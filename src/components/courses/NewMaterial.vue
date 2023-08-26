@@ -340,6 +340,7 @@ export default defineComponent({
     onMounted(() => {
       setQuizzes();
       Logic.Study.watchProperty("AllQuzzies", AllQuzzies);
+      Logic.Study.watchProperty("SingleCourse", SingleCourse);
       Logic.Study.GetQuizzes({
         where: [
           {

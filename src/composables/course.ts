@@ -1,5 +1,5 @@
 import { Logic } from 'sofa-logic'
-import { SelectOption } from 'sofa-logic/src/logic/types/common'
+import { Conditions, SelectOption } from 'sofa-logic/src/logic/types/common'
 import {
   CreateDocumentInput,
   UpdateCourseSectionsInput,
@@ -10,12 +10,16 @@ const courseSettingForm = reactive({
   title: '',
   description: '',
   visibility: '',
-  tags: '',
+  tags: [],
   photo: undefined,
   topic: '',
+  price: '0',
+  contentType: '',
 })
 
-const allTopics = reactive<SelectOption[]>([])
+const allTopics = ref<SelectOption[]>([])
+const allGenericTags = ref<SelectOption[]>([])
+const contentTypeOptions = ref<SelectOption[]>([])
 
 const courseSettingSaved = ref(false)
 
@@ -35,24 +39,76 @@ const addCourseFileForm = reactive<CreateDocumentInput>({
 })
 
 const getTopics = () => {
-  allTopics.length = 0
+  Logic.Study.GetTags({
+    where: [
+      {
+        field: 'type',
+        value: 'topics',
+        condition: Conditions.eq,
+      },
+    ],
+  }).then((response) => {
+    if (response) {
+      const data = []
+      response?.results.forEach((tag) => {
+        data.push({
+          key: tag.id,
+          value: tag.title,
+        })
+      })
+      allTopics.value.length = 0
+      allTopics.value = data
+    }
+  })
+}
 
-  Logic.Study.Tags?.results.forEach((tag) => {
-    allTopics.push({
-      key: tag.id,
-      value: tag.title,
-    })
+const getGenericTags = () => {
+  Logic.Study.GetTags({
+    where: [
+      {
+        field: 'type',
+        value: 'generic',
+        condition: Conditions.eq,
+      },
+    ],
+  }).then((response) => {
+    if (response) {
+      contentTypeOptions.value.length = 0
+      const data = []
+      response?.results.forEach((tag) => {
+        if (
+          tag.title == 'Past question' ||
+          tag.title == 'Note' ||
+          tag.title == 'Textbook solutions'
+        ) {
+          contentTypeOptions.value.push({
+            key: tag.id,
+            value: tag.title,
+          })
+        } else {
+          data.push({
+            key: tag.id,
+            value: tag.title,
+          })
+        }
+      })
+      allGenericTags.value.length = 0
+      allGenericTags.value = data
+    }
   })
 }
 
 const createCourse = (formComp: any) => {
+  if (!courseSettingForm.contentType) return
+
+  const allTags = [...courseSettingForm.tags, courseSettingForm.contentType]
   Logic.Study.CreateCourseForm = {
     description: courseSettingForm.description,
     price: {
-      amount: 0,
+      amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tagIds: [],
+    tagIds: allTags,
     title: courseSettingForm.title,
     topicId: courseSettingForm.topic,
     photo: courseSettingForm.photo,
@@ -61,8 +117,52 @@ const createCourse = (formComp: any) => {
   const formState: boolean = formComp.validate()
   courseSettingSaved.value = false
   Logic.Study.CreateCourse(formState)
-    ?.then(() => {
-      courseSettingSaved.value = true
+    ?.then((data) => {
+      if (data) {
+        courseSettingSaved.value = true
+        const newSection = [
+          {
+            items: [],
+            label: `Section 1`,
+          },
+        ]
+
+        updateCourseSectionForm.sections = newSection
+
+        updateCourseSections()
+
+        Logic.Common.hideLoader()
+      }
+    })
+    .catch((error) => {
+      Logic.Common.showValidationError(error, formComp)
+    })
+}
+
+const updateCourse = (formComp: any) => {
+  if (!courseSettingForm.contentType) return
+  const allTags = [...courseSettingForm.tags, courseSettingForm.contentType]
+  Logic.Study.UpdateCourseForm = {
+    description: courseSettingForm.description,
+    price: {
+      amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
+      currency: 'NGN',
+    },
+    tagIds: allTags,
+    title: courseSettingForm.title,
+    topicId: courseSettingForm.topic,
+    photo: courseSettingForm.photo,
+  }
+
+  const formState: boolean = formComp.validate()
+  courseSettingSaved.value = false
+
+  Logic.Study.UpdateCourse(formState, Logic.Study.SingleCourse.id)
+    ?.then((data) => {
+      if (data) {
+        courseSettingSaved.value = true
+        Logic.Common.hideLoader()
+      }
     })
     .catch((error) => {
       Logic.Common.showValidationError(error, formComp)
@@ -74,7 +174,6 @@ const updateCourseSections = () => {
     id: Logic.Study.SingleCourse.id,
     sections: updateCourseSectionForm.sections,
   }
-
   Logic.Study.UpdateCourseSection().then(() => {
     //
   })
@@ -91,17 +190,26 @@ const addCourseFile = () => {
     id: '',
   }
 
-  Logic.Study.CreateFile(true).then(() => {
-    // empty quiz
-    Logic.Study.SingleQuiz = undefined
-    // move item to course
-    Logic.Study.MoveItemToCourseForm = {
-      add: true,
-      coursableId: Logic.Study.SingleFile.id,
-      type: 'file',
-      id: Logic.Study.SingleCourse.id,
+  Logic.Study.CreateFile(true).then((data) => {
+    if (data) {
+      // empty quiz
+      Logic.Study.SingleQuiz = undefined
+      // move item to course
+      Logic.Study.MoveItemToCourseForm = {
+        add: true,
+        coursableId: Logic.Study.SingleFile.id,
+        type: 'file',
+        id: Logic.Study.SingleCourse.id,
+      }
+      Logic.Study.MoveItemToCourse(true)
+
+      Logic.Common.showLoader({
+        show: true,
+        loading: false,
+        message: 'Material added.',
+        type: 'success',
+      })
     }
-    Logic.Study.MoveItemToCourse(true)
   })
 }
 
@@ -115,6 +223,13 @@ const addQuizToCourse = (quizId: string) => {
       id: Logic.Study.SingleCourse.id,
     }
     Logic.Study.MoveItemToCourse(true)
+
+    Logic.Common.showLoader({
+      show: true,
+      loading: false,
+      message: 'Quiz added.',
+      type: 'success',
+    })
   })
 }
 
@@ -124,9 +239,13 @@ export {
   courseSettingSaved,
   updateCourseSectionForm,
   addCourseFileForm,
+  allGenericTags,
+  contentTypeOptions,
   createCourse,
+  updateCourse,
   getTopics,
   updateCourseSections,
   addCourseFile,
   addQuizToCourse,
+  getGenericTags,
 }

@@ -25,6 +25,7 @@
           :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'"
           :richEditor="false"
+          ref="description"
           v-model="courseSettingForm.description"
         />
 
@@ -44,14 +45,32 @@
         <sofa-select
           :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'Visibiliy'"
-          ref="Visibility"
-          :placeholder="'Visibility'"
+          :name="'Content Type'"
+          ref="content.type"
+          :placeholder="'Content Type'"
           :rules="[FormValidations.RequiredRule]"
+          :autoComplete="false"
           :borderColor="'border-transparent'"
-          :options="visibilityOptions"
-          v-model="courseSettingForm.visibility"
+          :options="contentTypeOptions"
+          v-model="courseSettingForm.contentType"
         />
+
+        <sofa-text-field
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+          type="text"
+          :name="'Price'"
+          ref="price.amount"
+          v-model="courseSettingForm.price"
+          :placeholder="'Price'"
+          :borderColor="'border-transparent'"
+          :rules="[Logic.Form.RequiredRule]"
+          :isFormatted="true"
+        >
+          <template v-slot:inner-prefix>
+            <sofa-normal-text>₦</sofa-normal-text>
+          </template>
+        </sofa-text-field>
       </div>
       <div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
         <sofa-image-loader
@@ -84,16 +103,18 @@
     </div>
 
     <div class="w-full flex flex-col space-y-2">
-      <sofa-text-field
+      <sofa-select
         :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-        type="text"
+        :padding="'md:!py-4 md:!px-4 px-3 py-4'"
         :name="'Tags'"
         ref="tags"
-        v-model="courseSettingForm.tags"
-        :placeholder="'Tags (Comma separated for multiple)'"
+        :placeholder="'Tags'"
+        :rules="[FormValidations.RequiredRule]"
+        :autoComplete="true"
         :borderColor="'border-transparent'"
-        :rules="[Logic.Form.RequiredRule]"
+        :options="allGenericTags"
+        v-model="courseSettingForm.tags"
+        :isMultiple="true"
       />
     </div>
 
@@ -110,14 +131,36 @@
         Exit
       </sofa-button>
 
-      <div class="mdlg:!w-auto w-full">
-        <sofa-button
-          :padding="'px-5 py-2'"
-          @click.prevent="createCourse(formComp)"
-          :customClass="'mdlg:!w-auto w-full'"
+      <div
+        class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!space-x-3 grid grid-cols-2 gap-2 mdlg:!gap-0 items-center"
+      >
+        <div
+          :class="`mdlg:!w-auto  flex flex-col ${
+            course && course.status != 'published'
+              ? 'col-span-1'
+              : 'col-span-full'
+          }`"
         >
-          {{ course ? "Save" : "Create" }}
-        </sofa-button>
+          <sofa-button
+            :padding="'px-5 mdlg:!py-2 py-3'"
+            :customClass="'mdlg:!w-auto w-full'"
+            @click.prevent="
+              course ? updateCourse(formComp) : createCourse(formComp)
+            "
+          >
+            {{ course ? "Save" : "Create" }}
+          </sofa-button>
+        </div>
+        <div class="mdlg:!w-auto col-span-1 flex flex-col">
+          <sofa-button
+            :padding="'px-5 mdlg:!py-2 py-3'"
+            :customClass="'mdlg:!w-auto w-full'"
+            v-if="course && course.status != 'published'"
+            @click.prevent="Logic.Study.PublishCourse(course.id)"
+          >
+            Publish
+          </sofa-button>
+        </div>
       </div>
     </div>
   </sofa-form-wrapper>
@@ -138,11 +181,15 @@ import {
 import { Logic } from "sofa-logic";
 import { FormValidations } from "@/composables";
 import {
+  allGenericTags,
   allTopics,
+  contentTypeOptions,
   courseSettingForm,
   courseSettingSaved,
   createCourse,
+  getGenericTags,
   getTopics,
+  updateCourse,
 } from "@/composables/course";
 import { Course } from "sofa-logic/src/logic/types/domains/study";
 
@@ -188,12 +235,52 @@ export default defineComponent({
 
     const courseImageUrl = ref("");
 
+    const preventUpdate = ref(true);
+
     watch(courseSettingSaved, () => {
-      context.emit("OnCourseUpdated", courseSettingSaved);
+      if (!preventUpdate.value) {
+        context.emit("OnCourseUpdated", courseSettingSaved);
+      }
     });
+
+    const setDefaultValues = () => {
+      if (props.course) {
+        const course = props.course;
+        courseSettingForm.title = course.title;
+        courseSettingForm.description = course.description;
+
+        courseSettingForm.topic = course.topicId;
+        courseSettingForm.visibility = "active";
+        courseSettingForm.price = course.price.amount.toString();
+        courseSettingForm.tags = course.tagIds;
+        courseImageUrl.value = course.photo.link;
+        courseSettingForm.contentType = "";
+      } else {
+        courseSettingForm.title = "";
+        courseSettingForm.description = "";
+        courseSettingForm.tags = [];
+        courseSettingForm.topic = "";
+        courseSettingForm.visibility = "";
+        courseImageUrl.value = "";
+        courseSettingForm.contentType = "";
+        setTimeout(() => {
+          formComp.value.fieldsToValidate?.title.emptyValue();
+          formComp.value.fieldsToValidate?.topic.emptyValue();
+          formComp.value.fieldsToValidate?.description.emptyValue();
+          if (formComp.value.fieldsToValidate["price.amount"]) {
+            formComp.value.fieldsToValidate["price.amount"]?.emptyValue();
+          }
+        }, 500);
+      }
+    };
 
     onMounted(() => {
       getTopics();
+      setDefaultValues();
+      getGenericTags();
+      setTimeout(() => {
+        preventUpdate.value = false;
+      }, 3000);
     });
 
     return {
@@ -204,7 +291,10 @@ export default defineComponent({
       formComp,
       courseImageUrl,
       createCourse,
+      updateCourse,
       allTopics,
+      allGenericTags,
+      contentTypeOptions,
     };
   },
   data() {

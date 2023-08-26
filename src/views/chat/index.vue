@@ -1,12 +1,43 @@
 <template>
-  <dashboard-layout>
+  <component :is="currentComponent">
+    <!-- For pending tutor verification -->
+    <div
+      class="w-full flex flex-row items-center space-x-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0 mdlg:hidden"
+    >
+      <div class="invisible">Hello</div>
+      <sofa-normal-text :customClass="'!font-bold !text-base'">
+        Chat</sofa-normal-text
+      >
+      <div class="invisible">Hello</div>
+    </div>
+    <div class="w-full flex flex-col h-[50px] items-center justify-center px-4">
+      <div class="lg:w-[60%] mdlg:w-[60%] w-full h-full flex flex-col">
+        <sofa-empty-state
+          :title="'Tutor application in review'"
+          :subTitle="'You will get a notification via email when your application has been accepted or rejected'"
+          :actionLabel="'Tutor guide'"
+          :action="
+            () => {
+              null;
+            }
+          "
+          :icon="{
+            name: 'tutor-review',
+            size: 'h-[34px]',
+          }"
+          :titleStyle="'mdlg:!text-xl '"
+        />
+      </div>
+    </div>
+
     <template v-slot:left-session>
       <div
-        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col"
+        class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-[16px] space-y-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin flex flex-col"
       >
         <div
-          class="w-full flex flex-row items-center justify-start space-x-3 py-3 px-3 cursor-pointer"
+          class="w-full flex flex-row items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 space-x-3 py-3 px-3 cursor-pointer"
           @click="addNewChat()"
+          v-if="Logic.Users.getUserType() == 'student'"
         >
           <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
           <sofa-normal-text :color="'text-primaryPink'">
@@ -14,12 +45,15 @@
           </sofa-normal-text>
         </div>
 
+        <!-- Chat list -->
         <div
-          :class="`w-full flex flex-row items-center justify-start space-x-3 px-3 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${
+          :class="`w-full flex flex-row items-center justify-start relative space-x-3 px-3 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${
             chat.selected ? 'bg-[#E5F2FD]' : ''
           }`"
           v-for="(chat, index) in chatList"
           :key="index"
+          @mouseenter="chat.hover = true"
+          @mouseleave="chat.hover = false"
           @click="selectConversation(chat.id)"
         >
           <span>
@@ -33,8 +67,61 @@
           >
             {{ chat.title.substring(0, 36) }}
           </sofa-normal-text>
+          <div
+            v-if="chat.hover"
+            class="right-0 top-0 absolute h-full bg-[#E5F2FD] rounded-r-[8px] px-4 flex flex-row items-center space-x-2"
+          >
+            <sofa-icon
+              :customClass="'h-[15px] cursor-pointer'"
+              :name="'trash-gray'"
+              @click.stop="
+                showDeleteConvo = true;
+                selectedConvoId = chat.id;
+              "
+            />
+          </div>
         </div>
+
+        <!-- Empty state -->
+        <template
+          v-if="Logic.Users.getUserType() == 'teacher' && !chatList.length"
+        >
+          <div class="pt-4">
+            <sofa-empty-state
+              :title="'No chat'"
+              :subTitle="'Your active chats will show up here'"
+              :actionLabel="''"
+            />
+          </div>
+        </template>
       </div>
+
+      <sofa-delete-prompt
+        v-if="showDeleteConvo"
+        :title="'Are you sure?'"
+        :subTitle="`This action is permanent. All messages in this conversation would be lost`"
+        :close="
+          () => {
+            showDeleteConvo = false;
+          }
+        "
+        :buttons="[
+          {
+            label: 'No',
+            isClose: true,
+            action: () => {
+              showDeleteConvo = false;
+            },
+          },
+          {
+            label: 'Yes, delete',
+            isClose: false,
+            action: () => {
+              deleteConvo(selectedConvoId);
+            },
+          },
+        ]"
+      />
     </template>
 
     <template v-slot:middle-session>
@@ -42,22 +129,42 @@
         class="w-full mdlg:!shadow-custom relative mdlg:!bg-white bg-transparent mdlg:!rounded-[16px] justify-between mdlg:flex-grow mdlg:h-full flex flex-col space-y-4 mdlg:!space-y-0"
       >
         <div
-          class="w-full mdlg:!flex hidden flex-row px-4 py-4 bg-white rounded-t-[16px] sticky top-0 space-x-3 items-center justify-start border-b-[1px] border-[#E1E6EB]"
+          class="w-full mdlg:!flex hidden flex-row px-4 py-4 bg-white rounded-t-[16px] sticky top-0 space-x-3 items-start justify-between border-b-[1px] border-[#E1E6EB]"
         >
-          <sofa-icon :name="'conversation'" :customClass="'h-[35px]'" />
-          <div class="flex flex-col">
-            <sofa-custom-input
-              :updateValue="
-                SingleConversation ? SingleConversation.title : 'New Chat'
-              "
-              :customClass="'!font-bold w-full flex flex-row justify-start !px-0 !py-0'"
-            ></sofa-custom-input>
-            <sofa-normal-text
-              :color="'text-grayColor'"
-              :customClass="'!text-[12px]'"
-            >
-              You, Dr. Sofa
-            </sofa-normal-text>
+          <div class="flex flex-row items-center space-x-3">
+            <sofa-icon :name="'conversation'" :customClass="'h-[35px]'" />
+            <div class="flex flex-col">
+              <sofa-custom-input
+                :updateValue="conversationTitle"
+                :customClass="'!font-bold w-full flex flex-row justify-start !px-0 !py-0'"
+                @onContentChange="contentTitleChanged"
+                @onBlur="editTitle = false"
+                :autoFocus="true"
+                v-if="editTitle"
+              ></sofa-custom-input>
+              <sofa-normal-text
+                :customClass="'!font-bold w-full flex flex-row justify-start !px-0 !py-0'"
+                v-else
+              >
+                {{ conversationTitle }}
+              </sofa-normal-text>
+              <sofa-normal-text
+                :color="'text-grayColor'"
+                :customClass="'!text-[12px]'"
+              >
+                You, {{ UserProfile.ai.name || "Dr. Sofa" }}
+              </sofa-normal-text>
+            </div>
+          </div>
+          <div
+            class="flex flex-row"
+            v-if="!editTitle && conversationTitle != 'New Chat'"
+            @click="editTitle = true"
+          >
+            <sofa-icon
+              :name="'edit-gray'"
+              :custom-class="'h-[15px] cursor-pointer'"
+            />
           </div>
         </div>
 
@@ -115,7 +222,10 @@
               class="hidden mdlg:!flex flex-col space-y-6 px-5 py-5 w-full"
               v-else
             >
-              <conversation-messages :Messages="Messages" />
+              <conversation-messages
+                :Messages="Messages"
+                :ShowLoader="showLoader"
+              />
             </div>
           </div>
         </div>
@@ -136,6 +246,7 @@
               :key="index"
               :custom-class="'!w-full'"
               @click="Logic.Common.GoToRoute('/chat/' + item.id)"
+              :showArrow="false"
             >
               <template v-slot:title>
                 <div class="w-full flex flex-row items-center space-x-2">
@@ -159,10 +270,11 @@
             <span
               :contenteditable="true"
               role="textbox"
-              :class="`w-full textarea resize-none !min-h-[48px]  focus:outline-none !max-h-[80px] overflow-x-hidden bg-transparent rounded-[8px] py-3 px-3 items-start text-left overflow-y-hidden`"
+              :class="`w-full textarea resize-none !min-h-[48px] text-bodyBlack focus:outline-none !max-h-[80px] overflow-x-hidden bg-transparent rounded-[8px] py-3 px-3 items-start text-left overflow-y-hidden`"
               placeholder="Enter message"
               id="messageContainer"
               @input="onInput"
+              @keypress="handleKeyEvent"
             >
             </span>
             <span class="min-w-[45px]">
@@ -176,71 +288,127 @@
           </div>
         </div>
       </div>
+
+      <add-tutor
+        v-if="showAddTutor"
+        :close="
+          () => {
+            showAddTutor = false;
+          }
+        "
+      />
     </template>
 
     <template v-slot:right-session>
-      <div
-        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
-      >
-        <div class="w-full flex flex-row items-center space-x-3">
-          <div
-            :style="`background-image: url('/images/icons/robot.svg')`"
-            class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"
-          ></div>
+      <!-- Student POV -->
+      <template v-if="Logic.Users.getUserType() == 'student'">
+        <div
+          class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
+        >
+          <div class="w-full flex flex-row items-center space-x-3">
+            <div
+              :style="`background-image: url('${
+                UserProfile.ai.photo
+                  ? UserProfile.ai.photo.link
+                  : '/images/icons/robot.svg'
+              }')`"
+              class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"
+            ></div>
 
-          <div class="flex flex-col space-y-1">
-            <sofa-header-text :customClass="'!text-base !font-bold'"
-              >Dr. Sofa</sofa-header-text
+            <div class="flex flex-col space-y-1">
+              <sofa-header-text :customClass="'!text-base !font-bold'">{{
+                UserProfile.ai.name || "Dr. Sofa"
+              }}</sofa-header-text>
+              <sofa-normal-text>AI assistant</sofa-normal-text>
+            </div>
+          </div>
+          <div
+            class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple"
+          >
+            <sofa-normal-text
+              :customClass="'text-left'"
+              :color="'text-deepGray'"
             >
-            <sofa-normal-text>AI assistant</sofa-normal-text>
+              Hello! I am here to respond to your messages in every chat 24/7.
+              <br /><br />
+              Let us work towards your highest ever academic achievements.
+            </sofa-normal-text>
           </div>
         </div>
+
         <div
-          class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple"
+          class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3"
         >
-          <sofa-normal-text :customClass="'text-left'" :color="'text-deepGray'">
-            Hello! I am here to respond to your messages in every chat 24/7.
-            <br /><br />
-            Let us work towards your highest ever academic achievements.
+          <div
+            class="w-full flex flex-row space-x-2 items-center justify-start"
+          >
+            <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
+            <sofa-normal-text
+              :color="'text-white'"
+              :customClass="'!text-base !font-bold'"
+            >
+              Tutor help
+            </sofa-normal-text>
+          </div>
+          <div class="w-full flex flex-col">
+            <sofa-normal-text
+              :customClass="'text-left'"
+              :color="'text-[#E1E6EB]'"
+            >
+              Need extra help with your work?
+            </sofa-normal-text>
+          </div>
+          <div class="flex flex-row">
+            <sofa-button
+              :bg-color="'bg-white'"
+              :text-color="'!text-primaryPurple'"
+              :padding="'px-5 py-1'"
+            >
+              Add a tutor
+            </sofa-button>
+          </div>
+        </div>
+      </template>
+
+      <!-- Teacher POV -->
+      <template v-if="Logic.Users.getUserType() == 'teacher'">
+        <div
+          class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4 justify-center items-center"
+        >
+          <div
+            class="w-full flex flex-col items-center justify-center space-y-3"
+          >
+            <sofa-avatar
+              :size="'180'"
+              :bgColor="'bg-grayColor'"
+              :photoUrl="
+                UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
+              "
+              :customClass="'!cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/settings')"
+            >
+              <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
+            </sofa-avatar>
+          </div>
+
+          <sofa-header-text :size="'xl'">
+            {{ UserProfile?.bio.name.full }}
+          </sofa-header-text>
+
+          <sofa-normal-text
+            :customClass="'text-center'"
+            :color="'text-[#78828C]'"
+          >
+            {{ UserProfile?.bio.description }}
           </sofa-normal-text>
         </div>
-      </div>
-
-      <div
-        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
-      >
-        <div class="w-full flex flex-row items-center justify-start space-x-2">
-          <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
-          <sofa-normal-text :color="'text-primaryGreen'">
-            Add a tutor
-          </sofa-normal-text>
-        </div>
-
-        <div class="w-full flex flex-row items-center justify-start space-x-2">
-          <sofa-icon :customClass="'h-[16px]'" :name="'star-outline'" />
-          <sofa-normal-text> Starred messages </sofa-normal-text>
-        </div>
-
-        <div class="w-full flex flex-row items-center justify-start space-x-2">
-          <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
-          <sofa-normal-text :color="'text-primaryRed'">
-            Delete chat
-          </sofa-normal-text>
-        </div>
-      </div>
+      </template>
     </template>
-  </dashboard-layout>
+  </component>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-  watch,
-} from "vue";
+import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToBottom, scrollToTop } from "@/composables";
@@ -250,14 +418,35 @@ import {
   SofaHeaderText,
   SofaIconCard,
   SofaCustomInput,
+  SofaDeletePrompt,
+  SofaEmptyState,
+  SofaAvatar,
+  SofaButton,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import {
-  createCoversation,
+  addNewChat,
+  AllConversations,
+  chatList,
+  contentTitleChanged,
+  conversationTitle,
+  deleteConvo,
+  handleKeyEvent,
+  hasMessage,
+  Messages,
   onInput,
+  selectConversation,
+  selectedConvoId,
   sendNewMessage,
+  setConversations,
+  setConvoFromRoute,
+  showAddTutor,
+  showDeleteConvo,
+  showLoader,
+  SingleConversation,
 } from "@/composables/conversation";
 import ConversationMessages from "@/components/conversation/Messages.vue";
+import AddTutor from "@/components/conversation/AddTutor.vue";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 
 export default defineComponent({
@@ -268,6 +457,11 @@ export default defineComponent({
     SofaIconCard,
     ConversationMessages,
     SofaCustomInput,
+    SofaDeletePrompt,
+    AddTutor,
+    SofaEmptyState,
+    SofaAvatar,
+    SofaButton,
   },
   middlewares: {
     fetchRules: [
@@ -275,16 +469,31 @@ export default defineComponent({
         domain: "Conversations",
         property: "AllConversations",
         method: "GetConversations",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Users",
+        property: "UserProfile",
+        method: "GetUserProfile",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Users",
+        property: "AllTutorRequests",
+        method: "GetTutorRequests",
         params: [
           {
             where: [
               {
-                field: "user.id",
-                value: Logic.Auth.AuthUser?.id,
+                field: "userId",
                 condition: Conditions.eq,
+                value: Logic.Auth.AuthUser?.id,
               },
             ],
           },
+          true,
         ],
         requireAuth: true,
       },
@@ -296,9 +505,11 @@ export default defineComponent({
       title: "Chat",
     });
 
-    onMounted(() => {
-      scrollToTop();
-    });
+    const UserProfile = ref(Logic.Users.UserProfile);
+    const SingleTutorRequest = ref(Logic.Users.SingleTutorRequest);
+    const currentComponent = ref("dashboard-layout");
+
+    const editTitle = ref(false);
 
     const contentList = [
       {
@@ -333,111 +544,6 @@ export default defineComponent({
       },
     ];
 
-    const chatList = reactive<
-      {
-        title: string;
-        selected: boolean;
-        subTitle: string;
-        icon: string;
-        iconSize: string;
-        id: string;
-      }[]
-    >([]);
-
-    const AllConversations = ref(Logic.Conversations.AllConversations);
-    const SingleConversation = ref(Logic.Conversations.SingleConversation);
-    const Messages = ref(Logic.Conversations.Messages);
-
-    const hasMessage = ref(false);
-
-    const addNewChat = () => {
-      createCoversation("Hello I need your help with a question.").then(
-        (data) => {
-          if (data) {
-            if (
-              Logic.Common.mediaQuery() != "sm" &&
-              Logic.Common.mediaQuery() != "md"
-            ) {
-              selectConversation(data.id);
-            } else {
-              Logic.Common.GoToRoute("/chat/" + data.id);
-            }
-            Logic.Conversations.GetConversations({
-              where: [
-                {
-                  field: "user.id",
-                  value: Logic.Auth.AuthUser.id,
-                  condition: Conditions.eq,
-                },
-              ],
-            });
-          }
-        }
-      );
-    };
-
-    const setConversations = (goToIndex = -1) => {
-      chatList.length = 0;
-      AllConversations.value.results.forEach((convo, index) => {
-        chatList.push({
-          icon: "conversation",
-          iconSize: "h-[35px]",
-          selected: index == goToIndex,
-          subTitle: convo.last.body,
-          title: convo.title,
-          id: convo.id,
-        });
-      });
-    };
-
-    const selectConversation = (convoId: string) => {
-      Logic.Common.showLoader({
-        loading: true,
-        show: true,
-        useModal: true,
-      });
-      Logic.Conversations.GetConversation(convoId).then((response: any) => {
-        if (response) {
-          Logic.Conversations.GetMessages(convoId).then((responseData: any) => {
-            if (responseData) {
-              Logic.Common.setupWebsocket();
-
-              setTimeout(() => {
-                Logic.Common.listenOnSocket(
-                  `conversations/${SingleConversation.value.id}/messages`,
-                  (data) => {
-                    console.log(data);
-                  },
-                  (data) => {
-                    console.log(data);
-                  }
-                );
-              }, 100);
-
-              if (Messages.value) {
-                hasMessage.value = true;
-              }
-
-              // scroll to bottom
-              setTimeout(() => {
-                scrollToBottom("MessagesScrollContainerLg");
-              }, 1000);
-
-              Logic.Common.hideLoader();
-
-              chatList.forEach((item) => {
-                if (item.id == SingleConversation.value.id) {
-                  item.selected = true;
-                } else {
-                  item.selected = false;
-                }
-              });
-            }
-          });
-        }
-      });
-    };
-
     onMounted(() => {
       if (
         document.getElementById("body") &&
@@ -453,8 +559,18 @@ export default defineComponent({
         SingleConversation
       );
       Logic.Conversations.watchProperty("Messages", Messages);
+      Logic.Users.watchProperty("UserProfile", UserProfile);
 
       setConversations();
+      setConvoFromRoute();
+      scrollToTop();
+
+      if (
+        Logic.Users.getUserType() == "teacher" &&
+        SingleTutorRequest.value.accepted == false
+      ) {
+        currentComponent.value = "expanded-layout";
+      }
     });
 
     watch(Messages, () => {
@@ -468,10 +584,21 @@ export default defineComponent({
 
     watch(AllConversations, () => {
       setConversations();
+      showDeleteConvo.value = false;
+      if (SingleConversation.value?.id == selectedConvoId.value) {
+        hasMessage.value = false;
+      }
     });
 
     watch(SingleConversation, () => {
-      //
+      if (editTitle.value == false) {
+        if (SingleConversation.value) {
+          conversationTitle.value = SingleConversation.value.title;
+        } else {
+          conversationTitle.value = "New Chat";
+        }
+        editTitle.value = false;
+      }
     });
 
     onUnmounted(() => {
@@ -483,6 +610,7 @@ export default defineComponent({
         document.getElementById("body").style["overflowY"] = "auto";
       }
     });
+
     return {
       moment,
       contentList,
@@ -496,6 +624,18 @@ export default defineComponent({
       selectConversation,
       sendNewMessage,
       onInput,
+      showLoader,
+      showDeleteConvo,
+      deleteConvo,
+      selectedConvoId,
+      showAddTutor,
+      handleKeyEvent,
+      UserProfile,
+      conversationTitle,
+      contentTitleChanged,
+      editTitle,
+      SingleTutorRequest,
+      currentComponent,
     };
   },
 });

@@ -7,6 +7,7 @@
     :subpage-actions="topbarOptions.actions"
     :title="topbarOptions.title"
     :type="topbarOptions.type"
+    :showAddItem="handleShowAddItem"
     v-if="hasTopBar"
     :custom-class="'hidden mdlg:!flex'"
   ></sofa-top-bar>
@@ -17,22 +18,37 @@
       :class="`h-full pb-4 flex-grow text-center relative px-0  mdlg:px-0 mdlg:!space-y-5 flex flex-col items-center  lg:text-sm mdlg:text-[12px] text-xs ${layoutStyle}`"
     >
       <slot />
-      <div class="h-[120px] mdlg:!hidden"></div>
+      <div class="h-[120px] mdlg:!hidden" v-if="bottomPadding"></div>
     </div>
   </div>
-  <sofa-bottom-bar :tab-is-active="tabIsActive" v-if="hasBottomBar" />
+  <sofa-bottom-bar
+    :tab-is-active="tabIsActive"
+    v-if="hasBottomBar"
+    :showAddItem="handleShowAddItem"
+  />
+  <add-material-modal
+    v-if="showAddItem"
+    :close="
+      () => {
+        showAddItem = false;
+      }
+    "
+  />
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { SofaTopBar, SofaBottomBar } from "sofa-ui-components";
-import { tabTitle } from "../composables";
+import { handleShowAddItem, showAddItem, tabTitle } from "../composables";
+import AddMaterialModal from "@/components/common/AddMaterialModal.vue";
+import { Logic } from "sofa-logic";
 
 export default defineComponent({
   components: {
     SofaTopBar,
     SofaBottomBar,
+    AddMaterialModal,
   },
   props: {
     topbarOptions: {
@@ -58,6 +74,10 @@ export default defineComponent({
       default: true,
     },
     hasBottomBar: {
+      type: Boolean,
+      default: true,
+    },
+    bottomPadding: {
       type: Boolean,
       default: true,
     },
@@ -109,13 +129,13 @@ export default defineComponent({
         routeTag: "chat",
         icon_size: "h-[18px]",
       },
-      {
-        name: "Explore",
-        path: "/explore",
-        icon: "explore",
-        routeTag: "explore",
-        icon_size: "h-[19px]",
-      },
+      // {
+      //   name: "Explore",
+      //   path: "/explore",
+      //   icon: "explore",
+      //   routeTag: "explore",
+      //   icon_size: "h-[19px]",
+      // },
       {
         name: "Library",
         path: "/library",
@@ -123,13 +143,13 @@ export default defineComponent({
         routeTag: "library",
         icon_size: "h-[18px]",
       },
-      {
-        name: "Analytics",
-        path: "/analytics",
-        icon: "analytics",
-        routeTag: "analytics",
-        icon_size: "h-[18px]",
-      },
+      // {
+      //   name: "Analytics",
+      //   path: "/analytics",
+      //   icon: "analytics",
+      //   routeTag: "analytics",
+      //   icon_size: "h-[18px]",
+      // },
       {
         name: "Marketplace",
         path: "/marketplace",
@@ -139,6 +159,19 @@ export default defineComponent({
       },
     ]);
 
+    onMounted(() => {
+      tabs.value = tabs.value.filter((item) => {
+        if (
+          Logic.Users.getUserType() == "organization" &&
+          item.icon == "chat"
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    });
+
     return {
       tabIsActive,
       goBack,
@@ -146,6 +179,8 @@ export default defineComponent({
       tabTitle,
       loaderSetup,
       tabs,
+      showAddItem,
+      handleShowAddItem,
     };
   },
 });

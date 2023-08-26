@@ -10,7 +10,9 @@
             {
               name: 'Settings',
               icon: 'cog',
-              handler: create,
+              handler: () => {
+                showSettingModal = true;
+              },
               size: 'h-[20px]',
             },
           ],
@@ -18,7 +20,9 @@
         {
           IsOutlined: true,
           name: 'Exit',
-          handler: create,
+          handler: () => {
+            Logic.Common.goBack();
+          },
         },
       ],
     }"
@@ -27,6 +31,7 @@
       top: true,
     }"
     :bgColor="'mdlg:!bg-backgroundGray bg-white'"
+    :middleSessionWidth="'lg:w-[56%]  mdlg:w-[50%] mdlg:!pb-5'"
   >
     <template v-slot:left-session>
       <div
@@ -38,7 +43,8 @@
           :updateSections="updateCourseSections"
           v-if="
             Logic.Common.mediaQuery() != 'sm' &&
-            Logic.Common.mediaQuery() != 'md'
+            Logic.Common.mediaQuery() != 'md' &&
+            SingleCourse
           "
         ></sofa-course-sections>
       </div>
@@ -58,11 +64,24 @@
           {{ mobileTitle }}
         </sofa-normal-text>
 
-        <sofa-icon
-          :customClass="`h-[6px] ${showSettingModal ? 'invisible' : 'visible'}`"
-          :name="'more-options-horizontal'"
-          @click="showMateterialDetails()"
-        />
+        <div
+          :class="`flex flex-row items-center space-x-3 ${
+            showSettingModal ? 'invisible' : ''
+          } `"
+        >
+          <sofa-icon
+            :customClass="'h-[18px]'"
+            :name="'cog'"
+            v-if="!showSettingModal"
+            @click="showSettingModal = true"
+          />
+
+          <sofa-icon
+            :customClass="'h-[6px]'"
+            :name="'more-options-horizontal'"
+            @click="showMateterialDetails()"
+          />
+        </div>
       </div>
       <!-- create course for smaller screens -->
       <template v-if="showSettingModal">
@@ -79,7 +98,7 @@
         </div>
       </template>
 
-      <template v-if="currentContent == 'sections'">
+      <template v-if="currentContent == 'sections' && !showSettingModal">
         <div
           class="w-full mdlg:!hidden flex-col h-full flex-grow bg-white py-2 px-4 md:!flex"
         >
@@ -89,8 +108,9 @@
             :sectionInput="updateCourseSectionForm"
             :updateSections="updateCourseSections"
             v-if="
-              Logic.Common.mediaQuery() == 'sm' ||
-              Logic.Common.mediaQuery() == 'md'
+              (Logic.Common.mediaQuery() == 'sm' ||
+                Logic.Common.mediaQuery() == 'md') &&
+              SingleCourse
             "
           ></sofa-course-sections>
 
@@ -151,7 +171,9 @@
             class="w-full mdlg:!h-full flex-grow flex flex-col"
             style="height: calc(100vh - 90px)"
           >
-            <sofa-document-reader />
+            <sofa-document-reader
+              :documentUrl="selectedMaterial.data.documentUrl"
+            />
           </div>
         </template>
 
@@ -239,7 +261,10 @@
             class="w-full flex flex-col px-4 pb-4"
             v-if="modalData.content == 'add_material'"
           >
-            <new-course-material @OnItemSelected="handleAddMaterialChanged" />
+            <new-course-material
+              @OnItemSelected="handleAddMaterialChanged"
+              v-if="SingleCourse"
+            />
           </div>
 
           <div
@@ -252,7 +277,7 @@
           <sofa-course-details
             :data="selectedMaterial?.details"
             :type="selectedMaterial?.type"
-            v-if="modalData.content == 'material_details'"
+            v-if="modalData.content == 'material_details' && SingleCourse"
             :close="
               () => {
                 showMoreOptions = false;
@@ -406,6 +431,7 @@ export default defineComponent({
           },
         ],
         requireAuth: true,
+        ignoreProperty: true,
       },
       {
         domain: "Study",
@@ -415,6 +441,7 @@ export default defineComponent({
         useRouteQuery: true,
         queries: ["id"],
         requireAuth: true,
+        ignoreProperty: true,
       },
     ],
   },
@@ -505,6 +532,8 @@ export default defineComponent({
 
       if (route.query?.id) {
         handleCourseSettingSaved(true);
+      } else {
+        Logic.Study.SingleCourse = undefined;
       }
     };
 

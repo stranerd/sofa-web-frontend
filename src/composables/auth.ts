@@ -10,6 +10,8 @@ const registerForm = reactive<SignUpInput>({
     last: '',
   },
   password: '',
+  organisation_name: '',
+  description: '',
 })
 
 const loginForm = reactive<SignInInput>({
@@ -19,7 +21,7 @@ const loginForm = reactive<SignInInput>({
 
 const termsAccepted = ref(false)
 
-const SignUp = (formComp: any) => {
+const SignUp = (formComp: any, accountType = 'student') => {
   Logic.Auth.SignUpForm = {
     email: registerForm.email,
     name: {
@@ -27,17 +29,39 @@ const SignUp = (formComp: any) => {
       last: 'user',
     },
     password: registerForm.password,
-    description: '',
+    description: registerForm.description,
   }
 
   const formState: boolean = formComp.validate()
 
+  if (accountType == 'organisation' && registerForm.description == '') {
+    return
+  }
+
+  if (accountType == 'organisation') {
+    const fullNameArray = registerForm.organisation_name.split(' ')
+    Logic.Auth.SignUpForm.name.first = fullNameArray[0]
+    Logic.Auth.SignUpForm.name.last = fullNameArray[1] ? fullNameArray[1] : ''
+  }
+
   if (termsAccepted.value) {
-    Logic.Auth.SignUp(formState).catch((error) => {
-      Logic.Common.showValidationError(error, formComp)
-    })
+    Logic.Auth.SignUp(formState)
+      .then((data) => {
+        if (data) {
+          Logic.Common.hideLoader()
+          Logic.Common.GoToRoute('/auth/verify-email')
+        }
+      })
+      .catch((error) => {
+        Logic.Common.showValidationError(error, formComp)
+      })
   } else {
     // show error
+    Logic.Common.showLoader({
+      show: true,
+      message: 'Please accept the terms and conditions',
+      type: 'warning',
+    })
   }
 }
 
@@ -52,13 +76,7 @@ const SignIn = (formComp: any) => {
   Logic.Auth.SignIn(formState)
     .then((data) => {
       if (data) {
-        setTimeout(() => {
-          if (Logic.Common.mediaQuery() == 'sm') {
-            Logic.Common.GoToRoute('/onboarding/account-setup')
-          } else {
-            showAccountSetup.value = true
-          }
-        }, 600)
+        Logic.Auth.DetectVerification(showAccountSetup)
       }
     })
     .catch((error) => {
@@ -71,7 +89,11 @@ const VerifyUserEmail = (token: string) => {
     Logic.Auth.VerifyWithTokenForm = {
       token,
     }
-    Logic.Auth.VerifyEmailWithToken(true)
+    Logic.Auth.VerifyEmailWithToken(true).then((response) => {
+      if (response) {
+        Logic.Auth.DetectVerification(showAccountSetup)
+      }
+    })
   } else {
     // show error
   }

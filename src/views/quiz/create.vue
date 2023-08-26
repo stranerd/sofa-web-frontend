@@ -39,6 +39,7 @@
       top: true,
     }"
     :bgColor="'mdlg:!bg-backgroundGray bg-white'"
+    :middleSessionWidth="'lg:w-[56%]  mdlg:w-[50%] mdlg:!pb-5'"
   >
     <template v-slot:left-session>
       <div
@@ -59,7 +60,7 @@
     <template v-slot:middle-session>
       <!-- Top bar for smaller screens -->
       <div
-        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-backgroundGray px-4 py-4 sticky top-0 left-0"
+        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[999999999] bg-backgroundGray px-4 py-4 sticky top-0 left-0"
       >
         <sofa-icon
           :customClass="'h-[19px]'"
@@ -84,6 +85,17 @@
           />
 
           <sofa-icon
+            :customClass="'h-[14px]'"
+            :name="'preview'"
+            v-if="!showSettingModal"
+            @click="
+              () => {
+                Logic.Common.GoToRoute('/quiz/' + Logic.Study.SingleQuiz?.id);
+              }
+            "
+          />
+
+          <sofa-icon
             :customClass="'h-[6px]'"
             :name="'more-options-horizontal'"
             @click="showMoreOptions = true"
@@ -103,6 +115,7 @@
         >
           <sofa-question-content
             :question="selectedQuestionData"
+            v-if="AllQuestions"
             :questionType="selectedQuestionData?.image"
           />
         </template>
@@ -115,6 +128,7 @@
         >
           <sofa-question-content
             :question="selectedQuestionData"
+            v-if="AllQuestions"
             :questionType="selectedQuestionData?.image"
           />
         </template>
@@ -210,6 +224,8 @@
               }
             "
             :questionSettings="selectedQuestionData.settings"
+            :questionId="selectedQuestionData.id"
+            :questionType="selectedQuestionData.key"
           />
         </div>
       </sofa-modal>
@@ -222,6 +238,8 @@
         <template v-if="selectedQuestionData">
           <sofa-question-options
             :questionSettings="selectedQuestionData.settings"
+            :questionId="selectedQuestionData.id"
+            :questionType="selectedQuestionData.key"
           />
         </template>
       </div>
@@ -285,6 +303,7 @@ export default defineComponent({
         useRouteQuery: true,
         queries: ["id"],
         requireAuth: true,
+        ignoreProperty: true,
       },
       {
         domain: "Study",
@@ -294,6 +313,7 @@ export default defineComponent({
         useRouteQuery: true,
         queries: ["id"],
         requireAuth: true,
+        ignoreProperty: true,
       },
     ],
   },
@@ -331,6 +351,9 @@ export default defineComponent({
 
       if (route.query?.id) {
         handleSettingSaved(true);
+      } else {
+        Logic.Study.SingleQuiz = undefined;
+        Logic.Study.AllQuestions = undefined;
       }
     };
 

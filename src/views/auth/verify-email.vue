@@ -6,7 +6,7 @@
       <div class="w-full flex flex-row space-x-4 md:!items-center">
         <span class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
           <sofa-icon
-            :customClass="'md:!h-[26px] h-[20px]'"
+            :customClass="'md:!h-[26px] h-[20px] cursor-pointer'"
             :name="'auth-goback'"
           />
         </span>
@@ -30,8 +30,8 @@
       <div
         class="h-full flex flex-col items-center space-y-4 justify-center w-full md:!px-10 px-0"
       >
-        <div class="flex flex-col space-y-6 w-full">
-          <div class="w-full flex flex-col space-y-4">
+        <div class="flex flex-col space-y-6 w-full items-center justify-center">
+          <div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col space-y-4">
             <sofa-otp-input
               :numberOfInput="6"
               :type="'tel'"

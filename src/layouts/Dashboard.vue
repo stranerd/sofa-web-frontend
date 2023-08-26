@@ -7,42 +7,71 @@
     :subpage-actions="topbarOptions.actions"
     :title="topbarOptions.title"
     :type="topbarOptions.type"
+    :showAddItem="handleShowAddItem"
     :custom-class="`${hideSmNavigator.top ? 'hidden mdlg:!flex' : 'flex'}`"
   ></sofa-top-bar>
   <div
-    class="fixed top-0 pt-[80px] left-0 h-full lg:w-[22%] mdlg:w-[25%] mdlg:flex hidden px-5 py-5 flex-col space-y-5 overscroll-y-auto scrollbar-hide"
+    :class="` ${
+      wrapLayout
+        ? 'mdlg:!fixed pb-5 px-4'
+        : 'fixed mdlg:!fixed hidden px-4 py-4'
+    } mdlg:!top-0 mdlg:!pt-[80px] mdlg:!left-0 h-full lg:!w-[22%] mdlg:!w-[25%] mdlg:flex w-full mdlg:!px-5 mdlg:!py-5  flex-col space-y-5 overscroll-y-auto scrollbar-hide`"
   >
     <slot name="left-session" />
   </div>
   <div
-    :class="`h-full ${middleSessionWidth} mdlg:!pb-0 pb-4 flex-grow ${bgColor} text-center mdlg:!pt-6 relative px-0 mdlg:px-0 mdlg:ml-[25%] lg:ml-[22%] ${
+    :class="`h-full ${middleSessionWidth}  ${
+      wrapLayout ? 'pb-6' : 'pb-4'
+    }   flex-grow ${bgColor} text-center mdlg:!pt-6 relative ${
+      wrapLayout ? 'px-4' : 'px-0'
+    }  mdlg:px-0 mdlg:ml-[25%] lg:ml-[22%] ${
       hideSmNavigator.bottom
         ? ' mdlg:!space-y-0'
         : 'lg:!space-y-5 mdlg:!space-y-5'
     }  space-y-2 flex flex-col lg:text-sm mdlg:text-[12px] text-xs`"
   >
     <slot name="middle-session" />
-    <div class="h-[120px] mdlg:!hidden"></div>
+    <div class="h-[120px] mdlg:!hidden" v-if="!wrapLayout"></div>
   </div>
 
   <div
-    class="fixed top-0 right-0 pt-[80px] h-full lg:w-[22%] mdlg:w-[25%] mdlg:flex hidden px-5 py-5 flex-col overflow-y-auto scrollbar-hide space-y-5"
+    :class="` ${
+      wrapLayout
+        ? 'mdlg:!fixed pb-5 px-4'
+        : 'fixed mdlg:!fixed hidden px-4 py-4'
+    } mdlg:!top-0 mdlg:!right-0 mdlg:!pt-[80px] h-full lg:w-[22%] mdlg:w-[25%] mdlg:!flex  mdlg:!px-5 mdlg:!py-5 flex-col overflow-y-auto scrollbar-hide space-y-5`"
   >
     <slot name="right-session" />
   </div>
   <sofa-bottom-bar
     :tab-is-active="tabIsActive"
+    :showAddItem="handleShowAddItem"
     v-if="!hideSmNavigator.bottom"
+  />
+  <add-material-modal
+    v-if="showAddItem"
+    :close="
+      () => {
+        showAddItem = false;
+      }
+    "
   />
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { SofaTopBar, SofaBottomBar } from "sofa-ui-components";
-import { tabTitle } from "../composables";
+import { handleShowAddItem, showAddItem, tabTitle } from "../composables";
+import AddMaterialModal from "@/components/common/AddMaterialModal.vue";
+import { Logic } from "sofa-logic";
 
 export default defineComponent({
+  components: {
+    SofaTopBar,
+    SofaBottomBar,
+    AddMaterialModal,
+  },
   props: {
     topbarOptions: {
       type: Object as () => {
@@ -76,12 +105,12 @@ export default defineComponent({
     },
     middleSessionWidth: {
       type: String,
-      default: "lg:w-[56%]  mdlg:w-[50%]",
+      default: "lg:w-[56%]  mdlg:w-[50%] mdlg:!pb-0",
     },
-  },
-  components: {
-    SofaTopBar,
-    SofaBottomBar,
+    wrapLayout: {
+      type: Boolean,
+      default: false,
+    },
   },
   name: "DashboardLayout",
   setup() {
@@ -130,13 +159,13 @@ export default defineComponent({
         routeTag: "chat",
         icon_size: "h-[18px]",
       },
-      {
-        name: "Explore",
-        path: "/explore",
-        icon: "explore",
-        routeTag: "explore",
-        icon_size: "h-[19px]",
-      },
+      // {
+      //   name: "Explore",
+      //   path: "/explore",
+      //   icon: "explore",
+      //   routeTag: "explore",
+      //   icon_size: "h-[19px]",
+      // },
       {
         name: "Library",
         path: "/library",
@@ -144,13 +173,13 @@ export default defineComponent({
         routeTag: "library",
         icon_size: "h-[18px]",
       },
-      {
-        name: "Analytics",
-        path: "/analytics",
-        icon: "analytics",
-        routeTag: "analytics",
-        icon_size: "h-[18px]",
-      },
+      // {
+      //   name: "Analytics",
+      //   path: "/analytics",
+      //   icon: "analytics",
+      //   routeTag: "analytics",
+      //   icon_size: "h-[18px]",
+      // },
       {
         name: "Marketplace",
         path: "/marketplace",
@@ -160,6 +189,19 @@ export default defineComponent({
       },
     ]);
 
+    onMounted(() => {
+      tabs.value = tabs.value.filter((item) => {
+        if (
+          Logic.Users.getUserType() == "organization" &&
+          item.icon == "chat"
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    });
+
     return {
       tabIsActive,
       goBack,
@@ -167,6 +209,8 @@ export default defineComponent({
       tabTitle,
       loaderSetup,
       tabs,
+      showAddItem,
+      handleShowAddItem,
     };
   },
 });

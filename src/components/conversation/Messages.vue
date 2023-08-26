@@ -97,7 +97,38 @@
         </div>
       </template>
     </template>
-    <div class="h-[30px] mdlg:flex hidden"></div>
+    <div
+      class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row space-x-2 items-end justify-start"
+      v-if="ShowLoader"
+    >
+      <div class="w-[30px]">
+        <sofa-avatar
+          :bgColor="'!bg-[#78828C]'"
+          :photoUrl="'/images/icons/robot.svg'"
+          :size="'27'"
+        >
+          <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
+        </sofa-avatar>
+      </div>
+      <div
+        class="px-3 py-3 custom-border text-left bg-[#E2F3FD] flex flex-col space-y-1 justify-start"
+      >
+        <sofa-normal-text
+          :customClass="'!font-semibold'"
+          :color="'text-[#3296C8]'"
+        >
+          Dr. Sofa
+        </sofa-normal-text>
+        <div
+          class="loader flex flex-row items-center space-x-1 !w-[100px] !h-[20px]"
+        >
+          <span class="w-[17px] h-[17px] rounded-full"></span>
+          <span class="w-[17px] h-[17px] rounded-full"></span>
+          <span class="w-[17px] h-[17px] rounded-full"></span>
+        </div>
+      </div>
+    </div>
+    <div class="md:!h-[30px] h-[40px]"></div>
   </div>
 </template>
 <script lang="ts">
@@ -117,6 +148,10 @@ export default defineComponent({
   props: {
     Messages: {
       type: Object as () => Paginated<Message>,
+    },
+    ShowLoader: {
+      type: Boolean,
+      default: false,
     },
   },
   name: "ConversationMessages",
@@ -191,3 +226,25 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.loader span {
+  background: #3219af;
+  animation: loader 0.8s infinite alternate;
+}
+.loader span:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+.loader span:nth-of-type(3) {
+  animation-delay: 0.6s;
+}
+@keyframes loader {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+}
+</style>

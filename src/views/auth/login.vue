@@ -6,7 +6,7 @@
       <div class="w-full flex flex-row space-x-4 md:!items-center">
         <span class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
           <sofa-icon
-            :customClass="'md:!h-[26px] h-[20px]'"
+            :customClass="'md:!h-[26px] h-[20px] cursor-pointer'"
             :name="'auth-goback'"
           />
         </span>
@@ -30,23 +30,29 @@
       >
         <div class="flex flex-col space-y-6 w-full">
           <div class="w-full flex flex-col space-y-4">
-            <div
-              class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row space-x-2 items-center justify-center"
-            >
-              <sofa-icon :customClass="'h-[16px]'" :name="'google'" />
-              <sofa-normal-text :custom-class="'!font-semibold'"
-                >Continue with Google</sofa-normal-text
-              >
+            <div class="w-full flex flex-col items-center justify-center">
+              <GoogleLogin :callback="onSuccessGoogle" prompt />
             </div>
 
-            <div
-              class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row space-x-2 items-center justify-center"
-            >
-              <sofa-icon :customClass="'h-[17px]'" :name="'apple'" />
-              <sofa-normal-text :custom-class="'!font-semibold'"
-                >Continue with Apple</sofa-normal-text
+            <!-- <div>
+              <div
+                class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row items-center justify-center"
               >
-            </div>
+                <vue-apple-login
+                  color="white"
+                  :border="false"
+                  type="continue"
+                  width="100%"
+                  height="25"
+                  logoSize="large"
+                  :onSuccess="onSuccessApple"
+                  mode="center-align"
+                  :className="'!border-none !h-auto'"
+                  :onFailure="onFailure"
+                ></vue-apple-login>
+                 
+              </div>
+            </div> -->
           </div>
 
           <div class="w-full flex flex-row space-x-3 items-center pt-2">
@@ -101,7 +107,7 @@
           <sofa-normal-text :color="'text-grayColor'"
             >Don’t have an account?
           </sofa-normal-text>
-          <router-link to="/auth/register"
+          <router-link to="/auth"
             ><sofa-normal-text :color="'!text-primaryBlue'"
               >Sign up</sofa-normal-text
             ></router-link
@@ -149,12 +155,31 @@ export default defineComponent({
 
     const formComp = ref<any>();
 
+    const onSuccessGoogle = (data: any) => {
+      Logic.Auth.GoogleSignInForm = {
+        accessToken: "",
+        idToken: data.credential,
+      };
+      Logic.Auth.GoogleSignIn();
+    };
+
+    const onSuccessApple = (data: any) => {
+      console.log(data);
+    };
+
+    const onFailure = () => {
+      //
+    };
+
     return {
       Logic,
       loginForm,
       FormValidations,
       SignIn,
       formComp,
+      onSuccessApple,
+      onSuccessGoogle,
+      onFailure,
     };
   },
   data() {

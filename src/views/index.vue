@@ -5,31 +5,43 @@
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
       >
         <div class="w-full flex flex-row items-center space-x-3">
-          <div
-            class="w-[84px] h-[84px] flex flex-row items-center justify-center bg-grayColor border-[1px] border-grayColor rounded-full"
+          <sofa-avatar
+            :size="'84'"
+            :bgColor="'bg-grayColor'"
+            :photoUrl="UserProfile.bio.photo ? UserProfile.bio?.photo.link : ''"
           >
             <sofa-icon :customClass="'h-[45px]'" :name="'user'" />
-          </div>
+          </sofa-avatar>
 
           <div class="flex flex-col space-y-1">
-            <sofa-header-text :customClass="'!text-base !font-bold'"
-              >Sukky Samwise</sofa-header-text
+            <sofa-header-text :customClass="'!text-base !font-bold'">{{
+              UserProfile.bio.name?.full
+            }}</sofa-header-text>
+            <sofa-normal-text :customClass="'capitalize'">{{
+              Logic.Users.getUserType()
+            }}</sofa-normal-text>
+
+            <sofa-normal-text
+              :color="'text-primaryPink'"
+              :customClass="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/settings')"
             >
-            <sofa-normal-text>Student</sofa-normal-text>
-            <sofa-normal-text :color="'text-primaryPink'"
-              >Add your school</sofa-normal-text
-            >
+              View profile
+            </sofa-normal-text>
           </div>
         </div>
 
-        <div class="w-full grid grid-cols-2 gap-3">
+        <div
+          class="w-full grid grid-cols-2 gap-3"
+          v-if="Logic.Users.getUserType() == 'student'"
+        >
           <div
             class="py-3 px-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] bg-ligthGray col-span-1 flex flex-row space-x-3 justify-start items-center"
           >
             <sofa-icon :customClass="'h-[40px]'" :name="'xp-points'" />
             <div class="flex flex-col items-start justify-center">
               <sofa-normal-text :customClass="'font-bold'"
-                >1 xp</sofa-normal-text
+                >{{ UserProfile.account.ratings.count }} xp</sofa-normal-text
               >
               <sofa-normal-text :color="'text-bodyBlack'"
                 >Point</sofa-normal-text
@@ -42,7 +54,7 @@
             <sofa-icon :customClass="'h-[40px]'" :name="'streak-new'" />
             <div class="flex flex-col items-start justify-center">
               <sofa-normal-text :customClass="'font-bold'"
-                >0 days</sofa-normal-text
+                >{{ UserProfile.account.streak.count }} days</sofa-normal-text
               >
               <sofa-normal-text :color="'text-bodyBlack'"
                 >Streak</sofa-normal-text
@@ -53,22 +65,31 @@
       </div>
 
       <div
+        v-if="Logic.Users.getUserType() != 'organization'"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-3"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
-            Get verified
+            {{ "Get verified" }}
           </sofa-normal-text>
           <sofa-icon :name="'verify'" :custom-class="'h-[16px]'" />
         </div>
-        <sofa-normal-text>
+        <sofa-normal-text v-if="Logic.Users.getUserType() != 'teacher'">
+          Join the elite that create the highest quality study materials, reach
+          more audience, and sell on marketplace.
+        </sofa-normal-text>
+        <sofa-normal-text v-if="Logic.Users.getUserType() == 'teacher'">
           Join the elite that create the highest quality study materials, reach
           more audience, and sell on marketplace.
         </sofa-normal-text>
         <sofa-button
           :has-double-layer="false"
           padding="py-2 px-6"
-          @click="Logic.Common.GoToRoute('/verification')"
+          @click="
+            Logic.Users.getUserType() == 'teacher'
+              ? Logic.Common.GoToRoute('/verification/tutor')
+              : Logic.Common.GoToRoute('/verification')
+          "
         >
           Apply here
         </sofa-button>
@@ -104,7 +125,9 @@
         </div>
 
         <div class="w-full">
-          <sofa-normal-text :color="'text-primaryPink'"
+          <sofa-normal-text
+            :color="'text-primaryPink'"
+            :custom-class="'cursor-pointer'"
             >See all</sofa-normal-text
           >
         </div>
@@ -112,62 +135,13 @@
     </template>
 
     <template v-slot:middle-session>
-      <div class="w-full flex flex-col mdlg:pl-0 pl-4">
-        <div
-          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-        >
-          <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-5 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:pr-0 pr-4 mdlg:pt-0 pt-2"
-          >
-            <div
-              class="mdlg:!col-span-1 w-[280px] mdlg:!w-auto rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] flex flex-row space-x-6 items-center justify-between lg:py-5 lg:px-5 px-3 py-3 bg-primaryPurple"
-            >
-              <sofa-header-text
-                :color="'text-white '"
-                :custom-class="'text-left '"
-              >
-                Engineering Notes
-              </sofa-header-text>
-              <sofa-icon
-                :name="'notes-white'"
-                :custom-class="'lg:h-[37px] h-[30px]'"
-              />
-            </div>
-
-            <div
-              class="mdlg:!col-span-1 w-[280px] mdlg:!w-auto rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] flex flex-row space-x-6 items-center justify-between lg:py-5 lg:px-5 px-3 py-3 bg-primaryGreen"
-            >
-              <sofa-header-text
-                :color="'text-white '"
-                :custom-class="'text-left '"
-              >
-                Engineering Past questions
-              </sofa-header-text>
-              <sofa-icon
-                :name="'questions-white'"
-                :custom-class="'lg:h-[37px] h-[30px]'"
-              />
-            </div>
-
-            <div
-              class="mdlg:!col-span-1 w-[280px] mdlg:!w-auto lg:mr-0 mr-4 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] flex flex-row space-x-6 items-center justify-between lg:py-5 lg:px-5 px-3 py-3 bg-primaryPurplePink"
-            >
-              <sofa-header-text
-                :color="'text-white '"
-                :custom-class="'text-left '"
-              >
-                Engineering Textbook solutions
-              </sofa-header-text>
-              <sofa-icon
-                :name="'books-white'"
-                :custom-class="'lg:h-[37px] h-[30px]'"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div
+        v-if="
+          (!Logic.Users.CheckUserTaskState('profile_setup') ||
+            !Logic.Users.CheckUserTaskState('phone_setup') ||
+            !Logic.Users.CheckUserTaskState('education_setup')) &&
+          Logic.Users.getUserType() != 'organization'
+        "
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 mdlg:!pt-4 pt-3 mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
@@ -186,6 +160,7 @@
               :data="item"
               v-for="(item, index) in profileSteps"
               :key="index"
+              @click="item.action ? item.action() : null"
             >
               <template v-slot:title>
                 <sofa-normal-text :customClass="'!font-bold'">
@@ -198,6 +173,10 @@
       </div>
 
       <div
+        v-if="
+          !Logic.Users.CheckUserTaskState('create_course') ||
+          !Logic.Users.CheckUserTaskState('create_quiz')
+        "
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
@@ -216,6 +195,7 @@
               :data="item"
               v-for="(item, index) in studyMaterialsSteps"
               :key="index"
+              @click="item.action ? item.action() : null"
             >
               <template v-slot:title>
                 <sofa-normal-text :customClass="'!font-bold'">
@@ -228,6 +208,7 @@
       </div>
 
       <div
+        v-if="Logic.Users.getUserType() == 'student'"
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
@@ -246,6 +227,7 @@
               :data="item"
               v-for="(item, index) in takeOnTasks"
               :key="index"
+              @click="item.action ? item.action() : null"
             >
               <template v-slot:title>
                 <sofa-normal-text :customClass="'!font-bold'">
@@ -258,6 +240,7 @@
       </div>
 
       <div
+        v-if="recentChats.length"
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] mdlg:!hidden flex flex-col mdlg:!space-y-4 space-y-1"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
@@ -276,15 +259,18 @@
               :data="item"
               v-for="(item, index) in recentChats"
               :key="index"
+              @click="Logic.Common.GoToRoute('/chat?id=' + item.id)"
             >
               <template v-slot:title>
                 <div class="w-full flex flex-row items-center space-x-2">
-                  <sofa-normal-text :customClass="'!line-clamp-1 font-bold'">
+                  <sofa-normal-text
+                    :customClass="'!line-clamp-1 font-bold text-left'"
+                  >
                     {{ item.title }}
                   </sofa-normal-text>
-                  <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]">
+                  <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]">
                   </span>
-                  <sofa-normal-text>{{ item.date }}</sofa-normal-text>
+                  <sofa-normal-text>{{ item.date }}</sofa-normal-text> -->
                 </div>
               </template>
             </sofa-icon-card>
@@ -299,10 +285,17 @@
           class="w-full flex flex-row space-x-2 items-center justify-between"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Suggested for you
+            Past questions
           </sofa-normal-text>
 
-          <div class="mdlg:!hidden pr-4">
+          <div
+            class="pr-4 mdlg:!pr-0 cursor-pointer"
+            @click="
+              Logic.Common.GoToRoute(
+                `/marketplace/search?tagId=${sectionTags.past_question}&q=nill`
+              )
+            "
+          >
             <sofa-normal-text :color="'text-primaryPink'"
               >See all</sofa-normal-text
             >
@@ -310,25 +303,107 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto scrollbar-hide"
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
-              v-for="(activity, index) in activities"
+              v-for="(activity, index) in pastQuestionContents"
               :key="index"
               :activity="activity"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
             />
           </div>
         </div>
+      </div>
 
-        <!-- <div class="w-full">
-          <sofa-normal-text :color="'text-primaryBlue'"
-            >See all</sofa-normal-text
+      <div
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4"
+      >
+        <div
+          class="w-full flex flex-row space-x-2 items-center justify-between"
+        >
+          <sofa-normal-text :customClass="'!font-bold'">
+            Notes
+          </sofa-normal-text>
+
+          <div
+            class="pr-4 mdlg:!pr-0 cursor-pointer"
+            @click="
+              Logic.Common.GoToRoute(
+                `/marketplace/search?tagId=${sectionTags.note}&q=nill`
+              )
+            "
           >
-        </div> -->
+            <sofa-normal-text :color="'text-primaryPink'"
+              >See all</sofa-normal-text
+            >
+          </div>
+        </div>
 
+        <div
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+        >
+          <div
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+          >
+            <sofa-activity-card
+              v-for="(activity, index) in notesContents"
+              :key="index"
+              :custom-class="'cursor-pointer'"
+              :activity="activity"
+              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4"
+      >
+        <div
+          class="w-full flex flex-row space-x-2 items-center justify-between"
+        >
+          <sofa-normal-text :customClass="'!font-bold'">
+            Textbook solutions
+          </sofa-normal-text>
+
+          <div
+            class="pr-4 mdlg:!pr-0 cursor-pointer"
+            @click="
+              Logic.Common.GoToRoute(
+                `/marketplace/search?tagId=${sectionTags.textbook}&q=nill`
+              )
+            "
+          >
+            <sofa-normal-text :color="'text-primaryPink'"
+              >See all</sofa-normal-text
+            >
+          </div>
+        </div>
+
+        <div
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+        >
+          <div
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+          >
+            <sofa-activity-card
+              v-for="(activity, index) in textbookContents"
+              :key="index"
+              :activity="activity"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4"
+      >
         <div
           class="w-full mdlg:!flex hidden flex-col space-y-3 justify-center items-center py-9 px-6 rounded-[8px] bg-primaryPurple"
         >
@@ -351,10 +426,13 @@
             :bgColor="'bg-white'"
             padding="py-1 px-3"
             :textColor="'text-[#141618]'"
+            @click="Logic.Common.GoToRoute('/marketplace')"
             >Explore more
           </sofa-button>
         </div>
       </div>
+
+      <div class="h-[100px]"></div>
 
       <!-- Content details modal -->
       <sofa-modal
@@ -385,57 +463,149 @@
           </div>
         </div>
       </sofa-modal>
+
+      <!-- Customize AI -->
+      <customize-bot
+        :close="
+          () => {
+            showCustomizeAI = false;
+          }
+        "
+        v-if="showCustomizeAI"
+      />
     </template>
 
     <template v-slot:right-session>
       <div
+        v-if="Logic.Users.getUserType() != 'teacher'"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
       >
-        <div class="w-full flex flex-row items-center space-x-3">
-          <div
-            :style="`background-image: url('/images/icons/robot.svg')`"
-            class="w-[84px] h-[84px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"
-          ></div>
+        <template v-if="Logic.Users.getUserType() == 'student'">
+          <div class="w-full flex flex-row items-center space-x-3">
+            <div
+              :style="`background-image: url('${
+                UserProfile.ai.photo
+                  ? UserProfile.ai.photo.link
+                  : '/images/icons/robot.svg'
+              }')`"
+              class="w-[84px] h-[84px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"
+            ></div>
 
-          <div class="flex flex-col space-y-1">
-            <sofa-header-text :customClass="'!text-base !font-bold'"
-              >Dr. Sofa</sofa-header-text
+            <div class="flex flex-col space-y-1">
+              <sofa-header-text :customClass="'!text-base !font-bold'">{{
+                UserProfile.ai.name
+              }}</sofa-header-text>
+              <sofa-normal-text>{{ UserProfile.ai.tagline }}</sofa-normal-text>
+              <sofa-normal-text
+                :color="'text-primaryPink'"
+                :customClass="'cursor-pointer'"
+                @click="showCustomizeAI = true"
+                >Customise</sofa-normal-text
+              >
+            </div>
+          </div>
+
+          <sofa-text-field
+            placeholder="What can I do for you?"
+            :padding="'px-3 py-3'"
+            :custom-class="'border-[1px]'"
+            v-model="newChatMessage"
+          >
+            <template v-slot:inner-suffix>
+              <sofa-icon
+                :name="'send'"
+                :customClass="'h-[19px] cursor-pointer'"
+                @click="startConversation()"
+              />
+            </template>
+          </sofa-text-field>
+
+          <div class="w-full flex flex-row items-center space-x-2">
+            <sofa-badge
+              :color="'gray'"
+              :isInverted="true"
+              :customClass="'py-2 px-4 cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/quiz/create')"
+              >Create a quiz</sofa-badge
             >
-            <sofa-normal-text>AI Assistant</sofa-normal-text>
-            <sofa-normal-text :color="'text-primaryPink'"
-              >Customise</sofa-normal-text
+            <sofa-badge
+              :color="'gray'"
+              :isInverted="true"
+              :customClass="'py-2 px-4 cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/course/create')"
+              >Create a course</sofa-badge
             >
           </div>
-        </div>
+        </template>
+        <template v-if="Logic.Users.getUserType() == 'organisation'">
+          <div class="w-full flex flex-row items-center justify-between">
+            <sofa-normal-text :custom-class="'!font-bold'">
+              Your students
+            </sofa-normal-text>
+            <div
+              class="flex flex-row space-x-2 items-center cursor-pointer"
+              @click="Logic.Common.GoToRoute('/settings?tab=students')"
+            >
+              <sofa-normal-text :custom-class="'!text-grayColor'">
+                Add
+              </sofa-normal-text>
+              <sofa-icon :name="'add-gray'" :custom-class="'h-[20px]'" />
+            </div>
+          </div>
 
-        <sofa-text-field
-          placeholder="What can I do for you?"
-          :padding="'px-3 py-3'"
-        >
-          <template v-slot:inner-suffix>
-            <sofa-icon :name="'send'" :customClass="'h-[19px]'" />
+          <template v-if="allStudents.length">
+            <div class="w-full flex flex-col space-y-4">
+              <div
+                class="w-full flex flex-row items-center justify-between"
+                v-for="(item, index) in allStudents"
+                :key="index"
+              >
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-avatar
+                    :photoUrl="item.profile_url || ''"
+                    :size="'26'"
+                    :bgColor="'bg-grayColor'"
+                  >
+                    <sofa-icon :name="'user'" :customClass="'h-[15px]'" />
+                  </sofa-avatar>
+
+                  <sofa-normal-text :customClass="'text-left'">
+                    {{ item.name }}
+                  </sofa-normal-text>
+                </div>
+              </div>
+
+              <div class="w-full flex flex-row items-center justify-start">
+                <sofa-normal-text
+                  :color="'text-primaryPink'"
+                  :custom-class="'cursor-pointer'"
+                  @click="Logic.Common.GoToRoute('/settings?tab=students')"
+                >
+                  View all
+                </sofa-normal-text>
+              </div>
+            </div>
           </template>
-        </sofa-text-field>
-
-        <div class="w-full flex flex-row items-center space-x-2">
-          <sofa-badge
-            :color="'gray'"
-            :isInverted="true"
-            :customClass="'py-2 px-4 cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/quiz/create')"
-            >Create a quiz</sofa-badge
-          >
-          <sofa-badge
-            :color="'gray'"
-            :isInverted="true"
-            :customClass="'py-2 px-4'"
-            >Create a course</sofa-badge
-          >
-        </div>
+          <sofa-empty-state
+            v-else
+            :title="'No students'"
+            :subTitle="'Your students have free access all contents you create'"
+            :actionLabel="'Add students'"
+            :action="
+              () => {
+                Logic.Common.GoToRoute('/settings?tab=students');
+              }
+            "
+          />
+        </template>
       </div>
 
       <div
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
+        v-if="
+          (recentChats.length && Logic.Users.getUserType() == 'student') ||
+          Logic.Users.getUserType() == 'teacher'
+        "
       >
         <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
@@ -443,42 +613,56 @@
           </sofa-normal-text>
         </div>
 
-        <div
-          class="w-full px-3 py-3 bg-ligthGray flex flex-row items-center space-x-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"
-          v-for="(item, index) in recentChats"
-          :key="index"
-        >
-          <div>
-            <sofa-icon :custom-class="'h-[40px]'" :name="'conversation'" />
-          </div>
-          <div class="w-full flex flex-col">
-            <div class="w-full flex flex-row items-center space-x-2">
-              <sofa-normal-text :customClass="'!line-clamp-1 font-bold'">
-                {{ item.title }}
-              </sofa-normal-text>
-              <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]"> </span>
-              <sofa-normal-text>{{ item.date }}</sofa-normal-text>
-            </div>
-            <sofa-normal-text
-              :customClass="'!line-clamp-1'"
-              :color="'text-grayColor'"
-            >
-              {{ item.content }}
-            </sofa-normal-text>
-          </div>
-        </div>
-        <div class="w-full">
-          <sofa-normal-text :color="'text-primaryPink'"
-            >See all</sofa-normal-text
+        <template v-if="recentChats.length">
+          <div
+            class="w-full px-3 py-3 bg-ligthGray cursor-pointer flex flex-row items-center space-x-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"
+            v-for="(item, index) in recentChats"
+            :key="index"
+            @click="Logic.Common.GoToRoute('/chat?id=' + item.id)"
           >
-        </div>
+            <div>
+              <sofa-icon :custom-class="'h-[40px]'" :name="'conversation'" />
+            </div>
+            <div class="w-full flex flex-col">
+              <div class="w-full flex flex-row items-center space-x-2">
+                <sofa-normal-text
+                  :customClass="'!line-clamp-1 font-bold text-left'"
+                >
+                  {{ item.title }}
+                </sofa-normal-text>
+                <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]"> </span>
+              <sofa-normal-text>{{ item.date }}</sofa-normal-text> -->
+              </div>
+              <sofa-normal-text
+                :customClass="'!line-clamp-1'"
+                :color="'text-grayColor'"
+              >
+                {{ item.content }}
+              </sofa-normal-text>
+            </div>
+          </div>
+          <div class="w-full">
+            <router-link to="/chat">
+              <sofa-normal-text :color="'text-primaryPink'"
+                >See all</sofa-normal-text
+              >
+            </router-link>
+          </div>
+        </template>
+        <template v-else>
+          <sofa-empty-state
+            :title="'No chat'"
+            :subTitle="'Your active chats will show up here'"
+            :actionLabel="''"
+          />
+        </template>
       </div>
     </template>
   </dashboard-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToTop } from "@/composables";
@@ -492,10 +676,30 @@ import {
   SofaActivityCard,
   SofaIconCard,
   SofaModal,
+  SofaAvatar,
+  SofaEmptyState,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import AccountSetup from "@/components/onboarding/AccountSetup.vue";
-import { showAccountSetup } from "@/composables/profile";
+import {
+  allOrganizationMembers,
+  allStudents,
+  selectedMember,
+  setOrganizationMembers,
+  showAccountSetup,
+  showCustomizeAI,
+  showRemoveMember,
+} from "@/composables/profile";
+import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import CustomizeBot from "@/components/onboarding/CustomizeBot.vue";
+import {
+  AllCourses,
+  setCourses,
+  notesContents,
+  pastQuestionContents,
+  textbookContents,
+  sectionTags,
+} from "@/composables/marketplace";
 
 export default defineComponent({
   components: {
@@ -509,19 +713,100 @@ export default defineComponent({
     SofaIconCard,
     SofaModal,
     AccountSetup,
+    SofaAvatar,
+    CustomizeBot,
+    SofaEmptyState,
   },
-  middlewares: {},
+  middlewares: {
+    fetchRules: [
+      {
+        domain: "Users",
+        property: "UserProfile",
+        method: "GetUserProfile",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Schools",
+        property: "AllInstitutions",
+        method: "GetInstitutions",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Conversations",
+        property: "AllConversations",
+        method: "GetConversations",
+        params: [
+          {
+            where: [
+              {
+                field: "user.id",
+                value: Logic.Auth.AuthUser?.id,
+                condition: Conditions.eq,
+              },
+            ],
+          },
+        ],
+        requireAuth: true,
+        silentUpdate: true,
+      },
+      {
+        domain: "Study",
+        property: "AllCourses",
+        method: "GetCourses",
+        params: [
+          {
+            where: [
+              {
+                field: "status",
+                value: "published",
+                condition: Conditions.eq,
+              },
+            ],
+          },
+        ],
+        requireAuth: true,
+        ignoreProperty: false,
+        silentUpdate: true,
+      },
+      {
+        domain: "Study",
+        property: "AllTopics",
+        method: "GetTopics",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Study",
+        property: "AllOtherTags",
+        method: "GetOtherTags",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Users",
+        property: "AllOrganisationMembers",
+        method: "GetOrganizationMembers",
+        params: [Logic.Auth.AuthUser?.id],
+        requireAuth: true,
+        silentUpdate: false,
+      },
+    ],
+  },
   name: "IndexPage",
   setup() {
     useMeta({
       title: "Home",
     });
 
-    onMounted(() => {
-      scrollToTop();
-    });
+    const UserProfile = ref(Logic.Users.UserProfile);
 
-    const latestAnalytics = [
+    const AllConversations = ref(Logic.Conversations.AllConversations);
+
+    const newChatMessage = ref("");
+
+    const latestAnalytics = ref([
       {
         icon: "orange-list",
         title: "Big Data: What it is and why is this working",
@@ -540,9 +825,9 @@ export default defineComponent({
         subText: "Learn - 75% done",
         subTextColor: "text-primaryOrange",
       },
-    ];
+    ]);
 
-    const activities = [
+    const activities = ref([
       {
         title: "Big Data: What it is and why it matters",
         image: "/images/big-data.png",
@@ -579,93 +864,168 @@ export default defineComponent({
         },
         progress: 60,
       },
-    ];
+    ]);
 
-    const recentChats = [
-      {
-        title: "Calculus",
-        date: "Today",
-        content: "That is the derivative of the function",
-        subTitle: "The idiom is correct",
-        icon: "conversation",
-        iconSize: "h-[40px]",
-      },
-      {
-        title: "Idioms",
-        date: "Yesterday",
-        content: "The idiom is correct",
-        subTitle: "The idiom is correct",
-        icon: "conversation",
-        iconSize: "h-[40px]",
-      },
-      {
-        title: "Scheduling",
-        date: "Yesterday",
-        content: "A very good start",
-        subTitle: "The idiom is correct",
-        icon: "conversation",
-        iconSize: "h-[40px]",
-      },
-    ];
+    const recentChats = reactive([]);
 
-    const profileSteps = [
-      {
-        title: "Add profile",
-        subTitle: "Picture, name and bio",
-        icon: "add-profile",
-        iconSize: "h-[46px]",
-      },
-      {
-        title: "Add education",
-        subTitle: "Level and school or exams",
-        icon: "add-education",
-        iconSize: "h-[46px]",
-      },
-      {
-        title: "Add phone",
-        subTitle: "Enter your phone numbero",
-        icon: "add-phone",
-        iconSize: "h-[46px]",
-      },
-    ];
+    const profileSteps = ref([]);
 
-    const studyMaterialsSteps = [
-      {
-        title: "Create a quiz",
-        subTitle:
-          "Build a customized quiz with different question types and study modes",
-        icon: "pink-question",
-        iconSize: "h-[46px]",
-      },
-      {
-        title: "Create a course",
-        subTitle:
-          "Develop and publish a series of educational material on a particular subject",
-        icon: "orange-list",
-        iconSize: "h-[46px]",
-      },
-    ];
+    const studyMaterialsSteps = ref([]);
 
-    const takeOnTasks = [
-      {
-        title: "Learn a quiz",
-        subTitle: "Practice alone with a quiz",
-        icon: "learn-quiz",
-        iconSize: "h-[46px]",
-      },
-      {
-        title: "Study flashcards",
-        subTitle: "Learn flashcards on a quiz",
-        icon: "study-flashcard",
-        iconSize: "h-[46px]",
-      },
-      {
-        title: "Play a quiz game ",
-        subTitle: "Challenge your friends",
-        icon: "play-quiz",
-        iconSize: "h-[46px]",
-      },
-    ];
+    const takeOnTasks = ref([]);
+
+    const setRecentChats = () => {
+      if (!AllConversations.value) return;
+      recentChats.length = 0;
+      const allConvo = AllConversations.value.results;
+      const latestConversations = AllConversations.value.results.slice(
+        allConvo.length - 3,
+        allConvo.length
+      );
+
+      latestConversations.forEach((convo) => {
+        recentChats.push({
+          title: convo.title,
+          date: "",
+          content: convo.last.body,
+          subTitle: convo.last.body,
+          icon: "conversation",
+          iconSize: "h-[40px]",
+          id: convo.id,
+        });
+      });
+    };
+
+    const setItems = () => {
+      profileSteps.value.length = 0;
+
+      profileSteps.value.push(
+        {
+          title: "Add profile",
+          subTitle: "Picture, name and bio",
+          icon: "add-profile",
+          iconSize: "h-[46px]",
+          isDone: Logic.Users.CheckUserTaskState("profile_setup"),
+        },
+        {
+          title: "Add education",
+          subTitle: "Level and school or exams",
+          icon: "add-education",
+          iconSize: "h-[46px]",
+          isDone: Logic.Users.CheckUserTaskState("education_setup"),
+        },
+        {
+          title: "Add phone",
+          subTitle: "Enter your phone number",
+          icon: "add-phone",
+          iconSize: "h-[46px]",
+          isDone: Logic.Users.CheckUserTaskState("phone_setup"),
+          action: () => {
+            //
+          },
+        }
+      );
+
+      studyMaterialsSteps.value.length = 0;
+
+      studyMaterialsSteps.value.push(
+        {
+          title: "Create a quiz",
+          subTitle:
+            "Build a customized quiz with different question types and study modes",
+          icon: "pink-question",
+          iconSize: "h-[46px]",
+          isDone: Logic.Users.CheckUserTaskState("create_quiz"),
+          action: () => {
+            Logic.Common.GoToRoute("/quiz/create");
+          },
+        },
+        {
+          title: "Create a course",
+          subTitle:
+            "Develop and publish a series of educational material on a particular subject",
+          icon: "orange-list",
+          iconSize: "h-[46px]",
+          isDone: Logic.Users.CheckUserTaskState("create_course"),
+          action: () => {
+            Logic.Common.GoToRoute("/course/create");
+          },
+        }
+      );
+
+      takeOnTasks.value.length = 0;
+      takeOnTasks.value.push(
+        {
+          title: "Learn a quiz",
+          subTitle: "Practice alone with a quiz",
+          icon: "learn-quiz",
+          isDone: Logic.Users.CheckUserTaskState("learn_quiz"),
+          iconSize: "h-[46px]",
+          action: () => {
+            Logic.Common.GoToRoute("/library");
+          },
+        },
+        {
+          title: "Study flashcards",
+          subTitle: "Learn flashcards on a quiz",
+          icon: "study-flashcard",
+          isDone: Logic.Users.CheckUserTaskState("quiz_flashcard"),
+          iconSize: "h-[46px]",
+          action: () => {
+            Logic.Common.GoToRoute("/library");
+          },
+        },
+        {
+          title: "Play a quiz game ",
+          subTitle: "Challenge your friends",
+          icon: "play-quiz",
+          isDone: Logic.Users.CheckUserTaskState("quiz_game"),
+          iconSize: "h-[46px]",
+          action: () => {
+            Logic.Common.GoToRoute("/library");
+          },
+        }
+      );
+    };
+
+    const startConversation = () => {
+      if (newChatMessage.value.length >= 2) {
+        Logic.Common.GoToRoute("/chat?message=" + newChatMessage.value);
+      }
+    };
+
+    onMounted(() => {
+      scrollToTop();
+      setItems();
+      setRecentChats();
+      setCourses(4);
+      Logic.Auth.DetectVerification(showAccountSetup);
+      Logic.Users.watchProperty("UserProfile", UserProfile);
+      // Logic.Conversations.watchProperty("AllConversations", AllConversations);
+      Logic.Study.watchProperty("AllCourses", AllCourses);
+      // set organisation students
+      Logic.Users.watchProperty(
+        "AllOrganisationMembers",
+        allOrganizationMembers
+      );
+      setOrganizationMembers();
+    });
+
+    watch(UserProfile, () => {
+      setItems();
+    });
+
+    watch(AllCourses, () => {
+      setCourses(4);
+    });
+
+    watch(AllConversations, () => {
+      setRecentChats();
+    });
+
+    watch(allOrganizationMembers, () => {
+      setOrganizationMembers();
+    });
 
     return {
       moment,
@@ -677,6 +1037,17 @@ export default defineComponent({
       studyMaterialsSteps,
       takeOnTasks,
       showAccountSetup,
+      UserProfile,
+      newChatMessage,
+      notesContents,
+      pastQuestionContents,
+      textbookContents,
+      sectionTags,
+      showCustomizeAI,
+      allStudents,
+      selectedMember,
+      showRemoveMember,
+      startConversation,
     };
   },
 });

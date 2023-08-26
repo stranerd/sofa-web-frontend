@@ -1,168 +1,259 @@
 <template>
-  <expanded-layout>
-    <div class="flex flex-row justify-between items-center w-full">
+  <expanded-layout :hasBottomBar="false">
+    <div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
       <sofa-normal-text
-        :color="'text-grayColor w-full flex flex-row justify-start'"
+        :color="'text-grayColor w-full flex flex-row justify-start space-x-1'"
       >
-        Marketplace / Physics
+        <span class="cursor-pointer" @click="Logic.Common.goBack()">{{
+          "Marketplace "
+        }}</span>
+        <span> / {{ contentDetails.title }}</span>
       </sofa-normal-text>
     </div>
     <div
-      class="w-full px-4 py-4 bg-white rounded-[16px] h-auto max-h-full flex flex-col space-y-3 items-center justify-start"
+      class="w-full flex mdlg:!hidden flex-row items-center z-[999] space-x-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0"
     >
-      <div class="w-full flex flex-row items-start justify-between">
-        <div class="w-full flex flex-row items-start space-x-3">
-          <sofa-image-loader
-            :photo-url="'/images/chemistry.png'"
-            :customClass="'w-[30%] h-[175px] rounded-[8px]'"
-          />
-
-          <div class="h-full flex flex-col space-y-2 justify-between">
-            <div class="flex flex-col space-y-2">
-              <sofa-normal-text :color="'text-grayColor'">
-                Chemistry
-              </sofa-normal-text>
-              <sofa-normal-text :custom-class="'!font-bold'">
-                Introduction to Organic Chemistry
-              </sofa-normal-text>
-              <div class="flex flex-row space-x-2 items-center">
-                <sofa-badge :color="'pink'"> Course </sofa-badge>
-                <sofa-badge :color="'pink'" :isInverted="true">
-                  12 materials
-                </sofa-badge>
-              </div>
-
-              <sofa-normal-text
-                :customClass="'w-full flex flex-row justify-start text-start'"
-                >This course is the well explained and simplified to ease
-                students into learning organic chemistry in a way that gives
-                them a strong foundation to go further into the world of organic
-                chemistry.</sofa-normal-text
-              >
-            </div>
-
-            <div class="flex flex-row pt-2 items-center space-x-2 flex-grow">
-              <div
-                class="w-[24px] h-[24px] flex flex-row items-center justify-center bg-grayColor border-[1px] border-grayColor rounded-full"
-              >
-                <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-              </div>
-              <sofa-normal-text> Sukky Samwise </sofa-normal-text>
-              <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]"> </span>
-              <sofa-normal-text :color="'text-grayColor'">
-                Last updated 28/01/2023
-              </sofa-normal-text>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-row space-x-4 justify-end items-center">
-          <div class="flex flex-row space-x-4 items-center w-[45px]">
-            <sofa-icon :customClass="'h-[16px]'" :name="'upload'" />
-            <sofa-icon :customClass="'h-[16px]'" :name="'bookmark'" />
-          </div>
-          <sofa-button
-            :custom-class="'!whitespace-nowrap !font-semibold'"
-            padding="py-1 px-3"
-            >Buy
-            {{ Logic.Common.convertToMoney(1200, false, "ngn") }}</sofa-button
-          >
-        </div>
-      </div>
-
-      <div
-        class="w-full flex flex-row space-x-3 justify-between items-center pt-3"
+      <sofa-icon
+        :customClass="'h-[15px]'"
+        :name="'back-arrow'"
+        @click="Logic.Common.goBack()"
+      />
+      <sofa-normal-text :customClass="'!font-bold !text-base'">
+        Course details</sofa-normal-text
       >
-        <div class="flex flex-row items-center justify-start space-x-3">
-          <sofa-normal-text :customClass="'!font-bold '">
-            Content
-          </sofa-normal-text>
-          <span class="h-[4px] w-[4px] rounded-full bg-[#78828c]"> </span>
-          <sofa-normal-text :customClass="'!font-bold '">
-            3 sections
-          </sofa-normal-text>
-          <span class="h-[4px] w-[4px] rounded-full bg-[#78828c]"> </span>
-          <sofa-normal-text :customClass="'!font-bold '">
-            12 materials
-          </sofa-normal-text>
-        </div>
-
-        <sofa-normal-text :color="'text-primaryPink'">
-          Expand all sections
-        </sofa-normal-text>
-      </div>
-
-      <div class="w-full flex flex-col space-y-4 pt-2 pb-2">
-        <div
-          v-for="(item, index) in contentList"
-          :key="index"
-          class="w-full px-4 py-4 bg-ligthGray flex flex-row items-center justify-between space-x-3 rounded-[8px]"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            {{ item.title }}
-          </sofa-normal-text>
-          <div class="flex flex-row space-x-4 items-center">
-            <sofa-normal-text>
-              {{ item.content }}
-            </sofa-normal-text>
-            <sofa-icon :name="'chevron-up'" :customClass="'h-[7px]'" />
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="w-full flex flex-col space-y-3 justify-center items-center py-9 px-6 rounded-[8px] bg-primaryPurple"
-      >
-        <sofa-icon :customClass="'h-[24px]'" :name="'lock-white'" />
-        <div
-          class="w-full flex flex-col space-y-2 justify-center items-center py-2"
-        >
-          <sofa-normal-text :color="'text-white'" :custom-class="'!font-bold'"
-            >You have no access</sofa-normal-text
-          >
-          <sofa-normal-text
-            :color="'text-white'"
-            :custom-class="'w-full flex flex-row items-center justify-center !font-semibold'"
-            >Purchase this quiz to use it’s content in different learning
-            modes</sofa-normal-text
-          >
-        </div>
-        <sofa-button
-          :custom-class="'!whitespace-nowrap'"
-          :bgColor="'bg-white'"
-          padding="py-1 px-3"
-          :textColor="'text-#141618[]'"
-          >Buy
-          {{ Logic.Common.convertToMoney(1200, false, "ngn") }}</sofa-button
-        >
+      <div>
+        <sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
       </div>
     </div>
+    <div
+      class="w-full bg-white rounded-[16px] h-auto max-h-full flex flex-row space-y-3"
+    >
+      <sofa-content-details
+        :content="contentDetails"
+        :customClass="'!rounded-none'"
+        :showBuyButton="true"
+        :buyAction="buyCourse"
+        :itemIsPurchased="PurchasedItems.includes(contentDetails.id)"
+      />
+    </div>
+
+    <!--  Payment modal -->
+    <sofa-modal
+      v-if="showMakePaymentModal"
+      :close="
+        () => {
+          showMakePaymentModal = false;
+        }
+      "
+    >
+      <div
+        class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
+        @click.stop="
+          () => {
+            //
+          }
+        "
+      >
+        <div
+          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-5 space-y-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center"
+        >
+          <div
+            class="w-full hidden flex-col space-y-3 justify-center items-center mdlg:!flex"
+          >
+            <sofa-header-text :customClass="'text-xl'">
+              Choose payment method
+            </sofa-header-text>
+          </div>
+
+          <div
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b-[1px] px-4"
+          >
+            <sofa-normal-text :customClass="'!font-bold !text-base'">
+              Choose payment method
+            </sofa-normal-text>
+            <sofa-icon
+              :customClass="'h-[19px]'"
+              :name="'circle-close'"
+              @click="showMakePaymentModal = false"
+            />
+          </div>
+
+          <div class="w-full flex flex-col space-y-3 mdlg:!px-0 px-4">
+            <!-- Wallet -->
+            <div
+              :class="`w-full flex flex-row items-center space-x-3 px-3 py-3  bg-[#F1F6FA] ${
+                selectedMethodId == 'payWithWallet'
+                  ? 'border-primaryBlue  border-[2px]'
+                  : ''
+              }  custom-border cursor-pointer `"
+              @click="selectedMethodId = 'payWithWallet'"
+            >
+              <sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
+              <sofa-normal-text>
+                Wallet (<span class="!font-semibold">{{
+                  Logic.Common.convertToMoney(
+                    UserWallet.balance.amount,
+                    true,
+                    "ngn"
+                  )
+                }}</span
+                >)
+              </sofa-normal-text>
+            </div>
+
+            <!-- Pay online -->
+
+            <div
+              :class="`w-full flex flex-row items-center space-x-3 px-3 py-3  bg-[#F1F6FA] ${
+                selectedMethodId == 'online'
+                  ? 'border-primaryBlue  border-[2px]'
+                  : ''
+              }  custom-border cursor-pointer `"
+              @click="selectedMethodId = 'online'"
+            >
+              <sofa-icon :customClass="'h-[20px]'" :name="'website'" />
+              <sofa-normal-text> Pay online </sofa-normal-text>
+            </div>
+
+            <div
+              class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer"
+              @click="Logic.Payment.initialPayment()"
+            >
+              <sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
+              <sofa-normal-text :color="'text-grayColor'"
+                >Add credit or debit card</sofa-normal-text
+              >
+            </div>
+
+            <div
+              :class="`w-full flex flex-row items-center space-x-3 px-3 py-3 bg-[#F1F6FA]  ${
+                selectedMethodId == method.id
+                  ? 'border-primaryBlue border-[2px]'
+                  : ''
+              }  custom-border cursor-pointer `"
+              @click="selectedMethodId = method.id"
+              v-for="(method, index) in PaymentMethods.results"
+              :key="index"
+            >
+              <sofa-icon :customClass="'h-[20px]'" :name="'card'" />
+              <sofa-normal-text>
+                **** **** **** {{ method.data.last4Digits }}
+              </sofa-normal-text>
+            </div>
+          </div>
+
+          <div
+            class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4"
+          >
+            <div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
+              <sofa-button
+                :textColor="'text-grayColor'"
+                :bgColor="'bg-white'"
+                :padding="'px-4 py-1'"
+                :customClass="`border-[2px] border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
+                @click="showMakePaymentModal = false"
+              >
+                Exit
+              </sofa-button>
+            </div>
+
+            <div class="md:!w-auto col-span-2 flex flex-col">
+              <sofa-button
+                :textColor="'text-white'"
+                :bgColor="'bg-primaryBlue'"
+                :padding="'px-4 md:!py-1 py-3'"
+                :customClass="`border-[2px] border-transparent md:!min-w-[100px] md:!w-auto w-full`"
+                @click="buyCourse()"
+              >
+                Make payment
+              </sofa-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sofa-modal>
   </expanded-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToTop } from "@/composables";
 import {
-  SofaIcon,
   SofaNormalText,
-  SofaImageLoader,
-  SofaBadge,
+  SofaContentDetails,
+  SofaIcon,
+  SofaModal,
+  SofaHeaderText,
   SofaButton,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
+import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 
 export default defineComponent({
   components: {
-    SofaIcon,
     SofaNormalText,
-    SofaImageLoader,
-    SofaBadge,
+    SofaContentDetails,
+    SofaIcon,
+    SofaModal,
+    SofaHeaderText,
     SofaButton,
   },
-  middlewares: {},
+  middlewares: {
+    fetchRules: [
+      {
+        domain: "Study",
+        property: "SingleCourse",
+        method: "GetCourse",
+        params: [],
+        useRouteId: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Payment",
+        property: "UserWallet",
+        method: "GetUserWallet",
+        params: [],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+      {
+        domain: "Study",
+        property: "Tags",
+        method: "GetTags",
+        params: [],
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Payment",
+        property: "PurchasedItems",
+        method: "GetUserPurchases",
+        params: [false],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+      {
+        domain: "Payment",
+        property: "PaymentMethods",
+        method: "GetPaymentMethods",
+        params: [
+          {
+            where: [
+              {
+                field: "userId",
+                condition: Conditions.eq,
+                value: Logic.Auth.AuthUser?.id,
+              },
+            ],
+          },
+        ],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+    ],
+  },
   name: "MarketplaceInfoPage",
   setup() {
     useMeta({
@@ -170,6 +261,8 @@ export default defineComponent({
     });
 
     const selectedTab = ref("start");
+
+    const UserWallet = ref(Logic.Payment.UserWallet);
 
     const tabItems = [
       {
@@ -186,10 +279,6 @@ export default defineComponent({
       },
     ];
 
-    onMounted(() => {
-      scrollToTop();
-    });
-
     const contentList = [
       {
         title: "Alkanes",
@@ -197,12 +286,140 @@ export default defineComponent({
       },
     ];
 
+    const SingleCourse = ref(Logic.Study.SingleCourse);
+    const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles);
+    const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes);
+
+    const PaymentMethods = ref(Logic.Payment.PaymentMethods);
+    const PurchasedItems = ref(Logic.Payment.PurchasedItems);
+
+    const selectedMethodId = ref("");
+
+    const showMakePaymentModal = ref(false);
+
+    const contentDetails = reactive(Logic.Study.contentDetails);
+
+    const setCourseData = () => {
+      contentDetails.id = SingleCourse.value.id;
+      contentDetails.title = SingleCourse.value.title;
+      contentDetails.price = SingleCourse.value.price.amount;
+      contentDetails.status = SingleCourse.value.status;
+      contentDetails.image = SingleCourse.value.photo
+        ? SingleCourse.value.photo.link
+        : "/images/default.png";
+      contentDetails.info = SingleCourse.value.description;
+      contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
+        SingleCourse.value.createdAt
+      ).format("DD/MM/YYYY")}`;
+      contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`;
+      contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
+        return Logic.Study.GetTagName(id);
+      });
+      contentDetails.user.name = SingleCourse.value.user.bio.name.full;
+      contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
+        ? SingleCourse.value.user.bio.photo.link
+        : "";
+
+      contentDetails.content.materialsCount =
+        SingleCourse.value.coursables.length;
+
+      // set sections
+
+      contentDetails.content.sections.length = 0;
+
+      SingleCourse.value.sections.forEach((section, index) => {
+        contentDetails.content.sections.push({
+          title: section.label,
+          opened: index == 0,
+          data: [],
+        });
+
+        section.items.forEach((item) => {
+          if (item.type == "quiz") {
+            const quizData = SingleCourseQuizzes.value.filter(
+              (quiz) => quiz.id == item.id
+            );
+            if (quizData.length) {
+              contentDetails.content.sections[index].data.push({
+                isLocked: true,
+                sub: `${quizData[0].questions.length} question${
+                  quizData[0].questions.length > 1 ? "s" : ""
+                }`,
+                title: quizData[0].title,
+                type: "Quiz",
+              });
+            }
+          } else {
+            const fileData = SingleCourseFiles.value.filter(
+              (file) => file.id == item.id
+            );
+
+            if (fileData.length) {
+              if (fileData[0].type == "video") {
+                contentDetails.content.sections[index].data.push({
+                  isLocked: true,
+                  sub: fileData[0].description,
+                  title: fileData[0].title,
+                  type: "Video",
+                });
+              } else {
+                contentDetails.content.sections[index].data.push({
+                  isLocked: true,
+                  sub: fileData[0].description,
+                  title: fileData[0].title,
+                  type: "Document",
+                });
+              }
+            }
+          }
+        });
+      });
+    };
+
+    const buyCourse = () => {
+      if (Logic.Common.loaderSetup.loading) return;
+
+      if (SingleCourse.value.price.amount > 0 && selectedMethodId.value == "") {
+        showMakePaymentModal.value = true;
+        return;
+      }
+
+      Logic.Payment.MakePurchaseForm = {
+        id: SingleCourse.value.id,
+        methodId: selectedMethodId.value,
+        type: "courses",
+      };
+
+      Logic.Payment.MakePurchase().then((data) => {
+        if (data) {
+          showMakePaymentModal.value = false;
+          Logic.Payment.GetUserPurchases(false);
+          Logic.Common.GoToRoute("/course/" + SingleCourse.value.id);
+        }
+      });
+    };
+
+    onMounted(() => {
+      scrollToTop();
+      setCourseData();
+      Logic.Payment.watchProperty("PaymentMethods", PaymentMethods);
+      Logic.Payment.watchProperty("PurchasedItems", PurchasedItems);
+      Logic.Payment.watchProperty("UserWallet", UserWallet);
+    });
+
     return {
       moment,
       tabItems,
       Logic,
       selectedTab,
       contentList,
+      contentDetails,
+      buyCourse,
+      PaymentMethods,
+      showMakePaymentModal,
+      selectedMethodId,
+      PurchasedItems,
+      UserWallet,
     };
   },
 });

@@ -17,6 +17,7 @@
           v-model="quizSettingsForm.title"
           :placeholder="'Title'"
           :borderColor="'border-transparent'"
+          :updateValue="quizSettingsForm.title"
           :rules="[Logic.Form.RequiredRule]"
         />
 
@@ -25,7 +26,9 @@
           :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'"
           :richEditor="false"
+          ref="description"
           v-model="quizSettingsForm.description"
+          :updateValue="quizSettingsForm.description"
         />
 
         <sofa-select
@@ -84,16 +87,18 @@
     </div>
 
     <div class="w-full flex flex-col space-y-2">
-      <sofa-text-field
+      <sofa-select
         :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-        type="text"
+        :padding="'md:!py-4 md:!px-4 px-3 py-4'"
         :name="'Tags'"
         ref="tags"
-        v-model="quizSettingsForm.tagIds"
-        :placeholder="'Tags (Comma separated for multiple)'"
+        :placeholder="'Tags'"
+        :rules="[FormValidations.RequiredRule]"
+        :autoComplete="true"
         :borderColor="'border-transparent'"
-        :rules="[Logic.Form.RequiredRule]"
+        :options="allGenericTags"
+        v-model="quizSettingsForm.tagIds"
+        :isMultiple="true"
       />
     </div>
 
@@ -110,14 +115,32 @@
         Exit
       </sofa-button>
 
-      <div class="mdlg:!w-auto w-full">
-        <sofa-button
-          :padding="'px-5 py-2'"
-          :customClass="'mdlg:!w-auto w-full'"
-          @click.prevent="createQuiz(formComp)"
+      <div
+        class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!space-x-3 grid grid-cols-2 gap-2 mdlg:!gap-0 items-center"
+      >
+        <div
+          :class="`mdlg:!w-auto  flex flex-col ${
+            quiz && quiz.status != 'published' ? 'col-span-1' : 'col-span-full'
+          }`"
         >
-          {{ quiz ? "Save" : "Create" }}
-        </sofa-button>
+          <sofa-button
+            :padding="'px-5 mdlg:!py-2 py-3'"
+            :customClass="'mdlg:!w-auto w-full'"
+            @click.prevent="quiz ? updateQuiz(formComp) : createQuiz(formComp)"
+          >
+            {{ quiz ? "Save" : "Create" }}
+          </sofa-button>
+        </div>
+        <div class="mdlg:!w-auto col-span-1 flex flex-col">
+          <sofa-button
+            :padding="'px-5 mdlg:!py-2 py-3'"
+            :customClass="'mdlg:!w-auto w-full'"
+            v-if="quiz && quiz.status != 'published'"
+            @click.prevent="Logic.Study.PublishQuiz(quiz.id)"
+          >
+            Publish
+          </sofa-button>
+        </div>
       </div>
     </div>
   </sofa-form-wrapper>
@@ -137,11 +160,17 @@ import {
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { FormValidations } from "@/composables";
-import { allTopics, getTopics } from "@/composables/course";
+import {
+  allGenericTags,
+  allTopics,
+  getGenericTags,
+  getTopics,
+} from "@/composables/course";
 import {
   createQuiz,
   quizSettingSaved,
   quizSettingsForm,
+  updateQuiz,
 } from "@/composables/quiz";
 import { Quiz } from "sofa-logic/src/logic/types/domains/study";
 
@@ -185,10 +214,14 @@ export default defineComponent({
 
     const formComp = ref<any>();
 
+    const preventUpdate = ref(true);
+
     const quizImageUrl = ref("");
 
     watch(quizSettingSaved, () => {
-      context.emit("OnQuizUpdated", quizSettingSaved);
+      if (!preventUpdate.value) {
+        context.emit("OnQuizUpdated", quizSettingSaved);
+      }
     });
 
     const setDefaultValues = () => {
@@ -200,12 +233,30 @@ export default defineComponent({
         quizSettingsForm.topicId = quiz.topicId;
         quizSettingsForm.visibility = "active";
         quizImageUrl.value = quiz.photo.link;
+      } else {
+        quizSettingsForm.title = "";
+        quizSettingsForm.description = "";
+        quizSettingsForm.tagIds = [];
+        quizSettingsForm.topicId = "";
+        quizSettingsForm.visibility = "";
+        quizImageUrl.value = "";
+
+        setTimeout(() => {
+          formComp.value.fieldsToValidate?.Visibility.emptyValue();
+          formComp.value.fieldsToValidate?.title.emptyValue();
+          formComp.value.fieldsToValidate?.topic.emptyValue();
+          formComp.value.fieldsToValidate?.description.emptyValue();
+        }, 500);
       }
     };
 
     onMounted(() => {
       getTopics();
       setDefaultValues();
+      getGenericTags();
+      setTimeout(() => {
+        preventUpdate.value = false;
+      }, 3000);
     });
 
     return {
@@ -217,6 +268,8 @@ export default defineComponent({
       quizImageUrl,
       createQuiz,
       allTopics,
+      updateQuiz,
+      allGenericTags,
     };
   },
   data() {

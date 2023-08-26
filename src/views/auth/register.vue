@@ -6,7 +6,7 @@
       <div class="w-full flex flex-row space-x-4 md:!items-center">
         <span class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
           <sofa-icon
-            :customClass="'md:!h-[26px] h-[20px]'"
+            :customClass="'md:!h-[26px] h-[20px] cursor-pointer'"
             :name="'auth-goback'"
           />
         </span>
@@ -14,10 +14,13 @@
         <div
           class="w-full flex flex-col md:!justify-center md:!items-center justify-start items-start space-y-1"
         >
-          <sofa-header-text :customClass="'md:!text-2xl text-lg'"
-            >Create your account</sofa-header-text
-          >
+          <sofa-header-text :customClass="'md:!text-2xl text-lg'">{{
+            accountType == "organisation"
+              ? "Set up your organization"
+              : "Create your account"
+          }}</sofa-header-text>
           <sofa-normal-text
+            v-if="accountType != 'organisation'"
             :color="'text-grayColor'"
             :customClass="'!font-normal'"
             >Join the School Of Future Africa</sofa-normal-text
@@ -29,35 +32,42 @@
         class="h-full flex flex-col items-center space-y-4 justify-center w-full md:!px-10 px-0"
       >
         <div class="flex flex-col space-y-6 w-full">
-          <div class="w-full flex flex-col space-y-4">
-            <div
-              class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row space-x-2 items-center justify-center"
-            >
-              <sofa-icon :customClass="'h-[16px]'" :name="'google'" />
-              <sofa-normal-text :custom-class="'!font-semibold'"
-                >Continue with Google</sofa-normal-text
+          <template v-if="accountType != 'organisation'">
+            <div class="w-full flex flex-col space-y-4">
+              <div class="w-full flex flex-col items-center justify-center">
+                <GoogleLogin :callback="onSuccessGoogle" prompt />
+              </div>
+
+              <!-- <div>
+              <div
+                class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row items-center justify-center"
               >
+                <vue-apple-login
+                  color="white"
+                  :border="false"
+                  type="continue"
+                  width="100%"
+                  height="25"
+                  logoSize="large"
+                  :onSuccess="onSuccessApple"
+                  mode="center-align"
+                  :className="'!border-none !h-auto'"
+                  :onFailure="onFailure"
+                ></vue-apple-login>
+              </div>
+            </div> -->
             </div>
 
-            <div
-              class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row space-x-2 items-center justify-center"
-            >
-              <sofa-icon :customClass="'h-[17px]'" :name="'apple'" />
-              <sofa-normal-text :custom-class="'!font-semibold'"
-                >Continue with Apple</sofa-normal-text
+            <div class="w-full flex flex-row space-x-3 items-center pt-2">
+              <div class="border-[1px] border-[#E1E6EB] w-full"></div>
+              <sofa-normal-text
+                :color="'text-grayColor'"
+                :customClass="'!whitespace-nowrap'"
+                >Or use email</sofa-normal-text
               >
+              <div class="border-[1px] border-[#E1E6EB] w-full"></div>
             </div>
-          </div>
-
-          <div class="w-full flex flex-row space-x-3 items-center pt-2">
-            <div class="border-[1px] border-[#E1E6EB] w-full"></div>
-            <sofa-normal-text
-              :color="'text-grayColor'"
-              :customClass="'!whitespace-nowrap'"
-              >Or use email</sofa-normal-text
-            >
-            <div class="border-[1px] border-[#E1E6EB] w-full"></div>
-          </div>
+          </template>
 
           <sofa-form-wrapper
             :parentRefs="parentRefs"
@@ -68,6 +78,28 @@
               :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
               :padding="'md:!py-4 md:!px-4 px-3 py-3'"
               type="text"
+              :name="'Organization name'"
+              ref="first_name"
+              v-if="accountType == 'organisation'"
+              v-model="registerForm.organisation_name"
+              :placeholder="'Name of organization'"
+              :rules="[FormValidations.RequiredRule]"
+            />
+
+            <sofa-textarea
+              :hasTitle="false"
+              :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint  !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+              :placeholder="'About the organisation'"
+              :richEditor="false"
+              v-model="registerForm.description"
+              :rules="[FormValidations.RequiredRule]"
+              ref="description"
+              v-if="accountType == 'organisation'"
+            />
+            <sofa-text-field
+              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+              :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+              type="email"
               :name="'Email'"
               ref="email"
               v-model="registerForm.email"
@@ -101,9 +133,9 @@
             <sofa-button
               :customClass="'w-full'"
               :padding="'md:!py-4 py-3'"
-              @click="SignUp(formComp)"
+              @click="SignUp(formComp, accountType)"
             >
-              Sign Up
+              {{ accountType == "organisation" ? "Get started" : "Sign Up" }}
             </sofa-button>
           </div>
         </div>
@@ -135,6 +167,7 @@ import {
   SofaCheckbox,
   SofaButton,
   SofaFormWrapper,
+  SofaTextarea,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { registerForm, SignUp, termsAccepted } from "@/composables/auth";
@@ -148,6 +181,7 @@ export default defineComponent({
     SofaCheckbox,
     SofaButton,
     SofaFormWrapper,
+    SofaTextarea,
   },
   middlewares: {},
   name: "AuthRegisterPage",
@@ -156,11 +190,39 @@ export default defineComponent({
       title: "Create Your Account",
     });
 
+    const accountType = ref("student");
+
     const formComp = ref<any>();
 
     onMounted(() => {
+      // get account type
+      const routeQueries = Logic.Common.route.query;
+
+      if (routeQueries?.type) {
+        localStorage.setItem(
+          "user_account_type",
+          routeQueries?.type.toString()
+        );
+        accountType.value = routeQueries?.type.toString();
+      }
       scrollToTop();
     });
+
+    const onSuccessGoogle = (data: any) => {
+      Logic.Auth.GoogleSignInForm = {
+        accessToken: "",
+        idToken: data.credential,
+      };
+      Logic.Auth.GoogleSignIn();
+    };
+
+    const onSuccessApple = (data: any) => {
+      console.log(data);
+    };
+
+    const onFailure = () => {
+      //
+    };
 
     return {
       Logic,
@@ -168,7 +230,11 @@ export default defineComponent({
       registerForm,
       FormValidations,
       termsAccepted,
+      accountType,
       SignUp,
+      onSuccessGoogle,
+      onSuccessApple,
+      onFailure,
     };
   },
   data() {

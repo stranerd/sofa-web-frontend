@@ -4,34 +4,39 @@
     ref="formComp"
     class="w-full flex flex-col space-y-4"
   >
-    <div class="w-full grid grid-cols-3 gap-3">
-      <div
-        :class="`col-span-1 py-3 px-3 custom-border flex flex-row items-center space-x-2 justify-center ${
-          option.status == 'active' ? 'bg-primaryPurple' : ''
-        } 
+    <div class="w-full grid grid-cols-6 gap-3">
+      <template v-for="(option, index) in accountSetupOptions" :key="index">
+        <div
+          :class="`${
+            currentAccountType == 'organisation' ? 'col-span-3' : 'col-span-2'
+          } py-3 px-3 custom-border flex flex-row items-center space-x-2 justify-center ${
+            option.status == 'active' ? 'bg-primaryPurple' : ''
+          } 
         ${option.status == 'inactive' ? 'bg-lightGrayVaraint' : ''} ${
-          option.status == 'done' ? 'bg-primaryGreen' : ''
-        }`"
-        v-for="(option, index) in accountSetupOptions"
-        :key="index"
-      >
-        <sofa-normal-text
-          :color="` ${option.status == 'active' ? 'text-white' : ''} 
-          ${option.status == 'inactive' ? 'text-grayColor' : ''} ${
-            option.status == 'done' ? 'text-white' : ''
+            option.status == 'done' ? 'bg-primaryGreen' : ''
           }`"
+          v-if="option.show"
         >
-          {{ option.name }}
-        </sofa-normal-text>
-        <sofa-icon
-          v-if="option.status == 'done'"
-          :customClass="'h-[14px]'"
-          :name="'done'"
-        />
-      </div>
+          <sofa-normal-text
+            :color="` ${option.status == 'active' ? 'text-white' : ''} 
+          ${option.status == 'inactive' ? 'text-grayColor' : ''} ${
+              option.status == 'done' ? 'text-white' : ''
+            }`"
+          >
+            {{ option.name }}
+          </sofa-normal-text>
+          <sofa-icon
+            v-if="option.status == 'done'"
+            :customClass="'h-[14px]'"
+            :name="'done'"
+          />
+        </div>
+      </template>
     </div>
 
-    <template v-if="currentSetupOption == 'profile'">
+    <template
+      v-if="currentSetupOption == 'profile' && accountSetupOptions[0].show"
+    >
       <div class="w-full flex flex-col space-y-4 py-3">
         <div class="w-full flex flex-col items-center justify-center pt-3">
           <sofa-image-loader
@@ -67,6 +72,7 @@
           :rules="[FormValidations.RequiredRule]"
           v-model="updateProfileForm.name.first"
           :borderColor="'border-transparent'"
+          v-if="currentAccountType != 'organisation'"
         />
 
         <sofa-text-field
@@ -79,19 +85,41 @@
           :rules="[FormValidations.RequiredRule]"
           v-model="updateProfileForm.name.last"
           :borderColor="'border-transparent'"
+          v-if="currentAccountType != 'organisation'"
+        />
+
+        <sofa-text-field
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+          type="text"
+          :name="'Organisation name'"
+          ref="organisation_name"
+          :placeholder="'Organisation name'"
+          :rules="[FormValidations.RequiredRule]"
+          v-model="updateProfileForm.organisation_name"
+          :borderColor="'border-transparent'"
+          :default-value="updateProfileForm.organisation_name"
+          v-if="currentAccountType == 'organisation'"
         />
 
         <sofa-textarea
           :hasTitle="false"
           :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-          :placeholder="'Bio'"
+          :placeholder="
+            currentAccountType != 'organisation'
+              ? 'Bio'
+              : 'About the organisation'
+          "
           :richEditor="false"
           v-model="updateProfileForm.description"
+          :update-value="updateProfileForm.description"
         />
       </div>
     </template>
 
-    <template v-if="currentSetupOption == 'education'">
+    <template
+      v-if="currentSetupOption == 'education' && accountSetupOptions[1].show"
+    >
       <div class="w-full flex flex-col space-y-4 py-3">
         <sofa-select
           :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
@@ -99,6 +127,7 @@
           :name="'Level'"
           ref="level"
           :placeholder="'Select education level'"
+          v-if="updateUserEducationForm.type == 'student'"
           :rules="[FormValidations.RequiredRule]"
           :borderColor="'border-transparent'"
           :options="educationOptions.levels"
@@ -128,6 +157,7 @@
           :rules="[FormValidations.RequiredRule]"
           :borderColor="'border-transparent'"
           :options="educationOptions.faculties"
+          v-if="updateUserEducationForm.type == 'student'"
           v-model="updateUserEducationForm.faculty"
           @OnOptionSelected="setDepartmentsOptions"
         />
@@ -140,13 +170,16 @@
           :placeholder="'Department'"
           :rules="[FormValidations.RequiredRule]"
           :borderColor="'border-transparent'"
+          v-if="updateUserEducationForm.type == 'student'"
           :options="educationOptions.departments"
           v-model="updateUserEducationForm.department"
         />
       </div>
     </template>
 
-    <template v-if="currentSetupOption == 'phone'">
+    <template
+      v-if="currentSetupOption == 'phone' && accountSetupOptions[2].show"
+    >
       <div class="w-full flex flex-col py-5">
         <template v-if="phoneVerificationState == 'start'">
           <sofa-text-field
@@ -242,7 +275,7 @@
   </sofa-form-wrapper>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import {
   SofaNormalText,
   SofaIcon,
@@ -259,6 +292,7 @@ import { FormValidations } from "@/composables";
 import phoneCodes from "../../assets/country-phone.json";
 import {
   accountSetupOptions,
+  accountTypeOption,
   currentSetupOption,
   educationOptions,
   phoneVerificationState,
@@ -273,6 +307,7 @@ import {
   updateUserEducationForm,
   VerifyPhone,
 } from "@/composables/profile";
+import { Logic } from "sofa-logic";
 
 export default defineComponent({
   components: {
@@ -290,11 +325,9 @@ export default defineComponent({
   props: {
     name: {
       type: String,
-      required: true,
     },
     customClass: {
       type: String,
-      required: true,
     },
   },
   name: "AccountSetup",
@@ -302,6 +335,12 @@ export default defineComponent({
     const profileImageUrl = ref("");
 
     const formComp = ref<any>();
+
+    const UserProfile = ref(Logic.Users.UserProfile);
+
+    const currentAccountType = ref(
+      localStorage.getItem("user_account_type") || "student"
+    );
 
     const handleAccountSetup = (type: "profile" | "education" | "phone") => {
       if (type == "profile") {
@@ -317,6 +356,53 @@ export default defineComponent({
       }
     };
 
+    const detectVerificationStage = () => {
+      updateUserEducationForm.type =
+        localStorage.getItem("user_account_type") || "student";
+
+      if (localStorage.getItem("user_account_type") == "organisation") {
+        accountSetupOptions[1].show = false;
+        updateUserEducationForm.type = "organisation";
+        updateProfileForm.organisation_name = `${UserProfile.value?.bio.name?.full}`;
+        updateProfileForm.description = UserProfile.value?.bio.description;
+      }
+      accountSetupOptions.forEach((item) => {
+        if (item.id == "profile") {
+          if (currentAccountType.value == "organisation") {
+            if (UserProfile.value?.type?.name) {
+              item.status = "done";
+              currentSetupOption.value = "phone";
+            }
+          } else {
+            if (
+              UserProfile.value?.bio.name?.first &&
+              UserProfile.value?.bio.name?.first != "New"
+            ) {
+              item.status = "done";
+              currentSetupOption.value = "education";
+              accountSetupOptions[1].status = "active";
+            }
+          }
+        }
+
+        if (
+          item.id == "education" &&
+          currentAccountType.value != "organisation"
+        ) {
+          if (UserProfile.value?.type) {
+            item.status = "done";
+            currentSetupOption.value = "phone";
+          }
+        }
+
+        if (item.id == "phone") {
+          if (UserProfile.value?.bio.phone) {
+            item.status = "done";
+          }
+        }
+      });
+    };
+
     const handleSchoolSelection = (option: any) => {
       updateUserEducationForm.institution = option.extraId;
       setFacultiesOptions();
@@ -325,6 +411,12 @@ export default defineComponent({
     const onChangeOTP = () => {
       //
     };
+
+    onMounted(() => {
+      detectVerificationStage();
+      Logic.Users.watchProperty("UserProfile", UserProfile);
+      setSchoolsOption();
+    });
 
     return {
       accountSetupOptions,
@@ -336,9 +428,11 @@ export default defineComponent({
       profileImageUrl,
       formComp,
       updateProfileForm,
+      currentAccountType,
       handleAccountSetup,
       educationOptions,
       updateUserEducationForm,
+      accountTypeOption,
       setSchoolsOption,
       setFacultiesOptions,
       setDepartmentsOptions,

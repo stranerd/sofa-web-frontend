@@ -5,6 +5,12 @@ export const topBarTitle = ref('')
 export const tabTitle = ref('')
 export const backRoutePath = ref('')
 
+export const showAddItem = ref(false)
+
+export const handleShowAddItem = () => {
+  showAddItem.value = true
+}
+
 export const scrollToTop = () => {
   window.scroll({
     top: 0,
@@ -19,7 +25,7 @@ export const scrollToBottom = (id = '') => {
   if (id) {
     height = document.getElementById(id)?.scrollHeight
 
-    document.getElementById(id).scroll({
+    document.getElementById(id)?.scroll({
       top: height,
       left: 0,
       behavior: 'auto',
