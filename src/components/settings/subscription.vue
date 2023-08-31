@@ -21,7 +21,7 @@
             >
               {{
                 userWallet.subscription.current.id == "premium-plan"
-                  ? "Stranerd Plus"
+                  ? "Stranerd Premium"
                   : "Stranerd for organization"
               }}
             </sofa-header-text>
@@ -69,6 +69,7 @@
 
     <template v-if="userWallet.subscription.active == false">
       <div
+        v-if="Logic.Users.getUserType() == 'organisation'"
         class="w-full flex flex-col space-y-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom"
       >
         <sofa-header-text :size="'xl'" :customClass="'text-left'">
@@ -78,7 +79,16 @@
         <div class="w-full flex flex-col space-y-2">
           <div class="flex flex-row space-x-2 items-center">
             <sofa-header-text :customClass="'text-left !text-2xl !font-bold'">
-              ₦500 per student
+              {{
+                Logic.Common.convertToMoney(
+                  AllPlans.results.filter(
+                    (item) => item.id == "organization-plan"
+                  )[0]?.amount,
+                  false,
+                  "ngn"
+                )
+              }}
+              per student
             </sofa-header-text>
             <sofa-normal-text :customClass="'!text-2xl'">
               / month
@@ -103,6 +113,7 @@
 
       <div
         class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom"
+        v-if="Logic.Users.getUserType() == 'student'"
       >
         <sofa-header-text
           :size="'xl'"
@@ -198,6 +209,8 @@ export default defineComponent({
       },
     ];
 
+    const AllPlans = ref(Logic.Payment.AllPlans);
+
     onMounted(() => {
       Logic.Payment.watchProperty("UserWallet", userWallet);
     });
@@ -220,8 +233,9 @@ export default defineComponent({
       Logic,
       subscriptionInfo,
       userWallet,
-      subscibeToPlan,
+      AllPlans,
       autoRenewIsOn,
+      subscibeToPlan,
     };
   },
 });

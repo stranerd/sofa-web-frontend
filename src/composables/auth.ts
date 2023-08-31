@@ -1,7 +1,6 @@
 import { Logic } from 'sofa-logic'
 import { SignInInput, SignUpInput } from 'sofa-logic/src/logic/types/forms/auth'
 import { reactive, ref } from 'vue'
-import { showAccountSetup } from './profile'
 
 const registerForm = reactive<SignUpInput>({
   email: '',
@@ -76,7 +75,7 @@ const SignIn = (formComp: any) => {
   Logic.Auth.SignIn(formState)
     .then((data) => {
       if (data) {
-        Logic.Auth.DetectVerification(showAccountSetup)
+        // do something else
       }
     })
     .catch((error) => {
@@ -91,7 +90,7 @@ const VerifyUserEmail = (token: string) => {
     }
     Logic.Auth.VerifyEmailWithToken(true).then((response) => {
       if (response) {
-        Logic.Auth.DetectVerification(showAccountSetup)
+        // do something else
       }
     })
   } else {

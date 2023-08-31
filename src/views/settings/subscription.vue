@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 import { useMeta } from "vue-meta";
 import { SofaNormalText, SofaIcon } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
@@ -34,16 +34,21 @@ export default defineComponent({
     SofaIcon,
   },
   middlewares: {
-    fetchRules: [],
+    fetchRules: [
+      {
+        domain: "Payment",
+        property: "AllPlans",
+        method: "GetPlans",
+        params: [],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+    ],
   },
   name: "SubscriptionSettingPage",
   setup() {
     useMeta({
       title: "Subscription",
-    });
-
-    onMounted(() => {
-      //
     });
 
     return {

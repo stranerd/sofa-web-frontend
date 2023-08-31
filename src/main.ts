@@ -66,6 +66,8 @@ const init = async () => {
           // fetch auth user in background
           Logic.Auth.GetAuthUser()
           Logic.Users.GetUserProfile()
+
+          Logic.Auth.DetectVerification()
         }
       }
     },

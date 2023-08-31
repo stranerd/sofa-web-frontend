@@ -15,7 +15,8 @@
     class="w-full flex flex-col flex-grow items-center justify-center h-full"
   >
     <div
-      :class="`h-full pb-4 flex-grow text-center relative px-0  mdlg:px-0 mdlg:!space-y-5 flex flex-col items-center  lg:text-sm mdlg:text-[12px] text-xs ${layoutStyle}`"
+      :class="`h-full pb-4 flex-grow text-center relative px-0  mdlg:px-0 mdlg:!space-y-5 flex flex-col  items-center  lg:text-sm mdlg:text-[12px] text-xs ${layoutStyle}`"
+      :style="`background-image: url(${bgImage})`"
     >
       <slot />
       <div class="h-[120px] mdlg:!hidden" v-if="bottomPadding"></div>
@@ -80,6 +81,10 @@ export default defineComponent({
     bottomPadding: {
       type: Boolean,
       default: true,
+    },
+    bgImage: {
+      type: String,
+      default: "",
     },
   },
   name: "ExpandedLayout",

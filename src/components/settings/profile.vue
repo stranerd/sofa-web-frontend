@@ -299,7 +299,6 @@ import {
 import { FormValidations } from "@/composables";
 import {
   accountTypeOption,
-  autoCreateVerification,
   educationOptions,
   setDepartmentsOptions,
   setFacultiesOptions,
@@ -312,6 +311,7 @@ import {
   updateVerificationForm,
 } from "@/composables/profile";
 import { Logic } from "sofa-logic";
+import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 
 export default defineComponent({
   components: {
@@ -336,7 +336,7 @@ export default defineComponent({
 
     const preventUpdate = ref(true);
 
-    const UserVerification = ref(Logic.Users.Verifications.results[0]);
+    const UserVerification = ref(Logic.Users.Verifications?.results[0]);
 
     const setDefaultValues = () => {
       updateProfileForm.description = UserProfile.value.bio.description;
@@ -371,10 +371,24 @@ export default defineComponent({
       Logic.Users.watchProperty("UserProfile", UserProfile);
       setDefaultValues();
       setSchoolsOption();
-      autoCreateVerification();
       setTimeout(() => {
         preventUpdate.value = false;
       }, 3000);
+
+      // get user verification
+      Logic.Users.GetVerifications({
+        where: [
+          {
+            field: "userId",
+            condition: Conditions.eq,
+            value: Logic.Auth.AuthUser?.id,
+          },
+        ],
+      }).then(() => {
+        if (UserVerification.value) {
+          updateVerificationForm.socials = UserVerification.value.socials;
+        }
+      });
     });
 
     watch(updateProfileForm, () => {

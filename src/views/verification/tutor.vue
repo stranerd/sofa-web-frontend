@@ -292,7 +292,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 import {
   SofaNormalText,
@@ -308,14 +308,18 @@ import {
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import {
+  allCountries,
+  allStates,
+  Countries,
+  countryIsSelected,
   createTutorRequest,
+  setCountry,
   tutorRequestForm,
   UpdateProfile,
   updateProfileForm,
   updateUserLocation,
 } from "@/composables/profile";
 import { FormValidations } from "@/composables";
-import { SelectOption } from "sofa-logic/src/logic/types/common";
 import { allTopics, getTopics } from "@/composables/course";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import { createQuizData } from "@/composables/library";
@@ -375,11 +379,7 @@ export default defineComponent({
     const UserProfile = ref(Logic.Users.UserProfile);
     const SingleTutorRequest = ref(Logic.Users.SingleTutorRequest);
     const SingleQuiz = ref(Logic.Study.SingleQuiz);
-    const Countries = ref(Logic.Users.Countries);
     const TestQuiz = ref();
-
-    const allCountries = reactive<SelectOption[]>([]);
-    const allStates = reactive<SelectOption[]>([]);
 
     const selectedTopic = ref("");
 
@@ -407,20 +407,6 @@ export default defineComponent({
       UpdateProfile(undefined, false);
     });
 
-    const setCountry = () => {
-      if (Countries.value) {
-        allCountries.length = 0;
-
-        Countries.value.forEach((country) => {
-          allCountries.push({
-            key: country.name,
-            value: country.name,
-            extras: JSON.stringify(country.states),
-          });
-        });
-      }
-    };
-
     onMounted(() => {
       Logic.Users.watchProperty("UserProfile", UserProfile);
       Logic.Users.watchProperty("Countries", Countries);
@@ -439,18 +425,6 @@ export default defineComponent({
     watch(Countries, () => {
       setCountry();
     });
-
-    const countryIsSelected = (data: any) => {
-      updateProfileForm.state = "";
-      allStates.length = 0;
-      const AllStateData: any = JSON.parse(data.extras);
-      AllStateData.forEach((states: { name: string; state_code: string }) => {
-        allStates.push({
-          key: states.name,
-          value: states.name,
-        });
-      });
-    };
 
     const handleNextAction = () => {
       if (currentStep.value == "profile") {

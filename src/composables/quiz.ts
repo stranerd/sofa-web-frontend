@@ -13,6 +13,8 @@ const selectedQuizMode = ref('')
 
 const userIsParticipating = ref(true)
 
+const currentPrepareCount = ref(0)
+
 const scoreBoardParticipants = reactive<
   {
     score: number
@@ -214,7 +216,9 @@ const listenToGame = () => {
       Logic.Plays.SingleGame = data.data
       Logic.Plays.GetGame(Logic.Plays.SingleGame.id).then(() => {
         if (data.data.status == 'started' && state.value != 'question') {
-          showQuestion(0)
+          Logic.Common.debounce(() => {
+            preStartGame()
+          })
         }
       })
     },
@@ -222,6 +226,48 @@ const listenToGame = () => {
       console.log(data)
     },
   )
+}
+
+const preStartGame = () => {
+  currentPrepareCount.value = 0
+  if (mode.value == 'game') {
+    if (SingleGame.value.status != 'started') {
+      state.value = 'lobby'
+      enabledSwiper.value = false
+      answerState.value = ''
+
+      buttonLabels.left = {
+        label: '',
+        bgColor: ' ',
+        textColor: ' ',
+      }
+
+      buttonLabels.right = {
+        label: '',
+        bgColor: ' ',
+        textColor: ' ',
+      }
+      return
+    }
+    currentPrepareCount.value = 5
+    state.value = 'prepare'
+
+    Logic.Common.debounce(() => {
+      const prepareCount = setInterval(() => {
+        if (currentPrepareCount.value == 1) {
+          state.value = 'question'
+          setViewMode()
+          setTimeout(() => {
+            showQuestion(0)
+          }, 500)
+          clearInterval(prepareCount)
+        } else {
+          state.value = 'prepare'
+          currentPrepareCount.value--
+        }
+      }, 1000)
+    }, 300)
+  }
 }
 
 const showQuestion = (index: number) => {
@@ -301,9 +347,11 @@ const showQuestion = (index: number) => {
 const setQuestions = () => {
   questions.length = 0
 
-  questions.push(
-    ...Logic.Study.CovertQuestionToQuizData(AllQuestions.value.results),
-  )
+  if (AllQuestions.value) {
+    questions.push(
+      ...Logic.Study.CovertQuestionToQuizData(AllQuestions.value.results),
+    )
+  }
 }
 
 const setScoreboardParticipants = () => {
@@ -332,7 +380,6 @@ const userIsGameHost = (id = null) => {
 }
 
 const setStartButtons = () => {
-  state.value = 'question'
   mobileTitle.value = SingleQuiz.value.title
 
   if (mode.value == 'flashcard') {
@@ -695,6 +742,7 @@ export {
   SingleGame,
   GameParticipants,
   scoreBoardParticipants,
+  currentPrepareCount,
   saveParticipantAnswer,
   createQuiz,
   updateQuiz,
@@ -716,4 +764,5 @@ export {
   startGame,
   listenToGame,
   setScoreboardParticipants,
+  preStartGame,
 }

@@ -36,7 +36,7 @@
       >
         <div
           class="w-full flex flex-row items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 space-x-3 py-3 px-3 cursor-pointer"
-          @click="addNewChat()"
+          @click="newChat()"
           v-if="Logic.Users.getUserType() == 'student'"
         >
           <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
@@ -54,7 +54,10 @@
           :key="index"
           @mouseenter="chat.hover = true"
           @mouseleave="chat.hover = false"
-          @click="selectConversation(chat.id)"
+          @click="
+            itIsNewMessage = false;
+            selectConversation(chat.id);
+          "
         >
           <span>
             <sofa-icon :name="'conversation'" :custom-class="'h-[20px]'"
@@ -199,7 +202,7 @@
             id="MessagesScrollContainerLg"
           >
             <div
-              v-if="!hasMessage"
+              v-if="!hasMessage && !itIsNewMessage"
               class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-4 flex flex-row space-x-3 mdlg:!space-x-0 py-2 mdlg:!py-0 mdlg:!pt-3 mdlg:!pr-4 pr-4"
             >
               <div
@@ -225,6 +228,7 @@
               <conversation-messages
                 :Messages="Messages"
                 :ShowLoader="showLoader"
+                :itIsNewMessage="itIsNewMessage"
               />
             </div>
           </div>
@@ -276,6 +280,7 @@
               @input="onInput"
               @keypress="handleKeyEvent"
             >
+              {{ messageContent }}
             </span>
             <span class="min-w-[45px]">
               <span
@@ -301,7 +306,7 @@
 
     <template v-slot:right-session>
       <!-- Student POV -->
-      <template v-if="Logic.Users.getUserType() == 'student'">
+      <template v-if="Logic.Users.getUserType() == 'student' && UserProfile">
         <div
           class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
         >
@@ -433,6 +438,8 @@ import {
   deleteConvo,
   handleKeyEvent,
   hasMessage,
+  itIsNewMessage,
+  messageContent,
   Messages,
   onInput,
   selectConversation,
@@ -573,13 +580,23 @@ export default defineComponent({
       }
     });
 
-    watch(Messages, () => {
-      if (Messages.value.results.length > 0) {
-        hasMessage.value = true;
+    const newChat = () => {
+      if (Messages.value) {
+        Messages.value = undefined;
       }
-      setTimeout(() => {
-        scrollToBottom("MessagesScrollContainerLg");
-      }, 1000);
+
+      itIsNewMessage.value = true;
+    };
+
+    watch(Messages, () => {
+      if (Messages.value?.results.length > 0) {
+        hasMessage.value = true;
+        setTimeout(() => {
+          scrollToBottom("MessagesScrollContainerLg");
+        }, 1000);
+      } else {
+        hasMessage.value = false;
+      }
     });
 
     watch(AllConversations, () => {
@@ -598,6 +615,15 @@ export default defineComponent({
           conversationTitle.value = "New Chat";
         }
         editTitle.value = false;
+      }
+    });
+
+    watch(itIsNewMessage, () => {
+      if (itIsNewMessage.value) {
+        const messageContainer = document.getElementById("messageContainer");
+        if (messageContainer) {
+          messageContainer.focus();
+        }
       }
     });
 
@@ -633,9 +659,12 @@ export default defineComponent({
       UserProfile,
       conversationTitle,
       contentTitleChanged,
+      itIsNewMessage,
       editTitle,
       SingleTutorRequest,
       currentComponent,
+      newChat,
+      messageContent,
     };
   },
 });

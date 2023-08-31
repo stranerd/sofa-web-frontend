@@ -16,6 +16,8 @@ const showAddTutor = ref(false)
 
 const showMoreOptions = ref(false)
 
+const itIsNewMessage = ref(false)
+
 const conversationTitle = ref('New Chat')
 
 const chatList = reactive<
@@ -37,9 +39,7 @@ const Messages = ref(Logic.Conversations.Messages)
 
 const hasMessage = ref(false)
 
-const addNewChat = (
-  convoMessage = 'Hello I need your help with a question.',
-) => {
+const addNewChat = (convoMessage = '') => {
   createCoversation(convoMessage).then((data) => {
     if (data) {
       if (
@@ -100,7 +100,7 @@ const selectConversation = (convoId: string) => {
 
           setTimeout(() => {
             Logic.Common.listenOnSocket(
-              `conversations/${SingleConversation.value.id}/messages`,
+              `conversations/conversations/${SingleConversation.value.id}/messages`,
               (data) => {
                 handleIncomingMessage(data)
               },
@@ -158,10 +158,16 @@ const handleKeyEvent = (e: any) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/ban-types
 const sendNewMessage = (selectConversation: Function | undefined) => {
-  if (messageContent.value) {
-    sendMessage(messageContent.value, selectConversation)
+  if (itIsNewMessage.value) {
+    itIsNewMessage.value = false
+    setConvoFromRoute(messageContent.value)
     messageContent.value = ''
-    document.getElementById('messageContainer').innerHTML = ''
+  } else {
+    if (messageContent.value) {
+      sendMessage(messageContent.value, selectConversation)
+      messageContent.value = ''
+      document.getElementById('messageContainer').innerHTML = ''
+    }
   }
 }
 
@@ -252,21 +258,24 @@ const handleIncomingMessage = (data: any) => {
   }
 }
 
-const setConvoFromRoute = () => {
+const setConvoFromRoute = (message = '') => {
   const route = Logic.Common.route
-
-  if (route.query?.id) {
-    if (
-      Logic.Common.mediaQuery() != 'sm' &&
-      Logic.Common.mediaQuery() != 'md'
-    ) {
-      // showLoader.value = true
-      selectConversation(route.query?.id.toString())
-    } else {
-      Logic.Common.GoToRoute('/chat/' + route.query?.id.toString())
+  if (message) {
+    addNewChat(message)
+  } else {
+    if (route.query?.id) {
+      if (
+        Logic.Common.mediaQuery() != 'sm' &&
+        Logic.Common.mediaQuery() != 'md'
+      ) {
+        // showLoader.value = true
+        selectConversation(route.query?.id.toString())
+      } else {
+        Logic.Common.GoToRoute('/chat/' + route.query?.id.toString())
+      }
+    } else if (route.query?.message) {
+      addNewChat(route.query?.message.toString())
     }
-  } else if (route.query?.message) {
-    addNewChat(route.query?.message.toString())
   }
 }
 
@@ -300,6 +309,7 @@ export {
   showAddTutor,
   showMoreOptions,
   conversationTitle,
+  itIsNewMessage,
   setConvoFromRoute,
   selectConversation,
   setConversations,

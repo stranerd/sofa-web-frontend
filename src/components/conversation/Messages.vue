@@ -9,7 +9,7 @@
           <div class="w-[30px]">
             <sofa-avatar
               :bgColor="'!bg-[#78828C]'"
-              :photoUrl="'/images/icons/robot.svg'"
+              :photoUrl="message.user.photo"
               :size="'27'"
             >
               <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
@@ -37,7 +37,11 @@
           v-if="message.user.type == 'tutor'"
         >
           <div class="w-[30px]">
-            <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="''" :size="'27'">
+            <sofa-avatar
+              :bgColor="'!bg-[#78828C]'"
+              :photoUrl="message.user.photo"
+              :size="'27'"
+            >
               <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
             </sofa-avatar>
           </div>
@@ -77,7 +81,7 @@
             <div class="w-[30px]">
               <sofa-avatar
                 :bgColor="'!bg-[#78828C]'"
-                :photoUrl="''"
+                :photoUrl="message.user.photo"
                 :size="'27'"
               >
                 <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
@@ -153,6 +157,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    itIsNewMessage: {
+      type: Boolean,
+      default: false,
+    },
   },
   name: "ConversationMessages",
   setup(props) {
@@ -174,7 +182,7 @@ export default defineComponent({
     const setMessage = () => {
       allMessages.value.length = 0;
 
-      MessagesRef.value.results.forEach((message) => {
+      MessagesRef.value?.results.forEach((message) => {
         let userType = "";
         let userName = "";
         let photoUrl = "";
@@ -182,11 +190,15 @@ export default defineComponent({
         if (message.userId == Logic.Auth.AuthUser.id) {
           userType = "user";
           userName = "User";
-          photoUrl = Logic.Auth.AuthUser.photo.link || "";
+          photoUrl = Logic.Users.UserProfile.bio?.photo?.link || "";
         } else if (message.userId == "ai-bot") {
           userType = "robot";
-          userName = "Dr. Sofa";
-          photoUrl = "/images/icons/robot.svg";
+          userName = Logic.Users.UserProfile.ai?.name
+            ? Logic.Users.UserProfile.ai?.name
+            : "Dr. Sofa";
+          photoUrl = Logic.Users.UserProfile.ai?.photo?.link
+            ? Logic.Users.UserProfile.ai?.photo?.link
+            : "/images/icons/robot.svg";
         } else {
           userType = "tutor";
           userName = "Tutor";
@@ -214,7 +226,16 @@ export default defineComponent({
     };
 
     watch(MessagesRef, () => {
-      setMessage();
+      if (props.itIsNewMessage != true) {
+        setMessage();
+      } else {
+        allMessages.value.length = 0;
+        allMessages.value.push({
+          content: "Send a message to get started",
+          id: "",
+          type: "badge",
+        });
+      }
     });
 
     onMounted(() => {

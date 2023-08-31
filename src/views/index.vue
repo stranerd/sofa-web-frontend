@@ -41,7 +41,14 @@
             <sofa-icon :customClass="'h-[40px]'" :name="'xp-points'" />
             <div class="flex flex-col items-start justify-center">
               <sofa-normal-text :customClass="'font-bold'"
-                >{{ UserProfile.account.ratings.count }} xp</sofa-normal-text
+                >{{
+                  Logic.Common.convertToMoney(
+                    UserProfile.account.rankings.overall.value,
+                    false,
+                    ""
+                  )
+                }}
+                xp</sofa-normal-text
               >
               <sofa-normal-text :color="'text-bodyBlack'"
                 >Point</sofa-normal-text
@@ -65,7 +72,7 @@
       </div>
 
       <div
-        v-if="Logic.Users.getUserType() != 'organization'"
+        v-if="!Logic.Users.UserProfile.roles.isVerified"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-3"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
@@ -74,22 +81,15 @@
           </sofa-normal-text>
           <sofa-icon :name="'verify'" :custom-class="'h-[16px]'" />
         </div>
-        <sofa-normal-text v-if="Logic.Users.getUserType() != 'teacher'">
+        <sofa-normal-text>
           Join the elite that create the highest quality study materials, reach
           more audience, and sell on marketplace.
         </sofa-normal-text>
-        <sofa-normal-text v-if="Logic.Users.getUserType() == 'teacher'">
-          Join the elite that create the highest quality study materials, reach
-          more audience, and sell on marketplace.
-        </sofa-normal-text>
+
         <sofa-button
           :has-double-layer="false"
           padding="py-2 px-6"
-          @click="
-            Logic.Users.getUserType() == 'teacher'
-              ? Logic.Common.GoToRoute('/verification/tutor')
-              : Logic.Common.GoToRoute('/verification')
-          "
+          @click="Logic.Common.GoToRoute('/verification')"
         >
           Apply here
         </sofa-button>
@@ -306,6 +306,7 @@
           class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
+            v-if="pastQuestionContents.length"
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
@@ -313,9 +314,17 @@
               :key="index"
               :activity="activity"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+              @click="Logic.Common.GoToRoute('/course/' + activity.id)"
             />
           </div>
+          <template v-else>
+            <div class="w-full flex flex-col space-y-3">
+              <sofa-empty-state
+                :title="'No result found'"
+                :subTitle="'We could not find any past question courses'"
+              />
+            </div>
+          </template>
         </div>
       </div>
 
@@ -347,6 +356,7 @@
           class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
+            v-if="notesContents.length"
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
@@ -354,9 +364,17 @@
               :key="index"
               :custom-class="'cursor-pointer'"
               :activity="activity"
-              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+              @click="Logic.Common.GoToRoute('/course/' + activity.id)"
             />
           </div>
+          <template v-else>
+            <div class="w-full flex flex-col space-y-3">
+              <sofa-empty-state
+                :title="'No result found'"
+                :subTitle="'We could not find any note courses'"
+              />
+            </div>
+          </template>
         </div>
       </div>
 
@@ -388,6 +406,7 @@
           class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
+            v-if="textbookContents.length"
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
@@ -395,9 +414,17 @@
               :key="index"
               :activity="activity"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+              @click="Logic.Common.GoToRoute('/course/' + activity.id)"
             />
           </div>
+          <template v-else>
+            <div class="w-full flex flex-col space-y-3">
+              <sofa-empty-state
+                :title="'No result found'"
+                :subTitle="'We could not find any textbook solutions courses'"
+              />
+            </div>
+          </template>
         </div>
       </div>
 
@@ -443,6 +470,7 @@
           }
         "
         :customClass="'hidden md:!flex'"
+        :can-close="false"
       >
         <div
           class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
@@ -788,7 +816,12 @@ export default defineComponent({
         domain: "Users",
         property: "AllOrganisationMembers",
         method: "GetOrganizationMembers",
-        params: [Logic.Auth.AuthUser?.id],
+        params: [
+          Logic.Auth.AuthUser?.id,
+          {
+            limit: 10,
+          },
+        ],
         requireAuth: true,
         silentUpdate: false,
       },
@@ -921,7 +954,7 @@ export default defineComponent({
           iconSize: "h-[46px]",
           isDone: Logic.Users.CheckUserTaskState("phone_setup"),
           action: () => {
-            //
+            showSetupProfile();
           },
         }
       );
@@ -994,21 +1027,31 @@ export default defineComponent({
       }
     };
 
+    const showSetupProfile = () => {
+      if (Logic.Common.mediaQuery() == "sm") {
+        Logic.Common.GoToRoute("/onboarding/account-setup");
+      } else {
+        showAccountSetup.value = true;
+      }
+    };
+
     onMounted(() => {
       scrollToTop();
       setItems();
       setRecentChats();
       setCourses(4);
-      Logic.Auth.DetectVerification(showAccountSetup);
       Logic.Users.watchProperty("UserProfile", UserProfile);
       // Logic.Conversations.watchProperty("AllConversations", AllConversations);
       Logic.Study.watchProperty("AllCourses", AllCourses);
       // set organisation students
-      Logic.Users.watchProperty(
-        "AllOrganisationMembers",
-        allOrganizationMembers
-      );
-      setOrganizationMembers();
+
+      if (Logic.Users.getUserType() == "organisation") {
+        setOrganizationMembers();
+        Logic.Users.watchProperty(
+          "AllOrganisationMembers",
+          allOrganizationMembers
+        );
+      }
     });
 
     watch(UserProfile, () => {
@@ -1048,6 +1091,7 @@ export default defineComponent({
       selectedMember,
       showRemoveMember,
       startConversation,
+      showSetupProfile,
     };
   },
 });

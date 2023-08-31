@@ -26,7 +26,7 @@
                 ? Logic.Common.convertToMoney(
                     UserWallet.balance.amount,
                     true,
-                    "ngn"
+                    UserWallet.balance.currency.toString().toLocaleLowerCase()
                   )
                 : "****"
             }}
@@ -75,18 +75,48 @@
       </div>
 
       <div
-        :class="`w-full flex flex-row items-center space-x-3 px-3 py-3 border-[2px] ${
+        :class="`w-full flex flex-row items-center space-x-3 px-3 py-3 border-[2px] justify-between ${
           selectedMethodId == method.id
-            ? 'border-primaryBlue'
+            ? 'border-[#E1E6EB]'
             : 'border-[#E1E6EB]'
         }  custom-border cursor-pointer `"
         v-for="(method, index) in PaymentMethods.results"
         :key="index"
       >
-        <sofa-icon :customClass="'h-[20px]'" :name="'card'" />
-        <sofa-normal-text>
-          **** **** **** {{ method.data.last4Digits }}
-        </sofa-normal-text>
+        <div class="flex flex-row items-center space-x-3">
+          <sofa-icon :customClass="'h-[20px]'" :name="'card'" />
+          <sofa-normal-text>
+            **** **** **** {{ method.data.last4Digits }}
+          </sofa-normal-text>
+        </div>
+
+        <div class="flex flex-row items-center space-x-4">
+          <span
+            class="px-4 py-1 bg-primaryGreen rounded-[14px] cursor-pointer"
+            v-if="method.primary"
+          >
+            <sofa-normal-text :color="'text-white'" :customClass="'!text-xs'"
+              >Primary</sofa-normal-text
+            >
+          </span>
+          <span
+            class="px-4 py-1 bg-primaryPurple rounded-[14px]"
+            v-else
+            @click="Logic.Payment.MakeMethodPrimary(method.id)"
+          >
+            <sofa-normal-text :color="'text-white'" :customClass="'!text-xs'"
+              >Set as primary</sofa-normal-text
+            >
+          </span>
+          <sofa-icon
+            :customClass="'h-[20px] cursor-pointer'"
+            :name="'remove'"
+            @click="
+              selectedMethodId = method.id;
+              showDeleteMethod = true;
+            "
+          />
+        </div>
       </div>
     </div>
 
@@ -120,15 +150,7 @@
             </sofa-normal-text>
             <sofa-normal-text
               :customClass="'!font-bold'"
-              :color="`${
-                transaction.type == 'credit'
-                  ? `${
-                      transaction.status == 'failed'
-                        ? '!text-primaryRed'
-                        : '!text-primaryGreen'
-                    }`
-                  : '!text-bodyBlack'
-              }`"
+              :color="`${getTransactionColor(transaction.status)}`"
             >
               {{ transaction.type == "credit" ? "+" : "" }}
               {{ Logic.Common.convertToMoney(transaction.amount, true, "ngn") }}
@@ -164,6 +186,7 @@
         showModal = false;
       }
     "
+    :can-close="false"
   >
     <div
       class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
@@ -243,7 +266,7 @@
                   ? 'border-primaryBlue  border-[2px]'
                   : ''
               }  custom-border cursor-pointer `"
-              @click="fundWalletMethod = 'online'"
+              @click="payOnline()"
             >
               <sofa-icon :customClass="'h-[20px]'" :name="'website'" />
               <sofa-normal-text> Pay online </sofa-normal-text>
@@ -340,7 +363,10 @@
             v-model="withdrawForm.amount"
           >
             <template v-slot:inner-prefix>
-              <sofa-normal-text>₦</sofa-normal-text>
+              <sofa-normal-text>{{
+                Logic.Common.AvailableCurrencies[UserWallet.balance.currency] ||
+                ""
+              }}</sofa-normal-text>
             </template>
           </sofa-text-field>
 
@@ -403,6 +429,35 @@
       </div>
     </div>
   </sofa-modal>
+
+  <!-- Delete payment method prompt -->
+  <sofa-delete-prompt
+    v-if="showDeleteMethod"
+    :title="'Are you sure?'"
+    :subTitle="`This action is permanent.`"
+    :close="
+      () => {
+        showDeleteMethod = false;
+      }
+    "
+    :buttons="[
+      {
+        label: 'No',
+        isClose: true,
+        action: () => {
+          showDeleteMethod = false;
+        },
+      },
+      {
+        label: 'Yes, delete',
+        isClose: false,
+        action: () => {
+          Logic.Payment.DeleteMethod(selectedMethodId);
+          showDeleteMethod = false;
+        },
+      },
+    ]"
+  />
 </template>
 <script lang="ts">
 import {
@@ -422,6 +477,7 @@ import {
   SofaTextField,
   SofaButton,
   SofaSelect,
+  SofaDeletePrompt,
 } from "sofa-ui-components";
 import { FormValidations } from "@/composables";
 import { Logic } from "sofa-logic";
@@ -439,12 +495,17 @@ export default defineComponent({
     SofaTextField,
     SofaButton,
     SofaSelect,
+    SofaDeletePrompt,
   },
   setup() {
     const UserWallet = ref(Logic.Payment.UserWallet);
     const AllTransactions = ref(Logic.Payment.AllTransactions);
     const PaymentMethods = ref(Logic.Payment.PaymentMethods);
     const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks);
+    const showDeleteMethod = ref(false);
+
+    const resolvingNumber = ref(false);
+    const resolvingStatus = ref("");
 
     const fundWalletAmount = ref("");
     const selectedMethodId = ref("");
@@ -467,15 +528,35 @@ export default defineComponent({
 
     const transactionDetails = reactive({
       amount: "₦10,000",
-      transaction_fee: "₦500",
-      bank: "GTBank",
-      account_name: "James Roland",
-      account_number: "0125647439",
+      title: "",
       date: "Mar 31, 2023",
       time: "8:22 AM",
     });
 
     const transactions = ref([]);
+
+    const getTransactionColor = (status: string) => {
+      let currentColor = "";
+      switch (status) {
+        case "initialized":
+          currentColor = "text-primaryOrange";
+          break;
+        case "fulfilled":
+          currentColor = "text-primaryOrange";
+          break;
+        case "failed":
+          currentColor = "text-primaryRed";
+          break;
+        case "settled":
+          currentColor = "text-primaryGreen";
+          break;
+        default:
+          currentColor = "text-primaryOrange";
+          break;
+      }
+
+      return currentColor;
+    };
 
     const setTransactions = () => {
       transactions.value.length = 0;
@@ -499,7 +580,7 @@ export default defineComponent({
 
     const setCommercialBankOptions = () => {
       commercialBankOptions.value.length = 0;
-      AllCommercialBanks.value.forEach((bank) => {
+      AllCommercialBanks.value?.forEach((bank) => {
         commercialBankOptions.value.push({
           key: bank.code,
           value: bank.name,
@@ -522,7 +603,10 @@ export default defineComponent({
     const showTransactionInfo = (transaction: Transaction) => {
       let transactionType = "Withdrawal";
 
-      if (transaction.title.includes("Test charge")) {
+      if (
+        transaction.title.includes("Test charge") ||
+        transaction.title.includes("Fund")
+      ) {
         transactionType = "Wallet funding";
       }
 
@@ -537,8 +621,9 @@ export default defineComponent({
         transactionType = "Withdrawal";
       }
 
+      transactionDetails.title = transaction.title;
+
       transactionTitle.value = transactionType;
-      transactionDetails.transaction_fee = "₦0";
       transactionDetails.amount = Logic.Common.convertToMoney(
         transaction.amount,
         false,
@@ -566,27 +651,29 @@ export default defineComponent({
             amount,
             methodId: fundWalletMethod.value,
           };
-          Logic.Payment.FundWallet().then((data) => {
-            if (data) {
+          Logic.Payment.FundWallet()
+            .then((data) => {
+              if (data) {
+                Logic.Common.showLoader({
+                  show: true,
+                  loading: false,
+                  message: "Funding successful",
+                  type: "success",
+                });
+              }
+
+              showModal.value = false;
+              fundWalletAmount.value = "0";
+              fundWalletMethod.value = "";
+            })
+            .catch((error) => {
               Logic.Common.showLoader({
                 show: true,
                 loading: false,
-                message: "Funding successful",
-                type: "success",
-              });
-            } else {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
-                message: "Funding failed",
+                message: capitalize(error.response.data[0]?.message),
                 type: "error",
               });
-            }
-
-            showModal.value = false;
-            fundWalletAmount.value = "0";
-            fundWalletMethod.value = "";
-          });
+            });
         } else {
           Logic.Payment.initialPayment(amount);
         }
@@ -598,55 +685,124 @@ export default defineComponent({
         ) {
           const amount = parseFloat(withdrawForm.amount.replace(/,/g, ""));
 
-          Logic.Payment.UpdateAccountForm = {
+          if (amount < 1000) {
+            Logic.Common.showLoader({
+              show: true,
+              loading: false,
+              message: `Withdrawal amount cannot be less than ${Logic.Common.convertToMoney(
+                1000,
+                false,
+                "ngn"
+              )}`,
+              type: "warning",
+            });
+            return;
+          }
+
+          Logic.Payment.WithdrawalFromWalletForm = {
+            amount,
+            account: {
+              bankCode: withdrawForm.bank,
+              bankNumber: withdrawForm.account_number,
+              country: "NG",
+            },
+          };
+
+          Logic.Payment.WithdrawFromWallet()
+            .then((data) => {
+              if (data) {
+                Logic.Common.showLoader({
+                  show: true,
+                  loading: false,
+                  message: "Withdrawal successful",
+                  type: "success",
+                });
+
+                showModal.value = false;
+                withdrawForm.account_number = "";
+                withdrawForm.amount = "";
+                withdrawForm.bank = "";
+              } else {
+                Logic.Common.showLoader({
+                  show: true,
+                  loading: false,
+                  message: "Withdrawal failed",
+                  type: "error",
+                });
+              }
+
+              showModal.value = false;
+              fundWalletAmount.value = "0";
+              fundWalletMethod.value = "";
+            })
+            .catch((error) => {
+              Logic.Common.showLoader({
+                show: true,
+                loading: false,
+                message: capitalize(error.response.data[0]?.message),
+                type: "error",
+              });
+            });
+        }
+      }
+    };
+
+    const payOnline = () => {
+      const amount = parseFloat(fundWalletAmount.value.replace(/,/g, ""));
+
+      if (amount < 200) {
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: `Funding amount cannot be less than ${Logic.Common.convertToMoney(
+            200,
+            false,
+            "ngn"
+          )}`,
+          type: "warning",
+        });
+        return;
+      }
+
+      Logic.Payment.initialPayment(amount, "fundWallet");
+    };
+
+    onMounted(() => {
+      Logic.Payment.watchProperty("UserWallet", UserWallet);
+      Logic.Payment.watchProperty("AllTransactions", AllTransactions);
+      Logic.Payment.watchProperty("PaymentMethods", PaymentMethods);
+
+      setTransactions();
+      if (!AllCommercialBanks.value) {
+        Logic.Payment.GetCommercialBanks().then(() => {
+          AllCommercialBanks.value = Logic.Payment.AllCommercialBanks;
+          setCommercialBankOptions();
+        });
+      }
+    });
+
+    watch(AllTransactions, () => {
+      setTransactions();
+    });
+
+    watch(withdrawForm, () => {
+      Logic.Common.debounce(() => {
+        if (withdrawForm.account_number.length >= 10 && withdrawForm.bank) {
+          Logic.Payment.verifyAccountNumberForm = {
             bankCode: withdrawForm.bank,
             bankNumber: withdrawForm.account_number,
             country: "NG",
           };
 
-          Logic.Payment.UpdateAccountNumber().then((data) => {
-            if (data) {
-              Logic.Payment.WithdrawFromWallet(amount).then((data) => {
-                if (data) {
-                  Logic.Common.showLoader({
-                    show: true,
-                    loading: false,
-                    message: "Withdrawal successful",
-                    type: "success",
-                  });
-
-                  showModal.value = false;
-                  withdrawForm.account_number = "";
-                  withdrawForm.amount = "";
-                  withdrawForm.bank = "";
-                } else {
-                  Logic.Common.showLoader({
-                    show: true,
-                    loading: false,
-                    message: "Withdrawal failed",
-                    type: "error",
-                  });
-                }
-
-                showModal.value = false;
-                fundWalletAmount.value = "0";
-                fundWalletMethod.value = "";
-              });
-            }
-          });
+          Logic.Payment.VerifyAccountNumber()
+            .then(() => {
+              // console.log(data);
+            })
+            .catch(() => {
+              //
+            });
         }
-      }
-    };
-    onMounted(() => {
-      Logic.Payment.watchProperty("UserWallet", UserWallet);
-      Logic.Payment.watchProperty("AllTransactions", AllTransactions);
-      Logic.Payment.watchProperty("PaymentMethods", PaymentMethods);
-      setTransactions();
-      setCommercialBankOptions();
-    });
-
-    watch(AllTransactions, () => {
-      setTransactions();
+      });
     });
 
     return {
@@ -667,11 +823,16 @@ export default defineComponent({
       fundWalletMethod,
       commercialBankOptions,
       showMoney,
+      resolvingNumber,
+      resolvingStatus,
+      showDeleteMethod,
       showFundWallet,
       handleContinue,
       showTransactionInfo,
       capitalize,
       showWalletWithdraw,
+      payOnline,
+      getTransactionColor,
     };
   },
 });

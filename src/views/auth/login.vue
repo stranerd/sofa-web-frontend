@@ -107,7 +107,7 @@
           <sofa-normal-text :color="'text-grayColor'"
             >Don’t have an account?
           </sofa-normal-text>
-          <router-link to="/auth"
+          <router-link to="/auth/register"
             ><sofa-normal-text :color="'!text-primaryBlue'"
               >Sign up</sofa-normal-text
             ></router-link

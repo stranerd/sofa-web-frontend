@@ -7,11 +7,14 @@
         <sofa-normal-text
           :customClass="'!font-bold md:!text-xl text-lg'"
           :size="''"
+          :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
           >{{ question.title }}</sofa-normal-text
         >
-        <sofa-normal-text :customClass="'md:!text-lg text-xs'">{{
-          question.question
-        }}</sofa-normal-text>
+        <sofa-normal-text
+          :customClass="'md:!text-lg text-xs'"
+          :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+          >{{ question.question }}</sofa-normal-text
+        >
       </div>
 
       <div
@@ -45,8 +48,19 @@
           class="w-full flex flex-col border-b-[2px] border-[#E1E6EB] pb-2 justify-start"
           v-if="Logic.Common.mediaQuery() != 'sm'"
         >
-          <sofa-header-text :custom-class="'text-left !font-bold'">
+          <sofa-header-text
+            :custom-class="'text-left !font-bold'"
+            v-if="mode != 'game'"
+            :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+          >
             {{ quizTitle }}
+          </sofa-header-text>
+          <sofa-header-text
+            :custom-class="'text-left !font-bold'"
+            :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            v-else
+          >
+            Question {{ questionIndex + 1 }}
           </sofa-header-text>
         </div>
         <sofa-header-text
@@ -54,35 +68,60 @@
             question.options.type != 'blanks' && question.options.type != 'drag'
           "
           :customClass="'!font-bold md:!text-2xl text-base w-full text-left justify-start flex flex-row'"
+          :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
           >{{ question.question }}</sofa-header-text
         >
 
         <!-- Question instruction -->
         <div class="w-full flex flex-col justify-start pb-2">
           <template v-if="question.title == 'Multiple choice'">
-            <sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
               Choose
               {{ Logic.Common.inWords(question.answer?.split(",").length) }}
               answer{{ question.answer?.split(",").length > 1 ? "s" : "" }}
             </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Write answer'">
-            <sofa-normal-text> Type your answer </sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
+              Type your answer
+            </sofa-normal-text>
           </template>
           <template v-if="question.title == 'True/False'">
-            <sofa-normal-text> Choose one answer </sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
+              Choose one answer
+            </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Fill in blank(s)'">
-            <sofa-normal-text> Fill in the gaps </sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
+              Fill in the gaps
+            </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Drag answers'">
-            <sofa-normal-text> Drag answers </sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
+              Drag answers
+            </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Sequence'">
-            <sofa-normal-text> Drag to rearrange </sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
+              Drag to rearrange
+            </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Match'">
-            <sofa-normal-text>
+            <sofa-normal-text
+              :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
+            >
               Drag items on the right side to rearrange
             </sofa-normal-text>
           </template>
@@ -175,6 +214,7 @@
               <sofa-header-text
                 v-if="content.type == 'text'"
                 :customClass="'!font-bold md:!text-2xl text-base '"
+                :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
                 >{{ content.label }}</sofa-header-text
               >
               <div
@@ -208,6 +248,7 @@
               <sofa-header-text
                 v-if="content.type == 'text'"
                 :customClass="'!font-bold md:!text-2xl text-base '"
+                :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
                 >{{ content.label }}</sofa-header-text
               >
               <div
@@ -442,6 +483,10 @@ export default defineComponent({
     quizTitle: {
       type: String,
       required: true,
+    },
+    quizIsDarkMode: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["OnAnswerSelected"],

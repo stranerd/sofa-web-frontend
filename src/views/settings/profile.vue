@@ -26,7 +26,6 @@ import { useMeta } from "vue-meta";
 import { SofaNormalText, SofaIcon } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import SettingProfile from "@/components/settings/profile.vue";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 
 export default defineComponent({
   components: {
@@ -43,23 +42,6 @@ export default defineComponent({
         params: [],
         requireAuth: true,
         ignoreProperty: false,
-      },
-      {
-        domain: "Users",
-        property: "Verifications",
-        method: "GetVerifications",
-        params: [
-          {
-            where: [
-              {
-                field: "userId",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-        ],
-        requireAuth: true,
       },
     ],
   },

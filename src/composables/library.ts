@@ -176,6 +176,34 @@ const folders = reactive([
   },
 ])
 
+const organizationFilterOption = reactive([
+  {
+    name: 'All',
+    active: true,
+    id: 'all',
+  },
+  {
+    name: 'Courses',
+    active: false,
+    id: 'courses',
+  },
+  {
+    name: 'Quizzes',
+    active: false,
+    id: 'quizzes',
+  },
+])
+
+const organisations = reactive([
+  {
+    name: '',
+    selected: false,
+    edit: false,
+    hover: false,
+    id: '',
+  },
+])
+
 const quizzes = ref<ResourceType[]>([])
 
 const currentQuizData = ref<ResourceType[]>([])
@@ -457,6 +485,8 @@ export {
   selectedFolderItems,
   currentFolderItems,
   showDeleteFolder,
+  organizationFilterOption,
+  organisations,
   saveItemsToFolder,
   createQuizData,
   setQuizzes,

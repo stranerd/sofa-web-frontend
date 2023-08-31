@@ -463,7 +463,9 @@ export default defineComponent({
 
     onMounted(() => {
       if (allOrganizationMembers.value == undefined) {
-        Logic.Users.GetOrganizationMembers(Logic.Auth.AuthUser.id).then(() => {
+        Logic.Users.GetOrganizationMembers(Logic.Auth.AuthUser.id, {
+          limit: 50,
+        }).then(() => {
           Logic.Common.hideLoader();
 
           setOrganizationMembers();

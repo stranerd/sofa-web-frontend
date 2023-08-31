@@ -25,6 +25,8 @@
           </sofa-normal-text>
         </div>
 
+        <!-- Folders -->
+
         <div
           class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2"
         >
@@ -104,6 +106,35 @@
             />
           </div>
         </div>
+
+        <!-- Organizations -->
+        <template v-if="allOrganizations.length">
+          <div
+            class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2"
+          >
+            <sofa-normal-text :customClass="'!font-bold'"
+              >Organizations</sofa-normal-text
+            >
+          </div>
+
+          <div
+            :class="`w-full flex flex-row items-center justify-start space-x-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${
+              selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
+            }`"
+            v-for="(item, index) in allOrganizations"
+            :key="index"
+            @click="selectedFilter = item.id"
+          >
+            <sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
+            <sofa-normal-text
+              :custom-class="` ${
+                selectedFilter == item.id ? '!font-bold' : ''
+              }`"
+            >
+              {{ item.name }}
+            </sofa-normal-text>
+          </div>
+        </template>
       </div>
     </template>
 
@@ -588,6 +619,7 @@ import {
   showDeleteFolder,
   deleteFolder,
 } from "@/composables/library";
+import { allOrganizations, setOrganizations } from "@/composables/profile";
 
 export default defineComponent({
   components: {
@@ -705,6 +737,8 @@ export default defineComponent({
 
     const selectedFolderId = ref("");
 
+    const UserProfile = ref(Logic.Users.UserProfile);
+
     onMounted(() => {
       scrollToTop();
       if (Logic.Common.route.query.filter) {
@@ -715,6 +749,7 @@ export default defineComponent({
       Logic.Study.watchProperty("PurchasedCourses", PurchasedCourses);
       Logic.Study.watchProperty("AllFolders", AllFolders);
       Logic.Study.watchProperty("SingleFolder", SingleFolder);
+      Logic.Study.watchProperty("UserProfile", UserProfile);
 
       setQuizzes();
       setCourses();
@@ -722,10 +757,15 @@ export default defineComponent({
       setFolders();
       setFolderItems();
       filterItem();
+      setOrganizations();
     });
 
     watch(AllFolders, () => {
       setFolders();
+    });
+
+    watch(UserProfile, () => {
+      setOrganizations();
     });
 
     watch(AllQuzzies, () => {
@@ -804,6 +844,7 @@ export default defineComponent({
       deleteFolder,
       selectedFolderId,
       goToFolder,
+      allOrganizations,
     };
   },
 });

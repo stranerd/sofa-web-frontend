@@ -27,7 +27,7 @@
 </template>
 <script lang="ts">
 import { useMeta } from "vue-meta";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { Logic } from "sofa-logic";
 import { SofaAlert } from "sofa-ui-components";
 

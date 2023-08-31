@@ -4,11 +4,16 @@
     ref="formComp"
     class="w-full flex flex-col space-y-4"
   >
-    <div class="w-full grid grid-cols-6 gap-3">
+    <div
+      class="w-full grid grid-cols-6 gap-3"
+      v-if="accountSetupOptions.filter((item) => item.show).length > 1"
+    >
       <template v-for="(option, index) in accountSetupOptions" :key="index">
         <div
           :class="`${
-            currentAccountType == 'organisation' ? 'col-span-3' : 'col-span-2'
+            accountSetupOptions.filter((item) => item.show).length == 2
+              ? 'col-span-3'
+              : 'col-span-2'
           } py-3 px-3 custom-border flex flex-row items-center space-x-2 justify-center ${
             option.status == 'active' ? 'bg-primaryPurple' : ''
           } 
@@ -38,7 +43,10 @@
       v-if="currentSetupOption == 'profile' && accountSetupOptions[0].show"
     >
       <div class="w-full flex flex-col space-y-4 py-3">
-        <div class="w-full flex flex-col items-center justify-center pt-3">
+        <div
+          class="w-full flex flex-col items-center justify-center pt-3"
+          v-if="false"
+        >
           <sofa-image-loader
             :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
             :photoUrl="profileImageUrl"
@@ -114,6 +122,41 @@
           v-model="updateProfileForm.description"
           :update-value="updateProfileForm.description"
         />
+
+        <div
+          class="w-full grid grid-cols-2 gap-4"
+          v-if="currentAccountType == 'organisation'"
+        >
+          <div class="col-span-1 flex flex-col">
+            <sofa-select
+              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor !w-full'"
+              :padding="'  px-3 py-3'"
+              :name="'Country'"
+              ref="country"
+              :placeholder="'Country'"
+              :rules="[FormValidations.RequiredRule]"
+              :borderColor="'border-transparent'"
+              :auto-complete="true"
+              @on-option-selected="countryIsSelected"
+              v-model="updateProfileForm.country"
+              :options="allCountries"
+            />
+          </div>
+          <div class="col-span-1 flex flex-col">
+            <sofa-select
+              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+              :padding="'px-3 py-3'"
+              :name="'State'"
+              ref="state"
+              :placeholder="'State'"
+              :rules="[FormValidations.RequiredRule]"
+              :borderColor="'border-transparent'"
+              :auto-complete="true"
+              v-model="updateProfileForm.state"
+              :options="allStates"
+            />
+          </div>
+        </div>
       </div>
     </template>
 
@@ -253,24 +296,36 @@
       </div>
     </template>
 
-    <div
-      class="w-full flex flex-row items-center justify-between md:!relative fixed bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0 py-4 px-4"
-    >
-      <sofa-button
-        :padding="'px-5 py-2'"
-        :bgColor="'bg-white'"
-        :textColor="'text-grayColor'"
-        :customClass="'border-[1px] border-gray-100'"
-      >
-        Exit
-      </sofa-button>
+    <div class="w-full flex flex-col items-center relative md:!py-0 px-0 py-4">
+      <div class="flex flex-col w-full" v-if="isNotModal">
+        <sofa-button
+          :customClass="'!w-full'"
+          :padding="'md:!py-4 py-3'"
+          @click.prevent="handleAccountSetup(currentSetupOption)"
+        >
+          Next
+        </sofa-button>
+      </div>
+      <div class="flex flex-row items-start justify-between w-full" v-else>
+        <sofa-button
+          :customClass="'!border-[1px] '"
+          :bg-color="'bg-white'"
+          :text-color="'text-grayColor'"
+          :padding="'md:!py-2 py-3 px-5'"
+          @click.prevent="showAccountSetup = false"
+          v-if="Logic.Common.mediaQuery() != 'sm'"
+        >
+          Close
+        </sofa-button>
 
-      <sofa-button
-        :padding="'px-5 py-2'"
-        @click.prevent="handleAccountSetup(currentSetupOption)"
-      >
-        Next
-      </sofa-button>
+        <sofa-button
+          :customClass="''"
+          :padding="'md:!py-2 py-3 px-5'"
+          @click.prevent="handleAccountSetup(currentSetupOption)"
+        >
+          Next
+        </sofa-button>
+      </div>
     </div>
   </sofa-form-wrapper>
 </template>
@@ -293,12 +348,18 @@ import phoneCodes from "../../assets/country-phone.json";
 import {
   accountSetupOptions,
   accountTypeOption,
+  allCountries,
+  allStates,
+  Countries,
+  countryIsSelected,
   currentSetupOption,
   educationOptions,
   phoneVerificationState,
+  setCountry,
   setDepartmentsOptions,
   setFacultiesOptions,
   setSchoolsOption,
+  showAccountSetup,
   UpdatePhone,
   updatePhoneForm,
   UpdateProfile,
@@ -338,9 +399,9 @@ export default defineComponent({
 
     const UserProfile = ref(Logic.Users.UserProfile);
 
-    const currentAccountType = ref(
-      localStorage.getItem("user_account_type") || "student"
-    );
+    const currentAccountType = ref("student");
+
+    const isNotModal = ref(Logic.Common.route.query?.type);
 
     const handleAccountSetup = (type: "profile" | "education" | "phone") => {
       if (type == "profile") {
@@ -358,49 +419,60 @@ export default defineComponent({
 
     const detectVerificationStage = () => {
       updateUserEducationForm.type =
-        localStorage.getItem("user_account_type") || "student";
+        Logic.Common.route.query?.type?.toString() || "student";
 
-      if (localStorage.getItem("user_account_type") == "organisation") {
-        accountSetupOptions[1].show = false;
-        updateUserEducationForm.type = "organisation";
-        updateProfileForm.organisation_name = `${UserProfile.value?.bio.name?.full}`;
-        updateProfileForm.description = UserProfile.value?.bio.description;
-      }
-      accountSetupOptions.forEach((item) => {
-        if (item.id == "profile") {
-          if (currentAccountType.value == "organisation") {
-            if (UserProfile.value?.type?.name) {
+      if (isNotModal.value) {
+        accountSetupOptions[2].show = false;
+        if (updateUserEducationForm.type == "organisation") {
+          accountSetupOptions[1].show = false;
+          updateUserEducationForm.type = "organisation";
+          updateProfileForm.organisation_name = `${
+            UserProfile.value?.bio.name?.full || ""
+          }`;
+          updateProfileForm.description = UserProfile.value?.bio.description;
+        } else {
+          accountSetupOptions[1].show = true;
+        }
+        accountSetupOptions.forEach((item) => {
+          if (item.id == "profile") {
+            if (currentAccountType.value == "organisation") {
+              if (UserProfile.value?.type?.name) {
+                item.status = "done";
+                currentSetupOption.value = "phone";
+              }
+            } else {
+              if (
+                UserProfile.value?.bio.name?.first &&
+                UserProfile.value?.bio.name?.first != "New"
+              ) {
+                item.status = "done";
+                currentSetupOption.value = "education";
+                accountSetupOptions[1].status = "active";
+              }
+            }
+          }
+
+          if (
+            item.id == "education" &&
+            currentAccountType.value != "organisation"
+          ) {
+            if (UserProfile.value?.type) {
               item.status = "done";
               currentSetupOption.value = "phone";
             }
-          } else {
-            if (
-              UserProfile.value?.bio.name?.first &&
-              UserProfile.value?.bio.name?.first != "New"
-            ) {
+          }
+
+          if (item.id == "phone") {
+            if (UserProfile.value?.bio.phone) {
               item.status = "done";
-              currentSetupOption.value = "education";
-              accountSetupOptions[1].status = "active";
             }
           }
-        }
-
-        if (
-          item.id == "education" &&
-          currentAccountType.value != "organisation"
-        ) {
-          if (UserProfile.value?.type) {
-            item.status = "done";
-            currentSetupOption.value = "phone";
-          }
-        }
-
-        if (item.id == "phone") {
-          if (UserProfile.value?.bio.phone) {
-            item.status = "done";
-          }
-        }
-      });
+        });
+      } else {
+        accountSetupOptions[0].show = false;
+        accountSetupOptions[1].show = false;
+        currentSetupOption.value = "phone";
+      }
     };
 
     const handleSchoolSelection = (option: any) => {
@@ -413,9 +485,20 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      currentAccountType.value =
+        Logic.Common.route?.query?.type?.toString() || "student";
       detectVerificationStage();
       Logic.Users.watchProperty("UserProfile", UserProfile);
-      setSchoolsOption();
+      if (currentAccountType.value == "organisation") {
+        Logic.Users.watchProperty("Countries", Countries);
+        if (!Countries.value) {
+          Logic.Users.GetCountries().then(() => {
+            setCountry();
+          });
+        }
+      } else {
+        setSchoolsOption();
+      }
     });
 
     return {
@@ -429,15 +512,21 @@ export default defineComponent({
       formComp,
       updateProfileForm,
       currentAccountType,
-      handleAccountSetup,
       educationOptions,
       updateUserEducationForm,
       accountTypeOption,
+      allCountries,
+      allStates,
+      isNotModal,
+      showAccountSetup,
+      Logic,
       setSchoolsOption,
       setFacultiesOptions,
       setDepartmentsOptions,
       handleSchoolSelection,
       onChangeOTP,
+      handleAccountSetup,
+      countryIsSelected,
     };
   },
   data() {

@@ -32,7 +32,7 @@
           class="flex md:!flex-row flex-col space-y-3 md:!space-x-6 md:!space-y-0 justify-center items-center w-full"
         >
           <div
-            @click="Logic.Common.GoToRoute('/auth/register?type=student')"
+            @click="goToOnboarding('student')"
             class="md:!h-[180px] md:!w-[180px] h-[120px] w-full cursor-pointer custom-border bg-primaryBlue flex flex-col items-center space-y-2 justify-center"
           >
             <sofa-icon
@@ -49,7 +49,7 @@
           </div>
 
           <div
-            @click="Logic.Common.GoToRoute('/auth/register?type=tutor')"
+            @click="goToOnboarding('tutor')"
             class="md:!h-[180px] md:!w-[180px] h-[120px] w-full custom-border cursor-pointer bg-primaryGreen flex flex-col items-center space-y-2 justify-center"
           >
             <sofa-icon
@@ -65,7 +65,7 @@
           </div>
 
           <div
-            @click="Logic.Common.GoToRoute('/auth/register?type=organisation')"
+            @click="goToOnboarding('organisation')"
             class="md:!h-[180px] md:!w-[180px] h-[120px] w-full custom-border cursor-pointer bg-primaryPurple flex flex-col items-center space-y-2 justify-center"
           >
             <sofa-icon
@@ -121,8 +121,14 @@ export default defineComponent({
       scrollToTop();
     });
 
+    const goToOnboarding = (type: "student" | "organisation" | "tutor") => {
+      localStorage.setItem("user_account_type", type);
+      Logic.Common.GoToRoute(`/auth/onboarding?type=${type}`);
+    };
+
     return {
       Logic,
+      goToOnboarding,
     };
   },
 });

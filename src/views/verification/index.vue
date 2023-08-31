@@ -2,7 +2,7 @@
   <dashboard-layout
     :topbarOptions="{
       type: 'subpage',
-      title: 'Profile settings',
+      title: 'Account verification',
       actions: [
         {
           IsOutlined: true,
@@ -62,6 +62,7 @@
           :hasTitle="true"
           :name="'First name'"
           ref="name.first"
+          :custom-class="'border-[1px]'"
           :rules="[FormValidations.RequiredRule]"
           v-model="updateProfileForm.name.first"
           :defaultValue="UserProfile.bio.name.first"
@@ -74,21 +75,13 @@
           :hasTitle="true"
           :name="'Last name'"
           ref="name.last"
+          :custom-class="'border-[1px]'"
           :rules="[FormValidations.RequiredRule]"
           v-model="updateProfileForm.name.last"
           :defaultValue="UserProfile.bio.name.last"
         >
           <template v-slot:title> Last Name </template>
         </sofa-text-field>
-
-        <!-- <sofa-text-field
-          :placeholder="'Enter email'"
-          :hasTitle="true"
-          :disabled="true"
-          v-model="UserProfile.bio.email"
-        >
-          <template v-slot:title> Email </template>
-        </sofa-text-field> -->
 
         <sofa-textarea
           :placeholder="'Description of yourself'"
@@ -351,6 +344,7 @@
           :hasTitle="true"
           :name="'Website'"
           ref="socials.website"
+          :custom-class="'border-[1px]'"
           :rules="[FormValidations.UrlRule]"
           v-model="updateProfileForm.socials[0].link"
           :defaultValue="updateProfileForm.socials[0].link"
@@ -363,6 +357,7 @@
           :hasTitle="true"
           :name="'TikTok'"
           ref="socials.tiktok"
+          :custom-class="'border-[1px]'"
           :rules="[FormValidations.UrlRule]"
           v-model="updateProfileForm.socials[1].link"
           :defaultValue="updateProfileForm.socials[1].link"
@@ -376,6 +371,7 @@
           :name="'Youtube'"
           ref="socials.youtube"
           :rules="[FormValidations.UrlRule]"
+          :custom-class="'border-[1px]'"
           v-model="updateProfileForm.socials[2].link"
           :defaultValue="updateProfileForm.socials[2].link"
         >
@@ -388,6 +384,7 @@
           :name="'Instagram'"
           ref="socials.instagram"
           :rules="[FormValidations.UrlRule]"
+          :custom-class="'border-[1px]'"
           v-model="updateProfileForm.socials[3].link"
           :defaultValue="updateProfileForm.socials[3].link"
         >
@@ -400,6 +397,7 @@
           :name="'Twitter'"
           ref="socials.twitter"
           :rules="[FormValidations.UrlRule]"
+          :custom-class="'border-[1px]'"
           v-model="updateProfileForm.socials[4].link"
           :defaultValue="updateProfileForm.socials[4].link"
         >
@@ -412,6 +410,7 @@
           :name="'Facebook'"
           ref="socials.facebook"
           :rules="[FormValidations.UrlRule]"
+          :custom-class="'border-[1px]'"
           v-model="updateProfileForm.socials[5].link"
           :defaultValue="updateProfileForm.socials[5].link"
         >
@@ -449,7 +448,6 @@ import {
   submitVerification,
   updateProfileForm,
   updateVerificationForm,
-  autoCreateVerification,
 } from "@/composables/profile";
 import { SelectOption } from "sofa-logic/src/logic/types/common";
 
@@ -737,7 +735,6 @@ export default defineComponent({
 
     onMounted(() => {
       scrollToTop();
-      autoCreateVerification();
       // Logic.Users.watchProperty("UserProfile", UserProfile);
       setMaterials();
       setMaterialsOptions();

@@ -16,6 +16,10 @@ const allRequests = ref([])
 const allOrganizationMembers = ref(Logic.Users.AllOrganisationMembers)
 const showRemoveMember = ref(false)
 const selectedMember = ref('')
+const allCountries = reactive<SelectOption[]>([])
+const allStates = reactive<SelectOption[]>([])
+const allOrganizations = reactive([])
+const Countries = ref(Logic.Users.Countries)
 
 const updateProfileForm = reactive({
   description: '',
@@ -66,6 +70,32 @@ const tutorRequestForm = reactive<CreateTutorRequestForm>({
   topicId: '',
   verification: undefined,
 })
+
+const setCountry = () => {
+  if (Countries.value) {
+    allCountries.length = 0
+
+    Countries.value.forEach((country) => {
+      allCountries.push({
+        key: country.name,
+        value: country.name,
+        extras: JSON.stringify(country.states),
+      })
+    })
+  }
+}
+
+const countryIsSelected = (data: any) => {
+  updateProfileForm.state = ''
+  allStates.length = 0
+  const AllStateData: any = JSON.parse(data.extras)
+  AllStateData.forEach((states: { name: string; state_code: string }) => {
+    allStates.push({
+      key: states.name,
+      value: states.name,
+    })
+  })
+}
 
 const updateVerificationForm = reactive({
   content: {
@@ -157,11 +187,13 @@ const setSchoolsOption = () => {
   Logic.Schools.GetInstitutions({}).then(() => {
     educationOptions.schools.length = 0
     Logic.Schools.AllInstitutions.results.forEach((institution) => {
-      educationOptions.schools.push({
-        key: institution.title,
-        value: institution.title,
-        extraId: institution.id,
-      })
+      if (institution.title) {
+        educationOptions.schools.push({
+          key: institution.title,
+          value: institution.title,
+          extraId: institution.id,
+        })
+      }
     })
 
     if (Logic.Users.UserProfile?.type?.type == 'student') {
@@ -258,9 +290,17 @@ const UpdateProfile = (formComp: any, showLoader = true) => {
     .then(() => {
       if (formComp) {
         if (updateUserEducationForm.type == 'organisation') {
-          currentSetupOption.value = 'phone'
-          accountSetupOptions[0].status = 'done'
-          accountSetupOptions[2].status = 'active'
+          updateUserLocation()
+            .then(() => {
+              Logic.Common.GoToRoute('/')
+            })
+            .catch(() => {
+              Logic.Common.showLoader({
+                show: true,
+                message: 'Unable to complete account setup. Please try again',
+                type: 'warning',
+              })
+            })
         } else {
           currentSetupOption.value = 'education'
           accountSetupOptions[0].status = 'done'
@@ -330,10 +370,7 @@ const UpdateUserEducation = (useLoader = true) => {
 
   Logic.Users.UpdateUser(true, useLoader).then(() => {
     if (useLoader) {
-      currentSetupOption.value = 'phone'
-      phoneVerificationState.value = 'start'
-      accountSetupOptions[1].status = 'done'
-      accountSetupOptions[2].status = 'active'
+      Logic.Common.GoToRoute('/')
     }
   })
 }
@@ -484,6 +521,30 @@ const createTutorRequest = () => {
   }
 }
 
+const setOrganizations = () => {
+  Logic.Users.GetUsers({
+    where: [
+      {
+        field: 'id',
+        value: Logic.Users.UserProfile.account.organizationsIn,
+        condition: Conditions.in,
+      },
+    ],
+  }).then((data) => {
+    const allUser: SingleUser[] = data
+    allOrganizations.length = 0
+    if (data) {
+      allUser.forEach((item) => {
+        allOrganizations.push({
+          id: item.id,
+          name: item.bio.name.full,
+          profile_url: item.bio.photo.link,
+        })
+      })
+    }
+  })
+}
+
 export {
   updateProfileForm,
   updateUserEducationForm,
@@ -503,6 +564,13 @@ export {
   showRemoveMember,
   selectedMember,
   tutorRequestForm,
+  allCountries,
+  allStates,
+  Countries,
+  allOrganizations,
+  setOrganizations,
+  countryIsSelected,
+  setCountry,
   UpdateProfile,
   setSchoolsOption,
   setFacultiesOptions,

@@ -220,7 +220,7 @@
           label: 'Yes, delete account',
           isClose: false,
           action: () => {
-            Logic.Auth.SignOut();
+            Logic.Auth.DeleteUserAccount();
           },
         },
       ]"
@@ -286,6 +286,7 @@ export default defineComponent({
         method: "GetTransactions",
         params: [
           {
+            limit: 50,
             where: [
               {
                 field: "userId",
@@ -330,31 +331,6 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: false,
       },
-      {
-        domain: "Users",
-        property: "Verifications",
-        method: "GetVerifications",
-        params: [
-          {
-            where: [
-              {
-                field: "userId",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-        ],
-        requireAuth: true,
-      },
-      {
-        domain: "Payment",
-        property: "AllCommercialBanks",
-        method: "GetCommercialBanks",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: false,
-      },
     ],
   },
   name: "SettingsIndexPage",
@@ -375,8 +351,11 @@ export default defineComponent({
 
     onMounted(() => {
       Logic.Payment.watchProperty("AllPlans", AllPlans);
+
       if (UserProfile.value?.type.type == "organization") {
-        Logic.Users.GetOrganizationMembers(Logic.Auth.AuthUser.id).then(() => {
+        Logic.Users.GetOrganizationMembers(Logic.Auth.AuthUser.id, {
+          limit: 20,
+        }).then(() => {
           Logic.Common.hideLoader();
         });
       }

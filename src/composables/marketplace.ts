@@ -114,12 +114,12 @@ const setCourses = (count = 5) => {
   mainCards[1].routePath = `/marketplace/search?tagId=${sectionTags.note}&q=nill`
   mainCards[2].routePath = `/marketplace/search?tagId=${sectionTags.textbook}&q=nill`
 
-  notesContents.value.length = 0
-  pastQuestionContents.value.length = 0
-  textbookContents.value.length = 0
+  const noteCourseArray: any[] = []
+  const pastQuestionArray: any[] = []
+  const textbookArray: any[] = []
   AllCourses.value.results.forEach((course) => {
     if (noteTag.length && course.tagIds.includes(noteTag[0].id)) {
-      notesContents.value.push({
+      noteCourseArray.push({
         id: course.id,
         subject: Logic.Study.GetTagName(course.topicId),
         title: course.title,
@@ -137,7 +137,7 @@ const setCourses = (count = 5) => {
       pastQuestionTag.length &&
       course.tagIds.includes(pastQuestionTag[0].id)
     ) {
-      pastQuestionContents.value.push({
+      pastQuestionArray.push({
         id: course.id,
         subject: Logic.Study.GetTagName(course.topicId),
         title: course.title,
@@ -152,7 +152,7 @@ const setCourses = (count = 5) => {
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
       })
     } else {
-      textbookContents.value.push({
+      textbookArray.push({
         id: course.id,
         subject: Logic.Study.GetTagName(course.topicId),
         title: course.title,
@@ -168,6 +168,9 @@ const setCourses = (count = 5) => {
       })
     }
   })
+  notesContents.value = noteCourseArray
+  pastQuestionContents.value = pastQuestionArray
+  textbookContents.value = textbookArray
 
   if (notesContents.value.length > count) {
     notesContents.value = notesContents.value.slice(0, count)

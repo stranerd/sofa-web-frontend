@@ -122,9 +122,19 @@
             <sofa-checkbox v-model="termsAccepted">
               <span class="text-grayColor text-left">
                 I have read and accepted SOFA’s
-                <span class="text-primaryBlue">Terms of Service</span>
+                <a
+                  class="text-primaryBlue hover:underline"
+                  target="_blank"
+                  href="#"
+                  >Terms of Service</a
+                >
                 <span> and </span>
-                <span class="text-primaryBlue">Privacy Policy</span>
+                <a
+                  class="text-primaryBlue hover:underline"
+                  target="_blank"
+                  href="#"
+                  >Privacy Policy</a
+                >
               </span>
             </sofa-checkbox>
           </div>

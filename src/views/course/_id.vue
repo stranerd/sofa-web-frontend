@@ -5,8 +5,8 @@
   >
     <!-- Display for larger screens -->
     <div
-      class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow !hidden"
-      v-if="Logic.Common.mediaQuery() == 'sm'"
+      class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow"
+      v-if="Logic.Common.mediaQuery() != 'sm'"
     >
       <div
         class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]"
@@ -38,90 +38,17 @@
           selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
         } `"
       >
-        <div
-          class="w-full mdlg:!shadow-custom md:!py-5 md:!px-5 px-4 py-2 relative bg-white mdlg:!rounded-[16px] overflow-y-auto flex-grow max-h-full h-fit flex flex-col space-y-4"
-        >
-          <template v-if="PurchasedItems.includes(SingleCourse?.id)">
-            <div class="w-full flex flex-col items-center justify-center">
-              <sofa-header-text :customClass="'!font-bold !text-lg'">
-                {{
-                  selectedMaterial?.details?.title ||
-                  selectedMaterial?.data?.title
-                }}
-              </sofa-header-text>
-            </div>
-            <template v-if="selectedMaterial?.type == 'quiz'">
-              <sofa-empty-state
-                :title="'Test yourself'"
-                :subTitle="'Evaluate your level of knowledge'"
-                :actionLabel="'Start'"
-                :action="
-                  () => {
-                    showStudyMode = true;
-                  }
-                "
-                :icon="{
-                  name: 'test-white',
-                  size: 'h-[40px]',
-                }"
-                :titleStyle="'mdlg:!text-xl '"
-              />
-            </template>
-
-            <template v-if="selectedMaterial?.type == 'document'">
-              <div
-                class="w-full mdlg:!h-full flex-grow flex flex-col"
-                style="height: calc(100vh - 90px)"
-              >
-                <sofa-document-reader
-                  :documentUrl="selectedMaterial.data.documentUrl"
-                />
-              </div>
-            </template>
-
-            <template v-if="selectedMaterial?.type == 'image'">
-              <div class="w-full flex flex-col">
-                <sofa-image-loader
-                  :customClass="'w-full h-[400px] rounded-[12px]'"
-                  :photoUrl="selectedMaterial.data.imageUrl"
-                />
-              </div>
-            </template>
-
-            <template v-if="selectedMaterial?.type == 'video'">
-              <div class="w-full flex flex-col">
-                <sofa-video-player :videoUrl="selectedMaterial.data.videoUrl" />
-              </div>
-            </template>
-          </template>
-          <template v-else>
-            <div class="w-full flex flex-col">
-              <sofa-empty-state
-                :title="'You have no access'"
-                :subTitle="'Purchase this course to start learning with it'"
-                :actionLabel="`Buy ${
-                  SingleCourse.price.amount
-                    ? Logic.Common.convertToMoney(
-                        SingleCourse.price.amount,
-                        false,
-                        'ngn'
-                      )
-                    : 'for free'
-                }`"
-                :action="
-                  () => {
-                    buyCourse();
-                  }
-                "
-                :icon="{
-                  name: 'lock-white',
-                  size: 'h-[28px]',
-                }"
-                :titleStyle="'mdlg:!text-xl '"
-              />
-            </div>
-          </template>
-        </div>
+        <CourseContent
+          :buyCourse="buyCourse"
+          :PurchasedItems="PurchasedItems"
+          :selected-material="selectedMaterial"
+          :show-study-mode="
+            () => {
+              showStudyMode = true;
+            }
+          "
+          :single-course="SingleCourse"
+        />
       </div>
     </div>
 
@@ -140,66 +67,101 @@
       </div>
 
       <!-- Content for smaller screens -->
-      <div class="w-full flex flex-col space-y-2">
-        <div
-          class="w-full flex flex-col space-y-2 px-4 pb-4 border-b-[1px] border-[#F1F6FA] items-start justify-start"
-        >
-          <sofa-header-text :custom-class="'!font-bold !text-xl'">
-            {{ SingleCourse.title }}
-          </sofa-header-text>
-          <sofa-normal-text :custom-class="'text-left'">
-            {{ SingleCourse.description }}
-          </sofa-normal-text>
-        </div>
-
-        <sofa-course-content
-          @OnMaterialSelected="handleItemSelected"
-          :lockContent="!PurchasedItems.includes(SingleCourse?.id)"
-          v-model="selectedMaterial"
-        />
-      </div>
-    </div>
-
-    <!-- Small screen course content modal -->
-    <sofa-modal
-      :close="
-        () => {
-          showCourseContent = false;
-        }
-      "
-      :customClass="`mdlg:!hidden ${showCourseContent ? '' : 'hidden'}`"
-    >
       <div
-        :class="` w-full top-0 px-0 pt-0 h-full flex flex-col  `"
-        @click.stop="
-          () => {
-            showCourseContent = false;
-          }
-        "
+        class="w-full flex flex-col space-y-2 overflow-y-auto relative flex-grow"
       >
-        <div
-          @click.stop="
-            () => {
-              //
-            }
-          "
-          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] space-y-4 justify-between relative overflow-y-auto h-full"
-        >
+        <template v-if="!showCourseContent">
           <div
-            class="w-full px-4 py-4 sticky top-0 left-0 bg-white z-30 flex flex-row items-start border-b-[1px] border-[#F1F6FA]"
+            class="w-full flex flex-col space-y-2 px-4 pb-3 items-start justify-start sticky top-0 left-0"
           >
-            <sofa-normal-text :customClass="'!font-bold'">
-              Course content
+            <sofa-header-text :custom-class="'!font-bold !text-xl !text-left'">
+              {{ SingleCourse.title }}
+            </sofa-header-text>
+            <sofa-normal-text :custom-class="'text-left'">
+              {{ SingleCourse.description }}
             </sofa-normal-text>
           </div>
 
           <sofa-course-content
             @OnMaterialSelected="handleItemSelected"
+            :lockContent="!PurchasedItems.includes(SingleCourse?.id)"
             v-model="selectedMaterial"
+            @onCourseContentSet="handleCourseContentSet"
           />
+        </template>
+
+        <template v-else>
+          <div class="flex flex-col w-full">
+            <div
+              :class="`w-full flex flex-col col-span-full  ${
+                selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
+              } `"
+            >
+              <CourseContent
+                :buyCourse="buyCourse"
+                :PurchasedItems="PurchasedItems"
+                :selected-material="selectedMaterial"
+                :show-study-mode="
+                  () => {
+                    showStudyMode = true;
+                  }
+                "
+                :single-course="SingleCourse"
+              />
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Course content slider -->
+      <div
+        class="absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col space-y-2 items-center justify-center w-full"
+        v-if="selectedMaterial && showCourseContent"
+      >
+        <sofa-normal-text :custom-class="'!font-bold'">
+          {{ SingleCourse.title }}
+        </sofa-normal-text>
+        <div
+          class="w-full flex flex-row space-x-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+        >
+          <div
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+          >
+            <template v-for="(section, index) in courseContents" :key="index">
+              <template
+                v-for="(item, itemIndex) in section.materials"
+                :key="itemIndex"
+              >
+                <div
+                  class="w-[280px] custom-border px-3 py-3 bg-primaryPurple flex flex-col space-y-1"
+                  @click="selectItem(item)"
+                >
+                  <sofa-normal-text
+                    :color="'!text-white'"
+                    :customClass="'!text-left'"
+                  >
+                    {{ section.name }} - {{ item.name }}
+                  </sofa-normal-text>
+
+                  <div class="w-full flex flex-row items-center space-x-2">
+                    <sofa-icon
+                      :name="`${item.type}-white`"
+                      :customClass="'h-[15px]'"
+                    />
+                    <sofa-normal-text
+                      :color="'!text-white'"
+                      :customClass="'!text-left'"
+                    >
+                      {{ item.type.split("-")[0] }}
+                    </sofa-normal-text>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
         </div>
       </div>
-    </sofa-modal>
+    </div>
 
     <!-- Small screen course info -->
 
@@ -377,7 +339,12 @@
                   ? 'border-primaryBlue  border-[2px]'
                   : ''
               }  custom-border cursor-pointer `"
-              @click="selectedMethodId = 'online'"
+              @click="
+                Logic.Payment.initialPayment(
+                  SingleCourse.price.amount,
+                  'fundWallet'
+                )
+              "
             >
               <sofa-icon :customClass="'h-[20px]'" :name="'website'" />
               <sofa-normal-text> Pay online </sofa-normal-text>
@@ -444,23 +411,20 @@
 </template>
 <script lang="ts">
 import { Logic } from "sofa-logic";
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import {
   SofaNormalText,
   SofaIcon,
   SofaCourseSummary,
   SofaCourseContent,
-  SofaDocumentReader,
-  SofaImageLoader,
-  SofaVideoPlayer,
   SofaModal,
   SofaHeaderText,
-  SofaEmptyState,
   SofaIconCard,
   SofaButton,
 } from "sofa-ui-components";
 import { useMeta } from "vue-meta";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import CourseContent from "@/components/courses/content.vue";
 
 export default defineComponent({
   components: {
@@ -468,14 +432,11 @@ export default defineComponent({
     SofaIcon,
     SofaCourseSummary,
     SofaCourseContent,
-    SofaDocumentReader,
-    SofaImageLoader,
-    SofaVideoPlayer,
     SofaModal,
     SofaHeaderText,
-    SofaEmptyState,
     SofaIconCard,
     SofaButton,
+    CourseContent,
   },
   name: "CourseDetailsPage",
   middlewares: {
@@ -553,20 +514,42 @@ export default defineComponent({
 
     const showCourseContent = ref(false);
 
+    const courseContents = reactive<any[]>([]);
+
     const showCourseInfo = ref(false);
 
     const handleItemSelected = (data: any) => {
       if (data) {
         selectedMaterial.value = data;
 
-        if (!data.isMounted) {
-          showCourseContent.value = false;
+        if (Logic.Common.mediaQuery() == "sm") {
+          showCourseContent.value = true;
+        } else {
+          if (!data.isMounted) {
+            showCourseContent.value = false;
+          }
         }
       }
     };
 
+    const selectItem = (material: any) => {
+      if (PurchasedItems.value.includes(SingleCourse.value?.id)) {
+        selectedMaterial.value = {
+          id: material.id,
+          data: material.data,
+          details: material.details,
+          type: material.type.split("-")[0],
+          name: material.name,
+        };
+      }
+    };
+
     const handleMobileGoback = () => {
-      Logic.Common.goBack();
+      if (showCourseContent.value) {
+        showCourseContent.value = false;
+      } else {
+        Logic.Common.goBack();
+      }
     };
 
     const otherTasks = [
@@ -627,6 +610,11 @@ export default defineComponent({
       });
     };
 
+    const handleCourseContentSet = (data) => {
+      courseContents.length = 0;
+      courseContents.push(...data);
+    };
+
     onMounted(() => {
       Logic.Payment.watchProperty("PaymentMethods", PaymentMethods);
       Logic.Payment.watchProperty("PurchasedItems", PurchasedItems);
@@ -652,6 +640,9 @@ export default defineComponent({
       selectedMethodId,
       PurchasedItems,
       UserWallet,
+      courseContents,
+      handleCourseContentSet,
+      selectItem,
     };
   },
 });

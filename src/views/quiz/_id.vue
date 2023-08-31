@@ -1,18 +1,24 @@
 <template>
   <expanded-layout
-    :layoutStyle="'!w-full !justify-between !flex !flex-col !h-screen !px-0 !py-0 !overflow-y-hidden'"
+    :layoutStyle="`!w-full !justify-between !flex !flex-col !h-screen !px-0 !py-0 !overflow-y-hidden ${
+      quizIsDarkMode ? 'bg-[#141618]' : ''
+    } `"
     :hasTopBar="false"
     :hasBottomBar="false"
     :bottomPadding="false"
+    :bgImage="quizIsDarkMode ? '/images/game-bg.png' : ''"
   >
-    <template v-if="state != 'lobby' && state != 'leaderboard'">
+    <template
+      v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
+    >
       <div
         :class="`py-8 w-full md:!flex hidden flex-row items-center justify-center sticky top-0 left-0 bg-white ${
-          answerState == 'wrong' ? '!bg-primaryRed' : ''
-        } ${answerState == 'correct' ? '!bg-primaryGreen' : ''} ${
-          state != 'preview' ? '' : 'invisible'
+          quizIsDarkMode ? '!bg-transparent' : ''
+        } ${answerState == 'wrong' ? '!bg-primaryRed' : ''} ${
+          answerState == 'correct' ? '!bg-primaryGreen' : ''
+        } ${state != 'preview' ? '' : 'invisible'} ${
+          answerState == 'time_up' ? '!bg-primaryRed' : ''
         }
-  ${answerState == 'time_up' ? '!bg-primaryRed' : ''}
   `"
         style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)"
       >
@@ -138,8 +144,10 @@
       <!-- Top bar for smaller screens -->
       <div
         :class="`w-full flex flex-row md:!hidden justify-between items-center z-50 bg-backgroundGray px-4 py-4 sticky top-0 left-0 ${
-          answerState == 'wrong' ? '!bg-primaryRed' : ''
-        } ${answerState == 'correct' ? '!bg-primaryGreen' : ''}
+          quizIsDarkMode ? '!bg-transparent' : ''
+        } ${answerState == 'wrong' ? '!bg-primaryRed' : ''} ${
+          answerState == 'correct' ? '!bg-primaryGreen' : ''
+        }
   ${answerState == 'time_up' ? '!bg-primaryRed' : ''}`"
       >
         <template v-if="!answerState">
@@ -227,24 +235,29 @@
       </div>
     </template>
 
+    <!-- Questions -->
     <sofa-swiper
       :free-mode="false"
       :show-pagination="false"
       :space-between="0"
       :slide-per-view="'1'"
-      custom-class="!w-full !h-full flex-grow"
+      custom-class="!w-full !h-full flex-grow !bg-transparent "
       :swiper-class="'!h-full '"
       v-model="currentQuestionIndex"
       :current-slide-position="questionIndex"
       :enabled="enabledSwiper"
       ref="swiperInstance"
+      v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
     >
       <swiper-slide
-        class="!h-full !flex !items-center !justify-center !flex-col !relative"
+        class="!h-full !flex !items-center !justify-center !w-full !flex-col !relative !bg-transparent"
         v-for="(question, index) in questions"
         :key="index"
       >
-        <template v-if="state != 'lobby' && state != 'leaderboard'">
+        <sofa-image-loader
+          :photoUrl="''"
+          :customClass="'w-full absolute h-full flex flex-col top-0 left-0 !items-center !justify-center !bg-transparent'"
+        >
           <template v-if="state != 'other_modes'">
             <flashcard
               v-if="mode == 'flashcard'"
@@ -263,6 +276,7 @@
                 @OnAnswerSelected="handleAnswerSelected"
                 :answerState="answerState"
                 :quiz-title="SingleQuiz.title"
+                :quizIsDarkMode="quizIsDarkMode"
               />
             </template>
           </template>
@@ -290,22 +304,104 @@
               </template>
             </div>
           </div>
-        </template>
+        </sofa-image-loader>
+      </swiper-slide>
+    </sofa-swiper>
 
+    <!-- Games and other pre-quiz views -->
+
+    <template v-else>
+      <sofa-image-loader
+        :photoUrl="''"
+        class="w-full h-full flex flex-col items-center"
+      >
+        <!-- question intro -->
+        <template v-if="state == 'prepare'">
+          <div
+            class="w-full h-full absolute top-0 left-0 flex flex-col space-y-8 items-center justify-center"
+          >
+            <sofa-header-text
+              :customClass="'md:!text-base mdlg:!text-lg'"
+              :color="'text-white'"
+            >
+              {{ SingleQuiz.questions.length }} questions
+            </sofa-header-text>
+            <div
+              class="w-full flex flex-row items-center justify-center py-5 bg-white"
+            >
+              <sofa-header-text
+                :customClass="'!font-bold md:!text-2xl text-lg'"
+              >
+                {{ SingleQuiz.title }}
+              </sofa-header-text>
+            </div>
+
+            <div
+              class="h-[67px] w-[67px] rounded-full bg-white flex flex-row items-center justify-center"
+            >
+              <sofa-header-text
+                :customClass="'!font-bold md:!text-2xl text-lg'"
+                :color="'text-[#141618]'"
+              >
+                {{ currentPrepareCount }}
+              </sofa-header-text>
+            </div>
+          </div>
+        </template>
         <template v-else>
           <div
-            class="w-full h-full bg-primaryPurple flex flex-col items-center"
+            :class="`lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] h-full w-full relative flex flex-col space-y-4 ${
+              state == 'leaderboard' ? 'item-center justify-center' : ''
+            } py-4 px-4 md:!px-0 md:!py-6`"
           >
+            <!-- lobby -->
             <div
-              :class="`lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] h-full w-full relative flex flex-col space-y-4 ${
-                state == 'leaderboard' ? 'item-center justify-center' : ''
-              } py-4 px-4 md:!px-0 md:!py-6`"
+              class="w-full custom-border bg-white px-4 py-4 flex flex-row space-x-3"
+              v-if="state == 'lobby'"
             >
-              <!-- lobby -->
-              <div
-                class="w-full custom-border bg-white px-3 py-3 flex flex-row space-x-3"
-                v-if="state == 'lobby'"
-              >
+              <template v-if="userIsGameHost()">
+                <div
+                  class="w-full flex flex-col space-y-3 justify-center items-center"
+                >
+                  <sofa-normal-text :color="'text-[#78828C] !text-center'">
+                    You are hosting the quiz game
+                  </sofa-normal-text>
+
+                  <sofa-header-text
+                    :customClass="'!text-center !font-extrabold'"
+                    size="xl"
+                  >
+                    Universe - Space and Solar Systems
+                  </sofa-header-text>
+
+                  <div
+                    class="w-full flex flex-row items-center justify-center space-x-4"
+                  >
+                    <div class="space-x-2 items-center flex flex-row">
+                      <sofa-icon
+                        :customClass="'h-[16px] cursor-pointer'"
+                        :name="'share'"
+                        @click="shareGameLink()"
+                      />
+                      <sofa-normal-text :color="'text-[#78828C]'">
+                        Share
+                      </sofa-normal-text>
+                    </div>
+
+                    <div class="space-x-2 items-center flex flex-row">
+                      <sofa-icon
+                        :customClass="'h-[16px] cursor-pointer'"
+                        :name="'copy'"
+                        @click="copyGameLink()"
+                      />
+                      <sofa-normal-text :color="'text-[#78828C]'">
+                        Copy
+                      </sofa-normal-text>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
                 <sofa-image-loader
                   :customClass="'md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] custom-border'"
                   :photoUrl="SingleQuiz.photo?.link"
@@ -320,15 +416,7 @@
                     >
                       {{ SingleQuiz.title }}
                     </sofa-header-text>
-                    <div
-                      class="flex flex-row space-x-3 items-center"
-                      v-if="userIsGameHost()"
-                    >
-                      <sofa-icon
-                        :customClass="'h-[16px] cursor-pointer'"
-                        :name="'copy'"
-                        @click="copyGameLink()"
-                      />
+                    <div class="flex flex-row space-x-3 items-center">
                       <sofa-icon
                         :customClass="'h-[16px] cursor-pointer'"
                         :name="'share'"
@@ -366,164 +454,182 @@
                     </sofa-normal-text>
                   </div>
                 </div>
-              </div>
+              </template>
+            </div>
 
-              <div
-                class="w-full flex flex-col space-y-2 py-2 items-center justify-center"
+            <div
+              class="w-full flex flex-col space-y-2 py-2 items-center justify-center"
+            >
+              <sofa-header-text
+                :customClass="'md:!text-3xl text-xl'"
+                :color="'text-white'"
               >
-                <sofa-header-text
-                  :customClass="'md:!text-3xl text-xl'"
-                  :color="'text-white'"
-                >
-                  {{ state == "lobby" ? "Lobby" : "Scoreboard" }}
-                </sofa-header-text>
-                <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
-                  {{
-                    userIsGameHost()
-                      ? "Start game when enough players have joined"
-                      : "Waiting for host to start game"
-                  }}
-                </sofa-normal-text>
-                <sofa-normal-text
-                  :color="'text-white'"
-                  v-if="state == 'leaderboard'"
-                >
-                  {{
-                    SingleGame.status == "started"
-                      ? "Game is still ongoing; Wait for the game to end to see your score"
-                      : "Game has ended"
-                  }}
-                </sofa-normal-text>
-              </div>
+                {{ state == "lobby" ? "Lobby" : "Scoreboard" }}
+              </sofa-header-text>
+              <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
+                {{
+                  userIsGameHost()
+                    ? "Start game when enough players have joined"
+                    : "Waiting for host to start game"
+                }}
+              </sofa-normal-text>
+              <sofa-normal-text
+                :color="'text-white'"
+                v-if="state == 'leaderboard'"
+              >
+                {{
+                  SingleGame.status == "started"
+                    ? "Game is still ongoing. Waiting for the game to end..."
+                    : "Game has ended"
+                }}
+              </sofa-normal-text>
+            </div>
 
-              <div
-                :class="`w-full h-auto md:!max-h-[80%] max-h-[70%]  overflow-y-auto flex flex-col space-y-3 `"
-              >
-                <!-- Lobby list -->
-                <template v-if="GameParticipants.length && state == 'lobby'">
-                  <div
-                    v-for="(user, index) in GameParticipants"
-                    :key="index"
-                    :class="`w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[2px] border-white ${
-                      userIsGameHost(user.id) ? 'bg-white' : 'bg-transparent'
-                    }`"
+            <div
+              :class="`w-full h-auto md:!max-h-[80%] max-h-[70%]  overflow-y-auto flex flex-col space-y-3 `"
+            >
+              <!-- Lobby list -->
+              <template v-if="GameParticipants.length && state == 'lobby'">
+                <div
+                  v-for="(user, index) in GameParticipants"
+                  :key="index"
+                  :class="`w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[6px] bg-white  ${
+                    userIsGameHost(user.id)
+                      ? 'border-[#7DC8FA]'
+                      : 'border-transparent'
+                  }`"
+                >
+                  <sofa-normal-text
+                    :color="
+                      userIsGameHost(user.id)
+                        ? 'text-[#141618]'
+                        : 'text-[#141618]'
+                    "
+                    :customClass="'!font-semibold'"
+                    >{{ userIsGameHost(user.id) ? "You" : user.bio.name.full }}
+                  </sofa-normal-text>
+                </div>
+                <div
+                  v-if="GameParticipants.length == 0"
+                  class="w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[2px] bg-white"
+                >
+                  <sofa-normal-text :color="'text-[#78828C]'"
+                    >Waiting for players</sofa-normal-text
                   >
+                </div>
+              </template>
+
+              <!-- Scoreboard -->
+
+              <template
+                v-if="scoreBoardParticipants.length && state == 'leaderboard'"
+              >
+                <div
+                  v-for="(user, index) in scoreBoardParticipants"
+                  :key="index"
+                  :class="`w-full flex flex-row items-center justify-between py-3 px-4 custom-border  bg-white    ${
+                    userIsGameHost(user.user.id)
+                      ? 'border-[#7DC8FA] border-[5px]'
+                      : 'border-transparent border-[2px]'
+                  }`"
+                >
+                  <div class="flex flex-row space-x-3 items-center">
                     <sofa-normal-text
-                      :color="
-                        userIsGameHost(user.id)
-                          ? 'text-[#141618]'
-                          : 'text-white'
-                      "
+                      :color="'text-[#141618]'"
                       :customClass="'!font-semibold'"
-                      >{{
-                        userIsGameHost(user.id) ? "You" : user.bio.name.full
+                      >{{ index + 1 }}
+                    </sofa-normal-text>
+                    <sofa-normal-text
+                      :color="'text-[#141618]'"
+                      :customClass="'!font-semibold'"
+                    >
+                      {{
+                        userIsGameHost(user.user.id)
+                          ? "You"
+                          : user.user.bio.name.full
                       }}
                     </sofa-normal-text>
+                    <sofa-icon
+                      :name="'game-winner'"
+                      :customClass="'h-[23px]'"
+                      v-if="index == 0 && user.score > 0"
+                    />
                   </div>
-                  <div
-                    v-if="GameParticipants.length == 0"
-                    class="w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[2px] border-white"
+
+                  <sofa-normal-text
+                    :color="'text-[#141618]'"
+                    :customClass="'!font-semibold'"
+                    >{{ `${user.score} points` }}
+                  </sofa-normal-text>
+                </div>
+              </template>
+            </div>
+
+            <div
+              :class="`absolute bottom-0 left-0 flex-row md:!flex grid grid-cols-2 md:!gap-0 gap-3 ${
+                state == 'leaderboard' ? 'justify-end' : 'justify-between'
+              }  py-4 w-full mdlg:!px-0 px-4 z-20 bg-transparent`"
+              v-if="userIsGameHost() || state == 'leaderboard'"
+            >
+              <template v-if="state == 'lobby'">
+                <div class="flex flex-col md:!w-auto col-span-1">
+                  <sofa-button
+                    :bgColor="'bg-white'"
+                    :hasDarkLayer="false"
+                    :customClass="'!bg-[#141618] !border-[2px] !border-white md:!w-auto w-full'"
+                    :textColor="'text-white'"
+                    :padding="'px-5 py-2'"
+                    @click="Logic.Common.goBack()"
                   >
-                    <sofa-normal-text :color="'text-white'"
-                      >No player has joined</sofa-normal-text
-                    >
-                  </div>
-                </template>
+                    Cancle
+                  </sofa-button>
+                </div>
 
-                <!-- Scoreboard -->
+                <div class="flex flex-col md:!w-auto col-span-1">
+                  <sofa-button
+                    :bgColor="'bg-white'"
+                    :customClass="'!bg-white !border-[2px] !border-white  md:!w-auto w-full'"
+                    :textColor="'text-[#141618] '"
+                    :padding="'px-5 py-2'"
+                    @click="startGame()"
+                  >
+                    Start
+                  </sofa-button>
+                </div>
+              </template>
 
-                <template
-                  v-if="scoreBoardParticipants.length && state == 'leaderboard'"
+              <template v-if="state == 'leaderboard'">
+                <div
+                  class="flex flex-col md:!w-full w-full col-span-2 justify-center items-center pb-3"
                 >
-                  <div
-                    v-for="(user, index) in scoreBoardParticipants"
-                    :key="index"
-                    :class="`w-full flex flex-row items-center justify-between py-3 px-3 custom-border border-[2px] bg-transparent border-white`"
+                  <sofa-button
+                    :bgColor="'bg-white'"
+                    :hasDarkLayer="false"
+                    :customClass="' !border-[2px] !border-gray-200 md:!w-auto w-full'"
+                    :textColor="'text-[#141618]'"
+                    :padding="'px-5 py-2'"
+                    @click="Logic.Common.goBack()"
                   >
-                    <div class="flex flex-row space-x-3 items-center">
-                      <sofa-normal-text
-                        :color="'text-white'"
-                        :customClass="'!font-semibold'"
-                        >{{ index + 1 }}
-                      </sofa-normal-text>
-                      <sofa-normal-text
-                        :color="'text-white'"
-                        :customClass="'!font-semibold'"
-                        >{{ user.user.bio.name.full }}
-                      </sofa-normal-text>
-                    </div>
-
-                    <sofa-normal-text
-                      :color="'text-white'"
-                      :customClass="'!font-semibold'"
-                      >{{ `${user.score} points` }}
-                    </sofa-normal-text>
-                  </div>
-                </template>
-              </div>
-
-              <div
-                :class="`absolute bottom-0 left-0 flex-row md:!flex grid grid-cols-2 md:!gap-0 gap-3 ${
-                  state == 'leaderboard' ? 'justify-end' : 'justify-between'
-                }  py-4 w-full mdlg:!px-0 px-4 z-20 bg-primaryPurple`"
-                v-if="userIsGameHost() || state == 'leaderboard'"
-              >
-                <template v-if="state == 'lobby'">
-                  <div class="flex flex-col md:!w-auto col-span-1">
-                    <sofa-button
-                      :bgColor="'bg-white'"
-                      :hasDarkLayer="false"
-                      :customClass="'!bg-primaryPurple !border-[2px] !border-white md:!w-auto w-full'"
-                      :textColor="'text-white'"
-                      :padding="'px-5 py-2'"
-                      @click="Logic.Common.goBack()"
-                    >
-                      Cancle
-                    </sofa-button>
-                  </div>
-
-                  <div class="flex flex-col md:!w-auto col-span-1">
-                    <sofa-button
-                      :bgColor="'bg-white'"
-                      :customClass="'!bg-white !border-[2px] !border-white  md:!w-auto w-full'"
-                      :textColor="'text-primaryPurple '"
-                      :padding="'px-5 py-2'"
-                      @click="startGame()"
-                    >
-                      Start
-                    </sofa-button>
-                  </div>
-                </template>
-
-                <template v-if="state == 'leaderboard'">
-                  <div
-                    class="flex flex-col md:!w-full w-full col-span-2 justify-center items-center pb-3"
-                  >
-                    <sofa-button
-                      :bgColor="'bg-white'"
-                      :hasDarkLayer="false"
-                      :customClass="' !border-[2px] !border-gray-200 md:!w-auto w-full'"
-                      :textColor="'text-primaryPurple'"
-                      :padding="'px-5 py-2'"
-                      @click="Logic.Common.goBack()"
-                    >
-                      Continue
-                    </sofa-button>
-                  </div>
-                </template>
-              </div>
+                    Continue
+                  </sofa-button>
+                </div>
+              </template>
             </div>
           </div>
         </template>
-      </swiper-slide>
-    </sofa-swiper>
+      </sofa-image-loader>
+    </template>
 
-    <template v-if="state != 'lobby' && state != 'leaderboard'">
+    <template
+      v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
+    >
       <!-- Bottom bar -->
       <div
-        :class="`md:!py-5 py-4 w-full sticky flex flex-row items-center justify-center bottom-0 left-0 md:!bg-white bg-backgroundGray ${
-          answerState && mode == 'practice' ? 'md:!invisible' : ''
-        }   ${state != 'preview' ? '' : 'invisible'}
+        :class="`md:!py-5 py-4 w-full sticky flex flex-row items-center justify-center bottom-0 left-0 md:bg-white bg-backgroundGray  ${
+          quizIsDarkMode ? '!bg-transparent' : ''
+        } ${answerState && mode == 'practice' ? 'md:!invisible' : ''}   ${
+          state != 'preview' ? '' : 'invisible'
+        }
             ${
               !(buttonLabels.left.label || !buttonLabels.right.label) ||
               mode != 'game'
@@ -549,7 +655,7 @@
 
           <span
             :class="`px-4 py-2 rounded-[8px] bg-[#F2F5F8] !font-semibold text-grayColor ${
-              state != 'question' ? 'invisible' : ''
+              state != 'question' || mode == 'game' ? 'invisible' : ''
             } `"
           >
             {{ currentQuestionIndex + 1 }}/{{ questions.length }}
@@ -728,6 +834,8 @@ import {
   listenToGame,
   setScoreboardParticipants,
   scoreBoardParticipants,
+  currentPrepareCount,
+  preStartGame,
 } from "@/composables/quiz";
 
 const fetchRules = [];
@@ -791,6 +899,9 @@ export default defineComponent({
     });
 
     const showScrollBar = ref(false);
+
+    const quizIsDarkMode = ref(false);
+
     watch(currentQuestionIndex, () => {
       questionIndex.value = currentQuestionIndex.value;
 
@@ -802,7 +913,9 @@ export default defineComponent({
         swiperInstance.value.swiperInstance.update();
       }
 
-      showQuestion(questionIndex.value);
+      if (enabledSwiper.value) {
+        showQuestion(questionIndex.value);
+      }
     });
 
     onMounted(() => {
@@ -813,7 +926,12 @@ export default defineComponent({
       Logic.Plays.watchProperty("GameParticipants", GameParticipants);
       setViewMode();
       setQuestions();
-      showQuestion(0);
+      if (mode.value != "game") {
+        showQuestion(0);
+      } else {
+        state.value = "prepare";
+      }
+
       mobileTitle.value = SingleQuiz.value.title;
 
       if (
@@ -834,6 +952,8 @@ export default defineComponent({
       if (mode.value == "game") {
         listenToGame();
         setScoreboardParticipants();
+        quizIsDarkMode.value = true;
+        preStartGame();
       }
     });
 
@@ -845,6 +965,13 @@ export default defineComponent({
 
     watch(SingleGame, () => {
       setScoreboardParticipants();
+    });
+
+    watch(AllQuestions, () => {
+      if (SingleQuiz.value) {
+        setViewMode();
+        setQuestions();
+      }
     });
 
     return {
@@ -874,6 +1001,8 @@ export default defineComponent({
       GameParticipants,
       showScrollBar,
       scoreBoardParticipants,
+      quizIsDarkMode,
+      currentPrepareCount,
       userIsGameHost,
       copyGameLink,
       shareGameLink,

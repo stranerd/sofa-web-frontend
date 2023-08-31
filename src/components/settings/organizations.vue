@@ -89,7 +89,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import {
   SofaHeaderText,
   SofaIcon,
@@ -100,8 +100,7 @@ import {
 } from "sofa-ui-components";
 import { FormValidations } from "@/composables";
 import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import { SingleUser } from "sofa-logic/src/logic/types/domains/users";
+import { setOrganizations, allOrganizations } from "@/composables/profile";
 
 export default defineComponent({
   components: {
@@ -114,33 +113,9 @@ export default defineComponent({
   },
   setup() {
     const UserProfile = ref(Logic.Users.UserProfile);
-    const allOrganizations = reactive([]);
+
     const selectedOrganization = ref("");
     const showLeaveOrganization = ref(false);
-
-    const setOrganizations = () => {
-      Logic.Users.GetUsers({
-        where: [
-          {
-            field: "id",
-            value: UserProfile.value.account.organizationsIn,
-            condition: Conditions.in,
-          },
-        ],
-      }).then((data) => {
-        const allUser: SingleUser[] = data;
-        allOrganizations.length = 0;
-        if (data) {
-          allUser.forEach((item) => {
-            allOrganizations.push({
-              id: item.id,
-              name: item.bio.name.full,
-              profile_url: item.bio.photo.link,
-            });
-          });
-        }
-      });
-    };
 
     onMounted(() => {
       setOrganizations();
