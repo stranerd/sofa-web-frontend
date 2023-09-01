@@ -78,6 +78,7 @@ const questionIndex = ref(0)
 const SingleQuiz = ref(Logic.Study.SingleQuiz)
 const AllQuestions = ref(Logic.Study.AllQuestions)
 const SingleGame = ref(Logic.Plays.SingleGame)
+const SingleTest = ref(Logic.Plays.SingleTest)
 const GameParticipants = ref(Logic.Plays.GameParticipants)
 
 const mobileTitle = ref('')
@@ -228,6 +229,71 @@ const listenToGame = () => {
   )
 }
 
+const listenToTest = () => {
+  // connect to websocket
+  Logic.Common.setupWebsocket()
+
+  Logic.Common.listenOnSocket(
+    `plays/tests/${Logic.Plays.SingleTest.id}`,
+    (data) => {
+      Logic.Plays.SingleTest = data.data
+      Logic.Plays.GetTest(Logic.Plays.SingleTest.id).then(() => {
+        if (data.data.status == 'started' && state.value != 'question') {
+          Logic.Common.debounce(() => {
+            preStartTest()
+          })
+        }
+      })
+    },
+    (data) => {
+      console.log(data)
+    },
+  )
+}
+
+const preStartTest = () => {
+  currentPrepareCount.value = 0
+  if (mode.value == 'test') {
+    if (SingleTest.value.status != 'started') {
+      state.value = 'lobby'
+      enabledSwiper.value = false
+      answerState.value = ''
+
+      buttonLabels.left = {
+        label: '',
+        bgColor: ' ',
+        textColor: ' ',
+      }
+
+      buttonLabels.right = {
+        label: '',
+        bgColor: ' ',
+        textColor: ' ',
+      }
+      return
+    }
+
+    currentPrepareCount.value = 5
+    state.value = 'prepare'
+
+    Logic.Common.debounce(() => {
+      const prepareCount = setInterval(() => {
+        if (currentPrepareCount.value == 1) {
+          state.value = 'question'
+          setViewMode()
+          setTimeout(() => {
+            showQuestion(0)
+          }, 500)
+          clearInterval(prepareCount)
+        } else {
+          state.value = 'prepare'
+          currentPrepareCount.value--
+        }
+      }, 1000)
+    }, 300)
+  }
+}
+
 const preStartGame = () => {
   currentPrepareCount.value = 0
   if (mode.value == 'game') {
@@ -376,6 +442,7 @@ const userIsGameHost = (id = null) => {
   if (id) {
     return Logic.Auth.AuthUser?.id == id
   }
+  if (SingleTest.value) return true
   return SingleGame.value?.user.id == Logic.Auth.AuthUser?.id
 }
 
@@ -714,6 +781,14 @@ const startGame = () => {
   }
 }
 
+const startTest = () => {
+  if (Logic.Plays.SingleTest) {
+    Logic.Plays.StartTest(Logic.Plays.SingleTest.id).then(() => {
+      // showQuestion(0)
+    })
+  }
+}
+
 export {
   quizSettingsForm,
   quizSettingSaved,
@@ -743,6 +818,7 @@ export {
   GameParticipants,
   scoreBoardParticipants,
   currentPrepareCount,
+  SingleTest,
   saveParticipantAnswer,
   createQuiz,
   updateQuiz,
@@ -765,4 +841,7 @@ export {
   listenToGame,
   setScoreboardParticipants,
   preStartGame,
+  listenToTest,
+  preStartTest,
+  startTest,
 }

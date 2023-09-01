@@ -217,7 +217,10 @@
               </sofa-header-text>
             </div>
 
-            <div class="flex flex-row space-x-3" v-if="mode != 'game'">
+            <div
+              class="flex flex-row space-x-3"
+              v-if="mode != 'game' && mode != 'test'"
+            >
               <sofa-button
                 :bgColor="'bg-white'"
                 :textColor="'text-white'"
@@ -364,18 +367,23 @@
                   class="w-full flex flex-col space-y-3 justify-center items-center"
                 >
                   <sofa-normal-text :color="'text-[#78828C] !text-center'">
-                    You are hosting the quiz game
+                    {{
+                      SingleGame
+                        ? "You are hosting the quiz game"
+                        : "You are about to take a test"
+                    }}
                   </sofa-normal-text>
 
                   <sofa-header-text
                     :customClass="'!text-center !font-extrabold'"
                     size="xl"
                   >
-                    Universe - Space and Solar Systems
+                    {{ SingleGame ? SingleQuiz.title : "Stanerd Tutor Test" }}
                   </sofa-header-text>
 
                   <div
                     class="w-full flex flex-row items-center justify-center space-x-4"
+                    v-if="SingleGame"
                   >
                     <div class="space-x-2 items-center flex flex-row">
                       <sofa-icon
@@ -466,23 +474,40 @@
               >
                 {{ state == "lobby" ? "Lobby" : "Scoreboard" }}
               </sofa-header-text>
-              <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
-                {{
-                  userIsGameHost()
-                    ? "Start game when enough players have joined"
-                    : "Waiting for host to start game"
-                }}
-              </sofa-normal-text>
-              <sofa-normal-text
-                :color="'text-white'"
-                v-if="state == 'leaderboard'"
-              >
-                {{
-                  SingleGame.status == "started"
-                    ? "Game is still ongoing. Waiting for the game to end..."
-                    : "Game has ended"
-                }}
-              </sofa-normal-text>
+              <template v-if="SingleGame">
+                <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
+                  {{
+                    userIsGameHost()
+                      ? "Start game when enough players have joined"
+                      : "Waiting for host to start game"
+                  }}
+                </sofa-normal-text>
+                <sofa-normal-text
+                  :color="'text-white'"
+                  v-if="state == 'leaderboard'"
+                >
+                  {{
+                    SingleGame.status == "started"
+                      ? "Game is still ongoing. Waiting for the game to end..."
+                      : "Game has ended"
+                  }}
+                </sofa-normal-text>
+              </template>
+              <template v-if="SingleTest">
+                <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
+                  {{ "Start the test when you are ready" }}
+                </sofa-normal-text>
+                <sofa-normal-text
+                  :color="'text-white'"
+                  v-if="state == 'leaderboard'"
+                >
+                  {{
+                    SingleTest.status == "started"
+                      ? "Test is still ongoing. Waiting for the test to end..."
+                      : "Test has ended"
+                  }}
+                </sofa-normal-text>
+              </template>
             </div>
 
             <div
@@ -591,7 +616,7 @@
                     :customClass="'!bg-white !border-[2px] !border-white  md:!w-auto w-full'"
                     :textColor="'text-[#141618] '"
                     :padding="'px-5 py-2'"
-                    @click="startGame()"
+                    @click="Logic.Plays.SingleGame ? startGame() : startTest()"
                   >
                     Start
                   </sofa-button>
@@ -632,7 +657,7 @@
         }
             ${
               !(buttonLabels.left.label || !buttonLabels.right.label) ||
-              mode != 'game'
+              (mode != 'game' && mode != 'test')
                 ? ''
                 : '!invisible'
             }
@@ -655,7 +680,9 @@
 
           <span
             :class="`px-4 py-2 rounded-[8px] bg-[#F2F5F8] !font-semibold text-grayColor ${
-              state != 'question' || mode == 'game' ? 'invisible' : ''
+              state != 'question' || mode == 'game' || mode == 'test'
+                ? 'invisible'
+                : ''
             } `"
           >
             {{ currentQuestionIndex + 1 }}/{{ questions.length }}
@@ -836,11 +863,18 @@ import {
   scoreBoardParticipants,
   currentPrepareCount,
   preStartGame,
+  SingleTest,
+  listenToTest,
+  preStartTest,
+  startTest,
 } from "@/composables/quiz";
 
 const fetchRules = [];
 
-if (!window.location.href.includes("game")) {
+if (
+  !window.location.href.includes("game") &&
+  !window.location.href.includes("test")
+) {
   fetchRules.push({
     domain: "Study",
     property: "AllQuestions",
@@ -852,16 +886,8 @@ if (!window.location.href.includes("game")) {
   });
 }
 
-fetchRules.push(
-  {
-    domain: "Study",
-    property: "SingleQuiz",
-    method: "GetQuiz",
-    params: [],
-    useRouteId: true,
-    ignoreProperty: true,
-  },
-  {
+if (window.location.href.includes("game")) {
+  fetchRules.push({
     domain: "Plays",
     property: "SingleGame",
     method: "GetGame",
@@ -870,8 +896,30 @@ fetchRules.push(
     queries: ["gameId"],
     requireAuth: true,
     ignoreProperty: true,
-  }
-);
+  });
+}
+
+if (window.location.href.includes("test")) {
+  fetchRules.push({
+    domain: "Plays",
+    property: "SingleTest",
+    method: "GetTest",
+    params: [],
+    useRouteQuery: true,
+    queries: ["testId"],
+    requireAuth: true,
+    ignoreProperty: true,
+  });
+}
+
+fetchRules.push({
+  domain: "Study",
+  property: "SingleQuiz",
+  method: "GetQuiz",
+  params: [],
+  useRouteId: true,
+  ignoreProperty: true,
+});
 
 export default defineComponent({
   components: {
@@ -921,6 +969,7 @@ export default defineComponent({
     onMounted(() => {
       scrollToTop();
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+      Logic.Plays.watchProperty("SingleTest", SingleTest);
       Logic.Study.watchProperty("AllQuestions", AllQuestions);
       Logic.Plays.watchProperty("SingleGame", SingleGame);
       Logic.Plays.watchProperty("GameParticipants", GameParticipants);
@@ -932,7 +981,9 @@ export default defineComponent({
         state.value = "prepare";
       }
 
-      mobileTitle.value = SingleQuiz.value.title;
+      if (SingleGame.value) {
+        mobileTitle.value = SingleQuiz.value.title;
+      }
 
       if (
         mode.value == "practice" ||
@@ -955,11 +1006,19 @@ export default defineComponent({
         quizIsDarkMode.value = true;
         preStartGame();
       }
+
+      if (mode.value == "test") {
+        listenToTest();
+        quizIsDarkMode.value = true;
+        preStartTest();
+      }
     });
 
     onUnmounted(() => {
       Logic.Study.SingleQuiz = undefined;
       Logic.Study.AllQuestions = undefined;
+      Logic.Plays.SingleGame = undefined;
+      Logic.Plays.SingleTest = undefined;
       questions.length = 0;
     });
 
@@ -1003,10 +1062,12 @@ export default defineComponent({
       scoreBoardParticipants,
       quizIsDarkMode,
       currentPrepareCount,
+      SingleTest,
       userIsGameHost,
       copyGameLink,
       shareGameLink,
       startGame,
+      startTest,
     };
   },
 });
