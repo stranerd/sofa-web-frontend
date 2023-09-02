@@ -117,7 +117,7 @@
                   } !border-[2px] !border-white`"
                   :hasDoubleLayer="true"
                   :hasDarkLayer="false"
-                  v-if="mode != 'game'"
+                  v-if="mode != 'game' && mode != 'tutor_test'"
                 >
                   Explanation
                 </sofa-button>
@@ -219,7 +219,7 @@
 
             <div
               class="flex flex-row space-x-3"
-              v-if="mode != 'game' && mode != 'test'"
+              v-if="mode != 'game' && mode != 'tutor_test'"
             >
               <sofa-button
                 :bgColor="'bg-white'"
@@ -278,7 +278,7 @@
                 :mode="mode"
                 @OnAnswerSelected="handleAnswerSelected"
                 :answerState="answerState"
-                :quiz-title="SingleQuiz.title"
+                :quiz-title="SingleQuiz?.title || 'Tutor quiz'"
                 :quizIsDarkMode="quizIsDarkMode"
               />
             </template>
@@ -327,7 +327,12 @@
               :customClass="'md:!text-base mdlg:!text-lg'"
               :color="'text-white'"
             >
-              {{ SingleQuiz.questions.length }} questions
+              {{
+                SingleQuiz
+                  ? SingleQuiz.questions.length
+                  : SingleTest.questions.length
+              }}
+              questions
             </sofa-header-text>
             <div
               class="w-full flex flex-row items-center justify-center py-5 bg-white"
@@ -335,7 +340,7 @@
               <sofa-header-text
                 :customClass="'!font-bold md:!text-2xl text-lg'"
               >
-                {{ SingleQuiz.title }}
+                {{ SingleQuiz?.title || "Tutor test" }}
               </sofa-header-text>
             </div>
 
@@ -471,6 +476,7 @@
               <sofa-header-text
                 :customClass="'md:!text-3xl text-xl'"
                 :color="'text-white'"
+                v-if="SingleGame"
               >
                 {{ state == "lobby" ? "Lobby" : "Scoreboard" }}
               </sofa-header-text>
@@ -493,28 +499,14 @@
                   }}
                 </sofa-normal-text>
               </template>
-              <template v-if="SingleTest">
-                <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
-                  {{ "Start the test when you are ready" }}
-                </sofa-normal-text>
-                <sofa-normal-text
-                  :color="'text-white'"
-                  v-if="state == 'leaderboard'"
-                >
-                  {{
-                    SingleTest.status == "started"
-                      ? "Test is still ongoing. Waiting for the test to end..."
-                      : "Test has ended"
-                  }}
-                </sofa-normal-text>
-              </template>
             </div>
 
             <div
               :class="`w-full h-auto md:!max-h-[80%] max-h-[70%]  overflow-y-auto flex flex-col space-y-3 `"
             >
               <!-- Lobby list -->
-              <template v-if="GameParticipants.length && state == 'lobby'">
+
+              <template v-if="GameParticipants?.length && state == 'lobby'">
                 <div
                   v-for="(user, index) in GameParticipants"
                   :key="index"
@@ -546,47 +538,66 @@
 
               <!-- Scoreboard -->
 
-              <template
-                v-if="scoreBoardParticipants.length && state == 'leaderboard'"
-              >
-                <div
-                  v-for="(user, index) in scoreBoardParticipants"
-                  :key="index"
-                  :class="`w-full flex flex-row items-center justify-between py-3 px-4 custom-border  bg-white    ${
-                    userIsGameHost(user.user.id)
-                      ? 'border-[#7DC8FA] border-[5px]'
-                      : 'border-transparent border-[2px]'
-                  }`"
-                >
-                  <div class="flex flex-row space-x-3 items-center">
-                    <sofa-normal-text
-                      :color="'text-[#141618]'"
-                      :customClass="'!font-semibold'"
-                      >{{ index + 1 }}
-                    </sofa-normal-text>
-                    <sofa-normal-text
-                      :color="'text-[#141618]'"
-                      :customClass="'!font-semibold'"
-                    >
-                      {{
-                        userIsGameHost(user.user.id)
-                          ? "You"
-                          : user.user.bio.name.full
-                      }}
-                    </sofa-normal-text>
-                    <sofa-icon
-                      :name="'game-winner'"
-                      :customClass="'h-[23px]'"
-                      v-if="index == 0 && user.score > 0"
-                    />
-                  </div>
+              <template v-if="state == 'leaderboard'">
+                <template v-if="scoreBoardParticipants">
+                  <div
+                    v-for="(user, index) in scoreBoardParticipants"
+                    :key="index"
+                    :class="`w-full flex flex-row items-center justify-between py-3 px-4 custom-border  bg-white    ${
+                      userIsGameHost(user.user.id)
+                        ? 'border-[#7DC8FA] border-[5px]'
+                        : 'border-transparent border-[2px]'
+                    }`"
+                  >
+                    <div class="flex flex-row space-x-3 items-center">
+                      <sofa-normal-text
+                        :color="'text-[#141618]'"
+                        :customClass="'!font-semibold'"
+                        >{{ index + 1 }}
+                      </sofa-normal-text>
+                      <sofa-normal-text
+                        :color="'text-[#141618]'"
+                        :customClass="'!font-semibold'"
+                      >
+                        {{
+                          userIsGameHost(user.user.id)
+                            ? "You"
+                            : user.user.bio.name.full
+                        }}
+                      </sofa-normal-text>
+                      <sofa-icon
+                        :name="'game-winner'"
+                        :customClass="'h-[23px]'"
+                        v-if="index == 0 && user.score > 0"
+                      />
+                    </div>
 
-                  <sofa-normal-text
-                    :color="'text-[#141618]'"
-                    :customClass="'!font-semibold'"
-                    >{{ `${user.score} points` }}
-                  </sofa-normal-text>
-                </div>
+                    <sofa-normal-text
+                      :color="'text-[#141618]'"
+                      :customClass="'!font-semibold'"
+                      >{{ `${user.score} points` }}
+                    </sofa-normal-text>
+                  </div>
+                </template>
+                <template v-if="SingleTest">
+                  <div
+                    class="w-full flex flex-col items-center justify-start space-y-3"
+                  >
+                    <sofa-header-text
+                      :color="'text-white'"
+                      :customClass="'md:!text-3xl text-xl'"
+                    >
+                      Application submitted
+                    </sofa-header-text>
+                    <sofa-normal-text
+                      :color="'text-white'"
+                      :customClass="'text-center px-4'"
+                    >
+                      Your application is under review. You will get notified of
+                      the result soon
+                    </sofa-normal-text>
+                  </div>
+                </template>
               </template>
             </div>
 
@@ -657,7 +668,7 @@
         }
             ${
               !(buttonLabels.left.label || !buttonLabels.right.label) ||
-              (mode != 'game' && mode != 'test')
+              (mode != 'game' && mode != 'tutor_test')
                 ? ''
                 : '!invisible'
             }
@@ -680,7 +691,7 @@
 
           <span
             :class="`px-4 py-2 rounded-[8px] bg-[#F2F5F8] !font-semibold text-grayColor ${
-              state != 'question' || mode == 'game' || mode == 'test'
+              state != 'question' || mode == 'game' || mode == 'tutor_test'
                 ? 'invisible'
                 : ''
             } `"
@@ -873,7 +884,7 @@ const fetchRules = [];
 
 if (
   !window.location.href.includes("game") &&
-  !window.location.href.includes("test")
+  !window.location.href.includes("tutor_test")
 ) {
   fetchRules.push({
     domain: "Study",
@@ -899,7 +910,7 @@ if (window.location.href.includes("game")) {
   });
 }
 
-if (window.location.href.includes("test")) {
+if (window.location.href.includes("tutor_test")) {
   fetchRules.push({
     domain: "Plays",
     property: "SingleTest",
@@ -1007,9 +1018,10 @@ export default defineComponent({
         preStartGame();
       }
 
-      if (mode.value == "test") {
+      if (mode.value == "tutor_test") {
         listenToTest();
         quizIsDarkMode.value = true;
+        setQuestions();
         preStartTest();
       }
     });

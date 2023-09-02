@@ -36,7 +36,13 @@
                   )
                 }}
               </sofa-normal-text>
-              <sofa-normal-text>
+              <sofa-normal-text
+                v-if="
+                  Logic.Common.momentInstance(
+                    userWallet.subscription.current.expiredAt
+                  ).diff(Logic.Common.momentInstance(new Date()), 'days') > 0
+                "
+              >
                 {{
                   Logic.Common.momentInstance(
                     userWallet.subscription.current.expiredAt
@@ -44,6 +50,7 @@
                 }}
                 days left
               </sofa-normal-text>
+              <sofa-normal-text v-else> Expired </sofa-normal-text>
             </div>
 
             <div

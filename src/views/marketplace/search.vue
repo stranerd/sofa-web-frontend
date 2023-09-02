@@ -67,7 +67,7 @@
                 custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
                 v-for="(content, index) in resourceContents"
                 :key="index"
-                @click="Logic.Common.GoToRoute('/course/' + content.id)"
+                @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
               ></sofa-item-card>
             </div>
 
@@ -78,7 +78,7 @@
                 v-for="(content, index) in resourceContents"
                 :isWrapped="true"
                 :key="index"
-                @click="Logic.Common.GoToRoute('/course/' + content.id)"
+                @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
               ></sofa-activity-card>
             </div>
           </div>
@@ -311,6 +311,10 @@ export default defineComponent({
             condition: Conditions.in,
           },
         });
+      }
+
+      if (route.query?.q) {
+        defaultValue.value = route.query?.q.toString();
       }
     };
 

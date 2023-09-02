@@ -253,8 +253,15 @@ const listenToTest = () => {
 
 const preStartTest = () => {
   currentPrepareCount.value = 0
-  if (mode.value == 'test') {
+  if (mode.value == 'tutor_test') {
     if (SingleTest.value.status != 'started') {
+      if (
+        SingleTest.value.status == 'ended' ||
+        SingleTest.value.status == 'scored'
+      ) {
+        state.value = 'leaderboard'
+        return
+      }
       state.value = 'lobby'
       enabledSwiper.value = false
       answerState.value = ''
@@ -338,13 +345,25 @@ const preStartGame = () => {
 
 const showQuestion = (index: number) => {
   answerState.value = ''
-  if (mode.value == 'game') {
-    if (SingleGame.value.status == 'scored') {
-      state.value = 'leaderboard'
-      return
+  if (mode.value == 'game' || mode.value == 'tutor_test') {
+    if (mode.value == 'game') {
+      if (SingleGame.value.status == 'scored') {
+        state.value = 'leaderboard'
+        return
+      }
     }
 
-    if (SingleGame.value.status == 'started') {
+    if (mode.value == 'tutor_test') {
+      if (SingleTest.value?.status == 'scored') {
+        state.value = 'leaderboard'
+        return
+      }
+    }
+
+    if (
+      SingleGame.value?.status == 'started' ||
+      SingleTest.value?.status == 'started'
+    ) {
       state.value = 'question'
 
       enabledSwiper.value = false
@@ -447,7 +466,11 @@ const userIsGameHost = (id = null) => {
 }
 
 const setStartButtons = () => {
-  mobileTitle.value = SingleQuiz.value.title
+  if (SingleQuiz.value) {
+    mobileTitle.value = SingleQuiz.value.title
+  } else {
+    mobileTitle.value = 'Tutor test'
+  }
 
   if (mode.value == 'flashcard') {
     buttonLabels.left = {
@@ -655,6 +678,11 @@ const handleRightButton = () => {
     } else if (mode.value == 'game') {
       clearInterval(counterInterval.value)
       state.value = 'leaderboard'
+    } else if (mode.value == 'tutor_test') {
+      clearInterval(counterInterval.value)
+      state.value = 'leaderboard'
+      // end test
+      Logic.Plays.EndTest(SingleTest.value.id)
     }
   } else {
     if (mode.value == 'practice') {
@@ -690,7 +718,18 @@ const handleAnswerSelected = () => {
       textColor: 'text-white',
     }
   } else if (mode.value == 'game') {
+    answerState.value = 'selected'
+    setTimeout(() => {
+      answerState.value = ''
+      handleRightButton()
+    }, 1500)
     handleRightButton()
+  } else if (mode.value == 'tutor_test') {
+    answerState.value = 'selected'
+    setTimeout(() => {
+      answerState.value = ''
+      handleRightButton()
+    }, 1500)
   }
 }
 
@@ -732,7 +771,13 @@ const saveParticipantAnswer = (answer: any, questionId: string) => {
     questionId,
   }
 
-  Logic.Plays.AnswerGameQuestion(Logic.Plays.SingleGame.id)
+  if (SingleGame.value) {
+    Logic.Plays.AnswerGameQuestion(Logic.Plays.SingleGame.id)
+  }
+
+  if (SingleTest.value) {
+    Logic.Plays.AnswerTestQuestion(Logic.Plays.SingleTest.id)
+  }
 }
 
 const copyGameLink = () => {

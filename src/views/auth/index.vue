@@ -80,18 +80,6 @@
             </sofa-normal-text>
           </div>
         </div>
-
-        <div class="flex flex-row items-center space-x-2 pt-3">
-          <sofa-normal-text :color="'text-grayColor'"
-            >Have an account?</sofa-normal-text
-          >
-          <sofa-normal-text
-            :color="'!text-primaryBlue'"
-            :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/auth/login')"
-            >Sign in</sofa-normal-text
-          >
-        </div>
       </div>
     </div>
   </auth-layout>

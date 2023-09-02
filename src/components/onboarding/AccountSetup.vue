@@ -14,13 +14,14 @@
             accountSetupOptions.filter((item) => item.show).length == 2
               ? 'col-span-3'
               : 'col-span-2'
-          } py-3 px-3 custom-border flex flex-row items-center space-x-2 justify-center ${
+          } py-3 px-3 custom-border flex flex-row items-center space-x-2 cursor-pointer justify-center ${
             option.status == 'active' ? 'bg-primaryPurple' : ''
           } 
         ${option.status == 'inactive' ? 'bg-lightGrayVaraint' : ''} ${
             option.status == 'done' ? 'bg-primaryGreen' : ''
           }`"
           v-if="option.show"
+          @click="selectStage(option.id)"
         >
           <sofa-normal-text
             :color="` ${option.status == 'active' ? 'text-white' : ''} 
@@ -480,6 +481,16 @@ export default defineComponent({
       setFacultiesOptions();
     };
 
+    const selectStage = (stage: string) => {
+      accountSetupOptions.forEach((item) => {
+        if (item.id == stage) {
+          item.show = true;
+        } else {
+          item.show = false;
+        }
+      });
+    };
+
     const onChangeOTP = () => {
       //
     };
@@ -527,6 +538,7 @@ export default defineComponent({
       onChangeOTP,
       handleAccountSetup,
       countryIsSelected,
+      selectStage,
     };
   },
   data() {

@@ -14,7 +14,9 @@
         <div
           class="w-full shadow-custom bg-white rounded-[16px] h-full flex flex-col pb-4"
         >
-          <div class="flex flex-col h-full overflow-y-auto relative">
+          <div
+            class="flex flex-col h-full overflow-y-auto relative scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin"
+          >
             <div
               class="w-full px-4 py-4 sticky top-0 left-0 bg-white z-30 rounded-t-[16px] flex flex-row items-start"
             >
@@ -332,23 +334,6 @@
             </div>
 
             <!-- Pay online -->
-
-            <div
-              :class="`w-full flex flex-row items-center space-x-3 px-3 py-3  bg-[#F1F6FA] ${
-                selectedMethodId == 'online'
-                  ? 'border-primaryBlue  border-[2px]'
-                  : ''
-              }  custom-border cursor-pointer `"
-              @click="
-                Logic.Payment.initialPayment(
-                  SingleCourse.price.amount,
-                  'fundWallet'
-                )
-              "
-            >
-              <sofa-icon :customClass="'h-[20px]'" :name="'website'" />
-              <sofa-normal-text> Pay online </sofa-normal-text>
-            </div>
 
             <div
               class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer"

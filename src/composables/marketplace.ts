@@ -1,57 +1,27 @@
 import { Logic } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
+export interface ContentDetails {
+  id: string
+  subject?: string
+  title?: string
+  image?: string
+  labels?: {
+    main: string
+    sub: string
+    color: string
+  }
+  username?: string
+  userPhoto: string
+  price?: number
+}
+
 const AllCourses = ref(Logic.Study.AllCourses)
-const notesContents = ref<
-  {
-    id: string
-    subject?: string
-    title?: string
-    image?: string
-    labels?: {
-      main: string
-      sub: string
-      color: string
-    }
-    username?: string
-    userPhoto: string
-    price?: number
-  }[]
->([])
+const notesContents = ref<ContentDetails[]>([])
 
-const pastQuestionContents = ref<
-  {
-    id: string
-    subject?: string
-    title?: string
-    image?: string
-    labels?: {
-      main: string
-      sub: string
-      color: string
-    }
-    username?: string
-    userPhoto: string
-    price?: number
-  }[]
->([])
+const pastQuestionContents = ref<ContentDetails[]>([])
 
-const textbookContents = ref<
-  {
-    id: string
-    subject?: string
-    title?: string
-    image?: string
-    labels?: {
-      main: string
-      sub: string
-      color: string
-    }
-    username?: string
-    userPhoto: string
-    price?: number
-  }[]
->([])
+const textbookContents = ref<ContentDetails[]>([])
 
 const mainCards = reactive([
   {
@@ -168,9 +138,18 @@ const setCourses = (count = 5) => {
       })
     }
   })
-  notesContents.value = noteCourseArray
-  pastQuestionContents.value = pastQuestionArray
-  textbookContents.value = textbookArray
+
+  if (noteCourseArray.length) {
+    notesContents.value = noteCourseArray
+  }
+
+  if (pastQuestionArray.length) {
+    pastQuestionContents.value = pastQuestionArray
+  }
+
+  if (textbookArray.length) {
+    textbookContents.value = textbookArray
+  }
 
   if (notesContents.value.length > count) {
     notesContents.value = notesContents.value.slice(0, count)

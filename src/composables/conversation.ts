@@ -4,6 +4,23 @@ import { Message } from 'sofa-logic/src/logic/types/domains/conversations'
 import { reactive, ref } from 'vue'
 import { scrollToBottom } from './index'
 
+export interface ChatListData {
+  title: string
+  selected: boolean
+  subTitle: string
+  icon?: string
+  iconSize?: string
+  id: string
+  hover: boolean
+  isDone: boolean
+  photoUrl: string
+  lastMessage: string
+  unread: number
+  lastMessageTime: string
+  isRequest?: boolean
+  convoId?: string
+}
+
 const messageContent = ref('')
 
 const showLoader = ref(false)
@@ -12,30 +29,47 @@ const showDeleteConvo = ref(false)
 
 const selectedConvoId = ref('')
 
+const showEndSession = ref(false)
+
 const showAddTutor = ref(false)
 
 const showMoreOptions = ref(false)
 
 const itIsNewMessage = ref(false)
 
+const itIsTutorRequest = ref(false)
+
 const conversationTitle = ref('New Chat')
 
-const chatList = reactive<
-  {
-    title: string
-    selected: boolean
-    subTitle: string
-    icon: string
-    iconSize: string
-    id: string
-    hover: boolean
-    isDone: boolean
-  }[]
->([])
+const selectedTutorRequestData = ref<ChatListData>()
+
+const selectedChatData = ref<ChatListData>({
+  icon: 'conversation',
+  iconSize: 'h-[35px]',
+  selected: false,
+  subTitle: 'New chat',
+  title: 'New chat',
+  id: '0',
+  hover: false,
+  isDone: false,
+  photoUrl:
+    Logic.Users.getUserType() == 'student'
+      ? Logic.Users.UserProfile.ai?.photo?.link || '/images/icons/robot.svg'
+      : '',
+  lastMessage: 'No message',
+  unread: 0,
+  lastMessageTime: Logic.Common.fomartDate(new Date().getTime(), 'h:mma'),
+})
+
+const chatList = reactive<ChatListData[]>([])
+
+const tutorRequestList = reactive<ChatListData[]>([])
 
 const AllConversations = ref(Logic.Conversations.AllConversations)
+const AllTutorRequests = ref(Logic.Conversations.AllTutorRequests)
 const SingleConversation = ref(Logic.Conversations.SingleConversation)
 const Messages = ref(Logic.Conversations.Messages)
+const ChatMembers = ref(Logic.Conversations.ChatMembers)
 
 const hasMessage = ref(false)
 
@@ -64,20 +98,87 @@ const addNewChat = (convoMessage = '') => {
   })
 }
 
+const setChatToDefault = () => {
+  selectedChatData.value = {
+    icon: 'conversation',
+    iconSize: 'h-[35px]',
+    selected: false,
+    subTitle: 'New chat',
+    title: 'New chat',
+    id: '0',
+    hover: false,
+    isDone: false,
+    photoUrl:
+      Logic.Users.getUserType() == 'student'
+        ? Logic.Users.UserProfile.ai?.photo?.link || '/images/icons/robot.svg'
+        : '',
+    lastMessage: 'No message',
+    unread: 0,
+    lastMessageTime: Logic.Common.fomartDate(new Date().getTime(), 'h:mma'),
+  }
+}
+
 const setConversations = (goToIndex = -1) => {
   chatList.length = 0
   AllConversations.value.results.forEach((convo, index) => {
+    let photourl = ''
+
+    if (Logic.Users.getUserType() == 'student') {
+      photourl = !convo.tutor
+        ? Logic.Users.UserProfile.ai?.photo?.link || '/images/icons/robot.svg'
+        : convo.tutor?.bio.photo?.link || ''
+    }
+
+    if (Logic.Users.getUserType() == 'teacher') {
+      photourl = convo.user.bio.photo?.link || ''
+    }
+
     chatList.push({
       icon: 'conversation',
       iconSize: 'h-[35px]',
       selected: index == goToIndex,
       subTitle: convo.last.body,
-      title: convo.title,
+      title: !convo.tutor ? convo.title : convo.tutor?.bio.name.full,
       id: convo.id,
       hover: false,
       isDone: false,
+      photoUrl: photourl,
+      lastMessage: convo.last.body || 'No message',
+      unread: 0,
+      lastMessageTime: Logic.Common.fomartDate(
+        convo.last?.createdAt || new Date().getTime(),
+        'h:mma',
+      ),
     })
   })
+  tutorRequestList.length = 0
+  if (
+    Logic.Users.getUserType() == 'teacher' ||
+    Logic.Users.getUserType() == 'student'
+  ) {
+    AllTutorRequests.value.results.forEach((request) => {
+      if (request.pending || Logic.Users.getUserType() == 'student') {
+        tutorRequestList.push({
+          icon: 'conversation',
+          iconSize: 'h-[35px]',
+          selected: false,
+          subTitle: request.message,
+          title: request.user?.bio?.name?.full,
+          id: request.id,
+          hover: false,
+          isDone: false,
+          photoUrl: request.user?.bio?.photo?.link || '',
+          lastMessage: request.message,
+          unread: 0,
+          lastMessageTime: Logic.Common.fomartDate(
+            request.createdAt || new Date().getTime(),
+            'h:mma',
+          ),
+          convoId: request.conversationId,
+        })
+      }
+    })
+  }
 }
 
 const selectConversation = (convoId: string) => {
@@ -124,8 +225,17 @@ const selectConversation = (convoId: string) => {
           chatList.forEach((item) => {
             if (item.id == SingleConversation.value.id) {
               item.selected = true
+              selectedChatData.value = item
             } else {
               item.selected = false
+            }
+          })
+
+          // set tutor request if it exists
+          selectedTutorRequestData.value = undefined
+          tutorRequestList.forEach((item) => {
+            if (item.convoId == convoId) {
+              selectedTutorRequestData.value = item
             }
           })
         }
@@ -296,6 +406,34 @@ const contentTitleChanged = (content) => {
   }, 700)
 }
 
+const acceptOrRejectTutorRequest = (accept: boolean) => {
+  Logic.Conversations.AcceptTutorRequest(
+    selectedTutorRequestData.value.id,
+    accept,
+  ).then(() => {
+    itIsTutorRequest.value = false
+    setChatToDefault()
+
+    if (accept) {
+      Logic.Conversations.GetTutorRequests(
+        {
+          where: [
+            {
+              field: 'tutor.id',
+              condition: Conditions.eq,
+              value: Logic.Auth.AuthUser?.id,
+            },
+          ],
+        },
+        true,
+      ).then(() => {
+        setConversations()
+        selectConversation(selectedTutorRequestData.value.convoId)
+      })
+    }
+  })
+}
+
 export {
   messageContent,
   showLoader,
@@ -310,6 +448,14 @@ export {
   showMoreOptions,
   conversationTitle,
   itIsNewMessage,
+  AllTutorRequests,
+  tutorRequestList,
+  itIsTutorRequest,
+  selectedTutorRequestData,
+  selectedChatData,
+  ChatMembers,
+  showEndSession,
+  setChatToDefault,
   setConvoFromRoute,
   selectConversation,
   setConversations,
@@ -322,4 +468,5 @@ export {
   deleteConvo,
   handleKeyEvent,
   contentTitleChanged,
+  acceptOrRejectTutorRequest,
 }

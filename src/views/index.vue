@@ -9,6 +9,12 @@
             :size="'84'"
             :bgColor="'bg-grayColor'"
             :photoUrl="UserProfile.bio.photo ? UserProfile.bio?.photo.link : ''"
+            @click="
+              Logic.Users.AcceptOrRejectTutorRequest(
+                '64e3c356f7effac4fa134904',
+                true
+              )
+            "
           >
             <sofa-icon :customClass="'h-[45px]'" :name="'user'" />
           </sofa-avatar>
@@ -24,7 +30,9 @@
             <sofa-normal-text
               :color="'text-primaryPink'"
               :customClass="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/settings')"
+              @click="
+                Logic.Common.GoToRoute(`/profile/${Logic.Auth.AuthUser.id}`)
+              "
             >
               View profile
             </sofa-normal-text>
@@ -314,7 +322,7 @@
               :key="index"
               :activity="activity"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
             />
           </div>
           <template v-else>
@@ -364,7 +372,7 @@
               :key="index"
               :custom-class="'cursor-pointer'"
               :activity="activity"
-              @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
             />
           </div>
           <template v-else>
@@ -414,7 +422,7 @@
               :key="index"
               :activity="activity"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
             />
           </div>
           <template v-else>

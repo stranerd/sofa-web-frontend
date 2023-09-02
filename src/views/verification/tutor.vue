@@ -263,9 +263,38 @@
           </div>
 
           <div class="w-full flex flex-col" v-if="SingleTutorRequest">
-            <sofa-normal-text :color="'text-grayColor'">
+            <sofa-normal-text
+              :color="'text-grayColor'"
+              v-if="!tutorRequestForm.topicId"
+            >
               You have not selected any subject
             </sofa-normal-text>
+            <template v-else>
+              <div
+                :class="`flex flex-row ${
+                  SingleTutorRequest.testFinished ? 'opacity-50' : ''
+                } `"
+                v-if="!SingleTutorRequest.testFinished"
+              >
+                <sofa-button
+                  @click="
+                    SingleTutorRequest.testFinished
+                      ? null
+                      : Logic.Common.GoToRoute(
+                          `/quiz/empty?mode=tutor_test&testId=${SingleTutorRequest.topicId}`
+                        )
+                  "
+                >
+                  Take test
+                </sofa-button>
+              </div>
+
+              <template v-if="SingleTutorRequest.testFinished">
+                <sofa-normal-text :color="'text-grayColor'"
+                  >Waiting for approval...</sofa-normal-text
+                >
+              </template>
+            </template>
           </div>
           <div v-else class="w-full flex flex-col">
             <sofa-activity-card v-if="TestQuiz" :activity="TestQuiz">
@@ -322,7 +351,6 @@ import {
 import { FormValidations } from "@/composables";
 import { allTopics, getTopics } from "@/composables/course";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import { createQuizData } from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -394,12 +422,6 @@ export default defineComponent({
       if (SingleTutorRequest.value) {
         currentStep.value = "test";
         tutorRequestForm.topicId = SingleTutorRequest.value.topicId;
-        Logic.Plays.GetTest(SingleTutorRequest.value.testId).then(() => {
-          Logic.Study.GetQuiz(Logic.Plays.SingleTest.quizId).then(() => {
-            console.log(Logic.Study.SingleQuiz, Logic.Plays.SingleTest);
-            TestQuiz.value = createQuizData(SingleQuiz.value);
-          });
-        });
       }
     };
 

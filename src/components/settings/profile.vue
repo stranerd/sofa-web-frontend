@@ -395,7 +395,7 @@ export default defineComponent({
       if (!preventUpdate.value) {
         Logic.Common.debounce(() => {
           UpdateProfile(undefined, false);
-        }, 500);
+        }, 1000);
       }
     });
 

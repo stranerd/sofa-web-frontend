@@ -150,7 +150,7 @@
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
               v-for="(content, index) in pastQuestionContents"
               :key="index"
-              @click="Logic.Common.GoToRoute('/course/' + content.id)"
+              @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
             ></sofa-item-card>
           </div>
         </div>
@@ -200,7 +200,7 @@
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
               v-for="(content, index) in notesContents"
               :key="index"
-              @click="Logic.Common.GoToRoute('/course/' + content.id)"
+              @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
             ></sofa-item-card>
           </div>
         </div>
@@ -250,7 +250,7 @@
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
               v-for="(content, index) in textbookContents"
               :key="index"
-              @click="Logic.Common.GoToRoute('/course/' + content.id)"
+              @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
             ></sofa-item-card>
           </div>
         </div>

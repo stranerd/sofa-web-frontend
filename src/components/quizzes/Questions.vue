@@ -50,7 +50,7 @@
         >
           <sofa-header-text
             :custom-class="'text-left !font-bold'"
-            v-if="mode != 'game'"
+            v-if="mode != 'game' && mode != 'tutor_test'"
             :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
           >
             {{ quizTitle }}
@@ -148,6 +148,11 @@
             ${
               optionState(option) == 'wrong_answer'
                 ? '!bg-[#FAEBEB] !border-primaryRed'
+                : ''
+            }
+            ${
+              optionState(option) == 'selected'
+                ? '!bg-[#E2F3FD] !border-primaryBlue  animate-bounce'
                 : ''
             }
              border-[#E1E6EB] bg-white space-x-3`"
@@ -682,7 +687,7 @@ export default defineComponent({
     const counterInterval = ref();
 
     const handleQuestionSelected = () => {
-      if (props.mode == "game") {
+      if (props.mode == "game" || props.mode == "tutor_test") {
         if (currentIndexRef.value == props.questionIndex) {
           question.duration = initialDuration;
           counterInterval.value = setInterval(() => {
@@ -732,7 +737,7 @@ export default defineComponent({
       }
       question.userAnswer = answer;
 
-      if (props.mode == "game") {
+      if (props.mode == "game" || props.mode == "tutor_test") {
         let mainAnswer: any = "";
         if (question.title == "Multiple choice") {
           mainAnswer = [
@@ -801,6 +806,10 @@ export default defineComponent({
         ) {
           return "wrong_answer";
         }
+      }
+
+      if (option.hover && props.answerState == "selected") {
+        return "selected";
       }
 
       if (option.hover || question.userAnswer == option.content[0].label) {

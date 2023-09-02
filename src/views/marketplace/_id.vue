@@ -34,6 +34,7 @@
         :showBuyButton="true"
         :buyAction="buyCourse"
         :itemIsPurchased="PurchasedItems.includes(contentDetails.id)"
+        :similarContents="similarContents"
       />
     </div>
 
@@ -104,18 +105,6 @@
             <!-- Pay online -->
 
             <div
-              :class="`w-full flex flex-row items-center space-x-3 px-3 py-3  bg-[#F1F6FA] ${
-                selectedMethodId == 'online'
-                  ? 'border-primaryBlue  border-[2px]'
-                  : ''
-              }  custom-border cursor-pointer `"
-              @click="selectedMethodId = 'online'"
-            >
-              <sofa-icon :customClass="'h-[20px]'" :name="'website'" />
-              <sofa-normal-text> Pay online </sofa-normal-text>
-            </div>
-
-            <div
               class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer"
               @click="Logic.Payment.initialPayment()"
             >
@@ -176,7 +165,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToTop } from "@/composables";
@@ -190,6 +179,7 @@ import {
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import { createCourseData } from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -292,6 +282,8 @@ export default defineComponent({
 
     const PaymentMethods = ref(Logic.Payment.PaymentMethods);
     const PurchasedItems = ref(Logic.Payment.PurchasedItems);
+
+    const similarContents = ref<any[]>([]);
 
     const selectedMethodId = ref("");
 
@@ -399,11 +391,54 @@ export default defineComponent({
       });
     };
 
+    const setSimilarContents = () => {
+      Logic.Study.GetCourses(
+        {
+          where: [
+            {
+              field: "topicId",
+              condition: Conditions.eq,
+              value: SingleCourse.value.topicId,
+            },
+            {
+              field: "status",
+              condition: Conditions.eq,
+              value: "published",
+            },
+            {
+              field: "id",
+              condition: Conditions.ne,
+              value: SingleCourse.value.id,
+            },
+          ],
+          limit: 3,
+        },
+        false
+      ).then((courses) => {
+        similarContents.value.length = 0;
+        if (courses) {
+          courses.results.forEach((course) => {
+            similarContents.value.push(createCourseData(course));
+          });
+        }
+      });
+    };
+
+    watch(SingleCourse, () => {
+      scrollToTop();
+      setCourseData();
+      setSimilarContents();
+    });
+
     onMounted(() => {
       scrollToTop();
       setCourseData();
+      setSimilarContents();
       Logic.Payment.watchProperty("PaymentMethods", PaymentMethods);
       Logic.Payment.watchProperty("PurchasedItems", PurchasedItems);
+      Logic.Study.watchProperty("SingleCourse", SingleCourse);
+      Logic.Study.watchProperty("SingleCourseFiles", SingleCourseFiles);
+      Logic.Study.watchProperty("SingleCourseQuizzes", SingleCourseQuizzes);
       Logic.Payment.watchProperty("UserWallet", UserWallet);
     });
 
@@ -414,12 +449,13 @@ export default defineComponent({
       selectedTab,
       contentList,
       contentDetails,
-      buyCourse,
       PaymentMethods,
       showMakePaymentModal,
       selectedMethodId,
       PurchasedItems,
       UserWallet,
+      similarContents,
+      buyCourse,
     };
   },
 });
