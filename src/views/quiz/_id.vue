@@ -962,9 +962,7 @@ export default defineComponent({
         swiperInstance.value.swiperInstance.update();
       }
 
-      if (enabledSwiper.value) {
-        showQuestion(questionIndex.value);
-      }
+      showQuestion(questionIndex.value);
     });
 
     onMounted(() => {
