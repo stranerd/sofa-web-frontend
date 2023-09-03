@@ -152,7 +152,7 @@
             }
             ${
               optionState(option) == 'selected'
-                ? '!bg-[#E2F3FD] !border-primaryBlue  animate-bounce'
+                ? '!bg-[#E2F3FD] !border-primaryBlue  shake'
                 : ''
             }
              border-[#E1E6EB] bg-white space-x-3`"
@@ -885,3 +885,26 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 0.5s infinite;
+}
+</style>

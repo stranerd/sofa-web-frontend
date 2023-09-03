@@ -722,7 +722,7 @@ const handleAnswerSelected = () => {
     setTimeout(() => {
       answerState.value = ''
       handleRightButton()
-    }, 1500)
+    }, 1000)
   } else if (mode.value == 'tutor_test') {
     answerState.value = 'selected'
     setTimeout(() => {
@@ -819,16 +819,32 @@ const shareGameLink = async () => {
 
 const startGame = () => {
   if (Logic.Plays.SingleGame) {
+    if (Logic.Common.loaderSetup.loading) {
+      return
+    }
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     Logic.Plays.StartGame(Logic.Plays.SingleGame.id).then(() => {
       // showQuestion(0)
+      Logic.Common.hideLoader()
     })
   }
 }
 
 const startTest = () => {
   if (Logic.Plays.SingleTest) {
+    if (Logic.Common.loaderSetup.loading) {
+      return
+    }
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     Logic.Plays.StartTest(Logic.Plays.SingleTest.id).then(() => {
       // showQuestion(0)
+      Logic.Common.hideLoader()
     })
   }
 }
