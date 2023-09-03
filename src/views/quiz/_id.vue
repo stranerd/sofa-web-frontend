@@ -882,11 +882,16 @@ import {
 
 const fetchRules = [];
 
-if (
-  !window.location.href.includes("game") &&
-  !window.location.href.includes("tutor_test")
-) {
-  fetchRules.push({
+fetchRules.push(
+  {
+    domain: "Study",
+    property: "SingleQuiz",
+    method: "GetQuiz",
+    params: [],
+    useRouteId: true,
+    ignoreProperty: true,
+  },
+  {
     domain: "Study",
     property: "AllQuestions",
     method: "GetQuestions",
@@ -894,11 +899,8 @@ if (
     useRouteId: true,
     requireAuth: true,
     ignoreProperty: true,
-  });
-}
-
-if (window.location.href.includes("game")) {
-  fetchRules.push({
+  },
+  {
     domain: "Plays",
     property: "SingleGame",
     method: "GetGame",
@@ -907,11 +909,8 @@ if (window.location.href.includes("game")) {
     queries: ["gameId"],
     requireAuth: true,
     ignoreProperty: true,
-  });
-}
-
-if (window.location.href.includes("tutor_test")) {
-  fetchRules.push({
+  },
+  {
     domain: "Plays",
     property: "SingleTest",
     method: "GetTest",
@@ -920,17 +919,8 @@ if (window.location.href.includes("tutor_test")) {
     queries: ["testId"],
     requireAuth: true,
     ignoreProperty: true,
-  });
-}
-
-fetchRules.push({
-  domain: "Study",
-  property: "SingleQuiz",
-  method: "GetQuiz",
-  params: [],
-  useRouteId: true,
-  ignoreProperty: true,
-});
+  }
+);
 
 export default defineComponent({
   components: {
