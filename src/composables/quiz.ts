@@ -723,13 +723,12 @@ const handleAnswerSelected = () => {
       answerState.value = ''
       handleRightButton()
     }, 1500)
-    handleRightButton()
   } else if (mode.value == 'tutor_test') {
     answerState.value = 'selected'
     setTimeout(() => {
       answerState.value = ''
       handleRightButton()
-    }, 1500)
+    }, 1000)
   }
 }
 
