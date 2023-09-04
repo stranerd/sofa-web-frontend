@@ -55,7 +55,7 @@
             <sofa-normal-text
               :color="'text-grayColor'"
               :customClass="'!text-base cursor-pointer'"
-              @click="Logic.Common.goBack()"
+              @click="Logic.Common.GoToRoute('/library')"
             >
               Exit
             </sofa-normal-text>
@@ -294,8 +294,11 @@
               <template v-for="(item, index) in otherTasks" :key="index">
                 <sofa-icon-card
                   :data="item"
-                  v-if="item.key != mode"
-                  @click="item.action ? item.action() : null"
+                  v-if="item.key != mode && item.key != 'game'"
+                  @click="
+                    isRestart = true;
+                    goToStudyMode(item.key);
+                  "
                   :customClass="'!bg-white !w-full'"
                 >
                   <template v-slot:title>
@@ -878,6 +881,9 @@ import {
   listenToTest,
   preStartTest,
   startTest,
+  goToStudyMode,
+  selectedQuizId,
+  isRestart,
 } from "@/composables/quiz";
 
 const fetchRules = [];
@@ -965,13 +971,7 @@ export default defineComponent({
       showQuestion(questionIndex.value);
     });
 
-    onMounted(() => {
-      scrollToTop();
-      Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
-      Logic.Plays.watchProperty("SingleTest", SingleTest);
-      Logic.Study.watchProperty("AllQuestions", AllQuestions);
-      Logic.Plays.watchProperty("SingleGame", SingleGame);
-      Logic.Plays.watchProperty("GameParticipants", GameParticipants);
+    const setUpQuiz = () => {
       setViewMode();
       setQuestions();
       if (mode.value != "game") {
@@ -1012,6 +1012,20 @@ export default defineComponent({
         setQuestions();
         preStartTest();
       }
+
+      if (SingleQuiz.value) {
+        selectedQuizId.value = SingleQuiz.value.id;
+      }
+    };
+
+    onMounted(() => {
+      scrollToTop();
+      Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+      Logic.Plays.watchProperty("SingleTest", SingleTest);
+      Logic.Study.watchProperty("AllQuestions", AllQuestions);
+      Logic.Plays.watchProperty("SingleGame", SingleGame);
+      Logic.Plays.watchProperty("GameParticipants", GameParticipants);
+      setUpQuiz();
     });
 
     onUnmounted(() => {
@@ -1020,6 +1034,7 @@ export default defineComponent({
       Logic.Plays.SingleGame = undefined;
       Logic.Plays.SingleTest = undefined;
       questions.length = 0;
+      isRestart.value = false;
     });
 
     watch(SingleGame, () => {
@@ -1028,8 +1043,13 @@ export default defineComponent({
 
     watch(AllQuestions, () => {
       if (SingleQuiz.value) {
-        setViewMode();
-        setQuestions();
+        if (isRestart.value) {
+          setUpQuiz();
+          currentQuestionIndex.value = 0;
+        } else {
+          setViewMode();
+          setQuestions();
+        }
       }
     });
 
@@ -1063,11 +1083,13 @@ export default defineComponent({
       quizIsDarkMode,
       currentPrepareCount,
       SingleTest,
+      isRestart,
       userIsGameHost,
       copyGameLink,
       shareGameLink,
       startGame,
       startTest,
+      goToStudyMode,
     };
   },
 });

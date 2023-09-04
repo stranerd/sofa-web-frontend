@@ -253,7 +253,7 @@ export default defineComponent({
         courseSettingForm.visibility = "active";
         courseSettingForm.price = course.price.amount.toString();
         courseSettingForm.tags = course.tagIds;
-        courseImageUrl.value = course.photo.link;
+        courseImageUrl.value = course.photo?.link || "";
         courseSettingForm.contentType = "";
       } else {
         courseSettingForm.title = "";

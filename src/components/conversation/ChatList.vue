@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full flex flex-col space-y-2 mdlg:pt-4 pt-0 border-b-[1px] border-[#F1F6FA] mdlg:pb-2 pb-4"
+    class="w-full flex flex-col space-y-2 mdlg:pt-1 pt-0 border-b-[1px] border-[#F1F6FA] mdlg:pb-2 pb-4"
     v-if="Logic.Users.getUserType() == 'teacher' && tutorRequestList.length"
   >
     <div
@@ -77,6 +77,10 @@ export default defineComponent({
     const showRequests = ref(true);
 
     const selectTutorRequest = (request: ChatListData) => {
+      if (Logic.Common.route.path != "/chat") {
+        Logic.Common.GoToRoute("/chat");
+        return;
+      }
       itIsTutorRequest.value = true;
       request.selected = true;
       selectedTutorRequestData.value = request;

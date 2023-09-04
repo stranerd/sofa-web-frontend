@@ -667,7 +667,7 @@ if (Logic.Users.getUserType() == "teacher") {
     method: "GetConversations",
     params: [],
     requireAuth: true,
-    ignoreProperty: false,
+    ignoreProperty: true,
   });
 }
 

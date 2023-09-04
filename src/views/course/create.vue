@@ -46,6 +46,11 @@
             Logic.Common.mediaQuery() != 'md' &&
             SingleCourse
           "
+          :close="
+            () => {
+              //
+            }
+          "
         ></sofa-course-sections>
       </div>
     </template>
@@ -111,6 +116,11 @@
               (Logic.Common.mediaQuery() == 'sm' ||
                 Logic.Common.mediaQuery() == 'md') &&
               SingleCourse
+            "
+            :close="
+              () => {
+                //
+              }
             "
           ></sofa-course-sections>
 
@@ -331,12 +341,14 @@
     <template v-slot:right-session>
       <div
         class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col space-y-4 h-full justify-between relative overflow-y-auto"
-        v-if="selectedMaterial"
       >
-        <sofa-course-details
-          :data="selectedMaterial.details"
-          :type="selectedMaterial.type"
-        />
+        <template v-if="selectedMaterial">
+          <sofa-course-details
+            :data="selectedMaterial.details"
+            :type="selectedMaterial.type"
+            :close="() => {}"
+          />
+        </template>
       </div>
     </template>
   </dashboard-layout>
@@ -368,7 +380,7 @@ import { Logic } from "sofa-logic";
 import CourseSettings from "@/components/courses/Settings.vue";
 import NewCourseMaterial from "@/components/courses/NewMaterial.vue";
 import AddVideo from "@/components/courses/AddVideo.vue";
-import { useRoute } from "vue-router";
+
 import {
   updateCourseSectionForm,
   updateCourseSections,
@@ -437,7 +449,7 @@ export default defineComponent({
         domain: "Study",
         property: "SingleCourse",
         method: "GetCourse",
-        params: [],
+        params: [true],
         useRouteQuery: true,
         queries: ["id"],
         requireAuth: true,
@@ -461,7 +473,7 @@ export default defineComponent({
 
     const showMoreOptions = ref(false);
 
-    const showSettingModal = ref(true);
+    const showSettingModal = ref(false);
 
     const mobileTitle = ref("Create course");
 
@@ -527,16 +539,6 @@ export default defineComponent({
       }
     };
 
-    const switchToEdit = () => {
-      const route = useRoute();
-
-      if (route.query?.id) {
-        handleCourseSettingSaved(true);
-      } else {
-        Logic.Study.SingleCourse = undefined;
-      }
-    };
-
     watch(currentContent, () => {
       if (currentContent.value == "sections") {
         mobileTitle.value = "Content";
@@ -552,7 +554,6 @@ export default defineComponent({
 
     onMounted(() => {
       scrollToTop();
-      switchToEdit();
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
     });
 

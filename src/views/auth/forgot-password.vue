@@ -15,52 +15,56 @@
           class="w-full flex flex-col md:!justify-center md:!items-center justify-start items-start space-y-1"
         >
           <sofa-header-text :customClass="'md:!text-2xl text-lg'"
-            >Verify your email</sofa-header-text
+            >Forgot your password</sofa-header-text
           >
           <sofa-normal-text
             :color="'text-grayColor'"
-            :customClass="'!font-normal'"
-            >Enter the 6-digit code sent to your email
-            {{
-              Logic.Auth?.AuthUser?.email
-                ? `(${Logic.Auth.AuthUser.email})`
-                : ""
-            }}
-          </sofa-normal-text>
+            :customClass="'!font-normal text-center'"
+            >Enter the email address associated with your account and we’ll send
+            you a link to reset your password</sofa-normal-text
+          >
         </div>
       </div>
 
       <div
         class="h-full flex flex-col items-center space-y-4 justify-center w-full md:!px-10 px-0"
       >
-        <div class="flex flex-col space-y-6 w-full items-center justify-center">
-          <div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col space-y-4">
-            <sofa-otp-input
-              :numberOfInput="6"
-              :type="'tel'"
-              :onChangeOTP="onChangeOTP"
-              v-model="otpValue"
+        <div class="flex flex-col space-y-6 w-full">
+          <sofa-form-wrapper
+            :parentRefs="parentRefs"
+            ref="formComp"
+            class="w-full flex flex-col space-y-4"
+          >
+            <sofa-text-field
+              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+              :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+              type="text"
+              :name="'Email'"
+              ref="email"
+              v-model="emailValue"
+              :placeholder="'Email'"
+              :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]"
             />
-          </div>
+          </sofa-form-wrapper>
 
-          <div class="w-full flex flex-col pt-3">
+          <div class="w-full flex flex-col">
             <sofa-button
               :customClass="'w-full'"
               :padding="'md:!py-4 py-3'"
-              @click="VerifyUserEmail(otpValue)"
+              @click="forgotPassword()"
             >
-              Verify
+              Continue
             </sofa-button>
           </div>
         </div>
 
         <div class="flex flex-row items-center space-x-2 pt-3">
           <sofa-normal-text :color="'text-grayColor'"
-            >Have an account?</sofa-normal-text
-          >
-          <router-link to="/auth/login"
+            >Don’t have an account?
+          </sofa-normal-text>
+          <router-link to="/auth/register"
             ><sofa-normal-text :color="'!text-primaryBlue'"
-              >Sign in</sofa-normal-text
+              >Sign up</sofa-normal-text
             ></router-link
           >
         </div>
@@ -77,47 +81,66 @@ import {
   SofaIcon,
   SofaNormalText,
   SofaHeaderText,
+  SofaTextField,
   SofaButton,
-  SofaOtpInput,
+  SofaFormWrapper,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
-import { loginForm, SignIn, VerifyUserEmail } from "@/composables/auth";
+import { SignIn } from "@/composables/auth";
 
 export default defineComponent({
   components: {
     SofaIcon,
     SofaNormalText,
     SofaHeaderText,
+    SofaTextField,
     SofaButton,
-    SofaOtpInput,
+    SofaFormWrapper,
   },
   middlewares: {},
-  name: "VerifyEmailPage",
+  name: "AuthForgotPasswordPage",
   setup() {
     useMeta({
-      title: "Verify your email",
+      title: "Forgot password",
     });
 
     onMounted(() => {
       scrollToTop();
     });
 
-    const otpValue = ref("");
+    const formComp = ref<any>();
 
-    const onChangeOTP = () => {
-      //
+    const emailValue = ref("");
+
+    const forgotPassword = () => {
+      const state = formComp.value.validate();
+
+      if (state) {
+        Logic.Auth.SendPasswordResetMail(emailValue.value).then((data) => {
+          if (data) {
+            Logic.Common.GoToRoute("/auth/reset-password");
+          }
+        });
+      }
     };
 
     return {
       Logic,
-      loginForm,
+      emailValue,
       FormValidations,
+      formComp,
       SignIn,
-      onChangeOTP,
-      localStorage,
-      otpValue,
-      VerifyUserEmail,
+      forgotPassword,
     };
+  },
+  data() {
+    return {
+      parentRefs: null,
+    };
+  },
+  mounted() {
+    const parentRefs: any = this.$refs;
+    this.parentRefs = parentRefs;
   },
 });
 </script>

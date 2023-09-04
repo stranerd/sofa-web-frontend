@@ -188,8 +188,22 @@
           :rules="[FormValidations.RequiredRule]"
           :borderColor="'border-transparent'"
           :options="educationOptions.schools"
+          v-if="updateUserEducationForm.type == 'student'"
           v-model="updateUserEducationForm.school"
           @OnOptionSelected="handleSchoolSelection"
+        />
+
+        <sofa-text-field
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+          :name="'School'"
+          ref="school"
+          :placeholder="'School'"
+          :rules="[FormValidations.RequiredRule]"
+          :borderColor="'border-transparent'"
+          :options="educationOptions.schools"
+          v-if="updateUserEducationForm.type == 'teacher'"
+          v-model="updateUserEducationForm.school"
         />
 
         <sofa-select

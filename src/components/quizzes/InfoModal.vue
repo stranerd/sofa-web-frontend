@@ -20,7 +20,7 @@
       </div>
 
       <div class="w-full flex flex-row space-x-2 items-center justify-center">
-        <sofa-checkbox :customClass="'!w-auto'"
+        <sofa-checkbox :customClass="'!w-auto'" v-model="dontShowAgain"
           ><sofa-normal-text :color="'text-grayColor'"
             >Don’t show again</sofa-normal-text
           ></sofa-checkbox
@@ -54,7 +54,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { SofaNormalText, SofaButton, SofaCheckbox } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { FormValidations } from "@/composables";
@@ -83,6 +83,8 @@ export default defineComponent({
 
     const allSteps = reactive<string[]>([]);
 
+    const dontShowAgain = ref(false);
+
     const setContent = () => {
       if (props.mode == "flashcard") {
         allSteps.push(
@@ -100,6 +102,14 @@ export default defineComponent({
       }
     };
 
+    watch(dontShowAgain, () => {
+      if (dontShowAgain.value) {
+        localStorage.setItem(`${props.mode}-info`, "true");
+      } else {
+        localStorage.removeItem(`${props.mode}-info`);
+      }
+    });
+
     onMounted(() => {
       setContent();
     });
@@ -109,6 +119,7 @@ export default defineComponent({
       FormValidations,
       showAddVideo,
       allSteps,
+      dontShowAgain,
     };
   },
 });

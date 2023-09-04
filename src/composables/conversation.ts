@@ -54,7 +54,7 @@ const selectedChatData = ref<ChatListData>({
   isDone: false,
   photoUrl:
     Logic.Users.getUserType() == 'student'
-      ? Logic.Users.UserProfile.ai?.photo?.link || '/images/icons/robot.svg'
+      ? Logic.Users.UserProfile?.ai?.photo?.link || '/images/icons/robot.svg'
       : '',
   lastMessage: 'No message',
   unread: 0,
@@ -118,7 +118,7 @@ const setChatToDefault = () => {
   }
 }
 
-const setConversations = (goToIndex = -1) => {
+const setConversations = (goToIndex = -1, limit = 0) => {
   chatList.length = 0
   AllConversations.value.results.forEach((convo, index) => {
     let photourl = ''
@@ -133,23 +133,25 @@ const setConversations = (goToIndex = -1) => {
       photourl = convo.user.bio.photo?.link || ''
     }
 
-    chatList.push({
-      icon: 'conversation',
-      iconSize: 'h-[35px]',
-      selected: index == goToIndex,
-      subTitle: convo.last.body,
-      title: !convo.tutor ? convo.title : convo.tutor?.bio.name.full,
-      id: convo.id,
-      hover: false,
-      isDone: false,
-      photoUrl: photourl,
-      lastMessage: convo.last.body || 'No message',
-      unread: 0,
-      lastMessageTime: Logic.Common.fomartDate(
-        convo.last?.createdAt || new Date().getTime(),
-        'h:mma',
-      ),
-    })
+    if (limit == 0 || index <= limit - 1) {
+      chatList.push({
+        icon: 'conversation',
+        iconSize: 'h-[35px]',
+        selected: index == goToIndex,
+        subTitle: convo.last.body,
+        title: !convo.tutor ? convo.title : convo.tutor?.bio.name.full,
+        id: convo.id,
+        hover: false,
+        isDone: false,
+        photoUrl: photourl,
+        lastMessage: convo.last.body || 'No message',
+        unread: 0,
+        lastMessageTime: Logic.Common.fomartDate(
+          convo.last?.createdAt || new Date().getTime(),
+          'h:mma',
+        ),
+      })
+    }
   })
   tutorRequestList.length = 0
   if (
@@ -182,6 +184,10 @@ const setConversations = (goToIndex = -1) => {
 }
 
 const selectConversation = (convoId: string) => {
+  if (Logic.Common.route.path != '/chat') {
+    Logic.Common.GoToRoute('/chat')
+    return
+  }
   showMoreOptions.value = false
   if (Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm') {
     showMoreOptions.value = false

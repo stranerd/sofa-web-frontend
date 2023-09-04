@@ -232,7 +232,7 @@ export default defineComponent({
         quizSettingsForm.tagIds = quiz.tagIds;
         quizSettingsForm.topicId = quiz.topicId;
         quizSettingsForm.visibility = "active";
-        quizImageUrl.value = quiz.photo.link;
+        quizImageUrl.value = quiz.photo?.link || "";
       } else {
         quizSettingsForm.title = "";
         quizSettingsForm.description = "";

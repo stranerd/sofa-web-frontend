@@ -639,7 +639,7 @@
       <div
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
         v-if="
-          (recentChats.length && Logic.Users.getUserType() == 'student') ||
+          (chatList.length && Logic.Users.getUserType() == 'student') ||
           Logic.Users.getUserType() == 'teacher'
         "
       >
@@ -649,34 +649,10 @@
           </sofa-normal-text>
         </div>
 
-        <template v-if="recentChats.length">
-          <div
-            class="w-full px-3 py-3 bg-ligthGray cursor-pointer flex flex-row items-center space-x-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"
-            v-for="(item, index) in recentChats"
-            :key="index"
-            @click="Logic.Common.GoToRoute('/chat?id=' + item.id)"
-          >
-            <div>
-              <sofa-icon :custom-class="'h-[40px]'" :name="'conversation'" />
-            </div>
-            <div class="w-full flex flex-col">
-              <div class="w-full flex flex-row items-center space-x-2">
-                <sofa-normal-text
-                  :customClass="'!line-clamp-1 font-bold text-left'"
-                >
-                  {{ item.title }}
-                </sofa-normal-text>
-                <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]"> </span>
-              <sofa-normal-text>{{ item.date }}</sofa-normal-text> -->
-              </div>
-              <sofa-normal-text
-                :customClass="'!line-clamp-1'"
-                :color="'text-grayColor'"
-              >
-                {{ item.content }}
-              </sofa-normal-text>
-            </div>
-          </div>
+        <template v-if="chatList.length">
+          <!-- Chat list -->
+          <chat-list-component :extra-style="'pt-0'" />
+
           <div class="w-full">
             <router-link to="/chat">
               <sofa-normal-text :color="'text-primaryPink'"
@@ -736,6 +712,132 @@ import {
   textbookContents,
   sectionTags,
 } from "@/composables/marketplace";
+import {
+  AllConversations,
+  AllTutorRequests,
+  chatList,
+  setConversations,
+} from "@/composables/conversation";
+import ChatListComponent from "@/components/conversation/ChatList.vue";
+
+const fetchRules = [];
+
+fetchRules.push(
+  {
+    domain: "Users",
+    property: "UserProfile",
+    method: "GetUserProfile",
+    params: [],
+    requireAuth: true,
+  },
+  {
+    domain: "Schools",
+    property: "AllInstitutions",
+    method: "GetInstitutions",
+    params: [],
+    requireAuth: true,
+  },
+  {
+    domain: "Conversations",
+    property: "AllConversations",
+    method: "GetConversations",
+    params: [
+      {
+        where: [
+          {
+            field: "user.id",
+            value: Logic.Auth.AuthUser?.id,
+            condition: Conditions.eq,
+          },
+        ],
+      },
+    ],
+    requireAuth: true,
+    silentUpdate: true,
+  },
+  {
+    domain: "Study",
+    property: "AllCourses",
+    method: "GetCourses",
+    params: [
+      {
+        where: [
+          {
+            field: "status",
+            value: "published",
+            condition: Conditions.eq,
+          },
+        ],
+      },
+    ],
+    requireAuth: true,
+    ignoreProperty: false,
+    silentUpdate: true,
+  },
+  {
+    domain: "Study",
+    property: "AllTopics",
+    method: "GetTopics",
+    params: [],
+    requireAuth: true,
+  },
+  {
+    domain: "Study",
+    property: "AllOtherTags",
+    method: "GetOtherTags",
+    params: [],
+    requireAuth: true,
+  },
+  {
+    domain: "Users",
+    property: "AllOrganisationMembers",
+    method: "GetOrganizationMembers",
+    params: [
+      Logic.Auth.AuthUser?.id,
+      {
+        limit: 10,
+      },
+    ],
+    requireAuth: true,
+    silentUpdate: false,
+  }
+);
+
+if (Logic.Users.getUserType() == "teacher") {
+  fetchRules.push({
+    domain: "Conversations",
+    property: "AllTutorRequests",
+    method: "GetTutorRequests",
+    params: [
+      {
+        where: [
+          {
+            field: "tutor.id",
+            condition: Conditions.eq,
+            value: Logic.Auth.AuthUser?.id,
+          },
+        ],
+      },
+      true,
+    ],
+    requireAuth: true,
+  });
+}
+if (Logic.Users.getUserType() == "organization") {
+  fetchRules.push({
+    domain: "Users",
+    property: "AllOrganisationMembers",
+    method: "GetOrganizationMembers",
+    params: [
+      Logic.Auth.AuthUser?.id,
+      {
+        limit: 10,
+      },
+    ],
+    requireAuth: true,
+    silentUpdate: false,
+  });
+}
 
 export default defineComponent({
   components: {
@@ -752,88 +854,10 @@ export default defineComponent({
     SofaAvatar,
     CustomizeBot,
     SofaEmptyState,
+    ChatListComponent,
   },
   middlewares: {
-    fetchRules: [
-      {
-        domain: "Users",
-        property: "UserProfile",
-        method: "GetUserProfile",
-        params: [],
-        requireAuth: true,
-      },
-      {
-        domain: "Schools",
-        property: "AllInstitutions",
-        method: "GetInstitutions",
-        params: [],
-        requireAuth: true,
-      },
-      {
-        domain: "Conversations",
-        property: "AllConversations",
-        method: "GetConversations",
-        params: [
-          {
-            where: [
-              {
-                field: "user.id",
-                value: Logic.Auth.AuthUser?.id,
-                condition: Conditions.eq,
-              },
-            ],
-          },
-        ],
-        requireAuth: true,
-        silentUpdate: true,
-      },
-      {
-        domain: "Study",
-        property: "AllCourses",
-        method: "GetCourses",
-        params: [
-          {
-            where: [
-              {
-                field: "status",
-                value: "published",
-                condition: Conditions.eq,
-              },
-            ],
-          },
-        ],
-        requireAuth: true,
-        ignoreProperty: false,
-        silentUpdate: true,
-      },
-      {
-        domain: "Study",
-        property: "AllTopics",
-        method: "GetTopics",
-        params: [],
-        requireAuth: true,
-      },
-      {
-        domain: "Study",
-        property: "AllOtherTags",
-        method: "GetOtherTags",
-        params: [],
-        requireAuth: true,
-      },
-      {
-        domain: "Users",
-        property: "AllOrganisationMembers",
-        method: "GetOrganizationMembers",
-        params: [
-          Logic.Auth.AuthUser?.id,
-          {
-            limit: 10,
-          },
-        ],
-        requireAuth: true,
-        silentUpdate: false,
-      },
-    ],
+    fetchRules,
   },
   name: "IndexPage",
   setup() {
@@ -842,8 +866,6 @@ export default defineComponent({
     });
 
     const UserProfile = ref(Logic.Users.UserProfile);
-
-    const AllConversations = ref(Logic.Conversations.AllConversations);
 
     const newChatMessage = ref("");
 
@@ -914,28 +936,6 @@ export default defineComponent({
     const studyMaterialsSteps = ref([]);
 
     const takeOnTasks = ref([]);
-
-    const setRecentChats = () => {
-      if (!AllConversations.value) return;
-      recentChats.length = 0;
-      const allConvo = AllConversations.value.results;
-      const latestConversations = AllConversations.value.results.slice(
-        allConvo.length - 3,
-        allConvo.length
-      );
-
-      latestConversations.forEach((convo) => {
-        recentChats.push({
-          title: convo.title,
-          date: "",
-          content: convo.last.body,
-          subTitle: convo.last.body,
-          icon: "conversation",
-          iconSize: "h-[40px]",
-          id: convo.id,
-        });
-      });
-    };
 
     const setItems = () => {
       profileSteps.value.length = 0;
@@ -1046,9 +1046,10 @@ export default defineComponent({
     onMounted(() => {
       scrollToTop();
       setItems();
-      setRecentChats();
       setCourses(4);
       Logic.Users.watchProperty("UserProfile", UserProfile);
+      Logic.Conversations.watchProperty("AllConversations", AllConversations);
+      Logic.Conversations.watchProperty("AllTutorRequests", AllTutorRequests);
       // Logic.Conversations.watchProperty("AllConversations", AllConversations);
       Logic.Study.watchProperty("AllCourses", AllCourses);
       // set organisation students
@@ -1059,6 +1060,10 @@ export default defineComponent({
           "AllOrganisationMembers",
           allOrganizationMembers
         );
+      }
+
+      if (Logic.Users.getUserType() == "teacher") {
+        setConversations(-1, 3);
       }
     });
 
@@ -1071,7 +1076,15 @@ export default defineComponent({
     });
 
     watch(AllConversations, () => {
-      setRecentChats();
+      if (Logic.Users.getUserType() == "student") {
+        setConversations(-1, 3);
+      }
+    });
+
+    watch(AllTutorRequests, () => {
+      if (Logic.Users.getUserType() == "teacher") {
+        setConversations(-1, 3);
+      }
     });
 
     watch(allOrganizationMembers, () => {
@@ -1098,6 +1111,7 @@ export default defineComponent({
       allStudents,
       selectedMember,
       showRemoveMember,
+      chatList,
       startConversation,
       showSetupProfile,
     };

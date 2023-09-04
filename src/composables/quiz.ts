@@ -15,6 +15,8 @@ const userIsParticipating = ref(true)
 
 const currentPrepareCount = ref(0)
 
+const isRestart = ref(false)
+
 const scoreBoardParticipants = reactive<
   {
     score: number
@@ -525,11 +527,19 @@ const setViewMode = () => {
   }
 
   if (mode.value == 'flashcard') {
-    showInfoModal.value = true
+    if (localStorage.getItem(`flashcard-info`)) {
+      showInfoModal.value = false
+    } else {
+      showInfoModal.value = true
+    }
     infoModalData.title = 'Flashcards'
     infoModalData.sub = 'Learning quiz questions and answers'
   } else if (mode.value == 'test') {
-    showInfoModal.value = true
+    if (localStorage.getItem(`test-info`)) {
+      showInfoModal.value = false
+    } else {
+      showInfoModal.value = true
+    }
     infoModalData.title = 'Test'
     infoModalData.sub = ''
   } else if (mode.value == 'practice') {
@@ -879,6 +889,7 @@ export {
   scoreBoardParticipants,
   currentPrepareCount,
   SingleTest,
+  isRestart,
   saveParticipantAnswer,
   createQuiz,
   updateQuiz,

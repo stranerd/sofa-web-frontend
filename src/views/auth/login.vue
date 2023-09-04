@@ -103,6 +103,14 @@
           </div>
         </div>
 
+        <div class="w-full flex flex-row items-center justify-center pt-3">
+          <router-link to="/auth/forgot-password"
+            ><sofa-normal-text :color="'!text-primaryBlue'"
+              >Forgot password?</sofa-normal-text
+            ></router-link
+          >
+        </div>
+
         <div class="flex flex-row items-center space-x-2 pt-3">
           <sofa-normal-text :color="'text-grayColor'"
             >Don’t have an account?
@@ -151,6 +159,9 @@ export default defineComponent({
 
     onMounted(() => {
       scrollToTop();
+      if (Logic.Auth.AuthUser) {
+        Logic.Common.GoToRoute("/", true);
+      }
     });
 
     const formComp = ref<any>();

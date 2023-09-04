@@ -170,13 +170,15 @@ const updateCourse = (formComp: any) => {
 }
 
 const updateCourseSections = () => {
-  Logic.Study.UpdateCourseSectionForm = {
-    id: Logic.Study.SingleCourse.id,
-    sections: updateCourseSectionForm.sections,
+  if (Logic.Study.SingleCourse) {
+    Logic.Study.UpdateCourseSectionForm = {
+      id: Logic.Study.SingleCourse.id,
+      sections: updateCourseSectionForm.sections,
+    }
+    Logic.Study.UpdateCourseSection().then(() => {
+      //
+    })
   }
-  Logic.Study.UpdateCourseSection().then(() => {
-    //
-  })
 }
 
 const addCourseFile = () => {

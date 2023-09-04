@@ -108,15 +108,16 @@
         </div>
 
         <!-- Organizations -->
-        <template v-if="allOrganizations.length">
-          <div
-            class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2"
-          >
-            <sofa-normal-text :customClass="'!font-bold'"
-              >Organizations</sofa-normal-text
-            >
-          </div>
 
+        <div
+          class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2"
+        >
+          <sofa-normal-text :customClass="'!font-bold'"
+            >Organizations</sofa-normal-text
+          >
+        </div>
+
+        <template v-if="allOrganizations.length">
           <div
             :class="`w-full flex flex-row items-center justify-start space-x-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${
               selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
@@ -132,6 +133,13 @@
               }`"
             >
               {{ item.name }}
+            </sofa-normal-text>
+          </div>
+        </template>
+        <template v-else>
+          <div class="flex justify-start px-2 py-2">
+            <sofa-normal-text :color="'text-grayColor'">
+              No organizations yet
             </sofa-normal-text>
           </div>
         </template>

@@ -60,7 +60,7 @@
     <template v-slot:middle-session>
       <!-- Top bar for smaller screens -->
       <div
-        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[999999999] bg-backgroundGray px-4 py-4 sticky top-0 left-0"
+        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[9999] bg-backgroundGray px-4 py-4 sticky top-0 left-0"
       >
         <sofa-icon
           :customClass="'h-[19px]'"
@@ -263,7 +263,6 @@ import {
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import QuizSettings from "@/components/quizzes/Settings.vue";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -299,7 +298,7 @@ export default defineComponent({
         domain: "Study",
         property: "SingleQuiz",
         method: "GetQuiz",
-        params: [],
+        params: [true],
         useRouteQuery: true,
         queries: ["id"],
         requireAuth: true,
@@ -347,9 +346,7 @@ export default defineComponent({
     };
 
     const switchToEdit = () => {
-      const route = useRoute();
-
-      if (route.query?.id) {
+      if (SingleQuiz.value) {
         handleSettingSaved(true);
       } else {
         Logic.Study.SingleQuiz = undefined;
@@ -369,10 +366,10 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+      Logic.Study.watchProperty("AllQuestions", AllQuestions);
       scrollToTop();
       switchToEdit();
-      Logic.Study.watchProperty("SingleQuiz", SingleQuiz),
-        Logic.Study.watchProperty("AllQuestions", AllQuestions);
     });
 
     watch(SingleQuiz, () => {
