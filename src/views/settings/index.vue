@@ -286,7 +286,7 @@ export default defineComponent({
         method: "GetTransactions",
         params: [
           {
-            limit: 50,
+            limit: 10,
             where: [
               {
                 field: "userId",

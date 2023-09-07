@@ -227,6 +227,8 @@ const createQuizData = (quiz: Quiz) => {
     routePath: '/quiz/create?id=' + quiz.id,
     id: quiz.id,
     status: quiz.status,
+    userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : '',
+    createdAt: quiz.createdAt,
   }
   return data
 }
@@ -250,6 +252,8 @@ const createCourseData = (course: Course) => {
     routePath: '/course/create?id=' + course.id,
     id: course.id,
     status: course.status,
+    userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+    createdAt: course.createdAt,
   }
 
   return data

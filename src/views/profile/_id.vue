@@ -129,7 +129,10 @@
       <div class="w-full flex flex-col space-y-3">
         <!-- Search -->
 
-        <div class="w-full flex flex-col mdlg:px-0 px-4 pt-4">
+        <div
+          class="w-full flex flex-col mdlg:px-0 px-4 pt-4"
+          v-if="userHasResources"
+        >
           <div
             class="w-full px-4 py-1 bg-white custom-border flex flex-row space-x-1 items-center justify-start"
           >
@@ -180,7 +183,13 @@
                 custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
                 v-for="(content, index) in courseResources"
                 :key="index"
-                @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
+                @click="
+                  Logic.Common.GoToRoute(
+                    '/marketplace/' +
+                      content.id +
+                      `?type=${content.labels.main.toLowerCase()}`
+                  )
+                "
               ></sofa-item-card>
             </div>
           </div>
@@ -234,17 +243,25 @@
             Links
           </sofa-normal-text>
           <div class="w-full flex flex-row space-x-5 items-center">
-            <template v-for="(item, index) in profileLinks" :key="index">
-              <a
-                :href="item.link"
-                target="_blank"
-                :class="`${item.show ? '' : 'opacity-40'}`"
-              >
-                <sofa-icon
-                  :name="item.icon"
-                  :customClass="`${item.iconSize} cursor-pointer `"
-                />
-              </a>
+            <template v-if="!hasAtleastASocialLink">
+              <sofa-normal-text :color="'text-grayColor'">
+                No social links
+              </sofa-normal-text>
+            </template>
+            <template v-else>
+              <template v-for="(item, index) in profileLinks" :key="index">
+                <a
+                  :href="item.link"
+                  target="_blank"
+                  :class="`${item.show ? '' : 'opacity-40'}`"
+                  v-if="item.show"
+                >
+                  <sofa-icon
+                    :name="item.icon"
+                    :customClass="`${item.iconSize} cursor-pointer `"
+                  />
+                </a>
+              </template>
             </template>
           </div>
         </div>
@@ -423,6 +440,8 @@ export default defineComponent({
       title: "Public Profile",
     });
 
+    const userHasResources = ref(false);
+
     const showModal = ref(false);
     const modalSetup = reactive({
       title: "",
@@ -436,6 +455,8 @@ export default defineComponent({
     const allCourses = ref(Logic.Study.AllCourses);
     const courseResources = ref<any[]>([]);
     const userVerifications = ref(Logic.Users.Verifications);
+
+    const hasAtleastASocialLink = ref(false);
 
     const selectedTab = ref("content");
 
@@ -486,7 +507,7 @@ export default defineComponent({
         icon: "profile-followers",
         iconSize: "h-[40px]",
         value: "1.1k",
-        show: true,
+        show: false,
       },
     ]);
 
@@ -581,6 +602,10 @@ export default defineComponent({
 
     const fetchCourses = () => {
       Logic.Study.GetCourses({
+        search: {
+          value: searchQuery.value,
+          fields: ["title"],
+        },
         where: [
           {
             field: "user.id",
@@ -595,6 +620,10 @@ export default defineComponent({
 
     watch(allCourses, () => {
       setCourseContent();
+    });
+
+    watch(searchQuery, () => {
+      fetchCourses();
     });
 
     const setProfileData = () => {
@@ -627,8 +656,11 @@ export default defineComponent({
 
         if (profileLink.length) {
           const index = profileLink.indexOf(profileLink[0]);
-          profileLinks[index].show = true;
+          profileLinks[index].show = item.link ? true : false;
           profileLinks[index].link = item.link;
+          if (item.link) {
+            hasAtleastASocialLink.value = true;
+          }
         }
       });
     };
@@ -669,6 +701,9 @@ export default defineComponent({
       fetchCourses();
       scrollToTop();
       Logic.Study.watchProperty("AllCourses", allCourses);
+      if (allCourses.value.results.length) {
+        userHasResources.value = true;
+      }
     });
 
     return {
@@ -687,6 +722,8 @@ export default defineComponent({
       showModal,
       modalSetup,
       joinCode,
+      hasAtleastASocialLink,
+      userHasResources,
       handleSearch,
       capitalize,
       showJoinOrganization,

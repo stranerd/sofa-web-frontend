@@ -19,7 +19,9 @@
         @click="Logic.Common.goBack()"
       />
       <sofa-normal-text :customClass="'!font-bold !text-base'">
-        Course details</sofa-normal-text
+        {{
+          contentType == "course" ? "Course details" : "Quiz details"
+        }}</sofa-normal-text
       >
       <div>
         <sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
@@ -35,6 +37,7 @@
         :buyAction="buyCourse"
         :itemIsPurchased="PurchasedItems.includes(contentDetails.id)"
         :similarContents="similarContents"
+        :type="contentType"
       />
     </div>
 
@@ -199,6 +202,34 @@ export default defineComponent({
         params: [],
         useRouteId: true,
         ignoreProperty: true,
+        condition: {
+          routeSearchItem: "fullPath",
+          searchQuery: "course",
+        },
+      },
+      {
+        domain: "Study",
+        property: "SingleQuiz",
+        method: "GetQuiz",
+        params: [],
+        useRouteId: true,
+        ignoreProperty: true,
+        condition: {
+          routeSearchItem: "fullPath",
+          searchQuery: "quiz",
+        },
+      },
+      {
+        domain: "Study",
+        property: "AllQuestions",
+        method: "GetQuestions",
+        params: [],
+        useRouteId: true,
+        ignoreProperty: true,
+        condition: {
+          routeSearchItem: "fullPath",
+          searchQuery: "quiz",
+        },
       },
       {
         domain: "Payment",
@@ -252,6 +283,8 @@ export default defineComponent({
 
     const selectedTab = ref("start");
 
+    const contentType = ref("course");
+
     const UserWallet = ref(Logic.Payment.UserWallet);
 
     const tabItems = [
@@ -280,6 +313,9 @@ export default defineComponent({
     const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles);
     const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes);
 
+    const SingleQuiz = ref(Logic.Study.SingleQuiz);
+    const AllQuestions = ref(Logic.Study.AllQuestions);
+
     const PaymentMethods = ref(Logic.Payment.PaymentMethods);
     const PurchasedItems = ref(Logic.Payment.PurchasedItems);
 
@@ -292,6 +328,7 @@ export default defineComponent({
     const contentDetails = reactive(Logic.Study.contentDetails);
 
     const setCourseData = () => {
+      contentType.value = "course";
       contentDetails.id = SingleCourse.value.id;
       contentDetails.title = SingleCourse.value.title;
       contentDetails.price = SingleCourse.value.price.amount;
@@ -303,6 +340,8 @@ export default defineComponent({
       contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
         SingleCourse.value.createdAt
       ).format("DD/MM/YYYY")}`;
+      contentDetails.labels.color = `orange`;
+      contentDetails.labels.main = `Course`;
       contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`;
       contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
         return Logic.Study.GetTagName(id);
@@ -328,10 +367,10 @@ export default defineComponent({
 
         section.items.forEach((item) => {
           if (item.type == "quiz") {
-            const quizData = SingleCourseQuizzes.value.filter(
+            const quizData = SingleCourseQuizzes.value?.filter(
               (quiz) => quiz.id == item.id
             );
-            if (quizData.length) {
+            if (quizData?.length) {
               contentDetails.content.sections[index].data.push({
                 isLocked: true,
                 sub: `${quizData[0].questions.length} question${
@@ -342,11 +381,11 @@ export default defineComponent({
               });
             }
           } else {
-            const fileData = SingleCourseFiles.value.filter(
+            const fileData = SingleCourseFiles.value?.filter(
               (file) => file.id == item.id
             );
 
-            if (fileData.length) {
+            if (fileData?.length) {
               if (fileData[0].type == "video") {
                 contentDetails.content.sections[index].data.push({
                   isLocked: true,
@@ -364,6 +403,42 @@ export default defineComponent({
               }
             }
           }
+        });
+      });
+    };
+
+    const setQuizData = () => {
+      contentType.value = "quiz";
+      contentDetails.id = SingleQuiz.value.courseId || SingleQuiz.value.id;
+      contentDetails.title = SingleQuiz.value.title;
+      contentDetails.price = 0;
+      contentDetails.status = SingleQuiz.value.status;
+      contentDetails.image = SingleQuiz.value.photo
+        ? SingleQuiz.value.photo.link
+        : "/images/default.png";
+      contentDetails.info = SingleQuiz.value.description;
+      contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
+        SingleQuiz.value.createdAt
+      ).format("DD/MM/YYYY")}`;
+      contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`;
+      contentDetails.labels.color = `pink`;
+      contentDetails.labels.main = `Quiz`;
+      contentDetails.tags = SingleQuiz.value.tagIds.map((id) => {
+        return Logic.Study.GetTagName(id);
+      });
+
+      contentDetails.user.name = SingleQuiz.value.user?.bio.name.full;
+      contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
+        ? SingleQuiz.value.user.bio.photo.link
+        : "";
+
+      contentDetails.questions.length = 0;
+      AllQuestions.value?.results.forEach((question) => {
+        contentDetails.questions.push({
+          type: question.type,
+          content: question.question,
+          duration: Logic.Common.EquivalentsSecondsInString[question.timeLimit],
+          answer: "",
         });
       });
     };
@@ -425,21 +500,43 @@ export default defineComponent({
     };
 
     watch(SingleCourse, () => {
-      scrollToTop();
-      setCourseData();
-      setSimilarContents();
+      console.log("Hello");
+      if (SingleCourse.value) {
+        scrollToTop();
+        setCourseData();
+        setSimilarContents();
+      }
+    });
+
+    watch(SingleQuiz, () => {
+      console.log("Hello 3");
+      if (SingleQuiz.value) {
+        scrollToTop();
+        setQuizData();
+      }
     });
 
     onMounted(() => {
-      scrollToTop();
-      setCourseData();
-      setSimilarContents();
+      if (Logic.Common.route.query?.type?.toString()) {
+        contentType.value = Logic.Common.route.query?.type?.toString();
+      }
       Logic.Payment.watchProperty("PaymentMethods", PaymentMethods);
       Logic.Payment.watchProperty("PurchasedItems", PurchasedItems);
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
       Logic.Study.watchProperty("SingleCourseFiles", SingleCourseFiles);
       Logic.Study.watchProperty("SingleCourseQuizzes", SingleCourseQuizzes);
       Logic.Payment.watchProperty("UserWallet", UserWallet);
+      Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+      scrollToTop();
+
+      if (contentType.value == "course") {
+        setCourseData();
+        setSimilarContents();
+      }
+
+      if (contentType.value == "quiz") {
+        setQuizData();
+      }
     });
 
     return {
@@ -455,6 +552,8 @@ export default defineComponent({
       PurchasedItems,
       UserWallet,
       similarContents,
+      SingleQuiz,
+      contentType,
       buyCourse,
     };
   },

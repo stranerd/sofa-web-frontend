@@ -293,19 +293,15 @@
           class="w-full flex flex-row space-x-2 items-center justify-between"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Past questions
+            Suggested for you
           </sofa-normal-text>
 
           <div
-            class="pr-4 mdlg:!pr-0 cursor-pointer"
-            @click="
-              Logic.Common.GoToRoute(
-                `/marketplace/search?tagId=${sectionTags.past_question}&q=nill`
-              )
-            "
+            class="pr-4 mdlg:!pr-0 cursor-pointer mdlg:hidden"
+            @click="Logic.Common.GoToRoute(`/marketplace`)"
           >
             <sofa-normal-text :color="'text-primaryPink'"
-              >See all</sofa-normal-text
+              >View all</sofa-normal-text
             >
           </div>
         </div>
@@ -314,25 +310,43 @@
           class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
-            v-if="pastQuestionContents.length"
+            v-if="homeContents.suggested.length"
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
-              v-for="(activity, index) in pastQuestionContents"
+              v-for="(activity, index) in homeContents.suggested"
               :key="index"
               :activity="activity"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+              @click="
+                Logic.Common.GoToRoute(
+                  '/marketplace/' +
+                    activity.id +
+                    `?type=${activity.labels.main.toLowerCase()}`
+                )
+              "
             />
           </div>
           <template v-else>
-            <div class="w-full flex flex-col space-y-3">
+            <div class="w-full flex flex-col space-y-3 mdlg:pr-0 pr-4">
               <sofa-empty-state
-                :title="'No result found'"
-                :subTitle="'We could not find any past question courses'"
+                :title="'No suggested materials'"
+                :subTitle="'We could not find any suggested materials'"
+                :custom-class="'!h-[230px]'"
               />
             </div>
           </template>
+        </div>
+
+        <div class="w-full" v-if="homeContents.suggested.length">
+          <div
+            class="pr-4 mdlg:!pr-0 cursor-pointer hidden mdlg:block"
+            @click="Logic.Common.GoToRoute(`/marketplace`)"
+          >
+            <sofa-normal-text :color="'text-primaryPink'"
+              >View all</sofa-normal-text
+            >
+          </div>
         </div>
       </div>
 
@@ -343,19 +357,15 @@
           class="w-full flex flex-row space-x-2 items-center justify-between"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Notes
+            Recent study materials
           </sofa-normal-text>
 
           <div
-            class="pr-4 mdlg:!pr-0 cursor-pointer"
-            @click="
-              Logic.Common.GoToRoute(
-                `/marketplace/search?tagId=${sectionTags.note}&q=nill`
-              )
-            "
+            class="pr-4 mdlg:!pr-0 cursor-pointer mdlg:hidden"
+            @click="Logic.Common.GoToRoute(`/marketplace`)"
           >
             <sofa-normal-text :color="'text-primaryPink'"
-              >See all</sofa-normal-text
+              >View all</sofa-normal-text
             >
           </div>
         </div>
@@ -364,48 +374,63 @@
           class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
-            v-if="notesContents.length"
+            v-if="homeContents.recent.length"
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
-              v-for="(activity, index) in notesContents"
+              v-for="(activity, index) in homeContents.recent"
               :key="index"
-              :custom-class="'cursor-pointer'"
               :activity="activity"
-              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+              :custom-class="'cursor-pointer'"
+              @click="
+                Logic.Common.GoToRoute(
+                  '/marketplace/' +
+                    activity.id +
+                    `?type=${activity.labels.main.toLowerCase()}`
+                )
+              "
             />
           </div>
           <template v-else>
-            <div class="w-full flex flex-col space-y-3">
+            <div class="w-full flex flex-col space-y-3 mdlg:pr-0 pr-4">
               <sofa-empty-state
-                :title="'No result found'"
-                :subTitle="'We could not find any note courses'"
+                :title="'No recent materials'"
+                :subTitle="'We could not find any recent materials'"
+                :custom-class="'!h-[230px]'"
               />
             </div>
           </template>
         </div>
+
+        <div class="w-full" v-if="homeContents.recent.length">
+          <div
+            class="pr-4 mdlg:!pr-0 cursor-pointer hidden mdlg:block"
+            @click="Logic.Common.GoToRoute(`/marketplace`)"
+          >
+            <sofa-normal-text :color="'text-primaryPink'"
+              >View all</sofa-normal-text
+            >
+          </div>
+        </div>
       </div>
 
       <div
+        v-if="homeContents.my_org.length"
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4"
       >
         <div
           class="w-full flex flex-row space-x-2 items-center justify-between"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Textbook solutions
+            From your organisations
           </sofa-normal-text>
 
           <div
-            class="pr-4 mdlg:!pr-0 cursor-pointer"
-            @click="
-              Logic.Common.GoToRoute(
-                `/marketplace/search?tagId=${sectionTags.textbook}&q=nill`
-              )
-            "
+            class="pr-4 mdlg:!pr-0 cursor-pointer mdlg:hidden"
+            @click="Logic.Common.GoToRoute(`/marketplace`)"
           >
             <sofa-normal-text :color="'text-primaryPink'"
-              >See all</sofa-normal-text
+              >View all</sofa-normal-text
             >
           </div>
         </div>
@@ -414,25 +439,43 @@
           class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           <div
-            v-if="textbookContents.length"
+            v-if="homeContents.my_org.length"
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
             <sofa-activity-card
-              v-for="(activity, index) in textbookContents"
+              v-for="(activity, index) in homeContents.my_org"
               :key="index"
-              :activity="activity"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/marketplace/' + activity.id)"
+              :activity="activity"
+              @click="
+                Logic.Common.GoToRoute(
+                  '/marketplace/' +
+                    activity.id +
+                    `?type=${activity.labels.main.toLowerCase()}`
+                )
+              "
             />
           </div>
           <template v-else>
-            <div class="w-full flex flex-col space-y-3">
+            <div class="w-full flex flex-col space-y-3 mdlg:pr-0 pr-4">
               <sofa-empty-state
                 :title="'No result found'"
-                :subTitle="'We could not find any textbook solutions courses'"
+                :subTitle="'We could not find any material from your organizations'"
+                :custom-class="'!h-[350px]'"
               />
             </div>
           </template>
+        </div>
+
+        <div class="w-full" v-if="homeContents.my_org.length">
+          <div
+            class="pr-4 mdlg:!pr-0 cursor-pointer hidden mdlg:block"
+            @click="Logic.Common.GoToRoute(`/marketplace`)"
+          >
+            <sofa-normal-text :color="'text-primaryPink'"
+              >View all</sofa-normal-text
+            >
+          </div>
         </div>
       </div>
 
@@ -573,7 +616,7 @@
             >
           </div>
         </template>
-        <template v-if="Logic.Users.getUserType() == 'organisation'">
+        <template v-if="Logic.Users.getUserType() == 'organization'">
           <div class="w-full flex flex-row items-center justify-between">
             <sofa-normal-text :custom-class="'!font-bold'">
               Your students
@@ -705,12 +748,10 @@ import {
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import CustomizeBot from "@/components/onboarding/CustomizeBot.vue";
 import {
-  AllCourses,
-  setCourses,
-  notesContents,
-  pastQuestionContents,
-  textbookContents,
   sectionTags,
+  HomeMaterials,
+  setHomeMaterials,
+  homeContents,
 } from "@/composables/marketplace";
 import {
   AllConversations,
@@ -757,19 +798,9 @@ fetchRules.push(
   },
   {
     domain: "Study",
-    property: "AllCourses",
-    method: "GetCourses",
-    params: [
-      {
-        where: [
-          {
-            field: "status",
-            value: "published",
-            condition: Conditions.eq,
-          },
-        ],
-      },
-    ],
+    property: "HomeMaterials",
+    method: "GetHomeMaterials",
+    params: [],
     requireAuth: true,
     ignoreProperty: false,
     silentUpdate: true,
@@ -1003,7 +1034,7 @@ export default defineComponent({
           isDone: Logic.Users.CheckUserTaskState("learn_quiz"),
           iconSize: "h-[46px]",
           action: () => {
-            Logic.Common.GoToRoute("/library");
+            Logic.Common.GoToRoute("/marketplace");
           },
         },
         {
@@ -1013,7 +1044,7 @@ export default defineComponent({
           isDone: Logic.Users.CheckUserTaskState("quiz_flashcard"),
           iconSize: "h-[46px]",
           action: () => {
-            Logic.Common.GoToRoute("/library");
+            Logic.Common.GoToRoute("/marketplace");
           },
         },
         {
@@ -1023,7 +1054,7 @@ export default defineComponent({
           isDone: Logic.Users.CheckUserTaskState("quiz_game"),
           iconSize: "h-[46px]",
           action: () => {
-            Logic.Common.GoToRoute("/library");
+            Logic.Common.GoToRoute("/marketplace");
           },
         }
       );
@@ -1046,12 +1077,11 @@ export default defineComponent({
     onMounted(() => {
       scrollToTop();
       setItems();
-      setCourses(4);
+      setHomeMaterials(4);
       Logic.Users.watchProperty("UserProfile", UserProfile);
       Logic.Conversations.watchProperty("AllConversations", AllConversations);
       Logic.Conversations.watchProperty("AllTutorRequests", AllTutorRequests);
-      // Logic.Conversations.watchProperty("AllConversations", AllConversations);
-      Logic.Study.watchProperty("AllCourses", AllCourses);
+      Logic.Study.watchProperty("HomeMaterials", HomeMaterials);
       // set organisation students
 
       if (Logic.Users.getUserType() == "organisation") {
@@ -1065,14 +1095,14 @@ export default defineComponent({
       if (Logic.Users.getUserType() == "teacher") {
         setConversations(-1, 3);
       }
+
+      if (Logic.Users.getUserType() == "student") {
+        setConversations(-1, 3);
+      }
     });
 
     watch(UserProfile, () => {
       setItems();
-    });
-
-    watch(AllCourses, () => {
-      setCourses(4);
     });
 
     watch(AllConversations, () => {
@@ -1091,6 +1121,10 @@ export default defineComponent({
       setOrganizationMembers();
     });
 
+    watch(HomeMaterials, () => {
+      setHomeMaterials(4);
+    });
+
     return {
       moment,
       latestAnalytics,
@@ -1103,9 +1137,7 @@ export default defineComponent({
       showAccountSetup,
       UserProfile,
       newChatMessage,
-      notesContents,
-      pastQuestionContents,
-      textbookContents,
+      homeContents,
       sectionTags,
       showCustomizeAI,
       allStudents,

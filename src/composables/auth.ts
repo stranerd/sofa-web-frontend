@@ -18,6 +18,7 @@ const loginForm = reactive<SignInInput>({
   password: '',
 })
 
+
 const termsAccepted = ref(false)
 
 const SignUp = (formComp: any, accountType = 'student') => {

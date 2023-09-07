@@ -55,7 +55,7 @@
             <sofa-normal-text
               :color="'text-grayColor'"
               :customClass="'!text-base cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/library')"
+              @click="Logic.Common.goBack()"
             >
               Exit
             </sofa-normal-text>

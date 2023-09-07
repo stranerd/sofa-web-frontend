@@ -161,7 +161,12 @@ const updateCourse = (formComp: any) => {
     ?.then((data) => {
       if (data) {
         courseSettingSaved.value = true
-        Logic.Common.hideLoader()
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'Course updated',
+          type: 'success',
+        })
       }
     })
     .catch((error) => {
@@ -224,13 +229,15 @@ const addQuizToCourse = (quizId: string) => {
       type: 'quiz',
       id: Logic.Study.SingleCourse.id,
     }
-    Logic.Study.MoveItemToCourse(true)
-
-    Logic.Common.showLoader({
-      show: true,
-      loading: false,
-      message: 'Quiz added.',
-      type: 'success',
+    Logic.Study.MoveItemToCourse(true).then((data) => {
+      if (data) {
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'Quiz added.',
+          type: 'success',
+        })
+      }
     })
   })
 }

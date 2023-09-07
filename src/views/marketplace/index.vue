@@ -84,7 +84,9 @@
     <div
       class="mdlg:!w-[85%] lg:!w-[75%] w-full flex flex-col space-y-6 md:!space-y-7 mdlg:!px-0 px-0"
     >
+      <!-- Textbook, note, past questions -->
       <div
+        v-if="false"
         class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide mdlg:!pl-0 pl-4"
       >
         <div
@@ -122,24 +124,20 @@
           class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Past questions
+            Latest
           </sofa-normal-text>
 
           <sofa-normal-text
             :color="'text-primaryPink'"
             :custom-class="'cursor-pointer'"
-            @click="
-              Logic.Common.GoToRoute(
-                `/marketplace/search?tagId=${sectionTags.past_question}&q=nill`
-              )
-            "
+            @click="Logic.Common.GoToRoute(`/marketplace/search`)"
           >
             View all
           </sofa-normal-text>
         </div>
 
         <div
-          v-if="pastQuestionContents.length"
+          v-if="marketplaceContents.lastest.length"
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
         >
           <div
@@ -148,9 +146,15 @@
             <sofa-item-card
               :content="content"
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in pastQuestionContents"
+              v-for="(content, index) in marketplaceContents.lastest"
               :key="index"
-              @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
+              @click="
+                Logic.Common.GoToRoute(
+                  '/marketplace/' +
+                    content.id +
+                    `?type=${content.labels.main.toLowerCase()}`
+                )
+              "
             ></sofa-item-card>
           </div>
         </div>
@@ -159,7 +163,7 @@
           <div class="w-full flex flex-col space-y-3">
             <sofa-empty-state
               :title="'No result found'"
-              :subTitle="'We could not find any past question courses'"
+              :subTitle="'We could not find any lastest material'"
             />
           </div>
         </template>
@@ -172,17 +176,13 @@
           class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Notes
+            Highest rated
           </sofa-normal-text>
 
           <sofa-normal-text
             :color="'text-primaryPink'"
             :custom-class="'cursor-pointer'"
-            @click="
-              Logic.Common.GoToRoute(
-                `/marketplace/search?tagId=${sectionTags.note}&q=nill`
-              )
-            "
+            @click="Logic.Common.GoToRoute(`/marketplace/search`)"
           >
             View all
           </sofa-normal-text>
@@ -190,7 +190,7 @@
 
         <div
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-          v-if="notesContents.length"
+          v-if="marketplaceContents.rated.length"
         >
           <div
             class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
@@ -198,9 +198,15 @@
             <sofa-item-card
               :content="content"
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in notesContents"
+              v-for="(content, index) in marketplaceContents.rated"
               :key="index"
-              @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
+              @click="
+                Logic.Common.GoToRoute(
+                  '/marketplace/' +
+                    content.id +
+                    `?type=${content.labels.main.toLowerCase()}`
+                )
+              "
             ></sofa-item-card>
           </div>
         </div>
@@ -209,7 +215,7 @@
           <div class="w-full flex flex-col space-y-3">
             <sofa-empty-state
               :title="'No result found'"
-              :subTitle="'We could not find any note courses'"
+              :subTitle="'We could not find any highes rated materials'"
             />
           </div>
         </template>
@@ -222,17 +228,13 @@
           class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
         >
           <sofa-normal-text :customClass="'!font-bold'">
-            Textbook solutions
+            Most popular
           </sofa-normal-text>
 
           <sofa-normal-text
             :color="'text-primaryPink'"
             :custom-class="'cursor-pointer'"
-            @click="
-              Logic.Common.GoToRoute(
-                `/marketplace/search?tagId=${sectionTags.textbook}&q=nill`
-              )
-            "
+            @click="Logic.Common.GoToRoute(`/marketplace/search`)"
           >
             View all
           </sofa-normal-text>
@@ -240,7 +242,7 @@
 
         <div
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-          v-if="textbookContents.length"
+          v-if="marketplaceContents.popular.length"
         >
           <div
             class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
@@ -248,9 +250,15 @@
             <sofa-item-card
               :content="content"
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in textbookContents"
+              v-for="(content, index) in marketplaceContents.popular"
               :key="index"
-              @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
+              @click="
+                Logic.Common.GoToRoute(
+                  '/marketplace/' +
+                    content.id +
+                    `?type=${content.labels.main.toLowerCase()}`
+                )
+              "
             ></sofa-item-card>
           </div>
         </div>
@@ -259,7 +267,7 @@
           <div class="w-full flex flex-col space-y-3">
             <sofa-empty-state
               :title="'No result found'"
-              :subTitle="'We could not find any textbook solution courses'"
+              :subTitle="'We could not find most popular materials'"
             />
           </div>
         </template>
@@ -288,14 +296,15 @@ import { Logic } from "sofa-logic";
 import {
   AllCourses,
   mainCards,
+  marketplaceContents,
+  MarketplaceMaterials,
   notesContents,
   pastQuestionContents,
   search,
   sectionTags,
-  setCourses,
+  setMarketplaceMaterials,
   textbookContents,
 } from "@/composables/marketplace";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 
 export default defineComponent({
   components: {
@@ -311,21 +320,12 @@ export default defineComponent({
     fetchRules: [
       {
         domain: "Study",
-        property: "AllCourses",
-        method: "GetCourses",
-        params: [
-          {
-            where: [
-              {
-                field: "status",
-                value: "published",
-                condition: Conditions.eq,
-              },
-            ],
-          },
-        ],
+        property: "MarketplaceMaterials",
+        method: "GetMarketplaceMaterials",
+        params: [],
         requireAuth: true,
-        ignoreProperty: true,
+        ignoreProperty: false,
+        silentUpdate: true,
       },
       {
         domain: "Study",
@@ -362,11 +362,12 @@ export default defineComponent({
     onMounted(() => {
       scrollToTop();
       Logic.Study.watchProperty("AllCourses", AllCourses);
-      setCourses();
+      Logic.Study.watchProperty("MarketplaceMaterials", MarketplaceMaterials);
+      setMarketplaceMaterials(5);
     });
 
-    watch(AllCourses, () => {
-      setCourses();
+    watch(MarketplaceMaterials, () => {
+      setMarketplaceMaterials();
     });
 
     watch(defaultValue, () => {
@@ -391,13 +392,14 @@ export default defineComponent({
       Logic,
       showFilter,
       selectedOptions,
-      search,
       searchQuery,
       defaultValue,
       searchQueryLg,
-      handleSearchLg,
       mainCards,
       sectionTags,
+      marketplaceContents,
+      handleSearchLg,
+      search,
     };
   },
 });

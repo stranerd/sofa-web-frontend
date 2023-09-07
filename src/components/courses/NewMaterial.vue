@@ -173,7 +173,10 @@
             <template v-slot:title> Choose a quiz </template>
           </sofa-select>
 
-          <div class="w-full flex flex-row items-center justify-center py-3">
+          <div
+            class="w-full flex flex-row items-center justify-center py-3"
+            v-if="!selectedQuiz"
+          >
             <sofa-button
               :padding="'px-5 py-2'"
               @click="Logic.Common.GoToRoute('/quiz/create')"
@@ -283,10 +286,12 @@ export default defineComponent({
     const setQuizzes = () => {
       allQuizzes.value.length = 0;
       AllQuzzies.value.results.forEach((quiz) => {
-        allQuizzes.value.push({
-          key: quiz.id,
-          value: quiz.title,
-        });
+        if (quiz.status != "published") {
+          allQuizzes.value.push({
+            key: quiz.id,
+            value: quiz.title,
+          });
+        }
       });
     };
 

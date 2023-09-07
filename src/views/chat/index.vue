@@ -139,7 +139,8 @@
             label: 'End session',
             isClose: false,
             action: () => {
-              //
+              showEndSession = false;
+              showRateAndReviewTutor = true;
             },
           },
         ]"
@@ -401,6 +402,26 @@
           },
         }"
       />
+
+      <!-- Rate and review modal -->
+      <rate-and-review-modal
+        v-if="showRateAndReviewTutor"
+        :close="
+          () => {
+            showRateAndReviewTutor = false;
+          }
+        "
+        :title="'Session ended, rate tutor'"
+        :tutor="{
+          name: SingleConversation.tutor.bio.name.full,
+          photo: SingleConversation.tutor?.bio?.photo?.link || '',
+        }"
+        @on-review-submitted="
+          (data) => {
+            endChatSession(data);
+          }
+        "
+      />
     </template>
 
     <template v-slot:right-session>
@@ -408,7 +429,7 @@
       <template v-if="Logic.Users.getUserType() == 'student' && UserProfile">
         <div
           class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
-          v-if="!selectedTutorRequestData"
+          v-if="!selectedTutorRequestData || !SingleConversation.tutor"
         >
           <div class="w-full flex flex-row items-center space-x-3">
             <div
@@ -447,16 +468,14 @@
         >
           <div
             class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-            v-if="selectedTutorRequestData"
+            v-if="selectedTutorRequestData && SingleConversation.tutor"
+            @click.stop="
+              showEndSession = true;
+              selectedConvoId = SingleConversation.id;
+            "
           >
             <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
-            <sofa-normal-text
-              :color="'text-primaryRed'"
-              @click.stop="
-                showEndSession = true;
-                selectedConvoId = SingleConversation.id;
-              "
-            >
+            <sofa-normal-text :color="'text-primaryRed'">
               End tutor session</sofa-normal-text
             >
           </div>
@@ -479,10 +498,11 @@
         <div
           class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3"
           v-if="
-            SingleConversation &&
-            hasMessage &&
-            !itIsNewMessage &&
-            !selectedTutorRequestData
+            (SingleConversation &&
+              hasMessage &&
+              !itIsNewMessage &&
+              !selectedTutorRequestData) ||
+            !SingleConversation?.tutor
           "
         >
           <div
@@ -582,6 +602,7 @@ import {
   contentTitleChanged,
   conversationTitle,
   deleteConvo,
+  endChatSession,
   handleKeyEvent,
   hasMessage,
   itIsNewMessage,
@@ -600,6 +621,7 @@ import {
   showDeleteConvo,
   showEndSession,
   showLoader,
+  showRateAndReviewTutor,
   SingleConversation,
   tutorRequestList,
 } from "@/composables/conversation";
@@ -607,6 +629,7 @@ import ConversationMessages from "@/components/conversation/Messages.vue";
 import AddTutor from "@/components/conversation/AddTutor.vue";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import ChatListComponent from "@/components/conversation/ChatList.vue";
+import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
 const fetchRules = [
   {
@@ -686,6 +709,7 @@ export default defineComponent({
     SofaButton,
     SofaSuccessPrompt,
     ChatListComponent,
+    RateAndReviewModal,
   },
   middlewares: {
     fetchRules,
@@ -792,9 +816,17 @@ export default defineComponent({
 
     watch(AllConversations, () => {
       setConversations();
+
       showDeleteConvo.value = false;
       if (SingleConversation.value?.id == selectedConvoId.value) {
         hasMessage.value = false;
+        // set tutor request if it exists
+        selectedTutorRequestData.value = undefined;
+        tutorRequestList.forEach((item) => {
+          if (item.convoId == selectedConvoId.value) {
+            selectedTutorRequestData.value = item;
+          }
+        });
       }
     });
 
@@ -864,6 +896,8 @@ export default defineComponent({
       acceptOrRejectTutorRequest,
       selectedTutorRequestData,
       showEndSession,
+      showRateAndReviewTutor,
+      endChatSession,
     };
   },
 });

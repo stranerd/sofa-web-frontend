@@ -37,6 +37,8 @@ const showMoreOptions = ref(false)
 
 const itIsNewMessage = ref(false)
 
+const showRateAndReviewTutor = ref(false)
+
 const itIsTutorRequest = ref(false)
 
 const conversationTitle = ref('New Chat')
@@ -158,8 +160,11 @@ const setConversations = (goToIndex = -1, limit = 0) => {
     Logic.Users.getUserType() == 'teacher' ||
     Logic.Users.getUserType() == 'student'
   ) {
-    AllTutorRequests.value.results.forEach((request) => {
-      if (request.pending || Logic.Users.getUserType() == 'student') {
+    AllTutorRequests.value?.results.forEach((request) => {
+      if (
+        (Logic.Users.getUserType() == 'student' && request.accepted) ||
+        (Logic.Users.getUserType() == 'teacher' && request.pending)
+      ) {
         tutorRequestList.push({
           icon: 'conversation',
           iconSize: 'h-[35px]',
@@ -440,6 +445,20 @@ const acceptOrRejectTutorRequest = (accept: boolean) => {
   })
 }
 
+const endChatSession = (reviewData: { ratings: number; review: string }) => {
+  Logic.Conversations.DeleteTutorForm = {
+    id: SingleConversation.value.id,
+    message: reviewData.review,
+    rating: reviewData.ratings,
+  }
+
+  Logic.Conversations.DeleteTutor().then((data) => {
+    if (data) {
+      showRateAndReviewTutor.value = false
+    }
+  })
+}
+
 export {
   messageContent,
   showLoader,
@@ -461,6 +480,7 @@ export {
   selectedChatData,
   ChatMembers,
   showEndSession,
+  showRateAndReviewTutor,
   setChatToDefault,
   setConvoFromRoute,
   selectConversation,
@@ -475,4 +495,5 @@ export {
   handleKeyEvent,
   contentTitleChanged,
   acceptOrRejectTutorRequest,
+  endChatSession,
 }

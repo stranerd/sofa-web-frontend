@@ -171,7 +171,12 @@ const updateQuiz = (formComp: any) => {
     ?.then((data) => {
       if (data) {
         quizSettingSaved.value = true
-        Logic.Common.hideLoader()
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'Quiz updated',
+          type: 'success',
+        })
       }
     })
     .catch((error) => {

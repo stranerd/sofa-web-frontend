@@ -168,6 +168,15 @@
             </sofa-normal-text>
           </div>
         </div>
+        <div
+          class="w-full flex flex-row items-center justify-center border-t-[1px] border-[#F1F6FA] pt-3 cursor-pointer"
+          v-if="AllTransactions.pages.next"
+          @click="loadMoreTransactions()"
+        >
+          <sofa-normal-text :color="'text-primaryPink'"
+            >load more</sofa-normal-text
+          >
+        </div>
       </div>
 
       <sofa-empty-state
@@ -484,6 +493,7 @@ import { Logic } from "sofa-logic";
 import { Transaction } from "sofa-logic/src/logic/types/domains/payment";
 import { SelectOption } from "sofa-logic/src/logic/types/common";
 import moment from "moment";
+import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 
 export default defineComponent({
   components: {
@@ -805,6 +815,29 @@ export default defineComponent({
       });
     });
 
+    const loadMoreTransactions = () => {
+      Logic.Payment.GetTransactions(
+        {
+          limit: 10,
+          where: [
+            {
+              field: "userId",
+              condition: Conditions.eq,
+              value: Logic.Auth.AuthUser?.id,
+            },
+          ],
+          sort: [
+            {
+              field: "createdAt",
+              desc: false,
+            },
+          ],
+          page: AllTransactions.value.pages.next,
+        },
+        true
+      );
+    };
+
     return {
       FormValidations,
       Logic,
@@ -833,6 +866,7 @@ export default defineComponent({
       showWalletWithdraw,
       payOnline,
       getTransactionColor,
+      loadMoreTransactions,
     };
   },
 });

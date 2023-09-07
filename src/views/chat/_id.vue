@@ -159,6 +159,52 @@
       "
     />
 
+    <!-- Success prompt for tutor request -->
+    <sofa-success-prompt
+      v-if="showTutorRequestSubmited"
+      :title="'Tutor request sent'"
+      :subTitle="`You will get notified when the tutor responds`"
+      :close="
+        () => {
+          showTutorRequestSubmited = false;
+        }
+      "
+      :button="{
+        label: 'Done',
+        action: () => {
+          showTutorRequestSubmited = false;
+        },
+      }"
+    />
+
+    <!-- End session modal -->
+    <sofa-delete-prompt
+      v-if="showEndSession"
+      :title="'End session with tutor?'"
+      :subTitle="`Are you sure you want to end this session? The tutor will be removed from this chat`"
+      :close="
+        () => {
+          showEndSession = false;
+        }
+      "
+      :buttons="[
+        {
+          label: 'No',
+          isClose: true,
+          action: () => {
+            showEndSession = false;
+          },
+        },
+        {
+          label: 'End session',
+          isClose: false,
+          action: () => {
+            //
+          },
+        },
+      ]"
+    />
+
     <!-- More options for smaller screens -->
     <sofa-modal
       :close="
@@ -208,10 +254,25 @@
           >
             <div
               class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
+              v-if="selectedTutorRequestData"
+              @click.stop="
+                showEndSession = true;
+                selectedConvoId = SingleConversation.id;
+              "
+            >
+              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
+              <sofa-normal-text :color="'text-primaryRed'">
+                End tutor session</sofa-normal-text
+              >
+            </div>
+
+            <div
+              class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
               @click="
                 showMoreOptions = false;
                 showAddTutor = true;
               "
+              v-if="!selectedTutorRequestData"
             >
               <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
               <sofa-normal-text :color="'text-primaryGreen'">
@@ -258,6 +319,8 @@ import {
   SofaCustomInput,
   SofaAvatar,
   SofaButton,
+  SofaSuccessPrompt,
+  SofaDeletePrompt,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import ConversationMessages from "@/components/conversation/Messages.vue";
@@ -284,6 +347,7 @@ import {
   setConversations,
   showAddTutor,
   showDeleteConvo,
+  showEndSession,
   showLoader,
   showMoreOptions,
   tutorRequestList,
@@ -380,6 +444,8 @@ export default defineComponent({
     SofaAvatar,
     ChatListComponent,
     SofaButton,
+    SofaSuccessPrompt,
+    SofaDeletePrompt,
   },
   middlewares: {
     fetchRules,
@@ -395,6 +461,8 @@ export default defineComponent({
 
     const SingleConversation = ref(Logic.Conversations.SingleConversation);
     const Messages = ref(Logic.Conversations.Messages);
+
+    const showTutorRequestSubmited = ref(false);
 
     const UserProfile = ref(Logic.Users.UserProfile);
 
@@ -512,6 +580,9 @@ export default defineComponent({
       selectedChatData,
       itIsTutorRequest,
       acceptOrRejectTutorRequest,
+      selectedTutorRequestData,
+      showTutorRequestSubmited,
+      showEndSession,
     };
   },
 });

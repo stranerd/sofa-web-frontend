@@ -25,7 +25,7 @@
 
     <template v-slot:middle-session>
       <div
-        class="w-full flex flex-col mdlg:!space-y-5 space-y-1 px-0 mdlg:!pr-7 relative"
+        class="w-full flex flex-col mdlg:!space-y-5 space-y-3 px-0 mdlg:!pr-7 relative"
       >
         <div
           class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-backgroundGray mdlgcustom-border flex flex-row space-x-3 items-center mdlg:!justify-between justify-start"
@@ -56,49 +56,167 @@
           </div>
         </div>
 
-        <div
-          class="w-full flex flex-col space-y-3 mdlg:!pt-2 pt-0 md:!px-0 px-4"
-          v-if="resourceContents.length"
-        >
-          <div class="w-full flex flex-col space-y-3">
-            <div class="w-full mdlg:!grid grid-cols-5 hidden mdlg:!gap-4">
-              <sofa-item-card
-                :content="content"
-                custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-                v-for="(content, index) in resourceContents"
-                :key="index"
-                @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
-              ></sofa-item-card>
-            </div>
-
-            <div class="w-full mdlg:!hidden flex flex-col space-y-4">
-              <sofa-activity-card
-                :activity="content"
-                custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-                v-for="(content, index) in resourceContents"
-                :isWrapped="true"
-                :key="index"
-                @click="Logic.Common.GoToRoute('/marketplace/' + content.id)"
-              ></sofa-activity-card>
-            </div>
-          </div>
+        <div class="w-full flex flex-row space-x-3 items-center mdlg:px-0 pl-4">
+          <span
+            :class="`px-6 py-2  ${
+              item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'
+            } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `"
+            v-for="(item, index) in filterOptions"
+            :key="index"
+            @click="selectedFilterOption = item.id"
+          >
+            <sofa-normal-text
+              :color="`${
+                item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'
+              } `"
+              :custom-class="'!font-semibold'"
+              >{{ item.name }}</sofa-normal-text
+            >
+          </span>
         </div>
 
-        <template v-else>
-          <div class="w-full flex flex-col space-y-3 md:!px-0 px-4">
-            <sofa-empty-state
-              :title="'No result found'"
-              :subTitle="'We could not find any course that matches your search'"
-              :actionLabel="'Clear search'"
-              :action="
-                () => {
-                  defaultValue = ' ';
-                  search();
-                }
-              "
-            />
+        <!-- Course contents -->
+
+        <div
+          class="w-full flex flex-col space-y-3 mdlg:!pt-0 pt-0 mdlg:px-0 pl-4"
+        >
+          <div class="w-full flex flex-col justify-start items-start">
+            <sofa-normal-text :customClass="'font-bold'">
+              Courses
+            </sofa-normal-text>
           </div>
-        </template>
+
+          <template v-if="resourceContents.length">
+            <div class="w-full flex flex-col space-y-3">
+              <div
+                class="w-full mdlg:!grid grid-cols-5 mdlg:!gap-4"
+                v-if="
+                  Logic.Common.mediaQuery() != 'sm' &&
+                  Logic.Common.mediaQuery() != 'md'
+                "
+              >
+                <sofa-item-card
+                  :content="content"
+                  custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
+                  v-for="(content, index) in resourceContents"
+                  :key="index"
+                  @click="
+                    Logic.Common.GoToRoute(
+                      '/marketplace/' + content.id + '?type=course'
+                    )
+                  "
+                ></sofa-item-card>
+              </div>
+
+              <div
+                class="lg:!w-full mdlg:!hidden flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+              >
+                <div
+                  class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 pr-4"
+                >
+                  <sofa-activity-card
+                    v-for="(activity, index) in resourceContents"
+                    :key="index"
+                    :activity="activity"
+                    :custom-class="'cursor-pointer'"
+                    @click="
+                      Logic.Common.GoToRoute(
+                        '/marketplace/' + activity.id + '?type=course'
+                      )
+                    "
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="w-full flex flex-col space-y-3 md:!px-0 px-4">
+              <sofa-empty-state
+                :title="'No result found'"
+                :subTitle="'We could not find any course that matches your search'"
+                :actionLabel="'Clear search'"
+                :action="
+                  () => {
+                    defaultValue = ' ';
+                    search();
+                  }
+                "
+              />
+            </div>
+          </template>
+        </div>
+
+        <!-- Quiz contents -->
+        <div
+          class="w-full flex flex-col space-y-3 mdlg:!pt-0 pt-0 mdlg:px-0 pl-4"
+        >
+          <div class="w-full flex flex-col justify-start items-start">
+            <sofa-normal-text :customClass="'font-bold'">
+              Quizzes
+            </sofa-normal-text>
+          </div>
+
+          <template v-if="quizContents.length">
+            <div class="w-full flex flex-col space-y-3">
+              <div
+                class="w-full mdlg:!grid grid-cols-5 mdlg:!gap-4"
+                v-if="
+                  Logic.Common.mediaQuery() != 'sm' &&
+                  Logic.Common.mediaQuery() != 'md'
+                "
+              >
+                <sofa-item-card
+                  :content="content"
+                  custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
+                  v-for="(content, index) in quizContents"
+                  :key="index"
+                  @click="
+                    Logic.Common.GoToRoute(
+                      '/marketplace/' + content.id + '?type=quiz'
+                    )
+                  "
+                ></sofa-item-card>
+              </div>
+
+              <div
+                class="lg:!w-full mdlg:!hidden flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide"
+              >
+                <div
+                  class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 pr-4"
+                >
+                  <sofa-activity-card
+                    v-for="(activity, index) in quizContents"
+                    :key="index"
+                    :activity="activity"
+                    :custom-class="'cursor-pointer'"
+                    @click="
+                      Logic.Common.GoToRoute(
+                        '/marketplace/' + activity.id + '?type=quiz'
+                      )
+                    "
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="w-full flex flex-col space-y-3 md:!px-0 px-4">
+              <sofa-empty-state
+                :title="'No result found'"
+                :subTitle="'We could not find any quiz that matches your search'"
+                :actionLabel="'Clear search'"
+                :action="
+                  () => {
+                    defaultValue = ' ';
+                    search();
+                  }
+                "
+              />
+            </div>
+          </template>
+        </div>
 
         <div class="w-full h-[100px]"></div>
       </div>
@@ -176,7 +294,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToTop } from "@/composables";
@@ -194,6 +312,7 @@ import MarketplaceFilter from "@/components/marketplace/Filter.vue";
 import { search } from "@/composables/marketplace";
 import { useRoute } from "vue-router";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import { createCourseData, createQuizData } from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -212,17 +331,17 @@ export default defineComponent({
         domain: "Study",
         property: "AllCourses",
         method: "GetCoursesWithQuery",
-        params: [
-          {
-            where: [
-              {
-                field: "status",
-                value: "published",
-                condition: Conditions.eq,
-              },
-            ],
-          },
-        ],
+        params: [],
+        requireAuth: true,
+        ignoreProperty: true,
+        useRouteQuery: true,
+        queries: ["tagId", "q"],
+      },
+      {
+        domain: "Study",
+        property: "AllQuzzies",
+        method: "GetQuizzesWithQuery",
+        params: [],
         requireAuth: true,
         ignoreProperty: true,
         useRouteQuery: true,
@@ -252,6 +371,8 @@ export default defineComponent({
 
     const AllCourses = ref(Logic.Study.AllCourses);
 
+    const AllQuzzies = ref(Logic.Study.AllQuzzies);
+
     const searchQuery = ref("");
 
     const selectedOptions = ref([]);
@@ -259,6 +380,26 @@ export default defineComponent({
     const defaultValue = ref("");
 
     const showFilter = ref(false);
+
+    const selectedFilterOption = ref("all");
+
+    const filterOptions = reactive([
+      {
+        name: "All",
+        active: true,
+        id: "all",
+      },
+      {
+        name: "Courses",
+        active: false,
+        id: "courses",
+      },
+      {
+        name: "Quizzes",
+        active: false,
+        id: "quizzes",
+      },
+    ]);
 
     const resourceContents = ref<
       {
@@ -274,26 +415,39 @@ export default defineComponent({
         username?: string;
         userPhoto: string;
         price?: number;
+        createdAt: number;
+      }[]
+    >([]);
+
+    const quizContents = ref<
+      {
+        id: string;
+        subject?: string;
+        title?: string;
+        image?: string;
+        labels?: {
+          main: string;
+          sub: string;
+          color: string;
+        };
+        username?: string;
+        userPhoto: string;
+        price?: number;
+        createdAt: number;
       }[]
     >([]);
 
     const setCourses = () => {
       resourceContents.value.length = 0;
       AllCourses.value.results.forEach((course) => {
-        resourceContents.value.push({
-          id: course.id,
-          subject: Logic.Study.GetTagName(course.topicId),
-          title: course.title,
-          image: course.photo ? course.photo.link : "/images/default.png",
-          labels: {
-            main: "Course",
-            sub: `${course.coursables.length} materials`,
-            color: "orange",
-          },
-          username: course.user.bio.name.full,
-          price: course.price.amount,
-          userPhoto: course.user.bio.photo ? course.user.bio.photo.link : "",
-        });
+        resourceContents.value.push(createCourseData(course));
+      });
+    };
+
+    const setQuizzes = () => {
+      quizContents.value.length = 0;
+      AllQuzzies.value.results.forEach((quiz) => {
+        quizContents.value.push(createQuizData(quiz));
       });
     };
 
@@ -314,24 +468,38 @@ export default defineComponent({
       }
 
       if (route.query?.q) {
-        defaultValue.value = route.query?.q.toString();
+        if (route.query?.q != "nill") {
+          defaultValue.value = route.query?.q.toString();
+        }
       }
     };
 
     onMounted(() => {
       scrollToTop();
       Logic.Study.watchProperty("AllCourses", AllCourses);
+      Logic.Study.watchProperty("AllQuzzies", AllQuzzies);
       setQuery();
       setCourses();
+      setQuizzes();
     });
 
     watch(AllCourses, () => {
       setCourses();
     });
 
+    watch(AllQuzzies, () => {
+      setQuizzes();
+    });
+
     watch(searchQuery, () => {
       const allQueries: any = {
-        where: [],
+        where: [
+          {
+            field: "status",
+            value: "published",
+            condition: Conditions.eq,
+          },
+        ],
       };
 
       selectedOptions.value.forEach((item) => {
@@ -346,7 +514,9 @@ export default defineComponent({
       };
 
       Logic.Common.debounce(() => {
-        search(allQueries);
+        if (searchQuery.value != "nill") {
+          search(allQueries);
+        }
       }, 500);
     });
 
@@ -356,9 +526,12 @@ export default defineComponent({
       Logic,
       searchQuery,
       selectedOptions,
-      search,
       defaultValue,
       showFilter,
+      quizContents,
+      filterOptions,
+      selectedFilterOption,
+      search,
     };
   },
 });

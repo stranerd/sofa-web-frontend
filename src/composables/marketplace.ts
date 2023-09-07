@@ -1,4 +1,6 @@
 import { Logic } from 'sofa-logic'
+import { Conditions } from 'sofa-logic/src/logic/types/common'
+import { Course, Quiz } from 'sofa-logic/src/logic/types/domains/study'
 import { reactive, ref } from 'vue'
 
 export interface ContentDetails {
@@ -17,7 +19,29 @@ export interface ContentDetails {
 }
 
 const AllCourses = ref(Logic.Study.AllCourses)
+const HomeMaterials = ref(Logic.Study.HomeMaterials)
+const MarketplaceMaterials = ref(Logic.Study.MarketplaceMaterials)
 const notesContents = ref<ContentDetails[]>([])
+
+const homeContents = reactive<{
+  recent: ContentDetails[]
+  my_org: ContentDetails[]
+  suggested: ContentDetails[]
+}>({
+  recent: [],
+  my_org: [],
+  suggested: [],
+})
+
+const marketplaceContents = reactive<{
+  lastest: ContentDetails[]
+  rated: ContentDetails[]
+  popular: ContentDetails[]
+}>({
+  lastest: [],
+  rated: [],
+  popular: [],
+})
 
 const pastQuestionContents = ref<ContentDetails[]>([])
 
@@ -52,12 +76,52 @@ const search = (query = {}) => {
     loading: true,
     show: false,
   })
-  Logic.Study.GetCourses(query)
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  query.where.push({
+    field: 'status',
+    value: 'published',
+    condition: Conditions.eq,
+  })
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  query.limit = 5
+
+  const allRequests: Promise<any>[] = []
+
+  // course search request
+  allRequests.push(
+    new Promise((resolve) => {
+      Logic.Study.GetCourses(query)
+        .then(() => {
+          resolve('')
+        })
+        .catch(() => {
+          resolve('')
+        })
+    }),
+  )
+
+  // quiz search request
+  allRequests.push(
+    new Promise((resolve) => {
+      Logic.Study.GetQuizzes(query)
+        .then(() => {
+          resolve('')
+        })
+        .catch(() => {
+          resolve('')
+        })
+    }),
+  )
+
+  Promise.all(allRequests)
     .then(() => {
       Logic.Common.hideLoader()
     })
-    .catch(() => {
-      Logic.Common.hideLoader()
+    .catch((error) => {
+      console.log(error)
     })
 }
 
@@ -162,6 +226,87 @@ const setCourses = (count = 5) => {
   }
 }
 
+const extractContent = (item: Quiz | Course) => {
+  return {
+    id: item.id,
+    subject: Logic.Study.GetTagName(item.topicId),
+    title: item.title,
+    image: item.photo ? item.photo.link : '/images/default.png',
+    labels: {
+      main: item.__type == 'CourseEntity' ? 'Course' : 'Quiz',
+      sub:
+        item.__type == 'CourseEntity'
+          ? `${item.coursables.length} materials`
+          : `${item.questions.length} questions`,
+      color: item.__type == 'CourseEntity' ? 'orange' : 'pink',
+    },
+    username: item.user.bio.name.full,
+    price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
+    userPhoto: item.user.bio.photo ? item.user.bio.photo.link : '',
+  }
+}
+
+const setHomeMaterials = (count = 5) => {
+  if (!HomeMaterials.value) return
+  homeContents.my_org.length = 0
+  homeContents.recent.length = 0
+  homeContents.suggested.length = 0
+  // set recent contents
+  HomeMaterials.value.recent.forEach((item) => {
+    homeContents.recent.push(extractContent(item))
+  })
+  if (homeContents.recent.length > count) {
+    homeContents.recent = homeContents.recent.slice(0, count)
+  }
+
+  // set my organization contents
+  HomeMaterials.value.my_org.forEach((item) => {
+    homeContents.my_org.push(extractContent(item))
+  })
+  if (homeContents.my_org.length > count) {
+    homeContents.my_org = homeContents.my_org.slice(0, count)
+  }
+
+  // set suggested contents
+  HomeMaterials.value.suggested.forEach((item) => {
+    homeContents.suggested.push(extractContent(item))
+  })
+  if (homeContents.suggested.length > count) {
+    homeContents.suggested = homeContents.suggested.slice(0, count)
+  }
+}
+
+const setMarketplaceMaterials = (count = 5) => {
+  if (!MarketplaceMaterials.value) return
+  marketplaceContents.lastest.length = 0
+  marketplaceContents.popular.length = 0
+  marketplaceContents.rated.length = 0
+
+  // set latest contents
+  MarketplaceMaterials.value.lastest.forEach((item) => {
+    marketplaceContents.lastest.push(extractContent(item))
+  })
+  if (marketplaceContents.lastest.length > count) {
+    marketplaceContents.lastest = marketplaceContents.lastest.slice(0, count)
+  }
+
+  // set popular contents
+  MarketplaceMaterials.value.popular.forEach((item) => {
+    marketplaceContents.popular.push(extractContent(item))
+  })
+  if (marketplaceContents.popular.length > count) {
+    marketplaceContents.popular = marketplaceContents.popular.slice(0, count)
+  }
+
+  // set rated contents
+  MarketplaceMaterials.value.rated.forEach((item) => {
+    marketplaceContents.rated.push(extractContent(item))
+  })
+  if (marketplaceContents.rated.length > count) {
+    marketplaceContents.rated = marketplaceContents.rated.slice(0, count)
+  }
+}
+
 export {
   notesContents,
   textbookContents,
@@ -169,6 +314,12 @@ export {
   sectionTags,
   AllCourses,
   mainCards,
+  HomeMaterials,
+  homeContents,
+  MarketplaceMaterials,
+  marketplaceContents,
+  setMarketplaceMaterials,
   setCourses,
+  setHomeMaterials,
   search,
 }
