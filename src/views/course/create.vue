@@ -17,13 +17,7 @@
             },
           ],
         },
-        {
-          IsOutlined: true,
-          name: 'Exit',
-          handler: () => {
-            Logic.Common.goBack();
-          },
-        },
+        ...actionButtonItems,
       ],
     }"
     :hideSmNavigator="{
@@ -477,6 +471,16 @@ export default defineComponent({
 
     const mobileTitle = ref("Create course");
 
+    const actionButtonItems = reactive([
+      {
+        IsOutlined: true,
+        name: "Exit",
+        handler: () => {
+          Logic.Common.goBack();
+        },
+      },
+    ]);
+
     const modalData = reactive({
       title: "Add study material",
       content: "add_material",
@@ -549,12 +553,34 @@ export default defineComponent({
     watch(SingleCourse, () => {
       if (SingleCourse.value) {
         showSettingModal.value = false;
+        // remove save button
+        if (SingleCourse.value.title != "Untitled Course") {
+          actionButtonItems.length = 0;
+          actionButtonItems.push({
+            IsOutlined: true,
+            name: "Exit",
+            handler: () => {
+              Logic.Common.goBack();
+            },
+          });
+        }
       }
     });
 
     onMounted(() => {
       scrollToTop();
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
+
+      // set save button
+      if (SingleCourse.value.title == "Untitled Course") {
+        actionButtonItems.push({
+          IsOutlined: false,
+          name: "Save",
+          handler: () => {
+            showSettingModal.value = true;
+          },
+        });
+      }
     });
 
     return {
@@ -567,6 +593,8 @@ export default defineComponent({
       currentContent,
       modalData,
       updateCourseSectionForm,
+      actionButtonItems,
+      SingleCourse,
       handleAddMaterialChanged,
       handleItemSelected,
       handleMobileGoback,
@@ -574,7 +602,6 @@ export default defineComponent({
       handleCourseSettingSaved,
       create,
       updateCourseSections,
-      SingleCourse,
     };
   },
 });

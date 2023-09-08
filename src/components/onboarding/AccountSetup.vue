@@ -21,7 +21,7 @@
             option.status == 'done' ? 'bg-primaryGreen' : ''
           }`"
           v-if="option.show"
-          @click="selectStage(option.id)"
+          @click="selectStage(option)"
         >
           <sofa-normal-text
             :color="` ${option.status == 'active' ? 'text-white' : ''} 
@@ -495,12 +495,23 @@ export default defineComponent({
       setFacultiesOptions();
     };
 
-    const selectStage = (stage: string) => {
-      accountSetupOptions.forEach((item) => {
-        if (item.id == stage) {
-          item.show = true;
+    const selectStage = (stage: {
+      name: string;
+      status: string;
+      id: string;
+      show: boolean;
+    }) => {
+      console.log(stage);
+      accountSetupOptions.forEach((item: any) => {
+        if (item.id == stage.id) {
+          if (item.status != "done") {
+            item.status = "active";
+          }
+          currentSetupOption.value = item.id;
         } else {
-          item.show = false;
+          if (item.status != "done") {
+            item.status = "inactive";
+          }
         }
       });
     };

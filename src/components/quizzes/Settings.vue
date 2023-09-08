@@ -41,7 +41,7 @@
           :autoComplete="true"
           :borderColor="'border-transparent'"
           :options="allTopics"
-          v-model="quizSettingsForm.topicId"
+          v-model="quizSettingsForm.topic"
         />
 
         <sofa-select
@@ -97,7 +97,7 @@
         :autoComplete="true"
         :borderColor="'border-transparent'"
         :options="allGenericTags"
-        v-model="quizSettingsForm.tagIds"
+        v-model="quizSettingsForm.tags"
         :isMultiple="true"
       />
     </div>
@@ -229,15 +229,17 @@ export default defineComponent({
         const quiz = props.quiz;
         quizSettingsForm.title = quiz.title;
         quizSettingsForm.description = quiz.description;
-        quizSettingsForm.tagIds = quiz.tagIds;
-        quizSettingsForm.topicId = quiz.topicId;
+        quizSettingsForm.tags = quiz.tagIds.map((id) =>
+          Logic.Study.GetTagName(id)
+        );
+        quizSettingsForm.topic = Logic.Study.GetTagName(quiz.topicId);
         quizSettingsForm.visibility = "active";
         quizImageUrl.value = quiz.photo?.link || "";
       } else {
         quizSettingsForm.title = "";
         quizSettingsForm.description = "";
-        quizSettingsForm.tagIds = [];
-        quizSettingsForm.topicId = "";
+        quizSettingsForm.tags = [];
+        quizSettingsForm.topic = "";
         quizSettingsForm.visibility = "";
         quizImageUrl.value = "";
 

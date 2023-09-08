@@ -52,7 +52,7 @@ const getTopics = () => {
       const data = []
       response?.results.forEach((tag) => {
         data.push({
-          key: tag.id,
+          key: tag.title,
           value: tag.title,
         })
       })
@@ -82,12 +82,12 @@ const getGenericTags = () => {
           tag.title == 'Textbook solutions'
         ) {
           contentTypeOptions.value.push({
-            key: tag.id,
+            key: tag.title,
             value: tag.title,
           })
         } else {
           data.push({
-            key: tag.id,
+            key: tag.title,
             value: tag.title,
           })
         }
@@ -108,9 +108,9 @@ const createCourse = (formComp: any) => {
       amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tagIds: allTags,
+    tags: allTags,
     title: courseSettingForm.title,
-    topicId: courseSettingForm.topic,
+    topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,
   }
 
@@ -148,9 +148,9 @@ const updateCourse = (formComp: any) => {
       amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tagIds: allTags,
+    tags: allTags,
     title: courseSettingForm.title,
-    topicId: courseSettingForm.topic,
+    topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,
   }
 

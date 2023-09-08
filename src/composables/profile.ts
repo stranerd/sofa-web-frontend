@@ -29,6 +29,11 @@ const updateProfileForm = reactive({
   },
   organisation_name: '',
   photo: undefined,
+  country: '',
+  state: '',
+})
+
+const userSocials = reactive({
   socials: [
     {
       ref: 'website',
@@ -55,8 +60,6 @@ const updateProfileForm = reactive({
       link: '',
     },
   ],
-  country: '',
-  state: '',
 })
 
 const customizeAIForm = reactive<CustomizeAIInput>({
@@ -269,7 +272,7 @@ const UpdateProfile = (formComp: any, showLoader = true) => {
     },
     description: updateProfileForm.description,
     photo: updateProfileForm.photo,
-    socials: updateProfileForm.socials,
+    socials: [],
   }
 
   let formState = false
@@ -403,7 +406,6 @@ const VerifyPhone = () => {
 const submitVerification = (useLoader = true) => {
   Logic.Users.CreateVerificationForm = {
     content: updateVerificationForm.content,
-    socials: updateVerificationForm.socials,
   }
 
   Logic.Users.CreateVerification(true, useLoader)
@@ -415,15 +417,6 @@ const autoCreateVerification = () => {
       content: {
         quizzes: [],
         courses: [],
-      },
-      socials: {
-        facebook: '',
-        instagram: '',
-        linkedIn: '',
-        tiktok: '',
-        twitter: '',
-        website: '',
-        youtube: '',
       },
     }
 
@@ -568,6 +561,7 @@ export {
   allStates,
   Countries,
   allOrganizations,
+  userSocials,
   setOrganizations,
   countryIsSelected,
   setCountry,

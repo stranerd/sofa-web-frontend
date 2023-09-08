@@ -346,8 +346,8 @@
           ref="socials.website"
           :custom-class="'border-[1px]'"
           :rules="[FormValidations.UrlRule]"
-          v-model="updateProfileForm.socials[0].link"
-          :defaultValue="updateProfileForm.socials[0].link"
+          v-model="userSocials.socials[0].link"
+          :defaultValue="userSocials.socials[0].link"
         >
           <template v-slot:title> Website </template>
         </sofa-text-field>
@@ -359,8 +359,8 @@
           ref="socials.tiktok"
           :custom-class="'border-[1px]'"
           :rules="[FormValidations.UrlRule]"
-          v-model="updateProfileForm.socials[1].link"
-          :defaultValue="updateProfileForm.socials[1].link"
+          v-model="userSocials.socials[1].link"
+          :defaultValue="userSocials.socials[1].link"
         >
           <template v-slot:title> TikTok </template>
         </sofa-text-field>
@@ -372,8 +372,8 @@
           ref="socials.youtube"
           :rules="[FormValidations.UrlRule]"
           :custom-class="'border-[1px]'"
-          v-model="updateProfileForm.socials[2].link"
-          :defaultValue="updateProfileForm.socials[2].link"
+          v-model="userSocials.socials[2].link"
+          :defaultValue="userSocials.socials[2].link"
         >
           <template v-slot:title> YouTube </template>
         </sofa-text-field>
@@ -385,8 +385,8 @@
           ref="socials.instagram"
           :rules="[FormValidations.UrlRule]"
           :custom-class="'border-[1px]'"
-          v-model="updateProfileForm.socials[3].link"
-          :defaultValue="updateProfileForm.socials[3].link"
+          v-model="userSocials.socials[3].link"
+          :defaultValue="userSocials.socials[3].link"
         >
           <template v-slot:title> Instagram </template>
         </sofa-text-field>
@@ -398,8 +398,8 @@
           ref="socials.twitter"
           :rules="[FormValidations.UrlRule]"
           :custom-class="'border-[1px]'"
-          v-model="updateProfileForm.socials[4].link"
-          :defaultValue="updateProfileForm.socials[4].link"
+          v-model="userSocials.socials[4].link"
+          :defaultValue="userSocials.socials[4].link"
         >
           <template v-slot:title> Twitter </template>
         </sofa-text-field>
@@ -411,8 +411,8 @@
           ref="socials.facebook"
           :rules="[FormValidations.UrlRule]"
           :custom-class="'border-[1px]'"
-          v-model="updateProfileForm.socials[5].link"
-          :defaultValue="updateProfileForm.socials[5].link"
+          v-model="userSocials.socials[5].link"
+          :defaultValue="userSocials.socials[5].link"
         >
           <template v-slot:title> Facebook </template>
         </sofa-text-field>
@@ -448,6 +448,7 @@ import {
   submitVerification,
   updateProfileForm,
   updateVerificationForm,
+  userSocials,
 } from "@/composables/profile";
 import { SelectOption } from "sofa-logic/src/logic/types/common";
 
@@ -751,9 +752,17 @@ export default defineComponent({
       }, 500);
     });
 
+    watch(userSocials, () => {
+      Logic.Common.debounce(() => {
+        Logic.Users.UpdateUserSocialForm = {
+          socials: userSocials.socials.filter((item) => item.link),
+        };
+        Logic.Users.UpdateUserSocial();
+      }, 500);
+    });
+
     return {
       moment,
-      cancle,
       quizContents,
       courseContents,
       updateProfileForm,
@@ -766,12 +775,14 @@ export default defineComponent({
       showAddMaterial,
       addMaterialType,
       Logic,
-      capitalize,
       allMaterials,
       selectedMaterial,
+      userSocials,
       addMaterial,
       showAddMaterialHandler,
       submitVerification,
+      capitalize,
+      cancle,
     };
   },
 });

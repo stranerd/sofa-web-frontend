@@ -415,7 +415,6 @@ export default defineComponent({
       profileImageUrl.value = UserProfile.value.bio.photo?.link || null;
       updateProfileForm.description = UserProfile.value.bio.description;
       updateProfileForm.name = UserProfile.value.bio.name;
-      updateProfileForm.socials = UserProfile.value.socials;
       updateProfileForm.state = UserProfile.value.location.state;
       updateProfileForm.country = UserProfile.value.location.country;
 

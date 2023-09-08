@@ -32,7 +32,9 @@ const router = Promise.all(routes).then((routes) => {
   router.beforeEach((to, from, next) => {
     const toRouter: any = to
     const fromRouter: any = from
-    return Logic.Common.preFetchRouteData(toRouter, next, fromRouter)
+    Logic.Common.preFetchRouteData(toRouter, next, fromRouter).then(() => {
+      return
+    })
   })
 
   return router

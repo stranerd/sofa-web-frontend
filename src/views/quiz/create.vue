@@ -11,7 +11,9 @@
               name: 'Preview',
               icon: 'preview',
               handler: () => {
-                Logic.Common.GoToRoute('/quiz/' + Logic.Study.SingleQuiz?.id);
+                Logic.Common.GoToRoute(
+                  '/marketplace/' + Logic.Study.SingleQuiz?.id + '?type=quiz'
+                );
               },
               size: 'h-[17px]',
             },
@@ -25,13 +27,7 @@
             },
           ],
         },
-        {
-          IsOutlined: true,
-          name: 'Exit',
-          handler: () => {
-            Logic.Common.goBack();
-          },
-        },
+        ...actionButtonItems,
       ],
     }"
     :hideSmNavigator="{
@@ -248,7 +244,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToTop } from "@/composables";
@@ -333,6 +329,16 @@ export default defineComponent({
       Logic.Common.GoToRoute("/");
     };
 
+    const actionButtonItems = reactive([
+      {
+        IsOutlined: true,
+        name: "Exit",
+        handler: () => {
+          Logic.Common.goBack();
+        },
+      },
+    ]);
+
     const selectedQuestion = ref(0);
 
     const showMoreOptions = ref(false);
@@ -370,11 +376,34 @@ export default defineComponent({
       Logic.Study.watchProperty("AllQuestions", AllQuestions);
       scrollToTop();
       switchToEdit();
+
+      // set save button
+      if (SingleQuiz.value.title == "Untitled Quiz") {
+        actionButtonItems.push({
+          IsOutlined: false,
+          name: "Save",
+          handler: () => {
+            showSettingModal.value = true;
+          },
+        });
+      }
     });
 
     watch(SingleQuiz, () => {
       if (SingleQuiz.value) {
         showSettingModal.value = false;
+
+        // remove save button
+        if (SingleQuiz.value.title != "Untitled Quiz") {
+          actionButtonItems.length = 0;
+          actionButtonItems.push({
+            IsOutlined: true,
+            name: "Exit",
+            handler: () => {
+              Logic.Common.goBack();
+            },
+          });
+        }
       }
     });
 
@@ -410,6 +439,7 @@ export default defineComponent({
       AllQuestions,
       showSettings,
       handleMobileGoback,
+      actionButtonItems,
     };
   },
 });

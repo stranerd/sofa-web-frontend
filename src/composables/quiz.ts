@@ -26,9 +26,9 @@ const scoreBoardParticipants = reactive<
 
 const quizSettingsForm = reactive({
   description: '',
-  tagIds: [],
+  tags: [],
   title: '',
-  topicId: '',
+  topic: '',
   photo: undefined,
   visibility: '',
 })
@@ -136,9 +136,9 @@ const quizSettingSaved = ref(false)
 const createQuiz = (formComp: any) => {
   Logic.Study.CreateQuizForm = {
     description: quizSettingsForm.description,
-    tagIds: quizSettingsForm.tagIds,
+    tags: quizSettingsForm.tags,
     title: quizSettingsForm.title,
-    topicId: quizSettingsForm.topicId,
+    topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
   }
 
@@ -159,9 +159,9 @@ const createQuiz = (formComp: any) => {
 const updateQuiz = (formComp: any) => {
   Logic.Study.UpdateQuizForm = {
     description: quizSettingsForm.description,
-    tagIds: quizSettingsForm.tagIds,
+    tags: quizSettingsForm.tags,
     title: quizSettingsForm.title,
-    topicId: quizSettingsForm.topicId,
+    topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
   }
 

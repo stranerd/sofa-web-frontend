@@ -205,8 +205,8 @@
         :placeholder="'Website'"
         :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
         :borderColor="'border-transparent'"
-        v-model="updateProfileForm.socials[0].link"
-        :defaultValue="updateProfileForm.socials[0].link"
+        v-model="userSocials.socials[0].link"
+        :defaultValue="userSocials.socials[0].link"
       >
       </sofa-text-field>
 
@@ -219,8 +219,8 @@
         :placeholder="'TikTok'"
         :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
         :borderColor="'border-transparent'"
-        v-model="updateProfileForm.socials[1].link"
-        :defaultValue="updateProfileForm.socials[1].link"
+        v-model="userSocials.socials[1].link"
+        :defaultValue="userSocials.socials[1].link"
       >
       </sofa-text-field>
 
@@ -233,8 +233,8 @@
         :placeholder="'YouTube'"
         :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
         :borderColor="'border-transparent'"
-        v-model="updateProfileForm.socials[2].link"
-        :defaultValue="updateProfileForm.socials[2].link"
+        v-model="userSocials.socials[2].link"
+        :defaultValue="userSocials.socials[2].link"
       >
       </sofa-text-field>
 
@@ -247,8 +247,8 @@
         :placeholder="'Instagram'"
         :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
         :borderColor="'border-transparent'"
-        v-model="updateProfileForm.socials[3].link"
-        :defaultValue="updateProfileForm.socials[3].link"
+        v-model="userSocials.socials[3].link"
+        :defaultValue="userSocials.socials[3].link"
       >
       </sofa-text-field>
 
@@ -261,8 +261,8 @@
         :placeholder="'Twitter'"
         :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
         :borderColor="'border-transparent'"
-        v-model="updateProfileForm.socials[4].link"
-        :defaultValue="updateProfileForm.socials[4].link"
+        v-model="userSocials.socials[4].link"
+        :defaultValue="userSocials.socials[4].link"
       >
       </sofa-text-field>
 
@@ -275,8 +275,8 @@
         :placeholder="'Facebook'"
         :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
         :borderColor="'border-transparent'"
-        v-model="updateProfileForm.socials[5].link"
-        :defaultValue="updateProfileForm.socials[5].link"
+        v-model="userSocials.socials[5].link"
+        :defaultValue="userSocials.socials[5].link"
       >
       </sofa-text-field>
     </div>
@@ -309,6 +309,7 @@ import {
   UpdateUserEducation,
   updateUserEducationForm,
   updateVerificationForm,
+  userSocials,
 } from "@/composables/profile";
 import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
@@ -419,6 +420,15 @@ export default defineComponent({
       }
     });
 
+    watch(userSocials, () => {
+      Logic.Common.debounce(() => {
+        Logic.Users.UpdateUserSocialForm = {
+          socials: userSocials.socials.filter((item) => item.link),
+        };
+        Logic.Users.UpdateUserSocial();
+      }, 500);
+    });
+
     return {
       profileImageUrl,
       FormValidations,
@@ -428,13 +438,14 @@ export default defineComponent({
       updateUserEducationForm,
       educationOptions,
       accountTypeOption,
-      setSchoolsOption,
-      handleSchoolSelection,
-      setDepartmentsOptions,
       updateVerificationForm,
       UserVerification,
       UserProfile,
       Logic,
+      userSocials,
+      setSchoolsOption,
+      handleSchoolSelection,
+      setDepartmentsOptions,
     };
   },
 });
