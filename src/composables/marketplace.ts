@@ -16,6 +16,8 @@ export interface ContentDetails {
   username?: string
   userPhoto: string
   price?: number
+  type?: 'quiz' | 'course'
+  userId: string
 }
 
 const AllCourses = ref(Logic.Study.AllCourses)
@@ -243,6 +245,7 @@ const extractContent = (item: Quiz | Course) => {
     username: item.user.bio.name.full,
     price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
     userPhoto: item.user.bio.photo ? item.user.bio.photo.link : '',
+    userId: item.user.id,
   }
 }
 

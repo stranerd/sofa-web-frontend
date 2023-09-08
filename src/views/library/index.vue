@@ -221,15 +221,37 @@
                   @click="showQuizOptions(activity.id)"
                 >
                   <template v-slot:extra>
-                    <sofa-icon
-                      :name="'more-options-horizontal'"
-                      :customClass="'h-[6px] hidden mdlg:!inline-block !cursor-pointer'"
-                      @click="showQuizOptions(activity.id)"
-                    />
-
-                    <span
-                      @click.stop="Logic.Common.GoToRoute(activity.routePath)"
+                    <div
+                      class="relative"
+                      :tabindex="Math.random() * 100"
+                      @blur="activity.showMore = false"
                     >
+                      <sofa-icon
+                        :name="'more-options-horizontal'"
+                        :customClass="'h-[6px] hidden mdlg:!inline-block !cursor-pointer'"
+                        @click.stop="showMoreOptionHandler(activity, 'quiz')"
+                      />
+                      <div
+                        class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
+                        v-if="activity.showMore"
+                      >
+                        <div
+                          class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
+                          v-for="(item, index) in moreOptions"
+                          :key="index"
+                          @click.stop="item.action()"
+                        >
+                          <sofa-icon
+                            :name="item.icon"
+                            :customClass="'h-[15px]'"
+                          />
+                          <sofa-normal-text>
+                            {{ item.title }}
+                          </sofa-normal-text>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="invisible">
                       <sofa-icon name="edit-gray" :customClass="'h-[20px]'" />
                     </span>
                   </template>
@@ -258,14 +280,38 @@
                   @click="Logic.Common.GoToRoute('/course/' + activity.id)"
                 >
                   <template v-slot:extra>
-                    <sofa-icon
-                      :name="'more-options-horizontal'"
-                      :customClass="'h-[6px] hidden mdlg:!inline-block !cursor-pointer invisible'"
-                    />
-
-                    <span
-                      @click.stop="Logic.Common.GoToRoute(activity.routePath)"
+                    <div
+                      class="relative"
+                      :tabindex="Math.random() * 100"
+                      @blur="activity.showMore = false"
                     >
+                      <sofa-icon
+                        :name="'more-options-horizontal'"
+                        :customClass="'h-[6px] hidden mdlg:!inline-block !cursor-pointer'"
+                        @click.stop="showMoreOptionHandler(activity, 'course')"
+                      />
+                      <div
+                        class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
+                        v-if="activity.showMore"
+                      >
+                        <div
+                          class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
+                          v-for="(item, index) in moreOptions"
+                          :key="index"
+                          @click.stop="item.action()"
+                        >
+                          <sofa-icon
+                            :name="item.icon"
+                            :customClass="'h-[15px]'"
+                          />
+                          <sofa-normal-text>
+                            {{ item.title }}
+                          </sofa-normal-text>
+                        </div>
+                      </div>
+                    </div>
+
+                    <span class="invisible">
                       <sofa-icon name="edit-gray" :customClass="'h-[20px]'" />
                     </span>
                   </template>
@@ -626,6 +672,9 @@ import {
   currentFolderItems,
   showDeleteFolder,
   deleteFolder,
+  moreOptions,
+  showMoreOptionHandler,
+  showMoreOptions,
 } from "@/composables/library";
 import { allOrganizations, setOrganizations } from "@/composables/profile";
 
@@ -853,6 +902,9 @@ export default defineComponent({
       selectedFolderId,
       goToFolder,
       allOrganizations,
+      moreOptions,
+      showMoreOptions,
+      showMoreOptionHandler,
     };
   },
 });

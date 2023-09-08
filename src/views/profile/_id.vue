@@ -156,7 +156,9 @@
           class="w-full flex flex-col mdlg:!space-y-4 space-y-3 mdlg:!pl-0 pl-4 z-40"
         >
           <div
-            class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
+            :class="`w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4 mdlg:pt-0 ${
+              userHasResources ? '' : 'pt-4'
+            }`"
           >
             <sofa-normal-text :customClass="'!font-bold'">
               Resources
@@ -172,7 +174,7 @@
           </div>
 
           <div
-            v-if="courseResources.length"
+            v-if="userMaterials.length"
             class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
           >
             <div
@@ -181,7 +183,7 @@
               <sofa-item-card
                 :content="content"
                 custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-                v-for="(content, index) in courseResources"
+                v-for="(content, index) in userMaterials"
                 :key="index"
                 @click="
                   Logic.Common.GoToRoute(
@@ -389,8 +391,11 @@ import {
   SofaModal,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import { AllCourses, createCourseData } from "@/composables/library";
+import {
+  Conditions,
+  QueryParams,
+} from "sofa-logic/src/logic/types/domains/common";
+import { createCourseData, createQuizData } from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -453,7 +458,8 @@ export default defineComponent({
     const joinCode = ref("");
     const singleUser = ref(Logic.Users.SingleUser);
     const allCourses = ref(Logic.Study.AllCourses);
-    const courseResources = ref<any[]>([]);
+    const allQuizzes = ref(Logic.Study.AllQuzzies);
+    const userMaterials = ref<any[]>([]);
     const userVerifications = ref(Logic.Users.Verifications);
 
     const hasAtleastASocialLink = ref(false);
@@ -593,15 +599,23 @@ export default defineComponent({
       ],
     };
 
-    const setCourseContent = () => {
-      courseResources.value.length = 0;
-      AllCourses.value?.results?.forEach((course) => {
-        courseResources.value.push(createCourseData(course));
+    const setMaterials = () => {
+      userMaterials.value.length = 0;
+      allCourses.value?.results?.forEach((course) => {
+        userMaterials.value.push(createCourseData(course));
+      });
+      allQuizzes.value?.results?.forEach((quiz) => {
+        userMaterials.value.push(createQuizData(quiz));
       });
     };
 
-    const fetchCourses = () => {
-      Logic.Study.GetCourses({
+    const fetchMaterials = () => {
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      });
+
+      const query: QueryParams = {
         search: {
           value: searchQuery.value,
           fields: ["title"],
@@ -612,18 +626,62 @@ export default defineComponent({
             value: singleUser.value.id,
             condition: Conditions.eq,
           },
+          {
+            field: "status",
+            value: "published",
+            condition: Conditions.eq,
+          },
         ],
-      }).then(() => {
-        Logic.Common.hideLoader();
-      });
+        limit: 20,
+      };
+
+      const allRequests: Promise<any>[] = [];
+
+      // course search request
+      allRequests.push(
+        new Promise((resolve) => {
+          Logic.Study.GetCourses(query)
+            .then(() => {
+              resolve("");
+            })
+            .catch(() => {
+              resolve("");
+            });
+        })
+      );
+
+      // quiz search request
+      allRequests.push(
+        new Promise((resolve) => {
+          Logic.Study.GetQuizzes(query)
+            .then(() => {
+              resolve("");
+            })
+            .catch(() => {
+              resolve("");
+            });
+        })
+      );
+
+      Promise.all(allRequests)
+        .then(() => {
+          Logic.Common.hideLoader();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     watch(allCourses, () => {
-      setCourseContent();
+      setMaterials();
+    });
+
+    watch(allQuizzes, () => {
+      setMaterials();
     });
 
     watch(searchQuery, () => {
-      fetchCourses();
+      fetchMaterials();
     });
 
     const setProfileData = () => {
@@ -697,13 +755,18 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      setProfileData();
-      fetchCourses();
-      scrollToTop();
       Logic.Study.watchProperty("AllCourses", allCourses);
-      if (allCourses.value.results.length) {
+      Logic.Study.watchProperty("AllQuzzies", allQuizzes);
+      if (
+        allCourses.value?.results.length ||
+        allQuizzes.value?.results.length
+      ) {
         userHasResources.value = true;
       }
+
+      setProfileData();
+      fetchMaterials();
+      scrollToTop();
     });
 
     return {
@@ -718,7 +781,7 @@ export default defineComponent({
       singleUser,
       userVerifications,
       allCourses,
-      courseResources,
+      userMaterials,
       showModal,
       modalSetup,
       joinCode,

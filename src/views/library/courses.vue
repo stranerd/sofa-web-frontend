@@ -41,16 +41,20 @@
             v-for="(activity, index) in currentCourseData"
             :key="index"
             :activity="activity"
-            :custom-class="'!bg-white shadow-custom cursor-pointer'"
+            :custom-class="'!bg-white shadow-custom cursor-pointer relative'"
             @click="Logic.Common.GoToRoute('/course/' + activity.id)"
             :isWrapped="true"
-            :hasEdit="true"
-            :editAction="
-              () => {
-                Logic.Common.GoToRoute(activity.routePath);
-              }
-            "
-          />
+          >
+            <div
+              class="absolute right-0 top-0 py-3 px-3 bg-white rounded-tr-[8px]"
+            >
+              <sofa-icon
+                :name="'more-options-horizontal'"
+                :customClass="'h-[6px] '"
+                @click.stop="showMoreOptionHandler(activity, 'course')"
+              />
+            </div>
+          </sofa-activity-card>
         </template>
 
         <sofa-empty-state
@@ -68,6 +72,56 @@
 
       <div class="w-full flex flex-row h-[100px]"></div>
     </div>
+
+    <!-- More options -->
+    <sofa-modal
+      v-if="showMoreOptions"
+      :close="
+        () => {
+          showMoreOptions = false;
+        }
+      "
+    >
+      <div
+        class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
+        @click.stop="
+          () => {
+            //
+          }
+        "
+      >
+        <div
+          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center"
+        >
+          <div
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4"
+          >
+            <sofa-normal-text :customClass="'!font-bold !text-base'">
+              Options
+            </sofa-normal-text>
+            <sofa-icon
+              :customClass="'h-[19px]'"
+              :name="'circle-close'"
+              @click="showMoreOptions = false"
+            />
+          </div>
+
+          <div class="w-full flex flex-col space-y-3 px-4 py-4">
+            <div
+              class="w-full flex flex-row items-center space-x-2 py-3"
+              v-for="(item, index) in moreOptions"
+              :key="index"
+              @click.stop="item.action()"
+            >
+              <sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
+              <sofa-normal-text>
+                {{ item.title }}
+              </sofa-normal-text>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sofa-modal>
   </sub-page-layout>
 </template>
 
@@ -80,10 +134,16 @@ import {
   SofaNormalText,
   SofaActivityCard,
   SofaEmptyState,
+  SofaModal,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import { ResourceType } from "sofa-logic/src/logic/types/domains/study";
+import {
+  moreOptions,
+  showMoreOptionHandler,
+  showMoreOptions,
+} from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -91,6 +151,7 @@ export default defineComponent({
     SofaNormalText,
     SofaActivityCard,
     SofaEmptyState,
+    SofaModal,
   },
   middlewares: {
     fetchRules: [
@@ -194,6 +255,8 @@ export default defineComponent({
           routePath: "/course/create?id=" + course.id,
           id: course.id,
           status: course.status,
+          showMore: false,
+          userId: course.user.id,
         });
       });
     };
@@ -227,6 +290,9 @@ export default defineComponent({
       courses,
       selectedItemId,
       currentCourseData,
+      showMoreOptions,
+      moreOptions,
+      showMoreOptionHandler,
     };
   },
 });

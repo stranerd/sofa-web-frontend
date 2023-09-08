@@ -5,7 +5,7 @@ import {
   Course,
   Folder,
 } from 'sofa-logic/src/logic/types/domains/study'
-import { ref, reactive } from 'vue'
+import { ref, reactive, capitalize } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
@@ -229,6 +229,8 @@ const createQuizData = (quiz: Quiz) => {
     status: quiz.status,
     userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : '',
     createdAt: quiz.createdAt,
+    showMore: false,
+    userId: quiz.user.id,
   }
   return data
 }
@@ -254,6 +256,8 @@ const createCourseData = (course: Course) => {
     status: course.status,
     userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
     createdAt: course.createdAt,
+    showMore: false,
+    userId: course.user.id,
   }
 
   return data
@@ -465,6 +469,110 @@ const deleteFolder = (id: string) => {
   })
 }
 
+const showMoreOptionHandler = (data: ResourceType, type: 'quiz' | 'course') => {
+  showMoreOptions.value = true
+  selectedItem.id = data.id
+  selectedItem.type = type
+  selectedItem.name = data.title
+  data.showMore = true
+}
+
+const reportMaterial = (type: string, name: string, id: string) => {
+  const queryMsg = `I have a feedback on the ${type} ${name} with ID - ${id}.`
+  if (Logic.Common.mediaQuery() == 'sm' || Logic.Common.mediaQuery() == 'md') {
+    Logic.Common.GoToRoute(`/settings/contact_us?query=${queryMsg}`)
+  } else {
+    Logic.Common.GoToRoute(`/settings?tab=contact_us&query=${queryMsg}`)
+  }
+}
+
+const selectedItem = reactive<{
+  id: string
+  type: 'quiz' | 'course'
+  name: string
+}>({
+  id: '',
+  type: 'course',
+  name: '',
+})
+
+const showMoreOptions = ref(false)
+
+const shareMaterialLink = async (
+  type: 'quiz' | 'course',
+  link: string,
+  title: string,
+) => {
+  // for web
+  const shareData = {
+    title: `${capitalize(type)} on SOFA`,
+    text: `View ${title} on SOFA`,
+    url: link,
+  }
+
+  try {
+    await navigator.share(shareData)
+    Logic.Common.showLoader({
+      show: true,
+      loading: false,
+      message: 'Game link shared.',
+      type: 'success',
+    })
+  } catch (err) {
+    console.log(err)
+    Logic.Common.showLoader({
+      show: true,
+      loading: false,
+      message: 'Unable to share link.',
+      type: 'error',
+    })
+  }
+}
+
+const moreOptions = reactive([
+  {
+    icon: 'edit-option',
+    title: 'Edit',
+    action: () => {
+      showMoreOptions.value = false
+      if (selectedItem.type == 'course') {
+        Logic.Common.GoToRoute(`/course/create?id=${selectedItem.id}`)
+      }
+
+      if (selectedItem.type == 'quiz') {
+        Logic.Common.GoToRoute(`/quiz/create?id=${selectedItem.id}`)
+      }
+    },
+  },
+  {
+    icon: 'share-option',
+    title: 'Share',
+    action: () => {
+      showMoreOptions.value = false
+      shareMaterialLink(
+        selectedItem.type,
+        `/${selectedItem.type}/create?id=${selectedItem.id}`,
+        selectedItem.name,
+      )
+    },
+  },
+  {
+    icon: 'report-option',
+    title: 'Report',
+    action: () => {
+      showMoreOptions.value = false
+      reportMaterial(selectedItem.type, selectedItem.name, selectedItem.id)
+    },
+  },
+  {
+    icon: 'remove-option',
+    title: 'Remove from library',
+    action: () => {
+      //
+    },
+  },
+])
+
 export {
   AllQuzzies,
   AllCourses,
@@ -491,6 +599,10 @@ export {
   showDeleteFolder,
   organizationFilterOption,
   organisations,
+  selectedItem,
+  showMoreOptions,
+  moreOptions,
+  showMoreOptionHandler,
   saveItemsToFolder,
   createQuizData,
   setQuizzes,
@@ -504,4 +616,5 @@ export {
   deleteFolder,
   showQuizOptions,
   createCourseData,
+  reportMaterial,
 }

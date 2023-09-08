@@ -65,7 +65,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import {
   SofaHeaderText,
   SofaIcon,
@@ -92,6 +92,12 @@ export default defineComponent({
         });
       }
     };
+
+    onMounted(() => {
+      if (Logic.Common.route.query?.query?.toString()) {
+        message.value = Logic.Common.route.query?.query?.toString();
+      }
+    });
     return {
       FormValidations,
       message,

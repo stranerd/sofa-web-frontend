@@ -62,7 +62,7 @@
           :hasTitle="true"
           :name="'First name'"
           ref="name.first"
-          :custom-class="'border-[1px]'"
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :rules="[FormValidations.RequiredRule]"
           v-model="updateProfileForm.name.first"
           :defaultValue="UserProfile.bio.name.first"
@@ -75,7 +75,7 @@
           :hasTitle="true"
           :name="'Last name'"
           ref="name.last"
-          :custom-class="'border-[1px]'"
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :rules="[FormValidations.RequiredRule]"
           v-model="updateProfileForm.name.last"
           :defaultValue="UserProfile.bio.name.last"
@@ -87,9 +87,9 @@
           :placeholder="'Description of yourself'"
           :hasTitle="true"
           :rich-editor="false"
-          :text-area-style="'border-[1px] border-[#E1E6EB] rounded-[8px] resize-none'"
           :name="'Bio'"
           ref="description"
+          :text-area-style="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor resize-none'"
           :rules="[FormValidations.RequiredRule]"
           v-if="UserProfile"
           v-model="updateProfileForm.description"
@@ -116,28 +116,26 @@
         </div>
 
         <div class="w-full flex flex-col space-y-2">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Courses
-          </sofa-normal-text>
-
-          <div
-            class="w-full md:!grid grid-cols-3 md:!gap-4 flex flex-col space-y-4 md:!space-y-0"
-          >
-            <template v-for="(content, index) in selectedCourses" :key="index">
+          <div class="w-full flex flex-col space-y-4 md:!space-y-4">
+            <template
+              v-for="(content, index) in selectedMaterialList"
+              :key="index"
+            >
               <template v-if="Logic.Common.mediaQuery() != 'sm'">
-                <sofa-item-card
+                <sofa-activity-card
                   v-if="content.subject"
-                  :content="content"
+                  :activity="content"
+                  :customClass="'!bg-backgroundGray !w-full cursor-pointer'"
                   @click="
                     Logic.Common.GoToRoute('/course/create?id=' + content.id)
                   "
-                ></sofa-item-card>
+                ></sofa-activity-card>
               </template>
               <template v-else>
                 <sofa-activity-card
                   :activity="content"
-                  :isWrapped="true"
                   :customClass="'!bg-backgroundGray'"
+                  :is-wrapped="true"
                   @click="
                     Logic.Common.GoToRoute('/course/create?id=' + content.id)
                   "
@@ -145,62 +143,20 @@
                 </sofa-activity-card>
               </template>
             </template>
-            <div
-              @click="showAddMaterialHandler('course')"
-              class="col-span-1 w-full flex cursor-pointer flex-row space-x-3 md:!min-h-[240px] min-h-[50px] justify-center items-center px-4 py-4 border-[2px] rounded-[16px] border-[#E1E6EB]"
-            >
-              <sofa-icon
-                :name="'box-plus'"
-                :customClass="'h-[18px]'"
-              ></sofa-icon>
-              <sofa-normal-text :color="'text-grayColor '">
-                Add course
-              </sofa-normal-text>
-            </div>
-          </div>
-        </div>
 
-        <div class="w-full flex flex-col space-y-2">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Quizzes
-          </sofa-normal-text>
-
-          <div
-            class="w-full md:!grid grid-cols-3 md:!gap-4 flex flex-col space-y-4 md:!space-y-0"
-          >
-            <template v-for="(content, index) in selectedQuiz" :key="index">
-              <template v-if="Logic.Common.mediaQuery() != 'sm'">
-                <sofa-item-card
-                  v-if="content.subject"
-                  :content="content"
-                  @click="
-                    Logic.Common.GoToRoute('/course/create?id=' + content.id)
-                  "
-                ></sofa-item-card>
-              </template>
-              <template v-else>
-                <sofa-activity-card
-                  :activity="content"
-                  :isWrapped="true"
-                  :customClass="'!bg-backgroundGray'"
-                  @click="
-                    Logic.Common.GoToRoute('/course/create?id=' + content.id)
-                  "
-                >
-                </sofa-activity-card>
-              </template>
-            </template>
-            <div
-              @click="showAddMaterialHandler('quiz')"
-              class="col-span-1 w-full flex flex-row cursor-pointer space-x-3 justify-center md:!min-h-[240px] min-h-[50px] items-center px-4 py-4 border-[2px] rounded-[16px] border-[#E1E6EB]"
-            >
-              <sofa-icon
-                :name="'box-plus'"
-                :customClass="'h-[18px]'"
-              ></sofa-icon>
-              <sofa-normal-text :color="'text-grayColor '">
-                Add quiz
-              </sofa-normal-text>
+            <div class="w-full flex flex-col">
+              <div
+                @click="showAddMaterialHandler()"
+                class="w-full flex cursor-pointer flex-row space-x-3 md:!min-h-[140px] min-h-[50px] justify-center items-center px-4 py-4 border-[2px] rounded-[16px] border-[#E1E6EB]"
+              >
+                <sofa-icon
+                  :name="'box-add-pink'"
+                  :customClass="'h-[18px]'"
+                ></sofa-icon>
+                <sofa-normal-text :color="'text-primaryPink '">
+                  Add content
+                </sofa-normal-text>
+              </div>
             </div>
           </div>
         </div>
@@ -245,7 +201,7 @@
           >
             <div class="w-full text-center hidden md:!inline-block">
               <sofa-header-text :customClass="'!text-xl !font-bold '"
-                >Add a {{ addMaterialType }}</sofa-header-text
+                >Add a Material</sofa-header-text
               >
             </div>
 
@@ -253,7 +209,7 @@
               class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden"
             >
               <sofa-normal-text :customClass="'!font-bold !text-base'">
-                Add a {{ addMaterialType }}
+                Add a Material
               </sofa-normal-text>
               <sofa-icon
                 :customClass="'h-[16px]'"
@@ -268,7 +224,7 @@
                 :padding="'md:!py-4 md:!px-4 px-3 py-3'"
                 :name="capitalize(addMaterialType)"
                 :ref="addMaterialType"
-                :placeholder="capitalize(addMaterialType)"
+                :placeholder="'Select material'"
                 :rules="[FormValidations.RequiredRule]"
                 :autoComplete="false"
                 :borderColor="'border-transparent'"
@@ -276,18 +232,8 @@
                 :hasTitle="true"
                 v-model="selectedMaterial"
               >
-                <template v-slot:title>
-                  Choose a {{ addMaterialType }}
-                </template>
+                <template v-slot:title> Choose a material </template>
               </sofa-select>
-
-              <div
-                class="w-full flex flex-row items-center justify-center py-3"
-              >
-                <sofa-button :padding="'px-5 py-2'" @click="addMaterial()">
-                  Add
-                </sofa-button>
-              </div>
 
               <div
                 class="w-full flex flex-row items-center justify-between z-[50] bg-white"
@@ -306,15 +252,9 @@
                   <sofa-button
                     :padding="'px-5 py-2'"
                     :customClass="'mdlg:!w-auto w-full'"
-                    @click="
-                      Logic.Common.GoToRoute(
-                        addMaterialType == 'quiz'
-                          ? `/quiz/create`
-                          : `/course/create`
-                      )
-                    "
+                    @click="addMaterial()"
                   >
-                    Create a {{ addMaterialType }}
+                    Add
                   </sofa-button>
                 </div>
               </div>
@@ -332,90 +272,71 @@
           <sofa-header-text
             :customClass="'!font-bold flex flex-row justify-start'"
           >
-            Social media
+            Add links (optional)
           </sofa-header-text>
           <sofa-normal-text
-            >Connect your educational social media
+            >Your educational website and socials
           </sofa-normal-text>
         </div>
 
         <sofa-text-field
-          :placeholder="'Add link'"
-          :hasTitle="true"
+          v-for="(item, index) in allLinks"
+          :key="index"
+          :placeholder="capitalize(item.ref)"
           :name="'Website'"
           ref="socials.website"
-          :custom-class="'border-[1px]'"
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :rules="[FormValidations.UrlRule]"
-          v-model="userSocials.socials[0].link"
-          :defaultValue="userSocials.socials[0].link"
+          v-model="item.link"
+          :defaultValue="item.link"
         >
-          <template v-slot:title> Website </template>
+          <template v-slot:inner-prefix>
+            <sofa-icon
+              :name="item.icon"
+              :customClass="`${item.iconSize} cursor-pointer `"
+            />
+          </template>
         </sofa-text-field>
 
-        <sofa-text-field
-          :placeholder="'Add link (optional)'"
-          :hasTitle="true"
-          :name="'TikTok'"
-          ref="socials.tiktok"
-          :custom-class="'border-[1px]'"
-          :rules="[FormValidations.UrlRule]"
-          v-model="userSocials.socials[1].link"
-          :defaultValue="userSocials.socials[1].link"
+        <div
+          class="w-full flex flex-col space-y-3 pt-2"
+          v-if="allLinks.length != profileLinks.length"
         >
-          <template v-slot:title> TikTok </template>
-        </sofa-text-field>
+          <div
+            class="w-full flex flex-row items-center justify-start space-x-3 py-3 px-3 custom-border border-[2px] border-[#E1E6EB] cursor-pointer"
+            @click="
+              showAddNewItems
+                ? (showAddNewItems = false)
+                : (showAddNewItems = true)
+            "
+          >
+            <sofa-icon :name="'box-plus'" :customClass="'h-[20px]'" />
+            <sofa-normal-text :color="'text-[#78828C]'">
+              Add link
+            </sofa-normal-text>
+          </div>
 
-        <sofa-text-field
-          :placeholder="'Add link (optional)'"
-          :hasTitle="true"
-          :name="'Youtube'"
-          ref="socials.youtube"
-          :rules="[FormValidations.UrlRule]"
-          :custom-class="'border-[1px]'"
-          v-model="userSocials.socials[2].link"
-          :defaultValue="userSocials.socials[2].link"
-        >
-          <template v-slot:title> YouTube </template>
-        </sofa-text-field>
-
-        <sofa-text-field
-          :placeholder="'Add link (optional)'"
-          :hasTitle="true"
-          :name="'Instagram'"
-          ref="socials.instagram"
-          :rules="[FormValidations.UrlRule]"
-          :custom-class="'border-[1px]'"
-          v-model="userSocials.socials[3].link"
-          :defaultValue="userSocials.socials[3].link"
-        >
-          <template v-slot:title> Instagram </template>
-        </sofa-text-field>
-
-        <sofa-text-field
-          :placeholder="'Add link (optional)'"
-          :hasTitle="true"
-          :name="'Twitter'"
-          ref="socials.twitter"
-          :rules="[FormValidations.UrlRule]"
-          :custom-class="'border-[1px]'"
-          v-model="userSocials.socials[4].link"
-          :defaultValue="userSocials.socials[4].link"
-        >
-          <template v-slot:title> Twitter </template>
-        </sofa-text-field>
-
-        <sofa-text-field
-          :placeholder="'Add link (optional)'"
-          :hasTitle="true"
-          :name="'Facebook'"
-          ref="socials.facebook"
-          :rules="[FormValidations.UrlRule]"
-          :custom-class="'border-[1px]'"
-          v-model="userSocials.socials[5].link"
-          :defaultValue="userSocials.socials[5].link"
-        >
-          <template v-slot:title> Facebook </template>
-        </sofa-text-field>
+          <div class="w-full flex flex-col space-y-2" v-if="showAddNewItems">
+            <div
+              class="w-full flex flex-row items-center justify-start space-x-3 py-3 px-3 custom-border border-[2px] border-[#E1E6EB] cursor-pointer"
+              @click="addNewLink(item.ref)"
+              v-for="(item, index) in profileLinks.filter(
+                (item) =>
+                  allLinks.filter((eachItem) => eachItem.ref == item.ref)
+                    .length == 0
+              )"
+              :key="index"
+            >
+              <sofa-icon
+                :name="item.icon"
+                :customClass="`${item.iconSize} cursor-pointer `"
+              />
+              <sofa-normal-text :color="'text-[#78828C]'">
+                {{ item.ref }}
+              </sofa-normal-text>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="h-[80px] mdlg:!hidden flex"></div>
     </template>
@@ -423,7 +344,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, capitalize, watch } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  capitalize,
+  watch,
+  reactive,
+} from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { FormValidations, scrollToTop } from "@/composables";
@@ -433,7 +361,6 @@ import {
   SofaHeaderText,
   SofaTextField,
   SofaTextarea,
-  SofaItemCard,
   SofaImageLoader,
   SofaFileAttachment,
   SofaModal,
@@ -451,6 +378,7 @@ import {
   userSocials,
 } from "@/composables/profile";
 import { SelectOption } from "sofa-logic/src/logic/types/common";
+import { ContentDetails } from "@/composables/marketplace";
 
 export default defineComponent({
   components: {
@@ -459,7 +387,6 @@ export default defineComponent({
     SofaHeaderText,
     SofaTextField,
     SofaTextarea,
-    SofaItemCard,
     SofaImageLoader,
     SofaFileAttachment,
     SofaModal,
@@ -559,13 +486,78 @@ export default defineComponent({
     const AllQuzzies = ref(Logic.Study.AllQuzzies);
     const AllCourses = ref(Logic.Study.AllCourses);
 
-    const selectedCourses = ref<any[]>([]);
-    const selectedQuiz = ref<any[]>([]);
+    const showAddNewItems = ref(false);
+
+    const selectedMaterialList = ref<ContentDetails[]>([]);
+
+    const allMaterialsContents = ref<ContentDetails[]>([]);
 
     const showAddMaterial = ref(false);
     const addMaterialType = ref("course");
     const allMaterials = ref<SelectOption[]>([]);
     const selectedMaterial = ref("");
+
+    const profileLinks = reactive([
+      {
+        icon: "website",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "website",
+        show: false,
+      },
+      {
+        icon: "youtube",
+        link: "",
+        iconSize: "h-[19px]",
+        ref: "youtube",
+        show: false,
+      },
+      {
+        icon: "instagram-social",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "instagram",
+        show: false,
+      },
+      {
+        icon: "tiktok-social",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "tiktok",
+        show: false,
+      },
+      {
+        icon: "facebook-social",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "facebook",
+        show: false,
+      },
+      {
+        icon: "twitter-social",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "twitter",
+        show: false,
+      },
+    ]);
+
+    const allLinks = reactive([
+      {
+        icon: "website",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "website",
+        show: false,
+      },
+      {
+        icon: "tiktok-social",
+        link: "",
+        iconSize: "h-[20px]",
+        ref: "tiktok",
+        show: false,
+      },
+    ]);
 
     const UserVerification = ref(Logic.Users.Verifications.results[0]);
 
@@ -579,13 +571,11 @@ export default defineComponent({
 
       if (UserVerification.value) {
         UserVerification.value.content.courses.forEach((courseId) => {
-          addMaterialType.value = "course";
           selectedMaterial.value = courseId;
           addMaterial();
         });
 
         UserVerification.value.content.quizzes.forEach((quizId) => {
-          addMaterialType.value = "quiz";
           selectedMaterial.value = quizId;
           addMaterial();
         });
@@ -600,62 +590,30 @@ export default defineComponent({
 
     const setMaterialsOptions = () => {
       allMaterials.value.length = 0;
-      if (addMaterialType.value == "course") {
-        AllCourses.value.results.forEach((course) => {
-          allMaterials.value.push({
-            key: course.id,
-            value: course.title,
-          });
-        });
-      } else {
-        AllQuzzies.value.results.forEach((quiz) => {
-          allMaterials.value.push({
-            key: quiz.id,
-            value: quiz.title,
-          });
-        });
-      }
-    };
-    const quizContents = ref<
-      {
-        id: string;
-        subject?: string;
-        title?: string;
-        image?: string;
-        labels?: {
-          main: string;
-          sub: string;
-          color: string;
-        };
-        username?: string;
-        userPhoto: string;
-        price?: number;
-      }[]
-    >([]);
 
-    const courseContents = ref<
-      {
-        id: string;
-        subject?: string;
-        title?: string;
-        image?: string;
-        labels?: {
-          main: string;
-          sub: string;
-          color: string;
-        };
-        username?: string;
-        userPhoto: string;
-        price?: number;
-      }[]
-    >([]);
-
-    const setMaterials = () => {
-      quizContents.value.length = 0;
-      courseContents.value.length = 0;
+      AllCourses.value.results.forEach((course) => {
+        allMaterials.value.push({
+          key: course.id,
+          value: course.title,
+        });
+      });
 
       AllQuzzies.value.results.forEach((quiz) => {
-        quizContents.value.push({
+        allMaterials.value.push({
+          key: quiz.id,
+          value: quiz.title,
+        });
+      });
+    };
+    const quizContents = ref<ContentDetails[]>([]);
+
+    const courseContents = ref<ContentDetails[]>([]);
+
+    const setMaterials = () => {
+      allMaterialsContents.value.length = 0;
+
+      AllQuzzies.value.results.forEach((quiz) => {
+        allMaterialsContents.value.push({
           id: quiz.id,
           subject: Logic.Study.GetTagName(quiz.topicId),
           title: quiz.title,
@@ -668,11 +626,13 @@ export default defineComponent({
           username: quiz.user.bio.name.full,
           price: 0,
           userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : "",
+          type: "quiz",
+          userId: quiz.user.id,
         });
       });
 
       AllCourses.value.results.forEach((course) => {
-        courseContents.value.push({
+        allMaterialsContents.value.push({
           id: course.id,
           subject: Logic.Study.GetTagName(course.topicId),
           title: course.title,
@@ -685,12 +645,13 @@ export default defineComponent({
           username: course.user.bio.name.full,
           price: course.price.amount,
           userPhoto: course.user.bio.photo ? course.user.bio.photo.link : "",
+          type: "course",
+          userId: course.user.id,
         });
       });
     };
 
-    const showAddMaterialHandler = (type: string) => {
-      addMaterialType.value = type;
+    const showAddMaterialHandler = () => {
       setMaterialsOptions();
       selectedMaterial.value;
       showAddMaterial.value = true;
@@ -698,40 +659,34 @@ export default defineComponent({
 
     const addMaterial = () => {
       if (selectedMaterial.value) {
-        if (addMaterialType.value == "quiz") {
-          const quizMaterial = quizContents.value.filter(
-            (quiz) => quiz.id == selectedMaterial.value
-          );
-          if (
-            selectedQuiz.value.filter(
-              (item) => item.id == selectedMaterial.value
-            ).length == 0
-          ) {
-            selectedQuiz.value.push(quizMaterial[0]);
+        const currentMaterial = allMaterialsContents.value.filter(
+          (item) => item.id == selectedMaterial.value
+        );
+
+        if (
+          selectedMaterialList.value.filter(
+            (item) => item.id == selectedMaterial.value
+          ).length == 0
+        ) {
+          selectedMaterialList.value.push(currentMaterial[0]);
+
+          if (currentMaterial[0].type == "quiz") {
+            updateVerificationForm.content.quizzes.push(currentMaterial[0].id);
           }
-
-          updateVerificationForm.content.quizzes = selectedQuiz.value.map(
-            (item) => item.id
-          );
-        } else {
-          const courseMaterial = courseContents.value.filter(
-            (course) => course.id == selectedMaterial.value
-          );
-
-          if (
-            selectedCourses.value.filter(
-              (item) => item.id == selectedMaterial.value
-            ).length == 0
-          ) {
-            selectedCourses.value.push(courseMaterial[0]);
+          if (currentMaterial[0].type == "course") {
+            updateVerificationForm.content.courses.push(currentMaterial[0].id);
           }
-
-          updateVerificationForm.content.courses = selectedCourses.value.map(
-            (item) => item.id
-          );
         }
       }
       showAddMaterial.value = false;
+    };
+
+    const addNewLink = (ref: string) => {
+      const currentLink = profileLinks.filter((item) => item.ref == ref);
+
+      if (currentLink.length) {
+        allLinks.push(currentLink[0]);
+      }
     };
 
     onMounted(() => {
@@ -752,10 +707,17 @@ export default defineComponent({
       }, 500);
     });
 
-    watch(userSocials, () => {
+    watch(allLinks, () => {
       Logic.Common.debounce(() => {
         Logic.Users.UpdateUserSocialForm = {
-          socials: userSocials.socials.filter((item) => item.link),
+          socials: allLinks
+            .filter((item) => item.link)
+            .map((item) => {
+              return {
+                ref: item.ref,
+                link: item.link,
+              };
+            }),
         };
         Logic.Users.UpdateUserSocial();
       }, 500);
@@ -770,19 +732,22 @@ export default defineComponent({
       UserProfile,
       profileImageUrl,
       updateVerificationForm,
-      selectedQuiz,
-      selectedCourses,
+      selectedMaterialList,
       showAddMaterial,
       addMaterialType,
       Logic,
       allMaterials,
       selectedMaterial,
       userSocials,
+      allLinks,
+      profileLinks,
+      showAddNewItems,
       addMaterial,
       showAddMaterialHandler,
       submitVerification,
       capitalize,
       cancle,
+      addNewLink,
     };
   },
 });
