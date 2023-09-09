@@ -1,5 +1,5 @@
 import { Logic } from 'sofa-logic'
-import { Conditions, SelectOption } from 'sofa-logic/src/logic/types/common'
+import { SelectOption } from 'sofa-logic/src/logic/types/common'
 import {
   CreateDocumentInput,
   UpdateCourseSectionsInput,
@@ -39,63 +39,31 @@ const addCourseFileForm = reactive<CreateDocumentInput>({
 })
 
 const getTopics = () => {
-  Logic.Study.GetTags({
-    where: [
-      {
-        field: 'type',
-        value: 'topics',
-        condition: Conditions.eq,
-      },
-    ],
-  }).then((response) => {
-    if (response) {
-      const data = []
-      response?.results.forEach((tag) => {
-        data.push({
-          key: tag.title,
-          value: tag.title,
-        })
+  const data = []
+  Logic.Study.Tags?.results?.forEach((tag) => {
+    if (tag.type == 'topics') {
+      data.push({
+        key: tag.title,
+        value: tag.title,
       })
-      allTopics.value.length = 0
-      allTopics.value = data
     }
   })
+  allTopics.value.length = 0
+  allTopics.value = data
 }
 
 const getGenericTags = () => {
-  Logic.Study.GetTags({
-    where: [
-      {
-        field: 'type',
-        value: 'generic',
-        condition: Conditions.eq,
-      },
-    ],
-  }).then((response) => {
-    if (response) {
-      contentTypeOptions.value.length = 0
-      const data = []
-      response?.results.forEach((tag) => {
-        if (
-          tag.title == 'Past question' ||
-          tag.title == 'Note' ||
-          tag.title == 'Textbook solutions'
-        ) {
-          contentTypeOptions.value.push({
-            key: tag.title,
-            value: tag.title,
-          })
-        } else {
-          data.push({
-            key: tag.title,
-            value: tag.title,
-          })
-        }
+  const data = []
+  Logic.Study.Tags?.results?.forEach((tag) => {
+    if (tag.type == 'generic') {
+      data.push({
+        key: tag.title,
+        value: tag.title,
       })
-      allGenericTags.value.length = 0
-      allGenericTags.value = data
     }
   })
+  allGenericTags.value.length = 0
+  allGenericTags.value = data
 }
 
 const createCourse = (formComp: any) => {
@@ -140,15 +108,13 @@ const createCourse = (formComp: any) => {
 }
 
 const updateCourse = (formComp: any) => {
-  if (!courseSettingForm.contentType) return
-  const allTags = [...courseSettingForm.tags, courseSettingForm.contentType]
   Logic.Study.UpdateCourseForm = {
     description: courseSettingForm.description,
     price: {
       amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tags: allTags,
+    tags: courseSettingForm.tags,
     title: courseSettingForm.title,
     topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,

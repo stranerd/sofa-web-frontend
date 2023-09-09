@@ -12,7 +12,7 @@
               icon: 'preview',
               handler: () => {
                 Logic.Common.GoToRoute(
-                  '/marketplace/' + Logic.Study.SingleQuiz?.id + '?type=quiz'
+                  '/quiz/' + Logic.Study.SingleQuiz?.id + '?mode=preview'
                 );
               },
               size: 'h-[17px]',
@@ -279,13 +279,7 @@ export default defineComponent({
         method: "GetTags",
         params: [
           {
-            where: [
-              {
-                field: "type",
-                value: "topics",
-                condition: "eq",
-              },
-            ],
+            all: true,
           },
         ],
         requireAuth: true,
@@ -321,7 +315,7 @@ export default defineComponent({
     const SingleQuiz = ref(Logic.Study.SingleQuiz);
     const AllQuestions = ref(Logic.Study.AllQuestions);
 
-    const showSettingModal = ref(true);
+    const showSettingModal = ref(false);
 
     const mobileTitle = ref("Create quiz");
 
@@ -354,9 +348,6 @@ export default defineComponent({
     const switchToEdit = () => {
       if (SingleQuiz.value) {
         handleSettingSaved(true);
-      } else {
-        Logic.Study.SingleQuiz = undefined;
-        Logic.Study.AllQuestions = undefined;
       }
     };
 
@@ -378,7 +369,7 @@ export default defineComponent({
       switchToEdit();
 
       // set save button
-      if (SingleQuiz.value.title == "Untitled Quiz") {
+      if (SingleQuiz.value?.title == "Untitled Quiz") {
         actionButtonItems.push({
           IsOutlined: false,
           name: "Save",
@@ -394,7 +385,7 @@ export default defineComponent({
         showSettingModal.value = false;
 
         // remove save button
-        if (SingleQuiz.value.title != "Untitled Quiz") {
+        if (SingleQuiz.value?.title != "Untitled Quiz") {
           actionButtonItems.length = 0;
           actionButtonItems.push({
             IsOutlined: true,

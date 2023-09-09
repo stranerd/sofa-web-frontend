@@ -44,10 +44,7 @@
       v-if="currentSetupOption == 'profile' && accountSetupOptions[0].show"
     >
       <div class="w-full flex flex-col space-y-4 py-3">
-        <div
-          class="w-full flex flex-col items-center justify-center pt-3"
-          v-if="false"
-        >
+        <div class="w-full flex flex-col items-center justify-center pt-3">
           <sofa-image-loader
             :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
             :photoUrl="profileImageUrl"
@@ -124,6 +121,20 @@
           :update-value="updateProfileForm.description"
         />
 
+        <sofa-text-field
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+          type="text"
+          :name="'Organisation Code'"
+          ref="organisation_code"
+          :placeholder="'Set Organisation Code'"
+          :rules="[FormValidations.RequiredRule]"
+          v-model="updateProfileForm.organisation_code"
+          :borderColor="'border-transparent'"
+          :default-value="updateProfileForm.organisation_code"
+          v-if="currentAccountType == 'organisation'"
+        />
+
         <div
           class="w-full grid grid-cols-2 gap-4"
           v-if="currentAccountType == 'organisation'"
@@ -165,6 +176,19 @@
       v-if="currentSetupOption == 'education' && accountSetupOptions[1].show"
     >
       <div class="w-full flex flex-col space-y-4 py-3">
+        <sofa-text-field
+          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+          :name="'School'"
+          ref="school"
+          :placeholder="'School'"
+          :rules="[FormValidations.RequiredRule]"
+          :borderColor="'border-transparent'"
+          :options="educationOptions.schools"
+          v-if="updateUserEducationForm.type == 'tutor'"
+          v-model="updateUserEducationForm.tutorSchool"
+        />
+
         <sofa-select
           :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'"
@@ -179,59 +203,133 @@
           @OnOptionSelected="setSchoolsOption"
         />
 
-        <sofa-select
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'School'"
-          ref="school"
-          :placeholder="'School'"
-          :rules="[FormValidations.RequiredRule]"
-          :borderColor="'border-transparent'"
-          :options="educationOptions.schools"
-          v-if="updateUserEducationForm.type == 'student'"
-          v-model="updateUserEducationForm.school"
-          @OnOptionSelected="handleSchoolSelection"
-        />
+        <template v-if="updateUserEducationForm.level != 'aspirant'">
+          <sofa-select
+            :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+            :name="'School'"
+            ref="school"
+            :placeholder="'School'"
+            :rules="[FormValidations.RequiredRule]"
+            :borderColor="'border-transparent'"
+            :options="educationOptions.schools"
+            v-if="updateUserEducationForm.type == 'student'"
+            v-model="updateUserEducationForm.school"
+            :update-value="updateUserEducationForm.institution"
+            @OnOptionSelected="handleSchoolSelection"
+          />
 
-        <sofa-text-field
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'School'"
-          ref="school"
-          :placeholder="'School'"
-          :rules="[FormValidations.RequiredRule]"
-          :borderColor="'border-transparent'"
-          :options="educationOptions.schools"
-          v-if="updateUserEducationForm.type == 'teacher'"
-          v-model="updateUserEducationForm.school"
-        />
+          <sofa-select
+            :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+            :name="'Faculty'"
+            ref="faculty"
+            :placeholder="'Faculty'"
+            :rules="[FormValidations.RequiredRule]"
+            :borderColor="'border-transparent'"
+            :options="educationOptions.faculties"
+            v-if="updateUserEducationForm.type == 'student'"
+            v-model="updateUserEducationForm.faculty"
+            @OnOptionSelected="setDepartmentsOptions"
+          />
 
-        <sofa-select
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'Faculty'"
-          ref="faculty"
-          :placeholder="'Faculty'"
-          :rules="[FormValidations.RequiredRule]"
-          :borderColor="'border-transparent'"
-          :options="educationOptions.faculties"
-          v-if="updateUserEducationForm.type == 'student'"
-          v-model="updateUserEducationForm.faculty"
-          @OnOptionSelected="setDepartmentsOptions"
-        />
+          <sofa-select
+            :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+            :name="'Department'"
+            ref="department"
+            :placeholder="'Department'"
+            :rules="[FormValidations.RequiredRule]"
+            :borderColor="'border-transparent'"
+            v-if="updateUserEducationForm.type == 'student'"
+            :options="educationOptions.departments"
+            v-model="updateUserEducationForm.department"
+          />
+        </template>
+        <template v-else>
+          <div class="w-full flex flex-col space-y-4">
+            <sofa-normal-text :custom-class="'!font-semibold !text-left'">
+              Your exams
+            </sofa-normal-text>
 
-        <sofa-select
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'Department'"
-          ref="department"
-          :placeholder="'Department'"
-          :rules="[FormValidations.RequiredRule]"
-          :borderColor="'border-transparent'"
-          v-if="updateUserEducationForm.type == 'student'"
-          :options="educationOptions.departments"
-          v-model="updateUserEducationForm.department"
-        />
+            <div class="w-full flex flex-row space-x-2 items-center">
+              <sofa-select
+                :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+                :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+                :name="'Exams'"
+                ref="exams"
+                :placeholder="'Select exam'"
+                :rules="[FormValidations.RequiredRule]"
+                :borderColor="'border-transparent'"
+                :options="educationOptions.schools"
+                v-if="updateUserEducationForm.type == 'student'"
+                v-model="updateUserEducationForm.school"
+                :update-value="updateUserEducationForm.school"
+              />
+              <sofa-button :padding="'py-3 px-4'" @click.prevent="addExam()"
+                >Add</sofa-button
+              >
+            </div>
+
+            <div class="w-full flex flex-row flex-wrap space-x-3">
+              <sofa-badge
+                v-for="(item, index) in updateUserEducationForm.exams"
+                :key="index"
+                :color="
+                  updateUserEducationForm.selectedExamId == item.institutionId
+                    ? 'purple'
+                    : 'gray'
+                "
+                :customClass="'!flex !flex-row items-center space-x-2 cursor-pointer'"
+                @click.prevent="
+                  updateUserEducationForm.selectedExamId = item.institutionId;
+                  setExamCourses();
+                "
+                >{{
+                  educationOptions.schools.filter(
+                    (eachitem) => eachitem.key == item.institutionId
+                  )[0]?.value
+                }}
+                <span class="pl-2">
+                  <sofa-icon
+                    :name="
+                      updateUserEducationForm.selectedExamId ==
+                      item.institutionId
+                        ? 'circle-close-white'
+                        : 'circle-close'
+                    "
+                    :customClass="'h-[17px]'"
+                  ></sofa-icon>
+                </span>
+              </sofa-badge>
+            </div>
+
+            <template v-if="updateUserEducationForm.selectedExamId">
+              <sofa-select
+                :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+                :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+                :name="'Courses'"
+                ref="courses"
+                :placeholder="'Select exam subjects'"
+                :rules="[FormValidations.RequiredRule]"
+                :borderColor="'border-transparent'"
+                :is-multiple="true"
+                v-if="
+                  updateUserEducationForm.type == 'student' &&
+                  !updateUserEducationForm.fetchingCourse
+                "
+                :options="educationOptions.examCourses"
+                v-model="
+                  updateUserEducationForm.exams.filter(
+                    (item) =>
+                      item.institutionId ==
+                      updateUserEducationForm.selectedExamId
+                  )[0].courseIds
+                "
+              />
+            </template>
+          </div>
+        </template>
       </div>
     </template>
 
@@ -312,35 +410,48 @@
     </template>
 
     <div class="w-full flex flex-col items-center relative md:!py-0 px-0 py-4">
-      <div class="flex flex-col w-full" v-if="isNotModal">
-        <sofa-button
-          :customClass="'!w-full'"
-          :padding="'md:!py-4 py-3'"
-          @click.prevent="handleAccountSetup(currentSetupOption)"
-        >
-          Next
-        </sofa-button>
-      </div>
-      <div class="flex flex-row items-start justify-between w-full" v-else>
-        <sofa-button
-          :customClass="'!border-[1px] '"
-          :bg-color="'bg-white'"
-          :text-color="'text-grayColor'"
-          :padding="'md:!py-2 py-3 px-5'"
-          @click.prevent="showAccountSetup = false"
-          v-if="Logic.Common.mediaQuery() != 'sm'"
-        >
-          Close
-        </sofa-button>
+      <template v-if="!fromProfile">
+        <div class="flex flex-col w-full" v-if="isNotModal">
+          <sofa-button
+            :customClass="'!w-full'"
+            :padding="'md:!py-4 py-3'"
+            @click.prevent="handleAccountSetup(currentSetupOption)"
+          >
+            Next
+          </sofa-button>
+        </div>
+        <div class="flex flex-row items-start justify-between w-full" v-else>
+          <sofa-button
+            :customClass="'!border-[1px] '"
+            :bg-color="'bg-white'"
+            :text-color="'text-grayColor'"
+            :padding="'md:!py-2 py-3 px-5'"
+            @click.prevent="showAccountSetup = false"
+            v-if="Logic.Common.mediaQuery() != 'sm'"
+          >
+            Close
+          </sofa-button>
 
-        <sofa-button
-          :customClass="''"
-          :padding="'md:!py-2 py-3 px-5'"
-          @click.prevent="handleAccountSetup(currentSetupOption)"
-        >
-          Next
-        </sofa-button>
-      </div>
+          <sofa-button
+            :customClass="''"
+            :padding="'md:!py-2 py-3 px-5'"
+            @click.prevent="handleAccountSetup(currentSetupOption)"
+          >
+            Next
+          </sofa-button>
+        </div>
+      </template>
+      <template v-else>
+        <div class="w-full flex flex-row justify-end">
+          <sofa-button
+            :customClass="'!w-full'"
+            :padding="'px-4 py-3'"
+            @click.prevent="handleAccountSetup(currentSetupOption)"
+          >
+            Save changes
+          </sofa-button>
+        </div>
+      </template>
     </div>
   </sofa-form-wrapper>
 </template>
@@ -357,6 +468,7 @@ import {
   SofaImageLoader,
   SofaFormWrapper,
   SofaOtpInput,
+  SofaBadge,
 } from "sofa-ui-components";
 import { FormValidations } from "@/composables";
 import phoneCodes from "../../assets/country-phone.json";
@@ -372,6 +484,7 @@ import {
   phoneVerificationState,
   setCountry,
   setDepartmentsOptions,
+  setExamCourses,
   setFacultiesOptions,
   setSchoolsOption,
   showAccountSetup,
@@ -397,6 +510,7 @@ export default defineComponent({
     SofaImageLoader,
     SofaFormWrapper,
     SofaOtpInput,
+    SofaBadge,
   },
   props: {
     name: {
@@ -405,9 +519,13 @@ export default defineComponent({
     customClass: {
       type: String,
     },
+    fromProfile: {
+      type: Boolean,
+      default: false,
+    },
   },
   name: "AccountSetup",
-  setup() {
+  setup(props) {
     const profileImageUrl = ref("");
 
     const formComp = ref<any>();
@@ -416,13 +534,13 @@ export default defineComponent({
 
     const currentAccountType = ref("student");
 
-    const isNotModal = ref(Logic.Common.route.query?.type);
+    const isNotModal = ref(Logic.Common.route.query?.type ? true : false);
 
     const handleAccountSetup = (type: "profile" | "education" | "phone") => {
       if (type == "profile") {
         UpdateProfile(formComp.value);
       } else if (type == "education") {
-        UpdateUserEducation();
+        UpdateUserEducation(true, props.fromProfile);
       } else {
         if (phoneVerificationState.value == "start") {
           UpdatePhone();
@@ -433,14 +551,29 @@ export default defineComponent({
     };
 
     const detectVerificationStage = () => {
+      if (props.fromProfile) {
+        isNotModal.value = true;
+        accountSetupOptions[0].show = false;
+        accountSetupOptions[1].show = true;
+        accountSetupOptions[2].show = false;
+        currentSetupOption.value = "education";
+        setTimeout(() => {
+          setDefaultVerificationData();
+        }, 300);
+
+        return;
+      }
+
       updateUserEducationForm.type =
         Logic.Common.route.query?.type?.toString() || "student";
 
       if (isNotModal.value) {
         accountSetupOptions[2].show = false;
         if (updateUserEducationForm.type == "organisation") {
+          accountSetupOptions[0].show = true;
           accountSetupOptions[1].show = false;
           updateUserEducationForm.type = "organisation";
+          currentSetupOption.value = "profile";
           updateProfileForm.organisation_name = `${
             UserProfile.value?.bio.name?.full || ""
           }`;
@@ -473,7 +606,7 @@ export default defineComponent({
           ) {
             if (UserProfile.value?.type) {
               item.status = "done";
-              currentSetupOption.value = "phone";
+              currentSetupOption.value = "profile";
             }
           }
 
@@ -492,7 +625,34 @@ export default defineComponent({
 
     const handleSchoolSelection = (option: any) => {
       updateUserEducationForm.institution = option.extraId;
-      setFacultiesOptions();
+
+      if (updateUserEducationForm.level == "aspirant") {
+        //
+      } else {
+        setFacultiesOptions();
+      }
+    };
+
+    const addExam = () => {
+      if (updateUserEducationForm.school) {
+        if (
+          updateUserEducationForm.exams.filter(
+            (item) => item.institutionId == updateUserEducationForm.school
+          ).length == 0
+        ) {
+          updateUserEducationForm.institution = updateUserEducationForm.school;
+          updateUserEducationForm.exams.push({
+            institutionId: updateUserEducationForm.institution,
+            courseIds: [],
+            startDate: new Date().getTime(),
+            endDate: new Date().getTime(),
+          });
+          setExamCourses();
+          updateUserEducationForm.selectedExamId =
+            updateUserEducationForm.institution;
+        }
+        updateUserEducationForm.school = "";
+      }
     };
 
     const selectStage = (stage: {
@@ -501,7 +661,6 @@ export default defineComponent({
       id: string;
       show: boolean;
     }) => {
-      console.log(stage);
       accountSetupOptions.forEach((item: any) => {
         if (item.id == stage.id) {
           if (item.status != "done") {
@@ -520,10 +679,48 @@ export default defineComponent({
       //
     };
 
+    const setDefaultVerificationData = () => {
+      if (UserProfile.value.type?.type) {
+        if (UserProfile.value.type?.type == "teacher") {
+          updateUserEducationForm.type = "tutor";
+          updateUserEducationForm.tutorSchool =
+            UserProfile.value.type?.school.toString();
+        } else if (UserProfile.value.type?.type == "organization") {
+          updateUserEducationForm.type = "organisation";
+          updateProfileForm.organisation_name = UserProfile.value.type?.name;
+        } else {
+          updateUserEducationForm.type = UserProfile.value.type?.type;
+
+          updateUserEducationForm.level = UserProfile.value.type?.school.type;
+
+          if (UserProfile.value.type?.school.type == "college") {
+            updateUserEducationForm.school =
+              UserProfile.value.type?.school.institutionId;
+            updateUserEducationForm.institution =
+              UserProfile.value.type?.school.institutionId;
+            updateUserEducationForm.faculty =
+              UserProfile.value.type?.school.facultyId;
+            updateUserEducationForm.department =
+              UserProfile.value.type?.school.departmentId;
+
+            handleSchoolSelection({
+              extraId: UserProfile.value.type?.school.institutionId,
+            });
+          }
+
+          if (UserProfile.value.type?.school.type == "aspirant") {
+            const allExams: any = UserProfile.value.type?.school.exams;
+            updateUserEducationForm.exams = allExams;
+          }
+        }
+      }
+    };
+
     onMounted(() => {
       currentAccountType.value =
         Logic.Common.route?.query?.type?.toString() || "student";
       detectVerificationStage();
+
       Logic.Users.watchProperty("UserProfile", UserProfile);
       if (currentAccountType.value == "organisation") {
         Logic.Users.watchProperty("Countries", Countries);
@@ -564,6 +761,8 @@ export default defineComponent({
       handleAccountSetup,
       countryIsSelected,
       selectStage,
+      addExam,
+      setExamCourses,
     };
   },
   data() {

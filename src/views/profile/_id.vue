@@ -167,7 +167,11 @@
             <sofa-normal-text
               :color="'text-primaryPink'"
               :custom-class="'cursor-pointer'"
-              @click="Logic.Common.GoToRoute(`/marketplace/search`)"
+              @click="
+                Logic.Common.GoToRoute(
+                  `/marketplace/search?userId=${singleUser.id}`
+                )
+              "
             >
               View all
             </sofa-normal-text>
@@ -199,8 +203,8 @@
           <template v-else>
             <div class="w-full flex flex-col space-y-3 pr-4 mdlg:pr-0">
               <sofa-empty-state
-                :title="'No resources found'"
-                :subTitle="'Discover thousands of courses on SOFA marketplace and save them here for easy access'"
+                :title="`${singleUser.bio.name.full} has no published materials yet`"
+                :subTitle="'Discover thousands of other materials on SOFA marketplace and save them here for easy access'"
                 :actionLabel="'Marketplace'"
                 :action="
                   () => {
@@ -396,6 +400,7 @@ import {
   QueryParams,
 } from "sofa-logic/src/logic/types/domains/common";
 import { createCourseData, createQuizData } from "@/composables/library";
+import { profileLinks } from "@/composables/profile";
 
 export default defineComponent({
   components: {
@@ -517,51 +522,6 @@ export default defineComponent({
       },
     ]);
 
-    const profileLinks = reactive([
-      {
-        icon: "website",
-        link: "#",
-        iconSize: "h-[20px]",
-        ref: "website",
-        show: false,
-      },
-      {
-        icon: "youtube",
-        link: "#",
-        iconSize: "h-[19px]",
-        ref: "youtube",
-        show: false,
-      },
-      {
-        icon: "instagram-social",
-        link: "#",
-        iconSize: "h-[20px]",
-        ref: "instagram",
-        show: false,
-      },
-      {
-        icon: "tiktok-social",
-        link: "#",
-        iconSize: "h-[20px]",
-        ref: "tiktok",
-        show: false,
-      },
-      {
-        icon: "facebook-social",
-        link: "#",
-        iconSize: "h-[20px]",
-        ref: "facebook",
-        show: false,
-      },
-      {
-        icon: "twitter-social",
-        link: "#",
-        iconSize: "h-[20px]",
-        ref: "twitter",
-        show: false,
-      },
-    ]);
-
     const handleSearch = () => {
       //
     };
@@ -607,6 +567,13 @@ export default defineComponent({
       allQuizzes.value?.results?.forEach((quiz) => {
         userMaterials.value.push(createQuizData(quiz));
       });
+
+      if (
+        allCourses.value?.results.length ||
+        allQuizzes.value?.results.length
+      ) {
+        userHasResources.value = true;
+      }
     };
 
     const fetchMaterials = () => {
@@ -633,6 +600,12 @@ export default defineComponent({
           },
         ],
         limit: 20,
+        sort: [
+          {
+            field: "createdAt",
+            desc: true,
+          },
+        ],
       };
 
       const allRequests: Promise<any>[] = [];
@@ -653,6 +626,11 @@ export default defineComponent({
       // quiz search request
       allRequests.push(
         new Promise((resolve) => {
+          query.where.push({
+            field: "courseId",
+            value: null,
+            condition: Conditions.eq,
+          });
           Logic.Study.GetQuizzes(query)
             .then(() => {
               resolve("");

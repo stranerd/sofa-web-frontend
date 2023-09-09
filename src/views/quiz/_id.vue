@@ -1029,8 +1029,6 @@ export default defineComponent({
     });
 
     onUnmounted(() => {
-      Logic.Study.SingleQuiz = undefined;
-      Logic.Study.AllQuestions = undefined;
       Logic.Plays.SingleGame = undefined;
       Logic.Plays.SingleTest = undefined;
       questions.length = 0;

@@ -410,13 +410,7 @@ export default defineComponent({
         method: "GetTags",
         params: [
           {
-            where: [
-              {
-                field: "type",
-                value: "topics",
-                condition: "eq",
-              },
-            ],
+            all: true,
           },
         ],
         requireAuth: true,
@@ -554,7 +548,7 @@ export default defineComponent({
       if (SingleCourse.value) {
         showSettingModal.value = false;
         // remove save button
-        if (SingleCourse.value.title != "Untitled Course") {
+        if (SingleCourse.value?.title != "Untitled Course") {
           actionButtonItems.length = 0;
           actionButtonItems.push({
             IsOutlined: true,
@@ -572,7 +566,7 @@ export default defineComponent({
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
 
       // set save button
-      if (SingleCourse.value.title == "Untitled Course") {
+      if (SingleCourse.value?.title == "Untitled Course") {
         actionButtonItems.push({
           IsOutlined: false,
           name: "Save",

@@ -279,64 +279,7 @@
           </sofa-normal-text>
         </div>
 
-        <sofa-text-field
-          v-for="(item, index) in allLinks"
-          :key="index"
-          :placeholder="capitalize(item.ref)"
-          :name="'Website'"
-          ref="socials.website"
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :rules="[FormValidations.UrlRule]"
-          v-model="item.link"
-          :defaultValue="item.link"
-        >
-          <template v-slot:inner-prefix>
-            <sofa-icon
-              :name="item.icon"
-              :customClass="`${item.iconSize} cursor-pointer `"
-            />
-          </template>
-        </sofa-text-field>
-
-        <div
-          class="w-full flex flex-col space-y-3 pt-2"
-          v-if="allLinks.length != profileLinks.length"
-        >
-          <div
-            class="w-full flex flex-row items-center justify-start space-x-3 py-3 px-3 custom-border border-[2px] border-[#E1E6EB] cursor-pointer"
-            @click="
-              showAddNewItems
-                ? (showAddNewItems = false)
-                : (showAddNewItems = true)
-            "
-          >
-            <sofa-icon :name="'box-plus'" :customClass="'h-[20px]'" />
-            <sofa-normal-text :color="'text-[#78828C]'">
-              Add link
-            </sofa-normal-text>
-          </div>
-
-          <div class="w-full flex flex-col space-y-2" v-if="showAddNewItems">
-            <div
-              class="w-full flex flex-row items-center justify-start space-x-3 py-3 px-3 custom-border border-[2px] border-[#E1E6EB] cursor-pointer"
-              @click="addNewLink(item.ref)"
-              v-for="(item, index) in profileLinks.filter(
-                (item) =>
-                  allLinks.filter((eachItem) => eachItem.ref == item.ref)
-                    .length == 0
-              )"
-              :key="index"
-            >
-              <sofa-icon
-                :name="item.icon"
-                :customClass="`${item.iconSize} cursor-pointer `"
-              />
-              <sofa-normal-text :color="'text-[#78828C]'">
-                {{ item.ref }}
-              </sofa-normal-text>
-            </div>
-          </div>
-        </div>
+        <social-media-update />
       </div>
       <div class="h-[80px] mdlg:!hidden flex"></div>
     </template>
@@ -344,14 +287,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  ref,
-  capitalize,
-  watch,
-  reactive,
-} from "vue";
+import { defineComponent, onMounted, ref, capitalize, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
 import { FormValidations, scrollToTop } from "@/composables";
@@ -379,6 +315,7 @@ import {
 } from "@/composables/profile";
 import { SelectOption } from "sofa-logic/src/logic/types/common";
 import { ContentDetails } from "@/composables/marketplace";
+import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue";
 
 export default defineComponent({
   components: {
@@ -393,6 +330,7 @@ export default defineComponent({
     SofaButton,
     SofaSelect,
     SofaActivityCard,
+    SocialMediaUpdate,
   },
   middlewares: {
     fetchRules: [
@@ -496,68 +434,6 @@ export default defineComponent({
     const addMaterialType = ref("course");
     const allMaterials = ref<SelectOption[]>([]);
     const selectedMaterial = ref("");
-
-    const profileLinks = reactive([
-      {
-        icon: "website",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "website",
-        show: false,
-      },
-      {
-        icon: "youtube",
-        link: "",
-        iconSize: "h-[19px]",
-        ref: "youtube",
-        show: false,
-      },
-      {
-        icon: "instagram-social",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "instagram",
-        show: false,
-      },
-      {
-        icon: "tiktok-social",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "tiktok",
-        show: false,
-      },
-      {
-        icon: "facebook-social",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "facebook",
-        show: false,
-      },
-      {
-        icon: "twitter-social",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "twitter",
-        show: false,
-      },
-    ]);
-
-    const allLinks = reactive([
-      {
-        icon: "website",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "website",
-        show: false,
-      },
-      {
-        icon: "tiktok-social",
-        link: "",
-        iconSize: "h-[20px]",
-        ref: "tiktok",
-        show: false,
-      },
-    ]);
 
     const UserVerification = ref(Logic.Users.Verifications.results[0]);
 
@@ -681,14 +557,6 @@ export default defineComponent({
       showAddMaterial.value = false;
     };
 
-    const addNewLink = (ref: string) => {
-      const currentLink = profileLinks.filter((item) => item.ref == ref);
-
-      if (currentLink.length) {
-        allLinks.push(currentLink[0]);
-      }
-    };
-
     onMounted(() => {
       scrollToTop();
       // Logic.Users.watchProperty("UserProfile", UserProfile);
@@ -704,22 +572,6 @@ export default defineComponent({
     watch(updateProfileForm, () => {
       Logic.Common.debounce(() => {
         UpdateProfile(undefined, false);
-      }, 500);
-    });
-
-    watch(allLinks, () => {
-      Logic.Common.debounce(() => {
-        Logic.Users.UpdateUserSocialForm = {
-          socials: allLinks
-            .filter((item) => item.link)
-            .map((item) => {
-              return {
-                ref: item.ref,
-                link: item.link,
-              };
-            }),
-        };
-        Logic.Users.UpdateUserSocial();
       }, 500);
     });
 
@@ -739,15 +591,12 @@ export default defineComponent({
       allMaterials,
       selectedMaterial,
       userSocials,
-      allLinks,
-      profileLinks,
       showAddNewItems,
       addMaterial,
       showAddMaterialHandler,
       submitVerification,
       capitalize,
       cancle,
-      addNewLink,
     };
   },
 });

@@ -1,5 +1,5 @@
 import { Logic } from 'sofa-logic'
-import { Conditions } from 'sofa-logic/src/logic/types/common'
+import { Conditions, QueryParams } from 'sofa-logic/src/logic/types/common'
 import { Course, Quiz } from 'sofa-logic/src/logic/types/domains/study'
 import { reactive, ref } from 'vue'
 
@@ -73,11 +73,18 @@ const sectionTags = reactive({
   textbook: '',
 })
 
-const search = (query = {}) => {
+const search = (query: QueryParams = {}) => {
   Logic.Common.showLoader({
     loading: true,
     show: false,
   })
+
+  query.sort = [
+    {
+      field: 'createdAt',
+      desc: true,
+    },
+  ]
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -108,6 +115,11 @@ const search = (query = {}) => {
   // quiz search request
   allRequests.push(
     new Promise((resolve) => {
+      query.where.push({
+        field: 'courseId',
+        value: null,
+        condition: Conditions.eq,
+      })
       Logic.Study.GetQuizzes(query)
         .then(() => {
           resolve('')

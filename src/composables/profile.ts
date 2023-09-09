@@ -28,6 +28,7 @@ const updateProfileForm = reactive({
     last: '',
   },
   organisation_name: '',
+  organisation_code: '',
   photo: undefined,
   country: '',
   state: '',
@@ -124,7 +125,24 @@ const updatePhoneForm = reactive({
   otp: '',
 })
 
-const updateUserEducationForm = reactive({
+const updateUserEducationForm = reactive<{
+  level: string
+  school: string
+  institution: string
+  faculty: string
+  department: string
+  type: string
+  name: string
+  selectedExamId: string
+  fetchingCourse: boolean
+  exams: {
+    institutionId: string
+    startDate: number
+    endDate: number
+    courseIds: string[]
+  }[]
+  tutorSchool: string
+}>({
   level: '',
   school: '',
   institution: '',
@@ -132,6 +150,10 @@ const updateUserEducationForm = reactive({
   department: '',
   type: '',
   name: '',
+  fetchingCourse: false,
+  selectedExamId: '',
+  exams: [],
+  tutorSchool: '',
 })
 
 const accountSetupOptions = reactive([
@@ -184,18 +206,95 @@ const educationOptions = reactive({
   schools: [],
   faculties: [],
   departments: [],
+  examCourses: [],
 })
+
+const profileLinks = reactive([
+  {
+    icon: 'website',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'website',
+    show: false,
+  },
+  {
+    icon: 'youtube',
+    link: '',
+    iconSize: 'h-[19px]',
+    ref: 'youtube',
+    show: false,
+  },
+  {
+    icon: 'instagram-social',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'instagram',
+    show: false,
+  },
+  {
+    icon: 'tiktok-social',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'tiktok',
+    show: false,
+  },
+  {
+    icon: 'facebook-social',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'facebook',
+    show: false,
+  },
+  {
+    icon: 'twitter-social',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'twitter',
+    show: false,
+  },
+])
+
+const allLinks = reactive([
+  {
+    icon: 'website',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'website',
+    show: false,
+  },
+  {
+    icon: 'tiktok-social',
+    link: '',
+    iconSize: 'h-[20px]',
+    ref: 'tiktok',
+    show: false,
+  },
+])
 
 const setSchoolsOption = () => {
   Logic.Schools.GetInstitutions({}).then(() => {
     educationOptions.schools.length = 0
     Logic.Schools.AllInstitutions.results.forEach((institution) => {
       if (institution.title) {
-        educationOptions.schools.push({
-          key: institution.title,
-          value: institution.title,
-          extraId: institution.id,
-        })
+        if (updateUserEducationForm.level == 'college') {
+          if (institution.isGateway == false) {
+            educationOptions.schools.push({
+              key: institution.title,
+              value: institution.title,
+              extraId: institution.id,
+            })
+          }
+        }
+
+        if (updateUserEducationForm.level == 'aspirant') {
+          if (institution.isGateway == true) {
+            educationOptions.schools.push({
+              key: institution.id,
+              value: institution.title,
+              extraId: institution.id,
+            })
+          }
+        }
       }
     })
 
@@ -205,6 +304,28 @@ const setSchoolsOption = () => {
           item.extraId == Logic.Users.UserProfile.type.school.institutionId,
       )[0]?.value
     }
+  })
+}
+
+const setExamCourses = () => {
+  updateUserEducationForm.fetchingCourse = true
+  Logic.Schools.GetDepartmentCourses({
+    where: [
+      {
+        field: 'institutionId',
+        value: updateUserEducationForm.institution,
+        condition: Conditions.eq,
+      },
+    ],
+  }).then(() => {
+    educationOptions.examCourses.length = 0
+    Logic.Schools.AllDepartmentCourses.results.forEach((courses) => {
+      educationOptions.examCourses.push({
+        key: courses.id,
+        value: courses.title,
+      })
+    })
+    updateUserEducationForm.fetchingCourse = false
   })
 }
 
@@ -255,7 +376,7 @@ const UpdateProfile = (formComp: any, showLoader = true) => {
         data: {
           type: 'organization',
           name: updateProfileForm.organisation_name,
-          code: Logic.Common.makeid(6, true),
+          code: updateProfileForm.organisation_code,
         },
       }
       Logic.Users.UpdateUser(true, false)
@@ -349,31 +470,50 @@ const CustomizeAI = (formComp: any) => {
     })
 }
 
-const UpdateUserEducation = (useLoader = true) => {
+const UpdateUserEducation = (useLoader = true, fromProfile = false) => {
   if (updateUserEducationForm.type == 'student') {
-    Logic.Users.UpdateUserForm = {
-      data: {
-        type: 'student',
-        school: {
-          departmentId: updateUserEducationForm.department,
-          type: updateUserEducationForm.level,
+    if (updateUserEducationForm.level == 'aspirant') {
+      const exams: any = updateUserEducationForm.exams
+      Logic.Users.UpdateUserForm = {
+        data: {
+          type: 'student',
+          school: {
+            type: 'aspirant',
+            exams: exams,
+          },
         },
-      },
+      }
+    } else {
+      Logic.Users.UpdateUserForm = {
+        data: {
+          type: 'student',
+          school: {
+            departmentId: updateUserEducationForm.department,
+            type: updateUserEducationForm.level,
+          },
+        },
+      }
     }
-  } else {
+  } else if (updateUserEducationForm.type == 'tutor') {
     Logic.Users.UpdateUserForm = {
       data: {
         type: 'teacher',
-        school: educationOptions.schools.filter(
-          (item) => item.key == updateUserEducationForm.school,
-        )[0]?.value,
+        school: updateUserEducationForm.tutorSchool,
       },
     }
   }
 
   Logic.Users.UpdateUser(true, useLoader).then(() => {
     if (useLoader) {
-      Logic.Common.GoToRoute('/')
+      if (!fromProfile) {
+        Logic.Common.GoToRoute('/')
+      } else {
+        Logic.Common.showLoader({
+          show: true,
+          message: 'Your changes has been saved',
+          type: 'success',
+        })
+      }
     }
   })
 }
@@ -538,6 +678,14 @@ const setOrganizations = () => {
   })
 }
 
+const addNewLink = (ref: string) => {
+  const currentLink = profileLinks.filter((item) => item.ref == ref)
+
+  if (currentLink.length) {
+    allLinks.push(currentLink[0])
+  }
+}
+
 export {
   updateProfileForm,
   updateUserEducationForm,
@@ -562,6 +710,10 @@ export {
   Countries,
   allOrganizations,
   userSocials,
+  profileLinks,
+  allLinks,
+  addNewLink,
+  setExamCourses,
   setOrganizations,
   countryIsSelected,
   setCountry,

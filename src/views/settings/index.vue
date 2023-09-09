@@ -394,7 +394,7 @@ export default defineComponent({
             title: "Verification",
             routePath: "#",
             id: "verification",
-            show: true,
+            show: !Logic.Users.UserProfile.roles.isVerified,
           },
         ],
       },

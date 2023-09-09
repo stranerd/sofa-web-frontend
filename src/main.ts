@@ -59,11 +59,9 @@ const init = async () => {
         ? JSON.parse(localStorage.getItem('auth_user') || '{}')
         : undefined
 
-      if (!window.location.href.includes('/auth')) {
+      if (!window.location.href.includes('/auth/login')) {
         if (AuthUser == undefined) {
-          if (!window.location.href.includes('/auth/reset-password')) {
-            Logic.Common.GoToRoute('/auth/login')
-          }
+          Logic.Common.GoToRoute('/auth/login')
         } else {
           // fetch auth user in background
           Logic.Auth.GetAuthUser()

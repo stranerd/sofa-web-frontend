@@ -53,6 +53,7 @@
           :rules="[FormValidations.RequiredRule]"
           :borderColor="'border-transparent'"
           :options="visibilityOptions"
+          v-if="false"
           v-model="quizSettingsForm.visibility"
         />
       </div>
@@ -97,6 +98,7 @@
         :autoComplete="true"
         :borderColor="'border-transparent'"
         :options="allGenericTags"
+        :default-options="defaultTags"
         v-model="quizSettingsForm.tags"
         :isMultiple="true"
       />
@@ -214,6 +216,8 @@ export default defineComponent({
 
     const formComp = ref<any>();
 
+    const defaultTags = ref([]);
+
     const preventUpdate = ref(true);
 
     const quizImageUrl = ref("");
@@ -232,6 +236,7 @@ export default defineComponent({
         quizSettingsForm.tags = quiz.tagIds.map((id) =>
           Logic.Study.GetTagName(id)
         );
+        defaultTags.value = quiz.tagIds.map((id) => Logic.Study.GetTagName(id));
         quizSettingsForm.topic = Logic.Study.GetTagName(quiz.topicId);
         quizSettingsForm.visibility = "active";
         quizImageUrl.value = quiz.photo?.link || "";
@@ -252,10 +257,18 @@ export default defineComponent({
       }
     };
 
+    watch(allTopics, () => {
+      setDefaultValues();
+    });
+
+    watch(allGenericTags, () => {
+      setDefaultValues();
+    });
+
     onMounted(() => {
       getTopics();
-      setDefaultValues();
       getGenericTags();
+      setDefaultValues();
       setTimeout(() => {
         preventUpdate.value = false;
       }, 3000);
@@ -272,6 +285,7 @@ export default defineComponent({
       allTopics,
       updateQuiz,
       allGenericTags,
+      defaultTags,
     };
   },
   data() {

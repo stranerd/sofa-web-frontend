@@ -15,6 +15,7 @@
           :name="'Title'"
           ref="title"
           v-model="courseSettingForm.title"
+          :update-value="courseSettingForm.title"
           :placeholder="'Title'"
           :borderColor="'border-transparent'"
           :rules="[Logic.Form.RequiredRule]"
@@ -26,6 +27,7 @@
           :placeholder="'Description'"
           :richEditor="false"
           ref="description"
+          :update-value="courseSettingForm.description"
           v-model="courseSettingForm.description"
         />
 
@@ -39,6 +41,7 @@
           :autoComplete="true"
           :borderColor="'border-transparent'"
           :options="allTopics"
+          :update-value="courseSettingForm.topic"
           v-model="courseSettingForm.topic"
         />
 
@@ -51,7 +54,9 @@
           :rules="[FormValidations.RequiredRule]"
           :autoComplete="false"
           :borderColor="'border-transparent'"
+          v-if="false"
           :options="contentTypeOptions"
+          :update-value="courseSettingForm.contentType"
           v-model="courseSettingForm.contentType"
         />
 
@@ -62,6 +67,7 @@
           :name="'Price'"
           ref="price.amount"
           v-model="courseSettingForm.price"
+          :update-value="courseSettingForm.price"
           :placeholder="'Price'"
           :borderColor="'border-transparent'"
           :rules="[Logic.Form.RequiredRule]"
@@ -113,6 +119,7 @@
         :autoComplete="true"
         :borderColor="'border-transparent'"
         :options="allGenericTags"
+        :default-options="defaultTags"
         v-model="courseSettingForm.tags"
         :isMultiple="true"
       />
@@ -235,6 +242,8 @@ export default defineComponent({
 
     const courseImageUrl = ref("");
 
+    const defaultTags = ref([]);
+
     const preventUpdate = ref(true);
 
     watch(courseSettingSaved, () => {
@@ -249,10 +258,16 @@ export default defineComponent({
         courseSettingForm.title = course.title;
         courseSettingForm.description = course.description;
 
-        courseSettingForm.topic = course.topicId;
+        courseSettingForm.topic = Logic.Study.GetTagName(course.topicId);
         courseSettingForm.visibility = "active";
         courseSettingForm.price = course.price.amount.toString();
-        courseSettingForm.tags = course.tagIds;
+        courseSettingForm.tags = course.tagIds.map((id) =>
+          Logic.Study.GetTagName(id)
+        );
+        defaultTags.value = course.tagIds.map((id) =>
+          Logic.Study.GetTagName(id)
+        );
+        console.log(courseSettingForm.tags);
         courseImageUrl.value = course.photo?.link || "";
         courseSettingForm.contentType = "";
       } else {
@@ -276,8 +291,8 @@ export default defineComponent({
 
     onMounted(() => {
       getTopics();
-      setDefaultValues();
       getGenericTags();
+      setDefaultValues();
       setTimeout(() => {
         preventUpdate.value = false;
       }, 3000);
@@ -295,6 +310,7 @@ export default defineComponent({
       allTopics,
       allGenericTags,
       contentTypeOptions,
+      defaultTags,
     };
   },
   data() {

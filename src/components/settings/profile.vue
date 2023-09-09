@@ -116,77 +116,7 @@
         Education
       </sofa-header-text>
 
-      <sofa-select
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        :name="'AccountType'"
-        ref="account_type"
-        :placeholder="'Account type'"
-        :rules="[FormValidations.RequiredRule]"
-        :borderColor="'border-transparent'"
-        :options="accountTypeOption"
-        v-model="updateUserEducationForm.type"
-        :updateValue="updateUserEducationForm.type"
-      />
-
-      <sofa-select
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        :name="'Level'"
-        ref="level"
-        :placeholder="'Select education level'"
-        v-if="updateUserEducationForm.type == 'student'"
-        :rules="[FormValidations.RequiredRule]"
-        :borderColor="'border-transparent'"
-        :options="educationOptions.levels"
-        v-model="updateUserEducationForm.level"
-        @OnOptionSelected="setSchoolsOption"
-        :updateValue="updateUserEducationForm.level"
-      />
-
-      <sofa-select
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        :name="'School'"
-        v-if="educationOptions.schools.length"
-        ref="school"
-        :placeholder="'School'"
-        :rules="[FormValidations.RequiredRule]"
-        :borderColor="'border-transparent'"
-        :options="educationOptions.schools"
-        v-model="updateUserEducationForm.institution"
-        @OnOptionSelected="handleSchoolSelection"
-        :updateValue="updateUserEducationForm.institution"
-      />
-
-      <sofa-select
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="' px-3 py-3'"
-        :name="'Faculty'"
-        ref="faculty"
-        :placeholder="'Faculty'"
-        :rules="[FormValidations.RequiredRule]"
-        :borderColor="'border-transparent'"
-        :options="educationOptions.faculties"
-        v-if="updateUserEducationForm.type == 'student'"
-        v-model="updateUserEducationForm.faculty"
-        @OnOptionSelected="setDepartmentsOptions"
-        :updateValue="updateUserEducationForm.faculty"
-      />
-
-      <sofa-select
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        :name="'Department'"
-        ref="department"
-        :placeholder="'Department'"
-        :rules="[FormValidations.RequiredRule]"
-        :borderColor="'border-transparent'"
-        v-if="updateUserEducationForm.type == 'student'"
-        :options="educationOptions.departments"
-        v-model="updateUserEducationForm.department"
-        :updateValue="updateUserEducationForm.department"
-      />
+      <account-setup :fromProfile="true" />
     </div>
 
     <div
@@ -196,89 +126,7 @@
         Social links
       </sofa-header-text>
 
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        type="text"
-        :name="'Website'"
-        ref="website"
-        :placeholder="'Website'"
-        :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
-        :borderColor="'border-transparent'"
-        v-model="userSocials.socials[0].link"
-        :defaultValue="userSocials.socials[0].link"
-      >
-      </sofa-text-field>
-
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        type="text"
-        :name="'TikTok'"
-        ref="tiktok"
-        :placeholder="'TikTok'"
-        :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
-        :borderColor="'border-transparent'"
-        v-model="userSocials.socials[1].link"
-        :defaultValue="userSocials.socials[1].link"
-      >
-      </sofa-text-field>
-
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        type="text"
-        :name="'YouTube'"
-        ref="youtube"
-        :placeholder="'YouTube'"
-        :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
-        :borderColor="'border-transparent'"
-        v-model="userSocials.socials[2].link"
-        :defaultValue="userSocials.socials[2].link"
-      >
-      </sofa-text-field>
-
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        type="text"
-        :name="'Instagram'"
-        ref="instagram"
-        :placeholder="'Instagram'"
-        :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
-        :borderColor="'border-transparent'"
-        v-model="userSocials.socials[3].link"
-        :defaultValue="userSocials.socials[3].link"
-      >
-      </sofa-text-field>
-
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        type="text"
-        :name="'Twitter'"
-        ref="twitter"
-        :placeholder="'Twitter'"
-        :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
-        :borderColor="'border-transparent'"
-        v-model="userSocials.socials[4].link"
-        :defaultValue="userSocials.socials[4].link"
-      >
-      </sofa-text-field>
-
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'  px-3 py-3'"
-        type="text"
-        :name="'Facebook'"
-        ref="facebook"
-        :placeholder="'Facebook'"
-        :rules="[FormValidations.RequiredRule, FormValidations.UrlRule]"
-        :borderColor="'border-transparent'"
-        v-model="userSocials.socials[5].link"
-        :defaultValue="userSocials.socials[5].link"
-      >
-      </sofa-text-field>
+      <social-media-update />
     </div>
 
     <div class="h-[40px]"></div>
@@ -293,7 +141,6 @@ import {
   SofaIcon,
   SofaFileAttachment,
   SofaImageLoader,
-  SofaSelect,
   SofaButton,
 } from "sofa-ui-components";
 import { FormValidations } from "@/composables";
@@ -303,7 +150,6 @@ import {
   setDepartmentsOptions,
   setFacultiesOptions,
   setSchoolsOption,
-  submitVerification,
   UpdateProfile,
   updateProfileForm,
   UpdateUserEducation,
@@ -312,7 +158,8 @@ import {
   userSocials,
 } from "@/composables/profile";
 import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue";
+import AccountSetup from "../onboarding/AccountSetup.vue";
 
 export default defineComponent({
   components: {
@@ -322,8 +169,9 @@ export default defineComponent({
     SofaIcon,
     SofaFileAttachment,
     SofaImageLoader,
-    SofaSelect,
     SofaButton,
+    SocialMediaUpdate,
+    AccountSetup,
   },
   setup() {
     const profileImageUrl = ref("");
@@ -375,21 +223,6 @@ export default defineComponent({
       setTimeout(() => {
         preventUpdate.value = false;
       }, 3000);
-
-      // get user verification
-      Logic.Users.GetVerifications({
-        where: [
-          {
-            field: "userId",
-            condition: Conditions.eq,
-            value: Logic.Auth.AuthUser?.id,
-          },
-        ],
-      }).then(() => {
-        if (UserVerification.value) {
-          updateVerificationForm.socials = UserVerification.value.socials;
-        }
-      });
     });
 
     watch(updateProfileForm, () => {
@@ -404,18 +237,6 @@ export default defineComponent({
       if (!preventUpdate.value) {
         Logic.Common.debounce(() => {
           UpdateUserEducation(false);
-        }, 500);
-      }
-    });
-
-    watch(updateVerificationForm, () => {
-      if (!preventUpdate.value) {
-        updateVerificationForm.content = {
-          courses: UserVerification.value.content.courses,
-          quizzes: UserVerification.value.content.quizzes,
-        };
-        Logic.Common.debounce(() => {
-          submitVerification(false);
         }, 500);
       }
     });

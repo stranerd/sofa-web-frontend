@@ -79,8 +79,14 @@
 
         <div
           class="w-full flex flex-col space-y-3 mdlg:!pt-0 pt-0 mdlg:px-0 pl-4"
+          v-if="
+            selectedFilterOption == 'all' || selectedFilterOption == 'courses'
+          "
         >
-          <div class="w-full flex flex-col justify-start items-start">
+          <div
+            class="w-full flex flex-col justify-start items-start"
+            v-if="selectedFilterOption == 'all'"
+          >
             <sofa-normal-text :customClass="'font-bold'">
               Courses
             </sofa-normal-text>
@@ -89,7 +95,7 @@
           <template v-if="resourceContents.length">
             <div class="w-full flex flex-col space-y-3">
               <div
-                class="w-full mdlg:!grid grid-cols-5 mdlg:!gap-4"
+                class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4"
                 v-if="
                   Logic.Common.mediaQuery() != 'sm' &&
                   Logic.Common.mediaQuery() != 'md'
@@ -150,8 +156,14 @@
         <!-- Quiz contents -->
         <div
           class="w-full flex flex-col space-y-3 mdlg:!pt-0 pt-0 mdlg:px-0 pl-4"
+          v-if="
+            selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'
+          "
         >
-          <div class="w-full flex flex-col justify-start items-start">
+          <div
+            class="w-full flex flex-col justify-start items-start"
+            v-if="selectedFilterOption == 'all'"
+          >
             <sofa-normal-text :customClass="'font-bold'">
               Quizzes
             </sofa-normal-text>
@@ -160,7 +172,7 @@
           <template v-if="quizContents.length">
             <div class="w-full flex flex-col space-y-3">
               <div
-                class="w-full mdlg:!grid grid-cols-5 mdlg:!gap-4"
+                class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4"
                 v-if="
                   Logic.Common.mediaQuery() != 'sm' &&
                   Logic.Common.mediaQuery() != 'md'
@@ -462,6 +474,19 @@ export default defineComponent({
           query: {
             field: "tagIds",
             value: route.query?.tagId.toString(),
+            condition: Conditions.in,
+          },
+        });
+      }
+
+      if (route.query?.userId) {
+        selectedOptions.value.push({
+          name: "",
+          active: false,
+          id: route.query?.userId.toString(),
+          query: {
+            field: "user.id",
+            value: route.query?.userId.toString(),
             condition: Conditions.in,
           },
         });
