@@ -540,7 +540,7 @@ export default defineComponent({
 
       Logic.Common.debounce(() => {
         if (searchQuery.value != "nill") {
-          search(allQueries);
+          search(allQueries, true);
         }
       }, 500);
     });

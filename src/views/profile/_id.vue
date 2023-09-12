@@ -44,10 +44,7 @@
                 <sofa-icon
                   :name="'verify'"
                   :customClass="'h-[16px]'"
-                  v-if="
-                    userVerifications.results.length &&
-                    userVerifications.results[0]?.accepted
-                  "
+                  v-if="singleUser.roles.isVerified"
                 />
                 <sofa-icon
                   :name="'tutor-bagde'"
@@ -465,7 +462,6 @@ export default defineComponent({
     const allCourses = ref(Logic.Study.AllCourses);
     const allQuizzes = ref(Logic.Study.AllQuzzies);
     const userMaterials = ref<any[]>([]);
-    const userVerifications = ref(Logic.Users.Verifications);
 
     const hasAtleastASocialLink = ref(false);
 
@@ -628,7 +624,7 @@ export default defineComponent({
         new Promise((resolve) => {
           query.where.push({
             field: "courseId",
-            value: null,
+            value: "null",
             condition: Conditions.eq,
           });
           Logic.Study.GetQuizzes(query)
@@ -663,7 +659,7 @@ export default defineComponent({
     });
 
     const setProfileData = () => {
-      if (singleUser.value.type?.type == "organization") {
+      if (singleUser.value?.type?.type == "organization") {
         profileAttributes[0].value =
           singleUser.value.account.meta.quizzes.toString();
         profileAttributes[1].value =
@@ -735,16 +731,18 @@ export default defineComponent({
     onMounted(() => {
       Logic.Study.watchProperty("AllCourses", allCourses);
       Logic.Study.watchProperty("AllQuzzies", allQuizzes);
+      Logic.Users.watchProperty("SingleUser", singleUser);
       if (
         allCourses.value?.results.length ||
         allQuizzes.value?.results.length
       ) {
         userHasResources.value = true;
       }
-
-      setProfileData();
-      fetchMaterials();
-      scrollToTop();
+      if (singleUser.value) {
+        setProfileData();
+        fetchMaterials();
+        scrollToTop();
+      }
     });
 
     return {
@@ -757,7 +755,6 @@ export default defineComponent({
       searchQuery,
       userRatings,
       singleUser,
-      userVerifications,
       allCourses,
       userMaterials,
       showModal,

@@ -519,6 +519,20 @@ const setStartButtons = () => {
       textColor: 'text-white',
     }
     buttonLabels.smIsDoubled = false
+  } else if (mode.value == 'preview') {
+    buttonLabels.left = {
+      label: 'Prev',
+      bgColor: 'bg-white border-[1px] border-gray-100',
+      textColor: 'text-grayColor',
+    }
+
+    buttonLabels.right = {
+      label: 'Next',
+      bgColor: 'bg-primaryBlue',
+      textColor: 'text-white',
+    }
+
+    buttonLabels.smIsDoubled = true
   }
 }
 
@@ -597,7 +611,7 @@ const handleLeftButton = () => {
   }
 
   if (mode.value == 'preview') {
-    //
+    goToPrevSlide()
   } else if (mode.value == 'flashcard') {
     const currentQuestion = questions[currentQuestionIndex.value]
     questions.push(currentQuestion)

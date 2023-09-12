@@ -73,7 +73,7 @@ const sectionTags = reactive({
   textbook: '',
 })
 
-const search = (query: QueryParams = {}) => {
+const search = (query: QueryParams = {}, returnCoursables = false) => {
   Logic.Common.showLoader({
     loading: true,
     show: false,
@@ -86,15 +86,11 @@ const search = (query: QueryParams = {}) => {
     },
   ]
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   query.where.push({
     field: 'status',
     value: 'published',
     condition: Conditions.eq,
   })
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   query.limit = 5
 
   const allRequests: Promise<any>[] = []
@@ -115,11 +111,13 @@ const search = (query: QueryParams = {}) => {
   // quiz search request
   allRequests.push(
     new Promise((resolve) => {
-      query.where.push({
-        field: 'courseId',
-        value: null,
-        condition: Conditions.eq,
-      })
+      if (returnCoursables) {
+        query.where.push({
+          field: 'courseId',
+          value: 'null',
+          condition: Conditions.eq,
+        })
+      }
       Logic.Study.GetQuizzes(query)
         .then(() => {
           resolve('')

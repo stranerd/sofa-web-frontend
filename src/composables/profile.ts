@@ -313,7 +313,7 @@ const setExamCourses = () => {
     where: [
       {
         field: 'institutionId',
-        value: updateUserEducationForm.institution,
+        value: updateUserEducationForm.selectedExamId,
         condition: Conditions.eq,
       },
     ],

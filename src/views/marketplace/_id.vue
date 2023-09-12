@@ -500,7 +500,6 @@ export default defineComponent({
     };
 
     watch(SingleCourse, () => {
-      console.log("Hello");
       if (SingleCourse.value) {
         scrollToTop();
         setCourseData();
@@ -509,7 +508,6 @@ export default defineComponent({
     });
 
     watch(SingleQuiz, () => {
-      console.log("Hello 3");
       if (SingleQuiz.value) {
         scrollToTop();
         setQuizData();
@@ -532,10 +530,27 @@ export default defineComponent({
       if (contentType.value == "course") {
         setCourseData();
         setSimilarContents();
+        // create course view
+        Logic.Interactions.CreateViewForm = {
+          entity: {
+            id: SingleCourse.value.id,
+            type: "courses",
+          },
+        };
+
+        Logic.Interactions.CreateView(true);
       }
 
       if (contentType.value == "quiz") {
         setQuizData();
+        Logic.Interactions.CreateViewForm = {
+          entity: {
+            id: SingleQuiz.value.id,
+            type: "quizzes",
+          },
+        };
+
+        Logic.Interactions.CreateView(true);
       }
     });
 
