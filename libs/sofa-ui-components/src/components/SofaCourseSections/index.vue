@@ -1,0 +1,575 @@
+<template>
+  <div
+    class="w-full flex flex-col h-full py-2 mdlg:!py-0 mdlg:!space-y-0 space-y-4 relative overflow-y-auto overflow-x-hidden"
+  >
+    <div class="flex flex-col space-y-6 h-full w-full">
+      <template v-if="sectionOptions.length">
+        <div
+          class="flex flex-col w-full space-y-3"
+          v-for="(option, index) in sectionOptions"
+          :key="index"
+        >
+          <template v-if="option">
+            <div
+              class="w-full flex flex-row items-center justify-between cursor-pointer"
+              @click="
+                option?.opened
+                  ? (option.opened = false)
+                  : (option.opened = true);
+                selectedSection = index;
+              "
+            >
+              <div class="flex flex-row items-center space-x-2">
+                <sofa-normal-text
+                  :customClass="'!font-bold'"
+                  v-if="!option.edit"
+                  >{{ option.name }}</sofa-normal-text
+                >
+                <input
+                  v-else
+                  @click.stop="null"
+                  class="outline-none focus:outline-slate-200 font-bold px-2 placeholder:font-normal w-full border-[1px] border-gray-100 rounded text-bodyBlack"
+                  v-model="option.name"
+                  autofocus
+                  placeholder="Section name"
+                  @blur="option.edit = false"
+                />
+              </div>
+              <div class="flex flex-row items-center space-x-3">
+                <sofa-icon
+                  @click.stop="option.edit = true"
+                  :customClass="'h-[15px] cursor-pointer'"
+                  :name="'edit-gray'"
+                />
+                <sofa-icon
+                  @click.stop="removeSection(index)"
+                  :customClass="'h-[15px] cursor-pointer'"
+                  :name="'trash-gray'"
+                />
+                <sofa-icon
+                  :customClass="'h-[7px] cursor-pointer'"
+                  :name="option.opened ? 'chevron-up' : 'chevron-down'"
+                />
+              </div>
+            </div>
+
+            <template v-if="option.opened">
+              <draggable
+                v-model="option.materials"
+                :group="option.id"
+                class="w-full space-y-3"
+                item-key="id"
+                handle=".handle"
+              >
+                <template #item="{ element }">
+                  <div
+                    :class="`w-full flex flex-row items-center relative justify-between space-x-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${
+                      selectedMaterial?.id == element.id
+                        ? 'bg-lightBlue'
+                        : 'bg-white'
+                    }`"
+                    @mouseover="element.hover = true"
+                    @mouseleave="element.hover = false"
+                    @click.stop="
+                      selectedMaterial = {
+                        id: element.id,
+                        data: element.data,
+                        details: element.details,
+                        type: element.type.split('-')[0],
+                      };
+                      handleItemSelected();
+                    "
+                  >
+                    <div class="flex flex-row items-center space-x-2">
+                      <sofa-icon
+                        :customClass="'h-[17px]'"
+                        :name="element.type"
+                      />
+                      <sofa-normal-text
+                        :customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'"
+                        >{{ element.name }}</sofa-normal-text
+                      >
+                    </div>
+
+                    <div
+                      class="flex flex-row space-x-2 items-center absolute h-full w-auto right-0 bottom-0 bg-lightBlue px-2 rounded-[8px]"
+                    >
+                      <!-- <sofa-icon
+                        :customClass="'h-[15px]'"
+                        :name="'trash-gray'"
+                      /> -->
+
+                      <sofa-icon
+                        :customClass="'h-[19px] handle'"
+                        :name="'reorder-gray'"
+                      />
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+
+              <div
+                class="px-2 py-2 flex flex-row w-full items-center space-x-2 cursor-pointer"
+                @click="
+                  selectedMaterial = undefined;
+                  selectedSection = index;
+                  handleItemSelected();
+                "
+              >
+                <sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
+                <sofa-normal-text :color="'text-primaryPurple'">
+                  Add study material
+                </sofa-normal-text>
+              </div>
+            </template>
+          </template>
+        </div>
+      </template>
+
+      <div
+        class="py-2 pt-0 flex flex-row w-full items-center space-x-2 cursor-pointer"
+        @click.stop="addNewSection()"
+      >
+        <sofa-icon :customClass="'h-[17px]'" :name="'box-add-pink'" />
+        <sofa-normal-text :color="'text-primaryPink'">
+          Add section
+        </sofa-normal-text>
+      </div>
+    </div>
+  </div>
+</template>
+<script lang="ts">
+import {
+  capitalize,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
+import SofaIcon from "../SofaIcon";
+import { SofaNormalText } from "../SofaTypography";
+import draggable from "vuedraggable";
+import { UpdateCourseSectionsInput } from "../../types";
+import { Logic } from "../../composable";
+import { Course, Question, Quiz, SofaFile } from "../../types/domains/study";
+
+export default defineComponent({
+  components: {
+    SofaIcon,
+    SofaNormalText,
+    draggable,
+  },
+  props: {
+    customClass: {
+      type: String,
+      default: "",
+    },
+    close: {
+      type: Function,
+      required: true,
+    },
+    sectionInput: {
+      type: Object as () => UpdateCourseSectionsInput,
+    },
+    updateSections: {
+      type: Function,
+      default: () => {
+        //
+      },
+    },
+  },
+  name: "SofaCourseSections",
+  emits: ["update:modelValue", "OnMaterialSelected"],
+  setup(props, context) {
+    const SingleCourse = ref<Course>(Logic.Study.SingleCourse);
+    const SingleFile = ref<SofaFile>(Logic.Study.SingleFile);
+    const SingleQuiz = ref<Quiz>(Logic.Study.SingleQuiz);
+    const SingleCourseFiles = ref<SofaFile[]>(Logic.Study.SingleCourseFiles);
+    const SingleCourseQuizzes = ref<Quiz[]>(Logic.Study.SingleCourseQuizzes);
+    const NewCoursableItem = ref(Logic.Study.NewCoursableItem);
+    const SelectedMaterialDetails = ref(Logic.Study.SelectedMaterialDetails);
+    const UpdatedFile = ref(Logic.Study.UpdatedFile);
+
+    const selectedSection = ref(0);
+
+    const sectionOptions = reactive([]);
+
+    const staticSectionOptions = ref([]);
+    const staticPropSections = ref([]);
+
+    const addSectionMaterial = (id: string, type: "file" | "quiz") => {
+      Logic.Common.debounce(() => {
+        props.sectionInput.sections[selectedSection.value].items.push({
+          id,
+          type,
+        });
+        setTimeout(() => {
+          props.updateSections();
+        }, 1000);
+      }, 300);
+    };
+
+    const setSectionMaterial = (
+      mediaFile: SofaFile | undefined,
+      quiz: Quiz | undefined,
+      save = false,
+      index: number
+    ) => {
+      if (mediaFile) {
+        const mediaUrl = `${process.env.VUE_APP_API_URL}study/files/${
+          mediaFile.id
+        }/media?AccessToken=${
+          JSON.parse(localStorage.getItem("AuthTokens")).accessToken
+        }`;
+        if (mediaFile.type == "image") {
+          staticSectionOptions.value[index].materials.push({
+            name: mediaFile.title,
+            id: mediaFile.id,
+            type: "image-course",
+            details: {
+              title: mediaFile.title,
+              description: mediaFile.description,
+              id: mediaFile.id,
+            },
+            data: {
+              zoom: 100,
+              fullScreen: false,
+              imageUrl: mediaUrl,
+            },
+            hover: false,
+          });
+        }
+
+        if (mediaFile.type == "video") {
+          staticSectionOptions.value[index].materials.push({
+            name: mediaFile.title,
+            id: mediaFile.id,
+            type: "video-course",
+            hover: false,
+            details: {
+              title: mediaFile.title,
+              link: mediaUrl,
+              duration: "4m 44s",
+              description: mediaFile.description,
+              id: mediaFile.id,
+            },
+            data: {
+              zoom: 100,
+              fullScreen: false,
+              videoUrl: mediaUrl,
+            },
+          });
+        }
+
+        if (mediaFile.type == "document") {
+          staticSectionOptions.value[index].materials.push({
+            name: mediaFile.title,
+            id: mediaFile.id,
+            type: "document-course",
+            hover: false,
+            details: {
+              title: mediaFile.title,
+              pages: "3",
+              description: mediaFile.description,
+              id: mediaFile.id,
+            },
+            data: {
+              pages: {
+                total: 3,
+                current: 1,
+              },
+              zoom: 100,
+              fullScreen: false,
+              documentUrl: mediaUrl,
+            },
+          });
+        }
+
+        if (save) {
+          addSectionMaterial(SingleFile.value.id, "file");
+        }
+      }
+
+      if (quiz) {
+        Logic.Study.GetQuestions(quiz.id).then((response) => {
+          if (response) {
+            const questions: Question[] = response.results;
+
+            const allQuestions = questions.map((eachQuestion) => {
+              let answers = "";
+
+              if (eachQuestion.data.type == "multipleChoice") {
+                answers =
+                  eachQuestion.data.options[eachQuestion.data.answers[0]];
+              } else if (eachQuestion.data.type == "trueOrFalse") {
+                answers = `${capitalize(eachQuestion.data.answer.toString())}`;
+              } else if (
+                eachQuestion.data.type == "writeAnswer" ||
+                eachQuestion.data.type == "sequence" ||
+                eachQuestion.data.type == "dragAnswers" ||
+                eachQuestion.data.type == "fillInBlanks"
+              ) {
+                answers = capitalize(eachQuestion.data.answers?.join(", "));
+              } else if (eachQuestion.data.type == "match") {
+                answers = capitalize(
+                  eachQuestion.data.set
+                    .map((item) => {
+                      return item.a;
+                    })
+                    .join(", ")
+                );
+              }
+              return {
+                type: Logic.Study.questionTypes[eachQuestion.data.type].type,
+                duration:
+                  Logic.Common.EquivalentsSecondsInString[
+                    `${eachQuestion.timeLimit}`
+                  ],
+                content: eachQuestion.question,
+                answer: answers,
+              };
+            });
+
+            staticSectionOptions.value[index].materials.push({
+              name: quiz.title,
+              id: quiz.id,
+              type: "quiz-course",
+              details: {
+                image_url: quiz.photo.link,
+                title: quiz.title,
+                type: "Quiz",
+                questions: `${quiz.questions.length} questions`,
+                description: quiz.description,
+                ratings: {
+                  total: "4",
+                  label: "24 ratings",
+                },
+                user: {
+                  photoUrl: `${quiz.user.bio.photo.link}`,
+                  name: `${quiz.user.bio.name.full}`,
+                },
+                last_updated: `${Logic.Common.momentInstance(
+                  quiz.createdAt
+                ).format("DD/MM/YYYY")}`,
+              },
+              data: allQuestions,
+              hover: false,
+            });
+
+            if (save) {
+              addSectionMaterial(SingleQuiz.value.id, "quiz");
+            }
+          }
+        });
+      }
+    };
+
+    watch(SingleCourse, () => {
+      if (sectionOptions.length < SingleCourse.value.sections.length) {
+        setSections(SingleCourse.value.sections.length - 1);
+      }
+    });
+
+    watch(NewCoursableItem, () => {
+      if (sectionOptions.length) {
+        Logic.Common.debounce(() => {
+          setSectionMaterial(
+            SingleFile.value,
+            SingleQuiz.value,
+            true,
+            selectedSection.value
+          );
+        }, 500);
+      }
+    });
+
+    const setSections = (index = 0) => {
+      staticSectionOptions.value.length = 0;
+      staticPropSections.value.length = 0;
+
+      selectedSection.value = index;
+
+      SingleCourse.value.sections.forEach((section, index) => {
+        staticSectionOptions.value.push({
+          name: section.label,
+          id: Logic.Common.makeid(9),
+          materials: [],
+          opened: index == selectedSection.value,
+          edit: false,
+        });
+
+        staticPropSections.value.push({
+          items: section.items,
+          label: section.label,
+        });
+
+        section.items.map((item) => {
+          if (item.type == "quiz") {
+            const quizData = SingleCourseQuizzes.value.filter(
+              (quiz) => quiz.id == item.id
+            );
+            if (quizData.length) {
+              setSectionMaterial(undefined, quizData[0], false, index);
+            }
+          } else {
+            const fileData = SingleCourseFiles.value.filter(
+              (file) => file.id == item.id
+            );
+            setSectionMaterial(fileData[0], undefined, false, index);
+          }
+        });
+      });
+
+      sectionOptions.length = 0;
+      sectionOptions.push(...staticSectionOptions.value);
+      props.sectionInput.sections.length = 0;
+      props.sectionInput.sections.push(...staticPropSections.value);
+    };
+
+    const addNewSection = () => {
+      props.sectionInput.sections.push({
+        items: [],
+        label: `Section ${sectionOptions.length + 1}`,
+      });
+      props.updateSections();
+      Logic.Common.showLoader({
+        show: true,
+        loading: false,
+        message: "New section added",
+        type: "success",
+      });
+    };
+
+    onMounted(() => {
+      Logic.Study.watchProperty("SingleCourse", SingleCourse);
+      Logic.Study.watchProperty("SingleFile", SingleFile);
+      Logic.Study.watchProperty("NewCoursableItem", NewCoursableItem);
+      Logic.Study.watchProperty("UpdatedFile", UpdatedFile);
+      Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+
+      Logic.Study.watchProperty(
+        "SelectedMaterialDetails",
+        SelectedMaterialDetails
+      );
+      if (SingleCourse.value) {
+        setSections();
+      }
+    });
+
+    const updateLatestSection = () => {
+      sectionOptions.forEach((option, index) => {
+        if (option) {
+          props.sectionInput.sections[index].items = option.materials.map(
+            (item) => {
+              return {
+                id: item.id,
+                type: item.type.includes("quiz") ? "quiz" : "file",
+              };
+            }
+          );
+          props.sectionInput.sections[index].label = option.name;
+        } else {
+          props.sectionInput.sections = props.sectionInput.sections.filter(
+            (item, itemIndex) => {
+              return index != itemIndex;
+            }
+          );
+        }
+      });
+
+      props.updateSections();
+    };
+
+    watch(sectionOptions, () => {
+      Logic.Common.debounce(() => {
+        updateLatestSection();
+      }, 500);
+    });
+
+    const removeSection = (index: number) => {
+      const fileMaterials = sectionOptions[index].items
+        .map((item) => {
+          if (item.type == "file") {
+            return item.id;
+          }
+        })
+        .filter((item) => {
+          return item != undefined;
+        });
+
+      let deletedFile = 0;
+      const totalFiles = fileMaterials.length;
+
+      const allFileDeletion: Promise<any>[] = [];
+
+      fileMaterials.forEach((item) => {
+        if (item) {
+          allFileDeletion.push(
+            new Promise((resolve) => {
+              Logic.Study.MoveItemToCourseForm = {
+                add: false,
+                coursableId: item.is,
+                type: "file",
+                id: Logic.Study.SingleCourse.id,
+              };
+              Logic.Study.MoveItemToCourse(true).then((response) => {
+                if (response) {
+                  deletedFile++;
+                  if (deletedFile == totalFiles) {
+                    sectionOptions[index] = undefined;
+                    resolve("");
+                  }
+                }
+              });
+            })
+          );
+        }
+      });
+
+      Promise.all(allFileDeletion).then(() => {
+        //
+      });
+    };
+
+    watch(selectedSection, () => {
+      sectionOptions.forEach((section, index) => {
+        if (selectedSection.value == index) {
+          section.opened = true;
+        } else {
+          section.opened = false;
+        }
+      });
+    });
+
+    watch(SelectedMaterialDetails, () => {
+      console.log("I got the changes");
+    });
+
+    const selectedMaterial = ref<any>();
+
+    watch(selectedMaterial, () => {
+      context.emit("update:modelValue", selectedMaterial.value);
+    });
+
+    const handleItemSelected = () => {
+      context.emit("OnMaterialSelected", selectedMaterial.value);
+    };
+
+    watch(UpdatedFile, () => {
+      Logic.Study.GetCourse(Logic.Study.SingleCourse.id).then(() => {
+        setSections();
+      });
+    });
+
+    return {
+      sectionOptions,
+      selectedMaterial,
+      handleItemSelected,
+      addNewSection,
+      selectedSection,
+      removeSection,
+    };
+  },
+});
+</script>
