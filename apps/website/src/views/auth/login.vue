@@ -31,7 +31,7 @@
         <div class="flex flex-col space-y-6 w-full">
           <div class="w-full flex flex-col space-y-4">
             <div class="w-full flex flex-col items-center justify-center">
-              <GoogleLogin :callback="onSuccessGoogle" prompt />
+              <GoogleLogin :callback="onSuccessGoogle" />
             </div>
 
             <!-- <div>
@@ -50,7 +50,7 @@
                   :className="'!border-none !h-auto'"
                   :onFailure="onFailure"
                 ></vue-apple-login>
-                 
+
               </div>
             </div> -->
           </div>
