@@ -43,16 +43,6 @@
         </div>
 
         <div
-          class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer relative"
-          @click="addFolder()"
-        >
-          <sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
-          <sofa-normal-text :color="'text-grayColor'"
-            >Add new folder</sofa-normal-text
-          >
-        </div>
-
-        <div
           :class="`w-full flex flex-row items-center justify-start space-x-3 px-3 py-3 relative rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${
             selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
           }`"
