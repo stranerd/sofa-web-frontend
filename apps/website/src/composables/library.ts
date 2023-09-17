@@ -230,6 +230,7 @@ const createQuizData = (quiz: Quiz) => {
     userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : '',
     createdAt: quiz.createdAt,
     showMore: false,
+    ratings: quiz.ratings,
     type: 'quiz',
     userId: quiz.user.id,
   }
@@ -258,6 +259,7 @@ const createCourseData = (course: Course) => {
     userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
     createdAt: course.createdAt,
     showMore: false,
+    ratings: course.ratings,
     type: 'course',
     userId: course.user.id,
   }

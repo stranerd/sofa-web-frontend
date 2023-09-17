@@ -32,6 +32,11 @@ export interface Quiz {
     games: number
     total: number
   }
+  ratings: {
+    avg: number
+    total: number
+    count: number
+  }
   createdAt: number
   updatedAt: number
   __type: 'QuizEntity'
@@ -92,6 +97,11 @@ export interface Course {
   tagIds: string[]
   status: string
   frozen: boolean
+  ratings: {
+    avg: number
+    total: number
+    count: number
+  }
   price: {
     amount: number
     currency: string
@@ -170,4 +180,9 @@ export interface ResourceType {
   showMore: boolean
   userId: string
   type: 'course' | 'quiz' | string
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
 }

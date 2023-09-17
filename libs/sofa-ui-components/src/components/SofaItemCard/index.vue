@@ -58,9 +58,9 @@
       <sofa-icon :name="'star-full'" :custom-class="'h-[16px]'" />
 
       <div class="flex flex-row space-x-1 items-center">
-        <sofa-normal-text> 4.0 </sofa-normal-text>
+        <sofa-normal-text> {{ content }} </sofa-normal-text>
         <sofa-normal-text :color="'text-grayColor'">
-          (24 ratings)
+          ({{ content }} ratings)
         </sofa-normal-text>
       </div>
     </div>
@@ -69,7 +69,7 @@
       class="flex flex-row space-x-2 items-center justify-between pt-1"
       v-if="content.username"
     >
-      <div class="flex flex-row space-x-1 items-center">
+      <router-link :to="`/profile/${content.userId}`" class="flex flex-row space-x-1 items-center">
         <sofa-avatar
           :size="'20'"
           :photoUrl="content.userPhoto"
@@ -89,7 +89,7 @@
           {{ content.username }}
         </sofa-normal-text>
         <sofa-icon :name="'verify'" :custom-class="'h-[13px]'" />
-      </div>
+      </router-link>
 
       <sofa-icon
         @click.stop="bookmarkAction ? bookmarkAction() : null"

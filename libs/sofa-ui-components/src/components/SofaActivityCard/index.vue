@@ -100,9 +100,9 @@
             <sofa-icon :name="'star-full'" :custom-class="'h-[16px]'" />
 
             <div class="flex flex-row space-x-1 items-center">
-              <sofa-normal-text> 4.0 </sofa-normal-text>
+              <sofa-normal-text> {{ activity.ratings.avg }} </sofa-normal-text>
               <sofa-normal-text :color="'text-grayColor'">
-                (24 ratings)
+                ({{ activity.ratings.total }} ratings)
               </sofa-normal-text>
             </div>
           </div>
@@ -110,7 +110,7 @@
           <div
             class="flex flex-row items-center space-x-2 flex-grow justify-between w-full"
           >
-            <div class="space-x-2 flex flex-row items-center">
+            <router-link :to="`/profile/${activity.userId}`" class="space-x-2 flex flex-row items-center cursor-pointer">
               <sofa-avatar
                 :size="'20'"
                 :photoUrl="activity.userPhoto"
@@ -128,7 +128,7 @@
               >
                 {{ activity.username }}
               </sofa-normal-text>
-            </div>
+            </router-link>
 
             <sofa-icon
               v-if="!isWrapped"

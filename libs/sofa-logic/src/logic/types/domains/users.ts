@@ -43,6 +43,13 @@ export interface SingleUser {
       videos: number
       total: number
       students: number
+      playedGames: number
+      playedTests: number
+      publishedCourses: number
+      publishedDocuments: number
+      publishedImages: number
+      publishedQuizzes: number
+      publishedVideos: number
     }
     rankings: {
       daily: RankingValue

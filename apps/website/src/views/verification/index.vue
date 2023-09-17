@@ -503,6 +503,7 @@ export default defineComponent({
           price: 0,
           userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : "",
           type: "quiz",
+          ratings: quiz.ratings,
           userId: quiz.user.id,
         });
       });
@@ -522,6 +523,7 @@ export default defineComponent({
           price: course.price.amount,
           userPhoto: course.user.bio.photo ? course.user.bio.photo.link : "",
           type: "course",
+          ratings: course.ratings,
           userId: course.user.id,
         });
       });

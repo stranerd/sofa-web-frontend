@@ -256,6 +256,7 @@ export default defineComponent({
           id: course.id,
           status: course.status,
           showMore: false,
+          ratings: course.ratings,
           type: 'course',
           userId: course.user.id,
         });

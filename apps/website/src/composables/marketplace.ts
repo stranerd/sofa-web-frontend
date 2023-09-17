@@ -16,6 +16,11 @@ export interface ContentDetails {
   username?: string
   userPhoto: string
   price?: number
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
   type?: 'quiz' | 'course'
   userId: string
 }
@@ -177,6 +182,7 @@ const setCourses = (count = 5) => {
         },
         username: course.user.bio.name.full,
         price: course.price.amount,
+        ratings: course.ratings,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
       })
     } else if (
@@ -195,6 +201,7 @@ const setCourses = (count = 5) => {
         },
         username: course.user.bio.name.full,
         price: course.price.amount,
+        ratings: course.ratings,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
       })
     } else {
@@ -210,6 +217,7 @@ const setCourses = (count = 5) => {
         },
         username: course.user.bio.name.full,
         price: course.price.amount,
+        ratings: course.ratings,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
       })
     }
@@ -255,6 +263,7 @@ const extractContent = (item: Quiz | Course) => {
     username: item.user.bio.name.full,
     price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
     userPhoto: item.user.bio.photo ? item.user.bio.photo.link : '',
+    ratings: item.ratings,
     userId: item.user.id,
   }
 }

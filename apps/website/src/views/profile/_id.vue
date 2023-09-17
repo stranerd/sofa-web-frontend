@@ -230,16 +230,6 @@
         </div>
 
         <div
-          v-if="singleUser.type?.type == 'teacher'"
-          class="w-full flex shadow-custom px-6 py-6 rounded-[16px] bg-white flex-col space-y-2"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            Teaches
-          </sofa-normal-text>
-          <sofa-normal-text> Physics </sofa-normal-text>
-        </div>
-
-        <div
           class="w-full flex shadow-custom px-6 py-6 rounded-[16px] bg-white flex-col space-y-2"
         >
           <sofa-normal-text :customClass="'!font-bold'">
@@ -421,23 +411,6 @@ export default defineComponent({
         params: [],
         useRouteId: true,
         ignoreProperty: true,
-      },
-      {
-        domain: "Users",
-        property: "Verifications",
-        method: "GetVerifications",
-        params: [
-          {
-            where: [
-              {
-                field: "userId",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-        ],
-        requireAuth: true,
       },
     ],
   },
@@ -659,26 +632,19 @@ export default defineComponent({
     });
 
     const setProfileData = () => {
+      profileAttributes[0].value = singleUser.value.account.meta.publishedQuizzes.toString();
+      profileAttributes[1].value = singleUser.value.account.meta.publishedCourses.toString();
+      profileAttributes[2].show = false;
+
       if (singleUser.value?.type?.type == "organization") {
-        profileAttributes[0].value =
-          singleUser.value.account.meta.quizzes.toString();
-        profileAttributes[1].value =
-          singleUser.value.account.meta.courses.toString();
-        profileAttributes[2].show = false;
         profileAttributes[3].title = "Students";
-        profileAttributes[3].value =
-          singleUser.value.account.meta.students.toString();
-        tabItems[2].show = false;
+        profileAttributes[3].value = singleUser.value.account.meta.students.toString();
       } else {
-        profileAttributes[0].value =
-          singleUser.value.account.meta.quizzes.toString();
-        profileAttributes[1].value =
-          singleUser.value.account.meta.courses.toString();
-        profileAttributes[2].show = false;
-        profileAttributes[3].value =
-          singleUser.value.account.meta.connects.toString();
-        tabItems[2].show = false;
+        profileAttributes[3].value = singleUser.value.account.meta.connects.toString();
       }
+
+      tabItems[2].show = false;
+
 
       // social media link
       singleUser.value.socials.forEach((item) => {
