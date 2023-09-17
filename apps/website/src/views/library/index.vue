@@ -522,7 +522,10 @@
                 :data="item"
                 v-for="(item, index) in otherTasks"
                 :key="index"
-                @click="goToStudyMode(item.key)"
+                @click="() => {
+                  goToStudyMode(item.key)
+                  showStudyMode = false
+                }"
                 :customClass="'!bg-[#F1F6FA] !w-full'"
               >
                 <template v-slot:title>
