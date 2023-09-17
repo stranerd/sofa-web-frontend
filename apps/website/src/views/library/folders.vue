@@ -51,7 +51,7 @@
             :isWrapped="true"
             @click="
               activity.labels.main.toLocaleLowerCase().includes('quiz')
-                ? openQuiz(activity.id)
+                ? openQuiz(activity)
                 : Logic.Common.GoToRoute('/course/' + activity.id)
             "
           >
@@ -60,13 +60,7 @@
         <sofa-empty-state
           v-else
           :title="'There are no items in this folder'"
-          :subTitle="'Add quiz and courses from your library to this folder'"
-          :actionLabel="'Add item'"
-          :action="
-            () => {
-              showAddItemToFolder = true;
-            }
-          "
+          :subTitle="'Save quiz and courses to this folder and you will see them here'"
         />
       </div>
 

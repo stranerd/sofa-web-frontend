@@ -177,15 +177,6 @@
               </span>
             </template>
           </div>
-
-          <div v-if="!allContentCategories.includes(selectedFilter)">
-            <sofa-button
-              :customClass="'whitespace-nowrap'"
-              @click="showAddItemToFolder = true"
-            >
-              Add item
-            </sofa-button>
-          </div>
         </div>
 
         <div
@@ -393,13 +384,7 @@
             <sofa-empty-state
               v-else
               :title="'There are no items in this folder'"
-              :subTitle="'Add quiz and courses from your library to this folder'"
-              :actionLabel="'Add item'"
-              :action="
-                () => {
-                  showAddItemToFolder = true;
-                }
-              "
+              :subTitle="'Save quiz and courses to this folder and you will see them here'"
             />
           </template>
         </div>
