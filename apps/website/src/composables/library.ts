@@ -208,8 +208,8 @@ const quizzes = ref<ResourceType[]>([])
 
 const currentQuizData = ref<ResourceType[]>([])
 
-const createQuizData = (quiz: Quiz) => {
-  const data = {
+const createQuizData = (quiz: Quiz) :ResourceType => {
+  return {
     title: quiz.title,
     image: quiz.photo ? quiz.photo.link : '/images/default.png',
     labels: {
@@ -219,26 +219,19 @@ const createQuizData = (quiz: Quiz) => {
     },
     progress: 0,
     subject: Logic.Study.GetTagName(quiz.topicId),
-    username:
-      quiz.user?.id == Logic.Users.UserProfile?.id
-        ? 'You'
-        : quiz.user.bio.name.full,
-
     routePath: '/quiz/create?id=' + quiz.id,
     id: quiz.id,
     status: quiz.status,
-    userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : '',
-    createdAt: quiz.createdAt,
     showMore: false,
     ratings: quiz.ratings,
     type: 'quiz',
-    userId: quiz.user.id,
+    user: quiz.user,
+    authUserId: Logic.Users.UserProfile?.id
   }
-  return data
 }
 
-const createCourseData = (course: Course) => {
-  const data = {
+const createCourseData = (course: Course) : ResourceType  => {
+  return {
     title: course.title,
     image: course.photo ? course.photo.link : '/images/default.png',
     labels: {
@@ -248,23 +241,15 @@ const createCourseData = (course: Course) => {
     },
     progress: 0,
     subject: Logic.Study.GetTagName(course.topicId),
-    username:
-      course.user?.id == Logic.Users.UserProfile?.id
-        ? 'You'
-        : course.user.bio.name.full,
-
+    user: course.user,
+    authUserId: Logic.Users.UserProfile?.id,
     routePath: '/course/create?id=' + course.id,
     id: course.id,
     status: course.status,
-    userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
-    createdAt: course.createdAt,
     showMore: false,
     ratings: course.ratings,
     type: 'course',
-    userId: course.user.id,
   }
-
-  return data
 }
 
 const setQuizzes = () => {
@@ -443,14 +428,14 @@ const updateFolder = (title: string, id: string) => {
 }
 
 const openQuiz = (activity: ResourceType) => {
-  if (activity.status == 'draft' && activity.userId === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/quiz/create?id=${activity.id}`)
+  if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/quiz/create?id=${activity.id}`)
   selectedQuizId.value = activity.id
   showStudyMode.value = true
   selectedQuizMode.value = ''
 }
 
 const openCourse = (activity: ResourceType) => {
-  if (activity.status == 'draft' && activity.userId === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
+  if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
   Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
 
@@ -534,7 +519,7 @@ const moreOptions = reactive([
   {
     icon: 'edit-option',
     title: 'Edit',
-    show: () => selectedItem.value?.userId === Logic.Users.UserProfile?.id,
+    show: () => selectedItem.value?.user.id === Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
       if (selectedItem.value?.type == 'course') {
@@ -562,7 +547,7 @@ const moreOptions = reactive([
   {
     icon: 'report-option',
     title: 'Report',
-    show: () => selectedItem.value?.userId != Logic.Users.UserProfile?.id,
+    show: () => selectedItem.value?.user.id != Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
       reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)

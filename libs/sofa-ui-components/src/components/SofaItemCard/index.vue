@@ -58,37 +58,37 @@
       <sofa-icon :name="'star-full'" :custom-class="'h-[16px]'" />
 
       <div class="flex flex-row space-x-1 items-center">
-        <sofa-normal-text> {{ content }} </sofa-normal-text>
+        <sofa-normal-text> {{ content.ratings.avg }} </sofa-normal-text>
         <sofa-normal-text :color="'text-grayColor'">
-          ({{ content }} ratings)
+          ({{ content.ratings.count }} ratings)
         </sofa-normal-text>
       </div>
     </div>
 
     <div
       class="flex flex-row space-x-2 items-center justify-between pt-1"
-      v-if="content.username"
+      v-if="content.user"
     >
-      <router-link :to="`/profile/${content.userId}`" class="flex flex-row space-x-1 items-center">
+      <router-link :to="`/profile/${content.user.id}`" class="space-x-2 flex flex-row items-center cursor-pointer">
         <sofa-avatar
           :size="'20'"
-          :photoUrl="content.userPhoto"
+          :photoUrl="content.user.bio.photo?.link ?? ''"
           :bgColor="'bg-grayColor'"
-          :user-id="content.userId"
+          :user-id="content.user.id"
         >
           <sofa-icon
             :customClass="'h-[12px]'"
             :name="'user'"
-            v-if="!content.userPhoto"
+            v-if="!content.user.bio.photo?.link"
           />
         </sofa-avatar>
         <sofa-normal-text
-          :customClass="'pl-1 !whitespace-nowrap !line-clamp-1'"
-          :color="'text-grayColor'"
+          :customClass="'!whitespace-nowrap !line-clamp-1'"
         >
-          {{ content.username }}
+          {{ content.authUserId === content.user.id ? 'You' : content.user.bio.name.full }}
         </sofa-normal-text>
-        <sofa-icon :name="'verify'" :custom-class="'h-[13px]'" />
+        <sofa-icon v-if="content.user.roles.isVerified" :name="'verify'" :custom-class="'h-[13px]'" />
+        <sofa-icon v-if="content.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
       </router-link>
 
       <sofa-icon

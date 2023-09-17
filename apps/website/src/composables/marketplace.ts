@@ -1,6 +1,7 @@
 import { Logic } from 'sofa-logic'
 import { Conditions, QueryParams } from 'sofa-logic/src/logic/types/common'
 import { Course, Quiz } from 'sofa-logic/src/logic/types/domains/study'
+import { SingleUser } from 'sofa-ui-components/src/types/domains/users';
 import { reactive, ref } from 'vue'
 
 export interface ContentDetails {
@@ -13,8 +14,8 @@ export interface ContentDetails {
     sub: string
     color: string
   }
-  username?: string
-  userPhoto: string
+  user: SingleUser
+  authUserId: string | undefined
   price?: number
   ratings: {
     avg: number
@@ -22,7 +23,6 @@ export interface ContentDetails {
     total: number
   }
   type?: 'quiz' | 'course'
-  userId: string
 }
 
 const AllCourses = ref(Logic.Study.AllCourses)
@@ -246,7 +246,7 @@ const setCourses = (count = 5) => {
   }
 }
 
-const extractContent = (item: Quiz | Course) => {
+const extractContent = (item: Quiz | Course) : ContentDetails => {
   return {
     id: item.id,
     subject: Logic.Study.GetTagName(item.topicId),
@@ -260,11 +260,10 @@ const extractContent = (item: Quiz | Course) => {
           : `${item.questions.length} questions`,
       color: item.__type == 'CourseEntity' ? 'orange' : 'pink',
     },
-    username: item.user.bio.name.full,
     price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
-    userPhoto: item.user.bio.photo ? item.user.bio.photo.link : '',
     ratings: item.ratings,
-    userId: item.user.id,
+    user: item.user as any,
+    authUserId: Logic.Users.UserProfile?.id
   }
 }
 

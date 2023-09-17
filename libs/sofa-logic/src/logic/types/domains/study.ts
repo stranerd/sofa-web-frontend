@@ -166,7 +166,6 @@ export interface QuizQuestion {
 export interface ResourceType {
   title: string
   image: string
-  username: string
   subject: string
   labels: {
     main: string
@@ -178,7 +177,8 @@ export interface ResourceType {
   id: string
   status: string
   showMore: boolean
-  userId: string
+  user: SingleUser
+  authUserId: string | undefined
   type: 'course' | 'quiz' | string
   ratings: {
     avg: number

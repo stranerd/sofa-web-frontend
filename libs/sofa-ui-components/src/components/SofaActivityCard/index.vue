@@ -110,24 +110,26 @@
           <div
             class="flex flex-row items-center space-x-2 flex-grow justify-between w-full"
           >
-            <router-link :to="`/profile/${activity.userId}`" class="space-x-2 flex flex-row items-center cursor-pointer">
+            <router-link :to="`/profile/${activity.user.id}`" class="space-x-2 flex flex-row items-center cursor-pointer">
               <sofa-avatar
                 :size="'20'"
-                :photoUrl="activity.userPhoto"
+                :photoUrl="activity.user.bio.photo?.link ?? ''"
                 :bgColor="'bg-grayColor'"
-                :user-id="activity.userId"
+                :user-id="activity.user.id"
               >
                 <sofa-icon
                   :customClass="'h-[12px]'"
                   :name="'user'"
-                  v-if="!activity.userPhoto"
+                  v-if="!activity.user.bio.photo?.link"
                 />
               </sofa-avatar>
               <sofa-normal-text
                 :customClass="'!whitespace-nowrap !line-clamp-1'"
               >
-                {{ activity.username }}
+                {{ activity.authUserId === activity.user.id ? 'You' : activity.user.bio.name.full }}
               </sofa-normal-text>
+              <sofa-icon v-if="activity.user.roles.isVerified" :name="'verify'" :custom-class="'h-[13px]'" />
+              <sofa-icon v-if="activity.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
             </router-link>
 
             <sofa-icon

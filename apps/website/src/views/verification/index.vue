@@ -499,12 +499,11 @@ export default defineComponent({
             sub: `${quiz.questions.length} questions`,
             color: "pink",
           },
-          username: quiz.user.bio.name.full,
           price: 0,
-          userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : "",
           type: "quiz",
           ratings: quiz.ratings,
-          userId: quiz.user.id,
+          user: quiz.user as any,
+          authUserId: Logic.Users.UserProfile?.id
         });
       });
 
@@ -519,12 +518,11 @@ export default defineComponent({
             sub: `${course.sections.length} materials`,
             color: "orange",
           },
-          username: course.user.bio.name.full,
           price: course.price.amount,
-          userPhoto: course.user.bio.photo ? course.user.bio.photo.link : "",
           type: "course",
           ratings: course.ratings,
-          userId: course.user.id,
+          user: course.user as any,
+          authUserId: Logic.Users.UserProfile?.id
         });
       });
     };

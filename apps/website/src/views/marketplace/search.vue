@@ -325,6 +325,7 @@ import { search } from "@/composables/marketplace";
 import { useRoute } from "vue-router";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import { createCourseData, createQuizData } from "@/composables/library";
+import { ResourceType } from 'sofa-logic/src/logic/types/domains/study';
 
 export default defineComponent({
   components: {
@@ -413,41 +414,8 @@ export default defineComponent({
       },
     ]);
 
-    const resourceContents = ref<
-      {
-        id: string;
-        subject?: string;
-        title?: string;
-        image?: string;
-        labels?: {
-          main: string;
-          sub: string;
-          color: string;
-        };
-        username?: string;
-        userPhoto: string;
-        price?: number;
-        createdAt: number;
-      }[]
-    >([]);
-
-    const quizContents = ref<
-      {
-        id: string;
-        subject?: string;
-        title?: string;
-        image?: string;
-        labels?: {
-          main: string;
-          sub: string;
-          color: string;
-        };
-        username?: string;
-        userPhoto: string;
-        price?: number;
-        createdAt: number;
-      }[]
-    >([]);
+    const resourceContents = ref<ResourceType[]>([]);
+    const quizContents = ref<ResourceType[]>([]);
 
     const setCourses = () => {
       resourceContents.value.length = 0;

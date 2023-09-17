@@ -259,6 +259,7 @@ import {
 } from "@/composables/quiz";
 import { ResourceType } from "sofa-logic/src/logic/types/domains/study";
 import {
+createQuizData,
   moreOptions,
   showMoreOptionHandler,
   showMoreOptions,
@@ -360,30 +361,8 @@ export default defineComponent({
       quizzes.value.length = 0;
 
       AllQuzzies.value.results.forEach((quiz) => {
-        quizzes.value.push({
-          title: quiz.title,
-          image: quiz.photo ? quiz.photo.link : "/images/default.png",
-          labels: {
-            color: "pink",
-            main: "Quiz - Learn",
-            sub: `${quiz.questions.length} questions`,
-          },
-          progress: 0,
-          subject: Logic.Study.GetTagName(quiz.topicId),
-          username:
-            quiz.user?.id == Logic.Users.UserProfile?.id
-              ? "You"
-              : quiz.user.bio.name.full,
-
-          routePath: "/quiz/create?id=" + quiz.id,
-          id: quiz.id,
-          status: quiz.status,
-          showMore: false,
-          ratings: quiz.ratings,
-          type: 'quiz',
-          userId: quiz.user.id,
-        });
-      });
+        quizzes.value.push(createQuizData(quiz));
+      })
     };
 
     const filterItem = () => {
