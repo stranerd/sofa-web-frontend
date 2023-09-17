@@ -230,6 +230,7 @@ const createQuizData = (quiz: Quiz) => {
     userPhoto: quiz.user.bio.photo ? quiz.user.bio.photo.link : '',
     createdAt: quiz.createdAt,
     showMore: false,
+    type: 'quiz',
     userId: quiz.user.id,
   }
   return data
@@ -257,6 +258,7 @@ const createCourseData = (course: Course) => {
     userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
     createdAt: course.createdAt,
     showMore: false,
+    type: 'course',
     userId: course.user.id,
   }
 

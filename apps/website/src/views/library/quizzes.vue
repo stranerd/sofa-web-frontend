@@ -379,6 +379,7 @@ export default defineComponent({
           id: quiz.id,
           status: quiz.status,
           showMore: false,
+          type: 'quiz',
           userId: quiz.user.id,
         });
       });

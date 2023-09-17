@@ -30,10 +30,19 @@ export class BaseApiService {
     }, (error) => Promise.reject(error))
     this.axiosInstance.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         const { config, response } = error as AxiosError
-        console.log(response.status)
         if (response.status.toString() !== StatusCodes.expiredAccessToken) return Promise.reject(error)
+        try {
+          const res = await this.axiosInstance.post('/auth/token')
+          const tokens = res.data as AuthResponse
+          localStorage.setItem('AuthTokens', JSON.stringify({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          }))
+        } catch {
+          return Promise.reject(error)
+        }
         return this.axiosInstance(config)
     })
   }
