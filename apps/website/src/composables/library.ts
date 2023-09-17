@@ -477,6 +477,7 @@ const deleteFolder = (id: string) => {
   Logic.Study.DeleteFolder(id).then(() => {
     showDeleteFolder.value = false
   })
+  if ([`library?filter=${id}`, `/library/folders?filter=${id}`].includes(Logic.Common.route.fullPath)) Logic.Common.GoToRoute('/library')
 }
 
 const showMoreOptionHandler = (data: ResourceType, _type: 'quiz' | 'course') => {
