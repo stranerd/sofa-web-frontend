@@ -34,12 +34,11 @@
           :id="`mutipleItemContainer` + tabIndex"
         >
           <template v-if="selectedItems.length">
-            <sofa-badge
-              :color="'blue'"
-              v-for="(option, index) in selectedItems"
-              :key="index"
-              >{{ getSelectedOption(option) }}</sofa-badge
-            >
+            <template v-for="(option, index) in selectedItems" :key="index">
+              <sofa-badge :color="'blue'" v-if="getSelectedOption(option)">{{
+                getSelectedOption(option)
+              }}</sofa-badge>
+            </template>
           </template>
           <template v-else>
             <sofa-normal-text :color="'text-grayColor'">{{
@@ -166,11 +165,7 @@
               <sofa-checkbox
                 :extraData="option"
                 :defaultValue="itemIsSelected(option.key)"
-                @onSelected="
-                  (data) => {
-                    selectValue(data);
-                  }
-                "
+                @click.stop="selectValue(option)"
               >
                 {{ option.value }}
               </sofa-checkbox>
@@ -230,7 +225,7 @@ export default defineComponent({
       type: String,
       default: "",
     },
-    defaultValues: {
+    defaultOptions: {
       required: false,
       default: [],
     },
@@ -296,6 +291,8 @@ export default defineComponent({
 
     const optionToRef = toRef(props, "options");
 
+    const defaultOptionsRef = toRef(props, "defaultOptions");
+
     watch(optionToRef, () => {
       // console.log("i changed");
     });
@@ -344,9 +341,17 @@ export default defineComponent({
       if (props.options) {
         OptionRef.value = props.options;
         searchResult.value = props.options;
-        updateDefaultValue(props.modelValue);
+        if (!props.isMultiple) {
+          updateDefaultValue(props.modelValue);
+        }
       }
       prepareSelectOptions();
+    });
+
+    watch(defaultOptionsRef, () => {
+      if (props.isMultiple) {
+        selectedItems.value = defaultOptionsRef.value;
+      }
     });
 
     const updateDefaultValue = (value: any) => {
@@ -357,16 +362,19 @@ export default defineComponent({
       selectedKey.value = value;
       if (selectedOption.length > 0) {
         selectValue(selectedOption[0]);
+      } else {
+        textValue.value = "";
+        valueData.value = "";
       }
 
-      if (props.isMultiple && value.length) {
-        selectedItems.value = value;
-      }
+      // if (props.isMultiple && value.length) {
+      //   selectedItems.value = value;
+      // }
     };
 
     onMounted(() => {
-      if (props.defaultValues.length > 0) {
-        selectedItems.value = props.defaultValues;
+      if (props.modelValue.length > 0 && props.isMultiple) {
+        selectedItems.value = props.modelValue;
       }
       if (props.options) {
         OptionRef.value = props.options;
@@ -405,7 +413,7 @@ export default defineComponent({
 
     const selectValue = (option: any) => {
       if (!option) return;
-      if (props.autoComplete) {
+      if (props.autoComplete && !props.isMultiple) {
         context.emit("OnOptionSelected", option);
 
         isFocused.value = false;
@@ -434,6 +442,7 @@ export default defineComponent({
       if (props.isMultiple) {
         if (itemIsSelected(option.key)) {
           const currentItems = JSON.parse(JSON.stringify(selectedItems.value));
+
           selectedItems.value = currentItems.filter((key: any) => {
             return key != option.key;
           });

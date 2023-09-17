@@ -109,9 +109,11 @@ export default class ConversationsApi extends ModelApiService {
 
   public async deleteTutor(data: DeleteTutorInput) {
     try {
-      const response: AxiosResponse<Conversation> = await this.axiosInstance.put(
+      const response: AxiosResponse<Conversation> = await this.axiosInstance.delete(
         this.getUrl() + `/${data.id}/tutor`,
-        data,
+        {
+          data,
+        },
       )
 
       return response

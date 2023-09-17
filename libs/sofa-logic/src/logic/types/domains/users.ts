@@ -72,14 +72,15 @@ export interface SingleUser {
         startDate: number
         endDate: number
         courseIds: string[]
-      }
+      }[]
       departmentId: string
       institutionId: string
       facultyId: string
     }
   }
   tutor: {
-    conversations: []
+    conversations: string[]
+    topics: string[]
   }
   ai: {
     name: string

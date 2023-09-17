@@ -3,18 +3,25 @@ import { SingleUser } from './../../logic/types/domains/users'
 import { AxiosResponse } from 'axios'
 import { ReadOnlyApiService } from '../common/ReadOnlyService'
 import { Paginated } from '../../logic/types/domains/common'
+import { QueryParams } from '../../logic/types/common'
 
 export default class OrganizationApi extends ReadOnlyApiService {
   constructor() {
     super('users/organizations')
   }
 
-  public async getOrganizationMembers(organisationUserId: string) {
+  public async getOrganizationMembers(
+    organisationUserId: string,
+    filters: QueryParams = {},
+  ) {
     try {
       const response: AxiosResponse<Paginated<
         OrganisationMember
       >> = await this.axiosInstance.get(
         this.getUrl() + `/${organisationUserId}/members`,
+        {
+          params: filters,
+        },
       )
 
       return response

@@ -43,9 +43,7 @@
         </div>
       </sofa-image-loader>
       <div class="grid grid-cols-10 w-full gap-2 items-center h-full relative">
-        <div
-          :class="`flex flex-col space-y-2 mdlg:!col-span-8 col-span-10 h-full w-full `"
-        >
+        <div :class="`flex flex-col space-y-2  col-span-10 h-full w-full `">
           <div class="w-full flex flex-row items-center justify-between">
             <sofa-normal-text
               :customClass="'!font-bold w-full text-left !line-clamp-1'"
@@ -58,6 +56,17 @@
             >
               <sofa-icon :customClass="'h-[16px]'" :name="'edit-gray'" />
             </div>
+            <div
+              class="flex flex-row justify-end"
+              v-if="hasBookmark"
+              @click.stop="bookmarkAction ? bookmarkAction() : null"
+            >
+              <sofa-icon :customClass="'h-[16px]'" :name="'bookmark'" />
+            </div>
+
+            <template v-if="hasExtra">
+              <slot name="extra" />
+            </template>
           </div>
           <div class="flex flex-row space-x-2 items-center">
             <sofa-normal-text
@@ -102,12 +111,21 @@
             class="flex flex-row items-center space-x-2 flex-grow justify-between w-full"
           >
             <div class="space-x-2 flex flex-row items-center">
-              <div
-                class="w-[20px] h-[20px] flex flex-row items-center justify-center bg-grayColor border-[1px] border-grayColor rounded-full"
+              <sofa-avatar
+                :size="'20'"
+                :photoUrl="activity.userPhoto"
+                :bgColor="'bg-grayColor'"
+                :user-id="activity.userId"
               >
-                <sofa-icon :customClass="'h-[13px]'" :name="'user'" />
-              </div>
-              <sofa-normal-text>
+                <sofa-icon
+                  :customClass="'h-[12px]'"
+                  :name="'user'"
+                  v-if="!activity.userPhoto"
+                />
+              </sofa-avatar>
+              <sofa-normal-text
+                :customClass="'!whitespace-nowrap !line-clamp-1'"
+              >
                 {{ activity.username }}
               </sofa-normal-text>
             </div>
@@ -115,21 +133,13 @@
             <sofa-icon
               v-if="!isWrapped"
               :name="'bookmark'"
-              :customClass="'h-[19px] mdlg:!hidden '"
+              :customClass="'h-[17px] mdlg:!hidden '"
             />
           </div>
         </div>
-        <div
-          :class="` flex-col ${
-            centralizeExtras
-              ? 'justify-center flex absolute right-[0%] z-40 top-0 h-full'
-              : 'justify-between hidden'
-          }  col-span-2 items-end !h-full cursor-pointer z-40 mdlg:flex`"
-        >
-          <slot name="extra" />
-        </div>
       </div>
     </div>
+    <slot />
   </div>
 </template>
 <script lang="ts">
@@ -139,6 +149,7 @@ import { SofaNormalText } from "../SofaTypography";
 import SofaImageLoader from "../SofaImageLoader";
 import SofaBadge from "../SofaBadge";
 import SofaButton from "../SofaButton";
+import SofaAvatar from "../SofaAvatar";
 
 export default defineComponent({
   components: {
@@ -147,6 +158,7 @@ export default defineComponent({
     SofaImageLoader,
     SofaNormalText,
     SofaButton,
+    SofaAvatar,
   },
   props: {
     customClass: {
@@ -169,6 +181,17 @@ export default defineComponent({
       type: Function,
     },
     centralizeExtras: {
+      type: Boolean,
+      default: false,
+    },
+    hasBookmark: {
+      type: Boolean,
+      default: false,
+    },
+    bookmarkAction: {
+      type: Function,
+    },
+    hasExtra: {
       type: Boolean,
       default: false,
     },

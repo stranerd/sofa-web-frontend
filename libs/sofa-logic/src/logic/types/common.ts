@@ -88,6 +88,10 @@ export interface FetchRule {
   queries?: string[]
   alignCurrency?: boolean
   silentUpdate?: boolean
+  condition?: {
+    routeSearchItem: 'fullPath' | 'params' | 'query'
+    searchQuery: string
+  }
 }
 
 export interface FormContentRule {

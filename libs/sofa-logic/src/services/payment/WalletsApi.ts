@@ -4,6 +4,7 @@ import { CommercialBanks, Wallet } from '../../logic/types/domains/payment'
 import {
   FundWalletInput,
   UpdateAccountNumberInput,
+  WithdrawalFromWalletInput,
 } from '../../logic/types/forms/payment'
 
 export default class WalletsApi extends ReadOnlyApiService {
@@ -84,12 +85,42 @@ export default class WalletsApi extends ReadOnlyApiService {
     }
   }
 
-  public async withdrawFromWallet(amount: number) {
+  public async verifyAccountNumber(data: UpdateAccountNumberInput) {
+    try {
+      const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
+        this.getUrl() + '/account/verify',
+        data,
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
+  public async withdrawFromWallet(data: WithdrawalFromWalletInput) {
     try {
       const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
         this.getUrl() + '/withdraw',
+        data,
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
+  public async toggleSubscriptionRenew(renew: boolean) {
+    try {
+      const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
+        this.getUrl() + '/subscriptions/renewal/toggle',
         {
-          amount,
+          renew,
         },
       )
 

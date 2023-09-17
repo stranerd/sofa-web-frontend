@@ -16,6 +16,7 @@ import {
   UpdateUserProfileInput,
   UpdateUserRoleInput,
 } from '../types/forms/auth'
+import { capitalize } from 'vue'
 
 export default class Auth extends Common {
   constructor() {
@@ -27,7 +28,10 @@ export default class Auth extends Common {
   }
 
   public AccessToken: string | null = null
+  public RefreshToken: string | null = null
   public AuthUser: AuthUser | undefined = undefined
+  public TokenRefreshWatcher: any = null
+  public RefreshIsActive = false
 
   // input data
   public UpdateUserProfileForm: UpdateUserProfileInput | undefined
@@ -46,28 +50,42 @@ export default class Auth extends Common {
       this.SendVerificationEmail()
       Logic.Common.GoToRoute('/auth/verify-email')
     } else {
-      Logic.Common.GoToRoute('/')
+      Logic.Users.GetUserProfile().then(() => {
+        this.DetectVerification()
+      })
     }
   }
 
-  public DetectVerification = (showAccountSetup: any) => {
-    if (
-      Logic.Auth.AuthUser.name &&
-      Logic.Auth.AuthUser.phone &&
-      Logic.Users.UserProfile.type
-    ) {
-      //
-    } else {
-      if (Logic.Common.mediaQuery() == 'sm') {
-        Logic.Common.GoToRoute('/onboarding/account-setup')
+  public DetectVerification = () => {
+    if (Logic.Auth.AuthUser?.name && Logic.Users.UserProfile?.type) {
+      if (!window.location.href.includes('auth')) {
+        //
       } else {
-        
-        showAccountSetup.value = true
+        Logic.Common.GoToRoute('/')
       }
+    } else {
+      Logic.Common.GoToRoute('/auth')
     }
+  }
+
+  public ParseJwt = (token) => {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        })
+        .join(''),
+    )
+
+    return JSON.parse(jsonPayload)
   }
 
   public SetTokens = (AuthData: AuthResponse) => {
+    this.RefreshToken = AuthData.refreshToken
     localStorage.setItem(
       'AuthTokens',
       JSON.stringify({
@@ -76,20 +94,34 @@ export default class Auth extends Common {
       }),
     )
 
+    const tokenData = this.ParseJwt(AuthData.accessToken)
+
+    localStorage.setItem('token_expiry', tokenData.exp.toString())
+
     localStorage.setItem('auth_user', JSON.stringify(AuthData.user))
   }
 
   public GetAuthUser = () => {
     return $api.auth.user.getAuthUser().then((response) => {
       this.AuthUser = response.data
+      // register auth watcher
+
       return response.data
     })
   }
 
   public DeleteUserAccount = () => {
-    return $api.auth.user.deleteUserAccount().then((response) => {
-      return response.data
-    })
+    return $api.auth.user
+      .deleteUserAccount()
+      .then((response) => {
+        localStorage.removeItem('AuthTokens')
+        localStorage.removeItem('auth_user')
+
+        window.location.href = '/auth/login'
+      })
+      .catch((error) => {
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
+      })
   }
 
   public UpdateUserProfile = (
@@ -148,10 +180,17 @@ export default class Auth extends Common {
       .signOut()
       .then((response) => {
         //
-        Logic.Common.GoToRoute('/auth/login')
-        window.location.reload()
+
         localStorage.removeItem('AuthTokens')
         localStorage.removeItem('auth_user')
+        localStorage.removeItem('token_expiry')
+        localStorage.removeItem('auth_user_profile')
+
+        clearInterval(this.TokenRefreshWatcher)
+
+        Logic.Common.GoToRoute('/auth/login')
+
+        window.location.reload()
       })
       .catch((error) => {
         //
@@ -199,8 +238,8 @@ export default class Auth extends Common {
           Logic.Auth.AuthUser = response.data.user
           this.SetTokens(response.data)
           Logic.Common.hideLoader()
-
           this.RedirectUser()
+
           return response.data.user
         })
         .catch((error) => {
@@ -222,6 +261,7 @@ export default class Auth extends Common {
           this.SetTokens(response.data)
           this.RedirectUser()
           Logic.Common.hideLoader()
+
           return response.data.user
         })
         .catch((error) => {
@@ -244,6 +284,7 @@ export default class Auth extends Common {
 
           this.RedirectUser()
           Logic.Common.hideLoader()
+
           return response.data.user
         })
         .catch((error) => {
@@ -265,11 +306,8 @@ export default class Auth extends Common {
           this.SetTokens(response.data)
           Logic.Common.hideLoader()
           Logic.Users.GetUserProfile()
-          if (Logic.Common.mediaQuery() == 'sm') {
-            Logic.Common.GoToRoute('/onboarding/account-setup')
-          } else {
-            Logic.Common.GoToRoute('/')
-          }
+          this.RedirectUser()
+
           return response.data.user
         })
         .catch((error) => {
@@ -292,38 +330,63 @@ export default class Auth extends Common {
   }
 
   public SendPasswordResetMail = (email: string) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     return $api.auth.passwords
       .sendResetPasswordMail({ email })
       .then((response) => {
+        Logic.Common.hideLoader()
+        Logic.Common.showLoader({
+          show: true,
+          message: 'A password reset token has been sent to your email',
+          type: 'success',
+        })
         return response.data
       })
       .catch((error) => {
-        //
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
   public ResetPasswordWithToken = (formIsValid: boolean) => {
     if (formIsValid && this.ResetPasswordWithTokenForm) {
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      })
       return $api.auth.passwords
         .resetPassword(this.ResetPasswordWithTokenForm)
         .then((response) => {
-          //
+          Logic.Auth.AuthUser = response.data.user
+          this.SetTokens(response.data)
+          Logic.Common.hideLoader()
+          Logic.Users.GetUserProfile().then(() => {
+            this.RedirectUser()
+          })
+
+          return response.data
         })
         .catch((error) => {
-          //
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
 
   public UpdatePassword = (formIsValid: boolean) => {
     if (formIsValid && this.UpdatePasswordForm) {
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      })
       return $api.auth.passwords
         .updatePassword(this.UpdatePasswordForm)
         .then((response) => {
-          //
+          return response.data
         })
-        .then((error) => {
-          //
+        .catch((error) => {
+          throw error
         })
     }
   }

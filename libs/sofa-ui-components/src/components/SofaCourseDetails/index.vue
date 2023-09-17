@@ -287,6 +287,7 @@ export default defineComponent({
             type: "error",
           });
         }
+        showDeleteMaterial.value = false;
       });
     };
 

@@ -40,7 +40,7 @@ export interface Wallet {
   userId: string
   balance: {
     amount: number
-    currency: number
+    currency: string
   }
   account: {
     country: string

@@ -3,11 +3,13 @@ import {
   UpdateUserAspirantInput,
   UpdateUserCollegeInput,
   UpdateUserLocationInput,
+  UpdateUserSocialInput,
   UpdateUserTeacherInput,
 } from './../../logic/types/forms/users'
 import { SingleUser } from './../../logic/types/domains/users'
 import { AxiosResponse } from 'axios'
 import { ReadOnlyApiService } from '../common/ReadOnlyService'
+import { Logic } from '../../logic'
 
 export default class UsersApi extends ReadOnlyApiService {
   constructor() {
@@ -18,7 +20,12 @@ export default class UsersApi extends ReadOnlyApiService {
     try {
       const response: AxiosResponse<SingleUser> = await this.axiosInstance.post(
         this.getUrl() + '/ai',
-        data,
+        Logic.Common.convertToFormData(data),
+        {
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+        },
       )
 
       return response
@@ -70,6 +77,21 @@ export default class UsersApi extends ReadOnlyApiService {
     try {
       const response: AxiosResponse<SingleUser> = await this.axiosInstance.post(
         this.getUrl() + '/location',
+        data,
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
+  public async updateUserSocial(data: UpdateUserSocialInput) {
+    try {
+      const response: AxiosResponse<SingleUser> = await this.axiosInstance.post(
+        this.getUrl() + '/socials',
         data,
       )
 

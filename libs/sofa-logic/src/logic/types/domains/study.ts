@@ -34,6 +34,7 @@ export interface Quiz {
   }
   createdAt: number
   updatedAt: number
+  __type: 'QuizEntity'
 }
 
 export interface Question {
@@ -97,6 +98,7 @@ export interface Course {
   }
   createdAt: number
   updatedAt: number
+  __type: 'CourseEntity'
 }
 
 export interface SofaFile {
@@ -165,4 +167,7 @@ export interface ResourceType {
   routePath: string
   id: string
   status: string
+  showMore: boolean
+  userId: string
+  type: 'course' | 'quiz' | string
 }

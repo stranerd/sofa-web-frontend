@@ -166,6 +166,7 @@ import draggable from "vuedraggable";
 import { Question } from "../../types/domains/study";
 import { Logic } from "../../composable";
 import SofaModal from "../SofaModal";
+import { SofaHeaderText } from "../SofaTypography";
 
 export default defineComponent({
   components: {
@@ -173,6 +174,7 @@ export default defineComponent({
     SofaNormalText,
     draggable,
     SofaModal,
+    SofaHeaderText,
   },
   props: {
     customClass: {
@@ -272,6 +274,8 @@ export default defineComponent({
         newQuestionData,
         type
       );
+
+      Logic.Study.CreateQuestionForm.explanation = "";
 
       Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id);
     };

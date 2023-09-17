@@ -15,7 +15,7 @@ export default class PasswordsApi extends ReadOnlyApiService {
   public async sendResetPasswordMail(data: SendResetPasswordInput) {
     try {
       const response: AxiosResponse<boolean> = await this.axiosInstance.post(
-        this.getUrl() + '/mail',
+        this.getUrl() + '/reset/mail',
         data,
       )
 

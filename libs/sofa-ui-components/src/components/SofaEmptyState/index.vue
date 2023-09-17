@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full flex flex-col space-y-3 justify-center items-center py-9 px-6 custom-border bg-primaryPurple"
+    :class="`w-full flex flex-col space-y-3 justify-center items-center py-9 px-6 custom-border bg-primaryPurple ${customClass}`"
   >
     <sofa-icon
       :customClass="icon ? icon.size : 'h-[28px]'"

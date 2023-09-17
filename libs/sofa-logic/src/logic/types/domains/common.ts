@@ -88,24 +88,6 @@ interface ContentDetails {
   }[]
 }
 
-interface Tags {
-  hash: string
-  id: string
-  type: string
-  title: string
-  parent?: string
-  meta: {
-    courses: number
-    quizzes: number
-    images: number
-    documents: number
-    videos: number
-    total: number
-  }
-  createdAt: number
-  updatedAt: number
-}
-
 interface Country {
   name: string
   iso2: string
@@ -142,4 +124,4 @@ export interface QueryParams {
   search?: { value: string; fields: string[] }
 }
 
-export { ValidationError, Paginated, FileData, Tags, ContentDetails, Country }
+export { ValidationError, Paginated, FileData, ContentDetails, Country }

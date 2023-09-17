@@ -4,126 +4,127 @@
   >
     <div class="flex flex-col space-y-6 h-full w-full">
       <template v-if="sectionOptions.length">
-        <div
-          class="flex flex-col w-full space-y-3"
-          v-for="(option, index) in sectionOptions"
-          :key="index"
-        >
-          <template v-if="option">
-            <div
-              class="w-full flex flex-row items-center justify-between cursor-pointer"
-              @click="
-                option?.opened
-                  ? (option.opened = false)
-                  : (option.opened = true);
-                selectedSection = index;
-              "
-            >
-              <div class="flex flex-row items-center space-x-2">
-                <sofa-normal-text
-                  :customClass="'!font-bold'"
-                  v-if="!option.edit"
-                  >{{ option.name }}</sofa-normal-text
-                >
-                <input
-                  v-else
-                  @click.stop="null"
-                  class="outline-none focus:outline-slate-200 font-bold px-2 placeholder:font-normal w-full border-[1px] border-gray-100 rounded text-bodyBlack"
-                  v-model="option.name"
-                  autofocus
-                  placeholder="Section name"
-                  @blur="option.edit = false"
-                />
-              </div>
-              <div class="flex flex-row items-center space-x-3">
-                <sofa-icon
-                  @click.stop="option.edit = true"
-                  :customClass="'h-[15px] cursor-pointer'"
-                  :name="'edit-gray'"
-                />
-                <sofa-icon
-                  @click.stop="removeSection(index)"
-                  :customClass="'h-[15px] cursor-pointer'"
-                  :name="'trash-gray'"
-                />
-                <sofa-icon
-                  :customClass="'h-[7px] cursor-pointer'"
-                  :name="option.opened ? 'chevron-up' : 'chevron-down'"
-                />
-              </div>
-            </div>
-
-            <template v-if="option.opened">
-              <draggable
-                v-model="option.materials"
-                :group="option.id"
-                class="w-full space-y-3"
-                item-key="id"
-                handle=".handle"
+        <template v-for="(option, index) in sectionOptions" :key="index">
+          <div class="flex flex-col w-full space-y-3">
+            <template v-if="option">
+              <div
+                class="w-full flex flex-row items-center justify-between cursor-pointer"
+                @click="
+                  option?.opened
+                    ? (option.opened = false)
+                    : (option.opened = true);
+                  selectedSection = index;
+                "
               >
-                <template #item="{ element }">
-                  <div
-                    :class="`w-full flex flex-row items-center relative justify-between space-x-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${
-                      selectedMaterial?.id == element.id
-                        ? 'bg-lightBlue'
-                        : 'bg-white'
-                    }`"
-                    @mouseover="element.hover = true"
-                    @mouseleave="element.hover = false"
-                    @click.stop="
-                      selectedMaterial = {
-                        id: element.id,
-                        data: element.data,
-                        details: element.details,
-                        type: element.type.split('-')[0],
-                      };
-                      handleItemSelected();
-                    "
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-normal-text
+                    :customClass="'!font-bold'"
+                    v-if="!option.edit"
+                    >{{ option.name }}</sofa-normal-text
                   >
-                    <div class="flex flex-row items-center space-x-2">
-                      <sofa-icon
-                        :customClass="'h-[17px]'"
-                        :name="element.type"
-                      />
-                      <sofa-normal-text
-                        :customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'"
-                        >{{ element.name }}</sofa-normal-text
-                      >
-                    </div>
+                  <input
+                    v-else
+                    @click.stop="null"
+                    class="outline-none focus:outline-slate-200 font-bold px-2 placeholder:font-normal w-full border-[1px] border-gray-100 rounded text-bodyBlack"
+                    v-model="option.name"
+                    autofocus
+                    placeholder="Section name"
+                    @blur="option.edit = false"
+                  />
+                </div>
+                <div class="flex flex-row items-center space-x-3">
+                  <sofa-icon
+                    @click.stop="option.edit = true"
+                    :customClass="'h-[15px] cursor-pointer'"
+                    :name="'edit-gray'"
+                  />
+                  <sofa-icon
+                    @click.stop="removeSection(index)"
+                    :customClass="'h-[15px] cursor-pointer'"
+                    :name="'trash-gray'"
+                  />
+                  <sofa-icon
+                    :customClass="'h-[7px] cursor-pointer'"
+                    :name="option.opened ? 'chevron-up' : 'chevron-down'"
+                  />
+                </div>
+              </div>
 
+              <template v-if="option.opened">
+                <draggable
+                  v-model="option.materials"
+                  :group="option.id"
+                  class="w-full space-y-3"
+                  item-key="id"
+                  handle=".handle"
+                >
+                  <template #item="{ element }">
                     <div
-                      class="flex flex-row space-x-2 items-center absolute h-full w-auto right-0 bottom-0 bg-lightBlue px-2 rounded-[8px]"
+                      :class="`w-full flex flex-row items-center relative justify-between space-x-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${
+                        selectedMaterial?.id == element.id
+                          ? 'bg-lightBlue'
+                          : 'bg-white'
+                      }`"
+                      @mouseover="element.hover = true"
+                      @mouseleave="element.hover = false"
+                      @click.stop="
+                        selectedMaterial = {
+                          id: element.id,
+                          data: element.data,
+                          details: element.details,
+                          type: element.type.split('-')[0],
+                        };
+                        handleItemSelected();
+                      "
                     >
-                      <!-- <sofa-icon
+                      <div class="flex flex-row items-center space-x-2">
+                        <sofa-icon
+                          :customClass="'h-[17px]'"
+                          :name="element.type"
+                        />
+                        <sofa-normal-text
+                          :customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'"
+                          >{{ element.name }}</sofa-normal-text
+                        >
+                      </div>
+
+                      <div
+                        class="flex flex-row space-x-2 items-center absolute h-full w-auto right-0 bottom-0 bg-lightBlue px-2 rounded-[8px]"
+                      >
+                        <!-- <sofa-icon
                         :customClass="'h-[15px]'"
                         :name="'trash-gray'"
                       /> -->
 
-                      <sofa-icon
-                        :customClass="'h-[19px] handle'"
-                        :name="'reorder-gray'"
-                      />
+                        <sofa-icon
+                          :customClass="'h-[19px] handle'"
+                          :name="'reorder-gray'"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </template>
-              </draggable>
+                  </template>
+                </draggable>
 
-              <div
-                class="px-2 py-2 flex flex-row w-full items-center space-x-2 cursor-pointer"
-                @click="
-                  selectedMaterial = undefined;
-                  selectedSection = index;
-                  handleItemSelected();
-                "
-              >
-                <sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
-                <sofa-normal-text :color="'text-primaryPurple'">
-                  Add study material
-                </sofa-normal-text>
-              </div>
+                <div
+                  class="px-2 py-2 flex flex-row w-full items-center space-x-2 cursor-pointer"
+                  @click="
+                    selectedMaterial = undefined;
+                    selectedSection = index;
+                    handleItemSelected();
+                  "
+                >
+                  <sofa-icon
+                    :customClass="'h-[17px]'"
+                    :name="'box-add-purple'"
+                  />
+                  <sofa-normal-text :color="'text-primaryPurple'">
+                    Add study material
+                  </sofa-normal-text>
+                </div>
+              </template>
             </template>
-          </template>
-        </div>
+          </div>
+        </template>
       </template>
 
       <div
@@ -188,6 +189,7 @@ export default defineComponent({
     const SingleCourseFiles = ref<SofaFile[]>(Logic.Study.SingleCourseFiles);
     const SingleCourseQuizzes = ref<Quiz[]>(Logic.Study.SingleCourseQuizzes);
     const NewCoursableItem = ref(Logic.Study.NewCoursableItem);
+    const CoursableItemRemoved = ref(Logic.Study.CoursableItemRemoved);
     const SelectedMaterialDetails = ref(Logic.Study.SelectedMaterialDetails);
     const UpdatedFile = ref(Logic.Study.UpdatedFile);
 
@@ -336,7 +338,7 @@ export default defineComponent({
               id: quiz.id,
               type: "quiz-course",
               details: {
-                image_url: quiz.photo.link,
+                image_url: quiz.photo?.link || "",
                 title: quiz.title,
                 type: "Quiz",
                 questions: `${quiz.questions.length} questions`,
@@ -346,8 +348,8 @@ export default defineComponent({
                   label: "24 ratings",
                 },
                 user: {
-                  photoUrl: `${quiz.user.bio.photo.link}`,
-                  name: `${quiz.user.bio.name.full}`,
+                  photoUrl: `${quiz.user.bio?.photo?.link}`,
+                  name: `${quiz.user.bio?.name?.full}`,
                 },
                 last_updated: `${Logic.Common.momentInstance(
                   quiz.createdAt
@@ -384,6 +386,12 @@ export default defineComponent({
       }
     });
 
+    watch(CoursableItemRemoved, () => {
+      setSections();
+      selectedMaterial.value = undefined;
+      handleItemSelected();
+    });
+
     const setSections = (index = 0) => {
       staticSectionOptions.value.length = 0;
       staticPropSections.value.length = 0;
@@ -406,14 +414,14 @@ export default defineComponent({
 
         section.items.map((item) => {
           if (item.type == "quiz") {
-            const quizData = SingleCourseQuizzes.value.filter(
+            const quizData = SingleCourseQuizzes.value?.filter(
               (quiz) => quiz.id == item.id
             );
             if (quizData.length) {
               setSectionMaterial(undefined, quizData[0], false, index);
             }
           } else {
-            const fileData = SingleCourseFiles.value.filter(
+            const fileData = SingleCourseFiles.value?.filter(
               (file) => file.id == item.id
             );
             setSectionMaterial(fileData[0], undefined, false, index);
@@ -444,7 +452,10 @@ export default defineComponent({
     onMounted(() => {
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
       Logic.Study.watchProperty("SingleFile", SingleFile);
+      Logic.Study.watchProperty("SingleCourseFiles", SingleCourseFiles);
+      Logic.Study.watchProperty("SingleCourseQuizzes", SingleCourseQuizzes);
       Logic.Study.watchProperty("NewCoursableItem", NewCoursableItem);
+      Logic.Study.watchProperty("CoursableItemRemoved", CoursableItemRemoved);
       Logic.Study.watchProperty("UpdatedFile", UpdatedFile);
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
 
@@ -484,7 +495,7 @@ export default defineComponent({
     watch(sectionOptions, () => {
       Logic.Common.debounce(() => {
         updateLatestSection();
-      }, 500);
+      }, 300);
     });
 
     const removeSection = (index: number) => {

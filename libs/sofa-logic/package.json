@@ -1,6 +1,6 @@
 {
   "name": "sofa-logic",
-  "version": "0.0.17",
+  "version": "1.0.0",
   "description": "Frontend Logic for SOFA",
   "main": "src/index.ts",
   "scripts": {

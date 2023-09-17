@@ -59,6 +59,11 @@ export default class Common {
     '300': '5m',
   }
 
+  public AvailableCurrencies = {
+    NGN: '₦',
+    USD: '$',
+  }
+
   public inWords = (num: any) => {
     let a = [
       '',
@@ -278,8 +283,35 @@ export default class Common {
     this.apiUrl = apiUrl
   }
 
-  public GoToRoute = (path: string) => {
-    this.router?.push(path)
+  public GoToRoute = (path: string, force = false) => {
+    if (path == '/auth/login') {
+      if (
+        !(window.location.pathname + window.location.search).includes('auth')
+      ) {
+        localStorage.setItem(
+          'previous_page',
+          window.location.pathname + window.location.search,
+        )
+      }
+
+      this.router?.push(path)
+    } else {
+      if (this.route.path == '/auth/login') {
+        let nextRoute = ''
+        if (!path.includes('auth')) {
+          if (force) {
+            this.router.push(path)
+          } else {
+            nextRoute = localStorage.getItem('previous_page') || '/'
+            this.router.push(nextRoute)
+          }
+        } else {
+          this.router?.push(path)
+        }
+      } else {
+        this.router?.push(path)
+      }
+    }
   }
 
   public convertToFormData = (data: any) => {
@@ -351,15 +383,14 @@ export default class Common {
     }
   }
 
-  // public showError = (
-  //   error: CombinedError,
-  //   title: string,
-  //   icon: 'error-alert' | 'error-kite' | 'success-kite' | 'success-thumb',
-  //   fallbackMsg = '',
-  // ) => {
-  //   const message = error.graphQLErrors[0].message
-  //   this.sideBarInfo.errorMessage = message != 'null' ? message : fallbackMsg
-  // }
+  public showError = (message: string) => {
+    this.showLoader({
+      show: true,
+      message,
+      loading: false,
+      type: 'error',
+    })
+  }
 
   public getLabel = (data: any, key: string) => {
     const thisData = data.filter((Option: any) => {
@@ -537,7 +568,7 @@ export default class Common {
     return oldData
   }
 
-  public preFetchRouteData = (
+  public preFetchRouteData = async (
     routeTo: RouteLocationNormalized,
     next: NavigationGuardNext,
     _routeFrom: RouteLocationNormalized,
@@ -547,6 +578,9 @@ export default class Common {
       return
     }
 
+    // save to route path
+    localStorage.setItem('to_route', routeTo.fullPath)
+
     const routeMiddlewares: any = routeTo.meta.middlewares
 
     // handle fetchRules
@@ -555,31 +589,95 @@ export default class Common {
 
     let BreakException = {}
 
+    // confirm auth token is has expired, if not refresh
+    const tokenExpiry = localStorage.getItem('token_expiry')
+
+    if (tokenExpiry && Logic.Auth.AuthUser) {
+      if (
+        this.momentInstance
+          .unix(parseInt(tokenExpiry))
+          .diff(this.momentInstance.now(), 'minute') < 3
+      ) {
+        await Logic.Auth.RefreshAuthToken()
+      }
+    }
+
     try {
       fetchRules?.forEach((rule) => {
         if (rule.requireAuth) {
           if (!Logic.Auth.AuthUser) {
-            this.GoToRoute('/auth/login')
+            window.location.href = '/auth/login'
+
             throw BreakException
           }
         }
-        // @ts-ignore
-        const domain = Logic[rule.domain]
 
-        if (rule.alignCurrency) {
-          if (rule.params[0] != this.globalParameters.currency) {
-            rule.params[0] = this.globalParameters.currency
-            rule.ignoreProperty = true
+        let addRuleToRequest = true
+
+        if (rule.condition) {
+          switch (rule.condition.routeSearchItem) {
+            case 'fullPath':
+              addRuleToRequest = routeTo['fullPath'].includes(
+                rule.condition.searchQuery,
+              )
+              break
+            case 'params':
+              addRuleToRequest = routeTo['params'][rule.condition.searchQuery]
+                ? true
+                : false
+              break
+            case 'query':
+              addRuleToRequest = routeTo['query'][rule.condition.searchQuery]
+                ? true
+                : false
+              break
+            default:
+              break
           }
         }
 
-        if (
-          domain[rule.property] == undefined ||
-          (typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) ||
-          rule.ignoreProperty
-        ) {
-          allActions.push(
-            new Promise((resolve) => {
+        if (addRuleToRequest) {
+          // @ts-ignore
+          const domain = Logic[rule.domain]
+
+          if (
+            domain[rule.property] == undefined ||
+            (typeof rule.ignoreProperty == 'function' &&
+              rule.ignoreProperty()) ||
+            rule.ignoreProperty
+          ) {
+            allActions.push(
+              new Promise((resolve) => {
+                if (rule.useRouteId) {
+                  rule.params.unshift(routeTo.params.id.toString())
+                }
+                if (rule.useRouteQuery) {
+                  rule.queries?.forEach((item) => {
+                    rule.params.unshift(routeTo.query[item])
+                  })
+                }
+
+                // update userid
+                rule.params.forEach((param) => {
+                  if (typeof param === 'object') {
+                    if (param.where) {
+                      param.where.forEach((item) => {
+                        if (item.field == 'user.id' || item.field == 'userId') {
+                          item.value = Logic.Auth.AuthUser.id
+                        }
+                      })
+                    }
+                  }
+                })
+                const request = domain[rule.method](...rule.params)
+                request?.then((value: any) => {
+                  resolve(value)
+                })
+              }),
+            )
+          } else {
+            if (rule.silentUpdate) {
+              // run in silence
               if (rule.useRouteId) {
                 rule.params.unshift(routeTo.params.id.toString())
               }
@@ -588,38 +686,9 @@ export default class Common {
                   rule.params.unshift(routeTo.query[item])
                 })
               }
-
-              // update userid
-              rule.params.forEach((param) => {
-                if (typeof param === 'object') {
-                  if (param.where) {
-                    param.where.forEach((item) => {
-                      if (item.field == 'user.id' || item.field == 'userId') {
-                        item.value = Logic.Auth.AuthUser.id
-                      }
-                    })
-                  }
-                }
-              })
-              const request = domain[rule.method](...rule.params)
-              request?.then((value: any) => {
-                resolve(value)
-              })
-            }),
-          )
-        } else {
-          if (rule.silentUpdate) {
-            // run in silence
-            if (rule.useRouteId) {
-              rule.params.unshift(routeTo.params.id.toString())
+              rule.params = [...new Set(rule.params)]
+              domain[rule.method](...rule.params)
             }
-            if (rule.useRouteQuery) {
-              rule.queries?.forEach((item) => {
-                rule.params.unshift(routeTo.query[item])
-              })
-            }
-            rule.params = [...new Set(rule.params)]
-            domain[rule.method](...rule.params)
           }
         }
       })

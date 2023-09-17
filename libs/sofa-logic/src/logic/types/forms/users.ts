@@ -60,15 +60,6 @@ export interface UpdateUserTeacherInput {
 }
 
 export interface CreateVerificationInput {
-  socials: {
-    website: string
-    facebook: string
-    twitter: string
-    instagram: string
-    linkedIn: string
-    youtube: string
-    tiktok: string
-  }
   content: {
     quizzes: string[]
     courses: string[]
@@ -89,4 +80,11 @@ export interface UpdateUserLocationInput {
     country: string
     state: string
   }
+}
+
+export interface UpdateUserSocialInput {
+  socials: {
+    ref: string
+    link: string
+  }[]
 }

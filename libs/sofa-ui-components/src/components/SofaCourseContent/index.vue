@@ -18,7 +18,7 @@
               option.name
             }}</sofa-normal-text>
           </div>
-          <div class="flex flex-row items-center space-x-3">
+          <div class="md:flex flex-row items-center space-x-3 hidden">
             <sofa-icon
               :customClass="'h-[7px] cursor-pointer'"
               :name="option.opened ? 'chevron-up' : 'chevron-down'"
@@ -28,49 +28,73 @@
 
         <template v-if="option.opened">
           <div class="w-full space-y-1">
-            <div
-              v-for="(material, index) in option.materials"
-              :key="index"
-              :class="`w-fill flex flex-col space-y-1 ${
-                lockContent ? 'opacity-80' : ''
-              } rounded-[8px] px-3 py-3 cursor-pointer ${
-                selectedMaterial?.id == material.id
-                  ? 'bg-lightBlue'
-                  : 'bg-white'
-              }  hover:bg-lightBlue `"
-              @click.stop="selectItem(material)"
-            >
-              <div class="w-full flex flex-row justify-between items-center">
-                <sofa-normal-text :customClass="'!text-left !line-clamp-1'">
-                  {{ material.name }}
-                </sofa-normal-text>
-                <sofa-icon
-                  :customClass="'h-[18px]'"
-                  v-if="!lockContent"
-                  :name="
-                    itemIsStudied(material.id) ? 'selected' : 'not-selected'
-                  "
-                />
-                <sofa-icon
-                  :customClass="'h-[25px]'"
-                  v-else
-                  :name="'locked-content'"
-                />
+            <!-- For larger screens -->
+            <template v-if="Logic.Common.mediaQuery() != 'sm'">
+              <div
+                v-for="(material, index) in option.materials"
+                :key="index"
+                :class="`w-fill flex flex-col space-y-1 ${
+                  lockContent ? 'opacity-80' : ''
+                } rounded-[8px] px-3 py-3 cursor-pointer ${
+                  selectedMaterial?.id == material.id
+                    ? 'bg-lightBlue'
+                    : 'bg-white'
+                }  hover:bg-lightBlue `"
+                @click.stop="selectItem(material)"
+              >
+                <div class="w-full flex flex-row justify-between items-center">
+                  <sofa-normal-text :customClass="'!text-left !line-clamp-1'">
+                    {{ material.name }}
+                  </sofa-normal-text>
+                  <sofa-icon
+                    :customClass="'h-[18px]'"
+                    v-if="!lockContent"
+                    :name="
+                      itemIsStudied(material.id) ? 'selected' : 'not-selected'
+                    "
+                  />
+                  <sofa-icon
+                    :customClass="'h-[25px]'"
+                    v-else
+                    :name="'locked-content'"
+                  />
+                </div>
+                <div class="w-full flex flex-row space-x-2 items-center">
+                  <div class="flex flex-row items-center space-x-1">
+                    <sofa-icon
+                      :customClass="'h-[17px]'"
+                      :name="material.type"
+                    />
+                    <sofa-normal-text
+                      :color="'text-grayColor'"
+                      :customClass="'!text-left !capitalize'"
+                    >
+                      {{ material.type.split("-")[0] }}
+                    </sofa-normal-text>
+                  </div>
+
+                  <!-- <span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span> -->
+                </div>
               </div>
-              <div class="w-full flex flex-row space-x-2 items-center">
-                <div class="flex flex-row items-center space-x-1">
-                  <sofa-icon :customClass="'h-[17px]'" :name="material.type" />
+            </template>
+            <template v-else>
+              <div class="w-full flex flex-col space-y-3 pt-2">
+                <div
+                  v-for="(material, index) in option.materials"
+                  :key="index"
+                  class="w-full flex flex-row space-x-3 items-center py-1 hover:bg-lightBlue"
+                  @click.stop="selectItem(material)"
+                >
+                  <sofa-icon :customClass="'h-[18px]'" :name="material.type" />
                   <sofa-normal-text
-                    :color="'text-grayColor'"
-                    :customClass="'!text-left !capitalize'"
+                    :customClass="'!text-left !line-clamp-1'"
+                    :color="'text-[#141618]'"
                   >
-                    {{ material.type.split("-")[0] }}
+                    {{ material.name }}
                   </sofa-normal-text>
                 </div>
-
-                <!-- <span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span> -->
               </div>
-            </div>
+            </template>
           </div>
         </template>
       </template>
@@ -152,7 +176,7 @@ export default defineComponent({
       required: false,
     },
   },
-  emits: ["update:modelValue", "OnMaterialSelected"],
+  emits: ["update:modelValue", "OnMaterialSelected", "onCourseContentSet"],
   name: "SofaCourseContent",
   setup(props, context) {
     const selectedSection = ref(0);
@@ -170,15 +194,14 @@ export default defineComponent({
     const selectedMaterial = ref<any>();
 
     const selectItem = (material: any) => {
-      if (!props.lockContent) {
-        selectedMaterial.value = {
-          id: material.id,
-          data: material.data,
-          details: material.details,
-          type: material.type.split("-")[0],
-        };
-        handleItemSelected();
-      }
+      selectedMaterial.value = {
+        id: material.id,
+        data: material.data,
+        details: material.details,
+        type: material.type.split("-")[0],
+        name: material.name,
+      };
+      handleItemSelected();
     };
 
     const itemIsStudied = (materialId: string) => {
@@ -321,97 +344,123 @@ export default defineComponent({
 
       if (quiz) {
         const allRequests: Promise<any>[] = [];
-        allRequests.push(
-          new Promise((resolve) => {
-            Logic.Study.GetQuestions(quiz.id).then((response) => {
-              if (response) {
-                const questions: Question[] = response.results;
 
-                const allQuestions = questions.map((eachQuestion) => {
-                  let answers = "";
+        if (!props.lockContent) {
+          allRequests.push(
+            new Promise((resolve) => {
+              Logic.Study.GetQuestions(quiz.id)
+                .then((response) => {
+                  if (response) {
+                    const questions: Question[] = response.results;
 
-                  if (eachQuestion.data.type == "multipleChoice") {
-                    answers =
-                      eachQuestion.data.options[eachQuestion.data.answers[0]];
-                  } else if (eachQuestion.data.type == "trueOrFalse") {
-                    answers = `${capitalize(
-                      eachQuestion.data.answer.toString()
-                    )}`;
-                  } else if (
-                    eachQuestion.data.type == "writeAnswer" ||
-                    eachQuestion.data.type == "sequence" ||
-                    eachQuestion.data.type == "dragAnswers" ||
-                    eachQuestion.data.type == "fillInBlanks"
-                  ) {
-                    answers = capitalize(eachQuestion.data.answers?.join(", "));
-                  } else if (eachQuestion.data.type == "match") {
-                    answers = capitalize(
-                      eachQuestion.data.set
-                        .map((item) => {
-                          return item.a;
-                        })
-                        .join(", ")
+                    const allQuestions = questions.map((eachQuestion) => {
+                      let answers = "";
+
+                      if (eachQuestion.data.type == "multipleChoice") {
+                        answers =
+                          eachQuestion.data.options[
+                            eachQuestion.data.answers[0]
+                          ];
+                      } else if (eachQuestion.data.type == "trueOrFalse") {
+                        answers = `${capitalize(
+                          eachQuestion.data.answer.toString()
+                        )}`;
+                      } else if (
+                        eachQuestion.data.type == "writeAnswer" ||
+                        eachQuestion.data.type == "sequence" ||
+                        eachQuestion.data.type == "dragAnswers" ||
+                        eachQuestion.data.type == "fillInBlanks"
+                      ) {
+                        answers = capitalize(
+                          eachQuestion.data.answers?.join(", ")
+                        );
+                      } else if (eachQuestion.data.type == "match") {
+                        answers = capitalize(
+                          eachQuestion.data.set
+                            .map((item) => {
+                              return item.a;
+                            })
+                            .join(", ")
+                        );
+                      }
+                      return {
+                        type: Logic.Study.questionTypes[eachQuestion.data.type]
+                          .type,
+                        duration:
+                          Logic.Common.EquivalentsSecondsInString[
+                            `${eachQuestion.timeLimit}`
+                          ],
+                        content: eachQuestion.question,
+                        answer: answers,
+                      };
+                    });
+
+                    const contentDetails = reactive<ContentDetails>(
+                      Logic.Study.contentDetails
                     );
+
+                    contentDetails.title = quiz.title;
+                    contentDetails.id = quiz.id;
+                    contentDetails.price = 0;
+                    contentDetails.image = quiz.photo
+                      ? quiz.photo.link
+                      : "/images/default.png";
+                    contentDetails.info = quiz.description;
+                    contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
+                      quiz.updatedAt
+                    ).format("DD/MM/YYYY")}`;
+                    contentDetails.tags = quiz.tagIds.map((id) => {
+                      return Logic.Study.GetTagName(id);
+                    });
+                    contentDetails.user.name = quiz.user.bio.name.full;
+                    contentDetails.user.photoUrl = quiz.user.bio.photo
+                      ? quiz.user.bio.photo.link
+                      : "";
+
+                    contentDetails.content.materialsCount =
+                      quiz.questions.length;
+
+                    contentDetails.labels = {
+                      color: "purple",
+                      main: "Quiz",
+                      sub: `${quiz.questions.length} question${
+                        quiz.questions.length > 1 ? "s" : ""
+                      }`,
+                    };
+
+                    contentDetails.questions = allQuestions;
+
+                    staticSectionOptions.value[index].materials.push({
+                      name: quiz.title,
+                      id: quiz.id,
+                      type: "quiz-course",
+                      data: contentDetails,
+                      hover: false,
+                    });
+
+                    resolve("");
                   }
-                  return {
-                    type: Logic.Study.questionTypes[eachQuestion.data.type]
-                      .type,
-                    duration:
-                      Logic.Common.EquivalentsSecondsInString[
-                        `${eachQuestion.timeLimit}`
-                      ],
-                    content: eachQuestion.question,
-                    answer: answers,
-                  };
+                })
+                .catch(() => {
+                  staticSectionOptions.value[index].materials.push({
+                    name: quiz.title,
+                    id: quiz.id,
+                    type: "quiz-course",
+                    data: [],
+                    hover: false,
+                  });
                 });
-
-                const contentDetails = reactive<ContentDetails>(
-                  Logic.Study.contentDetails
-                );
-
-                contentDetails.title = quiz.title;
-                contentDetails.id = quiz.id;
-                contentDetails.price = 0;
-                contentDetails.image = quiz.photo
-                  ? quiz.photo.link
-                  : "/images/default.png";
-                contentDetails.info = quiz.description;
-                contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-                  quiz.updatedAt
-                ).format("DD/MM/YYYY")}`;
-                contentDetails.tags = quiz.tagIds.map((id) => {
-                  return Logic.Study.GetTagName(id);
-                });
-                contentDetails.user.name = quiz.user.bio.name.full;
-                contentDetails.user.photoUrl = quiz.user.bio.photo
-                  ? quiz.user.bio.photo.link
-                  : "";
-
-                contentDetails.content.materialsCount = quiz.questions.length;
-
-                contentDetails.labels = {
-                  color: "purple",
-                  main: "Quiz",
-                  sub: `${quiz.questions.length} question${
-                    quiz.questions.length > 1 ? "s" : ""
-                  }`,
-                };
-
-                contentDetails.questions = allQuestions;
-
-                staticSectionOptions.value[index].materials.push({
-                  name: quiz.title,
-                  id: quiz.id,
-                  type: "quiz-course",
-                  data: contentDetails,
-                  hover: false,
-                });
-
-                resolve("");
-              }
-            });
-          })
-        );
+            })
+          );
+        } else {
+          staticSectionOptions.value[index].materials.push({
+            name: quiz.title,
+            id: quiz.id,
+            type: "quiz-course",
+            data: [],
+            hover: false,
+          });
+        }
 
         Promise.all(allRequests)
           .then(() => {
@@ -467,31 +516,37 @@ export default defineComponent({
       }
     };
 
+    watch(sectionOptions, () => {
+      context.emit("onCourseContentSet", sectionOptions);
+    });
     onMounted(() => {
       if (SingleCourse.value) {
         setSections();
       }
 
-      if (!props.lockContent) {
-        if (props.modelValue) {
-          selectedMaterial.value = props.modelValue;
-          selectedMaterial.value.isMounted = true;
-          handleItemSelected();
-        } else {
-          if (sectionOptions[0]) {
-            if (sectionOptions[0].materials[0]) {
-              selectedMaterial.value = {
-                id: sectionOptions[0].materials[0].id,
-                data: sectionOptions[0].materials[0].data,
-                details: sectionOptions[0].materials[0].details,
-                type: sectionOptions[0].materials[0].type.split("-")[0],
-                isMounted: true,
-              };
-              handleItemSelected();
+      setTimeout(() => {
+        if (!props.lockContent && Logic.Common.mediaQuery() != "sm") {
+          if (props.modelValue) {
+            selectedMaterial.value = props.modelValue;
+            selectedMaterial.value.isMounted = true;
+            handleItemSelected();
+          } else {
+            if (sectionOptions[0]) {
+              if (sectionOptions[0].materials[0]) {
+                selectedMaterial.value = {
+                  id: sectionOptions[0].materials[0].id,
+                  data: sectionOptions[0].materials[0].data,
+                  details: sectionOptions[0].materials[0].details,
+                  type: sectionOptions[0].materials[0].type.split("-")[0],
+                  isMounted: true,
+                  name: sectionOptions[0].materials[0].name,
+                };
+                handleItemSelected();
+              }
             }
           }
         }
-      }
+      }, 300);
     });
 
     return {

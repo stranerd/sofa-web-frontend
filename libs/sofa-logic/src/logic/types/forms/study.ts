@@ -13,8 +13,8 @@ export interface CreateQuizInput {
   title: string
   description: string
   photo?: Blob
-  topicId: string
-  tagIds: string[]
+  topic: string
+  tags: string[]
 }
 
 export interface ReorderQuizInput {
@@ -37,7 +37,6 @@ export interface CreateQuestionInput {
     options?: string[]
     answers?: any[]
     indicator?: string
-    explanation?: string
     answer?: boolean
     set?: {
       q: string
@@ -45,14 +44,15 @@ export interface CreateQuestionInput {
     }[]
   }
   id?: string
+  explanation?: string
 }
 
 export interface CreateCourseInput {
   title: string
   description: string
   photo?: Blob
-  topicId: string
-  tagIds: string[]
+  topic: string
+  tags: string[]
   price: {
     amount: number
     currency: string

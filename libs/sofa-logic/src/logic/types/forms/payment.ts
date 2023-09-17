@@ -20,3 +20,8 @@ export interface UpdateAccountNumberInput {
   bankCode: string
   bankNumber: string
 }
+
+export interface WithdrawalFromWalletInput {
+  amount: number
+  account: UpdateAccountNumberInput
+}

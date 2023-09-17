@@ -32,7 +32,7 @@
   ${
     color == 'gray'
       ? `  bg-backgroundGray ${
-          isInverted ? 'text-bodyBlack bg-opacity-25' : ' text-white '
+          isInverted ? 'text-bodyBlack bg-opacity-25' : ' text-grayColor '
         }`
       : ''
   }

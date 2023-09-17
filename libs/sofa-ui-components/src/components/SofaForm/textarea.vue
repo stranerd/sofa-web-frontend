@@ -12,7 +12,7 @@
       v-else
       v-model="valueContent"
       :placeholder="placeholder"
-      :class="`w-full !min-h-[100px] px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px]  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`"
+      :class="`w-full !min-h-[100px] px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`"
     >
     </textarea>
   </div>

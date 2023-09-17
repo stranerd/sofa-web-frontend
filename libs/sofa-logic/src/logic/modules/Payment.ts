@@ -2,6 +2,7 @@ import {
   MakePurchaseInput,
   FundWalletInput,
   UpdateAccountNumberInput,
+  WithdrawalFromWalletInput,
 } from './../types/forms/payment'
 import { $api } from '../../services'
 import Common from './Common'
@@ -16,6 +17,7 @@ import {
 } from '../types/domains/payment'
 import { Paginated } from '../types/domains/common'
 import { Conditions, QueryParams } from '../types/common'
+import { capitalize } from 'vue'
 
 export default class Payment extends Common {
   constructor() {
@@ -33,15 +35,23 @@ export default class Payment extends Common {
   public MakePurchaseForm: MakePurchaseInput | undefined
   public FundWalletForm: FundWalletInput | undefined
   public UpdateAccountForm: UpdateAccountNumberInput | undefined
+  public verifyAccountNumberForm: UpdateAccountNumberInput | undefined
+  public WithdrawalFromWalletForm: WithdrawalFromWalletInput | undefined
 
-  public initialPayment = (amount = 0) => {
+  public initialPayment = (amount = 0, type = 'newCard') => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     $api.payment.transaction
       .post(null, {
         data: {
-          type: 'newCard',
+          type,
+          amount: `${amount}`,
         },
       })
       .then((response) => {
+        Logic.Common.hideLoader()
         const transId = response.data.id
         $api.payment.transaction.getFlutterwaveKey().then((response) => {
           const publicToken = response.data.publicKey
@@ -69,6 +79,12 @@ export default class Payment extends Common {
                   .fulfillTransaction(transId)
                   .then(() => {
                     paymentModal.close()
+                    Logic.Common.showLoader({
+                      show: true,
+                      loading: false,
+                      message: 'Your wallet was funded successfully',
+                      type: 'success',
+                    })
                     const userQuery = {
                       where: [
                         {
@@ -82,9 +98,25 @@ export default class Payment extends Common {
                     Logic.Payment.GetTransactions(userQuery)
                     Logic.Payment.GetPaymentMethods(userQuery)
                   })
+                  .catch((error) => {
+                    Logic.Common.showLoader({
+                      show: true,
+                      loading: false,
+                      message: capitalize(error.response.data[0]?.message),
+                      type: 'error',
+                    })
+                  })
               }, 3000)
             },
           })
+        })
+      })
+      .catch((error) => {
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: capitalize(error.response.data[0]?.message),
+          type: 'error',
         })
       })
   }
@@ -107,9 +139,18 @@ export default class Payment extends Common {
     })
   }
 
-  public GetTransactions = (filter: QueryParams) => {
+  public GetTransactions = (filter: QueryParams, append = false) => {
     return $api.payment.transaction.fetch(filter).then((response) => {
-      this.AllTransactions = response.data
+      if (append) {
+        if (this.AllTransactions) {
+          response.data.results.unshift(...this.AllTransactions.results)
+          this.AllTransactions = response.data
+        } else {
+          this.AllTransactions = response.data
+        }
+      } else {
+        this.AllTransactions = response.data
+      }
     })
   }
 
@@ -195,8 +236,9 @@ export default class Payment extends Common {
           Logic.Common.hideLoader()
           return response.data
         })
-        .catch(() => {
+        .catch((error) => {
           Logic.Common.hideLoader()
+          throw error
         })
     }
   }
@@ -220,14 +262,28 @@ export default class Payment extends Common {
     }
   }
 
-  public WithdrawFromWallet = (amount: number) => {
-    if (amount > 0) {
+  public VerifyAccountNumber = () => {
+    if (this.verifyAccountNumberForm) {
+      return $api.payment.wallet
+        .verifyAccountNumber(this.verifyAccountNumberForm)
+        .then((response) => {
+          Logic.Common.hideLoader()
+          return response.data
+        })
+        .catch((error) => {
+          throw error
+        })
+    }
+  }
+
+  public WithdrawFromWallet = () => {
+    if (this.WithdrawalFromWalletForm) {
       Logic.Common.showLoader({
         loading: true,
         show: false,
       })
       return $api.payment.wallet
-        .withdrawFromWallet(amount)
+        .withdrawFromWallet(this.WithdrawalFromWalletForm)
         .then((response) => {
           Logic.Payment.GetUserWallet()
           Logic.Payment.GetTransactions({
@@ -242,8 +298,9 @@ export default class Payment extends Common {
           Logic.Common.hideLoader()
           return response.data
         })
-        .catch(() => {
+        .catch((error) => {
           Logic.Common.hideLoader()
+          throw error
         })
     }
   }
@@ -280,30 +337,84 @@ export default class Payment extends Common {
         Logic.Common.hideLoader()
         return response.data
       })
-      .catch(() => {
-        Logic.Common.hideLoader()
+      .catch((error) => {
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
+      })
+  }
+
+  public ToggleSubscriptionRenew = (renew: boolean) => {
+    return $api.payment.wallet
+      .toggleSubscriptionRenew(renew)
+      .then((response) => {
+        Logic.Payment.GetUserWallet()
+        Logic.Common.showLoader({
+          show: true,
+          message: 'Your subscription auto renewal has been updated',
+          type: 'success',
+        })
+        return response.data
+      })
+      .catch((error) => {
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
   public MakeMethodPrimary = (id: string) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     return $api.payment.paymentMethod
       .makePrimaryPaymentMethod(id)
       .then((response) => {
+        this.GetPaymentMethods({
+          where: [
+            {
+              field: 'userId',
+              condition: Conditions.eq,
+              value: Logic.Auth.AuthUser?.id,
+            },
+          ],
+        })
         this.PaymentMethod = response.data
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'Payment method set as primary',
+          type: 'success',
+        })
       })
       .catch((error) => {
-        //
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
   public DeleteMethod = (id: string) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     return $api.payment.paymentMethod
       .delete(id)
-      .then((response) => {
-        //
+      .then(() => {
+        this.GetPaymentMethods({
+          where: [
+            {
+              field: 'userId',
+              condition: Conditions.eq,
+              value: Logic.Auth.AuthUser?.id,
+            },
+          ],
+        })
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'Payment method deleted',
+          type: 'success',
+        })
       })
       .catch((error) => {
-        //
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 }

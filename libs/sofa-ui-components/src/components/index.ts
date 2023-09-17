@@ -25,6 +25,8 @@ import SofaCourseSummary from './SofaCourseSummary'
 import SofaCourseContent from './SofaCourseContent'
 import SofaDeletePrompt from './SofaDeletePrompt'
 import SofaAlert from './SofaAlert'
+import SofaSuccessPrompt from './SofaSuccessPrompt'
+import SofaRatings from './SofaRatings'
 import { SofaHeaderText, SofaNormalText } from './SofaTypography'
 import {
   SofaSelect,
@@ -88,4 +90,6 @@ export {
   SofaCourseContent,
   SofaDeletePrompt,
   SofaAlert,
+  SofaSuccessPrompt,
+  SofaRatings,
 }

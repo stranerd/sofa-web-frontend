@@ -80,7 +80,9 @@
             :key="index"
           >
             <sofa-icon :name="item.image" :custom-class="'h-[50px]'" />
-            <sofa-normal-text>{{ item.name }}</sofa-normal-text>
+            <sofa-normal-text :customClass="'text-center'">{{
+              item.name
+            }}</sofa-normal-text>
           </div>
         </div>
       </div>

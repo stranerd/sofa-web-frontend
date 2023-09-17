@@ -71,9 +71,12 @@
           class="bg-ligthGray w-[30%] py-2 rounded-[24px] flex flex-row items-center space-x-2 px-4"
         >
           <sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
-          <input
-            class="bg-transparent text-bodyBlack placeholder-[#78828C] w-full focus:outline-none"
+          <sofa-text-field
+            customClass="bg-transparent text-bodyBlack placeholder-[#78828C] w-full focus:outline-none"
             placeholder="Search "
+            :padding="'px-1 py-0'"
+            v-model="searchQuery"
+            @onEnter="initiateSearch"
           />
         </div>
       </div>
@@ -220,6 +223,7 @@ import { SingleUser } from "../../types/domains/users";
 import SofaModal from "../SofaModal";
 import { Conditions } from "../../types/domains/common";
 import notification from "./notification.vue";
+import { SofaTextField } from "../SofaForm";
 
 export default defineComponent({
   components: {
@@ -230,6 +234,7 @@ export default defineComponent({
     SofaHeaderText,
     SofaModal,
     notification,
+    SofaTextField,
   },
   props: {
     goBack: {
@@ -275,6 +280,8 @@ export default defineComponent({
 
     const showNotification = ref(false);
 
+    const searchQuery = ref("");
+
     onMounted(() => {
       Logic.Users.watchProperty("UserProfile", UserProfile);
 
@@ -289,10 +296,18 @@ export default defineComponent({
         ],
       });
     });
+
+    const initiateSearch = () => {
+      if (searchQuery.value.length > 1) {
+        Logic.Common.GoToRoute(`/marketplace/search?q=` + searchQuery.value);
+      }
+    };
     return {
       Logic,
       UserProfile,
       showNotification,
+      searchQuery,
+      initiateSearch,
     };
   },
 });

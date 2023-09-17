@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import { Logic } from '../../logic/modules'
 import { API_URL } from '../../common/constants'
 import { AuthResponse } from '../../logic/types/domains/auth'
+import { StatusCodes } from '../../logic/types/common';
 
 export class BaseApiService {
   private readonly baseUrl = API_URL
@@ -18,20 +19,26 @@ export class BaseApiService {
     }
 
     this.axiosInstance = axios.create(this.config)
+    this.axiosInstance.interceptors.request.use(async (config) => {
+      const savedTokens = localStorage.getItem('AuthTokens')
+      const tokens = savedTokens ? JSON.parse(savedTokens) as AuthResponse : undefined
+      config.baseURL = Logic.Common.apiUrl
+			config.headers ??= {} as any
+			if (tokens?.accessToken) config.headers['Access-Token'] = tokens.accessToken
+			if (tokens?.refreshToken) config.headers['Refresh-Token'] = tokens.refreshToken
+			return config
+    }, (error) => Promise.reject(error))
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const { config, response } = error as AxiosError
+        console.log(response.status)
+        if (response.status.toString() !== StatusCodes.expiredAccessToken) return Promise.reject(error)
+        return this.axiosInstance(config)
+    })
   }
 
   public getUrl(id = ''): string {
-    // auth token
-    const tokens: AuthResponse = localStorage.getItem('AuthTokens')
-      ? JSON.parse(localStorage.getItem('AuthTokens') || '{}')
-      : undefined
-    this.axiosInstance.defaults.baseURL = Logic.Common.apiUrl
-    this.axiosInstance.defaults.headers.common['Access-Token'] = tokens
-      ? tokens.accessToken
-      : ''
-    this.axiosInstance.defaults.headers.common['Refresh-Token'] = tokens
-      ? tokens.refreshToken
-      : ''
     return id ? `/${this.resource}/${id}` : `/${this.resource}`
   }
 

@@ -3,7 +3,7 @@
     <transition name="fade" appear>
       <div
         :class="`fixed top-0 w-screen h-screen bg-black !bg-opacity-40 flex flex-col overflow-y-hidden items-center mdlg:!justify-center justify-end ${customClass}`"
-        style="z-index: 999999999"
+        style="z-index: 9999999"
         @click="closeModal()"
       >
         <div

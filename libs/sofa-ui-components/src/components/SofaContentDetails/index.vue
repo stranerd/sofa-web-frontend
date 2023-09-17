@@ -137,7 +137,10 @@
               </sofa-normal-text>
             </div>
 
-            <div class="md:!flex hidden flex-col" v-if="showBuyButton">
+            <div
+              class="md:!flex hidden flex-col"
+              v-if="showBuyButton && type == 'course'"
+            >
               <sofa-button
                 v-if="!itemIsPurchased"
                 :padding="'px-6 py-1'"
@@ -167,6 +170,20 @@
                 @click="Logic.Common.GoToRoute('/course/' + content.id)"
               >
                 Go to course
+              </sofa-button>
+            </div>
+            <div class="md:!flex hidden flex-col" v-if="type == 'quiz'">
+              <sofa-button
+                :padding="'px-6 py-1'"
+                @click="
+                  itemIsPurchased
+                    ? (showStudyMode = true)
+                    : Logic.Common.GoToRoute(
+                        `/marketplace/${content.id}?type=course`
+                      )
+                "
+              >
+                {{ itemIsPurchased ? "Start" : "Go to course" }}
               </sofa-button>
             </div>
           </div>
@@ -228,7 +245,10 @@
       }  mdlg:!overflow-y-auto overflow-y-auto py-2 relative`"
       v-if="selectedTab == 'questions'"
     >
-      <div class="w-full flex flex-col space-y-3 h-full overflow-y-auto">
+      <div
+        class="w-full flex flex-col space-y-3 h-full overflow-y-auto"
+        v-if="itemIsPurchased"
+      >
         <div
           class="w-full bg-backgroundGray px-4 py-4 flex flex-col space-y-2 custom-border"
           v-for="(question, index) in content.questions"
@@ -255,17 +275,41 @@
           </sofa-normal-text> -->
         </div>
       </div>
+
+      <div class="w-full flex flex-col space-y-3 pb-4" v-if="!itemIsPurchased">
+        <sofa-empty-state
+          :title="'You have no access'"
+          :subTitle="'Purchase the course it is in to use'"
+          :actionLabel="'Go to course'"
+          :action="
+            () => {
+              Logic.Common.GoToRoute(`/marketplace/${content.id}?type=course`);
+            }
+          "
+          :icon="{
+            name: 'lock-white',
+            size: 'h-[28px]',
+          }"
+        />
+      </div>
+
       <div
         v-if="type == 'quiz'"
-        class="w-full flex flex-row items-center justify-center mdlg:!pt-3 mdlg:!relative fixed bottom-0 mdlg:!pb-0 pt-4 pb-4 mdlg:!px-0 px-4 bg-white left-0 mdlg:!bottom-auto mdlg:!left-auto"
+        class="w-full flex flex-row items-center justify-center mdlg:!pt-3 mdlg:!relative fixed bottom-0 mdlg:!pb-0 mdlg:hidden pt-4 pb-4 mdlg:!px-0 px-4 z-[50] bg-white left-0 mdlg:!bottom-auto mdlg:!left-auto"
       >
         <div class="md:!w-auto w-full flex flex-col">
           <sofa-button
             :padding="'md:!py-1 py-3 px-4'"
             :customClass="'md:!w-auto w-full'"
-            @click="showStudyMode = true"
+            @click="
+              itemIsPurchased
+                ? (showStudyMode = true)
+                : Logic.Common.GoToRoute(
+                    `/marketplace/${content.id}?type=course`
+                  )
+            "
           >
-            Start
+            {{ itemIsPurchased ? "Start" : "Go to course" }}
           </sofa-button>
         </div>
       </div>
@@ -315,13 +359,13 @@
             {{ content.user.role }}
           </sofa-normal-text>
 
-          <div class="w-full flex flex-row py-3 pb-4">
+          <!-- <div class="w-full flex flex-row py-3 pb-4">
             <sofa-button :padding="'px-5 py-1'" :customClass="'!font-semibold'"
               >Follow</sofa-button
             >
-          </div>
+          </div> -->
 
-          <div class="w-full flex flex-row items-center space-x-4">
+          <div class="w-full flex flex-row items-center space-x-4 pt-3">
             <div class="flex flex-row space-x-2 items-center">
               <sofa-icon
                 :customClass="'h-[40px] hidden mdlg:!inline-block'"
@@ -375,6 +419,7 @@
     >
       <div
         class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto scrollbar-hide"
+        v-if="similarContents?.length"
       >
         <div
           class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
@@ -383,10 +428,25 @@
             v-for="(activity, index) in similarContents"
             :key="index"
             :activity="activity"
-            :customClass="'!bg-[#F1F6FA]'"
+            :customClass="'!bg-[#F1F6FA] cursor-pointer'"
+            @click="Logic.Common.GoToRoute(`/marketplace/${activity.id}`)"
           />
         </div>
       </div>
+      <template v-else>
+        <div class="w-full flex flex-col space-y-3">
+          <sofa-empty-state
+            :title="'No similar course found'"
+            :subTitle="'Discover thousands of materials to buy, created by verified experts'"
+            :actionLabel="'Marketplace'"
+            :action="
+              () => {
+                Logic.Common.GoToRoute('/marketplace');
+              }
+            "
+          />
+        </div>
+      </template>
 
       <!-- <div class="w-full !h-[100px]"></div> -->
     </div>
@@ -427,7 +487,7 @@
   <!-- Smaller screen purchase buttons -->
   <div
     class="md:!hidden flex flex-col w-full fixed left-0 bottom-0 bg-white px-4 py-4"
-    v-if="showBuyButton"
+    v-if="showBuyButton && type == 'course'"
   >
     <sofa-button
       :padding="'px-6 py-3'"
@@ -518,7 +578,7 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref, toRef, watch } from "vue";
 import SofaIcon from "../SofaIcon";
 import SofaImageLoader from "../SofaImageLoader";
 import { SofaNormalText, SofaHeaderText } from "../SofaTypography";
@@ -532,6 +592,7 @@ import SofaContentRatings from "../SofaContentRatings";
 import SofaActivityCard from "../SofaActivityCard";
 import SofaModal from "../SofaModal";
 import SofaIconCard from "../SofaIconCard";
+import SofaEmptyState from "../SofaEmptyState";
 
 export default defineComponent({
   components: {
@@ -548,6 +609,7 @@ export default defineComponent({
     SofaActivityCard,
     SofaModal,
     SofaIconCard,
+    SofaEmptyState,
   },
   props: {
     customClass: {
@@ -592,6 +654,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    similarContents: {
+      type: Array as () => any[],
+    },
   },
   name: "SofaContentDetails",
   setup(props) {
@@ -601,80 +666,7 @@ export default defineComponent({
 
     const showStudyMode = ref(false);
 
-    if (props.type == "quiz") {
-      tabs.value.push({
-        name: "Questions",
-        key: "questions",
-      });
-
-      selectedTab.value = "questions";
-    } else {
-      tabs.value.push({
-        name: "Content",
-        key: "content",
-      });
-
-      selectedTab.value = "content";
-    }
-
-    if (!props.isMinimal) {
-      tabs.value.push(
-        {
-          name: "Ratings",
-          key: "ratings",
-        },
-        {
-          name: "Creator",
-          key: "creator",
-        }
-      );
-    }
-
-    if (props.type == "course") {
-      tabs.value.push({
-        name: "Similar courses",
-        key: "similar_courses",
-      });
-    }
-
-    const similarContents = [
-      {
-        title: "Big Data: What it is and why it matters",
-        image: "/images/big-data.png",
-        username: "Claudius Freeman",
-        subject: "Computer",
-        labels: {
-          main: "Course",
-          sub: "17 topics",
-          color: "orange",
-        },
-        progress: 40,
-      },
-      {
-        title: "Introduction to Organic Chemistry",
-        image: "/images/chemistry.png",
-        username: "Sukky Samwise",
-        subject: "Chemistry",
-        labels: {
-          main: "Quiz - Multiplayer",
-          sub: "20 questions",
-          color: "pink",
-        },
-        progress: 100,
-      },
-      {
-        title: "Physics: All terms and definitions",
-        image: "/images/physics.png",
-        username: "Dorcas Ayo",
-        subject: "Computer",
-        labels: {
-          main: "Quiz - Learn",
-          sub: "20 questions",
-          color: "pink",
-        },
-        progress: 60,
-      },
-    ];
+    const typeRef = toRef(props, "type");
 
     const otherTasks = [
       {
@@ -706,11 +698,58 @@ export default defineComponent({
       }
     };
 
+    const setContent = () => {
+      tabs.value.length = 0;
+
+      if (props.type == "quiz") {
+        tabs.value.push({
+          name: "Questions",
+          key: "questions",
+        });
+
+        selectedTab.value = "questions";
+      } else {
+        tabs.value.push({
+          name: "Content",
+          key: "content",
+        });
+
+        selectedTab.value = "content";
+      }
+
+      // if (!props.isMinimal) {
+      //   tabs.value.push(
+      //     {
+      //       name: "Ratings",
+      //       key: "ratings",
+      //     },
+      //     {
+      //       name: "Creator",
+      //       key: "creator",
+      //     }
+      //   );
+      // }
+
+      if (props.type == "course") {
+        tabs.value.push({
+          name: "Similar courses",
+          key: "similar_courses",
+        });
+      }
+    };
+
+    watch(typeRef, () => {
+      setContent();
+    });
+
+    onMounted(() => {
+      setContent();
+    });
+
     return {
       Logic,
       selectedTab,
       tabs,
-      similarContents,
       showStudyMode,
       otherTasks,
       goToStudyMode,

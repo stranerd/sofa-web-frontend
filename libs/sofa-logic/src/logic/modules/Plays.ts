@@ -44,9 +44,13 @@ export default class Plays extends Common {
           .then((response) => {
             this.SingleTest = response.data
             // get questions
-            this.GetTestQuizQuestions(this.SingleTest.id).then(() => {
+            if (this.SingleTest.status == 'started') {
+              this.GetTestQuizQuestions(this.SingleTest.id).then(() => {
+                resolve('')
+              })
+            } else {
               resolve('')
-            })
+            }
           })
           .catch((error) => {
             throw error
@@ -78,6 +82,30 @@ export default class Plays extends Common {
           .get(id)
           .then((response) => {
             this.SingleGame = response.data
+
+            const getParticipants = (resolve: any) => {
+              if (Logic.Auth.AuthUser?.id != this.SingleGame.user.id) {
+                // join game
+                if (
+                  !this.GameParticipants.filter(
+                    (item) => item.id == Logic.Auth.AuthUser?.id,
+                  ).length
+                ) {
+                  Logic.Plays.JoinGame(this.SingleGame.id, true).then(
+                    (data) => {
+                      if (data) {
+                        Logic.Plays.GetGame(this.SingleGame.id)
+                        resolve('')
+                      }
+                    },
+                  )
+                } else {
+                  resolve('')
+                }
+              } else {
+                resolve('')
+              }
+            }
             // get participants
             Logic.Users.GetUsers({
               where: [
@@ -89,29 +117,13 @@ export default class Plays extends Common {
               ],
             }).then((data) => {
               this.GameParticipants = data
-              this.GetQuizQuestions(this.SingleGame.id).then(() => {
-                if (Logic.Auth.AuthUser?.id != this.SingleGame.user.id) {
-                  // join game
-                  if (
-                    !this.GameParticipants.filter(
-                      (item) => item.id == Logic.Auth.AuthUser?.id,
-                    ).length
-                  ) {
-                    Logic.Plays.JoinGame(this.SingleGame.id, true).then(
-                      (data) => {
-                        if (data) {
-                          Logic.Plays.GetGame(this.SingleGame.id)
-                          resolve('')
-                        }
-                      },
-                    )
-                  } else {
-                    resolve('')
-                  }
-                } else {
-                  resolve('')
-                }
-              })
+              this.GetQuizQuestions(this.SingleGame.id)
+                .then(() => {
+                  getParticipants(resolve)
+                })
+                .catch(() => {
+                  getParticipants(resolve)
+                })
             })
           })
           .catch((error) => {
@@ -203,6 +215,18 @@ export default class Plays extends Common {
       })
   }
 
+  public StartTest = (testId: string) => {
+    return $api.plays.test
+      .startTest(testId)
+      .then((response) => {
+        this.SingleTest = response.data
+        return response.data
+      })
+      .catch((error) => {
+        //
+      })
+  }
+
   public EndTest = (testId: string) => {
     return $api.plays.test
       .endTest(testId)
@@ -219,6 +243,19 @@ export default class Plays extends Common {
     if (this.AnswerGameQuestionForm) {
       return $api.plays.game
         .answerGameQuestion(gameId, this.AnswerGameQuestionForm)
+        .then((response) => {
+          this.ParticipantAnswer = response.data
+        })
+        .catch((error) => {
+          //
+        })
+    }
+  }
+
+  public AnswerTestQuestion = (testId: string) => {
+    if (this.AnswerGameQuestionForm) {
+      return $api.plays.test
+        .answerTestQuestion(testId, this.AnswerGameQuestionForm)
         .then((response) => {
           this.ParticipantAnswer = response.data
         })

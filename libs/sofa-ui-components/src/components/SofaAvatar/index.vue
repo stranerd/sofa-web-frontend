@@ -1,8 +1,9 @@
 <template>
   <sofa-image-loader
     :photo-url="photoUrl"
-    :custom-class="`rounded-full flex text-xs uppercase font-semibold bg-opacity-10   ${bgColor} flex-row items-center justify-center ${customClass} `"
+    :custom-class="`rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer  ${bgColor} flex-row items-center justify-center ${customClass} `"
     :custom-style="`width: ${size}px; height: ${size}px;`"
+    @click.stop="userId ? Logic.Common.GoToRoute(`/profile/${userId}`) : null"
   >
     <template v-if="photoUrl == ''">
       <slot />
@@ -10,6 +11,7 @@
   </sofa-image-loader>
 </template>
 <script lang="ts">
+import { Logic } from "../../composable";
 import { defineComponent } from "vue";
 import SofaImageLoader from "../SofaImageLoader/index.vue";
 
@@ -34,6 +36,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    userId: {
+      type: String,
+      default: "",
+    },
   },
   name: "SofaAvatar",
   setup() {
@@ -41,6 +47,7 @@ export default defineComponent({
 
     return {
       randomIndex,
+      Logic,
     };
   },
 });

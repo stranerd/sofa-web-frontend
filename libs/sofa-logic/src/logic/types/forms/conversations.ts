@@ -25,3 +25,9 @@ export interface DeleteTutorInput {
   message: string
   id: string
 }
+
+export interface CreateTutorRequestInput {
+  message: string
+  conversationId: string
+  tutorId: string
+}

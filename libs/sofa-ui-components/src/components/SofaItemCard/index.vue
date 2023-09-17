@@ -70,18 +70,32 @@
       v-if="content.username"
     >
       <div class="flex flex-row space-x-1 items-center">
-        <div
-          class="w-[20px] h-[20px] flex flex-row items-center justify-center bg-grayColor border-[1px] border-grayColor rounded-full"
+        <sofa-avatar
+          :size="'20'"
+          :photoUrl="content.userPhoto"
+          :bgColor="'bg-grayColor'"
+          :user-id="content.userId"
         >
-          <sofa-icon :customClass="'h-[13px]'" :name="'user'" />
-        </div>
-        <sofa-normal-text :customClass="'pl-1'" :color="'text-grayColor'">
+          <sofa-icon
+            :customClass="'h-[12px]'"
+            :name="'user'"
+            v-if="!content.userPhoto"
+          />
+        </sofa-avatar>
+        <sofa-normal-text
+          :customClass="'pl-1 !whitespace-nowrap !line-clamp-1'"
+          :color="'text-grayColor'"
+        >
           {{ content.username }}
         </sofa-normal-text>
         <sofa-icon :name="'verify'" :custom-class="'h-[13px]'" />
       </div>
 
-      <sofa-icon :name="'bookmark'" :customClass="'h-[19px] '" />
+      <sofa-icon
+        @click.stop="bookmarkAction ? bookmarkAction() : null"
+        :name="'bookmark'"
+        :customClass="'h-[18px] '"
+      />
     </div>
   </div>
 </template>
@@ -93,6 +107,7 @@ import { SofaNormalText } from "../SofaTypography";
 import SofaBadge from "../SofaBadge";
 import SofaButton from "../SofaButton";
 import { Logic } from "../../composable";
+import SofaAvatar from "../SofaAvatar";
 
 export default defineComponent({
   components: {
@@ -101,6 +116,7 @@ export default defineComponent({
     SofaNormalText,
     SofaBadge,
     SofaButton,
+    SofaAvatar,
   },
   props: {
     customClass: {
@@ -109,6 +125,9 @@ export default defineComponent({
     },
     content: {
       type: Object as () => any,
+    },
+    bookmarkAction: {
+      type: Function,
     },
   },
   name: "SofaItemCard",

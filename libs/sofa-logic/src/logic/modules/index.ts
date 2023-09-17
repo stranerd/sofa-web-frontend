@@ -2,6 +2,7 @@ import Auth from './Auth'
 import Common from './Common'
 import Conversations from './Conversations'
 import Form from './Form'
+import Interactions from './Interactions'
 import Notifications from './Notifications'
 import Payment from './Payment'
 import Plays from './Plays'
@@ -20,4 +21,5 @@ export const Logic = {
   Schools: new Schools(),
   Study: new Study(),
   Users: new Users(),
+  Interactions: new Interactions(),
 }

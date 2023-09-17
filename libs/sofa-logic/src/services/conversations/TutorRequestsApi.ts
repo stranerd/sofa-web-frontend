@@ -1,20 +1,19 @@
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
 
-export default class TutorRequestApi extends ModelApiService {
+export default class ReviewsApi extends ModelApiService {
   constructor() {
-    super('users/tutorRequests')
+    super('conversations/tutorRequests')
   }
 
-  public async acceptOrRejectTutorRequest(requestId: string, status: boolean) {
+  public async acceptTutorRequest(tutorRequestId: string, accept: boolean) {
     try {
       const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-        this.getUrl() + `/${requestId}/accept`,
+        this.getUrl() + `/${tutorRequestId}/accept`,
         {
-          accept: status,
+          accept,
         },
       )
-
       return response
     } catch (err) {
       this.handleErrors(err)

@@ -1,6 +1,7 @@
 import {
   CreateTutorRequestForm,
   UpdateUserLocationInput,
+  UpdateUserSocialInput,
 } from './../types/forms/users'
 import { $api } from '../../services'
 import Common from './Common'
@@ -26,6 +27,9 @@ import {
 export default class Users extends Common {
   constructor() {
     super()
+    this.UserProfile = localStorage.getItem('auth_user_profile')
+      ? JSON.parse(localStorage.getItem('auth_user_profile') || '{}')
+      : undefined
   }
 
   public AllUsers: Paginated<User> | undefined
@@ -50,10 +54,11 @@ export default class Users extends Common {
   public UpdateUserVerificationForm: VerificationStatusInput | undefined
   public UpdateUserLocationForm: UpdateUserLocationInput | undefined
   public CreateTutorRequestForm: CreateTutorRequestForm | undefined
+  public UpdateUserSocialForm: UpdateUserSocialInput | undefined
 
   public getUserType = () => {
-    if (this.UserProfile.type?.type) {
-      return this.UserProfile.type?.type
+    if (Logic.Users.UserProfile?.type?.type) {
+      return Logic.Users.UserProfile.type?.type
     } else {
       const accountType = localStorage.getItem('user_account_type') || 'student'
 
@@ -105,9 +110,11 @@ export default class Users extends Common {
     }
   }
 
-  public GetUsers = (filters: QueryParams) => {
+  public GetUsers = (filters: QueryParams, updateItems = true) => {
     return $api.users.users.fetch(filters).then((response) => {
-      this.AllUsers = response.data
+      if (updateItems) {
+        this.AllUsers = response.data
+      }
       return response.data.results
     })
   }
@@ -135,9 +142,12 @@ export default class Users extends Common {
     })
   }
 
-  public GetOrganizationMembers = (organizationUserId: string) => {
+  public GetOrganizationMembers = (
+    organizationUserId: string,
+    filters: QueryParams = {},
+  ) => {
     return $api.users.organization
-      .getOrganizationMembers(organizationUserId)
+      .getOrganizationMembers(organizationUserId, filters)
       .then((response) => {
         this.AllOrganisationMembers = response.data
         return response.data.results
@@ -169,6 +179,7 @@ export default class Users extends Common {
 
   public GetUserProfile = () => {
     return $api.users.users.get(Logic.Auth.AuthUser.id).then((response) => {
+      localStorage.setItem('auth_user_profile', JSON.stringify(response.data))
       this.UserProfile = response.data
     })
   }
@@ -253,6 +264,20 @@ export default class Users extends Common {
       })
   }
 
+  public UpdateUserSocial = () => {
+    return $api.users.users
+      .updateUserSocial(this.UpdateUserSocialForm)
+      .then((response) => {
+        this.SingleUser = response.data
+        this.GetUserProfile()
+
+        return response.data
+      })
+      .catch((error) => {
+        throw error
+      })
+  }
+
   public CreateVerification = (formIsValid: boolean, useLoader = true) => {
     if (formIsValid && this.CreateVerificationForm) {
       if (useLoader) {
@@ -270,8 +295,9 @@ export default class Users extends Common {
             Logic.Common.hideLoader()
           }
         })
-        .catch(() => {
+        .catch((error) => {
           Logic.Common.hideLoader()
+          Logic.Common.showError(error.response.data[0].message)
         })
     }
   }
@@ -367,6 +393,29 @@ export default class Users extends Common {
       .then((response) => {
         Logic.Users.GetUserProfile()
         Logic.Common.hideLoader()
+        return response.data
+      })
+      .catch(() => {
+        Logic.Common.hideLoader()
+      })
+  }
+
+  public SendFeedbackMessage = (message: string) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.users.meta
+      .sendMessage(message)
+      .then((response) => {
+        Logic.Common.hideLoader()
+
+        Logic.Common.showLoader({
+          show: true,
+          message: 'Your feedback was sent successfully',
+          type: 'success',
+        })
+
         return response.data
       })
       .catch(() => {
