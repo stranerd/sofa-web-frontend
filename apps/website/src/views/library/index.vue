@@ -219,7 +219,7 @@
                   :activity="activity"
                   :custom-class="'!bg-white shadow-custom !cursor-pointer'"
                   :has-extra="true"
-                  @click="showQuizOptions(activity.id)"
+                  @click="openQuiz(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -234,7 +234,7 @@
                       />
                       <div
                         class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
-                        v-if="activity.showMore && selectedItem.id === activity.id"
+                        v-if="activity.showMore && selectedItem?.id === activity.id"
                       >
                         <div
                           class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
@@ -279,7 +279,7 @@
                   :activity="activity"
                   :has-extra="true"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
-                  @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+                  @click="openCourse(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -294,7 +294,7 @@
                       />
                       <div
                         class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
-                        v-if="activity.showMore && selectedItem.id === activity.id"
+                        v-if="activity.showMore && selectedItem?.id === activity.id"
                       >
                         <div
                           class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
@@ -340,7 +340,7 @@
                   :activity="activity"
                   :has-extra="true"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
-                  @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+                  @click="openCourse(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -355,7 +355,7 @@
                       />
                       <div
                         class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
-                        v-if="activity.showMore && selectedItem.id === activity.id"
+                        v-if="activity.showMore && selectedItem?.id === activity.id"
                       >
                         <div
                           class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
@@ -402,8 +402,8 @@
                 :custom-class="'!bg-white shadow-custom cursor-pointer'"
                 @click="
                   activity.labels.main.toLocaleLowerCase().includes('quiz')
-                    ? showQuizOptions(activity.id)
-                    : Logic.Common.GoToRoute('/course/' + activity.id)
+                    ? openQuiz(activity)
+                    : openCourse(activity)
                 "
               >
               </sofa-activity-card>
@@ -704,7 +704,8 @@ import {
   selectedFolderFilter,
   showAddItemToFolder,
   addFolder,
-  showQuizOptions,
+  openQuiz,
+  openCourse,
   updateFolder,
   AllCourses,
   setCourses,
@@ -936,7 +937,8 @@ export default defineComponent({
       selectedFolderFilter,
       FolderOptions,
       showAddItemToFolder,
-      showQuizOptions,
+      openQuiz,
+      openCourse,
       currentFolderItems,
       showDeleteFolder,
       deleteFolder,

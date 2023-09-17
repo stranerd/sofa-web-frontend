@@ -440,10 +440,16 @@ const updateFolder = (title: string, id: string) => {
   }, 500)
 }
 
-const showQuizOptions = (id: string) => {
-  selectedQuizId.value = id
+const openQuiz = (activity: ResourceType) => {
+  if (activity.status == 'draft' && activity.userId === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/quiz/create?id=${activity.id}`)
+  selectedQuizId.value = activity.id
   showStudyMode.value = true
   selectedQuizMode.value = ''
+}
+
+const openCourse = (activity: ResourceType) => {
+  if (activity.status == 'draft' && activity.userId === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
+  Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
 
 const saveItemsToFolder = (
@@ -471,12 +477,9 @@ const deleteFolder = (id: string) => {
   })
 }
 
-const showMoreOptionHandler = (data: ResourceType, type: 'quiz' | 'course') => {
+const showMoreOptionHandler = (data: ResourceType, _type: 'quiz' | 'course') => {
   showMoreOptions.value = true
-  selectedItem.id = data.id
-  selectedItem.type = type
-  selectedItem.name = data.title
-  selectedItem.userId = data.userId
+  selectedItem.value = data
   data.showMore = true
 }
 
@@ -489,17 +492,7 @@ const reportMaterial = (type: string, name: string, id: string) => {
   }
 }
 
-const selectedItem = reactive<{
-  id: string
-  type: 'quiz' | 'course'
-  name: string
-  userId: string
-}>({
-  id: '',
-  type: 'course',
-  name: '',
-  userId: '',
-})
+const selectedItem = ref<ResourceType | undefined>(undefined)
 
 const showMoreOptions = ref(false)
 
@@ -538,38 +531,38 @@ const moreOptions = reactive([
   {
     icon: 'edit-option',
     title: 'Edit',
-    show: () => selectedItem.userId === Logic.Users.UserProfile?.id,
+    show: () => selectedItem.value?.userId === Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
-      if (selectedItem.type == 'course') {
-        Logic.Common.GoToRoute(`/course/create?id=${selectedItem.id}`)
+      if (selectedItem.value?.type == 'course') {
+        Logic.Common.GoToRoute(`/course/create?id=${selectedItem.value?.id}`)
       }
 
-      if (selectedItem.type == 'quiz') {
-        Logic.Common.GoToRoute(`/quiz/create?id=${selectedItem.id}`)
+      if (selectedItem.value?.type == 'quiz') {
+        Logic.Common.GoToRoute(`/quiz/create?id=${selectedItem.value?.id}`)
       }
     },
   },
   {
     icon: 'share-option',
     title: 'Share',
-    show: () => true,
+    show: () => selectedItem.value?.status == 'published',
     action: () => {
       showMoreOptions.value = false
       shareMaterialLink(
-        selectedItem.type,
-        `/${selectedItem.type}/create?id=${selectedItem.id}`,
-        selectedItem.name,
+        selectedItem.value?.type ?? '' as any,
+        `/${selectedItem.value?.type}/create?id=${selectedItem.value?.id}`,
+        selectedItem.value?.title ?? '',
       )
     },
   },
   {
     icon: 'report-option',
     title: 'Report',
-    show: () => selectedItem.userId != Logic.Users.UserProfile?.id,
+    show: () => selectedItem.value?.userId != Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
-      reportMaterial(selectedItem.type, selectedItem.name, selectedItem.id)
+      reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
     },
   },
 ])
@@ -615,7 +608,8 @@ export {
   addFolder,
   updateFolder,
   deleteFolder,
-  showQuizOptions,
+  openQuiz,
+  openCourse,
   createCourseData,
   reportMaterial,
 }

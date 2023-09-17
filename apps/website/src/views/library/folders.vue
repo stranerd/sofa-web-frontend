@@ -51,7 +51,7 @@
             :isWrapped="true"
             @click="
               activity.labels.main.toLocaleLowerCase().includes('quiz')
-                ? showQuizOptions(activity.id)
+                ? openQuiz(activity.id)
                 : Logic.Common.GoToRoute('/course/' + activity.id)
             "
           >
@@ -117,7 +117,7 @@ import {
   setPurchasedData,
   setQuizzes,
   showAddItemToFolder,
-  showQuizOptions,
+  openQuiz,
   SingleFolder,
 } from "@/composables/library";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
@@ -263,7 +263,7 @@ export default defineComponent({
       folderFilterOption,
       SingleFolder,
       selectedFolderItems,
-      showQuizOptions,
+      openQuiz,
       showAddItemToFolder,
       FolderOptions,
       selectedFilter,

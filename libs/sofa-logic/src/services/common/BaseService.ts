@@ -21,7 +21,7 @@ export class BaseApiService {
     this.axiosInstance = axios.create(this.config)
     this.axiosInstance.interceptors.request.use(async (config) => {
       const isGet = config.method.toLowerCase() === 'get'
-			if (!isGet && !(config.data instanceof FormData)) {
+			if (!isGet && config.data && !(config.data instanceof FormData)) {
 				const formData = new FormData()
 				Object.entries(config.data).forEach(([key, val]) => {
 					if (val instanceof Blob) formData.set(key, val)
@@ -42,10 +42,11 @@ export class BaseApiService {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
+        if (!error.response) return Promise.reject(error)
         const { config, response } = error as AxiosError
         if (response.status.toString() !== StatusCodes.expiredAccessToken) return Promise.reject(error)
         try {
-          const res = await this.axiosInstance.post('/auth/token')
+          const res = await this.axiosInstance.post('/auth/token', {})
           const tokens = res.data as AuthResponse
           localStorage.setItem('AuthTokens', JSON.stringify({
             accessToken: tokens.accessToken,
