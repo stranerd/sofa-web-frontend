@@ -20,7 +20,7 @@
     <slot name="left-session" />
   </div>
   <div
-    :class="`h-full ${middleSessionWidth}  ${
+    :class="`h-full z-10 ${middleSessionWidth}  ${
       wrapLayout ? 'pb-6' : 'pb-4'
     }   flex-grow ${bgColor} text-center mdlg:!pt-6 relative ${
       wrapLayout ? 'px-4' : 'px-0'

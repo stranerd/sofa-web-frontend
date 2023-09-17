@@ -476,6 +476,7 @@ const showMoreOptionHandler = (data: ResourceType, type: 'quiz' | 'course') => {
   selectedItem.id = data.id
   selectedItem.type = type
   selectedItem.name = data.title
+  selectedItem.userId = data.userId
   data.showMore = true
 }
 
@@ -492,10 +493,12 @@ const selectedItem = reactive<{
   id: string
   type: 'quiz' | 'course'
   name: string
+  userId: string
 }>({
   id: '',
   type: 'course',
   name: '',
+  userId: '',
 })
 
 const showMoreOptions = ref(false)
@@ -535,6 +538,7 @@ const moreOptions = reactive([
   {
     icon: 'edit-option',
     title: 'Edit',
+    show: () => selectedItem.userId === Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
       if (selectedItem.type == 'course') {
@@ -549,6 +553,7 @@ const moreOptions = reactive([
   {
     icon: 'share-option',
     title: 'Share',
+    show: () => true,
     action: () => {
       showMoreOptions.value = false
       shareMaterialLink(
@@ -561,16 +566,10 @@ const moreOptions = reactive([
   {
     icon: 'report-option',
     title: 'Report',
+    show: () => selectedItem.userId != Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
       reportMaterial(selectedItem.type, selectedItem.name, selectedItem.id)
-    },
-  },
-  {
-    icon: 'remove-option',
-    title: 'Remove from library',
-    action: () => {
-      //
     },
   },
 ])
