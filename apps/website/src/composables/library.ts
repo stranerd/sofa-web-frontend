@@ -1,11 +1,11 @@
 import { Logic } from 'sofa-logic'
 import {
-  ResourceType,
-  Quiz,
   Course,
   Folder,
+  Quiz,
+  ResourceType,
 } from 'sofa-logic/src/logic/types/domains/study'
-import { ref, reactive, capitalize } from 'vue'
+import { capitalize, reactive, ref } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
@@ -128,23 +128,7 @@ const libraryTypeList = reactive([
     icon: 'purchased',
     id: 'purchased',
     routePath: '/library/purchased',
-    options: [
-      {
-        name: 'All',
-        active: true,
-        id: 'purchased-all',
-      },
-      {
-        name: 'Courses',
-        active: false,
-        id: 'purchased-courses',
-      },
-      {
-        name: 'Quizzes',
-        active: false,
-        id: 'purchased-quizzes',
-      },
-    ],
+    options: [],
   },
 ])
 
@@ -501,7 +485,7 @@ const shareMaterialLink = async (
     Logic.Common.showLoader({
       show: true,
       loading: false,
-      message: 'Game link shared.',
+      message: 'Link shared.',
       type: 'success',
     })
   } catch (err) {
@@ -539,7 +523,7 @@ const moreOptions = reactive([
       showMoreOptions.value = false
       shareMaterialLink(
         selectedItem.value?.type ?? '' as any,
-        `/${selectedItem.value?.type}/create?id=${selectedItem.value?.id}`,
+        `/marketplace/${selectedItem.value?.id}?type=${selectedItem.value?.id}`,
         selectedItem.value?.title ?? '',
       )
     },
@@ -556,48 +540,6 @@ const moreOptions = reactive([
 ])
 
 export {
-  AllQuzzies,
-  AllCourses,
-  PurchasedCourses,
-  AllFolders,
-  SingleFolder,
-  FolderOptions,
-  selectedFilter,
-  showStudyMode,
-  showAddItemToFolder,
-  selectedItemId,
-  selectedFolderFilter,
-  selectedQuizFilter,
-  selectedCourseFilter,
-  allContentCategories,
-  libraryTypeList,
-  folderFilterOption,
-  folders,
-  currentQuizData,
-  currentCourseData,
-  currentPurchasedData,
-  selectedFolderItems,
-  currentFolderItems,
-  showDeleteFolder,
-  organizationFilterOption,
-  organisations,
-  selectedItem,
-  showMoreOptions,
-  moreOptions,
-  showMoreOptionHandler,
-  saveItemsToFolder,
-  createQuizData,
-  setQuizzes,
-  setCourses,
-  setPurchasedData,
-  setFolders,
-  setFolderItems,
-  filterItem,
-  addFolder,
-  updateFolder,
-  deleteFolder,
-  openQuiz,
-  openCourse,
-  createCourseData,
-  reportMaterial,
+  AllCourses, AllFolders, AllQuzzies, FolderOptions, PurchasedCourses, SingleFolder, addFolder, allContentCategories, createCourseData, createQuizData, currentCourseData, currentFolderItems, currentPurchasedData, currentQuizData, deleteFolder, filterItem, folderFilterOption,
+  folders, libraryTypeList, moreOptions, openCourse, openQuiz, organisations, organizationFilterOption, reportMaterial, saveItemsToFolder, selectedCourseFilter, selectedFilter, selectedFolderFilter, selectedFolderItems, selectedItem, selectedItemId, selectedQuizFilter, setCourses, setFolderItems, setFolders, setPurchasedData, setQuizzes, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showStudyMode, updateFolder
 }
