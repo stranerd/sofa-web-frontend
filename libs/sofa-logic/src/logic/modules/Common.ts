@@ -422,6 +422,7 @@ export default class Common {
   public hideLoader = () => {
     const Loader: LoaderSetup = {
       loading: false,
+      show: false
     }
     this.loaderSetup = Loader
   }

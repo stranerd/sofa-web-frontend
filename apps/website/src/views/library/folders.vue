@@ -10,51 +10,59 @@
           @click="Logic.Common.goBack()"
         />
         <sofa-normal-text :customClass="'!font-bold !text-base !line-clamp-1'">
-          {{ SingleFolder?.title }}</sofa-normal-text
+          {{ SingleFolder?.title ?? 'Not Found' }}</sofa-normal-text
         >
         <span />
       </div>
-      <div
-        class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 space-x-3"
-      >
-        <span
-          :class="`px-6 py-2  ${
-            item.id == selectedFolderFilter ? 'bg-primaryPurple' : 'bg-white'
-          } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `"
-          v-for="(item, index) in folderFilterOption"
-          :key="index"
-          @click="selectedFolderFilter = item.id"
+      <template v-if="SingleFolder">
+        <div
+          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 space-x-3"
         >
-          <sofa-normal-text
-            :color="`${
-              item.id == selectedFolderFilter ? 'text-white' : 'text-deepGray'
-            } `"
-            :custom-class="'!font-semibold'"
-            >{{ item.name }}</sofa-normal-text
-          >
-        </span>
-      </div>
-
-      <div class="w-full flex flex-col space-y-3 px-4 pt-3">
-        <template v-if="selectedFolderItems.length">
-          <sofa-activity-card
-            v-for="(activity, index) in selectedFolderItems"
+          <span
+            :class="`px-6 py-2  ${
+              item.id == selectedFolderFilter ? 'bg-primaryPurple' : 'bg-white'
+            } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `"
+            v-for="(item, index) in folderFilterOption"
             :key="index"
-            :activity="activity"
-            :custom-class="'!bg-white shadow-custom cursor-pointer'"
-            :isWrapped="true"
-            @click="
-              activity.labels.main.toLocaleLowerCase().includes('quiz')
-                ? openQuiz(activity)
-                : Logic.Common.GoToRoute('/course/' + activity.id)
-            "
+            @click="selectedFolderFilter = item.id"
           >
-          </sofa-activity-card>
-        </template>
+            <sofa-normal-text
+              :color="`${
+                item.id == selectedFolderFilter ? 'text-white' : 'text-deepGray'
+              } `"
+              :custom-class="'!font-semibold'"
+              >{{ item.name }}</sofa-normal-text
+            >
+          </span>
+        </div>
+
+        <div class="w-full flex flex-col space-y-3 px-4 pt-3">
+          <template v-if="selectedFolderItems.length">
+            <sofa-activity-card
+              v-for="(activity, index) in selectedFolderItems"
+              :key="index"
+              :activity="activity"
+              :custom-class="'!bg-white shadow-custom cursor-pointer'"
+              :isWrapped="true"
+              @click="
+                activity.labels.main.toLocaleLowerCase().includes('quiz')
+                  ? openQuiz(activity)
+                  : Logic.Common.GoToRoute('/course/' + activity.id)
+              "
+            >
+            </sofa-activity-card>
+          </template>
+          <sofa-empty-state
+            v-else
+            :title="'There are no items in this folder'"
+            :subTitle="'Save quiz and courses to this folder and you will see them here'"
+          />
+        </div>
+      </template>
+      <div v-else class="px-4">
         <sofa-empty-state
-          v-else
-          :title="'There are no items in this folder'"
-          :subTitle="'Save quiz and courses to this folder and you will see them here'"
+          :title="'Folder not found'"
+          :subTitle="''"
         />
       </div>
 
