@@ -576,17 +576,6 @@
           </div>
         </div>
       </sofa-modal>
-      <add-item-to-folder
-        v-if="showAddItemToFolder"
-        :close="
-          () => {
-            showAddItemToFolder = false;
-          }
-        "
-        :data="FolderOptions"
-        :folderId="selectedFilter"
-        :currentFolderItems="currentFolderItems"
-      />
 
       <sofa-delete-prompt
         v-if="showDeleteFolder"
@@ -619,75 +608,73 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
-import { useMeta } from "vue-meta";
-import moment from "moment";
-import { scrollToTop } from "@/composables";
+import { scrollToTop } from "@/composables"
 import {
-  SofaIcon,
-  SofaNormalText,
-  SofaActivityCard,
-  // SofaProgressItemCard,
-  SofaEmptyState,
-  SofaButton,
-  SofaModal,
-  SofaIconCard,
-  SofaHeaderText,
-  SofaCustomInput,
-  SofaDeletePrompt,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+AllCourses,
+AllFolders,
+AllQuzzies,
+FolderOptions,
+PurchasedCourses,
+SingleFolder,
+addFolder,
+allContentCategories,
+currentCourseData,
+currentFolderItems,
+currentPurchasedData,
+currentQuizData,
+deleteFolder,
+filterItem,
+folderFilterOption,
+folders,
+libraryTypeList,
+moreOptions,
+openCourse,
+openQuiz,
+selectedCourseFilter,
+selectedFilter,
+selectedFolderFilter,
+selectedFolderItems,
+selectedItem,
+selectedItemId,
+selectedQuizFilter,
+setCourses,
+setFolderItems,
+setFolders,
+setPurchasedData,
+setQuizzes,
+showDeleteFolder,
+showMoreOptionHandler,
+showMoreOptions,
+showStudyMode,
+updateFolder,
+} from "@/composables/library"
+import { allOrganizations, setOrganizations } from "@/composables/profile"
 import {
-  createQuizGame,
-  goToStudyMode,
-  otherTasks,
-  selectedQuizId,
-  selectedQuizMode,
-  userIsParticipating,
-} from "@/composables/quiz";
-import AddItemToFolder from "@/components/library/AddItemToFolder.vue";
+createQuizGame,
+goToStudyMode,
+otherTasks,
+selectedQuizId,
+selectedQuizMode,
+userIsParticipating,
+} from "@/composables/quiz"
+import moment from "moment"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  selectedFilter,
-  AllFolders,
-  SingleFolder,
-  setQuizzes,
-  setPurchasedData,
-  setFolders,
-  setFolderItems,
-  filterItem,
-  FolderOptions,
-  AllQuzzies,
-  PurchasedCourses,
-  selectedItemId,
-  folders,
-  showStudyMode,
-  libraryTypeList,
-  currentQuizData,
-  currentCourseData,
-  selectedQuizFilter,
-  selectedCourseFilter,
-  currentPurchasedData,
-  selectedFolderItems,
-  allContentCategories,
-  folderFilterOption,
-  selectedFolderFilter,
-  showAddItemToFolder,
-  addFolder,
-  openQuiz,
-  openCourse,
-  updateFolder,
-  AllCourses,
-  setCourses,
-  currentFolderItems,
-  showDeleteFolder,
-  deleteFolder,
-  moreOptions,
-  showMoreOptionHandler,
-  showMoreOptions,
-  selectedItem,
-} from "@/composables/library";
-import { allOrganizations, setOrganizations } from "@/composables/profile";
+SofaActivityCard,
+SofaButton,
+SofaCustomInput,
+SofaDeletePrompt,
+// SofaProgressItemCard,
+SofaEmptyState,
+SofaHeaderText,
+SofaIcon,
+SofaIconCard,
+SofaModal,
+SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, ref, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
@@ -701,7 +688,6 @@ export default defineComponent({
     SofaIconCard,
     SofaHeaderText,
     SofaCustomInput,
-    AddItemToFolder,
     SofaDeletePrompt,
   },
   middlewares: {
@@ -906,7 +892,6 @@ export default defineComponent({
       folderFilterOption,
       selectedFolderFilter,
       FolderOptions,
-      showAddItemToFolder,
       openQuiz,
       openCourse,
       currentFolderItems,

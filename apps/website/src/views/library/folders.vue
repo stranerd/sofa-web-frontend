@@ -12,13 +12,7 @@
         <sofa-normal-text :customClass="'!font-bold !text-base !line-clamp-1'">
           {{ SingleFolder?.title }}</sofa-normal-text
         >
-        <div>
-          <sofa-icon
-            :customClass="'h-[20px]'"
-            :name="'circle-add'"
-            @click="showAddItemToFolder = true"
-          />
-        </div>
+        <span />
       </div>
       <div
         class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 space-x-3"
@@ -66,56 +60,42 @@
 
       <div class="w-full flex flex-row h-[100px]"></div>
     </div>
-
-    <add-item-to-folder
-      v-if="showAddItemToFolder"
-      :close="
-        () => {
-          showAddItemToFolder = false;
-        }
-      "
-      :data="FolderOptions"
-      :folderId="selectedFilter"
-      :currentFolderItems="currentFolderItems"
-    />
   </sub-page-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from "vue";
-import { useMeta } from "vue-meta";
-import { scrollToTop } from "@/composables";
+import { scrollToTop } from "@/composables"
 import {
-  SofaIcon,
-  SofaNormalText,
-  SofaEmptyState,
-  SofaActivityCard,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
+AllCourses,
+AllFolders,
+AllQuzzies,
+FolderOptions,
+PurchasedCourses,
+SingleFolder,
+currentFolderItems,
+filterItem,
+folderFilterOption,
+libraryTypeList,
+openQuiz,
+selectedFilter,
+selectedFolderFilter,
+selectedFolderItems,
+setCourses,
+setFolderItems,
+setFolders,
+setPurchasedData,
+setQuizzes,
+} from "@/composables/library"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  AllCourses,
-  AllFolders,
-  AllQuzzies,
-  currentFolderItems,
-  filterItem,
-  folderFilterOption,
-  FolderOptions,
-  libraryTypeList,
-  PurchasedCourses,
-  selectedFilter,
-  selectedFolderFilter,
-  selectedFolderItems,
-  setCourses,
-  setFolderItems,
-  setFolders,
-  setPurchasedData,
-  setQuizzes,
-  showAddItemToFolder,
-  openQuiz,
-  SingleFolder,
-} from "@/composables/library";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import AddItemToFolder from "@/components/library/AddItemToFolder.vue";
+SofaActivityCard,
+SofaEmptyState,
+SofaIcon,
+SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
@@ -123,7 +103,6 @@ export default defineComponent({
     SofaNormalText,
     SofaEmptyState,
     SofaActivityCard,
-    AddItemToFolder,
   },
   middlewares: {
     fetchRules: [
@@ -258,7 +237,6 @@ export default defineComponent({
       SingleFolder,
       selectedFolderItems,
       openQuiz,
-      showAddItemToFolder,
       FolderOptions,
       selectedFilter,
       currentFolderItems,
