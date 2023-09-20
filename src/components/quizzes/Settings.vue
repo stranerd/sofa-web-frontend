@@ -88,20 +88,37 @@
     </div>
 
     <div class="w-full flex flex-col space-y-2">
-      <sofa-select
+      <sofa-text-field
         :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-4'"
         :name="'Tags'"
         ref="tags"
-        :placeholder="'Tags'"
-        :rules="[FormValidations.RequiredRule]"
-        :autoComplete="true"
+        :placeholder="'Tags (Comma separated for multiple)'"
         :borderColor="'border-transparent'"
-        :options="allGenericTags"
-        :default-options="defaultTags"
-        v-model="quizSettingsForm.tags"
-        :isMultiple="true"
+        v-model="quizSettingsForm.tagString"
       />
+      <div class="w-full flex flex-row flex-wrap items-center">
+        <template v-for="(item, index) in quizSettingsForm.tags" :key="index">
+          <div class="py-2 pr-2" v-if="item != 'Not set'">
+            <div
+              class="py-2 px-3 border-[2px] flex flex-row items-center space-x-2 custom-border border-[#E1E6EB]"
+            >
+              <sofa-normal-text :color="'text-[#78828C]'">
+                {{ item }}
+              </sofa-normal-text>
+              <sofa-icon
+                @click="
+                  quizSettingsForm.tags = quizSettingsForm.tags.filter(
+                    (tag) => item != tag
+                  )
+                "
+                :name="'circle-close'"
+                :customClass="'h-[17px] cursor-pointer'"
+              ></sofa-icon>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
 
     <div
@@ -222,6 +239,8 @@ export default defineComponent({
 
     const quizImageUrl = ref("");
 
+    const newTags = ref("");
+
     watch(quizSettingSaved, () => {
       if (!preventUpdate.value) {
         context.emit("OnQuizUpdated", quizSettingSaved);
@@ -240,6 +259,10 @@ export default defineComponent({
         quizSettingsForm.topic = Logic.Study.GetTagName(quiz.topicId);
         quizSettingsForm.visibility = "active";
         quizImageUrl.value = quiz.photo?.link || "";
+        setTimeout(() => {
+          formComp.value.fieldsToValidate?.tags.emptyValue();
+          quizSettingsForm.tagString = "";
+        }, 300);
       } else {
         quizSettingsForm.title = "";
         quizSettingsForm.description = "";
@@ -286,6 +309,7 @@ export default defineComponent({
       updateQuiz,
       allGenericTags,
       defaultTags,
+      newTags,
     };
   },
   data() {

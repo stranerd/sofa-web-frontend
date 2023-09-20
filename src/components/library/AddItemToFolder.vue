@@ -84,6 +84,7 @@
                     ].filter((item) => item != activity.id))
                   : selectedItems[selectedTab].push(activity.id)
               "
+              :has-extra="true"
             >
               <template v-slot:extra>
                 <span class="pr-3">
@@ -119,7 +120,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row items-center justify-between z-[50] bg-white md:!sticky fixed bottom-0 left-0 py-4 md:!px-0 px-4"
+          class="w-full flex flex-row items-center justify-between z-[50] bg-white md:!absolute fixed bottom-0 left-0 py-4 md:!px-4 px-4"
         >
           <sofa-button
             :padding="'px-5 py-2'"

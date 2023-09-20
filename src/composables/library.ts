@@ -7,12 +7,14 @@ import {
 } from 'sofa-logic/src/logic/types/domains/study'
 import { ref, reactive, capitalize } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
+import { ContentDetails } from './marketplace'
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
 const AllCourses = ref(Logic.Study.AllCourses)
 const PurchasedCourses = ref(Logic.Study.PurchasedCourses)
 const AllFolders = ref(Logic.Study.AllFolders)
 const SingleFolder = ref(Logic.Study.SingleFolder)
+const RecentMaterials = ref(Logic.Study.RecentMaterials)
 
 const FolderOptions = ref<ResourceType[]>([])
 
@@ -33,6 +35,17 @@ const selectedQuizFilter = ref('recent')
 const selectedCourseFilter = ref('recent')
 
 const allContentCategories = ['quizzes', 'courses', 'purchased']
+
+const showSaveToFolder = ref(false)
+
+const addFolderIsActive = ref(false)
+
+const selectedFolderMaterailToAdd = ref<ResourceType | ContentDetails>()
+
+const currentFolder = reactive({
+  id: '',
+  name: '',
+})
 
 const currentFolderItems = ref<{
   quiz: string[]
@@ -128,23 +141,7 @@ const libraryTypeList = reactive([
     icon: 'purchased',
     id: 'purchased',
     routePath: '/library/purchased',
-    options: [
-      {
-        name: 'All',
-        active: true,
-        id: 'purchased-all',
-      },
-      {
-        name: 'Courses',
-        active: false,
-        id: 'purchased-courses',
-      },
-      {
-        name: 'Quizzes',
-        active: false,
-        id: 'purchased-quizzes',
-      },
-    ],
+    options: [],
   },
 ])
 
@@ -166,15 +163,15 @@ const folderFilterOption = reactive([
   },
 ])
 
-const folders = reactive([
+const folders = reactive<
   {
-    name: '400L Exam',
-    selected: false,
-    edit: false,
-    hover: false,
-    id: '',
-  },
-])
+    name: string
+    selected: boolean
+    edit: boolean
+    hover: boolean
+    id: string
+  }[]
+>([])
 
 const organizationFilterOption = reactive([
   {
@@ -231,6 +228,7 @@ const createQuizData = (quiz: Quiz) => {
     createdAt: quiz.createdAt,
     showMore: false,
     userId: quiz.user.id,
+    type: 'quiz',
   }
   return data
 }
@@ -258,6 +256,7 @@ const createCourseData = (course: Course) => {
     createdAt: course.createdAt,
     showMore: false,
     userId: course.user.id,
+    type: 'course',
   }
 
   return data
@@ -297,6 +296,24 @@ const setCourses = () => {
   })
 }
 
+const recentMaterials = ref<ResourceType[]>([])
+
+const currentRecentData = ref<ResourceType[]>([])
+
+const setRecentItems = () => {
+  if (!RecentMaterials.value) return
+
+  recentMaterials.value.length = 0
+
+  RecentMaterials.value?.forEach((material) => {
+    const data =
+      material.__type == 'CourseEntity'
+        ? createCourseData(material)
+        : createQuizData(material)
+    recentMaterials.value.push(data)
+  })
+}
+
 const currentPurchasedData = ref<ResourceType[]>([])
 
 const PurchasedData = ref<ResourceType[]>([])
@@ -316,9 +333,14 @@ const setPurchasedData = () => {
   })
 }
 
+const folderQuizzes = reactive<ResourceType[]>([])
+const folderCourses = reactive<ResourceType[]>([])
+
 const setFolders = () => {
   if (!AllFolders.value) return
   folders.length = 0
+  folderCourses.length = 0
+  folderQuizzes.length = 0
   AllFolders.value?.results.forEach((folder) => {
     folders.push({
       name: folder.title,
@@ -327,6 +349,13 @@ const setFolders = () => {
       id: folder.id,
       selected: false,
     })
+
+    folderCourses.push(
+      ...(folder.courses?.map((course) => createCourseData(course)) || []),
+    )
+    folderQuizzes.concat(
+      ...(folder.quizzes?.map((quiz) => createQuizData(quiz)) || []),
+    )
   })
 }
 
@@ -363,7 +392,11 @@ const filterItem = () => {
 
   if (type == 'quiz') {
     if (status == 'recent') {
-      currentQuizData.value = quizzes.value
+      currentQuizData.value = recentMaterials.value.filter(
+        (item) => item.type == 'quiz',
+      )
+    } else if (status == 'saved') {
+      currentQuizData.value = folderQuizzes
     } else {
       currentQuizData.value = quizzes.value.filter(
         (quiz) => quiz.status == status,
@@ -371,7 +404,9 @@ const filterItem = () => {
     }
   } else if (type == 'course') {
     if (status == 'recent') {
-      currentCourseData.value = courses.value
+      currentCourseData.value = recentMaterials.value.filter(
+        (item) => item.type == 'course',
+      )
     } else {
       currentCourseData.value = courses.value.filter(
         (course) => course.status == status,
@@ -380,6 +415,8 @@ const filterItem = () => {
   } else if (type == 'purchased') {
     if (status == 'all') {
       currentPurchasedData.value = PurchasedData.value
+    } else if (status == 'saved') {
+      currentQuizData.value = folderCourses
     } else {
       if (status == 'courses') {
         currentPurchasedData.value = PurchasedData.value
@@ -403,6 +440,7 @@ const filterItem = () => {
 }
 
 const addFolder = () => {
+  addFolderIsActive.value = true
   const tempId = Logic.Common.makeid(12)
   folders.push({
     name: '',
@@ -411,9 +449,12 @@ const addFolder = () => {
     selected: false,
     id: tempId,
   })
+}
 
+const saveFolder = (name: string, tempId: string) => {
+  if (addFolderIsActive.value == false) return
   Logic.Study.CreateFolderForm = {
-    title: 'New folder',
+    title: name,
   }
 
   Logic.Study.CreateFolder(true).then((data: Folder) => {
@@ -423,8 +464,53 @@ const addFolder = () => {
           folder.id = data?.id
         }
       })
+      addFolderIsActive.value = false
+      selectedFilter.value == data.id
     }
   })
+}
+
+const addMaterialToFolder = (
+  folderId: string,
+  type: 'quiz' | 'course',
+  itemId: string,
+) => {
+  const selectedFolder = AllFolders.value.results.filter((item) => {
+    return item.id == folderId
+  })
+
+  if (selectedFolder.length) {
+    const folder = selectedFolder[0]
+    const courses = folder.courses?.map((item) => item.id) || []
+    const quizzes = folder.quizzes?.map((item) => item.id) || []
+
+    if (type == 'course') {
+      courses.push(itemId)
+
+      saveItemsToFolder(folderId, 'courses', courses)
+    }
+
+    if (type == 'quiz') {
+      quizzes.push(itemId)
+      saveItemsToFolder(folderId, 'quizzes', quizzes)
+    }
+  }
+}
+
+const handleFolderNameBlur = () => {
+  if (currentFolder.name) {
+    if (addFolderIsActive.value) {
+      saveFolder(currentFolder.name, currentFolder.id)
+    } else {
+      updateFolder(currentFolder.name, currentFolder.id)
+    }
+
+    currentFolder.id = ''
+    currentFolder.name = ''
+  } else {
+    addFolderIsActive.value = false
+    folders.pop()
+  }
 }
 
 const updateFolder = (title: string, id: string) => {
@@ -602,6 +688,14 @@ export {
   selectedItem,
   showMoreOptions,
   moreOptions,
+  RecentMaterials,
+  currentRecentData,
+  showSaveToFolder,
+  currentFolder,
+  addFolderIsActive,
+  selectedFolderMaterailToAdd,
+  setRecentItems,
+  handleFolderNameBlur,
   showMoreOptionHandler,
   saveItemsToFolder,
   createQuizData,
@@ -617,4 +711,6 @@ export {
   showQuizOptions,
   createCourseData,
   reportMaterial,
+  saveFolder,
+  addMaterialToFolder,
 }

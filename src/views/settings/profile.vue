@@ -4,7 +4,7 @@
     layoutStyle="mdlg:!w-[75%] lg:!w-[60%] w-full pt-0  mdlg:!pt-6 "
   >
     <div
-      class="w-full flex flex-row items-center space-x-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0"
+      class="w-full flex flex-row items-center space-x-3 z-[99999999] justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0"
     >
       <sofa-icon
         :customClass="'h-[15px]'"

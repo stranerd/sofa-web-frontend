@@ -257,6 +257,7 @@ export default defineComponent({
           status: course.status,
           showMore: false,
           userId: course.user.id,
+          type: "course",
         });
       });
     };

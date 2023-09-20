@@ -180,7 +180,7 @@ export default defineComponent({
     const UserProfile = ref(Logic.Users.UserProfile);
 
     const userPhoneNumber = ref(
-      AuthUser.phone?.code + "" + AuthUser.phone?.number
+      AuthUser.phone ? AuthUser.phone?.code + "" + AuthUser.phone?.number : ""
     );
 
     const preventUpdate = ref(true);

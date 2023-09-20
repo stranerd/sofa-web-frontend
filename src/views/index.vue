@@ -325,6 +325,13 @@
                     `?type=${activity.labels.main.toLowerCase()}`
                 )
               "
+              :has-bookmark="true"
+              :bookmark-action="
+                () => {
+                  showSaveToFolder = true;
+                  selectedFolderMaterailToAdd = activity;
+                }
+              "
             />
           </div>
           <template v-else>
@@ -388,6 +395,13 @@
                     activity.id +
                     `?type=${activity.labels.main.toLowerCase()}`
                 )
+              "
+              :has-bookmark="true"
+              :bookmark-action="
+                () => {
+                  showSaveToFolder = true;
+                  selectedFolderMaterailToAdd = activity;
+                }
               "
             />
           </div>
@@ -453,6 +467,13 @@
                     activity.id +
                     `?type=${activity.labels.main.toLowerCase()}`
                 )
+              "
+              :has-bookmark="true"
+              :bookmark-action="
+                () => {
+                  showSaveToFolder = true;
+                  selectedFolderMaterailToAdd = activity;
+                }
               "
             />
           </div>
@@ -760,6 +781,10 @@ import {
   setConversations,
 } from "@/composables/conversation";
 import ChatListComponent from "@/components/conversation/ChatList.vue";
+import {
+  selectedFolderMaterailToAdd,
+  showSaveToFolder,
+} from "@/composables/library";
 
 const fetchRules = [];
 
@@ -1144,6 +1169,8 @@ export default defineComponent({
       selectedMember,
       showRemoveMember,
       chatList,
+      showSaveToFolder,
+      selectedFolderMaterailToAdd,
       startConversation,
       showSetupProfile,
     };

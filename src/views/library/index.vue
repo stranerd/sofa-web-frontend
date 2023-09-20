@@ -42,7 +42,7 @@
           >
         </div>
 
-        <div
+        <!-- <div
           class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer relative"
           @click="addFolder()"
         >
@@ -50,7 +50,7 @@
           <sofa-normal-text :color="'text-grayColor'"
             >Add new folder</sofa-normal-text
           >
-        </div>
+        </div> -->
 
         <div
           :class="`w-full flex flex-row items-center justify-start space-x-3 px-3 py-3 relative rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${
@@ -60,7 +60,7 @@
           :key="index"
           @mouseenter="item.hover = true"
           @mouseleave="item.hover = false"
-          @click="selectedFilter = item.id"
+          @click="!addFolderIsActive ? (selectedFilter = item.id) : null"
         >
           <sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
@@ -70,12 +70,16 @@
               selectedFilter == item.id ? '!font-bold' : ''
             } lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`"
             :updateValue="item.name"
-            @blur="item.edit = false"
+            @blur="
+              item.edit = false;
+              handleFolderNameBlur();
+            "
             :placeholder="'Folder name'"
             @onContentChange="
               (content) => {
                 item.name = content;
-                updateFolder(content, item.id);
+                currentFolder.name = content;
+                currentFolder.id = item.id;
               }
             "
           >
@@ -150,6 +154,10 @@
       <div class="w-full flex flex-col space-y-5 mdlg:!pl-3 mdlg:!pr-7">
         <div
           class="w-full mdlg:!flex hidden flex-row space-x-2 justify-between items-center"
+          v-if="
+            libraryTypeList.filter((item) => item.id == selectedFilter)[0]
+              ?.options.length || !allContentCategories.includes(selectedFilter)
+          "
         >
           <div class="w-full flex flex-row space-x-3 items-center">
             <template v-if="allContentCategories.includes(selectedFilter)">
@@ -219,10 +227,11 @@
                   :activity="activity"
                   :custom-class="'!bg-white shadow-custom !cursor-pointer'"
                   @click="showQuizOptions(activity.id)"
+                  :has-extra="true"
                 >
                   <template v-slot:extra>
                     <div
-                      class="relative"
+                      class="relative flex flex-row z-10 justify-end"
                       :tabindex="Math.random() * 100"
                       @blur="activity.showMore = false"
                     >
@@ -232,7 +241,7 @@
                         @click.stop="showMoreOptionHandler(activity, 'quiz')"
                       />
                       <div
-                        class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
+                        class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col !z-50"
                         v-if="activity.showMore"
                       >
                         <div
@@ -278,6 +287,7 @@
                   :activity="activity"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
                   @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+                  :has-extra="true"
                 >
                   <template v-slot:extra>
                     <div
@@ -435,12 +445,16 @@
                   v-if="item.edit"
                   :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-backgroundGray rounded cursor-text `"
                   :updateValue="item.name"
-                  @blur="item.edit = false"
+                  @blur="
+                    item.edit = false;
+                    handleFolderNameBlur();
+                  "
                   :placeholder="'Folder name'"
                   @onContentChange="
                     (content) => {
                       item.name = content;
-                      updateFolder(content, item.id);
+                      currentFolder.name = content;
+                      currentFolder.id = item.id;
                     }
                   "
                 >
@@ -675,6 +689,11 @@ import {
   moreOptions,
   showMoreOptionHandler,
   showMoreOptions,
+  RecentMaterials,
+  setRecentItems,
+  currentFolder,
+  handleFolderNameBlur,
+  addFolderIsActive,
 } from "@/composables/library";
 import { allOrganizations, setOrganizations } from "@/composables/profile";
 
@@ -710,6 +729,14 @@ export default defineComponent({
             ],
           },
         ],
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Study",
+        property: "RecentMaterials",
+        method: "GetRecentMaterials",
+        params: [],
         requireAuth: true,
         ignoreProperty: true,
       },
@@ -807,6 +834,7 @@ export default defineComponent({
       Logic.Study.watchProperty("AllFolders", AllFolders);
       Logic.Study.watchProperty("SingleFolder", SingleFolder);
       Logic.Study.watchProperty("UserProfile", UserProfile);
+      Logic.Study.watchProperty("RecentMaterials", RecentMaterials);
 
       setQuizzes();
       setCourses();
@@ -829,8 +857,14 @@ export default defineComponent({
       setQuizzes();
       filterItem();
     });
+
     watch(AllCourses, () => {
       setCourses();
+      filterItem();
+    });
+
+    watch(RecentMaterials, () => {
+      setRecentItems();
       filterItem();
     });
 
@@ -865,7 +899,9 @@ export default defineComponent({
     });
 
     const goToFolder = (folderId: string) => {
-      Logic.Common.GoToRoute("/library/folders?filter=" + folderId);
+      if (!addFolderIsActive.value) {
+        Logic.Common.GoToRoute("/library/folders?filter=" + folderId);
+      }
     };
 
     return {
@@ -905,6 +941,9 @@ export default defineComponent({
       moreOptions,
       showMoreOptions,
       showMoreOptionHandler,
+      currentFolder,
+      handleFolderNameBlur,
+      addFolderIsActive,
     };
   },
 });

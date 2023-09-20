@@ -1,3 +1,4 @@
+import { trim } from 'lodash'
 import { Logic } from 'sofa-logic'
 import { QuizQuestion } from 'sofa-logic/src/logic/types/domains/study'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
@@ -31,6 +32,7 @@ const quizSettingsForm = reactive({
   topic: '',
   photo: undefined,
   visibility: '',
+  tagString: '',
 })
 
 const allQuestionAnswers = reactive<
@@ -159,7 +161,14 @@ const createQuiz = (formComp: any) => {
 const updateQuiz = (formComp: any) => {
   Logic.Study.UpdateQuizForm = {
     description: quizSettingsForm.description,
-    tags: quizSettingsForm.tags,
+    tags: quizSettingsForm.tags
+      .filter((item) => item != '')
+      .concat(
+        ...quizSettingsForm.tagString
+          .split(',')
+          .map((item) => trim(item))
+          .filter((item) => item != ''),
+      ),
     title: quizSettingsForm.title,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
@@ -176,6 +185,10 @@ const updateQuiz = (formComp: any) => {
           loading: false,
           message: 'Quiz updated',
           type: 'success',
+        })
+        // update tags
+        Logic.Study.GetTags({
+          all: true,
         })
       }
     })

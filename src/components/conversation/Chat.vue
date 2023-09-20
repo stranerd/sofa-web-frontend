@@ -19,7 +19,7 @@
       </div>
       <div class="flex flex-col">
         <sofa-normal-text
-          :customClass="'!font-semibold text-left !line-clamp-1'"
+          :customClass="'!font-semibold text-left !line-clamp-1 !whitespace-nowrap '"
         >
           {{ chat.title }}
         </sofa-normal-text>
@@ -67,12 +67,13 @@
 <script lang="ts">
 import { ChatListData } from "@/composables/conversation";
 import { defineComponent } from "vue";
-import { SofaNormalText, SofaAvatar } from "sofa-ui-components";
+import { SofaNormalText, SofaAvatar, SofaIcon } from "sofa-ui-components";
 
 export default defineComponent({
   components: {
     SofaNormalText,
     SofaAvatar,
+    SofaIcon,
   },
   props: {
     chat: {

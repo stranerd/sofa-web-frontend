@@ -91,7 +91,7 @@ const search = (query: QueryParams = {}, returnCoursables = false) => {
     value: 'published',
     condition: Conditions.eq,
   })
-  query.limit = 5
+  query.limit = 20
 
   const allRequests: Promise<any>[] = []
 
@@ -178,6 +178,7 @@ const setCourses = (count = 5) => {
         username: course.user.bio.name.full,
         price: course.price.amount,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+        type: 'course',
       })
     } else if (
       pastQuestionTag.length &&
@@ -196,6 +197,7 @@ const setCourses = (count = 5) => {
         username: course.user.bio.name.full,
         price: course.price.amount,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+        type: 'course',
       })
     } else {
       textbookArray.push({
@@ -211,6 +213,7 @@ const setCourses = (count = 5) => {
         username: course.user.bio.name.full,
         price: course.price.amount,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+        type: 'course',
       })
     }
   })
@@ -239,6 +242,8 @@ const setCourses = (count = 5) => {
 }
 
 const extractContent = (item: Quiz | Course) => {
+  const type: 'course' | 'quiz' =
+    item.__type == 'CourseEntity' ? 'course' : 'quiz'
   return {
     id: item.id,
     subject: Logic.Study.GetTagName(item.topicId),
@@ -256,6 +261,7 @@ const extractContent = (item: Quiz | Course) => {
     price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
     userPhoto: item.user.bio.photo ? item.user.bio.photo.link : '',
     userId: item.user.id,
+    type,
   }
 }
 

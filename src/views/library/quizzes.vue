@@ -380,6 +380,7 @@ export default defineComponent({
           status: quiz.status,
           showMore: false,
           userId: quiz.user.id,
+          type: "quiz",
         });
       });
     };

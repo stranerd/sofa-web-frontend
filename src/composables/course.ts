@@ -1,3 +1,4 @@
+import { trim } from 'lodash'
 import { Logic } from 'sofa-logic'
 import { SelectOption } from 'sofa-logic/src/logic/types/common'
 import {
@@ -15,6 +16,7 @@ const courseSettingForm = reactive({
   topic: '',
   price: '0',
   contentType: '',
+  tagString: '',
 })
 
 const allTopics = ref<SelectOption[]>([])
@@ -114,7 +116,12 @@ const updateCourse = (formComp: any) => {
       amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tags: courseSettingForm.tags,
+    tags: courseSettingForm.tags
+      .filter((item) => item != '')
+      .concat(
+        ...courseSettingForm.tagString.split(',').map((item) => trim(item)),
+      )
+      .filter((item) => item != ''),
     title: courseSettingForm.title,
     topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,
@@ -132,6 +139,11 @@ const updateCourse = (formComp: any) => {
           loading: false,
           message: 'Course updated',
           type: 'success',
+        })
+
+        // update tags
+        Logic.Study.GetTags({
+          all: true,
         })
       }
     })
