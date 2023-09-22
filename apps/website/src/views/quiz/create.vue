@@ -375,6 +375,10 @@ export default defineComponent({
 
       // Clear local data
       localStorage.removeItem("quiz_question_update");
+
+      setTimeout(() => {
+        hasUnsavedChanges.value = false;
+      }, 1000);
     });
 
     watch(UpdatedQuestion, () => {

@@ -573,6 +573,9 @@ export default defineComponent({
       showSettingModal.value = false;
       mobileTitle.value = "Content";
       currentContent.value = "sections";
+      setTimeout(() => {
+        hasUnsavedChanges.value = false;
+      }, 1000);
     });
 
     return {
