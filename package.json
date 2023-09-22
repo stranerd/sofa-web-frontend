@@ -2,5 +2,8 @@
   "name": "sofa",
   "version": "1.0.0",
   "description": "",
-  "license": "ISC"
+  "license": "ISC",
+  "scripts": {
+    "envs": "node bin/copy-env-app.js"
+  }
 }

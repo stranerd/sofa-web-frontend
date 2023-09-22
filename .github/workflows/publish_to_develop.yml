@@ -1,0 +1,55 @@
+name: Publish to GCloud App Engine
+
+on:
+  push:
+    branches:
+      develop
+
+jobs:
+  publish-gae:
+    environment: develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - name: Setup pnpm cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "pnpm"
+          cache-dependency-path: "**/pnpm-lock.yaml"
+
+      - name: Fetch secrets
+        env:
+          ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
+        run: echo "$ENV_SECRETS" > env.json
+
+      - name: Setup secrets
+        run: pnpm -w run envs
+
+      - name: Build apps
+        run: |
+          pnpm --filter ./libs/sofa-logic build
+          pnpm --filter ./libs/sofa-ui-components build
+          pnpm --filter ./apps/website  build
+
+      - name: Deploy to GAE
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: ${{ secrets.GCLOUD_PROJECT }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_AUTH }}
+        with:
+          args: "app deploy --quiet"
