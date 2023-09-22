@@ -132,8 +132,7 @@ export default class Common {
   }
 
   public setupWebsocket = () => {
-    const domain = `${process.env.VUE_APP_BASE_URL}`
-    const path = `/api/socket.io`
+    const url = new URL(`${process.env.VUE_APP_API_URL}/socket.io`)
 
     const tokens: AuthResponse = localStorage.getItem('AuthTokens')
       ? JSON.parse(localStorage.getItem('AuthTokens') || '{}')
@@ -141,8 +140,8 @@ export default class Common {
 
     const accessToken = `${tokens?.accessToken}`
 
-    this.SocketClient = io(domain, {
-      path: path,
+    this.SocketClient = io(url.origin, {
+      path: url.pathname,
       auth: { token: accessToken },
       transports: ['websocket'],
     })
