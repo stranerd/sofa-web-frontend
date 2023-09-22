@@ -18,6 +18,19 @@
           ],
         },
         ...actionButtonItems,
+        {
+          IsOutlined: !hasUnsavedChanges,
+          name: 'Save',
+          handler: () => {
+            Logic.Study.SaveCourseLocalChanges();
+          },
+        },
+      ],
+      badges: [
+        {
+          text: SingleCourse.status,
+          color: SingleCourse.status != 'published' ? 'gray' : 'green',
+        },
       ],
     }"
     :hideSmNavigator="{
@@ -72,10 +85,14 @@
             :customClass="'h-[18px]'"
             :name="'cog'"
             v-if="!showSettingModal"
-            @click="showSettingModal = true"
+            @click="
+              showSettingModal = true;
+              currentContent = 'settings';
+            "
           />
 
           <sofa-icon
+            v-if="selectedMaterial"
             :customClass="'h-[6px]'"
             :name="'more-options-horizontal'"
             @click="showMateterialDetails()"
@@ -182,21 +199,6 @@
         </template>
 
         <template v-if="selectedMaterial?.type == 'image'">
-          <div
-            class="w-full flex flex-row space-x-2 items-center justify-center"
-          >
-            <span
-              class="flex flex-row items-center space-x-2 border-r-[1px] border-[#E1E6EB] pr-2"
-            >
-              <sofa-icon :customClass="'h-[15px]'" :name="'circle-substract'" />
-              <sofa-normal-text>
-                {{ selectedMaterial.data.zoom }}%
-              </sofa-normal-text>
-              <sofa-icon :customClass="'h-[15px]'" :name="'circle-add'" />
-            </span>
-
-            <sofa-icon :customClass="'h-[15px]'" :name="'fullscreen'" />
-          </div>
           <div class="w-full flex flex-col">
             <sofa-image-loader
               :customClass="'w-full h-[400px] rounded-[12px]'"
@@ -206,27 +208,32 @@
         </template>
 
         <template v-if="selectedMaterial?.type == 'video'">
-          <div
-            class="w-full flex flex-row space-x-2 items-center justify-center"
-          >
-            <span
-              class="flex flex-row items-center space-x-2 border-r-[1px] border-[#E1E6EB] pr-2"
-            >
-              <sofa-icon :customClass="'h-[15px]'" :name="'circle-substract'" />
-              <sofa-normal-text>
-                {{ selectedMaterial.data.zoom }}%
-              </sofa-normal-text>
-              <sofa-icon :customClass="'h-[15px]'" :name="'circle-add'" />
-            </span>
-
-            <sofa-icon :customClass="'h-[15px]'" :name="'fullscreen'" />
-          </div>
           <div class="w-full flex flex-col">
             <sofa-video-player :videoUrl="selectedMaterial.data.videoUrl" />
           </div>
         </template>
       </div>
 
+      <!-- Bottom save button sm -->
+      <div
+        class="mdlg:!hidden fixed left-0 bottom-0 px-4 py-4 bg-white flex flex-col w-full z-0"
+      >
+        <div
+          :class="`w-full flex flex-col ${
+            hasUnsavedChanges ? '' : 'opacity-50'
+          }`"
+        >
+          <sofa-button
+            :customClass="'w-full'"
+            :padding="'py-3'"
+            @click="
+              hasUnsavedChanges ? Logic.Study.SaveCourseLocalChanges() : null
+            "
+          >
+            Save changes
+          </sofa-button>
+        </div>
+      </div>
       <!-- More option / settings for smaller screens -->
       <sofa-modal
         v-if="showMoreOptions"
@@ -369,6 +376,7 @@ import {
   SofaHeaderText,
   SofaCourseDetails,
   SofaImageLoader,
+  SofaButton,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import CourseSettings from "@/components/courses/Settings.vue";
@@ -376,6 +384,7 @@ import NewCourseMaterial from "@/components/courses/NewMaterial.vue";
 import AddVideo from "@/components/courses/AddVideo.vue";
 
 import {
+  hasUnsavedChanges,
   updateCourseSectionForm,
   updateCourseSections,
 } from "@/composables/course";
@@ -401,6 +410,7 @@ export default defineComponent({
     CourseSettings,
     NewCourseMaterial,
     AddVideo,
+    SofaButton,
   },
   middlewares: {
     fetchRules: [
@@ -517,6 +527,7 @@ export default defineComponent({
         if (currentContent.value == "") {
           Logic.Common.goBack();
         } else {
+          showSettingModal.value = false;
           currentContent.value = "sections";
         }
       } else {
@@ -525,10 +536,12 @@ export default defineComponent({
     };
 
     const showMateterialDetails = () => {
-      modalData.title = "Details";
-      modalData.content = "material_details";
+      if (selectedMaterial.value) {
+        modalData.title = "Details";
+        modalData.content = "material_details";
 
-      showMoreOptions.value = true;
+        showMoreOptions.value = true;
+      }
     };
 
     const handleCourseSettingSaved = (status: boolean) => {
@@ -547,16 +560,9 @@ export default defineComponent({
     watch(SingleCourse, () => {
       if (SingleCourse.value) {
         showSettingModal.value = false;
-        // remove save button
-        if (SingleCourse.value?.title != "Untitled Course") {
-          actionButtonItems.length = 0;
-          actionButtonItems.push({
-            IsOutlined: true,
-            name: "Exit",
-            handler: () => {
-              Logic.Common.goBack();
-            },
-          });
+
+        if (localStorage.getItem("couse_section_update") == null) {
+          hasUnsavedChanges.value = false;
         }
       }
     });
@@ -564,17 +570,9 @@ export default defineComponent({
     onMounted(() => {
       scrollToTop();
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
-
-      // set save button
-      if (SingleCourse.value?.title == "Untitled Course") {
-        actionButtonItems.push({
-          IsOutlined: false,
-          name: "Save",
-          handler: () => {
-            showSettingModal.value = true;
-          },
-        });
-      }
+      showSettingModal.value = false;
+      mobileTitle.value = "Content";
+      currentContent.value = "sections";
     });
 
     return {
@@ -589,6 +587,7 @@ export default defineComponent({
       updateCourseSectionForm,
       actionButtonItems,
       SingleCourse,
+      hasUnsavedChanges,
       handleAddMaterialChanged,
       handleItemSelected,
       handleMobileGoback,

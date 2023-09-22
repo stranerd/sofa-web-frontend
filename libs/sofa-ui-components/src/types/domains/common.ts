@@ -28,22 +28,73 @@ interface FileData {
   link: string
 }
 
-interface Tags {
-  hash: string
-  id: string
+interface ContentDetails {
   type: string
+  price: number
+  image: string
   title: string
-  parent?: string
-  meta: {
-    courses: number
-    quizzes: number
-    images: number
-    documents: number
-    videos: number
-    total: number
+  info: string
+  id: string
+  status: string
+  labels: {
+    color: string
+    main: string
+    sub: string
   }
-  createdAt: number
-  updatedAt: number
+  ratings: {
+    total: 4
+    label: string
+    totalCount: number
+    stats: any
+    reviews: {
+      user: {
+        name: string
+        photoUrl: string
+      }
+      rating: number
+      review: string
+    }[]
+  }
+  user: {
+    name: string
+    photoUrl: string
+    role: string
+    stats: {
+      quizzes: number
+      courses: number
+      followers: string
+    }
+  }
+  lastUpdated: string
+  tags: string[]
+  content: {
+    materialsCount: number
+    sections: {
+      title: string
+      data: {
+        title: string
+        sub: string
+        type: string
+        isLocked: boolean
+      }[]
+      opened: boolean
+    }[]
+  }
+  questions: {
+    type: any
+    duration: any
+    content: string
+    answer: string
+  }[]
+}
+
+interface Country {
+  name: string
+  iso2: string
+  states: {
+    name: string
+    state_code: string
+  }[]
 }
 
 export enum QueryKeys {
@@ -73,4 +124,4 @@ export interface QueryParams {
   search?: { value: string; fields: string[] }
 }
 
-export { ValidationError, Paginated, FileData, Tags }
+export { ValidationError, Paginated, FileData, ContentDetails, Country }

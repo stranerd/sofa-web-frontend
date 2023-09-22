@@ -9,6 +9,8 @@ export interface Folder {
     courses: string[]
     quizzes: string[]
   }
+  courses: Course[]
+  quizzes: Quiz[]
   user: SingleUser
   createdAt: number
   updatedAt: number
@@ -32,6 +34,12 @@ export interface Quiz {
   }
   createdAt: number
   updatedAt: number
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
+  __type: 'QuizEntity'
 }
 
 export interface Question {
@@ -39,9 +47,12 @@ export interface Question {
   id: string
   userId: string
   quizId: string
+  key: string
+  type: string
   question: string
   questionMedia?: FileData
   timeLimit: number
+  explanation?: string
   data: {
     type:
       | 'multipleChoice'
@@ -92,6 +103,12 @@ export interface Course {
   }
   createdAt: number
   updatedAt: number
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
+  __type: 'CourseEntity'
 }
 
 export interface SofaFile {
@@ -118,4 +135,55 @@ export interface SofaMediaFile {
   path: string
   timestamp: number
   link: string
+}
+
+export interface QuizQuestion {
+  title: string
+  info: string
+  question: string
+  duration: string
+  answer?: String
+  userAnswer?: String
+  id: string
+  timeLimit: number
+  currentTime: number
+  options: {
+    type: string
+    data: {
+      content: {
+        label: string
+        type: string
+        value?: string
+        extraClass?: string
+        shape?: string
+      }[]
+      shape?: string
+      hover?: boolean
+    }[]
+  }
+}
+
+export interface ResourceType {
+  title: string
+  image: string
+  user: SingleUser
+  authUserId: string | undefined
+  subject: string
+  labels: {
+    main: string
+    sub: string
+    color: string
+  }
+  progress: number
+  routePath: string
+  id: string
+  status: string
+  showMore: boolean
+  userId: string
+  type: 'course' | 'quiz' | string
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
 }

@@ -1804,8 +1804,8 @@ export default class Study extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
           throw error
-          //
         })
     }
   }
@@ -1846,6 +1846,23 @@ export default class Study extends Common {
     }
 
     localStorage.setItem(`quiz_question_update`, JSON.stringify(localQuizData))
+  }
+
+  public SaveCourseChangesToLocal = (
+    UpdateCourseSections: UpdateCourseSectionsInput,
+  ) => {
+    localStorage.setItem(
+      `couse_section_update`,
+      JSON.stringify(UpdateCourseSections),
+    )
+  }
+
+  public SaveCourseLocalChanges = () => {
+    if (localStorage.getItem('couse_section_update')) {
+      const content = JSON.parse(localStorage.getItem('couse_section_update'))
+      this.UpdateCourseSectionForm = content
+      this.UpdateCourseSection()
+    }
   }
 
   public saveQuizLocalChanges = async () => {
@@ -1976,7 +1993,10 @@ export default class Study extends Common {
           Logic.Common.hideLoader()
           return response.data
         })
-        .catch((error) => {})
+        .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
+          throw error
+        })
     }
   }
 
@@ -2007,9 +2027,9 @@ export default class Study extends Common {
               sections: currentSections,
             }
 
-            this.UpdateCourseSection().then(() => {
-              this.CoursableItemRemoved = Logic.Common.makeid(16)
-            })
+            this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
+
+            this.CoursableItemRemoved = Logic.Common.makeid(16)
           } else {
             // remove items not in coursable
             currentSections.forEach((item) => {
@@ -2023,9 +2043,8 @@ export default class Study extends Common {
               sections: currentSections,
             }
 
-            this.UpdateCourseSection().then(() => {
-              this.NewCoursableItem = Logic.Common.makeid(16)
-            })
+            this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
+            this.NewCoursableItem = Logic.Common.makeid(16)
           }
 
           return response.data
@@ -2037,15 +2056,27 @@ export default class Study extends Common {
   }
 
   public UpdateCourseSection = () => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     if (this.UpdateCourseSectionForm) {
       return $api.study.course
         .updateCourseSections(this.UpdateCourseSectionForm)
         .then((response) => {
+          localStorage.removeItem('couse_section_update')
           this.SingleCourse = response.data
+          Logic.Common.showLoader({
+            show: true,
+            loading: false,
+            message: 'All changes have been saved',
+            type: 'success',
+          })
+
           return response.data
         })
         .catch((error) => {
-          //
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }

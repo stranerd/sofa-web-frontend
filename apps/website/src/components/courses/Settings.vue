@@ -61,6 +61,7 @@
         />
 
         <sofa-text-field
+          v-if="Logic.Users.UserProfile.roles.isVerified"
           :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'"
           type="text"

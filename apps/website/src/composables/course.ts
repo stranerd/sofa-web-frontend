@@ -24,6 +24,7 @@ const allGenericTags = ref<SelectOption[]>([])
 const contentTypeOptions = ref<SelectOption[]>([])
 
 const courseSettingSaved = ref(false)
+const hasUnsavedChanges = ref(false)
 
 const updateCourseSectionForm = reactive<UpdateCourseSectionsInput>({
   sections: [],
@@ -158,9 +159,23 @@ const updateCourseSections = () => {
       id: Logic.Study.SingleCourse.id,
       sections: updateCourseSectionForm.sections,
     }
-    Logic.Study.UpdateCourseSection().then(() => {
-      //
-    })
+
+    const unsectionedSection = updateCourseSectionForm.sections.filter(
+      (item) => {
+        return item.label == 'unsectioned'
+      },
+    )[0]
+
+    Logic.Study.UpdateCourseSectionForm.sections = updateCourseSectionForm.sections.filter(
+      (item) => {
+        return item.label != 'unsectioned'
+      },
+    )
+
+    Logic.Study.UpdateCourseSectionForm.sections.push(unsectionedSection)
+
+    Logic.Study.SaveCourseChangesToLocal(Logic.Study.UpdateCourseSectionForm)
+    hasUnsavedChanges.value = true
   }
 }
 
@@ -228,6 +243,7 @@ export {
   addCourseFileForm,
   allGenericTags,
   contentTypeOptions,
+  hasUnsavedChanges,
   createCourse,
   updateCourse,
   getTopics,

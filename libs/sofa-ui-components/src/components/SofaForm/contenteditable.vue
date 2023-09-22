@@ -1,6 +1,6 @@
 <template>
   <span
-    :class="` ${customClass} bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
+    :class="` ${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
     :placeholder="placeholder"
     :contenteditable="true"
     @input="onInput"

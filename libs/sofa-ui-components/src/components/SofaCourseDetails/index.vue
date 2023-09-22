@@ -147,6 +147,14 @@
           :updateValue="dataReactive.description"
         />
       </template>
+      <div
+        v-if="type != 'quiz'"
+        class="w-full flex flex-row items-center justify-end"
+      >
+        <sofa-button :padding="'px-4 py-2'" @click="updateFile()">
+          Save changes
+        </sofa-button>
+      </div>
     </div>
 
     <div
@@ -205,6 +213,7 @@ import { SofaTextField, SofaTextarea } from "../SofaForm";
 import draggable from "vuedraggable";
 import { Logic } from "../../composable";
 import SofaDeletePrompt from "../SofaDeletePrompt";
+import SofaButton from "../SofaButton";
 
 export default defineComponent({
   components: {
@@ -217,6 +226,7 @@ export default defineComponent({
     SofaTextField,
     SofaTextarea,
     SofaDeletePrompt,
+    SofaButton,
   },
   props: {
     customClass: {
@@ -256,7 +266,19 @@ export default defineComponent({
         topicId: Logic.Study.SingleCourse.topicId,
       };
 
-      Logic.Study.UpdateFile(true, dataRef.value.id);
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      });
+
+      Logic.Study.UpdateFile(true, dataRef.value.id)?.then(() => {
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: "All changes have been saved",
+          type: "success",
+        });
+      });
     };
 
     const deleteFile = (id: string) => {
@@ -291,12 +313,6 @@ export default defineComponent({
       });
     };
 
-    watch(dataReactive, () => {
-      Logic.Common.debounce(() => {
-        updateFile();
-      }, 500);
-    });
-
     const deleteMaterial = () => {
       deleteFile(selectedMaterialId.value);
     };
@@ -307,6 +323,7 @@ export default defineComponent({
       selectedMaterialId,
       deleteFile,
       deleteMaterial,
+      updateFile,
     };
   },
 });

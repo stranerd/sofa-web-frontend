@@ -56,3 +56,17 @@ export interface Review {
   createdAt: number
   updatedAt: number
 }
+
+export interface TutorRequest {
+  hash: string
+  id: string
+  tutor: SingleUser
+  userId: string
+  conversationId: string
+  pending: boolean
+  message: string
+  accepted: boolean
+  createdAt: number
+  updatedAt: number
+  user: SingleUser
+}
