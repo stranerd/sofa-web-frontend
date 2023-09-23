@@ -9,6 +9,9 @@
 		"test:e2e": "vue-cli-service test:e2e",
 		"lint": "vue-cli-service lint"
 	},
+	"engines": {
+		"node": ">= 18.0.0"
+	},
 	"dependencies": {
 		"@shopify/draggable": "^1.0.0-beta.8",
 		"@tailwindcss/line-clamp": "^0.3.0",
