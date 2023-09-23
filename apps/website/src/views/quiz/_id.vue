@@ -140,7 +140,11 @@
                   } !border-[2px] !border-white`"
                   :hasDoubleLayer="true"
                   :hasDarkLayer="false"
-                  v-if="mode != 'game' && mode != 'tutor_test'"
+                  v-if="
+                    mode != 'game' &&
+                    mode != 'tutor_test' &&
+                    questions[currentQuestionIndex].explanation
+                  "
                 >
                   Explanation
                 </sofa-button>

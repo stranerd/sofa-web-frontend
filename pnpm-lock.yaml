@@ -64,6 +64,9 @@ importers:
       vue3-google-login:
         specifier: ^2.0.18
         version: 2.0.20(vue@3.3.4)
+      vue3-slider:
+        specifier: ^1.9.0
+        version: 1.9.0(vue@3.3.4)
       vuedraggable:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.3.4)
@@ -10865,6 +10868,15 @@ packages:
     resolution: {integrity: sha512-JGXW0gx1Lg6zPSBWoquT+1TVS35V/zhSgkmzBjz+IfJzMN6cSBWLg1ELRF/47VGI8bmDFH8XgpxPqs3CTDHN5g==}
     peerDependencies:
       vue: ^3.0.3
+    dependencies:
+      vue: 3.3.4
+    dev: false
+
+  /vue3-slider@1.9.0(vue@3.3.4):
+    resolution: {integrity: sha512-S+ojp3A21FiOM389Xp/bdUKSzjxcsTaDwI4N1aWVPoNh9//E8M+dqs1Ufjh86LulPAWLCN0ZR6eaD8jLZZ574g==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.0.0
     dependencies:
       vue: 3.3.4
     dev: false

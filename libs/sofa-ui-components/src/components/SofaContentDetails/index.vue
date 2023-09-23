@@ -694,6 +694,7 @@ export default defineComponent({
 
     const goToStudyMode = (type: string) => {
       if (type != "assignment" && type != "game") {
+        console.log(props.contentId);
         Logic.Common.GoToRoute(`/quiz/${props.contentId}?mode=${type}`);
       }
     };

@@ -147,6 +147,7 @@ export interface QuizQuestion {
   id: string
   timeLimit: number
   currentTime: number
+  explanation: string
   options: {
     type: string
     data: {

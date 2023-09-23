@@ -19,7 +19,7 @@
       </div>
       <div class="flex flex-col">
         <sofa-normal-text
-          :customClass="'!font-semibold text-left !line-clamp-1 !whitespace-nowrap '"
+          :customClass="'!font-semibold text-left !line-clamp-1  '"
         >
           {{ chat.title }}
         </sofa-normal-text>
