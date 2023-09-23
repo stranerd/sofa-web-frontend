@@ -583,14 +583,18 @@ const setViewMode = () => {
   setStartButtons()
 }
 
-const goToNextSlide = () => {
+const goToNextSlide = (index = -1) => {
   if (!swiperInstance.value.swiperInstance.enabled) {
     enabledSwiper.value = true
     swiperInstance.value.swiperInstance.enabled = true
     swiperInstance.value.swiperInstance.update()
   }
-  if (questionIndex.value < questions.length - 1) {
-    questionIndex.value++
+  if (questionIndex.value < questions.length - 1 || index != -1) {
+    if (index != -1) {
+      questionIndex.value = index
+    } else {
+      questionIndex.value++
+    }
   }
 
   if (mode.value == 'practice') {
@@ -615,6 +619,14 @@ const goToPrevSlide = () => {
 
 const handleLeftButton = () => {
   if (questionIndex.value == questions.length - 1) {
+    if (mode.value == 'test') {
+      goToPrevSlide()
+      return
+    }
+    if (mode.value == 'preview') {
+      goToPrevSlide()
+      return
+    }
     enabledSwiper.value = true
     swiperInstance.value.swiperInstance.enabled = true
     swiperInstance.value.swiperInstance.update()
@@ -660,8 +672,8 @@ const checkAnswer = () => {
   }
 }
 
-const handleRightButton = () => {
-  if (questionIndex.value == questions.length - 1) {
+const handleRightButton = (index = -1) => {
+  if (questionIndex.value == questions.length - 1 && index == -1) {
     if (state.value == 'completed') {
       state.value = 'other_modes'
       mobileTitle.value = 'Try other modes'
@@ -735,16 +747,16 @@ const handleRightButton = () => {
           bgColor: 'bg-primaryBlue',
           textColor: 'text-white',
         }
-        goToNextSlide()
+        goToNextSlide(index)
       } else {
         checkAnswer()
       }
     } else if (mode.value == 'game') {
       clearInterval(counterInterval.value)
       // checkAnswer()
-      goToNextSlide()
+      goToNextSlide(index)
     } else {
-      goToNextSlide()
+      goToNextSlide(index)
     }
   }
 }

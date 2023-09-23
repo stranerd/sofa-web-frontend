@@ -190,15 +190,13 @@
             style="border-width: 2px 2px 4px 2px"
           >
             <div class="flex-grow flex flex-row space-x-3 py-3 items-center">
-              <sofa-icon
-                :name="option.shape"
-                :custom-class="`${getShapeSize(option.shape)}`"
-              />
-              <input
-                class="focus:outline-none bg-transparent !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base"
+              <sofa-textarea
                 :placeholder="option.content[0].label"
                 v-model="question.userAnswer"
-              />
+                :rich-editor="false"
+                :text-area-style="`focus:outline-none bg-transparent  !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base`"
+              >
+              </sofa-textarea>
             </div>
           </div>
         </div>
@@ -348,15 +346,15 @@
             item-key="label"
             :disabled="true"
           >
-            <template #item="{ element }">
+            <template #item="{ element, index }">
               <div class="w-full flex flex-row items-center space-x-3">
                 <div
-                  class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
+                  class="w-full flex flex-row items-center justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
                   style="border-width: 2px 2px 4px 2px"
                 >
                   <sofa-icon
                     :name="element.shape"
-                    :custom-class="`${getShapeSize(element.shape)}`"
+                    :custom-class="`${matchShapes[index]}`"
                   />
                   <div class="flex-grow flex flex-row space-x-3 items-center">
                     <sofa-header-text
@@ -375,7 +373,7 @@
             class="col-span-1 space-y-3"
             item-key="label"
           >
-            <template #item="{ element }">
+            <template #item="{ element, index }">
               <div class="w-full flex flex-row items-center space-x-3">
                 <div
                   class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
@@ -383,7 +381,7 @@
                 >
                   <sofa-icon
                     :name="element.shape"
-                    :custom-class="`${getShapeSize(element.shape)}`"
+                    :custom-class="`${matchShapes[index]}`"
                   />
                   <div class="flex-grow flex flex-row space-x-3 items-center">
                     <sofa-header-text
@@ -444,6 +442,7 @@ import {
   SofaHeaderText,
   SofaIcon,
   SofaPieChart,
+  SofaTextarea,
 } from "sofa-ui-components";
 import { QuizQuestion } from "sofa-logic/src/logic/types/domains/study";
 import { Logic } from "sofa-logic";
@@ -460,6 +459,7 @@ export default defineComponent({
     SofaHeaderText,
     SofaIcon,
     SofaPieChart,
+    SofaTextarea,
   },
   props: {
     questionData: {
@@ -506,6 +506,10 @@ export default defineComponent({
 
     const pieChartRef = ref();
 
+    const possibleAnswers = ref(0);
+
+    const multipleChoiceAnswers = reactive([]);
+
     const pieChartColor = ref("");
 
     const pieLabel = ref("");
@@ -513,6 +517,17 @@ export default defineComponent({
     const dragAndDropAnswers = reactive<string[]>([]);
 
     const resultData = ref();
+
+    const matchShapes = [
+      "circle",
+      "triangle",
+      "square",
+      "kite",
+      "circle",
+      "triangle",
+      "square",
+      "kite",
+    ];
 
     const setResultData = () => {
       let pieColor = "";
@@ -771,14 +786,29 @@ export default defineComponent({
     };
 
     const setAnswer = (value: any) => {
-      if (
-        question.title == "Multiple choice" ||
-        question.title == "True/False"
-      ) {
+      if (question.title == "True/False") {
         saveAnswer(value.trim());
       }
 
-      context.emit("OnAnswerSelected", value);
+      if (question.title != "Multiple choice") {
+        context.emit("OnAnswerSelected", value);
+      } else {
+        if (!multipleChoiceAnswers.includes(value.trim())) {
+          if (multipleChoiceAnswers.length < possibleAnswers.value) {
+            multipleChoiceAnswers.push(value.trim());
+          } else {
+            multipleChoiceAnswers.pop();
+            multipleChoiceAnswers.push(value.trim());
+          }
+        } else {
+          const currentValueIndex = multipleChoiceAnswers.indexOf(value.trim());
+          if (currentValueIndex != -1) {
+            multipleChoiceAnswers.splice(currentValueIndex, 1);
+          }
+        }
+
+        saveAnswer(multipleChoiceAnswers.join(", "));
+      }
     };
 
     const optionState = (option: {
@@ -813,6 +843,10 @@ export default defineComponent({
       }
 
       if (option.hover || question.userAnswer == option.content[0].label) {
+        return "hover";
+      }
+
+      if (multipleChoiceAnswers.includes(option.content[0].label)) {
         return "hover";
       }
 
@@ -860,6 +894,11 @@ export default defineComponent({
       handleQuestionSelected();
       setOptions();
       setResultData();
+
+      if (props.questionData.title == "Multiple choice") {
+        possibleAnswers.value = props.questionData.answer?.split(",").length;
+      }
+      console.log(question);
     });
 
     return {
@@ -881,6 +920,7 @@ export default defineComponent({
       pieChartColor,
       pieLabel,
       optionState,
+      matchShapes,
     };
   },
 });

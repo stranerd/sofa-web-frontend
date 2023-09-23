@@ -26,31 +26,54 @@
           class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex flex-row items-center space-x-3 justify-between"
         >
           <template v-if="!answerState">
-            <div
-              v-if="state == 'completed' || state == 'other_modes'"
-              class="flex flex-row items-center"
-            >
-              <sofa-header-text :size="'xl'">
-                {{ mobileTitle }}
-              </sofa-header-text>
-            </div>
-            <div
-              class="w-full relative h-[14px] bg-[#E1E6EB] rounded-[8px]"
-              v-else
-            >
+            <template v-if="mode != 'preview'">
               <div
-                class="absolute top-0 left-0 h-full bg-primaryGreen rounded-[8px]"
-                :style="`width: calc(${
-                  ((currentQuestionIndex + 1) / questions.length) * 90
-                }% + 10%);`"
+                v-if="state == 'completed' || state == 'other_modes'"
+                class="flex flex-row items-center"
               >
-                <span
-                  class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold"
-                >
-                  {{ currentQuestionIndex + 1 }}/{{ questions.length }}
-                </span>
+                <sofa-header-text :size="'xl'">
+                  {{ mobileTitle }}
+                </sofa-header-text>
               </div>
-            </div>
+              <!-- <div
+                class="w-full relative h-[14px] bg-[#E1E6EB] rounded-[8px]"
+                
+              >
+                <div
+                  class="absolute top-0 left-0 h-full bg-primaryGreen rounded-[8px]"
+                  :style="`width: calc(${
+                    ((currentQuestionIndex + 1) / questions.length) * 90
+                  }% + 10%);`"
+                >
+                  <span
+                    class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold"
+                  >
+                    {{ currentQuestionIndex + 1 }}/{{ questions.length }}
+                  </span>
+                </div>
+              </div> -->
+              <slider
+                v-else
+                v-model="currentSliderIndex"
+                color="#4aaf7d"
+                track-color="#e1e6ea"
+                height="15"
+                width="95%"
+                :alwaysShowHandle="true"
+                :handleScale="2"
+                :min="1"
+                :max="questions.length || 10"
+                :tooltip="true"
+                :tooltipText="`%v/${questions.length}`"
+                :flipTooltip="true"
+                :tooltipColor="'#4aaf7d'"
+                :tooltipTextColor="'#ffffff'"
+                :sticky="true"
+              />
+            </template>
+            <template v-else>
+              <sofa-header-text :size="'xl'"> Quiz preview </sofa-header-text>
+            </template>
 
             <sofa-normal-text
               :color="'text-grayColor'"
@@ -885,6 +908,7 @@ import {
   selectedQuizId,
   isRestart,
 } from "@/composables/quiz";
+import slider from "vue3-slider";
 
 const fetchRules = [];
 
@@ -943,6 +967,7 @@ export default defineComponent({
     SofaIconCard,
     SofaImageLoader,
     SofaAvatar,
+    slider,
   },
   middlewares: {
     fetchRules,
@@ -956,6 +981,8 @@ export default defineComponent({
     const showScrollBar = ref(false);
 
     const quizIsDarkMode = ref(false);
+
+    const currentSliderIndex = ref(1);
 
     watch(currentQuestionIndex, () => {
       questionIndex.value = currentQuestionIndex.value;
@@ -1039,6 +1066,14 @@ export default defineComponent({
       setScoreboardParticipants();
     });
 
+    watch(currentQuestionIndex, () => {
+      currentSliderIndex.value = currentQuestionIndex.value + 1;
+    });
+
+    watch(currentSliderIndex, () => {
+      handleRightButton(currentSliderIndex.value - 1);
+    });
+
     watch(AllQuestions, () => {
       if (SingleQuiz.value) {
         if (isRestart.value) {
@@ -1082,6 +1117,7 @@ export default defineComponent({
       currentPrepareCount,
       SingleTest,
       isRestart,
+      currentSliderIndex,
       userIsGameHost,
       copyGameLink,
       shareGameLink,
