@@ -3,11 +3,11 @@ name: Publish to Azure App Services
 on:
   push:
     branches:
-      develop
+      production
 
 jobs:
   publish:
-    environment: develop
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
