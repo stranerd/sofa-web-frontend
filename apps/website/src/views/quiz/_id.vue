@@ -145,6 +145,7 @@
                     mode != 'tutor_test' &&
                     questions[currentQuestionIndex].explanation
                   "
+                  @click="showExplanation()"
                 >
                   Explanation
                 </sofa-button>
@@ -256,6 +257,12 @@
                 } !border-[2px] !border-white`"
                 :hasDoubleLayer="true"
                 :hasDarkLayer="false"
+                @click="showExplanation()"
+                v-if="
+                  mode != 'game' &&
+                  mode != 'tutor_test' &&
+                  questions[currentQuestionIndex].explanation
+                "
               >
                 Explanation
               </sofa-button>
@@ -831,7 +838,10 @@
                   showInfoModal = false;
                 }
               "
+              :continue-action="handleRightButton"
               :mode="mode"
+              :is-explanation="answerState != ''"
+              :explanation="questions[currentQuestionIndex].explanation"
             />
           </div>
         </div>
@@ -1002,6 +1012,11 @@ export default defineComponent({
       showQuestion(questionIndex.value);
     });
 
+    const showExplanation = () => {
+      infoModalData.title = "Explanation";
+      showInfoModal.value = true;
+    };
+
     const setUpQuiz = () => {
       setViewMode();
       setQuestions();
@@ -1057,6 +1072,7 @@ export default defineComponent({
       Logic.Plays.watchProperty("SingleGame", SingleGame);
       Logic.Plays.watchProperty("GameParticipants", GameParticipants);
       setUpQuiz();
+      answerState.value = "";
     });
 
     onUnmounted(() => {
@@ -1128,6 +1144,7 @@ export default defineComponent({
       startGame,
       startTest,
       goToStudyMode,
+      showExplanation,
     };
   },
 });

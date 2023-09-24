@@ -394,6 +394,14 @@
             </template>
           </draggable>
         </div>
+
+        <div
+          class="w-full flex flex-col space-y-2 items-start justify-start pt-2"
+          v-if="answerState == 'wrong'"
+        >
+          <sofa-header-text :size="'xl'">Correct answer</sofa-header-text>
+          <sofa-normal-text>{{ question.answer }}</sofa-normal-text>
+        </div>
       </div>
     </div>
 
@@ -831,8 +839,26 @@ export default defineComponent({
         }
 
         if (
+          questions[props.questionIndex].answer
+            ?.trim()
+            .split(", ")
+            .includes(option.content[0].label?.trim())
+        ) {
+          return "correct_answer";
+        }
+
+        if (
           questions[props.questionIndex].userAnswer?.trim() ==
           option.content[0].label?.trim()
+        ) {
+          return "wrong_answer";
+        }
+
+        if (
+          questions[props.questionIndex].userAnswer
+            ?.trim()
+            .split(", ")
+            .includes(option.content[0].label?.trim())
         ) {
           return "wrong_answer";
         }
@@ -898,7 +924,6 @@ export default defineComponent({
       if (props.questionData.title == "Multiple choice") {
         possibleAnswers.value = props.questionData.answer?.split(",").length;
       }
-      console.log(question);
     });
 
     return {

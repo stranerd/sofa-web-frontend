@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col space-y-4">
-    <div class="w-full flex flex-col space-y-4">
+    <div class="w-full flex flex-col space-y-4" v-if="!isExplanation">
       <div
         class="bg-primaryPurple custom-border px-4 py-4 flex flex-col space-y-2"
       >
@@ -28,6 +28,11 @@
       </div>
     </div>
 
+    <div class="w-full flex flex-col">
+      <sofa-normal-text :customClass="'text-left'">
+        {{ explanation }}
+      </sofa-normal-text>
+    </div>
     <div
       class="w-full flex mdlg:!flex-row flex-col items-center justify-between mdlg:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0"
     >
@@ -45,9 +50,9 @@
         <sofa-button
           :padding="'px-5 mdlg:!py-2 py-3'"
           :customClass="'mdlg:!w-auto w-full'"
-          @click.prevent="close ? close() : null"
+          @click.prevent="handleNextButton()"
         >
-          Start
+          {{ isExplanation ? "Continue" : "Start" }}
         </sofa-button>
       </div>
     </div>
@@ -75,6 +80,17 @@ export default defineComponent({
       default: "flashcards",
     },
     close: {
+      type: Function,
+    },
+    isExplanation: {
+      type: Boolean,
+      default: false,
+    },
+    explanation: {
+      type: String,
+      default: "",
+    },
+    continueAction: {
       type: Function,
     },
   },
@@ -114,12 +130,22 @@ export default defineComponent({
       setContent();
     });
 
+    const handleNextButton = () => {
+      props.close();
+      if (props.isExplanation) {
+        props.continueAction();
+      } else {
+        //
+      }
+    };
+
     return {
       Logic,
       FormValidations,
       showAddVideo,
       allSteps,
       dontShowAgain,
+      handleNextButton,
     };
   },
 });

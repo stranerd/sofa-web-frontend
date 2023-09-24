@@ -983,6 +983,7 @@ export default class Study extends Common {
         currentTime: questionData.timeLimit,
         id: questionData.id,
         hover: false,
+        explanation: questionData.explanation,
       })
     })
 

@@ -657,18 +657,18 @@ const checkAnswer = () => {
     questions[questionIndex.value].userAnswer?.trim()
   if (isCorrect) {
     answerState.value = 'correct'
-    buttonLabels.right = {
-      label: 'Continue',
-      bgColor: 'bg-primaryGreen',
-      textColor: 'text-white',
-    }
+    // buttonLabels.right = {
+    //   label: 'Continue',
+    //   bgColor: 'bg-primaryGreen',
+    //   textColor: 'text-white',
+    // }
   } else {
     answerState.value = 'wrong'
-    buttonLabels.right = {
-      label: 'Continue',
-      bgColor: 'bg-primaryRed',
-      textColor: 'text-white',
-    }
+    // buttonLabels.right = {
+    //   label: 'Continue',
+    //   bgColor: 'bg-primaryRed',
+    //   textColor: 'text-white',
+    // }
   }
 }
 
