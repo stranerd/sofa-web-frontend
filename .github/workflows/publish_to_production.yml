@@ -3,7 +3,11 @@ name: Publish to Azure App Services
 on:
   push:
     branches:
-      production
+      - 'production'
+    paths:
+      - "apps/**"
+      - "libs/**"
+      - ".github/workflows/**"
 
 jobs:
   publish:

@@ -3,7 +3,9 @@ name: Publish to Azure App Services on PR
 on:
   push:
     branches:
-      - per-pr
+      - '*'
+      - '!develop'
+      - '!production'
     paths:
       - "apps/**"
       - "libs/**"
