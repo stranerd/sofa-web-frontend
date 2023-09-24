@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col" v-else>
       <sofa-normal-text :customClass="'text-left'">
         {{ explanation }}
       </sofa-normal-text>
