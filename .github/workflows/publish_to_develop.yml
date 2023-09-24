@@ -11,7 +11,7 @@ on:
     paths:
       - "apps/**"
       - "libs/**"
-      - ".github/workflows/**"
+      - ".github/workflows/publish_to_develop.yml"
 
 jobs:
   publish:
