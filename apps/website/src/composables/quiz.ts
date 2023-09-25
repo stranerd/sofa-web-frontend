@@ -19,6 +19,12 @@ const currentPrepareCount = ref(0)
 
 const isRestart = ref(false)
 
+const pieChartColor = ref('')
+
+const pieLabel = ref('')
+
+const resultData = ref()
+
 const scoreBoardParticipants = reactive<
   {
     score: number
@@ -65,6 +71,8 @@ const infoModalData = reactive({
   title: '',
   sub: '',
 })
+
+const pieChartRefForTestScore = ref()
 
 const showInfoModal = ref(false)
 
@@ -223,15 +231,15 @@ const quizResult = () => {
 
 const goToStudyMode = (type: string) => {
   selectedQuizMode.value = type
-  if (type != 'assignment' && type != 'game') {
-    showStudyMode.value = false
-    Logic.Common.GoToRoute(`/quiz/${selectedQuizId.value}?mode=${type}`)
-  }
+
+  Logic.Study.GoToStudyMode(type, selectedQuizId.value || '')
 
   if (type == 'game') {
     showStudyMode.value = true
     selectedQuizMode.value = 'game'
   }
+
+  showStudyMode.value = false
 }
 
 const listenToGame = () => {
@@ -270,12 +278,67 @@ const listenToTest = () => {
             preStartTest()
           })
         }
+
+        if (data.data.status == 'scored') {
+          const score =
+            (SingleTest.value.scores[Logic.Auth.AuthUser.id] /
+              (questions.length * 10)) *
+            100
+          setResultData(score)
+        }
       })
     },
     (data) => {
       console.log(data)
     },
   )
+}
+
+const setResultData = (score = 0) => {
+  let pieColor = ''
+
+  const passPercent = score
+
+  if (passPercent >= 80) {
+    pieColor = '#4BAF7D'
+    pieChartColor.value = 'text-[#4BAF7D]'
+    if (passPercent == 100) {
+      pieLabel.value = 'Perfect!'
+    }
+
+    if (passPercent < 100 && passPercent >= 90) {
+      pieLabel.value = 'Outstanding!'
+    }
+
+    if (passPercent < 90) {
+      pieLabel.value = 'Excellent work!'
+    }
+  } else if (passPercent <= 70 && passPercent > 60) {
+    pieColor = '#ADAF4B'
+    pieChartColor.value = 'text-[#ADAF4B]'
+    pieLabel.value = 'Great job!'
+  } else if (passPercent <= 60 && passPercent > 50) {
+    pieColor = '#FA9632'
+    pieChartColor.value = 'text-[#FA9632]'
+    pieLabel.value = 'Nice effort!'
+  } else if (passPercent <= 50) {
+    pieColor = '#F55F5F'
+    pieChartColor.value = 'text-[#F55F5F]'
+    pieLabel.value = 'Study harder!'
+  }
+  resultData.value = {
+    labels: ['passed', 'failed'],
+    datasets: [
+      {
+        data: [passPercent, 100 - passPercent],
+        backgroundColor: [pieColor, '#E1E6EB'],
+        hoverOffset: 4,
+        borderRadius: 10,
+      },
+    ],
+  }
+
+  // pieChartRefForTestScore.value?.updateChart()
 }
 
 const preStartTest = () => {
@@ -431,8 +494,11 @@ const showQuestion = (index: number) => {
     } else {
       state.value = 'lobby'
       enabledSwiper.value = false
-      swiperInstance.value.swiperInstance.enabled = false
-      swiperInstance.value.swiperInstance.update()
+      if (swiperInstance.value) {
+        swiperInstance.value.swiperInstance.enabled = false
+        swiperInstance.value.swiperInstance.update()
+      }
+
       answerState.value = ''
 
       buttonLabels.left = {
@@ -594,7 +660,7 @@ const setViewMode = () => {
 }
 
 const goToNextSlide = (index = -1) => {
-  if (!swiperInstance.value.swiperInstance.enabled) {
+  if (!swiperInstance.value?.swiperInstance.enabled) {
     enabledSwiper.value = true
     swiperInstance.value.swiperInstance.enabled = true
     swiperInstance.value.swiperInstance.update()
@@ -617,7 +683,7 @@ const goToNextSlide = (index = -1) => {
 }
 
 const goToPrevSlide = () => {
-  if (!swiperInstance.value.swiperInstance.enabled) {
+  if (!swiperInstance.value?.swiperInstance.enabled) {
     enabledSwiper.value = true
     swiperInstance.value.swiperInstance.enabled = true
     swiperInstance.value.swiperInstance.update()
@@ -638,8 +704,11 @@ const handleLeftButton = () => {
       return
     }
     enabledSwiper.value = true
-    swiperInstance.value.swiperInstance.enabled = true
-    swiperInstance.value.swiperInstance.update()
+    if (swiperInstance.value) {
+      swiperInstance.value.swiperInstance.enabled = true
+      swiperInstance.value.swiperInstance.update()
+    }
+
     questionIndex.value = 0
     setStartButtons()
     return
@@ -944,6 +1013,11 @@ export {
   currentPrepareCount,
   SingleTest,
   isRestart,
+  pieChartColor,
+  pieLabel,
+  resultData,
+  pieChartRefForTestScore,
+  setResultData,
   saveParticipantAnswer,
   createQuiz,
   updateQuiz,

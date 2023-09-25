@@ -35,23 +35,7 @@
                   {{ mobileTitle }}
                 </sofa-header-text>
               </div>
-              <!-- <div
-                class="w-full relative h-[14px] bg-[#E1E6EB] rounded-[8px]"
-                
-              >
-                <div
-                  class="absolute top-0 left-0 h-full bg-primaryGreen rounded-[8px]"
-                  :style="`width: calc(${
-                    ((currentQuestionIndex + 1) / questions.length) * 90
-                  }% + 10%);`"
-                >
-                  <span
-                    class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold"
-                  >
-                    {{ currentQuestionIndex + 1 }}/{{ questions.length }}
-                  </span>
-                </div>
-              </div> -->
+
               <slider
                 v-else
                 v-model="currentSliderIndex"
@@ -312,7 +296,7 @@
                 :mode="mode"
                 @OnAnswerSelected="handleAnswerSelected"
                 :answerState="answerState"
-                :quiz-title="SingleQuiz?.title || 'Tutor quiz'"
+                :quiz-title="SingleQuiz?.title || 'Test quiz'"
                 :quizIsDarkMode="quizIsDarkMode"
               />
             </template>
@@ -377,7 +361,7 @@
               <sofa-header-text
                 :customClass="'!font-bold md:!text-2xl text-lg'"
               >
-                {{ SingleQuiz?.title || "Tutor test" }}
+                {{ SingleQuiz?.title || "New test" }}
               </sofa-header-text>
             </div>
 
@@ -420,7 +404,9 @@
                     :customClass="'!text-center !font-extrabold'"
                     size="xl"
                   >
-                    {{ SingleGame ? SingleQuiz.title : "Stanerd Tutor Test" }}
+                    {{
+                      SingleGame ? SingleQuiz.title : "Click on Start to begin"
+                    }}
                   </sofa-header-text>
 
                   <div
@@ -620,19 +606,66 @@
                   <div
                     class="w-full flex flex-col items-center justify-start space-y-3"
                   >
-                    <sofa-header-text
-                      :color="'text-white'"
-                      :customClass="'md:!text-3xl text-xl'"
-                    >
-                      Application submitted
-                    </sofa-header-text>
-                    <sofa-normal-text
-                      :color="'text-white'"
-                      :customClass="'text-center px-4'"
-                    >
-                      Your application is under review. You will get notified of
-                      the result soon
-                    </sofa-normal-text>
+                    <template v-if="!isStudent">
+                      <sofa-header-text
+                        :color="'text-white'"
+                        :customClass="'md:!text-3xl text-xl'"
+                      >
+                        Application submitted
+                      </sofa-header-text>
+                      <sofa-normal-text
+                        :color="'text-white'"
+                        :customClass="'text-center px-4'"
+                      >
+                        Your application is under review. You will get notified
+                        of the result soon
+                      </sofa-normal-text>
+                    </template>
+                    <template v-else>
+                      <template v-if="SingleTest.status == 'ended'">
+                        <sofa-header-text
+                          :color="'text-white'"
+                          :customClass="'md:!text-3xl text-xl'"
+                        >
+                          Test completed
+                        </sofa-header-text>
+                        <sofa-normal-text
+                          :color="'text-white'"
+                          :customClass="'text-center px-4'"
+                        >
+                          Please wait while we calculate your score
+                        </sofa-normal-text>
+                      </template>
+                      <template v-if="SingleTest.status == 'scored'">
+                        <sofa-pie-chart
+                          :data="resultData"
+                          v-if="resultData"
+                          :cutoutPercentage="'90%'"
+                          ref="pieChartRefForTestScore"
+                          :textStyle="`!text-3xl ${pieChartColor}`"
+                          >{{
+                            (
+                              (SingleTest.scores[Logic.Auth.AuthUser.id] /
+                                (questions.length * 10)) *
+                              100
+                            ).toFixed(0)
+                          }}%</sofa-pie-chart
+                        >
+
+                        <div class="flex flex-col space-y-1">
+                          <sofa-header-text
+                            :customClass="'!font-bold md:!text-2xl text-lg !text-white'"
+                            >{{ pieLabel }}</sofa-header-text
+                          >
+                          <sofa-normal-text :color="'text-white'"
+                            >{{
+                              SingleTest.scores[Logic.Auth.AuthUser.id] / 10
+                            }}/{{ questions.length }} correct
+                            answers</sofa-normal-text
+                          >
+                        </div>
+                      </template>
+                    </template>
                   </div>
                 </template>
               </template>
@@ -872,6 +905,7 @@ import {
   SofaIconCard,
   SofaImageLoader,
   SofaAvatar,
+  SofaPieChart,
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { SwiperSlide } from "swiper/vue";
@@ -921,6 +955,10 @@ import {
   goToStudyMode,
   selectedQuizId,
   isRestart,
+  resultData,
+  pieChartColor,
+  pieLabel,
+  pieChartRefForTestScore,
 } from "@/composables/quiz";
 import slider from "vue3-slider";
 
@@ -982,6 +1020,7 @@ export default defineComponent({
     SofaImageLoader,
     SofaAvatar,
     slider,
+    SofaPieChart,
   },
   middlewares: {
     fetchRules,
@@ -995,6 +1034,8 @@ export default defineComponent({
     const showScrollBar = ref(false);
 
     const quizIsDarkMode = ref(false);
+
+    const isStudent = ref(false);
 
     const currentSliderIndex = ref(1);
 
@@ -1061,6 +1102,10 @@ export default defineComponent({
 
       if (SingleQuiz.value) {
         selectedQuizId.value = SingleQuiz.value.id;
+      }
+
+      if (Logic.Common.route.query?.is_student) {
+        isStudent.value = true;
       }
     };
 
@@ -1138,6 +1183,11 @@ export default defineComponent({
       SingleTest,
       isRestart,
       currentSliderIndex,
+      isStudent,
+      pieChartRefForTestScore,
+      resultData,
+      pieChartColor,
+      pieLabel,
       userIsGameHost,
       copyGameLink,
       shareGameLink,

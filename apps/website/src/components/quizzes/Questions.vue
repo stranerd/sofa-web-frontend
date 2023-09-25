@@ -422,7 +422,7 @@
         <sofa-pie-chart
           :data="resultData"
           :cutoutPercentage="'90%'"
-          ref="pieChartRef"
+          ref="pieChartRefForTestScore"
           :textStyle="`!text-3xl ${pieChartColor}`"
           >{{ quizResult().percentagePass }}%</sofa-pie-chart
         >
@@ -464,9 +464,14 @@ import {
 import { QuizQuestion } from "sofa-logic/src/logic/types/domains/study";
 import { Logic } from "sofa-logic";
 import {
+  pieChartColor,
+  pieChartRefForTestScore,
+  pieLabel,
   questions,
   quizResult,
+  resultData,
   saveParticipantAnswer,
+  setResultData,
 } from "@/composables/quiz";
 
 export default defineComponent({
@@ -515,19 +520,11 @@ export default defineComponent({
   setup(props, context) {
     const questionRef = toRef(props, "questionData");
 
-    const pieChartRef = ref();
-
     const possibleAnswers = ref(0);
 
     const multipleChoiceAnswers = reactive([]);
 
-    const pieChartColor = ref("");
-
-    const pieLabel = ref("");
-
     const dragAndDropAnswers = reactive<string[]>([]);
-
-    const resultData = ref();
 
     const matchShapes = [
       "circle",
@@ -539,56 +536,6 @@ export default defineComponent({
       "square",
       "kite",
     ];
-
-    const setResultData = () => {
-      let pieColor = "";
-
-      const passPercent = quizResult().percentagePass;
-
-      if (passPercent >= 80) {
-        pieColor = "#4BAF7D";
-        pieChartColor.value = "text-[#4BAF7D]";
-        if (passPercent == 100) {
-          pieLabel.value = "Perfect!";
-        }
-
-        if (passPercent < 100 && passPercent >= 90) {
-          pieLabel.value = "Outstanding!";
-        }
-
-        if (passPercent < 90) {
-          pieLabel.value = "Excellent work!";
-        }
-      } else if (passPercent <= 70 && passPercent > 60) {
-        pieColor = "#ADAF4B";
-        pieChartColor.value = "text-[#ADAF4B]";
-        pieLabel.value = "Great job!";
-      } else if (passPercent <= 60 && passPercent > 50) {
-        pieColor = "#FA9632";
-        pieChartColor.value = "text-[#FA9632]";
-        pieLabel.value = "Nice effort!";
-      } else if (passPercent <= 50) {
-        pieColor = "#F55F5F";
-        pieChartColor.value = "text-[#F55F5F]";
-        pieLabel.value = "Study harder!";
-      }
-      resultData.value = {
-        labels: ["passed", "failed"],
-        datasets: [
-          {
-            data: [
-              quizResult().percentagePass,
-              100 - quizResult().percentagePass,
-            ],
-            backgroundColor: [pieColor, "#E1E6EB"],
-            hoverOffset: 4,
-            borderRadius: 10,
-          },
-        ],
-      };
-
-      pieChartRef.value?.updateChart();
-    };
 
     const fillInblankAnswers = reactive<
       {
@@ -636,8 +583,6 @@ export default defineComponent({
           dragAndDropAnswers.push(item.content[0]?.label);
         }
       });
-
-      console.log(dragAndDropAnswers);
     };
 
     const getShapeSize = (shape: string) => {
@@ -845,7 +790,7 @@ export default defineComponent({
         }
       }
 
-      setResultData();
+      setResultData(quizResult().percentagePass);
     });
 
     watch(sequenceOption, () => {
@@ -874,7 +819,10 @@ export default defineComponent({
     onMounted(() => {
       handleQuestionSelected();
       setOptions();
-      setResultData();
+
+      setTimeout(() => {
+        setResultData(quizResult().percentagePass);
+      }, 1000);
 
       if (props.questionData.title == "Multiple choice") {
         possibleAnswers.value = props.questionData.answer?.split(",").length;
@@ -893,7 +841,7 @@ export default defineComponent({
       resultData,
       quizResult,
       questions,
-      pieChartRef,
+      pieChartRefForTestScore,
       pieChartColor,
       pieLabel,
       optionState,

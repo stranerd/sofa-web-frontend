@@ -7,6 +7,7 @@ import { Conditions, QueryParams } from '../types/common'
 import { Question } from '../types/domains/study'
 import { AddQuestionAnswer, CreateGameInput } from '../types/forms/plays'
 import { SingleUser } from '../types/domains/users'
+import { capitalize } from 'vue'
 
 export default class Plays extends Common {
   constructor() {
@@ -186,9 +187,23 @@ export default class Plays extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
           throw error
         })
     }
+  }
+
+  public CreateTest = (quizId: string) => {
+    return $api.plays.test
+      .post(null, { quizId })
+      .then((response) => {
+        this.SingleTest = response.data
+        return response.data
+      })
+      .catch((error) => {
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
+        throw error
+      })
   }
 
   public JoinGame = (gameId: string, join: boolean) => {

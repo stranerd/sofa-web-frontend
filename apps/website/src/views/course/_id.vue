@@ -117,7 +117,7 @@
 
       <!-- Course content slider -->
       <div
-        class="absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col space-y-2 items-center justify-center w-full"
+        :class="`absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col space-y-2 items-center justify-center w-full `"
         v-if="selectedMaterial && showCourseContent"
       >
         <sofa-normal-text :custom-class="'!font-bold'">
@@ -128,6 +128,7 @@
         >
           <div
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            id="sm-materials-container"
           >
             <template v-for="(section, index) in courseContents" :key="index">
               <template
@@ -135,11 +136,20 @@
                 :key="itemIndex"
               >
                 <div
-                  class="w-[280px] custom-border px-3 py-3 bg-primaryPurple flex flex-col space-y-1"
+                  :class="`w-[280px] custom-border px-3 py-3 ${
+                    selectedMaterial.id == item.id
+                      ? 'bg-primaryPurple'
+                      : 'bg-white border-[2px] border-grayColor'
+                  }  flex flex-col space-y-1`"
                   @click="selectItem(item)"
+                  :id="`sm-material-${item.id}`"
                 >
                   <sofa-normal-text
-                    :color="'!text-white'"
+                    :color="`${
+                      selectedMaterial.id == item.id
+                        ? '!text-white'
+                        : '!text-bodyBlack'
+                    } `"
                     :customClass="'!text-left'"
                   >
                     {{ section.name }} - {{ item.name }}
@@ -147,11 +157,17 @@
 
                   <div class="w-full flex flex-row items-center space-x-2">
                     <sofa-icon
-                      :name="`${item.type}-white`"
+                      :name="`${item.type}${
+                        selectedMaterial.id == item.id ? '-white' : ''
+                      }`"
                       :customClass="'h-[15px]'"
                     />
                     <sofa-normal-text
-                      :color="'!text-white'"
+                      :color="`${
+                        selectedMaterial.id == item.id
+                          ? '!text-white'
+                          : '!text-bodyBlack'
+                      } `"
                       :customClass="'!text-left'"
                     >
                       {{ item.type.split("-")[0] }}
@@ -509,6 +525,20 @@ export default defineComponent({
 
         if (Logic.Common.mediaQuery() == "sm") {
           showCourseContent.value = true;
+
+          setTimeout(() => {
+            const materialContianer = document.getElementById(
+              "sm-materials-container"
+            );
+
+            if (materialContianer) {
+              document
+                .getElementById(`sm-material-${selectedMaterial.value.id}`)
+                .scrollIntoView({
+                  behavior: "smooth",
+                });
+            }
+          }, 500);
         } else {
           if (!data.isMounted) {
             showCourseContent.value = false;
@@ -565,11 +595,8 @@ export default defineComponent({
     ];
 
     const goToStudyMode = (type: string) => {
-      if (type != "assignment" && type != "game") {
-        Logic.Common.GoToRoute(
-          `/quiz/${selectedMaterial.value.data?.id}?mode=${type}`
-        );
-      }
+      Logic.Study.GoToStudyMode(type, selectedMaterial.value.data?.id || "");
+      showStudyMode.value = false;
     };
 
     const buyCourse = () => {

@@ -1618,6 +1618,24 @@ export default class Study extends Common {
     })
   }
 
+  public GoToStudyMode = (mode: string, quizId) => {
+    if (mode != 'assignment' && mode != 'game' && mode != 'test') {
+      Logic.Common.GoToRoute(`/quiz/${quizId}?mode=${mode}`)
+    }
+
+    if (mode == 'test') {
+      Logic.Common.showLoader({ loading: true })
+      Logic.Plays.CreateTest(quizId)
+        .then((data) => {
+          Logic.Common.hideLoader()
+          Logic.Common.GoToRoute(
+            `/quiz/empty?mode=tutor_test&testId=${data.id}&is_student=yes`,
+          )
+        })
+        .catch(() => {})
+    }
+  }
+
   public GetHomeMaterials = () => {
     return new Promise(async (resolve) => {
       this.HomeMaterials = {
