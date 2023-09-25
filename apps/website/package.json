@@ -3,11 +3,16 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"preserve": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
 		"serve": "vue-cli-service serve",
+		"prebuild": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
 		"build": "vue-cli-service build",
 		"test:unit": "vue-cli-service test:unit",
 		"test:e2e": "vue-cli-service test:e2e",
 		"lint": "vue-cli-service lint"
+	},
+	"engines": {
+		"node": ">= 18.0.0"
 	},
 	"dependencies": {
 		"@shopify/draggable": "^1.0.0-beta.8",

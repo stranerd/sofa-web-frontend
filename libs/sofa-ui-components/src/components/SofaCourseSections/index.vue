@@ -226,7 +226,7 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const mediaUrl = `${process.env.VUE_APP_API_URL}study/files/${
+        const mediaUrl = `${process.env.VUE_APP_API_URL}/study/files/${
           mediaFile.id
         }/media?AccessToken=${
           JSON.parse(localStorage.getItem("AuthTokens")).accessToken
