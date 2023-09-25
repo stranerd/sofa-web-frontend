@@ -254,44 +254,53 @@
                 :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
                 >{{ content.label }}</sofa-header-text
               >
-              <div
+              <draggable
+                :key="index"
                 v-if="content.type == 'drop'"
+                :list="content.content"
+                item-key="id"
+                :group="{ name: 'drag-and-drop-question' }"
                 :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-[12px] md:!px-4 md:!py-3 px-3 py-1 bg-white flex items-center justify-center ${content.extraClass}`"
                 style="border-width: 2px 2px 4px 2px"
-                @dragover="dragOverHandler($event, true)"
-                @drop="dropHandler"
-                :id="content.extraClass"
-                @dragleave="dragLeaveHandler"
+                @end="dropHandler"
               >
-                <sofa-header-text
-                  :customClass="'!font-bold md:!text-2xl text-base !text-grayColor placeholder'"
-                  >{{ content.label }}</sofa-header-text
-                >
-              </div>
+                <template #item="{ element, index }">
+                  <div
+                    :key="index"
+                    :class="`md:!px-6 md:!py-3 px-4 py-1 flex flex-row items-center cursor-move justify-center touch-none bg-skyBlue rounded-[12px]  ${element.extraClass}`"
+                    style="border-width: 2px 2px 4px 2px"
+                  >
+                    <sofa-header-text
+                      :customClass="'!font-bold md:!text-2xl text-base '"
+                    >
+                      {{ element.label }}
+                    </sofa-header-text>
+                  </div>
+                </template>
+              </draggable>
             </template>
 
-            <div
+            <draggable
               class="w-full flex flex-row items-center space-x-3 pt-6 md:!h-[90px] h-[40px]"
-              @dragover="dragOverHandler($event, false)"
-              @drop="dropHandler"
-              :id="'dropMainContainer' + Logic.Common.makeid(8)"
+              :list="question.options.data[1].content"
+              item-key="id"
+              :group="{ name: 'drag-and-drop-question' }"
+              @end="dropHandler"
             >
-              <div
-                v-for="(dragOption, index) in question.options.data[1].content"
-                :key="index"
-                :class="`md:!px-6 md:!py-3 px-4 py-1 flex flex-row items-center cursor-move justify-center touch-none bg-skyBlue rounded-[12px]  ${dragOption.extraClass}`"
-                style="border-width: 2px 2px 4px 2px"
-                :id="dragOption.extraClass"
-                draggable="true"
-                @dragstart="handleDrag"
-              >
-                <sofa-header-text
-                  :customClass="'!font-bold md:!text-2xl text-base '"
+              <template #item="{ element, index }">
+                <div
+                  :key="index"
+                  :class="`md:!px-6 md:!py-3 px-4 py-1 flex flex-row items-center cursor-move justify-center touch-none bg-skyBlue rounded-[12px]  ${element.extraClass}`"
+                  style="border-width: 2px 2px 4px 2px"
                 >
-                  {{ dragOption.label }}
-                </sofa-header-text>
-              </div>
-            </div>
+                  <sofa-header-text
+                    :customClass="'!font-bold md:!text-2xl text-base '"
+                  >
+                    {{ element.label }}
+                  </sofa-header-text>
+                </div>
+              </template>
+            </draggable>
           </div>
         </div>
 
@@ -504,12 +513,6 @@ export default defineComponent({
   },
   emits: ["OnAnswerSelected"],
   setup(props, context) {
-    const dragDropState = ref("");
-
-    const lastDroppedContainerId = ref("new");
-
-    const placeholders = {};
-
     const questionRef = toRef(props, "questionData");
 
     const pieChartRef = ref();
@@ -621,68 +624,20 @@ export default defineComponent({
 
     const initialDuration = question.duration;
 
-    const handleDrag = (event) => {
-      event.dataTransfer.setData("application/my-app", event.target.id);
-      event.dataTransfer.effectAllowed = "move";
-      dragDropState.value = "dragged";
-    };
+    const dropHandler = () => {
+      const dropContents = question.options.data[0].content.filter(
+        (item) => item.type == "drop"
+      );
 
-    const dragLeaveHandler = (event) => {
-      if (placeholders[event.target.id]) {
-        event.target.appendChild(placeholders[event.target.id]);
-      }
-    };
+      dragAndDropAnswers.length = 0;
 
-    const dragOverHandler = (event, clearContent) => {
-      event.preventDefault();
-
-      if (clearContent) {
-        const placeholder = event.target.querySelector(".placeholder");
-
-        if (placeholder) {
-          placeholders[event.target.id] = placeholder;
-
-          event.target.innerHTML = "";
+      dropContents.forEach((item) => {
+        if (item.content[0]) {
+          dragAndDropAnswers.push(item.content[0]?.label);
         }
-      }
-      event.dataTransfer.dropEffect = "move";
+      });
 
-      dragDropState.value = "hover";
-    };
-
-    const dropHandler = (event) => {
-      event.preventDefault();
-      // Get the id of the target and add the moved element to the target's DOM
-      const data = event.dataTransfer.getData("application/my-app");
-
-      if (event.target.id == null || event.target.id == "") {
-        return;
-      }
-
-      if (
-        lastDroppedContainerId.value == null ||
-        lastDroppedContainerId.value == ""
-      ) {
-        return;
-      }
-
-      if (event.target.id == data) {
-        return;
-      }
-
-      const elementExist = event.target.querySelector(`#${data}`);
-
-      if (
-        elementExist == null &&
-        lastDroppedContainerId.value != event.target.id
-      ) {
-        event.target.appendChild(document.getElementById(data));
-
-        dragAndDropAnswers.push(document.getElementById(data).innerText);
-
-        lastDroppedContainerId.value = event.target.id;
-        dragDropState.value = "dropped";
-      }
+      console.log(dragAndDropAnswers);
     };
 
     const getShapeSize = (shape: string) => {
@@ -927,9 +882,6 @@ export default defineComponent({
     });
 
     return {
-      handleDrag,
-      dragLeaveHandler,
-      dragOverHandler,
       dropHandler,
       getShapeSize,
       question,

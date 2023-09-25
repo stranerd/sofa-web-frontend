@@ -907,12 +907,15 @@ export default class Study extends Common {
               value: '',
               type: 'drop',
               extraClass: `dragDrop${Logic.Common.makeid(6)}`,
+              id: Logic.Common.makeid(6),
+              content: [],
             })
 
             options.data[1].content.push({
               label: item.value,
               type: 'answer-box',
               extraClass: `drag${Logic.Common.makeid(6)}`,
+              id: Logic.Common.makeid(6),
             })
 
             allAnswers.push(item.value)

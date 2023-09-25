@@ -3,6 +3,7 @@ import { Logic } from 'sofa-logic'
 import { QuizQuestion } from 'sofa-logic/src/logic/types/domains/study'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import { reactive, ref } from 'vue'
+import { showStudyMode } from './library'
 
 const questions = reactive<QuizQuestion[]>([])
 
@@ -223,7 +224,13 @@ const quizResult = () => {
 const goToStudyMode = (type: string) => {
   selectedQuizMode.value = type
   if (type != 'assignment' && type != 'game') {
+    showStudyMode.value = false
     Logic.Common.GoToRoute(`/quiz/${selectedQuizId.value}?mode=${type}`)
+  }
+
+  if (type == 'game') {
+    showStudyMode.value = true
+    selectedQuizMode.value = 'game'
   }
 }
 
@@ -443,8 +450,11 @@ const showQuestion = (index: number) => {
   } else {
     state.value = 'question'
     enabledSwiper.value = false
-    swiperInstance.value.swiperInstance.enabled = false
-    swiperInstance.value.swiperInstance.update()
+    if (swiperInstance.value) {
+      swiperInstance.value.swiperInstance.enabled = false
+      swiperInstance.value.swiperInstance.update()
+    }
+
     answerState.value = ''
   }
 }

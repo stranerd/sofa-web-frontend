@@ -556,7 +556,6 @@
                 @click="
                   () => {
                     goToStudyMode(item.key);
-                    showStudyMode = false;
                   }
                 "
                 :customClass="'!bg-[#F1F6FA] !w-full'"
@@ -600,7 +599,10 @@
 
                 <sofa-button
                   :padding="'px-6 py-2'"
-                  @click="createQuizGame(selectedQuizId)"
+                  @click="
+                    createQuizGame(selectedQuizId);
+                    showStudyMode = false;
+                  "
                 >
                   Start
                 </sofa-button>

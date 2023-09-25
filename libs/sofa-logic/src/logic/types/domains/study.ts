@@ -157,6 +157,8 @@ export interface QuizQuestion {
         value?: string
         extraClass?: string
         shape?: string
+        id?: string
+        content?: any[]
       }[]
       shape?: string
       hover?: boolean
