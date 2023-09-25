@@ -267,6 +267,7 @@
       v-model="currentQuestionIndex"
       :current-slide-position="questionIndex"
       :enabled="enabledSwiper"
+      :baseData="questions"
       ref="swiperInstance"
       v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
     >

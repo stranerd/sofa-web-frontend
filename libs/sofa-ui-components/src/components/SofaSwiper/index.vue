@@ -88,12 +88,18 @@ export default {
       type: Boolean,
       default: true,
     },
+    baseData: {
+      type: Array as () => any[],
+      default: [],
+    },
   },
   name: "SofaSwiper",
   emits: ["update:modelValue"],
   setup(props: any, context: any) {
     const activeSlide = ref(0);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
+
+    const baseDataRef = toRef(props, "baseData");
 
     const swiperInstance = ref<any>();
     const onSwiper = (swiper: any) => {
@@ -110,6 +116,10 @@ export default {
     watch(currentSlidePositionRef, () => {
       swiperInstance.value.slideTo(currentSlidePositionRef.value);
       swiperInstance.value.update();
+    });
+
+    watch(baseDataRef, () => {
+      console.log("youi ");
     });
 
     return {

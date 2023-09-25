@@ -18,7 +18,7 @@
           >
             <sofa-header-text
               :customClass="'!font-bold md:!text-2xl text-lg'"
-              >{{ question.question }}</sofa-header-text
+              >{{ questionRef.question }}</sofa-header-text
             >
           </div>
           <div
@@ -26,7 +26,7 @@
           >
             <sofa-header-text
               :customClass="'!font-semibold md:!text-xl text-base'"
-              >{{ question.answer }}</sofa-header-text
+              >{{ questionRef.answer }}</sofa-header-text
             >
           </div>
         </div>
@@ -44,7 +44,7 @@
 </template>
 <script lang="ts">
 import { QuizQuestion } from "sofa-logic/src/logic/types/domains/study";
-import { defineComponent, onMounted, reactive, ref, toRef } from "vue";
+import { defineComponent, onMounted, reactive, ref, toRef, watch } from "vue";
 import { SofaHeaderText, SofaNormalText } from "sofa-ui-components";
 
 export default defineComponent({
@@ -85,6 +85,7 @@ export default defineComponent({
     return {
       question,
       showAnswer,
+      questionRef,
     };
   },
 });

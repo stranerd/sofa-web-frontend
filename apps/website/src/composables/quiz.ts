@@ -718,10 +718,24 @@ const handleLeftButton = () => {
     goToPrevSlide()
   } else if (mode.value == 'flashcard') {
     const currentQuestion = questions[currentQuestionIndex.value]
+
+    const currentQuestionData = JSON.parse(JSON.stringify(questions))
+
+    questions.length = 0
+
+    questions.push(
+      ...currentQuestionData.filter(
+        (item, index) => index != questionIndex.value,
+      ),
+    )
+
     questions.push(currentQuestion)
-    questions.splice(currentQuestionIndex.value, 1)
-    swiperInstance.value.swiperInstance.update()
+
+    swiperInstance.value.swiperInstance.updateSlides()
+
     goToNextSlide()
+
+    questionIndex.value = questionIndex.value - 1
   } else if (mode.value == 'test') {
     goToPrevSlide()
   } else if (mode.value == 'practice') {
@@ -753,13 +767,17 @@ const checkAnswer = () => {
 
 const handleRightButton = (index = -1) => {
   if (questionIndex.value == questions.length - 1 && index == -1) {
-    if (state.value == 'completed') {
-      state.value = 'other_modes'
-      mobileTitle.value = 'Try other modes'
-      return
-    }
+    // if (state.value == 'completed') {
+    //   state.value = 'other_modes'
+    //   mobileTitle.value = 'Try other modes'
+    //   return
+    // }
 
     if (mode.value == 'flashcard') {
+      if (state.value == 'completed') {
+        Logic.Common.goBack()
+        return
+      }
       state.value = 'completed'
       mobileTitle.value = 'Flashcards completed'
       buttonLabels.left = {
