@@ -210,6 +210,7 @@
                   :activity="activity"
                   :custom-class="'!bg-white shadow-custom !cursor-pointer'"
                   :has-extra="true"
+                  @click="openQuiz(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -271,7 +272,7 @@
                   :activity="activity"
                   :has-extra="true"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
-                  @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+                  @click="openCourse(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -336,7 +337,9 @@
                   :activity="activity"
                   :has-extra="true"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
-                  @click="openCourse(activity)"
+                  @click="activity.type === 'quiz'
+                    ? openQuiz(activity)
+                    : openCourse(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -401,7 +404,7 @@
                 :activity="activity"
                 :custom-class="'!bg-white shadow-custom cursor-pointer'"
                 @click="
-                  activity.labels.main.toLocaleLowerCase().includes('quiz')
+                  activity.type === 'quiz'
                     ? openQuiz(activity)
                     : openCourse(activity)
                 "
@@ -643,77 +646,77 @@
 </template>
 
 <script lang="ts">
-import { scrollToTop } from "@/composables";
+import { scrollToTop } from "@/composables"
 import {
-  createQuizGame,
-  goToStudyMode,
-  otherTasks,
-  selectedQuizId,
-  selectedQuizMode,
-  userIsParticipating,
-} from "@/composables/quiz";
-import moment from "moment";
-import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+AllCourses,
+AllFolders,
+AllQuzzies,
+FolderOptions,
+PurchasedCourses,
+RecentMaterials,
+SingleFolder,
+addFolder,
+addFolderIsActive,
+allContentCategories,
+currentCourseData,
+currentFolder,
+currentFolderItems,
+currentPurchasedData,
+currentQuizData,
+deleteFolder,
+filterItem,
+folderFilterOption,
+folders,
+handleFolderNameBlur,
+libraryTypeList,
+moreOptions,
+openCourse,
+openQuiz,
+selectedCourseFilter,
+selectedFilter,
+selectedFolderFilter,
+selectedFolderItems,
+selectedItem,
+selectedItemId,
+selectedQuizFilter,
+setCourses,
+setFolderItems,
+setFolders,
+setPurchasedData,
+setQuizzes,
+setRecentItems,
+showDeleteFolder,
+showMoreOptionHandler,
+showMoreOptions,
+showStudyMode,
+updateFolder,
+} from "@/composables/library"
+import { allOrganizations, setOrganizations } from "@/composables/profile"
 import {
-  selectedFilter,
-  AllFolders,
-  SingleFolder,
-  setQuizzes,
-  setPurchasedData,
-  setFolders,
-  setFolderItems,
-  filterItem,
-  FolderOptions,
-  AllQuzzies,
-  PurchasedCourses,
-  selectedItemId,
-  folders,
-  showStudyMode,
-  libraryTypeList,
-  currentQuizData,
-  currentCourseData,
-  selectedQuizFilter,
-  selectedCourseFilter,
-  currentPurchasedData,
-  selectedFolderItems,
-  allContentCategories,
-  folderFilterOption,
-  selectedFolderFilter,
-  addFolder,
-  updateFolder,
-  AllCourses,
-  setCourses,
-  currentFolderItems,
-  showDeleteFolder,
-  deleteFolder,
-  moreOptions,
-  showMoreOptionHandler,
-  showMoreOptions,
-  RecentMaterials,
-  setRecentItems,
-  currentFolder,
-  handleFolderNameBlur,
-  addFolderIsActive,
-  selectedItem,
-  openQuiz,
-  openCourse,
-} from "@/composables/library";
-import { allOrganizations, setOrganizations } from "@/composables/profile";
+createQuizGame,
+goToStudyMode,
+otherTasks,
+selectedQuizId,
+selectedQuizMode,
+userIsParticipating,
+} from "@/composables/quiz"
+import moment from "moment"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  SofaActivityCard,
-  SofaButton,
-  SofaDeletePrompt,
-  SofaEmptyState,
-  SofaCustomInput,
-  SofaIcon,
-  SofaIconCard,
-  SofaModal,
-  SofaNormalText,
-  SofaHeaderText,
-} from "sofa-ui-components";
-import { defineComponent, ref, onMounted, watch } from "vue";
-import { useMeta } from "vue-meta";
+SofaActivityCard,
+SofaButton,
+SofaCustomInput,
+SofaDeletePrompt,
+SofaEmptyState,
+SofaHeaderText,
+SofaIcon,
+SofaIconCard,
+SofaModal,
+SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, ref, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {

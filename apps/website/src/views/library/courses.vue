@@ -42,7 +42,7 @@
             :key="index"
             :activity="activity"
             :custom-class="'!bg-white shadow-custom cursor-pointer relative'"
-            @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+            @click="openCourse(activity)"
             :isWrapped="true"
           >
             <div
@@ -51,7 +51,7 @@
               <sofa-icon
                 :name="'more-options-horizontal'"
                 :customClass="'h-[6px] '"
-                @click.stop="showMoreOptionHandler(activity, 'course')"
+                @click.stop="showMoreOptionHandler(activity)"
               />
             </div>
           </sofa-activity-card>
@@ -126,24 +126,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
-import { useMeta } from "vue-meta";
-import { scrollToTop } from "@/composables";
+import { scrollToTop } from "@/composables"
 import {
-  SofaIcon,
-  SofaNormalText,
-  SofaActivityCard,
-  SofaEmptyState,
-  SofaModal,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import { ResourceType } from "sofa-logic/src/logic/types/domains/study";
-import {
+createCourseData,
   moreOptions,
-  showMoreOptionHandler,
-  showMoreOptions,
-} from "@/composables/library";
+openCourse,
+showMoreOptionHandler,
+showMoreOptions,
+} from "@/composables/library"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
+import {
+SofaActivityCard,
+SofaEmptyState,
+SofaIcon,
+SofaModal,
+SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
@@ -237,26 +239,7 @@ export default defineComponent({
       courses.value.length = 0;
 
       AllCourses.value.results.forEach((course) => {
-        courses.value.push({
-          title: course.title,
-          image: course.photo ? course.photo.link : "/images/default.png",
-          labels: {
-            color: "orange",
-            main: "Course",
-            sub: `${course.sections.length} topics`,
-          },
-          progress: 0,
-          subject: Logic.Study.GetTagName(course.topicId),
-          user: course.user,
-          routePath: "/course/create?id=" + course.id,
-          id: course.id,
-          status: course.status,
-          showMore: false,
-          userId: course.user.id,
-          type: "course",
-          authUserId: Logic.Auth.AuthUser.id,
-          ratings: course.ratings,
-        });
+        courses.value.push(createCourseData(course));
       });
     };
 
@@ -287,6 +270,7 @@ export default defineComponent({
       Logic,
       mainFilters,
       courses,
+      openCourse,
       selectedItemId,
       currentCourseData,
       showMoreOptions,
