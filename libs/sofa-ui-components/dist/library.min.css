@@ -2929,6 +2929,10 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
     font-size: 13px;
   }
 
+  .mdlg\:text-base {
+    font-size: .90rem;
+  }
+
   .mdlg\:text-lg {
     font-size: 1.0rem;
   }
