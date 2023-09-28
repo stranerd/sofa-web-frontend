@@ -765,11 +765,11 @@ import {
   SofaNormalText,
   SofaHeaderText,
   SofaProgressItemCard,
-  Logic,
 } from "sofa-ui-components";
 import { defineComponent, ref, onMounted, watch } from "vue";
 import { useMeta } from "vue-meta";
 import moment from "moment";
+import { Logic } from "sofa-logic";
 
 export default defineComponent({
   components: {
