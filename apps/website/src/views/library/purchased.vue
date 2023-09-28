@@ -14,7 +14,8 @@
         >
         <div></div>
       </div>
-      <div v-if="libraryTypeList[2].options.length > 1"
+      <div
+        v-if="libraryTypeList[2].options.length > 1"
         class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 space-x-3"
       >
         <span

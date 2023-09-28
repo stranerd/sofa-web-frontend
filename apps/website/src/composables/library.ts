@@ -9,16 +9,34 @@ import { capitalize, reactive, ref } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 import { ContentDetails } from './marketplace'
 
+interface PlayResource {
+  image: string
+  title: string
+  type: string
+  label_color: string
+  label: string
+  id: string
+  entity_type: 'game' | 'test'
+  participants?: number
+}
+
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
 const AllCourses = ref(Logic.Study.AllCourses)
 const PurchasedCourses = ref(Logic.Study.PurchasedCourses)
 const AllFolders = ref(Logic.Study.AllFolders)
+const AllFoldersCourses = ref(Logic.Study.AllFoldersCourses)
+const AllFoldersQuizzes = ref(Logic.Study.AllFoldersQuizzes)
+const GameAndTestQuizzes = ref(Logic.Plays.GameAndTestQuizzes)
+
+const AllTests = ref(Logic.Plays.AllTests)
+const AllGames = ref(Logic.Plays.AllGames)
+
 const SingleFolder = ref(Logic.Study.SingleFolder)
 const RecentMaterials = ref(Logic.Study.RecentMaterials)
 
 const FolderOptions = ref<ResourceType[]>([])
 
-const selectedFilter = ref('quizzes')
+const selectedFilter = ref('in-progress')
 
 const showStudyMode = ref(false)
 
@@ -26,7 +44,7 @@ const showDeleteFolder = ref(false)
 
 const showAddItemToFolder = ref(false)
 
-const selectedItemId = ref('quiz-recent')
+const selectedItemId = ref('in_progress-all')
 
 const selectedFolderFilter = ref('all')
 
@@ -34,7 +52,17 @@ const selectedQuizFilter = ref('recent')
 
 const selectedCourseFilter = ref('recent')
 
-const allContentCategories = ['quizzes', 'courses', 'purchased']
+const selectedInProgressFilter = ref('all')
+
+const selectedResultFilter = ref('all')
+
+const allContentCategories = [
+  'quizzes',
+  'courses',
+  'purchased',
+  'in-progress',
+  'results',
+]
 
 const showSaveToFolder = ref(false)
 
@@ -56,27 +84,30 @@ const currentFolderItems = ref<{
 })
 
 const libraryTypeList = reactive([
-  // {
-  //   title: "In progress",
-  //   selected: true,
-  //   icon: "in-progress",
-  //  id: 'in-progress',
-  //   routePath: "/library/type",
-  //   options: [
-  //     {
-  //       name: "All",
-  //       active: true,
-  //     },
-  //     {
-  //       name: "Quizzes",
-  //       active: false,
-  //     },
-  //     {
-  //       name: "Courses",
-  //       active: false,
-  //     },
-  //   ],
-  // },
+  {
+    title: 'In progress',
+    selected: true,
+    icon: 'in-progress',
+    id: 'in-progress',
+    routePath: '/library/in-progress',
+    options: [
+      {
+        name: 'All',
+        active: true,
+        id: 'in_progress-all',
+      },
+      {
+        name: 'Tests',
+        active: false,
+        id: 'in_progress-tests',
+      },
+      {
+        name: 'Games',
+        active: false,
+        id: 'in_progress-games',
+      },
+    ],
+  },
   {
     title: 'Quizzes',
     selected: false,
@@ -142,6 +173,30 @@ const libraryTypeList = reactive([
     id: 'purchased',
     routePath: '/library/purchased',
     options: [],
+  },
+  {
+    title: 'Results',
+    selected: true,
+    icon: 'results',
+    id: 'results',
+    routePath: '/library/results',
+    options: [
+      {
+        name: 'All',
+        active: true,
+        id: 'results-all',
+      },
+      {
+        name: 'Tests',
+        active: false,
+        id: 'results-tests',
+      },
+      {
+        name: 'Games',
+        active: false,
+        id: 'results-games',
+      },
+    ],
   },
 ])
 
@@ -285,6 +340,122 @@ const setCourses = () => {
   })
 }
 
+const inProgressItems = ref<PlayResource[]>([])
+
+const resultItems = ref<PlayResource[]>([])
+
+const currentInProgressItem = ref<PlayResource[]>([])
+
+const currentResultItems = ref<PlayResource[]>([])
+
+const setInProgressItems = () => {
+  inProgressItems.value.length = 0
+
+  AllGames.value?.results.forEach((game) => {
+    if (game.status != 'ended' && game.status != 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == game.quizId,
+      )[0]
+
+      inProgressItems.value.push({
+        entity_type: 'game',
+        id: game.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: game.status,
+        label_color: 'text-[#3296C8]',
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Game',
+        participants: game.participants.length,
+      })
+    }
+  })
+
+  AllTests.value?.results.forEach((test) => {
+    if (test.status != 'ended' && test.status != 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == test.quizId,
+      )[0]
+
+      inProgressItems.value.push({
+        entity_type: 'test',
+        id: test.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: test.status,
+        label_color: 'text-[#3296C8]',
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Test',
+      })
+    }
+  })
+}
+
+const setResultItems = async () => {
+  resultItems.value.length = 0
+
+  AllGames.value?.results.forEach((game) => {
+    if (game.status == 'ended' || game.status == 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == game.quizId,
+      )[0]
+
+      const allScores = Object.values(game.scores).sort(function (
+        a: number,
+        b: number,
+      ) {
+        return b - a
+      })
+
+      const userPosition = allScores.indexOf(
+        game.scores[Logic.Auth.AuthUser.id],
+      )
+      resultItems.value.push({
+        entity_type: 'game',
+        id: game.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: Logic.Common.ordinal_suffix_of(userPosition + 1),
+        label_color: 'text-[#3296C8]',
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Game',
+        participants: game.participants.length,
+      })
+    }
+  })
+
+  AllTests.value?.results.forEach((test) => {
+    if (test.status == 'ended' || test.status == 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == test.quizId,
+      )[0]
+
+      const userCorrectAnswers = test.scores[Logic.Auth.AuthUser.id] / 10
+
+      const percentage = (userCorrectAnswers / test.questions.length) * 100
+
+      let textColor = 'text-[#ADAF4B]'
+
+      if (percentage >= 90) {
+        textColor = 'text-[#4BAF7D]'
+      } else if (percentage >= 70) {
+        textColor = 'text-[#ADAF4B]'
+      } else if (percentage >= 50) {
+        textColor = 'text-[#3296C8]'
+      } else {
+        textColor = 'text-primaryRed'
+      }
+
+      resultItems.value.push({
+        entity_type: 'test',
+        id: test.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: `${percentage.toFixed()}%`,
+        label_color: textColor,
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Test',
+      })
+    }
+  })
+}
+
 const recentMaterials = ref<ResourceType[]>([])
 
 const currentRecentData = ref<ResourceType[]>([])
@@ -338,14 +509,15 @@ const setFolders = () => {
       id: folder.id,
       selected: false,
     })
-
-    folderCourses.push(
-      ...(folder.courses?.map((course) => createCourseData(course)) || []),
-    )
-    folderQuizzes.concat(
-      ...(folder.quizzes?.map((quiz) => createQuizData(quiz)) || []),
-    )
   })
+
+  folderCourses.push(
+    ...(AllFoldersCourses.value?.map((course) => createCourseData(course)) ||
+      []),
+  )
+  folderQuizzes.push(
+    ...(AllFoldersQuizzes.value?.map((quiz) => createQuizData(quiz)) || []),
+  )
 }
 
 const FolderItems = ref<ResourceType[]>([])
@@ -412,6 +584,30 @@ const filterItem = () => {
       } else {
         currentPurchasedData.value = []
       }
+    }
+  } else if (type == 'in_progress') {
+    if (status == 'all') {
+      currentInProgressItem.value = inProgressItems.value
+    } else if (status == 'tests') {
+      currentInProgressItem.value = inProgressItems.value.filter(
+        (item) => item.entity_type == 'test',
+      )
+    } else if (status == 'games') {
+      currentInProgressItem.value = inProgressItems.value.filter(
+        (item) => item.entity_type == 'game',
+      )
+    }
+  } else if (type == 'results') {
+    if (status == 'all') {
+      currentResultItems.value = resultItems.value
+    } else if (status == 'tests') {
+      currentResultItems.value = resultItems.value.filter(
+        (item) => item.entity_type == 'test',
+      )
+    } else if (status == 'games') {
+      currentResultItems.value = resultItems.value.filter(
+        (item) => item.entity_type == 'game',
+      )
     }
   } else {
     if (selectedFolderFilter.value == 'all') {
@@ -604,12 +800,13 @@ const shareMaterialLink = async (
       type: 'success',
     })
   } catch (err) {
-    console.log(err)
+    Logic.Common.copytext(link)
+    // show alert
     Logic.Common.showLoader({
       show: true,
       loading: false,
-      message: 'Unable to share link.',
-      type: 'error',
+      message: 'Link copied to your clipboard!',
+      type: 'success',
     })
   }
 }
@@ -672,6 +869,8 @@ export {
   selectedFolderFilter,
   selectedQuizFilter,
   selectedCourseFilter,
+  selectedInProgressFilter,
+  selectedResultFilter,
   allContentCategories,
   libraryTypeList,
   folderFilterOption,
@@ -693,6 +892,17 @@ export {
   currentFolder,
   addFolderIsActive,
   selectedFolderMaterailToAdd,
+  AllFoldersCourses,
+  AllFoldersQuizzes,
+  inProgressItems,
+  resultItems,
+  AllTests,
+  AllGames,
+  currentInProgressItem,
+  currentResultItems,
+  GameAndTestQuizzes,
+  setResultItems,
+  setInProgressItems,
   setRecentItems,
   handleFolderNameBlur,
   showMoreOptionHandler,

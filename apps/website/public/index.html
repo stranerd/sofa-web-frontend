@@ -3,7 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <title>SOFA</title>
-
+    <style>
+      #innerModal {
+        margin-top: env(safe-area-inset-top) !important;
+        margin-bottom: env(safe-area-inset-bottom) !important;
+        height: calc(
+          100% - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+        ) !important;
+      }
+    </style>
     <base href="/" />
 
     <meta name="color-scheme" content="light dark" />
@@ -19,12 +27,13 @@
 
   <body class="bg-backgroundGray" id="body">
     <div id="app" class="min-h-screen w-full flex flex-col">
-		<App></App>
-	</div>
-  <script src="/js/DragDropTouch.js"></script>
-  <script defer src="https://checkout.flutterwave.com/v3.js"></script>
-  <script  type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
-
+      <App></App>
+    </div>
+    <script src="/js/DragDropTouch.js"></script>
+    <script defer src="https://checkout.flutterwave.com/v3.js"></script>
+    <script
+      type="text/javascript"
+      src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+    ></script>
   </body>
-
 </html>

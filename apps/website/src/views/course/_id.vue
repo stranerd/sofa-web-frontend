@@ -632,6 +632,15 @@ export default defineComponent({
       Logic.Payment.watchProperty("PurchasedItems", PurchasedItems);
       Logic.Payment.watchProperty("UserWallet", UserWallet);
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
+
+      Logic.Interactions.CreateViewForm = {
+        entity: {
+          id: SingleCourse.value?.id,
+          type: "courses",
+        },
+      };
+
+      Logic.Interactions.CreateView(true);
     });
 
     return {

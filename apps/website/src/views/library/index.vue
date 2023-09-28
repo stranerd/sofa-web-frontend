@@ -17,7 +17,7 @@
           :key="index"
           @click="selectedFilter = item.id"
         >
-          <sofa-icon :name="item.icon" :custom-class="'h-[16px]'" />
+          <sofa-icon :name="item.icon" :custom-class="'h-[17px]'" />
           <sofa-normal-text
             :custom-class="` ${selectedFilter == item.id ? '!font-bold' : ''}`"
           >
@@ -199,7 +199,7 @@
 
         <div
           class="w-full mdlg:!flex hidden flex-col space-y-4"
-          v-if="selectedFilter != 'in-progress'"
+          v-if="selectedFilter != 'in-progress' && selectedFilter != 'results'"
         >
           <template v-if="allContentCategories.includes(selectedFilter)">
             <template v-if="selectedFilter == 'quizzes'">
@@ -210,6 +210,7 @@
                   :activity="activity"
                   :custom-class="'!bg-white shadow-custom !cursor-pointer'"
                   :has-extra="true"
+                  @click="openQuiz(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -271,7 +272,7 @@
                   :activity="activity"
                   :has-extra="true"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
-                  @click="Logic.Common.GoToRoute('/course/' + activity.id)"
+                  @click="openCourse(activity)"
                 >
                   <template v-slot:extra>
                     <div
@@ -417,12 +418,50 @@
         </div>
 
         <div class="w-full grid-cols-2 gap-4 mdlg:!grid hidden" v-else>
-          <!-- <sofa-progress-item-card
-            v-for="(content, index) in inProgressItems"
-            :key="index"
-            :content="content"
-            :custom-class="'!bg-white shadow-custom '"
-          /> -->
+          <template v-if="selectedFilter == 'in-progress'">
+            <template v-if="currentInProgressItem.length">
+              <sofa-progress-item-card
+                v-for="(content, index) in currentInProgressItem"
+                :key="index"
+                :content="content"
+                :custom-class="'!bg-white shadow-custom '"
+              />
+            </template>
+            <div v-else class="col-span-full flex flex-col">
+              <sofa-empty-state
+                :title="'You have no item in progress'"
+                :subTitle="'Discover thousands of materials to buy, created by verified experts'"
+                :actionLabel="'Marketplace'"
+                :action="
+                  () => {
+                    Logic.Common.GoToRoute('/marketplace');
+                  }
+                "
+              />
+            </div>
+          </template>
+          <template v-if="selectedFilter == 'results'">
+            <template v-if="currentResultItems.length">
+              <sofa-progress-item-card
+                v-for="(content, index) in currentResultItems"
+                :key="index"
+                :content="content"
+                :custom-class="'!bg-white shadow-custom '"
+              />
+            </template>
+            <div v-else class="col-span-full flex flex-col">
+              <sofa-empty-state
+                :title="'You have no practice item here'"
+                :subTitle="'Discover thousands of materials to buy, created by verified experts'"
+                :actionLabel="'Marketplace'"
+                :action="
+                  () => {
+                    Logic.Common.GoToRoute('/marketplace');
+                  }
+                "
+              />
+            </div>
+          </template>
         </div>
 
         <!-- Content for mobile screens -->
@@ -698,6 +737,17 @@ import {
   selectedItem,
   openQuiz,
   openCourse,
+  AllFoldersQuizzes,
+  AllFoldersCourses,
+  AllTests,
+  AllGames,
+  setInProgressItems,
+  setResultItems,
+  currentInProgressItem,
+  currentResultItems,
+  selectedResultFilter,
+  selectedInProgressFilter,
+  GameAndTestQuizzes,
 } from "@/composables/library";
 import { allOrganizations, setOrganizations } from "@/composables/profile";
 import {
@@ -711,6 +761,7 @@ import {
   SofaModal,
   SofaNormalText,
   SofaHeaderText,
+  SofaProgressItemCard,
 } from "sofa-ui-components";
 import { defineComponent, ref, onMounted, watch } from "vue";
 import { useMeta } from "vue-meta";
@@ -720,7 +771,7 @@ export default defineComponent({
     SofaIcon,
     SofaNormalText,
     SofaActivityCard,
-    // SofaProgressItemCard,
+    SofaProgressItemCard,
     SofaEmptyState,
     SofaButton,
     SofaModal,
@@ -811,6 +862,42 @@ export default defineComponent({
         ignoreProperty: false,
       },
       {
+        domain: "Plays",
+        property: "AllGames",
+        method: "GetGames",
+        params: [
+          {
+            where: [
+              {
+                field: "user.id",
+                value: Logic.Auth.AuthUser?.id,
+                condition: Conditions.eq,
+              },
+            ],
+          },
+        ],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+      {
+        domain: "Plays",
+        property: "AllTests",
+        method: "GetTests",
+        params: [
+          {
+            where: [
+              {
+                field: "user.id",
+                value: Logic.Auth.AuthUser?.id,
+                condition: Conditions.eq,
+              },
+            ],
+          },
+        ],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+      {
         domain: "Payment",
         property: "PurchasedItems",
         method: "GetUserPurchases",
@@ -839,28 +926,6 @@ export default defineComponent({
     const selectedFolderId = ref("");
 
     const UserProfile = ref(Logic.Users.UserProfile);
-
-    onMounted(() => {
-      scrollToTop();
-      if (Logic.Common.route.query.filter) {
-        selectedFilter.value = Logic.Common.route.query.filter.toString();
-      }
-      Logic.Study.watchProperty("AllQuzzies", AllQuzzies);
-      Logic.Study.watchProperty("AllCourses", AllCourses);
-      Logic.Study.watchProperty("PurchasedCourses", PurchasedCourses);
-      Logic.Study.watchProperty("AllFolders", AllFolders);
-      Logic.Study.watchProperty("SingleFolder", SingleFolder);
-      Logic.Study.watchProperty("UserProfile", UserProfile);
-      Logic.Study.watchProperty("RecentMaterials", RecentMaterials);
-
-      setQuizzes();
-      setCourses();
-      setPurchasedData();
-      setFolders();
-      setFolderItems();
-      filterItem();
-      setOrganizations();
-    });
 
     watch(AllFolders, () => {
       setFolders();
@@ -903,14 +968,37 @@ export default defineComponent({
       filterItem();
     });
 
-    watch(selectedFilter, () => {
+    watch(AllTests, () => {
+      setResultItems();
+      setInProgressItems();
+    });
+
+    watch(AllQuzzies, () => {
+      setResultItems();
+      setInProgressItems();
+    });
+
+    watch(GameAndTestQuizzes, () => {
+      setResultItems();
+      setInProgressItems();
+    });
+
+    const setSelectedFilter = () => {
       if (selectedFilter.value == "quizzes") {
         selectedItemId.value = "quiz-recent";
       } else if (selectedFilter.value == "courses") {
         selectedItemId.value = "course-recent";
       } else if (selectedFilter.value == "purchased") {
         selectedItemId.value = "purchased-all";
+      } else if (selectedFilter.value == "in-progress") {
+        selectedItemId.value = "in_progress-all";
+      } else if (selectedFilter.value == "results") {
+        selectedItemId.value = "results-all";
       }
+    };
+
+    watch(selectedFilter, () => {
+      setSelectedFilter();
 
       Logic.Common.GoToRoute("/library?filter=" + selectedFilter.value);
     });
@@ -920,6 +1008,38 @@ export default defineComponent({
         Logic.Common.GoToRoute("/library/folders?filter=" + folderId);
       }
     };
+
+    onMounted(async () => {
+      scrollToTop();
+      if (Logic.Common.route.query.filter) {
+        selectedFilter.value = Logic.Common.route.query.filter.toString();
+      }
+      Logic.Study.watchProperty("AllQuzzies", AllQuzzies);
+      Logic.Study.watchProperty("AllCourses", AllCourses);
+      Logic.Study.watchProperty("PurchasedCourses", PurchasedCourses);
+      Logic.Study.watchProperty("AllFolders", AllFolders);
+      Logic.Study.watchProperty("SingleFolder", SingleFolder);
+      Logic.Study.watchProperty("UserProfile", UserProfile);
+      Logic.Study.watchProperty("RecentMaterials", RecentMaterials);
+      Logic.Study.watchProperty("AllFoldersQuizzes", AllFoldersQuizzes);
+      Logic.Study.watchProperty("AllFoldersCourses", AllFoldersCourses);
+      Logic.Plays.watchProperty("AllTests", AllTests);
+      Logic.Plays.watchProperty("AllGames", AllGames);
+      Logic.Plays.watchProperty("GameAndTestQuizzes", GameAndTestQuizzes);
+
+      await Logic.Plays.GetGameAndTestQuizzes();
+
+      setQuizzes();
+      setCourses();
+      setPurchasedData();
+      setFolders();
+      setFolderItems();
+      filterItem();
+      setResultItems();
+      setInProgressItems();
+      setOrganizations();
+      setSelectedFilter();
+    });
 
     return {
       moment,
@@ -962,6 +1082,8 @@ export default defineComponent({
       currentFolder,
       handleFolderNameBlur,
       addFolderIsActive,
+      currentInProgressItem,
+      currentResultItems,
     };
   },
 });

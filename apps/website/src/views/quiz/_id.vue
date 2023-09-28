@@ -1084,6 +1084,17 @@ export default defineComponent({
           );
         }
         localStorage.setItem(`quiz_action_${mode.value}`, "done");
+
+        if (mode.value != "test") {
+          Logic.Interactions.CreateViewForm = {
+            entity: {
+              id: SingleQuiz.value?.id,
+              type: "quizzes",
+            },
+          };
+
+          Logic.Interactions.CreateView(true);
+        }
       }
 
       // listen to game

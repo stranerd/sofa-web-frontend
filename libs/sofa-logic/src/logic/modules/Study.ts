@@ -35,6 +35,8 @@ export default class Study extends Common {
   public AllOtherTags: Paginated<Tags> | undefined
   public SingleTag: Tags | undefined
   public AllFolders: Paginated<Folder> | undefined
+  public AllFoldersCourses: Course[] | undefined
+  public AllFoldersQuizzes: Quiz[] | undefined
   public SingleFolder: Folder | undefined
   public AllQuzzies: Paginated<Quiz> | undefined
   public SingleQuiz: Quiz | undefined
@@ -1257,8 +1259,43 @@ export default class Study extends Common {
   }
 
   public GetFolders = (filters: QueryParams) => {
-    return $api.study.folder.fetch(filters).then((response) => {
-      this.AllFolders = response.data
+    return new Promise((resolve) => {
+      $api.study.folder.fetch(filters).then(async (response) => {
+        const allFolderCourses: string[] = []
+        const allFolderQuizzes: string[] = []
+        this.AllFolders = response.data
+
+        this.AllFolders.results.forEach((folder) => {
+          allFolderCourses.push(...folder.saved.courses)
+          allFolderQuizzes.push(...folder.saved.quizzes)
+        })
+
+        const allQuizzes = await $api.study.quiz.fetch({
+          where: [
+            {
+              field: 'id',
+              condition: Conditions.in,
+              value: [...new Set(allFolderQuizzes)],
+            },
+          ],
+        })
+
+        this.AllFoldersQuizzes = allQuizzes.data.results
+
+        const allCourses = await $api.study.course.fetch({
+          where: [
+            {
+              field: 'id',
+              condition: Conditions.in,
+              value: [...new Set(allFolderCourses)],
+            },
+          ],
+        })
+
+        this.AllFoldersCourses = allCourses.data.results
+
+        resolve('')
+      })
     })
   }
 
