@@ -4,7 +4,7 @@
   >
     <div class="w-[110px] flex flex-col">
       <sofa-image-loader
-        custom-class="w-[110px] h-[78px] custom-border relative"
+        custom-class="w-[110px] h-[78px] mdlg:h-[80px] custom-border relative"
         :photo-url="content.image"
       >
       </sofa-image-loader>
@@ -21,7 +21,7 @@
         </sofa-normal-text>
       </div>
 
-      <div class="w-full pt-2 flex flex-row items-center justify-between">
+      <div class="w-full flex flex-row items-center justify-between">
         <sofa-normal-text
           :color="content.label_color"
           :customClass="'font-semibold'"
