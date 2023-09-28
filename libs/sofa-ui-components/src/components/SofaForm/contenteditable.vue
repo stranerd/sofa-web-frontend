@@ -6,8 +6,7 @@
     @input="onInput"
     @blur="onBlur"
     :id="`content-${tabIndex}`"
-    >{{ textContent }}</span
-  >
+  ></span>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, toRef, watch } from "vue";
@@ -55,6 +54,10 @@ export default defineComponent({
 
     watch(updateValueRef, () => {
       textContent.value = updateValueRef.value;
+      const contentField = document.getElementById(`content-${tabIndex}`);
+      if (contentField) {
+        contentField.innerText = textContent.value;
+      }
     });
 
     const onBlur = () => {
@@ -78,6 +81,14 @@ export default defineComponent({
     onMounted(() => {
       if (props.updateValue) {
         textContent.value = props.updateValue;
+
+        setTimeout(() => {
+          const contentField = document.getElementById(`content-${tabIndex}`);
+
+          if (contentField) {
+            contentField.innerText = textContent.value;
+          }
+        }, 400);
       }
 
       if (props.autoFocus) {

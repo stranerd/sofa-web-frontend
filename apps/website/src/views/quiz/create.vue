@@ -121,7 +121,9 @@
             !showSettingModal
           "
         >
-          <sofa-question-content v-if="AllQuestions" />
+          <sofa-question-content
+            v-if="AllQuestions && AllQuestions.results.length"
+          />
         </template>
         <template
           v-if="
@@ -129,7 +131,9 @@
             Logic.Common.mediaQuery() != 'md'
           "
         >
-          <sofa-question-content v-if="AllQuestions" />
+          <sofa-question-content
+            v-if="AllQuestions && AllQuestions.results.length"
+          />
         </template>
       </div>
 
@@ -222,6 +226,7 @@
                 showMoreOptions = false;
               }
             "
+            v-if="AllQuestions && AllQuestions.results.length"
           />
         </div>
       </sofa-modal>
@@ -231,7 +236,9 @@
       <div
         class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col space-y-4 h-full justify-between relative overflow-y-hidden"
       >
-        <sofa-question-options />
+        <sofa-question-options
+          v-if="AllQuestions && AllQuestions.results.length"
+        />
       </div>
     </template>
   </dashboard-layout>

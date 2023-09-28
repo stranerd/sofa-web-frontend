@@ -372,18 +372,26 @@ export default defineComponent({
         | "dragAnswers"
         | any
     ) => {
-      const newQuestionData = questionTypes[type];
+      Logic.Study.saveQuizLocalChanges(true).then(() => {
+        const newQuestionData = questionTypes[type];
 
-      showAddQuestionModal.value = false;
+        showAddQuestionModal.value = false;
 
-      Logic.Study.CreateQuestionForm = Logic.Study.convertQuestionToInput(
-        newQuestionData,
-        type
-      );
+        Logic.Study.CreateQuestionForm = Logic.Study.convertQuestionToInput(
+          newQuestionData,
+          type
+        );
 
-      Logic.Study.CreateQuestionForm.explanation = "";
+        Logic.Study.CreateQuestionForm.explanation = "";
 
-      Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id);
+        if (type == "writeAnswer") {
+          Logic.Study.CreateQuestionForm.data.options = [
+            Logic.Study.CreateQuestionForm.data.options[0],
+          ];
+        }
+
+        Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id);
+      });
     };
 
     const deleteQuestion = () => {
@@ -396,47 +404,62 @@ export default defineComponent({
         });
         return;
       }
-      Logic.Study.DeleteQuestion(
-        selectedQuestionData.value.id,
-        Logic.Study.SingleQuiz.id
-      )
-        .then((data) => {
-          if (data) {
+
+      Logic.Study.saveQuizLocalChanges(true).then(() => {
+        Logic.Study.DeleteQuestion(
+          selectedQuestionData.value.id,
+          Logic.Study.SingleQuiz.id
+        )
+          .then((data) => {
+            if (data) {
+              Logic.Common.showLoader({
+                show: true,
+                loading: false,
+                message: "Question has been deleted.",
+                type: "success",
+              });
+              showDeleteQuestion.value = false;
+            }
+          })
+          .catch(() => {
             Logic.Common.showLoader({
               show: true,
               loading: false,
-              message: "Question has been deleted.",
-              type: "success",
+              message: "Unable to delete question. Please try again",
+              type: "error",
             });
-            showDeleteQuestion.value = false;
-          }
-        })
-        .catch(() => {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
-            message: "Unable to delete question. Please try again",
-            type: "error",
           });
-        });
+      });
     };
 
     const duplicateQuestion = () => {
-      const newQuestionData = questionTypes[selectedQuestionData.value.key];
+      Logic.Study.saveQuizLocalChanges(true).then(() => {
+        const newQuestionData = questionTypes[selectedQuestionData.value.key];
 
-      Logic.Study.CreateQuestionForm = Logic.Study.convertQuestionToInput(
-        newQuestionData,
-        selectedQuestionData.value.key
-      );
+        Logic.Study.CreateQuestionForm = Logic.Study.convertQuestionToInput(
+          newQuestionData,
+          selectedQuestionData.value.key
+        );
 
-      Logic.Study.CreateQuestionForm["explanation"] = "";
+        if (selectedQuestionData.value.key == "writeAnswer") {
+          console.log(newQuestionData);
+        }
 
-      Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id).then(() => {
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
-          message: "Question duplicated",
-          type: "success",
+        Logic.Study.CreateQuestionForm["explanation"] = "";
+
+        if (selectedQuestionData.value.key == "writeAnswer") {
+          Logic.Study.CreateQuestionForm.data.options = [
+            Logic.Study.CreateQuestionForm.data.options[0],
+          ];
+        }
+
+        Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id).then(() => {
+          Logic.Common.showLoader({
+            show: true,
+            loading: false,
+            message: "Question duplicated",
+            type: "success",
+          });
         });
       });
     };

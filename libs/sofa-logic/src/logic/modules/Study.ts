@@ -672,7 +672,7 @@ export default class Study extends Common {
           text: 'Enter match',
           shapeSize: 'h-[23px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '1',
           answer: '1',
           showRemove: false,
@@ -682,7 +682,7 @@ export default class Study extends Common {
           text: 'Enter match',
           shapeSize: 'h-[20px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '2',
           answer: '2',
           showRemove: false,
@@ -692,7 +692,7 @@ export default class Study extends Common {
           text: 'Enter match',
           shapeSize: 'h-[20px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '3',
           answer: '3',
           showRemove: false,
@@ -702,7 +702,7 @@ export default class Study extends Common {
           text: 'Enter match',
           shapeSize: 'h-[24px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '4',
           answer: '4',
           showRemove: false,
@@ -1044,6 +1044,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: option,
           answer: '',
+          showRemove: false,
         }
       }
 
@@ -1089,9 +1090,19 @@ export default class Study extends Common {
       })
 
       question.data.answers?.forEach((item, index) => {
-        questionData.options[index].value = item
-        questionData.options[index].answer = item
+        if (item) {
+          questionData.options[index].value = item
+          questionData.options[index].answer = item
+        }
       })
+
+      if (question.data.answers) {
+        questionData.options.forEach((option, index) => {
+          if (question.data.answers[index] == undefined) {
+            questionData.options.splice(index, 1)
+          }
+        })
+      }
 
       questionData.content = question.question
     }
@@ -1946,38 +1957,46 @@ export default class Study extends Common {
     }
   }
 
-  public saveQuizLocalChanges = async () => {
-    if (localStorage.getItem('quiz_question_update')) {
-      let localQuizData: {
-        quizId: string
-        questionId: string
-        UpdateQuestionForm: CreateQuestionInput
-      }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
+  public saveQuizLocalChanges = (silent = false) => {
+    return new Promise(async (resolve) => {
+      if (localStorage.getItem('quiz_question_update')) {
+        let localQuizData: {
+          quizId: string
+          questionId: string
+          UpdateQuestionForm: CreateQuestionInput
+        }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
 
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+        Logic.Common.showLoader({
+          loading: true,
+          show: false,
+        })
 
-      await localQuizData.forEach(async (requestData) => {
-        if (
-          this.AllQuestions.results.filter(
-            (item) => item.id == requestData.UpdateQuestionForm.id,
-          )[0]
-        ) {
-          this.UpdateQuestionForm = requestData.UpdateQuestionForm
-          await this.UpdateQuestion(true, requestData.quizId)
-        }
-      })
+        await localQuizData.forEach(async (requestData) => {
+          if (
+            this.AllQuestions.results.filter(
+              (item) => item.id == requestData.UpdateQuestionForm.id,
+            )[0]
+          ) {
+            this.UpdateQuestionForm = requestData.UpdateQuestionForm
+            await this.UpdateQuestion(true, requestData.quizId)
+          }
+        })
 
-      Logic.Common.hideLoader()
-      localStorage.removeItem('quiz_question_update')
-    }
-    Logic.Common.showLoader({
-      show: true,
-      loading: false,
-      message: 'All changes have been saved',
-      type: 'success',
+        Logic.Common.hideLoader()
+        localStorage.removeItem('quiz_question_update')
+
+        resolve('')
+      }
+      if (!silent) {
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'All changes have been saved',
+          type: 'success',
+        })
+      }
+
+      resolve('')
     })
   }
 

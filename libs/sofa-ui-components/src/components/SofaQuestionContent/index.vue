@@ -129,7 +129,7 @@
           class="w-full space-y-4"
           item-key="id"
           :group="{ name: 'question-options' }"
-          :disabled="questionTypeMain == 'match'"
+          :disabled="questionTypeMain == 'write_answer'"
         >
           <template #item="{ element, index }">
             <div
@@ -142,12 +142,21 @@
                 <sofa-icon
                   :name="element.shape"
                   :custom-class="`${element.shapeSize}`"
+                  v-if="questionTypeMain != 'write_answer'"
                 />
                 <input
+                  v-if="questionTypeMain != 'write_answer'"
                   class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
                   :placeholder="element.text"
                   v-model="element.value"
                   :disabled="questionTypeMain == 'true_false'"
+                />
+                <sofa-custom-input
+                  v-else
+                  class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                  :placeholder="element.text"
+                  v-model="element.value"
+                  :updateValue="element.value"
                 />
               </div>
               <div class="flex flex-row items-center space-x-2">
@@ -157,7 +166,7 @@
                   v-if="
                     element.showRemove &&
                     questionTypeMain != 'true_false' &&
-                    reactiveQuestion.options.length > 1
+                    reactiveQuestion.options.length > optionLimitSettings.min
                   "
                   @click="removeOption(index)"
                 />
@@ -188,7 +197,6 @@
             class="w-full space-y-4"
             item-key="id"
             :group="{ name: 'question-match' }"
-            :disabled="true"
           >
             <template #item="{ element, index }">
               <div
@@ -213,7 +221,8 @@
                     :name="'remove'"
                     :custom-class="'h-[23px] cursor-pointer'"
                     v-if="
-                      element.showRemove && reactiveQuestion.match.length > 1
+                      element.showRemove &&
+                      reactiveQuestion.match.length > optionLimitSettings.min
                     "
                     @click="removeOption(index)"
                   />
@@ -236,8 +245,9 @@
       v-if="
         (questionTypeMain == 'multiple_choice' ||
           questionTypeMain == 'sequence' ||
-          questionTypeMain == 'match') &&
-        reactiveQuestion.options.length < 6
+          questionTypeMain == 'match' ||
+          questionTypeMain == 'write_answer') &&
+        reactiveQuestion.options.length < optionLimitSettings.max
       "
       @click="setQuestionOptions(reactiveQuestion.options.length + 1)"
     >
@@ -299,6 +309,11 @@ export default defineComponent({
     const questionTypeMain = ref("");
 
     const possibleAnswers = ref(0);
+
+    const optionLimitSettings = reactive({
+      max: 6,
+      min: 2,
+    });
 
     const questionSettings = ref(Logic.Study.questionSettings);
 
@@ -437,6 +452,7 @@ export default defineComponent({
             id: "",
             value: "1",
             answer: "1",
+            showRemove: false,
           },
           {
             shape: "triangle",
@@ -446,6 +462,7 @@ export default defineComponent({
             id: "",
             value: "2",
             answer: "2",
+            showRemove: false,
           },
           {
             shape: "square",
@@ -455,6 +472,7 @@ export default defineComponent({
             id: "",
             value: "3",
             answer: "3",
+            showRemove: false,
           },
           {
             shape: "kite",
@@ -464,6 +482,7 @@ export default defineComponent({
             id: "",
             value: "4",
             answer: "4",
+            showRemove: false,
           },
         ];
         reactiveQuestion.data = question.value.data;
@@ -475,6 +494,12 @@ export default defineComponent({
 
         setPossibleAnswers();
         saveQuizData();
+
+        if (questionTypeMain.value == "write_answer") {
+          optionLimitSettings.min = 1;
+        } else {
+          optionLimitSettings.min = 2;
+        }
       }
     };
 
@@ -576,6 +601,7 @@ export default defineComponent({
       });
 
       if (questionTypeSetting.length) {
+        reactiveQuestion.options = question.value.options;
         if (
           questionTypeMain.value != "match" &&
           questionTypeSetting[0].questionType == "match"
@@ -589,6 +615,7 @@ export default defineComponent({
               id: "",
               value: "a",
               answer: "a",
+              showRemove: false,
             },
             {
               shape: "triangle",
@@ -598,6 +625,7 @@ export default defineComponent({
               id: "",
               value: "b",
               answer: "b",
+              showRemove: false,
             },
             {
               shape: "square",
@@ -607,6 +635,7 @@ export default defineComponent({
               id: "",
               value: "c",
               answer: "c",
+              showRemove: false,
             },
             {
               shape: "kite",
@@ -616,6 +645,7 @@ export default defineComponent({
               id: "",
               value: "d",
               answer: "d",
+              showRemove: false,
             },
           ];
         }
@@ -630,6 +660,7 @@ export default defineComponent({
               id: "EaNYLgnn",
               value: "True",
               answer: "true",
+              showRemove: false,
             },
             {
               shape: "triangle",
@@ -639,8 +670,15 @@ export default defineComponent({
               id: "5cRJaK1Y",
               value: "False",
               answer: "",
+              showRemove: false,
             },
           ];
+        }
+
+        if (questionTypeSetting[0].questionType == "write_answer") {
+          optionLimitSettings.min = 1;
+        } else {
+          optionLimitSettings.min = 2;
         }
 
         reactiveQuestion.itemType = questionTypeSetting[0].itemType;
@@ -723,6 +761,7 @@ export default defineComponent({
       possibleAnswers,
       questionTypeMain,
       question,
+      optionLimitSettings,
       setAnswers,
       addNewDataItem,
       removeItemFormData,
