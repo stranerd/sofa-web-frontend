@@ -760,10 +760,6 @@ video {
   height: 310px !important;
 }
 
-.\!h-\[5px\] {
-  height: 5px !important;
-}
-
 .h-\[100px\] {
   height: 100px;
 }
@@ -1636,11 +1632,6 @@ video {
 .bg-\[\#FAEBEB\] {
   --tw-bg-opacity: 1;
   background-color: rgb(250 235 235 / var(--tw-bg-opacity));
-}
-
-.bg-\[\#FFAF4B\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 175 75 / var(--tw-bg-opacity));
 }
 
 .bg-\[\#FFF4EB\] {

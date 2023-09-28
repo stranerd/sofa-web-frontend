@@ -769,6 +769,7 @@ import {
 } from "sofa-ui-components";
 import { defineComponent, ref, onMounted, watch } from "vue";
 import { useMeta } from "vue-meta";
+import moment from "moment";
 
 export default defineComponent({
   components: {
@@ -1088,6 +1089,8 @@ export default defineComponent({
       addFolderIsActive,
       currentInProgressItem,
       currentResultItems,
+      selectedResultFilter,
+      selectedInProgressFilter,
     };
   },
 });
