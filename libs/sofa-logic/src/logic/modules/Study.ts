@@ -303,6 +303,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'a',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -312,6 +313,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'b',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -321,6 +323,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'c',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -330,6 +333,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'd',
           answer: '',
+          showRemove: false,
         },
       ],
       settings: [
@@ -373,6 +377,7 @@ export default class Study extends Common {
           id: '',
           value: 'a',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -382,6 +387,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -391,6 +397,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -400,6 +407,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: '',
+          showRemove: false,
         },
       ],
       settings: [
@@ -435,6 +443,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'True',
           answer: 'true',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -444,6 +453,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'False',
           answer: '',
+          showRemove: false,
         },
       ],
       settings: [
@@ -552,6 +562,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -561,6 +572,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'b',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -570,6 +582,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'c',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -579,6 +592,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'd',
+          showRemove: false,
         },
       ],
       settings: [
@@ -619,6 +633,7 @@ export default class Study extends Common {
           id: '',
           value: 'a',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -628,6 +643,7 @@ export default class Study extends Common {
           id: '',
           value: 'b',
           answer: 'b',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -637,6 +653,7 @@ export default class Study extends Common {
           id: '',
           value: 'c',
           answer: 'c',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -646,6 +663,7 @@ export default class Study extends Common {
           id: '',
           value: 'd',
           answer: 'd',
+          showRemove: false,
         },
       ],
       match: [
@@ -657,6 +675,7 @@ export default class Study extends Common {
           id: '',
           value: '1',
           answer: '1',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -666,6 +685,7 @@ export default class Study extends Common {
           id: '',
           value: '2',
           answer: '2',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -675,6 +695,7 @@ export default class Study extends Common {
           id: '',
           value: '3',
           answer: '3',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -684,6 +705,7 @@ export default class Study extends Common {
           id: '',
           value: '4',
           answer: '4',
+          showRemove: false,
         },
       ],
       settings: [

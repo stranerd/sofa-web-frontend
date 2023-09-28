@@ -2685,6 +2685,10 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
     height: 19px;
   }
 
+  .mdlg\:h-\[80px\] {
+    height: 80px;
+  }
+
   .mdlg\:\!w-\[200px\] {
     width: 200px !important;
   }

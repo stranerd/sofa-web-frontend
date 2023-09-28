@@ -214,7 +214,6 @@ import { Logic } from "../../composable";
 import SofaModal from "../SofaModal";
 import { SofaHeaderText } from "../SofaTypography";
 import SofaDeletePrompt from "../SofaDeletePrompt";
-import { SingleQuiz } from "../../../../../apps/website/src/composables/quiz";
 
 export default defineComponent({
   components: {
@@ -317,7 +316,7 @@ export default defineComponent({
         questions.value = allQuestions;
         if (questions.value) {
           const allQuestionIds = questions.value.map((question) => question.id);
-          console.log(allQuestionIds);
+
           Logic.Study.ReorderQuizQuestionsForm = {
             questions: allQuestionIds,
           };

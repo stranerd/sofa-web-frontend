@@ -124,66 +124,125 @@
           questionTypeMain != 'drag_answer'
         "
       >
-        <div
-          v-for="(answer, index) in reactiveQuestion.options"
-          :key="index"
-          :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
-          style="border-width: 2px 2px 4px 2px"
+        <draggable
+          :list="reactiveQuestion.options"
+          class="w-full space-y-4"
+          item-key="id"
+          :group="{ name: 'question-options' }"
+          :disabled="questionTypeMain == 'match'"
         >
-          <div class="flex-grow flex flex-row space-x-3">
-            <sofa-icon
-              :name="answer.shape"
-              :custom-class="`${answer.shapeSize}`"
-            />
-            <input
-              class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
-              :placeholder="answer.text"
-              v-model="answer.value"
-              :disabled="questionTypeMain == 'true_false'"
-            />
-          </div>
-          <div
-            class="w-[26px] cursor-pointer"
-            v-if="
-              answer.isRadio &&
-              (questionTypeMain == 'multiple_choice' ||
-                questionTypeMain == 'true_false')
-            "
-            @click="answer.isRadio ? setAnswers(answer) : null"
-          >
-            <sofa-icon
-              :name="answer.answer ? 'selected' : 'not-selected'"
-              :custom-class="'h-[23px]'"
-            />
-          </div>
-        </div>
+          <template #item="{ element, index }">
+            <div
+              :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+              style="border-width: 2px 2px 4px 2px"
+              @mouseenter="element.showRemove = true"
+              @mouseleave="element.showRemove = false"
+            >
+              <div class="flex-grow flex flex-row space-x-3">
+                <sofa-icon
+                  :name="element.shape"
+                  :custom-class="`${element.shapeSize}`"
+                />
+                <input
+                  class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                  :placeholder="element.text"
+                  v-model="element.value"
+                  :disabled="questionTypeMain == 'true_false'"
+                />
+              </div>
+              <div class="flex flex-row items-center space-x-2">
+                <sofa-icon
+                  :name="'remove'"
+                  :custom-class="'h-[23px] cursor-pointer'"
+                  v-if="
+                    element.showRemove &&
+                    questionTypeMain != 'true_false' &&
+                    reactiveQuestion.options.length > 1
+                  "
+                  @click="removeOption(index)"
+                />
+                <div
+                  class="w-[26px] cursor-pointer"
+                  v-if="
+                    element.isRadio &&
+                    (questionTypeMain == 'multiple_choice' ||
+                      questionTypeMain == 'true_false')
+                  "
+                  @click="element.isRadio ? setAnswers(element) : null"
+                >
+                  <sofa-icon
+                    :name="element.answer ? 'selected' : 'not-selected'"
+                    :custom-class="'h-[23px]'"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+        </draggable>
       </div>
 
       <template v-if="questionTypeMain == 'match'">
         <div class="col-span-1 flex flex-col space-y-4">
-          <div
-            v-for="(answer, index) in reactiveQuestion.match"
-            :key="index"
-            :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
-            style="border-width: 2px 2px 4px 2px"
+          <draggable
+            :list="reactiveQuestion.match"
+            class="w-full space-y-4"
+            item-key="id"
+            :group="{ name: 'question-match' }"
+            :disabled="true"
           >
-            <div class="flex-grow flex flex-row space-x-3">
-              <sofa-icon
-                :name="answer.shape"
-                :custom-class="`${answer.shapeSize}`"
-              />
-              <input
-                class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
-                :placeholder="answer.text"
-                v-model="answer.value"
-              />
-            </div>
-            <div class="w-[26px]" v-if="answer.isRadio">
-              <sofa-icon :name="'not-selected'" :custom-class="'h-[23px]'" />
-            </div>
-          </div>
+            <template #item="{ element, index }">
+              <div
+                :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+                style="border-width: 2px 2px 4px 2px"
+                @mouseenter="element.showRemove = true"
+                @mouseleave="element.showRemove = false"
+              >
+                <div class="flex-grow flex flex-row space-x-3">
+                  <sofa-icon
+                    :name="element.shape"
+                    :custom-class="`${element.shapeSize}`"
+                  />
+                  <input
+                    class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                    :placeholder="element.text"
+                    v-model="element.value"
+                  />
+                </div>
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-icon
+                    :name="'remove'"
+                    :custom-class="'h-[23px] cursor-pointer'"
+                    v-if="
+                      element.showRemove && reactiveQuestion.match.length > 1
+                    "
+                    @click="removeOption(index)"
+                  />
+                  <div class="w-[26px]" v-if="element.isRadio">
+                    <sofa-icon
+                      :name="'not-selected'"
+                      :custom-class="'h-[23px]'"
+                    />
+                  </div>
+                </div>
+              </div>
+            </template>
+          </draggable>
         </div>
       </template>
+    </div>
+
+    <div
+      class="w-full flex flex-row justify-end space-x-2 items-center cursor-pointer"
+      v-if="
+        (questionTypeMain == 'multiple_choice' ||
+          questionTypeMain == 'sequence' ||
+          questionTypeMain == 'match') &&
+        reactiveQuestion.options.length < 6
+      "
+      @click="setQuestionOptions(reactiveQuestion.options.length + 1)"
+    >
+      <sofa-icon :name="'box-plus'" :custom-class="'h-[24px]'" />
+      <sofa-normal-text :color="'text-grayColor'">Add option</sofa-normal-text>
     </div>
 
     <div class="w-full flex flex-col border-t-[1px] border-[#F1F6FA] pt-4">
@@ -214,6 +273,7 @@ import SofaButton from "../SofaButton";
 import { SofaTextarea, SofaCustomInput, SofaFileAttachment } from "../SofaForm";
 import { Logic } from "../../composable";
 import SofaImageLoader from "../SofaImageLoader";
+import draggable from "vuedraggable";
 
 export default defineComponent({
   components: {
@@ -224,6 +284,7 @@ export default defineComponent({
     SofaCustomInput,
     SofaFileAttachment,
     SofaImageLoader,
+    draggable,
   },
   props: {
     customClass: {
@@ -255,6 +316,10 @@ export default defineComponent({
         possibleAnswers.value = parseInt(answerSettings[0].value);
       } else {
         possibleAnswers.value = 1;
+      }
+
+      if (questionTypeMain.value == "multiple_choice") {
+        possibleAnswers.value = 6;
       }
     };
 
@@ -457,11 +522,45 @@ export default defineComponent({
             id: Logic.Common.makeid(8),
             value: "new",
             answer: "",
+            showRemove: false,
           };
           existingOptions.push(newOption);
         }
 
         // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
+      }
+
+      if (questionTypeMain.value == "match") {
+        const existingOptions = reactiveQuestion.match;
+
+        if (existingOptions.length >= count) {
+          if (existingOptions.length > count) {
+            reactiveQuestion.match = question.value.match.slice(0, count);
+          }
+        } else {
+          const availableShapes = ["circle", "triangle", "square", "kite"];
+
+          const amountToAdd = count - reactiveQuestion.match.length;
+
+          for (let step = 0; step < amountToAdd; step++) {
+            const newOption = {
+              shape:
+                availableShapes[
+                  Math.floor(Math.random() * availableShapes.length)
+                ],
+              text: "Enter answer",
+              shapeSize: "h-[23px]",
+              isRadio: false,
+              id: Logic.Common.makeid(8),
+              value: "new",
+              answer: "",
+              showRemove: false,
+            };
+            existingOptions.push(newOption);
+          }
+
+          // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
+        }
       }
     };
 
@@ -521,10 +620,7 @@ export default defineComponent({
           ];
         }
 
-        if (
-          questionTypeMain.value != "true_false" &&
-          questionTypeSetting[0].questionType == "true_false"
-        ) {
+        if (questionTypeSetting[0].questionType == "true_false") {
           reactiveQuestion.options = [
             {
               shape: "circle",
@@ -579,6 +675,10 @@ export default defineComponent({
         }
       }
 
+      if (questionTypeSetting[0].questionType == "true_false") {
+        setQuestionOptions(2);
+      }
+
       // possible answers
       const answersSettings = questionSettings.value.filter((item) => {
         return item.type == "correct-anwsers";
@@ -594,6 +694,18 @@ export default defineComponent({
 
       reactiveQuestion.settings = questionSettings.value;
     });
+
+    const removeOption = (index: number) => {
+      reactiveQuestion.options = reactiveQuestion.options.filter(
+        (item, eachIndex) => eachIndex != index
+      );
+
+      if (questionTypeMain.value == "match") {
+        reactiveQuestion.match = reactiveQuestion.match.filter(
+          (item, eachIndex) => eachIndex != index
+        );
+      }
+    };
 
     watch(selectedQuestion, () => {
       question.value = selectedQuestion.value;
@@ -614,6 +726,8 @@ export default defineComponent({
       setAnswers,
       addNewDataItem,
       removeItemFormData,
+      setQuestionOptions,
+      removeOption,
     };
   },
 });

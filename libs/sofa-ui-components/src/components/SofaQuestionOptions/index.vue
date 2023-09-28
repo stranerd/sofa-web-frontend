@@ -19,83 +19,77 @@
       />
     </div>
     <div class="flex flex-col space-y-6 h-full px-4">
-      <div
-        class="w-full flex flex-col space-y-4"
-        v-for="(option, index) in questionOptions"
-        :key="index"
-      >
-        <div
-          class="w-full flex flex-row items-center justify-between cursor-pointer"
-          @click="toggleOption(option)"
-        >
-          <div class="flex flex-row items-center space-x-2">
-            <sofa-icon :customClass="'h-[18px]'" :name="option.icon" />
-            <sofa-normal-text :customClass="'!font-bold'">{{
-              option.name
-            }}</sofa-normal-text>
-          </div>
-          <div class="flex flex-row items-center space-x-2">
-            <sofa-normal-text :color="'text-grayColor'">{{
-              option.value
-            }}</sofa-normal-text>
-            <sofa-icon
+      <template v-for="(option, index) in questionOptions" :key="index">
+        <div class="w-full flex flex-col space-y-2 relative" v-if="option.show">
+          <div
+            class="w-full flex flex-row items-center justify-between cursor-pointer sticky top-0 bg-white pb-2"
+          >
+            <div class="flex flex-row items-center space-x-2">
+              <sofa-icon :customClass="'h-[18px]'" :name="option.icon" />
+              <sofa-normal-text :customClass="'!font-bold'">{{
+                option.name
+              }}</sofa-normal-text>
+            </div>
+            <div class="flex flex-row items-center space-x-2">
+              <sofa-normal-text :color="'text-grayColor'">{{
+                option.value
+              }}</sofa-normal-text>
+              <!-- <sofa-icon
               :customClass="'h-[7px]'"
               :name="option.opened ? 'chevron-up' : 'chevron-down'"
-            />
+            /> -->
+            </div>
           </div>
-        </div>
 
-        <div
-          class="w-full flex flex-row flex-wrap gap-3"
-          v-if="selectedType == option.type && !option.hasImage"
-        >
-          <span
-            @mouseenter="item.active = true"
-            @mouseleave="item.active = false"
-            :class="`px-4 py-2  ${
-              item.name == option.value ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'
-            } rounded-[8px] flex flex-row items-center justify-center space-x-1  cursor-pointer`"
-            v-for="(item, index) in option.options"
-            :key="index"
-            @click="
-              option.value = item.name;
-              saveSettings();
-            "
-          >
-            <sofa-normal-text
-              :color="`${
-                item.name == option.value ? 'text-white' : 'text-deepGray'
-              } `"
-              >{{ item.name }}</sofa-normal-text
-            >
-          </span>
-        </div>
-
-        <div
-          v-if="selectedType == option.type && option.hasImage"
-          class="w-full grid grid-cols-2 gap-3"
-        >
           <div
-            :class="`col-span-1 px-3 py-3 flex flex-col space-y-2 items-center justify-center cursor-pointer ${
-              item.name == option.value ? 'bg-[#E6F5FF]' : 'bg-[#F2F5F8]'
-            }  rounded-[8px] `"
-            v-for="(item, index) in option.options"
-            :key="index"
-            @click="
-              option.value = item.name;
-              option.itemType = item.itemType;
-              option.questionType = item.type;
-              selectedQuestionType = item.itemType;
-              saveSettings();
-            "
+            class="w-full flex flex-row flex-wrap gap-3"
+            v-if="!option.hasImage"
           >
-            <sofa-icon :name="item.image" :custom-class="'h-[50px]'" />
-            <sofa-normal-text :customClass="'text-center'">{{
-              item.name
-            }}</sofa-normal-text>
+            <span
+              @mouseenter="item.active = true"
+              @mouseleave="item.active = false"
+              :class="`px-4 py-2  ${
+                item.name == option.value ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'
+              } rounded-[8px] flex flex-row items-center justify-center space-x-1  cursor-pointer`"
+              v-for="(item, index) in option.options"
+              :key="index"
+              @click="
+                option.value = item.name;
+                saveSettings();
+              "
+            >
+              <sofa-normal-text
+                :color="`${
+                  item.name == option.value ? 'text-white' : 'text-deepGray'
+                } `"
+                >{{ item.name }}</sofa-normal-text
+              >
+            </span>
+          </div>
+
+          <div v-if="option.hasImage" class="w-full grid grid-cols-2 gap-3">
+            <div
+              :class="`col-span-1 px-3 py-3 flex flex-col space-y-2 items-center justify-center cursor-pointer ${
+                item.name == option.value ? 'bg-[#E6F5FF]' : 'bg-[#F2F5F8]'
+              }  rounded-[8px] `"
+              v-for="(item, index) in option.options"
+              :key="index"
+              @click="
+                option.value = item.name;
+                option.itemType = item.itemType;
+                option.questionType = item.type;
+                selectedQuestionType = item.itemType;
+                saveSettings();
+              "
+            >
+              <sofa-icon :name="item.image" :custom-class="'h-[50px]'" />
+              <sofa-normal-text :customClass="'text-center'">{{
+                item.name
+              }}</sofa-normal-text>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
 
       <div class="h-[130px] w-full"></div>
     </div>
@@ -268,6 +262,7 @@ export default defineComponent({
           },
         ],
         opened: true,
+        show: true,
         hasImage: true,
         icon: "question-type",
         type: "question-type",
@@ -329,7 +324,8 @@ export default defineComponent({
             image: "",
           },
         ],
-        opened: false,
+        opened: true,
+        show: true,
         icon: "time-limit",
         type: "time-limit",
         value: "30s",
@@ -363,7 +359,8 @@ export default defineComponent({
             image: "",
           },
         ],
-        opened: false,
+        show: false,
+        opened: true,
         icon: "total-options",
         type: "total-options",
         value: "4",
@@ -387,7 +384,8 @@ export default defineComponent({
             image: "",
           },
         ],
-        opened: false,
+        show: false,
+        opened: true,
         icon: "total-options",
         type: "sequence-total",
         value: "4",
@@ -411,7 +409,8 @@ export default defineComponent({
             image: "",
           },
         ],
-        opened: false,
+        show: false,
+        opened: true,
         icon: "total-options",
         type: "match-total",
         value: "4",
@@ -440,7 +439,8 @@ export default defineComponent({
             image: "",
           },
         ],
-        opened: false,
+        show: false,
+        opened: true,
         icon: "correct-anwsers",
         type: "correct-anwsers",
         value: "2",
@@ -462,12 +462,18 @@ export default defineComponent({
     const setOptions = () => {
       if (question.value) {
         questionOptions.length = 0;
-        const currentSettings =
+
+        let currentSettings =
           Logic.Study.questionTypes[selectedQuestionType.value].settings;
+
+        if (selectedQuestionType.value == question.value.key) {
+          currentSettings = question.value.settings;
+        }
+
         currentSettings?.forEach((setting) => {
           const option = allOptions[setting.type];
-
           option.value = setting.value;
+
           questionOptions.push(option);
         });
       }
