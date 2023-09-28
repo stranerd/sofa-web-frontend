@@ -447,7 +447,7 @@ const setResultItems = async () => {
         entity_type: 'test',
         id: test.id,
         image: currentQuiz?.photo?.link || '/images/default.png',
-        label: `${percentage.toFixed()}%`,
+        label: `${percentage ? percentage.toFixed() : '0'}%`,
         label_color: textColor,
         title: currentQuiz?.title || 'Unknown quiz',
         type: 'Test',
