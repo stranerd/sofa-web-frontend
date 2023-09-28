@@ -1504,10 +1504,10 @@ export default class Study extends Common {
     })
   }
 
-  public GetCoursesWithQuery = (query: string, tagId = '', userId = '') => {
+  public GetCoursesWithQuery = (query = 'nill', tagId = '', userId = '') => {
     const whereQuery = []
 
-    if (tagId) {
+    if (tagId && tagId != 'nill') {
       whereQuery.push({
         field: 'tagIds',
         value: tagId,
@@ -1515,10 +1515,10 @@ export default class Study extends Common {
       })
     }
 
-    if (userId) {
+    if (userId && userId != 'nill') {
       whereQuery.push({
-        field: 'status',
-        value: 'published',
+        field: 'user.id',
+        value: userId,
         condition: Conditions.eq,
       })
     }
@@ -1542,10 +1542,10 @@ export default class Study extends Common {
       })
   }
 
-  public GetQuizzesWithQuery = (query: string, tagId = '', userId = '') => {
+  public GetQuizzesWithQuery = (query = 'nill', tagId = '', userId = '') => {
     const whereQuery = []
 
-    if (tagId) {
+    if (tagId && tagId != 'nill') {
       whereQuery.push({
         field: 'tagIds',
         value: tagId,
@@ -1553,10 +1553,10 @@ export default class Study extends Common {
       })
     }
 
-    if (userId) {
+    if (userId && userId != 'nill') {
       whereQuery.push({
-        field: 'status',
-        value: 'published',
+        field: 'user.id',
+        value: userId,
         condition: Conditions.eq,
       })
     }
