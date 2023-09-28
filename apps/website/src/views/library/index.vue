@@ -337,7 +337,11 @@
                   :activity="activity"
                   :has-extra="true"
                   :custom-class="'!bg-white shadow-custom cursor-pointer'"
-                  @click="openCourse(activity)"
+                  @click="
+                    activity.type === 'quiz'
+                      ? openQuiz(activity)
+                      : openCourse(activity)
+                  "
                 >
                   <template v-slot:extra>
                     <div
@@ -402,7 +406,7 @@
                 :activity="activity"
                 :custom-class="'!bg-white shadow-custom cursor-pointer'"
                 @click="
-                  activity.labels.main.toLocaleLowerCase().includes('quiz')
+                  activity.type === 'quiz'
                     ? openQuiz(activity)
                     : openCourse(activity)
                 "
@@ -683,17 +687,7 @@
 
 <script lang="ts">
 import { scrollToTop } from "@/composables";
-import {
-  createQuizGame,
-  goToStudyMode,
-  otherTasks,
-  selectedQuizId,
-  selectedQuizMode,
-  userIsParticipating,
-} from "@/composables/quiz";
-import moment from "moment";
-import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+
 import {
   selectedFilter,
   AllFolders,
@@ -751,6 +745,15 @@ import {
 } from "@/composables/library";
 import { allOrganizations, setOrganizations } from "@/composables/profile";
 import {
+  otherTasks,
+  goToStudyMode,
+  selectedQuizId,
+  selectedQuizMode,
+  userIsParticipating,
+  createQuizGame,
+} from "@/composables/quiz";
+import { Conditions } from "sofa-logic/src/logic/types/common";
+import {
   SofaActivityCard,
   SofaButton,
   SofaDeletePrompt,
@@ -762,6 +765,7 @@ import {
   SofaNormalText,
   SofaHeaderText,
   SofaProgressItemCard,
+  Logic,
 } from "sofa-ui-components";
 import { defineComponent, ref, onMounted, watch } from "vue";
 import { useMeta } from "vue-meta";
