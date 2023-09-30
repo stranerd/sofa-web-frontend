@@ -667,7 +667,7 @@ export default class Common {
                 }
                 if (rule.useRouteQuery) {
                   rule.queries?.forEach((item) => {
-                    rule.params.push(routeTo.query[item] || 'nill')
+                    rule.params.unshift(routeTo.query[item] || 'nill')
                   })
                 }
 

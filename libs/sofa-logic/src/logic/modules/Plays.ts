@@ -190,12 +190,14 @@ export default class Plays extends Common {
       allQuizIds.push(...this.AllGames.results.map((item) => item.quizId))
       allQuizIds.push(...this.AllTests.results.map((item) => item.quizId))
 
+      const uniqueItems = [...new Set(allQuizIds)]
+
       const response = await $api.study.quiz.fetch({
         where: [
           {
             field: 'id',
             condition: Conditions.in,
-            value: allQuizIds,
+            value: uniqueItems,
           },
         ],
       })

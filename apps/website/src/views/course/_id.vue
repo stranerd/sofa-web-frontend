@@ -29,7 +29,10 @@
 
             <sofa-course-content
               @OnMaterialSelected="handleItemSelected"
-              :lockContent="!PurchasedItems.includes(SingleCourse?.id)"
+              :lockContent="
+                !PurchasedItems.includes(SingleCourse?.id) &&
+                SingleCourse?.user.id != Logic.Auth.AuthUser?.id
+              "
               v-model="selectedMaterial"
             />
           </div>
@@ -86,7 +89,10 @@
 
           <sofa-course-content
             @OnMaterialSelected="handleItemSelected"
-            :lockContent="!PurchasedItems.includes(SingleCourse?.id)"
+            :lockContent="
+              !PurchasedItems.includes(SingleCourse?.id) &&
+              SingleCourse?.user.id != Logic.Auth.AuthUser?.id
+            "
             v-model="selectedMaterial"
             @onCourseContentSet="handleCourseContentSet"
           />

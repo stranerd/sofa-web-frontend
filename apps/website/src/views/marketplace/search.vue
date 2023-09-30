@@ -379,7 +379,7 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: true,
         useRouteQuery: true,
-        queries: ["tagId", "q", "userId"],
+        queries: ["userId", "tagId", "q"],
       },
       {
         domain: "Study",
@@ -389,7 +389,7 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: true,
         useRouteQuery: true,
-        queries: ["tagId", "q", "userId"],
+        queries: ["userId", "tagId", "q"],
       },
       {
         domain: "Study",

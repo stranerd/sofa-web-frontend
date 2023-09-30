@@ -1401,7 +1401,7 @@ export default class Study extends Common {
   }
 
   public GetQuiz = (id: string, autoCreate = false) => {
-    if (!id || id == 'nill') {
+    if (!id) {
       if (autoCreate) {
         return new Promise((resolve) => {
           // create a new quiz
@@ -1582,7 +1582,7 @@ export default class Study extends Common {
   }
 
   public GetCourse = (id: string, autoCreate = false) => {
-    if (!id || id == 'nill') {
+    if (!id) {
       if (autoCreate) {
         return new Promise((resolve) => {
           // create course

@@ -1,5 +1,6 @@
 <template>
-  <dashboard-layout
+  <component
+    :is="currentComponent"
     :topbarOptions="{
       type: 'subpage',
       title: SingleQuiz ? SingleQuiz.title : 'Create a quiz',
@@ -38,8 +39,8 @@
       ],
       badges: [
         {
-          text: SingleQuiz.status,
-          color: SingleQuiz.status != 'published' ? 'gray' : 'green',
+          text: SingleQuiz?.status,
+          color: SingleQuiz?.status != 'published' ? 'gray' : 'green',
         },
       ],
     }"
@@ -50,7 +51,24 @@
     :bgColor="'mdlg:!bg-backgroundGray bg-white'"
     :middleSessionWidth="'lg:w-[56%]  mdlg:w-[50%] mdlg:!pb-5'"
   >
-    <template v-slot:left-session>
+    <!-- Not found -->
+    <div class="w-full flex flex-col h-[50px] items-center justify-center px-4">
+      <div class="lg:w-[60%] mdlg:w-[60%] w-full h-full flex flex-col">
+        <sofa-empty-state
+          :title="'Quiz not found'"
+          :subTitle="`It is either this quiz doesn't exist or you don't have access to this quiz. Check out other materials in the marketplace`"
+          :actionLabel="'Go to marketplace'"
+          :action="
+            () => {
+              Logic.Common.GoToRoute('/marketplace');
+            }
+          "
+          :titleStyle="'mdlg:!text-xl '"
+        />
+      </div>
+    </div>
+
+    <template v-slot:left-session v-if="currentComponent == 'dashboard-layout'">
       <div
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full space-y-4 overflow-y-hidden"
       >
@@ -66,7 +84,10 @@
       </div>
     </template>
 
-    <template v-slot:middle-session>
+    <template
+      v-slot:middle-session
+      v-if="currentComponent == 'dashboard-layout'"
+    >
       <!-- Top bar for smaller screens -->
       <div
         class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[9999] bg-backgroundGray px-4 py-4 sticky top-0 left-0"
@@ -232,7 +253,10 @@
       </sofa-modal>
     </template>
 
-    <template v-slot:right-session>
+    <template
+      v-slot:right-session
+      v-if="currentComponent == 'dashboard-layout'"
+    >
       <div
         class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col space-y-4 h-full justify-between relative overflow-y-hidden"
       >
@@ -241,7 +265,7 @@
         />
       </div>
     </template>
-  </dashboard-layout>
+  </component>
 </template>
 
 <script lang="ts">
@@ -320,6 +344,7 @@ export default defineComponent({
 
     const questionSettings = ref(Logic.Study.questionSettings);
 
+    const currentComponent = ref("dashboard-layout");
     const showSettingModal = ref(false);
 
     const hasUnsavedChanges = ref(false);
@@ -383,9 +408,15 @@ export default defineComponent({
       // Clear local data
       localStorage.removeItem("quiz_question_update");
 
-      setTimeout(() => {
-        hasUnsavedChanges.value = false;
-      }, 1000);
+      if (SingleQuiz.value) {
+        setTimeout(() => {
+          hasUnsavedChanges.value = false;
+        }, 1000);
+
+        currentComponent.value = "dashboard-layout";
+      } else {
+        currentComponent.value = "expanded-layout";
+      }
     });
 
     watch(UpdatedQuestion, () => {
@@ -452,6 +483,7 @@ export default defineComponent({
       handleMobileGoback,
       actionButtonItems,
       hasUnsavedChanges,
+      currentComponent,
     };
   },
 });
