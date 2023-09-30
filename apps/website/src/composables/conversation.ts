@@ -189,16 +189,17 @@ const setConversations = (goToIndex = -1, limit = 0) => {
 }
 
 const selectConversation = (convoId: string) => {
-  if (Logic.Common.route.path != '/chat') {
-    Logic.Common.GoToRoute('/chat')
-    return
-  }
-  showMoreOptions.value = false
   if (Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm') {
     showMoreOptions.value = false
     Logic.Common.GoToRoute('/chat/' + convoId)
     return
   }
+
+  if (Logic.Common.route.path != '/chat') {
+    Logic.Common.GoToRoute('/chat')
+    return
+  }
+  showMoreOptions.value = false
   Logic.Common.showLoader({
     loading: true,
     show: false,
@@ -287,8 +288,18 @@ const sendNewMessage = (selectConversation: Function | undefined) => {
     if (messageContent.value) {
       sendMessage(messageContent.value, selectConversation)
       messageContent.value = ''
-      document.getElementById('messageContainer').innerHTML = ''
     }
+  }
+
+  const messageContainerSm = document.getElementById('messageContainerSm')
+  const messageContainer = document.getElementById('messageContainer')
+
+  if (messageContainerSm) {
+    messageContainerSm.innerText = ''
+  }
+
+  if (messageContainer) {
+    messageContainer.innerText = ''
   }
 }
 
