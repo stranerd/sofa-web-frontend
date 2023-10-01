@@ -35,6 +35,8 @@ interface ContentDetails {
   title: string
   info: string
   id: string
+  hasCourse: boolean
+  courseId: string
   status: string
   labels: {
     color: string

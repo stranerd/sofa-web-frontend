@@ -167,7 +167,7 @@
                 v-else
                 :padding="'px-6 py-1'"
                 :customClass="'w-auto'"
-                @click="Logic.Common.GoToRoute('/course/' + content.id)"
+                @click="Logic.Common.GoToRoute('/course/' + content.courseId)"
               >
                 Go to course
               </sofa-button>
@@ -283,7 +283,9 @@
           :actionLabel="'Go to course'"
           :action="
             () => {
-              Logic.Common.GoToRoute(`/marketplace/${content.id}?type=course`);
+              Logic.Common.GoToRoute(
+                `/marketplace/${content.courseId}?type=course`
+              );
             }
           "
           :icon="{
@@ -305,7 +307,7 @@
               itemIsPurchased
                 ? (showStudyMode = true)
                 : Logic.Common.GoToRoute(
-                    `/marketplace/${content.id}?type=course`
+                    `/marketplace/${content.courseId}?type=course`
                   )
             "
           >
@@ -507,7 +509,7 @@
       v-else
       :padding="'px-6 py-3'"
       :customClass="'w-full'"
-      @click="Logic.Common.GoToRoute('/course/' + content.id)"
+      @click="Logic.Common.GoToRoute('/course/' + content.courseId)"
     >
       Go to course
     </sofa-button>

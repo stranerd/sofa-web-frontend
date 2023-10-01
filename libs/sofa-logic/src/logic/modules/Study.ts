@@ -113,7 +113,9 @@ export default class Study extends Common {
     title: '',
     status: '',
     id: '',
+    hasCourse: true,
     info: '',
+    courseId: '',
     labels: {
       color: 'pink',
       main: 'Course',
@@ -1617,10 +1619,10 @@ export default class Study extends Common {
     }
     return new Promise((resolve) => {
       $api.study.course.get(id).then((response) => {
-        const allCourseableFiles = response.data.coursables
+        const allCourseableFiles = response.data?.coursables
           ?.filter((item) => item.type == 'file')
           .map((item) => item.id)
-        const allCourseableQuizzes = response.data.coursables
+        const allCourseableQuizzes = response.data?.coursables
           ?.filter((item) => item.type == 'quiz')
           .map((item) => item.id)
 

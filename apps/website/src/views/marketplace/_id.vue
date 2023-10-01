@@ -35,7 +35,10 @@
         :customClass="'!rounded-none'"
         :showBuyButton="true"
         :buyAction="buyCourse"
-        :itemIsPurchased="PurchasedItems.includes(contentDetails.id)"
+        :itemIsPurchased="
+          PurchasedItems.includes(contentDetails.id) ||
+          !contentDetails.hasCourse
+        "
         :similarContents="similarContents"
         :type="contentType"
         :contentId="contentDetails.id"
@@ -491,6 +494,9 @@ export default defineComponent({
         } rating${SingleQuiz.value.ratings.count > 1 ? "s" : ""}`;
         contentDetails.ratings.total = SingleQuiz.value.ratings.avg;
         contentDetails.ratings.totalCount = SingleQuiz.value.ratings.count;
+
+        contentDetails.hasCourse = SingleQuiz.value.courseId ? true : false;
+        contentDetails.courseId = SingleQuiz.value.courseId || "";
 
         // set reviews
         contentDetails.ratings.stats["1"] = 0;
