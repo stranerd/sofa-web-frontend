@@ -321,13 +321,13 @@ export default defineComponent({
 
     const setPossibleAnswers = (answerSettingsDefault: any[] = []) => {
       const answerSettings =
-        answerSettingsDefault.length == 0
-          ? question.value.settings.filter(
+        answerSettingsDefault?.length == 0
+          ? question.value.settings?.filter(
               (item) => item.type == "correct-anwsers"
             )
           : answerSettingsDefault;
 
-      if (answerSettings.length) {
+      if (answerSettings?.length) {
         possibleAnswers.value = parseInt(answerSettings[0].value);
       } else {
         possibleAnswers.value = 1;

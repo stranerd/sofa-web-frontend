@@ -42,7 +42,7 @@
             :key="index"
             :activity="activity"
             :custom-class="'!bg-white shadow-custom cursor-pointer relative'"
-            @click="openQuiz(activity)"
+            @click.stop="openQuiz(activity)"
             :isWrapped="true"
           >
             <div
@@ -231,36 +231,38 @@
 </template>
 
 <script lang="ts">
-import { scrollToTop } from "@/composables"
+import { scrollToTop } from "@/composables";
 import {
-createQuizData,
-moreOptions,
-openQuiz,
-showMoreOptionHandler,
-showMoreOptions,
-} from "@/composables/library"
+  AllQuzzies,
+  createQuizData,
+  moreOptions,
+  openQuiz,
+  showMoreOptionHandler,
+  showMoreOptions,
+  showStudyMode,
+} from "@/composables/library";
 import {
-createQuizGame,
-goToStudyMode,
-otherTasks,
-selectedQuizId,
-selectedQuizMode,
-userIsParticipating,
-} from "@/composables/quiz"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
-import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
+  createQuizGame,
+  goToStudyMode,
+  otherTasks,
+  selectedQuizId,
+  selectedQuizMode,
+  userIsParticipating,
+} from "@/composables/quiz";
+import { Logic } from "sofa-logic";
+import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import { ResourceType } from "sofa-logic/src/logic/types/domains/study";
 import {
-SofaActivityCard,
-SofaButton,
-SofaEmptyState,
-SofaIcon,
-SofaIconCard,
-SofaModal,
-SofaNormalText,
-} from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
-import { useMeta } from "vue-meta"
+  SofaActivityCard,
+  SofaButton,
+  SofaEmptyState,
+  SofaIcon,
+  SofaIconCard,
+  SofaModal,
+  SofaNormalText,
+} from "sofa-ui-components";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { useMeta } from "vue-meta";
 
 export default defineComponent({
   components: {
@@ -317,10 +319,6 @@ export default defineComponent({
       title: "Quizzes",
     });
 
-    const AllQuzzies = ref(Logic.Study.AllQuzzies);
-
-    const showStudyMode = ref(false);
-
     onMounted(() => {
       scrollToTop();
     });
@@ -357,8 +355,8 @@ export default defineComponent({
     const setQuizzes = () => {
       quizzes.value.length = 0;
 
-      AllQuzzies.value.results.forEach((quiz) => {
-        quizzes.value.push(createQuizData(quiz))
+      AllQuzzies.value?.results.forEach((quiz) => {
+        quizzes.value.push(createQuizData(quiz));
       });
     };
 
