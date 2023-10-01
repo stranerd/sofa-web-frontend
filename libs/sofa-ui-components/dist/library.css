@@ -2761,6 +2761,10 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
     align-items: center !important;
   }
 
+  .mdlg\:\!justify-start {
+    justify-content: flex-start !important;
+  }
+
   .mdlg\:\!justify-center {
     justify-content: center !important;
   }

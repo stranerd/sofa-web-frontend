@@ -715,18 +715,18 @@ export default defineComponent({
         selectedTab.value = "content";
       }
 
-      // if (!props.isMinimal) {
-      //   tabs.value.push(
-      //     {
-      //       name: "Ratings",
-      //       key: "ratings",
-      //     },
-      //     {
-      //       name: "Creator",
-      //       key: "creator",
-      //     }
-      //   );
-      // }
+      if (!props.isMinimal) {
+        tabs.value.push(
+          {
+            name: "Ratings",
+            key: "ratings",
+          }
+          // {
+          //   name: "Creator",
+          //   key: "creator",
+          // }
+        );
+      }
 
       if (props.type == "course") {
         tabs.value.push({

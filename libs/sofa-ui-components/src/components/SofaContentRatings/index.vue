@@ -15,7 +15,7 @@
         >
           <div class="flex flex-row">
             <sofa-normal-text :customClass="'mdlg:!text-xl !text-lg'">
-              {{ data.total }}.0
+              {{ data.total }}
             </sofa-normal-text>
             <sofa-normal-text
               :customClass="'mdlg:!text-xl  !text-lg'"
@@ -73,7 +73,11 @@
       :key="index"
     >
       <div>
-        <sofa-avatar :photoUrl="review.user.photoUrl" :size="'44'" />
+        <sofa-avatar
+          :photoUrl="review.user.photoUrl"
+          :size="'44'"
+          :userId="review.user.id"
+        />
       </div>
 
       <div class="flex flex-col space-y-1">

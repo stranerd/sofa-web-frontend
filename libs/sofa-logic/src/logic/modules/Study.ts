@@ -3,7 +3,7 @@ import Common from './Common'
 import { Logic } from '..'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Conditions, QueryParams } from '../types/common'
-import { AddTagInput } from '../types/forms/common'
+import { AddReviewInput, AddTagInput } from '../types/forms/common'
 import {
   Course,
   Folder,
@@ -24,6 +24,7 @@ import {
 } from '../types/forms/study'
 import { capitalize, reactive } from 'vue'
 import { Tags } from '../types/domains/interactions'
+import { Review } from '../types/domains/conversations'
 
 export default class Study extends Common {
   constructor() {
@@ -80,6 +81,8 @@ export default class Study extends Common {
         popular: (Course | Quiz)[]
       }
     | undefined
+  public SingleReview: Review | undefined
+  public AllReviews: Paginated<Review> | undefined
 
   // Form input
   public CreateTagForm: AddTagInput | undefined
@@ -97,6 +100,7 @@ export default class Study extends Common {
   public ReorderQuizQuestionsForm: ReorderQuizInput | undefined
   public MoveItemToCourseForm: AddItemToCourseInput | undefined
   public UpdateCourseSectionForm: UpdateCourseSectionsInput | undefined
+  public AddReviewForm: AddReviewInput | undefined
 
   public questionSettings = reactive([])
   public selectedQuestion = reactive({})
@@ -126,26 +130,7 @@ export default class Study extends Common {
         '2': 0,
         '1': 0,
       },
-      reviews: [
-        {
-          user: {
-            name: 'Blessing J.',
-            photoUrl: '/images/desdemona.png',
-          },
-          rating: 4,
-          review:
-            'This is truly amazing. Help me understand how I should approach o’chem. Thank you for sharing',
-        },
-        {
-          user: {
-            name: 'Blessing J.',
-            photoUrl: '/images/desdemona.png',
-          },
-          rating: 4,
-          review:
-            'This is truly amazing. Help me understand how I should approach o’chem. Thank you for sharing',
-        },
-      ],
+      reviews: [],
     },
     user: {
       name: '',
@@ -1777,6 +1762,60 @@ export default class Study extends Common {
     })
   }
 
+  public GetReviews = (uniqueId: string, type: 'quizzes' | 'courses') => {
+    return $api.interactions.reviews
+      .fetch({
+        where: [
+          {
+            field: 'entity.id',
+            value: uniqueId,
+            condition: Conditions.eq,
+          },
+          {
+            field: 'entity.type',
+            value: type,
+            condition: Conditions.eq,
+          },
+        ],
+      })
+      .then((response) => {
+        this.AllReviews = response.data
+        return response.data
+      })
+  }
+
+  public GetSingleReview = (uniqueId: string, type: 'quizzes' | 'courses') => {
+    return $api.interactions.reviews
+      .fetch({
+        where: [
+          {
+            field: 'entity.id',
+            value: uniqueId,
+            condition: Conditions.eq,
+          },
+          {
+            field: 'entity.type',
+            value: type,
+            condition: Conditions.eq,
+          },
+          {
+            field: 'user.id',
+            value: Logic.Auth.AuthUser.id,
+            condition: Conditions.eq,
+          },
+        ],
+      })
+      .then((response) => {
+        if (response.data.results.length) {
+          this.SingleReview = response.data.results[0]
+        } else {
+          this.SingleReview = undefined
+        }
+
+        return response.data
+      })
+  }
+
   public GetFileMedia = (fileId: string) => {
     return $api.study.file.getFileMedia(fileId).then((response) => {
       this.SingleMediaFile = response.data
@@ -1851,6 +1890,30 @@ export default class Study extends Common {
           Logic.Common.showLoader({
             show: true,
             message: 'Material added to folder',
+            type: 'success',
+          })
+          return response.data
+        })
+        .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
+        })
+    }
+  }
+
+  public AddReview = () => {
+    if (this.AddReviewForm) {
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      })
+      return $api.interactions.reviews
+        .post(null, this.AddReviewForm)
+        .then((response) => {
+          this.SingleReview = response.data
+          Logic.Common.hideLoader()
+          Logic.Common.showLoader({
+            show: true,
+            message: 'Your review has been added',
             type: 'success',
           })
           return response.data
