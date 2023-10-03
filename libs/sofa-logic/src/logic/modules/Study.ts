@@ -1891,7 +1891,9 @@ export default class Study extends Common {
           Logic.Common.hideLoader()
           Logic.Common.showLoader({
             show: true,
-            message: 'Material added to folder',
+            message: this.SaveItemToFolderForm.add
+              ? 'Material added to folder'
+              : 'Material removed from folder',
             type: 'success',
           })
           return response.data

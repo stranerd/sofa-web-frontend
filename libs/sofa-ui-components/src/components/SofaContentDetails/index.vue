@@ -48,9 +48,21 @@
             <div
               class="mdlg:!flex flex-row items-center justify-end space-x-4 hidden"
             >
-              <sofa-icon :name="'flag'" :customClass="'h-[16px] '" />
-              <sofa-icon :name="'share'" :customClass="'h-[16px] '" />
-              <sofa-icon :name="'bookmark'" :customClass="'h-[16px] '" />
+              <sofa-icon
+                :name="'flag'"
+                :customClass="'h-[16px] cursor-pointer '"
+                @click="actions.report()"
+              />
+              <sofa-icon
+                :name="'share'"
+                :customClass="'h-[16px] cursor-pointer'"
+                @click="actions.share()"
+              />
+              <sofa-icon
+                :name="'save'"
+                :customClass="'h-[16px] cursor-pointer'"
+                @click="actions.save()"
+              />
             </div>
           </div>
           <sofa-normal-text :customClass="'text-left'">
@@ -658,6 +670,13 @@ export default defineComponent({
     },
     similarContents: {
       type: Array as () => any[],
+    },
+    actions: {
+      type: Object as () => {
+        report: Function;
+        share: Function;
+        save: Function;
+      },
     },
   },
   name: "SofaContentDetails",

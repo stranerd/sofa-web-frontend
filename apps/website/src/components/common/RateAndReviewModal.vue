@@ -61,7 +61,10 @@
             </div>
           </template>
 
-          <div :class="`flex flex-col pb-3 ${tutor ? 'pt-2' : ''} `">
+          <div
+            :class="`flex flex-col pb-3 ${tutor ? 'pt-2' : ''} `"
+            v-if="hasRatings"
+          >
             <sofa-ratings
               :count="formData.ratings"
               v-model="formData.ratings"
@@ -75,7 +78,7 @@
             <sofa-textarea
               :padding="'px-3 py-4'"
               :custom-class="'bg-backgroundGray custom-border'"
-              :placeholder="'Write a short review'"
+              :placeholder="'Write a short message'"
               v-model="formData.review"
               :rich-editor="false"
               :text-area-style="'!bg-backgroundGray custom-border'"
@@ -140,6 +143,10 @@ export default defineComponent({
     canClose: {
       type: Boolean,
       default: false,
+    },
+    hasRatings: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: ["OnReviewSubmitted"],
