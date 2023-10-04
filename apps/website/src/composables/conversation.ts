@@ -189,6 +189,7 @@ const setConversations = (goToIndex = -1, limit = 0) => {
 }
 
 const selectConversation = (convoId: string) => {
+  itIsTutorRequest.value = false
   if (Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm') {
     showMoreOptions.value = false
     Logic.Common.GoToRoute('/chat/' + convoId)
@@ -452,6 +453,10 @@ const acceptOrRejectTutorRequest = (accept: boolean) => {
         setConversations()
         selectConversation(selectedTutorRequestData.value.convoId)
       })
+    } else {
+      Logic.Common.hideLoader()
+      Logic.Conversations.SingleConversation = undefined
+      Logic.Common.GoToRoute('/chat')
     }
   })
 }

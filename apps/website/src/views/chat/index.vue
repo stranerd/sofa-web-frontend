@@ -1,5 +1,5 @@
 <template>
-  <component :is="currentComponent">
+  <dashboard-layout>
     <!-- For pending tutor verification -->
     <div
       class="w-full flex flex-row items-center space-x-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0 mdlg:hidden"
@@ -304,7 +304,7 @@
 
         <!-- Tutor request message -->
         <div
-          class="w-full flex flex-row items-start justify-start px-4 py-4"
+          class="w-full mdlg:flex flex-row items-start justify-start px-4 py-4 hidden"
           v-if="itIsTutorRequest"
         >
           <div
@@ -569,7 +569,7 @@
         </div>
       </template>
     </template>
-  </component>
+  </dashboard-layout>
 </template>
 
 <script lang="ts">
@@ -581,7 +581,6 @@ import {
   SofaIcon,
   SofaNormalText,
   SofaHeaderText,
-  SofaIconCard,
   SofaCustomInput,
   SofaDeletePrompt,
   SofaEmptyState,
@@ -708,7 +707,6 @@ export default defineComponent({
     SofaIcon,
     SofaNormalText,
     SofaHeaderText,
-    SofaIconCard,
     ConversationMessages,
     SofaCustomInput,
     SofaDeletePrompt,

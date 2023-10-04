@@ -67,6 +67,11 @@
             :customClass="'h-[17px] '"
             :name="'tutor-black'"
             @click="showAddTutor = true"
+            v-if="
+              !itIsNewMessage &&
+              Logic.Users.getUserType() == 'student' &&
+              !selectedTutorRequestData
+            "
           />
           <sofa-icon
             :customClass="'h-[23px]'"
@@ -161,6 +166,7 @@
           showAddTutor = false;
         }
       "
+      @on-request-sent="handleRequestSent"
     />
 
     <!-- Success prompt for tutor request -->
@@ -237,7 +243,8 @@
         >
           <div
             class="w-full flex flex-row items-center justify-start top-0 left-0 sticky bg-white z-30 space-x-3 py-3 px-4 cursor-pointer"
-            @click="addNewChat()"
+            @click="newChat()"
+            v-if="Logic.Users.getUserType() == 'student'"
           >
             <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
             <sofa-normal-text :color="'text-primaryPink'">
@@ -250,15 +257,21 @@
             <chat-list-component
               :customClass="'!rounded-none'"
               :extraStyle="'px-3'"
+              @itemSelected="
+                () => {
+                  showMoreOptions = false;
+                }
+              "
             />
           </div>
 
           <div
             class="absolute w-full bottom-0 left-0 bg-white z-50 px-4 py-4 b border-t-[1px] border-[#F1F6FA] flex flex-col space-y-4"
+            v-if="!itIsNewMessage && Logic.Users.getUserType() == 'student'"
           >
             <div
               class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-              v-if="selectedTutorRequestData"
+              v-if="selectedTutorRequestData && SingleConversation.tutor"
               @click.stop="
                 showEndSession = true;
                 selectedConvoId = SingleConversation.id;
@@ -282,13 +295,6 @@
               <sofa-normal-text :color="'text-primaryGreen'">
                 Add a tutor
               </sofa-normal-text>
-            </div>
-
-            <div
-              class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-            >
-              <sofa-icon :customClass="'h-[16px]'" :name="'star-outline'" />
-              <sofa-normal-text> Starred messages </sofa-normal-text>
             </div>
 
             <div
@@ -575,6 +581,24 @@ export default defineComponent({
       }
     });
 
+    const handleRequestSent = () => {
+      showAddTutor.value = false;
+      showTutorRequestSubmited.value = true;
+      showMoreOptions.value = false;
+    };
+
+    const newChat = () => {
+      if (Messages.value) {
+        Messages.value = undefined;
+      }
+
+      itIsNewMessage.value = true;
+
+      showMoreOptions.value = false;
+
+      Logic.Common.GoToRoute("/chat/new");
+    };
+
     watch(SingleConversation, () => {
       if (SingleConversation.value) {
         chatList.forEach((chat) => {
@@ -627,6 +651,8 @@ export default defineComponent({
       showTutorRequestSubmited,
       showEndSession,
       itIsNewMessage,
+      handleRequestSent,
+      newChat,
     };
   },
 });
