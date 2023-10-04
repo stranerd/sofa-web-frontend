@@ -1491,7 +1491,11 @@ export default class Study extends Common {
     })
   }
 
-  public GetCoursesWithQuery = (query = 'nill', tagId = '', userId = '') => {
+  public GetCoursesWithQuery = async (
+    query = 'nill',
+    tagId = '',
+    userId = '',
+  ) => {
     const whereQuery = []
 
     if (tagId && tagId != 'nill') {
@@ -1508,6 +1512,8 @@ export default class Study extends Common {
         value: userId,
         condition: Conditions.eq,
       })
+
+      await Logic.Users.GetUser(userId)
     }
 
     whereQuery.push({
@@ -1529,7 +1535,11 @@ export default class Study extends Common {
       })
   }
 
-  public GetQuizzesWithQuery = (query = 'nill', tagId = '', userId = '') => {
+  public GetQuizzesWithQuery = async (
+    query = 'nill',
+    tagId = '',
+    userId = '',
+  ) => {
     const whereQuery = []
 
     if (tagId && tagId != 'nill') {
@@ -1546,6 +1556,8 @@ export default class Study extends Common {
         value: userId,
         condition: Conditions.eq,
       })
+
+      await Logic.Users.GetUser(userId)
     }
 
     whereQuery.push({
