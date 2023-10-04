@@ -6,6 +6,7 @@
         close ? close() : null;
       }
     "
+    :can-close="true"
   >
     <div
       class="mdlg:!w-[60%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"

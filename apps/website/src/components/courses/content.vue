@@ -54,6 +54,7 @@
         <sofa-empty-state
           :title="'You have no access'"
           :subTitle="'Purchase this course to start learning with it'"
+          :custom-class="'h-[380px]'"
           :actionLabel="`Buy ${
             SingleCourse.price.amount
               ? Logic.Common.convertToMoney(
@@ -104,7 +105,6 @@ export default defineComponent({
         [""];
       },
     },
-
     selectedMaterial: {
       type: Object as () => any,
     },

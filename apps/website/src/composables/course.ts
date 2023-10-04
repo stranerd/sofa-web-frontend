@@ -1,3 +1,4 @@
+import { trim } from 'lodash'
 import { Logic } from 'sofa-logic'
 import { SelectOption } from 'sofa-logic/src/logic/types/common'
 import {
@@ -15,6 +16,7 @@ const courseSettingForm = reactive({
   topic: '',
   price: '0',
   contentType: '',
+  tagString: '',
 })
 
 const allTopics = ref<SelectOption[]>([])
@@ -22,6 +24,7 @@ const allGenericTags = ref<SelectOption[]>([])
 const contentTypeOptions = ref<SelectOption[]>([])
 
 const courseSettingSaved = ref(false)
+const hasUnsavedChanges = ref(false)
 
 const updateCourseSectionForm = reactive<UpdateCourseSectionsInput>({
   sections: [],
@@ -114,7 +117,12 @@ const updateCourse = (formComp: any) => {
       amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tags: courseSettingForm.tags,
+    tags: courseSettingForm.tags
+      .filter((item) => item != '')
+      .concat(
+        ...courseSettingForm.tagString.split(',').map((item) => trim(item)),
+      )
+      .filter((item) => item != ''),
     title: courseSettingForm.title,
     topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,
@@ -133,6 +141,11 @@ const updateCourse = (formComp: any) => {
           message: 'Course updated',
           type: 'success',
         })
+
+        // update tags
+        Logic.Study.GetTags({
+          all: true,
+        })
       }
     })
     .catch((error) => {
@@ -146,9 +159,23 @@ const updateCourseSections = () => {
       id: Logic.Study.SingleCourse.id,
       sections: updateCourseSectionForm.sections,
     }
-    Logic.Study.UpdateCourseSection().then(() => {
-      //
-    })
+
+    const unsectionedSection = updateCourseSectionForm.sections.filter(
+      (item) => {
+        return item.label == 'unsectioned'
+      },
+    )[0]
+
+    Logic.Study.UpdateCourseSectionForm.sections = updateCourseSectionForm.sections.filter(
+      (item) => {
+        return item.label != 'unsectioned'
+      },
+    )
+
+    Logic.Study.UpdateCourseSectionForm.sections.push(unsectionedSection)
+
+    Logic.Study.SaveCourseChangesToLocal(Logic.Study.UpdateCourseSectionForm)
+    hasUnsavedChanges.value = true
   }
 }
 
@@ -216,6 +243,7 @@ export {
   addCourseFileForm,
   allGenericTags,
   contentTypeOptions,
+  hasUnsavedChanges,
   createCourse,
   updateCourse,
   getTopics,

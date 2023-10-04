@@ -38,6 +38,7 @@
         :itemIsPurchased="PurchasedItems.includes(contentDetails.id)"
         :similarContents="similarContents"
         :type="contentType"
+        :contentId="contentDetails.id"
       />
     </div>
 
@@ -408,39 +409,42 @@ export default defineComponent({
     };
 
     const setQuizData = () => {
-      contentType.value = "quiz";
-      contentDetails.id = SingleQuiz.value.courseId || SingleQuiz.value.id;
-      contentDetails.title = SingleQuiz.value.title;
-      contentDetails.price = 0;
-      contentDetails.status = SingleQuiz.value.status;
-      contentDetails.image = SingleQuiz.value.photo
-        ? SingleQuiz.value.photo.link
-        : "/images/default.png";
-      contentDetails.info = SingleQuiz.value.description;
-      contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-        SingleQuiz.value.createdAt
-      ).format("DD/MM/YYYY")}`;
-      contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`;
-      contentDetails.labels.color = `pink`;
-      contentDetails.labels.main = `Quiz`;
-      contentDetails.tags = SingleQuiz.value.tagIds.map((id) => {
-        return Logic.Study.GetTagName(id);
-      });
-
-      contentDetails.user.name = SingleQuiz.value.user?.bio.name.full;
-      contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
-        ? SingleQuiz.value.user.bio.photo.link
-        : "";
-
-      contentDetails.questions.length = 0;
-      AllQuestions.value?.results.forEach((question) => {
-        contentDetails.questions.push({
-          type: question.type,
-          content: question.question,
-          duration: Logic.Common.EquivalentsSecondsInString[question.timeLimit],
-          answer: "",
+      if (SingleQuiz.value) {
+        contentType.value = "quiz";
+        contentDetails.id = SingleQuiz.value?.courseId || SingleQuiz.value?.id;
+        contentDetails.title = SingleQuiz.value.title;
+        contentDetails.price = 0;
+        contentDetails.status = SingleQuiz.value.status;
+        contentDetails.image = SingleQuiz.value.photo
+          ? SingleQuiz.value.photo.link
+          : "/images/default.png";
+        contentDetails.info = SingleQuiz.value.description;
+        contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
+          SingleQuiz.value.createdAt
+        ).format("DD/MM/YYYY")}`;
+        contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`;
+        contentDetails.labels.color = `pink`;
+        contentDetails.labels.main = `Quiz`;
+        contentDetails.tags = SingleQuiz.value.tagIds.map((id) => {
+          return Logic.Study.GetTagName(id);
         });
-      });
+
+        contentDetails.user.name = SingleQuiz.value.user?.bio.name.full;
+        contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
+          ? SingleQuiz.value.user.bio.photo.link
+          : "";
+
+        contentDetails.questions.length = 0;
+        AllQuestions.value?.results.forEach((question) => {
+          contentDetails.questions.push({
+            type: question.type,
+            content: question.question,
+            duration:
+              Logic.Common.EquivalentsSecondsInString[question.timeLimit],
+            answer: "",
+          });
+        });
+      }
     };
 
     const buyCourse = () => {
@@ -545,7 +549,7 @@ export default defineComponent({
         setQuizData();
         Logic.Interactions.CreateViewForm = {
           entity: {
-            id: SingleQuiz.value.id,
+            id: SingleQuiz.value?.id,
             type: "quizzes",
           },
         };

@@ -35,6 +35,8 @@ export default class Study extends Common {
   public AllOtherTags: Paginated<Tags> | undefined
   public SingleTag: Tags | undefined
   public AllFolders: Paginated<Folder> | undefined
+  public AllFoldersCourses: Course[] | undefined
+  public AllFoldersQuizzes: Quiz[] | undefined
   public SingleFolder: Folder | undefined
   public AllQuzzies: Paginated<Quiz> | undefined
   public SingleQuiz: Quiz | undefined
@@ -97,6 +99,9 @@ export default class Study extends Common {
   public UpdateCourseSectionForm: UpdateCourseSectionsInput | undefined
 
   public questionSettings = reactive([])
+  public selectedQuestion = reactive({})
+  public quizDataUpdate = Math.random() * 100000
+  public quizQuestionDeleted = Math.random() * 100000
   public contentDetails = reactive<ContentDetails>({
     type: 'course',
     price: 0,
@@ -179,7 +184,7 @@ export default class Study extends Common {
         set.push({
           q: questionOptions.value,
           // @ts-ignore
-          a: questions.match[index].value,
+          a: questions.match ? questions.match[index].value : '',
         })
       })
     }
@@ -298,6 +303,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'a',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -307,6 +313,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'b',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -316,6 +323,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'c',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -325,6 +333,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'd',
           answer: '',
+          showRemove: false,
         },
       ],
       settings: [
@@ -368,6 +377,7 @@ export default class Study extends Common {
           id: '',
           value: 'a',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -377,6 +387,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -386,6 +397,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: '',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -395,6 +407,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: '',
+          showRemove: false,
         },
       ],
       settings: [
@@ -430,6 +443,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'True',
           answer: 'true',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -439,6 +453,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: 'False',
           answer: '',
+          showRemove: false,
         },
       ],
       settings: [
@@ -547,6 +562,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -556,6 +572,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'b',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -565,6 +582,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'c',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -574,6 +592,7 @@ export default class Study extends Common {
           id: '',
           value: '',
           answer: 'd',
+          showRemove: false,
         },
       ],
       settings: [
@@ -614,6 +633,7 @@ export default class Study extends Common {
           id: '',
           value: 'a',
           answer: 'a',
+          showRemove: false,
         },
         {
           shape: 'triangle',
@@ -623,6 +643,7 @@ export default class Study extends Common {
           id: '',
           value: 'b',
           answer: 'b',
+          showRemove: false,
         },
         {
           shape: 'square',
@@ -632,6 +653,7 @@ export default class Study extends Common {
           id: '',
           value: 'c',
           answer: 'c',
+          showRemove: false,
         },
         {
           shape: 'kite',
@@ -641,6 +663,7 @@ export default class Study extends Common {
           id: '',
           value: 'd',
           answer: 'd',
+          showRemove: false,
         },
       ],
       match: [
@@ -649,36 +672,40 @@ export default class Study extends Common {
           text: 'Enter match',
           shapeSize: 'h-[23px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '1',
           answer: '1',
+          showRemove: false,
         },
         {
           shape: 'triangle',
           text: 'Enter match',
           shapeSize: 'h-[20px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '2',
           answer: '2',
+          showRemove: false,
         },
         {
           shape: 'square',
           text: 'Enter match',
           shapeSize: 'h-[20px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '3',
           answer: '3',
+          showRemove: false,
         },
         {
           shape: 'kite',
           text: 'Enter match',
           shapeSize: 'h-[24px]',
           isRadio: false,
-          id: '',
+          id: this.makeid(8),
           value: '4',
           answer: '4',
+          showRemove: false,
         },
       ],
       settings: [
@@ -904,12 +931,15 @@ export default class Study extends Common {
               value: '',
               type: 'drop',
               extraClass: `dragDrop${Logic.Common.makeid(6)}`,
+              id: Logic.Common.makeid(6),
+              content: [],
             })
 
             options.data[1].content.push({
               label: item.value,
               type: 'answer-box',
               extraClass: `drag${Logic.Common.makeid(6)}`,
+              id: Logic.Common.makeid(6),
             })
 
             allAnswers.push(item.value)
@@ -979,6 +1009,8 @@ export default class Study extends Common {
         timeLimit: questionData.timeLimit,
         currentTime: questionData.timeLimit,
         id: questionData.id,
+        hover: false,
+        explanation: questionData.explanation,
       })
     })
 
@@ -1012,6 +1044,7 @@ export default class Study extends Common {
           id: this.makeid(8),
           value: option,
           answer: '',
+          showRemove: false,
         }
       }
 
@@ -1032,7 +1065,7 @@ export default class Study extends Common {
             Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
         }
         if (setting.type == 'total-options') {
-          setting.value = `${question.data.options.length}`
+          setting.value = `${question.data?.options?.length}`
         }
         if (setting.type == 'correct-anwsers') {
           setting.value = `${question.data.answers?.length}`
@@ -1040,7 +1073,9 @@ export default class Study extends Common {
       })
 
       question.data.answers?.forEach((index) => {
-        questionData.options[index].answer = questionData.options[index].value
+        if (questionData.options[index]) {
+          questionData.options[index].answer = questionData.options[index].value
+        }
       })
 
       questionData.content = question.question
@@ -1055,9 +1090,19 @@ export default class Study extends Common {
       })
 
       question.data.answers?.forEach((item, index) => {
-        questionData.options[index].value = item
-        questionData.options[index].answer = item
+        if (item) {
+          questionData.options[index].value = item
+          questionData.options[index].answer = item
+        }
       })
+
+      if (question.data.answers) {
+        questionData.options.forEach((option, index) => {
+          if (question.data.answers[index] == undefined) {
+            questionData.options.splice(index, 1)
+          }
+        })
+      }
 
       questionData.content = question.question
     }
@@ -1099,7 +1144,7 @@ export default class Study extends Common {
         }
       })
 
-      question.data.answers.forEach((item, index) => {
+      question.data.answers?.forEach((item, index) => {
         questionData.options[index].value = item
         questionData.options[index].answer = item
       })
@@ -1135,7 +1180,7 @@ export default class Study extends Common {
       question.data.type == 'fillInBlanks'
     ) {
       const questionContent = question.question
-        .trim()
+        ?.trim()
         .replaceAll(`${question.data.indicator}`, '{}')
         .split('}')
 
@@ -1147,7 +1192,7 @@ export default class Study extends Common {
 
       questionData.data.length = 0
 
-      questionContent.forEach((item) => {
+      questionContent?.forEach((item) => {
         if (item.trim()) {
           const itemStrings = item.split('')
 
@@ -1247,8 +1292,43 @@ export default class Study extends Common {
   }
 
   public GetFolders = (filters: QueryParams) => {
-    return $api.study.folder.fetch(filters).then((response) => {
-      this.AllFolders = response.data
+    return new Promise((resolve) => {
+      $api.study.folder.fetch(filters).then(async (response) => {
+        const allFolderCourses: string[] = []
+        const allFolderQuizzes: string[] = []
+        this.AllFolders = response.data
+
+        this.AllFolders.results.forEach((folder) => {
+          allFolderCourses.push(...folder.saved.courses)
+          allFolderQuizzes.push(...folder.saved.quizzes)
+        })
+
+        const allQuizzes = await $api.study.quiz.fetch({
+          where: [
+            {
+              field: 'id',
+              condition: Conditions.in,
+              value: [...new Set(allFolderQuizzes)],
+            },
+          ],
+        })
+
+        this.AllFoldersQuizzes = allQuizzes.data.results
+
+        const allCourses = await $api.study.course.fetch({
+          where: [
+            {
+              field: 'id',
+              condition: Conditions.in,
+              value: [...new Set(allFolderCourses)],
+            },
+          ],
+        })
+
+        this.AllFoldersCourses = allCourses.data.results
+
+        resolve('')
+      })
     })
   }
 
@@ -1608,6 +1688,24 @@ export default class Study extends Common {
     })
   }
 
+  public GoToStudyMode = (mode: string, quizId) => {
+    if (mode != 'assignment' && mode != 'game' && mode != 'test') {
+      Logic.Common.GoToRoute(`/quiz/${quizId}?mode=${mode}`)
+    }
+
+    if (mode == 'test') {
+      Logic.Common.showLoader({ loading: true })
+      Logic.Plays.CreateTest(quizId)
+        .then((data) => {
+          Logic.Common.hideLoader()
+          Logic.Common.GoToRoute(
+            `/quiz/empty?mode=tutor_test&testId=${data.id}&is_student=yes`,
+          )
+        })
+        .catch(() => {})
+    }
+  }
+
   public GetHomeMaterials = () => {
     return new Promise(async (resolve) => {
       this.HomeMaterials = {
@@ -1798,10 +1896,108 @@ export default class Study extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
           throw error
-          //
         })
     }
+  }
+
+  public SaveQuizChangesToLocal = (
+    quizId: string,
+    questionId: string,
+    UpdateQuestionForm: CreateQuestionInput,
+  ) => {
+    let localQuizData: {
+      quizId: string
+      questionId: string
+      UpdateQuestionForm: CreateQuestionInput
+    }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
+
+    const questionData = localQuizData.filter(
+      (item) => item.quizId == quizId && item.questionId == questionId,
+    )
+
+    if (questionData.length) {
+      // remove old data
+      localQuizData = localQuizData.filter(
+        (item) => !(item.quizId == quizId && item.questionId == questionId),
+      )
+
+      // update and add new data
+      localQuizData.unshift({
+        quizId,
+        questionId,
+        UpdateQuestionForm,
+      })
+    } else {
+      localQuizData.push({
+        quizId,
+        questionId,
+        UpdateQuestionForm,
+      })
+    }
+
+    localStorage.setItem(`quiz_question_update`, JSON.stringify(localQuizData))
+  }
+
+  public SaveCourseChangesToLocal = (
+    UpdateCourseSections: UpdateCourseSectionsInput,
+  ) => {
+    localStorage.setItem(
+      `couse_section_update`,
+      JSON.stringify(UpdateCourseSections),
+    )
+  }
+
+  public SaveCourseLocalChanges = () => {
+    if (localStorage.getItem('couse_section_update')) {
+      const content = JSON.parse(localStorage.getItem('couse_section_update'))
+      this.UpdateCourseSectionForm = content
+      this.UpdateCourseSection()
+    }
+  }
+
+  public saveQuizLocalChanges = (silent = false) => {
+    return new Promise(async (resolve) => {
+      if (localStorage.getItem('quiz_question_update')) {
+        let localQuizData: {
+          quizId: string
+          questionId: string
+          UpdateQuestionForm: CreateQuestionInput
+        }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
+
+        Logic.Common.showLoader({
+          loading: true,
+          show: false,
+        })
+
+        await localQuizData.forEach(async (requestData) => {
+          if (
+            this.AllQuestions.results.filter(
+              (item) => item.id == requestData.UpdateQuestionForm.id,
+            )[0]
+          ) {
+            this.UpdateQuestionForm = requestData.UpdateQuestionForm
+            await this.UpdateQuestion(true, requestData.quizId)
+          }
+        })
+
+        Logic.Common.hideLoader()
+        localStorage.removeItem('quiz_question_update')
+
+        resolve('')
+      }
+      if (!silent) {
+        Logic.Common.showLoader({
+          show: true,
+          loading: false,
+          message: 'All changes have been saved',
+          type: 'success',
+        })
+      }
+
+      resolve('')
+    })
   }
 
   public PublishQuiz = (id: string) => {
@@ -1845,8 +2041,7 @@ export default class Study extends Common {
           return response.data
         })
         .catch((error) => {
-          //
-          Logic.Common.hideLoader()
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
@@ -1858,10 +2053,10 @@ export default class Study extends Common {
         .updateQuestion(quizId, this.UpdateQuestionForm)
         .then((response) => {
           this.UpdatedQuestion = response.data
-          this.GetQuestions(quizId)
+          // this.GetQuestions(quizId)
         })
-        .catch((errro) => {
-          //
+        .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
@@ -1898,7 +2093,10 @@ export default class Study extends Common {
           Logic.Common.hideLoader()
           return response.data
         })
-        .catch((error) => {})
+        .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
+          throw error
+        })
     }
   }
 
@@ -1929,9 +2127,9 @@ export default class Study extends Common {
               sections: currentSections,
             }
 
-            this.UpdateCourseSection().then(() => {
-              this.CoursableItemRemoved = Logic.Common.makeid(16)
-            })
+            this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
+
+            this.CoursableItemRemoved = Logic.Common.makeid(16)
           } else {
             // remove items not in coursable
             currentSections.forEach((item) => {
@@ -1945,9 +2143,8 @@ export default class Study extends Common {
               sections: currentSections,
             }
 
-            this.UpdateCourseSection().then(() => {
-              this.NewCoursableItem = Logic.Common.makeid(16)
-            })
+            this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
+            this.NewCoursableItem = Logic.Common.makeid(16)
           }
 
           return response.data
@@ -1959,15 +2156,27 @@ export default class Study extends Common {
   }
 
   public UpdateCourseSection = () => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     if (this.UpdateCourseSectionForm) {
       return $api.study.course
         .updateCourseSections(this.UpdateCourseSectionForm)
         .then((response) => {
+          localStorage.removeItem('couse_section_update')
           this.SingleCourse = response.data
+          Logic.Common.showLoader({
+            show: true,
+            loading: false,
+            message: 'All changes have been saved',
+            type: 'success',
+          })
+
           return response.data
         })
         .catch((error) => {
-          //
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
@@ -1984,8 +2193,7 @@ export default class Study extends Common {
         Logic.Common.hideLoader()
       })
       .catch((error) => {
-        //
-        Logic.Common.hideLoader()
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
@@ -1996,7 +2204,7 @@ export default class Study extends Common {
         this.SingleCourse = response.data
       })
       .catch((error) => {
-        //
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
@@ -2014,7 +2222,7 @@ export default class Study extends Common {
           return this.SingleFile
         })
         .catch((error) => {
-          console.log(error)
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
@@ -2026,8 +2234,8 @@ export default class Study extends Common {
         .then((response) => {
           this.UpdatedFile = response.data
         })
-        .catch((errro) => {
-          //
+        .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
@@ -2067,13 +2275,18 @@ export default class Study extends Common {
   }
 
   public DeleteQuiz = (id: string) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
     return $api.study.quiz
       .delete(id)
       .then((response) => {
-        //
+        Logic.Common.hideLoader()
+        Logic.Common.goBack()
       })
       .catch((error) => {
-        //
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
@@ -2085,8 +2298,9 @@ export default class Study extends Common {
     return $api.study.quiz
       .deleteQuestion(quizId, id)
       .then((response) => {
-        Logic.Study.GetQuestions(quizId)
-        Logic.Common.hideLoader()
+        Logic.Study.GetQuestions(quizId).then(() => {
+          this.quizQuestionDeleted = Math.random() * 100000
+        })
         return response.data
       })
       .catch((error) => {

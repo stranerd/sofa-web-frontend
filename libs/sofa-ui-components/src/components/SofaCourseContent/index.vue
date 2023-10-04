@@ -6,25 +6,27 @@
       :key="index"
     >
       <template v-if="option">
-        <div
-          class="w-full flex flex-row items-center justify-between cursor-pointer px-1"
-          @click="
-            option?.opened ? (option.opened = false) : (option.opened = true);
-            selectedSection = index;
-          "
-        >
-          <div class="flex flex-row items-center space-x-2">
-            <sofa-normal-text :customClass="'!font-bold'">{{
-              option.name
-            }}</sofa-normal-text>
+        <template v-if="option.name != 'unsectioned'">
+          <div
+            class="w-full flex flex-row items-center justify-between cursor-pointer px-1"
+            @click="
+              option?.opened ? (option.opened = false) : (option.opened = true);
+              selectedSection = index;
+            "
+          >
+            <div class="flex flex-row items-center space-x-2">
+              <sofa-normal-text :customClass="'!font-bold'">{{
+                option.name
+              }}</sofa-normal-text>
+            </div>
+            <div class="md:flex flex-row items-center space-x-3 hidden">
+              <sofa-icon
+                :customClass="'h-[7px] cursor-pointer'"
+                :name="option.opened ? 'chevron-up' : 'chevron-down'"
+              />
+            </div>
           </div>
-          <div class="md:flex flex-row items-center space-x-3 hidden">
-            <sofa-icon
-              :customClass="'h-[7px] cursor-pointer'"
-              :name="option.opened ? 'chevron-up' : 'chevron-down'"
-            />
-          </div>
-        </div>
+        </template>
 
         <template v-if="option.opened">
           <div class="w-full space-y-1">

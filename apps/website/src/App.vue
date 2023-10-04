@@ -7,7 +7,6 @@
       <div class="bar"></div>
     </div>
   </div>
-
   <metainfo>
     <template #title="{ content }">{{
       content ? `${content} | SOFA` : `SOFA`
@@ -24,16 +23,28 @@
     "
     :type="loaderSetup.type"
   />
+  <!-- Save to folder -->
+  <save-to-folder
+    v-if="showSaveToFolder"
+    :close="
+      () => {
+        showSaveToFolder = false;
+      }
+    "
+  />
 </template>
 <script lang="ts">
 import { useMeta } from "vue-meta";
 import { defineComponent, onMounted, ref } from "vue";
 import { Logic } from "sofa-logic";
 import { SofaAlert } from "sofa-ui-components";
+import SaveToFolder from "./components/common/SaveToFolder.vue";
+import { showSaveToFolder } from "./composables/library";
 
 export default defineComponent({
   components: {
     SofaAlert,
+    SaveToFolder,
   },
   setup() {
     useMeta({
@@ -49,6 +60,7 @@ export default defineComponent({
 
     return {
       loaderSetup,
+      showSaveToFolder,
     };
   },
 });

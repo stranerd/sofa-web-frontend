@@ -134,6 +134,15 @@
         <sofa-header-text :customClass="'!font-bold py-4'">
           {{ title }}
         </sofa-header-text>
+        <div class="flex flex-row space-x-2 items-center" v-if="badges.length">
+          <sofa-badge
+            :color="item.color"
+            v-for="(item, index) in badges"
+            :key="index"
+          >
+            {{ item.text }}
+          </sofa-badge>
+        </div>
       </div>
 
       <div class="md:!flex hidden flex-row items-center space-x-4">
@@ -224,6 +233,7 @@ import SofaModal from "../SofaModal";
 import { Conditions } from "../../types/domains/common";
 import notification from "./notification.vue";
 import { SofaTextField } from "../SofaForm";
+import SofaBadge from "../SofaBadge";
 
 export default defineComponent({
   components: {
@@ -235,6 +245,7 @@ export default defineComponent({
     SofaModal,
     notification,
     SofaTextField,
+    SofaBadge,
   },
   props: {
     goBack: {
@@ -272,6 +283,13 @@ export default defineComponent({
     showAddItem: {
       type: Function,
       required: true,
+    },
+    badges: {
+      type: Array as () => {
+        text: string;
+        color: string;
+      }[],
+      default: [],
     },
   },
   name: "SofaTopBar",

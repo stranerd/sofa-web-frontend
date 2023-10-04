@@ -111,6 +111,12 @@
                       '/marketplace/' + content.id + '?type=course'
                     )
                   "
+                  :bookmark-action="
+                    () => {
+                      showSaveToFolder = true;
+                      selectedFolderMaterailToAdd = content;
+                    }
+                  "
                 ></sofa-item-card>
               </div>
 
@@ -129,6 +135,13 @@
                       Logic.Common.GoToRoute(
                         '/marketplace/' + activity.id + '?type=course'
                       )
+                    "
+                    :has-bookmark="true"
+                    :bookmark-action="
+                      () => {
+                        showSaveToFolder = true;
+                        selectedFolderMaterailToAdd = activity;
+                      }
                     "
                   />
                 </div>
@@ -188,6 +201,12 @@
                       '/marketplace/' + content.id + '?type=quiz'
                     )
                   "
+                  :bookmark-action="
+                    () => {
+                      showSaveToFolder = true;
+                      selectedFolderMaterailToAdd = content;
+                    }
+                  "
                 ></sofa-item-card>
               </div>
 
@@ -206,6 +225,13 @@
                       Logic.Common.GoToRoute(
                         '/marketplace/' + activity.id + '?type=quiz'
                       )
+                    "
+                    :has-bookmark="true"
+                    :bookmark-action="
+                      () => {
+                        showSaveToFolder = true;
+                        selectedFolderMaterailToAdd = activity;
+                      }
                     "
                   />
                 </div>
@@ -234,7 +260,7 @@
       </div>
       <!-- Bottom filter for sm screens -->
       <div
-        class="fixed bg-backgroundGray mdlg:!hidden bottom-0 left-0 px-4 py-4 flex flex-col w-full"
+        class="fixed bg-backgroundGray mdlg:!hidden bottom-0 left-0 px-4 py-4 flex flex-col w-full z-50"
       >
         <div
           class="bg-primaryPurple custom-border py-3 flex flex-row items-center justify-center space-x-2"
@@ -324,8 +350,13 @@ import MarketplaceFilter from "@/components/marketplace/Filter.vue";
 import { search } from "@/composables/marketplace";
 import { useRoute } from "vue-router";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import { createCourseData, createQuizData } from "@/composables/library";
-import { ResourceType } from 'sofa-logic/src/logic/types/domains/study';
+import {
+  createCourseData,
+  createQuizData,
+  selectedFolderMaterailToAdd,
+  showSaveToFolder,
+} from "@/composables/library";
+import { ResourceType } from "sofa-logic/src/logic/types/domains/study";
 
 export default defineComponent({
   components: {
@@ -348,7 +379,7 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: true,
         useRouteQuery: true,
-        queries: ["tagId", "q"],
+        queries: ["tagId", "q", "userId"],
       },
       {
         domain: "Study",
@@ -358,7 +389,7 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: true,
         useRouteQuery: true,
-        queries: ["tagId", "q"],
+        queries: ["tagId", "q", "userId"],
       },
       {
         domain: "Study",
@@ -416,7 +447,6 @@ export default defineComponent({
 
     const resourceContents = ref<ResourceType[]>([]);
     const quizContents = ref<ResourceType[]>([]);
-
     const setCourses = () => {
       resourceContents.value.length = 0;
       AllCourses.value.results.forEach((course) => {
@@ -433,32 +463,6 @@ export default defineComponent({
 
     const setQuery = () => {
       const route = useRoute();
-
-      if (route.query?.tagId) {
-        selectedOptions.value.push({
-          name: Logic.Study.GetTagName(route.query?.tagId.toString()),
-          active: false,
-          id: route.query?.tagId.toString(),
-          query: {
-            field: "tagIds",
-            value: route.query?.tagId.toString(),
-            condition: Conditions.in,
-          },
-        });
-      }
-
-      if (route.query?.userId) {
-        selectedOptions.value.push({
-          name: "",
-          active: false,
-          id: route.query?.userId.toString(),
-          query: {
-            field: "user.id",
-            value: route.query?.userId.toString(),
-            condition: Conditions.in,
-          },
-        });
-      }
 
       if (route.query?.q) {
         if (route.query?.q != "nill") {
@@ -508,7 +512,7 @@ export default defineComponent({
 
       Logic.Common.debounce(() => {
         if (searchQuery.value != "nill") {
-          search(allQueries, true);
+          search(allQueries, false);
         }
       }, 500);
     });
@@ -524,6 +528,8 @@ export default defineComponent({
       quizContents,
       filterOptions,
       selectedFilterOption,
+      showSaveToFolder,
+      selectedFolderMaterailToAdd,
       search,
     };
   },

@@ -27,7 +27,9 @@ export class ReadOnlyApiService extends BaseApiService {
 
   public async get(id: string): Promise<AxiosResponse<any, any>> {
     try {
-      if (!id) return { data: null } as any
+      if (!id) {
+        id = 'empty'
+      }
 
       const response: AxiosResponse = await this.axiosInstance.get(
         this.getUrl(id),

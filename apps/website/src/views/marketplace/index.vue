@@ -155,6 +155,12 @@
                     `?type=${content.labels.main.toLowerCase()}`
                 )
               "
+              :bookmark-action="
+                () => {
+                  showSaveToFolder = true;
+                  selectedFolderMaterailToAdd = content;
+                }
+              "
             ></sofa-item-card>
           </div>
         </div>
@@ -206,6 +212,12 @@
                     content.id +
                     `?type=${content.labels.main.toLowerCase()}`
                 )
+              "
+              :bookmark-action="
+                () => {
+                  showSaveToFolder = true;
+                  selectedFolderMaterailToAdd = content;
+                }
               "
             ></sofa-item-card>
           </div>
@@ -259,6 +271,12 @@
                     `?type=${content.labels.main.toLowerCase()}`
                 )
               "
+              :bookmark-action="
+                () => {
+                  showSaveToFolder = true;
+                  selectedFolderMaterailToAdd = content;
+                }
+              "
             ></sofa-item-card>
           </div>
         </div>
@@ -305,6 +323,10 @@ import {
   setMarketplaceMaterials,
   textbookContents,
 } from "@/composables/marketplace";
+import {
+  selectedFolderMaterailToAdd,
+  showSaveToFolder,
+} from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -398,6 +420,8 @@ export default defineComponent({
       mainCards,
       sectionTags,
       marketplaceContents,
+      showSaveToFolder,
+      selectedFolderMaterailToAdd,
       handleSearchLg,
       search,
     };

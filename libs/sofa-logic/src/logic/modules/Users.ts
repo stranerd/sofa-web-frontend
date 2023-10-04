@@ -106,7 +106,7 @@ export default class Users extends Common {
     }
 
     if (task == 'quiz_game') {
-      return this.UserProfile.account.meta.playedGames || this.UserProfile.account.meta.hostedGames
+      return localStorage.getItem('quiz_action_game')
     }
   }
 

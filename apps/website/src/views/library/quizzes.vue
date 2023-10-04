@@ -42,11 +42,7 @@
             :key="index"
             :activity="activity"
             :custom-class="'!bg-white shadow-custom cursor-pointer relative'"
-            @click="
-              selectedQuizId = activity.id;
-              showStudyMode = true;
-              selectedQuizMode = '';
-            "
+            @click="openQuiz(activity)"
             :isWrapped="true"
           >
             <div
@@ -55,7 +51,7 @@
               <sofa-icon
                 :name="'more-options-horizontal'"
                 :customClass="'h-[6px] '"
-                @click.stop="showMoreOptionHandler(activity, 'quiz')"
+                @click.stop="showMoreOptionHandler(activity)"
               />
             </div>
           </sofa-activity-card>
@@ -235,35 +231,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
-import { useMeta } from "vue-meta";
-import { scrollToTop } from "@/composables";
-import {
-  SofaIcon,
-  SofaNormalText,
-  SofaActivityCard,
-  SofaModal,
-  SofaIconCard,
-  SofaButton,
-  SofaEmptyState,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import {
-  createQuizGame,
-  goToStudyMode,
-  otherTasks,
-  selectedQuizId,
-  selectedQuizMode,
-  userIsParticipating,
-} from "@/composables/quiz";
-import { ResourceType } from "sofa-logic/src/logic/types/domains/study";
+import { scrollToTop } from "@/composables"
 import {
 createQuizData,
-  moreOptions,
-  showMoreOptionHandler,
-  showMoreOptions,
-} from "@/composables/library";
+moreOptions,
+openQuiz,
+showMoreOptionHandler,
+showMoreOptions,
+} from "@/composables/library"
+import {
+createQuizGame,
+goToStudyMode,
+otherTasks,
+selectedQuizId,
+selectedQuizMode,
+userIsParticipating,
+} from "@/composables/quiz"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
+import {
+SofaActivityCard,
+SofaButton,
+SofaEmptyState,
+SofaIcon,
+SofaIconCard,
+SofaModal,
+SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
@@ -361,8 +358,8 @@ export default defineComponent({
       quizzes.value.length = 0;
 
       AllQuzzies.value.results.forEach((quiz) => {
-        quizzes.value.push(createQuizData(quiz));
-      })
+        quizzes.value.push(createQuizData(quiz))
+      });
     };
 
     const filterItem = () => {
@@ -405,6 +402,7 @@ export default defineComponent({
       showMoreOptionHandler,
       showMoreOptions,
       moreOptions,
+      openQuiz,
     };
   },
 });

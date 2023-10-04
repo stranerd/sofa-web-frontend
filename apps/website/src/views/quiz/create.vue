@@ -28,6 +28,19 @@
           ],
         },
         ...actionButtonItems,
+        {
+          IsOutlined: !hasUnsavedChanges,
+          name: 'Save',
+          handler: () => {
+            Logic.Study.saveQuizLocalChanges();
+          },
+        },
+      ],
+      badges: [
+        {
+          text: SingleQuiz.status,
+          color: SingleQuiz.status != 'published' ? 'gray' : 'green',
+        },
       ],
     }"
     :hideSmNavigator="{
@@ -103,29 +116,23 @@
       >
         <template
           v-if="
-            selectedQuestionData &&
             (Logic.Common.mediaQuery() == 'sm' ||
               Logic.Common.mediaQuery() == 'md') &&
             !showSettingModal
           "
         >
           <sofa-question-content
-            :question="selectedQuestionData"
-            v-if="AllQuestions"
-            :questionType="selectedQuestionData?.image"
+            v-if="AllQuestions && AllQuestions.results.length"
           />
         </template>
         <template
           v-if="
             Logic.Common.mediaQuery() != 'sm' &&
-            Logic.Common.mediaQuery() != 'md' &&
-            selectedQuestionData
+            Logic.Common.mediaQuery() != 'md'
           "
         >
           <sofa-question-content
-            :question="selectedQuestionData"
-            v-if="AllQuestions"
-            :questionType="selectedQuestionData?.image"
+            v-if="AllQuestions && AllQuestions.results.length"
           />
         </template>
       </div>
@@ -219,9 +226,7 @@
                 showMoreOptions = false;
               }
             "
-            :questionSettings="selectedQuestionData.settings"
-            :questionId="selectedQuestionData.id"
-            :questionType="selectedQuestionData.key"
+            v-if="AllQuestions && AllQuestions.results.length"
           />
         </div>
       </sofa-modal>
@@ -231,13 +236,9 @@
       <div
         class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col space-y-4 h-full justify-between relative overflow-y-hidden"
       >
-        <template v-if="selectedQuestionData">
-          <sofa-question-options
-            :questionSettings="selectedQuestionData.settings"
-            :questionId="selectedQuestionData.id"
-            :questionType="selectedQuestionData.key"
-          />
-        </template>
+        <sofa-question-options
+          v-if="AllQuestions && AllQuestions.results.length"
+        />
       </div>
     </template>
   </dashboard-layout>
@@ -315,7 +316,15 @@ export default defineComponent({
     const SingleQuiz = ref(Logic.Study.SingleQuiz);
     const AllQuestions = ref(Logic.Study.AllQuestions);
 
+    const UpdatedQuestion = ref(Logic.Study.UpdatedQuestion);
+
+    const questionSettings = ref(Logic.Study.questionSettings);
+
     const showSettingModal = ref(false);
+
+    const hasUnsavedChanges = ref(false);
+
+    const quizDataUpdate = ref(Logic.Study.quizDataUpdate);
 
     const mobileTitle = ref("Create quiz");
 
@@ -365,19 +374,30 @@ export default defineComponent({
     onMounted(() => {
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
       Logic.Study.watchProperty("AllQuestions", AllQuestions);
+      Logic.Study.watchProperty("UpdatedQuestion", UpdatedQuestion);
+      Logic.Study.watchProperty("questionSettings", questionSettings);
+      Logic.Study.watchProperty("quizDataUpdate", quizDataUpdate);
       scrollToTop();
       switchToEdit();
 
-      // set save button
-      if (SingleQuiz.value?.title == "Untitled Quiz") {
-        actionButtonItems.push({
-          IsOutlined: false,
-          name: "Save",
-          handler: () => {
-            showSettingModal.value = true;
-          },
-        });
-      }
+      // Clear local data
+      localStorage.removeItem("quiz_question_update");
+
+      setTimeout(() => {
+        hasUnsavedChanges.value = false;
+      }, 1000);
+    });
+
+    watch(UpdatedQuestion, () => {
+      hasUnsavedChanges.value = false;
+    });
+
+    watch(questionSettings, () => {
+      hasUnsavedChanges.value = true;
+    });
+
+    watch(quizDataUpdate, () => {
+      hasUnsavedChanges.value = true;
     });
 
     watch(SingleQuiz, () => {
@@ -431,6 +451,7 @@ export default defineComponent({
       showSettings,
       handleMobileGoback,
       actionButtonItems,
+      hasUnsavedChanges,
     };
   },
 });

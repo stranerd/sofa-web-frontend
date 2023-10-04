@@ -14,7 +14,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, toRef, watch, markRaw } from "vue";
 import { Chart, registerables } from "chart.js";
 import { SofaHeaderText } from "../SofaTypography";
 Chart.register(...registerables);
@@ -54,36 +54,46 @@ export default defineComponent({
 
     const pieChart = ref();
 
+    const dataRef = toRef(props, "data");
+
     onMounted(() => {
       const ctx: any = document.getElementById("pieChart" + randomIndex);
 
       if (ctx && props.data) {
-        pieChart.value = new Chart(ctx, {
-          type: "doughnut",
-          data: props.data,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: props.cutoutPercentage,
-            borderColor: "transparent",
-            plugins: {
-              legend: {
-                display: false,
-              },
-              tooltip: {
-                backgroundColor: "whitesmoke",
-                bodyColor: "#294940",
-                titleColor: "#294940",
+        const chartData = markRaw(
+          new Chart(ctx, {
+            type: "doughnut",
+            data: props.data,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: props.cutoutPercentage,
+              borderColor: "transparent",
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  backgroundColor: "whitesmoke",
+                  bodyColor: "#294940",
+                  titleColor: "#294940",
+                },
               },
             },
-          },
-        });
+          })
+        );
+
+        pieChart.value = chartData;
       }
     });
 
     const updateChart = () => {
       pieChart.value?.update();
     };
+
+    watch(dataRef, () => {
+      updateChart();
+    });
 
     return {
       randomIndex,

@@ -19,7 +19,7 @@
       </div>
       <div class="flex flex-col">
         <sofa-normal-text
-          :customClass="'!font-semibold text-left !line-clamp-1'"
+          :customClass="'!font-semibold text-left !line-clamp-1  '"
         >
           {{ chat.title }}
         </sofa-normal-text>
@@ -73,7 +73,7 @@ export default defineComponent({
   components: {
     SofaNormalText,
     SofaAvatar,
-    SofaIcon
+    SofaIcon,
   },
   props: {
     chat: {

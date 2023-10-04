@@ -61,6 +61,7 @@
         />
 
         <sofa-text-field
+          v-if="Logic.Users.UserProfile.roles.isVerified"
           :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'"
           type="text"
@@ -109,20 +110,37 @@
     </div>
 
     <div class="w-full flex flex-col space-y-2">
-      <sofa-select
+      <sofa-text-field
         :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-4'"
         :name="'Tags'"
         ref="tags"
-        :placeholder="'Tags'"
-        :rules="[FormValidations.RequiredRule]"
-        :autoComplete="true"
+        :placeholder="'Tags (Comma separated for multiple)'"
         :borderColor="'border-transparent'"
-        :options="allGenericTags"
-        :default-options="defaultTags"
-        v-model="courseSettingForm.tags"
-        :isMultiple="true"
+        v-model="courseSettingForm.tagString"
       />
+      <div class="w-full flex flex-row flex-wrap items-center">
+        <template v-for="(item, index) in courseSettingForm.tags" :key="index">
+          <div class="py-2 pr-2" v-if="item != 'Not set'">
+            <div
+              class="py-2 px-3 border-[2px] flex flex-row items-center space-x-2 custom-border border-[#E1E6EB]"
+            >
+              <sofa-normal-text :color="'text-[#78828C]'">
+                {{ item }}
+              </sofa-normal-text>
+              <sofa-icon
+                @click="
+                  courseSettingForm.tags = courseSettingForm.tags.filter(
+                    (tag) => item != tag
+                  )
+                "
+                :name="'circle-close'"
+                :customClass="'h-[17px] cursor-pointer'"
+              ></sofa-icon>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
 
     <div
@@ -238,6 +256,8 @@ export default defineComponent({
       },
     ];
 
+    const newTags = ref("");
+
     const formComp = ref<any>();
 
     const courseImageUrl = ref("");
@@ -267,9 +287,12 @@ export default defineComponent({
         defaultTags.value = course.tagIds.map((id) =>
           Logic.Study.GetTagName(id)
         );
-        console.log(courseSettingForm.tags);
         courseImageUrl.value = course.photo?.link || "";
         courseSettingForm.contentType = "";
+        setTimeout(() => {
+          formComp.value.fieldsToValidate?.tags.emptyValue();
+          courseSettingForm.tagString = "";
+        }, 300);
       } else {
         courseSettingForm.title = "";
         courseSettingForm.description = "";
@@ -282,6 +305,7 @@ export default defineComponent({
           formComp.value.fieldsToValidate?.title.emptyValue();
           formComp.value.fieldsToValidate?.topic.emptyValue();
           formComp.value.fieldsToValidate?.description.emptyValue();
+          formComp.value.fieldsToValidate?.tags.emptyValue();
           if (formComp.value.fieldsToValidate["price.amount"]) {
             formComp.value.fieldsToValidate["price.amount"]?.emptyValue();
           }
@@ -311,6 +335,7 @@ export default defineComponent({
       allGenericTags,
       contentTypeOptions,
       defaultTags,
+      newTags,
     };
   },
   data() {

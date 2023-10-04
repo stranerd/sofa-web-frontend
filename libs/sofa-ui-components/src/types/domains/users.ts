@@ -10,6 +10,10 @@ export interface SingleUser {
   hash: string
   id: string
   bio: User
+  socials: {
+    ref: string
+    link: string
+  }[]
   roles: {
     isAdmin: boolean
     isSuperAdmin: boolean
@@ -24,6 +28,10 @@ export interface SingleUser {
     connections: number[]
     lastUpdatedAt: number
   }
+  location: {
+    country: string
+    state: string
+  }
   account: {
     meta: {
       connects: number
@@ -34,6 +42,9 @@ export interface SingleUser {
       documents: number
       videos: number
       total: number
+      students: number
+      publishedQuizzes: number
+      publishedCourses: number
     }
     rankings: {
       daily: RankingValue
@@ -51,9 +62,11 @@ export interface SingleUser {
       count: number
       avg: number
     }
+    organizationsIn: string[]
   }
   type?: {
     type: string
+    name: string
     school: {
       type: string
       exams: {
@@ -61,14 +74,15 @@ export interface SingleUser {
         startDate: number
         endDate: number
         courseIds: string[]
-      }
+      }[]
       departmentId: string
       institutionId: string
       facultyId: string
     }
   }
   tutor: {
-    conversations: []
+    conversations: string[]
+    topics: string[]
   }
   ai: {
     name: string
@@ -96,6 +110,21 @@ export interface UserVerification {
   }
   pending: boolean
   accepted: boolean
+  createdAt: number
+  updatedAt: number
+}
+
+export interface TutorRequest {
+  hash: string
+  id: string
+  userId: string
+  topicId: string
+  verification: FileData
+  qualification: FileData[]
+  pending: boolean
+  accepted: boolean
+  testId: string
+  testFinished: boolean
   createdAt: number
   updatedAt: number
 }

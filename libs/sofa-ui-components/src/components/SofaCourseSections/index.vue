@@ -5,55 +5,61 @@
     <div class="flex flex-col space-y-6 h-full w-full">
       <template v-if="sectionOptions.length">
         <template v-for="(option, index) in sectionOptions" :key="index">
-          <div class="flex flex-col w-full space-y-3">
+          <div
+            :class="`flex flex-col w-full  ${
+              option.name != 'unsectioned' ? 'space-y-3' : ''
+            }`"
+          >
             <template v-if="option">
-              <div
-                class="w-full flex flex-row items-center justify-between cursor-pointer"
-                @click="
-                  option?.opened
-                    ? (option.opened = false)
-                    : (option.opened = true);
-                  selectedSection = index;
-                "
-              >
-                <div class="flex flex-row items-center space-x-2">
-                  <sofa-normal-text
-                    :customClass="'!font-bold'"
-                    v-if="!option.edit"
-                    >{{ option.name }}</sofa-normal-text
-                  >
-                  <input
-                    v-else
-                    @click.stop="null"
-                    class="outline-none focus:outline-slate-200 font-bold px-2 placeholder:font-normal w-full border-[1px] border-gray-100 rounded text-bodyBlack"
-                    v-model="option.name"
-                    autofocus
-                    placeholder="Section name"
-                    @blur="option.edit = false"
-                  />
+              <template v-if="option.name != 'unsectioned'">
+                <div
+                  class="w-full flex flex-row items-center justify-between cursor-pointer"
+                  @click="
+                    option?.opened
+                      ? (option.opened = false)
+                      : (option.opened = true);
+                    selectedSection = index;
+                  "
+                >
+                  <div class="flex flex-row items-center space-x-2">
+                    <sofa-normal-text
+                      :customClass="'!font-bold'"
+                      v-if="!option.edit"
+                      >{{ option.name }}</sofa-normal-text
+                    >
+                    <input
+                      v-else
+                      @click.stop="null"
+                      class="outline-none focus:outline-slate-200 font-bold px-2 placeholder:font-normal w-full border-[1px] border-gray-100 rounded text-bodyBlack"
+                      v-model="option.name"
+                      autofocus
+                      placeholder="Section name"
+                      @blur="option.edit = false"
+                    />
+                  </div>
+                  <div class="flex flex-row items-center space-x-3">
+                    <sofa-icon
+                      @click.stop="option.edit = true"
+                      :customClass="'h-[15px] cursor-pointer'"
+                      :name="'edit-gray'"
+                    />
+                    <sofa-icon
+                      @click.stop="removeSection(index)"
+                      :customClass="'h-[15px] cursor-pointer'"
+                      :name="'trash-gray'"
+                    />
+                    <sofa-icon
+                      :customClass="'h-[7px] cursor-pointer'"
+                      :name="option.opened ? 'chevron-up' : 'chevron-down'"
+                    />
+                  </div>
                 </div>
-                <div class="flex flex-row items-center space-x-3">
-                  <sofa-icon
-                    @click.stop="option.edit = true"
-                    :customClass="'h-[15px] cursor-pointer'"
-                    :name="'edit-gray'"
-                  />
-                  <sofa-icon
-                    @click.stop="removeSection(index)"
-                    :customClass="'h-[15px] cursor-pointer'"
-                    :name="'trash-gray'"
-                  />
-                  <sofa-icon
-                    :customClass="'h-[7px] cursor-pointer'"
-                    :name="option.opened ? 'chevron-up' : 'chevron-down'"
-                  />
-                </div>
-              </div>
+              </template>
 
-              <template v-if="option.opened">
+              <template v-if="option.opened || option.name == 'unsectioned'">
                 <draggable
                   v-model="option.materials"
-                  :group="option.id"
+                  group="course-item"
                   class="w-full space-y-3"
                   item-key="id"
                   handle=".handle"
@@ -112,6 +118,7 @@
                     selectedSection = index;
                     handleItemSelected();
                   "
+                  v-if="option.name != 'unsectioned'"
                 >
                   <sofa-icon
                     :customClass="'h-[17px]'"
@@ -344,8 +351,10 @@ export default defineComponent({
                 questions: `${quiz.questions.length} questions`,
                 description: quiz.description,
                 ratings: {
-                  total: "4",
-                  label: "24 ratings",
+                  total: Math.round(quiz.ratings.avg),
+                  label: `${quiz.ratings.count} rating${
+                    quiz.ratings.count > 1 ? "s" : ""
+                  }`,
                 },
                 user: {
                   photoUrl: `${quiz.user.bio?.photo?.link}`,
@@ -392,6 +401,22 @@ export default defineComponent({
       handleItemSelected();
     });
 
+    const addItemToSection = (item: any, index: any) => {
+      if (item.type == "quiz") {
+        const quizData = SingleCourseQuizzes.value?.filter(
+          (quiz) => quiz.id == item.id
+        );
+        if (quizData.length) {
+          setSectionMaterial(undefined, quizData[0], false, index);
+        }
+      } else {
+        const fileData = SingleCourseFiles.value?.filter(
+          (file) => file.id == item.id
+        );
+        setSectionMaterial(fileData[0], undefined, false, index);
+      }
+    };
+
     const setSections = (index = 0) => {
       staticSectionOptions.value.length = 0;
       staticPropSections.value.length = 0;
@@ -413,20 +438,55 @@ export default defineComponent({
         });
 
         section.items.map((item) => {
-          if (item.type == "quiz") {
-            const quizData = SingleCourseQuizzes.value?.filter(
-              (quiz) => quiz.id == item.id
-            );
-            if (quizData.length) {
-              setSectionMaterial(undefined, quizData[0], false, index);
-            }
-          } else {
-            const fileData = SingleCourseFiles.value?.filter(
-              (file) => file.id == item.id
-            );
-            setSectionMaterial(fileData[0], undefined, false, index);
+          addItemToSection(item, index);
+        });
+      });
+
+      let remainCoursableItems = JSON.parse(
+        JSON.stringify(SingleCourse.value.coursables)
+      );
+
+      SingleCourse.value.sections.forEach((items) => {
+        items.items.forEach((eachItem) => {
+          const itemIndex = remainCoursableItems.findIndex(
+            (x) => x.id == eachItem.id
+          );
+          if (itemIndex != -1) {
+            remainCoursableItems = remainCoursableItems.filter((thisItem) => {
+              return thisItem.id != eachItem.id;
+            });
           }
         });
+      });
+
+      const unsectionedSection = SingleCourse.value.sections.filter(
+        (section) => {
+          return section.label == "unsectioned";
+        }
+      );
+
+      let unsectionedIndex = SingleCourse.value.sections.length - 1;
+
+      if (unsectionedSection.length == 0) {
+        staticSectionOptions.value.push({
+          name: "unsectioned",
+          id: Logic.Common.makeid(9),
+          materials: [],
+          opened: true,
+          edit: false,
+          items: [],
+        });
+
+        staticPropSections.value.push({
+          items: [],
+          label: "unsectioned",
+        });
+
+        unsectionedIndex++;
+      }
+
+      remainCoursableItems.map((item) => {
+        addItemToSection(item, unsectionedIndex);
       });
 
       sectionOptions.length = 0;
@@ -436,10 +496,33 @@ export default defineComponent({
     };
 
     const addNewSection = () => {
-      props.sectionInput.sections.push({
+      const currentSectionsLenght = props.sectionInput.sections.length;
+      const newSectionPosition =
+        currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1;
+      props.sectionInput.sections.splice(newSectionPosition, 0, {
         items: [],
-        label: `Section ${sectionOptions.length + 1}`,
+        label: `Section ${sectionOptions.length}`,
       });
+
+      sectionOptions.splice(newSectionPosition, 0, {
+        name: `Section ${sectionOptions.length}`,
+        id: Logic.Common.makeid(9),
+        materials: [],
+        opened: true,
+        edit: false,
+        items: [],
+      });
+
+      SingleCourse.value.sections.splice(newSectionPosition, 0, {
+        items: [],
+        label: `Section ${sectionOptions.length}`,
+      });
+
+      Logic.Study.SingleCourse.sections.splice(newSectionPosition, 0, {
+        items: [],
+        label: `Section ${sectionOptions.length}`,
+      });
+
       props.updateSections();
       Logic.Common.showLoader({
         show: true,
@@ -493,54 +576,19 @@ export default defineComponent({
     };
 
     watch(sectionOptions, () => {
-      Logic.Common.debounce(() => {
-        updateLatestSection();
-      }, 300);
+      updateLatestSection();
     });
 
     const removeSection = (index: number) => {
-      const fileMaterials = sectionOptions[index].items
-        .map((item) => {
-          if (item.type == "file") {
-            return item.id;
-          }
-        })
-        .filter((item) => {
-          return item != undefined;
-        });
-
-      let deletedFile = 0;
-      const totalFiles = fileMaterials.length;
-
-      const allFileDeletion: Promise<any>[] = [];
-
-      fileMaterials.forEach((item) => {
-        if (item) {
-          allFileDeletion.push(
-            new Promise((resolve) => {
-              Logic.Study.MoveItemToCourseForm = {
-                add: false,
-                coursableId: item.is,
-                type: "file",
-                id: Logic.Study.SingleCourse.id,
-              };
-              Logic.Study.MoveItemToCourse(true).then((response) => {
-                if (response) {
-                  deletedFile++;
-                  if (deletedFile == totalFiles) {
-                    sectionOptions[index] = undefined;
-                    resolve("");
-                  }
-                }
-              });
-            })
-          );
+      SingleCourse.value.sections = SingleCourse.value.sections.filter(
+        (section, eachIndex) => {
+          return index != eachIndex;
         }
-      });
+      );
 
-      Promise.all(allFileDeletion).then(() => {
-        //
-      });
+      setSections();
+
+      return;
     };
 
     watch(selectedSection, () => {
@@ -568,8 +616,21 @@ export default defineComponent({
     };
 
     watch(UpdatedFile, () => {
-      Logic.Study.GetCourse(Logic.Study.SingleCourse.id).then(() => {
-        setSections();
+      // update section
+      sectionOptions.forEach((option) => {
+        option.materials.forEach((item) => {
+          if (item.id == UpdatedFile.value.id) {
+            item.name = UpdatedFile.value.title;
+          }
+        });
+      });
+
+      // update course file
+      SingleCourseFiles.value.forEach((item) => {
+        if (UpdatedFile.value.id == item.id) {
+          item.title = UpdatedFile.value.title;
+          item.description = UpdatedFile.value.description;
+        }
       });
     });
 

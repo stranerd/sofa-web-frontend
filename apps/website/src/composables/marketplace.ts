@@ -1,7 +1,7 @@
 import { Logic } from 'sofa-logic'
 import { Conditions, QueryParams } from 'sofa-logic/src/logic/types/common'
 import { Course, Quiz } from 'sofa-logic/src/logic/types/domains/study'
-import { SingleUser } from 'sofa-ui-components/src/types/domains/users';
+import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import { reactive, ref } from 'vue'
 
 export interface ContentDetails {
@@ -96,7 +96,7 @@ const search = (query: QueryParams = {}, returnCoursables = false) => {
     value: 'published',
     condition: Conditions.eq,
   })
-  query.limit = 5
+  query.limit = 20
 
   const allRequests: Promise<any>[] = []
 
@@ -184,6 +184,7 @@ const setCourses = (count = 5) => {
         price: course.price.amount,
         ratings: course.ratings,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+        type: 'course',
       })
     } else if (
       pastQuestionTag.length &&
@@ -203,6 +204,7 @@ const setCourses = (count = 5) => {
         price: course.price.amount,
         ratings: course.ratings,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+        type: 'course',
       })
     } else {
       textbookArray.push({
@@ -219,6 +221,7 @@ const setCourses = (count = 5) => {
         price: course.price.amount,
         ratings: course.ratings,
         userPhoto: course.user.bio.photo ? course.user.bio.photo.link : '',
+        type: 'course',
       })
     }
   })
@@ -246,7 +249,9 @@ const setCourses = (count = 5) => {
   }
 }
 
-const extractContent = (item: Quiz | Course) : ContentDetails => {
+const extractContent = (item: Quiz | Course): ContentDetails => {
+  const type: 'course' | 'quiz' =
+    item.__type == 'CourseEntity' ? 'course' : 'quiz'
   return {
     id: item.id,
     subject: Logic.Study.GetTagName(item.topicId),
@@ -261,9 +266,10 @@ const extractContent = (item: Quiz | Course) : ContentDetails => {
       color: item.__type == 'CourseEntity' ? 'orange' : 'pink',
     },
     price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
+    user: item.user,
+    authUserId: Logic.Auth.AuthUser.id,
+    type,
     ratings: item.ratings,
-    user: item.user as any,
-    authUserId: Logic.Users.UserProfile?.id
   }
 }
 

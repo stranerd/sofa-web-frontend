@@ -9,6 +9,7 @@
     :type="topbarOptions.type"
     :showAddItem="handleShowAddItem"
     :custom-class="`${hideSmNavigator.top ? 'hidden mdlg:!flex' : 'flex'}`"
+    :badges="topbarOptions.badges"
   ></sofa-top-bar>
   <div
     :class="` ${
@@ -78,12 +79,17 @@ export default defineComponent({
         type: string;
         title: string;
         actions: any[];
+        badges: {
+          text: string;
+          color: string;
+        }[];
       },
       default: () => {
         return {
           type: "main",
           title: "",
           actions: [],
+          badges: [],
         };
       },
     },

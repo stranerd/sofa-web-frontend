@@ -1,7 +1,9 @@
 <template>
   <div class="w-full flex flex-col h-full space-y-4" v-if="question">
     <div
-      v-if="questionType != 'fill_in_blank' && questionType != 'drag_answer'"
+      v-if="
+        questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'
+      "
       class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] space-x-3"
     >
       <div class="w-[24px]">
@@ -19,7 +21,9 @@
     </div>
     <div
       class="w-full flex flex-row items-center flex-wrap space-x-1 md:!gap-2 gap-1"
-      v-if="questionType == 'fill_in_blank' || questionType == 'drag_answer'"
+      v-if="
+        questionTypeMain == 'fill_in_blank' || questionTypeMain == 'drag_answer'
+      "
     >
       <template v-for="(item, index) in reactiveQuestion.data" :key="index">
         <span class="flex flex-row items-center space-x-1">
@@ -113,65 +117,142 @@
     <div class="w-full grid grid-cols-2 gap-4 pt-4">
       <div
         :class="` ${
-          questionType != 'match' ? 'col-span-2' : 'col-span-1'
+          questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'
         } flex flex-col space-y-4`"
-        v-if="questionType != 'fill_in_blank' && questionType != 'drag_answer'"
+        v-if="
+          questionTypeMain != 'fill_in_blank' &&
+          questionTypeMain != 'drag_answer'
+        "
       >
-        <div
-          v-for="(answer, index) in reactiveQuestion.options"
-          :key="index"
-          :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
-          style="border-width: 2px 2px 4px 2px"
+        <draggable
+          :list="reactiveQuestion.options"
+          class="w-full space-y-4"
+          item-key="id"
+          :group="{ name: 'question-options' }"
+          :disabled="questionTypeMain == 'write_answer'"
         >
-          <div class="flex-grow flex flex-row space-x-3">
-            <sofa-icon
-              :name="answer.shape"
-              :custom-class="`${answer.shapeSize}`"
-            />
-            <input
-              class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
-              :placeholder="answer.text"
-              v-model="answer.value"
-            />
-          </div>
-          <div
-            class="w-[26px] cursor-pointer"
-            v-if="answer.isRadio"
-            @click="answer.isRadio ? setAnswers(answer) : null"
-          >
-            <sofa-icon
-              :name="answer.answer ? 'selected' : 'not-selected'"
-              :custom-class="'h-[23px]'"
-            />
-          </div>
-        </div>
+          <template #item="{ element, index }">
+            <div
+              :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+              style="border-width: 2px 2px 4px 2px"
+              @mouseenter="element.showRemove = true"
+              @mouseleave="element.showRemove = false"
+            >
+              <div class="flex-grow flex flex-row space-x-3">
+                <sofa-icon
+                  :name="element.shape"
+                  :custom-class="`${element.shapeSize}`"
+                  v-if="questionTypeMain != 'write_answer'"
+                />
+                <input
+                  v-if="questionTypeMain != 'write_answer'"
+                  class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                  :placeholder="element.text"
+                  v-model="element.value"
+                  :disabled="questionTypeMain == 'true_false'"
+                />
+                <sofa-custom-input
+                  v-else
+                  class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                  :placeholder="element.text"
+                  v-model="element.value"
+                  :updateValue="element.value"
+                />
+              </div>
+              <div class="flex flex-row items-center space-x-2">
+                <sofa-icon
+                  :name="'remove'"
+                  :custom-class="'h-[23px] cursor-pointer'"
+                  v-if="
+                    element.showRemove &&
+                    questionTypeMain != 'true_false' &&
+                    reactiveQuestion.options.length > optionLimitSettings.min
+                  "
+                  @click="removeOption(index)"
+                />
+                <div
+                  class="w-[26px] cursor-pointer"
+                  v-if="
+                    element.isRadio &&
+                    (questionTypeMain == 'multiple_choice' ||
+                      questionTypeMain == 'true_false')
+                  "
+                  @click="element.isRadio ? setAnswers(element) : null"
+                >
+                  <sofa-icon
+                    :name="element.answer ? 'selected' : 'not-selected'"
+                    :custom-class="'h-[23px]'"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+        </draggable>
       </div>
 
-      <template v-if="questionType == 'match'">
+      <template v-if="questionTypeMain == 'match'">
         <div class="col-span-1 flex flex-col space-y-4">
-          <div
-            v-for="(answer, index) in reactiveQuestion.match"
-            :key="index"
-            :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
-            style="border-width: 2px 2px 4px 2px"
+          <draggable
+            :list="reactiveQuestion.match"
+            class="w-full space-y-4"
+            item-key="id"
+            :group="{ name: 'question-match' }"
           >
-            <div class="flex-grow flex flex-row space-x-3">
-              <sofa-icon
-                :name="answer.shape"
-                :custom-class="`${answer.shapeSize}`"
-              />
-              <input
-                class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
-                :placeholder="answer.text"
-                v-model="answer.value"
-              />
-            </div>
-            <div class="w-[26px]" v-if="answer.isRadio">
-              <sofa-icon :name="'not-selected'" :custom-class="'h-[23px]'" />
-            </div>
-          </div>
+            <template #item="{ element, index }">
+              <div
+                :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+                style="border-width: 2px 2px 4px 2px"
+                @mouseenter="element.showRemove = true"
+                @mouseleave="element.showRemove = false"
+              >
+                <div class="flex-grow flex flex-row space-x-3">
+                  <sofa-icon
+                    :name="element.shape"
+                    :custom-class="`${element.shapeSize}`"
+                  />
+                  <input
+                    class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                    :placeholder="element.text"
+                    v-model="element.value"
+                  />
+                </div>
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-icon
+                    :name="'remove'"
+                    :custom-class="'h-[23px] cursor-pointer'"
+                    v-if="
+                      element.showRemove &&
+                      reactiveQuestion.match.length > optionLimitSettings.min
+                    "
+                    @click="removeOption(index)"
+                  />
+                  <div class="w-[26px]" v-if="element.isRadio">
+                    <sofa-icon
+                      :name="'not-selected'"
+                      :custom-class="'h-[23px]'"
+                    />
+                  </div>
+                </div>
+              </div>
+            </template>
+          </draggable>
         </div>
       </template>
+    </div>
+
+    <div
+      class="w-full flex flex-row justify-end space-x-2 items-center cursor-pointer"
+      v-if="
+        (questionTypeMain == 'multiple_choice' ||
+          questionTypeMain == 'sequence' ||
+          questionTypeMain == 'match' ||
+          questionTypeMain == 'write_answer') &&
+        reactiveQuestion.options.length < optionLimitSettings.max
+      "
+      @click="setQuestionOptions(reactiveQuestion.options.length + 1)"
+    >
+      <sofa-icon :name="'box-plus'" :custom-class="'h-[24px]'" />
+      <sofa-normal-text :color="'text-grayColor'">Add option</sofa-normal-text>
     </div>
 
     <div class="w-full flex flex-col border-t-[1px] border-[#F1F6FA] pt-4">
@@ -202,6 +283,7 @@ import SofaButton from "../SofaButton";
 import { SofaTextarea, SofaCustomInput, SofaFileAttachment } from "../SofaForm";
 import { Logic } from "../../composable";
 import SofaImageLoader from "../SofaImageLoader";
+import draggable from "vuedraggable";
 
 export default defineComponent({
   components: {
@@ -212,31 +294,35 @@ export default defineComponent({
     SofaCustomInput,
     SofaFileAttachment,
     SofaImageLoader,
+    draggable,
   },
   props: {
     customClass: {
       type: String,
       default: "",
     },
-    question: {
-      type: Object as () => any,
-    },
-    questionType: {
-      type: String,
-    },
   },
   name: "SofaQuestionContent",
   setup(props) {
-    const questionRef = toRef(props, "question");
+    const question = ref();
+
+    const questionTypeMain = ref("");
 
     const possibleAnswers = ref(0);
 
+    const optionLimitSettings = reactive({
+      max: 6,
+      min: 2,
+    });
+
     const questionSettings = ref(Logic.Study.questionSettings);
+
+    const selectedQuestion = ref(Logic.Study.selectedQuestion);
 
     const setPossibleAnswers = (answerSettingsDefault: any[] = []) => {
       const answerSettings =
         answerSettingsDefault.length == 0
-          ? questionRef.value.settings.filter(
+          ? question.value.settings.filter(
               (item) => item.type == "correct-anwsers"
             )
           : answerSettingsDefault;
@@ -246,9 +332,13 @@ export default defineComponent({
       } else {
         possibleAnswers.value = 1;
       }
+
+      if (questionTypeMain.value == "multiple_choice") {
+        possibleAnswers.value = 6;
+      }
     };
 
-    const reactiveQuestion = reactive(questionRef.value);
+    const reactiveQuestion = reactive<any>({});
 
     const setAnswers = (answer: any) => {
       let currentlySelectedAnswer = reactiveQuestion.options.filter(
@@ -280,22 +370,141 @@ export default defineComponent({
       });
     };
 
-    watch(questionRef, () => {
-      reactiveQuestion.active = questionRef.value.active;
-      reactiveQuestion.content = questionRef.value.content;
-      reactiveQuestion.id = questionRef.value.id;
-      reactiveQuestion.image = questionRef.value.image;
-      reactiveQuestion.options = questionRef.value.options;
-      reactiveQuestion.placeholder = questionRef.value.placeholder;
-      reactiveQuestion.settings = questionRef.value.settings;
-      reactiveQuestion.type = questionRef.value.type;
-      reactiveQuestion.match = questionRef.value.match;
-      reactiveQuestion.data = questionRef.value.data;
-      reactiveQuestion.itemType = questionRef.value.itemType;
-      reactiveQuestion.explanation = questionRef.value.explanation;
-      reactiveQuestion.questionMedia = questionRef.value.questionMedia;
-      reactiveQuestion.questionMediaBlob = null;
-      setPossibleAnswers();
+    const saveQuizData = (mounted = false) => {
+      Logic.Common.debounce(() => {
+        if (
+          reactiveQuestion.itemType == "writeAnswer" ||
+          reactiveQuestion.itemType == "sequence" ||
+          reactiveQuestion.itemType == "match"
+        ) {
+          reactiveQuestion.options.forEach((option) => {
+            option.answer = option.value;
+          });
+        }
+
+        if (reactiveQuestion.itemType == "match") {
+          reactiveQuestion.match?.forEach((option) => {
+            option.answer = option.value;
+          });
+        }
+
+        Logic.Study.UpdateQuestionForm = Logic.Study.convertQuestionToInput(
+          reactiveQuestion,
+          reactiveQuestion.itemType
+        );
+
+        Logic.Study.UpdateQuestionForm["timeLimit"] =
+          reactiveQuestion.timeLimit;
+
+        if (reactiveQuestion.questionMediaBlob) {
+          Logic.Study.UpdateQuestionForm["questionMedia"] =
+            reactiveQuestion.questionMediaBlob;
+        }
+
+        if (reactiveQuestion.explanation) {
+          Logic.Study.UpdateQuestionForm["explanation"] =
+            reactiveQuestion.explanation;
+        } else {
+          Logic.Study.UpdateQuestionForm["explanation"] = "";
+        }
+
+        Logic.Study.UpdateQuestionForm.id = reactiveQuestion.id;
+
+        if (!mounted) {
+          Logic.Study.quizDataUpdate = Math.random() * 100000;
+
+          Logic.Study.SaveQuizChangesToLocal(
+            Logic.Study.SingleQuiz.id,
+            reactiveQuestion.id,
+            Logic.Study.UpdateQuestionForm
+          );
+
+          Logic.Study.AllQuestions.results.forEach((questionItem) => {
+            if (questionItem.id == Logic.Study.UpdateQuestionForm.id) {
+              questionItem.data = Logic.Study.UpdateQuestionForm.data;
+              questionItem.explanation =
+                Logic.Study.UpdateQuestionForm.explanation;
+              questionItem.question = Logic.Study.UpdateQuestionForm.question;
+              questionItem.timeLimit = Logic.Study.UpdateQuestionForm.timeLimit;
+            }
+          });
+        }
+      }, 500);
+    };
+
+    const setDefaults = () => {
+      if (question.value) {
+        reactiveQuestion.active = question.value.active;
+        reactiveQuestion.content = question.value.content;
+        reactiveQuestion.id = question.value.id;
+        reactiveQuestion.image = question.value.image;
+        reactiveQuestion.options = question.value.options;
+        reactiveQuestion.placeholder = question.value.placeholder;
+        reactiveQuestion.settings = question.value.settings;
+        reactiveQuestion.type = question.value.type;
+        reactiveQuestion.timeLimit = question.value.timeLimit;
+        reactiveQuestion.match = question.value.match || [
+          {
+            shape: "circle",
+            text: "Enter match",
+            shapeSize: "h-[23px]",
+            isRadio: false,
+            id: "",
+            value: "1",
+            answer: "1",
+            showRemove: false,
+          },
+          {
+            shape: "triangle",
+            text: "Enter match",
+            shapeSize: "h-[20px]",
+            isRadio: false,
+            id: "",
+            value: "2",
+            answer: "2",
+            showRemove: false,
+          },
+          {
+            shape: "square",
+            text: "Enter match",
+            shapeSize: "h-[20px]",
+            isRadio: false,
+            id: "",
+            value: "3",
+            answer: "3",
+            showRemove: false,
+          },
+          {
+            shape: "kite",
+            text: "Enter match",
+            shapeSize: "h-[24px]",
+            isRadio: false,
+            id: "",
+            value: "4",
+            answer: "4",
+            showRemove: false,
+          },
+        ];
+        reactiveQuestion.data = question.value.data;
+        reactiveQuestion.itemType = question.value.itemType;
+        reactiveQuestion.explanation = question.value.explanation;
+        reactiveQuestion.questionMedia = question.value.questionMedia;
+        reactiveQuestion.questionMediaBlob = null;
+        questionTypeMain.value = question.value.image;
+
+        setPossibleAnswers();
+        saveQuizData();
+
+        if (questionTypeMain.value == "write_answer") {
+          optionLimitSettings.min = 1;
+        } else {
+          optionLimitSettings.min = 2;
+        }
+      }
+    };
+
+    watch(question, () => {
+      setDefaults();
     });
 
     const addNewDataItem = (type: "answer" | "text") => {
@@ -319,7 +528,7 @@ export default defineComponent({
 
       if (existingOptions.length >= count) {
         if (existingOptions.length > count) {
-          reactiveQuestion.options = questionRef.value.options.slice(0, count);
+          reactiveQuestion.options = question.value.options.slice(0, count);
         }
       } else {
         const availableShapes = ["circle", "triangle", "square", "kite"];
@@ -338,111 +547,226 @@ export default defineComponent({
             id: Logic.Common.makeid(8),
             value: "new",
             answer: "",
+            showRemove: false,
           };
           existingOptions.push(newOption);
         }
 
         // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
       }
+
+      if (questionTypeMain.value == "match") {
+        const existingOptions = reactiveQuestion.match;
+
+        if (existingOptions.length >= count) {
+          if (existingOptions.length > count) {
+            reactiveQuestion.match = question.value.match.slice(0, count);
+          }
+        } else {
+          const availableShapes = ["circle", "triangle", "square", "kite"];
+
+          const amountToAdd = count - reactiveQuestion.match.length;
+
+          for (let step = 0; step < amountToAdd; step++) {
+            const newOption = {
+              shape:
+                availableShapes[
+                  Math.floor(Math.random() * availableShapes.length)
+                ],
+              text: "Enter answer",
+              shapeSize: "h-[23px]",
+              isRadio: false,
+              id: Logic.Common.makeid(8),
+              value: "new",
+              answer: "",
+              showRemove: false,
+            };
+            existingOptions.push(newOption);
+          }
+
+          // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
+        }
+      }
     };
 
     watch(reactiveQuestion, () => {
-      Logic.Common.debounce(() => {
-        if (
-          reactiveQuestion.itemType == "writeAnswer" ||
-          reactiveQuestion.itemType == "sequence" ||
-          reactiveQuestion.itemType == "match"
-        ) {
-          reactiveQuestion.options.forEach((option) => {
-            option.answer = option.value;
-          });
-        }
-
-        if (reactiveQuestion.itemType == "match") {
-          reactiveQuestion.match.forEach((option) => {
-            option.answer = option.value;
-          });
-        }
-        Logic.Study.UpdateQuestionForm = Logic.Study.convertQuestionToInput(
-          reactiveQuestion,
-          reactiveQuestion.itemType
-        );
-
-        Logic.Study.UpdateQuestionForm["timeLimit"] =
-          reactiveQuestion.timeLimit;
-
-        if (reactiveQuestion.questionMediaBlob) {
-          Logic.Study.UpdateQuestionForm["questionMedia"] =
-            reactiveQuestion.questionMediaBlob;
-        }
-
-        if (reactiveQuestion.explanation) {
-          Logic.Study.UpdateQuestionForm["explanation"] =
-            reactiveQuestion.explanation;
-        }
-
-        Logic.Study.UpdateQuestionForm.id = reactiveQuestion.id;
-
-        Logic.Study.UpdateQuestion(true, Logic.Study.SingleQuiz.id);
-      }, 500);
+      saveQuizData(false);
     });
 
     watch(questionSettings, () => {
-      Logic.Common.debounce(() => {
-        // update time limit
-        const timeLimitSetting = questionSettings.value.filter((item) => {
-          return item.type == "time-limit";
-        });
+      // update question type
 
-        if (timeLimitSetting.length) {
-          if (
-            reactiveQuestion.timeLimit !=
-            Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value]
-          ) {
-            reactiveQuestion.timeLimit =
-              Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value];
-          }
-        }
-
-        // update multiple choice optons
-        const optionSettings = questionSettings.value.filter((item) => {
-          return item.type == "total-options";
-        });
-
-        if (optionSettings.length) {
-          const totalOptions = parseInt(optionSettings[0].value);
-
-          if (reactiveQuestion.options.length != totalOptions) {
-            setQuestionOptions(totalOptions);
-          }
-        }
-
-        // possible answers
-        const answersSettings = questionSettings.value.filter((item) => {
-          return item.type == "correct-anwsers";
-        });
-
-        if (answersSettings.length) {
-          const answerOptions = parseInt(answersSettings[0].value);
-
-          if (possibleAnswers.value != answerOptions) {
-            setPossibleAnswers(answersSettings);
-          }
-        }
-
-        reactiveQuestion.settings = questionSettings.value;
+      const questionTypeSetting = questionSettings.value.filter((item) => {
+        return item.type == "question-type";
       });
+
+      if (questionTypeSetting.length) {
+        reactiveQuestion.options = question.value.options;
+        if (
+          questionTypeMain.value != "match" &&
+          questionTypeSetting[0].questionType == "match"
+        ) {
+          reactiveQuestion.options = [
+            {
+              shape: "circle",
+              text: "Enter 1st word/sentence",
+              shapeSize: "h-[23px]",
+              isRadio: false,
+              id: "",
+              value: "a",
+              answer: "a",
+              showRemove: false,
+            },
+            {
+              shape: "triangle",
+              text: "Enter 2nd word/sentence",
+              shapeSize: "h-[20px]",
+              isRadio: false,
+              id: "",
+              value: "b",
+              answer: "b",
+              showRemove: false,
+            },
+            {
+              shape: "square",
+              text: "Enter 3rd word/sentence",
+              shapeSize: "h-[20px]",
+              isRadio: false,
+              id: "",
+              value: "c",
+              answer: "c",
+              showRemove: false,
+            },
+            {
+              shape: "kite",
+              text: "Enter 4th word/sentence",
+              shapeSize: "h-[24px]",
+              isRadio: false,
+              id: "",
+              value: "d",
+              answer: "d",
+              showRemove: false,
+            },
+          ];
+        }
+
+        if (questionTypeSetting[0].questionType == "true_false") {
+          reactiveQuestion.options = [
+            {
+              shape: "circle",
+              text: "True",
+              shapeSize: "h-[23px]",
+              isRadio: true,
+              id: "EaNYLgnn",
+              value: "True",
+              answer: "true",
+              showRemove: false,
+            },
+            {
+              shape: "triangle",
+              text: "False",
+              shapeSize: "h-[20px]",
+              isRadio: true,
+              id: "5cRJaK1Y",
+              value: "False",
+              answer: "",
+              showRemove: false,
+            },
+          ];
+        }
+
+        if (questionTypeSetting[0].questionType == "write_answer") {
+          optionLimitSettings.min = 1;
+        } else {
+          optionLimitSettings.min = 2;
+        }
+
+        reactiveQuestion.itemType = questionTypeSetting[0].itemType;
+        questionTypeMain.value = questionTypeSetting[0].questionType;
+      }
+
+      // update time limit
+      const timeLimitSetting = questionSettings.value.filter((item) => {
+        return item.type == "time-limit";
+      });
+
+      if (timeLimitSetting.length) {
+        if (
+          reactiveQuestion.timeLimit !=
+          Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value]
+        ) {
+          reactiveQuestion.timeLimit =
+            Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value];
+        }
+      }
+
+      // update multiple choice optons
+      const optionSettings = questionSettings.value.filter((item) => {
+        return item.type == "total-options";
+      });
+
+      if (optionSettings.length) {
+        const totalOptions = parseInt(optionSettings[0].value);
+
+        if (reactiveQuestion.options.length != totalOptions) {
+          setQuestionOptions(totalOptions);
+        }
+      }
+
+      if (questionTypeSetting[0].questionType == "true_false") {
+        setQuestionOptions(2);
+      }
+
+      // possible answers
+      const answersSettings = questionSettings.value.filter((item) => {
+        return item.type == "correct-anwsers";
+      });
+
+      if (answersSettings.length) {
+        const answerOptions = parseInt(answersSettings[0].value);
+
+        if (possibleAnswers.value != answerOptions) {
+          setPossibleAnswers(answersSettings);
+        }
+      }
+
+      reactiveQuestion.settings = questionSettings.value;
+    });
+
+    const removeOption = (index: number) => {
+      reactiveQuestion.options = reactiveQuestion.options.filter(
+        (item, eachIndex) => eachIndex != index
+      );
+
+      if (questionTypeMain.value == "match") {
+        reactiveQuestion.match = reactiveQuestion.match.filter(
+          (item, eachIndex) => eachIndex != index
+        );
+      }
+    };
+
+    watch(selectedQuestion, () => {
+      question.value = selectedQuestion.value;
     });
 
     onMounted(() => {
       Logic.Study.watchProperty("questionSettings", questionSettings);
+      Logic.Study.watchProperty("selectedQuestion", selectedQuestion);
+      question.value = Logic.Study.selectedQuestion;
+      setDefaults();
     });
+
     return {
       reactiveQuestion,
       possibleAnswers,
+      questionTypeMain,
+      question,
+      optionLimitSettings,
       setAnswers,
       addNewDataItem,
       removeItemFormData,
+      setQuestionOptions,
+      removeOption,
     };
   },
 });

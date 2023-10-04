@@ -7,16 +7,36 @@ import {
 } from 'sofa-logic/src/logic/types/domains/study'
 import { capitalize, reactive, ref } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
+import { ContentDetails } from './marketplace'
+
+interface PlayResource {
+  image: string
+  title: string
+  type: string
+  label_color: string
+  label: string
+  id: string
+  entity_type: 'game' | 'test'
+  participants?: number
+}
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
 const AllCourses = ref(Logic.Study.AllCourses)
 const PurchasedCourses = ref(Logic.Study.PurchasedCourses)
 const AllFolders = ref(Logic.Study.AllFolders)
+const AllFoldersCourses = ref(Logic.Study.AllFoldersCourses)
+const AllFoldersQuizzes = ref(Logic.Study.AllFoldersQuizzes)
+const GameAndTestQuizzes = ref(Logic.Plays.GameAndTestQuizzes)
+
+const AllTests = ref(Logic.Plays.AllTests)
+const AllGames = ref(Logic.Plays.AllGames)
+
 const SingleFolder = ref(Logic.Study.SingleFolder)
+const RecentMaterials = ref(Logic.Study.RecentMaterials)
 
 const FolderOptions = ref<ResourceType[]>([])
 
-const selectedFilter = ref('quizzes')
+const selectedFilter = ref('in-progress')
 
 const showStudyMode = ref(false)
 
@@ -24,7 +44,7 @@ const showDeleteFolder = ref(false)
 
 const showAddItemToFolder = ref(false)
 
-const selectedItemId = ref('quiz-recent')
+const selectedItemId = ref('in_progress-all')
 
 const selectedFolderFilter = ref('all')
 
@@ -32,7 +52,28 @@ const selectedQuizFilter = ref('recent')
 
 const selectedCourseFilter = ref('recent')
 
-const allContentCategories = ['quizzes', 'courses', 'purchased']
+const selectedInProgressFilter = ref('all')
+
+const selectedResultFilter = ref('all')
+
+const allContentCategories = [
+  'quizzes',
+  'courses',
+  'purchased',
+  'in-progress',
+  'results',
+]
+
+const showSaveToFolder = ref(false)
+
+const addFolderIsActive = ref(false)
+
+const selectedFolderMaterailToAdd = ref<ResourceType | ContentDetails>()
+
+const currentFolder = reactive({
+  id: '',
+  name: '',
+})
 
 const currentFolderItems = ref<{
   quiz: string[]
@@ -43,27 +84,30 @@ const currentFolderItems = ref<{
 })
 
 const libraryTypeList = reactive([
-  // {
-  //   title: "In progress",
-  //   selected: true,
-  //   icon: "in-progress",
-  //  id: 'in-progress',
-  //   routePath: "/library/type",
-  //   options: [
-  //     {
-  //       name: "All",
-  //       active: true,
-  //     },
-  //     {
-  //       name: "Quizzes",
-  //       active: false,
-  //     },
-  //     {
-  //       name: "Courses",
-  //       active: false,
-  //     },
-  //   ],
-  // },
+  {
+    title: 'In progress',
+    selected: true,
+    icon: 'in-progress',
+    id: 'in-progress',
+    routePath: '/library/in-progress',
+    options: [
+      {
+        name: 'All',
+        active: true,
+        id: 'in_progress-all',
+      },
+      {
+        name: 'Tests',
+        active: false,
+        id: 'in_progress-tests',
+      },
+      {
+        name: 'Games',
+        active: false,
+        id: 'in_progress-games',
+      },
+    ],
+  },
   {
     title: 'Quizzes',
     selected: false,
@@ -130,6 +174,30 @@ const libraryTypeList = reactive([
     routePath: '/library/purchased',
     options: [],
   },
+  {
+    title: 'Results',
+    selected: true,
+    icon: 'results',
+    id: 'results',
+    routePath: '/library/results',
+    options: [
+      {
+        name: 'All',
+        active: true,
+        id: 'results-all',
+      },
+      {
+        name: 'Tests',
+        active: false,
+        id: 'results-tests',
+      },
+      {
+        name: 'Games',
+        active: false,
+        id: 'results-games',
+      },
+    ],
+  },
 ])
 
 const folderFilterOption = reactive([
@@ -150,15 +218,15 @@ const folderFilterOption = reactive([
   },
 ])
 
-const folders = reactive([
+const folders = reactive<
   {
-    name: '400L Exam',
-    selected: false,
-    edit: false,
-    hover: false,
-    id: '',
-  },
-])
+    name: string
+    selected: boolean
+    edit: boolean
+    hover: boolean
+    id: string
+  }[]
+>([])
 
 const organizationFilterOption = reactive([
   {
@@ -192,7 +260,7 @@ const quizzes = ref<ResourceType[]>([])
 
 const currentQuizData = ref<ResourceType[]>([])
 
-const createQuizData = (quiz: Quiz) :ResourceType => {
+const createQuizData = (quiz: Quiz): ResourceType => {
   return {
     title: quiz.title,
     image: quiz.photo ? quiz.photo.link : '/images/default.png',
@@ -207,14 +275,15 @@ const createQuizData = (quiz: Quiz) :ResourceType => {
     id: quiz.id,
     status: quiz.status,
     showMore: false,
-    ratings: quiz.ratings,
+    userId: quiz.user.id,
     type: 'quiz',
+    authUserId: Logic.Auth.AuthUser.id,
     user: quiz.user,
-    authUserId: Logic.Users.UserProfile?.id
+    ratings: quiz.ratings,
   }
 }
 
-const createCourseData = (course: Course) : ResourceType  => {
+const createCourseData = (course: Course): ResourceType => {
   return {
     title: course.title,
     image: course.photo ? course.photo.link : '/images/default.png',
@@ -226,13 +295,14 @@ const createCourseData = (course: Course) : ResourceType  => {
     progress: 0,
     subject: Logic.Study.GetTagName(course.topicId),
     user: course.user,
-    authUserId: Logic.Users.UserProfile?.id,
+    authUserId: Logic.Auth.AuthUser?.id,
     routePath: '/course/create?id=' + course.id,
     id: course.id,
     status: course.status,
     showMore: false,
-    ratings: course.ratings,
+    userId: course.user.id,
     type: 'course',
+    ratings: course.ratings,
   }
 }
 
@@ -270,6 +340,140 @@ const setCourses = () => {
   })
 }
 
+const inProgressItems = ref<PlayResource[]>([])
+
+const resultItems = ref<PlayResource[]>([])
+
+const currentInProgressItem = ref<PlayResource[]>([])
+
+const currentResultItems = ref<PlayResource[]>([])
+
+const setInProgressItems = () => {
+  inProgressItems.value.length = 0
+
+  AllGames.value?.results.forEach((game) => {
+    if (game.status != 'ended' && game.status != 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == game.quizId,
+      )[0]
+
+      inProgressItems.value.push({
+        entity_type: 'game',
+        id: game.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: game.status,
+        label_color: 'text-[#3296C8]',
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Game',
+        participants: game.participants.length,
+      })
+    }
+  })
+
+  AllTests.value?.results.forEach((test) => {
+    if (test.status != 'ended' && test.status != 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == test.quizId,
+      )[0]
+
+      inProgressItems.value.push({
+        entity_type: 'test',
+        id: test.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: test.status,
+        label_color: 'text-[#3296C8]',
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Test',
+      })
+    }
+  })
+}
+
+const setResultItems = async () => {
+  resultItems.value.length = 0
+
+  AllGames.value?.results.forEach((game) => {
+    if (game.status == 'ended' || game.status == 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == game.quizId,
+      )[0]
+
+      const allScores = Object.values(game.scores).sort(function (
+        a: number,
+        b: number,
+      ) {
+        return b - a
+      })
+
+      const userPosition = allScores.indexOf(
+        game.scores[Logic.Auth.AuthUser.id],
+      )
+      resultItems.value.push({
+        entity_type: 'game',
+        id: game.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: Logic.Common.ordinal_suffix_of(userPosition + 1),
+        label_color: 'text-[#3296C8]',
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Game',
+        participants: game.participants.length,
+      })
+    }
+  })
+
+  AllTests.value?.results.forEach((test) => {
+    if (test.status == 'ended' || test.status == 'scored') {
+      const currentQuiz = GameAndTestQuizzes.value?.results.filter(
+        (item) => item.id == test.quizId,
+      )[0]
+
+      const userCorrectAnswers = test.scores[Logic.Auth.AuthUser.id] / 10
+
+      const percentage = (userCorrectAnswers / test.questions.length) * 100
+
+      let textColor = 'text-[#ADAF4B]'
+
+      if (percentage >= 90) {
+        textColor = 'text-[#4BAF7D]'
+      } else if (percentage >= 70) {
+        textColor = 'text-[#ADAF4B]'
+      } else if (percentage >= 50) {
+        textColor = 'text-[#3296C8]'
+      } else {
+        textColor = 'text-primaryRed'
+      }
+
+      resultItems.value.push({
+        entity_type: 'test',
+        id: test.id,
+        image: currentQuiz?.photo?.link || '/images/default.png',
+        label: `${percentage ? percentage.toFixed() : '0'}%`,
+        label_color: textColor,
+        title: currentQuiz?.title || 'Unknown quiz',
+        type: 'Test',
+      })
+    }
+  })
+}
+
+const recentMaterials = ref<ResourceType[]>([])
+
+const currentRecentData = ref<ResourceType[]>([])
+
+const setRecentItems = () => {
+  if (!RecentMaterials.value) return
+
+  recentMaterials.value.length = 0
+
+  RecentMaterials.value?.forEach((material) => {
+    const data =
+      material.__type == 'CourseEntity'
+        ? createCourseData(material)
+        : createQuizData(material)
+    recentMaterials.value.push(data)
+  })
+}
+
 const currentPurchasedData = ref<ResourceType[]>([])
 
 const PurchasedData = ref<ResourceType[]>([])
@@ -289,9 +493,14 @@ const setPurchasedData = () => {
   })
 }
 
+const folderQuizzes = reactive<ResourceType[]>([])
+const folderCourses = reactive<ResourceType[]>([])
+
 const setFolders = () => {
   if (!AllFolders.value) return
   folders.length = 0
+  folderCourses.length = 0
+  folderQuizzes.length = 0
   AllFolders.value?.results.forEach((folder) => {
     folders.push({
       name: folder.title,
@@ -301,6 +510,14 @@ const setFolders = () => {
       selected: false,
     })
   })
+
+  folderCourses.push(
+    ...(AllFoldersCourses.value?.map((course) => createCourseData(course)) ||
+      []),
+  )
+  folderQuizzes.push(
+    ...(AllFoldersQuizzes.value?.map((quiz) => createQuizData(quiz)) || []),
+  )
 }
 
 const FolderItems = ref<ResourceType[]>([])
@@ -336,7 +553,11 @@ const filterItem = () => {
 
   if (type == 'quiz') {
     if (status == 'recent') {
-      currentQuizData.value = quizzes.value
+      currentQuizData.value = recentMaterials.value.filter(
+        (item) => item.type == 'quiz',
+      )
+    } else if (status == 'saved') {
+      currentQuizData.value = folderQuizzes
     } else {
       currentQuizData.value = quizzes.value.filter(
         (quiz) => quiz.status == status,
@@ -344,7 +565,9 @@ const filterItem = () => {
     }
   } else if (type == 'course') {
     if (status == 'recent') {
-      currentCourseData.value = courses.value
+      currentCourseData.value = recentMaterials.value.filter(
+        (item) => item.type == 'course',
+      )
     } else {
       currentCourseData.value = courses.value.filter(
         (course) => course.status == status,
@@ -353,12 +576,38 @@ const filterItem = () => {
   } else if (type == 'purchased') {
     if (status == 'all') {
       currentPurchasedData.value = PurchasedData.value
+    } else if (status == 'saved') {
+      currentQuizData.value = folderCourses
     } else {
       if (status == 'courses') {
         currentPurchasedData.value = PurchasedData.value
       } else {
         currentPurchasedData.value = []
       }
+    }
+  } else if (type == 'in_progress') {
+    if (status == 'all') {
+      currentInProgressItem.value = inProgressItems.value
+    } else if (status == 'tests') {
+      currentInProgressItem.value = inProgressItems.value.filter(
+        (item) => item.entity_type == 'test',
+      )
+    } else if (status == 'games') {
+      currentInProgressItem.value = inProgressItems.value.filter(
+        (item) => item.entity_type == 'game',
+      )
+    }
+  } else if (type == 'results') {
+    if (status == 'all') {
+      currentResultItems.value = resultItems.value
+    } else if (status == 'tests') {
+      currentResultItems.value = resultItems.value.filter(
+        (item) => item.entity_type == 'test',
+      )
+    } else if (status == 'games') {
+      currentResultItems.value = resultItems.value.filter(
+        (item) => item.entity_type == 'game',
+      )
     }
   } else {
     if (selectedFolderFilter.value == 'all') {
@@ -376,6 +625,7 @@ const filterItem = () => {
 }
 
 const addFolder = () => {
+  addFolderIsActive.value = true
   const tempId = Logic.Common.makeid(12)
   folders.push({
     name: '',
@@ -384,9 +634,12 @@ const addFolder = () => {
     selected: false,
     id: tempId,
   })
+}
 
+const saveFolder = (name: string, tempId: string) => {
+  if (addFolderIsActive.value == false) return
   Logic.Study.CreateFolderForm = {
-    title: 'New folder',
+    title: name,
   }
 
   Logic.Study.CreateFolder(true).then((data: Folder) => {
@@ -396,8 +649,53 @@ const addFolder = () => {
           folder.id = data?.id
         }
       })
+      addFolderIsActive.value = false
+      selectedFilter.value == data.id
     }
   })
+}
+
+const addMaterialToFolder = (
+  folderId: string,
+  type: 'quiz' | 'course',
+  itemId: string,
+) => {
+  const selectedFolder = AllFolders.value.results.filter((item) => {
+    return item.id == folderId
+  })
+
+  if (selectedFolder.length) {
+    const folder = selectedFolder[0]
+    const courses = folder.courses?.map((item) => item.id) || []
+    const quizzes = folder.quizzes?.map((item) => item.id) || []
+
+    if (type == 'course') {
+      courses.push(itemId)
+
+      saveItemsToFolder(folderId, 'courses', courses)
+    }
+
+    if (type == 'quiz') {
+      quizzes.push(itemId)
+      saveItemsToFolder(folderId, 'quizzes', quizzes)
+    }
+  }
+}
+
+const handleFolderNameBlur = () => {
+  if (currentFolder.name) {
+    if (addFolderIsActive.value) {
+      saveFolder(currentFolder.name, currentFolder.id)
+    } else {
+      updateFolder(currentFolder.name, currentFolder.id)
+    }
+
+    currentFolder.id = ''
+    currentFolder.name = ''
+  } else {
+    addFolderIsActive.value = false
+    folders.pop()
+  }
 }
 
 const updateFolder = (title: string, id: string) => {
@@ -412,14 +710,22 @@ const updateFolder = (title: string, id: string) => {
 }
 
 const openQuiz = (activity: ResourceType) => {
-  if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/quiz/create?id=${activity.id}`)
+  if (
+    activity.status == 'draft' &&
+    activity.user.id === Logic.Users.UserProfile?.id
+  )
+    return Logic.Common.GoToRoute(`/quiz/create?id=${activity.id}`)
   selectedQuizId.value = activity.id
   showStudyMode.value = true
   selectedQuizMode.value = ''
 }
 
 const openCourse = (activity: ResourceType) => {
-  if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id) return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
+  if (
+    activity.status == 'draft' &&
+    activity.user.id === Logic.Users.UserProfile?.id
+  )
+    return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
   Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
 
@@ -446,10 +752,15 @@ const deleteFolder = (id: string) => {
   Logic.Study.DeleteFolder(id).then(() => {
     showDeleteFolder.value = false
   })
-  if ([`library?filter=${id}`, `/library/folders?filter=${id}`].includes(Logic.Common.route.fullPath)) Logic.Common.GoToRoute('/library')
+  if (
+    [`library?filter=${id}`, `/library/folders?filter=${id}`].includes(
+      Logic.Common.route.fullPath,
+    )
+  )
+    Logic.Common.GoToRoute('/library')
 }
 
-const showMoreOptionHandler = (data: ResourceType, _type: 'quiz' | 'course') => {
+const showMoreOptionHandler = (data: ResourceType) => {
   showMoreOptions.value = true
   selectedItem.value = data
   data.showMore = true
@@ -489,12 +800,13 @@ const shareMaterialLink = async (
       type: 'success',
     })
   } catch (err) {
-    console.log(err)
+    Logic.Common.copytext(link)
+    // show alert
     Logic.Common.showLoader({
       show: true,
       loading: false,
-      message: 'Unable to share link.',
-      type: 'error',
+      message: 'Link copied to your clipboard!',
+      type: 'success',
     })
   }
 }
@@ -522,7 +834,7 @@ const moreOptions = reactive([
     action: () => {
       showMoreOptions.value = false
       shareMaterialLink(
-        selectedItem.value?.type ?? '' as any,
+        selectedItem.value?.type ?? ('' as any),
         `/marketplace/${selectedItem.value?.id}?type=${selectedItem.value?.id}`,
         selectedItem.value?.title ?? '',
       )
@@ -534,12 +846,81 @@ const moreOptions = reactive([
     show: () => selectedItem.value?.user.id != Logic.Users.UserProfile?.id,
     action: () => {
       showMoreOptions.value = false
-      reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
+      reportMaterial(
+        selectedItem.value?.type,
+        selectedItem.value?.title,
+        selectedItem.value?.id,
+      )
     },
   },
 ])
 
 export {
-  AllCourses, AllFolders, AllQuzzies, FolderOptions, PurchasedCourses, SingleFolder, addFolder, allContentCategories, createCourseData, createQuizData, currentCourseData, currentFolderItems, currentPurchasedData, currentQuizData, deleteFolder, filterItem, folderFilterOption,
-  folders, libraryTypeList, moreOptions, openCourse, openQuiz, organisations, organizationFilterOption, reportMaterial, saveItemsToFolder, selectedCourseFilter, selectedFilter, selectedFolderFilter, selectedFolderItems, selectedItem, selectedItemId, selectedQuizFilter, setCourses, setFolderItems, setFolders, setPurchasedData, setQuizzes, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showStudyMode, updateFolder
+  AllQuzzies,
+  AllCourses,
+  PurchasedCourses,
+  AllFolders,
+  SingleFolder,
+  FolderOptions,
+  selectedFilter,
+  showStudyMode,
+  showAddItemToFolder,
+  selectedItemId,
+  selectedFolderFilter,
+  selectedQuizFilter,
+  selectedCourseFilter,
+  selectedInProgressFilter,
+  selectedResultFilter,
+  allContentCategories,
+  libraryTypeList,
+  folderFilterOption,
+  folders,
+  currentQuizData,
+  currentCourseData,
+  currentPurchasedData,
+  selectedFolderItems,
+  currentFolderItems,
+  showDeleteFolder,
+  organizationFilterOption,
+  organisations,
+  selectedItem,
+  showMoreOptions,
+  moreOptions,
+  RecentMaterials,
+  currentRecentData,
+  showSaveToFolder,
+  currentFolder,
+  addFolderIsActive,
+  selectedFolderMaterailToAdd,
+  AllFoldersCourses,
+  AllFoldersQuizzes,
+  inProgressItems,
+  resultItems,
+  AllTests,
+  AllGames,
+  currentInProgressItem,
+  currentResultItems,
+  GameAndTestQuizzes,
+  setResultItems,
+  setInProgressItems,
+  setRecentItems,
+  handleFolderNameBlur,
+  showMoreOptionHandler,
+  saveItemsToFolder,
+  createQuizData,
+  setQuizzes,
+  setCourses,
+  setPurchasedData,
+  setFolders,
+  setFolderItems,
+  filterItem,
+  addFolder,
+  updateFolder,
+  deleteFolder,
+  createCourseData,
+  reportMaterial,
+  saveFolder,
+  addMaterialToFolder,
+  openQuiz,
+  openCourse,
 }

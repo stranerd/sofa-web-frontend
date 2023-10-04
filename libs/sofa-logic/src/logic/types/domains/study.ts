@@ -32,13 +32,13 @@ export interface Quiz {
     games: number
     total: number
   }
-  ratings: {
-    avg: number
-    total: number
-    count: number
-  }
   createdAt: number
   updatedAt: number
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
   __type: 'QuizEntity'
 }
 
@@ -97,17 +97,17 @@ export interface Course {
   tagIds: string[]
   status: string
   frozen: boolean
-  ratings: {
-    avg: number
-    total: number
-    count: number
-  }
   price: {
     amount: number
     currency: string
   }
   createdAt: number
   updatedAt: number
+  ratings: {
+    avg: number
+    count: number
+    total: number
+  }
   __type: 'CourseEntity'
 }
 
@@ -147,6 +147,7 @@ export interface QuizQuestion {
   id: string
   timeLimit: number
   currentTime: number
+  explanation: string
   options: {
     type: string
     data: {
@@ -156,6 +157,8 @@ export interface QuizQuestion {
         value?: string
         extraClass?: string
         shape?: string
+        id?: string
+        content?: any[]
       }[]
       shape?: string
       hover?: boolean
@@ -166,6 +169,8 @@ export interface QuizQuestion {
 export interface ResourceType {
   title: string
   image: string
+  user: SingleUser
+  authUserId: string | undefined
   subject: string
   labels: {
     main: string
@@ -177,8 +182,7 @@ export interface ResourceType {
   id: string
   status: string
   showMore: boolean
-  user: SingleUser
-  authUserId: string | undefined
+  userId: string
   type: 'course' | 'quiz' | string
   ratings: {
     avg: number

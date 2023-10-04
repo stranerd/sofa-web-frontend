@@ -1,7 +1,9 @@
+import { trim } from 'lodash'
 import { Logic } from 'sofa-logic'
 import { QuizQuestion } from 'sofa-logic/src/logic/types/domains/study'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import { reactive, ref } from 'vue'
+import { showStudyMode } from './library'
 
 const questions = reactive<QuizQuestion[]>([])
 
@@ -17,6 +19,12 @@ const currentPrepareCount = ref(0)
 
 const isRestart = ref(false)
 
+const pieChartColor = ref('')
+
+const pieLabel = ref('')
+
+const resultData = ref()
+
 const scoreBoardParticipants = reactive<
   {
     score: number
@@ -31,6 +39,7 @@ const quizSettingsForm = reactive({
   topic: '',
   photo: undefined,
   visibility: '',
+  tagString: '',
 })
 
 const allQuestionAnswers = reactive<
@@ -62,6 +71,8 @@ const infoModalData = reactive({
   title: '',
   sub: '',
 })
+
+const pieChartRefForTestScore = ref()
 
 const showInfoModal = ref(false)
 
@@ -159,7 +170,14 @@ const createQuiz = (formComp: any) => {
 const updateQuiz = (formComp: any) => {
   Logic.Study.UpdateQuizForm = {
     description: quizSettingsForm.description,
-    tags: quizSettingsForm.tags,
+    tags: quizSettingsForm.tags
+      .filter((item) => item != '')
+      .concat(
+        ...quizSettingsForm.tagString
+          .split(',')
+          .map((item) => trim(item))
+          .filter((item) => item != ''),
+      ),
     title: quizSettingsForm.title,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
@@ -176,6 +194,10 @@ const updateQuiz = (formComp: any) => {
           loading: false,
           message: 'Quiz updated',
           type: 'success',
+        })
+        // update tags
+        Logic.Study.GetTags({
+          all: true,
         })
       }
     })
@@ -209,9 +231,15 @@ const quizResult = () => {
 
 const goToStudyMode = (type: string) => {
   selectedQuizMode.value = type
-  if (type != 'assignment' && type != 'game') {
-    Logic.Common.GoToRoute(`/quiz/${selectedQuizId.value}?mode=${type}`)
+
+  Logic.Study.GoToStudyMode(type, selectedQuizId.value || '')
+
+  if (type == 'game') {
+    showStudyMode.value = true
+    selectedQuizMode.value = 'game'
   }
+
+  showStudyMode.value = false
 }
 
 const listenToGame = () => {
@@ -250,12 +278,67 @@ const listenToTest = () => {
             preStartTest()
           })
         }
+
+        if (data.data.status == 'scored') {
+          const score =
+            (SingleTest.value.scores[Logic.Auth.AuthUser.id] /
+              (questions.length * 10)) *
+            100
+          setResultData(score)
+        }
       })
     },
     (data) => {
       console.log(data)
     },
   )
+}
+
+const setResultData = (score = 0) => {
+  let pieColor = ''
+
+  const passPercent = score
+
+  if (passPercent >= 80) {
+    pieColor = '#4BAF7D'
+    pieChartColor.value = 'text-[#4BAF7D]'
+    if (passPercent == 100) {
+      pieLabel.value = 'Perfect!'
+    }
+
+    if (passPercent < 100 && passPercent >= 90) {
+      pieLabel.value = 'Outstanding!'
+    }
+
+    if (passPercent < 90) {
+      pieLabel.value = 'Excellent work!'
+    }
+  } else if (passPercent <= 70 && passPercent > 60) {
+    pieColor = '#ADAF4B'
+    pieChartColor.value = 'text-[#ADAF4B]'
+    pieLabel.value = 'Great job!'
+  } else if (passPercent <= 60 && passPercent > 50) {
+    pieColor = '#FA9632'
+    pieChartColor.value = 'text-[#FA9632]'
+    pieLabel.value = 'Nice effort!'
+  } else if (passPercent <= 50) {
+    pieColor = '#F55F5F'
+    pieChartColor.value = 'text-[#F55F5F]'
+    pieLabel.value = 'Study harder!'
+  }
+  resultData.value = {
+    labels: ['passed', 'failed'],
+    datasets: [
+      {
+        data: [passPercent, 100 - passPercent],
+        backgroundColor: [pieColor, '#E1E6EB'],
+        hoverOffset: 4,
+        borderRadius: 10,
+      },
+    ],
+  }
+
+  // pieChartRefForTestScore.value?.updateChart()
 }
 
 const preStartTest = () => {
@@ -411,8 +494,11 @@ const showQuestion = (index: number) => {
     } else {
       state.value = 'lobby'
       enabledSwiper.value = false
-      swiperInstance.value.swiperInstance.enabled = false
-      swiperInstance.value.swiperInstance.update()
+      if (swiperInstance.value) {
+        swiperInstance.value.swiperInstance.enabled = false
+        swiperInstance.value.swiperInstance.update()
+      }
+
       answerState.value = ''
 
       buttonLabels.left = {
@@ -430,8 +516,11 @@ const showQuestion = (index: number) => {
   } else {
     state.value = 'question'
     enabledSwiper.value = false
-    swiperInstance.value.swiperInstance.enabled = false
-    swiperInstance.value.swiperInstance.update()
+    if (swiperInstance.value) {
+      swiperInstance.value.swiperInstance.enabled = false
+      swiperInstance.value.swiperInstance.update()
+    }
+
     answerState.value = ''
   }
 }
@@ -570,14 +659,18 @@ const setViewMode = () => {
   setStartButtons()
 }
 
-const goToNextSlide = () => {
-  if (!swiperInstance.value.swiperInstance.enabled) {
+const goToNextSlide = (index = -1) => {
+  if (!swiperInstance.value?.swiperInstance.enabled) {
     enabledSwiper.value = true
     swiperInstance.value.swiperInstance.enabled = true
     swiperInstance.value.swiperInstance.update()
   }
-  if (questionIndex.value < questions.length - 1) {
-    questionIndex.value++
+  if (questionIndex.value < questions.length - 1 || index != -1) {
+    if (index != -1) {
+      questionIndex.value = index
+    } else {
+      questionIndex.value++
+    }
   }
 
   if (mode.value == 'practice') {
@@ -590,7 +683,7 @@ const goToNextSlide = () => {
 }
 
 const goToPrevSlide = () => {
-  if (!swiperInstance.value.swiperInstance.enabled) {
+  if (!swiperInstance.value?.swiperInstance.enabled) {
     enabledSwiper.value = true
     swiperInstance.value.swiperInstance.enabled = true
     swiperInstance.value.swiperInstance.update()
@@ -602,9 +695,20 @@ const goToPrevSlide = () => {
 
 const handleLeftButton = () => {
   if (questionIndex.value == questions.length - 1) {
+    if (mode.value == 'test') {
+      goToPrevSlide()
+      return
+    }
+    if (mode.value == 'preview') {
+      goToPrevSlide()
+      return
+    }
     enabledSwiper.value = true
-    swiperInstance.value.swiperInstance.enabled = true
-    swiperInstance.value.swiperInstance.update()
+    if (swiperInstance.value) {
+      swiperInstance.value.swiperInstance.enabled = true
+      swiperInstance.value.swiperInstance.update()
+    }
+
     questionIndex.value = 0
     setStartButtons()
     return
@@ -614,10 +718,24 @@ const handleLeftButton = () => {
     goToPrevSlide()
   } else if (mode.value == 'flashcard') {
     const currentQuestion = questions[currentQuestionIndex.value]
+
+    const currentQuestionData = JSON.parse(JSON.stringify(questions))
+
+    questions.length = 0
+
+    questions.push(
+      ...currentQuestionData.filter(
+        (item, index) => index != questionIndex.value,
+      ),
+    )
+
     questions.push(currentQuestion)
-    questions.splice(currentQuestionIndex.value, 1)
-    swiperInstance.value.swiperInstance.update()
+
+    swiperInstance.value.swiperInstance.updateSlides()
+
     goToNextSlide()
+
+    questionIndex.value = questionIndex.value - 1
   } else if (mode.value == 'test') {
     goToPrevSlide()
   } else if (mode.value == 'practice') {
@@ -632,30 +750,34 @@ const checkAnswer = () => {
     questions[questionIndex.value].userAnswer?.trim()
   if (isCorrect) {
     answerState.value = 'correct'
-    buttonLabels.right = {
-      label: 'Continue',
-      bgColor: 'bg-primaryGreen',
-      textColor: 'text-white',
-    }
+    // buttonLabels.right = {
+    //   label: 'Continue',
+    //   bgColor: 'bg-primaryGreen',
+    //   textColor: 'text-white',
+    // }
   } else {
     answerState.value = 'wrong'
-    buttonLabels.right = {
-      label: 'Continue',
-      bgColor: 'bg-primaryRed',
-      textColor: 'text-white',
-    }
+    // buttonLabels.right = {
+    //   label: 'Continue',
+    //   bgColor: 'bg-primaryRed',
+    //   textColor: 'text-white',
+    // }
   }
 }
 
-const handleRightButton = () => {
-  if (questionIndex.value == questions.length - 1) {
-    if (state.value == 'completed') {
-      state.value = 'other_modes'
-      mobileTitle.value = 'Try other modes'
-      return
-    }
+const handleRightButton = (index = -1) => {
+  if (questionIndex.value == questions.length - 1 && index == -1) {
+    // if (state.value == 'completed') {
+    //   state.value = 'other_modes'
+    //   mobileTitle.value = 'Try other modes'
+    //   return
+    // }
 
     if (mode.value == 'flashcard') {
+      if (state.value == 'completed') {
+        Logic.Common.goBack()
+        return
+      }
       state.value = 'completed'
       mobileTitle.value = 'Flashcards completed'
       buttonLabels.left = {
@@ -722,16 +844,16 @@ const handleRightButton = () => {
           bgColor: 'bg-primaryBlue',
           textColor: 'text-white',
         }
-        goToNextSlide()
+        goToNextSlide(index)
       } else {
         checkAnswer()
       }
     } else if (mode.value == 'game') {
       clearInterval(counterInterval.value)
       // checkAnswer()
-      goToNextSlide()
+      goToNextSlide(index)
     } else {
-      goToNextSlide()
+      goToNextSlide(index)
     }
   }
 }
@@ -909,6 +1031,11 @@ export {
   currentPrepareCount,
   SingleTest,
   isRestart,
+  pieChartColor,
+  pieLabel,
+  resultData,
+  pieChartRefForTestScore,
+  setResultData,
   saveParticipantAnswer,
   createQuiz,
   updateQuiz,

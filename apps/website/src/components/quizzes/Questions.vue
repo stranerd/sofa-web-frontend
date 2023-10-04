@@ -190,15 +190,13 @@
             style="border-width: 2px 2px 4px 2px"
           >
             <div class="flex-grow flex flex-row space-x-3 py-3 items-center">
-              <sofa-icon
-                :name="option.shape"
-                :custom-class="`${getShapeSize(option.shape)}`"
-              />
-              <input
-                class="focus:outline-none bg-transparent !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base"
+              <sofa-textarea
                 :placeholder="option.content[0].label"
                 v-model="question.userAnswer"
-              />
+                :rich-editor="false"
+                :text-area-style="`focus:outline-none bg-transparent  !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base`"
+              >
+              </sofa-textarea>
             </div>
           </div>
         </div>
@@ -256,44 +254,53 @@
                 :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'"
                 >{{ content.label }}</sofa-header-text
               >
-              <div
+              <draggable
+                :key="index"
                 v-if="content.type == 'drop'"
+                :list="content.content"
+                item-key="id"
+                :group="{ name: 'drag-and-drop-question' }"
                 :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-[12px] md:!px-4 md:!py-3 px-3 py-1 bg-white flex items-center justify-center ${content.extraClass}`"
                 style="border-width: 2px 2px 4px 2px"
-                @dragover="dragOverHandler($event, true)"
-                @drop="dropHandler"
-                :id="content.extraClass"
-                @dragleave="dragLeaveHandler"
+                @end="dropHandler"
               >
-                <sofa-header-text
-                  :customClass="'!font-bold md:!text-2xl text-base !text-grayColor placeholder'"
-                  >{{ content.label }}</sofa-header-text
-                >
-              </div>
+                <template #item="{ element, index }">
+                  <div
+                    :key="index"
+                    :class="`md:!px-6 md:!py-3 px-4 py-1 flex flex-row items-center cursor-move justify-center touch-none bg-skyBlue rounded-[12px]  ${element.extraClass}`"
+                    style="border-width: 2px 2px 4px 2px"
+                  >
+                    <sofa-header-text
+                      :customClass="'!font-bold md:!text-2xl text-base '"
+                    >
+                      {{ element.label }}
+                    </sofa-header-text>
+                  </div>
+                </template>
+              </draggable>
             </template>
 
-            <div
+            <draggable
               class="w-full flex flex-row items-center space-x-3 pt-6 md:!h-[90px] h-[40px]"
-              @dragover="dragOverHandler($event, false)"
-              @drop="dropHandler"
-              :id="'dropMainContainer' + Logic.Common.makeid(8)"
+              :list="question.options.data[1].content"
+              item-key="id"
+              :group="{ name: 'drag-and-drop-question' }"
+              @end="dropHandler"
             >
-              <div
-                v-for="(dragOption, index) in question.options.data[1].content"
-                :key="index"
-                :class="`md:!px-6 md:!py-3 px-4 py-1 flex flex-row items-center cursor-move justify-center touch-none bg-skyBlue rounded-[12px]  ${dragOption.extraClass}`"
-                style="border-width: 2px 2px 4px 2px"
-                :id="dragOption.extraClass"
-                draggable="true"
-                @dragstart="handleDrag"
-              >
-                <sofa-header-text
-                  :customClass="'!font-bold md:!text-2xl text-base '"
+              <template #item="{ element, index }">
+                <div
+                  :key="index"
+                  :class="`md:!px-6 md:!py-3 px-4 py-1 flex flex-row items-center cursor-move justify-center touch-none bg-skyBlue rounded-[12px]  ${element.extraClass}`"
+                  style="border-width: 2px 2px 4px 2px"
                 >
-                  {{ dragOption.label }}
-                </sofa-header-text>
-              </div>
-            </div>
+                  <sofa-header-text
+                    :customClass="'!font-bold md:!text-2xl text-base '"
+                  >
+                    {{ element.label }}
+                  </sofa-header-text>
+                </div>
+              </template>
+            </draggable>
           </div>
         </div>
 
@@ -348,15 +355,15 @@
             item-key="label"
             :disabled="true"
           >
-            <template #item="{ element }">
+            <template #item="{ element, index }">
               <div class="w-full flex flex-row items-center space-x-3">
                 <div
-                  class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
+                  class="w-full flex flex-row items-center justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
                   style="border-width: 2px 2px 4px 2px"
                 >
                   <sofa-icon
                     :name="element.shape"
-                    :custom-class="`${getShapeSize(element.shape)}`"
+                    :custom-class="`${matchShapes[index]}`"
                   />
                   <div class="flex-grow flex flex-row space-x-3 items-center">
                     <sofa-header-text
@@ -375,7 +382,7 @@
             class="col-span-1 space-y-3"
             item-key="label"
           >
-            <template #item="{ element }">
+            <template #item="{ element, index }">
               <div class="w-full flex flex-row items-center space-x-3">
                 <div
                   class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
@@ -383,7 +390,7 @@
                 >
                   <sofa-icon
                     :name="element.shape"
-                    :custom-class="`${getShapeSize(element.shape)}`"
+                    :custom-class="`${matchShapes[index]}`"
                   />
                   <div class="flex-grow flex flex-row space-x-3 items-center">
                     <sofa-header-text
@@ -396,6 +403,14 @@
             </template>
           </draggable>
         </div>
+
+        <div
+          class="w-full flex flex-col space-y-2 items-start justify-start pt-2"
+          v-if="answerState == 'wrong'"
+        >
+          <sofa-header-text :size="'xl'">Correct answer</sofa-header-text>
+          <sofa-normal-text>{{ question.answer }}</sofa-normal-text>
+        </div>
       </div>
     </div>
 
@@ -407,7 +422,7 @@
         <sofa-pie-chart
           :data="resultData"
           :cutoutPercentage="'90%'"
-          ref="pieChartRef"
+          ref="pieChartRefForTestScore"
           :textStyle="`!text-3xl ${pieChartColor}`"
           >{{ quizResult().percentagePass }}%</sofa-pie-chart
         >
@@ -444,13 +459,19 @@ import {
   SofaHeaderText,
   SofaIcon,
   SofaPieChart,
+  SofaTextarea,
 } from "sofa-ui-components";
 import { QuizQuestion } from "sofa-logic/src/logic/types/domains/study";
 import { Logic } from "sofa-logic";
 import {
+  pieChartColor,
+  pieChartRefForTestScore,
+  pieLabel,
   questions,
   quizResult,
+  resultData,
   saveParticipantAnswer,
+  setResultData,
 } from "@/composables/quiz";
 
 export default defineComponent({
@@ -460,6 +481,7 @@ export default defineComponent({
     SofaHeaderText,
     SofaIcon,
     SofaPieChart,
+    SofaTextarea,
   },
   props: {
     questionData: {
@@ -496,73 +518,24 @@ export default defineComponent({
   },
   emits: ["OnAnswerSelected"],
   setup(props, context) {
-    const dragDropState = ref("");
-
-    const lastDroppedContainerId = ref("new");
-
-    const placeholders = {};
-
     const questionRef = toRef(props, "questionData");
 
-    const pieChartRef = ref();
+    const possibleAnswers = ref(0);
 
-    const pieChartColor = ref("");
-
-    const pieLabel = ref("");
+    const multipleChoiceAnswers = reactive([]);
 
     const dragAndDropAnswers = reactive<string[]>([]);
 
-    const resultData = ref();
-
-    const setResultData = () => {
-      let pieColor = "";
-
-      const passPercent = quizResult().percentagePass;
-
-      if (passPercent >= 80) {
-        pieColor = "#4BAF7D";
-        pieChartColor.value = "text-[#4BAF7D]";
-        if (passPercent == 100) {
-          pieLabel.value = "Perfect!";
-        }
-
-        if (passPercent < 100 && passPercent >= 90) {
-          pieLabel.value = "Outstanding!";
-        }
-
-        if (passPercent < 90) {
-          pieLabel.value = "Excellent work!";
-        }
-      } else if (passPercent <= 70 && passPercent > 60) {
-        pieColor = "#ADAF4B";
-        pieChartColor.value = "text-[#ADAF4B]";
-        pieLabel.value = "Great job!";
-      } else if (passPercent <= 60 && passPercent > 50) {
-        pieColor = "#FA9632";
-        pieChartColor.value = "text-[#FA9632]";
-        pieLabel.value = "Nice effort!";
-      } else if (passPercent <= 50) {
-        pieColor = "#F55F5F";
-        pieChartColor.value = "text-[#F55F5F]";
-        pieLabel.value = "Study harder!";
-      }
-      resultData.value = {
-        labels: ["passed", "failed"],
-        datasets: [
-          {
-            data: [
-              quizResult().percentagePass,
-              100 - quizResult().percentagePass,
-            ],
-            backgroundColor: [pieColor, "#E1E6EB"],
-            hoverOffset: 4,
-            borderRadius: 10,
-          },
-        ],
-      };
-
-      pieChartRef.value?.updateChart();
-    };
+    const matchShapes = [
+      "circle",
+      "triangle",
+      "square",
+      "kite",
+      "circle",
+      "triangle",
+      "square",
+      "kite",
+    ];
 
     const fillInblankAnswers = reactive<
       {
@@ -598,68 +571,18 @@ export default defineComponent({
 
     const initialDuration = question.duration;
 
-    const handleDrag = (event) => {
-      event.dataTransfer.setData("application/my-app", event.target.id);
-      event.dataTransfer.effectAllowed = "move";
-      dragDropState.value = "dragged";
-    };
+    const dropHandler = () => {
+      const dropContents = question.options.data[0].content.filter(
+        (item) => item.type == "drop"
+      );
 
-    const dragLeaveHandler = (event) => {
-      if (placeholders[event.target.id]) {
-        event.target.appendChild(placeholders[event.target.id]);
-      }
-    };
+      dragAndDropAnswers.length = 0;
 
-    const dragOverHandler = (event, clearContent) => {
-      event.preventDefault();
-
-      if (clearContent) {
-        const placeholder = event.target.querySelector(".placeholder");
-
-        if (placeholder) {
-          placeholders[event.target.id] = placeholder;
-
-          event.target.innerHTML = "";
+      dropContents.forEach((item) => {
+        if (item.content[0]) {
+          dragAndDropAnswers.push(item.content[0]?.label);
         }
-      }
-      event.dataTransfer.dropEffect = "move";
-
-      dragDropState.value = "hover";
-    };
-
-    const dropHandler = (event) => {
-      event.preventDefault();
-      // Get the id of the target and add the moved element to the target's DOM
-      const data = event.dataTransfer.getData("application/my-app");
-
-      if (event.target.id == null || event.target.id == "") {
-        return;
-      }
-
-      if (
-        lastDroppedContainerId.value == null ||
-        lastDroppedContainerId.value == ""
-      ) {
-        return;
-      }
-
-      if (event.target.id == data) {
-        return;
-      }
-
-      const elementExist = event.target.querySelector(`#${data}`);
-
-      if (
-        elementExist == null &&
-        lastDroppedContainerId.value != event.target.id
-      ) {
-        event.target.appendChild(document.getElementById(data));
-
-        dragAndDropAnswers.push(document.getElementById(data).innerText);
-
-        lastDroppedContainerId.value = event.target.id;
-        dragDropState.value = "dropped";
-      }
+      });
     };
 
     const getShapeSize = (shape: string) => {
@@ -771,14 +694,29 @@ export default defineComponent({
     };
 
     const setAnswer = (value: any) => {
-      if (
-        question.title == "Multiple choice" ||
-        question.title == "True/False"
-      ) {
+      if (question.title == "True/False") {
         saveAnswer(value.trim());
       }
 
-      context.emit("OnAnswerSelected", value);
+      if (question.title != "Multiple choice") {
+        context.emit("OnAnswerSelected", value);
+      } else {
+        if (!multipleChoiceAnswers.includes(value.trim())) {
+          if (multipleChoiceAnswers.length < possibleAnswers.value) {
+            multipleChoiceAnswers.push(value.trim());
+          } else {
+            multipleChoiceAnswers.pop();
+            multipleChoiceAnswers.push(value.trim());
+          }
+        } else {
+          const currentValueIndex = multipleChoiceAnswers.indexOf(value.trim());
+          if (currentValueIndex != -1) {
+            multipleChoiceAnswers.splice(currentValueIndex, 1);
+          }
+        }
+
+        saveAnswer(multipleChoiceAnswers.join(", "));
+      }
     };
 
     const optionState = (option: {
@@ -801,8 +739,26 @@ export default defineComponent({
         }
 
         if (
+          questions[props.questionIndex].answer
+            ?.trim()
+            .split(", ")
+            .includes(option.content[0].label?.trim())
+        ) {
+          return "correct_answer";
+        }
+
+        if (
           questions[props.questionIndex].userAnswer?.trim() ==
           option.content[0].label?.trim()
+        ) {
+          return "wrong_answer";
+        }
+
+        if (
+          questions[props.questionIndex].userAnswer
+            ?.trim()
+            .split(", ")
+            .includes(option.content[0].label?.trim())
         ) {
           return "wrong_answer";
         }
@@ -813,6 +769,10 @@ export default defineComponent({
       }
 
       if (option.hover || question.userAnswer == option.content[0].label) {
+        return "hover";
+      }
+
+      if (multipleChoiceAnswers.includes(option.content[0].label)) {
         return "hover";
       }
 
@@ -830,7 +790,7 @@ export default defineComponent({
         }
       }
 
-      setResultData();
+      setResultData(quizResult().percentagePass);
     });
 
     watch(sequenceOption, () => {
@@ -859,13 +819,17 @@ export default defineComponent({
     onMounted(() => {
       handleQuestionSelected();
       setOptions();
-      setResultData();
+
+      setTimeout(() => {
+        setResultData(quizResult().percentagePass);
+      }, 1000);
+
+      if (props.questionData.title == "Multiple choice") {
+        possibleAnswers.value = props.questionData.answer?.split(",").length;
+      }
     });
 
     return {
-      handleDrag,
-      dragLeaveHandler,
-      dragOverHandler,
       dropHandler,
       getShapeSize,
       question,
@@ -877,10 +841,11 @@ export default defineComponent({
       resultData,
       quizResult,
       questions,
-      pieChartRef,
+      pieChartRefForTestScore,
       pieChartColor,
       pieLabel,
       optionState,
+      matchShapes,
     };
   },
 });

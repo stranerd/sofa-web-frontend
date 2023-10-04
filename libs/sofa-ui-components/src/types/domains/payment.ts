@@ -40,15 +40,28 @@ export interface Wallet {
   userId: string
   balance: {
     amount: number
-    currency: number
+    currency: string
+  }
+  account: {
+    country: string
+    bankNumber: string
+    bankCode: string
+    bankName: string
   }
   subscription: {
     data: {
       tutorAidedConversations: number
     }
     active: boolean
-    current?: string
-    next?: string
+    current?: {
+      activatedAt: number
+      expiredAt: number
+      id: string
+    }
+    next?: {
+      id: string
+      renewedAt: string
+    }
   }
   createdAt: number
   updatedAt: number
@@ -69,4 +82,30 @@ export interface Purchase {
   }
   createdAt: number
   updatedAt: number
+}
+
+export interface Plan {
+  hash: string
+  id: string
+  name: string
+  interval: string
+  active: boolean
+  amount: number
+  currency: string
+  data: {
+    questions: number
+    recordings: number
+  }
+  features: {
+    questions: boolean
+    recordings: boolean
+  }
+  createdAt: number
+  updatedAt: number
+}
+
+export interface CommercialBanks {
+  id: number
+  code: string
+  name: string
 }

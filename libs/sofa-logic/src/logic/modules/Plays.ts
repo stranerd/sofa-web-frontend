@@ -4,9 +4,10 @@ import { Logic } from '..'
 import { Paginated } from '../types/domains/common'
 import { Game, GameParticipantAnswer, Test } from '../types/domains/plays'
 import { Conditions, QueryParams } from '../types/common'
-import { Question } from '../types/domains/study'
+import { Question, Quiz } from '../types/domains/study'
 import { AddQuestionAnswer, CreateGameInput } from '../types/forms/plays'
 import { SingleUser } from '../types/domains/users'
+import { capitalize } from 'vue'
 
 export default class Plays extends Common {
   constructor() {
@@ -21,6 +22,7 @@ export default class Plays extends Common {
   public GameParticipants: SingleUser[] | undefined
   public AllTests: Paginated<Test> | undefined
   public SingleTest: Test | undefined
+  public GameAndTestQuizzes: Paginated<Quiz> | undefined
 
   // Form input
   public CreateGameForm: CreateGameInput | undefined
@@ -177,6 +179,27 @@ export default class Plays extends Common {
     })
   }
 
+  public GetGameAndTestQuizzes = async () => {
+    if (this.GameAndTestQuizzes == undefined) {
+      const allQuizIds = []
+
+      allQuizIds.push(...this.AllGames.results.map((item) => item.quizId))
+      allQuizIds.push(...this.AllTests.results.map((item) => item.quizId))
+
+      const response = await $api.study.quiz.fetch({
+        where: [
+          {
+            field: 'id',
+            condition: Conditions.in,
+            value: allQuizIds,
+          },
+        ],
+      })
+
+      this.GameAndTestQuizzes = response.data
+    }
+  }
+
   public CreateGame = (formIsValid: boolean) => {
     if (formIsValid && this.CreateGameForm) {
       return $api.plays.game
@@ -186,9 +209,23 @@ export default class Plays extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
           throw error
         })
     }
+  }
+
+  public CreateTest = (quizId: string) => {
+    return $api.plays.test
+      .post(null, { quizId })
+      .then((response) => {
+        this.SingleTest = response.data
+        return response.data
+      })
+      .catch((error) => {
+        Logic.Common.showError(capitalize(error.response.data[0]?.message))
+        throw error
+      })
   }
 
   public JoinGame = (gameId: string, join: boolean) => {
