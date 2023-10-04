@@ -48,9 +48,21 @@
             <div
               class="mdlg:!flex flex-row items-center justify-end space-x-4 hidden"
             >
-              <sofa-icon :name="'flag'" :customClass="'h-[16px] '" />
-              <sofa-icon :name="'share'" :customClass="'h-[16px] '" />
-              <sofa-icon :name="'bookmark'" :customClass="'h-[16px] '" />
+              <sofa-icon
+                :name="'flag'"
+                :customClass="'h-[16px] cursor-pointer '"
+                @click="actions.report()"
+              />
+              <sofa-icon
+                :name="'share'"
+                :customClass="'h-[16px] cursor-pointer'"
+                @click="actions.share()"
+              />
+              <sofa-icon
+                :name="'save'"
+                :customClass="'h-[16px] cursor-pointer'"
+                @click="actions.save()"
+              />
             </div>
           </div>
           <sofa-normal-text :customClass="'text-left'">
@@ -167,7 +179,7 @@
                 v-else
                 :padding="'px-6 py-1'"
                 :customClass="'w-auto'"
-                @click="Logic.Common.GoToRoute('/course/' + content.id)"
+                @click="Logic.Common.GoToRoute('/course/' + content.courseId)"
               >
                 Go to course
               </sofa-button>
@@ -283,7 +295,9 @@
           :actionLabel="'Go to course'"
           :action="
             () => {
-              Logic.Common.GoToRoute(`/marketplace/${content.id}?type=course`);
+              Logic.Common.GoToRoute(
+                `/marketplace/${content.courseId}?type=course`
+              );
             }
           "
           :icon="{
@@ -305,7 +319,7 @@
               itemIsPurchased
                 ? (showStudyMode = true)
                 : Logic.Common.GoToRoute(
-                    `/marketplace/${content.id}?type=course`
+                    `/marketplace/${content.courseId}?type=course`
                   )
             "
           >
@@ -507,7 +521,7 @@
       v-else
       :padding="'px-6 py-3'"
       :customClass="'w-full'"
-      @click="Logic.Common.GoToRoute('/course/' + content.id)"
+      @click="Logic.Common.GoToRoute('/course/' + content.courseId)"
     >
       Go to course
     </sofa-button>
@@ -657,6 +671,13 @@ export default defineComponent({
     similarContents: {
       type: Array as () => any[],
     },
+    actions: {
+      type: Object as () => {
+        report: Function;
+        share: Function;
+        save: Function;
+      },
+    },
   },
   name: "SofaContentDetails",
   setup(props) {
@@ -715,18 +736,18 @@ export default defineComponent({
         selectedTab.value = "content";
       }
 
-      // if (!props.isMinimal) {
-      //   tabs.value.push(
-      //     {
-      //       name: "Ratings",
-      //       key: "ratings",
-      //     },
-      //     {
-      //       name: "Creator",
-      //       key: "creator",
-      //     }
-      //   );
-      // }
+      if (!props.isMinimal) {
+        tabs.value.push(
+          {
+            name: "Ratings",
+            key: "ratings",
+          }
+          // {
+          //   name: "Creator",
+          //   key: "creator",
+          // }
+        );
+      }
 
       if (props.type == "course") {
         tabs.value.push({

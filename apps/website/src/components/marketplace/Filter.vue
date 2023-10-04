@@ -93,7 +93,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, toRef, watch } from "vue";
 import { SofaNormalText, SofaIcon, SofaButton } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
@@ -124,6 +124,8 @@ export default defineComponent({
   setup(props, context) {
     const AllTopics = ref(Logic.Study.AllTopics);
     const AllOtherTags = ref(Logic.Study.AllOtherTags);
+
+    const updateValueRef = toRef(props, "updateValue");
 
     const selectedOptions = reactive<
       {
@@ -321,14 +323,21 @@ export default defineComponent({
     };
 
     watch(selectedOptions, () => {
-      setQueryConditions();
-      context.emit("update:modelValue", selectedOptions);
+      const userFilter = selectedOptions.filter((item) => item.type == "user");
+
+      if (userFilter.length == 0) {
+        setQueryConditions();
+        context.emit("update:modelValue", selectedOptions);
+      }
     });
 
     onMounted(() => {
       setSearchOption();
       if (props.updateValue) {
-        selectedOptions.push(...props.updateValue);
+        setTimeout(() => {
+          console.log(props.updateValue);
+          selectedOptions.push(...props.updateValue);
+        }, 300);
       }
     });
 

@@ -415,7 +415,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      getTopics();
+      getTopics(true);
     });
 
     return {

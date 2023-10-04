@@ -5,58 +5,55 @@
     <div class="flex flex-col space-y-6 h-full w-full">
       <template v-if="sectionOptions.length">
         <template v-for="(option, index) in sectionOptions" :key="index">
-          <div
-            :class="`flex flex-col w-full  ${
-              option.name != 'unsectioned' ? 'space-y-3' : ''
-            }`"
-          >
+          <div :class="`flex flex-col w-full space-y-3`">
             <template v-if="option">
-              <template v-if="option.name != 'unsectioned'">
-                <div
-                  class="w-full flex flex-row items-center justify-between cursor-pointer"
-                  @click="
-                    option?.opened
-                      ? (option.opened = false)
-                      : (option.opened = true);
-                    selectedSection = index;
-                  "
-                >
-                  <div class="flex flex-row items-center space-x-2">
-                    <sofa-normal-text
-                      :customClass="'!font-bold'"
-                      v-if="!option.edit"
-                      >{{ option.name }}</sofa-normal-text
-                    >
-                    <input
-                      v-else
-                      @click.stop="null"
-                      class="outline-none focus:outline-slate-200 font-bold px-2 placeholder:font-normal w-full border-[1px] border-gray-100 rounded text-bodyBlack"
-                      v-model="option.name"
-                      autofocus
-                      placeholder="Section name"
-                      @blur="option.edit = false"
-                    />
-                  </div>
-                  <div class="flex flex-row items-center space-x-3">
-                    <sofa-icon
-                      @click.stop="option.edit = true"
-                      :customClass="'h-[15px] cursor-pointer'"
-                      :name="'edit-gray'"
-                    />
-                    <sofa-icon
-                      @click.stop="removeSection(index)"
-                      :customClass="'h-[15px] cursor-pointer'"
-                      :name="'trash-gray'"
-                    />
-                    <sofa-icon
-                      :customClass="'h-[7px] cursor-pointer'"
-                      :name="option.opened ? 'chevron-up' : 'chevron-down'"
-                    />
-                  </div>
+              <div
+                class="w-full flex flex-row items-center justify-between cursor-pointer"
+                @click="
+                  option?.opened
+                    ? (option.opened = false)
+                    : (option.opened = true)
+                "
+              >
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-normal-text
+                    :customClass="'!font-bold'"
+                    v-if="!option.edit"
+                    >{{
+                      option.name == "unsectioned" ? "Unsectioned" : option.name
+                    }}</sofa-normal-text
+                  >
+                  <input
+                    v-else
+                    @click.stop="null"
+                    class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border-[1px] !bg-white border-gray-100 rounded !text-bodyBlack"
+                    v-model="option.name"
+                    autofocus
+                    placeholder="Section name"
+                    @blur="option.edit = false"
+                  />
                 </div>
-              </template>
+                <div class="flex flex-row items-center space-x-3">
+                  <sofa-icon
+                    @click.stop="option.edit = true"
+                    :customClass="'h-[15px] cursor-pointer'"
+                    :name="'edit-gray'"
+                    v-if="option.name != 'unsectioned'"
+                  />
+                  <sofa-icon
+                    @click.stop="removeSection(index)"
+                    :customClass="'h-[15px] cursor-pointer'"
+                    :name="'trash-gray'"
+                    v-if="option.name != 'unsectioned'"
+                  />
+                  <sofa-icon
+                    :customClass="'h-[7px] cursor-pointer'"
+                    :name="option.opened ? 'chevron-up' : 'chevron-down'"
+                  />
+                </div>
+              </div>
 
-              <template v-if="option.opened || option.name == 'unsectioned'">
+              <template v-if="option.opened">
                 <draggable
                   v-model="option.materials"
                   group="course-item"

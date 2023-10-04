@@ -32,6 +32,23 @@
       }
     "
   />
+  <!-- Report material -->
+  <rate-and-review-modal
+    v-if="reportMaterialSetup.show"
+    :close="
+      () => {
+        reportMaterialSetup.show = false;
+      }
+    "
+    :canClose="true"
+    :has-ratings="false"
+    :title="`Report this ${reportMaterialSetup.type}`"
+    @on-review-submitted="
+      (data) => {
+        sendReportMaterial(data);
+      }
+    "
+  />
 </template>
 <script lang="ts">
 import { useMeta } from "vue-meta";
@@ -39,12 +56,18 @@ import { defineComponent, onMounted, ref } from "vue";
 import { Logic } from "sofa-logic";
 import { SofaAlert } from "sofa-ui-components";
 import SaveToFolder from "./components/common/SaveToFolder.vue";
-import { showSaveToFolder } from "./composables/library";
+import {
+  reportMaterialSetup,
+  sendReportMaterial,
+  showSaveToFolder,
+} from "./composables/library";
+import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
 export default defineComponent({
   components: {
     SofaAlert,
     SaveToFolder,
+    RateAndReviewModal,
   },
   setup() {
     useMeta({
@@ -61,6 +84,8 @@ export default defineComponent({
     return {
       loaderSetup,
       showSaveToFolder,
+      reportMaterialSetup,
+      sendReportMaterial,
     };
   },
 });

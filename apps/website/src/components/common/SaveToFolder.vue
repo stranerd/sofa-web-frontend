@@ -42,37 +42,61 @@
 
         <div class="w-full flex flex-col space-y-3 px-4 py-4">
           <div
-            class="w-full flex flex-row items-center space-x-3 px-4 py-4 custom-border bg-[#F1F6FA] cursor-pointer"
-            @click="!addFolderIsActive ? handleFolderSelected(item.id) : null"
+            class="w-full flex flex-row items-center space-x-3 justify-between px-4 py-4 custom-border bg-[#F1F6FA] cursor-pointer"
             v-for="(item, index) in folders"
             :key="index"
           >
-            <sofa-icon :name="'folder'" :customClass="'h-[18px]'" />
+            <div class="flex flex-row items-center space-x-3">
+              <sofa-icon :name="'folder'" :customClass="'h-[18px]'" />
 
-            <sofa-custom-input
-              v-if="item.edit"
-              :custom-class="` ${
-                selectedFilter == item.id ? '!font-bold' : ''
-              } lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`"
-              :updateValue="item.name"
-              @blur="
-                item.edit = false;
-                handleFolderNameBlur();
-              "
-              :placeholder="'Folder name'"
-              @onContentChange="
-                (content) => {
-                  item.name = content;
-                  currentFolder.name = content;
-                  currentFolder.id = item.id;
-                }
-              "
-            >
-            </sofa-custom-input>
+              <sofa-custom-input
+                v-if="item.edit"
+                :custom-class="` ${
+                  selectedFilter == item.id ? '!font-bold' : ''
+                } lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`"
+                :updateValue="item.name"
+                @blur="
+                  item.edit = false;
+                  handleFolderNameBlur();
+                "
+                :placeholder="'Folder name'"
+                @onContentChange="
+                  (content) => {
+                    item.name = content;
+                    currentFolder.name = content;
+                    currentFolder.id = item.id;
+                  }
+                "
+              >
+              </sofa-custom-input>
 
-            <sofa-normal-text v-else>
-              {{ item.name }}
-            </sofa-normal-text>
+              <sofa-normal-text v-else>
+                {{ item.name }}
+              </sofa-normal-text>
+            </div>
+
+            <div class="flex justify-end flex-row">
+              <sofa-normal-text
+                :color="'text-primaryRed'"
+                :custom-class="'cursor-pointer'"
+                @click="
+                  !addFolderIsActive
+                    ? handleFolderSelected(item.id, false)
+                    : null
+                "
+                v-if="item.items.includes(selectedFolderMaterailToAdd.id)"
+                >- Remove</sofa-normal-text
+              >
+              <sofa-normal-text
+                :color="'text-primaryBlue'"
+                :custom-class="'cursor-pointer'"
+                @click="
+                  !addFolderIsActive ? handleFolderSelected(item.id) : null
+                "
+                v-else
+                >+ Add</sofa-normal-text
+              >
+            </div>
           </div>
           <div
             class="w-full flex flex-row items-center space-x-3 px-4 py-4 custom-border bg-[#F1F6FA] cursor-pointer"
@@ -126,7 +150,7 @@ export default defineComponent({
       type: Function,
     },
   },
-  setup(props) {
+  setup() {
     watch(AllFolders, () => {
       setFolders();
     });
@@ -147,18 +171,19 @@ export default defineComponent({
       setFolders();
     });
 
-    const handleFolderSelected = (folderId: string) => {
+    const handleFolderSelected = (folderId: string, add = true) => {
       if (selectedFolderMaterailToAdd.value) {
         addMaterialToFolder(
           folderId,
           selectedFolderMaterailToAdd.value.type == "course"
             ? "course"
             : "quiz",
-          selectedFolderMaterailToAdd.value.id
+          selectedFolderMaterailToAdd.value.id,
+          add
         );
-        if (props.close) {
-          props.close();
-        }
+        // if (props.close) {
+        //   props.close();
+        // }
       }
     };
 
@@ -168,6 +193,7 @@ export default defineComponent({
       currentFolder,
       selectedFilter,
       addFolderIsActive,
+      selectedFolderMaterailToAdd,
       handleFolderNameBlur,
       addFolder,
       handleFolderSelected,

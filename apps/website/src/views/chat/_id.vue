@@ -81,7 +81,11 @@
         id="MessagesScrollContainer"
         v-if="!itIsTutorRequest"
       >
-        <conversation-messages :Messages="Messages" :ShowLoader="showLoader" />
+        <conversation-messages
+          :Messages="Messages"
+          :ShowLoader="showLoader"
+          :itIsNewMessage="itIsNewMessage"
+        />
       </div>
 
       <!-- Tutor request message -->
@@ -108,7 +112,7 @@
             role="textbox"
             :class="`w-full textarea resize-none !min-h-[48px] text-bodyBlack whitespace-pre-wrap focus:outline-none !max-h-[80px] overflow-x-hidden bg-transparent rounded-[8px] py-3 px-3 items-start text-left overflow-y-auto`"
             placeholder="Enter message"
-            id="messageContainer"
+            id="messageContainerSm"
             @input="onInput"
           >
           </span>
@@ -336,6 +340,7 @@ import {
   handleIncomingMessage,
   handleKeyEvent,
   hasMessage,
+  itIsNewMessage,
   itIsTutorRequest,
   messageContent,
   onInput,
@@ -381,6 +386,18 @@ const fetchRules = [
     useRouteId: true,
     requireAuth: true,
     ignoreProperty: true,
+  },
+  {
+    domain: "Study",
+    property: "Tags",
+    method: "GetTags",
+    params: [
+      {
+        all: true,
+      },
+    ],
+    requireAuth: true,
+    ignoreProperty: false,
   },
 ];
 
@@ -466,12 +483,25 @@ export default defineComponent({
 
     const UserProfile = ref(Logic.Users.UserProfile);
 
+    const setNewMessage = () => {
+      if (itIsNewMessage.value) {
+        const messageContainer = document.getElementById("messageContainerSm");
+        if (messageContainer) {
+          messageContainer.focus();
+        }
+
+        selectedChatData.value.title = "New Chat";
+        Logic.Conversations.Messages = undefined;
+        Logic.Conversations.SingleConversation = undefined;
+      }
+    };
+
     const connectWebsocket = () => {
       if (SingleConversation.value) {
         Logic.Common.setupWebsocket();
 
         Logic.Common.listenOnSocket(
-          `conversations/${Logic.Conversations.SingleConversation.id}/messages`,
+          `conversations/conversations/${Logic.Conversations.SingleConversation.id}/messages`,
           (data) => {
             handleIncomingMessage(data);
           },
@@ -504,7 +534,7 @@ export default defineComponent({
 
     onMounted(() => {
       scrollToTop();
-      connectWebsocket();
+
       Logic.Conversations.watchProperty("AllConversations", AllConversations);
       Logic.Conversations.watchProperty("AllTutorRequests", AllTutorRequests);
       Logic.Conversations.watchProperty("ChatMembers", ChatMembers);
@@ -527,6 +557,9 @@ export default defineComponent({
       });
 
       setTutorRequest();
+      setNewMessage();
+
+      connectWebsocket();
     });
 
     watch(Messages, () => {
@@ -536,23 +569,33 @@ export default defineComponent({
       }, 500);
     });
 
-    watch(SingleConversation, () => {
-      chatList.forEach((chat) => {
-        if (chat.id == SingleConversation.value.id) {
-          chat.selected = true;
-        } else {
-          chat.selected = false;
-        }
-      });
-      connectWebsocket();
+    watch(itIsNewMessage, () => {
+      if (itIsNewMessage.value) {
+        setNewMessage();
+      }
+    });
 
-      if (editTitle.value == false) {
-        if (SingleConversation.value) {
-          conversationTitle.value = SingleConversation.value.title;
-        } else {
-          conversationTitle.value = "New Chat";
+    watch(SingleConversation, () => {
+      if (SingleConversation.value) {
+        chatList.forEach((chat) => {
+          if (chat.id == SingleConversation.value?.id) {
+            chat.selected = true;
+          } else {
+            chat.selected = false;
+          }
+        });
+        connectWebsocket();
+
+        if (editTitle.value == false) {
+          if (SingleConversation.value) {
+            conversationTitle.value = SingleConversation.value.title;
+            selectedChatData.value.title = SingleConversation.value.title;
+          } else {
+            conversationTitle.value = "New Chat";
+            selectedChatData.value.title = "New Chat";
+          }
+          editTitle.value = false;
         }
-        editTitle.value = false;
       }
     });
 
@@ -583,6 +626,7 @@ export default defineComponent({
       selectedTutorRequestData,
       showTutorRequestSubmited,
       showEndSession,
+      itIsNewMessage,
     };
   },
 });

@@ -18,18 +18,35 @@
             class="flex flex-col h-full overflow-y-auto relative scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin"
           >
             <div
-              class="w-full px-4 py-4 sticky top-0 left-0 bg-white z-30 rounded-t-[16px] flex flex-row items-start"
+              class="w-full px-4 py-4 sticky top-0 left-0 bg-white z-30 rounded-t-[16px] flex flex-row items-center justify-between"
             >
               <sofa-header-text
                 :customClass="'!font-bold !text-left !line-clamp-1'"
               >
                 {{ SingleCourse?.title }}
               </sofa-header-text>
+
+              <div
+                v-if="
+                  !CourseReview &&
+                  Logic.Auth.AuthUser.id != SingleCourse?.user.id
+                "
+              >
+                <sofa-button
+                  :custom-class="''"
+                  :padding="'px-4 py-1'"
+                  @click="showRateCourse = true"
+                  >Rate</sofa-button
+                >
+              </div>
             </div>
 
             <sofa-course-content
               @OnMaterialSelected="handleItemSelected"
-              :lockContent="!PurchasedItems.includes(SingleCourse?.id)"
+              :lockContent="
+                !PurchasedItems.includes(SingleCourse?.id) &&
+                SingleCourse?.user.id != Logic.Auth.AuthUser?.id
+              "
               v-model="selectedMaterial"
             />
           </div>
@@ -86,7 +103,10 @@
 
           <sofa-course-content
             @OnMaterialSelected="handleItemSelected"
-            :lockContent="!PurchasedItems.includes(SingleCourse?.id)"
+            :lockContent="
+              !PurchasedItems.includes(SingleCourse?.id) &&
+              SingleCourse?.user.id != Logic.Auth.AuthUser?.id
+            "
             v-model="selectedMaterial"
             @onCourseContentSet="handleCourseContentSet"
           />
@@ -408,6 +428,45 @@
         </div>
       </div>
     </sofa-modal>
+
+    <!-- Rating floating button sm -->
+    <Teleport
+      to="body"
+      v-if="
+        !CourseReview &&
+        Logic.Auth.AuthUser.id != SingleCourse?.user.id &&
+        (Logic.Common.mediaQuery() == 'sm' || Logic.Common.mediaQuery() == 'md')
+      "
+    >
+      <span
+        class="absolute bottom-[3%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]"
+      >
+        <span
+          class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
+          @click="showRateCourse = true"
+        >
+          <sofa-icon :name="'star-white'" :customClass="'h-[15px]'"></sofa-icon>
+          <sofa-normal-text :color="'text-white'"> Rate </sofa-normal-text>
+        </span>
+      </span>
+    </Teleport>
+
+    <!-- Rate course -->
+    <rate-and-review-modal
+      v-if="showRateCourse"
+      :close="
+        () => {
+          showRateCourse = false;
+        }
+      "
+      :canClose="true"
+      :title="'Rate this course'"
+      @on-review-submitted="
+        (data) => {
+          rateCourse(data);
+        }
+      "
+    />
   </expanded-layout>
 </template>
 <script lang="ts">
@@ -426,6 +485,7 @@ import {
 import { useMeta } from "vue-meta";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import CourseContent from "@/components/courses/content.vue";
+import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
 export default defineComponent({
   components: {
@@ -438,6 +498,7 @@ export default defineComponent({
     SofaIconCard,
     SofaButton,
     CourseContent,
+    RateAndReviewModal,
   },
   name: "CourseDetailsPage",
   middlewares: {
@@ -475,6 +536,15 @@ export default defineComponent({
         ignoreProperty: false,
       },
       {
+        domain: "Study",
+        property: "SingleReview",
+        method: "GetSingleReview",
+        params: ["courses"],
+        useRouteId: true,
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
         domain: "Payment",
         property: "PaymentMethods",
         method: "GetPaymentMethods",
@@ -509,6 +579,8 @@ export default defineComponent({
     const selectedMethodId = ref("");
     const showMakePaymentModal = ref(false);
 
+    const CourseReview = ref(Logic.Study.SingleReview);
+
     const showStudyMode = ref(false);
 
     const selectedMaterial = ref<any>();
@@ -518,6 +590,8 @@ export default defineComponent({
     const courseContents = reactive<any[]>([]);
 
     const showCourseInfo = ref(false);
+
+    const showRateCourse = ref(false);
 
     const handleItemSelected = (data: any) => {
       if (data) {
@@ -599,6 +673,21 @@ export default defineComponent({
       showStudyMode.value = false;
     };
 
+    const rateCourse = (data: any) => {
+      Logic.Study.AddReviewForm = {
+        entity: {
+          id: SingleCourse.value.id,
+          type: "courses",
+        },
+        message: data.review,
+        rating: data.ratings,
+      };
+
+      Logic.Study.AddReview().then(() => {
+        //
+      });
+    };
+
     const buyCourse = () => {
       if (Logic.Common.loaderSetup.loading) return;
 
@@ -632,6 +721,7 @@ export default defineComponent({
       Logic.Payment.watchProperty("PurchasedItems", PurchasedItems);
       Logic.Payment.watchProperty("UserWallet", UserWallet);
       Logic.Study.watchProperty("SingleCourse", SingleCourse);
+      Logic.Study.watchProperty("SingleReview", CourseReview);
 
       Logic.Interactions.CreateViewForm = {
         entity: {
@@ -662,8 +752,11 @@ export default defineComponent({
       PurchasedItems,
       UserWallet,
       courseContents,
+      showRateCourse,
+      CourseReview,
       handleCourseContentSet,
       selectItem,
+      rateCourse,
     };
   },
 });

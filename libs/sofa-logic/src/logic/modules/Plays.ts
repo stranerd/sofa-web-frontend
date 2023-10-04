@@ -35,7 +35,7 @@ export default class Plays extends Common {
   }
 
   public GetTest = (id: string | undefined) => {
-    if (!id) {
+    if (!id || id == 'nill') {
       return new Promise((resolve) => {
         resolve('')
       })
@@ -46,7 +46,7 @@ export default class Plays extends Common {
           .then((response) => {
             this.SingleTest = response.data
             // get questions
-            if (this.SingleTest.status == 'started') {
+            if (this.SingleTest?.status == 'started') {
               this.GetTestQuizQuestions(this.SingleTest.id).then(() => {
                 resolve('')
               })
@@ -74,7 +74,7 @@ export default class Plays extends Common {
   }
 
   public GetGame = (id: string | undefined) => {
-    if (!id) {
+    if (!id || id == 'nill') {
       return new Promise((resolve) => {
         resolve('')
       })
@@ -109,24 +109,28 @@ export default class Plays extends Common {
               }
             }
             // get participants
-            Logic.Users.GetUsers({
-              where: [
-                {
-                  field: 'id',
-                  value: this.SingleGame.participants,
-                  condition: Conditions.in,
-                },
-              ],
-            }).then((data) => {
-              this.GameParticipants = data
-              this.GetQuizQuestions(this.SingleGame.id)
-                .then(() => {
-                  getParticipants(resolve)
-                })
-                .catch(() => {
-                  getParticipants(resolve)
-                })
-            })
+            if (this.SingleGame) {
+              Logic.Users.GetUsers({
+                where: [
+                  {
+                    field: 'id',
+                    value: this.SingleGame?.participants,
+                    condition: Conditions.in,
+                  },
+                ],
+              }).then((data) => {
+                this.GameParticipants = data
+                this.GetQuizQuestions(this.SingleGame.id)
+                  .then(() => {
+                    getParticipants(resolve)
+                  })
+                  .catch(() => {
+                    getParticipants(resolve)
+                  })
+              })
+            } else {
+              resolve('')
+            }
           })
           .catch((error) => {
             throw error
@@ -186,12 +190,14 @@ export default class Plays extends Common {
       allQuizIds.push(...this.AllGames.results.map((item) => item.quizId))
       allQuizIds.push(...this.AllTests.results.map((item) => item.quizId))
 
+      const uniqueItems = [...new Set(allQuizIds)]
+
       const response = await $api.study.quiz.fetch({
         where: [
           {
             field: 'id',
             condition: Conditions.in,
-            value: allQuizIds,
+            value: uniqueItems,
           },
         ],
       })

@@ -35,6 +35,8 @@ interface ContentDetails {
   title: string
   info: string
   id: string
+  hasCourse: boolean
+  courseId: string
   status: string
   labels: {
     color: string
@@ -42,7 +44,7 @@ interface ContentDetails {
     sub: string
   }
   ratings: {
-    total: 4
+    total: number
     label: string
     totalCount: number
     stats: any
@@ -50,6 +52,7 @@ interface ContentDetails {
       user: {
         name: string
         photoUrl: string
+        id: string
       }
       rating: number
       review: string

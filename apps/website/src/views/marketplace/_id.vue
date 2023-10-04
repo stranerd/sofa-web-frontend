@@ -35,10 +35,33 @@
         :customClass="'!rounded-none'"
         :showBuyButton="true"
         :buyAction="buyCourse"
-        :itemIsPurchased="PurchasedItems.includes(contentDetails.id)"
+        :itemIsPurchased="
+          PurchasedItems.includes(contentDetails.id) ||
+          !contentDetails.hasCourse
+        "
         :similarContents="similarContents"
         :type="contentType"
         :contentId="contentDetails.id"
+        :actions="{
+          report: () => {
+            reportMaterial(
+              contentDetails?.type,
+              contentDetails?.title,
+              contentDetails?.id
+            );
+          },
+          share: () => {
+            shareMaterialLink(
+              contentDetails?.type ?? ('' as any),
+              `/marketplace/${contentDetails?.id}?type=${contentDetails?.id}`,
+              contentDetails?.title ?? '',
+            )
+          },
+          save: () => {
+            selectedFolderMaterailToAdd = contentDetails
+      showSaveToFolder = true
+          } 
+        }"
       />
     </div>
 
@@ -183,7 +206,13 @@ import {
 } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import { createCourseData } from "@/composables/library";
+import {
+  createCourseData,
+  reportMaterial,
+  selectedFolderMaterailToAdd,
+  shareMaterialLink,
+  showSaveToFolder,
+} from "@/composables/library";
 
 export default defineComponent({
   components: {
@@ -210,9 +239,33 @@ export default defineComponent({
       },
       {
         domain: "Study",
+        property: "AllReviews",
+        method: "GetReviews",
+        params: ["courses"],
+        useRouteId: true,
+        ignoreProperty: true,
+        condition: {
+          routeSearchItem: "fullPath",
+          searchQuery: "course",
+        },
+      },
+      {
+        domain: "Study",
         property: "SingleQuiz",
         method: "GetQuiz",
         params: [],
+        useRouteId: true,
+        ignoreProperty: true,
+        condition: {
+          routeSearchItem: "fullPath",
+          searchQuery: "quiz",
+        },
+      },
+      {
+        domain: "Study",
+        property: "AllReviews",
+        method: "GetReviews",
+        params: ["quizzes"],
         useRouteId: true,
         ignoreProperty: true,
         condition: {
@@ -320,6 +373,8 @@ export default defineComponent({
     const PaymentMethods = ref(Logic.Payment.PaymentMethods);
     const PurchasedItems = ref(Logic.Payment.PurchasedItems);
 
+    const AllReviews = ref(Logic.Study.AllReviews);
+
     const similarContents = ref<any[]>([]);
 
     const selectedMethodId = ref("");
@@ -331,6 +386,7 @@ export default defineComponent({
     const setCourseData = () => {
       contentType.value = "course";
       contentDetails.id = SingleCourse.value.id;
+      contentDetails.type = "course";
       contentDetails.title = SingleCourse.value.title;
       contentDetails.price = SingleCourse.value.price.amount;
       contentDetails.status = SingleCourse.value.status;
@@ -354,6 +410,32 @@ export default defineComponent({
 
       contentDetails.content.materialsCount =
         SingleCourse.value.coursables.length;
+
+      contentDetails.ratings.label = `${
+        SingleCourse.value.ratings.count
+      } rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`;
+      contentDetails.ratings.total = SingleCourse.value.ratings.avg;
+      contentDetails.ratings.totalCount = SingleCourse.value.ratings.count;
+
+      // set reviews
+      contentDetails.ratings.stats["1"] = 0;
+      contentDetails.ratings.stats["2"] = 0;
+      contentDetails.ratings.stats["3"] = 0;
+      contentDetails.ratings.stats["4"] = 0;
+      contentDetails.ratings.stats["5"] = 0;
+
+      AllReviews.value?.results.forEach((review) => {
+        contentDetails.ratings.stats[`${review.rating}`]++;
+        contentDetails.ratings.reviews.push({
+          rating: review.rating,
+          review: review.message,
+          user: {
+            name: review.user.bio.name.full,
+            photoUrl: review.user.bio.photo?.link || "",
+            id: review.user.id,
+          },
+        });
+      });
 
       // set sections
 
@@ -411,6 +493,7 @@ export default defineComponent({
     const setQuizData = () => {
       if (SingleQuiz.value) {
         contentType.value = "quiz";
+        contentDetails.type = "quiz";
         contentDetails.id = SingleQuiz.value?.courseId || SingleQuiz.value?.id;
         contentDetails.title = SingleQuiz.value.title;
         contentDetails.price = 0;
@@ -433,6 +516,35 @@ export default defineComponent({
         contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
           ? SingleQuiz.value.user.bio.photo.link
           : "";
+
+        contentDetails.ratings.label = `${
+          SingleQuiz.value.ratings.count
+        } rating${SingleQuiz.value.ratings.count > 1 ? "s" : ""}`;
+        contentDetails.ratings.total = SingleQuiz.value.ratings.avg;
+        contentDetails.ratings.totalCount = SingleQuiz.value.ratings.count;
+
+        contentDetails.hasCourse = SingleQuiz.value.courseId ? true : false;
+        contentDetails.courseId = SingleQuiz.value.courseId || "";
+
+        // set reviews
+        contentDetails.ratings.stats["1"] = 0;
+        contentDetails.ratings.stats["2"] = 0;
+        contentDetails.ratings.stats["3"] = 0;
+        contentDetails.ratings.stats["4"] = 0;
+        contentDetails.ratings.stats["5"] = 0;
+
+        AllReviews.value?.results.forEach((review) => {
+          contentDetails.ratings.stats[`${review.rating}`]++;
+          contentDetails.ratings.reviews.push({
+            rating: review.rating,
+            review: review.message,
+            user: {
+              name: review.user.bio.name.full,
+              photoUrl: review.user.bio.photo?.link || "",
+              id: review.user.id,
+            },
+          });
+        });
 
         contentDetails.questions.length = 0;
         AllQuestions.value?.results.forEach((question) => {
@@ -529,6 +641,8 @@ export default defineComponent({
       Logic.Study.watchProperty("SingleCourseQuizzes", SingleCourseQuizzes);
       Logic.Payment.watchProperty("UserWallet", UserWallet);
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+      Logic.Study.watchProperty("AllReviews", AllReviews);
+
       scrollToTop();
 
       if (contentType.value == "course") {
@@ -573,6 +687,10 @@ export default defineComponent({
       similarContents,
       SingleQuiz,
       contentType,
+      selectedFolderMaterailToAdd,
+      showSaveToFolder,
+      reportMaterial,
+      shareMaterialLink,
       buyCourse,
     };
   },

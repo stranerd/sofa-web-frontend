@@ -9,9 +9,9 @@
         <sofa-normal-text>{{ data.materialsCount }} materials</sofa-normal-text>
       </div>
 
-      <sofa-normal-text :color="'text-primaryPink'">
+      <!-- <sofa-normal-text :color="'text-primaryPink'">
         Expand all sections
-      </sofa-normal-text>
+      </sofa-normal-text> -->
     </div>
 
     <div

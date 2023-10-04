@@ -56,6 +56,16 @@ const selectedInProgressFilter = ref('all')
 
 const selectedResultFilter = ref('all')
 
+const reportMaterialSetup = reactive<{
+  show: boolean
+  type: 'course' | 'quiz'
+  id: string
+}>({
+  show: false,
+  type: 'course',
+  id: '',
+})
+
 const allContentCategories = [
   'quizzes',
   'courses',
@@ -225,6 +235,7 @@ const folders = reactive<
     edit: boolean
     hover: boolean
     id: string
+    items: string[]
   }[]
 >([])
 
@@ -508,6 +519,10 @@ const setFolders = () => {
       hover: false,
       id: folder.id,
       selected: false,
+      items: [
+        ...(folder.saved.courses?.map((item) => item) || []),
+        ...(folder.saved.quizzes?.map((item) => item) || []),
+      ],
     })
   })
 
@@ -633,6 +648,7 @@ const addFolder = () => {
     hover: false,
     selected: false,
     id: tempId,
+    items: [],
   })
 }
 
@@ -659,6 +675,7 @@ const addMaterialToFolder = (
   folderId: string,
   type: 'quiz' | 'course',
   itemId: string,
+  add: boolean,
 ) => {
   const selectedFolder = AllFolders.value.results.filter((item) => {
     return item.id == folderId
@@ -666,19 +683,41 @@ const addMaterialToFolder = (
 
   if (selectedFolder.length) {
     const folder = selectedFolder[0]
-    const courses = folder.courses?.map((item) => item.id) || []
-    const quizzes = folder.quizzes?.map((item) => item.id) || []
+
+    const courses = folder.saved.courses?.map((item) => item) || []
+    const quizzes = folder.saved.quizzes?.map((item) => item) || []
 
     if (type == 'course') {
-      courses.push(itemId)
-
-      saveItemsToFolder(folderId, 'courses', courses)
+      saveItemsToFolder(folderId, 'courses', courses, add)
     }
 
     if (type == 'quiz') {
-      quizzes.push(itemId)
-      saveItemsToFolder(folderId, 'quizzes', quizzes)
+      saveItemsToFolder(folderId, 'quizzes', quizzes, add)
     }
+
+    AllFolders.value?.results.forEach((item) => {
+      if (item.id == selectedFolder[0].id) {
+        if (type == 'course') {
+          if (add) {
+            item.saved.courses.push(itemId)
+          } else {
+            item.saved.courses = item.saved.courses.filter(
+              (eachId) => eachId != itemId,
+            )
+          }
+        }
+
+        if (type == 'quiz') {
+          if (add) {
+            item.saved.quizzes.push(itemId)
+          } else {
+            item.saved.quizzes = item.saved.quizzes.filter(
+              (eachId) => eachId != itemId,
+            )
+          }
+        }
+      }
+    })
   }
 }
 
@@ -733,9 +772,10 @@ const saveItemsToFolder = (
   folderId: string,
   type: 'courses' | 'quizzes',
   items: string[],
+  add: boolean,
 ) => {
   Logic.Study.SaveItemToFolderForm = {
-    add: true,
+    add,
     id: folderId,
     propIds: items,
     type,
@@ -744,6 +784,7 @@ const saveItemsToFolder = (
   Logic.Study.SaveItemToFolder(true).then((data) => {
     if (data) {
       Logic.Study.GetFolder(folderId)
+      setFolders()
     }
   })
 }
@@ -766,13 +807,22 @@ const showMoreOptionHandler = (data: ResourceType) => {
   data.showMore = true
 }
 
-const reportMaterial = (type: string, name: string, id: string) => {
-  const queryMsg = `I have a feedback on the ${type} ${name} with ID - ${id}.`
-  if (Logic.Common.mediaQuery() == 'sm' || Logic.Common.mediaQuery() == 'md') {
-    Logic.Common.GoToRoute(`/settings/contact_us?query=${queryMsg}`)
-  } else {
-    Logic.Common.GoToRoute(`/settings?tab=contact_us&query=${queryMsg}`)
+const reportMaterial = (type: any, name: string, id: string) => {
+  reportMaterialSetup.type = type
+  reportMaterialSetup.id = id
+  reportMaterialSetup.show = true
+}
+
+const sendReportMaterial = (data: any) => {
+  Logic.Interactions.CreateReportForm = {
+    entity: {
+      id: reportMaterialSetup.id,
+      type: reportMaterialSetup.type == 'course' ? 'courses' : 'quizzes',
+    },
+    message: data.review,
   }
+
+  Logic.Interactions.CreateReport(true)
 }
 
 const selectedItem = ref<ResourceType | undefined>(undefined)
@@ -853,6 +903,15 @@ const moreOptions = reactive([
       )
     },
   },
+  {
+    icon: 'save',
+    title: 'Save/unsave to folder',
+    show: () => selectedItem.value?.status == 'published',
+    action: () => {
+      selectedFolderMaterailToAdd.value = selectedItem.value
+      showSaveToFolder.value = true
+    },
+  },
 ])
 
 export {
@@ -901,6 +960,7 @@ export {
   currentInProgressItem,
   currentResultItems,
   GameAndTestQuizzes,
+  reportMaterialSetup,
   setResultItems,
   setInProgressItems,
   setRecentItems,
@@ -923,4 +983,6 @@ export {
   addMaterialToFolder,
   openQuiz,
   openCourse,
+  shareMaterialLink,
+  sendReportMaterial,
 }

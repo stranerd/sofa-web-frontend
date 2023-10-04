@@ -41,14 +41,21 @@ const addCourseFileForm = reactive<CreateDocumentInput>({
   id: '',
 })
 
-const getTopics = () => {
+const getTopics = (useId = false) => {
   const data = []
   Logic.Study.Tags?.results?.forEach((tag) => {
     if (tag.type == 'topics') {
-      data.push({
-        key: tag.title,
-        value: tag.title,
-      })
+      if (useId) {
+        data.push({
+          key: tag.id,
+          value: tag.title,
+        })
+      } else {
+        data.push({
+          key: tag.title,
+          value: tag.title,
+        })
+      }
     }
   })
   allTopics.value.length = 0

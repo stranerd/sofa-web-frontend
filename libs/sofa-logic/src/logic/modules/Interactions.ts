@@ -93,10 +93,20 @@ export default class Interactions extends Common {
 
   public CreateReport = (formIsValid: boolean) => {
     if (formIsValid && this.CreateReportForm) {
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      })
       return $api.interactions.reports
         .post(null, this.CreateReportForm)
         .then((response) => {
           this.SingleReport = response.data
+          Logic.Common.showLoader({
+            show: true,
+            loading: false,
+            message: 'Your report has been sent',
+            type: 'success',
+          })
         })
         .catch((error) => {
           Logic.Common.showError(capitalize(error.response.data[0]?.message))

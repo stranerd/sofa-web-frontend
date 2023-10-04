@@ -6,7 +6,7 @@
         close ? close() : null;
       }
     "
-    :can-close="false"
+    :can-close="canClose"
   >
     <div
       class="mdlg:!w-[60%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
@@ -38,29 +38,33 @@
         <div
           class="w-full flex flex-col space-y-4 px-4 py-4 items-center justify-center"
         >
-          <div
-            class="w-full flex flex-row justify-center items-center space-x-2"
-            v-if="tutor"
-          >
-            <sofa-avatar
-              :bgColor="'!bg-[#78828C]'"
-              :photoUrl="tutor.photo || ''"
-              :size="'27'"
+          <template v-if="tutor">
+            <div
+              class="w-full flex flex-row justify-center items-center space-x-2"
             >
-              <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-            </sofa-avatar>
-            <div class="flex flex-row items-center space-x-1">
-              <SofaNormalText :custom-class="'!font-bold'">
-                {{ tutor.name }}
-              </SofaNormalText>
-              <SofaIcon
-                :name="'tutor-bagde'"
-                :custom-class="'h-[20px]'"
-              ></SofaIcon>
+              <sofa-avatar
+                :bgColor="'!bg-[#78828C]'"
+                :photoUrl="tutor.photo || ''"
+                :size="'27'"
+              >
+                <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
+              </sofa-avatar>
+              <div class="flex flex-row items-center space-x-1">
+                <SofaNormalText :custom-class="'!font-bold'">
+                  {{ tutor.name }}
+                </SofaNormalText>
+                <SofaIcon
+                  :name="'tutor-bagde'"
+                  :custom-class="'h-[20px]'"
+                ></SofaIcon>
+              </div>
             </div>
-          </div>
+          </template>
 
-          <div class="flex flex-col pb-3 pt-2">
+          <div
+            :class="`flex flex-col pb-3 ${tutor ? 'pt-2' : ''} `"
+            v-if="hasRatings"
+          >
             <sofa-ratings
               :count="formData.ratings"
               v-model="formData.ratings"
@@ -74,7 +78,7 @@
             <sofa-textarea
               :padding="'px-3 py-4'"
               :custom-class="'bg-backgroundGray custom-border'"
-              :placeholder="'Write a short review'"
+              :placeholder="'Write a short message'"
               v-model="formData.review"
               :rich-editor="false"
               :text-area-style="'!bg-backgroundGray custom-border'"
@@ -135,6 +139,14 @@ export default defineComponent({
         name: string;
         photo: string;
       },
+    },
+    canClose: {
+      type: Boolean,
+      default: false,
+    },
+    hasRatings: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: ["OnReviewSubmitted"],

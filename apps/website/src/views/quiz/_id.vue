@@ -58,7 +58,6 @@
             <template v-else>
               <sofa-header-text :size="'xl'"> Quiz preview </sofa-header-text>
             </template>
-
             <sofa-normal-text
               :color="'text-grayColor'"
               :customClass="'!text-base cursor-pointer'"
@@ -814,6 +813,24 @@
       </div>
     </template>
 
+    <!-- Rating floating button -->
+    <Teleport
+      to="body"
+      v-if="!QuizReview && Logic.Auth.AuthUser.id != SingleQuiz?.user.id"
+    >
+      <span
+        class="absolute mdlg:bottom-[10%] mdlg:right-[1%] bottom-[13%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]"
+      >
+        <span
+          class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
+          @click="showRateQuiz = true"
+        >
+          <sofa-icon :name="'star-white'" :customClass="'h-[15px]'"></sofa-icon>
+          <sofa-normal-text :color="'text-white'"> Rate </sofa-normal-text>
+        </span>
+      </span>
+    </Teleport>
+
     <!-- Info modal -->
     <sofa-modal
       v-if="showInfoModal"
@@ -881,6 +898,23 @@
         </div>
       </div>
     </sofa-modal>
+
+    <!-- Rate quiz -->
+    <rate-and-review-modal
+      v-if="showRateQuiz"
+      :close="
+        () => {
+          showRateQuiz = false;
+        }
+      "
+      :canClose="true"
+      :title="'Rate this quiz'"
+      @on-review-submitted="
+        (data) => {
+          rateQuiz(data);
+        }
+      "
+    />
   </expanded-layout>
 </template>
 
@@ -962,6 +996,7 @@ import {
   pieChartRefForTestScore,
 } from "@/composables/quiz";
 import slider from "vue3-slider";
+import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
 const fetchRules = [];
 
@@ -994,6 +1029,15 @@ fetchRules.push(
     ignoreProperty: true,
   },
   {
+    domain: "Study",
+    property: "SingleReview",
+    method: "GetSingleReview",
+    params: ["quizzes"],
+    useRouteId: true,
+    requireAuth: true,
+    ignoreProperty: true,
+  },
+  {
     domain: "Plays",
     property: "SingleTest",
     method: "GetTest",
@@ -1022,6 +1066,7 @@ export default defineComponent({
     SofaAvatar,
     slider,
     SofaPieChart,
+    RateAndReviewModal,
   },
   middlewares: {
     fetchRules,
@@ -1039,6 +1084,10 @@ export default defineComponent({
     const isStudent = ref(false);
 
     const currentSliderIndex = ref(1);
+
+    const showRateQuiz = ref(false);
+
+    const QuizReview = ref(Logic.Study.SingleReview);
 
     watch(currentQuestionIndex, () => {
       questionIndex.value = currentQuestionIndex.value;
@@ -1121,6 +1170,21 @@ export default defineComponent({
       }
     };
 
+    const rateQuiz = (data: any) => {
+      Logic.Study.AddReviewForm = {
+        entity: {
+          id: SingleQuiz.value.id,
+          type: "quizzes",
+        },
+        message: data.review,
+        rating: data.ratings,
+      };
+
+      Logic.Study.AddReview().then(() => {
+        //
+      });
+    };
+
     onMounted(() => {
       scrollToTop();
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
@@ -1128,6 +1192,7 @@ export default defineComponent({
       Logic.Study.watchProperty("AllQuestions", AllQuestions);
       Logic.Plays.watchProperty("SingleGame", SingleGame);
       Logic.Plays.watchProperty("GameParticipants", GameParticipants);
+      Logic.Study.watchProperty("SingleReview", QuizReview);
       setUpQuiz();
       answerState.value = "";
     });
@@ -1200,6 +1265,8 @@ export default defineComponent({
       resultData,
       pieChartColor,
       pieLabel,
+      QuizReview,
+      showRateQuiz,
       userIsGameHost,
       copyGameLink,
       shareGameLink,
@@ -1207,6 +1274,7 @@ export default defineComponent({
       startTest,
       goToStudyMode,
       showExplanation,
+      rateQuiz,
     };
   },
 });

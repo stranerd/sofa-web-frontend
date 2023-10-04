@@ -63,7 +63,7 @@ export default class Conversations extends Common {
   }
 
   public GetConversation = (id: string) => {
-    if (!id || id == 'empty') {
+    if (!id || id == 'empty' || id == 'nill') {
       return new Promise((resolve) => {
         resolve('')
       })

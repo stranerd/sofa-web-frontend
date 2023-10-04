@@ -216,7 +216,7 @@
           v-if="Logic.Users.getUserType() == 'student'"
         >
           <div
-            @click="addNewChat()"
+            @click="newChat()"
             class="w-full rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] flex flex-row space-x-3 items-center justify-start px-4 py-4 bg-primaryPurple"
           >
             <sofa-icon :name="'box-add-white'" :custom-class="'h-[25px]'" />
@@ -498,11 +498,9 @@
         <div
           class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3"
           v-if="
-            (SingleConversation &&
-              hasMessage &&
-              !itIsNewMessage &&
-              !selectedTutorRequestData) ||
-            !SingleConversation?.tutor
+            ((hasMessage && !selectedTutorRequestData) ||
+              (!SingleConversation?.tutor && !itIsNewMessage)) &&
+            SingleConversation
           "
         >
           <div
@@ -639,6 +637,17 @@ const fetchRules = [
     params: [],
     requireAuth: true,
     ignoreProperty: false,
+  },
+  {
+    domain: "Study",
+    property: "Tags",
+    method: "GetTags",
+    params: [
+      {
+        all: true,
+      },
+    ],
+    requireAuth: true,
   },
 ];
 
@@ -782,12 +791,12 @@ export default defineComponent({
       setConvoFromRoute();
       scrollToTop();
 
-      if (
-        Logic.Users.getUserType() == "teacher" &&
-        SingleTutorRequest.value.accepted == false
-      ) {
-        currentComponent.value = "expanded-layout";
-      }
+      // if (
+      //   Logic.Users.getUserType() == "teacher" &&
+      //   SingleTutorRequest.value.accepted == false
+      // ) {
+      //   currentComponent.value = "expanded-layout";
+      // }
     });
 
     const newChat = () => {
@@ -796,6 +805,17 @@ export default defineComponent({
       }
 
       itIsNewMessage.value = true;
+
+      if (
+        Logic.Common.mediaQuery() == "md" ||
+        Logic.Common.mediaQuery() == "sm"
+      ) {
+        Logic.Common.GoToRoute("/chat/new");
+      } else {
+        selectedChatData.value.title = "New Chat";
+        Logic.Conversations.SingleConversation = undefined;
+        Logic.Conversations.Messages = undefined;
+      }
     };
 
     const handleRequestSent = () => {

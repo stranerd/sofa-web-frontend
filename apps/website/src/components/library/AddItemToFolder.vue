@@ -243,12 +243,18 @@ export default defineComponent({
         saveItemsToFolder(
           props.folderId,
           "courses",
-          selectedItems.value.course
+          selectedItems.value.course,
+          true
         );
       }
 
       if (selectedItems.value.quiz.length) {
-        saveItemsToFolder(props.folderId, "quizzes", selectedItems.value.quiz);
+        saveItemsToFolder(
+          props.folderId,
+          "quizzes",
+          selectedItems.value.quiz,
+          true
+        );
       }
       props.close ? props.close() : null;
     };

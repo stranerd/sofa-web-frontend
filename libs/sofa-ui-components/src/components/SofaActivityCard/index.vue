@@ -58,7 +58,11 @@
             </div>
             <div
               class="flex flex-row justify-end"
-              v-if="hasBookmark"
+              v-if="
+                hasBookmark &&
+                Logic.Common.mediaQuery() != 'sm' &&
+                Logic.Common.mediaQuery() != 'md'
+              "
               @click.stop="bookmarkAction ? bookmarkAction() : null"
             >
               <sofa-icon :customClass="'h-[16px]'" :name="'bookmark'" />
@@ -110,7 +114,10 @@
           <div
             class="flex flex-row items-center space-x-2 flex-grow justify-between w-full"
           >
-            <router-link :to="`/profile/${activity.user.id}`" class="space-x-2 flex flex-row items-center cursor-pointer">
+            <router-link
+              :to="`/profile/${activity.user.id}`"
+              class="space-x-2 flex flex-row items-center cursor-pointer"
+            >
               <sofa-avatar
                 :size="'20'"
                 :photoUrl="activity.user.bio.photo?.link ?? ''"
@@ -126,14 +133,27 @@
               <sofa-normal-text
                 :customClass="'!whitespace-nowrap !line-clamp-1'"
               >
-                {{ activity.authUserId === activity.user.id ? 'You' : activity.user.bio.name.full }}
+                {{
+                  activity.authUserId === activity.user.id
+                    ? "You"
+                    : activity.user.bio.name.full
+                }}
               </sofa-normal-text>
-              <sofa-icon v-if="activity.user.roles.isVerified" :name="'verify'" :custom-class="'h-[13px]'" />
-              <sofa-icon v-if="activity.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
+              <sofa-icon
+                v-if="activity.user.roles.isVerified"
+                :name="'verify'"
+                :custom-class="'h-[13px]'"
+              />
+              <sofa-icon
+                v-if="activity.user.type?.type === 'teacher'"
+                :name="'tutor-bagde'"
+                :custom-class="'h-[13px]'"
+              />
             </router-link>
 
             <sofa-icon
               v-if="!isWrapped"
+              @click.stop="bookmarkAction ? bookmarkAction() : null"
               :name="'bookmark'"
               :customClass="'h-[17px] mdlg:!hidden '"
             />
@@ -152,6 +172,7 @@ import SofaImageLoader from "../SofaImageLoader";
 import SofaBadge from "../SofaBadge";
 import SofaButton from "../SofaButton";
 import SofaAvatar from "../SofaAvatar";
+import { Logic } from "../../composable";
 
 export default defineComponent({
   components: {
@@ -199,5 +220,10 @@ export default defineComponent({
     },
   },
   name: "SofaActivityCard",
+  setup() {
+    return {
+      Logic,
+    };
+  },
 });
 </script>

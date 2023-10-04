@@ -3,7 +3,7 @@ import Common from './Common'
 import { Logic } from '..'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Conditions, QueryParams } from '../types/common'
-import { AddTagInput } from '../types/forms/common'
+import { AddReviewInput, AddTagInput } from '../types/forms/common'
 import {
   Course,
   Folder,
@@ -24,6 +24,7 @@ import {
 } from '../types/forms/study'
 import { capitalize, reactive } from 'vue'
 import { Tags } from '../types/domains/interactions'
+import { Review } from '../types/domains/conversations'
 
 export default class Study extends Common {
   constructor() {
@@ -80,6 +81,8 @@ export default class Study extends Common {
         popular: (Course | Quiz)[]
       }
     | undefined
+  public SingleReview: Review | undefined
+  public AllReviews: Paginated<Review> | undefined
 
   // Form input
   public CreateTagForm: AddTagInput | undefined
@@ -97,6 +100,7 @@ export default class Study extends Common {
   public ReorderQuizQuestionsForm: ReorderQuizInput | undefined
   public MoveItemToCourseForm: AddItemToCourseInput | undefined
   public UpdateCourseSectionForm: UpdateCourseSectionsInput | undefined
+  public AddReviewForm: AddReviewInput | undefined
 
   public questionSettings = reactive([])
   public selectedQuestion = reactive({})
@@ -109,7 +113,9 @@ export default class Study extends Common {
     title: '',
     status: '',
     id: '',
+    hasCourse: true,
     info: '',
+    courseId: '',
     labels: {
       color: 'pink',
       main: 'Course',
@@ -126,26 +132,7 @@ export default class Study extends Common {
         '2': 0,
         '1': 0,
       },
-      reviews: [
-        {
-          user: {
-            name: 'Blessing J.',
-            photoUrl: '/images/desdemona.png',
-          },
-          rating: 4,
-          review:
-            'This is truly amazing. Help me understand how I should approach o’chem. Thank you for sharing',
-        },
-        {
-          user: {
-            name: 'Blessing J.',
-            photoUrl: '/images/desdemona.png',
-          },
-          rating: 4,
-          review:
-            'This is truly amazing. Help me understand how I should approach o’chem. Thank you for sharing',
-        },
-      ],
+      reviews: [],
     },
     user: {
       name: '',
@@ -1401,7 +1388,7 @@ export default class Study extends Common {
   }
 
   public GetQuiz = (id: string, autoCreate = false) => {
-    if (!id) {
+    if (!id || id == 'nill') {
       if (autoCreate) {
         return new Promise((resolve) => {
           // create a new quiz
@@ -1504,10 +1491,14 @@ export default class Study extends Common {
     })
   }
 
-  public GetCoursesWithQuery = (query: string, tagId = '', userId = '') => {
+  public GetCoursesWithQuery = async (
+    query = 'nill',
+    tagId = '',
+    userId = '',
+  ) => {
     const whereQuery = []
 
-    if (tagId) {
+    if (tagId && tagId != 'nill') {
       whereQuery.push({
         field: 'tagIds',
         value: tagId,
@@ -1515,12 +1506,14 @@ export default class Study extends Common {
       })
     }
 
-    if (userId) {
+    if (userId && userId != 'nill') {
       whereQuery.push({
-        field: 'status',
-        value: 'published',
+        field: 'user.id',
+        value: userId,
         condition: Conditions.eq,
       })
+
+      await Logic.Users.GetUser(userId)
     }
 
     whereQuery.push({
@@ -1542,10 +1535,14 @@ export default class Study extends Common {
       })
   }
 
-  public GetQuizzesWithQuery = (query: string, tagId = '', userId = '') => {
+  public GetQuizzesWithQuery = async (
+    query = 'nill',
+    tagId = '',
+    userId = '',
+  ) => {
     const whereQuery = []
 
-    if (tagId) {
+    if (tagId && tagId != 'nill') {
       whereQuery.push({
         field: 'tagIds',
         value: tagId,
@@ -1553,12 +1550,14 @@ export default class Study extends Common {
       })
     }
 
-    if (userId) {
+    if (userId && userId != 'nill') {
       whereQuery.push({
-        field: 'status',
-        value: 'published',
+        field: 'user.id',
+        value: userId,
         condition: Conditions.eq,
       })
+
+      await Logic.Users.GetUser(userId)
     }
 
     whereQuery.push({
@@ -1582,7 +1581,7 @@ export default class Study extends Common {
   }
 
   public GetCourse = (id: string, autoCreate = false) => {
-    if (!id) {
+    if (!id || id == 'nill') {
       if (autoCreate) {
         return new Promise((resolve) => {
           // create course
@@ -1632,10 +1631,10 @@ export default class Study extends Common {
     }
     return new Promise((resolve) => {
       $api.study.course.get(id).then((response) => {
-        const allCourseableFiles = response.data.coursables
+        const allCourseableFiles = response.data?.coursables
           ?.filter((item) => item.type == 'file')
           .map((item) => item.id)
-        const allCourseableQuizzes = response.data.coursables
+        const allCourseableQuizzes = response.data?.coursables
           ?.filter((item) => item.type == 'quiz')
           .map((item) => item.id)
 
@@ -1777,6 +1776,60 @@ export default class Study extends Common {
     })
   }
 
+  public GetReviews = (uniqueId: string, type: 'quizzes' | 'courses') => {
+    return $api.interactions.reviews
+      .fetch({
+        where: [
+          {
+            field: 'entity.id',
+            value: uniqueId,
+            condition: Conditions.eq,
+          },
+          {
+            field: 'entity.type',
+            value: type,
+            condition: Conditions.eq,
+          },
+        ],
+      })
+      .then((response) => {
+        this.AllReviews = response.data
+        return response.data
+      })
+  }
+
+  public GetSingleReview = (uniqueId: string, type: 'quizzes' | 'courses') => {
+    return $api.interactions.reviews
+      .fetch({
+        where: [
+          {
+            field: 'entity.id',
+            value: uniqueId,
+            condition: Conditions.eq,
+          },
+          {
+            field: 'entity.type',
+            value: type,
+            condition: Conditions.eq,
+          },
+          {
+            field: 'user.id',
+            value: Logic.Auth.AuthUser.id,
+            condition: Conditions.eq,
+          },
+        ],
+      })
+      .then((response) => {
+        if (response.data.results.length) {
+          this.SingleReview = response.data.results[0]
+        } else {
+          this.SingleReview = undefined
+        }
+
+        return response.data
+      })
+  }
+
   public GetFileMedia = (fileId: string) => {
     return $api.study.file.getFileMedia(fileId).then((response) => {
       this.SingleMediaFile = response.data
@@ -1850,7 +1903,33 @@ export default class Study extends Common {
           Logic.Common.hideLoader()
           Logic.Common.showLoader({
             show: true,
-            message: 'Material added to folder',
+            message: this.SaveItemToFolderForm.add
+              ? 'Material added to folder'
+              : 'Material removed from folder',
+            type: 'success',
+          })
+          return response.data
+        })
+        .catch((error) => {
+          Logic.Common.showError(capitalize(error.response.data[0]?.message))
+        })
+    }
+  }
+
+  public AddReview = () => {
+    if (this.AddReviewForm) {
+      Logic.Common.showLoader({
+        loading: true,
+        show: false,
+      })
+      return $api.interactions.reviews
+        .post(null, this.AddReviewForm)
+        .then((response) => {
+          this.SingleReview = response.data
+          Logic.Common.hideLoader()
+          Logic.Common.showLoader({
+            show: true,
+            message: 'Your review has been added',
             type: 'success',
           })
           return response.data
