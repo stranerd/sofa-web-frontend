@@ -2019,7 +2019,28 @@ export default class Study extends Common {
   public SaveCourseLocalChanges = () => {
     if (localStorage.getItem('couse_section_update')) {
       const content = JSON.parse(localStorage.getItem('couse_section_update'))
+
       this.UpdateCourseSectionForm = content
+
+      const unsectioned = this.UpdateCourseSectionForm.sections.filter(
+        (item) => item.label == 'unsectioned',
+      )[0]
+      if (unsectioned) {
+        if (unsectioned.items.length > 0) {
+          Logic.Common.showLoader({
+            loading: false,
+            type: 'error',
+            message:
+              'Unsectioned has to be empty. Please, move all your materials to a section.',
+            show: true,
+          })
+          return
+        } else {
+          this.UpdateCourseSectionForm.sections = this.UpdateCourseSectionForm.sections.filter(
+            (item) => item.label != 'unsectioned',
+          )
+        }
+      }
       this.UpdateCourseSection()
     }
   }
