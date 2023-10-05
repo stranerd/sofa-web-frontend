@@ -428,7 +428,8 @@
                 v-for="(content, index) in currentInProgressItem"
                 :key="index"
                 :content="content"
-                :custom-class="'!bg-white shadow-custom '"
+                :custom-class="'!bg-white shadow-custom cursor-pointer'"
+                @click="content.action()"
               />
             </template>
             <div v-else class="col-span-full flex flex-col">
@@ -450,7 +451,8 @@
                 v-for="(content, index) in currentResultItems"
                 :key="index"
                 :content="content"
-                :custom-class="'!bg-white shadow-custom '"
+                :custom-class="'!bg-white shadow-custom cursor-pointer'"
+                @click="content.action()"
               />
             </template>
             <div v-else class="col-span-full flex flex-col">

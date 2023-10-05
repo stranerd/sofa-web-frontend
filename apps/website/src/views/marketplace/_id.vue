@@ -35,10 +35,7 @@
         :customClass="'!rounded-none'"
         :showBuyButton="true"
         :buyAction="buyCourse"
-        :itemIsPurchased="
-          PurchasedItems.includes(contentDetails.id) ||
-          !contentDetails.hasCourse
-        "
+        :itemIsPurchased="userHasAccess"
         :similarContents="similarContents"
         :type="contentType"
         :contentId="contentDetails.id"
@@ -208,6 +205,7 @@ import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import {
   createCourseData,
+  createQuizData,
   reportMaterial,
   selectedFolderMaterailToAdd,
   shareMaterialLink,
@@ -341,6 +339,8 @@ export default defineComponent({
 
     const UserWallet = ref(Logic.Payment.UserWallet);
 
+    const userHasAccess = ref(false);
+
     const tabItems = [
       {
         id: "start",
@@ -407,6 +407,7 @@ export default defineComponent({
       contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
         ? SingleCourse.value.user.bio.photo.link
         : "";
+      contentDetails.user.id = SingleCourse.value.user.id;
 
       contentDetails.content.materialsCount =
         SingleCourse.value.coursables.length;
@@ -516,6 +517,7 @@ export default defineComponent({
         contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
           ? SingleQuiz.value.user.bio.photo.link
           : "";
+        contentDetails.user.id = SingleQuiz.value.user.id;
 
         contentDetails.ratings.label = `${
           SingleQuiz.value.ratings.count
@@ -583,36 +585,44 @@ export default defineComponent({
     };
 
     const setSimilarContents = () => {
-      Logic.Study.GetCourses(
-        {
-          where: [
-            {
-              field: "topicId",
-              condition: Conditions.eq,
-              value: SingleCourse.value.topicId,
-            },
-            {
-              field: "status",
-              condition: Conditions.eq,
-              value: "published",
-            },
-            {
-              field: "id",
-              condition: Conditions.ne,
-              value: SingleCourse.value.id,
-            },
-          ],
-          limit: 3,
-        },
-        false
-      ).then((courses) => {
-        similarContents.value.length = 0;
-        if (courses) {
-          courses.results.forEach((course) => {
-            similarContents.value.push(createCourseData(course));
-          });
-        }
-      });
+      if (SingleQuiz.value) {
+        Logic.Study.GetSimilarQuizzes(SingleQuiz.value.id).then((data) => {
+          similarContents.value.length = 0;
+          if (data) {
+            data.forEach((quiz) => {
+              similarContents.value.push(createQuizData(quiz));
+            });
+          }
+        });
+      }
+
+      if (SingleCourse.value) {
+        Logic.Study.GetSimilarCourses(SingleCourse.value.id).then((data) => {
+          similarContents.value.length = 0;
+          if (data) {
+            data.forEach((course) => {
+              similarContents.value.push(createCourseData(course));
+            });
+          }
+        });
+      }
+    };
+
+    const setAccessState = () => {
+      if (Logic.Auth.AuthUser.id == contentDetails.user.id) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      if (
+        PurchasedItems.value.includes(contentDetails.id) ||
+        !contentDetails.hasCourse
+      ) {
+        userHasAccess.value == true;
+        return;
+      }
+
+      userHasAccess.value = false;
     };
 
     watch(SingleCourse, () => {
@@ -620,6 +630,7 @@ export default defineComponent({
         scrollToTop();
         setCourseData();
         setSimilarContents();
+        setAccessState();
       }
     });
 
@@ -627,10 +638,13 @@ export default defineComponent({
       if (SingleQuiz.value) {
         scrollToTop();
         setQuizData();
+        setSimilarContents();
+        setAccessState();
       }
     });
 
     onMounted(() => {
+      userHasAccess.value = false;
       if (Logic.Common.route.query?.type?.toString()) {
         contentType.value = Logic.Common.route.query?.type?.toString();
       }
@@ -661,6 +675,7 @@ export default defineComponent({
 
       if (contentType.value == "quiz") {
         setQuizData();
+        setSimilarContents();
         Logic.Interactions.CreateViewForm = {
           entity: {
             id: SingleQuiz.value?.id,
@@ -670,6 +685,8 @@ export default defineComponent({
 
         Logic.Interactions.CreateView(true);
       }
+
+      setAccessState();
     });
 
     return {
@@ -689,6 +706,7 @@ export default defineComponent({
       contentType,
       selectedFolderMaterailToAdd,
       showSaveToFolder,
+      userHasAccess,
       reportMaterial,
       shareMaterialLink,
       buyCourse,

@@ -11,6 +11,20 @@ export default class CoursesApi extends ModelApiService {
     super('study/courses')
   }
 
+  public async similarCourses(courseId: string) {
+    try {
+      const response: AxiosResponse<Course[]> = await this.axiosInstance.get(
+        this.getUrl() + `/${courseId}/similar`,
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
   public async moveItemIntoCourse(data: AddItemToCourseInput) {
     try {
       const response: AxiosResponse<Course> = await this.axiosInstance.post(
