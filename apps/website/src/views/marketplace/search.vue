@@ -19,7 +19,10 @@
           >
         </div>
 
-        <marketplace-filter v-model="selectedOptions" />
+        <marketplace-filter
+          v-model="selectedOptions"
+          :update-value="selectedOptions"
+        />
       </div>
     </template>
 
@@ -478,6 +481,15 @@ export default defineComponent({
       setQuery();
       setCourses();
       setQuizzes();
+
+      if (Logic.Common.route.query?.userId) {
+        selectedOptions.value.push({
+          name: Logic.Users.SingleUser?.bio.name.full,
+          active: true,
+          id: Logic.Common.route.query?.userId.toString(),
+          type: "user",
+        });
+      }
     });
 
     watch(AllCourses, () => {

@@ -336,6 +336,10 @@ export default defineComponent({
       if (questionTypeMain.value == "multiple_choice") {
         possibleAnswers.value = 6;
       }
+
+      if (questionTypeMain.value == "true_false") {
+        possibleAnswers.value = 1;
+      }
     };
 
     const reactiveQuestion = reactive<any>({});
@@ -651,13 +655,13 @@ export default defineComponent({
         }
 
         if (questionTypeSetting[0].questionType == "true_false") {
-          reactiveQuestion.options = [
+          question.value.options = [
             {
               shape: "circle",
               text: "True",
               shapeSize: "h-[23px]",
               isRadio: true,
-              id: "EaNYLgnn",
+              id: Logic.Common.makeid(6),
               value: "True",
               answer: "true",
               showRemove: false,
@@ -667,7 +671,7 @@ export default defineComponent({
               text: "False",
               shapeSize: "h-[20px]",
               isRadio: true,
-              id: "5cRJaK1Y",
+              id: Logic.Common.makeid(6),
               value: "False",
               answer: "",
               showRemove: false,
@@ -683,6 +687,8 @@ export default defineComponent({
 
         reactiveQuestion.itemType = questionTypeSetting[0].itemType;
         questionTypeMain.value = questionTypeSetting[0].questionType;
+
+        setPossibleAnswers();
       }
 
       // update time limit
