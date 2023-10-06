@@ -384,111 +384,113 @@ export default defineComponent({
     const contentDetails = reactive(Logic.Study.contentDetails);
 
     const setCourseData = () => {
-      contentType.value = "course";
-      contentDetails.id = SingleCourse.value.id;
-      contentDetails.type = "course";
-      contentDetails.title = SingleCourse.value.title;
-      contentDetails.price = SingleCourse.value.price.amount;
-      contentDetails.status = SingleCourse.value.status;
-      contentDetails.image = SingleCourse.value.photo
-        ? SingleCourse.value.photo.link
-        : "/images/default.png";
-      contentDetails.info = SingleCourse.value.description;
-      contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-        SingleCourse.value.createdAt
-      ).format("DD/MM/YYYY")}`;
-      contentDetails.labels.color = `orange`;
-      contentDetails.labels.main = `Course`;
-      contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`;
-      contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
-        return Logic.Study.GetTagName(id);
-      });
-      contentDetails.user.name = SingleCourse.value.user.bio.name.full;
-      contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
-        ? SingleCourse.value.user.bio.photo.link
-        : "";
-      contentDetails.user.id = SingleCourse.value.user.id;
-
-      contentDetails.content.materialsCount =
-        SingleCourse.value.coursables.length;
-
-      contentDetails.ratings.label = `${
-        SingleCourse.value.ratings.count
-      } rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`;
-      contentDetails.ratings.total = SingleCourse.value.ratings.avg;
-      contentDetails.ratings.totalCount = SingleCourse.value.ratings.count;
-
-      // set reviews
-      contentDetails.ratings.stats["1"] = 0;
-      contentDetails.ratings.stats["2"] = 0;
-      contentDetails.ratings.stats["3"] = 0;
-      contentDetails.ratings.stats["4"] = 0;
-      contentDetails.ratings.stats["5"] = 0;
-
-      AllReviews.value?.results.forEach((review) => {
-        contentDetails.ratings.stats[`${review.rating}`]++;
-        contentDetails.ratings.reviews.push({
-          rating: review.rating,
-          review: review.message,
-          user: {
-            name: review.user.bio.name.full,
-            photoUrl: review.user.bio.photo?.link || "",
-            id: review.user.id,
-          },
+      if (SingleCourse.value) {
+        contentType.value = "course";
+        contentDetails.id = SingleCourse.value.id;
+        contentDetails.type = "course";
+        contentDetails.title = SingleCourse.value.title;
+        contentDetails.price = SingleCourse.value.price.amount;
+        contentDetails.status = SingleCourse.value.status;
+        contentDetails.image = SingleCourse.value.photo
+          ? SingleCourse.value.photo.link
+          : "/images/default.png";
+        contentDetails.info = SingleCourse.value.description;
+        contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
+          SingleCourse.value.createdAt
+        ).format("DD/MM/YYYY")}`;
+        contentDetails.labels.color = `orange`;
+        contentDetails.labels.main = `Course`;
+        contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`;
+        contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
+          return Logic.Study.GetTagName(id);
         });
-      });
+        contentDetails.user.name = SingleCourse.value.user.bio.name.full;
+        contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
+          ? SingleCourse.value.user.bio.photo.link
+          : "";
+        contentDetails.user.id = SingleCourse.value.user.id;
 
-      // set sections
+        contentDetails.content.materialsCount =
+          SingleCourse.value.coursables.length;
 
-      contentDetails.content.sections.length = 0;
+        contentDetails.ratings.label = `${
+          SingleCourse.value.ratings.count
+        } rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`;
+        contentDetails.ratings.total = SingleCourse.value.ratings.avg;
+        contentDetails.ratings.totalCount = SingleCourse.value.ratings.count;
 
-      SingleCourse.value.sections.forEach((section, index) => {
-        contentDetails.content.sections.push({
-          title: section.label,
-          opened: index == 0,
-          data: [],
+        // set reviews
+        contentDetails.ratings.stats["1"] = 0;
+        contentDetails.ratings.stats["2"] = 0;
+        contentDetails.ratings.stats["3"] = 0;
+        contentDetails.ratings.stats["4"] = 0;
+        contentDetails.ratings.stats["5"] = 0;
+
+        AllReviews.value?.results.forEach((review) => {
+          contentDetails.ratings.stats[`${review.rating}`]++;
+          contentDetails.ratings.reviews.push({
+            rating: review.rating,
+            review: review.message,
+            user: {
+              name: review.user.bio.name.full,
+              photoUrl: review.user.bio.photo?.link || "",
+              id: review.user.id,
+            },
+          });
         });
 
-        section.items.forEach((item) => {
-          if (item.type == "quiz") {
-            const quizData = SingleCourseQuizzes.value?.filter(
-              (quiz) => quiz.id == item.id
-            );
-            if (quizData?.length) {
-              contentDetails.content.sections[index].data.push({
-                isLocked: true,
-                sub: `${quizData[0].questions.length} question${
-                  quizData[0].questions.length > 1 ? "s" : ""
-                }`,
-                title: quizData[0].title,
-                type: "Quiz",
-              });
-            }
-          } else {
-            const fileData = SingleCourseFiles.value?.filter(
-              (file) => file.id == item.id
-            );
+        // set sections
 
-            if (fileData?.length) {
-              if (fileData[0].type == "video") {
+        contentDetails.content.sections.length = 0;
+
+        SingleCourse.value.sections.forEach((section, index) => {
+          contentDetails.content.sections.push({
+            title: section.label,
+            opened: index == 0,
+            data: [],
+          });
+
+          section.items.forEach((item) => {
+            if (item.type == "quiz") {
+              const quizData = SingleCourseQuizzes.value?.filter(
+                (quiz) => quiz.id == item.id
+              );
+              if (quizData?.length) {
                 contentDetails.content.sections[index].data.push({
                   isLocked: true,
-                  sub: fileData[0].description,
-                  title: fileData[0].title,
-                  type: "Video",
-                });
-              } else {
-                contentDetails.content.sections[index].data.push({
-                  isLocked: true,
-                  sub: fileData[0].description,
-                  title: fileData[0].title,
-                  type: "Document",
+                  sub: `${quizData[0].questions.length} question${
+                    quizData[0].questions.length > 1 ? "s" : ""
+                  }`,
+                  title: quizData[0].title,
+                  type: "Quiz",
                 });
               }
+            } else {
+              const fileData = SingleCourseFiles.value?.filter(
+                (file) => file.id == item.id
+              );
+
+              if (fileData?.length) {
+                if (fileData[0].type == "video") {
+                  contentDetails.content.sections[index].data.push({
+                    isLocked: true,
+                    sub: fileData[0].description,
+                    title: fileData[0].title,
+                    type: "Video",
+                  });
+                } else {
+                  contentDetails.content.sections[index].data.push({
+                    isLocked: true,
+                    sub: fileData[0].description,
+                    title: fileData[0].title,
+                    type: "Document",
+                  });
+                }
+              }
             }
-          }
+          });
         });
-      });
+      }
     };
 
     const setQuizData = () => {
@@ -609,16 +611,40 @@ export default defineComponent({
     };
 
     const setAccessState = () => {
+      // User is owner
       if (Logic.Auth.AuthUser.id == contentDetails.user.id) {
         userHasAccess.value = true;
         return;
       }
 
+      // User purchased the course
+      if (PurchasedItems.value.includes(contentDetails.id)) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      // Quiz without a course
+      if (!contentDetails.hasCourse) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      // Owned by an organizationIn
       if (
-        PurchasedItems.value.includes(contentDetails.id) ||
-        !contentDetails.hasCourse
+        Logic.Users.UserProfile.account.organizationsIn.includes(
+          contentDetails.user.id
+        )
       ) {
-        userHasAccess.value == true;
+        userHasAccess.value = true;
+        return;
+      }
+
+      // Is for subscriber
+      if (
+        Logic.Users.UserProfile.roles.isSubscribed &&
+        SingleCourse.value?.user.roles.isOfficialAccount
+      ) {
+        userHasAccess.value = true;
         return;
       }
 

@@ -19,6 +19,8 @@ export interface SingleUser {
     isSuperAdmin: boolean
     isTutor: boolean
     isVerified: boolean
+    isSubscribed?: boolean
+    isOfficialAccount?: boolean
   }
   dates: {
     createdAt: number
