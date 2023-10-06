@@ -237,6 +237,7 @@ const goToStudyMode = (type: string) => {
   if (type == 'game') {
     showStudyMode.value = true
     selectedQuizMode.value = 'game'
+    return
   }
 
   showStudyMode.value = false
