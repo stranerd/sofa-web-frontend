@@ -413,8 +413,8 @@
         "
         :title="'Session ended, rate tutor'"
         :tutor="{
-          name: SingleConversation.tutor.bio.name.full,
-          photo: SingleConversation.tutor?.bio?.photo?.link || '',
+          name: SingleConversation?.tutor.bio.name.full,
+          photo: SingleConversation?.tutor?.bio?.photo?.link || '',
         }"
         @on-review-submitted="
           (data) => {
@@ -429,7 +429,7 @@
       <template v-if="Logic.Users.getUserType() == 'student' && UserProfile">
         <div
           class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
-          v-if="!selectedTutorRequestData || !SingleConversation.tutor"
+          v-if="!selectedTutorRequestData || !SingleConversation?.tutor"
         >
           <div class="w-full flex flex-row items-center space-x-3">
             <div
@@ -468,10 +468,10 @@
         >
           <div
             class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-            v-if="selectedTutorRequestData && SingleConversation.tutor"
+            v-if="selectedTutorRequestData && SingleConversation?.tutor"
             @click.stop="
               showEndSession = true;
-              selectedConvoId = SingleConversation.id;
+              selectedConvoId = SingleConversation?.id;
             "
           >
             <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
@@ -487,7 +487,7 @@
               :color="'text-primaryRed'"
               @click.stop="
                 showDeleteConvo = true;
-                selectedConvoId = SingleConversation.id;
+                selectedConvoId = SingleConversation?.id;
               "
             >
               Delete chat</sofa-normal-text

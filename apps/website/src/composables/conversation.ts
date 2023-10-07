@@ -236,7 +236,7 @@ const selectConversation = (convoId: string) => {
           Logic.Common.hideLoader()
 
           chatList.forEach((item) => {
-            if (item.id == SingleConversation.value.id) {
+            if (item.id == SingleConversation.value?.id) {
               item.selected = true
               selectedChatData.value = item
             } else {
