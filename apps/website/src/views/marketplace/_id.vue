@@ -211,6 +211,7 @@ import {
   shareMaterialLink,
   showSaveToFolder,
 } from "@/composables/library";
+import { allOrganizations, setOrganizations } from "@/composables/profile";
 
 export default defineComponent({
   components: {
@@ -630,14 +631,15 @@ export default defineComponent({
       }
 
       // Owned by an organizationIn
-      if (
-        Logic.Users.UserProfile.account.organizationsIn.includes(
-          contentDetails.user.id
-        )
-      ) {
-        userHasAccess.value = true;
-        return;
-      }
+      setOrganizations().then(() => {
+        const subscribedOrganizations = allOrganizations
+          .filter((item) => item.subscribed)
+          .map((item) => item.id);
+        if (subscribedOrganizations.includes(contentDetails.user.id)) {
+          userHasAccess.value = true;
+          return;
+        }
+      });
 
       // Is for subscriber
       if (

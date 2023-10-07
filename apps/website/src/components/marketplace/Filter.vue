@@ -93,7 +93,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, toRef, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { SofaNormalText, SofaIcon, SofaButton } from "sofa-ui-components";
 import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
@@ -124,8 +124,6 @@ export default defineComponent({
   setup(props, context) {
     const AllTopics = ref(Logic.Study.AllTopics);
     const AllOtherTags = ref(Logic.Study.AllOtherTags);
-
-    const updateValueRef = toRef(props, "updateValue");
 
     const selectedOptions = reactive<
       {

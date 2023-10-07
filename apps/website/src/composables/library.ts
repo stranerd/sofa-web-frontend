@@ -441,9 +441,12 @@ const setResultItems = async () => {
         type: 'Game',
         participants: game.participants.length,
         action: () => {
-          Logic.Common.GoToRoute(
-            `/quiz/${game.quizId}?mode=game&gameId=${game.id}`,
-          )
+          Logic.Common.showLoader({
+            loading: false,
+            show: true,
+            type: 'warning',
+            message: 'Game already ended',
+          })
         },
       })
     }
