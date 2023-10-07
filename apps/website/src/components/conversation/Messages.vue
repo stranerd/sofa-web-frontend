@@ -101,7 +101,8 @@
         </div>
       </template>
     </template>
-    <template v-if="Logic.Users.getUserType() != 'teacher'">
+    <!-- 
+      <template v-if="Logic.Users.getUserType() != 'teacher'">
       <div
         class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row space-x-2 items-end justify-start"
         v-if="ShowLoader && !selectedTutorRequestData"
@@ -133,7 +134,8 @@
           </div>
         </div>
       </div>
-    </template>
+    </template> 
+  -->
 
     <div class="md:!h-[30px] h-[40px]"></div>
   </div>
