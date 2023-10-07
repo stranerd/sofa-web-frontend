@@ -9,6 +9,7 @@
       <span
         class="px-3 py-2 bg-primaryPurple flex flex-row space-x-2 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"
         style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)"
+        @click="Logic.Common.GoToRoute('/chat/new')"
       >
         <sofa-normal-text :color="'text-white'">
           Ask me anything

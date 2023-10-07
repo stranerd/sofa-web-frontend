@@ -394,7 +394,7 @@ export default defineComponent({
       if (currentStep.value == 2) {
         if (selectedTutorId.value) {
           Logic.Conversations.CreateTutorRequestForm = {
-            conversationId: SingleConversation.value.id,
+            conversationId: SingleConversation.value?.id,
             message: reasonForRequest.value,
             tutorId: selectedTutorId.value,
           };
@@ -415,6 +415,10 @@ export default defineComponent({
     });
 
     onMounted(() => {
+      Logic.Conversations.watchProperty(
+        "SingleConversation",
+        SingleConversation
+      );
       getTopics(true);
     });
 

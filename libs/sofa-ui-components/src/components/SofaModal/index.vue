@@ -8,10 +8,10 @@
         id="innerModal"
       >
         <div
-          class="relative w-full flex flex-col mdlg:!justify-start justify-end items-center mdlg:!h-[85%] h-full overflow-y-auto overflow-x-hidden"
+          class="relative w-full flex flex-col mdlg:!justify-start justify-start items-center mdlg:!h-[85%] h-full overflow-y-auto overflow-x-hidden"
         >
           <div
-            class="w-full flex flex-col h-auto md:!justify-center justify-end items-center overflow-x-hidden"
+            class="w-full flex flex-col mdlg:h-auto h-full md:!justify-center justify-end items-center overflow-x-hidden"
           >
             <slot />
           </div>

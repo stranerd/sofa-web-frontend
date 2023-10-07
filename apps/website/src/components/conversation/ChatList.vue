@@ -73,11 +73,16 @@ export default defineComponent({
       default: "",
     },
   },
-  setup() {
+  emits: ["itemSelected"],
+  setup(props, context) {
     const showRequests = ref(true);
 
     const selectTutorRequest = (request: ChatListData) => {
-      if (Logic.Common.route.path != "/chat") {
+      if (
+        Logic.Common.route.path != "/chat" &&
+        Logic.Common.mediaQuery() != "sm" &&
+        Logic.Common.mediaQuery() != "md"
+      ) {
         Logic.Common.GoToRoute("/chat");
         return;
       }
@@ -85,7 +90,13 @@ export default defineComponent({
       request.selected = true;
       selectedTutorRequestData.value = request;
       selectedChatData.value = request;
-      if (Logic.Common.mediaQuery() == "sm") {
+
+      context.emit("itemSelected", true);
+
+      if (
+        Logic.Common.mediaQuery() == "sm" ||
+        Logic.Common.mediaQuery() == "md"
+      ) {
         Logic.Common.GoToRoute(`/chat/empty?requestId=${request.id}`);
       }
     };
