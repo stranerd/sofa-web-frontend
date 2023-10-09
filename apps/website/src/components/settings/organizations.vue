@@ -117,13 +117,13 @@ export default defineComponent({
     const selectedOrganization = ref("");
     const showLeaveOrganization = ref(false);
 
-    onMounted(() => {
-      setOrganizations();
+    onMounted(async () => {
+      await setOrganizations();
       Logic.Users.watchProperty("UserProfile", UserProfile);
     });
 
-    watch(UserProfile, () => {
-      setOrganizations();
+    watch(UserProfile, async () => {
+      await setOrganizations();
     });
 
     const leaveOrganization = () => {

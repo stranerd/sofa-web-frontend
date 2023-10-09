@@ -35,10 +35,7 @@
         :customClass="'!rounded-none'"
         :showBuyButton="true"
         :buyAction="buyCourse"
-        :itemIsPurchased="
-          PurchasedItems.includes(contentDetails.id) ||
-          !contentDetails.hasCourse
-        "
+        :itemIsPurchased="userHasAccess"
         :similarContents="similarContents"
         :type="contentType"
         :contentId="contentDetails.id"
@@ -208,11 +205,13 @@ import { Logic } from "sofa-logic";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import {
   createCourseData,
+  createQuizData,
   reportMaterial,
   selectedFolderMaterailToAdd,
   shareMaterialLink,
   showSaveToFolder,
 } from "@/composables/library";
+import { allOrganizations, setOrganizations } from "@/composables/profile";
 
 export default defineComponent({
   components: {
@@ -341,6 +340,8 @@ export default defineComponent({
 
     const UserWallet = ref(Logic.Payment.UserWallet);
 
+    const userHasAccess = ref(false);
+
     const tabItems = [
       {
         id: "start",
@@ -384,110 +385,113 @@ export default defineComponent({
     const contentDetails = reactive(Logic.Study.contentDetails);
 
     const setCourseData = () => {
-      contentType.value = "course";
-      contentDetails.id = SingleCourse.value.id;
-      contentDetails.type = "course";
-      contentDetails.title = SingleCourse.value.title;
-      contentDetails.price = SingleCourse.value.price.amount;
-      contentDetails.status = SingleCourse.value.status;
-      contentDetails.image = SingleCourse.value.photo
-        ? SingleCourse.value.photo.link
-        : "/images/default.png";
-      contentDetails.info = SingleCourse.value.description;
-      contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-        SingleCourse.value.createdAt
-      ).format("DD/MM/YYYY")}`;
-      contentDetails.labels.color = `orange`;
-      contentDetails.labels.main = `Course`;
-      contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`;
-      contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
-        return Logic.Study.GetTagName(id);
-      });
-      contentDetails.user.name = SingleCourse.value.user.bio.name.full;
-      contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
-        ? SingleCourse.value.user.bio.photo.link
-        : "";
-
-      contentDetails.content.materialsCount =
-        SingleCourse.value.coursables.length;
-
-      contentDetails.ratings.label = `${
-        SingleCourse.value.ratings.count
-      } rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`;
-      contentDetails.ratings.total = SingleCourse.value.ratings.avg;
-      contentDetails.ratings.totalCount = SingleCourse.value.ratings.count;
-
-      // set reviews
-      contentDetails.ratings.stats["1"] = 0;
-      contentDetails.ratings.stats["2"] = 0;
-      contentDetails.ratings.stats["3"] = 0;
-      contentDetails.ratings.stats["4"] = 0;
-      contentDetails.ratings.stats["5"] = 0;
-
-      AllReviews.value?.results.forEach((review) => {
-        contentDetails.ratings.stats[`${review.rating}`]++;
-        contentDetails.ratings.reviews.push({
-          rating: review.rating,
-          review: review.message,
-          user: {
-            name: review.user.bio.name.full,
-            photoUrl: review.user.bio.photo?.link || "",
-            id: review.user.id,
-          },
+      if (SingleCourse.value) {
+        contentType.value = "course";
+        contentDetails.id = SingleCourse.value.id;
+        contentDetails.type = "course";
+        contentDetails.title = SingleCourse.value.title;
+        contentDetails.price = SingleCourse.value.price.amount;
+        contentDetails.status = SingleCourse.value.status;
+        contentDetails.image = SingleCourse.value.photo
+          ? SingleCourse.value.photo.link
+          : "/images/default.png";
+        contentDetails.info = SingleCourse.value.description;
+        contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
+          SingleCourse.value.createdAt
+        ).format("DD/MM/YYYY")}`;
+        contentDetails.labels.color = `orange`;
+        contentDetails.labels.main = `Course`;
+        contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`;
+        contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
+          return Logic.Study.GetTagName(id);
         });
-      });
+        contentDetails.user.name = SingleCourse.value.user.bio.name.full;
+        contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
+          ? SingleCourse.value.user.bio.photo.link
+          : "";
+        contentDetails.user.id = SingleCourse.value.user.id;
 
-      // set sections
+        contentDetails.content.materialsCount =
+          SingleCourse.value.coursables.length;
 
-      contentDetails.content.sections.length = 0;
+        contentDetails.ratings.label = `${
+          SingleCourse.value.ratings.count
+        } rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`;
+        contentDetails.ratings.total = SingleCourse.value.ratings.avg;
+        contentDetails.ratings.totalCount = SingleCourse.value.ratings.count;
 
-      SingleCourse.value.sections.forEach((section, index) => {
-        contentDetails.content.sections.push({
-          title: section.label,
-          opened: index == 0,
-          data: [],
+        // set reviews
+        contentDetails.ratings.stats["1"] = 0;
+        contentDetails.ratings.stats["2"] = 0;
+        contentDetails.ratings.stats["3"] = 0;
+        contentDetails.ratings.stats["4"] = 0;
+        contentDetails.ratings.stats["5"] = 0;
+
+        AllReviews.value?.results.forEach((review) => {
+          contentDetails.ratings.stats[`${review.rating}`]++;
+          contentDetails.ratings.reviews.push({
+            rating: review.rating,
+            review: review.message,
+            user: {
+              name: review.user.bio.name.full,
+              photoUrl: review.user.bio.photo?.link || "",
+              id: review.user.id,
+            },
+          });
         });
 
-        section.items.forEach((item) => {
-          if (item.type == "quiz") {
-            const quizData = SingleCourseQuizzes.value?.filter(
-              (quiz) => quiz.id == item.id
-            );
-            if (quizData?.length) {
-              contentDetails.content.sections[index].data.push({
-                isLocked: true,
-                sub: `${quizData[0].questions.length} question${
-                  quizData[0].questions.length > 1 ? "s" : ""
-                }`,
-                title: quizData[0].title,
-                type: "Quiz",
-              });
-            }
-          } else {
-            const fileData = SingleCourseFiles.value?.filter(
-              (file) => file.id == item.id
-            );
+        // set sections
 
-            if (fileData?.length) {
-              if (fileData[0].type == "video") {
+        contentDetails.content.sections.length = 0;
+
+        SingleCourse.value.sections.forEach((section, index) => {
+          contentDetails.content.sections.push({
+            title: section.label,
+            opened: index == 0,
+            data: [],
+          });
+
+          section.items.forEach((item) => {
+            if (item.type == "quiz") {
+              const quizData = SingleCourseQuizzes.value?.filter(
+                (quiz) => quiz.id == item.id
+              );
+              if (quizData?.length) {
                 contentDetails.content.sections[index].data.push({
                   isLocked: true,
-                  sub: fileData[0].description,
-                  title: fileData[0].title,
-                  type: "Video",
-                });
-              } else {
-                contentDetails.content.sections[index].data.push({
-                  isLocked: true,
-                  sub: fileData[0].description,
-                  title: fileData[0].title,
-                  type: "Document",
+                  sub: `${quizData[0].questions.length} question${
+                    quizData[0].questions.length > 1 ? "s" : ""
+                  }`,
+                  title: quizData[0].title,
+                  type: "Quiz",
                 });
               }
+            } else {
+              const fileData = SingleCourseFiles.value?.filter(
+                (file) => file.id == item.id
+              );
+
+              if (fileData?.length) {
+                if (fileData[0].type == "video") {
+                  contentDetails.content.sections[index].data.push({
+                    isLocked: true,
+                    sub: fileData[0].description,
+                    title: fileData[0].title,
+                    type: "Video",
+                  });
+                } else {
+                  contentDetails.content.sections[index].data.push({
+                    isLocked: true,
+                    sub: fileData[0].description,
+                    title: fileData[0].title,
+                    type: "Document",
+                  });
+                }
+              }
             }
-          }
+          });
         });
-      });
+      }
     };
 
     const setQuizData = () => {
@@ -516,6 +520,7 @@ export default defineComponent({
         contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
           ? SingleQuiz.value.user.bio.photo.link
           : "";
+        contentDetails.user.id = SingleQuiz.value.user.id;
 
         contentDetails.ratings.label = `${
           SingleQuiz.value.ratings.count
@@ -583,36 +588,69 @@ export default defineComponent({
     };
 
     const setSimilarContents = () => {
-      Logic.Study.GetCourses(
-        {
-          where: [
-            {
-              field: "topicId",
-              condition: Conditions.eq,
-              value: SingleCourse.value.topicId,
-            },
-            {
-              field: "status",
-              condition: Conditions.eq,
-              value: "published",
-            },
-            {
-              field: "id",
-              condition: Conditions.ne,
-              value: SingleCourse.value.id,
-            },
-          ],
-          limit: 3,
-        },
-        false
-      ).then((courses) => {
-        similarContents.value.length = 0;
-        if (courses) {
-          courses.results.forEach((course) => {
-            similarContents.value.push(createCourseData(course));
-          });
+      if (SingleQuiz.value) {
+        Logic.Study.GetSimilarQuizzes(SingleQuiz.value.id).then((data) => {
+          similarContents.value.length = 0;
+          if (data) {
+            data.forEach((quiz) => {
+              similarContents.value.push(createQuizData(quiz));
+            });
+          }
+        });
+      }
+
+      if (SingleCourse.value) {
+        Logic.Study.GetSimilarCourses(SingleCourse.value.id).then((data) => {
+          similarContents.value.length = 0;
+          if (data) {
+            data.forEach((course) => {
+              similarContents.value.push(createCourseData(course));
+            });
+          }
+        });
+      }
+    };
+
+    const setAccessState = () => {
+      // User is owner
+      if (Logic.Auth.AuthUser.id == contentDetails.user.id) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      // User purchased the course
+      if (PurchasedItems.value.includes(contentDetails.id)) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      // Quiz without a course
+      if (!contentDetails.hasCourse) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      // Owned by an organizationIn
+      setOrganizations().then(() => {
+        const subscribedOrganizations = allOrganizations
+          .filter((item) => item.subscribed)
+          .map((item) => item.id);
+        if (subscribedOrganizations.includes(contentDetails.user.id)) {
+          userHasAccess.value = true;
+          return;
         }
       });
+
+      // Is for subscriber
+      if (
+        Logic.Users.UserProfile.roles.isSubscribed &&
+        SingleCourse.value?.user.roles.isOfficialAccount
+      ) {
+        userHasAccess.value = true;
+        return;
+      }
+
+      userHasAccess.value = false;
     };
 
     watch(SingleCourse, () => {
@@ -620,6 +658,7 @@ export default defineComponent({
         scrollToTop();
         setCourseData();
         setSimilarContents();
+        setAccessState();
       }
     });
 
@@ -627,10 +666,13 @@ export default defineComponent({
       if (SingleQuiz.value) {
         scrollToTop();
         setQuizData();
+        setSimilarContents();
+        setAccessState();
       }
     });
 
     onMounted(() => {
+      userHasAccess.value = false;
       if (Logic.Common.route.query?.type?.toString()) {
         contentType.value = Logic.Common.route.query?.type?.toString();
       }
@@ -661,6 +703,7 @@ export default defineComponent({
 
       if (contentType.value == "quiz") {
         setQuizData();
+        setSimilarContents();
         Logic.Interactions.CreateViewForm = {
           entity: {
             id: SingleQuiz.value?.id,
@@ -670,6 +713,8 @@ export default defineComponent({
 
         Logic.Interactions.CreateView(true);
       }
+
+      setAccessState();
     });
 
     return {
@@ -689,6 +734,7 @@ export default defineComponent({
       contentType,
       selectedFolderMaterailToAdd,
       showSaveToFolder,
+      userHasAccess,
       reportMaterial,
       shareMaterialLink,
       buyCourse,

@@ -1,6 +1,10 @@
 import { Logic } from 'sofa-logic'
 import { Conditions } from 'sofa-logic/src/logic/types/common'
-import { Message } from 'sofa-logic/src/logic/types/domains/conversations'
+import {
+  Conversation,
+  Message,
+  TutorRequest,
+} from 'sofa-logic/src/logic/types/domains/conversations'
 import { reactive, ref } from 'vue'
 import { scrollToBottom } from './index'
 
@@ -188,6 +192,61 @@ const setConversations = (goToIndex = -1, limit = 0) => {
   }
 }
 
+const listenToTutorRequest = () => {
+  Logic.Common.listenOnSocket(
+    `conversations/tutorRequests`,
+    (data) => {
+      const tutorRequest: TutorRequest = data.data
+
+      if (Logic.Conversations.AllTutorRequests) {
+        let dataIsPresent = false
+
+        Logic.Conversations.AllTutorRequests.results.forEach((item) => {
+          if (item.id == tutorRequest.id) {
+            dataIsPresent = true
+            item = tutorRequest
+          }
+        })
+
+        if (!dataIsPresent) {
+          Logic.Conversations.AllTutorRequests.results.push(tutorRequest)
+        }
+
+        setConversations()
+      }
+    },
+    (data) => {
+      console.log(data)
+    },
+  )
+}
+
+const listenToConversation = (id: string) => {
+  Logic.Common.listenOnSocket(
+    `conversations/conversations/${id}`,
+    (data) => {
+      const conversation: Conversation = data.data
+
+      if (Logic.Conversations.AllConversations) {
+        Logic.Conversations.AllConversations.results.forEach((item) => {
+          if (item.id == id) {
+            item = conversation
+          }
+        })
+        setConversations()
+      }
+
+      if (SingleConversation.value?.id == conversation.id) {
+        SingleConversation.value = conversation
+        selectConversation(conversation.id)
+      }
+    },
+    (data) => {
+      console.log(data)
+    },
+  )
+}
+
 const selectConversation = (convoId: string) => {
   itIsTutorRequest.value = false
   if (Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm') {
@@ -236,7 +295,7 @@ const selectConversation = (convoId: string) => {
           Logic.Common.hideLoader()
 
           chatList.forEach((item) => {
-            if (item.id == SingleConversation.value.id) {
+            if (item.id == SingleConversation.value?.id) {
               item.selected = true
               selectedChatData.value = item
             } else {
@@ -251,6 +310,8 @@ const selectConversation = (convoId: string) => {
               selectedTutorRequestData.value = item
             }
           })
+
+          listenToConversation(SingleConversation.value.id)
         }
       })
     }
@@ -471,6 +532,15 @@ const endChatSession = (reviewData: { ratings: number; review: string }) => {
   Logic.Conversations.DeleteTutor().then((data) => {
     if (data) {
       showRateAndReviewTutor.value = false
+      setChatToDefault()
+      if (
+        Logic.Common.mediaQuery() == 'sm' ||
+        Logic.Common.mediaQuery() == 'md'
+      ) {
+        Logic.Common.GoToRoute('/chat')
+      } else {
+        Logic.Conversations.SingleConversation = undefined
+      }
     }
   })
 }
@@ -497,6 +567,8 @@ export {
   ChatMembers,
   showEndSession,
   showRateAndReviewTutor,
+  listenToTutorRequest,
+  listenToConversation,
   setChatToDefault,
   setConvoFromRoute,
   selectConversation,

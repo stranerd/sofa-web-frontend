@@ -405,7 +405,7 @@
                     size="xl"
                   >
                     {{
-                      SingleGame ? SingleQuiz.title : "Click on Start to begin"
+                      SingleQuiz ? SingleQuiz?.title : "Click on Start to begin"
                     }}
                   </sofa-header-text>
 
@@ -440,7 +440,7 @@
               <template v-else>
                 <sofa-image-loader
                   :customClass="'md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] custom-border'"
-                  :photoUrl="SingleQuiz.photo?.link"
+                  :photoUrl="SingleQuiz?.photo?.link"
                 />
                 <div class="w-full flex flex-col h-full space-y-2">
                   <div
@@ -450,7 +450,7 @@
                       :size="'xl'"
                       :customClass="'text-left !line-clamp-1'"
                     >
-                      {{ SingleQuiz.title }}
+                      {{ SingleQuiz?.title }}
                     </sofa-header-text>
                     <div class="flex flex-row space-x-3 items-center">
                       <sofa-icon

@@ -63,16 +63,21 @@
           class="space-x-3 flex flex-row items-center min-w-[60px] justify-end"
           v-if="!itIsTutorRequest"
         >
-          <sofa-icon
-            :customClass="'h-[17px] '"
-            :name="'tutor-black'"
-            @click="showAddTutor = true"
-            v-if="
-              !itIsNewMessage &&
-              Logic.Users.getUserType() == 'student' &&
-              !selectedTutorRequestData
-            "
-          />
+          <template
+            v-if="UserWallet.subscription.data.tutorAidedConversations > 1"
+          >
+            <sofa-icon
+              :customClass="'h-[17px] '"
+              :name="'tutor-black'"
+              @click="showAddTutor = true"
+              v-if="
+                !itIsNewMessage &&
+                Logic.Users.getUserType() == 'student' &&
+                !selectedTutorRequestData
+              "
+            />
+          </template>
+
           <sofa-icon
             :customClass="'h-[23px]'"
             :name="'menu'"
@@ -209,10 +214,31 @@
           label: 'End session',
           isClose: false,
           action: () => {
-            //
+            showEndSession = false;
+            showRateAndReviewTutor = true;
           },
         },
       ]"
+    />
+
+    <!-- Rate and review modal -->
+    <rate-and-review-modal
+      v-if="showRateAndReviewTutor"
+      :close="
+        () => {
+          showRateAndReviewTutor = false;
+        }
+      "
+      :title="'Session ended, rate tutor'"
+      :tutor="{
+        name: SingleConversation?.tutor.bio.name.full,
+        photo: SingleConversation?.tutor?.bio?.photo?.link || '',
+      }"
+      @on-review-submitted="
+        (data) => {
+          endChatSession(data);
+        }
+      "
     />
 
     <!-- More options for smaller screens -->
@@ -239,10 +265,10 @@
               //
             }
           "
-          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] space-y-4 py-3 relative overflow-y-auto h-full"
+          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] space-y-4 relative overflow-y-auto h-full"
         >
           <div
-            class="w-full flex flex-row items-center justify-start top-0 left-0 sticky bg-white z-30 space-x-3 py-3 px-4 cursor-pointer"
+            class="w-full flex flex-row items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 space-x-3 py-3 px-4 cursor-pointer"
             @click="newChat()"
             v-if="Logic.Users.getUserType() == 'student'"
           >
@@ -266,12 +292,12 @@
           </div>
 
           <div
-            class="absolute w-full bottom-0 left-0 bg-white z-50 px-4 py-4 b border-t-[1px] border-[#F1F6FA] flex flex-col space-y-4"
+            class="sticky w-full bottom-0 left-0 bg-white z-50 px-4 py-4 b border-t-[1px] border-[#F1F6FA] flex flex-col space-y-4"
             v-if="!itIsNewMessage && Logic.Users.getUserType() == 'student'"
           >
             <div
               class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-              v-if="selectedTutorRequestData && SingleConversation.tutor"
+              v-if="SingleConversation.tutor"
               @click.stop="
                 showEndSession = true;
                 selectedConvoId = SingleConversation.id;
@@ -282,20 +308,23 @@
                 End tutor session</sofa-normal-text
               >
             </div>
-
-            <div
-              class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-              @click="
-                showMoreOptions = false;
-                showAddTutor = true;
-              "
-              v-if="!selectedTutorRequestData"
+            <template
+              v-if="UserWallet.subscription.data.tutorAidedConversations > 0"
             >
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
-              <sofa-normal-text :color="'text-primaryGreen'">
-                Add a tutor
-              </sofa-normal-text>
-            </div>
+              <div
+                class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
+                @click="
+                  showMoreOptions = false;
+                  showAddTutor = true;
+                "
+                v-if="!selectedTutorRequestData"
+              >
+                <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
+                <sofa-normal-text :color="'text-primaryGreen'">
+                  Add a tutor
+                </sofa-normal-text>
+              </div>
+            </template>
 
             <div
               class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
@@ -343,11 +372,14 @@ import {
   ChatMembers,
   contentTitleChanged,
   conversationTitle,
+  endChatSession,
   handleIncomingMessage,
   handleKeyEvent,
   hasMessage,
   itIsNewMessage,
   itIsTutorRequest,
+  listenToConversation,
+  listenToTutorRequest,
   messageContent,
   onInput,
   selectConversation,
@@ -361,11 +393,13 @@ import {
   showEndSession,
   showLoader,
   showMoreOptions,
+  showRateAndReviewTutor,
   tutorRequestList,
 } from "@/composables/conversation";
 import AddTutor from "@/components/conversation/AddTutor.vue";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import ChatListComponent from "@/components/conversation/ChatList.vue";
+import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
 const fetchRules = [
   {
@@ -405,6 +439,14 @@ const fetchRules = [
     requireAuth: true,
     ignoreProperty: false,
   },
+  {
+    domain: "Payment",
+    property: "UserWallet",
+    method: "GetUserWallet",
+    params: [],
+    requireAuth: true,
+    ignoreProperty: false,
+  },
 ];
 
 if (Logic.Users.getUserType() == "teacher") {
@@ -439,6 +481,11 @@ if (Logic.Users.getUserType() == "teacher") {
               condition: Conditions.eq,
               value: Logic.Auth.AuthUser?.id,
             },
+            {
+              field: "pending",
+              condition: Conditions.eq,
+              value: true,
+            },
           ],
         },
         true,
@@ -469,6 +516,7 @@ export default defineComponent({
     SofaButton,
     SofaSuccessPrompt,
     SofaDeletePrompt,
+    RateAndReviewModal,
   },
   middlewares: {
     fetchRules,
@@ -488,6 +536,7 @@ export default defineComponent({
     const showTutorRequestSubmited = ref(false);
 
     const UserProfile = ref(Logic.Users.UserProfile);
+    const UserWallet = ref(Logic.Payment.UserWallet);
 
     const setNewMessage = () => {
       if (itIsNewMessage.value) {
@@ -550,6 +599,7 @@ export default defineComponent({
       );
       Logic.Users.watchProperty("UserProfile", UserProfile);
       Logic.Conversations.watchProperty("Messages", Messages);
+      Logic.Payment.watchProperty("UserWallet", UserWallet);
 
       conversationTitle.value = SingleConversation.value?.title || "";
 
@@ -562,9 +612,13 @@ export default defineComponent({
         }
       });
 
+      if (SingleConversation.value) {
+        listenToConversation(SingleConversation.value.id);
+      }
+
       setTutorRequest();
       setNewMessage();
-
+      listenToTutorRequest();
       connectWebsocket();
     });
 
@@ -653,6 +707,9 @@ export default defineComponent({
       itIsNewMessage,
       handleRequestSent,
       newChat,
+      UserWallet,
+      showRateAndReviewTutor,
+      endChatSession,
     };
   },
 });

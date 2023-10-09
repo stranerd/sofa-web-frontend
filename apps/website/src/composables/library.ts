@@ -18,6 +18,8 @@ interface PlayResource {
   id: string
   entity_type: 'game' | 'test'
   participants?: number
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  action: Function
 }
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
@@ -377,6 +379,11 @@ const setInProgressItems = () => {
         title: currentQuiz?.title || 'Unknown quiz',
         type: 'Game',
         participants: game.participants.length,
+        action: () => {
+          Logic.Common.GoToRoute(
+            `/quiz/${game.quizId}?mode=game&gameId=${game.id}`,
+          )
+        },
       })
     }
   })
@@ -395,6 +402,11 @@ const setInProgressItems = () => {
         label_color: 'text-[#3296C8]',
         title: currentQuiz?.title || 'Unknown quiz',
         type: 'Test',
+        action: () => {
+          Logic.Common.GoToRoute(
+            `/quiz/empty?mode=tutor_test&testId=${test.id}&is_student=yes`,
+          )
+        },
       })
     }
   })
@@ -428,6 +440,14 @@ const setResultItems = async () => {
         title: currentQuiz?.title || 'Unknown quiz',
         type: 'Game',
         participants: game.participants.length,
+        action: () => {
+          Logic.Common.showLoader({
+            loading: false,
+            show: true,
+            type: 'warning',
+            message: 'Game already ended',
+          })
+        },
       })
     }
   })
@@ -462,6 +482,14 @@ const setResultItems = async () => {
         label_color: textColor,
         title: currentQuiz?.title || 'Unknown quiz',
         type: 'Test',
+        action: () => {
+          Logic.Common.showLoader({
+            loading: false,
+            show: true,
+            type: 'warning',
+            message: 'Test already ended',
+          })
+        },
       })
     }
   })
@@ -682,17 +710,12 @@ const addMaterialToFolder = (
   })
 
   if (selectedFolder.length) {
-    const folder = selectedFolder[0]
-
-    const courses = folder.saved.courses?.map((item) => item) || []
-    const quizzes = folder.saved.quizzes?.map((item) => item) || []
-
     if (type == 'course') {
-      saveItemsToFolder(folderId, 'courses', courses, add)
+      saveItemsToFolder(folderId, 'courses', [itemId], add)
     }
 
     if (type == 'quiz') {
-      saveItemsToFolder(folderId, 'quizzes', quizzes, add)
+      saveItemsToFolder(folderId, 'quizzes', [itemId], add)
     }
 
     AllFolders.value?.results.forEach((item) => {
@@ -834,11 +857,14 @@ const shareMaterialLink = async (
   link: string,
   title: string,
 ) => {
+  const baseUrl = window.location.origin
+
+  const finalLink = `${baseUrl}${link}`
   // for web
   const shareData = {
     title: `${capitalize(type)} on SOFA`,
     text: `View ${title} on SOFA`,
-    url: link,
+    url: finalLink,
   }
 
   try {
@@ -850,7 +876,7 @@ const shareMaterialLink = async (
       type: 'success',
     })
   } catch (err) {
-    Logic.Common.copytext(link)
+    Logic.Common.copytext(finalLink)
     // show alert
     Logic.Common.showLoader({
       show: true,

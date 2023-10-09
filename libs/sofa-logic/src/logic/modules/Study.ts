@@ -138,6 +138,7 @@ export default class Study extends Common {
       name: '',
       photoUrl: '',
       role: 'Teacher',
+      id: '',
       stats: {
         quizzes: 34,
         courses: 18,
@@ -1487,6 +1488,18 @@ export default class Study extends Common {
       if (updateItems) {
         this.AllCourses = response.data
       }
+      return response.data
+    })
+  }
+
+  public GetSimilarCourses = (courseId: string) => {
+    return $api.study.course.similarCourses(courseId).then((response) => {
+      return response.data
+    })
+  }
+
+  public GetSimilarQuizzes = (quizId: string) => {
+    return $api.study.quiz.similarQuizzes(quizId).then((response) => {
       return response.data
     })
   }

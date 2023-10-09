@@ -237,6 +237,7 @@ const goToStudyMode = (type: string) => {
   if (type == 'game') {
     showStudyMode.value = true
     selectedQuizMode.value = 'game'
+    return
   }
 
   showStudyMode.value = false
@@ -959,12 +960,7 @@ const shareGameLink = async () => {
     })
   } catch (err) {
     console.log(err)
-    Logic.Common.showLoader({
-      show: true,
-      loading: false,
-      message: 'Unable to share link.',
-      type: 'error',
-    })
+    copyGameLink()
   }
 }
 

@@ -18,7 +18,14 @@ const showRemoveMember = ref(false)
 const selectedMember = ref('')
 const allCountries = reactive<SelectOption[]>([])
 const allStates = reactive<SelectOption[]>([])
-const allOrganizations = reactive([])
+const allOrganizations = reactive<
+  {
+    id: string
+    name: string
+    profile_url: string
+    subscribed: boolean
+  }[]
+>([])
 const Countries = ref(Logic.Users.Countries)
 
 const updateProfileForm = reactive({
@@ -655,26 +662,30 @@ const createTutorRequest = () => {
 }
 
 const setOrganizations = () => {
-  Logic.Users.GetUsers({
-    where: [
-      {
-        field: 'id',
-        value: Logic.Users.UserProfile.account.organizationsIn,
-        condition: Conditions.in,
-      },
-    ],
-  }).then((data) => {
-    const allUser: SingleUser[] = data
-    allOrganizations.length = 0
-    if (data) {
-      allUser.forEach((item) => {
-        allOrganizations.push({
-          id: item.id,
-          name: item.bio.name.full,
-          profile_url: item.bio.photo.link,
+  return new Promise((resolve) => {
+    Logic.Users.GetUsers({
+      where: [
+        {
+          field: 'id',
+          value: Logic.Users.UserProfile.account.organizationsIn,
+          condition: Conditions.in,
+        },
+      ],
+    }).then((data) => {
+      const allUser: SingleUser[] = data
+      allOrganizations.length = 0
+      if (data) {
+        allUser.forEach((item) => {
+          allOrganizations.push({
+            id: item.id,
+            name: item.bio.name.full,
+            profile_url: item.bio.photo.link,
+            subscribed: item.roles.isSubscribed,
+          })
         })
-      })
-    }
+      }
+      resolve('')
+    })
   })
 }
 

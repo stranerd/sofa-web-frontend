@@ -55,6 +55,9 @@ const init = async () => {
       // set ui frontend logic
       SetFrontendLogic(Logic)
 
+      // initiate websocket
+      Logic.Common.setupWebsocket()
+
       const AuthUser = localStorage.getItem('auth_user')
         ? JSON.parse(localStorage.getItem('auth_user') || '{}')
         : undefined

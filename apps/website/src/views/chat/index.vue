@@ -413,8 +413,8 @@
         "
         :title="'Session ended, rate tutor'"
         :tutor="{
-          name: SingleConversation.tutor.bio.name.full,
-          photo: SingleConversation.tutor?.bio?.photo?.link || '',
+          name: SingleConversation?.tutor.bio.name.full,
+          photo: SingleConversation?.tutor?.bio?.photo?.link || '',
         }"
         @on-review-submitted="
           (data) => {
@@ -429,7 +429,7 @@
       <template v-if="Logic.Users.getUserType() == 'student' && UserProfile">
         <div
           class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
-          v-if="!selectedTutorRequestData || !SingleConversation.tutor"
+          v-if="!selectedTutorRequestData || !SingleConversation?.tutor"
         >
           <div class="w-full flex flex-row items-center space-x-3">
             <div
@@ -468,10 +468,10 @@
         >
           <div
             class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
-            v-if="selectedTutorRequestData && SingleConversation.tutor"
+            v-if="selectedTutorRequestData && SingleConversation?.tutor"
             @click.stop="
               showEndSession = true;
-              selectedConvoId = SingleConversation.id;
+              selectedConvoId = SingleConversation?.id;
             "
           >
             <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
@@ -487,7 +487,7 @@
               :color="'text-primaryRed'"
               @click.stop="
                 showDeleteConvo = true;
-                selectedConvoId = SingleConversation.id;
+                selectedConvoId = SingleConversation?.id;
               "
             >
               Delete chat</sofa-normal-text
@@ -495,44 +495,48 @@
           </div>
         </div>
 
-        <div
-          class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3"
-          v-if="
-            ((hasMessage && !selectedTutorRequestData) ||
-              (!SingleConversation?.tutor && !itIsNewMessage)) &&
-            SingleConversation
-          "
+        <template
+          v-if="UserWallet.subscription.data.tutorAidedConversations > 0"
         >
           <div
-            class="w-full flex flex-row space-x-2 items-center justify-start"
+            class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3"
+            v-if="
+              ((hasMessage && !selectedTutorRequestData) ||
+                (!SingleConversation?.tutor && !itIsNewMessage)) &&
+              SingleConversation
+            "
           >
-            <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
-            <sofa-normal-text
-              :color="'text-white'"
-              :customClass="'!text-base !font-bold'"
+            <div
+              class="w-full flex flex-row space-x-2 items-center justify-start"
             >
-              Tutor help
-            </sofa-normal-text>
+              <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
+              <sofa-normal-text
+                :color="'text-white'"
+                :customClass="'!text-base !font-bold'"
+              >
+                Tutor help
+              </sofa-normal-text>
+            </div>
+            <div class="w-full flex flex-col">
+              <sofa-normal-text
+                :customClass="'text-left'"
+                :color="'text-[#E1E6EB]'"
+              >
+                Need extra help with your work?
+              </sofa-normal-text>
+            </div>
+            <div class="flex flex-row">
+              <sofa-button
+                :bg-color="'bg-white'"
+                :text-color="'!text-primaryPurple'"
+                :padding="'px-5 py-1'"
+                @click="showAddTutor = true"
+              >
+                Add a tutor
+              </sofa-button>
+            </div>
           </div>
-          <div class="w-full flex flex-col">
-            <sofa-normal-text
-              :customClass="'text-left'"
-              :color="'text-[#E1E6EB]'"
-            >
-              Need extra help with your work?
-            </sofa-normal-text>
-          </div>
-          <div class="flex flex-row">
-            <sofa-button
-              :bg-color="'bg-white'"
-              :text-color="'!text-primaryPurple'"
-              :padding="'px-5 py-1'"
-              @click="showAddTutor = true"
-            >
-              Add a tutor
-            </sofa-button>
-          </div>
-        </div>
+        </template>
       </template>
 
       <!-- Teacher POV -->
@@ -604,6 +608,7 @@ import {
   hasMessage,
   itIsNewMessage,
   itIsTutorRequest,
+  listenToTutorRequest,
   messageContent,
   Messages,
   onInput,
@@ -647,6 +652,14 @@ const fetchRules = [
       },
     ],
     requireAuth: true,
+  },
+  {
+    domain: "Payment",
+    property: "UserWallet",
+    method: "GetUserWallet",
+    params: [],
+    requireAuth: true,
+    ignoreProperty: false,
   },
 ];
 
@@ -729,6 +742,7 @@ export default defineComponent({
 
     const UserProfile = ref(Logic.Users.UserProfile);
     const SingleTutorRequest = ref(Logic.Users.SingleTutorRequest);
+    const UserWallet = ref(Logic.Payment.UserWallet);
     const currentComponent = ref("dashboard-layout");
 
     const editTitle = ref(false);
@@ -784,10 +798,12 @@ export default defineComponent({
       Logic.Conversations.watchProperty("Messages", Messages);
       Logic.Users.watchProperty("UserProfile", UserProfile);
       Logic.Conversations.watchProperty("ChatMembers", ChatMembers);
+      Logic.Payment.watchProperty("UserWallet", UserWallet);
 
       setConversations();
       setConvoFromRoute();
       scrollToTop();
+      listenToTutorRequest();
 
       // if (
       //   Logic.Users.getUserType() == "teacher" &&
@@ -916,6 +932,7 @@ export default defineComponent({
       showEndSession,
       showRateAndReviewTutor,
       endChatSession,
+      UserWallet,
     };
   },
 });

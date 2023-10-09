@@ -62,6 +62,7 @@ interface ContentDetails {
     name: string
     photoUrl: string
     role: string
+    id: string
     stats: {
       quizzes: number
       courses: number
