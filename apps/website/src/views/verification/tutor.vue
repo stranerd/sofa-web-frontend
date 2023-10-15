@@ -415,8 +415,10 @@ export default defineComponent({
       profileImageUrl.value = UserProfile.value.bio.photo?.link || null;
       updateProfileForm.description = UserProfile.value.bio.description;
       updateProfileForm.name = UserProfile.value.bio.name;
-      updateProfileForm.state = UserProfile.value.location.state;
-      updateProfileForm.country = UserProfile.value.location.country;
+      if (UserProfile.value.location) {
+        updateProfileForm.state = UserProfile.value.location.state
+        updateProfileForm.country = UserProfile.value.location.country
+      }
 
       if (SingleTutorRequest.value) {
         currentStep.value = "test";

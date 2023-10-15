@@ -104,42 +104,29 @@
       </div>
 
       <div
-        v-if="false"
+        v-if="Logic.Users.UserProfile.type?.type === 'teacher' && Logic.Users.UserProfile.tutor.topics.length === 0"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-3"
       >
         <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
-            Latest analytics
+            Apply to teach subjects
           </sofa-normal-text>
+          <sofa-icon :name="'tutor-bagde'" :custom-class="'h-[16px]'" />
         </div>
-        <div class="flex flex-col space-y-4 w-full">
-          <div
-            class="w-full px-3 py-3 bg-ligthGray flex flex-row items-center space-x-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"
-            v-for="(item, index) in latestAnalytics"
-            :key="index"
-          >
-            <div>
-              <sofa-icon :custom-class="'h-[48px]'" :name="item.icon" />
-            </div>
-            <div class="w-full flex flex-col">
-              <sofa-normal-text :customClass="'!line-clamp-1'">
-                {{ item.title }}
-              </sofa-normal-text>
-              <sofa-normal-text :color="item.subTextColor">
-                {{ item.subText }}
-              </sofa-normal-text>
-            </div>
-          </div>
-        </div>
+        <sofa-normal-text>
+          As a teacher, you need to pass a test on a subject before you can be recommended to teach the subject to others.
+          Complete your test after this application and we will reach out to you with your result.
+        </sofa-normal-text>
 
-        <div class="w-full">
-          <sofa-normal-text
-            :color="'text-primaryPink'"
-            :custom-class="'cursor-pointer'"
-            >See all</sofa-normal-text
-          >
-        </div>
+        <sofa-button
+          :has-double-layer="false"
+          padding="py-2 px-6"
+          @click="Logic.Common.GoToRoute('/verification/tutor')"
+        >
+          Apply here
+        </sofa-button>
       </div>
+
     </template>
 
     <template v-slot:middle-session>
@@ -738,53 +725,53 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
-import { useMeta } from "vue-meta";
-import moment from "moment";
-import { scrollToTop } from "@/composables";
+import ChatListComponent from "@/components/conversation/ChatList.vue"
+import AccountSetup from "@/components/onboarding/AccountSetup.vue"
+import CustomizeBot from "@/components/onboarding/CustomizeBot.vue"
+import { scrollToTop } from "@/composables"
 import {
-  SofaIcon,
-  SofaNormalText,
-  SofaHeaderText,
-  SofaButton,
-  SofaBadge,
-  SofaTextField,
-  SofaActivityCard,
-  SofaIconCard,
-  SofaModal,
-  SofaAvatar,
-  SofaEmptyState,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import AccountSetup from "@/components/onboarding/AccountSetup.vue";
+AllConversations,
+AllTutorRequests,
+chatList,
+setConversations,
+} from "@/composables/conversation"
 import {
-  allOrganizationMembers,
-  allStudents,
-  selectedMember,
-  setOrganizationMembers,
-  showAccountSetup,
-  showCustomizeAI,
-  showRemoveMember,
-} from "@/composables/profile";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import CustomizeBot from "@/components/onboarding/CustomizeBot.vue";
+selectedFolderMaterailToAdd,
+showSaveToFolder,
+} from "@/composables/library"
 import {
-  sectionTags,
-  HomeMaterials,
-  setHomeMaterials,
-  homeContents,
-} from "@/composables/marketplace";
+HomeMaterials,
+homeContents,
+sectionTags,
+setHomeMaterials,
+} from "@/composables/marketplace"
 import {
-  AllConversations,
-  AllTutorRequests,
-  chatList,
-  setConversations,
-} from "@/composables/conversation";
-import ChatListComponent from "@/components/conversation/ChatList.vue";
+allOrganizationMembers,
+allStudents,
+selectedMember,
+setOrganizationMembers,
+showAccountSetup,
+showCustomizeAI,
+showRemoveMember,
+} from "@/composables/profile"
+import moment from "moment"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  selectedFolderMaterailToAdd,
-  showSaveToFolder,
-} from "@/composables/library";
+SofaActivityCard,
+SofaAvatar,
+SofaBadge,
+SofaButton,
+SofaEmptyState,
+SofaHeaderText,
+SofaIcon,
+SofaIconCard,
+SofaModal,
+SofaNormalText,
+SofaTextField,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 const fetchRules = [];
 
@@ -924,66 +911,6 @@ export default defineComponent({
     const UserProfile = ref(Logic.Users.UserProfile);
 
     const newChatMessage = ref("");
-
-    const latestAnalytics = ref([
-      {
-        icon: "orange-list",
-        title: "Big Data: What it is and why is this working",
-        subText: "40% done",
-        subTextColor: "text-primaryOrange",
-      },
-      {
-        icon: "pink-question",
-        title: "Our Solar System",
-        subText: "Multiplayer - 1st",
-        subTextColor: "text-primaryGreen",
-      },
-      {
-        icon: "pink-question",
-        title: "Physics: All terms and definitions",
-        subText: "Learn - 75% done",
-        subTextColor: "text-primaryOrange",
-      },
-    ]);
-
-    const activities = ref([
-      {
-        title: "Big Data: What it is and why it matters",
-        image: "/images/big-data.png",
-        username: "Claudius Freeman",
-        subject: "Computer",
-        labels: {
-          main: "Course",
-          sub: "17 topics",
-          color: "orange",
-        },
-        progress: 40,
-      },
-      {
-        title: "Introduction to Organic Chemistry",
-        image: "/images/chemistry.png",
-        username: "Sukky Samwise",
-        subject: "Chemistry",
-        labels: {
-          main: "Quiz - Multiplayer",
-          sub: "20 questions",
-          color: "pink",
-        },
-        progress: 100,
-      },
-      {
-        title: "Physics: All terms and definitions",
-        image: "/images/physics.png",
-        username: "Dorcas Ayo",
-        subject: "Computer",
-        labels: {
-          main: "Quiz - Learn",
-          sub: "20 questions",
-          color: "pink",
-        },
-        progress: 60,
-      },
-    ]);
 
     const recentChats = reactive([]);
 
@@ -1152,8 +1079,6 @@ export default defineComponent({
 
     return {
       moment,
-      latestAnalytics,
-      activities,
       recentChats,
       Logic,
       profileSteps,

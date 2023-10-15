@@ -30,7 +30,7 @@ export interface SingleUser {
     connections: number[]
     lastUpdatedAt: number
   }
-  location: {
+  location?: {
     country: string
     state: string
   }

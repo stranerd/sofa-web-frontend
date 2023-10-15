@@ -229,24 +229,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
-import { useMeta } from "vue-meta";
+import SettingContact from "@/components/settings/contact.vue"
+import SettingOrganizations from "@/components/settings/organizations.vue"
+import SettingProfile from "@/components/settings/profile.vue"
+import SettingSecurity from "@/components/settings/security.vue"
+import SettingStudents from "@/components/settings/students.vue"
+import SettingSubscription from "@/components/settings/subscription.vue"
+import SettingWallet from "@/components/settings/wallet.vue"
+import { Logic } from "sofa-logic"
+import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  SofaNormalText,
-  SofaHeaderText,
-  SofaIcon,
-  SofaDeletePrompt,
-} from "sofa-ui-components";
-import SettingProfile from "@/components/settings/profile.vue";
-import SettingWallet from "@/components/settings/wallet.vue";
-import SettingSubscription from "@/components/settings/subscription.vue";
-import SettingSecurity from "@/components/settings/security.vue";
-import { Logic } from "sofa-logic";
-import SettingContact from "@/components/settings/contact.vue";
-import { Conditions } from "sofa-logic/src/logic/types/domains/common";
-import SettingStudents from "@/components/settings/students.vue";
-import SettingOrganizations from "@/components/settings/organizations.vue";
-import { useRoute } from "vue-router";
+SofaDeletePrompt,
+SofaHeaderText,
+SofaIcon,
+SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, ref } from "vue"
+import { useMeta } from "vue-meta"
+import { useRoute } from "vue-router"
 
 export default defineComponent({
   components: {
@@ -378,23 +378,25 @@ export default defineComponent({
             title: "Students",
             routePath: "#",
             id: "students",
-            show: UserProfile.value.type
-              ? UserProfile.value.type.type == "organization"
-              : false,
+            show: UserProfile.value.type?.type == "organization"
           },
           {
             title: "Organizations",
             routePath: "#",
             id: "organizations",
-            show: UserProfile.value.type
-              ? UserProfile.value.type.type == "student"
-              : false,
+            show: UserProfile.value.type?.type == "student"
           },
           {
             title: "Verification",
             routePath: "#",
             id: "verification",
             show: !Logic.Users.UserProfile.roles.isVerified,
+          },
+          {
+            title: "Tutor Application",
+            routePath: "#",
+            id: "tutor-application",
+            show: UserProfile.value.type.type == "teacher",
           },
         ],
       },
@@ -446,19 +448,9 @@ export default defineComponent({
     ];
 
     const showItem = (id: string) => {
-      if (id == "verification") {
-        if (UserProfile.value.type?.type == "teacher") {
-          Logic.Common.GoToRoute("/verification/tutor");
-        } else {
-          Logic.Common.GoToRoute("/verification");
-        }
-
-        return;
-      }
-      if (
-        Logic.Common.mediaQuery() == "sm" ||
-        Logic.Common.mediaQuery() == "md"
-      ) {
+      if (id === "tutor-application") return Logic.Common.GoToRoute("/verification/tutor");
+      else if (id == "verification") return Logic.Common.GoToRoute("/verification");
+      if (Logic.Common.mediaQuery() == "sm" || Logic.Common.mediaQuery() == "md" ) {
         Logic.Common.GoToRoute("/settings/" + id);
       }
       selectedItem.value = id;
