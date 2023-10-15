@@ -121,6 +121,11 @@
       </div>
     </div>
 
+    <div v-if="Logic.Auth.AuthUser.roles.isAdmin" class="flex gap-2 text-grayColor items-center">
+      <span class="whitespace-nowrap">Is tutor assessments?</span>
+      <SofaCheckbox v-model="quizSettingsForm.isForTutors" />
+    </div>
+
     <div
       class="w-full flex flex-row items-center justify-between mdlg:!relative fixed z-[50] bottom-0 left-0 mdlg:!bottom-auto mdlg:!left-auto bg-white mdlg:!py-0 mdlg:!px-0 py-4 px-4"
     >
@@ -165,37 +170,39 @@
   </sofa-form-wrapper>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { FormValidations } from "@/composables"
 import {
-  SofaIcon,
-  SofaTextField,
-  SofaTextarea,
-  SofaSelect,
-  SofaImageLoader,
-  SofaNormalText,
-  SofaFileAttachment,
-  SofaButton,
-  SofaFormWrapper,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import { FormValidations } from "@/composables";
+allGenericTags,
+allTopics,
+getGenericTags,
+getTopics,
+} from "@/composables/course"
 import {
-  allGenericTags,
-  allTopics,
-  getGenericTags,
-  getTopics,
-} from "@/composables/course";
+createQuiz,
+quizSettingSaved,
+quizSettingsForm,
+updateQuiz,
+} from "@/composables/quiz"
+import { Logic } from "sofa-logic"
+import { Quiz } from "sofa-logic/src/logic/types/domains/study"
 import {
-  createQuiz,
-  quizSettingSaved,
-  quizSettingsForm,
-  updateQuiz,
-} from "@/composables/quiz";
-import { Quiz } from "sofa-logic/src/logic/types/domains/study";
+SofaButton,
+SofaCheckbox,
+SofaFileAttachment,
+SofaFormWrapper,
+SofaIcon,
+SofaImageLoader,
+SofaNormalText,
+SofaSelect,
+SofaTextField,
+SofaTextarea,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, ref, watch } from "vue"
 
 export default defineComponent({
   components: {
     SofaIcon,
+    SofaCheckbox,
     SofaTextField,
     SofaTextarea,
     SofaSelect,
@@ -252,6 +259,7 @@ export default defineComponent({
         const quiz = props.quiz;
         quizSettingsForm.title = quiz.title;
         quizSettingsForm.description = quiz.description;
+        quizSettingsForm.isForTutors = quiz.isForTutors;
         quizSettingsForm.tags = quiz.tagIds.map((id) =>
           Logic.Study.GetTagName(id)
         );
@@ -266,6 +274,7 @@ export default defineComponent({
       } else {
         quizSettingsForm.title = "";
         quizSettingsForm.description = "";
+        quizSettingsForm.isForTutors = false;
         quizSettingsForm.tags = [];
         quizSettingsForm.topic = "";
         quizSettingsForm.visibility = "";

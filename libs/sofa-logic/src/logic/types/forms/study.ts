@@ -13,6 +13,7 @@ export interface CreateQuizInput {
   title: string
   description: string
   photo?: Blob
+  isForTutors: boolean
   topic: string
   tags: string[]
 }

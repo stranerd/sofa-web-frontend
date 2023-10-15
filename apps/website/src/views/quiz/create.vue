@@ -274,6 +274,7 @@ import { useMeta } from "vue-meta";
 import moment from "moment";
 import { scrollToTop } from "@/composables";
 import {
+  SofaEmptyState,
   SofaIcon,
   SofaNormalText,
   SofaQuestionOptions,
@@ -288,6 +289,7 @@ import QuizSettings from "@/components/quizzes/Settings.vue";
 export default defineComponent({
   components: {
     SofaIcon,
+    SofaEmptyState,
     SofaNormalText,
     SofaQuestionOptions,
     SofaModal,

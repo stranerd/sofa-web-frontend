@@ -1,9 +1,10 @@
-import { $api } from '../../services'
-import Common from './Common'
+import { capitalize, reactive } from 'vue'
 import { Logic } from '..'
-import { ContentDetails, FileData, Paginated } from '../types/domains/common'
+import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
-import { AddReviewInput, AddTagInput } from '../types/forms/common'
+import { ContentDetails, FileData, Paginated } from '../types/domains/common'
+import { Review } from '../types/domains/conversations'
+import { Tags } from '../types/domains/interactions'
 import {
   Course,
   Folder,
@@ -11,6 +12,7 @@ import {
   Quiz,
   SofaFile,
 } from '../types/domains/study'
+import { AddReviewInput, AddTagInput } from '../types/forms/common'
 import {
   AddItemToCourseInput,
   CreateCourseInput,
@@ -22,9 +24,7 @@ import {
   SaveItemToFolderInput,
   UpdateCourseSectionsInput,
 } from '../types/forms/study'
-import { capitalize, reactive } from 'vue'
-import { Tags } from '../types/domains/interactions'
-import { Review } from '../types/domains/conversations'
+import Common from './Common'
 
 export default class Study extends Common {
   constructor() {
@@ -1397,6 +1397,7 @@ export default class Study extends Common {
             title: 'Untitled Quiz',
             description: 'Here is the quiz description',
             tags: [],
+            isForTutors: false,
             topic: 'Physics',
           }
           this.CreateQuiz(true)

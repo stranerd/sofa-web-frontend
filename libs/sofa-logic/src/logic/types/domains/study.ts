@@ -22,6 +22,7 @@ export interface Quiz {
   title: string
   description: string
   photo?: FileData
+  isForTutors: boolean
   questions: string[]
   courseId?: string
   user: SingleUser

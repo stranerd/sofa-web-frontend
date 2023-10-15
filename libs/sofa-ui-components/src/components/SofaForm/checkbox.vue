@@ -26,7 +26,7 @@ export default defineComponent({
   props: {
     extraData: {
       type: Object as () => any,
-      default: "",
+      default: () => ({}),
     },
     defaultValue: {
       type: Boolean,

@@ -37,6 +37,7 @@ const quizSettingsForm = reactive({
   tags: [],
   title: '',
   topic: '',
+  isForTutors: false,
   photo: undefined,
   visibility: '',
   tagString: '',
@@ -149,6 +150,7 @@ const createQuiz = (formComp: any) => {
     description: quizSettingsForm.description,
     tags: quizSettingsForm.tags,
     title: quizSettingsForm.title,
+    isForTutors: quizSettingsForm.isForTutors,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
   }
@@ -181,6 +183,7 @@ const updateQuiz = (formComp: any) => {
     title: quizSettingsForm.title,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
+    isForTutors: quizSettingsForm.isForTutors,
   }
 
   const formState: boolean = formComp.validate()
