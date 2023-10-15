@@ -18,7 +18,7 @@
 import { defineComponent, ref, onMounted, toRef, watch } from "vue";
 
 export default defineComponent({
-  name: "RoofImageLoader",
+  name: "SofaImageLoader",
   props: {
     photoUrl: {
       type: String,

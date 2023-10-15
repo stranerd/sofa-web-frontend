@@ -1,28 +1,28 @@
-import {
-  CreateTutorRequestForm,
-  UpdateUserLocationInput,
-  UpdateUserSocialInput,
-} from './../types/forms/users'
-import { $api } from '../../services'
-import Common from './Common'
 import { Logic } from '..'
-import { Country, Paginated } from '../types/domains/common'
-import { User } from '../types/domains/auth'
+import { $api } from '../../services'
 import { QueryParams } from '../types/common'
-import {
-  CreateVerificationInput,
-  CustomizeAIInput,
-  UpdateUserAspirantInput,
-  UpdateUserCollegeInput,
-  UpdateUserTeacherInput,
-  VerificationStatusInput,
-  OrganisationMember,
-} from '../types/forms/users'
+import { User } from '../types/domains/auth'
+import { Country, Paginated } from '../types/domains/common'
 import {
   SingleUser,
   TutorRequest,
   UserVerification,
 } from '../types/domains/users'
+import {
+  CreateVerificationInput,
+  CustomizeAIInput,
+  OrganisationMember,
+  UpdateUserAspirantInput,
+  UpdateUserCollegeInput,
+  UpdateUserTeacherInput,
+  VerificationStatusInput,
+} from '../types/forms/users'
+import {
+  CreateTutorRequestForm,
+  UpdateUserLocationInput,
+  UpdateUserSocialInput,
+} from './../types/forms/users'
+import Common from './Common'
 
 export default class Users extends Common {
   constructor() {

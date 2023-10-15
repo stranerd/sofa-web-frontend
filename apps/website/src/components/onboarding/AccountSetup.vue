@@ -16,7 +16,7 @@
               : 'col-span-2'
           } py-3 px-3 custom-border flex flex-row items-center space-x-2 cursor-pointer justify-center ${
             option.status == 'active' ? 'bg-primaryPurple' : ''
-          } 
+          }
         ${option.status == 'inactive' ? 'bg-lightGrayVaraint' : ''} ${
             option.status == 'done' ? 'bg-primaryGreen' : ''
           }`"
@@ -24,7 +24,7 @@
           @click="selectStage(option)"
         >
           <sofa-normal-text
-            :color="` ${option.status == 'active' ? 'text-white' : ''} 
+            :color="` ${option.status == 'active' ? 'text-white' : ''}
           ${option.status == 'inactive' ? 'text-grayColor' : ''} ${
               option.status == 'done' ? 'text-white' : ''
             }`"
@@ -47,7 +47,7 @@
         <div class="w-full flex flex-col items-center justify-center pt-3">
           <sofa-image-loader
             :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
-            :photoUrl="profileImageUrl"
+            :photoUrl="profileImageUrl ?? ''"
           >
             <sofa-icon
               :customClass="'h-[50px]'"

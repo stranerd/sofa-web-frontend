@@ -585,8 +585,8 @@ const updateUserLocation = () => {
 }
 
 const setOrganizationMembers = () => {
-  const allMembersEmail = allOrganizationMembers.value?.results.map((data) => {
-    return data.email?.toLocaleLowerCase()
+  const allMembersEmail = [] ?? allOrganizationMembers.value?.results.map((data) => {
+    return data.email.toLocaleLowerCase()
   })
 
   // get user details if it exist
@@ -603,18 +603,13 @@ const setOrganizationMembers = () => {
     allRequests.value.length = 0
     allStudents.value.length = 0
     allOrganizationMembers.value?.results.forEach((member) => {
-      const user = allUsers.filter((item) => {
-        return (
-          item.bio.email?.toLocaleLowerCase() ==
-          member.email?.toLocaleLowerCase()
-        )
-      })
+      const user = allUsers.find((item) => item.bio.email?.toLocaleLowerCase() == member.email?.toLocaleLowerCase())
 
       const memberData = {
-        name: user.length ? user[0].bio.name.full : member.email,
+        name: user?.bio.name.full ?? member.email,
         email: member.email?.toLocaleLowerCase(),
-        profile_url: user.length ? user[0].bio.photo?.link : '',
-        userId: user.length ? user[0].id : '',
+        profile_url: user?.bio.photo?.link ?? '',
+        userId: user?.id ?? '',
         emailId: member.email,
       }
       if (member.pending == true) {
@@ -698,47 +693,6 @@ const addNewLink = (ref: string) => {
 }
 
 export {
-  updateProfileForm,
-  updateUserEducationForm,
-  educationOptions,
-  accountSetupOptions,
-  currentSetupOption,
-  updatePhoneForm,
-  phoneVerificationState,
-  showAccountSetup,
-  accountTypeOption,
-  updateVerificationForm,
-  customizeAIForm,
-  showCustomizeAI,
-  allStudents,
-  allRequests,
-  allOrganizationMembers,
-  showRemoveMember,
-  selectedMember,
-  tutorRequestForm,
-  allCountries,
-  allStates,
-  Countries,
-  allOrganizations,
-  userSocials,
-  profileLinks,
-  allLinks,
-  addNewLink,
-  setExamCourses,
-  setOrganizations,
-  countryIsSelected,
-  setCountry,
-  UpdateProfile,
-  setSchoolsOption,
-  setFacultiesOptions,
-  setDepartmentsOptions,
-  UpdateUserEducation,
-  UpdatePhone,
-  VerifyPhone,
-  submitVerification,
-  autoCreateVerification,
-  CustomizeAI,
-  setOrganizationMembers,
-  updateUserLocation,
-  createTutorRequest,
+  Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, accountTypeOption, addNewLink, allCountries, allLinks, allOrganizationMembers, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizationMembers, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
+  updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
 }

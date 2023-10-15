@@ -55,7 +55,7 @@
           >
             <sofa-image-loader
               :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
-              :photoUrl="profileImageUrl"
+              :photoUrl="profileImageUrl ?? ''"
             >
               <sofa-icon
                 :customClass="'h-[50px]'"
