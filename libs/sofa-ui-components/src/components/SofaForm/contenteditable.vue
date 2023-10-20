@@ -1,6 +1,6 @@
 <template>
   <span
-    :class="` ${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
+    :class="`${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
     :placeholder="placeholder"
     :contenteditable="true"
     @input="onInput"
@@ -9,7 +9,7 @@
   ></span>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, toRef, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue"
 
 export default defineComponent({
   components: {},
@@ -49,16 +49,6 @@ export default defineComponent({
     const onInput = (e: any) => {
       textContent.value = e.target.innerText;
     };
-
-    const updateValueRef = toRef(props, "updateValue");
-
-    watch(updateValueRef, () => {
-      textContent.value = updateValueRef.value;
-      const contentField = document.getElementById(`content-${tabIndex}`);
-      if (contentField) {
-        contentField.innerText = textContent.value;
-      }
-    });
 
     const onBlur = () => {
       context.emit("onBlur", true);
