@@ -9,7 +9,6 @@ import {
 import { SingleUser } from './../../logic/types/domains/users'
 import { AxiosResponse } from 'axios'
 import { ReadOnlyApiService } from '../common/ReadOnlyService'
-import { Logic } from '../../logic'
 
 export default class UsersApi extends ReadOnlyApiService {
   constructor() {
@@ -20,12 +19,7 @@ export default class UsersApi extends ReadOnlyApiService {
     try {
       const response: AxiosResponse<SingleUser> = await this.axiosInstance.post(
         this.getUrl() + '/ai',
-        Logic.Common.convertToFormData(data),
-        {
-          headers: {
-            'content-type': 'multipart/form-data',
-          },
-        },
+        data
       )
 
       return response

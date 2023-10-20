@@ -464,7 +464,7 @@ export default defineComponent({
         questionOptions.length = 0;
 
         let currentSettings =
-          Logic.Study.questionTypes[selectedQuestionType.value].settings;
+          Logic.Study.questionTypes[selectedQuestionType.value]?.settings;
 
         if (selectedQuestionType.value == question.value.key) {
           currentSettings = question.value.settings;

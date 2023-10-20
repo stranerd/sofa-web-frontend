@@ -1,5 +1,7 @@
+import { AxiosError } from 'axios'
 import currency from 'currency.js'
 import moment from 'moment'
+import io, { Socket } from 'socket.io-client'
 import { reactive } from 'vue'
 import {
   NavigationGuardNext,
@@ -15,10 +17,8 @@ import {
   SocketReturn,
   StatusCodes,
 } from '../types/common'
-import { ValidationError } from '../types/domains/common'
-import { AxiosError } from 'axios'
-import io, { Socket } from 'socket.io-client'
 import { AuthResponse } from '../types/domains/auth'
+import { ValidationError } from '../types/domains/common'
 
 export default class Common {
   public router: Router | undefined = undefined
@@ -326,32 +326,6 @@ export default class Common {
         this.router?.push(path)
       }
     }
-  }
-
-  public convertToFormData = (data: any) => {
-    // convert request data to formData
-    const formData: FormData = new FormData()
-
-    for (const key in data) {
-      const param = data[key]
-      if (Array.isArray(param)) {
-        if (param[0] != 'string' && param[0] instanceof Blob == false) {
-          formData.append(`${key}`, JSON.stringify(param))
-        } else {
-          param.forEach((item) => {
-            formData.append(`${key}`, item)
-          })
-        }
-      } else {
-        if (typeof param != 'string' && param instanceof Blob == false) {
-          formData.append(key, JSON.stringify(param))
-        } else {
-          formData.append(key, param)
-        }
-      }
-    }
-
-    return formData
   }
 
   public shuffleArray = (array: any[]) => {

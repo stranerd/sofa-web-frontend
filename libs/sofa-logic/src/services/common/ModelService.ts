@@ -1,6 +1,5 @@
-import { Logic } from './../../logic/modules/index'
-import { ReadOnlyApiService } from './ReadOnlyService'
 import { AxiosResponse } from 'axios'
+import { ReadOnlyApiService } from './ReadOnlyService'
 
 export class ModelApiService extends ReadOnlyApiService {
   constructor(resource: string) {
@@ -14,26 +13,12 @@ export class ModelApiService extends ReadOnlyApiService {
     onUploadProgress = (progressEvent: any) => {
       // onprogress callback
     },
-    useFormdata = true,
   ): Promise<AxiosResponse<any, any>> {
     try {
-      // convert request data to formData
-      const formData: FormData = Logic.Common.convertToFormData(data)
-      let headers = {}
-
-      if (useFormdata) {
-        headers = {
-          'content-type': 'multipart/form-data',
-        }
-      }
-
       const response = await this.axiosInstance.post(
         url ? url : this.getUrl(),
-        useFormdata ? formData : data,
-        {
-          onUploadProgress: onUploadProgress,
-          headers,
-        },
+        data,
+        { onUploadProgress: onUploadProgress },
       )
 
       return response
@@ -52,27 +37,11 @@ export class ModelApiService extends ReadOnlyApiService {
     },
     useFormdata = true,
   ): Promise<AxiosResponse<any, any>> {
-    // convert request data to formData
-    const formData: FormData = Logic.Common.convertToFormData(data)
-
-    let headers = {}
-
-    if (useFormdata) {
-      headers = {
-        'content-type': 'multipart/form-data',
-      }
-    }
-
     try {
       const response: AxiosResponse = await this.axiosInstance.put(
         url ? url : this.getUrl(id),
-        useFormdata ? formData : data,
-        {
-          onUploadProgress: onUploadProgress,
-          headers: {
-            'content-type': 'multipart/form-data',
-          },
-        },
+        data,
+        { onUploadProgress: onUploadProgress },
       )
 
       return response

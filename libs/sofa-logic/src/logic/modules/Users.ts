@@ -322,7 +322,7 @@ export default class Users extends Common {
         show: false,
       })
       return $api.users.tutor_request
-        .post(null, this.CreateTutorRequestForm, () => {}, true)
+        .post(null, this.CreateTutorRequestForm, () => {})
         .then((response) => {
           this.SingleTutorRequest = response.data
           Logic.Common.hideLoader()

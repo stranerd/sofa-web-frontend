@@ -6,7 +6,6 @@ import {
   ReorderQuizInput,
 } from '../../logic/types/forms/study'
 import { Paginated } from '../../logic/types/domains/common'
-import { Logic } from '../../logic'
 
 export default class QuizzesApi extends ModelApiService {
   constructor() {
@@ -104,19 +103,9 @@ export default class QuizzesApi extends ModelApiService {
       const questionId = data.id
 
       data.id = undefined
-      // convert request data to formData
-      const formData: FormData = Logic.Common.convertToFormData(data)
-
-      const headers = {
-        'content-type': 'multipart/form-data',
-      }
-
       const response: AxiosResponse<Question> = await this.axiosInstance.put(
         this.getUrl() + `/${quizId}/questions/${questionId}`,
-        formData,
-        {
-          headers,
-        },
+        data,
       )
 
       return response
