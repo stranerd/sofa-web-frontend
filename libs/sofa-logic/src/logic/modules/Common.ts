@@ -573,7 +573,7 @@ export default class Common {
 
     // handle fetchRules
 
-    const fetchRules: FetchRule[] = routeMiddlewares.fetchRules
+    const fetchRules: FetchRule[] = routeMiddlewares?.fetchRules
 
     let BreakException = {}
 
@@ -685,10 +685,6 @@ export default class Common {
     }
 
     // save user activities
-
-    if (routeMiddlewares.tracking_data) {
-      const trackingData: any = routeMiddlewares.tracking_data
-    }
 
     if (allActions.length > 0) {
       this.showLoader({

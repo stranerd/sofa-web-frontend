@@ -240,71 +240,6 @@
       </div>
     </sofa-modal>
 
-    <!-- Study mode for quiz -->
-    <sofa-modal
-      v-if="showStudyMode"
-      :close="
-        () => {
-          showStudyMode = false;
-        }
-      "
-    >
-      <div
-        class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
-        @click.stop="
-          () => {
-            //
-          }
-        "
-      >
-        <div
-          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-5 space-y-3 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center"
-        >
-          <div
-            class="w-full hidden flex-col space-y-1 justify-center items-center md:flex"
-          >
-            <sofa-header-text :customClass="'text-xl'">
-              Choose Study Mode
-            </sofa-header-text>
-            <sofa-normal-text>
-              Complete at least one to make progress
-            </sofa-normal-text>
-          </div>
-
-          <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4"
-          >
-            <sofa-normal-text :customClass="'!font-bold !text-base'">
-              Choose Study Mode
-            </sofa-normal-text>
-            <sofa-icon
-              :customClass="'h-[19px]'"
-              :name="'circle-close'"
-              @click="showStudyMode = false"
-            />
-          </div>
-
-          <div
-            class="w-full flex flex-col space-y-3 mdlg:!px-0 px-4 mdlg:!pb-0 pb-4"
-          >
-            <sofa-icon-card
-              :data="item"
-              v-for="(item, index) in otherTasks"
-              :key="index"
-              @click="goToStudyMode(item.key)"
-              :customClass="'!bg-[#F1F6FA] !w-full !shadow-none'"
-            >
-              <template v-slot:title>
-                <sofa-normal-text :customClass="'!font-bold'">
-                  {{ item.title }}
-                </sofa-normal-text>
-              </template>
-            </sofa-icon-card>
-          </div>
-        </div>
-      </div>
-    </sofa-modal>
-
     <!--  Payment modal -->
     <sofa-modal
       v-if="showMakePaymentModal"
@@ -479,7 +414,6 @@ import {
   SofaCourseContent,
   SofaModal,
   SofaHeaderText,
-  SofaIconCard,
   SofaButton,
 } from "sofa-ui-components";
 import { useMeta } from "vue-meta";
@@ -495,7 +429,6 @@ export default defineComponent({
     SofaCourseContent,
     SofaModal,
     SofaHeaderText,
-    SofaIconCard,
     SofaButton,
     CourseContent,
     RateAndReviewModal,

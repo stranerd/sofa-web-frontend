@@ -23,6 +23,7 @@
     "
     :type="loaderSetup.type"
   />
+  <study-mode-modal />
   <!-- Save to folder -->
   <save-to-folder
     v-if="showSaveToFolder"
@@ -56,6 +57,7 @@ import { defineComponent, onMounted, ref } from "vue";
 import { Logic } from "sofa-logic";
 import { SofaAlert } from "sofa-ui-components";
 import SaveToFolder from "./components/common/SaveToFolder.vue";
+import StudyModeModal from './components/library/StudyModeModal.vue';
 import {
   reportMaterialSetup,
   sendReportMaterial,
@@ -68,6 +70,7 @@ export default defineComponent({
     SofaAlert,
     SaveToFolder,
     RateAndReviewModal,
+    StudyModeModal,
   },
   setup() {
     useMeta({

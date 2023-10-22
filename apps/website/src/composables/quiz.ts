@@ -99,50 +99,6 @@ const mobileTitle = ref('')
 
 const counterInterval = ref()
 
-const otherTasks = [
-  {
-    title: 'Practice',
-    subTitle: 'Interactive and comfortable learning',
-    icon: 'learn-quiz',
-    iconSize: 'h-[46px]',
-    key: 'practice',
-  },
-  {
-    title: 'Test',
-    subTitle: 'Evaluate your level of knowledge',
-    icon: 'test',
-    iconSize: 'h-[46px]',
-    key: 'test',
-  },
-  {
-    title: 'Flashcards',
-    subTitle: 'Digital cards to memorize answers',
-    icon: 'study-flashcard',
-    iconSize: 'h-[46px]',
-    key: 'flashcard',
-  },
-  {
-    title: 'Game',
-    subTitle: 'Battle friends for the highest score',
-    icon: 'play-quiz',
-    iconSize: 'h-[46px]',
-    action: () => {
-      //
-    },
-    key: 'game',
-  },
-  // {
-  //   title: 'Assignment',
-  //   subTitle: 'Share as homework with a deadline',
-  //   icon: 'assignment',
-  //   iconSize: 'h-[46px]',
-  //   action: () => {
-  //     //
-  //   },
-  //   key: 'assignment',
-  // },
-]
-
 const quizSettingSaved = ref(false)
 
 const createQuiz = (formComp: any) => {
@@ -232,10 +188,11 @@ const quizResult = () => {
   }
 }
 
-const goToStudyMode = (type: string) => {
+const goToStudyMode = (id: string, type: string) => {
+  selectedQuizId.value = id
   selectedQuizMode.value = type
 
-  Logic.Study.GoToStudyMode(type, selectedQuizId.value || '')
+  Logic.Study.GoToStudyMode(type, id)
 
   if (type == 'game') {
     showStudyMode.value = true
@@ -245,6 +202,52 @@ const goToStudyMode = (type: string) => {
 
   showStudyMode.value = false
 }
+
+
+const otherTasks = [
+  {
+    title: 'Practice',
+    subTitle: 'Interactive and comfortable learning',
+    icon: 'learn-quiz',
+    iconSize: 'h-[46px]',
+    actionFn: goToStudyMode,
+    key: 'practice',
+  },
+  {
+    title: 'Test',
+    subTitle: 'Evaluate your level of knowledge',
+    icon: 'test',
+    iconSize: 'h-[46px]',
+    actionFn: goToStudyMode,
+    key: 'test',
+  },
+  {
+    title: 'Flashcards',
+    subTitle: 'Digital cards to memorize answers',
+    icon: 'study-flashcard',
+    iconSize: 'h-[46px]',
+    actionFn: goToStudyMode,
+    key: 'flashcard',
+  },
+  {
+    title: 'Game',
+    subTitle: 'Battle friends for the highest score',
+    icon: 'play-quiz',
+    iconSize: 'h-[46px]',
+    actionFn: goToStudyMode,
+    key: 'game',
+  },
+  // {
+  //   title: 'Assignment',
+  //   subTitle: 'Share as homework with a deadline',
+  //   icon: 'assignment',
+  //   iconSize: 'h-[46px]',
+  //   action: () => {
+  //     //
+  //   },
+  //   key: 'assignment',
+  // },
+]
 
 const listenToGame = () => {
   // connect to websocket
@@ -1000,64 +1003,9 @@ const startTest = () => {
 }
 
 export {
-  quizSettingsForm,
-  quizSettingSaved,
-  selectedQuizId,
-  otherTasks,
-  mode,
-  state,
-  buttonLabels,
-  infoModalData,
-  showInfoModal,
-  answerState,
-  enabledSwiper,
-  swiperInstance,
-  swiperKey,
-  currentQuestionIndex,
-  questionIndex,
-  SingleQuiz,
-  AllQuestions,
-  mobileTitle,
-  counterInterval,
-  specialQuestionTypes,
-  allQuestionAnswers,
-  questions,
-  selectedQuizMode,
-  userIsParticipating,
-  SingleGame,
-  GameParticipants,
-  scoreBoardParticipants,
-  currentPrepareCount,
-  SingleTest,
-  isRestart,
-  pieChartColor,
-  pieLabel,
-  resultData,
-  pieChartRefForTestScore,
-  setResultData,
-  saveParticipantAnswer,
-  createQuiz,
-  updateQuiz,
-  quizResult,
-  goToStudyMode,
-  setQuestions,
-  showQuestion,
-  setStartButtons,
-  setViewMode,
-  goToNextSlide,
-  goToPrevSlide,
-  handleLeftButton,
-  handleRightButton,
-  handleAnswerSelected,
-  createQuizGame,
-  userIsGameHost,
-  copyGameLink,
-  shareGameLink,
-  startGame,
-  listenToGame,
-  setScoreboardParticipants,
-  preStartGame,
-  listenToTest,
-  preStartTest,
-  startTest,
+  AllQuestions, GameParticipants, SingleGame, SingleQuiz, SingleTest, allQuestionAnswers, answerState, buttonLabels, copyGameLink, counterInterval, createQuiz, createQuizGame, currentPrepareCount, currentQuestionIndex, enabledSwiper, goToNextSlide,
+  goToPrevSlide, goToStudyMode, handleAnswerSelected, handleLeftButton,
+  handleRightButton, infoModalData, isRestart, listenToGame, listenToTest, mobileTitle, mode, otherTasks, pieChartColor, pieChartRefForTestScore, pieLabel, preStartGame, preStartTest, questionIndex, questions, quizResult, quizSettingSaved, quizSettingsForm, resultData, saveParticipantAnswer, scoreBoardParticipants, selectedQuizId, selectedQuizMode, setQuestions, setResultData, setScoreboardParticipants, setStartButtons,
+  setViewMode, shareGameLink, showInfoModal, showQuestion, specialQuestionTypes, startGame, startTest, state, swiperInstance,
+  swiperKey, updateQuiz, userIsGameHost, userIsParticipating
 }
