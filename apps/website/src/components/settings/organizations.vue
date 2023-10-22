@@ -132,7 +132,7 @@ export default defineComponent({
           Logic.Common.showLoader({
             show: true,
             loading: false,
-            message: "You have been removed from this organisation.",
+            message: "You have been removed from this organization.",
             type: "success",
           });
           showLeaveOrganization.value = false;

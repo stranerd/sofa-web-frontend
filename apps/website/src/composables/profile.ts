@@ -2,8 +2,8 @@ import { Logic } from 'sofa-logic'
 import { Conditions, SelectOption } from 'sofa-logic/src/logic/types/common'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import {
-  CreateTutorRequestForm,
-  CustomizeAIInput,
+    CreateTutorRequestForm,
+    CustomizeAIInput,
 } from 'sofa-logic/src/logic/types/forms/users'
 import { reactive, ref } from 'vue'
 
@@ -13,7 +13,7 @@ const showAccountSetup = ref(false)
 const showCustomizeAI = ref(false)
 const allStudents = ref([])
 const allRequests = ref([])
-const allOrganizationMembers = ref(Logic.Users.AllOrganisationMembers)
+const allOrganizationMembers = ref(Logic.Users.AllorganizationMembers)
 const showRemoveMember = ref(false)
 const selectedMember = ref('')
 const allCountries = reactive<SelectOption[]>([])
@@ -34,8 +34,8 @@ const updateProfileForm = reactive({
     first: '',
     last: '',
   },
-  organisation_name: '',
-  organisation_code: '',
+  organization_name: '',
+  organization_code: '',
   photo: undefined,
   country: '',
   state: '',
@@ -194,8 +194,8 @@ const accountTypeOption = reactive<SelectOption[]>([
     value: 'Tutor',
   },
   {
-    key: 'organisation',
-    value: 'Organisation',
+    key: 'organization',
+    value: 'organization',
   },
 ])
 
@@ -377,17 +377,17 @@ const setDepartmentsOptions = () => {
 }
 
 const UpdateProfile = (formComp: any, showLoader = true) => {
-  if (updateUserEducationForm.type == 'organisation') {
-    if (updateProfileForm.organisation_name) {
+  if (updateUserEducationForm.type == 'organization') {
+    if (updateProfileForm.organization_name) {
       Logic.Users.UpdateUserForm = {
         data: {
           type: 'organization',
-          name: updateProfileForm.organisation_name,
-          code: updateProfileForm.organisation_code,
+          name: updateProfileForm.organization_name,
+          code: updateProfileForm.organization_code,
         },
       }
       Logic.Users.UpdateUser(true, false)
-      const fullNameArray = updateProfileForm.organisation_name.split(' ')
+      const fullNameArray = updateProfileForm.organization_name.split(' ')
       updateProfileForm.name.first = fullNameArray[0]
       updateProfileForm.name.last = fullNameArray[1] ? fullNameArray[1] : ''
     }
@@ -420,7 +420,7 @@ const UpdateProfile = (formComp: any, showLoader = true) => {
   )
     .then(() => {
       if (formComp) {
-        if (updateUserEducationForm.type == 'organisation') {
+        if (updateUserEducationForm.type == 'organization') {
           updateUserLocation()
             .then(() => {
               Logic.Common.GoToRoute('/')
@@ -693,6 +693,6 @@ const addNewLink = (ref: string) => {
 }
 
 export {
-  Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, accountTypeOption, addNewLink, allCountries, allLinks, allOrganizationMembers, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizationMembers, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
-  updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
+    Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, accountTypeOption, addNewLink, allCountries, allLinks, allOrganizationMembers, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizationMembers, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
+    updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
 }

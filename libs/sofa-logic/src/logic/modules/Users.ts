@@ -11,7 +11,7 @@ import {
 import {
   CreateVerificationInput,
   CustomizeAIInput,
-  OrganisationMember,
+  OrganizationMember,
   UpdateUserAspirantInput,
   UpdateUserCollegeInput,
   UpdateUserTeacherInput,
@@ -37,8 +37,8 @@ export default class Users extends Common {
   public Verification: UserVerification | undefined
   public Verifications: Paginated<UserVerification> | undefined
   public UserProfile: SingleUser | undefined
-  public AllOrganisationMembers: Paginated<OrganisationMember> | undefined
-  public OrganisationMember: OrganisationMember | undefined
+  public AllorganizationMembers: Paginated<OrganizationMember> | undefined
+  public organizationMember: OrganizationMember | undefined
   public Countries: Country[] | undefined
   public AllTutorRequests: Paginated<TutorRequest> | undefined
   public SingleTutorRequest: TutorRequest | undefined
@@ -62,7 +62,7 @@ export default class Users extends Common {
     } else {
       const accountType = localStorage.getItem('user_account_type') || 'student'
 
-      return accountType == 'organisation' ? 'organization' : accountType
+      return accountType == 'organization' ? 'organization' : accountType
     }
   }
 
@@ -149,7 +149,7 @@ export default class Users extends Common {
     return $api.users.organization
       .getOrganizationMembers(organizationUserId, filters)
       .then((response) => {
-        this.AllOrganisationMembers = response.data
+        this.AllorganizationMembers = response.data
         return response.data.results
       })
   }
@@ -161,7 +161,7 @@ export default class Users extends Common {
     return $api.users.organization
       .getOrganizationMember(organizationUserId, studentEmail)
       .then((response) => {
-        this.OrganisationMember = response.data
+        this.organizationMember = response.data
       })
   }
 

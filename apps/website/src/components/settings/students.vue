@@ -445,7 +445,7 @@ export default defineComponent({
           Logic.Common.showLoader({
             show: true,
             loading: false,
-            message: "Student removed from your organisation!",
+            message: "Student removed from your organization!",
             type: "success",
           });
         } else {

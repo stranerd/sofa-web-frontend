@@ -1,9 +1,8 @@
-import { OrganisationMember } from './../../logic/types/forms/users'
-import { SingleUser } from './../../logic/types/domains/users'
 import { AxiosResponse } from 'axios'
-import { ReadOnlyApiService } from '../common/ReadOnlyService'
-import { Paginated } from '../../logic/types/domains/common'
 import { QueryParams } from '../../logic/types/common'
+import { Paginated } from '../../logic/types/domains/common'
+import { ReadOnlyApiService } from '../common/ReadOnlyService'
+import { OrganizationMember } from './../../logic/types/forms/users'
 
 export default class OrganizationApi extends ReadOnlyApiService {
   constructor() {
@@ -11,14 +10,14 @@ export default class OrganizationApi extends ReadOnlyApiService {
   }
 
   public async getOrganizationMembers(
-    organisationUserId: string,
+    organizationUserId: string,
     filters: QueryParams = {},
   ) {
     try {
       const response: AxiosResponse<Paginated<
-        OrganisationMember
+        OrganizationMember
       >> = await this.axiosInstance.get(
-        this.getUrl() + `/${organisationUserId}/members`,
+        this.getUrl() + `/${organizationUserId}/members`,
         {
           params: filters,
         },
@@ -33,12 +32,12 @@ export default class OrganizationApi extends ReadOnlyApiService {
   }
 
   public async getOrganizationMember(
-    organisationUserId: string,
+    organizationUserId: string,
     studentEmail: string,
   ) {
     try {
-      const response: AxiosResponse<OrganisationMember> = await this.axiosInstance.get(
-        this.getUrl() + `/${organisationUserId}/members/${studentEmail}`,
+      const response: AxiosResponse<OrganizationMember> = await this.axiosInstance.get(
+        this.getUrl() + `/${organizationUserId}/members/${studentEmail}`,
       )
 
       return response
@@ -50,14 +49,14 @@ export default class OrganizationApi extends ReadOnlyApiService {
   }
 
   public async addOrganizationMembers(
-    organisationUserId: string,
+    organizationUserId: string,
     studentEmails: string[],
   ) {
     try {
       const response: AxiosResponse<
-        OrganisationMember[]
+        OrganizationMember[]
       > = await this.axiosInstance.post(
-        this.getUrl() + `/${organisationUserId}/members`,
+        this.getUrl() + `/${organizationUserId}/members`,
         {
           emails: studentEmails,
         },
@@ -72,12 +71,12 @@ export default class OrganizationApi extends ReadOnlyApiService {
   }
 
   public async requestToJoinOrganization(
-    organisationUserId: string,
+    organizationUserId: string,
     code: string,
   ) {
     try {
-      const response: AxiosResponse<OrganisationMember> = await this.axiosInstance.post(
-        this.getUrl() + `/${organisationUserId}/members/request`,
+      const response: AxiosResponse<OrganizationMember> = await this.axiosInstance.post(
+        this.getUrl() + `/${organizationUserId}/members/request`,
         {
           code,
         },
@@ -91,10 +90,10 @@ export default class OrganizationApi extends ReadOnlyApiService {
     }
   }
 
-  public async leaveOrganization(organisationUserId: string) {
+  public async leaveOrganization(organizationUserId: string) {
     try {
       const response: AxiosResponse<Boolean> = await this.axiosInstance.delete(
-        this.getUrl() + `/${organisationUserId}/members/leave`,
+        this.getUrl() + `/${organizationUserId}/members/leave`,
       )
 
       return response
@@ -106,12 +105,12 @@ export default class OrganizationApi extends ReadOnlyApiService {
   }
 
   public async removeOrganizationMember(
-    organisationUserId: string,
+    organizationUserId: string,
     studentEmail: string,
   ) {
     try {
       const response: AxiosResponse<Boolean> = await this.axiosInstance.delete(
-        this.getUrl() + `/${organisationUserId}/members`,
+        this.getUrl() + `/${organizationUserId}/members`,
         {
           data: {
             email: studentEmail,

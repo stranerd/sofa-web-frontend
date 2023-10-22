@@ -9,7 +9,7 @@ const registerForm = reactive<SignUpInput>({
     last: '',
   },
   password: '',
-  organisation_name: '',
+  organization_name: '',
   description: '',
 })
 
@@ -34,12 +34,12 @@ const SignUp = (formComp: any, accountType = 'student') => {
 
   const formState: boolean = formComp.validate()
 
-  if (accountType == 'organisation' && registerForm.description == '') {
+  if (accountType == 'organization' && registerForm.description == '') {
     return
   }
 
-  if (accountType == 'organisation') {
-    const fullNameArray = registerForm.organisation_name.split(' ')
+  if (accountType == 'organization') {
+    const fullNameArray = registerForm.organization_name.split(' ')
     Logic.Auth.SignUpForm.name.first = fullNameArray[0]
     Logic.Auth.SignUpForm.name.last = fullNameArray[1] ? fullNameArray[1] : ''
   }
@@ -100,10 +100,7 @@ const VerifyUserEmail = (token: string) => {
 }
 
 export {
-  registerForm,
-  loginForm,
-  termsAccepted,
-  SignIn,
-  SignUp,
-  VerifyUserEmail,
+    SignIn,
+    SignUp,
+    VerifyUserEmail, loginForm, registerForm, termsAccepted
 }

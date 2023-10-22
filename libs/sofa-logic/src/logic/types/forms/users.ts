@@ -14,7 +14,7 @@ export interface UpdateUserCollegeInput {
   }
 }
 
-export interface OrganisationMember {
+export interface OrganizationMember {
   hash: string
   id: string
   email: string

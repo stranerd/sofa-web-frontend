@@ -26,7 +26,7 @@ export interface SignUpInput {
   }
   description?: string
   photo?: Blob
-  organisation_name?: string
+  organization_name?: string
 }
 
 export interface SignInInput {
