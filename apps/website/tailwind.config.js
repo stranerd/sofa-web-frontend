@@ -2,6 +2,9 @@ module.exports = {
   content: ["./public/index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
+    fontFamily: {
+      lexend: ["Lexend", "system-ui"],
+    },
     extend: {
       colors: {
         primaryPurple: "#3219AF",

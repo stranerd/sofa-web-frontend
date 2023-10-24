@@ -1,94 +1,96 @@
 <template>
-  <sub-page-layout>
-    <div class="w-full h-full flex-grow flex flex-col justify-start relative">
-      <div
-        class="w-full flex flex-row items-center space-x-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0 z-[9999]"
-      >
-        <sofa-icon
-          :customClass="'h-[15px]'"
-          :name="'back-arrow'"
-          @click="Logic.Common.goBack()"
-        />
-        <sofa-normal-text :customClass="'!font-bold !text-base'">
-          {{ pageTitle }}</sofa-normal-text
-        >
-        <div></div>
-      </div>
-      <div
-        class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide pl-4 py-2"
-      >
+  <global-layout>
+    <sub-page-layout>
+      <div class="w-full h-auto flex-grow flex flex-col justify-start relative">
         <div
-          class="w-full flex flex-row space-x-3 items-center pr-4 mdlg:!pr-0"
+          class="w-full flex flex-row items-center space-x-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0 z-[9999]"
         >
-          <span
-            :class="`px-6 py-2  ${
-              selectedItemId == item.id ? 'bg-primaryPurple' : 'bg-white'
-            } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer`"
-            v-for="(item, index) in mainFilters"
-            :key="index"
-            @click="selectedItemId = item.id"
+          <sofa-icon
+            :customClass="'h-[15px]'"
+            :name="'back-arrow'"
+            @click="Logic.Common.goBack()"
+          />
+          <sofa-normal-text :customClass="'!font-bold !text-base'">
+            {{ pageTitle }}</sofa-normal-text
           >
-            <sofa-normal-text
-              :color="`${
-                selectedItemId == item.id ? 'text-white' : 'text-deepGray'
-              } `"
-              :custom-class="'!font-semibold'"
-              >{{ item.name }}</sofa-normal-text
-            >
-          </span>
+          <div></div>
         </div>
-      </div>
-
-      <div class="w-full grid grid-cols-1 gap-4 px-4 pt-3">
-        <template v-if="filterType == 'in-progress'">
-          <template v-if="currentInProgressItem.length">
-            <sofa-progress-item-card
-              v-for="(content, index) in currentInProgressItem"
+        <div
+          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide pl-4 py-2"
+        >
+          <div
+            class="w-full flex flex-row space-x-3 items-center pr-4 mdlg:!pr-0"
+          >
+            <span
+              :class="`px-6 py-2  ${
+                selectedItemId == item.id ? 'bg-primaryPurple' : 'bg-white'
+              } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer`"
+              v-for="(item, index) in mainFilters"
               :key="index"
-              :content="content"
-              :custom-class="'!bg-white shadow-custom '"
-            />
-          </template>
-          <div v-else class="col-span-full flex flex-col">
-            <sofa-empty-state
-              :title="'You have no item in progress'"
-              :subTitle="'Discover thousands of materials to buy, created by verified experts'"
-              :actionLabel="'Marketplace'"
-              :action="
-                () => {
-                  Logic.Common.GoToRoute('/marketplace');
-                }
-              "
-            />
+              @click="selectedItemId = item.id"
+            >
+              <sofa-normal-text
+                :color="`${
+                  selectedItemId == item.id ? 'text-white' : 'text-deepGray'
+                } `"
+                :custom-class="'!font-semibold'"
+                >{{ item.name }}</sofa-normal-text
+              >
+            </span>
           </div>
-        </template>
-        <template v-if="filterType == 'results'">
-          <template v-if="currentResultItems.length">
-            <sofa-progress-item-card
-              v-for="(content, index) in currentResultItems"
-              :key="index"
-              :content="content"
-              :custom-class="'!bg-white shadow-custom '"
-            />
-          </template>
-          <div v-else class="col-span-full flex flex-col">
-            <sofa-empty-state
-              :title="'You have no practice item here'"
-              :subTitle="'Discover thousands of materials to buy, created by verified experts'"
-              :actionLabel="'Marketplace'"
-              :action="
-                () => {
-                  Logic.Common.GoToRoute('/marketplace');
-                }
-              "
-            />
-          </div>
-        </template>
-      </div>
+        </div>
 
-      <div class="w-full flex flex-row h-[100px]"></div>
-    </div>
-  </sub-page-layout>
+        <div class="w-full grid grid-cols-1 gap-4 px-4 pt-3">
+          <template v-if="filterType == 'in-progress'">
+            <template v-if="currentInProgressItem.length">
+              <sofa-progress-item-card
+                v-for="(content, index) in currentInProgressItem"
+                :key="index"
+                :content="content"
+                :custom-class="'!bg-white shadow-custom '"
+              />
+            </template>
+            <div v-else class="col-span-full flex flex-col">
+              <sofa-empty-state
+                :title="'You have no item in progress'"
+                :subTitle="'Discover thousands of materials to buy, created by verified experts'"
+                :actionLabel="'Marketplace'"
+                :action="
+                  () => {
+                    Logic.Common.GoToRoute('/marketplace');
+                  }
+                "
+              />
+            </div>
+          </template>
+          <template v-if="filterType == 'results'">
+            <template v-if="currentResultItems.length">
+              <sofa-progress-item-card
+                v-for="(content, index) in currentResultItems"
+                :key="index"
+                :content="content"
+                :custom-class="'!bg-white shadow-custom '"
+              />
+            </template>
+            <div v-else class="col-span-full flex flex-col">
+              <sofa-empty-state
+                :title="'You have no practice item here'"
+                :subTitle="'Discover thousands of materials to buy, created by verified experts'"
+                :actionLabel="'Marketplace'"
+                :action="
+                  () => {
+                    Logic.Common.GoToRoute('/marketplace');
+                  }
+                "
+              />
+            </div>
+          </template>
+        </div>
+
+        <div class="w-full flex flex-row h-[100px]"></div>
+      </div>
+    </sub-page-layout>
+  </global-layout>
 </template>
 
 <script lang="ts">
@@ -114,6 +116,7 @@ import {
   setResultItems,
 } from "@/composables/library";
 import { Conditions } from "sofa-logic/src/logic/types/domains/common";
+import { onIonViewWillEnter } from "@ionic/vue";
 
 export default defineComponent({
   components: {
@@ -174,7 +177,7 @@ export default defineComponent({
 
     const filterType = ref("");
 
-    onMounted(async () => {
+    const mountAction = async () => {
       scrollToTop();
 
       const type = Logic.Common.route.params?.type.toString();
@@ -225,11 +228,18 @@ export default defineComponent({
         );
       }
 
+      await Logic.Plays.GetGameAndTestQuizzes();
+    };
+
+    onMounted(async () => {
       Logic.Plays.watchProperty("AllTests", AllTests);
       Logic.Plays.watchProperty("AllGames", AllGames);
       Logic.Plays.watchProperty("GameAndTestQuizzes", GameAndTestQuizzes);
+      mountAction();
+    });
 
-      await Logic.Plays.GetGameAndTestQuizzes();
+    onIonViewWillEnter(() => {
+      mountAction();
     });
 
     watch(AllTests, () => {

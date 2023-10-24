@@ -12,7 +12,9 @@
       content ? `${content} | SOFA` : `SOFA`
     }}</template>
   </metainfo>
+
   <router-view />
+
   <sofa-alert
     :content="loaderSetup.message"
     v-if="loaderSetup.show"
@@ -57,7 +59,7 @@ import { defineComponent, onMounted, ref } from "vue";
 import { Logic } from "sofa-logic";
 import { SofaAlert } from "sofa-ui-components";
 import SaveToFolder from "./components/common/SaveToFolder.vue";
-import StudyModeModal from './components/library/StudyModeModal.vue';
+import StudyModeModal from "./components/library/StudyModeModal.vue";
 import {
   reportMaterialSetup,
   sendReportMaterial,
@@ -85,6 +87,7 @@ export default defineComponent({
     });
 
     return {
+      Logic,
       loaderSetup,
       showSaveToFolder,
       reportMaterialSetup,

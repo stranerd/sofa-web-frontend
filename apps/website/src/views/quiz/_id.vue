@@ -1,70 +1,195 @@
 <template>
-  <expanded-layout
-    :layoutStyle="`!w-full !justify-between !flex !flex-col !h-screen !px-0 !py-0 !overflow-y-hidden ${
-      quizIsDarkMode ? 'bg-[#141618]' : ''
-    } `"
-    :hasTopBar="false"
-    :hasBottomBar="false"
-    :bottomPadding="false"
-    :bgImage="quizIsDarkMode ? '/images/game-bg.png' : ''"
-  >
-    <template
-      v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
+  <global-layout>
+    <expanded-layout
+      :layoutStyle="`!w-full !justify-between !flex !flex-col !h-screen !px-0 !py-0 !overflow-y-hidden ${
+        quizIsDarkMode ? 'bg-[#141618]' : ''
+      } `"
+      :hasTopBar="false"
+      :hasBottomBar="false"
+      :bottomPadding="false"
+      :bgImage="quizIsDarkMode ? '/images/game-bg.png' : ''"
     >
-      <div
-        :class="`py-8 w-full md:!flex hidden flex-row items-center justify-center sticky top-0 left-0 bg-white ${
-          quizIsDarkMode ? '!bg-transparent' : ''
-        } ${answerState == 'wrong' ? '!bg-primaryRed' : ''} ${
-          answerState == 'correct' ? '!bg-primaryGreen' : ''
-        } ${state != 'preview' ? '' : 'invisible'} ${
-          answerState == 'time_up' ? '!bg-primaryRed' : ''
-        }
-  `"
-        style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)"
+      <template
+        v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
       >
         <div
-          class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex flex-row items-center space-x-3 justify-between"
+          :class="`py-8 w-full md:!flex hidden flex-row items-center justify-center sticky top-0 left-0 bg-white ${
+            quizIsDarkMode ? '!bg-transparent' : ''
+          } ${answerState == 'wrong' ? '!bg-primaryRed' : ''} ${
+            answerState == 'correct' ? '!bg-primaryGreen' : ''
+          } ${state != 'preview' ? '' : 'invisible'} ${
+            answerState == 'time_up' ? '!bg-primaryRed' : ''
+          }
+  `"
+          style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)"
         >
-          <template v-if="!answerState">
-            <template v-if="mode != 'preview'">
-              <div
-                v-if="state == 'completed' || state == 'other_modes'"
-                class="flex flex-row items-center"
-              >
-                <sofa-header-text :size="'xl'">
-                  {{ mobileTitle }}
-                </sofa-header-text>
-              </div>
+          <div
+            class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex flex-row items-center space-x-3 justify-between"
+          >
+            <template v-if="!answerState">
+              <template v-if="mode != 'preview'">
+                <div
+                  v-if="state == 'completed' || state == 'other_modes'"
+                  class="flex flex-row items-center"
+                >
+                  <sofa-header-text :size="'xl'">
+                    {{ mobileTitle }}
+                  </sofa-header-text>
+                </div>
 
-              <slider
-                v-else
-                v-model="currentSliderIndex"
-                color="#4aaf7d"
-                track-color="#e1e6ea"
-                height="15"
-                width="95%"
-                :alwaysShowHandle="true"
-                :handleScale="2"
-                :min="1"
-                :max="questions.length || 10"
-                :tooltip="true"
-                :tooltipText="`%v/${questions.length}`"
-                :flipTooltip="true"
-                :tooltipColor="'#4aaf7d'"
-                :tooltipTextColor="'#ffffff'"
-                :sticky="true"
-              />
+                <slider
+                  v-else
+                  v-model="currentSliderIndex"
+                  color="#4aaf7d"
+                  track-color="#e1e6ea"
+                  height="15"
+                  width="95%"
+                  :alwaysShowHandle="true"
+                  :handleScale="2"
+                  :min="1"
+                  :max="questions.length || 10"
+                  :tooltip="true"
+                  :tooltipText="`%v/${questions.length}`"
+                  :flipTooltip="true"
+                  :tooltipColor="'#4aaf7d'"
+                  :tooltipTextColor="'#ffffff'"
+                  :sticky="true"
+                />
+              </template>
+              <template v-else>
+                <sofa-header-text :size="'xl'"> Quiz preview </sofa-header-text>
+              </template>
+              <sofa-normal-text
+                :color="'text-grayColor'"
+                :customClass="'!text-base cursor-pointer'"
+                @click="Logic.Common.goBack()"
+              >
+                Exit
+              </sofa-normal-text>
             </template>
             <template v-else>
-              <sofa-header-text :size="'xl'"> Quiz preview </sofa-header-text>
+              <template v-if="answerState == 'pending'">
+                <div
+                  class="w-full relative h-[14px] bg-primaryGreen rounded-[8px]"
+                >
+                  <div
+                    class="absolute top-0 left-0 h-full bg-[#E1E6EB] rounded-[8px]"
+                    :style="`width: calc( ${
+                      ((questions[currentQuestionIndex].timeLimit -
+                        questions[currentQuestionIndex].currentTime) /
+                        questions[currentQuestionIndex].timeLimit) *
+                      95
+                    }% + 5%);`"
+                  >
+                    <span
+                      class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold"
+                    >
+                      {{ questions[currentQuestionIndex].currentTime }}
+                    </span>
+                  </div>
+                </div>
+              </template>
+              <template v-if="answerState == 'time_up'">
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-icon
+                    :customClass="'h-[22px]'"
+                    :name="`${'white-wrong'}`"
+                  />
+                  <sofa-header-text :size="'xl'" :color="'text-white'">
+                    Time up!
+                  </sofa-header-text>
+                </div>
+              </template>
+              <template
+                v-if="answerState == 'wrong' || answerState == 'correct'"
+              >
+                <div class="flex flex-row items-center space-x-2">
+                  <sofa-icon
+                    :customClass="'h-[22px]'"
+                    :name="`${
+                      answerState == 'wrong' ? 'white-checkbox' : 'white-wrong'
+                    }`"
+                  />
+                  <sofa-header-text :size="'xl'" :color="'text-white'">
+                    {{ capitalize(answerState) }}!
+                  </sofa-header-text>
+                </div>
+
+                <div class="flex flex-row space-x-3">
+                  <sofa-button
+                    :bgColor="'bg-white'"
+                    :textColor="'text-white'"
+                    :customClass="` ${
+                      answerState == 'wrong'
+                        ? '!bg-primaryRed'
+                        : '!bg-primaryGreen'
+                    } !border-[2px] !border-white`"
+                    :hasDoubleLayer="true"
+                    :hasDarkLayer="false"
+                    v-if="
+                      mode != 'game' &&
+                      mode != 'tutor_test' &&
+                      questions[currentQuestionIndex].explanation
+                    "
+                    @click="showExplanation()"
+                  >
+                    Explanation
+                  </sofa-button>
+
+                  <sofa-button
+                    :bgColor="'bg-white'"
+                    :textColor="` ${
+                      answerState == 'wrong'
+                        ? '!text-primaryRed'
+                        : '!text-primaryGreen'
+                    }  `"
+                    :customClass="'!border-[2px] !border-gray-100'"
+                    :hasDoubleLayer="true"
+                    @click="handleRightButton()"
+                  >
+                    Continue
+                  </sofa-button>
+                </div>
+              </template>
             </template>
-            <sofa-normal-text
-              :color="'text-grayColor'"
-              :customClass="'!text-base cursor-pointer'"
+          </div>
+        </div>
+
+        <!-- Top bar for smaller screens -->
+        <div
+          :class="`w-full flex flex-row md:!hidden justify-between items-center z-50 bg-backgroundGray px-4 py-4 sticky top-0 left-0 ${
+            quizIsDarkMode ? '!bg-transparent' : ''
+          } ${answerState == 'wrong' ? '!bg-primaryRed' : ''} ${
+            answerState == 'correct' ? '!bg-primaryGreen' : ''
+          }
+  ${answerState == 'time_up' ? '!bg-primaryRed' : ''}`"
+        >
+          <template v-if="!answerState">
+            <sofa-icon
+              :customClass="'h-[19px]'"
+              :name="'circle-close'"
               @click="Logic.Common.goBack()"
+            />
+
+            <sofa-normal-text
+              :customClass="'!font-bold !text-sm !line-clamp-1'"
             >
-              Exit
+              {{ mobileTitle }}
             </sofa-normal-text>
+
+            <div
+              :class="`flex flex-row items-center space-x-3 ${
+                state != 'completed' && state != 'other_modes'
+                  ? 'visible'
+                  : 'invisible'
+              }`"
+            >
+              <sofa-normal-text>
+                {{ currentQuestionIndex + 1 }}/{{
+                  questions.length
+                }}</sofa-normal-text
+              >
+            </div>
           </template>
           <template v-else>
             <template v-if="answerState == 'pending'">
@@ -77,11 +202,11 @@
                     ((questions[currentQuestionIndex].timeLimit -
                       questions[currentQuestionIndex].currentTime) /
                       questions[currentQuestionIndex].timeLimit) *
-                    95
-                  }% + 5%);`"
+                    90
+                  }% + 10%);`"
                 >
                   <span
-                    class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold"
+                    class="w-[40px] h-[30px] z-[33344444] top-[-10px] text-white flex items-center justify-center rounded-[16px] absolute right-0 bg-primaryGreen !font-semibold"
                   >
                     {{ questions[currentQuestionIndex].currentTime }}
                   </span>
@@ -99,6 +224,7 @@
                 </sofa-header-text>
               </div>
             </template>
+
             <template v-if="answerState == 'wrong' || answerState == 'correct'">
               <div class="flex flex-row items-center space-x-2">
                 <sofa-icon
@@ -107,12 +233,15 @@
                     answerState == 'wrong' ? 'white-checkbox' : 'white-wrong'
                   }`"
                 />
-                <sofa-header-text :size="'xl'" :color="'text-white'">
+                <sofa-header-text :color="'text-white'">
                   {{ capitalize(answerState) }}!
                 </sofa-header-text>
               </div>
 
-              <div class="flex flex-row space-x-3">
+              <div
+                class="flex flex-row space-x-3"
+                v-if="mode != 'game' && mode != 'tutor_test'"
+              >
                 <sofa-button
                   :bgColor="'bg-white'"
                   :textColor="'text-white'"
@@ -123,619 +252,511 @@
                   } !border-[2px] !border-white`"
                   :hasDoubleLayer="true"
                   :hasDarkLayer="false"
+                  @click="showExplanation()"
                   v-if="
                     mode != 'game' &&
                     mode != 'tutor_test' &&
                     questions[currentQuestionIndex].explanation
                   "
-                  @click="showExplanation()"
                 >
                   Explanation
-                </sofa-button>
-
-                <sofa-button
-                  :bgColor="'bg-white'"
-                  :textColor="` ${
-                    answerState == 'wrong'
-                      ? '!text-primaryRed'
-                      : '!text-primaryGreen'
-                  }  `"
-                  :customClass="'!border-[2px] !border-gray-100'"
-                  :hasDoubleLayer="true"
-                  @click="handleRightButton()"
-                >
-                  Continue
                 </sofa-button>
               </div>
             </template>
           </template>
         </div>
-      </div>
+      </template>
 
-      <!-- Top bar for smaller screens -->
-      <div
-        :class="`w-full flex flex-row md:!hidden justify-between items-center z-50 bg-backgroundGray px-4 py-4 sticky top-0 left-0 ${
-          quizIsDarkMode ? '!bg-transparent' : ''
-        } ${answerState == 'wrong' ? '!bg-primaryRed' : ''} ${
-          answerState == 'correct' ? '!bg-primaryGreen' : ''
-        }
-  ${answerState == 'time_up' ? '!bg-primaryRed' : ''}`"
+      <!-- Questions -->
+      <sofa-swiper
+        :free-mode="false"
+        :show-pagination="false"
+        :space-between="0"
+        :slide-per-view="'1'"
+        custom-class="!w-full !h-full flex-grow !bg-transparent "
+        :swiper-class="'!h-full '"
+        v-model="currentQuestionIndex"
+        :current-slide-position="questionIndex"
+        :enabled="enabledSwiper"
+        :baseData="questions"
+        ref="swiperInstance"
+        v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
       >
-        <template v-if="!answerState">
-          <sofa-icon
-            :customClass="'h-[19px]'"
-            :name="'circle-close'"
-            @click="Logic.Common.goBack()"
-          />
-
-          <sofa-normal-text :customClass="'!font-bold !text-sm !line-clamp-1'">
-            {{ mobileTitle }}
-          </sofa-normal-text>
-
-          <div
-            :class="`flex flex-row items-center space-x-3 ${
-              state != 'completed' && state != 'other_modes'
-                ? 'visible'
-                : 'invisible'
-            }`"
+        <swiper-slide
+          class="!h-full !flex !items-center !justify-center !w-full !flex-col !relative !bg-transparent"
+          v-for="(question, index) in questions"
+          :key="index"
+        >
+          <sofa-image-loader
+            :photoUrl="''"
+            :customClass="'w-full absolute h-full flex flex-col top-0 left-0 !items-center !justify-center !bg-transparent'"
           >
-            <sofa-normal-text>
-              {{ currentQuestionIndex + 1 }}/{{
-                questions.length
-              }}</sofa-normal-text
+            <template v-if="state != 'other_modes'">
+              <flashcard
+                v-if="mode == 'flashcard'"
+                :questionData="question"
+                :mode="mode"
+                :state="state"
+              />
+
+              <template v-else>
+                <quiz-questions
+                  :questionData="question"
+                  :state="state"
+                  :questionIndex="index"
+                  :currentIndex="currentQuestionIndex"
+                  :mode="mode"
+                  @OnAnswerSelected="handleAnswerSelected"
+                  :answerState="answerState"
+                  :quiz-title="SingleQuiz?.title || 'Test quiz'"
+                  :quizIsDarkMode="quizIsDarkMode"
+                />
+              </template>
+            </template>
+
+            <div
+              v-else
+              class="w-full h-[80%] flex flex-col items-center space-y-2 justify-center"
             >
-          </div>
-        </template>
-        <template v-else>
-          <template v-if="answerState == 'pending'">
-            <div class="w-full relative h-[14px] bg-primaryGreen rounded-[8px]">
               <div
-                class="absolute top-0 left-0 h-full bg-[#E1E6EB] rounded-[8px]"
-                :style="`width: calc( ${
-                  ((questions[currentQuestionIndex].timeLimit -
-                    questions[currentQuestionIndex].currentTime) /
-                    questions[currentQuestionIndex].timeLimit) *
-                  90
-                }% + 10%);`"
+                class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex flex-col space-y-4 md:!px-0 px-4"
               >
-                <span
-                  class="w-[40px] h-[30px] z-[33344444] top-[-10px] text-white flex items-center justify-center rounded-[16px] absolute right-0 bg-primaryGreen !font-semibold"
+                <template v-for="(item, index) in otherTasks" :key="index">
+                  <sofa-icon-card
+                    :data="item"
+                    v-if="item.key != mode && item.key != 'game'"
+                    @click="
+                      isRestart = true;
+                      goToStudyMode(item.key);
+                    "
+                    :customClass="'!bg-white !w-full'"
+                  >
+                    <template v-slot:title>
+                      <sofa-normal-text :customClass="'!font-bold'">
+                        {{ item.title }}
+                      </sofa-normal-text>
+                    </template>
+                  </sofa-icon-card>
+                </template>
+              </div>
+            </div>
+          </sofa-image-loader>
+        </swiper-slide>
+      </sofa-swiper>
+
+      <!-- Games and other pre-quiz views -->
+
+      <template v-else>
+        <sofa-image-loader
+          :photoUrl="''"
+          class="w-full h-full flex flex-col items-center"
+        >
+          <!-- question intro -->
+          <template v-if="state == 'prepare'">
+            <div
+              class="w-full h-full absolute top-0 left-0 flex flex-col space-y-8 items-center justify-center"
+            >
+              <sofa-header-text
+                :customClass="'md:!text-base mdlg:!text-lg'"
+                :color="'text-white'"
+              >
+                {{
+                  SingleQuiz
+                    ? SingleQuiz.questions.length
+                    : SingleTest.questions.length
+                }}
+                questions
+              </sofa-header-text>
+              <div
+                class="w-full flex flex-row items-center justify-center py-5 bg-white"
+              >
+                <sofa-header-text
+                  :customClass="'!font-bold md:!text-2xl text-lg'"
                 >
-                  {{ questions[currentQuestionIndex].currentTime }}
-                </span>
+                  {{ SingleQuiz?.title || "New test" }}
+                </sofa-header-text>
+              </div>
+
+              <div
+                class="h-[67px] w-[67px] rounded-full bg-white flex flex-row items-center justify-center"
+              >
+                <sofa-header-text
+                  :customClass="'!font-bold md:!text-2xl text-lg'"
+                  :color="'text-[#141618]'"
+                >
+                  {{ currentPrepareCount }}
+                </sofa-header-text>
               </div>
             </div>
           </template>
-          <template v-if="answerState == 'time_up'">
-            <div class="flex flex-row items-center space-x-2">
-              <sofa-icon :customClass="'h-[22px]'" :name="`${'white-wrong'}`" />
-              <sofa-header-text :size="'xl'" :color="'text-white'">
-                Time up!
-              </sofa-header-text>
-            </div>
-          </template>
-
-          <template v-if="answerState == 'wrong' || answerState == 'correct'">
-            <div class="flex flex-row items-center space-x-2">
-              <sofa-icon
-                :customClass="'h-[22px]'"
-                :name="`${
-                  answerState == 'wrong' ? 'white-checkbox' : 'white-wrong'
-                }`"
-              />
-              <sofa-header-text :color="'text-white'">
-                {{ capitalize(answerState) }}!
-              </sofa-header-text>
-            </div>
-
+          <template v-else>
             <div
-              class="flex flex-row space-x-3"
-              v-if="mode != 'game' && mode != 'tutor_test'"
+              :class="`lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] h-full w-full relative flex flex-col space-y-4 ${
+                state == 'leaderboard' ? 'item-center justify-center' : ''
+              } py-4 px-4 md:!px-0 md:!py-6`"
             >
-              <sofa-button
-                :bgColor="'bg-white'"
-                :textColor="'text-white'"
-                :customClass="` ${
-                  answerState == 'wrong' ? '!bg-primaryRed' : '!bg-primaryGreen'
-                } !border-[2px] !border-white`"
-                :hasDoubleLayer="true"
-                :hasDarkLayer="false"
-                @click="showExplanation()"
-                v-if="
-                  mode != 'game' &&
-                  mode != 'tutor_test' &&
-                  questions[currentQuestionIndex].explanation
-                "
+              <!-- lobby -->
+              <div
+                class="w-full custom-border bg-white px-4 py-4 flex flex-row space-x-3"
+                v-if="state == 'lobby'"
               >
-                Explanation
-              </sofa-button>
-            </div>
-          </template>
-        </template>
-      </div>
-    </template>
-
-    <!-- Questions -->
-    <sofa-swiper
-      :free-mode="false"
-      :show-pagination="false"
-      :space-between="0"
-      :slide-per-view="'1'"
-      custom-class="!w-full !h-full flex-grow !bg-transparent "
-      :swiper-class="'!h-full '"
-      v-model="currentQuestionIndex"
-      :current-slide-position="questionIndex"
-      :enabled="enabledSwiper"
-      :baseData="questions"
-      ref="swiperInstance"
-      v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
-    >
-      <swiper-slide
-        class="!h-full !flex !items-center !justify-center !w-full !flex-col !relative !bg-transparent"
-        v-for="(question, index) in questions"
-        :key="index"
-      >
-        <sofa-image-loader
-          :photoUrl="''"
-          :customClass="'w-full absolute h-full flex flex-col top-0 left-0 !items-center !justify-center !bg-transparent'"
-        >
-          <template v-if="state != 'other_modes'">
-            <flashcard
-              v-if="mode == 'flashcard'"
-              :questionData="question"
-              :mode="mode"
-              :state="state"
-            />
-
-            <template v-else>
-              <quiz-questions
-                :questionData="question"
-                :state="state"
-                :questionIndex="index"
-                :currentIndex="currentQuestionIndex"
-                :mode="mode"
-                @OnAnswerSelected="handleAnswerSelected"
-                :answerState="answerState"
-                :quiz-title="SingleQuiz?.title || 'Test quiz'"
-                :quizIsDarkMode="quizIsDarkMode"
-              />
-            </template>
-          </template>
-
-          <div
-            v-else
-            class="w-full h-[80%] flex flex-col items-center space-y-2 justify-center"
-          >
-            <div
-              class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex flex-col space-y-4 md:!px-0 px-4"
-            >
-              <template v-for="(item, index) in otherTasks" :key="index">
-                <sofa-icon-card
-                  :data="item"
-                  v-if="item.key != mode && item.key != 'game'"
-                  @click="
-                    isRestart = true;
-                    goToStudyMode(item.key);
-                  "
-                  :customClass="'!bg-white !w-full'"
-                >
-                  <template v-slot:title>
-                    <sofa-normal-text :customClass="'!font-bold'">
-                      {{ item.title }}
+                <template v-if="userIsGameHost()">
+                  <div
+                    class="w-full flex flex-col space-y-3 justify-center items-center"
+                  >
+                    <sofa-normal-text :color="'text-[#78828C] !text-center'">
+                      {{
+                        SingleGame
+                          ? "You are hosting the quiz game"
+                          : "You are about to take a test"
+                      }}
                     </sofa-normal-text>
-                  </template>
-                </sofa-icon-card>
-              </template>
-            </div>
-          </div>
-        </sofa-image-loader>
-      </swiper-slide>
-    </sofa-swiper>
 
-    <!-- Games and other pre-quiz views -->
-
-    <template v-else>
-      <sofa-image-loader
-        :photoUrl="''"
-        class="w-full h-full flex flex-col items-center"
-      >
-        <!-- question intro -->
-        <template v-if="state == 'prepare'">
-          <div
-            class="w-full h-full absolute top-0 left-0 flex flex-col space-y-8 items-center justify-center"
-          >
-            <sofa-header-text
-              :customClass="'md:!text-base mdlg:!text-lg'"
-              :color="'text-white'"
-            >
-              {{
-                SingleQuiz
-                  ? SingleQuiz.questions.length
-                  : SingleTest.questions.length
-              }}
-              questions
-            </sofa-header-text>
-            <div
-              class="w-full flex flex-row items-center justify-center py-5 bg-white"
-            >
-              <sofa-header-text
-                :customClass="'!font-bold md:!text-2xl text-lg'"
-              >
-                {{ SingleQuiz?.title || "New test" }}
-              </sofa-header-text>
-            </div>
-
-            <div
-              class="h-[67px] w-[67px] rounded-full bg-white flex flex-row items-center justify-center"
-            >
-              <sofa-header-text
-                :customClass="'!font-bold md:!text-2xl text-lg'"
-                :color="'text-[#141618]'"
-              >
-                {{ currentPrepareCount }}
-              </sofa-header-text>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div
-            :class="`lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] h-full w-full relative flex flex-col space-y-4 ${
-              state == 'leaderboard' ? 'item-center justify-center' : ''
-            } py-4 px-4 md:!px-0 md:!py-6`"
-          >
-            <!-- lobby -->
-            <div
-              class="w-full custom-border bg-white px-4 py-4 flex flex-row space-x-3"
-              v-if="state == 'lobby'"
-            >
-              <template v-if="userIsGameHost()">
-                <div
-                  class="w-full flex flex-col space-y-3 justify-center items-center"
-                >
-                  <sofa-normal-text :color="'text-[#78828C] !text-center'">
-                    {{
-                      SingleGame
-                        ? "You are hosting the quiz game"
-                        : "You are about to take a test"
-                    }}
-                  </sofa-normal-text>
-
-                  <sofa-header-text
-                    :customClass="'!text-center !font-extrabold'"
-                    size="xl"
-                  >
-                    {{
-                      SingleQuiz ? SingleQuiz?.title : "Click on Start to begin"
-                    }}
-                  </sofa-header-text>
-
-                  <div
-                    class="w-full flex flex-row items-center justify-center space-x-4"
-                    v-if="SingleGame"
-                  >
-                    <div class="space-x-2 items-center flex flex-row">
-                      <sofa-icon
-                        :customClass="'h-[16px] cursor-pointer'"
-                        :name="'share'"
-                        @click="shareGameLink()"
-                      />
-                      <sofa-normal-text :color="'text-[#78828C]'">
-                        Share
-                      </sofa-normal-text>
-                    </div>
-
-                    <div class="space-x-2 items-center flex flex-row">
-                      <sofa-icon
-                        :customClass="'h-[16px] cursor-pointer'"
-                        :name="'copy'"
-                        @click="copyGameLink()"
-                      />
-                      <sofa-normal-text :color="'text-[#78828C]'">
-                        Copy
-                      </sofa-normal-text>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <sofa-image-loader
-                  :customClass="'md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] custom-border'"
-                  :photoUrl="SingleQuiz?.photo?.link"
-                />
-                <div class="w-full flex flex-col h-full space-y-2">
-                  <div
-                    class="w-full flex flex-row items-center justify-between"
-                  >
                     <sofa-header-text
-                      :size="'xl'"
-                      :customClass="'text-left !line-clamp-1'"
+                      :customClass="'!text-center !font-extrabold'"
+                      size="xl"
                     >
-                      {{ SingleQuiz?.title }}
+                      {{
+                        SingleQuiz
+                          ? SingleQuiz?.title
+                          : "Click on Start to begin"
+                      }}
                     </sofa-header-text>
-                    <div class="flex flex-row space-x-3 items-center">
-                      <sofa-icon
-                        :customClass="'h-[16px] cursor-pointer'"
-                        :name="'share'"
-                        @click="shareGameLink()"
-                      />
-                    </div>
-                  </div>
-                  <div class="flex flex-row space-x-2 items-center">
-                    <sofa-normal-text :color="'text-primaryPurple'">
-                      Game
-                    </sofa-normal-text>
-                    <span
-                      :class="`h-[5px] w-[5px] rounded-full bg-primaryPurple`"
+
+                    <div
+                      class="w-full flex flex-row items-center justify-center space-x-4"
+                      v-if="SingleGame"
                     >
-                    </span>
-                    <sofa-normal-text :color="'text-primaryPurple'">{{
-                      `${SingleGame.questions.length} question${
-                        SingleGame.questions.length > 1 ? "s" : ""
-                      }`
-                    }}</sofa-normal-text>
-                  </div>
-                  <div
-                    class="w-full flex flex-row items-start space-x-2 flex-nowrap"
-                  >
-                    <sofa-avatar
-                      :size="'20'"
-                      :photoUrl="SingleGame.user.bio.photo?.link"
-                    >
-                    </sofa-avatar>
-                    <sofa-normal-text :color="'text-grayColor'">
-                      Hosted by
-                      <span class="!font-semibold pl-1 text-bodyBlack">
-                        {{ SingleGame.user.bio.name.full }}</span
-                      >
-                    </sofa-normal-text>
-                  </div>
-                </div>
-              </template>
-            </div>
+                      <div class="space-x-2 items-center flex flex-row">
+                        <sofa-icon
+                          :customClass="'h-[16px] cursor-pointer'"
+                          :name="'share'"
+                          @click="shareGameLink()"
+                        />
+                        <sofa-normal-text :color="'text-[#78828C]'">
+                          Share
+                        </sofa-normal-text>
+                      </div>
 
-            <div
-              class="w-full flex flex-col space-y-2 py-2 items-center justify-center"
-            >
-              <sofa-header-text
-                :customClass="'md:!text-3xl text-xl'"
-                :color="'text-white'"
-                v-if="SingleGame"
-              >
-                {{ state == "lobby" ? "Lobby" : "Scoreboard" }}
-              </sofa-header-text>
-              <template v-if="SingleGame">
-                <sofa-normal-text :color="'text-white'" v-if="state == 'lobby'">
-                  {{
-                    userIsGameHost()
-                      ? "Start game when enough players have joined"
-                      : "Waiting for host to start game"
-                  }}
-                </sofa-normal-text>
-                <sofa-normal-text
-                  :color="'text-white'"
-                  v-if="state == 'leaderboard'"
-                >
-                  {{
-                    SingleGame.status == "started"
-                      ? "Game is still ongoing. Waiting for the game to end..."
-                      : "Game has ended"
-                  }}
-                </sofa-normal-text>
-              </template>
-            </div>
-
-            <div
-              :class="`w-full h-auto md:!max-h-[80%] max-h-[70%]  overflow-y-auto flex flex-col space-y-3 `"
-            >
-              <!-- Lobby list -->
-
-              <template v-if="GameParticipants?.length && state == 'lobby'">
-                <div
-                  v-for="(user, index) in GameParticipants"
-                  :key="index"
-                  :class="`w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[6px] bg-white  ${
-                    userIsGameHost(user.id)
-                      ? 'border-[#7DC8FA]'
-                      : 'border-transparent'
-                  }`"
-                >
-                  <sofa-normal-text
-                    :color="
-                      userIsGameHost(user.id)
-                        ? 'text-[#141618]'
-                        : 'text-[#141618]'
-                    "
-                    :customClass="'!font-semibold'"
-                    >{{ userIsGameHost(user.id) ? "You" : user.bio.name.full }}
-                  </sofa-normal-text>
-                </div>
-                <div
-                  v-if="GameParticipants.length == 0"
-                  class="w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[2px] bg-white"
-                >
-                  <sofa-normal-text :color="'text-[#78828C]'"
-                    >Waiting for players</sofa-normal-text
-                  >
-                </div>
-              </template>
-
-              <!-- Scoreboard -->
-
-              <template v-if="state == 'leaderboard'">
-                <template v-if="scoreBoardParticipants">
-                  <div
-                    v-for="(user, index) in scoreBoardParticipants"
-                    :key="index"
-                    :class="`w-full flex flex-row items-center justify-between py-3 px-4 custom-border  bg-white    ${
-                      userIsGameHost(user.user.id)
-                        ? 'border-[#7DC8FA] border-[5px]'
-                        : 'border-transparent border-[2px]'
-                    }`"
-                  >
-                    <div class="flex flex-row space-x-3 items-center">
-                      <sofa-normal-text
-                        :color="'text-[#141618]'"
-                        :customClass="'!font-semibold'"
-                        >{{ index + 1 }}
-                      </sofa-normal-text>
-                      <sofa-normal-text
-                        :color="'text-[#141618]'"
-                        :customClass="'!font-semibold'"
-                      >
-                        {{
-                          userIsGameHost(user.user.id)
-                            ? "You"
-                            : user.user.bio.name.full
-                        }}
-                      </sofa-normal-text>
-                      <sofa-icon
-                        :name="'game-winner'"
-                        :customClass="'h-[23px]'"
-                        v-if="index == 0 && user.score > 0"
-                      />
+                      <div class="space-x-2 items-center flex flex-row">
+                        <sofa-icon
+                          :customClass="'h-[16px] cursor-pointer'"
+                          :name="'copy'"
+                          @click="copyGameLink()"
+                        />
+                        <sofa-normal-text :color="'text-[#78828C]'">
+                          Copy
+                        </sofa-normal-text>
+                      </div>
                     </div>
-
-                    <sofa-normal-text
-                      :color="'text-[#141618]'"
-                      :customClass="'!font-semibold'"
-                      >{{ `${user.score} points` }}
-                    </sofa-normal-text>
                   </div>
                 </template>
-                <template v-if="SingleTest">
-                  <div
-                    class="w-full flex flex-col items-center justify-start space-y-3"
-                  >
-                    <template v-if="!isStudent">
+                <template v-else>
+                  <sofa-image-loader
+                    :customClass="'md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] custom-border'"
+                    :photoUrl="SingleQuiz?.photo?.link"
+                  />
+                  <div class="w-full flex flex-col h-full space-y-2">
+                    <div
+                      class="w-full flex flex-row items-center justify-between"
+                    >
                       <sofa-header-text
-                        :color="'text-white'"
-                        :customClass="'md:!text-3xl text-xl'"
+                        :size="'xl'"
+                        :customClass="'text-left !line-clamp-1'"
                       >
-                        Application submitted
+                        {{ SingleQuiz?.title }}
                       </sofa-header-text>
-                      <sofa-normal-text
-                        :color="'text-white'"
-                        :customClass="'text-center px-4'"
-                      >
-                        Your application is under review. You will get notified
-                        of the result soon
+                      <div class="flex flex-row space-x-3 items-center">
+                        <sofa-icon
+                          :customClass="'h-[16px] cursor-pointer'"
+                          :name="'share'"
+                          @click="shareGameLink()"
+                        />
+                      </div>
+                    </div>
+                    <div class="flex flex-row space-x-2 items-center">
+                      <sofa-normal-text :color="'text-primaryPurple'">
+                        Game
                       </sofa-normal-text>
-                    </template>
-                    <template v-else>
-                      <template v-if="SingleTest.status == 'ended'">
+                      <span
+                        :class="`h-[5px] w-[5px] rounded-full bg-primaryPurple`"
+                      >
+                      </span>
+                      <sofa-normal-text :color="'text-primaryPurple'">{{
+                        `${SingleGame.questions.length} question${
+                          SingleGame.questions.length > 1 ? "s" : ""
+                        }`
+                      }}</sofa-normal-text>
+                    </div>
+                    <div
+                      class="w-full flex flex-row items-start space-x-2 flex-nowrap"
+                    >
+                      <sofa-avatar
+                        :size="'20'"
+                        :photoUrl="SingleGame.user.bio.photo?.link"
+                      >
+                      </sofa-avatar>
+                      <sofa-normal-text :color="'text-grayColor'">
+                        Hosted by
+                        <span class="!font-semibold pl-1 text-bodyBlack">
+                          {{ SingleGame.user.bio.name.full }}</span
+                        >
+                      </sofa-normal-text>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <div
+                class="w-full flex flex-col space-y-2 py-2 items-center justify-center"
+              >
+                <sofa-header-text
+                  :customClass="'md:!text-3xl text-xl'"
+                  :color="'text-white'"
+                  v-if="SingleGame"
+                >
+                  {{ state == "lobby" ? "Lobby" : "Scoreboard" }}
+                </sofa-header-text>
+                <template v-if="SingleGame">
+                  <sofa-normal-text
+                    :color="'text-white'"
+                    v-if="state == 'lobby'"
+                  >
+                    {{
+                      userIsGameHost()
+                        ? "Start game when enough players have joined"
+                        : "Waiting for host to start game"
+                    }}
+                  </sofa-normal-text>
+                  <sofa-normal-text
+                    :color="'text-white'"
+                    v-if="state == 'leaderboard'"
+                  >
+                    {{
+                      SingleGame.status == "started"
+                        ? "Game is still ongoing. Waiting for the game to end..."
+                        : "Game has ended"
+                    }}
+                  </sofa-normal-text>
+                </template>
+              </div>
+
+              <div
+                :class="`w-full h-auto md:!max-h-[80%] max-h-[70%]  overflow-y-auto flex flex-col space-y-3 `"
+              >
+                <!-- Lobby list -->
+
+                <template v-if="GameParticipants?.length && state == 'lobby'">
+                  <div
+                    v-for="(user, index) in GameParticipants"
+                    :key="index"
+                    :class="`w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[6px] bg-white  ${
+                      userIsGameHost(user.id)
+                        ? 'border-[#7DC8FA]'
+                        : 'border-transparent'
+                    }`"
+                  >
+                    <sofa-normal-text
+                      :color="
+                        userIsGameHost(user.id)
+                          ? 'text-[#141618]'
+                          : 'text-[#141618]'
+                      "
+                      :customClass="'!font-semibold'"
+                      >{{
+                        userIsGameHost(user.id) ? "You" : user.bio.name.full
+                      }}
+                    </sofa-normal-text>
+                  </div>
+                  <div
+                    v-if="GameParticipants.length == 0"
+                    class="w-full flex flex-col items-center justify-center py-3 px-3 custom-border border-[2px] bg-white"
+                  >
+                    <sofa-normal-text :color="'text-[#78828C]'"
+                      >Waiting for players</sofa-normal-text
+                    >
+                  </div>
+                </template>
+
+                <!-- Scoreboard -->
+
+                <template v-if="state == 'leaderboard'">
+                  <template v-if="scoreBoardParticipants">
+                    <div
+                      v-for="(user, index) in scoreBoardParticipants"
+                      :key="index"
+                      :class="`w-full flex flex-row items-center justify-between py-3 px-4 custom-border  bg-white    ${
+                        userIsGameHost(user.user.id)
+                          ? 'border-[#7DC8FA] border-[5px]'
+                          : 'border-transparent border-[2px]'
+                      }`"
+                    >
+                      <div class="flex flex-row space-x-3 items-center">
+                        <sofa-normal-text
+                          :color="'text-[#141618]'"
+                          :customClass="'!font-semibold'"
+                          >{{ index + 1 }}
+                        </sofa-normal-text>
+                        <sofa-normal-text
+                          :color="'text-[#141618]'"
+                          :customClass="'!font-semibold'"
+                        >
+                          {{
+                            userIsGameHost(user.user.id)
+                              ? "You"
+                              : user.user.bio.name.full
+                          }}
+                        </sofa-normal-text>
+                        <sofa-icon
+                          :name="'game-winner'"
+                          :customClass="'h-[23px]'"
+                          v-if="index == 0 && user.score > 0"
+                        />
+                      </div>
+
+                      <sofa-normal-text
+                        :color="'text-[#141618]'"
+                        :customClass="'!font-semibold'"
+                        >{{ `${user.score} points` }}
+                      </sofa-normal-text>
+                    </div>
+                  </template>
+                  <template v-if="SingleTest">
+                    <div
+                      class="w-full flex flex-col items-center justify-start space-y-3"
+                    >
+                      <template v-if="!isStudent">
                         <sofa-header-text
                           :color="'text-white'"
                           :customClass="'md:!text-3xl text-xl'"
                         >
-                          Test completed
+                          Application submitted
                         </sofa-header-text>
                         <sofa-normal-text
                           :color="'text-white'"
                           :customClass="'text-center px-4'"
                         >
-                          Please wait while we calculate your score
+                          Your application is under review. You will get
+                          notified of the result soon
                         </sofa-normal-text>
                       </template>
-                      <template v-if="SingleTest.status == 'scored'">
-                        <sofa-pie-chart
-                          :data="resultData"
-                          v-if="resultData"
-                          :cutoutPercentage="'90%'"
-                          ref="pieChartRefForTestScore"
-                          :textStyle="`!text-3xl ${pieChartColor}`"
-                          >{{
-                            (
-                              (SingleTest.scores[Logic.Auth.AuthUser.id] /
-                                (questions.length * 10)) *
-                              100
-                            ).toFixed(0)
-                          }}%</sofa-pie-chart
-                        >
-
-                        <div class="flex flex-col space-y-1">
+                      <template v-else>
+                        <template v-if="SingleTest.status == 'ended'">
                           <sofa-header-text
-                            :customClass="'!font-bold md:!text-2xl text-lg !text-white'"
-                            >{{ pieLabel }}</sofa-header-text
+                            :color="'text-white'"
+                            :customClass="'md:!text-3xl text-xl'"
                           >
-                          <sofa-normal-text :color="'text-white'"
+                            Test completed
+                          </sofa-header-text>
+                          <sofa-normal-text
+                            :color="'text-white'"
+                            :customClass="'text-center px-4'"
+                          >
+                            Please wait while we calculate your score
+                          </sofa-normal-text>
+                        </template>
+                        <template v-if="SingleTest.status == 'scored'">
+                          <sofa-pie-chart
+                            :data="resultData"
+                            v-if="resultData"
+                            :cutoutPercentage="'90%'"
+                            ref="pieChartRefForTestScore"
+                            :textStyle="`!text-3xl ${pieChartColor}`"
                             >{{
-                              SingleTest.scores[Logic.Auth.AuthUser.id] / 10
-                            }}/{{ questions.length }} correct
-                            answers</sofa-normal-text
+                              (
+                                (SingleTest.scores[Logic.Auth.AuthUser.id] /
+                                  (questions.length * 10)) *
+                                100
+                              ).toFixed(0)
+                            }}%</sofa-pie-chart
                           >
-                        </div>
+
+                          <div class="flex flex-col space-y-1">
+                            <sofa-header-text
+                              :customClass="'!font-bold md:!text-2xl text-lg !text-white'"
+                              >{{ pieLabel }}</sofa-header-text
+                            >
+                            <sofa-normal-text :color="'text-white'"
+                              >{{
+                                SingleTest.scores[Logic.Auth.AuthUser.id] / 10
+                              }}/{{ questions.length }} correct
+                              answers</sofa-normal-text
+                            >
+                          </div>
+                        </template>
                       </template>
-                    </template>
+                    </div>
+                  </template>
+                </template>
+              </div>
+
+              <div
+                :class="`absolute bottom-0 left-0 flex-row md:!flex grid grid-cols-2 md:!gap-0 gap-3 ${
+                  state == 'leaderboard' ? 'justify-end' : 'justify-between'
+                }  py-4 w-full mdlg:!px-0 px-4 z-20 bg-transparent`"
+                v-if="userIsGameHost() || state == 'leaderboard'"
+              >
+                <template v-if="state == 'lobby'">
+                  <div class="flex flex-col md:!w-auto col-span-1">
+                    <sofa-button
+                      :bgColor="'bg-white'"
+                      :hasDarkLayer="false"
+                      :customClass="'!bg-[#141618] !border-[2px] !border-white md:!w-auto w-full'"
+                      :textColor="'text-white'"
+                      :padding="'px-5 py-2'"
+                      @click="Logic.Common.goBack()"
+                    >
+                      Cancle
+                    </sofa-button>
+                  </div>
+
+                  <div class="flex flex-col md:!w-auto col-span-1">
+                    <sofa-button
+                      :bgColor="'bg-white'"
+                      :customClass="'!bg-white !border-[2px] !border-white  md:!w-auto w-full'"
+                      :textColor="'text-[#141618] '"
+                      :padding="'px-5 py-2'"
+                      @click="
+                        Logic.Plays.SingleGame ? startGame() : startTest()
+                      "
+                    >
+                      Start
+                    </sofa-button>
                   </div>
                 </template>
-              </template>
+
+                <template v-if="state == 'leaderboard'">
+                  <div
+                    class="flex flex-col md:!w-full w-full col-span-2 justify-center items-center pb-3"
+                  >
+                    <sofa-button
+                      :bgColor="'bg-white'"
+                      :hasDarkLayer="false"
+                      :customClass="' !border-[2px] !border-gray-200 md:!w-auto w-full'"
+                      :textColor="'text-[#141618]'"
+                      :padding="'px-5 py-2'"
+                      @click="Logic.Common.goBack()"
+                    >
+                      Continue
+                    </sofa-button>
+                  </div>
+                </template>
+              </div>
             </div>
+          </template>
+        </sofa-image-loader>
+      </template>
 
-            <div
-              :class="`absolute bottom-0 left-0 flex-row md:!flex grid grid-cols-2 md:!gap-0 gap-3 ${
-                state == 'leaderboard' ? 'justify-end' : 'justify-between'
-              }  py-4 w-full mdlg:!px-0 px-4 z-20 bg-transparent`"
-              v-if="userIsGameHost() || state == 'leaderboard'"
-            >
-              <template v-if="state == 'lobby'">
-                <div class="flex flex-col md:!w-auto col-span-1">
-                  <sofa-button
-                    :bgColor="'bg-white'"
-                    :hasDarkLayer="false"
-                    :customClass="'!bg-[#141618] !border-[2px] !border-white md:!w-auto w-full'"
-                    :textColor="'text-white'"
-                    :padding="'px-5 py-2'"
-                    @click="Logic.Common.goBack()"
-                  >
-                    Cancle
-                  </sofa-button>
-                </div>
-
-                <div class="flex flex-col md:!w-auto col-span-1">
-                  <sofa-button
-                    :bgColor="'bg-white'"
-                    :customClass="'!bg-white !border-[2px] !border-white  md:!w-auto w-full'"
-                    :textColor="'text-[#141618] '"
-                    :padding="'px-5 py-2'"
-                    @click="Logic.Plays.SingleGame ? startGame() : startTest()"
-                  >
-                    Start
-                  </sofa-button>
-                </div>
-              </template>
-
-              <template v-if="state == 'leaderboard'">
-                <div
-                  class="flex flex-col md:!w-full w-full col-span-2 justify-center items-center pb-3"
-                >
-                  <sofa-button
-                    :bgColor="'bg-white'"
-                    :hasDarkLayer="false"
-                    :customClass="' !border-[2px] !border-gray-200 md:!w-auto w-full'"
-                    :textColor="'text-[#141618]'"
-                    :padding="'px-5 py-2'"
-                    @click="Logic.Common.goBack()"
-                  >
-                    Continue
-                  </sofa-button>
-                </div>
-              </template>
-            </div>
-          </div>
-        </template>
-      </sofa-image-loader>
-    </template>
-
-    <template
-      v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
-    >
-      <!-- Bottom bar -->
-      <div
-        :class="`md:!py-5 py-4 w-full sticky flex flex-row items-center justify-center bottom-0 left-0 md:bg-white bg-backgroundGray  ${
-          quizIsDarkMode ? '!bg-transparent' : ''
-        } ${answerState && mode == 'practice' ? 'md:!invisible' : ''}   ${
-          state != 'preview' ? '' : 'invisible'
-        }
+      <template
+        v-if="state != 'lobby' && state != 'leaderboard' && state != 'prepare'"
+      >
+        <!-- Bottom bar -->
+        <div
+          :class="`md:!py-5 py-4 w-full sticky flex flex-row items-center justify-center bottom-0 left-0 md:bg-white bg-backgroundGray  ${
+            quizIsDarkMode ? '!bg-transparent' : ''
+          } ${answerState && mode == 'practice' ? 'md:!invisible' : ''}   ${
+            state != 'preview' ? '' : 'invisible'
+          }
             ${
               !(buttonLabels.left.label || !buttonLabels.right.label) ||
               (mode != 'game' && mode != 'tutor_test')
@@ -743,179 +764,186 @@
                 : '!invisible'
             }
             `"
-        style="box-shadow: 0px -4px 4px rgba(8, 0, 24, 0.05)"
-      >
-        <div
-          class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full md:!flex hidden flex-row items-center justify-between"
+          style="box-shadow: 0px -4px 4px rgba(8, 0, 24, 0.05)"
         >
-          <sofa-button
-            :customClass="`!font-semibold`"
-            :visible="buttonLabels.left.label != ''"
-            :padding="'px-6 py-2'"
-            :bgColor="buttonLabels.left.bgColor"
-            :textColor="buttonLabels.left.textColor"
-            @click="handleLeftButton()"
+          <div
+            class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full md:!flex hidden flex-row items-center justify-between"
           >
-            {{ buttonLabels.left.label }}
-          </sofa-button>
-
-          <span
-            :class="`px-4 py-2 rounded-[8px] bg-[#F2F5F8] !font-semibold text-grayColor ${
-              state != 'question' || mode == 'game' || mode == 'tutor_test'
-                ? 'invisible'
-                : ''
-            } `"
-          >
-            {{ currentQuestionIndex + 1 }}/{{ questions.length }}
-          </span>
-
-          <sofa-button
-            :customClass="`!font-semibold ${
-              buttonLabels.right.label ? '' : '!invisible'
-            }`"
-            :padding="'px-6 py-2'"
-            :bgColor="buttonLabels.right.bgColor"
-            :textColor="buttonLabels.right.textColor"
-            @click="handleRightButton()"
-          >
-            {{ buttonLabels.right.label }}
-          </sofa-button>
-        </div>
-        <div class="w-full grid grid-cols-2 gap-3 px-4 md:!hidden">
-          <div class="col-span-1 flex flex-col" v-if="buttonLabels.smIsDoubled">
             <sofa-button
-              :customClass="`w-full`"
-              :padding="'py-3'"
-              v-if="buttonLabels.left.label"
+              :customClass="`!font-semibold`"
+              :visible="buttonLabels.left.label != ''"
+              :padding="'px-6 py-2'"
               :bgColor="buttonLabels.left.bgColor"
               :textColor="buttonLabels.left.textColor"
               @click="handleLeftButton()"
-              >{{ buttonLabels.left.label }}</sofa-button
             >
-          </div>
+              {{ buttonLabels.left.label }}
+            </sofa-button>
 
-          <div
-            :class="`${
-              buttonLabels.smIsDoubled ? 'col-span-1' : 'col-span-2'
-            } flex flex-col`"
-          >
+            <span
+              :class="`px-4 py-2 rounded-[8px] bg-[#F2F5F8] !font-semibold text-grayColor ${
+                state != 'question' || mode == 'game' || mode == 'tutor_test'
+                  ? 'invisible'
+                  : ''
+              } `"
+            >
+              {{ currentQuestionIndex + 1 }}/{{ questions.length }}
+            </span>
+
             <sofa-button
-              :customClass="'w-full'"
-              :padding="'py-3'"
-              v-if="buttonLabels.right.label"
+              :customClass="`!font-semibold ${
+                buttonLabels.right.label ? '' : '!invisible'
+              }`"
+              :padding="'px-6 py-2'"
               :bgColor="buttonLabels.right.bgColor"
               :textColor="buttonLabels.right.textColor"
               @click="handleRightButton()"
-              >{{ buttonLabels.right.label }}</sofa-button
             >
+              {{ buttonLabels.right.label }}
+            </sofa-button>
+          </div>
+          <div class="w-full grid grid-cols-2 gap-3 px-4 md:!hidden">
+            <div
+              class="col-span-1 flex flex-col"
+              v-if="buttonLabels.smIsDoubled"
+            >
+              <sofa-button
+                :customClass="`w-full`"
+                :padding="'py-3'"
+                v-if="buttonLabels.left.label"
+                :bgColor="buttonLabels.left.bgColor"
+                :textColor="buttonLabels.left.textColor"
+                @click="handleLeftButton()"
+                >{{ buttonLabels.left.label }}</sofa-button
+              >
+            </div>
+
+            <div
+              :class="`${
+                buttonLabels.smIsDoubled ? 'col-span-1' : 'col-span-2'
+              } flex flex-col`"
+            >
+              <sofa-button
+                :customClass="'w-full'"
+                :padding="'py-3'"
+                v-if="buttonLabels.right.label"
+                :bgColor="buttonLabels.right.bgColor"
+                :textColor="buttonLabels.right.textColor"
+                @click="handleRightButton()"
+                >{{ buttonLabels.right.label }}</sofa-button
+              >
+            </div>
           </div>
         </div>
-      </div>
-    </template>
+      </template>
 
-    <!-- Rating floating button -->
-    <Teleport
-      to="body"
-      v-if="!QuizReview && Logic.Auth.AuthUser.id != SingleQuiz?.user.id"
-    >
-      <span
-        class="absolute mdlg:bottom-[10%] mdlg:right-[1%] bottom-[13%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]"
+      <!-- Rating floating button -->
+      <Teleport
+        to="body"
+        v-if="!QuizReview && Logic.Auth.AuthUser.id != SingleQuiz?.user.id"
       >
         <span
-          class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
-          @click="showRateQuiz = true"
+          class="absolute mdlg:bottom-[10%] mdlg:right-[1%] bottom-[13%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]"
         >
-          <sofa-icon :name="'star-white'" :customClass="'h-[15px]'"></sofa-icon>
-          <sofa-normal-text :color="'text-white'"> Rate </sofa-normal-text>
+          <span
+            class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
+            @click="showRateQuiz = true"
+          >
+            <sofa-icon
+              :name="'star-white'"
+              :customClass="'h-[15px]'"
+            ></sofa-icon>
+            <sofa-normal-text :color="'text-white'"> Rate </sofa-normal-text>
+          </span>
         </span>
-      </span>
-    </Teleport>
+      </Teleport>
 
-    <!-- Info modal -->
-    <sofa-modal
-      v-if="showInfoModal"
-      :close="
-        () => {
-          showInfoModal = false;
-        }
-      "
-    >
-      <div
-        class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
-        @click.stop="
+      <!-- Info modal -->
+      <sofa-modal
+        v-if="showInfoModal"
+        :close="
           () => {
-            //
+            showInfoModal = false;
           }
         "
       >
         <div
-          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-3 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center"
+          class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
+          @click.stop="
+            () => {
+              //
+            }
+          "
         >
           <div
-            class="w-full hidden flex-col space-y-2 justify-center items-center md:flex"
+            class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-3 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center"
           >
-            <sofa-header-text :customClass="'text-xl'">{{
-              infoModalData.title
-            }}</sofa-header-text>
-            <sofa-normal-text v-if="infoModalData.sub"
-              >{{ infoModalData.sub }}
-            </sofa-normal-text>
-          </div>
+            <div
+              class="w-full hidden flex-col space-y-2 justify-center items-center md:flex"
+            >
+              <sofa-header-text :customClass="'text-xl'">{{
+                infoModalData.title
+              }}</sofa-header-text>
+              <sofa-normal-text v-if="infoModalData.sub"
+                >{{ infoModalData.sub }}
+              </sofa-normal-text>
+            </div>
 
-          <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden pb-2 border-[#F1F6FA] border-b-[1px] px-4"
-          >
-            <sofa-normal-text :customClass="'!font-bold !text-base'">
-              {{ infoModalData.title }}
-            </sofa-normal-text>
-            <sofa-icon
-              :customClass="'h-[19px]'"
-              :name="'circle-close'"
-              @click="showInfoModal = false"
-            />
-          </div>
+            <div
+              class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden pb-2 border-[#F1F6FA] border-b-[1px] px-4"
+            >
+              <sofa-normal-text :customClass="'!font-bold !text-base'">
+                {{ infoModalData.title }}
+              </sofa-normal-text>
+              <sofa-icon
+                :customClass="'h-[19px]'"
+                :name="'circle-close'"
+                @click="showInfoModal = false"
+              />
+            </div>
 
-          <div
-            class="w-full flex flex-col px-4 md:!hidden"
-            v-if="infoModalData.sub"
-          >
-            <sofa-normal-text>{{ infoModalData.sub }} </sofa-normal-text>
-          </div>
+            <div
+              class="w-full flex flex-col px-4 md:!hidden"
+              v-if="infoModalData.sub"
+            >
+              <sofa-normal-text>{{ infoModalData.sub }} </sofa-normal-text>
+            </div>
 
-          <div class="w-full flex flex-col pb-4 md:!pb-0 px-4 md:!px-0">
-            <info-modal
-              :close="
-                () => {
-                  showInfoModal = false;
-                }
-              "
-              :continue-action="handleRightButton"
-              :mode="mode"
-              :is-explanation="answerState != ''"
-              :explanation="questions[currentQuestionIndex].explanation"
-            />
+            <div class="w-full flex flex-col pb-4 md:!pb-0 px-4 md:!px-0">
+              <info-modal
+                :close="
+                  () => {
+                    showInfoModal = false;
+                  }
+                "
+                :continue-action="handleRightButton"
+                :mode="mode"
+                :is-explanation="answerState != ''"
+                :explanation="questions[currentQuestionIndex].explanation"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </sofa-modal>
+      </sofa-modal>
 
-    <!-- Rate quiz -->
-    <rate-and-review-modal
-      v-if="showRateQuiz"
-      :close="
-        () => {
-          showRateQuiz = false;
-        }
-      "
-      :canClose="true"
-      :title="'Rate this quiz'"
-      @on-review-submitted="
-        (data) => {
-          rateQuiz(data);
-        }
-      "
-    />
-  </expanded-layout>
+      <!-- Rate quiz -->
+      <rate-and-review-modal
+        v-if="showRateQuiz"
+        :close="
+          () => {
+            showRateQuiz = false;
+          }
+        "
+        :canClose="true"
+        :title="'Rate this quiz'"
+        @on-review-submitted="
+          (data) => {
+            rateQuiz(data);
+          }
+        "
+      />
+    </expanded-layout>
+  </global-layout>
 </template>
 
 <script lang="ts">
@@ -997,6 +1025,7 @@ import {
 } from "@/composables/quiz";
 import slider from "vue3-slider";
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
+import { onIonViewWillEnter } from "@ionic/vue";
 
 const fetchRules = [];
 
@@ -1185,16 +1214,24 @@ export default defineComponent({
       });
     };
 
-    onMounted(() => {
+    const mountAction = () => {
       scrollToTop();
+      setUpQuiz();
+      answerState.value = "";
+    };
+
+    onMounted(() => {
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
       Logic.Plays.watchProperty("SingleTest", SingleTest);
       Logic.Study.watchProperty("AllQuestions", AllQuestions);
       Logic.Plays.watchProperty("SingleGame", SingleGame);
       Logic.Plays.watchProperty("GameParticipants", GameParticipants);
       Logic.Study.watchProperty("SingleReview", QuizReview);
-      setUpQuiz();
-      answerState.value = "";
+      mountAction();
+    });
+
+    onIonViewWillEnter(() => {
+      mountAction();
     });
 
     onUnmounted(() => {

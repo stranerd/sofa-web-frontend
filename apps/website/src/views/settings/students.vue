@@ -1,4 +1,5 @@
 <template>
+  <global-layout>
     <expanded-layout
       :hasBottomBar="false"
       layoutStyle="mdlg:!w-[75%] lg:!w-[60%] w-full pt-0  mdlg:!pt-6 "
@@ -18,38 +19,38 @@
       </div>
       <setting-students />
     </expanded-layout>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, onMounted } from "vue";
-  import { useMeta } from "vue-meta";
-  import { SofaNormalText, SofaIcon } from "sofa-ui-components";
-  import { Logic } from "sofa-logic";
-  import SettingStudents from "@/components/settings/students.vue";
-  
-  export default defineComponent({
-    components: {
-      SofaNormalText,
-      SettingStudents,
-      SofaIcon,
-    },
-    middlewares: {
-      fetchRules: [],
-    },
-    name: "StudentsSettingPage",
-    setup() {
-      useMeta({
-        title: "Your students",
-      });
-  
-      onMounted(() => {
-        //
-      });
-  
-      return {
-        Logic,
-      };
-    },
-  });
-  </script>
-  
+  </global-layout>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted } from "vue";
+import { useMeta } from "vue-meta";
+import { SofaNormalText, SofaIcon } from "sofa-ui-components";
+import { Logic } from "sofa-logic";
+import SettingStudents from "@/components/settings/students.vue";
+
+export default defineComponent({
+  components: {
+    SofaNormalText,
+    SettingStudents,
+    SofaIcon,
+  },
+  middlewares: {
+    fetchRules: [],
+  },
+  name: "StudentsSettingPage",
+  setup() {
+    useMeta({
+      title: "Your students",
+    });
+
+    onMounted(() => {
+      //
+    });
+
+    return {
+      Logic,
+    };
+  },
+});
+</script>

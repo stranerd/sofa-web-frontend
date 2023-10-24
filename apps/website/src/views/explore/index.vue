@@ -1,33 +1,58 @@
 <template>
-  <expanded-layout layoutStyle="!w-full">
-    <div
-      class="w-full mdlg:!flex hidden flex-col space-y-2 py-10 pb-14 bg-primaryPurple justify-center items-center"
-    >
-      <sofa-header-text
-        color="!text-white"
-        :customClass="'!font-extrabold !text-xl'"
-        >Everything you need to study, in one place</sofa-header-text
+  <global-layout>
+    <expanded-layout layoutStyle="!w-full">
+      <div
+        class="w-full mdlg:!flex hidden flex-col space-y-2 py-10 pb-14 bg-primaryPurple justify-center items-center"
       >
-
-      <div class="w-[48%] flex flex-row items-center justify-center">
-        <sofa-normal-text
+        <sofa-header-text
           color="!text-white"
-          :customClass="'w-full text-center flex items-center justify-center'"
-          >Discover materials, creators, and tutors you can rely on for a
-          quality learning experience</sofa-normal-text
+          :customClass="'!font-extrabold !text-xl'"
+          >Everything you need to study, in one place</sofa-header-text
         >
+
+        <div class="w-[48%] flex flex-row items-center justify-center">
+          <sofa-normal-text
+            color="!text-white"
+            :customClass="'w-full text-center flex items-center justify-center'"
+            >Discover materials, creators, and tutors you can rely on for a
+            quality learning experience</sofa-normal-text
+          >
+        </div>
+
+        <div class="w-[40%] flex flex-col pt-4">
+          <div
+            class="w-full shadow-custom px-4 py-1 bg-white custom-border flex flex-row space-x-1 items-center justify-start"
+          >
+            <div class="flex flex-row space-x-2 items-center flex-grow">
+              <sofa-icon :name="'filter'" :customClass="'h-[15px]'" />
+              <sofa-normal-text
+                :customClass="'pr-2 border-r-[1px] border-[#E1E6EB]'"
+                >Filter</sofa-normal-text
+              >
+            </div>
+            <div class="w-full flex flex-row items-center space-x-1">
+              <div class="pl-2">
+                <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
+              </div>
+              <sofa-text-field
+                :customClass="'!border-none w-full flex-grow'"
+                :placeholder="'Search for anything'"
+              >
+              </sofa-text-field>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="w-[40%] flex flex-col pt-4">
+      <!-- Small screen search -->
+      <div
+        class="w-full px-4 flex mdlg:!hidden flex-col sticky top-0 left-0 py-4 bg-backgroundGray z-[9999999999]"
+      >
         <div
           class="w-full shadow-custom px-4 py-1 bg-white custom-border flex flex-row space-x-1 items-center justify-start"
         >
           <div class="flex flex-row space-x-2 items-center flex-grow">
             <sofa-icon :name="'filter'" :customClass="'h-[15px]'" />
-            <sofa-normal-text
-              :customClass="'pr-2 border-r-[1px] border-[#E1E6EB]'"
-              >Filter</sofa-normal-text
-            >
           </div>
           <div class="w-full flex flex-row items-center space-x-1">
             <div class="pl-2">
@@ -35,290 +60,267 @@
             </div>
             <sofa-text-field
               :customClass="'!border-none w-full flex-grow'"
-              :placeholder="'Search for anything'"
+              :placeholder="'Search'"
             >
             </sofa-text-field>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Small screen search -->
-    <div
-      class="w-full px-4 flex mdlg:!hidden flex-col sticky top-0 left-0 py-4 bg-backgroundGray z-[9999999999]"
-    >
       <div
-        class="w-full shadow-custom px-4 py-1 bg-white custom-border flex flex-row space-x-1 items-center justify-start"
+        class="mdlg:!w-[85%] lg:!w-[75%] w-full flex flex-col mdlg:!space-y-10 space-y-6 mdlg:!pt-8 pl-4 mdlg:!pl-0"
       >
-        <div class="flex flex-row space-x-2 items-center flex-grow">
-          <sofa-icon :name="'filter'" :customClass="'h-[15px]'" />
-        </div>
-        <div class="w-full flex flex-row items-center space-x-1">
-          <div class="pl-2">
-            <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
-          </div>
-          <sofa-text-field
-            :customClass="'!border-none w-full flex-grow'"
-            :placeholder="'Search'"
-          >
-          </sofa-text-field>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="mdlg:!w-[85%] lg:!w-[75%] w-full flex flex-col mdlg:!space-y-10 space-y-6 mdlg:!pt-8 pl-4 mdlg:!pl-0"
-    >
-      <div
-        class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-      >
-        <div
-          class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
-        >
-          <sofa-image-loader
-            :photoUrl="item.image"
-            custom-class="col-span-1 mdlg:!w-auto w-[290px] relative custom-border mdlg:!h-[230px] h-[190px]"
-            v-for="(item, index) in mainCards"
-            :key="index"
-          >
-            <div
-              class="w-full h-full absolute top-0 custom-border left-0 bg-black bg-opacity-40 z-10"
-            ></div>
-            <div
-              class="absolute left-0 bottom-0 flex flex-row items-center z-40 justify-between w-full py-3 px-4 bg-black bg-opacity-50 rounded-br-[16px] rounded-bl-[8px]"
-            >
-              <sofa-normal-text :color="'text-white !font-bold'">
-                {{ item.text }}
-              </sofa-normal-text>
-              <sofa-icon
-                :customClass="'h-[14px]'"
-                :name="'arrow-right-white'"
-              />
-            </div>
-          </sofa-image-loader>
-        </div>
-      </div>
-
-      <div class="w-full flex flex-col mdlg:!space-y-4 space-y-3">
-        <div
-          class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            Purchase verified materials
-          </sofa-normal-text>
-
-          <sofa-normal-text
-            :color="'text-primaryPink'"
-            :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/explore/search')"
-          >
-            View all
-          </sofa-normal-text>
-        </div>
-
         <div
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
         >
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
           >
-            <sofa-item-card
-              :content="content"
-              custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in resourceContents"
-              :key="index"
-              @click="showContentDetails = true"
-            ></sofa-item-card>
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full flex flex-col space-y-4">
-        <div
-          class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            Subjects and courses
-          </sofa-normal-text>
-
-          <sofa-normal-text
-            :color="'text-primaryPink'"
-            :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/explore/search')"
-          >
-            View all
-          </sofa-normal-text>
-        </div>
-
-        <div
-          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-        >
-          <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-6 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
-          >
-            <div
-              :class="`col-span-1 flex flex-row items-center justify-center mdlg:!h-[50px] h-[43px] mdlg:!w-auto w-[160px] custom-border ${topic.color}`"
-              v-for="(topic, index) in popularTopics"
+            <sofa-image-loader
+              :photoUrl="item.image"
+              custom-class="col-span-1 mdlg:!w-auto w-[290px] relative custom-border mdlg:!h-[230px] h-[190px]"
+              v-for="(item, index) in mainCards"
               :key="index"
             >
-              <sofa-normal-text
-                :color="'text-white'"
-                :customClass="'!font-semibold'"
-                >{{ topic.name }}</sofa-normal-text
+              <div
+                class="w-full h-full absolute top-0 custom-border left-0 bg-black bg-opacity-40 z-10"
+              ></div>
+              <div
+                class="absolute left-0 bottom-0 flex flex-row items-center z-40 justify-between w-full py-3 px-4 bg-black bg-opacity-50 rounded-br-[16px] rounded-bl-[8px]"
               >
+                <sofa-normal-text :color="'text-white !font-bold'">
+                  {{ item.text }}
+                </sofa-normal-text>
+                <sofa-icon
+                  :customClass="'h-[14px]'"
+                  :name="'arrow-right-white'"
+                />
+              </div>
+            </sofa-image-loader>
+          </div>
+        </div>
+
+        <div class="w-full flex flex-col mdlg:!space-y-4 space-y-3">
+          <div
+            class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
+          >
+            <sofa-normal-text :customClass="'!font-bold'">
+              Purchase verified materials
+            </sofa-normal-text>
+
+            <sofa-normal-text
+              :color="'text-primaryPink'"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/explore/search')"
+            >
+              View all
+            </sofa-normal-text>
+          </div>
+
+          <div
+            class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
+          >
+            <div
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            >
+              <sofa-item-card
+                :content="content"
+                custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
+                v-for="(content, index) in resourceContents"
+                :key="index"
+                @click="showContentDetails = true"
+              ></sofa-item-card>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="w-full flex flex-col space-y-4">
-        <div
-          class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            Popular exams
-          </sofa-normal-text>
-
-          <sofa-normal-text
-            :color="'text-primaryPink'"
-            :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/explore/search')"
-          >
-            View all
-          </sofa-normal-text>
-        </div>
-
-        <div
-          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-        >
+        <div class="w-full flex flex-col space-y-4">
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
           >
-            <sofa-item-card
-              :content="content"
-              custom-class="!col-span-1 !border-none mdlg:!w-auto w-[220px] !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in popularContents"
-              :key="index"
-              @click="showContentDetails = true"
-            ></sofa-item-card>
+            <sofa-normal-text :customClass="'!font-bold'">
+              Subjects and courses
+            </sofa-normal-text>
+
+            <sofa-normal-text
+              :color="'text-primaryPink'"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/explore/search')"
+            >
+              View all
+            </sofa-normal-text>
+          </div>
+
+          <div
+            class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
+          >
+            <div
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-6 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            >
+              <div
+                :class="`col-span-1 flex flex-row items-center justify-center mdlg:!h-[50px] h-[43px] mdlg:!w-auto w-[160px] custom-border ${topic.color}`"
+                v-for="(topic, index) in popularTopics"
+                :key="index"
+              >
+                <sofa-normal-text
+                  :color="'text-white'"
+                  :customClass="'!font-semibold'"
+                  >{{ topic.name }}</sofa-normal-text
+                >
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="w-full flex flex-col space-y-4">
-        <div
-          class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            Top tutors
-          </sofa-normal-text>
-
-          <sofa-normal-text
-            :color="'text-primaryPink'"
-            :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/explore/search')"
-          >
-            View all
-          </sofa-normal-text>
-        </div>
-
-        <div
-          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-        >
+        <div class="w-full flex flex-col space-y-4">
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-4 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
           >
-            <sofa-user-card
-              :user="user"
-              v-for="(user, index) in topTutors"
-              :key="index"
-              :custom-class="'w-[280px] mdlg:!w-auto'"
-            ></sofa-user-card>
+            <sofa-normal-text :customClass="'!font-bold'">
+              Popular exams
+            </sofa-normal-text>
+
+            <sofa-normal-text
+              :color="'text-primaryPink'"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/explore/search')"
+            >
+              View all
+            </sofa-normal-text>
+          </div>
+
+          <div
+            class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
+          >
+            <div
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            >
+              <sofa-item-card
+                :content="content"
+                custom-class="!col-span-1 !border-none mdlg:!w-auto w-[220px] !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
+                v-for="(content, index) in popularContents"
+                :key="index"
+                @click="showContentDetails = true"
+              ></sofa-item-card>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="w-full flex flex-col space-y-4">
-        <div
-          class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
-        >
-          <sofa-normal-text :customClass="'!font-bold'">
-            Top creators
-          </sofa-normal-text>
-
-          <sofa-normal-text
-            :color="'text-primaryPink'"
-            :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute('/explore/search')"
-          >
-            View all
-          </sofa-normal-text>
-        </div>
-
-        <div
-          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-        >
+        <div class="w-full flex flex-col space-y-4">
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
           >
-            <sofa-user-card
-              :user="user"
-              v-for="(user, index) in topCreators"
-              :key="index"
-              :custom-class="'w-[280px] mdlg:!w-auto'"
-            ></sofa-user-card>
+            <sofa-normal-text :customClass="'!font-bold'">
+              Top tutors
+            </sofa-normal-text>
+
+            <sofa-normal-text
+              :color="'text-primaryPink'"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/explore/search')"
+            >
+              View all
+            </sofa-normal-text>
+          </div>
+
+          <div
+            class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
+          >
+            <div
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-4 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            >
+              <sofa-user-card
+                :user="user"
+                v-for="(user, index) in topTutors"
+                :key="index"
+                :custom-class="'w-[280px] mdlg:!w-auto'"
+              ></sofa-user-card>
+            </div>
           </div>
         </div>
+
+        <div class="w-full flex flex-col space-y-4">
+          <div
+            class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4"
+          >
+            <sofa-normal-text :customClass="'!font-bold'">
+              Top creators
+            </sofa-normal-text>
+
+            <sofa-normal-text
+              :color="'text-primaryPink'"
+              :custom-class="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/explore/search')"
+            >
+              View all
+            </sofa-normal-text>
+          </div>
+
+          <div
+            class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
+          >
+            <div
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
+            >
+              <sofa-user-card
+                :user="user"
+                v-for="(user, index) in topCreators"
+                :key="index"
+                :custom-class="'w-[280px] mdlg:!w-auto'"
+              ></sofa-user-card>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-[120px] hidden mdlg:!inline-block"></div>
       </div>
 
-      <div class="h-[120px] hidden mdlg:!inline-block"></div>
-    </div>
-
-    <!-- Content details modal -->
-    <sofa-modal
-      v-if="showContentDetails"
-      :close="
-        () => {
-          showContentDetails = false;
-        }
-      "
-    >
-      <div
-        class="mdlg:!w-[70%] lg:!w-[60%] mdlg:!h-full h-[95%] w-full flex flex-col items-center justify-center relative"
-        @click.stop="
+      <!-- Content details modal -->
+      <sofa-modal
+        v-if="showContentDetails"
+        :close="
           () => {
-            //
+            showContentDetails = false;
           }
         "
       >
-        <sofa-content-details
-          :close="
+        <div
+          class="mdlg:!w-[70%] lg:!w-[60%] mdlg:!h-full h-[95%] w-full flex flex-col items-center justify-center relative"
+          @click.stop="
             () => {
-              showContentDetails = false;
+              //
             }
           "
-          :content="contentDetails"
-        />
-
-        <!--  Smaller screen options -->
-        <span
-          class="w-[47px] h-[40px] flex items-center mdlg:!hidden justify-center rounded-tr-[16px] rounded-bl-[16px] bg-white bg-opacity-50 top-0 right-0 absolute"
-          @click.stop="showContentDetails = false"
         >
-          <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" />
-        </span>
-
-        <span
-          class="w-[47px] h-[40px] flex items-center mdlg:!hidden justify-center rounded-tl-[16px] rounded-br-[16px] bg-white bg-opacity-50 top-0 left-0 absolute"
-        >
-          <sofa-icon
-            :customClass="'h-[5px]'"
-            :name="'more-options-horizontal'"
+          <sofa-content-details
+            :close="
+              () => {
+                showContentDetails = false;
+              }
+            "
+            :content="contentDetails"
           />
-        </span>
-      </div>
-    </sofa-modal>
-  </expanded-layout>
+
+          <!--  Smaller screen options -->
+          <span
+            class="w-[47px] h-[40px] flex items-center mdlg:!hidden justify-center rounded-tr-[16px] rounded-bl-[16px] bg-white bg-opacity-50 top-0 right-0 absolute"
+            @click.stop="showContentDetails = false"
+          >
+            <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" />
+          </span>
+
+          <span
+            class="w-[47px] h-[40px] flex items-center mdlg:!hidden justify-center rounded-tl-[16px] rounded-br-[16px] bg-white bg-opacity-50 top-0 left-0 absolute"
+          >
+            <sofa-icon
+              :customClass="'h-[5px]'"
+              :name="'more-options-horizontal'"
+            />
+          </span>
+        </div>
+      </sofa-modal>
+    </expanded-layout>
+  </global-layout>
 </template>
 
 <script lang="ts">

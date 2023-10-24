@@ -1,6 +1,10 @@
 <template>
   <div
-    class="w-full flex flex-col flex-grow items-center justify-center h-full"
+    :class="`w-full flex flex-col flex-grow items-center justify-center h-full ${
+      Logic.Common.isNativeApp
+        ? '!font-lexend !bg-backgroundGray overflow-y-auto'
+        : ''
+    }`"
   >
     <div
       :class="`h-full  flex-grow text-center relative mdlg:px-0 space-y-5 flex flex-col items-center  lg:text-sm mdlg:text-[12px] text-xs w-full`"
@@ -11,6 +15,7 @@
 </template>
 
 <script lang="ts">
+import { Logic } from "sofa-logic";
 import { ref, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
@@ -52,11 +57,12 @@ export default defineComponent({
     const loaderSetup = ref<any>();
 
     return {
+      tabTitle,
+      loaderSetup,
+      Logic,
       tabIsActive,
       goBack,
       goToRoute,
-      tabTitle,
-      loaderSetup,
     };
   },
 });

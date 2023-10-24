@@ -29,7 +29,11 @@
       hideSmNavigator.bottom
         ? ' mdlg:!space-y-0'
         : 'lg:!space-y-5 mdlg:!space-y-5'
-    }  space-y-2 flex flex-col lg:text-sm mdlg:text-[12px] text-xs`"
+    }  space-y-2 flex flex-col lg:text-sm mdlg:text-[12px] text-xs ${
+      Logic.Common.isNativeApp
+        ? '!font-lexend !bg-backgroundGray overflow-y-auto pb-[140px]'
+        : ''
+    }  `"
   >
     <slot name="middle-session" />
     <div class="h-[120px] mdlg:!hidden" v-if="!wrapLayout"></div>
@@ -40,7 +44,7 @@
       wrapLayout
         ? 'mdlg:!fixed pb-5 px-4'
         : 'fixed mdlg:!fixed hidden px-4 py-4'
-    } mdlg:!top-0 mdlg:!right-0 mdlg:!pt-[80px] h-full lg:w-[22%] mdlg:w-[25%] mdlg:!flex  mdlg:!px-5 mdlg:!py-5 flex-col overflow-y-auto scrollbar-hide space-y-5`"
+    } mdlg:!top-0 mdlg:!right-0 mdlg:!pt-[80px] h-full lg:w-[22%] mdlg:w-[25%] mdlg:!flex  mdlg:!px-5 mdlg:!py-5 flex-col overflow-y-auto scrollbar-hide space-y-5 `"
   >
     <slot name="right-session" />
   </div>
@@ -209,14 +213,15 @@ export default defineComponent({
     });
 
     return {
-      tabIsActive,
-      goBack,
-      goToRoute,
+      Logic,
       tabTitle,
       loaderSetup,
       tabs,
       showAddItem,
       handleShowAddItem,
+      tabIsActive,
+      goBack,
+      goToRoute,
     };
   },
 });

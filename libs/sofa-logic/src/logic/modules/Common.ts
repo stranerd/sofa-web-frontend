@@ -31,6 +31,8 @@ export default class Common {
 
   public loadingState = false
 
+  public isNativeApp = false
+
   public SocketClient: Socket | undefined
 
   public timeEquivalentsInSeconds = {

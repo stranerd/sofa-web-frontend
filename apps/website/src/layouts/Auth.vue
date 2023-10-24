@@ -1,6 +1,8 @@
 <template>
   <div
-    class="w-full h-full flex flex-row fixed top-0 left-0 bg-white items-center justify-center"
+    :class="`w-full h-full flex flex-row fixed top-0 left-0 bg-white items-center justify-center ${
+      Logic.Common.isNativeApp ? '!font-lexend  overflow-y-auto ' : ''
+    } `"
   >
     <div
       class="bg-white w-full lg:!w-[45%] mdlg:!w-[50%] h-full flex flex-col items-center justify-center mdlg:!pt-9 md:!pt-9 pt-0"
@@ -40,6 +42,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { SofaImageLoader, SofaNormalText, SofaIcon } from "sofa-ui-components";
+import { Logic } from "sofa-logic";
 
 export default defineComponent({
   components: {
@@ -49,7 +52,9 @@ export default defineComponent({
   },
   name: "AuthLayout",
   setup() {
-    //
+    return {
+      Logic,
+    };
   },
 });
 </script>
