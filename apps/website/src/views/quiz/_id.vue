@@ -998,57 +998,6 @@ import {
 import slider from "vue3-slider";
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
-const fetchRules = [];
-
-fetchRules.push(
-  {
-    domain: "Study",
-    property: "SingleQuiz",
-    method: "GetQuiz",
-    params: [],
-    useRouteId: true,
-    ignoreProperty: true,
-  },
-  {
-    domain: "Study",
-    property: "AllQuestions",
-    method: "GetQuestions",
-    params: [],
-    useRouteId: true,
-    requireAuth: true,
-    ignoreProperty: true,
-  },
-  {
-    domain: "Plays",
-    property: "SingleGame",
-    method: "GetGame",
-    params: [],
-    useRouteQuery: true,
-    queries: ["gameId"],
-    requireAuth: true,
-    ignoreProperty: true,
-  },
-  {
-    domain: "Study",
-    property: "SingleReview",
-    method: "GetSingleReview",
-    params: ["quizzes"],
-    useRouteId: true,
-    requireAuth: true,
-    ignoreProperty: true,
-  },
-  {
-    domain: "Plays",
-    property: "SingleTest",
-    method: "GetTest",
-    params: [],
-    useRouteQuery: true,
-    queries: ["testId"],
-    requireAuth: true,
-    ignoreProperty: true,
-  }
-);
-
 export default defineComponent({
   components: {
     SofaNormalText,
@@ -1069,7 +1018,54 @@ export default defineComponent({
     RateAndReviewModal,
   },
   middlewares: {
-    fetchRules,
+    fetchRules: [
+      {
+        domain: "Study",
+        property: "SingleQuiz",
+        method: "GetQuiz",
+        params: [],
+        useRouteId: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Study",
+        property: "AllQuestions",
+        method: "GetQuestions",
+        params: [],
+        useRouteId: true,
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Plays",
+        property: "SingleGame",
+        method: "GetGame",
+        params: [],
+        useRouteQuery: true,
+        queries: ["gameId"],
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Study",
+        property: "SingleReview",
+        method: "GetSingleReview",
+        params: ["quizzes"],
+        useRouteId: true,
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Plays",
+        property: "SingleTest",
+        method: "GetTest",
+        params: [],
+        useRouteQuery: true,
+        queries: ["testId"],
+        requireAuth: true,
+        ignoreProperty: true,
+      }
+    ],
   },
   name: "QuizPage",
   setup() {

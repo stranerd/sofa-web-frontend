@@ -96,8 +96,8 @@
 
     <template v-slot:middle-session>
       <div v-if="(!Logic.Users.CheckUserTaskState('profile_setup') ||
-          !Logic.Users.CheckUserTaskState('phone_setup') ||
-          !Logic.Users.CheckUserTaskState('education_setup')) &&
+        !Logic.Users.CheckUserTaskState('phone_setup') ||
+        !Logic.Users.CheckUserTaskState('education_setup')) &&
         Logic.Users.getUserType() != 'organization'
         "
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 mdlg:!pt-4 pt-3 mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1">
@@ -222,9 +222,9 @@
                   `?type=${activity.labels.main.toLowerCase()}`
                 )
                 " :has-bookmark="true" :bookmark-action="() => {
-      showSaveToFolder = true
-      selectedFolderMaterailToAdd = activity
-    }
+    showSaveToFolder = true
+    selectedFolderMaterailToAdd = activity
+  }
     " />
           </div>
           <template v-else>
@@ -266,9 +266,9 @@
                   `?type=${activity.labels.main.toLowerCase()}`
                 )
                 " :has-bookmark="true" :bookmark-action="() => {
-      showSaveToFolder = true
-      selectedFolderMaterailToAdd = activity
-    }
+    showSaveToFolder = true
+    selectedFolderMaterailToAdd = activity
+  }
     " />
           </div>
           <template v-else>
@@ -310,9 +310,9 @@
                   `?type=${activity.labels.main.toLowerCase()}`
                 )
                 " :has-bookmark="true" :bookmark-action="() => {
-      showSaveToFolder = true
-      selectedFolderMaterailToAdd = activity
-    }
+    showSaveToFolder = true
+    selectedFolderMaterailToAdd = activity
+  }
     " />
           </div>
           <template v-else>
@@ -352,13 +352,13 @@
 
       <!-- Content details modal -->
       <sofa-modal v-if="showAccountSetup" :close="() => {
-          showAccountSetup = false
-        }
+        showAccountSetup = false
+      }
         " :customClass="'hidden md:!flex'" :can-close="false">
         <div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
           @click.stop="() => {
-              //
-            }
+            //
+          }
             ">
           <div
             class="bg-white w-full flex flex-col lg:!px-6 space-y-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
@@ -371,8 +371,8 @@
 
       <!-- Customize AI -->
       <customize-bot :close="() => {
-          showCustomizeAI = false
-        }
+        showCustomizeAI = false
+      }
         " v-if="showCustomizeAI" />
     </template>
 
@@ -382,8 +382,8 @@
         <template v-if="Logic.Users.getUserType() == 'student'">
           <div class="w-full flex flex-row items-center space-x-3">
             <div :style="`background-image: url('${UserProfile.ai.photo
-                ? UserProfile.ai.photo.link
-                : '/images/icons/robot.svg'
+              ? UserProfile.ai.photo.link
+              : '/images/icons/robot.svg'
               }')`"
               class="w-[84px] h-[84px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
@@ -450,8 +450,8 @@
           </template>
           <sofa-empty-state v-else :title="'No students'"
             :subTitle="'Your students have free access all contents you create'" :actionLabel="'Add students'" :action="() => {
-                Logic.Common.GoToRoute('/settings?tab=students')
-              }
+              Logic.Common.GoToRoute('/settings?tab=students')
+            }
               " />
         </template>
       </div>
@@ -532,115 +532,6 @@ import {
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
 
-const fetchRules = []
-
-fetchRules.push(
-  {
-    domain: "Users",
-    property: "UserProfile",
-    method: "GetUserProfile",
-    params: [],
-    requireAuth: true,
-  },
-  {
-    domain: "Schools",
-    property: "AllInstitutions",
-    method: "GetInstitutions",
-    params: [],
-    requireAuth: true,
-  },
-  {
-    domain: "Conversations",
-    property: "AllConversations",
-    method: "GetConversations",
-    params: [
-      {
-        where: [
-          {
-            field: "user.id",
-            value: Logic.Auth.AuthUser?.id,
-            condition: Conditions.eq,
-          },
-        ],
-      },
-    ],
-    requireAuth: true,
-    silentUpdate: true,
-  },
-  {
-    domain: "Study",
-    property: "HomeMaterials",
-    method: "GetHomeMaterials",
-    params: [],
-    requireAuth: true,
-    ignoreProperty: false,
-    silentUpdate: true,
-  },
-  {
-    domain: "Study",
-    property: "AllTopics",
-    method: "GetTopics",
-    params: [],
-    requireAuth: true,
-  },
-  {
-    domain: "Study",
-    property: "AllOtherTags",
-    method: "GetOtherTags",
-    params: [],
-    requireAuth: true,
-  },
-  {
-    domain: "Users",
-    property: "AllorganizationMembers",
-    method: "GetOrganizationMembers",
-    params: [
-      Logic.Auth.AuthUser?.id,
-      {
-        limit: 10,
-      },
-    ],
-    requireAuth: true,
-    silentUpdate: false,
-  }
-)
-
-if (Logic.Users.getUserType() == "teacher") {
-  fetchRules.push({
-    domain: "Conversations",
-    property: "AllTutorRequests",
-    method: "GetTutorRequests",
-    params: [
-      {
-        where: [
-          {
-            field: "tutor.id",
-            condition: Conditions.eq,
-            value: Logic.Auth.AuthUser?.id,
-          },
-        ],
-      },
-      true,
-    ],
-    requireAuth: true,
-  })
-}
-if (Logic.Users.getUserType() == "organization") {
-  fetchRules.push({
-    domain: "Users",
-    property: "AllorganizationMembers",
-    method: "GetOrganizationMembers",
-    params: [
-      Logic.Auth.AuthUser?.id,
-      {
-        limit: 10,
-      },
-    ],
-    requireAuth: true,
-    silentUpdate: false,
-  })
-}
-
 export default defineComponent({
   components: {
     SofaIcon,
@@ -659,7 +550,109 @@ export default defineComponent({
     ChatListComponent,
   },
   middlewares: {
-    fetchRules,
+    fetchRules: [
+      {
+        domain: "Users",
+        property: "UserProfile",
+        method: "GetUserProfile",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Schools",
+        property: "AllInstitutions",
+        method: "GetInstitutions",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Conversations",
+        property: "AllConversations",
+        method: "GetConversations",
+        params: [
+          {
+            where: [
+              {
+                field: "user.id",
+                value: Logic.Auth.AuthUser?.id,
+                condition: Conditions.eq,
+              },
+            ],
+          },
+        ],
+        requireAuth: true,
+        silentUpdate: true,
+      },
+      {
+        domain: "Study",
+        property: "HomeMaterials",
+        method: "GetHomeMaterials",
+        params: [],
+        requireAuth: true,
+        ignoreProperty: false,
+        silentUpdate: true,
+      },
+      {
+        domain: "Study",
+        property: "AllTopics",
+        method: "GetTopics",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Study",
+        property: "AllOtherTags",
+        method: "GetOtherTags",
+        params: [],
+        requireAuth: true,
+      },
+      {
+        domain: "Users",
+        property: "AllorganizationMembers",
+        method: "GetOrganizationMembers",
+        params: [
+          Logic.Auth.AuthUser?.id,
+          {
+            limit: 10,
+          },
+        ],
+        requireAuth: true,
+        silentUpdate: false,
+      },
+      {
+        domain: "Conversations",
+        property: "AllTutorRequests",
+        method: "GetTutorRequests",
+        params: [
+          {
+            where: [
+              {
+                field: "tutor.id",
+                condition: Conditions.eq,
+                value: Logic.Auth.AuthUser?.id,
+              },
+            ],
+          },
+          true,
+        ],
+        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
+        requireAuth: true,
+      },
+      {
+        domain: "Users",
+        property: "AllorganizationMembers",
+        method: "GetOrganizationMembers",
+        params: [
+          Logic.Auth.AuthUser?.id,
+          {
+            limit: 10,
+          },
+        ],
+        shouldSkip: () => Logic.Users.getUserType() !== "organization",
+        requireAuth: true,
+        silentUpdate: false,
+      }
+    ]
   },
   name: "IndexPage",
   setup () {

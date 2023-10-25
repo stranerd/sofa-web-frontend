@@ -633,88 +633,6 @@ import { Conditions } from "sofa-logic/src/logic/types/domains/common";
 import ChatListComponent from "@/components/conversation/ChatList.vue";
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue";
 
-const fetchRules = [
-  {
-    domain: "Users",
-    property: "UserProfile",
-    method: "GetUserProfile",
-    params: [],
-    requireAuth: true,
-    ignoreProperty: false,
-  },
-  {
-    domain: "Study",
-    property: "Tags",
-    method: "GetTags",
-    params: [
-      {
-        all: true,
-      },
-    ],
-    requireAuth: true,
-  },
-  {
-    domain: "Payment",
-    property: "UserWallet",
-    method: "GetUserWallet",
-    params: [],
-    requireAuth: true,
-    ignoreProperty: false,
-  },
-];
-
-if (Logic.Users.getUserType() == "teacher") {
-  fetchRules.push(
-    {
-      domain: "Users",
-      property: "AllTutorRequests",
-      method: "GetTutorRequests",
-      params: [
-        {
-          where: [
-            {
-              field: "userId",
-              condition: Conditions.eq,
-              value: Logic.Auth.AuthUser?.id,
-            },
-          ],
-        },
-        true,
-      ],
-      requireAuth: true,
-      ignoreProperty: true,
-    },
-    {
-      domain: "Conversations",
-      property: "AllTutorRequests",
-      method: "GetTutorRequests",
-      params: [
-        {
-          where: [
-            {
-              field: "tutor.id",
-              condition: Conditions.eq,
-              value: Logic.Auth.AuthUser?.id,
-            },
-          ],
-        },
-        true,
-      ],
-      requireAuth: true,
-      ignoreProperty: true,
-    }
-  );
-} else {
-  fetchRules.push({
-    domain: "Conversations",
-    property: "AllConversations",
-    method: "GetConversations",
-    params: [],
-    requireAuth: true,
-    ignoreProperty: true,
-  });
-}
-
 export default defineComponent({
   components: {
     SofaIcon,
@@ -732,7 +650,84 @@ export default defineComponent({
     RateAndReviewModal,
   },
   middlewares: {
-    fetchRules,
+    fetchRules: [
+      {
+        domain: "Users",
+        property: "UserProfile",
+        method: "GetUserProfile",
+        params: [],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+      {
+        domain: "Study",
+        property: "Tags",
+        method: "GetTags",
+        params: [
+          {
+            all: true,
+          },
+        ],
+        requireAuth: true,
+      },
+      {
+        domain: "Payment",
+        property: "UserWallet",
+        method: "GetUserWallet",
+        params: [],
+        requireAuth: true,
+        ignoreProperty: false,
+      },
+      {
+        domain: "Users",
+        property: "AllTutorRequests",
+        method: "GetTutorRequests",
+        params: [
+          {
+            where: [
+              {
+                field: "userId",
+                condition: Conditions.eq,
+                value: Logic.Auth.AuthUser?.id,
+              },
+            ],
+          },
+          true,
+        ],
+        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Conversations",
+        property: "AllTutorRequests",
+        method: "GetTutorRequests",
+        params: [
+          {
+            where: [
+              {
+                field: "tutor.id",
+                condition: Conditions.eq,
+                value: Logic.Auth.AuthUser?.id,
+              },
+            ],
+          },
+          true,
+        ],
+        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
+        requireAuth: true,
+        ignoreProperty: true,
+      },
+      {
+        domain: "Conversations",
+        property: "AllConversations",
+        method: "GetConversations",
+        params: [],
+        shouldSkip: () => Logic.Users.getUserType() === "teacher",
+        requireAuth: true,
+        ignoreProperty: true,
+      }
+    ]
   },
   name: "ChatIndexPage",
   setup() {
