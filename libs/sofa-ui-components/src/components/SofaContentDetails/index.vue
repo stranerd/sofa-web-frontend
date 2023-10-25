@@ -107,7 +107,7 @@
                 }}
               </sofa-button>
               <sofa-button v-else :padding="'px-6 py-1'" :customClass="'w-auto'"
-                @click="Logic.Common.GoToRoute('/course/' + content.courseId)">
+                @click="Logic.Common.GoToRoute('/course/' + content.id)">
                 Go to course
               </sofa-button>
             </div>
