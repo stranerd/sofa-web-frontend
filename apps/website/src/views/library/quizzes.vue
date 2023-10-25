@@ -141,7 +141,17 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: true,
         shouldSkip: () => !(Logic.Auth.AuthUser && Logic.Auth.AuthUser.roles.isAdmin),
-        params: []
+        params: [
+          {
+            where: [
+              {
+                field: "user.id",
+                value: Logic.Auth.AuthUser?.id,
+                condition: Conditions.eq,
+              },
+            ],
+          },
+        ]
       },
       {
         domain: "Study",
