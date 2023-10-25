@@ -600,6 +600,8 @@ export default class Common {
           }
         }
 
+        if (rule.shouldSkip?.()) return
+
         let addRuleToRequest = true
 
         if (rule.condition) {

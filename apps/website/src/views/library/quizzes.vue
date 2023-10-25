@@ -140,6 +140,7 @@ export default defineComponent({
         method: "GetTutorQuizzes",
         requireAuth: true,
         ignoreProperty: true,
+        shouldSkip: () => !(Logic.Auth.AuthUser && Logic.Auth.AuthUser.roles.isAdmin),
         params: []
       },
       {

@@ -1392,7 +1392,7 @@ export default class Study extends Common {
   public GetTutorQuizzes = (filters: QueryParams) => {
     return $api.study.quiz.tutorQuizzes(filters).then((response) => {
       this.TutorQuizzes = response.data
-    })
+    }).catch(() => {})
   }
 
   public GetQuiz = (id: string, autoCreate = false) => {

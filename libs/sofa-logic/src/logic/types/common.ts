@@ -87,6 +87,7 @@ export interface FetchRule {
   useRouteQuery?: boolean
   queries?: string[]
   alignCurrency?: boolean
+  shouldSkip?: () => boolean
   silentUpdate?: boolean
   condition?: {
     routeSearchItem: 'fullPath' | 'params' | 'query'
