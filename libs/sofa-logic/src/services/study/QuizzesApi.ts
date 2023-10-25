@@ -5,7 +5,7 @@ import {
   CreateQuestionInput,
   ReorderQuizInput,
 } from '../../logic/types/forms/study'
-import { Paginated } from '../../logic/types/domains/common'
+import { Paginated, QueryParams } from '../../logic/types/domains/common'
 
 export default class QuizzesApi extends ModelApiService {
   constructor() {
@@ -25,6 +25,25 @@ export default class QuizzesApi extends ModelApiService {
       }
     }
   }
+
+
+  public async tutorQuizzes(filters: QueryParams) {
+    try {
+      const response: AxiosResponse<Paginated<Quiz>> = await this.axiosInstance.get(
+        this.getUrl() + '/tutors',
+        {
+          params: filters,
+        },
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
 
   public async getQuestions(quizId: string) {
     try {

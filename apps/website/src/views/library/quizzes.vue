@@ -30,8 +30,8 @@
         </template>
         <sofa-empty-state v-else :title="'You have no quizzes here'"
           :subTitle="'Discover thousands of quizzes and save them here for easy access'" :actionLabel="'Explore'" :action="() => {
-              Logic.Common.GoToRoute('/marketplace')
-            }
+            Logic.Common.GoToRoute('/marketplace')
+          }
             " />
       </div>
 
@@ -40,13 +40,13 @@
 
     <!-- More options -->
     <sofa-modal v-if="showMoreOptions" :close="() => {
-        showMoreOptions = false
-      }
+      showMoreOptions = false
+    }
       ">
       <div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
         @click.stop="() => {
-            //
-          }
+          //
+        }
           ">
         <div
           class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
@@ -83,6 +83,7 @@ import {
   showMoreOptionHandler,
   showMoreOptions,
   showStudyMode,
+  TutorQuizzes,
 } from "@/composables/library"
 import {
   createQuizGame,
@@ -132,6 +133,14 @@ export default defineComponent({
         ],
         requireAuth: true,
         ignoreProperty: true,
+      },
+      {
+        domain: "Study",
+        property: "TutorQuizzes",
+        method: "GetTutorQuizzes",
+        requireAuth: true,
+        ignoreProperty: true,
+        params: []
       },
       {
         domain: "Study",
@@ -187,7 +196,16 @@ export default defineComponent({
       },
     ])
 
+    if (Logic.Auth.AuthUser?.roles.isAdmin) {
+      mainFilters.push({
+        name: "Tutors",
+        active: false,
+        id: "quiz-tutors",
+      })
+    }
+
     const quizzes = ref<ResourceType[]>([])
+    const tutorQuizzes = ref<ResourceType[]>([])
 
     const currentQuizData = ref<ResourceType[]>([])
 
@@ -197,12 +215,20 @@ export default defineComponent({
       AllQuzzies.value?.results.forEach((quiz) => {
         quizzes.value.push(createQuizData(quiz))
       })
+
+      tutorQuizzes.value.length = 0
+
+      TutorQuizzes.value?.results.forEach((quiz) => {
+        tutorQuizzes.value.push(createQuizData(quiz))
+      })
     }
 
     const filterItem = () => {
       const status = selectedItemId.value.split("-")[1]
 
-      if (status == "recent") {
+      if (status == "tutors") {
+        currentQuizData.value = tutorQuizzes.value
+      } else if (status == "recent") {
         currentQuizData.value = quizzes.value
       } else {
         currentQuizData.value = quizzes.value.filter(
@@ -218,6 +244,7 @@ export default defineComponent({
     onMounted(() => {
       scrollToTop()
       Logic.Study.watchProperty("AllQuzzies", AllQuzzies)
+      Logic.Study.watchProperty("TutorQuizzes", TutorQuizzes)
       setQuizzes()
       filterItem()
     })

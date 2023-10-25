@@ -23,6 +23,7 @@ interface PlayResource {
 }
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
+const TutorQuizzes = ref(Logic.Study.TutorQuizzes)
 const AllCourses = ref(Logic.Study.AllCourses)
 const PurchasedCourses = ref(Logic.Study.PurchasedCourses)
 const AllFolders = ref(Logic.Study.AllFolders)
@@ -941,7 +942,7 @@ const moreOptions = reactive([
 ])
 
 export {
-    AllCourses, AllFolders, AllFoldersCourses,
+    AllCourses, AllFolders, AllFoldersCourses, TutorQuizzes,
     AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, FolderOptions, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, addFolder, addFolderIsActive, addMaterialToFolder, allContentCategories, createCourseData, createQuizData, currentCourseData, currentFolder, currentFolderItems, currentInProgressItem, currentPurchasedData, currentQuizData, currentRecentData, currentResultItems, deleteFolder, filterItem, folderFilterOption,
     folders, handleFolderNameBlur, inProgressItems, libraryTypeList, moreOptions, openCourse, openQuiz, organizationFilterOption,
     organizations, reportMaterial, reportMaterialSetup, resultItems, saveFolder, saveItemsToFolder, selectedCourseFilter, selectedFilter, selectedFolderFilter, selectedFolderItems, selectedFolderMaterailToAdd, selectedInProgressFilter, selectedItem, selectedItemId, selectedQuizFilter, selectedResultFilter, sendReportMaterial, setCourses, setFolderItems, setFolders, setInProgressItems, setPurchasedData, setQuizzes, setRecentItems, setResultItems, shareMaterialLink, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode, updateFolder

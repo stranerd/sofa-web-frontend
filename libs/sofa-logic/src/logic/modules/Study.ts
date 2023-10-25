@@ -40,6 +40,7 @@ export default class Study extends Common {
   public AllFoldersQuizzes: Quiz[] | undefined
   public SingleFolder: Folder | undefined
   public AllQuzzies: Paginated<Quiz> | undefined
+  public TutorQuizzes: Paginated<Quiz> | undefined
   public SingleQuiz: Quiz | undefined
   public AllQuestions: Paginated<Question> | undefined
   public SingleQuestion: Question | undefined
@@ -1385,6 +1386,12 @@ export default class Study extends Common {
   public GetQuizzes = (filters: QueryParams) => {
     return $api.study.quiz.fetch(filters).then((response) => {
       this.AllQuzzies = response.data
+    })
+  }
+
+  public GetTutorQuizzes = (filters: QueryParams) => {
+    return $api.study.quiz.tutorQuizzes(filters).then((response) => {
+      this.TutorQuizzes = response.data
     })
   }
 
