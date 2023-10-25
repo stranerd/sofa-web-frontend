@@ -64,7 +64,7 @@
           :actionLabel="'Explore'"
           :action="
             () => {
-              Logic.Common.GoToRoute('/explore');
+              Logic.Common.GoToRoute('/marketplace');
             }
           "
         />

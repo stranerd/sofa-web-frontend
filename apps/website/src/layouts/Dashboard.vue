@@ -165,13 +165,6 @@ export default defineComponent({
         routeTag: "chat",
         icon_size: "h-[18px]",
       },
-      // {
-      //   name: "Explore",
-      //   path: "/explore",
-      //   icon: "explore",
-      //   routeTag: "explore",
-      //   icon_size: "h-[19px]",
-      // },
       {
         name: "Library",
         path: "/library",

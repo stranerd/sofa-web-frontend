@@ -30,7 +30,7 @@
         </template>
         <sofa-empty-state v-else :title="'You have no quizzes here'"
           :subTitle="'Discover thousands of quizzes and save them here for easy access'" :actionLabel="'Explore'" :action="() => {
-              Logic.Common.GoToRoute('/explore')
+              Logic.Common.GoToRoute('/marketplace')
             }
             " />
       </div>
