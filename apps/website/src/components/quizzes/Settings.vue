@@ -41,34 +41,7 @@
           :autoComplete="true"
           :borderColor="'border-transparent'"
           :options="allTopics"
-          v-if="false"
           v-model="quizSettingsForm.topic"
-        />
-
-        <sofa-text-field
-            :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-            :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-            type="text"
-            :name="'Topic'"
-            ref="topic"
-            v-model="quizSettingsForm.topic"
-            :placeholder="'Topic'"
-            :borderColor="'border-transparent'"
-            :updateValue="quizSettingsForm.topic"
-            :rules="[Logic.Form.RequiredRule]"
-          />
-
-        <sofa-select
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'Visibiliy'"
-          ref="Visibility"
-          :placeholder="'Visibility'"
-          :rules="[FormValidations.RequiredRule]"
-          :borderColor="'border-transparent'"
-          :options="visibilityOptions"
-          v-if="false"
-          v-model="quizSettingsForm.visibility"
         />
       </div>
       <div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
@@ -241,17 +214,6 @@ export default defineComponent({
   name: "QuizSettings",
   emits: ["OnQuizUpdated"],
   setup(props, context) {
-    const visibilityOptions = [
-      {
-        key: "active",
-        value: "Active",
-      },
-      {
-        key: "inactive",
-        value: "Inactive",
-      },
-    ];
-
     const formComp = ref<any>();
 
     const defaultTags = ref([]);
@@ -279,7 +241,6 @@ export default defineComponent({
         );
         defaultTags.value = quiz.tagIds.map((id) => Logic.Study.GetTagName(id));
         quizSettingsForm.topic = Logic.Study.GetTagName(quiz.topicId);
-        quizSettingsForm.visibility = "active";
         quizImageUrl.value = quiz.photo?.link || "";
         setTimeout(() => {
           formComp.value.fieldsToValidate?.tags.emptyValue();
@@ -291,7 +252,6 @@ export default defineComponent({
         quizSettingsForm.isForTutors = false;
         quizSettingsForm.tags = [];
         quizSettingsForm.topic = "";
-        quizSettingsForm.visibility = "";
         quizImageUrl.value = "";
 
         setTimeout(() => {
@@ -324,7 +284,6 @@ export default defineComponent({
       quizSettingsForm,
       Logic,
       FormValidations,
-      visibilityOptions,
       formComp,
       quizImageUrl,
       createQuiz,

@@ -39,7 +39,6 @@ const quizSettingsForm = reactive({
   topic: '',
   isForTutors: false,
   photo: undefined,
-  visibility: '',
   tagString: '',
 })
 

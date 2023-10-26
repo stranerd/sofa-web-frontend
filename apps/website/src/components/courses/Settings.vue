@@ -42,36 +42,7 @@
           :borderColor="'border-transparent'"
           :options="allTopics"
           :update-value="courseSettingForm.topic"
-          v-if="false"
           v-model="courseSettingForm.topic"
-        />
-
-        <sofa-text-field
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          type="text"
-          :name="'Topic'"
-          ref="topic"
-          v-model="courseSettingForm.topic"
-          :placeholder="'Topic'"
-          :borderColor="'border-transparent'"
-          :updateValue="courseSettingForm.topic"
-          :rules="[Logic.Form.RequiredRule]"
-        />
-
-        <sofa-select
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-3'"
-          :name="'Content Type'"
-          ref="content.type"
-          :placeholder="'Content Type'"
-          :rules="[FormValidations.RequiredRule]"
-          :autoComplete="false"
-          :borderColor="'border-transparent'"
-          v-if="false"
-          :options="contentTypeOptions"
-          :update-value="courseSettingForm.contentType"
-          v-model="courseSettingForm.contentType"
         />
 
         <sofa-text-field
@@ -222,7 +193,6 @@ import { FormValidations } from "@/composables";
 import {
   allGenericTags,
   allTopics,
-  contentTypeOptions,
   courseSettingForm,
   courseSettingSaved,
   createCourse,
@@ -259,17 +229,6 @@ export default defineComponent({
   name: "CourseSettings",
   emits: ["OnCourseUpdated"],
   setup(props, context) {
-    const visibilityOptions = [
-      {
-        key: "active",
-        value: "Active",
-      },
-      {
-        key: "inactive",
-        value: "Inactive",
-      },
-    ];
-
     const newTags = ref("");
 
     const formComp = ref<any>();
@@ -293,7 +252,6 @@ export default defineComponent({
         courseSettingForm.description = course.description;
 
         courseSettingForm.topic = Logic.Study.GetTagName(course.topicId);
-        courseSettingForm.visibility = "active";
         courseSettingForm.price = course.price.amount.toString();
         courseSettingForm.tags = course.tagIds.map((id) =>
           Logic.Study.GetTagName(id)
@@ -302,7 +260,6 @@ export default defineComponent({
           Logic.Study.GetTagName(id)
         );
         courseImageUrl.value = course.photo?.link || "";
-        courseSettingForm.contentType = "";
         setTimeout(() => {
           formComp.value.fieldsToValidate?.tags.emptyValue();
           courseSettingForm.tagString = "";
@@ -312,9 +269,7 @@ export default defineComponent({
         courseSettingForm.description = "";
         courseSettingForm.tags = [];
         courseSettingForm.topic = "";
-        courseSettingForm.visibility = "";
         courseImageUrl.value = "";
-        courseSettingForm.contentType = "";
         setTimeout(() => {
           formComp.value.fieldsToValidate?.title.emptyValue();
           formComp.value.fieldsToValidate?.topic.emptyValue();
@@ -340,14 +295,12 @@ export default defineComponent({
       courseSettingForm,
       Logic,
       FormValidations,
-      visibilityOptions,
       formComp,
       courseImageUrl,
       createCourse,
       updateCourse,
       allTopics,
       allGenericTags,
-      contentTypeOptions,
       defaultTags,
       newTags,
     };

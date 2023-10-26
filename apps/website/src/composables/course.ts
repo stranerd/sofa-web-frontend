@@ -10,18 +10,15 @@ import { reactive, ref } from 'vue'
 const courseSettingForm = reactive({
   title: '',
   description: '',
-  visibility: '',
   tags: [],
   photo: undefined,
   topic: '',
   price: '0',
-  contentType: '',
   tagString: '',
 })
 
 const allTopics = ref<SelectOption[]>([])
 const allGenericTags = ref<SelectOption[]>([])
-const contentTypeOptions = ref<SelectOption[]>([])
 
 const courseSettingSaved = ref(false)
 const hasUnsavedChanges = ref(false)
@@ -77,16 +74,13 @@ const getGenericTags = () => {
 }
 
 const createCourse = (formComp: any) => {
-  if (!courseSettingForm.contentType) return
-
-  const allTags = [...courseSettingForm.tags, courseSettingForm.contentType]
   Logic.Study.CreateCourseForm = {
     description: courseSettingForm.description,
     price: {
       amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
       currency: 'NGN',
     },
-    tags: allTags,
+    tags: courseSettingForm.tags,
     title: courseSettingForm.title,
     topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,
@@ -243,19 +237,5 @@ const addQuizToCourse = (quizId: string) => {
 }
 
 export {
-  courseSettingForm,
-  allTopics,
-  courseSettingSaved,
-  updateCourseSectionForm,
-  addCourseFileForm,
-  allGenericTags,
-  contentTypeOptions,
-  hasUnsavedChanges,
-  createCourse,
-  updateCourse,
-  getTopics,
-  updateCourseSections,
-  addCourseFile,
-  addQuizToCourse,
-  getGenericTags,
+  addCourseFile, addCourseFileForm, addQuizToCourse, allGenericTags, allTopics, courseSettingForm, courseSettingSaved, createCourse, getGenericTags, getTopics, hasUnsavedChanges, updateCourse, updateCourseSectionForm, updateCourseSections
 }
