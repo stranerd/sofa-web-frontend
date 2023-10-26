@@ -137,7 +137,7 @@
 
     <div v-if="Logic.Users.UserProfile.roles.isAdmin" class="flex gap-2 text-grayColor items-center">
       <span class="whitespace-nowrap">Is tutor assessments?</span>
-      <SofaCheckbox v-model="quizSettingsForm.isForTutors" />
+      <SofaCheckbox v-model="quizSettingsForm.isForTutors" :default-value="quizSettingsForm.isForTutors" />
     </div>
 
     <div
