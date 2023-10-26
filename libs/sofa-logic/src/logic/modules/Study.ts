@@ -990,8 +990,10 @@ export default class Study extends Common {
     return questions
   }
 
-  public ProcessQuestionData = (question: any) => {
+  public ProcessQuestionData = (q: any) => {
     const availableShapes = ['circle', 'triangle', 'square', 'kite']
+    const question = JSON.parse(JSON.stringify(q))
+
     const questionData = JSON.parse(
       JSON.stringify(this.getQuestionTemplate(question.data.type)),
     )
@@ -1013,7 +1015,7 @@ export default class Study extends Common {
 
     if (questionData.options) questionData.options = []
     if (questionData.match) questionData.match = []
-    if (questionData.data) questionData.data.length = 0
+    if (questionData.data) questionData.data = []
 
     if (question.data.type == 'multipleChoice') {
       question.data.options.forEach((option, index) => {
@@ -1056,20 +1058,19 @@ export default class Study extends Common {
     }
 
     if (question.data.type == 'trueOrFalse') {
-      ['True', 'False'].forEach((option, index) => {
+      [true, false].forEach((option, index) => {
+        const optionString = option ? 'True' : 'False'
         questionData.options[index] ??= {
           shape: availableShapes[index % availableShapes.length],
-          text: option,
+          text: optionString,
           shapeSize: 'h-[23px]',
           isRadio: true,
           id: this.makeid(8),
-          value: option,
-          answer: '',
+          value: optionString,
+          answer: option === question.data.answer ? optionString.toLowerCase() : '',
           showRemove: false,
         }
-        questionData.options[index].value = option
-        // clear answers
-        questionData.options[index].answer = ''
+        questionData.options[index].value = optionString
       })
     }
 

@@ -35,9 +35,7 @@
 							AllQuzzies?.results.find(
 								(item) => item.id == selectedQuizId
 							)?.user.id
-							" @click="
-		Logic.Common.GoToRoute(`/quiz/create?id=${selectedQuizId}`)
-		">Edit Quiz</sofa-button>
+							" @click="goToEdit">Edit Quiz</sofa-button>
 					</div>
 				</div>
 
@@ -102,7 +100,13 @@ export default defineComponent({
 	},
 	name: "StudyModeModal",
 	setup () {
+		const goToEdit = () => {
+			showStudyMode.value = false
+			Logic.Common.GoToRoute(`/quiz/create?id=${selectedQuizId}`)
+		}
+
 		return {
+			goToEdit,
 			Logic,
 			showStudyMode,
 			selectedQuizId,
