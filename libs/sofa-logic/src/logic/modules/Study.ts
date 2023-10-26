@@ -258,7 +258,7 @@ export default class Study extends Common {
         answers,
         answer:
           type == 'trueOrFalse'
-            ? questions.options[0].answer == 'True'
+            ? questions.options[0]?.answer == 'True'
             : undefined,
         indicator:
           type == 'dragAnswers' || type == 'fillInBlanks'
@@ -333,14 +333,6 @@ export default class Study extends Common {
         {
           type: 'time-limit',
           value: '30s',
-        },
-        {
-          type: 'total-options',
-          value: '4',
-        },
-        {
-          type: 'correct-anwsers',
-          value: '1',
         },
       ],
     },
@@ -593,10 +585,6 @@ export default class Study extends Common {
           type: 'time-limit',
           value: '30s',
         },
-        {
-          type: 'sequence-total',
-          value: '',
-        },
       ],
     },
     match: {
@@ -705,10 +693,6 @@ export default class Study extends Common {
         {
           type: 'time-limit',
           value: '30s',
-        },
-        {
-          type: 'match-total',
-          value: '',
         },
       ],
     },
@@ -1007,6 +991,7 @@ export default class Study extends Common {
   }
 
   public ProcessQuestionData = (question: any) => {
+    const availableShapes = ['circle', 'triangle', 'square', 'kite']
     const questionData = JSON.parse(
       JSON.stringify(this.getQuestionTemplate(question.data.type)),
     )
@@ -1017,16 +1002,23 @@ export default class Study extends Common {
     questionData.questionMedia = question.questionMedia
       ? question.questionMedia?.link
       : ''
+    questionData.timeLimit = question.timeLimit
+    questionData.content = question.question
 
-    question.data.options?.forEach((option, index) => {
-      if (questionData.options[index]) {
-        questionData.options[index].value = option
-      } else {
-        const availableShapes = ['circle', 'triangle', 'square', 'kite']
+    questionData.settings.forEach((setting) => {
+      if (setting.type == 'time-limit') {
+        setting.value = Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
+      }
+    })
 
-        questionData.options[index] = {
-          shape:
-            availableShapes[Math.floor(Math.random() * availableShapes.length)],
+    if (questionData.options) questionData.options = []
+    if (questionData.match) questionData.match = []
+    if (questionData.data) questionData.data.length = 0
+
+    if (question.data.type == 'multipleChoice') {
+      question.data.options.forEach((option, index) => {
+        questionData.options[index] ??= {
+          shape: availableShapes[index % availableShapes.length],
           text: 'Enter answer',
           shapeSize: 'h-[23px]',
           isRadio: true,
@@ -1035,133 +1027,99 @@ export default class Study extends Common {
           answer: '',
           showRemove: false,
         }
-      }
-
-      // clear answers
-      questionData.options[index].answer = ''
-    })
-
-    question.data.questions?.forEach((option, index) => {
-      questionData.options[index].value = option
-    })
-
-    questionData.timeLimit = question.timeLimit
-
-    if (question.data.type == 'multipleChoice') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
-        }
-        if (setting.type == 'total-options') {
-          setting.value = `${question.data?.options?.length}`
-        }
-        if (setting.type == 'correct-anwsers') {
-          setting.value = `${question.data.answers?.length}`
-        }
+        questionData.options[index].value = option
+        // clear answers
+        questionData.options[index].answer = ''
       })
-
-      question.data.answers?.forEach((index) => {
+      question.data.answers.forEach((index) => {
         if (questionData.options[index]) {
           questionData.options[index].answer = questionData.options[index].value
         }
       })
-
-      questionData.content = question.question
     }
 
     if (question.data.type == 'writeAnswer') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
+      question.data.answers.forEach((item, index) => {
+        questionData.options[index] ??= {
+          shape: availableShapes[index % availableShapes.length],
+          text: `Enter word/sentence ${index + 1}`,
+          shapeSize: 'h-[23px]',
+          isRadio: false,
+          id: '',
+          value: item,
+          answer: item,
+          showRemove: false,
         }
+        questionData.options[index].value = item
+        questionData.options[index].answer = item
       })
-
-      question.data.answers?.forEach((item, index) => {
-        if (item) {
-          questionData.options[index].value = item
-          questionData.options[index].answer = item
-        }
-      })
-
-      if (question.data.answers) {
-        questionData.options.forEach((option, index) => {
-          if (question.data.answers[index] == undefined) {
-            questionData.options.splice(index, 1)
-          }
-        })
-      }
-
-      questionData.content = question.question
     }
 
     if (question.data.type == 'trueOrFalse') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
+      ['True', 'False'].forEach((option, index) => {
+        questionData.options[index] ??= {
+          shape: availableShapes[index % availableShapes.length],
+          text: option,
+          shapeSize: 'h-[23px]',
+          isRadio: true,
+          id: this.makeid(8),
+          value: option,
+          answer: '',
+          showRemove: false,
         }
-      })
-
-      questionData.content = question.question
-    }
-
-    if (question.data.type == 'fillInBlanks') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
-        }
-      })
-    }
-
-    if (question.data.type == 'dragAnswers') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
-        }
+        questionData.options[index].value = option
+        // clear answers
+        questionData.options[index].answer = ''
       })
     }
 
     if (question.data.type == 'sequence') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
+      question.data.answers.forEach((item, index) => {
+        questionData.options[index] ??= {
+          shape: availableShapes[index % availableShapes.length],
+          text: `Enter word/sentence ${index + 1}`,
+          shapeSize: 'h-[23px]',
+          isRadio: false,
+          id: '',
+          value: item,
+          answer: item,
+          showRemove: false,
         }
-      })
-
-      question.data.answers?.forEach((item, index) => {
         questionData.options[index].value = item
         questionData.options[index].answer = item
       })
-
-      questionData.content = question.question
     }
 
     if (question.data.type == 'match') {
-      questionData.settings.forEach((setting) => {
-        if (setting.type == 'time-limit') {
-          setting.value =
-            Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
+      question.data.set.forEach((item, index) => {
+        questionData.options[index] ??= {
+          shape: availableShapes[index % availableShapes.length],
+          text: `Enter word/sentence ${index + 1}`,
+          shapeSize: 'h-[23px]',
+          isRadio: false,
+          id: '',
+          value: item.q,
+          answer: item.q,
+          showRemove: false,
         }
-      })
 
-      question.data.set?.forEach((item, index) => {
+        questionData.match[index] ??= {
+          shape: availableShapes[index % availableShapes.length],
+          text: "Enter match",
+          shapeSize: 'h-[23px]',
+          isRadio: false,
+          id: '',
+          value: item.a,
+          answer: item.a,
+          showRemove: false,
+        }
+
         questionData.options[index].value = item.q
         questionData.options[index].answer = item.q
 
         questionData.match[index].value = item.a
         questionData.match[index].answer = item.a
       })
-
-      question.data.answers?.forEach((item, index) => {
-        questionData.match[index].value = item
-        questionData.match[index].answer = item
-      })
-      questionData.content = question.question
     }
 
     if (
@@ -1174,12 +1132,6 @@ export default class Study extends Common {
         .split('}')
 
       const answers = question.data.answers
-        ? JSON.parse(JSON.stringify(question.data.answers))
-        : []
-
-      questionData.content = question.question
-
-      questionData.data.length = 0
 
       questionContent?.forEach((item) => {
         if (item.trim()) {
