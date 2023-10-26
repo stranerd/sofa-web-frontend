@@ -42,6 +42,7 @@
           :borderColor="'border-transparent'"
           :options="allTopics"
           :update-value="courseSettingForm.topic"
+          :can-use-custom="true"
           v-model="courseSettingForm.topic"
         />
 

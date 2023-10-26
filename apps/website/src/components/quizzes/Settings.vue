@@ -41,6 +41,7 @@
           :autoComplete="true"
           :borderColor="'border-transparent'"
           :options="allTopics"
+          :can-use-custom="true"
           v-model="quizSettingsForm.topic"
         />
       </div>
