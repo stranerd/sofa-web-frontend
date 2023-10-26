@@ -41,8 +41,22 @@
           :autoComplete="true"
           :borderColor="'border-transparent'"
           :options="allTopics"
+          v-if="false"
           v-model="quizSettingsForm.topic"
         />
+
+        <sofa-text-field
+            :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            :padding="'md:!py-4 md:!px-4 px-3 py-3'"
+            type="text"
+            :name="'Topic'"
+            ref="topic"
+            v-model="quizSettingsForm.topic"
+            :placeholder="'Topic'"
+            :borderColor="'border-transparent'"
+            :updateValue="quizSettingsForm.topic"
+            :rules="[Logic.Form.RequiredRule]"
+          />
 
         <sofa-select
           :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
