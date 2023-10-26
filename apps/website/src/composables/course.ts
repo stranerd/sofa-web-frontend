@@ -1,4 +1,3 @@
-import { trim } from 'lodash'
 import { Logic } from 'sofa-logic'
 import { SelectOption } from 'sofa-logic/src/logic/types/common'
 import {
@@ -119,11 +118,11 @@ const updateCourse = (formComp: any) => {
       currency: 'NGN',
     },
     tags: courseSettingForm.tags
-      .filter((item) => item != '')
       .concat(
-        ...courseSettingForm.tagString.split(',').map((item) => trim(item)),
+        ...courseSettingForm.tagString.split(',')
+          .map((item) => item.trim()),
       )
-      .filter((item) => item != ''),
+      .filter(Boolean),
     title: courseSettingForm.title,
     topic: courseSettingForm.topic,
     photo: courseSettingForm.photo,

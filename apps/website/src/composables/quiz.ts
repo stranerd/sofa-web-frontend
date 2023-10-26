@@ -1,4 +1,3 @@
-import { trim } from 'lodash'
 import { Logic } from 'sofa-logic'
 import { QuizQuestion } from 'sofa-logic/src/logic/types/domains/study'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
@@ -128,13 +127,11 @@ const updateQuiz = (formComp: any) => {
   Logic.Study.UpdateQuizForm = {
     description: quizSettingsForm.description,
     tags: quizSettingsForm.tags
-      .filter((item) => item != '')
       .concat(
-        ...quizSettingsForm.tagString
-          .split(',')
-          .map((item) => trim(item))
-          .filter((item) => item != ''),
-      ),
+        ...quizSettingsForm.tagString.split(',')
+          .map((item) => item.trim()),
+      )
+      .filter(Boolean),
     title: quizSettingsForm.title,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
