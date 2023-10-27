@@ -3,11 +3,11 @@ module.exports = {
 	runtimeCompiler: true,
 	css: {
 		loaderOptions: {
-			sass: {
+			/* sass: {
 				additionalData: `
          @import '@/application/assets/styles/global.scss';
         `
-			}
+			} */
 		}
 	},
 

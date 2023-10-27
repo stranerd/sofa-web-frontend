@@ -93,7 +93,6 @@
           :rules="[FormValidations.RequiredRule]"
           v-if="UserProfile"
           v-model="updateProfileForm.description"
-          :updateValue="UserProfile.bio.description"
         >
           <template v-slot:title> Bio </template>
         </sofa-textarea>

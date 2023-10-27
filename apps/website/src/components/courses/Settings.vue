@@ -27,7 +27,6 @@
           :placeholder="'Description'"
           :richEditor="false"
           ref="description"
-          :update-value="courseSettingForm.description"
           v-model="courseSettingForm.description"
         />
 

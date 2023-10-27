@@ -1,3 +1,5 @@
+import 'katex/dist/katex.min'
+
 import SofaButton from './SofaButton'
 import SofaIcon from './SofaIcon'
 import SofaImageLoader from './SofaImageLoader'

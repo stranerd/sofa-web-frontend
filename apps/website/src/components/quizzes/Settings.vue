@@ -28,7 +28,6 @@
           :richEditor="false"
           ref="description"
           v-model="quizSettingsForm.description"
-          :updateValue="quizSettingsForm.description"
         />
 
         <sofa-select

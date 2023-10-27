@@ -44,7 +44,6 @@
         :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
         :placeholder="'Let us know how we can help'"
         :richEditor="false"
-        :update-value="message"
         v-model="message"
       />
 

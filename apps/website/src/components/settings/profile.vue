@@ -70,7 +70,6 @@
         :placeholder="'Bio'"
         :richEditor="false"
         v-model="updateProfileForm.description"
-        :updateValue="UserProfile.bio.description"
       />
     </div>
 

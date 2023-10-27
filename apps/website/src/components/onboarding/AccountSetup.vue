@@ -58,8 +58,7 @@
           :placeholder="currentAccountType != 'organization'
               ? 'Bio'
               : 'About the organization'
-            " :richEditor="false" v-model="updateProfileForm.description"
-          :update-value="updateProfileForm.description" />
+            " :richEditor="false" v-model="updateProfileForm.description" />
 
         <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'organization Code'" ref="organization_code"

@@ -19,20 +19,15 @@
   },
   "main": "src/index.ts",
   "dependencies": {
-    "@editorjs/checklist": "^1.4.0",
-    "@editorjs/editorjs": "^2.26.5",
-    "@editorjs/embed": "^2.5.3",
-    "@editorjs/header": "^2.7.0",
-    "@editorjs/list": "^1.8.0",
-    "@editorjs/quote": "^2.5.0",
-    "@editorjs/simple-image": "^1.5.1",
     "@vue/compiler-sfc": "^3.2.45",
     "chart.js": "^4.4.0",
     "gsap": "^3.12.2",
+    "katex": "^0.16.9",
     "swiper": "^8.4.2",
     "video.js": "^8.3.0",
     "vue": "^3.2.21",
     "vue-loader": "^17.0.1",
+    "vue3-editor": "^0.1.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {

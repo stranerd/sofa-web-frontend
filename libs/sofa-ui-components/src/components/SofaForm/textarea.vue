@@ -3,39 +3,48 @@
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>
-    <div
-      v-if="richEditor"
-      :class="`w-full h-auto lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle}  overflow-y-auto`"
-      :id="`textarea${tabIndex}`"
-    ></div>
-    <textarea
-      v-else
-      v-model="valueContent"
-      :placeholder="placeholder"
-      :class="`w-full !min-h-[100px] px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`"
-    >
+    <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`"
+      :disabled="disabled"
+      :style="`min-height: calc(${rows}em)`"
+      :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
+      :placeholder="placeholder" />
+    <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled"
+      :class="`w-full px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
   </div>
 </template>
 <script lang="ts">
-import SofaNormalText from "../SofaTypography/normalText.vue";
-import { defineComponent, onMounted, ref, toRef, watch } from "vue";
-import EditorJS from "@editorjs/editorjs";
-import Header from "@editorjs/header";
-import SimpleImage from "@editorjs/simple-image";
-import Checklist from "@editorjs/checklist";
-import List from "@editorjs/list";
-import Embed from "@editorjs/embed";
-import Quote from "@editorjs/quote";
+import { computed, defineComponent } from "vue"
+import { VueEditor } from 'vue3-editor'
+import SofaNormalText from "../SofaTypography/normalText.vue"
+
+const toolbar = [
+  [{ header: [2, 3, 4, 5, false] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  [{ script: 'sub' }, { script: 'super' }],
+  ['code-block'],
+  ['clean']
+]
 
 export default defineComponent({
   components: {
     SofaNormalText,
+    VueEditor,
   },
   props: {
     modelValue: {
       type: String,
       required: false,
+    },
+    rows: {
+      type: Number,
+      required: false,
+      default: 8,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     hasTitle: {
       type: Boolean,
@@ -67,171 +76,130 @@ export default defineComponent({
   },
   name: "SofaTextarea",
   emits: ["update:modelValue"],
-  setup(props, context) {
-    const tabIndex = Math.random();
+  setup (props, context) {
+    const tabIndex = Math.random()
 
-    const editor = ref<EditorJS>();
-
-    const contentUpdated = ref(false);
-
-    const valueContent = ref("");
-
-    watch(valueContent, () => {
-      if (editor.value && props.richEditor) {
-        editor.value?.isReady.then((value) => {
-          if (valueContent.value) {
-            const contentData = JSON.parse(valueContent.value);
-
-            if (contentData.blocks.length == 0) {
-              contentData.blocks[0] = {
-                data: {
-                  text: "",
-                },
-                id: "Z7IKqnnfme",
-                type: "paragraph",
-              };
-            }
-            editor.value?.render(contentData);
-          } else {
-            editor.value?.render({
-              time: 1550476186479,
-              blocks: [
-                {
-                  data: {
-                    text: "",
-                  },
-                  id: "Z7IKqnnfme",
-                  type: "paragraph",
-                },
-              ],
-              version: "2.26.5",
-            });
-          }
-        });
+    const comp = computed({
+      get: () => props.modelValue,
+      set: (ev: string) => {
+        context.emit('update:modelValue', ev)
       }
-    });
-
-    const updateValueRef = toRef(props, "updateValue");
-
-    watch(updateValueRef, () => {
-      valueContent.value = props.updateValue;
-    });
-
-    watch(props, () => {
-      if (props.richEditor) {
-        valueContent.value = props.updateValue;
-      } else {
-        if (props.updateValue && !contentUpdated.value) {
-          valueContent.value = props.updateValue;
-          contentUpdated.value = true;
-        }
-      }
-    });
-
-    onMounted(() => {
-      if (props.richEditor && editor.value == undefined) {
-        let data: any = { time: 1550476186479, blocks: [], version: "2.26.5" };
-        // if (props.modelValue) {
-        //   valueContent.value = JSON.parse(props.modelValue);
-        //   data = valueContent.value;
-        // }
-
-        let tools: any = {};
-
-        if (props.toolsToUse) {
-          const allTools = props.toolsToUse;
-
-          if (allTools.includes("header")) {
-            tools["header"] = {
-              class: Header,
-              inlineToolbar: true,
-              config: {
-                placeholder: "Header name...",
-                levels: [1, 2, 3, 4, 5, 6],
-                defaultLevel: 4,
-              },
-            };
-          }
-
-          if (allTools.includes("image")) {
-            tools["image"] = SimpleImage;
-          }
-
-          if (allTools.includes("list")) {
-            tools["list"] = {
-              class: List,
-              inlineToolbar: true,
-              config: {
-                defaultStyle: "unordered",
-              },
-            };
-          }
-
-          if (allTools.includes("checklist")) {
-            tools["checklist"] = {
-              class: Checklist,
-              inlineToolbar: true,
-            };
-          }
-
-          if (allTools.includes("embed")) {
-            tools["embed"] = Embed;
-          }
-
-          if (allTools.includes("quote")) {
-            tools["quote"] = {
-              class: Quote,
-              inlineToolbar: true,
-              shortcut: "CMD+SHIFT+O",
-              config: {
-                quotePlaceholder: "Enter a quote",
-                captionPlaceholder: "Quote's author",
-              },
-            };
-          }
-        }
-
-        editor.value = new EditorJS({
-          holder: `textarea${tabIndex}`,
-          tools,
-          placeholder: props.placeholder,
-          onChange: () => {
-            editor.value
-              ?.save()
-              .then((outputData) => {
-                context.emit("update:modelValue", JSON.stringify(outputData));
-              })
-              .catch((error) => {
-                console.log("Saving failed: ", error);
-              });
-          },
-          data,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          logLevel: "ERROR",
-        });
-      } else {
-        if (props.modelValue) {
-          valueContent.value = props.modelValue;
-        }
-      }
-    });
-
-    watch(valueContent, () => {
-      if (!props.richEditor) {
-        context.emit("update:modelValue", valueContent.value);
-      }
-    });
-
-    const emptyValue = () => {
-      valueContent.value = "";
-    };
+    })
 
     return {
-      valueContent,
+      comp,
       tabIndex,
-      emptyValue,
-    };
+      toolbar,
+    }
   },
-});
+})
 </script>
+
+
+<style lang="scss">
+.quillWrapper {
+  background: transparent;
+  // min-height: 320px;
+  border-radius: 0.5rem;
+  color: inherit;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-family: inherit !important;
+  font-size: inherit !important;
+
+  .ql-container {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    flex: 1;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .ql-editor {
+      flex: 1;
+    }
+  }
+
+  .ql-editor.ql-blank::before {
+    color: inherit;
+  }
+
+  .ql-toolbar {
+    display: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    font-family: inherit !important;
+    font-size: inherit !important;
+
+    // padding: 4px 0 !important;
+
+    .ql-formats {
+      display: flex;
+
+      // padding: 8px;
+      margin: 0 !important;
+
+      .ql-expanded {
+        position: static;
+
+        .ql-picker-options {
+          min-width: 0;
+          top: 0;
+          left: 0;
+          position: absolute;
+        }
+      }
+    }
+
+    .ql-formats + .ql-formats {
+      // border-left: 1px solid red;
+    }
+  }
+}
+
+.ql-toolbar.ql-snow {
+  // border: 1px solid red !important;
+}
+
+.ql-container.ql-snow {
+  border: 0 !important;
+}
+
+.ql-editor {
+  padding: 0;
+  background: transparent;
+  // border: 1px solid $color-itemBg;
+  border-radius: 0.5rem;
+  transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  min-height: unset;
+}
+
+.ql-editor:focus {
+  outline: 0;
+
+  // border: 0px solid $color-info;
+  // box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.is-valid .ql-editor:focus {
+  // border: 0px solid $color-success;
+  // box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.is-invalid .ql-editor:focus {
+  // border: 0px solid $color-danger;
+  // box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+.ql-editor.ql-blank::before {
+  color: inherit;
+  opacity: 0.35;
+  font-style: normal;
+}
+</style>

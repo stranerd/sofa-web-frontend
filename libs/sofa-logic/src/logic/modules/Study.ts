@@ -1006,6 +1006,7 @@ export default class Study extends Common {
       : ''
     questionData.timeLimit = question.timeLimit
     questionData.content = question.question
+    questionData.data ??= []
 
     questionData.settings.forEach((setting) => {
       if (setting.type == 'time-limit') {

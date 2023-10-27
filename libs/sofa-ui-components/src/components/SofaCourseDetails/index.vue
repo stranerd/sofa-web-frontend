@@ -89,7 +89,6 @@
           :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'"
           :richEditor="false"
-          :updateValue="dataReactive.description"
           v-model="dataReactive.description"
         />
       </template>
@@ -116,7 +115,6 @@
           :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'"
           :richEditor="false"
-          :updateValue="dataReactive.description"
           v-model="dataReactive.description"
         />
       </template>
@@ -144,7 +142,6 @@
           :placeholder="'Description'"
           :richEditor="false"
           v-model="dataReactive.description"
-          :updateValue="dataReactive.description"
         />
       </template>
       <div
