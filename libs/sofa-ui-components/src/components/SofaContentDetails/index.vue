@@ -29,7 +29,7 @@
               : 'mdlg:!w-[67%] mdlg:!pl-[33%]'
             }`">
           <div class="w-full flex flex-row items-center justify-between">
-            <sofa-header-text>{{ content.title }}</sofa-header-text>
+            <sofa-header-text :content="content.title" />
 
             <div class="mdlg:!flex flex-row items-center justify-end space-x-4 hidden">
               <sofa-icon :name="'flag'" :customClass="'h-[16px] cursor-pointer '" @click="actions.report()" />

@@ -20,12 +20,8 @@
         <div
           class="w-full hidden flex-col space-y-3 justify-center items-center mdlg:!flex"
         >
-          <sofa-header-text :customClass="'text-xl'">
-            {{ title }}
-          </sofa-header-text>
-          <sofa-normal-text>
-            {{ subTitle }}
-          </sofa-normal-text>
+          <sofa-header-text :customClass="'text-xl'" :content="title" />
+          <sofa-normal-text :content="subTitle" />
         </div>
 
         <div

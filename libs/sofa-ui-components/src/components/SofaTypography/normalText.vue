@@ -1,25 +1,13 @@
 <template>
-  <span
-    :class="` flex flex-row items-center
-  ${customClass} ${color}
-  ${size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : ''}
-  ${size == 'small' ? ' text-xs' : ''}`"
-    v-if="!isHtml"
-  >
-    <slot />
-  </span>
-  <span
-    v-else
-    :class="` flex flex-row items-center whitespace-pre-wrap
-  ${customClass} ${color}
-  ${size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : ''}
-  ${size == 'small' ? ' text-xs' : ''}`"
-    v-html="content"
-  >
+  <span :class="`flex flex-row items-center body ${customClass} ${color}
+      ${size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : ''}
+      ${size == 'small' ? ' text-xs' : ''}`">
+    <span v-if="content" v-html="content" />
+    <slot v-else />
   </span>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 export default defineComponent({
   props: {
     size: {
@@ -44,5 +32,29 @@ export default defineComponent({
     },
   },
   name: "RoofNormalText",
-});
+})
 </script>
+
+<style lang="scss" scoped>
+.body {
+  font-family: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  p {
+    margin-bottom: 0.25rem;
+  }
+
+  & > p:last-child {
+    margin-bottom: 0;
+  }
+
+  * {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+</style>

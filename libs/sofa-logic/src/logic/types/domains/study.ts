@@ -143,8 +143,8 @@ export interface QuizQuestion {
   info: string
   question: string
   duration: string
-  answer?: String
-  userAnswer?: String
+  answer?: string
+  userAnswer?: string
   id: string
   timeLimit: number
   currentTime: number

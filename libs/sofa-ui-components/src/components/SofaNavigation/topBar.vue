@@ -131,9 +131,7 @@
           :name="'back-arrow'"
           @click="Logic.Common.goBack()"
         />
-        <sofa-header-text :customClass="'!font-bold py-4'">
-          {{ title }}
-        </sofa-header-text>
+        <sofa-header-text :customClass="'!font-bold py-4'" :content="title" />
         <div class="flex flex-row space-x-2 items-center" v-if="badges.length">
           <sofa-badge
             :color="item.color"

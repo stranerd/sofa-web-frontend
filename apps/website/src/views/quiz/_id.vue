@@ -358,11 +358,9 @@
             <div
               class="w-full flex flex-row items-center justify-center py-5 bg-white"
             >
-              <sofa-header-text
+              <sofa-header-text :content="SingleQuiz?.title ?? 'New test'"
                 :customClass="'!font-bold md:!text-2xl text-lg'"
-              >
-                {{ SingleQuiz?.title || "New test" }}
-              </sofa-header-text>
+              />
             </div>
 
             <div
@@ -400,14 +398,10 @@
                     }}
                   </sofa-normal-text>
 
-                  <sofa-header-text
+                  <sofa-header-text :content="SingleQuiz?.title ?? 'Click on Start to begin'"
                     :customClass="'!text-center !font-extrabold'"
                     size="xl"
-                  >
-                    {{
-                      SingleQuiz ? SingleQuiz?.title : "Click on Start to begin"
-                    }}
-                  </sofa-header-text>
+                  />
 
                   <div
                     class="w-full flex flex-row items-center justify-center space-x-4"
@@ -446,12 +440,10 @@
                   <div
                     class="w-full flex flex-row items-center justify-between"
                   >
-                    <sofa-header-text
+                    <sofa-header-text :content="SingleQuiz?.title"
                       :size="'xl'"
                       :customClass="'text-left !line-clamp-1'"
-                    >
-                      {{ SingleQuiz?.title }}
-                    </sofa-header-text>
+                    />
                     <div class="flex flex-row space-x-3 items-center">
                       <sofa-icon
                         :customClass="'h-[16px] cursor-pointer'"
@@ -653,10 +645,9 @@
                         >
 
                         <div class="flex flex-col space-y-1">
-                          <sofa-header-text
+                          <sofa-header-text :content="pieLabel"
                             :customClass="'!font-bold md:!text-2xl text-lg !text-white'"
-                            >{{ pieLabel }}</sofa-header-text
-                          >
+                          />
                           <sofa-normal-text :color="'text-white'"
                             >{{
                               SingleTest.scores[Logic.Auth.AuthUser.id] / 10
@@ -854,12 +845,8 @@
           <div
             class="w-full hidden flex-col space-y-2 justify-center items-center md:flex"
           >
-            <sofa-header-text :customClass="'text-xl'">{{
-              infoModalData.title
-            }}</sofa-header-text>
-            <sofa-normal-text v-if="infoModalData.sub"
-              >{{ infoModalData.sub }}
-            </sofa-normal-text>
+            <sofa-header-text :customClass="'text-xl'" :content="infoModalData.title" />
+            <sofa-normal-text v-if="infoModalData.sub" :content="infoModalData.sub" />
           </div>
 
           <div

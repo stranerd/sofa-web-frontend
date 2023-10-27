@@ -24,12 +24,8 @@
             <sofa-icon :name="'success-modal-icon'" :customClass="'h-[39px]'" />
           </div>
 
-          <sofa-header-text :customClass="'text-xl'">
-            {{ title }}
-          </sofa-header-text>
-          <sofa-normal-text :color="'text-[#78828C]'">
-            {{ subTitle }}
-          </sofa-normal-text>
+          <sofa-header-text :customClass="'text-xl'" :content="title" />
+          <sofa-normal-text :color="'text-[#78828C]'" :content="subTitle" />
         </div>
 
         <div

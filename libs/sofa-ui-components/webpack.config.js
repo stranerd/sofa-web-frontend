@@ -42,6 +42,10 @@ const config = {
 				test: /\.css$/i,
 				use: ["style-loader", "css-loader"],
 			},
+			{
+				test: /\.scss$/,
+				use: ['style-loader', 'css-loader', 'sass-loader']
+			},
 			// Add your rules for custom modules here
 			// Learn more about loaders from https://webpack.js.org/loaders/
 		],

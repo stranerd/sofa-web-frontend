@@ -28,9 +28,7 @@
             v-for="(option, index) in settingOptions"
             :key="index"
           >
-            <sofa-header-text :size="'xl'" :customClass="'text-left px-2'">
-              {{ option.title }}
-            </sofa-header-text>
+            <sofa-header-text :size="'xl'" :customClass="'text-left px-2'" :content="option.title" />
 
             <div class="w-full flex flex-col items-start space-y-1">
               <template

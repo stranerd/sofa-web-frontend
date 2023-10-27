@@ -3,8 +3,7 @@
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>
-    <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`"
-      :disabled="disabled"
+    <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`" :disabled="disabled"
       :style="`min-height: calc(${rows}em)`"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
       :placeholder="placeholder" />
@@ -154,15 +153,7 @@ export default defineComponent({
         }
       }
     }
-
-    .ql-formats + .ql-formats {
-      // border-left: 1px solid red;
-    }
   }
-}
-
-.ql-toolbar.ql-snow {
-  // border: 1px solid red !important;
 }
 
 .ql-container.ql-snow {
@@ -185,16 +176,6 @@ export default defineComponent({
 
   // border: 0px solid $color-info;
   // box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.is-valid .ql-editor:focus {
-  // border: 0px solid $color-success;
-  // box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
-}
-
-.is-invalid .ql-editor:focus {
-  // border: 0px solid $color-danger;
-  // box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
 }
 
 .ql-editor.ql-blank::before {

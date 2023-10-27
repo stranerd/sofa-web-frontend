@@ -10,14 +10,13 @@
       class="w-full flex flex-col space-y-2 justify-center items-center py-2"
     >
       <sofa-header-text
-        :color="'text-white'"
+        :color="'text-white'" :content="title"
         :customClass="`!font-semibold ${titleStyle}`"
-        >{{ title }}</sofa-header-text
-      >
+        />
       <sofa-normal-text
-        :color="'text-white'"
+        :color="'text-white'" :content="subTitle"
         :custom-class="'w-full flex !font-lighter flex-row items-center text-center justify-center '"
-        >{{ subTitle }}</sofa-normal-text
+        />
       >
     </div>
     <sofa-button

@@ -29,9 +29,7 @@
     </div>
 
     <div class="w-full flex flex-col" v-else>
-      <sofa-normal-text :customClass="'text-left'">
-        {{ explanation }}
-      </sofa-normal-text>
+      <sofa-normal-text :customClass="'text-left'" :content="explanation" />
     </div>
     <div
       class="w-full flex mdlg:!flex-row flex-col items-center justify-between mdlg:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0"
