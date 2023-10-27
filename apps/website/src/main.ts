@@ -1,15 +1,15 @@
-import { createApp } from 'vue/dist/vue.esm-bundler.js'
-import App from './App.vue'
-import { createRouter, createWebHistory, useRoute, useRouter } from 'vue-router'
-import routes from './router/routes'
-import { createMetaManager } from 'vue-meta'
 import { Logic } from 'sofa-logic'
 import { SetFrontendLogic } from 'sofa-ui-components'
+import { createMetaManager } from 'vue-meta'
+import { createRouter, createWebHistory, useRoute, useRouter } from 'vue-router'
+import { createApp } from 'vue/dist/vue.esm-bundler.js'
+import App from './App.vue'
+import routes from './router/routes'
 
+import AuthLayout from './layouts/Auth.vue'
 import DashboardLayout from './layouts/Dashboard.vue'
 import ExpandedLayout from './layouts/Expanded.vue'
 import SubPageLayout from './layouts/SubPage.vue'
-import AuthLayout from './layouts/Auth.vue'
 
 import VueAppleLogin from 'vue-apple-login'
 import vue3GoogleLogin from 'vue3-google-login'
@@ -20,8 +20,8 @@ import 'sofa-ui-components/dist/library.min.css'
 // You can disable this if you dont want TailwindCss
 import './assets/app.css'
 
-import { store, key } from './store'
 import { AuthClientIDs } from './common/constants'
+import { key, store } from './store'
 
 const router = Promise.all(routes).then((routes) => {
   const router = createRouter({
@@ -30,11 +30,7 @@ const router = Promise.all(routes).then((routes) => {
   })
 
   router.beforeEach((to, from, next) => {
-    const toRouter: any = to
-    const fromRouter: any = from
-    Logic.Common.preFetchRouteData(toRouter, next, fromRouter).then(() => {
-      return
-    })
+    Logic.Common.preFetchRouteData(to, from, next)
   })
 
   return router

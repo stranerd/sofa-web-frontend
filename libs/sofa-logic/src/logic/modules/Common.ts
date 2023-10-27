@@ -558,8 +558,8 @@ export default class Common {
 
   public preFetchRouteData = async (
     routeTo: RouteLocationNormalized,
+    routeFrom: RouteLocationNormalized,
     next: NavigationGuardNext,
-    _routeFrom: RouteLocationNormalized,
   ) => {
     const allActions: Promise<any>[] = []
     if (this.loaderSetup.loading) {

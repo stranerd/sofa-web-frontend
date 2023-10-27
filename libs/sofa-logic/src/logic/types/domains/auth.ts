@@ -27,6 +27,7 @@ interface AuthUser extends User {
     isAdmin: boolean
     isSuperAdmin: boolean
     isVerified: boolean
+    isSubscribed: boolean
   }
   lastSignedInAt: number
   signedUpAt: number
