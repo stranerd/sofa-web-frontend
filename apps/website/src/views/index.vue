@@ -417,7 +417,7 @@
               Your students
             </sofa-normal-text>
             <div class="flex flex-row space-x-2 items-center cursor-pointer"
-              @click="Logic.Common.GoToRoute('/settings?tab=students')">
+              @click="Logic.Common.GoToRoute('/settings/students')">
               <sofa-normal-text :custom-class="'!text-grayColor'">
                 Add
               </sofa-normal-text>
@@ -442,7 +442,7 @@
 
               <div class="w-full flex flex-row items-center justify-start">
                 <sofa-normal-text :color="'text-primaryPink'" :custom-class="'cursor-pointer'"
-                  @click="Logic.Common.GoToRoute('/settings?tab=students')">
+                  @click="Logic.Common.GoToRoute('/settings/students')">
                   View all
                 </sofa-normal-text>
               </div>
@@ -450,7 +450,7 @@
           </template>
           <sofa-empty-state v-else :title="'No students'"
             :subTitle="'Your students have free access all contents you create'" :actionLabel="'Add students'" :action="() => {
-              Logic.Common.GoToRoute('/settings?tab=students')
+              Logic.Common.GoToRoute('/settings/students')
             }
               " />
         </template>
