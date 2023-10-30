@@ -129,7 +129,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in studyMaterialsSteps" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -175,7 +175,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in recentChats" :key="index"
               @click="Logic.Common.GoToRoute('/chats/' + item.id)">
               <template v-slot:title>
@@ -206,9 +206,9 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
           <div v-if="homeContents.suggested.length"
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-activity-card v-for="(activity, index) in homeContents.suggested" :key="index" :activity="activity"
               :custom-class="'cursor-pointer'" @click="
                 Logic.Common.GoToRoute(
@@ -250,9 +250,9 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
           <div v-if="homeContents.recent.length"
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-activity-card v-for="(activity, index) in homeContents.recent" :key="index" :activity="activity"
               :custom-class="'cursor-pointer'" @click="
                 Logic.Common.GoToRoute(
@@ -294,9 +294,9 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
           <div v-if="homeContents.my_org.length"
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-activity-card v-for="(activity, index) in homeContents.my_org" :key="index"
               :custom-class="'cursor-pointer'" :activity="activity" @click="
                 Logic.Common.GoToRoute(
