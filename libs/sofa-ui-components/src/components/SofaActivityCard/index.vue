@@ -4,9 +4,9 @@
       }  shadow-custom mdlg:!shadow-none flex ${isWrapped ? 'w-full' : 'flex-row '
       }  items-start gap-3 px-3 py-3 justify-between rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] mdlg:!bg-ligthGray bg-white  ${customClass}`">
     <div :class="`flex mdlg:!flex-row  ${isWrapped
-      ? ' flex-row gap-2'
-      : ' flex-col gap-2 mdlg:!gap-0'
-      } mdlg:gap-3  mdlg:gap-0 items-start w-full `">
+      ? ' flex-row'
+      : ' flex-col'
+      } gap-2 mdlg:gap-3 items-start w-full`">
       <sofa-image-loader :photoUrl="activity.image" :customClass="`mdlg:!h-[115px]  ${isWrapped ? ' h-[100px] w-[150px]' : '  h-[120px] w-full'
         } mdlg:!w-[200px]  rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] relative`">
         <div v-if="activity.progress > 0" :class="`absolute bottom-0 left-0 w-full px-2 rounded-b-[12px] bg-black bg-opacity-50  ${activity.progress < 100 ? 'py-2' : 'py-1'

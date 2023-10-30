@@ -115,15 +115,8 @@ const hasMessage = ref(false)
 const addNewChat = (convoMessage = '') => {
   createCoversation(convoMessage).then((data) => {
     if (data) {
-      if (
-        Logic.Common.mediaQuery() != 'sm' &&
-        Logic.Common.mediaQuery() != 'md'
-      ) {
-        showLoader.value = true
-        selectConversation(data.id)
-      } else {
-        Logic.Common.GoToRoute('/chat/' + data.id)
-      }
+      selectConversation(data.id)
+      Logic.Common.GoToRoute('/chats/' + data.id)
       Logic.Conversations.GetConversations({
         where: [
           {
@@ -282,17 +275,10 @@ const listenToConversation = (id: string) => {
 
 const selectConversation = (convoId: string) => {
   itIsTutorRequest.value = false
-  if (Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm') {
-    showMoreOptions.value = false
-    Logic.Common.GoToRoute('/chat/' + convoId)
-    return
-  }
-
-  if (Logic.Common.route.path != '/chat') {
-    Logic.Common.GoToRoute('/chat')
-    return
-  }
   showMoreOptions.value = false
+  Logic.Common.GoToRoute('/chats/' + convoId)
+  showMoreOptions.value = false
+
   Logic.Common.showLoader({
     loading: true,
     show: false,
@@ -490,15 +476,7 @@ const setConvoFromRoute = (message = '') => {
     addNewChat(message)
   } else {
     if (route.query?.id) {
-      if (
-        Logic.Common.mediaQuery() != 'sm' &&
-        Logic.Common.mediaQuery() != 'md'
-      ) {
-        // showLoader.value = true
-        selectConversation(route.query?.id.toString())
-      } else {
-        Logic.Common.GoToRoute('/chat/' + route.query?.id.toString())
-      }
+      Logic.Common.GoToRoute('/chats/' + route.query?.id.toString())
     } else if (route.query?.message) {
       addNewChat(route.query?.message.toString())
     }
@@ -549,7 +527,7 @@ const acceptOrRejectTutorRequest = (accept: boolean) => {
     } else {
       Logic.Common.hideLoader()
       Logic.Conversations.SingleConversation = undefined
-      Logic.Common.GoToRoute('/chat')
+      Logic.Common.GoToRoute('/chats')
     }
   })
 }
@@ -565,28 +543,23 @@ const endChatSession = (reviewData: { ratings: number; review: string }) => {
     if (data) {
       showRateAndReviewTutor.value = false
       setChatToDefault()
-      if (
-        Logic.Common.mediaQuery() == 'sm' ||
-        Logic.Common.mediaQuery() == 'md'
-      ) {
-        Logic.Common.GoToRoute('/chat')
-      } else {
-        Logic.Conversations.SingleConversation = undefined
-      }
+      Logic.Common.GoToRoute('/chats')
     }
   })
 }
 
 export const newChat = () => {
-	if (Messages.value) Messages.value = undefined
+  if (Messages.value) Messages.value = undefined
+  showMoreOptions.value = false
+  showAddTutor.value = false
+  showEndSession.value = false
+  showDeleteConvo.value = false
+  showRateAndReviewTutor.value = false
+	Logic.Common.GoToRoute("/chats/new")
 
-	if (Logic.Common.mediaQuery() == "md" || Logic.Common.mediaQuery() == "sm") {
-		Logic.Common.GoToRoute("/chat/new")
-	} else {
-		selectedChatData.value.title = "New Chat"
-		Logic.Conversations.SingleConversation = undefined
-		Logic.Conversations.Messages = undefined
-	}
+  selectedChatData.value.title = "New Chat"
+  Logic.Conversations.SingleConversation = undefined
+  Logic.Conversations.Messages = undefined
 }
 
 export {

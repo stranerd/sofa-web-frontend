@@ -4,12 +4,7 @@
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <div class="w-full flex flex-row items-center gap-3">
           <sofa-avatar :size="'84'" :bgColor="'bg-grayColor'"
-            :photoUrl="UserProfile.bio.photo ? UserProfile.bio?.photo.link : ''" @click="
-              Logic.Users.AcceptOrRejectTutorRequest(
-                '64e3c356f7effac4fa134904',
-                true
-              )
-              ">
+            :photoUrl="UserProfile.bio.photo ? UserProfile.bio?.photo.link : ''">
             <sofa-icon :customClass="'h-[45px]'" :name="'user'" />
           </sofa-avatar>
 
@@ -182,7 +177,7 @@
           <div
             class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in recentChats" :key="index"
-              @click="Logic.Common.GoToRoute('/chat?id=' + item.id)">
+              @click="Logic.Common.GoToRoute('/chats/' + item.id)">
               <template v-slot:title>
                 <div class="w-full flex flex-row items-center gap-2">
                   <sofa-normal-text :customClass="'!line-clamp-1 font-bold text-left'">
@@ -397,7 +392,7 @@
             </div>
           </div>
 
-          <sofa-text-field placeholder="What can I do for you?" :padding="'px-3 py-3'" :custom-class="'border-[1px]'"
+          <sofa-text-field placeholder="What can I do for you?" :padding="'p-3'" :custom-class="'border'"
             v-model="newChatMessage">
             <template v-slot:inner-suffix>
               <sofa-icon :name="'send'" :customClass="'h-[19px] cursor-pointer'" @click="startConversation()" />
@@ -470,7 +465,7 @@
           <chat-list-component :extra-style="'pt-0'" />
 
           <div class="w-full">
-            <router-link to="/chat">
+            <router-link to="/chats">
               <sofa-normal-text :color="'text-primaryPink'">See all</sofa-normal-text>
             </router-link>
           </div>
@@ -766,7 +761,7 @@ export default defineComponent({
 
     const startConversation = () => {
       if (newChatMessage.value.length >= 2) {
-        Logic.Common.GoToRoute("/chat?message=" + newChatMessage.value)
+        Logic.Common.GoToRoute("/chats?message=" + newChatMessage.value)
       }
     }
 

@@ -5,8 +5,8 @@
     :badges="topbarOptions.badges"></sofa-top-bar>
   <div
     :class="` ${wrapLayout
-        ? 'mdlg:!fixed pb-5 px-4'
-        : 'fixed mdlg:!fixed hidden px-4 py-4'
+      ? 'mdlg:!fixed pb-5 px-4'
+      : 'fixed mdlg:!fixed hidden px-4 py-4'
       } mdlg:!top-0 mdlg:!pt-[80px] mdlg:!left-0 h-full lg:!w-[22%] mdlg:!w-[25%] mdlg:flex w-full mdlg:!px-5 mdlg:!py-5  flex-col gap-5 overscroll-y-auto scrollbar-hide`">
     <slot name="left-session" />
   </div>
@@ -22,15 +22,15 @@
 
   <div
     :class="` ${wrapLayout
-        ? 'mdlg:!fixed pb-5 px-4'
-        : 'fixed mdlg:!fixed hidden px-4 py-4'
+      ? 'mdlg:!fixed pb-5 px-4'
+      : 'fixed mdlg:!fixed hidden px-4 py-4'
       } mdlg:!top-0 mdlg:!right-0 mdlg:!pt-[80px] h-full lg:w-[22%] mdlg:w-[25%] mdlg:!flex  mdlg:!px-5 mdlg:!py-5 flex-col overflow-y-auto scrollbar-hide gap-5`">
     <slot name="right-session" />
   </div>
   <sofa-bottom-bar :tab-is-active="tabIsActive" :showAddItem="handleShowAddItem" v-if="!hideSmNavigator.bottom" />
   <add-material-modal v-if="showAddItem" :close="() => {
-      showAddItem = false
-    }
+    showAddItem = false
+  }
     " />
 </template>
 
@@ -135,9 +135,9 @@ export default defineComponent({
       },
       {
         name: "Chat",
-        path: "/chat",
+        path: "/chats",
         icon: "chat",
-        routeTag: "chat",
+        routeTag: "chats",
         icon_size: "h-[18px]",
       },
       {

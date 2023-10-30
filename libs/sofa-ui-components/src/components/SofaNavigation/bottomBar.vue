@@ -3,7 +3,7 @@
     <div v-if="tabIsActive('base')" class="w-full flex flex-row items-center justify-end pr-2 mdlg:hidden">
       <span
         class="px-3 py-2 bg-primaryPurple flex flex-row gap-2 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"
-        style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)" @click="Logic.Common.GoToRoute('/chat/new')">
+        style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)" @click="Logic.Common.GoToRoute('/chats/new')">
         <sofa-normal-text :color="'text-white'">
           Ask me anything
         </sofa-normal-text>
@@ -19,9 +19,9 @@
         </span>
       </div>
 
-      <div class="col-span-1 flex flex-col items-center justify-center" @click="Logic.Common.GoToRoute('/chat')">
-        <sofa-icon :name="tabIsActive('chat') ? 'chat-mobile-active' : 'chat-mobile'" :customClass="'h-[30px] pb-2 '" />
-        <span v-if="tabIsActive('chat')" class="w-[8px] h-[4px] bg-primaryPurple rounded-[8px]">
+      <div class="col-span-1 flex flex-col items-center justify-center" @click="Logic.Common.GoToRoute('/chats')">
+        <sofa-icon :name="tabIsActive('chats') ? 'chat-mobile-active' : 'chat-mobile'" :customClass="'h-[30px] pb-2 '" />
+        <span v-if="tabIsActive('chats')" class="w-[8px] h-[4px] bg-primaryPurple rounded-[8px]">
         </span>
       </div>
 

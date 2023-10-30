@@ -109,9 +109,9 @@ export default defineComponent({
       },
       {
         name: "Chat",
-        path: "/chat",
+        path: "/chats",
         icon: "chat",
-        routeTag: "chat",
+        routeTag: "chats",
         icon_size: "h-[18px]",
       },
       {

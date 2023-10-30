@@ -54,27 +54,12 @@ export default defineComponent({
     const showRequests = ref(true)
 
     const selectTutorRequest = (request: ChatListData) => {
-      if (
-        Logic.Common.route.path != "/chat" &&
-        Logic.Common.mediaQuery() != "sm" &&
-        Logic.Common.mediaQuery() != "md"
-      ) {
-        Logic.Common.GoToRoute("/chat")
-        return
-      }
+      context.emit("itemSelected", true)
       itIsTutorRequest.value = true
       request.selected = true
       selectedTutorRequestData.value = request
       selectedChatData.value = request
-
-      context.emit("itemSelected", true)
-
-      if (
-        Logic.Common.mediaQuery() == "sm" ||
-        Logic.Common.mediaQuery() == "md"
-      ) {
-        Logic.Common.GoToRoute(`/chat/empty?requestId=${request.id}`)
-      }
+      Logic.Common.GoToRoute(`/chats/empty?requestId=${request.id}`)
     }
     return {
       itIsNewMessage,

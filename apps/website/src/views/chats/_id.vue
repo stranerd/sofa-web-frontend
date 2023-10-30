@@ -250,7 +250,7 @@ export default defineComponent({
         ignoreProperty: true,
       }
     ],
-    goBackRoute: "/chat",
+    goBackRoute: "/chats",
   },
   name: "ChatsIdPage",
   setup () {
