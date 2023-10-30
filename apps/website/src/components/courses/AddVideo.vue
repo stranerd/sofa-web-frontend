@@ -1,14 +1,9 @@
 <template>
-  <div class="w-full flex flex-col space-y-4">
-    <div class="w-full flex flex-col space-y-4">
-      <div
-        class="bg-primaryPurple custom-border px-4 py-4 flex flex-col space-y-2"
-      >
-        <div
-          class="flex flex-row items-center justify-start space-x-2"
-          v-for="(item, index) in videoUploadSteps"
-          :key="index"
-        >
+  <div class="w-full flex flex-col gap-4">
+    <div class="w-full flex flex-col gap-4">
+      <div class="bg-primaryPurple custom-border px-4 py-4 flex flex-col gap-2">
+        <div class="flex flex-row items-center justify-start gap-2" v-for="(item, index) in videoUploadSteps"
+          :key="index">
           <span class="h-[4px] w-[4px] rounded-full bg-white"> </span>
           <sofa-normal-text :color="'text-white'">
             {{ item }}
@@ -16,17 +11,10 @@
         </div>
       </div>
 
-      <sofa-text-field
-        :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-3 md:!px-3 px-3 py-3'"
-        type="text"
-        :name="'Youtube video link'"
-        ref="video_link"
-        v-model="addVideoForm.link"
-        :placeholder="'Paste link here'"
-        :borderColor="'border-transparent'"
-        :rules="[Logic.Form.RequiredRule]"
-      >
+      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Youtube video link'" ref="video_link"
+        v-model="addVideoForm.link" :placeholder="'Paste link here'" :borderColor="'border-transparent'"
+        :rules="[Logic.Form.RequiredRule]">
         <template v-slot:inner-prefix>
           <sofa-icon :customClass="'h-[15px]'" :name="'youtube'" />
         </template>
@@ -34,22 +22,14 @@
     </div>
 
     <div
-      class="w-full flex mdlg:!flex-row flex-col items-center justify-between mdlg:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0"
-    >
-      <sofa-button
-        :padding="'px-5 py-2'"
-        :bgColor="'bg-white'"
-        :textColor="'text-grayColor'"
-        :customClass="'border-[1px] border-gray-100 hidden mdlg:!inline-block'"
-      >
+      class="w-full flex mdlg:!flex-row flex-col items-center justify-between mdlg:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0">
+      <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
+        :customClass="'border-[1px] border-gray-100 hidden mdlg:!inline-block'">
         Exit
       </sofa-button>
 
       <div class="mdlg:!w-auto w-full flex flex-col">
-        <sofa-button
-          :padding="'px-5 mdlg:!py-2 py-3'"
-          :customClass="'mdlg:!w-auto w-full'"
-        >
+        <sofa-button :padding="'px-5 mdlg:!py-2 py-3'" :customClass="'mdlg:!w-auto w-full'">
           Add
         </sofa-button>
       </div>
@@ -57,15 +37,15 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue"
 import {
   SofaIcon,
   SofaNormalText,
   SofaTextField,
   SofaButton,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import { FormValidations } from "@/composables";
+} from "sofa-ui-components"
+import { Logic } from "sofa-logic"
+import { FormValidations } from "@/composables"
 
 export default defineComponent({
   components: {
@@ -81,18 +61,18 @@ export default defineComponent({
     },
   },
   name: "AddVideo",
-  setup() {
-    const showAddVideo = ref(false);
+  setup () {
+    const showAddVideo = ref(false)
 
     const videoUploadSteps = reactive([
       "Find or post a video on YouTube",
       "Tap share and copy the video link",
       "Paste the link below",
-    ]);
+    ])
 
     const addVideoForm = reactive({
       link: "",
-    });
+    })
 
     return {
       Logic,
@@ -100,7 +80,7 @@ export default defineComponent({
       showAddVideo,
       videoUploadSteps,
       addVideoForm,
-    };
+    }
   },
-});
+})
 </script>

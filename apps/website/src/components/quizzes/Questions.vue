@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col">
-    <div class="flex flex-col w-full space-y-5" v-if="state == 'preview'">
-      <div class="w-full flex flex-col space-y-1 items-center justify-center md:!px-0 px-4">
+    <div class="flex flex-col w-full gap-5" v-if="state == 'preview'">
+      <div class="w-full flex flex-col gap-1 items-center justify-center md:!px-0 px-4">
         <sofa-normal-text :customClass="'!font-bold md:!text-xl text-lg'" :size="''" :content="question.title"
           :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'" />
         <sofa-normal-text :customClass="'md:!text-lg text-xs'" :content="question.question"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="w-full flex flex-row justify-center items-center px-6" v-if="state == 'question'">
-      <div class="flex flex-col lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full space-y-4">
+      <div class="flex flex-col lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full gap-4">
         <div class="w-full flex flex-col border-b-[2px] border-[#E1E6EB] pb-2 justify-start"
           v-if="Logic.Common.mediaQuery() != 'sm'">
           <sofa-header-text :custom-class="'text-left !font-bold'" v-if="mode != 'game' && mode != 'tutor_test'"
@@ -37,7 +37,8 @@
         <div class="w-full flex flex-col justify-start pb-2">
           <template v-if="question.title == 'Multiple choice'">
             <sofa-normal-text :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'">
-              Choose {{ Logic.Common.inWords(question.answer?.split(",").length) }} answer{{ question.answer?.split(",").length > 1 ? "s" : "" }}
+              Choose {{ Logic.Common.inWords(question.answer?.split(",").length) }} answer{{
+                question.answer?.split(",").length > 1 ? "s" : "" }}
             </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Write answer'">
@@ -74,7 +75,7 @@
 
         <!-- Radio -->
 
-        <div class="w-full flex flex-col space-y-4" v-if="question.options.type == 'radio'">
+        <div class="w-full flex flex-col gap-4" v-if="question.options.type == 'radio'">
           <div v-for="(option, index) in question.options.data" :key="index" :class="`w-full flex flex-row items-center cursor-pointer justify-between bg-white rounded-[12px] px-3 py-3 ${optionState(option) == 'hover'
             ? '!bg-[#E2F3FD]  border-[#7DC8FA]'
             : ''
@@ -82,18 +83,17 @@
               ? '!bg-[#E1F5EB] !border-primaryGreen'
               : ''
             }
-                                ${optionState(option) == 'wrong_answer'
+                                                                                                      ${optionState(option) == 'wrong_answer'
               ? '!bg-[#FAEBEB] !border-primaryRed'
               : ''
             }
-                                ${optionState(option) == 'selected'
+                                                                                                      ${optionState(option) == 'selected'
               ? '!bg-[#E2F3FD] !border-primaryBlue  shake'
               : ''
             }
-             border-[#E1E6EB] bg-white space-x-3`" style="border-width: 2px 2px 4px 2px"
-            @mouseleave="option.hover = false" @mouseenter="option.hover = true"
-            @click="setAnswer(option.content[0].label)">
-            <div class="flex-grow flex flex-row space-x-3 items-center">
+             border-[#E1E6EB] bg-white gap-3`" style="border-width: 2px 2px 4px 2px" @mouseleave="option.hover = false"
+            @mouseenter="option.hover = true" @click="setAnswer(option.content[0].label)">
+            <div class="flex-grow flex flex-row gap-3 items-center">
               <sofa-icon :name="`${option.shape}${optionState(option) == 'hover' ? '-blue' : ''
                 }${optionState(option) == 'correct_answer' ? '-green' : ''}${optionState(option) == 'wrong_answer' ? '-red' : ''
                 }`" :custom-class="`${getShapeSize(option.shape)}`" />
@@ -104,11 +104,11 @@
         </div>
 
         <!-- Textfield -->
-        <div class="w-full flex flex-col space-y-4 pt-4" v-if="question.options.type == 'textField'">
+        <div class="w-full flex flex-col gap-4 pt-4" v-if="question.options.type == 'textField'">
           <div v-for="(option, index) in question.options.data" :key="index"
-            class="w-full flex flex-row items-center justify-between rounded-[12px] md:!px-3 md:!py-3 px-3 py-1 border-[#E1E6EB] bg-white space-x-3"
+            class="w-full flex flex-row items-center justify-between rounded-[12px] md:!px-3 md:!py-3 px-3 py-1 border-[#E1E6EB] bg-white gap-3"
             style="border-width: 2px 2px 4px 2px">
-            <div class="flex-grow flex flex-row space-x-3 py-3 items-center">
+            <div class="flex-grow flex flex-row gap-3 py-3 items-center">
               <sofa-textarea :placeholder="option.content[0].label" v-model="question.userAnswer" :rich-editor="false"
                 :text-area-style="`focus:outline-none bg-transparent  !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base`">
               </sofa-textarea>
@@ -117,9 +117,8 @@
         </div>
 
         <!-- Blanks -->
-        <div class="w-full flex flex-col space-y-4 pt-4" v-if="question.options.type == 'blanks'">
-          <div class="w-full flex flex-row md:!space-x-3 space-x-2 gap-2 items-center flex-wrap"
-            v-if="fillInblankAnswers.length">
+        <div class="w-full flex flex-col gap-4 pt-4" v-if="question.options.type == 'blanks'">
+          <div class="w-full flex flex-row md:!gap-3 gap-2 gap-2 items-center flex-wrap" v-if="fillInblankAnswers.length">
             <template v-for="(content, index) in question.options.data[0].content" :key="index">
               <sofa-header-text v-if="content.type == 'text'" :customClass="'!font-bold md:!text-2xl text-base'"
                 :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'" :content="content.label" />
@@ -136,8 +135,8 @@
 
         <!-- Drag and drop -->
 
-        <div class="w-full flex flex-col space-y-4 pt-4 boundary1" v-if="question.options.type == 'drag'">
-          <div class="w-full flex flex-row md:!space-x-3 space-x-2 gap-2 items-center flex-wrap">
+        <div class="w-full flex flex-col gap-4 pt-4 boundary1" v-if="question.options.type == 'drag'">
+          <div class="w-full flex flex-row md:!gap-3 gap-2 gap-2 items-center flex-wrap">
             <template v-for="(content, index) in question.options.data[0].content" :key="index">
               <sofa-header-text v-if="content.type == 'text'" :customClass="'!font-bold md:!text-2xl text-base '"
                 :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'">{{ content.label }}</sofa-header-text>
@@ -155,7 +154,7 @@
               </draggable>
             </template>
 
-            <draggable class="w-full flex flex-row items-center space-x-3 pt-6 md:!h-[90px] h-[40px]"
+            <draggable class="w-full flex flex-row items-center gap-3 pt-6 md:!h-[90px] h-[40px]"
               :list="question.options.data[1].content" item-key="id" :group="{ name: 'drag-and-drop-question' }"
               @end="dropHandler">
               <template #item="{ element, index }">
@@ -170,20 +169,22 @@
         </div>
 
         <!-- Sequence -->
-        <div class="w-full flex flex-col space-y-4 pt-4 boundary1" v-if="question.options.type == 'sequence'">
-          <draggable v-model="sequenceOption" group="sortable1" class="space-y-4" item-key="label">
+        <div class="w-full flex flex-col gap-4 pt-4 boundary1" v-if="question.options.type == 'sequence'">
+          <draggable v-model="sequenceOption" group="sortable1" class="gap-4" item-key="label">
             <template #item="{ element, index }">
-              <div class="w-full flex flex-row items-center space-x-3">
+              <div class="w-full flex flex-row items-center gap-3">
                 <div class="px-6 py-3 rounded-[12px] flex flex-row items-center justify-center bg-white border-[#E1E6EB]"
                   style="border-width: 2px 2px 4px 2px">
-                  <sofa-header-text :content="index + 1" :customClass="' md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row'" />
+                  <sofa-header-text :content="index + 1"
+                    :customClass="' md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row'" />
                 </div>
                 <div
-                  class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
+                  class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white gap-3"
                   style="border-width: 2px 2px 4px 2px">
-                  <div class="flex-grow flex flex-row space-x-3 items-center">
+                  <div class="flex-grow flex flex-row gap-3 items-center">
                     <sofa-header-text
-                      :customClass="' md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row !line-clamp-1'" :content="element.label" />
+                      :customClass="' md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row !line-clamp-1'"
+                      :content="element.label" />
                   </div>
                 </div>
               </div>
@@ -194,32 +195,35 @@
         <!-- Match -->
 
         <div class="w-full grid grid-cols-2 gap-4 pt-4 boundary1" v-if="question.options.type == 'match'">
-          <draggable v-model="question.options.data[0].content" group="sortable2" class="col-span-1 space-y-3"
+          <draggable v-model="question.options.data[0].content" group="sortable2" class="col-span-1 gap-3"
             item-key="label" :disabled="true">
             <template #item="{ element, index }">
-              <div class="w-full flex flex-row items-center space-x-3">
+              <div class="w-full flex flex-row items-center gap-3">
                 <div
-                  class="w-full flex flex-row items-center justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
+                  class="w-full flex flex-row items-center justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white gap-3"
                   style="border-width: 2px 2px 4px 2px">
                   <sofa-icon :name="element.shape" :custom-class="`${matchShapes[index]}`" />
-                  <div class="flex-grow flex flex-row space-x-3 items-center">
-                    <sofa-header-text :customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row !line-clamp-1'" :content="element.label" />
+                  <div class="flex-grow flex flex-row gap-3 items-center">
+                    <sofa-header-text
+                      :customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row !line-clamp-1'"
+                      :content="element.label" />
                   </div>
                 </div>
               </div>
             </template>
           </draggable>
 
-          <draggable v-model="matchOption" group="sortable3" class="col-span-1 space-y-3" item-key="label">
+          <draggable v-model="matchOption" group="sortable3" class="col-span-1 gap-3" item-key="label">
             <template #item="{ element, index }">
-              <div class="w-full flex flex-row items-center space-x-3">
+              <div class="w-full flex flex-row items-center gap-3">
                 <div
-                  class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white space-x-3"
+                  class="w-full flex flex-row items-center cursor-move justify-between rounded-[12px] flex-grow px-4 py-3 border-[#E1E6EB] bg-white gap-3"
                   style="border-width: 2px 2px 4px 2px">
                   <sofa-icon :name="element.shape" :custom-class="`${matchShapes[index]}`" />
-                  <div class="flex-grow flex flex-row space-x-3 items-center">
+                  <div class="flex-grow flex flex-row gap-3 items-center">
                     <sofa-header-text
-                      :customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row !line-clamp-1'" :content="element.label" />
+                      :customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex flex-row !line-clamp-1'"
+                      :content="element.label" />
                   </div>
                 </div>
               </div>
@@ -227,19 +231,19 @@
           </draggable>
         </div>
 
-        <div class="w-full flex flex-col space-y-2 items-start justify-start pt-2" v-if="answerState == 'wrong'">
+        <div class="w-full flex flex-col gap-2 items-start justify-start pt-2" v-if="answerState == 'wrong'">
           <sofa-header-text :size="'xl'">Correct answer</sofa-header-text>
           <sofa-normal-text :content="question.answer" />
         </div>
       </div>
     </div>
 
-    <div class="w-full flex flex-col space-y-3 h-full items-center justify-center" v-if="state == 'completed'">
+    <div class="w-full flex flex-col gap-3 h-full items-center justify-center" v-if="state == 'completed'">
       <template v-if="mode == 'test'">
         <sofa-pie-chart :data="resultData" :cutoutPercentage="'90%'" ref="pieChartRefForTestScore"
           :textStyle="`!text-3xl ${pieChartColor}`">{{ quizResult().percentagePass }}%</sofa-pie-chart>
 
-        <div class="flex flex-col space-y-1">
+        <div class="flex flex-col gap-1">
           <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'">{{
             pieLabel
           }}</sofa-header-text>
@@ -249,7 +253,7 @@
       </template>
 
       <template v-if="mode == 'practice'">
-        <div class="flex flex-col space-y-1">
+        <div class="flex flex-col gap-1">
           <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'">
             Congratulations!</sofa-header-text>
           <sofa-normal-text :color="'text-grayColor'">Your have mastered this quiz</sofa-normal-text>

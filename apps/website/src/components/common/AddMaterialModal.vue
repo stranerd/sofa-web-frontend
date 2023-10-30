@@ -1,56 +1,35 @@
 <template>
   <!-- create item action -->
-  <sofa-modal
-    :close="
-      () => {
-        close ? close() : null;
+  <sofa-modal :close="() => {
+    close ? close() : null
+  }
+    " :can-close="true">
+    <div class="mdlg:!w-[60%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
+      @click.stop="() => {
+        //
       }
-    "
-    :can-close="true"
-  >
-    <div
-      class="mdlg:!w-[60%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
-      @click.stop="
-        () => {
-          //
-        }
-      "
-    >
+        ">
       <div
-        class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center"
-      >
-        <div
-          class="w-full hidden flex-col space-y-2 justify-center items-center md:flex"
-        >
+        class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+        <div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
           <sofa-header-text :customClass="'text-xl'">
             Create study material
           </sofa-header-text>
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4"
-        >
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4">
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             Create study material
           </sofa-normal-text>
-          <sofa-icon
-            :customClass="'h-[19px]'"
-            :name="'circle-close'"
-            @click="close ? close() : null"
-          />
+          <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="close ? close() : null" />
         </div>
 
-        <div class="w-full flex flex-col space-y-3 px-4 py-4">
-          <sofa-icon-card
-            :data="item"
-            v-for="(item, index) in studyMaterialItems"
-            :key="index"
-            @click="
-              item.action();
-              showAddItem = false;
-            "
-            :customClass="'!bg-[#F1F6FA] !w-full !shadow-none'"
-          >
+        <div class="w-full flex flex-col gap-3 px-4 py-4">
+          <sofa-icon-card :data="item" v-for="(item, index) in studyMaterialItems" :key="index" @click="
+            item.action()
+          showAddItem = false;
+          " :customClass="'!bg-[#F1F6FA] !w-full !shadow-none'">
             <template v-slot:title>
               <sofa-normal-text :customClass="'!font-bold'">
                 {{ item.title }}
@@ -63,7 +42,7 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue"
 import {
   SofaModal,
   SofaIcon,
@@ -71,8 +50,8 @@ import {
   SofaHeaderText,
   SofaIconCard,
   Logic,
-} from "sofa-ui-components";
-import { showAddItem } from "@/composables";
+} from "sofa-ui-components"
+import { showAddItem } from "@/composables"
 
 export default defineComponent({
   components: {
@@ -87,7 +66,7 @@ export default defineComponent({
       type: Function,
     },
   },
-  setup() {
+  setup () {
     const studyMaterialItems = ref([
       {
         title: "Create a quiz",
@@ -96,7 +75,7 @@ export default defineComponent({
         icon: "pink-question",
         iconSize: "h-[46px]",
         action: () => {
-          Logic.Common.GoToRoute("/quiz/create");
+          Logic.Common.GoToRoute("/quiz/create")
         },
       },
       {
@@ -106,14 +85,14 @@ export default defineComponent({
         icon: "orange-list",
         iconSize: "h-[46px]",
         action: () => {
-          Logic.Common.GoToRoute("/course/create");
+          Logic.Common.GoToRoute("/course/create")
         },
       },
-    ]);
+    ])
     return {
       studyMaterialItems,
       showAddItem,
-    };
+    }
   },
-});
+})
 </script>

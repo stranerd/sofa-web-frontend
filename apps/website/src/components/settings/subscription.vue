@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full flex flex-col space-y-5 mdlg:!px-0 px-4">
-    <div class="w-full flex flex-col space-y-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+  <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
+    <div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
       <sofa-header-text :size="'xl'" :customClass="'text-left'">
         My subscription
       </sofa-header-text>
@@ -9,8 +9,8 @@
         You have no active subscription
       </sofa-normal-text>
       <template v-else>
-        <div class="w-full flex flex-col space-y-3">
-          <div class="w-full flex flex-col space-y-2 items-start">
+        <div class="w-full flex flex-col gap-3">
+          <div class="w-full flex flex-col gap-2 items-start">
             <sofa-header-text :color="'text-primaryPurple !text-2xl !font-extrabold'">
               {{
                 userWallet.subscription.current.id == "premium-plan"
@@ -19,7 +19,7 @@
               }}
             </sofa-header-text>
 
-            <div class="w-full flex flex-col space-y-1 pb-1">
+            <div class="w-full flex flex-col gap-1 pb-1">
               <sofa-normal-text>
                 Expires
                 {{
@@ -44,7 +44,7 @@
             </div>
 
             <div
-              class="w-full flex flex-row justify-between items-center space-x-4 py-3 pb-1 border-t-[1px] border-lightBorderColor"
+              class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t-[1px] border-lightBorderColor"
               @click="
               autoRenewIsOn ? (autoRenewIsOn = false) : (autoRenewIsOn = true)
                 ">
@@ -60,13 +60,13 @@
 
     <template v-if="!userWallet.subscription.active">
       <div v-if="Logic.Users.getUserType() == 'organization'"
-        class="w-full flex flex-col space-y-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+        class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
         <sofa-header-text :size="'xl'" :customClass="'text-left'">
           Stranerd Suite
         </sofa-header-text>
 
-        <div class="w-full flex flex-col space-y-2">
-          <div class="flex flex-row space-x-2 items-center">
+        <div class="w-full flex flex-col gap-2">
+          <div class="flex flex-row gap-2 items-center">
             <sofa-header-text :customClass="'text-left !text-2xl !font-bold'">
               {{
                 Logic.Common.convertToMoney(
@@ -97,14 +97,14 @@
         </div>
       </div>
 
-      <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom"
+      <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom"
         v-if="Logic.Users.getUserType() == 'student'">
         <sofa-header-text :size="'xl'" :customClass="'text-left w-full pb-2 border-b-[1px] border-[#F1F6FA]'">
           StranerdPlus
         </sofa-header-text>
 
-        <div class="w-full flex flex-col space-y-3">
-          <div :class="`w-full flex-col space-y-1 pb-2 items-start ${index != subscriptionInfo.length - 1
+        <div class="w-full flex flex-col gap-3">
+          <div :class="`w-full flex-col gap-1 pb-2 items-start ${index != subscriptionInfo.length - 1
             ? 'border-b-[1px] border-[#F1F6FA]'
             : ''
             } `" v-for="(info, index) in subscriptionInfo" :key="index">
