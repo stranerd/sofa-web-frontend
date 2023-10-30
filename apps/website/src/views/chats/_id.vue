@@ -41,9 +41,9 @@
     <sofa-modal :close="() => showMoreOptions = false" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
       <div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => showMoreOptions = false">
         <div @click.stop="() => { }"
-          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] space-y-4 relative overflow-y-auto h-full">
+          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
           <div
-            class="w-full flex flex-row items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 space-x-3 py-3 px-4 cursor-pointer"
+            class="w-full flex flex-row items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer"
             @click="newChat()" v-if="Logic.Users.getUserType() == 'student'">
             <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
             <sofa-normal-text :color="'text-primaryPink'">

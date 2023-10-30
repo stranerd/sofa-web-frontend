@@ -1,12 +1,12 @@
 <template>
   <auth-layout>
     <div class="w-full h-full flex-grow flex flex-col justify-start relative md:!px-9 md:!py-5 py-4 px-4">
-      <div class="w-full flex flex-row space-x-4 md:!items-center">
+      <div class="w-full flex flex-row gap-4 md:!items-center">
         <span class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
           <sofa-icon :customClass="'md:!h-[26px] h-[20px] cursor-pointer'" :name="'auth-goback'" />
         </span>
 
-        <div class="w-full flex flex-col md:!justify-center md:!items-center justify-start items-start space-y-1">
+        <div class="w-full flex flex-col md:!justify-center md:!items-center justify-start items-start gap-1">
           <sofa-header-text :customClass="'md:!text-2xl text-lg'">{{
             accountType == "organization"
             ? "Set up your organization"
@@ -17,10 +17,10 @@
         </div>
       </div>
 
-      <div class="h-full flex flex-col items-center space-y-4 justify-center w-full md:!px-10 px-0">
-        <div class="flex flex-col space-y-6 w-full">
+      <div class="h-full flex flex-col items-center gap-4 justify-center w-full md:!px-10 px-0">
+        <div class="flex flex-col gap-6 w-full">
           <template v-if="accountType != 'organization'">
-            <div class="w-full flex flex-col space-y-4">
+            <div class="w-full flex flex-col gap-4">
               <div class="w-full flex flex-col items-center justify-center">
                 <GoogleLogin :callback="onSuccessGoogle" prompt />
               </div>
@@ -45,7 +45,7 @@
             </div> -->
             </div>
 
-            <div class="w-full flex flex-row space-x-3 items-center pt-2">
+            <div class="w-full flex flex-row gap-ems-center pt-2">
               <div class="border-[1px] border-[#E1E6EB] w-full"></div>
               <sofa-normal-text :color="'text-grayColor'" :customClass="'!whitespace-nowrap'">Or use
                 email</sofa-normal-text>
@@ -53,7 +53,7 @@
             </div>
           </template>
 
-          <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col space-y-4">
+          <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
             <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
               :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Organization name'" ref="first_name"
               v-if="accountType == 'organization'" v-model="registerForm.organization_name"
@@ -72,14 +72,14 @@
               ref="password" :rules="[FormValidations.RequiredRule]" v-model="registerForm.password" />
           </sofa-form-wrapper>
 
-          <div class="flex flex-col items-center space-x-2">
-            <sofa-checkbox v-model="termsAccepted">
-              <span class="text-grayColor text-left">
-                I have read and accepted SOFA’s
-                <a class="text-primaryBlue hover:underline" target="_blank" href="#">Terms of Service</a>
-                <span> and </span>
-                <a class="text-primaryBlue hover:underline" target="_blank" href="#">Privacy Policy</a>
-              </span>
+          <div class="flex flex-col items-center gap-
+            <sofa-checkbox v-model=" termsAccepted">
+            <span class="text-grayColor text-left">
+              I have read and accepted SOFA’s
+              <a class="text-primaryBlue hover:underline" target="_blank" href="#">Terms of Service</a>
+              <span> and </span>
+              <a class="text-primaryBlue hover:underline" target="_blank" href="#">Privacy Policy</a>
+            </span>
             </sofa-checkbox>
           </div>
 
@@ -90,7 +90,7 @@
           </div>
         </div>
 
-        <div class="flex flex-row items-center space-x-2 pt-3">
+        <div class="flex flex-row items-center gap--3">
           <sofa-normal-text :color="'text-grayColor'">Have an account?</sofa-normal-text>
           <router-link to="/auth/login"><sofa-normal-text :color="'!text-primaryBlue'">Sign
               in</sofa-normal-text></router-link>

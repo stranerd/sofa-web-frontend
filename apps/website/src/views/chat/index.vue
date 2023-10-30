@@ -2,7 +2,7 @@
   <dashboard-layout>
     <!-- For pending tutor verification -->
     <div
-      class="w-full flex flex-row items-center space-x-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0 mdlg:hidden">
+      class="w-full flex flex-row items-center gap-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0 mdlg:hidden">
       <div class="invisible">Hello</div>
       <sofa-normal-text :customClass="'!font-bold !text-base'">
         Chat</sofa-normal-text>
@@ -36,9 +36,9 @@
 
     <template v-slot:left-session>
       <div
-        class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-[16px] space-y-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin flex flex-col">
+        class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-[16px] gap-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin flex flex-col">
         <div
-          class="w-full flex flex-row items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 space-x-3 py-3 px-3 cursor-pointer"
+          class="w-full flex flex-row items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 py-3 px-3 cursor-pointer"
           @click="newChat()" v-if="Logic.Users.getUserType() == 'student'">
           <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
           <sofa-normal-text :color="'text-primaryPink'">
@@ -111,10 +111,10 @@
 
     <template v-slot:middle-session>
       <div
-        class="w-full mdlg:!shadow-custom relative mdlg:!bg-white bg-transparent mdlg:!rounded-[16px] justify-between mdlg:flex-grow mdlg:h-full flex flex-col space-y-4 mdlg:!space-y-0">
+        class="w-full mdlg:!shadow-custom relative mdlg:!bg-white bg-transparent mdlg:!rounded-[16px] justify-between mdlg:flex-grow mdlg:h-full flex flex-col gap-4 mdlg:!gap-0">
         <div
-          class="w-full mdlg:!flex hidden flex-row px-4 py-4 bg-white rounded-t-[16px] sticky top-0 space-x-3 items-start justify-between border-b-[1px] border-[#E1E6EB]">
-          <div class="flex flex-row items-center space-x-3">
+          class="w-full mdlg:!flex hidden flex-row px-4 py-4 bg-white rounded-t-[16px] sticky top-0 gap-3 items-start justify-between border-b-[1px] border-[#E1E6EB]">
+          <div class="flex flex-row items-center gap-3">
             <sofa-avatar :photoUrl="selectedChatData.photoUrl" :size="'40'" :bgColor="'bg-grayColor'">
               <sofa-icon :customClass="'h-[23px]'" :name="'user'" v-if="!selectedChatData.photoUrl" />
             </sofa-avatar>
@@ -145,7 +145,7 @@
 
         <div class="w-full flex flex-col mdlg:!hidden px-4" v-if="Logic.Users.getUserType() == 'student'">
           <div @click="newChat()"
-            class="w-full rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] flex flex-row space-x-3 items-center justify-start px-4 py-4 bg-primaryPurple">
+            class="w-full rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] flex flex-row gap-3 items-center justify-start px-4 py-4 bg-primaryPurple">
             <sofa-icon :name="'box-add-white'" :custom-class="'h-[25px]'" />
             <sofa-normal-text :color="'text-white '" :custom-class="'text-left !text-sm'">
               New chat
@@ -154,13 +154,13 @@
         </div>
 
         <div
-          class="w-full mdlg:!flex-grow flex flex-col items-start justify-start space-y-2 mdlg:!pl-0 pl-4 mdlg:!pt-0 pt-3 mdlg:!h-[50px] !overflow-y-auto"
+          class="w-full mdlg:!flex-grow flex flex-col items-start justify-start gap-2 mdlg:!pl-0 pl-4 mdlg:!pt-0 pt-3 mdlg:!h-[50px] !overflow-y-auto"
           v-if="Logic.Common.mediaQuery() != 'sm' ||
             (Logic.Common.mediaQuery() == 'sm' &&
               chatList.length == 0 &&
               tutorRequestList.length == 0)
             ">
-          <div class="w-full flex flex-row space-x-2 items-center mdlg:!hidden">
+          <div class="w-full flex flex-row gap-2 items-center mdlg:!hidden">
             <sofa-normal-text :customClass="'!font-bold'">
               Recent chats
             </sofa-normal-text>
@@ -170,9 +170,9 @@
             class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide mdlg:scrollbar-default h-auto mdlg:!pb-4 scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin"
             id="MessagesScrollContainerLg" v-if="!itIsTutorRequest">
             <div v-if="!hasMessage && !itIsNewMessage && !itIsTutorRequest"
-              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-4 flex flex-row space-x-3 mdlg:!space-x-0 py-2 mdlg:!py-0 mdlg:!pt-3 mdlg:!pr-4 pr-4">
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-4 flex flex-row gap-3 mdlg:!gap-0 py-2 mdlg:!py-0 mdlg:!pt-3 mdlg:!pr-4 pr-4">
               <div
-                class="mdlg:!col-span-1 w-[280px] shadow-custom mdlg:!shadow-none mdlg:!w-auto flex flex-col space-y-2 mdlg:!justify-center mdlg:!items-center items-start px-5 py-5 rounded-[16px] mdlg:!bg-fadedPurple bg-white"
+                class="mdlg:!col-span-1 w-[280px] shadow-custom mdlg:!shadow-none mdlg:!w-auto flex flex-col gap-2 mdlg:!justify-center mdlg:!items-center items-start px-5 py-5 rounded-[16px] mdlg:!bg-fadedPurple bg-white"
                 v-for="(content, index) in contentList" :key="index">
                 <sofa-icon :name="content.icon" :customClass="'h-[39px]'" />
                 <sofa-normal-text :customClass="'!font-bold w-full flex flex-row mdlg:!justify-center justify-start'">{{
@@ -183,7 +183,7 @@
               </div>
             </div>
 
-            <div class="hidden mdlg:!flex flex-col space-y-6 px-5 py-5 w-full" v-else>
+            <div class="hidden mdlg:!flex flex-col gap-6 px-5 py-5 w-full" v-else>
               <conversation-messages :Messages="Messages" :ShowLoader="showLoader" :itIsNewMessage="itIsNewMessage" />
             </div>
           </div>
@@ -191,16 +191,16 @@
 
         <!-- Small screen chat list -->
 
-        <div class="w-full flex flex-col mdlg:!hidden px-4 space-y-3 pt-1"
+        <div class="w-full flex flex-col mdlg:!hidden px-4 gap-3 pt-1"
           v-if="chatList.length || tutorRequestList.length">
-          <div class="w-full flex flex-row space-x-2 items-center mdlg:hidden"
+          <div class="w-full flex flex-row gap-2 items-center mdlg:hidden"
             v-if="Logic.Users.getUserType() == 'student'">
             <sofa-normal-text :customClass="'!font-bold'">
               All chats
             </sofa-normal-text>
           </div>
 
-          <div class="w-full flex flex-col space-y-3">
+          <div class="w-full flex flex-col gap-3">
             <chat-list-component :customClass="'!bg-white shadow-custom'" />
           </div>
         </div>
@@ -233,7 +233,7 @@
               </div>
             </div>
           </template>
-          <div class="w-full flex flex-row space-x-2 items-center bg-fadedPurple rounded-[8px] px-1" v-else>
+          <div class="w-full flex flex-row gap-2 items-center bg-fadedPurple rounded-[8px] px-1" v-else>
             <span :contenteditable="true" role="textbox"
               :class="`w-full textarea resize-none !min-h-[48px] text-bodyBlack focus:outline-none !max-h-[80px] overflow-x-hidden bg-transparent rounded-[8px] py-3 px-3 items-start text-left overflow-y-hidden`"
               placeholder="Enter message" id="messageContainer" @input="onInput" @keypress="handleKeyEvent">
@@ -282,16 +282,16 @@
     <template v-slot:right-session>
       <!-- Student POV -->
       <template v-if="Logic.Users.getUserType() == 'student' && UserProfile">
-        <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
+        <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
           v-if="!selectedTutorRequestData || !SingleConversation?.tutor">
-          <div class="w-full flex flex-row items-center space-x-3">
+          <div class="w-full flex flex-row items-center gap-3">
             <div :style="`background-image: url('${UserProfile.ai.photo
                 ? UserProfile.ai.photo.link
                 : '/images/icons/robot.svg'
               }')`"
               class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
-            <div class="flex flex-col space-y-1">
+            <div class="flex flex-col gap-1">
               <sofa-header-text :customClass="'!text-base !font-bold'">{{
                 UserProfile.ai.name || "Dr. Sofa"
               }}</sofa-header-text>
@@ -307,9 +307,9 @@
           </div>
         </div>
 
-        <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
+        <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
           v-if="SingleConversation && !itIsNewMessage">
-          <div class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
+          <div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer"
             v-if="selectedTutorRequestData && SingleConversation?.tutor" @click.stop="
               showEndSession = true
             selectedConvoId = SingleConversation?.id;
@@ -318,7 +318,7 @@
             <sofa-normal-text :color="'text-primaryRed'">
               End tutor session</sofa-normal-text>
           </div>
-          <div class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer">
+          <div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer">
             <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
             <sofa-normal-text :color="'text-primaryRed'" @click.stop="
               showDeleteConvo = true
@@ -329,11 +329,11 @@
         </div>
 
         <template v-if="UserWallet.subscription.data.tutorAidedConversations > 0">
-          <div class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3" v-if="((hasMessage && !selectedTutorRequestData) ||
+          <div class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3" v-if="((hasMessage && !selectedTutorRequestData) ||
               (!SingleConversation?.tutor && !itIsNewMessage)) &&
             SingleConversation
             ">
-            <div class="w-full flex flex-row space-x-2 items-center justify-start">
+            <div class="w-full flex flex-row gap-2 items-center justify-start">
               <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
               <sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
                 Tutor help
@@ -357,8 +357,8 @@
       <!-- Teacher POV -->
       <template v-if="Logic.Users.getUserType() == 'teacher'">
         <div
-          class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4 justify-center items-center">
-          <div class="w-full flex flex-col items-center justify-center space-y-3">
+          class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4 justify-center items-center">
+          <div class="w-full flex flex-col items-center justify-center gap-3">
             <sofa-avatar :size="'180'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
               " :customClass="'!cursor-pointer'" @click="Logic.Common.GoToRoute('/settings')">
               <sofa-icon :customClass="'h-[23px]'" :name="'user'" />

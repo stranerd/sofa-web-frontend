@@ -3,8 +3,8 @@
     title: 'Library',
   }">
     <template v-slot:left-session>
-      <div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 space-y-2">
-        <div :class="`w-full flex flex-row items-center justify-start space-x-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
+      <div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-2">
+        <div :class="`w-full flex flex-row items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
           }`" v-for="(item, index) in libraryTypeList" :key="index" @click="selectedFilter = item.id">
           <sofa-icon :name="item.icon" :custom-class="'h-[17px]'" />
           <sofa-normal-text :custom-class="` ${selectedFilter == item.id ? '!font-bold' : ''}`">
@@ -22,7 +22,7 @@
         </div>
 
         <!-- <div
-          class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer relative"
+          class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer relative"
           @click="addFolder()"
         >
           <sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
@@ -31,7 +31,7 @@
           >
         </div> -->
 
-        <div :class="`w-full flex flex-row items-center justify-start space-x-3 px-3 py-3 relative rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
+        <div :class="`w-full flex flex-row items-center justify-start gap-3 px-3 py-3 relative rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
           }`" v-for="(item, index) in folders" :key="index" @mouseenter="item.hover = true"
           @mouseleave="item.hover = false" @click="!addFolderIsActive ? (selectedFilter = item.id) : null">
           <sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
@@ -52,7 +52,7 @@
           </sofa-normal-text>
 
           <div v-if="item.hover && !item.edit"
-            class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] flex flex-row space-x-2 items-center">
+            class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] flex flex-row gap-2 items-center">
             <sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'" />
             <sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'" @click.stop="
               selectedFolderId = item.id
@@ -67,7 +67,7 @@
           <div class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2">
             <sofa-normal-text :customClass="'!font-bold'">Organizations</sofa-normal-text>
           </div>
-          <div :class="`w-full flex flex-row items-center justify-start space-x-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
+          <div :class="`w-full flex flex-row items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD] cursor-pointer ${selectedFilter == item.id ? 'bg-[#E5F2FD]' : ''
             }`" v-for="(item, index) in allOrganizations" :key="index" @click="selectedFilter = item.id">
             <sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
             <sofa-normal-text :custom-class="` ${selectedFilter == item.id ? '!font-bold' : ''
@@ -80,14 +80,14 @@
     </template>
 
     <template v-slot:middle-session>
-      <div class="w-full flex flex-col space-y-5 mdlg:!pl-3 mdlg:!pr-7">
-        <div class="w-full mdlg:!flex hidden flex-row space-x-2 justify-between items-center" v-if="libraryTypeList.filter((item) => item.id == selectedFilter)[0]
+      <div class="w-full flex flex-col gap-5 mdlg:!pl-3 mdlg:!pr-7">
+        <div class="w-full mdlg:!flex hidden flex-row gap-2 justify-between items-center" v-if="libraryTypeList.filter((item) => item.id == selectedFilter)[0]
           ?.options.length || !allContentCategories.includes(selectedFilter)
           ">
-          <div class="w-full flex flex-row space-x-3 items-center">
+          <div class="w-full flex flex-row gap-3 items-center">
             <template v-if="allContentCategories.includes(selectedFilter)">
               <span :class="`px-6 py-2  ${item.id == selectedItemId ? 'bg-primaryPurple' : 'bg-white'
-                } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `" v-for="(item, index) in libraryTypeList.filter(
+                } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `" v-for="(item, index) in libraryTypeList.filter(
     (item) => item.id == selectedFilter
   )[0].options" :key="index" @click="selectedItemId = item.id">
                 <sofa-normal-text :color="`${item.id == selectedItemId ? 'text-white' : 'text-deepGray'
@@ -98,7 +98,7 @@
               <span :class="`px-6 py-2  ${item.id == selectedFolderFilter
                 ? 'bg-primaryPurple'
                 : 'bg-white'
-                } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `"
+                } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
                 v-for="(item, index) in folderFilterOption" :key="index" @click="selectedFolderFilter = item.id">
                 <sofa-normal-text :color="`${item.id == selectedFolderFilter
                   ? 'text-white'
@@ -109,7 +109,7 @@
           </div>
         </div>
 
-        <div class="w-full mdlg:!flex hidden flex-col space-y-4"
+        <div class="w-full mdlg:!flex hidden flex-col gap-4"
           v-if="selectedFilter != 'in-progress' && selectedFilter != 'results'">
           <template v-if="allContentCategories.includes(selectedFilter)">
             <template v-if="selectedFilter == 'quizzes'">
@@ -125,8 +125,7 @@
                       <div
                         class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col !z-50"
                         v-if="activity.showMore">
-                        <div
-                          class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
+                        <div class="w-full flex flex-row items-center gap-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
                           v-for="(item, index) in moreOptions.filter((o) =>
                             o.show()
                           )" :key="index" @click.stop="item.action()">
@@ -165,8 +164,7 @@
                         class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
                         v-if="activity.showMore && selectedItem?.id === activity.id
                           ">
-                        <div
-                          class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
+                        <div class="w-full flex flex-row items-center gap-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
                           v-for="(item, index) in moreOptions.filter((o) =>
                             o.show()
                           )" :key="index" @click.stop="item.action()">
@@ -209,8 +207,7 @@
                         class="absolute top-[80%] right-0 min-w-[300px] custom-border shadow-custom h-auto !bg-white flex flex-col"
                         v-if="activity.showMore && selectedItem?.id === activity.id
                           ">
-                        <div
-                          class="w-full flex flex-row items-center space-x-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
+                        <div class="w-full flex flex-row items-center gap-2 px-4 py-3 hover:bg-[#E5F2FD] custom-border"
                           v-for="(item, index) in moreOptions.filter((o) =>
                             o.show()
                           )" :key="index" @click.stop="item.action()">
@@ -283,10 +280,10 @@
         </div>
 
         <!-- Content for mobile screens -->
-        <div class="w-full flex flex-col space-y-4 px-4 mdlg:!hidden">
+        <div class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
           <div class="w-full bg-white flex flex-col shadow-custom custom-border px-3">
             <div
-              :class="`w-full flex flex-row items-center justify-start space-x-3 px-3 py-4  border-b-[1px] border-[#F1F6FA]`"
+              :class="`w-full flex flex-row items-center justify-start gap-3 px-3 py-4  border-b-[1px] border-[#F1F6FA]`"
               v-for="(item, index) in libraryTypeList" :key="index" @click="Logic.Common.GoToRoute(item.routePath)">
               <sofa-icon :name="item.icon" :custom-class="'h-[16px]'" />
               <sofa-normal-text>
@@ -295,7 +292,7 @@
             </div>
           </div>
 
-          <div class="w-full flex flex-col space-y-2">
+          <div class="w-full flex flex-col gap-2">
             <div class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2">
               <sofa-normal-text :customClass="'!font-bold'">Folders</sofa-normal-text>
 
@@ -303,9 +300,9 @@
             </div>
 
             <div
-              :class="`w-full flex flex-row items-center relative justify-between space-x-3 px-4 py-4 custom-border bg-white shadow-custom`"
+              :class="`w-full flex flex-row items-center relative justify-between gap-3 px-4 py-4 custom-border bg-white shadow-custom`"
               v-for="(item, index) in folders" :key="index" @click="goToFolder(item.id)">
-              <div class="flex flex-row items-center space-x-3 w-full">
+              <div class="flex flex-row items-center gap-3 w-full">
                 <sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
                 <sofa-custom-input v-if="item.edit"
                   :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-backgroundGray rounded cursor-text `"
@@ -325,7 +322,7 @@
               </div>
 
               <div v-if="!item.edit"
-                class="absolute right-0 top-0 h-full px-3 justify-center rounded-r-[8px] flex flex-row space-x-2 items-center">
+                class="absolute right-0 top-0 h-full px-3 justify-center rounded-r-[8px] flex flex-row gap-2 items-center">
                 <sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'" />
                 <sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'" @click.stop="
                   selectedFolderId = item.id

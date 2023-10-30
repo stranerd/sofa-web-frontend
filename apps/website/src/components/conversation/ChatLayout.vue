@@ -38,14 +38,14 @@
 		<template v-slot:right-session>
 			<!-- Student POV -->
 			<template v-if="Logic.Users.getUserType() == 'student' && Logic.Users.UserProfile">
-				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
+				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
 					v-if="!selectedTutorRequestData || !SingleConversation?.tutor">
-					<div class="w-full flex flex-row items-center space-x-3">
+					<div class="w-full flex flex-row items-center gap-3">
 						<div :style="`background-image: url('${Logic.Users.UserProfile.ai.photo?.link ?? '/images/icons/robot.svg'}')`"
 							class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full">
 						</div>
 
-						<div class="flex flex-col space-y-1">
+						<div class="flex flex-col gap-1">
 							<sofa-header-text :customClass="'!text-base !font-bold'">{{
 								Logic.Users.UserProfile.ai.name || "Dr. Sofa"
 							}}</sofa-header-text>
@@ -61,9 +61,9 @@
 					</div>
 				</div>
 
-				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4"
+				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
 					v-if="SingleConversation && !itIsNewMessage">
-					<div class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer"
+					<div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer"
 						v-if="selectedTutorRequestData && SingleConversation?.tutor" @click.stop="
 							showEndSession = true
 						selectedConvoId = SingleConversation?.id;
@@ -72,7 +72,7 @@
 						<sofa-normal-text :color="'text-primaryRed'">
 							End tutor session</sofa-normal-text>
 					</div>
-					<div class="w-full flex flex-row items-center justify-start space-x-2 cursor-pointer">
+					<div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer">
 						<sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
 						<sofa-normal-text :color="'text-primaryRed'" @click.stop="
 							showDeleteConvo = true
@@ -83,12 +83,11 @@
 				</div>
 
 				<template v-if="Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 0">
-					<div class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col space-y-3"
-						v-if="((hasMessage && !selectedTutorRequestData) ||
-							(!SingleConversation?.tutor && !itIsNewMessage)) &&
-							SingleConversation
-							">
-						<div class="w-full flex flex-row space-x-2 items-center justify-start">
+					<div class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3" v-if="((hasMessage && !selectedTutorRequestData) ||
+						(!SingleConversation?.tutor && !itIsNewMessage)) &&
+						SingleConversation
+						">
+						<div class="w-full flex flex-row gap-2 items-center justify-start">
 							<sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
 							<sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
 								Tutor help

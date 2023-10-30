@@ -1,49 +1,31 @@
 <template>
   <div
-    :class="`col-span-1  flex flex-row items-center shadow-custom space-x-3 px-3 py-3 custom-border bg-white ${customClass}`"
-  >
+    :class="`col-span-1  flex flex-row items-center shadow-custom gap-3 px-3 py-3 custom-border bg-white ${customClass}`">
     <div class="w-[65px]">
-      <sofa-avatar
-        :photoUrl="user.profile_image"
-        :size="'65'"
-        :customClass="'relative'"
-      >
-        <span
-          v-if="user.status"
-          :class="`w-[12px] h-[12px] border-[2px] border-white absolute bottom-0 right-0 rounded-full ${
-            user.status == 'online' ? 'bg-primaryGreen' : 'bg-grayColor'
-          }`"
-        >
+      <sofa-avatar :photoUrl="user.profile_image" :size="'65'" :customClass="'relative'">
+        <span v-if="user.status" :class="`w-[12px] h-[12px] border-[2px] border-white absolute bottom-0 right-0 rounded-full ${user.status == 'online' ? 'bg-primaryGreen' : 'bg-grayColor'
+          }`">
         </span>
       </sofa-avatar>
     </div>
-    <div class="w-full flex flex-col space-y-1">
-      <div class="w-full flex flex-row space-x-2 items-center flex-nowrap">
+    <div class="w-full flex flex-col gap-1">
+      <div class="w-full flex flex-row gap-ems-center flex-nowrap">
         <sofa-normal-text :customClass="'!font-bold'">
           {{ user.name }}
         </sofa-normal-text>
-        <span class="flex flex-row items-center space-x-1" v-if="user.icons">
-          <sofa-icon
-            v-for="(icon, index) in user.icons"
-            :key="index"
-            :customClass="icon == 'verify' ? 'h-[16px]' : 'h-[18px]'"
-            :name="icon"
-          />
+        <span class="flex flex-row items-center gap--if=" user.icons">
+          <sofa-icon v-for="(icon, index) in user.icons" :key="index"
+            :customClass="icon == 'verify' ? 'h-[16px]' : 'h-[18px]'" :name="icon" />
         </span>
       </div>
-      <sofa-normal-text
-        :customClass="'w-full flex flex-row text-left !line-clamp-1'"
-        :color="user.ratings ? 'text-bodyBlack' : 'text-grayColor'"
-      >
+      <sofa-normal-text :customClass="'w-full flex flex-row text-left !line-clamp-1'"
+        :color="user.ratings ? 'text-bodyBlack' : 'text-grayColor'">
         {{ user.subTitle }}
       </sofa-normal-text>
-      <div
-        class="w-full flex flex-row space-x-2 items-center"
-        v-if="user.ratings"
-      >
+      <div class="w-full flex flex-row gap-ems-center" v-if="user.ratings">
         <sofa-icon :name="'star-full'" :custom-class="'h-[16px]'" />
 
-        <div class="flex flex-row space-x-1 items-center">
+        <div class="flex flex-row gap-ems-center">
           <sofa-normal-text> {{ user.ratings.total }} </sofa-normal-text>
           <sofa-normal-text :color="'text-grayColor'">
             {{ user.ratings.label }}
@@ -54,14 +36,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import SofaIcon from "../SofaIcon";
-import SofaImageLoader from "../SofaImageLoader";
-import { SofaNormalText } from "../SofaTypography";
-import SofaBadge from "../SofaBadge";
-import SofaButton from "../SofaButton";
-import SofaAvatar from "../SofaAvatar";
-import { Logic } from "../../composable";
+import { defineComponent } from "vue"
+import SofaIcon from "../SofaIcon"
+import SofaImageLoader from "../SofaImageLoader"
+import { SofaNormalText } from "../SofaTypography"
+import SofaBadge from "../SofaBadge"
+import SofaButton from "../SofaButton"
+import SofaAvatar from "../SofaAvatar"
+import { Logic } from "../../composable"
 
 export default defineComponent({
   components: {
@@ -82,10 +64,10 @@ export default defineComponent({
     },
   },
   name: "SofaUserCard",
-  setup() {
+  setup () {
     return {
       Logic,
-    };
+    }
   },
-});
+})
 </script>

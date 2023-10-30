@@ -1,7 +1,7 @@
 <template>
   <expanded-layout :hasBottomBar="false">
     <div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
-      <sofa-normal-text :color="'text-grayColor w-full flex flex-row justify-start space-x-1'">
+      <sofa-normal-text :color="'text-grayColor w-full flex flex-row justify-start gap-1'">
         <span class="cursor-pointer" @click="Logic.Common.goBack()">{{
           "Marketplace "
         }}</span>
@@ -9,7 +9,7 @@
       </sofa-normal-text>
     </div>
     <div
-      class="w-full flex mdlg:!hidden flex-row items-center z-[999] space-x-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
+      class="w-full flex mdlg:!hidden flex-row items-center z-[999] gap-stify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
       <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
       <sofa-normal-text :customClass="'!font-bold !text-base'">
         {{
@@ -19,49 +19,46 @@
         <sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
       </div>
     </div>
-    <div class="w-full bg-white rounded-[16px] h-auto max-h-full flex flex-row space-y-3">
+    <div class="w-full bg-white rounded-[16px] h-auto max-h-full flex flex-row gap-3">
       <sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
         :buyAction="buyCourse" :itemIsPurchased="userHasAccess" :similarContents="similarContents" :type="contentType"
-        :contentId="contentDetails.id" :otherTasks="otherTasks"
-        :showStudyMode="showStudyMode"
-        :setShowStudyMode = "(value) => {
+        :contentId="contentDetails.id" :otherTasks="otherTasks" :showStudyMode="showStudyMode" :setShowStudyMode="(value) => {
           showStudyMode = value
-        }"
-        :actions="{
-          report: () => {
-            reportMaterial(
-              contentDetails?.type,
-              contentDetails?.title,
-              contentDetails?.id
-            )
-          },
-          share: () => {
-            shareMaterialLink(
-              contentDetails?.type ?? ('' as any),
-              `/marketplace/${contentDetails?.id}?type=${contentDetails?.id}`,
-              contentDetails?.title ?? '',
-            )
-          },
-          save: () => {
-            selectedFolderMaterailToAdd = contentDetails
-            showSaveToFolder = true
-          }
-        }" />
+        }" :actions="{
+  report: () => {
+    reportMaterial(
+      contentDetails?.type,
+      contentDetails?.title,
+      contentDetails?.id
+    )
+  },
+  share: () => {
+    shareMaterialLink(
+      contentDetails?.type ?? ('' as any),
+      `/marketplace/${contentDetails?.id}?type=${contentDetails?.id}`,
+      contentDetails?.title ?? '',
+    )
+  },
+  save: () => {
+    selectedFolderMaterailToAdd = contentDetails
+    showSaveToFolder = true
+  }
+}" />
     </div>
 
     <!--  Payment modal -->
     <sofa-modal v-if="showMakePaymentModal" :close="() => {
-        showMakePaymentModal = false
-      }
+      showMakePaymentModal = false
+    }
       ">
       <div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
         @click.stop="() => {
-            //
-          }
+          //
+        }
           ">
         <div
-          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-5 space-y-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
-          <div class="w-full hidden flex-col space-y-3 justify-center items-center mdlg:!flex">
+          class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+          <div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
             <sofa-header-text :customClass="'text-xl'">
               Choose payment method
             </sofa-header-text>
@@ -75,11 +72,11 @@
             <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMakePaymentModal = false" />
           </div>
 
-          <div class="w-full flex flex-col space-y-3 mdlg:!px-0 px-4">
+          <div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
             <!-- Wallet -->
-            <div :class="`w-full flex flex-row items-center space-x-3 px-3 py-3  bg-[#F1F6FA] ${selectedMethodId == 'payWithWallet'
-                ? 'border-primaryBlue  border-[2px]'
-                : ''
+            <div :class="`w-full flex flex-row items-center gap--3 py-3  bg-[#F1F6FA] ${selectedMethodId == 'payWithWallet'
+              ? 'border-primaryBlue  border-[2px]'
+              : ''
               }  custom-border cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
               <sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
               <sofa-normal-text>
@@ -95,15 +92,15 @@
 
             <!-- Pay online -->
 
-            <div class="w-full flex flex-row items-center space-x-3 px-3 py-3 cursor-pointer"
+            <div class="w-full flex flex-row items-center gap--3 py-3 cursor-pointer"
               @click="Logic.Payment.initialPayment()">
               <sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
               <sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
             </div>
 
-            <div :class="`w-full flex flex-row items-center space-x-3 px-3 py-3 bg-[#F1F6FA]  ${selectedMethodId == method.id
-                ? 'border-primaryBlue border-[2px]'
-                : ''
+            <div :class="`w-full flex flex-row items-center gap--3 py-3 bg-[#F1F6FA]  ${selectedMethodId == method.id
+              ? 'border-primaryBlue border-[2px]'
+              : ''
               }  custom-border cursor-pointer `" @click="selectedMethodId = method.id"
               v-for="(method, index) in PaymentMethods.results" :key="index">
               <sofa-icon :customClass="'h-[20px]'" :name="'card'" />

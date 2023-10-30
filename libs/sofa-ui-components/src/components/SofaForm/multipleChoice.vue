@@ -1,10 +1,10 @@
 <template>
-  <div class="flex w-full flex-col space-y-4 content">
+  <div class="flex w-full flex-col gap-4 content">
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2">
       <slot name="title" />
     </sofa-normal-text>
-    <div class="w-full flex flex-col space-y-4">
-      <div class="w-full flex flex-row items-center space-x-2 justify-between">
+    <div class="w-full flex flex-col gap-4">
+      <div class="w-full flex flex-row items-center gap-2 justify-between">
         <sofa-text-field
           :placeholder="'Enter new option'"
           :customClass="'flex flex-grow'"
@@ -26,13 +26,13 @@
         <template #item="{ element, index }">
           <div
             @click="selectedOption = element.key"
-            :class="`col-span-1 px-3 py-3 rounded-[15px] flex flex-row space-x-3 justify-between items-center bg-white border-[1px] cursor-pointer ${
+            :class="`col-span-1 px-3 py-3 rounded-[15px] flex flex-row gap-stify-between items-center bg-white border-[1px] cursor-pointer ${
               selectedOption == element.key
                 ? 'border-[#83AF9B]'
                 : 'border-[#E8E8E8]'
             } `"
           >
-            <div class="flex flex-row items-center space-x-3">
+            <div class="flex flex-row items-center gap-
               <div class="w-[25px]">
                 <div
                   :class="`h-[24px] w-[24px] rounded-[8px] flex flex-row items-center justify-center ${
@@ -61,25 +61,23 @@
             </div>
           </div>
         </template>
-        <template #footer v-if="options.length == 0">
-          <div class="w-full flex items-center justify-center">
-            <sofa-normal-text :color="'text-gray-400'"
-              >Your options would show up here</sofa-normal-text
-            >
-          </div>
-        </template>
+<template #footer v-if="options.length == 0">
+  <div class="w-full flex items-center justify-center">
+    <sofa-normal-text :color="'text-gray-400'">Your options would show up here</sofa-normal-text>
+  </div>
+</template>
       </draggable>
     </div>
   </div>
 </template>
 <script lang="ts">
-import SofaNormalText from "../SofaTypography/normalText.vue";
-import SofaTextField from "./textField.vue";
-import SofaButton from "../SofaButton";
-import SofaIcon from "../SofaIcon";
-import { defineComponent, onMounted, ref, watch } from "vue";
-import draggable from "vuedraggable";
-import { Logic } from "../../composable";
+import { defineComponent, onMounted, ref, watch } from "vue"
+import draggable from "vuedraggable"
+import { Logic } from "../../composable"
+import SofaButton from "../SofaButton"
+import SofaIcon from "../SofaIcon"
+import SofaNormalText from "../SofaTypography/normalText.vue"
+import SofaTextField from "./textField.vue"
 
 export default defineComponent({
   components: {
@@ -117,87 +115,87 @@ export default defineComponent({
   },
   name: "SofaMultipleChoice",
   emits: ["update:modelValue", "onUpdated"],
-  setup(props, context) {
-    const tabIndex = Math.random();
+  setup (props, context) {
+    const tabIndex = Math.random()
 
-    const optionContent = ref("");
+    const optionContent = ref("")
 
-    const updateValue = ref("");
+    const updateValue = ref("")
 
-    const options = ref<any[]>([]);
+    const options = ref<any[]>([])
 
-    const selectedOption = ref("");
+    const selectedOption = ref("")
 
     const addOption = (e: any) => {
-      e.preventDefault();
+      e.preventDefault()
 
-      if (!optionContent.value.trim()) return;
+      if (!optionContent.value.trim()) return
 
-      updateValue.value = optionContent.value;
+      updateValue.value = optionContent.value
       options.value.push({
         key: Logic.Common.makeid(9),
         value: optionContent.value,
-      });
+      })
 
-      optionContent.value = "";
-      updateValue.value = "empty";
+      optionContent.value = ""
+      updateValue.value = "empty"
       setTimeout(() => {
-        updateValue.value = "";
-      }, 200);
+        updateValue.value = ""
+      }, 200)
 
       if (options.value.length == 1) {
-        selectedOption.value = options.value[0].key;
+        selectedOption.value = options.value[0].key
       }
       context.emit("update:modelValue", {
         options: options.value,
         answer: selectedOption.value,
-      });
+      })
       context.emit("onUpdated", {
         options: options.value,
         answer: selectedOption.value,
         extraId: props.extraId,
-      });
-    };
+      })
+    }
 
     const removeOption = (key: string) => {
       options.value = options.value.filter((option) => {
-        return option.key != key;
-      });
+        return option.key != key
+      })
       if (key == selectedOption.value) {
         if (options.value.length > 0) {
-          selectedOption.value = options.value[0].key;
+          selectedOption.value = options.value[0].key
         }
       }
       context.emit("update:modelValue", {
         options: options.value,
         answer: selectedOption.value,
-      });
+      })
       context.emit("onUpdated", {
         options: options.value,
         answer: selectedOption.value,
         extraId: props.extraId,
-      });
-    };
+      })
+    }
 
     watch(selectedOption, () => {
       context.emit("update:modelValue", {
         options: options.value,
         answer: selectedOption.value,
-      });
+      })
       context.emit("onUpdated", {
         options: options.value,
         answer: selectedOption.value,
         extraId: props.extraId,
-      });
-    });
+      })
+    })
 
     onMounted(() => {
       if (props.updateValue) {
-        const optionsData = JSON.parse(props.updateValue);
-        options.value = optionsData;
-        selectedOption.value = props.defaultAnswer;
+        const optionsData = JSON.parse(props.updateValue)
+        options.value = optionsData
+        selectedOption.value = props.defaultAnswer
       }
-    });
+    })
 
     return {
       tabIndex,
@@ -207,7 +205,7 @@ export default defineComponent({
       addOption,
       removeOption,
       updateValue,
-    };
+    }
   },
-});
+})
 </script>

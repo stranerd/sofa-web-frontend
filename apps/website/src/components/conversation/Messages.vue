@@ -3,14 +3,14 @@
     <template v-for="(message, index) in allMessages" :key="index">
       <template v-if="message.type == 'message'">
         <div
-          class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row space-x-2 items-end justify-start"
+          class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start"
           v-if="message.user.type == 'robot'">
           <div class="w-[30px]">
             <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
               <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
             </sofa-avatar>
           </div>
-          <div class="px-3 py-3 custom-border text-left bg-[#E2F3FD] flex flex-col space-y-1 justify-start">
+          <div class="px-3 py-3 custom-border text-left bg-[#E2F3FD] flex flex-col gap-1 justify-start">
             <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#3296C8]'">
               {{ message.user.name }}
             </sofa-normal-text>
@@ -19,14 +19,14 @@
         </div>
 
         <div
-          class="w-auto min-w-[80px] max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex flex-row space-x-2 items-end justify-start"
+          class="w-auto min-w-[80px] max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex flex-row gap-ems-end justify-start"
           v-if="message.user.type == 'tutor'">
           <div class="w-[30px]">
             <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
               <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
             </sofa-avatar>
           </div>
-          <div class="px-3 py-3 custom-border text-left bg-[#E1F5EB] flex flex-col space-y-1 justify-start">
+          <div class="px-3 py-3 custom-border text-left bg-[#E1F5EB] flex flex-col gap-1 justify-start">
             <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#4BAF7D]'">
               {{ message.user.name }}
             </sofa-normal-text>
@@ -35,9 +35,8 @@
           </div>
         </div>
 
-        <div class="min-w-[80px] w-full flex flex-row space-x-2 items-end justify-end py-4"
-          v-if="message.user.type == 'user'">
-          <div class="flex flex-row items-end space-x-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
+        <div class="min-w-[80px] w-full flex flex-row gap-ems-end justify-end py-4" v-if="message.user.type == 'user'">
+          <div class="flex flex-row items-end gap-x-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
             <div class="px-3 py-3 custom-border text-left bg-[#E1E6EB]">
               <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.content">
               </sofa-normal-text>

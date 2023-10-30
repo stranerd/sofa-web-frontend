@@ -1,217 +1,151 @@
 <template>
   <expanded-layout :hasBottomBar="false">
     <div
-      class="w-full flex mdlg:!hidden flex-row items-center z-[999] space-x-3 justify-between bg-white py-4 px-4 sticky top-0 left-0"
-    >
-      <sofa-icon
-        :customClass="'h-[15px]'"
-        :name="'back-arrow'"
-        @click="Logic.Common.goBack()"
-      />
+      class="w-full flex mdlg:!hidden flex-row items-center z-[999] gap-3 justify-between bg-white py-4 px-4 sticky top-0 left-0">
+      <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
       <sofa-normal-text :customClass="'!font-bold !text-base'">
-        {{ singleUser.bio.name.full }}</sofa-normal-text
-      >
+        {{ singleUser.bio.name.full }}</sofa-normal-text>
       <div>
         <sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
       </div>
     </div>
 
-    <div
-      class="w-full flex flex-col bg-primaryPurple mdlg:!shadow-custom mdlg:rounded-[16px]"
-    >
+    <div class="w-full flex flex-col bg-primaryPurple mdlg:!shadow-custom mdlg:rounded-[16px]">
       <div class="w-full flex flex-col h-[140px]"></div>
 
-      <div
-        class="w-full flex flex-col mdlg:px-5 px-4 pt-3 space-y-6 bg-white mdlg:!rounded-b-[16px]"
-      >
-        <div
-          class="w-full flex mdlg:flex-row flex-col justify-between items-start mdlg:space-y-0 space-y-4"
-        >
-          <div class="flex flex-row space-x-3 items-start">
-            <div class="flex flex-row items-start space-x-3">
+      <div class="w-full flex flex-col mdlg:px-5 px-4 pt-3 gap-6 bg-white mdlg:!rounded-b-[16px]">
+        <div class="w-full flex mdlg:flex-row flex-col justify-between items-start mdlg:gap-0 gap-4">
+          <div class="flex flex-row gap-ems-start">
+            <div class="flex flex-row items-start gap-
               <sofa-avatar
-                :photoUrl="singleUser.bio.photo?.link || ''"
-                :size="'110'"
-                :customClass="' -mt-[60%]'"
-              />
-            </div>
-
-            <div class="flex flex-col">
-              <div class="flex flex-row items-center space-x-2">
-                <sofa-header-text :customClass="'!font-bold'">
-                  {{ singleUser.bio.name.full }}
-                </sofa-header-text>
-                <sofa-icon
-                  :name="'verify'"
-                  :customClass="'h-[16px]'"
-                  v-if="singleUser.roles.isVerified"
-                />
-                <sofa-icon
-                  :name="'tutor-bagde'"
-                  :customClass="'h-[18px]'"
-                  v-if="singleUser.type?.type == 'teacher'"
-                />
-              </div>
-              <div class="flex flex-row space-x-3 items-center">
-                <sofa-normal-text>
-                  {{ capitalize(singleUser.type?.type || "student") }}
-                </sofa-normal-text>
-                <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#141618]"> </span>
-                <sofa-normal-text> Tutor </sofa-normal-text> -->
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="flex mdlg:flex-row flex-col mdlg:space-x-4 mdlg:justify-end items-start space-y-3 mdlg:space-y-0 mdlg:items-center md:!w-auto w-full"
-          >
-            <div
-              class="flex flex-row items-center mdlg:space-x-4 space-x-16 justify-start mdlg:justify-start md:!w-auto w-full"
-            >
-              <template v-for="(item, index) in profileAttributes" :key="index">
-                <div
-                  class="flex mdlg:flex-row mdlg:space-x-2 flex-col space-y-1 items-center"
-                  v-if="item.show"
-                >
-                  <sofa-icon :name="item.icon" :customClass="item.iconSize" />
-                  <div class="flex flex-col space-y-1 items-start">
-                    <sofa-normal-text>
-                      {{ item.title }}
-                    </sofa-normal-text>
-                    <sofa-header-text :customClass="'!font-bold'">
-                      {{ item.value }}
-                    </sofa-header-text>
-                  </div>
+                :photoUrl=" singleUser.bio.photo?.link || ''"
+                    :size="'110'"
+                    :customClass="' -mt-[60%]'"
+                  />
                 </div>
-              </template>
-            </div>
 
-            <sofa-button
-              :padding="'px-6 py-2'"
-              v-if="singleUser.type?.type == 'organization'"
-              @click="
-                singleUser.type?.type == 'organization'
-                  ? showJoinOrganization()
-                  : null
-              "
-            >
-              {{ singleUser.type?.type == "organization" ? "Join" : "Follow" }}
-            </sofa-button>
+                <div class=" flex flex-col">
+              <div class="flex flex-row items-center gap-
+                <sofa-header-text :customClass="'!font-bold'">
+                      {{ singleUser.bio.name.full }}
+                    </sofa-header-text>
+                    <sofa-icon
+                      :name="'verify'"
+                      :customClass="'h-[16px]'"
+                      v-if="singleUser.roles.isVerified" />
+              <sofa-icon :name="'tutor-bagde'" :customClass="'h-[18px]'" v-if="singleUser.type?.type == 'teacher'" />
+            </div>
+            <div class="flex flex-row gap-ems-center">
+              <sofa-normal-text>
+                {{ capitalize(singleUser.type?.type || "student") }}
+              </sofa-normal-text>
+              <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#141618]"> </span>
+                <sofa-normal-text> Tutor </sofa-normal-text> -->
+            </div>
           </div>
         </div>
 
-        <div class="w-full flex flex-row space-x-6 items-center">
-          <template v-for="(item, index) in tabItems" :key="index">
-            <sofa-normal-text
-              :customClass="`!font-semibold pb-2 !relative cursor-pointer`"
-              :color="
-                selectedTab == item.id ? 'text-primaryPurple' : 'text-[#141618]'
-              "
-              @click="selectedTab = item.id"
-              v-if="item.show"
-            >
-              {{ item.name }}
-              <div
-                v-if="selectedTab == item.id"
-                class="w-full h-[3px] bg-primaryPurple absolute bottom-0 left-0 rounded-t-[3px]"
-              ></div>
-            </sofa-normal-text>
-          </template>
+        <div
+          class="flex mdlg:flex-row flex-col mdlg:gap-lg:justify-end items-start gap-3 mdlg:gap-0 mdlg:items-center md:!w-auto w-full">
+          <div class="flex flex-row items-center mdlg:gap-p-gap-fy-start mdlg:justify-start md:!w-auto w-full">
+            <template v-for="(item, index) in profileAttributes" :key="index">
+              <div class="flex mdlg:flex-row mdlg:gap-ex-col gap-1 items-center" v-if="item.show">
+                <sofa-icon :name="item.icon" :customClass="item.iconSize" />
+                <div class="flex flex-col gap-1 items-start">
+                  <sofa-normal-text>
+                    {{ item.title }}
+                  </sofa-normal-text>
+                  <sofa-header-text :customClass="'!font-bold'">
+                    {{ item.value }}
+                  </sofa-header-text>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <sofa-button :padding="'px-6 py-2'" v-if="singleUser.type?.type == 'organization'" @click="
+            singleUser.type?.type == 'organization'
+              ? showJoinOrganization()
+              : null
+            ">
+            {{ singleUser.type?.type == "organization" ? "Join" : "Follow" }}
+          </sofa-button>
         </div>
       </div>
+
+      <div class="w-full flex flex-row gap-ems-center">
+        <template v-for="(item, index) in tabItems" :key="index">
+          <sofa-normal-text :customClass="`!font-semibold pb-2 !relative cursor-pointer`" :color="selectedTab == item.id ? 'text-primaryPurple' : 'text-[#141618]'
+            " @click="selectedTab = item.id" v-if="item.show">
+            {{ item.name }}
+            <div v-if="selectedTab == item.id"
+              class="w-full h-[3px] bg-primaryPurple absolute bottom-0 left-0 rounded-t-[3px]"></div>
+          </sofa-normal-text>
+        </template>
+      </div>
+    </div>
     </div>
 
     <!-- Content sections -->
     <template v-if="selectedTab == 'content'">
-      <div class="w-full flex flex-col space-y-3">
+      <div class="w-full flex flex-col gap-3">
         <!-- Search -->
 
-        <div
-          class="w-full flex flex-col mdlg:px-0 px-4 pt-4"
-          v-if="userHasResources"
-        >
-          <div
-            class="w-full px-4 py-1 bg-white custom-border flex flex-row space-x-1 items-center justify-start"
-          >
-            <div class="w-full flex flex-row items-center space-x-1">
-              <div class="pl-2">
-                <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
-              </div>
-              <sofa-text-field
-                :customClass="'!border-none w-full flex-grow'"
-                :placeholder="'Search'"
-                v-model="searchQuery"
-                :defaultValue="searchQuery"
-                @onEnter="handleSearch"
-              >
-              </sofa-text-field>
+        <div class="w-full flex flex-col mdlg:px-0 px-4 pt-4" v-if="userHasResources">
+          <div class="w-full px-4 py-1 bg-white custom-border flex flex-row gap-ems-center justify-start">
+            <div class="w-full flex flex-row items-center gap-
+              <div class=" pl-2">
+              <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
             </div>
+            <sofa-text-field :customClass="'!border-none w-full flex-grow'" :placeholder="'Search'" v-model="searchQuery"
+              :defaultValue="searchQuery" @onEnter="handleSearch">
+            </sofa-text-field>
           </div>
         </div>
+      </div>
 
-        <div
-          class="w-full flex flex-col mdlg:!space-y-4 space-y-3 mdlg:!pl-0 pl-4 z-40"
-        >
+      <div class="w-full flex flex-col mdlg:!gap-4 gap-3 mdlg:!pl-0 pl-4 z-40">
+        <div :class="`w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4 mdlg:pt-0 ${userHasResources ? '' : 'pt-4'
+          }`">
+          <sofa-normal-text :customClass="'!font-bold'">
+            Resources
+          </sofa-normal-text>
+
+          <sofa-normal-text :color="'text-primaryPink'" :custom-class="'cursor-pointer'" @click="
+            Logic.Common.GoToRoute(
+              `/marketplace/search?userId=${singleUser.id}`
+            )
+            ">
+            View all
+          </sofa-normal-text>
+        </div>
+
+        <div v-if="userMaterials.length" class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            :class="`w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4 mdlg:pt-0 ${
-              userHasResources ? '' : 'pt-4'
-            }`"
-          >
-            <sofa-normal-text :customClass="'!font-bold'">
-              Resources
-            </sofa-normal-text>
-
-            <sofa-normal-text
-              :color="'text-primaryPink'"
-              :custom-class="'cursor-pointer'"
-              @click="
+            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-lg:!gap-gap-dlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            <sofa-item-card :content="content"
+              custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
+              v-for="(content, index) in userMaterials" :key="index" @click="
                 Logic.Common.GoToRoute(
-                  `/marketplace/search?userId=${singleUser.id}`
+                  '/marketplace/' +
+                  content.id +
+                  `?type=${content.labels.main.toLowerCase()}`
                 )
-              "
-            >
-              View all
-            </sofa-normal-text>
+                "></sofa-item-card>
           </div>
-
-          <div
-            v-if="userMaterials.length"
-            class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-          >
-            <div
-              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row space-x-3 mdlg:!space-x-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4"
-            >
-              <sofa-item-card
-                :content="content"
-                custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-                v-for="(content, index) in userMaterials"
-                :key="index"
-                @click="
-                  Logic.Common.GoToRoute(
-                    '/marketplace/' +
-                      content.id +
-                      `?type=${content.labels.main.toLowerCase()}`
-                  )
-                "
-              ></sofa-item-card>
-            </div>
-          </div>
-
-          <template v-else>
-            <div class="w-full flex flex-col space-y-3 pr-4 mdlg:pr-0">
-              <sofa-empty-state
-                :title="`${singleUser.bio.name.full} has no published materials yet`"
-                :subTitle="'Discover thousands of other materials on SOFA marketplace and save them here for easy access'"
-                :actionLabel="'Marketplace'"
-                :action="
-                  () => {
-                    Logic.Common.GoToRoute('/marketplace');
-                  }
-                "
-              />
-            </div>
-          </template>
         </div>
+
+        <template v-else>
+          <div class="w-full flex flex-col gap-3 pr-4 mdlg:pr-0">
+            <sofa-empty-state :title="`${singleUser.bio.name.full} has no published materials yet`"
+              :subTitle="'Discover thousands of other materials on SOFA marketplace and save them here for easy access'"
+              :actionLabel="'Marketplace'" :action="() => {
+                Logic.Common.GoToRoute('/marketplace')
+              }
+                " />
+          </div>
+        </template>
+      </div>
       </div>
     </template>
 
@@ -219,23 +153,19 @@
 
     <!-- For student/teacher -->
     <template v-if="selectedTab == 'about'">
-      <div class="w-full flex flex-col space-y-4 mdlg:px-0 mdlg:py-0 py-5 px-4">
-        <div
-          class="w-full flex shadow-custom px-6 py-6 rounded-[16px] bg-white flex-col space-y-2"
-        >
+      <div class="w-full flex flex-col gap-4 mdlg:px-0 mdlg:py-0 py-5 px-4">
+        <div class="w-full flex shadow-custom px-6 py-6 rounded-[16px] bg-white flex-col gap-2">
           <sofa-normal-text :customClass="'!font-bold'"> Bio </sofa-normal-text>
           <sofa-normal-text :custom-class="'!text-left'">
             {{ singleUser.bio.description }}
           </sofa-normal-text>
         </div>
 
-        <div
-          class="w-full flex shadow-custom px-6 py-6 rounded-[16px] bg-white flex-col space-y-2"
-        >
+        <div class="w-full flex shadow-custom px-6 py-6 rounded-[16px] bg-white flex-col gap-2">
           <sofa-normal-text :customClass="'!font-bold'">
             Links
           </sofa-normal-text>
-          <div class="w-full flex flex-row space-x-5 items-center">
+          <div class="w-full flex flex-row gap-ems-center">
             <template v-if="!hasAtleastASocialLink">
               <sofa-normal-text :color="'text-grayColor'">
                 No social links
@@ -243,16 +173,8 @@
             </template>
             <template v-else>
               <template v-for="(item, index) in profileLinks" :key="index">
-                <a
-                  :href="item.link"
-                  target="_blank"
-                  :class="`${item.show ? '' : 'opacity-40'}`"
-                  v-if="item.show"
-                >
-                  <sofa-icon
-                    :name="item.icon"
-                    :customClass="`${item.iconSize} cursor-pointer `"
-                  />
+                <a :href="item.link" target="_blank" :class="`${item.show ? '' : 'opacity-40'}`" v-if="item.show">
+                  <sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
                 </a>
               </template>
             </template>
@@ -268,85 +190,53 @@
       </div>
     </template>
 
-    <sofa-modal
-      v-if="showModal"
-      :close="
-        () => {
-          showModal = false;
+    <sofa-modal v-if="showModal" :close="() => {
+      showModal = false
+    }
+      ">
+      <div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
+        @click.stop="() => {
+          //
         }
-      "
-    >
-      <div
-        class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
-        @click.stop="
-          () => {
-            //
-          }
-        "
-      >
+          ">
         <div
-          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-5 space-y-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center"
-        >
-          <div
-            class="w-full hidden flex-col space-y-3 justify-center items-center mdlg:!flex"
-          >
+          class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+          <div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
             <sofa-header-text :customClass="'text-xl'">
               {{ modalSetup.title }}
             </sofa-header-text>
           </div>
 
           <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b-[1px] px-4"
-          >
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b-[1px] px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               {{ modalSetup.title }}
             </sofa-normal-text>
-            <sofa-icon
-              :customClass="'h-[19px]'"
-              :name="'circle-close'"
-              @click="showModal = false"
-            />
+            <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showModal = false" />
           </div>
 
-          <div class="w-full flex flex-col space-y-5 mdlg:!px-0 px-4">
-            <sofa-text-field
-              v-if="modalSetup.type == 'join_organization'"
-              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-              :padding="'px-3 py-3'"
-              type="text"
-              :name="'Join code'"
-              ref="join_code"
-              :placeholder="'Enter Join Code'"
-              :borderColor="'border-transparent'"
-              :rules="[Logic.Form.RequiredRule]"
-              v-model="joinCode"
-            >
+          <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
+            <sofa-text-field v-if="modalSetup.type == 'join_organization'"
+              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
+              type="text" :name="'Join code'" ref="join_code" :placeholder="'Enter Join Code'"
+              :borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" v-model="joinCode">
             </sofa-text-field>
           </div>
 
           <div
-            class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4"
-          >
+            class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
             <div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
-              <sofa-button
-                :textColor="'text-grayColor'"
-                :bgColor="'bg-white'"
-                :padding="'px-4 py-1'"
+              <sofa-button :textColor="'text-grayColor'" :bgColor="'bg-white'" :padding="'px-4 py-1'"
                 :customClass="`border-[2px] border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
-                @click="showModal = false"
-              >
+                @click="showModal = false">
                 Cancel
               </sofa-button>
             </div>
 
             <div class="md:!w-auto col-span-2 flex flex-col">
-              <sofa-button
-                :textColor="'text-white'"
-                :bgColor="'bg-primaryBlue'"
-                :padding="'px-4 md:!py-1 py-3'"
+              <sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'" :padding="'px-4 md:!py-1 py-3'"
                 :customClass="`border-[2px] border-transparent md:!min-w-[100px] md:!w-auto w-full`"
-                @click="modalSetup.action()"
-              >
+                @click="modalSetup.action()">
                 Continue
               </sofa-button>
             </div>
@@ -358,6 +248,27 @@
 </template>
 
 <script lang="ts">
+import { scrollToTop } from "@/composables"
+import { createCourseData, createQuizData } from "@/composables/library"
+import { profileLinks } from "@/composables/profile"
+import moment from "moment"
+import { Logic } from "sofa-logic"
+import {
+  Conditions,
+  QueryParams,
+} from "sofa-logic/src/logic/types/domains/common"
+import {
+  SofaAvatar,
+  SofaButton,
+  SofaContentRatings,
+  SofaEmptyState,
+  SofaHeaderText,
+  SofaIcon,
+  SofaItemCard,
+  SofaModal,
+  SofaNormalText,
+  SofaTextField,
+} from "sofa-ui-components"
 import {
   capitalize,
   defineComponent,
@@ -365,29 +276,8 @@ import {
   reactive,
   ref,
   watch,
-} from "vue";
-import { useMeta } from "vue-meta";
-import moment from "moment";
-import { scrollToTop } from "@/composables";
-import {
-  SofaNormalText,
-  SofaIcon,
-  SofaHeaderText,
-  SofaButton,
-  SofaAvatar,
-  SofaTextField,
-  SofaItemCard,
-  SofaContentRatings,
-  SofaEmptyState,
-  SofaModal,
-} from "sofa-ui-components";
-import { Logic } from "sofa-logic";
-import {
-  Conditions,
-  QueryParams,
-} from "sofa-logic/src/logic/types/domains/common";
-import { createCourseData, createQuizData } from "@/composables/library";
-import { profileLinks } from "@/composables/profile";
+} from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
@@ -415,32 +305,32 @@ export default defineComponent({
     ],
   },
   name: "PublicProfilePage",
-  setup() {
+  setup () {
     useMeta({
       title: "Public Profile",
-    });
+    })
 
-    const userHasResources = ref(false);
+    const userHasResources = ref(false)
 
-    const showModal = ref(false);
+    const showModal = ref(false)
     const modalSetup = reactive({
       title: "",
       type: "",
       action: () => {
         //
       },
-    });
-    const joinCode = ref("");
-    const singleUser = ref(Logic.Users.SingleUser);
-    const allCourses = ref(Logic.Study.AllCourses);
-    const allQuizzes = ref(Logic.Study.AllQuzzies);
-    const userMaterials = ref<any[]>([]);
+    })
+    const joinCode = ref("")
+    const singleUser = ref(Logic.Users.SingleUser)
+    const allCourses = ref(Logic.Study.AllCourses)
+    const allQuizzes = ref(Logic.Study.AllQuzzies)
+    const userMaterials = ref<any[]>([])
 
-    const hasAtleastASocialLink = ref(false);
+    const hasAtleastASocialLink = ref(false)
 
-    const selectedTab = ref("content");
+    const selectedTab = ref("content")
 
-    const searchQuery = ref("");
+    const searchQuery = ref("")
 
     const tabItems = [
       {
@@ -458,7 +348,7 @@ export default defineComponent({
         name: "Ratings",
         show: true,
       },
-    ];
+    ]
 
     const profileAttributes = reactive([
       {
@@ -489,11 +379,11 @@ export default defineComponent({
         value: "1.1k",
         show: false,
       },
-    ]);
+    ])
 
     const handleSearch = () => {
       //
-    };
+    }
 
     const userRatings = {
       total: 4,
@@ -526,30 +416,30 @@ export default defineComponent({
             "This is truly amazing. Help me understand how I should approach o’chem. Thank you for sharing",
         },
       ],
-    };
+    }
 
     const setMaterials = () => {
-      userMaterials.value.length = 0;
+      userMaterials.value.length = 0
       allCourses.value?.results?.forEach((course) => {
-        userMaterials.value.push(createCourseData(course));
-      });
+        userMaterials.value.push(createCourseData(course))
+      })
       allQuizzes.value?.results?.forEach((quiz) => {
-        userMaterials.value.push(createQuizData(quiz));
-      });
+        userMaterials.value.push(createQuizData(quiz))
+      })
 
       if (
         allCourses.value?.results.length ||
         allQuizzes.value?.results.length
       ) {
-        userHasResources.value = true;
+        userHasResources.value = true
       }
-    };
+    }
 
     const fetchMaterials = () => {
       Logic.Common.showLoader({
         loading: true,
         show: false,
-      });
+      })
 
       const query: QueryParams = {
         search: {
@@ -575,22 +465,22 @@ export default defineComponent({
             desc: true,
           },
         ],
-      };
+      }
 
-      const allRequests: Promise<any>[] = [];
+      const allRequests: Promise<any>[] = []
 
       // course search request
       allRequests.push(
         new Promise((resolve) => {
           Logic.Study.GetCourses(query)
             .then(() => {
-              resolve("");
+              resolve("")
             })
             .catch(() => {
-              resolve("");
-            });
+              resolve("")
+            })
         })
-      );
+      )
 
       // quiz search request
       allRequests.push(
@@ -599,73 +489,73 @@ export default defineComponent({
             field: "courseId",
             value: "null",
             condition: Conditions.eq,
-          });
+          })
           Logic.Study.GetQuizzes(query)
             .then(() => {
-              resolve("");
+              resolve("")
             })
             .catch(() => {
-              resolve("");
-            });
+              resolve("")
+            })
         })
-      );
+      )
 
       Promise.all(allRequests)
         .then(() => {
-          Logic.Common.hideLoader();
+          Logic.Common.hideLoader()
         })
         .catch((error) => {
-          console.log(error);
-        });
-    };
+          console.log(error)
+        })
+    }
 
     watch(allCourses, () => {
-      setMaterials();
-    });
+      setMaterials()
+    })
 
     watch(allQuizzes, () => {
-      setMaterials();
-    });
+      setMaterials()
+    })
 
     watch(searchQuery, () => {
-      fetchMaterials();
-    });
+      fetchMaterials()
+    })
 
     const setProfileData = () => {
-      profileAttributes[0].value = singleUser.value.account.meta.publishedQuizzes.toString();
-      profileAttributes[1].value = singleUser.value.account.meta.publishedCourses.toString();
-      profileAttributes[2].show = false;
+      profileAttributes[0].value = singleUser.value.account.meta.publishedQuizzes.toString()
+      profileAttributes[1].value = singleUser.value.account.meta.publishedCourses.toString()
+      profileAttributes[2].show = false
 
       if (singleUser.value?.type?.type == "organization") {
-        profileAttributes[3].title = "Students";
-        profileAttributes[3].value = singleUser.value.account.meta.students.toString();
+        profileAttributes[3].title = "Students"
+        profileAttributes[3].value = singleUser.value.account.meta.students.toString()
       } else {
-        profileAttributes[3].value = singleUser.value.account.meta.connects.toString();
+        profileAttributes[3].value = singleUser.value.account.meta.connects.toString()
       }
 
-      tabItems[2].show = false;
+      tabItems[2].show = false
 
 
       // social media link
       singleUser.value.socials.forEach((item) => {
         const profileLink = profileLinks.filter((profileitem) => {
-          return item.ref == profileitem.ref;
-        });
+          return item.ref == profileitem.ref
+        })
 
         if (profileLink.length) {
-          const index = profileLink.indexOf(profileLink[0]);
-          profileLinks[index].show = item.link ? true : false;
-          profileLinks[index].link = item.link;
+          const index = profileLink.indexOf(profileLink[0])
+          profileLinks[index].show = item.link ? true : false
+          profileLinks[index].link = item.link
           if (item.link) {
-            hasAtleastASocialLink.value = true;
+            hasAtleastASocialLink.value = true
           }
         }
-      });
-    };
+      })
+    }
 
     const showJoinOrganization = () => {
-      modalSetup.title = `Join ${singleUser.value.bio.name.full}`;
-      modalSetup.type = "join_organization";
+      modalSetup.title = `Join ${singleUser.value.bio.name.full}`
+      modalSetup.type = "join_organization"
       modalSetup.action = () => {
         if (joinCode.value) {
           Logic.Users.RequestToJoinOrganization(
@@ -678,38 +568,38 @@ export default defineComponent({
                 loading: false,
                 message: "Your join request has been sent.",
                 type: "success",
-              });
-              showModal.value = false;
+              })
+              showModal.value = false
             } else {
               Logic.Common.showLoader({
                 show: true,
                 loading: false,
                 message: "Unable to send join request. Invalid join code",
                 type: "error",
-              });
+              })
             }
-          });
+          })
         }
-      };
-      showModal.value = true;
-    };
+      }
+      showModal.value = true
+    }
 
     onMounted(() => {
-      Logic.Study.watchProperty("AllCourses", allCourses);
-      Logic.Study.watchProperty("AllQuzzies", allQuizzes);
-      Logic.Users.watchProperty("SingleUser", singleUser);
+      Logic.Study.watchProperty("AllCourses", allCourses)
+      Logic.Study.watchProperty("AllQuzzies", allQuizzes)
+      Logic.Users.watchProperty("SingleUser", singleUser)
       if (
         allCourses.value?.results.length ||
         allQuizzes.value?.results.length
       ) {
-        userHasResources.value = true;
+        userHasResources.value = true
       }
       if (singleUser.value) {
-        setProfileData();
-        fetchMaterials();
-        scrollToTop();
+        setProfileData()
+        fetchMaterials()
+        scrollToTop()
       }
-    });
+    })
 
     return {
       moment,
@@ -731,7 +621,7 @@ export default defineComponent({
       handleSearch,
       capitalize,
       showJoinOrganization,
-    };
+    }
   },
-});
+})
 </script>

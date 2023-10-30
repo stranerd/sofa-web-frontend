@@ -6,7 +6,7 @@
 			}
 				">
 			<div
-				class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 				<div
 					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4">
 					<sofa-normal-text :customClass="'!font-bold !text-base'">
@@ -19,7 +19,7 @@
 					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showStudyMode = false" />
 				</div>
 
-				<div class="w-full flex flex-col space-y-3 px-4 py-4" v-if="selectedQuizMode != 'game'">
+				<div class="w-full flex flex-col gap-3 px-4 py-4" v-if="selectedQuizMode != 'game'">
 					<sofa-icon-card :data="item" v-for="(item, index) in otherTasks" :key="index"
 						@click="item.actionFn(selectedQuizId, item.key)"
 						:customClass="'!bg-[#F1F6FA] !w-full !shadow-none'">
@@ -39,7 +39,7 @@
 					</div>
 				</div>
 
-				<div class="w-full flex flex-col space-y-3 py-4 px-4" v-else>
+				<div class="w-full flex flex-col gap-3 py-4 px-4" v-else>
 					<div @click="
 						userIsParticipating
 							? (userIsParticipating = false)

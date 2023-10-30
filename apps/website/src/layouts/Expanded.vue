@@ -1,49 +1,29 @@
 <template>
-  <sofa-top-bar
-    :go-back="goBack"
-    :go-to-route="goToRoute"
-    :tab-is-active="tabIsActive"
-    :tabs="tabs"
-    :subpage-actions="topbarOptions.actions"
-    :title="topbarOptions.title"
-    :type="topbarOptions.type"
-    :showAddItem="handleShowAddItem"
-    v-if="hasTopBar"
-    :custom-class="'hidden mdlg:!flex'"
-  ></sofa-top-bar>
-  <div
-    class="w-full flex flex-col flex-grow items-center justify-center h-full"
-  >
+  <sofa-top-bar :go-back="goBack" :go-to-route="goToRoute" :tab-is-active="tabIsActive" :tabs="tabs"
+    :subpage-actions="topbarOptions.actions" :title="topbarOptions.title" :type="topbarOptions.type"
+    :showAddItem="handleShowAddItem" v-if="hasTopBar" :custom-class="'hidden mdlg:!flex'"></sofa-top-bar>
+  <div class="w-full flex flex-col flex-grow items-center justify-center h-full">
     <div
-      :class="`h-full pb-4 flex-grow text-center relative px-0  mdlg:px-0 mdlg:!space-y-5 flex flex-col  items-center  lg:text-sm mdlg:text-[12px] text-xs ${layoutStyle}`"
-      :style="`background-image: url(${bgImage})`"
-    >
+      :class="`h-full pb-4 flex-grow text-center relative px-0  mdlg:px-0 mdlg:!gap-5 flex flex-col  items-center  lg:text-sm mdlg:text-[12px] text-xs ${layoutStyle}`"
+      :style="`background-image: url(${bgImage})`">
       <slot />
       <div class="h-[120px] mdlg:!hidden" v-if="bottomPadding"></div>
     </div>
   </div>
-  <sofa-bottom-bar
-    :tab-is-active="tabIsActive"
-    v-if="hasBottomBar"
-    :showAddItem="handleShowAddItem"
-  />
-  <add-material-modal
-    v-if="showAddItem"
-    :close="
-      () => {
-        showAddItem = false;
-      }
-    "
-  />
+  <sofa-bottom-bar :tab-is-active="tabIsActive" v-if="hasBottomBar" :showAddItem="handleShowAddItem" />
+  <add-material-modal v-if="showAddItem" :close="() => {
+      showAddItem = false
+    }
+    " />
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { SofaTopBar, SofaBottomBar } from "sofa-ui-components";
-import { handleShowAddItem, showAddItem, tabTitle } from "../composables";
-import AddMaterialModal from "@/components/common/AddMaterialModal.vue";
-import { Logic } from "sofa-logic";
+import AddMaterialModal from "@/components/common/AddMaterialModal.vue"
+import { Logic } from "sofa-logic"
+import { SofaBottomBar, SofaTopBar } from "sofa-ui-components"
+import { defineComponent, onMounted, ref } from "vue"
+import { useRouter } from "vue-router"
+import { handleShowAddItem, showAddItem, tabTitle } from "../composables"
 
 export default defineComponent({
   components: {
@@ -54,16 +34,16 @@ export default defineComponent({
   props: {
     topbarOptions: {
       type: Object as () => {
-        type: string;
-        title: string;
-        actions: any[];
+        type: string
+        title: string
+        actions: any[]
       },
       default: () => {
         return {
           type: "main",
           title: "",
           actions: [],
-        };
+        }
       },
     },
     layoutStyle: {
@@ -88,36 +68,36 @@ export default defineComponent({
     },
   },
   name: "ExpandedLayout",
-  setup() {
-    const router = useRouter();
+  setup () {
+    const router = useRouter()
 
-    const selectedTab = ref("");
+    const selectedTab = ref("")
 
     const tabIsActive = (tabName: string) => {
-      const mainName = tabName;
+      const mainName = tabName
 
       if (mainName == "base" && router.currentRoute.value.path == "/") {
-        return true;
+        return true
       } else if (
         mainName != "base" &&
         router.currentRoute.value.path.includes(mainName)
       ) {
-        selectedTab.value = mainName;
-        return true;
+        selectedTab.value = mainName
+        return true
       }
 
-      return false;
-    };
+      return false
+    }
 
     const goBack = () => {
-      window.history.length > 1 ? router.go(-1) : router.push("/");
-    };
+      window.history.length > 1 ? router.go(-1) : router.push("/")
+    }
 
     const goToRoute = (route: string) => {
-      router.push(route);
-    };
+      router.push(route)
+    }
 
-    const loaderSetup = ref<any>();
+    const loaderSetup = ref<any>()
 
     const tabs = ref<any[]>([
       {
@@ -155,7 +135,7 @@ export default defineComponent({
         routeTag: "marketplace",
         icon_size: "h-[18px]",
       },
-    ]);
+    ])
 
     onMounted(() => {
       tabs.value = tabs.value.filter((item) => {
@@ -163,12 +143,12 @@ export default defineComponent({
           Logic.Users.getUserType() == "organization" &&
           item.icon == "chat"
         ) {
-          return false;
+          return false
         } else {
-          return true;
+          return true
         }
-      });
-    });
+      })
+    })
 
     return {
       tabIsActive,
@@ -179,7 +159,7 @@ export default defineComponent({
       tabs,
       showAddItem,
       handleShowAddItem,
-    };
+    }
   },
-});
+})
 </script>

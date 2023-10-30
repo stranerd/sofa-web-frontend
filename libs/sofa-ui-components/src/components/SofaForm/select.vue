@@ -1,10 +1,10 @@
 <template>
-  <div :class="`flex flex-col space-y-2 ${defaultSize} `">
+  <div :class="`flex flex-col gap-2 ${defaultSize} `">
     <sofa-normal-text v-if="hasTitle" customClass="">
       <slot name="title" />
     </sofa-normal-text>
     <div
-      :class="`flex relative flex-col items-center space-x-1 justify-between w-full rounded-md ${customClass} bg-grey100 ${paddings}`"
+      :class="`flex relative flex-col items-center gap-1 justify-between w-full rounded-md ${customClass} bg-grey100 ${paddings}`"
       :id="'container' + tabIndex" @focus="
         showOption = true
       isFocused = true
@@ -14,12 +14,12 @@
   isFocused = false
 hideOptions();
 " :tabindex="tabIndex" @click="showAutoComplete()">
-      <div class="w-full flex flex-row space-x-1 items-center">
+      <div class="w-full flex flex-row gap-ems-center">
         <input ref="select" :value="withKey ? valueData : textValue" :placeholder="placeholder" v-if="!isMultiple"
           disabled
           :class="` text-bodyDark flex-grow bg-transparent placeholder-grayColor text-darkBody focus input w-full focus:outline-none   lg:text-sm mdlg:text-[12px] text-xs focus:border-primaryOrange`" />
         <div v-else
-          class="w-full flex flex-row whitespace-nowrap overflow-x-auto z-30 scrollbar-hide space-x-2 focus text-darkBody"
+          class="w-full flex flex-row whitespace-nowrap overflow-x-auto z-30 scrollbar-hide gap-cus text-darkBody"
           :id="`mutipleItemContainer` + tabIndex">
           <template v-if="selectedItems.length">
             <template v-for="(option, index) in selectedItems" :key="index">
@@ -44,8 +44,7 @@ hideOptions();
 
       <div v-if="showOption" @click.stop="null" :class="`w-full hidden mdlg:!flex flex-col top-[101%] left-0 bg-white z-[999999999999] max-h-[320px] ${isAbsolute ? 'min-w-[200px] absolute' : ' mt-3'
         }  overflow-y-auto rounded-md pb-3 px-3 shadow-md`">
-        <div class="w-full py-2 sticky top-0 bg-white space-x-3 flex flex-row items-center justify-between"
-          v-if="autoComplete">
+        <div class="w-full py-2 sticky top-0 bg-white gap-ex flex-row items-center justify-between" v-if="autoComplete">
           <sofa-text-field placeholder="Search" v-model="searchValue"
             custom-class="w-full !border-none !border-b-[1px] !bg-[whitesmoke]">
           </sofa-text-field>
@@ -55,9 +54,10 @@ hideOptions();
         </div>
         <div class="w-full flex flex-row py-2 bg-white" v-if="!autoComplete"></div>
         <div class="py-3 px-3 w-full flex flex-row items-center hover:!bg-gray-100 cursor-pointer"
-          v-for="(item, index) in canUseCustom && searchValue ? [{ key: searchValue, value: searchValue }, ...searchResult] : searchResult" :key="index" @click.stop="selectValue(item)">
+          v-for="(item, index) in canUseCustom && searchValue ? [{ key: searchValue, value: searchValue }, ...searchResult] : searchResult"
+          :key="index" @click.stop="selectValue(item)">
           <template v-if="isMultiple">
-            <div class="w-full flex flex-row space-x-3 items-center">
+            <div class="w-full flex flex-row gap-ems-center">
               <sofa-icon :name="itemIsSelected(item.key) ? 'checkbox-active' : 'checkbox'
                 " custom-class="h-[16px]" />
               <sofa-normal-text>
@@ -74,8 +74,8 @@ hideOptions();
       <sofa-modal :canClose="true" custom-class="mdlg:!hidden" :close="() => ShowSelectModal = false"
         v-if="ShowSelectModal">
         <div @click.stop="true"
-          class="rounded-t-md flex flex-col space-y-4 bg-white w-full absolute overflow-y-auto h-auto max-h-[80%] bottom-0 left-0 pb-3 px-3 lg:!text-sm mdlg:!text-[12px] text-xs">
-          <div class="flex items-center flex-col justify-center sticky top-0 space-y-2 bg-white w-full pt-3 pb-1">
+          class="rounded-t-md flex flex-col gap-4 bg-white w-full absolute overflow-y-auto h-auto max-h-[80%] bottom-0 left-0 pb-3 px-3 lg:!text-sm mdlg:!text-[12px] text-xs">
+          <div class="flex items-center flex-col justify-center sticky top-0 gap-2 bg-white w-full pt-3 pb-1">
             <div class="w-full flex items-center justify-center">
               <span class="bg-gray-200 rounded-full w-[30px] h-[4px]"></span>
             </div>
@@ -87,7 +87,7 @@ hideOptions();
           </div>
 
           <sofa-radio :options="selectOptions" v-model="selectedKey" @click.stop="true" v-if="!isMultiple" />
-          <div class="w-full flex flex-col space-y-2" v-else>
+          <div class="w-full flex flex-col gap-2" v-else>
             <div v-for="(option, index) in selectOptions" :key="index"
               class="flex w-full flex-row items-center justify-between cursor-pointer py-3 border-[1px] custom-border px-3 border-gray-200">
               <sofa-checkbox :extraData="option" :defaultValue="itemIsSelected(option.key)"
