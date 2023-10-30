@@ -34,10 +34,7 @@
     :key="index"
     @mouseenter="chat.hover = true"
     @mouseleave="chat.hover = false"
-    @click="
-      itIsNewMessage = false;
-      selectConversation(chat.id);
-    "
+    @click="selectConversation(chat.id)"
     :chat="chat"
   />
 </template>

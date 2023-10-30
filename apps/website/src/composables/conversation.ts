@@ -5,8 +5,41 @@ import {
   Message,
   TutorRequest,
 } from 'sofa-logic/src/logic/types/domains/conversations'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { scrollToBottom } from './index'
+
+export const contentList = [
+  {
+    icon: "master-subject",
+    title: "Master your subjects",
+    body: "Ask for answers, explanations, feedback on work, and anything else to help you learn better",
+  },
+  {
+    icon: "study-skill",
+    title: "Hone great study skills",
+    body: "Get better at time management, planning, scheduling, and many other skills with Dr. Sofa",
+  },
+  {
+    icon: "chat-category",
+    title: "Chat categorization",
+    body: "Have separate chats for each topic you want to learn under courses, subjects, or study skills",
+  },
+  {
+    icon: "study-material",
+    title: "Creating study materials",
+    body: "Dr. Sofa can take information you give it to create quizzes or courses for you to study with",
+  },
+  {
+    icon: "personal-learning",
+    title: "Personalized learning",
+    body: "The more you interact with, and give information to Dr. Sofa, the better it gets at helping you",
+  },
+  {
+    icon: "extra-hand",
+    title: "An extra hand",
+    body: "Add a tutor to a chat for a while to better help you learn beyond the limits of Dr. Sofa",
+  },
+]
 
 export interface ChatListData {
   title: string
@@ -39,7 +72,7 @@ const showAddTutor = ref(false)
 
 const showMoreOptions = ref(false)
 
-const itIsNewMessage = ref(false)
+const itIsNewMessage = computed(() => ['/chats/', '/chats/new'].includes(Logic.Common.route.path))
 
 const showRateAndReviewTutor = ref(false)
 
@@ -343,7 +376,6 @@ const handleKeyEvent = (e: any) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/ban-types
 const sendNewMessage = (selectConversation: Function | undefined) => {
   if (itIsNewMessage.value) {
-    itIsNewMessage.value = false
     setConvoFromRoute(messageContent.value)
     messageContent.value = ''
   } else {
@@ -545,43 +577,18 @@ const endChatSession = (reviewData: { ratings: number; review: string }) => {
   })
 }
 
+export const newChat = () => {
+	if (Messages.value) Messages.value = undefined
+
+	if (Logic.Common.mediaQuery() == "md" || Logic.Common.mediaQuery() == "sm") {
+		Logic.Common.GoToRoute("/chat/new")
+	} else {
+		selectedChatData.value.title = "New Chat"
+		Logic.Conversations.SingleConversation = undefined
+		Logic.Conversations.Messages = undefined
+	}
+}
+
 export {
-  messageContent,
-  showLoader,
-  chatList,
-  AllConversations,
-  SingleConversation,
-  Messages,
-  hasMessage,
-  showDeleteConvo,
-  selectedConvoId,
-  showAddTutor,
-  showMoreOptions,
-  conversationTitle,
-  itIsNewMessage,
-  AllTutorRequests,
-  tutorRequestList,
-  itIsTutorRequest,
-  selectedTutorRequestData,
-  selectedChatData,
-  ChatMembers,
-  showEndSession,
-  showRateAndReviewTutor,
-  listenToTutorRequest,
-  listenToConversation,
-  setChatToDefault,
-  setConvoFromRoute,
-  selectConversation,
-  setConversations,
-  addNewChat,
-  createCoversation,
-  sendMessage,
-  onInput,
-  sendNewMessage,
-  handleIncomingMessage,
-  deleteConvo,
-  handleKeyEvent,
-  contentTitleChanged,
-  acceptOrRejectTutorRequest,
-  endChatSession,
+  AllConversations, AllTutorRequests, ChatMembers, Messages, SingleConversation, acceptOrRejectTutorRequest, addNewChat, chatList, contentTitleChanged, conversationTitle, createCoversation, deleteConvo, endChatSession, handleIncomingMessage, handleKeyEvent, hasMessage, itIsNewMessage, itIsTutorRequest, listenToConversation, listenToTutorRequest, messageContent, onInput, selectConversation, selectedChatData, selectedConvoId, selectedTutorRequestData, sendMessage, sendNewMessage, setChatToDefault, setConversations, setConvoFromRoute, showAddTutor, showDeleteConvo, showEndSession, showLoader, showMoreOptions, showRateAndReviewTutor, tutorRequestList
 }
