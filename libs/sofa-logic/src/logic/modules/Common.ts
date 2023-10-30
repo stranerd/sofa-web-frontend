@@ -297,7 +297,7 @@ export default class Common {
     this.apiUrl = apiUrl
   }
 
-  public GoToRoute = (path: string, force = false) => {
+  public GoToRoute = async (path: string, force = false) => {
     if (path == '/auth/login') {
       if (
         !(window.location.pathname + window.location.search).includes('auth')
@@ -308,7 +308,7 @@ export default class Common {
         )
       }
 
-      this.router?.push(path)
+      await this.router?.push(path)
     } else {
       if (this.route.path == '/auth/login') {
         let nextRoute = ''
@@ -317,13 +317,13 @@ export default class Common {
             this.router.push(path)
           } else {
             nextRoute = localStorage.getItem('previous_page') || '/'
-            this.router.push(nextRoute)
+            await this.router.push(nextRoute)
           }
         } else {
-          this.router?.push(path)
+          await this.router?.push(path)
         }
       } else {
-        this.router?.push(path)
+        await this.router?.push(path)
       }
     }
   }

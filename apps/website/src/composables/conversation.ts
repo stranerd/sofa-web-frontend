@@ -112,12 +112,11 @@ const ChatMembers = ref(Logic.Conversations.ChatMembers)
 
 const hasMessage = ref(false)
 
-const addNewChat = (convoMessage = '') => {
-  createCoversation(convoMessage).then((data) => {
+const addNewChat = async (convoMessage = '') => {
+  return createCoversation(convoMessage).then(async (data) => {
     if (data) {
-      selectConversation(data.id)
-      Logic.Common.GoToRoute('/chats/' + data.id)
-      Logic.Conversations.GetConversations({
+      await selectConversation(data.id)
+      await Logic.Conversations.GetConversations({
         where: [
           {
             field: 'user.id',
@@ -273,10 +272,10 @@ const listenToConversation = (id: string) => {
   )
 }
 
-const selectConversation = (convoId: string) => {
+const selectConversation = async (convoId: string) => {
   itIsTutorRequest.value = false
   showMoreOptions.value = false
-  Logic.Common.GoToRoute('/chats/' + convoId)
+  await Logic.Common.GoToRoute('/chats/' + convoId)
   showMoreOptions.value = false
 
   Logic.Common.showLoader({
@@ -284,7 +283,7 @@ const selectConversation = (convoId: string) => {
     show: false,
   })
 
-  Logic.Conversations.GetConversation(convoId).then((response: any) => {
+  await Logic.Conversations.GetConversation(convoId).then((response: any) => {
     if (response) {
       Logic.Conversations.GetMessages(convoId).then((responseData: any) => {
         if (responseData) {
@@ -337,7 +336,7 @@ const selectConversation = (convoId: string) => {
   })
 }
 
-const createCoversation = (title: string) => {
+const createCoversation = async (title: string) => {
   return Logic.Conversations.CreateConversation(title).then((response) => {
     return response
   })
@@ -347,26 +346,26 @@ const onInput = (e: any) => {
   messageContent.value = e.target.innerText
 }
 
-const handleKeyEvent = (e: any) => {
+const handleKeyEvent = async (e: any) => {
   if (e.keyCode == 13 && e.shiftKey) {
     return
   }
 
   if (e.key === 'Enter' || e.keyCode === 13) {
-    sendNewMessage(undefined)
+    await sendNewMessage(undefined)
     e.preventDefault()
     return
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/ban-types
-const sendNewMessage = (selectConversation: Function | undefined) => {
+const sendNewMessage = async (selectConversation: Function | undefined) => {
   if (itIsNewMessage.value) {
-    setConvoFromRoute(messageContent.value)
+    await setConvoFromRoute(messageContent.value)
     messageContent.value = ''
   } else {
     if (messageContent.value) {
-      sendMessage(messageContent.value, selectConversation)
+      await sendMessage(messageContent.value, selectConversation)
       messageContent.value = ''
     }
   }
@@ -384,7 +383,7 @@ const sendNewMessage = (selectConversation: Function | undefined) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const sendMessage = (content: string, selectConversation = undefined) => {
+const sendMessage = async (content: string, selectConversation = undefined) => {
   if (Logic.Conversations.SingleConversation) {
     Logic.Conversations.CreateMessageForm = {
       body: content,
@@ -419,21 +418,21 @@ const sendMessage = (content: string, selectConversation = undefined) => {
 
     showLoader.value = true
 
-    Logic.Conversations.CreateMessage(
+    await Logic.Conversations.CreateMessage(
       Logic.Conversations.SingleConversation.id,
       true,
     )
   } else {
-    createCoversation(content).then((response) => {
+    await createCoversation(content).then(async (response) => {
       if (
         Logic.Common.mediaQuery() != 'sm' &&
         Logic.Common.mediaQuery() != 'md'
       ) {
         if (selectConversation) {
-          selectConversation(response.id)
+          await selectConversation(response.id)
         }
       }
-      Logic.Conversations.GetConversations({
+      await Logic.Conversations.GetConversations({
         where: [
           {
             field: 'user.id',
@@ -470,29 +469,29 @@ const handleIncomingMessage = (data: any) => {
   }
 }
 
-const setConvoFromRoute = (message = '') => {
+const setConvoFromRoute = async (message = '') => {
   const route = Logic.Common.route
   if (message) {
-    addNewChat(message)
+    await addNewChat(message)
   } else {
     if (route.query?.id) {
-      Logic.Common.GoToRoute('/chats/' + route.query?.id.toString())
+      await Logic.Common.GoToRoute('/chats/' + route.query?.id.toString())
     } else if (route.query?.message) {
-      addNewChat(route.query?.message.toString())
+      await addNewChat(route.query?.message.toString())
     }
   }
 }
 
-const deleteConvo = (id: string) => {
+const deleteConvo = async (id: string) => {
   if (Logic.Common.loaderSetup.loading) return
-  Logic.Conversations.DeleteConversation(id)
+  await Logic.Conversations.DeleteConversation(id)
 }
 
 const contentTitleChanged = (content) => {
-  Logic.Common.debounce(() => {
+  Logic.Common.debounce(async () => {
     if (SingleConversation.value) {
       conversationTitle.value = content
-      Logic.Conversations.UpdateConversation(
+      await Logic.Conversations.UpdateConversation(
         content,
         SingleConversation.value.id,
       )
@@ -500,11 +499,11 @@ const contentTitleChanged = (content) => {
   }, 700)
 }
 
-const acceptOrRejectTutorRequest = (accept: boolean) => {
-  Logic.Conversations.AcceptTutorRequest(
+const acceptOrRejectTutorRequest = async (accept: boolean) => {
+  await Logic.Conversations.AcceptTutorRequest(
     selectedTutorRequestData.value.id,
     accept,
-  ).then(() => {
+  ).then(async () => {
     itIsTutorRequest.value = false
     setChatToDefault()
 
@@ -520,42 +519,42 @@ const acceptOrRejectTutorRequest = (accept: boolean) => {
           ],
         },
         true,
-      ).then(() => {
+      ).then(async () => {
         setConversations()
-        selectConversation(selectedTutorRequestData.value.convoId)
+        await selectConversation(selectedTutorRequestData.value.convoId)
       })
     } else {
       Logic.Common.hideLoader()
       Logic.Conversations.SingleConversation = undefined
-      Logic.Common.GoToRoute('/chats')
+      await Logic.Common.GoToRoute('/chats')
     }
   })
 }
 
-const endChatSession = (reviewData: { ratings: number; review: string }) => {
+const endChatSession = async (reviewData: { ratings: number; review: string }) => {
   Logic.Conversations.DeleteTutorForm = {
     id: SingleConversation.value.id,
     message: reviewData.review,
     rating: reviewData.ratings,
   }
 
-  Logic.Conversations.DeleteTutor().then((data) => {
+  await Logic.Conversations.DeleteTutor().then(async (data) => {
     if (data) {
       showRateAndReviewTutor.value = false
       setChatToDefault()
-      Logic.Common.GoToRoute('/chats')
+      await Logic.Common.GoToRoute('/chats')
     }
   })
 }
 
-export const newChat = () => {
+export const newChat = async () => {
   if (Messages.value) Messages.value = undefined
   showMoreOptions.value = false
   showAddTutor.value = false
   showEndSession.value = false
   showDeleteConvo.value = false
   showRateAndReviewTutor.value = false
-	Logic.Common.GoToRoute("/chats/new")
+	await Logic.Common.GoToRoute("/chats/new")
 
   selectedChatData.value.title = "New Chat"
   Logic.Conversations.SingleConversation = undefined
