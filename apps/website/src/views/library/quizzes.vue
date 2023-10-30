@@ -2,22 +2,22 @@
   <sub-page-layout>
     <div class="w-full h-full flex-grow flex flex-col justify-start relative">
       <div
-        class="w-full flex flex-row items-center gap-3 justify-between z-50 bg-backgroundGray py-4 px-4 sticky top-0 left-0">
+        class="w-full flex flex-row items-center space-x-3 justify-between z-50 bg-backgroundGray py-4 px-4 sticky top-0 left-0">
         <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
         <sofa-normal-text :customClass="'!font-bold !text-base'">
           Quizzes</sofa-normal-text>
         <div></div>
       </div>
-      <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
+      <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 space-x-3">
         <span :class="`px-6 py-2  ${item.id == selectedItemId ? 'bg-primaryPurple' : 'bg-white'
-          } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
+          } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `"
           v-for="(item, index) in mainFilters" :key="index" @click="selectedItemId = item.id">
           <sofa-normal-text :color="`${item.id == selectedItemId ? 'text-white' : 'text-deepGray'
             } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
         </span>
       </div>
 
-      <div class="w-full flex flex-col gap-3 px-4 pt-3">
+      <div class="w-full flex flex-col space-y-3 px-4 pt-3">
         <template v-if="currentQuizData.length">
           <sofa-activity-card v-for="(activity, index) in currentQuizData" :key="index" :activity="activity"
             :custom-class="'!bg-white shadow-custom cursor-pointer relative'" @click.stop="openQuiz(activity)"
@@ -49,7 +49,7 @@
         }
           ">
         <div
-          class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+          class="bg-white w-full flex flex-col lg:!px-6 md:!space-y-4 space-y-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
           <div
             class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
@@ -58,9 +58,9 @@
             <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
           </div>
 
-          <div class="w-full flex flex-col gap-3 px-4 py-4">
-            <div class="w-full flex flex-row items-center gap-2 py-3" v-for="(item, index) in moreOptions" :key="index"
-              @click.stop="item.action()">
+          <div class="w-full flex flex-col space-y-3 px-4 py-4">
+            <div class="w-full flex flex-row items-center space-x-2 py-3" v-for="(item, index) in moreOptions"
+              :key="index" @click.stop="item.action()">
               <sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
               <sofa-normal-text>
                 {{ item.title }}

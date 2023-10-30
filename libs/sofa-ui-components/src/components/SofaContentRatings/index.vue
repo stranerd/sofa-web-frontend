@@ -1,15 +1,26 @@
 <template>
-  <div :class="`w-full flex flex-col ${hasWhiteBox ? 'gap-4' : 'gap-3'
-    }  pb-4`">
-    <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
-      } custom-border mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-center`">
+  <div
+    :class="`w-full flex flex-col ${
+      hasWhiteBox ? 'space-y-4' : 'space-y-3'
+    }  pb-4`"
+  >
+    <div
+      :class="`w-full  ${
+        hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
+      } custom-border mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row space-x-3 items-center`"
+    >
       <div class="flex flex-col py-4 px-2 mdlg:!w-[200px] w-[200px]">
-        <div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-[2px] border-[#E1E6EB]">
+        <div
+          class="mdlg:!px-7 px-3 py-4 flex flex-col space-y-2 items-center justify-center border-r-[2px] border-[#E1E6EB]"
+        >
           <div class="flex flex-row">
             <sofa-normal-text :customClass="'mdlg:!text-xl !text-lg'">
               {{ data.total }}
             </sofa-normal-text>
-            <sofa-normal-text :customClass="'mdlg:!text-xl  !text-lg'" :color="'text-grayColor'">
+            <sofa-normal-text
+              :customClass="'mdlg:!text-xl  !text-lg'"
+              :color="'text-grayColor'"
+            >
               /5
             </sofa-normal-text>
           </div>
@@ -21,38 +32,62 @@
         </div>
       </div>
 
-      <div class="w-full flex flex-col gap-2">
-        <div class="w-full flex flex-row items-center justify-between gap-
-          v-for=" (rating, index) in data.stats" :key="index">
-          <sofa-normal-text :customClass="'!text-xs mdlg:!text-xs'" :color="`${data.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'
-            }`">
+      <div class="w-full flex flex-col space-y-2">
+        <div
+          class="w-full flex flex-row items-center justify-between space-x-3"
+          v-for="(rating, index) in data.stats"
+          :key="index"
+        >
+          <sofa-normal-text
+            :customClass="'!text-xs mdlg:!text-xs'"
+            :color="`${
+              data.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'
+            }`"
+          >
             {{ index }} stars
           </sofa-normal-text>
           <div class="flex-grow h-[8px] rounded-[8px] bg-[#E1E6EB] relative">
-            <div class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
-              :style="`width: ${(data.stats[index] / data.totalCount) * 100}%;`"></div>
+            <div
+              class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
+              :style="`width: ${(data.stats[index] / data.totalCount) * 100}%;`"
+            ></div>
           </div>
 
-          <sofa-normal-text :customClass="'!text-xs mdlg:!text-xs'" :color="`${data.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'
-            }`">
+          <sofa-normal-text
+            :customClass="'!text-xs mdlg:!text-xs'"
+            :color="`${
+              data.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'
+            }`"
+          >
             ({{ data.stats[index] }})
           </sofa-normal-text>
         </div>
       </div>
     </div>
 
-    <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
-      }  custom-border mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-ems-start`"
-      v-for="(review, index) in data.reviews" :key="index">
+    <div
+      :class="`w-full  ${
+        hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
+      }  custom-border mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row space-x-3 items-start`"
+      v-for="(review, index) in data.reviews"
+      :key="index"
+    >
       <div>
-        <sofa-avatar :photoUrl="review.user.photoUrl" :size="'44'" :userId="review.user.id" />
+        <sofa-avatar
+          :photoUrl="review.user.photoUrl"
+          :size="'44'"
+          :userId="review.user.id"
+        />
       </div>
 
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col space-y-1">
         <sofa-normal-text :customClass="'!font-semibold'">{{
           review.user.name
         }}</sofa-normal-text>
-        <sofa-ratings :count="review.rating" :size="'h-[14px] mdlg:!h-[16px]'" />
+        <sofa-ratings
+          :count="review.rating"
+          :size="'h-[14px] mdlg:!h-[16px]'"
+        />
         <sofa-normal-text :customClass="'text-left'">
           {{ review.review }}
         </sofa-normal-text>
@@ -63,14 +98,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
-import SofaAvatar from "../SofaAvatar"
-import SofaBadge from "../SofaBadge"
-import SofaButton from "../SofaButton"
-import SofaIcon from "../SofaIcon"
-import SofaImageLoader from "../SofaImageLoader"
-import SofaRatings from "../SofaRatings"
-import { SofaNormalText } from "../SofaTypography"
+import { defineComponent } from "vue";
+import SofaIcon from "../SofaIcon";
+import { SofaNormalText } from "../SofaTypography";
+import SofaImageLoader from "../SofaImageLoader";
+import SofaBadge from "../SofaBadge";
+import SofaButton from "../SofaButton";
+import SofaRatings from "../SofaRatings";
+import SofaAvatar from "../SofaAvatar";
 
 export default defineComponent({
   components: {
@@ -97,5 +132,5 @@ export default defineComponent({
     },
   },
   name: "SofaContentRatings",
-})
+});
 </script>

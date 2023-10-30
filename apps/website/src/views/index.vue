@@ -1,8 +1,8 @@
 <template>
   <dashboard-layout>
     <template v-slot:left-session>
-      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
-        <div class="w-full flex flex-row items-center gap-3">
+      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4">
+        <div class="w-full flex flex-row items-center space-x-3">
           <sofa-avatar :size="'84'" :bgColor="'bg-grayColor'"
             :photoUrl="UserProfile.bio.photo ? UserProfile.bio?.photo.link : ''" @click="
               Logic.Users.AcceptOrRejectTutorRequest(
@@ -13,7 +13,7 @@
             <sofa-icon :customClass="'h-[45px]'" :name="'user'" />
           </sofa-avatar>
 
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col space-y-1">
             <sofa-header-text :customClass="'!text-base !font-bold'">{{
               UserProfile.bio.name?.full
             }}</sofa-header-text>
@@ -31,7 +31,7 @@
 
         <div class="w-full grid grid-cols-2 gap-3" v-if="Logic.Users.getUserType() == 'student'">
           <div
-            class="py-3 px-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] bg-ligthGray col-span-1 flex flex-row gap-3 justify-start items-center">
+            class="py-3 px-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] bg-ligthGray col-span-1 flex flex-row space-x-3 justify-start items-center">
             <sofa-icon :customClass="'h-[40px]'" :name="'xp-points'" />
             <div class="flex flex-col items-start justify-center">
               <sofa-normal-text :customClass="'font-bold'">{{
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div
-            class="py-3 px-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] bg-ligthGray col-span-1 flex flex-row gap-3 justify-start items-center">
+            class="py-3 px-3 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] bg-ligthGray col-span-1 flex flex-row space-x-3 justify-start items-center">
             <sofa-icon :customClass="'h-[40px]'" :name="'streak-new'" />
             <div class="flex flex-col items-start justify-center">
               <sofa-normal-text :customClass="'font-bold'">{{ UserProfile.account.streak.count }} days</sofa-normal-text>
@@ -57,8 +57,8 @@
       </div>
 
       <div v-if="!Logic.Users.UserProfile.roles.isVerified"
-        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-3">
-        <div class="w-full flex flex-row gap-2 items-center">
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-3">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             {{ "Get verified" }}
           </sofa-normal-text>
@@ -75,8 +75,8 @@
       </div>
 
       <div v-if="Logic.Users.UserProfile.type?.type === 'teacher' && Logic.Users.UserProfile.tutor.topics.length === 0"
-        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-3">
-        <div class="w-full flex flex-row gap-2 items-center">
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-3">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             Apply to teach subjects
           </sofa-normal-text>
@@ -100,8 +100,8 @@
         !Logic.Users.CheckUserTaskState('education_setup')) &&
         Logic.Users.getUserType() != 'organization'
         "
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 mdlg:!pt-4 pt-3 mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!gap-4 gap-1">
-        <div class="w-full flex flex-row gap-2 items-center">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 mdlg:!pt-4 pt-3 mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             Complete your account setup
           </sofa-normal-text>
@@ -109,7 +109,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in profileSteps" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -125,8 +125,8 @@
       <div v-if="!Logic.Users.CheckUserTaskState('create_course') ||
         !Logic.Users.CheckUserTaskState('create_quiz')
         "
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!gap-4 gap-1">
-        <div class="w-full flex flex-row gap-2 items-center">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             Create study materials
           </sofa-normal-text>
@@ -134,7 +134,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in studyMaterialsSteps" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -148,8 +148,8 @@
       </div>
 
       <div v-if="Logic.Users.getUserType() == 'student'"
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!gap-4 gap-1">
-        <div class="w-full flex flex-row gap-2 items-center">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!space-y-4 space-y-1">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             Take on some tasks
           </sofa-normal-text>
@@ -157,7 +157,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in takeOnTasks" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -171,8 +171,8 @@
       </div>
 
       <div v-if="recentChats.length"
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] mdlg:!hidden flex flex-col mdlg:!gap-4 gap-1">
-        <div class="w-full flex flex-row gap-2 items-center">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] mdlg:!hidden flex flex-col mdlg:!space-y-4 space-y-1">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             Recent chats
           </sofa-normal-text>
@@ -180,11 +180,11 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in recentChats" :key="index"
               @click="Logic.Common.GoToRoute('/chat?id=' + item.id)">
               <template v-slot:title>
-                <div class="w-full flex flex-row items-center gap-2">
+                <div class="w-full flex flex-row items-center space-x-2">
                   <sofa-normal-text :customClass="'!line-clamp-1 font-bold text-left'">
                     {{ item.title }}
                   </sofa-normal-text>
@@ -199,8 +199,8 @@
       </div>
 
       <div
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col gap-4">
-        <div class="w-full flex flex-row gap-2 items-center justify-between">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4">
+        <div class="w-full flex flex-row space-x-2 items-center justify-between">
           <sofa-normal-text :customClass="'!font-bold'">
             Suggested for you
           </sofa-normal-text>
@@ -211,9 +211,9 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
           <div v-if="homeContents.suggested.length"
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-activity-card v-for="(activity, index) in homeContents.suggested" :key="index" :activity="activity"
               :custom-class="'cursor-pointer'" @click="
                 Logic.Common.GoToRoute(
@@ -228,7 +228,7 @@
     " />
           </div>
           <template v-else>
-            <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
+            <div class="w-full flex flex-col space-y-3 mdlg:pr-0 pr-4">
               <sofa-empty-state :title="'No suggested materials'" :subTitle="'We could not find any suggested materials'"
                 :custom-class="'!h-[230px]'" />
             </div>
@@ -243,8 +243,8 @@
       </div>
 
       <div
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col gap-4">
-        <div class="w-full flex flex-row gap-2 items-center justify-between">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4">
+        <div class="w-full flex flex-row space-x-2 items-center justify-between">
           <sofa-normal-text :customClass="'!font-bold'">
             Recent study materials
           </sofa-normal-text>
@@ -255,9 +255,9 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
           <div v-if="homeContents.recent.length"
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-activity-card v-for="(activity, index) in homeContents.recent" :key="index" :activity="activity"
               :custom-class="'cursor-pointer'" @click="
                 Logic.Common.GoToRoute(
@@ -272,7 +272,7 @@
     " />
           </div>
           <template v-else>
-            <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
+            <div class="w-full flex flex-col space-y-3 mdlg:pr-0 pr-4">
               <sofa-empty-state :title="'No recent materials'" :subTitle="'We could not find any recent materials'"
                 :custom-class="'!h-[230px]'" />
             </div>
@@ -287,8 +287,8 @@
       </div>
 
       <div v-if="homeContents.my_org.length"
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col gap-4">
-        <div class="w-full flex flex-row gap-2 items-center justify-between">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4">
+        <div class="w-full flex flex-row space-x-2 items-center justify-between">
           <sofa-normal-text :customClass="'!font-bold'">
             From your organizations
           </sofa-normal-text>
@@ -299,9 +299,9 @@
         </div>
 
         <div
-          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
           <div v-if="homeContents.my_org.length"
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!space-y-4 flex flex-row space-x-3 mdlg:!space-x-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-activity-card v-for="(activity, index) in homeContents.my_org" :key="index"
               :custom-class="'cursor-pointer'" :activity="activity" @click="
                 Logic.Common.GoToRoute(
@@ -316,7 +316,7 @@
     " />
           </div>
           <template v-else>
-            <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
+            <div class="w-full flex flex-col space-y-3 mdlg:pr-0 pr-4">
               <sofa-empty-state :title="'No result found'"
                 :subTitle="'We could not find any material from your organizations'" :custom-class="'!h-[350px]'" />
             </div>
@@ -331,11 +331,11 @@
       </div>
 
       <div
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col gap-4">
+        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col space-y-4">
         <div
-          class="w-full mdlg:!flex hidden flex-col gap-3 justify-center items-center py-9 px-6 rounded-[8px] bg-primaryPurple">
+          class="w-full mdlg:!flex hidden flex-col space-y-3 justify-center items-center py-9 px-6 rounded-[8px] bg-primaryPurple">
           <sofa-icon :customClass="'h-[28px]'" :name="'white-search'" />
-          <div class="w-full flex flex-col gap-2 justify-center items-center py-2">
+          <div class="w-full flex flex-col space-y-2 justify-center items-center py-2">
             <sofa-normal-text :color="'text-white'" :custom-class="'!font-bold'">Discover more</sofa-normal-text>
             <sofa-normal-text :color="'text-white'"
               :custom-class="'w-full flex flex-row items-center justify-center !font-semibold'">There are lots of quizzes
@@ -361,7 +361,7 @@
           }
             ">
           <div
-            class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
+            class="bg-white w-full flex flex-col lg:!px-6 space-y-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
             <sofa-header-text :customClass="'text-xl'">Set up your account</sofa-header-text>
 
             <account-setup />
@@ -378,16 +378,16 @@
 
     <template v-slot:right-session>
       <div v-if="Logic.Users.getUserType() != 'teacher'"
-        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4">
         <template v-if="Logic.Users.getUserType() == 'student'">
-          <div class="w-full flex flex-row items-center gap-3">
+          <div class="w-full flex flex-row items-center space-x-3">
             <div :style="`background-image: url('${UserProfile.ai.photo
               ? UserProfile.ai.photo.link
               : '/images/icons/robot.svg'
               }')`"
               class="w-[84px] h-[84px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col space-y-1">
               <sofa-header-text :customClass="'!text-base !font-bold'">{{
                 UserProfile.ai.name
               }}</sofa-header-text>
@@ -404,7 +404,7 @@
             </template>
           </sofa-text-field>
 
-          <div class="w-full flex flex-row items-center gap-2">
+          <div class="w-full flex flex-row items-center space-x-2">
             <sofa-badge :color="'gray'" :isInverted="true" :customClass="'py-2 px-4 cursor-pointer'"
               @click="Logic.Common.GoToRoute('/quiz/create')">Create a quiz</sofa-badge>
             <sofa-badge :color="'gray'" :isInverted="true" :customClass="'py-2 px-4 cursor-pointer'"
@@ -416,7 +416,7 @@
             <sofa-normal-text :custom-class="'!font-bold'">
               Your students
             </sofa-normal-text>
-            <div class="flex flex-row gap-2 items-center cursor-pointer"
+            <div class="flex flex-row space-x-2 items-center cursor-pointer"
               @click="Logic.Common.GoToRoute('/settings/students')">
               <sofa-normal-text :custom-class="'!text-grayColor'">
                 Add
@@ -426,10 +426,10 @@
           </div>
 
           <template v-if="allStudents.length">
-            <div class="w-full flex flex-col gap-4">
+            <div class="w-full flex flex-col space-y-4">
               <div class="w-full flex flex-row items-center justify-between" v-for="(item, index) in allStudents"
                 :key="index">
-                <div class="flex flex-row items-center gap-2">
+                <div class="flex flex-row items-center space-x-2">
                   <sofa-avatar :photoUrl="item.profile_url || ''" :size="'26'" :bgColor="'bg-grayColor'">
                     <sofa-icon :name="'user'" :customClass="'h-[15px]'" />
                   </sofa-avatar>
@@ -456,10 +456,10 @@
         </template>
       </div>
 
-      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4" v-if="(chatList.length && Logic.Users.getUserType() == 'student') ||
+      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col space-y-4" v-if="(chatList.length && Logic.Users.getUserType() == 'student') ||
         Logic.Users.getUserType() == 'teacher'
         ">
-        <div class="w-full flex flex-row gap-2 items-center">
+        <div class="w-full flex flex-row space-x-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
             Recent chats
           </sofa-normal-text>

@@ -2,23 +2,23 @@
   <sub-page-layout>
     <div class="w-full h-full flex-grow flex flex-col justify-start relative">
       <div
-        class="w-full flex flex-row items-center gap-3 justify-between z-50 bg-backgroundGray py-4 px-4 sticky top-0 left-0">
+        class="w-full flex flex-row items-center space-x-3 justify-between z-50 bg-backgroundGray py-4 px-4 sticky top-0 left-0">
         <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
         <sofa-normal-text :customClass="'!font-bold !text-base !line-clamp-1'">
           {{ SingleFolder?.title ?? "Not Found" }}</sofa-normal-text>
         <span />
       </div>
       <template v-if="SingleFolder">
-        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
+        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 space-x-3">
           <span :class="`px-6 py-2  ${item.id == selectedFolderFilter ? 'bg-primaryPurple' : 'bg-white'
-            } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
+            } custom-border flex flex-row items-center justify-center space-x-1  cursor-pointer `"
             v-for="(item, index) in folderFilterOption" :key="index" @click="selectedFolderFilter = item.id">
             <sofa-normal-text :color="`${item.id == selectedFolderFilter ? 'text-white' : 'text-deepGray'
               } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
           </span>
         </div>
 
-        <div class="w-full flex flex-col gap-3 px-4 pt-3">
+        <div class="w-full flex flex-col space-y-3 px-4 pt-3">
           <template v-if="selectedFolderItems.length">
             <sofa-activity-card v-for="(activity, index) in selectedFolderItems" :key="index" :activity="activity"
               :custom-class="'!bg-white shadow-custom cursor-pointer'" :isWrapped="true" @click="

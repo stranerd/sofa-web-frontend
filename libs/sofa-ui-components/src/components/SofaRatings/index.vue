@@ -1,20 +1,35 @@
 <template>
-  <div :class="`flex flex-row items-center gap-1 ${customClass}`">
-    <sofa-icon :name="`${ratings >= 1 ? 'star-full' : 'star'}`" :custom-class="size"
-      @click="readonly ? '' : (ratings = 1)" />
-    <sofa-icon :name="`${ratings >= 2 ? 'star-full' : 'star'}`" :custom-class="size"
-      @click="readonly ? '' : (ratings = 2)" />
-    <sofa-icon :name="`${ratings >= 3 ? 'star-full' : 'star'}`" :custom-class="size"
-      @click="readonly ? '' : (ratings = 3)" />
-    <sofa-icon :name="`${ratings >= 4 ? 'star-full' : 'star'}`" :custom-class="size"
-      @click="readonly ? '' : (ratings = 4)" />
-    <sofa-icon :name="`${ratings >= 5 ? 'star-full' : 'star'}`" :custom-class="size"
-      @click="readonly ? '' : (ratings = 5)" />
+  <div :class="`flex flex-row items-center space-x-1 ${customClass}`">
+    <sofa-icon
+      :name="`${ratings >= 1 ? 'star-full' : 'star'}`"
+      :custom-class="size"
+      @click="readonly ? '' : (ratings = 1)"
+    />
+    <sofa-icon
+      :name="`${ratings >= 2 ? 'star-full' : 'star'}`"
+      :custom-class="size"
+      @click="readonly ? '' : (ratings = 2)"
+    />
+    <sofa-icon
+      :name="`${ratings >= 3 ? 'star-full' : 'star'}`"
+      :custom-class="size"
+      @click="readonly ? '' : (ratings = 3)"
+    />
+    <sofa-icon
+      :name="`${ratings >= 4 ? 'star-full' : 'star'}`"
+      :custom-class="size"
+      @click="readonly ? '' : (ratings = 4)"
+    />
+    <sofa-icon
+      :name="`${ratings >= 5 ? 'star-full' : 'star'}`"
+      :custom-class="size"
+      @click="readonly ? '' : (ratings = 5)"
+    />
   </div>
 </template>
 <script lang="ts">
-import { onMounted, ref, watch } from "vue"
-import SofaIcon from "../SofaIcon"
+import { onMounted, ref, watch } from "vue";
+import SofaIcon from "../SofaIcon";
 export default {
   components: {
     SofaIcon,
@@ -39,19 +54,19 @@ export default {
   },
   emits: ["update:modelValue"],
   name: "SofaRatings",
-  setup (props: any, context: any) {
-    const ratings = ref(0)
+  setup(props: any, context: any) {
+    const ratings = ref(0);
     onMounted(() => {
       if (props.count) {
-        ratings.value = Math.round(props.count)
+        ratings.value = Math.round(props.count);
       }
-    })
+    });
     watch(ratings, () => {
-      context.emit("update:modelValue", ratings.value)
-    })
+      context.emit("update:modelValue", ratings.value);
+    });
     return {
       ratings,
-    }
+    };
   },
-}
+};
 </script>
