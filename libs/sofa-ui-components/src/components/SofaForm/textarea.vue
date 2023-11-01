@@ -70,7 +70,8 @@ export default defineComponent({
     },
     richEditor: {
       type: Boolean,
-      default: true,
+      required: false,
+      default: false,
     },
   },
   name: "SofaTextarea",
