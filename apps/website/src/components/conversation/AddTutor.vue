@@ -136,7 +136,6 @@
               :custom-class="'bg-backgroundGray custom-border'"
               :placeholder="'Tell the tutor why you need him/her'"
               v-model="reasonForRequest"
-              :rich-editor="false"
               :text-area-style="'!bg-backgroundGray custom-border'"
             >
             </sofa-textarea>

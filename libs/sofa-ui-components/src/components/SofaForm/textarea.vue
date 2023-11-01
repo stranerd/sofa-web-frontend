@@ -4,7 +4,7 @@
       <slot name="title" />
     </sofa-normal-text>
     <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`" :disabled="disabled"
-      :style="`min-height: calc(${rows}em)`"
+      :style="`min-height: max(${rows}em, 40px)`"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
       :placeholder="placeholder" />
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled"
@@ -20,7 +20,7 @@ import SofaNormalText from "../SofaTypography/normalText.vue"
 const toolbar = [
   [{ header: [2, 3, 4, 5, false] }],
   ['bold', 'italic', 'underline', 'strike'],
-  [{ script: 'sub' }, { script: 'super' }],
+  [{ script: 'sub' }, { script: 'super' }, 'formula'],
   ['code-block'],
   ['clean']
 ]
@@ -110,6 +110,11 @@ export default defineComponent({
   font-family: inherit !important;
   font-size: inherit !important;
 
+  input, textarea {
+    color: inherit;
+    background-color: white;
+  }
+
   .ql-container {
     font-family: inherit !important;
     font-size: inherit !important;
@@ -123,24 +128,31 @@ export default defineComponent({
     }
   }
 
+  .ql-snow .ql-picker-label {
+    padding-left: 2px;
+  }
+
   .ql-editor.ql-blank::before {
     color: inherit;
   }
 
   .ql-toolbar {
-    display: none;
+    border: none;
+    // border-bottom: 1px solid #78828C;
+    display: flex;
+    gap: 2px;
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
     font-family: inherit !important;
     font-size: inherit !important;
 
-    // padding: 4px 0 !important;
+    padding: 4px !important;
 
     .ql-formats {
       display: flex;
+      gap: 1px;
 
-      // padding: 8px;
       margin: 0 !important;
 
       .ql-expanded {
@@ -150,38 +162,42 @@ export default defineComponent({
           min-width: 0;
           top: 0;
           left: 0;
-          position: absolute;
+          // position: absolute;
         }
       }
     }
   }
-}
 
-.ql-container.ql-snow {
-  border: 0 !important;
-}
+  .ql-container.ql-snow {
+    border: 0 !important;
+  }
 
-.ql-editor {
-  padding: 0;
-  background: transparent;
-  // border: 1px solid $color-itemBg;
-  border-radius: 0.5rem;
-  transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-  font-family: inherit !important;
-  font-size: inherit !important;
-  min-height: unset;
-}
+  .ql-editor {
+    padding: auto 0;
+    background: transparent;
+    // border: 1px solid $color-itemBg;
+    transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    min-height: unset;
+  }
 
-.ql-editor:focus {
-  outline: 0;
+  .ql-editor:focus {
+    outline: 0;
 
-  // border: 0px solid $color-info;
-  // box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
+    // border: 0px solid $color-info;
+    // box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
 
-.ql-editor.ql-blank::before {
-  color: inherit;
-  opacity: 0.35;
-  font-style: normal;
+  .ql-editor.ql-blank::before {
+    color: inherit;
+    opacity: 0.35;
+    font-style: normal;
+  }
+
+  .ql-tooltip.ql-editing[data-mode="formula"] {
+    left: 0 !important;
+    top: 0 !important;
+  }
 }
 </style>

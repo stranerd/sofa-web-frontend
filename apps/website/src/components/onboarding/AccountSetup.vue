@@ -55,10 +55,8 @@
 
         <sofa-textarea :hasTitle="false"
           :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-          :placeholder="currentAccountType != 'organization'
-              ? 'Bio'
-              : 'About the organization'
-            " :richEditor="false" v-model="updateProfileForm.description" />
+          :placeholder="currentAccountType != 'organization' ? 'Bio' : 'About the organization'"
+          v-model="updateProfileForm.description" />
 
         <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'organization Code'" ref="organization_code"

@@ -86,7 +86,6 @@
         <sofa-textarea
           :placeholder="'Description of yourself'"
           :hasTitle="true"
-          :rich-editor="false"
           :name="'Bio'"
           ref="description"
           :text-area-style="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor resize-none'"

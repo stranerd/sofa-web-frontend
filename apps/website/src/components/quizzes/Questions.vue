@@ -109,7 +109,7 @@
             class="w-full flex flex-row items-center justify-between rounded-[12px] md:!px-3 md:!py-3 px-3 py-1 border-[#E1E6EB] bg-white space-x-3"
             style="border-width: 2px 2px 4px 2px">
             <div class="flex-grow flex flex-row space-x-3 py-3 items-center">
-              <sofa-textarea :placeholder="option.content[0].label" v-model="question.userAnswer" :rich-editor="false"
+              <sofa-textarea :placeholder="option.content[0].label" v-model="question.userAnswer"
                 :text-area-style="`focus:outline-none bg-transparent  !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base`">
               </sofa-textarea>
             </div>

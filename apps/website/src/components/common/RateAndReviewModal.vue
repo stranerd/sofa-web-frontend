@@ -80,7 +80,6 @@
               :custom-class="'bg-backgroundGray custom-border'"
               :placeholder="'Write a short message'"
               v-model="formData.review"
-              :rich-editor="false"
               :text-area-style="'!bg-backgroundGray custom-border'"
             >
             </sofa-textarea>

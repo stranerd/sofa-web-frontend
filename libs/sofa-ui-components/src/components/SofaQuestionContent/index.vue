@@ -64,14 +64,16 @@
     </div>
 
     <div class="w-full grid grid-cols-2 gap-4 pt-4">
-      <div :class="`${questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'} flex flex-col space-y-4`" v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'">
-        <draggable :list="reactiveQuestion.options" class="w-full space-y-4" item-key="id" :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
+      <div :class="`${questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'} flex flex-col space-y-4`"
+        v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'">
+        <draggable :list="reactiveQuestion.options" class="w-full space-y-4" item-key="id"
+          :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
           <template #item="{ element, index }">
             <div
-              :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+              :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
               style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
               @mouseleave="element.showRemove = false">
-              <div class="flex-grow flex flex-row space-x-3 items-center">
+              <div class="w-full flex-grow flex flex-row space-x-3 items-center">
                 <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
                   v-if="questionTypeMain != 'write_answer'" />
                 <sofa-textarea :rows="1" :disabled="questionTypeMain == 'true_false'" :richEditor="true"
@@ -125,9 +127,9 @@
     </div>
 
     <div class="w-full flex flex-row justify-end space-x-2 items-center cursor-pointer" v-if="(questionTypeMain == 'multiple_choice' ||
-        questionTypeMain == 'sequence' ||
-        questionTypeMain == 'match' ||
-        questionTypeMain == 'write_answer') &&
+      questionTypeMain == 'sequence' ||
+      questionTypeMain == 'match' ||
+      questionTypeMain == 'write_answer') &&
       reactiveQuestion.options.length < optionLimitSettings.max
       " @click="setQuestionOptions(reactiveQuestion.options.length + 1)">
       <sofa-icon :name="'box-plus'" :custom-class="'h-[24px]'" />

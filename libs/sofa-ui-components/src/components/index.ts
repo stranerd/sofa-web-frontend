@@ -1,97 +1,50 @@
-import 'katex/dist/katex.min'
-
-import SofaButton from './SofaButton'
-import SofaIcon from './SofaIcon'
-import SofaImageLoader from './SofaImageLoader'
+import SofaActivityCard from './SofaActivityCard'
+import SofaAddQuestion from './SofaAddQuestion'
+import SofaAlert from './SofaAlert'
 import SofaAvatar from './SofaAvatar'
 import SofaBadge from './SofaBadge'
-import SofaItemCard from './SofaItemCard'
-import SofaActivityCard from './SofaActivityCard'
-import SofaSwiper from './SofaSwiper'
-import SofaIconCard from './SofaIconCard'
-import SofaUserCard from './SofaUserCard'
-import SofaProgressItemCard from './SofaProgressItemCard'
-import SofaContentDetails from './SofaContentDetails'
-import SofaModal from './SofaModal'
+import SofaButton from './SofaButton'
+import { SofaBarChart, SofaPieChart } from './SofaChart'
 import SofaContent from './SofaContent'
+import SofaContentDetails from './SofaContentDetails'
 import SofaContentRatings from './SofaContentRatings'
-import SofaQuestionOptions from './SofaQuestionOptions'
-import SofaCourseSections from './SofaCourseSections'
-import SofaCourseDetails from './SofaCourseDetails'
-import SofaDocumentReader from './SofaDocumentReader'
-import SofaVideoPlayer from './SofaVideoPlayer'
-import SofaAddQuestion from './SofaAddQuestion'
-import SofaQuestionContent from './SofaQuestionContent'
-import SofaEmptyState from './SofaEmptyState'
-import SofaCourseSummary from './SofaCourseSummary'
 import SofaCourseContent from './SofaCourseContent'
+import SofaCourseDetails from './SofaCourseDetails'
+import SofaCourseSections from './SofaCourseSections'
+import SofaCourseSummary from './SofaCourseSummary'
 import SofaDeletePrompt from './SofaDeletePrompt'
-import SofaAlert from './SofaAlert'
-import SofaSuccessPrompt from './SofaSuccessPrompt'
-import SofaRatings from './SofaRatings'
-import { SofaHeaderText, SofaNormalText } from './SofaTypography'
+import SofaDocumentReader from './SofaDocumentReader'
+import SofaEmptyState from './SofaEmptyState'
 import {
+  SofaCheckbox,
+  SofaCustomInput,
+  SofaFileAttachment,
+  SofaFormWrapper,
+  SofaKeyboard,
+  SofaMultipleChoice,
+  SofaOtpInput,
+  SofaRadio,
   SofaSelect,
   SofaTextField,
-  SofaCheckbox,
-  SofaOtpInput,
-  SofaKeyboard,
-  SofaRadio,
-  SofaFormWrapper,
-  SofaFileAttachment,
   SofaTextarea,
-  SofaMultipleChoice,
-  SofaCustomInput,
 } from './SofaForm'
+import SofaIcon from './SofaIcon'
+import SofaIconCard from './SofaIconCard'
+import SofaImageLoader from './SofaImageLoader'
+import SofaItemCard from './SofaItemCard'
+import SofaModal from './SofaModal'
 import { SofaBottomBar, SofaSideBar, SofaTopBar } from './SofaNavigation'
-import { SofaBarChart, SofaPieChart } from './SofaChart'
+import SofaProgressItemCard from './SofaProgressItemCard'
+import SofaQuestionContent from './SofaQuestionContent'
+import SofaQuestionOptions from './SofaQuestionOptions'
+import SofaRatings from './SofaRatings'
+import SofaSuccessPrompt from './SofaSuccessPrompt'
+import SofaSwiper from './SofaSwiper'
+import { SofaHeaderText, SofaNormalText } from './SofaTypography'
+import SofaUserCard from './SofaUserCard'
+import SofaVideoPlayer from './SofaVideoPlayer'
 
 export {
-  SofaButton,
-  SofaHeaderText,
-  SofaNormalText,
-  SofaSelect,
-  SofaTextField,
-  SofaCheckbox,
-  SofaOtpInput,
-  SofaKeyboard,
-  SofaRadio,
-  SofaFormWrapper,
-  SofaFileAttachment,
-  SofaIcon,
-  SofaImageLoader,
-  SofaBottomBar,
-  SofaSideBar,
-  SofaTopBar,
-  SofaAvatar,
-  SofaBadge,
-  SofaTextarea,
-  SofaMultipleChoice,
-  SofaItemCard,
-  SofaActivityCard,
-  SofaSwiper,
-  SofaIconCard,
-  SofaUserCard,
-  SofaProgressItemCard,
-  SofaContentDetails,
-  SofaModal,
-  SofaContent,
-  SofaContentRatings,
-  SofaQuestionOptions,
-  SofaCourseSections,
-  SofaCourseDetails,
-  SofaDocumentReader,
-  SofaVideoPlayer,
-  SofaAddQuestion,
-  SofaQuestionContent,
-  SofaCustomInput,
-  SofaEmptyState,
-  SofaBarChart,
-  SofaPieChart,
-  SofaCourseSummary,
-  SofaCourseContent,
-  SofaDeletePrompt,
-  SofaAlert,
-  SofaSuccessPrompt,
-  SofaRatings,
+  SofaActivityCard, SofaAddQuestion, SofaAlert, SofaAvatar,
+  SofaBadge, SofaBarChart, SofaBottomBar, SofaButton, SofaCheckbox, SofaContent, SofaContentDetails, SofaContentRatings, SofaCourseContent, SofaCourseDetails, SofaCourseSections, SofaCourseSummary, SofaCustomInput, SofaDeletePrompt, SofaDocumentReader, SofaEmptyState, SofaFileAttachment, SofaFormWrapper, SofaHeaderText, SofaIcon, SofaIconCard, SofaImageLoader, SofaItemCard, SofaKeyboard, SofaModal, SofaMultipleChoice, SofaNormalText, SofaOtpInput, SofaPieChart, SofaProgressItemCard, SofaQuestionContent, SofaQuestionOptions, SofaRadio, SofaRatings, SofaSelect, SofaSideBar, SofaSuccessPrompt, SofaSwiper, SofaTextField, SofaTextarea, SofaTopBar, SofaUserCard, SofaVideoPlayer
 }
