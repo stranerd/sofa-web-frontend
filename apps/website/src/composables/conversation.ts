@@ -5,8 +5,41 @@ import {
   Message,
   TutorRequest,
 } from 'sofa-logic/src/logic/types/domains/conversations'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { scrollToBottom } from './index'
+
+export const contentList = [
+  {
+    icon: "master-subject",
+    title: "Master your subjects",
+    body: "Ask for answers, explanations, feedback on work, and anything else to help you learn better",
+  },
+  {
+    icon: "study-skill",
+    title: "Hone great study skills",
+    body: "Get better at time management, planning, scheduling, and many other skills with Dr. Sofa",
+  },
+  {
+    icon: "chat-category",
+    title: "Chat categorization",
+    body: "Have separate chats for each topic you want to learn under courses, subjects, or study skills",
+  },
+  {
+    icon: "study-material",
+    title: "Creating study materials",
+    body: "Dr. Sofa can take information you give it to create quizzes or courses for you to study with",
+  },
+  {
+    icon: "personal-learning",
+    title: "Personalized learning",
+    body: "The more you interact with, and give information to Dr. Sofa, the better it gets at helping you",
+  },
+  {
+    icon: "extra-hand",
+    title: "An extra hand",
+    body: "Add a tutor to a chat for a while to better help you learn beyond the limits of Dr. Sofa",
+  },
+]
 
 export interface ChatListData {
   title: string
@@ -39,7 +72,7 @@ const showAddTutor = ref(false)
 
 const showMoreOptions = ref(false)
 
-const itIsNewMessage = ref(false)
+const itIsNewMessage = computed(() => ['/chats/', '/chats/new'].includes(Logic.Common.route.path))
 
 const showRateAndReviewTutor = ref(false)
 
@@ -79,19 +112,11 @@ const ChatMembers = ref(Logic.Conversations.ChatMembers)
 
 const hasMessage = ref(false)
 
-const addNewChat = (convoMessage = '') => {
-  createCoversation(convoMessage).then((data) => {
+const addNewChat = async (convoMessage = '') => {
+  return createCoversation(convoMessage).then(async (data) => {
     if (data) {
-      if (
-        Logic.Common.mediaQuery() != 'sm' &&
-        Logic.Common.mediaQuery() != 'md'
-      ) {
-        showLoader.value = true
-        selectConversation(data.id)
-      } else {
-        Logic.Common.GoToRoute('/chat/' + data.id)
-      }
-      Logic.Conversations.GetConversations({
+      await selectConversation(data.id)
+      await Logic.Conversations.GetConversations({
         where: [
           {
             field: 'user.id',
@@ -247,25 +272,18 @@ const listenToConversation = (id: string) => {
   )
 }
 
-const selectConversation = (convoId: string) => {
+const selectConversation = async (convoId: string) => {
   itIsTutorRequest.value = false
-  if (Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm') {
-    showMoreOptions.value = false
-    Logic.Common.GoToRoute('/chat/' + convoId)
-    return
-  }
-
-  if (Logic.Common.route.path != '/chat') {
-    Logic.Common.GoToRoute('/chat')
-    return
-  }
   showMoreOptions.value = false
+  await Logic.Common.GoToRoute('/chats/' + convoId)
+  showMoreOptions.value = false
+
   Logic.Common.showLoader({
     loading: true,
     show: false,
   })
 
-  Logic.Conversations.GetConversation(convoId).then((response: any) => {
+  await Logic.Conversations.GetConversation(convoId).then((response: any) => {
     if (response) {
       Logic.Conversations.GetMessages(convoId).then((responseData: any) => {
         if (responseData) {
@@ -318,7 +336,7 @@ const selectConversation = (convoId: string) => {
   })
 }
 
-const createCoversation = (title: string) => {
+const createCoversation = async (title: string) => {
   return Logic.Conversations.CreateConversation(title).then((response) => {
     return response
   })
@@ -328,27 +346,26 @@ const onInput = (e: any) => {
   messageContent.value = e.target.innerText
 }
 
-const handleKeyEvent = (e: any) => {
+const handleKeyEvent = async (e: any) => {
   if (e.keyCode == 13 && e.shiftKey) {
     return
   }
 
   if (e.key === 'Enter' || e.keyCode === 13) {
-    sendNewMessage(undefined)
+    await sendNewMessage(undefined)
     e.preventDefault()
     return
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/ban-types
-const sendNewMessage = (selectConversation: Function | undefined) => {
+const sendNewMessage = async (selectConversation: Function | undefined) => {
   if (itIsNewMessage.value) {
-    itIsNewMessage.value = false
-    setConvoFromRoute(messageContent.value)
+    await setConvoFromRoute(messageContent.value)
     messageContent.value = ''
   } else {
     if (messageContent.value) {
-      sendMessage(messageContent.value, selectConversation)
+      await sendMessage(messageContent.value, selectConversation)
       messageContent.value = ''
     }
   }
@@ -366,7 +383,7 @@ const sendNewMessage = (selectConversation: Function | undefined) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const sendMessage = (content: string, selectConversation = undefined) => {
+const sendMessage = async (content: string, selectConversation = undefined) => {
   if (Logic.Conversations.SingleConversation) {
     Logic.Conversations.CreateMessageForm = {
       body: content,
@@ -401,21 +418,21 @@ const sendMessage = (content: string, selectConversation = undefined) => {
 
     showLoader.value = true
 
-    Logic.Conversations.CreateMessage(
+    await Logic.Conversations.CreateMessage(
       Logic.Conversations.SingleConversation.id,
       true,
     )
   } else {
-    createCoversation(content).then((response) => {
+    await createCoversation(content).then(async (response) => {
       if (
         Logic.Common.mediaQuery() != 'sm' &&
         Logic.Common.mediaQuery() != 'md'
       ) {
         if (selectConversation) {
-          selectConversation(response.id)
+          await selectConversation(response.id)
         }
       }
-      Logic.Conversations.GetConversations({
+      await Logic.Conversations.GetConversations({
         where: [
           {
             field: 'user.id',
@@ -452,37 +469,29 @@ const handleIncomingMessage = (data: any) => {
   }
 }
 
-const setConvoFromRoute = (message = '') => {
+const setConvoFromRoute = async (message = '') => {
   const route = Logic.Common.route
   if (message) {
-    addNewChat(message)
+    await addNewChat(message)
   } else {
     if (route.query?.id) {
-      if (
-        Logic.Common.mediaQuery() != 'sm' &&
-        Logic.Common.mediaQuery() != 'md'
-      ) {
-        // showLoader.value = true
-        selectConversation(route.query?.id.toString())
-      } else {
-        Logic.Common.GoToRoute('/chat/' + route.query?.id.toString())
-      }
+      await Logic.Common.GoToRoute('/chats/' + route.query?.id.toString())
     } else if (route.query?.message) {
-      addNewChat(route.query?.message.toString())
+      await addNewChat(route.query?.message.toString())
     }
   }
 }
 
-const deleteConvo = (id: string) => {
+const deleteConvo = async (id: string) => {
   if (Logic.Common.loaderSetup.loading) return
-  Logic.Conversations.DeleteConversation(id)
+  await Logic.Conversations.DeleteConversation(id)
 }
 
 const contentTitleChanged = (content) => {
-  Logic.Common.debounce(() => {
+  Logic.Common.debounce(async () => {
     if (SingleConversation.value) {
       conversationTitle.value = content
-      Logic.Conversations.UpdateConversation(
+      await Logic.Conversations.UpdateConversation(
         content,
         SingleConversation.value.id,
       )
@@ -490,11 +499,11 @@ const contentTitleChanged = (content) => {
   }, 700)
 }
 
-const acceptOrRejectTutorRequest = (accept: boolean) => {
-  Logic.Conversations.AcceptTutorRequest(
+const acceptOrRejectTutorRequest = async (accept: boolean) => {
+  await Logic.Conversations.AcceptTutorRequest(
     selectedTutorRequestData.value.id,
     accept,
-  ).then(() => {
+  ).then(async () => {
     itIsTutorRequest.value = false
     setChatToDefault()
 
@@ -510,78 +519,48 @@ const acceptOrRejectTutorRequest = (accept: boolean) => {
           ],
         },
         true,
-      ).then(() => {
+      ).then(async () => {
         setConversations()
-        selectConversation(selectedTutorRequestData.value.convoId)
+        await selectConversation(selectedTutorRequestData.value.convoId)
       })
     } else {
       Logic.Common.hideLoader()
       Logic.Conversations.SingleConversation = undefined
-      Logic.Common.GoToRoute('/chat')
+      await Logic.Common.GoToRoute('/chats')
     }
   })
 }
 
-const endChatSession = (reviewData: { ratings: number; review: string }) => {
+const endChatSession = async (reviewData: { ratings: number; review: string }) => {
   Logic.Conversations.DeleteTutorForm = {
     id: SingleConversation.value.id,
     message: reviewData.review,
     rating: reviewData.ratings,
   }
 
-  Logic.Conversations.DeleteTutor().then((data) => {
+  await Logic.Conversations.DeleteTutor().then(async (data) => {
     if (data) {
       showRateAndReviewTutor.value = false
       setChatToDefault()
-      if (
-        Logic.Common.mediaQuery() == 'sm' ||
-        Logic.Common.mediaQuery() == 'md'
-      ) {
-        Logic.Common.GoToRoute('/chat')
-      } else {
-        Logic.Conversations.SingleConversation = undefined
-      }
+      await Logic.Common.GoToRoute('/chats')
     }
   })
 }
 
+export const newChat = async () => {
+  if (Messages.value) Messages.value = undefined
+  showMoreOptions.value = false
+  showAddTutor.value = false
+  showEndSession.value = false
+  showDeleteConvo.value = false
+  showRateAndReviewTutor.value = false
+	await Logic.Common.GoToRoute("/chats/new")
+
+  selectedChatData.value.title = "New Chat"
+  Logic.Conversations.SingleConversation = undefined
+  Logic.Conversations.Messages = undefined
+}
+
 export {
-  messageContent,
-  showLoader,
-  chatList,
-  AllConversations,
-  SingleConversation,
-  Messages,
-  hasMessage,
-  showDeleteConvo,
-  selectedConvoId,
-  showAddTutor,
-  showMoreOptions,
-  conversationTitle,
-  itIsNewMessage,
-  AllTutorRequests,
-  tutorRequestList,
-  itIsTutorRequest,
-  selectedTutorRequestData,
-  selectedChatData,
-  ChatMembers,
-  showEndSession,
-  showRateAndReviewTutor,
-  listenToTutorRequest,
-  listenToConversation,
-  setChatToDefault,
-  setConvoFromRoute,
-  selectConversation,
-  setConversations,
-  addNewChat,
-  createCoversation,
-  sendMessage,
-  onInput,
-  sendNewMessage,
-  handleIncomingMessage,
-  deleteConvo,
-  handleKeyEvent,
-  contentTitleChanged,
-  acceptOrRejectTutorRequest,
-  endChatSession,
+  AllConversations, AllTutorRequests, ChatMembers, Messages, SingleConversation, acceptOrRejectTutorRequest, addNewChat, chatList, contentTitleChanged, conversationTitle, createCoversation, deleteConvo, endChatSession, handleIncomingMessage, handleKeyEvent, hasMessage, itIsNewMessage, itIsTutorRequest, listenToConversation, listenToTutorRequest, messageContent, onInput, selectConversation, selectedChatData, selectedConvoId, selectedTutorRequestData, sendMessage, sendNewMessage, setChatToDefault, setConversations, setConvoFromRoute, showAddTutor, showDeleteConvo, showEndSession, showLoader, showMoreOptions, showRateAndReviewTutor, tutorRequestList
 }

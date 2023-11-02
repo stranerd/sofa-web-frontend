@@ -1,19 +1,19 @@
 <template>
   <expanded-layout :hasBottomBar="false" layoutStyle="mdlg:!w-[60%] lg:!w-[45%] w-full pt-0  mdlg:!pt-0 lg:!pt-0 ">
     <div
-      class="w-full flex mdlg:!hidden flex-row items-center space-x-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
+      class="w-full flex mdlg:!hidden flex-row items-center gap-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
       <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
       <sofa-normal-text :customClass="'!font-bold !text-base'">
         Become a tutor</sofa-normal-text>
       <div class="invisible">Hello</div>
     </div>
-    <div class="w-full flex flex-col space-y-5 mdlg:px-0 px-4">
+    <div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
       <!-- Top bar for larger screens -->
       <div class="w-full hidden flex-row items-center justify-between mdlg:!flex">
         <sofa-header-text :customClass="'!text-2xl !font-bold'">
           Become a tutor
         </sofa-header-text>
-        <div class="flex flex-row items-center space-x-2">
+        <div class="flex flex-row items-center gap-2">
           <sofa-button :padding="'px-5 py-2'" @click="handleNextAction">Next</sofa-button>
         </div>
       </div>
@@ -25,11 +25,11 @@
 
       <!-- Profile -->
       <template v-if="currentStep == 'profile'">
-        <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+        <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
           <sofa-header-text :size="'xl'" :customClass="'text-left'">
             Profile
           </sofa-header-text>
-          <div class="w-full flex flex-row items-center justify-start py-2 space-x-4">
+          <div class="w-full flex flex-row items-center justify-start py-2 gap-4">
             <sofa-image-loader
               :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
               :photoUrl="profileImageUrl ?? ''">
@@ -62,17 +62,16 @@
 
         <!-- Qualifications -->
 
-        <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+        <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
           <sofa-header-text :size="'xl'" :customClass="'text-left'">
             Qualification
           </sofa-header-text>
 
           <sofa-file-attachment :isWrapper="true"
-            :customClass="'custom-border border-[2px] border-dashed border-primaryPurple bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row space-x-2'"
+            :customClass="'custom-border border-[2px] border-dashed border-primaryPurple bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
             v-model="tutorRequestForm.qualification" accept="application/pdf, image/*" :is-multiple="true">
             <template v-slot:content>
-              <div
-                class="w-full flex mdlg:flex-row mdlg:space-x-3 flex-col space-y-1 mdlg:space-y-0 items-center justify-center">
+              <div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 mdlg:gap-0 items-center justify-center">
                 <sofa-icon :name="'upload-purple'" :customClass="'h-[16px]'" />
 
                 <sofa-normal-text :color="'text-primaryPurple'" :customClass="'text-center'">
@@ -90,17 +89,16 @@
         </div>
 
         <!-- Verification -->
-        <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+        <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
           <sofa-header-text :size="'xl'" :customClass="'text-left'">
             Verification
           </sofa-header-text>
 
           <sofa-file-attachment :isWrapper="true"
-            :customClass="'custom-border border-[2px] border-dashed border-primaryPurple  bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row space-x-2'"
+            :customClass="'custom-border border-[2px] border-dashed border-primaryPurple  bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
             v-model="tutorRequestForm.verification" accept="image/*">
             <template v-slot:content>
-              <div
-                class="w-full flex mdlg:flex-row mdlg:space-x-3 flex-col space-y-1 mdlg:space-y-0 items-center justify-center">
+              <div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
                 <sofa-icon :name="'upload-purple'" :customClass="'h-[16px]'" />
                 <sofa-normal-text :color="'text-primaryPurple'">
                   {{
@@ -115,7 +113,7 @@
         </div>
 
         <!-- Location -->
-        <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+        <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
           <sofa-header-text :size="'xl'" :customClass="'text-left'">
             Location
           </sofa-header-text>
@@ -136,8 +134,8 @@
 
       <template v-if="currentStep == 'test'">
         <!-- Select subject -->
-        <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-          <div class="w-full flex flex-col space-y-1">
+        <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+          <div class="w-full flex flex-col gap-1">
             <sofa-header-text :size="'xl'" :customClass="'text-left'">
               Subject
             </sofa-header-text>
@@ -153,8 +151,8 @@
         </div>
 
         <!-- Subject test -->
-        <div class="w-full flex flex-col space-y-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-          <div class="w-full flex flex-col space-y-1">
+        <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+          <div class="w-full flex flex-col gap-1">
             <sofa-header-text :size="'xl'" :customClass="'text-left'">
               Test
             </sofa-header-text>

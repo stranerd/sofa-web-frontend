@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-col space-y-2 content">
+  <div class="flex w-full flex-col gap-2 content">
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>

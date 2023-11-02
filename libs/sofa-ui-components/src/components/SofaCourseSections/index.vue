@@ -1,126 +1,75 @@
 <template>
-  <div
-    class="w-full flex flex-col h-full py-2 mdlg:!py-0 mdlg:!space-y-0 space-y-4 relative overflow-y-auto overflow-x-hidden"
-  >
-    <div class="flex flex-col space-y-6 h-full w-full">
+  <div class="w-full flex flex-col h-full py-2 mdlg:!py-0 mdlg:!gap-0 gap-4 relative overflow-y-auto overflow-x-hidden">
+    <div class="flex flex-col gap-6 h-full w-full">
       <template v-if="sectionOptions.length">
         <template v-for="(option, index) in sectionOptions" :key="index">
-          <div :class="`flex flex-col w-full space-y-3`">
+          <div :class="`flex flex-col w-full gap-3`">
             <template v-if="option">
-              <div
-                class="w-full flex flex-row items-center justify-between cursor-pointer"
-                @click="
-                  option?.opened
-                    ? (option.opened = false)
-                    : (option.opened = true)
-                "
-              >
-                <div class="flex flex-row items-center space-x-2">
-                  <sofa-normal-text
-                    :customClass="'!font-bold'"
-                    v-if="!option.edit"
-                    >{{
-                      option.name == "unsectioned" ? "Unsectioned" : option.name
-                    }}</sofa-normal-text
-                  >
-                  <input
-                    v-else
-                    @click.stop="null"
+              <div class="w-full flex flex-row items-center justify-between cursor-pointer" @click="
+                option?.opened
+                  ? (option.opened = false)
+                  : (option.opened = true)
+                ">
+                <div class="flex flex-row items-center gap-2">
+                  <sofa-normal-text :customClass="'!font-bold'" v-if="!option.edit">{{
+                    option.name == "unsectioned" ? "Unsectioned" : option.name
+                  }}</sofa-normal-text>
+                  <input v-else @click.stop="null"
                     class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border-[1px] !bg-white border-gray-100 rounded !text-bodyBlack"
-                    v-model="option.name"
-                    autofocus
-                    placeholder="Section name"
-                    @blur="option.edit = false"
-                  />
+                    v-model="option.name" autofocus placeholder="Section name" @blur="option.edit = false" />
                 </div>
-                <div class="flex flex-row items-center space-x-3">
-                  <sofa-icon
-                    @click.stop="option.edit = true"
-                    :customClass="'h-[15px] cursor-pointer'"
-                    :name="'edit-gray'"
-                    v-if="option.name != 'unsectioned'"
-                  />
-                  <sofa-icon
-                    @click.stop="removeSection(index)"
-                    :customClass="'h-[15px] cursor-pointer'"
-                    :name="'trash-gray'"
-                    v-if="option.name != 'unsectioned'"
-                  />
-                  <sofa-icon
-                    :customClass="'h-[7px] cursor-pointer'"
-                    :name="option.opened ? 'chevron-up' : 'chevron-down'"
-                  />
+                <div class="flex flex-row items-center gap-3">
+                  <sofa-icon @click.stop="option.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'"
+                    v-if="option.name != 'unsectioned'" />
+                  <sofa-icon @click.stop="removeSection(index)" :customClass="'h-[15px] cursor-pointer'"
+                    :name="'trash-gray'" v-if="option.name != 'unsectioned'" />
+                  <sofa-icon :customClass="'h-[7px] cursor-pointer'"
+                    :name="option.opened ? 'chevron-up' : 'chevron-down'" />
                 </div>
               </div>
 
               <template v-if="option.opened">
-                <draggable
-                  v-model="option.materials"
-                  group="course-item"
-                  class="w-full space-y-3"
-                  item-key="id"
-                  handle=".handle"
-                >
+                <draggable v-model="option.materials" group="course-item" class="w-full gap-3" item-key="id"
+                  handle=".handle">
                   <template #item="{ element }">
-                    <div
-                      :class="`w-full flex flex-row items-center relative justify-between space-x-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${
-                        selectedMaterial?.id == element.id
-                          ? 'bg-lightBlue'
-                          : 'bg-white'
-                      }`"
-                      @mouseover="element.hover = true"
-                      @mouseleave="element.hover = false"
-                      @click.stop="
-                        selectedMaterial = {
-                          id: element.id,
-                          data: element.data,
-                          details: element.details,
-                          type: element.type.split('-')[0],
-                        };
-                        handleItemSelected();
-                      "
-                    >
-                      <div class="flex flex-row items-center space-x-2">
-                        <sofa-icon
-                          :customClass="'h-[17px]'"
-                          :name="element.type"
-                        />
+                    <div :class="`w-full flex flex-row items-center relative justify-between gap-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${selectedMaterial?.id == element.id
+                      ? 'bg-lightBlue'
+                      : 'bg-white'
+                      }`" @mouseover="element.hover = true" @mouseleave="element.hover = false" @click.stop="
+    selectedMaterial = {
+      id: element.id,
+      data: element.data,
+      details: element.details,
+      type: element.type.split('-')[0],
+    }
+  handleItemSelected();
+  ">
+                      <div class="flex flex-row items-center gap-2">
+                        <sofa-icon :customClass="'h-[17px]'" :name="element.type" />
                         <sofa-normal-text
-                          :customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'"
-                          >{{ element.name }}</sofa-normal-text
-                        >
+                          :customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'">{{
+                            element.name }}</sofa-normal-text>
                       </div>
 
                       <div
-                        class="flex flex-row space-x-2 items-center absolute h-full w-auto right-0 bottom-0 bg-lightBlue px-2 rounded-[8px]"
-                      >
+                        class="flex flex-row gap-2 items-center absolute h-full w-auto right-0 bottom-0 bg-lightBlue px-2 rounded-[8px]">
                         <!-- <sofa-icon
                         :customClass="'h-[15px]'"
                         :name="'trash-gray'"
                       /> -->
 
-                        <sofa-icon
-                          :customClass="'h-[19px] handle'"
-                          :name="'reorder-gray'"
-                        />
+                        <sofa-icon :customClass="'h-[19px] handle'" :name="'reorder-gray'" />
                       </div>
                     </div>
                   </template>
                 </draggable>
 
-                <div
-                  class="px-2 py-2 flex flex-row w-full items-center space-x-2 cursor-pointer"
-                  @click="
-                    selectedMaterial = undefined;
-                    selectedSection = index;
-                    handleItemSelected();
-                  "
-                  v-if="option.name != 'unsectioned'"
-                >
-                  <sofa-icon
-                    :customClass="'h-[17px]'"
-                    :name="'box-add-purple'"
-                  />
+                <div class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer" @click="
+                  selectedMaterial = undefined
+                selectedSection = index
+                handleItemSelected();
+                " v-if="option.name != 'unsectioned'">
+                  <sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
                   <sofa-normal-text :color="'text-primaryPurple'">
                     Add study material
                   </sofa-normal-text>
@@ -131,10 +80,7 @@
         </template>
       </template>
 
-      <div
-        class="py-2 pt-0 flex flex-row w-full items-center space-x-2 cursor-pointer"
-        @click.stop="addNewSection()"
-      >
+      <div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
         <sofa-icon :customClass="'h-[17px]'" :name="'box-add-pink'" />
         <sofa-normal-text :color="'text-primaryPink'">
           Add section
@@ -151,13 +97,13 @@ import {
   reactive,
   ref,
   watch,
-} from "vue";
-import SofaIcon from "../SofaIcon";
-import { SofaNormalText } from "../SofaTypography";
-import draggable from "vuedraggable";
-import { UpdateCourseSectionsInput } from "../../types";
-import { Logic } from "../../composable";
-import { Course, Question, Quiz, SofaFile } from "../../types/domains/study";
+} from "vue"
+import draggable from "vuedraggable"
+import { Logic } from "../../composable"
+import { UpdateCourseSectionsInput } from "../../types"
+import { Course, Question, Quiz, SofaFile } from "../../types/domains/study"
+import SofaIcon from "../SofaIcon"
+import { SofaNormalText } from "../SofaTypography"
 
 export default defineComponent({
   components: {
@@ -186,35 +132,35 @@ export default defineComponent({
   },
   name: "SofaCourseSections",
   emits: ["update:modelValue", "OnMaterialSelected"],
-  setup(props, context) {
-    const SingleCourse = ref<Course>(Logic.Study.SingleCourse);
-    const SingleFile = ref<SofaFile>(Logic.Study.SingleFile);
-    const SingleQuiz = ref<Quiz>(Logic.Study.SingleQuiz);
-    const SingleCourseFiles = ref<SofaFile[]>(Logic.Study.SingleCourseFiles);
-    const SingleCourseQuizzes = ref<Quiz[]>(Logic.Study.SingleCourseQuizzes);
-    const NewCoursableItem = ref(Logic.Study.NewCoursableItem);
-    const CoursableItemRemoved = ref(Logic.Study.CoursableItemRemoved);
-    const SelectedMaterialDetails = ref(Logic.Study.SelectedMaterialDetails);
-    const UpdatedFile = ref(Logic.Study.UpdatedFile);
+  setup (props, context) {
+    const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
+    const SingleFile = ref<SofaFile>(Logic.Study.SingleFile)
+    const SingleQuiz = ref<Quiz>(Logic.Study.SingleQuiz)
+    const SingleCourseFiles = ref<SofaFile[]>(Logic.Study.SingleCourseFiles)
+    const SingleCourseQuizzes = ref<Quiz[]>(Logic.Study.SingleCourseQuizzes)
+    const NewCoursableItem = ref(Logic.Study.NewCoursableItem)
+    const CoursableItemRemoved = ref(Logic.Study.CoursableItemRemoved)
+    const SelectedMaterialDetails = ref(Logic.Study.SelectedMaterialDetails)
+    const UpdatedFile = ref(Logic.Study.UpdatedFile)
 
-    const selectedSection = ref(0);
+    const selectedSection = ref(0)
 
-    const sectionOptions = reactive([]);
+    const sectionOptions = reactive([])
 
-    const staticSectionOptions = ref([]);
-    const staticPropSections = ref([]);
+    const staticSectionOptions = ref([])
+    const staticPropSections = ref([])
 
     const addSectionMaterial = (id: string, type: "file" | "quiz") => {
       Logic.Common.debounce(() => {
         props.sectionInput.sections[selectedSection.value].items.push({
           id,
           type,
-        });
+        })
         setTimeout(() => {
-          props.updateSections();
-        }, 1000);
-      }, 300);
-    };
+          props.updateSections()
+        }, 1000)
+      }, 300)
+    }
 
     const setSectionMaterial = (
       mediaFile: SofaFile | undefined,
@@ -223,11 +169,9 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const mediaUrl = `${process.env.VUE_APP_API_URL}/study/files/${
-          mediaFile.id
-        }/media?AccessToken=${
-          JSON.parse(localStorage.getItem("AuthTokens")).accessToken
-        }`;
+        const mediaUrl = `${process.env.VUE_APP_API_URL}/study/files/${mediaFile.id
+          }/media?AccessToken=${JSON.parse(localStorage.getItem("AuthTokens")).accessToken
+          }`
         if (mediaFile.type == "image") {
           staticSectionOptions.value[index].materials.push({
             name: mediaFile.title,
@@ -244,7 +188,7 @@ export default defineComponent({
               imageUrl: mediaUrl,
             },
             hover: false,
-          });
+          })
         }
 
         if (mediaFile.type == "video") {
@@ -265,7 +209,7 @@ export default defineComponent({
               fullScreen: false,
               videoUrl: mediaUrl,
             },
-          });
+          })
         }
 
         if (mediaFile.type == "document") {
@@ -289,53 +233,53 @@ export default defineComponent({
               fullScreen: false,
               documentUrl: mediaUrl,
             },
-          });
+          })
         }
 
         if (save) {
-          addSectionMaterial(SingleFile.value.id, "file");
+          addSectionMaterial(SingleFile.value.id, "file")
         }
       }
 
       if (quiz) {
         Logic.Study.GetQuestions(quiz.id).then((response) => {
           if (response) {
-            const questions: Question[] = response.results;
+            const questions: Question[] = response.results
 
             const allQuestions = questions.map((eachQuestion) => {
-              let answers = "";
+              let answers = ""
 
               if (eachQuestion.data.type == "multipleChoice") {
                 answers =
-                  eachQuestion.data.options[eachQuestion.data.answers[0]];
+                  eachQuestion.data.options[eachQuestion.data.answers[0]]
               } else if (eachQuestion.data.type == "trueOrFalse") {
-                answers = `${capitalize(eachQuestion.data.answer.toString())}`;
+                answers = `${capitalize(eachQuestion.data.answer.toString())}`
               } else if (
                 eachQuestion.data.type == "writeAnswer" ||
                 eachQuestion.data.type == "sequence" ||
                 eachQuestion.data.type == "dragAnswers" ||
                 eachQuestion.data.type == "fillInBlanks"
               ) {
-                answers = capitalize(eachQuestion.data.answers?.join(", "));
+                answers = capitalize(eachQuestion.data.answers?.join(", "))
               } else if (eachQuestion.data.type == "match") {
                 answers = capitalize(
                   eachQuestion.data.set
                     .map((item) => {
-                      return item.a;
+                      return item.a
                     })
                     .join(", ")
-                );
+                )
               }
               return {
                 type: Logic.Study.questionTypes[eachQuestion.data.type].type,
                 duration:
                   Logic.Common.EquivalentsSecondsInString[
-                    `${eachQuestion.timeLimit}`
+                  `${eachQuestion.timeLimit}`
                   ],
                 content: eachQuestion.question,
                 answer: answers,
-              };
-            });
+              }
+            })
 
             staticSectionOptions.value[index].materials.push({
               name: quiz.title,
@@ -349,9 +293,8 @@ export default defineComponent({
                 description: quiz.description,
                 ratings: {
                   total: Math.round(quiz.ratings.avg),
-                  label: `${quiz.ratings.count} rating${
-                    quiz.ratings.count > 1 ? "s" : ""
-                  }`,
+                  label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? "s" : ""
+                    }`,
                 },
                 user: {
                   photoUrl: `${quiz.user.bio?.photo?.link}`,
@@ -363,21 +306,21 @@ export default defineComponent({
               },
               data: allQuestions,
               hover: false,
-            });
+            })
 
             if (save) {
-              addSectionMaterial(SingleQuiz.value.id, "quiz");
+              addSectionMaterial(SingleQuiz.value.id, "quiz")
             }
           }
-        });
+        })
       }
-    };
+    }
 
     watch(SingleCourse, () => {
       if (sectionOptions.length < SingleCourse.value.sections.length) {
-        setSections(SingleCourse.value.sections.length - 1);
+        setSections(SingleCourse.value.sections.length - 1)
       }
-    });
+    })
 
     watch(NewCoursableItem, () => {
       if (sectionOptions.length) {
@@ -387,38 +330,38 @@ export default defineComponent({
             SingleQuiz.value,
             true,
             selectedSection.value
-          );
-        }, 500);
+          )
+        }, 500)
       }
-    });
+    })
 
     watch(CoursableItemRemoved, () => {
-      setSections();
-      selectedMaterial.value = undefined;
-      handleItemSelected();
-    });
+      setSections()
+      selectedMaterial.value = undefined
+      handleItemSelected()
+    })
 
     const addItemToSection = (item: any, index: any) => {
       if (item.type == "quiz") {
         const quizData = SingleCourseQuizzes.value?.filter(
           (quiz) => quiz.id == item.id
-        );
+        )
         if (quizData.length) {
-          setSectionMaterial(undefined, quizData[0], false, index);
+          setSectionMaterial(undefined, quizData[0], false, index)
         }
       } else {
         const fileData = SingleCourseFiles.value?.filter(
           (file) => file.id == item.id
-        );
-        setSectionMaterial(fileData[0], undefined, false, index);
+        )
+        setSectionMaterial(fileData[0], undefined, false, index)
       }
-    };
+    }
 
     const setSections = (index = 0) => {
-      staticSectionOptions.value.length = 0;
-      staticPropSections.value.length = 0;
+      staticSectionOptions.value.length = 0
+      staticPropSections.value.length = 0
 
-      selectedSection.value = index;
+      selectedSection.value = index
 
       SingleCourse.value.sections.forEach((section, index) => {
         staticSectionOptions.value.push({
@@ -427,42 +370,42 @@ export default defineComponent({
           materials: [],
           opened: index == selectedSection.value,
           edit: false,
-        });
+        })
 
         staticPropSections.value.push({
           items: section.items,
           label: section.label,
-        });
+        })
 
         section.items.map((item) => {
-          addItemToSection(item, index);
-        });
-      });
+          addItemToSection(item, index)
+        })
+      })
 
       let remainCoursableItems = JSON.parse(
         JSON.stringify(SingleCourse.value.coursables)
-      );
+      )
 
       SingleCourse.value.sections.forEach((items) => {
         items.items.forEach((eachItem) => {
           const itemIndex = remainCoursableItems.findIndex(
             (x) => x.id == eachItem.id
-          );
+          )
           if (itemIndex != -1) {
             remainCoursableItems = remainCoursableItems.filter((thisItem) => {
-              return thisItem.id != eachItem.id;
-            });
+              return thisItem.id != eachItem.id
+            })
           }
-        });
-      });
+        })
+      })
 
       const unsectionedSection = SingleCourse.value.sections.filter(
         (section) => {
-          return section.label == "unsectioned";
+          return section.label == "unsectioned"
         }
-      );
+      )
 
-      let unsectionedIndex = SingleCourse.value.sections.length - 1;
+      let unsectionedIndex = SingleCourse.value.sections.length - 1
 
       if (unsectionedSection.length == 0) {
         staticSectionOptions.value.push({
@@ -472,34 +415,34 @@ export default defineComponent({
           opened: true,
           edit: false,
           items: [],
-        });
+        })
 
         staticPropSections.value.push({
           items: [],
           label: "unsectioned",
-        });
+        })
 
-        unsectionedIndex++;
+        unsectionedIndex++
       }
 
       remainCoursableItems.map((item) => {
-        addItemToSection(item, unsectionedIndex);
-      });
+        addItemToSection(item, unsectionedIndex)
+      })
 
-      sectionOptions.length = 0;
-      sectionOptions.push(...staticSectionOptions.value);
-      props.sectionInput.sections.length = 0;
-      props.sectionInput.sections.push(...staticPropSections.value);
-    };
+      sectionOptions.length = 0
+      sectionOptions.push(...staticSectionOptions.value)
+      props.sectionInput.sections.length = 0
+      props.sectionInput.sections.push(...staticPropSections.value)
+    }
 
     const addNewSection = () => {
-      const currentSectionsLenght = props.sectionInput.sections.length;
+      const currentSectionsLenght = props.sectionInput.sections.length
       const newSectionPosition =
-        currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1;
+        currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1
       props.sectionInput.sections.splice(newSectionPosition, 0, {
         items: [],
         label: `Section ${sectionOptions.length}`,
-      });
+      })
 
       sectionOptions.splice(newSectionPosition, 0, {
         name: `Section ${sectionOptions.length}`,
@@ -508,45 +451,45 @@ export default defineComponent({
         opened: true,
         edit: false,
         items: [],
-      });
+      })
 
       SingleCourse.value.sections.splice(newSectionPosition, 0, {
         items: [],
         label: `Section ${sectionOptions.length}`,
-      });
+      })
 
       Logic.Study.SingleCourse.sections.splice(newSectionPosition, 0, {
         items: [],
         label: `Section ${sectionOptions.length}`,
-      });
+      })
 
-      props.updateSections();
+      props.updateSections()
       Logic.Common.showLoader({
         show: true,
         loading: false,
         message: "New section added",
         type: "success",
-      });
-    };
+      })
+    }
 
     onMounted(() => {
-      Logic.Study.watchProperty("SingleCourse", SingleCourse);
-      Logic.Study.watchProperty("SingleFile", SingleFile);
-      Logic.Study.watchProperty("SingleCourseFiles", SingleCourseFiles);
-      Logic.Study.watchProperty("SingleCourseQuizzes", SingleCourseQuizzes);
-      Logic.Study.watchProperty("NewCoursableItem", NewCoursableItem);
-      Logic.Study.watchProperty("CoursableItemRemoved", CoursableItemRemoved);
-      Logic.Study.watchProperty("UpdatedFile", UpdatedFile);
-      Logic.Study.watchProperty("SingleQuiz", SingleQuiz);
+      Logic.Study.watchProperty("SingleCourse", SingleCourse)
+      Logic.Study.watchProperty("SingleFile", SingleFile)
+      Logic.Study.watchProperty("SingleCourseFiles", SingleCourseFiles)
+      Logic.Study.watchProperty("SingleCourseQuizzes", SingleCourseQuizzes)
+      Logic.Study.watchProperty("NewCoursableItem", NewCoursableItem)
+      Logic.Study.watchProperty("CoursableItemRemoved", CoursableItemRemoved)
+      Logic.Study.watchProperty("UpdatedFile", UpdatedFile)
+      Logic.Study.watchProperty("SingleQuiz", SingleQuiz)
 
       Logic.Study.watchProperty(
         "SelectedMaterialDetails",
         SelectedMaterialDetails
-      );
+      )
       if (SingleCourse.value) {
-        setSections();
+        setSections()
       }
-    });
+    })
 
     const updateLatestSection = () => {
       sectionOptions.forEach((option, index) => {
@@ -556,80 +499,80 @@ export default defineComponent({
               return {
                 id: item.id,
                 type: item.type.includes("quiz") ? "quiz" : "file",
-              };
+              }
             }
-          );
-          props.sectionInput.sections[index].label = option.name;
+          )
+          props.sectionInput.sections[index].label = option.name
         } else {
           props.sectionInput.sections = props.sectionInput.sections.filter(
             (item, itemIndex) => {
-              return index != itemIndex;
+              return index != itemIndex
             }
-          );
+          )
         }
-      });
+      })
 
-      props.updateSections();
-    };
+      props.updateSections()
+    }
 
     watch(sectionOptions, () => {
-      updateLatestSection();
-    });
+      updateLatestSection()
+    })
 
     const removeSection = (index: number) => {
       SingleCourse.value.sections = SingleCourse.value.sections.filter(
         (section, eachIndex) => {
-          return index != eachIndex;
+          return index != eachIndex
         }
-      );
+      )
 
-      setSections();
+      setSections()
 
-      return;
-    };
+      return
+    }
 
     watch(selectedSection, () => {
       sectionOptions.forEach((section, index) => {
         if (selectedSection.value == index) {
-          section.opened = true;
+          section.opened = true
         } else {
-          section.opened = false;
+          section.opened = false
         }
-      });
-    });
+      })
+    })
 
     watch(SelectedMaterialDetails, () => {
-      console.log("I got the changes");
-    });
+      console.log("I got the changes")
+    })
 
-    const selectedMaterial = ref<any>();
+    const selectedMaterial = ref<any>()
 
     watch(selectedMaterial, () => {
-      context.emit("update:modelValue", selectedMaterial.value);
-    });
+      context.emit("update:modelValue", selectedMaterial.value)
+    })
 
     const handleItemSelected = () => {
-      context.emit("OnMaterialSelected", selectedMaterial.value);
-    };
+      context.emit("OnMaterialSelected", selectedMaterial.value)
+    }
 
     watch(UpdatedFile, () => {
       // update section
       sectionOptions.forEach((option) => {
         option.materials.forEach((item) => {
           if (item.id == UpdatedFile.value.id) {
-            item.name = UpdatedFile.value.title;
+            item.name = UpdatedFile.value.title
           }
-        });
-      });
+        })
+      })
 
       // update course file
       SingleCourseFiles.value.forEach((item) => {
         if (UpdatedFile.value.id == item.id) {
-          item.title = UpdatedFile.value.title;
-          item.description = UpdatedFile.value.description;
+          item.title = UpdatedFile.value.title
+          item.description = UpdatedFile.value.description
         }
-      });
-    });
+      })
+    })
 
     return {
       sectionOptions,
@@ -638,7 +581,7 @@ export default defineComponent({
       addNewSection,
       selectedSection,
       removeSection,
-    };
+    }
   },
-});
+})
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full flex flex-col h-full space-y-4" v-if="question">
+  <div class="w-full flex flex-col h-full gap-4" v-if="question">
     <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'
-      " class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] space-x-3">
+      " class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] gap-3">
       <div class="w-[24px]">
         <sofa-icon :name="'question-input'" :custom-class="'h-[23px]'" />
       </div>
@@ -9,10 +9,10 @@
         :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor !px-0 !py-0 resize-none'"
         :placeholder="question.placeholder" :richEditor="true" v-model="reactiveQuestion.content" />
     </div>
-    <div class="w-full flex flex-row items-center flex-wrap space-x-1 md:!gap-2 gap-1" v-if="questionTypeMain == 'fill_in_blank' || questionTypeMain == 'drag_answer'
+    <div class="w-full flex flex-row items-center flex-wrap gap-1 md:!gap-2" v-if="questionTypeMain == 'fill_in_blank' || questionTypeMain == 'drag_answer'
       ">
       <template v-for="(item, index) in reactiveQuestion.data" :key="index">
-        <span class="flex flex-row items-center space-x-1">
+        <span class="flex flex-row items-center gap-1">
           <sofa-custom-input
             :customClass="`bg-transparent focus:outline-none w-auto !text-bodyBlack  placeholder:text-grayColor py-2 px-2 questionText`"
             placeholder="Text here" v-if="item.type == 'text'" v-model="item.value"
@@ -20,7 +20,7 @@
           <sofa-icon :customClass="'h-[14px] cursor-pointer'" :name="'circle-close'" v-if="item.type == 'text'"
             @click="removeItemFormData(index)" />
         </span>
-        <span class="flex flex-row items-center space-x-1">
+        <span class="flex flex-row items-center gap-1">
           <sofa-custom-input
             :class="`bg-transparent focus:outline-none w-auto placeholder:text-grayColor !text-bodyBlack  border-[2px] answerText border-[#E1E6EB] rounded-[8px] px-2 py-2`"
             placeholder="Answer here" v-if="item.type == 'answer'" v-model="item.value"
@@ -35,7 +35,7 @@
     </div>
 
     <div
-      class="w-full md:!flex flex-row items-center justify-center space-x-3 bg-primaryPurple custom-border px-5 py-5 hidden">
+      class="w-full md:!flex flex-row items-center justify-center gap-3 bg-primaryPurple custom-border px-5 py-5 hidden">
       <sofa-normal-text :color="'text-white'">Choose image to add to this question (optional)</sofa-normal-text>
       <sofa-file-attachment :is-wrapper="true" :accept="'image/png, image/gif, image/jpeg'"
         :custom-class="'!w-auto z-[999]'" v-model:local-file-url="reactiveQuestion.questionMedia"
@@ -64,23 +64,23 @@
     </div>
 
     <div class="w-full grid grid-cols-2 gap-4 pt-4">
-      <div :class="`${questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'} flex flex-col space-y-4`"
+      <div :class="`${questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'} flex flex-col gap-4`"
         v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'">
-        <draggable :list="reactiveQuestion.options" class="w-full space-y-4" item-key="id"
+        <draggable :list="reactiveQuestion.options" class="w-full gap-4" item-key="id"
           :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
           <template #item="{ element, index }">
             <div
-              :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+              :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white gap-3`"
               style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
               @mouseleave="element.showRemove = false">
-              <div class="w-full flex-grow flex flex-row space-x-3 items-center">
+              <div class="flex-grow flex flex-row gap-3 items-center">
                 <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
                   v-if="questionTypeMain != 'write_answer'" />
                 <sofa-textarea :rows="1" :disabled="questionTypeMain == 'true_false'" :richEditor="true"
                   class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
                   textAreaStyle="bg-grey100 p-0" :placeholder="element.text" v-model="element.value" />
               </div>
-              <div class="flex flex-row items-center space-x-2">
+              <div class="flex flex-row items-center gap-2">
                 <sofa-icon :name="'remove'" :custom-class="'h-[23px] cursor-pointer'" v-if="element.showRemove &&
                   questionTypeMain != 'true_false' &&
                   reactiveQuestion.options.length > optionLimitSettings.min
@@ -98,20 +98,20 @@
       </div>
 
       <template v-if="questionTypeMain == 'match'">
-        <div class="col-span-1 flex flex-col space-y-4">
-          <draggable :list="reactiveQuestion.match" class="w-full space-y-4" item-key="id"
+        <div class="col-span-1 flex flex-col gap-4">
+          <draggable :list="reactiveQuestion.match" class="w-full gap-4" item-key="id"
             :group="{ name: 'question-match' }">
             <template #item="{ element, index }">
               <div
-                :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white space-x-3`"
+                :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white gap-3`"
                 style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
                 @mouseleave="element.showRemove = false">
-                <div class="flex-grow flex flex-row space-x-3">
+                <div class="flex-grow flex flex-row gap-3">
                   <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`" />
                   <input class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
                     :placeholder="element.text" v-model="element.value" />
                 </div>
-                <div class="flex flex-row items-center space-x-2">
+                <div class="flex flex-row items-center gap-2">
                   <sofa-icon :name="'remove'" :custom-class="'h-[23px] cursor-pointer'" v-if="element.showRemove &&
                     reactiveQuestion.match.length > optionLimitSettings.min
                     " @click="removeOption(index)" />
@@ -126,7 +126,7 @@
       </template>
     </div>
 
-    <div class="w-full flex flex-row justify-end space-x-2 items-center cursor-pointer" v-if="(questionTypeMain == 'multiple_choice' ||
+    <div class="w-full flex flex-row justify-end gap-2 items-center cursor-pointer" v-if="(questionTypeMain == 'multiple_choice' ||
       questionTypeMain == 'sequence' ||
       questionTypeMain == 'match' ||
       questionTypeMain == 'write_answer') &&
@@ -137,7 +137,7 @@
     </div>
 
     <div class="w-full flex flex-col border-t-[1px] border-[#F1F6FA] pt-4">
-      <div class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] space-x-3">
+      <div class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] gap-3">
         <div class="w-[24px]">
           <sofa-icon :name="'question-input'" :custom-class="'h-[23px]'" />
         </div>

@@ -1,16 +1,16 @@
 <template>
-  <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col space-y-4">
+  <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
     <div class="w-full grid grid-cols-6 gap-3" v-if="accountSetupOptions.filter((item) => item.show).length > 1">
       <template v-for="(option, index) in accountSetupOptions" :key="index">
         <div :class="`${accountSetupOptions.filter((item) => item.show).length == 2
-            ? 'col-span-3'
-            : 'col-span-2'
-          } py-3 px-3 custom-border flex flex-row items-center space-x-2 cursor-pointer justify-center ${option.status == 'active' ? 'bg-primaryPurple' : ''
+          ? 'col-span-3'
+          : 'col-span-2'
+          } py-3 px-3 custom-border flex flex-row items-center gap-2 cursor-pointer justify-center ${option.status == 'active' ? 'bg-primaryPurple' : ''
           }
-                ${option.status == 'inactive' ? 'bg-lightGrayVaraint' : ''} ${option.status == 'done' ? 'bg-primaryGreen' : ''
+                                                ${option.status == 'inactive' ? 'bg-lightGrayVaraint' : ''} ${option.status == 'done' ? 'bg-primaryGreen' : ''
           }`" v-if="option.show" @click="selectStage(option)">
           <sofa-normal-text :color="` ${option.status == 'active' ? 'text-white' : ''}
-                    ${option.status == 'inactive' ? 'text-grayColor' : ''} ${option.status == 'done' ? 'text-white' : ''
+                                                            ${option.status == 'inactive' ? 'text-grayColor' : ''} ${option.status == 'done' ? 'text-white' : ''
             }`">
             {{ option.name }}
           </sofa-normal-text>
@@ -20,7 +20,7 @@
     </div>
 
     <template v-if="currentSetupOption == 'profile' && accountSetupOptions[0].show">
-      <div class="w-full flex flex-col space-y-4 py-3">
+      <div class="w-full flex flex-col gap-4 py-3">
         <div class="w-full flex flex-col items-center justify-center pt-3">
           <sofa-image-loader
             :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
@@ -82,7 +82,7 @@
     </template>
 
     <template v-if="currentSetupOption == 'education' && accountSetupOptions[1].show">
-      <div class="w-full flex flex-col space-y-4 py-3">
+      <div class="w-full flex flex-col gap-4 py-3">
         <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'School'" ref="school" :placeholder="'School'"
           :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :options="educationOptions.schools"
@@ -115,12 +115,12 @@
             v-model="updateUserEducationForm.department" />
         </template>
         <template v-else>
-          <div class="w-full flex flex-col space-y-4">
+          <div class="w-full flex flex-col gap-4">
             <sofa-normal-text :custom-class="'!font-semibold !text-left'">
               Your exams
             </sofa-normal-text>
 
-            <div class="w-full flex flex-row space-x-2 items-center">
+            <div class="w-full flex flex-row gap-2 items-center">
               <sofa-select :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
                 :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Exams'" ref="exams" :placeholder="'Select exam'"
                 :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
@@ -129,11 +129,11 @@
               <sofa-button :padding="'py-3 px-4'" @click.prevent="addExam()">Add</sofa-button>
             </div>
 
-            <div class="w-full flex flex-row flex-wrap space-x-3">
+            <div class="w-full flex flex-row flex-wrap gap-3">
               <sofa-badge v-for="(item, index) in updateUserEducationForm.exams" :key="index" :color="updateUserEducationForm.selectedExamId == item.institutionId
-                  ? 'purple'
-                  : 'gray'
-                " :customClass="'!flex !flex-row items-center space-x-2 cursor-pointer'" @click.prevent="
+                ? 'purple'
+                : 'gray'
+                " :customClass="'!flex !flex-row items-center gap-2 cursor-pointer'" @click.prevent="
     updateUserEducationForm.selectedExamId = item.institutionId
   setExamCourses();
   ">{{
@@ -184,22 +184,22 @@
           </sofa-text-field>
         </template>
         <template v-else>
-          <div class="w-full flex flex-col items-center justify-center space-y-4">
+          <div class="w-full flex flex-col items-center justify-center gap-4">
             <sofa-normal-text :color="'text-grayColor'" :customClass="'pb-3'">Enter the 6-digit code sent to
               {{
                 updatePhoneForm.phone.code + "" + updatePhoneForm.phone.number
               }}</sofa-normal-text>
-            <div class="w-full md:!w-[60%] flex flex-col space-y-4">
+            <div class="w-full md:!w-[60%] flex flex-col gap-4">
               <sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="onChangeOTP" v-model="updatePhoneForm.otp" />
             </div>
 
-            <div class="w-full flex flex-row items-center justify-center space-x-1 pt-3">
+            <div class="w-full flex flex-row items-center justify-center gap-1 pt-3">
               <sofa-normal-text :color="'text-grayColor'">Didn’t receive code?
               </sofa-normal-text>
               <sofa-normal-text :color="'text-primaryBlue'" :customClass="'cursor-pointer'">Resend code</sofa-normal-text>
             </div>
 
-            <div class="w-full flex flex-row items-center justify-center space-x-2">
+            <div class="w-full flex flex-row items-center justify-center gap-2">
               <sofa-normal-text :color="'text-primaryBlue'" :customClass="'cursor-pointer'"
                 @click="phoneVerificationState = 'start'">Change number</sofa-normal-text>
             </div>

@@ -1,36 +1,24 @@
 <template>
-  <div
-    :class="`w-full flex flex-col h-full mdlg:!space-y-0 space-y-4 relative overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
-      showScrollBar ? 'mdlg:!scrollbar-thin' : 'scrollbar-none'
-    }`"
-    @mouseover="showScrollBar = true"
-    @mouseleave="showScrollBar = false"
-  >
+  <div :class="`w-full flex flex-col h-full mdlg:!gap-0 gap-4 relative overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${showScrollBar ? 'mdlg:!scrollbar-thin' : 'scrollbar-none'
+    }`" @mouseover="showScrollBar = true" @mouseleave="showScrollBar = false">
     <div
-      class="mdlg:!hidden flex flex-row space-x-2 justify-between items-center px-4 py-4 border-b-[1px] sticky top-0 left-0 bg-white border-[#F2F5F8]"
-    >
+      class="mdlg:!hidden flex flex-row gap-2 justify-between items-center px-4 py-4 border-b-[1px] sticky top-0 left-0 bg-white border-[#F2F5F8]">
       <sofa-normal-text :customClass="'!text-sm !font-bold'">
         Options
       </sofa-normal-text>
-      <sofa-icon
-        :customClass="'h-[19px]'"
-        :name="'circle-close'"
-        @click="close()"
-      />
+      <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="close()" />
     </div>
-    <div class="flex flex-col space-y-6 h-full px-4">
+    <div class="flex flex-col gap-6 h-full px-4">
       <template v-for="(option, index) in questionOptions" :key="index">
-        <div class="w-full flex flex-col space-y-2 relative" v-if="option.show">
-          <div
-            class="w-full flex flex-row items-center justify-between cursor-pointer sticky top-0 bg-white pb-2"
-          >
-            <div class="flex flex-row items-center space-x-2">
+        <div class="w-full flex flex-col gap-2 relative" v-if="option.show">
+          <div class="w-full flex flex-row items-center justify-between cursor-pointer sticky top-0 bg-white pb-2">
+            <div class="flex flex-row items-center gap-2">
               <sofa-icon :customClass="'h-[18px]'" :name="option.icon" />
               <sofa-normal-text :customClass="'!font-bold'">{{
                 option.name
               }}</sofa-normal-text>
             </div>
-            <div class="flex flex-row items-center space-x-2">
+            <div class="flex flex-row items-center gap-2">
               <sofa-normal-text :color="'text-grayColor'">{{
                 option.value
               }}</sofa-normal-text>
@@ -41,47 +29,27 @@
             </div>
           </div>
 
-          <div
-            class="w-full flex flex-row flex-wrap gap-3"
-            v-if="!option.hasImage"
-          >
-            <span
-              @mouseenter="item.active = true"
-              @mouseleave="item.active = false"
-              :class="`px-4 py-2  ${
-                item.name == option.value ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'
-              } rounded-[8px] flex flex-row items-center justify-center space-x-1  cursor-pointer`"
-              v-for="(item, index) in option.options"
-              :key="index"
-              @click="
-                option.value = item.name;
-                saveSettings();
-              "
-            >
-              <sofa-normal-text
-                :color="`${
-                  item.name == option.value ? 'text-white' : 'text-deepGray'
-                } `"
-                >{{ item.name }}</sofa-normal-text
-              >
+          <div class="w-full flex flex-row flex-wrap gap-3" v-if="!option.hasImage">
+            <span @mouseenter="item.active = true" @mouseleave="item.active = false" :class="`px-4 py-2  ${item.name == option.value ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'
+              } rounded-[8px] flex flex-row items-center justify-center gap-1  cursor-pointer`"
+              v-for="(item, index) in option.options" :key="index" @click="
+                option.value = item.name
+              saveSettings();
+              ">
+              <sofa-normal-text :color="`${item.name == option.value ? 'text-white' : 'text-deepGray'
+                } `">{{ item.name }}</sofa-normal-text>
             </span>
           </div>
 
           <div v-if="option.hasImage" class="w-full grid grid-cols-2 gap-3">
-            <div
-              :class="`col-span-1 px-3 py-3 flex flex-col space-y-2 items-center justify-center cursor-pointer ${
-                item.name == option.value ? 'bg-[#E6F5FF]' : 'bg-[#F2F5F8]'
-              }  rounded-[8px] `"
-              v-for="(item, index) in option.options"
-              :key="index"
-              @click="
-                option.value = item.name;
-                option.itemType = item.itemType;
-                option.questionType = item.type;
-                selectedQuestionType = item.itemType;
-                saveSettings();
-              "
-            >
+            <div :class="`col-span-1 px-3 py-3 flex flex-col gap-2 items-center justify-center cursor-pointer ${item.name == option.value ? 'bg-[#E6F5FF]' : 'bg-[#F2F5F8]'
+              }  rounded-[8px] `" v-for="(item, index) in option.options" :key="index" @click="
+    option.value = item.name
+  option.itemType = item.itemType
+  option.questionType = item.type
+  selectedQuestionType = item.itemType
+  saveSettings();
+  ">
               <sofa-icon :name="item.image" :custom-class="'h-[50px]'" />
               <sofa-normal-text :customClass="'text-center'">{{
                 item.name
@@ -95,96 +63,70 @@
     </div>
 
     <div
-      class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-[2px] border-[#F2F5F8] z-50 flex flex-col space-y-4 scrollbar-hide"
-    >
-      <div
-        class="w-full flex flex-row items-center justify-start space-x-3 cursor-pointer"
-        @click="duplicateQuestion()"
-        v-if="Logic.Common.mediaQuery() == 'sm'"
-      >
+      class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-[2px] border-[#F2F5F8] z-50 flex flex-col gap-4 scrollbar-hide">
+      <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="duplicateQuestion()"
+        v-if="Logic.Common.mediaQuery() == 'sm'">
         <sofa-icon :name="'copy'" :customClass="'h-[16px]'" />
         <sofa-normal-text>Duplicate question</sofa-normal-text>
       </div>
-      <div
-        class="w-full flex flex-row items-center justify-start space-x-3 cursor-pointer"
-        @click="showDeleteQuestion = true"
-        v-if="Logic.Common.mediaQuery() == 'sm'"
-      >
+      <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="showDeleteQuestion = true"
+        v-if="Logic.Common.mediaQuery() == 'sm'">
         <sofa-icon :name="'trash'" :customClass="'h-[16px]'" />
-        <sofa-normal-text :color="'text-primaryRed'"
-          >Delete question</sofa-normal-text
-        >
+        <sofa-normal-text :color="'text-primaryRed'">Delete question</sofa-normal-text>
       </div>
-      <div
-        class="w-full flex flex-row items-center justify-start space-x-3 cursor-pointer"
-        @click="showDeleteQuiz = true"
-      >
+      <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="showDeleteQuiz = true">
         <sofa-icon :name="'trash'" :customClass="'h-[16px]'" />
-        <sofa-normal-text :color="'text-primaryRed'"
-          >Delete Quiz</sofa-normal-text
-        >
+        <sofa-normal-text :color="'text-primaryRed'">Delete Quiz</sofa-normal-text>
       </div>
     </div>
   </div>
-  <sofa-delete-prompt
-    v-if="showDeleteQuiz"
-    :title="'Are you sure you?'"
-    :subTitle="`This action is permanent. You will loss all saved questions in this quiz.`"
-    :close="
-      () => {
-        showDeleteQuiz = false;
-      }
-    "
-    :buttons="[
-      {
-        label: 'No',
-        isClose: true,
-        action: () => {
-          showDeleteQuiz = false;
-        },
+  <sofa-delete-prompt v-if="showDeleteQuiz" :title="'Are you sure you?'"
+    :subTitle="`This action is permanent. You will loss all saved questions in this quiz.`" :close="() => {
+      showDeleteQuiz = false
+    }
+      " :buttons="[
+    {
+      label: 'No',
+      isClose: true,
+      action: () => {
+        showDeleteQuiz = false
       },
-      {
-        label: 'Yes, delete',
-        isClose: false,
-        action: () => {
-          deleteQuiz();
-        },
+    },
+    {
+      label: 'Yes, delete',
+      isClose: false,
+      action: () => {
+        deleteQuiz()
       },
-    ]"
-  />
-  <sofa-delete-prompt
-    v-if="showDeleteQuestion"
-    :title="'Are you sure you?'"
-    :subTitle="`This action is permanent. You won't be able to undo this.`"
-    :close="
-      () => {
-        showDeleteQuestion = false;
-      }
-    "
-    :buttons="[
-      {
-        label: 'No',
-        isClose: true,
-        action: () => {
-          showDeleteQuestion = false;
-        },
+    },
+  ]" />
+  <sofa-delete-prompt v-if="showDeleteQuestion" :title="'Are you sure you?'"
+    :subTitle="`This action is permanent. You won't be able to undo this.`" :close="() => {
+      showDeleteQuestion = false
+    }
+      " :buttons="[
+    {
+      label: 'No',
+      isClose: true,
+      action: () => {
+        showDeleteQuestion = false
       },
-      {
-        label: 'Yes, delete',
-        isClose: false,
-        action: () => {
-          deleteQuestion();
-        },
+    },
+    {
+      label: 'Yes, delete',
+      isClose: false,
+      action: () => {
+        deleteQuestion()
       },
-    ]"
-  />
+    },
+  ]" />
 </template>
 <script lang="ts">
-import { Logic } from "../../composable";
-import { defineComponent, onMounted, reactive, ref, toRef, watch } from "vue";
-import SofaIcon from "../SofaIcon";
-import { SofaNormalText } from "../SofaTypography";
-import SofaDeletePrompt from "../SofaDeletePrompt";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { Logic } from "../../composable"
+import SofaDeletePrompt from "../SofaDeletePrompt"
+import SofaIcon from "../SofaIcon"
+import { SofaNormalText } from "../SofaTypography"
 
 export default defineComponent({
   components: {
@@ -203,10 +145,10 @@ export default defineComponent({
     },
   },
   name: "SofaQuestionOptions",
-  setup(props, context) {
-    const showDeleteQuestion = ref(false);
-    const showDeleteQuiz = ref(false);
-    const selectedType = ref("question-type");
+  setup (props, context) {
+    const showDeleteQuestion = ref(false)
+    const showDeleteQuiz = ref(false)
+    const selectedType = ref("question-type")
     const allOptions = {
       "question-type": {
         name: "Question type",
@@ -445,70 +387,70 @@ export default defineComponent({
         type: "correct-anwsers",
         value: "2",
       },
-    };
+    }
 
-    const questionOptions = reactive([]);
+    const questionOptions = reactive([])
 
-    const selectedQuestionType = ref("multipleChoice");
+    const selectedQuestionType = ref("multipleChoice")
 
-    const questionTypes = Logic.Study.questionTypes;
+    const questionTypes = Logic.Study.questionTypes
 
-    const showScrollBar = ref(false);
+    const showScrollBar = ref(false)
 
-    const selectedQuestion = ref(Logic.Study.selectedQuestion);
+    const selectedQuestion = ref(Logic.Study.selectedQuestion)
 
-    const question = ref();
+    const question = ref()
 
     const setOptions = () => {
       if (question.value) {
-        questionOptions.length = 0;
+        questionOptions.length = 0
 
         let currentSettings =
-          Logic.Study.questionTypes[selectedQuestionType.value]?.settings;
+          Logic.Study.questionTypes[selectedQuestionType.value]?.settings
 
         if (selectedQuestionType.value == question.value.key) {
-          currentSettings = question.value.settings;
+          currentSettings = question.value.settings
         }
 
         currentSettings?.forEach((setting) => {
-          const option = allOptions[setting.type];
-          option.value = setting.value;
+          const option = allOptions[setting.type]
+          option.value = setting.value
 
-          questionOptions.push(option);
-        });
+          questionOptions.push(option)
+        })
       }
-    };
+    }
 
     onMounted(() => {
-      Logic.Study.watchProperty("selectedQuestion", selectedQuestion);
-      question.value = selectedQuestion.value;
-      selectedQuestionType.value = question.value?.key;
-      setOptions();
-    });
+      Logic.Study.watchProperty("selectedQuestion", selectedQuestion)
+      question.value = selectedQuestion.value
+      selectedQuestionType.value = question.value?.key
+      setOptions()
+    })
 
     watch(question, () => {
-      selectedQuestionType.value = question.value?.key;
-    });
+      selectedQuestionType.value = question.value?.key
+    })
 
     watch(selectedQuestionType, () => {
-      setOptions();
-    });
+      setOptions()
+    })
 
     watch(selectedQuestion, () => {
-      question.value = selectedQuestion.value;
-    });
+      question.value = selectedQuestion.value
+    })
 
     const saveSettings = () => {
       Logic.Study.AllQuestions.results.forEach((item) => {
         if (item.id == question.value?.id) {
-          item.data.type = selectedQuestionType.value;
+          item.data.type = selectedQuestionType.value
         }
-      });
+      })
 
       Logic.Study.questionSettings = JSON.parse(
         JSON.stringify(questionOptions)
-      );
-    };
+      )
+    }
 
     const deleteQuestion = () => {
       Logic.Study.DeleteQuestion(question.value.id, Logic.Study.SingleQuiz.id)
@@ -519,8 +461,8 @@ export default defineComponent({
               loading: false,
               message: "Question has been deleted.",
               type: "success",
-            });
-            showDeleteQuestion.value = false;
+            })
+            showDeleteQuestion.value = false
           }
         })
         .catch(() => {
@@ -529,46 +471,46 @@ export default defineComponent({
             loading: false,
             message: "Unable to delete question. Please try again",
             type: "error",
-          });
-        });
-    };
+          })
+        })
+    }
 
     const duplicateQuestion = () => {
-      const newQuestionData = questionTypes[selectedQuestionType.value];
+      const newQuestionData = questionTypes[selectedQuestionType.value]
 
       Logic.Study.CreateQuestionForm = Logic.Study.convertQuestionToInput(
         newQuestionData,
         selectedQuestionType.value
-      );
+      )
 
-      Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id);
+      Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id)
 
       Logic.Common.showLoader({
         show: true,
         loading: false,
         message: "Question duplicated",
         type: "success",
-      });
-    };
+      })
+    }
 
     const deleteQuiz = () => {
-      Logic.Study.DeleteQuiz(Logic.Study.SingleQuiz.id);
-    };
+      Logic.Study.DeleteQuiz(Logic.Study.SingleQuiz.id)
+    }
 
     const toggleOption = (option: any) => {
       if (option.opened) {
-        option.opened = false;
-        selectedType.value = "";
+        option.opened = false
+        selectedType.value = ""
       } else {
-        option.opened = true;
-        selectedType.value = option.type;
+        option.opened = true
+        selectedType.value = option.type
       }
       questionOptions.forEach((eachOption) => {
         if (option.type != eachOption.type) {
-          eachOption.opened = false;
+          eachOption.opened = false
         }
-      });
-    };
+      })
+    }
 
     return {
       questionOptions,
@@ -583,7 +525,7 @@ export default defineComponent({
       duplicateQuestion,
       saveSettings,
       deleteQuiz,
-    };
+    }
   },
-});
+})
 </script>
