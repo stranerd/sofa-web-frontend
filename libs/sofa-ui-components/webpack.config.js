@@ -5,6 +5,7 @@ const path = require("path");
 const isProduction = process.env.NODE_ENV == "production";
 
 const { VueLoaderPlugin } = require('vue-loader')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const config = {
 	entry: "./src/index.ts",
@@ -18,6 +19,7 @@ const config = {
 	plugins: [
 		// Add your plugins here
 		// Learn more about plugins from https://webpack.js.org/configuration/plugins/
+		new ForkTsCheckerWebpackPlugin(),
 		new VueLoaderPlugin()
 	],
 	module: {
