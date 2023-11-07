@@ -82,7 +82,7 @@ export default class Payment extends Common {
                     Logic.Common.showLoader({
                       show: true,
                       loading: false,
-                      message: 'Your wallet was funded successfully',
+                      message: 'Transaction completed successfully!',
                       type: 'success',
                     })
                     const userQuery = {
