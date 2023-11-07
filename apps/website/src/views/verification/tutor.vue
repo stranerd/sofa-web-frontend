@@ -20,7 +20,8 @@
 
       <div class="w-full grid grid-cols-2 gap-2">
         <div class="col-span-1 h-[8px] rounded-[99px] bg-[#141618]"></div>
-        <div :class="`col-span-1 h-[8px] rounded-[99px] ${currentStep === 'test' ? 'bg-[#141618]' : 'bg-[#E1E6EB]'}`"></div>
+        <div :class="`col-span-1 h-[8px] rounded-[99px] ${currentStep === 'test' ? 'bg-[#141618]' : 'bg-[#E1E6EB]'}`">
+        </div>
       </div>
 
       <!-- Profile -->
@@ -71,7 +72,7 @@
             :customClass="'custom-border border-[2px] border-dashed border-primaryPurple bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
             v-model="tutorRequestForm.qualification" accept="application/pdf, image/*" :is-multiple="true">
             <template v-slot:content>
-              <div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 mdlg:gap-0 items-center justify-center">
+              <div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
                 <sofa-icon :name="'upload-purple'" :customClass="'h-[16px]'" />
 
                 <sofa-normal-text :color="'text-primaryPurple'" :customClass="'text-center'">
@@ -160,34 +161,6 @@
               Pass a test on the subject you selected
             </sofa-normal-text>
           </div>
-
-          <div class="w-full flex flex-col" v-if="SingleTutorRequest">
-            <sofa-normal-text :color="'text-grayColor'" v-if="!tutorRequestForm.topicId">
-              You have not selected any subject
-            </sofa-normal-text>
-            <template v-else>
-              <div :class="`flex flex-row ${SingleTutorRequest.testFinished ? 'opacity-50' : ''
-                } `" v-if="!SingleTutorRequest.testFinished">
-                <sofa-button @click="
-                  SingleTutorRequest.testFinished
-                    ? null
-                    : Logic.Common.GoToRoute(
-                      `/quiz/empty?mode=tutor_test&testId=${SingleTutorRequest.topicId}`
-                    )
-                  ">
-                  Take test
-                </sofa-button>
-              </div>
-
-              <template v-if="SingleTutorRequest.testFinished">
-                <sofa-normal-text :color="'text-grayColor'">Waiting for approval...</sofa-normal-text>
-              </template>
-            </template>
-          </div>
-          <div v-else class="w-full flex flex-col">
-            <sofa-activity-card v-if="TestQuiz" :activity="TestQuiz">
-            </sofa-activity-card>
-          </div>
         </div>
       </template>
 
@@ -220,7 +193,6 @@ import {
 import { Logic } from "sofa-logic"
 import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  SofaActivityCard,
   SofaButton,
   SofaFileAttachment,
   SofaHeaderText,
@@ -245,7 +217,6 @@ export default defineComponent({
     SofaFileAttachment,
     SofaImageLoader,
     SofaSelect,
-    SofaActivityCard,
   },
   middlewares: {
     fetchRules: [
@@ -306,11 +277,6 @@ export default defineComponent({
       if (UserProfile.value.location) {
         updateProfileForm.state = UserProfile.value.location.state
         updateProfileForm.country = UserProfile.value.location.country
-      }
-
-      if (SingleTutorRequest.value) {
-        currentStep.value = "test"
-        tutorRequestForm.topicId = SingleTutorRequest.value.topicId
       }
     }
 

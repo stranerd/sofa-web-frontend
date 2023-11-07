@@ -642,8 +642,8 @@ const createTutorRequest = () => {
       verification: tutorRequestForm.verification,
     }
     Logic.Users.CreateTutorRequest()
-      .then(() => {
-        Logic.Common.GoToRoute("/")
+      .then((res) => {
+        if (!res?.testFinished) Logic.Common.GoToRoute(`/quiz/empty?mode=tutor_test&testId=${res.testId}`)
       })
       .catch((e) => {
         Logic.Common.hideLoader()

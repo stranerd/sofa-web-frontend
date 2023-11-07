@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col h-full gap-4" v-if="question">
     <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'
       " class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] gap-3">
-      <div class="w-[24px]">
+      <div class="hidden lg:block w-[24px]">
         <sofa-icon :name="'question-input'" :custom-class="'h-[23px]'" />
       </div>
       <sofa-textarea :hasTitle="false"
@@ -66,16 +66,16 @@
     <div class="w-full grid grid-cols-2 gap-4 pt-4">
       <div :class="`${questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'} flex flex-col gap-4`"
         v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'">
-        <draggable :list="reactiveQuestion.options" class="w-full gap-4" item-key="id"
+        <draggable :list="reactiveQuestion.options" class="w-full flex flex-col gap-4" item-key="id"
           :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
           <template #item="{ element, index }">
             <div
-              :class="` w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white gap-3`"
+              :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white gap-3`"
               style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
               @mouseleave="element.showRemove = false">
-              <div class="flex-grow flex flex-row gap-3 items-center">
+              <div class="w-full flex-grow flex flex-row gap-3 items-center">
                 <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
-                  v-if="questionTypeMain != 'write_answer'" />
+                  v-if="questionTypeMain != 'write_answer'" class="hidden lg:block" />
                 <sofa-textarea :rows="1" :disabled="questionTypeMain == 'true_false'" :richEditor="true"
                   class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
                   textAreaStyle="bg-grey100 p-0" :placeholder="element.text" v-model="element.value" />
