@@ -9,7 +9,7 @@
     </div>
     <div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
       <!-- Top bar for larger screens -->
-      <div class="w-full hidden flex-row items-center justify-between mdlg:!flex">
+      <div class="w-full hidden flex-row items-center justify-between mdlg:!flex pt-4">
         <sofa-header-text :customClass="'!text-2xl !font-bold'">
           Become a tutor
         </sofa-header-text>
