@@ -47,7 +47,7 @@ export default defineComponent({
     });
 
     const onInput = (e: any) => {
-      textContent.value = e.target.innerText;
+      textContent.value = e.target.innerText.trim();
     };
 
     const onBlur = () => {

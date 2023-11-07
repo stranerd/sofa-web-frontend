@@ -300,8 +300,8 @@
             </div>
 
             <div
-              :class="`w-full flex flex-row items-center relative justify-between gap-3 px-4 py-4 custom-border bg-white shadow-custom`"
-              v-for="(item, index) in folders" :key="index" @click="goToFolder(item.id)">
+              :class="`w-full flex flex-row items-center relative justify-between gap-3 p-4 custom-border bg-white shadow-custom`"
+              v-for="(item, index) in folders" :key="index" @click="!item.edit ? goToFolder(item.id) : null">
               <div class="flex flex-row items-center gap-3 w-full">
                 <sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
                 <sofa-custom-input v-if="item.edit"
@@ -322,7 +322,7 @@
               </div>
 
               <div v-if="!item.edit"
-                class="absolute right-0 top-0 h-full px-3 justify-center rounded-r-[8px] flex flex-row gap-2 items-center">
+                class="h-full justify-center flex flex-row gap-2 items-center">
                 <sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'" />
                 <sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'" @click.stop="
                   selectedFolderId = item.id
