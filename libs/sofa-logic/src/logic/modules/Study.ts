@@ -1034,7 +1034,7 @@ export default class Study extends Common {
         // clear answers
         questionData.options[index].answer = ''
       })
-      question.data.answers.forEach((index) => {
+      question.data.answers?.forEach((index) => {
         if (questionData.options[index]) {
           questionData.options[index].answer = questionData.options[index].value
         }
@@ -1042,7 +1042,7 @@ export default class Study extends Common {
     }
 
     if (question.data.type == 'writeAnswer') {
-      question.data.answers.forEach((item, index) => {
+      question.data.answers?.forEach((item, index) => {
         questionData.options[index] ??= {
           shape: availableShapes[index % availableShapes.length],
           text: `Enter word/sentence ${index + 1}`,
@@ -1093,7 +1093,8 @@ export default class Study extends Common {
     }
 
     if (question.data.type == 'match') {
-      question.data.set.forEach((item, index) => {
+      const set = question.data.set ?? question.data.questions?.map((q, i) => ({ q, a: question.data.answers?.[i] ?? '' })) ?? []
+      set.forEach((item, index) => {
         questionData.options[index] ??= {
           shape: availableShapes[index % availableShapes.length],
           text: `Enter word/sentence ${index + 1}`,
@@ -1133,7 +1134,7 @@ export default class Study extends Common {
         .replaceAll(`${question.data.indicator}`, '{}')
         .split('}')
 
-      const answers = question.data.answers
+      const answers = question.data.answers ?? []
 
       questionContent?.forEach((item) => {
         if (item.trim()) {
@@ -1161,7 +1162,7 @@ export default class Study extends Common {
             questionData.data.push({
               content: '',
               type: 'answer',
-              value: answers.shift(),
+              value: answers.shift() ?? '',
             })
           }
         }

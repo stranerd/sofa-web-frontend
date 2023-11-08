@@ -413,7 +413,7 @@
                   <sofa-button :bgColor="'bg-white'" :hasDarkLayer="false"
                     :customClass="'!bg-[#141618] !border-[2px] !border-white md:!w-auto w-full'" :textColor="'text-white'"
                     :padding="'px-5 py-2'" @click="Logic.Common.goBack()">
-                    Cancle
+                    Cancel
                   </sofa-button>
                 </div>
 

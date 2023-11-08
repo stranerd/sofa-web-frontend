@@ -8,13 +8,15 @@
           Courses</sofa-normal-text>
         <div></div>
       </div>
-      <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
-        <span :class="`px-6 py-2  ${item.id == selectedItemId ? 'bg-primaryPurple' : 'bg-white'
-          } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
-          v-for="(item, index) in mainFilters" :key="index" @click="selectedItemId = item.id">
-          <sofa-normal-text :color="`${item.id == selectedItemId ? 'text-white' : 'text-deepGray'
-            } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
-        </span>
+      <div>
+        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
+          <span :class="`px-6 py-2  ${item.id == selectedItemId ? 'bg-primaryPurple' : 'bg-white'
+            } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
+            v-for="(item, index) in mainFilters" :key="index" @click="selectedItemId = item.id">
+            <sofa-normal-text :color="`${item.id == selectedItemId ? 'text-white' : 'text-deepGray'
+              } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+          </span>
+        </div>
       </div>
 
       <div class="w-full flex flex-col gap-3 px-4 pt-3">

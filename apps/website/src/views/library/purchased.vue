@@ -8,14 +8,16 @@
           Purchased</sofa-normal-text>
         <div></div>
       </div>
-      <div v-if="libraryTypeList[2].options.length > 1"
-        class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
-        <span :class="`px-6 py-2  ${item.id == selectedItemId ? 'bg-primaryPurple' : 'bg-white'
-          } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
-          v-for="(item, index) in libraryTypeList[2].options" :key="index" @click="selectedItemId = item.id">
-          <sofa-normal-text :color="`${item.id == selectedItemId ? 'text-white' : 'text-deepGray'
-            } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
-        </span>
+      <div>
+        <div v-if="libraryTypeList[2].options.length > 1"
+          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
+          <span :class="`px-6 py-2  ${item.id == selectedItemId ? 'bg-primaryPurple' : 'bg-white'
+            } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
+            v-for="(item, index) in libraryTypeList[2].options" :key="index" @click="selectedItemId = item.id">
+            <sofa-normal-text :color="`${item.id == selectedItemId ? 'text-white' : 'text-deepGray'
+              } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+          </span>
+        </div>
       </div>
 
       <div class="w-full flex flex-col gap-3 px-4 pt-3">
@@ -39,24 +41,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from "vue"
-import { useMeta } from "vue-meta"
 import { scrollToTop } from "@/composables"
 import {
-  SofaIcon,
-  SofaNormalText,
-  SofaEmptyState,
-  SofaActivityCard,
-} from "sofa-ui-components"
-import { Logic } from "sofa-logic"
-import {
+  PurchasedCourses,
   currentPurchasedData,
   filterItem,
   libraryTypeList,
-  PurchasedCourses,
   selectedItemId,
   setPurchasedData,
 } from "@/composables/library"
+import { Logic } from "sofa-logic"
+import {
+  SofaActivityCard,
+  SofaEmptyState,
+  SofaIcon,
+  SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {

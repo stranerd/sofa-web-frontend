@@ -1,10 +1,10 @@
 <template>
-  <h3 :class="`font-semibold text-header body ${size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : ''}
-        	${size == 'xl' ? 'lg:!text-3xl mdlg:!text-xl text-base' : ''}
-        	${size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : ''}
-        	${size == 'xs' ? 'mdlg:!text-[12px] text-xs' : ''}
-        	${customClass}
-        	${color}`">
+  <h3 :class="`font-semibold text-header ${content ? 'body' : ''} ${size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : ''}
+          	${size == 'xl' ? 'lg:!text-3xl mdlg:!text-xl text-base' : ''}
+          	${size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : ''}
+          	${size == 'xs' ? 'mdlg:!text-[12px] text-xs' : ''}
+          	${customClass}
+          	${color}`">
     <span v-if="content" v-html="content" />
     <slot v-else />
   </h3>

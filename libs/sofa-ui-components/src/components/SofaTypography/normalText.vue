@@ -1,5 +1,5 @@
 <template>
-  <span :class="`flex flex-row items-center body ${customClass} ${color}
+  <span :class="`flex flex-row items-center ${content ? 'body' : ''} ${customClass} ${color}
       ${size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : ''}
       ${size == 'small' ? ' text-xs' : ''}`">
     <span v-if="content" v-html="content" />

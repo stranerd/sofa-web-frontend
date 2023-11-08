@@ -8,14 +8,16 @@
           {{ pageTitle }}</sofa-normal-text>
         <div></div>
       </div>
-      <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide pl-4 py-2">
-        <div class="w-full flex flex-row gap-3 items-center pr-4 mdlg:!pr-0">
-          <span :class="`px-6 py-2  ${selectedItemId == item.id ? 'bg-primaryPurple' : 'bg-white'
-            } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer`"
-            v-for="(item, index) in mainFilters" :key="index" @click="selectedItemId = item.id">
-            <sofa-normal-text :color="`${selectedItemId == item.id ? 'text-white' : 'text-deepGray'
-              } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
-          </span>
+      <div>
+        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide pl-4 py-2">
+          <div class="w-full flex flex-row gap-3 items-center pr-4 mdlg:!pr-0">
+            <span :class="`px-6 py-2  ${selectedItemId == item.id ? 'bg-primaryPurple' : 'bg-white'
+              } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer`"
+              v-for="(item, index) in mainFilters" :key="index" @click="selectedItemId = item.id">
+              <sofa-normal-text :color="`${selectedItemId == item.id ? 'text-white' : 'text-deepGray'
+                } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -56,28 +58,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
-import { useMeta } from "vue-meta"
 import { scrollToTop } from "@/composables"
-import {
-  SofaIcon,
-  SofaNormalText,
-  SofaProgressItemCard,
-  SofaEmptyState,
-} from "sofa-ui-components"
-import { Logic } from "sofa-logic"
 import {
   AllGames,
   AllTests,
+  GameAndTestQuizzes,
   currentInProgressItem,
   currentResultItems,
   filterItem,
-  GameAndTestQuizzes,
   selectedItemId,
   setInProgressItems,
   setResultItems,
 } from "@/composables/library"
+import { Logic } from "sofa-logic"
 import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import {
+  SofaEmptyState,
+  SofaIcon,
+  SofaNormalText,
+  SofaProgressItemCard,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
