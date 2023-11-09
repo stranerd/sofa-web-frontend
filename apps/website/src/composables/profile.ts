@@ -643,7 +643,7 @@ const createTutorRequest = () => {
     }
     Logic.Users.CreateTutorRequest()
       .then((res) => {
-        if (!res?.testFinished) Logic.Common.GoToRoute(`/quiz/empty?mode=tutor_test&testId=${res.testId}`)
+        Logic.Common.GoToRoute(`/quiz/empty?mode=tutor_test&testId=${res.testId}`)
       })
       .catch((e) => {
         Logic.Common.hideLoader()

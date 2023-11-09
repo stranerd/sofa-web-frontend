@@ -481,6 +481,7 @@ const showQuestion = (index: number) => {
       buttonLabels.smIsDoubled = false
 
       counterInterval.value = setInterval(() => {
+        if (!questions[index]) return
         if (questions[index].currentTime == 1) {
           state.value = 'question'
           clearInterval(counterInterval.value)
@@ -721,6 +722,7 @@ const handleLeftButton = () => {
     goToPrevSlide()
   } else if (mode.value == 'flashcard') {
     const currentQuestion = questions[currentQuestionIndex.value]
+    if (!currentQuestion) return
 
     const currentQuestionData = JSON.parse(JSON.stringify(questions))
 
@@ -749,8 +751,8 @@ const handleLeftButton = () => {
 
 const checkAnswer = () => {
   const isCorrect =
-    questions[questionIndex.value].answer?.trim() ==
-    questions[questionIndex.value].userAnswer?.trim()
+    questions[questionIndex.value]?.answer?.trim() ==
+    questions[questionIndex.value]?.userAnswer?.trim()
   if (isCorrect) {
     answerState.value = 'correct'
     // buttonLabels.right = {
@@ -994,6 +996,7 @@ const startTest = () => {
     Logic.Plays.StartTest(Logic.Plays.SingleTest.id).then(() => {
       // showQuestion(0)
       Logic.Common.hideLoader()
+      window.location.reload()
     })
   }
 }

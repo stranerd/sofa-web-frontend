@@ -33,14 +33,14 @@
           <template v-else>
             <template v-if="answerState == 'pending'">
               <div class="w-full relative h-[14px] bg-primaryGreen rounded-[8px]">
-                <div class="absolute top-0 left-0 h-full bg-[#E1E6EB] rounded-[8px]" :style="`width: calc( ${((questions[currentQuestionIndex].timeLimit -
-                  questions[currentQuestionIndex].currentTime) /
-                  questions[currentQuestionIndex].timeLimit) *
+                <div class="absolute top-0 left-0 h-full bg-[#E1E6EB] rounded-[8px]" :style="`width: calc( ${((questions[currentQuestionIndex]?.timeLimit -
+                  questions[currentQuestionIndex]?.currentTime) /
+                  questions[currentQuestionIndex]?.timeLimit) *
                   95
                   }% + 5%);`">
                   <span
                     class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold">
-                    {{ questions[currentQuestionIndex].currentTime }}
+                    {{ questions[currentQuestionIndex]?.currentTime }}
                   </span>
                 </div>
               </div>
@@ -68,7 +68,7 @@
                   : '!bg-primaryGreen'
                   } !border-[2px] !border-white`" :hasDoubleLayer="true" :hasDarkLayer="false" v-if="mode != 'game' &&
     mode != 'tutor_test' &&
-    questions[currentQuestionIndex].explanation
+    questions[currentQuestionIndex]?.explanation
     " @click="showExplanation()">
                   Explanation
                 </sofa-button>
@@ -111,14 +111,14 @@
         <template v-else>
           <template v-if="answerState == 'pending'">
             <div class="w-full relative h-[14px] bg-primaryGreen rounded-[8px]">
-              <div class="absolute top-0 left-0 h-full bg-[#E1E6EB] rounded-[8px]" :style="`width: calc( ${((questions[currentQuestionIndex].timeLimit -
-                questions[currentQuestionIndex].currentTime) /
-                questions[currentQuestionIndex].timeLimit) *
+              <div class="absolute top-0 left-0 h-full bg-[#E1E6EB] rounded-[8px]" :style="`width: calc( ${((questions[currentQuestionIndex]?.timeLimit -
+                questions[currentQuestionIndex]?.currentTime) /
+                questions[currentQuestionIndex]?.timeLimit) *
                 90
                 }% + 10%);`">
                 <span
                   class="w-[40px] h-[30px] z-[33344444] top-[-10px] text-white flex items-center justify-center rounded-[16px] absolute right-0 bg-primaryGreen !font-semibold">
-                  {{ questions[currentQuestionIndex].currentTime }}
+                  {{ questions[currentQuestionIndex]?.currentTime }}
                 </span>
               </div>
             </div>
@@ -146,7 +146,7 @@
                 } !border-[2px] !border-white`" :hasDoubleLayer="true" :hasDarkLayer="false" @click="showExplanation()"
                 v-if="mode != 'game' &&
                   mode != 'tutor_test' &&
-                  questions[currentQuestionIndex].explanation
+                  questions[currentQuestionIndex]?.explanation
                   ">
                 Explanation
               </sofa-button>
@@ -725,7 +725,7 @@ export default defineComponent({
 
       const thisQuestion = questions[currentQuestionIndex.value]
 
-      if (specialQuestionTypes.includes(thisQuestion.options.type)) {
+      if (specialQuestionTypes.includes(thisQuestion?.options.type)) {
         enabledSwiper.value = false
         swiperInstance.value.swiperInstance.enabled = false
         swiperInstance.value.swiperInstance.update()
