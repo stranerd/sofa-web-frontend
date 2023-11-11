@@ -4,6 +4,50 @@
 
     <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
 
+    <template v-if="showNeedsSubscription">
+      <sofa-delete-prompt v-if="Logic.Payment.UserWallet?.subscription.active" title="You have run out of tutor aided conversations"
+        subTitle="This feature will become available on your next subscription renewal"
+        :close="() => showNeedsSubscription = false"
+        :buttons="[
+          {
+            label: 'Close',
+            hide: true,
+            action: () => {
+              showNeedsSubscription = false
+            },
+          },
+          {
+            label: 'Close',
+            bgColor: 'bg-primaryBlue',
+            isClose: false,
+            action: () => {
+              showNeedsSubscription = false
+            },
+          },
+        ]" />
+      <sofa-delete-prompt v-else title="You have no subscription"
+        subTitle="You need to be subscribed to Stranerd Plus to access this feature"
+        :close="() => showNeedsSubscription = false"
+        :buttons="[
+          {
+            label: 'Cancel',
+            isClose: true,
+            action: () => {
+              showNeedsSubscription = false
+            },
+          },
+          {
+            label: 'Subscribe',
+            bgColor: 'bg-primaryBlue',
+            isClose: false,
+            action: () => {
+              showNeedsSubscription = false
+              Logic.Common.GoToRoute('/settings/subscription')
+            },
+          },
+        ]" />
+    </template>
+
     <!-- Success prompt for tutor request -->
     <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
       :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
@@ -63,15 +107,13 @@
               <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
               <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
             </a>
-            <template v-if="Logic.Payment.UserWallet?.subscription.data.tutorAidedConversations > 0">
-              <a class="w-full flex flex-row items-center justify-start gap-2"
-                @click="showMoreOptions = false; showAddTutor = true" v-if="!selectedTutorRequestData">
-                <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
-                <sofa-normal-text :color="'text-primaryGreen'">
-                  Add a tutor
-                </sofa-normal-text>
-              </a>
-            </template>
+            <a class="w-full flex flex-row items-center justify-start gap-2" @click="onClickAddTutor"
+              v-if="SingleConversation && !SingleConversation.tutor && !selectedTutorRequestData">
+              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
+              <sofa-normal-text :color="'text-primaryGreen'">
+                Add a tutor
+              </sofa-normal-text>
+            </a>
 
             <a class="w-full flex flex-row items-center justify-start gap-2"
               @click="showDeleteConvo = true; selectedConvoId = SingleConversation?.id">
@@ -113,6 +155,7 @@ import {
   listenToTutorRequest,
   messageContent,
   newChat,
+  onClickAddTutor,
   onInput,
   selectConversation,
   selectedChatData,
@@ -125,6 +168,7 @@ import {
   showEndSession,
   showLoader,
   showMoreOptions,
+  showNeedsSubscription,
   showRateAndReviewTutor,
   tutorRequestList,
 } from "@/composables/conversation"
@@ -403,10 +447,12 @@ export default defineComponent({
       contentTitleChanged,
       editTitle,
       selectedChatData,
+      onClickAddTutor,
       itIsTutorRequest,
       acceptOrRejectTutorRequest,
       selectedTutorRequestData,
       showTutorRequestSubmited,
+      showNeedsSubscription,
       showEndSession,
       itIsNewMessage,
       handleRequestSent,

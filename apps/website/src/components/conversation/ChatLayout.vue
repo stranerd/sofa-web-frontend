@@ -82,28 +82,20 @@
 					</div>
 				</div>
 
-				<template v-if="Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 0">
-					<div class="w-full shadow-custom px-4 py-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3" v-if="((hasMessage && !selectedTutorRequestData) ||
-						(!SingleConversation?.tutor && !itIsNewMessage)) &&
-						SingleConversation
-						">
+				<template v-if="SingleConversation && ((hasMessage && !selectedTutorRequestData) || (!SingleConversation?.tutor && !itIsNewMessage))">
+					<div class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
 						<div class="w-full flex flex-row gap-2 items-center justify-start">
 							<sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
 							<sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
 								Tutor help
 							</sofa-normal-text>
 						</div>
-						<div class="w-full flex flex-col">
-							<sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
-								Need extra help with your work?
-							</sofa-normal-text>
-						</div>
-						<div class="flex flex-row">
-							<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'"
-								@click="showAddTutor = true">
-								Add a tutor
-							</sofa-button>
-						</div>
+						<sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
+							Need extra help with your work?
+						</sofa-normal-text>
+						<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
+							Add a tutor
+						</sofa-button>
 					</div>
 				</template>
 			</template>
@@ -189,11 +181,11 @@ import {
 	itIsNewMessage,
 	listenToTutorRequest,
 	newChat,
+	onClickAddTutor,
 	selectedConvoId,
 	selectedTutorRequestData,
 	setConversations,
 	setConvoFromRoute,
-	showAddTutor,
 	showDeleteConvo,
 	showEndSession,
 	showRateAndReviewTutor

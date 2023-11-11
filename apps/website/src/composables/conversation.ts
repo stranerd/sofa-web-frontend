@@ -70,6 +70,8 @@ const showEndSession = ref(false)
 
 const showAddTutor = ref(false)
 
+export const showNeedsSubscription = ref(false)
+
 const showMoreOptions = ref(false)
 
 const itIsNewMessage = computed(() => ['/chats/', '/chats/new'].includes(Logic.Common.route.path))
@@ -551,6 +553,7 @@ export const newChat = async () => {
   if (Messages.value) Messages.value = undefined
   showMoreOptions.value = false
   showAddTutor.value = false
+  showNeedsSubscription.value = false
   showEndSession.value = false
   showDeleteConvo.value = false
   showRateAndReviewTutor.value = false
@@ -561,6 +564,14 @@ export const newChat = async () => {
   Logic.Conversations.Messages = undefined
 }
 
+export const onClickAddTutor = () => {
+  showMoreOptions.value = false;
+  if (Logic.Payment.UserWallet?.subscription.data.tutorAidedConversations > 0) showAddTutor.value = true
+  else showNeedsSubscription.value = true
+}
+
 export {
-  AllConversations, AllTutorRequests, ChatMembers, Messages, SingleConversation, acceptOrRejectTutorRequest, addNewChat, chatList, contentTitleChanged, conversationTitle, createCoversation, deleteConvo, endChatSession, handleIncomingMessage, handleKeyEvent, hasMessage, itIsNewMessage, itIsTutorRequest, listenToConversation, listenToTutorRequest, messageContent, onInput, selectConversation, selectedChatData, selectedConvoId, selectedTutorRequestData, sendMessage, sendNewMessage, setChatToDefault, setConversations, setConvoFromRoute, showAddTutor, showDeleteConvo, showEndSession, showLoader, showMoreOptions, showRateAndReviewTutor, tutorRequestList
+  AllConversations, AllTutorRequests, ChatMembers, Messages, SingleConversation, acceptOrRejectTutorRequest, addNewChat, chatList, contentTitleChanged,
+  conversationTitle, createCoversation, deleteConvo, endChatSession, handleIncomingMessage, handleKeyEvent, hasMessage, itIsNewMessage, itIsTutorRequest, listenToConversation, listenToTutorRequest, messageContent, onInput, selectConversation,
+  selectedChatData, selectedConvoId, selectedTutorRequestData, sendMessage, sendNewMessage, setChatToDefault, setConversations, setConvoFromRoute, showAddTutor, showDeleteConvo, showEndSession, showLoader, showMoreOptions, showRateAndReviewTutor, tutorRequestList
 }

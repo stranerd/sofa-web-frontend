@@ -32,12 +32,10 @@
         <div
           class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
           <div class="md:!-auto col-span-1 flex flex-col" v-for="(button, index) in buttons" :key="index">
-            <sofa-button :textColor="!button.isClose ? 'text-white' : 'text-grayColor'"
-              :bgColor="!button.isClose ? 'bg-primaryRed' : 'bg-white'" :padding="'px-4 py-2'"
-              @click="button.action ? button.action() : null" :customClass="`${button.isClose
-                ? 'border-[2px] border-gray-100 md:!min-w-[100px]'
-                : 'border-[2px] border-transparent'
-                } md:!w-auto w-full`">
+            <sofa-button v-if="!button.hide" :textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
+              :bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')" :padding="'px-4 py-2'"
+              @click="button.action ? button.action() : null"
+              :customClass="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-[2px]  md:!w-auto w-full`">
               {{ button.label }}
             </sofa-button>
           </div>
@@ -80,6 +78,9 @@ export default defineComponent({
     buttons: {
       type: Object as () => {
         label: string
+        hide?: boolean
+        bgColor?: string
+        textColor?: string
         isClose: boolean
         action: Function
       }[],
