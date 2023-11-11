@@ -1,5 +1,5 @@
 <template>
-  <span> <img :src="`/images/icons/${name}.svg`" :class="`${customClass}`" /></span>
+  <img :src="`/images/icons/${name}.svg`" :class="`${customClass}`" />
 </template>
 <script lang="ts">
 export default {

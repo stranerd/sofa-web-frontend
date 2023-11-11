@@ -1,9 +1,9 @@
 <template>
   <div class="w-full flex flex-col h-full gap-4" v-if="question">
     <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'
-      " class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] gap-3">
-      <div class="hidden lg:block w-[24px]">
-        <sofa-icon :name="'question-input'" :custom-class="'h-[23px]'" />
+      " class="w-full flex flex-row items-start custom-border bg-[#F1F6FA] gap-3">
+      <div class="hidden lg:block pt-4 pl-4">
+        <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
       </div>
       <sofa-textarea :hasTitle="false"
         :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor !px-0 !py-0 resize-none'"
@@ -70,27 +70,21 @@
           :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
           <template #item="{ element, index }">
             <div
-              :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white gap-3`"
+              :class="`w-full flex flex-row items-center justify-between rounded-[12px] border-lightBorderColor bg-white gap-3`"
               style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
               @mouseleave="element.showRemove = false">
-              <div class="w-full flex-grow flex flex-row gap-3 items-center">
-                <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
-                  v-if="questionTypeMain != 'write_answer'" class="hidden lg:block" />
-                <sofa-textarea :rows="1" :disabled="questionTypeMain == 'true_false'" :richEditor="true"
-                  class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
-                  textAreaStyle="bg-grey100 p-0" :placeholder="element.text" v-model="element.value" />
-              </div>
-              <div class="flex flex-row items-center gap-2">
-                <sofa-icon :name="'remove'" :custom-class="'h-[23px] cursor-pointer'" v-if="element.showRemove &&
-                  questionTypeMain != 'true_false' &&
-                  reactiveQuestion.options.length > optionLimitSettings.min
-                  " @click="removeOption(index)" />
-                <div class="w-[26px] cursor-pointer" v-if="element.isRadio &&
-                  (questionTypeMain == 'multiple_choice' ||
-                    questionTypeMain == 'true_false')
-                  " @click="element.isRadio ? setAnswers(element) : null">
-                  <sofa-icon :name="element.answer ? 'selected' : 'not-selected'" :custom-class="'h-[23px]'" />
-                </div>
+              <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
+                v-if="questionTypeMain != 'write_answer'" class="hidden lg:block" />
+              <sofa-textarea :rows="1" :disabled="questionTypeMain == 'true_false'" :richEditor="true"
+                class="!w-[200px] flex-1 focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack"
+                textAreaStyle="bg-grey100 p-0" :placeholder="element.text" v-model="element.value" />
+              <div class="flex items-center gap-2 pr-2 py-2">
+                <sofa-icon :name="'remove'" :custom-class="'w-[23px] cursor-pointer'"
+                  v-if="element.showRemove && questionTypeMain != 'true_false' && reactiveQuestion.options.length > optionLimitSettings.min"
+                  @click="removeOption(index)" />
+                <sofa-icon v-if="element.isRadio && (questionTypeMain == 'multiple_choice' || questionTypeMain == 'true_false')"
+                  @click="element.isRadio ? setAnswers(element) : null" :name="element.answer ? 'selected' : 'not-selected'"
+                  :custom-class="'w-[23px] cursor-pointer'" />
               </div>
             </div>
           </template>
@@ -126,7 +120,7 @@
       </template>
     </div>
 
-    <div class="w-full flex flex-row justify-end gap-2 items-center cursor-pointer" v-if="(questionTypeMain == 'multiple_choice' ||
+    <div class="self-end flex justify-end gap-2 items-center cursor-pointer" v-if="(questionTypeMain == 'multiple_choice' ||
       questionTypeMain == 'sequence' ||
       questionTypeMain == 'match' ||
       questionTypeMain == 'write_answer') &&
@@ -137,9 +131,9 @@
     </div>
 
     <div class="w-full flex flex-col border-t-[1px] border-[#F1F6FA] pt-4">
-      <div class="w-full flex flex-row items-start custom-border px-4 py-4 bg-[#F1F6FA] gap-3">
-        <div class="w-[24px]">
-          <sofa-icon :name="'question-input'" :custom-class="'h-[23px]'" />
+      <div class="w-full flex flex-row items-start custom-border bg-[#F1F6FA]">
+        <div class="hidden lg-block pt-4 pl-4">
+          <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
         </div>
         <sofa-textarea :hasTitle="false"
           :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor !px-0 !py-0 resize-none'"

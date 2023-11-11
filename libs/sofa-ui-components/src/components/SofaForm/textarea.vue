@@ -6,8 +6,8 @@
     <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`" :disabled="disabled"
       :style="`min-height: max(${rows}em, 40px)`"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
-      :placeholder="placeholder" />
-    <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled"
+      :placeholder="placeholder" :tabindex="0" />
+    <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
       :class="`w-full px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
   </div>
@@ -110,7 +110,8 @@ export default defineComponent({
   font-family: inherit !important;
   font-size: inherit !important;
 
-  input, textarea {
+  input,
+  textarea {
     color: inherit;
     background-color: white;
   }
@@ -136,10 +137,13 @@ export default defineComponent({
     color: inherit;
   }
 
+  &:focus-within .ql-toolbar {
+    display: flex;
+  }
+
   .ql-toolbar {
     border: none;
-    // border-bottom: 1px solid #78828C;
-    display: flex;
+    display: none;
     gap: 2px;
     flex-wrap: nowrap;
     overflow-x: auto;
