@@ -3,11 +3,9 @@
     :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] mdlg:!overflow-y-auto overflow-y-auto  custom-border ${customClass}`">
     <div :class="`w-full flex flex-col gap-2 ${padding} relative`">
       <div
-        class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start mdlg:!gap-3 mdlg:!gap-0 gap-3 gap-0">
-        <div :class="` ${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'
-          } w-full h-full mdlg:!absolute top-0 left-0`">
-          <sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] custom-border relative'"
-            :photoUrl="content.image">
+        class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
+        <div :class="` ${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
+          <sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] custom-border relative'" :photoUrl="content.image">
             <div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
               v-if="content.price > 0 && !itemIsPurchased">
               <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 custom-border'">
@@ -114,7 +112,7 @@
             <div class="md:!flex hidden flex-col" v-if="type == 'quiz'">
               <sofa-button :padding="'px-6 py-1'" @click="
                 itemIsPurchased
-                  ? (setShowStudyMode(true))
+                  ? openQuiz()
                   : Logic.Common.GoToRoute(
                     `/marketplace/${content.id}?type=course`
                   )
@@ -194,7 +192,7 @@
         <div class="md:!w-auto w-full flex flex-col">
           <sofa-button :padding="'md:!py-1 py-3 px-4'" :customClass="'md:!w-auto w-full'" @click="
             itemIsPurchased
-              ? (setShowStudyMode(true))
+              ? openQuiz()
               : Logic.Common.GoToRoute(
                 `/marketplace/${content.courseId}?type=course`
               )
@@ -278,10 +276,10 @@
       } mdlg:!overflow-y-auto overflow-y-visible py-2 relative pb-4`"
       v-if="selectedTab == 'similar_courses' && type == 'course'">
       <div
-        class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto scrollbar-hide"
+        class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide"
         v-if="similarContents?.length">
         <div
-          class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+          class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
           <sofa-activity-card v-for="(activity, index) in similarContents" :key="index" :activity="activity"
             :customClass="'!bg-[#F1F6FA] cursor-pointer'"
             @click="Logic.Common.GoToRoute(`/marketplace/${activity.id}`)" />
@@ -429,11 +427,7 @@ export default defineComponent({
         save: Function
       },
     },
-    showStudyMode: {
-      type: Boolean,
-      default: false,
-    },
-    setShowStudyMode: {
+    openQuiz: {
       type: Function,
     },
   },

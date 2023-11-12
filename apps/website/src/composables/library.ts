@@ -772,7 +772,7 @@ const updateFolder = (title: string, id: string) => {
   }, 500)
 }
 
-const openQuiz = (activity: ResourceType) => {
+const openQuiz = <T extends Pick<ResourceType, 'status' | 'user' | 'id'>>(activity: T) => {
   if (
     activity.status == 'draft' &&
     activity.user.id === Logic.Users.UserProfile?.id

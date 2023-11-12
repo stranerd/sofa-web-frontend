@@ -2,9 +2,7 @@
   <expanded-layout :hasBottomBar="false">
     <div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
       <sofa-normal-text :color="'text-grayColor w-full flex flex-row justify-start gap-1'">
-        <span class="cursor-pointer" @click="Logic.Common.goBack()">{{
-          "Marketplace "
-        }}</span>
+        <span class="cursor-pointer" @click="Logic.Common.goBack()">{{ "Marketplace " }}</span>
         <span> / {{ contentDetails.title }}</span>
       </sofa-normal-text>
     </div>
@@ -22,28 +20,27 @@
     <div class="w-full bg-white rounded-[16px] h-auto max-h-full flex flex-row gap-3">
       <sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
         :buyAction="buyCourse" :itemIsPurchased="userHasAccess" :similarContents="similarContents" :type="contentType"
-        :contentId="contentDetails.id" :otherTasks="otherTasks" :showStudyMode="showStudyMode" :setShowStudyMode="(value) => {
-          showStudyMode = value
-        }" :actions="{
-  report: () => {
-    reportMaterial(
-      contentDetails?.type,
-      contentDetails?.title,
-      contentDetails?.id
-    )
-  },
-  share: () => {
-    shareMaterialLink(
-      contentDetails?.type ?? ('' as any),
-      `/marketplace/${contentDetails?.id}?type=${contentDetails?.id}`,
-      contentDetails?.title ?? '',
-    )
-  },
-  save: () => {
-    selectedFolderMaterailToAdd = contentDetails
-    showSaveToFolder = true
-  }
-}" />
+        :contentId="contentDetails.id" :otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)"
+        :actions="{
+          report: () => {
+            reportMaterial(
+              contentDetails?.type,
+              contentDetails?.title,
+              contentDetails?.id
+            )
+          },
+          share: () => {
+            shareMaterialLink(
+              contentDetails?.type ?? ('' as any),
+              `/marketplace/${contentDetails?.id}?type=${contentDetails?.id}`,
+              contentDetails?.title ?? '',
+            )
+          },
+          save: () => {
+            selectedFolderMaterailToAdd = contentDetails
+            showSaveToFolder = true
+          }
+        }" />
     </div>
 
     <!--  Payment modal -->
@@ -138,11 +135,11 @@ import { scrollToTop } from "@/composables"
 import {
   createCourseData,
   createQuizData,
+  openQuiz,
   reportMaterial,
   selectedFolderMaterailToAdd,
   shareMaterialLink,
   showSaveToFolder,
-  showStudyMode,
 } from "@/composables/library"
 import { allOrganizations, setOrganizations } from "@/composables/profile"
 import { otherTasks } from "@/composables/quiz"
@@ -443,7 +440,7 @@ export default defineComponent({
       if (SingleQuiz.value) {
         contentType.value = "quiz"
         contentDetails.type = "quiz"
-        contentDetails.id = SingleQuiz.value?.courseId || SingleQuiz.value?.id
+        contentDetails.id = SingleQuiz.value.id
         contentDetails.title = SingleQuiz.value.title
         contentDetails.price = 0
         contentDetails.status = SingleQuiz.value.status
@@ -680,7 +677,7 @@ export default defineComponent({
       selectedFolderMaterailToAdd,
       showSaveToFolder,
       userHasAccess,
-      showStudyMode,
+      openQuiz,
       reportMaterial,
       shareMaterialLink,
       buyCourse,

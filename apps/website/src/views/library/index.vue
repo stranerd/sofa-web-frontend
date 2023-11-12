@@ -115,7 +115,7 @@
             <template v-if="selectedFilter == 'quizzes'">
               <template v-if="currentQuizData.length">
                 <sofa-activity-card v-for="(activity, index) in currentQuizData" :key="index" :activity="activity"
-                  :custom-class="'!bg-white shadow-custom !cursor-pointer'" :has-extra="true" @click="openQuiz(activity)">
+                  :custom-class="'mdlg:!bg-white shadow-custom !cursor-pointer'" :has-extra="true" @click="openQuiz(activity)">
                   <template v-slot:extra>
                     <div class="relative flex flex-row z-10 justify-end" :tabindex="Math.random() * 100"
                       @blur="activity.showMore = false">

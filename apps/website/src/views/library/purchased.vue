@@ -23,7 +23,7 @@
       <div class="w-full flex flex-col gap-3 px-4 pt-3">
         <template v-if="currentPurchasedData.length">
           <sofa-activity-card v-for="(activity, index) in currentPurchasedData" :key="index" :activity="activity"
-            :custom-class="'!bg-white shadow-custom cursor-pointer'" :isWrapped="true"
+            :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer'" :isWrapped="true"
             @click="Logic.Common.GoToRoute('/course/' + activity.id)">
           </sofa-activity-card>
         </template>

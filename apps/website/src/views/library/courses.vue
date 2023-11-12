@@ -22,7 +22,7 @@
       <div class="w-full flex flex-col gap-3 px-4 pt-3">
         <template v-if="currentCourseData.length">
           <sofa-activity-card v-for="(activity, index) in currentCourseData" :key="index" :activity="activity"
-            :custom-class="'!bg-white shadow-custom cursor-pointer relative'" @click="openCourse(activity)"
+            :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'" @click="openCourse(activity)"
             :isWrapped="true">
             <div class="absolute right-0 top-0 py-3 px-3 bg-white rounded-tr-[8px]">
               <sofa-icon :name="'more-options-horizontal'" :customClass="'h-[6px] '"

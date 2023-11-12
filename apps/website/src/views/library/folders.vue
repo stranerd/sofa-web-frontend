@@ -23,7 +23,7 @@
         <div class="w-full flex flex-col gap-3 px-4 pt-3">
           <template v-if="selectedFolderItems.length">
             <sofa-activity-card v-for="(activity, index) in selectedFolderItems" :key="index" :activity="activity"
-              :custom-class="'!bg-white shadow-custom cursor-pointer'" :isWrapped="true" @click="
+              :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer'" :isWrapped="true" @click="
                 activity.labels.main.toLocaleLowerCase().includes('quiz')
                   ? openQuiz(activity)
                   : Logic.Common.GoToRoute('/course/' + activity.id)
