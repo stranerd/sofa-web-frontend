@@ -200,7 +200,6 @@
 </template>
 
 <script setup lang="ts">
-import { scrollToTop } from '@/composables'
 import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, moreOptions, setFolders, showDeleteFolder, showMoreOptions } from '@/composables/library'
 import { Logic } from "sofa-logic"
 import { Conditions } from 'sofa-logic/src/logic/types/common'
@@ -347,17 +346,16 @@ watch(AllFolders, setFolders)
 watch(UserProfile, setOrganizations)
 
 onMounted(async () => {
-	scrollToTop()
 	Logic.Study.watchProperty("UserProfile", UserProfile)
 	Logic.Study.watchProperty("AllFolders", AllFolders)
-	await Logic.Study.GetFolders({
-		where: [
-			{
-				field: "user.id",
-				value: Logic.Auth.AuthUser?.id,
-				condition: Conditions.eq,
-			},
-		],
+	if (!Logic.Study.Tags) Logic.Study.GetTags({
+		where: [{ field: "type", value: "topics" }],
+		all: true
+	})
+	if (!Logic.Study.RecentMaterials) Logic.Study.GetRecentMaterials()
+	Logic.Study.GetFolders({
+		where: [{ field: "user.id", value: Logic.Auth.AuthUser?.id }],
+		all: true
 	})
 	setOrganizations()
 })

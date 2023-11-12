@@ -555,6 +555,8 @@ const recentMaterials = ref<ResourceType[]>([])
 
 const currentRecentData = ref<ResourceType[]>([])
 
+export const recentEntities = computed(() => RecentMaterials.value?.map((m) => m.__type === "CourseEntity" ? createCourseData(m) : createQuizData(m)) ?? [])
+
 const setRecentItems = () => {
   if (!RecentMaterials.value) return
 

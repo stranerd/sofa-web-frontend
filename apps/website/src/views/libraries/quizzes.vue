@@ -22,6 +22,7 @@ import {
 	AllQuzzies,
 	createQuizData,
 	openQuiz,
+	recentEntities,
 	showMoreOptionHandler,
 	TutorQuizzes
 } from "@/composables/library"
@@ -93,7 +94,7 @@ export default defineComponent({
 		const tutorQuizzes = ref<ResourceType[]>([])
 		const data = computed(() => {
 			if (tab.value === "tutors") return tutorQuizzes.value
-			else if (tab.value === "recent") return quizzes.value
+			else if (tab.value === "recent") return recentEntities.value.filter((e) => e.type === "quiz")
 			return quizzes.value.filter((quiz) => quiz.status === tab.value)
 		})
 

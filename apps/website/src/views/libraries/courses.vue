@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import LibraryLayout from "@/components/library/LibraryLayout.vue"
-import { createCourseData, openCourse, showMoreOptionHandler } from "@/composables/library"
+import { createCourseData, openCourse, recentEntities, showMoreOptionHandler } from "@/composables/library"
 import { Logic } from "sofa-logic"
 import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
@@ -66,7 +66,7 @@ export default defineComponent({
 		const courses = ref<ResourceType[]>([])
 
 		const data = computed(() => {
-			if (tab.value === "recent") return courses.value
+			if (tab.value === "recent") return recentEntities.value.filter((e) => e.type === "course")
 			return courses.value.filter((course) => course.status === tab.value)
 		})
 
