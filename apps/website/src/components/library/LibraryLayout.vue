@@ -1,14 +1,33 @@
 <template>
-	<dashboard-layout :middleSessionWidth="'lg:w-[78%] mdlg:w-[75%]'" :topbarOptions="{ title }">
+	<sub-page-layout v-if="!index && ['sm', 'md'].includes(Logic.Common.mediaQuery())">
+		<div class="w-full h-full flex-grow flex flex-col justify-start relative">
+			<div class="w-full flex items-center gap-3 z-50 justify-between bg-backgroundGray p-4 sticky top-0 left-0">
+				<sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
+				<sofa-normal-text :customClass="'!font-bold !text-base'">{{ title }}</sofa-normal-text>
+				<div></div>
+			</div>
+			<div v-if="currentOption && tabs.length">
+				<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
+					<router-link class="px-6 py-2 bg-white custom-border flex items-center justify-center"
+						v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id" :to="`${currentOption.routePath}?tab=${item.id}`" exact-active-class="!bg-primaryPurple">
+						<sofa-normal-text :color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
+							:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+					</router-link>
+				</div>
+			</div>
+
+			<div class="w-full flex flex-col gap-3 px-4 pt-3">
+				<slot />
+				<div class="w-full flex flex-row h-[100px]"></div>
+			</div>
+		</div>
+	</sub-page-layout>
+	<dashboard-layout v-else :middleSessionWidth="'lg:w-[78%] mdlg:w-[75%]'" :topbarOptions="{ title }">
 		<div
 			class="mdlg:hidden w-full flex items-center gap-3 z-[99999999] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 			<sofa-normal-text customClass="!font-bold !text-base">{{ title }}</sofa-normal-text>
 			<span />
-		</div>
-
-		<div v-if="!index" class="mdlg:hidden w-full">
-			<slot />
 		</div>
 
 		<template v-slot:left-session>
@@ -26,7 +45,7 @@
 						@click="addFolder">Add</sofa-normal-text>
 				</div>
 
-				<router-link
+				<component :is="item.edit ? 'span' : 'router-link'"
 					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD]"
 					v-for="item in folders" :key="item.id" @mouseenter="item.hover = true" :to="`/libraries/${item.id}`"
 					exact-active-class="bg-[#E5F2FD]" @mouseleave="item.hover = false">
@@ -48,9 +67,9 @@
 						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] flex flex-row gap-2 items-center">
 						<sofa-icon @click.stop="item.edit = true" customClass="h-[15px] cursor-pointer" name="edit-gray" />
 						<sofa-icon customClass="h-[15px] cursor-pointer" name="trash-gray"
-							@click.stop="showDeleteFolder = true" />
+							@click.stop="selectedFolderId = item.id; showDeleteFolder = true" />
 					</div>
-				</router-link>
+				</component>
 
 				<template v-if="allOrganizations.length">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
@@ -68,7 +87,7 @@
 		</template>
 
 		<template v-slot:middle-session>
-			<div class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
+			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
 				<div class="px-2 bg-white flex flex-col shadow-custom custom-border">
 					<router-link :to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-[#F1F6FA]"
@@ -104,7 +123,7 @@
 
 						<div v-if="!item.edit" class="h-full justify-center flex gap-2 items-center">
 							<sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'" />
-							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'" @click.stop="showDeleteFolder = true" />
+							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'" @click.stop="selectedFolderId = item.id; showDeleteFolder = true" />
 						</div>
 					</component>
 				</div>
@@ -114,7 +133,7 @@
 						<sofa-normal-text customClass="!font-bold">Organizations</sofa-normal-text>
 					</div>
 					<router-link
-						class="w-full flex items-center relative justify-between gap-2 p-4 custom-border bg-white shadow-custom"
+						class="w-full flex items-center relative justify-start gap-2 p-4 custom-border bg-white shadow-custom"
 						:to="`/libraries/${item.id}`" v-for="item in allOrganizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
@@ -122,19 +141,152 @@
 					</router-link>
 				</template>
 			</div>
+			<div v-else class="w-full flex flex-col gap-5 mdlg:!pl-3 mdlg:!pr-7">
+				<div class="w-full flex gap-2 justify-between items-center" v-if="currentOption && tabs.length">
+					<div class="w-full flex-nowrap overflow-x-auto scrollbar-hide flex gap-3 items-center">
+						<router-link class="px-6 py-2 bg-white custom-border flex items-center justify-center" exact-active-class="!bg-primaryPurple"
+							v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id" :to="`${currentOption.routePath}?tab=${item.id}`">
+							<sofa-normal-text :color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
+								:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+						</router-link>
+					</div>
+				</div>
+				<slot />
+				<div class="w-full h-[130px]"></div>
+			</div>
 		</template>
 	</dashboard-layout>
+	<sofa-delete-prompt v-if="showDeleteFolder" :title="'Are you sure?'" :subTitle="`This action is permanent. All items in the folder will be deleted`"
+		:close="() => showDeleteFolder = false"
+        :buttons="[
+			{
+				label: 'No',
+				isClose: true,
+				action: () => showDeleteFolder = false
+			},
+			{
+				label: 'Yes, delete',
+				isClose: false,
+				action: () => deleteFolder(selectedFolderId)
+			},
+		]" />
 </template>
 
 <script setup lang="ts">
 import { scrollToTop } from '@/composables'
-import { AllFolders, addFolder, currentFolder, folders, handleFolderNameBlur, setFolders, showDeleteFolder } from '@/composables/library'
-import { libraryOptions } from '@/composables/settings'
+import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, setFolders, showDeleteFolder } from '@/composables/library'
 import { Logic } from "sofa-logic"
 import { Conditions } from 'sofa-logic/src/logic/types/common'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import { SofaCustomInput, SofaIcon, SofaNormalText } from "sofa-ui-components"
 import { defineProps, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const libraryOptions = [
+	{
+		title: 'In progress',
+		icon: 'in-progress',
+		routePath: '/libraries/in-progress',
+		options: [
+			{
+				name: 'All',
+				id: 'all',
+			},
+			{
+				name: 'Tests',
+				id: 'tests',
+			},
+			{
+				name: 'Games',
+				id: 'games',
+			},
+		],
+	},
+	{
+		title: 'Quizzes',
+		icon: 'quiz',
+		routePath: '/libraries/quizzes',
+		options: [
+			{
+				name: 'Recent',
+				id: 'recent',
+			},
+			{
+				name: 'Saved',
+				id: 'saved',
+			},
+			{
+				name: 'Published',
+				id: 'published',
+			},
+			{
+				name: 'Draft',
+				id: 'draft',
+			},
+			{
+				name: "Tutors",
+				id: "quiz-tutors",
+				hide: () => !Logic.Auth.AuthUser?.roles.isAdmin,
+			},
+		],
+	},
+	{
+		title: 'Courses',
+		icon: 'course-list',
+		routePath: '/libraries/courses',
+		options: [
+			{
+				name: 'Recent',
+				id: 'recent',
+			},
+			{
+				name: 'Saved',
+				id: 'saved',
+			},
+			{
+				name: 'Published',
+				id: 'published',
+			},
+			{
+				name: 'Draft',
+				id: 'draft',
+			},
+		],
+	},
+	{
+		title: 'Purchased',
+		icon: 'purchased',
+		routePath: '/libraries/purchased',
+		options: [],
+	},
+	{
+		title: 'Results',
+		icon: 'results',
+		routePath: '/libraries/results',
+		options: [
+			{
+				name: 'All',
+				id: 'all',
+			},
+			{
+				name: 'Tests',
+				id: 'tests',
+			},
+			{
+				name: 'Games',
+				id: 'games',
+			},
+		],
+	},
+]
+
+const route = useRoute()
+const currentTab = route.query.tab
+const selectedFolderId = ref('')
+const UserProfile = ref(Logic.Users.UserProfile)
+const allOrganizations = ref<{ id: string; name: string; subscribed: boolean }[]>([])
+const currentOption = libraryOptions.find((o) => o.routePath === route.path)
+const tabs = currentOption?.options ?? []
 
 defineProps({
 	title: {
@@ -147,9 +299,6 @@ defineProps({
 		default: false
 	}
 })
-
-const UserProfile = ref(Logic.Users.UserProfile)
-const allOrganizations = ref<{ id: string; name: string; subscribed: boolean }[]>([])
 
 const setOrganizations = async () => {
 	const users: SingleUser[] = await Logic.Users.GetUsers({
