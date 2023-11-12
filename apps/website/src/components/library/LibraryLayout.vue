@@ -1,5 +1,5 @@
 <template>
-	<sub-page-layout v-if="!index && ['sm', 'md'].includes(Logic.Common.mediaQuery())">
+	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
 		<div class="w-full h-full flex-grow flex flex-col justify-start relative">
 			<div class="w-full flex items-center gap-3 z-50 justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 				<sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
@@ -179,7 +179,7 @@ import { Logic } from "sofa-logic"
 import { Conditions } from 'sofa-logic/src/logic/types/common'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import { SofaCustomInput, SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { defineProps, onMounted, ref, watch } from 'vue'
+import { computed, defineProps, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const libraryOptions = [
@@ -212,10 +212,6 @@ const libraryOptions = [
 				id: 'recent',
 			},
 			{
-				name: 'Saved',
-				id: 'saved',
-			},
-			{
 				name: 'Published',
 				id: 'published',
 			},
@@ -238,10 +234,6 @@ const libraryOptions = [
 			{
 				name: 'Recent',
 				id: 'recent',
-			},
-			{
-				name: 'Saved',
-				id: 'saved',
 			},
 			{
 				name: 'Published',
@@ -281,7 +273,7 @@ const libraryOptions = [
 ]
 
 const route = useRoute()
-const currentTab = route.query.tab
+const currentTab = computed(() => route.query.tab as string | undefined)
 const selectedFolderId = ref('')
 const UserProfile = ref(Logic.Users.UserProfile)
 const allOrganizations = ref<{ id: string; name: string; subscribed: boolean }[]>([])

@@ -17,7 +17,7 @@ export default defineComponent({
 			title: "Library",
 		})
 
-		// if (!["sm", "md"].includes(Logic.Common.mediaQuery())) Logic.Common.GoToRoute("/libraries/quizzes")
+		// if (Logic.Common.isLarge) Logic.Common.GoToRoute("/libraries/quizzes")
 	},
 })
 </script>

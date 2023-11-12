@@ -371,6 +371,10 @@ export default class Common {
     }
   }
 
+  public get isLarge () {
+    return window.screen.width > 768
+  }
+
   public showError = (message: string) => {
     this.showLoader({
       show: true,
