@@ -5,7 +5,7 @@ import {
     Quiz,
     ResourceType,
 } from 'sofa-logic/src/logic/types/domains/study'
-import { capitalize, reactive, ref, watch } from 'vue'
+import { capitalize, computed, reactive, ref, watch } from 'vue'
 import { ContentDetails } from './marketplace'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 
@@ -361,6 +361,61 @@ const resultItems = ref<PlayResource[]>([])
 const currentInProgressItem = ref<PlayResource[]>([])
 
 const currentResultItems = ref<PlayResource[]>([])
+
+export const plays = computed(() => [
+  AllGames.value?.results.map((p) => {
+    const currentQuiz = GameAndTestQuizzes.value?.results.find((i) => i.id == p.quizId)
+    const ended = ["scored", "ended"].includes(p.status)
+    const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
+    const userPosition = allScores.indexOf(p.scores[Logic.Auth.AuthUser.id])
+
+    return {
+      id: p.id,
+      inProgress: !ended,
+      createdAt: p.createdAt,
+      image: currentQuiz?.photo?.link || '/images/default.png',
+      label: Logic.Common.ordinal_suffix_of(userPosition !== -1 ? userPosition + 1 : p.participants.length),
+      label_color: 'text-[#3296C8]',
+      title: currentQuiz?.title || 'Unknown quiz',
+      type: 'game',
+      participants: p.participants.length,
+      action: () => {
+        ended ? Logic.Common.showLoader({
+          loading: false,
+          show: true,
+          type: 'warning',
+          message: 'Game already ended',
+        }) : Logic.Common.GoToRoute(`/quiz/${p.quizId}?mode=game&gameId=${p.id}`)
+      },
+    }
+  }) ?? [],
+  AllTests.value?.results.map((p) => {
+    const currentQuiz = GameAndTestQuizzes.value?.results.find((i) => i.id == p.quizId)
+    const ended = ["scored", "ended"].includes(p.status)
+    const userCorrectAnswers = (p.scores[Logic.Auth.AuthUser.id] ?? 0) / 10
+    const percentage = (userCorrectAnswers / p.questions.length) * 100
+    const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
+      percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
+    return {
+      id: p.id,
+      inProgress: !ended,
+      createdAt: p.createdAt,
+      image: currentQuiz?.photo?.link || '/images/default.png',
+      label: `${percentage ? percentage.toFixed() : '0'}%`,
+      label_color: textColor,
+      title: currentQuiz?.title || 'Unknown quiz',
+      type: 'test',
+      action: () => {
+        ended ? Logic.Common.showLoader({
+          loading: false,
+          show: true,
+          type: 'warning',
+          message: 'Test already ended',
+        }) : Logic.Common.GoToRoute(`/quiz/${p.quizId}?mode=tutor_test&testId=${p.id}&is_student=yes`)
+      },
+    }
+  }) ?? [],
+].flat().sort((a, b) => b.createdAt - a.createdAt))
 
 const setInProgressItems = () => {
   inProgressItems.value.length = 0

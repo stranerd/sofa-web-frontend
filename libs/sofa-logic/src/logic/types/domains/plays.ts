@@ -8,7 +8,7 @@ export interface Game {
   status: string
   participants: string[]
   questions: string[]
-  scores: {}
+  scores: Record<string, number>
   startedAt?: number
   endedAt?: number
   createdAt: number
@@ -22,7 +22,7 @@ export interface Test {
   status: string
   userId: string
   questions: string[]
-  scores: {}
+  scores: Record<string, number>
   startedAt: number
   endedAt?: number
   createdAt: number

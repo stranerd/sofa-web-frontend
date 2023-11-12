@@ -1,27 +1,27 @@
 <template>
-  <div :class="`col-span-1 flex flex-row  gap-3 px-3 py-3 custom-border bg-white ${customClass}`">
+  <div :class="`col-span-1 flex gap-3 p-3 custom-border bg-white ${customClass}`">
     <div class="w-[110px] flex flex-col">
       <sofa-image-loader custom-class="w-[110px] h-[78px] mdlg:h-[80px] custom-border relative"
         :photo-url="content.image">
       </sofa-image-loader>
     </div>
     <div class="flex flex-col w-full gap-2">
-      <div class="w-full flex flex-row items-center justify-between">
+      <div class="w-full flex items-center justify-between">
         <sofa-normal-text :customClass="'!font-bold !line-clamp-1'">
           {{ content.title }}
         </sofa-normal-text>
       </div>
       <div class="w-full flex flex-row items-center gap-3">
-        <sofa-normal-text :color="'text-grayColor'">
+        <sofa-normal-text :color="'text-grayColor'" custom-class="capitalize">
           {{ content.type }}
         </sofa-normal-text>
       </div>
 
-      <div class="w-full flex flex-row items-center justify-between">
+      <div class="w-full flex items-center justify-between">
         <sofa-normal-text :color="content.label_color" :customClass="'font-semibold'">
           {{ content.label }}
         </sofa-normal-text>
-        <div class="flex flex-row items-center gap-2" v-if="content.entity_type == 'game'">
+        <div class="flex flex-row items-center gap-2" v-if="content.type == 'game'">
           <sofa-normal-text :color="'text-grayColor'">
             {{ content.participants }}
           </sofa-normal-text>
@@ -31,6 +31,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue"
 import { Logic } from "../../composable"
