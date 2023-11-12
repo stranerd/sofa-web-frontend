@@ -145,7 +145,7 @@ export default defineComponent({
       },
     ],
   },
-  name: "LibraryCoursesPage",
+  name: "LibraryaCoursesPage",
   setup () {
     useMeta({
       title: "Courses",

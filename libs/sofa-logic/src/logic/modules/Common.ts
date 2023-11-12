@@ -21,6 +21,7 @@ import { AuthResponse } from '../types/domains/auth'
 import { ValidationError } from '../types/domains/common'
 
 export default class Common {
+  public window = reactive({ width: window.innerWidth })
   public router: Router | undefined = undefined
 
   public route: RouteLocationNormalizedLoaded | undefined = undefined
@@ -62,6 +63,12 @@ export default class Common {
   public AvailableCurrencies = {
     NGN: '₦',
     USD: '$',
+  }
+
+  constructor () {
+    window.addEventListener('resize', () => {
+      this.window.width = window.innerWidth
+    })
   }
 
   public inWords = (num: any) => {
@@ -132,7 +139,7 @@ export default class Common {
   }
 
   public setupWebsocket = () => {
-    const url = new URL(`${process.env.VUE_APP_API_URL}/socket.io`)
+    const url = new URL('https://development.apis.sofa.stranerd.com/api/socket.io' ?? `${process.env.VUE_APP_API_URL}/socket.io`)
 
     const tokens: AuthResponse = localStorage.getItem('AuthTokens')
       ? JSON.parse(localStorage.getItem('AuthTokens') || '{}')
@@ -294,6 +301,7 @@ export default class Common {
   })
 
   public SetApiUrl = (apiUrl: string) => {
+    apiUrl = 'https://development.apis.sofa.stranerd.com/api'
     this.apiUrl = apiUrl
   }
 
@@ -372,11 +380,11 @@ export default class Common {
   }
 
   public get isOnlyMobile () {
-    return window.screen.width <= 640
+    return this.window.width <= 640
   }
 
   public get isLarge () {
-    return window.screen.width > 768
+    return this.window.width > 1000
   }
 
   public showError = (message: string) => {

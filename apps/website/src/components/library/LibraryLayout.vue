@@ -4,16 +4,16 @@
 			<div class="w-full flex items-center gap-3 z-50 justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 				<sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 				<sofa-normal-text :customClass="'!font-bold !text-base'">{{ title }}</sofa-normal-text>
-				<div></div>
+				<span class="w-4" />
 			</div>
-			<div v-if="currentOption && tabs.length">
+			<div v-if="tabs.length">
 				<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
 					<router-link class="px-6 py-2 custom-border flex items-center justify-center"
-						:class="(currentTab && item.id === currentTab) || index === 0 ? 'bg-primaryPurple' : 'bg-white'"
-						v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id"
-						:to="`${currentOption.routePath}?tab=${item.id}`">
+						:class="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'"
+						v-for="(item, index) in tabs.filter((t) => !t.hide)" :key="item.id"
+						:to="`${$route.path}?tab=${item.id}`">
 						<sofa-normal-text
-							:color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
+							:color="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'text-white' : 'text-deepGray'"
 							:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
 					</router-link>
 				</div>
@@ -50,8 +50,9 @@
 
 				<component :is="item.edit ? 'span' : 'router-link'"
 					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD]"
-					v-for="item in folders" :key="item.id" @mouseenter="item.hover = true" :to="`/libraries/${item.id}`"
-					exact-active-class="bg-[#E5F2FD]" @mouseleave="item.hover = false">
+					v-for="item in folders" :key="item.id" @mouseenter="item.hover = true"
+					:to="`/libraries/folders/${item.id}`" exact-active-class="bg-[#E5F2FD] font-bold"
+					@mouseleave="item.hover = false">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
 					<sofa-custom-input v-if="item.edit"
@@ -108,7 +109,8 @@
 
 					<component :is="item.edit ? 'span' : 'router-link'"
 						class="w-full flex items-center relative justify-between gap-3 p-4 custom-border bg-white shadow-custom"
-						v-for="item in folders" :key="item.id" :to="`/libraries/${item.id}`">
+						v-for="item in folders" :key="item.id" :to="`/libraries/folders/${item.id}`"
+						exact-active-class="font-bold">
 						<div class="flex items-center gap-3 w-full">
 							<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 							<sofa-custom-input v-if="item.edit" :updateValue="item.name" :placeholder="'Folder name'"
@@ -147,14 +149,14 @@
 				</template>
 			</div>
 			<div v-else class="w-full flex flex-col gap-5 mdlg:!pl-3 mdlg:!pr-7">
-				<div class="w-full flex gap-2 justify-between items-center" v-if="currentOption && tabs.length">
+				<div class="w-full flex gap-2 justify-between items-center" v-if="tabs.length">
 					<div class="w-full flex-nowrap overflow-x-auto scrollbar-hide flex gap-3 items-center">
 						<router-link class="px-6 py-2 custom-border flex items-center justify-center"
-							:class="(currentTab && item.id === currentTab) || index === 0 ? 'bg-primaryPurple' : 'bg-white'"
-							v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id"
-							:to="`${currentOption.routePath}?tab=${item.id}`">
+							:class="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'"
+							v-for="(item, index) in tabs.filter((t) => !t.hide)" :key="item.id"
+							:to="`${$route.path}?tab=${item.id}`">
 							<sofa-normal-text
-								:color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
+								:color="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'text-white' : 'text-deepGray'"
 								:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
 						</router-link>
 					</div>
@@ -179,22 +181,19 @@
 			},
 		]" />
 	<sofa-modal v-if="showMoreOptions" :close="() => showMoreOptions = false">
-		<div class="mdlg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative">
-			<div
-				class="bg-white w-full flex flex-col md:!gap-4 gap-1 mdlg:!p-6 md:!p-4 md:!rounded-[16px] rounded-t-2xl items-center justify-center">
+		<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
+			<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
 				<div
 					class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-[#F1F6FA] border-b">
 					<sofa-normal-text :customClass="'!font-bold !text-base'">Options</sofa-normal-text>
 					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
 				</div>
 
-				<div class="w-full flex flex-col gap-3 p-4">
-					<div class="w-full flex items-center gap-2 py-3" v-for="item in moreOptions" :key="item.title"
-						@click.stop="item.action()">
-						<sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
-						<sofa-normal-text>{{ item.title }}</sofa-normal-text>
-					</div>
-				</div>
+				<a class="w-full flex items-center gap-2 p-4" v-for="item in moreOptions" :key="item.title"
+					@click.stop="item.action()">
+					<sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
+					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
+				</a>
 			</div>
 		</div>
 	</sofa-modal>
@@ -206,12 +205,13 @@ import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFold
 import { Logic } from "sofa-logic"
 import { Conditions } from 'sofa-logic/src/logic/types/common'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
-import { SofaCustomInput, SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { computed, defineProps, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { SofaCustomInput, SofaDeletePrompt, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
+import { PropType, computed, defineProps, onMounted, ref, watch } from 'vue'
 import { useMeta } from "vue-meta"
+import { useRoute } from 'vue-router'
 
-const libraryOptions = [
+const UserProfile = ref(Logic.Users.UserProfile)
+const libraryOptions = computed(() => [
 	{
 		title: 'In progress',
 		icon: 'in-progress',
@@ -250,8 +250,8 @@ const libraryOptions = [
 			},
 			{
 				name: "Tutors",
-				id: "quiz-tutors",
-				hide: () => !Logic.Auth.AuthUser?.roles.isAdmin,
+				id: "tutors",
+				hide: !UserProfile.value?.roles.isAdmin
 			},
 		],
 	},
@@ -299,15 +299,7 @@ const libraryOptions = [
 			},
 		],
 	},
-]
-
-const route = useRoute()
-const currentTab = computed(() => route.query.tab as string | undefined)
-const selectedFolderId = ref('')
-const UserProfile = ref(Logic.Users.UserProfile)
-const allOrganizations = ref<{ id: string; name: string; subscribed: boolean }[]>([])
-const currentOption = libraryOptions.find((o) => o.routePath === route.path)
-const tabs = currentOption?.options ?? []
+])
 
 const props = defineProps({
 	title: {
@@ -318,12 +310,22 @@ const props = defineProps({
 		type: Boolean,
 		required: false,
 		default: false
+	},
+	options: {
+		type: Array as PropType<{ name: string; id: string; hide?: boolean }[]>,
+		required: false
 	}
 })
 
-useMeta({
-	title: props.title,
-})
+const route = useRoute()
+const currentTab = computed(() => route.query.tab as string | undefined)
+const selectedFolderId = ref('')
+const allOrganizations = ref<{ id: string; name: string }[]>([])
+const tabs = props.options ?? libraryOptions.value.find((o) => o.routePath === route.path)?.options ?? []
+
+useMeta(computed(() => ({
+	title: props.title
+})))
 
 const setOrganizations = async () => {
 	const users: SingleUser[] = await Logic.Users.GetUsers({
@@ -338,17 +340,11 @@ const setOrganizations = async () => {
 	allOrganizations.value = users.map((item) => ({
 		id: item.id,
 		name: item.type?.name ?? item.bio.name.full,
-		subscribed: item.roles.isSubscribed,
 	}))
 }
 
-watch(AllFolders, () => {
-	setFolders()
-})
-
-watch(UserProfile, () => {
-	setOrganizations()
-})
+watch(AllFolders, setFolders)
+watch(UserProfile, setOrganizations)
 
 onMounted(async () => {
 	scrollToTop()

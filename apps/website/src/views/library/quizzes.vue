@@ -174,7 +174,7 @@ export default defineComponent({
       },
     ],
   },
-  name: "LibraryQuizzesPage",
+  name: "LibraryaQuizzesPage",
   setup () {
     useMeta({
       title: "Quizzes",

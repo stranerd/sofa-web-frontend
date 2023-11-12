@@ -79,7 +79,7 @@ export default defineComponent({
       },
     ],
   },
-  name: "LibraryPurchasedPage",
+  name: "LibraryaPurchasedPage",
   setup () {
     useMeta({
       title: "Purchased",

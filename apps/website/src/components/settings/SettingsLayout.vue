@@ -4,7 +4,7 @@
 			class="mdlg:hidden w-full flex items-center gap-3 z-[99999999] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 			<sofa-normal-text customClass="!font-bold !text-base">{{ title }}</sofa-normal-text>
-			<span />
+			<span class="w-4" />
 		</div>
 
 		<div v-if="!index" class="mdlg:hidden w-full">
