@@ -389,7 +389,7 @@ const UpdateProfile = (formComp: any, showLoader = true) => {
       Logic.Users.UpdateUser(true, false)
       const fullNameArray = updateProfileForm.organization_name.split(' ')
       updateProfileForm.name.first = fullNameArray[0]
-      updateProfileForm.name.last = fullNameArray[1] ? fullNameArray[1] : ''
+      updateProfileForm.name.last = fullNameArray[1] ?? ''
     }
   }
 

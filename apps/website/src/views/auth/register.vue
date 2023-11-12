@@ -22,7 +22,7 @@
           <template v-if="accountType != 'organization'">
             <div class="w-full flex flex-col gap-4">
               <div class="w-full flex flex-col items-center justify-center">
-                <GoogleLogin :callback="onSuccessGoogle" prompt />
+                <GoogleLogin :callback="onSuccessGoogle" />
               </div>
 
               <!-- <div>
