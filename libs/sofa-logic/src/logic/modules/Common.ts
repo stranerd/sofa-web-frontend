@@ -371,6 +371,10 @@ export default class Common {
     }
   }
 
+  public get isOnlyMobile () {
+    return window.screen.width <= 640
+  }
+
   public get isLarge () {
     return window.screen.width > 768
   }

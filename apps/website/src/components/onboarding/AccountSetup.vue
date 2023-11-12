@@ -219,7 +219,7 @@
         <div class="flex flex-row items-start justify-between w-full" v-else>
           <sofa-button :customClass="'!border-[1px] '" :bg-color="'bg-white'" :text-color="'text-grayColor'"
             :padding="'md:!py-2 py-3 px-5'" @click.prevent="showAccountSetup = false"
-            v-if="Logic.Common.mediaQuery() != 'sm'">
+            v-if="!Logic.Common.isOnlyMobile">
             Close
           </sofa-button>
 

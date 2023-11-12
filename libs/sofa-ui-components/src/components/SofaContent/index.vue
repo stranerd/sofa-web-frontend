@@ -40,10 +40,10 @@
               <sofa-normal-text :customClass="'!font-bold text-left  !line-clamp-1'">{{ eachData.title
               }}</sofa-normal-text>
               <div class="flex flex-row items-center gap-2">
-                <sofa-normal-text :color="'text-grayColor'" v-if="Logic.Common.mediaQuery() != 'sm'"
+                <sofa-normal-text :color="'text-grayColor'" v-if="!Logic.Common.isOnlyMobile"
                   :customClass="'text-left !line-clamp-1 '">{{ eachData.type }}
                 </sofa-normal-text>
-                <span v-if="Logic.Common.mediaQuery() != 'sm'"
+                <span v-if="!Logic.Common.isOnlyMobile"
                   :class="`h-[5px] w-[5px] rounded-full bg-grayColor  hidden md:!inline-block`">
                 </span>
                 <sofa-normal-text :color="'text-grayColor'" :customClass="'text-left !line-clamp-1'">{{ eachData.sub }}

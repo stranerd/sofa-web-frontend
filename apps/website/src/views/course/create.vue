@@ -38,13 +38,7 @@
     <template v-slot:left-session>
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
         <sofa-course-sections v-model="selectedMaterial" :sectionInput="updateCourseSectionForm"
-          :updateSections="updateCourseSections" v-if="Logic.Common.mediaQuery() != 'sm' &&
-            Logic.Common.mediaQuery() != 'md' &&
-            SingleCourse
-            " :close="() => {
-    //
-  }
-    "></sofa-course-sections>
+          :updateSections="updateCourseSections" v-if="Logic.Common.isLarge && SingleCourse" :close="() => {}" />
       </div>
     </template>
 
@@ -81,13 +75,7 @@
       <template v-if="currentContent == 'sections' && !showSettingModal">
         <div class="w-full mdlg:!hidden flex-col h-full flex-grow bg-white py-2 px-4 md:!flex">
           <sofa-course-sections v-model="selectedMaterial" @OnMaterialSelected="handleItemSelected"
-            :sectionInput="updateCourseSectionForm" :updateSections="updateCourseSections" v-if="(Logic.Common.mediaQuery() == 'sm' ||
-              Logic.Common.mediaQuery() == 'md') &&
-              SingleCourse
-              " :close="() => {
-    //
-  }
-    "></sofa-course-sections>
+            :sectionInput="updateCourseSectionForm" :updateSections="updateCourseSections" v-if="!Logic.Common.isLarge && SingleCourse" :close="() => {}" />
 
           <div class="h-[100px]"></div>
         </div>

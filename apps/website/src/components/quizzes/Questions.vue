@@ -23,7 +23,7 @@
     <div class="w-full flex flex-row justify-center items-center px-6" v-if="state == 'question'">
       <div class="flex flex-col lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full gap-4">
         <div class="w-full flex flex-col border-b-[2px] border-[#E1E6EB] pb-2 justify-start"
-          v-if="Logic.Common.mediaQuery() != 'sm'">
+          v-if="!Logic.Common.isOnlyMobile">
           <sofa-header-text :custom-class="'text-left !font-bold'" v-if="mode != 'game' && mode != 'tutor_test'"
             :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'" :content="quizTitle" />
           <sofa-header-text :custom-class="'text-left !font-bold'" :content="`Question ${questionIndex + 1}`"

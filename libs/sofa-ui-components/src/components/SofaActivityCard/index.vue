@@ -27,10 +27,7 @@
             <div class="flex flex-row justify-end" v-if="hasEdit" @click.stop="editAction ? editAction() : null">
               <sofa-icon :customClass="'h-[16px]'" :name="'edit-gray'" />
             </div>
-            <div class="flex flex-row justify-end" v-if="hasBookmark &&
-              Logic.Common.mediaQuery() != 'sm' &&
-              Logic.Common.mediaQuery() != 'md'
-              " @click.stop="bookmarkAction ? bookmarkAction() : null">
+            <div class="flex flex-row justify-end" v-if="hasBookmark && Logic.Common.isLarge" @click.stop="bookmarkAction ? bookmarkAction() : null">
               <sofa-icon :customClass="'h-[16px]'" :name="'bookmark'" />
             </div>
 

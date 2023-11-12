@@ -155,11 +155,7 @@
 
         <div
           class="w-full mdlg:!flex-grow flex flex-col items-start justify-start gap-2 mdlg:!pl-0 pl-4 mdlg:!pt-0 pt-3 mdlg:!h-[50px] !overflow-y-auto"
-          v-if="Logic.Common.mediaQuery() != 'sm' ||
-            (Logic.Common.mediaQuery() == 'sm' &&
-              chatList.length == 0 &&
-              tutorRequestList.length == 0)
-            ">
+          v-if="!Logic.Common.isOnlyMobile || (Logic.Common.isOnlyMobile && chatList.length == 0 && tutorRequestList.length == 0)">
           <div class="w-full flex flex-row gap-2 items-center mdlg:!hidden">
             <sofa-normal-text :customClass="'!font-bold'">
               Recent chats
@@ -170,7 +166,7 @@
             class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide mdlg:scrollbar-default h-auto mdlg:!pb-4 scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin"
             id="MessagesScrollContainerLg" v-if="!itIsTutorRequest">
             <div v-if="!hasMessage && !itIsNewMessage && !itIsTutorRequest"
-              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-4 flex flex-row gap-3 mdlg:!gap-0 py-2 mdlg:!py-0 mdlg:!pt-3 mdlg:!pr-4 pr-4">
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-4 flex flex-row gap-3 py-2 mdlg:!py-0 mdlg:!pt-3 mdlg:!pr-4 pr-4">
               <div
                 class="mdlg:!col-span-1 w-[280px] shadow-custom mdlg:!shadow-none mdlg:!w-auto flex flex-col gap-2 mdlg:!justify-center mdlg:!items-center items-start px-5 py-5 rounded-[16px] mdlg:!bg-fadedPurple bg-white"
                 v-for="(content, index) in contentList" :key="index">
@@ -577,11 +573,7 @@ export default defineComponent({
     ]
 
     onMounted(() => {
-      if (
-        document.getElementById("body") &&
-        Logic.Common.mediaQuery() != "sm" &&
-        Logic.Common.mediaQuery() != "md"
-      ) {
+      if (document.getElementById("body") && Logic.Common.isLarge) {
         document.getElementById("body").style["overflowY"] = "hidden"
       }
       Logic.Conversations.watchProperty("AllConversations", AllConversations)
@@ -613,10 +605,7 @@ export default defineComponent({
         Messages.value = undefined
       }
 
-      if (
-        Logic.Common.mediaQuery() == "md" ||
-        Logic.Common.mediaQuery() == "sm"
-      ) {
+      if (!Logic.Common.isLarge) {
         Logic.Common.GoToRoute("/chat/new")
       } else {
         selectedChatData.value.title = "New Chat"
@@ -678,11 +667,7 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
-      if (
-        document.getElementById("body") &&
-        Logic.Common.mediaQuery() != "sm" &&
-        Logic.Common.mediaQuery() != "md"
-      ) {
+      if (document.getElementById("body") && Logic.Common.isLarge) {
         document.getElementById("body").style["overflowY"] = "auto"
       }
     })

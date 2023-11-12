@@ -1,5 +1,5 @@
 <template>
-	<sub-page-layout v-if="!index && ['sm', 'md'].includes(Logic.Common.mediaQuery())">
+	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
 		<div class="h-full w-full">
 			<slot />
 		</div>
