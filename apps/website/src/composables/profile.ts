@@ -674,7 +674,7 @@ const setOrganizations = () => {
           allOrganizations.push({
             id: item.id,
             name: item.bio.name.full,
-            profile_url: item.bio.photo.link,
+            profile_url: item.bio.photo?.link,
             subscribed: item.roles.isSubscribed,
           })
         })
