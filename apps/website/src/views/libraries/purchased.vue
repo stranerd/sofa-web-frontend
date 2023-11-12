@@ -1,5 +1,5 @@
 <template>
-	<LibraryLayout title="Courses">
+	<LibraryLayout title="Purchased">
 		<template v-if="data.length">
 			<sofa-activity-card v-for="(activity, index) in data" :key="index" :activity="activity"
 				:isWrapped="!Logic.Common.isLarge" :hasExtra="Logic.Common.isLarge"
@@ -33,30 +33,29 @@
 			</sofa-activity-card>
 		</template>
 
-		<sofa-empty-state v-else :title="'You have no course here'" :actionLabel="'Explore'"
-			:subTitle="'Discover thousands of courses and save them here for easy access'"
+		<sofa-empty-state v-else :title="'You have not bought anything'" :actionLabel="'Marketplace'"
+			:subTitle="'Discover thousands of materials to buy, created by verified experts'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
 </template>
 
 <script lang="ts">
-import LibraryLayout from "@/components/library/LibraryLayout.vue"
+import LibraryLayout from '@/components/library/LibraryLayout.vue'
 import {
+	PurchasedCourses,
 	createCourseData,
 	moreOptions,
 	openCourse,
-	showMoreOptionHandler
+	showMoreOptionHandler,
 } from "@/composables/library"
 import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
-import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
 import {
 	SofaActivityCard,
 	SofaEmptyState,
 	SofaIcon,
 	SofaNormalText,
 } from "sofa-ui-components"
-import { computed, defineComponent, onMounted, ref } from "vue"
+import { computed, defineComponent, onMounted } from "vue"
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -70,42 +69,25 @@ export default defineComponent({
 	middlewares: {
 		fetchRules: [
 			{
-				domain: "Study",
-				property: "AllCourses",
-				method: "GetCourses",
-				params: [
-					{
-						where: [
-							{
-								field: "user.id",
-								value: Logic.Auth.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-					},
-				],
+				domain: "Payment",
+				property: "PurchasedItems",
+				method: "GetUserPurchases",
+				params: [true],
 				requireAuth: true,
-				ignoreProperty: true,
+				ignoreProperty: false,
 			},
 		],
 	},
-	name: "LibraryCourses",
+	name: "LibraryPurchased",
 	setup () {
-		const AllCourses = ref(Logic.Study.AllCourses)
-
 		const route = useRoute()
-		const tab = computed(() => route.query.tab as string ?? 'recent')
+		const tab = computed(() => route.query.tab as string ?? 'all')
 
-		const courses = ref<ResourceType[]>([])
-
-		const data = computed(() => {
-			if (tab.value === "recent") return courses.value
-			return courses.value.filter((course) => course.status === tab.value)
-		})
+		const PurchasedData = computed(() => (PurchasedCourses.value?.results ?? []).map(createCourseData))
+		const data = computed(() => PurchasedData.value)
 
 		onMounted(() => {
-			Logic.Study.watchProperty("AllCourses", AllCourses)
-			courses.value = AllCourses.value?.results.map(createCourseData) ?? []
+			Logic.Study.watchProperty("PurchasedCourses", PurchasedCourses)
 		})
 
 		return {

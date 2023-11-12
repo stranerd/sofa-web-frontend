@@ -5,7 +5,7 @@ import {
     Quiz,
     ResourceType,
 } from 'sofa-logic/src/logic/types/domains/study'
-import { capitalize, reactive, ref } from 'vue'
+import { capitalize, reactive, ref, watch } from 'vue'
 import { ContentDetails } from './marketplace'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 
@@ -519,19 +519,22 @@ const currentPurchasedData = ref<ResourceType[]>([])
 const PurchasedData = ref<ResourceType[]>([])
 
 const setPurchasedData = () => {
-  if (!PurchasedCourses.value) return
-  PurchasedData.value.length = 0
-
-  PurchasedCourses.value?.results.forEach((course) => {
+  PurchasedData.value = PurchasedCourses.value?.results.map((course) => {
     const data = createCourseData(course)
-    PurchasedData.value.push(data)
-
     // add to options
-    if (FolderOptions.value.filter((item) => item.id == data.id).length == 0) {
+    if (FolderOptions.value.filter((item) => item.id == data.id).length === 0)
       FolderOptions.value.push(data)
-    }
-  })
+    return data
+  }) ?? []
 }
+
+watch([PurchasedCourses], () => {
+  const data = PurchasedCourses.value?.results ?? []
+  data.forEach((c) => {
+    if (!FolderOptions.value.find((i) => i.id === c.id))
+      FolderOptions.value.push(createCourseData(c))
+  })
+})
 
 const folderQuizzes = reactive<ResourceType[]>([])
 const folderCourses = reactive<ResourceType[]>([])

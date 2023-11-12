@@ -8,9 +8,12 @@
 			</div>
 			<div v-if="currentOption && tabs.length">
 				<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
-					<router-link class="px-6 py-2 bg-white custom-border flex items-center justify-center"
-						v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id" :to="`${currentOption.routePath}?tab=${item.id}`" exact-active-class="!bg-primaryPurple">
-						<sofa-normal-text :color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
+					<router-link class="px-6 py-2 custom-border flex items-center justify-center"
+						:class="(currentTab && item.id === currentTab) || index === 0 ? 'bg-primaryPurple' : 'bg-white'"
+						v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id"
+						:to="`${currentOption.routePath}?tab=${item.id}`">
+						<sofa-normal-text
+							:color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
 							:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
 					</router-link>
 				</div>
@@ -114,16 +117,18 @@
 									item.edit = false
 								handleFolderNameBlur();
 								" @onContentChange="(content) => {
-									item.name = content
-									currentFolder.name = content
-									currentFolder.id = item.id
-								}" />
+	item.name = content
+	currentFolder.name = content
+	currentFolder.id = item.id
+}" />
 							<sofa-normal-text v-else>{{ item.name }}</sofa-normal-text>
 						</div>
 
 						<div v-if="!item.edit" class="h-full justify-center flex gap-2 items-center">
-							<sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'" />
-							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'" @click.stop="selectedFolderId = item.id; showDeleteFolder = true" />
+							<sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'"
+								:name="'edit-gray'" />
+							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'"
+								@click.stop="selectedFolderId = item.id; showDeleteFolder = true" />
 						</div>
 					</component>
 				</div>
@@ -144,9 +149,12 @@
 			<div v-else class="w-full flex flex-col gap-5 mdlg:!pl-3 mdlg:!pr-7">
 				<div class="w-full flex gap-2 justify-between items-center" v-if="currentOption && tabs.length">
 					<div class="w-full flex-nowrap overflow-x-auto scrollbar-hide flex gap-3 items-center">
-						<router-link class="px-6 py-2 bg-white custom-border flex items-center justify-center" exact-active-class="!bg-primaryPurple"
-							v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id" :to="`${currentOption.routePath}?tab=${item.id}`">
-							<sofa-normal-text :color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
+						<router-link class="px-6 py-2 custom-border flex items-center justify-center"
+							:class="(currentTab && item.id === currentTab) || index === 0 ? 'bg-primaryPurple' : 'bg-white'"
+							v-for="(item, index) in tabs.filter((t) => !t.hide?.())" :key="item.id"
+							:to="`${currentOption.routePath}?tab=${item.id}`">
+							<sofa-normal-text
+								:color="(currentTab && item.id === currentTab) || index === 0 ? 'text-white' : 'text-deepGray'"
 								:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
 						</router-link>
 					</div>
@@ -156,9 +164,9 @@
 			</div>
 		</template>
 	</dashboard-layout>
-	<sofa-delete-prompt v-if="showDeleteFolder" :title="'Are you sure?'" :subTitle="`This action is permanent. All items in the folder will be deleted`"
-		:close="() => showDeleteFolder = false"
-        :buttons="[
+	<sofa-delete-prompt v-if="showDeleteFolder" :title="'Are you sure?'"
+		:subTitle="`This action is permanent. All items in the folder will be deleted`"
+		:close="() => showDeleteFolder = false" :buttons="[
 			{
 				label: 'No',
 				isClose: true,
@@ -170,17 +178,38 @@
 				action: () => deleteFolder(selectedFolderId)
 			},
 		]" />
+	<sofa-modal v-if="showMoreOptions" :close="() => showMoreOptions = false">
+		<div class="mdlg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative">
+			<div
+				class="bg-white w-full flex flex-col md:!gap-4 gap-1 mdlg:!p-6 md:!p-4 md:!rounded-[16px] rounded-t-2xl items-center justify-center">
+				<div
+					class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-[#F1F6FA] border-b">
+					<sofa-normal-text :customClass="'!font-bold !text-base'">Options</sofa-normal-text>
+					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
+				</div>
+
+				<div class="w-full flex flex-col gap-3 p-4">
+					<div class="w-full flex items-center gap-2 py-3" v-for="item in moreOptions" :key="item.title"
+						@click.stop="item.action()">
+						<sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
+						<sofa-normal-text>{{ item.title }}</sofa-normal-text>
+					</div>
+				</div>
+			</div>
+		</div>
+	</sofa-modal>
 </template>
 
 <script setup lang="ts">
 import { scrollToTop } from '@/composables'
-import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, setFolders, showDeleteFolder } from '@/composables/library'
+import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, moreOptions, setFolders, showDeleteFolder, showMoreOptions } from '@/composables/library'
 import { Logic } from "sofa-logic"
 import { Conditions } from 'sofa-logic/src/logic/types/common'
 import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import { SofaCustomInput, SofaIcon, SofaNormalText } from "sofa-ui-components"
 import { computed, defineProps, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useMeta } from "vue-meta"
 
 const libraryOptions = [
 	{
@@ -280,7 +309,7 @@ const allOrganizations = ref<{ id: string; name: string; subscribed: boolean }[]
 const currentOption = libraryOptions.find((o) => o.routePath === route.path)
 const tabs = currentOption?.options ?? []
 
-defineProps({
+const props = defineProps({
 	title: {
 		type: String,
 		required: true
@@ -290,6 +319,10 @@ defineProps({
 		required: false,
 		default: false
 	}
+})
+
+useMeta({
+	title: props.title,
 })
 
 const setOrganizations = async () => {
