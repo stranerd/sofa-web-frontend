@@ -59,10 +59,7 @@
 
     <template v-slot:left-session v-if="currentComponent == 'dashboard-layout'">
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-hidden">
-        <sofa-add-question @OnQuestionSelected="handleSelectedQuestion" v-if="Logic.Common.mediaQuery() != 'sm' &&
-          Logic.Common.mediaQuery() != 'md' &&
-          AllQuestions
-          " :data="AllQuestions.results" />
+        <sofa-add-question @OnQuestionSelected="handleSelectedQuestion" v-if="Logic.Common.isLarge && AllQuestions" :data="AllQuestions.results" />
       </div>
     </template>
 
@@ -90,15 +87,10 @@
       </div>
       <div
         class="w-full mdlg:!shadow-custom mdlg:!py-5 py-2 px-5 relative bg-white mdlg:!rounded-[16px] flex-grow h-full flex flex-col gap-4">
-        <template v-if="(Logic.Common.mediaQuery() == 'sm' ||
-          Logic.Common.mediaQuery() == 'md') &&
-          !showSettingModal
-          ">
+        <template v-if="!Logic.Common.isLarge && !showSettingModal">
           <sofa-question-content v-if="AllQuestions && AllQuestions.results.length" />
         </template>
-        <template v-if="Logic.Common.mediaQuery() != 'sm' &&
-          Logic.Common.mediaQuery() != 'md'
-          ">
+        <template v-if="Logic.Common.isLarge">
           <sofa-question-content v-if="AllQuestions && AllQuestions.results.length" />
         </template>
       </div>
@@ -114,11 +106,8 @@
       </template>
 
       <!-- Add question for smaller screens -->
-      <sofa-add-question v-if="(Logic.Common.mediaQuery() == 'sm' ||
-        Logic.Common.mediaQuery() == 'md') &&
-        !showSettingModal &&
-        AllQuestions
-        " @OnQuestionSelected="handleSelectedQuestion" :data="AllQuestions.results"></sofa-add-question>
+      <sofa-add-question v-if="!Logic.Common.isLarge && !showSettingModal && AllQuestions"
+        @OnQuestionSelected="handleSelectedQuestion" :data="AllQuestions.results"></sofa-add-question>
 
       <!-- Larger screen setings modal -->
       <sofa-modal v-if="showSettingModal" :close="() => {

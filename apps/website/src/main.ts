@@ -33,6 +33,12 @@ const router = Promise.all(routes).then((routes) => {
     Logic.Common.preFetchRouteData(to, from, next)
   })
 
+  router.afterEach((route) => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    const listRoute = router.options.routes.find((r) => r.name === route.name)
+    router.currentRoute.value.meta = listRoute?.meta ?? {}
+  })
+
   return router
 })
 

@@ -17,7 +17,7 @@ export default defineComponent({
       title: "Settings",
     })
 
-    if (!["sm", "md"].includes(Logic.Common.mediaQuery())) Logic.Common.GoToRoute("/settings/profile")
+    if (Logic.Common.isLarge) Logic.Common.GoToRoute("/settings/profile")
   },
 })
 </script>

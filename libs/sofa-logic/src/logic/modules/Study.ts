@@ -1277,70 +1277,45 @@ export default class Study extends Common {
   }
 
   public GetFolder = (id: string) => {
-    const allContentCategories = ['quizzes', 'courses', 'purchased']
+    return new Promise(async (resolve) => {
+      const folder: Folder | null = (await $api.study.folder.get(id)).data
 
-    if (allContentCategories.includes(id)) {
-      return new Promise((resolve) => {
-        resolve('')
-      })
-    }
-    return new Promise((resolve) => {
-      $api.study.folder.get(id).then((response) => {
-        const folder = response.data
-
-        if (folder) {
-          const fetchStatus = reactive({
-            quizzes: false,
-            courses: false,
+      if (folder) await Promise.all([
+        $api.study.course.fetch({
+          where: [
+            {
+              field: 'id',
+              value: folder.saved.courses,
+              condition: Conditions.in,
+            },
+          ],
+          all: true,
+        }).then((response) => {
+          folder.courses = response.data.results
+        }),
+        $api.study.quiz
+          .fetch({
+            where: [
+              {
+                field: 'id',
+                value: folder.saved.quizzes,
+                condition: Conditions.in,
+              },
+            ],
+            all: true,
+          }).then((response) => {
+            folder.quizzes = response.data.results
           })
-
-          $api.study.course
-            .fetch({
-              where: [
-                {
-                  field: 'id',
-                  value: folder.saved.courses,
-                  condition: Conditions.in,
-                },
-              ],
-            })
-            .then((response) => {
-              folder.courses = response.data.results
-              fetchStatus.courses = true
-              if (fetchStatus.quizzes) {
-                this.SingleFolder = folder
-                resolve('')
-              }
-            })
-
-          $api.study.quiz
-            .fetch({
-              where: [
-                {
-                  field: 'id',
-                  value: folder.saved.quizzes,
-                  condition: Conditions.in,
-                },
-              ],
-            })
-            .then((response) => {
-              folder.quizzes = response.data.results
-              fetchStatus.quizzes = true
-              if (fetchStatus.courses) {
-                this.SingleFolder = folder
-                resolve('')
-              }
-            })
-        } else {
-          resolve('')
-        }
-      })
+      ])
+      this.SingleFolder = folder
+      resolve(folder)
     })
   }
 
-  public GetQuizzes = (filters: QueryParams) => {
+  public GetQuizzes = (filters: QueryParams, updateItems = true) :Promise<Paginated<Quiz>> => {
     return $api.study.quiz.fetch(filters).then((response) => {
-      this.AllQuzzies = response.data
+      if (updateItems) this.AllQuzzies = response.data
+      return response.data
     })
   }
 
@@ -1448,9 +1423,7 @@ export default class Study extends Common {
     updateItems = true,
   ): Promise<Paginated<Course>> => {
     return $api.study.course.fetch(filters).then((response) => {
-      if (updateItems) {
-        this.AllCourses = response.data
-      }
+      if (updateItems) this.AllCourses = response.data
       return response.data
     })
   }

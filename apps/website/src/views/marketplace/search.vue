@@ -56,9 +56,7 @@
 
           <template v-if="resourceContents.length">
             <div class="w-full flex flex-col gap-3">
-              <div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.mediaQuery() != 'sm' &&
-                Logic.Common.mediaQuery() != 'md'
-                ">
+              <div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.isLarge">
                 <sofa-item-card :content="content"
                   custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
                   v-for="(content, index) in resourceContents" :key="index" @click="
@@ -74,7 +72,7 @@
 
               <div
                 class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-                <div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 pr-4">
+                <div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
                   <sofa-activity-card v-for="(activity, index) in resourceContents" :key="index" :activity="activity"
                     :custom-class="'cursor-pointer'" @click="
                       Logic.Common.GoToRoute(
@@ -113,9 +111,7 @@
 
           <template v-if="quizContents.length">
             <div class="w-full flex flex-col gap-3">
-              <div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.mediaQuery() != 'sm' &&
-                Logic.Common.mediaQuery() != 'md'
-                ">
+              <div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.isLarge">
                 <sofa-item-card :content="content"
                   custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
                   v-for="(content, index) in quizContents" :key="index" @click="
@@ -131,7 +127,7 @@
 
               <div
                 class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-                <div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 pr-4">
+                <div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
                   <sofa-activity-card v-for="(activity, index) in quizContents" :key="index" :activity="activity"
                     :custom-class="'cursor-pointer'" @click="
                       Logic.Common.GoToRoute(

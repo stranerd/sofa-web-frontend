@@ -21,6 +21,7 @@ import { AuthResponse } from '../types/domains/auth'
 import { ValidationError } from '../types/domains/common'
 
 export default class Common {
+  public window = reactive({ width: window.innerWidth })
   public router: Router | undefined = undefined
 
   public route: RouteLocationNormalizedLoaded | undefined = undefined
@@ -62,6 +63,12 @@ export default class Common {
   public AvailableCurrencies = {
     NGN: '₦',
     USD: '$',
+  }
+
+  constructor () {
+    window.addEventListener('resize', () => {
+      this.window.width = window.innerWidth
+    })
   }
 
   public inWords = (num: any) => {
@@ -132,7 +139,7 @@ export default class Common {
   }
 
   public setupWebsocket = () => {
-    const url = new URL(`${process.env.VUE_APP_API_URL}/socket.io`)
+    const url = new URL(`${this.apiUrl}/socket.io`)
 
     const tokens: AuthResponse = localStorage.getItem('AuthTokens')
       ? JSON.parse(localStorage.getItem('AuthTokens') || '{}')
@@ -369,6 +376,14 @@ export default class Common {
     } else if (windowWidth > 1280) {
       return '2xl'
     }
+  }
+
+  public get isOnlyMobile () {
+    return this.window.width <= 640
+  }
+
+  public get isLarge () {
+    return this.window.width > 1000
   }
 
   public showError = (message: string) => {

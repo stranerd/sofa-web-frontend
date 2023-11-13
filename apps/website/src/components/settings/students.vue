@@ -1,8 +1,7 @@
 <template>
   <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
     <!-- For smaller screens -->
-    <div v-if="Logic.Common.mediaQuery() == 'md' || Logic.Common.mediaQuery() == 'sm'
-      " class="w-full flex mdlg:hidden flex-col gap-3 bg-white py-3 px-3 rounded-[8px]">
+    <div class="w-full flex mdlg:hidden flex-col gap-3 bg-white py-3 px-3 rounded-[8px]">
       <div class="flex flex-row items-center gap-2 opacity-60 cursor-pointer" @click="copyJoinLink()">
         <sofa-icon :name="'copy'" :customClass="'h-[14px]'" />
         <sofa-normal-text> Copy join link </sofa-normal-text>

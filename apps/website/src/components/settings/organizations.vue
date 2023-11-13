@@ -2,8 +2,7 @@
   <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
     <div :class="`w-full flex flex-col gap-4 mdlg:bg-white mdlg:rounded-[16px]  md:!px-5 md:!py-5 mdlg:px-4 mdlg:py-4 mdlg:shadow-custom ${allOrganizations.length > 0 ? 'bg-white rounded-[8px] px-3 py-3' : ''
       }`">
-      <div class="w-full flex-row items-center justify-between md:flex hidden" v-if="Logic.Common.mediaQuery() != 'md' && Logic.Common.mediaQuery() != 'sm'
-        ">
+      <div class="w-full flex-row items-center justify-between mdlg:flex hidden">
         <sofa-header-text :size="'xl'" :customClass="'text-left'">
           Organizations
         </sofa-header-text>

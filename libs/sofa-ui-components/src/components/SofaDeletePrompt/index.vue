@@ -81,7 +81,7 @@ export default defineComponent({
         hide?: boolean
         bgColor?: string
         textColor?: string
-        isClose: boolean
+        isClose?: boolean
         action: Function
       }[],
     },

@@ -233,14 +233,8 @@ export default defineComponent({
     const selectedQuiz = ref("")
 
     const handleShowAddVideo = () => {
-      if (
-        Logic.Common.mediaQuery() != "sm" &&
-        Logic.Common.mediaQuery() != "md"
-      ) {
-        showAddVideo.value = true
-      } else {
-        context.emit("OnItemSelected", "video")
-      }
+      if (Logic.Common.isLarge) showAddVideo.value = true
+      else context.emit("OnItemSelected", "video")
     }
 
     const addFile = (file: Blob, type: "video" | "image" | "document") => {

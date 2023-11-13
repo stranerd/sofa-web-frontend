@@ -2,7 +2,7 @@
   <expanded-layout layoutStyle="mdlg:!w-[90%] lg:!w-[77%] w-full pt-0 h-full   mdlg:!pt-[20px] lg:!pt-[20px]"
     :hasBottomBar="false">
     <!-- Display for larger screens -->
-    <div class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow" v-if="Logic.Common.mediaQuery() != 'sm'">
+    <div class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow" v-if="!Logic.Common.isOnlyMobile">
       <div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
         <div class="w-full shadow-custom bg-white rounded-[16px] h-full flex flex-col pb-4">
           <div
@@ -228,10 +228,7 @@
     </sofa-modal>
 
     <!-- Rating floating button sm -->
-    <Teleport to="body" v-if="!CourseReview &&
-      Logic.Auth.AuthUser.id != SingleCourse?.user.id &&
-      (Logic.Common.mediaQuery() == 'sm' || Logic.Common.mediaQuery() == 'md')
-      ">
+    <Teleport to="body" v-if="!CourseReview && Logic.Auth.AuthUser.id != SingleCourse?.user.id && !Logic.Common.isLarge">
       <span class="absolute bottom-[3%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]">
         <span
           class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
@@ -378,7 +375,7 @@ export default defineComponent({
       if (data) {
         selectedMaterial.value = data
 
-        if (Logic.Common.mediaQuery() == "sm") {
+        if (Logic.Common.isOnlyMobile) {
           showCourseContent.value = true
 
           setTimeout(() => {

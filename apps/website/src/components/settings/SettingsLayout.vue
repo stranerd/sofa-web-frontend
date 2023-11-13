@@ -4,7 +4,7 @@
 			class="mdlg:hidden w-full flex items-center gap-3 z-[99999999] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 			<sofa-normal-text customClass="!font-bold !text-base">{{ title }}</sofa-normal-text>
-			<span />
+			<span class="w-4" />
 		</div>
 
 		<div v-if="!index" class="mdlg:hidden w-full">
@@ -80,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-import { settingOptions } from '@/composables/settings'
 import { Logic } from "sofa-logic"
 import { SofaDeletePrompt, SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
 import { defineProps, ref } from 'vue'
@@ -99,4 +98,77 @@ defineProps({
 
 const showLogout = ref(false)
 const showDeleteAccount = ref(false)
+
+const settingOptions = [
+	{
+		title: "Account",
+		subPages: [
+			{
+				title: "Profile",
+				to: "/settings/profile",
+				show: () => true,
+			},
+			{
+				title: "Students",
+				to: "/settings/students",
+				show: () => Logic.Users.UserProfile?.type?.type == "organization"
+			},
+			{
+				title: "Organizations",
+				to: "/settings/organizations",
+				show: () => Logic.Users.UserProfile?.type?.type == "student"
+			},
+			{
+				title: "Verification",
+				to: "/verification",
+				show: () => !Logic.Users.UserProfile.roles.isVerified,
+			},
+			{
+				title: "Tutor Application",
+				to: "/verification/tutor",
+				show: () => Logic.Users.UserProfile?.type.type == "teacher",
+			},
+		],
+	},
+	{
+		title: "Billing",
+		subPages: [
+			{
+				title: "Wallet",
+				to: "/settings/wallet",
+				show: () => true,
+			},
+			{
+				title: "Subscription",
+				to: "/settings/subscription",
+				show: () => true,
+			},
+		],
+	},
+	{
+		title: "Preferences",
+		subPages: [
+			{
+				title: "Notifications",
+				to: "/settings/notifications",
+				show: () => true,
+			},
+			{
+				title: "Security",
+				to: "/settings/security",
+				show: () => true,
+			},
+		],
+	},
+	{
+		title: "Support",
+		subPages: [
+			{
+				title: "Contact us",
+				to: "/settings/contact_us",
+				show: () => true,
+			},
+		],
+	},
+]
 </script>

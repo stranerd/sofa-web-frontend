@@ -22,7 +22,7 @@
         <template v-if="option.opened">
           <div class="w-full gap-1">
             <!-- For larger screens -->
-            <template v-if="Logic.Common.mediaQuery() != 'sm'">
+            <template v-if="!Logic.Common.isOnlyMobile">
               <div v-for="(material, index) in option.materials" :key="index" :class="`w-fill flex flex-col gap-1 ${lockContent ? 'opacity-80' : ''
                 } rounded-[8px] px-3 py-3 cursor-pointer ${selectedMaterial?.id == material.id
                   ? 'bg-lightBlue'
@@ -486,7 +486,7 @@ export default defineComponent({
       }
 
       setTimeout(() => {
-        if (!props.lockContent && Logic.Common.mediaQuery() != "sm") {
+        if (!props.lockContent && !Logic.Common.isOnlyMobile) {
           if (props.modelValue) {
             selectedMaterial.value = props.modelValue
             selectedMaterial.value.isMounted = true

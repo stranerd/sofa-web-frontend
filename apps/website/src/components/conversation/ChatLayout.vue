@@ -1,5 +1,5 @@
 <template>
-	<sub-page-layout v-if="!index && ['sm', 'md'].includes(Logic.Common.mediaQuery())">
+	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
 		<div class="h-full w-full">
 			<slot />
 		</div>
@@ -64,7 +64,7 @@
 				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
 					v-if="SingleConversation && !itIsNewMessage">
 					<div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer"
-						v-if="selectedTutorRequestData && SingleConversation?.tutor" @click.stop="
+						v-if="selectedTutorRequestData && SingleConversation?.tutor" @click.stop.prevent="
 							showEndSession = true
 						selectedConvoId = SingleConversation?.id;
 						">
@@ -74,7 +74,7 @@
 					</div>
 					<div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer">
 						<sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
-						<sofa-normal-text :color="'text-primaryRed'" @click.stop="
+						<sofa-normal-text :color="'text-primaryRed'" @click.stop.prevent="
 							showDeleteConvo = true
 						selectedConvoId = SingleConversation?.id;
 						">

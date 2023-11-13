@@ -426,10 +426,7 @@ const sendMessage = async (content: string, selectConversation = undefined) => {
     )
   } else {
     await createCoversation(content).then(async (response) => {
-      if (
-        Logic.Common.mediaQuery() != 'sm' &&
-        Logic.Common.mediaQuery() != 'md'
-      ) {
+      if (Logic.Common.isLarge) {
         if (selectConversation) {
           await selectConversation(response.id)
         }

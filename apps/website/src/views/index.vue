@@ -766,7 +766,7 @@ export default defineComponent({
     }
 
     const showSetupProfile = () => {
-      if (Logic.Common.mediaQuery() == "sm") {
+      if (Logic.Common.isOnlyMobile) {
         Logic.Common.GoToRoute("/onboarding/account-setup")
       } else {
         showAccountSetup.value = true

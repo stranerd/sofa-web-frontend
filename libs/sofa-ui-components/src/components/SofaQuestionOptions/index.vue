@@ -65,12 +65,12 @@
     <div
       class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-[2px] border-[#F2F5F8] z-50 flex flex-col gap-4 scrollbar-hide">
       <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="duplicateQuestion()"
-        v-if="Logic.Common.mediaQuery() == 'sm'">
+        v-if="Logic.Common.isOnlyMobile">
         <sofa-icon :name="'copy'" :customClass="'h-[16px]'" />
         <sofa-normal-text>Duplicate question</sofa-normal-text>
       </div>
       <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="showDeleteQuestion = true"
-        v-if="Logic.Common.mediaQuery() == 'sm'">
+        v-if="Logic.Common.isOnlyMobile">
         <sofa-icon :name="'trash'" :customClass="'h-[16px]'" />
         <sofa-normal-text :color="'text-primaryRed'">Delete question</sofa-normal-text>
       </div>

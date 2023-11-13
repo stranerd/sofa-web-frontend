@@ -184,6 +184,7 @@ export interface ResourceType {
   status: string
   showMore: boolean
   userId: string
+  createdAt: number
   type: 'course' | 'quiz' | string
   ratings: {
     avg: number

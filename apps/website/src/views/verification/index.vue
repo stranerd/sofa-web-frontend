@@ -79,7 +79,7 @@
         <div class="w-full flex flex-col gap-2">
           <div class="w-full flex flex-col gap-4 md:!gap-4">
             <template v-for="(content, index) in selectedMaterialList" :key="index">
-              <template v-if="Logic.Common.mediaQuery() != 'sm'">
+              <template v-if="!Logic.Common.isOnlyMobile">
                 <sofa-activity-card v-if="content.subject" :activity="content"
                   :customClass="'!bg-backgroundGray !w-full cursor-pointer'" @click="
                     Logic.Common.GoToRoute('/course/create?id=' + content.id)
