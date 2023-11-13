@@ -49,10 +49,8 @@
 				</div>
 
 				<component :is="item.edit ? 'span' : 'router-link'"
-					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD]"
-					v-for="item in folders" :key="item.id" @mouseenter="item.hover = true"
-					:to="`/library/folders/${item.id}`" exact-active-class="bg-[#E5F2FD] font-bold"
-					@mouseleave="item.hover = false">
+					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
+					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`" exact-active-class="bg-[#E5F2FD] font-bold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
 					<sofa-custom-input v-if="item.edit"
@@ -67,11 +65,11 @@
 }" />
 					<sofa-normal-text v-else>{{ item.name }}</sofa-normal-text>
 
-					<div v-if="item.hover && !item.edit"
-						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] flex flex-row gap-2 items-center">
-						<sofa-icon @click.stop="item.edit = true" customClass="h-[15px] cursor-pointer" name="edit-gray" />
+					<div v-if="!item.edit"
+						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] hidden group-focus-within-[.folder-link]:flex flex-row gap-2 items-center">
+						<sofa-icon @click.stop.prevent="item.edit = true" customClass="h-[15px] cursor-pointer" name="edit-gray" />
 						<sofa-icon customClass="h-[15px] cursor-pointer" name="trash-gray"
-							@click.stop="selectedFolderId = item.id; showDeleteFolder = true" />
+							@click.stop.prevent="selectedFolderId = item.id; showDeleteFolder = true" />
 					</div>
 				</component>
 
@@ -108,7 +106,7 @@
 					</div>
 
 					<component :is="item.edit ? 'span' : 'router-link'"
-						class="w-full flex items-center relative justify-between gap-3 p-4 custom-border bg-white shadow-custom"
+						class="w-full flex items-center relative justify-between gap-3 p-4 custom-border bg-white shadow-custom group folder-link"
 						v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 						exact-active-class="font-bold">
 						<div class="flex items-center gap-3 w-full">
@@ -126,11 +124,11 @@
 							<sofa-normal-text v-else>{{ item.name }}</sofa-normal-text>
 						</div>
 
-						<div v-if="!item.edit" class="h-full justify-center flex gap-2 items-center">
-							<sofa-icon @click.stop="item.edit = true" :customClass="'h-[15px] cursor-pointer'"
+						<div v-if="!item.edit" class="h-full justify-center hidden group-focus-within-[.folder-link]:flex gap-2 items-center">
+							<sofa-icon @click.stop.prevent="item.edit = true" :customClass="'h-[15px] cursor-pointer'"
 								:name="'edit-gray'" />
 							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'"
-								@click.stop="selectedFolderId = item.id; showDeleteFolder = true" />
+								@click.stop.prevent="selectedFolderId = item.id; showDeleteFolder = true" />
 						</div>
 					</component>
 				</div>
@@ -190,7 +188,7 @@
 				</div>
 
 				<a class="w-full flex items-center gap-2 p-4" v-for="item in moreOptions" :key="item.title"
-					@click.stop="item.action()">
+					@click.stop.prevent="item.action()">
 					<sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
 					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
 				</a>
