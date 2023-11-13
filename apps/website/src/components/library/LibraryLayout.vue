@@ -81,7 +81,7 @@
 					</div>
 					<router-link
 						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
-						:to="`/libraries/${item.id}`" v-for="item in allOrganizations" :key="item.id"
+						:to="`/libraries/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text>{{ item.name }}</sofa-normal-text>
@@ -141,7 +141,7 @@
 					</div>
 					<router-link
 						class="w-full flex items-center relative justify-start gap-2 p-4 custom-border bg-white shadow-custom"
-						:to="`/libraries/${item.id}`" v-for="item in allOrganizations" :key="item.id"
+						:to="`/libraries/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text>{{ item.name }}</sofa-normal-text>
@@ -331,7 +331,7 @@ const setOrganizations = async () => {
 		where: [
 			{
 				field: 'id',
-				value: Logic.Users.UserProfile.account.organizationsIn,
+				value: ['64d239c882aa7ca88e5d16d2', '64e1341ef1f5d8058adf9e22'] ?? Logic.Users.UserProfile.account.organizationsIn,
 				condition: Conditions.in,
 			},
 		],

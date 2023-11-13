@@ -59,8 +59,8 @@ export default defineComponent({
 		].flat())
 
 		const data = computed(() => {
-			if (tab.value === 'courses') return FolderItems.value.filter((i) => i.labels.main.toLocaleLowerCase().includes('course'))
-			if (tab.value === 'quizzes') return FolderItems.value.filter((i) => i.labels.main.toLocaleLowerCase().includes('quiz'))
+			if (tab.value === 'courses') return FolderItems.value.filter((i) => i.type === 'course')
+			if (tab.value === 'quizzes') return FolderItems.value.filter((i) => i.type === 'quiz')
 			return FolderItems.value
 		})
 

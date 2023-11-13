@@ -294,6 +294,7 @@ const createQuizData = (quiz: Quiz): ResourceType => {
     authUserId: Logic.Auth.AuthUser.id,
     user: quiz.user,
     ratings: quiz.ratings,
+    createdAt: quiz.createdAt,
   }
 }
 
@@ -317,6 +318,7 @@ const createCourseData = (course: Course): ResourceType => {
     userId: course.user.id,
     type: 'course',
     ratings: course.ratings,
+    createdAt: course.createdAt,
   }
 }
 
