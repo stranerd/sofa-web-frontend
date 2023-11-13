@@ -51,7 +51,7 @@
 				<component :is="item.edit ? 'span' : 'router-link'"
 					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD]"
 					v-for="item in folders" :key="item.id" @mouseenter="item.hover = true"
-					:to="`/libraries/folders/${item.id}`" exact-active-class="bg-[#E5F2FD] font-bold"
+					:to="`/library/folders/${item.id}`" exact-active-class="bg-[#E5F2FD] font-bold"
 					@mouseleave="item.hover = false">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
@@ -81,7 +81,7 @@
 					</div>
 					<router-link
 						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
-						:to="`/libraries/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
+						:to="`/library/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text>{{ item.name }}</sofa-normal-text>
@@ -109,7 +109,7 @@
 
 					<component :is="item.edit ? 'span' : 'router-link'"
 						class="w-full flex items-center relative justify-between gap-3 p-4 custom-border bg-white shadow-custom"
-						v-for="item in folders" :key="item.id" :to="`/libraries/folders/${item.id}`"
+						v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 						exact-active-class="font-bold">
 						<div class="flex items-center gap-3 w-full">
 							<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
@@ -141,7 +141,7 @@
 					</div>
 					<router-link
 						class="w-full flex items-center relative justify-start gap-2 p-4 custom-border bg-white shadow-custom"
-						:to="`/libraries/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
+						:to="`/library/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text>{{ item.name }}</sofa-normal-text>
@@ -214,7 +214,7 @@ const libraryOptions = computed(() => [
 	{
 		title: 'In progress',
 		icon: 'in-progress',
-		routePath: '/libraries/in-progress',
+		routePath: '/library/in-progress',
 		options: [
 			{
 				name: 'All',
@@ -233,7 +233,7 @@ const libraryOptions = computed(() => [
 	{
 		title: 'Quizzes',
 		icon: 'quiz',
-		routePath: '/libraries/quizzes',
+		routePath: '/library/quizzes',
 		options: [
 			{
 				name: 'Recent',
@@ -257,7 +257,7 @@ const libraryOptions = computed(() => [
 	{
 		title: 'Courses',
 		icon: 'course-list',
-		routePath: '/libraries/courses',
+		routePath: '/library/courses',
 		options: [
 			{
 				name: 'Recent',
@@ -276,13 +276,13 @@ const libraryOptions = computed(() => [
 	{
 		title: 'Purchased',
 		icon: 'purchased',
-		routePath: '/libraries/purchased',
+		routePath: '/library/purchased',
 		options: [],
 	},
 	{
 		title: 'Results',
 		icon: 'results',
-		routePath: '/libraries/results',
+		routePath: '/library/results',
 		options: [
 			{
 				name: 'All',
