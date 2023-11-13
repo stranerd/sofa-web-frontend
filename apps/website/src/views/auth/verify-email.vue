@@ -1,82 +1,54 @@
 <template>
-  <auth-layout>
-    <div class="w-full h-full flex-grow flex flex-col justify-start relative md:!px-9 md:!py-5 py-4 px-4">
-      <div class="w-full flex gap-4 md:!items-center">
-        <a class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
-          <sofa-icon :customClass="'md:!h-[26px] h-[20px] cursor-pointer'" :name="'auth-goback'" />
-        </a>
-
-        <div class="w-full flex flex-col md:!justify-center md:!items-center justify-start items-start gap-1">
-          <sofa-header-text :customClass="'md:!text-2xl text-lg'">Verify your email</sofa-header-text>
-          <sofa-normal-text :color="'text-grayColor'" :customClass="'!font-normal'">Enter the 6-digit code sent to your
-            email
-            {{
-              Logic.Auth?.AuthUser?.email
-              ? `(${Logic.Auth.AuthUser.email})`
-              : ""
-            }}
-          </sofa-normal-text>
-        </div>
+  <auth-layout title="Verify your email"
+    :subTitle="`Enter the 6-digit code sent to your email ${Logic.Auth.AuthUser?.email ?? ''}`">
+    <div class="flex flex-col gap-6 w-full items-center justify-center">
+      <div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col gap-4">
+        <sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="onChangeOTP" v-model="otpValue" />
       </div>
 
-      <div class="h-full flex flex-col items-center gap-4 justify-center w-full md:!px-10 px-0">
-        <div class="flex flex-col gap-6 w-full items-center justify-center">
-          <div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col gap-4">
-            <sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="onChangeOTP" v-model="otpValue" />
-          </div>
-
-          <div class="w-full flex flex-col pt-3">
-            <sofa-button :customClass="'w-full'" :padding="'md:!py-4 py-3'" @click="VerifyUserEmail(otpValue)">
-              Verify
-            </sofa-button>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 pt-3">
-          <sofa-normal-text :color="'text-grayColor'">Have an account?</sofa-normal-text>
-          <router-link to="/auth/login"><sofa-normal-text :color="'!text-primaryBlue'">Sign
-              in</sofa-normal-text></router-link>
-        </div>
+      <div class="w-full flex flex-col pt-3">
+        <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="VerifyUserEmail(otpValue)">
+          Verify
+        </sofa-button>
       </div>
+    </div>
+
+    <div class="flex items-center gap-2 pt-3">
+      <sofa-normal-text :color="'text-grayColor'">Have an account?</sofa-normal-text>
+      <router-link to="/auth/login">
+        <sofa-normal-text :color="'!text-primaryBlue'">Sign in</sofa-normal-text>
+      </router-link>
     </div>
   </auth-layout>
 </template>
 
 <script lang="ts">
-import { FormValidations, scrollToTop } from "@/composables"
-import { SignIn, VerifyUserEmail, loginForm } from "@/composables/auth"
+import { FormValidations } from "@/composables"
+import { VerifyUserEmail } from "@/composables/auth"
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import {
   SofaButton,
-  SofaHeaderText,
-  SofaIcon,
   SofaNormalText,
-  SofaOtpInput,
+  SofaOtpInput
 } from "sofa-ui-components"
-import { defineComponent, onMounted, ref } from "vue"
+import { defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
   components: {
-    SofaIcon,
     SofaNormalText,
-    SofaHeaderText,
     SofaButton,
     SofaOtpInput,
   },
+  name: "AuthVerifyEmailPage",
   beforeRouteEnter: generateMiddlewares([async () => {
     // check if there is an email
     // if (!getEmailVerificationEmail()) return '/auth/signin'
   }]),
-  name: "VerifyEmailPage",
   setup () {
     useMeta({
       title: "Verify your email",
-    })
-
-    onMounted(() => {
-      scrollToTop()
     })
 
     const otpValue = ref("")
@@ -87,11 +59,8 @@ export default defineComponent({
 
     return {
       Logic,
-      loginForm,
       FormValidations,
-      SignIn,
       onChangeOTP,
-      localStorage,
       otpValue,
       VerifyUserEmail,
     }
