@@ -1,10 +1,10 @@
 <template>
   <auth-layout>
     <div class="w-full h-full flex-grow flex flex-col justify-start relative md:!px-9 md:!py-5 py-4 px-4">
-      <div class="w-full flex flex-row gap-4 md:!items-center">
-        <span class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
+      <div class="w-full flex gap-4 md:!items-center">
+        <a class="w-[28px] pt-2 md:!pt-0" @click="Logic.Common.goBack()">
           <sofa-icon :customClass="'md:!h-[26px] h-[20px] cursor-pointer'" :name="'auth-goback'" />
-        </span>
+        </a>
 
         <div class="w-full flex flex-col md:!justify-center md:!items-center justify-start items-start gap-1">
           <sofa-header-text :customClass="'md:!text-2xl text-lg'">Verify your email</sofa-header-text>
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="flex flex-row items-center gap-2 pt-3">
+        <div class="flex items-center gap-2 pt-3">
           <sofa-normal-text :color="'text-grayColor'">Have an account?</sofa-normal-text>
           <router-link to="/auth/login"><sofa-normal-text :color="'!text-primaryBlue'">Sign
               in</sofa-normal-text></router-link>
@@ -45,6 +45,7 @@
 <script lang="ts">
 import { FormValidations, scrollToTop } from "@/composables"
 import { SignIn, VerifyUserEmail, loginForm } from "@/composables/auth"
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import {
   SofaButton,
@@ -64,7 +65,10 @@ export default defineComponent({
     SofaButton,
     SofaOtpInput,
   },
-  middlewares: {},
+  beforeRouteEnter: generateMiddlewares([async () => {
+    // check if there is an email
+    // if (!getEmailVerificationEmail()) return '/auth/signin'
+  }]),
   name: "VerifyEmailPage",
   setup () {
     useMeta({
