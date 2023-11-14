@@ -26,7 +26,7 @@ const init = async () => {
   SetFrontendLogic(Logic)
 
   // initiate websocket
-  Logic.Common.setupWebsocket()
+  await Logic.Common.setupWebsocket()
 
   const app = createApp(App)
 

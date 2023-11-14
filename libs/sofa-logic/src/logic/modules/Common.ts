@@ -138,18 +138,14 @@ export default class Common {
     return str
   }
 
-  public setupWebsocket = () => {
+  public setupWebsocket = async () => {
     const url = new URL(`${this.apiUrl}/socket.io`)
 
-    const tokens: AuthResponse = localStorage.getItem('AuthTokens')
-      ? JSON.parse(localStorage.getItem('AuthTokens') || '{}')
-      : undefined
-
-    const accessToken = `${tokens?.accessToken}`
+    const tokens = await Logic.Auth.GetTokens()
 
     this.SocketClient = io(url.origin, {
       path: url.pathname,
-      auth: { token: accessToken },
+      auth: { token: tokens?.accessToken },
       transports: ['websocket'],
     })
   }
@@ -588,19 +584,6 @@ export default class Common {
     const fetchRules: FetchRule[] = routeMiddlewares?.fetchRules
 
     let BreakException = {}
-
-    // confirm auth token is has expired, if not refresh
-    const tokenExpiry = localStorage.getItem('token_expiry')
-
-    if (tokenExpiry && Logic.Auth.AuthUser) {
-      if (
-        this.momentInstance
-          .unix(parseInt(tokenExpiry))
-          .diff(this.momentInstance.now(), 'minute') < 3
-      ) {
-        await Logic.Auth.RefreshAuthToken()
-      }
-    }
 
     try {
       fetchRules?.forEach((rule) => {

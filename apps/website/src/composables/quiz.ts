@@ -245,9 +245,9 @@ const otherTasks = [
   // },
 ]
 
-const listenToGame = () => {
+const listenToGame = async () => {
   // connect to websocket
-  Logic.Common.setupWebsocket()
+  await Logic.Common.setupWebsocket()
 
   Logic.Common.listenOnSocket(
     `plays/games/${Logic.Plays.SingleGame.id}`,
@@ -267,9 +267,9 @@ const listenToGame = () => {
   )
 }
 
-const listenToTest = () => {
+const listenToTest = async () => {
   // connect to websocket
-  Logic.Common.setupWebsocket()
+  await Logic.Common.setupWebsocket()
 
   Logic.Common.listenOnSocket(
     `plays/tests/${Logic.Plays.SingleTest.id}`,

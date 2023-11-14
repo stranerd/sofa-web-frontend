@@ -43,7 +43,7 @@ export default defineComponent({
         subTitle: string
         icon: string
         iconSize: string
-        isDone: any
+        isDone?: any
       },
     },
     showArrow: {

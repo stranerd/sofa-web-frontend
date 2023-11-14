@@ -181,7 +181,7 @@
               <template v-for="(item, index) in otherTasks" :key="index">
                 <sofa-icon-card :data="item" v-if="item.key != mode && item.key != 'game'" @click="
                   isRestart = true
-                goToStudyMode(item.key);
+                goToStudyMode(SingleQuiz?.id ?? '', item.key);
                 " :customClass="'!bg-white !w-full'">
                   <template v-slot:title>
                     <sofa-normal-text :customClass="'!font-bold'">
@@ -739,7 +739,7 @@ export default defineComponent({
       showInfoModal.value = true
     }
 
-    const setUpQuiz = () => {
+    const setUpQuiz = async () => {
       setViewMode()
       setQuestions()
       if (mode.value != "game") {
@@ -779,14 +779,14 @@ export default defineComponent({
 
       // listen to game
       if (mode.value == "game") {
-        listenToGame()
+        await listenToGame()
         setScoreboardParticipants()
         quizIsDarkMode.value = true
         preStartGame()
       }
 
       if (mode.value == "tutor_test") {
-        listenToTest()
+        await listenToTest()
         quizIsDarkMode.value = true
         setQuestions()
         preStartTest()
@@ -816,7 +816,7 @@ export default defineComponent({
       })
     }
 
-    onMounted(() => {
+    onMounted(async () => {
       scrollToTop()
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz)
       Logic.Plays.watchProperty("SingleTest", SingleTest)
@@ -824,7 +824,7 @@ export default defineComponent({
       Logic.Plays.watchProperty("SingleGame", SingleGame)
       Logic.Plays.watchProperty("GameParticipants", GameParticipants)
       Logic.Study.watchProperty("SingleReview", QuizReview)
-      setUpQuiz()
+      await setUpQuiz()
       answerState.value = ""
     })
 
@@ -847,10 +847,10 @@ export default defineComponent({
       handleRightButton(currentSliderIndex.value - 1)
     })
 
-    watch(AllQuestions, () => {
+    watch(AllQuestions, async () => {
       if (SingleQuiz.value) {
         if (isRestart.value) {
-          setUpQuiz()
+           await setUpQuiz()
           currentQuestionIndex.value = 0
         } else {
           setViewMode()

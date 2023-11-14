@@ -317,9 +317,9 @@ export default defineComponent({
       }
     }
 
-    const connectWebsocket = () => {
+    const connectWebsocket = async () => {
       if (SingleConversation.value) {
-        Logic.Common.setupWebsocket()
+        await Logic.Common.setupWebsocket()
 
         Logic.Common.listenOnSocket(
           `conversations/conversations/${Logic.Conversations.SingleConversation.id}/messages`,

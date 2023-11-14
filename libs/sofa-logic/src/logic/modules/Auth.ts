@@ -67,22 +67,6 @@ export default class Auth extends Common {
     }
   }
 
-  public ParseJwt = (token) => {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        })
-        .join(''),
-    )
-
-    return JSON.parse(jsonPayload)
-  }
-
   public SetTokens = (AuthData: AuthResponse) => {
     this.RefreshToken = AuthData.refreshToken
     localStorage.setItem(
@@ -92,10 +76,6 @@ export default class Auth extends Common {
         refreshToken: AuthData.refreshToken,
       }),
     )
-
-    const tokenData = this.ParseJwt(AuthData.accessToken)
-
-    localStorage.setItem('token_expiry', tokenData.exp.toString())
 
     localStorage.setItem('auth_user', JSON.stringify(AuthData.user))
   }
@@ -187,7 +167,6 @@ export default class Auth extends Common {
 
         localStorage.removeItem('AuthTokens')
         localStorage.removeItem('auth_user')
-        localStorage.removeItem('token_expiry')
         localStorage.removeItem('auth_user_profile')
 
         clearInterval(this.TokenRefreshWatcher)

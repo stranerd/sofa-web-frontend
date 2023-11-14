@@ -287,9 +287,9 @@ const selectConversation = async (convoId: string) => {
 
   await Logic.Conversations.GetConversation(convoId).then((response: any) => {
     if (response) {
-      Logic.Conversations.GetMessages(convoId).then((responseData: any) => {
+      Logic.Conversations.GetMessages(convoId).then(async (responseData: any) => {
         if (responseData) {
-          Logic.Common.setupWebsocket()
+          await Logic.Common.setupWebsocket()
 
           setTimeout(() => {
             Logic.Common.listenOnSocket(
