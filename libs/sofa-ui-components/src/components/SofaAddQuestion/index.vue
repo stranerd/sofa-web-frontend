@@ -51,7 +51,7 @@
   <!-- Smaller screens bottom bar -->
 
   <div
-    class="w-full !flex flex-row fixed bottom-0 left-0 items-center py-3 px-4 border-t-[1px] justify-between mdlg:!hidden bg-white border-[#F1F6FA] z-[9999999]">
+    class="w-full !flex flex-row fixed bottom-0 left-0 items-center py-3 px-4 border-t-[1px] justify-between mdlg:!hidden bg-white border-[#F1F6FA] z-[100]">
     <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
       <draggable class="flex flex-row gap-2 items-center flex-nowrap whitespace-nowrap pr-4" v-model="questions"
         v-if="questions" :group="'add-question-mobile'" item-key="id" @end="handleDrag" :direction="'horizontal'"

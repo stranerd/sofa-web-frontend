@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-full flex sofa-alert flex-row px-4 py-4 items-end justify-end z-[999999999999999]">
+  <div class="fixed w-full flex sofa-alert flex-row px-4 py-4 items-end justify-end z-[100]">
     <div :class="`md:!min-w-[300px] mdlg:!min-w-[300px] md:!w-auto mdlg:!w-auto w-full flex flex-row items-center md:py-4 md:px-4 px-3 py-3 custom-border justify-between border-[2px] ${type == 'success' ? 'border-[#4BAF7D] bg-[#E1F5EB]' : ''
       }
           ${type == 'error' ? 'border-[#F55F5F] bg-[#FAEBEB]' : ''}

@@ -7,7 +7,7 @@
 
     <div
       v-if="!videoIsPlaying"
-      class="flex flex-row items-center justify-center !rounded-[12px] absolute h-full w-full top-0 left-0 bg-black bg-opacity-60 z-index"
+      class="flex flex-row items-center justify-center !rounded-[12px] absolute h-full w-full top-0 left-0 bg-black bg-opacity-60"
     >
       <sofa-icon
         name="play-video"

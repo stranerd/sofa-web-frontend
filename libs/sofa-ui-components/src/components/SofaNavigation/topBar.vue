@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="` flex-row items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[8999] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white  lg:!bg-white bg-backgroundGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
+    :class="` flex-row items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white  lg:!bg-white bg-backgroundGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
     <template v-if="type == 'main'">
       <div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
         <sofa-avatar :size="'32'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
@@ -51,7 +51,7 @@
             <sofa-icon :customClass="'h-[16px]'" :name="'bell'" />
           </div>
           <div v-if="showNotification"
-            class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom custom-border pb-3 px-4 absolute top-[140%] right-0 z-[99999999] hidden mdlg:flex flex-col">
+            class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom custom-border pb-3 px-4 absolute top-[140%] right-0 z-[100] hidden mdlg:flex flex-col">
             <notification :close="() => {
               showNotification = false
             }

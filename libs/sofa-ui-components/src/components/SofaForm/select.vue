@@ -42,7 +42,7 @@ hideOptions();
         </span>
       </div>
 
-      <div v-if="showOption" @click.stop="null" :class="`w-full hidden mdlg:!flex flex-col top-[101%] left-0 bg-white z-[999999999999] max-h-[320px] ${isAbsolute ? 'min-w-[200px] absolute' : ' mt-3'
+      <div v-if="showOption" @click.stop="null" :class="`w-full hidden mdlg:!flex flex-col top-[101%] left-0 bg-white z-[100] max-h-[320px] ${isAbsolute ? 'min-w-[200px] absolute' : ' mt-3'
         }  overflow-y-auto rounded-md pb-3 px-3 shadow-md`">
         <div class="w-full py-2 sticky top-0 bg-white gap-3 flex flex-row items-center justify-between"
           v-if="autoComplete">

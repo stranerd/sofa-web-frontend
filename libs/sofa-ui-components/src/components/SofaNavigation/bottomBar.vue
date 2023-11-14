@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-3 fixed left-0 bottom-0 mdlg:!hidden z-[9000]">
+  <div class="w-full flex flex-col gap-3 fixed left-0 bottom-0 mdlg:!hidden z-[100]">
     <div v-if="tabIsActive('base')" class="w-full flex flex-row items-center justify-end pr-2 mdlg:hidden">
       <span
         class="px-3 py-2 bg-primaryPurple flex flex-row gap-2 rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]"

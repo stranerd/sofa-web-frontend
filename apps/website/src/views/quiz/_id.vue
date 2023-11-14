@@ -39,7 +39,7 @@
                   95
                   }% + 5%);`">
                   <span
-                    class="w-[60px] h-[40px] z-[33344444] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold">
+                    class="w-[60px] h-[40px] z-[100] top-[-15px] text-white flex items-center justify-center rounded-[32px] absolute right-0 bg-primaryGreen !font-semibold">
                     {{ questions[currentQuestionIndex]?.currentTime }}
                   </span>
                 </div>
@@ -117,7 +117,7 @@
                 90
                 }% + 10%);`">
                 <span
-                  class="w-[40px] h-[30px] z-[33344444] top-[-10px] text-white flex items-center justify-center rounded-[16px] absolute right-0 bg-primaryGreen !font-semibold">
+                  class="w-[40px] h-[30px] z-[100] top-[-10px] text-white flex items-center justify-center rounded-[16px] absolute right-0 bg-primaryGreen !font-semibold">
                   {{ questions[currentQuestionIndex]?.currentTime }}
                 </span>
               </div>
@@ -492,7 +492,7 @@
     <!-- Rating floating button -->
     <Teleport to="body" v-if="!QuizReview && Logic.Auth.AuthUser.id != SingleQuiz?.user.id">
       <span
-        class="absolute mdlg:bottom-[10%] mdlg:right-[1%] bottom-[13%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]">
+        class="absolute mdlg:bottom-[10%] mdlg:right-[1%] bottom-[13%] right-[2%] z-[100] flex flex-row items-center justify-center h-[70px] w-[70px]">
         <span
           class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
           @click="showRateQuiz = true">

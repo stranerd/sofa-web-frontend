@@ -9,7 +9,7 @@
             left: 0;
             overflow: hidden;
             position: absolute;
-            z-index: 999999;
+            z-index: 100;
           `" :accept="accept" :multiple="isMultiple" @change="uploadHandler" />
         <div class="w-full flex flex-col justify-center items-center">
           <slot name="content" />

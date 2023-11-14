@@ -66,7 +66,7 @@
     <template v-slot:middle-session v-if="currentComponent == 'dashboard-layout'">
       <!-- Top bar for smaller screens -->
       <div
-        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[9999] bg-backgroundGray px-4 py-4 sticky top-0 left-0">
+        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[100] bg-backgroundGray px-4 py-4 sticky top-0 left-0">
         <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
 
         <sofa-normal-text :customClass="'!font-bold !text-sm'">

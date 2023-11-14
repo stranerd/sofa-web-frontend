@@ -34,7 +34,7 @@
     </div>
 
     <!-- Small screen search -->
-    <div class="w-full px-4 flex mdlg:!hidden flex-col sticky top-0 left-0 py-4 bg-backgroundGray z-[9999]">
+    <div class="w-full px-4 flex mdlg:!hidden flex-col sticky top-0 left-0 py-4 bg-backgroundGray z-[100]">
       <div class="w-full shadow-custom px-4 py-1 bg-white custom-border flex flex-row gap-1 items-center justify-start">
         <div class="flex flex-row gap-2 items-center flex-grow" @click="Logic.Common.GoToRoute('/marketplace/search')">
           <sofa-icon :name="'filter'" :customClass="'h-[15px]'" />

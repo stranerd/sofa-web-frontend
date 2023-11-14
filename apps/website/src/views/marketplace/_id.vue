@@ -7,7 +7,7 @@
       </sofa-normal-text>
     </div>
     <div
-      class="w-full flex mdlg:!hidden flex-row items-center z-[999] gap-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
+      class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
       <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
       <sofa-normal-text :customClass="'!font-bold !text-base'">
         {{

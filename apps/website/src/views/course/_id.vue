@@ -39,7 +39,7 @@
     <div class="w-full flex flex-col gap-2 fixed top-0 left-0 h-full bg-white mdlg:hidden overflow-y-auto">
       <!-- Top bar for smaller screens -->
       <div
-        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[99999999] bg-white px-4 py-4 sticky top-0 left-0 overflow-y-auto">
+        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[100] bg-white px-4 py-4 sticky top-0 left-0 overflow-y-auto">
         <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="handleMobileGoback()" />
       </div>
 
@@ -229,7 +229,7 @@
 
     <!-- Rating floating button sm -->
     <Teleport to="body" v-if="!CourseReview && Logic.Auth.AuthUser.id != SingleCourse?.user.id && !Logic.Common.isLarge">
-      <span class="absolute bottom-[3%] right-[2%] z-[9999] flex flex-row items-center justify-center h-[70px] w-[70px]">
+      <span class="absolute bottom-[3%] right-[2%] z-[1000] flex flex-row items-center justify-center h-[70px] w-[70px]">
         <span
           class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
           @click="showRateCourse = true">

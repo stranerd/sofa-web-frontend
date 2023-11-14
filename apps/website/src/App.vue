@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 left-0 h-full w-full bg-transparent z-[999999999999999999]"
+    class="fixed top-0 left-0 h-full w-full bg-transparent z-[100000]"
     v-if="loaderSetup.loading"
   >
     <div class="loader w-full fixed left-0 top-0 overflow-x-hidden">

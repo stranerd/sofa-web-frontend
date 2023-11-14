@@ -38,7 +38,7 @@
       class="w-full md:!flex flex-row items-center justify-center gap-3 bg-primaryPurple custom-border px-5 py-5 hidden">
       <sofa-normal-text :color="'text-white'">Choose image to add to this question (optional)</sofa-normal-text>
       <sofa-file-attachment :is-wrapper="true" :accept="'image/png, image/gif, image/jpeg'"
-        :custom-class="'!w-auto z-[999]'" v-model:local-file-url="reactiveQuestion.questionMedia"
+        :custom-class="'!w-auto z-[100]'" v-model:local-file-url="reactiveQuestion.questionMedia"
         v-model="reactiveQuestion.questionMediaBlob">
         <template v-slot:content>
           <sofa-button :bgColor="'bg-white'" :textColor="'text-bodyBlack'" :custom-class="'!z-50'">Add Image</sofa-button>
@@ -48,7 +48,7 @@
 
     <div class="w-full flex md:!hidden flex-col">
       <sofa-file-attachment :is-wrapper="true" :accept="'image/png, image/gif, image/jpeg'"
-        :custom-class="'!w-full flex flex-col z-[999]'" v-model:local-file-url="reactiveQuestion.questionMedia"
+        :custom-class="'!w-full flex flex-col z-[100]'" v-model:local-file-url="reactiveQuestion.questionMedia"
         v-model="reactiveQuestion.questionMediaBlob">
         <template v-slot:content>
           <div class="w-full flex flex-col">
