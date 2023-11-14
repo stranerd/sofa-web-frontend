@@ -101,6 +101,11 @@ export default class Auth extends Common {
     localStorage.setItem('auth_user', JSON.stringify(AuthData.user))
   }
 
+  public GetTokens = () => {
+    const savedTokens = localStorage.getItem('AuthTokens')
+	  return savedTokens ? JSON.parse(savedTokens) as { accessToken: string, refreshToken: string } : undefined
+  }
+
   public GetAuthUser = () => {
     return $api.auth.user.getAuthUser().then((response) => {
       this.AuthUser = response.data
