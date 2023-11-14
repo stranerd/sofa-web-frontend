@@ -45,7 +45,7 @@ const parseLoggedInUser = definePlugin(async ({ router }) => {
 	}
 	await Logic.Auth.GetAuthUser()
 	await Logic.Users.GetUserProfile()
-	Logic.Auth.DetectVerification()
+	await Logic.Auth.DetectVerification()
 })
 
 export const globalPlugins = [parseLoggedInUser, registerLayouts, cssListeners]

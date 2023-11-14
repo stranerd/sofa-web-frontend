@@ -317,7 +317,7 @@ export default class Common {
 
       await this.router?.push(path)
     } else {
-      if (this.route.path == '/auth/login') {
+      if (this.route?.path == '/auth/login') {
         let nextRoute = ''
         if (!path.includes('auth')) {
           if (force) {

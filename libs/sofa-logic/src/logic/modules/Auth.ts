@@ -1,3 +1,13 @@
+import { capitalize } from 'vue'
+import { Logic } from '..'
+import { $api } from '../../services'
+import { AuthResponse, AuthUser } from '../types/domains/auth'
+import {
+  SignInInput,
+  SignUpInput,
+  UpdateUserProfileInput,
+  UpdateUserRoleInput,
+} from '../types/forms/auth'
 import {
   AppleAuthInput,
   GoogleAuthInput,
@@ -6,17 +16,7 @@ import {
   UpdatePhoneInput,
   VerifyWithTokenInput,
 } from './../types/forms/auth'
-import { $api } from '../../services'
 import Common from './Common'
-import { Logic } from '..'
-import { AuthResponse, AuthUser } from '../types/domains/auth'
-import {
-  SignInInput,
-  SignUpInput,
-  UpdateUserProfileInput,
-  UpdateUserRoleInput,
-} from '../types/forms/auth'
-import { capitalize } from 'vue'
 
 export default class Auth extends Common {
   constructor() {
@@ -45,26 +45,21 @@ export default class Auth extends Common {
   public AppleSignInForm: AppleAuthInput | undefined
   public SendPhoneVerificationForm: UpdatePhoneInput | undefined
 
-  private RedirectUser = () => {
+  private RedirectUser = async () => {
     if (!Logic.Auth.AuthUser.isEmailVerified) {
-      this.SendVerificationEmail()
-      Logic.Common.GoToRoute('/auth/verify-email')
+      await this.SendVerificationEmail()
+      await Logic.Common.GoToRoute('/auth/verify-email')
     } else {
-      Logic.Users.GetUserProfile().then(() => {
-        this.DetectVerification()
-      })
+      await Logic.Users.GetUserProfile()
+      await this.DetectVerification()
     }
   }
 
-  public DetectVerification = () => {
+  public DetectVerification = async () => {
     if (Logic.Auth.AuthUser?.name && Logic.Users.UserProfile?.type) {
-      if (!window.location.href.includes('auth')) {
-        //
-      } else {
-        Logic.Common.GoToRoute('/')
-      }
+      if (window.location.href.includes('auth')) await Logic.Common.GoToRoute('/')
     } else {
-      Logic.Common.GoToRoute('/auth')
+      await Logic.Common.GoToRoute('/onboarding')
     }
   }
 
