@@ -1,19 +1,14 @@
-
-import { text } from './build/banner.json'
-import packageInfo from './package.json'
-
-import vue from 'rollup-plugin-vue'
-import node from '@rollup/plugin-node-resolve'
-import cjs from '@rollup/plugin-commonjs'
 import babel from '@rollup/plugin-babel'
+import cjs from '@rollup/plugin-commonjs'
+import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
-import typescript from 'rollup-plugin-typescript2';
+import typescript from 'rollup-plugin-typescript2'
+import vue from 'rollup-plugin-vue'
 
 import fs from 'fs'
 import path from 'path'
 
 const baseFolderPath = './src/'
-const banner = text.replace('${version}', packageInfo.version)
 
 const components = fs
 	.readdirSync(baseFolderPath)
@@ -76,7 +71,6 @@ export default () => {
 			output: {
 				format: 'esm',
 				file: 'dist/sofa-library.mjs',
-				banner: banner
 			},
 			plugins: [
 				node({
@@ -118,7 +112,6 @@ export default () => {
 				name: capitalize('sofa-library'),
 				file: 'dist/sofa-library.js',
 				exports: 'named',
-				banner: banner,
 				globals: {
 					vue: 'Vue'
 				}

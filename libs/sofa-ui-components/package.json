@@ -6,12 +6,8 @@
   "scripts": {
     "serve": "webpack serve",
     "build": "webpack --mode=production --node-env=production && npm run build:style",
-    "build:dev": "webpack --mode=development",
-    "build:lib": "rimraf dist && npm run build:vue && npm run build:style",
-    "build:prod": "webpack --mode=production --node-env=production && npm run build:style",
-    "build:style": "npx tailwindcss -i  ./src/styles/index.css -o  dist/library.css  && cleancss -o dist/library.min.css dist/library.css",
-    "build:style:watch": "npx tailwindcss -i  ./src/styles/index.css -o  dist/library.min.css --watch",
-    "publish:lib": "npm run build:lib && npm publish",
+    "build:style": "npx tailwindcss -i  ./src/styles/index.css -o dist/library.css  && cleancss -o dist/library.min.css dist/library.css",
+    "watch:style": "npx tailwindcss -i  ./src/styles/index.css -o dist/library.min.css --watch",
     "watch": "webpack --watch"
   },
   "engines": {

@@ -48,11 +48,12 @@ export class BaseApiService {
       return config
     }, (error) => Promise.reject(error))
 
-    this.axiosInstance.interceptors.response.use(async (response) => response, async (error) => {
+    this.axiosInstance.interceptors.response.use(async (response) => response, async (error: AxiosError) => {
+      if (!error.isAxiosError) return Promise.reject(error)
       const status = error.response?.status ?? null
-      const path = error?.config?.url ?? null
+      const path = error.config?.url ?? null
 
-      if (status !== 461 || path === 'auth/token') return Promise.reject(error)
+      if (status !== 461 || path === '/auth/token') return Promise.reject(error)
 
       try {
         await Logic.Auth.RefreshAuthToken()
@@ -68,12 +69,6 @@ export class BaseApiService {
   }
 
   public handleErrors (err: AxiosError | any): void {
-    // TODO: remove this signout
-    // Note: here you may want to add your errors handling
-    if (err.response?.status == 401) {
-      Logic.Common.hideLoader()
-      Logic.Auth.SignOut()
-    }
     throw err
   }
 }

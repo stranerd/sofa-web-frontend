@@ -21,7 +21,6 @@ export class ReadOnlyApiService extends BaseApiService {
       return response
     } catch (err) {
       this.handleErrors(err)
-      throw err
     }
   }
 
@@ -38,7 +37,6 @@ export class ReadOnlyApiService extends BaseApiService {
       return response
     } catch (err) {
       this.handleErrors(err)
-      throw err
     }
   }
 
@@ -53,7 +51,6 @@ export class ReadOnlyApiService extends BaseApiService {
       return response
     } catch (err) {
       this.handleErrors(err)
-      throw err
     }
   }
 }

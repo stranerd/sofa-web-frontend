@@ -6,7 +6,6 @@ export class ModelApiService extends ReadOnlyApiService {
     super(resource)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async post(
     url = null,
     data: any = {},
@@ -24,7 +23,6 @@ export class ModelApiService extends ReadOnlyApiService {
       return response
     } catch (err) {
       this.handleErrors(err)
-      throw err
     }
   }
 
@@ -47,7 +45,6 @@ export class ModelApiService extends ReadOnlyApiService {
       return response
     } catch (err) {
       this.handleErrors(err)
-      throw err
     }
   }
 
@@ -61,7 +58,6 @@ export class ModelApiService extends ReadOnlyApiService {
       return response
     } catch (err) {
       this.handleErrors(err)
-      throw err
     }
   }
 }
