@@ -767,7 +767,7 @@ export default defineComponent({
 
     const showSetupProfile = () => {
       if (Logic.Common.isOnlyMobile) {
-        Logic.Common.GoToRoute("/onboarding/account-setup")
+        Logic.Common.GoToRoute("/onboarding")
       } else {
         showAccountSetup.value = true
       }

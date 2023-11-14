@@ -6,7 +6,7 @@
         <sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="onChangeOTP" v-model="otpValue" />
       </div>
 
-      <div class="w-full flex flex-col pt-3">
+      <div class="w-full flex flex-col">
         <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="VerifyUserEmail(otpValue)">
           Verify
         </sofa-button>
@@ -43,8 +43,7 @@ export default defineComponent({
   },
   name: "AuthVerifyEmailPage",
   beforeRouteEnter: generateMiddlewares([async () => {
-    // check if there is an email
-    // if (!getEmailVerificationEmail()) return '/auth/signin'
+    if (!Logic.Auth.AuthUser) return '/auth/signin'
   }]),
   setup () {
     useMeta({

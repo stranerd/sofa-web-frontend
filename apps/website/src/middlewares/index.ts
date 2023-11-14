@@ -20,24 +20,35 @@ export const isAdmin = defineMiddleware(async () => {
 export const isNotAuthenticated = defineMiddleware(async () => {
 	if (Logic.Auth.AuthUser) return '/'
 })
-export const isAuthenticated = defineMiddleware(async ({ to }) => {
-	if (!Logic.Auth.AuthUser) {
-		if (!to.fullPath.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to.fullPath)
+const checkAuthUser = async (to: string) => {
+	if (!Logic.Auth.AuthUser || !Logic.Users.UserProfile) {
+		if (!to.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to)
 		return '/auth/login'
 	}
 	if (!Logic.Auth.AuthUser.isEmailVerified) {
-		if (!to.fullPath.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to.fullPath)
+		if (!to.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to)
 		return '/auth/verify-email'
 	}
+}
+export const isAuthenticated = defineMiddleware(async ({ to }) => {
+	const redirect = await checkAuthUser(to.fullPath)
+	if (redirect) return redirect
+	if (!Logic.Users.UserProfile.type) {
+		if (!to.fullPath.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to.fullPath)
+		return '/onboarding'
+	}
+})
+export const isOnboarding = defineMiddleware(async ({ to, goBackToNonAuth }) => {
+	const redirect = await checkAuthUser(to.fullPath)
+	if (redirect) return redirect
+	if (Logic.Users.UserProfile.type) return goBackToNonAuth()
 })
 export const isSubscribed = defineMiddleware(async ({ goBackToNonAuth }) => {
 	const authUser = Logic.Auth.AuthUser
-	if (!authUser || !authUser.roles.isSubscribed) {
-		return goBackToNonAuth()
-	}
+	if (!authUser || !authUser.roles.isSubscribed) return goBackToNonAuth()
 })
 
-const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isAdmin, isSubscribed }
+const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed }
 type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
 
 export const generateMiddlewares = (middlewares: Middleware[]): NavigationGuardWithThis<undefined> => async (to, fromRoute) => {

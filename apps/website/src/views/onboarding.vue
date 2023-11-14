@@ -1,5 +1,8 @@
 <template>
-  <auth-layout title="Create your account" subTitle="Choose your account type">
+  <auth-layout v-if="screen === 'setup'" title="Set up your account">
+    <AccountSetup />
+  </auth-layout>
+  <auth-layout v-else title="Create your account" subTitle="Choose your account type">
     <div class="flex md:flex-row flex-col gap-3 md:gap-6 justify-center items-center w-full">
       <div v-for="userType in types" :key="userType.value"
         @click="goToOnboarding(userType.value)"
@@ -16,26 +19,29 @@
 
 <script lang="ts">
 import { generateMiddlewares } from '@/middlewares'
-import { Logic } from "sofa-logic"
 import { SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
+import AccountSetup from "@/components/onboarding/AccountSetup.vue"
 
 export default defineComponent({
   components: {
+    AccountSetup,
     SofaIcon,
     SofaNormalText,
   },
-  name: "AuthIndexPage",
-  beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+  name: "OnboardingPage",
+  beforeRouteEnter: generateMiddlewares(['isOnboarding']),
   setup () {
     useMeta({
-      title: "Auth",
+      title: "Setup Your Account",
     })
+
+    const screen = ref<'choose-type' | 'setup'>('choose-type')
 
     const goToOnboarding = (type: string) => {
       localStorage.setItem("user_account_type", type)
-      Logic.Common.GoToRoute(`/auth/onboarding?type=${type}`)
+      screen.value = 'setup'
     }
 
     const types = [
@@ -45,6 +51,7 @@ export default defineComponent({
     ]
 
     return {
+      screen,
       types,
       goToOnboarding,
     }
