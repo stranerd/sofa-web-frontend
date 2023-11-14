@@ -19,7 +19,9 @@ import {
 import Common from './Common'
 
 export default class Auth extends Common {
-  constructor() {
+  redirectToName = 'redirect-to'
+
+  constructor () {
     super()
     this.AccessToken = localStorage.getItem('access_token')
     this.AuthUser = localStorage.getItem('auth_user')
@@ -56,8 +58,10 @@ export default class Auth extends Common {
   }
 
   public DetectVerification = async () => {
-    if (Logic.Auth.AuthUser?.name && Logic.Users.UserProfile?.type) {
-      if (window.location.href.includes('auth')) await Logic.Common.GoToRoute('/')
+    if (Logic.Users.UserProfile?.type) {
+      if (window.location.pathname.startsWith('/auth')) {
+        await Logic.Common.GoToRoute(localStorage.getItem(this.redirectToName) ?? '/')
+      }
     } else {
       await Logic.Common.GoToRoute('/onboarding')
     }

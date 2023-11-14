@@ -581,9 +581,6 @@ export default class Common {
       return
     }
 
-    // save to route path
-    localStorage.setItem('to_route', routeTo.fullPath)
-
     const routeMiddlewares: any = routeTo.meta.middlewares
 
     // handle fetchRules

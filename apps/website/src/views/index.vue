@@ -345,25 +345,6 @@
 
       <div class="h-[100px]"></div>
 
-      <!-- Content details modal -->
-      <sofa-modal v-if="showAccountSetup" :close="() => {
-        showAccountSetup = false
-      }
-        " :customClass="'hidden md:!flex'" :can-close="false">
-        <div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
-          @click.stop="() => {
-            //
-          }
-            ">
-          <div
-            class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-            <sofa-header-text :customClass="'text-xl'">Set up your account</sofa-header-text>
-
-            <account-setup />
-          </div>
-        </div>
-      </sofa-modal>
-
       <!-- Customize AI -->
       <customize-bot :close="() => {
         showCustomizeAI = false
@@ -480,49 +461,46 @@
 
 <script lang="ts">
 import ChatListComponent from "@/components/conversation/ChatList.vue"
-import AccountSetup from "@/components/onboarding/AccountSetup.vue"
 import CustomizeBot from "@/components/onboarding/CustomizeBot.vue"
 import { scrollToTop } from "@/composables"
 import {
-  AllConversations,
-  AllTutorRequests,
-  chatList,
-  setConversations,
+AllConversations,
+AllTutorRequests,
+chatList,
+setConversations,
 } from "@/composables/conversation"
 import {
-  selectedFolderMaterailToAdd,
-  showSaveToFolder,
+selectedFolderMaterailToAdd,
+showSaveToFolder,
 } from "@/composables/library"
 import {
-  HomeMaterials,
-  homeContents,
-  sectionTags,
-  setHomeMaterials,
+HomeMaterials,
+homeContents,
+sectionTags,
+setHomeMaterials,
 } from "@/composables/marketplace"
 import {
-  allOrganizationMembers,
-  allStudents,
-  selectedMember,
-  setOrganizationMembers,
-  showAccountSetup,
-  showCustomizeAI,
-  showRemoveMember,
+allOrganizationMembers,
+allStudents,
+selectedMember,
+setOrganizationMembers,
+showCustomizeAI,
+showRemoveMember,
 } from "@/composables/profile"
 import moment from "moment"
 import { Logic } from "sofa-logic"
 import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import {
-  SofaActivityCard,
-  SofaAvatar,
-  SofaBadge,
-  SofaButton,
-  SofaEmptyState,
-  SofaHeaderText,
-  SofaIcon,
-  SofaIconCard,
-  SofaModal,
-  SofaNormalText,
-  SofaTextField,
+SofaActivityCard,
+SofaAvatar,
+SofaBadge,
+SofaButton,
+SofaEmptyState,
+SofaHeaderText,
+SofaIcon,
+SofaIconCard,
+SofaNormalText,
+SofaTextField,
 } from "sofa-ui-components"
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
@@ -537,8 +515,6 @@ export default defineComponent({
     SofaTextField,
     SofaActivityCard,
     SofaIconCard,
-    SofaModal,
-    AccountSetup,
     SofaAvatar,
     CustomizeBot,
     SofaEmptyState,
@@ -677,6 +653,9 @@ export default defineComponent({
           icon: "add-profile",
           iconSize: "h-[46px]",
           isDone: Logic.Users.CheckUserTaskState("profile_setup"),
+          action: () => {
+            Logic.Common.GoToRoute('/settings/profile')
+          },
         },
         {
           title: "Add education",
@@ -684,6 +663,9 @@ export default defineComponent({
           icon: "add-education",
           iconSize: "h-[46px]",
           isDone: Logic.Users.CheckUserTaskState("education_setup"),
+          action: () => {
+            Logic.Common.GoToRoute('/settings/profile')
+          },
         },
         {
           title: "Add phone",
@@ -692,7 +674,7 @@ export default defineComponent({
           iconSize: "h-[46px]",
           isDone: Logic.Users.CheckUserTaskState("phone_setup"),
           action: () => {
-            showSetupProfile()
+            Logic.Common.GoToRoute('/settings/profile')
           },
         }
       )
@@ -765,14 +747,6 @@ export default defineComponent({
       }
     }
 
-    const showSetupProfile = () => {
-      if (Logic.Common.isOnlyMobile) {
-        Logic.Common.GoToRoute("/onboarding")
-      } else {
-        showAccountSetup.value = true
-      }
-    }
-
     onMounted(() => {
       scrollToTop()
       setItems()
@@ -831,7 +805,6 @@ export default defineComponent({
       profileSteps,
       studyMaterialsSteps,
       takeOnTasks,
-      showAccountSetup,
       UserProfile,
       newChatMessage,
       homeContents,
@@ -844,7 +817,6 @@ export default defineComponent({
       showSaveToFolder,
       selectedFolderMaterailToAdd,
       startConversation,
-      showSetupProfile,
     }
   },
 })

@@ -1,11 +1,16 @@
 import { Logic } from 'sofa-logic'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
+import { generateMiddlewares } from '@/middlewares'
 
 export const routerPromise = Promise.all(routes).then((routes) => {
   const router = createRouter({
     history: createWebHistory(),
     routes,
+  })
+
+  routes.forEach((route) => {
+    route.component.beforeRouteEnter ??= generateMiddlewares(['isAuthenticated'])
   })
 
   router.beforeEach((to, from, next) => {

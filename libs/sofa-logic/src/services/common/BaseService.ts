@@ -62,18 +62,6 @@ export class BaseApiService {
       Logic.Common.hideLoader()
       Logic.Auth.SignOut()
     }
-
-    if (err.response?.status == 461) {
-      if (!Logic.Auth.RefreshIsActive) {
-        Logic.Auth.RefreshIsActive = true
-        Logic.Auth.RefreshAuthToken()?.then(() => {
-          const fullWindowPath =
-            window.location.pathname + window.location.search
-          window.location.href =
-            localStorage.getItem('to_route') || fullWindowPath
-        })
-      }
-    }
     throw err
   }
 }

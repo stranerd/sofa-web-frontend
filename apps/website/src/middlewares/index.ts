@@ -1,8 +1,6 @@
 import { NavigationGuardWithThis, RouteLocationNormalized } from 'vue-router'
 import { Logic } from 'sofa-logic'
 
-const REDIRECT_SESSION_NAME = 'redirect-to'
-
 type MiddleWareArgs = {
 	to: RouteLocationNormalized,
 	from: RouteLocationNormalized | null,
@@ -22,11 +20,11 @@ export const isNotAuthenticated = defineMiddleware(async () => {
 })
 const checkAuthUser = async (to: string) => {
 	if (!Logic.Auth.AuthUser || !Logic.Users.UserProfile) {
-		if (!to.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to)
+		if (!to.startsWith('/auth/')) localStorage.set(Logic.Auth.redirectToName, to)
 		return '/auth/login'
 	}
 	if (!Logic.Auth.AuthUser.isEmailVerified) {
-		if (!to.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to)
+		if (!to.startsWith('/auth/')) localStorage.set(Logic.Auth.redirectToName, to)
 		return '/auth/verify-email'
 	}
 }
@@ -34,7 +32,7 @@ export const isAuthenticated = defineMiddleware(async ({ to }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
 	if (!Logic.Users.UserProfile.type) {
-		if (!to.fullPath.startsWith('/auth/')) await localStorage.set(REDIRECT_SESSION_NAME, to.fullPath)
+		localStorage.set(Logic.Auth.redirectToName, to.fullPath)
 		return '/onboarding'
 	}
 })
