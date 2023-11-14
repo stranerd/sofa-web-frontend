@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import { API_URL } from '../../common/constants'
 import { Logic } from '../../logic/modules'
-import { AuthResponse } from '../../logic/types/domains/auth'
 
 export class BaseApiService {
   private readonly baseUrl = API_URL
@@ -40,9 +39,7 @@ export class BaseApiService {
 
       // @ts-ignore
       config.headers ??= {}
-      const tokens: AuthResponse = localStorage.getItem('AuthTokens')
-      ? JSON.parse(localStorage.getItem('AuthTokens') || '{}')
-        : undefined
+      const tokens =  await Logic.Auth.GetTokens()
       if (tokens) {
         config.headers['Access-Token'] = tokens.accessToken
         config.headers['Refresh-Token'] = tokens.refreshToken
@@ -50,13 +47,28 @@ export class BaseApiService {
 
       return config
     }, (error) => Promise.reject(error))
+
+    this.axiosInstance.interceptors.response.use(async (response) => response, async (error) => {
+      const status = error.response?.status ?? null
+      const path = error?.config?.url ?? null
+
+      if (status !== 461 || path === 'auth/token') return Promise.reject(error)
+
+      try {
+        await Logic.Auth.RefreshAuthToken()
+        return this.axiosInstance.request(error.config)
+      } catch {
+        return Promise.reject(error)
+      }
+    });
   }
 
   public getUrl(id = ''): string {
     return id ? `/${this.resource}/${id}` : `/${this.resource}`
   }
 
-  public handleErrors(err: AxiosError | any): void {
+  public handleErrors (err: AxiosError | any): void {
+    // TODO: remove this signout
     // Note: here you may want to add your errors handling
     if (err.response?.status == 401) {
       Logic.Common.hideLoader()

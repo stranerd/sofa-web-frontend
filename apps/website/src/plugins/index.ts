@@ -39,7 +39,7 @@ const cssListeners = definePlugin(async () => {
 })
 
 const parseLoggedInUser = definePlugin(async ({ router }) => {
-	if (!Logic.Auth.GetTokens()) {
+	if (!(await Logic.Auth.GetTokens())) {
 		await router.push('/auth/login')
 		return
 	}

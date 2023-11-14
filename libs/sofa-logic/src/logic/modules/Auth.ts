@@ -100,9 +100,9 @@ export default class Auth extends Common {
     localStorage.setItem('auth_user', JSON.stringify(AuthData.user))
   }
 
-  public GetTokens = () => {
+  public GetTokens = async () : Promise<Omit<AuthResponse, 'user'> | undefined> => {
     const savedTokens = localStorage.getItem('AuthTokens')
-	  return savedTokens ? JSON.parse(savedTokens) as { accessToken: string, refreshToken: string } : undefined
+	  return savedTokens ? JSON.parse(savedTokens) : undefined
   }
 
   public GetAuthUser = () => {
@@ -327,9 +327,6 @@ export default class Auth extends Common {
         this.AuthUser = response.data.user
         this.SetTokens(response.data)
         return response.data
-      })
-      .then((error) => {
-        //
       })
   }
 
