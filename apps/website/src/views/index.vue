@@ -104,7 +104,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in profileSteps" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -152,7 +152,7 @@
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:!gap-0 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in takeOnTasks" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>

@@ -39,7 +39,7 @@
           </div>
 
           <div
-            class="flex mdlg:flex-row flex-col mdlg:gap-4 mdlg:justify-end items-start gap-3 mdlg:gap-0 mdlg:items-center md:!w-auto w-full">
+            class="flex mdlg:flex-row flex-col mdlg:gap-4 mdlg:justify-end items-start gap-3 mdlg:items-center md:!w-auto w-full">
             <div class="flex flex-row items-center mdlg:gap-4 gap-16 justify-start mdlg:justify-start md:!w-auto w-full">
               <template v-for="(item, index) in profileAttributes" :key="index">
                 <div class="flex mdlg:flex-row mdlg:gap-2 flex-col gap-1 items-center" v-if="item.show">
@@ -115,7 +115,7 @@
 
           <div v-if="userMaterials.length" class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
             <div
-              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 mdlg:!gap-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+              class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
               <sofa-item-card :content="content"
                 custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
                 v-for="(content, index) in userMaterials" :key="index" @click="

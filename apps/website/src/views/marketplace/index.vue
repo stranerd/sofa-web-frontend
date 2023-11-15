@@ -54,7 +54,7 @@
       <!-- Textbook, note, past questions -->
       <div v-if="false" class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide mdlg:!pl-0 pl-4">
         <div
-          class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 mdlg:!gap-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+          class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
           <sofa-image-loader :photoUrl="item.image"
             custom-class="col-span-1 mdlg:!w-auto w-[290px] relative custom-border mdlg:!h-[230px] h-[190px] cursor-pointer"
             v-for="(item, index) in mainCards" :key="index" @click="Logic.Common.GoToRoute(item.routePath)">
@@ -85,7 +85,7 @@
         <div v-if="marketplaceContents.lastest.length"
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 mdlg:!gap-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-item-card :content="content"
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
               v-for="(content, index) in marketplaceContents.lastest" :key="index" @click="
@@ -124,7 +124,7 @@
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
           v-if="marketplaceContents.rated.length">
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 mdlg:!gap-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-item-card :content="content"
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
               v-for="(content, index) in marketplaceContents.rated" :key="index" @click="
@@ -163,7 +163,7 @@
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
           v-if="marketplaceContents.popular.length">
           <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 mdlg:!gap-0 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-item-card :content="content"
               custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
               v-for="(content, index) in marketplaceContents.popular" :key="index" @click="
