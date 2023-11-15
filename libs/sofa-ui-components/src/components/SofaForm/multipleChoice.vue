@@ -42,7 +42,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaButton from "../SofaButton"
 import SofaIcon from "../SofaIcon"
 import SofaNormalText from "../SofaTypography/normalText.vue"

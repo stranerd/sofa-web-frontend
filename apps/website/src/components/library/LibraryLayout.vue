@@ -199,9 +199,7 @@
 
 <script setup lang="ts">
 import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, moreOptions, setFolders, showDeleteFolder, showMoreOptions } from '@/composables/library'
-import { Logic } from "sofa-logic"
-import { Conditions } from 'sofa-logic/src/logic/types/common'
-import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
+import { Conditions, Logic, SingleUser } from "sofa-logic"
 import { SofaCustomInput, SofaDeletePrompt, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
 import { PropType, computed, defineProps, onMounted, ref, watch } from 'vue'
 import { useMeta } from "vue-meta"

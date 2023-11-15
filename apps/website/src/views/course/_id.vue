@@ -252,8 +252,7 @@
 <script lang="ts">
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue"
 import CourseContent from "@/components/courses/content.vue"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
 import {
   SofaButton,
   SofaCourseContent,

@@ -11,7 +11,7 @@
   </sofa-image-loader>
 </template>
 <script lang="ts">
-import { Logic } from "../../composable";
+import { Logic } from "sofa-logic"
 import { defineComponent } from "vue";
 import SofaImageLoader from "../SofaImageLoader/index.vue";
 

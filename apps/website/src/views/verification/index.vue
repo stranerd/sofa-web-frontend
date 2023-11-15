@@ -203,7 +203,7 @@ import {
   SofaActivityCard,
 } from "sofa-ui-components"
 import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions } from "sofa-logic"
 import {
   UpdateProfile,
   submitVerification,
@@ -211,7 +211,7 @@ import {
   updateVerificationForm,
   userSocials,
 } from "@/composables/profile"
-import { SelectOption } from "sofa-logic/src/logic/types/common"
+import { SelectOption } from "sofa-logic"
 import { ContentDetails } from "@/composables/marketplace"
 import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue"
 

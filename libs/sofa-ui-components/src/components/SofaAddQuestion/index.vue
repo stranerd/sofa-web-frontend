@@ -137,8 +137,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, toRef, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "../../composable"
-import { Question } from "../../types/domains/study"
+import { Logic, Question } from "sofa-logic"
 import SofaDeletePrompt from "../SofaDeletePrompt"
 import SofaIcon from "../SofaIcon"
 import SofaModal from "../SofaModal"

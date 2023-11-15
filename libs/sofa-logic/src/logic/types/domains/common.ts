@@ -1,9 +1,9 @@
-interface ValidationError {
+export interface ValidationError {
   field: string
   message: string
 }
 
-interface Paginated<D> {
+export interface Paginated<D> {
   pages: {
     start: number
     last: number
@@ -19,7 +19,7 @@ interface Paginated<D> {
   results: D[]
 }
 
-interface FileData {
+export interface FileData {
   name: string
   type: string
   size: number
@@ -28,7 +28,7 @@ interface FileData {
   link: string
 }
 
-interface ContentDetails {
+export interface ContentDetails {
   type: string
   price: number
   image: string
@@ -92,7 +92,7 @@ interface ContentDetails {
   }[]
 }
 
-interface Country {
+export interface Country {
   name: string
   iso2: string
   states: {
@@ -100,32 +100,3 @@ interface Country {
     state_code: string
   }[]
 }
-
-export enum QueryKeys {
-  and = 'and',
-  or = 'or',
-}
-
-export enum Conditions {
-  lt = 'lt',
-  lte = 'lte',
-  gt = 'gt',
-  gte = 'gte',
-  eq = 'eq',
-  ne = 'ne',
-  in = 'in',
-  nin = 'nin',
-  exists = 'exists',
-}
-
-export interface QueryParams {
-  where?: { field: string; value: any; condition?: Conditions }[]
-  whereType?: QueryKeys
-  sort?: [{ field: string; desc?: boolean }]
-  limit?: number
-  all?: boolean
-  page?: number
-  search?: { value: string; fields: string[] }
-}
-
-export { ValidationError, Paginated, FileData, ContentDetails, Country }

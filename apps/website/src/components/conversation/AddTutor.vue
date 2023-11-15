@@ -161,25 +161,23 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import {
-  SofaModal,
-  SofaHeaderText,
-  SofaNormalText,
-  SofaButton,
-  SofaIcon,
-  SofaSelect,
   SofaAvatar,
+  SofaButton,
+  SofaHeaderText,
+  SofaIcon,
+  SofaModal,
+  SofaNormalText,
+  SofaSelect,
   SofaTextField,
   SofaTextarea,
 } from "sofa-ui-components"
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 
-import { Logic } from "sofa-logic"
-import { allTopics, getTopics } from "@/composables/course"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import { FormValidations } from "@/composables"
-import { SingleUser } from "sofa-logic/src/logic/types/domains/users"
 import { SingleConversation } from "@/composables/conversation"
+import { allTopics, getTopics } from "@/composables/course"
+import { Conditions, Logic, SingleUser } from "sofa-logic"
 
 export default defineComponent({
   components: {

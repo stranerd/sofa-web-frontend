@@ -305,10 +305,7 @@
 <script lang="ts">
 import { FormValidations } from "@/composables"
 import moment from "moment"
-import { Logic } from "sofa-logic"
-import { SelectOption } from "sofa-logic/src/logic/types/common"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
-import { Transaction } from "sofa-logic/src/logic/types/domains/payment"
+import { Conditions, Logic, SelectOption, Transaction } from "sofa-logic"
 import {
   SofaButton,
   SofaDeletePrompt,

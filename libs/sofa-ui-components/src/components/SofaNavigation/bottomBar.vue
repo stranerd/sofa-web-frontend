@@ -49,7 +49,7 @@
 </template>
 <script lang="ts">
 import { ref } from "vue"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaIcon from "../SofaIcon/index.vue"
 import { SofaNormalText } from "../SofaTypography"
 

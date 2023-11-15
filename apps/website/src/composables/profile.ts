@@ -1,10 +1,7 @@
-import { Logic } from 'sofa-logic'
-import { Conditions, SelectOption } from 'sofa-logic/src/logic/types/common'
-import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
 import {
-  CreateTutorRequestForm,
-  CustomizeAIInput,
-} from 'sofa-logic/src/logic/types/forms/users'
+  Conditions, CreateTutorRequestForm,
+  CustomizeAIInput, Logic, SelectOption, SingleUser
+} from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
 const currentSetupOption = ref<'profile' | 'education' | 'phone'>('profile')

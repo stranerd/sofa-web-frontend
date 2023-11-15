@@ -245,11 +245,7 @@ import { scrollToTop } from "@/composables"
 import { createCourseData, createQuizData } from "@/composables/library"
 import { profileLinks } from "@/composables/profile"
 import moment from "moment"
-import { Logic } from "sofa-logic"
-import {
-  Conditions,
-  QueryParams,
-} from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic, QueryParams } from "sofa-logic"
 import {
   SofaAvatar,
   SofaButton,

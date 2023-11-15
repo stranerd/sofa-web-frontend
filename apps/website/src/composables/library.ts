@@ -1,10 +1,8 @@
-import { Logic } from 'sofa-logic'
 import {
-    Course,
-    Folder,
-    Quiz,
-    ResourceType,
-} from 'sofa-logic/src/logic/types/domains/study'
+  Course,
+  Folder, Logic, Quiz,
+  ResourceType
+} from 'sofa-logic'
 import { capitalize, computed, reactive, ref, watch } from 'vue'
 import { ContentDetails } from './marketplace'
 import { selectedQuizId, selectedQuizMode } from './quiz'
@@ -1004,8 +1002,7 @@ const moreOptions = reactive([
 ])
 
 export {
-    AllCourses, AllFolders, AllFoldersCourses, TutorQuizzes,
-    AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, FolderOptions, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, addFolder, addFolderIsActive, addMaterialToFolder, allContentCategories, createCourseData, createQuizData, currentCourseData, currentFolder, currentFolderItems, currentInProgressItem, currentPurchasedData, currentQuizData, currentRecentData, currentResultItems, deleteFolder, filterItem, folderFilterOption,
-    folders, handleFolderNameBlur, inProgressItems, libraryTypeList, moreOptions, openCourse, openQuiz, organizationFilterOption,
-    organizations, reportMaterial, reportMaterialSetup, resultItems, saveFolder, saveItemsToFolder, selectedCourseFilter, selectedFilter, selectedFolderFilter, selectedFolderItems, selectedFolderMaterailToAdd, selectedInProgressFilter, selectedItem, selectedItemId, selectedQuizFilter, selectedResultFilter, sendReportMaterial, setCourses, setFolderItems, setFolders, setInProgressItems, setPurchasedData, setQuizzes, setRecentItems, setResultItems, shareMaterialLink, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode, updateFolder
+  AllCourses, AllFolders, AllFoldersCourses, AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, FolderOptions, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, TutorQuizzes, addFolder, addFolderIsActive, addMaterialToFolder, allContentCategories, createCourseData, createQuizData, currentCourseData, currentFolder, currentFolderItems, currentInProgressItem, currentPurchasedData, currentQuizData, currentRecentData, currentResultItems, deleteFolder, filterItem, folderFilterOption,
+  folders, handleFolderNameBlur, inProgressItems, libraryTypeList, moreOptions, openCourse, openQuiz, organizationFilterOption,
+  organizations, reportMaterial, reportMaterialSetup, resultItems, saveFolder, saveItemsToFolder, selectedCourseFilter, selectedFilter, selectedFolderFilter, selectedFolderItems, selectedFolderMaterailToAdd, selectedInProgressFilter, selectedItem, selectedItemId, selectedQuizFilter, selectedResultFilter, sendReportMaterial, setCourses, setFolderItems, setFolders, setInProgressItems, setPurchasedData, setQuizzes, setRecentItems, setResultItems, shareMaterialLink, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode, updateFolder
 }

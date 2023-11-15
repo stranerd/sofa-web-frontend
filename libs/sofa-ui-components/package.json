@@ -6,8 +6,8 @@
   "scripts": {
     "serve": "webpack serve",
     "build": "webpack --mode=production --node-env=production && npm run build:style",
-    "build:style": "npx tailwindcss -i  ./src/styles/index.css -o dist/library.css  && cleancss -o dist/library.min.css dist/library.css",
-    "watch:style": "npx tailwindcss -i  ./src/styles/index.css -o dist/library.min.css --watch",
+    "build:style": "npx tailwindcss -i ./src/styles/index.css -o dist/library.css && cleancss -o dist/library.min.css dist/library.css",
+    "watch:style": "npx tailwindcss -i ./src/styles/index.css -o dist/library.min.css --watch",
     "watch": "webpack --watch"
   },
   "engines": {
@@ -18,6 +18,7 @@
     "@vue/compiler-sfc": "^3.2.45",
     "chart.js": "^4.4.0",
     "gsap": "^3.12.2",
+    "sofa-logic": "workspace:^",
     "swiper": "^8.4.2",
     "video.js": "^8.3.0",
     "vue": "^3.2.21",

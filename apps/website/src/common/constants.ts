@@ -7,3 +7,7 @@ export const AuthClientIDs = {
     ios: googleClients.ios ?? ''
   },
 }
+
+export const packageName = process.env.VUE_APP_PACKAGE_NAME
+
+export const apiUrl = process.env.VUE_APP_API_URL

@@ -2,7 +2,7 @@ import { $api } from '../../services'
 import Common from './Common'
 import { Logic } from '..'
 import { Notification } from '../types/domains/notifications'
-import { Paginated, QueryParams } from '../types/domains/common'
+import { Paginated, QueryParams } from '../types'
 import { Conditions } from '../types/common'
 
 export default class Notifications extends Common {

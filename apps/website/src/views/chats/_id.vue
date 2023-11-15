@@ -5,10 +5,10 @@
     <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
 
     <template v-if="showNeedsSubscription">
-      <sofa-delete-prompt v-if="Logic.Payment.UserWallet?.subscription.active" title="You have run out of tutor aided conversations"
+      <sofa-delete-prompt v-if="Logic.Payment.UserWallet?.subscription.active"
+        title="You have run out of tutor aided conversations"
         subTitle="This feature will become available on your next subscription renewal"
-        :close="() => showNeedsSubscription = false"
-        :buttons="[
+        :close="() => showNeedsSubscription = false" :buttons="[
           {
             label: 'Close',
             hide: true,
@@ -27,8 +27,7 @@
         ]" />
       <sofa-delete-prompt v-else title="You have no subscription"
         subTitle="You need to be subscribed to Stranerd Plus to access this feature"
-        :close="() => showNeedsSubscription = false"
-        :buttons="[
+        :close="() => showNeedsSubscription = false" :buttons="[
           {
             label: 'Cancel',
             isClose: true,
@@ -172,8 +171,7 @@ import {
   showRateAndReviewTutor,
   tutorRequestList,
 } from "@/composables/conversation"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
 import {
   SofaDeletePrompt,
   SofaIcon,

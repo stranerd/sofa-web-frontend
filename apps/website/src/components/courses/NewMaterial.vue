@@ -145,22 +145,20 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { capitalize, defineComponent, onMounted, ref, watch } from "vue"
+import { FormValidations } from "@/composables"
+import { addCourseFile, addCourseFileForm, addQuizToCourse } from "@/composables/course"
+import { Conditions, Logic } from "sofa-logic"
 import {
+  SofaButton,
+  SofaFileAttachment,
+  SofaHeaderText,
   SofaIcon,
   SofaModal,
   SofaNormalText,
-  SofaFileAttachment,
-  SofaHeaderText,
   SofaSelect,
-  SofaButton,
 } from "sofa-ui-components"
-import { Logic } from "sofa-logic"
-import { FormValidations } from "@/composables"
+import { capitalize, defineComponent, onMounted, ref, watch } from "vue"
 import AddVideo from "./AddVideo.vue"
-import { addCourseFileForm, addQuizToCourse } from "@/composables/course"
-import { addCourseFile } from "@/composables/course"
-import { Conditions } from "sofa-logic/src/logic/types/common"
 
 export default defineComponent({
   components: {

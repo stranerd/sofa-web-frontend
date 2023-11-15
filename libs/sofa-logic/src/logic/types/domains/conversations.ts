@@ -45,19 +45,7 @@ export interface Message {
   readAt: {}
 }
 
-export interface Review {
-  hash: string
-  id: string
-  conversationId: string
-  to: string
-  user: SingleUser
-  rating: number
-  message: string
-  createdAt: number
-  updatedAt: number
-}
-
-export interface TutorRequest {
+export interface ConversationTutorRequest {
   hash: string
   id: string
   tutor: SingleUser

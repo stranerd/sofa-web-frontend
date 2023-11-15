@@ -489,7 +489,7 @@ showRemoveMember,
 } from "@/composables/profile"
 import moment from "moment"
 import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions } from "sofa-logic"
 import {
 SofaActivityCard,
 SofaAvatar,

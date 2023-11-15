@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
+import { Paginated, QueryParams } from '../../logic/types'
 import { Question, Quiz } from '../../logic/types/domains/study'
-import { ModelApiService } from '../common/ModelService'
 import {
   CreateQuestionInput,
   ReorderQuizInput,
 } from '../../logic/types/forms/study'
-import { Paginated, QueryParams } from '../../logic/types/domains/common'
+import { ModelApiService } from '../common/ModelService'
 
 export default class QuizzesApi extends ModelApiService {
   constructor() {

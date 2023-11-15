@@ -19,7 +19,7 @@
 </template>
 <script lang="ts">
 import { onMounted, ref, watch } from "vue"
-import { SelectOption } from "../../types"
+import { SelectOption } from "sofa-logic"
 import SofaIcon from "../SofaIcon"
 import SofaNormalText from "../SofaTypography/normalText.vue"
 

@@ -261,7 +261,7 @@ import {
   updateCourseSectionForm,
   updateCourseSections,
 } from "@/composables/course"
-import { Course } from "sofa-logic/src/logic/types/domains/study"
+import { Course } from "sofa-logic"
 const SofaDocumentReader = defineAsyncComponent(
   () => import("sofa-ui-components/src/components/SofaDocumentReader/index.vue")
 )

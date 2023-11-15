@@ -77,8 +77,7 @@
         Exit
       </sofa-button>
 
-      <div
-        class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!gap-3 grid grid-cols-2 gap-2 items-center">
+      <div class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!gap-3 grid grid-cols-2 gap-2 items-center">
         <div :class="`mdlg:!w-auto  flex flex-col ${course && course.status != 'published'
           ? 'col-span-1'
           : 'col-span-full'
@@ -100,19 +99,6 @@
   </sofa-form-wrapper>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue"
-import {
-  SofaIcon,
-  SofaTextField,
-  SofaTextarea,
-  SofaSelect,
-  SofaImageLoader,
-  SofaNormalText,
-  SofaFileAttachment,
-  SofaButton,
-  SofaFormWrapper,
-} from "sofa-ui-components"
-import { Logic } from "sofa-logic"
 import { FormValidations } from "@/composables"
 import {
   allGenericTags,
@@ -124,7 +110,19 @@ import {
   getTopics,
   updateCourse,
 } from "@/composables/course"
-import { Course } from "sofa-logic/src/logic/types/domains/study"
+import { Course, Logic } from "sofa-logic"
+import {
+  SofaButton,
+  SofaFileAttachment,
+  SofaFormWrapper,
+  SofaIcon,
+  SofaImageLoader,
+  SofaNormalText,
+  SofaSelect,
+  SofaTextField,
+  SofaTextarea,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, ref, watch } from "vue"
 
 export default defineComponent({
   components: {

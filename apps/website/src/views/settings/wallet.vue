@@ -7,8 +7,7 @@
 <script lang="ts">
 import SettingsLayout from "@/components/settings/SettingsLayout.vue"
 import SettingWallet from "@/components/settings/wallet.vue"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
 import { defineComponent } from "vue"
 import { useMeta } from "vue-meta"
 

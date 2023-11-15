@@ -33,8 +33,7 @@ chatList,
 newChat,
 tutorRequestList
 } from "@/composables/conversation"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
 import {
 SofaIcon,
 SofaNormalText

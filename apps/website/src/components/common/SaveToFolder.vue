@@ -73,29 +73,28 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, watch } from "vue"
-import {
-  SofaModal,
-  SofaIcon,
-  SofaNormalText,
-  SofaHeaderText,
-  SofaCustomInput,
-} from "sofa-ui-components"
 import { showAddItem } from "@/composables"
-import { Logic } from "sofa-logic"
 import {
   AllFolders,
   addFolder,
+  addFolderIsActive,
+  addMaterialToFolder,
   currentFolder,
   folders,
   handleFolderNameBlur,
   selectedFilter,
-  setFolders,
   selectedFolderMaterailToAdd,
-  addMaterialToFolder,
-  addFolderIsActive,
+  setFolders,
 } from "@/composables/library"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
+import {
+  SofaCustomInput,
+  SofaHeaderText,
+  SofaIcon,
+  SofaModal,
+  SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, onMounted, watch } from "vue"
 
 export default defineComponent({
   components: {

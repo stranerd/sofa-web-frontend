@@ -125,8 +125,8 @@
   </div>
 </template>
 <script lang="ts">
+import { Conditions, Logic, SingleUser } from "sofa-logic"
 import { defineComponent, onMounted, ref } from "vue"
-import { Logic } from "../../composable"
 import SofaAvatar from "../SofaAvatar"
 import SofaBadge from "../SofaBadge"
 import SofaButton from "../SofaButton"
@@ -136,8 +136,6 @@ import SofaModal from "../SofaModal"
 import { SofaHeaderText } from "../SofaTypography"
 import SofaNormalText from "../SofaTypography/normalText.vue"
 import notification from "./notification.vue"
-import { Conditions } from '../../types/domains/common'
-import { SingleUser } from '../../types/domains/users'
 
 export default defineComponent({
   components: {
@@ -221,16 +219,16 @@ export default defineComponent({
 
     const initiateSearch = () => {
       if (searchQuery.value.length > 1) {
-        Logic.Common.GoToRoute(`/marketplace/search?q=` + searchQuery.value);
+        Logic.Common.GoToRoute(`/marketplace/search?q=` + searchQuery.value)
       }
-    };
+    }
     return {
       Logic,
       UserProfile,
       showNotification,
       searchQuery,
       initiateSearch,
-    };
+    }
   },
-});
+})
 </script>

@@ -26,9 +26,7 @@ import {
 	showMoreOptionHandler,
 	TutorQuizzes
 } from "@/composables/library"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
-import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
+import { Conditions, Logic, ResourceType } from "sofa-logic"
 import {
 	SofaActivityCard,
 	SofaEmptyState,

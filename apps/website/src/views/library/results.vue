@@ -14,8 +14,7 @@
 <script lang="ts">
 import LibraryLayout from "@/components/library/LibraryLayout.vue"
 import { AllGames, AllTests, GameAndTestQuizzes, plays } from "@/composables/library"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
 import { SofaEmptyState, SofaProgressItemCard } from "sofa-ui-components"
 import { computed, defineComponent, onMounted } from "vue"
 import { useRoute } from 'vue-router'

@@ -17,6 +17,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 input[type="range"].styled-slider {
   height: 4px;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 /*progress support*/
@@ -80,8 +81,8 @@ input[type="range"].styled-slider.slider-progress:active::-webkit-slider-runnabl
 
 /*mozilla*/
 input[type="range"].styled-slider::-moz-range-thumb {
-  width: max(calc(20px - 1px - 1px), 0px);
-  height: max(calc(20px - 1px - 1px), 0px);
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #ffffff;
   border: 1px solid #e7692b;

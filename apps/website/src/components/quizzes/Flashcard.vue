@@ -27,9 +27,9 @@
   </div>
 </template>
 <script lang="ts">
-import { QuizQuestion } from "sofa-logic/src/logic/types/domains/study"
-import { defineComponent, reactive, ref, toRef } from "vue"
+import { QuizQuestion } from "sofa-logic"
 import { SofaHeaderText, SofaNormalText } from "sofa-ui-components"
+import { defineComponent, reactive, ref, toRef } from "vue"
 
 export default defineComponent({
   components: {

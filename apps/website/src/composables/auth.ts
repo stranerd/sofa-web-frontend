@@ -1,5 +1,4 @@
-import { Logic } from 'sofa-logic'
-import { SignInInput, SignUpInput } from 'sofa-logic/src/logic/types/forms/auth'
+import { Logic, SignInInput, SignUpInput } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
 const registerForm = reactive<SignUpInput & { confirm_password: string }>({
@@ -91,7 +90,7 @@ const VerifyUserEmail = (token: string) => {
 }
 
 export {
-    SignIn,
-    SignUp,
-    VerifyUserEmail, loginForm, registerForm, termsAccepted
+  SignIn,
+  SignUp,
+  VerifyUserEmail, loginForm, registerForm, termsAccepted
 }

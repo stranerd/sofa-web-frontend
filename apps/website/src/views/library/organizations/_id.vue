@@ -24,9 +24,8 @@
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
 import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from "@/composables/library"
 import { Logic } from "sofa-logic"
-import { ResourceType } from 'sofa-logic/src/logic/types/domains/study'
+import { ResourceType, QueryParams } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
-import { QueryParams } from 'sofa-ui-components/src/types/domains/common'
 import { computed, defineComponent, onMounted, ref, watch } from "vue"
 import { useRoute } from 'vue-router'
 

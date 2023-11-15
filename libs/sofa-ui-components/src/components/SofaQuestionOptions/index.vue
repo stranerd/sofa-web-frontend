@@ -123,7 +123,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaDeletePrompt from "../SofaDeletePrompt"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
@@ -443,7 +443,7 @@ export default defineComponent({
     const saveSettings = () => {
       Logic.Study.AllQuestions.results.forEach((item) => {
         if (item.id == question.value?.id) {
-          item.data.type = selectedQuestionType.value
+          item.data.type = selectedQuestionType.value as any
         }
       })
 

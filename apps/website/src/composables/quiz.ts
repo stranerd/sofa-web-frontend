@@ -1,6 +1,4 @@
-import { Logic } from 'sofa-logic'
-import { QuizQuestion } from 'sofa-logic/src/logic/types/domains/study'
-import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
+import { Logic, QuizQuestion, SingleUser } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 import { showStudyMode } from './library'
 

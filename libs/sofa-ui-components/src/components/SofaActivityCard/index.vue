@@ -92,7 +92,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaBadge from "../SofaBadge"
 import SofaButton from "../SofaButton"

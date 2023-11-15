@@ -71,8 +71,7 @@
         Exit
       </sofa-button>
 
-      <div
-        class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!gap-3 grid grid-cols-2 gap-2 items-center">
+      <div class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!gap-3 grid grid-cols-2 gap-2 items-center">
         <div :class="`mdlg:!w-auto  flex flex-col ${quiz && quiz.status != 'published' ? 'col-span-1' : 'col-span-full'
           }`">
           <sofa-button :padding="'px-5 mdlg:!py-2 py-3'" :customClass="'mdlg:!w-auto w-full'"
@@ -104,8 +103,7 @@ import {
   quizSettingsForm,
   updateQuiz,
 } from "@/composables/quiz"
-import { Logic } from "sofa-logic"
-import { Quiz } from "sofa-logic/src/logic/types/domains/study"
+import { Logic, Quiz } from "sofa-logic"
 import {
   SofaButton,
   SofaCheckbox,

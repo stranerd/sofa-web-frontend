@@ -337,7 +337,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, toRef, watch } from "vue"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaActivityCard from "../SofaActivityCard"
 import SofaAvatar from "../SofaAvatar"
 import SofaBadge from "../SofaBadge"

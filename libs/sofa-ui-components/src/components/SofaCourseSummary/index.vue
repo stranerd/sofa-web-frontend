@@ -55,8 +55,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
-import { Logic } from "../../composable"
-import { Course } from "../../types/domains/study"
+import { Logic, Course } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaIcon from "../SofaIcon"
 import SofaImageLoader from "../SofaImageLoader"

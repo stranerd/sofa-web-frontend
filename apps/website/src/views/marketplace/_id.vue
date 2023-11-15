@@ -144,8 +144,7 @@ import {
 import { allOrganizations, setOrganizations } from "@/composables/profile"
 import { otherTasks } from "@/composables/quiz"
 import moment from "moment"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
+import { Conditions, Logic } from "sofa-logic"
 import {
   SofaButton,
   SofaContentDetails,

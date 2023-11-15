@@ -145,7 +145,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaButton from "../SofaButton"
 import { SofaCustomInput, SofaFileAttachment, SofaTextarea } from "../SofaForm"
 import SofaIcon from "../SofaIcon"

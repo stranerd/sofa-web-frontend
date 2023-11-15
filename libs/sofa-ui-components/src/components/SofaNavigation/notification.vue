@@ -32,9 +32,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue"
-import { Logic } from "../../composable"
-import { Paginated } from "../../types/domains/common"
-import { Notification } from "../../types/domains/notifications"
+import { Logic, Paginated, Notification } from "sofa-logic"
 import SofaIcon from "../SofaIcon"
 import { SofaHeaderText, SofaNormalText } from "../SofaTypography"
 

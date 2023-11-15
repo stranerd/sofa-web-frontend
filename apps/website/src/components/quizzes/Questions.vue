@@ -83,11 +83,11 @@
               ? '!bg-[#E1F5EB] !border-primaryGreen'
               : ''
             }
-                                                                                                      ${optionState(option) == 'wrong_answer'
+                                                                                                                ${optionState(option) == 'wrong_answer'
               ? '!bg-[#FAEBEB] !border-primaryRed'
               : ''
             }
-                                                                                                      ${optionState(option) == 'selected'
+                                                                                                                ${optionState(option) == 'selected'
               ? '!bg-[#E2F3FD] !border-primaryBlue  shake'
               : ''
             }
@@ -273,8 +273,7 @@ import {
   saveParticipantAnswer,
   setResultData,
 } from "@/composables/quiz"
-import { Logic } from "sofa-logic"
-import { QuizQuestion } from "sofa-logic/src/logic/types/domains/study"
+import { Logic, QuizQuestion } from "sofa-logic"
 import {
   SofaHeaderText,
   SofaIcon,

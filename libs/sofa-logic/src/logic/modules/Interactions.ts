@@ -1,16 +1,15 @@
-import { $api } from '../../services'
-import Common from './Common'
+import { capitalize } from 'vue'
 import { Logic } from '..'
-import { Paginated } from '../types/domains/common'
+import { $api } from '../../services'
 import { QueryParams } from '../types/common'
-import { Report, View } from '../types/domains/interactions'
-import { Review } from '../types/domains/conversations'
+import { Paginated } from '../types/domains/common'
+import { Report, Review, View } from '../types/domains/interactions'
 import {
   AddReportInput,
   AddReviewInput,
   AddViewInput,
 } from '../types/forms/common'
-import { capitalize } from 'vue'
+import Common from './Common'
 
 export default class Interactions extends Common {
   constructor() {

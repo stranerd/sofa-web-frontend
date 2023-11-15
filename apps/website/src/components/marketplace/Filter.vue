@@ -53,11 +53,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
-import { SofaNormalText, SofaIcon, SofaButton } from "sofa-ui-components"
-import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic/src/logic/types/domains/common"
 import { search } from "@/composables/marketplace"
+import { Conditions, Logic } from "sofa-logic"
+import { SofaButton, SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 
 export default defineComponent({
   props: {

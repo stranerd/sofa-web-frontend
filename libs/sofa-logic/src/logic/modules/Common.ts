@@ -26,7 +26,7 @@ export default class Common {
 
   public route: RouteLocationNormalizedLoaded | undefined = undefined
 
-  public apiUrl: string | undefined = undefined
+  public apiUrl = ''
 
   public watchInterval: number | undefined = undefined
 

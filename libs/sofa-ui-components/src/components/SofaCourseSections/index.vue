@@ -99,9 +99,7 @@ import {
   watch,
 } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "../../composable"
-import { UpdateCourseSectionsInput } from "../../types"
-import { Course, Question, Quiz, SofaFile } from "../../types/domains/study"
+import { Logic, UpdateCourseSectionsInput, Course, Question, Quiz, SofaFile } from "sofa-logic"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
 
@@ -169,7 +167,7 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const mediaUrl = `${process.env.VUE_APP_API_URL}/study/files/${mediaFile.id
+        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id
           }/media?AccessToken=${JSON.parse(localStorage.getItem("AuthTokens")).accessToken
           }`
         if (mediaFile.type == "image") {

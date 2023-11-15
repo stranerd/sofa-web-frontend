@@ -138,7 +138,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRef, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "../../composable"
+import { Logic } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaButton from "../SofaButton"
 import SofaDeletePrompt from "../SofaDeletePrompt"
@@ -192,6 +192,7 @@ export default defineComponent({
 
     const updateFile = () => {
       Logic.Study.UpdateFileForm = {
+        type: dataReactive.type,
         description: dataReactive.description,
         title: dataReactive.title,
         id: dataRef.value.id,

@@ -237,6 +237,9 @@ importers:
       gsap:
         specifier: ^3.12.2
         version: 3.12.2
+      sofa-logic:
+        specifier: workspace:^
+        version: link:../sofa-logic
       swiper:
         specifier: ^8.4.2
         version: 8.4.7

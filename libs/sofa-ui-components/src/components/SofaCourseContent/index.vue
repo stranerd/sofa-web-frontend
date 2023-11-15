@@ -106,9 +106,7 @@ import {
   ref,
   watch
 } from "vue"
-import { Logic } from "../../composable"
-import { ContentDetails } from "../../types"
-import { Course, Question, Quiz, SofaFile } from "../../types/domains/study"
+import { Logic, ContentDetails, Course, Question, Quiz, SofaFile } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaIcon from "../SofaIcon"
 import SofaImageLoader from "../SofaImageLoader"
@@ -236,7 +234,7 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const mediaUrl = `${process.env.VUE_APP_API_URL}/study/files/${mediaFile.id
+        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id
           }/media?AccessToken=${JSON.parse(localStorage.getItem("AuthTokens")).accessToken
           }`
         if (mediaFile.type == "image") {
@@ -313,7 +311,7 @@ export default defineComponent({
               Logic.Study.GetQuestions(quiz.id)
                 .then((response) => {
                   if (response) {
-                    const questions: Question[] = response.results
+                    const questions: Question[] = response.results ?? []
 
                     const allQuestions = questions.map((eachQuestion) => {
                       let answers = ""

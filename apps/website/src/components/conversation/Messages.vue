@@ -72,9 +72,7 @@ import {
   selectedTutorRequestData,
   SingleConversation,
 } from "@/composables/conversation"
-import { Logic } from "sofa-logic"
-import { Message } from "sofa-logic/src/logic/types/domains/conversations"
-import { Paginated } from "sofa-ui-components/src/types/domains/common"
+import { Logic, Message, Paginated } from "sofa-logic"
 
 export default defineComponent({
   components: {

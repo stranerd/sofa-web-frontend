@@ -105,8 +105,7 @@ hideOptions();
 
 <script lang="ts">
 import { capitalize, defineComponent, onMounted, ref, toRef, watch } from "vue"
-import { Logic } from "../../composable"
-import { SelectOption } from "../../types"
+import { Logic, SelectOption } from "sofa-logic"
 import SofaBadge from "../SofaBadge"
 import SofaIcon from "../SofaIcon/index.vue"
 import SofaModal from "../SofaModal"

@@ -1,22 +1,22 @@
-import { $api } from '../../services'
-import Common from './Common'
+import { capitalize } from 'vue'
 import { Logic } from '..'
+import { $api } from '../../services'
+import { Conditions, QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
 import {
   Conversation,
   Message,
-  Review,
-  TutorRequest,
+  ConversationTutorRequest as TutorRequest,
 } from '../types/domains/conversations'
-import { Conditions, QueryParams } from '../types/common'
+import { Review } from '../types/domains/interactions'
+import { SingleUser } from '../types/domains/users'
 import {
   AddTutorInput,
   CreateMessageInput,
   CreateTutorRequestInput,
   DeleteTutorInput,
 } from '../types/forms/conversations'
-import { capitalize } from 'vue'
-import { SingleUser } from '../types/domains/users'
+import Common from './Common'
 
 export default class Conversations extends Common {
   constructor() {

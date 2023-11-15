@@ -1,21 +1,21 @@
-import SofaActivityCard from './SofaActivityCard'
-import SofaAddQuestion from './SofaAddQuestion'
-import SofaAlert from './SofaAlert'
-import SofaAvatar from './SofaAvatar'
-import SofaBadge from './SofaBadge'
-import SofaButton from './SofaButton'
-import { SofaBarChart, SofaPieChart } from './SofaChart'
-import SofaContent from './SofaContent'
-import SofaContentDetails from './SofaContentDetails'
-import SofaContentRatings from './SofaContentRatings'
-import SofaCourseContent from './SofaCourseContent'
-import SofaCourseDetails from './SofaCourseDetails'
-import SofaCourseSections from './SofaCourseSections'
-import SofaCourseSummary from './SofaCourseSummary'
-import SofaDeletePrompt from './SofaDeletePrompt'
-import SofaDocumentReader from './SofaDocumentReader'
-import SofaEmptyState from './SofaEmptyState'
-import {
+export { default as SofaActivityCard } from './SofaActivityCard'
+export { default as SofaAddQuestion } from './SofaAddQuestion'
+export { default as SofaAlert } from './SofaAlert'
+export { default as SofaAvatar } from './SofaAvatar'
+export { default as SofaBadge } from './SofaBadge'
+export { default as SofaButton } from './SofaButton'
+export { SofaBarChart, SofaPieChart } from './SofaChart'
+export { default as SofaContent } from './SofaContent'
+export { default as SofaContentDetails } from './SofaContentDetails'
+export { default as SofaContentRatings } from './SofaContentRatings'
+export { default as SofaCourseContent } from './SofaCourseContent'
+export { default as SofaCourseDetails } from './SofaCourseDetails'
+export { default as SofaCourseSections } from './SofaCourseSections'
+export { default as SofaCourseSummary } from './SofaCourseSummary'
+export { default as SofaDeletePrompt } from './SofaDeletePrompt'
+export { default as SofaDocumentReader } from './SofaDocumentReader'
+export { default as SofaEmptyState } from './SofaEmptyState'
+export {
   SofaCheckbox,
   SofaCustomInput,
   SofaFileAttachment,
@@ -26,25 +26,20 @@ import {
   SofaRadio,
   SofaSelect,
   SofaTextField,
-  SofaTextarea,
+  SofaTextarea
 } from './SofaForm'
-import SofaIcon from './SofaIcon'
-import SofaIconCard from './SofaIconCard'
-import SofaImageLoader from './SofaImageLoader'
-import SofaItemCard from './SofaItemCard'
-import SofaModal from './SofaModal'
-import { SofaBottomBar, SofaSideBar, SofaTopBar } from './SofaNavigation'
-import SofaProgressItemCard from './SofaProgressItemCard'
-import SofaQuestionContent from './SofaQuestionContent'
-import SofaQuestionOptions from './SofaQuestionOptions'
-import SofaRatings from './SofaRatings'
-import SofaSuccessPrompt from './SofaSuccessPrompt'
-import SofaSwiper from './SofaSwiper'
-import { SofaHeaderText, SofaNormalText } from './SofaTypography'
-import SofaUserCard from './SofaUserCard'
-import SofaVideoPlayer from './SofaVideoPlayer'
-
-export {
-  SofaActivityCard, SofaAddQuestion, SofaAlert, SofaAvatar,
-  SofaBadge, SofaBarChart, SofaBottomBar, SofaButton, SofaCheckbox, SofaContent, SofaContentDetails, SofaContentRatings, SofaCourseContent, SofaCourseDetails, SofaCourseSections, SofaCourseSummary, SofaCustomInput, SofaDeletePrompt, SofaDocumentReader, SofaEmptyState, SofaFileAttachment, SofaFormWrapper, SofaHeaderText, SofaIcon, SofaIconCard, SofaImageLoader, SofaItemCard, SofaKeyboard, SofaModal, SofaMultipleChoice, SofaNormalText, SofaOtpInput, SofaPieChart, SofaProgressItemCard, SofaQuestionContent, SofaQuestionOptions, SofaRadio, SofaRatings, SofaSelect, SofaSideBar, SofaSuccessPrompt, SofaSwiper, SofaTextField, SofaTextarea, SofaTopBar, SofaUserCard, SofaVideoPlayer
-}
+export { default as SofaIcon } from './SofaIcon'
+export { default as SofaIconCard } from './SofaIconCard'
+export { default as SofaImageLoader } from './SofaImageLoader'
+export { default as SofaItemCard } from './SofaItemCard'
+export { default as SofaModal } from './SofaModal'
+export { SofaBottomBar, SofaSideBar, SofaTopBar } from './SofaNavigation'
+export { default as SofaProgressItemCard } from './SofaProgressItemCard'
+export { default as SofaQuestionContent } from './SofaQuestionContent'
+export { default as SofaQuestionOptions } from './SofaQuestionOptions'
+export { default as SofaRatings } from './SofaRatings'
+export { default as SofaSuccessPrompt } from './SofaSuccessPrompt'
+export { default as SofaSwiper } from './SofaSwiper'
+export { SofaHeaderText, SofaNormalText } from './SofaTypography'
+export { default as SofaUserCard } from './SofaUserCard'
+export { default as SofaVideoPlayer } from './SofaVideoPlayer'

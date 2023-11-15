@@ -1,9 +1,4 @@
-import { Logic } from 'sofa-logic'
-import { SelectOption } from 'sofa-logic/src/logic/types/common'
-import {
-  CreateDocumentInput,
-  UpdateCourseSectionsInput,
-} from 'sofa-logic/src/logic/types/forms/study'
+import { CreateDocumentInput, Logic, SelectOption, UpdateCourseSectionsInput } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
 const courseSettingForm = reactive({

@@ -1,29 +1,22 @@
 import { Logic } from 'sofa-logic'
-import { SetFrontendLogic } from 'sofa-ui-components'
-import { createMetaManager } from 'vue-meta'
 import { createApp } from 'vue'
+import { createMetaManager } from 'vue-meta'
 import App from './App.vue'
 
 import VueAppleLogin from 'vue-apple-login'
 import vue3GoogleLogin from 'vue3-google-login'
 
-// UI component css style
-import 'sofa-ui-components/dist/library.min.css'
-
 // You can disable this if you dont want TailwindCss
 import './assets/app.css'
 
-import { AuthClientIDs } from './common/constants'
-import { routerPromise } from './router'
+import { AuthClientIDs, apiUrl } from './common/constants'
 import { globalPlugins } from './plugins'
+import { routerPromise } from './router'
 
 const init = async () => {
   const router = await routerPromise
 
-  Logic.Common.SetApiUrl(process.env.VUE_APP_API_URL || '')
-
-  // set ui frontend logic
-  SetFrontendLogic(Logic)
+  Logic.Common.SetApiUrl(apiUrl)
 
   // initiate websocket
   await Logic.Common.setupWebsocket()

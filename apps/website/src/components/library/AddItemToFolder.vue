@@ -102,19 +102,18 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { capitalize, defineComponent, onMounted, ref, watch } from "vue"
-import {
-  SofaModal,
-  SofaHeaderText,
-  SofaNormalText,
-  SofaButton,
-  SofaActivityCard,
-  SofaEmptyState,
-  SofaIcon,
-} from "sofa-ui-components"
-import { ResourceType } from "sofa-logic/src/logic/types/domains/study"
-import { Logic } from "sofa-logic"
 import { saveItemsToFolder } from "@/composables/library"
+import { Logic, ResourceType } from "sofa-logic"
+import {
+  SofaActivityCard,
+  SofaButton,
+  SofaEmptyState,
+  SofaHeaderText,
+  SofaIcon,
+  SofaModal,
+  SofaNormalText,
+} from "sofa-ui-components"
+import { capitalize, defineComponent, onMounted, ref, watch } from "vue"
 
 export default defineComponent({
   components: {

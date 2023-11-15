@@ -1,7 +1,4 @@
-import { Logic } from 'sofa-logic'
-import { Conditions, QueryParams } from 'sofa-logic/src/logic/types/common'
-import { Course, Quiz } from 'sofa-logic/src/logic/types/domains/study'
-import { SingleUser } from 'sofa-logic/src/logic/types/domains/users'
+import { Conditions, Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
 export interface ContentDetails {
@@ -335,18 +332,6 @@ const setMarketplaceMaterials = (count = 5) => {
 }
 
 export {
-  notesContents,
-  textbookContents,
-  pastQuestionContents,
-  sectionTags,
-  AllCourses,
-  mainCards,
-  HomeMaterials,
-  homeContents,
-  MarketplaceMaterials,
-  marketplaceContents,
-  setMarketplaceMaterials,
-  setCourses,
-  setHomeMaterials,
-  search,
+  AllCourses, HomeMaterials, MarketplaceMaterials, homeContents, mainCards, marketplaceContents, notesContents, pastQuestionContents, search, sectionTags, setCourses,
+  setHomeMaterials, setMarketplaceMaterials, textbookContents
 }

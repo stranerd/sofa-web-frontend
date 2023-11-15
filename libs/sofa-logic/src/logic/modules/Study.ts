@@ -3,8 +3,7 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
-import { Review } from '../types/domains/conversations'
-import { Tags } from '../types/domains/interactions'
+import { Tags, Review } from '../types/domains/interactions'
 import {
   Course,
   Folder,
@@ -1393,23 +1392,17 @@ export default class Study extends Common {
   }
 
   public GetQuestions = (quizId: string) => {
-    if (!quizId || quizId == 'empty') {
-      return new Promise((resolve) => {
-        resolve('')
+    if (!quizId || quizId == 'empty') return undefined
+    return $api.study.quiz
+      .getQuestions(quizId)
+      .then((response) => {
+        this.AllQuestions = response.data
+        return response.data
       })
-    }
-    return new Promise((resolve) => {
-      $api.study.quiz
-        .getQuestions(quizId)
-        .then((response) => {
-          this.AllQuestions = response.data
-          resolve(response.data)
-        })
-        .catch(() => {
-          this.AllQuestions = undefined
-          resolve(undefined)
-        })
-    })
+      .catch(() => {
+        this.AllQuestions = undefined
+        return undefined
+      })
   }
 
   public GetQuestion = (quidId: string, questionId: string) => {

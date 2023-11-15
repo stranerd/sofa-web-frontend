@@ -39,9 +39,8 @@
   </div>
 </template>
 <script lang="ts">
+import { FormRule, Logic } from "sofa-logic"
 import { defineComponent, onMounted, ref, toRef, watch } from "vue"
-import { Logic } from "../../composable"
-import { FormRule } from "../../types"
 import SofaIcon from "../SofaIcon"
 import SofaNormalText from "../SofaTypography/normalText.vue"
 

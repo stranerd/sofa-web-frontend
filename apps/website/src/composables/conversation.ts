@@ -1,10 +1,7 @@
-import { Logic } from 'sofa-logic'
-import { Conditions } from 'sofa-logic/src/logic/types/common'
 import {
-  Conversation,
-  Message,
-  TutorRequest,
-} from 'sofa-logic/src/logic/types/domains/conversations'
+  Conditions, Conversation, Logic, Message,
+  ConversationTutorRequest as TutorRequest
+} from 'sofa-logic'
 import { computed, reactive, ref } from 'vue'
 import { scrollToBottom } from './index'
 

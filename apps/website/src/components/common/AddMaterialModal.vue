@@ -42,16 +42,16 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue"
-import {
-  SofaModal,
-  SofaIcon,
-  SofaNormalText,
-  SofaHeaderText,
-  SofaIconCard,
-  Logic,
-} from "sofa-ui-components"
 import { showAddItem } from "@/composables"
+import { Logic } from 'sofa-logic'
+import {
+  SofaHeaderText,
+  SofaIcon,
+  SofaIconCard,
+  SofaModal,
+  SofaNormalText,
+} from "sofa-ui-components"
+import { defineComponent, ref } from "vue"
 
 export default defineComponent({
   components: {
