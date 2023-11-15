@@ -46,8 +46,8 @@
 <script lang="ts">
 import AuthProvider from "@/components/auth/AuthProvider.vue"
 import { FormValidations } from "@/composables"
-import { SignUp, registerForm, termsAccepted } from "@/composables/auth"
 import { generateMiddlewares } from '@/middlewares'
+import { Logic, SignUpInput } from 'sofa-logic'
 import {
   SofaButton,
   SofaCheckbox,
@@ -55,7 +55,7 @@ import {
   SofaNormalText,
   SofaTextField
 } from "sofa-ui-components"
-import { defineComponent, ref } from "vue"
+import { defineComponent, reactive, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -75,6 +75,54 @@ export default defineComponent({
     })
 
     const formComp = ref<any>()
+
+    const registerForm = reactive<SignUpInput & { confirm_password: string }>({
+      email: '',
+      name: {
+        first: '',
+        last: '',
+      },
+      password: '',
+      confirm_password: '',
+      organization_name: '',
+      description: '',
+    })
+
+    const termsAccepted = ref(false)
+
+    const SignUp = (formComp: any) => {
+      Logic.Auth.SignUpForm = {
+        email: registerForm.email,
+        name: {
+          first: 'new',
+          last: 'user',
+        },
+        password: registerForm.password,
+        description: registerForm.description,
+      }
+
+      const formState: boolean = formComp.validate()
+
+      if (!termsAccepted.value) {
+        Logic.Common.showLoader({
+          show: true,
+          message: 'Please accept the terms and conditions',
+          type: 'warning',
+        })
+        return
+      }
+
+      Logic.Auth.SignUp(formState)
+        .then((data) => {
+          if (data) {
+            Logic.Common.hideLoader()
+            Logic.Common.GoToRoute('/auth/verify-email')
+          }
+        })
+        .catch((error) => {
+          Logic.Common.showValidationError(error, formComp)
+        })
+    }
 
     return {
       formComp,

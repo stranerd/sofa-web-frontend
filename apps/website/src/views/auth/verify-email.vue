@@ -24,7 +24,6 @@
 
 <script lang="ts">
 import { FormValidations } from "@/composables"
-import { VerifyUserEmail } from "@/composables/auth"
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import {
@@ -54,6 +53,21 @@ export default defineComponent({
 
     const onChangeOTP = () => {
       //
+    }
+
+    const VerifyUserEmail = (token: string) => {
+      if (token) {
+        Logic.Auth.VerifyWithTokenForm = {
+          token,
+        }
+        Logic.Auth.VerifyEmailWithToken(true).then((response) => {
+          if (response) {
+            // do something else
+          }
+        })
+      } else {
+        // show error
+      }
     }
 
     return {

@@ -5,8 +5,8 @@
 
       <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
         <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
-          :padding="'md:p-4 p-3'" type="text" :name="'Email'" ref="email" v-model="loginForm.email"
-          :placeholder="'Email'" :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]" />
+          :padding="'md:p-4 p-3'" type="text" :name="'Email'" ref="email" v-model="loginForm.email" :placeholder="'Email'"
+          :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]" />
         <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" :type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
           :rules="[FormValidations.RequiredRule]" v-model="loginForm.password" />
@@ -37,15 +37,15 @@
 <script lang="ts">
 import AuthProvider from "@/components/auth/AuthProvider.vue"
 import { FormValidations } from "@/composables"
-import { SignIn, loginForm } from "@/composables/auth"
 import { generateMiddlewares } from '@/middlewares'
+import { Logic, SignInInput } from 'sofa-logic'
 import {
   SofaButton,
   SofaFormWrapper,
   SofaNormalText,
   SofaTextField
 } from "sofa-ui-components"
-import { defineComponent, ref } from "vue"
+import { defineComponent, reactive, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -64,6 +64,30 @@ export default defineComponent({
     })
 
     const formComp = ref<any>()
+
+    const loginForm = reactive<SignInInput>({
+      email: '',
+      password: '',
+    })
+
+    const SignIn = (formComp: any) => {
+      Logic.Auth.SignInForm = {
+        email: loginForm.email,
+        password: loginForm.password,
+      }
+
+      const formState: boolean = formComp.validate()
+
+      Logic.Auth.SignIn(formState)
+        .then((data) => {
+          if (data) {
+            // do something else
+          }
+        })
+        .catch((error) => {
+          Logic.Common.showValidationError(error, formComp)
+        })
+    }
 
     return {
       loginForm,
