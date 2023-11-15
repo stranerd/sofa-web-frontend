@@ -39,8 +39,6 @@ const cssListeners = definePlugin(async () => {
 })
 
 const parseLoggedInUser = definePlugin(async ({ router }) => {
-	await Logic.Common.setupWebsocket().catch()
-
 	if (!(await Logic.Auth.GetTokens())) {
 		await router.push('/auth/login')
 		return

@@ -8,6 +8,17 @@ export const AuthClientIDs = {
   },
 }
 
-export const packageName = process.env.VUE_APP_PACKAGE_NAME
-
 export const apiUrl = process.env.VUE_APP_API_URL
+
+const packageName = process.env.VUE_APP_PACKAGE_NAME
+
+const clientId = packageName.replace('.app', '')
+const redirectURI = 'https://' + clientId.split('.').reverse().join('.')
+
+export const appleDetails = {
+  clientId,
+  redirectURI,
+  usePopup: true,
+  scopes: 'name email',
+  state: Date.now().toString()
+}

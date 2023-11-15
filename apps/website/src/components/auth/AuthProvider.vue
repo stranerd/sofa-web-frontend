@@ -1,27 +1,11 @@
 <template>
-  <div class="w-full flex flex-col gap-4">
-    <div class="w-full flex flex-col items-center justify-center">
-      <GoogleLogin :callback="onSuccessGoogle" />
-    </div>
+  <div class="w-full flex flex-col items-center gap-4">
+    <GoogleLogin :callback="onSuccessGoogle" />
 
-    <!-- <div>
-      <div
-        class="w-full border-[2px] border-[#E1E6EB] custom-border md:!py-4 md:!px-4 px-3 py-3 flex flex-row items-center justify-center"
-      >
-        <vue-apple-login
-          color="white"
-          :border="false"
-          type="continue"
-          width="100%"
-          height="25"
-          logoSize="large"
-          :onSuccess="onSuccessApple"
-          mode="center-align"
-          :className="'!border-none !h-auto'"
-          :onFailure="onFailure"
-        ></vue-apple-login>
-      </div>
-    </div> -->
+    <vue-apple-login v-if="false" color="white" :border="false" logoSize="large" mode="center-align" type="sign in"
+      :onSuccess="onSuccessApple" class="border border-[#E1E6EB] rounded-lg text-[1em]" :onFailure="onFailure">
+      Sign in with Apple
+    </vue-apple-login>
   </div>
   <div class="w-full flex gap-3 items-center">
     <div class="border border-[#E1E6EB] w-full"></div>
@@ -31,8 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-import { SofaNormalText } from "sofa-ui-components"
 import { Logic } from "sofa-logic"
+import { SofaNormalText } from "sofa-ui-components"
 
 const onSuccessGoogle = (data: any) => {
   Logic.Auth.GoogleSignInForm = {
@@ -42,11 +26,11 @@ const onSuccessGoogle = (data: any) => {
   Logic.Auth.GoogleSignIn()
 }
 
-/* const onSuccessApple = (data: any) => {
+const onSuccessApple = (data: any) => {
   console.log(data)
 }
 
 const onFailure = () => {
   //
-} */
+}
 </script>
