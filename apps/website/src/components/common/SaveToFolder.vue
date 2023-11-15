@@ -32,8 +32,7 @@
             <div class="flex flex-row items-center gap-3">
               <sofa-icon :name="'folder'" :customClass="'h-[18px]'" />
 
-              <sofa-custom-input v-if="item.edit" :custom-class="` ${selectedFilter == item.id ? '!font-bold' : ''
-                } lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`" :updateValue="item.name" @blur="
+              <sofa-custom-input v-if="item.edit" :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`" :updateValue="item.name" @blur="
     item.edit = false
   handleFolderNameBlur();
   " :placeholder="'Folder name'" @onContentChange="(content) => {
@@ -82,7 +81,6 @@ import {
   currentFolder,
   folders,
   handleFolderNameBlur,
-  selectedFilter,
   selectedFolderMaterailToAdd,
   setFolders,
 } from "@/composables/library"
@@ -150,7 +148,6 @@ export default defineComponent({
       showAddItem,
       folders,
       currentFolder,
-      selectedFilter,
       addFolderIsActive,
       selectedFolderMaterailToAdd,
       handleFolderNameBlur,
