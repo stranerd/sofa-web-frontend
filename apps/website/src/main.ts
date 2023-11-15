@@ -18,9 +18,6 @@ const init = async () => {
 
   Logic.Common.SetApiUrl(apiUrl)
 
-  // initiate websocket
-  await Logic.Common.setupWebsocket()
-
   const app = createApp(App)
 
 	for (const plugin of globalPlugins) await plugin({ app, router }).catch()

@@ -286,8 +286,6 @@ const selectConversation = async (convoId: string) => {
     if (response) {
       Logic.Conversations.GetMessages(convoId).then(async (responseData: any) => {
         if (responseData) {
-          await Logic.Common.setupWebsocket()
-
           setTimeout(() => {
             Logic.Common.listenOnSocket(
               `conversations/conversations/${SingleConversation.value.id}/messages`,

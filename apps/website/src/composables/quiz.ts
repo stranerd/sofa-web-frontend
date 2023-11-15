@@ -244,9 +244,6 @@ const otherTasks = [
 ]
 
 const listenToGame = async () => {
-  // connect to websocket
-  await Logic.Common.setupWebsocket()
-
   Logic.Common.listenOnSocket(
     `plays/games/${Logic.Plays.SingleGame.id}`,
     (data) => {
@@ -266,9 +263,6 @@ const listenToGame = async () => {
 }
 
 const listenToTest = async () => {
-  // connect to websocket
-  await Logic.Common.setupWebsocket()
-
   Logic.Common.listenOnSocket(
     `plays/tests/${Logic.Plays.SingleTest.id}`,
     (data) => {

@@ -17,7 +17,6 @@ import {
   SocketReturn,
   StatusCodes,
 } from '../types/common'
-import { AuthResponse } from '../types/domains/auth'
 import { ValidationError } from '../types/domains/common'
 
 export default class Common {
@@ -150,16 +149,24 @@ export default class Common {
     })
   }
 
-  public listenOnSocket = (
+  public listenOnSocket = async (
     initialChannel,
     listener: Function,
     onleave: Function,
   ) => {
+    const tokens = await Logic.Auth.GetTokens()
+    const accessToken = tokens?.accessToken
+    if (
+      !this.SocketClient
+      || (!this.SocketClient.auth['token'] && accessToken)
+      || (accessToken && this.SocketClient.auth['token'] !== accessToken)
+    ) await this.setupWebsocket()
+
     let finalChannel = ''
 
     this.SocketClient.emit(
       'join',
-      { channel: `${initialChannel}` },
+      { channel: initialChannel },
       (res: SocketReturn) => {
         finalChannel = res.channel
 

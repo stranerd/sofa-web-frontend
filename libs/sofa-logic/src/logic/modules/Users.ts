@@ -25,13 +25,6 @@ import {
 import Common from './Common'
 
 export default class Users extends Common {
-  constructor() {
-    super()
-    this.UserProfile = localStorage.getItem('auth_user_profile')
-      ? JSON.parse(localStorage.getItem('auth_user_profile') || '{}')
-      : undefined
-  }
-
   public AllUsers: Paginated<User> | undefined
   public SingleUser: SingleUser | undefined
   public Verification: UserVerification | undefined
@@ -57,13 +50,7 @@ export default class Users extends Common {
   public UpdateUserSocialForm: UpdateUserSocialInput | undefined
 
   public getUserType = () => {
-    if (Logic.Users.UserProfile?.type?.type) {
-      return Logic.Users.UserProfile.type?.type
-    } else {
-      const accountType = localStorage.getItem('user_account_type') || 'student'
-
-      return accountType == 'organization' ? 'organization' : accountType
-    }
+    return Logic.Users.UserProfile?.type?.type ?? 'student'
   }
 
   public CheckUserTaskState = (
@@ -179,7 +166,6 @@ export default class Users extends Common {
 
   public GetUserProfile = () => {
     return $api.users.users.get(Logic.Auth.AuthUser.id).then((response) => {
-      localStorage.setItem('auth_user_profile', JSON.stringify(response.data))
       this.UserProfile = response.data
     })
   }

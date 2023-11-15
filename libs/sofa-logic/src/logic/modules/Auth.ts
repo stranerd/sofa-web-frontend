@@ -20,17 +20,8 @@ import Common from './Common'
 
 export default class Auth extends Common {
   redirectToName = 'redirect-to'
+  private authTokensStorageName = 'AuthTokens'
 
-  constructor () {
-    super()
-    this.AccessToken = localStorage.getItem('access_token')
-    this.AuthUser = localStorage.getItem('auth_user')
-      ? JSON.parse(localStorage.getItem('auth_user') || '{}')
-      : undefined
-  }
-
-  public AccessToken: string | null = null
-  public RefreshToken: string | null = null
   public AuthUser: AuthUser | undefined = undefined
   public TokenRefreshWatcher: any = null
   public RefreshIsActive = false
@@ -68,20 +59,17 @@ export default class Auth extends Common {
   }
 
   public SetTokens = (AuthData: AuthResponse) => {
-    this.RefreshToken = AuthData.refreshToken
     localStorage.setItem(
-      'AuthTokens',
+      this.authTokensStorageName,
       JSON.stringify({
         accessToken: AuthData.accessToken,
         refreshToken: AuthData.refreshToken,
-      }),
+      })
     )
-
-    localStorage.setItem('auth_user', JSON.stringify(AuthData.user))
   }
 
   public GetTokens = async () : Promise<Omit<AuthResponse, 'user'> | undefined> => {
-    const savedTokens = localStorage.getItem('AuthTokens')
+    const savedTokens = localStorage.getItem(this.authTokensStorageName)
 	  return savedTokens ? JSON.parse(savedTokens) : undefined
   }
 
@@ -98,8 +86,7 @@ export default class Auth extends Common {
     return $api.auth.user
       .deleteUserAccount()
       .then((response) => {
-        localStorage.removeItem('AuthTokens')
-        localStorage.removeItem('auth_user')
+        localStorage.removeItem(this.authTokensStorageName)
 
         window.location.href = '/auth/login'
       })
@@ -165,9 +152,7 @@ export default class Auth extends Common {
       .then((response) => {
         //
 
-        localStorage.removeItem('AuthTokens')
-        localStorage.removeItem('auth_user')
-        localStorage.removeItem('auth_user_profile')
+        localStorage.removeItem(this.authTokensStorageName)
 
         clearInterval(this.TokenRefreshWatcher)
 

@@ -98,15 +98,15 @@
   </div> -->
 </template>
 <script lang="ts">
+import { ContentDetails, Course, Logic, Question, Quiz, SofaFile } from "sofa-logic"
 import {
-  capitalize,
-  defineComponent,
-  onMounted,
-  reactive,
-  ref,
-  watch
+capitalize,
+defineComponent,
+onMounted,
+reactive,
+ref,
+watch
 } from "vue"
-import { Logic, ContentDetails, Course, Question, Quiz, SofaFile } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaIcon from "../SofaIcon"
 import SofaImageLoader from "../SofaImageLoader"
@@ -185,9 +185,9 @@ export default defineComponent({
       studiedMaterial.value = savedMaterial
     }
 
-    watch(SingleCourse, () => {
+    watch(SingleCourse, async () => {
       if (sectionOptions.length < SingleCourse.value.sections.length) {
-        setSections(SingleCourse.value.sections.length - 1)
+        await setSections(SingleCourse.value.sections.length - 1)
       }
     })
 
@@ -227,16 +227,15 @@ export default defineComponent({
       setStudiesMaterial()
     }
 
-    const setSectionMaterial = (
+    const setSectionMaterial = async (
       mediaFile: SofaFile | undefined,
       quiz: Quiz | undefined,
       save = false,
       index: number
     ) => {
       if (mediaFile) {
-        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id
-          }/media?AccessToken=${JSON.parse(localStorage.getItem("AuthTokens")).accessToken
-          }`
+        const tokens = await Logic.Auth.GetTokens()
+        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id}/media?AccessToken=${tokens?.accessToken}`
         if (mediaFile.type == "image") {
           staticSectionOptions.value[index].materials.push({
             name: mediaFile.title,
@@ -431,7 +430,7 @@ export default defineComponent({
       }
     }
 
-    const setSections = (index = 0) => {
+    const setSections = async (index = 0) => {
       staticSectionOptions.value.length = 0
       selectedSection.value = index
 
@@ -443,7 +442,7 @@ export default defineComponent({
 
       let hasQuiz = false
 
-      SingleCourse.value.sections.forEach((section, index) => {
+      await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
         staticSectionOptions.value.push({
           name: section.label,
           id: Logic.Common.makeid(9),
@@ -452,23 +451,23 @@ export default defineComponent({
           edit: false,
         })
 
-        section.items.map((item) => {
+        await Promise.all(section.items.map(async (item) => {
           if (item.type == "quiz") {
             const quizData = SingleCourseQuizzes.value.filter(
               (quiz) => quiz.id == item.id
             )
             if (quizData.length) {
-              setSectionMaterial(undefined, quizData[0], false, index)
+              await setSectionMaterial(undefined, quizData[0], false, index)
             }
             hasQuiz = true
           } else {
             const fileData = SingleCourseFiles.value.filter(
               (file) => file.id == item.id
             )
-            setSectionMaterial(fileData[0], undefined, false, index)
+            await setSectionMaterial(fileData[0], undefined, false, index)
           }
-        })
-      })
+        }))
+      }))
 
       if (!hasQuiz) {
         saveSectionToLocalStorage()
@@ -478,9 +477,9 @@ export default defineComponent({
     watch(sectionOptions, () => {
       context.emit("onCourseContentSet", sectionOptions)
     })
-    onMounted(() => {
+    onMounted(async () => {
       if (SingleCourse.value) {
-        setSections()
+       await setSections()
       }
 
       setTimeout(() => {

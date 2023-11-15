@@ -160,16 +160,15 @@ export default defineComponent({
       }, 300)
     }
 
-    const setSectionMaterial = (
+    const setSectionMaterial = async (
       mediaFile: SofaFile | undefined,
       quiz: Quiz | undefined,
       save = false,
       index: number
     ) => {
       if (mediaFile) {
-        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id
-          }/media?AccessToken=${JSON.parse(localStorage.getItem("AuthTokens")).accessToken
-          }`
+        const tokens = await Logic.Auth.GetTokens()
+        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id}/media?AccessToken=${tokens?.accessToken}`
         if (mediaFile.type == "image") {
           staticSectionOptions.value[index].materials.push({
             name: mediaFile.title,
@@ -314,16 +313,16 @@ export default defineComponent({
       }
     }
 
-    watch(SingleCourse, () => {
+    watch(SingleCourse, async () => {
       if (sectionOptions.length < SingleCourse.value.sections.length) {
-        setSections(SingleCourse.value.sections.length - 1)
+        await setSections(SingleCourse.value.sections.length - 1)
       }
     })
 
     watch(NewCoursableItem, () => {
       if (sectionOptions.length) {
-        Logic.Common.debounce(() => {
-          setSectionMaterial(
+        Logic.Common.debounce(async () => {
+          await setSectionMaterial(
             SingleFile.value,
             SingleQuiz.value,
             true,
@@ -333,35 +332,35 @@ export default defineComponent({
       }
     })
 
-    watch(CoursableItemRemoved, () => {
-      setSections()
+    watch(CoursableItemRemoved, async () => {
+      await setSections()
       selectedMaterial.value = undefined
       handleItemSelected()
     })
 
-    const addItemToSection = (item: any, index: any) => {
+    const addItemToSection = async (item: any, index: any) => {
       if (item.type == "quiz") {
         const quizData = SingleCourseQuizzes.value?.filter(
           (quiz) => quiz.id == item.id
         )
         if (quizData.length) {
-          setSectionMaterial(undefined, quizData[0], false, index)
+          await setSectionMaterial(undefined, quizData[0], false, index)
         }
       } else {
         const fileData = SingleCourseFiles.value?.filter(
           (file) => file.id == item.id
         )
-        setSectionMaterial(fileData[0], undefined, false, index)
+        await setSectionMaterial(fileData[0], undefined, false, index)
       }
     }
 
-    const setSections = (index = 0) => {
+    const setSections = async (index = 0) => {
       staticSectionOptions.value.length = 0
       staticPropSections.value.length = 0
 
       selectedSection.value = index
 
-      SingleCourse.value.sections.forEach((section, index) => {
+      await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
         staticSectionOptions.value.push({
           name: section.label,
           id: Logic.Common.makeid(9),
@@ -375,10 +374,10 @@ export default defineComponent({
           label: section.label,
         })
 
-        section.items.map((item) => {
-          addItemToSection(item, index)
-        })
-      })
+        await Promise.all(section.items.map(async (item) => {
+          await addItemToSection(item, index)
+        }))
+      }))
 
       let remainCoursableItems = JSON.parse(
         JSON.stringify(SingleCourse.value.coursables)
@@ -470,7 +469,7 @@ export default defineComponent({
       })
     }
 
-    onMounted(() => {
+    onMounted(async () => {
       Logic.Study.watchProperty("SingleCourse", SingleCourse)
       Logic.Study.watchProperty("SingleFile", SingleFile)
       Logic.Study.watchProperty("SingleCourseFiles", SingleCourseFiles)
@@ -485,7 +484,7 @@ export default defineComponent({
         SelectedMaterialDetails
       )
       if (SingleCourse.value) {
-        setSections()
+        await setSections()
       }
     })
 
@@ -517,14 +516,14 @@ export default defineComponent({
       updateLatestSection()
     })
 
-    const removeSection = (index: number) => {
+    const removeSection = async (index: number) => {
       SingleCourse.value.sections = SingleCourse.value.sections.filter(
         (section, eachIndex) => {
           return index != eachIndex
         }
       )
 
-      setSections()
+      await setSections()
 
       return
     }
