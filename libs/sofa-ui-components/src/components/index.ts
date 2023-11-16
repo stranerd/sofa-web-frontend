@@ -1,3 +1,5 @@
+import 'mathlive'
+
 export { default as SofaActivityCard } from './SofaActivityCard'
 export { default as SofaAddQuestion } from './SofaAddQuestion'
 export { default as SofaAlert } from './SofaAlert'

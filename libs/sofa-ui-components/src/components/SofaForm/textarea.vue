@@ -3,17 +3,19 @@
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>
-    <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`" :disabled="disabled"
-      :style="`min-height: max(${rows}em, 40px)`"
-      :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
-      :placeholder="placeholder" :tabindex="0" />
+    <math-field v-if="math" :id="tabIndex.toString()" ref="mathDisplay" :style="`min-height: max(${rows}em, 40px)`"
+      :class="`w-full bg-transparent outline-none lg:text-sm mdlg:text-[12px] p-0 text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
+      @input="(e) => !disabled && (comp = e.target.value)">
+      {{ comp }}
+    </math-field>
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
       :class="`w-full px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
+    <p>{{ comp }}</p>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue"
+import { computed, defineComponent, onMounted, ref } from "vue"
 import { VueEditor } from 'vue3-editor'
 import SofaNormalText from "../SofaTypography/normalText.vue"
 
@@ -68,7 +70,7 @@ export default defineComponent({
       type: String,
       default: "",
     },
-    richEditor: {
+    math: {
       type: Boolean,
       required: false,
       default: false,
@@ -79,6 +81,8 @@ export default defineComponent({
   setup (props, context) {
     const tabIndex = Math.random()
 
+    const mathDisplay = ref()
+
     const comp = computed({
       get: () => props.modelValue,
       set: (ev: string) => {
@@ -86,10 +90,21 @@ export default defineComponent({
       }
     })
 
+    onMounted(async () => {
+      await window.customElements.whenDefined('math-field')
+      mathDisplay.value.setOptions({
+        defaultMode: 'text',
+        smartMode: false,
+        mathModeSpace: '\\:',
+        virtualKeyboardMode: 'manual'
+      })
+    })
+
     return {
       comp,
       tabIndex,
       toolbar,
+      mathDisplay,
     }
   },
 })
