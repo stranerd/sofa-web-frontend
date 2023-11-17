@@ -3,28 +3,34 @@
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>
-
-    <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :id="`textarea${tabIndex}`" :disabled="disabled"
+    <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :disabled="disabled"
       :style="`min-height: max(${rows}em, 40px)`" @ready="(v) => quill = v"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
       :placeholder="placeholder" :tabindex="0">
       <template v-slot:toolbar>
-        <div :id="`toolbar-${tabIndex}`">
+        <div :id="toolbarId" :class=" {'!hidden': showMath}">
           <button class="ql-formula"></button>
           <button class="ql-bold"></button>
-          <!-- Add subscript and superscript buttons -->
           <button class="ql-script" value="sub"></button>
           <button class="ql-script" value="super"></button>
         </div>
+        <math-field ref="mathRef"
+          class="w-full bg-white z-[10] outline-none text-darkBody absolute"
+          :class="{'hidden': !showMath}"
+          @input="(e) => !disabled && (mathText = e.target.value)"
+          @change="saveFormula">
+          {{ mathText }}
+        </math-field>
       </template>
     </VueEditor>
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
-      :class="`w-full px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
+      :class="`w-full p-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue"
+import 'mathlive'
+import { computed, defineComponent, onMounted, ref, watch } from "vue"
 import { VueEditor, Quill } from 'vue3-editor'
 import SofaNormalText from "../SofaTypography/normalText.vue"
 
@@ -88,49 +94,73 @@ export default defineComponent({
   name: "SofaTextarea",
   emits: ["update:modelValue"],
   setup (props, context) {
-    const tabIndex = Math.random().toString(32).slice(2)
+    const editorId = Math.random().toString(32).slice(2)
+    const toolbarId = `toolbar-${editorId}`
 
     const quill = ref<Quill>()
+    const mathRef = ref()
+    const showMath = ref(false)
+    const mathText = ref('')
 
     const comp = computed({
       get: () => props.modelValue,
-      set: (ev: string) => {
-        context.emit('update:modelValue', ev)
-      }
+      set: (v) => context.emit('update:modelValue', v)
     })
 
-    const save = (quill: Quill, value: string) => {
-      const range = quill.getSelection(true)
-      if (range === null) return
+    const saveFormula = () => {
+      console.log(mathText.value)
+      const q = quill.value
+      if (!q || !mathText.value) return
+
+      const range = q.getSelection(true)
+      if (!range) return
 
       const emitter = 'user'
       const dataMode = 'formula'
 
       const index = range.index + range.length
-      quill.insertEmbed(index, dataMode, value, emitter)
-      quill.insertText(index + 1, ' ', emitter)
-      quill.setSelection(index + 2, emitter)
+      q.insertEmbed(index, dataMode, mathText.value, emitter)
+      q.insertText(index + 1, ' ', emitter)
+      q.setSelection(index + 2, emitter)
+
+      showMath.value = false
+      mathText.value = ''
     }
 
     const editorOptions = {
       modules: {
         toolbar: {
-          container: `#toolbar-${tabIndex}`,//toolbar,
+          container: `#${toolbarId}`,
           handlers: {
             formula () {
-              quill.value.theme.tooltip.edit('formula')
-              // bring up math editor modal
+              // quill.value.theme.tooltip.edit('formula')
+              showMath.value = true
             }
           }
         }
       }
     }
 
+    onMounted(async () => {
+      await window.customElements.whenDefined('math-field')
+      mathRef.value.setOptions({
+        defaultMode: 'text',
+        smartMode: false,
+        mathModeSpace: '\\:',
+        virtualKeyboardMode: 'manual'
+      })
+    })
+
     return {
       comp,
-      tabIndex,
+      editorId,
+      toolbarId,
       editorOptions,
-      quill
+      quill,
+      showMath,
+      mathRef,
+      mathText,
+      saveFormula,
     }
   },
 })
