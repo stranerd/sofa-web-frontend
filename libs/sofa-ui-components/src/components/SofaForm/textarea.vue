@@ -3,18 +3,29 @@
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>
-    <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`" :disabled="disabled"
-      :style="`min-height: max(${rows}em, 40px)`"
+
+    <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :id="`textarea${tabIndex}`" :disabled="disabled"
+      :style="`min-height: max(${rows}em, 40px)`" @ready="(v) => quill = v"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
-      :placeholder="placeholder" :tabindex="0" />
+      :placeholder="placeholder" :tabindex="0">
+      <template v-slot:toolbar>
+        <div :id="`toolbar-${tabIndex}`">
+          <button class="ql-formula"></button>
+          <button class="ql-bold"></button>
+          <!-- Add subscript and superscript buttons -->
+          <button class="ql-script" value="sub"></button>
+          <button class="ql-script" value="super"></button>
+        </div>
+      </template>
+    </VueEditor>
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
       :class="`w-full px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue"
-import { VueEditor } from 'vue3-editor'
+import { computed, defineComponent, ref, watch } from "vue"
+import { VueEditor, Quill } from 'vue3-editor'
 import SofaNormalText from "../SofaTypography/normalText.vue"
 
 const toolbar = [
@@ -77,7 +88,9 @@ export default defineComponent({
   name: "SofaTextarea",
   emits: ["update:modelValue"],
   setup (props, context) {
-    const tabIndex = Math.random()
+    const tabIndex = Math.random().toString(32).slice(2)
+
+    const quill = ref<Quill>()
 
     const comp = computed({
       get: () => props.modelValue,
@@ -86,10 +99,38 @@ export default defineComponent({
       }
     })
 
+    const save = (quill: Quill, value: string) => {
+      const range = quill.getSelection(true)
+      if (range === null) return
+
+      const emitter = 'user'
+      const dataMode = 'formula'
+
+      const index = range.index + range.length
+      quill.insertEmbed(index, dataMode, value, emitter)
+      quill.insertText(index + 1, ' ', emitter)
+      quill.setSelection(index + 2, emitter)
+    }
+
+    const editorOptions = {
+      modules: {
+        toolbar: {
+          container: `#toolbar-${tabIndex}`,//toolbar,
+          handlers: {
+            formula () {
+              quill.value.theme.tooltip.edit('formula')
+              // bring up math editor modal
+            }
+          }
+        }
+      }
+    }
+
     return {
       comp,
       tabIndex,
-      toolbar,
+      editorOptions,
+      quill
     }
   },
 })
@@ -143,13 +184,15 @@ export default defineComponent({
 
   .ql-toolbar {
     border: none;
-    display: none;
+    display: flex;
+    z-index: 100;
     gap: 2px;
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
     font-family: inherit !important;
     font-size: inherit !important;
+    justify-content: center;
 
     padding: 4px !important;
 
