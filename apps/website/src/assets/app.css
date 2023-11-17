@@ -1,4 +1,4 @@
-@import 'sofa-ui-components/dist/library.min.css';
+@import 'sofa-ui-components/src/styles/index.css';
 
 @tailwind base;
 @tailwind components;

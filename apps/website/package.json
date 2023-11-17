@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"preserve": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
+		"preserve": "pnpm -w run envs",
 		"serve": "vue-cli-service serve",
 		"prebuild": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
 		"build": "vue-cli-service build",
