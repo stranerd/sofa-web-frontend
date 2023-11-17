@@ -13,9 +13,6 @@ importers:
       '@shopify/draggable':
         specifier: ^1.0.0-beta.8
         version: 1.0.0-beta.8
-      '@tailwindcss/line-clamp':
-        specifier: ^0.3.0
-        version: 0.3.1(tailwindcss@3.3.3)
       '@tailwindcss/typography':
         specifier: ^0.5.0
         version: 0.5.10(tailwindcss@3.3.3)
@@ -141,7 +138,7 @@ importers:
         specifier: ^13.0.2
         version: 13.3.2(sass@1.67.0)(webpack@5.88.2)
       tailwindcss:
-        specifier: ^3.0.17
+        specifier: ^3.3.3
         version: 3.3.3
       ts-jest:
         specifier: ^27.0.7
@@ -265,9 +262,6 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.3.4)
     devDependencies:
-      '@tailwindcss/line-clamp':
-        specifier: ^0.3.1
-        version: 0.3.1(tailwindcss@3.3.3)
       '@tailwindcss/typography':
         specifier: ^0.5.0
         version: 0.5.10(tailwindcss@3.3.3)
@@ -2173,13 +2167,6 @@ packages:
   /@soda/get-current-script@1.0.2:
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
     dev: true
-
-  /@tailwindcss/line-clamp@0.3.1(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-pNr0T8LAc3TUx/gxCfQZRe9NB2dPEo/cedPHzUGIPxqDMhgjwNm6jYxww4W5l0zAsAddxr+XfZcqttGiFDgrGg==}
-    peerDependencies:
-      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
-    dependencies:
-      tailwindcss: 3.3.3
 
   /@tailwindcss/postcss7-compat@2.2.17:
     resolution: {integrity: sha512-3h2svqQAqYHxRZ1KjsJjZOVTQ04m29LjfrLjXyZZEJuvUuJN+BCIF9GI8vhE1s0plS0mogd6E6YLg6mu4Wv/Vw==}
