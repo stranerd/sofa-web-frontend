@@ -3,18 +3,36 @@
     <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
       <slot name="title" />
     </sofa-normal-text>
-    <VueEditor v-if="richEditor" v-model="comp" :editor-toolbar="toolbar" :id="`textarea${tabIndex}`" :disabled="disabled"
-      :style="`min-height: max(${rows}em, 40px)`"
+    <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :disabled="disabled"
+      :style="`min-height: max(${rows}em, 40px)`" @ready="(v) => quill = v"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
-      :placeholder="placeholder" :tabindex="0" />
+      :placeholder="placeholder" :tabindex="0">
+      <template v-slot:toolbar>
+        <div :id="toolbarId" :class="{'!hidden': disabled}">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+          <button class="ql-strike"></button>
+          <button class="ql-script" value="sub"></button>
+          <button class="ql-script" value="super"></button>
+          <button class="ql-formula"></button>
+          <button class="ql-code-block"></button>
+        </div>
+        <math-field ref="mathRef" class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
+          :class="{ 'hidden': !showMath }" @beforeinput="saveFormula">
+          {{ mathText }}
+        </math-field>
+      </template>
+    </VueEditor>
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
-      :class="`w-full px-3 py-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white  focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
+      :class="`w-full p-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from "vue"
-import { VueEditor } from 'vue3-editor'
+import 'mathlive'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
+import { Quill, VueEditor } from 'vue3-editor'
 import SofaNormalText from "../SofaTypography/normalText.vue"
 
 const toolbar = [
@@ -77,19 +95,94 @@ export default defineComponent({
   name: "SofaTextarea",
   emits: ["update:modelValue"],
   setup (props, context) {
-    const tabIndex = Math.random()
+    const editorId = Math.random().toString(32).slice(2)
+    const toolbarId = `toolbar-${editorId}`
+
+    const quill = ref<Quill>()
+    const mathRef = ref()
+    const showMath = ref(false)
+    const mathText = ref('')
 
     const comp = computed({
       get: () => props.modelValue,
-      set: (ev: string) => {
-        context.emit('update:modelValue', ev)
+      set: (v) => context.emit('update:modelValue', v)
+    })
+
+    const saveFormula = (e: Event) => {
+      // @ts-ignore
+      if (e.data === 'insertLineBreak') {
+        const q = quill.value
+        const value = mathText.value.slice(2, -2)
+        if (!q || !value) return
+
+        const range = q.getSelection(true)
+        if (!range) return
+
+        const emitter = 'user'
+        const dataMode = 'formula'
+
+        const index = range.index + range.length
+        q.insertEmbed(index, dataMode, value, emitter)
+        q.insertText(index + 1, ' ', emitter)
+        q.setSelection(index + 2, emitter)
+
+        showMath.value = false
+        mathText.value = ''
+      } else {
+        mathText.value = (e.target as HTMLInputElement).value
       }
+    }
+
+    const editorOptions = {
+      modules: {
+        toolbar: {
+          container: `#${toolbarId}`,
+          handlers: {
+            formula () {
+              // quill.value.theme.tooltip.edit('formula')
+              console.log(mathRef.value)
+              showMath.value = !showMath.value
+              if (showMath.value) setImmediate(() => {
+                mathRef.value.focus()
+                window.mathVirtualKeyboard.show()
+              })
+            }
+          }
+        }
+      }
+    }
+
+    const leaveMathFieldFocus = () => {
+      showMath.value = false
+      window.mathVirtualKeyboard.hide()
+    }
+
+    onMounted(async () => {
+      await window.customElements.whenDefined('math-field')
+      const mf = mathRef.value
+      mf.defaultMode = 'text'
+      mf.smartMode = false
+      mf.mathModeSpace = '\\:'
+      mf.mathVirtualKeyboardPolicy = 'manual'
+      mf.addEventListener('focusout', leaveMathFieldFocus)
+    })
+
+    onBeforeUnmount(() => {
+      const mf = mathRef.value
+      if (!mf) return
+      mf.removeEventListener('focusout', leaveMathFieldFocus)
     })
 
     return {
       comp,
-      tabIndex,
-      toolbar,
+      editorId,
+      toolbarId,
+      editorOptions,
+      quill,
+      showMath,
+      mathRef,
+      mathText,
+      saveFormula,
     }
   },
 })
@@ -142,7 +235,7 @@ export default defineComponent({
   }
 
   .ql-toolbar {
-    border: none;
+    border: none !important;
     display: none;
     gap: 2px;
     flex-wrap: nowrap;
@@ -150,6 +243,7 @@ export default defineComponent({
     overflow-y: hidden;
     font-family: inherit !important;
     font-size: inherit !important;
+    justify-content: center;
 
     padding: 4px !important;
 
@@ -183,7 +277,7 @@ export default defineComponent({
     transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
     font-family: inherit !important;
     font-size: inherit !important;
-    min-height: unset;
+    min-height: 100%;
   }
 
   .ql-editor:focus {

@@ -18,6 +18,7 @@
     "@vue/compiler-sfc": "^3.2.45",
     "chart.js": "^4.4.0",
     "gsap": "^3.12.2",
+    "mathlive": "^0.96.0",
     "sofa-logic": "workspace:^",
     "swiper": "^8.4.2",
     "video.js": "^8.3.0",
@@ -27,7 +28,6 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/line-clamp": "^0.3.1",
     "@tailwindcss/typography": "^0.5.0",
     "@types/editorjs__header": "^2.6.0",
     "@types/node": "^20.7.1",

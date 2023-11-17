@@ -19,5 +19,17 @@ module.exports = {
 			},
 			extensions: ['.js', '.vue', '.json', '.ts']
 		}
+	},
+	chainWebpack: config => {
+		config.module
+		.rule('vue')
+		.use('vue-loader')
+			.tap((options) => {
+				options.compilerOptions ??= {}
+				options.compilerOptions.isCustomElement = (tag) => {
+					return ['math-field'].includes(tag)
+				}
+				return options
+			})
 	}
 }

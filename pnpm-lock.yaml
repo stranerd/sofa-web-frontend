@@ -13,9 +13,6 @@ importers:
       '@shopify/draggable':
         specifier: ^1.0.0-beta.8
         version: 1.0.0-beta.8
-      '@tailwindcss/line-clamp':
-        specifier: ^0.3.0
-        version: 0.3.1(tailwindcss@3.3.3)
       '@tailwindcss/typography':
         specifier: ^0.5.0
         version: 0.5.10(tailwindcss@3.3.3)
@@ -141,7 +138,7 @@ importers:
         specifier: ^13.0.2
         version: 13.3.2(sass@1.67.0)(webpack@5.88.2)
       tailwindcss:
-        specifier: ^3.0.17
+        specifier: ^3.3.3
         version: 3.3.3
       ts-jest:
         specifier: ^27.0.7
@@ -237,6 +234,9 @@ importers:
       gsap:
         specifier: ^3.12.2
         version: 3.12.2
+      mathlive:
+        specifier: ^0.96.0
+        version: 0.96.0
       sofa-logic:
         specifier: workspace:^
         version: link:../sofa-logic
@@ -262,9 +262,6 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.3.4)
     devDependencies:
-      '@tailwindcss/line-clamp':
-        specifier: ^0.3.1
-        version: 0.3.1(tailwindcss@3.3.3)
       '@tailwindcss/typography':
         specifier: ^0.5.0
         version: 0.5.10(tailwindcss@3.3.3)
@@ -1617,6 +1614,14 @@ packages:
     dev: true
     optional: true
 
+  /@cortex-js/compute-engine@0.12.4:
+    resolution: {integrity: sha512-lU3+NP24jG9RMThNKcoYlpXfHLPAX43rdHrveXKl1OcYy92ayzHiilqeTop0oRUfAUxbnZF0m+bG2+dTvLdePw==}
+    engines: {node: '>=16.14.2', npm: '>=8.5.0'}
+    dependencies:
+      complex.js: 2.1.1
+      decimal.js: 10.4.3
+    dev: false
+
   /@cypress/request@2.88.12:
     resolution: {integrity: sha512-tOn+0mDZxASFM+cuAP9szGUGPI1HwWVSvdzm7V4cCsPdFTx6qMj29CwaQmRAMIEhORIUBFBsYROYJcveK4uOjA==}
     engines: {node: '>= 6'}
@@ -2162,13 +2167,6 @@ packages:
   /@soda/get-current-script@1.0.2:
     resolution: {integrity: sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==}
     dev: true
-
-  /@tailwindcss/line-clamp@0.3.1(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-pNr0T8LAc3TUx/gxCfQZRe9NB2dPEo/cedPHzUGIPxqDMhgjwNm6jYxww4W5l0zAsAddxr+XfZcqttGiFDgrGg==}
-    peerDependencies:
-      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
-    dependencies:
-      tailwindcss: 3.3.3
 
   /@tailwindcss/postcss7-compat@2.2.17:
     resolution: {integrity: sha512-3h2svqQAqYHxRZ1KjsJjZOVTQ04m29LjfrLjXyZZEJuvUuJN+BCIF9GI8vhE1s0plS0mogd6E6YLg6mu4Wv/Vw==}
@@ -4464,6 +4462,10 @@ packages:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
     dev: true
 
+  /complex.js@2.1.1:
+    resolution: {integrity: sha512-8njCHOTtFFLtegk6zQo0kkVX1rngygb/KQI6z1qZxlFI3scluC+LVTCFbrkWjBv4vvLlbQ9t88IPMC6k95VTTg==}
+    dev: false
+
   /compressible@2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
     engines: {node: '>= 0.6'}
@@ -5372,7 +5374,6 @@ packages:
 
   /decimal.js@10.4.3:
     resolution: {integrity: sha512-VBBaLc1MgL5XpzgIP7ny5Z6Nx3UrRkIViUkPUdtl9aya5amy3De1gsUUSB1g3+3sExYNjCAsAznmukyxCb1GRA==}
-    dev: true
 
   /declaration-bundler-webpack-plugin@1.0.3:
     resolution: {integrity: sha512-bgeoSOZYTOOdiNUZd/U8K6Z+6IrM/X+DgUcm3/VI1l130lzOBeL+ObetjIkKksxcj0zUJbLaFRFumFGYDOQ9fg==}
@@ -8118,6 +8119,13 @@ packages:
     dependencies:
       tmpl: 1.0.5
     dev: true
+
+  /mathlive@0.96.0:
+    resolution: {integrity: sha512-IcW4irk82zbmjyc73fq43j0W1jgtF+o3NRMQGV8/6MWuQOtfQwSVBriWr+9fpqQnKCj/L4diX06JozBDvM3BYw==}
+    engines: {node: '>=16.14.2', npm: '>=8.5.0'}
+    dependencies:
+      '@cortex-js/compute-engine': 0.12.4
+    dev: false
 
   /mdn-data@2.0.14:
     resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}

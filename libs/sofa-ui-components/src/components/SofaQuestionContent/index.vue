@@ -1,12 +1,12 @@
 <template>
-  <div class="w-full flex flex-col h-full gap-4" v-if="question">
-    <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'
-      " class="w-full flex flex-row items-start custom-border bg-[#F1F6FA] gap-3">
-      <div class="hidden lg:block pt-4 pl-4">
+  <div class="w-full flex flex-col h-full overflow-y-auto gap-4" v-if="question">
+    <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'"
+      class="w-full flex flex-row items-start p-3 custom-border bg-[#F1F6FA] gap-3">
+      <div class="hidden lg:block">
         <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
       </div>
       <sofa-textarea :hasTitle="false"
-        :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor !px-0 !py-0 resize-none'"
+        :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor resize-none'"
         :placeholder="question.placeholder" :richEditor="true" v-model="reactiveQuestion.content" />
     </div>
     <div class="w-full flex flex-row items-center flex-wrap gap-1 md:!gap-2" v-if="questionTypeMain == 'fill_in_blank' || questionTypeMain == 'drag_answer'
@@ -70,7 +70,7 @@
           :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
           <template #item="{ element, index }">
             <div
-              :class="`w-full flex flex-row items-center justify-between rounded-[12px] border-lightBorderColor bg-white gap-3`"
+              :class="`w-full flex flex-row items-center justify-between rounded-[12px] p-3 border-lightBorderColor bg-white gap-3`"
               style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
               @mouseleave="element.showRemove = false">
               <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
@@ -82,9 +82,10 @@
                 <sofa-icon :name="'remove'" :custom-class="'w-[23px] cursor-pointer'"
                   v-if="element.showRemove && questionTypeMain != 'true_false' && reactiveQuestion.options.length > optionLimitSettings.min"
                   @click="removeOption(index)" />
-                <sofa-icon v-if="element.isRadio && (questionTypeMain == 'multiple_choice' || questionTypeMain == 'true_false')"
-                  @click="element.isRadio ? setAnswers(element) : null" :name="element.answer ? 'selected' : 'not-selected'"
-                  :custom-class="'w-[23px] cursor-pointer'" />
+                <sofa-icon
+                  v-if="element.isRadio && (questionTypeMain == 'multiple_choice' || questionTypeMain == 'true_false')"
+                  @click="element.isRadio ? setAnswers(element) : null"
+                  :name="element.answer ? 'selected' : 'not-selected'" :custom-class="'w-[23px] cursor-pointer'" />
               </div>
             </div>
           </template>
@@ -97,7 +98,7 @@
             :group="{ name: 'question-match' }">
             <template #item="{ element, index }">
               <div
-                :class="`w-full flex flex-row items-center justify-between rounded-[12px] px-3 py-3 border-lightBorderColor bg-white gap-3`"
+                :class="`w-full flex flex-row items-center justify-between rounded-[12px] p-3 border-lightBorderColor bg-white gap-3`"
                 style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
                 @mouseleave="element.showRemove = false">
                 <div class="flex-grow flex flex-row gap-3">
@@ -131,8 +132,8 @@
     </div>
 
     <div class="w-full flex flex-col border-t-[1px] border-[#F1F6FA] pt-4">
-      <div class="w-full flex flex-row items-start custom-border bg-[#F1F6FA]">
-        <div class="hidden lg-block pt-4 pl-4">
+      <div class="w-full flex flex-row items-start custom-border bg-[#F1F6FA] p-3 gap-3">
+        <div class="hidden lg:block">
           <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
         </div>
         <sofa-textarea :hasTitle="false"
@@ -143,9 +144,9 @@
   </div>
 </template>
 <script lang="ts">
+import { Logic } from "sofa-logic"
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "sofa-logic"
 import SofaButton from "../SofaButton"
 import { SofaCustomInput, SofaFileAttachment, SofaTextarea } from "../SofaForm"
 import SofaIcon from "../SofaIcon"

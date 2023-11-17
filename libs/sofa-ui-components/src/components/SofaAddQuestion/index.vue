@@ -1,7 +1,7 @@
 <template>
   <div :class="`w-full mdlg:!flex hidden flex-col gap-4 h-full overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${showScrollBar ? 'mdlg:!scrollbar-thin' : 'scrollbar-none'
     }`" @mouseover="showScrollBar = true" @mouseleave="showScrollBar = false">
-    <draggable :list="questions" class="w-full gap-4" item-key="id" :group="{ name: 'question-list-lg' }"
+    <draggable :list="questions" class="w-full flex flex-col gap-4" item-key="id" :group="{ name: 'question-list-lg' }"
       @end="handleDrag">
       <template #item="{ element, index }">
         <div :class="`w-full px-4 py-4 rounded-[12px] cursor-pointer ${selectedQuestion == index ? 'bg-[#E6F5FF]' : 'bg-[#F1F6FA]'

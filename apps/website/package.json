@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"preserve": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
+		"preserve": "pnpm -w run envs",
 		"serve": "vue-cli-service serve",
 		"prebuild": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
 		"build": "vue-cli-service build",
@@ -14,7 +14,6 @@
 	},
 	"dependencies": {
 		"@shopify/draggable": "^1.0.0-beta.8",
-		"@tailwindcss/line-clamp": "^0.3.0",
 		"@tailwindcss/typography": "^0.5.0",
 		"axios": "^0.27.2",
 		"core-js": "^3.32.2",
@@ -58,7 +57,7 @@
 		"jest": "^27.3.1",
 		"postcss": "^8.4.5",
 		"sass-loader": "^13.0.2",
-		"tailwindcss": "^3.0.17",
+		"tailwindcss": "^3.3.3",
 		"ts-jest": "^27.0.7",
 		"typescript": "^4.3.5"
 	},
