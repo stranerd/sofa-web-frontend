@@ -140,6 +140,7 @@
           :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor !px-0 !py-0 resize-none'"
           :placeholder="'Explanation'" :richEditor="true" v-model="reactiveQuestion.explanation" />
       </div>
+      <div class="h-16 mdlg:hidden" />
     </div>
   </div>
 </template>

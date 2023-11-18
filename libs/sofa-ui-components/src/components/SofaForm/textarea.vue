@@ -8,7 +8,7 @@
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
       :placeholder="placeholder" :tabindex="0">
       <template v-slot:toolbar>
-        <div :id="toolbarId" :class="{'!hidden': disabled}">
+        <div :id="toolbarId" :class="{ '!hidden': disabled }">
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
           <button class="ql-underline"></button>
@@ -19,7 +19,7 @@
           <button class="ql-code-block"></button>
         </div>
         <math-field ref="mathRef" class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
-          :class="{ 'hidden': !showMath }" @beforeinput="saveFormula">
+          :class="{ 'hidden': !showMath || !quill }" @beforeinput="saveFormula">
           {{ mathText }}
         </math-field>
       </template>
@@ -34,14 +34,6 @@ import 'mathlive'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
 import { Quill, VueEditor } from 'vue3-editor'
 import SofaNormalText from "../SofaTypography/normalText.vue"
-
-const toolbar = [
-  [{ header: [2, 3, 4, 5, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  [{ script: 'sub' }, { script: 'super' }, 'formula'],
-  ['code-block'],
-  ['clean']
-]
 
 export default defineComponent({
   components: {
@@ -109,27 +101,16 @@ export default defineComponent({
     })
 
     const saveFormula = (e: Event) => {
+      const target = e.target as HTMLInputElement
       // @ts-ignore
       if (e.data === 'insertLineBreak') {
-        const q = quill.value
-        const value = mathText.value.slice(2, -2)
-        if (!q || !value) return
-
-        const range = q.getSelection(true)
-        if (!range) return
-
-        const emitter = 'user'
-        const dataMode = 'formula'
-
-        const index = range.index + range.length
-        q.insertEmbed(index, dataMode, value, emitter)
-        q.insertText(index + 1, ' ', emitter)
-        q.setSelection(index + 2, emitter)
+        quill.value.theme.tooltip.textbox.value = target.value.slice(2, -2)
+        quill.value.theme.tooltip.root.querySelector('a.ql-action').click()
 
         showMath.value = false
         mathText.value = ''
       } else {
-        mathText.value = (e.target as HTMLInputElement).value
+        mathText.value = target.value
       }
     }
 
@@ -139,8 +120,9 @@ export default defineComponent({
           container: `#${toolbarId}`,
           handlers: {
             formula () {
-              // quill.value.theme.tooltip.edit('formula')
-              console.log(mathRef.value)
+              quill.value.theme.tooltip.edit('formula')
+              quill.value.theme.tooltip.hide()
+
               showMath.value = !showMath.value
               if (showMath.value) setImmediate(() => {
                 mathRef.value.focus()
