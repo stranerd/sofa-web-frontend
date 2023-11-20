@@ -121,7 +121,7 @@ const settingOptions = [
 			{
 				title: "Verification",
 				to: "/verification",
-				show: () => !Logic.Users.UserProfile.roles.isVerified,
+				show: () => !Logic.Users.UserProfile?.roles?.isVerified,
 			},
 			{
 				title: "Tutor Application",

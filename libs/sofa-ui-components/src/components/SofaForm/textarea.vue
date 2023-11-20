@@ -142,6 +142,7 @@ export default defineComponent({
     onMounted(async () => {
       await window.customElements.whenDefined('math-field')
       const mf = mathRef.value
+      if (!mf) return
       mf.defaultMode = 'text'
       mf.smartMode = false
       mf.mathModeSpace = '\\:'
