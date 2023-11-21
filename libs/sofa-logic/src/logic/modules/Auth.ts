@@ -117,6 +117,7 @@ export default class Auth extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoader()
           // error handler
         })
     }

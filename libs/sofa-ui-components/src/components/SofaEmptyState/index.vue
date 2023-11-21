@@ -6,7 +6,6 @@
       <sofa-header-text :color="'text-white'" :content="title" :customClass="`!font-semibold ${titleStyle}`" />
       <sofa-normal-text :color="'text-white'" :content="subTitle"
         :custom-class="'w-full flex !font-lighter flex-row items-center text-center justify-center '" />
-      >
     </div>
     <sofa-button v-if="action" :custom-class="'!whitespace-nowrap'" :bgColor="'bg-white'" padding="py-1 px-4"
       @click="action ? action() : null" :textColor="'text-[#141618] !font-semibold'">{{ actionLabel }}

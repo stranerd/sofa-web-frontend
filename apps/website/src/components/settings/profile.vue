@@ -80,7 +80,6 @@ import { FormValidations } from "@/composables"
 import {
   UpdateProfile,
   UpdateUserEducation,
-  accountTypeOption,
   educationOptions,
   setDepartmentsOptions,
   setFacultiesOptions,
@@ -200,7 +199,6 @@ export default defineComponent({
       userPhoneNumber,
       updateUserEducationForm,
       educationOptions,
-      accountTypeOption,
       updateVerificationForm,
       UserVerification,
       UserProfile,

@@ -61,8 +61,24 @@
 					</div>
 				</div>
 
-				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
-					v-if="SingleConversation && !itIsNewMessage">
+				<template v-if="SingleConversation && ((hasMessage && !selectedTutorRequestData) || (!SingleConversation?.tutor && !itIsNewMessage))">
+					<div class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
+						<div class="w-full flex flex-row gap-2 items-center justify-start">
+							<sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
+							<sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
+								Tutor help
+							</sofa-normal-text>
+						</div>
+						<sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
+							Need extra help with your work?
+						</sofa-normal-text>
+						<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
+							Add a tutor
+						</sofa-button>
+					</div>
+				</template>
+
+				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4" v-if="SingleConversation && !itIsNewMessage">
 					<div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer"
 						v-if="selectedTutorRequestData && SingleConversation?.tutor" @click.stop.prevent="
 							showEndSession = true
@@ -81,23 +97,6 @@
 							Delete chat</sofa-normal-text>
 					</div>
 				</div>
-
-				<template v-if="SingleConversation && ((hasMessage && !selectedTutorRequestData) || (!SingleConversation?.tutor && !itIsNewMessage))">
-					<div class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
-						<div class="w-full flex flex-row gap-2 items-center justify-start">
-							<sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
-							<sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
-								Tutor help
-							</sofa-normal-text>
-						</div>
-						<sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
-							Need extra help with your work?
-						</sofa-normal-text>
-						<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
-							Add a tutor
-						</sofa-button>
-					</div>
-				</template>
 			</template>
 
 			<!-- Teacher POV -->

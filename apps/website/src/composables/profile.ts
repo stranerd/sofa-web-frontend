@@ -181,21 +181,6 @@ const accountSetupOptions = reactive([
   },
 ])
 
-const accountTypeOption = reactive<SelectOption[]>([
-  {
-    key: 'student',
-    value: 'Student',
-  },
-  {
-    key: 'teacher',
-    value: 'Tutor',
-  },
-  {
-    key: 'organization',
-    value: 'organization',
-  },
-])
-
 const educationOptions = reactive({
   levels: [
     {
@@ -373,23 +358,7 @@ const setDepartmentsOptions = () => {
   })
 }
 
-const UpdateProfile = (formComp: any, showLoader = true) => {
-  if (updateUserEducationForm.type == 'organization') {
-    if (updateProfileForm.organization_name) {
-      Logic.Users.UpdateUserForm = {
-        data: {
-          type: 'organization',
-          name: updateProfileForm.organization_name,
-          code: updateProfileForm.organization_code,
-        },
-      }
-      Logic.Users.UpdateUser(true, false)
-      const fullNameArray = updateProfileForm.organization_name.split(' ')
-      updateProfileForm.name.first = fullNameArray[0]
-      updateProfileForm.name.last = fullNameArray[1] ?? ''
-    }
-  }
-
+const UpdateProfile = async (formComp: any, showLoader = true) => {
   Logic.Auth.UpdateUserProfileForm = {
     name: {
       first: updateProfileForm.name.first,
@@ -400,49 +369,13 @@ const UpdateProfile = (formComp: any, showLoader = true) => {
     socials: [],
   }
 
-  let formState = false
-
-  if (formComp) {
-    formState = formComp.validate()
-  } else {
-    formState = true
-  }
-
-  Logic.Auth.UpdateUserProfile(
-    formState,
+  await Logic.Auth.UpdateUserProfile(
+    formComp?.validate() ?? true,
     () => {
-      // console.log(progress)
+      //
     },
     showLoader,
   )
-    .then(() => {
-      if (formComp) {
-        if (updateUserEducationForm.type == 'organization') {
-          updateUserLocation()
-            .then(() => {
-              Logic.Common.GoToRoute('/')
-            })
-            .catch(() => {
-              Logic.Common.showLoader({
-                show: true,
-                message: 'Unable to complete account setup. Please try again',
-                type: 'warning',
-              })
-            })
-        } else {
-          currentSetupOption.value = 'education'
-          accountSetupOptions[0].status = 'done'
-          accountSetupOptions[1].status = 'active'
-        }
-      }
-    })
-    .catch((error) => {
-      if (formComp) {
-        Logic.Common.showValidationError(error, formComp)
-      } else {
-        Logic.Common.hideLoader()
-      }
-    })
 }
 
 const CustomizeAI = (formComp: any) => {
@@ -474,16 +407,15 @@ const CustomizeAI = (formComp: any) => {
     })
 }
 
-const UpdateUserEducation = (useLoader = true, fromProfile = false) => {
-  if (updateUserEducationForm.type == 'student') {
-    if (updateUserEducationForm.level == 'aspirant') {
-      const exams: any = updateUserEducationForm.exams
+const UpdateUserEducation = async (useLoader = true) => {
+  if (updateUserEducationForm.type === 'student') {
+    if (updateUserEducationForm.level === 'aspirant') {
       Logic.Users.UpdateUserForm = {
         data: {
           type: 'student',
           school: {
             type: 'aspirant',
-            exams: exams,
+            exams: updateUserEducationForm.exams as any,
           },
         },
       }
@@ -498,7 +430,7 @@ const UpdateUserEducation = (useLoader = true, fromProfile = false) => {
         },
       }
     }
-  } else if (updateUserEducationForm.type == 'tutor') {
+  } else if (updateUserEducationForm.type == 'teacher') {
     Logic.Users.UpdateUserForm = {
       data: {
         type: 'teacher',
@@ -507,35 +439,19 @@ const UpdateUserEducation = (useLoader = true, fromProfile = false) => {
     }
   }
 
-  Logic.Users.UpdateUser(true, useLoader).then(() => {
-    if (useLoader) {
-      if (!fromProfile) {
-        Logic.Common.GoToRoute('/')
-      } else {
-        Logic.Common.showLoader({
-          show: true,
-          message: 'Your changes has been saved',
-          type: 'success',
-        })
-      }
-    }
-  })
+  return await Logic.Users.UpdateUser(true, useLoader)
 }
 
-const UpdatePhone = () => {
+const UpdatePhone = async () => {
   Logic.Auth.SendPhoneVerificationForm = {
     phone: {
       code: updatePhoneForm.phone.code,
-      number:
-        updatePhoneForm.phone.number.charAt(0) == '0'
-          ? updatePhoneForm.phone.number.substring(1)
-          : updatePhoneForm.phone.number,
+      // TODO: substring is used to remove 0 if no starts with zero, might only work for 9ja numbers, so needs a more robust solution
+      number: updatePhoneForm.phone.number.substring(updatePhoneForm.phone.number.charAt(0) == '0' ? 1 : 0)
     },
   }
 
-  Logic.Auth.SendPhoneVerification(true).then(() => {
-    phoneVerificationState.value = 'verify'
-  })
+  return await Logic.Auth.SendPhoneVerification(true)
 }
 
 const VerifyPhone = () => {
@@ -690,6 +606,6 @@ const addNewLink = (ref: string) => {
 }
 
 export {
-  Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, accountTypeOption, addNewLink, allCountries, allLinks, allOrganizationMembers, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizationMembers, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
+  Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, addNewLink, allCountries, allLinks, allOrganizationMembers, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizationMembers, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
   updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
 }
