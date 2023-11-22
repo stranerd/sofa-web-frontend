@@ -37,8 +37,8 @@
         <div class="w-full flex flex-col justify-start pb-2">
           <template v-if="question.title == 'Multiple choice'">
             <sofa-normal-text :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'">
-              Choose {{ Logic.Common.inWords(question.answer?.split(",").length) }} answer{{
-                question.answer?.split(",").length > 1 ? "s" : "" }}
+              Choose {{ Logic.Common.inWords(question.answer?.split("----------").length) }} answer{{
+                question.answer?.split("----------").length > 1 ? "s" : "" }}
             </sofa-normal-text>
           </template>
           <template v-if="question.title == 'Write answer'">
@@ -83,11 +83,11 @@
               ? '!bg-[#E1F5EB] !border-primaryGreen'
               : ''
             }
-                                                                                                                ${optionState(option) == 'wrong_answer'
+                                                                                                                          ${optionState(option) == 'wrong_answer'
               ? '!bg-[#FAEBEB] !border-primaryRed'
               : ''
             }
-                                                                                                                ${optionState(option) == 'selected'
+                                                                                                                          ${optionState(option) == 'selected'
               ? '!bg-[#E2F3FD] !border-primaryBlue  shake'
               : ''
             }

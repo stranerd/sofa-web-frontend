@@ -478,6 +478,8 @@ const setConvoFromRoute = async (message = '') => {
 
 const deleteConvo = async (id: string) => {
   if (Logic.Common.loaderSetup.loading) return
+  AllConversations.value.results = AllConversations.value.results.filter((c) => c.id !== id)
+  setConversations()
   await Logic.Conversations.DeleteConversation(id)
 }
 

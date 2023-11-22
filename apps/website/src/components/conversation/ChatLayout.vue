@@ -139,7 +139,8 @@
 				label: 'Yes, delete',
 				isClose: false,
 				action: () => {
-					deleteConvo(selectedConvoId)
+					deleteConvo(selectedConvoId).then(() => showDeleteConvo = false)
+
 				},
 			},
 		]" />

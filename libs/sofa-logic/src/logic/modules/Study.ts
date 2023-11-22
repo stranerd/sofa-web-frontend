@@ -738,7 +738,7 @@ export default class Study extends Common {
       )
 
       if (answerOption.length) {
-        answer = answerOption.map((item) => item.value).join(', ')
+        answer = answerOption.map((item) => item.value).join('----------')
       }
 
       if (questionData.itemType == 'multipleChoice') {
