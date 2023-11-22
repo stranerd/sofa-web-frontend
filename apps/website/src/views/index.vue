@@ -90,11 +90,7 @@
     </template>
 
     <template v-slot:middle-session>
-      <div v-if="(!Logic.Users.CheckUserTaskState('profile_setup') ||
-        !Logic.Users.CheckUserTaskState('phone_setup') ||
-        !Logic.Users.CheckUserTaskState('education_setup')) &&
-        Logic.Users.getUserType() != 'organization'
-        "
+      <div v-if="profileSteps.find((s) => !s.isDone) && Logic.Users.getUserType() != 'organization'"
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 mdlg:!pt-4 pt-3 mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!gap-4 gap-1">
         <div class="w-full flex flex-row gap-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
@@ -103,8 +99,7 @@
         </div>
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
-          <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+          <div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in profileSteps" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -117,9 +112,7 @@
         </div>
       </div>
 
-      <div v-if="!Logic.Users.CheckUserTaskState('create_course') ||
-        !Logic.Users.CheckUserTaskState('create_quiz')
-        "
+      <div v-if="studyMaterialsSteps.find((s) => !s.isDone)"
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!gap-4 gap-1">
         <div class="w-full flex flex-row gap-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
@@ -142,7 +135,7 @@
         </div>
       </div>
 
-      <div v-if="Logic.Users.getUserType() == 'student'"
+      <div v-if="takeOnTasks.find((s) => !s.isDone) && Logic.Users.getUserType() == 'student'"
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col mdlg:!gap-4 gap-1">
         <div class="w-full flex flex-row gap-2 items-center">
           <sofa-normal-text :customClass="'!font-bold'">
@@ -502,7 +495,7 @@ SofaIconCard,
 SofaNormalText,
 SofaTextField,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -637,109 +630,79 @@ export default defineComponent({
 
     const recentChats = reactive([])
 
-    const profileSteps = ref([])
+    const profileSteps = computed(() => UserProfile.value ? [
+      {
+        title: "Add profile",
+        subTitle: "Picture, name and bio",
+        icon: "add-profile",
+        iconSize: "h-[46px]",
+        isDone: Logic.Users.CheckUserTaskState("profile_setup"),
+        action: () => Logic.Common.GoToRoute('/settings/profile#profile')
+      },
+      {
+        title: UserProfile.value.type?.type === 'teacher' ? 'Add experience' : "Add education",
+        subTitle: "Current place you teach at",
+        icon: "add-education",
+        iconSize: "h-[46px]",
+        isDone: Logic.Users.CheckUserTaskState("education_setup"),
+        action: () => Logic.Common.GoToRoute('/settings/profile#type')
+      },
+      {
+        title: "Add phone",
+        subTitle: "Enter your phone number",
+        icon: "add-phone",
+        iconSize: "h-[46px]",
+        isDone: Logic.Users.CheckUserTaskState("phone_setup"),
+        action: () => Logic.Common.GoToRoute('/settings/profile#contact')
+      }
+    ] : [])
 
-    const studyMaterialsSteps = ref([])
+    const studyMaterialsSteps = computed(() => UserProfile.value ? [
+      {
+        title: "Create a quiz",
+        subTitle:
+          "Build a customized quiz with different question types and study modes",
+        icon: "pink-question",
+        iconSize: "h-[46px]",
+        isDone: Logic.Users.CheckUserTaskState("create_quiz"),
+        action: () => Logic.Common.GoToRoute("/quiz/create")
+      },
+      {
+        title: "Create a course",
+        subTitle: "Develop and publish a series of educational material on a particular subject",
+        icon: "orange-list",
+        iconSize: "h-[46px]",
+        isDone: Logic.Users.CheckUserTaskState("create_course"),
+        action: () => Logic.Common.GoToRoute("/course/create")
+      }
+    ] : [])
 
-    const takeOnTasks = ref([])
-
-    const setItems = () => {
-      profileSteps.value.length = 0
-
-      profileSteps.value.push(
-        {
-          title: "Add profile",
-          subTitle: "Picture, name and bio",
-          icon: "add-profile",
-          iconSize: "h-[46px]",
-          isDone: Logic.Users.CheckUserTaskState("profile_setup"),
-          action: () => {
-            Logic.Common.GoToRoute('/settings/profile')
-          },
-        },
-        {
-          title: "Add education",
-          subTitle: "Level and school or exams",
-          icon: "add-education",
-          iconSize: "h-[46px]",
-          isDone: Logic.Users.CheckUserTaskState("education_setup"),
-          action: () => {
-            Logic.Common.GoToRoute('/settings/profile')
-          },
-        },
-        {
-          title: "Add phone",
-          subTitle: "Enter your phone number",
-          icon: "add-phone",
-          iconSize: "h-[46px]",
-          isDone: Logic.Users.CheckUserTaskState("phone_setup"),
-          action: () => {
-            Logic.Common.GoToRoute('/settings/profile')
-          },
-        }
-      )
-
-      studyMaterialsSteps.value.length = 0
-
-      studyMaterialsSteps.value.push(
-        {
-          title: "Create a quiz",
-          subTitle:
-            "Build a customized quiz with different question types and study modes",
-          icon: "pink-question",
-          iconSize: "h-[46px]",
-          isDone: Logic.Users.CheckUserTaskState("create_quiz"),
-          action: () => {
-            Logic.Common.GoToRoute("/quiz/create")
-          },
-        },
-        {
-          title: "Create a course",
-          subTitle:
-            "Develop and publish a series of educational material on a particular subject",
-          icon: "orange-list",
-          iconSize: "h-[46px]",
-          isDone: Logic.Users.CheckUserTaskState("create_course"),
-          action: () => {
-            Logic.Common.GoToRoute("/course/create")
-          },
-        }
-      )
-
-      takeOnTasks.value.length = 0
-      takeOnTasks.value.push(
-        {
-          title: "Learn a quiz",
-          subTitle: "Practice alone with a quiz",
-          icon: "learn-quiz",
-          isDone: Logic.Users.CheckUserTaskState("learn_quiz"),
-          iconSize: "h-[46px]",
-          action: () => {
-            Logic.Common.GoToRoute("/marketplace")
-          },
-        },
-        {
-          title: "Study flashcards",
-          subTitle: "Learn flashcards on a quiz",
-          icon: "study-flashcard",
-          isDone: Logic.Users.CheckUserTaskState("quiz_flashcard"),
-          iconSize: "h-[46px]",
-          action: () => {
-            Logic.Common.GoToRoute("/marketplace")
-          },
-        },
-        {
-          title: "Play a quiz game ",
-          subTitle: "Challenge your friends",
-          icon: "play-quiz",
-          isDone: Logic.Users.CheckUserTaskState("quiz_game"),
-          iconSize: "h-[46px]",
-          action: () => {
-            Logic.Common.GoToRoute("/marketplace")
-          },
-        }
-      )
-    }
+    const takeOnTasks = computed(() => UserProfile.value ? [
+      {
+        title: "Learn a quiz",
+        subTitle: "Practice alone with a quiz",
+        icon: "learn-quiz",
+        isDone: Logic.Users.CheckUserTaskState("learn_quiz"),
+        iconSize: "h-[46px]",
+        action: () => Logic.Common.GoToRoute("/marketplace")
+      },
+      {
+        title: "Study flashcards",
+        subTitle: "Learn flashcards on a quiz",
+        icon: "study-flashcard",
+        isDone: Logic.Users.CheckUserTaskState("quiz_flashcard"),
+        iconSize: "h-[46px]",
+        action: () => Logic.Common.GoToRoute("/marketplace")
+      },
+      {
+        title: "Play a quiz game ",
+        subTitle: "Challenge your friends",
+        icon: "play-quiz",
+        isDone: Logic.Users.CheckUserTaskState("quiz_game"),
+        iconSize: "h-[46px]",
+        action: () => Logic.Common.GoToRoute("/marketplace")
+      }
+    ] :[])
 
     const startConversation = () => {
       if (newChatMessage.value.length >= 2) {
@@ -749,7 +712,6 @@ export default defineComponent({
 
     onMounted(() => {
       scrollToTop()
-      setItems()
       setHomeMaterials(4)
       Logic.Users.watchProperty("UserProfile", UserProfile)
       Logic.Conversations.watchProperty("AllConversations", AllConversations)
@@ -772,10 +734,6 @@ export default defineComponent({
       if (Logic.Users.getUserType() == "student") {
         setConversations(-1, 3)
       }
-    })
-
-    watch(UserProfile, () => {
-      setItems()
     })
 
     watch(AllConversations, () => {

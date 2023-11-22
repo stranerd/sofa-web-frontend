@@ -1,6 +1,6 @@
 <template>
   <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
-    <div class="w-full flex gap-3" v-if="!fromProfile">
+    <div class="w-full flex gap-3" v-if="!isProfileEducation && !isProfilePhone">
       <a v-for="option in accountSetupOptions.filter((o) => !o.hide)" :key="option.id"
         class="p-3 custom-border flex items-center gap-2 justify-center w-full"
         :class="tab === option.id ? 'bg-primaryPurple' : option.done ? 'bg-primaryGreen' : 'bg-lightGrayVaraint'"
@@ -180,14 +180,14 @@
     </template>
 
     <div class="w-full flex flex-col items-center md:py-0 px-0 py-4">
-      <div v-if="!fromProfile" class="flex flex-col w-full">
-        <sofa-button :customClass="'!w-full'" :padding="'md:py-4 py-3'" @click.prevent="handleAccountSetup">
-          Next
+      <div v-if="isProfileEducation || isProfilePhone" class="w-full flex justify-end">
+        <sofa-button :customClass="'!w-full'" :padding="'px-4 py-3'" @click.prevent="handleAccountSetup">
+          {{ isProfilePhone && tab === 'phone' ? 'Send OTP': 'Save changes'  }}
         </sofa-button>
       </div>
-      <div v-else class="w-full flex justify-end">
-        <sofa-button :customClass="'!w-full'" :padding="'px-4 py-3'" @click.prevent="handleAccountSetup">
-          Save changes
+      <div v-else class="flex flex-col w-full">
+        <sofa-button :customClass="'!w-full'" :padding="'md:py-4 py-3'" @click.prevent="handleAccountSetup">
+          Continue
         </sofa-button>
       </div>
     </div>
@@ -253,7 +253,11 @@ export default defineComponent({
     customClass: {
       type: String,
     },
-    fromProfile: {
+    isProfileEducation: {
+      type: Boolean,
+      default: false,
+    },
+    isProfilePhone: {
       type: Boolean,
       default: false,
     },
@@ -263,7 +267,7 @@ export default defineComponent({
     const profileImageUrl = ref("")
 
     const formComp = ref<any>()
-    const tab = ref(props.fromProfile ? 'type' : 'profile')
+    const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
     const currentAccountType = computed(() => UserProfile.value?.type?.type ?? Logic.Common.route?.query?.type?.toString() ?? "student")
     const AuthUser = ref(Logic.Auth.AuthUser)
     const UserProfile = ref(Logic.Users.UserProfile)
@@ -310,7 +314,7 @@ export default defineComponent({
           tab.value = updateUserEducationForm.type === 'organization' ? 'phone' : 'type'
         } else if (tab.value === 'type') {
           await UpdateUserEducation(true)
-          if (!props.fromProfile) tab.value = 'phone'
+          if (!props.isProfileEducation) tab.value = 'phone'
         }
         else if (tab.value === 'phone') {
           await UpdatePhone()
@@ -318,7 +322,8 @@ export default defineComponent({
         }
         else if (tab.value === 'phone-verify') {
           await VerifyPhone()
-          await Logic.Common.GoToRoute(localStorage.getItem(Logic.Auth.redirectToName) ?? '/')
+          if (props.isProfilePhone) tab.value = 'phone'
+          else await Logic.Common.GoToRoute(localStorage.getItem(Logic.Auth.redirectToName) ?? '/')
         }
       } catch (e) {
         Logic.Common.showValidationError(e, formComp.value)
@@ -364,6 +369,8 @@ export default defineComponent({
       updateProfileForm.description = UserProfile.value?.bio.description
       updateProfileForm.country = UserProfile.value?.location?.country
       updateProfileForm.state = UserProfile.value?.location?.state
+      updatePhoneForm.phone.code = AuthUser.value?.phone?.code
+      updatePhoneForm.phone.number = AuthUser.value?.phone?.number
       if (currentAccountType.value == "teacher") {
         updateUserEducationForm.type = "teacher"
         updateUserEducationForm.tutorSchool = UserProfile.value?.type?.school.toString()

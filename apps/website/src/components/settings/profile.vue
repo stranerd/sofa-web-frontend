@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
-    <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+    <div id="profile" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
       <sofa-header-text :size="'xl'" :customClass="'text-left'">
         Personal info
       </sofa-header-text>
@@ -19,17 +19,16 @@
           </sofa-file-attachment>
         </sofa-image-loader>
 
-        <sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile/' + Logic.Auth.AuthUser.id)">View
-          profile</sofa-button>
+        <sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile/' + Logic.Auth.AuthUser.id)">View profile</sofa-button>
       </div>
 
       <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'First name'" ref="name.first"
+        :padding="'p-3'" type="text" :name="'First name'" ref="name.first"
         :placeholder="'First Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
         :defaultValue="UserProfile.bio.name.first" :borderColor="'border-transparent'" />
 
       <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Last name'" ref="name.last"
+        :padding="'p-3'" type="text" :name="'Last name'" ref="name.last"
         :placeholder="'Last Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
         :defaultValue="UserProfile.bio.name.last" :borderColor="'border-transparent'" />
 
@@ -38,32 +37,29 @@
         :placeholder="'Bio'" v-model="updateProfileForm.description" />
     </div>
 
-    <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-      <sofa-header-text :size="'xl'" :customClass="'text-left'">
+    <div id="contact" class="w-full flex flex-col bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
+      <sofa-header-text :size="'xl'" :customClass="'text-left mb-4'">
         Contact info
       </sofa-header-text>
 
       <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Email'" ref="name.first" :placeholder="'Email'"
+        :padding="'p-3'" type="text" :name="'Email'" ref="name.first" :placeholder="'Email'"
         v-model="AuthUser.email" :rules="[FormValidations.RequiredRule]" :disabled="true"
         :borderColor="'border-transparent'" />
 
-      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="tel" :name="'Phone number'" ref="phone.code" :disabled="true"
-        v-model="userPhoneNumber" :placeholder="'Phone number'" :rules="[FormValidations.RequiredRule]"
-        :borderColor="'border-transparent'" />
+      <account-setup :isProfilePhone="true" />
     </div>
 
-    <div v-if="UserProfile.type.type != 'organization'"
-      class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+    <div id="type" v-if="UserProfile.type.type !== 'organization'"
+      class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
       <sofa-header-text :size="'xl'" :customClass="'text-left'">
-        Education
+        {{ UserProfile.type.type === 'teacher' ? 'Experience' : 'Education' }}
       </sofa-header-text>
 
-      <account-setup :fromProfile="true" />
+      <account-setup :isProfileEducation="true" />
     </div>
 
-    <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
+    <div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
       <sofa-header-text :size="'xl'" :customClass="'text-left'">
         Social links
       </sofa-header-text>
@@ -79,12 +75,12 @@ import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue"
 import { FormValidations } from "@/composables"
 import {
   UpdateProfile,
-  UpdateUserEducation,
   educationOptions,
   setDepartmentsOptions,
   setFacultiesOptions,
   setSchoolsOption,
   updateProfileForm,
+  updatePhoneForm,
   updateUserEducationForm,
   updateVerificationForm,
   userSocials,
@@ -134,16 +130,23 @@ export default defineComponent({
       updateProfileForm.name.last = UserProfile.value.bio.name.last
       profileImageUrl.value = UserProfile.value.bio.photo?.link
 
+      updatePhoneForm.phone.code = AuthUser?.phone?.code
+      updatePhoneForm.phone.number = AuthUser?.phone?.number
+
       if (UserProfile.value.type?.type) {
         updateUserEducationForm.type = UserProfile.value.type?.type
 
         if (UserProfile.value.type?.type == "student") {
-          updateUserEducationForm.department =
-            UserProfile.value.type.school.departmentId
-          updateUserEducationForm.faculty =
-            UserProfile.value.type.school.facultyId
-
-          updateUserEducationForm.level = "college"
+          updateUserEducationForm.level = UserProfile.value.type.school.type
+          if (UserProfile.value.type.school.type === 'college') {
+            updateUserEducationForm.institution = UserProfile.value.type.school.institutionId
+            updateUserEducationForm.department = UserProfile.value.type.school.departmentId
+            updateUserEducationForm.faculty = UserProfile.value.type.school.facultyId
+          } else if (UserProfile.value.type.school.type === 'aspirant') {
+            updateUserEducationForm.exams = UserProfile.value.type.school.exams
+          }
+        } else if (UserProfile.value.type?.type === 'teacher') {
+          updateUserEducationForm.tutorSchool = UserProfile.value.type.school.toString()
         }
       }
 
@@ -174,21 +177,13 @@ export default defineComponent({
       }
     })
 
-    watch(updateUserEducationForm, () => {
-      if (!preventUpdate.value) {
-        Logic.Common.debounce(() => {
-          UpdateUserEducation(false)
-        }, 500)
-      }
-    })
-
     watch(userSocials, () => {
       Logic.Common.debounce(() => {
         Logic.Users.UpdateUserSocialForm = {
           socials: userSocials.socials.filter((item) => item.link),
         }
         Logic.Users.UpdateUserSocial()
-      }, 500)
+      }, 1000)
     })
 
     return {

@@ -173,8 +173,7 @@
           <sofa-header-text :customClass="'!font-bold flex flex-row justify-start'">
             Add links (optional)
           </sofa-header-text>
-          <sofa-normal-text>Your educational website and socials
-          </sofa-normal-text>
+          <sofa-normal-text>Your educational website and socials</sofa-normal-text>
         </div>
 
         <social-media-update />

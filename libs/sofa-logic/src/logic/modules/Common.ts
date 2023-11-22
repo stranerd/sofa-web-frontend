@@ -261,7 +261,7 @@ export default class Common {
       if (validationErrors.length) {
         errorMessage = validationErrors[0].message
       }
-    }
+    } else errorMessage = error.message
 
     // this.hideLoader()
     this.showLoader({

@@ -365,13 +365,8 @@ export default class Auth extends Common {
       })
       return $api.auth.phone
         .sendVerifyPhone(this.SendPhoneVerificationForm)
-        .then((response) => {
-          //
+        .finally(() => {
           Logic.Common.hideLoader()
-        })
-        .catch((error) => {
-          Logic.Common.hideLoader()
-          //
         })
     }
   }
@@ -387,10 +382,8 @@ export default class Auth extends Common {
         this.AuthUser = response.data.user
         Logic.Users.GetUserProfile()
         this.SetTokens(response.data)
-        Logic.Common.hideLoader()
       })
-      .catch((error) => {
-        //
+      .finally(() => {
         Logic.Common.hideLoader()
       })
   }

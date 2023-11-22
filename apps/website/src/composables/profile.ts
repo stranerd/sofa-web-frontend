@@ -447,7 +447,7 @@ const UpdatePhone = async () => {
     phone: {
       code: updatePhoneForm.phone.code,
       // TODO: substring is used to remove 0 if no starts with zero, might only work for 9ja numbers, so needs a more robust solution
-      number: updatePhoneForm.phone.number.substring(updatePhoneForm.phone.number.charAt(0) == '0' ? 1 : 0)
+      number: updatePhoneForm.phone.number?.substring(updatePhoneForm.phone.number?.charAt(0) == '0' ? 1 : 0)
     },
   }
 
