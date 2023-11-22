@@ -1,21 +1,18 @@
 <template>
-  <div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 border-b-[1px] border-[#F1F6FA] mdlg:pb-2 pb-4"
+  <div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 border-b border-[#F1F6FA] mdlg:pb-2 pb-4"
     v-if="Logic.Users.getUserType() == 'teacher' && tutorRequestList.length">
-    <div :class="`w-full flex flex-row items-center justify-between cursor-pointer ${extraStyle}`"
-      @click="showRequests ? (showRequests = false) : (showRequests = true)">
+    <a :class="`w-full flex items-center justify-between ${extraStyle}`" @click="showRequests = !showRequests">
       <sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'">
         Requests ({{ tutorRequestList.length }})
       </sofa-header-text>
 
       <sofa-icon :name="showRequests ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
-    </div>
+    </a>
     <div class="w-full flex flex-col gap-3" v-if="showRequests">
-      <chat :customClass="customClass" v-for="(chat, index) in tutorRequestList" :key="index"
-        @mouseenter="chat.hover = true" @mouseleave="chat.hover = false" @click="selectTutorRequest(chat)" :chat="chat" />
+      <Chat :customClass="customClass" v-for="(chat, index) in tutorRequestList" :key="index"  @click="selectTutorRequest(chat)" :chat="chat" />
     </div>
   </div>
-  <chat :customClass="customClass" v-for="(chat, index) in chatList" :key="index" @mouseenter="chat.hover = true"
-    @mouseleave="chat.hover = false" @click="selectConversation(chat.id)" :chat="chat" />
+  <Chat :customClass="customClass" v-for="(chat, index) in chatList" :key="index" @click="selectConversation(chat.id)" :chat="chat" />
 </template>
 <script lang="ts">
 import {

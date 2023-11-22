@@ -345,23 +345,9 @@ export default class Conversations extends Common {
       loading: true,
       show: false,
     })
-    return $api.conversations.conversation
-      .delete(id)
-      .then((response) => {
-        this.GetConversations({
-          where: [
-            {
-              field: 'user.id',
-              value: Logic.Auth.AuthUser?.id,
-              condition: Conditions.eq,
-            },
-          ],
-        }).then(() => {
-          Logic.Common.hideLoader()
-        })
-      })
-      .then((error) => {
-        //
+    return $api.conversations.conversation.delete(id)
+      .finally(() => {
+        Logic.Common.hideLoader()
       })
   }
 

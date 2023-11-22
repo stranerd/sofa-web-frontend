@@ -4,6 +4,7 @@ import {
 } from 'sofa-logic'
 import { computed, reactive, ref } from 'vue'
 import { scrollToBottom } from './index'
+import { formatTime } from '../common/dates'
 
 export const contentList = [
   {
@@ -176,10 +177,7 @@ const setConversations = (goToIndex = -1, limit = 0) => {
         photoUrl: photourl,
         lastMessage: convo.last.body || 'No message',
         unread: 0,
-        lastMessageTime: Logic.Common.fomartDate(
-          convo.last?.createdAt || new Date().getTime(),
-          'h:mma',
-        ),
+        lastMessageTime: formatTime(convo.last?.createdAt || new Date().getTime()),
       })
     }
   })
@@ -205,10 +203,7 @@ const setConversations = (goToIndex = -1, limit = 0) => {
           photoUrl: request.user?.bio?.photo?.link || '',
           lastMessage: request.message,
           unread: 0,
-          lastMessageTime: Logic.Common.fomartDate(
-            request.createdAt || new Date().getTime(),
-            'h:mma',
-          ),
+          lastMessageTime: formatTime(request.createdAt || new Date().getTime()),
           convoId: request.conversationId,
         })
       }
@@ -478,9 +473,12 @@ const setConvoFromRoute = async (message = '') => {
 
 const deleteConvo = async (id: string) => {
   if (Logic.Common.loaderSetup.loading) return
+  await Logic.Conversations.DeleteConversation(id)
   AllConversations.value.results = AllConversations.value.results.filter((c) => c.id !== id)
   setConversations()
-  await Logic.Conversations.DeleteConversation(id)
+  await Logic.Common.GoToRoute('/chats')
+  setChatToDefault()
+  showDeleteConvo.value = false
 }
 
 const contentTitleChanged = (content) => {

@@ -24,27 +24,6 @@
       </sofa-normal-text>
       <div class="invisible">Hello</div>
     </div>
-
-    <!-- <sofa-normal-text
-      :custom-class="` !line-clamp-1 text-left ${
-        chat.selected ? '!font-bold' : ''
-      }`"
-    >
-      {{ chat.title.substring(0, 36) }}
-    </sofa-normal-text>
-    <div
-      v-if="chat.hover"
-      class="right-0 top-0 absolute h-full bg-[#E5F2FD] rounded-r-[8px] px-4 flex flex-row items-center gap-2"
-    >
-      <sofa-icon
-        :customClass="'h-[15px] cursor-pointer'"
-        :name="'trash-gray'"
-        @click.stop="
-          showDeleteConvo = true;
-          selectedConvoId = chat.id;
-        "
-      />
-    </div> -->
   </div>
 </template>
 <script lang="ts">

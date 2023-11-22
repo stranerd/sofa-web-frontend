@@ -307,35 +307,8 @@ export default class Common {
     this.apiUrl = apiUrl
   }
 
-  public GoToRoute = async (path: string, force = false) => {
-    if (path == '/auth/login') {
-      if (
-        !(window.location.pathname + window.location.search).includes('auth')
-      ) {
-        localStorage.setItem(
-          'previous_page',
-          window.location.pathname + window.location.search,
-        )
-      }
-
-      await this.router?.push(path)
-    } else {
-      if (this.route?.path == '/auth/login') {
-        let nextRoute = ''
-        if (!path.includes('auth')) {
-          if (force) {
-            this.router.push(path)
-          } else {
-            nextRoute = localStorage.getItem('previous_page') || '/'
-            await this.router.push(nextRoute)
-          }
-        } else {
-          await this.router?.push(path)
-        }
-      } else {
-        await this.router?.push(path)
-      }
-    }
+  public GoToRoute = async (path: string) => {
+    await this.router?.push(path)
   }
 
   public shuffleArray = (array: any[]) => {
