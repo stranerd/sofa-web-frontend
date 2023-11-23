@@ -15,7 +15,7 @@
 
       <div class="w-full flex flex-row items-center justify-center">
         <span class="h-[46px] w-[46px] rounded-full bg-white flex flex-row items-center justify-center">
-          <sofa-header-text :customClass="'!text-lg'">{{ question.duration }}</sofa-header-text>
+          <sofa-header-text :customClass="'!text-lg'" :content="question.duration" />
         </span>
       </div>
     </div>
@@ -139,7 +139,7 @@
           <div class="w-full flex flex-row md:!gap-3 gap-2 items-center flex-wrap">
             <template v-for="(content, index) in question.options.data[0].content" :key="index">
               <sofa-header-text v-if="content.type == 'text'" :customClass="'!font-bold md:!text-2xl text-base '"
-                :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'">{{ content.label }}</sofa-header-text>
+                :color="quizIsDarkMode ? 'text-white' : 'text-bodyBlack'" :content="content.label" />
               <draggable :key="index" v-if="content.type == 'drop'" :list="content.content" item-key="id"
                 :group="{ name: 'drag-and-drop-question' }"
                 :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-[12px] md:!px-4 md:!py-3 px-3 py-1 bg-white flex items-center justify-center ${content.extraClass}`"
@@ -232,7 +232,7 @@
         </div>
 
         <div class="w-full flex flex-col gap-2 items-start justify-start pt-2" v-if="answerState == 'wrong'">
-          <sofa-header-text :size="'xl'">Correct answer</sofa-header-text>
+          <sofa-header-text :size="'xl'" content="Correct answer" />
           <sofa-normal-text :content="question.answer" />
         </div>
       </div>
@@ -244,19 +244,15 @@
           :textStyle="`!text-3xl ${pieChartColor}`">{{ quizResult().percentagePass }}%</sofa-pie-chart>
 
         <div class="flex flex-col gap-1">
-          <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'">{{
-            pieLabel
-          }}</sofa-header-text>
-          <sofa-normal-text :color="'text-grayColor'">{{ quizResult().correctAnswers }}/{{ questions.length }} correct
-            answers</sofa-normal-text>
+          <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'" :content="pieLabel" />
+          <sofa-normal-text :color="'text-grayColor'" :content="`${quizResult().correctAnswers}/${questions.length} correct answers`" />
         </div>
       </template>
 
       <template v-if="mode == 'practice'">
         <div class="flex flex-col gap-1">
-          <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'">
-            Congratulations!</sofa-header-text>
-          <sofa-normal-text :color="'text-grayColor'">Your have mastered this quiz</sofa-normal-text>
+          <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'" content="Congratulations!" />
+          <sofa-normal-text :color="'text-grayColor'" content="You have mastered this quiz" />
         </div>
       </template>
     </div>

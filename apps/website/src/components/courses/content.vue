@@ -3,9 +3,7 @@
     class="w-full px-4 relative md:py-4 bg-white mdlg:!rounded-[16px] overflow-y-auto flex-grow max-h-full h-fit flex flex-col gap-4 mdlg:min-h-[400px]">
     <template v-if="PurchasedItems.includes(SingleCourse?.id)">
       <div class="w-full flex flex-col items-start justify-start">
-        <sofa-header-text :customClass="'!font-bold !text-lg'">
-          {{ selectedMaterial?.name }}
-        </sofa-header-text>
+        <sofa-header-text :customClass="'!font-bold !text-lg'" :content="selectedMaterial?.name" />
       </div>
       <template v-if="selectedMaterial?.type == 'quiz'">
         <sofa-empty-state :title="'Test yourself'" :subTitle="'Evaluate your level of knowledge'" :actionLabel="'Start'"

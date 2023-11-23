@@ -15,9 +15,7 @@
         <div
           class="w-full hidden flex-col gap-2 justify-center items-center md:flex sticky top-0 left-0 pt-4 bg-white z-50"
           v-if="!Logic.Common.isOnlyMobile">
-          <sofa-header-text :customClass="'text-xl'">
-            Add a tutor
-          </sofa-header-text>
+          <sofa-header-text :customClass="'text-xl'" content="Add a tutor" />
 
           <div class="w-full grid grid-cols-3 gap-2 py-3">
             <div :class="`col-span-1 h-[8px] rounded-[99px]  ${index <= currentStep ? 'bg-[#141618]' : 'bg-[#E1E6EB]'
@@ -34,9 +32,7 @@
         <div
           class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden pt-3 border-[#F1F6FA] border-b-[1px] px-4 pb-3">
           <div class="flex flex-row w-full items-center gap-2 justify-between">
-            <sofa-header-text :customClass="'!font-bold'">
-              Add a tutor
-            </sofa-header-text>
+            <sofa-header-text :customClass="'!font-bold'" content="Add a tutor" />
             <sofa-icon :customClass="'h-[16px]'" :name="'circle-close'" @click="close ? close() : null" />
           </div>
 

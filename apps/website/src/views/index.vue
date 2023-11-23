@@ -357,10 +357,8 @@
               class="w-[84px] h-[84px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
             <div class="flex flex-col gap-1">
-              <sofa-header-text :customClass="'!text-base !font-bold'">{{
-                UserProfile.ai.name
-              }}</sofa-header-text>
-              <sofa-normal-text>{{ UserProfile.ai.tagline }}</sofa-normal-text>
+              <sofa-header-text :customClass="'!text-base !font-bold'" :content="UserProfile.ai.name" />
+              <sofa-normal-text :content="UserProfile.ai.tagline" />
               <sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'"
                 @click="showCustomizeAI = true">Customise</sofa-normal-text>
             </div>

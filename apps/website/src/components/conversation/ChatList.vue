@@ -3,9 +3,8 @@
     v-if="Logic.Users.getUserType() == 'teacher' && tutorRequestList.length">
     <div :class="`w-full flex flex-row items-center justify-between cursor-pointer ${extraStyle}`"
       @click="showRequests ? (showRequests = false) : (showRequests = true)">
-      <sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'">
-        Requests ({{ tutorRequestList.length }})
-      </sofa-header-text>
+      <sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'"
+        :content="`Requests (${tutorRequestList.length})`" />
 
       <sofa-icon :name="showRequests ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
     </div>
@@ -28,9 +27,9 @@ import {
   selectedTutorRequestData,
   tutorRequestList,
 } from "@/composables/conversation"
-import { defineComponent, ref } from "vue"
-import { SofaHeaderText, SofaIcon } from "sofa-ui-components"
 import { Logic } from "sofa-logic"
+import { SofaHeaderText, SofaIcon } from "sofa-ui-components"
+import { defineComponent, ref } from "vue"
 import Chat from "./Chat.vue"
 
 export default defineComponent({

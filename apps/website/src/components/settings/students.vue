@@ -126,9 +126,7 @@
         <div
           class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
           <div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
-            <sofa-header-text :customClass="'text-xl'">
-              {{ modalSetup.title }}
-            </sofa-header-text>
+            <sofa-header-text :customClass="'text-xl'" :content="modalSetup.title" />
           </div>
 
           <div

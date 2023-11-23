@@ -18,9 +18,7 @@
 
 				<div class="w-full flex justify-start pt-4 pb-2"
 					v-if="chatList.length && Logic.Users.getUserType() == 'teacher'">
-					<sofa-header-text customClass="text-left mdlg:!text-base text-sm">
-						All Chats
-					</sofa-header-text>
+					<sofa-header-text customClass="text-left mdlg:!text-base text-sm" content="All Chats" />
 				</div>
 
 				<!-- Chat list -->
@@ -46,10 +44,7 @@
 						</div>
 
 						<div class="flex flex-col gap-1">
-							<sofa-header-text :customClass="'!text-base !font-bold'">{{
-								Logic.Users.UserProfile.ai.name || "Dr. Sofa"
-							}}</sofa-header-text>
-							<sofa-normal-text>AI assistant</sofa-normal-text>
+							<sofa-header-text :customClass="'!text-base !font-bold'" :content="Logic.Users.UserProfile.ai.name || 'Dr. Sofa'" />
 						</div>
 					</div>
 					<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
@@ -61,7 +56,8 @@
 					</div>
 				</div>
 
-				<template v-if="SingleConversation && ((hasMessage && !selectedTutorRequestData) || (!SingleConversation?.tutor && !itIsNewMessage))">
+				<template
+					v-if="SingleConversation && ((hasMessage && !selectedTutorRequestData) || (!SingleConversation?.tutor && !itIsNewMessage))">
 					<div class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
 						<div class="w-full flex flex-row gap-2 items-center justify-start">
 							<sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
@@ -72,13 +68,15 @@
 						<sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
 							Need extra help with your work?
 						</sofa-normal-text>
-						<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
+						<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'"
+							@click="onClickAddTutor">
 							Add a tutor
 						</sofa-button>
 					</div>
 				</template>
 
-				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4" v-if="SingleConversation && !itIsNewMessage">
+				<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4"
+					v-if="SingleConversation && !itIsNewMessage">
 					<div class="w-full flex flex-row items-center justify-start gap-2 cursor-pointer"
 						v-if="selectedTutorRequestData && SingleConversation?.tutor" @click.stop.prevent="
 							showEndSession = true
@@ -110,9 +108,7 @@
 						</sofa-avatar>
 					</div>
 
-					<sofa-header-text :size="'xl'">
-						{{ Logic.Users.UserProfile?.bio.name.full }}
-					</sofa-header-text>
+					<sofa-header-text :size="'xl'" :content="Logic.Users.UserProfile?.bio.name.full" />
 
 					<sofa-normal-text :customClass="'text-center'" :color="'text-[#78828C]'">
 						{{ Logic.Users.UserProfile?.bio.description }}

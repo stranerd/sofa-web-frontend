@@ -3,9 +3,7 @@
     <div :class="`w-full flex flex-col gap-4 mdlg:bg-white mdlg:rounded-[16px]  md:!px-5 md:!py-5 mdlg:px-4 mdlg:py-4 mdlg:shadow-custom ${allOrganizations.length > 0 ? 'bg-white rounded-[8px] px-3 py-3' : ''
       }`">
       <div class="w-full flex-row items-center justify-between mdlg:flex hidden">
-        <sofa-header-text :size="'xl'" :customClass="'text-left'">
-          Organizations
-        </sofa-header-text>
+        <sofa-header-text :size="'xl'" :customClass="'text-left'" content="Organizations" />
       </div>
 
       <template v-if="allOrganizations.length">
@@ -17,9 +15,7 @@
                 <sofa-icon :name="'user'" :customClass="'h-[15px]'" />
               </sofa-avatar>
 
-              <sofa-normal-text :customClass="'text-left'">
-                {{ item.name }}
-              </sofa-normal-text>
+              <sofa-normal-text :customClass="'text-left'" :content="item.name" />
             </div>
             <div class="flex flex-row">
               <sofa-normal-text :color="'text-primaryRed'" :custom-class="'cursor-pointer'" @click="

@@ -20,8 +20,8 @@
       </div>
     </template>
     <template v-if="state == 'completed'">
-      <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'">Congratulations!</sofa-header-text>
-      <sofa-normal-text :color="'text-grayColor'">Your have mastered all flashcards</sofa-normal-text>
+      <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'" content="Congratulations!" />
+      <sofa-normal-text :color="'text-grayColor'" content="Your have mastered all flashcards" />
     </template>
   </div>
 </template>

@@ -12,9 +12,7 @@
       <div
         class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
         <div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-          <sofa-header-text :customClass="'text-xl'">
-            {{ title }}
-          </sofa-header-text>
+          <sofa-header-text :customClass="'text-xl'" :content="title" />
         </div>
 
         <div
@@ -63,18 +61,18 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue"
+import { showAddItem } from "@/composables"
 import {
-  SofaModal,
-  SofaIcon,
-  SofaNormalText,
-  SofaHeaderText,
   SofaAvatar,
+  SofaButton,
+  SofaHeaderText,
+  SofaIcon,
+  SofaModal,
+  SofaNormalText,
   SofaRatings,
   SofaTextarea,
-  SofaButton,
 } from "sofa-ui-components"
-import { showAddItem } from "@/composables"
+import { defineComponent, reactive } from "vue"
 
 export default defineComponent({
   components: {
