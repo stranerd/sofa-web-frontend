@@ -3,18 +3,17 @@
     <template v-if="state == 'question'">
       <div
         class="group h-full lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full [perspective:1000px] cursor-pointer md:!px-0 px-4">
-        <div class="flip-card rounded-xl" @click="showAnswer ? (showAnswer = false) : (showAnswer = true)"
-          @swiped="handleSwiperAction($event)" style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)">
+        <div class="flip-card rounded-xl" @click="showAnswer = !showAnswer" @swiped="handleSwiperAction($event)"
+          style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)">
           <div class="flip-card-inner rounded-xl" :style="`${showAnswer ? 'transform: rotateY(180deg);' : ''}`">
             <div class="flip-card-front rounded-xl">
               <div class="absolute inset-0 flex flex-col items-center justify-center px-4">
-                <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'">{{ questionRef.question
-                }}</sofa-header-text>
+                <sofa-header-text :customClass="'!font-bold md:!text-2xl text-lg'" :content="questionRef.question" />
               </div>
             </div>
             <div class="flip-card-back rounded-xl flex flex-col items-center justify-center px-12 text-center">
-              <sofa-header-text :customClass="'!font-semibold md:!text-xl text-base '">{{ questionRef.answer
-              }}</sofa-header-text>
+              <sofa-header-text :customClass="'!font-semibold md:!text-xl text-base w-full'"
+                :content="questionRef.answer.replace('----------', ' ')" />
             </div>
           </div>
         </div>
