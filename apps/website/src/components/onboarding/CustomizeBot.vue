@@ -15,9 +15,7 @@
         <div
           class="w-full hidden flex-col gap-2 justify-center items-center md:flex sticky top-0 left-0 pt-4 bg-white z-50"
           v-if="!Logic.Common.isOnlyMobile">
-          <sofa-header-text :customClass="'!text-xl'">
-            Customize AI
-          </sofa-header-text>
+          <sofa-header-text :customClass="'!text-xl'" content="Customize AI" />
         </div>
 
         <div

@@ -80,7 +80,7 @@
         ">
       <div
         class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-        <sofa-header-text :customClass="'text-xl'">Add video</sofa-header-text>
+        <sofa-header-text :customClass="'text-xl'" content="Add video" />
 
         <add-video />
       </div>
@@ -101,7 +101,7 @@
       <div
         class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 pt-0 pb-3 px-4 md:!rounded-[16px] rounded-t-[19px] items-center justify-center">
         <div class="w-full text-center hidden md:!inline-block">
-          <sofa-header-text :customClass="'!text-xl !font-bold '">Add a quiz</sofa-header-text>
+          <sofa-header-text :customClass="'!text-xl !font-bold'" content="Add a quiz" />
         </div>
 
         <div class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden">

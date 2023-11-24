@@ -8,8 +8,8 @@
           </a>
 
           <div class="w-full flex flex-col md:justify-center md:items-center justify-start items-start gap-1">
-            <sofa-header-text :customClass="'md:!text-2xl text-lg'">{{ title }}</sofa-header-text>
-            <sofa-normal-text v-if="subTitle" :color="'text-grayColor'" :customClass="'!font-normal'">{{ subTitle }}</sofa-normal-text>
+            <sofa-header-text :customClass="'md:!text-2xl text-lg'" :content="title" />
+            <sofa-normal-text v-if="subTitle" :color="'text-grayColor'" :customClass="'!font-normal'" :content="subTitle" />
           </div>
         </div>
 
