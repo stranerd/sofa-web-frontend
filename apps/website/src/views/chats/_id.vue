@@ -11,8 +11,7 @@
             @click="showAddTutor = true"
             v-if="Logic.Users.isStudent && Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 1" />
 
-          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'"
-            @click="showMoreOptions = true" />
+          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
         </div>
       </template>
       <ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
@@ -102,7 +101,67 @@
       </template>
     </template>
 
+    <!-- More options for smaller screens -->
+    <sofa-modal :close="() => showMoreOptions = false" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
+      <div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => showMoreOptions = false">
+        <div class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
+          <router-link to="/chats/new" v-if="conversation.user.id === Logic.Auth.AuthUser?.id"
+            class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
+            <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
+            <sofa-normal-text :color="'text-primaryPink'">
+              New chat
+            </sofa-normal-text>
+          </router-link>
+
+          <div class="w-full flex flex-col gap-2">
+            <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
+          </div>
+
+          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4" v-if="conversation.user.id === Logic.Auth.AuthUser?.id">
+            <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor" @click="showEndSession = true">
+              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
+              <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
+            </a>
+            <a class="w-full flex items-center justify-start gap-2" @click="onClickAddTutor" v-else>
+              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
+              <sofa-normal-text :color="'text-primaryGreen'">
+                Add a tutor
+              </sofa-normal-text>
+            </a>
+
+            <a class="w-full flex items-center justify-start gap-2" @click="showDeleteConvo = true">
+              <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
+              <sofa-normal-text :color="'text-primaryRed'">
+                Delete chat
+              </sofa-normal-text>
+            </a>
+          </div>
+        </div>
+      </div>
+    </sofa-modal>
+
     <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
+
+    <!-- Success prompt for tutor request -->
+    <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
+      :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
+      :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
+
+    <!-- Delete convo -->
+    <sofa-delete-prompt v-if="showDeleteConvo" title="Are you sure?"
+      subTitle="This action is permanent. All messages in this conversation would be lost"
+      :close="() => showDeleteConvo = false" :buttons="[
+        {
+          label: 'No',
+          isClose: true,
+          action: () => showDeleteConvo = false
+        },
+        {
+          label: 'Yes, delete',
+          isClose: false,
+          action: deleteConversation
+        },
+      ]" />
 
     <template v-if="showNeedsSubscription">
       <sofa-delete-prompt v-if="Logic.Payment.UserWallet?.subscription.active"
@@ -147,14 +206,9 @@
         ]" />
     </template>
 
-    <!-- Success prompt for tutor request -->
-    <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
-      :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
-      :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
-
-    <!-- End session modal -->
-    <sofa-delete-prompt v-if="showEndSession" :title="'End session with tutor?'"
-      :subTitle="`Are you sure you want to end this session? The tutor will be removed from this chat`"
+    <!-- End session confirmation modal -->
+    <sofa-delete-prompt v-if="showEndSession" title="End session with tutor?"
+      subTitle="Are you sure you want to end this session? The tutor will be removed from this chat"
       :close="() => showEndSession = false" :buttons="[
         {
           label: 'No',
@@ -178,93 +232,7 @@
       :title="'Session ended, rate tutor'" :tutor="{
         name: conversation.tutor?.bio.name.full,
         photo: conversation.tutor?.bio.photo?.link,
-      }" @on-review-submitted="(data) => endChatSession(data)" />
-
-    <!-- More options for smaller screens -->
-    <sofa-modal :close="() => showMoreOptions = false" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
-      <div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => showMoreOptions = false">
-        <div @click.stop="() => { }"
-          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
-          <div
-            class="w-full flex flex-row items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer"
-            @click="newChat()" v-if="Logic.Users.getUserType() == 'student'">
-            <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
-            <sofa-normal-text :color="'text-primaryPink'">
-              New chat
-            </sofa-normal-text>
-          </div>
-
-          <div class="w-full flex flex-col gap-2">
-            <!-- Chat list -->
-            <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
-          </div>
-
-          <div class="sticky w-full bottom-0 left-0 bg-white z-50 px-4 py-4 border-t border-[#F1F6FA] flex flex-col gap-4"
-            v-if="!itIsNewMessage && Logic.Users.getUserType() == 'student'">
-            <a class="w-full flex flex-row items-center justify-start gap-2" v-if="conversation.tutor"
-              @click="showEndSession = true; selectedConvoId = conversation.id">
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
-              <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
-            </a>
-            <a class="w-full flex flex-row items-center justify-start gap-2" @click="onClickAddTutor"
-              v-if="!conversation.tutor && !selectedTutorRequestData">
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
-              <sofa-normal-text :color="'text-primaryGreen'">
-                Add a tutor
-              </sofa-normal-text>
-            </a>
-
-            <a class="w-full flex flex-row items-center justify-start gap-2"
-              @click="showDeleteConvo = true; selectedConvoId = conversation?.id">
-              <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
-              <sofa-normal-text :color="'text-primaryRed'">
-                Delete chat
-              </sofa-normal-text>
-            </a>
-          </div>
-        </div>
-      </div>
-    </sofa-modal>
-
-    <sofa-delete-prompt v-if="showDeleteConvo" title="Are you sure?"
-      subTitle="This action is permanent. All messages in this conversation would be lost"
-      :close="() => showDeleteConvo = false" :buttons="[
-        {
-          label: 'No',
-          isClose: true,
-          action: () => {
-            showDeleteConvo = false
-          },
-        },
-        {
-          label: 'Yes, delete',
-          isClose: false,
-          action: () => {
-            // deleteConvo(selectedConvoId)
-          },
-        },
-      ]" />
-
-    <!-- End session modal -->
-    <sofa-delete-prompt v-if="showEndSession" title="End session with tutor?"
-      subTitle="Are you sure you want to end this session? The tutor will be removed from this chat"
-      :close="() => showEndSession = false" :buttons="[
-        {
-          label: 'No',
-          isClose: true,
-          action: () => {
-            showEndSession = false
-          },
-        },
-        {
-          label: 'End session',
-          isClose: false,
-          action: () => {
-            showEndSession = false
-            showRateAndReviewTutor = true
-          },
-        },
-      ]" />
+      }" @on-review-submitted="(data) => endSession(data)" />
   </ChatLayout>
 </template>
 
@@ -276,32 +244,9 @@ import ChatLayout from "@/components/conversation/ChatLayout.vue"
 import ChatList from "@/components/conversation/ChatList.vue"
 import ConversationMessages from "@/components/conversation/Messages.vue"
 import {
-  acceptOrRejectTutorRequest,
-  addNewChat,
-  chatList,
-  contentTitleChanged,
-  conversationTitle,
-  endChatSession,
-  handleKeyEvent,
-  hasMessage,
-  itIsNewMessage,
-  itIsTutorRequest,
-  messageContent,
   newChat,
-  onClickAddTutor,
   onInput,
-  selectConversation,
-  selectedChatData,
-  selectedConvoId,
-  selectedTutorRequestData,
-  sendNewMessage,
-  showAddTutor,
-  showDeleteConvo,
-  showEndSession,
-  showLoader,
-  showMoreOptions,
-  showNeedsSubscription,
-  showRateAndReviewTutor
+  sendNewMessage
 } from "@/composables/conversation"
 import { useConversation } from '@/composables/conversations/conversations'
 import { Logic } from "sofa-logic"
@@ -370,7 +315,7 @@ export default defineComponent({
     const route = useRoute()
     const { id } = route.params
 
-    const { conversation } = useConversation(id as string)
+    const { conversation, endSession, deleteConversation } = useConversation(id as string)
 
     const otherUsers = computed(() => {
       if (!conversation.value) return []
@@ -382,6 +327,12 @@ export default defineComponent({
     })
 
     const showTutorRequestSubmited = ref(false)
+    const showDeleteConvo = ref(false)
+    const showAddTutor = ref(false)
+    const showEndSession = ref(false)
+    const showMoreOptions = ref(false)
+    const showNeedsSubscription = ref(false)
+    const showRateAndReviewTutor = ref(false)
 
     const handleRequestSent = () => {
       showAddTutor.value = false
@@ -389,38 +340,30 @@ export default defineComponent({
       showMoreOptions.value = false
     }
 
+    const onClickAddTutor = () => {
+      showMoreOptions.value = false
+      if (Logic.Payment.UserWallet?.subscription.data.tutorAidedConversations > 0) showAddTutor.value = true
+      else showNeedsSubscription.value = true
+    }
+
     return {
       Logic,
       conversation,
       otherUsers,
       onInput,
-      messageContent,
       sendNewMessage,
-      showLoader,
       showAddTutor,
       showMoreOptions,
-      chatList,
       showDeleteConvo,
-      selectConversation,
-      selectedConvoId,
-      addNewChat,
-      hasMessage,
-      handleKeyEvent,
-      conversationTitle,
-      contentTitleChanged,
-      selectedChatData,
       onClickAddTutor,
-      itIsTutorRequest,
-      acceptOrRejectTutorRequest,
-      selectedTutorRequestData,
       showTutorRequestSubmited,
       showNeedsSubscription,
       showEndSession,
-      itIsNewMessage,
       handleRequestSent,
       newChat,
       showRateAndReviewTutor,
-      endChatSession,
+      endSession,
+      deleteConversation,
     }
   },
 })

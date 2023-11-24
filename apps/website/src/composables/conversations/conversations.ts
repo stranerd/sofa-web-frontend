@@ -52,10 +52,54 @@ export const useConversationsList = () => {
 
 export const useConversation = (id: string) => {
 	const conversationList = useConversationsList()
+	const error = useErrorHandler()
+	const loading = useLoadingHandler()
 
 	const conversation = computed(() => store.conversations.value.find((q) => q.id === id) ?? null)
 
-	return { ...conversationList, conversation }
+	const endSession = async (reviewData: { ratings: number; review: string }) => {
+		if (loading.loading.value) return
+		error.setError('')
+		loading.setLoading(true)
+		try {
+			Logic.Conversations.DeleteTutorForm = {
+				id,
+				message: reviewData.review,
+				rating: reviewData.ratings,
+			}
+
+			await Logic.Conversations.DeleteTutor()
+			Logic.Common.showLoader({
+				show: true,
+				message: 'Tutor has been removed from this chat',
+				type: 'success',
+			})
+			await Logic.Common.GoToRoute('/chats')
+		} catch (e) {
+			error.setError(e)
+		}
+		loading.setLoading(false)
+	}
+
+	const deleteConversation = async () => {
+		if (loading.loading.value) return
+		error.setError('')
+		loading.setLoading(true)
+		try {
+			await Logic.Conversations.DeleteConversation(id)
+			Logic.Common.showLoader({
+				show: true,
+				message: 'Conversation deleted',
+				type: 'success',
+			})
+			await Logic.Common.GoToRoute('/chats')
+		} catch (e) {
+			error.setError(e)
+		}
+		loading.setLoading(false)
+	}
+
+	return { ...conversationList, conversation, endSession, deleteConversation }
 }
 
 export const useCreateConversation = () => {

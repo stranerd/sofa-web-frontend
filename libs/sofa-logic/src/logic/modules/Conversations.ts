@@ -265,14 +265,8 @@ export default class Conversations extends Common {
   }
 
   public DeleteConversation = (id: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
     return $api.conversations.conversation.delete(id)
-      .finally(() => {
-        Logic.Common.hideLoader()
-      })
+      .then((response) => response.data)
   }
 
   public DeleteTutorRequest = (tutorRequestId: string) => {
@@ -293,26 +287,6 @@ export default class Conversations extends Common {
     })
     return $api.conversations.conversation
       .deleteTutor(this.DeleteTutorForm)
-      .then((response) => {
-        this.GetConversations({
-          where: [
-            {
-              field: 'user.id',
-              value: Logic.Auth.AuthUser?.id,
-              condition: Conditions.eq,
-            },
-          ],
-        }).then(() => {
-          Logic.Common.showLoader({
-            show: true,
-            message: 'Tutor has been removed from this chat',
-            type: 'success',
-          })
-        })
-        return response.data
-      })
-      .catch((error) => {
-        Logic.Common.showError(capitalize(error.response.data[0]?.message))
-      })
+      .then((response) => response.data)
   }
 }

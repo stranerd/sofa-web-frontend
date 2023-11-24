@@ -78,5 +78,5 @@ export const useRequest = (id: string) => {
 		await acceptLoading.setLoading(false)
 	}
 
-	return { ...requestList, request, accept, ...acceptError, ...acceptLoading }
+	return { ...requestList, request, accept, acceptError, acceptLoading }
 }
