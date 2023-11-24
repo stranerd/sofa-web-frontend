@@ -121,6 +121,7 @@ export default class Users extends Common {
   public GetUser = (id: string) => {
     return $api.users.users.get(id).then((response) => {
       this.SingleUser = response.data
+      return this.SingleUser
     })
   }
 

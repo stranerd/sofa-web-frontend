@@ -1,66 +1,59 @@
 <template>
   <div class="w-full flex flex-col gap-5">
     <template v-for="(message, index) in allMessages" :key="index">
-      <template v-if="message.type == 'message'">
-        <div
-          class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start"
-          v-if="message.user.type == 'robot'">
-          <div class="w-[30px]">
-            <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
-              <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-            </sofa-avatar>
-          </div>
-          <div class="px-3 py-3 custom-border text-left bg-[#E2F3FD] flex flex-col gap-1 justify-start">
-            <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#3296C8]'">
-              {{ message.user.name }}
-            </sofa-normal-text>
-            <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.content"></sofa-normal-text>
-          </div>
+      <div
+        class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start"
+        v-if="message.user.type == 'robot'">
+        <div class="w-[30px]">
+          <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
+            <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
+          </sofa-avatar>
         </div>
+        <div class="px-3 py-3 custom-border text-left bg-[#E2F3FD] flex flex-col gap-1 justify-start">
+          <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#3296C8]'">
+            {{ message.user.name }}
+          </sofa-normal-text>
+          <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.content"></sofa-normal-text>
+        </div>
+      </div>
 
-        <div
-          class="w-auto min-w-[80px] max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex flex-row gap-2 items-end justify-start"
-          v-if="message.user.type == 'tutor'">
-          <div class="w-[30px]">
-            <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
-              <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-            </sofa-avatar>
-          </div>
-          <div class="px-3 py-3 custom-border text-left bg-[#E1F5EB] flex flex-col gap-1 justify-start">
-            <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#4BAF7D]'">
-              {{ message.user.name }}
-            </sofa-normal-text>
+      <div
+        class="w-auto min-w-[80px] max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex flex-row gap-2 items-end justify-start"
+        v-if="message.user.type == 'tutor'">
+        <div class="w-[30px]">
+          <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
+            <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
+          </sofa-avatar>
+        </div>
+        <div class="px-3 py-3 custom-border text-left bg-[#E1F5EB] flex flex-col gap-1 justify-start">
+          <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#4BAF7D]'">
+            {{ message.user.name }}
+          </sofa-normal-text>
+          <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.content">
+          </sofa-normal-text>
+        </div>
+      </div>
+
+      <div class="min-w-[80px] w-full flex flex-row gap-2 items-end justify-end py-4"
+        v-if="message.user.type == 'user'">
+        <div class="flex flex-row items-end gap-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
+          <div class="px-3 py-3 custom-border text-left bg-[#E1E6EB]">
             <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.content">
             </sofa-normal-text>
           </div>
-        </div>
-
-        <div class="min-w-[80px] w-full flex flex-row gap-2 items-end justify-end py-4"
-          v-if="message.user.type == 'user'">
-          <div class="flex flex-row items-end gap-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
-            <div class="px-3 py-3 custom-border text-left bg-[#E1E6EB]">
-              <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.content">
-              </sofa-normal-text>
-            </div>
-            <div class="w-[30px]">
-              <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
-                <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-              </sofa-avatar>
-            </div>
+          <div class="w-[30px]">
+            <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="message.user.photo" :size="'27'">
+              <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
+            </sofa-avatar>
           </div>
         </div>
-      </template>
-
-      <template v-if="message.type == 'badge'">
-        <div class="w-full flex flex-row items-center justify-center">
-          <div class="px-4 py-2 custom-border bg-[#F1F6FA] text-center">
-            <sofa-normal-text :color="'text-grayColor'">{{
-              message.content
-            }}</sofa-normal-text>
-          </div>
-        </div>
-      </template>
+      </div>
     </template>
+    <div v-if="allMessages.length === 0" class="w-full flex items-center justify-center">
+      <div class="px-4 py-2 custom-border bg-[#F1F6FA] text-center">
+        <sofa-normal-text :color="'text-grayColor'" content="Send a message to get started" />
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -154,14 +147,6 @@ export default defineComponent({
           },
         })
       })
-
-      if (allMessages.value.length == 0) {
-        allMessages.value.push({
-          content: "Send a message to get started",
-          id: "",
-          type: "badge",
-        })
-      }
     }
 
     watch(MessagesRef, () => {

@@ -1,16 +1,26 @@
 <template>
-  <ChatLayout title="Chat">
+  <ChatLayout v-if="conversation" title="Chat">
     <ChatContent class="h-full">
       <template v-slot:top-extras>
         <div class="flex flex-row items-center gap-3">
           <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'"
-            @click="showAddTutor = true" v-if="Logic.Users.isStudent && !selectedTutorRequestData && Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 1
-              " />
+            @click="showAddTutor = true" v-if="Logic.Users.isStudent && Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 1" />
 
           <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
         </div>
       </template>
       <ConversationMessages id="MessagesScrollContainer" :Messages="Messages" :ShowLoader="showLoader" />
+      <template v-slot:bottom>
+        <form @submit.prevent="console.log"
+          class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
+          <textarea
+            :class="`w-full resize-none !min-h-[48px] text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
+            placeholder="Enter message" />
+          <a class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
+            <sofa-icon :name="'send'" :customClass="'h-[19px]'" />
+          </a>
+        </form>
+      </template>
     </ChatContent>
 
     <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
@@ -146,24 +156,18 @@ import ChatContent from "@/components/conversation/ChatContent.vue"
 import ChatLayout from "@/components/conversation/ChatLayout.vue"
 import ChatList from "@/components/conversation/ChatList.vue"
 import ConversationMessages from "@/components/conversation/Messages.vue"
-import { scrollToBottom, scrollToTop } from "@/composables"
+import { scrollToBottom } from "@/composables"
 import {
-  AllConversations,
-  AllTutorRequests,
-  ChatMembers,
   acceptOrRejectTutorRequest,
   addNewChat,
   chatList,
   contentTitleChanged,
   conversationTitle,
   endChatSession,
-  handleIncomingMessage,
   handleKeyEvent,
   hasMessage,
   itIsNewMessage,
   itIsTutorRequest,
-  listenToConversation,
-  listenToTutorRequest,
   messageContent,
   newChat,
   onClickAddTutor,
@@ -173,17 +177,16 @@ import {
   selectedConvoId,
   selectedTutorRequestData,
   sendNewMessage,
-  setConversations,
   showAddTutor,
   showDeleteConvo,
   showEndSession,
   showLoader,
   showMoreOptions,
   showNeedsSubscription,
-  showRateAndReviewTutor,
-  tutorRequestList,
+  showRateAndReviewTutor
 } from "@/composables/conversation"
-import { Conditions, Logic } from "sofa-logic"
+import { useConversation } from '@/composables/conversations/conversations'
+import { Logic } from "sofa-logic"
 import {
   SofaDeletePrompt,
   SofaIcon,
@@ -191,8 +194,9 @@ import {
   SofaNormalText,
   SofaSuccessPrompt,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, ref, watch } from "vue"
+import { defineComponent, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -210,15 +214,6 @@ export default defineComponent({
   },
   middlewares: {
     fetchRules: [
-      {
-        domain: "Conversations",
-        property: "SingleConversation",
-        method: "GetConversation",
-        params: [],
-        useRouteId: true,
-        ignoreProperty: true,
-        requireAuth: true,
-      },
       {
         domain: "Conversations",
         property: "Messages",
@@ -248,54 +243,6 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: false,
       },
-      {
-        domain: "Users",
-        property: "AllTutorRequests",
-        method: "GetTutorRequests",
-        params: [
-          {
-            where: [
-              {
-                field: "userId",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-          true,
-        ],
-        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
-        requireAuth: true,
-        ignoreProperty: true,
-      },
-      {
-        domain: "Conversations",
-        property: "AllTutorRequests",
-        method: "GetTutorRequests",
-        params: [
-          {
-            where: [
-              {
-                field: "tutor.id",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-          true,
-        ],
-        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
-        requireAuth: true,
-        ignoreProperty: true,
-      },
-      {
-        domain: "Conversations",
-        property: "AllConversations",
-        method: "GetConversations",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: true,
-      }
     ],
     goBackRoute: "/chats",
   },
@@ -305,84 +252,16 @@ export default defineComponent({
       title: "Chat",
     })
 
-    const editTitle = ref(false)
+    const route = useRoute()
+    const { id } = route.params
+
+    const { conversation } = useConversation(id as string)
+
 
     const SingleConversation = ref(Logic.Conversations.SingleConversation)
     const Messages = ref(Logic.Conversations.Messages)
 
     const showTutorRequestSubmited = ref(false)
-
-    const setNewMessage = () => {
-      if (itIsNewMessage.value) {
-        selectedChatData.value.title = "New Chat"
-        Logic.Conversations.Messages = undefined
-        Logic.Conversations.SingleConversation = undefined
-      }
-    }
-
-    const connectWebsocket = async () => {
-      if (SingleConversation.value) {
-        Logic.Common.listenOnSocket(
-          `conversations/conversations/${Logic.Conversations.SingleConversation.id}/messages`,
-          (data) => {
-            handleIncomingMessage(data)
-          },
-          (data) => {
-            console.log(data)
-          }
-        )
-
-        setTimeout(() => {
-          scrollToBottom("MessagesScrollContainer")
-        }, 500)
-      }
-    }
-
-    const setTutorRequest = () => {
-      if (Logic.Users.isTeacher && !SingleConversation.value) {
-        const requestId = Logic.Common.route.query?.requestId?.toString()
-        if (requestId) {
-          itIsTutorRequest.value = true
-          tutorRequestList.forEach((item) => {
-            if (item.id == requestId) {
-              item.selected = true
-              selectedChatData.value = item
-              selectedTutorRequestData.value = item
-            }
-          })
-        }
-      }
-    }
-
-    onMounted(() => {
-      scrollToTop()
-
-      Logic.Conversations.watchProperty("AllConversations", AllConversations)
-      Logic.Conversations.watchProperty("AllTutorRequests", AllTutorRequests)
-      Logic.Conversations.watchProperty("ChatMembers", ChatMembers)
-      Logic.Conversations.watchProperty("SingleConversation", SingleConversation)
-      Logic.Conversations.watchProperty("Messages", Messages)
-
-      conversationTitle.value = SingleConversation.value?.title || ""
-
-      setConversations()
-
-      chatList.forEach((chat) => {
-        if (chat.id == SingleConversation.value?.id) {
-          chat.selected = true
-          selectedChatData.value = chat
-        }
-      })
-
-      if (SingleConversation.value) {
-        listenToConversation(SingleConversation.value.id)
-      }
-
-      setTutorRequest()
-      setNewMessage()
-      listenToTutorRequest()
-      connectWebsocket()
-    })
 
     watch(Messages, () => {
       //
@@ -391,44 +270,15 @@ export default defineComponent({
       }, 500)
     })
 
-    watch(itIsNewMessage, () => {
-      if (itIsNewMessage.value) {
-        setNewMessage()
-      }
-    })
-
     const handleRequestSent = () => {
       showAddTutor.value = false
       showTutorRequestSubmited.value = true
       showMoreOptions.value = false
     }
 
-    watch(SingleConversation, () => {
-      if (SingleConversation.value) {
-        chatList.forEach((chat) => {
-          if (chat.id == SingleConversation.value?.id) {
-            chat.selected = true
-          } else {
-            chat.selected = false
-          }
-        })
-        connectWebsocket()
-
-        if (editTitle.value == false) {
-          if (SingleConversation.value) {
-            conversationTitle.value = SingleConversation.value.title
-            selectedChatData.value.title = SingleConversation.value.title
-          } else {
-            conversationTitle.value = "New Chat"
-            selectedChatData.value.title = "New Chat"
-          }
-          editTitle.value = false
-        }
-      }
-    })
-
     return {
       Logic,
+      conversation,
       SingleConversation,
       Messages,
       onInput,
@@ -446,7 +296,6 @@ export default defineComponent({
       handleKeyEvent,
       conversationTitle,
       contentTitleChanged,
-      editTitle,
       selectedChatData,
       onClickAddTutor,
       itIsTutorRequest,

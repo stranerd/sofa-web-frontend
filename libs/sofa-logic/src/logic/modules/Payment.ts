@@ -124,6 +124,7 @@ export default class Payment extends Common {
   public GetUserWallet = () => {
     return $api.payment.wallet.getUserWallet().then((response) => {
       this.UserWallet = response.data
+      return this.UserWallet
     })
   }
 
