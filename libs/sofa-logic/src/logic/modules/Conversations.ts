@@ -251,17 +251,13 @@ export default class Conversations extends Common {
       })
   }
 
-  public CreateMessage = (conversationId: string, formIsValid: boolean) => {
-    if (formIsValid && this.CreateMessageForm) {
+  public CreateMessage = (conversationId: string, CreateMessageForm: CreateMessageInput) => {
       return $api.conversations.conversation
         .createMessage(conversationId, this.CreateMessageForm)
         .then((response) => {
           this.SingleMessage = response.data
+          return this.SingleMessage
         })
-        .catch((error) => {
-          //
-        })
-    }
   }
 
   public DeleteConversation = (id: string) => {

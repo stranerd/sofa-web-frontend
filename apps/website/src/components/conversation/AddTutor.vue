@@ -1,15 +1,9 @@
 <template>
   <!-- add tutor -->
-  <sofa-modal :close="() => {
-    close ? close() : null
-  }
-    " :can-close="false">
+  <sofa-modal :close="() => close?.()" :can-close="false">
     <div
       class="mdlg:!w-[60%] lg:!w-[50%] w-full mdlg:!h-[80%] md:!h-[70%] overflow-y-hidden md:w-[70%] h-[90%] flex flex-col items-center relative"
-      @click.stop="() => {
-        //
-      }
-        ">
+      @click.stop="() => {}">
       <div
         class="bg-white w-full flex flex-col h-full overflow-y-auto lg:!px-6 md:!gap-4 relative gap-3 lg:!py-0 mdlg:!px-6 mdlg:!py-0 md:!py-0 py-0 md:!px-4 md:!rounded-[16px] rounded-t-[16px]">
         <div
@@ -18,7 +12,7 @@
           <sofa-header-text :customClass="'text-xl'" content="Add a tutor" />
 
           <div class="w-full grid grid-cols-3 gap-2 py-3">
-            <div :class="`col-span-1 h-[8px] rounded-[99px]  ${index <= currentStep ? 'bg-[#141618]' : 'bg-[#E1E6EB]'
+            <div :class="`col-span-1 h-[8px] rounded-[99px] ${index <= currentStep ? 'bg-[#141618]' : 'bg-[#E1E6EB]'
               }`" v-for="(step, index) in 3" :key="index"></div>
           </div>
 
@@ -86,10 +80,10 @@
         <template v-if="currentStep == 2">
           <div class="w-full flex flex-col gap-3 md:!px-0 px-4 flex-grow">
             <template v-if="allTutors.length">
-              <div :class="`w-full custom-border bg-[#F1F6FA] ${selectedTutorId == tutor.id
+              <a :class="`w-full custom-border bg-[#F1F6FA] ${selectedTutorId == tutor.id
                 ? 'border-[2px] border-primaryPurple'
                 : ''
-                } px-4 py-4 flex flex-row items-center gap-3 cursor-pointer`" v-for="(tutor, index) in allTutors"
+                } p-4 flex items-center gap-3`" v-for="(tutor, index) in allTutors"
                 :key="index" @click="selectedTutorId = tutor.id">
                 <div class="w-[60px]">
                   <sofa-avatar :size="'60'" :photoUrl="tutor.photo_url" :bgColor="'bg-grayColor'">
@@ -124,7 +118,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </a>
             </template>
             <template v-else>
               <div class="flex flex-col items-center justify-center pt-3">
@@ -139,12 +133,11 @@
         <div
           class="w-full flex flex-row items-center justify-between z-[50] bg-white md:!absolute fixed bottom-0 left-0 py-4 px-4">
           <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-            :customClass="'border-[1px] border-gray-100 hidden md:!inline-block'" @click.prevent="close ? close() : null">
+            :customClass="'border border-gray-100 hidden md:!inline-block'" @click.prevent="close?.()">
             Exit
           </sofa-button>
 
-          <div :class="`md:!w-auto w-full  ${currentStep == 2 && !selectedTutorId ? 'opacity-50' : ''
-            } `">
+          <div :class="`md:!w-auto w-full ${currentStep == 2 && !selectedTutorId ? 'opacity-50' : ''}`">
             <sofa-button :padding="'px-5 py-3 md:!py-2'" :customClass="`mdlg:!w-auto w-full`" @click="handleAddTutor()">
               {{ currentStep == 0 ? "Next" : "" }}
               {{ currentStep == 1 ? "Next" : "" }}
@@ -156,6 +149,7 @@
     </div>
   </sofa-modal>
 </template>
+
 <script lang="ts">
 import {
   SofaAvatar,
@@ -168,12 +162,29 @@ import {
   SofaTextField,
   SofaTextarea,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
-
+import { defineComponent, onMounted, ref, watch } from "vue"
 import { FormValidations } from "@/composables"
-import { SingleConversation } from "@/composables/conversation"
 import { allTopics, getTopics } from "@/composables/course"
 import { Conditions, Logic, SingleUser } from "sofa-logic"
+
+const helpOptions = [
+  {
+    title: "Homework help",
+    key: "homework_help",
+  },
+  {
+    title: "Explanation",
+    key: "explanation",
+  },
+  {
+    title: "Project help",
+    key: "project_help",
+  },
+  {
+    title: "Essay",
+    key: "essay",
+  },
+]
 
 export default defineComponent({
   components: {
@@ -191,16 +202,16 @@ export default defineComponent({
     close: {
       type: Function,
     },
-    chatId: {
+    conversationId: {
       type: String,
-      default: "",
+      required: true,
     },
   },
   emits: ["OnRequestSent"],
   setup (props, context) {
     const selectedTopic = ref("")
 
-    const selectedhelpOption = ref("homework_help")
+    const selectedhelpOption = ref(helpOptions[0].key)
 
     const selectedTutorId = ref("")
 
@@ -209,25 +220,6 @@ export default defineComponent({
     const reasonForRequest = ref("")
 
     const currentStep = ref(0)
-
-    const helpOptions = reactive([
-      {
-        title: "Homework help",
-        key: "homework_help",
-      },
-      {
-        title: "Explanation",
-        key: "explanation",
-      },
-      {
-        title: "Project help",
-        key: "project_help",
-      },
-      {
-        title: "Essay",
-        key: "essay",
-      },
-    ])
 
     const allTutors = ref<
       {
@@ -301,7 +293,7 @@ export default defineComponent({
       if (currentStep.value == 2) {
         if (selectedTutorId.value) {
           Logic.Conversations.CreateTutorRequestForm = {
-            conversationId: SingleConversation.value?.id,
+            conversationId: props.conversationId,
             message: reasonForRequest.value,
             tutorId: selectedTutorId.value,
           }
@@ -322,10 +314,6 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      Logic.Conversations.watchProperty(
-        "SingleConversation",
-        SingleConversation
-      )
       getTopics(true)
     })
 

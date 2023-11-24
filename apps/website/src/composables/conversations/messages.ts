@@ -1,4 +1,4 @@
-import { Conditions, Conversation, Logic, Message, SingleUser } from 'sofa-logic'
+import { Conditions, Conversation, Logic, Message, MessageFactory, SingleUser } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
@@ -105,7 +105,7 @@ export const useMessages = (conversation: Conversation) => {
 		loading: store[conversationId].loading,
 		error: store[conversationId].error,
 		hasMore: store[conversationId].hasMore,
-		fetchOlderChats: fetchOlderMessages
+		fetchOlderMessages
 	}
 }
 
@@ -117,4 +117,26 @@ export const useMessage = (message: Message) => {
 		if (!message.readAt[Logic.Auth.AuthUser?.id]) await markMessageRead()
 	})
 	return { markChatRead: markMessageRead }
+}
+
+export const useCreateMessage = (conversationId: string) => {
+	const { error, setError } = useErrorHandler()
+	const { loading, setLoading } = useLoadingHandler()
+	const factory = new MessageFactory()
+
+	const createMessage = async () => {
+		await setError('')
+		if (factory.valid && !loading.value) {
+			try {
+				await setLoading(true)
+				await Logic.Conversations.CreateMessage(conversationId, await factory.toModel())
+				factory.reset()
+			} catch (error) {
+				await setError(error)
+			}
+			await setLoading(false)
+		} else factory.validateAll()
+	}
+
+	return { error, loading, factory, createMessage }
 }

@@ -16,9 +16,9 @@
           <input v-model=factory.title
             :class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
             placeholder="Enter message" />
-          <a class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
+          <button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
             <sofa-icon :name="'send'" :customClass="'h-[19px]'" />
-          </a>
+          </button>
         </form>
       </template>
     </ChatContent>

@@ -159,34 +159,6 @@
         </div>
       </div>
 
-      <div v-if="recentChats.length"
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] mdlg:!hidden flex flex-col mdlg:!gap-4 gap-1">
-        <div class="w-full flex flex-row gap-2 items-center">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Recent chats
-          </sofa-normal-text>
-        </div>
-
-        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
-          <div
-            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-            <sofa-icon-card :data="item" v-for="(item, index) in recentChats" :key="index"
-              @click="Logic.Common.GoToRoute('/chats/' + item.id)">
-              <template v-slot:title>
-                <div class="w-full flex flex-row items-center gap-2">
-                  <sofa-normal-text :customClass="'!line-clamp-1 font-bold text-left'">
-                    {{ item.title }}
-                  </sofa-normal-text>
-                  <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#78828c]">
-                  </span>
-                  <sofa-normal-text>{{ item.date }}</sofa-normal-text> -->
-                </div>
-              </template>
-            </sofa-icon-card>
-          </div>
-        </div>
-      </div>
-
       <div
         class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col gap-4">
         <div class="w-full flex flex-row gap-2 items-center justify-between">
@@ -347,9 +319,9 @@
     </template>
 
     <template v-slot:right-session>
-      <div v-if="Logic.Users.getUserType() != 'teacher'"
+      <div v-if="!Logic.Users.isTeacher"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
-        <template v-if="Logic.Users.getUserType() == 'student'">
+        <template v-if="Logic.Users.isStudent">
           <div class="w-full flex flex-row items-center gap-3">
             <div :style="`background-image: url('${UserProfile.ai.photo
               ? UserProfile.ai.photo.link
@@ -366,9 +338,9 @@
           </div>
 
           <sofa-text-field placeholder="What can I do for you?" :padding="'p-3'" :custom-class="'border'"
-            v-model="newChatMessage">
+            v-model="factory.title">
             <template v-slot:inner-suffix>
-              <sofa-icon :name="'send'" :customClass="'h-[19px] cursor-pointer'" @click="startConversation()" />
+              <sofa-icon :name="'send'" :customClass="'h-[19px] cursor-pointer'" @click="createConversation" />
             </template>
           </sofa-text-field>
 
@@ -449,7 +421,7 @@
 import ChatList from "@/components/conversation/ChatList.vue"
 import CustomizeBot from "@/components/onboarding/CustomizeBot.vue"
 import { scrollToTop } from "@/composables"
-import { useConversationsList } from '@/composables/conversations/conversations'
+import { useConversationsList, useCreateConversation } from '@/composables/conversations/conversations'
 import {
   selectedFolderMaterailToAdd,
   showSaveToFolder,
@@ -482,7 +454,7 @@ import {
   SofaNormalText,
   SofaTextField,
 } from "sofa-ui-components"
-import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { computed, defineComponent, onMounted, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -575,12 +547,9 @@ export default defineComponent({
     })
 
     const { conversations } = useConversationsList()
+    const { factory, createConversation } = useCreateConversation()
 
     const UserProfile = ref(Logic.Users.UserProfile)
-
-    const newChatMessage = ref("")
-
-    const recentChats = reactive([])
 
     const profileSteps = computed(() => UserProfile.value ? [
       {
@@ -656,12 +625,6 @@ export default defineComponent({
       }
     ] : [])
 
-    const startConversation = () => {
-      if (newChatMessage.value.length >= 2) {
-        Logic.Common.GoToRoute("/chats?message=" + newChatMessage.value)
-      }
-    }
-
     onMounted(() => {
       scrollToTop()
       setHomeMaterials(4)
@@ -688,14 +651,14 @@ export default defineComponent({
 
     return {
       moment,
-      recentChats,
+      factory,
+      createConversation,
       Logic,
       profileSteps,
       studyMaterialsSteps,
       conversations,
       takeOnTasks,
       UserProfile,
-      newChatMessage,
       homeContents,
       sectionTags,
       showCustomizeAI,
@@ -704,7 +667,6 @@ export default defineComponent({
       showRemoveMember,
       showSaveToFolder,
       selectedFolderMaterailToAdd,
-      startConversation,
     }
   },
 })

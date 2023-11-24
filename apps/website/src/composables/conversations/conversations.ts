@@ -110,7 +110,7 @@ export const useCreateConversation = () => {
 
 	const createConversation = async () => {
 		await setError('')
-		if (factory.title && !loading.value) {
+		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true)
 				const conversation = await Logic.Conversations.CreateConversation(factory.title)

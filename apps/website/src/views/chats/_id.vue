@@ -16,14 +16,14 @@
       </template>
       <ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
       <template v-slot:bottom>
-        <form @submit.prevent="console.log"
+        <form @submit.prevent="createMessage"
           class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-          <input
+          <input v-model="factory.body"
             :class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
             placeholder="Enter message" />
-          <a class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
+          <button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
             <sofa-icon :name="'send'" :customClass="'h-[19px]'" />
-          </a>
+          </button>
         </form>
       </template>
     </ChatContent>
@@ -140,7 +140,7 @@
       </div>
     </sofa-modal>
 
-    <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
+    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
 
     <!-- Success prompt for tutor request -->
     <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
@@ -243,12 +243,8 @@ import ChatContent from "@/components/conversation/ChatContent.vue"
 import ChatLayout from "@/components/conversation/ChatLayout.vue"
 import ChatList from "@/components/conversation/ChatList.vue"
 import ConversationMessages from "@/components/conversation/Messages.vue"
-import {
-  newChat,
-  onInput,
-  sendNewMessage
-} from "@/composables/conversation"
 import { useConversation } from '@/composables/conversations/conversations'
+import { useCreateMessage } from '@/composables/conversations/messages'
 import { Logic } from "sofa-logic"
 import {
   SofaAvatar,
@@ -316,6 +312,7 @@ export default defineComponent({
     const { id } = route.params
 
     const { conversation, endSession, deleteConversation } = useConversation(id as string)
+    const { factory, createMessage } = useCreateMessage(id as string)
 
     const otherUsers = computed(() => {
       if (!conversation.value) return []
@@ -348,10 +345,10 @@ export default defineComponent({
 
     return {
       Logic,
+      factory,
+      createMessage,
       conversation,
       otherUsers,
-      onInput,
-      sendNewMessage,
       showAddTutor,
       showMoreOptions,
       showDeleteConvo,
@@ -360,7 +357,6 @@ export default defineComponent({
       showNeedsSubscription,
       showEndSession,
       handleRequestSent,
-      newChat,
       showRateAndReviewTutor,
       endSession,
       deleteConversation,
