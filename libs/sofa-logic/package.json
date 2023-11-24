@@ -41,6 +41,7 @@
     "currency.js": "^2.0.4",
     "moment": "^2.29.4",
     "socket.io-client": "^4.6.1",
+    "valleyed": "^4.2.3",
     "vue-router": "^4.0.12"
   }
 }

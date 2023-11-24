@@ -43,6 +43,9 @@ importers:
       tailwind-scrollbar-hide:
         specifier: ^1.1.7
         version: 1.1.7
+      valleyed:
+        specifier: ^4.2.3
+        version: 4.2.3
       vue:
         specifier: ^3.2.21
         version: 3.3.4
@@ -161,6 +164,9 @@ importers:
       socket.io-client:
         specifier: ^4.6.1
         version: 4.7.2
+      valleyed:
+        specifier: ^4.2.3
+        version: 4.2.3
       vue:
         specifier: ^3.2.21
         version: 3.3.4
@@ -6831,6 +6837,11 @@ packages:
     resolution: {integrity: sha512-6xwYfHbajpoF0xLW+iwLkhwgvLoZDfjYfoFNu8ftMoXINzwuymNLd9u/KmwtdT2GbR+/Cz66otEGEVVUHX9QLQ==}
     engines: {node: '>=10.13.0'}
 
+  /ip-regex@4.3.0:
+    resolution: {integrity: sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==}
+    engines: {node: '>=8'}
+    dev: false
+
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
@@ -10806,6 +10817,11 @@ packages:
   /thunky@1.1.0:
     resolution: {integrity: sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==}
 
+  /tlds@1.247.0:
+    resolution: {integrity: sha512-m9G0j6euzOucY3Auzl2/SAnGXJVFA1ibJDRBqUdAx7o4jzMidCCKZXWNQVBDcx5zHISJl1r5yA8aaS6WfWuKMQ==}
+    hasBin: true
+    dev: false
+
   /tmp@0.2.1:
     resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
     engines: {node: '>=8.17.0'}
@@ -11067,6 +11083,19 @@ packages:
       requires-port: 1.0.0
     dev: true
 
+  /url-regex-safe@4.0.0:
+    resolution: {integrity: sha512-BrnFCWKNFrFnRzKD66NtJqQepfJrUHNPvPxE5y5NSAhXBb4OlobQjt7907Jm4ItPiXaeX+dDWMkcnOd4jR9N8A==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      re2: ^1.20.1
+    peerDependenciesMeta:
+      re2:
+        optional: true
+    dependencies:
+      ip-regex: 4.3.0
+      tlds: 1.247.0
+    dev: false
+
   /url-toolkit@2.2.5:
     resolution: {integrity: sha512-mtN6xk+Nac+oyJ/PrI7tzfmomRVNFIWKUbG8jdYFt52hxbiReFAXIjYskvu64/dvuW71IcB7lV8l0HvZMac6Jg==}
     dev: false
@@ -11108,6 +11137,14 @@ packages:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
     dev: true
+
+  /valleyed@4.2.3:
+    resolution: {integrity: sha512-7DRCUrvLlZJPIsnFCj4FkgOaH4VFKCv8d0m/O6kgxhPKUGsM4e13dogbEMOjcQy28Queswyaga0HhymJ7gOkeg==}
+    dependencies:
+      url-regex-safe: 4.0.0
+    transitivePeerDependencies:
+      - re2
+    dev: false
 
   /vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}

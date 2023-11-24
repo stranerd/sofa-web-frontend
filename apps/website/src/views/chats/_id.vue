@@ -287,7 +287,6 @@ export default defineComponent({
         property: "AllConversations",
         method: "GetConversations",
         params: [],
-        shouldSkip: () => Logic.Users.getUserType() === "teacher",
         requireAuth: true,
         ignoreProperty: true,
       }

@@ -13,6 +13,7 @@ import { Logic } from '..'
 import {
   EmitTypes,
   FetchRule,
+  Listeners,
   LoaderSetup,
   SocketReturn,
   StatusCodes,
@@ -152,7 +153,7 @@ export default class Common {
   public listenOnSocket = async (
     initialChannel,
     listener: Function,
-    onleave: Function,
+    onleave: Function = () => {},
   ) => {
     const tokens = await Logic.Auth.GetTokens()
     const accessToken = tokens?.accessToken
@@ -194,7 +195,6 @@ export default class Common {
           },
         )
       } catch (e) {
-        return e
       }
     }
 
@@ -202,6 +202,29 @@ export default class Common {
       closeConnection,
     }
   }
+
+  public async listenToSocket<Model> (channel: string, listeners: Listeners<Model>) {
+    const { closeConnection } = await this.listenOnSocket(channel, (data) => listeners[data.type]?.(data.data))
+    return closeConnection
+  }
+
+  public async listenToOne<Model> (channel: string, listeners: Listeners<Model>) {
+    return this.listenToSocket(channel, listeners)
+	}
+
+	async listenToMany<Model> (channel: string, listeners: Listeners<Model>, matches: (entity: Model) => boolean = () => true) {
+		return this.listenToSocket<Model>(channel, {
+			created: async (model) => {
+				if (matches(model)) await listeners.created(model)
+			},
+			updated: async (model) => {
+				if (matches(model)) await listeners.updated(model)
+			},
+			deleted: async (model) => {
+				if (matches(model)) await listeners.deleted(model)
+			}
+		})
+	}
 
   public SetRouter = (router: Router) => {
     this.router = router

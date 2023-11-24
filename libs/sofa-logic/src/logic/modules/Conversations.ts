@@ -39,27 +39,11 @@ export default class Conversations extends Common {
   public CreateMessageForm: CreateMessageInput | undefined
   public CreateTutorRequestForm: CreateTutorRequestInput | undefined
 
-  public GetConversations = (filters: QueryParams) => {
-    return new Promise((resolve) => {
-      $api.conversations.conversation.fetch(filters).then((response) => {
-        this.AllConversations = response.data
-        if (Logic.Users.getUserType() == 'student') {
-          this.GetTutorRequests({
-            where: [
-              {
-                field: 'userId',
-                value: Logic.Auth.AuthUser.id,
-                condition: Conditions.eq,
-              },
-            ],
-          }).then(() => {
-            resolve('')
-          })
-        } else {
-          resolve('')
-        }
-      })
-    })
+  public async GetConversations (filters: QueryParams) {
+    const response = await $api.conversations.conversation.fetch(filters)
+    this.AllConversations = response.data
+    if (Logic.Users.getUserType() === 'student') await this.GetTutorRequests({})
+    return this.AllConversations
   }
 
   public GetConversation = (id: string) => {
@@ -267,9 +251,6 @@ export default class Conversations extends Common {
       .then((response) => {
         this.SingleConversation = response.data
         return response.data
-      })
-      .catch((error) => {
-        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
