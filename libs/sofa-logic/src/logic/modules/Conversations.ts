@@ -58,65 +58,46 @@ export default class Conversations extends Common {
     })
   }
 
-  public GetTutorRequests = (filters: QueryParams, fetchConvos = false) => {
-    return new Promise((resolve) => {
-      $api.conversations.tutor_request.fetch(filters).then((response) => {
-        this.AllTutorRequests = response.data
-        if (fetchConvos) {
-          const itemsFetched = []
+  public async GetTutorRequests (filters: QueryParams, fetchConvos = false) {
+    const response = await $api.conversations.tutor_request.fetch(filters)
+    this.AllTutorRequests = response.data
+    if (fetchConvos) {
+      const allConversations = this.AllTutorRequests.results.map((item) => item.conversationId)
 
-          const allConversations = this.AllTutorRequests.results.map(
-            (item) => item.conversationId,
-          )
+      const allUsers = this.AllTutorRequests.results.map((item) => item.userId)
 
-          const allUsers = this.AllTutorRequests.results.map(
-            (item) => item.userId,
-          )
-
-          this.GetConversations({
-            where: [
-              {
-                field: 'id',
-                value: allConversations,
-                condition: Conditions.in,
-              },
-            ],
-          }).then(() => {
-            itemsFetched.push('convos')
-            if (itemsFetched.length == 2) {
-              resolve('')
-            }
-          })
-
-          Logic.Users.GetUsers(
-            {
-              where: [
-                {
-                  field: 'id',
-                  value: allUsers,
-                  condition: Conditions.in,
-                },
-              ],
-            },
-            false,
-          ).then((users: SingleUser[]) => {
-            users.forEach((user) => {
-              this.AllTutorRequests.results.forEach((request) => {
-                if (request.userId == user.id) {
-                  request.user = user
-                }
-              })
-            })
-            itemsFetched.push('users')
-            if (itemsFetched.length == 2) {
-              resolve('')
-            }
-          })
-        } else {
-          resolve('')
-        }
+      await this.GetConversations({
+        where: [
+          {
+            field: 'id',
+            value: allConversations,
+            condition: Conditions.in,
+          },
+        ],
       })
-    })
+
+      await Logic.Users.GetUsers(
+        {
+          where: [
+            {
+              field: 'id',
+              value: allUsers,
+              condition: Conditions.in,
+            },
+          ],
+        },
+        false,
+      ).then((users: SingleUser[]) => {
+        users.forEach((user) => {
+          this.AllTutorRequests.results.forEach((request) => {
+            if (request.userId == user.id) {
+              request.user = user
+            }
+          })
+        })
+      })
+    }
+    return this.AllTutorRequests
   }
 
   public GetTutorRequest = (id: string) => {

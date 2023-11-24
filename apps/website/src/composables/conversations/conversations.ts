@@ -1,9 +1,9 @@
 import { Conversation, ConversationFactory, Logic } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
-import { useRouter } from 'vue-router'
 
 const store = {
 	conversations: ref<Conversation[]>([]),
@@ -16,7 +16,6 @@ const store = {
 				addToArray(store.conversations.value, entity, (e) => e.id, (e) => (e.last?.createdAt ?? 0))
 			},
 			updated: async (entity) => {
-				// if (entity.hasUnRead(userId)) await player.play()
 				addToArray(store.conversations.value, entity, (e) => e.id, (e) => (e.last?.createdAt ?? 0))
 			},
 			deleted: async (entity) => {
