@@ -96,7 +96,7 @@
 
           <div class="w-full flex flex-col gap-2">
             <!-- Chat list -->
-            <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" @itemSelected="() => showMoreOptions = false" />
+            <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
           </div>
 
           <div class="sticky w-full bottom-0 left-0 bg-white z-50 px-4 py-4 border-t border-[#F1F6FA] flex flex-col gap-4"

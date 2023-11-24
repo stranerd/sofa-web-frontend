@@ -41,7 +41,7 @@ export const contentList = [
 
 export interface ChatListData {
   title: string
-  selected: boolean
+  selected?: boolean
   subTitle: string
   icon?: string
   iconSize?: string

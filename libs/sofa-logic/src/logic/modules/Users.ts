@@ -53,6 +53,18 @@ export default class Users extends Common {
     return Logic.Users.UserProfile?.type?.type ?? 'student'
   }
 
+  public get isTeacher () {
+    return this.getUserType() === 'teacher'
+  }
+
+  public get isStudent () {
+    return this.getUserType() === 'student'
+  }
+
+  public get isOrg () {
+    return this.getUserType() === 'organization'
+  }
+
   public CheckUserTaskState = (
     task:
       | 'profile_setup'

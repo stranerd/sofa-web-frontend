@@ -99,7 +99,8 @@
         </div>
 
         <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
-          <div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+          <div
+            class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
             <sofa-icon-card :data="item" v-for="(item, index) in profileSteps" :key="index"
               @click="item.action ? item.action() : null">
               <template v-slot:title>
@@ -423,24 +424,18 @@
         </template>
       </div>
 
-      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4" v-if="(chatList.length && Logic.Users.getUserType() == 'student') ||
-        Logic.Users.getUserType() == 'teacher'
-        ">
-        <div class="w-full flex flex-row gap-2 items-center">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Recent chats
-          </sofa-normal-text>
-        </div>
+      <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4"
+        v-if="(conversations.length && Logic.Users.isStudent) || Logic.Users.isTeacher">
+        <sofa-normal-text :customClass="'!font-bold'">
+          Recent chats
+        </sofa-normal-text>
 
-        <template v-if="chatList.length">
-          <!-- Chat list -->
-          <chat-list-component :extra-style="'pt-0'" />
+        <template v-if="conversations.length">
+          <ChatList :limit="3" />
 
-          <div class="w-full">
-            <router-link to="/chats">
-              <sofa-normal-text :color="'text-primaryPink'">See all</sofa-normal-text>
-            </router-link>
-          </div>
+          <router-link to="/chats">
+            <sofa-normal-text :color="'text-primaryPink'">See all</sofa-normal-text>
+          </router-link>
         </template>
         <template v-else>
           <sofa-empty-state :title="'No chat'" :subTitle="'Your active chats will show up here'" :actionLabel="''" />
@@ -451,47 +446,41 @@
 </template>
 
 <script lang="ts">
-import ChatListComponent from "@/components/conversation/ChatList.vue"
+import ChatList from "@/components/conversation/ChatList.vue"
 import CustomizeBot from "@/components/onboarding/CustomizeBot.vue"
 import { scrollToTop } from "@/composables"
+import { useConversationsList } from '@/composables/conversations/conversations'
 import {
-AllConversations,
-AllTutorRequests,
-chatList,
-setConversations,
-} from "@/composables/conversation"
-import {
-selectedFolderMaterailToAdd,
-showSaveToFolder,
+  selectedFolderMaterailToAdd,
+  showSaveToFolder,
 } from "@/composables/library"
 import {
-HomeMaterials,
-homeContents,
-sectionTags,
-setHomeMaterials,
+  HomeMaterials,
+  homeContents,
+  sectionTags,
+  setHomeMaterials,
 } from "@/composables/marketplace"
 import {
-allOrganizationMembers,
-allStudents,
-selectedMember,
-setOrganizationMembers,
-showCustomizeAI,
-showRemoveMember,
+  allOrganizationMembers,
+  allStudents,
+  selectedMember,
+  setOrganizationMembers,
+  showCustomizeAI,
+  showRemoveMember,
 } from "@/composables/profile"
 import moment from "moment"
 import { Logic } from "sofa-logic"
-import { Conditions } from "sofa-logic"
 import {
-SofaActivityCard,
-SofaAvatar,
-SofaBadge,
-SofaButton,
-SofaEmptyState,
-SofaHeaderText,
-SofaIcon,
-SofaIconCard,
-SofaNormalText,
-SofaTextField,
+  SofaActivityCard,
+  SofaAvatar,
+  SofaBadge,
+  SofaButton,
+  SofaEmptyState,
+  SofaHeaderText,
+  SofaIcon,
+  SofaIconCard,
+  SofaNormalText,
+  SofaTextField,
 } from "sofa-ui-components"
 import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
@@ -509,7 +498,7 @@ export default defineComponent({
     SofaAvatar,
     CustomizeBot,
     SofaEmptyState,
-    ChatListComponent,
+    ChatList,
   },
   middlewares: {
     fetchRules: [
@@ -526,24 +515,6 @@ export default defineComponent({
         method: "GetInstitutions",
         params: [],
         requireAuth: true,
-      },
-      {
-        domain: "Conversations",
-        property: "AllConversations",
-        method: "GetConversations",
-        params: [
-          {
-            where: [
-              {
-                field: "user.id",
-                value: Logic.Auth.AuthUser?.id,
-                condition: Conditions.eq,
-              },
-            ],
-          },
-        ],
-        requireAuth: true,
-        silentUpdate: true,
       },
       {
         domain: "Study",
@@ -582,25 +553,6 @@ export default defineComponent({
         silentUpdate: false,
       },
       {
-        domain: "Conversations",
-        property: "AllTutorRequests",
-        method: "GetTutorRequests",
-        params: [
-          {
-            where: [
-              {
-                field: "tutor.id",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-          true,
-        ],
-        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
-        requireAuth: true,
-      },
-      {
         domain: "Users",
         property: "AllorganizationMembers",
         method: "GetOrganizationMembers",
@@ -621,6 +573,8 @@ export default defineComponent({
     useMeta({
       title: "Home",
     })
+
+    const { conversations } = useConversationsList()
 
     const UserProfile = ref(Logic.Users.UserProfile)
 
@@ -700,7 +654,7 @@ export default defineComponent({
         iconSize: "h-[46px]",
         action: () => Logic.Common.GoToRoute("/marketplace")
       }
-    ] :[])
+    ] : [])
 
     const startConversation = () => {
       if (newChatMessage.value.length >= 2) {
@@ -712,8 +666,6 @@ export default defineComponent({
       scrollToTop()
       setHomeMaterials(4)
       Logic.Users.watchProperty("UserProfile", UserProfile)
-      Logic.Conversations.watchProperty("AllConversations", AllConversations)
-      Logic.Conversations.watchProperty("AllTutorRequests", AllTutorRequests)
       Logic.Study.watchProperty("HomeMaterials", HomeMaterials)
       // set organization students
 
@@ -723,26 +675,6 @@ export default defineComponent({
           "AllorganizationMembers",
           allOrganizationMembers
         )
-      }
-
-      if (Logic.Users.getUserType() == "teacher") {
-        setConversations(-1, 3)
-      }
-
-      if (Logic.Users.getUserType() == "student") {
-        setConversations(-1, 3)
-      }
-    })
-
-    watch(AllConversations, () => {
-      if (Logic.Users.getUserType() == "student") {
-        setConversations(-1, 3)
-      }
-    })
-
-    watch(AllTutorRequests, () => {
-      if (Logic.Users.getUserType() == "teacher") {
-        setConversations(-1, 3)
       }
     })
 
@@ -760,6 +692,7 @@ export default defineComponent({
       Logic,
       profileSteps,
       studyMaterialsSteps,
+      conversations,
       takeOnTasks,
       UserProfile,
       newChatMessage,
@@ -769,7 +702,6 @@ export default defineComponent({
       allStudents,
       selectedMember,
       showRemoveMember,
-      chatList,
       showSaveToFolder,
       selectedFolderMaterailToAdd,
       startConversation,
