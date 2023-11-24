@@ -138,7 +138,7 @@ export default class Common {
     return str
   }
 
-  public setupWebsocket = async () => {
+  public async setupWebsocket () {
     const url = new URL(`${this.apiUrl}/socket.io`)
 
     const tokens = await Logic.Auth.GetTokens()
@@ -150,11 +150,11 @@ export default class Common {
     })
   }
 
-  public listenOnSocket = async (
+  public async listenOnSocket (
     initialChannel,
     listener: Function,
     onleave: Function = () => {},
-  ) => {
+  ) {
     const tokens = await Logic.Auth.GetTokens()
     const accessToken = tokens?.accessToken
     if (

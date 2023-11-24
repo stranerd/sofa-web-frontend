@@ -7,8 +7,7 @@ import {
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
 import { Conversation, Message } from '../../logic/types/domains/conversations'
-import { Paginated } from '../../logic/types/domains/common'
-import { QueryParams } from 'src/logic'
+import { Paginated, QueryParams } from '../../logic'
 
 export default class ConversationsApi extends ModelApiService {
   constructor() {

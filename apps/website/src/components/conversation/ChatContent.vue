@@ -3,8 +3,7 @@
 		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-[#E1E6EB]">
 			<div class="flex flex-row items-center gap-3">
 				<sofa-icon class="mdlg:hidden" customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-				<sofa-avatar :photoUrl="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" :bgColor="'bg-grayColor'"
-					customClass="mdlg:hidden">
+				<sofa-avatar :photoUrl="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" :bgColor="'bg-grayColor'">
 					<sofa-icon :customClass="'h-[23px]'" :name="'user'" v-if="!data.photoUrl" />
 				</sofa-avatar>
 				<div class="flex flex-col">

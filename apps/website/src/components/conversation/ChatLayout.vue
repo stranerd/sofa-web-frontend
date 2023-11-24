@@ -8,16 +8,15 @@
 		<template v-slot:left-session>
 			<div
 				class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-2xl gap-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin flex flex-col">
-				<a class="w-full flex items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 p-3"
-					@click="newChat" v-if="Logic.Users.isStudent">
+				<router-link class="w-full flex items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 p-3"
+					to="/chats/new" v-if="Logic.Users.isStudent">
 					<sofa-icon name="box-add-pink" custom-class="h-[17px]" />
 					<sofa-normal-text :color="'text-primaryPink'">
 						New chat
 					</sofa-normal-text>
-				</a>
+				</router-link>
 
-				<div class="w-full flex justify-start pt-4 pb-2"
-					v-if="chatList.length && Logic.Users.isTeacher">
+				<div class="w-full flex justify-start pt-4 pb-2" v-if="conversations.length && Logic.Users.isTeacher">
 					<sofa-header-text customClass="text-left mdlg:!text-base text-sm" content="All Chats" />
 				</div>
 
@@ -25,7 +24,7 @@
 				<ChatList />
 
 				<!-- Empty state -->
-				<template v-if="Logic.Users.isTeacher && !chatList.length">
+				<template v-if="Logic.Users.isTeacher && !conversations.length">
 					<div class="pt-4">
 						<sofa-empty-state title="No chat" subTitle="Your active chats will show up here" actionLabel="" />
 					</div>
@@ -43,7 +42,8 @@
 						</div>
 
 						<div class="flex flex-col gap-1">
-							<sofa-header-text :customClass="'!text-base !font-bold'" :content="Logic.Users.UserProfile.ai?.name || 'Dr. Sofa'" />
+							<sofa-header-text :customClass="'!text-base !font-bold'"
+								:content="Logic.Users.UserProfile.ai?.name || 'Dr. Sofa'" />
 						</div>
 					</div>
 					<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
@@ -64,24 +64,11 @@
 </template>
 
 <script lang="ts" setup>
-import {
-	SingleConversation,
-	chatList,
-	deleteConvo,
-	hasMessage,
-	itIsNewMessage,
-	newChat,
-	onClickAddTutor,
-	selectedConvoId,
-	selectedTutorRequestData,
-	showDeleteConvo,
-	showEndSession,
-	showRateAndReviewTutor
-} from '@/composables/conversation'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaButton, SofaDeletePrompt, SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 import ChatList from './ChatList.vue'
+import { useConversationsList } from '@/composables/conversations/conversations'
 
 defineProps({
 	title: {
@@ -94,4 +81,6 @@ defineProps({
 		default: false
 	}
 })
+
+const { conversations } = useConversationsList()
 </script>

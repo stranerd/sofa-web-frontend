@@ -1,4 +1,4 @@
-import { Conversation } from 'src/logic'
+import { Conversation } from '../../logic'
 import { v } from 'valleyed'
 import { BaseFactory } from '../base'
 

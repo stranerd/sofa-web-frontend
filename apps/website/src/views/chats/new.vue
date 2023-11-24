@@ -13,8 +13,8 @@
       <template v-slot:bottom>
         <form @submit.prevent="createConversation"
           class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-          <textarea v-model=factory.title
-            :class="`w-full resize-none !min-h-[48px] text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
+          <input v-model=factory.title
+            :class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
             placeholder="Enter message" />
           <a class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
             <sofa-icon :name="'send'" :customClass="'h-[19px]'" />

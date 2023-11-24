@@ -16,8 +16,7 @@ export const useMessages = (conversation: Conversation) => {
 	const conversationId = conversation.id
 
 	if (store[conversationId] === undefined) {
-		const date = store[conversationId].messages.value.at(-1)?.createdAt
-		const listener = useListener(async () => await Logic.Conversations.listenToMany<Message>(`conversations/conversations/${conversationId}/messages`, {
+		const listener = useListener(async () => await Logic.Common.listenToMany<Message>(`conversations/conversations/${conversationId}/messages`, {
 			created: async (entity) => {
 				addToArray(store[conversationId].messages.value, entity, (e) => e.id, (e) => e.createdAt)
 			},
@@ -28,7 +27,7 @@ export const useMessages = (conversation: Conversation) => {
 				const index = store[conversationId].messages.value.findIndex((c) => c.id === entity.id)
 				if (index !== -1) store[conversationId].messages.value.splice(index, 1)
 			}
-		}, (e) => date ? e.createdAt >= date : true))
+		}, (e) => e.createdAt >= (store[conversationId].messages.value.at(-1)?.createdAt ?? 0)))
 		store[conversationId] = {
 			messages: ref([]),
 			users: ref([]),

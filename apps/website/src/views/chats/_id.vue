@@ -1,6 +1,10 @@
 <template>
   <ChatLayout v-if="conversation" title="Chat">
-    <ChatContent class="h-full">
+    <ChatContent class="h-full" :data="{
+      title: conversation.title,
+      photoUrl: otherUsers.at(0).photo ?? null,
+      userNames: ['You', ...otherUsers.map((u) => u.name)]
+    }">
       <template v-slot:top-extras>
         <div class="flex flex-row items-center gap-3">
           <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'"
@@ -15,8 +19,8 @@
       <template v-slot:bottom>
         <form @submit.prevent="console.log"
           class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-          <textarea
-            :class="`w-full resize-none !min-h-[48px] text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
+          <input
+            :class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
             placeholder="Enter message" />
           <a class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
             <sofa-icon :name="'send'" :customClass="'h-[19px]'" />
@@ -26,38 +30,60 @@
     </ChatContent>
 
     <template v-slot:right-extras>
-      <template
-        v-if="!conversation.tutor">
-        <div class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
-          <div class="w-full flex flex-row gap-2 items-center justify-start">
-            <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
-            <sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
-              Tutor help
-            </sofa-normal-text>
+      <div v-if="conversation.user.id === Logic.Auth.AuthUser?.id && !conversation.tutor"
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+        <div class="w-full flex flex-row items-center gap-3">
+          <div :style="`background-image: url('${Logic.Users.UserProfile.ai?.photo?.link ?? '/images/icons/robot.svg'}')`"
+            class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full">
           </div>
-          <sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
-            Need extra help with your work?
-          </sofa-normal-text>
-          <sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
-            Add a tutor
-          </sofa-button>
-        </div>
-      </template>
 
-      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
-        <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor" @click.stop.prevent="showEndSession = true">
+          <div class="flex flex-col gap-1">
+            <sofa-header-text :customClass="'!text-base !font-bold'"
+              :content="Logic.Users.UserProfile.ai?.name || 'Dr. Sofa'" />
+          </div>
+        </div>
+        <div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
+          <sofa-normal-text :customClass="'text-left'" :color="'text-deepGray'">
+            Hello! I am here to respond to your messages in every chat 24/7.
+            <br /><br />
+            Let us work towards your highest ever academic achievements.
+          </sofa-normal-text>
+        </div>
+      </div>
+
+      <div v-if="conversation.user.id === Logic.Auth.AuthUser?.id && !conversation.tutor"
+        class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
+        <div class="w-full flex flex-row gap-2 items-center justify-start">
+          <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
+          <sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
+            Tutor help
+          </sofa-normal-text>
+        </div>
+        <sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
+          Need extra help with your work?
+        </sofa-normal-text>
+        <sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'"
+          @click="onClickAddTutor">
+          Add a tutor
+        </sofa-button>
+      </div>
+
+      <div v-if="conversation.user.id === Logic.Auth.AuthUser?.id"
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+        <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
+          @click.stop.prevent="showEndSession = true">
           <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
           <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
         </a>
 
-        <a class="w-full flex items-center justify-start gap-2"  @click.stop.prevent="showDeleteConvo = true">
+        <a class="w-full flex items-center justify-start gap-2" @click.stop.prevent="showDeleteConvo = true">
           <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
           <sofa-normal-text :color="'text-primaryRed'">Delete chat</sofa-normal-text>
         </a>
       </div>
 
       <!-- Teacher POV -->
-      <template v-if="Logic.Users.isTeacher">
+      <template v-if="conversation.tutor?.id === Logic.Auth.AuthUser?.id">
         <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
           <div class="w-full flex flex-col items-center justify-center gap-3">
             <sofa-avatar :size="'180'" :bgColor="'bg-grayColor'"
@@ -214,7 +240,7 @@
           label: 'Yes, delete',
           isClose: false,
           action: () => {
-            deleteConvo(selectedConvoId)
+            // deleteConvo(selectedConvoId)
           },
         },
       ]" />
@@ -280,13 +306,16 @@ import {
 import { useConversation } from '@/composables/conversations/conversations'
 import { Logic } from "sofa-logic"
 import {
+  SofaAvatar,
+  SofaButton,
   SofaDeletePrompt,
+  SofaHeaderText,
   SofaIcon,
   SofaModal,
   SofaNormalText,
-  SofaSuccessPrompt,
+  SofaSuccessPrompt
 } from "sofa-ui-components"
-import { defineComponent, ref } from "vue"
+import { computed, defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
 import { useRoute } from 'vue-router'
 
@@ -301,6 +330,9 @@ export default defineComponent({
     SofaModal,
     SofaSuccessPrompt,
     SofaDeletePrompt,
+    SofaButton,
+    SofaAvatar,
+    SofaHeaderText,
     RateAndReviewModal,
     ConversationMessages,
   },
@@ -340,6 +372,14 @@ export default defineComponent({
 
     const { conversation } = useConversation(id as string)
 
+    const otherUsers = computed(() => {
+      if (!conversation.value) return []
+      const res: { name: string, photo: string | null }[] = []
+      if (conversation.value.user.id !== Logic.Auth.AuthUser?.id) return [{ name: conversation.value.user.bio.name.first, photo: conversation.value.user.bio.photo?.link }]
+      if (conversation.value.tutor) res.push({ name: conversation.value.tutor.bio.name.first, photo: conversation.value.tutor.bio.photo?.link })
+      res.push({ name: Logic.Users.UserProfile?.ai?.name ?? 'Dr. Sofa', photo: Logic.Users.UserProfile?.ai?.photo?.link ?? '/images/icons/robot.svg' })
+      return res
+    })
 
     const showTutorRequestSubmited = ref(false)
 
@@ -352,6 +392,7 @@ export default defineComponent({
     return {
       Logic,
       conversation,
+      otherUsers,
       onInput,
       messageContent,
       sendNewMessage,
