@@ -7,7 +7,7 @@
     </a>
     <div class="w-full flex flex-col gap-3" v-if="showRequests">
       <Chat :customClass="customClass" v-for="request in requests" :key="request.hash" :chat="{
-        route: `/chats/empty?requestId=${request.id}`,
+        route: `/chats/requests/${request.id}`,
         title: request.user?.bio?.name?.full,
         lastMessage: request.message,
         lastMessageTime: formatTime(request.createdAt),

@@ -1,6 +1,7 @@
 import { ConversationTutorRequest, Logic } from 'sofa-logic'
 import { addToArray } from 'valleyed'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
@@ -46,5 +47,36 @@ export const useRequestsList = () => {
 		await store.listener.close()
 	})
 
-	return { ...store }
+	const requests = computed(() => store.requests.value.filter((r) => r.pending && r.tutor.id === Logic.Auth.AuthUser?.id))
+
+	return { ...store, requests }
+}
+
+export const useRequest = (id: string) => {
+	const router = useRouter()
+	const requestList = useRequestsList()
+
+	const request = computed(() => store.requests.value.find((q) => q.id === id) ?? null)
+
+	const acceptError = useErrorHandler()
+	const acceptLoading = useLoadingHandler()
+
+	const accept = async (accepted: boolean) => {
+		if (acceptLoading.loading.value) return
+		await acceptLoading.setLoading(true)
+		await acceptError.setError('')
+		try {
+			const req = request.value
+			if (!req) return
+			if (!req.pending || req.tutor.id !== Logic.Auth.AuthUser?.id) return
+
+			await Logic.Conversations.AcceptTutorRequest(id, accepted)
+			await router.push(`/chats/${req.conversationId}`)
+		} catch (e) {
+			await acceptError.setError(e)
+		}
+		await acceptLoading.setLoading(false)
+	}
+
+	return { ...requestList, request, accept, ...acceptError, ...acceptLoading }
 }

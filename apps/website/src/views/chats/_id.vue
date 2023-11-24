@@ -1,6 +1,15 @@
 <template>
   <ChatLayout title="Chat">
     <ChatContent class="h-full">
+      <template v-slot:top-extras>
+        <div class="flex flex-row items-center gap-3">
+          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'"
+            @click="showAddTutor = true" v-if="Logic.Users.isStudent && !selectedTutorRequestData && Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 1
+              " />
+
+          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
+        </div>
+      </template>
       <ConversationMessages id="MessagesScrollContainer" :Messages="Messages" :ShowLoader="showLoader" />
     </ChatContent>
 
