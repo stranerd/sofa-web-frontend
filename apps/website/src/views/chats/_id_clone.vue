@@ -1,8 +1,6 @@
 <template>
   <ChatLayout title="Chat">
-    <ChatContent class="h-full">
-      <ConversationMessages id="MessagesScrollContainer" :Messages="Messages" :ShowLoader="showLoader" />
-    </ChatContent>
+    <ChatContent class="h-full" />
 
     <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
 
@@ -136,7 +134,6 @@ import AddTutor from "@/components/conversation/AddTutor.vue"
 import ChatContent from "@/components/conversation/ChatContent.vue"
 import ChatLayout from "@/components/conversation/ChatLayout.vue"
 import ChatList from "@/components/conversation/ChatList.vue"
-import ConversationMessages from "@/components/conversation/Messages.vue"
 import { scrollToBottom, scrollToTop } from "@/composables"
 import {
   AllConversations,
@@ -197,10 +194,16 @@ export default defineComponent({
     SofaSuccessPrompt,
     SofaDeletePrompt,
     RateAndReviewModal,
-    ConversationMessages,
   },
   middlewares: {
     fetchRules: [
+      {
+        domain: "Users",
+        property: "UserProfile",
+        method: "GetUserProfile",
+        params: [],
+        requireAuth: true,
+      },
       {
         domain: "Conversations",
         property: "SingleConversation",
@@ -330,7 +333,7 @@ export default defineComponent({
     }
 
     const setTutorRequest = () => {
-      if (Logic.Users.isTeacher && !SingleConversation.value) {
+      if (Logic.Users.getUserType() == "teacher" && !SingleConversation.value) {
         const requestId = Logic.Common.route.query?.requestId?.toString()
         if (requestId) {
           itIsTutorRequest.value = true

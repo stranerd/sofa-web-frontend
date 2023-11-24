@@ -44,28 +44,15 @@
 
 		<div
 			class="w-full bg-white flex flex-col items-start justify-start gap-2 h-full flex-grow overflow-y-auto px-4 py-2">
-			<template v-if="itIsTutorRequest">
-				<div class="w-full flex items-start justify-start p-4 pb-[90px]">
+			<slot>
+				<div v-if="itIsTutorRequest" class="w-full flex items-start justify-start p-4 pb-[90px]">
 					<div class="w-[90%] custom-border bg-[#E2F3FD] p-3 flex items-start justify-start">
 						<sofa-normal-text :customClass="'text-left'">
 							{{ selectedChatData.lastMessage }}
 						</sofa-normal-text>
 					</div>
 				</div>
-			</template>
-			<template v-else>
-				<conversation-messages id="MessagesScrollContainer" :Messages="Messages" :ShowLoader="showLoader"
-					:itIsNewMessage="itIsNewMessage" />
-				<div v-if="itIsNewMessage" class="grid w-full gap-4 py-2 mdlg:!grid-cols-3"
-					style="grid-template-columns: repeat(auto-fit, minmax(150px,  1fr))">
-					<div class="col-span-1 flex flex-col gap-2 items-center p-3 mdlg:p-5 rounded-2xl bg-fadedPurple"
-						v-for="(content, index) in contentList" :key="index">
-						<sofa-icon :name="content.icon" :customClass="'h-[39px]'" />
-						<sofa-normal-text :customClass="'!font-bold'">{{ content.title }}</sofa-normal-text>
-						<sofa-normal-text>{{ content.body }}</sofa-normal-text>
-					</div>
-				</div>
-			</template>
+			</slot>
 		</div>
 
 		<div class="w-full px-4 py-2 bg-white mdlg:border-t mdlg:border-[#E1E6EB]">
@@ -85,43 +72,23 @@
 					</sofa-button>
 				</div>
 			</div>
-			<div v-else
-				class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-				<span :contenteditable="true" role="textbox"
-					:class="`w-full textarea resize-none !min-h-[48px] text-bodyBlack whitespace-pre-wrap focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
-					placeholder="Enter message" id="messageContainer" @input="onInput" @keypress="handleKeyEvent">
-					{{ messageContent }}
-				</span>
-				<span class="min-w-[45px]">
-					<span class="h-[40px] w-[40px] flex items-center justify-center cursor-pointer"
-						@click="sendNewMessage(selectConversation)">
-						<sofa-icon :name="'send'" :customClass="'h-[19px]'" />
-					</span>
-				</span>
-			</div>
+			<slot v-else name="bottom" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import ConversationMessages from "@/components/conversation/Messages.vue"
 import {
-	Messages,
 	acceptOrRejectTutorRequest,
-	contentList,
 	contentTitleChanged,
 	conversationTitle,
-	handleKeyEvent,
 	hasMessage,
 	itIsNewMessage,
 	itIsTutorRequest,
-	messageContent, onInput, selectConversation,
 	selectedChatData,
 	selectedTutorRequestData,
-	sendNewMessage,
 	showAddTutor,
-	showLoader,
-	showMoreOptions,
+	showMoreOptions
 } from '@/composables/conversation'
 import { Logic } from 'sofa-logic'
 import { SofaAvatar, SofaButton, SofaCustomInput, SofaIcon, SofaNormalText } from 'sofa-ui-components'
@@ -129,11 +96,3 @@ import { ref } from 'vue'
 
 const editTitle = ref(false)
 </script>
-
-
-<style scoped>
-.textarea[contenteditable]:empty::before {
-	content: "Enter message";
-	color: #78828c;
-}
-</style>

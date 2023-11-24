@@ -88,10 +88,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    itIsNewMessage: {
-      type: Boolean,
-      default: false,
-    },
   },
   name: "ConversationMessages",
   setup (props) {
@@ -169,16 +165,7 @@ export default defineComponent({
     }
 
     watch(MessagesRef, () => {
-      if (props.itIsNewMessage != true) {
-        setMessage()
-      } else {
-        allMessages.value.length = 0
-        allMessages.value.push({
-          content: "Send a message to get started",
-          id: "",
-          type: "badge",
-        })
-      }
+      setMessage()
     })
 
     onMounted(() => {

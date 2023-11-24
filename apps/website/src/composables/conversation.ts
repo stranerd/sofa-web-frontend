@@ -3,8 +3,8 @@ import {
   ConversationTutorRequest as TutorRequest
 } from 'sofa-logic'
 import { computed, reactive, ref } from 'vue'
-import { scrollToBottom } from './index'
 import { formatTime } from '../common/dates'
+import { scrollToBottom } from './index'
 
 export const contentList = [
   {
@@ -151,7 +151,7 @@ const setChatToDefault = () => {
 
 const setConversations = (goToIndex = -1, limit = 0) => {
   chatList.length = 0
-  AllConversations.value.results.forEach((convo, index) => {
+  AllConversations.value?.results.forEach((convo, index) => {
     let photourl = ''
 
     if (Logic.Users.getUserType() == 'student') {

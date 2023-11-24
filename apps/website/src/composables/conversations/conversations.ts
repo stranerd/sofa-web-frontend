@@ -64,7 +64,7 @@ export const useCreateConversation = () => {
 	const factory = new ConversationFactory()
 	const router = useRouter()
 
-	const createQuestion = async () => {
+	const createConversation = async () => {
 		await setError('')
 		if (factory.title && !loading.value) {
 			try {
@@ -79,5 +79,5 @@ export const useCreateConversation = () => {
 		} else factory.validateAll()
 	}
 
-	return { error, loading, factory, createQuestion }
+	return { error, loading, factory, createConversation }
 }

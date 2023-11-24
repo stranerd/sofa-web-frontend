@@ -20,10 +20,9 @@
     </div>
 
     <div class="flex flex-col justify-between items-end">
-      <sofa-normal-text :customClass="'text-right !text-[11px]'" :color="'text-[#78828C]'">
+      <sofa-normal-text :customClass="'text-right !text-[11px] whitespace-nowrap'" :color="'text-[#78828C]'">
         {{ chat.lastMessageTime }}
       </sofa-normal-text>
-      <div class="invisible">Hello</div>
     </div>
   </router-link>
 </template>
