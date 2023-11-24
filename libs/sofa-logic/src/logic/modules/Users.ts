@@ -114,7 +114,7 @@ export default class Users extends Common {
       if (updateItems) {
         this.AllUsers = response.data
       }
-      return response.data.results
+      return response.data.results as SingleUser[]
     })
   }
 

@@ -107,48 +107,13 @@ export default class Conversations extends Common {
     })
   }
 
-  public GetMessages = (conversationId: string) => {
-    if (!conversationId || conversationId == 'empty') {
-      return new Promise((resolve) => {
-        resolve('')
+  public GetMessages = (conversationId: string, filters: QueryParams = {}) => {
+    return $api.conversations.conversation
+      .getMessages(conversationId, filters)
+      .then((response) => {
+        this.Messages = response.data
+        return this.Messages
       })
-    }
-    return new Promise((resolve) => {
-      $api.conversations.conversation
-        .getMessages(conversationId)
-        .then((response) => {
-          this.Messages = response.data
-          // get all chat members
-          const membersIds = this.Messages.results.map((item) => item.userId)
-
-          const otherMembers = membersIds.filter(
-            (item) => item != 'ai-bot' && item != Logic.Auth.AuthUser.id,
-          )
-
-          if (otherMembers.length) {
-            Logic.Users.GetUsers(
-              {
-                where: [
-                  {
-                    field: 'id',
-                    value: otherMembers,
-                    condition: Conditions.in,
-                  },
-                ],
-              },
-              false,
-            ).then((users: SingleUser[]) => {
-              this.ChatMembers = users
-              resolve(response.data)
-            })
-          } else {
-            resolve(response.data)
-          }
-        })
-        .catch(() => {
-          resolve('')
-        })
-    })
   }
 
   public GetMessage = (conversationId: string, messageId: string) => {
@@ -282,10 +247,7 @@ export default class Conversations extends Common {
     return $api.conversations.conversation
       .markMessagesAsRead(conversationId)
       .then((response) => {
-        //
-      })
-      .catch((error) => {
-        //
+        return response.data
       })
   }
 
