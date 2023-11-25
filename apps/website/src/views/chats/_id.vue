@@ -140,7 +140,7 @@
       </div>
     </sofa-modal>
 
-    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
+    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false" @onSelected="handleRequestSent" />
 
     <!-- Success prompt for tutor request -->
     <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
@@ -280,18 +280,6 @@ export default defineComponent({
   middlewares: {
     fetchRules: [
       {
-        domain: "Study",
-        property: "Tags",
-        method: "GetTags",
-        params: [
-          {
-            all: true,
-          },
-        ],
-        requireAuth: true,
-        ignoreProperty: false,
-      },
-      {
         domain: "Payment",
         property: "UserWallet",
         method: "GetUserWallet",
@@ -311,7 +299,7 @@ export default defineComponent({
     const route = useRoute()
     const { id } = route.params
 
-    const { conversation, endSession, deleteConversation } = useConversation(id as string)
+    const { conversation, endSession, deleteConversation, addTutor } = useConversation(id as string)
     const { factory, createMessage } = useCreateMessage(id as string)
 
     const otherUsers = computed(() => {
@@ -331,7 +319,9 @@ export default defineComponent({
     const showNeedsSubscription = ref(false)
     const showRateAndReviewTutor = ref(false)
 
-    const handleRequestSent = () => {
+    const handleRequestSent = async (data: { message: string, tutorId: string }) => {
+      const res = await addTutor(data)
+      if (!res) return
       showAddTutor.value = false
       showTutorRequestSubmited.value = true
       showMoreOptions.value = false

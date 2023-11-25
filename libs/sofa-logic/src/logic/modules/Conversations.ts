@@ -141,23 +141,13 @@ export default class Conversations extends Common {
       })
   }
 
-  public CreateTutorRequest = () => {
-    if (this.CreateTutorRequestForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public CreateTutorRequest = (CreateTutorRequestForm: CreateTutorRequestInput) => {
+    return $api.conversations.tutor_request
+      .post(null, CreateTutorRequestForm)
+      .then((response) => {
+        this.SingleTutorRequest = response.data
+        return response.data
       })
-      return $api.conversations.tutor_request
-        .post(null, this.CreateTutorRequestForm)
-        .then((response) => {
-          this.SingleTutorRequest = response.data
-          Logic.Common.hideLoader()
-          return response.data
-        })
-        .catch((error) => {
-          Logic.Common.showError(capitalize(error.response.data[0]?.message))
-        })
-    }
   }
 
   public AcceptTutorRequest = (tutorRequestId: string, accept: boolean) => {

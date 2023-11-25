@@ -3,7 +3,7 @@ import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 
 const store = {
 	conversations: ref<Conversation[]>([]),
@@ -54,6 +54,7 @@ export const useConversation = (id: string) => {
 	const conversationList = useConversationsList()
 	const error = useErrorHandler()
 	const loading = useLoadingHandler()
+	const { setMessage } = useSuccessHandler()
 
 	const conversation = computed(() => store.conversations.value.find((q) => q.id === id) ?? null)
 
@@ -69,11 +70,7 @@ export const useConversation = (id: string) => {
 			}
 
 			await Logic.Conversations.DeleteTutor()
-			Logic.Common.showLoader({
-				show: true,
-				message: 'Tutor has been removed from this chat',
-				type: 'success',
-			})
+			await setMessage('Tutor has been removed from this chats')
 			await Logic.Common.GoToRoute('/chats')
 		} catch (e) {
 			error.setError(e)
@@ -87,11 +84,7 @@ export const useConversation = (id: string) => {
 		loading.setLoading(true)
 		try {
 			await Logic.Conversations.DeleteConversation(id)
-			Logic.Common.showLoader({
-				show: true,
-				message: 'Conversation deleted',
-				type: 'success',
-			})
+			await setMessage('Conversation deleted')
 			await Logic.Common.GoToRoute('/chats')
 		} catch (e) {
 			error.setError(e)
@@ -99,7 +92,30 @@ export const useConversation = (id: string) => {
 		loading.setLoading(false)
 	}
 
-	return { ...conversationList, conversation, endSession, deleteConversation }
+	const addTutor = async (data: { message: string, tutorId: string }) => {
+		if (loading.loading.value) return false
+		error.setError('')
+		loading.setLoading(true)
+		let errored = false
+		try {
+			await Logic.Conversations.CreateTutorRequest({
+				...data,
+				conversationId: id as string,
+			})
+			Logic.Common.showLoader({
+				show: true,
+				message: 'Tutor request sent',
+				type: 'success',
+			})
+		} catch (e) {
+			error.setError(e)
+			errored = true
+		}
+		loading.setLoading(false)
+		return !errored
+	}
+
+	return { ...conversationList, conversation, endSession, deleteConversation, addTutor }
 }
 
 export const useCreateConversation = () => {
