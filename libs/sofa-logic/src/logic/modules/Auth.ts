@@ -19,11 +19,10 @@ import {
 import Common from './Common'
 
 export default class Auth extends Common {
-  redirectToName = 'redirect-to'
+  private redirectToName = 'redirect-to'
   private authTokensStorageName = 'AuthTokens'
 
   public AuthUser: AuthUser | undefined = undefined
-  public TokenRefreshWatcher: any = null
   public RefreshIsActive = false
 
   // input data
@@ -38,6 +37,16 @@ export default class Auth extends Common {
   public AppleSignInForm: AppleAuthInput | undefined
   public SendPhoneVerificationForm: UpdatePhoneInput | undefined
 
+  async getRedirectToRoute () {
+    const value = localStorage.getItem(this.redirectToName)
+    if (value) localStorage.removeItem(value)
+    return value
+  }
+
+  async setRedirectToRoute (value: string) {
+    localStorage.setItem(this.redirectToName, value)
+  }
+
   private RedirectUser = async () => {
     if (!Logic.Auth.AuthUser.isEmailVerified) {
       await this.SendVerificationEmail()
@@ -51,7 +60,7 @@ export default class Auth extends Common {
   public DetectVerification = async () => {
     if (Logic.Users.UserProfile?.type) {
       if (window.location.pathname.startsWith('/auth')) {
-        await Logic.Common.GoToRoute(localStorage.getItem(this.redirectToName) ?? '/')
+        await Logic.Common.GoToRoute((await this.getRedirectToRoute()) ?? '/')
       }
     } else {
       await Logic.Common.GoToRoute('/onboarding')
@@ -151,15 +160,8 @@ export default class Auth extends Common {
     $api.auth.user
       .signOut()
       .then((response) => {
-        //
-
         localStorage.removeItem(this.authTokensStorageName)
-
-        clearInterval(this.TokenRefreshWatcher)
-
-        Logic.Common.GoToRoute('/auth/login')
-
-        window.location.reload()
+        window.location.assign('/auth/login')
       })
       .catch((error) => {
         //
@@ -173,116 +175,74 @@ export default class Auth extends Common {
       .then((error) => {})
   }
 
-  public SignUp = (formIsValid: boolean) => {
-    if (formIsValid && this.SignUpForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public SignUp = (SignUpForm: SignUpInput) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.auth.email
+      .signUp(SignUpForm)
+      .then((response) => {
+        Logic.Auth.AuthUser = response.data.user
+        Logic.Common.hideLoader()
+        return response.data
       })
-      return $api.auth.email
-        .signUp(this.SignUpForm)
-        .then((response) => {
-          Logic.Auth.AuthUser = response.data.user
-          this.SetTokens(response.data)
-          this.SendVerificationEmail()
-          return response.data
-        })
-        .catch((error) => {
-          // handle error
-
-          throw error
-        })
-    }
   }
 
-  public SignIn = (formIsValid: boolean) => {
-    if (formIsValid && this.SignInForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public SignIn = (SignInForm: SignInInput) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.auth.email
+      .signIn(SignInForm)
+      .then((response) => {
+        Logic.Auth.AuthUser = response.data.user
+        Logic.Common.hideLoader()
+        return response.data
       })
-      return $api.auth.email
-        .signIn(this.SignInForm)
-        .then((response) => {
-          Logic.Auth.AuthUser = response.data.user
-          this.SetTokens(response.data)
-          Logic.Common.hideLoader()
-          this.RedirectUser()
-
-          return response.data.user
-        })
-        .catch((error) => {
-          throw error
-        })
-    }
   }
 
-  public GoogleSignIn = () => {
-    if (this.GoogleSignInForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public GoogleSignIn = (GoogleSignInForm: GoogleAuthInput) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.auth.identities
+      .googleSignIn(GoogleSignInForm)
+      .then((response) => {
+        this.AuthUser = response.data.user
+        Logic.Common.hideLoader()
+        return response.data
       })
-      return $api.auth.identities
-        .googleSignIn(this.GoogleSignInForm)
-        .then((response) => {
-          this.AuthUser = response.data.user
-          this.SetTokens(response.data)
-          this.RedirectUser()
-          Logic.Common.hideLoader()
-
-          return response.data.user
-        })
-        .catch((error) => {
-          throw error
-        })
-    }
   }
 
-  public AppleSignIn = () => {
-    if (this.AppleSignInForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public AppleSignIn = (AppleSignInForm: AppleAuthInput) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.auth.identities
+      .appleSignIn(AppleSignInForm)
+      .then((response) => {
+        this.AuthUser = response.data.user
+        Logic.Common.hideLoader()
+        return response.data
       })
-      return $api.auth.identities
-        .appleSignIn(this.AppleSignInForm)
-        .then((response) => {
-          this.AuthUser = response.data.user
-          this.SetTokens(response.data)
-
-          this.RedirectUser()
-          Logic.Common.hideLoader()
-
-          return response.data.user
-        })
-        .catch((error) => {
-          //
-        })
-    }
   }
 
-  public VerifyEmailWithToken = (formIsValid: boolean) => {
-    if (formIsValid && this.VerifyWithTokenForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public VerifyEmailWithToken = (VerifyEmailWithToken: VerifyWithTokenInput) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.auth.email
+      .verifyEmail(this.VerifyWithTokenForm)
+      .then((response) => {
+        this.AuthUser = response.data.user
+        Logic.Common.hideLoader()
+        return response.data
       })
-      return $api.auth.email
-        .verifyEmail(this.VerifyWithTokenForm)
-        .then((response) => {
-          this.AuthUser = response.data.user
-          this.SetTokens(response.data)
-          Logic.Common.hideLoader()
-          Logic.Users.GetUserProfile()
-          this.RedirectUser()
-
-          return response.data.user
-        })
-        .catch((error) => {
-          //
-        })
-    }
   }
 
   public RefreshAuthToken = () => {
@@ -304,40 +264,22 @@ export default class Auth extends Common {
       .sendResetPasswordMail({ email })
       .then((response) => {
         Logic.Common.hideLoader()
-        Logic.Common.showLoader({
-          show: true,
-          message: 'A password reset token has been sent to your email',
-          type: 'success',
-        })
         return response.data
-      })
-      .catch((error) => {
-        Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
-  public ResetPasswordWithToken = (formIsValid: boolean) => {
-    if (formIsValid && this.ResetPasswordWithTokenForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
+  public ResetPasswordWithToken = (ResetPasswordWithTokenForm: ResetPasswordWithTokenInput) => {
+    Logic.Common.showLoader({
+      loading: true,
+      show: false,
+    })
+    return $api.auth.passwords
+      .resetPassword(ResetPasswordWithTokenForm)
+      .then((response) => {
+        Logic.Auth.AuthUser = response.data.user
+        Logic.Common.hideLoader()
+        return response.data
       })
-      return $api.auth.passwords
-        .resetPassword(this.ResetPasswordWithTokenForm)
-        .then((response) => {
-          Logic.Auth.AuthUser = response.data.user
-          this.SetTokens(response.data)
-          Logic.Common.hideLoader()
-          Logic.Users.GetUserProfile().then(() => {
-            this.RedirectUser()
-          })
-
-          return response.data
-        })
-        .catch((error) => {
-          Logic.Common.showError(capitalize(error.response.data[0]?.message))
-        })
-    }
   }
 
   public UpdatePassword = (formIsValid: boolean) => {

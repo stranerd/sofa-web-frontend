@@ -28,7 +28,7 @@
       </div>
 
       <div class="w-full flex flex-col">
-        <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="SignUp(formComp)">
+        <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="SignUp">
           Sign Up
         </sofa-button>
       </div>
@@ -46,6 +46,7 @@
 <script lang="ts">
 import AuthProvider from "@/components/auth/AuthProvider.vue"
 import { FormValidations } from "@/composables"
+import { createSession } from '@/composables/auth/session'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic, SignUpInput } from 'sofa-logic'
 import {
@@ -90,19 +91,7 @@ export default defineComponent({
 
     const termsAccepted = ref(false)
 
-    const SignUp = (formComp: any) => {
-      Logic.Auth.SignUpForm = {
-        email: registerForm.email,
-        name: {
-          first: 'new',
-          last: 'user',
-        },
-        password: registerForm.password,
-        description: registerForm.description,
-      }
-
-      const formState: boolean = formComp.validate()
-
+    const SignUp = async () => {
       if (!termsAccepted.value) {
         Logic.Common.showLoader({
           show: true,
@@ -112,13 +101,16 @@ export default defineComponent({
         return
       }
 
-      Logic.Auth.SignUp(formState)
-        .then((data) => {
-          if (data) {
-            Logic.Common.hideLoader()
-            Logic.Common.GoToRoute('/auth/verify-email')
-          }
-        })
+      if (formComp.value.validate()) await Logic.Auth.SignUp({
+        email: registerForm.email,
+        name: {
+          first: 'new',
+          last: 'user',
+        },
+        password: registerForm.password,
+        description: registerForm.description,
+      })
+        .then(createSession)
         .catch((error) => {
           Logic.Common.showValidationError(error, formComp)
         })

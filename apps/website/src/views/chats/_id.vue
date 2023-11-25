@@ -243,6 +243,7 @@ import ChatContent from "@/components/conversation/ChatContent.vue"
 import ChatLayout from "@/components/conversation/ChatLayout.vue"
 import ChatList from "@/components/conversation/ChatList.vue"
 import ConversationMessages from "@/components/conversation/Messages.vue"
+import { useAuth } from '@/composables/auth/auth'
 import { useConversation } from '@/composables/conversations/conversations'
 import { useCreateMessage } from '@/composables/conversations/messages'
 import { Logic } from "sofa-logic"
@@ -278,16 +279,6 @@ export default defineComponent({
     ConversationMessages,
   },
   middlewares: {
-    fetchRules: [
-      {
-        domain: "Payment",
-        property: "UserWallet",
-        method: "GetUserWallet",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: false,
-      },
-    ],
     goBackRoute: "/chats",
   },
   name: "ChatsIdPage",
@@ -296,6 +287,7 @@ export default defineComponent({
       title: "Chat",
     })
 
+    const { wallet } = useAuth()
     const route = useRoute()
     const { id } = route.params
 
@@ -329,7 +321,7 @@ export default defineComponent({
 
     const onClickAddTutor = () => {
       showMoreOptions.value = false
-      if (Logic.Payment.UserWallet?.subscription.data.tutorAidedConversations > 0) showAddTutor.value = true
+      if (wallet.value?.subscription.data.tutorAidedConversations > 0) showAddTutor.value = true
       else showNeedsSubscription.value = true
     }
 

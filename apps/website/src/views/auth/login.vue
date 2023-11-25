@@ -13,7 +13,7 @@
       </sofa-form-wrapper>
 
       <div class="w-full flex flex-col">
-        <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="SignIn(formComp)">
+        <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="SignIn">
           Login
         </sofa-button>
       </div>
@@ -37,6 +37,7 @@
 <script lang="ts">
 import AuthProvider from "@/components/auth/AuthProvider.vue"
 import { FormValidations } from "@/composables"
+import { createSession } from '@/composables/auth/session'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic, SignInInput } from 'sofa-logic'
 import {
@@ -70,20 +71,12 @@ export default defineComponent({
       password: '',
     })
 
-    const SignIn = (formComp: any) => {
-      Logic.Auth.SignInForm = {
+    const SignIn = async () => {
+      if (formComp.value.validate()) await Logic.Auth.SignIn({
         email: loginForm.email,
         password: loginForm.password,
-      }
-
-      const formState: boolean = formComp.validate()
-
-      Logic.Auth.SignIn(formState)
-        .then((data) => {
-          if (data) {
-            // do something else
-          }
-        })
+      })
+        .then(createSession)
         .catch((error) => {
           Logic.Common.showValidationError(error, formComp)
         })

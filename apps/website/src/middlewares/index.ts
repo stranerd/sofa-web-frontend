@@ -20,11 +20,11 @@ export const isNotAuthenticated = defineMiddleware(async () => {
 })
 const checkAuthUser = async (to: string) => {
 	if (!Logic.Auth.AuthUser || !Logic.Users.UserProfile) {
-		if (!to.startsWith('/auth/')) localStorage.set(Logic.Auth.redirectToName, to)
+		if (!to.startsWith('/auth/')) await Logic.Auth.setRedirectToRoute(to)
 		return '/auth/login'
 	}
 	if (!Logic.Auth.AuthUser.isEmailVerified) {
-		if (!to.startsWith('/auth/')) localStorage.set(Logic.Auth.redirectToName, to)
+		if (!to.startsWith('/auth/')) await Logic.Auth.setRedirectToRoute(to)
 		return '/auth/verify-email'
 	}
 }
@@ -32,7 +32,7 @@ export const isAuthenticated = defineMiddleware(async ({ to }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
 	if (!Logic.Users.UserProfile.type) {
-		localStorage.set(Logic.Auth.redirectToName, to.fullPath)
+		await Logic.Auth.setRedirectToRoute(to.fullPath)
 		return '/onboarding'
 	}
 })

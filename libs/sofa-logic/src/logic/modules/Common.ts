@@ -266,32 +266,22 @@ export default class Common {
     formElement: any,
     customErrorMessage: string | undefined = undefined,
   ) => {
-    const responseData: any = error.response?.data
-
-    const validationErrors: ValidationError[] = responseData
+    const validationErrors = error?.response?.data as ValidationError[]
 
     let errorMessage = ''
 
-    if (validationErrors) {
+    if (validationErrors && validationErrors.length) {
       validationErrors.forEach((validation) => {
-        const field: any = formElement.fieldsToValidate[validation.field]
-
-        if (field) {
-          field.showError(validation.message)
-        }
+        formElement?.fieldsToValidate[validation.field]?.showError(validation.message)
       })
-
-      if (validationErrors.length) {
-        errorMessage = validationErrors[0].message
-      }
+      errorMessage = validationErrors[0]?.message
     } else errorMessage = error.message
 
-    // this.hideLoader()
     this.showLoader({
       loading: false,
       show: true,
       type: 'error',
-      message: customErrorMessage ? customErrorMessage : errorMessage,
+      message: customErrorMessage ?? errorMessage,
     })
   }
 

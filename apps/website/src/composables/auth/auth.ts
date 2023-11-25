@@ -1,4 +1,4 @@
-import { AuthTypes, AuthUser, Logic, SingleUser, Wallet } from 'sofa-logic'
+import { AuthUser, Logic, SingleUser, Wallet } from 'sofa-logic'
 import { computed, ref } from 'vue'
 import { useListener } from '../core/listener'
 
@@ -40,7 +40,6 @@ export const useAuth = () => {
 	const isEmailVerified = computed(() => !!store.auth.value?.isEmailVerified)
 	const isAdmin = computed(() => !!store.user.value?.roles.isAdmin || !!store.user.value?.roles.isSuperAdmin)
 	const isSubscribed = computed(() => !!store.wallet.value?.subscription.active)
-	const hasPassword = computed(() => !!store.auth.value?.authTypes.includes(AuthTypes.email))
 
 	const setAuthUser = async (details: AuthUser | null) => {
 		if (store.listener) await store.listener.close()
@@ -55,7 +54,8 @@ export const useAuth = () => {
 		await store.listener.restart()
 	}
 
-	const signin = async () => {
+	const signin = async (remembered: boolean) => {
+		remembered
 		await Promise.all([
 			// setupPush(id.value),
 			startProfileListener()
@@ -79,7 +79,7 @@ export const useAuth = () => {
 
 	return {
 		id, bio, user: store.user, auth: store.auth, wallet: store.wallet,
-		isLoggedIn, isEmailVerified, isAdmin, hasPassword, isSubscribed,
+		isLoggedIn, isEmailVerified, isAdmin, isSubscribed,
 		setAuthUser, signin, signout, deleteAccount
 	}
 }
