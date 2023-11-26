@@ -1,5 +1,6 @@
 import babel from '@rollup/plugin-babel'
 import cjs from '@rollup/plugin-commonjs'
+import json from '@rollup/plugin-json'
 import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
@@ -57,6 +58,7 @@ export default () => {
 				node({
 					extensions: ['.vue', '.ts']
 				}),
+				json(),
 				typescript({
 					typescript: require('typescript')
 				}),
@@ -76,6 +78,7 @@ export default () => {
 				node({
 					extensions: ['.vue', '.ts']
 				}),
+				json(),
 				typescript({
 					typescript: require('typescript')
 				}),
@@ -96,6 +99,7 @@ export default () => {
 				node({
 					extensions: ['.vue', '.ts']
 				}),
+				json(),
 				typescript({
 					typescript: require('typescript')
 				}),
@@ -120,6 +124,7 @@ export default () => {
 				node({
 					extensions: ['.vue', '.ts']
 				}),
+				json(),
 				typescript({
 					typescript: require('typescript')
 				}),

@@ -19,18 +19,18 @@
           </sofa-file-attachment>
         </sofa-image-loader>
 
-        <sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile/' + Logic.Auth.AuthUser.id)">View profile</sofa-button>
+        <sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile')">View profile</sofa-button>
       </div>
 
-      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'p-3'" type="text" :name="'First name'" ref="name.first"
-        :placeholder="'First Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
+      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'p-3'"
+        type="text" :name="'First name'" ref="name.first" :placeholder="'First Name'"
+        :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
         :defaultValue="UserProfile.bio.name.first" :borderColor="'border-transparent'" />
 
-      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'p-3'" type="text" :name="'Last name'" ref="name.last"
-        :placeholder="'Last Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
-        :defaultValue="UserProfile.bio.name.last" :borderColor="'border-transparent'" />
+      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'p-3'"
+        type="text" :name="'Last name'" ref="name.last" :placeholder="'Last Name'" :rules="[FormValidations.RequiredRule]"
+        v-model="updateProfileForm.name.last" :defaultValue="UserProfile.bio.name.last"
+        :borderColor="'border-transparent'" />
 
       <sofa-textarea :hasTitle="false"
         :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
@@ -42,10 +42,9 @@
         Contact info
       </sofa-header-text>
 
-      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
-        :padding="'p-3'" type="text" :name="'Email'" ref="name.first" :placeholder="'Email'"
-        v-model="AuthUser.email" :rules="[FormValidations.RequiredRule]" :disabled="true"
-        :borderColor="'border-transparent'" />
+      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'p-3'"
+        type="text" :name="'Email'" ref="name.first" :placeholder="'Email'" v-model="AuthUser.email"
+        :rules="[FormValidations.RequiredRule]" :disabled="true" :borderColor="'border-transparent'" />
 
       <account-setup :isProfilePhone="true" />
     </div>
@@ -79,8 +78,8 @@ import {
   setDepartmentsOptions,
   setFacultiesOptions,
   setSchoolsOption,
-  updateProfileForm,
   updatePhoneForm,
+  updateProfileForm,
   updateUserEducationForm,
   updateVerificationForm,
   userSocials,

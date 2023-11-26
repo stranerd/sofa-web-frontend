@@ -3,7 +3,7 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
-import { Tags, Review } from '../types/domains/interactions'
+import { Review, Tags } from '../types/domains/interactions'
 import {
   Course,
   Folder,
@@ -1629,18 +1629,18 @@ export default class Study extends Common {
     })
   }
 
-  public GoToStudyMode = (mode: string, quizId) => {
+  public GoToStudyMode = async (mode: string, quizId) => {
     if (mode != 'assignment' && mode != 'game' && mode != 'test') {
-      Logic.Common.GoToRoute(`/quiz/${quizId}?mode=${mode}`)
+      await Logic.Common.GoToRoute(`/quiz/${quizId}?mode=${mode}`)
     }
 
     if (mode == 'test') {
       Logic.Common.showLoader({ loading: true })
-      Logic.Plays.CreateTest(quizId)
-        .then((data) => {
+      await Logic.Plays.CreateTest(quizId)
+        .then(async (data) => {
           Logic.Common.hideLoader()
-          Logic.Common.GoToRoute(
-            `/quiz/empty?mode=tutor_test&testId=${data.id}&is_student=yes`,
+          await Logic.Common.GoToRoute(
+            `/quiz/${data.quizId}?mode=tutor_test&testId=${data.id}&is_student=yes`,
           )
         })
         .catch(() => {})

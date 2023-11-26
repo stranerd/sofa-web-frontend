@@ -5,7 +5,8 @@
       <div
         class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
         <div :class="` ${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
-          <sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] custom-border relative'" :photoUrl="content.image">
+          <sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] custom-border relative'"
+            :photoUrl="content.image">
             <div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
               v-if="content.price > 0 && !itemIsPurchased">
               <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 custom-border'">
@@ -153,24 +154,16 @@
         <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 custom-border"
           v-for="(question, index) in content.questions" :key="index">
           <div class="flex flex-row items-center gap-2">
-            <sofa-normal-text :color="'text-grayColor'">
-              {{ question.type }}
-            </sofa-normal-text>
+            <sofa-normal-text :color="'text-grayColor'" :content="question.type" />
 
-            <span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span>
+            <span class="w-[5px] h-[5px] rounded-full bg-grayColor" />
 
-            <sofa-normal-text :color="'text-grayColor'">
-              {{ question.duration }}
-            </sofa-normal-text>
+            <sofa-normal-text :color="'text-grayColor'" :content="question.duration" />
           </div>
 
-          <sofa-normal-text :customClass="'text-left !font-bold'">
-            {{ question.content }}
-          </sofa-normal-text>
+          <sofa-normal-text :customClass="'text-left !font-bold'" :content="question.content" />
 
-          <!-- <sofa-normal-text :customClass="'text-left'">
-            {{ question.answer }}
-          </sofa-normal-text> -->
+          <!-- <sofa-normal-text :customClass="'text-left'" :content="question.answer" /> -->
         </div>
       </div>
 
@@ -336,8 +329,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, toRef, watch } from "vue"
 import { Logic } from "sofa-logic"
+import { defineComponent, onMounted, ref, toRef, watch } from "vue"
 import SofaActivityCard from "../SofaActivityCard"
 import SofaAvatar from "../SofaAvatar"
 import SofaBadge from "../SofaBadge"

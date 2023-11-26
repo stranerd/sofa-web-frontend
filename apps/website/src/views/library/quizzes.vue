@@ -23,6 +23,7 @@ import {
 	createQuizData,
 	openQuiz,
 	recentEntities,
+	RecentMaterials,
 	showMoreOptionHandler,
 	TutorQuizzes
 } from "@/composables/library"
@@ -81,6 +82,14 @@ export default defineComponent({
 					},
 				]
 			},
+			{
+				domain: 'Study',
+				property: "RecentMaterials",
+				method: 'GetRecentMaterials',
+				requireAuth: true,
+				ignoreProperty: true,
+				params: []
+			}
 		],
 	},
 	name: "LibraryQuizzesPage",
@@ -99,6 +108,7 @@ export default defineComponent({
 		onMounted(() => {
 			Logic.Study.watchProperty("AllQuzzies", AllQuzzies)
 			Logic.Study.watchProperty("TutorQuizzes", TutorQuizzes)
+			Logic.Study.watchProperty("RecentMaterials", RecentMaterials)
 
 			quizzes.value = AllQuzzies.value?.results.map(createQuizData) ?? []
 			tutorQuizzes.value = TutorQuizzes.value?.results.map(createQuizData) ?? []

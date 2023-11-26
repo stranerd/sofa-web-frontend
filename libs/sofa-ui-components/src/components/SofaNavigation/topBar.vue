@@ -60,7 +60,7 @@
         </div>
 
         <sofa-avatar :size="'36'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
-          " :customClass="'!cursor-pointer'" @click="Logic.Common.GoToRoute('/settings')">
+          " :customClass="'!cursor-pointer'" @click="Logic.Common.GoToRoute('/settings/profile')">
           <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
         </sofa-avatar>
       </div>

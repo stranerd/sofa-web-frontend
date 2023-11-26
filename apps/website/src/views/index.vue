@@ -4,21 +4,15 @@
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <div class="w-full flex flex-row items-center gap-3">
           <sofa-avatar :size="'84'" :bgColor="'bg-grayColor'"
-            :photoUrl="UserProfile.bio.photo ? UserProfile.bio?.photo.link : ''">
+            :photoUrl="UserProfile.bio?.photo?.link ?? ''">
             <sofa-icon :customClass="'h-[45px]'" :name="'user'" />
           </sofa-avatar>
 
           <div class="flex flex-col gap-1">
-            <sofa-header-text :customClass="'!text-base !font-bold'">{{
-              UserProfile.bio.name?.full
-            }}</sofa-header-text>
-            <sofa-normal-text :customClass="'capitalize'">{{
-              Logic.Users.getUserType()
-            }}</sofa-normal-text>
+            <sofa-header-text :customClass="'!text-base !font-bold'">{{ UserProfile.bio.name?.full }}</sofa-header-text>
+            <sofa-normal-text :customClass="'capitalize'">{{ Logic.Users.getUserType() }}</sofa-normal-text>
 
-            <sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'" @click="
-              Logic.Common.GoToRoute(`/profile/${Logic.Auth.AuthUser.id}`)
-              ">
+            <sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'" @click="Logic.Common.GoToRoute('/profile/')" >
               View profile
             </sofa-normal-text>
           </div>

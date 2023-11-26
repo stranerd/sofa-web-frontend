@@ -278,7 +278,7 @@ export default class Users extends Common {
       })
   }
 
-  public CreateVerification = (formIsValid: boolean, useLoader = true) => {
+  public CreateVerification = async (formIsValid: boolean, useLoader = true) => {
     if (formIsValid && this.CreateVerificationForm) {
       if (useLoader) {
         Logic.Common.showLoader({
@@ -287,7 +287,7 @@ export default class Users extends Common {
         })
       }
 
-      $api.users.verifications
+      return $api.users.verifications
         .createVerification(this.CreateVerificationForm)
         .then((response) => {
           this.Verification = response.data

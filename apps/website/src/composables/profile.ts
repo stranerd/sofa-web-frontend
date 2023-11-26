@@ -463,12 +463,18 @@ const VerifyPhone = () => {
   }
 }
 
-const submitVerification = (useLoader = true) => {
+const submitVerification = async (useLoader = true) => {
   Logic.Users.CreateVerificationForm = {
     content: updateVerificationForm.content,
   }
 
-  Logic.Users.CreateVerification(true, useLoader)
+  await Logic.Users.CreateVerification(true, useLoader)
+  await Logic.Common.showLoader({
+    show: true,
+    message: 'Verification submitted. You will get an email after your account has been reviewed',
+    type: 'success'
+  })
+  await Logic.Common.GoToRoute('/')
 }
 
 const autoCreateVerification = () => {

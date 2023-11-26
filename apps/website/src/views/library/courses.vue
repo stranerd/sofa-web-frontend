@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import LibraryLayout from "@/components/library/LibraryLayout.vue"
-import { createCourseData, openCourse, recentEntities, showMoreOptionHandler } from "@/composables/library"
+import { RecentMaterials, createCourseData, openCourse, recentEntities, showMoreOptionHandler } from "@/composables/library"
 import { Conditions, Logic, ResourceType } from "sofa-logic"
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
 import { computed, defineComponent, onMounted, ref } from "vue"
@@ -52,6 +52,14 @@ export default defineComponent({
 				requireAuth: true,
 				ignoreProperty: true,
 			},
+			{
+				domain: 'Study',
+				property: "RecentMaterials",
+				method: 'GetRecentMaterials',
+				requireAuth: true,
+				ignoreProperty: true,
+				params: []
+			}
 		],
 	},
 	name: "LibraryCoursesPage",
@@ -70,6 +78,7 @@ export default defineComponent({
 
 		onMounted(() => {
 			Logic.Study.watchProperty("AllCourses", AllCourses)
+			Logic.Study.watchProperty("RecentMaterials", RecentMaterials)
 			courses.value = AllCourses.value?.results.map(createCourseData) ?? []
 		})
 

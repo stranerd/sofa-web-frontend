@@ -1,5 +1,6 @@
 export interface CreateGameInput {
   quizId: string
+  join: boolean
 }
 
 export interface JoinGame {

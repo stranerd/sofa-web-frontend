@@ -182,18 +182,13 @@ const quizResult = () => {
   }
 }
 
-const goToStudyMode = (id: string, type: string) => {
+const goToStudyMode = async (id: string, type: string) => {
   selectedQuizId.value = id
   selectedQuizMode.value = type
 
-  Logic.Study.GoToStudyMode(type, id)
+  await Logic.Study.GoToStudyMode(type, id)
 
-  if (type == 'game') {
-    showStudyMode.value = true
-    selectedQuizMode.value = 'game'
-    return
-  }
-
+  if (type == 'game') return showStudyMode.value = true
   showStudyMode.value = false
 }
 
@@ -889,25 +884,15 @@ const createQuizGame = (quizId: string) => {
 
   Logic.Plays.CreateGameForm = {
     quizId,
+    join: userIsParticipating.value
   }
 
-  Logic.Plays.CreateGame(true).then((game) => {
+  Logic.Plays.CreateGame(true).then(async (game) => {
     if (game) {
-      if (userIsParticipating.value) {
-        Logic.Plays.JoinGame(game.id, true).then((data) => {
-          if (data) {
-            Logic.Common.hideLoader()
-            Logic.Common.GoToRoute(
-              `/quiz/${game.quizId}?mode=game&gameId=${game.id}`,
-            )
-          }
-        })
-      } else {
-        Logic.Common.hideLoader()
-        Logic.Common.GoToRoute(
-          `/quiz/${game.quizId}?mode=game&gameId=${game.id}`,
-        )
-      }
+      Logic.Common.hideLoader()
+      Logic.Common.GoToRoute(
+        `/quiz/${game.quizId}?mode=game&gameId=${game.id}`,
+      )
     }
   })
 }
