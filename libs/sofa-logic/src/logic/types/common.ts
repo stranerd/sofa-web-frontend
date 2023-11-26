@@ -40,8 +40,6 @@ export type SocketReturn = {
   channel: string
 }
 
-export type EmitTypes = 'created' | 'updated' | 'deleted'
-
 export interface FormRule {
   type:
     | 'isRequired'
@@ -99,4 +97,16 @@ export interface FormContentRule {
   max: number
   characterToAdd: string
   addAfterCount: number
+}
+
+export enum EmitTypes {
+	created = 'created',
+	updated = 'updated',
+	deleted = 'deleted'
+}
+
+export type Listeners<Model> = {
+	[EmitTypes.created]: (model: Model) => Promise<void>
+	[EmitTypes.updated]: (model: Model) => Promise<void>
+	[EmitTypes.deleted]: (model: Model) => Promise<void>
 }

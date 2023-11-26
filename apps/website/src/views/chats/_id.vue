@@ -1,12 +1,171 @@
 <template>
-  <ChatLayout title="Chat">
-    <ChatContent class="h-full" />
+  <ChatLayout v-if="conversation" title="Chat">
+    <ChatContent class="h-full" :data="{
+      title: conversation.title,
+      photoUrl: otherUsers.at(0).photo ?? null,
+      userNames: ['You', ...otherUsers.map((u) => u.name)]
+    }">
+      <template v-slot:top-extras>
+        <div class="flex flex-row items-center gap-3">
+          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'" @click="onClickAddTutor"
+            v-if="conversation.user.id === id" />
 
-    <add-tutor v-if="showAddTutor" :close="() => showAddTutor = false" @on-request-sent="handleRequestSent" />
+          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'"
+            @click="showMoreOptions = true" />
+        </div>
+      </template>
+      <ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
+      <template v-slot:bottom>
+        <form @submit.prevent="createMessage"
+          class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
+          <input v-model="factory.body"
+            :class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
+            placeholder="Enter message" />
+          <button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
+            <sofa-icon :name="'send'" :customClass="'h-[19px]'" />
+          </button>
+        </form>
+      </template>
+    </ChatContent>
+
+    <template v-slot:right-extras>
+      <div v-if="conversation.user.id === id && !conversation.tutor"
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+        <div class="w-full flex flex-row items-center gap-3">
+          <div :style="`background-image: url('${userAi.image}')`"
+            class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full">
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <sofa-header-text :customClass="'!text-base !font-bold'" :content="userAi.name" />
+          </div>
+        </div>
+        <div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
+          <sofa-normal-text :customClass="'text-left'" :color="'text-deepGray'">
+            Hello! I am here to respond to your messages in every chat 24/7.
+            <br /><br />
+            Let us work towards your highest ever academic achievements.
+          </sofa-normal-text>
+        </div>
+      </div>
+
+      <div v-if="conversation.user.id === id && !conversation.tutor"
+        class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
+        <div class="w-full flex flex-row gap-2 items-center justify-start">
+          <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
+          <sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'">
+            Tutor help
+          </sofa-normal-text>
+        </div>
+        <sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
+          Need extra help with your work?
+        </sofa-normal-text>
+        <sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'"
+          @click="onClickAddTutor">
+          Add a tutor
+        </sofa-button>
+      </div>
+
+      <div v-if="conversation.user.id === id"
+        class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+        <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
+          @click.stop.prevent="showEndSession = true">
+          <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
+          <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
+        </a>
+
+        <a class="w-full flex items-center justify-start gap-2" @click.stop.prevent="showDeleteConvo = true">
+          <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
+          <sofa-normal-text :color="'text-primaryRed'">Delete chat</sofa-normal-text>
+        </a>
+      </div>
+
+      <!-- Teacher POV -->
+      <template v-if="conversation.tutor?.id === id">
+        <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
+          <router-link to="/profile" class="w-full flex flex-col items-center justify-center gap-3">
+            <sofa-avatar :size="'180'" :bgColor="'bg-grayColor'" :photoUrl="user?.bio.photo?.link ?? ''">
+              <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
+            </sofa-avatar>
+          </router-link>
+
+          <sofa-header-text :size="'xl'" :content="user?.bio.name.full" />
+
+          <sofa-normal-text :customClass="'text-center'" :color="'text-[#78828C]'">
+            {{ user?.bio.description }}
+          </sofa-normal-text>
+        </div>
+      </template>
+    </template>
+
+    <!-- More options for smaller screens -->
+    <sofa-modal :close="() => showMoreOptions = false" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
+      <div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => showMoreOptions = false">
+        <div
+          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
+          <router-link to="/chats/new" v-if="conversation.user.id === id"
+            class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
+            <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
+            <sofa-normal-text :color="'text-primaryPink'">
+              New chat
+            </sofa-normal-text>
+          </router-link>
+
+          <div class="w-full flex flex-col gap-2">
+            <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
+          </div>
+
+          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4"
+            v-if="conversation.user.id === id">
+            <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
+              @click="showEndSession = true">
+              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
+              <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
+            </a>
+            <a class="w-full flex items-center justify-start gap-2" @click="onClickAddTutor" v-else>
+              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
+              <sofa-normal-text :color="'text-primaryGreen'">
+                Add a tutor
+              </sofa-normal-text>
+            </a>
+
+            <a class="w-full flex items-center justify-start gap-2" @click="showDeleteConvo = true">
+              <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
+              <sofa-normal-text :color="'text-primaryRed'">
+                Delete chat
+              </sofa-normal-text>
+            </a>
+          </div>
+        </div>
+      </div>
+    </sofa-modal>
+
+    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false"
+      @onSelected="handleRequestSent" />
+
+    <!-- Success prompt for tutor request -->
+    <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
+      :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
+      :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
+
+    <!-- Delete convo -->
+    <sofa-delete-prompt v-if="showDeleteConvo" title="Are you sure?"
+      subTitle="This action is permanent. All messages in this conversation would be lost"
+      :close="() => showDeleteConvo = false" :buttons="[
+        {
+          label: 'No',
+          isClose: true,
+          action: () => showDeleteConvo = false
+        },
+        {
+          label: 'Yes, delete',
+          isClose: false,
+          action: deleteConversation
+        },
+      ]" />
 
     <template v-if="showNeedsSubscription">
-      <sofa-delete-prompt v-if="Logic.Payment.UserWallet?.subscription.active"
-        title="You have run out of tutor aided conversations"
+      <sofa-delete-prompt v-if="wallet?.subscription.active" title="You have run out of tutor aided conversations"
         subTitle="This feature will become available on your next subscription renewal"
         :close="() => showNeedsSubscription = false" :buttons="[
           {
@@ -41,20 +200,15 @@
             isClose: false,
             action: () => {
               showNeedsSubscription = false
-              Logic.Common.GoToRoute('/settings/subscription')
+              $router.push('/settings/subscription')
             },
           },
         ]" />
     </template>
 
-    <!-- Success prompt for tutor request -->
-    <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
-      :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
-      :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
-
-    <!-- End session modal -->
-    <sofa-delete-prompt v-if="showEndSession" :title="'End session with tutor?'"
-      :subTitle="`Are you sure you want to end this session? The tutor will be removed from this chat`"
+    <!-- End session confirmation modal -->
+    <sofa-delete-prompt v-if="showEndSession" title="End session with tutor?"
+      subTitle="Are you sure you want to end this session? The tutor will be removed from this chat"
       :close="() => showEndSession = false" :buttons="[
         {
           label: 'No',
@@ -76,111 +230,35 @@
     <!-- Rate and review modal -->
     <rate-and-review-modal v-if="showRateAndReviewTutor" :close="() => showRateAndReviewTutor = false"
       :title="'Session ended, rate tutor'" :tutor="{
-        name: SingleConversation?.tutor.bio.name.full,
-        photo: SingleConversation?.tutor?.bio?.photo?.link || '',
-      }" @on-review-submitted="(data) => endChatSession(data)" />
-
-    <!-- More options for smaller screens -->
-    <sofa-modal :close="() => showMoreOptions = false" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
-      <div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => showMoreOptions = false">
-        <div @click.stop="() => { }"
-          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
-          <div
-            class="w-full flex flex-row items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer"
-            @click="newChat()" v-if="Logic.Users.getUserType() == 'student'">
-            <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
-            <sofa-normal-text :color="'text-primaryPink'">
-              New chat
-            </sofa-normal-text>
-          </div>
-
-          <div class="w-full flex flex-col gap-2">
-            <!-- Chat list -->
-            <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" @itemSelected="() => showMoreOptions = false" />
-          </div>
-
-          <div class="sticky w-full bottom-0 left-0 bg-white z-50 px-4 py-4 border-t border-[#F1F6FA] flex flex-col gap-4"
-            v-if="!itIsNewMessage && Logic.Users.getUserType() == 'student'">
-            <a class="w-full flex flex-row items-center justify-start gap-2" v-if="SingleConversation.tutor"
-              @click="showEndSession = true; selectedConvoId = SingleConversation.id">
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
-              <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
-            </a>
-            <a class="w-full flex flex-row items-center justify-start gap-2" @click="onClickAddTutor"
-              v-if="SingleConversation && !SingleConversation.tutor && !selectedTutorRequestData">
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
-              <sofa-normal-text :color="'text-primaryGreen'">
-                Add a tutor
-              </sofa-normal-text>
-            </a>
-
-            <a class="w-full flex flex-row items-center justify-start gap-2"
-              @click="showDeleteConvo = true; selectedConvoId = SingleConversation?.id">
-              <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
-              <sofa-normal-text :color="'text-primaryRed'">
-                Delete chat
-              </sofa-normal-text>
-            </a>
-          </div>
-        </div>
-      </div>
-    </sofa-modal>
+        name: conversation.tutor?.bio.name.full,
+        photo: conversation.tutor?.bio.photo?.link,
+      }" @on-review-submitted="(data) => endSession(data)" />
   </ChatLayout>
 </template>
 
 <script lang="ts">
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue"
-import AddTutor from "@/components/conversation/AddTutor.vue"
-import ChatContent from "@/components/conversation/ChatContent.vue"
-import ChatLayout from "@/components/conversation/ChatLayout.vue"
-import ChatList from "@/components/conversation/ChatList.vue"
-import { scrollToBottom, scrollToTop } from "@/composables"
+import AddTutor from "@/components/conversations/AddTutor.vue"
+import ChatContent from "@/components/conversations/ChatContent.vue"
+import ChatLayout from "@/components/conversations/ChatLayout.vue"
+import ChatList from "@/components/conversations/ChatList.vue"
+import ConversationMessages from "@/components/conversations/Messages.vue"
+import { useAuth } from '@/composables/auth/auth'
+import { useConversation } from '@/composables/conversations/conversations'
+import { useCreateMessage } from '@/composables/conversations/messages'
 import {
-  AllConversations,
-  AllTutorRequests,
-  ChatMembers,
-  acceptOrRejectTutorRequest,
-  addNewChat,
-  chatList,
-  contentTitleChanged,
-  conversationTitle,
-  endChatSession,
-  handleIncomingMessage,
-  handleKeyEvent,
-  hasMessage,
-  itIsNewMessage,
-  itIsTutorRequest,
-  listenToConversation,
-  listenToTutorRequest,
-  messageContent,
-  newChat,
-  onClickAddTutor,
-  onInput,
-  selectConversation,
-  selectedChatData,
-  selectedConvoId,
-  selectedTutorRequestData,
-  sendNewMessage,
-  setConversations,
-  showAddTutor,
-  showDeleteConvo,
-  showEndSession,
-  showLoader,
-  showMoreOptions,
-  showNeedsSubscription,
-  showRateAndReviewTutor,
-  tutorRequestList,
-} from "@/composables/conversation"
-import { Conditions, Logic } from "sofa-logic"
-import {
+  SofaAvatar,
+  SofaButton,
   SofaDeletePrompt,
+  SofaHeaderText,
   SofaIcon,
   SofaModal,
   SofaNormalText,
-  SofaSuccessPrompt,
+  SofaSuccessPrompt
 } from "sofa-ui-components"
-import { defineComponent, onMounted, ref, watch } from "vue"
+import { computed, defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -193,105 +271,13 @@ export default defineComponent({
     SofaModal,
     SofaSuccessPrompt,
     SofaDeletePrompt,
+    SofaButton,
+    SofaAvatar,
+    SofaHeaderText,
     RateAndReviewModal,
+    ConversationMessages,
   },
   middlewares: {
-    fetchRules: [
-      {
-        domain: "Users",
-        property: "UserProfile",
-        method: "GetUserProfile",
-        params: [],
-        requireAuth: true,
-      },
-      {
-        domain: "Conversations",
-        property: "SingleConversation",
-        method: "GetConversation",
-        params: [],
-        useRouteId: true,
-        ignoreProperty: true,
-        requireAuth: true,
-      },
-      {
-        domain: "Conversations",
-        property: "Messages",
-        method: "GetMessages",
-        params: [],
-        useRouteId: true,
-        requireAuth: true,
-        ignoreProperty: true,
-      },
-      {
-        domain: "Study",
-        property: "Tags",
-        method: "GetTags",
-        params: [
-          {
-            all: true,
-          },
-        ],
-        requireAuth: true,
-        ignoreProperty: false,
-      },
-      {
-        domain: "Payment",
-        property: "UserWallet",
-        method: "GetUserWallet",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: false,
-      },
-      {
-        domain: "Users",
-        property: "AllTutorRequests",
-        method: "GetTutorRequests",
-        params: [
-          {
-            where: [
-              {
-                field: "userId",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-          true,
-        ],
-        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
-        requireAuth: true,
-        ignoreProperty: true,
-      },
-      {
-        domain: "Conversations",
-        property: "AllTutorRequests",
-        method: "GetTutorRequests",
-        params: [
-          {
-            where: [
-              {
-                field: "tutor.id",
-                condition: Conditions.eq,
-                value: Logic.Auth.AuthUser?.id,
-              },
-            ],
-          },
-          true,
-        ],
-        shouldSkip: () => Logic.Users.getUserType() !== "teacher",
-        requireAuth: true,
-        ignoreProperty: true,
-      },
-      {
-        domain: "Conversations",
-        property: "AllConversations",
-        method: "GetConversations",
-        params: [],
-        shouldSkip: () => Logic.Users.getUserType() === "teacher",
-        requireAuth: true,
-        ignoreProperty: true,
-      }
-    ],
     goBackRoute: "/chats",
   },
   name: "ChatsIdPage",
@@ -300,161 +286,64 @@ export default defineComponent({
       title: "Chat",
     })
 
-    const editTitle = ref(false)
+    const { wallet, id, user, userAi } = useAuth()
+    const route = useRoute()
+    const { id: conversationId } = route.params
 
-    const SingleConversation = ref(Logic.Conversations.SingleConversation)
-    const Messages = ref(Logic.Conversations.Messages)
+    const { conversation, endSession, deleteConversation, addTutor } = useConversation(conversationId as string)
+    const { factory, createMessage } = useCreateMessage(conversationId as string)
+
+    const otherUsers = computed(() => {
+      if (!conversation.value) return []
+      const res: { name: string, photo: string | null }[] = []
+      if (conversation.value.user.id !== id.value) return [{ name: conversation.value.user.bio.name.first, photo: conversation.value.user.bio.photo?.link }]
+      if (conversation.value.tutor) res.push({ name: conversation.value.tutor.bio.name.first, photo: conversation.value.tutor.bio.photo?.link })
+      res.push({ name: userAi.value.name, photo: userAi.value.image })
+      return res
+    })
 
     const showTutorRequestSubmited = ref(false)
+    const showDeleteConvo = ref(false)
+    const showAddTutor = ref(false)
+    const showEndSession = ref(false)
+    const showMoreOptions = ref(false)
+    const showNeedsSubscription = ref(false)
+    const showRateAndReviewTutor = ref(false)
 
-    const setNewMessage = () => {
-      if (itIsNewMessage.value) {
-        selectedChatData.value.title = "New Chat"
-        Logic.Conversations.Messages = undefined
-        Logic.Conversations.SingleConversation = undefined
-      }
-    }
-
-    const connectWebsocket = async () => {
-      if (SingleConversation.value) {
-        Logic.Common.listenOnSocket(
-          `conversations/conversations/${Logic.Conversations.SingleConversation.id}/messages`,
-          (data) => {
-            handleIncomingMessage(data)
-          },
-          (data) => {
-            console.log(data)
-          }
-        )
-
-        setTimeout(() => {
-          scrollToBottom("MessagesScrollContainer")
-        }, 500)
-      }
-    }
-
-    const setTutorRequest = () => {
-      if (Logic.Users.getUserType() == "teacher" && !SingleConversation.value) {
-        const requestId = Logic.Common.route.query?.requestId?.toString()
-        if (requestId) {
-          itIsTutorRequest.value = true
-          tutorRequestList.forEach((item) => {
-            if (item.id == requestId) {
-              item.selected = true
-              selectedChatData.value = item
-              selectedTutorRequestData.value = item
-            }
-          })
-        }
-      }
-    }
-
-    onMounted(() => {
-      scrollToTop()
-
-      Logic.Conversations.watchProperty("AllConversations", AllConversations)
-      Logic.Conversations.watchProperty("AllTutorRequests", AllTutorRequests)
-      Logic.Conversations.watchProperty("ChatMembers", ChatMembers)
-      Logic.Conversations.watchProperty("SingleConversation", SingleConversation)
-      Logic.Conversations.watchProperty("Messages", Messages)
-
-      conversationTitle.value = SingleConversation.value?.title || ""
-
-      setConversations()
-
-      chatList.forEach((chat) => {
-        if (chat.id == SingleConversation.value?.id) {
-          chat.selected = true
-          selectedChatData.value = chat
-        }
-      })
-
-      if (SingleConversation.value) {
-        listenToConversation(SingleConversation.value.id)
-      }
-
-      setTutorRequest()
-      setNewMessage()
-      listenToTutorRequest()
-      connectWebsocket()
-    })
-
-    watch(Messages, () => {
-      //
-      setTimeout(() => {
-        scrollToBottom("MessagesScrollContainer")
-      }, 500)
-    })
-
-    watch(itIsNewMessage, () => {
-      if (itIsNewMessage.value) {
-        setNewMessage()
-      }
-    })
-
-    const handleRequestSent = () => {
+    const handleRequestSent = async (data: { message: string, tutorId: string }) => {
+      const res = await addTutor(data)
+      if (!res) return
       showAddTutor.value = false
       showTutorRequestSubmited.value = true
       showMoreOptions.value = false
     }
 
-    watch(SingleConversation, () => {
-      if (SingleConversation.value) {
-        chatList.forEach((chat) => {
-          if (chat.id == SingleConversation.value?.id) {
-            chat.selected = true
-          } else {
-            chat.selected = false
-          }
-        })
-        connectWebsocket()
-
-        if (editTitle.value == false) {
-          if (SingleConversation.value) {
-            conversationTitle.value = SingleConversation.value.title
-            selectedChatData.value.title = SingleConversation.value.title
-          } else {
-            conversationTitle.value = "New Chat"
-            selectedChatData.value.title = "New Chat"
-          }
-          editTitle.value = false
-        }
-      }
-    })
+    const onClickAddTutor = () => {
+      showMoreOptions.value = false
+      if (wallet.value?.subscription.data.tutorAidedConversations > 0) showAddTutor.value = true
+      else showNeedsSubscription.value = true
+    }
 
     return {
-      Logic,
-      SingleConversation,
-      Messages,
-      onInput,
-      messageContent,
-      sendNewMessage,
-      showLoader,
+      wallet,
+      id,
+      user,
+      userAi,
+      factory,
+      createMessage,
+      conversation,
+      otherUsers,
       showAddTutor,
       showMoreOptions,
-      chatList,
       showDeleteConvo,
-      selectConversation,
-      selectedConvoId,
-      addNewChat,
-      hasMessage,
-      handleKeyEvent,
-      conversationTitle,
-      contentTitleChanged,
-      editTitle,
-      selectedChatData,
       onClickAddTutor,
-      itIsTutorRequest,
-      acceptOrRejectTutorRequest,
-      selectedTutorRequestData,
       showTutorRequestSubmited,
       showNeedsSubscription,
       showEndSession,
-      itIsNewMessage,
       handleRequestSent,
-      newChat,
       showRateAndReviewTutor,
-      endChatSession,
+      endSession,
+      deleteConversation,
     }
   },
 })

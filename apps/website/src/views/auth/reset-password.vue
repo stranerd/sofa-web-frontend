@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import { FormValidations } from "@/composables"
+import { createSession } from '@/composables/auth/session'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import {
@@ -72,14 +73,15 @@ export default defineComponent({
     })
 
     const resetPassword = () => {
-      const state = formComp.value.validate()
-
-      if (state) {
-        Logic.Auth.ResetPasswordWithTokenForm = {
+      if (formComp.value.validate()) {
+        Logic.Auth.ResetPasswordWithToken({
           password: passwordForm.confirm_password,
           token: passwordForm.token,
-        }
-        Logic.Auth.ResetPasswordWithToken(true)
+        })
+          .then(createSession)
+          .catch((error) => {
+            Logic.Common.showError(error?.response?.data[0]?.message)
+          })
       }
     }
 

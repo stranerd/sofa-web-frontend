@@ -15,15 +15,17 @@
 </template>
 
 <script lang="ts" setup>
+import { createSession } from '@/composables/auth/session'
 import { Logic } from "sofa-logic"
 import { SofaNormalText } from "sofa-ui-components"
 
 const onSuccessGoogle = (data: any) => {
-  Logic.Auth.GoogleSignInForm = {
+  Logic.Auth.GoogleSignIn({
     accessToken: "",
     idToken: data.credential,
-  }
-  Logic.Auth.GoogleSignIn()
+  })
+    .then(createSession)
+    .catch((error) => Logic.Common.showError(error?.message ?? ''))
 }
 
 const onSuccessApple = (data: any) => {

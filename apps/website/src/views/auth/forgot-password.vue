@@ -55,14 +55,20 @@ export default defineComponent({
     const emailValue = ref("")
 
     const forgotPassword = () => {
-      const state = formComp.value.validate()
-
-      if (state) {
-        Logic.Auth.SendPasswordResetMail(emailValue.value).then((data) => {
-          if (data) {
+      if (formComp.value.validate()) {
+        Logic.Auth.SendPasswordResetMail(emailValue.value)
+          .then((data) => {
+            if (!data) return
+            Logic.Common.showLoader({
+              show: true,
+              message: 'A password reset token has been sent to your email',
+              type: 'success',
+            })
             Logic.Common.GoToRoute("/auth/reset-password")
-          }
-        })
+          })
+          .catch((error) => {
+            Logic.Common.showError(error.response.data[0]?.message)
+          })
       }
     }
 

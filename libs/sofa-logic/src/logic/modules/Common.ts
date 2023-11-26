@@ -13,6 +13,7 @@ import { Logic } from '..'
 import {
   EmitTypes,
   FetchRule,
+  Listeners,
   LoaderSetup,
   SocketReturn,
   StatusCodes,
@@ -137,7 +138,7 @@ export default class Common {
     return str
   }
 
-  public setupWebsocket = async () => {
+  public async setupWebsocket () {
     const url = new URL(`${this.apiUrl}/socket.io`)
 
     const tokens = await Logic.Auth.GetTokens()
@@ -149,11 +150,11 @@ export default class Common {
     })
   }
 
-  public listenOnSocket = async (
+  public async listenOnSocket (
     initialChannel,
     listener: Function,
-    onleave: Function,
-  ) => {
+    onleave: Function = () => {},
+  ) {
     const tokens = await Logic.Auth.GetTokens()
     const accessToken = tokens?.accessToken
     if (
@@ -194,7 +195,6 @@ export default class Common {
           },
         )
       } catch (e) {
-        return e
       }
     }
 
@@ -202,6 +202,29 @@ export default class Common {
       closeConnection,
     }
   }
+
+  public async listenToSocket<Model> (channel: string, listeners: Listeners<Model>) {
+    const { closeConnection } = await this.listenOnSocket(channel, (data) => listeners[data.type]?.(data.data))
+    return closeConnection
+  }
+
+  public async listenToOne<Model> (channel: string, listeners: Listeners<Model>) {
+    return this.listenToSocket(channel, listeners)
+	}
+
+	async listenToMany<Model> (channel: string, listeners: Listeners<Model>, matches: (entity: Model) => boolean = () => true) {
+		return this.listenToSocket<Model>(channel, {
+			created: async (model) => {
+				if (matches(model)) await listeners.created(model)
+			},
+			updated: async (model) => {
+				if (matches(model)) await listeners.updated(model)
+			},
+			deleted: async (model) => {
+				if (matches(model)) await listeners.deleted(model)
+			}
+		})
+	}
 
   public SetRouter = (router: Router) => {
     this.router = router
@@ -243,32 +266,22 @@ export default class Common {
     formElement: any,
     customErrorMessage: string | undefined = undefined,
   ) => {
-    const responseData: any = error.response?.data
-
-    const validationErrors: ValidationError[] = responseData
+    const validationErrors = error?.response?.data as ValidationError[]
 
     let errorMessage = ''
 
-    if (validationErrors) {
+    if (validationErrors && validationErrors.length) {
       validationErrors.forEach((validation) => {
-        const field: any = formElement.fieldsToValidate[validation.field]
-
-        if (field) {
-          field.showError(validation.message)
-        }
+        formElement?.fieldsToValidate[validation.field]?.showError(validation.message)
       })
-
-      if (validationErrors.length) {
-        errorMessage = validationErrors[0].message
-      }
+      errorMessage = validationErrors[0]?.message
     } else errorMessage = error.message
 
-    // this.hideLoader()
     this.showLoader({
       loading: false,
       show: true,
       type: 'error',
-      message: customErrorMessage ? customErrorMessage : errorMessage,
+      message: customErrorMessage ?? errorMessage,
     })
   }
 
@@ -307,35 +320,8 @@ export default class Common {
     this.apiUrl = apiUrl
   }
 
-  public GoToRoute = async (path: string, force = false) => {
-    if (path == '/auth/login') {
-      if (
-        !(window.location.pathname + window.location.search).includes('auth')
-      ) {
-        localStorage.setItem(
-          'previous_page',
-          window.location.pathname + window.location.search,
-        )
-      }
-
-      await this.router?.push(path)
-    } else {
-      if (this.route?.path == '/auth/login') {
-        let nextRoute = ''
-        if (!path.includes('auth')) {
-          if (force) {
-            this.router.push(path)
-          } else {
-            nextRoute = localStorage.getItem('previous_page') || '/'
-            await this.router.push(nextRoute)
-          }
-        } else {
-          await this.router?.push(path)
-        }
-      } else {
-        await this.router?.push(path)
-      }
-    }
+  public GoToRoute = async (path: string) => {
+    await this.router?.push(path)
   }
 
   public shuffleArray = (array: any[]) => {

@@ -1190,7 +1190,7 @@ export default class Study extends Common {
   public GetTags = (filters: QueryParams) => {
     return $api.interactions.tag.fetch(filters).then((response) => {
       this.Tags = response.data
-      return response.data
+      return this.Tags
     })
   }
 

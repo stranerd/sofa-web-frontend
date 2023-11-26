@@ -53,6 +53,18 @@ export default class Users extends Common {
     return Logic.Users.UserProfile?.type?.type ?? 'student'
   }
 
+  public get isTeacher () {
+    return this.getUserType() === 'teacher'
+  }
+
+  public get isStudent () {
+    return this.getUserType() === 'student'
+  }
+
+  public get isOrg () {
+    return this.getUserType() === 'organization'
+  }
+
   public CheckUserTaskState = (
     task:
       | 'profile_setup'
@@ -102,13 +114,14 @@ export default class Users extends Common {
       if (updateItems) {
         this.AllUsers = response.data
       }
-      return response.data.results
+      return response.data.results as SingleUser[]
     })
   }
 
   public GetUser = (id: string) => {
     return $api.users.users.get(id).then((response) => {
       this.SingleUser = response.data
+      return this.SingleUser
     })
   }
 
@@ -164,9 +177,10 @@ export default class Users extends Common {
     })
   }
 
-  public GetUserProfile = () => {
-    return $api.users.users.get(Logic.Auth.AuthUser.id).then((response) => {
+  public GetUserProfile = (id = Logic.Auth.AuthUser.id) => {
+    return $api.users.users.get(id).then((response) => {
       this.UserProfile = response.data
+      return this.UserProfile
     })
   }
 

@@ -3,7 +3,7 @@
     :subTitle="`Enter the 6-digit code sent to your email ${Logic.Auth.AuthUser?.email ?? ''}`">
     <div class="flex flex-col gap-6 w-full items-center justify-center">
       <div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col gap-4">
-        <sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="onChangeOTP" v-model="otpValue" />
+        <sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="() => {}" v-model="otpValue" />
       </div>
 
       <div class="w-full flex flex-col">
@@ -24,6 +24,7 @@
 
 <script lang="ts">
 import { FormValidations } from "@/composables"
+import { createSession } from '@/composables/auth/session'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import {
@@ -31,7 +32,7 @@ import {
   SofaNormalText,
   SofaOtpInput
 } from "sofa-ui-components"
-import { defineComponent, ref } from "vue"
+import { defineComponent, onMounted, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -51,20 +52,17 @@ export default defineComponent({
 
     const otpValue = ref("")
 
-    const onChangeOTP = () => {
-      //
-    }
+    onMounted(async () => {
+      await Logic.Auth.SendVerificationEmail()
+    })
 
     const VerifyUserEmail = (token: string) => {
       if (token) {
-        Logic.Auth.VerifyWithTokenForm = {
-          token,
-        }
-        Logic.Auth.VerifyEmailWithToken(true).then((response) => {
-          if (response) {
-            // do something else
-          }
-        })
+        Logic.Auth.VerifyEmailWithToken({ token })
+          .then(createSession)
+          .catch((error) => {
+            Logic.Common.showError(error?.response?.data[0]?.message)
+          })
       } else {
         // show error
       }
@@ -73,7 +71,6 @@ export default defineComponent({
     return {
       Logic,
       FormValidations,
-      onChangeOTP,
       otpValue,
       VerifyUserEmail,
     }

@@ -7,19 +7,22 @@ import {
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
 import { Conversation, Message } from '../../logic/types/domains/conversations'
-import { Paginated } from '../../logic/types/domains/common'
+import { Paginated, QueryParams } from '../../logic'
 
 export default class ConversationsApi extends ModelApiService {
   constructor() {
     super('conversations/conversations')
   }
 
-  public async getMessages(conversationId: string) {
+  public async getMessages(conversationId: string, filters: QueryParams = {},) {
     try {
       const response: AxiosResponse<Paginated<
         Message
       >> = await this.axiosInstance.get(
         this.getUrl() + `/${conversationId}/messages`,
+        {
+          params: filters
+        }
       )
 
       return response

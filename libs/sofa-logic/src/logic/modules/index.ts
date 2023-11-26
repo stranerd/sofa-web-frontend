@@ -10,6 +10,8 @@ import Schools from './Schools'
 import Study from './Study'
 import Users from './Users'
 
+import { addToArray } from 'valleyed'
+
 export const Logic = {
   Auth: new Auth(),
   Common: new Common(),
@@ -22,4 +24,6 @@ export const Logic = {
   Study: new Study(),
   Users: new Users(),
   Interactions: new Interactions(),
+
+  addToArray,
 }

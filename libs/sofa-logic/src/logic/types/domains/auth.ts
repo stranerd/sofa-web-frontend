@@ -1,6 +1,10 @@
 import { FileData } from './common'
 
-type AuthTypes = 'email' | 'google'
+export enum AuthTypes {
+  email = 'email',
+  google = 'google',
+  apple = 'apple'
+}
 
 interface User {
   name: {

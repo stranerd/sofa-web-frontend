@@ -2,6 +2,7 @@ import { Logic } from 'sofa-logic'
 import { App } from 'vue'
 import { Router } from 'vue-router'
 
+import { useAuth } from '@/composables/auth/auth'
 import AuthLayout from '../layouts/Auth.vue'
 import DashboardLayout from '../layouts/Dashboard.vue'
 import ExpandedLayout from '../layouts/Expanded.vue'
@@ -39,14 +40,19 @@ const cssListeners = definePlugin(async () => {
 })
 
 const parseLoggedInUser = definePlugin(async ({ router }) => {
-	if (!(await Logic.Auth.GetTokens())) {
+	const tokens = await Logic.Auth.GetTokens()
+	if (!tokens) {
 		await router.push('/auth/login')
 		return
 	}
 	try {
-		await Logic.Auth.GetAuthUser()
-		await Logic.Users.GetUserProfile()
-		await Logic.Auth.DetectVerification()
+		const user = await Logic.Auth.GetAuthUser().catch(() => null)
+		if (!user) return await Logic.Auth.DeleteTokens()
+
+		const { isLoggedIn, isEmailVerified, signin, setAuthUser } = useAuth()
+		await setAuthUser(user)
+		if (!isEmailVerified.value) await router.push('/auth/verify-email')
+		if (isLoggedIn.value) await signin(true)
 	} catch {
 		//
 	}
