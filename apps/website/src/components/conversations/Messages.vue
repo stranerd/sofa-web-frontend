@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col gap-5">
     <template v-for="message in messages" :key="message.hash">
-      <div class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start" v-if="message.userId !== Logic.Auth.AuthUser?.id">
+      <div class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start" v-if="message.userId !== id">
         <div class="w-[30px]">
           <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="users[message.userId]?.photoUrl" :size="'27'">
             <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
@@ -40,8 +40,9 @@
 
 <script lang="ts" setup>
 import { scrollToBottom } from '@/composables'
+import { useAuth } from '@/composables/auth/auth'
 import { useMessages } from '@/composables/conversations/messages'
-import { Conversation, Logic } from "sofa-logic"
+import { Conversation } from "sofa-logic"
 import { SofaAvatar, SofaIcon, SofaNormalText } from "sofa-ui-components"
 import { PropType, defineProps, watch } from "vue"
 
@@ -52,6 +53,7 @@ const props = defineProps({
   }
 })
 
+const { id } = useAuth()
 const { messages, users } = useMessages(props.conversation)
 
 watch(messages, () => {

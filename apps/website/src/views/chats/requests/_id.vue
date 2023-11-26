@@ -37,10 +37,10 @@
 </template>
 
 <script lang="ts">
-import ChatContent from "@/components/conversation/ChatContent.vue"
-import ChatLayout from "@/components/conversation/ChatLayout.vue"
+import ChatContent from "@/components/conversations/ChatContent.vue"
+import ChatLayout from "@/components/conversations/ChatLayout.vue"
+import { useAuth } from '@/composables/auth/auth'
 import { useRequest } from '@/composables/conversations/tutorRequests'
-import { Logic } from 'sofa-logic'
 import { SofaButton, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent } from "vue"
 import { useMeta } from "vue-meta"
@@ -57,12 +57,13 @@ export default defineComponent({
 			title: "Request",
 		})
 
+		const { id } = useAuth()
 		const route = useRoute()
-		const { id } = route.params
+		const { id: requestId } = route.params
 
-		const { request, accept } = useRequest(id as string)
+		const { request, accept } = useRequest(requestId as string)
 
-		const otherUser = computed(() => request.value ? request.value.userId === Logic.Auth.AuthUser?.id ? request.value.tutor : request.value.user : null)
+		const otherUser = computed(() => request.value ? request.value.userId === id.value ? request.value.tutor : request.value.user : null)
 
 		return { request, accept, otherUser }
 	},

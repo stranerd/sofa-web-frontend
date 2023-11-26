@@ -9,14 +9,14 @@
 			<div
 				class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-2xl gap-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin flex flex-col">
 				<router-link class="w-full flex items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 p-3"
-					to="/chats/new" v-if="Logic.Users.isStudent">
+					to="/chats/new" v-if="userType.isStudent">
 					<sofa-icon name="box-add-pink" custom-class="h-[17px]" />
 					<sofa-normal-text :color="'text-primaryPink'">
 						New chat
 					</sofa-normal-text>
 				</router-link>
 
-				<div class="w-full flex justify-start pt-4 pb-2" v-if="conversations.length && Logic.Users.isTeacher">
+				<div class="w-full flex justify-start pt-4 pb-2" v-if="conversations.length && userType.isTeacher">
 					<sofa-header-text customClass="text-left mdlg:!text-base text-sm" content="All Chats" />
 				</div>
 
@@ -24,7 +24,7 @@
 				<ChatList />
 
 				<!-- Empty state -->
-				<template v-if="Logic.Users.isTeacher && !conversations.length">
+				<template v-if="userType.isTeacher && !conversations.length">
 					<div class="pt-4">
 						<sofa-empty-state title="No chat" subTitle="Your active chats will show up here" actionLabel="" />
 					</div>
@@ -35,15 +35,14 @@
 		<template v-slot:right-session>
 			<!-- Student POV -->
 			<slot name="right-extras">
-				<div v-if="Logic.Users.isStudent && Logic.Users.UserProfile" class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+				<div v-if="userType.isStudent" class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 					<div class="w-full flex flex-row items-center gap-3">
-						<div :style="`background-image: url('${Logic.Users.UserProfile.ai?.photo?.link ?? '/images/icons/robot.svg'}')`"
+						<div :style="`background-image: url('${userAi.image}')`"
 							class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full">
 						</div>
 
 						<div class="flex flex-col gap-1">
-							<sofa-header-text :customClass="'!text-base !font-bold'"
-								:content="Logic.Users.UserProfile.ai?.name || 'Dr. Sofa'" />
+							<sofa-header-text :customClass="'!text-base !font-bold'" :content="userAi.name" />
 						</div>
 					</div>
 					<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
@@ -68,6 +67,7 @@ import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 import ChatList from './ChatList.vue'
+import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList } from '@/composables/conversations/conversations'
 
 defineProps({
@@ -82,5 +82,6 @@ defineProps({
 	}
 })
 
+const { userType, userAi } = useAuth()
 const { conversations } = useConversationsList()
 </script>

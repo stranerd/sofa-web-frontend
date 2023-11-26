@@ -7,11 +7,11 @@
     }">
       <template v-slot:top-extras>
         <div class="flex flex-row items-center gap-3">
-          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'"
-            @click="showAddTutor = true"
-            v-if="Logic.Users.isStudent && Logic.Payment.UserWallet.subscription.data.tutorAidedConversations > 1" />
+          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'" @click="onClickAddTutor"
+            v-if="conversation.user.id === id" />
 
-          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
+          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'"
+            @click="showMoreOptions = true" />
         </div>
       </template>
       <ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
@@ -29,16 +29,15 @@
     </ChatContent>
 
     <template v-slot:right-extras>
-      <div v-if="conversation.user.id === Logic.Auth.AuthUser?.id && !conversation.tutor"
+      <div v-if="conversation.user.id === id && !conversation.tutor"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <div class="w-full flex flex-row items-center gap-3">
-          <div :style="`background-image: url('${Logic.Users.UserProfile.ai?.photo?.link ?? '/images/icons/robot.svg'}')`"
+          <div :style="`background-image: url('${userAi.image}')`"
             class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full">
           </div>
 
           <div class="flex flex-col gap-1">
-            <sofa-header-text :customClass="'!text-base !font-bold'"
-              :content="Logic.Users.UserProfile.ai?.name || 'Dr. Sofa'" />
+            <sofa-header-text :customClass="'!text-base !font-bold'" :content="userAi.name" />
           </div>
         </div>
         <div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
@@ -50,7 +49,7 @@
         </div>
       </div>
 
-      <div v-if="conversation.user.id === Logic.Auth.AuthUser?.id && !conversation.tutor"
+      <div v-if="conversation.user.id === id && !conversation.tutor"
         class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
         <div class="w-full flex flex-row gap-2 items-center justify-start">
           <sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
@@ -67,7 +66,7 @@
         </sofa-button>
       </div>
 
-      <div v-if="conversation.user.id === Logic.Auth.AuthUser?.id"
+      <div v-if="conversation.user.id === id"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
           @click.stop.prevent="showEndSession = true">
@@ -82,20 +81,18 @@
       </div>
 
       <!-- Teacher POV -->
-      <template v-if="conversation.tutor?.id === Logic.Auth.AuthUser?.id">
+      <template v-if="conversation.tutor?.id === id">
         <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
-          <div class="w-full flex flex-col items-center justify-center gap-3">
-            <sofa-avatar :size="'180'" :bgColor="'bg-grayColor'"
-              :photoUrl="Logic.Users.UserProfile?.bio.photo?.link ?? ''" :customClass="'!cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/settings')">
+          <router-link to="/profile" class="w-full flex flex-col items-center justify-center gap-3">
+            <sofa-avatar :size="'180'" :bgColor="'bg-grayColor'" :photoUrl="user?.bio.photo?.link ?? ''">
               <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
             </sofa-avatar>
-          </div>
+          </router-link>
 
-          <sofa-header-text :size="'xl'" :content="Logic.Users.UserProfile?.bio.name.full" />
+          <sofa-header-text :size="'xl'" :content="user?.bio.name.full" />
 
           <sofa-normal-text :customClass="'text-center'" :color="'text-[#78828C]'">
-            {{ Logic.Users.UserProfile?.bio.description }}
+            {{ user?.bio.description }}
           </sofa-normal-text>
         </div>
       </template>
@@ -104,8 +101,9 @@
     <!-- More options for smaller screens -->
     <sofa-modal :close="() => showMoreOptions = false" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
       <div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => showMoreOptions = false">
-        <div class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
-          <router-link to="/chats/new" v-if="conversation.user.id === Logic.Auth.AuthUser?.id"
+        <div
+          class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
+          <router-link to="/chats/new" v-if="conversation.user.id === id"
             class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
             <sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
             <sofa-normal-text :color="'text-primaryPink'">
@@ -117,8 +115,10 @@
             <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
           </div>
 
-          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4" v-if="conversation.user.id === Logic.Auth.AuthUser?.id">
-            <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor" @click="showEndSession = true">
+          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4"
+            v-if="conversation.user.id === id">
+            <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
+              @click="showEndSession = true">
               <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
               <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
             </a>
@@ -140,7 +140,8 @@
       </div>
     </sofa-modal>
 
-    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false" @onSelected="handleRequestSent" />
+    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false"
+      @onSelected="handleRequestSent" />
 
     <!-- Success prompt for tutor request -->
     <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
@@ -164,8 +165,7 @@
       ]" />
 
     <template v-if="showNeedsSubscription">
-      <sofa-delete-prompt v-if="Logic.Payment.UserWallet?.subscription.active"
-        title="You have run out of tutor aided conversations"
+      <sofa-delete-prompt v-if="wallet?.subscription.active" title="You have run out of tutor aided conversations"
         subTitle="This feature will become available on your next subscription renewal"
         :close="() => showNeedsSubscription = false" :buttons="[
           {
@@ -200,7 +200,7 @@
             isClose: false,
             action: () => {
               showNeedsSubscription = false
-              Logic.Common.GoToRoute('/settings/subscription')
+              $router.push('/settings/subscription')
             },
           },
         ]" />
@@ -238,15 +238,14 @@
 
 <script lang="ts">
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue"
-import AddTutor from "@/components/conversation/AddTutor.vue"
-import ChatContent from "@/components/conversation/ChatContent.vue"
-import ChatLayout from "@/components/conversation/ChatLayout.vue"
-import ChatList from "@/components/conversation/ChatList.vue"
-import ConversationMessages from "@/components/conversation/Messages.vue"
+import AddTutor from "@/components/conversations/AddTutor.vue"
+import ChatContent from "@/components/conversations/ChatContent.vue"
+import ChatLayout from "@/components/conversations/ChatLayout.vue"
+import ChatList from "@/components/conversations/ChatList.vue"
+import ConversationMessages from "@/components/conversations/Messages.vue"
 import { useAuth } from '@/composables/auth/auth'
 import { useConversation } from '@/composables/conversations/conversations'
 import { useCreateMessage } from '@/composables/conversations/messages'
-import { Logic } from "sofa-logic"
 import {
   SofaAvatar,
   SofaButton,
@@ -287,19 +286,19 @@ export default defineComponent({
       title: "Chat",
     })
 
-    const { wallet } = useAuth()
+    const { wallet, id, user, userAi } = useAuth()
     const route = useRoute()
-    const { id } = route.params
+    const { id: conversationId } = route.params
 
-    const { conversation, endSession, deleteConversation, addTutor } = useConversation(id as string)
-    const { factory, createMessage } = useCreateMessage(id as string)
+    const { conversation, endSession, deleteConversation, addTutor } = useConversation(conversationId as string)
+    const { factory, createMessage } = useCreateMessage(conversationId as string)
 
     const otherUsers = computed(() => {
       if (!conversation.value) return []
       const res: { name: string, photo: string | null }[] = []
-      if (conversation.value.user.id !== Logic.Auth.AuthUser?.id) return [{ name: conversation.value.user.bio.name.first, photo: conversation.value.user.bio.photo?.link }]
+      if (conversation.value.user.id !== id.value) return [{ name: conversation.value.user.bio.name.first, photo: conversation.value.user.bio.photo?.link }]
       if (conversation.value.tutor) res.push({ name: conversation.value.tutor.bio.name.first, photo: conversation.value.tutor.bio.photo?.link })
-      res.push({ name: Logic.Users.UserProfile?.ai?.name ?? 'Dr. Sofa', photo: Logic.Users.UserProfile?.ai?.photo?.link ?? '/images/icons/robot.svg' })
+      res.push({ name: userAi.value.name, photo: userAi.value.image })
       return res
     })
 
@@ -326,7 +325,10 @@ export default defineComponent({
     }
 
     return {
-      Logic,
+      wallet,
+      id,
+      user,
+      userAi,
       factory,
       createMessage,
       conversation,

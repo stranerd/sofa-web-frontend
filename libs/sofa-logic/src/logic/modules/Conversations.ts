@@ -243,7 +243,7 @@ export default class Conversations extends Common {
 
   public CreateMessage = (conversationId: string, CreateMessageForm: CreateMessageInput) => {
       return $api.conversations.conversation
-        .createMessage(conversationId, this.CreateMessageForm)
+        .createMessage(conversationId, CreateMessageForm)
         .then((response) => {
           this.SingleMessage = response.data
           return this.SingleMessage

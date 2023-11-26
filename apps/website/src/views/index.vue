@@ -418,7 +418,7 @@
 </template>
 
 <script lang="ts">
-import ChatList from "@/components/conversation/ChatList.vue"
+import ChatList from "@/components/conversations/ChatList.vue"
 import CustomizeBot from "@/components/onboarding/CustomizeBot.vue"
 import { scrollToTop } from "@/composables"
 import { useConversationsList, useCreateConversation } from '@/composables/conversations/conversations'

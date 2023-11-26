@@ -29,7 +29,7 @@ const store = {
 				deleted: setWallet
 			})
 		]
-		return async () => await Promise.all(listeners.map((l) => l()))
+		return () => Promise.all(listeners.map((l) => l()))
 	})
 }
 
@@ -40,6 +40,18 @@ export const useAuth = () => {
 	const isEmailVerified = computed(() => !!store.auth.value?.isEmailVerified)
 	const isAdmin = computed(() => !!store.user.value?.roles.isAdmin || !!store.user.value?.roles.isSuperAdmin)
 	const isSubscribed = computed(() => !!store.wallet.value?.subscription.active)
+
+	const userType = computed(() => ({
+		isStudent: store.user.value?.type.type === 'student',
+		isTeacher: store.user.value?.type.type === 'teacher',
+		isOrg: store.user.value?.type.type === 'organiation',
+	}))
+
+	const userAi = computed(() => ({
+		name: store.user.value?.ai?.name ?? 'Dr. Sofa',
+		tagline: store.user.value?.ai?.tagline ?? '',
+		image: store.user.value?.ai?.photo?.link ?? '/images/icons/robot.svg'
+	}))
 
 	const setAuthUser = async (details: AuthUser | null) => {
 		if (store.listener) await store.listener.close()
@@ -67,19 +79,19 @@ export const useAuth = () => {
 		// await unregisterDeviceOnLogout()
 		// await AuthUseCases.sessionSignout()
 		await setAuthUser(null)
-		// if (isClient()) window.location.assign('/auth/signin')
+		window.location.assign('/auth/login')
 	}
 
 	const deleteAccount = async () => {
 		// await unregisterDeviceOnLogout()
 		// await AuthUseCases.deleteAccount()
 		await setAuthUser(null)
-		// if (isClient()) window.location.assign('/auth/signin')
+		window.location.assign('/auth/login')
 	}
 
 	return {
 		id, bio, user: store.user, auth: store.auth, wallet: store.wallet,
-		isLoggedIn, isEmailVerified, isAdmin, isSubscribed,
+		isLoggedIn, isEmailVerified, isAdmin, isSubscribed, userType, userAi,
 		setAuthUser, signin, signout, deleteAccount
 	}
 }
