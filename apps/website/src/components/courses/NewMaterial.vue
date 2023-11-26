@@ -215,12 +215,10 @@ export default defineComponent({
     const setQuizzes = () => {
       allQuizzes.value.length = 0
       AllQuzzies.value.results.forEach((quiz) => {
-        if (quiz.status != "published") {
-          allQuizzes.value.push({
-            key: quiz.id,
-            value: quiz.title,
-          })
-        }
+        allQuizzes.value.push({
+          key: quiz.id,
+          value: quiz.title,
+        })
       })
     }
 

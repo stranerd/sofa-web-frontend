@@ -431,10 +431,12 @@ export default defineComponent({
       })
 
       const query: QueryParams = {
-        search: {
-          value: searchQuery.value,
-          fields: ["title"],
-        },
+        ...(searchQuery.value ? {
+          search: {
+            value: searchQuery.value,
+            fields: ["title"],
+          },
+        } : {}),
         where: [
           {
             field: "user.id",
@@ -460,33 +462,19 @@ export default defineComponent({
 
       // course search request
       allRequests.push(
-        new Promise((resolve) => {
-          Logic.Study.GetCourses(query)
-            .then(() => {
-              resolve("")
-            })
-            .catch(() => {
-              resolve("")
-            })
-        })
+        Logic.Study.GetCourses(query).catch()
       )
 
       // quiz search request
       allRequests.push(
-        new Promise((resolve) => {
-          query.where.push({
+        Logic.Study.GetQuizzes({
+          ...query,
+          where: [...query.where, {
             field: "courseId",
-            value: "null",
+            value: null,
             condition: Conditions.eq,
-          })
-          Logic.Study.GetQuizzes(query)
-            .then(() => {
-              resolve("")
-            })
-            .catch(() => {
-              resolve("")
-            })
-        })
+          }]
+        }).catch()
       )
 
       Promise.all(allRequests)
@@ -498,16 +486,16 @@ export default defineComponent({
         })
     }
 
-    watch(allCourses, () => {
-      setMaterials()
-    })
-
-    watch(allQuizzes, () => {
+    watch([allCourses, allQuizzes], () => {
       setMaterials()
     })
 
     watch(searchQuery, () => {
       fetchMaterials()
+    })
+
+    watch(singleUser, () => {
+      if (singleUser.value) setProfileData()
     })
 
     const setProfileData = () => {
@@ -527,17 +515,14 @@ export default defineComponent({
 
       // social media link
       singleUser.value.socials.forEach((item) => {
-        const profileLink = profileLinks.filter((profileitem) => {
+        const profileLink = profileLinks.find((profileitem) => {
           return item.ref == profileitem.ref
         })
 
-        if (profileLink.length) {
-          const index = profileLink.indexOf(profileLink[0])
-          profileLinks[index].show = item.link ? true : false
-          profileLinks[index].link = item.link
-          if (item.link) {
-            hasAtleastASocialLink.value = true
-          }
+        if (profileLink) {
+          profileLink.show = item.link ? true : false
+          profileLink.link = item.link
+          if (item.link) hasAtleastASocialLink.value = true
         }
       })
     }
