@@ -85,8 +85,6 @@ export default class Auth extends Common {
   public GetAuthUser = () => {
     return $api.auth.user.getAuthUser().then((response) => {
       this.AuthUser = response.data
-      // register auth watcher
-
       return response.data
     })
   }
@@ -94,14 +92,17 @@ export default class Auth extends Common {
   public DeleteUserAccount = () => {
     return $api.auth.user
       .deleteUserAccount()
-      .then((response) => {
-        localStorage.removeItem(this.authTokensStorageName)
-
+      .then(async (response) => {
+        await this.DeleteTokens()
         window.location.href = '/auth/login'
       })
       .catch((error) => {
         Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
+  }
+
+  public async DeleteTokens () {
+    localStorage.removeItem(this.authTokensStorageName)
   }
 
   public UpdateUserProfile = (
@@ -159,8 +160,8 @@ export default class Auth extends Common {
   public SignOut = () => {
     $api.auth.user
       .signOut()
-      .then((response) => {
-        localStorage.removeItem(this.authTokensStorageName)
+      .then(async (response) => {
+        await this.DeleteTokens()
         window.location.assign('/auth/login')
       })
       .catch((error) => {

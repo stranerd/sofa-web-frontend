@@ -1,5 +1,6 @@
 import { NavigationGuardWithThis, RouteLocationNormalized } from 'vue-router'
 import { Logic } from 'sofa-logic'
+import { useAuth } from '@/composables/auth/auth'
 
 type MiddleWareArgs = {
 	to: RouteLocationNormalized,
@@ -16,14 +17,14 @@ export const isAdmin = defineMiddleware(async () => {
 	if (!authUser || !authUser.roles.isAdmin) return '/'
 })
 export const isNotAuthenticated = defineMiddleware(async () => {
-	if (Logic.Auth.AuthUser) return '/'
+	if (useAuth().isLoggedIn.value) return '/'
 })
 const checkAuthUser = async (to: string) => {
-	if (!Logic.Auth.AuthUser || !Logic.Users.UserProfile) {
+	if (!useAuth().isLoggedIn.value) {
 		if (!to.startsWith('/auth/')) await Logic.Auth.setRedirectToRoute(to)
 		return '/auth/login'
 	}
-	if (!Logic.Auth.AuthUser.isEmailVerified) {
+	if (!useAuth().isEmailVerified.value) {
 		if (!to.startsWith('/auth/')) await Logic.Auth.setRedirectToRoute(to)
 		return '/auth/verify-email'
 	}
@@ -42,8 +43,7 @@ export const isOnboarding = defineMiddleware(async ({ to, goBackToNonAuth }) => 
 	if (Logic.Users.UserProfile.type) return goBackToNonAuth()
 })
 export const isSubscribed = defineMiddleware(async ({ goBackToNonAuth }) => {
-	const authUser = Logic.Auth.AuthUser
-	if (!authUser || !authUser.roles.isSubscribed) return goBackToNonAuth()
+	if (!useAuth().isSubscribed.value) return goBackToNonAuth()
 })
 
 const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed }

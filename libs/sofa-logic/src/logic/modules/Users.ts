@@ -177,9 +177,10 @@ export default class Users extends Common {
     })
   }
 
-  public GetUserProfile = () => {
-    return $api.users.users.get(Logic.Auth.AuthUser.id).then((response) => {
+  public GetUserProfile = (id = Logic.Auth.AuthUser.id) => {
+    return $api.users.users.get(id).then((response) => {
       this.UserProfile = response.data
+      return this.UserProfile
     })
   }
 

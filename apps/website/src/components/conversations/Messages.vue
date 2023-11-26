@@ -1,7 +1,9 @@
 <template>
-  <div class="w-full flex flex-col gap-5">
+  <div v-chat-scroll class="w-full flex flex-col overflow-y-auto scrollbar-hide gap-4">
     <template v-for="message in messages" :key="message.hash">
-      <div class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start" v-if="message.userId !== id">
+      <div
+        class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start"
+        v-if="message.userId !== id">
         <div class="w-[30px]">
           <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="users[message.userId]?.photoUrl" :size="'27'">
             <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
@@ -15,7 +17,7 @@
         </div>
       </div>
 
-      <div class="min-w-[80px] w-full flex flex-row gap-2 items-end justify-end py-4" v-else>
+      <div class="min-w-[80px] w-full flex gap-2 items-end justify-end py-4" v-else>
         <div class="flex flex-row items-end gap-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
           <div class="p-3 custom-border text-left bg-[#E1E6EB]">
             <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body">
@@ -39,12 +41,12 @@
 </template>
 
 <script lang="ts" setup>
-import { scrollToBottom } from '@/composables'
 import { useAuth } from '@/composables/auth/auth'
 import { useMessages } from '@/composables/conversations/messages'
+import { ChatScroll as vChatScroll } from '@/directives/chat-scroll'
 import { Conversation } from "sofa-logic"
 import { SofaAvatar, SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { PropType, defineProps, watch } from "vue"
+import { PropType, defineProps } from "vue"
 
 const props = defineProps({
   conversation: {
@@ -55,13 +57,6 @@ const props = defineProps({
 
 const { id } = useAuth()
 const { messages, users } = useMessages(props.conversation)
-
-watch(messages, () => {
-  // todo: use scroll directive
-  setTimeout(() => {
-    scrollToBottom("MessagesScrollContainer")
-  }, 500)
-})
 </script>
 
 <style scoped>

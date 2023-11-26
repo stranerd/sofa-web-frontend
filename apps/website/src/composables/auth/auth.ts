@@ -44,7 +44,7 @@ export const useAuth = () => {
 	const userType = computed(() => ({
 		isStudent: store.user.value?.type.type === 'student',
 		isTeacher: store.user.value?.type.type === 'teacher',
-		isOrg: store.user.value?.type.type === 'organiation',
+		isOrg: store.user.value?.type.type === 'organization',
 	}))
 
 	const userAi = computed(() => ({
@@ -54,10 +54,10 @@ export const useAuth = () => {
 	}))
 
 	const setAuthUser = async (details: AuthUser | null) => {
-		if (store.listener) await store.listener.close()
+		await store.listener?.close()
 		store.auth.value = details
 		if (details?.id) {
-			store.user.value = await Logic.Users.GetUser(details.id)
+			store.user.value = await Logic.Users.GetUserProfile(details.id)
 			store.wallet.value = await Logic.Payment.GetUserWallet()
 		} else store.user.value = null
 	}

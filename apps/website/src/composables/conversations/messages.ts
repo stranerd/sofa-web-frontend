@@ -100,7 +100,7 @@ export const useMessages = (conversation: Conversation) => {
 
 	return {
 		users,
-		messages: store[conversationId].messages,
+		messages: computed(() => [...store[conversationId].messages.value].reverse()),
 		fetched: store[conversationId].fetched,
 		loading: store[conversationId].loading,
 		error: store[conversationId].error,

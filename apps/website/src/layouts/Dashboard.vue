@@ -2,16 +2,16 @@
   <sofa-top-bar :go-back="goBack" :go-to-route="goToRoute" :tab-is-active="tabIsActive" :tabs="tabs"
     :subpage-actions="topbarOptions.actions" :title="topbarOptions.title" :type="topbarOptions.type"
     :showAddItem="handleShowAddItem" :custom-class="`${hideSmNavigator.top ? 'hidden mdlg:!flex' : 'flex'}`"
-    :badges="topbarOptions.badges"></sofa-top-bar>
+    :badges="topbarOptions.badges"/>
   <div
     :class="` ${wrapLayout
       ? 'mdlg:!fixed pb-5 px-4'
       : 'fixed mdlg:!fixed hidden px-4 py-4'
-      } mdlg:!top-0 mdlg:!pt-[80px] mdlg:!left-0 h-full lg:!w-[22%] mdlg:!w-[25%] mdlg:flex w-full mdlg:!px-5 mdlg:!py-5  flex-col gap-5 overscroll-y-auto scrollbar-hide`">
+      } mdlg:!top-0 mdlg:!pt-[80px] mdlg:!left-0 h-full lg:!w-[22%] mdlg:!w-[25%] mdlg:flex w-full mdlg:!px-5 mdlg:!py-5  flex-col gap-5 overflow-y-auto scrollbar-hide`">
     <slot name="left-session" />
   </div>
   <div :class="`h-full overflow-y-auto z-10 ${middleSessionWidth}  ${wrapLayout ? 'pb-6' : 'pb-4'
-    }   flex-grow ${bgColor} text-center mdlg:!pt-6 relative ${wrapLayout ? 'px-4' : 'px-0'
+    } flex-grow ${bgColor} text-center mdlg:!pt-6 relative ${wrapLayout ? 'px-4' : 'px-0'
     }  mdlg:px-0 mdlg:ml-[25%] lg:ml-[22%] ${hideSmNavigator.bottom
       ? ' mdlg:!gap-0'
       : 'lg:!gap-5 mdlg:!gap-5'
@@ -28,19 +28,16 @@
     <slot name="right-session" />
   </div>
   <sofa-bottom-bar :tab-is-active="tabIsActive" :showAddItem="handleShowAddItem" v-if="!hideSmNavigator.bottom" />
-  <add-material-modal v-if="showAddItem" :close="() => {
-    showAddItem = false
-  }
-    " />
+  <add-material-modal v-if="showAddItem" :close="() => showAddItem = false" />
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted } from "vue"
-import { useRouter } from "vue-router"
-import { SofaTopBar, SofaBottomBar } from "sofa-ui-components"
-import { handleShowAddItem, showAddItem, tabTitle } from "../composables"
 import AddMaterialModal from "@/components/common/AddMaterialModal.vue"
-import { Logic } from "sofa-logic"
+import { useAuth } from '@/composables/auth/auth'
+import { SofaBottomBar, SofaTopBar } from "sofa-ui-components"
+import { computed, defineComponent, ref } from "vue"
+import { useRouter } from "vue-router"
+import { handleShowAddItem, showAddItem, tabTitle } from "../composables"
 
 export default defineComponent({
   components: {
@@ -97,6 +94,8 @@ export default defineComponent({
   setup () {
     const router = useRouter()
 
+    const { userType } = useAuth()
+
     const selectedTab = ref("")
 
     const tabIsActive = (tabName: string) => {
@@ -123,9 +122,7 @@ export default defineComponent({
       router.push(route)
     }
 
-    const loaderSetup = ref<any>()
-
-    const tabs = ref<any[]>([
+    const tabs = computed(() => [
       {
         name: "Home",
         path: "/",
@@ -133,13 +130,13 @@ export default defineComponent({
         routeTag: "base",
         icon_size: "h-[18px]",
       },
-      {
+      ...(userType.value.isOrg ? [] : [{
         name: "Chat",
         path: "/chats",
         icon: "chat",
         routeTag: "chats",
         icon_size: "h-[18px]",
-      },
+      }]),
       {
         name: "Library",
         path: "/library",
@@ -163,25 +160,11 @@ export default defineComponent({
       },
     ])
 
-    onMounted(() => {
-      tabs.value = tabs.value.filter((item) => {
-        if (
-          Logic.Users.getUserType() == "organization" &&
-          item.icon == "chat"
-        ) {
-          return false
-        } else {
-          return true
-        }
-      })
-    })
-
     return {
       tabIsActive,
       goBack,
       goToRoute,
       tabTitle,
-      loaderSetup,
       tabs,
       showAddItem,
       handleShowAddItem,
