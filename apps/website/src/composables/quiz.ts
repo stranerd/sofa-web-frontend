@@ -875,7 +875,8 @@ const handleAnswerSelected = () => {
   }
 }
 
-const createQuizGame = (quizId: string) => {
+const createQuizGame = async () => {
+  if (!selectedQuizId.value) return
   if (Logic.Common.loaderSetup.loading) return
   Logic.Common.showLoader({
     loading: true,
@@ -883,16 +884,15 @@ const createQuizGame = (quizId: string) => {
   })
 
   Logic.Plays.CreateGameForm = {
-    quizId,
+    quizId: selectedQuizId.value,
     join: userIsParticipating.value
   }
 
-  Logic.Plays.CreateGame(true).then(async (game) => {
+  await Logic.Plays.CreateGame(true).then(async (game) => {
     if (game) {
       Logic.Common.hideLoader()
-      Logic.Common.GoToRoute(
-        `/quiz/${game.quizId}?mode=game&gameId=${game.id}`,
-      )
+      showStudyMode.value = false
+      await Logic.Common.GoToRoute( `/quiz/${game.quizId}?mode=game&gameId=${game.id}`)
     }
   })
 }
@@ -903,13 +903,8 @@ const saveParticipantAnswer = (answer: any, questionId: string) => {
     questionId,
   }
 
-  if (SingleGame.value) {
-    Logic.Plays.AnswerGameQuestion(Logic.Plays.SingleGame.id)
-  }
-
-  if (SingleTest.value) {
-    Logic.Plays.AnswerTestQuestion(Logic.Plays.SingleTest.id)
-  }
+  if (SingleGame.value) Logic.Plays.AnswerGameQuestion(Logic.Plays.SingleGame.id)
+  if (SingleTest.value) Logic.Plays.AnswerTestQuestion(Logic.Plays.SingleTest.id)
 }
 
 const copyGameLink = () => {

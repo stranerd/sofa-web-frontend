@@ -82,7 +82,7 @@
           </sofa-normal-text>
         </div>
 
-        <div v-if="marketplaceContents.lastest.length"
+        <div v-if="0 && marketplaceContents.lastest.length"
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
             class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
@@ -103,8 +103,8 @@
         </div>
 
         <template v-else>
-          <div class="w-full flex flex-col gap-3">
-            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any lastest material'" />
+          <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
+            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any latest material'" />
           </div>
         </template>
       </div>
@@ -142,8 +142,8 @@
         </div>
 
         <template v-else>
-          <div class="w-full flex flex-col gap-3">
-            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any highes rated materials'" />
+          <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
+            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any materials'" />
           </div>
         </template>
       </div>
@@ -181,8 +181,8 @@
         </div>
 
         <template v-else>
-          <div class="w-full flex flex-col gap-3">
-            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find most popular materials'" />
+          <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
+            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any materials'" />
           </div>
         </template>
       </div>

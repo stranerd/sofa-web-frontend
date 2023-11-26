@@ -289,7 +289,7 @@ export default defineComponent({
                 questions: `${quiz.questions.length} questions`,
                 description: quiz.description,
                 ratings: {
-                  total: Math.round(quiz.ratings.avg),
+                  avg: Math.round(quiz.ratings.avg),
                   label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? "s" : ""
                     }`,
                 },

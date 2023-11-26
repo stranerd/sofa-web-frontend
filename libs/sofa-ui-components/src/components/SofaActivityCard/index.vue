@@ -59,13 +59,13 @@
             <div class="flex flex-row gap-1 items-center">
               <sofa-normal-text> {{ activity.ratings.avg }} </sofa-normal-text>
               <sofa-normal-text :color="'text-grayColor'">
-                ({{ activity.ratings.total }} ratings)
+                ({{ activity.ratings.count }} rating{{ activity.ratings.count > 1 ? 's' : '' }})
               </sofa-normal-text>
             </div>
           </div>
 
-          <div class="flex flex-row items-center gap-2 flex-grow justify-between w-full">
-            <router-link :to="`/profile/${activity.user.id}`" class="gap-2 flex flex-row items-center cursor-pointer">
+          <div class="flex items-center gap-2 flex-grow justify-between w-full">
+            <a @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)" class="gap-2 flex items-center">
               <sofa-avatar :size="'20'" :photoUrl="activity.user.bio.photo?.link ?? ''" :bgColor="'bg-grayColor'"
                 :user-id="activity.user.id">
                 <sofa-icon :customClass="'h-[12px]'" :name="'user'" v-if="!activity.user.bio.photo?.link" />
@@ -79,7 +79,7 @@
               </sofa-normal-text>
               <sofa-icon v-if="activity.user.roles.isVerified" :name="'verify'" :custom-class="'h-[13px]'" />
               <sofa-icon v-if="activity.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
-            </router-link>
+            </a>
 
             <sofa-icon v-if="!isWrapped" @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'"
               :customClass="'h-[17px] mdlg:!hidden '" />

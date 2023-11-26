@@ -31,8 +31,8 @@
 
         <div class="w-full flex flex-col gap-2">
           <div class="flex flex-row gap-1 items-center">
-            <sofa-ratings :count="data.ratings.total" :size="'h-[14px] mdlg:!h-[15px]'" />
-            <sofa-normal-text> {{ data.ratings.total }}.0 </sofa-normal-text>
+            <sofa-ratings :count="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
+            <sofa-normal-text> {{ data.ratings.avg }} </sofa-normal-text>
             <sofa-normal-text :color="'text-grayColor pl-2'">
               ({{ data.ratings.label }})
             </sofa-normal-text>

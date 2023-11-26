@@ -1,10 +1,9 @@
 import {
   Course,
-  Folder, Logic, Quiz,
+  Logic, Quiz,
   ResourceType
 } from 'sofa-logic'
 import { capitalize, computed, reactive, ref } from 'vue'
-import { ContentDetails } from './marketplace'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
@@ -42,7 +41,7 @@ const showSaveToFolder = ref(false)
 
 const addFolderIsActive = ref(false)
 
-const selectedFolderMaterailToAdd = ref<ResourceType | ContentDetails>()
+const selectedFolderMaterailToAdd = ref<{ id: string, type: string }>()
 
 const currentFolder = reactive({
   id: '',
@@ -185,35 +184,16 @@ const setFolders = () => {
 
 const selectedFolderItems = ref<ResourceType[]>([])
 
-const addFolder = () => {
+const addFolder = async () => {
   addFolderIsActive.value = true
-  const tempId = Logic.Common.makeid(12)
-  folders.push({
-    name: '',
-    edit: true,
-    hover: false,
-    selected: false,
-    id: tempId,
-    items: [],
-  })
-}
 
-const saveFolder = (name: string, tempId: string) => {
-  if (addFolderIsActive.value == false) return
-  Logic.Study.CreateFolderForm = {
-    title: name,
-  }
+  const title = `New folder (${Logic.Common.makeid(4)})`
 
-  Logic.Study.CreateFolder(true).then((data: Folder) => {
-    if (data) {
-      folders.forEach((folder) => {
-        if (folder.id == tempId) {
-          folder.id = data?.id
-        }
-      })
-      addFolderIsActive.value = false
-    }
-  })
+  await Logic.Study.CreateFolder({ title })
+  await Logic.Study.GetFolders({ all: true }, true)
+  setFolders()
+  const folder = folders.find((f) => f.name === title)
+  if (folder) folder.edit = true
 }
 
 const addMaterialToFolder = (
@@ -261,31 +241,17 @@ const addMaterialToFolder = (
   }
 }
 
-const handleFolderNameBlur = () => {
-  if (currentFolder.name) {
-    if (addFolderIsActive.value) {
-      saveFolder(currentFolder.name, currentFolder.id)
-    } else {
-      updateFolder(currentFolder.name, currentFolder.id)
-    }
-
-    currentFolder.id = ''
-    currentFolder.name = ''
+const handleFolderNameBlur = async () => {
+  if (currentFolder.id && currentFolder.name) {
+    Logic.Common.debounce(async () => {
+      await Logic.Study.UpdateFolder(currentFolder.id, { title: currentFolder.name })
+      await Logic.Study.GetFolders({ all: true }, true)
+      setFolders()
+    }, 500)
   } else {
     addFolderIsActive.value = false
     folders.pop()
   }
-}
-
-const updateFolder = (title: string, id: string) => {
-  Logic.Common.debounce(() => {
-    Logic.Study.UpdateFolderForm = {
-      title,
-    }
-    Logic.Study.UpdateFolder(true, id).then(() => {
-      //
-    })
-  }, 500)
 }
 
 const openQuiz = <T extends Pick<ResourceType, 'status' | 'user' | 'id'>>(activity: T) => {
@@ -451,6 +417,7 @@ const moreOptions = reactive([
     title: 'Save/unsave to folder',
     show: () => selectedItem.value?.status == 'published',
     action: () => {
+      showMoreOptions.value = false
       selectedFolderMaterailToAdd.value = selectedItem.value
       showSaveToFolder.value = true
     },
@@ -460,5 +427,5 @@ const moreOptions = reactive([
 export {
   AllCourses, AllFolders, AllFoldersCourses, AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, TutorQuizzes, addFolder, addFolderIsActive, addMaterialToFolder, createCourseData, createQuizData, currentFolder, deleteFolder,
   folders, handleFolderNameBlur, moreOptions, openCourse, openQuiz,
-  reportMaterial, reportMaterialSetup, saveFolder, saveItemsToFolder, selectedFolderItems, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial, setFolders, shareMaterialLink, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode, updateFolder
+  reportMaterial, reportMaterialSetup, saveItemsToFolder, selectedFolderItems, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial, setFolders, shareMaterialLink, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
 }

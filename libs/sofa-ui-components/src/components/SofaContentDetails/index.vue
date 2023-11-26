@@ -59,9 +59,9 @@
 
           <div class="w-full flex flex-row gap-2 items-center" v-if="!isMinimal">
             <div class="flex flex-row gap-1 items-center">
-              <sofa-ratings :count="content.ratings.total" :size="'h-[14px] mdlg:!h-[15px]'" />
+              <sofa-ratings :count="content.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
               <sofa-normal-text>
-                {{ content.ratings.total }}.0
+                {{ content.ratings.avg }}
               </sofa-normal-text>
               <sofa-normal-text :color="'text-grayColor pl-2'">
                 ({{ content.ratings.label }})

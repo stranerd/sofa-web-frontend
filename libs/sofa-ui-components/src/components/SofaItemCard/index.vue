@@ -16,21 +16,13 @@
       {{ content.title }}
     </sofa-normal-text>
     <div class="flex flex-row gap-2 items-center">
-      <sofa-normal-text :color="content.labels.color == 'pink'
-        ? 'text-primaryPurplePink'
-        : 'text-primaryPurple'
-        ">
+      <sofa-normal-text :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">
         {{ content.labels.main }}
       </sofa-normal-text>
-      <span :class="`h-[5px] w-[5px] rounded-full ${content.labels.color == 'pink'
-        ? 'bg-primaryPurplePink'
-        : 'bg-primaryPurple'
-        }`">
-      </span>
-      <sofa-normal-text :color="content.labels.color == 'pink'
-        ? 'text-primaryPurplePink'
-        : 'text-primaryPurple'
-        ">{{ content.labels.sub }}</sofa-normal-text>
+      <span
+        :class="`h-[5px] w-[5px] rounded-full ${content.labels.color == 'pink' ? 'bg-primaryPurplePink' : 'bg-primaryPurple'}`" />
+      <sofa-normal-text :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">{{
+        content.labels.sub }}</sofa-normal-text>
     </div>
 
     <div class="w-full flex flex-row gap-2 items-center">
@@ -39,13 +31,13 @@
       <div class="flex flex-row gap-1 items-center">
         <sofa-normal-text> {{ content.ratings.avg }} </sofa-normal-text>
         <sofa-normal-text :color="'text-grayColor'">
-          ({{ content.ratings.count }} ratings)
+          ({{ content.ratings.count }} rating{{ content.ratings.count > 1 ? 's' : '' }})
         </sofa-normal-text>
       </div>
     </div>
 
-    <div class="flex flex-row gap-2 items-center justify-between pt-1" v-if="content.user">
-      <router-link :to="`/profile/${content.user.id}`" class="gap-2 flex flex-row items-center cursor-pointer">
+    <div class="flex gap-2 items-center justify-between pt-1" v-if="content.user">
+      <a @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${content.user.id}`)" class="gap-2 flex items-center">
         <sofa-avatar :size="'20'" :photoUrl="content.user.bio.photo?.link ?? ''" :bgColor="'bg-grayColor'"
           :user-id="content.user.id">
           <sofa-icon :customClass="'h-[12px]'" :name="'user'" v-if="!content.user.bio.photo?.link" />
@@ -55,15 +47,15 @@
         </sofa-normal-text>
         <sofa-icon v-if="content.user.roles.isVerified" :name="'verify'" :custom-class="'h-[13px]'" />
         <sofa-icon v-if="content.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
-      </router-link>
+      </a>
 
       <sofa-icon @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'" :customClass="'h-[18px] '" />
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
 import { Logic } from "sofa-logic"
+import { defineComponent } from "vue"
 import SofaAvatar from "../SofaAvatar"
 import SofaBadge from "../SofaBadge"
 import SofaButton from "../SofaButton"

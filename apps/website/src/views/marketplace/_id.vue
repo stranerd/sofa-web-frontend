@@ -335,9 +335,7 @@ export default defineComponent({
         contentDetails.title = SingleCourse.value.title
         contentDetails.price = SingleCourse.value.price.amount
         contentDetails.status = SingleCourse.value.status
-        contentDetails.image = SingleCourse.value.photo
-          ? SingleCourse.value.photo.link
-          : "/images/default.png"
+        contentDetails.image = SingleCourse.value.photo?.link ?? "/images/default.png"
         contentDetails.info = SingleCourse.value.description
         contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
           SingleCourse.value.createdAt
@@ -357,10 +355,9 @@ export default defineComponent({
         contentDetails.content.materialsCount =
           SingleCourse.value.coursables.length
 
-        contentDetails.ratings.label = `${SingleCourse.value.ratings.count
-          } rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`
-        contentDetails.ratings.total = SingleCourse.value.ratings.avg
-        contentDetails.ratings.totalCount = SingleCourse.value.ratings.count
+        contentDetails.ratings.label = `${SingleCourse.value.ratings.count} rating${SingleCourse.value.ratings.count > 1 ? "s" : ""}`
+        contentDetails.ratings.avg = SingleCourse.value.ratings.avg
+        contentDetails.ratings.count = SingleCourse.value.ratings.count
 
         // set reviews
         contentDetails.ratings.stats["1"] = 0
@@ -463,10 +460,9 @@ export default defineComponent({
           : ""
         contentDetails.user.id = SingleQuiz.value.user.id
 
-        contentDetails.ratings.label = `${SingleQuiz.value.ratings.count
-          } rating${SingleQuiz.value.ratings.count > 1 ? "s" : ""}`
-        contentDetails.ratings.total = SingleQuiz.value.ratings.avg
-        contentDetails.ratings.totalCount = SingleQuiz.value.ratings.count
+        contentDetails.ratings.label = `${SingleQuiz.value.ratings.count} rating${SingleQuiz.value.ratings.count > 1 ? "s" : ""}`
+        contentDetails.ratings.avg = SingleQuiz.value.ratings.avg
+        contentDetails.ratings.count = SingleQuiz.value.ratings.count
 
         contentDetails.hasCourse = SingleQuiz.value.courseId ? true : false
         contentDetails.courseId = SingleQuiz.value.courseId || ""

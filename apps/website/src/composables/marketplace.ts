@@ -19,7 +19,7 @@ export interface ContentDetails {
     count: number
     total: number
   }
-  type?: 'quiz' | 'course'
+  type: 'quiz' | 'course'
 }
 
 const AllCourses = ref(Logic.Study.AllCourses)

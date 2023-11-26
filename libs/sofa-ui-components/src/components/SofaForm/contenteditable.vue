@@ -1,12 +1,8 @@
 <template>
   <span
     :class="`${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
-    :placeholder="placeholder"
-    :contenteditable="true"
-    @input="onInput"
-    @blur="onBlur"
-    :id="`content-${tabIndex}`"
-  ></span>
+    :placeholder="placeholder" :contenteditable="true" @input="onInput" @blur="onBlur" @keydown.enter.prevent="onEnter"
+    :id="`content-${tabIndex}`"></span>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue"
@@ -35,69 +31,74 @@ export default defineComponent({
     },
   },
   name: "SofaCustomInput",
-  emits: ["update:modelValue", "onBlur", "onContentChange"],
-  setup(props, context) {
-    const textContent = ref("");
+  emits: ["update:modelValue", "onBlur", "onContentChange", "onEnter"],
+  setup (props, context) {
+    const textContent = ref("")
 
-    const tabIndex = Math.random();
+    const tabIndex = Math.random()
 
     watch(textContent, () => {
-      context.emit("update:modelValue", textContent.value);
-      context.emit("onContentChange", textContent.value);
-    });
+      context.emit("update:modelValue", textContent.value)
+      context.emit("onContentChange", textContent.value)
+    })
 
     const onInput = (e: any) => {
-      textContent.value = e.target.innerText.trim();
-    };
+      textContent.value = e.target.innerText.trim()
+    }
 
     const onBlur = () => {
-      context.emit("onBlur", true);
-    };
+      context.emit("onBlur", true)
+    }
+
+    const onEnter = () => {
+      context.emit("onEnter", true)
+    }
 
     const setCaretToEnd = (target: any) => {
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.selectNodeContents(target);
-      range.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      target.focus();
-      range.detach(); // optimization
+      const range = document.createRange()
+      const sel = window.getSelection()
+      range.selectNodeContents(target)
+      range.collapse(false)
+      sel.removeAllRanges()
+      sel.addRange(range)
+      target.focus()
+      range.detach() // optimization
 
       // set scroll to the end if multiline
-      target.scrollTop = target.scrollHeight;
-    };
+      target.scrollTop = target.scrollHeight
+    }
 
     onMounted(() => {
       if (props.updateValue) {
-        textContent.value = props.updateValue;
+        textContent.value = props.updateValue
 
         setTimeout(() => {
-          const contentField = document.getElementById(`content-${tabIndex}`);
+          const contentField = document.getElementById(`content-${tabIndex}`)
 
           if (contentField) {
-            contentField.innerText = textContent.value;
+            contentField.innerText = textContent.value
           }
-        }, 400);
+        }, 400)
       }
 
       if (props.autoFocus) {
-        const contentField = document.getElementById(`content-${tabIndex}`);
+        const contentField = document.getElementById(`content-${tabIndex}`)
 
         setTimeout(() => {
-          setCaretToEnd(contentField);
-        }, 500);
+          setCaretToEnd(contentField)
+        }, 500)
       }
-    });
+    })
 
     return {
       textContent,
       tabIndex,
       onInput,
       onBlur,
-    };
+      onEnter,
+    }
   },
-});
+})
 </script>
 <style scoped>
 .customInput[contenteditable]:empty::before {

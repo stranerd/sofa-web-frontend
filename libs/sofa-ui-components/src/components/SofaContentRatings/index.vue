@@ -7,13 +7,13 @@
         <div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-[2px] border-[#E1E6EB]">
           <div class="flex flex-row">
             <sofa-normal-text :customClass="'mdlg:!text-xl !text-lg'">
-              {{ data.total }}
+              {{ data.avg }}
             </sofa-normal-text>
             <sofa-normal-text :customClass="'mdlg:!text-xl  !text-lg'" :color="'text-grayColor'">
               /5
             </sofa-normal-text>
           </div>
-          <sofa-ratings :count="data.total" :size="'h-[15px] mdlg:!h-[17px]'" />
+          <sofa-ratings :count="data.avg" :size="'h-[15px] mdlg:!h-[17px]'" />
 
           <sofa-normal-text :color="'text-grayColor'">
             {{ data.label }}
@@ -30,7 +30,7 @@
           </sofa-normal-text>
           <div class="flex-grow h-[8px] rounded-[8px] bg-[#E1E6EB] relative">
             <div class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
-              :style="`width: ${(data.stats[index] / data.totalCount) * 100}%;`"></div>
+              :style="`width: ${(data.stats[index] / data.count) * 100}%;`"></div>
           </div>
 
           <sofa-normal-text :customClass="'!text-xs mdlg:!text-xs'" :color="`${data.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'

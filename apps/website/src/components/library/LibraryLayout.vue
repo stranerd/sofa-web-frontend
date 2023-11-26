@@ -50,15 +50,19 @@
 
 				<component :is="item.edit ? 'span' : 'router-link'"
 					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
-					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`" exact-active-class="bg-[#E5F2FD] font-bold">
+					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
+					exact-active-class="bg-[#E5F2FD] font-bold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
 					<sofa-custom-input v-if="item.edit"
 						custom-class="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
-						:updateValue="item.name" placeholder="Folder name" @blur="() => {
+						:updateValue="item.name" placeholder="Folder name" @onBlur="() => {
 							item.edit = false
 							handleFolderNameBlur()
-						}" @onContentChange="(content) => {
+						}" @onEnter="() => {
+	item.edit = false
+	handleFolderNameBlur()
+}" @onContentChange="(content) => {
 	item.name = content
 	currentFolder.name = content
 	currentFolder.id = item.id
@@ -66,8 +70,9 @@
 					<sofa-normal-text v-else>{{ item.name }}</sofa-normal-text>
 
 					<div v-if="!item.edit"
-						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] hidden group-focus-within-[.folder-link]:flex flex-row gap-2 items-center">
-						<sofa-icon @click.stop.prevent="item.edit = true" customClass="h-[15px] cursor-pointer" name="edit-gray" />
+						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex flex-row gap-2 items-center">
+						<sofa-icon @click.stop.prevent="item.edit = true" customClass="h-[15px] cursor-pointer"
+							name="edit-gray" />
 						<sofa-icon customClass="h-[15px] cursor-pointer" name="trash-gray"
 							@click.stop.prevent="selectedFolderId = item.id; showDeleteFolder = true" />
 					</div>
@@ -113,10 +118,13 @@
 							<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 							<sofa-custom-input v-if="item.edit" :updateValue="item.name" :placeholder="'Folder name'"
 								custom-class="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-backgroundGray rounded cursor-text"
-								@blur="
+								@onBlur="() => {
 									item.edit = false
-								handleFolderNameBlur();
-								" @onContentChange="(content) => {
+									handleFolderNameBlur()
+								}" @onEnter="() => {
+	item.edit = false
+	handleFolderNameBlur()
+}" @onContentChange="(content) => {
 	item.name = content
 	currentFolder.name = content
 	currentFolder.id = item.id
@@ -124,7 +132,8 @@
 							<sofa-normal-text v-else>{{ item.name }}</sofa-normal-text>
 						</div>
 
-						<div v-if="!item.edit" class="h-full justify-center hidden group-focus-within-[.folder-link]:flex gap-2 items-center">
+						<div v-if="!item.edit"
+							class="h-full justify-center hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 							<sofa-icon @click.stop.prevent="item.edit = true" :customClass="'h-[15px] cursor-pointer'"
 								:name="'edit-gray'" />
 							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'"
@@ -349,10 +358,7 @@ onMounted(async () => {
 		all: true
 	})
 	if (!Logic.Study.RecentMaterials) Logic.Study.GetRecentMaterials()
-	Logic.Study.GetFolders({
-		where: [{ field: "user.id", value: Logic.Auth.AuthUser?.id }],
-		all: true
-	})
+	Logic.Study.GetFolders({ all: true })
 	setOrganizations()
 })
 </script>

@@ -14,7 +14,7 @@
 							selectedQuizMode == "game"
 							? "Start quiz game"
 							: "Choose Study Mode"
-						}} -- {{ selectedQuizMode }}
+						}}
 					</sofa-normal-text>
 					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showStudyMode = false" />
 				</div>
@@ -52,7 +52,7 @@
 
 					<div class="w-full flex flex-col items-center justify-between pt-3">
 						<div class="w-full flex flex-col">
-							<sofa-button :padding="'py-3'" :customClass="'w-full'" @click="createQuizGame(selectedQuizId)">
+							<sofa-button :padding="'py-3'" :customClass="'w-full'" @click="createQuizGame">
 								Start
 							</sofa-button>
 						</div>

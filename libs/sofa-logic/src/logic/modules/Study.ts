@@ -122,9 +122,9 @@ export default class Study extends Common {
       sub: '',
     },
     ratings: {
-      total: 4,
+      avg: 4,
       label: '24 ratings',
-      totalCount: 24,
+      count: 24,
       stats: {
         '5': 3,
         '4': 21,
@@ -1234,45 +1234,46 @@ export default class Study extends Common {
     })
   }
 
-  public GetFolders = (filters: QueryParams) => {
-    return new Promise((resolve) => {
-      $api.study.folder.fetch(filters).then(async (response) => {
-        const allFolderCourses: string[] = []
-        const allFolderQuizzes: string[] = []
-        this.AllFolders = response.data
+  public GetFolders = async (filters: QueryParams, showLoader = false) => {
+    if (showLoader) Logic.Common.showLoader({ loading: true, show: false })
 
-        this.AllFolders.results.forEach((folder) => {
-          allFolderCourses.push(...folder.saved.courses)
-          allFolderQuizzes.push(...folder.saved.quizzes)
-        })
+    const response = await $api.study.folder.fetch(filters)
+    const allFolderCourses: string[] = []
+    const allFolderQuizzes: string[] = []
+    this.AllFolders = response.data
 
-        const allQuizzes = await $api.study.quiz.fetch({
-          where: [
-            {
-              field: 'id',
-              condition: Conditions.in,
-              value: [...new Set(allFolderQuizzes)],
-            },
-          ],
-        })
-
-        this.AllFoldersQuizzes = allQuizzes.data.results
-
-        const allCourses = await $api.study.course.fetch({
-          where: [
-            {
-              field: 'id',
-              condition: Conditions.in,
-              value: [...new Set(allFolderCourses)],
-            },
-          ],
-        })
-
-        this.AllFoldersCourses = allCourses.data.results
-
-        resolve('')
-      })
+    this.AllFolders.results.forEach((folder) => {
+      allFolderCourses.push(...folder.saved.courses)
+      allFolderQuizzes.push(...folder.saved.quizzes)
     })
+
+    const allQuizzes = await $api.study.quiz.fetch({
+      where: [
+        {
+          field: 'id',
+          condition: Conditions.in,
+          value: [...new Set(allFolderQuizzes)],
+        },
+      ],
+    })
+
+    this.AllFoldersQuizzes = allQuizzes.data.results
+
+    const allCourses = await $api.study.course.fetch({
+      where: [
+        {
+          field: 'id',
+          condition: Conditions.in,
+          value: [...new Set(allFolderCourses)],
+        },
+      ],
+    })
+
+    this.AllFoldersCourses = allCourses.data.results
+
+    if (showLoader) Logic.Common.hideLoader()
+
+    return this.AllFolders
   }
 
   public GetFolder = (id: string) => {
@@ -1805,31 +1806,33 @@ export default class Study extends Common {
     }
   }
 
-  public CreateFolder = (formIsValid: boolean) => {
-    if (formIsValid && this.CreateFolderForm) {
-      return $api.study.folder
-        .post(null, this.CreateFolderForm)
-        .then((response) => {
-          this.SingleFolder = response.data
-          return this.SingleFolder
-        })
-        .catch((error) => {
-          throw error
-        })
-    }
+  public CreateFolder = (CreateFolderForm: CreateFolderInput) => {
+    Logic.Common.showLoader({ loading: true, show: false })
+    return $api.study.folder
+      .post(null, CreateFolderForm)
+      .then((response) => {
+        this.SingleFolder = response.data
+        Logic.Common.hideLoader()
+        return this.SingleFolder
+      })
+      .catch((error) => {
+        Logic.Common.hideLoader()
+        throw error
+      })
   }
 
-  public UpdateFolder = (formIsValid: boolean, id: string) => {
-    if (formIsValid && this.UpdateFolderForm) {
-      return $api.study.folder
-        .put(null, id, this.UpdateFolderForm)
-        .then((response) => {
-          return response.data
-        })
-        .catch((error) => {
-          throw error
-        })
-    }
+  public UpdateFolder = (id: string, UpdateFolderForm: CreateFolderInput) => {
+    Logic.Common.showLoader({ loading: true, show: false })
+    return $api.study.folder
+      .put(null, id, UpdateFolderForm)
+      .then((response) => {
+        Logic.Common.hideLoader()
+        return response.data
+      })
+      .catch((error) => {
+        Logic.Common.hideLoader()
+        throw error
+      })
   }
 
   public SaveItemToFolder = (formIsValid: boolean) => {

@@ -566,9 +566,7 @@ export default class Common {
     next: NavigationGuardNext,
   ) => {
     const allActions: Promise<any>[] = []
-    if (this.loaderSetup.loading) {
-      return
-    }
+    if (this.loaderSetup.loading) return
 
     const routeMiddlewares: any = routeTo.meta.middlewares
 
@@ -580,34 +578,24 @@ export default class Common {
 
     try {
       fetchRules?.forEach((rule) => {
-        if (rule.requireAuth) {
-          if (!Logic.Auth.AuthUser) {
-            window.location.href = '/auth/login'
-
-            throw BreakException
-          }
+        if (rule.requireAuth && !Logic.Auth.AuthUser) {
+          window.location.href = '/auth/login'
+          throw BreakException
         }
 
         if (rule.shouldSkip?.()) return
-
         let addRuleToRequest = true
 
         if (rule.condition) {
           switch (rule.condition.routeSearchItem) {
             case 'fullPath':
-              addRuleToRequest = routeTo['fullPath'].includes(
-                rule.condition.searchQuery,
-              )
+              addRuleToRequest = routeTo['fullPath'].includes( rule.condition.searchQuery)
               break
             case 'params':
-              addRuleToRequest = routeTo['params'][rule.condition.searchQuery]
-                ? true
-                : false
+              addRuleToRequest = routeTo['params'][rule.condition.searchQuery] ? true : false
               break
             case 'query':
-              addRuleToRequest = routeTo['query'][rule.condition.searchQuery]
-                ? true
-                : false
+              addRuleToRequest = routeTo['query'][rule.condition.searchQuery] ? true : false
               break
             default:
               break
@@ -618,54 +606,29 @@ export default class Common {
           // @ts-ignore
           const domain = Logic[rule.domain]
 
-          if (
-            domain[rule.property] == undefined ||
-            (typeof rule.ignoreProperty == 'function' &&
-              rule.ignoreProperty()) ||
-            rule.ignoreProperty
-          ) {
+          if (domain[rule.property] == undefined || (typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) || rule.ignoreProperty) {
+            if (rule.useRouteId) rule.params.unshift(routeTo.params.id.toString())
+            if (rule.useRouteQuery) rule.queries?.forEach((item) => {
+              rule.params.unshift(routeTo.query[item])
+            })
+
             allActions.push(
               new Promise((resolve) => {
-                if (rule.useRouteId) {
-                  rule.params.unshift(routeTo.params.id.toString())
-                }
-                if (rule.useRouteQuery) {
-                  rule.queries?.forEach((item) => {
-                    rule.params.unshift(routeTo.query[item] || 'nill')
-                  })
-                }
-
                 // update userid
                 rule.params.forEach((param) => {
-                  if (typeof param === 'object') {
-                    if (param.where) {
-                      param.where.forEach((item) => {
-                        if (item.field == 'user.id' || item.field == 'userId') {
-                          item.value = Logic.Auth.AuthUser.id
-                        }
-                      })
-                    }
-                  }
+                  if (typeof param !== 'object') return
+                  param.where?.forEach((item) => {
+                    if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Auth.AuthUser.id
+                  })
                 })
-                const request = domain[rule.method](...rule.params)
-                request?.then((value: any) => {
-                  resolve(value)
-                })
+                domain[rule.method]?.(...rule.params).then(resolve)
               }),
             )
           } else {
             if (rule.silentUpdate) {
               // run in silence
-              if (rule.useRouteId) {
-                rule.params.unshift(routeTo.params.id.toString())
-              }
-              if (rule.useRouteQuery) {
-                rule.queries?.forEach((item) => {
-                  rule.params.unshift(routeTo.query[item])
-                })
-              }
               rule.params = [...new Set(rule.params)]
-              domain[rule.method](...rule.params)
+              domain[rule.method]?.(...rule.params)
             }
           }
         }
@@ -677,18 +640,10 @@ export default class Common {
     // save user activities
 
     if (allActions.length > 0) {
-      this.showLoader({
-        loading: true,
-        show: false,
-      })
-
-      Promise.all(allActions).then(() => {
-        this.hideLoader()
-        return next()
-      })
-    } else {
-      this.hideLoader()
-      return next()
+      this.showLoader({ loading: true, show: false })
+      await Promise.all(allActions)
     }
+    this.hideLoader()
+    return next()
   }
 }

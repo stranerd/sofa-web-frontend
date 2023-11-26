@@ -44,9 +44,9 @@ export interface ContentDetails {
     sub: string
   }
   ratings: {
-    total: number
+    avg: number
+    count: number
     label: string
-    totalCount: number
     stats: any
     reviews: {
       user: {

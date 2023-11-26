@@ -30,15 +30,21 @@
             <div class="flex flex-row items-center gap-3">
               <sofa-icon :name="'folder'" :customClass="'h-[18px]'" />
 
-              <sofa-custom-input v-if="item.edit" :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`" :updateValue="item.name" @blur="
-    item.edit = false
-  handleFolderNameBlur();
-  " :placeholder="'Folder name'" @onContentChange="(content) => {
-  item.name = content
-  currentFolder.name = content
-  currentFolder.id = item.id
-}
-  ">
+              <sofa-custom-input v-if="item.edit" :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`" :updateValue="item.name"
+              @onBlur="() => {
+                item.edit = false
+                handleFolderNameBlur()
+              }"
+              @onEnter="() => {
+                item.edit = false
+                handleFolderNameBlur()
+              }"
+              :placeholder="'Folder name'"
+              @onContentChange="(content) => {
+                item.name = content
+                currentFolder.name = content
+                currentFolder.id = item.id
+              }">
               </sofa-custom-input>
 
               <sofa-normal-text v-else>
@@ -82,7 +88,7 @@ import {
   selectedFolderMaterailToAdd,
   setFolders,
 } from "@/composables/library"
-import { Conditions, Logic } from "sofa-logic"
+import { Logic } from "sofa-logic"
 import {
   SofaCustomInput,
   SofaHeaderText,
@@ -112,15 +118,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (!AllFolders.value) {
-        Logic.Study.GetFolders({
-          where: [
-            {
-              field: "user.id",
-              value: Logic.Auth.AuthUser?.id,
-              condition: Conditions.eq,
-            },
-          ],
-        })
+        Logic.Study.GetFolders({ all: true })
       }
       Logic.Study.watchProperty("AllFolders", AllFolders)
       setFolders()

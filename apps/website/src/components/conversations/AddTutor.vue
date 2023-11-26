@@ -100,7 +100,7 @@
                           {{ tutor.ratings.value }}
                         </sofa-normal-text>
                         <sofa-normal-text :color="'text-grayColor'">
-                          ({{ tutor.ratings.total }} rating{{ tutor.ratings.total > 1 ? "s" : "" }})
+                          ({{ tutor.ratings.count }} rating{{ tutor.ratings.count > 1 ? "s" : "" }})
                         </sofa-normal-text>
                       </div>
                     </div>
@@ -221,7 +221,7 @@ export default defineComponent({
         online: t.status.connections.length > 0,
         photo_url: t.bio.photo?.link || "",
         ratings: {
-          total: t.account.ratings.total,
+          count: t.account.ratings.count,
           value: Logic.Common.convertToMoney(t.account.ratings.avg, false, ""),
         },
         subjects: t.tutor.topics
