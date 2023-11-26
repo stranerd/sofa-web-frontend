@@ -2,7 +2,7 @@
   <sofa-top-bar :go-back="goBack" :go-to-route="goToRoute" :tab-is-active="tabIsActive" :tabs="tabs"
     :subpage-actions="topbarOptions.actions" :title="topbarOptions.title" :type="topbarOptions.type"
     :showAddItem="handleShowAddItem" :custom-class="`${hideSmNavigator.top ? 'hidden mdlg:!flex' : 'flex'}`"
-    :badges="topbarOptions.badges"/>
+    :badges="topbarOptions.badges" />
   <div
     :class="` ${wrapLayout
       ? 'mdlg:!fixed pb-5 px-4'
@@ -10,14 +10,12 @@
       } mdlg:!top-0 mdlg:!pt-[80px] mdlg:!left-0 h-full lg:!w-[22%] mdlg:!w-[25%] mdlg:flex w-full mdlg:!px-5 mdlg:!py-5  flex-col gap-5 overflow-y-auto scrollbar-hide`">
     <slot name="left-session" />
   </div>
-  <div :class="`h-full overflow-y-auto z-10 ${middleSessionWidth}  ${wrapLayout ? 'pb-6' : 'pb-4'
-    } flex-grow ${bgColor} text-center mdlg:!pt-6 relative ${wrapLayout ? 'px-4' : 'px-0'
+  <div :class="`h-full overflow-y-auto z-10 ${middleSessionWidth} flex-grow ${bgColor} text-center mdlg:!pt-6 relative ${wrapLayout ? 'px-4' : 'px-0'
     }  mdlg:px-0 mdlg:ml-[25%] lg:ml-[22%] ${hideSmNavigator.bottom
       ? ' mdlg:!gap-0'
       : 'lg:!gap-5 mdlg:!gap-5'
     } gap-2 flex flex-col lg:text-sm mdlg:text-[12px] text-xs`">
     <slot name="middle-session" />
-    <div class="h-[120px] mdlg:!hidden" v-if="!wrapLayout"></div>
   </div>
 
   <div

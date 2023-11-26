@@ -106,7 +106,7 @@
 
             <sofa-normal-text :color="'text-primaryPink'" :custom-class="'cursor-pointer'" @click="
               Logic.Common.GoToRoute(
-                `/marketplace/search?userId=${singleUser.id}`
+                `/marketplace/search?userId=${singleUser.id}&userName=${singleUser.bio.name.full}`
               )
               ">
               View all

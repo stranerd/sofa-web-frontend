@@ -94,26 +94,17 @@
 
       <template v-if="questionTypeMain == 'match'">
         <div class="col-span-1 flex flex-col gap-4">
-          <draggable :list="reactiveQuestion.match" class="w-full gap-4" item-key="id"
+          <draggable :list="reactiveQuestion.match" class="w-full flex flex-col gap-4" item-key="id"
             :group="{ name: 'question-match' }">
             <template #item="{ element, index }">
               <div
-                :class="`w-full flex flex-row items-center justify-between rounded-[12px] p-3 border-lightBorderColor bg-white gap-3`"
+                :class="`w-full flex items-center justify-between rounded-[12px] p-3 border-lightBorderColor bg-white gap-3`"
                 style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
                 @mouseleave="element.showRemove = false">
-                <div class="flex-grow flex flex-row gap-3">
-                  <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`" />
-                  <input class="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
-                    :placeholder="element.text" v-model="element.value" />
-                </div>
-                <div class="flex flex-row items-center gap-2">
-                  <sofa-icon :name="'remove'" :custom-class="'h-[23px] cursor-pointer'" v-if="element.showRemove &&
-                    reactiveQuestion.match.length > optionLimitSettings.min
-                    " @click="removeOption(index)" />
-                  <div class="w-[26px]" v-if="element.isRadio">
-                    <sofa-icon :name="'not-selected'" :custom-class="'h-[23px]'" />
-                  </div>
-                </div>
+                <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`" />
+                <sofa-textarea :rows="1" :richEditor="true"
+                  textAreaStyle="focus:outline-none bg-transparent placeholder:text-grayColor text-bodyBlack w-full"
+                  :placeholder="element.text" v-model="element.value" />
               </div>
             </template>
           </draggable>

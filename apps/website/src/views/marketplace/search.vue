@@ -1,22 +1,18 @@
 <template>
-  <dashboard-layout :middleSessionWidth="'lg:w-[78%] mdlg:w-[78%]'" :hideSmNavigator="{
-    bottom: true,
-    top: true,
-  }">
+  <dashboard-layout :middleSessionWidth="'mdlg:w-[78%]'" :hideSmNavigator="{ bottom: true, top: true }">
     <template v-slot:left-session>
       <div class="w-full shadow-custom pb-6 bg-white custom-border relative flex flex-col h-full gap-6 overflow-y-auto">
-        <div
-          class="w-full flex flex-row items-center px-4 pt-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b-[1px] border-[#F1F6FA]">
+        <div class="w-full flex items-center p-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b border-[#F1F6FA]">
           <sofa-icon :customClass="'h-[14px]'" :name="'filter'" />
-          <sofa-normal-text :customClass="'!font-bold'">Filter</sofa-normal-text>
+          <sofa-normal-text :customClass="'!font-bold'" content="Filter" />
         </div>
 
-        <marketplace-filter v-model="selectedOptions" :update-value="selectedOptions" />
+        <marketplace-filter v-model="selectedOptions" />
       </div>
     </template>
 
     <template v-slot:middle-session>
-      <div class="w-full flex flex-col mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7 relative">
+      <div class="w-full h-full flex flex-col flex-grow overflow-y-auto mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7">
         <div
           class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-backgroundGray mdlgcustom-border flex flex-row gap-3 items-center mdlg:!justify-between justify-start">
           <sofa-icon :customClass="'h-[15px] mdlg:!hidden pl-2'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
@@ -26,7 +22,7 @@
               <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
             </div>
             <sofa-text-field :customClass="'!border-none w-full'" :placeholder="'Search for anything'"
-              :padding="'px-3 mdlg:!pl-0 py-3'" v-model="searchQuery" :defaultValue="defaultValue">
+              :padding="'px-3 mdlg:!pl-0 py-3'" v-model="searchQuery">
             </sofa-text-field>
           </div>
 
@@ -35,18 +31,18 @@
           </div>
         </div>
 
-        <div class="w-full flex flex-row gap-3 items-center mdlg:px-0 pl-4">
-          <span :class="`px-6 py-2  ${item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'
-            } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
+        <div class="w-full flex gap-3 items-center mdlg:px-0 pl-4">
+          <span
+            :class="`px-6 py-2 ${item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'} custom-border flex flex-row items-center justify-center gap-1  cursor-pointer `"
             v-for="(item, index) in filterOptions" :key="index" @click="selectedFilterOption = item.id">
-            <sofa-normal-text :color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'
-              } `" :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+            <sofa-normal-text :color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'}`"
+              :custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
           </span>
         </div>
 
         <!-- Course contents -->
 
-        <div class="w-full flex flex-col gap-3 mdlg:!pt-0 pt-0 mdlg:px-0 pl-4" v-if="selectedFilterOption == 'all' || selectedFilterOption == 'courses'
+        <div class="w-full flex flex-col gap-3 mdlg:px-0 pl-4" v-if="selectedFilterOption == 'all' || selectedFilterOption == 'courses'
           ">
           <div class="w-full flex flex-col justify-start items-start" v-if="selectedFilterOption == 'all'">
             <sofa-normal-text :customClass="'font-bold'">
@@ -89,19 +85,16 @@
           </template>
 
           <template v-else>
-            <div class="w-full flex flex-col gap-3 md:!px-0 px-4">
+            <div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
               <sofa-empty-state :title="'No result found'"
-                :subTitle="'We could not find any course that matches your search'" :actionLabel="'Clear search'" :action="() => {
-                  defaultValue = ' '
-                  search()
-                }
-                  " />
+                :subTitle="'We could not find any course that matches your search'" :actionLabel="'Clear search'"
+                :action="() => searchQuery = ''" />
             </div>
           </template>
         </div>
 
         <!-- Quiz contents -->
-        <div class="w-full flex flex-col gap-3 mdlg:!pt-0 pt-0 mdlg:px-0 pl-4" v-if="selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'
+        <div class="w-full flex flex-col gap-3 mdlg:px-0 pl-4" v-if="selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'
           ">
           <div class="w-full flex flex-col justify-start items-start" v-if="selectedFilterOption == 'all'">
             <sofa-normal-text :customClass="'font-bold'">
@@ -144,58 +137,41 @@
           </template>
 
           <template v-else>
-            <div class="w-full flex flex-col gap-3 md:!px-0 px-4">
+            <div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
               <sofa-empty-state :title="'No result found'"
-                :subTitle="'We could not find any quiz that matches your search'" :actionLabel="'Clear search'" :action="() => {
-                  defaultValue = ' '
-                  search()
-                }
-                  " />
+                :subTitle="'We could not find any quiz that matches your search'" :actionLabel="'Clear search'"
+                :action="() => searchQuery = ''" />
             </div>
           </template>
         </div>
-
-        <div class="w-full h-[100px]"></div>
       </div>
+
       <!-- Bottom filter for sm screens -->
-      <div class="fixed bg-backgroundGray mdlg:!hidden bottom-0 left-0 px-4 py-4 flex flex-col w-full z-50">
-        <div class="bg-primaryPurple custom-border py-3 flex flex-row items-center justify-center gap-2"
+      <div class="bg-backgroundGray mdlg:!hidden p-4 flex flex-col w-full">
+        <div class="bg-primaryPurple custom-border py-3 flex items-center justify-center gap-2"
           @click="showFilter = true">
           <sofa-icon :customClass="'h-[14px]'" :name="'filter-white'" />
           <sofa-normal-text :customClass="'!font-semibold !text-sm'" :color="'text-white'">Filter</sofa-normal-text>
           <span class="w-[24px] h-[24px] bg-white rounded-full flex items-center justify-center">
-            <sofa-normal-text :color="'text-primaryPurple'">{{
-              selectedOptions.length
-            }}</sofa-normal-text>
+            <sofa-normal-text :color="'text-primaryPurple'">{{ selectedOptions.length }}</sofa-normal-text>
           </span>
         </div>
       </div>
 
-      <sofa-modal v-if="showFilter" :close="() => {
-        showFilter = false
-      }
-        " :customClass="'mdlg:!hidden'">
+      <sofa-modal v-if="showFilter" :close="() => showFilter = false" :customClass="'mdlg:!hidden'">
         <div
-          :class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4  relative overflow-y-auto`"
-          @click.stop="() => {
-            //
-          }
-            ">
+          :class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4 relative overflow-y-auto`"
+          @click.stop="() => { }">
           <div
-            class="w-full flex flex-row px-4 py-3 justify-between items-center bg-white sticky top-0 left-0 border-b-[1px] border-[#F1F6FA]">
-            <div class="flex flex-row items-center gap-3">
+            class="w-full flex px-4 py-3 justify-between items-center bg-white sticky top-0 left-0 border-b-[1px] border-[#F1F6FA]">
+            <div class="flex items-center gap-3">
               <sofa-icon :customClass="'h-[13px]'" :name="'filter'" />
-              <sofa-normal-text :customClass="'!font-bold !text-base'">
-                Filters
-              </sofa-normal-text>
+              <sofa-normal-text :customClass="'!font-bold !text-base'" content="Filters" />
             </div>
             <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showFilter = false" />
           </div>
 
-          <marketplace-filter :close="() => {
-            showFilter = false
-          }
-            " :updateValue="selectedOptions" :searchQuery="searchQuery" v-model="selectedOptions" />
+          <marketplace-filter :close="() => showFilter = false" v-model="selectedOptions" />
         </div>
       </sofa-modal>
     </template>
@@ -203,8 +179,7 @@
 </template>
 
 <script lang="ts">
-import MarketplaceFilter from "@/components/marketplace/Filter.vue"
-import { scrollToTop } from "@/composables"
+import MarketplaceFilter, { SelectedOption } from "@/components/marketplace/Filter.vue"
 import {
   createCourseData,
   createQuizData,
@@ -213,7 +188,7 @@ import {
 } from "@/composables/library"
 import { search } from "@/composables/marketplace"
 import moment from "moment"
-import { Conditions, Logic, ResourceType } from "sofa-logic"
+import { Conditions, Logic, QueryParams } from "sofa-logic"
 import {
   SofaActivityCard,
   SofaEmptyState,
@@ -223,9 +198,8 @@ import {
   SofaNormalText,
   SofaTextField,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
-import { useRoute } from "vue-router"
 
 export default defineComponent({
   components: {
@@ -282,118 +256,74 @@ export default defineComponent({
       title: "Search",
     })
 
-    const AllCourses = ref(Logic.Study.AllCourses)
-
-    const AllQuzzies = ref(Logic.Study.AllQuzzies)
-
-    const searchQuery = ref("")
-
-    const selectedOptions = ref([])
-
-    const defaultValue = ref("")
-
-    const showFilter = ref(false)
-
-    const selectedFilterOption = ref("all")
-
-    const filterOptions = reactive([
+    const filterOptions = [
       {
         name: "All",
-        active: true,
         id: "all",
       },
       {
         name: "Courses",
-        active: false,
         id: "courses",
       },
       {
         name: "Quizzes",
-        active: false,
         id: "quizzes",
       },
+    ]
+
+    const AllCourses = ref(Logic.Study.AllCourses)
+    const AllQuzzies = ref(Logic.Study.AllQuzzies)
+    const resourceContents = computed(() => AllCourses.value.results.map(createCourseData))
+    const quizContents = computed(() => AllQuzzies.value.results.map(createQuizData))
+    const showFilter = ref(false)
+    const selectedFilterOption = ref(filterOptions[0].id)
+    const searchQuery = ref(Logic.Common.route.query?.q?.toString() ?? '')
+
+    const selectedOptions = reactive<SelectedOption[]>([
+      ...(Logic.Common.route.query?.userId && Logic.Common.route.query?.userName ? [{
+        name: Logic.Common.route.query.userName.toString(),
+        id: Logic.Common.route.query.userId.toString(),
+        type: "user",
+        query: {
+          field: 'user.id',
+          value: Logic.Common.route.query.userId.toString(),
+          condition: Conditions.eq
+        }
+      }] : [])
     ])
 
-    const resourceContents = ref<ResourceType[]>([])
-    const quizContents = ref<ResourceType[]>([])
-    const setCourses = () => {
-      resourceContents.value.length = 0
-      AllCourses.value.results.forEach((course) => {
-        resourceContents.value.push(createCourseData(course))
-      })
-    }
-
-    const setQuizzes = () => {
-      quizContents.value.length = 0
-      AllQuzzies.value.results.forEach((quiz) => {
-        quizContents.value.push(createQuizData(quiz))
-      })
-    }
-
-    const setQuery = () => {
-      const route = useRoute()
-
-      if (route.query?.q) {
-        if (route.query?.q != "nill") {
-          defaultValue.value = route.query?.q.toString()
-        }
-      }
-    }
-
-    onMounted(() => {
-      scrollToTop()
-      Logic.Study.watchProperty("AllCourses", AllCourses)
-      Logic.Study.watchProperty("AllQuzzies", AllQuzzies)
-      setQuery()
-      setCourses()
-      setQuizzes()
-
-      if (Logic.Common.route.query?.userId) {
-        selectedOptions.value.push({
-          name: Logic.Users.SingleUser?.bio.name.full,
-          active: true,
-          id: Logic.Common.route.query?.userId.toString(),
-          type: "user",
-        })
-      }
-    })
-
-    watch(AllCourses, () => {
-      setCourses()
-    })
-
-    watch(AllQuzzies, () => {
-      setQuizzes()
-    })
-
-    watch(searchQuery, () => {
-      const allQueries: any = {
+    const fetchSearchResults = () => {
+      const allQueries: QueryParams = {
         where: [
           {
             field: "status",
             value: "published",
             condition: Conditions.eq,
           },
+          ...selectedOptions.map((option) => option.query)
         ],
-      }
-
-      selectedOptions.value.forEach((item) => {
-        if (item.query) {
-          allQueries.where.push(item.query)
-        }
-      })
-
-      allQueries.search = {
-        value: searchQuery.value,
-        fields: ["title"],
+        sort: [{ field: 'createdAt', desc: true }],
+        limit: 20,
+        ...(searchQuery.value ? {
+          search: {
+            value: searchQuery.value,
+            fields: ["title", "user.bio.name.first", "user.bio.name.last", "user.bio.name.full"],
+          }
+        } : {})
       }
 
       Logic.Common.debounce(() => {
-        if (searchQuery.value != "nill") {
-          search(allQueries, false)
-        }
+        search(allQueries)
       }, 500)
+    }
+
+    onMounted(() => {
+      Logic.Study.watchProperty("AllCourses", AllCourses)
+      Logic.Study.watchProperty("AllQuzzies", AllQuzzies)
+      fetchSearchResults()
     })
+
+    watch([searchQuery, selectedOptions], fetchSearchResults)
 
     return {
       moment,
@@ -401,7 +331,6 @@ export default defineComponent({
       Logic,
       searchQuery,
       selectedOptions,
-      defaultValue,
       showFilter,
       quizContents,
       filterOptions,
@@ -413,6 +342,7 @@ export default defineComponent({
   },
 })
 </script>
+
 <style scoped>
 .textarea[contenteditable]:empty::before {
   content: "Enter message";

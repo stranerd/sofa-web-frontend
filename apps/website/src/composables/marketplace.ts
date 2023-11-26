@@ -1,4 +1,4 @@
-import { Conditions, Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
+import { Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
 export interface ContentDetails {
@@ -75,60 +75,19 @@ const sectionTags = reactive({
   textbook: '',
 })
 
-const search = (query: QueryParams = {}, returnCoursables = false) => {
+export const search = (query: QueryParams, returnCoursables = false) => {
   Logic.Common.showLoader({
     loading: true,
     show: false,
   })
 
-  query.sort = [
-    {
-      field: 'createdAt',
-      desc: true,
-    },
+  const allRequests = [
+    Logic.Study.GetCourses(query).catch(),
+    Logic.Study.GetQuizzes({
+        ...query,
+        where: query.where.concat(...(returnCoursables ? [{ field: 'courseId', value: null }] : []))
+      }).catch()
   ]
-
-  query.where.push({
-    field: 'status',
-    value: 'published',
-    condition: Conditions.eq,
-  })
-  query.limit = 20
-
-  const allRequests: Promise<any>[] = []
-
-  // course search request
-  allRequests.push(
-    new Promise((resolve) => {
-      Logic.Study.GetCourses(query)
-        .then(() => {
-          resolve('')
-        })
-        .catch(() => {
-          resolve('')
-        })
-    }),
-  )
-
-  // quiz search request
-  allRequests.push(
-    new Promise((resolve) => {
-      if (returnCoursables) {
-        query.where.push({
-          field: 'courseId',
-          value: 'null',
-          condition: Conditions.eq,
-        })
-      }
-      Logic.Study.GetQuizzes(query)
-        .then(() => {
-          resolve('')
-        })
-        .catch(() => {
-          resolve('')
-        })
-    }),
-  )
 
   Promise.all(allRequests)
     .then(() => {
@@ -332,6 +291,6 @@ const setMarketplaceMaterials = (count = 5) => {
 }
 
 export {
-  AllCourses, HomeMaterials, MarketplaceMaterials, homeContents, mainCards, marketplaceContents, notesContents, pastQuestionContents, search, sectionTags, setCourses,
+  AllCourses, HomeMaterials, MarketplaceMaterials, homeContents, mainCards, marketplaceContents, notesContents, pastQuestionContents, sectionTags, setCourses,
   setHomeMaterials, setMarketplaceMaterials, textbookContents
 }

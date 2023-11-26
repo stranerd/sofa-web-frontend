@@ -1,77 +1,72 @@
 <template>
   <div class="w-full flex flex-col gap-6">
     <div class="w-full flex flex-col gap-3 px-4" v-if="selectedOptions.length">
-      <div class="w-full flex flex-row items-center gap-2 justify-between">
+      <div class="w-full flex items-center gap-2 justify-between">
         <sofa-normal-text :customClass="'!font-bold'">Applied filters</sofa-normal-text>
-
         <sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'"
           @click="selectedOptions.length = 0">Clear all</sofa-normal-text>
       </div>
 
-      <div class="flex flex-row gap-3 flex-wrap items-center">
+      <div class="flex gap-3 flex-wrap items-center">
         <div v-for="(option, index) in selectedOptions" :key="index" class="w-auto pb-2">
           <span class="px-4 py-2 bg-primaryPurple custom-border flex flex-row items-center justify-center gap-1">
-            <sofa-normal-text :color="'text-white'">{{
-              option.name
-            }}</sofa-normal-text>
-            <sofa-icon :customClass="'h-[18px] cursor-pointer'" @click="toggelOption(option)" :name="'close-white'" />
+            <sofa-normal-text :color="'text-white'" :content="option.name" />
+            <sofa-icon :customClass="'h-[18px] cursor-pointer'" @click="toggleOption(option)" :name="'close-white'" />
           </span>
         </div>
       </div>
     </div>
 
     <div class="w-full flex flex-col gap-3 px-4" v-for="(option, index) in searchOptions" :key="index">
-      <div class="w-full flex flex-row items-center justify-between cursor-pointer" @click="
-        option.opened ? (option.opened = false) : (option.opened = true)
-        ">
-        <div class="flex flex-row items-center gap-2">
+      <a class="w-full flex items-center justify-between"
+        @click="openOption = option.name === openOption ? '' : option.name">
+        <div class="flex items-center gap-2">
           <sofa-icon :customClass="'h-[16px]'" :name="option.icon" />
-
-          <sofa-normal-text :customClass="'!font-bold'">{{
-            option.name
-          }}</sofa-normal-text>
+          <sofa-normal-text :customClass="'!font-bold'" :content="option.name" />
         </div>
-        <sofa-icon :customClass="'h-[7px]'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
-      </div>
+        <sofa-icon :customClass="'h-[7px]'" :name="option.name === openOption ? 'chevron-up' : 'chevron-down'" />
+      </a>
 
-      <div class="w-full flex flex-row flex-wrap gap-3" v-if="option.opened">
-        <span :class="`px-4 py-2  ${optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'
-          } custom-border flex flex-row items-center justify-center gap-1  cursor-pointer`"
-          v-for="(item, index) in option.options" :key="index" @click="toggelOption(item)">
-          <sofa-normal-text :color="`${optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'
-            } `">{{ item.name }}</sofa-normal-text>
-        </span>
+      <div class="w-full flex flex-wrap gap-3" v-if="option.name === openOption">
+        <a :class="`px-4 py-2 ${optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'} custom-border flex items-center justify-center gap-1`"
+          v-for="(item, index) in option.options" :key="index" @click="toggleOption(item)">
+          <sofa-normal-text :color="`${optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'}`"
+            :content="item.name" />
+        </a>
       </div>
     </div>
+
     <div class="h-[60px]"></div>
   </div>
-  <div class="w-full flex flex-col bg-white mdlg:!hidden px-4 py-4 bottom-0 fixed left-0"
-    @click.prevent="close ? close() : null">
-    <sofa-button :customClass="'w-full'" :padding="'py-3'">
-      Show results
-    </sofa-button>
+  <div class="w-full flex flex-col bg-white mdlg:!hidden p-4 bottom-0 fixed left-0" @click.prevent="close?.()">
+    <sofa-button :customClass="'w-full'" :padding="'py-3'">Show results</sofa-button>
   </div>
 </template>
+
 <script lang="ts">
-import { search } from "@/composables/marketplace"
 import { Conditions, Logic } from "sofa-logic"
 import { SofaButton, SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { computed, defineComponent, reactive, ref, watch } from "vue"
+
+export type SelectedOption = {
+  name: string
+  id: string
+  type: string
+  query: {
+    field: string
+    value: any
+    condition: Conditions
+  }
+}
 
 export default defineComponent({
   props: {
     close: {
       type: Function,
     },
-    updateValue: {
-      type: Array as () => any[],
-      default: () => {
-        return []
-      },
-    },
-    searchQuery: {
-      type: String,
-      default: "",
+    modelValue: {
+      type: Array as () => SelectedOption[],
+      default: () => []
     },
   },
   components: {
@@ -84,58 +79,18 @@ export default defineComponent({
     const AllTopics = ref(Logic.Study.AllTopics)
     const AllOtherTags = ref(Logic.Study.AllOtherTags)
 
-    const selectedOptions = reactive<
-      {
-        name: string
-        active: boolean
-        id: string
-        type: string
-        query?: {
-          field: string
-          value: any
-          condition: string
-        }
-      }[]
-    >([])
+    const selectedOptions = reactive(props.modelValue)
 
-    const optionIsSelected = (id: string) => {
-      return selectedOptions.filter((item) => item.id == id).length
-    }
+    watch(selectedOptions, (value) => {
+      context.emit('update:modelValue', value)
+    })
 
-    const typeExist = (type: string) => {
-      return selectedOptions.filter((item) => item.type == type).length
-    }
-
-    const toggelOption = (option: any) => {
-      if (optionIsSelected(option.id)) {
-        const itemIndex = selectedOptions.indexOf(option)
-
-        if (itemIndex > -1) {
-          selectedOptions.splice(itemIndex, 1)
-        }
-      } else {
-        // check it filter item of similar type exists, it yes remove before appending
-        if (typeExist(option.type)) {
-          let currentOptions = JSON.parse(JSON.stringify(selectedOptions))
-          currentOptions = currentOptions.filter(
-            (item) => item.type != option.type
-          )
-          selectedOptions.length = 0
-          selectedOptions.push(...currentOptions)
-          selectedOptions.push(option)
-        } else {
-          selectedOptions.push(option)
-        }
-      }
-    }
-
-    const searchOptions = reactive([
+    const searchOptions = computed(() => [
       {
         name: "Price",
         options: [
           {
             name: "Free",
-            active: false,
             type: "price",
             id: "free",
             query: {
@@ -146,9 +101,8 @@ export default defineComponent({
           },
           {
             name: "Paid",
-            active: false,
-            id: "paid",
             type: "price",
+            id: "paid",
             query: {
               field: "price.amount",
               value: 0,
@@ -156,78 +110,40 @@ export default defineComponent({
             },
           },
         ],
-        opened: true,
         icon: "price-filter",
       },
       {
-        name: "Subject",
-        options: [],
-        opened: true,
-        icon: "subject-filter",
-      },
-      {
-        name: "Popular tags",
-        options: [],
-        opened: false,
-        icon: "tag-filter",
-      },
-      {
-        name: "Rating",
-        options: [
-          {
-            name: "4 stars and higher ",
-            active: false,
-            type: "ratings",
-            id: "4",
+        name: "Ratings",
+        options: [4, 3, 2, 1].map((option) => ({
+          name: `${option} stars and higher`,
+          type: "ratings",
+          id: option.toString(),
+          query: {
+            field: "ratings.avg",
+            value: option,
+            condition: Conditions.gte,
           },
-          {
-            name: "3 stars and higher",
-            active: false,
-            type: "ratings",
-            id: "3",
-          },
-          {
-            name: "2 stars and higher",
-            active: false,
-            type: "ratings",
-            id: "2",
-          },
-          {
-            name: "1 star and higher ",
-            active: false,
-            type: "ratings",
-            id: "1",
-          },
-        ],
-        opened: false,
+        })),
         icon: "rating-filter",
       },
       {
         name: "Author",
-        options: [
-          {
-            name: "Student",
-            active: false,
-            type: "author",
-            id: "student",
+        options: ['Student', 'Teacher', 'Organization'].map((option) => ({
+          name: option,
+          type: "author",
+          id: option,
+          query: {
+            field: "user.type.type",
+            value: option.toLowerCase(),
+            condition: Conditions.eq,
           },
-          {
-            name: "Teacher",
-            active: false,
-            type: "author",
-            id: "teacher",
-          },
-        ],
-        opened: false,
+        })),
         icon: "author-filter",
       },
-    ])
-
-    const setSearchOption = () => {
-      const allSubjects = AllTopics.value.results.map((tag) => {
-        return {
+      {
+        name: "Subject",
+        options: AllTopics.value.results.map((tag) => ({
           name: tag.title,
-          active: false,
           id: tag.id,
           type: "subject",
           query: {
@@ -235,13 +151,13 @@ export default defineComponent({
             value: tag.id,
             condition: Conditions.eq,
           },
-        }
-      })
-
-      const allOtherTags = AllOtherTags.value.results.map((tag) => {
-        return {
+        })),
+        icon: "subject-filter",
+      },
+      {
+        name: "Popular tags",
+        options: AllOtherTags.value.results.map((tag) => ({
           name: tag.title,
-          active: false,
           id: tag.id,
           type: "tags",
           query: {
@@ -249,60 +165,33 @@ export default defineComponent({
             value: tag.id,
             condition: Conditions.in,
           },
-        }
-      })
+        })),
+        icon: "tag-filter",
+      },
+    ])
 
-      searchOptions.forEach((item) => {
-        if (item.name == "Subject") {
-          item.options = allSubjects
-        }
+    const openOption = ref(searchOptions.value[0]?.name)
 
-        if (item.name == "Popular tags") {
-          item.options = allOtherTags
-        }
-      })
+    const optionIsSelected = (id: string) => !!selectedOptions.find((item) => item.id == id)
+
+    const toggleOption = (option: SelectedOption) => {
+      if (optionIsSelected(option.id)) {
+        const itemIndex = selectedOptions.indexOf(option)
+        if (itemIndex > -1) selectedOptions.splice(itemIndex, 1)
+      } else {
+        // check it filter item of similar type exists, it yes remove before appending
+        const typeIndex = selectedOptions.findIndex((o) => o.type === option.type)
+        if (typeIndex > -1) selectedOptions.splice(typeIndex, 1, option)
+        else selectedOptions.push(option)
+      }
     }
-
-    const setQueryConditions = () => {
-      const allQueries = {
-        where: [],
-      }
-
-      selectedOptions.forEach((item) => {
-        if (item.query) {
-          allQueries.where.push(JSON.parse(JSON.stringify(item.query)))
-        }
-      })
-
-      Logic.Common.debounce(() => {
-        search(allQueries)
-      }, 500)
-    }
-
-    watch(selectedOptions, () => {
-      const userFilter = selectedOptions.filter((item) => item.type == "user")
-
-      if (userFilter.length == 0) {
-        setQueryConditions()
-        context.emit("update:modelValue", selectedOptions)
-      }
-    })
-
-    onMounted(() => {
-      setSearchOption()
-      if (props.updateValue) {
-        setTimeout(() => {
-          console.log(props.updateValue)
-          selectedOptions.push(...props.updateValue)
-        }, 300)
-      }
-    })
 
     return {
+      openOption,
       searchOptions,
       selectedOptions,
       optionIsSelected,
-      toggelOption,
+      toggleOption,
     }
   },
 })

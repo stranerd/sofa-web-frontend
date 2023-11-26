@@ -29,11 +29,11 @@ import ChatList from "@/components/conversations/ChatList.vue"
 import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList } from '@/composables/conversations/conversations'
 import { useRequestsList } from '@/composables/conversations/tutorRequests'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import { SofaIcon, SofaNormalText } from "sofa-ui-components"
 import { defineComponent } from "vue"
 import { useMeta } from "vue-meta"
-import { useRouter } from 'vue-router'
 
 export default defineComponent({
 	components: {
@@ -43,14 +43,13 @@ export default defineComponent({
 		ChatList,
 	},
 	name: "ChatsIndexPage",
+	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/chats/new' : undefined ]),
 	setup () {
 		useMeta({
 			title: "Chat",
 		})
 
 		const { userType } = useAuth()
-		const router = useRouter()
-		if (Logic.Common.isLarge) router.push("/chats/new")
 
 		const { conversations } = useConversationsList()
 		const { requests } = useRequestsList()

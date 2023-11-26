@@ -22,11 +22,11 @@
             <sofa-normal-text :customClass="'pr-2 border-r-[1px] border-[#E1E6EB] cursor-pointer'"
               @click="Logic.Common.GoToRoute('/marketplace/search')">Filter</sofa-normal-text>
             <sofa-text-field :customClass="'!border-none w-full'" :placeholder="'Search for anything'"
-              v-model="searchQueryLg" @onEnter="handleSearchLg">
+              v-model="searchQuery" @onEnter="handleSearch">
             </sofa-text-field>
           </div>
 
-          <div class="w-[20px] cursor-pointer" @click="handleSearchLg">
+          <div class="w-[20px] cursor-pointer" @click="handleSearch">
             <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
           </div>
         </div>
@@ -43,9 +43,7 @@
           <div class="pl-2">
             <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
           </div>
-          <sofa-text-field :customClass="'!border-none w-full flex-grow'" :placeholder="'Search'" v-model="searchQueryLg"
-            :defaultValue="defaultValue" @onEnter="handleSearchLg">
-          </sofa-text-field>
+          <sofa-text-field :customClass="'!border-none w-full flex-grow'" :placeholder="'Search'" v-model="searchQuery" @onEnter="handleSearch" />
         </div>
       </div>
     </div>
@@ -205,7 +203,6 @@ import {
   marketplaceContents,
   notesContents,
   pastQuestionContents,
-  search,
   sectionTags,
   setMarketplaceMaterials,
   textbookContents,
@@ -267,15 +264,7 @@ export default defineComponent({
       title: "Marketplace",
     })
 
-    const showFilter = ref(false)
-
     const searchQuery = ref("")
-
-    const searchQueryLg = ref("")
-
-    const selectedOptions = ref([])
-
-    const defaultValue = ref("")
 
     onMounted(() => {
       scrollToTop()
@@ -288,17 +277,9 @@ export default defineComponent({
       setMarketplaceMaterials()
     })
 
-    watch(defaultValue, () => {
-      if (defaultValue.value) {
-        setTimeout(() => {
-          defaultValue.value = ""
-        }, 1000)
-      }
-    })
-
-    const handleSearchLg = () => {
-      if (searchQueryLg.value) {
-        Logic.Common.GoToRoute(`/marketplace/search?q=` + searchQueryLg.value)
+    const handleSearch = () => {
+      if (searchQuery.value) {
+        Logic.Common.GoToRoute(`/marketplace/search?q=` + searchQuery.value)
       }
     }
 
@@ -308,18 +289,13 @@ export default defineComponent({
       pastQuestionContents,
       textbookContents,
       Logic,
-      showFilter,
-      selectedOptions,
       searchQuery,
-      defaultValue,
-      searchQueryLg,
       mainCards,
       sectionTags,
       marketplaceContents,
       showSaveToFolder,
       selectedFolderMaterailToAdd,
-      handleSearchLg,
-      search,
+      handleSearch,
     }
   },
 })
