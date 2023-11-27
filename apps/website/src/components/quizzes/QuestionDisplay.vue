@@ -75,7 +75,7 @@
       <template v-if="question.strippedData.type === 'dragAnswers'">
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
           <template v-for="(content, index) in question.splitQuestions" :key="index">
-            <draggable v-if="index !== 0" v-model="answer.value[index - 1]" itemKey=""
+            <draggable v-if="index !== 0" :list="answer.value" itemKey=""
               :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
               <template #item="{ element }">
                 <div
@@ -90,7 +90,7 @@
 
           <draggable class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]"
             :list="question.strippedData.answers.filter((o) => !answer.value.flat(1).includes(o))" itemKey=""
-            :group="{ name: 'drag-and-drop-question' }">
+            @change="console.log">
             <template #item="{ element }">
               <div
                 :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
@@ -99,6 +99,7 @@
             </template>
           </draggable>
         </div>
+        <pre>{{ JSON.stringify(answer, null, 2) }}</pre>
       </template>
 
       <template v-if="question.strippedData.type === 'sequence'">
@@ -192,6 +193,10 @@ watch(answer, () => {
   console.log(answer.value)
   emits('update:modelValue', answer.value)
 })
+
+const dropHandler = (e: any) => {
+  console.log(e)
+}
 </script>
 
 <style scoped>
