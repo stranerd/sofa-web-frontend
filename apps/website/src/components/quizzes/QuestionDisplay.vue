@@ -20,7 +20,7 @@
             '!bg-[#E2F3FD] !border-primaryBlue shake': optionState(index) === 'selected',
             '!bg-[#E2F3FD] border-[#7DC8FA]': optionState(index) === 'hover'
           }"
-          @click="multipleChoiceAnswers.includes(index) ? multipleChoiceAnswers = multipleChoiceAnswers.filter((x) => x === index) : multipleChoiceAnswers.push(index)">
+          @click="answer.value.includes(index) ? answer.value.splice(answer.value.indexOf(index), 1) : answer.value.push(index)">
           <div class="flex-grow flex gap-3 items-center">
             <SofaIcon
               :name="`${Logic.Study.getShape(index)}${optionState(index) == 'hover' ? '-blue' : ''}${optionState(index) == 'correct' ? '-green' : ''}${optionState(index) == 'wrong' ? '-red' : ''}`"
@@ -39,7 +39,7 @@
             '!bg-[#FAEBEB] !border-primaryRed': optionState(option) === 'wrong',
             '!bg-[#E2F3FD] !border-primaryBlue shake': optionState(option) === 'selected',
             '!bg-[#E2F3FD] border-[#7DC8FA]': optionState(option) === 'hover'
-          }" @click="trueOrFalseAnswer = option">
+          }" @click="answer.value = option">
           <div class="flex-grow flex gap-3 items-center">
             <SofaIcon
               :name="`${Logic.Study.getShape(index)}${optionState(option) == 'hover' ? '-blue' : ''}${optionState(option) == 'correct' ? '-green' : ''}${optionState(option) == 'wrong' ? '-red' : ''}`"
@@ -50,13 +50,28 @@
         </a>
       </div>
 
-      <div class="w-full flex flex-col gap-4 pt-4" v-if="question.type === 'writeAnswer'">
+      <div class="w-full flex flex-col gap-4" v-if="question.type === 'writeAnswer'">
         <div
           class="w-full flex items-center justify-between rounded-[12px] md:!px-3 md:!py-3 px-3 py-1 border-[#E1E6EB] bg-white gap-3 border-2">
           <div class="flex-grow flex gap-3 py-3 items-center">
-            <SofaTextarea placeholder="Write your answer here" v-model="writeAnswerAnswer"
-              text-area-style="focus:outline-none bg-transparent  !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base" />
+            <SofaTextarea placeholder="Write your answer here" v-model="answer.value"
+              text-area-style="focus:outline-none bg-transparent !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base" />
           </div>
+        </div>
+      </div>
+
+      <div class="w-full flex flex-col gap-4" v-if="question.type === 'fillInBlanks'">
+        <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
+          <template v-for="(content, index) in question.question.split(question.data.indicator)" :key="index">
+            <div v-if="index !== 0"
+              class="min-w-[160px] rounded-xl md:p-3 p-1 bg-white flex items-center justify-center border-2 border-b-4">
+              <input placeholder="answer here"
+                class="w-full focus:outline-none placeholder:md:!text-2xl !text-bodyBlack !bg-white placeholder:text-base placeholder:text-grayColor md:!text-2xl text-base"
+                v-model="answer.value[index]" />
+            </div>
+            <SofaHeaderText :customClass="'!font-semibold md:!text-2xl text-base'" color="text-inherit"
+              :content="content" />
+          </template>
         </div>
       </div>
     </div>
@@ -71,7 +86,7 @@ import {
   SofaNormalText,
   SofaTextarea,
 } from "sofa-ui-components"
-import { PropType, computed, defineEmits, defineProps, reactive, ref, watch } from "vue"
+import { PropType, computed, defineEmits, defineProps, reactive, watch } from "vue"
 
 const props = defineProps({
   questionData: {
@@ -96,20 +111,10 @@ const emits = defineEmits(['update:modelValue'])
 
 const question = computed(() => Logic.Study.transformQuestion(props.questionData))
 
-const multipleChoiceAnswers = reactive<number[]>(Array.isArray(props.modelValue) ? props.modelValue : [])
-const trueOrFalseAnswer = ref<boolean>()
-const writeAnswerAnswer = ref('')
+const answer = reactive({ value: props.modelValue })
 
-watch(writeAnswerAnswer, () => {
-  emits('update:modelValue', writeAnswerAnswer.value.trim())
-})
-
-watch(multipleChoiceAnswers, () => {
-  emits('update:modelValue', multipleChoiceAnswers)
-})
-
-watch(trueOrFalseAnswer, () => {
-  emits('update:modelValue', trueOrFalseAnswer.value)
+watch(answer, () => {
+  emits('update:modelValue', answer.value)
 })
 </script>
 
@@ -131,5 +136,6 @@ watch(trueOrFalseAnswer, () => {
 }
 
 .shake {
-  animation: shake 0.5s infinite;
-}</style>
+  animation: shake 0.5s 1;
+}
+</style>

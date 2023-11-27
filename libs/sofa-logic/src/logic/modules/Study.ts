@@ -1412,9 +1412,6 @@ export default class Study extends Common {
       get type () {
         return question.data.type
       },
-      get usesRadio () {
-        return ['multipleChoice', 'trueOrFalse'].includes(question.data.type)
-      },
       get instruction () {
         if (question.data.type === 'multipleChoice') return 'Choose the right answer(s)'
         if (question.data.type === 'writeAnswer') return `Type your answer`
@@ -1425,10 +1422,18 @@ export default class Study extends Common {
         if (question.data.type === 'match') return `Drag items on the right side to rearrange`
         return ''
       },
-      get radioOptions () {
-        if (question.data.type === 'multipleChoice') return question.data.answers.map((opt, index) => ({ label: opt, value: index }))
-        if (question.data.type === 'trueOrFalse') return [true, false].map((opt) => ({ label: opt.toString(), value: opt }))
-        return []
+      get indicatorCount () {
+        return question.question.split(question.data.indicator).length - 1
+      },
+      get defaultAnswer () {
+        if (question.data.type === 'multipleChoice') return []
+        if (question.data.type === 'writeAnswer') return ''
+        if (question.data.type === 'trueOrFalse') return undefined as boolean
+        if (question.data.type === 'fillInBlanks') return []
+        if (question.data.type === 'dragAnswers') return []
+        if (question.data.type === 'sequence') return []
+        if (question.data.type === 'match') return []
+        return undefined
       }
     }
   }

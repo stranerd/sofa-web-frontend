@@ -20,8 +20,8 @@
 	</template>
 
 	<div class="w-full flex-grow flex flex-col items-center justify-center">
-		<QuestionDisplay v-if="currentQuestion" v-model="answer" :questionData="currentQuestion" :title="title"
-			:optionState="optionState" />
+		<QuestionDisplay v-if="currentQuestion" :key="questionIndex" v-model="answer" :questionData="currentQuestion"
+			:title="title" :optionState="optionState" />
 
 		<div class="w-full flex flex-col gap-2 items-start justify-start pt-2" v-if="answerState == 'wrong'">
 			<SofaHeaderText :size="'xl'" content="Correct answer" color="text-inherit" />
@@ -72,7 +72,7 @@
 import QuestionDisplay from '@/components/quizzes/QuestionDisplay.vue'
 import { Logic, Question } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
-import { PropType, computed, defineEmits, defineProps, ref } from 'vue'
+import { PropType, computed, defineEmits, defineProps, reactive, ref } from 'vue'
 
 type ButtonConfig = {
 	label: string,
@@ -115,17 +115,23 @@ const emits = defineEmits(['update:index'])
 const questionIndex = computed({
 	get: () => props.index,
 	set: (val) => {
-		console.log(val)
 		emits('update:index', val)
 	}
 })
 
 const answerState = ref('')
-const answer = ref<any>({})
-const currentQuestion = computed(() => props.questions[questionIndex.value])
+const answers = reactive<Record<string, any>>({})
+const currentQuestion = computed(() => props.questions.at(questionIndex.value))
+const answer = computed({
+	get: () => currentQuestion.value ? answers[currentQuestion.value.id] ?? Logic.Study.transformQuestion(currentQuestion.value).defaultAnswer : [],
+	set: (val) => {
+		answers[currentQuestion.value?.id] = val
+	}
+})
 
-const optionState = () => {
-	currentQuestion
+const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val: number | boolean) => {
+	if (Array.isArray(answer.value) && answer.value.includes(val)) return 'selected'
+	if (typeof (answer.value) === 'boolean' && answer.value === val) return 'selected'
 	return null
 }
 </script>
