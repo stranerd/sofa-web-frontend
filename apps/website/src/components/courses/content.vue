@@ -1,7 +1,7 @@
 <template>
   <div v-if="SingleCourse"
     class="w-full px-4 relative md:py-4 bg-white mdlg:!rounded-[16px] overflow-y-auto flex-grow max-h-full h-fit flex flex-col gap-4 mdlg:min-h-[400px]">
-    <template v-if="PurchasedItems.includes(SingleCourse?.id)">
+    <template v-if="isUnlocked">
       <div class="w-full flex flex-col items-start justify-start">
         <sofa-header-text :customClass="'!font-bold !text-lg'" :content="selectedMaterial?.name" />
       </div>
@@ -34,35 +34,23 @@
     </template>
     <template v-else>
       <div class="w-full flex flex-col">
-        <sofa-empty-state :title="'You have no access'" :subTitle="'Purchase this course to start learning with it'"
-          :custom-class="'h-[380px]'" :actionLabel="`Buy ${SingleCourse.price.amount
-              ? Logic.Common.convertToMoney(
-                SingleCourse.price.amount,
-                false,
-                'ngn'
-              )
-              : 'for free'
-            }`" :action="() => {
-      buyCourse()
-    }
-    " :icon="{
-    name: 'lock-white',
-    size: 'h-[28px]',
-  }" :titleStyle="'mdlg:!text-xl '" />
+        <sofa-empty-state :title="'You have no access'" :subTitle="'Get this course to start learning with it'"
+          :custom-class="'h-[380px]'" :actionLabel="`${SingleCourse.price.amount ? 'Buy' : 'Get'} ${SingleCourse.price.amount ? Logic.Common.convertToMoney(SingleCourse.price.amount, false, 'ngn') : 'for free'}`"
+          :action="buyCourse" :icon="{ name: 'lock-white', size: 'h-[28px]' }" :titleStyle="'mdlg:!text-xl'" />
       </div>
     </template>
   </div>
 </template>
 <script lang="ts">
 import { Logic } from "sofa-logic"
-import { defineComponent, onMounted, ref } from "vue"
 import {
-  SofaHeaderText,
-  SofaEmptyState,
   SofaDocumentReader,
+  SofaEmptyState,
+  SofaHeaderText,
   SofaImageLoader,
   SofaVideoPlayer,
 } from "sofa-ui-components"
+import { defineComponent, onMounted, ref } from "vue"
 
 export default defineComponent({
   components: {
@@ -73,11 +61,9 @@ export default defineComponent({
     SofaVideoPlayer,
   },
   props: {
-    PurchasedItems: {
-      type: Array as () => any[],
-      default: () => {
-        [""]
-      },
+    isUnlocked: {
+      type: Boolean,
+      default: false,
     },
     selectedMaterial: {
       type: Object as () => any,

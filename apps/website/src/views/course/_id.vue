@@ -20,15 +20,13 @@
               </div>
             </div>
 
-            <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!PurchasedItems.includes(SingleCourse?.id) &&
-              SingleCourse?.user.id != Logic.Auth.AuthUser?.id
-              " v-model="selectedMaterial" />
+            <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked" v-model="selectedMaterial" />
           </div>
         </div>
       </div>
       <div :class="`mdlg:col-span-8 flex flex-col col-span-full ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
         } `">
-        <CourseContent :buyCourse="buyCourse" :PurchasedItems="PurchasedItems" :selected-material="selectedMaterial"
+        <CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked" :selected-material="selectedMaterial"
           :show-study-mode="() => {
             showStudyMode = true
           }
@@ -55,16 +53,14 @@
             </sofa-normal-text>
           </div>
 
-          <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!PurchasedItems.includes(SingleCourse?.id) &&
-            SingleCourse?.user.id != Logic.Auth.AuthUser?.id
-            " v-model="selectedMaterial" @onCourseContentSet="handleCourseContentSet" />
+          <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked" v-model="selectedMaterial" @onCourseContentSet="handleCourseContentSet" />
         </template>
 
         <template v-else>
           <div class="flex flex-col w-full">
             <div :class="`w-full flex flex-col col-span-full  ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
               } `">
-              <CourseContent :buyCourse="buyCourse" :PurchasedItems="PurchasedItems" :selected-material="selectedMaterial"
+              <CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked" :selected-material="selectedMaterial"
                 :show-study-mode="() => {
                   showStudyMode = true
                 }
@@ -262,7 +258,7 @@ import {
   SofaModal,
   SofaNormalText,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref } from "vue"
+import { computed, defineComponent, onMounted, reactive, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -369,6 +365,13 @@ export default defineComponent({
     const showCourseInfo = ref(false)
 
     const showRateCourse = ref(false)
+
+    const isUnlocked = computed(() => [
+      PurchasedItems.value.includes(SingleCourse.value?.id),
+      SingleCourse.value?.user.id === Logic.Auth.AuthUser?.id,
+      SingleCourse.value?.user.roles.isOfficialAccount && Logic.Auth.AuthUser?.roles.isSubscribed,
+      Logic.Users.UserProfile?.account.organizationsIn.includes(SingleCourse.value?.user.id) && SingleCourse.value?.user.roles.isSubscribed
+    ].some((x) => x))
 
     const handleItemSelected = (data: any) => {
       if (data) {
@@ -523,6 +526,7 @@ export default defineComponent({
       otherTasks,
       goToStudyMode,
       buyCourse,
+      isUnlocked,
       PaymentMethods,
       showMakePaymentModal,
       selectedMethodId,
