@@ -39,7 +39,7 @@ export default class Auth extends Common {
 
   async getRedirectToRoute () {
     const value = localStorage.getItem(this.redirectToName)
-    if (value) localStorage.removeItem(value)
+    if (value) localStorage.removeItem(this.redirectToName)
     return value
   }
 

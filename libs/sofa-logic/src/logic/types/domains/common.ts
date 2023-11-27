@@ -67,7 +67,8 @@ export interface ContentDetails {
       quizzes: number
       courses: number
       followers: string
-    }
+    },
+    roles?: Record<string, boolean>
   }
   lastUpdated: string
   tags: string[]

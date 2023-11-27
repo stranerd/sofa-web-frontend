@@ -33,7 +33,7 @@
       <template v-if="section.opened">
         <div :class="`w-full bg-[#F1F6FA] custom-border px-4 py-4 flex flex-row items-center justify-between   `"
           v-for="(eachData, index) in section.data" :key="index">
-          <div :class="`flex flex-row items-center gap-3 ${!itemIsPurchased ? 'opacity-50' : ''
+          <div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''
             }`">
             <sofa-icon :customClass="'h-[42px]'" :name="`${eachData.type.toLowerCase()}-content`" />
             <div class="flex flex-col gap-1">
@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <sofa-icon :customClass="'h-[40px]'" v-if="!itemIsPurchased" :name="'locked-content'" />
+          <sofa-icon :customClass="'h-[40px]'" v-if="!hasAccess" :name="'locked-content'" />
         </div>
       </template>
     </div>
@@ -86,7 +86,7 @@ export default defineComponent({
       type: Object as () => any,
       required: true,
     },
-    itemIsPurchased: {
+    hasAccess: {
       type: Boolean,
       default: false,
     },

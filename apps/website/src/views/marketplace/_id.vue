@@ -19,7 +19,7 @@
     </div>
     <div class="w-full bg-white rounded-[16px] h-auto max-h-full flex flex-row gap-3">
       <sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
-        :buyAction="buyCourse" :itemIsPurchased="userHasAccess" :similarContents="similarContents" :type="contentType"
+        :buyAction="buyCourse" :hasAccess="userHasAccess" :similarContents="similarContents" :type="contentType"
         :contentId="contentDetails.id" :otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)"
         :actions="{
           report: () => {
@@ -141,7 +141,6 @@ import {
   shareMaterialLink,
   showSaveToFolder,
 } from "@/composables/library"
-import { allOrganizations, setOrganizations } from "@/composables/profile"
 import { otherTasks } from "@/composables/quiz"
 import moment from "moment"
 import { Conditions, Logic } from "sofa-logic"
@@ -153,7 +152,7 @@ import {
   SofaModal,
   SofaNormalText,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
+import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -283,7 +282,13 @@ export default defineComponent({
 
     const UserWallet = ref(Logic.Payment.UserWallet)
 
-    const userHasAccess = ref(false)
+    const userHasAccess = computed(() => [
+      PurchasedItems.value.includes(SingleCourse.value?.id),
+      contentDetails?.user.id === Logic.Auth.AuthUser?.id,
+      contentDetails?.user.roles.isOfficialAccount && Logic.Auth.AuthUser?.roles.isSubscribed,
+      Logic.Users.UserProfile?.account.organizationsIn.includes(contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
+    ].some((x) => x))
+
 
     const tabItems = [
       {
@@ -351,6 +356,7 @@ export default defineComponent({
           ? SingleCourse.value.user.bio.photo.link
           : ""
         contentDetails.user.id = SingleCourse.value.user.id
+        contentDetails.user.roles = SingleCourse.value.user.roles
 
         contentDetails.content.materialsCount =
           SingleCourse.value.coursables.length
@@ -459,6 +465,7 @@ export default defineComponent({
           ? SingleQuiz.value.user.bio.photo.link
           : ""
         contentDetails.user.id = SingleQuiz.value.user.id
+        contentDetails.user.roles = SingleQuiz.value.user.roles
 
         contentDetails.ratings.label = `${SingleQuiz.value.ratings.count} rating${SingleQuiz.value.ratings.count > 1 ? "s" : ""}`
         contentDetails.ratings.avg = SingleQuiz.value.ratings.avg
@@ -547,54 +554,11 @@ export default defineComponent({
       }
     }
 
-    const setAccessState = () => {
-      // User is owner
-      if (Logic.Auth.AuthUser.id == contentDetails.user.id) {
-        userHasAccess.value = true
-        return
-      }
-
-      // User purchased the course
-      if (PurchasedItems.value.includes(contentDetails.id)) {
-        userHasAccess.value = true
-        return
-      }
-
-      // Quiz without a course
-      if (!contentDetails.hasCourse) {
-        userHasAccess.value = true
-        return
-      }
-
-      // Owned by an organizationIn
-      setOrganizations().then(() => {
-        const subscribedOrganizations = allOrganizations
-          .filter((item) => item.subscribed)
-          .map((item) => item.id)
-        if (subscribedOrganizations.includes(contentDetails.user.id)) {
-          userHasAccess.value = true
-          return
-        }
-      })
-
-      // Is for subscriber
-      if (
-        Logic.Users.UserProfile.roles.isSubscribed &&
-        SingleCourse.value?.user.roles.isOfficialAccount
-      ) {
-        userHasAccess.value = true
-        return
-      }
-
-      userHasAccess.value = false
-    }
-
     watch(SingleCourse, () => {
       if (SingleCourse.value) {
         scrollToTop()
         setCourseData()
         setSimilarContents()
-        setAccessState()
       }
     })
 
@@ -603,12 +567,10 @@ export default defineComponent({
         scrollToTop()
         setQuizData()
         setSimilarContents()
-        setAccessState()
       }
     })
 
     onMounted(() => {
-      userHasAccess.value = false
       if (Logic.Common.route.query?.type?.toString()) {
         contentType.value = Logic.Common.route.query?.type?.toString()
       }
@@ -649,8 +611,6 @@ export default defineComponent({
 
         Logic.Interactions.CreateView(true)
       }
-
-      setAccessState()
     })
 
     return {

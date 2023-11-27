@@ -1,43 +1,35 @@
 <template>
   <div class="flex flex-col h-full w-full relative pb-4">
-    <div class="flex flex-col w-full gap-2 py-4 px-4 border-[#F1F6FA] border-t-[1px]"
-      v-for="(option, index) in sectionOptions" :key="index">
+    <div class="flex flex-col w-full gap-2 p-4 border-[#F1F6FA] border-t" v-for="(option, index) in sectionOptions"
+      :key="index">
       <template v-if="option">
         <template v-if="option.name != 'unsectioned'">
-          <div class="w-full flex flex-row items-center justify-between cursor-pointer px-1" @click="
-            option?.opened ? (option.opened = false) : (option.opened = true)
-          selectedSection = index;
-          ">
-            <div class="flex flex-row items-center gap-2">
-              <sofa-normal-text :customClass="'!font-bold'">{{
-                option.name
-              }}</sofa-normal-text>
-            </div>
-            <div class="md:flex flex-row items-center gap-3 hidden">
-              <sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
-            </div>
-          </div>
+          <a class="w-full flex items-center justify-between px-1" @click="() => {
+            option.opened = !option.opened
+            selectedSection = index
+          }">
+            <sofa-normal-text :customClass="'!font-bold'">{{ option.name }}</sofa-normal-text>
+            <sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
+          </a>
         </template>
 
         <template v-if="option.opened">
           <div class="w-full gap-1">
             <!-- For larger screens -->
             <template v-if="!Logic.Common.isOnlyMobile">
-              <div v-for="(material, index) in option.materials" :key="index" :class="`w-fill flex flex-col gap-1 ${lockContent ? 'opacity-80' : ''
-                } rounded-[8px] px-3 py-3 cursor-pointer ${selectedMaterial?.id == material.id
-                  ? 'bg-lightBlue'
-                  : 'bg-white'
-                }  hover:bg-lightBlue `" @click.stop="selectItem(material)">
-                <div class="w-full flex flex-row justify-between items-center">
+              <a v-for="(material, index) in option.materials" :key="index"
+                class="w-full flex flex-col gap-1 rounded-lg p-3 hover:bg-lightBlue"
+                :class="{ 'opacity-80': lockContent, 'bg-lightBlue': selectedMaterial?.id === material.id, 'bg-white': selectedMaterial?.id !== material.id }"
+                @click.stop="selectItem(material)">
+                <div class="w-full flex justify-between items-center">
                   <sofa-normal-text :customClass="'!text-left !line-clamp-1'">
                     {{ material.name }}
                   </sofa-normal-text>
-                  <sofa-icon :customClass="'h-[18px]'" v-if="!lockContent" :name="itemIsStudied(material.id) ? 'selected' : 'not-selected'
-                    " />
-                  <sofa-icon :customClass="'h-[25px]'" v-else :name="'locked-content'" />
+                  <sofa-icon :customClass="'h-[25px]'" v-if="lockContent" :name="'locked-content'" />
+                  <sofa-icon :customClass="'h-[18px]'" v-else-if="itemIsStudied(material.id)" name="selected" />
                 </div>
-                <div class="w-full flex flex-row gap-2 items-center">
-                  <div class="flex flex-row items-center gap-1">
+                <div class="w-full flex gap-2 items-center">
+                  <div class="flex items-center gap-1">
                     <sofa-icon :customClass="'h-[17px]'" :name="material.type" />
                     <sofa-normal-text :color="'text-grayColor'" :customClass="'!text-left !capitalize'">
                       {{ material.type.split("-")[0] }}
@@ -46,13 +38,12 @@
 
                   <!-- <span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span> -->
                 </div>
-              </div>
+              </a>
             </template>
             <template v-else>
               <div class="w-full flex flex-col gap-3 pt-2">
                 <div v-for="(material, index) in option.materials" :key="index"
-                  class="w-full flex flex-row gap-3 items-center py-1 hover:bg-lightBlue"
-                  @click.stop="selectItem(material)">
+                  class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue" @click.stop="selectItem(material)">
                   <sofa-icon :customClass="'h-[18px]'" :name="material.type" />
                   <sofa-normal-text :customClass="'!text-left !line-clamp-1'" :color="'text-[#141618]'">
                     {{ material.name }}
@@ -65,47 +56,16 @@
       </template>
     </div>
   </div>
-  <!-- <div
-    class="sticky bottom-0 left-0 w-full flex flex-col gap-1 bg-white z-50 py-4 border-t-[1px] border-[#F1F6FA] px-4"
-    v-if="sectionOptions.length"
-  >
-    <sofa-normal-text :customClass="'!font-bold'">
-      Your progress
-    </sofa-normal-text>
-    <div class="w-full flex flex-col py-1">
-      <div class="w-full bg-[#E1E6EB] rounded-[8px] h-[8px] relative">
-        <div
-          class="h-full absolute top-0 left-0 rounded-[8px] bg-primaryOrange"
-          :style="`width: ${
-            (studiedMaterial /
-              Logic.Common.SumArray(
-                sectionOptions.map((item) => item.materials.length)
-              )) *
-            100
-          }%;`"
-        ></div>
-      </div>
-    </div>
-    <sofa-normal-text :color="'text-grayColor'">
-      {{ studiedMaterial + "/"
-      }}{{
-        Logic.Common.SumArray(
-          sectionOptions.map((item) => item.materials.length)
-        )
-      }}
-      materials studied
-    </sofa-normal-text>
-  </div> -->
 </template>
 <script lang="ts">
 import { ContentDetails, Course, Logic, Question, Quiz, SofaFile } from "sofa-logic"
 import {
-capitalize,
-defineComponent,
-onMounted,
-reactive,
-ref,
-watch
+  capitalize,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  watch
 } from "vue"
 import SofaAvatar from "../SofaAvatar"
 import SofaIcon from "../SofaIcon"
@@ -151,8 +111,6 @@ export default defineComponent({
 
     const staticSectionOptions = ref([])
 
-    const studiedMaterial = ref(0)
-
     const selectedMaterial = ref<any>()
 
     const selectItem = (material: any) => {
@@ -167,22 +125,10 @@ export default defineComponent({
     }
 
     const itemIsStudied = (materialId: string) => {
-      return localStorage.getItem(
+      return false
+      /* return !!localStorage.getItem(
         `course_${SingleCourse.value.id}_material_${materialId}`
-      )
-    }
-
-    const setStudiesMaterial = () => {
-      let savedMaterial = 0
-
-      sectionOptions.forEach((option) => {
-        option.materials.forEach((material) => {
-          if (itemIsStudied(material.id)) {
-            savedMaterial++
-          }
-        })
-      })
-      studiedMaterial.value = savedMaterial
+      ) */
     }
 
     watch(SingleCourse, async () => {
@@ -207,7 +153,6 @@ export default defineComponent({
           "done"
         )
       }
-      setStudiesMaterial()
     }
 
     const saveSectionToLocalStorage = (autoLoad = false) => {
@@ -223,8 +168,6 @@ export default defineComponent({
       )
       sectionOptions.length = 0
       sectionOptions.push(...sectionOptionsData)
-
-      setStudiesMaterial()
     }
 
     const setSectionMaterial = async (
@@ -479,7 +422,7 @@ export default defineComponent({
     })
     onMounted(async () => {
       if (SingleCourse.value) {
-       await setSections()
+        await setSections()
       }
 
       setTimeout(() => {
@@ -514,7 +457,6 @@ export default defineComponent({
       selectedMaterial,
       handleItemSelected,
       itemIsStudied,
-      studiedMaterial,
       selectItem,
     }
   },
