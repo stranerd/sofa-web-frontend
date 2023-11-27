@@ -74,6 +74,57 @@
           </template>
         </div>
       </div>
+
+      <div class="w-full flex flex-col gap-4" v-if="question.type === 'dragAnswers'">
+        <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
+          <template v-for="(content, index) in question.question.split(question.data.indicator)" :key="index">
+            <draggable v-if="index !== 0" :list="answer.value[index]" itemKey=""
+              :group="{ name: 'drag-and-drop-question' }"
+              :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`"
+              @end="dropHandler">
+              <template #item="{ element, index }">
+                <div :key="index"
+                  :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
+                  <SofaHeaderText :customClass="'!font-bold md:!text-2xl text-base'" :content="element" />
+                </div>
+              </template>
+            </draggable>
+            <SofaHeaderText :customClass="'!font-semibold md:!text-2xl text-base'" color="text-inherit"
+              :content="content" />
+          </template>
+
+          <draggable class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]"
+            :list="question.data.answers.filter((o) => !answer.value.includes(o))" itemKey=""
+            :group="{ name: 'drag-and-drop-question' }" @end="dropHandler">
+            <template #item="{ element, index }">
+              <div :key="index"
+                :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
+                <SofaHeaderText :customClass="'!font-bold md:!text-2xl text-base'" :content="element" />
+              </div>
+            </template>
+          </draggable>
+        </div>
+      </div>
+
+      <div class="w-full flex flex-col gap-4" v-if="question.type === 'sequence'">
+        <draggable v-model="answer.value" class="flex flex-col gap-4" itemKey="">
+          <template #item="{ element, index }">
+            <div class="w-full flex items-center gap-3">
+              <div
+                class="px-6 py-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
+                <SofaHeaderText :content="(index + 1).toString()"
+                  customClass="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
+              </div>
+              <div
+                class="w-full flex items-center cursor-move justify-between rounded-xl flex-grow p-4 border-[#E1E6EB] bg-white gap-3 border-2 border-b-4">
+                <SofaHeaderText
+                  customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex !line-clamp-1"
+                  :content="element" />
+              </div>
+            </div>
+          </template>
+        </draggable>
+      </div>
     </div>
   </div>
 </template>
@@ -87,6 +138,7 @@ import {
   SofaTextarea,
 } from "sofa-ui-components"
 import { PropType, computed, defineEmits, defineProps, reactive, watch } from "vue"
+import Draggable from "vuedraggable"
 
 const props = defineProps({
   questionData: {
@@ -94,8 +146,9 @@ const props = defineProps({
     required: true
   },
   modelValue: {
-    type: Object as PropType<any>,
-    required: true
+    type: [Array, String, Boolean] as PropType<any>,
+    required: true,
+    validator: () => true
   },
   title: {
     type: String,
@@ -113,7 +166,13 @@ const question = computed(() => Logic.Study.transformQuestion(props.questionData
 
 const answer = reactive({ value: props.modelValue })
 
+const dropHandler = () => {
+  console.log(answer.value)
+  console.log(question.value)
+}
+
 watch(answer, () => {
+  console.log(answer.value)
   emits('update:modelValue', answer.value)
 })
 </script>

@@ -1428,10 +1428,10 @@ export default class Study extends Common {
       get defaultAnswer () {
         if (question.data.type === 'multipleChoice') return []
         if (question.data.type === 'writeAnswer') return ''
-        if (question.data.type === 'trueOrFalse') return undefined as boolean
+        if (question.data.type === 'trueOrFalse') return '' as unknown as boolean
         if (question.data.type === 'fillInBlanks') return []
         if (question.data.type === 'dragAnswers') return []
-        if (question.data.type === 'sequence') return []
+        if (question.data.type === 'sequence') return question.data.answers
         if (question.data.type === 'match') return []
         return undefined
       }
