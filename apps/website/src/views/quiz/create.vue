@@ -10,9 +10,7 @@
             name: 'Preview',
             icon: 'preview',
             handler: () => {
-              Logic.Common.GoToRoute(
-                '/quiz/' + Logic.Study.SingleQuiz?.id + '?mode=preview'
-              )
+              Logic.Common.GoToRoute(`/quiz/${Logic.Study.SingleQuiz?.id}/preview`)
             },
             size: 'h-[17px]',
           },

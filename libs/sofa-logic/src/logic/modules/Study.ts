@@ -715,8 +715,7 @@ export default class Study extends Common {
     writeAnswer: 'Type in your answer in the given box',
     trueOrFalse: 'Choose if this statement is true or false',
     fillInBlanks: 'Type your answers in the boxes given',
-    dragAnswers:
-      'Answers are given for you to drag and drop in the blank boxes',
+    dragAnswers: 'Answers are given for you to drag and drop in the blank boxes',
     sequence: 'Drag boxes or use arrows to arrange sequence correctly',
     match: 'Click a box on the left and then one the right to match',
   }
@@ -1388,6 +1387,7 @@ export default class Study extends Common {
     } else {
       return $api.study.quiz.get(id).then((response) => {
         this.SingleQuiz = response.data
+        return this.SingleQuiz
       })
     }
   }
@@ -1398,13 +1398,58 @@ export default class Study extends Common {
       .getQuestions(quizId)
       .then((response) => {
         this.AllQuestions = response.data
-        return response.data
+        return this.AllQuestions
       })
       .catch(() => {
         this.AllQuestions = undefined
         return undefined
       })
   }
+
+  public transformQuestion (question: Question) {
+    return {
+      ...question,
+      get type () {
+        return question.data.type
+      },
+      get usesRadio () {
+        return ['multipleChoice', 'trueOrFalse'].includes(question.data.type)
+      },
+      get instruction () {
+        if (question.data.type === 'multipleChoice') return 'Choose the right answer(s)'
+        if (question.data.type === 'writeAnswer') return `Type your answer`
+        if (question.data.type === 'trueOrFalse') return `Choose an answer`
+        if (question.data.type === 'fillInBlanks') return `Fill in the gaps`
+        if (question.data.type === 'dragAnswers') return `Drag answers`
+        if (question.data.type === 'sequence') return `Drag to rearrange`
+        if (question.data.type === 'match') return `Drag items on the right side to rearrange`
+        return ''
+      },
+      get radioOptions () {
+        if (question.data.type === 'multipleChoice') return question.data.answers.map((opt, index) => ({ label: opt, value: index }))
+        if (question.data.type === 'trueOrFalse') return [true, false].map((opt) => ({ label: opt.toString(), value: opt }))
+        return []
+      }
+    }
+  }
+
+  public getShape (index: number) {
+    const shapes = [
+      "circle",
+      "triangle",
+      "square",
+      "kite"
+    ]
+    return shapes[index % shapes.length]
+  }
+
+  public getShapeSize (shape: string) {
+      if (shape == "circle") return "md:!h-[23px] h-[20px]"
+      if (shape == "triangle") return "md:!h-[20px] h-[17px]"
+      if (shape == "square") return "md:!h-[20px] h-[17px]"
+      if (shape == "kite") return "md:!h-[24px] h-[21px]"
+      return "h-[23px]"
+    }
 
   public GetQuestion = (quidId: string, questionId: string) => {
     return $api.study.quiz.getQuestion(quidId, questionId).then((response) => {
