@@ -12,8 +12,8 @@
         <SofaNormalText color="text-inherit" :content="question.instruction" />
       </div>
 
-      <div class="w-full flex flex-col gap-4" v-if="question.type === 'multipleChoice'">
-        <a v-for="(option, index) in question.data.options" :key="index"
+      <template v-if="question.strippedData.type === 'multipleChoice'">
+        <a v-for="(option, index) in question.strippedData.options" :key="index"
           class="w-full flex items-center border-2 justify-between rounded-xl p-3 bg-white border-[#E1E6EB] gap-3" :class="{
             '!bg-[#E1F5EB] !border-primaryGreen': optionState(index) === 'correct',
             '!bg-[#FAEBEB] !border-primaryRed': optionState(index) === 'wrong',
@@ -29,9 +29,9 @@
               :customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex'" />
           </div>
         </a>
-      </div>
+      </template>
 
-      <div class="w-full flex flex-col gap-4" v-if="question.type === 'trueOrFalse'">
+      <template v-if="question.strippedData.type === 'trueOrFalse'">
         <a v-for="(option, index) in [true, false]" :key="index"
           class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 bg-white border-[#E1E6EB] gap-3"
           :class="{
@@ -48,18 +48,18 @@
               :customClass="'capitalize md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex'" />
           </div>
         </a>
-      </div>
+      </template>
 
-      <div class="w-full flex flex-col gap-4" v-if="question.type === 'writeAnswer'">
+      <template v-if="question.strippedData.type === 'writeAnswer'">
         <div class="w-full flex items-center justify-between rounded-xl border-[#E1E6EB] bg-white gap-3 border-2">
           <SofaTextarea placeholder="Write your answer here" v-model="answer.value"
             text-area-style="focus:outline-none bg-transparent !text-bodyBlack p-3 !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base" />
         </div>
-      </div>
+      </template>
 
-      <div class="w-full flex flex-col gap-4" v-if="question.type === 'fillInBlanks'">
+      <template v-if="question.strippedData.type === 'fillInBlanks'">
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
-          <template v-for="(content, index) in question.question.split(question.data.indicator)" :key="index">
+          <template v-for="(content, index) in question.splitQuestions" :key="index">
             <div v-if="index !== 0"
               class="min-w-[160px] rounded-xl p-3 bg-white flex items-center justify-center border-2 border-b-4">
               <input placeholder="answer here"
@@ -70,17 +70,15 @@
               :content="content" />
           </template>
         </div>
-      </div>
+      </template>
 
-      <div class="w-full flex flex-col gap-4" v-if="question.type === 'dragAnswers'">
+      <template v-if="question.strippedData.type === 'dragAnswers'">
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
-          <template v-for="(content, index) in question.question.split(question.data.indicator)" :key="index">
-            <draggable v-if="index !== 0" :list="answer.value[index]" itemKey=""
-              :group="{ name: 'drag-and-drop-question' }"
-              :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`"
-              @end="dropHandler">
-              <template #item="{ element, index }">
-                <div :key="index"
+          <template v-for="(content, index) in question.splitQuestions" :key="index">
+            <draggable v-if="index !== 0" v-model="answer.value[index - 1]" itemKey=""
+              :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
+              <template #item="{ element }">
+                <div
                   :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
                   <SofaHeaderText :customClass="'!font-bold md:!text-2xl text-base'" :content="element" />
                 </div>
@@ -91,24 +89,23 @@
           </template>
 
           <draggable class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]"
-            :list="question.data.answers.filter((o) => !answer.value.includes(o))" itemKey=""
-            :group="{ name: 'drag-and-drop-question' }" @end="dropHandler">
-            <template #item="{ element, index }">
-              <div :key="index"
+            :list="question.strippedData.answers.filter((o) => !answer.value.flat(1).includes(o))" itemKey=""
+            :group="{ name: 'drag-and-drop-question' }">
+            <template #item="{ element }">
+              <div
                 :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
                 <SofaHeaderText :customClass="'!font-bold md:!text-2xl text-base'" :content="element" />
               </div>
             </template>
           </draggable>
         </div>
-      </div>
+      </template>
 
-      <div class="w-full flex flex-col gap-4" v-if="question.type === 'sequence'">
+      <template v-if="question.strippedData.type === 'sequence'">
         <draggable v-model="answer.value" class="flex flex-col gap-4" itemKey="">
           <template #item="{ element, index }">
             <div class="w-full flex items-center gap-3">
-              <div
-                class="p-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
+              <div class="p-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
                 <SofaHeaderText :content="(index + 1).toString()"
                   customClass="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
               </div>
@@ -121,7 +118,7 @@
             </div>
           </template>
         </draggable>
-      </div>
+      </template>
 
       <div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
         <draggable v-model="question.matchQuestions" class="col-span-1 flex flex-col gap-2" itemKey="" :disabled="true">
@@ -190,11 +187,6 @@ const emits = defineEmits(['update:modelValue'])
 const question = computed(() => Logic.Study.transformQuestion(props.questionData))
 
 const answer = reactive({ value: props.modelValue })
-
-const dropHandler = () => {
-  console.log(answer.value)
-  console.log(question.value)
-}
 
 watch(answer, () => {
   console.log(answer.value)

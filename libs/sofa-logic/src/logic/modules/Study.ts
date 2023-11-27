@@ -1407,42 +1407,42 @@ export default class Study extends Common {
   }
 
   public transformQuestion (question: Question) {
+    const type = question.strippedData.type
     return {
       ...question,
       get type () {
-        return question.data.type
+        return type
       },
       get instruction () {
-        if (question.data.type === 'multipleChoice') return 'Choose the right answer(s)'
-        if (question.data.type === 'writeAnswer') return `Type your answer`
-        if (question.data.type === 'trueOrFalse') return `Choose an answer`
-        if (question.data.type === 'fillInBlanks') return `Fill in the gaps`
-        if (question.data.type === 'dragAnswers') return `Drag answers`
-        if (question.data.type === 'sequence') return `Drag to rearrange`
-        if (question.data.type === 'match') return `Drag items on the right side to rearrange`
+        if (type === 'multipleChoice') return 'Choose the right answer(s)'
+        if (type === 'writeAnswer') return `Type your answer`
+        if (type === 'trueOrFalse') return `Choose an answer`
+        if (type === 'fillInBlanks') return `Fill in the gaps`
+        if (type === 'dragAnswers') return `Drag answers`
+        if (type === 'sequence') return `Drag to rearrange`
+        if (type === 'match') return `Drag items on the right side to rearrange`
         return ''
       },
-      get indicatorCount () {
-        return question.question.split(question.data.indicator).length - 1
+      get splitQuestions () {
+        if (type === 'fillInBlanks' || type === 'dragAnswers') return question.question.split(question.strippedData.indicator)
+        return []
       },
       get defaultAnswer () {
-        if (question.data.type === 'multipleChoice') return []
-        if (question.data.type === 'writeAnswer') return ''
-        if (question.data.type === 'trueOrFalse') return '' as unknown as boolean
-        if (question.data.type === 'fillInBlanks') return new Array(this.indicatorCount)
-        if (question.data.type === 'dragAnswers') return []
-        if (question.data.type === 'sequence') return question.data.answers
-        if (question.data.type === 'match') return this.matchAnswers
+        if (type === 'multipleChoice') return []
+        if (type === 'writeAnswer') return ''
+        if (type === 'trueOrFalse') return '' as unknown as boolean
+        if (type === 'fillInBlanks') return new Array(this.indicatorCount).fill('')
+        if (type === 'dragAnswers') return Array.from({ length: this.indicatorCount }, () => [])
+        if (type === 'sequence') return question.strippedData.answers
+        if (type === 'match') return this.matchAnswers
         return undefined
       },
       get matchQuestions () {
-        if (question.data.questions) return question.data.questions
-        if (question.data.set) return question.data.set.map((s) => s.q)
+        if (type === 'match') return question.strippedData.questions
         return []
       },
       get matchAnswers () {
-         if (question.data.answers) return question.data.answers
-        if (question.data.set) return question.data.set.map((s) => s.a)
+        if (type === 'match') return question.strippedData.answers
         return []
       }
     }

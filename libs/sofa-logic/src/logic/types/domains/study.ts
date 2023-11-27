@@ -73,6 +73,28 @@ export interface Question {
       a: string
     }[]
   }
+  strippedData: {
+    type: 'multipleChoice'
+    options: string[]
+  } | {
+    type: 'trueOrFalse'
+  } | {
+    type: 'writeAnswer'
+  } | {
+    type: 'fillInBlanks'
+    indicator: string
+  } | {
+    type: 'dragAnswers'
+    indicator: string
+    answers: string[]
+  } | {
+    type: 'sequence'
+    answers: string[]
+  } | {
+    type: 'match'
+    questions: string[]
+    answers: string[]
+  }
   createdAt: number
   updatedAt: number
 }
