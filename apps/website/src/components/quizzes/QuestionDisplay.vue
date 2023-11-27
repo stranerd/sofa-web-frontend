@@ -24,7 +24,7 @@
           <div class="flex-grow flex gap-3 items-center">
             <SofaIcon
               :name="`${Logic.Study.getShape(index)}${optionState(index) == 'hover' ? '-blue' : ''}${optionState(index) == 'correct' ? '-green' : ''}${optionState(index) == 'wrong' ? '-red' : ''}`"
-              :custom-class="`${Logic.Study.getShapeSize(Logic.Study.getShape(index))}`" />
+              :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
             <SofaHeaderText :content="option"
               :customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex'" />
           </div>
@@ -43,7 +43,7 @@
           <div class="flex-grow flex gap-3 items-center">
             <SofaIcon
               :name="`${Logic.Study.getShape(index)}${optionState(option) == 'hover' ? '-blue' : ''}${optionState(option) == 'correct' ? '-green' : ''}${optionState(option) == 'wrong' ? '-red' : ''}`"
-              :custom-class="`${Logic.Study.getShapeSize(Logic.Study.getShape(index))}`" />
+              :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
             <SofaHeaderText :content="option.toString()"
               :customClass="'capitalize md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex'" />
           </div>
@@ -51,12 +51,9 @@
       </div>
 
       <div class="w-full flex flex-col gap-4" v-if="question.type === 'writeAnswer'">
-        <div
-          class="w-full flex items-center justify-between rounded-[12px] md:!px-3 md:!py-3 px-3 py-1 border-[#E1E6EB] bg-white gap-3 border-2">
-          <div class="flex-grow flex gap-3 py-3 items-center">
-            <SofaTextarea placeholder="Write your answer here" v-model="answer.value"
-              text-area-style="focus:outline-none bg-transparent !text-bodyBlack !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base" />
-          </div>
+        <div class="w-full flex items-center justify-between rounded-xl border-[#E1E6EB] bg-white gap-3 border-2">
+          <SofaTextarea placeholder="Write your answer here" v-model="answer.value"
+            text-area-style="focus:outline-none bg-transparent !text-bodyBlack p-3 !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base" />
         </div>
       </div>
 
@@ -64,7 +61,7 @@
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
           <template v-for="(content, index) in question.question.split(question.data.indicator)" :key="index">
             <div v-if="index !== 0"
-              class="min-w-[160px] rounded-xl md:p-3 p-1 bg-white flex items-center justify-center border-2 border-b-4">
+              class="min-w-[160px] rounded-xl p-3 bg-white flex items-center justify-center border-2 border-b-4">
               <input placeholder="answer here"
                 class="w-full focus:outline-none placeholder:md:!text-2xl !text-bodyBlack !bg-white placeholder:text-base placeholder:text-grayColor md:!text-2xl text-base"
                 v-model="answer.value[index]" />
@@ -111,16 +108,44 @@
           <template #item="{ element, index }">
             <div class="w-full flex items-center gap-3">
               <div
-                class="px-6 py-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
+                class="p-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
                 <SofaHeaderText :content="(index + 1).toString()"
                   customClass="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
               </div>
               <div
-                class="w-full flex items-center cursor-move justify-between rounded-xl flex-grow p-4 border-[#E1E6EB] bg-white gap-3 border-2 border-b-4">
+                class="w-full flex items-center cursor-move justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] bg-white gap-3 border-2 border-b-4">
                 <SofaHeaderText
                   customClass="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex !line-clamp-1"
                   :content="element" />
               </div>
+            </div>
+          </template>
+        </draggable>
+      </div>
+
+      <div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
+        <draggable v-model="question.matchQuestions" class="col-span-1 flex flex-col gap-2" itemKey="" :disabled="true">
+          <template #item="{ element, index }">
+            <div
+              class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
+              <SofaIcon :name="Logic.Study.getShape(index)"
+                :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
+              <SofaHeaderText
+                customClass="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex line-clamp-1"
+                :content="element" />
+            </div>
+          </template>
+        </draggable>
+
+        <draggable v-model="answer.value" class="col-span-1 flex flex-col gap-2" itemKey="">
+          <template #item="{ element, index }">
+            <div
+              class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
+              <SofaIcon :name="Logic.Study.getShape(index)"
+                :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
+              <SofaHeaderText
+                customClass="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex line-clamp-1"
+                :content="element" />
             </div>
           </template>
         </draggable>

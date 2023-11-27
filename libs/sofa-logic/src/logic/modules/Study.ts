@@ -1429,11 +1429,21 @@ export default class Study extends Common {
         if (question.data.type === 'multipleChoice') return []
         if (question.data.type === 'writeAnswer') return ''
         if (question.data.type === 'trueOrFalse') return '' as unknown as boolean
-        if (question.data.type === 'fillInBlanks') return []
+        if (question.data.type === 'fillInBlanks') return new Array(this.indicatorCount)
         if (question.data.type === 'dragAnswers') return []
         if (question.data.type === 'sequence') return question.data.answers
-        if (question.data.type === 'match') return []
+        if (question.data.type === 'match') return this.matchAnswers
         return undefined
+      },
+      get matchQuestions () {
+        if (question.data.questions) return question.data.questions
+        if (question.data.set) return question.data.set.map((s) => s.q)
+        return []
+      },
+      get matchAnswers () {
+         if (question.data.answers) return question.data.answers
+        if (question.data.set) return question.data.set.map((s) => s.a)
+        return []
       }
     }
   }

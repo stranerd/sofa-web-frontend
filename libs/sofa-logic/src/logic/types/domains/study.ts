@@ -65,6 +65,7 @@ export interface Question {
       | 'match'
     indicator?: string
     options?: string[]
+    questions?: any[]
     answers?: any[]
     answer?: boolean
     set?: {
