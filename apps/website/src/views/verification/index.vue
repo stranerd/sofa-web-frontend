@@ -186,7 +186,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, capitalize, watch } from "vue"
 import { useMeta } from "vue-meta"
-import moment from "moment"
 import { FormValidations, scrollToTop } from "@/composables"
 import {
   SofaIcon,
@@ -473,7 +472,6 @@ export default defineComponent({
     })
 
     return {
-      moment,
       quizContents,
       courseContents,
       updateProfileForm,

@@ -4,6 +4,7 @@
 			label: 'Next',
 			bgColor: 'bg-primaryBlue',
 			textColor: 'text-white',
+			disabled: questionIndex === questions.length - 1,
 			click: () => {
 				if (questionIndex < questions.length - 1) questionIndex++
 			}

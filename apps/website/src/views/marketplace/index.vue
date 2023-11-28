@@ -207,7 +207,6 @@ import {
   setMarketplaceMaterials,
   textbookContents,
 } from "@/composables/marketplace"
-import moment from "moment"
 import { Logic } from "sofa-logic"
 import {
   SofaEmptyState,
@@ -284,7 +283,6 @@ export default defineComponent({
     }
 
     return {
-      moment,
       notesContents,
       pastQuestionContents,
       textbookContents,

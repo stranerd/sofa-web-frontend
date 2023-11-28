@@ -302,7 +302,6 @@
 </template>
 <script lang="ts">
 import { FormValidations } from "@/composables"
-import moment from "moment"
 import { Conditions, Logic, SelectOption, Transaction } from "sofa-logic"
 import {
   SofaButton,
@@ -413,7 +412,7 @@ export default defineComponent({
       })
 
       transactions.value.sort(
-        (a, b) => moment(b.fullData).valueOf() - moment(a.fullData).valueOf()
+        (a, b) => b.fullData - a.fullData
       )
     }
 

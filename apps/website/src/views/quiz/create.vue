@@ -162,7 +162,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
-import moment from "moment"
 import { scrollToTop } from "@/composables"
 import {
   SofaEmptyState,
@@ -360,7 +359,6 @@ export default defineComponent({
     }
 
     return {
-      moment,
       create,
       selectedQuestion,
       showMoreOptions,

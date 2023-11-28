@@ -607,7 +607,6 @@ import {
   swiperKey,
   userIsGameHost,
 } from "@/composables/quiz"
-import moment from "moment"
 import { Logic } from "sofa-logic"
 import {
   SofaAvatar,
@@ -860,7 +859,6 @@ export default defineComponent({
     })
 
     return {
-      moment,
       Logic,
       questions,
       state,

@@ -244,7 +244,6 @@
 import { scrollToTop } from "@/composables"
 import { createCourseData, createQuizData } from "@/composables/library"
 import { profileLinks } from "@/composables/profile"
-import moment from "moment"
 import { Conditions, Logic, QueryParams } from "sofa-logic"
 import {
   SofaAvatar,
@@ -576,7 +575,6 @@ export default defineComponent({
     })
 
     return {
-      moment,
       tabItems,
       Logic,
       selectedTab,
