@@ -7,7 +7,7 @@
 					@click="Logic.Common.goBack()" />
 				<SofaHeaderText :size="'xl'" customClass="!font-bold !text-sm truncate" color="text-inherit"
 					:content="title" />
-				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${questionIndex + 1}/${questions.length}`"
+				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${currentIndex + 1}/${questions.length}`"
 					color="text-inherit" />
 				<SofaNormalText class="hidden md:inline" :customClass="'!text-base cursor-pointer whitespace-nowrap'"
 					color="text-inherit" content="Exit" @click="Logic.Common.goBack()" />
@@ -18,13 +18,9 @@
 	<slot>
 		<div
 			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-2 items-center justify-center px-6">
-			<QuestionDisplay v-if="currentQuestion" :key="questionIndex" v-model="answer" :questionData="currentQuestion"
+			<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question"
 				:title="title" :optionState="optionState" />
-
-			<div class="w-full flex flex-col gap-2 items-start justify-start" v-if="answerState == 'wrong'">
-				<SofaHeaderText :size="'xl'" content="Correct answer" color="text-inherit" />
-				<SofaNormalText :content="answer" color="text-inherit" />
-			</div>
+			<slot name="postBody" />
 		</div>
 	</slot>
 
@@ -39,7 +35,7 @@
 				</SofaButton>
 
 				<span class="px-4 py-2 rounded-lg font-semibold hidden md:inline">
-					{{ questionIndex + 1 }}/{{ questions.length }}
+					{{ currentIndex + 1 }}/{{ questions.length }}
 				</span>
 
 				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
@@ -54,9 +50,9 @@
 
 <script lang="ts" setup>
 import QuestionDisplay from '@/components/quizzes/QuestionDisplay.vue'
-import { Logic, Question } from 'sofa-logic'
+import { Logic, TransformedQuestion } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
-import { PropType, computed, defineEmits, defineProps, reactive, ref } from 'vue'
+import { defineEmits, PropType, computed, defineProps } from 'vue'
 
 type ButtonConfig = {
 	label: string,
@@ -72,8 +68,13 @@ const props = defineProps({
 		required: true
 	},
 	questions: {
-		type: Array as PropType<Question[]>,
+		type: Array as PropType<TransformedQuestion[]>,
 		required: true
+	},
+	answer: {
+		type: [Array, String, Boolean] as PropType<any>,
+		required: true,
+		validator: () => true
 	},
 	isDark: {
 		type: Boolean,
@@ -94,28 +95,27 @@ const props = defineProps({
 	}
 })
 
-const emits = defineEmits(['update:index'])
+const emits = defineEmits(['update:answer', 'update:index'])
 
-const questionIndex = computed({
+const currentIndex = computed({
 	get: () => props.index,
-	set: (val) => {
-		emits('update:index', val)
+	set: (v) => {
+		emits('update:index', v)
 	}
 })
 
-const answerState = ref('')
-const answers = reactive<Record<string, any>>({})
-const currentQuestion = computed(() => props.questions.at(questionIndex.value))
 const answer = computed({
-	get: () => currentQuestion.value ? answers[currentQuestion.value.id] ?? Logic.Study.transformQuestion(currentQuestion.value).defaultAnswer : [],
-	set: (val) => {
-		answers[currentQuestion.value?.id] = val
+	get: () => props.answer,
+	set: (v) => {
+		emits('update:answer', v)
 	}
 })
+
+const question = computed(() => props.questions.at(props.index))
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
-	if (currentQuestion.value.strippedData.type === 'trueOrFalse' && answer.value === val) return 'selected'
-	if (currentQuestion.value.strippedData.type === 'multipleChoice' && answer.value.includes(index)) return 'selected'
+	if (question.value?.strippedData.type === 'trueOrFalse' && props.answer === val) return 'selected'
+	if (question.value?.strippedData.type === 'multipleChoice' && props.answer.includes(index)) return 'selected'
 	return null
 }
 </script>

@@ -1431,7 +1431,7 @@ export default class Study extends Common {
         if (type === 'multipleChoice') return []
         if (type === 'writeAnswer') return ''
         if (type === 'trueOrFalse') return '' as unknown as boolean
-        if (type === 'fillInBlanks') return new Array(this.indicatorCount).fill('')
+        if (type === 'fillInBlanks') return new Array(this.splitQuestions.length - 1).fill('')
         if (type === 'dragAnswers') return []
         if (type === 'sequence') return question.strippedData.answers
         if (type === 'match') return this.matchAnswers

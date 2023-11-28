@@ -69,7 +69,7 @@
             class="min-w-[160px] rounded-xl p-3 bg-white flex items-center justify-center border-2 border-b-4">
             <input placeholder="answer here"
               class="w-full focus:outline-none placeholder:md:!text-2xl !text-bodyBlack !bg-white placeholder:text-base placeholder:text-grayColor md:!text-2xl text-base"
-              v-model="answer.value[index]" />
+              v-model="answer.value[index - 1]" />
           </div>
           <SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
         </template>
@@ -124,7 +124,7 @@
     </template>
 
     <div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
-      <Draggable v-model="question.matchQuestions" group="match-questions" class="col-span-1 flex flex-col gap-2"
+      <Draggable :list="question.matchQuestions" group="match-questions" class="col-span-1 flex flex-col gap-2"
         itemKey="" :disabled="true">
         <template #item="{ element, index }">
           <div
@@ -153,19 +153,19 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, Question } from "sofa-logic"
+import { Logic, TransformedQuestion } from "sofa-logic"
 import {
   SofaHeaderText,
   SofaIcon,
   SofaNormalText,
   SofaTextarea,
 } from "sofa-ui-components"
-import { PropType, computed, defineEmits, defineProps, reactive, watch } from "vue"
+import { PropType, defineEmits, defineProps, reactive, watch } from "vue"
 import Draggable from "vuedraggable"
 
 const props = defineProps({
-  questionData: {
-    type: Object as PropType<Question>,
+  question: {
+    type: Object as PropType<TransformedQuestion>,
     required: true
   },
   modelValue: {
@@ -185,16 +185,14 @@ const props = defineProps({
 
 const emits = defineEmits(['update:modelValue'])
 
-const question = computed(() => Logic.Study.transformQuestion(props.questionData))
-
 const answer = reactive({
   value: props.modelValue,
-  dragOptions: question.value.dragAnswers.filter((x) => !props.modelValue.includes(x)),
-  drag: Array.from({ length: question.value.dragAnswers.length }, (_, idx) => props.modelValue[idx] ? [props.modelValue[idx]] : []),
+  dragOptions: props.question.dragAnswers.filter((x) => !props.modelValue.includes(x)),
+  drag: Array.from({ length: props.question.dragAnswers.length }, (_, idx) => props.modelValue[idx] ? [props.modelValue[idx]] : []),
 })
 
 watch(answer, () => {
-  if (question.value.type === 'dragAnswers') emits('update:modelValue', answer.drag.flat(1))
+  if (props.question.type === 'dragAnswers') emits('update:modelValue', answer.drag.flat(1))
   else emits('update:modelValue', answer.value)
 })
 

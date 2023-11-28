@@ -12,6 +12,8 @@ import Users from './Users'
 
 import { addToArray } from 'valleyed'
 
+const study = new Study
+
 export const Logic = {
   Auth: new Auth(),
   Common: new Common(),
@@ -21,9 +23,11 @@ export const Logic = {
   Payment: new Payment(),
   Plays: new Plays(),
   Schools: new Schools(),
-  Study: new Study(),
+  Study: study,
   Users: new Users(),
   Interactions: new Interactions(),
 
   addToArray,
 }
+
+export type TransformedQuestion = ReturnType<typeof study['transformQuestion']>
