@@ -1392,10 +1392,10 @@ export default class Study extends Common {
     }
   }
 
-  public GetQuestions = (quizId: string) => {
+  public GetQuestions = (quizId: string, filters: QueryParams = {}) => {
     if (!quizId || quizId == 'empty') return undefined
     return $api.study.quiz
-      .getQuestions(quizId)
+      .getQuestions(quizId, filters)
       .then((response) => {
         this.AllQuestions = response.data
         return this.AllQuestions
