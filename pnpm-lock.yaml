@@ -237,6 +237,9 @@ importers:
       vue:
         specifier: ^3.2.21
         version: 3.3.4
+      vue-inline-svg:
+        specifier: ^3.1.2
+        version: 3.1.2(vue@3.3.4)
       vue-loader:
         specifier: ^17.0.1
         version: 17.2.2(@vue/compiler-sfc@3.3.4)(vue@3.3.4)(webpack@5.88.2)
@@ -10994,6 +10997,14 @@ packages:
   /vue-hot-reload-api@2.3.4:
     resolution: {integrity: sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==}
     dev: true
+
+  /vue-inline-svg@3.1.2(vue@3.3.4):
+    resolution: {integrity: sha512-K01sLANBnjosObee4JrBu/igXpYIFhQfy4EcEyVWxEWf6nmrxp7Isz6pmeRCsWx6XGrGWfrQH3uNwt4nOmrFdA==}
+    peerDependencies:
+      vue: ^3
+    dependencies:
+      vue: 3.3.4
+    dev: false
 
   /vue-loader@15.10.2(css-loader@6.8.1)(webpack@5.88.2):
     resolution: {integrity: sha512-ndeSe/8KQc/nlA7TJ+OBhv2qalmj1s+uBs7yHDRFaAXscFTApBzY9F1jES3bautmgWjDlDct0fw8rPuySDLwxw==}
