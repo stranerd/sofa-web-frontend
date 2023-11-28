@@ -75,7 +75,8 @@
       <template v-if="question.strippedData.type === 'dragAnswers'">
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
           <template v-for="(content, index) in question.splitQuestions" :key="index">
-            <Draggable v-if="index !== 0" :list="answer.drag[index - 1]" itemKey="" group="dragAnswers"
+            <Draggable v-if="index !== 0" :list="answer.drag[index - 1]" itemKey="" group="dragAnswers" :move="move"
+              :id="`drag-answer-${index - 1}`"
               :class="`md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
               <template #item="{ element }">
                 <div
@@ -88,7 +89,7 @@
               :content="content" />
           </template>
 
-          <Draggable :list="answer.dragOptions" itemKey="" group="dragAnswers"
+          <Draggable :list="answer.dragOptions" itemKey="" group="dragAnswers" :move="move" id="drag-options"
             class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
             <template #item="{ element }">
               <div
@@ -98,16 +99,6 @@
             </template>
           </Draggable>
         </div>
-        <Draggable :list="answer.list1" group="num1" itemKey="">
-          <template #item="{ element }">
-            <p class="p-4 bg-black text-white">{{ element }}</p>
-          </template>
-        </Draggable>
-        <Draggable :list="answer.list2" group="num2" itemKey="">
-          <template #item="{ element }">
-            <p class="p-4 bg-black text-white">{{ element }}</p>
-          </template>
-        </Draggable>
         <pre>{{ JSON.stringify(answer, null, 2) }}</pre>
       </template>
 
@@ -199,16 +190,22 @@ const question = computed(() => Logic.Study.transformQuestion(props.questionData
 
 const answer = reactive({
   value: props.modelValue,
-  dragOptions: question.value.dragAnswers,
-  drag: Array.from({ length: question.value.dragAnswers.length }, () => []),
-  list1: [1, 2, 3, 4, 5],
-  list2: [6, 7, 8, 9, 10]
+  dragOptions: question.value.dragAnswers.filter((x) => !props.modelValue.includes(x)),
+  drag: Array.from({ length: question.value.dragAnswers.length }, (_, idx) => props.modelValue[idx] ? [props.modelValue[idx]] : []),
 })
 
 watch(answer, () => {
-  console.log(answer.value)
-  emits('update:modelValue', answer.value)
+  if (question.value.type === 'dragAnswers') emits('update:modelValue', answer.drag.flat(1))
+  else emits('update:modelValue', answer.value)
 })
+
+const move = (e: { from: HTMLElement, to: HTMLElement, draggedContext: { element: string } }) => {
+  const optionsId = 'drag-options'
+  const answersId = 'drag-answer-'
+  if (e.to.id === optionsId) return true
+  const toId = Number(e.to.id.split(answersId)[1])
+  if (answer.drag[toId].length) return false
+}
 </script>
 
 <style scoped>
