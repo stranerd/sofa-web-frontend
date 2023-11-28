@@ -75,7 +75,7 @@
       <template v-if="question.strippedData.type === 'dragAnswers'">
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
           <template v-for="(content, index) in question.splitQuestions" :key="index">
-            <Draggable v-if="index !== 0" :list="answer.drag[index - 1]" itemKey="" :group="{ name: 'drag-and-drop' }"
+            <Draggable v-if="index !== 0" :list="answer.drag[index - 1]" itemKey="" group="dragAnswers"
               :class="`md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
               <template #item="{ element }">
                 <div
@@ -88,7 +88,7 @@
               :content="content" />
           </template>
 
-          <Draggable :list="answer.dragOptions" itemKey="" :group="{ name: 'drag-and-drop' }"
+          <Draggable :list="answer.dragOptions" itemKey="" group="dragAnswers"
             class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
             <template #item="{ element }">
               <div
@@ -98,21 +98,21 @@
             </template>
           </Draggable>
         </div>
-        <Draggable v-model="answer.list1" itemKey="">
+        <Draggable :list="answer.list1" group="num1" itemKey="">
           <template #item="{ element }">
-            <p class="p-4 bg-black text-white">{{element}}</p>
+            <p class="p-4 bg-black text-white">{{ element }}</p>
           </template>
         </Draggable>
-        <Draggable v-model="answer.list2" itemKey="">
+        <Draggable :list="answer.list2" group="num2" itemKey="">
           <template #item="{ element }">
-            <p class="p-4 bg-black text-white">{{element}}</p>
+            <p class="p-4 bg-black text-white">{{ element }}</p>
           </template>
         </Draggable>
         <pre>{{ JSON.stringify(answer, null, 2) }}</pre>
       </template>
 
       <template v-if="question.strippedData.type === 'sequence'">
-        <Draggable v-model="answer.value" class="flex flex-col gap-4" itemKey="">
+        <Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4" itemKey="">
           <template #item="{ element, index }">
             <div class="w-full flex items-center gap-3">
               <div class="p-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
@@ -131,7 +131,8 @@
       </template>
 
       <div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
-        <Draggable v-model="question.matchQuestions" class="col-span-1 flex flex-col gap-2" itemKey="" :disabled="true">
+        <Draggable v-model="question.matchQuestions" group="match-questions" class="col-span-1 flex flex-col gap-2"
+          itemKey="" :disabled="true">
           <template #item="{ element, index }">
             <div
               class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
@@ -144,7 +145,7 @@
           </template>
         </Draggable>
 
-        <Draggable v-model="answer.value" class="col-span-1 flex flex-col gap-2" itemKey="">
+        <Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" itemKey="">
           <template #item="{ element, index }">
             <div
               class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
@@ -200,8 +201,8 @@ const answer = reactive({
   value: props.modelValue,
   dragOptions: question.value.dragAnswers,
   drag: Array.from({ length: question.value.dragAnswers.length }, () => []),
-  list1: [1,2,3,4,5],
-  list2: [6,7,8,9,10]
+  list1: [1, 2, 3, 4, 5],
+  list2: [6, 7, 8, 9, 10]
 })
 
 watch(answer, () => {
