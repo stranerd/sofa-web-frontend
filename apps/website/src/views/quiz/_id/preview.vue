@@ -4,6 +4,7 @@
 		<QuizWrapper :id="($route.params.id as string)">
 			<template v-slot="{ quiz, questions, extras }">
 				<Quiz v-model:index="extras.index" :title="quiz.title" :questions="questions" v-model:answer="extras.answer"
+					:optionState="extras.optionState"
 					:rightButton="{
 						label: 'Next',
 						bgColor: 'bg-primaryBlue',

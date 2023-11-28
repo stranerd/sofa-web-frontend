@@ -20,6 +20,7 @@ module.exports = {
         lightBorderColor: "#E1E6EB",
         skyBlue: "#E6F5FF",
         lightGrayVaraint: "#F1F6FA",
+        hoverBlue: "#7DC8FA"
       },
       boxShadow: {
         custom: "0px 4px 4px rgba(8, 0, 24, 0.05)",

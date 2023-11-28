@@ -17,7 +17,7 @@
 
 	<slot>
 		<div
-			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-2 items-center justify-center px-6">
+			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-8 items-center justify-center px-6">
 			<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question"
 				:title="title" :optionState="optionState" />
 			<slot name="postBody" />
@@ -92,7 +92,11 @@ const props = defineProps({
 	leftButton: {
 		type: Object as PropType<ButtonConfig>,
 		required: false,
-	}
+	},
+	optionState: {
+		type: Function as PropType<InstanceType<typeof QuestionDisplay>['$props']['optionState']>,
+		required: true
+	},
 })
 
 const emits = defineEmits(['update:answer', 'update:index'])
@@ -112,10 +116,4 @@ const answer = computed({
 })
 
 const question = computed(() => props.questions.at(props.index))
-
-const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
-	if (question.value?.strippedData.type === 'trueOrFalse' && props.answer === val) return 'selected'
-	if (question.value?.strippedData.type === 'multipleChoice' && props.answer.includes(index)) return 'selected'
-	return null
-}
 </script>

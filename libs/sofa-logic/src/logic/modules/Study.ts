@@ -1,4 +1,5 @@
-import { capitalize, reactive } from 'vue'
+import { reactive } from 'vue'
+import stringSimilarity from 'string-similarity'
 import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
@@ -8,6 +9,7 @@ import {
   Course,
   Folder,
   Question,
+  QuestionAnswer,
   Quiz,
   SofaFile,
 } from '../types/domains/study'
@@ -24,6 +26,7 @@ import {
   UpdateCourseSectionsInput,
 } from '../types/forms/study'
 import Common from './Common'
+import { capitalize, Differ, stripHTML } from 'valleyed'
 
 export default class Study extends Common {
   constructor() {
@@ -1406,8 +1409,49 @@ export default class Study extends Common {
       })
   }
 
+  private compare (a: string, b: string, quality = 0.95) {
+		return stringSimilarity.compareTwoStrings(
+			stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
+			stripHTML(b).toLowerCase().replaceAll(' ', '').trim()
+		) >= quality
+	}
+
+  checkAnswer (question: Question, answer: any): boolean {
+    if (!question.data) return false
+
+		if (question.data.type === 'multipleChoice') {
+			return Array.isArray(answer) && Differ.equal(answer.sort(), [...question.data.answers].sort())
+		} else if (question.data.type === 'trueOrFalse') {
+			return answer === question.data.answer
+		} else if (question.data.type === 'writeAnswer') {
+			return question.data.answers.some((a) => this.compare(a, answer))
+		} else if (question.data.type === 'fillInBlanks') {
+			const answers = question.data.answers
+			return Array.isArray(answer) &&
+				answer.length === answers.length &&
+				answer.every((a, i) => this.compare(a, answers[i]))
+		} else if (question.data.type === 'dragAnswers') {
+			const answers = question.data.answers
+			return Array.isArray(answer) &&
+				answer.length === answers.length &&
+				answer.every((a, i) => this.compare(a, answers[i], 1))
+		} else if (question.data.type === 'sequence') {
+			const answers = question.data.answers
+			return Array.isArray(answer) &&
+				answer.length === answers.length &&
+				answer.every((a, i) => this.compare(a, answers[i], 1))
+		} else if (question.data.type === 'match') {
+			const questions = question.data.set
+			return Array.isArray(answer) &&
+				answer.length === questions.length &&
+				answer.every((a, i) => this.compare(a, questions[i].a, 1))
+		}
+		return false
+	}
+
   public transformQuestion (question: Question) {
     const type = question.strippedData.type
+
     return {
       ...question,
       get type () {
@@ -1427,7 +1471,7 @@ export default class Study extends Common {
         if (type === 'fillInBlanks' || type === 'dragAnswers') return question.question.split(question.strippedData.indicator)
         return []
       },
-      get defaultAnswer () {
+      get defaultAnswer () : QuestionAnswer {
         if (type === 'multipleChoice') return []
         if (type === 'writeAnswer') return ''
         if (type === 'trueOrFalse') return '' as unknown as boolean
@@ -1448,6 +1492,15 @@ export default class Study extends Common {
       get matchAnswers () {
         if (type === 'match') return question.strippedData.answers
         return []
+      },
+      get answer () {
+        if (!question.data) return ''
+        if (type === 'multipleChoice') return question.data.answers.map((idx) => question.data.options[idx]).join('<br>')
+        if (type === 'writeAnswer') return question.data.answers.join('<br>-- or --<br>')
+        if (type === 'trueOrFalse') return capitalize(question.data.answer.toString())
+        if (['fillInBlanks', 'dragAnswers', 'sequence'].includes(type)) return question.data.answers.join('<br>')
+        if (type === 'match') return question.data.set.map((s) => s.a).join('<br>')
+        return ''
       }
     }
   }

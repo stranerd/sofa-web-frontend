@@ -99,6 +99,8 @@ export interface Question {
   updatedAt: number
 }
 
+export type QuestionAnswer = string[] | number[] | boolean | string
+
 export interface Course {
   hash: string
   id: string

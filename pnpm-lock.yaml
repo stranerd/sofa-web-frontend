@@ -146,6 +146,9 @@ importers:
       socket.io-client:
         specifier: ^4.6.1
         version: 4.7.2
+      string-similarity:
+        specifier: ^4.0.4
+        version: 4.0.4
       valleyed:
         specifier: ^4.2.3
         version: 4.2.3
@@ -10240,6 +10243,11 @@ packages:
       char-regex: 2.0.1
       strip-ansi: 7.1.0
     dev: true
+
+  /string-similarity@4.0.4:
+    resolution: {integrity: sha512-/q/8Q4Bl4ZKAPjj8WerIBJWALKkaPRfrvhfF8k/B23i4nzrlRj2/go1m90In7nG/3XDSbOo0+pu6RvCTM9RGMQ==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+    dev: false
 
   /string-width@2.1.1:
     resolution: {integrity: sha512-nOqH59deCq9SRHlxq1Aw85Jnt4w6KvLKqWVik6oA9ZklXLNIOlqg4F2yrT1MVaTjAqvVwdfeZ7w7aCvJD7ugkw==}

@@ -5,6 +5,7 @@
 <script lang="ts" setup>
 import { Logic, Question, Quiz } from 'sofa-logic'
 import { PropType, computed, defineProps, onMounted, reactive, ref } from 'vue'
+import QuestionDisplay from './QuestionDisplay.vue'
 
 const props = defineProps({
 	id: {
@@ -14,6 +15,16 @@ const props = defineProps({
 	questions: {
 		type: Array as PropType<Question[]>,
 		required: false,
+	},
+	showAnswer: {
+		type: Boolean,
+		required: false,
+		default: false
+	},
+	isAnswerRight: {
+		type: Boolean,
+		required: false,
+		default: false
 	}
 })
 
@@ -29,6 +40,33 @@ const answer = computed({
 	}
 })
 
+const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
+	const question = currentQuestion.value
+	if (!question) return null
+	if (props.showAnswer && question.data) {
+		if (question.strippedData.type === 'multipleChoice') {
+			if (question.data.answers.includes(index)) return 'right'
+			if (answer.value.includes(index)) return 'wrong'
+		}
+		if (question.strippedData.type === 'trueOrFalse') {
+			if (question.data.answer === val) return 'right'
+			if (answer.value === val) return 'wrong'
+		}
+		if (question.data.type === 'writeAnswer') return props.isAnswerRight ? 'right' : 'wrong'
+		if (['fillInBlanks', 'dragAnswers', 'sequence'].includes(question.data.type)) {
+			if (props.isAnswerRight) return 'right'
+			return question.data.answers[index] === val ? 'right' : 'wrong'
+		}
+		if (question.data.type === 'match') {
+			if (props.isAnswerRight) return 'right'
+			return question.data.set[index]?.a === val ? 'right' : 'wrong'
+		}
+	}
+	if (question.strippedData.type === 'trueOrFalse' && answer.value === val) return 'selected'
+	if (question.strippedData.type === 'multipleChoice' && answer.value.includes(index)) return 'selected'
+	return null
+}
+
 const extras = computed(() => ({
 	get index () {
 		return index.value
@@ -42,7 +80,8 @@ const extras = computed(() => ({
 	set answer (v) {
 		answer.value = v
 	},
-	currentQuestion: currentQuestion.value
+	question: currentQuestion.value,
+	optionState
 }))
 
 onMounted(async () => {

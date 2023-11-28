@@ -1,47 +1,61 @@
 <template>
 	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0" :hasTopBar="false" :hasBottomBar="false"
 		:bottomPadding="false">
-		<QuizWrapper :id="($route.params.id as string)">
+		<QuizWrapper :id="($route.params.id as string)" :showAnswer="showSolution" :isAnswerRight="isCorrect">
 			<template v-slot="{ quiz, questions, extras }">
 				<Quiz v-model:index="extras.index" :title="isDone ? 'Practice completed' : quiz.title" v-model:answer="extras.answer"
-					:questions="questions" :rightButton="{
+					:questions="questions" :optionState="extras.optionState"
+					:rightButton="{
 						label: showSolution ? 'Continue' : 'Check',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
 						click: () => {
 							if (isDone) return Logic.Common.goBack()
-							if (!showSolution) return showSolution = true
+							if (!showSolution) {
+								isCorrect = Logic.Study.checkAnswer(extras.question, extras.answer)
+								return showSolution = true
+							}
 							if (extras.index < questions.length - 1) {
 								showSolution = false
-								extras.index++
-								return
+								return extras.index++
 							}
+							showSolution = false
 							return isDone = true
 						}
 					}" :leftButton="{
-						label: isDone ? 'Restart' : 'Skip',
+						label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
 						bgColor: 'bg-white border-[1px] border-gray-100',
 						textColor: 'text-grayColor',
-						disabled: showSolution || (!isDone && extras.index === questions.length - 1),
+						disabled:  !isDone && extras.index === questions.length - 1,
 						click: () => {
 							if (isDone) {
 								extras.index = 0
-								isDone = false
-								return
+								return isDone = false
 							}
+							else if (showSolution) return showSolution = false
 							else if (extras.index < questions.length - 1) return extras.index++
 						}
 					}">
 					<template v-if="showSolution" v-slot:header>
-						<div class="w-full p-4 md:py-8 flex items-center justify-center gap-2" :class="correct ? 'bg-primaryGreen' : 'bg-primaryRed'">
-							<SofaIcon class="h-[22px]" :name="correct ? 'white-checkbox' : 'white-wrong'" />
-							<SofaHeaderText :size="'xl'" :color="'text-white'" :content="correct ? 'Correct!' : 'Wrong!'" />
+						<div class="w-full p-4 md:py-8 flex items-center justify-center gap-2" :class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
+							<SofaIcon class="h-[22px]" :name="isCorrect ? 'white-checkbox' : 'white-wrong'" />
+							<SofaHeaderText :size="'xl'" :color="'text-white'" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
 						</div>
 					</template>
 					<template v-if="isDone" v-slot>
 						<div class="flex flex-col gap-1">
 							<SofaHeaderText :customClass="'!font-bold md:!text-2xl text-lg'" content="Congratulations!" />
 							<SofaNormalText :color="'text-grayColor'" content="You have mastered this quiz" />
+						</div>
+					</template>
+					<template v-if="showSolution" v-slot:postBody>
+						<div class="w-full flex flex-col gap-2 items-start">
+							<SofaHeaderText size="xl" content="Answer" />
+							<SofaNormalText :content="extras.question.answer" />
+						</div>
+						<div v-if="extras.question.explanation" class="w-full flex flex-col gap-2 items-start">
+							<SofaHeaderText size="xl" content="Explanation" />
+							<SofaNormalText :content="extras.question.explanation" />
 						</div>
 					</template>
 				</Quiz>
@@ -68,9 +82,9 @@ export default defineComponent({
 
 		const showSolution = ref(false)
 		const isDone = ref(false)
-		const correct = ref(false)
+		const isCorrect = ref(false)
 
-		return { showSolution, isDone, Logic, correct }
+		return { showSolution, isDone, Logic, isCorrect }
 	}
 })
 </script>

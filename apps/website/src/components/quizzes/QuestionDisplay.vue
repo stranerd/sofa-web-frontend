@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col justify-center items-start w-full gap-4">
-    <SofaHeaderText v-if="!Logic.Common.isOnlyMobile" class="text-left !font-bold border-b-2 border-[#E1E6EB] pb-2"
+    <SofaHeaderText v-if="!Logic.Common.isOnlyMobile" class="text-left !font-bold border-b-2 border-lightBorderColor pb-2"
       color="text-inherit" :content="title" />
+
     <SofaHeaderText v-if="question.data.type !== 'fillInBlanks' && question.data.type !== 'dragAnswers'"
       class="!font-bold md:!text-2xl text-base w-full text-left justify-start flex" color="text-inherit"
       :content="question.question" />
@@ -10,65 +11,43 @@
 
     <template v-if="question.strippedData.type === 'multipleChoice'">
       <a v-for="(option, index) in question.strippedData.options" :key="index"
-        class="w-full flex items-center border-2 justify-between rounded-xl p-3 bg-white border-[#E1E6EB] hover:bg-[#E2F3FD] hover:border-[#7DC8FA] group gap-3"
-        :class="{
-          '!bg-[#E1F5EB] !border-primaryGreen': optionState(option, index) === 'correct',
-          '!bg-[#FAEBEB] !border-primaryRed': optionState(option, index) === 'wrong',
-          '!bg-[#E2F3FD] !border-[#7DC8FA] shake': optionState(option, index) === 'selected',
-        }"
+        class="w-full flex items-center border-2 justify-between rounded-xl p-3 bg-white border-lightBorderColor hover:bg-[#E2F3FD] hover:border-hoverBlue group gap-3"
+        :class="buildClass(option, index)"
         @click="answer.value.includes(index) ? answer.value.splice(answer.value.indexOf(index), 1) : answer.value.push(index)">
         <div class="flex-grow flex gap-3 items-center">
-          <SofaIcon
-            :name="Logic.Study.getShape(index)"
-            :class="{
-              'group-hover:stroke-[#7DC8FA]': true,
-              'stroke-primaryGreen': optionState(option, index) === 'correct',
-              'stroke-primaryRed': optionState(option, index) === 'wrong',
-              'stroke-[#7DC8FA]': optionState(option, index) === 'selected',
-              [Logic.Study.getShapeSize(Logic.Study.getShape(index))]: true
-            }" />
-          <SofaHeaderText :content="option" class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
+          <SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
+          <SofaHeaderText :content="option" color="text-inherit"
+            class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
         </div>
       </a>
     </template>
 
     <template v-if="question.strippedData.type === 'trueOrFalse'">
       <a v-for="(option, index) in [true, false]" :key="index"
-        class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 bg-white border-[#E1E6EB] hover:bg-[#E2F3FD] hover:border-[#7DC8FA] group gap-3"
-        :class="{
-          '!bg-[#E1F5EB] !border-primaryGreen': optionState(option) === 'correct',
-          '!bg-[#FAEBEB] !border-primaryRed': optionState(option) === 'wrong',
-          '!bg-[#E2F3FD] !border-[#7DC8FA] shake': optionState(option) === 'selected',
-        }" @click="answer.value = option">
+        class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 bg-white border-lightBorderColor hover:bg-[#E2F3FD] hover:border-hoverBlue group gap-3"
+        :class="buildClass(option, index)" @click="answer.value = option">
         <div class="flex-grow flex gap-3 items-center">
-          <SofaIcon
-            :name="Logic.Study.getShape(index)"
-            :class="{
-              'group-hover:stroke-[#7DC8FA]': true,
-              'stroke-primaryGreen': optionState(option, index) === 'correct',
-              'stroke-primaryRed': optionState(option, index) === 'wrong',
-              'stroke-[#7DC8FA]': optionState(option, index) === 'selected',
-              [Logic.Study.getShapeSize(Logic.Study.getShape(index))]: true
-            }" />
-          <SofaHeaderText :content="option.toString()" class="capitalize md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
+          <SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
+          <SofaHeaderText :content="option.toString()" color="text-inherit"
+            class="capitalize md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
         </div>
       </a>
     </template>
 
     <template v-if="question.strippedData.type === 'writeAnswer'">
-      <div class="w-full flex items-center justify-between rounded-xl border-[#E1E6EB] bg-white gap-3 border-2">
+      <div class="w-full rounded-xl bg-white border-lightBorderColor gap-3 border-2" :class="buildClass(answer.value)">
         <SofaTextarea placeholder="Write your answer here" v-model="answer.value"
-          text-area-style="focus:outline-none bg-transparent !text-bodyBlack p-3 !bg-white placeholder:text-grayColor w-full placeholder:font-semibold text-base placeholder:text-base" />
+          text-area-style="focus:outline-none !bg-transparent !text-inherit p-3 placeholder:!text-inherit w-full text-base placeholder:text-base" />
       </div>
     </template>
 
     <template v-if="question.strippedData.type === 'fillInBlanks'">
-      <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
+      <div class="w-full flex md:gap-3 gap-2 items-center flex-wrap">
         <template v-for="(content, index) in question.splitQuestions" :key="index">
-          <div v-if="index !== 0"
-            class="min-w-[160px] rounded-xl p-3 bg-white flex items-center justify-center border-2 border-b-4">
+          <div v-if="index !== 0" class="min-w-[160px] rounded-xl p-3 bg-white flex items-center justify-center border-2"
+            :class="buildClass(answer.value[index - 1], index - 1)">
             <input placeholder="answer here"
-              class="w-full focus:outline-none placeholder:md:!text-2xl !text-bodyBlack !bg-white placeholder:text-base placeholder:text-grayColor md:!text-2xl text-base"
+              class="w-full focus:outline-none placeholder:md:text-2xl text-inherit bg-transparent placeholder:text-base placeholder:text-inherit md:text-2xl text-base"
               v-model="answer.value[index - 1]" />
           </div>
           <SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
@@ -77,15 +56,16 @@
     </template>
 
     <template v-if="question.strippedData.type === 'dragAnswers'">
-      <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
+      <div class="w-full flex md:gap-3 gap-2 items-center flex-wrap">
         <template v-for="(content, index) in question.splitQuestions" :key="index">
           <Draggable v-if="index !== 0" :list="answer.drag[index - 1]" itemKey="" group="dragAnswers" :move="move"
             :id="`drag-answer-${index - 1}`"
-            :class="`md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
+            class="md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2"
+            :class="buildClass(answer.drag[index - 1][0], index - 1)">
             <template #item="{ element }">
               <div
-                :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
-                <SofaHeaderText class="!font-bold md:!text-2xl text-base" :content="element" />
+                class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2">
+                <SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
               </div>
             </template>
           </Draggable>
@@ -96,8 +76,8 @@
           class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
           <template #item="{ element }">
             <div
-              :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
-              <SofaHeaderText class="!font-bold md:!text-2xl text-base" :content="element" />
+              class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2">
+              <SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
             </div>
           </template>
         </Draggable>
@@ -105,18 +85,17 @@
     </template>
 
     <template v-if="question.strippedData.type === 'sequence'">
-      <Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4" itemKey="">
+      <Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" itemKey="">
         <template #item="{ element, index }">
-          <div class="w-full flex items-center gap-3">
-            <div class="p-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
-              <SofaHeaderText :content="(index + 1).toString()"
+          <div class="w-full flex items-center gap-3 cursor-move">
+            <div class="p-3 rounded-xl bg-white border-lightBorderColor border-2" :class="buildClass(element, index)">
+              <SofaHeaderText :content="(index + 1).toString()" color="text-inherit"
                 class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
             </div>
-            <div
-              class="w-full flex items-center cursor-move justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] bg-white gap-3 border-2 border-b-4">
-              <SofaHeaderText
-                class="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex !line-clamp-1"
-                :content="element" />
+            <div class="p-3 rounded-xl bg-white border-lightBorderColor border-2 flex-grow"
+              :class="buildClass(element, index)">
+              <SofaHeaderText :content="element" color="text-inherit"
+                class="'md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex !line-clamp-1" />
             </div>
           </div>
         </template>
@@ -124,14 +103,15 @@
     </template>
 
     <div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
-      <Draggable :list="question.matchQuestions" group="match-questions" class="col-span-1 flex flex-col gap-2"
-        itemKey="" :disabled="true">
+      <Draggable :list="question.matchQuestions" group="match-questions" class="col-span-1 flex flex-col gap-2" itemKey=""
+        :disabled="true">
         <template #item="{ element, index }">
           <div
-            class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
-            <SofaIcon :name="Logic.Study.getShape(index)"
-              :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
-            <SofaHeaderText class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex line-clamp-1"
+            class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-lightBorderColor border-2 bg-white gap-3"
+            :class="buildClass(answer.value[index], index)">
+            <SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
+            <SofaHeaderText color="text-inherit"
+              class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex line-clamp-1"
               :content="element" />
           </div>
         </template>
@@ -140,10 +120,11 @@
       <Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" itemKey="">
         <template #item="{ element, index }">
           <div
-            class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
-            <SofaIcon :name="Logic.Study.getShape(index)"
-              :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
-            <SofaHeaderText class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex line-clamp-1"
+            class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-lightBorderColor border-2 bg-white gap-3 cursor-move"
+            :class="buildClass(element, index)">
+            <SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(element, index)" />
+            <SofaHeaderText color="text-inherit"
+              class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex line-clamp-1"
               :content="element" />
           </div>
         </template>
@@ -178,9 +159,9 @@ const props = defineProps({
     required: true,
   },
   optionState: {
-    type: Function as PropType<(val: boolean | string, index?: number) => 'selected' | 'correct' | 'wrong' | null>,
+    type: Function as PropType<(val: boolean | string, index?: number) => 'selected' | 'right' | 'wrong' | null>,
     required: true
-  }
+  },
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -203,6 +184,20 @@ const move = (e: { from: HTMLElement, to: HTMLElement, draggedContext: { element
   const toId = Number(e.to.id.split(answersId)[1])
   if (answer.drag[toId].length) return false
 }
+
+const buildClass = (...args: Parameters<typeof props['optionState']>) => ({
+  '!bg-[#E1F5EB] !border-primaryGreen': props.optionState(...args) === 'right',
+  '!bg-[#FAEBEB] !border-primaryRed': props.optionState(...args) === 'wrong',
+  '!bg-[#E2F3FD] !border-hoverBlue shake': props.optionState(...args) === 'selected',
+})
+
+const buildIconClass = (...args: Parameters<typeof props['optionState']>) => ({
+  'group-hover:stroke-hoverBlue': true,
+  '!stroke-primaryGreen': props.optionState(...args) === 'right',
+  '!stroke-primaryRed': props.optionState(...args) === 'wrong',
+  '!stroke-hoverBlue': props.optionState(...args) === 'selected',
+  [Logic.Study.getShapeSize(Logic.Study.getShape(args[1]))]: true
+})
 </script>
 
 <style scoped>
@@ -224,5 +219,4 @@ const move = (e: { from: HTMLElement, to: HTMLElement, draggedContext: { element
 
 .shake {
   animation: shake 0.5s 1;
-}
-</style>
+}</style>
