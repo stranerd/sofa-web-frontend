@@ -1,42 +1,52 @@
 <template>
-  <h3 :class="`font-semibold text-header ${content ? 'body' : ''} ${size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : ''}
-          	${size == 'xl' ? 'lg:!text-3xl mdlg:!text-xl text-base' : ''}
-          	${size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : ''}
-          	${size == 'xs' ? 'mdlg:!text-[12px] text-xs' : ''}
-          	${customClass}
-          	${color}`">
-    <span v-if="content" v-html="content" />
-    <slot v-else />
-  </h3>
+	<h3 v-if="content" :class="cls" v-html="content" />
+	<h3 v-else :class="cls">
+		<slot />
+	</h3>
 </template>
+
 <script lang="ts">
-export default {
-  props: {
-    size: {
-      type: String,
-      default: "lg",
-    },
-    color: {
-      type: String,
-      default: "text-darkBody",
-    },
-    customClass: {
-      type: String,
-      default: "",
-    },
-    content: {
-      type: String,
-      default: "",
-    },
-  },
-  name: "RoofHeaderText",
-}
+import { computed, defineComponent } from 'vue'
+
+export default defineComponent({
+	props: {
+		size: {
+			type: String,
+			default: "lg",
+		},
+		color: {
+			type: String,
+			default: "text-darkBody",
+		},
+		customClass: {
+			type: String,
+			default: "",
+		},
+		content: {
+			type: String,
+			default: "",
+		},
+	},
+	name: "RoofHeaderText",
+	setup (props) {
+		const cls = computed(() => [
+			'font-semibold text-header',
+			props.content ? 'body' : '',
+			props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
+			props.size == 'xl' ? 'lg:!text-3xl mdlg:!text-xl text-base' : '',
+			props.size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : '',
+			props.size == 'xs' ? 'mdlg:!text-[12px] text-xs' : '',
+			props.customClass,
+			props.color,
+		].join(' '))
+		return { cls }
+	}
+})
 </script>
 
 <style lang="scss" scoped>
 .body {
   font-family: inherit;
-  white-space: pre-wrap;
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;

@@ -1,7 +1,7 @@
 <template>
 	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0" :hasTopBar="false" :hasBottomBar="false"
 		:bottomPadding="false">
-		<QuizWrapper :id="quizId">
+		<QuizWrapper :id="($route.params.id as string)">
 			<template v-slot="{ quiz, questions }">
 				<Quiz v-model:index="questionIndex" :title="quiz.title" :questions="questions"
 					:rightButton="{
@@ -10,7 +10,7 @@
 						textColor: 'text-white',
 						disabled: questionIndex === questions.length - 1,
 						click: () => {
-							if (questionIndex < questions.length - 1) questionIndex++
+							if (questionIndex < questions.length - 1) return questionIndex++
 						}
 					}" :leftButton="{
 						label: 'Prev',
@@ -18,7 +18,7 @@
 						textColor: 'text-grayColor',
 						disabled: questionIndex === 0,
 						click: () => {
-							if (questionIndex > 0) questionIndex--
+							if (questionIndex > 0) return questionIndex--
 						}
 					}"
 				/>
@@ -32,7 +32,6 @@ import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
@@ -42,10 +41,9 @@ export default defineComponent({
 			title: "Preview",
 		})
 
-		const route = useRoute()
 		const questionIndex = ref(0)
 
-		return { quizId: route.params.id as string, questionIndex }
+		return { questionIndex }
 	}
 })
 </script>

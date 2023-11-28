@@ -1,71 +1,55 @@
 <template>
-	<template v-if="true">
-		<div class="py-8 w-full md:!flex hidden items-center justify-center sticky top-0 left-0"
-			:class="{ 'md:bg-white': !isDark }" style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)">
-			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-3 justify-between">
-				<SofaHeaderText :size="'xl'" color="text-inherit">Quiz preview</SofaHeaderText>
-				<SofaNormalText :customClass="'!text-base cursor-pointer'" color="text-inherit"
-					@click="Logic.Common.goBack()">
-					Exit
-				</SofaNormalText>
+	<slot name="header">
+		<div class="p-4 md:py-8 w-full flex justify-center" :class="{ 'md:bg-white': !isDark }"
+			style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)">
+			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
+				<SofaIcon class="md:hidden" :customClass="'h-[19px]'" :name="'circle-close'"
+					@click="Logic.Common.goBack()" />
+				<SofaHeaderText :size="'xl'" customClass="!font-bold !text-sm truncate" color="text-inherit"
+					:content="title" />
+				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${questionIndex + 1}/${questions.length}`"
+					color="text-inherit" />
+				<SofaNormalText class="hidden md:inline" :customClass="'!text-base cursor-pointer whitespace-nowrap'"
+					color="text-inherit" content="Exit" @click="Logic.Common.goBack()" />
 			</div>
 		</div>
+	</slot>
 
-		<div class="w-full flex md:!hidden justify-between items-center z-50 p-4 sticky top-0 left-0"
-			:class="{ 'bg-backgroundGray': !isDark }">
-			<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="Logic.Common.goBack()" />
-			<SofaNormalText :customClass="'!font-bold !text-sm !line-clamp-1'" color="text-inherit" :content="title" />
-			<SofaNormalText :content="`${questionIndex + 1}/${questions.length}`" color="text-inherit" />
+	<slot>
+		<div
+			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-2 items-center justify-center px-6">
+			<QuestionDisplay v-if="currentQuestion" :key="questionIndex" v-model="answer" :questionData="currentQuestion"
+				:title="title" :optionState="optionState" />
+
+			<div class="w-full flex flex-col gap-2 items-start justify-start" v-if="answerState == 'wrong'">
+				<SofaHeaderText :size="'xl'" content="Correct answer" color="text-inherit" />
+				<SofaNormalText :content="answer" color="text-inherit" />
+			</div>
 		</div>
-	</template>
+	</slot>
 
-	<div class="w-full flex-grow flex flex-col items-center justify-center">
-		<QuestionDisplay v-if="currentQuestion" :key="questionIndex" v-model="answer" :questionData="currentQuestion"
-			:title="title" :optionState="optionState" />
-
-		<div class="w-full flex flex-col gap-2 items-start justify-start pt-2" v-if="answerState == 'wrong'">
-			<SofaHeaderText :size="'xl'" content="Correct answer" color="text-inherit" />
-			<SofaNormalText :content="answer" color="text-inherit" />
-		</div>
-	</div>
-
-	<template v-if="true">
-		<div class="md:!py-5 py-4 w-full sticky flex items-center justify-center bottom-0 left-0" :class="{
-			'bg-backgroundGray md:bg-white': !isDark,
-			'md:!invisible': answerState,
-			'!invisible': !leftButton && !rightButton
-		}" style="box-shadow: 0px -4px 4px rgba(8, 0, 24, 0.05)">
-			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full md:!flex hidden items-center justify-between">
-				<SofaButton :customClass="'!font-semibold'" padding="py-2 px-6" v-if="leftButton"
-					:disabled="leftButton.disabled" :bgColor="leftButton.bgColor" :textColor="leftButton.textColor"
-					@click="leftButton.click">
+	<slot name="footer">
+		<div v-if="leftButton || rightButton" class="px-4 py-2 w-full flex justify-center"
+			:class="{ 'md:bg-white': !isDark }" style="box-shadow: 0px -4px 4px rgba(8, 0, 24, 0.05)">
+			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
+				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
+					padding="py-3 md:px-6" v-if="leftButton" :disabled="leftButton.disabled" :bgColor="leftButton.bgColor"
+					:textColor="leftButton.textColor" @click="leftButton.click">
 					{{ leftButton.label }}
 				</SofaButton>
 
-				<span class="px-4 py-2 rounded-lg !font-semibold ">
+				<span class="px-4 py-2 rounded-lg font-semibold hidden md:inline">
 					{{ questionIndex + 1 }}/{{ questions.length }}
 				</span>
 
-				<SofaButton :customClass="'!font-semibold'" padding="py-2 px-6" v-if="rightButton"
-					:disabled="rightButton.disabled" :bgColor="rightButton.bgColor" :textColor="rightButton.textColor"
-					@click="rightButton.click">
-					{{ rightButton.label }}
-				</SofaButton>
-			</div>
-			<div class="w-full flex gap-3 px-4 md:!hidden">
-				<SofaButton class="!w-full" customClass="w-full" padding="py-3" v-if="leftButton"
-					:disabled="leftButton.disabled" :bgColor="leftButton.bgColor" :textColor="leftButton.textColor"
-					@click="leftButton.click">
-					{{ leftButton.label }}
-				</SofaButton>
-				<SofaButton class="!w-full" customClass="w-full" padding="py-3" v-if="rightButton"
-					:disabled="rightButton.disabled" :bgColor="rightButton.bgColor" :textColor="rightButton.textColor"
-					@click="rightButton.click">
+				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
+					padding="py-3 md:px-6" v-if="rightButton" :disabled="rightButton.disabled"
+					:bgColor="rightButton.bgColor" :textColor="rightButton.textColor" @click="rightButton.click">
 					{{ rightButton.label }}
 				</SofaButton>
 			</div>
 		</div>
-	</template>
+	</slot>
 </template>
 
 <script lang="ts" setup>
