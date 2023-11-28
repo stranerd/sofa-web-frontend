@@ -10,38 +10,34 @@
 
     <template v-if="question.strippedData.type === 'multipleChoice'">
       <a v-for="(option, index) in question.strippedData.options" :key="index"
-        class="w-full flex items-center border-2 justify-between rounded-xl p-3 bg-white border-[#E1E6EB] gap-3" :class="{
-          '!bg-[#E1F5EB] !border-primaryGreen': optionState(index) === 'correct',
-          '!bg-[#FAEBEB] !border-primaryRed': optionState(index) === 'wrong',
-          '!bg-[#E2F3FD] !border-primaryBlue shake': optionState(index) === 'selected',
-          '!bg-[#E2F3FD] border-[#7DC8FA]': optionState(index) === 'hover'
+        class="w-full flex items-center border-2 justify-between rounded-xl p-3 bg-white border-[#E1E6EB] hover:bg-[#E2F3FD] hover:border-[#7DC8FA] gap-3" :class="{
+          '!bg-[#E1F5EB] !border-primaryGreen': optionState(option, index) === 'correct',
+          '!bg-[#FAEBEB] !border-primaryRed': optionState(option, index) === 'wrong',
+          '!bg-[#E2F3FD] !border-primaryBlue shake': optionState(option, index) === 'selected',
         }"
         @click="answer.value.includes(index) ? answer.value.splice(answer.value.indexOf(index), 1) : answer.value.push(index)">
         <div class="flex-grow flex gap-3 items-center">
           <SofaIcon
-            :name="`${Logic.Study.getShape(index)}${optionState(index) == 'hover' ? '-blue' : ''}${optionState(index) == 'correct' ? '-green' : ''}${optionState(index) == 'wrong' ? '-red' : ''}`"
+            :name="Logic.Study.getShape(index) + ({ 'correct': '-green', 'wrong': '-red' }[optionState(option, index)] ?? '')"
             :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
-          <SofaHeaderText :content="option"
-            class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
+          <SofaHeaderText :content="option" class="md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
         </div>
       </a>
     </template>
 
     <template v-if="question.strippedData.type === 'trueOrFalse'">
       <a v-for="(option, index) in [true, false]" :key="index"
-        class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 bg-white border-[#E1E6EB] gap-3"
+        class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 bg-white border-[#E1E6EB] hover:bg-[#E2F3FD] hover:border-[#7DC8FA] gap-3"
         :class="{
           '!bg-[#E1F5EB] !border-primaryGreen': optionState(option) === 'correct',
           '!bg-[#FAEBEB] !border-primaryRed': optionState(option) === 'wrong',
           '!bg-[#E2F3FD] !border-primaryBlue shake': optionState(option) === 'selected',
-          '!bg-[#E2F3FD] border-[#7DC8FA]': optionState(option) === 'hover'
         }" @click="answer.value = option">
         <div class="flex-grow flex gap-3 items-center">
           <SofaIcon
-            :name="`${Logic.Study.getShape(index)}${optionState(option) == 'hover' ? '-blue' : ''}${optionState(option) == 'correct' ? '-green' : ''}${optionState(option) == 'wrong' ? '-red' : ''}`"
+            :name="Logic.Study.getShape(index) + ({ 'correct': '-green', 'wrong': '-red' }[optionState(option, index)] ?? '')"
             :custom-class="Logic.Study.getShapeSize(Logic.Study.getShape(index))" />
-          <SofaHeaderText :content="option.toString()"
-            customClass="capitalize md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
+          <SofaHeaderText :content="option.toString()" class="capitalize md:!text-lg mdlg:!text-xl text-xs w-full text-left justify-start flex" />
         </div>
       </a>
     </template>
@@ -169,7 +165,7 @@ const props = defineProps({
     required: true,
   },
   optionState: {
-    type: Function as PropType<(val: number | boolean) => 'selected' | 'correct' | 'wrong' | 'hover' | null>,
+    type: Function as PropType<(val: boolean | string, index?: number) => 'selected' | 'correct' | 'wrong' | null>,
     required: true
   }
 })

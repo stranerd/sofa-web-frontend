@@ -113,9 +113,9 @@ const answer = computed({
 	}
 })
 
-const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val: number | boolean) => {
-	if (Array.isArray(answer.value) && answer.value.includes(val)) return 'selected'
-	if (typeof (answer.value) === 'boolean' && answer.value === val) return 'selected'
+const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
+	if (currentQuestion.value.strippedData.type === 'trueOrFalse' && answer.value === val) return 'selected'
+	if (currentQuestion.value.strippedData.type === 'multipleChoice' && answer.value.includes(index)) return 'selected'
 	return null
 }
 </script>
