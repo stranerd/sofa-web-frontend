@@ -75,35 +75,44 @@
       <template v-if="question.strippedData.type === 'dragAnswers'">
         <div class="w-full flex md:!gap-3 gap-2 items-center flex-wrap">
           <template v-for="(content, index) in question.splitQuestions" :key="index">
-            <draggable v-if="index !== 0" :list="answer.value" itemKey=""
-              :class="`md:!w-[160px] md:!h-[70px] w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
+            <Draggable v-if="index !== 0" :list="answer.drag[index - 1]" itemKey="" :group="{ name: 'drag-and-drop' }"
+              :class="`md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 bg-white flex items-center justify-center border-2 border-b-4`">
               <template #item="{ element }">
                 <div
                   :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
                   <SofaHeaderText :customClass="'!font-bold md:!text-2xl text-base'" :content="element" />
                 </div>
               </template>
-            </draggable>
+            </Draggable>
             <SofaHeaderText :customClass="'!font-semibold md:!text-2xl text-base'" color="text-inherit"
               :content="content" />
           </template>
 
-          <draggable class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]"
-            :list="question.strippedData.answers.filter((o) => !answer.value.flat(1).includes(o))" itemKey=""
-            @change="console.log">
+          <Draggable :list="answer.dragOptions" itemKey="" :group="{ name: 'drag-and-drop' }"
+            class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
             <template #item="{ element }">
               <div
                 :class="`md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2 border-b-4`">
                 <SofaHeaderText :customClass="'!font-bold md:!text-2xl text-base'" :content="element" />
               </div>
             </template>
-          </draggable>
+          </Draggable>
         </div>
+        <Draggable v-model="answer.list1" itemKey="">
+          <template #item="{ element }">
+            <p class="p-4 bg-black text-white">{{element}}</p>
+          </template>
+        </Draggable>
+        <Draggable v-model="answer.list2" itemKey="">
+          <template #item="{ element }">
+            <p class="p-4 bg-black text-white">{{element}}</p>
+          </template>
+        </Draggable>
         <pre>{{ JSON.stringify(answer, null, 2) }}</pre>
       </template>
 
       <template v-if="question.strippedData.type === 'sequence'">
-        <draggable v-model="answer.value" class="flex flex-col gap-4" itemKey="">
+        <Draggable v-model="answer.value" class="flex flex-col gap-4" itemKey="">
           <template #item="{ element, index }">
             <div class="w-full flex items-center gap-3">
               <div class="p-3 rounded-xl flex items-center justify-center bg-white border-[#E1E6EB] border-2 border-b-4">
@@ -118,11 +127,11 @@
               </div>
             </div>
           </template>
-        </draggable>
+        </Draggable>
       </template>
 
       <div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
-        <draggable v-model="question.matchQuestions" class="col-span-1 flex flex-col gap-2" itemKey="" :disabled="true">
+        <Draggable v-model="question.matchQuestions" class="col-span-1 flex flex-col gap-2" itemKey="" :disabled="true">
           <template #item="{ element, index }">
             <div
               class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
@@ -133,9 +142,9 @@
                 :content="element" />
             </div>
           </template>
-        </draggable>
+        </Draggable>
 
-        <draggable v-model="answer.value" class="col-span-1 flex flex-col gap-2" itemKey="">
+        <Draggable v-model="answer.value" class="col-span-1 flex flex-col gap-2" itemKey="">
           <template #item="{ element, index }">
             <div
               class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-[#E1E6EB] border-2 border-b-4 bg-white gap-3">
@@ -146,7 +155,7 @@
                 :content="element" />
             </div>
           </template>
-        </draggable>
+        </Draggable>
       </div>
     </div>
   </div>
@@ -187,16 +196,18 @@ const emits = defineEmits(['update:modelValue'])
 
 const question = computed(() => Logic.Study.transformQuestion(props.questionData))
 
-const answer = reactive({ value: props.modelValue })
+const answer = reactive({
+  value: props.modelValue,
+  dragOptions: question.value.dragAnswers,
+  drag: Array.from({ length: question.value.dragAnswers.length }, () => []),
+  list1: [1,2,3,4,5],
+  list2: [6,7,8,9,10]
+})
 
 watch(answer, () => {
   console.log(answer.value)
   emits('update:modelValue', answer.value)
 })
-
-const dropHandler = (e: any) => {
-  console.log(e)
-}
 </script>
 
 <style scoped>
