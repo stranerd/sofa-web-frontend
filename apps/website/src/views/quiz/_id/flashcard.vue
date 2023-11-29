@@ -4,28 +4,29 @@
 		<QuizWrapper :id="($route.params.id as string)">
 			<template v-slot="{ quiz, questions, extras }">
 				<Quiz v-model:index="extras.index" :title="isDone ? 'Flashcards completed' : quiz.title"
-					v-model:answer="extras.answer" :questions="questions" :optionState="extras.optionState" :rightButton="{
+					v-model:answer="extras.answer" :questions="questions" :optionState="extras.optionState"
+					:rightButton="{
 						label: isDone ? 'Continue' : 'Mastered',
 						bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
 						textColor: 'text-white',
 						click: () => {
 							if (isDone) return Logic.Common.goBack()
-							if (extras.index < questions.length - 1) return extras.index++
+							if (extras.canNext) return extras.next()
 							return isDone = true
 						}
-					}" :leftButton="{
-	label: isDone ? 'Restart' : 'Show later',
-	bgColor: isDone ? 'bg-white border-[1px] border-gray-100' : 'bg-primaryBlue',
-	textColor: isDone ? 'text-grayColor' : 'text-white',
-	click: () => {
-		if (isDone) {
-			extras.index = 0
-			return isDone = false
-		}
-		// TODO: move current question to end of list
-		if (extras.index < questions.length - 1) return extras.index++
-	}
-}">
+					}"
+					:leftButton="{
+						label: isDone ? 'Restart' : 'Show later',
+						bgColor: isDone ? 'bg-white border-[1px] border-gray-100' : 'bg-primaryBlue',
+						textColor: isDone ? 'text-grayColor' : 'text-white',
+						click: () => {
+							if (isDone) {
+								extras.index = 0
+								return isDone = false
+							}
+							return extras.moveCurrrentQuestionToEnd()
+						}
+					}">
 					<template v-slot>
 						<div v-if="isDone" class="flex flex-col gap-1">
 							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit"
@@ -46,7 +47,7 @@
 				<div class="w-full flex flex-col gap-2 items-start">
 					<div class="w-full flex gap-2 justify-between md:justify-center items-center">
 						<SofaHeaderText class="text-xl" content="Flashcards" />
-						<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="showInfoModal = false" />
+						<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
 					</div>
 					<SofaNormalText content="Learning quiz questions and answers" />
 				</div>
@@ -66,10 +67,11 @@
 						<SofaNormalText color="text-inherit" content="Don't show again" />
 					</SofaCheckbox>
 					<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
-						<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="showInfoModal = false"
+						<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="close"
 							class="hidden mdlg:inline-block" customClass="border border-gray-100">Exit</SofaButton>
 
-						<SofaButton padding="px-5 py-3 mdlg:py-2" customClass="mdlg:w-auto w-full">Start</SofaButton>
+						<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close"
+							customClass="mdlg:w-auto w-full">Start</SofaButton>
 					</div>
 				</div>
 			</div>
@@ -83,7 +85,7 @@ import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
@@ -97,11 +99,20 @@ export default defineComponent({
 			title: "Flashcards",
 		})
 
+		const storageKey = 'flashcards-info'
+
 		const isDone = ref(false)
-		const showInfoModal = ref(true)
+		const showInfoModal = ref(!localStorage.getItem(storageKey))
 		const dontShowAgain = ref(false)
 
-		return { isDone, showInfoModal, dontShowAgain, Logic }
+		const close = () => showInfoModal.value =false
+
+		watch(dontShowAgain, () => {
+			if (dontShowAgain.value) localStorage.setItem(storageKey, "true")
+			else localStorage.removeItem(storageKey)
+		})
+
+		return { isDone, showInfoModal, dontShowAgain, Logic, close }
 	}
 })
 </script>

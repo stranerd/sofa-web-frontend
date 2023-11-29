@@ -9,18 +9,14 @@
 						label: 'Next',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
-						disabled: extras.index === questions.length - 1,
-						click: () => {
-							if (extras.index < questions.length - 1) return extras.index++
-						}
+						disabled: !extras.canNext,
+						click: extras.next
 					}" :leftButton="{
 						label: 'Prev',
 						bgColor: 'bg-white border-[1px] border-gray-100',
 						textColor: 'text-grayColor',
-						disabled: extras.index === 0,
-						click: () => {
-							if (extras.index > 0) return extras.index--
-						}
+						disabled: !extras.canPrev,
+						click: extras.previous
 					}"
 				/>
 			</template>

@@ -67,6 +67,10 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 	return null
 }
 
+const moveCurrrentQuestionToEnd = () => {
+	quizQuestions.value = quizQuestions.value.concat(quizQuestions.value.splice(index.value, 1))
+}
+
 const extras = computed(() => ({
 	get index () {
 		return index.value
@@ -81,7 +85,16 @@ const extras = computed(() => ({
 		answer.value = v
 	},
 	question: currentQuestion.value,
-	optionState
+	optionState,
+	moveCurrrentQuestionToEnd,
+	next: () => {
+		if (extras.value.canNext) index.value++
+	},
+	previous: () => {
+		if (extras.value.canPrev) index.value--
+	},
+	canPrev: index.value > 0,
+	canNext: index.value < quizQuestions.value.length - 1
 }))
 
 onMounted(async () => {

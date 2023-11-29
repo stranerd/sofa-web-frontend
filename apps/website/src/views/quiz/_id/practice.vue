@@ -15,9 +15,9 @@
 								isCorrect = Logic.Study.checkAnswer(extras.question, extras.answer)
 								return showSolution = true
 							}
-							if (extras.index < questions.length - 1) {
+							if (extras.canNext) {
 								showSolution = false
-								return extras.index++
+								return extras.next()
 							}
 							showSolution = false
 							return isDone = true
@@ -33,7 +33,7 @@
 								return isDone = false
 							}
 							else if (showSolution) return showSolution = false
-							else if (extras.index < questions.length - 1) return extras.index++
+							else if (extras.canNext) return extras.next()
 						}
 					}">
 					<template v-if="showSolution" v-slot:header>
