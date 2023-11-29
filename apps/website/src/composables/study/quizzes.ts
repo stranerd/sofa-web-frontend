@@ -1,5 +1,5 @@
 import { Quiz, Logic, Question } from 'sofa-logic'
-import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
@@ -30,8 +30,6 @@ export const useQuiz = (id: string, skipQuestions = false) => {
 		...useLoadingHandler()
 	}
 
-	const questionIds = computed(() => store[id].quiz.value?.questions)
-
 	const fetchGame = async () => {
 		await store[id].setError('')
 		try {
@@ -44,12 +42,13 @@ export const useQuiz = (id: string, skipQuestions = false) => {
 		await store[id].setLoading(false)
 	}
 
-	watch(questionIds, async () => {
+	watch(store[id].quiz, async () => {
 		if (!store[id].quiz.value || skipQuestions) return
-		const questions = await Logic.Study.GetQuestions(id, { all: true }).catch()
-		store[id].questions.value = questions?.results ?? []
+		if (store[id].quiz.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))) {
+			const questions = await Logic.Study.GetQuestions(id, { all: true }).catch()
+			store[id].questions.value = questions?.results ?? []
+		}
 	})
-
 
 	onMounted(async () => {
 		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchGame()

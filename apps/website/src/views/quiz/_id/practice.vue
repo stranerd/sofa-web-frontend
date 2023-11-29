@@ -67,6 +67,7 @@
 <script lang="ts">
 import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
@@ -75,6 +76,7 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	name: 'QuizIdPracticePage',
 	components: { QuizWrapper, Quiz, SofaHeaderText, SofaIcon, SofaNormalText },
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
 			title: "Practice",

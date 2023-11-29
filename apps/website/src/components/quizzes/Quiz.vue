@@ -16,7 +16,7 @@
 
 	<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-8 items-center justify-center px-6">
 		<slot>
-			<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question"
+			<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question" :isDark="isDark"
 				:title="title" :optionState="optionState" />
 			<slot name="postBody" />
 		</slot>

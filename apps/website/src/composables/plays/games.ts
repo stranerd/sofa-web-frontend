@@ -1,5 +1,5 @@
 import { Conditions, Game, Logic, Question, SingleUser } from 'sofa-logic'
-import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
@@ -32,9 +32,6 @@ export const useGame = (id: string, skipQuestions = false) => {
 		...useLoadingHandler()
 	}
 
-	const participantIds = computed(() => store[id].game.value?.participants)
-	const questionIds = computed(() => store[id].game.value?.questions)
-
 	const fetchGame = async () => {
 		await store[id].setError('')
 		try {
@@ -47,19 +44,17 @@ export const useGame = (id: string, skipQuestions = false) => {
 		await store[id].setLoading(false)
 	}
 
-	watch(participantIds, async () => {
+	watch(store[id].game, async () => {
 		if (!store[id].game.value) return
-		store[id].participants.value = await Logic.Users.GetUsers({
-			where: [{ field: 'id', value: store[id].game.value.participants, condition: Conditions.in }],
-			all: true
-		},  false).catch(() => [])
+		if (store[id].game.value.participants.some((pId) => !store[id].participants.value.find((p) => p.id === pId)))
+			store[id].participants.value = await Logic.Users.GetUsers({
+				where: [{ field: 'id', value: store[id].game.value.participants, condition: Conditions.in }],
+				all: true
+			}, false).catch(() => [])
+		if (skipQuestions) return
+		if (store[id].game.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId)))
+			store[id].questions.value = await Logic.Plays.GetQuizQuestions(id).catch(() => [])
 	})
-
-	watch(questionIds, async () => {
-		if (!store[id].game.value || skipQuestions) return
-		store[id].questions.value = await Logic.Plays.GetQuizQuestions(id).catch(() => [])
-	})
-
 
 	onMounted(async () => {
 		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchGame()
@@ -69,11 +64,5 @@ export const useGame = (id: string, skipQuestions = false) => {
 		await store[id].listener.close()
 	})
 
-	return {
-		participants: store[id].participants,
-		game: store[id].game,
-		fetched: store[id].fetched,
-		loading: store[id].loading,
-		error: store[id].error,
-	}
+	return { ...store[id] }
 }

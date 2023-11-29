@@ -84,6 +84,7 @@
 import Flashcard from '@/components/quizzes/FlashcardDisplay.vue'
 import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref, watch } from 'vue'
@@ -95,6 +96,7 @@ export default defineComponent({
 		QuizWrapper, Quiz, Flashcard, SofaHeaderText, SofaNormalText,
 		SofaButton, SofaIcon, SofaModal, SofaCheckbox
 	},
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
 			title: "Flashcards",
