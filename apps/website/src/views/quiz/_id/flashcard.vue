@@ -3,9 +3,8 @@
 		:bottomPadding="false">
 		<QuizWrapper :id="($route.params.id as string)">
 			<template v-slot="{ quiz, questions, extras }">
-				<Quiz v-model:index="extras.index" :title="isDone ? 'Flashcards completed' : quiz.title" v-model:answer="extras.answer"
-					:questions="questions" :optionState="extras.optionState"
-					:rightButton="{
+				<Quiz v-model:index="extras.index" :title="isDone ? 'Flashcards completed' : quiz.title"
+					v-model:answer="extras.answer" :questions="questions" :optionState="extras.optionState" :rightButton="{
 						label: isDone ? 'Continue' : 'Mastered',
 						bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
 						textColor: 'text-white',
@@ -15,51 +14,94 @@
 							return isDone = true
 						}
 					}" :leftButton="{
-						label: isDone ? 'Restart' : 'Show later',
-						bgColor: isDone ? 'bg-white border-[1px] border-gray-100' : 'bg-primaryBlue',
-						textColor: isDone ? 'text-grayColor' : 'text-white',
-						click: () => {
-							if (isDone) {
-								extras.index = 0
-								return isDone = false
-							}
-							// TODO: move current question to end of list
-							if (extras.index < questions.length - 1) return extras.index++
-						}
-					}">
+	label: isDone ? 'Restart' : 'Show later',
+	bgColor: isDone ? 'bg-white border-[1px] border-gray-100' : 'bg-primaryBlue',
+	textColor: isDone ? 'text-grayColor' : 'text-white',
+	click: () => {
+		if (isDone) {
+			extras.index = 0
+			return isDone = false
+		}
+		// TODO: move current question to end of list
+		if (extras.index < questions.length - 1) return extras.index++
+	}
+}">
 					<template v-slot>
 						<div v-if="isDone" class="flex flex-col gap-1">
-							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
+							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit"
+								content="Congratulations!" />
 							<SofaNormalText color="text-inherit" content="You have mastered all flashcards" />
 						</div>
-						<Flashcard v-else-if="extras.question" :key="extras.question.id" :question="extras.question" :isDark="false" />
+						<Flashcard v-else-if="extras.question" :key="extras.question.id" :question="extras.question"
+							:isDark="false" />
 					</template>
 				</Quiz>
 			</template>
 		</QuizWrapper>
 	</expanded-layout>
+	<SofaModal v-if="showInfoModal" :close="() => {}">
+		<div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full w-full h-auto flex flex-col items-center relative">
+			<div
+				class="bg-white w-full flex flex-col p-4 mdlg:p-6 gap-6 md:rounded-2xl rounded-t-2xl items-center justify-center">
+				<div class="w-full flex flex-col gap-2 items-start">
+					<div class="w-full flex gap-2 justify-between md:justify-center items-center">
+						<SofaHeaderText class="text-xl" content="Flashcards" />
+						<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="showInfoModal = false" />
+					</div>
+					<SofaNormalText content="Learning quiz questions and answers" />
+				</div>
+				<div class="w-full h-full flex flex-col items-center gap-4">
+					<div class="bg-primaryPurple text-white custom-border p-4 w-full flex flex-col gap-2">
+						<div class="flex items-center justify-start gap-2" v-for="(item, index) in [
+							'Click on the card to flip it',
+							'Mastered makes card not reappear',
+							'Show later sends card to end of deck',
+							'Both buttons take you to next card'
+						]" :key="index">
+							<span class="w-1 aspect-square rounded-full bg-white" />
+							<SofaNormalText color="text-inherit" :content="item" />
+						</div>
+					</div>
+					<SofaCheckbox class="!w-auto" v-model="dontShowAgain">
+						<SofaNormalText color="text-inherit" content="Don't show again" />
+					</SofaCheckbox>
+					<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
+						<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="showInfoModal = false"
+							class="hidden mdlg:inline-block" customClass="border border-gray-100">Exit</SofaButton>
+
+						<SofaButton padding="px-5 py-3 mdlg:py-2" customClass="mdlg:w-auto w-full">Start</SofaButton>
+					</div>
+				</div>
+			</div>
+		</div>
+	</SofaModal>
 </template>
 
 <script lang="ts">
+import Flashcard from '@/components/quizzes/FlashcardDisplay.vue'
 import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
-import Flashcard from '@/components/quizzes/FlashcardDisplay.vue'
-import { SofaHeaderText, SofaNormalText } from 'sofa-ui-components'
 import { Logic } from 'sofa-logic'
+import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',
-	components: { QuizWrapper, Quiz, Flashcard, SofaHeaderText, SofaNormalText },
+	components: {
+		QuizWrapper, Quiz, Flashcard, SofaHeaderText, SofaNormalText,
+		SofaButton, SofaIcon, SofaModal, SofaCheckbox
+	},
 	setup () {
 		useMeta({
 			title: "Flashcards",
 		})
 
 		const isDone = ref(false)
+		const showInfoModal = ref(true)
+		const dontShowAgain = ref(false)
 
-		return { isDone, Logic }
+		return { isDone, showInfoModal, dontShowAgain, Logic }
 	}
 })
 </script>
