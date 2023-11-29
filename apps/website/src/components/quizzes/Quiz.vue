@@ -1,7 +1,6 @@
 <template>
 	<slot name="header">
-		<div class="p-4 md:py-8 w-full flex justify-center" :class="{ 'md:bg-white': !isDark }"
-			style="box-shadow: 0px 4px 4px rgba(8, 0, 24, 0.05)">
+		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom" :class="{ 'md:bg-white': !isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
 				<SofaIcon class="md:hidden" :customClass="'h-[19px]'" :name="'circle-close'"
 					@click="Logic.Common.goBack()" />
@@ -24,8 +23,7 @@
 	</div>
 
 	<slot name="footer">
-		<div v-if="leftButton || rightButton" class="px-4 py-2 w-full flex justify-center"
-			:class="{ 'md:bg-white': !isDark }" style="box-shadow: 0px -4px 4px rgba(8, 0, 24, 0.05)">
+		<div v-if="leftButton || rightButton" class="px-4 py-2 w-full flex justify-center shadow-customInverted" :class="{ 'md:bg-white': !isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
 				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
 					padding="py-3 md:px-6" v-if="leftButton" :disabled="leftButton.disabled" :bgColor="leftButton.bgColor"

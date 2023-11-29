@@ -24,6 +24,7 @@ module.exports = {
       },
       boxShadow: {
         custom: "0px 4px 4px rgba(8, 0, 24, 0.05)",
+        customInverted: "0px -4px 4px rgba(8, 0, 24, 0.05)",
         itemBox: "0px 16px 12px rgba(130, 130, 140, 0.1)",
       },
     },

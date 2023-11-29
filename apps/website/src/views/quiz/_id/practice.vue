@@ -26,7 +26,7 @@
 						label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
 						bgColor: 'bg-white border-[1px] border-gray-100',
 						textColor: 'text-grayColor',
-						disabled:  !isDone && extras.index === questions.length - 1,
+						disabled: !isDone && extras.index === questions.length - 1,
 						click: () => {
 							if (isDone) {
 								extras.index = 0
@@ -44,8 +44,8 @@
 					</template>
 					<template v-if="isDone" v-slot>
 						<div class="flex flex-col gap-1">
-							<SofaHeaderText :customClass="'!font-bold md:!text-2xl text-lg'" content="Congratulations!" />
-							<SofaNormalText :color="'text-grayColor'" content="You have mastered this quiz" />
+							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
+							<SofaNormalText color="text-inherit" content="You have mastered this quiz" />
 						</div>
 					</template>
 					<template v-if="showSolution" v-slot:postBody>
