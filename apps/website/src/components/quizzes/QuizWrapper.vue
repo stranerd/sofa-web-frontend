@@ -1,10 +1,11 @@
 <template>
-	<slot v-if="quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" />
+	<slot v-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" />
 </template>
 
 <script lang="ts" setup>
-import { Logic, Question, Quiz } from 'sofa-logic'
-import { PropType, computed, defineProps, onMounted, reactive, ref } from 'vue'
+import { useQuiz } from '@/composables/study/quizzes'
+import { Logic, Question } from 'sofa-logic'
+import { PropType, computed, defineProps, reactive, ref } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 
 const props = defineProps({
@@ -28,8 +29,10 @@ const props = defineProps({
 	}
 })
 
-const quiz = ref<Quiz | null>(null)
-const quizQuestions = ref(props.questions?.map(Logic.Study.transformQuestion) ?? [])
+const { quiz, questions, fetched } = useQuiz(props.id, !!props.questions)
+const reorderedQuestions = ref<Question[] | null>(null)
+const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
+
 const index = ref(0)
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
@@ -68,7 +71,8 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 }
 
 const moveCurrrentQuestionToEnd = () => {
-	quizQuestions.value = quizQuestions.value.concat(quizQuestions.value.splice(index.value, 1))
+	if (!reorderedQuestions.value) reorderedQuestions.value = [...quizQuestions.value]
+	reorderedQuestions.value = reorderedQuestions.value.concat(reorderedQuestions.value.splice(index.value, 1))
 }
 
 const extras = computed(() => ({
@@ -94,14 +98,9 @@ const extras = computed(() => ({
 		if (extras.value.canPrev) index.value--
 	},
 	canPrev: index.value > 0,
-	canNext: index.value < quizQuestions.value.length - 1
-}))
-
-onMounted(async () => {
-	quiz.value = await Logic.Study.GetQuiz(props.id).catch(() => null) as any
-	if (!props.questions) {
-		const questions = await Logic.Study.GetQuestions(props.id, { all: true }).catch(() => null)
-		quizQuestions.value = questions?.results.map(Logic.Study.transformQuestion) ?? []
+	canNext: index.value < quizQuestions.value.length - 1,
+	reset: () => {
+		reorderedQuestions.value = null
 	}
-})
+}))
 </script>

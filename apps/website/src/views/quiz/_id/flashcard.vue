@@ -21,6 +21,7 @@
 						textColor: isDone ? 'text-grayColor' : 'text-white',
 						click: () => {
 							if (isDone) {
+								extras.reset()
 								extras.index = 0
 								return isDone = false
 							}

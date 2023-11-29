@@ -1327,66 +1327,33 @@ export default class Study extends Common {
     }).catch(() => {})
   }
 
-  public GetQuiz = (id: string, autoCreate = false) => {
+  public GetQuiz = async (id: string, autoCreate = false) => {
     if (!id || id == 'nill') {
       if (autoCreate) {
-        return new Promise((resolve) => {
-          // create a new quiz
-          this.CreateQuizForm = {
-            title: 'Untitled Quiz',
-            description: 'Here is the quiz description',
-            tags: [],
-            isForTutors: false,
-            topic: 'Physics',
-          }
-          this.CreateQuiz(true)
-            .then((data: Quiz) => {
-              // create a multiple choice and ture/false question
-              const defaultQuestions: CreateQuestionInput[] = []
+        this.CreateQuizForm = {
+          title: 'Untitled Quiz',
+          description: 'Here is the quiz description',
+          tags: [],
+          isForTutors: false,
+          topic: 'Physics',
+        }
+        const data = await this.CreateQuiz(true)
 
-              // multiple choice
-              const newQuestionDataMultipleChoice = this.questionTypes[
-                'multipleChoice'
-              ]
+        const defaultQuestions: CreateQuestionInput[] = [
+          Logic.Study.convertQuestionToInput(this.questionTypes['multipleChoice'], 'multipleChoice'),
+          Logic.Study.convertQuestionToInput(this.questionTypes['trueOrFalse'], 'trueOrFalse'),
+        ]
 
-              defaultQuestions.push(
-                Logic.Study.convertQuestionToInput(
-                  newQuestionDataMultipleChoice,
-                  'multipleChoice',
-                ),
-              )
+        await Promise.all(defaultQuestions.map(async (formData) => {
+          this.CreateQuestionForm = formData
+          this.CreateQuestionForm.explanation = ''
+          await this.CreateQuestion(true, data.id)
+        }))
 
-              // true/false
-              const newQuestionDataTrueFalse = this.questionTypes['trueOrFalse']
-              defaultQuestions.push(
-                Logic.Study.convertQuestionToInput(
-                  newQuestionDataTrueFalse,
-                  'trueOrFalse',
-                ),
-              )
-
-              defaultQuestions.forEach(async (formData) => {
-                this.CreateQuestionForm = formData
-                this.CreateQuestionForm.explanation = ''
-                await this.CreateQuestion(true, data.id)
-              })
-
-              Logic.Common.hideLoader()
-              Logic.Common.GoToRoute(
-                `/quiz/create?id=${Logic.Study.SingleQuiz.id}`,
-              )
-
-              // get quiz questions
-            })
-            .catch(() => {
-              resolve('')
-            })
-        })
-      } else {
-        return new Promise((resolve) => {
-          resolve('')
-        })
-      }
+        Logic.Common.hideLoader()
+        await Logic.Common.GoToRoute(`/quiz/create?id=${Logic.Study.SingleQuiz.id}`)
+        return data
+      } else return null
     } else {
       return $api.study.quiz.get(id).then((response) => {
         this.SingleQuiz = response.data

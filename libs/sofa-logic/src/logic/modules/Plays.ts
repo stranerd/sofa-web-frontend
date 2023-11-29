@@ -1,13 +1,13 @@
-import { $api } from '../../services'
-import Common from './Common'
+import { capitalize } from 'vue'
 import { Logic } from '..'
+import { $api } from '../../services'
+import { Conditions, QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
 import { Game, GameParticipantAnswer, Test } from '../types/domains/plays'
-import { Conditions, QueryParams } from '../types/common'
 import { Question, Quiz } from '../types/domains/study'
-import { AddQuestionAnswer, CreateGameInput } from '../types/forms/plays'
 import { SingleUser } from '../types/domains/users'
-import { capitalize } from 'vue'
+import { AddQuestionAnswer, CreateGameInput } from '../types/forms/plays'
+import Common from './Common'
 
 export default class Plays extends Common {
   constructor() {
@@ -73,70 +73,31 @@ export default class Plays extends Common {
     })
   }
 
-  public GetGame = (id: string | undefined) => {
-    if (!id || id == 'nill') {
-      return new Promise((resolve) => {
-        resolve('')
-      })
-    } else {
-      return new Promise((resolve) => {
-        $api.plays.game
-          .get(id)
-          .then((response) => {
-            this.SingleGame = response.data
+  public GetGame = async (id: string | undefined, skipExtras = false) => {
+    if (!id || id == 'nill') return null
 
-            const getParticipants = (resolve: any) => {
-              if (Logic.Auth.AuthUser?.id != this.SingleGame.user.id) {
-                // join game
-                if (
-                  !this.GameParticipants.filter(
-                    (item) => item.id == Logic.Auth.AuthUser?.id,
-                  ).length
-                ) {
-                  Logic.Plays.JoinGame(this.SingleGame.id, true).then(
-                    (data) => {
-                      if (data) {
-                        Logic.Plays.GetGame(this.SingleGame.id)
-                        resolve('')
-                      }
-                    },
-                  )
-                } else {
-                  resolve('')
-                }
-              } else {
-                resolve('')
-              }
-            }
-            // get participants
-            if (this.SingleGame) {
-              Logic.Users.GetUsers({
-                where: [
-                  {
-                    field: 'id',
-                    value: this.SingleGame?.participants,
-                    condition: Conditions.in,
-                  },
-                ],
-              }).then((data) => {
-                this.GameParticipants = data
-                this.GetQuizQuestions(this.SingleGame.id)
-                  .then(() => {
-                    getParticipants(resolve)
-                  })
-                  .catch(() => {
-                    getParticipants(resolve)
-                  })
-              })
-            } else {
-              resolve('')
-            }
-          })
-          .catch((error) => {
-            throw error
-          })
-      })
-    }
+    const response = await $api.plays.game.get(id)
+    this.SingleGame = response.data
+    if (!this.SingleGame || skipExtras) return this.SingleGame
+
+    this.GameParticipants = await Logic.Users.GetUsers({
+      where: [
+        {
+          field: 'id',
+          value: this.SingleGame.participants,
+          condition: Conditions.in,
+        },
+      ],
+    })
+
+    await this.GetQuizQuestions(this.SingleGame.id)
+    if (![...this.GameParticipants, this.SingleGame.user.id].includes(Logic.Auth.AuthUser?.id))
+      await Logic.Plays.JoinGame(this.SingleGame.id, true)
+        .then((data) => {
+          this.SingleGame = data
+        })
+
+    return this.SingleGame
   }
 
   public GetParticipantAnswer = (gameId: string, participantId: string) => {
@@ -180,6 +141,7 @@ export default class Plays extends Common {
           start: 1,
         },
       }
+      return response.data
     })
   }
 
@@ -242,7 +204,7 @@ export default class Plays extends Common {
         return response.data
       })
       .catch((error) => {
-        //
+        return null
       })
   }
 
