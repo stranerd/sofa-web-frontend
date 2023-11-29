@@ -15,14 +15,13 @@
 		</div>
 	</slot>
 
-	<slot>
-		<div
-			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-8 items-center justify-center px-6">
+	<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-8 items-center justify-center px-6">
+		<slot>
 			<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question"
 				:title="title" :optionState="optionState" />
 			<slot name="postBody" />
-		</div>
-	</slot>
+		</slot>
+	</div>
 
 	<slot name="footer">
 		<div v-if="leftButton || rightButton" class="px-4 py-2 w-full flex justify-center"

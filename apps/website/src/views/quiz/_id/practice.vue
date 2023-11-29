@@ -6,7 +6,7 @@
 				<Quiz v-model:index="extras.index" :title="isDone ? 'Practice completed' : quiz.title" v-model:answer="extras.answer"
 					:questions="questions" :optionState="extras.optionState"
 					:rightButton="{
-						label: showSolution ? 'Continue' : 'Check',
+						label: isDone || showSolution ? 'Continue' : 'Check',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
 						click: () => {
