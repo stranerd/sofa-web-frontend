@@ -1,7 +1,7 @@
 <template>
 	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0 bg-deepGray" :hasTopBar="false"
 		:hasBottomBar="false" :bottomPadding="false" bgImage="/images/game-bg.png">
-		<GameWrapper :id="($route.params.id as string)" :skipQuestions="true">
+		<GameWrapper :id="($route.params.id as string)" :skipQuestions="true" :skipStatusNav="true">
 			<template v-slot="{ game, extras: gameExtras, questions }">
 				<QuizWrapper :id="game.quizId" :questions="questions">
 					<template v-slot="{ quiz, questions, extras }">
@@ -9,7 +9,7 @@
 							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true" :rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
-								textColor: 'text-grayColor',
+								textColor: 'text-darkBody',
 								click: () => Logic.Common.GoToRoute('/library')
 							}">
 							<template v-slot:header>
@@ -22,7 +22,7 @@
 										<SofaHeaderText class="md:!text-3xl text-xl" color="text-white"
 											content="Scoreboard" />
 										<SofaNormalText color="text-white" class="-mt-4"
-											:content="game.status === 'scored' ? 'Game has ended' : game.status === 'ended' ? 'Scores are being calculated' : 'Game hasn\'t ended yet'" />
+											:content="game.status === 'scored' ? 'Game has ended' : game.status === 'ended' ? 'Scores are being calculated' : 'Waiting for others to finish'" />
 										<div v-for="score in gameExtras.scores" :key="score.user.id"
 											class="w-full flex items-center justify-between gap-2 p-4 custom-border bg-white border-4"
 											:class="score.user.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">

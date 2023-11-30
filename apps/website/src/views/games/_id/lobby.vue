@@ -9,7 +9,7 @@
 							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true" :rightButton="{
 								label: gameExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
-								textColor: 'text-grayColor',
+								textColor: 'text-darkBody',
 								disabled: gameExtras.isMine ? !gameExtras.canStart : !gameExtras.canJoin,
 								click: async () => {
 									if (gameExtras.isMine) return await gameExtras.start()
@@ -18,7 +18,7 @@
 							}" :leftButton="{
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
-								textColor: 'text-grayColor',
+								textColor: 'text-white',
 								click: () => Logic.Common.GoToRoute('/library')
 							}"
 						>

@@ -1,6 +1,7 @@
 <template>
 	<slot name="header">
-		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom" :class="{ 'md:bg-white': !isDark }">
+		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom"
+			:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
 				<SofaIcon class="md:hidden" :customClass="'h-[19px]'" :name="'circle-close'"
 					@click="Logic.Common.goBack()" />
@@ -14,8 +15,9 @@
 		</div>
 	</slot>
 
-	<div class="w-full h-full flex-grow overflow-y-auto px-4 flex flex-col items-center">
-		<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center">
+	<div class="w-full h-full flex-grow overflow-y-auto px-4 flex flex-col items-center" :class="{ 'text-white': isDark }">
+		<div
+			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center">
 			<slot>
 				<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question" :isDark="isDark"
 					:title="title" :optionState="optionState" />
@@ -25,9 +27,10 @@
 	</div>
 
 	<slot name="footer">
-		<div v-if="leftButton || rightButton" class="px-4 py-2 md:py-4 w-full flex justify-center shadow-customInverted" :class="{ 'md:bg-white': !isDark }">
+		<div v-if="leftButton || rightButton" class="px-4 py-2 md:py-4 w-full flex justify-center shadow-customInverted"
+			:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-center">
-				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
+				<SofaButton class="!w-full md:!w-auto mr-auto" customClass="w-full md:font-semibold whitespace-nowrap"
 					padding="py-3 md:px-6" v-if="leftButton" :disabled="leftButton.disabled" :bgColor="leftButton.bgColor"
 					:textColor="leftButton.textColor" @click="leftButton.click">
 					{{ leftButton.label }}
@@ -37,7 +40,7 @@
 					{{ currentIndex + 1 }}/{{ questions.length }}
 				</span>
 
-				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
+				<SofaButton class="!w-full md:!w-auto ml-auto" customClass="w-full md:font-semibold whitespace-nowrap"
 					padding="py-3 md:px-6" v-if="rightButton" :disabled="rightButton.disabled"
 					:bgColor="rightButton.bgColor" :textColor="rightButton.textColor" @click="rightButton.click">
 					{{ rightButton.label }}
@@ -51,7 +54,7 @@
 import QuestionDisplay from '@/components/quizzes/QuestionDisplay.vue'
 import { Logic, TransformedQuestion } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
-import { defineEmits, PropType, computed, defineProps } from 'vue'
+import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 type ButtonConfig = {
 	label: string,
