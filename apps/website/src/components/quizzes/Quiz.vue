@@ -14,12 +14,14 @@
 		</div>
 	</slot>
 
-	<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex-grow h-full overflow-y-auto flex flex-col gap-8 items-center justify-center px-6">
-		<slot>
-			<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question" :isDark="isDark"
-				:title="title" :optionState="optionState" />
-			<slot name="postBody" />
-		</slot>
+	<div class="w-full h-full flex-grow px-4 flex flex-col items-center">
+		<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center">
+			<slot>
+				<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question" :isDark="isDark"
+					:title="title" :optionState="optionState" />
+				<slot name="postBody" />
+			</slot>
+		</div>
 	</div>
 
 	<slot name="footer">

@@ -17,7 +17,7 @@
 					}"
 					:leftButton="{
 						label: isDone ? 'Restart' : 'Show later',
-						bgColor: isDone ? 'bg-white border-[1px] border-gray-100' : 'bg-primaryBlue',
+						bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
 						textColor: isDone ? 'text-grayColor' : 'text-white',
 						click: () => {
 							if (isDone) {

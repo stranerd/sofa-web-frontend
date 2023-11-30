@@ -24,7 +24,7 @@
 						}
 					}" :leftButton="{
 						label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
-						bgColor: 'bg-white border-[1px] border-gray-100',
+						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',
 						disabled: !isDone && extras.index === questions.length - 1,
 						click: () => {

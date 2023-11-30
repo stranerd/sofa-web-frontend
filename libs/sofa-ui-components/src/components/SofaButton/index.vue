@@ -1,6 +1,6 @@
 <template>
   <div :class="`w-auto h-auto relative ${visible ? '' : 'invisible'} ${disabled ? 'opacity-30' : ''}`">
-    <button :disabled="loading" @click="handleClicked()" :class="`focus:outline-none relative rounded-md flex flex-row gap-2 items-center z-50 ${loading ? 'opacity-75' : ''
+    <button :disabled="loading || disabled" @click="handleClicked" :class="`focus:outline-none relative rounded-md flex flex-row gap-2 items-center z-50 ${loading ? 'opacity-75' : ''
       } lg:text-sm mdlg:text-[12px] text-xs justify-center ${padding} ${bgColor} ${textColor} ${customClass}`"
       style="border-radius: 16px 8px">
       <slot />

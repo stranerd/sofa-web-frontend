@@ -19,10 +19,13 @@ const props = defineProps({
 	}
 })
 
-const { game, participants, questions, fetched } = useGame(props.id, props.skipQuestions)
+const { game, participants, questions, fetched, start, join } = useGame(props.id, props.skipQuestions)
 const { id } = useAuth()
 
 const extras = computed(() => ({
-	isMine: game.value && game.value.user.id === id.value
+	isMine: game.value && game.value.user.id === id.value,
+	canStart: game.value && game.value.status === 'created',
+	canJoin: game.value && !game.value.participants.includes(id.value),
+	start, join
 }))
 </script>

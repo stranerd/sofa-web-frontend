@@ -13,7 +13,7 @@
 						click: extras.next
 					}" :leftButton="{
 						label: 'Prev',
-						bgColor: 'bg-white border-[1px] border-gray-100',
+						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',
 						disabled: !extras.canPrev,
 						click: extras.previous

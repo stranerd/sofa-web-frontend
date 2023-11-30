@@ -1,12 +1,29 @@
 <template>
-	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0 bg-[#141618]" :hasTopBar="false"
+	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0 bg-deepGray" :hasTopBar="false"
 		:hasBottomBar="false" :bottomPadding="false" bgImage="/images/game-bg.png">
 		<GameWrapper :id="($route.params.id as string)">
 			<template v-slot="{ game, extras: gameExtras, questions, participants }">
 				<QuizWrapper :id="game.quizId" :questions="questions">
 					<template v-slot="{ quiz, questions, extras }">
 						<Quiz v-model:index="extras.index" :title="quiz.title" :questions="questions"
-							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true">
+							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true"
+							:rightButton="{
+								label: gameExtras.isMine ? 'Start' : 'Join',
+								bgColor: 'bg-white border border-white',
+								textColor: 'text-grayColor',
+								disabled: gameExtras.isMine ? !gameExtras.canStart : !gameExtras.canJoin,
+								click: async () => {
+									if (gameExtras.isMine) return await gameExtras.start()
+									else return await gameExtras.join(true)
+								}
+							}"
+							:leftButton="{
+								label: 'Cancel',
+								bgColor: 'bg-deepGray border border-white',
+								textColor: 'text-grayColor',
+								click: Logic.Common.goBack
+							}"
+						>
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white p-4 custom-border"
@@ -122,7 +139,7 @@ export default defineComponent({
 			Logic.Common.showLoader({ show: true, message: 'Game link copied!', type: 'success' })
 		}
 
-		return { id, share, copy }
+		return { id, share, copy, Logic }
 	}
 })
 </script>

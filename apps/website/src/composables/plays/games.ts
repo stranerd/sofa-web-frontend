@@ -2,6 +2,7 @@ import { Conditions, Game, Logic, Question, SingleUser } from 'sofa-logic'
 import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useAuth } from '../auth/auth'
 
 const store = {} as Record<string, {
 	game: Ref<Game | null>
@@ -12,6 +13,8 @@ const store = {} as Record<string, {
 } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
 
 export const useGame = (id: string, skipQuestions = false) => {
+	const { id: authId } = useAuth()
+
 	store[id] ??= {
 		game: ref(null),
 		participants: ref([]),
@@ -36,8 +39,33 @@ export const useGame = (id: string, skipQuestions = false) => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			store[id].game.value = await Logic.Plays.GetGame(id)
+			store[id].game.value = await Logic.Plays.GetGame(id, true)
 			store[id].fetched.value = true
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const start = async () => {
+		await store[id].setError('')
+		if (store[id].game.value?.status !== 'created') return
+		try {
+			await store[id].setLoading(true)
+			await Logic.Plays.StartGame(id)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const join = async (join: boolean) => {
+		await store[id].setError('')
+		if (join && store[id].game.value?.participants.includes(authId.value)) return
+		if (!join && !store[id].game.value?.participants.includes(authId.value)) return
+		try {
+			await store[id].setLoading(true)
+			await Logic.Plays.JoinGame(id, join)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -64,5 +92,5 @@ export const useGame = (id: string, skipQuestions = false) => {
 		await store[id].listener.close()
 	})
 
-	return { ...store[id] }
+	return { ...store[id], start, join }
 }
