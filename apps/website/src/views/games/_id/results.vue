@@ -1,7 +1,7 @@
 <template>
 	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0 bg-deepGray" :hasTopBar="false"
 		:hasBottomBar="false" :bottomPadding="false" bgImage="/images/game-bg.png">
-		<GameWrapper :id="($route.params.id as string)">
+		<GameWrapper :id="($route.params.id as string)" :skipQuestions="true">
 			<template v-slot="{ game, extras: gameExtras, questions }">
 				<QuizWrapper :id="game.quizId" :questions="questions">
 					<template v-slot="{ quiz, questions, extras }">

@@ -12,7 +12,7 @@ const store = {} as Record<string, {
 	listener: ReturnType<typeof useListener>
 } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
 
-export const useGame = (id: string, skipQuestions = false) => {
+export const useGame = (id: string, skip: { questions: boolean, participants: boolean }) => {
 	const { id: authId } = useAuth()
 
 	store[id] ??= {
@@ -74,13 +74,14 @@ export const useGame = (id: string, skipQuestions = false) => {
 
 	watch(store[id].game, async () => {
 		if (!store[id].game.value) return
-		if (store[id].game.value.participants.some((pId) => !store[id].participants.value.find((p) => p.id === pId)))
+		const hasUnfetchedParticipants = store[id].game.value.participants.some((pId) => !store[id].participants.value.find((p) => p.id === pId))
+		if (!skip.participants && hasUnfetchedParticipants)
 			store[id].participants.value = await Logic.Users.GetUsers({
 				where: [{ field: 'id', value: store[id].game.value.participants, condition: Conditions.in }],
 				all: true
 			}, false).catch(() => [])
-		if (skipQuestions) return
-		if (store[id].game.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId)))
+		const hasUnfetchedQuestions = store[id].game.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
+		if (!skip.questions && hasUnfetchedQuestions)
 			store[id].questions.value = await Logic.Plays.GetQuizQuestions(id).catch(() => [])
 	})
 

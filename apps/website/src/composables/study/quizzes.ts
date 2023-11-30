@@ -43,8 +43,9 @@ export const useQuiz = (id: string, skipQuestions = false) => {
 	}
 
 	watch(store[id].quiz, async () => {
-		if (!store[id].quiz.value || skipQuestions) return
-		if (store[id].quiz.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))) {
+		if (!store[id].quiz.value) return
+		const hasUnfetchedQuestions = store[id].quiz.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
+		if (!skipQuestions && hasUnfetchedQuestions) {
 			const questions = await Logic.Study.GetQuestions(id, { all: true }).catch()
 			store[id].questions.value = questions?.results ?? []
 		}

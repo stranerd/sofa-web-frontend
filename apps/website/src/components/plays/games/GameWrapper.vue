@@ -5,7 +5,9 @@
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
 import { useGame } from '@/composables/plays/games'
-import { computed, defineProps } from 'vue'
+import { computed, defineProps, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps({
 	id: {
@@ -16,11 +18,40 @@ const props = defineProps({
 		type: Boolean,
 		required: false,
 		default: false
+	},
+	skipParticipants: {
+		type: Boolean,
+		required: false,
+		default: false
+	},
+	skipStatusNav: {
+		type: Boolean,
+		required: false,
+		default: false
 	}
 })
 
-const { game, participants, questions, fetched, start, join } = useGame(props.id, props.skipQuestions)
+const router = useRouter()
+const route = useRoute()
+const { game, participants, questions, fetched, start, join } = useGame(props.id, { questions: props.skipQuestions, participants: props.skipParticipants })
 const { id } = useAuth()
+
+const alertAndNav = async (route: string, message?: string) => {
+	if (message) Logic.Common.showLoader({ show: true, message, type: 'info' })
+	await router.replace(route)
+}
+
+watch(game, async () => {
+	const g = game.value
+	if (!g || props.skipStatusNav) return
+	const lobby = `/games/${g.id}/lobby`
+	const run = `/games/${g.id}/run`
+	const results = `/games/${g.id}/results`
+
+	if (g.status === 'created' && route.path !== lobby) return await alertAndNav(lobby)
+	if (g.status === 'started' && route.path !== run) return await alertAndNav(run, 'Game has started')
+	if (['ended', 'scored'].includes(g.status) && route.path !== results) return await alertAndNav(results, 'Game has ended')
+})
 
 const extras = computed(() => ({
 	isMine: game.value && game.value.user.id === id.value,
