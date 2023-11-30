@@ -125,12 +125,7 @@ export const plays = computed(() => [
       type: 'game',
       participants: p.participants.length,
       action: () => {
-        ended ? Logic.Common.showLoader({
-          loading: false,
-          show: true,
-          type: 'warning',
-          message: 'Game already ended',
-        }) : Logic.Common.GoToRoute(`/quiz/${p.quizId}?mode=game&gameId=${p.id}`)
+        Logic.Common.GoToRoute(`/games/${p.id}`)
       },
     }
   }) ?? [],

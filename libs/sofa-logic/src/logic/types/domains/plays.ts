@@ -1,11 +1,13 @@
 import { SingleUser } from './users'
 
+type PlayStatus = 'created' | 'started' | 'ended' | 'scored'
+
 export interface Game {
   hash: string
   id: string
   quizId: string
   user: SingleUser
-  status: string
+  status: PlayStatus
   participants: string[]
   questions: string[]
   scores: Record<string, number>
@@ -19,7 +21,7 @@ export interface Test {
   hash: string
   id: string
   quizId: string
-  status: string
+  status: PlayStatus
   userId: string
   questions: string[]
   scores: Record<string, number>

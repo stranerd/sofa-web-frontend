@@ -14,7 +14,7 @@
 		</div>
 	</slot>
 
-	<div class="w-full h-full flex-grow px-4 flex flex-col items-center">
+	<div class="w-full h-full flex-grow overflow-y-auto px-4 flex flex-col items-center">
 		<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center">
 			<slot>
 				<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question" :isDark="isDark"
@@ -25,15 +25,15 @@
 	</div>
 
 	<slot name="footer">
-		<div v-if="leftButton || rightButton" class="px-4 py-2 w-full flex justify-center shadow-customInverted" :class="{ 'md:bg-white': !isDark }">
-			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
+		<div v-if="leftButton || rightButton" class="px-4 py-2 md:py-4 w-full flex justify-center shadow-customInverted" :class="{ 'md:bg-white': !isDark }">
+			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-center">
 				<SofaButton class="!w-full md:!w-auto" customClass="w-full md:font-semibold whitespace-nowrap"
 					padding="py-3 md:px-6" v-if="leftButton" :disabled="leftButton.disabled" :bgColor="leftButton.bgColor"
 					:textColor="leftButton.textColor" @click="leftButton.click">
 					{{ leftButton.label }}
 				</SofaButton>
 
-				<span class="px-4 py-2 rounded-lg font-semibold hidden md:inline">
+				<span v-if="leftButton && rightButton" class="px-4 py-2 rounded-lg font-semibold hidden md:inline mx-auto">
 					{{ currentIndex + 1 }}/{{ questions.length }}
 				</span>
 
