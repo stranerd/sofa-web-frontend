@@ -55,7 +55,7 @@ export default defineComponent({
     SofaButton,
     SofaFormWrapper,
   },
-  name: "AuthResetPasswordPage",
+  name: "AuthResetPage",
   beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
   setup () {
     useMeta({

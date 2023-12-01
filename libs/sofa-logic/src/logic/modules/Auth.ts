@@ -40,31 +40,11 @@ export default class Auth extends Common {
   async getRedirectToRoute () {
     const value = localStorage.getItem(this.redirectToName)
     if (value) localStorage.removeItem(this.redirectToName)
-    return value
+    return value ?? '/'
   }
 
   async setRedirectToRoute (value: string) {
     localStorage.setItem(this.redirectToName, value)
-  }
-
-  private RedirectUser = async () => {
-    if (!Logic.Auth.AuthUser.isEmailVerified) {
-      await this.SendVerificationEmail()
-      await Logic.Common.GoToRoute('/auth/verify-email')
-    } else {
-      await Logic.Users.GetUserProfile()
-      await this.DetectVerification()
-    }
-  }
-
-  public DetectVerification = async () => {
-    if (Logic.Users.UserProfile?.type) {
-      if (window.location.pathname.startsWith('/auth')) {
-        await Logic.Common.GoToRoute((await this.getRedirectToRoute()) ?? '/')
-      }
-    } else {
-      await Logic.Common.GoToRoute('/onboarding')
-    }
   }
 
   public SetTokens = (AuthData: AuthResponse) => {

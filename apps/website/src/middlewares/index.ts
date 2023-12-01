@@ -26,7 +26,7 @@ const checkAuthUser = async (to: string) => {
 	}
 	if (!useAuth().isEmailVerified.value) {
 		if (!to.startsWith('/auth/')) await Logic.Auth.setRedirectToRoute(to)
-		return '/auth/verify-email'
+		return '/auth/verify'
 	}
 }
 export const isAuthenticated = defineMiddleware(async ({ to }) => {
