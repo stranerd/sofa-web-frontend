@@ -40,7 +40,7 @@ const reorderedQuestions = ref<Question[] | null>(null)
 const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 
 const started = ref(false)
-const startCountdown = ref(5)
+const startCountdown = ref(3)
 const index = ref(0)
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))

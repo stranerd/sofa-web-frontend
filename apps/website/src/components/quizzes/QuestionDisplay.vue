@@ -11,8 +11,8 @@
 
     <template v-if="question.strippedData.type === 'multipleChoice'">
       <a v-for="(option, index) in question.strippedData.options" :key="index"
-        class="w-full flex items-center border-2 justify-between rounded-xl p-3 hover:bg-[#E2F3FD] hover:border-hoverBlue group gap-3"
-        :class="buildClass(option, index)"
+        class="w-full flex items-center border-2 justify-between rounded-xl p-3 group gap-3"
+        :class="{ ...buildClass(option, index), 'hover:bg-primaryBlue hover:border-primaryBlue': isDark, 'hover:bg-skyBlue hover:border-hoverBlue': !isDark }"
         @click="answer.value.includes(index) ? answer.value.splice(answer.value.indexOf(index), 1) : answer.value.push(index)">
         <div class="flex-grow flex gap-3 items-center">
           <SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
@@ -24,8 +24,9 @@
 
     <template v-if="question.strippedData.type === 'trueOrFalse'">
       <a v-for="(option, index) in [true, false]" :key="index"
-        class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 hover:bg-[#E2F3FD] hover:border-hoverBlue group gap-3"
-        :class="buildClass(option, index)" @click="answer.value = option">
+        class="w-full flex items-center border-2 justify-between rounded-[12px] p-3 group gap-3"
+        :class="{ ...buildClass(option, index), 'hover:bg-primaryBlue hover:border-primaryBlue': isDark, 'hover:bg-skyBlue hover:border-hoverBlue': !isDark }"
+        @click="answer.value = option">
         <div class="flex-grow flex gap-3 items-center">
           <SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
           <SofaHeaderText :content="option.toString()" color="text-inherit"
@@ -193,14 +194,17 @@ const buildClass = (...args: Parameters<typeof props['optionState']>) => ({
   'border-white': props.isDark,
   '!bg-[#E1F5EB] !border-primaryGreen': props.optionState(...args) === 'right',
   '!bg-[#FAEBEB] !border-primaryRed': props.optionState(...args) === 'wrong',
-  '!bg-[#E2F3FD] !border-hoverBlue shake': props.optionState(...args) === 'selected',
+  '!bg-[#E2F3FD] !border-hoverBlue shake': props.optionState(...args) === 'selected' && !props.isDark,
+  '!bg-primaryBlue !border-primaryBlue shake': props.optionState(...args) === 'selected' && props.isDark,
 })
 
 const buildIconClass = (...args: Parameters<typeof props['optionState']>) => ({
-  'group-hover:stroke-hoverBlue': true,
+  'group-hover:stroke-hoverBlue': !props.isDark,
+  'stroke-white': props.isDark,
   '!stroke-primaryGreen': props.optionState(...args) === 'right',
   '!stroke-primaryRed': props.optionState(...args) === 'wrong',
-  '!stroke-hoverBlue': props.optionState(...args) === 'selected',
+  '!stroke-hoverBlue': props.optionState(...args) === 'selected' && !props.isDark,
+  '!stroke-white': props.optionState(...args) === 'selected' && props.isDark,
   [Logic.Study.getShapeSize(Logic.Study.getShape(args[1]))]: true
 })
 </script>
