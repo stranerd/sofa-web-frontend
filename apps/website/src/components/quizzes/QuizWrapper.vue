@@ -1,11 +1,12 @@
 <template>
-	<slot v-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" />
+	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="quizQuestions" />
+	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" />
 </template>
 
 <script lang="ts" setup>
 import { useQuiz } from '@/composables/study/quizzes'
 import { Logic, Question } from 'sofa-logic'
-import { PropType, computed, defineProps, reactive, ref } from 'vue'
+import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 
 const props = defineProps({
@@ -26,13 +27,20 @@ const props = defineProps({
 		type: Boolean,
 		required: false,
 		default: false
-	}
+	},
+	useTimer: {
+		type: Boolean,
+		required: false,
+		default: false
+	},
 })
 
 const { quiz, questions, fetched } = useQuiz(props.id, !!props.questions)
 const reorderedQuestions = ref<Question[] | null>(null)
 const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 
+const started = ref(false)
+const startCountdown = ref(5)
 const index = ref(0)
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
@@ -88,6 +96,8 @@ const extras = computed(() => ({
 	set answer (v) {
 		answer.value = v
 	},
+	started: started.value,
+	startCountdown: startCountdown.value,
 	question: currentQuestion.value,
 	optionState,
 	moveCurrrentQuestionToEnd,
@@ -103,4 +113,17 @@ const extras = computed(() => ({
 		reorderedQuestions.value = null
 	}
 }))
+
+watch(quiz, async () => {
+	if (!started.value) {
+		const timer = setInterval(() => {
+			const newValue = startCountdown.value - 1
+			if (newValue === 0) {
+				started.value = true
+				clearInterval(timer)
+			}
+			startCountdown.value = newValue
+		}, 1000)
+	}
+})
 </script>

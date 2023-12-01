@@ -32,8 +32,8 @@ export default defineComponent({
 		const cls = computed(() => [
 			'font-semibold text-header',
 			props.content ? 'body' : '',
+			props.size == 'xl' ? 'lg:text-3xl mdlg:text-xl text-lg' : '',
 			props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
-			props.size == 'xl' ? 'lg:!text-3xl mdlg:!text-xl text-base' : '',
 			props.size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : '',
 			props.size == 'xs' ? 'mdlg:!text-[12px] text-xs' : '',
 			props.customClass,

@@ -20,7 +20,8 @@
 			class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center">
 			<slot>
 				<QuestionDisplay v-if="question" :key="question.id" v-model="answer" :question="question" :isDark="isDark"
-					:title="title" :optionState="optionState" />
+					:title="title" :optionState="optionState"
+					:instruction="showInstruction ? question.instruction : undefined" />
 				<slot name="postBody" />
 			</slot>
 		</div>
@@ -99,6 +100,11 @@ const props = defineProps({
 		type: Function as PropType<InstanceType<typeof QuestionDisplay>['$props']['optionState']>,
 		required: true
 	},
+	showInstruction: {
+		type: Boolean,
+		required: false,
+		default: true
+	}
 })
 
 const emits = defineEmits(['update:answer', 'update:index'])

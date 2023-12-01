@@ -34,8 +34,9 @@ export default defineComponent({
 	setup (props) {
 		const cls = computed(() => [
 			props.content ? 'body' : '', props.customClass, props.color,
+			props.size == 'lg' ? 'lg:text-lg mdlg:text-base text-sm' : '',
 			props.size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : '',
-			props.size == 'small' ? ' text-xs' : ''
+			props.size == 'small' ? ' text-xs' : '',
 		].join(' '))
 		return { cls }
 	}
