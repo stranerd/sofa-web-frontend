@@ -43,7 +43,7 @@ export default defineComponent({
     SofaButton,
     SofaFormWrapper,
   },
-  name: "AuthForgotPasswordPage",
+  name: "AuthForgotPage",
   beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
   setup () {
     useMeta({
@@ -64,7 +64,7 @@ export default defineComponent({
               message: 'A password reset token has been sent to your email',
               type: 'success',
             })
-            Logic.Common.GoToRoute("/auth/reset-password")
+            Logic.Common.GoToRoute("/auth/reset")
           })
           .catch((error) => {
             Logic.Common.showError(error.response.data[0]?.message)

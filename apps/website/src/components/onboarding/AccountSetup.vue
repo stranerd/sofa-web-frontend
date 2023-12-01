@@ -323,7 +323,7 @@ export default defineComponent({
         else if (tab.value === 'phone-verify') {
           await VerifyPhone()
           if (props.isProfilePhone) tab.value = 'phone'
-          else await Logic.Common.GoToRoute((await Logic.Auth.getRedirectToRoute()) ?? '/')
+          else await Logic.Common.GoToRoute(await Logic.Auth.getRedirectToRoute())
         }
       } catch (e) {
         Logic.Common.showValidationError(e, formComp.value)

@@ -41,7 +41,7 @@ export default defineComponent({
     SofaButton,
     SofaOtpInput,
   },
-  name: "AuthVerifyEmailPage",
+  name: "AuthVerifyPage",
   beforeRouteEnter: generateMiddlewares([async () => {
     if (!Logic.Auth.AuthUser) return '/auth/signin'
   }]),

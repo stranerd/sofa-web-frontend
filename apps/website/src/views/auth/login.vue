@@ -20,7 +20,7 @@
     </div>
 
     <div class="w-full flex items-center justify-center pt-3">
-      <router-link to="/auth/forgot-password">
+      <router-link to="/auth/forgot">
         <sofa-normal-text :color="'!text-primaryBlue'">Forgot password?</sofa-normal-text>
       </router-link>
     </div>

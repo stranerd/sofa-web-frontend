@@ -51,7 +51,7 @@ const parseLoggedInUser = definePlugin(async ({ router }) => {
 
 		const { isLoggedIn, isEmailVerified, signin, setAuthUser } = useAuth()
 		await setAuthUser(user)
-		if (!isEmailVerified.value) await router.push('/auth/verify-email')
+		if (!isEmailVerified.value) await router.push('/auth/verify')
 		if (isLoggedIn.value) await signin(true)
 	} catch {
 		//
