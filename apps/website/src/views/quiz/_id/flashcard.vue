@@ -3,7 +3,7 @@
 		:bottomPadding="false">
 		<QuizWrapper :id="($route.params.id as string)">
 			<template v-slot="{ quiz, questions, extras }">
-				<Quiz v-model:index="extras.index" :title="isDone ? 'Flashcards completed' : quiz.title"
+				<Quiz :index="extras.index" :title="isDone ? 'Flashcards completed' : quiz.title"
 					v-model:answer="extras.answer" :questions="questions" :optionState="extras.optionState"
 					:rightButton="{
 						label: isDone ? 'Continue' : 'Mastered',

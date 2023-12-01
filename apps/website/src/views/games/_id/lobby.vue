@@ -5,11 +5,11 @@
 			<template v-slot="{ game, extras: gameExtras, questions, participants }">
 				<QuizWrapper :id="game.quizId" :questions="questions">
 					<template v-slot="{ quiz, questions, extras }">
-						<Quiz v-model:index="extras.index" :title="quiz.title" :questions="questions"
+						<Quiz :index="extras.index" :title="quiz.title" :questions="questions" :showCounter="false"
 							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true" :rightButton="{
 								label: gameExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
-								textColor: 'text-darkBody',
+								textColor: 'text-bodyBlack',
 								disabled: gameExtras.isMine ? !gameExtras.canStart : !gameExtras.canJoin,
 								click: async () => {
 									if (gameExtras.isMine) return await gameExtras.start()

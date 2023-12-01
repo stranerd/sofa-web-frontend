@@ -70,6 +70,7 @@ export default class Plays extends Common {
   public GetGameAnswers = (gameId: string, filters: QueryParams) => {
     return $api.plays.game.getGameAnswers(gameId, filters).then((response) => {
       this.AllParticipantAnswers = response.data
+      return this.AllParticipantAnswers
     })
   }
 
@@ -244,30 +245,22 @@ export default class Plays extends Common {
       })
   }
 
-  public AnswerGameQuestion = (gameId: string) => {
-    if (this.AnswerGameQuestionForm) {
-      return $api.plays.game
-        .answerGameQuestion(gameId, this.AnswerGameQuestionForm)
-        .then((response) => {
-          this.ParticipantAnswer = response.data
-        })
-        .catch((error) => {
-          //
-        })
-    }
+  public AnswerGameQuestion = (gameId: string, AnswerGameQuestionForm: AddQuestionAnswer) => {
+    return $api.plays.game
+      .answerGameQuestion(gameId, AnswerGameQuestionForm)
+      .then((response) => {
+        this.ParticipantAnswer = response.data
+        return this.ParticipantAnswer
+      })
   }
 
-  public AnswerTestQuestion = (testId: string) => {
-    if (this.AnswerGameQuestionForm) {
-      return $api.plays.test
-        .answerTestQuestion(testId, this.AnswerGameQuestionForm)
-        .then((response) => {
-          this.ParticipantAnswer = response.data
-        })
-        .catch((error) => {
-          //
-        })
-    }
+  public AnswerTestQuestion = (testId: string, AnswerGameQuestionForm: AddQuestionAnswer) => {
+    return $api.plays.test
+      .answerTestQuestion(testId, AnswerGameQuestionForm)
+      .then((response) => {
+        this.ParticipantAnswer = response.data
+        return this.ParticipantAnswer
+      })
   }
 
   public DeleteGame = (id: string) => {

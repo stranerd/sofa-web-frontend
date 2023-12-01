@@ -7,7 +7,7 @@
 					@click="Logic.Common.goBack()" />
 				<SofaHeaderText :size="'xl'" customClass="!font-bold !text-sm truncate" color="text-inherit"
 					:content="title" />
-				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${currentIndex + 1}/${questions.length}`"
+				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${index + 1}/${questions.length}`"
 					color="text-inherit" />
 				<SofaNormalText class="hidden md:inline" :customClass="'!text-base cursor-pointer whitespace-nowrap'"
 					color="text-inherit" content="Exit" @click="Logic.Common.goBack()" />
@@ -37,8 +37,8 @@
 					{{ leftButton.label }}
 				</SofaButton>
 
-				<span v-if="leftButton && rightButton" class="px-4 py-2 rounded-lg font-semibold hidden md:inline mx-auto">
-					{{ currentIndex + 1 }}/{{ questions.length }}
+				<span v-if="showCounter" class="px-4 py-2 rounded-lg font-semibold hidden md:inline mx-auto">
+					{{ index + 1 }}/{{ questions.length }}
 				</span>
 
 				<SofaButton class="!w-full md:!w-auto ml-auto" customClass="w-full md:font-semibold whitespace-nowrap"
@@ -104,17 +104,15 @@ const props = defineProps({
 		type: Boolean,
 		required: false,
 		default: true
+	},
+	showCounter: {
+		type: Boolean,
+		required: false,
+		default: true
 	}
 })
 
-const emits = defineEmits(['update:answer', 'update:index'])
-
-const currentIndex = computed({
-	get: () => props.index,
-	set: (v) => {
-		emits('update:index', v)
-	}
-})
+const emits = defineEmits(['update:answer'])
 
 const answer = computed({
 	get: () => props.answer,

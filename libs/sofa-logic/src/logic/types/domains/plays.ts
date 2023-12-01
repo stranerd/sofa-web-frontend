@@ -36,7 +36,7 @@ export interface GameParticipantAnswer {
   id: string
   gameId: string
   userId: string
-  data: {}
+  data: Record<string, string[] | number[] | string | boolean>
   createdAt: number
   updatedAt: number
 }

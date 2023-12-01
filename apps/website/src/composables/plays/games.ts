@@ -1,4 +1,4 @@
-import { Conditions, Game, Logic, Question, SingleUser } from 'sofa-logic'
+import { AddQuestionAnswer, Conditions, Game, GameParticipantAnswer, Logic, Question, SingleUser } from 'sofa-logic'
 import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
@@ -8,6 +8,7 @@ const store = {} as Record<string, {
 	game: Ref<Game | null>
 	participants: Ref<SingleUser[]>
 	questions: Ref<Question[]>
+	answer: Ref<GameParticipantAnswer | null>
 	fetched: Ref<boolean>
 	listener: ReturnType<typeof useListener>
 } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
@@ -19,6 +20,7 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		game: ref(null),
 		participants: ref([]),
 		questions: ref([]),
+		answer: ref(null),
 		fetched: ref(false),
 		listener: useListener(async () => await Logic.Common.listenToOne<Game>(`plays/games/${id}`, {
 			created: async (entity) => {
@@ -72,6 +74,20 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		await store[id].setLoading(false)
 	}
 
+	const submitAnswer = async (data: AddQuestionAnswer) => {
+		let succeeded = false
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Plays.AnswerGameQuestion(id, data)
+			succeeded = true
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+		return succeeded
+	}
+
 	watch(store[id].game, async () => {
 		if (!store[id].game.value) return
 		const hasUnfetchedParticipants = store[id].game.value.participants.some((pId) => !store[id].participants.value.find((p) => p.id === pId))
@@ -83,6 +99,10 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		const hasUnfetchedQuestions = store[id].game.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
 		if (!skip.questions && hasUnfetchedQuestions)
 			store[id].questions.value = await Logic.Plays.GetQuizQuestions(id).catch(() => [])
+		if (!skip.questions) {
+			const answers = await Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
+			store[id].answer.value = answers.results.at(0) ?? null
+		}
 	})
 
 	onMounted(async () => {
@@ -93,5 +113,5 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		await store[id].listener.close()
 	})
 
-	return { ...store[id], start, join }
+	return { ...store[id], start, join, submitAnswer }
 }

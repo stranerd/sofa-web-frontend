@@ -898,13 +898,13 @@ const createQuizGame = async () => {
 }
 
 const saveParticipantAnswer = (answer: any, questionId: string) => {
-  Logic.Plays.AnswerGameQuestionForm = {
+  const data = {
     answer,
     questionId,
   }
 
-  if (SingleGame.value) Logic.Plays.AnswerGameQuestion(Logic.Plays.SingleGame.id)
-  if (SingleTest.value) Logic.Plays.AnswerTestQuestion(Logic.Plays.SingleTest.id)
+  if (SingleGame.value) Logic.Plays.AnswerGameQuestion(Logic.Plays.SingleGame.id, data).catch()
+  if (SingleTest.value) Logic.Plays.AnswerTestQuestion(Logic.Plays.SingleTest.id, data).catch()
 }
 
 const copyGameLink = () => {
