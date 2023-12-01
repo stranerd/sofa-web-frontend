@@ -11,25 +11,15 @@
     }}</template>
   </metainfo>
   <router-view />
-  <sofa-alert :content="loaderSetup.message" v-if="loaderSetup.show" :close="() => {
-    loaderSetup.show = false
-  }
-    " :type="loaderSetup.type" />
+  <sofa-alert :content="loaderSetup.message" v-if="loaderSetup.show" :close="() => loaderSetup.show = false" :type="loaderSetup.type" />
   <study-mode-modal />
   <!-- Save to folder -->
-  <save-to-folder v-if="showSaveToFolder" :close="() => {
-    showSaveToFolder = false
-  }
-    " />
+  <save-to-folder v-if="showSaveToFolder" :close="() => showSaveToFolder = false" />
   <!-- Report material -->
-  <rate-and-review-modal v-if="reportMaterialSetup.show" :close="() => {
-    reportMaterialSetup.show = false
-  }
-    " :canClose="true" :has-ratings="false" :title="`Report this ${reportMaterialSetup.type}`" @on-review-submitted="(data) => {
-    sendReportMaterial(data)
-  }
-    " />
+  <rate-and-review-modal v-if="reportMaterialSetup.show" :close="() => reportMaterialSetup.show = false" :canClose="true"
+    :has-ratings="false" :title="`Report this ${reportMaterialSetup.type}`" @on-review-submitted="sendReportMaterial" />
 </template>
+
 <script lang="ts">
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue"
 import { Logic } from "sofa-logic"

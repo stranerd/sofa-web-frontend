@@ -29,7 +29,7 @@
 						disabled: !isDone && extras.index === questions.length - 1,
 						click: () => {
 							if (isDone) {
-								extras.index = 0
+								extras.reset()
 								return isDone = false
 							}
 							else if (showSolution) return showSolution = false

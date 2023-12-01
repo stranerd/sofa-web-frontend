@@ -7,7 +7,7 @@
       class="!font-bold md:!text-2xl text-base w-full justify-start flex" color="text-inherit"
       :content="question.question" />
 
-    <SofaNormalText v-if="instruction" color="text-inherit" class="pb-2" :content="instruction" />
+    <SofaNormalText color="text-inherit" class="pb-2" :content="question.instruction" />
 
     <template v-if="question.strippedData.type === 'multipleChoice'">
       <a v-for="(option, index) in question.strippedData.options" :key="index"
@@ -64,8 +64,8 @@
             class="md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 flex items-center justify-center border-2"
             :class="buildClass(answer.drag[index - 1][0], index - 1)">
             <template #item="{ element }">
-              <div
-                class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2">
+              <div class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
+                :class="isDark ? 'bg-primaryBlue' : 'bg-hoverBlue'">
                 <SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
               </div>
             </template>
@@ -76,8 +76,8 @@
         <Draggable :list="answer.dragOptions" itemKey="" group="dragAnswers" :move="move" id="drag-options"
           class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
           <template #item="{ element }">
-            <div
-              class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none bg-skyBlue rounded-xl border-2">
+            <div class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
+              :class="isDark ? 'bg-primaryBlue' : 'bg-hoverBlue'">
               <SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
             </div>
           </template>
@@ -145,10 +145,6 @@ const props = defineProps({
     type: Object as PropType<TransformedQuestion>,
     required: true
   },
-  instruction: {
-    type: String,
-    required: false
-  },
   modelValue: {
     type: [Array, String, Boolean] as PropType<any>,
     required: true,
@@ -191,7 +187,7 @@ const move = (e: { from: HTMLElement, to: HTMLElement, draggedContext: { element
 
 const buildClass = (...args: Parameters<typeof props['optionState']>) => ({
   'bg-white border-lightBorderColor': !props.isDark,
-  'border-white': props.isDark,
+  'bg-deepGray border-white': props.isDark,
   '!bg-[#E1F5EB] !border-primaryGreen': props.optionState(...args) === 'right',
   '!bg-[#FAEBEB] !border-primaryRed': props.optionState(...args) === 'wrong',
   '!bg-[#E2F3FD] !border-hoverBlue shake': props.optionState(...args) === 'selected' && !props.isDark,

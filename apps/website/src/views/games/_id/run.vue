@@ -1,9 +1,9 @@
 <template>
 	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0 bg-deepGray text-white" :hasTopBar="false"
 		:hasBottomBar="false" :bottomPadding="false" bgImage="/images/game-bg.png">
-		<GameWrapper :id="($route.params.id as string)" :skipParticipants="true" :skipStatusNav="true">
+		<GameWrapper :id="($route.params.id as string)" :skipParticipants="true">
 			<template v-slot="{ game, questions, extras: gameExtras }">
-				<QuizWrapper v-if="gameExtras.isParticipant" :id="game.quizId" :questions="questions" :useTimer="true">
+				<QuizWrapper v-if="gameExtras.isParticipant" :id="game.quizId" :questions="questions" :useTimer="true" :submit="gameExtras.submit">
 					<template v-slot:prestart="{ quiz, extras }">
 						<div class="w-full my-auto flex flex-col gap-6 items-center">
 							<SofaHeaderText content="Game is starting" size="xl" />
@@ -19,12 +19,12 @@
 					</template>
 					<template v-slot="{ questions, extras }">
 						<Quiz :index="extras.index" :title="`Question ${extras.index + 1}`" :showCounter="false"
-							:questions="questions" v-model:answer="extras.answer" :showInstruction="false"
+							:questions="questions" v-model:answer="extras.answer"
 							:optionState="extras.optionState" :isDark="true" :rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-primaryBlue',
 								textColor: 'text-white',
-								click: () => null
+								click: extras.submitAnswer
 							}">
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center">
@@ -32,15 +32,15 @@
 										<div v-for="i in Array.from({ length: questions.length }, (_, i) => i)" :key="i"
 											class="w-full flex">
 											<div class="h-2 bg-primaryGreen" :class="{
-												'w-full rounded-full': i < extras.index,
+												'w-full rounded-full': i < extras.index || (i === extras.index && extras.fractionTimeLeft === 1),
 												'w-0': i > extras.index,
 												'rounded-l-full': i === extras.index
-											}" :style="i === extras.index ? `width: 50%;` : ''" />
+											}" :style="i === extras.index ? `width: ${extras.fractionTimeLeft * 100}%;` : ''" />
 											<div class="h-2 bg-lightBorderColor" :class="{
-												'w-full rounded-full': i > extras.index,
+												'w-full rounded-full': i > extras.index || (i === extras.index && extras.fractionTimeLeft === 0),
 												'w-0': i < extras.index,
 												'rounded-r-full': i === extras.index
-											}" :style="i === extras.index ? `width: 50%;` : ''" />
+											}" :style="i === extras.index ? `width: ${(1 - extras.fractionTimeLeft) * 100}%;` : ''" />
 										</div>
 									</div>
 								</div>

@@ -35,7 +35,7 @@ const router = useRouter()
 const route = useRoute()
 const {
 	game, participants, questions, fetched, answer,
-	start, join
+	start, join, submitAnswer
 } = useGame(props.id, { questions: props.skipQuestions, participants: props.skipParticipants })
 const { id } = useAuth()
 
@@ -63,6 +63,11 @@ const extras = computed(() => ({
 	authId: id.value,
 	answers: answer.value?.data ?? null,
 	start, join,
+	submit: async (data?: { questionId: string, answer: any }) => {
+		if (data) return await submitAnswer(data)
+		await router.push(`/games/${id}/results`)
+		return true
+	},
 	isParticipant: game.value?.participants.includes(id.value),
 	get scores () {
 		return Object.entries(game.value.scores ?? {})
@@ -75,9 +80,6 @@ const extras = computed(() => ({
 			}))
 			.filter((res) => !!res.user)
 	},
-	async continue () {
-		//
-	}
 }))
 
 watch(game, gameWatcherCb)

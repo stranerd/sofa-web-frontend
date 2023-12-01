@@ -22,7 +22,6 @@
 						click: () => {
 							if (isDone) {
 								extras.reset()
-								extras.index = 0
 								return isDone = false
 							}
 							return extras.moveCurrrentQuestionToEnd()

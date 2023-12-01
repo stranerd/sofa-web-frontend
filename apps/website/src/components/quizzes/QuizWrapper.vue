@@ -4,6 +4,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
 import { Logic, Question } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
@@ -33,6 +34,10 @@ const props = defineProps({
 		required: false,
 		default: false
 	},
+	submit: {
+		type: Function as PropType<(data?: { questionId: string, answer: any }) => Promise<boolean>>,
+		required: false
+	}
 })
 
 const { quiz, questions, fetched } = useQuiz(props.id, !!props.questions)
@@ -40,7 +45,8 @@ const reorderedQuestions = ref<Question[] | null>(null)
 const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 
 const started = ref(!props.useTimer)
-const startCountdown = ref(3)
+const { time: startTime, countdown: startCountdown } = useCountdown()
+const { time: runTime, countdown: runCountdown } = useCountdown()
 const index = ref(0)
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
@@ -83,6 +89,22 @@ const moveCurrrentQuestionToEnd = () => {
 	reorderedQuestions.value = reorderedQuestions.value.concat(reorderedQuestions.value.splice(index.value, 1))
 }
 
+const nextQ = async (newIndex: number) => {
+	index.value = newIndex
+	if (props.useTimer) runCountdown({ time: currentQuestion.value?.timeLimit }).then(submitAnswer)
+}
+
+const submitAnswer = async () => {
+	if (!currentQuestion.value) return
+	const res = await props.submit?.({
+		questionId: currentQuestion.value.id,
+		answer: answer.value
+	})
+	if (!res) return
+	if (extras.value.canNext) await nextQ(index.value + 1)
+	else await props.submit?.()
+}
+
 const extras = computed(() => ({
 	get index () {
 		return index.value
@@ -96,10 +118,15 @@ const extras = computed(() => ({
 	set answer (v) {
 		answer.value = v
 	},
+	get fractionTimeLeft () {
+		const duration = currentQuestion.value?.timeLimit ?? 0
+		if (duration === 0) return 0
+		return runTime.value / duration
+	},
 	started: started.value,
-	startCountdown: startCountdown.value,
+	startCountdown: startTime.value,
 	question: currentQuestion.value,
-	optionState,
+	optionState, submitAnswer,
 	moveCurrrentQuestionToEnd,
 	next: () => {
 		if (extras.value.canNext) index.value++
@@ -111,19 +138,15 @@ const extras = computed(() => ({
 	canNext: index.value < quizQuestions.value.length - 1,
 	reset: () => {
 		reorderedQuestions.value = null
+		index.value = 0
 	}
 }))
 
 watch(quiz, async () => {
-	if (!started.value) {
-		const timer = setInterval(() => {
-			const newValue = startCountdown.value - 1
-			if (newValue === 0) {
-				started.value = true
-				clearInterval(timer)
-			}
-			startCountdown.value = newValue
-		}, 1000)
-	}
+	if (!started.value) startCountdown({ time: 3 })
+		.then(() => {
+			started.value = true
+			nextQ(0)
+		})
 })
 </script>
