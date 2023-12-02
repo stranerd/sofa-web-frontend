@@ -218,7 +218,7 @@ export default class Auth extends Common {
       show: false,
     })
     return $api.auth.email
-      .verifyEmail(this.VerifyWithTokenForm)
+      .verifyEmail(VerifyEmailWithToken)
       .then((response) => {
         this.AuthUser = response.data.user
         Logic.Common.hideLoader()

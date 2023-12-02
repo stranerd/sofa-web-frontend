@@ -272,7 +272,7 @@ export default class Common {
 
     if (validationErrors && validationErrors.length) {
       validationErrors.forEach((validation) => {
-        formElement?.fieldsToValidate[validation.field]?.showError(validation.message)
+        formElement?.fieldsToValidate?.[validation.field]?.showError(validation.message)
       })
       errorMessage = validationErrors[0]?.message
     } else errorMessage = error.message
