@@ -60,7 +60,7 @@
                   ).length
                     ? 'selected'
                     : `not-selected`
-                    " :customClass="'md:!h-[23px] h-[20px] !cursor-pointer '" />
+                    " :customClass="'md:!h-[23px] h-[20px] cursor-pointer '" />
                 </span>
               </template>
             </sofa-activity-card>

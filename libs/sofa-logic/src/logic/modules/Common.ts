@@ -635,4 +635,10 @@ export default class Common {
     this.hideLoading()
     return next()
   }
+
+  tabIsActive = (tab: string) => {
+      if (tab === "/" && this.route.path === "/") return true
+      else if (tab !== "/" && this.route.path.startsWith(tab)) return true
+      return false
+    }
 }

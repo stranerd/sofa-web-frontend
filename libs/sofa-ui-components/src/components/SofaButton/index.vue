@@ -1,14 +1,14 @@
 <template>
   <div :class="`w-auto h-auto relative ${visible ? '' : 'invisible'} ${disabled ? 'opacity-30' : ''}`">
-    <button :disabled="loading || disabled" @click="handleClicked" :class="`focus:outline-none relative rounded-md flex flex-row gap-2 items-center z-50 ${loading ? 'opacity-75' : ''
+    <button :disabled="loading || disabled" @click="handleClicked" :class="`focus:outline-none relative rounded-md flex gap-2 items-center z-[3] ${loading ? 'opacity-75' : ''
       } lg:text-sm mdlg:text-[12px] text-xs justify-center ${padding} ${bgColor} ${textColor} ${customClass}`"
       style="border-radius: 16px 8px">
       <slot />
       <span class="pl-2" v-if="loading"><sofa-icon :name="'loader'" :custom-class="'h-[28px]'" /></span>
     </button>
     <div v-if="hasDoubleLayer && !isHovered && hasDarkLayer && !disabled"
-      class="absolute top-0 left-0 w-full h-[110%] bg-black !bg-opacity-25 z-20" style="border-radius: 16px 8px"></div>
-    <div v-if="hasDoubleLayer && !isHovered && !disabled" :class="`absolute top-0 left-0 w-full h-[110%] ${bgColor} z-10`"
+      class="absolute top-0 left-0 w-full h-[110%] bg-black !bg-opacity-25 z-[2]" style="border-radius: 16px 8px"></div>
+    <div v-if="hasDoubleLayer && !isHovered && !disabled" :class="`absolute top-0 left-0 w-full h-[110%] ${bgColor} z-[1]`"
       style="border-radius: 16px 8px"></div>
   </div>
 </template>

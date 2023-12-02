@@ -3,8 +3,7 @@
     <template v-slot:left-session>
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <div class="w-full flex flex-row items-center gap-3">
-          <sofa-avatar :size="'84'" :bgColor="'bg-grayColor'"
-            :photoUrl="UserProfile.bio?.photo?.link ?? ''">
+          <sofa-avatar :size="'84'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile.bio?.photo?.link ?? ''">
             <sofa-icon :customClass="'h-[45px]'" :name="'user'" />
           </sofa-avatar>
 
@@ -12,7 +11,8 @@
             <sofa-header-text :customClass="'!text-base !font-bold'">{{ UserProfile.bio.name?.full }}</sofa-header-text>
             <sofa-normal-text :customClass="'capitalize'">{{ Logic.Users.getUserType() }}</sofa-normal-text>
 
-            <sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'" @click="Logic.Common.GoToRoute('/profile/')" >
+            <sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'"
+              @click="Logic.Common.GoToRoute('/profile/')">
               View profile
             </sofa-normal-text>
           </div>
@@ -286,9 +286,8 @@
       </div>
 
       <div
-        class="w-full mdlg:shadow-custom mdlg:!px-4 pl-4 mdlg:!py-4 py-1 lg:!bg-white mdlg:!bg-white bg-transparent rounded-[16px] flex flex-col gap-4">
-        <div
-          class="w-full mdlg:!flex hidden flex-col gap-3 justify-center items-center py-9 px-6 rounded-[8px] bg-primaryPurple">
+        class="w-full mdlg:shadow-custom px-4 mdlg:!py-4 mdlg:!bg-white bg-transparent rounded-2xl flex flex-col gap-4">
+        <div class="w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-[8px] bg-primaryPurple">
           <sofa-icon :customClass="'h-[28px]'" :name="'white-search'" />
           <div class="w-full flex flex-col gap-2 justify-center items-center py-2">
             <sofa-normal-text :color="'text-white'" :custom-class="'!font-bold'">Discover more</sofa-normal-text>
@@ -303,13 +302,16 @@
         </div>
       </div>
 
-      <div class="h-[100px]"></div>
+      <div class="fixed bottom-[80px] z-[100] w-full flex items-center justify-end pr-2 mdlg:hidden">
+        <router-link class="px-3 py-2 bg-primaryPurple text-white flex items-center rounded-custom gap-2"
+          style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)" to="/chats/new">
+          <SofaNormalText color="text-inherit" content="Ask me anything" />
+          <SofaIcon name="robot" class="w-[24px] h-[24px]" />
+        </router-link>
+      </div>
 
       <!-- Customize AI -->
-      <customize-bot :close="() => {
-        showCustomizeAI = false
-      }
-        " v-if="showCustomizeAI" />
+      <customize-bot :close="() => showCustomizeAI = false" v-if="showCustomizeAI" />
     </template>
 
     <template v-slot:right-session>

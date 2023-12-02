@@ -1,7 +1,7 @@
 <template>
   <div
-    class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] cursor-pointer md:px-0 px-4">
-    <div class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer"
+    class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
+    <a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer"
       @swiped="handleSwiperAction($event)">
       <div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
         <div class="flip-card-front bg-white rounded-xl flex flex-col items-center justify-center">
@@ -13,7 +13,7 @@
             :content="question.answer" />
         </div>
       </div>
-    </div>
+    </a>
   </div>
 </template>
 

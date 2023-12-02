@@ -1,5 +1,5 @@
 <template>
-  <div :class="`flex flex-row items-center gap-1 ${customClass}`">
+  <a :class="`flex items-center gap-1 ${customClass}`">
     <sofa-icon :name="`${ratings >= 1 ? 'star-full' : 'star'}`" :custom-class="size"
       @click="readonly ? '' : (ratings = 1)" />
     <sofa-icon :name="`${ratings >= 2 ? 'star-full' : 'star'}`" :custom-class="size"
@@ -10,7 +10,7 @@
       @click="readonly ? '' : (ratings = 4)" />
     <sofa-icon :name="`${ratings >= 5 ? 'star-full' : 'star'}`" :custom-class="size"
       @click="readonly ? '' : (ratings = 5)" />
-  </div>
+  </a>
 </template>
 <script lang="ts">
 import { onMounted, ref, watch } from "vue"

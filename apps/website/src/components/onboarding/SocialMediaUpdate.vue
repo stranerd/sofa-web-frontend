@@ -14,9 +14,9 @@
     </template>
   </sofa-text-field>
 
-  <div class="w-full flex flex-col gap-3 pt-2">
-    <div
-      class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB] cursor-pointer"
+  <div class="w-full flex flex-col gap-3">
+    <a
+      class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB]"
       @click="
         showAddNewItems ? (showAddNewItems = false) : (showAddNewItems = true)
         ">
@@ -30,17 +30,17 @@
       <div>
         <sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="showAddNewItems ? 'chevron-up' : 'chevron-down'" />
       </div>
-    </div>
+    </a>
 
     <div class="w-full flex flex-col gap-2" v-if="showAddNewItems">
-      <div
-        class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB] cursor-pointer"
+      <a
+        class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB]"
         @click="addNewLink(item.ref)" v-for="(item, index) in profileLinks" :key="index">
         <sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
         <sofa-normal-text :color="'text-[#78828C]'">
           {{ capitalize(item.ref) }}
         </sofa-normal-text>
-      </div>
+      </a>
     </div>
   </div>
 

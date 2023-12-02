@@ -14,8 +14,7 @@
         handler: submitVerification,
       },
     ],
-  }" :wrapLayout="true" :hideSmNavigator="{
-  top: false,
+  }" :wrap="true" :hide="{
   bottom: true,
 }">
     <template v-slot:left-session>
@@ -66,8 +65,8 @@
     </template>
 
     <template v-slot:middle-session>
-      <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
-        <div class="w-full flex flex-col justify-start">
+      <div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col gap-4">
+        <div class="w-full flex flex-col items-start">
           <sofa-header-text :customClass="'!font-bold flex flex-row justify-start'">
             Page content
           </sofa-header-text>
@@ -105,8 +104,6 @@
         </div>
       </div>
 
-      <div class="h-[80px] hidden mdlg:!flex"></div>
-
       <!-- Smaller screen CTA -->
       <div
         class="w-full flex flex-col md:!hidden bg-backgroundGray px-4 py-4 fixed bottom-0 left-0 items-center z-50 justify-center">
@@ -116,10 +113,7 @@
       </div>
 
       <!-- Add material modal -->
-      <sofa-modal v-if="showAddMaterial" :close="() => {
-        showAddMaterial = false
-      }
-        " :canClose="false">
+      <sofa-modal v-if="showAddMaterial" :close="() => showAddMaterial = false" :canClose="false">
         <div
           class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] w-full flex flex-col justify-end md:!justify-start items-center relative"
           @click.stop="() => {
@@ -177,7 +171,6 @@
 
         <social-media-update />
       </div>
-      <div class="h-[80px] mdlg:!hidden flex"></div>
     </template>
   </dashboard-layout>
 </template>

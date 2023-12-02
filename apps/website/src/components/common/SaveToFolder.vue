@@ -24,8 +24,8 @@
         </div>
 
         <div class="w-full flex flex-col gap-3 px-4 py-4">
-          <div
-            class="w-full flex flex-row items-center gap-3 justify-between px-4 py-4 rounded-custom bg-[#F1F6FA] cursor-pointer"
+          <a
+            class="w-full flex flex-row items-center gap-3 justify-between px-4 py-4 rounded-custom bg-[#F1F6FA]"
             v-for="(item, index) in folders" :key="index">
             <div class="flex flex-row items-center gap-3">
               <sofa-icon :name="'folder'" :customClass="'h-[18px]'" />
@@ -60,14 +60,14 @@
                 !addFolderIsActive ? handleFolderSelected(item.id) : null
                 " v-else>+ Add</sofa-normal-text>
             </div>
-          </div>
-          <div class="w-full flex flex-row items-center gap-3 px-4 py-4 rounded-custom bg-[#F1F6FA] cursor-pointer"
+          </a>
+          <a class="w-full flex flex-row items-center gap-3 px-4 py-4 rounded-custom bg-[#F1F6FA]"
             @click="addFolder()">
             <sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
             <sofa-normal-text :customClass="'text-grayColor'">
               Add new folder
             </sofa-normal-text>
-          </div>
+          </a>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <expanded-layout :hasBottomBar="false">
+  <expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
     <div
       class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-white py-4 px-4 sticky top-0 left-0">
       <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />

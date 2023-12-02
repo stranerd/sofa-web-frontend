@@ -1,6 +1,5 @@
 <template>
-  <expanded-layout layoutStyle="mdlg:!w-[90%] lg:!w-[77%] w-full pt-0 h-full   mdlg:!pt-[20px] lg:!pt-[20px]"
-    :hasBottomBar="false">
+  <expanded-layout width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5" :hide="{ bottom: true }">
     <!-- Display for larger screens -->
     <div class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow" v-if="!Logic.Common.isOnlyMobile">
       <div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
@@ -371,7 +370,7 @@ export default defineComponent({
     const isUnlocked = computed(() => [
       PurchasedItems.value.includes(SingleCourse.value?.id),
       SingleCourse.value?.user.id === Logic.Auth.AuthUser?.id,
-      SingleCourse.value?.user.roles.isOfficialAccount && Logic.Auth.AuthUser?.roles.isSubscribed,
+      SingleCourse.value?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
       Logic.Users.UserProfile?.account.organizationsIn.includes(SingleCourse.value?.user.id) && SingleCourse.value?.user.roles.isSubscribed
     ].some((x) => x))
 

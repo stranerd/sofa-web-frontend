@@ -1,5 +1,5 @@
 <template>
-  <expanded-layout :hasBottomBar="false">
+  <expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
     <div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
       <sofa-normal-text :color="'text-grayColor w-full flex flex-row justify-start gap-1'">
         <span class="cursor-pointer" @click="Logic.Common.goBack()">{{ "Marketplace " }}</span>
@@ -17,7 +17,7 @@
         <sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
       </div>
     </div>
-    <div class="w-full bg-white rounded-[16px] h-auto max-h-full flex flex-row gap-3">
+    <div class="w-full bg-white rounded-[16px] flex flex-grow overflow-y-auto gap-3">
       <sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
         :buyAction="buyCourse" :hasAccess="userHasAccess" :similarContents="similarContents" :type="contentType"
         :contentId="contentDetails.id" :otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)"
@@ -284,7 +284,7 @@ export default defineComponent({
     const userHasAccess = computed(() => [
       PurchasedItems.value.includes(SingleCourse.value?.id),
       contentDetails?.user.id === Logic.Auth.AuthUser?.id,
-      contentDetails?.user.roles.isOfficialAccount && Logic.Auth.AuthUser?.roles.isSubscribed,
+      contentDetails?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
       Logic.Users.UserProfile?.account.organizationsIn.includes(contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
     ].some((x) => x))
 

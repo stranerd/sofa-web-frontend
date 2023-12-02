@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] mdlg:!overflow-y-auto overflow-y-auto  rounded-custom ${customClass}`">
+    :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] overflow-y-auto rounded-custom ${customClass}`">
     <div :class="`w-full flex flex-col gap-2 ${padding} relative`">
       <div
         class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
@@ -144,12 +144,12 @@
     </div>
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-      }  mdlg:!overflow-y-auto overflow-y-visible py-2 relative`" v-if="selectedTab == 'content'">
+      } overflow-y-auto py-2 relative`" v-if="selectedTab == 'content'">
       <sofa-content :data="content.content" :hasAccess="hasAccess" />
     </div>
 
     <div :class="`w-full flex flex-col h-full  rounded-b-[16px]  ${hasPadding ? 'px-4' : ''
-      }  mdlg:!overflow-y-auto overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
+      } overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
       <div class="w-full flex flex-col gap-3 h-full overflow-y-auto" v-if="hasAccess">
         <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 rounded-custom"
           v-for="(question, index) in content.questions" :key="index">
@@ -197,12 +197,12 @@
     </div>
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-      } mdlg:!overflow-y-auto overflow-y-visible py-2 relative`" v-if="selectedTab == 'ratings'">
+      } overflow-y-auto py-2 relative`" v-if="selectedTab == 'ratings'">
       <sofa-content-ratings :data="content.ratings" />
     </div>
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-      } mdlg:!overflow-y-auto overflow-y-visible py-2 relative pb-4`" v-if="selectedTab == 'creator'">
+      } overflow-y-auto py-2 relative pb-4`" v-if="selectedTab == 'creator'">
       <div class="w-full bg-[#F1F6FA] rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
         <div>
           <sofa-avatar :photoUrl="content.user.photoUrl" :size="'150'" :customClass="'hidden mdlg:!inline-block'" />
@@ -266,7 +266,7 @@
     </div>
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-      } mdlg:!overflow-y-auto overflow-y-visible py-2 relative pb-4`"
+      } overflow-y-auto py-2 relative pb-4`"
       v-if="selectedTab == 'similar_courses' && type == 'course'">
       <div
         class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide"
@@ -288,31 +288,11 @@
               " />
         </div>
       </template>
-
-      <!-- <div class="w-full !h-[100px]"></div> -->
-    </div>
-
-    <div v-if="false"
-      class="w-full px-4 py-4 mdlg:!rounded-b-[16px] mdlg:!absolute fixed bottom-0 left-0 bg-white flex mdlg:!flex-row flex-col items-center justify-between z-50">
-      <sofa-button :bgColor="'bg-white'" :textColor="'text-grayColor'" :padding="'px-5 py-2'"
-        :customClass="'border border-gray-200 mdlg:!inline-block hidden'" @click="close()">
-        Exit
-      </sofa-button>
-
-      <sofa-button :padding="'px-5 py-2'" :customClass="'mdlg:!inline-block hidden '">
-        Start
-      </sofa-button>
-
-      <div class="w-full mdlg:!hidden">
-        <sofa-button :padding="'px-5 py-2'" :customClass="'mdlg:!hidden !w-full'">
-          Start
-        </sofa-button>
-      </div>
     </div>
   </div>
 
   <!-- Smaller screen purchase buttons -->
-  <div class="md:!hidden flex flex-col w-full fixed left-0 bottom-0 bg-white px-4 py-4"
+  <div class="md:!hidden flex flex-col w-full bg-white p-4"
     v-if="showBuyButton && type == 'course'">
     <sofa-button :padding="'px-6 py-3'" v-if="!hasAccess" :customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'
       } w-full`" @click="buyAction && content.status == 'published' ? buyAction() : null">

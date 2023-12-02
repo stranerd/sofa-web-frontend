@@ -31,10 +31,10 @@
         color: SingleCourse.status != 'published' ? 'gray' : 'green',
       },
     ],
-  }" :hideSmNavigator="{
+  }" :hide="{
   bottom: true,
   top: true,
-}" :bgColor="'mdlg:!bg-backgroundGray bg-white'" :middleSessionWidth="'lg:w-[56%]  mdlg:w-[50%] mdlg:!pb-5'">
+}" :bgColor="'mdlg:!bg-backgroundGray bg-white'">
     <template v-slot:left-session>
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
         <sofa-course-sections v-model="selectedMaterial" :sectionInput="updateCourseSectionForm"

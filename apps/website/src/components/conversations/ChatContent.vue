@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between flex-grow h-full flex-col">
-		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-[#E1E6EB]">
+		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-[#E1E6EB] text-left">
 			<div class="flex items-center gap-3 flex-1">
 				<sofa-icon class="mdlg:hidden" customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 				<sofa-avatar :photoUrl="data.photoUrl ?? ''" :size="Logic.Common.isLarge ? '40' : '34'"
@@ -13,8 +13,8 @@
 						@onContentChange="submitTitle" @onBlur="editTitle = false" :autoFocus="true"
 						v-if="canEditTitle && editTitle"></sofa-custom-input>
 					<SofaNormalText v-else @click="editTitle = canEditTitle"
-						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1" :content="data.title.repeat(10)" />
-					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ').repeat(10)" />
+						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1" :content="data.title" />
+					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
 				</div>
 			</div>
 			<slot v-if="!editTitle" name="top-extras" />

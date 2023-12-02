@@ -1,5 +1,5 @@
 <template>
-  <dashboard-layout :middleSessionWidth="'mdlg:w-[78%]'" :hideSmNavigator="{ bottom: true, top: true }">
+  <dashboard-layout :hide="{ bottom: true, top: true, right: true }">
     <template v-slot:left-session>
       <div class="w-full shadow-custom pb-6 bg-white rounded-custom relative flex flex-col h-full gap-6 overflow-y-auto">
         <div class="w-full flex items-center p-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b border-[#F1F6FA]">

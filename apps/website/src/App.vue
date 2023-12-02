@@ -16,14 +16,16 @@
   <!-- Report material -->
   <rate-and-review-modal v-if="reportMaterialSetup.show" :close="() => reportMaterialSetup.show = false" :canClose="true"
     :has-ratings="false" :title="`Report this ${reportMaterialSetup.type}`" @on-review-submitted="sendReportMaterial" />
+  <add-material-modal v-if="showAddItem" :close="() => showAddItem = false" />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import RateAndReviewModal from "@/components/common/RateAndReviewModal.vue"
 import { Logic } from "sofa-logic"
 import { SofaAlert } from "sofa-ui-components"
-import { defineComponent } from "vue"
 import { useMeta } from "vue-meta"
+import AddMaterialModal from "@/components/common/AddMaterialModal.vue"
+import { showAddItem } from "./composables"
 import SaveToFolder from "./components/common/SaveToFolder.vue"
 import StudyModeModal from './components/library/StudyModeModal.vue'
 import {
@@ -32,33 +34,10 @@ import {
   showSaveToFolder,
 } from "./composables/library"
 
-export default defineComponent({
-  components: {
-    SofaAlert,
-    SaveToFolder,
-    RateAndReviewModal,
-    StudyModeModal,
-  },
-  setup () {
-    useMeta({
-      title: "Home",
-      htmlAttrs: { lang: "en", amp: true },
-    })
-
-    const loaderSetup = Logic.Common.loaderSetup
-
-    return {
-      loaderSetup,
-      showSaveToFolder,
-      reportMaterialSetup,
-      sendReportMaterial,
-    }
-  },
+useMeta({
+  title: "Home",
+  htmlAttrs: { lang: "en", amp: true },
 })
+
+const loaderSetup = Logic.Common.loaderSetup
 </script>
-<style>
-body,
-html {
-  -webkit-tap-highlight-color: transparent;
-}
-</style>

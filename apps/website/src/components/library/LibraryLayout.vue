@@ -25,7 +25,7 @@
 			</div>
 		</div>
 	</sub-page-layout>
-	<dashboard-layout v-else :middleSessionWidth="'lg:w-[78%] mdlg:w-[75%]'" :topbarOptions="{ title }">
+	<dashboard-layout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<div
 			class="mdlg:hidden w-full flex items-center gap-3 z-[100] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />

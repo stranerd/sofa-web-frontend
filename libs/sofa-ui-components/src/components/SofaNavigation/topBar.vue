@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="` flex-row items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white  lg:!bg-white bg-backgroundGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
+    :class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white  lg:!bg-white bg-backgroundGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
     <template v-if="type == 'main'">
       <div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
         <sofa-avatar :size="'32'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
@@ -20,20 +20,17 @@
         </div>
       </div>
       <div class="hidden flex-row gap-5 items-center justify-start flex-grow mdlg:!flex lg:!flex">
-        <div class="py-4 pr-3 cursor-pointer" @click="Logic.Common.GoToRoute('/')">
+        <router-link class="py-4 pr-3" to="/">
           <img src="/images/logo.svg" class="h-[26px]" />
-        </div>
+        </router-link>
 
-        <div :class="`py-4 flex flex-row items-center justify-center gap-2 cursor-pointer ${tabIsActive(tab.routeTag)
-          ? 'border-b-2 border-primaryPurple'
-          : ''
-          }`" @click="Logic.Common.GoToRoute(tab.path)" v-for="(tab, index) in tabs" :key="index">
-          <sofa-icon :customClass="tab.icon_size" :name="tabIsActive(tab.routeTag) ? `${tab.icon}-active` : tab.icon" />
-          <sofa-normal-text :customClass="'font-bold'" :color="tabIsActive(tab.routeTag) ? 'text-primaryPurple' : 'text-darkBody'
-            ">
+        <router-link :class="`py-4 flex items-center justify-center gap-2 ${Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple': ''}`"
+          :to="tab.path" v-for="(tab, index) in tabs" :key="index">
+          <SofaIcon :name="tab.icon" :class="{'!fill-primaryPurple': Logic.Common.tabIsActive(tab.path), [tab.icon_size]: true, 'fill-bodyBlack': true }" />
+          <sofa-normal-text :customClass="'font-bold'" :color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
             {{ tab.name }}
           </sofa-normal-text>
-        </div>
+        </router-link>
 
         <div class="bg-ligthGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
           <sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
@@ -150,18 +147,6 @@ export default defineComponent({
     SofaBadge,
   },
   props: {
-    goBack: {
-      type: Function,
-      required: true,
-    },
-    goToRoute: {
-      type: Function,
-      required: true,
-    },
-    tabIsActive: {
-      type: Function,
-      required: true,
-    },
     subpageActions: {
       type: Array as () => any[],
       default: [],
@@ -171,7 +156,12 @@ export default defineComponent({
       default: "",
     },
     tabs: {
-      type: Array as () => any[],
+      type: Array as () => {
+        name: string,
+        path: string,
+        icon: string,
+        icon_size: string,
+      }[],
       default: [],
     },
     type: {

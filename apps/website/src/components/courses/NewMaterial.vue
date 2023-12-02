@@ -2,53 +2,53 @@
   <div class="w-full flex flex-col gap-4">
     <div class="w-full grid grid-cols-2 h-full md:!gap-6 gap-3">
       <template v-for="(item, index) in newMaterialOptions" :key="index">
-        <div v-if="item.type == 'quiz'" @click="showAddQuiz = true"
-          class="col-span-1 rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center cursor-pointer">
+        <a v-if="item.type == 'quiz'" @click="showAddQuiz = true"
+          class="col-span-1 rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
           <sofa-icon :name="item.icon" :customClass="'h-[22px]'"> </sofa-icon>
           <sofa-normal-text :customClass="'!font-bold'">
             {{ item.name }}
           </sofa-normal-text>
-        </div>
+        </a>
 
         <sofa-file-attachment v-if="item.type == 'image'" :isWrapper="true" :customClass="'col-span-1 flex flex-col'"
           :accept="'image/png, image/gif, image/jpeg'" v-model="imageFile">
           <template v-slot:content>
-            <div
-              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center cursor-pointer">
+            <a
+              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
               <sofa-icon :name="item.icon" :customClass="'h-[22px]'">
               </sofa-icon>
               <sofa-normal-text :customClass="'!font-bold'">
                 {{ item.name }}
               </sofa-normal-text>
-            </div>
+            </a>
           </template>
         </sofa-file-attachment>
 
         <sofa-file-attachment v-if="item.type == 'document'" :isWrapper="true" :customClass="'col-span-1 flex flex-col'"
           :accept="'application/pdf'" v-model="documentFile">
           <template v-slot:content>
-            <div
-              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center cursor-pointer">
+            <a
+              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
               <sofa-icon :name="item.icon" :customClass="'h-[22px]'">
               </sofa-icon>
               <sofa-normal-text :customClass="'!font-bold'">
                 {{ item.name }}
               </sofa-normal-text>
-            </div>
+            </a>
           </template>
         </sofa-file-attachment>
 
         <sofa-file-attachment v-if="item.type == 'video'" :isWrapper="true" :customClass="'col-span-1 flex flex-col'"
           :accept="'video/mp4'" v-model="videoFile">
           <template v-slot:content>
-            <div
-              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center cursor-pointer">
+            <a
+              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
               <sofa-icon :name="item.icon" :customClass="'h-[22px]'">
               </sofa-icon>
               <sofa-normal-text :customClass="'!font-bold'">
                 {{ item.name }}
               </sofa-normal-text>
-            </div>
+            </a>
           </template>
         </sofa-file-attachment>
 
@@ -57,14 +57,14 @@
           :customClass="'col-span-1 flex flex-col'"
           @click="handleShowAddVideo()"
         >
-          <div
-            class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center cursor-pointer"
+          <a
+            class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center"
           >
             <sofa-icon :name="item.icon" :customClass="'h-[22px]'"> </sofa-icon>
             <sofa-normal-text :customClass="'!font-bold'">
               {{ item.name }}
             </sofa-normal-text>
-          </div>
+          </a>
         </div> -->
       </template>
     </div>

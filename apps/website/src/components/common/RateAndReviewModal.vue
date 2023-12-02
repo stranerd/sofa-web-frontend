@@ -38,8 +38,7 @@
           </template>
 
           <div :class="`flex flex-col pb-3 ${tutor ? 'pt-2' : ''} `" v-if="hasRatings">
-            <sofa-ratings :count="formData.ratings" v-model="formData.ratings" :custom-class="'cursor-pointer'"
-              :readonly="false" :size="'h-[23px]'" />
+            <sofa-ratings :count="formData.ratings" v-model="formData.ratings" :readonly="false" :size="'h-[23px]'" />
           </div>
 
           <div class="flex flex-col w-full">

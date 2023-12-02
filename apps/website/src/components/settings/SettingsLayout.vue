@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout :hasBottomBar="false" layoutStyle="mdlg:!w-[75%] lg:!w-[60%] w-full pt-0 mdlg:!pt-6">
+	<expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
 		<div
 			class="mdlg:hidden w-full flex items-center gap-3 z-[10] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
 			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
@@ -11,10 +11,10 @@
 			<slot />
 		</div>
 
-		<div :class="`${index ? 'grid' : 'hidden mdlg:grid'} grid-cols-12 w-full gap-5 text-left`">
+		<div :class="`${index ? 'grid' : 'hidden mdlg:grid'} flex-grow overflow-y-auto grid-cols-12 w-full gap-5 text-left`">
 			<div class="mdlg:col-span-3 mdlg:flex col-span-full flex-col relative mdlg:px-0 px-4">
 				<div
-					class="flex flex-col gap-3 mdlg:p-4 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:sticky lg:top-[8%] mdlg:top-[10%] mdlg:shadow-custom">
+					class="flex flex-col gap-3 mdlg:p-4 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:shadow-custom">
 					<div v-for="option in settingOptions" :key="option.title"
 						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 rounded-custom shadow-custom mdlg:shadow-none mdlg:border-none">
 						<sofa-header-text size="xl" customClass="px-2 hidden mdlg:block mb-2" :content="option.title" />
@@ -43,7 +43,7 @@
 				</div>
 			</div>
 
-			<div class="col-span-full mdlg:col-span-9">
+			<div class="col-span-full mdlg:col-span-9 flex-grow overflow-y-auto">
 				<slot />
 			</div>
 		</div>

@@ -35,8 +35,6 @@
         </div>
       </div>
     </sofa-form-wrapper>
-
-    <div class="h-[40px]"></div>
   </div>
 </template>
 <script lang="ts">

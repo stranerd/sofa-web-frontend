@@ -1,6 +1,5 @@
 <template>
-	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0" :hasTopBar="false" :hasBottomBar="false"
-		:bottomPadding="false">
+	<expanded-layout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
 		<QuizWrapper :id="($route.params.id as string)" :showAnswer="showSolution" :isAnswerRight="isCorrect">
 			<template v-slot="{ quiz, questions, extras }">
 				<Quiz :index="extras.index" :title="isDone ? 'Practice completed' : quiz.title" v-model:answer="extras.answer"

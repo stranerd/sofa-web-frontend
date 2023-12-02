@@ -65,8 +65,6 @@
 
       <social-media-update />
     </div>
-
-    <div class="h-[40px]"></div>
   </div>
 </template>
 <script lang="ts">

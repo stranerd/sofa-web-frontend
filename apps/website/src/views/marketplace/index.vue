@@ -1,5 +1,5 @@
 <template>
-  <expanded-layout layoutStyle="!w-full">
+  <expanded-layout layoutStyle="mdlg:pb-4">
     <div class="w-full mdlg:!flex hidden flex-col gap-5 py-8 pb-14 bg-primaryPurple justify-center items-center">
       <sofa-header-text color="!text-white" size="xl" :customClass="'!font-extrabold'">All contents made by verified
         creators</sofa-header-text>
@@ -185,8 +185,6 @@
           </div>
         </template>
       </div>
-
-      <div class="h-[100px]"></div>
     </div>
   </expanded-layout>
 </template>

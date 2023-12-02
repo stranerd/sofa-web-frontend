@@ -12,11 +12,12 @@
 
 body {
   font-family: Lexend;
+  -webkit-tap-highlight-color: transparent;
   @apply bg-backgroundGray text-bodyBlack;
 }
 
 #app {
-  @apply h-screen overflow-auto w-full flex flex-col;
+  @apply h-[100dvh] w-[100dvw] overflow-auto flex flex-col;
 }
 
 

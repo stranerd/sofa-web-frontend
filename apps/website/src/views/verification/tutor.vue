@@ -1,5 +1,5 @@
 <template>
-  <expanded-layout :hasBottomBar="false" layoutStyle="mdlg:!w-[60%] lg:!w-[45%] w-full pt-0  mdlg:!pt-0 lg:!pt-0 ">
+  <expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[60%] lg:!w-[45%]">
     <div
       class="w-full flex mdlg:!hidden flex-row items-center gap-3 z-50 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
       <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
@@ -7,7 +7,7 @@
         Become a tutor</sofa-normal-text>
       <div class="invisible">Hello</div>
     </div>
-    <div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
+    <div class="w-full flex flex-col flex-grow overflow-y-auto gap-5 mdlg:px-0 px-4 pb-4">
       <!-- Top bar for larger screens -->
       <div class="w-full hidden flex-row items-center justify-between mdlg:!flex pt-4">
         <sofa-header-text :customClass="'!text-2xl !font-bold'">
@@ -163,11 +163,9 @@
           </div>
         </div>
       </template>
-
-      <div class="h-[100px]"></div>
     </div>
     <!-- Button for smaller screens -->
-    <div class="w-full flex flex-col fixed bottom-0 left-0 bg-white px-4 py-4 mdlg:hidden">
+    <div class="w-full flex flex-col bg-white px-4 py-4 mdlg:hidden">
       <sofa-button :padding="'py-3'" :customClass="'!w-full'" @click="handleNextAction()">
         Next
       </sofa-button>

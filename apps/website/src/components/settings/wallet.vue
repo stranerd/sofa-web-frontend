@@ -8,8 +8,7 @@
       <div class="w-full flex flex-col gap-1">
         <div class="flex flex-row items-center gap-2">
           <sofa-normal-text>Balance</sofa-normal-text>
-          <sofa-icon :customClass="`${showMoney ? 'h-[10px]' : 'h-[15px]'
-            } cursor-pointer`" :name="showMoney ? 'hide' : 'show'"
+          <sofa-icon :customClass="`${showMoney ? 'h-[10px]' : 'h-[15px]'} cursor-pointer`" :name="showMoney ? 'hide' : 'show'"
             @click="showMoney ? (showMoney = false) : (showMoney = true)" />
         </div>
 
@@ -120,8 +119,6 @@
       <sofa-empty-state v-else :title="'No transaction yet'"
         :subTitle="'All you wallet transaction would show up here'" />
     </div>
-
-    <div class="h-[40px]"></div>
   </div>
   <sofa-modal v-if="showModal" :close="() => {
     showModal = false

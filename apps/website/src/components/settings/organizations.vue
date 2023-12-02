@@ -31,8 +31,6 @@
       <sofa-empty-state v-else :title="'No organization'" :subTitle="'Your are not a student of any organization'" />
     </div>
 
-    <div class="h-[40px]"></div>
-
     <sofa-delete-prompt v-if="showLeaveOrganization" :title="'Are you sure you want to leave this organization?'"
       :subTitle="`This action is permanent. You will lose access to all current and future resources of this organization.`"
       :close="() => {

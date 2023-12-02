@@ -39,7 +39,7 @@
         color: SingleQuiz?.status != 'published' ? 'gray' : 'green',
       },
     ],
-  }" :hideSmNavigator="{
+  }" :hide="{
   bottom: true,
   top: true,
 }" :bgColor="'mdlg:!bg-backgroundGray bg-white'" :middleSessionWidth="'lg:w-[56%]  mdlg:w-[50%] mdlg:!pb-5'">

@@ -2,10 +2,10 @@
   <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
     <!-- For smaller screens -->
     <div class="w-full flex mdlg:hidden flex-col gap-3 bg-white py-3 px-3 rounded-[8px]">
-      <div class="flex flex-row items-center gap-2 opacity-60 cursor-pointer" @click="copyJoinLink()">
+      <a class="flex flex-row items-center gap-2 opacity-60" @click="copyJoinLink()">
         <sofa-icon :name="'copy'" :customClass="'h-[14px]'" />
         <sofa-normal-text> Copy join link </sofa-normal-text>
-      </div>
+      </a>
 
       <div class="w-full flex flex-row items-center gap-3">
         <sofa-button @click="showAddStudents()"> Add student </sofa-button>
@@ -17,14 +17,14 @@
 
     <div v-if="allRequests.length"
       class="w-full flex flex-col gap-4 bg-white mdlg:rounded-[16px] rounded-[8px] py-3 px-3 md:!px-5 md:!py-5 mdlg:px-4 mdlg:py-4 mdlg:shadow-custom">
-      <div class="w-full flex flex-row items-center justify-between cursor-pointer"
+      <a class="w-full flex flex-row items-center justify-between"
         @click="showRequests ? (showRequests = false) : (showRequests = true)">
         <sofa-header-text :size="'xl'" :customClass="'text-left'">
           Requests ({{ allRequests.length }})
         </sofa-header-text>
 
         <sofa-icon :name="showRequests ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
-      </div>
+      </a>
 
       <div class="w-full flex flex-col gap-4" v-if="showRequests">
         <div class="w-full flex flex-row gap-2 items-center justify-between" v-for="(item, index) in allRequests"
@@ -66,10 +66,10 @@
         </sofa-header-text>
 
         <div class="mdlg:flex flex-row items-center gap-4 hidden">
-          <div class="flex flex-row items-center gap-2 opacity-60 cursor-pointer" @click="copyJoinLink()">
+          <a class="flex flex-row items-center gap-2 opacity-60" @click="copyJoinLink()">
             <sofa-normal-text> Copy join link </sofa-normal-text>
             <sofa-icon :name="'copy'" :customClass="'h-[15px]'" />
-          </div>
+          </a>
 
           <div class="flex flex-row items-center gap-2">
             <sofa-button @click="showAddStudents()"> Add student </sofa-button>
@@ -111,8 +111,6 @@
         }
           " />
     </div>
-
-    <div class="h-[40px]"></div>
 
     <sofa-modal v-if="showModal" :close="() => {
       showModal = false
