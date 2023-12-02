@@ -89,6 +89,19 @@ export default class GamesApi extends ModelApiService {
     }
   }
 
+  public async endGame(gameId: string) {
+    try {
+      const response: AxiosResponse<Game> = await this.axiosInstance.post(
+        this.getUrl() + `/${gameId}/end`,
+      )
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
   public async answerGameQuestion(gameId: string, data: AddQuestionAnswer) {
     try {
       const response: AxiosResponse<GameParticipantAnswer> = await this.axiosInstance.post(

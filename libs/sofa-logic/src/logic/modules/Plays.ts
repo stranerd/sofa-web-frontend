@@ -34,31 +34,15 @@ export default class Plays extends Common {
     })
   }
 
-  public GetTest = (id: string | undefined) => {
-    if (!id || id == 'nill') {
-      return new Promise((resolve) => {
-        resolve('')
-      })
-    } else {
-      return new Promise((resolve) => {
-        $api.plays.test
-          .get(id)
-          .then((response) => {
-            this.SingleTest = response.data
-            // get questions
-            if (this.SingleTest?.status == 'started') {
-              this.GetTestQuizQuestions(this.SingleTest.id).then(() => {
-                resolve('')
-              })
-            } else {
-              resolve('')
-            }
-          })
-          .catch((error) => {
-            throw error
-          })
-      })
-    }
+  public GetTest = async (id: string | undefined, skipExtras = false) => {
+    if (!id || id == 'nill') return null
+    const response = await $api.plays.test.get(id)
+    this.SingleTest = response.data
+    if (!this.SingleTest || skipExtras) return this.SingleTest
+
+    if (this.SingleTest?.status == 'started') await this.GetTestQuizQuestions(this.SingleTest.id)
+
+    return this.SingleTest
   }
 
   public GetGames = (filters: QueryParams) => {
@@ -69,6 +53,13 @@ export default class Plays extends Common {
 
   public GetGameAnswers = (gameId: string, filters: QueryParams) => {
     return $api.plays.game.getGameAnswers(gameId, filters).then((response) => {
+      this.AllParticipantAnswers = response.data
+      return this.AllParticipantAnswers
+    })
+  }
+
+  public GetTestAnswers = (testId: string, filters: QueryParams) => {
+    return $api.plays.test.getTestAnswers(testId, filters).then((response) => {
       this.AllParticipantAnswers = response.data
       return this.AllParticipantAnswers
     })
@@ -226,6 +217,15 @@ export default class Plays extends Common {
       .startTest(testId)
       .then((response) => {
         this.SingleTest = response.data
+        return response.data
+      })
+  }
+
+  public EndGame = (gameId: string) => {
+    return $api.plays.game
+      .endGame(gameId)
+      .then((response) => {
+        this.SingleGame = response.data
         return response.data
       })
       .catch((error) => {

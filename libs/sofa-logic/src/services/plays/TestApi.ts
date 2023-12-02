@@ -3,6 +3,7 @@ import { ModelApiService } from '../common/ModelService'
 import { Question } from '../../logic/types/domains/study'
 import { GameParticipantAnswer, Test } from '../../logic/types/domains/plays'
 import { AddQuestionAnswer } from '../../logic/types/forms/plays'
+import { Paginated, QueryParams } from '../../logic'
 
 export default class TestApi extends ModelApiService {
   constructor() {
@@ -14,6 +15,20 @@ export default class TestApi extends ModelApiService {
       const response: AxiosResponse<Question[]> = await this.axiosInstance.get(
         this.getUrl() + `/${testId}/questions`,
       )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
+  public async getTestAnswers(testId: string, filters: QueryParams) {
+    try {
+      const response: AxiosResponse<Paginated<GameParticipantAnswer>> = await this.axiosInstance.get(this.getUrl() + `/${testId}/answers`, {
+        params: filters,
+      })
 
       return response
     } catch (err) {

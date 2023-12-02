@@ -64,6 +64,18 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		await store[id].setLoading(false)
 	}
 
+	const end = async () => {
+		await store[id].setError('')
+		if (store[id].game.value?.status !== 'started') return
+		try {
+			await store[id].setLoading(true)
+			await Logic.Plays.EndGame(id)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
 	const join = async (join: boolean) => {
 		await store[id].setError('')
 		if (join && store[id].game.value?.participants.includes(authId.value)) return
@@ -139,5 +151,5 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		await store[id].listener.close()
 	})
 
-	return { ...store[id], start, join, submitAnswer }
+	return { ...store[id], start, end, join, submitAnswer }
 }
