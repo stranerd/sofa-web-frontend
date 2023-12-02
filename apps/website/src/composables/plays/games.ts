@@ -19,6 +19,10 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 	const route = useRoute()
 	const router = useRouter()
 
+	const lobby = `/games/${id}/lobby`
+	const run = `/games/${id}/run`
+	const results = `/games/${id}/results`
+
 	store[id] ??= {
 		game: ref(null),
 		participants: ref([]),
@@ -58,6 +62,7 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		try {
 			await store[id].setLoading(true)
 			await Logic.Plays.StartGame(id)
+			await router.push(store[id].game.value?.participants.includes(authId.value) ? run : results)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -111,9 +116,6 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 	const gameWatcherCb = async () => {
 		const g = store[id].game.value
 		if (!g || skip.statusNav) return
-		const lobby = `/games/${g.id}/lobby`
-		const run = `/games/${g.id}/run`
-		const results = `/games/${g.id}/results`
 
 		if (g.status === 'created' && route.path !== lobby) return await alertAndNav(lobby, 'Game has not started yet')
 		if (g.status === 'started' && route.path !== run) return await alertAndNav(run, 'Game has started')

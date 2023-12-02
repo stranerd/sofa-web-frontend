@@ -18,6 +18,10 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 	const route = useRoute()
 	const router = useRouter()
 
+	const lobby = `/tests/${id}/lobby`
+	const run = `/tests/${id}/run`
+	const results = `/tests/${id}/results`
+
 	store[id] ??= {
 		test: ref(null),
 		questions: ref([]),
@@ -56,6 +60,7 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 		try {
 			await store[id].setLoading(true)
 			await Logic.Plays.StartTest(id)
+			await router.push(run)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -64,14 +69,18 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 
 	const end = async () => {
 		await store[id].setError('')
-		if (store[id].test.value?.status !== 'started') return
+		if (store[id].test.value?.status !== 'started') return false
+		let succeeded = false
 		try {
 			await store[id].setLoading(true)
 			await Logic.Plays.EndTest(id)
+			await router.push(results)
+			succeeded = true
 		} catch (e) {
 			await store[id].setError(e)
 		}
 		await store[id].setLoading(false)
+		return succeeded
 	}
 
 	const submitAnswer = async (data: AddQuestionAnswer) => {
@@ -96,9 +105,6 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 	const testWatcherCb = async () => {
 		const g = store[id].test.value
 		if (!g || skip.statusNav) return
-		const lobby = `/tests/${g.id}/lobby`
-		const run = `/tests/${g.id}/run`
-		const results = `/tests/${g.id}/results`
 
 		if (g.userId !== authId.value) return await alertAndNav('/library')
 		if (g.status === 'created' && route.path !== lobby) return await alertAndNav(lobby, 'Test has not started yet')
