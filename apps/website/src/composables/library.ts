@@ -125,7 +125,7 @@ export const plays = computed(() => [
       type: 'game',
       participants: p.participants.length,
       action: () => {
-        Logic.Common.GoToRoute(`/games/${p.id}`)
+        Logic.Common.GoToRoute(`/games/${p.id}/${ended ? 'results' : 'lobby'}`)
       },
     }
   }) ?? [],
@@ -146,7 +146,7 @@ export const plays = computed(() => [
       title: currentQuiz?.title || 'Unknown quiz',
       type: 'test',
       action: () => {
-        Logic.Common.GoToRoute(`/tests/${p.id}`)
+        Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
       },
     }
   }) ?? [],

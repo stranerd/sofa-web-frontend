@@ -32,6 +32,7 @@ const { id, user } = useAuth()
 
 const extras = computed(() => ({
 	isMine: test.value && test.value.userId === id.value,
+	canEnd: test.value && test.value.userId === id.value && test.value.status === 'started',
 	authId: id.value,
 	answers: answer.value?.data ?? null,
 	start, end,

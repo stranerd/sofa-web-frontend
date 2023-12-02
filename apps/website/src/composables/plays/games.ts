@@ -71,14 +71,19 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 
 	const end = async () => {
 		await store[id].setError('')
-		if (store[id].game.value?.status !== 'started') return
+		if (store[id].game.value?.status !== 'started') return false
+		const confirmed = confirm('Ending the game now will automically end it for all participants currently taking the tests!')
+		if (!confirmed) return false
+		let succeeded = false
 		try {
 			await store[id].setLoading(true)
 			await Logic.Plays.EndGame(id)
+			succeeded = true
 		} catch (e) {
 			await store[id].setError(e)
 		}
 		await store[id].setLoading(false)
+		return succeeded
 	}
 
 	const join = async (join: boolean) => {
