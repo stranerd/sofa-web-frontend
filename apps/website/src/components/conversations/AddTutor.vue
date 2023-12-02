@@ -17,14 +17,15 @@
             </div>
 
             <div class="w-full flex flex-col" v-if="currentStep == 2">
-              <sofa-select placeholder="Select subject" :padding="'px-2 py-4'" :customClass="'custom-border border-[1px]'"
-                :options="allTopics" :auto-complete="true" v-model="selectedTopic">
+              <sofa-select placeholder="Select subject" :padding="'px-2 py-4'"
+                :customClass="'rounded-custom border'" :options="allTopics" :auto-complete="true"
+                v-model="selectedTopic">
               </sofa-select>
             </div>
           </div>
 
           <div
-            class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden pt-3 border-[#F1F6FA] border-b-[1px] px-4 pb-3">
+            class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden pt-3 border-[#F1F6FA] border-b px-4 pb-3">
             <div class="flex flex-row w-full items-center gap-2 justify-between">
               <sofa-header-text :customClass="'!font-bold'" content="Add a tutor" />
               <sofa-icon :customClass="'h-[16px]'" :name="'circle-close'" @click="close ? close() : null" />
@@ -36,8 +37,9 @@
             </div>
 
             <div class="w-full flex flex-col pt-3" v-if="currentStep === 2">
-              <sofa-select placeholder="Select subject" :padding="'px-2 py-4'" :customClass="'custom-border border-[1px]'"
-                :options="allTopics" :auto-complete="true" v-model="selectedTopic">
+              <sofa-select placeholder="Select subject" :padding="'px-2 py-4'"
+                :customClass="'rounded-custom border'" :options="allTopics" :auto-complete="true"
+                v-model="selectedTopic">
               </sofa-select>
             </div>
           </div>
@@ -49,24 +51,24 @@
                   What type of help do you need?
                 </sofa-normal-text>
               </div>
-              <a
-                class="w-full flex  items-center justify-between p-4 custom-border bg-backgroundGray"
+              <a class="w-full flex  items-center justify-between p-4 rounded-custom bg-backgroundGray"
                 v-for="(option, index) in helpOptions" :key="index" @click="selectedhelpOption = option.key">
                 <sofa-normal-text :color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-[#78828C]'">
                   {{ option.title }}
                 </sofa-normal-text>
-                <sofa-icon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" :customClass="'h-[20px]'" />
+                <sofa-icon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'"
+                  :customClass="'h-[20px]'" />
               </a>
-              <sofa-text-field :padding="'px-3 py-4'" :custom-class="'border-[1px] custom-border'" :placeholder="'Others'"
-                v-model="selectedhelpOptionOthers" />
+              <sofa-text-field :padding="'px-3 py-4'" :custom-class="'border rounded-custom'"
+                :placeholder="'Others'" v-model="selectedhelpOptionOthers" />
             </div>
           </template>
 
           <template v-if="currentStep == 1">
             <div class="w-full flex flex-col gap-3 px-4 md:px-0">
-              <sofa-textarea :padding="'px-3 py-4'" :custom-class="'bg-backgroundGray custom-border'"
+              <sofa-textarea :padding="'px-3 py-4'" :custom-class="'bg-backgroundGray rounded-custom'"
                 :placeholder="'Tell the tutor why you need him/her'" v-model="reasonForRequest"
-                :text-area-style="'!bg-backgroundGray custom-border'">
+                :text-area-style="'!bg-backgroundGray rounded-custom'">
               </sofa-textarea>
             </div>
           </template>
@@ -74,7 +76,7 @@
           <template v-if="currentStep == 2">
             <div class="w-full flex flex-col gap-3 md:!px-0 px-4 flex-grow">
               <template v-if="filteredTutors.length">
-                <a :class="`w-full custom-border bg-[#F1F6FA] ${selectedTutorId == tutor.id ? 'border-[2px] border-primaryPurple' : ''} p-4 flex items-center gap-3`"
+                <a :class="`w-full rounded-custom bg-[#F1F6FA] ${selectedTutorId == tutor.id ? 'border-2 border-primaryPurple' : ''} p-4 flex items-center gap-3`"
                   v-for="(tutor, index) in filteredTutors" :key="index" @click="selectedTutorId = tutor.id">
                   <div class="w-[60px]">
                     <sofa-avatar :size="'60'" :photoUrl="tutor.photo_url" :bgColor="'bg-grayColor'">
@@ -118,8 +120,7 @@
           </template>
         </div>
 
-        <div
-          class="w-full flex items-center justify-between bg-white p-4">
+        <div class="w-full flex items-center justify-between bg-white p-4">
           <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
             :customClass="'border border-gray-100 hidden md:!inline-block'" @click.prevent="close?.()">
             Exit

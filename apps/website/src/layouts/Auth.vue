@@ -24,7 +24,7 @@
       :customClass="`bg-primaryPurple hidden mdlg:flex flex-col relative lg:w-[55%] mdlg:w-[50%] h-full items-center justify-center pt-9`">
       <div
         class="w-full h-full bg-[#141618] bg-opacity-75 top-0 left-0 absolute flex flex-col gap-5 px-[14%] py-6 justify-center">
-        <div class="w-full bg-white custom-border px-5 py-3">
+        <div class="w-full bg-white rounded-custom px-5 py-3">
           <sofa-normal-text :customClass="'!font-bold !text-base gap-2 flex'">
             <span> Did you know? </span>
             <sofa-icon :name="'idea'" :customClass="'h-[20px]'" />

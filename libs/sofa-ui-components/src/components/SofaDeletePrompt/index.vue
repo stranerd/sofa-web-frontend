@@ -16,7 +16,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b-[1px] px-4">
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             {{ title }}
           </sofa-normal-text>
@@ -35,7 +35,7 @@
             <sofa-button v-if="!button.hide" :textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
               :bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')" :padding="'px-4 py-2'"
               @click="button.action ? button.action() : null"
-              :customClass="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-[2px]  md:!w-auto w-full`">
+              :customClass="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-2  md:!w-auto w-full`">
               {{ button.label }}
             </sofa-button>
           </div>

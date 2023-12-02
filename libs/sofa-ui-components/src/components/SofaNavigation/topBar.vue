@@ -25,7 +25,7 @@
         </div>
 
         <div :class="`py-4 flex flex-row items-center justify-center gap-2 cursor-pointer ${tabIsActive(tab.routeTag)
-          ? 'border-b-[2px] border-primaryPurple'
+          ? 'border-b-2 border-primaryPurple'
           : ''
           }`" @click="Logic.Common.GoToRoute(tab.path)" v-for="(tab, index) in tabs" :key="index">
           <sofa-icon :customClass="tab.icon_size" :name="tabIsActive(tab.routeTag) ? `${tab.icon}-active` : tab.icon" />
@@ -46,12 +46,12 @@
         <sofa-button :padding="'px-4 py-1'" @click="showAddItem()">Create</sofa-button>
         <div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
           <div
-            class="w-[36px] h-[36px] flex flex-row items-center justify-center border-[1px] border-[#E1E6EB] rounded-full cursor-pointer"
+            class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-[#E1E6EB] rounded-full cursor-pointer"
             @click="showNotification = true">
             <sofa-icon :customClass="'h-[16px]'" :name="'bell'" />
           </div>
           <div v-if="showNotification"
-            class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom custom-border pb-3 px-4 absolute top-[140%] right-0 z-[100] hidden mdlg:flex flex-col">
+            class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom rounded-custom pb-3 px-4 absolute top-[140%] right-0 z-[100] hidden mdlg:flex flex-col">
             <notification :close="() => {
               showNotification = false
             }
@@ -80,7 +80,7 @@
       <div class="md:!flex hidden flex-row items-center gap-4">
         <template v-for="(action, index) in subpageActions" :key="index">
           <template v-if="action.isIcon">
-            <div class="flex flex-row gap-4 border-r-[1px] border-[#E1E6EB] items-center pr-3 cursor-pointer">
+            <div class="flex flex-row gap-4 border-r border-[#E1E6EB] items-center pr-3 cursor-pointer">
               <div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data" :key="index"
                 @click="icon.handler()">
                 <sofa-icon :name="icon.icon" :customClass="icon.size" />
@@ -95,7 +95,7 @@
             <sofa-button v-if="!action.IsOutlined" :padding="'px-4 py-1'" :customClass="'!font-semibold'"
               @click="action.handler()">{{ action.name }}</sofa-button>
             <sofa-button :bgColor="'bg-white'" :textColor="'text-grayColor'"
-              :custom-class="'!font-semibold !border-[2px]!border-grayColor border-[1px] border-gray-200'"
+              :custom-class="'!font-semibold border border-gray-200'"
               @click="action.handler()" v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
           </template>
         </template>

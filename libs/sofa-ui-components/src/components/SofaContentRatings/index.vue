@@ -2,9 +2,9 @@
   <div :class="`w-full flex flex-col ${hasWhiteBox ? 'gap-4' : 'gap-3'
     }  pb-4`">
     <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
-      } custom-border mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-center`">
+      } rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-center`">
       <div class="flex flex-col py-4 px-2 mdlg:!w-[200px] w-[200px]">
-        <div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-[2px] border-[#E1E6EB]">
+        <div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-2 border-[#E1E6EB]">
           <div class="flex flex-row">
             <sofa-normal-text :customClass="'mdlg:!text-xl !text-lg'">
               {{ data.avg }}
@@ -42,7 +42,7 @@
     </div>
 
     <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
-      }  custom-border mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-start`"
+      }  rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-start`"
       v-for="(review, index) in data.reviews" :key="index">
       <div>
         <sofa-avatar :photoUrl="review.user.photoUrl" :size="'44'" :userId="review.user.id" />

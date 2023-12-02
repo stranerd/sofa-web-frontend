@@ -8,7 +8,7 @@
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 				<div
-					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4">
+					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
 					<sofa-normal-text :customClass="'!font-bold !text-base'">
 						{{
 							selectedQuizMode == "game"
@@ -40,7 +40,8 @@
 				</div>
 
 				<div class="w-full flex flex-col gap-3 py-4 px-4" v-else>
-					<div @click="userIsParticipating = !userIsParticipating" class="w-full custom-border py-4 px-4 bg-backgroundGray flex flex-row cursor-pointer items-center justify-between">
+					<div @click="userIsParticipating = !userIsParticipating"
+						class="w-full rounded-custom py-4 px-4 bg-backgroundGray flex flex-row cursor-pointer items-center justify-between">
 						<sofa-normal-text>Participate</sofa-normal-text>
 						<sofa-icon :customClass="'h-[22px] z-50'"
 							:name="userIsParticipating ? 'toggle-on' : 'toggle-off'" />

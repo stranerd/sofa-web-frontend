@@ -9,7 +9,7 @@
             <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
           </sofa-avatar>
         </div>
-        <div class="p-3 custom-border text-left bg-[#E2F3FD] flex flex-col gap-1 justify-start">
+        <div class="p-3 rounded-custom text-left bg-[#E2F3FD] flex flex-col gap-1 justify-start">
           <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#3296C8]'">
             {{ users[message.userId]?.name }}
           </sofa-normal-text>
@@ -19,7 +19,7 @@
 
       <div class="min-w-[80px] w-full flex gap-2 items-end justify-end py-4" v-else>
         <div class="flex flex-row items-end gap-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
-          <div class="p-3 custom-border text-left bg-[#E1E6EB]">
+          <div class="p-3 rounded-custom text-left bg-[#E1E6EB]">
             <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body">
             </sofa-normal-text>
           </div>
@@ -33,7 +33,7 @@
     </template>
 
     <div v-if="messages.length === 0" class="w-full flex items-center justify-center">
-      <div class="px-4 py-2 custom-border bg-[#F1F6FA] text-center">
+      <div class="px-4 py-2 rounded-custom bg-[#F1F6FA] text-center">
         <sofa-normal-text :color="'text-grayColor'" content="Send a message to get started" />
       </div>
     </div>

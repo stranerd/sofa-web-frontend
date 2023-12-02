@@ -1,9 +1,9 @@
 <template>
-  <div :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer custom-border ${customClass}`">
-    <sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] custom-border relative" :photo-url="content.image">
+  <div :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer rounded-custom ${customClass}`">
+    <sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photo-url="content.image">
       <div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
         v-if="content.price > 0">
-        <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 custom-border'">
+        <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
           {{
             content.price > 0
             ? `${Logic.Common.convertToMoney(content.price, false, "ngn")}`
@@ -75,7 +75,7 @@ export default defineComponent({
   props: {
     customClass: {
       type: String,
-      default: "border-[2px] rounded-[16px] border-[#E1E6EB]",
+      default: "border-2 rounded-[16px] border-[#E1E6EB]",
     },
     content: {
       type: Object as () => any,

@@ -29,7 +29,7 @@
 
         <div class="w-full flex flex-col items-center justify-center pt-3">
           <sofa-image-loader
-            :customClass="`w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
+            :customClass="`w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
             :photoUrl="profileImageUrl">
             <sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileImageUrl" />
             <sofa-file-attachment :isWrapper="true"
@@ -44,22 +44,21 @@
         </div>
 
         <sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'First name'" ref="name.first"
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
           :defaultValue="UserProfile.bio.name.first">
           <template v-slot:title> First Name </template>
         </sofa-text-field>
 
         <sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'Last name'" ref="name.last"
-          :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
           :defaultValue="UserProfile.bio.name.last">
           <template v-slot:title> Last Name </template>
         </sofa-text-field>
 
-        <sofa-textarea :placeholder="'Description of yourself'" :hasTitle="true" :name="'Bio'"
-          ref="description"
-          :text-area-style="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor resize-none'"
+        <sofa-textarea :placeholder="'Description of yourself'" :hasTitle="true" :name="'Bio'" ref="description"
+          :text-area-style="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor resize-none'"
           :rules="[FormValidations.RequiredRule]" v-if="UserProfile" v-model="updateProfileForm.description">
           <template v-slot:title> Bio </template>
         </sofa-textarea>
@@ -95,7 +94,7 @@
 
             <div class="w-full flex flex-col">
               <div @click="showAddMaterialHandler()"
-                class="w-full flex cursor-pointer flex-row gap-3 md:!min-h-[140px] min-h-[50px] justify-center items-center px-4 py-4 border-[2px] rounded-[16px] border-[#E1E6EB]">
+                class="w-full flex cursor-pointer flex-row gap-3 md:!min-h-[140px] min-h-[50px] justify-center items-center px-4 py-4 border-2 rounded-[16px] border-[#E1E6EB]">
                 <sofa-icon :name="'box-add-pink'" :customClass="'h-[18px]'"></sofa-icon>
                 <sofa-normal-text :color="'text-primaryPink '">
                   Add content
@@ -141,7 +140,7 @@
             </div>
 
             <div class="w-full flex flex-col gap-4">
-              <sofa-select :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+              <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
                 :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="capitalize(addMaterialType)" :ref="addMaterialType"
                 :placeholder="'Select material'" :rules="[FormValidations.RequiredRule]" :autoComplete="false"
                 :borderColor="'border-transparent'" :options="allMaterials" :hasTitle="true" v-model="selectedMaterial">
@@ -150,7 +149,7 @@
 
               <div class="w-full flex flex-row items-center justify-between z-[50] bg-white">
                 <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-                  :customClass="'border-[1px] border-gray-100 hidden mdlg:!inline-block'"
+                  :customClass="'border border-gray-100 hidden mdlg:!inline-block'"
                   @click.prevent="showAddMaterial = false">
                   Exit
                 </sofa-button>

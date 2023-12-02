@@ -15,7 +15,7 @@
     </div>
 
     <div class="w-full flex flex-col gap-3" v-for="(section, index) in data.sections" :key="index">
-      <div class="w-full bg-[#F1F6FA] cursor-pointer custom-border px-4 py-4 flex flex-row items-center justify-between"
+      <div class="w-full bg-[#F1F6FA] cursor-pointer rounded-custom px-4 py-4 flex flex-row items-center justify-between"
         @click.stop="
           section.opened ? (section.opened = false) : (section.opened = true)
           ">
@@ -31,7 +31,7 @@
       </div>
 
       <template v-if="section.opened">
-        <div :class="`w-full bg-[#F1F6FA] custom-border px-4 py-4 flex flex-row items-center justify-between   `"
+        <div :class="`w-full bg-[#F1F6FA] rounded-custom px-4 py-4 flex flex-row items-center justify-between   `"
           v-for="(eachData, index) in section.data" :key="index">
           <div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''
             }`">
@@ -61,8 +61,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
 import { Logic } from "sofa-logic"
+import { defineComponent } from "vue"
 import SofaBadge from "../SofaBadge"
 import SofaButton from "../SofaButton"
 import SofaIcon from "../SofaIcon"

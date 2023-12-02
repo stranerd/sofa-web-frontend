@@ -20,7 +20,7 @@
           <div class="w-full grid grid-cols-2 gap-3 pt-2">
             <sofa-normal-text :color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'
               " :customClass="`!font-semibold cursor-pointer pb-2 col-span-1 items-center justify-center ${selectedTab == tab.key
-    ? 'border-b-[2px] border-primaryPurple'
+    ? 'border-b-2 border-primaryPurple'
     : ''
     }`" v-for="(tab, index) in tabs" @click="selectedTab = tab.key" :key="index">
               {{ tab.name }}
@@ -29,11 +29,11 @@
         </div>
 
         <div
-          class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden pt-3 border-[#F1F6FA] border-b-[1px] px-4">
+          class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden pt-3 border-[#F1F6FA] border-b px-4">
           <div class="w-full grid grid-cols-2 gap-3 pt-2">
             <sofa-normal-text :color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'
               " :customClass="`!font-semibold cursor-pointer pb-2 col-span-1 items-center justify-center ${selectedTab == tab.key
-    ? 'border-b-[2px] border-primaryPurple'
+    ? 'border-b-2 border-primaryPurple'
     : ''
     }`" v-for="(tab, index) in tabs" @click="selectedTab = tab.key" :key="index">
               {{ tab.name }}
@@ -79,7 +79,7 @@
         <div
           class="w-full flex flex-row items-center justify-between z-[50] bg-white md:!absolute fixed bottom-0 left-0 py-4 md:!px-4 px-4">
           <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-            :customClass="'border-[1px] border-gray-100 hidden md:!inline-block'" @click.prevent="close ? close() : null">
+            :customClass="'border border-gray-100 hidden md:!inline-block'" @click.prevent="close ? close() : null">
             Exit
           </sofa-button>
 

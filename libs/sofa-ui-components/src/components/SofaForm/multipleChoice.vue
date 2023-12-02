@@ -13,7 +13,7 @@
       <draggable :class="`w-full grid-cols-1 gap-3 grid  ${options.length == 0 ? 'bg-gray-100 h-[140px] rounded-lg' : ''
         }`" v-model="options" item-key="key" group="options">
         <template #item="{ element, index }">
-          <div @click="selectedOption = element.key" :class="`col-span-1 px-3 py-3 rounded-[15px] flex flex-row gap-3 justify-between items-center bg-white border-[1px] cursor-pointer ${selectedOption == element.key ? 'border-[#83AF9B]' : 'border-[#E8E8E8]'}`">
+          <div @click="selectedOption = element.key" :class="`col-span-1 px-3 py-3 rounded-[15px] flex flex-row gap-3 justify-between items-center bg-white border cursor-pointer ${selectedOption == element.key ? 'border-[#83AF9B]' : 'border-[#E8E8E8]'}`">
             <div class="flex flex-row items-center gap-3">
               <div class="w-[25px]">
                 <div :class="`h-[24px] w-[24px] rounded-[8px] flex flex-row items-center justify-center ${selectedOption == element.key ? 'bg-primaryGreen text-white' : 'bg-[#F7F7F7] text-[#878787]'}`">

@@ -47,7 +47,7 @@ hideOptions();
         <div class="w-full py-2 sticky top-0 bg-white gap-3 flex flex-row items-center justify-between"
           v-if="autoComplete">
           <sofa-text-field placeholder="Search" v-model="searchValue"
-            custom-class="w-full !border-none !border-b-[1px] !bg-[whitesmoke]">
+            custom-class="w-full !border-none !border-b !bg-[whitesmoke]">
           </sofa-text-field>
           <div class="pr-2 cursor-pointer" @click.stop="showOption = false">
             <sofa-icon :customClass="'h-[16px]'" :name="'circle-close'" />
@@ -81,7 +81,7 @@ hideOptions();
               <span class="bg-gray-200 rounded-full w-[30px] h-[4px]"></span>
             </div>
 
-            <div class="border-[1px] w-full border-gray-200 rounded bg-white" v-if="autoComplete">
+            <div class="border w-full border-gray-200 rounded bg-white" v-if="autoComplete">
               <input ref="select" :placeholder="placeholder" v-model="searchValue" autofocus
                 :class="`py-3 px-3 flex-grow cursor-pointer bg-transparent placeholder-gray-600 focus input w-full filled focus:outline-none rounded-md focus:border-primary`" />
             </div>
@@ -90,7 +90,7 @@ hideOptions();
           <sofa-radio :options="selectOptions" v-model="selectedKey" @click.stop="true" v-if="!isMultiple" />
           <div class="w-full flex flex-col gap-2" v-else>
             <div v-for="(option, index) in selectOptions" :key="index"
-              class="flex w-full flex-row items-center justify-between cursor-pointer py-3 border-[1px] custom-border px-3 border-gray-200">
+              class="flex w-full flex-row items-center justify-between cursor-pointer py-3 border rounded-custom px-3 border-gray-200">
               <sofa-checkbox :extraData="option" :defaultValue="itemIsSelected(option.key)"
                 @click.stop="selectValue(option)">
                 {{ option.value }}
@@ -104,8 +104,8 @@ hideOptions();
 </template>
 
 <script lang="ts">
-import { capitalize, defineComponent, onMounted, ref, toRef, watch } from "vue"
 import { Logic, SelectOption } from "sofa-logic"
+import { capitalize, defineComponent, onMounted, ref, toRef, watch } from "vue"
 import SofaBadge from "../SofaBadge"
 import SofaIcon from "../SofaIcon/index.vue"
 import SofaModal from "../SofaModal"

@@ -2,29 +2,29 @@
   <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
     <div class="w-full md:!grid md:!grid-cols-2 flex flex-col-reverse gap-4">
       <div class="col-span-1 w-full flex flex-col gap-3">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Title'" ref="title"
           v-model="quizSettingsForm.title" :placeholder="'Title'" :borderColor="'border-transparent'"
           :updateValue="quizSettingsForm.title" :rules="[Logic.Form.RequiredRule]" />
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" ref="description" v-model="quizSettingsForm.description" />
 
-        <sofa-select :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Topic'" ref="topic" :placeholder="'Topic'"
           :rules="[FormValidations.RequiredRule]" :autoComplete="true" :borderColor="'border-transparent'"
           :options="allTopics" :can-use-custom="true" v-model="quizSettingsForm.topic" />
       </div>
       <div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
-        <sofa-image-loader :customClass="'w-full md:!h-full h-[220px] custom-border relative'"
+        <sofa-image-loader :customClass="'w-full md:!h-full h-[220px] rounded-custom relative'"
           :photoUrl="quizImageUrl ? quizImageUrl : '/images/default.png'">
           <div class="absolute bottom-0 left-0 pb-3 flex w-full flex-row items-center justify-center">
             <sofa-file-attachment :isWrapper="true" v-model="quizSettingsForm.photo"
               :accept="'image/png, image/gif, image/jpeg'" v-model:localFileUrl="quizImageUrl">
               <template v-slot:content>
                 <div
-                  class="px-4 py-3 flex flex-row items-center justify-center gap-2 custom-border bg-deepGray bg-opacity-50">
+                  class="px-4 py-3 flex flex-row items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
                   <sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
                   <sofa-normal-text :color="'text-white'">Add cover photo</sofa-normal-text>
                 </div>
@@ -36,14 +36,14 @@
     </div>
 
     <div class="w-full flex flex-col gap-2">
-      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-4'" :name="'Tags'" ref="tags"
         :placeholder="'Tags (Comma separated for multiple)'" :borderColor="'border-transparent'"
         v-model="quizSettingsForm.tagString" />
       <div class="w-full flex flex-row flex-wrap items-center">
         <template v-for="(item, index) in quizSettingsForm.tags" :key="index">
           <div class="py-2 pr-2" v-if="item != 'Not set'">
-            <div class="py-2 px-3 border-[2px] flex flex-row items-center gap-2 custom-border border-[#E1E6EB]">
+            <div class="py-2 px-3 border-2 flex flex-row items-center gap-2 rounded-custom border-[#E1E6EB]">
               <sofa-normal-text :color="'text-[#78828C]'">
                 {{ item }}
               </sofa-normal-text>
@@ -66,7 +66,7 @@
     <div
       class="w-full flex flex-row items-center justify-between mdlg:!relative fixed z-[50] bottom-0 left-0 mdlg:!bottom-auto mdlg:!left-auto bg-white mdlg:!py-0 mdlg:!px-0 py-4 px-4">
       <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-        :customClass="'border-[1px] border-gray-100 hidden mdlg:inline-block'"
+        :customClass="'border border-gray-100 hidden mdlg:inline-block'"
         @click.prevent="quiz ? close() : Logic.Common.goBack()">
         Exit
       </sofa-button>

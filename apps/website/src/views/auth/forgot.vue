@@ -1,8 +1,9 @@
 <template>
-  <auth-layout title="Forgot your password" subTitle="Enter the email address associated with your account and we’ll send you a link to reset your password">
+  <auth-layout title="Forgot your password"
+    subTitle="Enter the email address associated with your account and we’ll send you a link to reset your password">
     <div class="flex flex-col gap-6 w-full">
       <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="text" :name="'Email'" ref="email" v-model="emailValue" :placeholder="'Email'"
           :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]" />
       </sofa-form-wrapper>

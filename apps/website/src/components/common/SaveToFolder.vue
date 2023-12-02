@@ -16,7 +16,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4">
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             Save to
           </sofa-normal-text>
@@ -25,26 +25,24 @@
 
         <div class="w-full flex flex-col gap-3 px-4 py-4">
           <div
-            class="w-full flex flex-row items-center gap-3 justify-between px-4 py-4 custom-border bg-[#F1F6FA] cursor-pointer"
+            class="w-full flex flex-row items-center gap-3 justify-between px-4 py-4 rounded-custom bg-[#F1F6FA] cursor-pointer"
             v-for="(item, index) in folders" :key="index">
             <div class="flex flex-row items-center gap-3">
               <sofa-icon :name="'folder'" :customClass="'h-[18px]'" />
 
-              <sofa-custom-input v-if="item.edit" :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`" :updateValue="item.name"
-              @onBlur="() => {
-                item.edit = false
-                handleFolderNameBlur()
-              }"
-              @onEnter="() => {
-                item.edit = false
-                handleFolderNameBlur()
-              }"
-              :placeholder="'Folder name'"
-              @onContentChange="(content) => {
-                item.name = content
-                currentFolder.name = content
-                currentFolder.id = item.id
-              }">
+              <sofa-custom-input v-if="item.edit"
+                :custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`"
+                :updateValue="item.name" @onBlur="() => {
+                  item.edit = false
+                  handleFolderNameBlur()
+                }" @onEnter="() => {
+  item.edit = false
+  handleFolderNameBlur()
+}" :placeholder="'Folder name'" @onContentChange="(content) => {
+  item.name = content
+  currentFolder.name = content
+  currentFolder.id = item.id
+}">
               </sofa-custom-input>
 
               <sofa-normal-text v-else>
@@ -63,7 +61,7 @@
                 " v-else>+ Add</sofa-normal-text>
             </div>
           </div>
-          <div class="w-full flex flex-row items-center gap-3 px-4 py-4 custom-border bg-[#F1F6FA] cursor-pointer"
+          <div class="w-full flex flex-row items-center gap-3 px-4 py-4 rounded-custom bg-[#F1F6FA] cursor-pointer"
             @click="addFolder()">
             <sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
             <sofa-normal-text :customClass="'text-grayColor'">

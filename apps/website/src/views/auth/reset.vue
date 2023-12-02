@@ -2,15 +2,15 @@
   <auth-layout title="Reset your password">
     <div class="flex flex-col gap-6 w-full">
       <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="tel" :name="'Token'" ref="token" v-model="passwordForm.token"
           :placeholder="'Enter 6-digit token'" :rules="[FormValidations.RequiredRule]" />
 
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="password" :name="'New password'" ref="new_password"
           v-model="passwordForm.password" :placeholder="'New password'" :rules="[FormValidations.RequiredRule]" />
 
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="password" :name="'Confirm password'" ref="confirm_new_password"
           v-model="passwordForm.confirm_password" :placeholder="'Confirm new password'" :rules="[
             FormValidations.RequiredRule,

@@ -16,15 +16,14 @@
 									else return await gameExtras.join(true)
 								}
 							}" :leftButton="{
-								label: 'Close',
-								bgColor: 'bg-deepGray border border-white',
-								textColor: 'text-white',
-								click: () => Logic.Common.GoToRoute('/library')
-							}"
-						>
+	label: 'Close',
+	bgColor: 'bg-deepGray border border-white',
+	textColor: 'text-white',
+	click: () => Logic.Common.GoToRoute('/library')
+}">
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
-									<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 custom-border"
+									<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom"
 										:class="{ 'flex-col justify-center items-center': gameExtras.isMine }">
 										<template v-if="gameExtras.isMine">
 											<SofaNormalText color="text-grayColor !text-center"
@@ -45,7 +44,7 @@
 										</template>
 										<template v-else>
 											<SofaImageLoader :photoUrl="quiz.photo?.link"
-												customClass="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] custom-border" />
+												customClass="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
 											<div class="w-full flex flex-col h-full gap-2">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="quiz.title" size="xl"
@@ -76,13 +75,13 @@
 									<SofaNormalText color="text-white" class="-mt-4"
 										:content="gameExtras.isMine ? 'Start game when enough players have joined' : 'Waiting for host to start game'" />
 									<div v-for="user in participants" :key="user.id"
-										class="w-full flex items-center justify-center p-3 custom-border border-4 bg-white"
+										class="w-full flex items-center justify-center p-3 rounded-custom border-4 bg-white"
 										:class="user.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
 										<SofaNormalText color="text-deepGray" class="!font-semibold"
 											:content="user.id === gameExtras.authId ? 'You' : user.bio.name.full" />
 									</div>
 									<div v-if="participants.length == 0"
-										class="w-full flex items-center justify-center p-3 custom-border border-2 bg-white">
+										class="w-full flex items-center justify-center p-3 rounded-custom border-2 bg-white">
 										<SofaNormalText content="Waiting for players!" />
 									</div>
 								</div>

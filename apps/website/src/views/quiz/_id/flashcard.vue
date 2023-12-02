@@ -4,8 +4,7 @@
 		<QuizWrapper :id="($route.params.id as string)">
 			<template v-slot="{ quiz, questions, extras }">
 				<Quiz :index="extras.index" :title="isDone ? 'Flashcards completed' : quiz.title"
-					v-model:answer="extras.answer" :questions="questions" :optionState="extras.optionState"
-					:rightButton="{
+					v-model:answer="extras.answer" :questions="questions" :optionState="extras.optionState" :rightButton="{
 						label: isDone ? 'Continue' : 'Mastered',
 						bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
 						textColor: 'text-white',
@@ -14,19 +13,18 @@
 							if (extras.canNext) return extras.next()
 							return isDone = true
 						}
-					}"
-					:leftButton="{
-						label: isDone ? 'Restart' : 'Show later',
-						bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
-						textColor: isDone ? 'text-grayColor' : 'text-white',
-						click: () => {
-							if (isDone) {
-								extras.reset()
-								return isDone = false
-							}
-							return extras.moveCurrrentQuestionToEnd()
-						}
-					}">
+					}" :leftButton="{
+	label: isDone ? 'Restart' : 'Show later',
+	bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
+	textColor: isDone ? 'text-grayColor' : 'text-white',
+	click: () => {
+		if (isDone) {
+			extras.reset()
+			return isDone = false
+		}
+		return extras.moveCurrrentQuestionToEnd()
+	}
+}">
 					<template v-slot>
 						<div v-if="isDone" class="flex flex-col gap-1">
 							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit"
@@ -40,7 +38,7 @@
 			</template>
 		</QuizWrapper>
 	</expanded-layout>
-	<SofaModal v-if="showInfoModal" :close="() => {}">
+	<SofaModal v-if="showInfoModal" :close="() => { }">
 		<div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full w-full h-auto flex flex-col items-center relative">
 			<div
 				class="bg-white w-full flex flex-col p-4 mdlg:p-6 gap-6 md:rounded-2xl rounded-t-2xl items-center justify-center">
@@ -52,7 +50,7 @@
 					<SofaNormalText content="Learning quiz questions and answers" />
 				</div>
 				<div class="w-full h-full flex flex-col items-center gap-4">
-					<div class="bg-primaryPurple text-white custom-border p-4 w-full flex flex-col gap-2">
+					<div class="bg-primaryPurple text-white rounded-custom p-4 w-full flex flex-col gap-2">
 						<div class="flex items-center justify-start gap-2" v-for="(item, index) in [
 							'Click on the card to flip it',
 							'Mastered makes card not reappear',
@@ -70,8 +68,8 @@
 						<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="close"
 							class="hidden mdlg:inline-block" customClass="border border-gray-100">Exit</SofaButton>
 
-						<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close"
-							customClass="mdlg:w-auto w-full">Start</SofaButton>
+						<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close" customClass="mdlg:w-auto w-full">Start
+						</SofaButton>
 					</div>
 				</div>
 			</div>
@@ -107,7 +105,7 @@ export default defineComponent({
 		const showInfoModal = ref(!localStorage.getItem(storageKey))
 		const dontShowAgain = ref(false)
 
-		const close = () => showInfoModal.value =false
+		const close = () => showInfoModal.value = false
 
 		watch(dontShowAgain, () => {
 			if (dontShowAgain.value) localStorage.setItem(storageKey, "true")

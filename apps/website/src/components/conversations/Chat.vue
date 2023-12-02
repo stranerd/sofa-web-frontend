@@ -1,6 +1,6 @@
 <template>
   <router-link :to="chat.route"
-    :class="`w-full flex items-center justify-between relative gap-3 p-3 custom-border hover:bg-[#E5F2FD] ${customClass}`"
+    :class="`w-full flex items-center justify-between relative gap-3 p-3 rounded-custom hover:bg-[#E5F2FD] ${customClass}`"
     exact-active-class="bg-[#E5F2FD]">
     <div class="flex gap-2 w-full">
       <div class="!w-[40px] mdlg:!w-[44px]">

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col h-full overflow-y-auto gap-4" v-if="question">
     <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'"
-      class="w-full flex flex-row items-start p-3 custom-border bg-[#F1F6FA] gap-3">
+      class="w-full flex flex-row items-start p-3 rounded-custom bg-[#F1F6FA] gap-3">
       <div class="hidden lg:block">
         <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
       </div>
@@ -22,7 +22,7 @@
         </span>
         <span class="flex flex-row items-center gap-1">
           <sofa-custom-input
-            :class="`bg-transparent focus:outline-none w-auto placeholder:text-grayColor !text-bodyBlack  border-[2px] answerText border-[#E1E6EB] rounded-[8px] px-2 py-2`"
+            :class="`bg-transparent focus:outline-none w-auto placeholder:text-grayColor !text-bodyBlack  border-2 answerText border-[#E1E6EB] rounded-[8px] px-2 py-2`"
             placeholder="Answer here" v-if="item.type == 'answer'" v-model="item.value"
             :updateValue="item.value"></sofa-custom-input>
           <sofa-icon :customClass="'h-[14px]  cursor-pointer'" :name="'circle-close'" @click="removeItemFormData(index)"
@@ -35,7 +35,7 @@
     </div>
 
     <div
-      class="w-full md:!flex flex-row items-center justify-center gap-3 bg-primaryPurple custom-border px-5 py-5 hidden">
+      class="w-full md:!flex flex-row items-center justify-center gap-3 bg-primaryPurple rounded-custom px-5 py-5 hidden">
       <sofa-normal-text :color="'text-white'">Choose image to add to this question (optional)</sofa-normal-text>
       <sofa-file-attachment :is-wrapper="true" :accept="'image/png, image/gif, image/jpeg'"
         :custom-class="'!w-auto z-[100]'" v-model:local-file-url="reactiveQuestion.questionMedia"
@@ -60,7 +60,7 @@
 
     <div class="w-full flex flex-col items-center justify-center" v-if="reactiveQuestion.questionMedia">
       <sofa-image-loader :photoUrl="reactiveQuestion.questionMedia"
-        :customClass="'h-[250px] lg:w-[70%] mdlg:w-[70%] w-full custom-border'" />
+        :customClass="'h-[250px] lg:w-[70%] mdlg:w-[70%] w-full rounded-custom'" />
     </div>
 
     <div class="w-full grid grid-cols-2 gap-4 pt-4">
@@ -122,8 +122,8 @@
       <sofa-normal-text :color="'text-grayColor'">Add option</sofa-normal-text>
     </div>
 
-    <div class="w-full flex flex-col border-t-[1px] border-[#F1F6FA] pt-4">
-      <div class="w-full flex flex-row items-start custom-border bg-[#F1F6FA] p-3 gap-3">
+    <div class="w-full flex flex-col border-t border-[#F1F6FA] pt-4">
+      <div class="w-full flex flex-row items-start rounded-custom bg-[#F1F6FA] p-3 gap-3">
         <div class="hidden lg:block">
           <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
         </div>

@@ -4,10 +4,10 @@
       <AuthProvider />
 
       <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="text" :name="'Email'" ref="email" v-model="loginForm.email" :placeholder="'Email'"
           :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]" />
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" :type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
           :rules="[FormValidations.RequiredRule]" v-model="loginForm.password" />
       </sofa-form-wrapper>

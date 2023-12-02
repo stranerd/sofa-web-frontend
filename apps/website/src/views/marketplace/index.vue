@@ -15,11 +15,11 @@
 
       <div class="w-[40%] flex flex-col pt-4">
         <div
-          class="w-full shadow-custom px-4 py-1 bg-white custom-border flex flex-row gap-3 items-center justify-between">
+          class="w-full shadow-custom px-4 py-1 bg-white rounded-custom flex flex-row gap-3 items-center justify-between">
           <div class="flex flex-row gap-2 items-center flex-grow">
             <sofa-icon :name="'filter'" :customClass="'h-[15px] cursor-pointer'"
               @click="Logic.Common.GoToRoute('/marketplace/search')" />
-            <sofa-normal-text :customClass="'pr-2 border-r-[1px] border-[#E1E6EB] cursor-pointer'"
+            <sofa-normal-text :customClass="'pr-2 border-r border-[#E1E6EB] cursor-pointer'"
               @click="Logic.Common.GoToRoute('/marketplace/search')">Filter</sofa-normal-text>
             <sofa-text-field :customClass="'!border-none w-full'" :placeholder="'Search for anything'"
               v-model="searchQuery" @onEnter="handleSearch">
@@ -35,7 +35,7 @@
 
     <!-- Small screen search -->
     <div class="w-full px-4 flex mdlg:!hidden flex-col sticky top-0 left-0 py-4 bg-backgroundGray z-[100]">
-      <div class="w-full shadow-custom px-4 py-1 bg-white custom-border flex flex-row gap-1 items-center justify-start">
+      <div class="w-full shadow-custom px-4 py-1 bg-white rounded-custom flex flex-row gap-1 items-center justify-start">
         <div class="flex flex-row gap-2 items-center flex-grow" @click="Logic.Common.GoToRoute('/marketplace/search')">
           <sofa-icon :name="'filter'" :customClass="'h-[15px]'" />
         </div>
@@ -43,7 +43,8 @@
           <div class="pl-2">
             <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
           </div>
-          <sofa-text-field :customClass="'!border-none w-full flex-grow'" :placeholder="'Search'" v-model="searchQuery" @onEnter="handleSearch" />
+          <sofa-text-field :customClass="'!border-none w-full flex-grow'" :placeholder="'Search'" v-model="searchQuery"
+            @onEnter="handleSearch" />
         </div>
       </div>
     </div>
@@ -54,9 +55,9 @@
         <div
           class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
           <sofa-image-loader :photoUrl="item.image"
-            custom-class="col-span-1 mdlg:!w-auto w-[290px] relative custom-border mdlg:!h-[230px] h-[190px] cursor-pointer"
+            custom-class="col-span-1 mdlg:!w-auto w-[290px] relative rounded-custom mdlg:!h-[230px] h-[190px] cursor-pointer"
             v-for="(item, index) in mainCards" :key="index" @click="Logic.Common.GoToRoute(item.routePath)">
-            <div class="w-full h-full absolute top-0 custom-border left-0 bg-black bg-opacity-40 z-10"></div>
+            <div class="w-full h-full absolute top-0 rounded-custom left-0 bg-black bg-opacity-40 z-10"></div>
             <div
               class="absolute left-0 bottom-0 flex flex-row items-center z-40 justify-between w-full py-3 px-4 bg-black bg-opacity-50 rounded-br-[16px] rounded-bl-[8px]">
               <sofa-normal-text :color="'text-white !font-bold'">

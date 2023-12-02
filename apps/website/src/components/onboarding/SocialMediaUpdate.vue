@@ -1,6 +1,6 @@
 <template>
   <sofa-text-field v-for="(item, index) in allLinks" :key="index" :placeholder="capitalize(item.ref)" :name="'Website'"
-    ref="socials.website" :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+    ref="socials.website" :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
     :rules="[FormValidations.UrlRule]" v-model="item.link" :update-value="item.link">
     <template v-slot:inner-prefix>
       <sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
@@ -16,7 +16,7 @@
 
   <div class="w-full flex flex-col gap-3 pt-2">
     <div
-      class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 custom-border border-[2px] border-[#E1E6EB] cursor-pointer"
+      class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB] cursor-pointer"
       @click="
         showAddNewItems ? (showAddNewItems = false) : (showAddNewItems = true)
         ">
@@ -34,7 +34,7 @@
 
     <div class="w-full flex flex-col gap-2" v-if="showAddNewItems">
       <div
-        class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 custom-border border-[2px] border-[#E1E6EB] cursor-pointer"
+        class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB] cursor-pointer"
         @click="addNewLink(item.ref)" v-for="(item, index) in profileLinks" :key="index">
         <sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
         <sofa-normal-text :color="'text-[#78828C]'">

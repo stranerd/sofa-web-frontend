@@ -15,7 +15,7 @@
                     option.name == "unsectioned" ? "Unsectioned" : option.name
                   }}</sofa-normal-text>
                   <input v-else @click.stop="null"
-                    class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border-[1px] !bg-white border-gray-100 rounded !text-bodyBlack"
+                    class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
                     v-model="option.name" autofocus placeholder="Section name" @blur="option.edit = false" />
                 </div>
                 <div class="flex flex-row items-center gap-3">

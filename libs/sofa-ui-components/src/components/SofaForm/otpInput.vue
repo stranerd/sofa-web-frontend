@@ -2,7 +2,7 @@
   <div class="flex flex-row items-center justify-around gap-1 z-40">
     <span v-for="index in numberOfInput" :key="index + '' + uniqueKey">
       <input :id="'' + uniqueKey + index" v-model="otps[index - 1]" type="tel"
-        class="md:!w-[53px] md:!h-[53px] w-[40px] h-[40px] text-lg text-center text-darkBody focus:outline-none !bg-lightGrayVaraint custom-border"
+        class="md:!w-[53px] md:!h-[53px] w-[40px] h-[40px] text-lg text-center text-darkBody focus:outline-none !bg-lightGrayVaraint rounded-custom"
         :disabled="isDisabled" @keypress="onKeyPress" @keyup.right="focusInputByRef('' + uniqueKey + (index + 1))"
         @keyup.left="focusInputByRef('' + uniqueKey + (index - 1))"
         @keyup.delete="focusInputByRef('' + uniqueKey + (index - 1))" @paste="onPaste" @input="

@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`w-full flex flex-col gap-3 justify-center items-center py-9 px-6 custom-border bg-primaryPurple ${customClass}`">
+    :class="`w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-custom bg-primaryPurple ${customClass}`">
     <sofa-icon :customClass="icon ? icon.size : 'h-[28px]'" :name="icon ? icon.name : 'attention-white'" />
     <div class="w-full flex flex-col gap-2 justify-center items-center py-2">
       <sofa-header-text :color="'text-white'" :content="title" :customClass="`!font-semibold ${titleStyle}`" />

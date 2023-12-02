@@ -16,9 +16,8 @@
 				<div
 					class="flex flex-col gap-3 mdlg:p-4 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:sticky lg:top-[8%] mdlg:top-[10%] mdlg:shadow-custom">
 					<div v-for="option in settingOptions" :key="option.title"
-						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 custom-border shadow-custom mdlg:shadow-none mdlg:border-none">
-						<sofa-header-text size="xl" customClass="px-2 hidden mdlg:block mb-2"
-							:content="option.title" />
+						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 rounded-custom shadow-custom mdlg:shadow-none mdlg:border-none">
+						<sofa-header-text size="xl" customClass="px-2 hidden mdlg:block mb-2" :content="option.title" />
 						<template v-for="(optionItem, index) in option.subPages" :key="optionItem.title">
 							<router-link :class="`w-full flex flex-col items-start p-2 mdlg:hover:bg-[#E2F3FD] rounded-lg
 								${index !== 0 ? 'border-t border-[#F1F6FA] mdlg:border-none' : ''}`"
@@ -30,12 +29,12 @@
 					</div>
 
 					<div
-						class="border-t-[2px] border-[#E1E6EB] mdlg:border-0 mt-1 mdlg:mt-0 pt-4 mdlg:pt-0 flex flex-col gap-3 mdlg:gap-0">
+						class="border-t-2 border-[#E1E6EB] mdlg:border-0 mt-1 mdlg:mt-0 pt-4 mdlg:pt-0 flex flex-col gap-3 mdlg:gap-0">
 						<a v-for="action in [
 							{ title: 'Logout', onClick: () => showLogout = true },
 							{ title: 'Delete account', onClick: () => showDeleteAccount = true }
 						]" :key="action.title" @click="action.onClick"
-							class="bg-white p-4 mdlg:p-2 custom-border shadow-custom mdlg:border-none mdlg:shadow-none mdlg:rounded-[8px] mdlg:hover:bg-[#E2F3FD]">
+							class="bg-white p-4 mdlg:p-2 rounded-custom shadow-custom mdlg:border-none mdlg:shadow-none mdlg:rounded-[8px] mdlg:hover:bg-[#E2F3FD]">
 							<sofa-normal-text color="text-primaryRed">
 								{{ action.title }}
 							</sofa-normal-text>

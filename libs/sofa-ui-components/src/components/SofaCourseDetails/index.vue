@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col h-full gap-4 relative" v-if="data">
     <div
-      class="flex flex-row gap-2 justify-between items-center px-4 py-4 mdlg:!pt-0 border-b-[1px] sticky top-0 left-0 bg-white border-[#F2F5F8]">
+      class="flex flex-row gap-2 justify-between items-center px-4 py-4 mdlg:!pt-0 border-b sticky top-0 left-0 bg-white border-[#F2F5F8]">
       <sofa-normal-text :customClass="'!text-sm !font-bold'">
         Details
       </sofa-normal-text>
@@ -9,7 +9,7 @@
     </div>
     <div class="flex flex-col gap-3 h-full w-full px-4">
       <template v-if="type == 'quiz'">
-        <sofa-image-loader :customClass="'w-full custom-border h-[200px]'" :photoUrl="data.image_url" />
+        <sofa-image-loader :customClass="'w-full rounded-custom h-[200px]'" :photoUrl="data.image_url" />
 
         <sofa-normal-text :customClass="'text-left font-bold'">
           {{ data.title }}
@@ -57,7 +57,7 @@
       </template>
 
       <template v-if="type == 'document'">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Document title'" ref="document_title"
           v-model="dataReactive.title" :updateValue="dataReactive.title" :placeholder="'Document title'" :hasTitle="true"
           :rules="[Logic.Form.RequiredRule]" :borderColor="'border-transparent'">
@@ -65,12 +65,12 @@
         </sofa-text-field>
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" v-model="dataReactive.description" />
       </template>
 
       <template v-if="type == 'image'">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Image title'" ref="image_title"
           v-model="dataReactive.title" :placeholder="'Image title'" :hasTitle="true" :rules="[Logic.Form.RequiredRule]"
           :updateValue="dataReactive.title" :borderColor="'border-transparent'">
@@ -78,12 +78,12 @@
         </sofa-text-field>
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" v-model="dataReactive.description" />
       </template>
 
       <template v-if="type == 'video'">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Video title'" ref="video_title"
           v-model="dataReactive.title" :placeholder="'Video title'" :hasTitle="true" :rules="[Logic.Form.RequiredRule]"
           :updateValue="dataReactive.title" :borderColor="'border-transparent'">
@@ -91,9 +91,8 @@
         </sofa-text-field>
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-          :placeholder="'Description'" v-model="dataReactive.description"
-        />
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :placeholder="'Description'" v-model="dataReactive.description" />
       </template>
       <div v-if="type != 'quiz'" class="w-full flex flex-row items-center justify-end">
         <sofa-button :padding="'px-4 py-2'" @click="updateFile()">
@@ -103,7 +102,7 @@
     </div>
 
     <div
-      class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-[2px] border-[#F2F5F8] z-50 flex flex-col gap-3 scrollbar-hide">
+      class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-2 border-[#F2F5F8] z-50 flex flex-col gap-3 scrollbar-hide">
       <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="
         selectedMaterialId = data.id
       showDeleteMaterial = true;
@@ -136,9 +135,9 @@
   ]" />
 </template>
 <script lang="ts">
+import { Logic } from "sofa-logic"
 import { defineComponent, reactive, ref, toRef, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaButton from "../SofaButton"
 import SofaDeletePrompt from "../SofaDeletePrompt"

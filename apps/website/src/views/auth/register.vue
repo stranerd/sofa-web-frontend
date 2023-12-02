@@ -4,13 +4,13 @@
       <AuthProvider />
 
       <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="email" :name="'Email'" ref="email" v-model="registerForm.email"
           :placeholder="'Email'" :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]" />
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" :type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
           :rules="[FormValidations.RequiredRule]" v-model="registerForm.password" />
-        <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="password" :name="'Confirm password'" ref="confirm_new_password"
           v-model="registerForm.confirm_password" :placeholder="'Confirm password'"
           :rules="[FormValidations.RequiredRule, FormValidations.customValidator(registerForm.password == registerForm.confirm_password, 'Passwords do not match')]" />

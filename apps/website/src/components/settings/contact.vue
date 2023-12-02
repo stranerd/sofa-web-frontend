@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
     <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-      <sofa-header-text :size="'xl'" :customClass="'text-left'" content="Contact details"  />
+      <sofa-header-text :size="'xl'" :customClass="'text-left'" content="Contact details" />
 
       <div class="w-full flex flex-row items-center gap-5 flex-wrap">
         <a href="mailto:support@stranerd.com" target="_blank"><sofa-icon :customClass="'h-[15px]'"
@@ -21,7 +21,7 @@
       <sofa-header-text :size="'xl'" :customClass="'text-left'" content="Give feedback" />
 
       <sofa-textarea :hasTitle="false"
-        :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+        :textAreaStyle="'h-[90px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
         :placeholder="'Let us know how we can help'" v-model="message" />
 
       <div class="w-full flex flex-row justify-end">

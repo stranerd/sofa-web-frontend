@@ -41,7 +41,7 @@
 
     <div class="w-full py-3 px-3">
       <div
-        class="h-[144px] w-full rounded-[12px] border-[2px] border-[#E1E6EB] flex flex-row items-center justify-center cursor-pointer"
+        class="h-[144px] w-full rounded-[12px] border-2 border-[#E1E6EB] flex flex-row items-center justify-center cursor-pointer"
         @click="showAddQuestionModal = true">
         <sofa-icon :name="'add-item'" :custom-class="'h-[30px]'"></sofa-icon>
       </div>
@@ -51,13 +51,13 @@
   <!-- Smaller screens bottom bar -->
 
   <div
-    class="w-full !flex flex-row fixed bottom-0 left-0 items-center py-3 px-4 border-t-[1px] justify-between mdlg:!hidden bg-white border-[#F1F6FA] z-[100]">
+    class="w-full !flex flex-row fixed bottom-0 left-0 items-center py-3 px-4 border-t justify-between mdlg:!hidden bg-white border-[#F1F6FA] z-[100]">
     <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
       <draggable class="flex flex-row gap-2 items-center flex-nowrap whitespace-nowrap pr-4" v-model="questions"
         v-if="questions" :group="'add-question-mobile'" item-key="id" @end="handleDrag" :direction="'horizontal'"
         :disabled="true">
         <template #item="{ element, index }">
-          <div :class="`w-[48px] h-[48px] custom-border ${selectedQuestion == index
+          <div :class="`w-[48px] h-[48px] rounded-custom ${selectedQuestion == index
             ? 'bg-primaryPurple'
             : 'bg-lightGrayVaraint'
             }  items-center justify-center flex`" @click="selectQuestion(element, index)">
@@ -135,9 +135,9 @@
   ]" />
 </template>
 <script lang="ts">
+import { Logic, Question } from "sofa-logic"
 import { defineComponent, onMounted, ref, toRef, watch } from "vue"
 import draggable from "vuedraggable"
-import { Logic, Question } from "sofa-logic"
 import SofaDeletePrompt from "../SofaDeletePrompt"
 import SofaIcon from "../SofaIcon"
 import SofaModal from "../SofaModal"

@@ -19,7 +19,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden py-3 border-[#F1F6FA] border-b-[1px] px-4">
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden py-3 border-[#F1F6FA] border-b px-4">
           <sofa-normal-text :customClass="'!font-bold'">
             Customize AI
           </sofa-normal-text>
@@ -31,7 +31,7 @@
           <div class="w-full flex flex-col gap-4 py-3">
             <div class="w-full flex flex-col items-center justify-center pt-3">
               <sofa-image-loader
-                :customClass="`w-[93px] h-[93px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
+                :customClass="`w-[93px] h-[93px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
                 :photoUrl="profileImageUrl">
                 <sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileImageUrl" />
                 <sofa-file-attachment :isWrapper="true"
@@ -45,12 +45,12 @@
               </sofa-image-loader>
             </div>
 
-            <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
               :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Name'" ref="name" :placeholder="'Name'"
               :rules="[FormValidations.RequiredRule]" v-model="customizeAIForm.name" :defaultValue="customizeAIForm.name"
               :borderColor="'border-transparent'" />
 
-            <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
               :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Tagline'" ref="tagline"
               :placeholder="'Tagline'" :rules="[FormValidations.RequiredRule]" v-model="customizeAIForm.tagline"
               :defaultValue="customizeAIForm.tagline" :borderColor="'border-transparent'" />
@@ -59,7 +59,7 @@
           <div
             class="w-full flex flex-row items-center justify-between md:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0 py-4">
             <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-              :customClass="'border-[1px] border-gray-100'" @click.prevent="close ? close() : null">
+              :customClass="'border border-gray-100'" @click.prevent="close ? close() : null">
               Exit
             </sofa-button>
 

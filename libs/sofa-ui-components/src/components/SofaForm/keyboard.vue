@@ -4,7 +4,7 @@
       <div class="col-span-4 flex flex-row items-center justify-center"
         v-for="(key, index) in Array.from(Array(9).keys())" :key="index">
         <span @click="content += `${key + 1}`"
-          class="w-[43px] h-[43px] rounded-full border-[1px] border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
+          class="w-[43px] h-[43px] rounded-full border border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
           <sofa-normal-text customClass="!text-lg">
             {{ key + 1 }}
           </sofa-normal-text>
@@ -12,19 +12,19 @@
       </div>
       <div class="col-span-4 flex flex-row items-center justify-center">
         <span
-          class="w-[43px] h-[43px] rounded-full border-[1px] border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
+          class="w-[43px] h-[43px] rounded-full border border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
           <sofa-icon :name="'fingerprint'" :customClass="'h-[30px]'" v-if="hasFingerPrint" />
         </span>
       </div>
       <div class="col-span-4 flex flex-row items-center justify-center">
         <span @click="content += `0`"
-          class="w-[43px] h-[43px] rounded-full border-[1px] border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
+          class="w-[43px] h-[43px] rounded-full border border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
           <sofa-normal-text customClass="!text-lg"> 0 </sofa-normal-text>
         </span>
       </div>
       <div class="col-span-4 flex flex-row items-center justify-center">
         <span @click="content = `${content.slice(0, -1)}`"
-          class="w-[43px] h-[43px] rounded-full border-[1px] border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
+          class="w-[43px] h-[43px] rounded-full border border-transparent hover:bg-gray-50 flex flex-row items-center justify-center">
           <sofa-icon :name="'chevron-left-gray'" :customClass="'h-[15px]'" />
         </span>
       </div>

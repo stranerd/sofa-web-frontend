@@ -2,7 +2,7 @@
   <div :class="`w-full flex flex-col h-full mdlg:!gap-0 gap-4 relative overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${showScrollBar ? 'mdlg:!scrollbar-thin' : 'scrollbar-none'
     }`" @mouseover="showScrollBar = true" @mouseleave="showScrollBar = false">
     <div
-      class="mdlg:!hidden flex flex-row gap-2 justify-between items-center px-4 py-4 border-b-[1px] sticky top-0 left-0 bg-white border-[#F2F5F8]">
+      class="mdlg:!hidden flex flex-row gap-2 justify-between items-center px-4 py-4 border-b sticky top-0 left-0 bg-white border-[#F2F5F8]">
       <sofa-normal-text :customClass="'!text-sm !font-bold'">
         Options
       </sofa-normal-text>
@@ -63,7 +63,7 @@
     </div>
 
     <div
-      class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-[2px] border-[#F2F5F8] z-50 flex flex-col gap-4 scrollbar-hide">
+      class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-2 border-[#F2F5F8] z-50 flex flex-col gap-4 scrollbar-hide">
       <div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="duplicateQuestion()"
         v-if="Logic.Common.isOnlyMobile">
         <sofa-icon :name="'copy'" :customClass="'h-[16px]'" />

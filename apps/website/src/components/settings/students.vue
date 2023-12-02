@@ -130,7 +130,7 @@
           </div>
 
           <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b-[1px] px-4">
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               {{ modalSetup.title }}
             </sofa-normal-text>
@@ -139,13 +139,13 @@
 
           <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
             <sofa-text-field v-if="modalSetup.type == 'add_students'"
-              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
+              :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
               type="text" :name="'Emails field'" ref="emails" :placeholder="'Student emails (comma-seperated)'"
               :borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" v-model="studentEmails">
             </sofa-text-field>
 
             <sofa-text-field v-if="modalSetup.type == 'set_Join_code'"
-              :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
+              :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
               type="password" :name="'Join code'" ref="join_code" :placeholder="'Set Join Code'"
               :borderColor="'border-transparent'" :rules="[
                 Logic.Form.RequiredRule,
@@ -161,7 +161,7 @@
             class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
             <div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
               <sofa-button :textColor="'text-grayColor'" :bgColor="'bg-white'" :padding="'px-4 py-1'"
-                :customClass="`border-[2px] border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
+                :customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
                 @click="showModal = false">
                 Cancel
               </sofa-button>
@@ -169,7 +169,7 @@
 
             <div class="md:!w-auto col-span-2 flex flex-col">
               <sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'" :padding="'px-4 md:!py-1 py-3'"
-                :customClass="`border-[2px] border-transparent md:!min-w-[100px] md:!w-auto w-full`"
+                :customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
                 @click="modalSetup.action()">
                 Continue
               </sofa-button>

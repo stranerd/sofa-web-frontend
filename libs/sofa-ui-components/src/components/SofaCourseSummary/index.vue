@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 h-full w-full px-4" v-if="data">
-    <sofa-image-loader :customClass="'w-full custom-border h-[200px]'"
+    <sofa-image-loader :customClass="'w-full rounded-custom h-[200px]'"
       :photoUrl="data.photo ? data.photo.link : '/images/default.png'" />
 
     <sofa-normal-text :customClass="'text-left font-bold'">
@@ -54,8 +54,8 @@
   </div>
 </template>
 <script lang="ts">
+import { Course, Logic } from "sofa-logic"
 import { defineComponent } from "vue"
-import { Logic, Course } from "sofa-logic"
 import SofaAvatar from "../SofaAvatar"
 import SofaIcon from "../SofaIcon"
 import SofaImageLoader from "../SofaImageLoader"

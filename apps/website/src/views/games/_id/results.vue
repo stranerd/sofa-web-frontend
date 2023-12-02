@@ -12,11 +12,11 @@
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=games')
 							}" :leftButton="gameExtras.canEnd ? {
-								label: 'End',
-								bgColor: 'bg-deepGray border border-white',
-								textColor: 'text-white',
-								click: gameExtras.end
-							} : undefined">
+	label: 'End',
+	bgColor: 'bg-deepGray border border-white',
+	textColor: 'text-white',
+	click: gameExtras.end
+} : undefined">
 							<template v-slot:header>
 								<div />
 							</template>
@@ -29,7 +29,7 @@
 										<SofaNormalText color="text-white" class="-mt-4"
 											:content="game.status === 'scored' ? 'Game has ended' : game.status === 'ended' ? 'Scores are being calculated' : 'Waiting for others to finish'" />
 										<div v-for="score in gameExtras.scores" :key="score.user.id"
-											class="w-full flex items-center justify-between gap-2 p-4 custom-border bg-white border-4"
+											class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white border-4"
 											:class="score.user.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
 											<SofaNormalText color="text-deepGray" class="!font-semibold"
 												:content="score.position" />

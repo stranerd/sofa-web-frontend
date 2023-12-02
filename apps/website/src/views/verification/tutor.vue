@@ -32,7 +32,7 @@
           </sofa-header-text>
           <div class="w-full flex flex-row items-center justify-start py-2 gap-4">
             <sofa-image-loader
-              :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border-[1px] border-grayColor rounded-full`"
+              :customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
               :photoUrl="profileImageUrl ?? ''">
               <sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileImageUrl" />
               <sofa-file-attachment :isWrapper="true"
@@ -46,18 +46,18 @@
             </sofa-image-loader>
           </div>
 
-          <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'First name'" ref="name.first"
             :placeholder="'First Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
             :defaultValue="UserProfile.bio.name.first" :borderColor="'border-transparent'" />
 
-          <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Last name'" ref="name.last"
             :placeholder="'Last Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
             :defaultValue="UserProfile.bio.name.last" :borderColor="'border-transparent'" />
 
           <sofa-textarea :hasTitle="false"
-            :textAreaStyle="'h-[90px] custom-border !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+            :textAreaStyle="'h-[90px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
             :placeholder="'Bio'" v-model="updateProfileForm.description" />
         </div>
 
@@ -69,7 +69,7 @@
           </sofa-header-text>
 
           <sofa-file-attachment :isWrapper="true"
-            :customClass="'custom-border border-[2px] border-dashed border-primaryPurple bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
+            :customClass="'rounded-custom border-2 border-dashed border-primaryPurple bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
             v-model="tutorRequestForm.qualification" accept="application/pdf, image/*" :is-multiple="true">
             <template v-slot:content>
               <div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
@@ -96,7 +96,7 @@
           </sofa-header-text>
 
           <sofa-file-attachment :isWrapper="true"
-            :customClass="'custom-border border-[2px] border-dashed border-primaryPurple  bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
+            :customClass="'rounded-custom border-2 border-dashed border-primaryPurple  bg-[#F1F6FA] py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
             v-model="tutorRequestForm.verification" accept="image/*">
             <template v-slot:content>
               <div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
@@ -119,12 +119,12 @@
             Location
           </sofa-header-text>
 
-          <sofa-select :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'  px-3 py-3'" :name="'Country'" ref="country" :placeholder="'Country'"
             :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :auto-complete="true"
             @on-option-selected="countryIsSelected" v-model="updateProfileForm.country" :options="allCountries" />
 
-          <sofa-select :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'px-3 py-3'" :name="'State'" ref="state" :placeholder="'State'"
             :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :auto-complete="true"
             v-model="updateProfileForm.state" :options="allStates" />
@@ -145,7 +145,7 @@
             </sofa-normal-text>
           </div>
 
-          <sofa-select :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'  px-3 py-3'" :name="'Subject'" ref="Subject" :placeholder="'Select subject'"
             :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :auto-complete="true"
             :options="allTopics" v-model="tutorRequestForm.topicId" />

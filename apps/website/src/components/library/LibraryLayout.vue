@@ -8,7 +8,7 @@
 			</div>
 			<div v-if="tabs.length">
 				<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
-					<router-link class="px-6 py-2 custom-border flex items-center justify-center"
+					<router-link class="px-6 py-2 rounded-custom flex items-center justify-center"
 						:class="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'"
 						v-for="(item, index) in tabs.filter((t) => !t.hide)" :key="item.id"
 						:to="`${$route.path}?tab=${item.id}`">
@@ -95,7 +95,7 @@
 
 		<template v-slot:middle-session>
 			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
-				<div class="px-2 bg-white flex flex-col shadow-custom custom-border">
+				<div class="px-2 bg-white flex flex-col shadow-custom rounded-custom">
 					<router-link :to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-[#F1F6FA]"
 						v-for="item in libraryOptions" :key="item.routePath">
@@ -111,7 +111,7 @@
 					</div>
 
 					<component :is="item.edit ? 'span' : 'router-link'"
-						class="w-full flex items-center relative justify-between gap-3 p-4 custom-border bg-white shadow-custom group folder-link"
+						class="w-full flex items-center relative justify-between gap-3 p-4 rounded-custom bg-white shadow-custom group folder-link"
 						v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 						exact-active-class="font-bold">
 						<div class="flex items-center gap-3 w-full">
@@ -147,7 +147,7 @@
 						<sofa-normal-text customClass="!font-bold">Organizations</sofa-normal-text>
 					</div>
 					<router-link
-						class="w-full flex items-center relative justify-start gap-2 p-4 custom-border bg-white shadow-custom"
+						class="w-full flex items-center relative justify-start gap-2 p-4 rounded-custom bg-white shadow-custom"
 						:to="`/library/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
@@ -158,7 +158,7 @@
 			<div v-else class="w-full flex flex-col gap-5 mdlg:!pl-3 mdlg:!pr-7">
 				<div class="w-full flex gap-2 justify-between items-center" v-if="tabs.length">
 					<div class="w-full flex-nowrap overflow-x-auto scrollbar-hide flex gap-3 items-center">
-						<router-link class="px-6 py-2 custom-border flex items-center justify-center"
+						<router-link class="px-6 py-2 rounded-custom flex items-center justify-center"
 							:class="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'"
 							v-for="(item, index) in tabs.filter((t) => !t.hide)" :key="item.id"
 							:to="`${$route.path}?tab=${item.id}`">

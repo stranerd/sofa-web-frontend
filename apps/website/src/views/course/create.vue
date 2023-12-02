@@ -38,7 +38,7 @@
     <template v-slot:left-session>
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
         <sofa-course-sections v-model="selectedMaterial" :sectionInput="updateCourseSectionForm"
-          :updateSections="updateCourseSections" v-if="Logic.Common.isLarge && SingleCourse" :close="() => {}" />
+          :updateSections="updateCourseSections" v-if="Logic.Common.isLarge && SingleCourse" :close="() => { }" />
       </div>
     </template>
 
@@ -75,7 +75,8 @@
       <template v-if="currentContent == 'sections' && !showSettingModal">
         <div class="w-full mdlg:!hidden flex-col h-full flex-grow bg-white py-2 px-4 md:!flex">
           <sofa-course-sections v-model="selectedMaterial" @OnMaterialSelected="handleItemSelected"
-            :sectionInput="updateCourseSectionForm" :updateSections="updateCourseSections" v-if="!Logic.Common.isLarge && SingleCourse" :close="() => {}" />
+            :sectionInput="updateCourseSectionForm" :updateSections="updateCourseSections"
+            v-if="!Logic.Common.isLarge && SingleCourse" :close="() => { }" />
 
           <div class="h-[100px]"></div>
         </div>
@@ -100,7 +101,7 @@
           </div>
 
           <div class="w-full flex flex-col gap-3">
-            <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 custom-border"
+            <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 rounded-custom"
               v-for="(question, index) in selectedMaterial.data" :key="index">
               <div class="flex flex-row items-center gap-2">
                 <sofa-normal-text :color="'text-grayColor'">

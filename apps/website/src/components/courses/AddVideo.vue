@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col gap-4">
     <div class="w-full flex flex-col gap-4">
-      <div class="bg-primaryPurple custom-border px-4 py-4 flex flex-col gap-2">
+      <div class="bg-primaryPurple rounded-custom px-4 py-4 flex flex-col gap-2">
         <div class="flex flex-row items-center justify-start gap-2" v-for="(item, index) in videoUploadSteps"
           :key="index">
           <span class="h-[4px] w-[4px] rounded-full bg-white"> </span>
@@ -11,7 +11,7 @@
         </div>
       </div>
 
-      <sofa-text-field :custom-class="'custom-border !bg-lightGrayVaraint !placeholder:text-grayColor '"
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
         :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Youtube video link'" ref="video_link"
         v-model="addVideoForm.link" :placeholder="'Paste link here'" :borderColor="'border-transparent'"
         :rules="[Logic.Form.RequiredRule]">
@@ -24,7 +24,7 @@
     <div
       class="w-full flex mdlg:!flex-row flex-col items-center justify-between mdlg:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0">
       <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-        :customClass="'border-[1px] border-gray-100 hidden mdlg:!inline-block'">
+        :customClass="'border border-gray-100 hidden mdlg:!inline-block'">
         Exit
       </sofa-button>
 

@@ -1,15 +1,15 @@
 <template>
   <div
-    :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] mdlg:!overflow-y-auto overflow-y-auto  custom-border ${customClass}`">
+    :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] mdlg:!overflow-y-auto overflow-y-auto  rounded-custom ${customClass}`">
     <div :class="`w-full flex flex-col gap-2 ${padding} relative`">
       <div
         class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
         <div :class="` ${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
-          <sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] custom-border relative'"
+          <sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative'"
             :photoUrl="content.image">
             <div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
               v-if="content.price > 0 && !hasAccess">
-              <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 custom-border'">
+              <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
                 {{
                   content.price > 0
                   ? `${Logic.Common.convertToMoney(
@@ -126,17 +126,17 @@
       </div>
 
       <div class="w-full flex flex-row gap-3 items-center py-2 flex-nowrap overflow-x-auto scrollbar-hide">
-        <div class="px-4 py-1 border-[1px] custom-border border-grayColor" v-for="(tag, index) in content.tags"
+        <div class="px-4 py-1 border rounded-custom border-grayColor" v-for="(tag, index) in content.tags"
           :key="index">
           <sofa-normal-text :color="'text-grayColor'" :customClass="'!whitespace-nowrap'">{{ tag }}</sofa-normal-text>
         </div>
       </div>
     </div>
 
-    <div :class="`w-full flex flex-row gap-4 items-center border-b-[1px] border-[#F1F6FA] mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${hasPadding ? 'px-4' : ''
+    <div :class="`w-full flex flex-row gap-4 items-center border-b border-[#F1F6FA] mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${hasPadding ? 'px-4' : ''
       }`">
       <sofa-normal-text :color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'" :customClass="`!font-semibold cursor-pointer pb-2  ${selectedTab == tab.key && !isMinimal
-        ? 'border-b-[2px] border-bodyBlack'
+        ? 'border-b-2 border-bodyBlack'
         : ''
         }`" v-for="(tab, index) in tabs" @click="selectedTab = tab.key" :key="index">
         {{ tab.name }}
@@ -151,7 +151,7 @@
     <div :class="`w-full flex flex-col h-full  rounded-b-[16px]  ${hasPadding ? 'px-4' : ''
       }  mdlg:!overflow-y-auto overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
       <div class="w-full flex flex-col gap-3 h-full overflow-y-auto" v-if="hasAccess">
-        <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 custom-border"
+        <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 rounded-custom"
           v-for="(question, index) in content.questions" :key="index">
           <div class="flex flex-row items-center gap-2">
             <sofa-normal-text :color="'text-grayColor'" :content="question.type" />
@@ -203,7 +203,7 @@
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
       } mdlg:!overflow-y-auto overflow-y-visible py-2 relative pb-4`" v-if="selectedTab == 'creator'">
-      <div class="w-full bg-[#F1F6FA] custom-border px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
+      <div class="w-full bg-[#F1F6FA] rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
         <div>
           <sofa-avatar :photoUrl="content.user.photoUrl" :size="'150'" :customClass="'hidden mdlg:!inline-block'" />
 
@@ -295,7 +295,7 @@
     <div v-if="false"
       class="w-full px-4 py-4 mdlg:!rounded-b-[16px] mdlg:!absolute fixed bottom-0 left-0 bg-white flex mdlg:!flex-row flex-col items-center justify-between z-50">
       <sofa-button :bgColor="'bg-white'" :textColor="'text-grayColor'" :padding="'px-5 py-2'"
-        :customClass="'border-[1px] border-gray-200 mdlg:!inline-block hidden'" @click="close()">
+        :customClass="'border border-gray-200 mdlg:!inline-block hidden'" @click="close()">
         Exit
       </sofa-button>
 

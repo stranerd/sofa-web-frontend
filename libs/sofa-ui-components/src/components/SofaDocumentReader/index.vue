@@ -1,6 +1,6 @@
 <template>
   <iframe
-    class="w-full flex flex-col h-full flex-grow outline-none border-[1px] border-[#F1F6FA] rounded-[8px]"
+    class="w-full flex flex-col h-full flex-grow outline-none border border-[#F1F6FA] rounded-[8px]"
     :src="`/web/viewer.html?file=${documentUrl}`"
   >
   </iframe>

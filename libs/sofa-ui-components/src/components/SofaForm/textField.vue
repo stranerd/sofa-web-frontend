@@ -7,7 +7,7 @@
       }`" :tabindex="tabIndex" @focus="isFocused = true" @blur="isFocused = false">
       <slot name="outer-prefix" />
       <div :class="`flew-grow w-full gap-1 flex-row flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs  ${borderColor}   ${padding} ${customClass}  bg-transparent rounded-[8px] ${isFocused ? '!border-primaryBlue ' : ''
-        } ${validationStatus == false ? '!border-red-500 !border-[1px]' : ''}`">
+        } ${validationStatus == false ? '!border-red-500 !border' : ''}`">
         <span>
           <slot name="inner-prefix" />
         </span>

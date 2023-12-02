@@ -1,7 +1,7 @@
 <template>
-  <div :class="`col-span-1 flex gap-3 p-3 custom-border bg-white ${customClass}`">
+  <div :class="`col-span-1 flex gap-3 p-3 rounded-custom bg-white ${customClass}`">
     <div class="w-[110px] flex flex-col">
-      <sofa-image-loader custom-class="w-[110px] h-[78px] mdlg:h-[80px] custom-border relative"
+      <sofa-image-loader custom-class="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom relative"
         :photo-url="content.image">
       </sofa-image-loader>
     </div>
@@ -33,8 +33,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
 import { Logic } from "sofa-logic"
+import { defineComponent } from "vue"
 import SofaBadge from "../SofaBadge"
 import SofaButton from "../SofaButton"
 import SofaIcon from "../SofaIcon"

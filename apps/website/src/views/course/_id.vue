@@ -20,7 +20,8 @@
               </div>
             </div>
 
-            <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked" v-model="selectedMaterial" />
+            <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked"
+              v-model="selectedMaterial" />
           </div>
         </div>
       </div>
@@ -53,7 +54,8 @@
             </sofa-normal-text>
           </div>
 
-          <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked" v-model="selectedMaterial" @onCourseContentSet="handleCourseContentSet" />
+          <sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked"
+            v-model="selectedMaterial" @onCourseContentSet="handleCourseContentSet" />
         </template>
 
         <template v-else>
@@ -83,9 +85,9 @@
             id="sm-materials-container">
             <template v-for="(section, index) in courseContents" :key="index">
               <template v-for="(item, itemIndex) in section.materials" :key="itemIndex">
-                <div :class="`w-[280px] custom-border px-3 py-3 ${selectedMaterial.id == item.id
+                <div :class="`w-[280px] rounded-custom px-3 py-3 ${selectedMaterial.id == item.id
                   ? 'bg-primaryPurple'
-                  : 'bg-white border-[2px] border-grayColor'
+                  : 'bg-white border-2 border-grayColor'
                   }  flex flex-col gap-1`" @click="selectItem(item)" :id="`sm-material-${item.id}`">
                   <sofa-normal-text :color="`${selectedMaterial.id == item.id
                     ? '!text-white'
@@ -126,7 +128,7 @@
         <div
           class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 overflow-y-auto h-full lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
           <div
-            class="w-full flex flex-row justify-between items-center sticky bg-white z-40 top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b-[1px] px-4">
+            class="w-full flex flex-row justify-between items-center sticky bg-white z-40 top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               Course details
             </sofa-normal-text>
@@ -157,7 +159,7 @@
           </div>
 
           <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b-[1px] px-4">
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               Choose payment method
             </sofa-normal-text>
@@ -167,9 +169,9 @@
           <div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
             <!-- Wallet -->
             <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-[#F1F6FA] ${selectedMethodId == 'payWithWallet'
-              ? 'border-primaryBlue  border-[2px]'
+              ? 'border-primaryBlue border-2'
               : ''
-              }  custom-border cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
+              }  rounded-custom cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
               <sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
               <sofa-normal-text>
                 Wallet (<span class="!font-semibold">{{
@@ -191,9 +193,9 @@
             </div>
 
             <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-[#F1F6FA]  ${selectedMethodId == method.id
-              ? 'border-primaryBlue border-[2px]'
+              ? 'border-primaryBlue border-2'
               : ''
-              }  custom-border cursor-pointer `" @click="selectedMethodId = method.id"
+              }  rounded-custom cursor-pointer `" @click="selectedMethodId = method.id"
               v-for="(method, index) in PaymentMethods.results" :key="index">
               <sofa-icon :customClass="'h-[20px]'" :name="'card'" />
               <sofa-normal-text>
@@ -206,7 +208,7 @@
             class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
             <div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
               <sofa-button :textColor="'text-grayColor'" :bgColor="'bg-white'" :padding="'px-4 py-1'"
-                :customClass="`border-[2px] border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
+                :customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
                 @click="showMakePaymentModal = false">
                 Exit
               </sofa-button>
@@ -214,7 +216,7 @@
 
             <div class="md:!w-auto col-span-2 flex flex-col">
               <sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'" :padding="'px-4 md:!py-1 py-3'"
-                :customClass="`border-[2px] border-transparent md:!min-w-[100px] md:!w-auto w-full`" @click="buyCourse()">
+                :customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`" @click="buyCourse()">
                 Make payment
               </sofa-button>
             </div>

@@ -44,7 +44,7 @@
             </div>
 
             <div
-              class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t-[1px] border-lightBorderColor"
+              class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-lightBorderColor"
               @click="
               autoRenewIsOn ? (autoRenewIsOn = false) : (autoRenewIsOn = true)
                 ">
@@ -99,13 +99,13 @@
 
       <div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom"
         v-if="Logic.Users.getUserType() == 'student'">
-        <sofa-header-text :size="'xl'" :customClass="'text-left w-full pb-2 border-b-[1px] border-[#F1F6FA]'">
+        <sofa-header-text :size="'xl'" :customClass="'text-left w-full pb-2 border-b border-[#F1F6FA]'">
           StranerdPlus
         </sofa-header-text>
 
         <div class="w-full flex flex-col gap-3">
           <div :class="`w-full flex-col gap-1 pb-2 items-start ${index != subscriptionInfo.length - 1
-            ? 'border-b-[1px] border-[#F1F6FA]'
+            ? 'border-b border-[#F1F6FA]'
             : ''
             } `" v-for="(info, index) in subscriptionInfo" :key="index">
             <sofa-icon :customClass="'h-[23px] '" :name="info.icon" />
