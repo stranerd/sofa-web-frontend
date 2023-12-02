@@ -12,13 +12,18 @@
 
 body {
   font-family: Lexend;
+  @apply bg-backgroundGray text-bodyBlack;
+}
+
+#app {
+  @apply h-screen overflow-auto w-full flex flex-col;
 }
 
 .custom-border {
-  @apply rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]
+  @apply rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg;
 }
-.mdlgcustom-border {
-  @apply mdlg:!rounded-tl-[16px] mdlg:!rounded-br-[16px] mdlg:!rounded-tr-[8px] mdlg:!rounded-bl-[8px]
+.mdlg:custom-border {
+  @apply mdlg:!rounded-tl-2xl mdlg:!rounded-br-2xl mdlg:!rounded-tr-lg mdlg:!rounded-bl-lg;
 }
 
 

@@ -11,10 +11,7 @@
     </div>
   </div>
   <sofa-bottom-bar :tab-is-active="tabIsActive" v-if="hasBottomBar" :showAddItem="handleShowAddItem" />
-  <add-material-modal v-if="showAddItem" :close="() => {
-      showAddItem = false
-    }
-    " />
+  <add-material-modal v-if="showAddItem" :close="() => showAddItem = false" />
 </template>
 
 <script lang="ts">

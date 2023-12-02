@@ -14,7 +14,7 @@
     <template v-slot:middle-session>
       <div class="w-full h-full flex flex-col flex-grow overflow-y-auto mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7">
         <div
-          class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-backgroundGray mdlgcustom-border flex flex-row gap-3 items-center mdlg:!justify-between justify-start">
+          class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-backgroundGray mdlg:custom-border flex flex-row gap-3 items-center mdlg:!justify-between justify-start">
           <sofa-icon :customClass="'h-[15px] mdlg:!hidden pl-2'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
           <div
             class="flex flex-row items-center flex-grow custom-border w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">

@@ -1,23 +1,20 @@
 <template>
 	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between flex-grow h-full flex-col">
 		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-[#E1E6EB]">
-			<div class="flex flex-row items-center gap-3">
+			<div class="flex items-center gap-3 flex-1">
 				<sofa-icon class="mdlg:hidden" customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-				<sofa-avatar :photoUrl="data.photoUrl ?? ''" :size="Logic.Common.isLarge ? '40' : '34'" :bgColor="'bg-grayColor'">
+				<sofa-avatar :photoUrl="data.photoUrl ?? ''" :size="Logic.Common.isLarge ? '40' : '34'"
+					:bgColor="'bg-grayColor'">
 					<sofa-icon :customClass="'h-[23px]'" :name="'user'" v-if="!data.photoUrl" />
 				</sofa-avatar>
-				<div class="flex flex-col">
+				<div class="flex flex-col w-full">
 					<sofa-custom-input v-model="title"
 						:customClass="'!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base'"
 						@onContentChange="submitTitle" @onBlur="editTitle = false" :autoFocus="true"
 						v-if="canEditTitle && editTitle"></sofa-custom-input>
-					<sofa-normal-text v-else @click="editTitle = canEditTitle"
-						:customClass="'!font-bold w-full !text-sm mdlg:!text-base'">
-						{{ data.title }}
-					</sofa-normal-text>
-					<sofa-normal-text :color="'text-grayColor'" :customClass="'!text-[12px]'">
-						{{ data.userNames.join(', ') }}
-					</sofa-normal-text>
+					<SofaNormalText v-else @click="editTitle = canEditTitle"
+						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1" :content="data.title.repeat(10)" />
+					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ').repeat(10)" />
 				</div>
 			</div>
 			<slot v-if="!editTitle" name="top-extras" />
