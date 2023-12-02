@@ -1,6 +1,6 @@
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 
-export const useCountdown = () => {
+export const useCountdown = (skipClearOnUnmounted = false) => {
 	const time = ref(0)
 	let interval: ReturnType<typeof setTimeout> = null
 
@@ -24,6 +24,10 @@ export const useCountdown = () => {
 				rej(e.message)
 			}
 		})
+
+	onUnmounted(() => {
+		if (!skipClearOnUnmounted) clearInterval(interval)
+	})
 
 	return { time, countdown }
 }

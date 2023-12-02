@@ -7,6 +7,7 @@ import {
     NavigationGuardNext,
     RouteLocationNormalized,
     RouteLocationNormalizedLoaded,
+    RouteLocationRaw,
     Router,
 } from 'vue-router'
 import { Logic } from '..'
@@ -311,8 +312,8 @@ export default class Common {
     this.apiUrl = apiUrl
   }
 
-  public GoToRoute = async (path: string) => {
-    await this.router?.push(path)
+  public GoToRoute = async (to: RouteLocationRaw) => {
+    await this.router?.push(to)
   }
 
   public shuffleArray = (array: any[]) => {
@@ -556,8 +557,6 @@ export default class Common {
     next: NavigationGuardNext,
   ) => {
     const allActions: Promise<any>[] = []
-    if (this.loaderSetup.loading) return
-
     const routeMiddlewares: any = routeTo.meta.middlewares
 
     // handle fetchRules
