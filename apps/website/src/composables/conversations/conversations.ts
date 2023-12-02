@@ -101,8 +101,7 @@ export const useConversation = (id: string) => {
 				...data,
 				conversationId: id as string,
 			})
-			Logic.Common.showLoader({
-				show: true,
+			Logic.Common.showAlert({
 				message: 'Tutor request sent',
 				type: 'success',
 			})

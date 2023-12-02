@@ -312,8 +312,7 @@ export default defineComponent({
             currentStep.value = "test"
           })
         } else {
-          Logic.Common.showLoader({
-            show: true,
+          Logic.Common.showAlert({
             message: "Please upload the required documents",
             type: "warning",
           })

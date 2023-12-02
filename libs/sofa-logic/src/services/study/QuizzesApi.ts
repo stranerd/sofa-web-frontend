@@ -45,11 +45,11 @@ export default class QuizzesApi extends ModelApiService {
   }
 
 
-  public async getQuestions(quizId: string) {
+  public async getQuestions(quizId: string, filters: QueryParams) {
     try {
       const response: AxiosResponse<Paginated<
         Question
-      >> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions`)
+      >> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions`, { params: filters })
 
       return response
     } catch (err) {

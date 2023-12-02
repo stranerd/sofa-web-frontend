@@ -263,17 +263,13 @@ export default defineComponent({
           allEmails
         ).then((data) => {
           if (data) {
-            Logic.Common.showLoader({
-              show: true,
-              loading: false,
+            Logic.Common.showAlert({
               message: "Students was added successfully",
               type: "success",
             })
             studentEmails.value = ""
           } else {
-            Logic.Common.showLoader({
-              show: true,
-              loading: false,
+            Logic.Common.showAlert({
               message: "Unable to add students",
               type: "error",
             })
@@ -288,9 +284,7 @@ export default defineComponent({
       Logic.Common.copytext(
         window.location.origin + "/profile/" + Logic.Auth.AuthUser.id
       )
-      Logic.Common.showLoader({
-        show: true,
-        loading: false,
+      Logic.Common.showAlert({
         message: "Join link copied!",
         type: "success",
       })
@@ -313,9 +307,7 @@ export default defineComponent({
           Logic.Users.UpdateOrganizationCode(joinCode.value)
             .then((data) => {
               if (data) {
-                Logic.Common.showLoader({
-                  show: true,
-                  loading: false,
+                Logic.Common.showAlert({
                   message: "Join link updated!",
                   type: "success",
                 })
@@ -323,9 +315,7 @@ export default defineComponent({
               showModal.value = false
             })
             .catch(() => {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
+              Logic.Common.showAlert({
                 message: `Unable to update join link. Join code must contain at least 1 alphabet`,
                 type: "error",
               })
@@ -341,16 +331,12 @@ export default defineComponent({
         selectedMember.value
       ).then((response) => {
         if (response) {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Student removed from your organization!",
             type: "success",
           })
         } else {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Unable to remove student. Please try again",
             type: "error",
           })
@@ -365,7 +351,7 @@ export default defineComponent({
         Logic.Users.GetOrganizationMembers(Logic.Auth.AuthUser.id, {
           limit: 50,
         }).then(() => {
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
 
           setOrganizationMembers()
         })

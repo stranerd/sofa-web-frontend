@@ -45,7 +45,7 @@ export default defineComponent({
       default: "85%",
     },
     data: {
-      type: Array as () => any,
+      type: Object as () => any,
     },
   },
   name: "SofaPieChart",

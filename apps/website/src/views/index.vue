@@ -434,7 +434,6 @@ import {
   showCustomizeAI,
   showRemoveMember,
 } from "@/composables/profile"
-import moment from "moment"
 import { Logic } from "sofa-logic"
 import {
   SofaActivityCard,
@@ -644,7 +643,6 @@ export default defineComponent({
     })
 
     return {
-      moment,
       factory,
       createConversation,
       Logic,

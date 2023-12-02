@@ -51,7 +51,7 @@ export default defineComponent({
 	middlewares: {
 		goBackRoute: "/chats",
 	},
-	name: "ChatsRequestIdPage",
+	name: "ChatsRequestsIdPage",
 	setup () {
 		useMeta({
 			title: "Request",

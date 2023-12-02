@@ -4,31 +4,12 @@ const importAll = (r: __WebpackModuleApi.RequireContext) => r.keys()
 
 const pages = importAll(require.context('../views', true, /\.vue$/))
 
-const generateRoute = (path: any[]) => {
-	// Note: remove first element if route starts with index
-	if (path[0].toLowerCase().startsWith('index') && path.length > 1) {
-		path.shift()
-	}
-	// Note: handle root routes
-	if (path.length === 1) {
-		const shortcut = path[0].toLowerCase()
-		return shortcut.startsWith('index')
-			? ''
-			// Note: handle dynamic routes
-			: shortcut.startsWith('_')
-				? shortcut.replace('_', ':')
-				: shortcut;
-	}
-	// Note: handle other routes
-	const lastElement = path[path.length - 1]
-	// Note: remove last element in array if it is index
-	if (lastElement.toLowerCase().startsWith('index')) {
-		path.pop()
-		// Note: handle dynamic routes
-	} else if (lastElement.startsWith('_')) {
-		path[path.length - 1] = lastElement.replace('_', ':');
-	}
-	return path.map((p: string) => p.toLowerCase()).join('/')
+const generateRoute = (path: string[]) => {
+	return path
+		.map((p) => p.toLowerCase())
+		.map((p) => p === 'index' ? '' : p)
+		.map((p) => p.startsWith('_') ? p.replace('_', ':') : p)
+		.join('/')
 }
 
 const childrenFilter = (p: string | string[]) => ~p.indexOf('^')

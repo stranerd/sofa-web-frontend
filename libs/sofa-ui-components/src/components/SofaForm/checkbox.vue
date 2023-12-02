@@ -5,7 +5,7 @@
       <span :class="`${iconWidth}`">
         <sofa-icon :name="`${selected ? 'checkbox-active' : 'checkbox'}`" :customClass="`md:!h-[18px] h-[20px]`" />
       </span>
-      <div class="flex flex-row gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs">
+      <div class="flex gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs">
         <slot />
       </div>
     </div>

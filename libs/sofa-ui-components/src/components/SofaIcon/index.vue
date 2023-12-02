@@ -1,7 +1,9 @@
 <template>
-  <img :src="`/images/icons/${name}.svg`" :class="`${customClass}`" />
+  <InlineSvg :src="`/images/icons/${name}.svg`" :class="customClass" />
 </template>
+
 <script lang="ts">
+import InlineSvg from 'vue-inline-svg'
 export default {
   props: {
     name: {
@@ -10,9 +12,10 @@ export default {
     },
     customClass: {
       type: String,
-      required: true,
+      required: false,
     },
   },
+  components: { InlineSvg },
   name: "RoofIcon",
 };
 </script>

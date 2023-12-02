@@ -9,5 +9,5 @@ export interface JoinGame {
 
 export interface AddQuestionAnswer {
   questionId: string
-  answer: any[] | string | boolean
+  answer: number[] | string[] | string | boolean
 }

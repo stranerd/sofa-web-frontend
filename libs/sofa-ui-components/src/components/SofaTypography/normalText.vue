@@ -1,44 +1,51 @@
 <template>
-  <span :class="`flex flex-row items-center ${content ? 'body' : ''} ${customClass} ${color}
-      ${size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : ''}
-      ${size == 'small' ? ' text-xs' : ''}`">
-    <span v-if="content" v-html="content" />
-    <slot v-else />
-  </span>
+	<span v-if="content" :class="cls" v-html="content" />
+	<span v-else :class="cls">
+		<slot />
+	</span>
 </template>
+
 <script lang="ts">
-import { defineComponent } from "vue"
+import { computed, defineComponent } from "vue"
 export default defineComponent({
-  props: {
-    size: {
-      type: String,
-      default: "base",
-    },
-    color: {
-      type: String,
-      default: "text-bodyBlack",
-    },
-    customClass: {
-      type: String,
-      default: "",
-    },
-    isHtml: {
-      type: Boolean,
-      default: false,
-    },
-    content: {
-      type: String,
-      default: "",
-    },
-  },
-  name: "RoofNormalText",
+	props: {
+		size: {
+			type: String,
+			default: "base",
+		},
+		color: {
+			type: String,
+			default: "text-bodyBlack",
+		},
+		customClass: {
+			type: String,
+			default: "",
+		},
+		isHtml: {
+			type: Boolean,
+			default: false,
+		},
+		content: {
+			type: String,
+			default: "",
+		},
+	},
+	name: "RoofNormalText",
+	setup (props) {
+		const cls = computed(() => [
+			props.content ? 'body' : '', props.customClass, props.color,
+			props.size == 'lg' ? 'lg:text-lg mdlg:text-base text-sm' : '',
+			props.size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : '',
+			props.size == 'small' ? ' text-xs' : '',
+		].join(' '))
+		return { cls }
+	}
 })
 </script>
 
 <style lang="scss" scoped>
 .body {
   font-family: inherit;
-  white-space: pre-wrap;
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;

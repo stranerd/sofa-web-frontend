@@ -187,7 +187,6 @@ import {
   showSaveToFolder,
 } from "@/composables/library"
 import { search } from "@/composables/marketplace"
-import moment from "moment"
 import { Conditions, Logic, QueryParams } from "sofa-logic"
 import {
   SofaActivityCard,
@@ -326,7 +325,6 @@ export default defineComponent({
     watch([searchQuery, selectedOptions], fetchSearchResults)
 
     return {
-      moment,
       resourceContents,
       Logic,
       searchQuery,

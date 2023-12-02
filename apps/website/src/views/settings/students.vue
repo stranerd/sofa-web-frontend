@@ -30,10 +30,10 @@ export default defineComponent({
         Logic.Users.GetOrganizationMembers(Logic.Auth.AuthUser.id, {
           limit: 20,
         }).then(() => {
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
         })
       }
     })
   },
-});
+})
 </script>

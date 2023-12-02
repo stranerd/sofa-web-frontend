@@ -64,14 +64,8 @@ export interface SelectOption {
 }
 
 export interface LoaderSetup {
-  show?: boolean
-  loading?: boolean
-  hasError?: boolean
-  message?: string
-  ctaText?: string
-  ctaFunction?: any
-  type?: 'success' | 'error' | 'warning' | 'info'
-  title?: string
+  loading: boolean
+  alerts: { message: string, type: 'success' | 'error' | 'warning' | 'info' }[]
 }
 
 export interface FetchRule {

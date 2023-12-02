@@ -11,6 +11,36 @@
           100% - env(safe-area-inset-top) - env(safe-area-inset-bottom)
         ) !important;
       }
+
+      #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        background-color: #141618;
+        background-image: url('/images/game-bg.png');
+      }
+
+      .animate-bounce {
+        animation: bounce 1s infinite;
+      }
+
+      @keyframes bounce {
+        0%, 100% {
+          transform: translateY(-25%);
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+        }
+        50% {
+          transform: translateY(0);
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+        }
+      }
     </style>
     <base href="/" />
 
@@ -28,9 +58,11 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
   </head>
 
-  <body class="bg-backgroundGray" id="body">
+  <body style="background: #f1f6fb" id="body">
     <div id="app" class="h-screen overflow-auto w-full flex flex-col">
-      <App></App>
+      <div id="loader">
+        <img src="/favicon.svg" class="animate-bounce" style="height: 5rem;" />
+      </div>
     </div>
     <script src="/js/DragDropTouch.js"></script>
     <script src="/js/swiper-event.js"></script>

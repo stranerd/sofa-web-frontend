@@ -93,8 +93,7 @@ export default defineComponent({
 
     const SignUp = async () => {
       if (!termsAccepted.value) {
-        Logic.Common.showLoader({
-          show: true,
+        Logic.Common.showAlert({
           message: 'Please accept the terms and conditions',
           type: 'warning',
         })

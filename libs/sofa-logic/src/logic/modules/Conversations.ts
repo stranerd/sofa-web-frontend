@@ -4,17 +4,17 @@ import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
 import {
-  Conversation,
-  Message,
-  ConversationTutorRequest as TutorRequest,
+    Conversation,
+    Message,
+    ConversationTutorRequest as TutorRequest,
 } from '../types/domains/conversations'
 import { Review } from '../types/domains/interactions'
 import { SingleUser } from '../types/domains/users'
 import {
-  AddTutorInput,
-  CreateMessageInput,
-  CreateTutorRequestInput,
-  DeleteTutorInput,
+    AddTutorInput,
+    CreateMessageInput,
+    CreateTutorRequestInput,
+    DeleteTutorInput,
 } from '../types/forms/conversations'
 import Common from './Common'
 
@@ -151,30 +151,27 @@ export default class Conversations extends Common {
   }
 
   public AcceptTutorRequest = (tutorRequestId: string, accept: boolean) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.conversations.tutor_request
       .acceptTutorRequest(tutorRequestId, accept)
       .then((response) => {
         if (accept) {
-          Logic.Common.showLoader({
-            show: true,
+          Logic.Common.showAlert({
             message: 'Request has been accepted successfully',
             type: 'success',
           })
         } else {
-          Logic.Common.showLoader({
-            show: true,
+          Logic.Common.showAlert({
             message: 'Request has been rejected successfully',
             type: 'success',
           })
         }
+        Logic.Common.hideLoading()
 
         return response.data
       })
       .catch((error) => {
+        Logic.Common.hideLoading()
         Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
@@ -267,12 +264,15 @@ export default class Conversations extends Common {
   }
 
   public DeleteTutor = () => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.conversations.conversation
       .deleteTutor(this.DeleteTutorForm)
-      .then((response) => response.data)
+      .then((response) => {
+        Logic.Common.hideLoading()
+        return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
+      })
   }
 }

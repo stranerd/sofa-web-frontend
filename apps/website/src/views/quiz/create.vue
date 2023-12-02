@@ -10,9 +10,7 @@
             name: 'Preview',
             icon: 'preview',
             handler: () => {
-              Logic.Common.GoToRoute(
-                '/quiz/' + Logic.Study.SingleQuiz?.id + '?mode=preview'
-              )
+              Logic.Common.GoToRoute(`/quiz/${Logic.Study.SingleQuiz?.id}/preview`)
             },
             size: 'h-[17px]',
           },
@@ -78,7 +76,7 @@
           <sofa-icon :customClass="'h-[18px]'" :name="'cog'" v-if="!showSettingModal" @click="showSettings()" />
 
           <sofa-icon :customClass="'h-[14px]'" :name="'preview'" v-if="!showSettingModal" @click="() => {
-            Logic.Common.GoToRoute('/quiz/' + Logic.Study.SingleQuiz?.id)
+            Logic.Common.GoToRoute(`/quiz/${Logic.Study.SingleQuiz?.id}/preview`)
           }
             " />
 
@@ -164,7 +162,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
-import moment from "moment"
 import { scrollToTop } from "@/composables"
 import {
   SofaEmptyState,
@@ -362,7 +359,6 @@ export default defineComponent({
     }
 
     return {
-      moment,
       create,
       selectedQuestion,
       showMoreOptions,

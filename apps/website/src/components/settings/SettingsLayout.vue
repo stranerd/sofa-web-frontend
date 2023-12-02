@@ -11,13 +11,13 @@
 			<slot />
 		</div>
 
-		<div :class="`${index ? 'grid' : 'hidden mdlg:grid'} grid-cols-12 w-full gap-5`">
+		<div :class="`${index ? 'grid' : 'hidden mdlg:grid'} grid-cols-12 w-full gap-5 text-left`">
 			<div class="mdlg:col-span-3 mdlg:flex col-span-full flex-col relative mdlg:px-0 px-4">
 				<div
 					class="flex flex-col gap-3 mdlg:p-4 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:sticky lg:top-[8%] mdlg:top-[10%] mdlg:shadow-custom">
 					<div v-for="option in settingOptions" :key="option.title"
 						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 custom-border shadow-custom mdlg:shadow-none mdlg:border-none">
-						<sofa-header-text size="xl" customClass="text-left px-2 hidden mdlg:block mb-2"
+						<sofa-header-text size="xl" customClass="px-2 hidden mdlg:block mb-2"
 							:content="option.title" />
 						<template v-for="(optionItem, index) in option.subPages" :key="optionItem.title">
 							<router-link :class="`w-full flex flex-col items-start p-2 mdlg:hover:bg-[#E2F3FD] rounded-lg

@@ -461,9 +461,7 @@ export default defineComponent({
       })
 
       props.updateSections()
-      Logic.Common.showLoader({
-        show: true,
-        loading: false,
+      Logic.Common.showAlert({
         message: "New section added",
         type: "success",
       })

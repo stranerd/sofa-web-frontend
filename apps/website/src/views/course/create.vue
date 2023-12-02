@@ -239,7 +239,6 @@ import {
   watch,
 } from "vue"
 import { useMeta } from "vue-meta"
-import moment from "moment"
 import { scrollToTop } from "@/composables"
 import {
   SofaIcon,
@@ -452,7 +451,6 @@ export default defineComponent({
     })
 
     return {
-      moment,
       selectedMaterial,
       showMoreOptions,
       Logic,

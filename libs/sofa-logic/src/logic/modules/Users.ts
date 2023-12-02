@@ -206,10 +206,7 @@ export default class Users extends Common {
   public UpdateUser = (formIsValid: boolean, useLoader: boolean) => {
     if (formIsValid && this.UpdateUserForm) {
       if (useLoader) {
-        Logic.Common.showLoader({
-          loading: true,
-          show: false,
-        })
+        Logic.Common.showLoading()
       }
 
       return $api.users.users
@@ -218,48 +215,45 @@ export default class Users extends Common {
           this.SingleUser = response.data
           this.GetUserProfile()
           if (useLoader) {
-            Logic.Common.hideLoader()
+            Logic.Common.hideLoading()
           }
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           throw error
         })
     }
   }
 
   public UpdateOrganizationCode = (code: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.users.users
       .updateOrganizationCode(code)
       .then((response) => {
         this.SingleUser = response.data
         this.GetUserProfile()
 
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch((error) => {
+        Logic.Common.hideLoading()
         throw error
       })
   }
 
   public UpdateUserLocation = () => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.users.users
       .updateUserLocation(this.UpdateUserLocationForm)
       .then((response) => {
         this.SingleUser = response.data
         this.GetUserProfile()
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch((error) => {
+        Logic.Common.hideLoading()
         throw error
       })
   }
@@ -281,10 +275,7 @@ export default class Users extends Common {
   public CreateVerification = async (formIsValid: boolean, useLoader = true) => {
     if (formIsValid && this.CreateVerificationForm) {
       if (useLoader) {
-        Logic.Common.showLoader({
-          loading: true,
-          show: false,
-        })
+        Logic.Common.showLoading()
       }
 
       return $api.users.verifications
@@ -292,11 +283,11 @@ export default class Users extends Common {
         .then((response) => {
           this.Verification = response.data
           if (useLoader) {
-            Logic.Common.hideLoader()
+            Logic.Common.hideLoading()
           }
         })
         .catch((error) => {
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           Logic.Common.showError(error.response.data[0].message)
         })
     }
@@ -317,18 +308,16 @@ export default class Users extends Common {
 
   public CreateTutorRequest = () => {
     if (this.CreateTutorRequestForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.users.tutor_request
         .post(null, this.CreateTutorRequestForm, () => {})
         .then((response) => {
           this.SingleTutorRequest = response.data
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           throw error
         })
     }
@@ -346,19 +335,16 @@ export default class Users extends Common {
     organizationUserId: string,
     studentEmails: string[],
   ) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.users.organization
       .addOrganizationMembers(organizationUserId, studentEmails)
       .then((response) => {
         Logic.Users.GetOrganizationMembers(organizationUserId)
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 
@@ -366,52 +352,42 @@ export default class Users extends Common {
     organizationUserId: string,
     code: string,
   ) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
 
     return $api.users.organization
       .requestToJoinOrganization(organizationUserId, code)
       .then((response) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 
   public LeaveOrganization = (organizationUserId: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
 
     return $api.users.organization
       .leaveOrganization(organizationUserId)
       .then((response) => {
         Logic.Users.GetUserProfile()
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 
   public SendFeedbackMessage = (message: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.users.meta
       .sendMessage(message)
       .then((response) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
 
-        Logic.Common.showLoader({
-          show: true,
+        Logic.Common.showAlert({
           message: 'Your feedback was sent successfully',
           type: 'success',
         })
@@ -419,7 +395,7 @@ export default class Users extends Common {
         return response.data
       })
       .catch(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 
@@ -427,19 +403,16 @@ export default class Users extends Common {
     organizationUserId: string,
     studentEmail: string,
   ) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.users.organization
       .removeOrganizationMember(organizationUserId, studentEmail)
       .then((response) => {
         Logic.Users.GetOrganizationMembers(organizationUserId)
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 }

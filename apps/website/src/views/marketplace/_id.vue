@@ -142,7 +142,6 @@ import {
   showSaveToFolder,
 } from "@/composables/library"
 import { otherTasks } from "@/composables/quiz"
-import moment from "moment"
 import { Conditions, Logic } from "sofa-logic"
 import {
   SofaButton,
@@ -614,7 +613,6 @@ export default defineComponent({
     })
 
     return {
-      moment,
       otherTasks,
       tabItems,
       Logic,

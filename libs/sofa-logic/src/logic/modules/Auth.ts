@@ -92,10 +92,7 @@ export default class Auth extends Common {
   ) => {
     if (formIsValid && this.UpdateUserProfileForm) {
       if (showLoader) {
-        Logic.Common.showLoader({
-          loading: true,
-          show: false,
-        })
+        Logic.Common.showLoading()
       }
 
       return $api.auth.user
@@ -103,11 +100,11 @@ export default class Auth extends Common {
         .then((response) => {
           this.AuthUser = response.data
           Logic.Users.GetUserProfile()
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           // error handler
         })
     }
@@ -157,72 +154,72 @@ export default class Auth extends Common {
   }
 
   public SignUp = (SignUpForm: SignUpInput) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.email
       .signUp(SignUpForm)
       .then((response) => {
         Logic.Auth.AuthUser = response.data.user
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
   public SignIn = (SignInForm: SignInInput) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.email
       .signIn(SignInForm)
       .then((response) => {
         Logic.Auth.AuthUser = response.data.user
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
   public GoogleSignIn = (GoogleSignInForm: GoogleAuthInput) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.identities
       .googleSignIn(GoogleSignInForm)
       .then((response) => {
         this.AuthUser = response.data.user
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
   public AppleSignIn = (AppleSignInForm: AppleAuthInput) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.identities
       .appleSignIn(AppleSignInForm)
       .then((response) => {
         this.AuthUser = response.data.user
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
   public VerifyEmailWithToken = (VerifyEmailWithToken: VerifyWithTokenInput) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.email
       .verifyEmail(VerifyEmailWithToken)
       .then((response) => {
         this.AuthUser = response.data.user
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
@@ -237,44 +234,43 @@ export default class Auth extends Common {
   }
 
   public SendPasswordResetMail = (email: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.passwords
       .sendResetPasswordMail({ email })
       .then((response) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
   public ResetPasswordWithToken = (ResetPasswordWithTokenForm: ResetPasswordWithTokenInput) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.passwords
       .resetPassword(ResetPasswordWithTokenForm)
       .then((response) => {
         Logic.Auth.AuthUser = response.data.user
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
+      }).catch((e) => {
+        Logic.Common.hideLoading()
+        throw e
       })
   }
 
   public UpdatePassword = (formIsValid: boolean) => {
     if (formIsValid && this.UpdatePasswordForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.auth.passwords
         .updatePassword(this.UpdatePasswordForm)
         .then((response) => {
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           throw error
         })
     }
@@ -282,23 +278,17 @@ export default class Auth extends Common {
 
   public SendPhoneVerification = (formIsValid: boolean) => {
     if (formIsValid && this.SendPhoneVerificationForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.auth.phone
         .sendVerifyPhone(this.SendPhoneVerificationForm)
         .finally(() => {
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
         })
     }
   }
 
   public VerifyPhone = (token: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.auth.phone
       .verifyPhone({ token })
       .then((response) => {
@@ -307,7 +297,7 @@ export default class Auth extends Common {
         this.SetTokens(response.data)
       })
       .finally(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 }

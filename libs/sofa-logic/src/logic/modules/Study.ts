@@ -1,4 +1,6 @@
-import { capitalize, reactive } from 'vue'
+import stringSimilarity from 'string-similarity'
+import { Differ, capitalize, stripHTML } from 'valleyed'
+import { reactive } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
@@ -8,6 +10,7 @@ import {
   Course,
   Folder,
   Question,
+  QuestionAnswer,
   Quiz,
   SofaFile,
 } from '../types/domains/study'
@@ -715,8 +718,7 @@ export default class Study extends Common {
     writeAnswer: 'Type in your answer in the given box',
     trueOrFalse: 'Choose if this statement is true or false',
     fillInBlanks: 'Type your answers in the boxes given',
-    dragAnswers:
-      'Answers are given for you to drag and drop in the blank boxes',
+    dragAnswers: 'Answers are given for you to drag and drop in the blank boxes',
     sequence: 'Drag boxes or use arrows to arrange sequence correctly',
     match: 'Click a box on the left and then one the right to match',
   }
@@ -1235,7 +1237,7 @@ export default class Study extends Common {
   }
 
   public GetFolders = async (filters: QueryParams, showLoader = false) => {
-    if (showLoader) Logic.Common.showLoader({ loading: true, show: false })
+    if (showLoader) Logic.Common.showLoading()
 
     const response = await $api.study.folder.fetch(filters)
     const allFolderCourses: string[] = []
@@ -1271,7 +1273,7 @@ export default class Study extends Common {
 
     this.AllFoldersCourses = allCourses.data.results
 
-    if (showLoader) Logic.Common.hideLoader()
+    if (showLoader) Logic.Common.hideLoading()
 
     return this.AllFolders
   }
@@ -1325,86 +1327,168 @@ export default class Study extends Common {
     }).catch(() => {})
   }
 
-  public GetQuiz = (id: string, autoCreate = false) => {
+  public GetQuiz = async (id: string, autoCreate = false) => {
     if (!id || id == 'nill') {
       if (autoCreate) {
-        return new Promise((resolve) => {
-          // create a new quiz
-          this.CreateQuizForm = {
-            title: 'Untitled Quiz',
-            description: 'Here is the quiz description',
-            tags: [],
-            isForTutors: false,
-            topic: 'Physics',
-          }
-          this.CreateQuiz(true)
-            .then((data: Quiz) => {
-              // create a multiple choice and ture/false question
-              const defaultQuestions: CreateQuestionInput[] = []
+        this.CreateQuizForm = {
+          title: 'Untitled Quiz',
+          description: 'Here is the quiz description',
+          tags: [],
+          isForTutors: false,
+          topic: 'Physics',
+        }
+        const data = await this.CreateQuiz(true)
 
-              // multiple choice
-              const newQuestionDataMultipleChoice = this.questionTypes[
-                'multipleChoice'
-              ]
+        const defaultQuestions: CreateQuestionInput[] = [
+          Logic.Study.convertQuestionToInput(this.questionTypes['multipleChoice'], 'multipleChoice'),
+          Logic.Study.convertQuestionToInput(this.questionTypes['trueOrFalse'], 'trueOrFalse'),
+        ]
 
-              defaultQuestions.push(
-                Logic.Study.convertQuestionToInput(
-                  newQuestionDataMultipleChoice,
-                  'multipleChoice',
-                ),
-              )
+        await Promise.all(defaultQuestions.map(async (formData) => {
+          this.CreateQuestionForm = formData
+          this.CreateQuestionForm.explanation = ''
+          await this.CreateQuestion(true, data.id)
+        }))
 
-              // true/false
-              const newQuestionDataTrueFalse = this.questionTypes['trueOrFalse']
-              defaultQuestions.push(
-                Logic.Study.convertQuestionToInput(
-                  newQuestionDataTrueFalse,
-                  'trueOrFalse',
-                ),
-              )
-
-              defaultQuestions.forEach(async (formData) => {
-                this.CreateQuestionForm = formData
-                this.CreateQuestionForm.explanation = ''
-                await this.CreateQuestion(true, data.id)
-              })
-
-              Logic.Common.hideLoader()
-              Logic.Common.GoToRoute(
-                `/quiz/create?id=${Logic.Study.SingleQuiz.id}`,
-              )
-
-              // get quiz questions
-            })
-            .catch(() => {
-              resolve('')
-            })
-        })
-      } else {
-        return new Promise((resolve) => {
-          resolve('')
-        })
-      }
+        Logic.Common.hideLoading()
+        await Logic.Common.GoToRoute(`/quiz/create?id=${Logic.Study.SingleQuiz.id}`)
+        return data
+      } else return null
     } else {
       return $api.study.quiz.get(id).then((response) => {
         this.SingleQuiz = response.data
+        return this.SingleQuiz
       })
     }
   }
 
-  public GetQuestions = (quizId: string) => {
+  public GetQuestions = (quizId: string, filters: QueryParams = {}) => {
     if (!quizId || quizId == 'empty') return undefined
     return $api.study.quiz
-      .getQuestions(quizId)
+      .getQuestions(quizId, filters)
       .then((response) => {
         this.AllQuestions = response.data
-        return response.data
+        return this.AllQuestions
       })
       .catch(() => {
         this.AllQuestions = undefined
         return undefined
       })
   }
+
+  private compare (a: string, b: string, quality = 0.95) {
+		return stringSimilarity.compareTwoStrings(
+			stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
+			stripHTML(b).toLowerCase().replaceAll(' ', '').trim()
+		) >= quality
+	}
+
+  checkAnswer (question: Question, answer: any): boolean {
+    if (!question.data) return false
+
+		if (question.data.type === 'multipleChoice') {
+			return Array.isArray(answer) && Differ.equal(answer.sort(), [...question.data.answers].sort())
+		} else if (question.data.type === 'trueOrFalse') {
+			return answer === question.data.answer
+		} else if (question.data.type === 'writeAnswer') {
+			return question.data.answers.some((a) => this.compare(a, answer))
+		} else if (question.data.type === 'fillInBlanks') {
+			const answers = question.data.answers
+			return Array.isArray(answer) &&
+				answer.length === answers.length &&
+				answer.every((a, i) => this.compare(a, answers[i]))
+		} else if (question.data.type === 'dragAnswers') {
+			const answers = question.data.answers
+			return Array.isArray(answer) &&
+				answer.length === answers.length &&
+				answer.every((a, i) => this.compare(a, answers[i], 1))
+		} else if (question.data.type === 'sequence') {
+			const answers = question.data.answers
+			return Array.isArray(answer) &&
+				answer.length === answers.length &&
+				answer.every((a, i) => this.compare(a, answers[i], 1))
+		} else if (question.data.type === 'match') {
+			const questions = question.data.set
+			return Array.isArray(answer) &&
+				answer.length === questions.length &&
+				answer.every((a, i) => this.compare(a, questions[i].a, 1))
+		}
+		return false
+	}
+
+  public transformQuestion (question: Question) {
+    const type = question.strippedData.type
+
+    return {
+      ...question,
+      get type () {
+        return type
+      },
+      get instruction () {
+        if (type === 'multipleChoice') return 'Choose the right answer(s)'
+        if (type === 'writeAnswer') return `Type your answer`
+        if (type === 'trueOrFalse') return `Choose an answer`
+        if (type === 'fillInBlanks') return `Fill in the gaps`
+        if (type === 'dragAnswers') return `Drag answers`
+        if (type === 'sequence') return `Drag to rearrange`
+        if (type === 'match') return `Drag items on the right side to rearrange`
+        return ''
+      },
+      get splitQuestions () {
+        if (type === 'fillInBlanks' || type === 'dragAnswers') return question.question.split(question.strippedData.indicator)
+        return []
+      },
+      get defaultAnswer () : QuestionAnswer {
+        if (type === 'multipleChoice') return []
+        if (type === 'writeAnswer') return ''
+        if (type === 'trueOrFalse') return '' as unknown as boolean
+        if (type === 'fillInBlanks') return new Array(this.splitQuestions.length - 1).fill('')
+        if (type === 'dragAnswers') return []
+        if (type === 'sequence') return question.strippedData.answers
+        if (type === 'match') return this.matchAnswers
+        return undefined
+      },
+      get dragAnswers () {
+        if (type === 'dragAnswers') return question.strippedData.answers
+        return []
+      },
+      get matchQuestions () {
+        if (type === 'match') return question.strippedData.questions
+        return []
+      },
+      get matchAnswers () {
+        if (type === 'match') return question.strippedData.answers
+        return []
+      },
+      get answer () {
+        if (!question.data) return ''
+        if (type === 'multipleChoice') return question.data.answers.map((idx) => question.data.options[idx]).join('<br>')
+        if (type === 'writeAnswer') return question.data.answers.join('<br>-- or --<br>')
+        if (type === 'trueOrFalse') return capitalize(question.data.answer.toString())
+        if (['fillInBlanks', 'dragAnswers', 'sequence'].includes(type)) return question.data.answers.join('<br>')
+        if (type === 'match') return question.data.set.map((s) => s.a).join('<br>')
+        return ''
+      }
+    }
+  }
+
+  public getShape (index: number) {
+    const shapes = [
+      "circle",
+      "triangle",
+      "square",
+      "kite"
+    ]
+    return shapes[index % shapes.length]
+  }
+
+  public getShapeSize (shape: string) {
+      if (shape == "circle") return "md:!h-[23px] h-[20px]"
+      if (shape == "triangle") return "md:!h-[20px] h-[17px]"
+      if (shape == "square") return "md:!h-[20px] h-[17px]"
+      if (shape == "kite") return "md:!h-[24px] h-[21px]"
+      return "h-[23px]"
+    }
 
   public GetQuestion = (quidId: string, questionId: string) => {
     return $api.study.quiz.getQuestion(quidId, questionId).then((response) => {
@@ -1557,7 +1641,7 @@ export default class Study extends Common {
               }
 
               await this.UpdateCourseSection()
-              Logic.Common.hideLoader()
+              Logic.Common.hideLoading()
               Logic.Common.GoToRoute(
                 `/course/create?id=${Logic.Study.SingleCourse.id}`,
               )
@@ -1631,20 +1715,22 @@ export default class Study extends Common {
   }
 
   public GoToStudyMode = async (mode: string, quizId) => {
-    if (mode != 'assignment' && mode != 'game' && mode != 'test') {
-      await Logic.Common.GoToRoute(`/quiz/${quizId}?mode=${mode}`)
+    if (mode === 'practice' || mode === 'flashcard') {
+      await Logic.Common.GoToRoute(`/quiz/${quizId}/${mode}`)
+      return
     }
 
-    if (mode == 'test') {
-      Logic.Common.showLoader({ loading: true })
+    if (mode === 'test') {
+      Logic.Common.showLoading()
       await Logic.Plays.CreateTest(quizId)
         .then(async (data) => {
-          Logic.Common.hideLoader()
-          await Logic.Common.GoToRoute(
-            `/quiz/${data.quizId}?mode=tutor_test&testId=${data.id}&is_student=yes`,
-          )
+          Logic.Common.hideLoading()
+          await Logic.Common.GoToRoute(`/tests/${data.id}`)
         })
-        .catch(() => {})
+        .catch(() => {
+          Logic.Common.hideLoading()
+        })
+      return
     }
   }
 
@@ -1807,47 +1893,43 @@ export default class Study extends Common {
   }
 
   public CreateFolder = (CreateFolderForm: CreateFolderInput) => {
-    Logic.Common.showLoader({ loading: true, show: false })
+    Logic.Common.showLoading()
     return $api.study.folder
       .post(null, CreateFolderForm)
       .then((response) => {
         this.SingleFolder = response.data
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return this.SingleFolder
       })
       .catch((error) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         throw error
       })
   }
 
   public UpdateFolder = (id: string, UpdateFolderForm: CreateFolderInput) => {
-    Logic.Common.showLoader({ loading: true, show: false })
+    Logic.Common.showLoading()
     return $api.study.folder
       .put(null, id, UpdateFolderForm)
       .then((response) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch((error) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         throw error
       })
   }
 
   public SaveItemToFolder = (formIsValid: boolean) => {
     if (formIsValid && this.SaveItemToFolderForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.folder
         .saveItemToFolder(this.SaveItemToFolderForm)
         .then((response) => {
           this.SingleFolder = response.data
-          Logic.Common.hideLoader()
-          Logic.Common.showLoader({
-            show: true,
+          Logic.Common.hideLoading()
+          Logic.Common.showAlert({
             message: this.SaveItemToFolderForm.add
               ? 'Material added to folder'
               : 'Material removed from folder',
@@ -1856,6 +1938,7 @@ export default class Study extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
@@ -1863,23 +1946,20 @@ export default class Study extends Common {
 
   public AddReview = () => {
     if (this.AddReviewForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.interactions.reviews
         .post(null, this.AddReviewForm)
         .then((response) => {
           this.SingleReview = response.data
-          Logic.Common.hideLoader()
-          Logic.Common.showLoader({
-            show: true,
+          Logic.Common.hideLoading()
+          Logic.Common.showAlert({
             message: 'Your review has been added',
             type: 'success',
           })
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
@@ -1887,19 +1967,17 @@ export default class Study extends Common {
 
   public CreateQuiz = (formIsValid: boolean) => {
     if (formIsValid && this.CreateQuizForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.quiz
         .post(null, this.CreateQuizForm)
         .then((response) => {
           this.SingleQuiz = response.data
           this.GetQuestions(this.SingleQuiz.id)
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           throw error
         })
     }
@@ -1907,19 +1985,17 @@ export default class Study extends Common {
 
   public UpdateQuiz = (formIsValid: boolean, id: string) => {
     if (formIsValid && this.UpdateQuizForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.quiz
         .put(null, id, this.UpdateQuizForm)
         .then((response) => {
           this.SingleQuiz = response.data
           this.GetQuestions(this.SingleQuiz.id)
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
           throw error
         })
@@ -1984,12 +2060,10 @@ export default class Study extends Common {
       )[0]
       if (unsectioned) {
         if (unsectioned.items.length > 0) {
-          Logic.Common.showLoader({
-            loading: false,
+          Logic.Common.showAlert({
             type: 'error',
             message:
               'Unsectioned has to be empty. Please, move all your materials to a section.',
-            show: true,
           })
           return
         } else {
@@ -2011,10 +2085,7 @@ export default class Study extends Common {
           UpdateQuestionForm: CreateQuestionInput
         }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
 
-        Logic.Common.showLoader({
-          loading: true,
-          show: false,
-        })
+        Logic.Common.showLoading()
 
         await localQuizData.forEach(async (requestData) => {
           if (
@@ -2027,15 +2098,13 @@ export default class Study extends Common {
           }
         })
 
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         localStorage.removeItem('quiz_question_update')
 
         resolve('')
       }
       if (!silent) {
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: 'All changes have been saved',
           type: 'success',
         })
@@ -2046,20 +2115,17 @@ export default class Study extends Common {
   }
 
   public PublishQuiz = (id: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.study.quiz
       .publishQuiz(id)
       .then((response) => {
         this.SingleQuiz = response.data
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch(() => {
         //
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 
@@ -2073,19 +2139,17 @@ export default class Study extends Common {
 
   public CreateQuestion = (formIsValid: boolean, quizId: string) => {
     if (formIsValid && this.CreateQuestionForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.quiz
         .createQuestion(quizId, this.CreateQuestionForm)
         .then((response) => {
           this.SingleQuestion = response.data
           this.GetQuestions(quizId)
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
@@ -2108,18 +2172,16 @@ export default class Study extends Common {
 
   public CreateCourse = (formIsValid: boolean) => {
     if (formIsValid && this.CreateCourseForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.course
         .post(null, this.CreateCourseForm)
         .then((response) => {
           this.SingleCourse = response.data
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           throw error
         })
     }
@@ -2127,18 +2189,16 @@ export default class Study extends Common {
 
   public UpdateCourse = (formIsValid: boolean, id: string) => {
     if (formIsValid && this.UpdateCourseForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.course
         .put(null, id, this.UpdateCourseForm)
         .then((response) => {
           this.SingleCourse = response.data
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
           throw error
         })
@@ -2147,10 +2207,7 @@ export default class Study extends Common {
 
   public MoveItemToCourse = (formIsValid: boolean) => {
     if (formIsValid && this.MoveItemToCourseForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.course
         .moveItemIntoCourse(this.MoveItemToCourseForm)
         .then((response) => {
@@ -2192,28 +2249,25 @@ export default class Study extends Common {
             this.NewCoursableItem = Logic.Common.makeid(16)
           }
 
+          Logic.Common.hideLoading()
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
 
   public UpdateCourseSection = () => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     if (this.UpdateCourseSectionForm) {
       return $api.study.course
         .updateCourseSections(this.UpdateCourseSectionForm)
         .then((response) => {
           localStorage.removeItem('couse_section_update')
           this.SingleCourse = response.data
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: 'All changes have been saved',
             type: 'success',
           })
@@ -2221,23 +2275,22 @@ export default class Study extends Common {
           return response.data
         })
         .catch((error) => {
+          Logic.Common.hideLoading
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
   }
 
   public PublishCourse = (id: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.study.course
       .publishCourse(id)
       .then((response) => {
         this.SingleCourse = response.data
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
       .catch((error) => {
+        Logic.Common.hideLoading()
         Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
@@ -2255,18 +2308,16 @@ export default class Study extends Common {
 
   public CreateFile = (formIsValid: boolean) => {
     if (formIsValid && this.CreateFileForm) {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
       return $api.study.file
         .post(null, this.CreateFileForm)
         .then((response) => {
           this.SingleFile = response.data
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
           return this.SingleFile
         })
         .catch((error) => {
+          Logic.Common.hideLoading()
           Logic.Common.showError(capitalize(error.response.data[0]?.message))
         })
     }
@@ -2296,14 +2347,11 @@ export default class Study extends Common {
   }
 
   public DeleteFolder = (id: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.study.folder
       .delete(id)
       .then(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         Logic.Study.GetFolders({
           where: [
             {
@@ -2315,40 +2363,37 @@ export default class Study extends Common {
         })
       })
       .catch(() => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       })
   }
 
   public DeleteQuiz = (id: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.study.quiz
       .delete(id)
       .then((response) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         Logic.Common.goBack()
       })
       .catch((error) => {
+        Logic.Common.hideLoading()
         Logic.Common.showError(capitalize(error.response.data[0]?.message))
       })
   }
 
   public DeleteQuestion = (id: string, quizId: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.study.quiz
       .deleteQuestion(quizId, id)
       .then((response) => {
+        Logic.Common.hideLoading()
         Logic.Study.GetQuestions(quizId).then(() => {
           this.quizQuestionDeleted = Math.random() * 100000
         })
         return response.data
       })
       .catch((error) => {
+        Logic.Common.hideLoading()
         throw error
       })
   }
@@ -2365,18 +2410,16 @@ export default class Study extends Common {
   }
 
   public DeleteFile = (id: string) => {
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     return $api.study.file
       .delete(id)
       .then((response) => {
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
         return response.data
       })
       .catch((error) => {
         //
+        Logic.Common.hideLoading()
       })
   }
 }

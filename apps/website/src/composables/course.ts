@@ -97,7 +97,7 @@ const createCourse = (formComp: any) => {
 
         updateCourseSections()
 
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       }
     })
     .catch((error) => {
@@ -130,9 +130,7 @@ const updateCourse = (formComp: any) => {
     ?.then((data) => {
       if (data) {
         courseSettingSaved.value = true
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: 'Course updated',
           type: 'success',
         })
@@ -198,9 +196,7 @@ const addCourseFile = () => {
       }
       Logic.Study.MoveItemToCourse(true)
 
-      Logic.Common.showLoader({
-        show: true,
-        loading: false,
+      Logic.Common.showAlert({
         message: 'Material added.',
         type: 'success',
       })
@@ -219,9 +215,7 @@ const addQuizToCourse = (quizId: string) => {
     }
     Logic.Study.MoveItemToCourse(true).then((data) => {
       if (data) {
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: 'Quiz added.',
           type: 'success',
         })
@@ -231,5 +225,5 @@ const addQuizToCourse = (quizId: string) => {
 }
 
 export {
-  addCourseFile, addCourseFileForm, addQuizToCourse, allGenericTags, allTopics, courseSettingForm, courseSettingSaved, createCourse, getGenericTags, getTopics, hasUnsavedChanges, updateCourse, updateCourseSectionForm, updateCourseSections
+    addCourseFile, addCourseFileForm, addQuizToCourse, allGenericTags, allTopics, courseSettingForm, courseSettingSaved, createCourse, getGenericTags, getTopics, hasUnsavedChanges, updateCourse, updateCourseSectionForm, updateCourseSections
 }

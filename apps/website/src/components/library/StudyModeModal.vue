@@ -40,11 +40,7 @@
 				</div>
 
 				<div class="w-full flex flex-col gap-3 py-4 px-4" v-else>
-					<div @click="
-						userIsParticipating
-							? (userIsParticipating = false)
-							: (userIsParticipating = true)
-						" class="w-full custom-border py-4 px-4 bg-backgroundGray flex flex-row cursor-pointer items-center justify-between">
+					<div @click="userIsParticipating = !userIsParticipating" class="w-full custom-border py-4 px-4 bg-backgroundGray flex flex-row cursor-pointer items-center justify-between">
 						<sofa-normal-text>Participate</sofa-normal-text>
 						<sofa-icon :customClass="'h-[22px] z-50'"
 							:name="userIsParticipating ? 'toggle-on' : 'toggle-off'" />

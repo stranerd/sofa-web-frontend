@@ -76,8 +76,7 @@ export default defineComponent({
         }
         Logic.Auth.UpdatePassword(true)
           .then(() => {
-            Logic.Common.showLoader({
-              show: true,
+            Logic.Common.showAlert({
               message: "Your password has been updated",
               type: "success",
             })

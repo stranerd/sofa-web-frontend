@@ -65,6 +65,7 @@ export interface Question {
       | 'match'
     indicator?: string
     options?: string[]
+    questions?: any[]
     answers?: any[]
     answer?: boolean
     set?: {
@@ -72,9 +73,33 @@ export interface Question {
       a: string
     }[]
   }
+  strippedData: {
+    type: 'multipleChoice'
+    options: string[]
+  } | {
+    type: 'trueOrFalse'
+  } | {
+    type: 'writeAnswer'
+  } | {
+    type: 'fillInBlanks'
+    indicator: string
+  } | {
+    type: 'dragAnswers'
+    indicator: string
+    answers: string[]
+  } | {
+    type: 'sequence'
+    answers: string[]
+  } | {
+    type: 'match'
+    questions: string[]
+    answers: string[]
+  }
   createdAt: number
   updatedAt: number
 }
+
+export type QuestionAnswer = string[] | number[] | boolean | string
 
 export interface Course {
   hash: string

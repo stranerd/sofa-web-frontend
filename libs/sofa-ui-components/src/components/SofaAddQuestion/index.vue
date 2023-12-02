@@ -324,9 +324,7 @@ export default defineComponent({
 
     const deleteQuestion = () => {
       if (Logic.Study.SingleQuiz.status == "published") {
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: "You cannot delete questions from published quiz",
           type: "warning",
         })
@@ -340,9 +338,7 @@ export default defineComponent({
         )
           .then((data) => {
             if (data) {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
+              Logic.Common.showAlert({
                 message: "Question has been deleted.",
                 type: "success",
               })
@@ -350,9 +346,7 @@ export default defineComponent({
             }
           })
           .catch(() => {
-            Logic.Common.showLoader({
-              show: true,
-              loading: false,
+            Logic.Common.showAlert({
               message: "Unable to delete question. Please try again",
               type: "error",
             })
@@ -382,9 +376,7 @@ export default defineComponent({
         }
 
         Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id).then(() => {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Question duplicated",
             type: "success",
           })

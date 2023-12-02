@@ -125,12 +125,7 @@ export const plays = computed(() => [
       type: 'game',
       participants: p.participants.length,
       action: () => {
-        ended ? Logic.Common.showLoader({
-          loading: false,
-          show: true,
-          type: 'warning',
-          message: 'Game already ended',
-        }) : Logic.Common.GoToRoute(`/quiz/${p.quizId}?mode=game&gameId=${p.id}`)
+        Logic.Common.GoToRoute(`/games/${p.id}`)
       },
     }
   }) ?? [],
@@ -151,12 +146,7 @@ export const plays = computed(() => [
       title: currentQuiz?.title || 'Unknown quiz',
       type: 'test',
       action: () => {
-        ended ? Logic.Common.showLoader({
-          loading: false,
-          show: true,
-          type: 'warning',
-          message: 'Test already ended',
-        }) : Logic.Common.GoToRoute(`/quiz/${p.quizId}?mode=tutor_test&testId=${p.id}&is_student=yes`)
+        Logic.Common.GoToRoute(`/tests/${p.id}`)
       },
     }
   }) ?? [],
@@ -352,18 +342,14 @@ const shareMaterialLink = async (
 
   try {
     await navigator.share(shareData)
-    Logic.Common.showLoader({
-      show: true,
-      loading: false,
+    Logic.Common.showAlert({
       message: 'Link shared.',
       type: 'success',
     })
   } catch (err) {
     Logic.Common.copytext(finalLink)
     // show alert
-    Logic.Common.showLoader({
-      show: true,
-      loading: false,
+    Logic.Common.showAlert({
       message: 'Link copied to your clipboard!',
       type: 'success',
     })

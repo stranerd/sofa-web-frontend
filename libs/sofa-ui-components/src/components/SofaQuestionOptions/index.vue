@@ -456,9 +456,7 @@ export default defineComponent({
       Logic.Study.DeleteQuestion(question.value.id, Logic.Study.SingleQuiz.id)
         .then((data) => {
           if (data) {
-            Logic.Common.showLoader({
-              show: true,
-              loading: false,
+            Logic.Common.showAlert({
               message: "Question has been deleted.",
               type: "success",
             })
@@ -466,9 +464,7 @@ export default defineComponent({
           }
         })
         .catch(() => {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Unable to delete question. Please try again",
             type: "error",
           })
@@ -485,9 +481,7 @@ export default defineComponent({
 
       Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id)
 
-      Logic.Common.showLoader({
-        show: true,
-        loading: false,
+      Logic.Common.showAlert({
         message: "Question duplicated",
         type: "success",
       })
