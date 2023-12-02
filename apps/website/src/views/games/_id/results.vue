@@ -10,8 +10,13 @@
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
-								click: () => Logic.Common.GoToRoute('/library')
-							}">
+								click: () => Logic.Common.GoToRoute('/library/results?tab=games')
+							}" :leftButton="gameExtras.canEnd ? {
+								label: 'End',
+								bgColor: 'bg-deepGray border border-white',
+								textColor: 'text-white',
+								click: gameExtras.end
+							} : undefined">
 							<template v-slot:header>
 								<div />
 							</template>

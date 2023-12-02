@@ -41,6 +41,7 @@ const { id } = useAuth()
 const extras = computed(() => ({
 	isMine: game.value && game.value.user.id === id.value,
 	canStart: game.value && game.value.status === 'created',
+	canEnd: game.value && game.value.user.id === id.value && game.value.status === 'started',
 	canJoin: game.value && !game.value.participants.includes(id.value),
 	authId: id.value,
 	answers: answer.value?.data ?? null,

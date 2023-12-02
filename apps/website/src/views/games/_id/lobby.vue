@@ -24,7 +24,7 @@
 						>
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
-									<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white p-4 custom-border"
+									<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 custom-border"
 										:class="{ 'flex-col justify-center items-center': gameExtras.isMine }">
 										<template v-if="gameExtras.isMine">
 											<SofaNormalText color="text-grayColor !text-center"
@@ -57,7 +57,7 @@
 													<SofaNormalText color="text-primaryPurple" content="Game" />
 													<span class="h-[5px] w-[5px] rounded-full bg-primaryPurple" />
 													<SofaNormalText color="text-primaryPurple"
-														:content="`${questions.length} question${questions.length > 1 ? 's' : ''}`" />
+														:content="`${game.questions.length} question${game.questions.length > 1 ? 's' : ''}`" />
 												</div>
 												<div class="w-full flex items-start gap-2 flex-nowrap">
 													<SofaAvatar size="20" :photoUrl="quiz.user.bio.photo?.link" />

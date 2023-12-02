@@ -1,12 +1,16 @@
 <template>
-  <div class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] cursor-pointer md:px-0 px-4">
-    <div class="flip-card rounded-xl shadow-custom" @click="showAnswer = !showAnswer" @swiped="handleSwiperAction($event)">
-      <div class="flip-card-inner rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
+  <div
+    class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] cursor-pointer md:px-0 px-4">
+    <div class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer"
+      @swiped="handleSwiperAction($event)">
+      <div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
         <div class="flip-card-front bg-white rounded-xl flex flex-col items-center justify-center">
-          <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit" :content="question.question" />
+          <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
+            :content="question.question" />
         </div>
         <div class="flip-card-back bg-white rounded-xl flex flex-col items-center justify-center">
-          <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit" :content="question.answer" />
+          <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
+            :content="question.answer" />
         </div>
       </div>
     </div>
@@ -44,6 +48,7 @@ const handleSwiperAction = (event: any) => {
   width: 100%;
   height: 100%;
   perspective: 1000px;
+  overflow: hidden;
   /* Remove this if you don't want the 3D effect */
 }
 
@@ -70,8 +75,7 @@ const handleSwiperAction = (event: any) => {
 }
 
 /* Style the front side (fallback if image is missing) */
-.flip-card-front {
-}
+.flip-card-front {}
 
 /* Style the back side */
 .flip-card-back {
