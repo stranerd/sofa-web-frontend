@@ -526,14 +526,14 @@ const setQuestions = () => {
 
 const setScoreboardParticipants = () => {
   scoreBoardParticipants.length = 0
-  const allParticipants = GameParticipants.value.map((participant) => {
+  const allParticipants = GameParticipants.value?.map((participant) => {
     return {
       score: SingleGame.value.scores[participant.id]
         ? SingleGame.value.scores[participant.id]
         : 0,
       user: participant,
     }
-  })
+  }) ?? []
 
   allParticipants.sort((a, b) => {
     return b.score - a.score
@@ -875,7 +875,6 @@ const handleAnswerSelected = () => {
 
 const createQuizGame = async () => {
   if (!selectedQuizId.value) return
-  if (Logic.Common.loaderSetup.loading) return
   Logic.Common.showLoading()
 
   Logic.Plays.CreateGameForm = {
@@ -887,7 +886,7 @@ const createQuizGame = async () => {
     if (game) {
       Logic.Common.hideLoading()
       showStudyMode.value = false
-      await Logic.Common.GoToRoute( `/quiz/${game.quizId}?mode=game&gameId=${game.id}`)
+      await Logic.Common.GoToRoute( `/games/${game.id}`)
     }
   })
 }

@@ -1715,22 +1715,22 @@ export default class Study extends Common {
   }
 
   public GoToStudyMode = async (mode: string, quizId) => {
-    if (mode != 'assignment' && mode != 'game' && mode != 'test') {
+    if (mode === 'practice' || mode === 'flashcard') {
       await Logic.Common.GoToRoute(`/quiz/${quizId}/${mode}`)
+      return
     }
 
-    if (mode == 'test') {
+    if (mode === 'test') {
       Logic.Common.showLoading()
       await Logic.Plays.CreateTest(quizId)
         .then(async (data) => {
           Logic.Common.hideLoading()
-          await Logic.Common.GoToRoute(
-            `/quiz/${data.quizId}?mode=tutor_test&testId=${data.id}&is_student=yes`,
-          )
+          await Logic.Common.GoToRoute(`/tests/${data.id}`)
         })
         .catch(() => {
           Logic.Common.hideLoading()
         })
+      return
     }
   }
 

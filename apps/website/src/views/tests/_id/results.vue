@@ -1,9 +1,9 @@
 <template>
 	<expanded-layout layoutStyle="!w-full !justify-between !h-screen !p-0 bg-deepGray text-white" :hasTopBar="false"
 		:hasBottomBar="false" :bottomPadding="false" bgImage="/images/game-bg.png">
-		<GameWrapper :id="($route.params.id as string)" :skipQuestions="true" :skipStatusNav="true">
-			<template v-slot="{ game, extras: gameExtras, questions }">
-				<QuizWrapper :id="game.quizId" :questions="questions">
+		<TestWrapper :id="($route.params.id as string)" :skipQuestions="true" :skipStatusNav="true">
+			<template v-slot="{ test, extras: testExtras, questions }">
+				<QuizWrapper :id="test.quizId" :questions="questions">
 					<template v-slot="{ quiz, questions, extras }">
 						<Quiz :index="extras.index" :title="quiz.title" :questions="questions" :showCounter="false"
 							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true" :rightButton="{
@@ -22,15 +22,15 @@
 										<SofaHeaderText class="md:!text-3xl text-xl" color="text-white"
 											content="Scoreboard" />
 										<SofaNormalText color="text-white" class="-mt-4"
-											:content="game.status === 'scored' ? 'Game has ended' : game.status === 'ended' ? 'Scores are being calculated' : 'Waiting for others to finish'" />
-										<div v-for="score in gameExtras.scores" :key="score.user.id"
+											:content="test.status === 'scored' ? 'Test has ended' : test.status === 'ended' ? 'Scores are being calculated' : 'Waiting for others to finish'" />
+										<div v-for="score in testExtras.scores" :key="score.user.id"
 											class="w-full flex items-center justify-between gap-2 p-4 custom-border bg-white border-4"
-											:class="score.user.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
+											:class="score.user.id === testExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
 											<SofaNormalText color="text-deepGray" class="!font-semibold"
 												:content="score.position" />
 											<SofaNormalText color="text-deepGray" class="!font-semibold"
-												:content="score.user.id === gameExtras.authId ? 'You' : score.user.bio.name.full" />
-											<SofaIcon name="game-winner" class="h-[23px]" v-if="score.isWinner" />
+												:content="score.user.id === testExtras.authId ? 'You' : score.user.bio.name.full" />
+											<SofaIcon name="test-winner" class="h-[23px]" v-if="score.isWinner" />
 											<SofaNormalText color="text-deepGray" class="!font-semibold ml-auto"
 												:content="`${score.score} pts`" />
 										</div>
@@ -41,12 +41,12 @@
 					</template>
 				</QuizWrapper>
 			</template>
-		</GameWrapper>
+		</TestWrapper>
 	</expanded-layout>
 </template>
 
 <script lang="ts">
-import GameWrapper from '@/components/plays/games/GameWrapper.vue'
+import TestWrapper from '@/components/plays/tests/TestWrapper.vue'
 import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
@@ -56,9 +56,9 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
-	name: 'GamesIdResultsPage',
+	name: 'TestsIdResultsPage',
 	components: {
-		GameWrapper, QuizWrapper, Quiz,
+		TestWrapper, QuizWrapper, Quiz,
 		SofaHeaderText, SofaNormalText, SofaIcon
 	},
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),

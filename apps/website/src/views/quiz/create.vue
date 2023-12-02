@@ -76,7 +76,7 @@
           <sofa-icon :customClass="'h-[18px]'" :name="'cog'" v-if="!showSettingModal" @click="showSettings()" />
 
           <sofa-icon :customClass="'h-[14px]'" :name="'preview'" v-if="!showSettingModal" @click="() => {
-            Logic.Common.GoToRoute('/quiz/' + Logic.Study.SingleQuiz?.id)
+            Logic.Common.GoToRoute(`/quiz/${Logic.Study.SingleQuiz?.id}/preview`)
           }
             " />
 

@@ -146,10 +146,7 @@ export const plays = computed(() => [
       title: currentQuiz?.title || 'Unknown quiz',
       type: 'test',
       action: () => {
-        ended ? Logic.Common.showAlert({
-          type: 'warning',
-          message: 'Test already ended',
-        }) : Logic.Common.GoToRoute(`/quiz/${p.quizId}?mode=tutor_test&testId=${p.id}&is_student=yes`)
+        Logic.Common.GoToRoute(`/tests/${p.id}`)
       },
     }
   }) ?? [],
