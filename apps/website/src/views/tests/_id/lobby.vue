@@ -20,7 +20,7 @@
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div
-										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-grayColor p-4 custom-border flex-col justify-center items-center">
+										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 custom-border flex-col justify-center items-center">
 										<SofaNormalText color="text-inherit" content="You are about to take a test" />
 										<SofaHeaderText :content="quiz.title" color="text-inherit" class="!font-extrabold"
 											size="xl" />

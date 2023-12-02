@@ -63,8 +63,8 @@ export default defineComponent({
   setup (_, ctx) {
     const isHovered = ref(false)
 
-    const handleClicked = () => {
-      ctx.emit('click')
+    const handleClicked = (e: Event) => {
+      ctx.emit('click', e)
       isHovered.value = true
 
       setTimeout(() => {
