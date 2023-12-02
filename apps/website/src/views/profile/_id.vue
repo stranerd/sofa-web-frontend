@@ -424,10 +424,7 @@ export default defineComponent({
     }
 
     const fetchMaterials = () => {
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
 
       const query: QueryParams = {
         ...(searchQuery.value ? {
@@ -478,7 +475,7 @@ export default defineComponent({
 
       Promise.all(allRequests)
         .then(() => {
-          Logic.Common.hideLoader()
+          Logic.Common.hideLoading()
         })
         .catch((error) => {
           console.log(error)
@@ -536,17 +533,13 @@ export default defineComponent({
             joinCode.value
           ).then((data) => {
             if (data) {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
+              Logic.Common.showAlert({
                 message: "Your join request has been sent.",
                 type: "success",
               })
               showModal.value = false
             } else {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
+              Logic.Common.showAlert({
                 message: "Unable to send join request. Invalid join code",
                 type: "error",
               })

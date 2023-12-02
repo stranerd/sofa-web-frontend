@@ -39,7 +39,7 @@ body {
   }
 }
 
-.loader .bar {
+.loader-bar {
   width: 100%;
   position: absolute;
   height: 5px;

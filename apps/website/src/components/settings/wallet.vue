@@ -492,9 +492,7 @@ export default defineComponent({
           Logic.Payment.FundWallet()
             .then((data) => {
               if (data) {
-                Logic.Common.showLoader({
-                  show: true,
-                  loading: false,
+                Logic.Common.showAlert({
                   message: "Funding successful",
                   type: "success",
                 })
@@ -505,9 +503,7 @@ export default defineComponent({
               fundWalletMethod.value = ""
             })
             .catch((error) => {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
+              Logic.Common.showAlert({
                 message: capitalize(error.response.data[0]?.message),
                 type: "error",
               })
@@ -524,9 +520,7 @@ export default defineComponent({
           const amount = parseFloat(withdrawForm.amount.replace(/,/g, ""))
 
           if (amount < 1000) {
-            Logic.Common.showLoader({
-              show: true,
-              loading: false,
+            Logic.Common.showAlert({
               message: `Withdrawal amount cannot be less than ${Logic.Common.convertToMoney(
                 1000,
                 false,
@@ -549,9 +543,7 @@ export default defineComponent({
           Logic.Payment.WithdrawFromWallet()
             .then((data) => {
               if (data) {
-                Logic.Common.showLoader({
-                  show: true,
-                  loading: false,
+                Logic.Common.showAlert({
                   message: "Withdrawal successful",
                   type: "success",
                 })
@@ -561,9 +553,7 @@ export default defineComponent({
                 withdrawForm.amount = ""
                 withdrawForm.bank = ""
               } else {
-                Logic.Common.showLoader({
-                  show: true,
-                  loading: false,
+                Logic.Common.showAlert({
                   message: "Withdrawal failed",
                   type: "error",
                 })
@@ -574,9 +564,7 @@ export default defineComponent({
               fundWalletMethod.value = ""
             })
             .catch((error) => {
-              Logic.Common.showLoader({
-                show: true,
-                loading: false,
+              Logic.Common.showAlert({
                 message: capitalize(error.response.data[0]?.message),
                 type: "error",
               })
@@ -589,9 +577,7 @@ export default defineComponent({
       const amount = parseFloat(fundWalletAmount.value.replace(/,/g, ""))
 
       if (amount < 200) {
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: `Funding amount cannot be less than ${Logic.Common.convertToMoney(
             200,
             false,

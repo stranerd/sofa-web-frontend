@@ -59,8 +59,7 @@ export default defineComponent({
         Logic.Auth.SendPasswordResetMail(emailValue.value)
           .then((data) => {
             if (!data) return
-            Logic.Common.showLoader({
-              show: true,
+            Logic.Common.showAlert({
               message: 'A password reset token has been sent to your email',
               type: 'success',
             })

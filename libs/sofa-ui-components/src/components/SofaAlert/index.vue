@@ -1,20 +1,15 @@
 <template>
-  <div class="fixed w-full flex sofa-alert flex-row px-4 py-4 items-end justify-end z-[100]">
-    <div :class="`md:!min-w-[300px] mdlg:!min-w-[300px] md:!w-auto mdlg:!w-auto w-full flex flex-row items-center md:py-4 md:px-4 px-3 py-3 custom-border justify-between border-[2px] ${type == 'success' ? 'border-[#4BAF7D] bg-[#E1F5EB]' : ''
-      }
-          ${type == 'error' ? 'border-[#F55F5F] bg-[#FAEBEB]' : ''}
-          ${type == 'warning' ? 'border-[#FA9632] bg-[#FFF4EB]' : ''}
-          ${type == 'info' ? 'border-[#7DC8FA] bg-[#E2F3FD]' : ''} `">
-      <div class="flex flex-row items-center gap-3">
-        <sofa-icon :name="`${type}-icon`" :customClass="'h-[25px]'" />
-        <sofa-normal-text :customClass="'!font-semibold w-full text-left'">
-          {{ content }}
-        </sofa-normal-text>
-      </div>
-
-      <div class="w-[30px] flex flex-row justify-end">
-        <sofa-icon :name="'circle-close'" :customClass="'h-[18px]'" @click="closeAlert()" />
-      </div>
+  <div class="fixed w-full flex sofa-alert p-4 items-end justify-end z-[100]">
+    <div class="md:!min-w-[300px] md:!w-auto w-full flex items-center md:p-4 p-3 custom-border justify-between border-2 gap-3"
+        :class="{
+          'border-[#4BAF7D] bg-[#E1F5EB]': type === 'success',
+          'border-[#F55F5F] bg-[#FAEBEB]': type === 'error',
+          'border-[#FA9632] bg-[#FFF4EB]': type === 'warning',
+          'border-[#7DC8FA] bg-[#E2F3FD]': type === 'info'
+        }">
+      <SofaIcon :name="`${type}-icon`" class="h-[25px]" />
+      <SofaNormalText class="!font-semibold w-full text-left" :content="content" />
+      <SofaIcon name="circle-close" class="h-[18px] ml-auto" @click="closeAlert()" />
     </div>
   </div>
 </template>

@@ -200,15 +200,10 @@ export default defineComponent({
         topicId: Logic.Study.SingleCourse.topicId,
       }
 
-      Logic.Common.showLoader({
-        loading: true,
-        show: false,
-      })
+      Logic.Common.showLoading()
 
       Logic.Study.UpdateFile(true, dataRef.value.id)?.then(() => {
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: "All changes have been saved",
           type: "success",
         })
@@ -228,17 +223,13 @@ export default defineComponent({
         if (response) {
           Logic.Study.DeleteFile(id).then(() => {
             Logic.Study.GetCourse(Logic.Study.SingleCourse.id)
-            Logic.Common.showLoader({
-              show: true,
-              loading: false,
+            Logic.Common.showAlert({
               message: "Material has been deleted.",
               type: "success",
             })
           })
         } else {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Unable to delete material. Please try again.",
             type: "error",
           })

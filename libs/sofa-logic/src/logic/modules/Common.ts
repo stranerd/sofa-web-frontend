@@ -2,21 +2,21 @@ import { AxiosError } from 'axios'
 import currency from 'currency.js'
 import moment from 'moment'
 import io, { Socket } from 'socket.io-client'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import {
-  NavigationGuardNext,
-  RouteLocationNormalized,
-  RouteLocationNormalizedLoaded,
-  Router,
+    NavigationGuardNext,
+    RouteLocationNormalized,
+    RouteLocationNormalizedLoaded,
+    Router,
 } from 'vue-router'
 import { Logic } from '..'
 import {
-  EmitTypes,
-  FetchRule,
-  Listeners,
-  LoaderSetup,
-  SocketReturn,
-  StatusCodes,
+    EmitTypes,
+    FetchRule,
+    Listeners,
+    LoaderSetup,
+    SocketReturn,
+    StatusCodes,
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
 
@@ -277,9 +277,7 @@ export default class Common {
       errorMessage = validationErrors[0]?.message
     } else errorMessage = error.message
 
-    this.showLoader({
-      loading: false,
-      show: true,
+    this.showAlert({
       type: 'error',
       message: customErrorMessage ?? errorMessage,
     })
@@ -304,16 +302,9 @@ export default class Common {
     return i + 'th'
   }
 
-  public loaderSetup: LoaderSetup = reactive({
-    show: false,
-    useModal: false,
-    hasError: false,
+  public loaderSetup = reactive<LoaderSetup>({
+    alerts: [],
     loading: false,
-    message: '',
-    ctaText: '',
-    ctaFunction: () => {},
-    icon: 'success-thumb',
-    title: '',
   })
 
   public SetApiUrl = (apiUrl: string) => {
@@ -375,15 +366,6 @@ export default class Common {
     return this.window.width > 1000
   }
 
-  public showError = (message: string) => {
-    this.showLoader({
-      show: true,
-      message,
-      loading: false,
-      type: 'error',
-    })
-  }
-
   public getLabel = (data: any, key: string) => {
     const thisData = data.filter((Option: any) => {
       return Option.key == key
@@ -392,8 +374,23 @@ export default class Common {
     return thisData.length > 0 ? thisData[0].value : ''
   }
 
-  public showLoader = (loaderSetup: LoaderSetup) => {
-    this.loaderSetup = loaderSetup
+  public showAlert = (alert: LoaderSetup['alerts'][number]) => {
+    this.loaderSetup.alerts.push(alert)
+  }
+
+  public showError = (message: string) => {
+    this.showAlert({
+      message,
+      type: 'error',
+    })
+  }
+
+  public showLoading = () => {
+    this.loaderSetup.loading = true
+  }
+
+  public hideLoading = () => {
+    this.loaderSetup.loading = false
   }
 
   public goBack = () => {
@@ -409,13 +406,6 @@ export default class Common {
     } else {
       window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
     }
-  }
-
-  public hideLoader = () => {
-    const Loader: LoaderSetup = {
-      loading: false,
-    }
-    this.loaderSetup = Loader
   }
 
   public globalParameters = reactive<{
@@ -640,10 +630,10 @@ export default class Common {
     // save user activities
 
     if (allActions.length > 0) {
-      this.showLoader({ loading: true, show: false })
+      this.showLoading()
       await Promise.all(allActions)
     }
-    this.hideLoader()
+    this.hideLoading()
     return next()
   }
 }

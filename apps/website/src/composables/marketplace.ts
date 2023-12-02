@@ -76,10 +76,7 @@ const sectionTags = reactive({
 })
 
 export const search = (query: QueryParams, returnCoursables = false) => {
-  Logic.Common.showLoader({
-    loading: true,
-    show: false,
-  })
+  Logic.Common.showLoading()
 
   const allRequests = [
     Logic.Study.GetCourses(query).catch(),
@@ -91,7 +88,7 @@ export const search = (query: QueryParams, returnCoursables = false) => {
 
   Promise.all(allRequests)
     .then(() => {
-      Logic.Common.hideLoader()
+      Logic.Common.hideLoading()
     })
     .catch((error) => {
       console.log(error)
@@ -291,6 +288,6 @@ const setMarketplaceMaterials = (count = 5) => {
 }
 
 export {
-  AllCourses, HomeMaterials, MarketplaceMaterials, homeContents, mainCards, marketplaceContents, notesContents, pastQuestionContents, sectionTags, setCourses,
-  setHomeMaterials, setMarketplaceMaterials, textbookContents
+    AllCourses, HomeMaterials, MarketplaceMaterials, homeContents, mainCards, marketplaceContents, notesContents, pastQuestionContents, sectionTags, setCourses,
+    setHomeMaterials, setMarketplaceMaterials, textbookContents
 }

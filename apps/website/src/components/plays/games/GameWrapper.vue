@@ -40,7 +40,7 @@ const {
 const { id } = useAuth()
 
 const alertAndNav = async (route: string, message?: string) => {
-	if (message) Logic.Common.showLoader({ show: true, message, type: 'info' })
+	if (message) Logic.Common.showAlert({ message, type: 'info' })
 	await router.replace(route)
 }
 

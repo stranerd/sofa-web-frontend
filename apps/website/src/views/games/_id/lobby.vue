@@ -124,14 +124,14 @@ export default defineComponent({
 					text: `Join and play a game on ${quiz.title}`,
 					url: window.location.href,
 				})
-				Logic.Common.showLoader({ show: true, message: 'Game link shared.', type: 'success' })
+				Logic.Common.showAlert({ message: 'Game link shared.', type: 'success' })
 			} catch (err) {
 				copy()
 			}
 		}
 		const copy = () => {
 			Logic.Common.copytext(window.location.href)
-			Logic.Common.showLoader({ show: true, message: 'Game link copied!', type: 'success' })
+			Logic.Common.showAlert({ message: 'Game link copied!', type: 'success' })
 		}
 
 		return { share, copy, Logic }

@@ -97,17 +97,13 @@ export default defineComponent({
     const leaveOrganization = () => {
       Logic.Users.LeaveOrganization(selectedOrganization.value).then((data) => {
         if (data) {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "You have been removed from this organization.",
             type: "success",
           })
           showLeaveOrganization.value = false
         } else {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Unable to leave request. Please try again.",
             type: "error",
           })

@@ -187,9 +187,7 @@ export default defineComponent({
     const subscibeToPlan = (type: "premium-plan" | "organization-plan") => {
       Logic.Payment.SubscribeToPlan(type).then((data) => {
         if (data) {
-          Logic.Common.showLoader({
-            show: true,
-            loading: false,
+          Logic.Common.showAlert({
             message: "Subscription successful",
             type: "success",
           })

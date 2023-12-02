@@ -113,7 +113,7 @@ const createQuiz = (formComp: any) => {
     ?.then((data) => {
       if (data) {
         quizSettingSaved.value = true
-        Logic.Common.hideLoader()
+        Logic.Common.hideLoading()
       }
     })
     .catch((error) => {
@@ -142,9 +142,7 @@ const updateQuiz = (formComp: any) => {
     ?.then((data) => {
       if (data) {
         quizSettingSaved.value = true
-        Logic.Common.showLoader({
-          show: true,
-          loading: false,
+        Logic.Common.showAlert({
           message: 'Quiz updated',
           type: 'success',
         })
@@ -878,10 +876,7 @@ const handleAnswerSelected = () => {
 const createQuizGame = async () => {
   if (!selectedQuizId.value) return
   if (Logic.Common.loaderSetup.loading) return
-  Logic.Common.showLoader({
-    loading: true,
-    show: false,
-  })
+  Logic.Common.showLoading()
 
   Logic.Plays.CreateGameForm = {
     quizId: selectedQuizId.value,
@@ -890,7 +885,7 @@ const createQuizGame = async () => {
 
   await Logic.Plays.CreateGame(true).then(async (game) => {
     if (game) {
-      Logic.Common.hideLoader()
+      Logic.Common.hideLoading()
       showStudyMode.value = false
       await Logic.Common.GoToRoute( `/quiz/${game.quizId}?mode=game&gameId=${game.id}`)
     }
@@ -910,9 +905,7 @@ const saveParticipantAnswer = (answer: any, questionId: string) => {
 const copyGameLink = () => {
   Logic.Common.copytext(window.location.href)
   // show alert
-  Logic.Common.showLoader({
-    show: true,
-    loading: false,
+  Logic.Common.showAlert({
     message: 'Game link copied!',
     type: 'success',
   })
@@ -928,9 +921,7 @@ const shareGameLink = async () => {
 
   try {
     await navigator.share(shareData)
-    Logic.Common.showLoader({
-      show: true,
-      loading: false,
+    Logic.Common.showAlert({
       message: 'Game link shared.',
       type: 'success',
     })
@@ -945,13 +936,10 @@ const startGame = () => {
     if (Logic.Common.loaderSetup.loading) {
       return
     }
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     Logic.Plays.StartGame(Logic.Plays.SingleGame.id).then(() => {
       // showQuestion(0)
-      Logic.Common.hideLoader()
+      Logic.Common.hideLoading()
     })
   }
 }
@@ -961,22 +949,19 @@ const startTest = () => {
     if (Logic.Common.loaderSetup.loading) {
       return
     }
-    Logic.Common.showLoader({
-      loading: true,
-      show: false,
-    })
+    Logic.Common.showLoading()
     Logic.Plays.StartTest(Logic.Plays.SingleTest.id).then(() => {
       // showQuestion(0)
-      Logic.Common.hideLoader()
+      Logic.Common.hideLoading()
       window.location.reload()
     })
   }
 }
 
 export {
-  AllQuestions, GameParticipants, SingleGame, SingleQuiz, SingleTest, allQuestionAnswers, answerState, buttonLabels, copyGameLink, counterInterval, createQuiz, createQuizGame, currentPrepareCount, currentQuestionIndex, enabledSwiper, goToNextSlide,
-  goToPrevSlide, goToStudyMode, handleAnswerSelected, handleLeftButton,
-  handleRightButton, infoModalData, isRestart, listenToGame, listenToTest, mobileTitle, mode, otherTasks, pieChartColor, pieChartRefForTestScore, pieLabel, preStartGame, preStartTest, questionIndex, questions, quizResult, quizSettingSaved, quizSettingsForm, resultData, saveParticipantAnswer, scoreBoardParticipants, selectedQuizId, selectedQuizMode, setQuestions, setResultData, setScoreboardParticipants, setStartButtons,
-  setViewMode, shareGameLink, showInfoModal, showQuestion, specialQuestionTypes, startGame, startTest, state, swiperInstance,
-  swiperKey, updateQuiz, userIsGameHost, userIsParticipating
+    AllQuestions, GameParticipants, SingleGame, SingleQuiz, SingleTest, allQuestionAnswers, answerState, buttonLabels, copyGameLink, counterInterval, createQuiz, createQuizGame, currentPrepareCount, currentQuestionIndex, enabledSwiper, goToNextSlide,
+    goToPrevSlide, goToStudyMode, handleAnswerSelected, handleLeftButton,
+    handleRightButton, infoModalData, isRestart, listenToGame, listenToTest, mobileTitle, mode, otherTasks, pieChartColor, pieChartRefForTestScore, pieLabel, preStartGame, preStartTest, questionIndex, questions, quizResult, quizSettingSaved, quizSettingsForm, resultData, saveParticipantAnswer, scoreBoardParticipants, selectedQuizId, selectedQuizMode, setQuestions, setResultData, setScoreboardParticipants, setStartButtons,
+    setViewMode, shareGameLink, showInfoModal, showQuestion, specialQuestionTypes, startGame, startTest, state, swiperInstance,
+    swiperKey, updateQuiz, userIsGameHost, userIsParticipating
 }
