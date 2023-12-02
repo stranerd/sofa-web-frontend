@@ -12,7 +12,7 @@ import Users from './Users'
 
 import { addToArray } from 'valleyed'
 
-const study = new Study
+const study = new Study()
 
 export const Logic = {
   Auth: new Auth(),
