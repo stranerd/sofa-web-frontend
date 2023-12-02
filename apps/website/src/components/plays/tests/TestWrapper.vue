@@ -39,7 +39,7 @@ const extras = computed(() => ({
 	start, end,
 	submit: async (data?: { questionId: string, answer: any }) => {
 		if (data) return await submitAnswer(data)
-		await router.push(`/tests/${id}/results`)
+		await router.push(`/tests/${props.id}/results`)
 		return true
 	},
 	get scores () {

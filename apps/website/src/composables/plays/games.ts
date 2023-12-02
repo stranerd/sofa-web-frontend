@@ -130,7 +130,7 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 				store[id].participants.value = users
 			}).catch()
 		const hasUnfetchedQuestions = store[id].game.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
-		if (!skip.questions && hasUnfetchedQuestions) Logic.Plays.GetQuizQuestions(id)
+		if (!skip.questions && hasUnfetchedQuestions) Logic.Plays.GetGameQuestions(id)
 				.then((questions) => {
 					store[id].questions.value = questions
 				})

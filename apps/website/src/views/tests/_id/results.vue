@@ -30,7 +30,7 @@
 												:content="score.position" />
 											<SofaNormalText color="text-deepGray" class="!font-semibold"
 												:content="score.user.id === testExtras.authId ? 'You' : score.user.bio.name.full" />
-											<SofaIcon name="test-winner" class="h-[23px]" v-if="score.isWinner" />
+											<SofaIcon name="game-winner" class="h-[23px]" v-if="score.isWinner" />
 											<SofaNormalText color="text-deepGray" class="!font-semibold ml-auto"
 												:content="`${score.score} pts`" />
 										</div>

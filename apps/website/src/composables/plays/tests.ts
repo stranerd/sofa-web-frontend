@@ -109,7 +109,7 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 	watch(store[id].test, async () => {
 		if (!store[id].test.value) return
 		const hasUnfetchedQuestions = store[id].test.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
-		if (!skip.questions && hasUnfetchedQuestions) Logic.Plays.GetQuizQuestions(id)
+		if (!skip.questions && hasUnfetchedQuestions) Logic.Plays.GetTestQuestions(id)
 				.then((questions) => {
 					store[id].questions.value = questions
 				})

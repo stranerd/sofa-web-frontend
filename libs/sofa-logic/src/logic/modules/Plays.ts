@@ -82,7 +82,7 @@ export default class Plays extends Common {
       ],
     })
 
-    await this.GetQuizQuestions(this.SingleGame.id)
+    await this.GetGameQuestions(this.SingleGame.id)
     if (![...this.GameParticipants, this.SingleGame.user.id].includes(Logic.Auth.AuthUser?.id))
       await Logic.Plays.JoinGame(this.SingleGame.id, true)
         .then((data) => {
@@ -118,8 +118,27 @@ export default class Plays extends Common {
     })
   }
 
-  public GetQuizQuestions = (gameId: string) => {
+  public GetGameQuestions = (gameId: string) => {
     return $api.plays.game.getGameQuestions(gameId).then((response) => {
+      Logic.Study.AllQuestions = {
+        results: response.data,
+        docs: {
+          count: response.data.length,
+          limit: 0,
+          total: response.data.length,
+        },
+        pages: {
+          current: 1,
+          last: 1,
+          start: 1,
+        },
+      }
+      return response.data
+    })
+  }
+
+  public GetTestQuestions = (testId: string) => {
+    return $api.plays.test.getTestQuestions(testId).then((response) => {
       Logic.Study.AllQuestions = {
         results: response.data,
         docs: {

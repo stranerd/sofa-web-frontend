@@ -12,17 +12,19 @@
 								textColor: 'text-bodyBlack',
 								click: testExtras.start
 							}" :leftButton="{
-								label: 'Close',
-								bgColor: 'bg-deepGray border border-white',
-								textColor: 'text-white',
-								click: () => Logic.Common.GoToRoute('/library')
-							}">
+	label: 'Close',
+	bgColor: 'bg-deepGray border border-white',
+	textColor: 'text-white',
+	click: () => Logic.Common.GoToRoute('/library')
+}">
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div
-										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white p-4 custom-border flex-col justify-center items-center">
-										<SofaNormalText color="text-grayColor !text-center" content="You are about to take a test" />
-										<SofaHeaderText :content="quiz.title" class="!text-center !font-extrabold" size="xl" />
+										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-grayColor p-4 custom-border flex-col justify-center items-center">
+										<SofaNormalText color="text-inherit" content="You are about to take a test" />
+										<SofaHeaderText :content="quiz.title" color="text-inherit" class="!font-extrabold"
+											size="xl" />
+										<SofaNormalText color="text-inherit" :content="`${test.questions.length} questions`" />
 									</div>
 								</div>
 							</template>

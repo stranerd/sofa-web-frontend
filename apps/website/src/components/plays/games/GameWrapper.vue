@@ -46,7 +46,7 @@ const extras = computed(() => ({
 	start, end, join,
 	submit: async (data?: { questionId: string, answer: any }) => {
 		if (data) return await submitAnswer(data)
-		await router.push(`/games/${id}/results`)
+		await router.push(`/games/${props.id}/results`)
 		return true
 	},
 	isParticipant: game.value?.participants.includes(id.value),
