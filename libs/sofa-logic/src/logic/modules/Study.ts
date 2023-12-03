@@ -1362,7 +1362,7 @@ export default class Study extends Common {
     }
   }
 
-  public GetQuestions = (quizId: string, filters: QueryParams = {}) => {
+  public GetQuestions = (quizId: string, filters: QueryParams = {}) :Promise<Paginated<Question> | undefined> => {
     if (!quizId || quizId == 'empty') return undefined
     return $api.study.quiz
       .getQuestions(quizId, filters)

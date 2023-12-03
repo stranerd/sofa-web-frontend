@@ -37,10 +37,15 @@ const props = defineProps({
 	submit: {
 		type: Function as PropType<(data?: { questionId: string, answer: any }) => Promise<boolean>>,
 		required: false
+	},
+	skipMembers: {
+		type: Boolean,
+		required: false,
+		default: true
 	}
 })
 
-const { quiz, questions, fetched } = useQuiz(props.id, !!props.questions)
+const { quiz, questions, fetched } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
 const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 

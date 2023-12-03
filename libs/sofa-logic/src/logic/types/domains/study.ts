@@ -40,6 +40,10 @@ export interface Quiz {
     count: number
     total: number
   }
+  access: {
+    requests: string[]
+    members: string[]
+  }
   __type: 'QuizEntity'
 }
 
