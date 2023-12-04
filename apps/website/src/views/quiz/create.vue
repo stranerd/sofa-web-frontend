@@ -104,7 +104,7 @@
       </template>
 
       <!-- Add question for smaller screens -->
-      <sofa-add-question v-if="!Logic.Common.isLarge && !showSettingModal && AllQuestions"
+      <sofa-add-question v-if="!Logic.Common.isLarge && !showSettingModal && AllQuestions" class="fixed mdlg:static bottom-0 left-0 z-[100]"
         @OnQuestionSelected="handleSelectedQuestion" :data="AllQuestions.results"></sofa-add-question>
 
       <!-- Larger screen setings modal -->

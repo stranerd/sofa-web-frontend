@@ -479,7 +479,7 @@ export default defineComponent({
         selectedQuestionType.value
       )
 
-      Logic.Study.CreateQuestion(true, Logic.Study.SingleQuiz.id)
+      Logic.Study.CreateQuestion(Logic.Study.SingleQuiz.id, Logic.Study.CreateQuestionForm)
 
       Logic.Common.showAlert({
         message: "Question duplicated",

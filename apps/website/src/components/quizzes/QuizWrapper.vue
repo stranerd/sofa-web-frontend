@@ -9,6 +9,7 @@ import { useQuiz } from '@/composables/study/quizzes'
 import { Logic, Question } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
+import { useAuth } from '@/composables/auth/auth'
 
 const props = defineProps({
 	id: {
@@ -45,7 +46,11 @@ const props = defineProps({
 	}
 })
 
-const { quiz, questions, fetched } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
+const { id } = useAuth()
+const {
+	quiz, questions, fetched,
+	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion
+} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
 const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 
@@ -131,8 +136,9 @@ const extras = computed(() => ({
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestion.value,
-	optionState, submitAnswer,
-	moveCurrrentQuestionToEnd,
+	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
+	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion,
+	optionState, submitAnswer, moveCurrrentQuestionToEnd,
 	next: () => {
 		if (extras.value.canNext) index.value++
 	},
@@ -144,7 +150,8 @@ const extras = computed(() => ({
 	reset: () => {
 		reorderedQuestions.value = null
 		index.value = 0
-	}
+	},
+	canEdit: quiz.value.access.members?.concat(quiz.value.user.id).includes(id.value),
 }))
 
 watch(quiz, async () => {

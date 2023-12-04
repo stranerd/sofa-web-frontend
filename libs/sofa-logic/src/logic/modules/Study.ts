@@ -271,10 +271,29 @@ export default class Study extends Common {
     }
   }
 
+  public getQuestionTypeLabel (type: Question['strippedData']['type']) {
+    return this.questionTypes[type]?.type ?? 'Multiple choice'
+  }
+
+  public getQuestionTypeIcon (type: Question['strippedData']['type']) {
+    return this.questionTypes[type]?.icon ?? 'multiple-choice-type'
+  }
+
+  public getQuestionTypeImage (type: Question['strippedData']['type']) {
+    return this.questionTypes[type]?.image ?? 'multiple_choice'
+  }
+
+  public getQuestionTypeTemplate (type: Question['strippedData']['type']) {
+    const newQuestionData = this.questionTypes[type]
+    const form = this.convertQuestionToInput(newQuestionData, type)
+    if (type === "writeAnswer") form.data.options = [form.data.options[0]]
+    return form
+  }
+
   public questionTypes = {
     multipleChoice: {
       id: '',
-      key: 'multipleChoice',
+      key: 'multipleChoice' as const,
       type: 'Multiple choice',
       image: 'multiple_choice',
       icon: 'multiple-choice-type',
@@ -340,7 +359,7 @@ export default class Study extends Common {
     },
     writeAnswer: {
       id: '',
-      key: 'writeAnswer',
+      key: 'writeAnswer' as const,
       type: 'Write answer',
       image: 'write_answer',
       content: 'Enter question',
@@ -406,7 +425,7 @@ export default class Study extends Common {
     },
     trueOrFalse: {
       id: '',
-      key: 'trueOrFalse',
+      key: 'trueOrFalse' as const,
       type: 'True/False',
       image: 'true_false',
       content: 'Enter question',
@@ -452,7 +471,7 @@ export default class Study extends Common {
     },
     fillInBlanks: {
       id: '',
-      key: 'fillInBlanks',
+      key: 'fillInBlanks' as const,
       type: 'Fill in blank(s)',
       image: 'fill_in_blank',
       content: '__________ Enter text',
@@ -488,7 +507,7 @@ export default class Study extends Common {
     },
     dragAnswers: {
       id: '',
-      key: 'dragAnswers',
+      key: 'dragAnswers' as const,
       type: 'Drag answers',
       image: 'drag_answer',
       content: '__________ Enter text',
@@ -524,7 +543,7 @@ export default class Study extends Common {
     },
     sequence: {
       id: '',
-      key: 'sequence',
+      key: 'sequence' as const,
       type: 'Sequence',
       image: 'sequence',
       content: 'Enter question',
@@ -591,7 +610,7 @@ export default class Study extends Common {
     },
     match: {
       id: '',
-      key: 'match',
+      key: 'match' as const,
       type: 'Match',
       image: 'match',
       content: 'Enter question',
@@ -1347,7 +1366,7 @@ export default class Study extends Common {
         await Promise.all(defaultQuestions.map(async (formData) => {
           this.CreateQuestionForm = formData
           this.CreateQuestionForm.explanation = ''
-          await this.CreateQuestion(true, data.id)
+          await this.CreateQuestion( data.id, this.CreateQuestionForm)
         }))
 
         Logic.Common.hideLoading()
@@ -2129,30 +2148,22 @@ export default class Study extends Common {
       })
   }
 
-  public ReorderQuizQuestions = (id: string) => {
+  public ReorderQuizQuestions = (id: string, ReorderQuizQuestionsForm: ReorderQuizInput) => {
     return $api.study.quiz
-      .reorderQuiz(id, this.ReorderQuizQuestionsForm)
+      .reorderQuiz(id, ReorderQuizQuestionsForm)
       .then((response) => {
         this.SingleQuiz = response.data
+        return this.SingleQuiz
       })
   }
 
-  public CreateQuestion = (formIsValid: boolean, quizId: string) => {
-    if (formIsValid && this.CreateQuestionForm) {
-      Logic.Common.showLoading()
-      return $api.study.quiz
-        .createQuestion(quizId, this.CreateQuestionForm)
-        .then((response) => {
-          this.SingleQuestion = response.data
-          this.GetQuestions(quizId)
-          Logic.Common.hideLoading()
-          return response.data
-        })
-        .catch((error) => {
-          Logic.Common.hideLoading()
-          Logic.Common.showError(capitalize(error.response.data[0]?.message))
-        })
-    }
+  public CreateQuestion = (quizId: string, CreateQuestionForm: CreateQuestionInput) => {
+    return $api.study.quiz
+      .createQuestion(quizId, CreateQuestionForm)
+      .then((response) => {
+        this.SingleQuestion = response.data
+        return this.SingleQuestion
+      })
   }
 
   public UpdateQuestion = (formIsValid: boolean, quizId: string) => {

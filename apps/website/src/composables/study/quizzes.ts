@@ -1,7 +1,7 @@
 import { Quiz, Logic, Question, SingleUser, Conditions } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 
 const store = {} as Record<string, {
 	quiz: Ref<Quiz | null>
@@ -10,7 +10,7 @@ const store = {} as Record<string, {
 	fetched: Ref<boolean>
 	listener: ReturnType<typeof useListener>
 	membersListener: ReturnType<typeof useListener>
-} & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
+} & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler> & ReturnType<typeof useSuccessHandler>>
 
 export const useQuiz = (id: string, skip: { questions: boolean, members: boolean }) => {
 	store[id] ??= {
@@ -44,7 +44,8 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 			},  (e) => members.includes(e.id))
 		}),
 		...useErrorHandler(),
-		...useLoadingHandler()
+		...useLoadingHandler(),
+		...useSuccessHandler(),
 	}
 
 	const fetchGame = async () => {
@@ -53,6 +54,62 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 			await store[id].setLoading(true)
 			store[id].quiz.value = await Logic.Study.GetQuiz(id)
 			store[id].fetched.value = true
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const reorderQuestions = async (questions: string[]) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			store[id].quiz.value = await Logic.Study.ReorderQuizQuestions(id, { questions })
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const deleteQuestion = async (questionId: string) => {
+		if (store[id].quiz.value?.status === "published") return Logic.Common.showAlert({
+			message: "You cannot delete questions from published quiz",
+			type: "warning",
+		})
+
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.saveQuizLocalChanges(true)
+			await Logic.Study.DeleteQuestion(questionId, id)
+			await store[id].setMessage('Question has been deleted.')
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const addQuestion = async (type: Question['strippedData']['type']) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.saveQuizLocalChanges(true)
+			const form = Logic.Study.getQuestionTypeTemplate(type)
+			await Logic.Study.CreateQuestion(id, form)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const duplicateQuestion = async (question: Question) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.saveQuizLocalChanges(true)
+			const form = Logic.Study.getQuestionTypeTemplate(question.strippedData.type)
+			await Logic.Study.CreateQuestion(id, form)
+			await store[id].setMessage('Question duplicated')
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -94,6 +151,10 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	return {
 		...store[id],
 		members,
-		requests
+		requests,
+		reorderQuestions,
+		deleteQuestion,
+		duplicateQuestion,
+		addQuestion,
 	}
 }
