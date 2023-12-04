@@ -48,7 +48,7 @@ const props = defineProps({
 
 const { id } = useAuth()
 const {
-	quiz, questions, fetched,
+	quiz, questions, fetched, deleteQuiz,
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion
 } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
@@ -58,6 +58,7 @@ const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
 const { time: runTime, countdown: runCountdown } = useCountdown()
 const index = ref(0)
+const selectedQuestionId = ref('')
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
 const answer = computed({
@@ -122,6 +123,12 @@ const extras = computed(() => ({
 	set index (v) {
 		index.value = v
 	},
+	get selectedQuestionId () {
+		return selectedQuestionId.value
+	},
+	set selectedQuestionId (v) {
+		selectedQuestionId.value = v
+	},
 	get answer () {
 		return answer.value
 	},
@@ -133,11 +140,12 @@ const extras = computed(() => ({
 		if (duration === 0) return 0
 		return runTime.value / duration
 	},
+	currentQuestionById: quizQuestions.value.find((q) => q.id === selectedQuestionId.value),
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestion.value,
 	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
-	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion,
+	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
 	optionState, submitAnswer, moveCurrrentQuestionToEnd,
 	next: () => {
 		if (extras.value.canNext) index.value++

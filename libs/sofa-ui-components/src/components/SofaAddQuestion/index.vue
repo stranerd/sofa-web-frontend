@@ -11,10 +11,10 @@
 
           <div class="w-full h-[144px] bg-cover" :style="`background-image: url('/images/${Logic.Study.getQuestionTypeImage(element.type)}.svg')`">
             <div class="h-full w-full hidden group-hover:flex gap-3 items-center justify-center">
-              <a @click.stop="duplicateQuestion(element)" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
+              <a @click.stop="emits('duplicateQuestion', element)" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
                 <SofaIcon name="duplicate-quiz" class="h-[24px]" />
               </a>
-              <a @click.stop="toDeleteId = element.id; showDeleteQuestion = true" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
+              <a @click.stop="emits('deleteQuestion', element.id)" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
                 <SofaIcon name="delete-quiz" class="h-[24px]" />
               </a>
             </div>
@@ -23,7 +23,7 @@
       </template>
     </Draggable>
 
-    <a class="h-[144px] w-full rounded-xl border-2 border-[#E1E6EB] flex items-center justify-center" @click="showAddQuestionModal = true">
+    <a class="h-[144px] w-full rounded-xl border-2 border-[#E1E6EB] flex items-center justify-center" @click="emits('addQuestion')">
       <SofaIcon name="add-item" class="h-[30px]" />
     </a>
   </div>
@@ -39,59 +39,18 @@
       </template>
     </Draggable>
 
-    <a class="w-[55px] flex flex-col justify-end" @click="showAddQuestionModal = true">
+    <a class="w-[55px] flex flex-col justify-end" @click="emits('addQuestion')">
       <SofaIcon class="h-[44px]" name="faded-plus" />
     </a>
   </div>
-
-  <!-- Add question modal -->
-  <SofaModal v-if="showAddQuestionModal" :close="() => showAddQuestionModal = false">
-    <div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full h-[95%] w-full flex flex-col justify-end md:justify-start items-center">
-      <div class="bg-white w-full flex flex-col mdlg:p-6 gap-4 p-4 md:rounded-2xl rounded-t-[20px] items-center justify-center">
-        <div class="w-full text-center hidden md:inline-block">
-          <SofaHeaderText class="!text-xl !font-bold" content="Choose question type" />
-        </div>
-
-        <div class="w-full flex justify-between items-center md:!hidden">
-          <SofaNormalText class="!font-bold !text-base" content="Choose question type" />
-          <SofaIcon class="h-[16px]" name="circle-close" @click="showAddQuestionModal = false" />
-        </div>
-
-        <div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
-          <a class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-[#E6F5FF] bg-[#F2F5F8] rounded-lg"
-            v-for="item in Logic.Study.questionTypes" :key="item.key" @click="add(item.key)">
-            <SofaIcon :name="item.icon" class="h-[50px]" />
-            <SofaNormalText :content="Logic.Study.getQuestionTypeLabel(item.key)" />
-          </a>
-        </div>
-      </div>
-    </div>
-  </SofaModal>
-
-  <SofaDeletePrompt v-if="showDeleteQuestion" title="Are you sure?"
-    subTitle="This action is permanent. You won't be able to undo this." :close="() => showDeleteQuestion = false"
-    :buttons="[
-      {
-        label: 'No',
-        isClose: true,
-        action: () => showDeleteQuestion = false
-      },
-      {
-        label: 'Yes, delete',
-        isClose: false,
-        action: del
-      },
-    ]" />
 </template>
 
 <script lang="ts" setup>
 import { Logic, Question, TransformedQuestion } from "sofa-logic"
-import { computed, defineEmits, defineProps, PropType, reactive, ref, toRef, watch } from "vue"
+import { computed, defineEmits, defineProps, PropType, reactive, toRef, watch } from "vue"
 import Draggable from "vuedraggable"
-import SofaDeletePrompt from "../SofaDeletePrompt"
 import SofaIcon from "../SofaIcon"
-import SofaModal from "../SofaModal"
-import { SofaHeaderText, SofaNormalText } from "../SofaTypography"
+import { SofaNormalText } from "../SofaTypography"
 
 const props = defineProps({
   questionId: {
@@ -100,27 +59,11 @@ const props = defineProps({
   },
   questions: {
     type: Array as PropType<TransformedQuestion[]>,
-    default: [],
-  },
-  reorderQuestions: {
-    type: Function as PropType<(questions: string[]) => Promise<void>>,
-    required: true
-  },
-  deleteQuestion: {
-    type: Function as PropType<(questionId: string) => Promise<void>>,
-    required: true
-  },
-  addQuestion: {
-    type: Function as PropType<(type: Question['strippedData']['type']) => Promise<void>>,
-    required: true
-  },
-  duplicateQuestion: {
-    type: Function as PropType<(question: Question) => Promise<void>>,
     required: true
   },
 })
 
-const emits = defineEmits(['update:questionId'])
+const emits = defineEmits(['update:questionId', 'addQuestion', 'duplicateQuestion', 'deleteQuestion', 'reorderQuestions'])
 
 const selectedQuestionId = computed({
   get: () => props.questionId,
@@ -129,29 +72,18 @@ const selectedQuestionId = computed({
   }
 })
 
-const showAddQuestionModal = ref(false)
-const showDeleteQuestion = ref(false)
-const reactiveQuestions = reactive([...props.questions])
-
-const toDeleteId = ref('')
+const questionsRef = toRef(props, 'questions')
+const reactiveQuestions = reactive([...questionsRef.value])
 
 const selectQuestion = (question: Question) => {
   selectedQuestionId.value = question.id
 }
 
-const add = async (type: Question['strippedData']['type']) => {
-  await props.addQuestion(type)
-  showAddQuestionModal.value = false
-}
-
-const del = async () => {
-  await props.deleteQuestion(toDeleteId.value)
-  showDeleteQuestion.value = false
-}
+watch(questionsRef, () => {
+  reactiveQuestions.splice(0, reactiveQuestions.length, ...questionsRef.value)
+})
 
 watch(reactiveQuestions, () => {
-  Logic.Study.debounce(async () => {
-    await props.reorderQuestions(reactiveQuestions.map((q) => q.id))
-  }, 500)
+  emits('reorderQuestions', reactiveQuestions.map((q) => q.id))
 })
 </script>

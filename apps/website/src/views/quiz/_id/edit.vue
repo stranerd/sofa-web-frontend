@@ -1,7 +1,7 @@
 <template>
   <QuizWrapper :id="($route.params.id as string)">
-    <template v-slot="{ quiz, questions, extras }">
-      <dashboard-layout v-if="extras.canEdit && questions.length" :hide="{ bottom: true, top: true }" bgColor="mdlg:bg-backgroundGray bg-white"
+    <template v-slot="{ quiz, extras }">
+      <dashboard-layout v-if="extras.canEdit" :hide="{ bottom: true, top: true }" bgColor="mdlg:bg-backgroundGray bg-white"
         :topbarOptions="{
           type: 'subpage',
           title: quiz.title,
@@ -39,19 +39,25 @@
         <template v-slot:left-session>
           <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
             <SofaAddQuestion
-              v-model:questionId="selectedQuestionId"
+              v-model:questionId="extras.selectedQuestionId"
               :questions="extras.sortedQuestions"
-              :addQuestion="extras.addQuestion"
-              :duplicateQuestion="extras.duplicateQuestion"
-              :deleteQuestion="extras.deleteQuestion"
-              :reorderQuestions="extras.reorderQuestions"
+              @addQuestion="showAddQuestionModal = true"
+              @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
+              @deleteQuestion="(id) => { interactingQuestionId = id; showDeleteQuestion = true }"
+              @reorderQuestions="(ids) => extras.reorderQuestions(ids)"
             />
           </div>
         </template>
 
         <template v-slot:right-session>
           <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto justify-between">
-            <SofaQuestionOptions />
+            <SofaQuestionOptions v-if="extras.currentQuestionById"
+              :question="extras.currentQuestionById"
+              :close="() => showMoreOptions = false"
+              @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
+              @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
+              @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"
+            />
           </div>
         </template>
 
@@ -60,7 +66,7 @@
           <div class="w-full flex mdlg:!hidden justify-between items-center bg-backgroundGray p-4">
             <SofaIcon class="h-[19px]" name="circle-close" @click="handleMobileGoback" />
 
-            <SofaNormalText class="!font-bold !text-sm" :content="showSettingModal ? 'Update quiz' : Logic.Study.getQuestionTypeLabel(questions.find((q) => q.id === selectedQuestionId)?.type) ?? ''" />
+            <SofaNormalText class="!font-bold !text-sm" :content="showSettingModal ? 'Update quiz' : Logic.Study.getQuestionTypeLabel(extras.currentQuestionById?.type) ?? ''" />
 
             <div class="flex items-center gap-3" :class="{ 'invisible': showSettingModal }">
               <SofaIcon class="h-[18px]" name="cog" @click="showSettingModal = true" />
@@ -80,12 +86,12 @@
 
           <!-- Add question for smaller screens -->
           <SofaAddQuestion v-if="!Logic.Common.isLarge && !showSettingModal"
-            v-model:questionId="selectedQuestionId"
+            v-model:questionId="extras.selectedQuestionId"
             :questions="extras.sortedQuestions"
-            :addQuestion="extras.addQuestion"
-            :duplicateQuestion="extras.duplicateQuestion"
-            :deleteQuestion="extras.deleteQuestion"
-            :reorderQuestions="extras.reorderQuestions"
+            @addQuestion="showAddQuestionModal = true"
+            @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
+            @deleteQuestion="(id) => { interactingQuestionId = id; showDeleteQuestion = true }"
+            @reorderQuestions="(ids) => extras.reorderQuestions(ids)"
           />
         </template>
       </dashboard-layout>
@@ -112,7 +118,71 @@
       <!-- More option / settings for smaller screens -->
       <SofaModal v-if="showMoreOptions" :close="() => showMoreOptions = false">
         <div class="bg-white mdlg:!w-[70%] lg:!w-[60%] h-[95%] w-full flex flex-col rounded-t-2xl gap-4 justify-between relative overflow-y-auto">
-          <SofaQuestionOptions :close="() => showMoreOptions = false" v-if="questions.length" />
+           <div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b bg-white border-[#F2F5F8]">
+            <SofaNormalText class="!text-sm !font-bold" content="Options" />
+            <SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
+          </div>
+
+          <SofaQuestionOptions v-if="extras.currentQuestionById"
+            :question="extras.currentQuestionById"
+            :close="() => showMoreOptions = false"
+            @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
+            @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
+            @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"
+          />
+        </div>
+      </SofaModal>
+
+      <SofaDeletePrompt v-if="showDeleteQuiz" title="Are you sure?"
+        subTitle="This action is permanent. You will lose all saved questions in this quiz."
+        :close="() => showDeleteQuiz = false" :buttons="[
+          {
+            label: 'No',
+            isClose: true,
+            action: () => showDeleteQuiz = false
+          },
+          {
+            label: 'Yes, delete',
+            isClose: false,
+            action: () => extras.deleteQuiz().then(() => showDeleteQuiz = false)
+          },
+        ]" />
+
+      <SofaDeletePrompt v-if="showDeleteQuestion && interactingQuestionId" title="Are you sure?"
+        subTitle="This action is permanent. You won't be able to undo this." :close="() => showDeleteQuestion = false"
+        :buttons="[
+          {
+            label: 'No',
+            isClose: true,
+            action: () => showDeleteQuestion = false
+          },
+          {
+            label: 'Yes, delete',
+            isClose: false,
+            action: () => extras.deleteQuestion(interactingQuestionId).then(() => showDeleteQuestion = false)
+          },
+        ]" />
+
+      <SofaModal v-if="showAddQuestionModal" :close="() => showAddQuestionModal = false">
+        <div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full h-[95%] w-full flex flex-col justify-end md:justify-start items-center">
+          <div class="bg-white w-full flex flex-col mdlg:p-6 gap-4 p-4 md:rounded-2xl rounded-t-[20px] items-center justify-center">
+            <div class="w-full text-center hidden md:inline-block">
+              <SofaHeaderText class="!text-xl !font-bold" content="Choose question type" />
+            </div>
+
+            <div class="w-full flex justify-between items-center md:!hidden">
+              <SofaNormalText class="!font-bold !text-base" content="Choose question type" />
+              <SofaIcon class="h-[16px]" name="circle-close" @click="showAddQuestionModal = false" />
+            </div>
+
+            <div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
+              <a class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-[#E6F5FF] bg-[#F2F5F8] rounded-lg"
+                v-for="type in Logic.Study.getAllQuestionTypes()" :key="type.value" @click="extras.addQuestion(type.value).then(() => showAddQuestionModal = false)">
+                <SofaIcon :name="type.icon" class="h-[50px]" />
+                <SofaNormalText :content="type.label" />
+              </a>
+            </div>
+          </div>
         </div>
       </SofaModal>
     </template>
@@ -123,6 +193,7 @@
 import { defineComponent, onMounted, ref, watch } from "vue"
 import { useMeta } from "vue-meta"
 import {
+  SofaDeletePrompt,
   SofaEmptyState,
   SofaIcon,
   SofaNormalText,
@@ -139,6 +210,7 @@ import QuizSettings from "@/components/quizzes/Settings.vue"
 export default defineComponent({
   components: {
     QuizWrapper,
+    SofaDeletePrompt,
     SofaIcon,
     SofaEmptyState,
     SofaNormalText,
@@ -170,7 +242,11 @@ export default defineComponent({
       title: "Edit Quiz",
     })
 
-    const selectedQuestionId = ref('')
+    const showDeleteQuiz = ref(false)
+    const showDeleteQuestion = ref(false)
+    const showAddQuestionModal = ref(false)
+
+    const interactingQuestionId = ref('')
 
     const UpdatedQuestion = ref(Logic.Study.UpdatedQuestion)
 
@@ -209,9 +285,12 @@ export default defineComponent({
     }
 
     return {
-      selectedQuestionId,
+      showDeleteQuiz,
+      showDeleteQuestion,
+      showAddQuestionModal,
       showMoreOptions,
       showSettingModal,
+      interactingQuestionId,
       handleSettingSaved,
       Logic,
       handleMobileGoback,

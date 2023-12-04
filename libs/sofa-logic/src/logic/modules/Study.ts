@@ -290,6 +290,15 @@ export default class Study extends Common {
     return form
   }
 
+  public getAllQuestionTypes () {
+    return Object.values(this.questionTypes).map((t) => ({
+      label: t.type,
+      value: t.key,
+      icon: t.icon,
+      image: t.image
+    }))
+  }
+
   public questionTypes = {
     multipleChoice: {
       id: '',
