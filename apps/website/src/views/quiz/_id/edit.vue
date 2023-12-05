@@ -80,8 +80,7 @@
 
           <div class="w-full flex flex-col bg-white px-4 mdlg:py-4 flex-grow h-full overflow-y-auto"
             :class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
-            <!-- create quiz for smaller screens -->
-            <SofaQuestionContent v-if="0 && !showSettingModal" />
+            <SofaQuestionContent v-if="!showSettingModal" :factory="extras.questionFactory" />
             <QuizSettings v-if="showSettingModal" @OnQuizUpdated="handleSettingSaved" :quiz="quiz" :close="() => showSettingModal = false" class="mdlg:hidden" />
           </div>
 

@@ -162,6 +162,9 @@ export default class Study extends Common {
 
     let questionContent = questions.content
 
+    questions.options ??= []
+    questions.settings ??= []
+
     questions.settings.forEach((setting) => {
       if (setting.type == 'time-limit') {
         timeLimit = Logic.Common.timeEquivalentsInSeconds[`${setting.value}`]

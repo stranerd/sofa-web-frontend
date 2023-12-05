@@ -1,16 +1,13 @@
 <template>
   <div class="w-full flex flex-col h-full overflow-y-auto gap-4" v-if="question">
-    <div v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'"
-      class="w-full flex flex-row items-start p-3 rounded-custom bg-[#F1F6FA] gap-3">
-      <div class="hidden lg:block">
-        <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
-      </div>
-      <sofa-textarea :hasTitle="false"
-        :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor resize-none'"
-        :placeholder="question.placeholder" :richEditor="true" v-model="reactiveQuestion.content" />
+    <div v-if="!factory.isFillOrDrag" class="w-full flex items-start p-3 rounded-custom bg-[#F1F6FA] text-grayColor gap-3">
+      <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden lg:inline" />
+      <SofaTextarea :hasTitle="false"
+        textAreaStyle="bg-transparent h-[130px] w-ull resize-none"
+        placeholder="factory.questionPlaceholder" :richEditor="true" v-model="factory.question" />
     </div>
-    <div class="w-full flex flex-row items-center flex-wrap gap-1 md:!gap-2" v-if="questionTypeMain == 'fill_in_blank' || questionTypeMain == 'drag_answer'
-      ">
+
+    <div class="w-full flex items-center flex-wrap gap-1 md:gap-2" v-if="factory.isFillOrDrag">
       <template v-for="(item, index) in reactiveQuestion.data" :key="index">
         <span class="flex flex-row items-center gap-1">
           <sofa-custom-input
@@ -34,44 +31,36 @@
       <sofa-button @click="addNewDataItem('answer')">Add answer</sofa-button>
     </div>
 
-    <div
-      class="w-full md:!flex flex-row items-center justify-center gap-3 bg-primaryPurple rounded-custom px-5 py-5 hidden">
-      <sofa-normal-text :color="'text-white'">Choose image to add to this question (optional)</sofa-normal-text>
-      <sofa-file-attachment :is-wrapper="true" :accept="'image/png, image/gif, image/jpeg'"
-        :custom-class="'!w-auto z-[100]'" v-model:local-file-url="reactiveQuestion.questionMedia"
-        v-model="reactiveQuestion.questionMediaBlob">
+    <div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
+      <SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />
+      <SofaFileAttachment :isWrapper="true" accept="image/*" class="!w-auto" v-model:localFileUrl="localFileUrl" v-model="factory.questionMedia">
         <template v-slot:content>
-          <sofa-button :bgColor="'bg-white'" :textColor="'text-bodyBlack'" :custom-class="'!z-50'">Add Image</sofa-button>
+          <SofaButton bgColor="bg-white" textColor="text-bodyBlack">Add Image</SofaButton>
         </template>
-      </sofa-file-attachment>
+      </SofaFileAttachment>
     </div>
 
-    <div class="w-full flex md:!hidden flex-col">
-      <sofa-file-attachment :is-wrapper="true" :accept="'image/png, image/gif, image/jpeg'"
-        :custom-class="'!w-full flex flex-col z-[100]'" v-model:local-file-url="reactiveQuestion.questionMedia"
-        v-model="reactiveQuestion.questionMediaBlob">
+    <div class="w-full flex md:hidden flex-col">
+      <SofaFileAttachment :isWrapper="true" accept="image/*" class="!w-full flex flex-col" v-model:local-file-url="localFileUrl" v-model="factory.questionMedia">
         <template v-slot:content>
           <div class="w-full flex flex-col">
-            <sofa-button :customClass="'w-full !z-50'" :padding="'py-3'">Add image (optional)</sofa-button>
+            <SofaButton customClass="w-full" padding="py-3">Add image (optional)</SofaButton>
           </div>
         </template>
-      </sofa-file-attachment>
+      </SofaFileAttachment>
     </div>
 
-    <div class="w-full flex flex-col items-center justify-center" v-if="reactiveQuestion.questionMedia">
-      <sofa-image-loader :photoUrl="reactiveQuestion.questionMedia"
-        :customClass="'h-[250px] lg:w-[70%] mdlg:w-[70%] w-full rounded-custom'" />
+    <div class="w-full flex flex-col items-center justify-center" v-if="localFileUrl">
+      <SofaImageLoader :photoUrl="localFileUrl" customClass="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
     </div>
 
     <div class="w-full grid grid-cols-2 gap-4 pt-4">
-      <div :class="`${questionTypeMain != 'match' ? 'col-span-2' : 'col-span-1'} flex flex-col gap-4`"
-        v-if="questionTypeMain != 'fill_in_blank' && questionTypeMain != 'drag_answer'">
-        <draggable :list="reactiveQuestion.options" class="w-full flex flex-col gap-4" item-key="id"
-          :group="{ name: 'question-options' }" :disabled="questionTypeMain == 'write_answer'">
+      <div class="flex flex-col gap-4" :class="factory.type !== 'match' ? 'col-span-2' : 'col-span-1'" v-if="!factory.isFillOrDrag">
+        <Draggable :list="reactiveQuestion.options" class="w-full flex flex-col gap-4" item-key="id"
+          group="question-options" :disabled="questionTypeMain == 'write_answer'">
           <template #item="{ element, index }">
-            <div
-              :class="`w-full flex flex-row items-center justify-between rounded-[12px] p-3 border-lightBorderColor bg-white gap-3`"
-              style="border-width: 2px 2px 4px 2px" @mouseenter="element.showRemove = true"
+            <div class="w-full flex items-center justify-between rounded-[12px] p-3 border-2 border-b-4 border-lightBorderColor bg-white gap-3"
+              @mouseenter="element.showRemove = true"
               @mouseleave="element.showRemove = false">
               <sofa-icon :name="element.shape" :custom-class="`${element.shapeSize}`"
                 v-if="questionTypeMain != 'write_answer'" class="hidden lg:block" />
@@ -89,12 +78,12 @@
               </div>
             </div>
           </template>
-        </draggable>
+        </Draggable>
       </div>
 
       <template v-if="questionTypeMain == 'match'">
         <div class="col-span-1 flex flex-col gap-4">
-          <draggable :list="reactiveQuestion.match" class="w-full flex flex-col gap-4" item-key="id"
+          <Draggable :list="reactiveQuestion.match" class="w-full flex flex-col gap-4" item-key="id"
             :group="{ name: 'question-match' }">
             <template #item="{ element, index }">
               <div
@@ -107,7 +96,7 @@
                   :placeholder="element.text" v-model="element.value" />
               </div>
             </template>
-          </draggable>
+          </Draggable>
         </div>
       </template>
     </div>
@@ -123,517 +112,490 @@
     </div>
 
     <div class="w-full flex flex-col border-t border-[#F1F6FA] pt-4">
-      <div class="w-full flex flex-row items-start rounded-custom bg-[#F1F6FA] p-3 gap-3">
-        <div class="hidden lg:block">
-          <sofa-icon :name="'question-input'" :custom-class="'h-[23px] w-[24px]'" />
-        </div>
-        <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'!bg-[#F1F6FA] h-[130px] w-full placeholder:text-grayColor !px-0 !py-0 resize-none'"
-          :placeholder="'Explanation'" :richEditor="true" v-model="reactiveQuestion.explanation" />
+      <div class="w-full flex items-start rounded-custom bg-[#F1F6FA] text-grayColor p-3 gap-3">
+        <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden lg:block" />
+        <SofaTextarea :hasTitle="false"
+          textAreaStyle="bg-transparent h-[130px] w-full !p-0 resize-none"
+          placeholder="Explanation" :richEditor="true" v-model="factory.explanation" />
       </div>
-      <div class="h-16 mdlg:hidden" />
     </div>
   </div>
 </template>
-<script lang="ts">
-import { Logic } from "sofa-logic"
-import { defineComponent, onMounted, reactive, ref, watch } from "vue"
-import draggable from "vuedraggable"
+
+<script lang="ts" setup>
+import { Logic, QuestionFactory } from "sofa-logic"
+import { PropType, defineProps, onMounted, reactive, ref, watch } from "vue"
+import Draggable from "vuedraggable"
 import SofaButton from "../SofaButton"
 import { SofaCustomInput, SofaFileAttachment, SofaTextarea } from "../SofaForm"
 import SofaIcon from "../SofaIcon"
 import SofaImageLoader from "../SofaImageLoader"
 import { SofaNormalText } from "../SofaTypography"
 
-export default defineComponent({
-  components: {
-    SofaIcon,
-    SofaNormalText,
-    SofaButton,
-    SofaTextarea,
-    SofaCustomInput,
-    SofaFileAttachment,
-    SofaImageLoader,
-    draggable,
-  },
-  props: {
-    customClass: {
-      type: String,
-      default: "",
-    },
-  },
-  name: "SofaQuestionContent",
-  setup (props) {
-    const question = ref()
+const props = defineProps({
+  factory: {
+    type: Object as PropType<QuestionFactory>,
+    required: true
+  }
+})
 
-    const questionTypeMain = ref("")
+const localFileUrl = ref(props.factory.questionMedia?.link ?? '')
 
-    const possibleAnswers = ref(0)
+const question = ref()
 
-    const optionLimitSettings = reactive({
-      max: 6,
-      min: 2,
-    })
+const questionTypeMain = ref("")
 
-    const questionSettings = ref(Logic.Study.questionSettings)
+const possibleAnswers = ref(0)
 
-    const selectedQuestion = ref(Logic.Study.selectedQuestion)
+const optionLimitSettings = reactive({
+  max: 6,
+  min: 2,
+})
 
-    const setPossibleAnswers = (answerSettingsDefault: any[] = []) => {
-      const answerSettings =
-        answerSettingsDefault?.length == 0
-          ? question.value.settings?.filter(
-            (item) => item.type == "correct-anwsers"
-          )
-          : answerSettingsDefault
+const questionSettings = ref(Logic.Study.questionSettings)
 
-      if (answerSettings?.length) {
-        possibleAnswers.value = parseInt(answerSettings[0].value)
-      } else {
-        possibleAnswers.value = 1
-      }
+const selectedQuestion = ref(Logic.Study.selectedQuestion)
 
-      if (questionTypeMain.value == "multiple_choice") {
-        possibleAnswers.value = 6
-      }
-
-      if (questionTypeMain.value == "true_false") {
-        possibleAnswers.value = 1
-      }
-    }
-
-    const reactiveQuestion = reactive<any>({})
-
-    const setAnswers = (answer: any) => {
-      let currentlySelectedAnswer = reactiveQuestion.options.filter(
-        (item) => item.isRadio && item.answer
+const setPossibleAnswers = (answerSettingsDefault: any[] = []) => {
+  const answerSettings =
+    answerSettingsDefault?.length == 0
+      ? question.value.settings?.filter(
+        (item) => item.type == "correct-anwsers"
       )
+      : answerSettingsDefault
 
-      const alreadySelected = currentlySelectedAnswer.filter((item) => {
-        return item.id == answer.id
-      })
+  if (answerSettings?.length) {
+    possibleAnswers.value = parseInt(answerSettings[0].value)
+  } else {
+    possibleAnswers.value = 1
+  }
 
-      if (alreadySelected.length) {
-        currentlySelectedAnswer = currentlySelectedAnswer.filter((item) => {
-          return item.id != answer.id
-        })
-      } else {
-        if (currentlySelectedAnswer.length >= possibleAnswers.value) {
-          currentlySelectedAnswer.pop()
-        }
+  if (questionTypeMain.value == "multiple_choice") {
+    possibleAnswers.value = 6
+  }
 
-        currentlySelectedAnswer.push(answer)
-      }
+  if (questionTypeMain.value == "true_false") {
+    possibleAnswers.value = 1
+  }
+}
 
-      reactiveQuestion.options.forEach((answer) => {
-        if (currentlySelectedAnswer.includes(answer)) {
-          answer.answer = answer.value
-        } else {
-          answer.answer = ""
-        }
-      })
-    }
+const reactiveQuestion = reactive<any>({})
 
-    const saveQuizData = (mounted = false) => {
-      Logic.Common.debounce(() => {
-        if (
-          reactiveQuestion.itemType == "writeAnswer" ||
-          reactiveQuestion.itemType == "sequence" ||
-          reactiveQuestion.itemType == "match"
-        ) {
-          reactiveQuestion.options.forEach((option) => {
-            option.answer = option.value
-          })
-        }
+const setAnswers = (answer: any) => {
+  let currentlySelectedAnswer = reactiveQuestion.options.filter(
+    (item) => item.isRadio && item.answer
+  )
 
-        if (reactiveQuestion.itemType == "match") {
-          reactiveQuestion.match?.forEach((option) => {
-            option.answer = option.value
-          })
-        }
+  const alreadySelected = currentlySelectedAnswer.filter((item) => {
+    return item.id == answer.id
+  })
 
-        Logic.Study.UpdateQuestionForm = Logic.Study.convertQuestionToInput(
-          reactiveQuestion,
-          reactiveQuestion.itemType
-        )
-
-        Logic.Study.UpdateQuestionForm["timeLimit"] =
-          reactiveQuestion.timeLimit
-
-        if (reactiveQuestion.questionMediaBlob) {
-          Logic.Study.UpdateQuestionForm["questionMedia"] =
-            reactiveQuestion.questionMediaBlob
-        }
-
-        if (reactiveQuestion.explanation) {
-          Logic.Study.UpdateQuestionForm["explanation"] =
-            reactiveQuestion.explanation
-        } else {
-          Logic.Study.UpdateQuestionForm["explanation"] = ""
-        }
-
-        Logic.Study.UpdateQuestionForm.id = reactiveQuestion.id
-
-        if (!mounted) {
-          Logic.Study.quizDataUpdate = Math.random() * 100000
-
-          Logic.Study.SaveQuizChangesToLocal(
-            Logic.Study.SingleQuiz.id,
-            reactiveQuestion.id,
-            Logic.Study.UpdateQuestionForm
-          )
-
-          Logic.Study.AllQuestions.results.forEach((questionItem) => {
-            if (questionItem.id == Logic.Study.UpdateQuestionForm.id) {
-              questionItem.data = Logic.Study.UpdateQuestionForm.data
-              questionItem.explanation =
-                Logic.Study.UpdateQuestionForm.explanation
-              questionItem.question = Logic.Study.UpdateQuestionForm.question
-              questionItem.timeLimit = Logic.Study.UpdateQuestionForm.timeLimit
-            }
-          })
-        }
-      }, 500)
-    }
-
-    const setDefaults = () => {
-      if (question.value) {
-        reactiveQuestion.active = question.value.active
-        reactiveQuestion.content = question.value.content
-        reactiveQuestion.id = question.value.id
-        reactiveQuestion.image = question.value.image
-        reactiveQuestion.options = question.value.options
-        reactiveQuestion.placeholder = question.value.placeholder
-        reactiveQuestion.settings = question.value.settings
-        reactiveQuestion.type = question.value.type
-        reactiveQuestion.timeLimit = question.value.timeLimit
-        reactiveQuestion.match = question.value.match || [
-          {
-            shape: "circle",
-            text: "Enter match",
-            shapeSize: "h-[23px]",
-            isRadio: false,
-            id: "",
-            value: "1",
-            answer: "1",
-            showRemove: false,
-          },
-          {
-            shape: "triangle",
-            text: "Enter match",
-            shapeSize: "h-[20px]",
-            isRadio: false,
-            id: "",
-            value: "2",
-            answer: "2",
-            showRemove: false,
-          },
-          {
-            shape: "square",
-            text: "Enter match",
-            shapeSize: "h-[20px]",
-            isRadio: false,
-            id: "",
-            value: "3",
-            answer: "3",
-            showRemove: false,
-          },
-          {
-            shape: "kite",
-            text: "Enter match",
-            shapeSize: "h-[24px]",
-            isRadio: false,
-            id: "",
-            value: "4",
-            answer: "4",
-            showRemove: false,
-          },
-        ]
-        reactiveQuestion.data = question.value.data
-        reactiveQuestion.itemType = question.value.itemType
-        reactiveQuestion.explanation = question.value.explanation
-        reactiveQuestion.questionMedia = question.value.questionMedia
-        reactiveQuestion.questionMediaBlob = null
-        questionTypeMain.value = question.value.image
-
-        setPossibleAnswers()
-        saveQuizData()
-
-        if (questionTypeMain.value == "write_answer") {
-          optionLimitSettings.min = 1
-        } else {
-          optionLimitSettings.min = 2
-        }
-      }
-    }
-
-    watch(question, () => {
-      setDefaults()
+  if (alreadySelected.length) {
+    currentlySelectedAnswer = currentlySelectedAnswer.filter((item) => {
+      return item.id != answer.id
     })
+  } else {
+    if (currentlySelectedAnswer.length >= possibleAnswers.value) {
+      currentlySelectedAnswer.pop()
+    }
 
-    const addNewDataItem = (type: "answer" | "text") => {
-      reactiveQuestion.data.push({
-        content: "",
-        type,
-        value: "",
+    currentlySelectedAnswer.push(answer)
+  }
+
+  reactiveQuestion.options.forEach((answer) => {
+    if (currentlySelectedAnswer.includes(answer)) {
+      answer.answer = answer.value
+    } else {
+      answer.answer = ""
+    }
+  })
+}
+
+const saveQuizData = (mounted = false) => {
+  Logic.Common.debounce(() => {
+    if (
+      reactiveQuestion.itemType == "writeAnswer" ||
+      reactiveQuestion.itemType == "sequence" ||
+      reactiveQuestion.itemType == "match"
+    ) {
+      reactiveQuestion.options.forEach((option) => {
+        option.answer = option.value
       })
     }
 
-    const removeItemFormData = (index: number) => {
-      reactiveQuestion.data = reactiveQuestion.data.filter(
-        (item, itemindex) => {
-          return index != itemindex
-        }
-      )
+    if (reactiveQuestion.itemType == "match") {
+      reactiveQuestion.match?.forEach((option) => {
+        option.answer = option.value
+      })
     }
 
-    const setQuestionOptions = (count: number) => {
-      const existingOptions = reactiveQuestion.options
-
-      if (existingOptions.length >= count) {
-        if (existingOptions.length > count) {
-          reactiveQuestion.options = question.value.options.slice(0, count)
-        }
-      } else {
-        const availableShapes = ["circle", "triangle", "square", "kite"]
-
-        const amountToAdd = count - reactiveQuestion.options.length
-
-        for (let step = 0; step < amountToAdd; step++) {
-          const newOption = {
-            shape:
-              availableShapes[
-              Math.floor(Math.random() * availableShapes.length)
-              ],
-            text: "Enter answer",
-            shapeSize: "h-[23px]",
-            isRadio: true,
-            id: Logic.Common.makeid(8),
-            value: "new",
-            answer: "",
-            showRemove: false,
-          }
-          existingOptions.push(newOption)
-        }
-
-        // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
-      }
-
-      if (questionTypeMain.value == "match") {
-        const existingOptions = reactiveQuestion.match
-
-        if (existingOptions.length >= count) {
-          if (existingOptions.length > count) {
-            reactiveQuestion.match = question.value.match.slice(0, count)
-          }
-        } else {
-          const availableShapes = ["circle", "triangle", "square", "kite"]
-
-          const amountToAdd = count - reactiveQuestion.match.length
-
-          for (let step = 0; step < amountToAdd; step++) {
-            const newOption = {
-              shape:
-                availableShapes[
-                Math.floor(Math.random() * availableShapes.length)
-                ],
-              text: "Enter answer",
-              shapeSize: "h-[23px]",
-              isRadio: false,
-              id: Logic.Common.makeid(8),
-              value: "new",
-              answer: "",
-              showRemove: false,
-            }
-            existingOptions.push(newOption)
-          }
-
-          // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
-        }
-      }
-    }
-
-    watch(reactiveQuestion, () => {
-      saveQuizData(false)
-    })
-
-    watch(questionSettings, () => {
-      // update question type
-
-      const questionTypeSetting = questionSettings.value.filter((item) => {
-        return item.type == "question-type"
-      })
-
-      if (questionTypeSetting.length) {
-        reactiveQuestion.options = question.value.options
-        if (
-          questionTypeMain.value != "match" &&
-          questionTypeSetting[0].questionType == "match"
-        ) {
-          reactiveQuestion.options = [
-            {
-              shape: "circle",
-              text: "Enter 1st word/sentence",
-              shapeSize: "h-[23px]",
-              isRadio: false,
-              id: "",
-              value: "a",
-              answer: "a",
-              showRemove: false,
-            },
-            {
-              shape: "triangle",
-              text: "Enter 2nd word/sentence",
-              shapeSize: "h-[20px]",
-              isRadio: false,
-              id: "",
-              value: "b",
-              answer: "b",
-              showRemove: false,
-            },
-            {
-              shape: "square",
-              text: "Enter 3rd word/sentence",
-              shapeSize: "h-[20px]",
-              isRadio: false,
-              id: "",
-              value: "c",
-              answer: "c",
-              showRemove: false,
-            },
-            {
-              shape: "kite",
-              text: "Enter 4th word/sentence",
-              shapeSize: "h-[24px]",
-              isRadio: false,
-              id: "",
-              value: "d",
-              answer: "d",
-              showRemove: false,
-            },
-          ]
-        }
-
-        if (questionTypeSetting[0].questionType == "true_false") {
-          question.value.options = [
-            {
-              shape: "circle",
-              text: "True",
-              shapeSize: "h-[23px]",
-              isRadio: true,
-              id: Logic.Common.makeid(6),
-              value: "True",
-              answer: "true",
-              showRemove: false,
-            },
-            {
-              shape: "triangle",
-              text: "False",
-              shapeSize: "h-[20px]",
-              isRadio: true,
-              id: Logic.Common.makeid(6),
-              value: "False",
-              answer: "",
-              showRemove: false,
-            },
-          ]
-        }
-
-        if (questionTypeSetting[0].questionType == "write_answer") {
-          optionLimitSettings.min = 1
-        } else {
-          optionLimitSettings.min = 2
-        }
-
-        reactiveQuestion.itemType = questionTypeSetting[0].itemType
-        questionTypeMain.value = questionTypeSetting[0].questionType
-
-        setPossibleAnswers()
-      }
-
-      // update time limit
-      const timeLimitSetting = questionSettings.value.filter((item) => {
-        return item.type == "time-limit"
-      })
-
-      if (timeLimitSetting.length) {
-        if (
-          reactiveQuestion.timeLimit !=
-          Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value]
-        ) {
-          reactiveQuestion.timeLimit =
-            Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value]
-        }
-      }
-
-      // update multiple choice optons
-      const optionSettings = questionSettings.value.filter((item) => {
-        return item.type == "total-options"
-      })
-
-      if (optionSettings.length) {
-        const totalOptions = parseInt(optionSettings[0].value)
-
-        if (reactiveQuestion.options.length != totalOptions) {
-          setQuestionOptions(totalOptions)
-        }
-      }
-
-      if (questionTypeSetting[0].questionType == "true_false") {
-        setQuestionOptions(2)
-      }
-
-      // possible answers
-      const answersSettings = questionSettings.value.filter((item) => {
-        return item.type == "correct-anwsers"
-      })
-
-      if (answersSettings.length) {
-        const answerOptions = parseInt(answersSettings[0].value)
-
-        if (possibleAnswers.value != answerOptions) {
-          setPossibleAnswers(answersSettings)
-        }
-      }
-
-      reactiveQuestion.settings = questionSettings.value
-    })
-
-    const removeOption = (index: number) => {
-      reactiveQuestion.options = reactiveQuestion.options.filter(
-        (item, eachIndex) => eachIndex != index
-      )
-
-      if (questionTypeMain.value == "match") {
-        reactiveQuestion.match = reactiveQuestion.match.filter(
-          (item, eachIndex) => eachIndex != index
-        )
-      }
-    }
-
-    watch(selectedQuestion, () => {
-      question.value = selectedQuestion.value
-    })
-
-    onMounted(() => {
-      Logic.Study.watchProperty("questionSettings", questionSettings)
-      Logic.Study.watchProperty("selectedQuestion", selectedQuestion)
-      question.value = Logic.Study.selectedQuestion
-      setDefaults()
-    })
-
-    return {
+    Logic.Study.UpdateQuestionForm = Logic.Study.convertQuestionToInput(
       reactiveQuestion,
-      possibleAnswers,
-      questionTypeMain,
-      question,
-      optionLimitSettings,
-      setAnswers,
-      addNewDataItem,
-      removeItemFormData,
-      setQuestionOptions,
-      removeOption,
+      reactiveQuestion.itemType
+    )
+
+    Logic.Study.UpdateQuestionForm["timeLimit"] =
+      reactiveQuestion.timeLimit
+
+    if (reactiveQuestion.questionMediaBlob) {
+      Logic.Study.UpdateQuestionForm["questionMedia"] =
+        reactiveQuestion.questionMediaBlob
     }
-  },
+
+    if (reactiveQuestion.explanation) {
+      Logic.Study.UpdateQuestionForm["explanation"] =
+        reactiveQuestion.explanation
+    } else {
+      Logic.Study.UpdateQuestionForm["explanation"] = ""
+    }
+
+    Logic.Study.UpdateQuestionForm.id = reactiveQuestion.id
+
+    if (!mounted) {
+      Logic.Study.quizDataUpdate = Math.random() * 100000
+
+      Logic.Study.SaveQuizChangesToLocal(
+        Logic.Study.SingleQuiz.id,
+        reactiveQuestion.id,
+        Logic.Study.UpdateQuestionForm
+      )
+
+      Logic.Study.AllQuestions?.results.forEach((questionItem) => {
+        if (questionItem.id == Logic.Study.UpdateQuestionForm.id) {
+          questionItem.data = Logic.Study.UpdateQuestionForm.data
+          questionItem.explanation =
+            Logic.Study.UpdateQuestionForm.explanation
+          questionItem.question = Logic.Study.UpdateQuestionForm.question
+          questionItem.timeLimit = Logic.Study.UpdateQuestionForm.timeLimit
+        }
+      })
+    }
+  }, 500)
+}
+
+const setDefaults = () => {
+  if (question.value) {
+    reactiveQuestion.active = question.value.active
+    reactiveQuestion.content = question.value.content
+    reactiveQuestion.id = question.value.id
+    reactiveQuestion.image = question.value.image
+    reactiveQuestion.options = question.value.options
+    reactiveQuestion.placeholder = question.value.placeholder
+    reactiveQuestion.settings = question.value.settings
+    reactiveQuestion.type = question.value.type
+    reactiveQuestion.timeLimit = question.value.timeLimit
+    reactiveQuestion.match = question.value.match || [
+      {
+        shape: "circle",
+        text: "Enter match",
+        shapeSize: "h-[23px]",
+        isRadio: false,
+        id: "",
+        value: "1",
+        answer: "1",
+        showRemove: false,
+      },
+      {
+        shape: "triangle",
+        text: "Enter match",
+        shapeSize: "h-[20px]",
+        isRadio: false,
+        id: "",
+        value: "2",
+        answer: "2",
+        showRemove: false,
+      },
+      {
+        shape: "square",
+        text: "Enter match",
+        shapeSize: "h-[20px]",
+        isRadio: false,
+        id: "",
+        value: "3",
+        answer: "3",
+        showRemove: false,
+      },
+      {
+        shape: "kite",
+        text: "Enter match",
+        shapeSize: "h-[24px]",
+        isRadio: false,
+        id: "",
+        value: "4",
+        answer: "4",
+        showRemove: false,
+      },
+    ]
+    reactiveQuestion.data = question.value.data
+    reactiveQuestion.itemType = question.value.itemType
+    reactiveQuestion.explanation = question.value.explanation
+    reactiveQuestion.questionMedia = question.value.questionMedia
+    reactiveQuestion.questionMediaBlob = null
+    questionTypeMain.value = question.value.image
+
+    setPossibleAnswers()
+    saveQuizData()
+
+    if (questionTypeMain.value == "write_answer") {
+      optionLimitSettings.min = 1
+    } else {
+      optionLimitSettings.min = 2
+    }
+  }
+}
+
+watch(question, () => {
+  setDefaults()
+})
+
+const addNewDataItem = (type: "answer" | "text") => {
+  reactiveQuestion.data.push({
+    content: "",
+    type,
+    value: "",
+  })
+}
+
+const removeItemFormData = (index: number) => {
+  reactiveQuestion.data = reactiveQuestion.data.filter(
+    (item, itemindex) => {
+      return index != itemindex
+    }
+  )
+}
+
+const setQuestionOptions = (count: number) => {
+  const existingOptions = reactiveQuestion.options
+
+  if (existingOptions.length >= count) {
+    if (existingOptions.length > count) {
+      reactiveQuestion.options = question.value.options.slice(0, count)
+    }
+  } else {
+    const availableShapes = ["circle", "triangle", "square", "kite"]
+
+    const amountToAdd = count - reactiveQuestion.options.length
+
+    for (let step = 0; step < amountToAdd; step++) {
+      const newOption = {
+        shape:
+          availableShapes[
+          Math.floor(Math.random() * availableShapes.length)
+          ],
+        text: "Enter answer",
+        shapeSize: "h-[23px]",
+        isRadio: true,
+        id: Logic.Common.makeid(8),
+        value: "new",
+        answer: "",
+        showRemove: false,
+      }
+      existingOptions.push(newOption)
+    }
+
+    // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
+  }
+
+  if (questionTypeMain.value == "match") {
+    const existingOptions = reactiveQuestion.match
+
+    if (existingOptions.length >= count) {
+      if (existingOptions.length > count) {
+        reactiveQuestion.match = question.value.match.slice(0, count)
+      }
+    } else {
+      const availableShapes = ["circle", "triangle", "square", "kite"]
+
+      const amountToAdd = count - reactiveQuestion.match.length
+
+      for (let step = 0; step < amountToAdd; step++) {
+        const newOption = {
+          shape:
+            availableShapes[
+            Math.floor(Math.random() * availableShapes.length)
+            ],
+          text: "Enter answer",
+          shapeSize: "h-[23px]",
+          isRadio: false,
+          id: Logic.Common.makeid(8),
+          value: "new",
+          answer: "",
+          showRemove: false,
+        }
+        existingOptions.push(newOption)
+      }
+
+      // reactiveQuestion.options = JSON.parse(JSON.stringify(existingOptions));
+    }
+  }
+}
+
+watch(reactiveQuestion, () => {
+  saveQuizData(false)
+})
+
+watch(questionSettings, () => {
+  // update question type
+
+  const questionTypeSetting = questionSettings.value.filter((item) => {
+    return item.type == "question-type"
+  })
+
+  if (questionTypeSetting.length) {
+    reactiveQuestion.options = question.value.options
+    if (
+      questionTypeMain.value != "match" &&
+      questionTypeSetting[0].questionType == "match"
+    ) {
+      reactiveQuestion.options = [
+        {
+          shape: "circle",
+          text: "Enter 1st word/sentence",
+          shapeSize: "h-[23px]",
+          isRadio: false,
+          id: "",
+          value: "a",
+          answer: "a",
+          showRemove: false,
+        },
+        {
+          shape: "triangle",
+          text: "Enter 2nd word/sentence",
+          shapeSize: "h-[20px]",
+          isRadio: false,
+          id: "",
+          value: "b",
+          answer: "b",
+          showRemove: false,
+        },
+        {
+          shape: "square",
+          text: "Enter 3rd word/sentence",
+          shapeSize: "h-[20px]",
+          isRadio: false,
+          id: "",
+          value: "c",
+          answer: "c",
+          showRemove: false,
+        },
+        {
+          shape: "kite",
+          text: "Enter 4th word/sentence",
+          shapeSize: "h-[24px]",
+          isRadio: false,
+          id: "",
+          value: "d",
+          answer: "d",
+          showRemove: false,
+        },
+      ]
+    }
+
+    if (questionTypeSetting[0].questionType == "true_false") {
+      question.value.options = [
+        {
+          shape: "circle",
+          text: "True",
+          shapeSize: "h-[23px]",
+          isRadio: true,
+          id: Logic.Common.makeid(6),
+          value: "True",
+          answer: "true",
+          showRemove: false,
+        },
+        {
+          shape: "triangle",
+          text: "False",
+          shapeSize: "h-[20px]",
+          isRadio: true,
+          id: Logic.Common.makeid(6),
+          value: "False",
+          answer: "",
+          showRemove: false,
+        },
+      ]
+    }
+
+    if (questionTypeSetting[0].questionType == "write_answer") {
+      optionLimitSettings.min = 1
+    } else {
+      optionLimitSettings.min = 2
+    }
+
+    reactiveQuestion.itemType = questionTypeSetting[0].itemType
+    questionTypeMain.value = questionTypeSetting[0].questionType
+
+    setPossibleAnswers()
+  }
+
+  // update time limit
+  const timeLimitSetting = questionSettings.value.filter((item) => {
+    return item.type == "time-limit"
+  })
+
+  if (timeLimitSetting.length) {
+    if (
+      reactiveQuestion.timeLimit !=
+      Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value]
+    ) {
+      reactiveQuestion.timeLimit =
+        Logic.Common.timeEquivalentsInSeconds[timeLimitSetting[0].value]
+    }
+  }
+
+  // update multiple choice optons
+  const optionSettings = questionSettings.value.filter((item) => {
+    return item.type == "total-options"
+  })
+
+  if (optionSettings.length) {
+    const totalOptions = parseInt(optionSettings[0].value)
+
+    if (reactiveQuestion.options.length != totalOptions) {
+      setQuestionOptions(totalOptions)
+    }
+  }
+
+  if (questionTypeSetting[0].questionType == "true_false") {
+    setQuestionOptions(2)
+  }
+
+  // possible answers
+  const answersSettings = questionSettings.value.filter((item) => {
+    return item.type == "correct-anwsers"
+  })
+
+  if (answersSettings.length) {
+    const answerOptions = parseInt(answersSettings[0].value)
+
+    if (possibleAnswers.value != answerOptions) {
+      setPossibleAnswers(answersSettings)
+    }
+  }
+
+  reactiveQuestion.settings = questionSettings.value
+})
+
+const removeOption = (index: number) => {
+  reactiveQuestion.options = reactiveQuestion.options.filter(
+    (item, eachIndex) => eachIndex != index
+  )
+
+  if (questionTypeMain.value == "match") {
+    reactiveQuestion.match = reactiveQuestion.match.filter(
+      (item, eachIndex) => eachIndex != index
+    )
+  }
+}
+
+watch(selectedQuestion, () => {
+  question.value = selectedQuestion.value
+})
+
+onMounted(() => {
+  Logic.Study.watchProperty("questionSettings", questionSettings)
+  Logic.Study.watchProperty("selectedQuestion", selectedQuestion)
+  question.value = Logic.Study.selectedQuestion
+  setDefaults()
 })
 </script>

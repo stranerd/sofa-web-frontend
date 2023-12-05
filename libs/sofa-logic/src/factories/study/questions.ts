@@ -1,5 +1,5 @@
+import { Differ, v } from 'valleyed'
 import { FileData, Question } from '../../logic'
-import { v, Differ } from 'valleyed'
 import { BaseFactory } from '../base'
 
 type Content = FileData | null
@@ -15,69 +15,57 @@ export enum QuestionTypes {
 	match = 'match',
 }
 
-export class QuestionFactory extends BaseFactory<Question, QuestionToModel, QuestionToModel> {
+type QTypes = Question['data']['type'] | QuestionTypes
+
+type Keys = Omit<QuestionToModel, 'data'> & {
+	type: QTypes, multipleOptions: string[], multipleAnswers: number[]
+	trueOrFalseAnswer: boolean, writeAnswerAnswers: string[]
+	sequenceAnswers: string[], matchSet: { q: string, a: string }[]
+	indicator: string, fillInBlanksAnswers: string[], dragAnswersAnswers: string[]
+}
+
+export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys> {
+	private data: Question['data']
 	readonly rules = {
 		question: v.string().min(1, true),
 		questionMedia: v.file().image().nullable(),
 		explanation: v.string(),
 		timeLimit: v.number().gt(0).lte(300).round(),
-		data: v.discriminate((d) => d.type, {
-			[QuestionTypes.multipleChoice]: v.object({
-				type: v.is(QuestionTypes.multipleChoice as const),
-				options: v.array(v.string().min(1, true)).min(2).max(6),
-				answers: v.array(v.number().gte(0).round()).min(1).set()
-			}).custom((value) => {
-				const length = value?.options?.length ?? 1
-				return v.array(v.number().lt(length)).max(length).parse(value.answers).valid
+		type: v.in(Object.values(QuestionTypes)),
+		multipleOptions: v.array(v.string().min(1, true)).min(2).max(6).requiredIf(() => this.isMultipleChoice),
+		multipleAnswers: v.array(v.number().gte(0).round()).min(1).set().requiredIf(() => this.isMultipleChoice)
+			.custom((value) => {
+				const length = this.multipleOptions.length ?? 1
+				return v.array(v.number().lt(length)).max(length).parse(value).valid
 			}),
-			[QuestionTypes.trueOrFalse]: v.object({
-				type: v.is(QuestionTypes.trueOrFalse as const),
-				answer: v.boolean()
+		trueOrFalseAnswer: v.boolean().requiredIf(() => this.isTrueOrFalse),
+		writeAnswerAnswers: v.array(v.string().min(1, true)).min(1).max(6).requiredIf(() => this.isWriteAnswer),
+		sequenceAnswers: v.array(v.string().min(1, true)).min(2).max(6).requiredIf(() => this.isSequence),
+		indicator: v.string().min(1).requiredIf(() => this.isFillInBlanks || this.isDragAnswers),
+		fillInBlanksAnswers: v.array(v.string().min(1, true)).min(1).requiredIf(() => this.isFillInBlanks)
+			.custom((value) => {
+				const length = this.question?.split(this.values.indicator).length ?? 1
+				return v.array(v.any()).has(length - 1).parse(value).valid
 			}),
-			[QuestionTypes.writeAnswer]: v.object({
-				type: v.is(QuestionTypes.writeAnswer as const),
-				answers: v.array(v.string().min(1, true)).min(1).max(6)
+		dragAnswersAnswers: v.array(v.string().min(1, true)).min(1).requiredIf(() => this.isDragAnswers)
+			.custom((value) => {
+				const length = this.question?.split(this.values.indicator).length ?? 1
+				return v.array(v.any()).has(length - 1).parse(value).valid
 			}),
-			[QuestionTypes.fillInBlanks]: v.object({
-				type: v.is(QuestionTypes.fillInBlanks as const),
-				indicator: v.string().min(1),
-				answers: v.array(v.string().min(1, true)).min(1)
-			}).custom((value) => {
-				const length = this.question?.split(value.indicator).length ?? 1
-				return v.array(v.any()).has(length - 1).parse(value.answers).valid
-			}),
-			[QuestionTypes.dragAnswers]: v.object({
-				type: v.is(QuestionTypes.dragAnswers as const),
-				indicator: v.string().min(1),
-				answers: v.array(v.string().min(1, true)).min(1)
-			}).custom((value) => {
-				const length = this.question?.split(value.indicator).length ?? 1
-				return v.array(v.any()).has(length - 1).parse(value.answers).valid
-			}),
-			[QuestionTypes.sequence]: v.object({
-				type: v.is(QuestionTypes.sequence as const),
-				answers: v.array(v.string().min(1, true)).min(2).max(6)
-			}),
-			[QuestionTypes.match]: v.object({
-				type: v.is(QuestionTypes.match as const),
-				set: v.array(v.object({
-					q: v.string().min(1, true),
-					a: v.string().min(1, true)
-				})).min(2).max(10)
-			})
-		})
+		matchSet: v.array(v.object({
+			q: v.string().min(1, true),
+			a: v.string().min(1, true)
+		})).min(2).max(10).requiredIf(() => this.isMatch)
 	}
 
 	reserved = []
 
 	constructor () {
 		super({
-			question: '', explanation: '', questionMedia: null, timeLimit: 30,
-			data: {
-				type: QuestionTypes.multipleChoice,
-				options: [],
-				answers: []
-			}
+			question: '', explanation: '', questionMedia: null, timeLimit: 30, type: QuestionTypes.multipleChoice,
+			multipleAnswers: [], multipleOptions: [], trueOrFalseAnswer: true, writeAnswerAnswers: [],
+			sequenceAnswers: [], indicator: '----------', fillInBlanksAnswers: [], dragAnswersAnswers: [],
+			matchSet: []
 		})
 	}
 
@@ -113,22 +101,114 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Ques
 		this.set('explanation', value)
 	}
 
-	get data () {
-		return this.values.data
-	}
-
-	set data (value: Question['data']) {
-		this.set('data', value)
-	}
-
 	get type () {
-		return this.values.data.type
+		return this.values.type
 	}
 
-	set type (value: Question['data']['type']) {
-		this.data = {
-			type: value
-		}
+	set type (value: QTypes) {
+		this.type = value
+	}
+
+	get multipleOptions () {
+		return this.values.multipleOptions
+	}
+
+	set multipleOptions (value: string[]) {
+		this.set('multipleOptions', value)
+	}
+
+	get multipleAnswers () {
+		return this.values.multipleAnswers
+	}
+
+	set multipleAnswers (value: number[]) {
+		this.set('multipleAnswers', value)
+	}
+
+	get trueOrFalseAnswer () {
+		return this.values.trueOrFalseAnswer
+	}
+
+	set trueOrFalseAnswer (value: boolean) {
+		this.set('trueOrFalseAnswer', value)
+	}
+
+	get writeAnswerAnswers () {
+		return this.values.writeAnswerAnswers
+	}
+
+	set writeAnswerAnswers (value: string[]) {
+		this.set('writeAnswerAnswers', value)
+	}
+
+	get sequenceAnswers () {
+		return this.values.sequenceAnswers
+	}
+
+	set sequenceAnswers (value: string[]) {
+		this.set('sequenceAnswers', value)
+	}
+
+	get fillInBlanksAnswers () {
+		return this.values.fillInBlanksAnswers
+	}
+
+	set fillInBlanksAnswers (value: string[]) {
+		this.set('fillInBlanksAnswers', value)
+	}
+
+	get dragAnswersAnswers () {
+		return this.values.dragAnswersAnswers
+	}
+
+	set dragAnswersAnswers (value: string[]) {
+		this.set('dragAnswersAnswers', value)
+	}
+
+	get matchSet () {
+		return this.values.matchSet
+	}
+
+	set matchSet (value: { q: string, a: string }[]) {
+		this.set('matchSet', value)
+	}
+
+	get isFillOrDrag () {
+		return this.isDragAnswers || this.isFillInBlanks
+	}
+
+	get questionPlaceholder () {
+		if (this.isMatch) return 'Enter instruction/questions here (e.g. match the vegetables with their colors)'
+		if (this.isSequence) return 'Enter instruction/question here (e.g. arrange these sentences in alphabetical order)'
+		return 'Enter question'
+	}
+
+	get isMultipleChoice () {
+		return this.type === QuestionTypes.multipleChoice
+	}
+
+	get isTrueOrFalse () {
+		return this.type === QuestionTypes.trueOrFalse
+	}
+
+	get isWriteAnswer () {
+		return this.type === QuestionTypes.writeAnswer
+	}
+
+	get isMatch () {
+		return this.type === QuestionTypes.match
+	}
+
+	get isSequence () {
+		return this.type === QuestionTypes.sequence
+	}
+
+	get isFillInBlanks () {
+		return this.type === QuestionTypes.fillInBlanks
+	}
+
+	get isDragAnswers () {
+		return this.type === QuestionTypes.dragAnswers
 	}
 
 	hasNoChanges (entity: Question) {
@@ -143,15 +223,44 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Ques
 	loadEntity = (entity: Question) => {
 		this.question = entity.question
 		this.questionMedia = entity.questionMedia
-		this.data = entity.data
 		this.explanation = entity.explanation
 		this.timeLimit = entity.timeLimit
+		this.data = entity.data
+		this.type = entity.data.type
+		if (this.isMultipleChoice) {
+			this.multipleOptions = entity.data.options
+			this.multipleAnswers = entity.data.answers
+		}
+		if (this.isTrueOrFalse) this.trueOrFalseAnswer = entity.data.answer
+		if (this.isWriteAnswer) this.writeAnswerAnswers = entity.data.answers
+		if (this.isSequence) this.sequenceAnswers = entity.data.answers
+		if (this.isFillInBlanks) {
+			this.set('indicator', entity.data.indicator)
+			this.fillInBlanksAnswers = entity.data.answers
+		}
+		if (this.isDragAnswers) {
+			this.set('indicator', entity.data.indicator)
+			this.dragAnswersAnswers = entity.data.answers
+		}
+		if (this.isMatch) this.matchSet = entity.data.set
+	}
+
+	private getValidData () {
+		const v = this.validValues
+		if (this.isMultipleChoice) return { type: QuestionTypes.multipleChoice, options: v.multipleOptions, answers: v.multipleAnswers }
+		if (this.isTrueOrFalse) return { type: QuestionTypes.trueOrFalse, answer: v.trueOrFalseAnswer }
+		if (this.isWriteAnswer) return { type: QuestionTypes.writeAnswer, answers: v.writeAnswerAnswers }
+		if (this.isSequence) return { type: QuestionTypes.sequence, answers: v.sequenceAnswers }
+		if (this.isMatch) return { type: QuestionTypes.match, set: v.matchSet }
+		if (this.isFillInBlanks) return { type: QuestionTypes.fillInBlanks, indicator: v.indicator, answers: v.fillInBlanksAnswers }
+		if (this.isDragAnswers) return { type: QuestionTypes.dragAnswers, indicator: v.indicator, answers: v.dragAnswersAnswers }
+		return {} as never
 	}
 
 	toModel = async () => {
 		if (this.valid) {
-			const { question, questionMedia, data, explanation, timeLimit } = this.validValues
-			return { question, questionMedia, data, explanation, timeLimit }
+			const { question, questionMedia, explanation, timeLimit } = this.validValues
+			return { question, questionMedia, explanation, timeLimit, data: this.getValidData() }
 		} else {
 			throw new Error('Validation errors')
 		}
