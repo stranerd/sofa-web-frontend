@@ -1,15 +1,8 @@
 <template>
-  <sofa-modal :close="() => {
-    close ? close() : null
-  }
-    ">
-    <div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
-      @click.stop="() => {
-        //
-      }
-        ">
+  <sofa-modal :close="() => close?.()">
+    <div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
       <div
-        class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+        class="bg-white text-bodyBlack w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
         <div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
           <sofa-header-text :customClass="'text-xl'" :content="title" />
           <sofa-normal-text :content="subTitle" />
@@ -20,7 +13,7 @@
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             {{ title }}
           </sofa-normal-text>
-          <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="close ? close() : null" />
+          <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="close?.()" />
         </div>
 
         <div class="w-full flex flex-row items-start justify-center mdlg:!hidden px-4 pt-3">

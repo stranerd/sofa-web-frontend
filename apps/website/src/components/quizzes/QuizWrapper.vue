@@ -6,7 +6,7 @@
 <script lang="ts" setup>
 import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
-import { Logic, Question } from 'sofa-logic'
+import { Logic, Question, QuestionFactory } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 import { useAuth } from '@/composables/auth/auth'
@@ -61,12 +61,14 @@ const index = ref(0)
 const selectedQuestionId = ref('')
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
+const currentQuestionById = computed(() => quizQuestions.value.find((q) => q.id === selectedQuestionId.value))
 const answer = computed({
 	get: () => currentQuestion.value ? answers[currentQuestion.value.id] ?? currentQuestion.value.defaultAnswer : [],
 	set: (val) => {
 		answers[currentQuestion.value?.id] = val
 	}
 })
+const questionFactory = new QuestionFactory()
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
 	const question = currentQuestion.value
@@ -140,10 +142,11 @@ const extras = computed(() => ({
 		if (duration === 0) return 0
 		return runTime.value / duration
 	},
-	currentQuestionById: quizQuestions.value.find((q) => q.id === selectedQuestionId.value),
+	currentQuestionById: currentQuestionById.value,
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestion.value,
+	questionFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
 	optionState, submitAnswer, moveCurrrentQuestionToEnd,
@@ -168,5 +171,11 @@ watch(quiz, async () => {
 			started.value = true
 			nextQ(0)
 		})
+})
+
+watch([currentQuestionById, quizQuestions], () => {
+	const question = currentQuestionById.value
+	if (question) questionFactory.loadEntity(question)
+	else if (quizQuestions.value.length > 0) selectedQuestionId.value = quizQuestions.value[0].id
 })
 </script>

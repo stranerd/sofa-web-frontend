@@ -6,7 +6,7 @@
           <div class="flex items-center gap-2">
             <SofaNormalText class="!font-bold" :content="`${index + 1}`" />
             <span class="w-[4px] h-[4px] rounded-full bg-deepGray" />
-            <SofaNormalText class="!font-bold" :content="element.type" />
+            <SofaNormalText class="!font-bold" :content="Logic.Study.getQuestionTypeLabel(element.type)" />
           </div>
 
           <div class="w-full h-[144px] bg-cover" :style="`background-image: url('/images/${Logic.Study.getQuestionTypeImage(element.type)}.svg')`">

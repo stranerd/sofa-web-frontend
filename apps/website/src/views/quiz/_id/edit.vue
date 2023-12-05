@@ -29,7 +29,7 @@
               handler: () => Logic.Common.goBack()
             },
             {
-              IsOutlined: !hasUnsavedChanges,
+              IsOutlined: extras.questionFactory.hasNoChanges(extras.currentQuestionById),
               name: 'Save',
               handler: () => Logic.Study.saveQuizLocalChanges(),
             },
@@ -53,6 +53,7 @@
           <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto justify-between">
             <SofaQuestionOptions v-if="extras.currentQuestionById"
               :question="extras.currentQuestionById"
+              :factory="extras.questionFactory"
               :close="() => showMoreOptions = false"
               @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
               @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
@@ -125,6 +126,7 @@
 
           <SofaQuestionOptions v-if="extras.currentQuestionById"
             :question="extras.currentQuestionById"
+            :factory="extras.questionFactory"
             :close="() => showMoreOptions = false"
             @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
             @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
@@ -190,7 +192,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue"
+import { defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
 import {
   SofaDeletePrompt,
@@ -248,15 +250,7 @@ export default defineComponent({
 
     const interactingQuestionId = ref('')
 
-    const UpdatedQuestion = ref(Logic.Study.UpdatedQuestion)
-
-    const questionSettings = ref(Logic.Study.questionSettings)
-
     const showSettingModal = ref(false)
-
-    const hasUnsavedChanges = ref(false)
-
-    const quizDataUpdate = ref(Logic.Study.quizDataUpdate)
 
     const showMoreOptions = ref(false)
 
@@ -265,19 +259,6 @@ export default defineComponent({
         showSettingModal.value = false
       }
     }
-
-    onMounted(() => {
-      Logic.Study.watchProperty("UpdatedQuestion", UpdatedQuestion)
-      Logic.Study.watchProperty("questionSettings", questionSettings)
-      Logic.Study.watchProperty("quizDataUpdate", quizDataUpdate)
-
-      // Clear local data
-      localStorage.removeItem("quiz_question_update")
-    })
-
-    watch([UpdatedQuestion, questionSettings, quizDataUpdate], () => {
-      hasUnsavedChanges.value = false
-    })
 
     const handleMobileGoback = () => {
       if (showSettingModal.value) showSettingModal.value = false
@@ -294,15 +275,7 @@ export default defineComponent({
       handleSettingSaved,
       Logic,
       handleMobileGoback,
-      hasUnsavedChanges,
     }
   },
 })
 </script>
-
-<style scoped>
-.textarea[contenteditable]:empty::before {
-  content: "Enter message";
-  color: #78828c;
-}
-</style>
