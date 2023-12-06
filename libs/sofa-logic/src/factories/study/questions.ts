@@ -106,7 +106,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 	}
 
 	set type (value: QTypes) {
-		this.type = value
+		this.set('type', value)
 	}
 
 	get multipleOptions () {
@@ -209,6 +209,45 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 
 	get isDragAnswers () {
 		return this.type === QuestionTypes.dragAnswers
+	}
+
+	get canAddOption () {
+		if (this.isMultipleChoice) return this.multipleOptions.length < 6
+		if (this.isSequence) return this.sequenceAnswers.length < 6
+		if (this.isMatch) return this.matchSet.length < 10
+		if (this.isWriteAnswer) return this.writeAnswerAnswers.length < 6
+		return false
+	}
+
+	get canRemoveOption () {
+		if (this.isMultipleChoice) return this.multipleOptions.length > 2
+		if (this.isSequence) return this.sequenceAnswers.length > 2
+		if (this.isMatch) return this.matchSet.length > 2
+		if (this.isWriteAnswer) return this.writeAnswerAnswers.length > 2
+		return false
+	}
+
+	addOption () {
+		if (this.isMultipleChoice) this.multipleOptions.push('')
+		if (this.isSequence) this.sequenceAnswers.push('')
+		if (this.isMatch) this.matchSet.push({ q: '', a: '' })
+		if (this.isWriteAnswer) this.writeAnswerAnswers.push('')
+	}
+
+	removeOption (index: number) {
+		console.log(this.type, index)
+		if (this.isMultipleChoice) {
+			this.multipleOptions.splice(index, 1)
+			this.multipleAnswers = this.multipleAnswers.filter((a) => a !== index)
+		}
+		if (this.isSequence) this.sequenceAnswers.splice(index, 1)
+		if (this.isMatch) this.matchSet.splice(index, 1)
+		if (this.isWriteAnswer) this.writeAnswerAnswers.splice(index, 1)
+	}
+
+	toggleMultipleChoicAnswer (index: number) {
+		if (this.multipleAnswers.includes(index)) this.multipleAnswers = this.multipleAnswers.filter((a) => a !== index)
+		else this.multipleAnswers.push(index)
 	}
 
 	hasNoChanges (entity: Question) {

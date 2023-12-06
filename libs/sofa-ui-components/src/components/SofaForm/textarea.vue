@@ -4,7 +4,7 @@
       <slot name="title" />
     </sofa-normal-text>
     <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :disabled="disabled"
-      :style="`min-height: max(${rows}em, 40px)`" @ready="(v) => quill = v"
+      :style="`min-height: ${rows}em`" @ready="(v) => quill = v"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
       :placeholder="placeholder" :tabindex="0">
       <template v-slot:toolbar>
@@ -254,7 +254,7 @@ export default defineComponent({
   }
 
   .ql-editor {
-    padding: auto 0;
+    padding: 0 !important;
     background: transparent;
     // border: 1px solid $color-itemBg;
     transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
@@ -274,6 +274,8 @@ export default defineComponent({
     color: inherit;
     opacity: 0.35;
     font-style: normal;
+    right: 0 !important;
+    left: 0 !important;
   }
 
   .ql-tooltip.ql-editing[data-mode="formula"] {
