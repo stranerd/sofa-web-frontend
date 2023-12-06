@@ -11,11 +11,12 @@ export const useErrorHandler = () => {
 }
 
 export const useLoadingHandler = () => {
+	const id = Logic.Common.makeid(6)
 	const loadingState = ref(false)
 	const setLoading = async (loading: boolean, skipAlert = false) => {
 		loadingState.value = loading
-		if (loading && !skipAlert) Logic.Common.showLoading()
-		if (!loading && !skipAlert) Logic.Common.hideLoading()
+		if (loading && !skipAlert) Logic.Common.showLoading(id)
+		if (!loading && !skipAlert) Logic.Common.hideLoading(id)
 	}
 	return { loading: loadingState, setLoading }
 }

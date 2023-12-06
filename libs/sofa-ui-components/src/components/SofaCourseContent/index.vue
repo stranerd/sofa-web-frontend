@@ -286,8 +286,7 @@ export default defineComponent({
                         )
                       }
                       return {
-                        type: Logic.Study.questionTypes[eachQuestion.data.type]
-                          .type,
+                        type: Logic.Study.getQuestionTypeLabel(eachQuestion.data.type),
                         duration:
                           Logic.Common.EquivalentsSecondsInString[
                           `${eachQuestion.timeLimit}`

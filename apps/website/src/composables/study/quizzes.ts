@@ -183,3 +183,34 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		deleteQuiz,
 	}
 }
+
+export const useCreateQuiz = () => {
+	const { error, setError } = useErrorHandler()
+	const { loading, setLoading } = useLoadingHandler()
+
+	const createQuiz = async () => {
+		await setError('')
+		try {
+			await setLoading(true)
+			const quiz = await Logic.Study.CreateQuiz({
+				title: 'Untitled Quiz',
+				description: 'Here is the quiz description',
+				tags: [],
+				isForTutors: false,
+				topic: 'Physics',
+			})
+			await Promise.all(
+				[Logic.Study.getQuestionTypeTemplate('multipleChoice'), Logic.Study.getQuestionTypeTemplate('trueOrFalse')]
+					.map((q) => Logic.Study.CreateQuestion(quiz.id, q))
+			).catch()
+			await setLoading(false)
+			return quiz.id
+		} catch (e) {
+			await setLoading(false)
+			await setError(e)
+			return null
+		}
+	}
+
+	return { createQuiz, error, loading }
+}

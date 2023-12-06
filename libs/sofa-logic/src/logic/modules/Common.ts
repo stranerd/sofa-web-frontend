@@ -305,6 +305,7 @@ export default class Common {
 
   public loaderSetup = reactive<LoaderSetup>({
     alerts: [],
+    loaders: [],
     loading: false,
   })
 
@@ -386,12 +387,14 @@ export default class Common {
     })
   }
 
-  public showLoading = () => {
-    this.loaderSetup.loading = true
+  public showLoading = (id?: string) => {
+    if (id) this.loaderSetup.loaders.push(id)
+    else this.loaderSetup.loading = true
   }
 
-  public hideLoading = () => {
-    this.loaderSetup.loading = false
+  public hideLoading = (id?: string) => {
+    if (id) this.loaderSetup.loaders = this.loaderSetup.loaders.filter((i) => i !== id)
+    else this.loaderSetup.loading = false
   }
 
   public goBack = () => {

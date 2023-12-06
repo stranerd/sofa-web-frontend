@@ -21,18 +21,17 @@ export const quizSettingsForm = reactive({
 export const quizSettingSaved = ref(false)
 
 export const createQuiz = (formComp: any) => {
-  Logic.Study.CreateQuizForm = {
+  const formState: boolean = formComp.validate()
+  if (!formState) return
+  quizSettingSaved.value = false
+  Logic.Study.CreateQuiz({
     description: quizSettingsForm.description,
     tags: quizSettingsForm.tags,
     title: quizSettingsForm.title,
     isForTutors: quizSettingsForm.isForTutors,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
-  }
-
-  const formState: boolean = formComp.validate()
-  quizSettingSaved.value = false
-  Logic.Study.CreateQuiz(formState)
+  })
     ?.then((data) => {
       if (data) {
         quizSettingSaved.value = true

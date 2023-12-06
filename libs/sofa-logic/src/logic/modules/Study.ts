@@ -28,6 +28,8 @@ import {
 } from '../types/forms/study'
 import Common from './Common'
 
+const wrap = (v: string) => `<p>${v}</p>`
+
 export default class Study extends Common {
   constructor() {
     super()
@@ -157,146 +159,32 @@ export default class Study extends Common {
     questions: [],
   })
 
-  public convertQuestionToInput = (questions: any, type: any) => {
-    let timeLimit = 0
-
-    let questionContent = questions.content
-
-    questions.options ??= []
-    questions.settings ??= []
-
-    questions.settings.forEach((setting) => {
-      if (setting.type == 'time-limit') {
-        timeLimit = Logic.Common.timeEquivalentsInSeconds[`${setting.value}`]
-      }
-    })
-
-    let set = []
-
-    if (type == 'match') {
-      questions.options.forEach((questionOptions, index) => {
-        set.push({
-          q: questionOptions.value,
-          // @ts-ignore
-          a: questions.match ? questions.match[index].value : '',
-        })
-      })
-    }
-
-    if (set.length == 0) {
-      set = undefined
-    }
-
-    let options = questions.options.map((option) => {
-      return option.value
-    })
-
-    let answers = []
-
-    if (type == 'multipleChoice') {
-      answers = questions.options
-        .map((option, index) => {
-          if (option.answer) {
-            return index
-          }
-        })
-        .filter((item) => {
-          return item != undefined
-        })
-    } else {
-      answers = questions.options
-        .map((option) => {
-          if (option.answer) {
-            return option.answer
-          }
-        })
-        .filter((item) => {
-          return item != undefined
-        })
-    }
-
-    if (type == 'trueOrFalse') {
-      answers = undefined
-      options = undefined
-    }
-
-    if (type == 'sequence') {
-      options = undefined
-    }
-
-    if (type == 'match') {
-      options = undefined
-      answers = undefined
-    }
-
-    if (type == 'dragAnswers' || type == 'fillInBlanks') {
-      options = undefined
-      // @ts-ignore
-      answers = questions.data
-        ?.map((item) => {
-          if (item.type == 'answer') {
-            return item.value
-          }
-        })
-        .filter((item) => {
-          return item != undefined
-        })
-
-      questionContent = questions.data
-        ?.map((item) => {
-          if (item.type == 'text') {
-            return item.value.trim()
-          } else {
-            return '__________'
-          }
-        })
-        .join('')
-    }
-
-    return {
-      id: Logic.Study.SingleQuiz.id,
-      question: questionContent,
-      timeLimit: timeLimit,
-      data: {
-        type,
-        options,
-        answers,
-        answer:
-          type == 'trueOrFalse'
-            ? questions.options[0]?.answer == 'True'
-            : undefined,
-        indicator:
-          type == 'dragAnswers' || type == 'fillInBlanks'
-            ? '__________'
-            : undefined,
-        set,
-      },
-    }
-  }
-
   public getQuestionTypeLabel (type: Question['strippedData']['type']) {
-    return this.questionTypes[type]?.type ?? 'Multiple choice'
+    const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
+    return data.extras.label
   }
 
   public getQuestionTypeIcon (type: Question['strippedData']['type']) {
-    return this.questionTypes[type]?.icon ?? 'multiple-choice-type'
+    const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
+    return data.extras.icon
   }
 
   public getQuestionTypeImage (type: Question['strippedData']['type']) {
-    return this.questionTypes[type]?.image ?? 'multiple_choice'
+    const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
+    return data.extras.image
   }
 
   public getQuestionTypeTemplate (type: Question['strippedData']['type']) :CreateQuestionInput {
-    const newQuestionData = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
-    return newQuestionData.template
+    const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
+    return data.template
   }
 
   public getAllQuestionTypes () {
-    return Object.values(this.questionTypes).map((t) => ({
-      label: t.type,
-      value: t.key,
-      icon: t.icon,
-      image: t.image
+    return Object.entries(this.questionTypes).map(([key, t]) => ({
+      label: t.extras.label,
+      value: key as Question['strippedData']['type'],
+      icon: t.extras.icon,
+      image: t.extras.image
     }))
   }
 
@@ -305,160 +193,42 @@ export default class Study extends Common {
   public questionTypes = {
     multipleChoice: {
       template: {
-        question: 'Enter question',
+        question: wrap('Enter question'),
         questionMedia: null,
         timeLimit: 30,
         explanation: '',
         data: {
           type: 'multipleChoice' as const,
-          options: ['a', 'b', 'c', 'd'],
+          options: ['a', 'b', 'c', 'd'].map(wrap),
           answers: [0,1]
         }
       },
-      id: '',
-      key: 'multipleChoice' as const,
-      type: 'Multiple choice',
-      image: 'multiple_choice',
-      icon: 'multiple-choice-type',
-      active: true,
-      placeholder: 'Enter question',
-      content: 'Enter question',
-      timeLimit: 0,
-      questionMedia: '',
-      questionMediaBlob: null,
-      explanation: '',
-      options: [
-        {
-          shape: 'circle',
-          text: 'Enter answer',
-          shapeSize: 'h-[23px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: 'a',
-          answer: 'a',
-          showRemove: false,
-        },
-        {
-          shape: 'triangle',
-          text: 'Enter answer',
-          shapeSize: 'h-[20px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: 'b',
-          answer: '',
-          showRemove: false,
-        },
-        {
-          shape: 'square',
-          text: 'Enter answer',
-          shapeSize: 'h-[20px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: 'c',
-          answer: '',
-          showRemove: false,
-        },
-        {
-          shape: 'kite',
-          text: 'Enter answer',
-          shapeSize: 'h-[24px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: 'd',
-          answer: '',
-          showRemove: false,
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'Multiple choice',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
+      extras: {
+        label: 'Multiple choice',
+        image: 'multiple_choice',
+        icon: 'multiple-choice-type'
+      }
     },
     writeAnswer: {
       template: {
-        question: 'Enter question',
+        question: wrap('Enter question'),
         questionMedia: null,
         timeLimit: 30,
         explanation: '',
         data: {
           type: 'writeAnswer' as const,
-          answers: ['a', 'b']
+          answers: ['a', 'b'].map(wrap)
         }
       },
-      id: '',
-      key: 'writeAnswer' as const,
-      type: 'Write answer',
-      image: 'write_answer',
-      content: 'Enter question',
-      active: false,
-      placeholder: 'Enter question',
-      icon: 'write-answer-type',
-      timeLimit: 0,
-      questionMedia: '',
-      questionMediaBlob: null,
-      explanation: '',
-      options: [
-        {
-          shape: 'circle',
-          text: 'Enter correct answer',
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: '',
-          value: 'a',
-          answer: 'a',
-          showRemove: false,
-        },
-        {
-          shape: 'triangle',
-          text: 'Enter another accepted answer (optional)',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: '',
-          showRemove: false,
-        },
-        {
-          shape: 'square',
-          text: 'Enter another accepted answer (optional)',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: '',
-          showRemove: false,
-        },
-        {
-          shape: 'kite',
-          text: 'Enter another accepted answer (optional)',
-          shapeSize: 'h-[24px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: '',
-          showRemove: false,
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'Write answer',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
+      extras: {
+        label: 'Write answer',
+        image: 'write_answer',
+        icon: 'write-answer-type'
+      }
     },
     trueOrFalse: {
       template: {
-        question: 'Enter question',
+        question: wrap('Enter question'),
         questionMedia: null,
         timeLimit: 30,
         explanation: '',
@@ -467,50 +237,11 @@ export default class Study extends Common {
           answer: true
         }
       },
-      id: '',
-      key: 'trueOrFalse' as const,
-      type: 'True/False',
-      image: 'true_false',
-      content: 'Enter question',
-      active: false,
-      placeholder: 'Enter question',
-      icon: 'true-false-type',
-      timeLimit: 0,
-      questionMedia: '',
-      questionMediaBlob: null,
-      explanation: '',
-      options: [
-        {
-          shape: 'circle',
-          text: 'True',
-          shapeSize: 'h-[23px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: 'True',
-          answer: 'true',
-          showRemove: false,
-        },
-        {
-          shape: 'triangle',
-          text: 'False',
-          shapeSize: 'h-[20px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: 'False',
-          answer: '',
-          showRemove: false,
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'True/False',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
+      extras: {
+        label: 'True/False',
+        icon: 'true-false-type',
+        image: 'true_false'
+      }
     },
     fillInBlanks: {
       template: {
@@ -524,40 +255,11 @@ export default class Study extends Common {
           answers: ['a', 'b']
         }
       },
-      id: '',
-      key: 'fillInBlanks' as const,
-      type: 'Fill in blank(s)',
-      image: 'fill_in_blank',
-      content: '__________ Enter text',
-      options: [],
-      icon: 'fill-in-blanks-type',
-      active: false,
-      timeLimit: 0,
-      questionMedia: '',
-      questionMediaBlob: null,
-      explanation: '',
-      data: [
-        {
-          content: '',
-          type: 'text',
-          value: '',
-        },
-        {
-          content: '',
-          type: 'answer',
-          value: 'answer here',
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'Fill in blank(s)',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
+      extras: {
+        label: 'Fill in blank(s)',
+        image: 'fill_in_blank',
+        icon: 'fill-in-blanks-type'
+      }
     },
     dragAnswers: {
       template: {
@@ -571,121 +273,32 @@ export default class Study extends Common {
           answers: ['a', 'b']
         }
       },
-      id: '',
-      key: 'dragAnswers' as const,
-      type: 'Drag answers',
-      image: 'drag_answer',
-      content: '__________ Enter text',
-      active: false,
-      icon: 'drag-answers-type',
-      options: [],
-      questionMedia: '',
-      questionMediaBlob: null,
-      timeLimit: 0,
-      explanation: '',
-      data: [
-        {
-          content: '',
-          type: 'text',
-          value: '',
-        },
-        {
-          content: '',
-          type: 'answer',
-          value: 'answer here',
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'Drag answers',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
+      extras: {
+        label: 'Drag answers',
+        image: 'drag_answer',
+        icon: 'drag-answers-type'
+      }
     },
     sequence: {
       template: {
-        question: 'Enter question',
+        question: wrap('Enter question'),
         questionMedia: null,
         timeLimit: 30,
         explanation: '',
         data: {
           type: 'sequence' as const,
-          answers: ['a', 'b', 'c', 'd', 'e', 'f']
+          answers: ['a', 'b', 'c', 'd', 'e', 'f'].map(wrap)
         }
       },
-      id: '',
-      key: 'sequence' as const,
-      type: 'Sequence',
-      image: 'sequence',
-      content: 'Enter question',
-      icon: 'sequence-type',
-      active: false,
-      timeLimit: 0,
-      explanation: '',
-      questionMedia: '',
-      questionMediaBlob: null,
-      placeholder:
-        'Enter instruction/question here (e.g. arrange these sentences in alphabetical order)',
-      options: [
-        {
-          shape: 'circle',
-          text: 'Enter 1st word/sentence',
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: 'a',
-          showRemove: false,
-        },
-        {
-          shape: 'triangle',
-          text: 'Enter 2nd word/sentence',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: 'b',
-          showRemove: false,
-        },
-        {
-          shape: 'square',
-          text: 'Enter 3rd word/sentence',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: 'c',
-          showRemove: false,
-        },
-        {
-          shape: 'kite',
-          text: 'Enter 4th word/sentence',
-          shapeSize: 'h-[24px]',
-          isRadio: false,
-          id: '',
-          value: '',
-          answer: 'd',
-          showRemove: false,
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'Sequence',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
+      extras: {
+        label: 'Sequence',
+        image: 'sequence',
+        icon: 'sequence-type'
+      }
     },
     match: {
       template: {
-        question: 'Enter question',
+        question: wrap('Enter question'),
         questionMedia: null,
         timeLimit: 30,
         explanation: '',
@@ -696,590 +309,15 @@ export default class Study extends Common {
             { q: 'Left 2', a: 'Right 2' },
             { q: 'Left 3', a: 'Right 3' },
             { q: 'Left 4', a: 'Right 4' },
-          ]
+          ].map((s) => ({ q: wrap(s.q), a: wrap(s.a) }))
         }
       },
-      id: '',
-      key: 'match' as const,
-      type: 'Match',
-      image: 'match',
-      content: 'Enter question',
-      active: false,
-      icon: 'match-type',
-      timeLimit: 0,
-      questionMedia: '',
-      explanation: '',
-      questionMediaBlob: null,
-      placeholder:
-        'Enter instruction/questions here (e.g. match the vegetables with their colors)',
-      options: [
-        {
-          shape: 'circle',
-          text: 'Enter 1st word/sentence',
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: '',
-          value: 'a',
-          answer: 'a',
-          showRemove: false,
-        },
-        {
-          shape: 'triangle',
-          text: 'Enter 2nd word/sentence',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: '',
-          value: 'b',
-          answer: 'b',
-          showRemove: false,
-        },
-        {
-          shape: 'square',
-          text: 'Enter 3rd word/sentence',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: '',
-          value: 'c',
-          answer: 'c',
-          showRemove: false,
-        },
-        {
-          shape: 'kite',
-          text: 'Enter 4th word/sentence',
-          shapeSize: 'h-[24px]',
-          isRadio: false,
-          id: '',
-          value: 'd',
-          answer: 'd',
-          showRemove: false,
-        },
-      ],
-      match: [
-        {
-          shape: 'circle',
-          text: 'Enter match',
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: '1',
-          answer: '1',
-          showRemove: false,
-        },
-        {
-          shape: 'triangle',
-          text: 'Enter match',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: '2',
-          answer: '2',
-          showRemove: false,
-        },
-        {
-          shape: 'square',
-          text: 'Enter match',
-          shapeSize: 'h-[20px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: '3',
-          answer: '3',
-          showRemove: false,
-        },
-        {
-          shape: 'kite',
-          text: 'Enter match',
-          shapeSize: 'h-[24px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: '4',
-          answer: '4',
-          showRemove: false,
-        },
-      ],
-      settings: [
-        {
-          type: 'question-type',
-          value: 'Match',
-        },
-        {
-          type: 'time-limit',
-          value: '30s',
-        },
-      ],
-    },
-  }
-
-  public getQuestionTemplate = (
-    type:
-      | 'sequence'
-      | 'match'
-      | 'multipleChoice'
-      | 'writeAnswer'
-      | 'trueOrFalse'
-      | 'fillInBlanks'
-      | 'dragAnswers',
-  ) => {
-    return this.questionTypes[type]
-  }
-
-  public questionInfo = {
-    multipleChoice: 'Choose the correct answer',
-    writeAnswer: 'Type in your answer in the given box',
-    trueOrFalse: 'Choose if this statement is true or false',
-    fillInBlanks: 'Type your answers in the boxes given',
-    dragAnswers: 'Answers are given for you to drag and drop in the blank boxes',
-    sequence: 'Drag boxes or use arrows to arrange sequence correctly',
-    match: 'Click a box on the left and then one the right to match',
-  }
-
-  public CovertQuestionToQuizData = (AllQuestions: Question[]) => {
-    const questions = []
-    AllQuestions?.forEach((question) => {
-      const questionData = this.ProcessQuestionData(question)
-
-      let options = {
-        type: 'radio',
-        data: [],
+      extras: {
+        label: 'Match',
+        image: 'match',
+        icon: 'match-type'
       }
-
-      let answer = ''
-
-      const answerOption = questionData.options.filter(
-        (item) => item.answer != '',
-      )
-
-      if (answerOption.length) {
-        answer = answerOption.map((item) => item.value).join('----------')
-      }
-
-      if (questionData.itemType == 'multipleChoice') {
-        options.data.push(
-          {
-            content: [
-              {
-                label: questionData.options[0].value,
-                type: 'text',
-              },
-            ],
-            shape: 'circle',
-          },
-          {
-            content: [
-              {
-                label: questionData.options[1].value,
-                type: 'text',
-              },
-            ],
-            shape: 'triangle',
-          },
-          {
-            content: [
-              {
-                label: questionData.options[2].value,
-                type: 'text',
-              },
-            ],
-            shape: 'square',
-          },
-          {
-            content: [
-              {
-                label: questionData.options[3].value,
-                type: 'text',
-              },
-            ],
-            shape: 'kite',
-          },
-        )
-
-        if (questionData.options[4]) {
-          options.data.push({
-            content: [
-              {
-                label: questionData.options[4].value,
-                type: 'text',
-              },
-            ],
-            shape: 'circle',
-          })
-        }
-
-        if (questionData.options[5]) {
-          options.data.push({
-            content: [
-              {
-                label: questionData.options[5].value,
-                type: 'text',
-              },
-            ],
-            shape: 'triangle',
-          })
-        }
-      }
-
-      if (questionData.itemType == 'writeAnswer') {
-        options.type = 'textField'
-        options.data = [
-          {
-            content: [
-              {
-                label: 'Write your answer here',
-                type: 'text',
-              },
-            ],
-            shape: 'circle',
-          },
-        ]
-      }
-
-      if (questionData.itemType == 'trueOrFalse') {
-        options.type = 'radio'
-        options.data = [
-          {
-            content: [
-              {
-                label: 'True',
-                type: 'text',
-              },
-            ],
-            shape: 'circle',
-          },
-          {
-            content: [
-              {
-                label: 'False',
-                type: 'text',
-              },
-            ],
-            shape: 'triangle',
-          },
-        ]
-      }
-
-      if (questionData.itemType == 'fillInBlanks') {
-        options.type = 'blanks'
-
-        const allAnswers = []
-
-        options.data = [
-          {
-            content: [],
-            shape: '',
-          },
-        ]
-
-        questionData.data.forEach((item) => {
-          if (item.type == 'text') {
-            options.data[0].content.push({
-              label: item.value,
-              type: 'text',
-            })
-          } else if (item.type == 'answer') {
-            options.data[0].content.push({
-              label: 'answer here',
-              value: '',
-              type: 'textField',
-            })
-            allAnswers.push(item.value)
-          }
-        })
-
-        answer = allAnswers.join(', ')
-      }
-
-      if (questionData.itemType == 'dragAnswers') {
-        options.type = 'drag'
-
-        options.data = [
-          {
-            content: [],
-            shape: '',
-          },
-          {
-            content: [],
-          },
-        ]
-
-        const allAnswers = []
-
-        questionData.data.forEach((item) => {
-          if (item.type == 'text') {
-            options.data[0].content.push({
-              label: item.value,
-              type: 'text',
-            })
-          } else if (item.type == 'answer') {
-            options.data[0].content.push({
-              label: 'drop here',
-              value: '',
-              type: 'drop',
-              extraClass: `dragDrop${Logic.Common.makeid(6)}`,
-              id: Logic.Common.makeid(6),
-              content: [],
-            })
-
-            options.data[1].content.push({
-              label: item.value,
-              type: 'answer-box',
-              extraClass: `drag${Logic.Common.makeid(6)}`,
-              id: Logic.Common.makeid(6),
-            })
-
-            allAnswers.push(item.value)
-          }
-        })
-
-        answer = allAnswers.join(', ')
-      }
-
-      if (questionData.itemType == 'sequence') {
-        options.type = 'sequence'
-
-        options.data.push({
-          content: [],
-          shape: '',
-        })
-
-        questionData.options.forEach((option) => {
-          options.data[0].content.push({
-            label: option.value,
-            type: 'text',
-          })
-        })
-      }
-
-      if (questionData.itemType == 'match') {
-        options.type = 'match'
-
-        options.data.push(
-          {
-            content: [],
-            shape: '',
-          },
-          {
-            content: [],
-            shape: '',
-          },
-        )
-
-        questionData.options.forEach((option) => {
-          options.data[0].content.push({
-            label: option.value,
-            type: 'text',
-            shape: option.shape,
-          })
-        })
-
-        questionData.match.forEach((option) => {
-          options.data[1].content.push({
-            label: option.value,
-            type: 'text',
-            shape: option.shape,
-          })
-        })
-
-        if (questionData.match.length) {
-          answer = questionData.match.map((item) => item.value).join(', ')
-        }
-      }
-      questions.push({
-        title: questionData.type,
-        duration: '5',
-        info: this.questionInfo[questionData.itemType],
-        options,
-        answer,
-        question: questionData.content,
-        timeLimit: questionData.timeLimit,
-        currentTime: questionData.timeLimit,
-        id: questionData.id,
-        hover: false,
-        explanation: questionData.explanation,
-      })
-    })
-
-    return questions
-  }
-
-  public ProcessQuestionData = (q: any) => {
-    const availableShapes = ['circle', 'triangle', 'square', 'kite']
-    const question = JSON.parse(JSON.stringify(q))
-
-    const questionData = JSON.parse(
-      JSON.stringify(this.getQuestionTemplate(question.data.type)),
-    )
-
-    questionData.id = question.id
-    questionData.itemType = question.data.type
-    questionData.explanation = question.explanation ? question.explanation : ''
-    questionData.questionMedia = question.questionMedia
-      ? question.questionMedia?.link
-      : ''
-    questionData.timeLimit = question.timeLimit
-    questionData.content = question.question
-    questionData.data ??= []
-
-    questionData.settings.forEach((setting) => {
-      if (setting.type == 'time-limit') {
-        setting.value = Logic.Common.EquivalentsSecondsInString[`${question.timeLimit}`]
-      }
-    })
-
-    if (questionData.options) questionData.options = []
-    if (questionData.match) questionData.match = []
-    if (questionData.data) questionData.data = []
-
-    if (question.data.type == 'multipleChoice') {
-      question.data.options.forEach((option, index) => {
-        questionData.options[index] ??= {
-          shape: availableShapes[index % availableShapes.length],
-          text: 'Enter answer',
-          shapeSize: 'h-[23px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: option,
-          answer: '',
-          showRemove: false,
-        }
-        questionData.options[index].value = option
-        // clear answers
-        questionData.options[index].answer = ''
-      })
-      question.data.answers?.forEach((index) => {
-        if (questionData.options[index]) {
-          questionData.options[index].answer = questionData.options[index].value
-        }
-      })
     }
-
-    if (question.data.type == 'writeAnswer') {
-      question.data.answers?.forEach((item, index) => {
-        questionData.options[index] ??= {
-          shape: availableShapes[index % availableShapes.length],
-          text: `Enter word/sentence ${index + 1}`,
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: item,
-          answer: item,
-          showRemove: false,
-        }
-        questionData.options[index].value = item
-        questionData.options[index].answer = item
-      })
-    }
-
-    if (question.data.type == 'trueOrFalse') {
-      [true, false].forEach((option, index) => {
-        const optionString = option ? 'True' : 'False'
-        questionData.options[index] ??= {
-          shape: availableShapes[index % availableShapes.length],
-          text: optionString,
-          shapeSize: 'h-[23px]',
-          isRadio: true,
-          id: this.makeid(8),
-          value: optionString,
-          answer: option === question.data.answer ? optionString.toLowerCase() : '',
-          showRemove: false,
-        }
-        questionData.options[index].value = optionString
-      })
-    }
-
-    if (question.data.type == 'sequence') {
-      question.data.answers.forEach((item, index) => {
-        questionData.options[index] ??= {
-          shape: availableShapes[index % availableShapes.length],
-          text: `Enter word/sentence ${index + 1}`,
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: item,
-          answer: item,
-          showRemove: false,
-        }
-        questionData.options[index].value = item
-        questionData.options[index].answer = item
-      })
-    }
-
-    if (question.data.type == 'match') {
-      const set = question.data.set ?? question.data.questions?.map((q, i) => ({ q, a: question.data.answers?.[i] ?? '' })) ?? []
-      set.forEach((item, index) => {
-        questionData.options[index] ??= {
-          shape: availableShapes[index % availableShapes.length],
-          text: `Enter word/sentence ${index + 1}`,
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: this.makeid(0),
-          value: item.q,
-          answer: item.q,
-          showRemove: false,
-        }
-
-        questionData.match[index] ??= {
-          shape: availableShapes[index % availableShapes.length],
-          text: "Enter match",
-          shapeSize: 'h-[23px]',
-          isRadio: false,
-          id: this.makeid(8),
-          value: item.a,
-          answer: item.a,
-          showRemove: false,
-        }
-
-        questionData.options[index].value = item.q
-        questionData.options[index].answer = item.q
-
-        questionData.match[index].value = item.a
-        questionData.match[index].answer = item.a
-      })
-    }
-
-    if (
-      question.data.type == 'dragAnswers' ||
-      question.data.type == 'fillInBlanks'
-    ) {
-      const questionContent = question.question
-        ?.trim()
-        .replaceAll(`${question.data.indicator}`, '{}')
-        .split('}')
-
-      const answers = question.data.answers ?? []
-
-      questionContent?.forEach((item) => {
-        if (item.trim()) {
-          const itemStrings = item.split('')
-
-          let textHasAnswer = false
-
-          let finalString = ''
-
-          if (itemStrings[itemStrings.length - 1] == '{') {
-            itemStrings.pop()
-            finalString = itemStrings.join('')
-            textHasAnswer = true
-          } else {
-            finalString = itemStrings.join('')
-          }
-
-          questionData.data.push({
-            content: '',
-            type: 'text',
-            value: finalString,
-          })
-
-          if (textHasAnswer) {
-            questionData.data.push({
-              content: '',
-              type: 'answer',
-              value: answers.shift() ?? '',
-            })
-          }
-        }
-      })
-    }
-
-    return questionData
   }
 
   public GetTagName = (id: string) => {
@@ -1436,7 +474,7 @@ export default class Study extends Common {
     }).catch(() => {})
   }
 
-  public GetQuiz = async (id: string, autoCreate = false) => {
+  public GetQuiz = async (id: string) => {
     if (!id || id == 'nill') return null
     return $api.study.quiz.get(id).then((response) => {
       this.SingleQuiz = response.data
@@ -2047,22 +1085,13 @@ export default class Study extends Common {
     }
   }
 
-  public CreateQuiz = (formIsValid: boolean) => {
-    if (formIsValid && this.CreateQuizForm) {
-      Logic.Common.showLoading()
-      return $api.study.quiz
-        .post(null, this.CreateQuizForm)
-        .then((response) => {
-          this.SingleQuiz = response.data
-          this.GetQuestions(this.SingleQuiz.id)
-          Logic.Common.hideLoading()
-          return response.data
-        })
-        .catch((error) => {
-          Logic.Common.hideLoading()
-          throw error
-        })
-    }
+  public CreateQuiz = (CreateQuizForm: CreateQuizInput) => {
+    return $api.study.quiz
+      .post(null, CreateQuizForm)
+      .then((response) => {
+        this.SingleQuiz = response.data
+        return this.SingleQuiz
+      })
   }
 
   public UpdateQuiz = (formIsValid: boolean, id: string) => {
@@ -2082,44 +1111,6 @@ export default class Study extends Common {
           throw error
         })
     }
-  }
-
-  public SaveQuizChangesToLocal = (
-    quizId: string,
-    questionId: string,
-    UpdateQuestionForm: CreateQuestionInput,
-  ) => {
-    let localQuizData: {
-      quizId: string
-      questionId: string
-      UpdateQuestionForm: CreateQuestionInput
-    }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
-
-    const questionData = localQuizData.filter(
-      (item) => item.quizId == quizId && item.questionId == questionId,
-    )
-
-    if (questionData.length) {
-      // remove old data
-      localQuizData = localQuizData.filter(
-        (item) => !(item.quizId == quizId && item.questionId == questionId),
-      )
-
-      // update and add new data
-      localQuizData.unshift({
-        quizId,
-        questionId,
-        UpdateQuestionForm,
-      })
-    } else {
-      localQuizData.push({
-        quizId,
-        questionId,
-        UpdateQuestionForm,
-      })
-    }
-
-    localStorage.setItem(`quiz_question_update`, JSON.stringify(localQuizData))
   }
 
   public SaveCourseChangesToLocal = (

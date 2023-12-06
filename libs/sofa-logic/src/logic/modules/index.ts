@@ -10,11 +10,12 @@ import Schools from './Schools'
 import Study from './Study'
 import Users from './Users'
 
-import { addToArray, formatNumber } from 'valleyed'
+import * as valleyed from 'valleyed'
 
 const study = new Study()
 
 export const Logic = {
+  ...valleyed,
   Auth: new Auth(),
   Common: new Common(),
   Form: new Form(),
@@ -26,9 +27,6 @@ export const Logic = {
   Study: study,
   Users: new Users(),
   Interactions: new Interactions(),
-
-  addToArray,
-  formatNumber,
 }
 
 export type TransformedQuestion = ReturnType<typeof study['transformQuestion']>
