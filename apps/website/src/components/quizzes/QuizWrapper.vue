@@ -4,12 +4,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useAuth } from '@/composables/auth/auth'
 import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
 import { Logic, Question, QuestionFactory } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
-import { useAuth } from '@/composables/auth/auth'
 
 const props = defineProps({
 	id: {
@@ -48,7 +48,7 @@ const props = defineProps({
 
 const { id } = useAuth()
 const {
-	quiz, questions, fetched, deleteQuiz,
+	quiz, questions, fetched, deleteQuiz, saveQuestion,
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion
 } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
@@ -118,6 +118,11 @@ const submitAnswer = async () => {
 	else await props.submit?.()
 }
 
+const saveCurrentQuestion = async () => {
+	if (!currentQuestion.value || !questionFactory.valid) return
+	await saveQuestion(currentQuestion.value.id, await questionFactory.toModel())
+}
+
 const extras = computed(() => ({
 	get index () {
 		return index.value
@@ -149,7 +154,7 @@ const extras = computed(() => ({
 	questionFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
-	optionState, submitAnswer, moveCurrrentQuestionToEnd,
+	optionState, submitAnswer, moveCurrrentQuestionToEnd, saveCurrentQuestion,
 	next: () => {
 		if (extras.value.canNext) index.value++
 	},

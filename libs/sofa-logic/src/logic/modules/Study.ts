@@ -286,11 +286,9 @@ export default class Study extends Common {
     return this.questionTypes[type]?.image ?? 'multiple_choice'
   }
 
-  public getQuestionTypeTemplate (type: Question['strippedData']['type']) {
-    const newQuestionData = this.questionTypes[type]
-    const form = this.convertQuestionToInput(newQuestionData, type)
-    if (type === "writeAnswer") form.data.options = [form.data.options[0]]
-    return form
+  public getQuestionTypeTemplate (type: Question['strippedData']['type']) :CreateQuestionInput {
+    const newQuestionData = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
+    return newQuestionData.template
   }
 
   public getAllQuestionTypes () {
@@ -302,8 +300,21 @@ export default class Study extends Common {
     }))
   }
 
+  public indicator = '----------'
+
   public questionTypes = {
     multipleChoice: {
+      template: {
+        question: 'Enter question',
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'multipleChoice' as const,
+          options: ['a', 'b', 'c', 'd'],
+          answers: [0,1]
+        }
+      },
       id: '',
       key: 'multipleChoice' as const,
       type: 'Multiple choice',
@@ -370,6 +381,16 @@ export default class Study extends Common {
       ],
     },
     writeAnswer: {
+      template: {
+        question: 'Enter question',
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'writeAnswer' as const,
+          answers: ['a', 'b']
+        }
+      },
       id: '',
       key: 'writeAnswer' as const,
       type: 'Write answer',
@@ -436,6 +457,16 @@ export default class Study extends Common {
       ],
     },
     trueOrFalse: {
+      template: {
+        question: 'Enter question',
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'trueOrFalse' as const,
+          answer: true
+        }
+      },
       id: '',
       key: 'trueOrFalse' as const,
       type: 'True/False',
@@ -482,6 +513,17 @@ export default class Study extends Common {
       ],
     },
     fillInBlanks: {
+      template: {
+        question: `Enter question ${this.indicator} and another ${this.indicator}`,
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'fillInBlanks' as const,
+          indicator: this.indicator,
+          answers: ['a', 'b']
+        }
+      },
       id: '',
       key: 'fillInBlanks' as const,
       type: 'Fill in blank(s)',
@@ -518,6 +560,17 @@ export default class Study extends Common {
       ],
     },
     dragAnswers: {
+      template: {
+        question: `Enter question ${this.indicator} and another ${this.indicator}`,
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'dragAnswers' as const,
+          indicator: this.indicator,
+          answers: ['a', 'b']
+        }
+      },
       id: '',
       key: 'dragAnswers' as const,
       type: 'Drag answers',
@@ -554,6 +607,16 @@ export default class Study extends Common {
       ],
     },
     sequence: {
+      template: {
+        question: 'Enter question',
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'sequence' as const,
+          answers: ['a', 'b', 'c', 'd', 'e', 'f']
+        }
+      },
       id: '',
       key: 'sequence' as const,
       type: 'Sequence',
@@ -621,6 +684,21 @@ export default class Study extends Common {
       ],
     },
     match: {
+      template: {
+        question: 'Enter question',
+        questionMedia: null,
+        timeLimit: 30,
+        explanation: '',
+        data: {
+          type: 'match' as const,
+          answers: [
+            { q: 'Left 1', a: 'Right 1' },
+            { q: 'Left 2', a: 'Right 2' },
+            { q: 'Left 3', a: 'Right 3' },
+            { q: 'Left 4', a: 'Right 4' },
+          ]
+        }
+      },
       id: '',
       key: 'match' as const,
       type: 'Match',
@@ -1359,38 +1437,11 @@ export default class Study extends Common {
   }
 
   public GetQuiz = async (id: string, autoCreate = false) => {
-    if (!id || id == 'nill') {
-      if (autoCreate) {
-        this.CreateQuizForm = {
-          title: 'Untitled Quiz',
-          description: 'Here is the quiz description',
-          tags: [],
-          isForTutors: false,
-          topic: 'Physics',
-        }
-        const data = await this.CreateQuiz(true)
-
-        const defaultQuestions: CreateQuestionInput[] = [
-          Logic.Study.convertQuestionToInput(this.questionTypes['multipleChoice'], 'multipleChoice'),
-          Logic.Study.convertQuestionToInput(this.questionTypes['trueOrFalse'], 'trueOrFalse'),
-        ]
-
-        await Promise.all(defaultQuestions.map(async (formData) => {
-          this.CreateQuestionForm = formData
-          this.CreateQuestionForm.explanation = ''
-          await this.CreateQuestion( data.id, this.CreateQuestionForm)
-        }))
-
-        Logic.Common.hideLoading()
-        await Logic.Common.GoToRoute(`/quiz/create?id=${Logic.Study.SingleQuiz.id}`)
-        return data
-      } else return null
-    } else {
-      return $api.study.quiz.get(id).then((response) => {
-        this.SingleQuiz = response.data
-        return this.SingleQuiz
-      })
-    }
+    if (!id || id == 'nill') return null
+    return $api.study.quiz.get(id).then((response) => {
+      this.SingleQuiz = response.data
+      return this.SingleQuiz
+    })
   }
 
   public GetQuestions = (quizId: string, filters: QueryParams = {}) :Promise<Paginated<Question> | undefined> => {
@@ -2107,44 +2158,6 @@ export default class Study extends Common {
     }
   }
 
-  public saveQuizLocalChanges = (silent = false) => {
-    return new Promise(async (resolve) => {
-      if (localStorage.getItem('quiz_question_update')) {
-        let localQuizData: {
-          quizId: string
-          questionId: string
-          UpdateQuestionForm: CreateQuestionInput
-        }[] = JSON.parse(localStorage.getItem('quiz_question_update') || '[]')
-
-        Logic.Common.showLoading()
-
-        await localQuizData.forEach(async (requestData) => {
-          if (
-            this.AllQuestions.results.filter(
-              (item) => item.id == requestData.UpdateQuestionForm.id,
-            )[0]
-          ) {
-            this.UpdateQuestionForm = requestData.UpdateQuestionForm
-            await this.UpdateQuestion(true, requestData.quizId)
-          }
-        })
-
-        Logic.Common.hideLoading()
-        localStorage.removeItem('quiz_question_update')
-
-        resolve('')
-      }
-      if (!silent) {
-        Logic.Common.showAlert({
-          message: 'All changes have been saved',
-          type: 'success',
-        })
-      }
-
-      resolve('')
-    })
-  }
-
   public PublishQuiz = (id: string) => {
     Logic.Common.showLoading()
     return $api.study.quiz
@@ -2178,19 +2191,13 @@ export default class Study extends Common {
       })
   }
 
-  public UpdateQuestion = (formIsValid: boolean, quizId: string) => {
-    if (formIsValid && this.UpdateQuestionForm) {
-      this.UpdatedQuestion = undefined
-      return $api.study.quiz
-        .updateQuestion(quizId, this.UpdateQuestionForm)
-        .then((response) => {
-          this.UpdatedQuestion = response.data
-          // this.GetQuestions(quizId)
-        })
-        .catch((error) => {
-          Logic.Common.showError(capitalize(error.response.data[0]?.message))
-        })
-    }
+  public UpdateQuestion = (quizId: string, questionId: string, UpdateQuestionForm: CreateQuestionInput) => {
+    return $api.study.quiz
+      .updateQuestion(quizId, questionId, UpdateQuestionForm)
+      .then((response) => {
+        this.UpdatedQuestion = response.data
+        return this.UpdatedQuestion
+      })
   }
 
   public CreateCourse = (formIsValid: boolean) => {

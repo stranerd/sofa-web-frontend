@@ -27,10 +27,10 @@
     </div>
 
     <div v-else class="w-full flex items-start p-3 rounded-custom bg-[#F1F6FA] gap-3">
-        <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline" />
-        <SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full resize-none" :placeholder="factory.questionPlaceholder"
-          :richEditor="true" v-model="factory.question" />
-      </div>
+      <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline" />
+      <SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full resize-none" :placeholder="factory.questionPlaceholder"
+        :richEditor="true" v-model="factory.question" />
+    </div>
 
     <div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
       <SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />

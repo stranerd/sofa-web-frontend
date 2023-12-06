@@ -1,3 +1,5 @@
+import { FileData } from '../domains'
+
 export interface CreateFolderInput {
   title: string
 }
@@ -24,7 +26,7 @@ export interface ReorderQuizInput {
 
 export interface CreateQuestionInput {
   question: string
-  questionMedia?: Blob
+  questionMedia: FileData | null
   timeLimit: number
   data: {
     type:
@@ -44,8 +46,7 @@ export interface CreateQuestionInput {
       a: string
     }[]
   }
-  id?: string
-  explanation?: string
+  explanation: string
 }
 
 export interface CreateCourseInput {

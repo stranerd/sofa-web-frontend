@@ -1,5 +1,5 @@
-import { Differ, v } from 'valleyed'
-import { FileData, Question } from '../../logic'
+import { v } from 'valleyed'
+import { FileData, Logic, Question } from '../../logic'
 import { BaseFactory } from '../base'
 
 type Content = FileData | null
@@ -27,7 +27,6 @@ type Keys = Omit<QuestionToModel, 'data'> & {
 }
 
 export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys> {
-	private data: Question['data']
 	readonly rules = {
 		question: v.string().min(1, true).requiredIf(() => !this.isFillInBlanks && !this.isDragAnswers),
 		questionMedia: v.file().image().nullable(),
@@ -64,7 +63,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		super({
 			question: '', explanation: '', questionMedia: null, timeLimit: 30, type: QuestionTypes.multipleChoice,
 			multipleAnswers: [], multipleOptions: [], trueOrFalseAnswer: true, writeAnswerAnswers: [],
-			sequenceAnswers: [], indicator: '----------', fillInBlanksAnswers: [], dragAnswersAnswers: [],
+			sequenceAnswers: [], indicator: Logic.Study.indicator, fillInBlanksAnswers: [], dragAnswersAnswers: [],
 			matchSet: []
 		})
 	}
@@ -267,62 +266,54 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		else this.multipleAnswers.push(index)
 	}
 
-	hasNoChanges (entity: Question) {
-		if (!entity) return true
-		return Differ.equal(this.question, entity.question)
-			&& Differ.equal(this.questionMedia, entity.questionMedia)
-			&& Differ.equal(this.explanation, entity.explanation)
-			&& Differ.equal(this.timeLimit, entity.timeLimit)
-			&& Differ.equal(this.data, entity.data)
-	}
-
 	loadEntity = (entity: Question) => {
 		this.reset()
-		this.question = entity.question
-		this.questionMedia = entity.questionMedia
-		this.explanation = entity.explanation
-		this.timeLimit = entity.timeLimit
-		this.data = entity.data
-		this.type = entity.data.type
+		this.question = this.defaults.question = entity.question
+		this.questionMedia = this.defaults.questionMedia = entity.questionMedia
+		this.explanation = this.defaults.explanation = entity.explanation
+		this.timeLimit = this.defaults.timeLimit = entity.timeLimit
+		this.type = this.defaults.type = entity.data.type
 		if (this.isMultipleChoice) {
-			this.multipleOptions = entity.data.options
-			this.multipleAnswers = entity.data.answers
+			this.multipleOptions = this.defaults.multipleOptions = entity.data.options
+			this.multipleAnswers = this.defaults.multipleAnswers = entity.data.answers
 		}
-		if (this.isTrueOrFalse) this.trueOrFalseAnswer = entity.data.answer
-		if (this.isWriteAnswer) this.writeAnswerAnswers = entity.data.answers
-		if (this.isSequence) this.sequenceAnswers = entity.data.answers
+		if (this.isTrueOrFalse) this.trueOrFalseAnswer = this.defaults.trueOrFalseAnswer = entity.data.answer
+		if (this.isWriteAnswer) this.writeAnswerAnswers = this.defaults.writeAnswerAnswers = entity.data.answers
+		if (this.isSequence) this.sequenceAnswers = this.defaults.sequenceAnswers = entity.data.answers
 		if (this.isFillInBlanks) {
 			this.set('indicator', entity.data.indicator)
-			this.fillInBlanksAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
+			this.defaults.explanation = entity.data.indicator
+			this.fillInBlanksAnswers = this.defaults.fillInBlanksAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
 		}
 		if (this.isDragAnswers) {
 			this.set('indicator', entity.data.indicator)
-			this.dragAnswersAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
+			this.defaults.explanation = entity.data.indicator
+			this.dragAnswersAnswers = this.defaults.dragAnswersAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
 		}
-		if (this.isMatch) this.matchSet = entity.data.set
+		if (this.isMatch) this.matchSet = this.defaults.matchSet = entity.data.set
 	}
 
-	private getValidData (fillOrDragAnswers: string[]) {
-		const v = this.validValues
+	private get constructedData () {
+		const v = this.values
 		if (this.isMultipleChoice) return { type: QuestionTypes.multipleChoice, options: v.multipleOptions, answers: v.multipleAnswers }
 		if (this.isTrueOrFalse) return { type: QuestionTypes.trueOrFalse, answer: v.trueOrFalseAnswer }
 		if (this.isWriteAnswer) return { type: QuestionTypes.writeAnswer, answers: v.writeAnswerAnswers }
 		if (this.isSequence) return { type: QuestionTypes.sequence, answers: v.sequenceAnswers }
 		if (this.isMatch) return { type: QuestionTypes.match, set: v.matchSet }
-		if (this.isFillInBlanks) return { type: QuestionTypes.fillInBlanks, indicator: v.indicator, answers: fillOrDragAnswers }
-		if (this.isDragAnswers) return { type: QuestionTypes.dragAnswers, indicator: v.indicator, answers: fillOrDragAnswers }
+		if (this.isFillInBlanks) return { type: QuestionTypes.fillInBlanks, indicator: v.indicator, answers: this.deconstructOptions(this.fillInBlanksAnswers, v.indicator).answers }
+		if (this.isDragAnswers) return { type: QuestionTypes.dragAnswers, indicator: v.indicator, answers: this.deconstructOptions(this.dragAnswersAnswers, v.indicator).answers }
 		return {} as never
 	}
 
 	toModel = async () => {
 		if (this.valid) {
 			const { questionMedia, explanation, timeLimit, indicator } = this.validValues
-			const fillInBlanks = this.deconstructOptions(this.fillInBlanksAnswers, indicator)
-			const dragAnswers = this.deconstructOptions(this.dragAnswersAnswers, indicator)
 
-			const question = this.isFillInBlanks ? fillInBlanks.question : this.isDragAnswers ? dragAnswers.question : this.validValues.question
+			const question = this.isFillInBlanks ? this.deconstructOptions(this.fillInBlanksAnswers, indicator).question
+				: this.isDragAnswers ? this.deconstructOptions(this.dragAnswersAnswers, indicator).question
+					: this.validValues.question
 
-			return { question, questionMedia, explanation, timeLimit, data: this.getValidData(this.isFillInBlanks ? fillInBlanks.answers : dragAnswers.answers) }
+			return { question, questionMedia, explanation, timeLimit, data: this.constructedData }
 		} else {
 			throw new Error('Validation errors')
 		}

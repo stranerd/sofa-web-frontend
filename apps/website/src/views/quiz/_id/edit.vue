@@ -28,11 +28,6 @@
               name: 'Exit',
               handler: () => Logic.Common.goBack()
             },
-            {
-              IsOutlined: extras.questionFactory.hasNoChanges(extras.currentQuestionById),
-              name: 'Save',
-              handler: () => Logic.Study.saveQuizLocalChanges(),
-            },
           ],
           badges: [{ text: quiz.status, color: quiz.status === 'published' ? 'green' : 'gray' }],
         }">
@@ -55,6 +50,7 @@
               :question="extras.currentQuestionById"
               :factory="extras.questionFactory"
               :close="() => showMoreOptions = false"
+              @saveQuestion="extras.saveCurrentQuestion()"
               @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
               @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
               @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"
@@ -80,7 +76,7 @@
 
           <div class="w-full flex flex-col bg-white px-4 mdlg:py-4 flex-grow h-full overflow-y-auto"
             :class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
-            <SofaQuestionContent v-if="!showSettingModal" :factory="extras.questionFactory" />
+            <SofaQuestionContent v-if="!showSettingModal && extras.currentQuestionById" :factory="extras.questionFactory" />
             <QuizSettings v-if="showSettingModal" @OnQuizUpdated="handleSettingSaved" :quiz="quiz" :close="() => showSettingModal = false" class="mdlg:hidden" />
           </div>
 
@@ -127,6 +123,7 @@
             :question="extras.currentQuestionById"
             :factory="extras.questionFactory"
             :close="() => showMoreOptions = false"
+            @saveQuestion="extras.saveCurrentQuestion()"
             @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
             @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
             @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"

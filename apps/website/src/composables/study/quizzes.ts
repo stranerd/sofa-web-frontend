@@ -1,4 +1,4 @@
-import { Quiz, Logic, Question, SingleUser, Conditions } from 'sofa-logic'
+import { Quiz, Logic, Question, SingleUser, Conditions, CreateQuestionInput } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
@@ -83,7 +83,6 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.saveQuizLocalChanges(true)
 			await Logic.Study.DeleteQuestion(questionId, id)
 			await store[id].setMessage('Question has been deleted.')
 		} catch (e) {
@@ -96,9 +95,20 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.saveQuizLocalChanges(true)
-			const form = Logic.Study.getQuestionTypeTemplate(type)
-			await Logic.Study.CreateQuestion(id, form)
+			const data = Logic.Study.getQuestionTypeTemplate(type)
+			await Logic.Study.CreateQuestion(id, data)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const saveQuestion = async (questionId: string, data: CreateQuestionInput) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.UpdateQuestion(id, questionId, data)
+			await store[id].setMessage('Question saved')
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -109,9 +119,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.saveQuizLocalChanges(true)
-			const form = Logic.Study.getQuestionTypeTemplate(question.strippedData.type)
-			await Logic.Study.CreateQuestion(id, form)
+			await Logic.Study.CreateQuestion(id, question)
 			await store[id].setMessage('Question duplicated')
 		} catch (e) {
 			await store[id].setError(e)
@@ -171,6 +179,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		deleteQuestion,
 		duplicateQuestion,
 		addQuestion,
+		saveQuestion,
 		deleteQuiz,
 	}
 }
