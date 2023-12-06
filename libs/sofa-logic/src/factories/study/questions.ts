@@ -17,17 +17,19 @@ export enum QuestionTypes {
 
 type QTypes = Question['data']['type'] | QuestionTypes
 
+type FillOrDragOption = { type: 'q' | 'a', value: string }
+
 type Keys = Omit<QuestionToModel, 'data'> & {
 	type: QTypes, multipleOptions: string[], multipleAnswers: number[]
 	trueOrFalseAnswer: boolean, writeAnswerAnswers: string[]
 	sequenceAnswers: string[], matchSet: { q: string, a: string }[]
-	indicator: string, fillInBlanksAnswers: string[], dragAnswersAnswers: string[]
+	indicator: string, fillInBlanksAnswers: FillOrDragOption[], dragAnswersAnswers: FillOrDragOption[]
 }
 
 export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys> {
 	private data: Question['data']
 	readonly rules = {
-		question: v.string().min(1, true),
+		question: v.string().min(1, true).requiredIf(() => !this.isFillInBlanks && !this.isDragAnswers),
 		questionMedia: v.file().image().nullable(),
 		explanation: v.string(),
 		timeLimit: v.number().gt(0).lte(300).round(),
@@ -42,16 +44,14 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		writeAnswerAnswers: v.array(v.string().min(1, true)).min(1).max(6).requiredIf(() => this.isWriteAnswer),
 		sequenceAnswers: v.array(v.string().min(1, true)).min(2).max(6).requiredIf(() => this.isSequence),
 		indicator: v.string().min(1).requiredIf(() => this.isFillInBlanks || this.isDragAnswers),
-		fillInBlanksAnswers: v.array(v.string().min(1, true)).min(1).requiredIf(() => this.isFillInBlanks)
-			.custom((value) => {
-				const length = this.question?.split(this.values.indicator).length ?? 1
-				return v.array(v.any()).has(length - 1).parse(value).valid
-			}),
-		dragAnswersAnswers: v.array(v.string().min(1, true)).min(1).requiredIf(() => this.isDragAnswers)
-			.custom((value) => {
-				const length = this.question?.split(this.values.indicator).length ?? 1
-				return v.array(v.any()).has(length - 1).parse(value).valid
-			}),
+		fillInBlanksAnswers: v.array(v.object({
+			type: v.in(['q', 'a'] as const),
+			value: v.string().min(1, true)
+		})).min(1).requiredIf(() => this.isFillInBlanks),
+		dragAnswersAnswers: v.array(v.object({
+			type: v.in(['q', 'a'] as const),
+			value: v.string().min(1, true)
+		})).min(1).requiredIf(() => this.isDragAnswers),
 		matchSet: v.array(v.object({
 			q: v.string().min(1, true),
 			a: v.string().min(1, true)
@@ -153,7 +153,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		return this.values.fillInBlanksAnswers
 	}
 
-	set fillInBlanksAnswers (value: string[]) {
+	set fillInBlanksAnswers (value: FillOrDragOption[]) {
 		this.set('fillInBlanksAnswers', value)
 	}
 
@@ -161,7 +161,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		return this.values.dragAnswersAnswers
 	}
 
-	set dragAnswersAnswers (value: string[]) {
+	set dragAnswersAnswers (value: FillOrDragOption[]) {
 		this.set('dragAnswersAnswers', value)
 	}
 
@@ -171,10 +171,6 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 
 	set matchSet (value: { q: string, a: string }[]) {
 		this.set('matchSet', value)
-	}
-
-	get isFillOrDrag () {
-		return this.isDragAnswers || this.isFillInBlanks
 	}
 
 	get questionPlaceholder () {
@@ -211,6 +207,28 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		return this.type === QuestionTypes.dragAnswers
 	}
 
+	private buildOptions (question: string, indicator: string, answers: string[]) :FillOrDragOption[] {
+		const questions = question.split(indicator)
+		const leftovers = answers.slice(questions.length).map((a) => ({ value: a, type: 'a' as const }))
+		return questions.map((q, i) => {
+			const res: FillOrDragOption[] = [{ value: q, type: 'q' }]
+			const a = answers.at(i)
+			if (a) res.push({ value: a, type: 'a' })
+			return res
+		}).flat().concat(leftovers)
+	}
+
+	private deconstructOptions (options: FillOrDragOption[], indicator: string,) {
+		return options.reduce((acc, cur) => {
+			if (cur.type === 'q') acc.question = acc.question + cur.value
+			if (cur.type === 'a') {
+				acc.question = acc.question + indicator
+				acc.answers.push(cur.value)
+			}
+			return acc
+		}, { question: '', answers: [] as string[] })
+	}
+
 	get canAddOption () {
 		if (this.isMultipleChoice) return this.multipleOptions.length < 6
 		if (this.isSequence) return this.sequenceAnswers.length < 6
@@ -235,7 +253,6 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 	}
 
 	removeOption (index: number) {
-		console.log(this.type, index)
 		if (this.isMultipleChoice) {
 			this.multipleOptions.splice(index, 1)
 			this.multipleAnswers = this.multipleAnswers.filter((a) => a !== index)
@@ -260,6 +277,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 	}
 
 	loadEntity = (entity: Question) => {
+		this.reset()
 		this.question = entity.question
 		this.questionMedia = entity.questionMedia
 		this.explanation = entity.explanation
@@ -275,31 +293,36 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		if (this.isSequence) this.sequenceAnswers = entity.data.answers
 		if (this.isFillInBlanks) {
 			this.set('indicator', entity.data.indicator)
-			this.fillInBlanksAnswers = entity.data.answers
+			this.fillInBlanksAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
 		}
 		if (this.isDragAnswers) {
 			this.set('indicator', entity.data.indicator)
-			this.dragAnswersAnswers = entity.data.answers
+			this.dragAnswersAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
 		}
 		if (this.isMatch) this.matchSet = entity.data.set
 	}
 
-	private getValidData () {
+	private getValidData (fillOrDragAnswers: string[]) {
 		const v = this.validValues
 		if (this.isMultipleChoice) return { type: QuestionTypes.multipleChoice, options: v.multipleOptions, answers: v.multipleAnswers }
 		if (this.isTrueOrFalse) return { type: QuestionTypes.trueOrFalse, answer: v.trueOrFalseAnswer }
 		if (this.isWriteAnswer) return { type: QuestionTypes.writeAnswer, answers: v.writeAnswerAnswers }
 		if (this.isSequence) return { type: QuestionTypes.sequence, answers: v.sequenceAnswers }
 		if (this.isMatch) return { type: QuestionTypes.match, set: v.matchSet }
-		if (this.isFillInBlanks) return { type: QuestionTypes.fillInBlanks, indicator: v.indicator, answers: v.fillInBlanksAnswers }
-		if (this.isDragAnswers) return { type: QuestionTypes.dragAnswers, indicator: v.indicator, answers: v.dragAnswersAnswers }
+		if (this.isFillInBlanks) return { type: QuestionTypes.fillInBlanks, indicator: v.indicator, answers: fillOrDragAnswers }
+		if (this.isDragAnswers) return { type: QuestionTypes.dragAnswers, indicator: v.indicator, answers: fillOrDragAnswers }
 		return {} as never
 	}
 
 	toModel = async () => {
 		if (this.valid) {
-			const { question, questionMedia, explanation, timeLimit } = this.validValues
-			return { question, questionMedia, explanation, timeLimit, data: this.getValidData() }
+			const { questionMedia, explanation, timeLimit, indicator } = this.validValues
+			const fillInBlanks = this.deconstructOptions(this.fillInBlanksAnswers, indicator)
+			const dragAnswers = this.deconstructOptions(this.dragAnswersAnswers, indicator)
+
+			const question = this.isFillInBlanks ? fillInBlanks.question : this.isDragAnswers ? dragAnswers.question : this.validValues.question
+
+			return { question, questionMedia, explanation, timeLimit, data: this.getValidData(this.isFillInBlanks ? fillInBlanks.answers : dragAnswers.answers) }
 		} else {
 			throw new Error('Validation errors')
 		}

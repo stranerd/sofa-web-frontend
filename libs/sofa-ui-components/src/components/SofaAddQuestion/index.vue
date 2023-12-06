@@ -23,25 +23,23 @@
       </template>
     </Draggable>
 
-    <a class="h-[144px] w-full rounded-xl border-2 border-[#E1E6EB] flex items-center justify-center" @click="emits('addQuestion')">
+    <a class="h-[144px] flex-shrink-0 w-full rounded-xl border-2 border-[#E1E6EB] flex items-center justify-center" @click="emits('addQuestion')">
       <SofaIcon name="add-item" class="h-[30px]" />
     </a>
   </div>
 
   <!-- Smaller screens bottom bar -->
-  <div class="w-full flex mdlg:!hidden items-center py-3 gap-2 px-4 border-t justify-between bg-white border-[#F1F6FA]">
-    <Draggable class="flex flex-nowrap overflow-x-auto scrollbar-none gap-2 items-center whitespace-nowrap" :list="reactiveQuestions"
+  <div class="w-full overflow-x-auto scrollbar-hide flex mdlg:!hidden items-center py-3 gap-2 px-4 border-t justify-between bg-white border-[#F1F6FA]">
+    <Draggable class="w-full flex flex-nowrap gap-2 items-center whitespace-nowrap" :list="reactiveQuestions"
       group="question-list-mobile" item-key="id" direction="horizontal" :disabled="true">
       <template #item="{ element, index }">
-        <a class="w-[48px] h-[48px] rounded-custom items-center justify-center flex" :class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGrayVaraint'" @click="selectQuestion(element)">
+        <a class="w-[48px] h-[48px] flex-shrink-0 rounded-custom items-center justify-center flex" :class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGrayVaraint'" @click="selectQuestion(element)">
           <SofaNormalText :color="selectedQuestionId === element.id ? 'text-white' : 'text-bodyBlack'" :content="`${index + 1}`" />
         </a>
       </template>
     </Draggable>
 
-    <a class="w-[55px] flex flex-col justify-end" @click="emits('addQuestion')">
-      <SofaIcon class="h-[44px]" name="faded-plus" />
-    </a>
+    <SofaIcon class="h-[44px] cursor-pointer flex-shrink-0" name="faded-plus" @click="emits('addQuestion')" />
   </div>
 </template>
 
