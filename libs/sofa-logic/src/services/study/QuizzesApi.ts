@@ -145,4 +145,49 @@ export default class QuizzesApi extends ModelApiService {
       }
     }
   }
+
+  public async requestAccess (quizId, add: boolean) {
+    try {
+      const response: AxiosResponse<boolean> = await this.axiosInstance.post(
+        this.getUrl(quizId) + `/access/request`,
+        { add }
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
+  public async grantAccess (quizId, userId: string, grant: boolean) {
+    try {
+      const response: AxiosResponse<boolean> = await this.axiosInstance.post(
+        this.getUrl(quizId) + `/access/grant`,
+        { userId, grant }
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
+
+  public async manageMembers (quizId, userIds: string[], grant: boolean) {
+    try {
+      const response: AxiosResponse<boolean> = await this.axiosInstance.post(
+        this.getUrl(quizId) + `/access/members/manage`,
+        { userIds, grant }
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
 }

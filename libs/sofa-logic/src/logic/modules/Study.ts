@@ -1139,7 +1139,7 @@ export default class Study extends Common {
     }
   }
 
-  public PublishQuiz = (id: string) => {
+  public async PublishQuiz (id: string) {
     return $api.study.quiz
       .publishQuiz(id)
       .then((response) => {
@@ -1373,33 +1373,18 @@ export default class Study extends Common {
   }
 
   public DeleteQuiz = (id: string) => {
-    Logic.Common.showLoading()
     return $api.study.quiz
       .delete(id)
       .then((response) => {
-        Logic.Common.hideLoading()
-        Logic.Common.goBack()
-      })
-      .catch((error) => {
-        Logic.Common.hideLoading()
-        Logic.Common.showError(capitalize(error.response.data[0]?.message))
+        return response.data
       })
   }
 
   public DeleteQuestion = (id: string, quizId: string) => {
-    Logic.Common.showLoading()
     return $api.study.quiz
       .deleteQuestion(quizId, id)
       .then((response) => {
-        Logic.Common.hideLoading()
-        Logic.Study.GetQuestions(quizId).then(() => {
-          this.quizQuestionDeleted = Math.random() * 100000
-        })
         return response.data
-      })
-      .catch((error) => {
-        Logic.Common.hideLoading()
-        throw error
       })
   }
 
@@ -1426,5 +1411,23 @@ export default class Study extends Common {
         //
         Logic.Common.hideLoading()
       })
+  }
+
+  public async requestAccess (id: string, add: boolean) {
+    return $api.study.quiz
+      .requestAccess(id, add)
+      .then((res) => res.data)
+  }
+
+  public async grantAccess (id: string, userId: string, grant: boolean) {
+    return $api.study.quiz
+      .grantAccess(id, userId, grant)
+      .then((res) => res.data)
+  }
+
+  public async manageMembers (id: string, userIds: string[], grant: boolean) {
+    return $api.study.quiz
+      .manageMembers(id, userIds, grant)
+      .then((res) => res.data)
   }
 }
