@@ -10,6 +10,13 @@
               isIcon: true,
               data: [
                 {
+                  name: 'Share',
+                  icon: 'share-option',
+                  handler: () => showShareModal = true,
+                  size: 'h-[20px]',
+                  hide: !extras.isMine,
+                },
+                {
                   name: 'Preview',
                   icon: 'preview',
                   handler: () => Logic.Common.GoToRoute(`/quiz/${quiz.id}/preview`),
@@ -20,6 +27,7 @@
                   icon: 'cog',
                   handler: () => showSettingModal = true,
                   size: 'h-[20px]',
+                  hide: !extras.isMine,
                 },
               ],
             },
@@ -68,10 +76,9 @@
             <SofaNormalText class="!font-bold !text-sm" :content="showSettingModal ? 'Update quiz' : Logic.Study.getQuestionTypeLabel(extras.currentQuestionById?.type) ?? ''" />
 
             <div class="flex items-center gap-3" :class="{ 'invisible': showSettingModal }">
+              <SofaIcon class="h-[18px]" name="share-option" @click="showShareModal = true" />
               <SofaIcon class="h-[18px]" name="cog" @click="showSettingModal = true" />
-
               <SofaIcon class="h-[14px]" name="preview" @click="() => Logic.Common.GoToRoute(`/quiz/${quiz.id}/preview`)" />
-
               <SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
             </div>
           </div>
@@ -101,14 +108,23 @@
         </template>
       </dashboard-layout>
 
+      <RequestAccessModal :quiz="quiz" v-else-if="quiz"
+        @requestAccess="extras.requestAccess"
+      />
+
       <div v-else class="w-full flex flex-col items-center justify-center p-4">
         <div class="mdlg:w-[60%] w-full h-full flex flex-col">
           <SofaEmptyState title="Quiz not found"
-            subTitle="It is either this quiz doesn't exist or you don't have access to this quiz. Check out other materials in the marketplace"
+            subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
             actionLabel="Go to marketplace" :action="() => Logic.Common.GoToRoute('/marketplace')" titleStyle="mdlg:!text-xl"
           />
         </div>
       </div>
+
+      <ManageAccessModal v-if="showShareModal"
+        :quiz="quiz"
+        @close="showShareModal = false"
+      />
 
       <!-- Larger screen setings modal -->
       <SofaModal v-if="showSettingModal" :close="() => showSettingModal = false" customClass="hidden mdlg:!flex" :canClose="false">
@@ -220,6 +236,8 @@ import {
 import { Logic } from "sofa-logic"
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import QuizSettings from "@/components/quizzes/Settings.vue"
+import RequestAccessModal from "@/components/quizzes/RequestAccessModal.vue"
+import ManageAccessModal from "@/components/quizzes/ManageAccessModal.vue"
 
 export default defineComponent({
   components: {
@@ -234,8 +252,13 @@ export default defineComponent({
     SofaAddQuestion,
     SofaQuestionContent,
     SofaHeaderText,
+    RequestAccessModal,
+    ManageAccessModal,
   },
   name: "QuizIdEdit",
+  middlewares: {
+    goBackRoute: "/library",
+  },
   setup () {
     useMeta({
       title: "Edit Quiz",
@@ -251,6 +274,8 @@ export default defineComponent({
 
     const showMoreOptions = ref(false)
 
+    const showShareModal = ref(false)
+
     const handleSettingSaved = (status: boolean) => {
       if (status) showSettingModal.value = false
     }
@@ -264,6 +289,7 @@ export default defineComponent({
       showDeleteQuiz,
       showDeleteQuestion,
       showAddQuestionModal,
+      showShareModal,
       showMoreOptions,
       showSettingModal,
       interactingQuestionId,

@@ -60,18 +60,14 @@
       </SofaButton>
 
       <div class="mdlg:w-auto w-full flex gap-3 items-center">
-        <div class="mdlg:!w-auto w-full flex flex-col">
-          <SofaButton :disabled="!factory.valid" padding="px-5 mdlg:py-2 py-3" customClass="mdlg:!w-auto w-full"
-            @click.prevent="emits('updateQuiz')">
-            Save
-          </SofaButton>
-        </div>
-        <div class="mdlg:!w-auto w-full flex flex-col">
-          <SofaButton :disabled="!factory.valid" padding="px-5 mdlg:py-2 py-3" customClass="mdlg:!w-auto w-full"
-            v-if="quiz.status !== 'published'" @click.prevent="emits('publishQuiz')">
-            Publish
-          </SofaButton>
-        </div>
+        <SofaButton :disabled="!factory.valid" padding="px-5 mdlg:py-2 py-3" class="mdlg:!w-auto w-full" customClass="w-full"
+          @click.prevent="emits('updateQuiz')">
+          Save
+        </SofaButton>
+        <SofaButton :disabled="!factory.valid" padding="px-5 mdlg:py-2 py-3" class="mdlg:!w-auto w-full" customClass="w-full"
+          v-if="quiz.status !== 'published'" @click.prevent="emits('publishQuiz')">
+          Publish
+        </SofaButton>
       </div>
     </div>
   </sofa-form-wrapper>

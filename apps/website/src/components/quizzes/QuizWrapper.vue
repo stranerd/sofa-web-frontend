@@ -49,10 +49,10 @@ const props = defineProps({
 const { id } = useAuth()
 const {
 	quiz, questions, fetched, deleteQuiz, saveQuestion, updateQuiz: update, publishQuiz,
-	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion
+	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, requestAccess
 } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
-const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
+const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions ?? []).map(Logic.Study.transformQuestion))
 
 const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
@@ -161,7 +161,7 @@ const extras = computed(() => ({
 	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
 	optionState, submitAnswer, moveCurrrentQuestionToEnd, saveCurrentQuestion,
-	updateQuiz, publishQuiz,
+	updateQuiz, publishQuiz, requestAccess,
 	next: () => {
 		if (extras.value.canNext) index.value++
 	},
@@ -174,6 +174,7 @@ const extras = computed(() => ({
 		reorderedQuestions.value = null
 		index.value = 0
 	},
+	isMine: quiz.value?.user.id === id.value,
 	canEdit: quiz.value.access.members?.concat(quiz.value.user.id).includes(id.value),
 }))
 

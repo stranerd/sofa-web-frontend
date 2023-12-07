@@ -1,5 +1,5 @@
 import { Quiz, Logic, Question, SingleUser, Conditions, CreateQuestionInput, CreateQuizInput } from 'sofa-logic'
-import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 import { useRouter } from 'vue-router'
@@ -7,8 +7,8 @@ import { useAuth } from '../auth/auth'
 
 const store = {} as Record<string, {
 	quiz: Ref<Quiz | null>
-	members: Ref<SingleUser[]>
-	questions: Ref<Question[]>
+	members: SingleUser[]
+	questions: Question[]
 	fetched: Ref<boolean>
 	listener: ReturnType<typeof useListener>
 	membersListener: ReturnType<typeof useListener>
@@ -17,8 +17,8 @@ const store = {} as Record<string, {
 export const useQuiz = (id: string, skip: { questions: boolean, members: boolean }) => {
 	store[id] ??= {
 		quiz: ref(null),
-		members: ref([]),
-		questions: ref([]),
+		members: reactive([]),
+		questions: reactive([]),
 		fetched: ref(false),
 		listener: useListener(async () => await Logic.Common.listenToOne<Quiz>(`study/quizzes/${id}`, {
 			created: async (entity) => {
@@ -35,13 +35,14 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 			const members = [...store[id].quiz.value?.access.members ?? [], ...store[id].quiz.value?.access.requests ?? []]
 			return await Logic.Common.listenToMany<SingleUser>('users/users', {
 				created: async (entity) => {
-					Logic.addToArray(store[id].members.value, entity, (e) => e.id, (e) => e.id)
+					Logic.addToArray(store[id].members, entity, (e) => e.id, (e) => e.id)
 				},
 				updated: async (entity) => {
-					Logic.addToArray(store[id].members.value, entity, (e) => e.id, (e) => e.id)
+					Logic.addToArray(store[id].members, entity, (e) => e.id, (e) => e.id)
 				},
 				deleted: async (entity) => {
-					store[id].members.value = store[id].members.value.filter((u) => u.id !== entity.id)
+					const index = store[id].members.findIndex((u) => u.id === entity.id)
+					if (index !== -1 ) store[id].members.splice(index, 1)
 				}
 			},  (e) => members.includes(e.id))
 		}),
@@ -181,6 +182,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		try {
 			await store[id].setLoading(true)
 			await Logic.Study.requestAccess(id, add)
+			await store[id].setMessage('Request sent')
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -209,24 +211,24 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const members = computed(() => store[id].members.value.filter((m) => store[id].quiz.value?.access.members.includes(m.id)))
-	const requests = computed(() => store[id].members.value.filter((m) => store[id].quiz.value?.access.requests.includes(m.id)))
+	const members = computed(() => store[id].members.filter((m) => store[id].quiz.value?.access.members.includes(m.id)))
+	const requests = computed(() => store[id].members.filter((m) => store[id].quiz.value?.access.requests.includes(m.id)))
 
 	watch(store[id].quiz, async () => {
 		if (!store[id].quiz.value) return
-		const hasUnfetchedQuestions = store[id].quiz.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
+		const hasUnfetchedQuestions = store[id].quiz.value.questions.some((qId) => !store[id].questions.find((q) => q.id === qId))
 		if (!skip.questions && hasUnfetchedQuestions) Logic.Study.GetQuestions(id, { all: true })
 			.then((res) => {
-				store[id].questions.value = res?.results ?? []
+				store[id].questions.splice(0, store[id].questions.length, ...(res?.results ?? []))
 			}).catch()
 		const members = [...store[id].quiz.value.access.members, ...store[id].quiz.value.access.requests]
-		const hasUnfetchedMembers = members.some((id) => !store[id].members.value.find((u) => u.id === id))
+		const hasUnfetchedMembers = members.some((mId) => !store[id].members.find((u) => u.id === mId))
 		if (!skip.members && hasUnfetchedMembers)  Logic.Users.GetUsers({
 				where: [{ field: 'id', value: members, condition: Conditions.in }],
 				all: true
 			}, false).then(async (users) => {
 				users.forEach((u) => {
-					Logic.addToArray(store[id].members.value, u, (e) => e.id, (e) => e.id)
+					Logic.addToArray(store[id].members, u, (e) => e.id, (e) => e.id)
 				})
 				await store[id].membersListener.restart()
 			}).catch()
