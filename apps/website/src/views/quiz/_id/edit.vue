@@ -1,6 +1,6 @@
 <template>
-  <QuizWrapper :id="($route.params.id as string)">
-    <template v-slot="{ quiz, extras }">
+  <QuizWrapper :id="($route.params.id as string)" :skipMembers="false">
+    <template v-slot="{ quiz, extras, members }">
       <dashboard-layout v-if="extras.canEdit" :hide="{ bottom: true, top: true }" bgColor="mdlg:bg-backgroundGray bg-white"
         :topbarOptions="{
           type: 'subpage',
@@ -123,6 +123,9 @@
 
       <ManageAccessModal v-if="showShareModal"
         :quiz="quiz"
+        :users="members"
+        @grantAccess="extras.grantAccess"
+        @manageMembers="extras.manageMembers"
         @close="showShareModal = false"
       />
 

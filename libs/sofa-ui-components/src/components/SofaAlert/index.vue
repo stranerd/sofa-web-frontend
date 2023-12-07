@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-full flex sofa-alert p-4 items-end justify-end z-[100]">
+  <div class="fixed w-full flex sofa-alert p-4 items-end justify-end z-[1002]">
     <div
       class="md:!min-w-[300px] md:!w-auto w-full flex items-center md:p-4 p-3 rounded-custom justify-between border-2 gap-3"
       :class="{

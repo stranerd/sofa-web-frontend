@@ -26,7 +26,7 @@
       <SofaButton @click="factory.dragAnswersAnswers.push({ type: 'a', value: '' })">Add answer</SofaButton>
     </div>
 
-    <div v-else class="w-full flex items-start p-3 rounded-custom bg-[#F1F6FA] gap-3">
+    <div v-else class="w-full flex items-start p-4 rounded-custom bg-[#F1F6FA] gap-3">
       <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline" />
       <SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full resize-none" :placeholder="factory.questionPlaceholder"
         :richEditor="true" v-model="factory.question" />
@@ -138,7 +138,7 @@
     </a>
 
     <div class="w-full flex flex-col border-t border-[#F1F6FA] pt-4">
-      <div class="w-full flex items-start p-3 rounded-custom bg-[#F1F6FA] gap-3">
+      <div class="w-full flex items-start p-4 rounded-custom bg-[#F1F6FA] gap-3">
         <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline" />
         <SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full !p-0 resize-none" placeholder="Explanation"
           :richEditor="true" v-model="factory.explanation" />

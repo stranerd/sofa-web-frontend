@@ -331,29 +331,7 @@ const shareMaterialLink = async (
   title: string,
 ) => {
   const baseUrl = window.location.origin
-
-  const finalLink = `${baseUrl}${link}`
-  // for web
-  const shareData = {
-    title: `${capitalize(type)} on SOFA`,
-    text: `View ${title} on SOFA`,
-    url: finalLink,
-  }
-
-  try {
-    await navigator.share(shareData)
-    Logic.Common.showAlert({
-      message: 'Link shared.',
-      type: 'success',
-    })
-  } catch (err) {
-    Logic.Common.copytext(finalLink)
-    // show alert
-    Logic.Common.showAlert({
-      message: 'Link copied to your clipboard!',
-      type: 'success',
-    })
-  }
+  Logic.Common.share(`${capitalize(type)} on SOFA`, `View ${title} on SOFA`, `${baseUrl}${link}`)
 }
 
 const moreOptions = reactive([

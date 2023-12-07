@@ -640,8 +640,21 @@ export default class Common {
   }
 
   tabIsActive = (tab: string) => {
-      if (tab === "/" && this.route.path === "/") return true
-      else if (tab !== "/" && this.route.path.startsWith(tab)) return true
-      return false
+    if (tab === "/" && this.route.path === "/") return true
+    else if (tab !== "/" && this.route.path.startsWith(tab)) return true
+    return false
+  }
+
+  public async share (title: string, text: string, url = window.location.href)  {
+    try {
+      await navigator.share({ title, text, url })
+    } catch (err) {
+      this.copy(url, 'Link copied to your clipboard!')
     }
+  }
+
+  public async copy (text: string, message = 'Copied!', type: LoaderSetup['alerts'][number]['type'] = 'success') {
+    this.copytext(text)
+    this.showAlert({ message, type })
+  }
 }

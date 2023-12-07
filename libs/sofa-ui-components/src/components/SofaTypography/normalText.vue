@@ -1,8 +1,8 @@
 <template>
-	<span v-if="content" :class="cls" v-html="content" />
-	<span v-else :class="cls">
+	<component :is="as" v-if="content" :class="cls" v-html="content" />
+	<component :is="as" v-else :class="cls">
 		<slot />
-	</span>
+	</component>
 </template>
 
 <script lang="ts">
@@ -29,6 +29,10 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
+		as: {
+			type: String,
+			default: "span"
+		}
 	},
 	name: "RoofNormalText",
 	setup (props) {

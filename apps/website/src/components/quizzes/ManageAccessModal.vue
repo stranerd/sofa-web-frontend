@@ -1,58 +1,108 @@
 <template>
 	<SofaModal :close="() => emits('close')" :canClose="false">
 		<div
-			class="md:w-[70%] mdlg:w-[50%] mdlg:h-full h-auto w-full flex flex-col items-center rounded-t-2xl md:rounded-2xl bg-white gap-2 p-4 md:p-8 text-bodyBlack">
+			class="md:w-[70%] mdlg:w-[50%] mdlg:h-full overflow-y-auto h-auto w-full flex flex-col rounded-t-2xl md:rounded-2xl bg-white gap-6 p-4 md:p-8 text-bodyBlack">
 			<div class="w-full flex items-center gap-4 justify-between text-deepGray">
 				<SofaHeaderText size="xl" class="!font-bold" content="Invite" />
-				<SofaIcon name="close-white" class="rounded-full h-[16px] fill-current" @click="emits('close')" />
+				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer" @click="emits('close')" />
 			</div>
 
-			<SofaIcon v-if="hasRequested" name="checkmark-circle" class="rounded-full h-[40px]" />
-			<SofaHeaderText size="xl" class="!font-bold text-deepGray"
-				:content="hasRequested ? 'Request sent' : 'Request editing access'" />
-			<SofaNormalText color="text-inherit"
-				:content="hasRequested ? 'You will get notified when the quiz owner responds' : 'You do not have access to collaborate on this quiz'" />
+			<div class="flex gap-4 items-center">
+				<SofaTextField customClass="rounded-custom !bg-lightGrayVaraint"
+					padding="p-4" name="Emails" placeholder="Email, comma seperated"
+					borderColor="border-transparent" v-model="searchValue" />
+				<SofaButton
+					customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+					textColor="text-white" @click="addUsers">
+					Add
+				</SofaButton>
+			</div>
 
-			<div class="w-full flex mt-2 items-center justify-center gap-4">
-				<SofaButton v-if="hasRequested" class="!w-full md:!w-auto"
-					customClass="w-full md:font-semibold whitespace-nowrap" padding="py-3 md:px-6" bgColor="bg-primaryBlue"
-					textColor="text-white" @click="Logic.Common.goBack">
-					Done
-				</SofaButton>
-				<SofaButton v-if="!hasRequested" class="!w-full md:!w-auto mr-auto"
-					customClass="w-full md:font-semibold whitespace-nowrap" padding="py-3 md:px-6"
-					bgColor="bg-white border border-gray-100" textColor="text-grayColor" @click="Logic.Common.goBack">
-					Cancel
-				</SofaButton>
-				<SofaButton v-if="!hasRequested" class="!w-full md:!w-auto ml-auto"
-					customClass="w-full md:font-semibold whitespace-nowrap" padding="py-3 md:px-6" bgColor="bg-primaryBlue"
-					textColor="text-white" @click="emits('requestAccess', true)">
-					Request
-				</SofaButton>
+			<template v-if="requests.length">
+				<div class="bg-darkLightGray h-[1px] w-full" />
+
+				<div class="w-full flex flex-col gap-2">
+					<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
+						<SofaAvatar bgColor="!bg-[#78828C]" :photoUrl="request.bio.photo?.link ?? ''" size="28">
+							<SofaIcon class="h-[16px]" name="user" />
+						</SofaAvatar>
+						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`" class="truncate flex-grow" />
+						<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="emits('grantAccess', request.id, false)" />
+						<div class="h-full bg-darkLightGray w-[1px]" />
+						<SofaNormalText as="a" color="text-primaryGreen" content="Approve" @click="emits('grantAccess', request.id, true)" />
+					</div>
+				</div>
+			</template>
+
+			<div class="bg-darkLightGray h-[1px] w-full" />
+
+			<div class="w-full flex flex-col gap-2">
+				<div v-for="member in [quiz.user, ...members]" :key="member.id" class="flex gap-2 items-center w-full">
+					<SofaAvatar bgColor="!bg-[#78828C]" :photoUrl="member.bio.photo?.link ?? ''" size="28">
+						<SofaIcon class="h-[16px]" name="user" />
+					</SofaAvatar>
+					<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
+					<template v-if="member.id !== quiz.user.id">
+						<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="emits('manageMembers', [member.id], false)" />
+						<div class="h-full bg-darkLightGray w-[1px]" />
+					</template>
+					<SofaNormalText color="text-inherit" :content="member.id === quiz.user.id ? 'Owner' : 'Editor'" />
+				</div>
+			</div>
+
+			<div class="bg-darkLightGray h-[1px] w-full" />
+
+			<div class="flex gap-4 justify-between items-center">
+				<a class="text-primaryBlue flex items-center gap-1" @click="share">
+					<SofaIcon class="h-[16px] stroke-current" name="share" />
+					<SofaNormalText color="text-inherit" content="Share" />
+				</a>
+				<a class="text-primaryBlue flex items-center gap-1" @click="copy">
+					<SofaIcon class="h-[16px] stroke-current" name="copy" />
+					<SofaNormalText color="text-inherit" content="Copy" />
+				</a>
 			</div>
 		</div>
 	</SofaModal>
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { Logic, Quiz } from 'sofa-logic'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { useSearchUsers } from '@/composables/users/users'
+import { Conditions, Logic, Quiz, SingleUser } from 'sofa-logic'
+import { SofaHeaderText, SofaIcon, SofaModal, SofaAvatar, SofaNormalText, SofaTextField, SofaButton } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
 		type: Object as PropType<Quiz>,
 		required: true
+	},
+	users: {
+		type: Array as PropType<SingleUser[]>,
+		required: true
 	}
 })
 
 const emits = defineEmits<{
-	requestAccess: [add: boolean]
+	grantAccess: [userId: string, grant: boolean]
+	manageMembers: [userIds: string[], grant: boolean]
 	close: []
 }>()
 
-const { id } = useAuth()
+const { searchUsers, searchValue } = useSearchUsers()
 
-const hasRequested = computed(() => props.quiz.access.requests.includes(id.value))
+const addUsers = async () => {
+	const emails = searchValue.value.toLowerCase().split(',').map((e) => e.trim())
+	const users = await searchUsers({
+		where: [{ field: 'bio.email', condition: Conditions.in, value: emails }],
+		all: true
+	})
+	if (users.length) emits('manageMembers', users.map((u) => u.id), true)
+}
+
+const members = computed(() => props.users.filter((u) => props.quiz.access.members.includes(u.id)))
+const requests = computed(() => props.users.filter((u) => props.quiz.access.requests.includes(u.id)))
+
+const share = async () => await Logic.Common.share('Join game on SOFA', `Join and play a game on`)
+const copy = () => Logic.Common.copy(window.location.href)
 </script>

@@ -1,5 +1,5 @@
 import { Quiz, Logic, Question, SingleUser, Conditions, CreateQuestionInput, CreateQuizInput } from 'sofa-logic'
-import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 import { useRouter } from 'vue-router'
@@ -211,9 +211,6 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const members = computed(() => store[id].members.filter((m) => store[id].quiz.value?.access.members.includes(m.id)))
-	const requests = computed(() => store[id].members.filter((m) => store[id].quiz.value?.access.requests.includes(m.id)))
-
 	watch(store[id].quiz, async () => {
 		if (!store[id].quiz.value) return
 		const hasUnfetchedQuestions = store[id].quiz.value.questions.some((qId) => !store[id].questions.find((q) => q.id === qId))
@@ -244,7 +241,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	})
 
 	return {
-		...store[id], members, requests,
+		...store[id],
 		reorderQuestions, deleteQuestion, duplicateQuestion,
 		addQuestion,saveQuestion,
 		updateQuiz, publishQuiz, deleteQuiz,

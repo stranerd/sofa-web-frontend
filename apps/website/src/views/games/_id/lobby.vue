@@ -115,22 +115,8 @@ export default defineComponent({
 			title: "Lobby",
 		})
 
-		const share = async (quiz: IQuiz) => {
-			try {
-				await navigator.share({
-					title: 'Join game on SOFA',
-					text: `Join and play a game on ${quiz.title}`,
-					url: window.location.href,
-				})
-				Logic.Common.showAlert({ message: 'Game link shared.', type: 'success' })
-			} catch (err) {
-				copy()
-			}
-		}
-		const copy = () => {
-			Logic.Common.copytext(window.location.href)
-			Logic.Common.showAlert({ message: 'Game link copied!', type: 'success' })
-		}
+		const share = async (quiz: IQuiz) => await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)
+		const copy = () => Logic.Common.copy(window.location.href)
 
 		return { share, copy, Logic }
 	}

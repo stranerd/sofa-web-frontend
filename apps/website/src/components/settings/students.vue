@@ -279,13 +279,10 @@ export default defineComponent({
     }
 
     const copyJoinLink = async () => {
-      Logic.Common.copytext(
-        window.location.origin + "/profile/" + Logic.Auth.AuthUser.id
+      Logic.Common.copy(
+        window.location.origin + "/profile/" + Logic.Auth.AuthUser.id,
+        "Join link copied!"
       )
-      Logic.Common.showAlert({
-        message: "Join link copied!",
-        type: "success",
-      })
     }
 
     const showAddStudents = () => {
