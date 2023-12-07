@@ -96,4 +96,19 @@ export default class UsersApi extends ReadOnlyApiService {
       }
     }
   }
+
+  public async updateUserEditingQuizzes(data: SingleUser['account']['editing']['quizzes']) {
+    try {
+      const response: AxiosResponse<SingleUser> = await this.axiosInstance.post(
+        this.getUrl() + '/editing/quizzes',
+        { quizzes: data },
+      )
+
+      return response
+    } catch (err) {
+      this.handleErrors(err)
+      if (err.response) {
+      }
+    }
+  }
 }

@@ -45,7 +45,7 @@
 
 <script lang="ts" setup>
 import { Logic, Question, Quiz, TransformedQuestion } from "sofa-logic"
-import { computed, defineEmits, defineProps, PropType, reactive, toRef, watch } from "vue"
+import { computed, defineEmits, defineProps, PropType, reactive, ref, toRef, watch } from "vue"
 import Draggable from "vuedraggable"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
@@ -76,6 +76,7 @@ const selectedQuestionId = computed({
 
 const questionsRef = toRef(props, 'questions')
 const reactiveQuestions = reactive([...questionsRef.value])
+const canEmit = ref(false)
 
 const selectQuestion = (question: Question) => {
   selectedQuestionId.value = question.id
@@ -83,9 +84,11 @@ const selectQuestion = (question: Question) => {
 
 watch(questionsRef, () => {
   reactiveQuestions.splice(0, reactiveQuestions.length, ...questionsRef.value)
+  canEmit.value = true
 })
 
 watch(reactiveQuestions, () => {
-  emits('reorderQuestions', reactiveQuestions.map((q) => q.id))
+  const ids = reactiveQuestions.map((q) => q.id)
+  if (canEmit.value && !Logic.Differ.equal(props.quiz.questions, ids)) emits('reorderQuestions', reactiveQuestions.map((q) => q.id))
 })
 </script>

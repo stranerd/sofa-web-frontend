@@ -1,5 +1,5 @@
 <template>
-  <QuizWrapper :id="($route.params.id as string)" :skipMembers="false">
+  <QuizWrapper :id="($route.params.id as string)" :selectedQuestion="($route.query.q as string)" :skipMembers="false">
     <template v-slot="{ quiz, extras, members }">
       <dashboard-layout v-if="extras.canEdit" :hide="{ bottom: true, top: true }" bgColor="mdlg:bg-backgroundGray bg-white"
         :topbarOptions="{

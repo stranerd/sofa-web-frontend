@@ -65,6 +65,9 @@ export interface SingleUser {
       avg: number
     }
     organizationsIn: string[]
+    editing: {
+		  quizzes: { id: string, questionId: string } | null
+	  }
   }
   type?: {
     type: string

@@ -33,6 +33,9 @@ import {
   sendReportMaterial,
   showSaveToFolder,
 } from "./composables/library"
+import { useRoute } from 'vue-router'
+import { useAuth } from './composables/auth/auth'
+import { watch } from 'vue'
 
 useMeta({
   title: "Home",
@@ -40,4 +43,14 @@ useMeta({
 })
 
 const loaderSetup = Logic.Common.loaderSetup
+
+const route = useRoute()
+const { user } = useAuth()
+
+watch([route, user], async () => {
+  const path = route.fullPath
+  const quizzes = user.value?.account.editing?.quizzes
+  if (!quizzes) return
+  if (!path.startsWith(`/quiz/${quizzes.id}/edit`)) Logic.Users.updateUserEditingQuizzes(null).catch()
+})
 </script>

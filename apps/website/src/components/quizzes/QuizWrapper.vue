@@ -10,11 +10,17 @@ import { useQuiz } from '@/composables/study/quizzes'
 import { Logic, Question, QuestionFactory, QuizFactory } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
 	id: {
 		type: String,
 		required: true
+	},
+	selectedQuestion: {
+		type: String,
+		required: false,
+		default: ''
 	},
 	questions: {
 		type: Array as PropType<Question[]>,
@@ -46,6 +52,7 @@ const props = defineProps({
 	}
 })
 
+const router = useRouter()
 const { id } = useAuth()
 const {
 	quiz, questions, fetched, deleteQuiz, saveQuestion, updateQuiz: update, publishQuiz,
@@ -59,7 +66,7 @@ const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
 const { time: runTime, countdown: runCountdown } = useCountdown()
 const index = ref(0)
-const selectedQuestionId = ref('')
+const selectedQuestionId = ref(props.selectedQuestion)
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
 const currentQuestionById = computed(() => quizQuestions.value.find((q) => q.id === selectedQuestionId.value))
@@ -176,8 +183,14 @@ const extras = computed(() => ({
 		index.value = 0
 	},
 	isMine: quiz.value?.user.id === id.value,
-	canEdit: quiz.value.access.members?.concat(quiz.value.user.id).includes(id.value),
+	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(id.value),
 }))
+
+const updateEditing = async () => {
+	const v = selectedQuestionId.value
+	router.push(`/quiz/${props.id}/edit?q=${v}`).catch()
+	if (extras.value.canEdit) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
+}
 
 watch(quiz, async () => {
 	const q = quiz.value
@@ -193,6 +206,10 @@ watch(quiz, async () => {
 watch([currentQuestionById, quizQuestions], () => {
 	const question = currentQuestionById.value
 	if (question) questionFactory.loadEntity(question)
-	else if (quizQuestions.value.length > 0) selectedQuestionId.value = quizQuestions.value[0].id
+	else if (quizQuestions.value.length > 0) extras.value.selectedQuestionId = quizQuestions.value[0].id
 })
+
+watch(selectedQuestionId, updateEditing)
+
+updateEditing()
 </script>

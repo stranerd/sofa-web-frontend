@@ -415,4 +415,10 @@ export default class Users extends Common {
         Logic.Common.hideLoading()
       })
   }
+
+  public async updateUserEditingQuizzes (data: SingleUser['account']['editing']['quizzes']) {
+    return $api.users.users
+      .updateUserEditingQuizzes(data)
+      .then((response) => response.data)
+  }
 }
