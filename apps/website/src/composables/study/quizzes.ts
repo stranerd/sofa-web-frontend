@@ -51,7 +51,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 
 	const router = useRouter()
 
-	const fetchGame = async () => {
+	const fetchQuiz = async () => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
@@ -170,6 +170,39 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setLoading(false)
 	}
 
+	const requestAccess = async (add: boolean) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.requestAccess(id, add)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const grantAccess = async (userId: string, grant: boolean) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.grantAccess(id, userId, grant)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
+	const manageMembers = async (userIds: string[], grant: boolean) => {
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.manageMembers(id, userIds, grant)
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+	}
+
 	const members = computed(() => store[id].members.value.filter((m) => store[id].quiz.value?.access.members.includes(m.id)))
 	const requests = computed(() => store[id].members.value.filter((m) => store[id].quiz.value?.access.requests.includes(m.id)))
 
@@ -194,7 +227,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	})
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchGame()
+		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchQuiz()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {
@@ -203,17 +236,11 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	})
 
 	return {
-		...store[id],
-		members,
-		requests,
-		reorderQuestions,
-		deleteQuestion,
-		duplicateQuestion,
-		addQuestion,
-		saveQuestion,
-		updateQuiz,
-		publishQuiz,
-		deleteQuiz,
+		...store[id], members, requests,
+		reorderQuestions, deleteQuestion, duplicateQuestion,
+		addQuestion,saveQuestion,
+		updateQuiz, publishQuiz, deleteQuiz,
+		requestAccess, grantAccess, manageMembers
 	}
 }
 
