@@ -1,17 +1,17 @@
 <template>
-  <sofa-form-wrapper :parentRefs="{}" ref="formComp" class="w-full h-full flex flex-col gap-4 text-grayColor">
+  <sofa-form-wrapper :parentRefs="{}" class="w-full h-full flex flex-col gap-4 text-grayColor !placeholder:text-grayColor">
     <div class="flex flex-col flex-grow overflow-y-auto gap-4">
       <div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
         <div class="col-span-1 w-full flex flex-col gap-3">
-          <SofaTextField custom-class="rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor" padding="md:!p-4 p-3" type="text" name="Title"
+          <SofaTextField custom-class="rounded-custom !bg-lightGrayVaraint" padding="md:!p-4 p-3" type="text" name="Title"
             v-model="factory.title" placeholder="Title" borderColor="border-transparent" :error="factory.errors.title"  />
 
-          <SofaTextarea :hasTitle="false"
-            :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          <SofaTextarea :hasTitle="false" :rows="4"
+            textAreaStyle="rounded-custom !bg-lightGrayVaraint md:p-4 p-3 resize-none"
             placeholder="Description" v-model="factory.description" :error="factory.errors.description" />
 
-          <SofaSelect custom-class="rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor"
-            :padding="'md:p-4 p-3'" name="Topic" placeholder="Topic"
+          <SofaSelect customClass="rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor"
+            padding="md:p-4 p-3" name="Topic" placeholder="Topic"
             :autoComplete="true" borderColor="border-transparent" :error="factory.errors.topic"
             :options="topics.map((t) => ({ key: t.title, value: t.title }))" :canUseCustom="true" v-model="factory.topic" />
         </div>
@@ -33,23 +33,15 @@
       </div>
 
       <div class="w-full flex flex-col gap-2">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:!py-4 md:!px-4 px-3 py-4'" :name="'Tags'" ref="tags"
-          :placeholder="'Tags (Comma separated for multiple)'" :borderColor="'border-transparent'"
-          v-model="quizSettingsForm.tagString" />
-        <div class="w-full flex flex-row flex-wrap items-center">
-          <template v-for="(item, index) in quizSettingsForm.tags" :key="index">
-            <div class="py-2 pr-2" v-if="item != 'Not set'">
-              <div class="py-2 px-3 border-2 flex flex-row items-center gap-2 rounded-custom border-[#E1E6EB]">
-                <sofa-normal-text :color="'text-[#78828C]'">
-                  {{ item }}
-                </sofa-normal-text>
-                <sofa-icon @click="
-                  quizSettingsForm.tags = quizSettingsForm.tags.filter(
-                    (tag) => item != tag
-                  )
-                  " :name="'circle-close'" :customClass="'h-[17px] cursor-pointer'"></sofa-icon>
-              </div>
+        <SofaTextField customClass="rounded-custom !bg-lightGrayVaraint"
+          padding="md:p-4 p-3" name="Tags"
+          placeholder="Tags (Comma separated for multiple)" borderColor="border-transparent"
+          v-model="factory.tagString" />
+        <div class="w-full flex flex-wrap gap-2 items-center">
+          <template v-for="(item, index) in factory.tags" :key="index">
+            <div class="p-2 border-2 flex items-center gap-2 rounded-custom border-[#E1E6EB]">
+              <SofaNormalText color="text-[#78828C]" :content="item" />
+              <SofaIcon @click="factory.removeTag(index)" name="circle-close" class="h-[17px] cursor-pointer" />
             </div>
           </template>
         </div>
@@ -87,16 +79,8 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
-import {
-  allGenericTags,
-  getGenericTags,
-} from "@/composables/course"
-import { useTopicsList } from '@/composables/interactions/tags'
-import {
-  quizSettingSaved,
-  quizSettingsForm,
-} from "@/composables/quiz"
-import { Logic, Quiz, QuizFactory } from "sofa-logic"
+import { useGenericTagsList, useTopicsList } from '@/composables/interactions/tags'
+import { Quiz, QuizFactory } from "sofa-logic"
 import {
   SofaButton,
   SofaCheckbox,
@@ -109,7 +93,7 @@ import {
   SofaTextField,
   SofaTextarea,
 } from "sofa-ui-components"
-import { PropType, defineEmits, defineProps, onMounted, ref, watch } from "vue"
+import { PropType, defineEmits, defineProps, ref, watch } from "vue"
 
 const props = defineProps({
   quiz: {
@@ -126,79 +110,35 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(["OnQuizUpdated", "updateQuiz", "publishQuiz"])
+const emits = defineEmits(["updateQuiz", "publishQuiz"])
 
 const { isAdmin } = useAuth()
 const quizImageUrl = ref(props.quiz.photo?.link ?? '')
 
 const { topics } = useTopicsList()
+const { tags } = useGenericTagsList()
 
-watch(topics, () => {
-  console.log(topics.value)
-  console.log(props.factory.topicId, props.factory.topic)
-  if (!topics.value.length) return
+const loadTopic = () => {
+  if (!topics.length) return
   if (props.factory.topicId && !props.factory.topic) {
-    const topic = topics.value.find((t) => t.id === props.factory.topicId)
-    console.log(topic)
+    const topic = topics.find((t) => t.id === props.factory.topicId)
     if (topic) props.factory.topic = topic.title
-  }
-})
-
-const formComp = ref<any>()
-
-const defaultTags = ref([])
-
-const preventUpdate = ref(true)
-
-
-watch(quizSettingSaved, () => {
-  if (!preventUpdate.value) {
-    emits("OnQuizUpdated", quizSettingSaved)
-  }
-})
-
-const setDefaultValues = () => {
-  if (props.quiz) {
-    const quiz = props.quiz
-    quizSettingsForm.title = quiz.title
-    quizSettingsForm.description = quiz.description
-    quizSettingsForm.isForTutors = quiz.isForTutors
-    quizSettingsForm.tags = quiz.tagIds.map((id) =>
-      Logic.Study.GetTagName(id)
-    )
-    defaultTags.value = quiz.tagIds.map((id) => Logic.Study.GetTagName(id))
-    quizSettingsForm.topic = Logic.Study.GetTagName(quiz.topicId)
-    quizImageUrl.value = quiz.photo?.link || ""
-    setTimeout(() => {
-      formComp.value.fieldsToValidate?.tags.emptyValue()
-      quizSettingsForm.tagString = ""
-    }, 300)
-  } else {
-    quizSettingsForm.title = ""
-    quizSettingsForm.description = ""
-    quizSettingsForm.isForTutors = false
-    quizSettingsForm.tags = []
-    quizSettingsForm.topic = ""
-    quizImageUrl.value = ""
-
-    setTimeout(() => {
-      formComp.value.fieldsToValidate?.Visibility.emptyValue()
-      formComp.value.fieldsToValidate?.title.emptyValue()
-      formComp.value.fieldsToValidate?.topic.emptyValue()
-      formComp.value.fieldsToValidate?.description.emptyValue()
-    }, 500)
   }
 }
 
-watch(allGenericTags, () => {
-  setDefaultValues()
-})
+const loadTags = () => {
+  if (!tags.length) return
+  if (props.factory.tagIds.length && !props.factory.tags.length) {
+    const myTags = tags.filter((t) => props.factory.tagIds.includes(t.id))
+    props.factory.tags = props.factory.tagIds
+      .map((t) => myTags.find((mt) => t === mt.id)?.title)
+      .filter(Boolean)
+  }
+}
 
-onMounted(() => {
-  getGenericTags()
-  setDefaultValues()
-  setTimeout(() => {
-    preventUpdate.value = false
-  }, 3000)
-})
+watch(topics, loadTopic)
+watch(tags, loadTags)
+
+loadTopic()
+loadTags()
 </script>

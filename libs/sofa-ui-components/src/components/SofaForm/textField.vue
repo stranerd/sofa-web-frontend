@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { FormRule, Logic } from "sofa-logic"
-import { defineComponent, onMounted, ref, toRef, watch } from "vue"
+import { computed, defineComponent, onMounted, ref, toRef, watch } from "vue"
 import SofaIcon from "../SofaIcon"
 import SofaNormalText from "../SofaTypography/normalText.vue"
 
@@ -46,7 +46,7 @@ export default defineComponent({
   props: {
     padding: {
       type: String,
-      default: "py-3 px-3",
+      default: "p-3",
     },
     placeholder: {
       type: String,
@@ -102,13 +102,17 @@ export default defineComponent({
   },
   name: "SofaTextField",
   emits: ["update:modelValue", "onEnter"],
-  setup (props: any, context: any) {
-    const content = ref("")
+  setup (props, context) {
+    const content = computed({
+      get: () => props.modelValue,
+      set: (value) => {
+        context.emit("update:modelValue", value)
+      }
+    })
 
     const fieldType = ref("text")
 
     watch(content, () => {
-      context.emit("update:modelValue", content.value)
       setTimeout(() => {
         checkValidation()
       }, 500)
@@ -121,17 +125,9 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      if (props.modelValue) {
-        content.value = props.modelValue
-      }
+      if (props.defaultValue)  content.value = props.defaultValue
+      if (props.type) fieldType.value = props.type
 
-      if (props.defaultValue) {
-        content.value = props.defaultValue
-      }
-
-      if (props.type) {
-        fieldType.value = props.type
-      }
       if (props.isFormatted) {
         content.value = Logic.Common.convertToMoney(
           content.value ? content.value.toString().replace(/,/g, "") : 0,

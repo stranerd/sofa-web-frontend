@@ -35,6 +35,7 @@
           <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
             <SofaAddQuestion
               v-model:questionId="extras.selectedQuestionId"
+              :quiz="quiz"
               :questions="extras.sortedQuestions"
               @addQuestion="showAddQuestionModal = true"
               @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
@@ -47,6 +48,7 @@
         <template v-slot:right-session>
           <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto justify-between">
             <SofaQuestionOptions v-if="extras.currentQuestionById"
+              :quiz="quiz"
               :question="extras.currentQuestionById"
               :factory="extras.questionFactory"
               :close="() => showMoreOptions = false"
@@ -89,6 +91,7 @@
           <!-- Add question for smaller screens -->
           <SofaAddQuestion v-if="!Logic.Common.isLarge && !showSettingModal"
             v-model:questionId="extras.selectedQuestionId"
+            :quiz="quiz"
             :questions="extras.sortedQuestions"
             @addQuestion="showAddQuestionModal = true"
             @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
@@ -132,6 +135,7 @@
           </div>
 
           <SofaQuestionOptions v-if="extras.currentQuestionById"
+            :quiz="quiz"
             :question="extras.currentQuestionById"
             :factory="extras.questionFactory"
             :close="() => showMoreOptions = false"

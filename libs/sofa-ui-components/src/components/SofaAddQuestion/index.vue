@@ -14,7 +14,7 @@
               <a @click.stop="emits('duplicateQuestion', element)" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
                 <SofaIcon name="duplicate-quiz" class="h-[24px]" />
               </a>
-              <a @click.stop="emits('deleteQuestion', element.id)" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
+              <a v-if="quiz.status !== 'published'" @click.stop="emits('deleteQuestion', element.id)" class="w-[40px] h-[40px] bg-[#E1E6EB80] rounded-lg flex items-center justify-center">
                 <SofaIcon name="delete-quiz" class="h-[24px]" />
               </a>
             </div>
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, Question, TransformedQuestion } from "sofa-logic"
+import { Logic, Question, Quiz, TransformedQuestion } from "sofa-logic"
 import { computed, defineEmits, defineProps, PropType, reactive, toRef, watch } from "vue"
 import Draggable from "vuedraggable"
 import SofaIcon from "../SofaIcon"
@@ -59,6 +59,10 @@ const props = defineProps({
     type: Array as PropType<TransformedQuestion[]>,
     required: true
   },
+  quiz: {
+    type: Object as PropType<Quiz>,
+    required: true
+  }
 })
 
 const emits = defineEmits(['update:questionId', 'addQuestion', 'duplicateQuestion', 'deleteQuestion', 'reorderQuestions'])

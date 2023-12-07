@@ -1094,23 +1094,13 @@ export default class Study extends Common {
       })
   }
 
-  public UpdateQuiz = (formIsValid: boolean, id: string) => {
-    if (formIsValid && this.UpdateQuizForm) {
-      Logic.Common.showLoading()
-      return $api.study.quiz
-        .put(null, id, this.UpdateQuizForm)
-        .then((response) => {
-          this.SingleQuiz = response.data
-          this.GetQuestions(this.SingleQuiz.id)
-          Logic.Common.hideLoading()
-          return response.data
-        })
-        .catch((error) => {
-          Logic.Common.hideLoading()
-          Logic.Common.showError(capitalize(error.response.data[0]?.message))
-          throw error
-        })
-    }
+  public UpdateQuiz = (id: string, UpdateQuizForm: CreateQuizInput) => {
+    return $api.study.quiz
+      .put(null, id, UpdateQuizForm)
+      .then((response) => {
+        this.SingleQuiz = response.data
+        return response.data
+      })
   }
 
   public SaveCourseChangesToLocal = (
@@ -1150,17 +1140,11 @@ export default class Study extends Common {
   }
 
   public PublishQuiz = (id: string) => {
-    Logic.Common.showLoading()
     return $api.study.quiz
       .publishQuiz(id)
       .then((response) => {
         this.SingleQuiz = response.data
-        Logic.Common.hideLoading()
         return response.data
-      })
-      .catch(() => {
-        //
-        Logic.Common.hideLoading()
       })
   }
 

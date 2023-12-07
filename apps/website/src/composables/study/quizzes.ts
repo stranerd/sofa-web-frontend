@@ -1,4 +1,4 @@
-import { Quiz, Logic, Question, SingleUser, Conditions, CreateQuestionInput } from 'sofa-logic'
+import { Quiz, Logic, Question, SingleUser, Conditions, CreateQuestionInput, CreateQuizInput } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
@@ -61,6 +61,37 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 			await store[id].setError(e)
 		}
 		await store[id].setLoading(false)
+	}
+
+	const updateQuiz = async (data: CreateQuizInput) => {
+		let succeeded = false
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.UpdateQuiz(id, data)
+			await store[id].setMessage('Quiz saved')
+			succeeded = true
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+		return succeeded
+	}
+
+	const publishQuiz = async () => {
+		if (store[id].quiz.value?.status === 'published') return true
+		let succeeded = false
+		await store[id].setError('')
+		try {
+			await store[id].setLoading(true)
+			await Logic.Study.PublishQuiz(id)
+			await store[id].setMessage('Quiz published')
+			succeeded = true
+		} catch (e) {
+			await store[id].setError(e)
+		}
+		await store[id].setLoading(false)
+		return succeeded
 	}
 
 	const reorderQuestions = async (questions: string[]) => {
@@ -180,6 +211,8 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		duplicateQuestion,
 		addQuestion,
 		saveQuestion,
+		updateQuiz,
+		publishQuiz,
 		deleteQuiz,
 	}
 }

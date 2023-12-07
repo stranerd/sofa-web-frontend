@@ -47,11 +47,11 @@
         <SofaIcon name="copy" class="h-[16px]" />
         <SofaNormalText content="Duplicate question" />
       </a>
-      <a class="w-full flex md:hidden items-center justify-start gap-3" @click="emits('deleteQuestion', question.id)">
+      <a v-if="quiz.status !== 'published'" class="w-full flex md:hidden items-center justify-start gap-3" @click="emits('deleteQuestion', question.id)">
         <SofaIcon name="trash" class="h-[16px]" />
         <SofaNormalText color="text-primaryRed" content="Delete question" />
       </a>
-      <a class="w-full flex items-center justify-start gap-3" @click="emits('deleteQuiz')">
+      <a v-if="quiz.status !== 'published'" class="w-full flex items-center justify-start gap-3" @click="emits('deleteQuiz')">
         <SofaIcon name="trash" class="h-[16px]" />
         <SofaNormalText color="text-primaryRed" content="Delete quiz" />
       </a>
@@ -60,12 +60,16 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, QuestionFactory, TransformedQuestion } from "sofa-logic"
+import { Logic, Quiz, QuestionFactory, TransformedQuestion } from "sofa-logic"
 import { PropType, defineProps, ref } from "vue"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
 
 defineProps({
+  quiz: {
+    type: Object as PropType<Quiz>,
+    required: true
+  },
   question: {
     type: Object as PropType<TransformedQuestion>,
     required: true

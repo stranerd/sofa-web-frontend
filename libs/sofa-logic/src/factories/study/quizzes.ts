@@ -1,11 +1,13 @@
 import { v } from 'valleyed'
-import { FileData, CreateQuizInput, Quiz } from '../../logic'
+import { CreateQuizInput, Quiz } from '../../logic'
 import { BaseFactory } from '../base'
+import { ref } from 'vue'
 
 
 export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizInput> {
 	public topicId: string = ''
 	public tagIds: string[] = []
+	#tagString = ref('')
 
 	readonly rules = {
 		title: v.string().min(1),
@@ -80,6 +82,26 @@ export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizIn
 
 	set tags (value: string[]) {
 		this.set('tags', value)
+	}
+
+	get tagString () {
+		return this.#tagString.value
+	}
+
+	set tagString (value: string) {
+		const sep = ','
+		if (!value.includes(sep)) this.#tagString.value = value
+		else {
+			const tags = value.trim().toLowerCase()
+				.split(sep)
+				.filter((t) => !!t && !this.tags.includes(t))
+			this.tags = this.tags.concat(...tags)
+			this.#tagString.value = ''
+		}
+	}
+
+	removeTag (index: number) {
+		this.tags = this.tags.filter((_, i) => i !== index)
 	}
 
 	loadEntity = (entity: Quiz) => {

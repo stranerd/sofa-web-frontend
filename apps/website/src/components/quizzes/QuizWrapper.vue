@@ -48,7 +48,7 @@ const props = defineProps({
 
 const { id } = useAuth()
 const {
-	quiz, questions, fetched, deleteQuiz, saveQuestion,
+	quiz, questions, fetched, deleteQuiz, saveQuestion, updateQuiz: update, publishQuiz,
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion
 } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
@@ -125,13 +125,8 @@ const saveCurrentQuestion = async () => {
 }
 
 const updateQuiz = async () => {
-	console.log('update quiz')
-	return true
-}
-
-const publishQuiz = async () => {
-	console.log('publish quiz')
-	return true
+	if (!quizFactory.valid) return
+	return await update(await quizFactory.toModel())
 }
 
 const extras = computed(() => ({
