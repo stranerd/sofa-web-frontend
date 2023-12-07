@@ -10,6 +10,7 @@ module.exports = {
         primaryGreen: "#4BAF7D",
         primaryRed: "#E1324B",
         primaryPurplePink: "#AF19C8",
+        primaryYellow: "#FFAF4B",
         primaryPink: "#FF4BC8",
         bodyBlack: "#413C46",
         ligthGray: "#F1F6FB",
@@ -20,7 +21,10 @@ module.exports = {
         lightBorderColor: "#E1E6EB",
         skyBlue: "#E6F5FF",
         lightGrayVaraint: "#F1F6FA",
-        hoverBlue: "#7DC8FA"
+        hoverBlue: "#7DC8FA",
+        darkBody: "#050F19",
+        darkLightGray: "#E1E6EB",
+        lightBlue: "#E2F3FD",
       },
       boxShadow: {
         custom: "0px 4px 4px rgba(8, 0, 24, 0.05)",

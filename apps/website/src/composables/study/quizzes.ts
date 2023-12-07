@@ -195,6 +195,8 @@ export const useCreateQuiz = () => {
 			const quiz = await Logic.Study.CreateQuiz({
 				title: 'Untitled Quiz',
 				description: 'Here is the quiz description',
+				photo: null,
+				courseId: null,
 				tags: [],
 				isForTutors: false,
 				topic: 'Physics',

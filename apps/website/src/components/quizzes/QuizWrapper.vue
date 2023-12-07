@@ -7,7 +7,7 @@
 import { useAuth } from '@/composables/auth/auth'
 import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
-import { Logic, Question, QuestionFactory } from 'sofa-logic'
+import { Logic, Question, QuestionFactory, QuizFactory } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 
@@ -68,6 +68,7 @@ const answer = computed({
 		answers[currentQuestion.value?.id] = val
 	}
 })
+const quizFactory = new QuizFactory()
 const questionFactory = new QuestionFactory()
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
@@ -123,6 +124,16 @@ const saveCurrentQuestion = async () => {
 	await saveQuestion(currentQuestion.value.id, await questionFactory.toModel())
 }
 
+const updateQuiz = async () => {
+	console.log('update quiz')
+	return true
+}
+
+const publishQuiz = async () => {
+	console.log('publish quiz')
+	return true
+}
+
 const extras = computed(() => ({
 	get index () {
 		return index.value
@@ -151,10 +162,11 @@ const extras = computed(() => ({
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestion.value,
-	questionFactory,
+	questionFactory, quizFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
 	optionState, submitAnswer, moveCurrrentQuestionToEnd, saveCurrentQuestion,
+	updateQuiz, publishQuiz,
 	next: () => {
 		if (extras.value.canNext) index.value++
 	},
@@ -171,6 +183,9 @@ const extras = computed(() => ({
 }))
 
 watch(quiz, async () => {
+	const q = quiz.value
+	if (!q) return
+	quizFactory.loadEntity(q)
 	if (!started.value) startCountdown({ time: 3 })
 		.then(() => {
 			started.value = true

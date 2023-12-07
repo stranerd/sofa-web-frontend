@@ -1,6 +1,6 @@
 <template>
-  <div class="flex w-full flex-col gap-2 content">
-    <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
+  <div class="flex w-full flex-col content">
+    <sofa-normal-text v-if="hasTitle" customClass="!pb-4 font-bold">
       <slot name="title" />
     </sofa-normal-text>
     <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :disabled="disabled"
@@ -27,8 +27,12 @@
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
       :class="`w-full p-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
+    <div v-if="error" class="w-full flex pt-1 justify-start">
+      <SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
+    </div>
   </div>
 </template>
+
 <script lang="ts">
 import 'mathlive'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
@@ -83,6 +87,10 @@ export default defineComponent({
       required: false,
       default: false,
     },
+    error: {
+      type: String,
+      default: ''
+    }
   },
   name: "SofaTextarea",
   emits: ["update:modelValue"],

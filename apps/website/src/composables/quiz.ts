@@ -31,6 +31,7 @@ export const createQuiz = (formComp: any) => {
     isForTutors: quizSettingsForm.isForTutors,
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
+    courseId: null,
   })
     ?.then((data) => {
       if (data) {
@@ -56,6 +57,7 @@ export const updateQuiz = (formComp: any) => {
     topic: quizSettingsForm.topic,
     photo: quizSettingsForm.photo,
     isForTutors: quizSettingsForm.isForTutors,
+    courseId: null,
   }
 
   const formState: boolean = formComp.validate()

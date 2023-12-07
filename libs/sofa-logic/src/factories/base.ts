@@ -62,7 +62,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 
 		this.values[property] = check.value as any
 		this.validValues[property] = check.valid || ignoreRules ? check.value as any : this.defaults[property]
-		this.errors[property] = Differ.equal(this.defaults[property], value) ? '' : check.errors.at(0) ?? ''
+		this.errors[property] = /* Differ.equal(this.defaults[property], value) ? '' : */ check.errors.at(0) ?? ''
 
 		return check.valid
 	}

@@ -14,10 +14,11 @@ export interface SaveItemToFolderInput {
 export interface CreateQuizInput {
   title: string
   description: string
-  photo?: Blob
+  photo: FileData | null
   isForTutors: boolean
   topic: string
   tags: string[]
+  courseId: string | null
 }
 
 export interface ReorderQuizInput {

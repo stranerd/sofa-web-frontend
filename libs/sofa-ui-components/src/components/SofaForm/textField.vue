@@ -1,43 +1,37 @@
 <template>
   <div class="flex w-full flex-col relative">
-    <sofa-normal-text v-if="hasTitle" customClass="!pb-2 !font-bold">
+    <SofaNormalText v-if="hasTitle" class="!pb-2 !font-bold">
       <slot name="title" />
-    </sofa-normal-text>
-    <div :class="`w-full flex flex-row items-center ${disabled ? 'opacity-50' : ''
-      }`" :tabindex="tabIndex" @focus="isFocused = true" @blur="isFocused = false">
+    </SofaNormalText>
+    <div class="w-full flex items-center group" :class="{ 'opacity-50': disabled }" :tabindex="tabIndex">
       <slot name="outer-prefix" />
-      <div :class="`flew-grow w-full gap-1 flex-row flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs  ${borderColor}   ${padding} ${customClass}  bg-transparent rounded-[8px] ${isFocused ? '!border-primaryBlue ' : ''
-        } ${validationStatus == false ? '!border-red-500 !border' : ''}`">
+      <div class="flew-grow w-full gap-1 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
+        :class="{ '!border-red-500 !border': validationStatus == false || error, [`${borderColor} ${padding} ${customClass}`]: true }">
         <span>
           <slot name="inner-prefix" />
         </span>
-        <input v-model="content" :placeholder="placeholder" @focus="isFocused = true" @blur="
-          isFocused = false
-        checkValidation();
-        " @keypress="isNumber" :disabled="disabled" :type="fieldType" @keyup="detectKey"
-          :class="` text-bodyDark flex-grow bg-transparent text-darkBody placeholder-grayColor focus input w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs `" />
+        <input v-model="content" :placeholder="placeholder" @blur="checkValidation()" @keypress="isNumber" :disabled="disabled" :type="fieldType" @keyup="detectKey"
+          class="flex-grow bg-transparent text-darkBody placeholder-grayColor input w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
         <slot name="inner-suffix" />
-        <span class="flex flex-row gap-2 items-center">
-          <sofa-icon :name="`${fieldType == 'password' ? 'show' : 'hide'}`" :customClass="`${fieldType == 'password'
-            ? 'md:!h-[18px] h-[14px]'
-            : 'md:!h-[13px] h-[10px]'
-            }`" v-if="type == 'password'" @click.stop="
-    fieldType == 'password'
-      ? (fieldType = 'text')
-      : (fieldType = 'password')
-    " />
-          <sofa-icon v-if="!validationStatus" :name="'error-state'" :customClass="'md:!h-[18px] h-[15px]'" />
+        <span class="flex gap-2 items-center">
+          <SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'" :customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'" v-if="type == 'password'"
+            @click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
+          <SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
         </span>
       </div>
       <slot name="outer-suffix" />
     </div>
-    <div v-if="!validationStatus" class="w-full flex flex-row pt-1 justify-start">
+    <div v-if="!validationStatus" class="w-full flex pt-1 justify-start">
       <sofa-normal-text :customClass="' text-left !font-normal '" :color="`text-primaryRed`">
         {{ Logic.Common.capitalizeFirstLetter(errorMessage) }}
       </sofa-normal-text>
     </div>
+    <div v-if="error" class="w-full flex pt-1 justify-start">
+      <SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
+    </div>
   </div>
 </template>
+
 <script lang="ts">
 import { FormRule, Logic } from "sofa-logic"
 import { defineComponent, onMounted, ref, toRef, watch } from "vue"
@@ -101,6 +95,10 @@ export default defineComponent({
       type: String,
       default: "border-darkLightGray",
     },
+    error: {
+      type: String,
+      default: ''
+    }
   },
   name: "SofaTextField",
   emits: ["update:modelValue", "onEnter"],

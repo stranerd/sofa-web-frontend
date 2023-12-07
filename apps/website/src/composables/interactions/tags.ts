@@ -25,6 +25,7 @@ const store = {
 
 export const useTopicsList = () => {
 	const fetchTopics = async () => {
+		if (store.loading.value) return
 		try {
 			await store.setError('')
 			await store.setLoading(true)

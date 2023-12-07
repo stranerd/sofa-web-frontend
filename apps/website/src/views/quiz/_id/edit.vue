@@ -77,7 +77,13 @@
           <div class="w-full flex flex-col bg-white px-4 mdlg:py-4 flex-grow h-full overflow-y-auto"
             :class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
             <SofaQuestionContent v-if="!showSettingModal && extras.currentQuestionById" :factory="extras.questionFactory" />
-            <QuizSettings v-if="showSettingModal" @OnQuizUpdated="handleSettingSaved" :quiz="quiz" :close="() => showSettingModal = false" class="mdlg:hidden" />
+            <QuizSettings v-if="showSettingModal && !Logic.Common.isLarge"
+                :quiz="quiz"
+                :factory="extras.quizFactory"
+                :close="() => showSettingModal = false"
+                @updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
+                @publishQuiz="extras.publishQuiz().then(handleSettingSaved)"
+              />
           </div>
 
           <!-- Add question for smaller screens -->
@@ -106,7 +112,13 @@
         <div class="mdlg:w-[50%] mdlg:h-full h-[95%] md:w-[70%] flex flex-col items-center relative">
           <div class="bg-white w-full flex flex-col gap-4 mdlg:p-6 p-4 rounded-2xl items-center justify-center">
             <SofaHeaderText class="!text-xl !font-bold" content="Update quiz" />
-            <QuizSettings @OnQuizUpdated="handleSettingSaved" :quiz="quiz" :close="() => showSettingModal = false" />
+            <QuizSettings
+              :quiz="quiz"
+              :factory="extras.quizFactory"
+              :close="() => showSettingModal = false"
+              @updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
+              @publishQuiz="extras.publishQuiz().then(handleSettingSaved)"
+            />
           </div>
         </div>
       </SofaModal>
@@ -219,21 +231,6 @@ export default defineComponent({
     SofaQuestionContent,
     SofaHeaderText,
   },
-  middlewares: {
-    fetchRules: [
-      {
-        domain: "Study",
-        property: "Tags",
-        method: "GetTags",
-        params: [
-          {
-            all: true,
-          },
-        ],
-        requireAuth: true,
-      },
-    ],
-  },
   name: "QuizIdEdit",
   setup () {
     useMeta({
@@ -251,9 +248,7 @@ export default defineComponent({
     const showMoreOptions = ref(false)
 
     const handleSettingSaved = (status: boolean) => {
-      if (status) {
-        showSettingModal.value = false
-      }
+      if (status) showSettingModal.value = false
     }
 
     const handleMobileGoback = () => {
