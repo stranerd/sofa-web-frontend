@@ -117,11 +117,8 @@ export default class QuizzesApi extends ModelApiService {
     }
   }
 
-  public async updateQuestion(quizId: string, data: CreateQuestionInput) {
+  public async updateQuestion(quizId: string, questionId, data: CreateQuestionInput) {
     try {
-      const questionId = data.id
-
-      data.id = undefined
       const response: AxiosResponse<Question> = await this.axiosInstance.put(
         this.getUrl() + `/${quizId}/questions/${questionId}`,
         data,

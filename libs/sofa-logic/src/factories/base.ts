@@ -52,12 +52,17 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 			.every((valid) => valid)
 	}
 
+	get hasChanges () {
+		return Object.keys(this.defaults)
+			.some((key) => !Differ.equal(this.defaults[key], this.values[key]))
+	}
+
 	set (property: keyof K, value: any, ignoreRules = false) {
 		const check = this.checkValidity(property, value)
 
 		this.values[property] = check.value as any
 		this.validValues[property] = check.valid || ignoreRules ? check.value as any : this.defaults[property]
-		this.errors[property] = Differ.equal(this.defaults[property], value) ? '' : check.errors.at(0) ?? ''
+		this.errors[property] = /* Differ.equal(this.defaults[property], value) ? '' : */ check.errors.at(0) ?? ''
 
 		return check.valid
 	}
@@ -70,7 +75,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	}
 
 	checkValidity (property: keyof K, value: any) {
-		return this.rules[property].parse(deepUnref(value))
+		return this.rules[property].parse(deepUnref(value), true)
 	}
 
 	reset () {

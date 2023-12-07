@@ -1,10 +1,10 @@
 <template>
-  <div class="flex w-full flex-col gap-2 content">
-    <sofa-normal-text v-if="hasTitle" customClass="!pb-2 font-bold">
+  <div class="flex w-full flex-col content">
+    <sofa-normal-text v-if="hasTitle" customClass="!pb-4 font-bold">
       <slot name="title" />
     </sofa-normal-text>
     <VueEditor v-if="richEditor" v-model="comp" :editor-options="editorOptions" :disabled="disabled"
-      :style="`min-height: max(${rows}em, 40px)`" @ready="(v) => quill = v"
+      :style="`min-height: ${rows}em`" @ready="(v) => quill = v"
       :class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
       :placeholder="placeholder" :tabindex="0">
       <template v-slot:toolbar>
@@ -27,8 +27,12 @@
     <textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
       :class="`w-full p-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
+    <div v-if="error" class="w-full flex pt-1 justify-start">
+      <SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
+    </div>
   </div>
 </template>
+
 <script lang="ts">
 import 'mathlive'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
@@ -83,6 +87,10 @@ export default defineComponent({
       required: false,
       default: false,
     },
+    error: {
+      type: String,
+      default: ''
+    }
   },
   name: "SofaTextarea",
   emits: ["update:modelValue"],
@@ -254,7 +262,7 @@ export default defineComponent({
   }
 
   .ql-editor {
-    padding: auto 0;
+    padding: 0 !important;
     background: transparent;
     // border: 1px solid $color-itemBg;
     transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
@@ -274,6 +282,8 @@ export default defineComponent({
     color: inherit;
     opacity: 0.35;
     font-style: normal;
+    right: 0 !important;
+    left: 0 !important;
   }
 
   .ql-tooltip.ql-editing[data-mode="formula"] {

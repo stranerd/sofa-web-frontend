@@ -209,7 +209,7 @@ export default defineComponent({
     const { tutors } = useTutorsList()
     const { topics } = useTopicsList()
 
-    const allTopics = computed(() => topics.value.map((t) => ({
+    const allTopics = computed(() => topics.map((t) => ({
       key: t.id,
       value: t.title
     })))
@@ -226,7 +226,7 @@ export default defineComponent({
           value: Logic.Common.convertToMoney(t.account.ratings.avg, false, ""),
         },
         subjects: t.tutor.topics
-          .map((item) => topics.value.find((t) => t.id === item)?.title)
+          .map((item) => topics.find((t) => t.id === item)?.title)
           .filter(Boolean)
           .join(", "),
       }))

@@ -4,9 +4,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useAuth } from '@/composables/auth/auth'
 import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
-import { Logic, Question } from 'sofa-logic'
+import { Logic, Question, QuestionFactory, QuizFactory } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 
@@ -37,10 +38,19 @@ const props = defineProps({
 	submit: {
 		type: Function as PropType<(data?: { questionId: string, answer: any }) => Promise<boolean>>,
 		required: false
+	},
+	skipMembers: {
+		type: Boolean,
+		required: false,
+		default: true
 	}
 })
 
-const { quiz, questions, fetched } = useQuiz(props.id, !!props.questions)
+const { id } = useAuth()
+const {
+	quiz, questions, fetched, deleteQuiz, saveQuestion, updateQuiz: update, publishQuiz,
+	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion
+} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
 const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 
@@ -48,14 +58,18 @@ const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
 const { time: runTime, countdown: runCountdown } = useCountdown()
 const index = ref(0)
+const selectedQuestionId = ref('')
 const answers = reactive<Record<string, any>>({})
 const currentQuestion = computed(() => quizQuestions.value.at(index.value))
+const currentQuestionById = computed(() => quizQuestions.value.find((q) => q.id === selectedQuestionId.value))
 const answer = computed({
 	get: () => currentQuestion.value ? answers[currentQuestion.value.id] ?? currentQuestion.value.defaultAnswer : [],
 	set: (val) => {
 		answers[currentQuestion.value?.id] = val
 	}
 })
+const quizFactory = new QuizFactory()
+const questionFactory = new QuestionFactory()
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
 	const question = currentQuestion.value
@@ -105,12 +119,28 @@ const submitAnswer = async () => {
 	else await props.submit?.()
 }
 
+const saveCurrentQuestion = async () => {
+	if (!currentQuestion.value || !questionFactory.valid) return
+	await saveQuestion(currentQuestion.value.id, await questionFactory.toModel())
+}
+
+const updateQuiz = async () => {
+	if (!quizFactory.valid) return
+	return await update(await quizFactory.toModel())
+}
+
 const extras = computed(() => ({
 	get index () {
 		return index.value
 	},
 	set index (v) {
 		index.value = v
+	},
+	get selectedQuestionId () {
+		return selectedQuestionId.value
+	},
+	set selectedQuestionId (v) {
+		selectedQuestionId.value = v
 	},
 	get answer () {
 		return answer.value
@@ -123,11 +153,15 @@ const extras = computed(() => ({
 		if (duration === 0) return 0
 		return runTime.value / duration
 	},
+	currentQuestionById: currentQuestionById.value,
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestion.value,
-	optionState, submitAnswer,
-	moveCurrrentQuestionToEnd,
+	questionFactory, quizFactory,
+	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
+	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
+	optionState, submitAnswer, moveCurrrentQuestionToEnd, saveCurrentQuestion,
+	updateQuiz, publishQuiz,
 	next: () => {
 		if (extras.value.canNext) index.value++
 	},
@@ -139,14 +173,24 @@ const extras = computed(() => ({
 	reset: () => {
 		reorderedQuestions.value = null
 		index.value = 0
-	}
+	},
+	canEdit: quiz.value.access.members?.concat(quiz.value.user.id).includes(id.value),
 }))
 
 watch(quiz, async () => {
+	const q = quiz.value
+	if (!q) return
+	quizFactory.loadEntity(q)
 	if (!started.value) startCountdown({ time: 3 })
 		.then(() => {
 			started.value = true
 			nextQ(0)
 		})
+})
+
+watch([currentQuestionById, quizQuestions], () => {
+	const question = currentQuestionById.value
+	if (question) questionFactory.loadEntity(question)
+	else if (quizQuestions.value.length > 0) selectedQuestionId.value = quizQuestions.value[0].id
 })
 </script>

@@ -1,5 +1,5 @@
 import { Logic } from 'sofa-logic'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { showStudyMode } from './library'
 
 export const selectedQuizId = ref('')
@@ -7,78 +7,6 @@ export const selectedQuizId = ref('')
 export const selectedQuizMode = ref('')
 
 export const userIsParticipating = ref(true)
-
-export const quizSettingsForm = reactive({
-  description: '',
-  tags: [],
-  title: '',
-  topic: '',
-  isForTutors: false,
-  photo: undefined,
-  tagString: '',
-})
-
-export const quizSettingSaved = ref(false)
-
-export const createQuiz = (formComp: any) => {
-  Logic.Study.CreateQuizForm = {
-    description: quizSettingsForm.description,
-    tags: quizSettingsForm.tags,
-    title: quizSettingsForm.title,
-    isForTutors: quizSettingsForm.isForTutors,
-    topic: quizSettingsForm.topic,
-    photo: quizSettingsForm.photo,
-  }
-
-  const formState: boolean = formComp.validate()
-  quizSettingSaved.value = false
-  Logic.Study.CreateQuiz(formState)
-    ?.then((data) => {
-      if (data) {
-        quizSettingSaved.value = true
-        Logic.Common.hideLoading()
-      }
-    })
-    .catch((error) => {
-      Logic.Common.showValidationError(error, formComp)
-    })
-}
-
-export const updateQuiz = (formComp: any) => {
-  Logic.Study.UpdateQuizForm = {
-    description: quizSettingsForm.description,
-    tags: quizSettingsForm.tags
-      .concat(
-        ...quizSettingsForm.tagString.split(',')
-          .map((item) => item.trim()),
-      )
-      .filter(Boolean),
-    title: quizSettingsForm.title,
-    topic: quizSettingsForm.topic,
-    photo: quizSettingsForm.photo,
-    isForTutors: quizSettingsForm.isForTutors,
-  }
-
-  const formState: boolean = formComp.validate()
-  quizSettingSaved.value = false
-  Logic.Study.UpdateQuiz(formState, Logic.Study.SingleQuiz.id)
-    ?.then((data) => {
-      if (data) {
-        quizSettingSaved.value = true
-        Logic.Common.showAlert({
-          message: 'Quiz updated',
-          type: 'success',
-        })
-        // update tags
-        Logic.Study.GetTags({
-          all: true,
-        })
-      }
-    })
-    .catch((error) => {
-      Logic.Common.showValidationError(error, formComp)
-    })
-}
 
 export const goToStudyMode = async (id: string, type: string) => {
   selectedQuizId.value = id

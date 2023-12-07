@@ -29,6 +29,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    trim: {
+      type: Boolean,
+      default: true
+    }
   },
   name: "SofaCustomInput",
   emits: ["update:modelValue", "onBlur", "onContentChange", "onEnter"],
@@ -43,7 +47,7 @@ export default defineComponent({
     })
 
     const onInput = (e: any) => {
-      textContent.value = e.target.innerText.trim()
+      textContent.value = props.trim ? e.target.innerText.trim() : e.target.innerText
     }
 
     const onBlur = () => {

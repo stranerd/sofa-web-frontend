@@ -65,6 +65,7 @@ export interface SelectOption {
 
 export interface LoaderSetup {
   loading: boolean
+  loaders: string[]
   alerts: { message: string, type: 'success' | 'error' | 'warning' | 'info' }[]
 }
 

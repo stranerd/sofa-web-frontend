@@ -21,7 +21,7 @@
 
 			<div class="w-full flex flex-col gap-3 px-4 pt-3">
 				<slot />
-				<div class="w-full flex flex-row h-[100px]"></div>
+				<div class="w-full flex h-[100px]"></div>
 			</div>
 		</div>
 	</sub-page-layout>
@@ -42,14 +42,14 @@
 					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
 				</router-link>
 
-				<div class="w-full flex flex-row items-center justify-between px-2 mt-3 mb-2">
+				<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
 					<sofa-normal-text :customClass="'!font-bold'">Folders</sofa-normal-text>
 					<sofa-normal-text :color="'text-primaryPink'" customClass="cursor-pointer"
 						@click="addFolder">Add</sofa-normal-text>
 				</div>
 
 				<component :is="item.edit ? 'span' : 'router-link'"
-					class="w-full flex flex-row items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
+					class="w-full flex items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
 					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 					exact-active-class="bg-[#E5F2FD] font-bold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
@@ -70,7 +70,7 @@
 					<sofa-normal-text v-else>{{ item.name }}</sofa-normal-text>
 
 					<div v-if="!item.edit"
-						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex flex-row gap-2 items-center">
+						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-[8px] hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 						<sofa-icon @click.stop.prevent="item.edit = true" customClass="h-[15px] cursor-pointer"
 							name="edit-gray" />
 						<sofa-icon customClass="h-[15px] cursor-pointer" name="trash-gray"

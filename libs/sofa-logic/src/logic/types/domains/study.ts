@@ -40,6 +40,10 @@ export interface Quiz {
     count: number
     total: number
   }
+  access: {
+    requests: string[]
+    members: string[]
+  }
   __type: 'QuizEntity'
 }
 
@@ -51,9 +55,9 @@ export interface Question {
   key: string
   type: string
   question: string
-  questionMedia?: FileData
+  questionMedia: FileData | null
   timeLimit: number
-  explanation?: string
+  explanation: string
   data: {
     type:
       | 'multipleChoice'

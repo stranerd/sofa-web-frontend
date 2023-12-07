@@ -1,3 +1,5 @@
+import { FileData } from '../domains'
+
 export interface CreateFolderInput {
   title: string
 }
@@ -12,10 +14,11 @@ export interface SaveItemToFolderInput {
 export interface CreateQuizInput {
   title: string
   description: string
-  photo?: Blob
+  photo: FileData | null
   isForTutors: boolean
   topic: string
   tags: string[]
+  courseId: string | null
 }
 
 export interface ReorderQuizInput {
@@ -24,7 +27,7 @@ export interface ReorderQuizInput {
 
 export interface CreateQuestionInput {
   question: string
-  questionMedia?: Blob
+  questionMedia: FileData | null
   timeLimit: number
   data: {
     type:
@@ -44,8 +47,7 @@ export interface CreateQuestionInput {
       a: string
     }[]
   }
-  id?: string
-  explanation?: string
+  explanation: string
 }
 
 export interface CreateCourseInput {
