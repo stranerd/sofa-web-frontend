@@ -194,14 +194,6 @@ const extras = computed(() => ({
 	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(id.value),
 }))
 
-const updateEditing = async () => {
-	if (!extras.value.canEdit) return
-	const v = selectedQuestionId.value
-	router.push(`/quiz/${props.id}/edit?q=${v}`).catch()
-	const edit = user.value?.account.editing.quizzes
-	if (edit?.id !== props.id || edit?.questionId !== v) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
-}
-
 watch(quiz, async () => {
 	const q = quiz.value
 	if (!q) return
@@ -220,8 +212,10 @@ watch([currentQuestionById, quizQuestions], () => {
 })
 
 watch([currentQuestionById, quizQuestions, quiz], () => {
-	updateEditing()
-})
-
-updateEditing()
+	if (!extras.value.canEdit) return
+	const v = selectedQuestionId.value
+	router.push(`/quiz/${props.id}/edit?q=${v}`).catch()
+	const edit = user.value?.account.editing.quizzes
+	if (edit?.id !== props.id || edit?.questionId !== v) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
+}, { immediate: true })
 </script>

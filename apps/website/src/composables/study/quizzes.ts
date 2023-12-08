@@ -226,18 +226,17 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		await store[id].setLoading(false)
 	}
 
-	watch(store[id].quiz, async () => {
-		if (!store[id].quiz.value) return
-		const hasUnfetchedQuestions = store[id].quiz.value.questions.some((qId) => !store[id].questions.find((q) => q.id === qId))
-		if (!skip.questions && hasUnfetchedQuestions) Logic.Study.GetQuestions(id, { all: true })
+	watch(store[id].quiz, async (cur, old) => {
+		if (!cur) return
+		if (!skip.questions && !Logic.Differ.equal(cur?.questions, old?.questions)) Logic.Study.GetQuestions(id, { all: true })
 			.then(async (res) => {
 				store[id].questions.splice(0, store[id].questions.length, ...(res?.results ?? []))
 				await store[id].questionsListener.restart()
 			}).catch()
-		const members = [store[id].quiz.value.user.id, ...store[id].quiz.value.access.members, ...store[id].quiz.value.access.requests]
-		const hasUnfetchedMembers = members.some((mId) => !store[id].members.find((u) => u.id === mId))
-		if (!skip.members && hasUnfetchedMembers)  Logic.Users.GetUsers({
-				where: [{ field: 'id', value: members, condition: Conditions.in }],
+		const oldMembers = [...(old?.access.members ?? []), old?.user.id, ...(old?.access.requests) ?? []]
+		const newMembers = [...(cur.access.members ?? []), cur?.user.id, ...(cur?.access.requests) ?? []]
+		if (!skip.members && !Logic.Differ.equal(newMembers, oldMembers))  Logic.Users.GetUsers({
+				where: [{ field: 'id', value: newMembers, condition: Conditions.in }],
 				all: true
 			}, false).then(async (users) => {
 				users.forEach((u) => {
