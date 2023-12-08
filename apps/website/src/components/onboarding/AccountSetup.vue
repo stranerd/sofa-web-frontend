@@ -146,16 +146,7 @@
 
     <template v-if="tab === 'phone'">
       <div class="w-full flex flex-col py-5">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :padding="'md:p-4 p-3'" type="tel" :name="'Phone'" ref="phone" :placeholder="'Enter phone number'"
-          :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-          v-model="updatePhoneForm.phone.number">
-          <template v-slot:inner-prefix>
-            <sofa-select v-model="updatePhoneForm.phone.code" :options="phoneCodes"
-              :customClass="'!border-none bg-transparent !w-[70px]'" :paddings="'!py-0'" :withKey="true"
-              :autoComplete="true" :placeholder="'Search country'" />
-          </template>
-        </sofa-text-field>
+        <SofaPhoneInput v-model="updatePhoneForm.phone" class="rounded-custom bg-lightGrayVaraint py-2" />
       </div>
     </template>
 
@@ -183,12 +174,12 @@
 
     <div class="w-full flex flex-col items-center md:py-0 px-0 py-4">
       <div v-if="isProfileEducation || isProfilePhone" class="w-full flex justify-end">
-        <sofa-button :customClass="'!w-full'" :padding="'px-4 py-3'" @click.prevent="handleAccountSetup">
+        <sofa-button :disabled="isDisabled" :customClass="'!w-full'" :padding="'px-4 py-3'" @click.prevent="handleAccountSetup">
           {{ isProfilePhone && tab === 'phone' ? 'Send OTP' : 'Save changes' }}
         </sofa-button>
       </div>
       <div v-else class="flex flex-col w-full">
-        <sofa-button :customClass="'!w-full'" :padding="'md:py-4 py-3'" @click.prevent="handleAccountSetup">
+        <sofa-button :disabled="isDisabled" :customClass="'!w-full'" :padding="'md:py-4 py-3'" @click.prevent="handleAccountSetup">
           Continue
         </sofa-button>
       </div>
@@ -230,9 +221,9 @@ import {
   SofaSelect,
   SofaTextField,
   SofaTextarea,
+  SofaPhoneInput
 } from "sofa-ui-components"
 import { computed, defineComponent, onMounted, ref, watch } from "vue"
-import phoneCodes from "../../assets/country-phone.json"
 
 export default defineComponent({
   components: {
@@ -247,6 +238,7 @@ export default defineComponent({
     SofaFormWrapper,
     SofaOtpInput,
     SofaBadge,
+    SofaPhoneInput,
   },
   props: {
     name: {
@@ -274,6 +266,8 @@ export default defineComponent({
     const AuthUser = ref(Logic.Auth.AuthUser)
     const UserProfile = ref(Logic.Users.UserProfile)
 
+    const isDisabled = computed(() => tab.value === 'phone' ? !updatePhoneForm.phone : false)
+
     const accountSetupOptions = computed(() => [
       {
         name: 'Profile',
@@ -296,6 +290,7 @@ export default defineComponent({
     ])
 
     const handleAccountSetup = async () => {
+      if (isDisabled.value) return
       try {
         if (tab.value === 'profile') {
           if (updateUserEducationForm.type === 'organization') {
@@ -371,8 +366,7 @@ export default defineComponent({
       updateProfileForm.description = UserProfile.value?.bio.description
       updateProfileForm.country = UserProfile.value?.location?.country
       updateProfileForm.state = UserProfile.value?.location?.state
-      updatePhoneForm.phone.code = AuthUser.value?.phone?.code
-      updatePhoneForm.phone.number = AuthUser.value?.phone?.number
+      updatePhoneForm.phone = AuthUser.value?.phone
       if (currentAccountType.value == "teacher") {
         updateUserEducationForm.type = "teacher"
         updateUserEducationForm.tutorSchool = UserProfile.value?.type?.school.toString()
@@ -412,10 +406,10 @@ export default defineComponent({
 
     return {
       tab,
+      isDisabled,
       accountSetupOptions,
       FormValidations,
       updatePhoneForm,
-      phoneCodes,
       profileImageUrl,
       formComp,
       updateProfileForm,

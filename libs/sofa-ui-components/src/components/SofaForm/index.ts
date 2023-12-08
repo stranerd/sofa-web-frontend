@@ -1,25 +1,11 @@
-import SofaSelect from './select.vue'
-import SofaTextField from './textField.vue'
-import SofaCheckbox from './checkbox.vue'
-import SofaOtpInput from './otpInput.vue'
-import SofaKeyboard from './keyboard.vue'
-import SofaRadio from './radio.vue'
-import SofaFormWrapper from './wrapper.vue'
-import SofaFileAttachment from './fileAttachment.vue'
-import SofaTextarea from './textarea.vue'
-import SofaMultipleChoice from './multipleChoice.vue'
-import SofaCustomInput from './contenteditable.vue'
-
-export {
-  SofaSelect,
-  SofaTextField,
-  SofaCheckbox,
-  SofaOtpInput,
-  SofaKeyboard,
-  SofaRadio,
-  SofaFormWrapper,
-  SofaFileAttachment,
-  SofaTextarea,
-  SofaMultipleChoice,
-  SofaCustomInput,
-}
+export { default as SofaSelect } from './select.vue'
+export { default as SofaTextField } from './textField.vue'
+export { default as SofaCheckbox } from './checkbox.vue'
+export { default as SofaOtpInput } from './otpInput.vue'
+export { default as SofaKeyboard } from './keyboard.vue'
+export { default as SofaRadio } from './radio.vue'
+export { default as SofaFormWrapper } from './wrapper.vue'
+export { default as SofaFileAttachment} from './fileAttachment.vue'
+export { default as SofaTextarea } from './textarea.vue'
+export { default as SofaPhoneInput} from './phoneInput.vue'
+export { default as SofaCustomInput } from './contenteditable.vue'

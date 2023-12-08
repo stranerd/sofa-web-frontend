@@ -6,6 +6,11 @@ export enum AuthTypes {
   apple = 'apple'
 }
 
+export type Phone = {
+  code: string
+  number: string
+}
+
 interface User {
   name: {
     first: string
@@ -15,11 +20,8 @@ interface User {
   }
   email: string
   description: string
-  photo?: FileData
-  phone?: {
-    code: string
-    number: string
-  }
+  photo: FileData | null
+  phone: Phone | null
 }
 
 interface AuthUser extends User {
