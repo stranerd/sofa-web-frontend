@@ -247,6 +247,7 @@ import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import QuizSettings from "@/components/quizzes/Settings.vue"
 import RequestAccessModal from "@/components/quizzes/RequestAccessModal.vue"
 import ManageAccessModal from "@/components/quizzes/ManageAccessModal.vue"
+import { generateMiddlewares } from '@/middlewares'
 
 export default defineComponent({
   components: {
@@ -268,6 +269,7 @@ export default defineComponent({
   middlewares: {
     goBackRoute: "/library",
   },
+  beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
   setup () {
     useMeta({
       title: "Edit Quiz",

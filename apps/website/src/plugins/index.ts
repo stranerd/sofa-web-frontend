@@ -39,19 +39,15 @@ const cssListeners = definePlugin(async () => {
 	}, 500)
 })
 
-const parseLoggedInUser = definePlugin(async ({ router }) => {
-	const tokens = await Logic.Auth.GetTokens()
-	if (!tokens) {
-		await router.push('/auth/login')
-		return
-	}
+const parseLoggedInUser = definePlugin(async () => {
 	try {
+		const tokens = await Logic.Auth.GetTokens()
+		if (!tokens) return
 		const user = await Logic.Auth.GetAuthUser().catch(() => null)
 		if (!user) return await Logic.Auth.DeleteTokens()
 
-		const { isLoggedIn, isEmailVerified, signin, setAuthUser } = useAuth()
+		const { isLoggedIn, signin, setAuthUser } = useAuth()
 		await setAuthUser(user)
-		if (!isEmailVerified.value) await router.push('/auth/verify')
 		if (isLoggedIn.value) await signin(true)
 	} catch {
 		//
