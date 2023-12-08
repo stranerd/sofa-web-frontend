@@ -68,7 +68,9 @@
               :quiz="quiz"
               :question="extras.currentQuestionById"
               :factory="extras.questionFactory"
+              :users="extras.usersByQuestions"
               :close="() => showMoreOptions = false"
+              @showCurrentlyEditing="showCurrentlyEditingModal = true"
               @saveQuestion="extras.saveCurrentQuestion()"
               @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
               @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
@@ -158,13 +160,35 @@
           <SofaQuestionOptions v-if="extras.currentQuestionById"
             :quiz="quiz"
             :question="extras.currentQuestionById"
+            :users="extras.usersByQuestions"
             :factory="extras.questionFactory"
             :close="() => showMoreOptions = false"
+            @showCurrentlyEditing="showCurrentlyEditingModal = true"
             @saveQuestion="extras.saveCurrentQuestion()"
             @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
             @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
             @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"
           />
+        </div>
+      </SofaModal>
+
+      <SofaModal v-if="showCurrentlyEditingModal" :close="() => showCurrentlyEditingModal = false">
+        <div class="bg-white mdlg:!w-[70%] lg:!w-[60%] w-full flex flex-col rounded-t-2xl p-6 gap-6 justify-between relative">
+           <div class="mdlg:hidden flex gap-2 justify-between items-center">
+            <SofaHeaderText content="Currently editing" />
+            <SofaIcon class="h-[19px]" name="circle-close" @click="showCurrentlyEditingModal = false" />
+          </div>
+          <div class="flex flex-col gap-4 w-full">
+             <div v-for="(user, index) in extras.usersByQuestions[extras.currentQuestionById?.id] ?? []" :key="user.id" class="flex items-center gap-2">
+              <SofaAvatar v-if="index < 3" bgColor="!bg-[#78828C]" :photoUrl="user.bio.photo?.link ?? ''" size="36" class="-ml-1">
+                <SofaIcon class="h-[16px]" name="user" />
+              </SofaAvatar>
+              <SofaNormalText :content="user.bio.name.full" size="lg" />
+            </div>
+            <SofaNormalText v-if="!(extras.usersByQuestions[extras.currentQuestionById?.id] ?? []).length"
+              content="No users currently editing this question" size="xl"
+            />
+          </div>
         </div>
       </SofaModal>
 
@@ -239,6 +263,7 @@
 import { defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
 import {
+  SofaAvatar,
   SofaDeletePrompt,
   SofaEmptyState,
   SofaIcon,
@@ -261,6 +286,7 @@ export default defineComponent({
     QuizWrapper,
     SofaDeletePrompt,
     SofaIcon,
+    SofaAvatar,
     SofaEmptyState,
     SofaNormalText,
     SofaQuestionOptions,
@@ -289,10 +315,9 @@ export default defineComponent({
     const interactingQuestionId = ref('')
 
     const showSettingModal = ref(false)
-
     const showMoreOptions = ref(false)
-
     const showShareModal = ref(false)
+    const showCurrentlyEditingModal = ref(false)
 
     const handleSettingSaved = (status: boolean) => {
       if (status) showSettingModal.value = false
@@ -307,6 +332,7 @@ export default defineComponent({
       showDeleteQuiz,
       showDeleteQuestion,
       showAddQuestionModal,
+      showCurrentlyEditingModal,
       showShareModal,
       showMoreOptions,
       showSettingModal,

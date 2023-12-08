@@ -3,13 +3,11 @@
     <transition name="fade" appear>
       <div
         :class="`fixed top-0 w-[100dvw] h-[dwh] bg-black text-white !bg-opacity-40 flex flex-col overflow-y-hidden items-center mdlg:!justify-center justify-end ${customClass}`"
-        style="z-index: 1000" @click="closeModal()" id="innerModal">
+        style="z-index: 1000" id="innerModal">
+        <div class="h-full w-full absolute top-0 left-0" @click="closeModal()" />
         <div
-          class="relative w-full flex flex-col justify-center items-center mdlg:!h-[85%] h-full overflow-y-auto overflow-x-hidden">
-          <div
-            class="w-full flex flex-col mdlg:h-auto h-full md:!justify-center justify-end items-center overflow-x-hidden">
-            <slot />
-          </div>
+          class="w-full flex flex-col mdlg:h-auto h-full md:justify-center justify-end relative items-center mdlg:max-h-[85%] overflow-y-auto overflow-x-hidden">
+          <slot />
         </div>
       </div>
     </transition>

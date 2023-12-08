@@ -37,7 +37,22 @@
       </div>
     </div>
 
-    <div class="rounded-b-xl w-full p-4 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4">
+    <div class="rounded-b-xl w-full p-4 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4 text-bodyBlack">
+      <a class="w-full flex md:hidden items-center justify-start gap-3"
+          @click="emits('showCurrentlyEditing')">
+          <SofaIcon name="edit" class="h-[16px] stroke-grayColor" />
+          <SofaNormalText color="text-inherit" content="Currently editing" />
+          <div class="flex flex-row-reverse items-center ml-auto">
+            <template v-for="(user, index) in users[question.id] ?? []" :key="user.id">
+              <SofaAvatar v-if="index < 3" bgColor="!bg-[#78828C]" :photoUrl="user.bio.photo?.link ?? ''" size="28" class="-ml-1">
+                <SofaIcon class="h-[16px]" name="user" />
+              </SofaAvatar>
+              <SofaAvatar v-if="index === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGrayVaraint" :photoUrl="user.bio.photo?.link ?? ''" size="28" class="-ml-1">
+                <span>{{ users[question.id].length - 3 }}+</span>
+              </SofaAvatar>
+            </template>
+          </div>
+        </a>
       <a :class="{'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges}" class="text-primaryGreen w-full flex md:hidden items-center justify-start gap-3"
         @click="emits('saveQuestion')">
         <SofaIcon name="save" class="h-[16px] stroke-current" />
@@ -45,7 +60,7 @@
       </a>
       <a class="w-full flex md:hidden items-center justify-start gap-3" @click="emits('duplicateQuestion', question)">
         <SofaIcon name="copy" class="h-[16px]" />
-        <SofaNormalText content="Duplicate question" />
+        <SofaNormalText color="text-inherit" content="Duplicate question" />
       </a>
       <a v-if="quiz.status !== 'published'" class="w-full flex md:hidden items-center justify-start gap-3" @click="emits('deleteQuestion', question.id)">
         <SofaIcon name="trash" class="h-[16px]" />
@@ -60,10 +75,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, Quiz, QuestionFactory, TransformedQuestion } from "sofa-logic"
+import { Logic, Quiz, QuestionFactory, TransformedQuestion, SingleUser } from "sofa-logic"
 import { PropType, defineProps, ref } from "vue"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
+import SofaAvatar from "../SofaAvatar"
 
 defineProps({
   quiz: {
@@ -77,10 +93,14 @@ defineProps({
   factory: {
     type: Object as PropType<QuestionFactory>,
     required: true
+  },
+  users: {
+    type: Object as PropType<Record<string, SingleUser[]>>,
+    required: true
   }
 })
 
-const emits = defineEmits(['duplicateQuestion', 'saveQuestion', 'deleteQuestion', 'deleteQuiz'])
+const emits = defineEmits(['showCurrentlyEditing', 'duplicateQuestion', 'saveQuestion', 'deleteQuestion', 'deleteQuiz'])
 
 const formatTime = (v: number) => {
   const min = Math.floor(v / 60)

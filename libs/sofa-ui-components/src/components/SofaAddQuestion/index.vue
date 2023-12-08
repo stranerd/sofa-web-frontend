@@ -44,8 +44,12 @@
     <Draggable class="w-full flex flex-nowrap gap-2 items-center whitespace-nowrap" :list="reactiveQuestions"
       group="question-list-mobile" item-key="id" direction="horizontal" :disabled="true">
       <template #item="{ element, index }">
-        <a class="w-[48px] h-[48px] flex-shrink-0 rounded-custom items-center justify-center flex" :class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGrayVaraint'" @click="selectQuestion(element)">
+        <a class="w-[48px] h-[48px] flex-shrink-0 rounded-custom items-center justify-center flex relative" :class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGrayVaraint'" @click="selectQuestion(element)">
           <SofaNormalText :color="selectedQuestionId === element.id ? 'text-white' : 'text-bodyBlack'" :content="`${index + 1}`" />
+          <SofaNormalText v-if="users[element.id]?.length"
+            class="aspect-square leading-none h-4 rounded-full flex items-center justify-center bg-[#F55F5F] absolute right-[-0.25rem] top-[-0.25rem]" color="text-ligthGray"
+            :content="`${users[element.id].length}`"
+          />
         </a>
       </template>
     </Draggable>
