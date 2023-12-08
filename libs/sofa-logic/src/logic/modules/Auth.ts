@@ -69,16 +69,16 @@ export default class Auth extends Common {
     })
   }
 
+  public SignOut = () => {
+    return $api.auth.user
+      .signOut()
+      .finally(this.DeleteTokens)
+  }
+
   public DeleteUserAccount = () => {
     return $api.auth.user
       .deleteUserAccount()
-      .then(async (response) => {
-        await this.DeleteTokens()
-        window.location.href = '/auth/login'
-      })
-      .catch((error) => {
-        Logic.Common.showError(capitalize(error.response.data[0]?.message))
-      })
+      .finally(this.DeleteTokens)
   }
 
   public async DeleteTokens () {
@@ -128,18 +128,6 @@ export default class Auth extends Common {
       .setSuperAdminRoles()
       .then((response) => {
         //
-      })
-      .catch((error) => {
-        //
-      })
-  }
-
-  public SignOut = () => {
-    $api.auth.user
-      .signOut()
-      .then(async (response) => {
-        await this.DeleteTokens()
-        window.location.assign('/auth/login')
       })
       .catch((error) => {
         //

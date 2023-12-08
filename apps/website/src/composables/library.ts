@@ -23,8 +23,6 @@ const RecentMaterials = ref(Logic.Study.RecentMaterials)
 
 const showStudyMode = ref(false)
 
-const showDeleteFolder = ref(false)
-
 const showAddItemToFolder = ref(false)
 
 const reportMaterialSetup = reactive<{
@@ -285,16 +283,15 @@ const saveItemsToFolder = (
   })
 }
 
-const deleteFolder = (id: string) => {
-  Logic.Study.DeleteFolder(id).then(() => {
-    showDeleteFolder.value = false
+const deleteFolder = async (id: string) => {
+  const confirmed = await Logic.Common.confirm({
+    title: 'Are you sure?',
+    sub: 'This action is permanent. All items in the folder will be removed',
+    rightLabel: 'Yes, delete',
   })
-  if (
-    [`library?filter=${id}`, `/library/folders?filter=${id}`].includes(
-      Logic.Common.route.fullPath,
-    )
-  )
-    Logic.Common.GoToRoute('/library')
+  if (!confirmed) return
+  await Logic.Study.DeleteFolder(id)
+  if (`/library/folders/${id}` === Logic.Common.route?.path) await Logic.Common.GoToRoute('/library')
 }
 
 const showMoreOptionHandler = (data: ResourceType) => {
@@ -391,5 +388,5 @@ const moreOptions = reactive([
 export {
   AllCourses, AllFolders, AllFoldersCourses, AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, TutorQuizzes, addFolder, addFolderIsActive, addMaterialToFolder, createCourseData, createQuizData, currentFolder, deleteFolder,
   folders, handleFolderNameBlur, moreOptions, openCourse, openQuiz,
-  reportMaterial, reportMaterialSetup, saveItemsToFolder, selectedFolderItems, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial, setFolders, shareMaterialLink, showAddItemToFolder, showDeleteFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
+  reportMaterial, reportMaterialSetup, saveItemsToFolder, selectedFolderItems, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial, setFolders, shareMaterialLink, showAddItemToFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
 }

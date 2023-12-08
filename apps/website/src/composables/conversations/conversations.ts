@@ -78,6 +78,12 @@ export const useConversation = (id: string) => {
 	}
 
 	const deleteConversation = async () => {
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure?',
+			sub: 'This action is permanent. All messages in this conversation would be lost',
+			rightLabel: 'Yes, delete',
+		})
+		if (!confirmed) return
 		if (loading.loading.value) return
 		error.setError('')
 		loading.setLoading(true)

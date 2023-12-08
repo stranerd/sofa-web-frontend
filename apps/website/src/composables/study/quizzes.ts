@@ -129,6 +129,13 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 			type: "warning",
 		})
 
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure?',
+			sub: 'This action is permanent. You won\'t be able to undo this.',
+			rightLabel: 'Yes, delete',
+		})
+		if (!confirmed) return
+
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
@@ -177,6 +184,12 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	}
 
 	const deleteQuiz = async () => {
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure?',
+			sub: 'This action is permanent. You will lose all saved questions in this quiz.',
+			rightLabel: 'Yes, delete',
+		})
+		if (!confirmed) return
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)

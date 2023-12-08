@@ -76,15 +76,28 @@ export const useAuth = () => {
 	}
 
 	const signout = async () => {
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure you want to logout?',
+			sub: '',
+			rightLabel: 'Yes, logout',
+		})
+		if (!confirmed) return
 		// await unregisterDeviceOnLogout()
-		// await AuthUseCases.sessionSignout()
+		await Logic.Auth.SignOut()
 		await setAuthUser(null)
 		window.location.assign('/auth/login')
 	}
 
 	const deleteAccount = async () => {
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure?',
+			sub: 'This action is permanent. All your learning resources will be lost',
+			rightLabel: 'Yes, delete account',
+		})
+		if (!confirmed) return
+		//
 		// await unregisterDeviceOnLogout()
-		// await AuthUseCases.deleteAccount()
+		await Logic.Auth.DeleteUserAccount()
 		await setAuthUser(null)
 		window.location.assign('/auth/login')
 	}

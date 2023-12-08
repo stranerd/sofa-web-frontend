@@ -74,7 +74,7 @@
 						<sofa-icon @click.stop.prevent="item.edit = true" customClass="h-[15px] cursor-pointer"
 							name="edit-gray" />
 						<sofa-icon customClass="h-[15px] cursor-pointer" name="trash-gray"
-							@click.stop.prevent="selectedFolderId = item.id; showDeleteFolder = true" />
+							@click.stop.prevent="deleteFolder(item.id)" />
 					</div>
 				</component>
 
@@ -137,7 +137,7 @@
 							<sofa-icon @click.stop.prevent="item.edit = true" :customClass="'h-[15px] cursor-pointer'"
 								:name="'edit-gray'" />
 							<sofa-icon :customClass="'h-[15px] cursor-pointer'" :name="'trash-gray'"
-								@click.stop.prevent="selectedFolderId = item.id; showDeleteFolder = true" />
+								@click.stop.prevent="deleteFolder(item.id)" />
 						</div>
 					</component>
 				</div>
@@ -173,20 +173,7 @@
 			</div>
 		</template>
 	</dashboard-layout>
-	<sofa-delete-prompt v-if="showDeleteFolder" :title="'Are you sure?'"
-		:subTitle="`This action is permanent. All items in the folder will be removed`"
-		:close="() => showDeleteFolder = false" :buttons="[
-			{
-				label: 'No',
-				isClose: true,
-				action: () => showDeleteFolder = false
-			},
-			{
-				label: 'Yes, delete',
-				isClose: false,
-				action: () => deleteFolder(selectedFolderId)
-			},
-		]" />
+
 	<sofa-modal v-if="showMoreOptions" :close="() => showMoreOptions = false">
 		<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
 			<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
@@ -207,9 +194,10 @@
 </template>
 
 <script setup lang="ts">
-import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, moreOptions, setFolders, showDeleteFolder, showMoreOptions } from '@/composables/library'
+import { useAuth } from '@/composables/auth/auth'
+import { AllFolders, addFolder, currentFolder, deleteFolder, folders, handleFolderNameBlur, moreOptions, setFolders, showMoreOptions } from '@/composables/library'
 import { Conditions, Logic, SingleUser } from "sofa-logic"
-import { SofaCustomInput, SofaDeletePrompt, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
+import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
 import { PropType, computed, defineProps, onMounted, ref, watch } from 'vue'
 import { useMeta } from "vue-meta"
 import { useRoute } from 'vue-router'
@@ -322,8 +310,8 @@ const props = defineProps({
 })
 
 const route = useRoute()
+const { user } = useAuth()
 const currentTab = computed(() => route.query.tab as string | undefined)
-const selectedFolderId = ref('')
 const allOrganizations = ref<{ id: string; name: string }[]>([])
 const tabs = props.options ?? libraryOptions.value.find((o) => o.routePath === route.path)?.options ?? []
 
@@ -336,7 +324,7 @@ const setOrganizations = async () => {
 		where: [
 			{
 				field: 'id',
-				value: ['64d239c882aa7ca88e5d16d2', '64e1341ef1f5d8058adf9e22'] ?? Logic.Users.UserProfile.account.organizationsIn,
+				value: user.value?.account.organizationsIn ?? [],
 				condition: Conditions.in,
 			},
 		],

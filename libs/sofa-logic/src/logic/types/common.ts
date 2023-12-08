@@ -69,6 +69,24 @@ export interface LoaderSetup {
   alerts: { message: string, type: 'success' | 'error' | 'warning' | 'info' }[]
 }
 
+export interface Confirmation {
+  title: string
+  sub: string
+  leftLabel?: string
+  leftHide?: boolean
+  leftBg?: string
+  leftColor?: string
+  rightLabel?: string
+  rightHide?: boolean
+  rightBg?: string
+  rightColor?: string
+}
+
+export interface ConfirmationSetup extends Confirmation {
+  id: string
+  close: (val: boolean) => void
+}
+
 export interface FetchRule {
   domain: string
   property: string
