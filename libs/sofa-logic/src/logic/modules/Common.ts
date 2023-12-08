@@ -2,22 +2,24 @@ import { AxiosError } from 'axios'
 import currency from 'currency.js'
 import moment from 'moment'
 import io, { Socket } from 'socket.io-client'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import {
-    NavigationGuardNext,
-    RouteLocationNormalized,
-    RouteLocationNormalizedLoaded,
-    RouteLocationRaw,
-    Router,
+  NavigationGuardNext,
+  RouteLocationNormalized,
+  RouteLocationNormalizedLoaded,
+  RouteLocationRaw,
+  Router,
 } from 'vue-router'
 import { Logic } from '..'
 import {
-    EmitTypes,
-    FetchRule,
-    Listeners,
-    LoaderSetup,
-    SocketReturn,
-    StatusCodes,
+  Confirmation,
+  ConfirmationSetup,
+  EmitTypes,
+  FetchRule,
+  Listeners,
+  LoaderSetup,
+  SocketReturn,
+  StatusCodes,
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
 
@@ -308,6 +310,24 @@ export default class Common {
     loaders: [],
     loading: false,
   })
+
+  public confirmations = reactive<ConfirmationSetup[]>([])
+
+  public async confirm (confirmation: Confirmation) {
+    return new Promise<boolean>((res) => {
+      const id = this.makeid(6)
+      this.confirmations.push({
+        ...confirmation, id,
+        close: (val: boolean) => {
+          const index = this.confirmations.findIndex((c) => c.id === id)
+          console.log(index, val)
+          if (index === -1) return
+          this.confirmations.splice(index, 1)
+          res(val)
+        }
+      })
+    })
+  }
 
   public SetApiUrl = (apiUrl: string) => {
     this.apiUrl = apiUrl

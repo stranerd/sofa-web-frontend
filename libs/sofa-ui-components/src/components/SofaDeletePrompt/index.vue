@@ -2,29 +2,27 @@
   <sofa-modal :close="() => close?.()">
     <div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
       <div
-        class="bg-white text-bodyBlack w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
+        class="bg-white text-bodyBlack w-full flex flex-col md:gap-5 gap-4 relative mdlg:p-6 p-4 mdlg:rounded-2xl rounded-t-2xl items-center justify-center">
         <div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
           <sofa-header-text :customClass="'text-xl'" :content="title" />
           <sofa-normal-text :content="subTitle" />
         </div>
 
-        <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
+        <div class="w-full flex justify-between items-center mdlg:!hidden border-[#F1F6FA] border-b pb-2">
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             {{ title }}
           </sofa-normal-text>
           <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="close?.()" />
         </div>
 
-        <div class="w-full flex flex-row items-start justify-center mdlg:!hidden px-4 pt-3">
+        <div class="w-full flex flex-row items-start justify-center mdlg:!hidden">
           <sofa-normal-text :customClass="'text-center'">
             {{ subTitle }}
           </sofa-normal-text>
         </div>
 
-        <div
-          class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
-          <div class="md:!-auto col-span-1 flex flex-col" v-for="(button, index) in buttons" :key="index">
+        <div class="w-full md:flex justify-between items-center grid grid-cols-2 gap-3">
+          <div class="md:w-auto col-span-1 flex flex-col" v-for="(button, index) in buttons" :key="index">
             <sofa-button v-if="!button.hide" :textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
               :bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')" :padding="'px-4 py-2'"
               @click="button.action ? button.action() : null"
@@ -79,13 +77,6 @@ export default defineComponent({
       }[],
     },
   },
-  name: "SofaDeletePrompt",
-  setup () {
-    const showModal = ref(true)
-
-    return {
-      showModal,
-    }
-  },
+  name: "SofaDeletePrompt"
 })
 </script>
