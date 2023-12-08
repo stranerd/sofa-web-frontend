@@ -240,7 +240,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		if (this.isMultipleChoice) return this.multipleOptions.length > 2
 		if (this.isSequence) return this.sequenceAnswers.length > 2
 		if (this.isMatch) return this.matchSet.length > 2
-		if (this.isWriteAnswer) return this.writeAnswerAnswers.length > 2
+		if (this.isWriteAnswer) return this.writeAnswerAnswers.length > 1
 		return false
 	}
 

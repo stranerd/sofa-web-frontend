@@ -88,10 +88,11 @@ const formatTime = (v: number) => {
   return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
 }
 
-const openOption = ref('type')
+const openOptions = ref(['type', 'timeLimit'])
 
-const isOpen = (key: string) => openOption.value === key
+const isOpen = (key: string) => openOptions.value.includes(key)
 const toggleOpen = (key: string) => {
-  openOption.value = openOption.value === key ? null : key
+  if (isOpen(key)) openOptions.value = openOptions.value.filter((k) => k !== key)
+  else openOptions.value.push(key)
 }
 </script>

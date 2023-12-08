@@ -304,7 +304,7 @@ export default class Study extends Common {
         explanation: '',
         data: {
           type: 'match' as const,
-          answers: [
+          set: [
             { q: 'Left 1', a: 'Right 1' },
             { q: 'Left 2', a: 'Right 2' },
             { q: 'Left 3', a: 'Right 3' },

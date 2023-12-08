@@ -103,6 +103,7 @@ const addUsers = async () => {
 const members = computed(() => props.users.filter((u) => props.quiz.access.members.includes(u.id)))
 const requests = computed(() => props.users.filter((u) => props.quiz.access.requests.includes(u.id)))
 
-const share = async () => await Logic.Common.share('Join game on SOFA', `Join and play a game on`)
-const copy = () => Logic.Common.copy(window.location.href)
+const shareUrl = `${window.location.origin}/quiz/${props.quiz.id}/edit`
+const share = async () => await Logic.Common.share('Join game on SOFA', `Join and play a game on`, shareUrl)
+const copy = () => Logic.Common.copy(shareUrl)
 </script>

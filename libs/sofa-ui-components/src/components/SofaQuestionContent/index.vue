@@ -27,7 +27,7 @@
     </div>
 
     <div v-else class="w-full flex items-start p-4 rounded-custom bg-[#F1F6FA] gap-3">
-      <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline" />
+      <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
       <SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full resize-none" :placeholder="factory.questionPlaceholder"
         :richEditor="true" v-model="factory.question" />
     </div>
@@ -62,7 +62,7 @@
         <div v-for="(_, index) in factory.multipleOptions" :key="index"
           class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-lightBorderColor bg-white gap-3">
           <SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-            class="hidden md:inline" />
+            class="hidden md:inline self-start" />
           <SofaTextarea :rows="1" :richEditor="true"
             class="flex-1" textAreaStyle="p-0" :placeholder="`Enter answer ${index + 1}`"
             v-model="factory.multipleOptions[index]" />
@@ -77,7 +77,7 @@
         <div v-for="(option, index) in [true, false]" :key="index"
           class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-lightBorderColor bg-white gap-3">
           <SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-            class="hidden md:inline" />
+            class="hidden md:inline self-start" />
           <SofaNormalText color="text-inherit" class="flex-1 capitalize" :content="option.toString()" />
           <SofaIcon @click="factory.trueOrFalseAnswer = option"
             :name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'" class="w-[23px] cursor-pointer" />
@@ -87,8 +87,8 @@
         <div v-for="(_, index) in factory.writeAnswerAnswers" :key="index"
           class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-lightBorderColor bg-white gap-3">
           <SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-            class="hidden md:inline" />
-          <SofaTextarea :rows="1" :richEditor="true"
+            class="hidden md:inline self-start" />
+          <SofaTextarea :rows="index === 0 ? 3 : 1" :richEditor="true"
             class="flex-1" textAreaStyle="p-0" :placeholder="index === 0 ? 'Enter answer' : `Add optional answer ${index}`"
             v-model="factory.writeAnswerAnswers[index]" />
           <SofaIcon name="remove" class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline" v-if="factory.canRemoveOption"
@@ -100,7 +100,7 @@
           <div
             class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-lightBorderColor bg-white gap-3">
             <SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-              class="hidden md:inline" />
+              class="hidden md:inline self-start" />
             <SofaTextarea :rows="1" :richEditor="true"
               class="flex-1" textAreaStyle="p-0" :placeholder="`Enter word/sentence ${index + 1}`"
               v-model="factory.matchSet[index].q" />
@@ -108,7 +108,7 @@
           <div
             class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-lightBorderColor bg-white gap-3">
             <SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-              class="hidden md:inline" />
+              class="hidden md:inline self-start" />
             <SofaTextarea :rows="1" :richEditor="true"
               class="flex-1" textAreaStyle="p-0" placeholder="Enter answer"
               v-model="factory.matchSet[index].a" />
@@ -121,7 +121,7 @@
         <template #item="{ index }">
           <div class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-lightBorderColor bg-white gap-3">
             <SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-              class="hidden md:inline" />
+              class="hidden md:inline self-start" />
             <SofaTextarea :rows="1" :richEditor="true"
               class="flex-1" textAreaStyle="p-0" :placeholder="`Enter word/sentence ${index + 1}`"
               v-model="factory.sequenceAnswers[index]" />
@@ -139,7 +139,7 @@
 
     <div class="w-full flex flex-col border-t border-[#F1F6FA] pt-4">
       <div class="w-full flex items-start p-4 rounded-custom bg-[#F1F6FA] gap-3">
-        <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline" />
+        <SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
         <SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full !p-0 resize-none" placeholder="Explanation"
           :richEditor="true" v-model="factory.explanation" />
       </div>

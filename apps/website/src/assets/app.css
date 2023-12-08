@@ -16,6 +16,16 @@ body {
   @apply h-[100dvh] w-[100dvw] overflow-auto flex flex-col;
 }
 
+::-webkit-scrollbar {
+	width: 1px;
+	height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+	/* background: #4e474788; */
+	border-radius: 100px;
+	cursor: pointer;
+}
 
 /* Top bar loader */
 
