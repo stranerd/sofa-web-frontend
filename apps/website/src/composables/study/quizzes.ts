@@ -12,6 +12,7 @@ const store = {} as Record<string, {
 	fetched: Ref<boolean>
 	listener: ReturnType<typeof useListener>
 	membersListener: ReturnType<typeof useListener>
+	questionsListener: ReturnType<typeof useListener>
 } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler> & ReturnType<typeof useSuccessHandler>>
 
 export const useQuiz = (id: string, skip: { questions: boolean, members: boolean }) => {
@@ -32,7 +33,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 			}
 		})),
 		membersListener: useListener(async () => {
-			const members = [...store[id].quiz.value?.access.members ?? [], ...store[id].quiz.value?.access.requests ?? []]
+			const members = [store[id].quiz.value?.user.id, ...store[id].quiz.value?.access.members ?? [], ...store[id].quiz.value?.access.requests ?? []]
 			return await Logic.Common.listenToMany<SingleUser>('users/users', {
 				created: async (entity) => {
 					Logic.addToArray(store[id].members, entity, (e) => e.id, (e) => e.id)
@@ -45,6 +46,20 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 					if (index !== -1 ) store[id].members.splice(index, 1)
 				}
 			},  (e) => members.includes(e.id))
+		}),
+		questionsListener: useListener(async () => {
+			return await Logic.Common.listenToMany<Question>(`study/quizzes/${id}/questions`, {
+				created: async (entity) => {
+					Logic.addToArray(store[id].questions, entity, (e) => e.id, (e) => e.id)
+				},
+				updated: async (entity) => {
+					Logic.addToArray(store[id].questions, entity, (e) => e.id, (e) => e.id)
+				},
+				deleted: async (entity) => {
+					const index = store[id].questions.findIndex((u) => u.id === entity.id)
+					if (index !== -1 ) store[id].questions.splice(index, 1)
+				}
+			}, (e) => store[id].quiz.value?.questions.includes(e.id))
 		}),
 		...useErrorHandler(),
 		...useLoadingHandler(),
@@ -215,10 +230,11 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		if (!store[id].quiz.value) return
 		const hasUnfetchedQuestions = store[id].quiz.value.questions.some((qId) => !store[id].questions.find((q) => q.id === qId))
 		if (!skip.questions && hasUnfetchedQuestions) Logic.Study.GetQuestions(id, { all: true })
-			.then((res) => {
+			.then(async (res) => {
 				store[id].questions.splice(0, store[id].questions.length, ...(res?.results ?? []))
+				await store[id].questionsListener.restart()
 			}).catch()
-		const members = [...store[id].quiz.value.access.members, ...store[id].quiz.value.access.requests]
+		const members = [store[id].quiz.value.user.id, ...store[id].quiz.value.access.members, ...store[id].quiz.value.access.requests]
 		const hasUnfetchedMembers = members.some((mId) => !store[id].members.find((u) => u.id === mId))
 		if (!skip.members && hasUnfetchedMembers)  Logic.Users.GetUsers({
 				where: [{ field: 'id', value: members, condition: Conditions.in }],
@@ -234,6 +250,8 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	onMounted(async () => {
 		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchQuiz()
 		await store[id].listener.start()
+		if (!skip.members) await store[id].membersListener.start()
+		if (!skip.questions) await store[id].questionsListener.start()
 	})
 	onUnmounted(async () => {
 		await store[id].listener.close()

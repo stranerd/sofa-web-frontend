@@ -7,7 +7,7 @@
 import { useAuth } from '@/composables/auth/auth'
 import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
-import { Logic, Question, QuestionFactory, QuizFactory } from 'sofa-logic'
+import { Logic, Question, QuestionFactory, QuizFactory, SingleUser } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 import { useRouter } from 'vue-router'
@@ -53,7 +53,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const { id } = useAuth()
+const { id, user } = useAuth()
 const {
 	quiz, questions, fetched, deleteQuiz, saveQuestion, updateQuiz: update, publishQuiz,
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, members,
@@ -161,6 +161,14 @@ const extras = computed(() => ({
 		if (duration === 0) return 0
 		return runTime.value / duration
 	},
+	get usersByQuestions () {
+		const allMembers = quiz.value?.access.members.concat(quiz.value.user.id) ?? []
+		const online = members.filter((u) => u.id !== id.value && u.status.connections.length > 0 && allMembers.includes(u.id))
+		return quizQuestions.value.reduce((acc, cur) => {
+			acc[cur.id] = online.filter((m) => m.account.editing.quizzes?.questionId === cur.id)
+			return acc
+		}, {} as Record<string, SingleUser[]>)
+	},
 	currentQuestionById: currentQuestionById.value,
 	started: started.value,
 	startCountdown: startTime.value,
@@ -187,9 +195,11 @@ const extras = computed(() => ({
 }))
 
 const updateEditing = async () => {
+	if (!extras.value.canEdit) return
 	const v = selectedQuestionId.value
 	router.push(`/quiz/${props.id}/edit?q=${v}`).catch()
-	if (extras.value.canEdit) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
+	const edit = user.value?.account.editing.quizzes
+	if (edit?.id !== props.id || edit?.questionId !== v) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
 }
 
 watch(quiz, async () => {
@@ -209,7 +219,9 @@ watch([currentQuestionById, quizQuestions], () => {
 	else if (quizQuestions.value.length > 0) extras.value.selectedQuestionId = quizQuestions.value[0].id
 })
 
-watch(selectedQuestionId, updateEditing)
+watch([currentQuestionById, quizQuestions, quiz], () => {
+	updateEditing()
+})
 
 updateEditing()
 </script>

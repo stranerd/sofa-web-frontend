@@ -44,6 +44,7 @@
             <SofaAddQuestion
               v-model:questionId="extras.selectedQuestionId"
               :quiz="quiz"
+              :users="extras.usersByQuestions"
               :questions="extras.sortedQuestions"
               @addQuestion="showAddQuestionModal = true"
               @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
@@ -99,6 +100,7 @@
           <SofaAddQuestion v-if="!Logic.Common.isLarge && !showSettingModal"
             v-model:questionId="extras.selectedQuestionId"
             :quiz="quiz"
+            :users="extras.usersByQuestions"
             :questions="extras.sortedQuestions"
             @addQuestion="showAddQuestionModal = true"
             @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
