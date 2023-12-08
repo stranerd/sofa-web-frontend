@@ -320,7 +320,6 @@ export default class Common {
         ...confirmation, id,
         close: (val: boolean) => {
           const index = this.confirmations.findIndex((c) => c.id === id)
-          console.log(index, val)
           if (index === -1) return
           this.confirmations.splice(index, 1)
           res(val)

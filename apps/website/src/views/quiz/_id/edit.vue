@@ -56,7 +56,7 @@
               :factory="extras.questionFactory"
               @addQuestion="showAddQuestionModal = true"
               @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
-              @deleteQuestion="(id) => { interactingQuestionId = id; showDeleteQuestion = true }"
+              @deleteQuestion="(id) => extras.deleteQuestion(id)"
               @reorderQuestions="(ids) => extras.reorderQuestions(ids)"
             />
           </div>
@@ -73,8 +73,8 @@
               @showCurrentlyEditing="showCurrentlyEditingModal = true"
               @saveQuestion="extras.saveCurrentQuestion()"
               @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
-              @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
-              @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"
+              @deleteQuestion="(id) => { showMoreOptions = false; extras.deleteQuestion(id) }"
+              @deleteQuiz="() => { showMoreOptions = false; extras.deleteQuiz() }"
             />
           </div>
         </template>
@@ -115,7 +115,7 @@
             :questions="extras.sortedQuestions"
             @addQuestion="showAddQuestionModal = true"
             @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
-            @deleteQuestion="(id) => { interactingQuestionId = id; showDeleteQuestion = true }"
+            @deleteQuestion="(id) => extras.deleteQuestion(id)"
             @reorderQuestions="(ids) => extras.reorderQuestions(ids)"
           />
         </template>
@@ -166,8 +166,8 @@
             @showCurrentlyEditing="showCurrentlyEditingModal = true"
             @saveQuestion="extras.saveCurrentQuestion()"
             @duplicateQuestion="(question) => { showMoreOptions = false; extras.duplicateQuestion(question) }"
-            @deleteQuestion="(id) => { showMoreOptions = false; interactingQuestionId = id; showDeleteQuestion = true }"
-            @deleteQuiz="() => { showMoreOptions = false; showDeleteQuiz = true }"
+            @deleteQuestion="(id) => { showMoreOptions = false; extras.deleteQuestion(id) }"
+            @deleteQuiz="() => { showMoreOptions = false; extras.deleteQuiz() }"
           />
         </div>
       </SofaModal>
@@ -191,36 +191,6 @@
           </div>
         </div>
       </SofaModal>
-
-      <SofaDeletePrompt v-if="showDeleteQuiz" title="Are you sure?"
-        subTitle="This action is permanent. You will lose all saved questions in this quiz."
-        :close="() => showDeleteQuiz = false" :buttons="[
-          {
-            label: 'No',
-            isClose: true,
-            action: () => showDeleteQuiz = false
-          },
-          {
-            label: 'Yes, delete',
-            isClose: false,
-            action: () => extras.deleteQuiz().then(() => showDeleteQuiz = false)
-          },
-        ]" />
-
-      <SofaDeletePrompt v-if="showDeleteQuestion && interactingQuestionId" title="Are you sure?"
-        subTitle="This action is permanent. You won't be able to undo this." :close="() => showDeleteQuestion = false"
-        :buttons="[
-          {
-            label: 'No',
-            isClose: true,
-            action: () => showDeleteQuestion = false
-          },
-          {
-            label: 'Yes, delete',
-            isClose: false,
-            action: () => extras.deleteQuestion(interactingQuestionId).then(() => showDeleteQuestion = false)
-          },
-        ]" />
 
       <SofaModal v-if="showAddQuestionModal" :close="() => showAddQuestionModal = false">
         <div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full h-[95%] w-full flex flex-col justify-end md:justify-start items-center">
@@ -264,7 +234,6 @@ import { defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
 import {
   SofaAvatar,
-  SofaDeletePrompt,
   SofaEmptyState,
   SofaIcon,
   SofaNormalText,
@@ -284,7 +253,6 @@ import { generateMiddlewares } from '@/middlewares'
 export default defineComponent({
   components: {
     QuizWrapper,
-    SofaDeletePrompt,
     SofaIcon,
     SofaAvatar,
     SofaEmptyState,
@@ -308,8 +276,6 @@ export default defineComponent({
       title: "Edit Quiz",
     })
 
-    const showDeleteQuiz = ref(false)
-    const showDeleteQuestion = ref(false)
     const showAddQuestionModal = ref(false)
 
     const interactingQuestionId = ref('')
@@ -329,8 +295,6 @@ export default defineComponent({
     }
 
     return {
-      showDeleteQuiz,
-      showDeleteQuestion,
       showAddQuestionModal,
       showCurrentlyEditingModal,
       showShareModal,

@@ -21,12 +21,18 @@
   <SofaDeletePrompt v-for="(confirmation, index) in confirmations" :key="index" :title="confirmation.title"
     :subTitle="confirmation.sub" :close="() => confirmation.close(false)" :buttons="[
       {
-        label: confirmation.leftButtonLabel ?? 'No',
+        label: confirmation.leftLabel ?? 'No',
+        hide: confirmation.leftHide,
+        bgColor: confirmation.leftBg,
+        textColor: confirmation.leftColor,
         isClose: true,
         action: () => confirmation.close(false)
       },
       {
-        label: confirmation.rightButtonLabel ?? 'Yes',
+        label: confirmation.rightLabel ?? 'Yes',
+        hide: confirmation.rightHide,
+        bgColor: confirmation.rightBg,
+        textColor: confirmation.rightColor,
         isClose: false,
         action: () => confirmation.close(true)
       },

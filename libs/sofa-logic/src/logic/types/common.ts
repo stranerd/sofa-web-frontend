@@ -72,8 +72,14 @@ export interface LoaderSetup {
 export interface Confirmation {
   title: string
   sub: string
-  rightButtonLabel?: string
-  leftButtonLabel?: string
+  leftLabel?: string
+  leftHide?: boolean
+  leftBg?: string
+  leftColor?: string
+  rightLabel?: string
+  rightHide?: boolean
+  rightBg?: string
+  rightColor?: string
 }
 
 export interface ConfirmationSetup extends Confirmation {
