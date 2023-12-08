@@ -1,6 +1,7 @@
 <template>
 	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="quizQuestions" :members="members" />
 	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" :members="members" />
+	<slot v-if="fetched && !quiz" name="notfound" />
 </template>
 
 <script lang="ts" setup>
@@ -10,7 +11,7 @@ import { useQuiz } from '@/composables/study/quizzes'
 import { Logic, Question, QuestionFactory, QuizFactory, SingleUser } from 'sofa-logic'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const props = defineProps({
 	id: {
@@ -53,6 +54,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const route = useRoute()
 const { id, user } = useAuth()
 const {
 	quiz, questions, fetched, deleteQuiz, saveQuestion, updateQuiz: update, publishQuiz,
@@ -212,9 +214,11 @@ watch([currentQuestionById, quizQuestions], () => {
 })
 
 watch([currentQuestionById, quizQuestions, quiz], () => {
-	if (!extras.value.canEdit) return
+	if (!extras.value.canEdit || !currentQuestionById.value) return
+	const quizPath = `/quiz/${props.id}/edit`
+	if (route.path !== quizPath) return
 	const v = selectedQuestionId.value
-	router.push(`/quiz/${props.id}/edit?q=${v}`).catch()
+	router.push(`${quizPath}?q=${v}`).catch()
 	const edit = user.value?.account.editing.quizzes
 	if (edit?.id !== props.id || edit?.questionId !== v) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
 }, { immediate: true })

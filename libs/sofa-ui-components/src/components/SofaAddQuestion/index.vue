@@ -6,7 +6,7 @@
           <div class="flex items-center gap-2">
             <SofaNormalText class="!font-bold" :content="`${index + 1}`" />
             <span class="w-[4px] h-[4px] rounded-full bg-deepGray" />
-            <SofaNormalText class="!font-bold truncate" :content="Logic.Study.getQuestionTypeLabel(element.type)" />
+            <SofaNormalText class="!font-bold truncate" :content="Logic.Study.getQuestionTypeLabel(factory.entityId === element.id ? factory.type : element.type)" />
 
             <div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
               <template v-for="(user, index) in users[element.id] ?? []" :key="user.id">
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, Question, Quiz, SingleUser, TransformedQuestion } from "sofa-logic"
+import { Logic, Question, QuestionFactory, Quiz, SingleUser, TransformedQuestion } from "sofa-logic"
 import { computed, defineEmits, defineProps, PropType, reactive, ref, toRef, watch } from "vue"
 import Draggable from "vuedraggable"
 import SofaIcon from "../SofaIcon"
@@ -73,6 +73,10 @@ const props = defineProps({
   },
   quiz: {
     type: Object as PropType<Quiz>,
+    required: true
+  },
+  factory: {
+    type: Object as PropType<QuestionFactory>,
     required: true
   },
   users: {

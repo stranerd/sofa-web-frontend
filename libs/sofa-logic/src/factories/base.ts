@@ -26,6 +26,7 @@ const deepUnref = (val: any): any => {
 }
 
 export abstract class BaseFactory<E, T, K extends Record<string, any>> {
+	#entity: string | null = null
 	errors: Record<keyof K, string>
 	abstract toModel: () => Promise<T>
 	abstract loadEntity: (entity: E) => void
@@ -57,6 +58,14 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 			.some((key) => !Differ.equal(this.defaults[key], this.values[key]))
 	}
 
+	get entityId () {
+		return this.#entity
+	}
+
+	protected set entityId (v: string | null) {
+		this.#entity = v
+	}
+
 	set (property: keyof K, value: any, ignoreRules = false) {
 		const check = this.checkValidity(property, value)
 
@@ -79,6 +88,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	}
 
 	reset () {
+		this.#entity = null
 		const reserved = (this.reserved ?? []).concat(['userId', 'user', 'userBio'])
 		Object.keys(this.defaults)
 			.filter((key) => !reserved.includes(key))

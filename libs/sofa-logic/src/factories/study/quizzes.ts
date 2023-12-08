@@ -106,6 +106,7 @@ export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizIn
 
 	loadEntity = (entity: Quiz) => {
 		this.reset()
+		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
 		this.photo = entity.photo

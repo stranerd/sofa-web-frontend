@@ -268,6 +268,7 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 
 	loadEntity = (entity: Question) => {
 		this.reset()
+		this.entityId = entity.id
 		this.question = this.defaults.question = entity.question
 		this.questionMedia = this.defaults.questionMedia = entity.questionMedia
 		this.explanation = this.defaults.explanation = entity.explanation

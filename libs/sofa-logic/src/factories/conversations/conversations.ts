@@ -21,6 +21,7 @@ export class ConversationFactory extends BaseFactory<Conversation, { title: stri
 		this.set('title', value)
 	}
 	loadEntity = (entity: Conversation) => {
+		this.entityId = entity.id
 		this.title = entity.title
 	}
 

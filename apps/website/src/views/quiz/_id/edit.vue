@@ -46,6 +46,7 @@
               :quiz="quiz"
               :users="extras.usersByQuestions"
               :questions="extras.sortedQuestions"
+              :factory="extras.questionFactory"
               @addQuestion="showAddQuestionModal = true"
               @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
               @deleteQuestion="(id) => { interactingQuestionId = id; showDeleteQuestion = true }"
@@ -101,6 +102,7 @@
             v-model:questionId="extras.selectedQuestionId"
             :quiz="quiz"
             :users="extras.usersByQuestions"
+            :factory="extras.questionFactory"
             :questions="extras.sortedQuestions"
             @addQuestion="showAddQuestionModal = true"
             @duplicateQuestion="(question) => extras.duplicateQuestion(question)"
@@ -113,15 +115,6 @@
       <RequestAccessModal :quiz="quiz" v-else-if="quiz"
         @requestAccess="extras.requestAccess"
       />
-
-      <div v-else class="w-full flex flex-col items-center justify-center p-4">
-        <div class="mdlg:w-[60%] w-full h-full flex flex-col">
-          <SofaEmptyState title="Quiz not found"
-            subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
-            actionLabel="Go to marketplace" :action="() => Logic.Common.GoToRoute('/marketplace')" titleStyle="mdlg:!text-xl"
-          />
-        </div>
-      </div>
 
       <ManageAccessModal v-if="showShareModal"
         :quiz="quiz"
@@ -220,6 +213,17 @@
           </div>
         </div>
       </SofaModal>
+    </template>
+
+    <template v-slot:notfound>
+      <div class="w-full flex flex-col items-center justify-center p-4">
+        <div class="mdlg:w-[60%] w-full h-full flex flex-col">
+          <SofaEmptyState title="Quiz not found"
+            subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
+            actionLabel="Go to marketplace" :action="() => Logic.Common.GoToRoute('/marketplace')" titleStyle="mdlg:!text-xl"
+          />
+        </div>
+      </div>
     </template>
   </QuizWrapper>
 </template>
