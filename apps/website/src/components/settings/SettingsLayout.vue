@@ -1,9 +1,8 @@
 <template>
 	<expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
-		<div
-			class="mdlg:hidden w-full flex items-center gap-3 z-[10] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
-			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-			<sofa-normal-text customClass="!font-bold !text-base">{{ title }}</sofa-normal-text>
+		<div class="mdlg:hidden w-full flex items-center gap-3 justify-between bg-backgroundGray p-4">
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaNormalText class="!font-bold !text-base">{{ title }}</SofaNormalText>
 			<span class="w-4" />
 		</div>
 
@@ -31,8 +30,8 @@
 					<div
 						class="border-t-2 border-[#E1E6EB] mdlg:border-0 mt-1 mdlg:mt-0 pt-4 mdlg:pt-0 flex flex-col gap-3 mdlg:gap-0">
 						<a v-for="action in [
-							{ title: 'Logout', onClick: () => showLogout = true },
-							{ title: 'Delete account', onClick: () => showDeleteAccount = true }
+							{ title: 'Logout', onClick: signout },
+							{ title: 'Delete account', onClick: deleteAccount }
 						]" :key="action.title" @click="action.onClick"
 							class="bg-white p-4 mdlg:p-2 rounded-custom shadow-custom mdlg:border-none mdlg:shadow-none mdlg:rounded-[8px] mdlg:hover:bg-[#E2F3FD]">
 							<sofa-normal-text color="text-primaryRed">
@@ -47,41 +46,14 @@
 				<slot />
 			</div>
 		</div>
-
-		<sofa-delete-prompt v-if="showLogout" :title="'Are you sure you want to logout?'" subTitle=""
-			:close="() => showLogout = false" :buttons="[
-				{
-					label: 'No',
-					isClose: true,
-					action: () => showLogout = false,
-				},
-				{
-					label: 'Yes, log me out',
-					isClose: false,
-					action: () => Logic.Auth.SignOut()
-				},
-			]" />
-		<sofa-delete-prompt v-if="showDeleteAccount" :title="'Are you sure?'"
-			:subTitle="`This action is permanent. All your learning resources and setups will be lost`"
-			:close="() => showDeleteAccount = false" :buttons="[
-				{
-					label: 'No',
-					isClose: true,
-					action: () => showDeleteAccount = false
-				},
-				{
-					label: 'Yes, delete account',
-					isClose: false,
-					action: () => Logic.Auth.DeleteUserAccount()
-				},
-			]" />
 	</expanded-layout>
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '@/composables/auth/auth'
 import { Logic } from "sofa-logic"
-import { SofaDeletePrompt, SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { defineProps, ref } from 'vue'
+import { SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { defineProps } from 'vue'
 
 defineProps({
 	title: {
@@ -95,8 +67,7 @@ defineProps({
 	}
 })
 
-const showLogout = ref(false)
-const showDeleteAccount = ref(false)
+const { signout, deleteAccount } = useAuth()
 
 const settingOptions = [
 	{
