@@ -38,7 +38,7 @@
     </div>
 
     <div class="rounded-b-xl w-full p-4 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4">
-      <a :class="{'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges}" class="text-primaryGreen w-full flex items-center justify-start gap-3"
+      <a :class="{'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges}" class="text-primaryGreen w-full flex md:hidden items-center justify-start gap-3"
         @click="emits('saveQuestion')">
         <SofaIcon name="save" class="h-[16px] stroke-current" />
         <SofaNormalText color="text-inherit" content="Save question" />

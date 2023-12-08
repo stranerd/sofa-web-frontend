@@ -36,6 +36,13 @@
               name: 'Exit',
               handler: () => Logic.Common.goBack()
             },
+            {
+              IsOutlined: false,
+              hide: !extras.currentQuestionById,
+              disabled: !extras.questionFactory.valid || !extras.questionFactory.hasChanges,
+              name: 'Save',
+              handler: () => extras.saveCurrentQuestion()
+            },
           ],
           badges: [{ text: quiz.status, color: quiz.status === 'published' ? 'green' : 'gray' }],
         }">

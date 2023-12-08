@@ -76,7 +76,7 @@
 
       <div class="md:!flex hidden flex-row items-center gap-4">
         <template v-for="(action, index) in subpageActions" :key="index">
-          <template v-if="action.isIcon">
+          <template v-if="action.isIcon && !action.hide">
             <div class="flex flex-row gap-4 border-r border-[#E1E6EB] items-center pr-3 cursor-pointer">
               <div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data.filter((d) => !d.hide)" :key="index"
                 @click="icon.handler()">
@@ -88,11 +88,11 @@
               </div>
             </div>
           </template>
-          <template v-else>
-            <sofa-button v-if="!action.IsOutlined" :padding="'px-4 py-1'" :customClass="'!font-semibold'"
+          <template v-else-if="!action.hide">
+            <sofa-button v-if="!action.IsOutlined" :disabled="action.disabled" :padding="'px-4 py-1'" :customClass="`!font-semibold ${action.class ?? ''}`"
               @click="action.handler()">{{ action.name }}</sofa-button>
-            <sofa-button :bgColor="'bg-white'" :textColor="'text-grayColor'"
-              :custom-class="'!font-semibold border border-gray-200'"
+            <sofa-button :disabled="action.disabled" :bgColor="'bg-white'" :textColor="'text-grayColor'"
+              :customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
               @click="action.handler()" v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
           </template>
         </template>

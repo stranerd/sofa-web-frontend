@@ -18,7 +18,7 @@
       },
       ...actionButtonItems,
       {
-        IsOutlined: !hasUnsavedChanges,
+        disabled: !hasUnsavedChanges,
         name: 'Save',
         handler: () => {
           Logic.Study.SaveCourseLocalChanges()
