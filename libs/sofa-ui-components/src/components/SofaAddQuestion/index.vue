@@ -6,7 +6,18 @@
           <div class="flex items-center gap-2">
             <SofaNormalText class="!font-bold" :content="`${index + 1}`" />
             <span class="w-[4px] h-[4px] rounded-full bg-deepGray" />
-            <SofaNormalText class="!font-bold" :content="Logic.Study.getQuestionTypeLabel(element.type)" />
+            <SofaNormalText class="!font-bold truncate" :content="Logic.Study.getQuestionTypeLabel(element.type)" />
+
+            <div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
+              <template v-for="(user, index) in users[element.id] ?? []" :key="user.id">
+                <SofaAvatar v-if="index < 3" bgColor="!bg-[#78828C]" :photoUrl="user.bio.photo?.link ?? ''" size="28" class="-ml-1">
+                  <SofaIcon class="h-[16px]" name="user" />
+                </SofaAvatar>
+                <SofaAvatar v-if="index === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGrayVaraint" :photoUrl="user.bio.photo?.link ?? ''" size="28" class="-ml-1">
+                  <span>{{ users[element.id].length - 3 }}+</span>
+                </SofaAvatar>
+              </template>
+            </div>
           </div>
 
           <div class="w-full h-[144px] bg-cover" :style="`background-image: url('/images/${Logic.Study.getQuestionTypeImage(element.type)}.svg')`">
@@ -44,11 +55,12 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, Question, Quiz, TransformedQuestion } from "sofa-logic"
-import { computed, defineEmits, defineProps, PropType, reactive, toRef, watch } from "vue"
+import { Logic, Question, Quiz, SingleUser, TransformedQuestion } from "sofa-logic"
+import { computed, defineEmits, defineProps, PropType, reactive, ref, toRef, watch } from "vue"
 import Draggable from "vuedraggable"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
+import SofaAvatar from "../SofaAvatar"
 
 const props = defineProps({
   questionId: {
@@ -61,6 +73,10 @@ const props = defineProps({
   },
   quiz: {
     type: Object as PropType<Quiz>,
+    required: true
+  },
+  users: {
+    type: Object as PropType<Record<string, SingleUser[]>>,
     required: true
   }
 })
@@ -76,6 +92,7 @@ const selectedQuestionId = computed({
 
 const questionsRef = toRef(props, 'questions')
 const reactiveQuestions = reactive([...questionsRef.value])
+const canEmit = ref(false)
 
 const selectQuestion = (question: Question) => {
   selectedQuestionId.value = question.id
@@ -83,9 +100,11 @@ const selectQuestion = (question: Question) => {
 
 watch(questionsRef, () => {
   reactiveQuestions.splice(0, reactiveQuestions.length, ...questionsRef.value)
+  canEmit.value = true
 })
 
 watch(reactiveQuestions, () => {
-  emits('reorderQuestions', reactiveQuestions.map((q) => q.id))
+  const ids = reactiveQuestions.map((q) => q.id)
+  if (canEmit.value && !Logic.Differ.equal(props.quiz.questions, ids)) emits('reorderQuestions', reactiveQuestions.map((q) => q.id))
 })
 </script>

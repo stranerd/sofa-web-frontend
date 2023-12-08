@@ -59,7 +59,7 @@ const extras = computed(() => ({
 				score: res[1],
 				percentage: Logic.formatNumber((res[1] / game.value.questions.length) * 10, 1),
 				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
-				user: participants.value.find((p) => p.id === res[0]),
+				user: participants.find((p) => p.id === res[0]),
 				isWinner: orgArr[0]?.[1] === res[1],
 			}))
 			.filter((res) => !!res.user)

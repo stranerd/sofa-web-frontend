@@ -1,5 +1,5 @@
 import { AddQuestionAnswer, Test, GameParticipantAnswer, Logic, Question } from 'sofa-logic'
-import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useAuth } from '../auth/auth'
@@ -7,7 +7,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 const store = {} as Record<string, {
 	test: Ref<Test | null>
-	questions: Ref<Question[]>
+	questions: Question[]
 	answer: Ref<GameParticipantAnswer | null>
 	fetched: Ref<boolean>
 	listener: ReturnType<typeof useListener>
@@ -24,7 +24,7 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 
 	store[id] ??= {
 		test: ref(null),
-		questions: ref([]),
+		questions: reactive([]),
 		answer: ref(null),
 		fetched: ref(false),
 		listener: useListener(async () => await Logic.Common.listenToOne<Test>(`plays/tests/${id}`, {
@@ -112,12 +112,11 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 		if (['ended', 'scored'].includes(g.status) && route.path !== results) return await alertAndNav(results, 'Test has ended')
 	}
 
-	watch(store[id].test, async () => {
-		if (!store[id].test.value) return
-		const hasUnfetchedQuestions = store[id].test.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
-		if (!skip.questions && hasUnfetchedQuestions) Logic.Plays.GetTestQuestions(id)
+	watch(store[id].test, async (cur, old) => {
+		if (!cur) return
+		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions)) Logic.Plays.GetTestQuestions(id)
 				.then((questions) => {
-					store[id].questions.value = questions
+					store[id].questions.splice(0, store[id].questions.length, ...questions)
 				})
 				.catch()
 		if (!skip.questions) Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })

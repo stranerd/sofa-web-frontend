@@ -1,5 +1,5 @@
 import { AddQuestionAnswer, Conditions, Game, GameParticipantAnswer, Logic, Question, SingleUser } from 'sofa-logic'
-import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useAuth } from '../auth/auth'
@@ -7,8 +7,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 const store = {} as Record<string, {
 	game: Ref<Game | null>
-	participants: Ref<SingleUser[]>
-	questions: Ref<Question[]>
+	participants: SingleUser[]
+	questions: Question[]
 	answer: Ref<GameParticipantAnswer | null>
 	fetched: Ref<boolean>
 	listener: ReturnType<typeof useListener>
@@ -25,8 +25,8 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 
 	store[id] ??= {
 		game: ref(null),
-		participants: ref([]),
-		questions: ref([]),
+		participants: reactive([]),
+		questions: reactive([]),
 		answer: ref(null),
 		fetched: ref(false),
 		listener: useListener(async () => await Logic.Common.listenToOne<Game>(`plays/games/${id}`, {
@@ -127,19 +127,17 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		if (['ended', 'scored'].includes(g.status) && route.path !== results) return await alertAndNav(results, 'Game has ended')
 	}
 
-	watch(store[id].game, async () => {
-		if (!store[id].game.value) return
-		const hasUnfetchedParticipants = store[id].game.value.participants.some((pId) => !store[id].participants.value.find((p) => p.id === pId))
-		if (!skip.participants && hasUnfetchedParticipants) Logic.Users.GetUsers({
-				where: [{ field: 'id', value: store[id].game.value.participants, condition: Conditions.in }],
+	watch(store[id].game, async (cur, old) => {
+		if (!cur) return
+		if (!skip.participants && !Logic.Differ.equal(cur.participants, old?.participants)) Logic.Users.GetUsers({
+				where: [{ field: 'id', value: cur.participants, condition: Conditions.in }],
 				all: true
 			}, false).then((users) => {
-				store[id].participants.value = users
+				store[id].participants.splice(0, store[id].participants.length, ...users)
 			}).catch()
-		const hasUnfetchedQuestions = store[id].game.value.questions.some((qId) => !store[id].questions.value.find((q) => q.id === qId))
-		if (!skip.questions && hasUnfetchedQuestions) Logic.Plays.GetGameQuestions(id)
+		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions)) Logic.Plays.GetGameQuestions(id)
 				.then((questions) => {
-					store[id].questions.value = questions
+					store[id].questions.splice(0, store[id].questions.length, ...questions)
 				})
 				.catch()
 		if (!skip.questions) Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })

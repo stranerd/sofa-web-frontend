@@ -1,8 +1,8 @@
 <template>
-	<h3 v-if="content" :class="cls" v-html="content" />
-	<h3 v-else :class="cls">
+	<component :is="as" v-if="content" :class="cls" v-html="content" />
+	<component :is="as" v-else :class="cls">
 		<slot />
-	</h3>
+	</component>
 </template>
 
 <script lang="ts">
@@ -26,6 +26,10 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
+		as: {
+			type: String,
+			default: 'h3'
+		}
 	},
 	name: "RoofHeaderText",
 	setup (props) {

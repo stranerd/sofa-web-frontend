@@ -92,8 +92,8 @@ export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizIn
 		const sep = ','
 		if (!value.includes(sep)) this.#tagString.value = value
 		else {
-			const tags = value.trim().toLowerCase()
-				.split(sep)
+			const tags = value.toLowerCase()
+				.split(sep).map((t) => t.trim())
 				.filter((t) => !!t && !this.tags.includes(t))
 			this.tags = this.tags.concat(...tags)
 			this.#tagString.value = ''

@@ -78,7 +78,7 @@
         <template v-for="(action, index) in subpageActions" :key="index">
           <template v-if="action.isIcon">
             <div class="flex flex-row gap-4 border-r border-[#E1E6EB] items-center pr-3 cursor-pointer">
-              <div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data" :key="index"
+              <div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data.filter((d) => !d.hide)" :key="index"
                 @click="icon.handler()">
                 <sofa-icon :name="icon.icon" :customClass="icon.size" />
 
