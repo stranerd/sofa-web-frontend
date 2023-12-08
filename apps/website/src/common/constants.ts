@@ -8,7 +8,7 @@ export const AuthClientIDs = {
   },
 }
 
-export const apiUrl = 'https://development.apis.sofa.stranerd.com/api' || process.env.VUE_APP_API_URL
+export const apiUrl = process.env.VUE_APP_API_URL
 
 const packageName = process.env.VUE_APP_PACKAGE_NAME
 
