@@ -69,12 +69,12 @@
       <div v-if="conversation.user.id === id"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
-          @click.stop.prevent="showEndSession = true">
+          @click.stop.prevent="onClickEndSession">
           <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
           <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
         </a>
 
-        <a class="w-full flex items-center justify-start gap-2" @click.stop.prevent="showDeleteConvo = true">
+        <a class="w-full flex items-center justify-start gap-2" @click.stop.prevent="deleteConversation">
           <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
           <sofa-normal-text :color="'text-primaryRed'">Delete chat</sofa-normal-text>
         </a>
@@ -118,7 +118,7 @@
           <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4"
             v-if="conversation.user.id === id">
             <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
-              @click="showEndSession = true">
+              @click="onClickEndSession">
               <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
               <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
             </a>
@@ -129,7 +129,7 @@
               </sofa-normal-text>
             </a>
 
-            <a class="w-full flex items-center justify-start gap-2" @click="showDeleteConvo = true">
+            <a class="w-full flex items-center justify-start gap-2" @click="deleteConversation">
               <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
               <sofa-normal-text :color="'text-primaryRed'">
                 Delete chat
@@ -147,85 +147,6 @@
     <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
       :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
       :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
-
-    <!-- Delete convo -->
-    <sofa-delete-prompt v-if="showDeleteConvo" title="Are you sure?"
-      subTitle="This action is permanent. All messages in this conversation would be lost"
-      :close="() => showDeleteConvo = false" :buttons="[
-        {
-          label: 'No',
-          isClose: true,
-          action: () => showDeleteConvo = false
-        },
-        {
-          label: 'Yes, delete',
-          isClose: false,
-          action: deleteConversation
-        },
-      ]" />
-
-    <template v-if="showNeedsSubscription">
-      <sofa-delete-prompt v-if="wallet?.subscription.active" title="You have run out of tutor aided conversations"
-        subTitle="This feature will become available on your next subscription renewal"
-        :close="() => showNeedsSubscription = false" :buttons="[
-          {
-            label: 'Close',
-            hide: true,
-            action: () => {
-              showNeedsSubscription = false
-            },
-          },
-          {
-            label: 'Close',
-            bgColor: 'bg-primaryBlue',
-            isClose: false,
-            action: () => {
-              showNeedsSubscription = false
-            },
-          },
-        ]" />
-      <sofa-delete-prompt v-else title="You have no subscription"
-        subTitle="You need to be subscribed to Stranerd Plus to access this feature"
-        :close="() => showNeedsSubscription = false" :buttons="[
-          {
-            label: 'Cancel',
-            isClose: true,
-            action: () => {
-              showNeedsSubscription = false
-            },
-          },
-          {
-            label: 'Subscribe',
-            bgColor: 'bg-primaryBlue',
-            isClose: false,
-            action: () => {
-              showNeedsSubscription = false
-              $router.push('/settings/subscription')
-            },
-          },
-        ]" />
-    </template>
-
-    <!-- End session confirmation modal -->
-    <sofa-delete-prompt v-if="showEndSession" title="End session with tutor?"
-      subTitle="Are you sure you want to end this session? The tutor will be removed from this chat"
-      :close="() => showEndSession = false" :buttons="[
-        {
-          label: 'No',
-          isClose: true,
-          action: () => {
-            showEndSession = false
-          },
-        },
-        {
-          label: 'End session',
-          isClose: false,
-          action: () => {
-            showEndSession = false
-            showRateAndReviewTutor = true
-          },
-        },
-      ]" />
 
     <!-- Rate and review modal -->
     <rate-and-review-modal v-if="showRateAndReviewTutor" :close="() => showRateAndReviewTutor = false"
@@ -246,10 +167,10 @@ import ConversationMessages from "@/components/conversations/Messages.vue"
 import { useAuth } from '@/composables/auth/auth'
 import { useConversation } from '@/composables/conversations/conversations'
 import { useCreateMessage } from '@/composables/conversations/messages'
+import { Logic } from 'sofa-logic'
 import {
   SofaAvatar,
   SofaButton,
-  SofaDeletePrompt,
   SofaHeaderText,
   SofaIcon,
   SofaModal,
@@ -270,7 +191,6 @@ export default defineComponent({
     AddTutor,
     SofaModal,
     SofaSuccessPrompt,
-    SofaDeletePrompt,
     SofaButton,
     SofaAvatar,
     SofaHeaderText,
@@ -303,11 +223,8 @@ export default defineComponent({
     })
 
     const showTutorRequestSubmited = ref(false)
-    const showDeleteConvo = ref(false)
     const showAddTutor = ref(false)
-    const showEndSession = ref(false)
     const showMoreOptions = ref(false)
-    const showNeedsSubscription = ref(false)
     const showRateAndReviewTutor = ref(false)
 
     const handleRequestSent = async (data: { message: string, tutorId: string }) => {
@@ -318,10 +235,34 @@ export default defineComponent({
       showMoreOptions.value = false
     }
 
-    const onClickAddTutor = () => {
+    const onClickAddTutor = async () => {
       showMoreOptions.value = false
-      if (wallet.value?.subscription.data.tutorAidedConversations > 0) showAddTutor.value = true
-      else showNeedsSubscription.value = true
+      if (wallet.value?.subscription.data.tutorAidedConversations > 0) return showAddTutor.value = true
+      if (wallet.value?.subscription.active) return await Logic.Common.confirm({
+        title: 'You have run out of tutor aided conversations',
+        sub: 'This feature will become available on your next subscription renewal',
+        rightLabel: 'Close',
+        rightBg: 'bg-primaryBlue',
+        leftHide: true
+      })
+      const confirmed = await Logic.Common.confirm({
+        title: 'You have no subscription',
+        sub: 'You need to be subscribed to Stranerd Plus to access this feature',
+        rightLabel: 'Yes, delete',
+        leftLabel: 'Cancel',
+        rightBg: 'bg-primaryBlue'
+      })
+      if (confirmed) await Logic.Common.GoToRoute('/settings/subscription')
+      return confirmed
+    }
+
+    const onClickEndSession = async () => {
+      const confirmed = await Logic.Common.confirm({
+        title: 'End session with tutor?',
+        sub: 'Are you sure you want to end this session? The tutor will be removed from this chat',
+        rightLabel: 'End session',
+      })
+      if (confirmed) showRateAndReviewTutor.value = true
     }
 
     return {
@@ -335,13 +276,11 @@ export default defineComponent({
       otherUsers,
       showAddTutor,
       showMoreOptions,
-      showDeleteConvo,
       onClickAddTutor,
       showTutorRequestSubmited,
-      showNeedsSubscription,
-      showEndSession,
       handleRequestSent,
       showRateAndReviewTutor,
+      onClickEndSession,
       endSession,
       deleteConversation,
     }
