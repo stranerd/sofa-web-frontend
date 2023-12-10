@@ -3,10 +3,7 @@
     :class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white  lg:!bg-white bg-backgroundGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
     <template v-if="type == 'main'">
       <div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-        <sofa-avatar :size="'32'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
-          " @click="Logic.Common.GoToRoute('/settings')">
-          <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
-        </sofa-avatar>
+        <sofa-avatar :size="'32'" :photoUrl="UserProfile?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
 
         <div class="py-4 cursor-pointer flex flex-row items-center justify-center">
           <img src="/images/logo.svg" class="h-[24px]" v-if="!title" />
@@ -56,10 +53,7 @@
           </div>
         </div>
 
-        <sofa-avatar :size="'36'" :bgColor="'bg-grayColor'" :photoUrl="UserProfile?.bio?.photo ? UserProfile?.bio?.photo.link : ''
-          " :customClass="'!cursor-pointer'" @click="Logic.Common.GoToRoute('/settings/profile')">
-          <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
-        </sofa-avatar>
+        <sofa-avatar :size="'36'" :photoUrl="UserProfile?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
       </div>
     </template>
 

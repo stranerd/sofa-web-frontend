@@ -36,10 +36,7 @@
               contentDetails?.title ?? '',
             )
           },
-          save: () => {
-            selectedFolderMaterailToAdd = contentDetails
-            showSaveToFolder = true
-          }
+          save: () => saveToFolder(contentDetails)
         }" />
     </div>
 
@@ -137,9 +134,8 @@ import {
   createQuizData,
   openQuiz,
   reportMaterial,
-  selectedFolderMaterailToAdd,
   shareMaterialLink,
-  showSaveToFolder,
+  saveToFolder
 } from "@/composables/library"
 import { otherTasks } from "@/composables/quiz"
 import { Conditions, Logic } from "sofa-logic"
@@ -623,8 +619,7 @@ export default defineComponent({
       similarContents,
       SingleQuiz,
       contentType,
-      selectedFolderMaterailToAdd,
-      showSaveToFolder,
+      saveToFolder,
       userHasAccess,
       openQuiz,
       reportMaterial,

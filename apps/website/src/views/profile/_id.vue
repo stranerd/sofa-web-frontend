@@ -17,7 +17,7 @@
         <div class="w-full flex mdlg:flex-row flex-col justify-between items-start mdlg:gap-0 gap-4">
           <div class="flex flex-row gap-3 items-start">
             <div class="flex flex-row items-start gap-3">
-              <sofa-avatar :photoUrl="singleUser.bio.photo?.link || ''" :size="'110'" :customClass="' -mt-[60%]'" />
+              <sofa-avatar :photoUrl="singleUser.bio.photo?.link" :size="'110'" :customClass="'-mt-[60%]'" />
             </div>
 
             <div class="flex flex-col">

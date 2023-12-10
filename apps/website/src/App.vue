@@ -13,7 +13,7 @@
     :content="alert.message" :type="alert.type" />
   <study-mode-modal />
   <!-- Save to folder -->
-  <save-to-folder v-if="showSaveToFolder" :close="() => showSaveToFolder = false" />
+  <save-to-folder v-if="selectedFolderMaterailToAdd" :material="selectedFolderMaterailToAdd" :close="() => selectedFolderMaterailToAdd = null" />
   <!-- Report material -->
   <rate-and-review-modal v-if="reportMaterialSetup.show" :close="() => reportMaterialSetup.show = false" :canClose="true"
     :has-ratings="false" :title="`Report this ${reportMaterialSetup.type}`" @on-review-submitted="sendReportMaterial" />
@@ -54,7 +54,7 @@ import { useAuth } from './composables/auth/auth'
 import {
   reportMaterialSetup,
   sendReportMaterial,
-  showSaveToFolder,
+  selectedFolderMaterailToAdd,
 } from "./composables/library"
 
 useMeta({

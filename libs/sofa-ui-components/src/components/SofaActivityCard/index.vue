@@ -1,5 +1,5 @@
 <template>
-  <div
+  <component :is="as"
     :class="`mdlg:!w-full ${isWrapped ? 'w-full' : 'w-[220px]'
       }  shadow-custom mdlg:!shadow-none flex ${isWrapped ? 'w-full' : 'flex-row '
       }  items-start gap-3 px-3 py-3 justify-between rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] mdlg:!bg-ligthGray bg-white  ${customClass}`">
@@ -66,10 +66,7 @@
 
           <div class="flex items-center gap-2 flex-grow justify-between w-full">
             <a @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)" class="gap-2 flex items-center">
-              <sofa-avatar :size="'20'" :photoUrl="activity.user.bio.photo?.link ?? ''" :bgColor="'bg-grayColor'"
-                :user-id="activity.user.id">
-                <sofa-icon :customClass="'h-[12px]'" :name="'user'" v-if="!activity.user.bio.photo?.link" />
-              </sofa-avatar>
+              <sofa-avatar :size="'20'" :photoUrl="activity.user.bio.photo?.link" :user-id="activity.user.id" />
               <sofa-normal-text :customClass="'!whitespace-nowrap !line-clamp-1'">
                 {{
                   activity.authUserId === activity.user.id
@@ -88,7 +85,7 @@
       </div>
     </div>
     <slot />
-  </div>
+  </component>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
@@ -113,6 +110,10 @@ export default defineComponent({
     customClass: {
       type: String,
       default: "bg-ligthGray",
+    },
+    as: {
+      type: String,
+      default: 'div'
     },
     activity: {
       type: Object as () => any,

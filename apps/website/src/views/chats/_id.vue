@@ -81,9 +81,7 @@
       <template v-if="conversation.tutor?.id === id">
         <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
           <router-link to="/profile" class="w-full flex flex-col items-center justify-center gap-3">
-            <sofa-avatar :size="'180'" :bgColor="'bg-grayColor'" :photoUrl="user?.bio.photo?.link ?? ''">
-              <sofa-icon :customClass="'h-[23px]'" :name="'user'" />
-            </sofa-avatar>
+            <sofa-avatar :size="'180'" :photoUrl="user?.bio.photo?.link" />
           </router-link>
 
           <sofa-header-text :size="'xl'" :content="user?.bio.name.full" />

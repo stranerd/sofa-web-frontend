@@ -1,21 +1,28 @@
 <template>
-  <sofa-image-loader :photo-url="photoUrl"
-    :custom-class="`rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer  ${bgColor} flex-row items-center justify-center ${customClass} `"
+  <SofaImageLoader :photo-url="photoUrl"
+    :custom-class="`rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer ${bgColor} items-center justify-center ${customClass}`"
     :custom-style="`width: ${size}px; height: ${size}px;`"
     @click.stop.prevent="userId ? Logic.Common.GoToRoute(`/profile/${userId}`) : null">
-    <template v-if="photoUrl == ''">
-      <slot />
+    <template v-if="!photoUrl">
+      <slot>
+        <SofaIcon style="height: 66.67%" name="user" />
+      </slot>
     </template>
-  </sofa-image-loader>
+    <span v-if="showOnline" class="h-[5px] w-[5px] absolute bottom-0 right-0 rounded-full"
+      :class="online ? 'bg-primaryGreen' : 'bg-grayColor'" />
+  </SofaImageLoader>
 </template>
+
 <script lang="ts">
 import { Logic } from "sofa-logic"
 import { defineComponent } from "vue"
 import SofaImageLoader from "../SofaImageLoader/index.vue"
+import SofaIcon from '../SofaIcon'
 
 export default defineComponent({
   components: {
     SofaImageLoader,
+    SofaIcon,
   },
   props: {
     size: {
@@ -24,7 +31,8 @@ export default defineComponent({
     },
     photoUrl: {
       type: String,
-      required: true,
+      required: false,
+      default: '',
     },
     customClass: {
       type: String,
@@ -32,12 +40,22 @@ export default defineComponent({
     },
     bgColor: {
       type: String,
-      default: "",
+      default: "bg-grayColor",
     },
     userId: {
       type: String,
       default: "",
     },
+    showOnline: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    online: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
   },
   name: "SofaAvatar",
   setup () {

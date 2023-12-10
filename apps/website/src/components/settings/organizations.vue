@@ -11,9 +11,7 @@
           <div class="w-full flex flex-row gap-2 items-center justify-between" v-for="(item, index) in allOrganizations"
             :key="index">
             <div class="flex flex-row items-center gap-2">
-              <sofa-avatar :photoUrl="item.profile_url || ''" :size="'23'" :bgColor="'bg-grayColor'">
-                <sofa-icon :name="'user'" :customClass="'h-[15px]'" />
-              </sofa-avatar>
+              <sofa-avatar :photoUrl="item.profile_url" :size="'23'" />
 
               <sofa-normal-text :customClass="'text-left'" :content="item.name" />
             </div>
@@ -58,7 +56,6 @@
 import { defineComponent, onMounted, ref, watch } from "vue"
 import {
   SofaHeaderText,
-  SofaIcon,
   SofaNormalText,
   SofaEmptyState,
   SofaAvatar,
@@ -71,7 +68,6 @@ import { setOrganizations, allOrganizations } from "@/composables/profile"
 export default defineComponent({
   components: {
     SofaHeaderText,
-    SofaIcon,
     SofaNormalText,
     SofaEmptyState,
     SofaAvatar,

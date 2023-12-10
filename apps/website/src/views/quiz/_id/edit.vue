@@ -180,9 +180,7 @@
           </div>
           <div class="flex flex-col gap-4 w-full">
              <div v-for="(user, index) in extras.usersByQuestions[extras.currentQuestionById?.id] ?? []" :key="user.id" class="flex items-center gap-2">
-              <SofaAvatar v-if="index < 3" bgColor="!bg-[#78828C]" :photoUrl="user.bio.photo?.link ?? ''" size="36" class="-ml-1">
-                <SofaIcon class="h-[16px]" name="user" />
-              </SofaAvatar>
+              <SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="36" class="-ml-1" />
               <SofaNormalText :content="user.bio.name.full" size="lg" />
             </div>
             <SofaNormalText v-if="!(extras.usersByQuestions[extras.currentQuestionById?.id] ?? []).length"

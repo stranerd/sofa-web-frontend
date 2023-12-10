@@ -3,7 +3,7 @@
     <sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photo-url="content.image">
       <div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
         v-if="content.price > 0">
-        <sofa-badge :customClass="'!bg-[#141618] !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
+        <sofa-badge :customClass="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
           {{
             content.price > 0
             ? `${Logic.Common.convertToMoney(content.price, false, "ngn")}`
@@ -38,10 +38,7 @@
 
     <div class="flex gap-2 items-center justify-between pt-1" v-if="content.user">
       <a @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${content.user.id}`)" class="gap-2 flex items-center">
-        <sofa-avatar :size="'20'" :photoUrl="content.user.bio.photo?.link ?? ''" :bgColor="'bg-grayColor'"
-          :user-id="content.user.id">
-          <sofa-icon :customClass="'h-[12px]'" :name="'user'" v-if="!content.user.bio.photo?.link" />
-        </sofa-avatar>
+        <sofa-avatar :size="'20'" :photoUrl="content.user.bio.photo?.link" :user-id="content.user.id" />
         <sofa-normal-text :customClass="'!whitespace-nowrap !line-clamp-1'">
           {{ content.authUserId === content.user.id ? 'You' : content.user.bio.name.full }}
         </sofa-normal-text>

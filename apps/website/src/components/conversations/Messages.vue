@@ -4,11 +4,7 @@
       <div
         class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start"
         v-if="message.userId !== id">
-        <div class="w-[30px]">
-          <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="users[message.userId]?.photoUrl" :size="'27'">
-            <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-          </sofa-avatar>
-        </div>
+        <sofa-avatar :photoUrl="users[message.userId]?.photoUrl" :size="'27'" />
         <div class="p-3 rounded-custom text-left bg-[#E2F3FD] flex flex-col gap-1 justify-start">
           <sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#3296C8]'">
             {{ users[message.userId]?.name }}
@@ -23,11 +19,7 @@
             <sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body">
             </sofa-normal-text>
           </div>
-          <div class="w-[30px]">
-            <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="users[message.userId]?.photoUrl" :size="'27'">
-              <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-            </sofa-avatar>
-          </div>
+          <sofa-avatar :photoUrl="users[message.userId]?.photoUrl" :size="'27'" />
         </div>
       </div>
     </template>
@@ -45,7 +37,7 @@ import { useAuth } from '@/composables/auth/auth'
 import { useMessages } from '@/composables/conversations/messages'
 import { ChatScroll as vChatScroll } from '@/directives/chat-scroll'
 import { Conversation } from "sofa-logic"
-import { SofaAvatar, SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { SofaAvatar, SofaNormalText } from "sofa-ui-components"
 import { PropType, defineProps } from "vue"
 
 const props = defineProps({

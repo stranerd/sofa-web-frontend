@@ -52,11 +52,7 @@
               <a class="w-full rounded-custom bg-[#F1F6FA] p-4 flex items-center gap-3"
                 :class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
                 v-for="(tutor, index) in filteredTutors" :key="index" @click="factory.tutorId = tutor.id">
-                <SofaAvatar size="60" :photoUrl="tutor.photo_url" bgColor="bg-grayColor">
-                  <SofaIcon v-if="!tutor.photo_url" class="h-[35px]" name="user" />
-                  <span class="h-[5px] w-[5px] absolute bottom-0 right-0 rounded-full"
-                    :class="tutor.online ? 'bg-primaryGreen' : 'bg-deepGray'" />
-                </SofaAvatar>
+                <SofaAvatar size="60" :photoUrl="tutor.photo_url" :showOnline="true" :online="tutor.online" />
                 <div class="w-full flex flex-col flex-grow gap-1">
                   <div class="flex gap-2 items-center">
                     <SofaNormalText class="!font-bold" :content="tutor.name" />

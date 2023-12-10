@@ -93,11 +93,7 @@
                   content.id +
                   `?type=${content.labels.main.toLowerCase()}`
                 )
-                " :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = content
-  }
-    "></sofa-item-card>
+                " :bookmark-action="() => saveToFolder(content)" />
           </div>
         </div>
 
@@ -132,11 +128,7 @@
                   content.id +
                   `?type=${content.labels.main.toLowerCase()}`
                 )
-                " :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = content
-  }
-    "></sofa-item-card>
+                " :bookmark-action="() => saveToFolder(content)" />
           </div>
         </div>
 
@@ -171,11 +163,7 @@
                   content.id +
                   `?type=${content.labels.main.toLowerCase()}`
                 )
-                " :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = content
-  }
-    "></sofa-item-card>
+                " :bookmark-action="() => saveToFolder(content)" />
           </div>
         </div>
 
@@ -191,10 +179,7 @@
 
 <script lang="ts">
 import { scrollToTop } from "@/composables"
-import {
-  selectedFolderMaterailToAdd,
-  showSaveToFolder,
-} from "@/composables/library"
+import { saveToFolder } from "@/composables/library"
 import {
   AllCourses,
   MarketplaceMaterials,
@@ -276,8 +261,7 @@ export default defineComponent({
       mainCards,
       sectionTags,
       marketplaceContents,
-      showSaveToFolder,
-      selectedFolderMaterailToAdd,
+      saveToFolder,
       handleSearch,
     }
   },

@@ -32,12 +32,10 @@
             </div>
 
             <div class="flex items-center flex-shrink-0">
-              <SofaNormalText color="text-primaryRed" as="a"
-                @click="handleFolderSelected(item.id, false)"
-                v-if="[...item.saved.courses, ...item.saved.quizzes].includes(selectedFolderMaterailToAdd.id)"
-                content="- Remove" />
-              <SofaNormalText color="text-primaryBlue" as="a"
-                @click="handleFolderSelected(item.id)" content="+ Add" v-else />
+              <SofaNormalText color="text-primaryRed" as="a" @click="handleFolderSelected(item.id, false)"
+                v-if="[...item.saved.courses, ...item.saved.quizzes].includes(material.id)" content="- Remove" />
+              <SofaNormalText color="text-primaryBlue" as="a" @click="handleFolderSelected(item.id)" content="+ Add"
+                v-else />
             </div>
           </a>
           <a class="w-full flex items-center gap-3 p-4 rounded-custom bg-[#F1F6FA]" @click="generateNewFolder">
@@ -53,10 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  addMaterialToFolder,
-  selectedFolderMaterailToAdd
-} from "@/composables/library"
+import { addMaterialToFolder } from "@/composables/library"
 import { useEditFolder, useMyFolders } from '@/composables/study/folders'
 import {
   SofaCustomInput,
@@ -67,9 +62,13 @@ import {
 } from "sofa-ui-components"
 import { defineProps } from "vue"
 
-defineProps({
+const props = defineProps({
   close: {
     type: Function
+  },
+  material: {
+    type: Object,
+    required: true
   }
 })
 
@@ -77,13 +76,11 @@ const { folders } = useMyFolders()
 const { factory, saveFolder, generateNewFolder } = useEditFolder()
 
 const handleFolderSelected = (folderId: string, add = true) => {
-  if (selectedFolderMaterailToAdd.value) {
+  if (props.material) {
     addMaterialToFolder(
       folderId,
-      selectedFolderMaterailToAdd.value.type == "course"
-        ? "courses"
-        : "quizzes",
-      selectedFolderMaterailToAdd.value.id,
+      props.material.type == "course" ? "courses" : "quizzes",
+      props.material.id,
       add
     )
   }

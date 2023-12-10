@@ -25,9 +25,7 @@
         <div class="w-full flex flex-col gap-4 px-4 py-4 items-center justify-center">
           <template v-if="tutor">
             <div class="w-full flex flex-row justify-center items-center gap-2">
-              <sofa-avatar :bgColor="'!bg-[#78828C]'" :photoUrl="tutor.photo || ''" :size="'27'">
-                <sofa-icon :customClass="'h-[16px]'" :name="'user'" />
-              </sofa-avatar>
+              <sofa-avatar :photoUrl="tutor.photo" :size="'27'" />
               <div class="flex flex-row items-center gap-1">
                 <SofaNormalText :custom-class="'!font-bold'">
                   {{ tutor.name }}

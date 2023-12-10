@@ -59,11 +59,7 @@
                     Logic.Common.GoToRoute(
                       '/marketplace/' + content.id + '?type=course'
                     )
-                    " :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = content
-  }
-    "></sofa-item-card>
+                    " :bookmark-action="() => saveToFolder(content)" />
               </div>
 
               <div
@@ -74,11 +70,7 @@
                       Logic.Common.GoToRoute(
                         '/marketplace/' + activity.id + '?type=course'
                       )
-                      " :has-bookmark="true" :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = activity
-  }
-    " />
+                      " :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
                 </div>
               </div>
             </div>
@@ -111,11 +103,7 @@
                     Logic.Common.GoToRoute(
                       '/marketplace/' + content.id + '?type=quiz'
                     )
-                    " :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = content
-  }
-    "></sofa-item-card>
+                    " :bookmark-action="() =>  saveToFolder(content)" />
               </div>
 
               <div
@@ -126,11 +114,7 @@
                       Logic.Common.GoToRoute(
                         '/marketplace/' + activity.id + '?type=quiz'
                       )
-                      " :has-bookmark="true" :bookmark-action="() => {
-    showSaveToFolder = true
-    selectedFolderMaterailToAdd = activity
-  }
-    " />
+                      " :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
                 </div>
               </div>
             </div>
@@ -182,9 +166,7 @@
 import MarketplaceFilter, { SelectedOption } from "@/components/marketplace/Filter.vue"
 import {
   createCourseData,
-  createQuizData,
-  selectedFolderMaterailToAdd,
-  showSaveToFolder,
+  createQuizData, saveToFolder
 } from "@/composables/library"
 import { search } from "@/composables/marketplace"
 import { Conditions, Logic, QueryParams } from "sofa-logic"
@@ -333,8 +315,7 @@ export default defineComponent({
       quizContents,
       filterOptions,
       selectedFilterOption,
-      showSaveToFolder,
-      selectedFolderMaterailToAdd,
+      saveToFolder,
       search,
     }
   },

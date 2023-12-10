@@ -22,9 +22,11 @@ const reportMaterialSetup = reactive<{
   id: '',
 })
 
-const showSaveToFolder = ref(false)
+export const selectedFolderMaterailToAdd = ref<{ id: string, type: string }>()
 
-const selectedFolderMaterailToAdd = ref<{ id: string, type: string }>()
+export const saveToFolder = (activity: { id: string, type: string }) => {
+  selectedFolderMaterailToAdd.value = activity
+}
 
 export const createQuizData = (quiz: Quiz): ResourceType => {
   return {
@@ -239,14 +241,13 @@ const moreOptions = reactive([
     show: () => selectedItem.value?.status == 'published',
     action: () => {
       showMoreOptions.value = false
-      selectedFolderMaterailToAdd.value = selectedItem.value
-      showSaveToFolder.value = true
+      saveToFolder(selectedItem.value)
     },
   },
 ])
 
 export {
   AllQuzzies, addMaterialToFolder, moreOptions, openCourse, openQuiz,
-  reportMaterial, reportMaterialSetup, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial,
-  shareMaterialLink, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
+  reportMaterial, reportMaterialSetup, selectedItem, sendReportMaterial,
+  shareMaterialLink, showMoreOptionHandler, showMoreOptions, showStudyMode
 }

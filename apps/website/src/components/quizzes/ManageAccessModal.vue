@@ -23,9 +23,7 @@
 
 				<div class="w-full flex flex-col gap-2">
 					<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
-						<SofaAvatar bgColor="!bg-[#78828C]" :photoUrl="request.bio.photo?.link ?? ''" size="28">
-							<SofaIcon class="h-[16px]" name="user" />
-						</SofaAvatar>
+						<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
 						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`" class="truncate flex-grow" />
 						<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="emits('grantAccess', request.id, false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
@@ -38,9 +36,7 @@
 
 			<div class="w-full flex flex-col gap-2">
 				<div v-for="member in [quiz.user, ...members]" :key="member.id" class="flex gap-2 items-center w-full">
-					<SofaAvatar bgColor="!bg-[#78828C]" :photoUrl="member.bio.photo?.link ?? ''" size="28">
-						<SofaIcon class="h-[16px]" name="user" />
-					</SofaAvatar>
+					<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
 					<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
 					<template v-if="member.id !== quiz.user.id">
 						<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="emits('manageMembers', [member.id], false)" />

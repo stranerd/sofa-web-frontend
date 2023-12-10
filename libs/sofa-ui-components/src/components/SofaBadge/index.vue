@@ -1,6 +1,6 @@
 <template>
-  <span
-    :class="`px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs ${customClass} text-xs rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] 
+  <component :is="as"
+    :class="`px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs ${customClass} text-xs rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]
 	${
     color == 'purple'
       ? ` bg-primaryPurple ${
@@ -32,7 +32,7 @@
   ${
     color == 'gray'
       ? `  bg-backgroundGray ${
-          isInverted ? 'text-bodyBlack bg-opacity-25' : ' text-grayColor '
+          isInverted ? 'text-bodyBlack bg-opacity-50' : ' text-grayColor '
         }`
       : ''
   }
@@ -46,7 +46,7 @@
 	`"
   >
     <slot />
-  </span>
+  </component>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -64,6 +64,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    as: {
+      type: String,
+      required: false,
+      default: 'span'
+    }
   },
   name: "SofaBadge",
 });

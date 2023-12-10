@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 border-b border-[#F1F6FA] mdlg:pb-2 pb-4"
+  <div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4"
     v-if="userType.isTeacher && requests.length">
     <a :class="`w-full flex items-center justify-between ${extraStyle}`" @click="showRequests = !showRequests">
       <sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'" :content="`Requests (${requests.length})`" />
@@ -15,13 +15,13 @@
       }" />
     </div>
   </div>
-  <div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 border-b border-[#F1F6FA] mdlg:pb-2 pb-4" v-if="pending.length">
+  <div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4" v-if="pending.length">
     <a :class="`w-full flex items-center justify-between ${extraStyle}`" @click="showPending = !showPending">
       <sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'" :content="`Pending (${pending.length})`" />
       <sofa-icon :name="showPending ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
     </a>
     <div class="w-full flex flex-col gap-3" v-if="showPending">
-      <Chat :customClass="customClass" v-for="request in pending" :key="request.hash" :chat="{
+      <Chat :customClass="customClass" v-for="request in pending.slice(0, limit)" :key="request.hash" :chat="{
         route: `/chats/${request.id}`,
         title: request.user.bio.name.full,
         lastMessage: request.title,

@@ -20,6 +20,7 @@ export interface ContentDetails {
     total: number
   }
   type: 'quiz' | 'course'
+  route: string
 }
 
 const AllCourses = ref(Logic.Study.AllCourses)
@@ -202,7 +203,7 @@ const setCourses = (count = 5) => {
   }
 }
 
-const extractContent = (item: Quiz | Course): ContentDetails => {
+export const extractContent = (item: Quiz | Course): ContentDetails => {
   const type: 'course' | 'quiz' =
     item.__type == 'CourseEntity' ? 'course' : 'quiz'
   return {
@@ -223,6 +224,7 @@ const extractContent = (item: Quiz | Course): ContentDetails => {
     authUserId: Logic.Auth.AuthUser.id,
     type,
     ratings: item.ratings,
+    route: `/marketplace/${item.id}?${type}`
   }
 }
 

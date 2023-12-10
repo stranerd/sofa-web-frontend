@@ -44,10 +44,8 @@
           <SofaNormalText color="text-inherit" content="Currently editing" />
           <div class="flex flex-row-reverse items-center ml-auto">
             <template v-for="(user, index) in users[question.id] ?? []" :key="user.id">
-              <SofaAvatar v-if="index < 3" bgColor="!bg-[#78828C]" :photoUrl="user.bio.photo?.link ?? ''" size="28" class="-ml-1">
-                <SofaIcon class="h-[16px]" name="user" />
-              </SofaAvatar>
-              <SofaAvatar v-if="index === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGrayVaraint" :photoUrl="user.bio.photo?.link ?? ''" size="28" class="-ml-1">
+              <SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="28" class="-ml-1" />
+              <SofaAvatar v-if="index === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGrayVaraint" size="28" class="-ml-1">
                 <span>{{ users[question.id].length - 3 }}+</span>
               </SofaAvatar>
             </template>

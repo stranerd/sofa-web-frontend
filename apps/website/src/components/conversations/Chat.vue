@@ -3,12 +3,7 @@
     :class="`w-full flex items-center justify-between relative gap-3 p-3 rounded-custom hover:bg-[#E5F2FD] ${customClass}`"
     exact-active-class="bg-[#E5F2FD]">
     <div class="flex gap-2 w-full">
-      <div class="!w-[40px] mdlg:!w-[44px]">
-        <sofa-avatar :photoUrl="chat.photoUrl ?? ''"
-          :custom-class="'!h-[40px] !w-[40px] mdlg:!h-[44px] mdlg:!w-[44px] !bg-grayColor'">
-          <sofa-icon :customClass="'h-[23px]'" :name="'user'" v-if="!chat.photoUrl" />
-        </sofa-avatar>
-      </div>
+      <sofa-avatar :photoUrl="chat.photoUrl" size="40"  />
       <div class="flex flex-col">
         <sofa-normal-text :customClass="'!font-semibold text-left !line-clamp-1'">
           {{ chat.title }}
@@ -28,14 +23,13 @@
 </template>
 
 <script lang="ts">
-import { SofaAvatar, SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { SofaAvatar, SofaNormalText } from "sofa-ui-components"
 import { defineComponent } from "vue"
 
 export default defineComponent({
   components: {
     SofaNormalText,
     SofaAvatar,
-    SofaIcon,
   },
   props: {
     chat: {
