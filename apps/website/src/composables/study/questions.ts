@@ -5,7 +5,7 @@ import { useListener } from '../core/listener'
 
 
 export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, listen = false) => {
-	const allQuestions = computed(() => [])
+	const allQuestions = computed(() => [] as Question[])
 
 	const { items: questions, addToList } = useItemsInList('questions', ids, allQuestions, async (notFetched: string[]) => {
 		const questions = await Logic.Study.GetQuestions(quizId, {
@@ -16,7 +16,7 @@ export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, liste
 	})
 
 	const listener = useListener(async () => {
-		return await Logic.Common.listenToMany<Question>(`study/quizzes/${quizId}questions`, {
+		return await Logic.Common.listenToMany<Question>(`study/quizzes/${quizId}/questions`, {
 			created: addToList, updated: addToList, deleted: () => {/* */}
 		},  (e) => ids.value.includes(e.id))
 	})

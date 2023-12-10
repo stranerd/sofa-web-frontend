@@ -1,5 +1,6 @@
 import { ComputedRef, Ref, computed, reactive, watch } from 'vue'
 import { useErrorHandler, useLoadingHandler } from './states'
+import { Logic } from 'sofa-logic'
 
 const store: Record<string, {
 	items: { id: string }[],
@@ -31,7 +32,7 @@ export const useItemsInList = <T extends { id: string }> (
 			await store[key].setError('')
 			await store[key].setLoading(true)
 			const items = await fetchItems(notFetched)
-			items.forEach((item) => store[key].items.push(item))
+			items.forEach((item) => addToList(item))
 		} catch (e) {
 			await store[key].setError(e)
 		}
@@ -39,7 +40,9 @@ export const useItemsInList = <T extends { id: string }> (
 	}, { immediate: true })
 
 	const addToList = (...items: T[]) => {
-		store[key].items.push(...items)
+		items.forEach((item) => {
+			Logic.addToArray(store[key].items, item, (e) => e.id, (e) => e.id)
+		})
 	}
 
 	return { items: filteredItems, addToList }

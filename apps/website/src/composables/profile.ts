@@ -83,7 +83,7 @@ const setCountry = () => {
   if (Countries.value) {
     allCountries.length = 0
 
-    Countries.value.forEach((country) => {
+    Countries.value?.forEach((country) => {
       allCountries.push({
         key: country.name,
         value: country.name,

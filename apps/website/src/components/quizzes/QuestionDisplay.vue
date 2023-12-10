@@ -175,7 +175,7 @@ const answer = reactive({
 watch(answer, () => {
   if (props.question.type === 'dragAnswers') emits('update:modelValue', answer.drag.flat(1))
   else emits('update:modelValue', answer.value)
-})
+}, { immediate: true })
 
 const move = (e: { from: HTMLElement, to: HTMLElement, draggedContext: { element: string } }) => {
   const optionsId = 'drag-options'

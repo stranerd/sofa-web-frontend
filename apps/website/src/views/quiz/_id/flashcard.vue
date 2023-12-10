@@ -110,7 +110,7 @@ export default defineComponent({
 		watch(dontShowAgain, () => {
 			if (dontShowAgain.value) localStorage.setItem(storageKey, "true")
 			else localStorage.removeItem(storageKey)
-		})
+		}, { immediate: true })
 
 		return { isDone, showInfoModal, dontShowAgain, Logic, close }
 	}

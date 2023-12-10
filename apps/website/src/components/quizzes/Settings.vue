@@ -132,9 +132,6 @@ const loadTags = () => {
   }
 }
 
-watch(topics, loadTopic)
-watch(tags, loadTags)
-
-loadTopic()
-loadTags()
+watch(topics, loadTopic, { immediate: true })
+watch(tags, loadTags, { immediate: true })
 </script>

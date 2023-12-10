@@ -62,7 +62,7 @@ const {
 	requestAccess, grantAccess, manageMembers
 } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
 const reorderedQuestions = ref<Question[] | null>(null)
-const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions ?? []).map(Logic.Study.transformQuestion))
+const quizQuestions = computed(() => (reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion))
 
 const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
@@ -165,7 +165,7 @@ const extras = computed(() => ({
 	},
 	get usersByQuestions () {
 		const allMembers = quiz.value?.access.members.concat(quiz.value.user.id) ?? []
-		const online = members.filter((u) => u.id !== id.value && u.status.connections.length > 0 && allMembers.includes(u.id))
+		const online = members.value.filter((u) => u.id !== id.value && u.status.connections.length > 0 && allMembers.includes(u.id))
 		return quizQuestions.value.reduce((acc, cur) => {
 			acc[cur.id] = online.filter((m) => m.account.editing.quizzes?.questionId === cur.id)
 			return acc
@@ -205,13 +205,13 @@ watch(quiz, async () => {
 			started.value = true
 			nextQ(0)
 		})
-})
+}, { immediate: true })
 
 watch([currentQuestionById, quizQuestions], () => {
 	const question = currentQuestionById.value
 	if (question) questionFactory.loadEntity(question)
 	else if (quizQuestions.value.length > 0) extras.value.selectedQuestionId = quizQuestions.value[0].id
-})
+}, { immediate: true })
 
 watch([currentQuestionById, quizQuestions, quiz], () => {
 	if (!extras.value.canEdit || !currentQuestionById.value) return
