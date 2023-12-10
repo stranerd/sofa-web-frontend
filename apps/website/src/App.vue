@@ -73,5 +73,5 @@ watch([route, user], async () => {
   const quizzes = user.value?.account.editing?.quizzes
   if (!quizzes) return
   if (!path.startsWith(`/quiz/${quizzes.id}/edit`)) Logic.Users.updateUserEditingQuizzes(null).catch()
-})
+}, { immediate: true })
 </script>

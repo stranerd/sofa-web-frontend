@@ -69,5 +69,5 @@ const submitTitle = () => {
 
 watch(title, () => {
 	emits('update:modelValue', title.value)
-})
+}, { immediate: true })
 </script>

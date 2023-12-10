@@ -83,7 +83,7 @@ export default defineComponent({
 
     watch(selectedOptions, (value) => {
       context.emit('update:modelValue', value)
-    })
+    }, { immediate: true })
 
     const searchOptions = computed(() => [
       {

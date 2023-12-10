@@ -1,8 +1,8 @@
 import { Conditions, Logic, QueryParams, SingleUser } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useListener } from '../core/listener'
+import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const searchStore = {
 	users: reactive<SingleUser[]>([]),
@@ -78,15 +78,29 @@ export const useSearchUsers = () => {
 	return { ...searchStore, searchValue, searchUsers }
 }
 
-export const useUsersInList = (ids: Refable<string[]>) => {
+export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
 	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users])
 
-	const { items: users } = useItemsInList('users', ids, allUsers, async (notFetched: string[]) => {
+	const { items: users, addToList } = useItemsInList('users', ids, allUsers, async (notFetched: string[]) => {
 		const users = await Logic.Users.GetUsers({
 			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
 			all: true
 		})
 		return users.results
+	})
+
+	const listener = useListener(async () => {
+		return await Logic.Common.listenToMany<SingleUser>('users/users', {
+			created: addToList, updated: addToList, deleted: () => {/* */}
+		},  (e) => ids.value.includes(e.id))
+	})
+
+	onMounted(() => {
+		if (listen) listener.start()
+	})
+
+	onUnmounted(() => {
+		if (listen) listener.close()
 	})
 
 	return { users }
