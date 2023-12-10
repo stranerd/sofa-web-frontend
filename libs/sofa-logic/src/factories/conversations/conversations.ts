@@ -1,34 +1,46 @@
-import { Conversation } from '../../logic'
+import { Conversation, CreateConversationInput } from '../../logic'
 import { v } from 'valleyed'
 import { BaseFactory } from '../base'
 
-export class ConversationFactory extends BaseFactory<Conversation, { title: string }, { title: string }> {
+
+export class ConversationFactory extends BaseFactory<Conversation, CreateConversationInput, CreateConversationInput> {
 	readonly rules = {
-		title: v.string().min(1, true),
+		body: v.string().min(1, true),
+		tutorId: v.string().min(1).nullable(),
 	}
 
 	reserved = []
 
 	constructor () {
-		super({ title: '' })
+		super({ body: '', tutorId: null })
 	}
 
-	get title () {
-		return this.values.title
+	get body () {
+		return this.values.body
 	}
 
-	set title (value: string) {
-		this.set('title', value)
+	set body (value: string) {
+		this.set('body', value)
 	}
+
+	get tutorId () {
+		return this.values.tutorId
+	}
+
+	set tutorId (value: string | null) {
+		this.set('tutorId', value)
+	}
+
 	loadEntity = (entity: Conversation) => {
 		this.entityId = entity.id
-		this.title = entity.title
+		this.body = entity.title
+		this.tutorId = entity.tutor?.id ?? null
 	}
 
 	toModel = async () => {
 		if (this.valid) {
-			const { title } = this.validValues
-			return { title }
+			const { body, tutorId } = this.validValues
+			return { body, tutorId }
 		} else {
 			throw new Error('Validation errors')
 		}

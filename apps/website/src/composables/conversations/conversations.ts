@@ -1,6 +1,7 @@
 import { Conversation, ConversationFactory, Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 
@@ -25,6 +26,8 @@ const store = {
 }
 
 export const useConversationsList = () => {
+	const { userType, id: authId } = useAuth()
+
 	const fetchConversations = async () => {
 		try {
 			await store.setError('')
@@ -46,7 +49,12 @@ export const useConversationsList = () => {
 		await store.listener.close()
 	})
 
-	return { ...store }
+	const conversations = computed(() => store.conversations.value
+		.filter((c) => userType.value.isTeacher ? c.pending ? false : c.accepted?.is : true))
+	const requests = computed(() => store.conversations.value
+		.filter((c) => userType.value.isTeacher ? c.pending && c.tutor?.id === authId.value : false))
+
+	return { ...store, conversations, requests }
 }
 
 export const useConversation = (id: string) => {
@@ -55,21 +63,18 @@ export const useConversation = (id: string) => {
 	const loading = useLoadingHandler()
 	const { setMessage } = useSuccessHandler()
 
+	const { id: authId } = useAuth()
+	const router = useRouter()
+
 	const conversation = computed(() => store.conversations.value.find((q) => q.id === id) ?? null)
 
-	const endSession = async (reviewData: { ratings: number; review: string }) => {
+	const end = async (reviewData: { rating: number; message: string }) => {
 		if (loading.loading.value) return
 		error.setError('')
 		loading.setLoading(true)
 		try {
-			Logic.Conversations.DeleteTutorForm = {
-				id,
-				message: reviewData.review,
-				rating: reviewData.ratings,
-			}
-
-			await Logic.Conversations.DeleteTutor()
-			await setMessage('Tutor has been removed from this chats')
+			await Logic.Conversations.end(id, reviewData)
+			await setMessage('Conversation has ended')
 			await Logic.Common.GoToRoute('/chats')
 		} catch (e) {
 			error.setError(e)
@@ -77,7 +82,7 @@ export const useConversation = (id: string) => {
 		loading.setLoading(false)
 	}
 
-	const deleteConversation = async () => {
+	const deleteConv = async () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All messages in this conversation would be lost',
@@ -97,34 +102,31 @@ export const useConversation = (id: string) => {
 		loading.setLoading(false)
 	}
 
-	const addTutor = async (data: { message: string, tutorId: string }) => {
-		if (loading.loading.value) return false
-		error.setError('')
-		loading.setLoading(true)
-		let errored = false
+	const accept = async (accepted: boolean) => {
+		if (loading.loading.value) return
+		await loading.setLoading(true)
+		await error.setError('')
 		try {
-			await Logic.Conversations.CreateTutorRequest({
-				...data,
-				conversationId: id as string,
-			})
-			Logic.Common.showAlert({
-				message: 'Tutor request sent',
-				type: 'success',
-			})
+			const conv = conversation.value
+			if (!conv || !conv.pending || conv.tutor.id !== authId.value) return
+			await Logic.Conversations.accept(id, accepted)
+			await setMessage(`Request has been ${accepted ? 'accepted' : 'rejected'} successfully`)
+			if (accepted) await router.push(`/chats/${id}`)
+			else await router.push('/chats')
 		} catch (e) {
-			error.setError(e)
-			errored = true
+			await error.setError(e)
 		}
-		loading.setLoading(false)
-		return !errored
+		await loading.setLoading(false)
 	}
 
-	return { ...conversationList, conversation, endSession, deleteConversation, addTutor }
+
+	return { ...conversationList, conversation, end, deleteConv, accept }
 }
 
 export const useCreateConversation = () => {
 	const { error, setError } = useErrorHandler()
 	const { loading, setLoading } = useLoadingHandler()
+	const { setMessage } = useSuccessHandler()
 	const factory = new ConversationFactory()
 	const router = useRouter()
 
@@ -133,9 +135,11 @@ export const useCreateConversation = () => {
 		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true)
-				const conversation = await Logic.Conversations.CreateConversation(factory.title)
+				const data = await factory.toModel()
+				const conversation = await Logic.Conversations.CreateConversation(data)
 				factory.reset()
 				await router.push(`/chats/${conversation.id}`)
+				if (conversation.tutor) setMessage('Tutor request sent successfully')
 			} catch (error) {
 				await setError(error)
 			}

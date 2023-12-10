@@ -6,29 +6,14 @@ export interface Conversation {
   id: string
   title: string
   user: SingleUser
-  tutor: SingleUser
-  tags: string[]
-  starred: boolean
+  tutor: SingleUser | null
+  pending: boolean
+  accepted: { is: boolean, at: number } | null
+  ended: { rating: number, message: string, at: number } | null
   createdAt: number
   updatedAt: number
-  last?: {
-    hash: string
-    id: string
-    conversationId: string
-    userId: string
-    body: string
-    media?: FileData
-    tags: string[]
-    starred: boolean
-    createdAt: number
-    updatedAt: number
-    readAt: {
-      'ai-bot': number
-    }
-  }
-  readAt: {
-    'ai-bot': number
-  }
+  last: Message | null
+  readAt: Record<string, number>
 }
 
 export interface Message {
@@ -42,19 +27,5 @@ export interface Message {
   starred: boolean
   createdAt: number
   updatedAt: number
-  readAt: {}
-}
-
-export interface ConversationTutorRequest {
-  hash: string
-  id: string
-  tutor: SingleUser
-  userId: string
-  conversationId: string
-  pending: boolean
-  message: string
-  accepted: boolean
-  createdAt: number
-  updatedAt: number
-  user: SingleUser
+  readAt: Record<string, number>
 }

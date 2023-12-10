@@ -8,10 +8,10 @@
     <div class="w-full flex flex-col gap-3" v-if="showRequests">
       <Chat :customClass="customClass" v-for="request in requests" :key="request.hash" :chat="{
         route: `/chats/requests/${request.id}`,
-        title: request.user?.bio?.name?.full,
-        lastMessage: request.message,
+        title: request.user.bio.name.full,
+        lastMessage: request.title,
         lastMessageTime: formatTime(request.createdAt),
-        photoUrl: request.user?.bio?.photo?.link ?? null,
+        photoUrl: request.user.bio.photo?.link ?? null,
       }" />
     </div>
   </div>
@@ -28,12 +28,11 @@
 
 <script lang="ts" setup>
 import { formatTime } from '@/common/dates'
+import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList } from '@/composables/conversations/conversations'
-import { useRequestsList } from '@/composables/conversations/tutorRequests'
 import { SofaHeaderText, SofaIcon } from "sofa-ui-components"
 import { defineProps, ref } from "vue"
 import Chat from "./Chat.vue"
-import { useAuth } from '@/composables/auth/auth'
 
 defineProps({
   customClass: {
@@ -54,6 +53,5 @@ const { userType, id, userAi } = useAuth()
 
 const showRequests = ref(true)
 
-const { conversations } = useConversationsList()
-const { requests } = useRequestsList()
+const { conversations, requests } = useConversationsList()
 </script>

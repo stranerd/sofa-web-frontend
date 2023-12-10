@@ -1,24 +1,21 @@
 <template>
-  <ChatLayout v-if="conversation" title="Chat">
-    <ChatContent class="h-full" :data="{
+  <ChatLayout title="Chat">
+    <ChatContent v-if="conversation" class="h-full" :data="{
       title: conversation.title,
       photoUrl: otherUsers.at(0).photo ?? null,
       userNames: ['You', ...otherUsers.map((u) => u.name)]
     }">
       <template v-slot:top-extras>
-        <div class="flex flex-row items-center gap-3">
-          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor-black'" @click="onClickAddTutor"
-            v-if="conversation.user.id === id" />
-
-          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'"
-            @click="showMoreOptions = true" />
+        <div class="flex items-center gap-3">
+          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor'" @click="onClickAddTutor" v-if="conversation.user.id === id" />
+          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
         </div>
       </template>
       <ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
       <template v-slot:bottom>
         <form @submit.prevent="createMessage"
           class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-          <input v-model="factory.body"
+          <input v-model="factory.body" :disabled="!conversation.accepted?.is"
             :class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
             placeholder="Enter message" />
           <button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
@@ -62,21 +59,21 @@
         </sofa-normal-text>
         <sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'"
           @click="onClickAddTutor">
-          Add a tutor
+          Message a tutor
         </sofa-button>
       </div>
 
       <div v-if="conversation.user.id === id"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
-        <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
-          @click.stop.prevent="onClickEndSession">
-          <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
-          <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
+        <a class="w-full flex items-center justify-start gap-2 text-primaryRed" v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
+          @click="onClickEndSession">
+          <sofa-icon :customClass="'h-[16px] fill-current'" :name="'tutor'" />
+          <sofa-normal-text :color="'text-inherit'">End conversation</sofa-normal-text>
         </a>
 
-        <a class="w-full flex items-center justify-start gap-2" @click.stop.prevent="deleteConversation">
+        <a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
           <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
-          <sofa-normal-text :color="'text-primaryRed'">Delete chat</sofa-normal-text>
+          <sofa-normal-text :color="'text-primaryRed'">Delete conversation</sofa-normal-text>
         </a>
       </div>
 
@@ -115,33 +112,25 @@
             <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
           </div>
 
-          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4"
-            v-if="conversation.user.id === id">
-            <a class="w-full flex items-center justify-start gap-2" v-if="conversation.tutor"
-              @click="onClickEndSession">
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-red'" />
-              <sofa-normal-text :color="'text-primaryRed'">End tutor session</sofa-normal-text>
+          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4" v-if="conversation.user.id === id">
+            <a class="w-full flex items-center justify-start gap-2 text-primaryRed" v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended" @click="onClickEndSession">
+              <SofaIcon class="h-[16px] fill-current" name="tutor" />
+              <SofaNormalText color="text-inherit" content="End conversation" />
             </a>
-            <a class="w-full flex items-center justify-start gap-2" @click="onClickAddTutor" v-else>
-              <sofa-icon :customClass="'h-[16px]'" :name="'tutor-green'" />
-              <sofa-normal-text :color="'text-primaryGreen'">
-                Add a tutor
-              </sofa-normal-text>
+            <a class="w-full flex items-center justify-start gap-2 text-primaryGreen" @click="onClickAddTutor" v-else-if="!conversation.tutor">
+              <SofaIcon class="h-[16px] fill-current" name="tutor" />
+              <SofaNormalText color="text-inherit" content="Message a tutor" />
             </a>
-
-            <a class="w-full flex items-center justify-start gap-2" @click="deleteConversation">
-              <sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
-              <sofa-normal-text :color="'text-primaryRed'">
-                Delete chat
-              </sofa-normal-text>
+            <a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
+              <SofaIcon class="h-[16px]" name="trash" />
+              <SofaNormalText color="text-primaryRed" content="Delete conversation" />
             </a>
           </div>
         </div>
       </div>
     </sofa-modal>
 
-    <add-tutor v-if="showAddTutor" :conversationId="conversation.id" :close="() => showAddTutor = false"
-      @onSelected="handleRequestSent" />
+    <AddTutor v-if="showAddTutor" @close="showAddTutor = false" />
 
     <!-- Success prompt for tutor request -->
     <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
@@ -149,11 +138,9 @@
       :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
 
     <!-- Rate and review modal -->
-    <rate-and-review-modal v-if="showRateAndReviewTutor" :close="() => showRateAndReviewTutor = false"
-      :title="'Session ended, rate tutor'" :tutor="{
-        name: conversation.tutor?.bio.name.full,
-        photo: conversation.tutor?.bio.photo?.link,
-      }" @on-review-submitted="(data) => endSession(data)" />
+    <RateAndReviewModal v-if="showRateAndReviewTutor && conversation.tutor" :close="() => showRateAndReviewTutor = false"
+      title="Session ended, rate tutor" :tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
+      @OnReviewSubmitted="(data) => end({ rating: data.ratings, message: data.review })" />
   </ChatLayout>
 </template>
 
@@ -210,7 +197,7 @@ export default defineComponent({
     const route = useRoute()
     const { id: conversationId } = route.params
 
-    const { conversation, endSession, deleteConversation, addTutor } = useConversation(conversationId as string)
+    const { conversation, end, deleteConv } = useConversation(conversationId as string)
     const { factory, createMessage } = useCreateMessage(conversationId as string)
 
     const otherUsers = computed(() => {
@@ -218,7 +205,7 @@ export default defineComponent({
       const res: { name: string, photo: string | null }[] = []
       if (conversation.value.user.id !== id.value) return [{ name: conversation.value.user.bio.name.first, photo: conversation.value.user.bio.photo?.link }]
       if (conversation.value.tutor) res.push({ name: conversation.value.tutor.bio.name.first, photo: conversation.value.tutor.bio.photo?.link })
-      res.push({ name: userAi.value.name, photo: userAi.value.image })
+      else res.push({ name: userAi.value.name, photo: userAi.value.image })
       return res
     })
 
@@ -226,14 +213,6 @@ export default defineComponent({
     const showAddTutor = ref(false)
     const showMoreOptions = ref(false)
     const showRateAndReviewTutor = ref(false)
-
-    const handleRequestSent = async (data: { message: string, tutorId: string }) => {
-      const res = await addTutor(data)
-      if (!res) return
-      showAddTutor.value = false
-      showTutorRequestSubmited.value = true
-      showMoreOptions.value = false
-    }
 
     const onClickAddTutor = async () => {
       showMoreOptions.value = false
@@ -278,11 +257,10 @@ export default defineComponent({
       showMoreOptions,
       onClickAddTutor,
       showTutorRequestSubmited,
-      handleRequestSent,
       showRateAndReviewTutor,
       onClickEndSession,
-      endSession,
-      deleteConversation,
+      end,
+      deleteConv,
     }
   },
 })

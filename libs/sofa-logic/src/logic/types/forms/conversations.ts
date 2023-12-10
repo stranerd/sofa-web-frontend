@@ -1,14 +1,10 @@
 export interface CreateConversationInput {
-  title: string
+  body: string
+  tutorId: string | null
 }
 
 export interface UpdateConversationInput {
   title: string
-}
-
-export interface AddTutorInput {
-  tutorId: string
-  id: string
 }
 
 export interface StarMessageInput {
@@ -20,10 +16,9 @@ export interface CreateMessageInput {
   media?: Blob
 }
 
-export interface DeleteTutorInput {
+export interface EndConversationInput {
   rating: number
   message: string
-  id: string
 }
 
 export interface CreateTutorRequestInput {
