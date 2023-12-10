@@ -74,6 +74,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		try {
 			await store[id].setLoading(true)
 			store[id].quiz.value = await Logic.Study.GetQuiz(id)
+			if (store[id].quiz.value) Logic.Interactions.CreateView({ entity: { id: id, type: "quizzes" } }).catch() // dont await, run in bg
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)

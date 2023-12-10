@@ -588,27 +588,23 @@ export default defineComponent({
         setCourseData()
         setSimilarContents()
         // create course view
-        if (SingleCourse.value) Logic.Interactions.CreateViewForm = {
-          entity: {
-            id: SingleCourse.value.id,
-            type: "courses",
-          },
-        }
-
-        Logic.Interactions.CreateView(true)
+        if (SingleCourse.value) Logic.Interactions.CreateView({
+            entity: {
+              id: SingleCourse.value.id,
+              type: "courses",
+            },
+          }).catch()
       }
 
       if (contentType.value == "quiz") {
         setQuizData()
         setSimilarContents()
-        if (SingleQuiz.value) Logic.Interactions.CreateViewForm = {
-          entity: {
-            id: SingleQuiz.value.id,
-            type: "quizzes",
-          },
-        }
-
-        Logic.Interactions.CreateView(true)
+        if (SingleQuiz.value) Logic.Interactions.CreateView({
+            entity: {
+              id: SingleQuiz.value.id,
+              type: "quizzes",
+            },
+          }).catch()
       }
     })
 

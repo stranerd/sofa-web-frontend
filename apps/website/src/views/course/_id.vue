@@ -259,7 +259,7 @@ import {
   SofaModal,
   SofaNormalText,
 } from "sofa-ui-components"
-import { computed, defineComponent, onMounted, reactive, ref } from "vue"
+import { capitalize, computed, defineComponent, onMounted, reactive, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -504,14 +504,12 @@ export default defineComponent({
       Logic.Study.watchProperty("SingleCourse", SingleCourse)
       Logic.Study.watchProperty("SingleReview", CourseReview)
 
-      Logic.Interactions.CreateViewForm = {
+      Logic.Interactions.CreateView({
         entity: {
           id: SingleCourse.value?.id,
           type: "courses",
         },
-      }
-
-      Logic.Interactions.CreateView(true)
+      }).catch()
     })
 
     return {
