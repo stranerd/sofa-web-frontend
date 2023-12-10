@@ -48,10 +48,8 @@ import { useRoute } from "vue-router"
 
 export default defineComponent({
 	components: { ChatLayout, ChatContent, SofaButton, SofaNormalText },
-	middlewares: {
-		goBackRoute: "/chats",
-	},
 	name: "ChatsRequestsIdPage",
+	middlewares: { goBackRoute: "/chats" },
 	setup () {
 		useMeta({
 			title: "Request",

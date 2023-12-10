@@ -1,10 +1,11 @@
-import { Conversation } from '../../logic'
 import { v } from 'valleyed'
+import { CreateFolderInput, Folder } from '../../logic'
 import { BaseFactory } from '../base'
 
-export class ConversationFactory extends BaseFactory<Conversation, { title: string }, { title: string }> {
+
+export class FolderFactory extends BaseFactory<Folder, CreateFolderInput, CreateFolderInput> {
 	readonly rules = {
-		title: v.string().min(1, true),
+		title: v.string().min(1)
 	}
 
 	constructor () {
@@ -18,7 +19,9 @@ export class ConversationFactory extends BaseFactory<Conversation, { title: stri
 	set title (value: string) {
 		this.set('title', value)
 	}
-	loadEntity = (entity: Conversation) => {
+
+	loadEntity = (entity: Folder) => {
+		this.reset()
 		this.entityId = entity.id
 		this.title = entity.title
 	}

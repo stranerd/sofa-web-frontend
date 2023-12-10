@@ -159,6 +159,11 @@ export default class Payment extends Common {
     })
   }
 
+  public async GetMyPurchases (filters: QueryParams) {
+    return $api.payment.purchase.fetch(filters)
+      .then((response) => response.data as Paginated<Purchase>)
+  }
+
   public GetUserPurchases = (fetchItems: boolean) => {
     return new Promise((resolve) => {
       $api.payment.purchase

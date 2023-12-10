@@ -87,8 +87,8 @@ export default class Conversations extends Common {
           ],
         },
         false,
-      ).then((users: SingleUser[]) => {
-        users.forEach((user) => {
+      ).then((users) => {
+        users.results.forEach((user) => {
           this.AllTutorRequests.results.forEach((request) => {
             if (request.userId == user.id) {
               request.user = user

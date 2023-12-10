@@ -383,6 +383,11 @@ export default class Study extends Common {
     })
   }
 
+  public async getFolders (filters: QueryParams) {
+    return $api.study.folder.fetch(filters)
+      .then((response) => response.data)
+  }
+
   public GetFolders = async (filters: QueryParams, showLoader = false) => {
     if (showLoader) Logic.Common.showLoading()
 
@@ -471,7 +476,8 @@ export default class Study extends Common {
   public GetTutorQuizzes = (filters: QueryParams) => {
     return $api.study.quiz.tutorQuizzes(filters).then((response) => {
       this.TutorQuizzes = response.data
-    }).catch(() => {})
+      return this.TutorQuizzes
+    })
   }
 
   public GetQuiz = async (id: string) => {
@@ -1013,31 +1019,20 @@ export default class Study extends Common {
   }
 
   public CreateFolder = (CreateFolderForm: CreateFolderInput) => {
-    Logic.Common.showLoading()
     return $api.study.folder
       .post(null, CreateFolderForm)
       .then((response) => {
         this.SingleFolder = response.data
-        Logic.Common.hideLoading()
         return this.SingleFolder
-      })
-      .catch((error) => {
-        Logic.Common.hideLoading()
-        throw error
       })
   }
 
   public UpdateFolder = (id: string, UpdateFolderForm: CreateFolderInput) => {
-    Logic.Common.showLoading()
     return $api.study.folder
       .put(null, id, UpdateFolderForm)
       .then((response) => {
-        Logic.Common.hideLoading()
-        return response.data
-      })
-      .catch((error) => {
-        Logic.Common.hideLoading()
-        throw error
+        this.SingleFolder = response.data
+        return this.SingleFolder
       })
   }
 

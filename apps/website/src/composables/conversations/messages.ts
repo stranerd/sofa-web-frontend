@@ -65,10 +65,11 @@ export const useMessages = (conversation: Conversation) => {
 			return
 		}
 
-		store[conversationId].users.value = await Logic.Users.GetUsers({
+		const users = await Logic.Users.GetUsers({
 			where: [{ field: 'id', value: ids, condition: Conditions.in }],
 			all: true
-		},  false)
+		}, false)
+		store[conversationId].users.value = users.results
 	}
 
 	watch(store[conversationId].messages, fetchUsers)

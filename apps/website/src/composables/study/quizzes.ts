@@ -74,6 +74,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		try {
 			await store[id].setLoading(true)
 			store[id].quiz.value = await Logic.Study.GetQuiz(id)
+			if (store[id].quiz.value) Logic.Interactions.CreateView({ entity: { id: id, type: "quizzes" } }).catch() // dont await, run in bg
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)
@@ -252,7 +253,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 				where: [{ field: 'id', value: newMembers, condition: Conditions.in }],
 				all: true
 			}, false).then(async (users) => {
-				users.forEach((u) => {
+				users.results.forEach((u) => {
 					Logic.addToArray(store[id].members, u, (e) => e.id, (e) => e.id)
 				})
 				await store[id].membersListener.restart()

@@ -88,6 +88,7 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',
+	middlewares: { goBackRoute: "/library" },
 	components: {
 		QuizWrapper, Quiz, Flashcard, SofaHeaderText, SofaNormalText,
 		SofaButton, SofaIcon, SofaModal, SofaCheckbox

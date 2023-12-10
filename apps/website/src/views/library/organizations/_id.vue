@@ -1,11 +1,11 @@
 <template>
-	<LibraryLayout :title="SingleUser?.type?.name ?? 'Not Found'" :options="[
+	<LibraryLayout :title="user?.type?.name ?? user?.bio.name.full ?? 'Not found'" :options="[
 		{ name: 'All', id: 'all' },
 		{ name: 'Courses', id: 'courses' },
 		{ name: 'Quizzes', id: 'quizzes' },
 	]">
 		<template v-if="data.length">
-			<sofa-activity-card v-for="(activity, index) in data" :key="index" :activity="activity"
+			<sofa-activity-card v-for="activity in data" :key="activity.id" :activity="activity"
 				:isWrapped="!Logic.Common.isLarge" :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="activity.type === 'course' ? openCourse(activity) : openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
@@ -23,10 +23,11 @@
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
 import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from "@/composables/library"
+import { useUsersMaterials } from '@/composables/study/users-materials'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
-import { ResourceType, QueryParams } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
-import { computed, defineComponent, onMounted, ref, watch } from "vue"
+import { computed, defineComponent } from "vue"
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -36,60 +37,26 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaActivityCard,
 	},
-	middlewares: {
-		fetchRules: [
-			{
-				domain: "Users",
-				property: "SingleUser",
-				method: "GetUser",
-				params: [],
-				useRouteId: true,
-				ignoreProperty: true,
-			},
-		],
-	},
 	name: "LibraryOrganizationsIdPage",
+	middlewares: { goBackRoute: '/library' },
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'all')
 
-		const SingleUser = ref(Logic.Users.SingleUser)
-
-		const items = ref<ResourceType[]>([])
+		const { user, courses, quizzes } = useUsersMaterials(route.params.id as string)
 
 		const data = computed(() => {
-			if (tab.value === 'courses') return items.value.filter((i) => i.type === 'course')
-			if (tab.value === 'quizzes') return items.value.filter((i) => i.type === 'quiz')
-			return items.value
-		})
-
-		watch(SingleUser, async () => {
-			const query: QueryParams = {
-				where: [{ field: "user.id", value: SingleUser.value?.id ?? '' }],
-				all: true,
-				sort: [{ field: 'createdAt', desc: true }]
-			}
-			const courses = await Logic.Study.GetCourses(query, false)
-			const quizzes = await Logic.Study.GetQuizzes(query)
-			items.value = [
-				...courses.results.map(createCourseData),
-				...quizzes.results.map(createQuizData),
+			if (tab.value === 'all') return [
+				...courses.map(createCourseData),
+				...quizzes.map(createQuizData)
 			].sort((a, b) => b.createdAt - a.createdAt)
+			if (tab.value === 'courses') return courses.map(createCourseData)
+			if (tab.value === 'quizzes') return quizzes.map(createQuizData)
+			return []
 		})
 
-		onMounted(() => {
-			Logic.Users.watchProperty("SingleUser", SingleUser)
-		})
-
-		return {
-			Logic,
-			SingleUser,
-			openQuiz,
-			openCourse,
-			data,
-			showMoreOptionHandler,
-			tab,
-		}
+		return { Logic, user, openQuiz, openCourse, data, showMoreOptionHandler }
 	},
 })
 </script>
