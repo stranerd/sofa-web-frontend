@@ -1,7 +1,9 @@
 import {
   Course,
-  Logic, Quiz,
-  ResourceType
+  Game,
+  Logic, PlayStatus, Quiz,
+  ResourceType,
+  Test
 } from 'sofa-logic'
 import { capitalize, computed, reactive, ref } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
@@ -57,7 +59,7 @@ const folders = reactive<
   }[]
 >([])
 
-const createQuizData = (quiz: Quiz): ResourceType => {
+export const createQuizData = (quiz: Quiz): ResourceType => {
   return {
     title: quiz.title,
     image: quiz.photo ? quiz.photo.link : '/images/default.png',
@@ -81,7 +83,7 @@ const createQuizData = (quiz: Quiz): ResourceType => {
   }
 }
 
-const createCourseData = (course: Course): ResourceType => {
+export const createCourseData = (course: Course): ResourceType => {
   return {
     title: course.title,
     image: course.photo ? course.photo.link : '/images/default.png',
@@ -105,50 +107,49 @@ const createCourseData = (course: Course): ResourceType => {
   }
 }
 
-export const plays = computed(() => [
-  AllGames.value?.results.map((p) => {
-    const currentQuiz = GameAndTestQuizzes.value?.results.find((i) => i.id == p.quizId)
-    const ended = ["scored", "ended"].includes(p.status)
-    const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
-    const userPosition = allScores.indexOf(p.scores[Logic.Auth.AuthUser.id])
+export const createGameData = (p: Game, quizzes: Quiz[]) => {
+  const currentQuiz = quizzes.find((i) => i.id == p.quizId)
+  const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
+  const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
+  const userPosition = allScores.indexOf(p.scores[Logic.Auth.AuthUser.id])
 
-    return {
-      id: p.id,
-      inProgress: !ended,
-      createdAt: p.createdAt,
-      image: currentQuiz?.photo?.link || '/images/default.png',
-      label: Logic.Common.ordinal_suffix_of(userPosition !== -1 ? userPosition + 1 : p.participants.length),
-      label_color: 'text-[#3296C8]',
-      title: currentQuiz?.title || 'Unknown quiz',
-      type: 'game',
-      participants: p.participants.length,
-      action: () => {
-        Logic.Common.GoToRoute(`/games/${p.id}/${ended ? 'results' : 'lobby'}`)
-      },
-    }
-  }) ?? [],
-  AllTests.value?.results.map((p) => {
-    const currentQuiz = GameAndTestQuizzes.value?.results.find((i) => i.id == p.quizId)
-    const ended = ["scored", "ended"].includes(p.status)
-    const userCorrectAnswers = (p.scores[Logic.Auth.AuthUser.id] ?? 0) / 10
-    const percentage = (userCorrectAnswers / p.questions.length) * 100
-    const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
-      percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
-    return {
-      id: p.id,
-      inProgress: !ended,
-      createdAt: p.createdAt,
-      image: currentQuiz?.photo?.link || '/images/default.png',
-      label: `${percentage ? percentage.toFixed() : '0'}%`,
-      label_color: textColor,
-      title: currentQuiz?.title || 'Unknown quiz',
-      type: 'test',
-      action: () => {
-        Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
-      },
-    }
-  }) ?? [],
-].flat().sort((a, b) => b.createdAt - a.createdAt))
+  return {
+    id: p.id,
+    inProgress: !ended,
+    createdAt: p.createdAt,
+    image: currentQuiz?.photo?.link || '/images/default.png',
+    label: Logic.Common.ordinal_suffix_of(userPosition !== -1 ? userPosition + 1 : p.participants.length),
+    label_color: 'text-[#3296C8]',
+    title: currentQuiz?.title || 'Unknown quiz',
+    type: 'game',
+    participants: p.participants.length,
+    action: () => {
+      Logic.Common.GoToRoute(`/games/${p.id}/${ended ? 'results' : 'lobby'}`)
+    },
+  }
+}
+
+export const createTestData = (p: Test, quizzes: Quiz[]) => {
+  const currentQuiz = quizzes.find((i) => i.id == p.quizId)
+  const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
+  const userCorrectAnswers = (p.scores[Logic.Auth.AuthUser.id] ?? 0) / 10
+  const percentage = (userCorrectAnswers / p.questions.length) * 100
+  const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
+    percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
+  return {
+    id: p.id,
+    inProgress: !ended,
+    createdAt: p.createdAt,
+    image: currentQuiz?.photo?.link || '/images/default.png',
+    label: `${percentage ? percentage.toFixed() : '0'}%`,
+    label_color: textColor,
+    title: currentQuiz?.title || 'Unknown quiz',
+    type: 'test',
+    action: () => {
+      Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
+    },
+  }
+}
 
 export const recentEntities = computed(() => RecentMaterials.value?.map((m) => m.__type === "CourseEntity" ? createCourseData(m) : createQuizData(m)) ?? [])
 
@@ -386,7 +387,7 @@ const moreOptions = reactive([
 ])
 
 export {
-  AllCourses, AllFolders, AllFoldersCourses, AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, TutorQuizzes, addFolder, addFolderIsActive, addMaterialToFolder, createCourseData, createQuizData, currentFolder, deleteFolder,
+  AllCourses, AllFolders, AllFoldersCourses, AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, TutorQuizzes, addFolder, addFolderIsActive, addMaterialToFolder, currentFolder, deleteFolder,
   folders, handleFolderNameBlur, moreOptions, openCourse, openQuiz,
   reportMaterial, reportMaterialSetup, saveItemsToFolder, selectedFolderItems, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial, setFolders, shareMaterialLink, showAddItemToFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
 }

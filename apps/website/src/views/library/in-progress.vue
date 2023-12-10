@@ -13,10 +13,12 @@
 
 <script lang="ts">
 import LibraryLayout from "@/components/library/LibraryLayout.vue"
-import { AllGames, AllTests, GameAndTestQuizzes, plays } from "@/composables/library"
-import { Conditions, Logic } from "sofa-logic"
+import { createGameData, createTestData } from '@/composables/library'
+import { useMyGames } from '@/composables/plays/games-list'
+import { useMyTests } from '@/composables/plays/tests-list'
+import { Logic } from "sofa-logic"
 import { SofaEmptyState, SofaProgressItemCard } from "sofa-ui-components"
-import { computed, defineComponent, onMounted } from "vue"
+import { computed, defineComponent } from "vue"
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -25,77 +27,22 @@ export default defineComponent({
 		SofaProgressItemCard,
 		SofaEmptyState,
 	},
-	middlewares: {
-		fetchRules: [
-			{
-				domain: "Plays",
-				property: "AllGames",
-				method: "GetGames",
-				params: [
-					{
-						where: [
-							{
-								field: "user.id",
-								value: Logic.Auth.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-						all: true,
-						sort: [
-							{
-								field: "createdAt",
-								desc: true,
-							},
-						]
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
-				domain: "Plays",
-				property: "AllTests",
-				method: "GetTests",
-				params: [
-					{
-						where: [
-							{
-								field: "user.id",
-								value: Logic.Auth.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-						all: true,
-						sort: [
-							{
-								field: "createdAt",
-								desc: true,
-							},
-						]
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-		],
-	},
 	name: "LibraryInProgressPage",
 	setup () {
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'all')
 
-		const data = computed(() => {
-			const inProgress = plays.value.filter((p) => p.inProgress)
-			if (tab.value === "games") return inProgress.filter((p) => p.type === "game")
-			if (tab.value === "tests") return inProgress.filter((p) => p.type === "test")
-			return inProgress
-		})
+		const { ongoing: ongoingGames } = useMyGames()
+		const { ongoing: ongoingTests } = useMyTests()
 
-		onMounted(async () => {
-			Logic.Plays.watchProperty("AllTests", AllTests)
-			Logic.Plays.watchProperty("AllGames", AllGames)
-			Logic.Plays.watchProperty("GameAndTestQuizzes", GameAndTestQuizzes)
-			await Logic.Plays.GetGameAndTestQuizzes()
+		const data = computed(() => {
+			if (tab.value === "all") return [
+				...ongoingGames.value.map((g) => createGameData(g, [])),
+				...ongoingTests.value.map((t) => createTestData(t, [])),
+			].sort((a, b) => b.createdAt - a.createdAt)
+			if (tab.value === "games") return ongoingGames.value.map((g) => createGameData(g, []))
+			if (tab.value === "tests") return ongoingTests.value.map((t) => createTestData(t, []))
+			return []
 		})
 
 		return {

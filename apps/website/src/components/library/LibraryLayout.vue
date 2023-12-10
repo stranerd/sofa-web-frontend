@@ -19,9 +19,8 @@
 				</div>
 			</div>
 
-			<div class="w-full flex flex-col gap-3 px-4 pt-3">
+			<div class="w-full flex flex-col gap-3 px-4 pt-3 h-full overflow-y-auto">
 				<slot />
-				<div class="w-full flex h-[100px]"></div>
 			</div>
 		</div>
 	</sub-page-layout>
@@ -155,7 +154,7 @@
 					</router-link>
 				</template>
 			</div>
-			<div v-else class="w-full flex flex-col gap-5 mdlg:!pl-3 mdlg:!pr-7">
+			<div v-else class="w-full flex flex-col gap-4 mdlg:!pl-3 mdlg:!pr-7 h-full">
 				<div class="w-full flex gap-2 justify-between items-center" v-if="tabs.length">
 					<div class="w-full flex-nowrap overflow-x-auto scrollbar-hide flex gap-3 items-center">
 						<router-link class="px-6 py-2 rounded-custom flex items-center justify-center"
@@ -168,8 +167,9 @@
 						</router-link>
 					</div>
 				</div>
-				<slot />
-				<div class="w-full h-[130px]"></div>
+				<div class="flex flex-col gap-4 h-full overflow-y-auto">
+					<slot />
+				</div>
 			</div>
 		</template>
 	</dashboard-layout>

@@ -1,6 +1,11 @@
 import { SingleUser } from './users'
 
-type PlayStatus = 'created' | 'started' | 'ended' | 'scored'
+export enum PlayStatus {
+  created = 'created',
+  started = 'started',
+  ended = 'ended',
+  scored = 'scored',
+}
 
 export interface Game {
   hash: string

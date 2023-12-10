@@ -259,7 +259,7 @@ import {
   SofaModal,
   SofaNormalText,
 } from "sofa-ui-components"
-import { capitalize, computed, defineComponent, onMounted, reactive, ref } from "vue"
+import { computed, defineComponent, onMounted, reactive, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({

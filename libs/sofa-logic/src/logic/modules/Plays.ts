@@ -31,6 +31,7 @@ export default class Plays extends Common {
   public GetTests = (filters: QueryParams) => {
     return $api.plays.test.fetch(filters).then((response) => {
       this.AllTests = response.data
+      return this.AllTests
     })
   }
 
@@ -48,6 +49,7 @@ export default class Plays extends Common {
   public GetGames = (filters: QueryParams) => {
     return $api.plays.game.fetch(filters).then((response) => {
       this.AllGames = response.data
+      return this.AllGames
     })
   }
 
