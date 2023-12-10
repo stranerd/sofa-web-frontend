@@ -10,6 +10,7 @@
 				</div>
 			</sofa-activity-card>
 		</template>
+
 		<sofa-empty-state v-else :title="'You have no quizzes here'" :actionLabel="'Explore'"
 			:subTitle="'Discover thousands of quizzes and save them here for easy access'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
@@ -18,22 +19,13 @@
 
 <script lang="ts">
 import LibraryLayout from "@/components/library/LibraryLayout.vue"
-import {
-	AllQuzzies,
-	createQuizData,
-	openQuiz,
-	recentEntities,
-	RecentMaterials,
-	showMoreOptionHandler,
-	TutorQuizzes
-} from "@/composables/library"
-import { Conditions, Logic, ResourceType } from "sofa-logic"
-import {
-	SofaActivityCard,
-	SofaEmptyState,
-	SofaIcon,
-} from "sofa-ui-components"
-import { computed, defineComponent, onMounted, ref } from "vue"
+import { createQuizData, openQuiz, showMoreOptionHandler } from "@/composables/library"
+import { useMyQuizzes, useTutorQuizzes } from '@/composables/study/quizzes-list'
+import { useRecent } from '@/composables/study/study'
+import { generateMiddlewares } from '@/middlewares'
+import { Logic } from "sofa-logic"
+import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
+import { computed, defineComponent } from "vue"
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -43,84 +35,26 @@ export default defineComponent({
 		SofaActivityCard,
 		SofaEmptyState,
 	},
-	middlewares: {
-		fetchRules: [
-			{
-				domain: "Study",
-				property: "AllQuzzies",
-				method: "GetQuizzes",
-				params: [
-					{
-						where: [
-							{
-								field: "user.id",
-								value: Logic.Auth.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: true,
-			},
-			{
-				domain: "Study",
-				property: "TutorQuizzes",
-				method: "GetTutorQuizzes",
-				requireAuth: true,
-				ignoreProperty: true,
-				shouldSkip: () => !(Logic.Auth.AuthUser && Logic.Auth.AuthUser.roles.isAdmin),
-				params: [
-					{
-						where: [
-							{
-								field: "user.id",
-								value: Logic.Auth.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-					},
-				]
-			},
-			{
-				domain: 'Study',
-				property: "RecentMaterials",
-				method: 'GetRecentMaterials',
-				requireAuth: true,
-				ignoreProperty: true,
-				params: []
-			}
-		],
-	},
 	name: "LibraryQuizzesPage",
+	middlewares: { goBackRoute: '/library' },
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'recent')
 
-		const quizzes = ref<ResourceType[]>([])
-		const tutorQuizzes = ref<ResourceType[]>([])
+		const { published, draft } = useMyQuizzes()
+		const { quizzes: tutorQuizzes } = useTutorQuizzes()
+		const { quizzes: recentQuizzes } = useRecent()
+
 		const data = computed(() => {
-			if (tab.value === "tutors") return tutorQuizzes.value
-			else if (tab.value === "recent") return recentEntities.value.filter((e) => e.type === "quiz")
-			return quizzes.value.filter((quiz) => quiz.status === tab.value)
+			if (tab.value === "tutors") return tutorQuizzes.value.map(createQuizData)
+			else if (tab.value === "recent") return recentQuizzes.value.map(createQuizData)
+			else if (tab.value === "published") return published.value.map(createQuizData)
+			else if (tab.value === "draft") return draft.value.map(createQuizData)
+			return []
 		})
 
-		onMounted(() => {
-			Logic.Study.watchProperty("AllQuzzies", AllQuzzies)
-			Logic.Study.watchProperty("TutorQuizzes", TutorQuizzes)
-			Logic.Study.watchProperty("RecentMaterials", RecentMaterials)
-
-			quizzes.value = AllQuzzies.value?.results.map(createQuizData) ?? []
-			tutorQuizzes.value = TutorQuizzes.value?.results.map(createQuizData) ?? []
-		})
-
-		return {
-			Logic,
-			data,
-			tab,
-			showMoreOptionHandler,
-			openQuiz,
-		}
+		return { Logic, data, showMoreOptionHandler, openQuiz }
 	},
 })
 </script>

@@ -64,17 +64,13 @@ export default class Interactions extends Common {
     })
   }
 
-  public CreateView = (formIsValid: boolean) => {
-    if (formIsValid && this.CreateViewForm) {
-      return $api.interactions.views
-        .post(null, this.CreateViewForm)
-        .then((response) => {
-          this.SingleView = response.data
-        })
-        .catch((error) => {
-          Logic.Common.showError(capitalize(error.response.data[0]?.message))
-        })
-    }
+  public CreateView = (CreateViewForm: AddViewInput) => {
+    return $api.interactions.views
+      .post(null, CreateViewForm)
+      .then((response) => {
+        this.SingleView = response.data
+        return this.SingleView
+      })
   }
 
   public CreateReview = (formIsValid: boolean) => {

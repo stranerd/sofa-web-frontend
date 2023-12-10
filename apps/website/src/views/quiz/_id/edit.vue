@@ -267,9 +267,7 @@ export default defineComponent({
     ManageAccessModal,
   },
   name: "QuizIdEdit",
-  middlewares: {
-    goBackRoute: "/library",
-  },
+  middlewares: { goBackRoute: "/library" },
   beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
   setup () {
     useMeta({

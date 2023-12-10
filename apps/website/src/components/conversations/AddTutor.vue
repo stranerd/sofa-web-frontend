@@ -102,7 +102,7 @@
 <script lang="ts" setup>
 import { useCreateConversation } from '@/composables/conversations/conversations'
 import { useTopicsList } from '@/composables/interactions/tags'
-import { useTutorsList } from '@/composables/users/tutors'
+import { useTutorsList } from '@/composables/users/users'
 import { Logic } from "sofa-logic"
 import {
   SofaAvatar,

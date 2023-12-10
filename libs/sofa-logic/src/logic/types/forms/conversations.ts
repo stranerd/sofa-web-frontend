@@ -1,3 +1,5 @@
+import { FileData } from '../domains'
+
 export interface CreateConversationInput {
   body: string
   tutorId: string | null
@@ -13,7 +15,7 @@ export interface StarMessageInput {
 
 export interface CreateMessageInput {
   body: string
-  media?: Blob
+  media: FileData | null
 }
 
 export interface EndConversationInput {

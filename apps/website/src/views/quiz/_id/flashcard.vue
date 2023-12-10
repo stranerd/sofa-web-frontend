@@ -88,6 +88,7 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',
+	middlewares: { goBackRoute: "/library" },
 	components: {
 		QuizWrapper, Quiz, Flashcard, SofaHeaderText, SofaNormalText,
 		SofaButton, SofaIcon, SofaModal, SofaCheckbox
@@ -109,7 +110,7 @@ export default defineComponent({
 		watch(dontShowAgain, () => {
 			if (dontShowAgain.value) localStorage.setItem(storageKey, "true")
 			else localStorage.removeItem(storageKey)
-		})
+		}, { immediate: true })
 
 		return { isDone, showInfoModal, dontShowAgain, Logic, close }
 	}

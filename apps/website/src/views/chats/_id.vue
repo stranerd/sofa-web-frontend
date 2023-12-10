@@ -184,10 +184,8 @@ export default defineComponent({
     RateAndReviewModal,
     ConversationMessages,
   },
-  middlewares: {
-    goBackRoute: "/chats",
-  },
   name: "ChatsIdPage",
+  middlewares: { goBackRoute: "/chats" },
   setup () {
     useMeta({
       title: "Chat",
@@ -227,7 +225,7 @@ export default defineComponent({
       const confirmed = await Logic.Common.confirm({
         title: 'You have no subscription',
         sub: 'You need to be subscribed to Stranerd Plus to access this feature',
-        rightLabel: 'Yes, delete',
+        rightLabel: 'Subscribe',
         leftLabel: 'Cancel',
         rightBg: 'bg-primaryBlue'
       })

@@ -119,7 +119,7 @@ export enum EmitTypes {
 }
 
 export type Listeners<Model> = {
-	[EmitTypes.created]: (model: Model) => Promise<void>
-	[EmitTypes.updated]: (model: Model) => Promise<void>
-	[EmitTypes.deleted]: (model: Model) => Promise<void>
+	[EmitTypes.created]: (model: Model) => void | Promise<void>
+	[EmitTypes.updated]: (model: Model) => void | Promise<void>
+	[EmitTypes.deleted]: (model: Model) => void | Promise<void>
 }

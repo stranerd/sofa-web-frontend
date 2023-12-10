@@ -504,14 +504,12 @@ export default defineComponent({
       Logic.Study.watchProperty("SingleCourse", SingleCourse)
       Logic.Study.watchProperty("SingleReview", CourseReview)
 
-      Logic.Interactions.CreateViewForm = {
+      Logic.Interactions.CreateView({
         entity: {
           id: SingleCourse.value?.id,
           type: "courses",
         },
-      }
-
-      Logic.Interactions.CreateView(true)
+      }).catch()
     })
 
     return {

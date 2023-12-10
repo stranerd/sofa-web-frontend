@@ -9,8 +9,6 @@ export class ConversationFactory extends BaseFactory<Conversation, CreateConvers
 		tutorId: v.string().min(1).nullable(),
 	}
 
-	reserved = []
-
 	constructor () {
 		super({ body: '', tutorId: null })
 	}

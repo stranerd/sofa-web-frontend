@@ -73,10 +73,8 @@ export const contentList = [
 
 export default defineComponent({
   components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText },
-  middlewares: {
-    goBackRoute: "/",
-  },
   name: "ChatsNewPage",
+  middlewares: { goBackRoute: "/" },
   setup () {
     useMeta({
       title: "New Chat",

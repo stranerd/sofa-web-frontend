@@ -1,29 +1,16 @@
 import {
   Course,
-  Logic, Quiz,
-  ResourceType
+  Game,
+  Logic, PlayStatus, Quiz,
+  ResourceType,
+  Test
 } from 'sofa-logic'
-import { capitalize, computed, reactive, ref } from 'vue'
+import { capitalize, reactive, ref } from 'vue'
 import { selectedQuizId, selectedQuizMode } from './quiz'
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
-const TutorQuizzes = ref(Logic.Study.TutorQuizzes)
-const AllCourses = ref(Logic.Study.AllCourses)
-const PurchasedCourses = ref(Logic.Study.PurchasedCourses)
-const AllFolders = ref(Logic.Study.AllFolders)
-const AllFoldersCourses = ref(Logic.Study.AllFoldersCourses)
-const AllFoldersQuizzes = ref(Logic.Study.AllFoldersQuizzes)
-const GameAndTestQuizzes = ref(Logic.Plays.GameAndTestQuizzes)
-
-const AllTests = ref(Logic.Plays.AllTests)
-const AllGames = ref(Logic.Plays.AllGames)
-
-const SingleFolder = ref(Logic.Study.SingleFolder)
-const RecentMaterials = ref(Logic.Study.RecentMaterials)
 
 const showStudyMode = ref(false)
-
-const showAddItemToFolder = ref(false)
 
 const reportMaterialSetup = reactive<{
   show: boolean
@@ -37,27 +24,9 @@ const reportMaterialSetup = reactive<{
 
 const showSaveToFolder = ref(false)
 
-const addFolderIsActive = ref(false)
-
 const selectedFolderMaterailToAdd = ref<{ id: string, type: string }>()
 
-const currentFolder = reactive({
-  id: '',
-  name: '',
-})
-
-const folders = reactive<
-  {
-    name: string
-    selected: boolean
-    edit: boolean
-    hover: boolean
-    id: string
-    items: string[]
-  }[]
->([])
-
-const createQuizData = (quiz: Quiz): ResourceType => {
+export const createQuizData = (quiz: Quiz): ResourceType => {
   return {
     title: quiz.title,
     image: quiz.photo ? quiz.photo.link : '/images/default.png',
@@ -81,7 +50,7 @@ const createQuizData = (quiz: Quiz): ResourceType => {
   }
 }
 
-const createCourseData = (course: Course): ResourceType => {
+export const createCourseData = (course: Course): ResourceType => {
   return {
     title: course.title,
     image: course.photo ? course.photo.link : '/images/default.png',
@@ -105,141 +74,64 @@ const createCourseData = (course: Course): ResourceType => {
   }
 }
 
-export const plays = computed(() => [
-  AllGames.value?.results.map((p) => {
-    const currentQuiz = GameAndTestQuizzes.value?.results.find((i) => i.id == p.quizId)
-    const ended = ["scored", "ended"].includes(p.status)
-    const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
-    const userPosition = allScores.indexOf(p.scores[Logic.Auth.AuthUser.id])
+export const createGameData = (p: Game, quizzes: Quiz[]) => {
+  const currentQuiz = quizzes.find((i) => i.id == p.quizId)
+  const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
+  const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
+  const userPosition = allScores.indexOf(p.scores[Logic.Auth.AuthUser.id])
 
-    return {
-      id: p.id,
-      inProgress: !ended,
-      createdAt: p.createdAt,
-      image: currentQuiz?.photo?.link || '/images/default.png',
-      label: Logic.Common.ordinal_suffix_of(userPosition !== -1 ? userPosition + 1 : p.participants.length),
-      label_color: 'text-[#3296C8]',
-      title: currentQuiz?.title || 'Unknown quiz',
-      type: 'game',
-      participants: p.participants.length,
-      action: () => {
-        Logic.Common.GoToRoute(`/games/${p.id}/${ended ? 'results' : 'lobby'}`)
-      },
-    }
-  }) ?? [],
-  AllTests.value?.results.map((p) => {
-    const currentQuiz = GameAndTestQuizzes.value?.results.find((i) => i.id == p.quizId)
-    const ended = ["scored", "ended"].includes(p.status)
-    const userCorrectAnswers = (p.scores[Logic.Auth.AuthUser.id] ?? 0) / 10
-    const percentage = (userCorrectAnswers / p.questions.length) * 100
-    const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
-      percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
-    return {
-      id: p.id,
-      inProgress: !ended,
-      createdAt: p.createdAt,
-      image: currentQuiz?.photo?.link || '/images/default.png',
-      label: `${percentage ? percentage.toFixed() : '0'}%`,
-      label_color: textColor,
-      title: currentQuiz?.title || 'Unknown quiz',
-      type: 'test',
-      action: () => {
-        Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
-      },
-    }
-  }) ?? [],
-].flat().sort((a, b) => b.createdAt - a.createdAt))
-
-export const recentEntities = computed(() => RecentMaterials.value?.map((m) => m.__type === "CourseEntity" ? createCourseData(m) : createQuizData(m)) ?? [])
-
-const setFolders = () => {
-  if (!AllFolders.value) return
-  folders.length = 0
-  AllFolders.value?.results.forEach((folder) => {
-    folders.push({
-      name: folder.title,
-      edit: false,
-      hover: false,
-      id: folder.id,
-      selected: false,
-      items: [
-        ...(folder.saved.courses?.map((item) => item) || []),
-        ...(folder.saved.quizzes?.map((item) => item) || []),
-      ],
-    })
-  })
+  return {
+    id: p.id,
+    inProgress: !ended,
+    createdAt: p.createdAt,
+    image: currentQuiz?.photo?.link || '/images/default.png',
+    label: Logic.Common.ordinal_suffix_of(userPosition !== -1 ? userPosition + 1 : p.participants.length),
+    label_color: 'text-[#3296C8]',
+    title: currentQuiz?.title || 'Unknown quiz',
+    type: 'game',
+    participants: p.participants.length,
+    action: () => {
+      Logic.Common.GoToRoute(`/games/${p.id}/${ended ? 'results' : 'lobby'}`)
+    },
+  }
 }
 
-const selectedFolderItems = ref<ResourceType[]>([])
-
-const addFolder = async () => {
-  addFolderIsActive.value = true
-
-  const title = `New folder (${Logic.Common.makeid(4)})`
-
-  await Logic.Study.CreateFolder({ title })
-  await Logic.Study.GetFolders({ all: true }, true)
-  setFolders()
-  const folder = folders.find((f) => f.name === title)
-  if (folder) folder.edit = true
+export const createTestData = (p: Test, quizzes: Quiz[]) => {
+  const currentQuiz = quizzes.find((i) => i.id == p.quizId)
+  const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
+  const userCorrectAnswers = (p.scores[Logic.Auth.AuthUser.id] ?? 0) / 10
+  const percentage = (userCorrectAnswers / p.questions.length) * 100
+  const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
+    percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
+  return {
+    id: p.id,
+    inProgress: !ended,
+    createdAt: p.createdAt,
+    image: currentQuiz?.photo?.link || '/images/default.png',
+    label: `${percentage ? percentage.toFixed() : '0'}%`,
+    label_color: textColor,
+    title: currentQuiz?.title || 'Unknown quiz',
+    type: 'test',
+    action: () => {
+      Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
+    },
+  }
 }
 
 const addMaterialToFolder = (
   folderId: string,
-  type: 'quiz' | 'course',
+  type: 'quizzes' | 'courses',
   itemId: string,
   add: boolean,
 ) => {
-  const selectedFolder = AllFolders.value.results.filter((item) => {
-    return item.id == folderId
-  })
-
-  if (selectedFolder.length) {
-    if (type == 'course') {
-      saveItemsToFolder(folderId, 'courses', [itemId], add)
-    }
-
-    if (type == 'quiz') {
-      saveItemsToFolder(folderId, 'quizzes', [itemId], add)
-    }
-
-    AllFolders.value?.results.forEach((item) => {
-      if (item.id == selectedFolder[0].id) {
-        if (type == 'course') {
-          if (add) {
-            item.saved.courses.push(itemId)
-          } else {
-            item.saved.courses = item.saved.courses.filter(
-              (eachId) => eachId != itemId,
-            )
-          }
-        }
-
-        if (type == 'quiz') {
-          if (add) {
-            item.saved.quizzes.push(itemId)
-          } else {
-            item.saved.quizzes = item.saved.quizzes.filter(
-              (eachId) => eachId != itemId,
-            )
-          }
-        }
-      }
-    })
+   Logic.Study.SaveItemToFolderForm = {
+    add,
+    id: folderId,
+    propIds: [itemId],
+    type,
   }
-}
 
-const handleFolderNameBlur = async () => {
-  if (currentFolder.id && currentFolder.name) {
-    Logic.Common.debounce(async () => {
-      await Logic.Study.UpdateFolder(currentFolder.id, { title: currentFolder.name })
-      await Logic.Study.GetFolders({ all: true }, true)
-      setFolders()
-    }, 500)
-  } else {
-    addFolderIsActive.value = false
-    folders.pop()
-  }
+  Logic.Study.SaveItemToFolder(true)
 }
 
 const openQuiz = <T extends Pick<ResourceType, 'status' | 'user' | 'id'>>(activity: T) => {
@@ -260,38 +152,6 @@ const openCourse = (activity: ResourceType) => {
   )
     return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
   Logic.Common.GoToRoute(`/course/${activity.id}`)
-}
-
-const saveItemsToFolder = (
-  folderId: string,
-  type: 'courses' | 'quizzes',
-  items: string[],
-  add: boolean,
-) => {
-  Logic.Study.SaveItemToFolderForm = {
-    add,
-    id: folderId,
-    propIds: items,
-    type,
-  }
-
-  Logic.Study.SaveItemToFolder(true).then((data) => {
-    if (data) {
-      Logic.Study.GetFolder(folderId)
-      setFolders()
-    }
-  })
-}
-
-const deleteFolder = async (id: string) => {
-  const confirmed = await Logic.Common.confirm({
-    title: 'Are you sure?',
-    sub: 'This action is permanent. All items in the folder will be removed',
-    rightLabel: 'Yes, delete',
-  })
-  if (!confirmed) return
-  await Logic.Study.DeleteFolder(id)
-  if (`/library/folders/${id}` === Logic.Common.route?.path) await Logic.Common.GoToRoute('/library')
 }
 
 const showMoreOptionHandler = (data: ResourceType) => {
@@ -386,7 +246,7 @@ const moreOptions = reactive([
 ])
 
 export {
-  AllCourses, AllFolders, AllFoldersCourses, AllFoldersQuizzes, AllGames, AllQuzzies, AllTests, GameAndTestQuizzes, PurchasedCourses, RecentMaterials, SingleFolder, TutorQuizzes, addFolder, addFolderIsActive, addMaterialToFolder, createCourseData, createQuizData, currentFolder, deleteFolder,
-  folders, handleFolderNameBlur, moreOptions, openCourse, openQuiz,
-  reportMaterial, reportMaterialSetup, saveItemsToFolder, selectedFolderItems, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial, setFolders, shareMaterialLink, showAddItemToFolder, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
+  AllQuzzies, addMaterialToFolder, moreOptions, openCourse, openQuiz,
+  reportMaterial, reportMaterialSetup, selectedFolderMaterailToAdd, selectedItem, sendReportMaterial,
+  shareMaterialLink, showMoreOptionHandler, showMoreOptions, showSaveToFolder, showStudyMode
 }

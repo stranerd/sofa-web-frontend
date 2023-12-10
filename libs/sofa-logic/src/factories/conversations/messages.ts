@@ -8,10 +8,8 @@ type Keys = { body: string, media: Content | null }
 export class MessageFactory extends BaseFactory<Message, Keys, Keys> {
 	readonly rules = {
 		body: v.string(),
-		media: v.any()//.file().nullable()
+		media: v.file().nullable()
 	}
-
-	reserved = []
 
 	constructor () {
 		super({ body: '', media: null })
@@ -36,7 +34,7 @@ export class MessageFactory extends BaseFactory<Message, Keys, Keys> {
 	toModel = async () => {
 		if (this.valid) {
 			const { body, media } = this.validValues
-			return { body, media: null }
+			return { body, media }
 		} else {
 			throw new Error('Validation errors')
 		}

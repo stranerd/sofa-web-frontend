@@ -19,8 +19,6 @@ export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizIn
 		courseId: v.string().min(1).nullable()
 	}
 
-	reserved = []
-
 	constructor () {
 		super({
 			title: '', description: '', photo: null, topic: '',

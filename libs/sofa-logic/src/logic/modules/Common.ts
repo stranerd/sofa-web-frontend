@@ -217,13 +217,13 @@ export default class Common {
 
 	async listenToMany<Model> (channel: string, listeners: Listeners<Model>, matches: (entity: Model) => boolean = () => true) {
 		return this.listenToSocket<Model>(channel, {
-			created: async (model) => {
+      created: async (model) => {
 				if (matches(model)) await listeners.created(model)
 			},
-			updated: async (model) => {
+      updated: async (model) => {
 				if (matches(model)) await listeners.updated(model)
 			},
-			deleted: async (model) => {
+      deleted: async (model) => {
 				if (matches(model)) await listeners.deleted(model)
 			}
 		})

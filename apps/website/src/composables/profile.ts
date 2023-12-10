@@ -83,7 +83,7 @@ const setCountry = () => {
   if (Countries.value) {
     allCountries.length = 0
 
-    Countries.value.forEach((country) => {
+    Countries.value?.forEach((country) => {
       allCountries.push({
         key: country.name,
         value: country.name,
@@ -517,7 +517,7 @@ const setOrganizationMembers = () => {
       },
     ],
   }).then((response) => {
-    const allUsers: SingleUser[] = response
+    const allUsers: SingleUser[] = response.results
     allRequests.value.length = 0
     allStudents.value.length = 0
     allOrganizationMembers.value?.results.forEach((member) => {
@@ -584,7 +584,7 @@ const setOrganizations = () => {
         },
       ],
     }).then((data) => {
-      const allUser: SingleUser[] = data
+      const allUser: SingleUser[] = data.results
       allOrganizations.length = 0
       if (data) {
         allUser.forEach((item) => {
