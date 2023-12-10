@@ -383,6 +383,11 @@ export default class Study extends Common {
     })
   }
 
+  public async getFolders (filters: QueryParams) {
+    return $api.study.folder.fetch(filters)
+      .then((response) => response.data)
+  }
+
   public GetFolders = async (filters: QueryParams, showLoader = false) => {
     if (showLoader) Logic.Common.showLoading()
 
