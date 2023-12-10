@@ -873,11 +873,12 @@ export default class Study extends Common {
 
   public GetMarketplaceMaterials = () => {
     return new Promise(async (resolve) => {
-      this.MarketplaceMaterials = {
-        lastest: await this.GetLatestMaterials(),
-        rated: await this.GetRatedMaterials(),
-        popular: await this.GetPopularMaterials(),
-      }
+      const [latest, rated, popular] = await Promise.all([
+        this.GetLatestMaterials(),
+        this.GetRatedMaterials(),
+        this.GetPopularMaterials(),
+      ])
+      this.MarketplaceMaterials = { lastest: latest, rated, popular }
       resolve('')
     })
   }

@@ -81,7 +81,7 @@
           </sofa-normal-text>
         </div>
 
-        <div v-if="0 && marketplaceContents.lastest.length"
+        <div v-if="marketplaceContents.lastest.length"
           class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
           <div
             class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
@@ -239,20 +239,6 @@ export default defineComponent({
         requireAuth: true,
         ignoreProperty: false,
         silentUpdate: true,
-      },
-      {
-        domain: "Study",
-        property: "AllTopics",
-        method: "GetTopics",
-        params: [],
-        requireAuth: true,
-      },
-      {
-        domain: "Study",
-        property: "AllOtherTags",
-        method: "GetOtherTags",
-        params: [],
-        requireAuth: true,
       },
     ],
   },

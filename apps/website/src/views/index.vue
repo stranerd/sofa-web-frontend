@@ -334,7 +334,7 @@
           </div>
 
           <sofa-text-field placeholder="What can I do for you?" :padding="'p-3'" :custom-class="'border'"
-            v-model="factory.title">
+            v-model="factory.body">
             <template v-slot:inner-suffix>
               <sofa-icon :name="'send'" :customClass="'h-[19px] cursor-pointer'" @click="createConversation" />
             </template>
