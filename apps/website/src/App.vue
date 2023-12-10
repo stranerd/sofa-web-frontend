@@ -8,7 +8,7 @@
       {{ content ? `${content} | SOFA` : `SOFA` }}
     </template>
   </metainfo>
-  <router-view />
+  <router-view :key="$route.path" />
   <SofaAlert v-for="(alert, i) in loaderSetup.alerts" :key="i" :close="() => loaderSetup.alerts.splice(i, 1)"
     :content="alert.message" :type="alert.type" />
   <study-mode-modal />
