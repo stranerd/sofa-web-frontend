@@ -86,7 +86,9 @@ export const useCoursesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => 
 
 	const unfetched = computed(() => ids.value.filter((id) => !filteredCourses.value.find((q) => q.id === id)))
 
-	const filteredCourses = computed(() => allCourses.value.filter((q) => ids.value.includes(q.id)))
+	const filteredCourses = computed(() => ids.value
+		.map((id) => allCourses.value.find((c) => c.id === id))
+		.filter(Boolean))
 
 	watch(ids, async () => {
 		const notFetched = [...new Set(unfetched.value)]

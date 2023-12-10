@@ -50,11 +50,7 @@ export default defineComponent({
 			return []
 		})
 
-		return {
-			Logic,
-			tab,
-			data,
-		}
+		return { Logic, data }
 	},
 })
 </script>

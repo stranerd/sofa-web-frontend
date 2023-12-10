@@ -1,9 +1,9 @@
 import { Folder, FolderFactory, Logic } from 'sofa-logic'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
-import { useRoute } from 'vue-router'
 
 const store = {
 	folders: ref<Folder[]>([]),
@@ -114,4 +114,13 @@ export const useEditFolder = () => {
 	}
 
 	return { factory, edit, saveFolder, generateNewFolder, deleteFolder }
+}
+
+
+export const useFolder = (id: string) => {
+	const folderList = useMyFolders()
+
+	const folder = computed(() => store.folders.value.find((q) => q.id === id) ?? null)
+
+	return { ...folderList, folder }
 }

@@ -127,7 +127,9 @@ export const useQuizzesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => 
 
 	const unfetched = computed(() => ids.value.filter((id) => !filteredQuizzes.value.find((q) => q.id === id)))
 
-	const filteredQuizzes = computed(() => allQuizzes.value.filter((q) => ids.value.includes(q.id)))
+	const filteredQuizzes = computed(() => ids.value
+		.map((id) => allQuizzes.value.find((q) => q.id === id))
+		.filter(Boolean))
 
 	watch(ids, async () => {
 		const notFetched = [...new Set(unfetched.value)]

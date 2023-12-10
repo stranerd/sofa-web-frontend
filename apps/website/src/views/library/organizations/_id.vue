@@ -81,15 +81,7 @@ export default defineComponent({
 			Logic.Users.watchProperty("SingleUser", SingleUser)
 		})
 
-		return {
-			Logic,
-			SingleUser,
-			openQuiz,
-			openCourse,
-			data,
-			showMoreOptionHandler,
-			tab,
-		}
+		return { Logic, SingleUser, openQuiz, openCourse, data, showMoreOptionHandler }
 	},
 })
 </script>

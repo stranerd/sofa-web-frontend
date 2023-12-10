@@ -48,13 +48,7 @@ export default defineComponent({
 			return []
 		})
 
-		return {
-			Logic,
-			tab,
-			openCourse,
-			data,
-			showMoreOptionHandler,
-		}
+		return { Logic, openCourse, data, showMoreOptionHandler }
 	},
 })
 </script>
