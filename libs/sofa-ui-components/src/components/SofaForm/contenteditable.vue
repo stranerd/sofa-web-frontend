@@ -2,15 +2,16 @@
   <span
     :class="`${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
     :placeholder="placeholder" :contenteditable="true" @input="onInput" @blur="onBlur" @keydown.enter.prevent="onEnter"
-    :id="`content-${tabIndex}`"></span>
+    :id="`content-${tabIndex}`">{{ textContent }}</span>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue"
+import { defineComponent, onMounted, ref, toRef, watch } from "vue"
 
 export default defineComponent({
   components: {},
   props: {
     modelValue: {
+      type: String,
       required: false,
     },
     customClass: {
@@ -37,7 +38,9 @@ export default defineComponent({
   name: "SofaCustomInput",
   emits: ["update:modelValue", "onBlur", "onContentChange", "onEnter"],
   setup (props, context) {
-    const textContent = ref("")
+    const textContent = ref(props.modelValue ?? "")
+
+    const modelValueRef = toRef(props, 'modelValue')
 
     const tabIndex = Math.random()
 
@@ -45,6 +48,10 @@ export default defineComponent({
       context.emit("update:modelValue", textContent.value)
       context.emit("onContentChange", textContent.value)
     })
+
+    watch(modelValueRef, () => {
+      textContent.value = modelValueRef.value
+    }, { immediate: true })
 
     const onInput = (e: any) => {
       textContent.value = props.trim ? e.target.innerText.trim() : e.target.innerText

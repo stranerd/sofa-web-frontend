@@ -1,5 +1,5 @@
 import { Differ, VCore } from 'valleyed'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 import { isRef, unref } from 'vue'
 
@@ -26,11 +26,11 @@ const deepUnref = (val: any): any => {
 }
 
 export abstract class BaseFactory<E, T, K extends Record<string, any>> {
-	#entity: string | null = null
+	#entity = ref<string| null>(null)
 	errors: Record<keyof K, string>
 	abstract toModel: () => Promise<T>
 	abstract loadEntity: (entity: E) => void
-	abstract reserved: string[]
+	reserved: string[]
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
 	protected readonly defaults: K
 	protected values: K
@@ -59,11 +59,11 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	}
 
 	get entityId () {
-		return this.#entity
+		return this.#entity.value
 	}
 
 	protected set entityId (v: string | null) {
-		this.#entity = v
+		this.#entity.value = v
 	}
 
 	set (property: keyof K, value: any, ignoreRules = false) {
@@ -88,7 +88,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	}
 
 	reset () {
-		this.#entity = null
+		this.entityId = null
 		const reserved = (this.reserved ?? []).concat(['userId', 'user', 'userBio'])
 		Object.keys(this.defaults)
 			.filter((key) => !reserved.includes(key))

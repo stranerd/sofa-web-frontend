@@ -9,6 +9,7 @@ import { defineComponent } from "vue"
 
 export default defineComponent({
   name: "QuizCreate",
+  middlewares: { goBackRoute: "/library" },
   beforeRouteEnter: generateMiddlewares([async () => {
     const { createQuiz } = useCreateQuiz()
     const id = await createQuiz()

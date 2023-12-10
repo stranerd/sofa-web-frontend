@@ -30,6 +30,7 @@ export default defineComponent({
 		SofaEmptyState,
 	},
 	name: "LibraryResultsPage",
+	middlewares: { goBackRoute: "/library" },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()

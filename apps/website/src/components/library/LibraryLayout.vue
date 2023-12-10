@@ -33,7 +33,7 @@
 		</div>
 
 		<template v-slot:left-session>
-			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-2">
+			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
 				<router-link class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
 					v-for="item in libraryOptions" :key="item.routePath" :to="item.routePath"
 					exact-active-class="bg-[#E5F2FD] !font-bold">
@@ -43,37 +43,24 @@
 
 				<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
 					<sofa-normal-text :customClass="'!font-bold'">Folders</sofa-normal-text>
-					<sofa-normal-text :color="'text-primaryPink'" customClass="cursor-pointer"
-						@click="addFolder">Add</sofa-normal-text>
+					<sofa-normal-text :color="'text-primaryPink'" as="a" @click="generateNewFolder">Add</sofa-normal-text>
 				</div>
 
-				<component :is="item.id === currentlyEditingFolder ? 'span' : 'router-link'"
-					class="w-full flex items-center justify-start gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
+				<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
+					class="w-full flex items-center justify-start text-left gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
 					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 					exact-active-class="bg-[#E5F2FD] font-bold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
-					<sofa-custom-input v-if="item.id === currentlyEditingFolder"
-						custom-class="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
-						:updateValue="item.title" placeholder="Folder name"
-						@onBlur="() => {
-							currentlyEditingFolder = null
-							/* TODO: save folder name  */
-						}"
-						@onEnter="() => {
-							currentlyEditingFolder = null
-							/* TODO: save folder name  */
-						}"
-						@onContentChange="(content) => {
-							/* save folder name in debounce */
-						}"
-					/>
-					<sofa-normal-text v-else>{{ item.title }}</sofa-normal-text>
+					<sofa-custom-input v-if="item.id === factory.entityId"
+						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white" :autoFocus="true"
+						v-model="factory.title" placeholder="Folder name" @onBlur="saveFolder" @onEnter="saveFolder" />
+					<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
-					<div v-if="item.id !== currentlyEditingFolder"
-						class="absolute right-0 top-0 h-full px-3 justify-center bg-[#E5F2FD] rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
-						<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click="currentlyEditingFolder = item.id" />
-						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click="deleteFolder(item.id)" />
+					<div v-if="item.id !== factory.entityId"
+						class="px-3 ml-auto justify-center bg-[#E5F2FD] rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
+						<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
+						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
 					</div>
 				</component>
 
@@ -106,36 +93,24 @@
 				<div class="w-full flex flex-col gap-2">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
 						<sofa-normal-text :customClass="'!font-bold'">Folders</sofa-normal-text>
-						<sofa-normal-text :color="'text-primaryPink'" @click="addFolder()">Add</sofa-normal-text>
+						<sofa-normal-text :color="'text-primaryPink'" @click="generateNewFolder">Add</sofa-normal-text>
 					</div>
 
-					<component :is="item.id === currentlyEditingFolder ? 'span' : 'router-link'"
-						class="w-full flex items-center relative justify-between gap-3 p-4 rounded-custom bg-white shadow-custom group folder-link"
+					<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
+						class="w-full flex items-center relative gap-3 p-4 rounded-custom text-left bg-white shadow-custom group folder-link"
 						v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 						exact-active-class="font-bold">
-						<div class="flex items-center gap-3 w-full">
-							<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
-							<sofa-custom-input v-if="item.id === currentlyEditingFolder" :updateValue="item.title" :placeholder="'Folder name'"
-								custom-class="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-backgroundGray rounded cursor-text"
-								@onBlur="() => {
-									currentlyEditingFolder = null
-									/* TODO: save folder name  */
-								}"
-								@onEnter="() => {
-									currentlyEditingFolder = null
-									/* TODO: save folder name  */
-								}"
-								@onContentChange="(content) => {
-									/* save folder name in debounce */
-								}"
-							/>
-							<sofa-normal-text v-else>{{ item.title }}</sofa-normal-text>
-						</div>
+						<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
+						<sofa-custom-input v-if="item.id === factory.entityId" v-model="factory.title"
+							placeholder="Folder name" :autoFocus="true"
+							customClass="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-backgroundGray rounded cursor-text"
+							@onBlur="saveFolder" @onEnter="saveFolder" />
+						<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
-						<div v-if="item.id !== currentlyEditingFolder"
-							class="h-full justify-center hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
-							<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click="currentlyEditingFolder = item.id" />
-							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click="deleteFolder(item.id)" />
+						<div v-if="item.id !== factory.entityId"
+							class="ml-auto justify-center hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
+							<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
+							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
 						</div>
 					</component>
 				</div>
@@ -194,11 +169,11 @@
 
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
-import { addFolder, deleteFolder, moreOptions, showMoreOptions } from '@/composables/library'
-import { useMyFolders } from '@/composables/study/folders'
-import { Conditions, Logic, SingleUser } from "sofa-logic"
+import { moreOptions, showMoreOptions } from '@/composables/library'
+import { useEditFolder, useMyFolders } from '@/composables/study/folders'
+import { Conditions, Logic } from "sofa-logic"
 import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
-import { PropType, computed, defineProps, onMounted, ref, watch } from 'vue'
+import { PropType, computed, defineProps, ref, watch } from 'vue'
 import { useMeta } from "vue-meta"
 import { useRoute } from 'vue-router'
 
@@ -314,14 +289,14 @@ const currentTab = computed(() => route.query.tab as string | undefined)
 const allOrganizations = ref<{ id: string; name: string }[]>([])
 const tabs = props.options ?? libraryOptions.value.find((o) => o.routePath === route.path)?.options ?? []
 const { folders } = useMyFolders()
-const currentlyEditingFolder = ref<string | null>(null)
+const { factory, edit, saveFolder, generateNewFolder, deleteFolder } = useEditFolder()
 
 useMeta(computed(() => ({
 	title: props.title
 })))
 
 const setOrganizations = async () => {
-	const users: SingleUser[] = await Logic.Users.GetUsers({
+	const users = await Logic.Users.GetUsers({
 		where: [
 			{
 				field: 'id',
@@ -336,13 +311,5 @@ const setOrganizations = async () => {
 	}))
 }
 
-watch(user, setOrganizations)
-
-onMounted(async () => {
-	if (!Logic.Study.Tags) Logic.Study.GetTags({
-		where: [{ field: "type", value: "topics" }],
-		all: true
-	})
-	setOrganizations()
-})
+watch(user, setOrganizations, { immediate: true })
 </script>

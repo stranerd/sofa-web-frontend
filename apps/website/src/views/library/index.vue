@@ -12,6 +12,7 @@ import { useMeta } from "vue-meta"
 export default defineComponent({
 	components: { LibraryLayout },
 	name: "LibraryPage",
+	middlewares: { goBackRoute: "/library" },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => Logic.Common.isLarge ? '/library/quizzes' : undefined]),
 	setup () {
 		useMeta({

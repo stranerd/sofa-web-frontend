@@ -22,10 +22,10 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { SingleFolder, createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from "@/composables/library"
-import { Logic } from "sofa-logic"
+import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from "@/composables/library"
+import { Folder, Logic } from "sofa-logic"
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
-import { computed, defineComponent, onMounted } from "vue"
+import { computed, defineComponent, onMounted, ref } from "vue"
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -50,6 +50,7 @@ export default defineComponent({
 	},
 	name: "LibraryFoldersIdPage",
 	setup () {
+		const SingleFolder = ref<Folder | null>()
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'all')
 

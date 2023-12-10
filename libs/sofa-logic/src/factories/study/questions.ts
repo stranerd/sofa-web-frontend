@@ -57,8 +57,6 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 		})).min(2).max(10).requiredIf(() => this.isMatch)
 	}
 
-	reserved = []
-
 	constructor () {
 		super({
 			question: '', explanation: '', questionMedia: null, timeLimit: 30, type: QuestionTypes.multipleChoice,

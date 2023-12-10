@@ -1,8 +1,9 @@
-import { Folder, Logic } from 'sofa-logic'
+import { Folder, FolderFactory, Logic } from 'sofa-logic'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useRoute } from 'vue-router'
 
 const store = {
 	folders: ref<Folder[]>([]),
@@ -53,4 +54,64 @@ export const useMyFolders = () => {
 	})
 
 	return { ...store }
+}
+
+export const useEditFolder = () => {
+	const factory = new FolderFactory()
+	const { setLoading } = useLoadingHandler()
+	const { setError } = useErrorHandler()
+	const route = useRoute()
+
+	const edit = (folder: Folder) => {
+		factory.loadEntity(folder)
+	}
+
+	const saveFolder = async () => {
+		const id = factory.entityId
+		if (!id || !factory.valid) return factory.reset()
+		const data = await factory.toModel()
+		try {
+			await setError('')
+			await setLoading(true)
+			await Logic.Study.UpdateFolder(id, data)
+			factory.reset()
+		} catch (e) {
+			await setError(e)
+		}
+		await setLoading(false)
+	}
+
+	const deleteFolder = async (folder: Folder) => {
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure?',
+			sub: 'This action is permanent. All items in the folder will be removed',
+			rightLabel: 'Yes, delete',
+		})
+		if (!confirmed) return
+		try {
+			await setError('')
+			await setLoading(true)
+			await Logic.Study.DeleteFolder(folder.id)
+			if (factory.entityId === folder.id) factory.reset()
+			if (`/library/folders/${folder.id}` === route.path) await Logic.Common.GoToRoute('/library')
+		} catch (e) {
+			await setError(e)
+		}
+		await setLoading(false)
+	}
+
+	const generateNewFolder = async () => {
+		const title = `New folder (${Logic.Common.makeid(4)})`
+		try {
+			await setError('')
+			await setLoading(true)
+			const folder = await Logic.Study.CreateFolder({ title })
+			edit(folder)
+		} catch (e) {
+			await setError(e)
+		}
+		await setLoading(false)
+	}
+
+	return { factory, edit, saveFolder, generateNewFolder, deleteFolder }
 }
