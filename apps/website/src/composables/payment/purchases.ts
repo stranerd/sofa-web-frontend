@@ -1,5 +1,5 @@
 import { Logic, Purchase } from 'sofa-logic'
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
@@ -52,5 +52,9 @@ export const useMyPurchases = () => {
 		await store.listener.close()
 	})
 
-	return { ...store }
+	const purchasesCoursesIds = computed(() => store.purchases
+		.filter((p) => p.data.type === 'courses')
+		.map((p) => p.data.id))
+
+	return { ...store, purchasesCoursesIds }
 }

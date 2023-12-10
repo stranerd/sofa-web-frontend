@@ -10,6 +10,7 @@
 				</div>
 			</sofa-activity-card>
 		</template>
+
 		<sofa-empty-state v-else :title="'You have no quizzes here'" :actionLabel="'Explore'"
 			:subTitle="'Discover thousands of quizzes and save them here for easy access'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />

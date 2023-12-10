@@ -1,5 +1,5 @@
-import { Conditions, Course, Differ, Logic } from 'sofa-logic'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Conditions, Course, Logic } from 'sofa-logic'
+import { ComputedRef, Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
@@ -26,7 +26,8 @@ const store = {
 	})
 }
 
-const purchasedStore = {
+
+const extraCoursesStore = {
 	courses: ref<Course[]>([]),
 	...useLoadingHandler(),
 	...useErrorHandler(),
@@ -68,33 +69,40 @@ export const useMyCourses = () => {
 }
 
 export const useMyPurchasedCourses = () => {
-	const { purchases } = useMyPurchases()
+	const { purchasesCoursesIds } = useMyPurchases()
+	const { courses: fetchedCourses } = useCoursesInList(purchasesCoursesIds)
+	const courses = computed(() => purchasesCoursesIds.value
+		.map((id) => fetchedCourses.value.find((c) => c.id === id))
+		.filter(Boolean))
+	return { courses }
+}
 
-	const purchasesCoursesIds = computed(() => purchases
-		.filter((p) => p.data.type === 'courses')
-		.map((p) => p.data.id))
 
-	watch(purchases, async () => {
-		const sortedPurchasesIds = purchasesCoursesIds.value.sort()
-		const fetchedCoursesIds = purchasedStore.courses.value.map((c) => c.id).sort()
-		if (Differ.equal(sortedPurchasesIds, fetchedCoursesIds)) return
-		await purchasedStore.setError('')
-		await purchasedStore.setLoading(true)
+export const useCoursesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => {
+	const allCourses = computed(() => [
+		...store.courses.value,
+		...extraCoursesStore.courses.value
+	])
+
+	const unfetched = computed(() => ids.value.filter((id) => !filteredCourses.value.find((q) => q.id === id)))
+
+	const filteredCourses = computed(() => allCourses.value.filter((q) => ids.value.includes(q.id)))
+
+	watch(ids, async () => {
+		const notFetched = [...new Set(unfetched.value)]
 		try {
+			await extraCoursesStore.setError('')
+			await extraCoursesStore.setLoading(true)
 			const courses = await Logic.Study.GetCourses({
-				where: [{ field: 'id', value: purchasesCoursesIds.value, condition: Conditions.in }],
+				where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
 				all: true
 			})
-			purchasedStore.courses.value = courses.results
+			courses.results.forEach((course) => extraCoursesStore.courses.value.push(course))
 		} catch (e) {
-			await purchasedStore.setError(e)
+			await extraCoursesStore.setError(e)
 		}
-		await purchasedStore.setLoading(false)
+		await extraCoursesStore.setLoading(false)
 	})
 
-	const courses = computed(() => purchasesCoursesIds.value
-		.map((id) => purchasedStore.courses.value.find((c) => c.id === id))
-		.filter(Boolean))
-
-	return { ...purchasedStore, courses }
+	return { courses: filteredCourses }
 }
