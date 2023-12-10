@@ -1,7 +1,7 @@
 <template>
 	<LibraryLayout title="Purchased">
 		<template v-if="data.length">
-			<sofa-activity-card v-for="(activity, index) in data" :key="index" :activity="activity"
+			<sofa-activity-card v-for="activity in data" :key="activity.id" :activity="activity"
 				:isWrapped="!Logic.Common.isLarge" :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="openCourse(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
@@ -19,10 +19,11 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { PurchasedCourses, createCourseData, openCourse, showMoreOptionHandler } from "@/composables/library"
+import { createCourseData, openCourse, showMoreOptionHandler } from "@/composables/library"
+import { useMyPurchasedCourses } from '@/composables/study/courses-list'
 import { Logic } from "sofa-logic"
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
-import { computed, defineComponent, onMounted } from "vue"
+import { computed, defineComponent } from "vue"
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -32,28 +33,16 @@ export default defineComponent({
 		SofaActivityCard,
 		SofaEmptyState,
 	},
-	middlewares: {
-		fetchRules: [
-			{
-				domain: "Payment",
-				property: "PurchasedItems",
-				method: "GetUserPurchases",
-				params: [true],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-		],
-	},
 	name: "LibraryPurchasedPage",
 	setup () {
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'all')
 
-		const PurchasedData = computed(() => (PurchasedCourses.value?.results ?? []).map(createCourseData))
-		const data = computed(() => PurchasedData.value)
+		const { courses } = useMyPurchasedCourses()
 
-		onMounted(() => {
-			Logic.Study.watchProperty("PurchasedCourses", PurchasedCourses)
+		const data = computed(() => {
+			if (tab.value === 'all') return courses.value.map(createCourseData)
+			return []
 		})
 
 		return {

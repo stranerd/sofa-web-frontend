@@ -1,8 +1,9 @@
-import { Course, Logic } from 'sofa-logic'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { Conditions, Course, Differ, Logic } from 'sofa-logic'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useMyPurchases } from '../payment/purchases'
 
 const store = {
 	courses: ref<Course[]>([]),
@@ -23,6 +24,12 @@ const store = {
 			}
 		}, (e) => e.user.id === id.value)
 	})
+}
+
+const purchasedStore = {
+	courses: ref<Course[]>([]),
+	...useLoadingHandler(),
+	...useErrorHandler(),
 }
 
 export const useMyCourses = () => {
@@ -58,4 +65,36 @@ export const useMyCourses = () => {
 		.filter((m) => m.status === 'draft'))
 
 	return { ...store, published, draft }
+}
+
+export const useMyPurchasedCourses = () => {
+	const { purchases } = useMyPurchases()
+
+	const purchasesCoursesIds = computed(() => purchases
+		.filter((p) => p.data.type === 'courses')
+		.map((p) => p.data.id))
+
+	watch(purchases, async () => {
+		const sortedPurchasesIds = purchasesCoursesIds.value.sort()
+		const fetchedCoursesIds = purchasedStore.courses.value.map((c) => c.id).sort()
+		if (Differ.equal(sortedPurchasesIds, fetchedCoursesIds)) return
+		await purchasedStore.setError('')
+		await purchasedStore.setLoading(true)
+		try {
+			const courses = await Logic.Study.GetCourses({
+				where: [{ field: 'id', value: purchasesCoursesIds.value, condition: Conditions.in }],
+				all: true
+			})
+			purchasedStore.courses.value = courses.results
+		} catch (e) {
+			await purchasedStore.setError(e)
+		}
+		await purchasedStore.setLoading(false)
+	})
+
+	const courses = computed(() => purchasesCoursesIds.value
+		.map((id) => purchasedStore.courses.value.find((c) => c.id === id))
+		.filter(Boolean))
+
+	return { ...purchasedStore, courses }
 }
