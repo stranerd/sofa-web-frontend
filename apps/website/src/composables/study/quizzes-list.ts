@@ -114,15 +114,29 @@ export const useTutorQuizzes = () => {
 	return { ...tutorStore }
 }
 
-export const useQuizzesInList = (ids: Refable<string[]>) => {
+export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
 	const allQuizzes = computed(() => [...store.quizzes.value, ...tutorStore.quizzes.value])
 
-	const { items: quizzes } = useItemsInList('quizzes', ids, allQuizzes, async (notFetched: string[]) => {
+	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, async (notFetched: string[]) => {
 		const quizzes = await Logic.Study.GetQuizzes({
 			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
 			all: true
 		})
 		return quizzes.results
+	})
+
+	const listener = useListener(async () => {
+		return await Logic.Common.listenToMany<Quiz>('study/quizzes', {
+			created: addToList, updated: addToList, deleted: () => {/* */}
+		},  (e) => ids.value.includes(e.id))
+	})
+
+	onMounted(() => {
+		if (listen) listener.start()
+	})
+
+	onUnmounted(() => {
+		if (listen) listener.close()
 	})
 
 	return { quizzes }

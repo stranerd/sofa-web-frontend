@@ -1,7 +1,7 @@
 import { Conditions, Course, Logic } from 'sofa-logic'
-import { ComputedRef, Ref, computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useItemsInList } from '../core/hooks'
+import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useMyPurchases } from '../payment/purchases'
@@ -73,15 +73,29 @@ export const useMyPurchasedCourses = () => {
 }
 
 
-export const useCoursesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => {
+export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 	const allCourses = computed(() => [...store.courses.value])
 
-	const { items: courses } = useItemsInList('courses', ids, allCourses, async (notFetched: string[]) => {
+	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, async (notFetched: string[]) => {
 		const courses = await Logic.Study.GetCourses({
 			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
 			all: true
 		})
 		return courses.results
+	})
+
+	const listener = useListener(async () => {
+		return await Logic.Common.listenToMany<Course>('study/courses', {
+			created: addToList, updated: addToList, deleted: () => {/* */}
+		},  (e) => ids.value.includes(e.id))
+	})
+
+	onMounted(() => {
+		if (listen) listener.start()
+	})
+
+	onUnmounted(() => {
+		if (listen) listener.close()
 	})
 
 	return { courses }
