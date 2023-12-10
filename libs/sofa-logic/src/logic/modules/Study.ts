@@ -471,7 +471,8 @@ export default class Study extends Common {
   public GetTutorQuizzes = (filters: QueryParams) => {
     return $api.study.quiz.tutorQuizzes(filters).then((response) => {
       this.TutorQuizzes = response.data
-    }).catch(() => {})
+      return this.TutorQuizzes
+    })
   }
 
   public GetQuiz = async (id: string) => {
