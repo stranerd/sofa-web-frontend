@@ -21,6 +21,7 @@ import LibraryLayout from "@/components/library/LibraryLayout.vue"
 import { createQuizData, openQuiz, showMoreOptionHandler } from "@/composables/library"
 import { useMyQuizzes, useTutorQuizzes } from '@/composables/study/quizzes-list'
 import { useRecent } from '@/composables/study/study'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
 import { computed, defineComponent } from "vue"
@@ -34,6 +35,7 @@ export default defineComponent({
 		SofaEmptyState,
 	},
 	name: "LibraryQuizzesPage",
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'recent')

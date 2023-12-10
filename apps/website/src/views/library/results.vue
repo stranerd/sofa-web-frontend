@@ -16,6 +16,8 @@ import LibraryLayout from "@/components/library/LibraryLayout.vue"
 import { createGameData, createTestData } from "@/composables/library"
 import { useMyGames } from '@/composables/plays/games-list'
 import { useMyTests } from '@/composables/plays/tests-list'
+import { useQuizzesInList } from '@/composables/study/quizzes-list'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import { SofaEmptyState, SofaProgressItemCard } from "sofa-ui-components"
 import { computed, defineComponent } from "vue"
@@ -28,20 +30,22 @@ export default defineComponent({
 		SofaEmptyState,
 	},
 	name: "LibraryResultsPage",
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()
 		const tab = computed(() => route.query.tab as string ?? 'all')
 
 		const { ended: endedGames } = useMyGames()
 		const { ended: endedTests } = useMyTests()
+		const { quizzes } = useQuizzesInList(computed(() => [...endedGames.value, ...endedTests.value].map((p) => p.quizId)))
 
 		const data = computed(() => {
 			if (tab.value === "all") return [
-				...endedGames.value.map((g) => createGameData(g, [])),
-				...endedTests.value.map((t) => createTestData(t, [])),
+				...endedGames.value.map((g) => createGameData(g, quizzes.value)),
+				...endedTests.value.map((t) => createTestData(t, quizzes.value)),
 			].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === "games") return endedGames.value.map((g) => createGameData(g, []))
-			if (tab.value === "tests") return endedTests.value.map((t) => createTestData(t, []))
+			if (tab.value === "games") return endedGames.value.map((g) => createGameData(g, quizzes.value))
+			if (tab.value === "tests") return endedTests.value.map((t) => createTestData(t, quizzes.value))
 			return []
 		})
 

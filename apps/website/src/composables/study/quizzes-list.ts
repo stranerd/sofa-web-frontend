@@ -1,5 +1,5 @@
-import { Logic, Quiz } from 'sofa-logic'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { Conditions, Logic, Quiz } from 'sofa-logic'
+import { ComputedRef, Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useAuth } from '../auth/auth'
@@ -45,6 +45,12 @@ const tutorStore = {
 			}
 		}, (e) => e.user.id === id.value && e.isForTutors)
 	})
+}
+
+const extraQuizzesStore = {
+	quizzes: ref<Quiz[]>([]),
+	...useLoadingHandler(),
+	...useErrorHandler(),
 }
 
 export const useMyQuizzes = () => {
@@ -110,4 +116,34 @@ export const useTutorQuizzes = () => {
 	})
 
 	return { ...tutorStore }
+}
+
+export const useQuizzesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => {
+	const allQuizzes = computed(() => [
+		...store.quizzes.value,
+		...tutorStore.quizzes.value,
+		...extraQuizzesStore.quizzes.value
+	])
+
+	const unfetched = computed(() => ids.value.filter((id) => !filteredQuizzes.value.find((q) => q.id === id)))
+
+	const filteredQuizzes = computed(() => allQuizzes.value.filter((q) => ids.value.includes(q.id)))
+
+	watch(ids, async () => {
+		const notFetched = [...new Set(unfetched.value)]
+		try {
+			await extraQuizzesStore.setError('')
+			await extraQuizzesStore.setLoading(true)
+			const quizzes = await Logic.Study.GetQuizzes({
+				where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
+				all: true
+			})
+			quizzes.results.forEach((quiz) => extraQuizzesStore.quizzes.value.push(quiz))
+		} catch (e) {
+			await extraQuizzesStore.setError(e)
+		}
+		await extraQuizzesStore.setLoading(false)
+	})
+
+	return { quizzes: filteredQuizzes }
 }
