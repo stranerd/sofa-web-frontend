@@ -115,10 +115,7 @@ export const useTutorQuizzes = () => {
 }
 
 export const useQuizzesInList = (ids: Refable<string[]>) => {
-	const allQuizzes = computed(() => [
-		...store.quizzes.value,
-		...tutorStore.quizzes.value,
-	])
+	const allQuizzes = computed(() => [...store.quizzes.value, ...tutorStore.quizzes.value])
 
 	const { items: quizzes } = useItemsInList('quizzes', ids, allQuizzes, async (notFetched: string[]) => {
 		const quizzes = await Logic.Study.GetQuizzes({

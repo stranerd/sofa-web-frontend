@@ -142,7 +142,7 @@
 <script lang="ts">
 import { FormValidations } from "@/composables"
 import { useTopicsList } from '@/composables/interactions/tags'
-import { useTutorsList } from '@/composables/users/tutors'
+import { useTutorsList } from '@/composables/users/users'
 import { Logic } from "sofa-logic"
 import {
   SofaAvatar,

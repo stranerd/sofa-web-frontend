@@ -74,9 +74,7 @@ export const useMyPurchasedCourses = () => {
 
 
 export const useCoursesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => {
-	const allCourses = computed(() => [
-		...store.courses.value,
-	])
+	const allCourses = computed(() => [...store.courses.value])
 
 	const { items: courses } = useItemsInList('courses', ids, allCourses, async (notFetched: string[]) => {
 		const courses = await Logic.Study.GetCourses({

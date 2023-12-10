@@ -20,7 +20,7 @@ export const useItemsInList = <T extends { id: string }> (
 
 	const filteredItems = computed(() => ids.value
 		.map((id) => allItems.value.find((q) => q.id === id))
-		.filter(Boolean))
+		.filter(Boolean) as T[])
 
 	const unfetched = computed(() => ids.value.filter((id) => !filteredItems.value.find((q) => q.id === id)))
 

@@ -48,7 +48,7 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			store[id].game.value = await Logic.Plays.GetGame(id, true)
+			store[id].game.value = await Logic.Plays.GetGame(id)
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)
@@ -133,7 +133,7 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 				where: [{ field: 'id', value: cur.participants, condition: Conditions.in }],
 				all: true
 			}, false).then((users) => {
-				store[id].participants.splice(0, store[id].participants.length, ...users)
+				store[id].participants.splice(0, store[id].participants.length, ...users.results)
 			}).catch()
 		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions)) Logic.Plays.GetGameQuestions(id)
 				.then((questions) => {

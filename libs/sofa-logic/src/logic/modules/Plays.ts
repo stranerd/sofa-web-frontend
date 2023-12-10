@@ -67,30 +67,9 @@ export default class Plays extends Common {
     })
   }
 
-  public GetGame = async (id: string | undefined, skipExtras = false) => {
-    if (!id || id == 'nill') return null
-
+  public GetGame = async (id: string | undefined) => {
     const response = await $api.plays.game.get(id)
     this.SingleGame = response.data
-    if (!this.SingleGame || skipExtras) return this.SingleGame
-
-    this.GameParticipants = await Logic.Users.GetUsers({
-      where: [
-        {
-          field: 'id',
-          value: this.SingleGame.participants,
-          condition: Conditions.in,
-        },
-      ],
-    })
-
-    await this.GetGameQuestions(this.SingleGame.id)
-    if (![...this.GameParticipants, this.SingleGame.user.id].includes(Logic.Auth.AuthUser?.id))
-      await Logic.Plays.JoinGame(this.SingleGame.id, true)
-        .then((data) => {
-          this.SingleGame = data
-        })
-
     return this.SingleGame
   }
 

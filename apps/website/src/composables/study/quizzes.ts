@@ -253,7 +253,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 				where: [{ field: 'id', value: newMembers, condition: Conditions.in }],
 				all: true
 			}, false).then(async (users) => {
-				users.forEach((u) => {
+				users.results.forEach((u) => {
 					Logic.addToArray(store[id].members, u, (e) => e.id, (e) => e.id)
 				})
 				await store[id].membersListener.restart()

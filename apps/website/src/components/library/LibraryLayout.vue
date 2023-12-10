@@ -60,20 +60,21 @@
 					<div v-if="item.id !== factory.entityId"
 						class="px-3 ml-auto justify-center bg-[#E5F2FD] rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 						<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
-						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
+						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray"
+							@click.stop.prevent="deleteFolder(item)" />
 					</div>
 				</component>
 
-				<template v-if="allOrganizations.length">
+				<template v-if="organizations.length">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
 						<sofa-normal-text customClass="!font-bold">Organizations</sofa-normal-text>
 					</div>
 					<router-link
 						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
-						:to="`/library/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
+						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
-						<sofa-normal-text>{{ item.name }}</sofa-normal-text>
+						<sofa-normal-text class="truncate">{{ item.name }}</sofa-normal-text>
 					</router-link>
 				</template>
 			</div>
@@ -110,21 +111,22 @@
 						<div v-if="item.id !== factory.entityId"
 							class="ml-auto justify-center hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 							<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
-							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
+							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray"
+								@click.stop.prevent="deleteFolder(item)" />
 						</div>
 					</component>
 				</div>
 
-				<template v-if="allOrganizations.length">
+				<template v-if="organizations.length">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
 						<sofa-normal-text customClass="!font-bold">Organizations</sofa-normal-text>
 					</div>
 					<router-link
 						class="w-full flex items-center relative justify-start gap-2 p-4 rounded-custom bg-white shadow-custom"
-						:to="`/library/organizations/${item.id}`" v-for="item in allOrganizations" :key="item.id"
+						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
 						exact-active-class="bg-[#E5F2FD]">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
-						<sofa-normal-text>{{ item.name }}</sofa-normal-text>
+						<sofa-normal-text class="truncate">{{ item.name }}</sofa-normal-text>
 					</router-link>
 				</template>
 			</div>
@@ -171,9 +173,10 @@
 import { useAuth } from '@/composables/auth/auth'
 import { moreOptions, showMoreOptions } from '@/composables/library'
 import { useEditFolder, useMyFolders } from '@/composables/study/folders'
-import { Conditions, Logic } from "sofa-logic"
+import { useUsersInList } from '@/composables/users/users'
+import { Logic } from "sofa-logic"
 import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
-import { PropType, computed, defineProps, ref, watch } from 'vue'
+import { PropType, computed, defineProps } from 'vue'
 import { useMeta } from "vue-meta"
 import { useRoute } from 'vue-router'
 
@@ -286,30 +289,17 @@ const props = defineProps({
 
 const route = useRoute()
 const currentTab = computed(() => route.query.tab as string | undefined)
-const allOrganizations = ref<{ id: string; name: string }[]>([])
 const tabs = props.options ?? libraryOptions.value.find((o) => o.routePath === route.path)?.options ?? []
 const { folders } = useMyFolders()
 const { factory, edit, saveFolder, generateNewFolder, deleteFolder } = useEditFolder()
 
+const { users: orgs } = useUsersInList(computed(() => user.value?.account.organizationsIn ?? []))
+const organizations = computed(() => orgs.value.map((u) => ({
+	id: u.id,
+	name: u.type?.name ?? u.bio.name.full
+})))
+
 useMeta(computed(() => ({
 	title: props.title
 })))
-
-const setOrganizations = async () => {
-	const users = await Logic.Users.GetUsers({
-		where: [
-			{
-				field: 'id',
-				value: user.value?.account.organizationsIn ?? [],
-				condition: Conditions.in,
-			},
-		],
-	})
-	allOrganizations.value = users.map((item) => ({
-		id: item.id,
-		name: item.type?.name ?? item.bio.name.full,
-	}))
-}
-
-watch(user, setOrganizations, { immediate: true })
 </script>
