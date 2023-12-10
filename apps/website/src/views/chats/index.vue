@@ -28,7 +28,6 @@ import ChatLayout from '@/components/conversations/ChatLayout.vue'
 import ChatList from "@/components/conversations/ChatList.vue"
 import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList } from '@/composables/conversations/conversations'
-import { useRequestsList } from '@/composables/conversations/tutorRequests'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import { SofaIcon, SofaNormalText } from "sofa-ui-components"
@@ -50,15 +49,9 @@ export default defineComponent({
 		})
 
 		const { userType } = useAuth()
+		const { conversations, requests } = useConversationsList()
 
-		const { conversations } = useConversationsList()
-		const { requests } = useRequestsList()
-
-		return {
-			conversations,
-			userType,
-			requests,
-		}
+		return { conversations, userType, requests }
 	},
 })
 </script>

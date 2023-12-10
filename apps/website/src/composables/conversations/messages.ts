@@ -1,11 +1,11 @@
-import { Conditions, Conversation, Logic, Message, MessageFactory, SingleUser } from 'sofa-logic'
-import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Conversation, Logic, Message, MessageFactory } from 'sofa-logic'
+import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useAuth } from '../auth/auth'
 
 const store = {} as Record<string, {
 	messages: Ref<Message[]>
-	users: Ref<SingleUser[]>
 	fetched: Ref<boolean>
 	hasMore: Ref<boolean>
 	listener: ReturnType<typeof useListener>
@@ -13,6 +13,8 @@ const store = {} as Record<string, {
 
 export const useMessages = (conversation: Conversation) => {
 	const conversationId = conversation.id
+
+	const { userAi } = useAuth()
 
 	if (store[conversationId] === undefined) {
 		const listener = useListener(async () => await Logic.Common.listenToMany<Message>(`conversations/conversations/${conversationId}/messages`, {
@@ -29,7 +31,6 @@ export const useMessages = (conversation: Conversation) => {
 		}, (e) => e.createdAt >= (store[conversationId].messages.value.at(-1)?.createdAt ?? 0)))
 		store[conversationId] = {
 			messages: ref([]),
-			users: ref([]),
 			fetched: ref(false),
 			hasMore: ref(false),
 			listener,
@@ -56,24 +57,6 @@ export const useMessages = (conversation: Conversation) => {
 		await store[conversationId].setLoading(false)
 	}
 
-	const fetchUsers = async () => {
-		const ids = store[conversationId].messages.value.map((m) => m.userId)
-			.filter((id) => id !== 'ai-bot' && id !== conversation.user.id && id !== conversation.tutor?.id)
-
-		if (!ids.length) {
-			store[conversationId].users.value = []
-			return
-		}
-
-		const users = await Logic.Users.GetUsers({
-			where: [{ field: 'id', value: ids, condition: Conditions.in }],
-			all: true
-		}, false)
-		store[conversationId].users.value = users.results
-	}
-
-	watch(store[conversationId].messages, fetchUsers)
-
 	const fetchOlderMessages = async () => {
 		await fetchMessages()
 		await store[conversationId].listener.restart()
@@ -87,7 +70,7 @@ export const useMessages = (conversation: Conversation) => {
 		await store[conversationId].listener.close()
 	})
 
-	const users = computed(() => [...store[conversationId].users.value, conversation.user, conversation.tutor]
+	const users = computed(() => [conversation.user, conversation.tutor]
 		.filter(Boolean)
 		.reduce((acc, cur) => {
 			acc[cur.id] = {
@@ -95,7 +78,7 @@ export const useMessages = (conversation: Conversation) => {
 				photoUrl: cur.bio.photo?.link ?? null
 			}
 			return acc
-		}, { 'ai-bot': { name: Logic.Users.UserProfile?.ai?.name ?? 'Dr. Sofa', photoUrl: Logic.Users.UserProfile?.ai?.photo?.link ?? '/images/icons/robot.svg' } } as Record<string, { name: string, photoUrl: string | null }>)
+		}, { 'ai-bot': { name: userAi.value?.name ?? 'Dr. Sofa', photoUrl: userAi.value?.image ?? '/images/icons/robot.svg' } } as Record<string, { name: string, photoUrl: string | null }>)
 	)
 
 	return {
@@ -116,7 +99,7 @@ export const useMessage = (message: Message) => {
 	onMounted(async () => {
 		if (!message.readAt[Logic.Auth.AuthUser?.id]) await markMessageRead()
 	})
-	return { markChatRead: markMessageRead }
+	return { markMessageRead }
 }
 
 export const useCreateMessage = (conversationId: string) => {

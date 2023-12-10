@@ -1,6 +1,6 @@
 <template>
-	<ChatLayout v-if="request" title="Chat">
-		<ChatContent class="h-full" :data="{
+	<ChatLayout title="Chat">
+		<ChatContent v-if="conversation && conversation.pending && conversation.tutor?.id === authId" class="h-full" :data="{
 			title: otherUser?.bio.name.full ?? 'New Request',
 			photoUrl: otherUser?.bio.photo?.link ?? null,
 			userNames: ['You', otherUser?.bio.name.first].filter(Boolean)
@@ -8,7 +8,7 @@
 			<div class="w-full flex items-start justify-start p-4 pb-[90px]">
 				<div class="w-[90%] rounded-custom bg-[#E2F3FD] p-3 flex items-start justify-start">
 					<sofa-normal-text :customClass="'text-left'">
-						{{ request.message }}
+						{{ conversation.title }}
 					</sofa-normal-text>
 				</div>
 			</div>
@@ -40,7 +40,7 @@
 import ChatContent from "@/components/conversations/ChatContent.vue"
 import ChatLayout from "@/components/conversations/ChatLayout.vue"
 import { useAuth } from '@/composables/auth/auth'
-import { useRequest } from '@/composables/conversations/tutorRequests'
+import { useConversation } from '@/composables/conversations/conversations'
 import { SofaButton, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent } from "vue"
 import { useMeta } from "vue-meta"
@@ -55,15 +55,15 @@ export default defineComponent({
 			title: "Request",
 		})
 
-		const { id } = useAuth()
+		const { id: authId } = useAuth()
 		const route = useRoute()
-		const { id: requestId } = route.params
+		const { id } = route.params
 
-		const { request, accept } = useRequest(requestId as string)
+		const { conversation, accept } = useConversation(id as string)
 
-		const otherUser = computed(() => request.value ? request.value.userId === id.value ? request.value.tutor : request.value.user : null)
+		const otherUser = computed(() => conversation.value ? conversation.value.user.id === authId.value ? conversation.value.tutor : conversation.value.user : null)
 
-		return { request, accept, otherUser }
+		return { id, authId, conversation, accept, otherUser }
 	},
 })
 </script>

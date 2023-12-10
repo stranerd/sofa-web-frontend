@@ -1,13 +1,12 @@
+import { AxiosResponse } from 'axios'
+import { Paginated, QueryParams } from '../../logic'
+import { Conversation, Message } from '../../logic/types/domains/conversations'
+import { ModelApiService } from '../common/ModelService'
 import {
-  AddTutorInput,
   CreateMessageInput,
-  DeleteTutorInput,
+  EndConversationInput,
   StarMessageInput,
 } from './../../logic/types/forms/conversations'
-import { AxiosResponse } from 'axios'
-import { ModelApiService } from '../common/ModelService'
-import { Conversation, Message } from '../../logic/types/domains/conversations'
-import { Paginated, QueryParams } from '../../logic'
 
 export default class ConversationsApi extends ModelApiService {
   constructor() {
@@ -95,14 +94,13 @@ export default class ConversationsApi extends ModelApiService {
     }
   }
 
-  public async addTutor(data: AddTutorInput) {
+  public async end(id: string, data: EndConversationInput) {
     try {
       const response: AxiosResponse<Conversation> = await this.axiosInstance.post(
-        this.getUrl() + `/${data.id}/tutor`,
+        this.getUrl() + `/${id}/end`,
         data,
       )
-
-      return response
+      return response.data
     } catch (err) {
       this.handleErrors(err)
       if (err.response) {
@@ -110,16 +108,13 @@ export default class ConversationsApi extends ModelApiService {
     }
   }
 
-  public async deleteTutor(data: DeleteTutorInput) {
+  public async accept(id: string, accept: boolean) {
     try {
-      const response: AxiosResponse<Conversation> = await this.axiosInstance.delete(
-        this.getUrl() + `/${data.id}/tutor`,
-        {
-          data,
-        },
+      const response: AxiosResponse<Conversation> = await this.axiosInstance.post(
+        this.getUrl() + `/${id}/accept`,
+        { accept }
       )
-
-      return response
+      return response.data
     } catch (err) {
       this.handleErrors(err)
       if (err.response) {
