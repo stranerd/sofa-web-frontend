@@ -1,8 +1,9 @@
 import { Conditions, Logic, Quiz } from 'sofa-logic'
-import { ComputedRef, Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useAuth } from '../auth/auth'
+import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
-import { useAuth } from '../auth/auth'
 
 const store = {
 	quizzes: ref<Quiz[]>([]),
@@ -47,11 +48,6 @@ const tutorStore = {
 	})
 }
 
-const extraQuizzesStore = {
-	quizzes: ref<Quiz[]>([]),
-	...useLoadingHandler(),
-	...useErrorHandler(),
-}
 
 export const useMyQuizzes = () => {
 	const { id } = useAuth()
@@ -118,34 +114,19 @@ export const useTutorQuizzes = () => {
 	return { ...tutorStore }
 }
 
-export const useQuizzesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => {
+export const useQuizzesInList = (ids: Refable<string[]>) => {
 	const allQuizzes = computed(() => [
 		...store.quizzes.value,
 		...tutorStore.quizzes.value,
-		...extraQuizzesStore.quizzes.value
 	])
 
-	const unfetched = computed(() => ids.value.filter((id) => !filteredQuizzes.value.find((q) => q.id === id)))
-
-	const filteredQuizzes = computed(() => ids.value
-		.map((id) => allQuizzes.value.find((q) => q.id === id))
-		.filter(Boolean))
-
-	watch(ids, async () => {
-		const notFetched = [...new Set(unfetched.value)]
-		try {
-			await extraQuizzesStore.setError('')
-			await extraQuizzesStore.setLoading(true)
-			const quizzes = await Logic.Study.GetQuizzes({
-				where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
-				all: true
-			})
-			quizzes.results.forEach((quiz) => extraQuizzesStore.quizzes.value.push(quiz))
-		} catch (e) {
-			await extraQuizzesStore.setError(e)
-		}
-		await extraQuizzesStore.setLoading(false)
+	const { items: quizzes } = useItemsInList('quizzes', ids, allQuizzes, async (notFetched: string[]) => {
+		const quizzes = await Logic.Study.GetQuizzes({
+			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
+			all: true
+		})
+		return quizzes.results
 	})
 
-	return { quizzes: filteredQuizzes }
+	return { quizzes }
 }

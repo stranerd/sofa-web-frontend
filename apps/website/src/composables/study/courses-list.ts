@@ -1,6 +1,7 @@
 import { Conditions, Course, Logic } from 'sofa-logic'
-import { ComputedRef, Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { ComputedRef, Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
+import { useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useMyPurchases } from '../payment/purchases'
@@ -26,12 +27,6 @@ const store = {
 	})
 }
 
-
-const extraCoursesStore = {
-	courses: ref<Course[]>([]),
-	...useLoadingHandler(),
-	...useErrorHandler(),
-}
 
 export const useMyCourses = () => {
 	const { id } = useAuth()
@@ -81,30 +76,15 @@ export const useMyPurchasedCourses = () => {
 export const useCoursesInList = (ids: Ref<string[]> | ComputedRef<string[]>) => {
 	const allCourses = computed(() => [
 		...store.courses.value,
-		...extraCoursesStore.courses.value
 	])
 
-	const unfetched = computed(() => ids.value.filter((id) => !filteredCourses.value.find((q) => q.id === id)))
-
-	const filteredCourses = computed(() => ids.value
-		.map((id) => allCourses.value.find((c) => c.id === id))
-		.filter(Boolean))
-
-	watch(ids, async () => {
-		const notFetched = [...new Set(unfetched.value)]
-		try {
-			await extraCoursesStore.setError('')
-			await extraCoursesStore.setLoading(true)
-			const courses = await Logic.Study.GetCourses({
-				where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
-				all: true
-			})
-			courses.results.forEach((course) => extraCoursesStore.courses.value.push(course))
-		} catch (e) {
-			await extraCoursesStore.setError(e)
-		}
-		await extraCoursesStore.setLoading(false)
+	const { items: courses } = useItemsInList('courses', ids, allCourses, async (notFetched: string[]) => {
+		const courses = await Logic.Study.GetCourses({
+			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
+			all: true
+		})
+		return courses.results
 	})
 
-	return { courses: filteredCourses }
+	return { courses }
 }
