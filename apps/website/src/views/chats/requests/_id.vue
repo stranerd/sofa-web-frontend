@@ -1,6 +1,6 @@
 <template>
 	<ChatLayout title="Chat">
-		<ChatContent v-if="conversation && conversation.pending && conversation.tutor?.id === id" class="h-full" :data="{
+		<ChatContent v-if="conversation && conversation.pending && conversation.tutor?.id === authId" class="h-full" :data="{
 			title: otherUser?.bio.name.full ?? 'New Request',
 			photoUrl: otherUser?.bio.photo?.link ?? null,
 			userNames: ['You', otherUser?.bio.name.first].filter(Boolean)
@@ -65,7 +65,7 @@ export default defineComponent({
 
 		const otherUser = computed(() => conversation.value ? conversation.value.user.id === authId.value ? conversation.value.tutor : conversation.value.user : null)
 
-		return { id, conversation, accept, otherUser }
+		return { id, authId, conversation, accept, otherUser }
 	},
 })
 </script>

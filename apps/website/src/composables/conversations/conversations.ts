@@ -26,7 +26,7 @@ const store = {
 }
 
 export const useConversationsList = () => {
-	const { userType, id: authId } = useAuth()
+	const { id: authId } = useAuth()
 
 	const fetchConversations = async () => {
 		try {
@@ -50,11 +50,13 @@ export const useConversationsList = () => {
 	})
 
 	const conversations = computed(() => store.conversations.value
-		.filter((c) => userType.value.isTeacher ? c.pending ? false : c.accepted?.is : true))
+		.filter((c) => !c.pending && (c.tutor?.id === authId.value ? c.accepted?.is : true)))
 	const requests = computed(() => store.conversations.value
-		.filter((c) => userType.value.isTeacher ? c.pending && c.tutor?.id === authId.value : false))
+		.filter((c) => c.pending && c.tutor?.id === authId.value))
+	const pending = computed(() => store.conversations.value
+		.filter((c) => c.pending && c.user.id === authId.value))
 
-	return { ...store, conversations, requests }
+	return { ...store, conversations, requests, pending }
 }
 
 export const useConversation = (id: string) => {

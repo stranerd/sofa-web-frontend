@@ -25,7 +25,7 @@
       </template>
     </ChatContent>
 
-    <template v-slot:right-extras>
+    <template v-if="conversation" v-slot:right-extras>
       <div v-if="conversation.user.id === id && !conversation.tutor"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
         <div class="w-full flex flex-row items-center gap-3">
