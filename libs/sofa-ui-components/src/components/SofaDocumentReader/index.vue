@@ -1,29 +1,18 @@
 <template>
-  <iframe
-    class="w-full flex flex-col h-full flex-grow outline-none border border-[#F1F6FA] rounded-[8px]"
-    :src="`/web/viewer.html?file=${documentUrl}`"
-  >
-  </iframe>
+  <div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-[#F1F6FA] rounded-lg">
+    <VuePDF :pdf="pdf" :textLayer="true" :fitParent="true" class="!overflow-y-auto" />
+  </div>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted } from "vue";
 
-export default defineComponent({
-  components: {},
-  props: {
-    customClass: {
-      type: String,
-      default: "",
-    },
-    documentUrl: {
-      type: String,
-      default:
-        "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf",
-    },
+<script lang="ts" setup>
+import { VuePDF, usePDF } from '@tato30/vue-pdf'
+
+const props = defineProps({
+  documentUrl: {
+    type: String,
+    default: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf"
   },
-  name: "SofaDocumentReader",
-  setup() {
-    onMounted(() => {});
-  },
-});
+})
+
+const { pdf } = usePDF(props.documentUrl)
 </script>

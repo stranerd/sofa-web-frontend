@@ -202,7 +202,7 @@ import {
   userSocials,
 } from "@/composables/profile"
 import { SelectOption } from "sofa-logic"
-import { ContentDetails } from "@/composables/marketplace"
+import { ContentDetails, extractContent } from "@/composables/marketplace"
 import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue"
 
 export default defineComponent({
@@ -377,41 +377,11 @@ export default defineComponent({
       allMaterialsContents.value.length = 0
 
       AllQuzzies.value.results.forEach((quiz) => {
-        allMaterialsContents.value.push({
-          id: quiz.id,
-          subject: Logic.Study.GetTagName(quiz.topicId),
-          title: quiz.title,
-          image: quiz.photo ? quiz.photo.link : "/images/default.png",
-          labels: {
-            main: "Quiz",
-            sub: `${quiz.questions.length} questions`,
-            color: "pink",
-          },
-          price: 0,
-          type: "quiz",
-          ratings: quiz.ratings,
-          user: quiz.user as any,
-          authUserId: Logic.Users.UserProfile?.id
-        })
+        allMaterialsContents.value.push(extractContent(quiz))
       })
 
       AllCourses.value.results.forEach((course) => {
-        allMaterialsContents.value.push({
-          id: course.id,
-          subject: Logic.Study.GetTagName(course.topicId),
-          title: course.title,
-          image: course.photo ? course.photo.link : "/images/default.png",
-          labels: {
-            main: "Course",
-            sub: `${course.sections.length} materials`,
-            color: "orange",
-          },
-          price: course.price.amount,
-          type: "course",
-          ratings: course.ratings,
-          user: course.user as any,
-          authUserId: Logic.Users.UserProfile?.id
-        })
+        allMaterialsContents.value.push(extractContent(course))
       })
     }
 
