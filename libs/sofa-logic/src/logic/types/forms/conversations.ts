@@ -22,9 +22,3 @@ export interface EndConversationInput {
   rating: number
   message: string
 }
-
-export interface CreateTutorRequestInput {
-  message: string
-  conversationId: string
-  tutorId: string
-}

@@ -1,5 +1,5 @@
 <template>
-  <div :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer rounded-custom ${customClass}`">
+  <component :is="as" :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer rounded-custom ${customClass}`">
     <sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photo-url="content.image">
       <div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
         v-if="content.price > 0">
@@ -48,7 +48,7 @@
 
       <sofa-icon @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'" :customClass="'h-[18px] '" />
     </div>
-  </div>
+  </component>
 </template>
 <script lang="ts">
 import { Logic } from "sofa-logic"
@@ -80,6 +80,10 @@ export default defineComponent({
     bookmarkAction: {
       type: Function,
     },
+    as: {
+      type: String,
+      default: 'div'
+    }
   },
   name: "SofaItemCard",
   setup () {

@@ -13,7 +13,7 @@
 
           <div class="w-full grid grid-cols-3 gap-2 py-3">
             <div class="col-span-1 h-2 rounded-full" v-for="(_, index) in 3" :key="index"
-              :class="index <= currentStep ? 'bg-[#141618]' : 'bg-[#E1E6EB]'" />
+              :class="index <= currentStep ? 'bg-deepGray' : 'bg-darkLightGray'" />
           </div>
 
           <div class="w-full flex flex-col pt-3" v-if="currentStep === 2">
@@ -28,7 +28,7 @@
             <SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
             <a class="w-full flex items-center justify-between p-4 rounded-custom bg-backgroundGray"
               v-for="(option, index) in helpOptions" :key="index" @click="selectedhelpOption = option.key">
-              <SofaNormalText :color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-[#78828C]'"
+              <SofaNormalText :color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
                 :content="option.title" />
               <SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
             </a>

@@ -208,7 +208,6 @@ export interface ResourceType {
     color: string
   }
   progress: number
-  routePath: string
   id: string
   status: string
   showMore: boolean

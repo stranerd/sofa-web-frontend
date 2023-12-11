@@ -1,207 +1,102 @@
 <template>
   <expanded-layout layoutStyle="mdlg:pb-4">
-    <div class="w-full mdlg:!flex hidden flex-col gap-5 py-8 pb-14 bg-primaryPurple justify-center items-center">
-      <sofa-header-text color="!text-white" size="xl" :customClass="'!font-extrabold'">All contents made by verified
-        creators</sofa-header-text>
+    <div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple justify-center items-center">
+      <SofaHeaderText color="text-white" size="xl" class="!font-extrabold" content="All contents made by verified creators" />
 
-      <div class="w-[48%] flex flex-row items-center justify-center">
-        <sofa-normal-text color="!text-white"
-          :customClass="'w-full text-center flex items-center justify-center'">Everything here is carefully reviewed to
-          ensure the highest quality
-          and accuracy. By purchasing from our marketplace, you can have
-          confidence in the credibility of the creators and the value of the
-          materials.</sofa-normal-text>
-      </div>
+      <SofaNormalText color="text-white"
+        :customClass="'w-[48%] text-center flex items-center justify-center'">
+        Everything here is carefully reviewed to ensure the highest quality and accuracy.
+        By purchasing from our marketplace, you can have confidence in the credibility of the creators and the value of the materials.
+      </SofaNormalText>
 
-      <div class="w-[40%] flex flex-col pt-4">
-        <div
-          class="w-full shadow-custom px-4 py-1 bg-white rounded-custom flex flex-row gap-3 items-center justify-between">
-          <div class="flex flex-row gap-2 items-center flex-grow">
-            <sofa-icon :name="'filter'" :customClass="'h-[15px] cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/marketplace/search')" />
-            <sofa-normal-text :customClass="'pr-2 border-r border-[#E1E6EB] cursor-pointer'"
-              @click="Logic.Common.GoToRoute('/marketplace/search')">Filter</sofa-normal-text>
-            <sofa-text-field :customClass="'!border-none w-full'" :placeholder="'Search for anything'"
-              v-model="searchQuery" @onEnter="handleSearch">
-            </sofa-text-field>
-          </div>
-
-          <div class="w-[20px] cursor-pointer" @click="handleSearch">
-            <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
-          </div>
+      <div class="w-[40%] shadow-custom px-4 py-2 bg-white rounded-custom flex gap-3 items-center justify-between">
+        <div class="flex gap-2 items-center flex-1">
+          <SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
+          <SofaNormalText class="pr-2 border-r border-lightBorderColor cursor-pointer" content="Filter" @click="Logic.Common.GoToRoute('/marketplace/search')" />
+          <SofaTextField class="flex-1" customClass="!border-none w-full" placeholder="Search for anything" v-model="searchQuery" @onEnter="handleSearch" />
         </div>
+
+        <SofaIcon name="search-black" class="h-[17px] cursor-pointer w-[20px]" @click="handleSearch" />
       </div>
     </div>
 
-    <!-- Small screen search -->
-    <div class="w-full px-4 flex mdlg:!hidden flex-col sticky top-0 left-0 py-4 bg-backgroundGray z-[100]">
-      <div class="w-full shadow-custom px-4 py-1 bg-white rounded-custom flex flex-row gap-1 items-center justify-start">
-        <div class="flex flex-row gap-2 items-center flex-grow" @click="Logic.Common.GoToRoute('/marketplace/search')">
-          <sofa-icon :name="'filter'" :customClass="'h-[15px]'" />
-        </div>
-        <div class="w-full flex flex-row items-center gap-1">
-          <div class="pl-2">
-            <sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
-          </div>
-          <sofa-text-field :customClass="'!border-none w-full flex-grow'" :placeholder="'Search'" v-model="searchQuery"
-            @onEnter="handleSearch" />
-        </div>
+    <div class="w-full p-4 flex mdlg:hidden flex-col">
+      <div class="w-full shadow-custom px-4 py-2 bg-white rounded-custom flex gap-2 items-center justify-start">
+        <SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
+        <SofaIcon name="search-black" class="h-[15px] cursor-pointer" @click="handleSearch"  />
+        <SofaTextField class="flex-1" customClass="!border-none w-full !px-0" placeholder="Search" v-model="searchQuery" @onEnter="handleSearch"  />
       </div>
     </div>
 
-    <div class="mdlg:!w-[85%] lg:!w-[75%] w-full flex flex-col gap-6 md:!gap-7 mdlg:!px-0 px-0">
-      <!-- Textbook, note, past questions -->
-      <div v-if="false" class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide mdlg:!pl-0 pl-4">
-        <div
-          class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-3 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-          <sofa-image-loader :photoUrl="item.image"
-            custom-class="col-span-1 mdlg:!w-auto w-[290px] relative rounded-custom mdlg:!h-[230px] h-[190px] cursor-pointer"
-            v-for="(item, index) in mainCards" :key="index" @click="Logic.Common.GoToRoute(item.routePath)">
-            <div class="w-full h-full absolute top-0 rounded-custom left-0 bg-black bg-opacity-40 z-10"></div>
-            <div
-              class="absolute left-0 bottom-0 flex flex-row items-center z-40 justify-between w-full py-3 px-4 bg-black bg-opacity-50 rounded-br-[16px] rounded-bl-[8px]">
-              <sofa-normal-text :color="'text-white !font-bold'">
-                {{ item.text }}
-              </sofa-normal-text>
-              <sofa-icon :customClass="'h-[14px]'" :name="'arrow-right-white'" />
-            </div>
-          </sofa-image-loader>
+    <div class="mdlg:w-[85%] lg:w-[75%] w-full flex flex-col h-full overflow-y-auto gap-8 mdlg:pl-0 pl-4">
+      <div class="w-full flex flex-col mdlg:gap-4 gap-3">
+        <div class="w-full flex items-center justify-between mdlg:pr-0 pr-4">
+          <SofaNormalText class="!font-bold" content="Latest" />
+          <SofaNormalText color="text-primaryPink" as="router-link" to="/marketplace/search" content="View all" />
         </div>
+
+        <div v-if="latestMaterials.length"
+          class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
+          <SofaItemCard v-for="activity in latestMaterials" as="router-link" :key="activity.id" :content="activity"
+            :to="`/marketplace/${activity.id}?${activity.type}`" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+            class="flex-shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
+        </div>
+
+        <SofaEmptyState v-else title="No result found" subTitle="We could not find any latest materials"
+          customClass="!h-[230px] mr-4 mdlg:mr-0" />
       </div>
 
-      <div class="w-full flex flex-col mdlg:!gap-4 gap-3 mdlg:!pl-0 pl-4 z-40">
-        <div class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Latest
-          </sofa-normal-text>
-
-          <sofa-normal-text :color="'text-primaryPink'" :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute(`/marketplace/search`)">
-            View all
-          </sofa-normal-text>
+      <div class="w-full flex flex-col mdlg:gap-4 gap-3">
+        <div class="w-full flex items-center justify-between mdlg:pr-0 pr-4">
+          <SofaNormalText class="!font-bold" content="Highest rated" />
+          <SofaNormalText color="text-primaryPink" as="router-link" to="/marketplace/search" content="View all" />
         </div>
 
-        <div v-if="marketplaceContents.lastest.length"
-          class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide">
-          <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-            <sofa-item-card :content="content"
-              custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in marketplaceContents.lastest" :key="index" @click="
-                Logic.Common.GoToRoute(
-                  '/marketplace/' +
-                  content.id +
-                  `?type=${content.labels.main.toLowerCase()}`
-                )
-                " :bookmark-action="() => saveToFolder(content)" />
-          </div>
+        <div v-if="ratedMaterials.length"
+          class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
+          <SofaItemCard v-for="activity in ratedMaterials" as="router-link" :key="activity.id" :content="activity"
+            :to="`/marketplace/${activity.id}?${activity.type}`" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+            class="flex-shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
         </div>
 
-        <template v-else>
-          <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
-            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any latest material'" />
-          </div>
-        </template>
+        <SofaEmptyState v-else title="No result found" subTitle="We could not find any rated materials"
+          customClass="!h-[230px] mr-4 mdlg:mr-0" />
       </div>
 
-      <div class="w-full flex flex-col mdlg:!gap-4 gap-3 mdlg:!pl-0 pl-4 z-40">
-        <div class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Highest rated
-          </sofa-normal-text>
-
-          <sofa-normal-text :color="'text-primaryPink'" :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute(`/marketplace/search`)">
-            View all
-          </sofa-normal-text>
+      <div class="w-full flex flex-col mdlg:gap-4 gap-3">
+        <div class="w-full flex items-center justify-between mdlg:pr-0 pr-4">
+          <SofaNormalText class="!font-bold" content="Most popular" />
+          <SofaNormalText color="text-primaryPink" as="router-link" to="/marketplace/search" content="View all" />
         </div>
 
-        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-          v-if="marketplaceContents.rated.length">
-          <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-            <sofa-item-card :content="content"
-              custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in marketplaceContents.rated" :key="index" @click="
-                Logic.Common.GoToRoute(
-                  '/marketplace/' +
-                  content.id +
-                  `?type=${content.labels.main.toLowerCase()}`
-                )
-                " :bookmark-action="() => saveToFolder(content)" />
-          </div>
+        <div v-if="popularMaterials.length"
+          class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
+          <SofaItemCard v-for="activity in popularMaterials" as="router-link" :key="activity.id" :content="activity"
+            :to="`/marketplace/${activity.id}?${activity.type}`" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+            class="flex-shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
         </div>
 
-        <template v-else>
-          <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
-            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any materials'" />
-          </div>
-        </template>
-      </div>
-
-      <div class="w-full flex flex-col mdlg:!gap-4 gap-3 mdlg:!pl-0 pl-4 z-40">
-        <div class="w-full flex flex-row items-center justify-between mdlg:pr-0 pr-4">
-          <sofa-normal-text :customClass="'!font-bold'">
-            Most popular
-          </sofa-normal-text>
-
-          <sofa-normal-text :color="'text-primaryPink'" :custom-class="'cursor-pointer'"
-            @click="Logic.Common.GoToRoute(`/marketplace/search`)">
-            View all
-          </sofa-normal-text>
-        </div>
-
-        <div class="w-full flex flex-row flex-nowrap overflow-x-auto scrollbar-hide"
-          v-if="marketplaceContents.popular.length">
-          <div
-            class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-            <sofa-item-card :content="content"
-              custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-              v-for="(content, index) in marketplaceContents.popular" :key="index" @click="
-                Logic.Common.GoToRoute(
-                  '/marketplace/' +
-                  content.id +
-                  `?type=${content.labels.main.toLowerCase()}`
-                )
-                " :bookmark-action="() => saveToFolder(content)" />
-          </div>
-        </div>
-
-        <template v-else>
-          <div class="w-full flex flex-col gap-3 mdlg:pr-0 pr-4">
-            <sofa-empty-state :title="'No result found'" :subTitle="'We could not find any materials'" />
-          </div>
-        </template>
+        <SofaEmptyState v-else title="No result found" subTitle="We could not find any popular materials"
+          customClass="!h-[230px] mr-4 mdlg:mr-0" />
       </div>
     </div>
   </expanded-layout>
 </template>
 
 <script lang="ts">
-import { scrollToTop } from "@/composables"
-import { saveToFolder } from "@/composables/library"
-import {
-  AllCourses,
-  MarketplaceMaterials,
-  mainCards,
-  marketplaceContents,
-  notesContents,
-  pastQuestionContents,
-  sectionTags,
-  setMarketplaceMaterials,
-  textbookContents,
-} from "@/composables/marketplace"
+import { createCourseData, createQuizData, saveToFolder } from "@/composables/library"
+import { useMyStudy } from '@/composables/study/study'
+import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
 import {
   SofaEmptyState,
   SofaHeaderText,
   SofaIcon,
-  SofaImageLoader,
   SofaItemCard,
   SofaNormalText,
   SofaTextField,
 } from "sofa-ui-components"
-import { defineComponent, onMounted, ref, watch } from "vue"
+import { computed, defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -212,22 +107,9 @@ export default defineComponent({
     SofaTextField,
     SofaHeaderText,
     SofaEmptyState,
-    SofaImageLoader,
-  },
-  middlewares: {
-    fetchRules: [
-      {
-        domain: "Study",
-        property: "MarketplaceMaterials",
-        method: "GetMarketplaceMaterials",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: false,
-        silentUpdate: true,
-      },
-    ],
   },
   name: "MarketPlaceIndexPage",
+  beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
   setup () {
     useMeta({
       title: "Marketplace",
@@ -235,16 +117,13 @@ export default defineComponent({
 
     const searchQuery = ref("")
 
-    onMounted(() => {
-      scrollToTop()
-      Logic.Study.watchProperty("AllCourses", AllCourses)
-      Logic.Study.watchProperty("MarketplaceMaterials", MarketplaceMaterials)
-      setMarketplaceMaterials(5)
-    })
+    const { materials: latest } = useMyStudy('latest')
+    const { materials: popular } = useMyStudy('popular')
+    const { materials: rated } = useMyStudy('rated')
 
-    watch(MarketplaceMaterials, () => {
-      setMarketplaceMaterials()
-    })
+    const latestMaterials = computed(() => latest.value.map((m) => m.__type === 'QuizEntity' ? createQuizData(m) : createCourseData(m)))
+    const popularMaterials = computed(() => popular.value.map((m) => m.__type === 'QuizEntity' ? createQuizData(m) : createCourseData(m)))
+    const ratedMaterials = computed(() => rated.value.map((m) => m.__type === 'QuizEntity' ? createQuizData(m) : createCourseData(m)))
 
     const handleSearch = () => {
       if (searchQuery.value) {
@@ -253,16 +132,8 @@ export default defineComponent({
     }
 
     return {
-      notesContents,
-      pastQuestionContents,
-      textbookContents,
-      Logic,
-      searchQuery,
-      mainCards,
-      sectionTags,
-      marketplaceContents,
-      saveToFolder,
-      handleSearch,
+      latestMaterials, popularMaterials, ratedMaterials, saveToFolder,
+      Logic, searchQuery, handleSearch,
     }
   },
 })
