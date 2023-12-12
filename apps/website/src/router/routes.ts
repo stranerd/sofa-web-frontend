@@ -1,85 +1,41 @@
-const importAll = (r: __WebpackModuleApi.RequireContext) => r.keys()
-	.map((key: string) => key.slice(2)
-		.replace('.vue', '').split('/'))
-
-const pages = importAll(require.context('../views', true, /\.vue$/))
-
-const generateRoute = (path: string[]) => {
+const getPath = (page: string[]) => page.map((path) => {
+	if (path === 'index') return ''
+	if (path === '~') return ':pathMatch(.*)*'
+	// prolly insignificant if (path.startsWith('^')) path = path.replace('^', '')
+	if (path.startsWith('_')) path = path.replace('_', ':')
 	return path
-		.map((p) => p.toLowerCase())
-		.map((p) => p === 'index' ? '' : p)
-		.map((p) => p.startsWith('_') ? p.replace('_', ':') : p)
-		.join('/')
+}).join('/').replace(new RegExp('///', 'g'), '/').replace(new RegExp('//', 'g'), '/')
+
+const makeRoute = async (page: string[]) => {
+	const path = '/' + getPath(page)
+	const { default: component } = await import(`../views/${page.join('/')}`)
+	const {  middlewares, name, layout } = component
+	return {
+		path, name, component,
+		meta: { layout: layout ?? 'AppDefaultLayout', middlewares: middlewares ?? {} },
+	}
 }
 
-const childrenFilter = (p: string | string[]) => ~p.indexOf('^')
-
-const childrenByPath = pages
-	// Note: filter pages by children routes
-	.filter((path: any[]) => path.some(childrenFilter))
-	.map((path: any) => {
-		// Note: copy path and remove special char ^
-		const copy = [...path]
-		copy[copy.length - 1] = copy[copy.length - 1].slice(1)
-		// Note: generate key to identify parent
-		const key = `/${generateRoute(copy.slice(0, copy.length - 1))}`
-		return {
-			path,
-			route: `/${generateRoute(copy)}`,
-			key
-		}
+const allPages = require.context('../views', true, /\.vue$/)
+	.keys()
+	.map((key) => key.slice(2)
+	.replace('.vue', '').split('/'))
+	.map((path) => {
+		let parent = null as null | string
+		const nestedIndex = path.findIndex((p) => p.startsWith('^'))
+		if (nestedIndex > -1) parent = getPath(path.slice(0, nestedIndex))
+		return { parent, path }
 	})
-	.reduce((acc: { [x: string]: any[] }, cur: { key: any }) => {
-		// Note: generate list of nested routes where key is the parent path
-		const key = cur.key
-		delete cur.key
-		if (acc[key]) {
-			acc[key].push(cur)
-		} else {
-			acc[key] = [cur]
-		}
-		return acc
-	}, {})
 
-const defaultLayout = 'AppDefaultLayout'
+const nestedPages = allPages.filter((page) => page.parent)
 
-export default pages
-	// Note: remove nested routes from pages
-	.filter((path: any[]) => !path.some(childrenFilter))
-	.map(async (path: any[]) => {
-		const { default: component } = await import(`../views/${path.join('/')}`)
-		const { layout, middlewares, name } = component
-		const route = `/${generateRoute([...path])}`
-		let children: { path: any; name: any; component: any; meta: { layout: any; middlewares: any } }[] = []
-		if (childrenByPath[route]) {
-			const promises = childrenByPath[route].map(async ({ path, route }) => {
-				const { default: childComponent } =
-					await import(`../views/${path.join('/')}`)
-				const {
-					layout: childLayout,
-					middlewares: childMiddleware,
-					name: childName
-				} = childComponent
-				return {
-					path: route,
-					name: childName,
-					component: childComponent,
-					meta: {
-						layout: childLayout || defaultLayout,
-						middlewares: childMiddleware || {}
-					}
-				}
-			})
-			children = await Promise.all(promises)
-		}
-		return {
-			path: route,
-			name,
-			component,
-			meta: {
-				layout: layout || defaultLayout,
-				middlewares: middlewares || {}
-			},
-			children
-		}
+export const routes = allPages.filter((page) => !page.parent)
+	.map(async (page) => {
+		const path = getPath(page.path)
+		const childrenPages = nestedPages.filter((p) => p.parent === path)
+
+		const route = await makeRoute(page.path)
+		const children = await Promise.all(childrenPages.map((page) => makeRoute(page.path)))
+
+		return { ...route, children }
 	})
