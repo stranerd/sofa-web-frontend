@@ -329,7 +329,7 @@ export default defineComponent({
     ]
   },
   name: "IndexPage",
-  beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+  beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => useAuth().userType.value.isOrg ? '/organization/dashboard' : undefined]),
   setup () {
     useMeta({
       title: "Home",
