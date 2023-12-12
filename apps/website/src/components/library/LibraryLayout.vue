@@ -25,13 +25,6 @@
 		</div>
 	</sub-page-layout>
 	<dashboard-layout v-else :topbarOptions="{ title }" :hide="{ right: true }">
-		<div
-			class="mdlg:hidden w-full flex items-center gap-3 z-[100] justify-between bg-backgroundGray p-4 sticky top-0 left-0">
-			<sofa-icon customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-			<sofa-normal-text customClass="!font-bold !text-base">{{ title }}</sofa-normal-text>
-			<span />
-		</div>
-
 		<template v-slot:left-session>
 			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
 				<router-link class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
@@ -82,7 +75,7 @@
 
 		<template v-slot:middle-session>
 			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
-				<div class="px-2 bg-white flex flex-col shadow-custom rounded-custom">
+				<div class="bg-white flex flex-col shadow-custom rounded-custom">
 					<router-link :to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-[#F1F6FA]"
 						v-for="item in libraryOptions" :key="item.routePath">
