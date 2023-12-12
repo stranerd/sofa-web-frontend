@@ -1,16 +1,6 @@
-const googleClients = JSON.parse(process.env.VUE_APP_GOOGLE_CLIENT_IDS ?? '{}')
+import { packageName } from 'sofa-logic/src/utils/environment'
 
-export const AuthClientIDs = {
-  google_client_ids: {
-    web: googleClients.web ?? '',
-    android: googleClients.web ?? '',
-    ios: googleClients.ios ?? ''
-  },
-}
-
-export const apiUrl = process.env.VUE_APP_API_URL
-
-const packageName = process.env.VUE_APP_PACKAGE_NAME
+export { apiBase as apiUrl, packageName, googleClientId } from 'sofa-logic/src/utils/environment'
 
 const clientId = packageName.replace('.app', '')
 const redirectURI = 'https://' + clientId.split('.').reverse().join('.')
