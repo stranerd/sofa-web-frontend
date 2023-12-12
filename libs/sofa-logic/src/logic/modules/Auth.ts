@@ -72,13 +72,13 @@ export default class Auth extends Common {
   public SignOut = () => {
     return $api.auth.user
       .signOut()
-      .finally(this.DeleteTokens)
+      .finally(() => this.DeleteTokens())
   }
 
   public DeleteUserAccount = () => {
     return $api.auth.user
       .deleteUserAccount()
-      .finally(this.DeleteTokens)
+      .finally(() => this.DeleteTokens())
   }
 
   public async DeleteTokens () {
