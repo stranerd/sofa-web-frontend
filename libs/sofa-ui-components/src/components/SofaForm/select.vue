@@ -226,10 +226,6 @@ export default defineComponent({
 
     const defaultOptionsRef = toRef(props, "defaultOptions")
 
-    watch(optionToRef, () => {
-      // console.log("i changed");
-    })
-
     const showAutoComplete = () => {
       if (props.autoComplete) {
         hasAutoComplete.value = true
