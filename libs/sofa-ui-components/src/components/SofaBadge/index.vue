@@ -1,6 +1,6 @@
 <template>
   <component :is="as"
-    :class="`px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs ${customClass} text-xs rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px]
+    :class="`px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs ${customClass} text-xs rounded-custom
 	${
     color == 'purple'
       ? ` bg-primaryPurple ${
@@ -32,7 +32,7 @@
   ${
     color == 'gray'
       ? `  bg-backgroundGray ${
-          isInverted ? 'text-bodyBlack bg-opacity-50' : ' text-grayColor '
+          isInverted ? 'text-bodyBlack bg-opacity-75' : ' text-grayColor '
         }`
       : ''
   }

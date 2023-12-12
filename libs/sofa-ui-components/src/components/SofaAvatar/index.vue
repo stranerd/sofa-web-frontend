@@ -5,7 +5,7 @@
     @click.stop.prevent="userId ? Logic.Common.GoToRoute(`/profile/${userId}`) : null">
     <template v-if="!photoUrl">
       <slot>
-        <SofaIcon style="height: 66.67%" name="user" />
+        <SofaIcon class="w-1/2 h-1/2" name="user" />
       </slot>
     </template>
     <span v-if="showOnline" class="h-[5px] w-[5px] absolute bottom-0 right-0 rounded-full"

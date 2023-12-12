@@ -14,12 +14,33 @@
 	</sub-page-layout>
 	<dashboard-layout v-else :topbarOptions="{ title }">
 		<template v-slot:left-session>
-			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-1">
-				<router-link class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
-					v-for="item in options" :key="item.route" :to="item.route" exact-active-class="bg-lightBlue !font-bold">
-					<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
-					<SofaNormalText color="text-inherit" :content="item.title" />
-				</router-link>
+			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
+				<div class="w-full flex items-center gap-3">
+					<SofaAvatar size="84" :photoUrl="user.bio.photo?.link" />
+
+					<div class="flex flex-col gap-1">
+						<div class="flex items-center gap-1">
+							<SofaHeaderText class="!text-base !font-bold"
+								:content="user.type?.name ?? user.bio.name.full" />
+							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
+							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
+						</div>
+						<SofaNormalText class="capitalize" color="text-grayColor" :content="user.type?.type ?? 'student'" />
+						<SofaNormalText color="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
+					</div>
+				</div>
+
+				<div class="h-[1px] w-full bg-lightGrayVaraint" />
+
+				<div class="w-full flex flex-col gap-1">
+					<router-link
+						class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
+						v-for="item in options" :key="item.route" :to="item.route"
+						exact-active-class="bg-lightBlue !font-bold">
+						<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
+						<SofaNormalText color="text-inherit" :content="item.title" />
+					</router-link>
+				</div>
 			</div>
 		</template>
 
@@ -40,8 +61,14 @@
 		</template>
 
 		<template v-slot:right-session>
-			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-3">
-				<SofaNormalText content="Start something" />
+			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
+				<SofaHeaderText class="!text-base !font-bold" content="Start something" />
+
+				<div class="grid grid-cols-2 gap-2 gap-y-2 gap-x-4">
+					<SofaBadge v-for="command in rightCommands" :key="command.label" color="gray" :isInverted="true" as="a" class="!py-3 !px-4 truncate" @click="command.action">
+						{{ command.label }}
+					</SofaBadge>
+				</div>
 			</div>
 		</template>
 	</dashboard-layout>
@@ -50,18 +77,18 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
 import { Logic } from "sofa-logic"
-import { SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
 import { computed, defineProps } from 'vue'
 import { useMeta } from "vue-meta"
 
 const { user } = useAuth()
 
-const options = computed(() => [
+const options = [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
 	{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
 	{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
 	{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
-])
+]
 
 const props = defineProps({
 	title: {
@@ -78,4 +105,12 @@ const props = defineProps({
 useMeta(computed(() => ({
 	title: props.title
 })))
+
+const rightCommands = [
+	{ label: 'Add a student', action: () => null },
+	{ label: 'Add a teacher', action: () => null },
+	{ label: 'Create a quiz', action: () => null },
+	{ label: 'Create a course', action: () => null },
+	{ label: 'Create a class', action: () => null },
+]
 </script>

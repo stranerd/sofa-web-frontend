@@ -6,12 +6,13 @@
           <SofaAvatar size="84" :photoUrl="user.bio.photo?.link" />
 
           <div class="flex flex-col gap-1">
-            <SofaHeaderText class="!text-base !font-bold" :content="user.bio.name.full" />
-            <SofaNormalText class="capitalize" :content="user.type?.type ?? 'student'" />
-
-            <router-link to="/profile">
-              <SofaNormalText color="text-primaryPink" content="View Profile" />
-            </router-link>
+            <div class="flex items-center gap-1">
+              <SofaHeaderText class="!text-base !font-bold" :content="user.bio.name.full" />
+              <SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
+              <SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
+            </div>
+            <SofaNormalText class="capitalize" color="text-grayColor" :content="user.type?.type ?? 'student'" />
+            <SofaNormalText color="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
           </div>
         </div>
 
@@ -74,8 +75,10 @@
           <SofaNormalText class="!font-bold" content="Complete your account setup" />
         </div>
 
-        <div class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-          <SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" @click="item.action?.()" class="flex-shrink-0">
+        <div
+          class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" @click="item.action?.()"
+            class="flex-shrink-0">
             <template v-slot:title>
               <SofaNormalText customClass="!font-bold" :content="item.title" />
             </template>
@@ -89,12 +92,14 @@
           <SofaNormalText class="!font-bold" content="Create study materials" />
         </div>
 
-        <div class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-          <SofaIconCard v-for="item in studyMaterialsSteps" :key="item.title" :data="item" @click="item.action?.()" class="flex-shrink-0">
-              <template v-slot:title>
-                <SofaNormalText customClass="!font-bold" :content="item.title" />
-              </template>
-            </SofaIconCard>
+        <div
+          class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <SofaIconCard v-for="item in studyMaterialsSteps" :key="item.title" :data="item" @click="item.action?.()"
+            class="flex-shrink-0">
+            <template v-slot:title>
+              <SofaNormalText customClass="!font-bold" :content="item.title" />
+            </template>
+          </SofaIconCard>
         </div>
       </div>
 
@@ -104,12 +109,14 @@
           <SofaNormalText class="!font-bold" content="Take on some tasks" />
         </div>
 
-        <div class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-          <SofaIconCard v-for="item in takeOnTasks" :key="item.title" :data="item" @click="item.action?.()" class="flex-shrink-0">
-              <template v-slot:title>
-                <SofaNormalText customClass="!font-bold" :content="item.title" />
-              </template>
-            </SofaIconCard>
+        <div
+          class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <SofaIconCard v-for="item in takeOnTasks" :key="item.title" :data="item" @click="item.action?.()"
+            class="flex-shrink-0">
+            <template v-slot:title>
+              <SofaNormalText customClass="!font-bold" :content="item.title" />
+            </template>
+          </SofaIconCard>
         </div>
       </div>
 
@@ -121,11 +128,14 @@
           </router-link>
         </div>
 
-        <div v-if="suggestedMaterials.length" class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-          <SofaActivityCard v-for="activity in suggestedMaterials.slice(4)" as="router-link" :key="activity.id" :activity="activity"
-            :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)" class="flex-shrink-0" />
+        <div v-if="suggestedMaterials.length"
+          class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <SofaActivityCard v-for="activity in suggestedMaterials.slice(4)" as="router-link" :key="activity.id"
+            :activity="activity" :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+            class="flex-shrink-0" />
         </div>
-        <SofaEmptyState v-else title="No suggested materials" subTitle="We could not find any suggested materials" customClass="!h-[230px] mr-4 mdlg:mr-0" />
+        <SofaEmptyState v-else title="No suggested materials" subTitle="We could not find any suggested materials"
+          customClass="!h-[230px] mr-4 mdlg:mr-0" />
 
         <router-link v-if="suggestedMaterials.length" class="pr-4 mdlg:!pr-0 hidden mdlg:inline" to="/marketplace">
           <SofaNormalText color="text-primaryPink" content="View all" />
@@ -140,18 +150,22 @@
           </router-link>
         </div>
 
-        <div v-if="recentMaterials.length" class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-          <SofaActivityCard v-for="activity in recentMaterials.slice(4)" as="router-link" :key="activity.id" :activity="activity"
-            :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)" class="flex-shrink-0" />
+        <div v-if="recentMaterials.length"
+          class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <SofaActivityCard v-for="activity in recentMaterials.slice(4)" as="router-link" :key="activity.id"
+            :activity="activity" :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+            class="flex-shrink-0" />
         </div>
-        <SofaEmptyState v-else title="No recent materials" subTitle="We could not find any recent materials" customClass="!h-[230px] mr-4 mdlg:mr-0" />
+        <SofaEmptyState v-else title="No recent materials" subTitle="We could not find any recent materials"
+          customClass="!h-[230px] mr-4 mdlg:mr-0" />
 
         <router-link v-if="recentMaterials.length" class="pr-4 mdlg:!pr-0 hidden mdlg:inline" to="/marketplace">
           <SofaNormalText color="text-primaryPink" content="View all" />
         </router-link>
       </div>
 
-      <div v-if="myOrgsMaterials.length" class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
+      <div v-if="myOrgsMaterials.length"
+        class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
         <div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
           <SofaNormalText class="!font-bold" content="From your organizations" />
           <router-link class="mdlg:hidden" to="/marketplace">
@@ -159,11 +173,14 @@
           </router-link>
         </div>
 
-        <div v-if="myOrgsMaterials.length" class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-          <SofaActivityCard v-for="activity in myOrgsMaterials.slice(4)" as="router-link" :key="activity.id" :activity="activity"
-            :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)" class="flex-shrink-0" />
+        <div v-if="myOrgsMaterials.length"
+          class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+          <SofaActivityCard v-for="activity in myOrgsMaterials.slice(4)" as="router-link" :key="activity.id"
+            :activity="activity" :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+            class="flex-shrink-0" />
         </div>
-        <SofaEmptyState v-else title="No materials found" subTitle="We could not find any materials from yuor organizations" customClass="!h-[230px] mr-4 mdlg:mr-0" />
+        <SofaEmptyState v-else title="No materials found"
+          subTitle="We could not find any materials from yuor organizations" customClass="!h-[230px] mr-4 mdlg:mr-0" />
 
         <router-link v-if="myOrgsMaterials.length" class="pr-4 mdlg:!pr-0 hidden mdlg:inline" to="/marketplace">
           <SofaNormalText color="text-primaryPink" content="View all" />
@@ -179,13 +196,15 @@
               There are lots of quizzes and courses that you can learn from, so start searching!
             </SofaNormalText>
           </div>
-          <SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-[#141618]" @click="Logic.Common.GoToRoute('/marketplace')">
+          <SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-[#141618]"
+            @click="Logic.Common.GoToRoute('/marketplace')">
             Explore more
           </SofaButton>
         </div>
       </div>
 
-      <router-link class="fixed bottom-[80px] right-2 z-[100] px-3 py-2 bg-primaryPurple text-white flex mdlg:hidden items-center rounded-custom gap-2"
+      <router-link
+        class="fixed bottom-[80px] right-2 z-[100] px-3 py-2 bg-primaryPurple text-white flex mdlg:hidden items-center rounded-custom gap-2"
         style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)" to="/chats/new">
         <SofaNormalText color="text-inherit" content="Ask me anything" />
         <SofaIcon name="robot" class="w-[24px] h-[24px]" />
@@ -211,9 +230,9 @@
           </SofaTextField>
 
           <div class="w-full flex items-center gap-2">
-            <SofaBadge color="gray" :isInverted="true" as="a" customClass="py-2 px-4"
+            <SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
               @click="Logic.Common.GoToRoute('/quiz/create')">Create a quiz</SofaBadge>
-            <SofaBadge color="gray" :isInverted="true" as="a" customClass="py-2 px-4"
+            <SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
               @click="Logic.Common.GoToRoute('/course/create')">Create a course</SofaBadge>
           </div>
         </template>
