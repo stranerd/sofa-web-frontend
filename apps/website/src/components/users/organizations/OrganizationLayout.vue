@@ -1,6 +1,6 @@
 <template>
 	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
-		<div class="w-full h-full flex-1 gap-3 flex flex-col justify-start relative">
+		<div class="w-full h-full flex-1 flex flex-col justify-start relative">
 			<div class="w-full flex items-center gap-3 justify-between bg-backgroundGray p-4">
 				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 				<SofaNormalText class="!font-bold !text-base" :content="title" />
@@ -55,17 +55,18 @@
 					</router-link>
 				</div>
 			</div>
-			<div class="flex flex-col gap-4 h-full overflow-y-auto mdlg:px-4">
+			<div class="flex flex-col gap-4 h-full overflow-y-auto">
 				<slot :user="user!" />
 			</div>
 		</template>
 
 		<template v-slot:right-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
-				<SofaHeaderText class="!text-base !font-bold" content="Start something" />
+				<SofaHeaderText class="!text-lg !font-bold" content="Start something" />
 
-				<div class="grid grid-cols-2 gap-2 gap-y-2 gap-x-4">
-					<SofaBadge v-for="command in rightCommands" :key="command.label" color="gray" :isInverted="true" as="a" class="!py-3 !px-4 truncate" @click="command.action">
+				<div class="grid grid-cols-2 gap-y-2 gap-x-4">
+					<SofaBadge v-for="command in rightCommands" :key="command.label" color="gray" :isInverted="true" as="a"
+						class="!py-3 !px-4 truncate" @click="command.action">
 						{{ command.label }}
 					</SofaBadge>
 				</div>

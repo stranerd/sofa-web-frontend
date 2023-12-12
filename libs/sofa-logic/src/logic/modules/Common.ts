@@ -659,7 +659,7 @@ export default class Common {
   }
 
   tabIsActive = (tab: string) => {
-    if (tab === "/" && this.route.path === "/") return true
+    if (tab === "/" && (this.route.path === "/" || this.route.path === '/organization/dashboard')) return true
     else if (tab !== "/" && this.route.path.startsWith(tab)) return true
     return false
   }
