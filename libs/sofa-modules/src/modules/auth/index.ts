@@ -2,7 +2,8 @@ import { AuthApiDataSource } from './data/datasources/authApi'
 import { AuthRepository } from './data/repositories/auth'
 import { AuthUseCase } from './domain/usecases/auth'
 
-export type { Phone } from './domain/entities/auth'
+export { AuthRoles } from './domain/entities/auth'
+export type { AfterAuthUser, AuthDetails, Phone, UserBio } from './domain/entities/auth'
 export { EmailSigninFactory } from './domain/factories/emailSignin'
 export { EmailSignupFactory } from './domain/factories/emailSignup'
 export { PasswordResetFactory } from './domain/factories/passwordReset'
@@ -15,5 +16,3 @@ const authDataSource = new AuthApiDataSource()
 const authRepository = new AuthRepository(authDataSource)
 
 export const AuthUseCases = new AuthUseCase(authRepository)
-
-export { AfterAuthUser, AuthRoles, UserBio } from './domain/entities/auth'

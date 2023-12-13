@@ -67,6 +67,8 @@ import {
   ref,
   watch
 } from "vue"
+import { apiBase } from "@utils/environment"
+import { getTokens } from "@utils/tokens"
 import SofaAvatar from "../SofaAvatar"
 import SofaIcon from "../SofaIcon"
 import SofaImageLoader from "../SofaImageLoader"
@@ -177,8 +179,8 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const tokens = await Logic.Auth.GetTokens()
-        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id}/media?AccessToken=${tokens?.accessToken}`
+        const { accessToken } = await getTokens()
+        const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`
         if (mediaFile.type == "image") {
           staticSectionOptions.value[index].materials.push({
             name: mediaFile.title,

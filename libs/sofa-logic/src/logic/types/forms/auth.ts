@@ -17,18 +17,6 @@ export interface UpdateUserRoleInput {
   value: boolean
 }
 
-export interface SignUpInput {
-  email: string
-  password: string
-  name?: {
-    first: string
-    last: string
-  }
-  description?: string
-  photo?: Blob
-  organization_name?: string
-}
-
 export interface SignInInput {
   email: string
   password: string
@@ -40,11 +28,6 @@ export interface VerifyWithTokenInput {
 
 export interface SendResetPasswordInput {
   email: string
-}
-
-export interface ResetPasswordWithTokenInput {
-  token: string
-  password: string
 }
 
 export interface UpdatePasswordInput {

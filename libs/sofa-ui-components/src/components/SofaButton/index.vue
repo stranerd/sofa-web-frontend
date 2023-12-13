@@ -2,7 +2,7 @@
   <div :class="`w-auto h-auto relative ${visible ? '' : 'invisible'} ${disabled ? 'opacity-30' : ''}`">
     <button :disabled="loading || disabled" @click="handleClicked" :class="`focus:outline-none relative rounded-md flex gap-2 items-center z-[3] ${loading ? 'opacity-75' : ''
       } lg:text-sm mdlg:text-[12px] text-xs justify-center whitespace-nowrap ${padding} ${bgColor} ${textColor} ${customClass}`"
-      style="border-radius: 16px 8px">
+      style="border-radius: 16px 8px" :type="type">
       <slot />
       <span class="pl-2" v-if="loading"><sofa-icon :name="'loader'" :custom-class="'h-[28px]'" /></span>
     </button>
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent, PropType, ref } from "vue"
 import SofaIcon from "../SofaIcon"
 
 export default defineComponent({
@@ -24,6 +24,10 @@ export default defineComponent({
     bgColor: {
       type: String,
       default: "bg-primaryBlue",
+    },
+    type: {
+      type: String as PropType<'button' | 'submit' | 'reset'>,
+      default: "button",
     },
     textColor: {
       type: String,

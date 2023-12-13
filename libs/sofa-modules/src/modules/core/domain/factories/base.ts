@@ -1,11 +1,8 @@
 import { Differ, VCore } from 'valleyed'
-import { isRef, reactive, ref, unref, UnwrapNestedRefs } from 'vue'
+import { isRef, reactive, ref, unref } from 'vue'
 
 const isObject = (val: any) => val !== null && typeof val === 'object'
-const smartUnref = (val: any) => {
-	if (val !== null && !isRef(val) && typeof val === 'object') return deepUnref(val)
-	return unref(val)
-}
+const smartUnref = (val: any) => isObject(val) && !isRef(val) ? deepUnref(val) : unref(val)
 
 const deepUnref = (val: any) => {
 	const checkedVal = isRef(val) ? unref(val) : val

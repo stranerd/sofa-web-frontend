@@ -1,25 +1,21 @@
+import { HttpClient } from '@modules/core'
+import { apiBase } from '@utils/environment'
+import { getTokens } from '@utils/tokens'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
-import { API_URL } from '../../common/constants'
-import { Logic } from '../../logic/modules'
 
 export class BaseApiService {
-  private readonly baseUrl = API_URL
   public axiosInstance: AxiosInstance
-  private config: AxiosRequestConfig
+  private config: AxiosRequestConfig = {}
   resource
 
   constructor(resource: string) {
     if (!resource) throw new Error('Resource is not provided')
     this.resource = resource
 
-    this.config = {
-      baseURL: this.baseUrl,
-    }
-
     this.axiosInstance = axios.create(this.config)
 
     this.axiosInstance.interceptors.request.use(async (config) => {
-      config.baseURL = Logic.Common.apiUrl
+      config.baseURL = apiBase
 
       if (config.method.toLowerCase() === "get") {
         config.params = Object.fromEntries(
@@ -39,11 +35,9 @@ export class BaseApiService {
 
       // @ts-ignore
       config.headers ??= {}
-      const tokens =  await Logic.Auth.GetTokens()
-      if (tokens) {
-        config.headers['Access-Token'] = tokens.accessToken
-        config.headers['Refresh-Token'] = tokens.refreshToken
-      }
+      const { accessToken, refreshToken } =  await getTokens()
+      if (accessToken) config.headers['Access-Token'] = accessToken
+      if (refreshToken) config.headers['Refresh-Token'] = refreshToken
 
       return config
     }, (error) => Promise.reject(error))
@@ -56,7 +50,7 @@ export class BaseApiService {
       if (status !== 461 || path === '/auth/token') return Promise.reject(error)
 
       try {
-        await Logic.Auth.RefreshAuthToken()
+        await new HttpClient().getNewTokens()
         return this.axiosInstance.request(error.config)
       } catch {
         return Promise.reject(error)

@@ -1,6 +1,6 @@
 import { v } from 'valleyed'
 import { FileData, Logic, Question } from '../../logic'
-import { BaseFactory } from '../base'
+import { BaseFactory } from '@modules/core'
 
 type Content = FileData | null
 type QuestionToModel = Pick<Question, 'question' | 'questionMedia' | 'data' | 'explanation' | 'timeLimit'>

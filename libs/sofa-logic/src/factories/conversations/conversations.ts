@@ -1,6 +1,6 @@
 import { Conversation, CreateConversationInput } from '../../logic'
 import { v } from 'valleyed'
-import { BaseFactory } from '../base'
+import { BaseFactory } from '@modules/core'
 
 
 export class ConversationFactory extends BaseFactory<Conversation, CreateConversationInput, CreateConversationInput> {

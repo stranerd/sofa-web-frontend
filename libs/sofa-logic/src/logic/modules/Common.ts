@@ -1,7 +1,7 @@
+import { listenOnSocket } from '@modules/core'
 import { AxiosError } from 'axios'
 import currency from 'currency.js'
 import moment from 'moment'
-import io, { Socket } from 'socket.io-client'
 import { reactive } from 'vue'
 import {
   NavigationGuardNext,
@@ -14,12 +14,9 @@ import { Logic } from '..'
 import {
   Confirmation,
   ConfirmationSetup,
-  EmitTypes,
   FetchRule,
   Listeners,
-  LoaderSetup,
-  SocketReturn,
-  StatusCodes,
+  LoaderSetup
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
 
@@ -29,26 +26,7 @@ export default class Common {
 
   public route: RouteLocationNormalizedLoaded | undefined = undefined
 
-  public apiUrl = ''
-
   public watchInterval: number | undefined = undefined
-
-  public loadingState = false
-
-  public SocketClient: Socket | undefined
-
-  public timeEquivalentsInSeconds = {
-    '5s': 5,
-    '10s': 10,
-    '20s': 20,
-    '30s': 30,
-    '1m': 60,
-    '1m 30s': 90,
-    '2m': 120,
-    '3m': 180,
-    '4m': 240,
-    '5m': 300,
-  }
 
   public EquivalentsSecondsInString = {
     '5': '5s',
@@ -74,141 +52,8 @@ export default class Common {
     })
   }
 
-  public inWords = (num: any) => {
-    let a = [
-      '',
-      'one ',
-      'two ',
-      'three ',
-      'four ',
-      'five ',
-      'six ',
-      'seven ',
-      'eight ',
-      'nine ',
-      'ten ',
-      'eleven ',
-      'twelve ',
-      'thirteen ',
-      'fourteen ',
-      'fifteen ',
-      'sixteen ',
-      'seventeen ',
-      'eighteen ',
-      'nineteen ',
-    ]
-    let b = [
-      '',
-      '',
-      'twenty',
-      'thirty',
-      'forty',
-      'fifty',
-      'sixty',
-      'seventy',
-      'eighty',
-      'ninety',
-    ]
-
-    if ((num = num.toString()).length > 9) return 'overflow'
-    const n: any = ('000000000' + num)
-      .substr(-9)
-      .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/)
-    if (!n) return
-    var str = ''
-    str +=
-      n[1] != 0
-        ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore '
-        : ''
-    str +=
-      n[2] != 0
-        ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh '
-        : ''
-    str +=
-      n[3] != 0
-        ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand '
-        : ''
-    str +=
-      n[4] != 0
-        ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred '
-        : ''
-    str +=
-      n[5] != 0
-        ? (str != '' ? 'and ' : '') +
-          (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) +
-          ' '
-        : ''
-    return str
-  }
-
-  public async setupWebsocket () {
-    const url = new URL(`${this.apiUrl}/socket.io`)
-
-    const tokens = await Logic.Auth.GetTokens()
-
-    this.SocketClient = io(url.origin, {
-      path: url.pathname,
-      auth: { token: tokens?.accessToken },
-      transports: ['websocket'],
-    })
-  }
-
-  public async listenOnSocket (
-    initialChannel,
-    listener: Function,
-    onleave: Function = () => {},
-  ) {
-    const tokens = await Logic.Auth.GetTokens()
-    const accessToken = tokens?.accessToken
-    if (
-      !this.SocketClient
-      || (!this.SocketClient.auth['token'] && accessToken)
-      || (accessToken && this.SocketClient.auth['token'] !== accessToken)
-    ) await this.setupWebsocket()
-
-    let finalChannel = ''
-
-    this.SocketClient.emit(
-      'join',
-      { channel: initialChannel },
-      (res: SocketReturn) => {
-        finalChannel = res.channel
-
-        if (res.code.toString() !== StatusCodes.success) return
-
-        this.SocketClient.on(
-          finalChannel,
-          (data: { channel: string; type: EmitTypes; data: any }) => {
-            if (finalChannel !== data.channel) return
-            // Do whatever you want with the data depending on the type emitted
-            listener(data)
-          },
-        )
-      },
-    )
-
-    const closeConnection = () => {
-      try {
-        this.SocketClient.emit(
-          'leave',
-          { channel: finalChannel },
-          (res: SocketReturn) => {
-            // Perform any cleanup after the connection is closed
-            onleave(res)
-          },
-        )
-      } catch (e) {
-      }
-    }
-
-    return {
-      closeConnection,
-    }
-  }
-
   public async listenToSocket<Model> (channel: string, listeners: Listeners<Model>) {
-    const { closeConnection } = await this.listenOnSocket(channel, (data) => listeners[data.type]?.(data.data))
-    return closeConnection
+    return listenOnSocket<Model>(channel, listeners)
   }
 
   public async listenToOne<Model> (channel: string, listeners: Listeners<Model>) {
@@ -235,10 +80,6 @@ export default class Common {
 
   public SetRoute = (route: RouteLocationNormalizedLoaded) => {
     this.route = route
-  }
-
-  public SumArray = (array: any[]) => {
-    return array.reduce((partialSum, a) => partialSum + a, 0)
   }
 
   public removeDuplicatesFromArray = (arrayData: any[], keys: any[]) => {
@@ -328,55 +169,8 @@ export default class Common {
     })
   }
 
-  public SetApiUrl = (apiUrl: string) => {
-    this.apiUrl = apiUrl
-  }
-
   public GoToRoute = async (to: RouteLocationRaw) => {
     await this.router?.push(to)
-  }
-
-  public shuffleArray = (array: any[]) => {
-    let currentIndex = array.length,
-      randomIndex
-
-    // While there remain elements to shuffle.
-    while (currentIndex != 0) {
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex)
-      currentIndex--
-
-      // And swap it with the current element.
-      ;[array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ]
-    }
-
-    return array
-  }
-
-  public intersectArray(a: any[], b: any[]) {
-    var setB = new Set(b)
-    return [...new Set(a)].filter((x) => setB.has(x))
-  }
-
-  public mediaQuery = (): 'lg' | 'mdlg' | 'md' | 'sm' | 'xl' | '2xl' => {
-    const windowWidth = window.screen.width
-
-    if (windowWidth <= 640) {
-      return 'sm'
-    } else if (windowWidth > 640 && windowWidth <= 768) {
-      return 'md'
-    } else if (windowWidth > 769 && windowWidth <= 1000) {
-      return 'mdlg'
-    } else if (windowWidth > 1001 && windowWidth <= 1580) {
-      return 'lg'
-    } else if (windowWidth > 1581 && windowWidth <= 1280) {
-      return 'xl'
-    } else if (windowWidth > 1280) {
-      return '2xl'
-    }
   }
 
   public get isOnlyMobile () {
@@ -385,14 +179,6 @@ export default class Common {
 
   public get isLarge () {
     return this.window.width > 1000
-  }
-
-  public getLabel = (data: any, key: string) => {
-    const thisData = data.filter((Option: any) => {
-      return Option.key == key
-    })
-
-    return thisData.length > 0 ? thisData[0].value : ''
   }
 
   public showAlert = (alert: LoaderSetup['alerts'][number]) => {
@@ -430,12 +216,6 @@ export default class Common {
       window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
     }
   }
-
-  public globalParameters = reactive<{
-    currency: string
-  }>({
-    currency: 'ngn',
-  })
 
   public momentInstance = moment
 
@@ -511,20 +291,12 @@ export default class Common {
   public watchProperty = (objectToWatch: any, objectToUpdate: any) => {
     let upatedValue = (this as any)[`${objectToWatch}`]
     const watchAction = () => {
-      upatedValue = (this as any)[`${objectToWatch}`]
-      if (objectToUpdate) {
-        objectToUpdate.value = upatedValue
-      }
+      upatedValue = (this as any)[objectToWatch]
+      if (objectToUpdate) objectToUpdate.value = upatedValue
       this.watchInterval = window.requestAnimationFrame(watchAction)
     }
 
     watchAction()
-  }
-
-  public stopWatchAction = () => {
-    if (this.watchInterval != undefined) {
-      window.cancelAnimationFrame(this.watchInterval)
-    }
   }
 
   private fetchFile = (url: string) => {
@@ -558,19 +330,8 @@ export default class Common {
     return moment(date).format(format)
   }
 
-  public countDownTime = (endTime: number) => {
-    return moment(moment(endTime).diff(moment.now())).format('mm:ss')
-  }
-
   public timeFromNow = (time: number) => {
     return moment(time).fromNow()
-  }
-
-  public updatedData = (oldData: any, newData: any) => {
-    if (oldData != undefined && newData != undefined) {
-      return { ...oldData, ...newData }
-    }
-    return oldData
   }
 
   public preFetchRouteData = async (

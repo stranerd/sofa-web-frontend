@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "Frontend Logic for SOFA",
   "main": "src/index.ts",
-  "scripts": {
-    "build:vue": "rollup -c && rollup -c --environment MINIFY",
-    "build": "rimraf dist && npm run build:vue",
-    "watch": "rollup -c --watch"
-  },
   "engines": {
     "node": ">= 18.0.0"
   },
@@ -41,6 +36,7 @@
     "currency.js": "^2.0.4",
     "moment": "^2.29.4",
     "socket.io-client": "^4.6.1",
+    "sofa-modules": "workspace:^",
     "string-similarity": "^4.0.4",
     "valleyed": "^4.2.3",
     "vue-router": "^4.0.12"

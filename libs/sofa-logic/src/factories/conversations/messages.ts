@@ -1,6 +1,6 @@
 import { v } from 'valleyed'
 import { FileData, Message } from '../../logic'
-import { BaseFactory } from '../base'
+import { BaseFactory } from '@modules/core'
 
 type Content = FileData | null
 type Keys = { body: string, media: Content | null }

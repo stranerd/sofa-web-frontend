@@ -1,9 +1,10 @@
-import { AuthUser, Logic, SingleUser, Wallet } from 'sofa-logic'
+import { useListener } from '@app/composables/core/listener'
+import { AuthDetails, AuthUseCases } from '@modules/auth'
+import { Logic, SingleUser, Wallet } from 'sofa-logic'
 import { computed, ref } from 'vue'
-import { useListener } from '../core/listener'
 
 const store = {
-	auth: ref(null as AuthUser | null),
+	auth: ref(null as AuthDetails | null),
 	user: ref(null as SingleUser | null),
 	wallet: ref(null as Wallet | null),
 	listener: useListener(async () => {
@@ -53,9 +54,10 @@ export const useAuth = () => {
 		image: store.user.value?.ai?.photo?.link ?? '/images/icons/robot.svg'
 	}))
 
-	const setAuthUser = async (details: AuthUser | null) => {
+	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
 		store.auth.value = details
+		Logic.Auth.AuthUser = details as any
 		if (details?.id) {
 			store.user.value = await Logic.Users.GetUserProfile(details.id)
 			store.wallet.value = await Logic.Payment.GetUserWallet()
@@ -83,7 +85,7 @@ export const useAuth = () => {
 		})
 		if (!confirmed) return
 		// await unregisterDeviceOnLogout()
-		await Logic.Auth.SignOut()
+		await AuthUseCases.sessionSignout()
 		await setAuthUser(null)
 		window.location.assign('/auth/login')
 	}
@@ -97,7 +99,7 @@ export const useAuth = () => {
 		if (!confirmed) return
 		//
 		// await unregisterDeviceOnLogout()
-		await Logic.Auth.DeleteUserAccount()
+		await AuthUseCases.deleteAccount()
 		await setAuthUser(null)
 		window.location.assign('/auth/login')
 	}

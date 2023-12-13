@@ -9,6 +9,7 @@ type Keys = Omit<NewUser, 'name' | 'photo'> & {
 	last: string
 	cPassword: string
 	photo: Content
+	termsAccepted: boolean
 }
 
 export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
@@ -20,15 +21,16 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		photo: v.file().image().nullable(),
 		password: v.string().min(8).max(16),
 		cPassword: v.string().min(8).max(16)
-			.custom((val) => isEqualTo(this.password)(val).valid, 'is not equal')
+			.custom((val) => isEqualTo(this.password)(val).valid, 'is not equal'),
+		termsAccepted: v.is(true)
 	}
 
 	reserved = []
 
 	constructor () {
 		super({
-			first: '', last: '', email: '', password: '', cPassword: '',
-			description: '', photo: null
+			first: 'new', last: 'user', email: '', password: '', cPassword: '',
+			description: '', photo: null, termsAccepted: false
 		})
 	}
 
@@ -87,6 +89,14 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 
 	set cPassword (value: string) {
 		this.set('cPassword', value)
+	}
+
+	get termsAccepted () {
+		return this.values.termsAccepted
+	}
+
+	set termsAccepted (value: boolean) {
+		this.set('termsAccepted', value)
 	}
 
 	toModel = async () => {

@@ -5,7 +5,7 @@
 	"scripts": {
 		"preserve": "pnpm -w run envs",
 		"serve": "vue-cli-service serve",
-		"prebuild": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
+		"prebuild": "pnpm -w run envs",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint"
 	},

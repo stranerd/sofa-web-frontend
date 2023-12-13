@@ -92,7 +92,7 @@ export class HttpClient {
 		}
 	}
 
-	private async getNewTokens () {
+	async getNewTokens () {
 		try {
 			const { data } = await this.client.post<any, AxiosResponse<AfterAuthUser>>('/auth/token', {}, { baseURL: apiBase })
 			await saveTokens(data)

@@ -13,7 +13,7 @@ export enum EmitTypes {
 
 type SocketReturn = { code: StatusCodes, message: string, channel: string }
 
-export async function listenOnSocket<Model> (channel: string, listeners: Listeners<Model>) {
+export async function listenOnSocket<Model> (channel: string, listeners: Listeners<Model>, onleave: Function = () => {}) {
 	const { accessToken } = await getTokens()
 	// @ts-ignore
 	if (!socket || (!socket.auth.token && accessToken) || (accessToken && socket.auth.token !== accessToken)) {
@@ -35,7 +35,7 @@ export async function listenOnSocket<Model> (channel: string, listeners: Listene
 	})
 	return () => {
 		try {
-			socket?.emit('leave', { channel: finalChannel }, (ret: SocketReturn) => ret)
+			socket?.emit('leave', { channel: finalChannel }, (ret: SocketReturn) => onleave(ret))
 		} catch (e) {
 			return e
 		}

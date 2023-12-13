@@ -20,6 +20,9 @@
 			"@/*": [
 				"src/*"
 			],
+			"@app/*": [
+				"src/*"
+			],
 			"@modules/*": [
 				"node_modules/sofa-modules/src/modules/*"
 			],

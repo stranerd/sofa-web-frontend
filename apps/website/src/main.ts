@@ -1,4 +1,3 @@
-import { Logic } from 'sofa-logic'
 import { createApp } from 'vue'
 import { createMetaManager } from 'vue-meta'
 import App from './App.vue'
@@ -9,14 +8,12 @@ import vue3GoogleLogin from 'vue3-google-login'
 // You can disable this if you dont want TailwindCss
 import './assets/app.css'
 
-import { apiUrl, appleDetails, googleClientId } from './common/constants'
+import { appleDetails, googleClientId } from './common/constants'
 import { globalPlugins } from './plugins'
 import { routerPromise } from './router'
 
 const init = async () => {
   const router = await routerPromise
-
-  Logic.Common.SetApiUrl(apiUrl)
 
   const app = createApp(App)
 

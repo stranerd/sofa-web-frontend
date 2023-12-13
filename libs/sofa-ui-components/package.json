@@ -21,6 +21,7 @@
     "gsap": "^3.12.2",
     "mathlive": "^0.96.0",
     "sofa-logic": "workspace:^",
+    "sofa-modules": "workspace:^",
     "video.js": "^8.3.0",
     "vue": "^3.2.21",
     "vue-inline-svg": "^3.1.2",

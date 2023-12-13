@@ -1,37 +1,22 @@
-import { capitalize } from 'vue'
+import { saveTokens } from '@utils/tokens'
 import { Logic } from '..'
 import { $api } from '../../services'
-import { AuthResponse, AuthUser } from '../types/domains/auth'
+import { AuthUser } from '../types/domains/auth'
 import {
-  SignInInput,
-  SignUpInput,
-  UpdateUserProfileInput,
-  UpdateUserRoleInput,
+  UpdateUserProfileInput
 } from '../types/forms/auth'
 import {
   AppleAuthInput,
   GoogleAuthInput,
-  ResetPasswordWithTokenInput,
   UpdatePasswordInput,
-  UpdatePhoneInput,
-  VerifyWithTokenInput,
+  UpdatePhoneInput
 } from './../types/forms/auth'
 import Common from './Common'
 
 export default class Auth extends Common {
   private redirectToName = 'redirect-to'
-  private authTokensStorageName = 'AuthTokens'
-
   public AuthUser: AuthUser | undefined = undefined
-  public RefreshIsActive = false
-
-  // input data
   public UpdateUserProfileForm: UpdateUserProfileInput | undefined
-  public UpdateUserRolesForm: UpdateUserRoleInput | undefined
-  public SignUpForm: SignUpInput | undefined
-  public SignInForm: SignInInput | undefined
-  public VerifyWithTokenForm: VerifyWithTokenInput | undefined
-  public ResetPasswordWithTokenForm: ResetPasswordWithTokenInput | undefined
   public UpdatePasswordForm: UpdatePasswordInput | undefined
   public GoogleSignInForm: GoogleAuthInput | undefined
   public AppleSignInForm: AppleAuthInput | undefined
@@ -45,44 +30,6 @@ export default class Auth extends Common {
 
   async setRedirectToRoute (value: string) {
     localStorage.setItem(this.redirectToName, value)
-  }
-
-  public SetTokens = (AuthData: AuthResponse) => {
-    localStorage.setItem(
-      this.authTokensStorageName,
-      JSON.stringify({
-        accessToken: AuthData.accessToken,
-        refreshToken: AuthData.refreshToken,
-      })
-    )
-  }
-
-  public GetTokens = async () : Promise<Omit<AuthResponse, 'user'> | undefined> => {
-    const savedTokens = localStorage.getItem(this.authTokensStorageName)
-	  return savedTokens ? JSON.parse(savedTokens) : undefined
-  }
-
-  public GetAuthUser = () => {
-    return $api.auth.user.getAuthUser().then((response) => {
-      this.AuthUser = response.data
-      return response.data
-    })
-  }
-
-  public SignOut = () => {
-    return $api.auth.user
-      .signOut()
-      .finally(() => this.DeleteTokens())
-  }
-
-  public DeleteUserAccount = () => {
-    return $api.auth.user
-      .deleteUserAccount()
-      .finally(() => this.DeleteTokens())
-  }
-
-  public async DeleteTokens () {
-    localStorage.removeItem(this.authTokensStorageName)
   }
 
   public UpdateUserProfile = (
@@ -110,65 +57,6 @@ export default class Auth extends Common {
     }
   }
 
-  public UpdateUserRoles = (formIsValid: boolean) => {
-    if (formIsValid && this.UpdateUserRolesForm) {
-      $api.auth.user
-        .updateUserRoles(this.UpdateUserRolesForm)
-        .then((response) => {
-          // do something
-        })
-        .catch((error) => {
-          // error handler
-        })
-    }
-  }
-
-  public SetSuperAdminRole = () => {
-    return $api.auth.user
-      .setSuperAdminRoles()
-      .then((response) => {
-        //
-      })
-      .catch((error) => {
-        //
-      })
-  }
-
-  public SendVerificationEmail = () => {
-    return $api.auth.email
-      .sendVerificationMail()
-      .then((response) => {})
-      .then((error) => {})
-  }
-
-  public SignUp = (SignUpForm: SignUpInput) => {
-    Logic.Common.showLoading()
-    return $api.auth.email
-      .signUp(SignUpForm)
-      .then((response) => {
-        Logic.Auth.AuthUser = response.data.user
-        Logic.Common.hideLoading()
-        return response.data
-      }).catch((e) => {
-        Logic.Common.hideLoading()
-        throw e
-      })
-  }
-
-  public SignIn = (SignInForm: SignInInput) => {
-    Logic.Common.showLoading()
-    return $api.auth.email
-      .signIn(SignInForm)
-      .then((response) => {
-        Logic.Auth.AuthUser = response.data.user
-        Logic.Common.hideLoading()
-        return response.data
-      }).catch((e) => {
-        Logic.Common.hideLoading()
-        throw e
-      })
-  }
-
   public GoogleSignIn = (GoogleSignInForm: GoogleAuthInput) => {
     Logic.Common.showLoading()
     return $api.auth.identities
@@ -189,57 +77,6 @@ export default class Auth extends Common {
       .appleSignIn(AppleSignInForm)
       .then((response) => {
         this.AuthUser = response.data.user
-        Logic.Common.hideLoading()
-        return response.data
-      }).catch((e) => {
-        Logic.Common.hideLoading()
-        throw e
-      })
-  }
-
-  public VerifyEmailWithToken = (VerifyEmailWithToken: VerifyWithTokenInput) => {
-    Logic.Common.showLoading()
-    return $api.auth.email
-      .verifyEmail(VerifyEmailWithToken)
-      .then((response) => {
-        this.AuthUser = response.data.user
-        Logic.Common.hideLoading()
-        return response.data
-      }).catch((e) => {
-        Logic.Common.hideLoading()
-        throw e
-      })
-  }
-
-  public RefreshAuthToken = () => {
-    return $api.auth.token
-      .exchangeToken()
-      .then((response) => {
-        this.AuthUser = response.data.user
-        this.SetTokens(response.data)
-        return response.data
-      })
-  }
-
-  public SendPasswordResetMail = (email: string) => {
-    Logic.Common.showLoading()
-    return $api.auth.passwords
-      .sendResetPasswordMail({ email })
-      .then((response) => {
-        Logic.Common.hideLoading()
-        return response.data
-      }).catch((e) => {
-        Logic.Common.hideLoading()
-        throw e
-      })
-  }
-
-  public ResetPasswordWithToken = (ResetPasswordWithTokenForm: ResetPasswordWithTokenInput) => {
-    Logic.Common.showLoading()
-    return $api.auth.passwords
-      .resetPassword(ResetPasswordWithTokenForm)
-      .then((response) => {
-        Logic.Auth.AuthUser = response.data.user
         Logic.Common.hideLoading()
         return response.data
       }).catch((e) => {
@@ -282,7 +119,7 @@ export default class Auth extends Common {
       .then((response) => {
         this.AuthUser = response.data.user
         Logic.Users.GetUserProfile()
-        this.SetTokens(response.data)
+        saveTokens(response.data)
       })
       .finally(() => {
         Logic.Common.hideLoading()

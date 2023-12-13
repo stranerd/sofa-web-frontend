@@ -71,7 +71,7 @@ export default defineComponent({
     },
     onChangeOTP: {
       type: Function,
-      required: true,
+      required: false,
     },
     type: {
       type: String,
@@ -129,7 +129,7 @@ export default defineComponent({
     }
 
     const onInput = (event: any, id: string) => {
-      props.onChangeOTP(otp.value)
+      props.onChangeOTP?.(otp.value)
       if (event.inputType === "deleteContentBackward") return false
 
       focusInputByRef(id)

@@ -69,7 +69,7 @@
     </template>
 
     <template v-slot:middle-session>
-      <div v-if="profileSteps.find((s) => !s.isDone) && !userType.isOrg"
+      <div v-if="profileSteps.find((s) => !s.isDone)"
         class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:!bg-white rounded-2xl flex flex-col mdlg:gap-4 gap-1">
         <div class="w-full flex gap-2 items-center">
           <SofaNormalText class="!font-bold" content="Complete your account setup" />
@@ -212,56 +212,28 @@
     </template>
 
     <template v-slot:right-session>
-      <div v-if="!userType.isTeacher" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
-        <template v-if="userType.isStudent">
-          <div class="w-full flex items-center gap-3">
-            <img :src="userAi.image" alt="" class="w-[84px] aspect-square rounded-full">
-            <div class="flex flex-col gap-1">
-              <SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
-              <SofaNormalText :content="userAi.tagline" />
-              <SofaNormalText color="text-primaryPink" as="a" content="Customise" @click="showCustomizeAI = true" />
-            </div>
+      <div v-if="userType.isStudent" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
+        <div class="w-full flex items-center gap-3">
+          <img :src="userAi.image" alt="" class="w-[84px] aspect-square rounded-full">
+          <div class="flex flex-col gap-1">
+            <SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
+            <SofaNormalText :content="userAi.tagline" />
+            <SofaNormalText color="text-primaryPink" as="a" content="Customise" @click="showCustomizeAI = true" />
           </div>
+        </div>
 
-          <SofaTextField placeholder="What can I do for you?" padding="p-3" customClass="border" v-model="factory.body">
-            <template v-slot:inner-suffix>
-              <SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
-            </template>
-          </SofaTextField>
+        <SofaTextField placeholder="What can I do for you?" padding="p-3" customClass="border" v-model="factory.body">
+          <template v-slot:inner-suffix>
+            <SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
+          </template>
+        </SofaTextField>
 
-          <div class="w-full flex items-center gap-2">
-            <SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
-              @click="Logic.Common.GoToRoute('/quiz/create')">Create a quiz</SofaBadge>
-            <SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
-              @click="Logic.Common.GoToRoute('/course/create')">Create a course</SofaBadge>
-          </div>
-        </template>
-
-        <template v-if="userType.isOrg">
-          <div class="w-full flex items-center justify-between">
-            <SofaNormalText class="!font-bold" content="Your students" />
-            <router-link class="flex gap-2 items-center" to="/settings/students">
-              <SofaNormalText class="!text-grayColor" content="Add" />
-              <SofaIcon name="add-gray" class="h-[20px]" />
-            </router-link>
-          </div>
-
-          <div v-if="allStudents.length" class="w-full flex flex-col gap-4">
-            <div class="w-full flex items-center justify-between" v-for="(item, index) in allStudents" :key="index">
-              <div class="flex items-center gap-2">
-                <SofaAvatar :photoUrl="item.profile_url" size="26" />
-                <SofaNormalText :content="item.name" />
-              </div>
-            </div>
-
-            <router-link class="mx-auto" to="/settings/students">
-              <SofaNormalText color="text-primaryPink" content="View all" />
-            </router-link>
-          </div>
-
-          <SofaEmptyState v-else title="No students" subTitle="Your students have free access all contents you create"
-            actionLabel="Add students" :action="() => Logic.Common.GoToRoute('/settings/students')" />
-        </template>
+        <div class="w-full flex items-center gap-2">
+          <SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
+            @click="Logic.Common.GoToRoute('/quiz/create')">Create a quiz</SofaBadge>
+          <SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
+            @click="Logic.Common.GoToRoute('/course/create')">Create a course</SofaBadge>
+        </div>
       </div>
 
       <div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4"
@@ -290,12 +262,7 @@ import { useConversationsList, useCreateConversation } from '@/composables/conve
 import { useHomeTasks } from '@/composables/home'
 import { saveToFolder } from "@/composables/library"
 import { extractContent } from '@/composables/marketplace'
-import {
-  allOrganizationMembers,
-  allStudents,
-  setOrganizationMembers,
-  showCustomizeAI
-} from "@/composables/profile"
+import { showCustomizeAI } from "@/composables/profile"
 import { useMyStudy } from '@/composables/study/study'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from "sofa-logic"
@@ -311,7 +278,7 @@ import {
   SofaNormalText,
   SofaTextField,
 } from "sofa-ui-components"
-import { computed, defineComponent, onMounted, watch } from "vue"
+import { computed, defineComponent } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
@@ -368,26 +335,12 @@ export default defineComponent({
     const suggestedMaterials = computed(() => suggested.value.map(extractContent))
     const myOrgsMaterials = computed(() => myOrgs.value.map(extractContent))
 
-    onMounted(() => {
-      if (userType.value.isOrg) {
-        setOrganizationMembers()
-        Logic.Users.watchProperty("AllorganizationMembers", allOrganizationMembers)
-      }
-    })
-
-    watch(allOrganizationMembers, () => {
-      setOrganizationMembers()
-    })
-
     return {
       user, userType, userAi,
       factory, createConversation, conversations,
-      Logic,
       profileSteps, studyMaterialsSteps, takeOnTasks,
       recentMaterials, suggestedMaterials, myOrgsMaterials,
-      showCustomizeAI,
-      allStudents,
-      saveToFolder,
+      showCustomizeAI, saveToFolder, Logic,
     }
   },
 })
