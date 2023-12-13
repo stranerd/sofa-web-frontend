@@ -51,3 +51,7 @@ export class UploadedFile {
 		return new Blob([byteArray])
 	}
 }
+
+declare module 'valleyed/lib/types' {
+    interface File extends UploadedFile, Media {}
+}
