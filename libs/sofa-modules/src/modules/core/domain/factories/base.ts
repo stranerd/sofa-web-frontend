@@ -24,8 +24,8 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	reserved: string[]
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
 	protected readonly defaults: K
-	protected values: K
-	protected validValues: K
+	public readonly values: K
+	protected readonly validValues: K
 
 	protected constructor (keys: K) {
 		this.defaults = reactive({ ...keys }) as K
