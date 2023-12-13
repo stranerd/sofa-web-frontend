@@ -1,23 +1,39 @@
-import { UploadedFile } from '@modules/core'
-import { deepUnref } from '@utils/unref'
 import { Differ, VCore } from 'valleyed'
-import { reactive } from 'vue'
-import { UploaderService } from '../../services/uploader'
+import { isRef, reactive, ref, unref, UnwrapNestedRefs } from 'vue'
+
+const isObject = (val: any) => val !== null && typeof val === 'object'
+const smartUnref = (val: any) => {
+	if (val !== null && !isRef(val) && typeof val === 'object') return deepUnref(val)
+	return unref(val)
+}
+
+const deepUnref = (val: any) => {
+	const checkedVal = isRef(val) ? unref(val) : val
+	if (!isObject(checkedVal)) return checkedVal
+	if (Array.isArray(checkedVal)) return checkedVal.map(smartUnref)
+
+	return Object.entries(checkedVal)
+		.reduce((acc, [key, value]) => {
+			acc[key] = smartUnref(value)
+			return acc
+		}, {} as Record<string, any>)
+}
 
 export abstract class BaseFactory<E, T, K extends Record<string, any>> {
+	#entity = ref<string| null>(null)
 	errors: Record<keyof K, string>
 	abstract toModel: () => Promise<T>
 	abstract loadEntity: (entity: E) => void
-	abstract reserved: string[]
-	protected abstract readonly rules: { [Key in keyof K]: VCore<any, K[Key] | undefined | null> }
+	reserved: string[]
+	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
 	protected readonly defaults: K
 	protected values: K
 	protected validValues: K
 
 	protected constructor (keys: K) {
-		this.defaults = reactive({ ...keys })
-		this.values = reactive({ ...keys })
-		this.validValues = reactive({ ...keys })
+		this.defaults = reactive({ ...keys }) as K
+		this.values = reactive({ ...keys }) as K
+		this.validValues = reactive({ ...keys }) as K
 		this.errors = Object.keys(keys)
 			.reduce((acc, value: keyof K) => {
 				acc[value] = ''
@@ -31,12 +47,25 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 			.every((valid) => valid)
 	}
 
+	get hasChanges () {
+		return Object.keys(this.defaults)
+			.some((key) => !Differ.equal(this.defaults[key], this.values[key]))
+	}
+
+	get entityId () {
+		return this.#entity.value
+	}
+
+	protected set entityId (v: string | null) {
+		this.#entity.value = v
+	}
+
 	set (property: keyof K, value: any, ignoreRules = false) {
 		const check = this.checkValidity(property, value)
 
 		this.values[property] = check.value as any
 		this.validValues[property] = check.valid || ignoreRules ? check.value as any : this.defaults[property]
-		this.errors[property] = Differ.equal(this.defaults[property], value) ? '' : check.errors.at(0) ?? ''
+		this.errors[property] = /* Differ.equal(this.defaults[property], value) ? '' : */ check.errors.at(0) ?? ''
 
 		return check.valid
 	}
@@ -49,22 +78,15 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	}
 
 	checkValidity (property: keyof K, value: any) {
-		return this.rules[property].parse(deepUnref(value))
+		return this.rules[property].parse(deepUnref(value), true)
 	}
 
 	reset () {
+		this.entityId = null
 		const reserved = (this.reserved ?? []).concat(['userId', 'user', 'userBio'])
 		Object.keys(this.defaults)
 			.filter((key) => !reserved.includes(key))
 			.forEach((key) => this.resetProp(key))
-	}
-
-	async uploadFile (path: string, file: UploadedFile) {
-		return await UploaderService.single(path, file)
-	}
-
-	async uploadFiles (path: string, files: UploadedFile[]) {
-		return await UploaderService.multiple(path, files)
 	}
 
 	resetProp (property: keyof K) {

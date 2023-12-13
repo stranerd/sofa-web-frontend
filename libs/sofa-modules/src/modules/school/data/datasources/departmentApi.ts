@@ -1,6 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, apiBase, listenOnSocket } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenOnSocket } from '@modules/core'
 import { DepartmentFromModel, DepartmentToModel } from '../models/department'
 import { DepartmentBaseDataSource } from './departmentBase'
+import { apiBase } from '@utils/environment'
 
 export class DepartmentApiDataSource implements DepartmentBaseDataSource {
 	private stranerdClient: HttpClient

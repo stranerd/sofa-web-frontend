@@ -1,8 +1,8 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse, Method } from 'axios'
-import { getTokens, saveTokens } from '@utils/tokens'
-import { apiBase } from '@utils/environment'
-import { AfterAuthUser } from '@modules/auth/domain/entities/auth'
+import { AfterAuthUser } from '@modules/auth'
 import { UploadedFile } from '@modules/core'
+import { apiBase } from '@utils/environment'
+import { getTokens, saveTokens } from '@utils/tokens'
+import axios, { AxiosError, AxiosHeaders, AxiosInstance, AxiosResponse, Method } from 'axios'
 
 export class NetworkError extends Error {
 	readonly statusCode: StatusCodes
@@ -24,11 +24,9 @@ export class HttpClient {
 			const isFromOurServer = this.client.defaults.baseURL?.startsWith(apiBase)
 			if (!isFromOurServer) return config
 			const { accessToken, refreshToken } = await getTokens()
-			config.headers = config.headers ?? {}
-			// @ts-ignore
-			if (accessToken) config.headers['Access-Token'] = accessToken
-			// @ts-ignore
-			if (refreshToken) config.headers['Refresh-Token'] = refreshToken
+			config.headers = new AxiosHeaders(config.headers)
+			if (accessToken) config.headers.set('Access-Token', accessToken)
+			if (refreshToken) config.headers.set('Refresh-Token', refreshToken)
 			return config
 		}, (error) => Promise.reject(error))
 	}

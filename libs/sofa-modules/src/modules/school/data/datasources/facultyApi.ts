@@ -1,4 +1,5 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, apiBase, listenOnSocket } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenOnSocket } from '@modules/core'
+import { apiBase } from '@utils/environment'
 import { FacultyFromModel, FacultyToModel } from '../models/faculty'
 import { FacultyBaseDataSource } from './facultyBase'
 

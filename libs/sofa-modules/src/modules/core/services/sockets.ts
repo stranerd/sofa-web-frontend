@@ -1,18 +1,9 @@
-import io, { Socket } from 'socket.io-client'
-import { getTokens } from '@utils/tokens'
-import { apiBase } from '@utils/environment'
 import { Listeners, StatusCodes } from '@modules/core'
+import { apiBase } from '@utils/environment'
+import { getTokens } from '@utils/tokens'
+import io, { Socket } from 'socket.io-client'
 
 let socket = null as Socket<any, any> | null
-const getSocketBaseAndPath = () => {
-	const splitOnDoubleSlash = apiBase.split('//')
-	const http = splitOnDoubleSlash[0]
-	const minusHttp = splitOnDoubleSlash[1]
-	const minusDomain = [null, ...minusHttp.split('/').slice(1), null].join('/')
-	const path = minusDomain + 'socket.io'
-	const domain = [http, minusHttp.split('/')[0]].join('//')
-	return { path, domain }
-}
 
 export enum EmitTypes {
 	created = 'created',
@@ -26,12 +17,10 @@ export async function listenOnSocket<Model> (channel: string, listeners: Listene
 	const { accessToken } = await getTokens()
 	// @ts-ignore
 	if (!socket || (!socket.auth.token && accessToken) || (accessToken && socket.auth.token !== accessToken)) {
-		socket = io(getSocketBaseAndPath().domain, {
-			path: getSocketBaseAndPath().path,
-			auth: {
-				token: accessToken,
-				app: 'stranerd'
-			}
+		const url = new URL(`${apiBase}/socket.io`)
+		socket = io(url.origin, {
+			path: url.pathname,
+			auth: { token: accessToken }
 		})
 	}
 

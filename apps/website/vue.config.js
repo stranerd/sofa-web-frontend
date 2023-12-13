@@ -14,8 +14,9 @@ module.exports = {
 	configureWebpack: {
 		resolve: {
 			alias: {
-				"@/*": path.resolve(__dirname, "./src"),
-				vue: path.resolve('./node_modules/vue')
+				"@": path.resolve(__dirname, "./src"),
+				"@modules": path.resolve('./node_modules/sofa-modules/src/modules'),
+				"@utils": path.resolve('./node_modules/sofa-modules/src/utils'),
 			},
 			extensions: ['.js', '.vue', '.json', '.ts']
 		}
