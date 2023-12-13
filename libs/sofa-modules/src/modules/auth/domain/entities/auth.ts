@@ -70,3 +70,5 @@ export type PasswordUpdate = {
 	oldPassword: string
 	password: string
 }
+
+export type AuthRoleType = AuthDetails['roles']

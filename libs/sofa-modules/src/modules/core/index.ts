@@ -7,4 +7,6 @@ export { BaseFactory } from './domain/factories/base'
 
 export { Conditions, HttpClient, NetworkError, QueryKeys, StatusCodes } from './services/http'
 export type { QueryParams, QueryResults } from './services/http'
-export { closeSocket, listenOnSocket, EmitTypes } from './services/sockets'
+export { EmitTypes, closeSocket, listenOnSocket } from './services/sockets'
+
+export type { Ratings } from './domain/types'
