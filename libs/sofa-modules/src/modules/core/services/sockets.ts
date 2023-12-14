@@ -37,9 +37,39 @@ export async function listenOnSocket<Model> (channel: string, listeners: Listene
 		try {
 			socket?.emit('leave', { channel: finalChannel }, (ret: SocketReturn) => onleave(ret))
 		} catch (e) {
-			return e
+			console.log(e)
 		}
 	}
+}
+
+export async function listenToOne<Model, Entity> (channel: string, listeners: Listeners<Entity>, mapper: (model: Model) => Entity) {
+	return listenOnSocket<Model>(channel, {
+		created: async (model) => await listeners.created(mapper(model)),
+		updated: async (model) => await listeners.updated(mapper(model)),
+		deleted: async (model) => await listeners.deleted(mapper(model)),
+	})
+}
+
+export async function listenToMany<Model, Entity> (
+	channel: string,
+	listeners: Listeners<Entity>,
+	mapper: (model: Model) => Entity,
+	matches: (entity: Entity) => boolean = () => true
+) {
+	return listenOnSocket<Model>(channel, {
+		created: async (model) => {
+			const entity = mapper(model)
+			if (matches(entity)) await listeners.created(entity)
+		},
+		updated: async (model) => {
+			const entity = mapper(model)
+			if (matches(entity)) await listeners.updated(entity)
+		},
+		deleted: async (model) => {
+			const entity = mapper(model)
+			if (matches(entity)) await listeners.deleted(entity)
+		}
+	})
 }
 
 export async function closeSocket () {

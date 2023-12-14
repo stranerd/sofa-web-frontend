@@ -1,4 +1,1 @@
-export enum MemberTypes {
-	teacher = 'teacher',
-	student = 'student'
-}
+export { MemberTypes } from './domain/types'
