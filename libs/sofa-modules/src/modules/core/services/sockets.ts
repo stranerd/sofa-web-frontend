@@ -11,6 +11,12 @@ export enum EmitTypes {
 	deleted = 'deleted'
 }
 
+export type Listeners<Model> = {
+	[EmitTypes.created]: (model: Model) => void | Promise<void>
+	[EmitTypes.updated]: (model: Model) => void | Promise<void>
+	[EmitTypes.deleted]: (model: Model) => void | Promise<void>
+}
+
 type SocketReturn = { code: StatusCodes, message: string, channel: string }
 
 export async function listenOnSocket<Model> (channel: string, listeners: Listeners<Model>, onleave: Function = () => {}) {
