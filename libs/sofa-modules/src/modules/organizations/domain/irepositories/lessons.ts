@@ -1,13 +1,15 @@
-import { QueryParams, QueryResults } from '@modules/core'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { LessonToModel } from '../../data/models/lessons'
 import { LessonEntity } from '../entities/lessons'
-import { LessonMembers } from '../types'
 
 export interface ILessonRepository {
 	add: (data: LessonToModel) => Promise<LessonEntity>
-	get: (condition: QueryParams) => Promise<QueryResults<LessonEntity>>
-	find: (id: string) => Promise<LessonEntity | null>
-	update: (organizationId: string, classId: string, id: string, data: Partial<LessonToModel>) => Promise<LessonEntity | null>
+	get: (organizationId: string, classId: string, condition: QueryParams) => Promise<QueryResults<LessonEntity>>
+	find: (organizationId: string, classId: string, id: string) => Promise<LessonEntity | null>
+	update: (organizationId: string, classId: string, id: string, data: LessonToModel) => Promise<LessonEntity | null>
 	delete: (organizationId: string, classId: string, id: string) => Promise<boolean>
-	manageUsers: (data: { organizationId: string, classId: string, id: string, userIds: string[], type: keyof LessonMembers, add: boolean }) => Promise<LessonEntity | null>
+	join: (data: { organizationId: string, classId: string, id: string, join: boolean }) => Promise<LessonEntity | null>
+	manageTeachers: (data: { organizationId: string, classId: string, id: string, userId: string, add: boolean }) => Promise<LessonEntity | null>
+	listenToOne: (organizationId: string, classId: string, id: string, listeners: Listeners<LessonEntity>) => Promise<() => void>
+	listenToMany: (organizationId: string, classId: string, query: QueryParams, listeners: Listeners<LessonEntity>, matches: (entity: LessonEntity) => boolean) => Promise<() => void>
 }

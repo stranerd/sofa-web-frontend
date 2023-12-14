@@ -9,5 +9,5 @@ export interface IClassRepository {
 	update: (organizationId: string, id: string, data: ClassToModel) => Promise<ClassEntity | null>
 	delete: (organizationId: string, id: string) => Promise<boolean>
 	listenToOne: (organizationId: string, id: string, listeners: Listeners<ClassEntity>) => Promise<() => void>
-	listenToMany: (organizationId: string, query: QueryParams, listeners: Listeners<ClassEntity>,  matches: (entity: ClassEntity) => boolean) => Promise<() => void>
+	listenToMany: (organizationId: string, query: QueryParams, listeners: Listeners<ClassEntity>, matches: (entity: ClassEntity) => boolean) => Promise<() => void>
 }

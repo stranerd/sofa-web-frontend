@@ -1,16 +1,17 @@
-import { appInstance } from '@utils/types'
-import { QueryParams } from 'equipped'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
+import { apiBase } from '@utils/environment'
 import { ILessonRepository } from '../../domain/irepositories/lessons'
-import { LessonMembers } from '../../domain/types'
 import { LessonMapper } from '../mappers/lessons'
-import { LessonToModel } from '../models/lessons'
-import { Lesson } from '../mongooseModels/lessons'
+import { LessonFromModel, LessonToModel } from '../models/lessons'
+import { LessonEntity } from '../../domain/entities/lessons'
 
 export class LessonRepository implements ILessonRepository {
 	private static instance: LessonRepository
+	private client: HttpClient
 	private mapper: LessonMapper
 
 	private constructor () {
+		this.client = new HttpClient(apiBase + '/organizations')
 		this.mapper = new LessonMapper()
 	}
 
@@ -19,48 +20,55 @@ export class LessonRepository implements ILessonRepository {
 		return LessonRepository.instance
 	}
 
-	async get (query: QueryParams) {
-		const data = await appInstance.dbs.mongo.query(Lesson, query)
+	async get (organizationId: string, classId: string, query: QueryParams) {
+		const d = await this.client.get<QueryParams, QueryResults<LessonFromModel>>(`/${organizationId}/classes/${classId}/lessons`, query)
 
 		return {
-			...data,
-			results: data.results.map((r) => this.mapper.mapFrom(r)!)
+			...d,
+			results: d.results.map((r) => this.mapper.mapFrom(r)!)
 		}
 	}
 
 	async add (data: LessonToModel) {
-		const lesson = await new Lesson(data).save()
-		return this.mapper.mapFrom(lesson)!
+		const d = await this.client.post<LessonToModel, LessonFromModel>(`/${data.organizationId}/classes/${data.classId}/lessons`, data)
+		return this.mapper.mapFrom(d)!
 	}
 
-	async find (id: string) {
-		const lesson = await Lesson.findById(id)
-		return this.mapper.mapFrom(lesson)
+	async update (organizationId: string, classId: string, id: string, data: LessonToModel) {
+		const d = await this.client.put<LessonToModel, LessonFromModel>(`/${organizationId}/classes/${classId}/lessons/${id}`, data)
+		return this.mapper.mapFrom(d)!
 	}
 
-	async update (organizationId: string, classId: string, id: string, data: Partial<LessonToModel>) {
-		const lesson = await Lesson.findOneAndUpdate({ _id: id, organizationId, classId }, { $set: data }, { new: true })
-		return this.mapper.mapFrom(lesson)
+	async find (organizationId: string, classId: string, id: string) {
+		const data = await this.client.get<QueryParams, LessonFromModel | null>(`/${organizationId}/classes/${classId}/lessons/${id}`, {})
+		return this.mapper.mapFrom(data)
 	}
 
 	async delete (organizationId: string, classId: string, id: string) {
-		const lesson = await Lesson.findOneAndDelete({ _id: id, organizationId, classId })
-		return !!lesson
+		return await this.client.delete<{}, boolean>(`/${organizationId}/classes/${classId}/lessons/${id}`, {})
 	}
 
-	async deleteClassLessons (organizationId: string, classId: string) {
-		const lessons = await Lesson.deleteMany({ organizationId, classId })
-		return lessons.acknowledged
+	async listenToOne (organizationId: string, classId: string, id: string, listeners: Listeners<LessonEntity>) {
+		const listener = listenToOne(`organizations/${organizationId}/classes/${classId}/lessons${id}`, listeners, this.mapper.mapFrom)
+		const model = await this.find(organizationId, classId, id)
+		if (model) await listeners.updated(model)
+		return listener
 	}
 
-	async manageUsers ({ organizationId, classId, id, userIds, type, add }: {
-		organizationId: string, classId: string, id: string, userIds: string[], type: keyof LessonMembers, add: boolean
-	}) {
-		const lesson = await Lesson.findOneAndUpdate(
-			{ _id: id, organizationId, classId },
-			{ [add ? '$addToSet' : '$pull']: { [`users.${type}`]: { [add ? '$each' : '$in']: userIds } } },
-			{ new: true }
-		)
-		return this.mapper.mapFrom(lesson)
+	async listenToMany (organizationId: string, classId: string, query: QueryParams, listeners: Listeners<LessonEntity>, matches: (entity: LessonEntity) => boolean) {
+		const listener = listenToMany(`organizations/${organizationId}/classes/${classId}/lessons`, listeners, this.mapper.mapFrom, matches)
+		const models = await this.get(organizationId, classId, query)
+		await Promise.all(models.results.map(listeners.updated))
+		return listener
+	}
+
+	async join (data: { organizationId: string, classId: string, id: string, join: boolean }) {
+		const d = await this.client.post<{ join: boolean }, LessonFromModel>(`/${data.organizationId}/classes/${data.classId}/lessons/${data.id}/members/join`, { join: data.join })
+		return this.mapper.mapFrom(d)!
+	}
+
+	async manageTeachers (data: { organizationId: string, classId: string, id: string, userId: string, add: boolean }) {
+		const d = await this.client.post<{ userId: string, add: boolean }, LessonFromModel>(`/${data.organizationId}/classes/${data.classId}/lessons/${data.id}/members/teachers`, { userId: data.userId, add: data.add })
+		return this.mapper.mapFrom(d)!
 	}
 }
