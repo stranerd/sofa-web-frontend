@@ -67,13 +67,6 @@
 
 <script lang="ts" setup>
 import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue"
-import {
-  setSchoolsOption,
-  updatePhoneForm,
-  updateUserEducationForm,
-  updateVerificationForm,
-  userSocials,
-} from "@/composables/profile"
 import { Logic } from "sofa-logic"
 import {
   SofaButton,
@@ -84,65 +77,18 @@ import {
   SofaTextField,
   SofaTextarea,
 } from "sofa-ui-components"
-import { onMounted, ref, watch } from "vue"
+import { ref, watch } from "vue"
 import AccountSetup from "../onboarding/AccountSetup.vue"
 import { useProfileUpdate } from '@/composables/auth/profile'
 import { useAuth } from '@/composables/auth/auth'
 
-    const { auth, user, userType } = useAuth()
-    const profileImageUrl = ref(auth.value?.photo?.link ?? '')
-    const { factory, updateProfile } = useProfileUpdate()
+const { auth, userType } = useAuth()
+const profileImageUrl = ref(auth.value?.photo?.link ?? '')
+const { factory, updateProfile } = useProfileUpdate()
 
-    const preventUpdate = ref(true)
-
-    const UserVerification = ref(Logic.Users.Verifications?.results[0])
-
-    const setDefaultValues = () => {
-      updatePhoneForm.phone = auth.value?.phone
-
-      if (user.value.type?.type) {
-        updateUserEducationForm.type = user.value.type?.type
-
-        if (userType.value.isStudent) {
-          updateUserEducationForm.level = user.value.type.school.type
-          if (user.value.type.school.type === 'college') {
-            updateUserEducationForm.institution = user.value.type.school.institutionId
-            updateUserEducationForm.department = user.value.type.school.departmentId
-            updateUserEducationForm.faculty = user.value.type.school.facultyId
-          } else if (user.value.type.school.type === 'aspirant') {
-            updateUserEducationForm.exams = user.value.type.school.exams
-          }
-        } else if (userType.value.isTeacher) {
-          updateUserEducationForm.tutorSchool = user.value.type.school.toString()
-        }
-      }
-
-      if (UserVerification.value) {
-        updateVerificationForm.socials = UserVerification.value.socials
-      }
-    }
-
-    onMounted(() => {
-      setDefaultValues()
-      setSchoolsOption()
-      setTimeout(() => {
-        preventUpdate.value = false
-      }, 3000)
-    })
-
-    watch(factory.values, () => {
-      if (!preventUpdate.value) Logic.Common
-        .debounce(() => {
-          updateProfile(true)
-        }, 1000)
-    })
-
-    watch(userSocials, () => {
-      Logic.Common.debounce(() => {
-        Logic.Users.UpdateUserSocialForm = {
-          socials: userSocials.socials.filter((item) => item.link),
-        }
-        Logic.Users.UpdateUserSocial()
-      }, 1000)
-    })
+watch(factory.values, () => {
+  Logic.Common.debounce(() => {
+    updateProfile(true)
+  }, 1000)
+})
 </script>

@@ -41,12 +41,7 @@ export default class Payment extends Common {
   public initialPayment = (amount = 0, type = 'newCard') => {
     Logic.Common.showLoading()
     $api.payment.transaction
-      .post(null, {
-        data: {
-          type,
-          amount: `${amount}`,
-        },
-      })
+      .post(null, { amount, data: { type } })
       .then((response) => {
         Logic.Common.hideLoading()
         const transId = response.data.id

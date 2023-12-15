@@ -393,7 +393,7 @@ export default defineComponent({
     const setTransactions = () => {
       transactions.value.length = 0
       AllTransactions.value.results.forEach((transaction) => {
-        transactions.value.push({
+        if (transaction.data.type !== 'newCard') transactions.value.push({
           title: transaction.title,
           type: transaction.amount > 0 ? "credit" : "debit",
           date: `${Logic.Common.fomartDate(transaction.createdAt, "MMM D")}`,
