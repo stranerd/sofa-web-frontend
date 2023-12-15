@@ -139,8 +139,8 @@
             </sofa-text-field>
 
             <sofa-text-field v-if="modalSetup.type == 'set_Join_code'"
-              :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
-              type="password" :name="'Join code'" ref="join_code" :placeholder="'Set Join Code'"
+              :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" padding="p-3"
+              :name="'Join code'" ref="join_code" :placeholder="'Set Join Code'" type="text"
               :borderColor="'border-transparent'" :rules="[
                 Logic.Form.RequiredRule,
                 Logic.Form.customValidator(
