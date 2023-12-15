@@ -17,15 +17,11 @@ export class SchedulesUseCase {
 		return await this.repository.delete(data.organizationId, data.classId, data.id)
 	}
 
-	async find (id: string) {
-		return await this.repository.find(id)
+	async find (organizationId: string, classId: string, id: string) {
+		return await this.repository.find(organizationId, classId, id)
 	}
 
-	async get (query: QueryParams) {
-		return await this.repository.get(query)
-	}
-
-	async update (input: { organizationId: string, classId: string, id: string, data: Partial<ScheduleToModel> }) {
-		return await this.repository.update(input.organizationId, input.classId, input.id, input.data)
+	async get (organizationId: string, classId: string, query: QueryParams) {
+		return await this.repository.get(organizationId, classId, query)
 	}
 }

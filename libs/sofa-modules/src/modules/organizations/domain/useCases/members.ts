@@ -1,6 +1,7 @@
-import { QueryParams } from '@modules/core'
+import { Listeners, QueryParams } from '@modules/core'
 import { IMemberRepository } from '../irepositories/members'
-import { EmbeddedUser, MemberTypes } from '../types'
+import { MemberTypes } from '../types'
+import { MemberEntity } from '../entities/members'
 
 export class MembersUseCase {
 	repository: IMemberRepository
@@ -9,19 +10,19 @@ export class MembersUseCase {
 		this.repository = repo
 	}
 
-	async find (id: string) {
-		return await this.repository.find(id)
+	async find (organizationId, email: string) {
+		return await this.repository.find(organizationId, email)
 	}
 
-	async get (input: QueryParams) {
-		return await this.repository.get(input)
+	async get (organizationId: string, input: QueryParams) {
+		return await this.repository.get(organizationId, input)
 	}
 
-	async add (input: { organizationId: string, members: { email: string, user: EmbeddedUser | null, type: MemberTypes }[] }) {
+	async add (input: { organizationId: string, emails: string[], type: MemberTypes }) {
 		return await this.repository.add(input)
 	}
 
-	async request (data: { email: string, user: EmbeddedUser | null, type: MemberTypes, organizationId: string, withCode: boolean }) {
+	async request (data: { type: MemberTypes, organizationId: string, code: string }) {
 		return await this.repository.request(data)
 	}
 
@@ -31,5 +32,19 @@ export class MembersUseCase {
 
 	async remove (data: { organizationId: string, email: string, type: MemberTypes }) {
 		return await this.repository.remove(data)
+	}
+
+	async getAllMembers (organizationId: string) {
+		return await this.repository.get(organizationId, {
+			all: true
+		})
+	}
+
+	async listenToAllMembers (organizationId: string, listener: Listeners<MemberEntity>) {
+		return await this.repository.listenToMany(organizationId,
+			{ all: true },
+			listener,
+			(entity) => true
+		)
 	}
 }

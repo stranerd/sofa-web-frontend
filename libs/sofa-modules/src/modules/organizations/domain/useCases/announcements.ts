@@ -13,12 +13,12 @@ export class AnnouncementsUseCase {
 		return await this.repository.add(data)
 	}
 
-	async find (id: string) {
-		return await this.repository.find(id)
+	async find (organizationId: string, classId: string, id: string) {
+		return await this.repository.find(organizationId, classId, id)
 	}
 
-	async get (query: QueryParams) {
-		return await this.repository.get(query)
+	async get (organizationId: string, classId: string, query: QueryParams) {
+		return await this.repository.get(organizationId, classId, query)
 	}
 
 	async markRead (input: { organizationId: string, classId: string, userId: string }) {

@@ -17,15 +17,11 @@ export class ClassesUseCase {
 		return await this.repository.delete(data.organizationId, data.id)
 	}
 
-	async find (classId: string) {
-		return await this.repository.find(classId)
+	async find (organizationId: string, classId: string) {
+		return await this.repository.find(organizationId, classId)
 	}
 
-	async get (query: QueryParams) {
-		return await this.repository.get(query)
-	}
-
-	async update (input: { id: string, organizationId: string, data: Partial<ClassToModel> }) {
-		return await this.repository.update(input.organizationId, input.id, input.data)
+	async get (organizationId: string, query: QueryParams) {
+		return await this.repository.get(organizationId, query)
 	}
 }

@@ -8,7 +8,7 @@
 			</div>
 
 			<div class="w-full flex flex-col gap-3 px-4 h-full overflow-y-auto">
-				<slot :user="user!" />
+				<slot :user="user!" :extras="extras" />
 			</div>
 		</div>
 	</sub-page-layout>
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :user="user!" />
+				<slot :user="user!" :extras="extras" />
 			</div>
 		</template>
 
@@ -78,18 +78,10 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
 import { Logic } from "sofa-logic"
+import { MemberTypes } from "@modules/organizations"
 import { SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { computed, defineProps } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 import { useMeta } from "vue-meta"
-
-const { user } = useAuth()
-
-const options = [
-	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
-	{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
-	{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
-	{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
-]
 
 const props = defineProps({
 	title: {
@@ -114,4 +106,20 @@ const rightCommands = [
 	{ label: 'Create a course', action: () => null },
 	{ label: 'Create a class', action: () => null },
 ]
+
+const { id, user } = useAuth()
+
+const options = [
+	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
+	{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
+	{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
+	{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
+]
+
+const addModalType = ref<MemberTypes | null>(null)
+
+const extras = computed(() => ({
+	isAdmin: user.value?.id === id.value,
+	openAddModal: (type: MemberTypes) => addModalType.value = type,
+}))
 </script>

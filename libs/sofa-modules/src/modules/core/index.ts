@@ -1,4 +1,3 @@
-export type { Listeners } from './data/datasources/base'
 export { UploadedFile, parseMedia } from './data/models/base'
 export type { Media } from './data/models/base'
 
@@ -7,6 +6,6 @@ export { BaseFactory } from './domain/factories/base'
 
 export { Conditions, HttpClient, NetworkError, QueryKeys, StatusCodes } from './services/http'
 export type { QueryParams, QueryResults } from './services/http'
-export { EmitTypes, closeSocket, listenOnSocket, listenToMany, listenToOne } from './services/sockets'
+export { Listeners, EmitTypes, closeSocket, listenOnSocket, listenToMany, listenToOne } from './services/sockets'
 
 export type { Ratings } from './domain/types'
