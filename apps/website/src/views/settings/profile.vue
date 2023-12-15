@@ -15,18 +15,6 @@ export default defineComponent({
     SettingsLayout,
     SettingProfile,
   },
-  middlewares: {
-    fetchRules: [
-      {
-        domain: "Users",
-        property: "UserProfile",
-        method: "GetUserProfile",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: false,
-      },
-    ],
-  },
   name: "ProfileSettingPage",
   setup () {
     useMeta({

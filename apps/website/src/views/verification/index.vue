@@ -44,21 +44,19 @@
 
         <sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'First name'" ref="name.first"
           :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
-          :defaultValue="UserProfile.bio.name.first">
+          :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first">
           <template v-slot:title> First Name </template>
         </sofa-text-field>
 
         <sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'Last name'" ref="name.last"
           :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
-          :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
-          :defaultValue="UserProfile.bio.name.last">
+          :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last">
           <template v-slot:title> Last Name </template>
         </sofa-text-field>
 
         <sofa-textarea :placeholder="'Description of yourself'" :hasTitle="true" :name="'Bio'" ref="description"
           :text-area-style="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor resize-none'"
-          :rules="[FormValidations.RequiredRule]" v-if="UserProfile" v-model="updateProfileForm.description">
+          :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.description">
           <template v-slot:title> Bio </template>
         </sofa-textarea>
       </div>
@@ -204,6 +202,7 @@ import {
 import { SelectOption } from "sofa-logic"
 import { ContentDetails, extractContent } from "@/composables/marketplace"
 import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue"
+import { useAuth } from '@/composables/auth/auth'
 
 export default defineComponent({
   components: {
@@ -222,14 +221,6 @@ export default defineComponent({
   },
   middlewares: {
     fetchRules: [
-      {
-        domain: "Users",
-        property: "UserProfile",
-        method: "GetUserProfile",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: true,
-      },
       {
         domain: "Users",
         property: "Verifications",
@@ -308,7 +299,8 @@ export default defineComponent({
       title: "Verification application",
     })
 
-    const UserProfile = ref(Logic.Users.UserProfile)
+    const { user } = useAuth()
+
     const AllQuzzies = ref(Logic.Study.AllQuzzies)
     const AllCourses = ref(Logic.Study.AllCourses)
 
@@ -328,10 +320,12 @@ export default defineComponent({
     const profileImageUrl = ref("")
 
     const setDefaultValues = () => {
-      updateProfileForm.description = UserProfile.value.bio.description
-      updateProfileForm.name.first = UserProfile.value.bio.name.first
-      updateProfileForm.name.last = UserProfile.value.bio.name.last
-      profileImageUrl.value = UserProfile.value.bio.photo?.link
+      if (user.value) {
+        updateProfileForm.description = user.value.bio.description
+        updateProfileForm.name.first = user.value.bio.name.first
+        updateProfileForm.name.last = user.value.bio.name.last
+        profileImageUrl.value = user.value.bio.photo?.link
+      }
 
       if (UserVerification.value) {
         UserVerification.value.content.courses.forEach((courseId) => {
@@ -417,13 +411,8 @@ export default defineComponent({
 
     onMounted(() => {
       scrollToTop()
-      // Logic.Users.watchProperty("UserProfile", UserProfile);
       setMaterials()
       setMaterialsOptions()
-      setDefaultValues()
-    })
-
-    watch(UserProfile, () => {
       setDefaultValues()
     })
 
@@ -438,7 +427,6 @@ export default defineComponent({
       courseContents,
       updateProfileForm,
       FormValidations,
-      UserProfile,
       profileImageUrl,
       updateVerificationForm,
       selectedMaterialList,

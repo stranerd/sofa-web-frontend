@@ -15,9 +15,6 @@ export default defineComponent({
     SettingsLayout,
     SettingSecurity
   },
-  middlewares: {
-    fetchRules: [],
-  },
   name: "SecuritySettingPage",
   setup () {
     useMeta({

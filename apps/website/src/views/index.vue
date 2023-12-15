@@ -296,24 +296,6 @@ export default defineComponent({
     SofaEmptyState,
     ChatList,
   },
-  middlewares: {
-    fetchRules: [
-      {
-        domain: "Users",
-        property: "AllorganizationMembers",
-        method: "GetOrganizationMembers",
-        params: [
-          Logic.Auth.AuthUser?.id,
-          {
-            limit: 10,
-          },
-        ],
-        shouldSkip: () => Logic.Users.getUserType() !== "organization",
-        requireAuth: true,
-        silentUpdate: false,
-      }
-    ]
-  },
   name: "IndexPage",
   beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => useAuth().userType.value.isOrg ? '/organization/dashboard' : undefined]),
   setup () {

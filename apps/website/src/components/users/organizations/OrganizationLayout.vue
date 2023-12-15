@@ -42,6 +42,21 @@
 					</router-link>
 				</div>
 			</div>
+
+			<div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-3">
+				<div class="w-full flex gap-2 items-center">
+					<SofaNormalText class="!font-bold" content="Get verified" />
+					<SofaIcon name="verify" class="h-[16px]" />
+				</div>
+				<SofaNormalText>
+					Join the elite that create the highest quality study materials, reach
+					more audience, and sell on marketplace.
+				</SofaNormalText>
+
+				<SofaButton :hasDoubleLayer="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification')">
+					Apply here
+				</SofaButton>
+			</div>
 		</template>
 
 		<template v-slot:middle-session>
@@ -79,7 +94,7 @@
 import { useAuth } from '@/composables/auth/auth'
 import { Logic } from "sofa-logic"
 import { MemberTypes } from "@modules/organizations"
-import { SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton } from "sofa-ui-components"
 import { computed, defineProps, ref } from 'vue'
 import { useMeta } from "vue-meta"
 
@@ -104,7 +119,7 @@ const rightCommands = [
 	{ label: 'Add a teacher', action: () => null },
 	{ label: 'Create a quiz', action: () => null },
 	{ label: 'Create a course', action: () => null },
-	{ label: 'Create a class', action: () => null },
+	// TODO: remove after adding classes { label: 'Create a class', action: () => null },
 ]
 
 const { id, user } = useAuth()

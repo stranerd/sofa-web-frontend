@@ -91,6 +91,7 @@ import { FormValidations } from "@/composables"
 
 import { Logic } from "sofa-logic"
 import { CustomizeAI, customizeAIForm } from "@/composables/profile"
+import { useAuth } from '@/composables/auth/auth'
 
 export default defineComponent({
   components: {
@@ -116,25 +117,18 @@ export default defineComponent({
   setup () {
     const profileImageUrl = ref("")
 
+    const { user } = useAuth()
     const formComp = ref<any>()
-
-    const UserProfile = ref(Logic.Users.UserProfile)
 
     const handleCustomizeBot = () => {
       CustomizeAI(formComp.value)
     }
 
     onMounted(() => {
-      customizeAIForm.name = UserProfile.value.ai.name
-      customizeAIForm.tagline = UserProfile.value.ai.tagline
-
-      if (UserProfile.value.ai?.photo) {
-        profileImageUrl.value = UserProfile.value.ai.photo.link
-      } else {
-        profileImageUrl.value = "/images/icons/robot.svg"
-      }
-
-      Logic.Users.watchProperty("UserProfile", UserProfile)
+      if (!user.value) return
+      customizeAIForm.name = user.value.ai.name
+      customizeAIForm.tagline = user.value.ai.tagline
+      profileImageUrl.value = user.value.ai?.photo?.link ?? '/images/icons/robot.svg'
     })
 
     return {

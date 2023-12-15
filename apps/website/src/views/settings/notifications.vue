@@ -18,9 +18,6 @@ export default defineComponent({
   components: {
     SettingsLayout,
   },
-  middlewares: {
-    fetchRules: [],
-  },
   name: "NotificationSettingPage",
   setup () {
     useMeta({

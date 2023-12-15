@@ -15,9 +15,6 @@ export default defineComponent({
     SettingsLayout,
     SettingContact,
   },
-  middlewares: {
-    fetchRules: [],
-  },
   name: "ContactUsSettingPage",
   setup () {
     useMeta({

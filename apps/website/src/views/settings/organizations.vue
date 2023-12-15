@@ -15,9 +15,6 @@ export default defineComponent({
     SettingsLayout,
     SettingOrganizations,
   },
-  middlewares: {
-    fetchRules: [],
-  },
   name: "OrganizationsSettingPage",
   setup () {
     useMeta({

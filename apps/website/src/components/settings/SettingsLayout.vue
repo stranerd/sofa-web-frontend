@@ -67,7 +67,7 @@ defineProps({
 	}
 })
 
-const { signout, deleteAccount } = useAuth()
+const { userType, auth, signout, deleteAccount } = useAuth()
 
 const settingOptions = [
 	{
@@ -79,24 +79,19 @@ const settingOptions = [
 				show: () => true,
 			},
 			{
-				title: "Students",
-				to: "/settings/students",
-				show: () => Logic.Users.UserProfile?.type?.type == "organization"
-			},
-			{
 				title: "Organizations",
 				to: "/settings/organizations",
-				show: () => Logic.Users.UserProfile?.type?.type == "student"
+				show: () => !userType.value.isOrg
 			},
 			{
 				title: "Verification",
 				to: "/verification",
-				show: () => !Logic.Users.UserProfile?.roles?.isVerified,
+				show: () => !auth.value?.roles.isVerified,
 			},
 			{
 				title: "Tutor Application",
 				to: "/verification/tutor",
-				show: () => Logic.Users.UserProfile?.type.type == "teacher",
+				show: () => userType.value.isTeacher,
 			},
 		],
 	},

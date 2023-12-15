@@ -49,12 +49,12 @@
           <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'First name'" ref="name.first"
             :placeholder="'First Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
-            :defaultValue="UserProfile.bio.name.first" :borderColor="'border-transparent'" />
+            :borderColor="'border-transparent'" />
 
           <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
             :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Last name'" ref="name.last"
             :placeholder="'Last Name'" :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
-            :defaultValue="UserProfile.bio.name.last" :borderColor="'border-transparent'" />
+            :borderColor="'border-transparent'" />
 
           <sofa-textarea :hasTitle="false"
             :textAreaStyle="'h-[90px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
@@ -175,6 +175,7 @@
 
 <script lang="ts">
 import { FormValidations } from "@/composables"
+import { useAuth } from '@/composables/auth/auth'
 import { allTopics, getTopics } from "@/composables/course"
 import {
   Countries,
@@ -219,14 +220,6 @@ export default defineComponent({
     fetchRules: [
       {
         domain: "Users",
-        property: "UserProfile",
-        method: "GetUserProfile",
-        params: [],
-        requireAuth: true,
-        ignoreProperty: true,
-      },
-      {
-        domain: "Users",
         property: "AllTutorRequests",
         method: "GetTutorRequests",
         params: [
@@ -257,10 +250,10 @@ export default defineComponent({
       title: "Become a tutor",
     })
 
+    const { user } = useAuth()
     const currentStep = ref("profile")
 
     const profileImageUrl = ref("")
-    const UserProfile = ref(Logic.Users.UserProfile)
     const SingleTutorRequest = ref(Logic.Users.SingleTutorRequest)
     const SingleQuiz = ref(Logic.Study.SingleQuiz)
     const TestQuiz = ref()
@@ -268,12 +261,13 @@ export default defineComponent({
     const selectedTopic = ref("")
 
     const setDefault = () => {
-      profileImageUrl.value = UserProfile.value.bio.photo?.link || null
-      updateProfileForm.description = UserProfile.value.bio.description
-      updateProfileForm.name = UserProfile.value.bio.name
-      if (UserProfile.value.location) {
-        updateProfileForm.state = UserProfile.value.location.state
-        updateProfileForm.country = UserProfile.value.location.country
+      if (!user.value) return
+      profileImageUrl.value = user.value.bio.photo?.link || null
+      updateProfileForm.description = user.value.bio.description
+      updateProfileForm.name = user.value.bio.name
+      if (user.value.location) {
+        updateProfileForm.state = user.value.location.state
+        updateProfileForm.country = user.value.location.country
       }
     }
 
@@ -282,7 +276,6 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      Logic.Users.watchProperty("UserProfile", UserProfile)
       Logic.Users.watchProperty("Countries", Countries)
       Logic.Study.watchProperty("SingleQuiz", SingleQuiz)
       if (!Countries.value) {
@@ -290,9 +283,7 @@ export default defineComponent({
           setCountry()
         })
       }
-      if (UserProfile.value) {
-        setDefault()
-      }
+      setDefault()
       getTopics(true)
     })
 
@@ -325,7 +316,6 @@ export default defineComponent({
     }
 
     return {
-      UserProfile,
       Logic,
       profileImageUrl,
       updateProfileForm,
