@@ -72,15 +72,7 @@ import SocialMediaUpdate from "@/components/onboarding/SocialMediaUpdate.vue"
 import { FormValidations } from "@/composables"
 import {
   UpdateProfile,
-  educationOptions,
-  setDepartmentsOptions,
-  setFacultiesOptions,
-  setSchoolsOption,
-  updatePhoneForm,
   updateProfileForm,
-  updateUserEducationForm,
-  updateVerificationForm,
-  userSocials,
 } from "@/composables/profile"
 import { Logic } from "sofa-logic"
 import {
@@ -113,54 +105,18 @@ export default defineComponent({
     const AuthUser = Logic.Auth.AuthUser
     const UserProfile = ref(Logic.Users.UserProfile)
 
-    const userPhoneNumber = ref(
-      AuthUser.phone ? AuthUser.phone?.code + "" + AuthUser.phone?.number : ""
-    )
-
     const preventUpdate = ref(true)
-
-    const UserVerification = ref(Logic.Users.Verifications?.results[0])
 
     const setDefaultValues = () => {
       updateProfileForm.description = UserProfile.value.bio.description
       updateProfileForm.name.first = UserProfile.value.bio.name.first
       updateProfileForm.name.last = UserProfile.value.bio.name.last
       profileImageUrl.value = UserProfile.value.bio.photo?.link
-
-      updatePhoneForm.phone.code = AuthUser?.phone?.code
-      updatePhoneForm.phone.number = AuthUser?.phone?.number
-
-      if (UserProfile.value.type?.type) {
-        updateUserEducationForm.type = UserProfile.value.type?.type
-
-        if (UserProfile.value.type?.type == "student") {
-          updateUserEducationForm.level = UserProfile.value.type.school.type
-          if (UserProfile.value.type.school.type === 'college') {
-            updateUserEducationForm.institution = UserProfile.value.type.school.institutionId
-            updateUserEducationForm.department = UserProfile.value.type.school.departmentId
-            updateUserEducationForm.faculty = UserProfile.value.type.school.facultyId
-          } else if (UserProfile.value.type.school.type === 'aspirant') {
-            updateUserEducationForm.exams = UserProfile.value.type.school.exams
-          }
-        } else if (UserProfile.value.type?.type === 'teacher') {
-          updateUserEducationForm.tutorSchool = UserProfile.value.type.school.toString()
-        }
-      }
-
-      if (UserVerification.value) {
-        updateVerificationForm.socials = UserVerification.value.socials
-      }
-    }
-
-    const handleSchoolSelection = (option: any) => {
-      updateUserEducationForm.institution = option.extraId
-      setFacultiesOptions()
     }
 
     onMounted(() => {
       Logic.Users.watchProperty("UserProfile", UserProfile)
       setDefaultValues()
-      setSchoolsOption()
       setTimeout(() => {
         preventUpdate.value = false
       }, 3000)
@@ -174,31 +130,13 @@ export default defineComponent({
       }
     })
 
-    watch(userSocials, () => {
-      Logic.Common.debounce(() => {
-        Logic.Users.UpdateUserSocialForm = {
-          socials: userSocials.socials.filter((item) => item.link),
-        }
-        Logic.Users.UpdateUserSocial()
-      }, 1000)
-    })
-
     return {
       profileImageUrl,
       FormValidations,
       updateProfileForm,
       AuthUser,
-      userPhoneNumber,
-      updateUserEducationForm,
-      educationOptions,
-      updateVerificationForm,
-      UserVerification,
       UserProfile,
-      Logic,
-      userSocials,
-      setSchoolsOption,
-      handleSchoolSelection,
-      setDepartmentsOptions,
+      Logic
     }
   },
 })

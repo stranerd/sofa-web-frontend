@@ -53,7 +53,14 @@
 
         <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
           :padding="'md:p-4 p-3'" type="text" :name="'organization Code'" ref="organization_code"
-          :placeholder="'Set organization code'" :rules="[FormValidations.RequiredRule]"
+          :placeholder="'Set organization code'"
+          :rules="[
+            FormValidations.RequiredRule,
+            FormValidations.customValidator(
+              updateProfileForm.organization_code.length >= 6,
+              'Join code must be more than 5 characters'
+            ),
+          ]"
           v-model="updateProfileForm.organization_code" :borderColor="'border-transparent'"
           :default-value="updateProfileForm.organization_code" v-if="currentAccountType == 'organization'" />
 

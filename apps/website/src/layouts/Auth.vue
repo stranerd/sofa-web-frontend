@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex fixed top-0 left-0 bg-white items-center justify-center">
-    <div class="bg-white w-full lg:w-[45%] mdlg:w-[50%] h-full flex flex-col items-center justify-center md:pt-9 pt-0">
-      <div class="w-full h-full flex-grow flex flex-col justify-start relative md:px-9 md:py-5 p-4">
+    <div class="bg-white w-full lg:w-[45%] mdlg:w-[50%] h-full flex flex-col items-center justify-center">
+      <div class="w-full h-full flex-grow flex flex-col justify-start relative md:p-8 p-4">
         <div class="w-full flex gap-4 items-center">
           <a @click="Logic.Common.goBack()">
             <sofa-icon :customClass="'md:h-[26px] h-[20px] cursor-pointer'" :name="'back-arrow'" />
