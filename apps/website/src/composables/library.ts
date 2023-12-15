@@ -139,7 +139,7 @@ const openQuiz = <T extends Pick<ResourceType, 'status' | 'user' | 'id'>>(activi
     activity.status == 'draft' &&
     activity.user.id === Logic.Users.UserProfile?.id
   )
-    return Logic.Common.GoToRoute(`/quiz/create?id=${activity.id}`)
+    return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
   selectedQuizId.value = activity.id
   showStudyMode.value = true
   selectedQuizMode.value = ''
@@ -203,7 +203,7 @@ const moreOptions = reactive([
       }
 
       if (selectedItem.value?.type == 'quiz') {
-        Logic.Common.GoToRoute(`/quiz/create?id=${selectedItem.value?.id}`)
+        Logic.Common.GoToRoute(`/quiz/${selectedItem.value?.id}/edit`)
       }
     },
   },

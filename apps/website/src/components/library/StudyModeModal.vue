@@ -99,7 +99,7 @@ export default defineComponent({
 	setup () {
 		const goToEdit = () => {
 			showStudyMode.value = false
-			Logic.Common.GoToRoute(`/quiz/create?id=${selectedQuizId}`)
+			Logic.Common.GoToRoute(`/quiz/${selectedQuizId}/edit`)
 		}
 
 		return {
