@@ -87,6 +87,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	}
 
 	const reorderQuestions = async (questions: string[]) => {
+		if (store[id].quiz.value?.questions.length !== questions.length) return
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)

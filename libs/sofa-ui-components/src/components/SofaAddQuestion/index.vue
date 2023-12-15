@@ -111,6 +111,6 @@ watch(questionsRef, () => {
 
 watch(reactiveQuestions, () => {
   const ids = reactiveQuestions.map((q) => q.id)
-  if (canEmit.value && !Logic.Differ.equal(props.quiz.questions, ids)) emits('reorderQuestions', reactiveQuestions.map((q) => q.id))
+  if (canEmit.value && !Logic.Differ.equal(props.quiz.questions, ids)) emits('reorderQuestions', ids)
 })
 </script>
