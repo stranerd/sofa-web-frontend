@@ -4,7 +4,7 @@ import { ClassFromModel, ClassToModel } from '../models/classes'
 export class ClassMapper {
 	mapFrom (param: ClassFromModel | null) {
 		return !param ? null : new ClassEntity({
-			id: param._id.toString(),
+			id: param.id,
 			organizationId: param.organizationId,
 			title: param.title,
 			description: param.description,

@@ -1,7 +1,7 @@
 import { AnnouncementFilter, EmbeddedUser } from '../../domain/types'
 
 export interface AnnouncementFromModel extends AnnouncementToModel {
-	_id: string
+	id: string
 	readAt: Record<string, number>
 	createdAt: number
 	updatedAt: number

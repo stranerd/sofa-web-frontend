@@ -1,8 +1,8 @@
 import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { Ref, computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, Ref, ref } from 'vue'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 
 const store = {} as Record<string, {
 	members: MemberEntity[]
@@ -57,4 +57,43 @@ export const useOrganizationMembers = (id: string) => {
 	const students = computed(() => store[id].members.filter((m) => m.type === MemberTypes.student))
 
 	return { ...store[id], teachers, students }
+}
+
+export const useManageOrganizationMembers = (id: string) => {
+	const { error, setError } = useErrorHandler()
+	const { loading, setLoading } = useLoadingHandler()
+	const { message, setMessage } = useSuccessHandler()
+
+	const addMembersEmails = ref('')
+
+	const addMembers = async (type: MemberTypes) => {
+		let succeeded = false
+		const emails = addMembersEmails.value.split(',')
+			.map((e) => e.trim())
+			.filter((e) => Logic.v.string().email().parse(e).valid)
+		if (emails.length === 0) {
+			await setError('no valid emails found in list')
+			return succeeded
+		}
+		await setError('')
+		try {
+			await setLoading(true)
+			await MembersUseCases.add({ organizationId: id, emails, type })
+			await setMessage('Members added')
+			addMembersEmails.value = ''
+			succeeded = true
+		} catch (e) {
+			await setError(e)
+		}
+		await setLoading(false)
+		return succeeded
+	}
+
+	return {
+		error,
+		loading,
+		message,
+		addMembersEmails,
+		addMembers
+	}
 }

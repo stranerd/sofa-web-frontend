@@ -1,7 +1,7 @@
 import { EmbeddedUser, MemberTypes } from '../../domain/types'
 
 export interface MemberFromModel extends MemberToModel {
-	_id: string
+	id: string
 	withCode: boolean
 	pending: boolean
 	accepted: { is: boolean, at: number } | null

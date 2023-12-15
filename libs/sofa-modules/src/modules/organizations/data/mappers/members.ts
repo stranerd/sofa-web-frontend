@@ -4,7 +4,7 @@ import { MemberFromModel, MemberToModel } from '../models/members'
 export class MemberMapper {
 	mapFrom (param: MemberFromModel | null) {
 		return !param ? null : new MemberEntity({
-			id: param._id.toString(),
+			id: param.id,
 			email: param.email,
 			user: param.user,
 			type: param.type,

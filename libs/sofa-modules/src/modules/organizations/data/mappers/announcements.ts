@@ -4,9 +4,9 @@ import { AnnouncementFromModel, AnnouncementToModel } from '../models/announceme
 export class AnnouncementMapper {
 	mapFrom (model: AnnouncementFromModel | null) {
 		if (!model) return null
-		const { _id, organizationId, classId, filter, user, body, readAt, createdAt, updatedAt } = model
+		const { id, organizationId, classId, filter, user, body, readAt, createdAt, updatedAt } = model
 		return new AnnouncementEntity({
-			id: _id.toString(), organizationId, classId, filter, user,
+			id, organizationId, classId, filter, user,
 			body, readAt, createdAt, updatedAt
 		})
 	}

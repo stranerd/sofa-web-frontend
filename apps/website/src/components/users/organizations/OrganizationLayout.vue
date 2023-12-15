@@ -88,15 +88,52 @@
 			</div>
 		</template>
 	</dashboard-layout>
+	<SofaModal v-if="addModalType">
+		<div class="bg-white mdlg:!w-[70%] lg:!w-[60%] w-full flex flex-col rounded-t-2xl p-4 gap-4 md:p-6 md:gap-6 justify-between relative">
+			<div class="flex gap-2 justify-between items-center">
+				<SofaHeaderText :content="addModalType === MemberTypes.teacher ? 'Add teachers' : 'Add students'" />
+				<SofaIcon class="h-[19px]" name="circle-close" @click="addModalType = null" />
+			</div>
+			<div v-if="addModalType === MemberTypes.student" class="bg-primaryPurple text-white flex items-center gap-2 p-4 rounded-custom">
+				<SofaIcon class="h-[16px] fill-current" name="info" />
+				<SofaNormalText color="text-inherit" content="Students added get your classes, courses, and quizzes for FREE" />
+				<SofaIcon class="h-[16px] fill-current ml-auto" name="circle-close" />
+			</div>
+			<div class="flex gap-2 items-center">
+				<SofaTextField customClass="!bg-lightGrayVaraint" v-model="addMembersEmails"
+					padding="p-4" name="Emails" placeholder="Email, comma seperated"
+					borderColor="border-transparent" />
+				<SofaButton customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white"
+					@click="addMembers(addModalType).then((succeeded) => succeeded ? addModalType = null : null)">
+					Invite
+				</SofaButton>
+			</div>
+			<div class="bg-darkLightGray h-[1px] w-full" />
+			<div class="flex gap-4 justify-between items-center">
+				<a class="text-primaryBlue flex items-center gap-1" @click="copy">
+					<SofaIcon class="w-[16px] fill-current" name="copy" />
+					<SofaNormalText color="text-inherit" content="Copy" />
+				</a>
+				<a class="text-primaryBlue flex items-center gap-1" @click="share">
+					<SofaIcon class="w-[16px] fill-current" name="share" />
+					<SofaNormalText color="text-inherit" content="Share" />
+				</a>
+			</div>
+		</div>
+	</SofaModal>
 </template>
 
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
 import { Logic } from "sofa-logic"
 import { MemberTypes } from "@modules/organizations"
-import { SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton } from "sofa-ui-components"
+import {
+	SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton, SofaModal,
+	SofaTextField
+} from "sofa-ui-components"
 import { computed, defineProps, ref } from 'vue'
 import { useMeta } from "vue-meta"
+import { useManageOrganizationMembers } from '@/composables/organizations/members'
 
 const props = defineProps({
 	title: {
@@ -119,10 +156,11 @@ const rightCommands = [
 	{ label: 'Add a teacher', action: () => null },
 	{ label: 'Create a quiz', action: () => null },
 	{ label: 'Create a course', action: () => null },
-	// TODO: remove after adding classes { label: 'Create a class', action: () => null },
+	{ label: 'Create a class', action: () => null },
 ]
 
 const { id, user } = useAuth()
+const { addMembersEmails, addMembers } = useManageOrganizationMembers(id.value)
 
 const options = [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
@@ -137,4 +175,8 @@ const extras = computed(() => ({
 	isAdmin: user.value?.id === id.value,
 	openAddModal: (type: MemberTypes) => addModalType.value = type,
 }))
+
+const shareUrl = `${window.location.origin}/profile/${id.value}`
+const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.type.name}`, shareUrl)
+const copy = () => Logic.Common.copy(shareUrl)
 </script>

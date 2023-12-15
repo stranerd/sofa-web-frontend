@@ -4,9 +4,9 @@ import { ScheduleFromModel, ScheduleToModel } from '../models/schedules'
 export class ScheduleMapper {
 	mapFrom (model: ScheduleFromModel | null) {
 		if (!model) return null
-		const { _id, organizationId, classId, lessonId, user, title, time, createdAt, updatedAt } = model
+		const { id, organizationId, classId, lessonId, user, title, time, createdAt, updatedAt } = model
 		return new ScheduleEntity({
-			id: _id.toString(), organizationId, classId, lessonId, user,
+			id, organizationId, classId, lessonId, user,
 			title, time, createdAt, updatedAt
 		})
 	}

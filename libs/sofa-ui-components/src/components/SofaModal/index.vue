@@ -4,7 +4,7 @@
       <div
         :class="`fixed top-0 w-[100dvw] h-[dwh] bg-black text-white !bg-opacity-40 flex flex-col overflow-y-hidden items-center mdlg:!justify-center justify-end ${customClass}`"
         style="z-index: 1000" id="innerModal">
-        <div class="h-full w-full absolute top-0 left-0" @click="closeModal()" />
+        <div class="h-full w-full absolute top-0 left-0" @click="closeModal" />
         <div
           class="w-full flex flex-col mdlg:h-auto h-full md:justify-center justify-end relative items-center mdlg:max-h-[85%] overflow-y-auto overflow-x-hidden">
           <slot />
@@ -30,7 +30,7 @@ export default {
     },
     close: {
       type: Function,
-      required: true,
+      required: false,
     },
     customClass: {
       type: String,
@@ -41,7 +41,7 @@ export default {
   setup (props: any) {
     const closeModal = () => {
       if (props.canClose) {
-        props.close()
+        props.close?.()
       }
     }
 

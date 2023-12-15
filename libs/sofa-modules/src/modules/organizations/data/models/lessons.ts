@@ -1,7 +1,7 @@
 import { LessonMembers } from '../../domain/types'
 
 export interface LessonFromModel extends LessonToModel {
-	_id: string
+	id: string
 	createdAt: number
 	updatedAt: number
 }

@@ -30,6 +30,8 @@ import { SofaHeaderText, SofaIcon, SofaNormalText, SofaButton } from 'sofa-ui-co
 import { defineComponent } from "vue"
 import { useMeta } from "vue-meta"
 import { MemberTypes } from "@modules/organizations"
+import { useOrganizationMembers } from '@/composables/organizations/members'
+import { useAuth } from '@/composables/auth/auth'
 
 export default defineComponent({
 	components: { OrganizationLayout, SofaHeaderText, SofaNormalText, SofaIcon, SofaButton },
@@ -48,7 +50,9 @@ export default defineComponent({
 			'No loss of study resources so students can keep coming back to them.'
 		]
 
-		return { Logic, messages, MemberTypes }
+		const { id } = useAuth()
+		const { students } = useOrganizationMembers(id.value)
+		return { students, Logic, messages, MemberTypes }
 	},
 })
 </script>

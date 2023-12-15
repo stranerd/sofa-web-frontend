@@ -2,7 +2,7 @@ import { Media } from '@modules/core'
 import { EmbeddedUser, Saleable } from '../../domain/types'
 
 export interface ClassFromModel extends ClassToModel {
-	_id: string
+	id: string
 	createdAt: number
 	updatedAt: number
 }

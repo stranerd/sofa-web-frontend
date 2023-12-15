@@ -50,11 +50,11 @@
 
 			<div class="flex gap-4 justify-between items-center">
 				<a class="text-primaryBlue flex items-center gap-1" @click="share">
-					<SofaIcon class="h-[16px] stroke-current" name="share" />
+					<SofaIcon class="w-[16px] fill-current" name="share" />
 					<SofaNormalText color="text-inherit" content="Share" />
 				</a>
 				<a class="text-primaryBlue flex items-center gap-1" @click="copy">
-					<SofaIcon class="h-[16px] stroke-current" name="copy" />
+					<SofaIcon class="w-[16px] fill-current" name="copy" />
 					<SofaNormalText color="text-inherit" content="Copy" />
 				</a>
 			</div>
@@ -100,6 +100,6 @@ const members = computed(() => props.users.filter((u) => props.quiz.access.membe
 const requests = computed(() => props.users.filter((u) => props.quiz.access.requests.includes(u.id)))
 
 const shareUrl = `${window.location.origin}/quiz/${props.quiz.id}/edit`
-const share = async () => await Logic.Common.share('Join game on SOFA', `Join and play a game on`, shareUrl)
+const share = async () => await Logic.Common.share('Edit quiz', `Gain access to edit quiz: ${props.quiz.title}`, shareUrl)
 const copy = () => Logic.Common.copy(shareUrl)
 </script>

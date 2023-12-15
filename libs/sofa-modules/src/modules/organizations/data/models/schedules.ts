@@ -1,7 +1,7 @@
 import { EmbeddedUser, ScheduleTime } from '../../domain/types'
 
 export interface ScheduleFromModel extends ScheduleToModel {
-	_id: string
+	id: string
 	createdAt: number
 	updatedAt: number
 }
