@@ -1,6 +1,6 @@
 import { Listeners, QueryParams, QueryResults } from '@modules/core'
-import { CourseEntity } from '../entities/course'
-import { CourseToModel } from '../../data/models/course'
+import { CourseToModel } from '../../data/models/courses'
+import { CourseEntity } from '../entities/courses'
 
 export interface ICourseRepository {
 	add: (data: CourseToModel) => Promise<CourseEntity>

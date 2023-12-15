@@ -105,6 +105,13 @@ export class HttpClient {
 			throw new NetworkError(status, error.response.data)
 		}
 	}
+
+	get socketPath () {
+		const baseUrl = this.client.defaults.baseURL ?? ''
+		const isFromOurServer = baseUrl.startsWith(apiBase)
+		if (!isFromOurServer) return ''
+		return new URL(baseUrl).pathname
+	}
 }
 
 export enum StatusCodes {

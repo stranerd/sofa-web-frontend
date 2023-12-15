@@ -11,7 +11,7 @@ export const useErrorHandler = () => {
 }
 
 export const useLoadingHandler = () => {
-	const id = Logic.Common.makeid(6)
+	const id = Logic.getRandomValue()
 	const loadingState = ref(false)
 	const setLoading = async (loading: boolean, skipAlert = false) => {
 		loadingState.value = loading

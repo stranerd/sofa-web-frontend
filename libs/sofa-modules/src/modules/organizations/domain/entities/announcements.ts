@@ -1,4 +1,5 @@
 import { BaseEntity } from '@modules/core'
+import { AnnouncementFromModel } from '../../data/models/announcements'
 import { AnnouncementFilter, EmbeddedUser } from '../types'
 
 export class AnnouncementEntity extends BaseEntity {
@@ -12,7 +13,7 @@ export class AnnouncementEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, classId, user, body, filter, readAt, createdAt, updatedAt }: AnnouncementConstructorArgs) {
+	constructor ({ id, organizationId, classId, user, body, filter, readAt, createdAt, updatedAt }: AnnouncementFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId
@@ -24,16 +25,4 @@ export class AnnouncementEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type AnnouncementConstructorArgs = {
-	id: string
-	organizationId: string
-	classId: string
-	filter: AnnouncementFilter
-	user: EmbeddedUser
-	body: string
-	readAt: Record<string, number>
-	createdAt: number
-	updatedAt: number
 }

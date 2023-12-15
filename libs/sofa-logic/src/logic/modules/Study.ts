@@ -1232,7 +1232,7 @@ export default class Study extends Common {
 
             this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
 
-            this.CoursableItemRemoved = Logic.Common.makeid(16)
+            this.CoursableItemRemoved = Logic.Common.makeId()
           } else {
             // remove items not in coursable
             currentSections.forEach((item) => {
@@ -1247,7 +1247,7 @@ export default class Study extends Common {
             }
 
             this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
-            this.NewCoursableItem = Logic.Common.makeid(16)
+            this.NewCoursableItem = Logic.Common.makeId()
           }
 
           Logic.Common.hideLoading()

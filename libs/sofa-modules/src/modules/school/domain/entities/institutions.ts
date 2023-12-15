@@ -1,4 +1,5 @@
 import { BaseEntity } from '@modules/core'
+import { InstitutionFromModel } from '../../data/models/institutions'
 
 export class InstitutionEntity extends BaseEntity {
 	public readonly id: string
@@ -7,7 +8,7 @@ export class InstitutionEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, name, isGateway, createdAt, updatedAt }: InstitutionConstructorArgs) {
+	constructor ({ id, name, isGateway, createdAt, updatedAt }: InstitutionFromModel) {
 		super()
 		this.id = id
 		this.name = name
@@ -15,12 +16,4 @@ export class InstitutionEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type InstitutionConstructorArgs = {
-	id: string
-	name: string
-	isGateway: boolean
-	createdAt: number
-	updatedAt: number
 }

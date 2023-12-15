@@ -82,27 +82,8 @@ export default class Common {
     this.route = route
   }
 
-  public removeDuplicatesFromArray = (arrayData: any[], keys: any[]) => {
-    return arrayData.filter(
-      ((s) => (o) =>
-        ((k) => !s.has(k) && s.add(k))(keys.map((k) => o[k]).join('|')))(
-        new Set(),
-      ),
-    )
-  }
-
-  public makeid = (length: number, isNumeric = false) => {
-    let result = ''
-    let characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    if (isNumeric) {
-      characters = '0123456789'
-    }
-    let charactersLength = characters.length
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    }
-    return result
+  public makeId = () => {
+    return Logic.getRandomValue()
   }
 
   public showValidationError = (
@@ -127,22 +108,12 @@ export default class Common {
     })
   }
 
-  public capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
-
-  public ordinal_suffix_of(i) {
-    var j = i % 10,
+  public ordinal_suffix_of(i: number) {
+    const j = i % 10,
       k = i % 100
-    if (j == 1 && k != 11) {
-      return i + 'st'
-    }
-    if (j == 2 && k != 12) {
-      return i + 'nd'
-    }
-    if (j == 3 && k != 13) {
-      return i + 'rd'
-    }
+    if (j == 1 && k != 11) return i + 'st'
+    if (j == 2 && k != 12) return i + 'nd'
+    if (j == 3 && k != 13) return i + 'rd'
     return i + 'th'
   }
 
@@ -156,7 +127,7 @@ export default class Common {
 
   public async confirm (confirmation: Confirmation) {
     return new Promise<boolean>((res) => {
-      const id = this.makeid(6)
+      const id = Logic.getRandomValue()
       this.confirmations.push({
         ...confirmation, id,
         close: (val: boolean) => {
@@ -244,28 +215,12 @@ export default class Common {
     }
   }
 
-  private isString = (x: any) => {
-    return Object.prototype.toString.call(x) === '[object String]'
-  }
-
   public searchArray = (arr: any[], searchKey: string) => {
     return arr.filter((obj) => {
       return Object.keys(obj).some((key) => {
-        return this.isString(obj[key]) ? obj[key].includes(searchKey) : false
+        return Logic.isString()(obj[key]).valid ? obj[key].includes(searchKey) : false
       })
     })
-  }
-
-  public copytext = (text: string) => {
-    const el = document.createElement('textarea')
-    el.value = text
-    el.setAttribute('readonly', '')
-    el.style.position = 'absolute'
-    el.style.left = '-9999px'
-    document.body.appendChild(el)
-    el.select()
-    document.execCommand('copy')
-    document.body.removeChild(el)
   }
 
   public debounce = (
@@ -297,33 +252,6 @@ export default class Common {
     }
 
     watchAction()
-  }
-
-  private fetchFile = (url: string) => {
-    return new Promise(function (resolve, reject) {
-      // Get file name from url.
-      const xhr = new XMLHttpRequest()
-      xhr.responseType = 'blob'
-      xhr.onload = function () {
-        resolve(xhr)
-      }
-      xhr.onerror = reject
-      xhr.open('GET', url)
-      xhr.send()
-    }).then(function (xhr: any) {
-      const filename = url.substring(url.lastIndexOf('/') + 1).split('?')[0]
-      const a = document.createElement('a')
-      a.href = window.URL.createObjectURL(xhr.response) // xhr.response is a blob
-      a.download = filename // Set the file name.
-      a.style.display = 'none'
-      document.body.appendChild(a)
-      a.click()
-      return xhr
-    })
-  }
-
-  public downloadFiles = (urls = []) => {
-    return Promise.all(urls.map(this.fetchFile))
   }
 
   public fomartDate = (date: number, format: string) => {
@@ -434,7 +362,12 @@ export default class Common {
   }
 
   public async copy (text: string, message = 'Copied!', type: LoaderSetup['alerts'][number]['type'] = 'success') {
-    this.copytext(text)
-    this.showAlert({ message, type })
+    const result = await window.navigator.permissions.query({ name: 'clipboard-write' as any })
+    if (result.state === 'granted' || result.state === 'prompt') {
+      await window.navigator.clipboard.writeText(text)
+      this.showAlert({ message, type })
+      return true
+    }
+    return false
   }
 }

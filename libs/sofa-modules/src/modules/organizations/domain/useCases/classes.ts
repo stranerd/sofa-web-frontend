@@ -3,25 +3,25 @@ import { ClassToModel } from '../../data/models/classes'
 import { IClassRepository } from '../irepositories/classes'
 
 export class ClassesUseCase {
-	private repository: IClassRepository
+	private repository: (organizationId: string) => IClassRepository
 
-	constructor (repository: IClassRepository) {
+	constructor (repository: (organizationId: string) => IClassRepository) {
 		this.repository = repository
 	}
 
 	async add (data: ClassToModel) {
-		return await this.repository.add(data)
+		return await this.repository(data.organizationId).add(data)
 	}
 
 	async delete (data: { id: string, organizationId: string }) {
-		return await this.repository.delete(data.organizationId, data.id)
+		return await this.repository(data.organizationId).delete(data.id)
 	}
 
 	async find (organizationId: string, classId: string) {
-		return await this.repository.find(organizationId, classId)
+		return await this.repository(organizationId).find(classId)
 	}
 
 	async get (organizationId: string, query: QueryParams) {
-		return await this.repository.get(organizationId, query)
+		return await this.repository(organizationId).get(query)
 	}
 }

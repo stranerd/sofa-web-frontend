@@ -1,4 +1,3 @@
-import { AuthApiDataSource } from './data/datasources/authApi'
 import { AuthRepository } from './data/repositories/auth'
 import { AuthUseCase } from './domain/usecases/auth'
 
@@ -11,8 +10,4 @@ export { PasswordUpdateFactory } from './domain/factories/passwordUpdate'
 export { PhoneUpdateFactory } from './domain/factories/phoneUpdate'
 export { ProfileUpdateFactory } from './domain/factories/profileUpdate'
 
-const authDataSource = new AuthApiDataSource()
-
-const authRepository = new AuthRepository(authDataSource)
-
-export const AuthUseCases = new AuthUseCase(authRepository)
+export const AuthUseCases = new AuthUseCase(AuthRepository.getInstance)

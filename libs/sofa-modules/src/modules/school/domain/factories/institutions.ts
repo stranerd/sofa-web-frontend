@@ -1,7 +1,7 @@
 import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
-import { InstitutionToModel } from '../../data/models/institution'
-import { InstitutionEntity } from '../entities/institution'
+import { InstitutionToModel } from '../../data/models/institutions'
+import { InstitutionEntity } from '../entities/institutions'
 
 export class InstitutionFactory extends BaseFactory<InstitutionEntity, InstitutionToModel, InstitutionToModel> {
 	readonly rules = {

@@ -101,7 +101,7 @@ export const useEditFolder = () => {
 	}
 
 	const generateNewFolder = async () => {
-		const title = `New folder (${Logic.Common.makeid(4)})`
+		const title = `New folder (${Logic.getRandomValue()})`
 		try {
 			await setError('')
 			await setLoading(true)

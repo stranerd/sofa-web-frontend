@@ -1,12 +1,12 @@
-import { IInstitutionRepository } from '../irepositories/iinstitution'
-import { InstitutionFactory } from '../factories/institution'
 import { QueryParams } from '@modules/core'
+import { InstitutionFactory } from '../factories/institutions'
+import { IInstitutionRepository } from '../irepositories/iinstitutions'
 
 export class InstitutionsUseCase {
 	private repository: IInstitutionRepository
 
-	constructor (repository: IInstitutionRepository) {
-		this.repository = repository
+	constructor (repository: () => IInstitutionRepository) {
+		this.repository = repository()
 	}
 
 	async add (factory: InstitutionFactory) {

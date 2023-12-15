@@ -9,17 +9,11 @@ import { LessonsUseCase } from './domain/useCases/lessons'
 import { MembersUseCase } from './domain/useCases/members'
 import { SchedulesUseCase } from './domain/useCases/schedules'
 
-const announcementRepository = AnnouncementRepository.getInstance()
-const classRepository = ClassRepository.getInstance()
-const lessonRepository = LessonRepository.getInstance()
-const memberRepository = MemberRepository.getInstance()
-const scheduleRepository = ScheduleRepository.getInstance()
-
-export const AnnouncementsUseCases = new AnnouncementsUseCase(announcementRepository)
-export const ClassesUseCases = new ClassesUseCase(classRepository)
-export const LessonsUseCases = new LessonsUseCase(lessonRepository)
-export const MembersUseCases = new MembersUseCase(memberRepository)
-export const SchedulesUseCases = new SchedulesUseCase(scheduleRepository)
+export const AnnouncementsUseCases = new AnnouncementsUseCase(AnnouncementRepository.getInstance)
+export const ClassesUseCases = new ClassesUseCase(ClassRepository.getInstance)
+export const LessonsUseCases = new LessonsUseCase(LessonRepository.getInstance)
+export const MembersUseCases = new MembersUseCase(MemberRepository.getInstance)
+export const SchedulesUseCases = new SchedulesUseCase(ScheduleRepository.getInstance)
 
 export { AnnouncementEntity } from './domain/entities/announcements'
 export { ClassEntity } from './domain/entities/classes'

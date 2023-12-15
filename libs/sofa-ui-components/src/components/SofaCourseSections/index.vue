@@ -365,7 +365,7 @@ export default defineComponent({
       await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
         staticSectionOptions.value.push({
           name: section.label,
-          id: Logic.Common.makeid(9),
+          id: Logic.Common.makeId(),
           materials: [],
           opened: index == selectedSection.value,
           edit: false,
@@ -409,7 +409,7 @@ export default defineComponent({
       if (unsectionedSection.length == 0) {
         staticSectionOptions.value.push({
           name: "unsectioned",
-          id: Logic.Common.makeid(9),
+          id: Logic.Common.makeId(),
           materials: [],
           opened: true,
           edit: false,
@@ -445,7 +445,7 @@ export default defineComponent({
 
       sectionOptions.splice(newSectionPosition, 0, {
         name: `Section ${sectionOptions.length}`,
-        id: Logic.Common.makeid(9),
+        id: Logic.Common.makeId(),
         materials: [],
         opened: true,
         edit: false,

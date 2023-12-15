@@ -1,5 +1,5 @@
-export { Saleable } from '@modules/payment'
-export { EmbeddedUser } from '@modules/users'
+export type { Saleable } from '@modules/payment'
+export type { EmbeddedUser } from '@modules/users'
 
 export enum MemberTypes {
 	teacher = 'teacher',

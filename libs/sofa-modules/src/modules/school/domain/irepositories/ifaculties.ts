@@ -1,6 +1,6 @@
 import { Listeners, QueryParams, QueryResults } from '@modules/core'
-import { FacultyEntity } from '../entities/faculty'
-import { FacultyToModel } from '../../data/models/faculty'
+import { FacultyToModel } from '../../data/models/faculties'
+import { FacultyEntity } from '../entities/faculties'
 
 export interface IFacultyRepository {
 	add: (data: FacultyToModel) => Promise<FacultyEntity>

@@ -1,4 +1,5 @@
 import { BaseEntity } from '@modules/core'
+import { ScheduleFromModel } from '../../data/models/schedules'
 import { EmbeddedUser, ScheduleTime } from '../types'
 
 export class ScheduleEntity extends BaseEntity {
@@ -12,7 +13,7 @@ export class ScheduleEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, classId, lessonId, user, title, time, createdAt, updatedAt }: ScheduleConstructorArgs) {
+	constructor ({ id, organizationId, classId, lessonId, user, title, time, createdAt, updatedAt }: ScheduleFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId
@@ -24,16 +25,4 @@ export class ScheduleEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type ScheduleConstructorArgs = {
-	id: string
-	organizationId: string
-	classId: string
-	lessonId: string
-	user: EmbeddedUser
-	title: string
-	time: ScheduleTime
-	createdAt: number
-	updatedAt: number
 }

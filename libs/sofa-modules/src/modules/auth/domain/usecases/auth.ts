@@ -10,8 +10,8 @@ import { IAuthRepository } from '../irepositories/iauth'
 export class AuthUseCase {
 	private repository: IAuthRepository
 
-	constructor (repository: IAuthRepository) {
-		this.repository = repository
+	constructor (repository: () => IAuthRepository) {
+		this.repository = repository()
 	}
 
 	async completeEmailVerification (token: string) {

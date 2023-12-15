@@ -1,4 +1,5 @@
 import { BaseEntity } from '@modules/core'
+import { MemberFromModel } from '../../data/models/members'
 import { EmbeddedUser, MemberTypes } from '../types'
 
 export class MemberEntity extends BaseEntity {
@@ -13,7 +14,7 @@ export class MemberEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, email, user, type, organizationId, pending, withCode, accepted, createdAt, updatedAt }: MemberConstructorArgs) {
+	constructor ({ id, email, user, type, organizationId, pending, withCode, accepted, createdAt, updatedAt }: MemberFromModel) {
 		super()
 		this.id = id
 		this.email = email
@@ -26,17 +27,4 @@ export class MemberEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type MemberConstructorArgs = {
-	id: string
-	email: string
-	user: EmbeddedUser | null
-	type: MemberTypes
-	organizationId: string
-	pending: boolean
-	withCode: boolean
-	accepted: { is: boolean, at: number } | null
-	createdAt: number
-	updatedAt: number
 }

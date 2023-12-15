@@ -1,4 +1,5 @@
 import { BaseEntity, Media } from '@modules/core'
+import { ClassFromModel } from '../../data/models/classes'
 import { EmbeddedUser, Saleable } from '../types'
 
 export class ClassEntity extends BaseEntity implements Saleable {
@@ -13,7 +14,7 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, title, description, photo, user, frozen, price, createdAt, updatedAt }: ClassConstructorArgs) {
+	constructor ({ id, organizationId, title, description, photo, user, frozen, price, createdAt, updatedAt }: ClassFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId
@@ -26,15 +27,4 @@ export class ClassEntity extends BaseEntity implements Saleable {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type ClassConstructorArgs = Saleable & {
-	id: string
-	organizationId: string
-	title: string
-	description: string
-	photo: Media | null
-	user: EmbeddedUser
-	createdAt: number
-	updatedAt: number
 }

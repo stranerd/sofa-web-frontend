@@ -1,4 +1,5 @@
 import { BaseEntity } from '@modules/core'
+import { UserFromModel } from '../../data/models/user'
 import {
 	AuthRoleType,
 	UserAccount,
@@ -11,20 +12,6 @@ import {
 	UserTutor,
 	UserTypeData
 } from '../types'
-
-type UserConstructorArgs = {
-	id: string
-	bio: UserBio
-	roles: AuthRoleType
-	account: UserAccount
-	status: UserStatus
-	dates: UserDates
-	type: UserTypeData | null
-	tutor: UserTutor
-	ai: UserAi
-	socials: UserSocialsType
-	location: UserLocation | null
-}
 
 export class UserEntity extends BaseEntity {
 	public readonly id: string
@@ -39,7 +26,7 @@ export class UserEntity extends BaseEntity {
 	public readonly socials: UserSocialsType
 	public readonly location: UserLocation | null
 
-	constructor ({ id, bio, roles, account, status, dates, type, tutor, ai, socials, location }: UserConstructorArgs) {
+	constructor ({ id, bio, roles, account, status, dates, type, tutor, ai, socials, location }: UserFromModel) {
 		super()
 		this.id = id
 		this.bio = bio

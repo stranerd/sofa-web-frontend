@@ -1,12 +1,12 @@
-import { IFacultyRepository } from '../irepositories/ifaculty'
-import { FacultyFactory } from '../factories/faculty'
 import { QueryParams } from '@modules/core'
+import { FacultyFactory } from '../factories/faculties'
+import { IFacultyRepository } from '../irepositories/ifaculties'
 
 export class FacultiesUseCase {
 	private repository: IFacultyRepository
 
-	constructor (repository: IFacultyRepository) {
-		this.repository = repository
+	constructor (repository: () => IFacultyRepository) {
+		this.repository = repository()
 	}
 
 	async add (factory: FacultyFactory) {

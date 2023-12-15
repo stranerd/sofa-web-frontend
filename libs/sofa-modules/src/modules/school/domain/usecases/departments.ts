@@ -1,12 +1,12 @@
-import { IDepartmentRepository } from '../irepositories/idepartment'
-import { DepartmentFactory } from '../factories/department'
 import { QueryParams } from '@modules/core'
+import { DepartmentFactory } from '../factories/departments'
+import { IDepartmentRepository } from '../irepositories/idepartments'
 
 export class DepartmentsUseCase {
 	private repository: IDepartmentRepository
 
-	constructor (repository: IDepartmentRepository) {
-		this.repository = repository
+	constructor (repository: () => IDepartmentRepository) {
+		this.repository = repository()
 	}
 
 	async add (factory: DepartmentFactory) {

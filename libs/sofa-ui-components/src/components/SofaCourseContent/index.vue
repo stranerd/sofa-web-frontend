@@ -389,7 +389,7 @@ export default defineComponent({
       await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
         staticSectionOptions.value.push({
           name: section.label,
-          id: Logic.Common.makeid(9),
+          id: Logic.Common.makeId(),
           materials: [],
           opened: index == selectedSection.value,
           edit: false,

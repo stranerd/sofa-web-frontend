@@ -1,63 +1,60 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { apiBase } from '@utils/environment'
-import { IScheduleRepository } from '../../domain/irepositories/schedules'
-import { ScheduleMapper } from '../mappers/schedules'
-import { ScheduleFromModel, ScheduleToModel } from '../models/schedules'
 import { ScheduleEntity } from '../../domain/entities/schedules'
+import { IScheduleRepository } from '../../domain/irepositories/schedules'
+import { ScheduleFromModel, ScheduleToModel } from '../models/schedules'
 
 export class ScheduleRepository implements IScheduleRepository {
-	private static instance: ScheduleRepository
+	private static instances: Record<string, ScheduleRepository> = {}
 	private client: HttpClient
-	private mapper: ScheduleMapper
+	private mapper = (model: ScheduleFromModel | null) => model ? new ScheduleEntity(model) : null
 
-	private constructor () {
-		this.client = new HttpClient(apiBase + '/organizations')
-		this.mapper = new ScheduleMapper()
+	private constructor (organizationId: string, classId: string) {
+		this.client = new HttpClient(`${apiBase}/organizations/${organizationId}/classes/${classId}/schedules`)
 	}
 
-	static getInstance () {
-		if (!ScheduleRepository.instance) ScheduleRepository.instance = new ScheduleRepository()
-		return ScheduleRepository.instance
+	static getInstance (organizationId: string, classId: string) {
+		return ScheduleRepository.instances[`${organizationId}-${classId}`] ??= new ScheduleRepository(organizationId, classId)
 	}
 
-	async get (organizationId: string, classId: string, query: QueryParams) {
-		const d = await this.client.get<QueryParams, QueryResults<ScheduleFromModel>>(`/${organizationId}/classes/${classId}/schedules`, query)
+	async get (query: QueryParams) {
+		const d = await this.client.get<QueryParams, QueryResults<ScheduleFromModel>>('/', query)
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper.mapFrom(r)!)
+			results: d.results.map((r) => this.mapper(r)!)
 		}
 	}
 
 	async add (data: ScheduleToModel) {
-		const d = await this.client.post<ScheduleToModel, ScheduleFromModel>(`/${data.organizationId}/classes/${data.classId}/schedules`, data)
-		return this.mapper.mapFrom(d)!
+		const d = await this.client.post<ScheduleToModel, ScheduleFromModel>('/', data)
+		return this.mapper(d)!
 	}
 
-	async update (organizationId: string, classId: string, id: string, data: ScheduleToModel) {
-		const d = await this.client.put<ScheduleToModel, ScheduleFromModel>(`/${organizationId}/classes/${classId}/schedules/${id}`, data)
-		return this.mapper.mapFrom(d)!
+	async update (id: string, data: ScheduleToModel) {
+		const d = await this.client.put<ScheduleToModel, ScheduleFromModel>(`/${id}`, data)
+		return this.mapper(d)!
 	}
 
-	async find (organizationId: string, classId: string, id: string) {
-		const data = await this.client.get<QueryParams, ScheduleFromModel | null>(`/${organizationId}/classes/${classId}/schedules/${id}`, {})
-		return this.mapper.mapFrom(data)
+	async find (id: string) {
+		const data = await this.client.get<QueryParams, ScheduleFromModel | null>(`/${id}`, {})
+		return this.mapper(data)
 	}
 
-	async delete (organizationId: string, classId: string, id: string) {
-		return await this.client.delete<{}, boolean>(`/${organizationId}/classes/${classId}/schedules/${id}`, {})
+	async delete (id: string) {
+		return await this.client.delete<{}, boolean>(`/${id}`, {})
 	}
 
-	async listenToOne (organizationId: string, classId: string, id: string, listeners: Listeners<ScheduleEntity>) {
-		const listener = listenToOne(`organizations/${organizationId}/classes/${classId}/schedules${id}`, listeners, this.mapper.mapFrom)
-		const model = await this.find(organizationId, classId, id)
+	async listenToOne (id: string, listeners: Listeners<ScheduleEntity>) {
+		const listener = listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
+		const model = await this.find(id)
 		if (model) await listeners.updated(model)
 		return listener
 	}
 
-	async listenToMany (organizationId: string, classId: string, query: QueryParams, listeners: Listeners<ScheduleEntity>, matches: (entity: ScheduleEntity) => boolean) {
-		const listener = listenToMany(`organizations/${organizationId}/classes/${classId}/schedules`, listeners, this.mapper.mapFrom, matches)
-		const models = await this.get(organizationId, classId, query)
+	async listenToMany (query: QueryParams, listeners: Listeners<ScheduleEntity>, matches: (entity: ScheduleEntity) => boolean) {
+		const listener = listenToMany(this.client.socketPath, listeners, this.mapper, matches)
+		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
 		return listener
 	}

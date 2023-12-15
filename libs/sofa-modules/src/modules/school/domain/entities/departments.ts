@@ -1,4 +1,5 @@
 import { BaseEntity } from '@modules/core'
+import { DepartmentFromModel } from '../../data/models/departments'
 
 export class DepartmentEntity extends BaseEntity {
 	public readonly id: string
@@ -8,7 +9,7 @@ export class DepartmentEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, name, institutionId, facultyId, createdAt, updatedAt }: DepartmentConstructorArgs) {
+	constructor ({ id, name, institutionId, facultyId, createdAt, updatedAt }: DepartmentFromModel) {
 		super()
 		this.id = id
 		this.name = name
@@ -18,5 +19,3 @@ export class DepartmentEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 }
-
-type DepartmentConstructorArgs = { id: string, name: string, institutionId: string, facultyId: string, createdAt: number, updatedAt: number }

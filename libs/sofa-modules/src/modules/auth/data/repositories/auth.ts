@@ -1,79 +1,111 @@
-import { AfterAuthUser, AuthExtras, NewUser, PasswordUpdate, Phone, ProfileUpdate } from '../../domain/entities/auth'
+import { HttpClient, closeSocket } from '@modules/core'
+import { apiBase } from '@utils/environment'
+import { deleteTokens, saveTokens } from '@utils/tokens'
+import { AfterAuthUser, AuthDetails, AuthExtras, AuthRoles, NewUser, PasswordUpdate, Phone, ProfileUpdate } from '../../domain/entities/auth'
 import { IAuthRepository } from '../../domain/irepositories/iauth'
-import { AuthBaseDataSource } from '../datasources/authBase'
 
 export class AuthRepository implements IAuthRepository {
-	private dataSource: AuthBaseDataSource
+	private static instance: AuthRepository
+	private client: HttpClient
 
-	constructor (dataSource: AuthBaseDataSource) {
-		this.dataSource = dataSource
+	private constructor () {
+		this.client = new HttpClient(`${apiBase}/auth`)
+	}
+
+	static getInstance () {
+		if (!AuthRepository.instance) AuthRepository.instance = new AuthRepository()
+		return AuthRepository.instance
 	}
 
 	async getAuthUser () {
-		return await this.dataSource.getAuthUser()
+		return await this.client.get<any, AuthDetails | null>('/user', {})
 	}
 
 	async signinWithEmail (email: string, password: string, extras: AuthExtras) {
-		return await this.dataSource.signinWithEmail(email, password, extras)
+		return await this.client.post<any, AfterAuthUser>('/emails/signin', {
+			email, password,
+			referrer: extras.referrer
+		})
 	}
 
 	async signinWithGoogle (data: { idToken: string }, extras: AuthExtras) {
-		return await this.dataSource.signinWithGoogle(data, extras)
+		return await this.client.post<any, AfterAuthUser>('/identities/google', {
+			...data, referrer: extras.referrer
+		})
 	}
 
 	async signinWithApple (data: { firstName: string | null, lastName: string | null, email: string | null, idToken: string }, extras: AuthExtras) {
-		return await this.dataSource.signinWithApple(data, extras)
+		return await this.client.post<any, AfterAuthUser>('/identities/apple', {
+			...data, referrer: extras.referrer
+		})
 	}
 
-	async signupWithEmail (data: NewUser, extras: AuthExtras) {
-		return await this.dataSource.signupWithEmail(data, extras)
+	async signupWithEmail (user: NewUser, extras: AuthExtras) {
+		return await this.client.post<any, AfterAuthUser>('/emails/signup', {
+			...user,
+			referrer: extras.referrer
+		})
 	}
 
 	async sendVerificationEmail () {
-		return await this.dataSource.sendVerificationEmail()
+		await this.client.post<any, boolean>('/emails/verify/mail', {})
 	}
 
 	async completeEmailVerification (token: string) {
-		return await this.dataSource.completeEmailVerification(token)
+		return await this.client.post<any, AfterAuthUser>('/emails/verify', {
+			token
+		})
 	}
 
 	async sendVerificationText (phone: Phone) {
-		return await this.dataSource.sendVerificationText(phone)
+		await this.client.post<any, boolean>('/phone/verify/text', { phone })
 	}
 
 	async completePhoneVerification (token: string) {
-		return await this.dataSource.completePhoneVerification(token)
+		return await this.client.post<any, AfterAuthUser>('/phone/verify', { token })
 	}
 
 	async sendPasswordResetEmail (email: string) {
-		return await this.dataSource.sendPasswordResetEmail(email)
+		await this.client.post<any, boolean>('/passwords/reset/mail', { email })
 	}
 
 	async resetPassword (token: string, password: string) {
-		return await this.dataSource.resetPassword(token, password)
+		return await this.client.post<any, AfterAuthUser>('/passwords/reset', {
+			token, password
+		})
 	}
 
-	async updateProfile (profile: ProfileUpdate) {
-		return await this.dataSource.updateProfile(profile)
+	async updateProfile (bio: ProfileUpdate) {
+		await this.client.put<ProfileUpdate, any>('/user', bio)
 	}
 
-	async updatePassword (password: PasswordUpdate) {
-		return await this.dataSource.updatePassword(password)
+	async updatePassword (passwords: PasswordUpdate) {
+		await this.client.post<PasswordUpdate, any>('/passwords/update', passwords)
 	}
 
 	async session (afterAuth: AfterAuthUser) {
-		return await this.dataSource.session(afterAuth)
+		await saveTokens(afterAuth)
+		await closeSocket()
+		return afterAuth.user
 	}
 
 	async signout () {
-		return await this.dataSource.signout()
+		await this.client.post<any, boolean>('/user/signout', {}).catch()
+		await deleteTokens()
+		await closeSocket()
 	}
 
 	async deleteAccount () {
-		return await this.dataSource.deleteAccount()
+		await this.client.delete<any, boolean>('/user', {}).catch()
+		await deleteTokens()
+		await closeSocket()
 	}
 
-	async updateRole (data: { id: string, value: boolean, role: string }) {
-		return await this.dataSource.updateRole(data)
+	async updateRole (data: { id: string, value: boolean, role: AuthRoles }) {
+		return await this.client.post<any, boolean>('/user/roles', {
+			role: data.role,
+			userId: data.id,
+			value: data.value
+		})
 	}
 }
