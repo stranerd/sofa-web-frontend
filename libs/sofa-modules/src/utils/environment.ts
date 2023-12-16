@@ -18,6 +18,6 @@ export const googleClientId = isIos ? googleClientIds.ios : isAndroid ? googleCl
 const host = process.env.VUE_APP_DOMAIN ?? ''
 export const domain = parseURL(`http${!isDev ? 's' : ''}://${host}`)
 
-export const apiBase = 'https://development.apis.sofa.stranerd.com/api' || parseURL(process.env.VUE_APP_API_URL ?? '')
+export const apiBase = parseURL(process.env.VUE_APP_API_URL ?? '')
 
 export const packageName = process.env.VUE_APP_PACKAGE_NAME

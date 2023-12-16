@@ -160,7 +160,7 @@ const rightCommands = [
 ]
 
 const { id, user } = useAuth()
-const { addMembersEmails, addMembers } = useManageOrganizationMembers(id.value)
+const { addMembersEmails, addMembers, removeMember, acceptMember } = useManageOrganizationMembers(id.value)
 
 const options = [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
@@ -174,6 +174,7 @@ const addModalType = ref<MemberTypes | null>(null)
 const extras = computed(() => ({
 	isAdmin: user.value?.id === id.value,
 	openAddModal: (type: MemberTypes) => addModalType.value = type,
+	removeMember, acceptMember
 }))
 
 const shareUrl = `${window.location.origin}/profile/${id.value}`

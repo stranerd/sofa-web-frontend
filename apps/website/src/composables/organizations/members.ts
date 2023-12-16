@@ -89,11 +89,20 @@ export const useManageOrganizationMembers = (id: string) => {
 		return succeeded
 	}
 
+	const removeMember = async (member: MemberEntity) => {
+		console.log(member)
+	}
+
+	const acceptMember = async (member: MemberEntity, accept: boolean) => {
+		console.log(member, accept)
+	}
+
 	return {
 		error,
 		loading,
 		message,
 		addMembersEmails,
-		addMembers
+		addMembers,
+		removeMember, acceptMember
 	}
 }
