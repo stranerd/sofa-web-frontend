@@ -20,8 +20,7 @@
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
-							<SofaHeaderText class="!text-base !font-bold"
-								:content="user.type?.name ?? user.bio.name.full" />
+							<SofaHeaderText class="!text-base !font-bold" :content="user.orgName" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
 							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 						</div>
@@ -89,7 +88,7 @@
 		</template>
 	</dashboard-layout>
 	<SofaModal v-if="addModalType">
-		<div class="bg-white mdlg:!w-[70%] lg:!w-[60%] w-full flex flex-col rounded-t-2xl p-4 gap-4 md:p-6 md:gap-6 justify-between relative">
+		<div class="flex flex-col p-4 gap-4 md:p-6 md:gap-6 justify-between">
 			<div class="flex gap-2 justify-between items-center">
 				<SofaHeaderText :content="addModalType === MemberTypes.teacher ? 'Add teachers' : 'Add students'" />
 				<SofaIcon class="h-[19px]" name="circle-close" @click="addModalType = null" />
@@ -128,8 +127,8 @@ import { useAuth } from '@/composables/auth/auth'
 import { Logic } from "sofa-logic"
 import { MemberTypes } from "@modules/organizations"
 import {
-	SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton, SofaModal,
-	SofaTextField
+	SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton,
+	SofaTextField, SofaModal2 as SofaModal
 } from "sofa-ui-components"
 import { computed, defineProps, ref } from 'vue'
 import { useMeta } from "vue-meta"
@@ -178,6 +177,6 @@ const extras = computed(() => ({
 }))
 
 const shareUrl = `${window.location.origin}/profile/${id.value}`
-const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.type.name}`, shareUrl)
+const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.orgName}`, shareUrl)
 const copy = () => Logic.Common.copy(shareUrl)
 </script>

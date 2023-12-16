@@ -1,7 +1,6 @@
 <template>
-	<SofaModal :close="Logic.Common.goBack" :canClose="false">
-		<div
-			class="md:w-[70%] mdlg:w-[50%] mdlg:h-full h-auto w-full flex flex-col items-center rounded-t-2xl md:rounded-2xl bg-white gap-2 p-4 md:p-8 text-bodyBlack">
+	<SofaModal>
+		<div class="flex flex-col items-center gap-2 p-4 md:p-8">
 			<SofaIcon v-if="hasRequested" name="checkmark-circle" class="rounded-full h-[40px]" />
 			<SofaHeaderText size="xl" class="!font-bold text-deepGray"
 				:content="hasRequested ? 'Request sent' : 'Request editing access'" />
@@ -32,7 +31,7 @@
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
 import { Logic, Quiz } from 'sofa-logic'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaButton, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({

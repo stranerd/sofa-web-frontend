@@ -134,25 +134,23 @@
       />
 
       <!-- Larger screen setings modal -->
-      <SofaModal v-if="showSettingModal" :close="() => showSettingModal = false" customClass="hidden mdlg:!flex" :canClose="false">
-        <div class="mdlg:w-[50%] mdlg:h-full h-[95%] md:w-[70%] flex flex-col items-center relative">
-          <div class="bg-white w-full flex flex-col gap-4 mdlg:p-6 p-4 rounded-2xl items-center justify-center">
-            <SofaHeaderText class="!text-xl !font-bold" content="Update quiz" />
-            <QuizSettings
-              :quiz="quiz"
-              :factory="extras.quizFactory"
-              :close="() => showSettingModal = false"
-              @updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
-              @publishQuiz="extras.publishQuiz().then(handleSettingSaved)"
-            />
-          </div>
+      <SofaModal v-if="showSettingModal && Logic.Common.isLarge">
+        <div class="bg-white w-full flex flex-col gap-4 mdlg:p-6 p-4 rounded-2xl items-center justify-center">
+          <SofaHeaderText class="!text-xl !font-bold" content="Update quiz" />
+          <QuizSettings
+            :quiz="quiz"
+            :factory="extras.quizFactory"
+            :close="() => showSettingModal = false"
+            @updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
+            @publishQuiz="extras.publishQuiz().then(handleSettingSaved)"
+          />
         </div>
       </SofaModal>
 
       <!-- More option / settings for smaller screens -->
       <SofaModal v-if="showMoreOptions" :close="() => showMoreOptions = false">
-        <div class="bg-white mdlg:!w-[70%] lg:!w-[60%] h-[95%] w-full flex flex-col rounded-t-2xl gap-4 justify-between relative overflow-y-auto">
-           <div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b bg-white border-[#F2F5F8]">
+        <div class="flex flex-col gap-4 justify-between">
+          <div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b bg-white border-[#F2F5F8]">
             <SofaNormalText class="!text-sm !font-bold" content="Options" />
             <SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
           </div>
@@ -173,7 +171,7 @@
       </SofaModal>
 
       <SofaModal v-if="showCurrentlyEditingModal" :close="() => showCurrentlyEditingModal = false">
-        <div class="bg-white mdlg:!w-[70%] lg:!w-[60%] w-full flex flex-col rounded-t-2xl p-6 gap-6 justify-between relative">
+        <div class="flex flex-col p-6 gap-6 justify-between">
            <div class="mdlg:hidden flex gap-2 justify-between items-center">
             <SofaHeaderText content="Currently editing" />
             <SofaIcon class="h-[19px]" name="circle-close" @click="showCurrentlyEditingModal = false" />
@@ -191,24 +189,22 @@
       </SofaModal>
 
       <SofaModal v-if="showAddQuestionModal" :close="() => showAddQuestionModal = false">
-        <div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full h-[95%] w-full flex flex-col justify-end md:justify-start items-center">
-          <div class="bg-white w-full flex flex-col mdlg:p-6 gap-4 p-4 md:rounded-2xl rounded-t-[20px] items-center justify-center">
-            <div class="w-full text-center hidden md:inline-block">
-              <SofaHeaderText class="!text-xl !font-bold" content="Choose question type" />
-            </div>
+        <div class="w-full flex flex-col mdlg:p-6 gap-4 p-4 items-center justify-center">
+          <div class="w-full text-center hidden md:inline-block">
+            <SofaHeaderText class="!text-xl !font-bold" content="Choose question type" />
+          </div>
 
-            <div class="w-full flex justify-between items-center md:!hidden">
-              <SofaNormalText class="!font-bold !text-base" content="Choose question type" />
-              <SofaIcon class="h-[16px]" name="circle-close" @click="showAddQuestionModal = false" />
-            </div>
+          <div class="w-full flex justify-between items-center md:!hidden">
+            <SofaNormalText class="!font-bold !text-base" content="Choose question type" />
+            <SofaIcon class="h-[16px]" name="circle-close" @click="showAddQuestionModal = false" />
+          </div>
 
-            <div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
-              <a class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-[#E6F5FF] bg-[#F2F5F8] rounded-lg"
-                v-for="type in Logic.Study.getAllQuestionTypes()" :key="type.value" @click="extras.addQuestion(type.value).then(() => showAddQuestionModal = false)">
-                <SofaIcon :name="type.icon" class="h-[50px]" />
-                <SofaNormalText :content="type.label" />
-              </a>
-            </div>
+          <div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
+            <a class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-[#E6F5FF] bg-[#F2F5F8] rounded-lg"
+              v-for="type in Logic.Study.getAllQuestionTypes()" :key="type.value" @click="extras.addQuestion(type.value).then(() => showAddQuestionModal = false)">
+              <SofaIcon :name="type.icon" class="h-[50px]" />
+              <SofaNormalText :content="type.label" />
+            </a>
           </div>
         </div>
       </SofaModal>
@@ -236,7 +232,7 @@ import {
   SofaIcon,
   SofaNormalText,
   SofaQuestionOptions,
-  SofaModal,
+  SofaModal2 as SofaModal,
   SofaAddQuestion,
   SofaQuestionContent,
   SofaHeaderText,

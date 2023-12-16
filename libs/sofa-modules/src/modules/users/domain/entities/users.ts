@@ -10,6 +10,7 @@ import {
 	UserSocialsType,
 	UserStatus,
 	UserTutor,
+	UserType,
 	UserTypeData
 } from '../types'
 
@@ -51,5 +52,10 @@ export class UserEntity extends BaseEntity {
 
 	get score () {
 		return this.account.rankings.overall.value
+	}
+
+	get orgName () {
+		if (this.type.type === UserType.organization) return this.type.name
+		return this.bio.name.full
 	}
 }

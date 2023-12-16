@@ -1,7 +1,6 @@
 <template>
-	<SofaModal :close="() => emits('close')" :canClose="false">
-		<div
-			class="md:w-[70%] mdlg:w-[50%] mdlg:h-full overflow-y-auto h-auto w-full flex flex-col rounded-t-2xl md:rounded-2xl bg-white gap-6 p-4 md:p-8 text-bodyBlack">
+	<SofaModal>
+		<div class="flex flex-col gap-6 p-4 md:p-8">
 			<div class="w-full flex items-center gap-4 justify-between text-deepGray">
 				<SofaHeaderText size="xl" class="!font-bold" content="Invite" />
 				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer" @click="emits('close')" />
@@ -65,7 +64,7 @@
 <script lang="ts" setup>
 import { useSearchUsers } from '@/composables/users/users'
 import { Conditions, Logic, Quiz, SingleUser } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaModal, SofaAvatar, SofaNormalText, SofaTextField, SofaButton } from 'sofa-ui-components'
+import { SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaAvatar, SofaNormalText, SofaTextField, SofaButton } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({

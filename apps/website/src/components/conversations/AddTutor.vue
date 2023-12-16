@@ -1,6 +1,6 @@
 <template>
-  <SofaModal :close="() => emits('close')" :canClose="false">
-    <div class="mdlg:w-[60%] lg:w-[50%] w-full md:w-[70%] gap-4 flex flex-col items-center relative bg-white rounded-t-2xl md:rounded-2xl">
+  <SofaModal>
+    <div class="flex flex-col items-center">
       <div class="w-full flex flex-col h-full gap-3 md:gap-4 mdlg:px-6 md:px-4 overflow-y-auto">
         <div
           class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-1 border-[#F1F6FA] border-b md:border-0 p-4 md:gap-2">
