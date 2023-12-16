@@ -84,7 +84,7 @@ export const useAuth = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure you want to logout?',
 			sub: '',
-			rightLabel: 'Yes, logout',
+			right: { label: 'Yes, logout' },
 		})
 		if (!confirmed) return
 		// await unregisterDeviceOnLogout()
@@ -97,7 +97,7 @@ export const useAuth = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All your learning resources will be lost',
-			rightLabel: 'Yes, delete account',
+			right: { label: 'Yes, delete account' },
 		})
 		if (!confirmed) return
 		// await unregisterDeviceOnLogout()

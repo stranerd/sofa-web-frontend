@@ -130,11 +130,6 @@
 
     <AddTutor v-if="showAddTutor" @close="showAddTutor = false" />
 
-    <!-- Success prompt for tutor request -->
-    <sofa-success-prompt v-if="showTutorRequestSubmited" :title="'Tutor request sent'"
-      :subTitle="`You will get notified when the tutor responds`" :close="() => showTutorRequestSubmited = false"
-      :button="{ label: 'Done', action: () => showTutorRequestSubmited = false }" />
-
     <!-- Rate and review modal -->
     <RateAndReviewModal v-if="showRateAndReviewTutor && conversation.tutor" :close="() => showRateAndReviewTutor = false"
       title="Session ended, rate tutor" :tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
@@ -160,7 +155,6 @@ import {
   SofaIcon,
   SofaModal,
   SofaNormalText,
-  SofaSuccessPrompt
 } from "sofa-ui-components"
 import { computed, defineComponent, ref } from "vue"
 import { useMeta } from "vue-meta"
@@ -175,7 +169,6 @@ export default defineComponent({
     ChatContent,
     AddTutor,
     SofaModal,
-    SofaSuccessPrompt,
     SofaButton,
     SofaAvatar,
     SofaHeaderText,
@@ -205,7 +198,6 @@ export default defineComponent({
       return res
     })
 
-    const showTutorRequestSubmited = ref(false)
     const showAddTutor = ref(false)
     const showMoreOptions = ref(false)
     const showRateAndReviewTutor = ref(false)
@@ -216,16 +208,14 @@ export default defineComponent({
       if (wallet.value?.subscription.active) return await Logic.Common.confirm({
         title: 'You have run out of tutor aided conversations',
         sub: 'This feature will become available on your next subscription renewal',
-        rightLabel: 'Close',
-        rightBg: 'bg-primaryBlue',
-        leftHide: true
+        right: { label: 'Close', bg: 'bg-primaryBlue' },
+        left: { hide: true }
       })
       const confirmed = await Logic.Common.confirm({
         title: 'You have no subscription',
         sub: 'You need to be subscribed to Stranerd Plus to access this feature',
-        rightLabel: 'Subscribe',
-        leftLabel: 'Cancel',
-        rightBg: 'bg-primaryBlue'
+        right: { label: 'Subscribe', bg: 'bg-primaryBlue' },
+        left: { label: 'Cancel' }
       })
       if (confirmed) await Logic.Common.GoToRoute('/settings/subscription')
       return confirmed
@@ -235,7 +225,7 @@ export default defineComponent({
       const confirmed = await Logic.Common.confirm({
         title: 'End session with tutor?',
         sub: 'Are you sure you want to end this session? The tutor will be removed from this chat',
-        rightLabel: 'End session',
+        right: { label: 'End session' }
       })
       if (confirmed) showRateAndReviewTutor.value = true
     }
@@ -252,7 +242,6 @@ export default defineComponent({
       showAddTutor,
       showMoreOptions,
       onClickAddTutor,
-      showTutorRequestSubmited,
       showRateAndReviewTutor,
       onClickEndSession,
       end,

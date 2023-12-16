@@ -90,6 +90,12 @@ export const useManageOrganizationMembers = (id: string) => {
 	}
 
 	const removeMember = async (member: MemberEntity) => {
+		const confirmed = await Logic.Common.confirm({
+			title: 'Are you sure you want to remove this member?',
+			sub: '',
+			right: { label: 'Yes, remove' }
+		})
+		if (!confirmed) return
 		console.log(member)
 	}
 

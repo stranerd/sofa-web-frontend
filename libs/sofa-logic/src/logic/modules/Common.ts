@@ -13,10 +13,14 @@ import {
 import { Logic } from '..'
 import {
   Confirmation,
+  ConfirmationBase,
   ConfirmationSetup,
+  ConfirmationSetupBase,
   FetchRule,
   Listeners,
-  LoaderSetup
+  LoaderSetup,
+  SuccessConfirmation,
+  SuccessConfirmationSetup
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
 
@@ -124,19 +128,28 @@ export default class Common {
   })
 
   public confirmations = reactive<ConfirmationSetup[]>([])
+  public successes = reactive<SuccessConfirmationSetup[]>([])
 
   public async confirm (confirmation: Confirmation) {
+    return this.confirm_logic(this.confirmations, confirmation)
+  }
+
+  public async success (confirmation: SuccessConfirmation) {
+    return this.confirm_logic(this.successes, confirmation)
+  }
+
+  private async confirm_logic<I extends ConfirmationBase, J extends ConfirmationBase & ConfirmationSetupBase> (confirmations: J[], confirmation: I) {
     return new Promise<boolean>((res) => {
       const id = Logic.getRandomValue()
-      this.confirmations.push({
+      confirmations.push({
         ...confirmation, id,
         close: (val: boolean) => {
-          const index = this.confirmations.findIndex((c) => c.id === id)
-          if (index === -1) return
-          this.confirmations.splice(index, 1)
+          const index = confirmations.findIndex((c) => c.id === id)
+          if (index === -1) return res(false)
+          confirmations.splice(index, 1)
           res(val)
         }
-      })
+      } as any)
     })
   }
 

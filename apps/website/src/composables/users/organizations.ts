@@ -37,7 +37,7 @@ export const useMyOrganizations = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure you want to leave this organization?',
 			sub: 'This action is permanent. You will lose access to all current and future resources of this organization.',
-			rightLabel: 'Yes, delete',
+			right: { label: 'Yes, leave' }
 		})
 		if (!confirmed) return
 		if (loading.value) return

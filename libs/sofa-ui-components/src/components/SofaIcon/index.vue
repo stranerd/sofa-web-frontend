@@ -1,5 +1,5 @@
 <template>
-  <InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer" :class="customClass" />
+  <InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer aspect-square" :class="customClass" />
 </template>
 
 <script lang="ts">
@@ -19,3 +19,10 @@ export default {
   name: "RoofIcon",
 }
 </script>
+
+<style>
+svg {
+  width: auto;
+  height: auto;
+}
+</style>

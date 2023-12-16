@@ -85,7 +85,7 @@ export const useEditFolder = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All items in the folder will be removed',
-			rightLabel: 'Yes, delete',
+			right: { label: 'Yes, delete' }
 		})
 		if (!confirmed) return
 		try {

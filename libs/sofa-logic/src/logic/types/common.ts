@@ -45,23 +45,35 @@ export interface LoaderSetup {
   alerts: { message: string, type: 'success' | 'error' | 'warning' | 'info' }[]
 }
 
-export interface Confirmation {
-  title: string
-  sub: string
-  leftLabel?: string
-  leftHide?: boolean
-  leftBg?: string
-  leftColor?: string
-  rightLabel?: string
-  rightHide?: boolean
-  rightBg?: string
-  rightColor?: string
+interface ConfirmButton {
+  label: string
+  color: string
+  hide: boolean
+  bg: string
 }
 
-export interface ConfirmationSetup extends Confirmation {
+export interface ConfirmationBase {
+  title: string
+  sub: string
+}
+
+export interface ConfirmationSetupBase {
   id: string
   close: (val: boolean) => void
 }
+
+export interface Confirmation extends ConfirmationBase {
+  left?: Partial<ConfirmButton>
+  right?: Partial<ConfirmButton>
+}
+
+export interface ConfirmationSetup extends Confirmation, ConfirmationSetupBase {}
+
+export interface SuccessConfirmation extends ConfirmationBase {
+  button?: Partial<ConfirmButton>
+}
+
+export interface SuccessConfirmationSetup extends SuccessConfirmation, ConfirmationSetupBase { }
 
 export interface FetchRule {
   domain: string
