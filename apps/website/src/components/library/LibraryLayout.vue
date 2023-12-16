@@ -166,14 +166,14 @@
 import { useAuth } from '@/composables/auth/auth'
 import { moreOptions, showMoreOptions } from '@/composables/library'
 import { useEditFolder, useMyFolders } from '@/composables/study/folders'
-import { useUsersInList } from '@/composables/users/users'
+import { useMyOrganizations } from '@/composables/users/organizations'
 import { Logic } from "sofa-logic"
 import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
 import { PropType, computed, defineProps } from 'vue'
 import { useMeta } from "vue-meta"
 import { useRoute } from 'vue-router'
 
-const { isAdmin, user } = useAuth()
+const { isAdmin } = useAuth()
 const libraryOptions = computed(() => [
 	{
 		title: 'In progress',
@@ -286,11 +286,7 @@ const tabs = props.options ?? libraryOptions.value.find((o) => o.routePath === r
 const { folders } = useMyFolders()
 const { factory, edit, saveFolder, generateNewFolder, deleteFolder } = useEditFolder()
 
-const { users: orgs } = useUsersInList(computed(() => user.value?.account.organizationsIn ?? []))
-const organizations = computed(() => orgs.value.map((u) => ({
-	id: u.id,
-	name: u.type?.name ?? u.bio.name.full
-})))
+const { organizations } = useMyOrganizations()
 
 useMeta(computed(() => ({
 	title: props.title

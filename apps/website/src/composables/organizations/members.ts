@@ -98,11 +98,8 @@ export const useManageOrganizationMembers = (id: string) => {
 	}
 
 	return {
-		error,
-		loading,
-		message,
-		addMembersEmails,
-		addMembers,
+		error, loading, message,
+		addMembersEmails, addMembers,
 		removeMember, acceptMember
 	}
 }

@@ -371,7 +371,7 @@ export default defineComponent({
       PurchasedItems.value.includes(SingleCourse.value?.id),
       SingleCourse.value?.user.id === Logic.Auth.AuthUser?.id,
       SingleCourse.value?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
-      Logic.Users.UserProfile?.account.organizationsIn.includes(SingleCourse.value?.user.id) && SingleCourse.value?.user.roles.isSubscribed
+      Logic.Users.UserProfile?.account.organizationsIn.find((o) => o.id === SingleCourse.value?.user.id) && SingleCourse.value?.user.roles.isSubscribed
     ].some((x) => x))
 
     const handleItemSelected = (data: any) => {

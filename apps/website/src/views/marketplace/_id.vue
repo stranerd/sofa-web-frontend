@@ -281,7 +281,7 @@ export default defineComponent({
       PurchasedItems.value.includes(SingleCourse.value?.id),
       contentDetails?.user.id === Logic.Auth.AuthUser?.id,
       contentDetails?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
-      Logic.Users.UserProfile?.account.organizationsIn.includes(contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
+      Logic.Users.UserProfile?.account.organizationsIn.find((o) => o.id === contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
     ].some((x) => x))
 
 

@@ -142,29 +142,6 @@ export default class Users extends Common {
     })
   }
 
-  public GetOrganizationMembers = (
-    organizationUserId: string,
-    filters: QueryParams = {},
-  ) => {
-    return $api.users.organization
-      .getOrganizationMembers(organizationUserId, filters)
-      .then((response) => {
-        this.AllorganizationMembers = response.data
-        return response.data.results
-      })
-  }
-
-  public GetOrganizationMember = (
-    organizationUserId: string,
-    studentEmail: string,
-  ) => {
-    return $api.users.organization
-      .getOrganizationMember(organizationUserId, studentEmail)
-      .then((response) => {
-        this.organizationMember = response.data
-      })
-  }
-
   public GetVerifications = (filters: QueryParams) => {
     return $api.users.verifications.fetch(filters).then((response) => {
       this.Verifications = response.data
@@ -331,55 +308,6 @@ export default class Users extends Common {
       })
   }
 
-  public AddOrganizationMembers = (
-    organizationUserId: string,
-    studentEmails: string[],
-  ) => {
-    Logic.Common.showLoading()
-    return $api.users.organization
-      .addOrganizationMembers(organizationUserId, studentEmails)
-      .then((response) => {
-        Logic.Users.GetOrganizationMembers(organizationUserId)
-        Logic.Common.hideLoading()
-        return response.data
-      })
-      .catch(() => {
-        Logic.Common.hideLoading()
-      })
-  }
-
-  public RequestToJoinOrganization = (
-    organizationUserId: string,
-    code: string,
-  ) => {
-    Logic.Common.showLoading()
-
-    return $api.users.organization
-      .requestToJoinOrganization(organizationUserId, code)
-      .then((response) => {
-        Logic.Common.hideLoading()
-        return response.data
-      })
-      .catch(() => {
-        Logic.Common.hideLoading()
-      })
-  }
-
-  public LeaveOrganization = (organizationUserId: string) => {
-    Logic.Common.showLoading()
-
-    return $api.users.organization
-      .leaveOrganization(organizationUserId)
-      .then((response) => {
-        Logic.Users.GetUserProfile()
-        Logic.Common.hideLoading()
-        return response.data
-      })
-      .catch(() => {
-        Logic.Common.hideLoading()
-      })
-  }
-
   public SendFeedbackMessage = (message: string) => {
     Logic.Common.showLoading()
     return $api.users.meta
@@ -392,23 +320,6 @@ export default class Users extends Common {
           type: 'success',
         })
 
-        return response.data
-      })
-      .catch(() => {
-        Logic.Common.hideLoading()
-      })
-  }
-
-  public RemoveOrganizationMember = (
-    organizationUserId: string,
-    studentEmail: string,
-  ) => {
-    Logic.Common.showLoading()
-    return $api.users.organization
-      .removeOrganizationMember(organizationUserId, studentEmail)
-      .then((response) => {
-        Logic.Users.GetOrganizationMembers(organizationUserId)
-        Logic.Common.hideLoading()
         return response.data
       })
       .catch(() => {

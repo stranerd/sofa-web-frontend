@@ -68,7 +68,7 @@ export interface SingleUser {
       count: number
       avg: number
     }
-    organizationsIn: string[]
+    organizationsIn: { id: string, type: 'student' | 'teacher' }[]
     editing: {
 		  quizzes: { id: string, questionId: string } | null
 	  }

@@ -244,6 +244,7 @@
 import { scrollToTop } from "@/composables"
 import { createCourseData, createQuizData } from "@/composables/library"
 import { profileLinks } from "@/composables/profile"
+import { useMyOrganizations } from '@/composables/users/organizations'
 import { Conditions, Logic, QueryParams } from "sofa-logic"
 import {
   SofaAvatar,
@@ -308,11 +309,12 @@ export default defineComponent({
         //
       },
     })
-    const joinCode = ref("")
     const singleUser = ref(Logic.Users.SingleUser)
     const allCourses = ref(Logic.Study.AllCourses)
     const allQuizzes = ref(Logic.Study.AllQuzzies)
     const userMaterials = ref<any[]>([])
+
+    const { code: joinCode, requestToJoinOrganization } = useMyOrganizations()
 
     const hasAtleastASocialLink = ref(false)
 
@@ -526,27 +528,7 @@ export default defineComponent({
     const showJoinOrganization = () => {
       modalSetup.title = `Join ${singleUser.value.bio.name.full}`
       modalSetup.type = "join_organization"
-      modalSetup.action = () => {
-        if (joinCode.value) {
-          Logic.Users.RequestToJoinOrganization(
-            singleUser.value.id,
-            joinCode.value
-          ).then((data) => {
-            if (data) {
-              Logic.Common.showAlert({
-                message: "Your join request has been sent.",
-                type: "success",
-              })
-              showModal.value = false
-            } else {
-              Logic.Common.showAlert({
-                message: "Unable to send join request. Invalid join code",
-                type: "error",
-              })
-            }
-          })
-        }
-      }
+      modalSetup.action = () => requestToJoinOrganization(singleUser.value.id)
       showModal.value = true
     }
 

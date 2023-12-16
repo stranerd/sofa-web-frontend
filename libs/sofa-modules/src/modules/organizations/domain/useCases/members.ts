@@ -30,6 +30,10 @@ export class MembersUseCase {
 		return await this.repository(data.organizationId).accept(data)
 	}
 
+	async leave (data: { organizationId: string, type: MemberTypes }) {
+		return await this.repository(data.organizationId).leave(data)
+	}
+
 	async remove (data: { organizationId: string, email: string, type: MemberTypes }) {
 		return await this.repository(data.organizationId).remove(data)
 	}

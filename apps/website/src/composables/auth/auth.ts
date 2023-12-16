@@ -1,19 +1,21 @@
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthUseCases } from '@modules/auth'
-import { Logic, SingleUser, Wallet } from 'sofa-logic'
+import { Logic, Wallet } from 'sofa-logic'
+import { UserEntity, UsersUseCases } from '@modules/users'
 import { computed, ref } from 'vue'
 
 const store = {
 	auth: ref(null as AuthDetails | null),
-	user: ref(null as SingleUser | null),
+	user: ref(null as UserEntity | null),
 	wallet: ref(null as Wallet | null),
 	listener: useListener(async () => {
 		const id = store.auth.value?.id as string | undefined
 		if (!id) return () => {
 			//
 		}
-		const setUser = async (user: SingleUser) => {
+		const setUser = async (user: UserEntity) => {
 			store.user.value = user
+			Logic.Users.UserProfile = user as any
 		}
 		const setWallet = async (wallet: Wallet) => {
 			store.wallet.value = wallet
@@ -59,7 +61,8 @@ export const useAuth = () => {
 		store.auth.value = details
 		Logic.Auth.AuthUser = details as any
 		if (details?.id) {
-			store.user.value = await Logic.Users.GetUserProfile(details.id)
+			store.user.value = await UsersUseCases.find(details.id)
+			Logic.Users.UserProfile = store.user.value as any
 			store.wallet.value = await Logic.Payment.GetUserWallet()
 		} else store.user.value = null
 	}
@@ -97,7 +100,6 @@ export const useAuth = () => {
 			rightLabel: 'Yes, delete account',
 		})
 		if (!confirmed) return
-		//
 		// await unregisterDeviceOnLogout()
 		await AuthUseCases.deleteAccount()
 		await setAuthUser(null)
