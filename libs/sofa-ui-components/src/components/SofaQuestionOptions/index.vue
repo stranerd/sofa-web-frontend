@@ -23,7 +23,7 @@
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('timeLimit')">
 					<SofaIcon class="h-[18px]" name="time-limit" />
 					<SofaNormalText class="!font-bold" content="Time limit" />
-					<SofaNormalText :content="formatTime(factory.timeLimit)" class="ml-auto" />
+					<SofaNormalText :content="Logic.Common.prettifyTime(factory.timeLimit)" class="ml-auto" />
 					<SofaIcon class="h-[7px]" :name="isOpen('timeLimit') ? 'chevron-up' : 'chevron-down'" />
 				</a>
 
@@ -31,7 +31,7 @@
 					<a v-for="time in [5, 10, 20, 30, 60, 90, 120, 180, 240, 300]" :key="time" @click="factory.timeLimit = time"
 						class="rounded-lg flex px-4 py-2 items-center justify-center gap-1"
 						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'">
-						<SofaNormalText class="text-center" color="text-inherit" :content="formatTime(time)" />
+						<SofaNormalText class="text-center" color="text-inherit" :content="Logic.Common.prettifyTime(time)" />
 					</a>
 				</div>
 			</div>
@@ -100,12 +100,6 @@ defineProps({
 })
 
 const emits = defineEmits(['showCurrentlyEditing', 'duplicateQuestion', 'saveQuestion', 'deleteQuestion', 'deleteQuiz'])
-
-const formatTime = (v: number) => {
-	const min = Math.floor(v / 60)
-	const sec = v % 60
-	return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
-}
 
 const openOptions = ref(['type', 'timeLimit'])
 

@@ -149,6 +149,7 @@ import {
 } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
+import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	components: {
@@ -337,9 +338,7 @@ export default defineComponent({
 				contentDetails.status = SingleCourse.value.status
 				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.png'
 				contentDetails.info = SingleCourse.value.description
-				contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-					SingleCourse.value.createdAt
-				).format('DD/MM/YYYY')}`
+				contentDetails.lastUpdated = `Last updated ${formatTime(SingleCourse.value.createdAt)}`
 				contentDetails.labels.color = 'orange'
 				contentDetails.labels.main = 'Course'
 				contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`
@@ -445,9 +444,7 @@ export default defineComponent({
 					? SingleQuiz.value.photo.link
 					: '/images/default.png'
 				contentDetails.info = SingleQuiz.value.description
-				contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-					SingleQuiz.value.createdAt
-				).format('DD/MM/YYYY')}`
+				contentDetails.lastUpdated = `Last updated ${formatTime(SingleQuiz.value.createdAt)}`
 				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`
 				contentDetails.labels.color = 'pink'
 				contentDetails.labels.main = 'Quiz'
@@ -494,8 +491,7 @@ export default defineComponent({
 					contentDetails.questions.push({
 						type: question.type,
 						content: question.question,
-						duration:
-              Logic.Common.EquivalentsSecondsInString[question.timeLimit],
+						duration: Logic.Common.prettifyTime(question.timeLimit),
 						answer: '',
 					})
 				})

@@ -1,7 +1,6 @@
 import { listenOnSocket } from '@modules/core'
 import { AxiosError } from 'axios'
 import currency from 'currency.js'
-import moment from 'moment'
 import { reactive } from 'vue'
 import {
 	NavigationGuardNext,
@@ -32,17 +31,10 @@ export default class Common {
 
 	public watchInterval: number | undefined = undefined
 
-	public EquivalentsSecondsInString = {
-		'5': '5s',
-		'10': '10s',
-		'20': '20s',
-		'30': '30s',
-		'60': '1m',
-		'90': '1m 30s',
-		'120': '2m',
-		'180': '3m',
-		'240': '4m',
-		'300': '5m',
+	prettifyTime = (seconds: number) => {
+		const min = Math.floor(seconds / 60)
+		const sec = seconds % 60
+		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
 	}
 
 	public AvailableCurrencies = {
@@ -112,9 +104,8 @@ export default class Common {
 		})
 	}
 
-	public ordinal_suffix_of(i: number) {
-		const j = i % 10,
-			k = i % 100
+	public ordinalSuffixOf(i: number) {
+		const j = i % 10, k = i % 100
 		if (j == 1 && k != 11) return i + 'st'
 		if (j == 2 && k != 12) return i + 'nd'
 		if (j == 3 && k != 13) return i + 'rd'
@@ -187,21 +178,19 @@ export default class Common {
 	}
 
 	public goBack = () => {
-		const ignoreBackRoute = this.route?.query.ignoreBackRoute
-			? this.route.query.ignoreBackRoute.toString()
-			: null
-		const routeMiddlewares: any = this.route?.meta.middlewares
-		const goBackRoute = routeMiddlewares?.goBackRoute
-		if (typeof goBackRoute == 'function' && !ignoreBackRoute) {
-			this.GoToRoute(goBackRoute())
-		} else if (typeof goBackRoute == 'string' && !ignoreBackRoute) {
-			this.GoToRoute(goBackRoute)
-		} else {
-			window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
-		}
+		const ignoreBackRoute = this.route?.query.ignoreBackRoute ?? null
+		const goBackRoute = this.route?.meta.middlewares?.goBackRoute
+		if (typeof goBackRoute == 'function' && !ignoreBackRoute) this.GoToRoute(goBackRoute())
+		else if (typeof goBackRoute == 'string' && !ignoreBackRoute) this.GoToRoute(goBackRoute)
+		else window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
 	}
 
-	public momentInstance = moment
+	public daysDiff (a: Date, b: Date) {
+		const _MS_PER_DAY = 1000 * 60 * 60 * 24
+		const utc1 = new Date(a.getFullYear(), a.getMonth(), a.getDate())
+		const utc2 = new Date(b.getFullYear(), b.getMonth(), b.getDate())
+		return Math.floor((utc2 - utc1) / _MS_PER_DAY)
+	}
 
 	public convertToMoney = (
 		float: any,
@@ -265,14 +254,6 @@ export default class Common {
 		}
 
 		watchAction()
-	}
-
-	public fomartDate = (date: number, format: string) => {
-		return moment(date).format(format)
-	}
-
-	public timeFromNow = (time: number) => {
-		return moment(time).fromNow()
 	}
 
 	public preFetchRouteData = async (

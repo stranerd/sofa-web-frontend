@@ -9,18 +9,19 @@
 								option?.opened
 									? (option.opened = false)
 									: (option.opened = true)
-							">
+								">
 								<div class="flex flex-row items-center gap-2">
 									<sofa-normal-text :customClass="'!font-bold'" v-if="!option.edit">{{
 										option.name == "unsectioned" ? "Unsectioned" : option.name
 									}}</sofa-normal-text>
 									<input v-else @click.stop="null"
 										class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
-										v-model="option.name" autofocus placeholder="Section name" @blur="option.edit = false" />
+										v-model="option.name" autofocus placeholder="Section name"
+										@blur="option.edit = false" />
 								</div>
 								<div class="flex flex-row items-center gap-3">
-									<sofa-icon @click.stop="option.edit = true" :customClass="'h-[15px] cursor-pointer'" :name="'edit-gray'"
-										v-if="option.name != 'unsectioned'" />
+									<sofa-icon @click.stop="option.edit = true" :customClass="'h-[15px] cursor-pointer'"
+										:name="'edit-gray'" v-if="option.name != 'unsectioned'" />
 									<sofa-icon @click.stop="removeSection(index)" :customClass="'h-[15px] cursor-pointer'"
 										:name="'trash-gray'" v-if="option.name != 'unsectioned'" />
 									<sofa-icon :customClass="'h-[7px] cursor-pointer'"
@@ -35,20 +36,20 @@
 										<div :class="`w-full flex flex-row items-center relative justify-between gap-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${selectedMaterial?.id == element.id
 											? 'bg-lightBlue'
 											: 'bg-white'
-										}`" @mouseover="element.hover = true" @mouseleave="element.hover = false" @click.stop="
-											selectedMaterial = {
-												id: element.id,
-												data: element.data,
-												details: element.details,
-												type: element.type.split('-')[0],
-											}
-											handleItemSelected();
-										">
+											}`" @mouseover="element.hover = true" @mouseleave="element.hover = false" @click.stop="
+		selectedMaterial = {
+			id: element.id,
+			data: element.data,
+			details: element.details,
+			type: element.type.split('-')[0],
+		}
+	handleItemSelected();
+	">
 											<div class="flex flex-row items-center gap-2">
 												<sofa-icon :customClass="'h-[17px]'" :name="element.type" />
 												<sofa-normal-text
 													:customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'">{{
-													element.name }}</sofa-normal-text>
+														element.name }}</sofa-normal-text>
 											</div>
 
 											<div
@@ -66,8 +67,8 @@
 
 								<div class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer" @click="
 									selectedMaterial = undefined
-									selectedSection = index
-									handleItemSelected();
+								selectedSection = index
+								handleItemSelected();
 								" v-if="option.name != 'unsectioned'">
 									<sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
 									<sofa-normal-text :color="'text-primaryPurple'">
@@ -90,6 +91,10 @@
 	</div>
 </template>
 <script lang="ts">
+import { formatTime } from '@utils/dates'
+import { apiBase } from '@utils/environment'
+import { getTokens } from '@utils/tokens'
+import { Course, Logic, Question, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
 import {
 	capitalize,
 	defineComponent,
@@ -99,9 +104,6 @@ import {
 	watch,
 } from 'vue'
 import draggable from 'vuedraggable'
-import { Logic, UpdateCourseSectionsInput, Course, Question, Quiz, SofaFile } from 'sofa-logic'
-import { apiBase } from '@utils/environment'
-import { getTokens } from '@utils/tokens'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
@@ -250,14 +252,14 @@ export default defineComponent({
 
 							if (eachQuestion.data.type == 'multipleChoice') {
 								answers =
-                  eachQuestion.data.options[eachQuestion.data.answers[0]]
+									eachQuestion.data.options[eachQuestion.data.answers[0]]
 							} else if (eachQuestion.data.type == 'trueOrFalse') {
 								answers = `${capitalize(eachQuestion.data.answer.toString())}`
 							} else if (
 								eachQuestion.data.type == 'writeAnswer' ||
-                eachQuestion.data.type == 'sequence' ||
-                eachQuestion.data.type == 'dragAnswers' ||
-                eachQuestion.data.type == 'fillInBlanks'
+								eachQuestion.data.type == 'sequence' ||
+								eachQuestion.data.type == 'dragAnswers' ||
+								eachQuestion.data.type == 'fillInBlanks'
 							) {
 								answers = capitalize(eachQuestion.data.answers?.join(', '))
 							} else if (eachQuestion.data.type == 'match') {
@@ -271,7 +273,7 @@ export default defineComponent({
 							}
 							return {
 								type: Logic.Study.getQuestionTypeLabel(eachQuestion.data.type),
-								duration: Logic.Common.EquivalentsSecondsInString[eachQuestion.timeLimit],
+								duration: Logic.Common.prettifyTime(eachQuestion.timeLimit),
 								content: eachQuestion.question,
 								answer: answers,
 							}
@@ -289,16 +291,13 @@ export default defineComponent({
 								description: quiz.description,
 								ratings: {
 									avg: Math.round(quiz.ratings.avg),
-									label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? 's' : ''
-									}`,
+									label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? 's' : ''}`,
 								},
 								user: {
 									photoUrl: `${quiz.user.bio?.photo?.link}`,
 									name: `${quiz.user.bio?.name?.full}`,
 								},
-								last_updated: `${Logic.Common.momentInstance(
-									quiz.createdAt
-								).format('DD/MM/YYYY')}`,
+								last_updated: formatTime(quiz.createdAt)
 							},
 							data: allQuestions,
 							hover: false,
@@ -434,7 +433,7 @@ export default defineComponent({
 		const addNewSection = () => {
 			const currentSectionsLenght = props.sectionInput.sections.length
 			const newSectionPosition =
-        currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1
+				currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1
 			props.sectionInput.sections.splice(newSectionPosition, 0, {
 				items: [],
 				label: `Section ${sectionOptions.length}`,

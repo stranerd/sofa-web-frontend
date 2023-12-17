@@ -5,7 +5,13 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
 	plugins: [
-		vue(),
+		vue({
+			template: {
+				compilerOptions: {
+					isCustomElement: tag => ['math-field'].includes(tag),
+				},
+			},
+		}),
 		/* Pages({
 			dirs: 'src/views',
 			routeStyle: 'nuxt',

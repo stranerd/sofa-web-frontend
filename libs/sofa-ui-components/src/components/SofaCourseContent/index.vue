@@ -9,7 +9,8 @@
 						selectedSection = index
 					}">
 						<sofa-normal-text :customClass="'!font-bold'">{{ option.name }}</sofa-normal-text>
-						<sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
+						<sofa-icon :customClass="'h-[7px] cursor-pointer'"
+							:name="option.opened ? 'chevron-up' : 'chevron-down'" />
 					</a>
 				</template>
 
@@ -26,7 +27,8 @@
 										{{ material.name }}
 									</sofa-normal-text>
 									<sofa-icon :customClass="'h-[25px]'" v-if="lockContent" :name="'locked-content'" />
-									<sofa-icon :customClass="'h-[18px]'" v-else-if="itemIsStudied(material.id)" name="selected" />
+									<sofa-icon :customClass="'h-[18px]'" v-else-if="itemIsStudied(material.id)"
+										name="selected" />
 								</div>
 								<div class="w-full flex gap-2 items-center">
 									<div class="flex items-center gap-1">
@@ -43,7 +45,8 @@
 						<template v-else>
 							<div class="w-full flex flex-col gap-3 pt-2">
 								<div v-for="(material, index) in option.materials" :key="index"
-									class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue" @click.stop="selectItem(material)">
+									class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue"
+									@click.stop="selectItem(material)">
 									<sofa-icon :customClass="'h-[18px]'" :name="material.type" />
 									<sofa-normal-text :customClass="'!text-left !line-clamp-1'" :color="'text-deepGray'">
 										{{ material.name }}
@@ -71,6 +74,7 @@ import {
 } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
+import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	components: {
@@ -124,8 +128,8 @@ export default defineComponent({
 			materialId
 			return false
 			/* return !!localStorage.getItem(
-        `course_${SingleCourse.value.id}_material_${materialId}`
-      ) */
+		`course_${SingleCourse.value.id}_material_${materialId}`
+	  ) */
 		}
 
 		watch(SingleCourse, async () => {
@@ -142,8 +146,8 @@ export default defineComponent({
 			context.emit('OnMaterialSelected', selectedMaterial.value)
 			if (
 				selectedMaterial.value.type == 'document' ||
-        selectedMaterial.value.type == 'image' ||
-        selectedMaterial.value.type == 'video'
+				selectedMaterial.value.type == 'image' ||
+				selectedMaterial.value.type == 'video'
 			) {
 				localStorage.setItem(
 					`course_${SingleCourse.value.id}_material_${selectedMaterial.value.id}`,
@@ -280,7 +284,7 @@ export default defineComponent({
 											}
 											return {
 												type: Logic.Study.getQuestionTypeLabel(eachQuestion.data.type),
-												duration: Logic.Common.EquivalentsSecondsInString[eachQuestion.timeLimit],
+												duration: Logic.Common.prettifyTime(eachQuestion.timeLimit),
 												content: eachQuestion.question,
 												answer: answers,
 											}
@@ -297,9 +301,7 @@ export default defineComponent({
 											? quiz.photo.link
 											: '/images/default.png'
 										contentDetails.info = quiz.description
-										contentDetails.lastUpdated = `Last updated ${Logic.Common.momentInstance(
-											quiz.updatedAt
-										).format('DD/MM/YYYY')}`
+										contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
 										contentDetails.tags = quiz.tagIds.map((id) => {
 											return Logic.Study.GetTagName(id)
 										})
@@ -313,8 +315,7 @@ export default defineComponent({
 										contentDetails.labels = {
 											color: 'purple',
 											main: 'Quiz',
-											sub: `${quiz.questions.length} question${quiz.questions.length > 1 ? 's' : ''
-											}`,
+											sub: `${quiz.questions.length} question${quiz.questions.length > 1 ? 's' : ''}`,
 										}
 
 										contentDetails.questions = allQuestions

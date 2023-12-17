@@ -18,6 +18,6 @@ export const googleClientId = isIos ? googleClientIds.ios : isAndroid ? googleCl
 const host = import.meta.env.VITE_DOMAIN ?? ''
 export const domain = parseURL(`http${!isDev ? 's' : ''}://${host}`)
 
-export const apiBase = 'https://development.apis.sofa.stranerd.com/api' || parseURL(import.meta.env.VITE_API_URL ?? '')
+export const apiBase = parseURL(import.meta.env.VITE_API_URL ?? '')
 
 export const packageName = import.meta.env.VITE_PACKAGE_NAME

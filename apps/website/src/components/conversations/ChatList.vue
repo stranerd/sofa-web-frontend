@@ -1,8 +1,8 @@
 <template>
-	<div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4"
-		v-if="userType.isTeacher && requests.length">
+	<div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4" v-if="userType.isTeacher && requests.length">
 		<a :class="`w-full flex items-center justify-between ${extraStyle}`" @click="showRequests = !showRequests">
-			<sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'" :content="`Requests (${requests.length})`" />
+			<sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'"
+				:content="`Requests (${requests.length})`" />
 			<sofa-icon :name="showRequests ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
 		</a>
 		<div class="w-full flex flex-col gap-3" v-if="showRequests">
@@ -42,9 +42,9 @@
 </template>
 
 <script lang="ts" setup>
-import { formatTime } from '@/common/dates'
 import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList } from '@/composables/conversations/conversations'
+import { formatTime } from '@utils/dates'
 import { SofaHeaderText, SofaIcon } from 'sofa-ui-components'
 import { defineProps, ref } from 'vue'
 import Chat from './Chat.vue'

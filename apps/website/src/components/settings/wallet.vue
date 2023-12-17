@@ -52,8 +52,7 @@
 				<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
 			</a>
 
-			<div
-				:class="`w-full flex flex-row items-center gap-3 p-3 border-2 border-darkLightGray justify-between rounded-custom`"
+			<div :class="`w-full flex flex-row items-center gap-3 p-3 border-2 border-darkLightGray justify-between rounded-custom`"
 				v-for="(method, index) in PaymentMethods.results" :key="index">
 				<div class="flex flex-row items-center gap-3">
 					<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
@@ -66,7 +65,8 @@
 					<span class="px-4 py-1 bg-primaryGreen rounded-[14px] cursor-pointer" v-if="method.primary">
 						<sofa-normal-text :color="'text-white'" :customClass="'!text-xs'">Primary</sofa-normal-text>
 					</span>
-					<a class="px-4 py-1 bg-primaryPurple rounded-[14px]" v-else @click="Logic.Payment.MakeMethodPrimary(method.id)">
+					<a class="px-4 py-1 bg-primaryPurple rounded-[14px]" v-else
+						@click="Logic.Payment.MakeMethodPrimary(method.id)">
 						<sofa-normal-text :color="'text-white'" :customClass="'!text-xs'">Set as primary</sofa-normal-text>
 					</a>
 					<sofa-icon :customClass="'h-[20px] cursor-pointer'" :name="'remove'" @click="
@@ -101,10 +101,6 @@
 						</sofa-normal-text>
 					</div>
 					<div class="w-full flex flex-row justify-start gap-2 items-center">
-						<sofa-normal-text :color="'text-grayColor'">
-							{{ transaction.date }}
-						</sofa-normal-text>
-						<span class="h-[4px] w-[4px] bg-grayColor rounded-full"> </span>
 						<sofa-normal-text :color="'text-grayColor'">
 							{{ transaction.time }}
 						</sofa-normal-text>
@@ -184,8 +180,7 @@
 							</sofa-normal-text>
 						</div>
 
-						<div
-							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer border-2 rounded-custom border-darkLightGray"
+						<div class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer border-2 rounded-custom border-darkLightGray"
 							@click="Logic.Payment.initialPayment()">
 							<sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
 							<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
@@ -228,40 +223,40 @@
 						:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" :isFormatted="true"
 						v-model="withdrawForm.amount">
 						<template v-slot:inner-prefix>
-							<sofa-normal-text>{{
-								Logic.Common.AvailableCurrencies[UserWallet.balance.currency] ||
-									""
-							}}</sofa-normal-text>
+							<sofa-normal-text>
+								{{ Logic.Common.AvailableCurrencies[UserWallet.balance.currency] || "" }}
+							</sofa-normal-text>
 						</template>
 					</sofa-text-field>
 
 					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
 						:padding="'px-3 py-3'" type="tel" :name="'Account number'" ref="account_number"
-						:placeholder="'Account number'" :borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]"
-						v-model="withdrawForm.account_number">
+						:placeholder="'Account number'" :borderColor="'border-transparent'"
+						:rules="[Logic.Form.RequiredRule]" v-model="withdrawForm.account_number">
 					</sofa-text-field>
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'px-3 py-3'"
-						:name="'Bank'" ref="bank" :placeholder="'Bank'" :borderColor="'border-transparent'"
-						:rules="[Logic.Form.RequiredRule]"
-						:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))" :auto-complete="true"
-						v-model="withdrawForm.bank">
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+						:padding="'px-3 py-3'" :name="'Bank'" ref="bank" :placeholder="'Bank'"
+						:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]"
+						:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))"
+						:auto-complete="true" v-model="withdrawForm.bank">
 					</sofa-select>
 				</div>
 
-				<div
-					class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4"
+				<div class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4"
 					v-if="modalContent != 'transaction_info'">
 					<div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
 						<sofa-button :textColor="'text-grayColor'" :bgColor="'bg-white'" :padding="'px-4 py-1'"
-							:customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`" @click="showModal = false">
+							:customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
+							@click="showModal = false">
 							Cancel
 						</sofa-button>
 					</div>
 
 					<div class="md:!w-auto col-span-2 flex flex-col">
 						<sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'" :padding="'px-4 md:!py-1 py-3'"
-							:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`" @click="handleContinue()">
+							:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
+							@click="handleContinue()">
 							Continue
 						</sofa-button>
 					</div>
@@ -271,29 +266,28 @@
 	</sofa-modal>
 
 	<!-- Delete payment method prompt -->
-	<sofa-delete-prompt v-if="showDeleteMethod" :title="'Are you sure?'" :subTitle="`This action is permanent.`" :close="() => {
-		showDeleteMethod = false
-	}
-	" :buttons="[
-		{
-			label: 'No',
-			isClose: true,
-			action: () => {
-				showDeleteMethod = false
+	<sofa-delete-prompt v-if="showDeleteMethod" :title="'Are you sure?'" :subTitle="`This action is permanent.`"
+		:close="() => showDeleteMethod = false" :buttons="[
+			{
+				label: 'No',
+				isClose: true,
+				action: () => {
+					showDeleteMethod = false
+				},
 			},
-		},
-		{
-			label: 'Yes, delete',
-			isClose: false,
-			action: () => {
-				Logic.Payment.DeleteMethod(selectedMethodId)
-				showDeleteMethod = false
+			{
+				label: 'Yes, delete',
+				isClose: false,
+				action: () => {
+					Logic.Payment.DeleteMethod(selectedMethodId)
+					showDeleteMethod = false
+				},
 			},
-		},
-	]" />
+		]" />
 </template>
 <script lang="ts">
 import { FormValidations } from '@/composables'
+import { formatTime } from '@utils/dates'
 import { Conditions, Logic, SelectOption, Transaction } from 'sofa-logic'
 import {
 	SofaButton,
@@ -359,7 +353,6 @@ export default defineComponent({
 		const transactionDetails = reactive({
 			amount: '₦10,000',
 			title: '',
-			date: 'Mar 31, 2023',
 			time: '8:22 AM',
 		})
 
@@ -394,8 +387,7 @@ export default defineComponent({
 				if (transaction.data.type !== 'newCard') transactions.value.push({
 					title: transaction.title,
 					type: transaction.amount > 0 ? 'credit' : 'debit',
-					date: `${Logic.Common.fomartDate(transaction.createdAt, 'MMM D')}`,
-					time: `${Logic.Common.fomartDate(transaction.createdAt, 'hh:mma')}`,
+					time: formatTime(transaction.createdAt),
 					amount: transaction.amount,
 					data: transaction,
 					status: transaction.status,
@@ -435,14 +427,14 @@ export default defineComponent({
 
 			if (
 				transaction.title.includes('Test charge') ||
-        transaction.title.includes('Fund')
+				transaction.title.includes('Fund')
 			) {
 				transactionType = 'Wallet funding'
 			}
 
 			if (
 				transaction.title.includes('Purchasing') ||
-        transaction.title.includes('Purchase')
+				transaction.title.includes('Purchase')
 			) {
 				transactionType = 'Course purchase'
 			}
@@ -459,14 +451,7 @@ export default defineComponent({
 				false,
 				'ngn'
 			)
-			transactionDetails.date = `${Logic.Common.fomartDate(
-				transaction.createdAt,
-				'MMM D, YYYY'
-			)}`
-			transactionDetails.time = `${Logic.Common.fomartDate(
-				transaction.createdAt,
-				'hh:mma'
-			)}`
+			transactionDetails.time = formatTime(transaction.createdAt)
 
 			modalTitle.value = 'Transaction details'
 			modalContent.value = 'transaction_info'
@@ -506,8 +491,8 @@ export default defineComponent({
 			} else if (modalContent.value == 'withdraw_money') {
 				if (
 					withdrawForm.account_number &&
-          withdrawForm.amount &&
-          withdrawForm.bank
+					withdrawForm.amount &&
+					withdrawForm.bank
 				) {
 					const amount = parseFloat(withdrawForm.amount.replace(/,/g, ''))
 

@@ -85,7 +85,7 @@ export const createGameData = (p: Game, quizzes: Quiz[]) => {
 		inProgress: !ended,
 		createdAt: p.createdAt,
 		image: currentQuiz?.photo?.link || '/images/default.png',
-		label: Logic.Common.ordinal_suffix_of(userPosition !== -1 ? userPosition + 1 : p.participants.length),
+		label: Logic.Common.ordinalSuffixOf(userPosition !== -1 ? userPosition + 1 : p.participants.length),
 		label_color: 'text-[#3296C8]',
 		title: currentQuiz?.title || 'Unknown quiz',
 		type: 'game',

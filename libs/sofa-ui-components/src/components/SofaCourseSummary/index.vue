@@ -46,8 +46,7 @@
 			<div class="w-full flex flex-row items-center gap-2">
 				<sofa-icon :customClass="'h-[16px]'" :name="'calendar-black'" />
 				<sofa-normal-text>
-					Last updated
-					{{ Logic.Common.fomartDate(data.updatedAt, "DD/MM/YYYY") }}
+					Last updated {{ formatTime(data.updatedAt) }}
 				</sofa-normal-text>
 			</div>
 		</div>
@@ -61,6 +60,7 @@ import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaNormalText } from '../SofaTypography'
+import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	components: {
@@ -86,7 +86,7 @@ export default defineComponent({
 	name: 'SofaCourseSummary',
 	setup () {
 		return {
-			Logic,
+			Logic, formatTime
 		}
 	},
 })

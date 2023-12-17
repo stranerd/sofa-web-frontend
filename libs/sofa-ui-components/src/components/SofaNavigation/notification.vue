@@ -7,14 +7,14 @@
 			<sofa-icon :customClass="'h-[19px] cursor-pointer'" :name="'circle-close'" @click="close ? close() : null" />
 		</div>
 		<div class="w-full flex flex-col gap-3" v-if="AllNotifications.results.length">
-			<div :class="`w-full flex flex-row items-start justify-between ${item.seen ? 'opacity-80' : ''
-			}`" v-for="(item, index) in AllNotifications.results" :key="index">
+			<div :class="`w-full flex flex-row items-start justify-between ${item.seen ? 'opacity-80' : ''}`"
+				v-for="(item, index) in AllNotifications.results" :key="index">
 				<div class="flex flex-col gap-1">
 					<sofa-normal-text :custom-class="'text-left'">
 						{{ item.body }}
 					</sofa-normal-text>
 					<sofa-normal-text :color="'text-grayColor'" :customClass="'!text-left'">
-						{{ Logic.Common.timeFromNow(item.createdAt) }}
+						{{ formatTime(item.createdAt) }}
 					</sofa-normal-text>
 				</div>
 				<div class="flex flex-col" v-if="!item.seen">
@@ -31,8 +31,9 @@
 	</div>
 </template>
 <script lang="ts">
+import { formatTime } from '@utils/dates'
+import { Logic, Notification, Paginated } from 'sofa-logic'
 import { defineComponent, onMounted, ref } from 'vue'
-import { Logic, Paginated, Notification } from 'sofa-logic'
 import SofaIcon from '../SofaIcon'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
@@ -60,6 +61,7 @@ export default defineComponent({
 		return {
 			AllNotifications,
 			Logic,
+			formatTime,
 		}
 	},
 })
