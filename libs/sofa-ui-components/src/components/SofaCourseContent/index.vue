@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full w-full relative pb-4">
-    <div class="flex flex-col w-full gap-2 p-4 border-[#F1F6FA] border-t" v-for="(option, index) in sectionOptions"
+    <div class="flex flex-col w-full gap-2 p-4 border-lightGray border-t" v-for="(option, index) in sectionOptions"
       :key="index">
       <template v-if="option">
         <template v-if="option.name != 'unsectioned'">
@@ -45,7 +45,7 @@
                 <div v-for="(material, index) in option.materials" :key="index"
                   class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue" @click.stop="selectItem(material)">
                   <sofa-icon :customClass="'h-[18px]'" :name="material.type" />
-                  <sofa-normal-text :customClass="'!text-left !line-clamp-1'" :color="'text-[#141618]'">
+                  <sofa-normal-text :customClass="'!text-left !line-clamp-1'" :color="'text-deepGray'">
                     {{ material.name }}
                   </sofa-normal-text>
                 </div>
@@ -58,6 +58,8 @@
   </div>
 </template>
 <script lang="ts">
+import { apiBase } from "@utils/environment"
+import { getTokens } from "@utils/tokens"
 import { ContentDetails, Course, Logic, Question, Quiz, SofaFile } from "sofa-logic"
 import {
   capitalize,
@@ -177,8 +179,8 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const tokens = await Logic.Auth.GetTokens()
-        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id}/media?AccessToken=${tokens?.accessToken}`
+        const { accessToken } = await getTokens()
+        const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`
         if (mediaFile.type == "image") {
           staticSectionOptions.value[index].materials.push({
             name: mediaFile.title,
@@ -387,7 +389,7 @@ export default defineComponent({
       await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
         staticSectionOptions.value.push({
           name: section.label,
-          id: Logic.Common.makeid(9),
+          id: Logic.Common.makeId(),
           materials: [],
           opened: index == selectedSection.value,
           edit: false,

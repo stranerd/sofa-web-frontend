@@ -1,12 +1,14 @@
-import { Logic } from 'sofa-logic'
 import { App } from 'vue'
 import { Router } from 'vue-router'
 
 import { useAuth } from '@/composables/auth/auth'
+import { setEmailVerificationEmail } from '@/composables/auth/signin'
 import AuthLayout from '../layouts/Auth.vue'
 import DashboardLayout from '../layouts/Dashboard.vue'
 import ExpandedLayout from '../layouts/Expanded.vue'
 import SubPageLayout from '../layouts/SubPage.vue'
+import { deleteTokens, getTokens } from '@utils/tokens'
+import { AuthUseCases } from '@modules/auth'
 
 type PluginFunction = (args: { app: App, router: Router }) => Promise<void>
 const definePlugin = (plugin: PluginFunction) => plugin
@@ -39,16 +41,20 @@ const cssListeners = definePlugin(async () => {
 	}, 500)
 })
 
-const parseLoggedInUser = definePlugin(async () => {
+const parseLoggedInUser = definePlugin(async ({ router }) => {
 	try {
-		const tokens = await Logic.Auth.GetTokens()
-		if (!tokens) return
-		const user = await Logic.Auth.GetAuthUser().catch(() => null)
-		if (!user) return await Logic.Auth.DeleteTokens()
-
-		const { isLoggedIn, signin, setAuthUser } = useAuth()
-		await setAuthUser(user)
-		if (isLoggedIn.value) await signin(true)
+		const { accessToken, refreshToken } = await getTokens()
+		if (!accessToken || !refreshToken) return
+		const user = await AuthUseCases.getAuthUser().catch(() => null)
+		if (!user) return await deleteTokens()
+		if (!user.isEmailVerified) {
+			setEmailVerificationEmail(user.email)
+			await router.push('/auth/verify')
+		} else {
+			const { isLoggedIn, signin, setAuthUser } = useAuth()
+			await setAuthUser(user)
+			if (isLoggedIn.value) await signin(true)
+		}
 	} catch {
 		//
 	}

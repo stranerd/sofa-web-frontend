@@ -7,7 +7,7 @@
       </sofa-normal-text>
     </div>
     <div
-      class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-backgroundGray py-4 px-4 sticky top-0 left-0">
+      class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
       <sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
       <sofa-normal-text :customClass="'!font-bold !text-base'">
         {{
@@ -59,7 +59,7 @@
           </div>
 
           <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               Choose payment method
             </sofa-normal-text>
@@ -68,7 +68,7 @@
 
           <div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
             <!-- Wallet -->
-            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-[#F1F6FA] ${selectedMethodId == 'payWithWallet'
+            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${selectedMethodId == 'payWithWallet'
               ? 'border-primaryBlue  border-2'
               : ''
               }  rounded-custom cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
@@ -92,7 +92,7 @@
               <sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
             </div>
 
-            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-[#F1F6FA]  ${selectedMethodId == method.id
+            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id
               ? 'border-primaryBlue border-2'
               : ''
               }  rounded-custom cursor-pointer `" @click="selectedMethodId = method.id"
@@ -134,8 +134,8 @@ import {
   createQuizData,
   openQuiz,
   reportMaterial,
-  shareMaterialLink,
-  saveToFolder
+  saveToFolder,
+  shareMaterialLink
 } from "@/composables/library"
 import { otherTasks } from "@/composables/quiz"
 import { Conditions, Logic } from "sofa-logic"
@@ -281,7 +281,7 @@ export default defineComponent({
       PurchasedItems.value.includes(SingleCourse.value?.id),
       contentDetails?.user.id === Logic.Auth.AuthUser?.id,
       contentDetails?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
-      Logic.Users.UserProfile?.account.organizationsIn.includes(contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
+      Logic.Users.UserProfile?.account.organizationsIn.find((o) => o.id === contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
     ].some((x) => x))
 
 
@@ -585,22 +585,22 @@ export default defineComponent({
         setSimilarContents()
         // create course view
         if (SingleCourse.value) Logic.Interactions.CreateView({
-            entity: {
-              id: SingleCourse.value.id,
-              type: "courses",
-            },
-          }).catch()
+          entity: {
+            id: SingleCourse.value.id,
+            type: "courses",
+          },
+        }).catch()
       }
 
       if (contentType.value == "quiz") {
         setQuizData()
         setSimilarContents()
         if (SingleQuiz.value) Logic.Interactions.CreateView({
-            entity: {
-              id: SingleQuiz.value.id,
-              type: "quizzes",
-            },
-          }).catch()
+          entity: {
+            id: SingleQuiz.value.id,
+            type: "quizzes",
+          },
+        }).catch()
       }
     })
 

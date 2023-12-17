@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-[#F1F6FA] rounded-lg">
+  <div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-lightGray rounded-lg">
     <VuePDF :pdf="pdf" :textLayer="true" :fitParent="true" class="!overflow-y-auto" />
   </div>
 </template>

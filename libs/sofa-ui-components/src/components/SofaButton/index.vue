@@ -1,19 +1,21 @@
 <template>
-  <div :class="`w-auto h-auto relative ${visible ? '' : 'invisible'} ${disabled ? 'opacity-30' : ''}`">
-    <button :disabled="loading || disabled" @click="handleClicked" :class="`focus:outline-none relative rounded-md flex gap-2 items-center z-[3] ${loading ? 'opacity-75' : ''
-      } lg:text-sm mdlg:text-[12px] text-xs justify-center whitespace-nowrap ${padding} ${bgColor} ${textColor} ${customClass}`"
-      style="border-radius: 16px 8px">
-      <slot />
-      <span class="pl-2" v-if="loading"><sofa-icon :name="'loader'" :custom-class="'h-[28px]'" /></span>
-    </button>
-    <div v-if="hasDoubleLayer && !isHovered && hasDarkLayer && !disabled"
-      class="absolute top-0 left-0 w-full h-[110%] bg-black !bg-opacity-25 z-[2]" style="border-radius: 16px 8px"></div>
-    <div v-if="hasDoubleLayer && !isHovered && !disabled" :class="`absolute top-0 left-0 w-full h-[110%] ${bgColor} z-[1]`"
-      style="border-radius: 16px 8px"></div>
-  </div>
+  <button :disabled="loading || disabled"
+    class="focus:outline-none disabled:opacity-30 relative rounded-custom flex gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs justify-center whitespace-nowrap"
+    :class="{
+      'opacity-75': loading,
+      'shadow-button': hasShadow,
+      [padding]: true,
+      [bgColor]: true,
+      [textColor]: true,
+      [customClass]: true,
+    }">
+    <slot />
+    <SofaIcon v-if="loading" name="loader" class="h-[28px] pl-2" />
+  </button>
 </template>
+
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent } from "vue"
 import SofaIcon from "../SofaIcon"
 
 export default defineComponent({
@@ -41,15 +43,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    hasDoubleLayer: {
-      type: Boolean,
-      default: true,
-    },
-    hasDarkLayer: {
-      type: Boolean,
-      default: true,
-    },
-    visible: {
+    hasShadow: {
       type: Boolean,
       default: true,
     },
@@ -58,24 +52,17 @@ export default defineComponent({
       default: false,
     },
   },
-  name: "SofaButton",
-  emits: ['click'],
-  setup (_, ctx) {
-    const isHovered = ref(false)
-
-    const handleClicked = (e: Event) => {
-      ctx.emit('click', e)
-      isHovered.value = true
-
-      setTimeout(() => {
-        isHovered.value = false
-      }, 300)
-    }
-
-    return {
-      isHovered,
-      handleClicked,
-    }
-  },
+  name: "SofaButton"
 })
 </script>
+
+<style scoped>
+.shadow-button {
+  box-shadow: 0 3px #999;
+}
+
+.shadow-button:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
   <sofa-text-field v-for="(item, index) in allLinks" :key="index" :placeholder="capitalize(item.ref)" :name="'Website'"
-    ref="socials.website" :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+    ref="socials.website" :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
     :rules="[FormValidations.UrlRule]" v-model="item.link" :update-value="item.link">
     <template v-slot:inner-prefix>
       <sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
@@ -15,14 +15,13 @@
   </sofa-text-field>
 
   <div class="w-full flex flex-col gap-3">
-    <a
-      class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB]"
+    <a class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 rounded-custom border-2 border-darkLightGray"
       @click="
         showAddNewItems ? (showAddNewItems = false) : (showAddNewItems = true)
         ">
       <div class="flex flex-row items-center gap-3">
         <sofa-icon :name="'box-plus'" :customClass="'h-[20px]'" />
-        <sofa-normal-text :color="'text-[#78828C]'">
+        <sofa-normal-text :color="'text-grayColor'">
           Add link
         </sofa-normal-text>
       </div>
@@ -33,11 +32,10 @@
     </a>
 
     <div class="w-full flex flex-col gap-2" v-if="showAddNewItems">
-      <a
-        class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 rounded-custom border-2 border-[#E1E6EB]"
+      <a class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 rounded-custom border-2 border-darkLightGray"
         @click="addNewLink(item.ref)" v-for="(item, index) in profileLinks" :key="index">
         <sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
-        <sofa-normal-text :color="'text-[#78828C]'">
+        <sofa-normal-text :color="'text-grayColor'">
           {{ capitalize(item.ref) }}
         </sofa-normal-text>
       </a>

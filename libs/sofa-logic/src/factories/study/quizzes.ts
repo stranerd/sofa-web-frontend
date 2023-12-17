@@ -1,6 +1,6 @@
 import { v } from 'valleyed'
 import { CreateQuizInput, Quiz } from '../../logic'
-import { BaseFactory } from '../base'
+import { BaseFactory } from '@modules/core'
 import { ref } from 'vue'
 
 

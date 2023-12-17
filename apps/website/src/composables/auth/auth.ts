@@ -1,18 +1,21 @@
-import { AuthUser, Logic, SingleUser, Wallet } from 'sofa-logic'
+import { useListener } from '@app/composables/core/listener'
+import { AuthDetails, AuthUseCases } from '@modules/auth'
+import { Logic, Wallet } from 'sofa-logic'
+import { UserEntity, UsersUseCases } from '@modules/users'
 import { computed, ref } from 'vue'
-import { useListener } from '../core/listener'
 
 const store = {
-	auth: ref(null as AuthUser | null),
-	user: ref(null as SingleUser | null),
+	auth: ref(null as AuthDetails | null),
+	user: ref(null as UserEntity | null),
 	wallet: ref(null as Wallet | null),
 	listener: useListener(async () => {
 		const id = store.auth.value?.id as string | undefined
 		if (!id) return () => {
 			//
 		}
-		const setUser = async (user: SingleUser) => {
+		const setUser = async (user: UserEntity) => {
 			store.user.value = user
+			Logic.Users.UserProfile = user as any
 		}
 		const setWallet = async (wallet: Wallet) => {
 			store.wallet.value = wallet
@@ -53,11 +56,13 @@ export const useAuth = () => {
 		image: store.user.value?.ai?.photo?.link ?? '/images/icons/robot.svg'
 	}))
 
-	const setAuthUser = async (details: AuthUser | null) => {
+	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
 		store.auth.value = details
+		Logic.Auth.AuthUser = details as any
 		if (details?.id) {
-			store.user.value = await Logic.Users.GetUserProfile(details.id)
+			store.user.value = await UsersUseCases.find(details.id)
+			Logic.Users.UserProfile = store.user.value as any
 			store.wallet.value = await Logic.Payment.GetUserWallet()
 		} else store.user.value = null
 	}
@@ -79,11 +84,11 @@ export const useAuth = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure you want to logout?',
 			sub: '',
-			rightLabel: 'Yes, logout',
+			right: { label: 'Yes, logout' },
 		})
 		if (!confirmed) return
 		// await unregisterDeviceOnLogout()
-		await Logic.Auth.SignOut()
+		await AuthUseCases.sessionSignout()
 		await setAuthUser(null)
 		window.location.assign('/auth/login')
 	}
@@ -92,12 +97,11 @@ export const useAuth = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All your learning resources will be lost',
-			rightLabel: 'Yes, delete account',
+			right: { label: 'Yes, delete account' },
 		})
 		if (!confirmed) return
-		//
 		// await unregisterDeviceOnLogout()
-		await Logic.Auth.DeleteUserAccount()
+		await AuthUseCases.deleteAccount()
 		await setAuthUser(null)
 		window.location.assign('/auth/login')
 	}

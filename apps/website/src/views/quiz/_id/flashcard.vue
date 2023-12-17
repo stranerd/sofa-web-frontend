@@ -37,39 +37,35 @@
 			</template>
 		</QuizWrapper>
 	</expanded-layout>
-	<SofaModal v-if="showInfoModal" :close="() => { }">
-		<div class="md:w-[70%] mdlg:w-[50%] mdlg:h-full w-full h-auto flex flex-col items-center relative">
-			<div
-				class="bg-white w-full flex flex-col p-4 mdlg:p-6 gap-6 md:rounded-2xl rounded-t-2xl items-center justify-center">
-				<div class="w-full flex flex-col gap-2 items-start">
-					<div class="w-full flex gap-2 justify-between md:justify-center items-center">
-						<SofaHeaderText class="text-xl" content="Flashcards" />
-						<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
-					</div>
-					<SofaNormalText content="Learning quiz questions and answers" />
+	<SofaModal v-if="showInfoModal">
+		<div class="flex flex-col p-4 mdlg:p-6 gap-6 items-center justify-center">
+			<div class="w-full flex flex-col gap-2 items-start">
+				<div class="w-full flex gap-2 justify-between md:justify-center items-center">
+					<SofaHeaderText class="text-xl" content="Flashcards" />
+					<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
 				</div>
-				<div class="w-full h-full flex flex-col items-center gap-4">
-					<div class="bg-primaryPurple text-white rounded-custom p-4 w-full flex flex-col gap-2">
-						<div class="flex items-center justify-start gap-2" v-for="(item, index) in [
-							'Click on the card to flip it',
-							'Mastered makes card not reappear',
-							'Show later sends card to end of deck',
-							'Both buttons take you to next card'
-						]" :key="index">
-							<span class="w-1 aspect-square rounded-full bg-white" />
-							<SofaNormalText color="text-inherit" :content="item" />
-						</div>
+				<SofaNormalText content="Learning quiz questions and answers" />
+			</div>
+			<div class="w-full h-full flex flex-col items-center gap-4">
+				<div class="bg-primaryPurple text-white rounded-custom p-4 w-full flex flex-col gap-2">
+					<div class="flex items-center justify-start gap-2" v-for="(item, index) in [
+						'Click on the card to flip it',
+						'Mastered makes card not reappear',
+						'Show later sends card to end of deck',
+						'Both buttons take you to next card'
+					]" :key="index">
+						<span class="w-1 aspect-square rounded-full bg-white" />
+						<SofaNormalText color="text-inherit" :content="item" />
 					</div>
-					<SofaCheckbox class="!w-auto" v-model="dontShowAgain">
-						<SofaNormalText color="text-inherit" content="Don't show again" />
-					</SofaCheckbox>
-					<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
-						<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="close"
-							class="hidden mdlg:inline-block" customClass="border border-gray-100">Exit</SofaButton>
+				</div>
+				<SofaCheckbox class="!w-auto" v-model="dontShowAgain">
+					<SofaNormalText color="text-inherit" content="Don't show again" />
+				</SofaCheckbox>
+				<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
+					<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="close"
+						class="hidden mdlg:inline-block" customClass="border border-gray-100">Exit</SofaButton>
 
-						<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close" customClass="mdlg:w-auto w-full">Start
-						</SofaButton>
-					</div>
+					<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close" class="mdlg:w-auto w-full">Start</SofaButton>
 				</div>
 			</div>
 		</div>
@@ -82,7 +78,7 @@ import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 

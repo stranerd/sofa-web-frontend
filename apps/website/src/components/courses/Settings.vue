@@ -2,23 +2,23 @@
   <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
     <div class="w-full md:!grid md:!grid-cols-2 flex flex-col-reverse gap-4">
       <div class="col-span-1 w-full flex flex-col gap-3">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Title'" ref="title"
           v-model="courseSettingForm.title" :update-value="courseSettingForm.title" :placeholder="'Title'"
           :borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" />
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" ref="description" v-model="courseSettingForm.description" />
 
-        <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Topic'" ref="topic" :placeholder="'Topic'"
           :rules="[FormValidations.RequiredRule]" :autoComplete="true" :borderColor="'border-transparent'"
           :options="allTopics" :update-value="courseSettingForm.topic" :can-use-custom="true"
           v-model="courseSettingForm.topic" />
 
         <sofa-text-field v-if="Logic.Users.UserProfile.roles.isVerified"
-          :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Price'" ref="price.amount"
           v-model="courseSettingForm.price" :update-value="courseSettingForm.price" :placeholder="'Price'"
           :borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" :isFormatted="true">
@@ -47,15 +47,15 @@
     </div>
 
     <div class="w-full flex flex-col gap-2">
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-4'" :name="'Tags'" ref="tags"
         :placeholder="'Tags (Comma separated for multiple)'" :borderColor="'border-transparent'"
         v-model="courseSettingForm.tagString" />
       <div class="w-full flex flex-row flex-wrap items-center">
         <template v-for="(item, index) in courseSettingForm.tags" :key="index">
           <div class="py-2 pr-2" v-if="item != 'Not set'">
-            <div class="py-2 px-3 border-2 flex flex-row items-center gap-2 rounded-custom border-[#E1E6EB]">
-              <sofa-normal-text :color="'text-[#78828C]'">
+            <div class="py-2 px-3 border-2 flex flex-row items-center gap-2 rounded-custom border-darkLightGray">
+              <sofa-normal-text :color="'text-grayColor'">
                 {{ item }}
               </sofa-normal-text>
               <sofa-icon @click="

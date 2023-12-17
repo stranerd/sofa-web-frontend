@@ -18,10 +18,8 @@ export default defineComponent({
   components: {
     SettingsLayout,
   },
-  middlewares: {
-    fetchRules: [],
-  },
-  name: "NotificationSettingPage",
+  name: "SettingsNotificationsPage",
+  middlewares: { goBackRoute: '/settings' },
   setup () {
     useMeta({
       title: "Notifications",

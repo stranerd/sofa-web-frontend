@@ -28,7 +28,7 @@
       </a>
 
       <div class="w-full flex flex-wrap gap-3" v-if="option.name === openOption">
-        <a :class="`px-4 py-2 ${optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-[#EFF2F5]'} rounded-custom flex items-center justify-center gap-1`"
+        <a :class="`px-4 py-2 ${optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-lightGray'} rounded-custom flex items-center justify-center gap-1`"
           v-for="(item, index) in option.options" :key="index" @click="toggleOption(item)">
           <sofa-normal-text :color="`${optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'}`"
             :content="item.name" />

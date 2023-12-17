@@ -100,6 +100,8 @@ import {
 } from "vue"
 import draggable from "vuedraggable"
 import { Logic, UpdateCourseSectionsInput, Course, Question, Quiz, SofaFile } from "sofa-logic"
+import { apiBase } from "@utils/environment"
+import { getTokens } from "@utils/tokens"
 import SofaIcon from "../SofaIcon"
 import { SofaNormalText } from "../SofaTypography"
 
@@ -167,8 +169,8 @@ export default defineComponent({
       index: number
     ) => {
       if (mediaFile) {
-        const tokens = await Logic.Auth.GetTokens()
-        const mediaUrl = `${Logic.Common.apiUrl}/study/files/${mediaFile.id}/media?AccessToken=${tokens?.accessToken}`
+        const { accessToken } = await getTokens()
+        const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`
         if (mediaFile.type == "image") {
           staticSectionOptions.value[index].materials.push({
             name: mediaFile.title,
@@ -363,7 +365,7 @@ export default defineComponent({
       await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
         staticSectionOptions.value.push({
           name: section.label,
-          id: Logic.Common.makeid(9),
+          id: Logic.Common.makeId(),
           materials: [],
           opened: index == selectedSection.value,
           edit: false,
@@ -407,7 +409,7 @@ export default defineComponent({
       if (unsectionedSection.length == 0) {
         staticSectionOptions.value.push({
           name: "unsectioned",
-          id: Logic.Common.makeid(9),
+          id: Logic.Common.makeId(),
           materials: [],
           opened: true,
           edit: false,
@@ -443,7 +445,7 @@ export default defineComponent({
 
       sectionOptions.splice(newSectionPosition, 0, {
         name: `Section ${sectionOptions.length}`,
-        id: Logic.Common.makeid(9),
+        id: Logic.Common.makeId(),
         materials: [],
         opened: true,
         edit: false,

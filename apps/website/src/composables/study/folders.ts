@@ -85,7 +85,7 @@ export const useEditFolder = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All items in the folder will be removed',
-			rightLabel: 'Yes, delete',
+			right: { label: 'Yes, delete' }
 		})
 		if (!confirmed) return
 		try {
@@ -101,7 +101,7 @@ export const useEditFolder = () => {
 	}
 
 	const generateNewFolder = async () => {
-		const title = `New folder (${Logic.Common.makeid(4)})`
+		const title = `New folder (${Logic.getRandomValue()})`
 		try {
 			await setError('')
 			await setLoading(true)

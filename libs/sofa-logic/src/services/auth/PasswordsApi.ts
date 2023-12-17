@@ -1,5 +1,4 @@
 import {
-  ResetPasswordWithTokenInput,
   SendResetPasswordInput,
   UpdatePasswordInput,
 } from './../../logic/types/forms/auth'
@@ -16,21 +15,6 @@ export default class PasswordsApi extends ReadOnlyApiService {
     try {
       const response: AxiosResponse<boolean> = await this.axiosInstance.post(
         this.getUrl() + '/reset/mail',
-        data,
-      )
-
-      return response
-    } catch (err) {
-      this.handleErrors(err)
-      if (err.response) {
-      }
-    }
-  }
-
-  public async resetPassword(data: ResetPasswordWithTokenInput) {
-    try {
-      const response: AxiosResponse<AuthResponse> = await this.axiosInstance.post(
-        this.getUrl() + '/reset',
         data,
       )
 

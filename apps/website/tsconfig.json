@@ -18,11 +18,20 @@
 		],
 		"paths": {
 			"@/*": [
-			"src/*"
-			]
+				"src/*"
+			],
+			"@app/*": [
+				"src/*"
+			],
+			"@modules/*": [
+				"node_modules/sofa-modules/src/modules/*"
+			],
+			"@utils/*": [
+				"node_modules/sofa-modules/src/utils/*"
+			],
 		},
 		"lib": [
-			"esnext",
+			"es2022",
 			"dom",
 			"dom.iterable",
 			"scripthost"

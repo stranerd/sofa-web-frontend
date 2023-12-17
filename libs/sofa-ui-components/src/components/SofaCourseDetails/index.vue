@@ -57,7 +57,7 @@
       </template>
 
       <template v-if="type == 'document'">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Document title'" ref="document_title"
           v-model="dataReactive.title" :updateValue="dataReactive.title" :placeholder="'Document title'" :hasTitle="true"
           :rules="[Logic.Form.RequiredRule]" :borderColor="'border-transparent'">
@@ -65,12 +65,12 @@
         </sofa-text-field>
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" v-model="dataReactive.description" />
       </template>
 
       <template v-if="type == 'image'">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Image title'" ref="image_title"
           v-model="dataReactive.title" :placeholder="'Image title'" :hasTitle="true" :rules="[Logic.Form.RequiredRule]"
           :updateValue="dataReactive.title" :borderColor="'border-transparent'">
@@ -78,12 +78,12 @@
         </sofa-text-field>
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" v-model="dataReactive.description" />
       </template>
 
       <template v-if="type == 'video'">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Video title'" ref="video_title"
           v-model="dataReactive.title" :placeholder="'Video title'" :hasTitle="true" :rules="[Logic.Form.RequiredRule]"
           :updateValue="dataReactive.title" :borderColor="'border-transparent'">
@@ -91,7 +91,7 @@
         </sofa-text-field>
 
         <sofa-textarea :hasTitle="false"
-          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+          :textAreaStyle="'h-[60px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
           :placeholder="'Description'" v-model="dataReactive.description" />
       </template>
       <div v-if="type != 'quiz'" class="w-full flex flex-row items-center justify-end">

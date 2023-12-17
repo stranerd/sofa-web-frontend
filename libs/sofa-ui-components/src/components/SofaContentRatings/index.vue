@@ -1,10 +1,10 @@
 <template>
   <div :class="`w-full flex flex-col ${hasWhiteBox ? 'gap-4' : 'gap-3'
     }  pb-4`">
-    <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
+    <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-lightGray'
       } rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-center`">
       <div class="flex flex-col py-4 px-2 mdlg:!w-[200px] w-[200px]">
-        <div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-2 border-[#E1E6EB]">
+        <div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-2 border-darkLightGray">
           <div class="flex flex-row">
             <sofa-normal-text :customClass="'mdlg:!text-xl !text-lg'">
               {{ data.avg }}
@@ -28,7 +28,7 @@
             }`">
             {{ index }} stars
           </sofa-normal-text>
-          <div class="flex-grow h-[8px] rounded-[8px] bg-[#E1E6EB] relative">
+          <div class="flex-grow h-[8px] rounded-[8px] bg-darkLightGray relative">
             <div class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
               :style="`width: ${(data.stats[index] / data.count) * 100}%;`"></div>
           </div>
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-[#F1F6FA]'
+    <div :class="`w-full  ${hasWhiteBox ? 'bg-white shadow-custom' : 'bg-lightGray'
       }  rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-start`"
       v-for="(review, index) in data.reviews" :key="index">
       <div>
@@ -85,7 +85,7 @@ export default defineComponent({
   props: {
     customClass: {
       type: String,
-      default: "bg-ligthGray",
+      default: "bg-lightGray",
     },
     data: {
       type: Object as () => any,

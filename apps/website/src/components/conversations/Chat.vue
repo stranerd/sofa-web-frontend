@@ -1,21 +1,21 @@
 <template>
   <router-link :to="chat.route"
-    :class="`w-full flex items-center justify-between relative gap-3 p-3 rounded-custom hover:bg-[#E5F2FD] ${customClass}`"
-    exact-active-class="bg-[#E5F2FD]">
+    :class="`w-full flex items-center justify-between relative gap-3 p-3 rounded-custom hover:bg-lightBlue ${customClass}`"
+    exact-active-class="bg-lightBlue">
     <div class="flex gap-2 w-full">
       <sofa-avatar :photoUrl="chat.photoUrl" size="40"  />
       <div class="flex flex-col">
         <sofa-normal-text :customClass="'!font-semibold text-left !line-clamp-1'">
           {{ chat.title }}
         </sofa-normal-text>
-        <sofa-normal-text :customClass="'text-left !line-clamp-1'" :color="'text-[#78828C]'">
+        <sofa-normal-text :customClass="'text-left !line-clamp-1'" :color="'text-grayColor'">
           {{ chat.lastMessage }}
         </sofa-normal-text>
       </div>
     </div>
 
     <div class="flex flex-col justify-between items-end">
-      <sofa-normal-text :customClass="'text-right !text-[11px] whitespace-nowrap'" :color="'text-[#78828C]'">
+      <sofa-normal-text :customClass="'text-right !text-[11px] whitespace-nowrap'" :color="'text-grayColor'">
         {{ chat.lastMessageTime }}
       </sofa-normal-text>
     </div>

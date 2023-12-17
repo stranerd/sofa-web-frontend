@@ -9,7 +9,7 @@
 body {
   font-family: Lexend;
   -webkit-tap-highlight-color: transparent;
-  @apply bg-backgroundGray text-bodyBlack;
+  @apply bg-lightGray text-bodyBlack;
 }
 
 #app {

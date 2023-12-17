@@ -10,7 +10,7 @@ export default defineComponent({
   components: {},
   props: {
     parentRefs: {
-      required: true,
+      required: false,
     },
   },
   name: "RoofFormWrapper",
@@ -20,7 +20,7 @@ export default defineComponent({
     const fieldsToValidate = ref<any[]>();
 
     watch(props, () => {
-      fieldsToValidate.value = props.parentRefs;
+      if (props.parentRefs) fieldsToValidate.value = props.parentRefs;
     });
 
     const validate = () => {

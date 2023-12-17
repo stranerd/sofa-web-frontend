@@ -14,6 +14,12 @@
 		"sourceMap": true,
 		"baseUrl": ".",
 		"paths": {
+			"@modules/*": [
+				"node_modules/sofa-modules/src/modules/*"
+			],
+			"@utils/*": [
+				"node_modules/sofa-modules/src/utils/*"
+			],
 		},
 		"lib": [
 			"esnext",

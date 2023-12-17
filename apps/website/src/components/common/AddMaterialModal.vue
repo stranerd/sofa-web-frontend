@@ -16,7 +16,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             Create study material
           </sofa-normal-text>
@@ -27,7 +27,7 @@
           <sofa-icon-card :data="item" v-for="(item, index) in studyMaterialItems" :key="index" @click="
             item.action()
           showAddItem = false;
-          " :customClass="'!bg-[#F1F6FA] !w-full !shadow-none'">
+          " :customClass="'!bg-lightGray !w-full !shadow-none'">
             <template v-slot:title>
               <sofa-normal-text :customClass="'!font-bold'">
                 {{ item.title }}

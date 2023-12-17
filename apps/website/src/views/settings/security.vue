@@ -15,10 +15,8 @@ export default defineComponent({
     SettingsLayout,
     SettingSecurity
   },
-  middlewares: {
-    fetchRules: [],
-  },
   name: "SecuritySettingPage",
+  middlewares: { goBackRoute: '/settings' },
   setup () {
     useMeta({
       title: "Security",

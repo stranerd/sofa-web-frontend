@@ -3,7 +3,7 @@
     <div class="w-full grid grid-cols-2 h-full md:!gap-6 gap-3">
       <template v-for="(item, index) in newMaterialOptions" :key="index">
         <a v-if="item.type == 'quiz'" @click="showAddQuiz = true"
-          class="col-span-1 rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
+          class="col-span-1 rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
           <sofa-icon :name="item.icon" :customClass="'h-[22px]'"> </sofa-icon>
           <sofa-normal-text :customClass="'!font-bold'">
             {{ item.name }}
@@ -14,7 +14,7 @@
           :accept="'image/png, image/gif, image/jpeg'" v-model="imageFile">
           <template v-slot:content>
             <a
-              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
+              class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
               <sofa-icon :name="item.icon" :customClass="'h-[22px]'">
               </sofa-icon>
               <sofa-normal-text :customClass="'!font-bold'">
@@ -28,7 +28,7 @@
           :accept="'application/pdf'" v-model="documentFile">
           <template v-slot:content>
             <a
-              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
+              class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
               <sofa-icon :name="item.icon" :customClass="'h-[22px]'">
               </sofa-icon>
               <sofa-normal-text :customClass="'!font-bold'">
@@ -42,7 +42,7 @@
           :accept="'video/mp4'" v-model="videoFile">
           <template v-slot:content>
             <a
-              class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center">
+              class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
               <sofa-icon :name="item.icon" :customClass="'h-[22px]'">
               </sofa-icon>
               <sofa-normal-text :customClass="'!font-bold'">
@@ -58,7 +58,7 @@
           @click="handleShowAddVideo()"
         >
           <a
-            class="w-full rounded-custom md:!h-[280px] h-[120px] border-[#E1E6EB] border-2 flex flex-col gap-3 items-center justify-center"
+            class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center"
           >
             <sofa-icon :name="item.icon" :customClass="'h-[22px]'"> </sofa-icon>
             <sofa-normal-text :customClass="'!font-bold'">
@@ -112,7 +112,7 @@
         </div>
 
         <div class="w-full flex flex-col gap-4">
-          <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          <sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
             :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Quiz'" ref="quiz" :placeholder="'Quiz'"
             :rules="[FormValidations.RequiredRule]" :autoComplete="false" :borderColor="'border-transparent'"
             :options="allQuizzes" :hasTitle="true" v-model="selectedQuiz">
@@ -127,8 +127,7 @@
 
           <div class="w-full flex flex-row items-center justify-between z-[50] bg-white">
             <sofa-button :padding="'px-5 py-2'" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-              :customClass="'border border-gray-100 hidden mdlg:!inline-block'"
-              @click.prevent="showAddQuiz = false">
+              :customClass="'border border-gray-100 hidden mdlg:!inline-block'" @click.prevent="showAddQuiz = false">
               Exit
             </sofa-button>
 

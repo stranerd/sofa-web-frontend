@@ -44,9 +44,13 @@ export interface SingleUser {
       documents: number
       videos: number
       total: number
-      students: number
       publishedQuizzes: number
       publishedCourses: number
+
+      students: number
+      teachers: number
+      classes: number
+      lessons: number
     }
     rankings: {
       daily: RankingValue
@@ -64,7 +68,7 @@ export interface SingleUser {
       count: number
       avg: number
     }
-    organizationsIn: string[]
+    organizationsIn: { id: string, type: 'student' | 'teacher' }[]
     editing: {
 		  quizzes: { id: string, questionId: string } | null
 	  }

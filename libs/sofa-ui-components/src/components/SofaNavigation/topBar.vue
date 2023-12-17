@@ -1,9 +1,10 @@
 <template>
   <div
-    :class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white  lg:!bg-white bg-backgroundGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
+    :class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
     <template v-if="type == 'main'">
       <div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-        <sofa-avatar :size="'32'" :photoUrl="UserProfile?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
+        <sofa-avatar :size="'32'" :photoUrl="UserProfile?.bio?.photo?.link"
+          @click="Logic.Common.GoToRoute('/settings')" />
 
         <div class="py-4 cursor-pointer flex flex-row items-center justify-center">
           <img src="/images/logo.svg" class="h-[24px]" v-if="!title" />
@@ -21,17 +22,20 @@
           <img src="/images/logo.svg" class="h-[26px]" />
         </router-link>
 
-        <router-link :class="`py-4 flex items-center justify-center gap-2 ${Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple': ''}`"
+        <router-link
+          :class="`py-4 flex items-center justify-center gap-2 ${Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''}`"
           :to="tab.path" v-for="(tab, index) in tabs" :key="index">
-          <SofaIcon :name="tab.icon" :class="{'!fill-primaryPurple': Logic.Common.tabIsActive(tab.path), [tab.icon_size]: true, 'fill-bodyBlack': true }" />
-          <sofa-normal-text :customClass="'font-bold'" :color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
+          <SofaIcon :name="tab.icon"
+            :class="{ '!fill-primaryPurple': Logic.Common.tabIsActive(tab.path), [tab.icon_size]: true, 'fill-bodyBlack': true }" />
+          <sofa-normal-text :customClass="'font-bold'"
+            :color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
             {{ tab.name }}
           </sofa-normal-text>
         </router-link>
 
-        <div class="bg-ligthGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
+        <div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
           <sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
-          <sofa-text-field customClass="bg-transparent text-bodyBlack placeholder-[#78828C] w-full focus:outline-none"
+          <sofa-text-field customClass="bg-transparent text-bodyBlack placeholder-grayColor w-full focus:outline-none"
             placeholder="Search " :padding="'px-1 py-0'" v-model="searchQuery" @onEnter="initiateSearch" />
         </div>
       </div>
@@ -40,7 +44,7 @@
         <sofa-button :padding="'px-4 py-1'" @click="showAddItem()">Create</sofa-button>
         <div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
           <div
-            class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-[#E1E6EB] rounded-full cursor-pointer"
+            class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
             @click="showNotification = true">
             <sofa-icon :customClass="'h-[16px]'" :name="'bell'" />
           </div>
@@ -53,7 +57,8 @@
           </div>
         </div>
 
-        <sofa-avatar :size="'36'" :photoUrl="UserProfile?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
+        <sofa-avatar :size="'36'" :photoUrl="UserProfile?.bio?.photo?.link"
+          @click="Logic.Common.GoToRoute('/settings/profile')" />
       </div>
     </template>
 
@@ -71,9 +76,9 @@
       <div class="md:!flex hidden flex-row items-center gap-4">
         <template v-for="(action, index) in subpageActions" :key="index">
           <template v-if="action.isIcon && !action.hide">
-            <div class="flex flex-row gap-4 border-r border-[#E1E6EB] items-center pr-3 cursor-pointer">
-              <div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data.filter((d) => !d.hide)" :key="index"
-                @click="icon.handler()">
+            <div class="flex flex-row gap-4 border-r border-darkLightGray items-center pr-3 cursor-pointer">
+              <div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data.filter((d) => !d.hide)"
+                :key="index" @click="icon.handler()">
                 <sofa-icon :name="icon.icon" :customClass="icon.size" />
 
                 <sofa-normal-text>
@@ -83,11 +88,12 @@
             </div>
           </template>
           <template v-else-if="!action.hide">
-            <sofa-button v-if="!action.IsOutlined" :disabled="action.disabled" :padding="'px-4 py-1'" :customClass="`!font-semibold ${action.class ?? ''}`"
-              @click="action.handler()">{{ action.name }}</sofa-button>
+            <sofa-button v-if="!action.IsOutlined" :disabled="action.disabled" :padding="'px-4 py-1'"
+              :customClass="`!font-semibold ${action.class ?? ''}`" @click="action.handler()">{{ action.name
+              }}</sofa-button>
             <sofa-button :disabled="action.disabled" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-              :customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
-              @click="action.handler()" v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
+              :customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`" @click="action.handler()"
+              v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
           </template>
         </template>
       </div>

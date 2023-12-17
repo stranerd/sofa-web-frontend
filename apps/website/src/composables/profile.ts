@@ -10,7 +10,6 @@ const showAccountSetup = ref(false)
 const showCustomizeAI = ref(false)
 const allStudents = ref([])
 const allRequests = ref([])
-const allOrganizationMembers = ref(Logic.Users.AllorganizationMembers)
 const showRemoveMember = ref(false)
 const selectedMember = ref('')
 const allCountries = reactive<SelectOption[]>([])
@@ -502,52 +501,6 @@ const updateUserLocation = () => {
   }
 }
 
-const setOrganizationMembers = () => {
-  const allMembersEmail = [] ?? allOrganizationMembers.value?.results.map((data) => {
-    return data.email.toLocaleLowerCase()
-  })
-
-  // get user details if it exist
-  Logic.Users.GetUsers({
-    where: [
-      {
-        field: 'bio.email',
-        value: allMembersEmail,
-        condition: Conditions.in,
-      },
-    ],
-  }).then((response) => {
-    const allUsers: SingleUser[] = response.results
-    allRequests.value.length = 0
-    allStudents.value.length = 0
-    allOrganizationMembers.value?.results.forEach((member) => {
-      const user = allUsers.find((item) => item.bio.email?.toLocaleLowerCase() == member.email?.toLocaleLowerCase())
-
-      const memberData = {
-        name: user?.bio.name.full ?? member.email,
-        email: member.email?.toLocaleLowerCase(),
-        profile_url: user?.bio.photo?.link ?? '',
-        userId: user?.id ?? '',
-        emailId: member.email,
-      }
-      if (member.pending == true) {
-        allRequests.value.push(memberData)
-      } else {
-        allStudents.value.push(memberData)
-      }
-    })
-
-    allRequests.value = Logic.Common.removeDuplicatesFromArray(
-      allRequests.value,
-      ['email'],
-    )
-    allStudents.value = Logic.Common.removeDuplicatesFromArray(
-      allStudents.value,
-      ['email'],
-    )
-  })
-}
-
 const createTutorRequest = () => {
   if (
     tutorRequestForm.qualification.length &&
@@ -610,6 +563,6 @@ const addNewLink = (ref: string) => {
 }
 
 export {
-    Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, addNewLink, allCountries, allLinks, allOrganizationMembers, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizationMembers, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
+    Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, addNewLink, allCountries, allLinks, allOrganizations, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setOrganizations, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
     updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
 }

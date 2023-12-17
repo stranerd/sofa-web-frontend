@@ -1,18 +1,16 @@
 <template>
-	<SofaModal :close="() => emits('close')" :canClose="false">
-		<div
-			class="md:w-[70%] mdlg:w-[50%] mdlg:h-full overflow-y-auto h-auto w-full flex flex-col rounded-t-2xl md:rounded-2xl bg-white gap-6 p-4 md:p-8 text-bodyBlack">
+	<SofaModal>
+		<div class="flex flex-col gap-6 p-4 md:p-8">
 			<div class="w-full flex items-center gap-4 justify-between text-deepGray">
 				<SofaHeaderText size="xl" class="!font-bold" content="Invite" />
-				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer" @click="emits('close')" />
+				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer"
+					@click="emits('close')" />
 			</div>
 
 			<div class="flex gap-4 items-center">
-				<SofaTextField customClass="rounded-custom !bg-lightGrayVaraint"
-					padding="p-4" name="Emails" placeholder="Email, comma seperated"
-					borderColor="border-transparent" v-model="searchValue" />
-				<SofaButton
-					customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+				<SofaTextField customClass="rounded-custom !bg-lightGray" padding="p-4" name="Emails"
+					placeholder="Email, comma seperated" borderColor="border-transparent" v-model="searchValue" />
+				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 					textColor="text-white" @click="addUsers">
 					Add
 				</SofaButton>
@@ -24,10 +22,13 @@
 				<div class="w-full flex flex-col gap-2">
 					<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
 						<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
-						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`" class="truncate flex-grow" />
-						<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="emits('grantAccess', request.id, false)" />
+						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`"
+							class="truncate flex-grow" />
+						<SofaNormalText as="a" color="text-primaryRed" content="Deny"
+							@click="emits('grantAccess', request.id, false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
-						<SofaNormalText as="a" color="text-primaryGreen" content="Approve" @click="emits('grantAccess', request.id, true)" />
+						<SofaNormalText as="a" color="text-primaryGreen" content="Approve"
+							@click="emits('grantAccess', request.id, true)" />
 					</div>
 				</div>
 			</template>
@@ -39,7 +40,8 @@
 					<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
 					<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
 					<template v-if="member.id !== quiz.user.id">
-						<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="emits('manageMembers', [member.id], false)" />
+						<SofaNormalText as="a" color="text-primaryRed" content="Remove"
+							@click="emits('manageMembers', [member.id], false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
 					</template>
 					<SofaNormalText color="text-inherit" :content="member.id === quiz.user.id ? 'Owner' : 'Editor'" />
@@ -50,11 +52,11 @@
 
 			<div class="flex gap-4 justify-between items-center">
 				<a class="text-primaryBlue flex items-center gap-1" @click="share">
-					<SofaIcon class="h-[16px] stroke-current" name="share" />
+					<SofaIcon class="w-[16px] fill-current" name="share" />
 					<SofaNormalText color="text-inherit" content="Share" />
 				</a>
 				<a class="text-primaryBlue flex items-center gap-1" @click="copy">
-					<SofaIcon class="h-[16px] stroke-current" name="copy" />
+					<SofaIcon class="w-[16px] fill-current" name="copy" />
 					<SofaNormalText color="text-inherit" content="Copy" />
 				</a>
 			</div>
@@ -65,7 +67,7 @@
 <script lang="ts" setup>
 import { useSearchUsers } from '@/composables/users/users'
 import { Conditions, Logic, Quiz, SingleUser } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaModal, SofaAvatar, SofaNormalText, SofaTextField, SofaButton } from 'sofa-ui-components'
+import { SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaAvatar, SofaNormalText, SofaTextField, SofaButton } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
@@ -100,6 +102,6 @@ const members = computed(() => props.users.filter((u) => props.quiz.access.membe
 const requests = computed(() => props.users.filter((u) => props.quiz.access.requests.includes(u.id)))
 
 const shareUrl = `${window.location.origin}/quiz/${props.quiz.id}/edit`
-const share = async () => await Logic.Common.share('Join game on SOFA', `Join and play a game on`, shareUrl)
+const share = async () => await Logic.Common.share('Edit quiz', `Gain access to edit quiz: ${props.quiz.title}`, shareUrl)
 const copy = () => Logic.Common.copy(shareUrl)
 </script>

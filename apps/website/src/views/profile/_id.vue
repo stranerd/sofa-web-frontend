@@ -32,8 +32,6 @@
                 <sofa-normal-text>
                   {{ capitalize(singleUser.type?.type || "student") }}
                 </sofa-normal-text>
-                <!-- <span class="h-[5px] w-[5px] rounded-full bg-[#141618]"> </span>
-                <sofa-normal-text> Tutor </sofa-normal-text> -->
               </div>
             </div>
           </div>
@@ -68,7 +66,7 @@
 
         <div class="w-full flex flex-row gap-6 items-center">
           <template v-for="(item, index) in tabItems" :key="index">
-            <sofa-normal-text :customClass="`!font-semibold pb-2 !relative cursor-pointer`" :color="selectedTab == item.id ? 'text-primaryPurple' : 'text-[#141618]'
+            <sofa-normal-text :customClass="`!font-semibold pb-2 !relative cursor-pointer`" :color="selectedTab == item.id ? 'text-primaryPurple' : 'text-deepGray'
               " @click="selectedTab = item.id" v-if="item.show">
               {{ item.name }}
               <div v-if="selectedTab == item.id"
@@ -201,7 +199,7 @@
           </div>
 
           <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               {{ modalSetup.title }}
             </sofa-normal-text>
@@ -210,7 +208,7 @@
 
           <div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
             <sofa-text-field v-if="modalSetup.type == 'join_organization'"
-              :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'px-3 py-3'"
+              :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'px-3 py-3'"
               type="text" :name="'Join code'" ref="join_code" :placeholder="'Enter Join Code'"
               :borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" v-model="joinCode">
             </sofa-text-field>
@@ -220,8 +218,7 @@
             class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
             <div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
               <sofa-button :textColor="'text-grayColor'" :bgColor="'bg-white'" :padding="'px-4 py-1'"
-                :customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
-                @click="showModal = false">
+                :customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`" @click="showModal = false">
                 Cancel
               </sofa-button>
             </div>
@@ -244,6 +241,7 @@
 import { scrollToTop } from "@/composables"
 import { createCourseData, createQuizData } from "@/composables/library"
 import { profileLinks } from "@/composables/profile"
+import { useMyOrganizations } from '@/composables/users/organizations'
 import { Conditions, Logic, QueryParams } from "sofa-logic"
 import {
   SofaAvatar,
@@ -308,11 +306,12 @@ export default defineComponent({
         //
       },
     })
-    const joinCode = ref("")
     const singleUser = ref(Logic.Users.SingleUser)
     const allCourses = ref(Logic.Study.AllCourses)
     const allQuizzes = ref(Logic.Study.AllQuzzies)
     const userMaterials = ref<any[]>([])
+
+    const { code: joinCode, requestToJoinOrganization } = useMyOrganizations()
 
     const hasAtleastASocialLink = ref(false)
 
@@ -526,27 +525,7 @@ export default defineComponent({
     const showJoinOrganization = () => {
       modalSetup.title = `Join ${singleUser.value.bio.name.full}`
       modalSetup.type = "join_organization"
-      modalSetup.action = () => {
-        if (joinCode.value) {
-          Logic.Users.RequestToJoinOrganization(
-            singleUser.value.id,
-            joinCode.value
-          ).then((data) => {
-            if (data) {
-              Logic.Common.showAlert({
-                message: "Your join request has been sent.",
-                type: "success",
-              })
-              showModal.value = false
-            } else {
-              Logic.Common.showAlert({
-                message: "Unable to send join request. Invalid join code",
-                type: "error",
-              })
-            }
-          })
-        }
-      }
+      modalSetup.action = () => requestToJoinOrganization(singleUser.value.id)
       showModal.value = true
     }
 

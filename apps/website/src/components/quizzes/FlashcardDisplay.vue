@@ -1,14 +1,12 @@
 <template>
-  <div
-    class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
-    <a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer"
-      @swiped="handleSwiperAction($event)">
+  <div class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
+    <a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer">
       <div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
-        <div class="flip-card-front bg-white rounded-xl flex flex-col items-center justify-center">
+        <div class="flip-card-front">
           <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
             :content="question.question" />
         </div>
-        <div class="flip-card-back bg-white rounded-xl flex flex-col items-center justify-center">
+        <div class="flip-card-back">
           <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
             :content="question.answer" />
         </div>
@@ -34,11 +32,6 @@ defineProps({
 })
 
 const showAnswer = ref(false)
-
-const handleSwiperAction = (event: any) => {
-  if (event.detail.dir == "left") showAnswer.value = false
-  if (event.detail.dir == "right") showAnswer.value = true
-}
 </script>
 
 <style scoped>
@@ -65,6 +58,12 @@ const handleSwiperAction = (event: any) => {
 /* Position the front and back side */
 .flip-card-front,
 .flip-card-back {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -73,9 +72,6 @@ const handleSwiperAction = (event: any) => {
   /* Safari */
   backface-visibility: hidden;
 }
-
-/* Style the front side (fallback if image is missing) */
-.flip-card-front {}
 
 /* Style the back side */
 .flip-card-back {

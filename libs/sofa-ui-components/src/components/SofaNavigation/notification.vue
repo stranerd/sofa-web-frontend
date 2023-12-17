@@ -13,7 +13,7 @@
           <sofa-normal-text :custom-class="'text-left'">
             {{ item.body }}
           </sofa-normal-text>
-          <sofa-normal-text :color="'text-[#78828C]'" :customClass="'!text-left'">
+          <sofa-normal-text :color="'text-grayColor'" :customClass="'!text-left'">
             {{ Logic.Common.timeFromNow(item.createdAt) }}
           </sofa-normal-text>
         </div>
@@ -24,7 +24,7 @@
     </div>
     <div v-else class="w-full flex flex-col gap-2 flex-grow items-center justify-center h-full">
       <sofa-icon :name="'empty-notification'" :customClass="'h-[48px]'" />
-      <sofa-normal-text :color="'text-[#78828C]'" :customClass="'!text-center'">
+      <sofa-normal-text :color="'text-grayColor'" :customClass="'!text-center'">
         You have no notifications
       </sofa-normal-text>
     </div>

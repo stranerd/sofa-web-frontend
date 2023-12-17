@@ -88,7 +88,7 @@ export const useConversation = (id: string) => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All messages in this conversation would be lost',
-			rightLabel: 'Yes, delete',
+			right: { label: 'Yes, delete' }
 		})
 		if (!confirmed) return
 		if (loading.loading.value) return
@@ -128,7 +128,6 @@ export const useConversation = (id: string) => {
 export const useCreateConversation = () => {
 	const { error, setError } = useErrorHandler()
 	const { loading, setLoading } = useLoadingHandler()
-	const { setMessage } = useSuccessHandler()
 	const factory = new ConversationFactory()
 	const router = useRouter()
 
@@ -141,7 +140,11 @@ export const useCreateConversation = () => {
 				const conversation = await Logic.Conversations.CreateConversation(data)
 				factory.reset()
 				await router.push(`/chats/${conversation.id}`)
-				if (conversation.tutor) setMessage('Tutor request sent successfully')
+				if (conversation.tutor) await Logic.Common.success({
+					title: 'Tutor request sent!',
+					sub: 'You will get notified when the tutor responds',
+					button: { label: 'Done' }
+				})
 			} catch (error) {
 				await setError(error)
 			}

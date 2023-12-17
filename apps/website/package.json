@@ -5,7 +5,7 @@
 	"scripts": {
 		"preserve": "pnpm -w run envs",
 		"serve": "vue-cli-service serve",
-		"prebuild": "pnpm -w run envs && pnpm --filter sofa-logic build && pnpm --filter sofa-ui-components build",
+		"prebuild": "pnpm -w run envs",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint"
 	},
@@ -16,11 +16,11 @@
 		"@tailwindcss/typography": "^0.5.0",
 		"core-js": "^3.32.2",
 		"sofa-logic": "workspace:^1.0.0",
+		"sofa-modules": "workspace:^1.0.0",
 		"sofa-ui-components": "workspace:^1.0.0",
-		"swiper": "^9.2.0",
 		"tailwind-scrollbar": "^3.0.1",
 		"tailwind-scrollbar-hide": "^1.1.7",
-		"vue": "^3.3.4",
+		"vue": "^3.3.11",
 		"vue-apple-login": "^2.0.1",
 		"vue-meta": "^3.0.0-alpha.7",
 		"vue-router": "^4.0.12",

@@ -1,6 +1,6 @@
 import { v } from 'valleyed'
 import { CreateFolderInput, Folder } from '../../logic'
-import { BaseFactory } from '../base'
+import { BaseFactory } from '@modules/core'
 
 
 export class FolderFactory extends BaseFactory<Folder, CreateFolderInput, CreateFolderInput> {

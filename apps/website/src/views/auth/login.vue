@@ -1,23 +1,23 @@
 <template>
   <auth-layout title="Welcome back" subTitle="Let the progress continue">
-    <div class="flex flex-col gap-6 w-full">
+    <form class="flex flex-col gap-6 w-full" @submit.prevent="signin">
       <AuthProvider />
 
-      <sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
-          :padding="'md:p-4 p-3'" type="text" :name="'Email'" ref="email" v-model="loginForm.email" :placeholder="'Email'"
-          :rules="[FormValidations.RequiredRule, FormValidations.EmailRule]" />
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
+      <div class="w-full flex flex-col gap-4">
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
+          :padding="'md:p-4 p-3'" type="text" :name="'Email'" ref="email" v-model="factory.email" :placeholder="'Email'"
+          :error="factory.errors.email" />
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" :type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
-          :rules="[FormValidations.RequiredRule]" v-model="loginForm.password" />
-      </sofa-form-wrapper>
+          :error="factory.errors.password" v-model="factory.password" />
+      </div>
 
       <div class="w-full flex flex-col">
-        <sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" @click="SignIn">
+        <sofa-button :disabled="!factory.valid" :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit">
           Login
         </sofa-button>
       </div>
-    </div>
+    </form>
 
     <div class="w-full flex items-center justify-center pt-3">
       <router-link to="/auth/forgot">
@@ -36,67 +36,20 @@
 
 <script lang="ts">
 import AuthProvider from "@/components/auth/AuthProvider.vue"
-import { FormValidations } from "@/composables"
-import { createSession } from '@/composables/auth/session'
+import { useEmailSignin } from '@/composables/auth/signin'
 import { generateMiddlewares } from '@/middlewares'
-import { Logic, SignInInput } from 'sofa-logic'
-import {
-  SofaButton,
-  SofaFormWrapper,
-  SofaNormalText,
-  SofaTextField
-} from "sofa-ui-components"
-import { defineComponent, reactive, ref } from "vue"
+import { SofaButton, SofaNormalText, SofaTextField } from "sofa-ui-components"
+import { defineComponent } from "vue"
 import { useMeta } from "vue-meta"
 
 export default defineComponent({
-  components: {
-    AuthProvider,
-    SofaNormalText,
-    SofaTextField,
-    SofaButton,
-    SofaFormWrapper,
-  },
+  components: { AuthProvider, SofaNormalText, SofaTextField, SofaButton },
   name: "AuthLoginPage",
   beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
   setup () {
-    useMeta({
-      title: "Login To Your Account",
-    })
-
-    const formComp = ref<any>()
-
-    const loginForm = reactive<SignInInput>({
-      email: '',
-      password: '',
-    })
-
-    const SignIn = async () => {
-      if (formComp.value.validate()) await Logic.Auth.SignIn({
-        email: loginForm.email,
-        password: loginForm.password,
-      })
-        .then(createSession)
-        .catch((error) => {
-          Logic.Common.showValidationError(error, formComp)
-        })
-    }
-
-    return {
-      loginForm,
-      FormValidations,
-      SignIn,
-      formComp,
-    }
-  },
-  data () {
-    return {
-      parentRefs: null,
-    }
-  },
-  mounted () {
-    const parentRefs: any = this.$refs
-    this.parentRefs = parentRefs
-  },
+    useMeta({ title: "Login To Your Account" })
+    const { factory, signin } = useEmailSignin()
+    return { factory, signin }
+  }
 })
 </script>

@@ -6,7 +6,7 @@
         'border-[#4BAF7D] bg-[#E1F5EB]': type === 'success',
         'border-[#F55F5F] bg-[#FAEBEB]': type === 'error',
         'border-[#FA9632] bg-[#FFF4EB]': type === 'warning',
-        'border-[#7DC8FA] bg-[#E2F3FD]': type === 'info'
+        'border-hoverBlue bg-lightBlue': type === 'info'
       }">
       <SofaIcon :name="`${type}-icon`" class="h-[25px]" />
       <SofaNormalText class="!font-semibold w-full text-left" :content="content" />

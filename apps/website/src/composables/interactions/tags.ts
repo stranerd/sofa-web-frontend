@@ -85,7 +85,6 @@ export const useGenericTagsList = () => {
 			tags.results.forEach((r) => Logic.addToArray(genericStore.tags, r, (e) => e.id, (e) => e.meta.total))
 			genericStore.fetched.value = true
 		} catch (e) {
-			console.log(e)
 			await genericStore.setError(e)
 		}
 		await genericStore.setLoading(false)

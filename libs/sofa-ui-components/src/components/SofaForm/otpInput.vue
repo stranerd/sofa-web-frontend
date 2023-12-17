@@ -2,7 +2,7 @@
   <div class="flex flex-row items-center justify-around gap-1 z-40">
     <span v-for="index in numberOfInput" :key="index + '' + uniqueKey">
       <input :id="'' + uniqueKey + index" v-model="otps[index - 1]" type="tel"
-        class="md:!w-[53px] md:!h-[53px] w-[40px] h-[40px] text-lg text-center text-darkBody focus:outline-none !bg-lightGrayVaraint rounded-custom"
+        class="md:!w-[53px] md:!h-[53px] w-[40px] h-[40px] text-lg text-center text-darkBody focus:outline-none !bg-lightGray rounded-custom"
         :disabled="isDisabled" @keypress="onKeyPress" @keyup.right="focusInputByRef('' + uniqueKey + (index + 1))"
         @keyup.left="focusInputByRef('' + uniqueKey + (index - 1))"
         @keyup.delete="focusInputByRef('' + uniqueKey + (index - 1))" @paste="onPaste" @input="
@@ -71,7 +71,7 @@ export default defineComponent({
     },
     onChangeOTP: {
       type: Function,
-      required: true,
+      required: false,
     },
     type: {
       type: String,
@@ -129,7 +129,7 @@ export default defineComponent({
     }
 
     const onInput = (event: any, id: string) => {
-      props.onChangeOTP(otp.value)
+      props.onChangeOTP?.(otp.value)
       if (event.inputType === "deleteContentBackward") return false
 
       focusInputByRef(id)

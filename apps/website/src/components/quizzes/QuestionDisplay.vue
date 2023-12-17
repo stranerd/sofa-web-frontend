@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-center items-start w-full gap-4 text-left">
-    <SofaHeaderText class="!font-bold border-b-2 pb-2" :class="isDark ? 'border-white' : 'border-lightBorderColor'"
+    <SofaHeaderText class="!font-bold border-b-2 pb-2" :class="isDark ? 'border-white' : 'border-darkLightGray'"
       color="text-inherit" :content="title" />
 
     <SofaHeaderText v-if="question.data.type !== 'fillInBlanks' && question.data.type !== 'dragAnswers'"
@@ -186,11 +186,11 @@ const move = (e: { from: HTMLElement, to: HTMLElement, draggedContext: { element
 }
 
 const buildClass = (...args: Parameters<typeof props['optionState']>) => ({
-  'bg-white border-lightBorderColor': !props.isDark,
+  'bg-white border-darkLightGray': !props.isDark,
   'bg-deepGray border-white': props.isDark,
   '!bg-[#E1F5EB] !border-primaryGreen': props.optionState(...args) === 'right',
   '!bg-[#FAEBEB] !border-primaryRed': props.optionState(...args) === 'wrong',
-  '!bg-[#E2F3FD] !border-hoverBlue shake': props.optionState(...args) === 'selected' && !props.isDark,
+  '!bg-lightBlue !border-hoverBlue shake': props.optionState(...args) === 'selected' && !props.isDark,
   '!bg-primaryBlue !border-primaryBlue shake': props.optionState(...args) === 'selected' && props.isDark,
 })
 

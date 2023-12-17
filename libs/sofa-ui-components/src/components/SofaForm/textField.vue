@@ -22,9 +22,7 @@
       <slot name="outer-suffix" />
     </div>
     <div v-if="!validationStatus" class="w-full flex pt-1 justify-start">
-      <sofa-normal-text :customClass="' text-left !font-normal '" :color="`text-primaryRed`">
-        {{ Logic.Common.capitalizeFirstLetter(errorMessage) }}
-      </sofa-normal-text>
+      <SofaNormalText class="text-left !font-normal capitalize" color="text-primaryRed" :content="errorMessage" />
     </div>
     <div v-if="error" class="w-full flex pt-1 justify-start">
       <SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />

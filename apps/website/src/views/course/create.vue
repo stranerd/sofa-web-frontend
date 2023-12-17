@@ -34,7 +34,7 @@
   }" :hide="{
   bottom: true,
   top: true,
-}" :bgColor="'mdlg:!bg-backgroundGray bg-white'">
+}" :bgColor="'mdlg:!bg-lightGray bg-white'">
     <template v-slot:left-session>
       <div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
         <sofa-course-sections v-model="selectedMaterial" :sectionInput="updateCourseSectionForm"
@@ -45,7 +45,7 @@
     <template v-slot:middle-session>
       <!-- Top bar for smaller screens -->
       <div
-        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-backgroundGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
+        class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-lightGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
         <sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
         <sofa-normal-text :customClass="'!font-bold !text-sm'">
           {{ mobileTitle }}
@@ -101,7 +101,7 @@
           </div>
 
           <div class="w-full flex flex-col gap-3">
-            <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 rounded-custom"
+            <div class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom"
               v-for="(question, index) in selectedMaterial.data" :key="index">
               <div class="flex flex-row items-center gap-2">
                 <sofa-normal-text :color="'text-grayColor'">

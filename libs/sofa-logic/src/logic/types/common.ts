@@ -1,29 +1,5 @@
-export enum QueryKeys {
-  and = 'and',
-  or = 'or',
-}
-
-export enum Conditions {
-  lt = 'lt',
-  lte = 'lte',
-  gt = 'gt',
-  gte = 'gte',
-  eq = 'eq',
-  ne = 'ne',
-  in = 'in',
-  nin = 'nin',
-  exists = 'exists',
-}
-
-export interface QueryParams {
-  where?: { field: string; value: any; condition?: Conditions }[]
-  whereType?: QueryKeys
-  sort?: [{ field: string; desc?: boolean }]
-  limit?: number
-  all?: boolean
-  page?: number
-  search?: { value: string; fields: string[] }
-}
+export { Conditions, EmitTypes, QueryKeys } from '@modules/core'
+export type { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export enum StatusCodes {
   success = '200',
@@ -69,23 +45,35 @@ export interface LoaderSetup {
   alerts: { message: string, type: 'success' | 'error' | 'warning' | 'info' }[]
 }
 
-export interface Confirmation {
-  title: string
-  sub: string
-  leftLabel?: string
-  leftHide?: boolean
-  leftBg?: string
-  leftColor?: string
-  rightLabel?: string
-  rightHide?: boolean
-  rightBg?: string
-  rightColor?: string
+interface ConfirmButton {
+  label: string
+  color: string
+  hide: boolean
+  bg: string
 }
 
-export interface ConfirmationSetup extends Confirmation {
+export interface ConfirmationBase {
+  title: string
+  sub: string
+}
+
+export interface ConfirmationSetupBase {
   id: string
   close: (val: boolean) => void
 }
+
+export interface Confirmation extends ConfirmationBase {
+  left?: Partial<ConfirmButton>
+  right?: Partial<ConfirmButton>
+}
+
+export interface ConfirmationSetup extends Confirmation, ConfirmationSetupBase {}
+
+export interface SuccessConfirmation extends ConfirmationBase {
+  button?: Partial<ConfirmButton>
+}
+
+export interface SuccessConfirmationSetup extends SuccessConfirmation, ConfirmationSetupBase { }
 
 export interface FetchRule {
   domain: string
@@ -110,16 +98,4 @@ export interface FormContentRule {
   max: number
   characterToAdd: string
   addAfterCount: number
-}
-
-export enum EmitTypes {
-	created = 'created',
-	updated = 'updated',
-	deleted = 'deleted'
-}
-
-export type Listeners<Model> = {
-	[EmitTypes.created]: (model: Model) => void | Promise<void>
-	[EmitTypes.updated]: (model: Model) => void | Promise<void>
-	[EmitTypes.deleted]: (model: Model) => void | Promise<void>
 }
