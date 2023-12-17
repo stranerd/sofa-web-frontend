@@ -16,7 +16,7 @@ const makeRoute = async (page: string[], importFn: () => Promise<any>) => {
 	}
 }
 
-const allPages = Object.entries(import.meta.glob('../views/**/*.vue'))
+const allPages = Object.entries(import.meta.glob('../views/**/*.vue', { eager: false }))
 	.map(([key, importFn]) => ({ path: key.slice(9).replace('.vue', '').split('/'), importFn }))
 	.map(({ path, importFn }) => {
 		let parent = null as null | string
@@ -33,7 +33,7 @@ export const routes = allPages.filter((page) => !page.parent)
 		const childrenPages = nestedPages.filter((p) => p.parent === path)
 
 		const route = await makeRoute(page.path, page.importFn)
-		const children = await Promise.all(childrenPages.map((page) => makeRoute(page.path)))
+		const children = await Promise.all(childrenPages.map((page) => makeRoute(page.path, page.importFn)))
 
 		return { ...route, children }
 	})
