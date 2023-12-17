@@ -29,7 +29,7 @@
 			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
 				<router-link class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
 					v-for="item in libraryOptions" :key="item.routePath" :to="item.routePath"
-					exact-active-class="bg-[#E5F2FD] !font-bold">
+					exact-active-class="bg-lightBlue font-semibold">
 					<sofa-icon :name="item.icon" :custom-class="'h-[17px]'" />
 					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
 				</router-link>
@@ -42,7 +42,7 @@
 				<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
 					class="w-full flex items-center justify-start text-left gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
 					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
-					exact-active-class="bg-[#E5F2FD] font-bold">
+					exact-active-class="bg-lightBlue font-semibold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
 					<sofa-custom-input v-if="item.id === factory.entityId"
@@ -51,7 +51,7 @@
 					<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
 					<div v-if="item.id !== factory.entityId"
-						class="px-3 ml-auto justify-center bg-[#E5F2FD] rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
+						class="px-3 ml-auto justify-center rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 						<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
 						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray"
 							@click.stop.prevent="deleteFolder(item)" />
@@ -65,7 +65,7 @@
 					<router-link
 						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
 						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
-						exact-active-class="bg-[#E5F2FD]">
+						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text class="truncate">{{ item.name }}</sofa-normal-text>
 					</router-link>
@@ -93,7 +93,7 @@
 					<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
 						class="w-full flex items-center relative gap-3 p-4 rounded-custom text-left bg-white shadow-custom group folder-link"
 						v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
-						exact-active-class="font-bold">
+						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 						<sofa-custom-input v-if="item.id === factory.entityId" v-model="factory.title"
 							placeholder="Folder name" :autoFocus="true"
@@ -117,7 +117,7 @@
 					<router-link
 						class="w-full flex items-center relative justify-start gap-2 p-4 rounded-custom bg-white shadow-custom"
 						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
-						exact-active-class="bg-[#E5F2FD]">
+						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text class="truncate">{{ item.name }}</sofa-normal-text>
 					</router-link>

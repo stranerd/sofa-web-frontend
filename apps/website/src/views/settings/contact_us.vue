@@ -16,6 +16,7 @@ export default defineComponent({
     SettingContact,
   },
   name: "ContactUsSettingPage",
+  middlewares: { goBackRoute: '/settings' },
   setup () {
     useMeta({
       title: "Contact Us",

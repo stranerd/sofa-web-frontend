@@ -18,9 +18,9 @@
 						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 rounded-custom shadow-custom mdlg:shadow-none mdlg:border-none">
 						<sofa-header-text size="xl" customClass="px-2 hidden mdlg:block mb-2" :content="option.title" />
 						<template v-for="(optionItem, index) in option.subPages" :key="optionItem.title">
-							<router-link :class="`w-full flex flex-col items-start p-2 mdlg:hover:bg-[#E2F3FD] rounded-lg
-								${index !== 0 ? 'border-t border-[#F1F6FA] mdlg:border-none' : ''}`"
-								exact-active-class="font-semibold mdlg:bg-[#E2F3FD]" :to="optionItem.to"
+							<router-link class="w-full flex flex-col items-start p-2 hover:bg-skyBlue rounded-lg"
+								:class="{'border-t border-lightGrayVaraint mdlg:border-none': index !== 0}"
+								exact-active-class="bg-lightBlue font-semibold" :to="optionItem.to"
 								v-if="optionItem.show()">
 								<sofa-normal-text :content="optionItem.title" />
 							</router-link>

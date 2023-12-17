@@ -1,7 +1,7 @@
 <template>
   <router-link :to="chat.route"
     :class="`w-full flex items-center justify-between relative gap-3 p-3 rounded-custom hover:bg-[#E5F2FD] ${customClass}`"
-    exact-active-class="bg-[#E5F2FD]">
+    exact-active-class="bg-lightBlue">
     <div class="flex gap-2 w-full">
       <sofa-avatar :photoUrl="chat.photoUrl" size="40"  />
       <div class="flex flex-col">

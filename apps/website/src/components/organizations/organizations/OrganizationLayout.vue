@@ -35,7 +35,7 @@
 					<router-link
 						class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
 						v-for="item in options" :key="item.route" :to="item.route"
-						exact-active-class="bg-lightBlue !font-bold">
+						exact-active-class="bg-lightBlue font-semibold">
 						<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
 						<SofaNormalText color="text-inherit" :content="item.title" />
 					</router-link>
@@ -151,11 +151,11 @@ useMeta(computed(() => ({
 })))
 
 const rightCommands = [
-	{ label: 'Add a student', action: () => null },
-	{ label: 'Add a teacher', action: () => null },
-	{ label: 'Create a quiz', action: () => null },
-	{ label: 'Create a course', action: () => null },
-	{ label: 'Create a class', action: () => null },
+	{ label: 'Add a student', action: () => extras.value.openAddModal(MemberTypes.student)},
+	{ label: 'Add a teacher', action: () => extras.value.openAddModal(MemberTypes.teacher) },
+	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
+	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
+	{ label: 'Create a class', action: () => Logic.Common.GoToRoute(`/organzation/classes/create`) },
 ]
 
 const { id, user } = useAuth()

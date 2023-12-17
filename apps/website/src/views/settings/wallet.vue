@@ -78,6 +78,7 @@ export default defineComponent({
         ignoreProperty: false,
       },
     ],
+    goBackRoute: '/settings',
   },
   name: "WalletSettingPage",
   setup () {
