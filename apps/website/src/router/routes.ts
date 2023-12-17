@@ -6,9 +6,9 @@ const getPath = (page: string[]) => page.map((path) => {
 	return path
 }).join('/').replace(new RegExp('///', 'g'), '/').replace(new RegExp('//', 'g'), '/')
 
-const makeRoute = async (page: string[]) => {
+const makeRoute = async (page: string[], importFn: () => Promise<any>) => {
 	const path = '/' + getPath(page)
-	const { default: component } = await import(`../views/${page.join('/')}`)
+	const { default: component } = await importFn()
 	const {  middlewares, name, layout } = component
 	return {
 		path, name, component,
@@ -16,15 +16,13 @@ const makeRoute = async (page: string[]) => {
 	}
 }
 
-const allPages = require.context('../views', true, /\.vue$/)
-	.keys()
-	.map((key) => key.slice(2)
-		.replace('.vue', '').split('/'))
-	.map((path) => {
+const allPages = Object.entries(import.meta.glob('../views/**/*.vue'))
+	.map(([key, importFn]) => ({ path: key.slice(9).replace('.vue', '').split('/'), importFn }))
+	.map(({ path, importFn }) => {
 		let parent = null as null | string
 		const nestedIndex = path.findIndex((p) => p.startsWith('^'))
 		if (nestedIndex > -1) parent = getPath(path.slice(0, nestedIndex))
-		return { parent, path }
+		return { parent, path, importFn }
 	})
 
 const nestedPages = allPages.filter((page) => page.parent)
@@ -34,7 +32,7 @@ export const routes = allPages.filter((page) => !page.parent)
 		const path = getPath(page.path)
 		const childrenPages = nestedPages.filter((p) => p.parent === path)
 
-		const route = await makeRoute(page.path)
+		const route = await makeRoute(page.path, page.importFn)
 		const children = await Promise.all(childrenPages.map((page) => makeRoute(page.path)))
 
 		return { ...route, children }

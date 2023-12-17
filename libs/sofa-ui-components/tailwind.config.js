@@ -1,5 +1,5 @@
 module.exports = {
-	content: ['../../apps/website/public/index.html', './src/**/*.{vue,js,ts,jsx,tsx}', '../../apps/website/src/**/*.{vue,js,ts,jsx,tsx}'],
+	content: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
 	darkMode: 'class',
 	theme: {
 		extend: {

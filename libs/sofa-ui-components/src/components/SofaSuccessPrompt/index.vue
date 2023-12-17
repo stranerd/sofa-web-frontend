@@ -20,7 +20,7 @@
 import { defineProps, PropType } from 'vue'
 import SofaButton from '../SofaButton'
 import SofaIcon from '../SofaIcon'
-import { SofaModal2 as SofaModal } from '../SofaModal'
+import SofaModal from '../SofaModal2'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
 defineProps({

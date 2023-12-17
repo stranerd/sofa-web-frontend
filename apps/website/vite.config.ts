@@ -1,0 +1,43 @@
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+import { defineConfig } from 'vite'
+// import Pages from 'vite-plugin-pages'
+
+export default defineConfig({
+	plugins: [
+		vue(),
+		/* Pages({
+			dirs: 'src/views',
+			routeStyle: 'nuxt',
+			extendRoute: (route: any) => {
+				const path = route.path.split('/')
+				const lastIndex = path.length - 1
+				if (path[lastIndex] && path[lastIndex].includes(':')) path[lastIndex] = path[lastIndex] + '/'
+				return { ...route, path: path.join('/') }
+			}
+		}), */
+	],
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+			'@app': path.resolve(__dirname, './src'),
+			'@modules': path.resolve('./node_modules/sofa-modules/src/modules'),
+			'@utils': path.resolve('./node_modules/sofa-modules/src/utils'),
+		},
+		extensions: ['.js', '.vue', '.json', '.ts']
+	},
+	build: {
+		minify: 'terser'
+	},
+	server: {
+		port: 8080
+	},
+	/* css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@import '@app/assets/styles/global.scss';
+`
+			}
+		}
+	} */
+})
