@@ -35,25 +35,24 @@
 
 				<div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
 					<sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
-					<sofa-text-field customClass="bg-transparent text-bodyBlack placeholder-grayColor w-full focus:outline-none"
+					<sofa-text-field
+						customClass="bg-transparent text-bodyBlack placeholder-grayColor w-full focus:outline-none"
 						placeholder="Search " :padding="'px-1 py-0'" v-model="searchQuery" @onEnter="initiateSearch" />
 				</div>
 			</div>
 
 			<div class="hidden mdlg:!flex lg:!flex flex-row items-center gap-4">
-				<sofa-button :padding="'px-4 py-1'" @click="showAddItem()">Create</sofa-button>
+				<SofaButton padding="p-2 rounded-full" @click="showAddItem()">
+					<SofaIcon name="plus-white" />
+				</SofaButton>
 				<div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
-					<div
-						class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
+					<div class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
 						@click="showNotification = true">
 						<sofa-icon :customClass="'h-[16px]'" :name="'bell'" />
 					</div>
 					<div v-if="showNotification"
 						class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom rounded-custom pb-3 px-4 absolute top-[140%] right-0 z-[100] hidden mdlg:flex flex-col">
-						<notification :close="() => {
-							showNotification = false
-						}
-						" />
+						<notification :close="() => showNotification = false" />
 					</div>
 				</div>
 
@@ -77,8 +76,9 @@
 				<template v-for="(action, index) in subpageActions" :key="index">
 					<template v-if="action.isIcon && !action.hide">
 						<div class="flex flex-row gap-4 border-r border-darkLightGray items-center pr-3 cursor-pointer">
-							<div class="flex flex-row gap-2 items-center" v-for="(icon, index) in action.data.filter((d) => !d.hide)"
-								:key="index" @click="icon.handler()">
+							<div class="flex flex-row gap-2 items-center"
+								v-for="(icon, index) in action.data.filter((d) => !d.hide)" :key="index"
+								@click="icon.handler()">
 								<sofa-icon :name="icon.icon" :customClass="icon.size" />
 
 								<sofa-normal-text>
@@ -92,30 +92,19 @@
 							:customClass="`!font-semibold ${action.class ?? ''}`" @click="action.handler()">{{ action.name
 							}}</sofa-button>
 						<sofa-button :disabled="action.disabled" :bgColor="'bg-white'" :textColor="'text-grayColor'"
-							:customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`" @click="action.handler()"
-							v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
+							:customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
+							@click="action.handler()" v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
 					</template>
 				</template>
 			</div>
 		</template>
 
 		<!-- Notification modal -->
-		<sofa-modal v-if="showNotification" :close="() => {
-			showNotification = false
-		}
-		" :custom-class="'mdlg:!hidden'">
-			<div
-				class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative"
-				@click.stop="() => {
-					//
-				}
-				">
+		<sofa-modal v-if="showNotification" :close="() => showNotification = false" :custom-class="'mdlg:!hidden'">
+			<div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-3 px-4 pb-5 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
-					<notification :close="() => {
-						showNotification = false
-					}
-					" />
+					<notification :close="() => showNotification = false" />
 				</div>
 			</div>
 		</sofa-modal>

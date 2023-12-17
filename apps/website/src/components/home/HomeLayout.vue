@@ -24,38 +24,43 @@
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
 							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 						</div>
-						<SofaNormalText class="capitalize" color="text-grayColor" :content="user.type?.type ?? 'student'" />
+						<SofaNormalText class="capitalize" color="text-grayColor" :content="userType.type" />
 						<SofaNormalText color="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
 					</div>
 				</div>
 
-				<div class="h-[1px] w-full bg-lightGray" />
-
-				<div class="w-full flex flex-col gap-1">
-					<router-link
-						class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
-						v-for="item in options" :key="item.route" :to="item.route"
-						exact-active-class="bg-lightBlue font-semibold">
-						<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
-						<SofaNormalText color="text-inherit" :content="item.title" />
-					</router-link>
+				<div class="w-full grid grid-cols-2 gap-3" v-if="userType.isStudent">
+					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
+						<SofaIcon class="h-[40px]" name="xp-points" />
+						<div class="flex flex-col items-start justify-center">
+							<SofaNormalText class="font-bold">
+								{{ Logic.Common.formatNumber(user.account.rankings.overall.value, 2) }} xp
+							</SofaNormalText>
+							<SofaNormalText color="text-bodyBlack" content="Point" />
+						</div>
+					</div>
+					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
+						<SofaIcon class="h-[40px]" name="streak-new" />
+						<div class="flex flex-col items-start justify-center">
+							<SofaNormalText class="font-bold">{{ user.account.streak.count }} days</SofaNormalText>
+							<SofaNormalText color="text-bodyBlack">Streak</SofaNormalText>
+						</div>
+					</div>
 				</div>
-			</div>
 
-			<div v-if="!user.roles.isVerified"
-				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
-				<div class="w-full flex gap-2 items-center">
-					<SofaNormalText class="!font-bold" content="Get verified" />
-					<SofaIcon name="verify" class="h-[16px]" />
-				</div>
-				<SofaNormalText>
-					Join the elite that create the highest quality study materials, reach
-					more audience, and sell on marketplace.
-				</SofaNormalText>
+				<template v-else>
+					<div class="h-[1px] w-full bg-lightGray" />
 
-				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification')">
-					Apply here
-				</SofaButton>
+					<div class="w-full flex flex-col gap-1">
+						<router-link
+							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
+							v-for="item in options" :key="item.route" :to="item.route"
+							exact-active-class="bg-lightBlue font-semibold">
+							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
+							<SofaNormalText color="text-inherit" :content="item.title" />
+						</router-link>
+					</div>
+				</template>
 			</div>
 		</template>
 
@@ -75,7 +80,44 @@
 		</template>
 
 		<template v-slot:right-session>
-			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
+			<div v-if="userType.isStudent" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
+				<div class="w-full flex items-center gap-3">
+					<img :src="userAi.image" alt="" class="w-[84px] aspect-square rounded-full">
+					<div class="flex flex-col gap-1">
+						<SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
+						<SofaNormalText :content="userAi.tagline" />
+						<SofaNormalText color="text-primaryPink" as="a" content="Customise"
+							@click="showCustomizeAI = true" />
+					</div>
+				</div>
+
+				<SofaTextField placeholder="What can I do for you?" padding="p-3" customClass="border"
+					v-model="factory.body">
+					<template v-slot:inner-suffix>
+						<SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
+					</template>
+				</SofaTextField>
+
+				<div class="w-full flex items-center gap-2">
+					<SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
+						@click="Logic.Common.GoToRoute('/quiz/create')">Create a quiz</SofaBadge>
+					<SofaBadge color="gray" :isInverted="true" as="a" customClass="!py-2 !px-4"
+						@click="Logic.Common.GoToRoute('/course/create')">Create a course</SofaBadge>
+				</div>
+			</div>
+
+			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4"
+				v-if="(conversations.length && userType.isStudent) || userType.isTeacher">
+				<SofaNormalText class="!font-bold" content="Recent chats" />
+
+				<template v-if="conversations.length">
+					<ChatList :limit="3" />
+					<SofaNormalText color="text-primaryPink" as="router-link" to="/chats" content="See all" />
+				</template>
+				<SofaEmptyState v-else title="No chat" subTitle="Your active chats will show up here" actionLabel="" />
+			</div>
+
+			<div v-if="userType.isOrg" class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
 				<SofaHeaderText class="!text-lg !font-bold" content="Start something" />
 
 				<div class="grid grid-cols-2 gap-y-2 gap-x-4">
@@ -85,8 +127,42 @@
 					</SofaBadge>
 				</div>
 			</div>
+
+			<div v-if="!userType.isStudent && !user.roles.isVerified"
+				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
+				<div class="w-full flex gap-2 items-center">
+					<SofaNormalText class="!font-bold" content="Get verified" />
+					<SofaIcon name="verify" class="h-[16px]" />
+				</div>
+				<SofaNormalText>
+					Join the elite that create the highest quality study materials, reach
+					more audience, and sell on marketplace.
+				</SofaNormalText>
+
+				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification')">
+					Apply here
+				</SofaButton>
+			</div>
+
+			<div v-if="userType.isTeacher && user.tutor.topics.length === 0"
+				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
+				<div class="w-full flex gap-2 items-center">
+					<SofaNormalText class="!font-bold" content="Apply to teach subjects" />
+					<SofaIcon name="tutor-bagde" class="h-[16px]" />
+				</div>
+				<SofaNormalText>
+					As a teacher, you need to pass a test on a subject before you can be recommended to teach the subject to
+					others.
+					Complete your test after this application and we will reach out to you with your result.
+				</SofaNormalText>
+
+				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')">
+					Apply here
+				</SofaButton>
+			</div>
 		</template>
 	</dashboard-layout>
+	<CustomizeBot :close="() => showCustomizeAI = false" v-if="showCustomizeAI" />
 	<SofaModal v-if="addModalType">
 		<div class="flex flex-col p-4 gap-4 md:p-6 md:gap-6 justify-between">
 			<div class="flex gap-2 justify-between items-center">
@@ -124,17 +200,20 @@
 </template>
 
 <script setup lang="ts">
+import ChatList from '@/components/conversations/ChatList.vue'
+import CustomizeBot from '@/components/onboarding/CustomizeBot.vue'
 import { useAuth } from '@/composables/auth/auth'
+import { useConversationsList, useCreateConversation } from '@/composables/conversations/conversations'
 import { useManageOrganizationMembers } from '@/composables/organizations/members'
+import { showCustomizeAI } from '@/composables/profile'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import {
-	SofaAvatar, SofaBadge,
-	SofaButton,
-	SofaHeaderText, SofaIcon,
-	SofaModal2 as SofaModal,
+	SofaAvatar, SofaBadge, SofaButton, SofaEmptyState,
+	SofaHeaderText,
+	SofaIcon, SofaModal2 as SofaModal,
 	SofaNormalText,
-	SofaTextField
+	SofaTextField,
 } from 'sofa-ui-components'
 import { computed, defineProps, ref } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -163,12 +242,14 @@ const rightCommands = [
 	//{ label: 'Create a class', action: () => Logic.Common.GoToRoute('/organzation/classes/create') },
 ]
 
-const { id, user } = useAuth()
+const { id, user, userAi, userType } = useAuth()
 const { addMembersEmails, addMembers, removeMember, acceptMember } = useManageOrganizationMembers(id.value)
+const { conversations } = useConversationsList()
+const { factory, createConversation } = useCreateConversation()
 
 const options = [
-	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
-	//{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
+	{ title: 'Dashboard', icon: 'dashboard', route: '/' },
+	//{ title: 'Classes', icon: 'classes', route: '/classes' },
 	{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
 	{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
 ]

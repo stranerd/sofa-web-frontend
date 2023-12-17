@@ -1,16 +1,16 @@
 <template>
-	<OrganizationLayout title="Teachers">
+	<HomeLayout title="Teachers">
 		<template v-slot="{ extras }">
 			<MembersList :image="teachersImage" :type="MemberTypes.teacher"
 				:members="teachers" :messages="messages" @openAddModal="extras.openAddModal"
 				@acceptMember="extras.acceptMember" @removeMember="extras.removeMember" />
 		</template>
-	</OrganizationLayout>
+	</HomeLayout>
 </template>
 
 <script lang="ts">
 import MembersList from '@/components/organizations/members/MembersList.vue'
-import OrganizationLayout from '@/components/organizations/organizations/OrganizationLayout.vue'
+import HomeLayout from '@/components/home/HomeLayout.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationMembers } from '@/composables/organizations/members'
 import { generateMiddlewares } from '@/middlewares'
@@ -20,9 +20,9 @@ import { useMeta } from 'vue-meta'
 import teachersImage from '@/assets/images/class-teachers.png'
 
 export default defineComponent({
-	components: { OrganizationLayout, MembersList },
+	components: { HomeLayout, MembersList },
 	name: 'OrganizationTeachersPage',
-	middlewares: { goBackRoute: '/organization' },
+	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup () {
 		useMeta({ title: 'Teachers' })

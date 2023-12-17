@@ -1,28 +1,28 @@
 <template>
-	<OrganizationLayout title="Students">
+	<HomeLayout title="Students">
 		<template v-slot="{ extras }">
-			<MembersList :image="studentsImage" :type="MemberTypes.student"
-				:members="students" :messages="messages" @openAddModal="extras.openAddModal"
-				@acceptMember="extras.acceptMember" @removeMember="extras.removeMember" />
+			<MembersList :image="studentsImage" :type="MemberTypes.student" :members="students" :messages="messages"
+				@openAddModal="extras.openAddModal" @acceptMember="extras.acceptMember"
+				@removeMember="extras.removeMember" />
 		</template>
-	</OrganizationLayout>
+	</HomeLayout>
 </template>
 
 <script lang="ts">
+import studentsImage from '@/assets/images/class-students.png'
+import HomeLayout from '@/components/home/HomeLayout.vue'
 import MembersList from '@/components/organizations/members/MembersList.vue'
-import OrganizationLayout from '@/components/organizations/organizations/OrganizationLayout.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationMembers } from '@/composables/organizations/members'
 import { generateMiddlewares } from '@/middlewares'
 import { MemberTypes } from '@modules/organizations'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import studentsImage from '@/assets/images/class-students.png'
 
 export default defineComponent({
-	components: { OrganizationLayout, MembersList },
+	components: { HomeLayout, MembersList },
 	name: 'OrganizationStudentsPage',
-	middlewares: { goBackRoute: '/organization' },
+	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup () {
 		useMeta({ title: 'Students' })
