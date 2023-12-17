@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 left-0 h-full w-full bg-[#00000050] z-[100000000000] cursor-not-allowed"
+  <div class="fixed top-0 left-0 h-full w-full bg-black opacity-80 z-[100000000000] cursor-not-allowed"
     v-if="loaderSetup.loading || loaderSetup.loaders.length">
     <div class="loader-bar" />
   </div>

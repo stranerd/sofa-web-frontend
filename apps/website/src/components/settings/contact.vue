@@ -21,7 +21,7 @@
       <sofa-header-text :size="'xl'" :customClass="'text-left'" content="Give feedback" />
 
       <sofa-textarea :hasTitle="false"
-        :textAreaStyle="'h-[90px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+        :textAreaStyle="'h-[90px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
         :placeholder="'Let us know how we can help'" v-model="message" />
 
       <div class="w-full flex flex-row justify-end">

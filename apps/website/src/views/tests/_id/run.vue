@@ -35,7 +35,7 @@
 												'w-0': i > extras.index,
 												'rounded-l-full': i === extras.index
 											}" :style="i === extras.index ? `width: ${extras.fractionTimeLeft * 100}%;` : ''" />
-											<div class="h-2 bg-lightBorderColor" :class="{
+											<div class="h-2 bg-darkLightGray" :class="{
 												'w-full rounded-full': i > extras.index || (i === extras.index && extras.fractionTimeLeft === 0),
 												'w-0': i < extras.index,
 												'rounded-r-full': i === extras.index

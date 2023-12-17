@@ -12,7 +12,7 @@
       <div class="w-[40%] shadow-custom px-4 py-2 bg-white rounded-custom flex gap-3 items-center justify-between">
         <div class="flex gap-2 items-center flex-1">
           <SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
-          <SofaNormalText class="pr-2 border-r border-lightBorderColor cursor-pointer" content="Filter" @click="Logic.Common.GoToRoute('/marketplace/search')" />
+          <SofaNormalText as="a" class="pr-2 border-r border-darkLightGray" content="Filter" @click="Logic.Common.GoToRoute('/marketplace/search')" />
           <SofaTextField class="flex-1" customClass="!border-none w-full" placeholder="Search for anything" v-model="searchQuery" @onEnter="handleSearch" />
         </div>
 

@@ -1,7 +1,7 @@
 <template>
 	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
 		<div class="w-full h-full flex-1 flex flex-col justify-start relative">
-			<div class="w-full flex items-center gap-3 justify-between bg-backgroundGray p-4">
+			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 				<SofaNormalText class="!font-bold !text-base" :content="title" />
 				<span class="w-4" />
@@ -29,7 +29,7 @@
 					</div>
 				</div>
 
-				<div class="h-[1px] w-full bg-lightGrayVaraint" />
+				<div class="h-[1px] w-full bg-lightGray" />
 
 				<div class="w-full flex flex-col gap-1">
 					<router-link
@@ -61,9 +61,8 @@
 		<template v-slot:middle-session>
 			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
 				<div class="bg-white flex flex-col shadow-custom rounded-custom">
-					<router-link :to="item.route"
-						class="w-full flex items-center gap-3 p-4 border-b border-lightGrayVaraint" v-for="item in options"
-						:key="item.route">
+					<router-link :to="item.route" class="w-full flex items-center gap-3 p-4 border-b border-lightGray"
+						v-for="item in options" :key="item.route">
 						<SofaIcon :name="item.icon" class="h-[16px] fill-current" />
 						<SofaNormalText color="text-inherit" :content="item.title" />
 					</router-link>
@@ -93,16 +92,18 @@
 				<SofaHeaderText :content="addModalType === MemberTypes.teacher ? 'Add teachers' : 'Add students'" />
 				<SofaIcon class="h-[19px]" name="circle-close" @click="addModalType = null" />
 			</div>
-			<div v-if="addModalType === MemberTypes.student" class="bg-primaryPurple text-white flex items-center gap-2 p-4 rounded-custom">
+			<div v-if="addModalType === MemberTypes.student"
+				class="bg-primaryPurple text-white flex items-center gap-2 p-4 rounded-custom">
 				<SofaIcon class="h-[16px] fill-current" name="info" />
-				<SofaNormalText color="text-inherit" content="Students added get your classes, courses, and quizzes for FREE" />
+				<SofaNormalText color="text-inherit"
+					content="Students added get your classes, courses, and quizzes for FREE" />
 				<SofaIcon class="h-[16px] fill-current ml-auto" name="circle-close" />
 			</div>
 			<div class="flex gap-2 items-center">
-				<SofaTextField customClass="!bg-lightGrayVaraint" v-model="addMembersEmails"
-					padding="p-4" name="Emails" placeholder="Email, comma seperated"
-					borderColor="border-transparent" />
-				<SofaButton customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white"
+				<SofaTextField customClass="!bg-lightGray" v-model="addMembersEmails" padding="p-4" name="Emails"
+					placeholder="Email, comma seperated" borderColor="border-transparent" />
+				<SofaButton customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+					textColor="text-white"
 					@click="addMembers(addModalType).then((succeeded) => succeeded ? addModalType = null : null)">
 					Invite
 				</SofaButton>
@@ -151,7 +152,7 @@ useMeta(computed(() => ({
 })))
 
 const rightCommands = [
-	{ label: 'Add a student', action: () => extras.value.openAddModal(MemberTypes.student)},
+	{ label: 'Add a student', action: () => extras.value.openAddModal(MemberTypes.student) },
 	{ label: 'Add a teacher', action: () => extras.value.openAddModal(MemberTypes.teacher) },
 	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
 	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },

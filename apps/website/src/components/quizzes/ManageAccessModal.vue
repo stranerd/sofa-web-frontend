@@ -3,15 +3,14 @@
 		<div class="flex flex-col gap-6 p-4 md:p-8">
 			<div class="w-full flex items-center gap-4 justify-between text-deepGray">
 				<SofaHeaderText size="xl" class="!font-bold" content="Invite" />
-				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer" @click="emits('close')" />
+				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer"
+					@click="emits('close')" />
 			</div>
 
 			<div class="flex gap-4 items-center">
-				<SofaTextField customClass="rounded-custom !bg-lightGrayVaraint"
-					padding="p-4" name="Emails" placeholder="Email, comma seperated"
-					borderColor="border-transparent" v-model="searchValue" />
-				<SofaButton
-					customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+				<SofaTextField customClass="rounded-custom !bg-lightGray" padding="p-4" name="Emails"
+					placeholder="Email, comma seperated" borderColor="border-transparent" v-model="searchValue" />
+				<SofaButton customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 					textColor="text-white" @click="addUsers">
 					Add
 				</SofaButton>
@@ -23,10 +22,13 @@
 				<div class="w-full flex flex-col gap-2">
 					<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
 						<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
-						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`" class="truncate flex-grow" />
-						<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="emits('grantAccess', request.id, false)" />
+						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`"
+							class="truncate flex-grow" />
+						<SofaNormalText as="a" color="text-primaryRed" content="Deny"
+							@click="emits('grantAccess', request.id, false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
-						<SofaNormalText as="a" color="text-primaryGreen" content="Approve" @click="emits('grantAccess', request.id, true)" />
+						<SofaNormalText as="a" color="text-primaryGreen" content="Approve"
+							@click="emits('grantAccess', request.id, true)" />
 					</div>
 				</div>
 			</template>
@@ -38,7 +40,8 @@
 					<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
 					<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
 					<template v-if="member.id !== quiz.user.id">
-						<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="emits('manageMembers', [member.id], false)" />
+						<SofaNormalText as="a" color="text-primaryRed" content="Remove"
+							@click="emits('manageMembers', [member.id], false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
 					</template>
 					<SofaNormalText color="text-inherit" :content="member.id === quiz.user.id ? 'Owner' : 'Editor'" />

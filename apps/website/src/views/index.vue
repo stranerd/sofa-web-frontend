@@ -17,7 +17,7 @@
         </div>
 
         <div class="w-full grid grid-cols-2 gap-3" v-if="userType.isStudent">
-          <div class="p-3 rounded-custom bg-ligthGray col-span-1 flex gap-3 justify-start items-center">
+          <div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
             <SofaIcon class="h-[40px]" name="xp-points" />
             <div class="flex flex-col items-start justify-center">
               <SofaNormalText class="font-bold">
@@ -26,7 +26,7 @@
               <SofaNormalText color="text-bodyBlack" content="Point" />
             </div>
           </div>
-          <div class="p-3 rounded-custom bg-ligthGray col-span-1 flex gap-3 justify-start items-center">
+          <div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
             <SofaIcon class="h-[40px]" name="streak-new" />
             <div class="flex flex-col items-start justify-center">
               <SofaNormalText class="font-bold">{{ user.account.streak.count }} days</SofaNormalText>
@@ -196,7 +196,7 @@
               There are lots of quizzes and courses that you can learn from, so start searching!
             </SofaNormalText>
           </div>
-          <SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-[#141618]"
+          <SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-deepGray"
             @click="Logic.Common.GoToRoute('/marketplace')">
             Explore more
           </SofaButton>

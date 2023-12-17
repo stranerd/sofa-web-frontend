@@ -1,7 +1,7 @@
 <template>
 	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
 		<div class="w-full h-full flex-grow flex flex-col justify-start relative">
-			<div class="w-full flex items-center gap-3 z-50 justify-between bg-backgroundGray p-4 sticky top-0 left-0">
+			<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray p-4 sticky top-0 left-0">
 				<sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 				<sofa-normal-text :customClass="'!font-bold !text-base'">{{ title }}</sofa-normal-text>
 				<span class="w-4" />
@@ -27,7 +27,7 @@
 	<dashboard-layout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template v-slot:left-session>
 			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
-				<router-link class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
+				<router-link class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
 					v-for="item in libraryOptions" :key="item.routePath" :to="item.routePath"
 					exact-active-class="bg-lightBlue font-semibold">
 					<sofa-icon :name="item.icon" :custom-class="'h-[17px]'" />
@@ -40,7 +40,7 @@
 				</div>
 
 				<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
-					class="w-full flex items-center justify-start text-left gap-3 p-3 relative rounded-[8px] hover:bg-[#E5F2FD] group folder-link"
+					class="w-full flex items-center justify-start text-left gap-3 p-3 relative rounded-[8px] hover:bg-lightBlue group folder-link"
 					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
 					exact-active-class="bg-lightBlue font-semibold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
@@ -63,7 +63,7 @@
 						<sofa-normal-text customClass="!font-bold">Organizations</sofa-normal-text>
 					</div>
 					<router-link
-						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-[#E5F2FD]"
+						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
 						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
 						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
@@ -77,7 +77,7 @@
 			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
 				<div class="bg-white flex flex-col shadow-custom rounded-custom">
 					<router-link :to="item.routePath"
-						class="w-full flex items-center justify-start gap-3 p-4 border-b border-[#F1F6FA]"
+						class="w-full flex items-center justify-start gap-3 p-4 border-b border-lightGray"
 						v-for="item in libraryOptions" :key="item.routePath">
 						<sofa-icon :name="item.icon" :custom-class="'h-[16px]'" />
 						<sofa-normal-text>{{ item.title }}</sofa-normal-text>
@@ -97,7 +97,7 @@
 						<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 						<sofa-custom-input v-if="item.id === factory.entityId" v-model="factory.title"
 							placeholder="Folder name" :autoFocus="true"
-							customClass="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-backgroundGray rounded cursor-text"
+							customClass="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-lightGray rounded cursor-text"
 							@onBlur="saveFolder" @onEnter="saveFolder" />
 						<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
@@ -147,7 +147,7 @@
 		<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
 			<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
 				<div
-					class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-[#F1F6FA] border-b">
+					class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-lightGray border-b">
 					<sofa-normal-text :customClass="'!font-bold !text-base'">Options</sofa-normal-text>
 					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
 				</div>

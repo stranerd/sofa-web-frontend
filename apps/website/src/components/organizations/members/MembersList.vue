@@ -1,7 +1,7 @@
 <template>
 	<div v-if="!members.length"
 		class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col mdlg:flex-row gap-4 p-6">
-		<div class="h-full aspect-square bg-lightGrayVaraint rounded flex items-center justify-center">
+		<div class="h-full aspect-square bg-lightGray rounded flex items-center justify-center">
 			<img class="w-3/4 h-3/4" :src="image" />
 		</div>
 		<div class="flex flex-col gap-2">
@@ -18,8 +18,8 @@
 	</div>
 	<div v-else class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 md:p-6">
 		<div class="flex gap-4 items-center">
-			<SofaTextField class="!w-auto" customClass="!bg-lightGrayVaraint" padding="p-4" placeholder="Search"
-				type="search" borderColor="border-transparent" />
+			<SofaTextField class="!w-auto" customClass="!bg-lightGray" padding="p-4" placeholder="Search" type="search"
+				borderColor="border-transparent" />
 			<SofaButton class="ml-auto" customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 				textColor="text-white" @click="emits('openAddModal', type)">
 				Add {{ label }}

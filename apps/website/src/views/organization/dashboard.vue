@@ -13,7 +13,7 @@
 						{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
 						{ label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
 					]" :key="stat.label"
-						class="flex items-center gap-4 justify-between col-span-1 bg-lightGrayVaraint p-4 md:p-6 rounded-custom">
+						class="flex items-center gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">
 						<div class="flex flex-col items-start">
 							<SofaHeaderText size="xl" color="text-inherit !font-normal"
 								:content="Logic.formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />

@@ -3,7 +3,7 @@
     <div class="flex flex-col items-center">
       <div class="w-full flex flex-col h-full gap-3 md:gap-4 mdlg:px-6 md:px-4 overflow-y-auto">
         <div
-          class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-1 border-[#F1F6FA] border-b md:border-0 p-4 md:gap-2">
+          class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-1 border-lightGray border-b md:border-0 p-4 md:gap-2">
           <SofaHeaderText class="text-xl hidden md:inline-block " content="Add a tutor" />
 
           <div class="flex w-full md:hidden items-center gap-2 justify-between">
@@ -26,7 +26,7 @@
         <template v-if="currentStep == 0">
           <div class="w-full flex flex-col gap-3 px-4 md:px-0">
             <SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
-            <a class="w-full flex items-center justify-between p-4 rounded-custom bg-backgroundGray"
+            <a class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
               v-for="(option, index) in helpOptions" :key="index" @click="selectedhelpOption = option.key">
               <SofaNormalText :color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
                 :content="option.title" />
@@ -39,9 +39,9 @@
 
         <template v-if="currentStep == 1">
           <div class="w-full flex flex-col gap-3 px-4 md:px-0">
-            <SofaTextarea padding="px-3 py-4" customClass="bg-backgroundGray rounded-custom"
+            <SofaTextarea padding="px-3 py-4" customClass="bg-lightGray rounded-custom"
               placeholder="Tell the tutor why you need him/her" v-model="factory.body"
-              textAreaStyle="!bg-backgroundGray rounded-custom">
+              textAreaStyle="!bg-lightGray rounded-custom">
             </SofaTextarea>
           </div>
         </template>
@@ -49,7 +49,7 @@
         <template v-if="currentStep == 2">
           <div class="w-full flex flex-col gap-3 md:px-0 px-4 flex-grow">
             <template v-if="filteredTutors.length">
-              <a class="w-full rounded-custom bg-[#F1F6FA] p-4 flex items-center gap-3"
+              <a class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
                 :class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
                 v-for="(tutor, index) in filteredTutors" :key="index" @click="factory.tutorId = tutor.id">
                 <SofaAvatar size="60" :photoUrl="tutor.photo_url" :showOnline="true" :online="tutor.online" />
@@ -73,7 +73,7 @@
             </template>
             <template v-else>
               <div class="flex flex-col items-center justify-center pt-3">
-                <SofaNormalText color="text-[#78828C]" content="No tutor found for selected subject" />
+                <SofaNormalText color="text-grayColor" content="No tutor found for selected subject" />
               </div>
             </template>
           </div>

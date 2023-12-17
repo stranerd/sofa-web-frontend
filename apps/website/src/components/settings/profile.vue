@@ -21,16 +21,16 @@
         <sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile')">View profile</sofa-button>
       </div>
 
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'p-3'"
-        type="text" :name="'First name'" :placeholder="'First Name'" :error="factory.errors.first"
-        v-model="factory.first"  :borderColor="'border-transparent'" />
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'p-3'"
+        type="text" :name="'First name'" :placeholder="'First Name'" :error="factory.errors.first" v-model="factory.first"
+        :borderColor="'border-transparent'" />
 
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'p-3'"
-        type="text" :name="'Last name'" :placeholder="'Last Name'" :error="factory.errors.last"
-        v-model="factory.last" :borderColor="'border-transparent'" />
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'p-3'"
+        type="text" :name="'Last name'" :placeholder="'Last Name'" :error="factory.errors.last" v-model="factory.last"
+        :borderColor="'border-transparent'" />
 
       <sofa-textarea :hasTitle="false" :error="factory.errors.description"
-        :textAreaStyle="'h-[90px] rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+        :textAreaStyle="'h-[90px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
         :placeholder="'Bio'" v-model="factory.description" />
     </div>
 
@@ -39,9 +39,9 @@
         Contact info
       </sofa-header-text>
 
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '" :padding="'p-3'"
-        type="text" :name="'Email'" ref="name.first" :placeholder="'Email'" v-model="auth.email"
-        :disabled="true" :borderColor="'border-transparent'" />
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'p-3'"
+        type="text" :name="'Email'" ref="name.first" :placeholder="'Email'" v-model="auth.email" :disabled="true"
+        :borderColor="'border-transparent'" />
 
       <account-setup :isProfilePhone="true" />
     </div>

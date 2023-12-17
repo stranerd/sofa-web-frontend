@@ -8,7 +8,7 @@
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 				<div
-					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
+					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
 					<sofa-normal-text :customClass="'!font-bold !text-base'">
 						{{
 							selectedQuizMode == "game"
@@ -22,7 +22,7 @@
 				<div class="w-full flex flex-col gap-3 px-4 py-4" v-if="selectedQuizMode != 'game'">
 					<sofa-icon-card :data="item" v-for="(item, index) in otherTasks" :key="index"
 						@click="item.actionFn(selectedQuizId, item.key)"
-						:customClass="'!bg-[#F1F6FA] !w-full !shadow-none'">
+						:customClass="'!bg-lightGray !w-full !shadow-none'">
 						<template v-slot:title>
 							<sofa-normal-text :customClass="'!font-bold'">
 								{{ item.title }}
@@ -39,9 +39,9 @@
 					</div>
 				</div>
 
-				<div class="w-full flex flex-col gap-3 py-4 px-4" v-else>
+				<div class="w-full flex flex-col gap-3 p-4" v-else>
 					<a @click="userIsParticipating = !userIsParticipating"
-						class="w-full rounded-custom py-4 px-4 bg-backgroundGray flex items-center justify-between">
+						class="w-full rounded-custom p-4 bg-lightGray flex items-center justify-between">
 						<sofa-normal-text>Participate</sofa-normal-text>
 						<sofa-icon :customClass="'h-[22px] z-50'"
 							:name="userIsParticipating ? 'toggle-on' : 'toggle-off'" />

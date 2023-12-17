@@ -43,19 +43,19 @@
         </div>
 
         <sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'First name'" ref="name.first"
-          :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first">
           <template v-slot:title> First Name </template>
         </sofa-text-field>
 
         <sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'Last name'" ref="name.last"
-          :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+          :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
           :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last">
           <template v-slot:title> Last Name </template>
         </sofa-text-field>
 
         <sofa-textarea :placeholder="'Description of yourself'" :hasTitle="true" :name="'Bio'" ref="description"
-          :text-area-style="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor resize-none'"
+          :text-area-style="'rounded-custom !bg-lightGray !placeholder:text-grayColor resize-none'"
           :rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.description">
           <template v-slot:title> Bio </template>
         </sofa-textarea>
@@ -77,12 +77,12 @@
             <template v-for="(content, index) in selectedMaterialList" :key="index">
               <template v-if="!Logic.Common.isOnlyMobile">
                 <sofa-activity-card v-if="content.subject" :activity="content"
-                  :customClass="'!bg-backgroundGray !w-full cursor-pointer'" @click="
+                  :customClass="'!bg-lightGray !w-full cursor-pointer'" @click="
                     Logic.Common.GoToRoute('/course/create?id=' + content.id)
                     "></sofa-activity-card>
               </template>
               <template v-else>
-                <sofa-activity-card :activity="content" :customClass="'!bg-backgroundGray'" :is-wrapped="true" @click="
+                <sofa-activity-card :activity="content" :customClass="'!bg-lightGray'" :is-wrapped="true" @click="
                   Logic.Common.GoToRoute('/course/create?id=' + content.id)
                   ">
                 </sofa-activity-card>
@@ -91,7 +91,7 @@
 
             <div class="w-full flex flex-col">
               <div @click="showAddMaterialHandler()"
-                class="w-full flex cursor-pointer flex-row gap-3 md:!min-h-[140px] min-h-[50px] justify-center items-center px-4 py-4 border-2 rounded-[16px] border-[#E1E6EB]">
+                class="w-full flex cursor-pointer flex-row gap-3 md:!min-h-[140px] min-h-[50px] justify-center items-center px-4 py-4 border-2 rounded-[16px] border-darkLightGray">
                 <sofa-icon :name="'box-add-pink'" :customClass="'h-[18px]'"></sofa-icon>
                 <sofa-normal-text :color="'text-primaryPink '">
                   Add content
@@ -104,7 +104,7 @@
 
       <!-- Smaller screen CTA -->
       <div
-        class="w-full flex flex-col md:!hidden bg-backgroundGray px-4 py-4 fixed bottom-0 left-0 items-center z-50 justify-center">
+        class="w-full flex flex-col md:!hidden bg-lightGray px-4 py-4 fixed bottom-0 left-0 items-center z-50 justify-center">
         <div class="w-full flex flex-col">
           <sofa-button :padding="'py-3'" :customClass="'w-full'" @click="submitVerification()">Submit</sofa-button>
         </div>
@@ -132,7 +132,7 @@
             </div>
 
             <div class="w-full flex flex-col gap-4">
-              <sofa-select :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+              <sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
                 :padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="capitalize(addMaterialType)" :ref="addMaterialType"
                 :placeholder="'Select material'" :rules="[FormValidations.RequiredRule]" :autoComplete="false"
                 :borderColor="'border-transparent'" :options="allMaterials" :hasTitle="true" v-model="selectedMaterial">

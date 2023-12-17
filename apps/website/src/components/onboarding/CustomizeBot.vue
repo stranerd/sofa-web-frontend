@@ -19,7 +19,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden py-3 border-[#F1F6FA] border-b px-4">
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 bg-white z-50 md:!hidden py-3 border-lightGray border-b px-4">
           <sofa-normal-text :customClass="'!font-bold'">
             Customize AI
           </sofa-normal-text>
@@ -45,12 +45,12 @@
               </sofa-image-loader>
             </div>
 
-            <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
               :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Name'" ref="name" :placeholder="'Name'"
               :rules="[FormValidations.RequiredRule]" v-model="customizeAIForm.name" :defaultValue="customizeAIForm.name"
               :borderColor="'border-transparent'" />
 
-            <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+            <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
               :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Tagline'" ref="tagline"
               :placeholder="'Tagline'" :rules="[FormValidations.RequiredRule]" v-model="customizeAIForm.tagline"
               :defaultValue="customizeAIForm.tagline" :borderColor="'border-transparent'" />
@@ -75,23 +75,23 @@
   </sofa-modal>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue"
+import { FormValidations } from "@/composables"
 import {
-  SofaIcon,
-  SofaTextField,
   SofaButton,
   SofaFileAttachment,
-  SofaImageLoader,
   SofaFormWrapper,
+  SofaHeaderText,
+  SofaIcon,
+  SofaImageLoader,
   SofaModal,
   SofaNormalText,
-  SofaHeaderText,
+  SofaTextField,
 } from "sofa-ui-components"
-import { FormValidations } from "@/composables"
+import { defineComponent, onMounted, ref } from "vue"
 
-import { Logic } from "sofa-logic"
-import { CustomizeAI, customizeAIForm } from "@/composables/profile"
 import { useAuth } from '@/composables/auth/auth'
+import { CustomizeAI, customizeAIForm } from "@/composables/profile"
+import { Logic } from "sofa-logic"
 
 export default defineComponent({
   components: {

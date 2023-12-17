@@ -124,14 +124,13 @@
       </div>
 
       <div class="w-full flex flex-row gap-3 items-center py-2 flex-nowrap overflow-x-auto scrollbar-hide">
-        <div class="px-4 py-1 border rounded-custom border-grayColor" v-for="(tag, index) in content.tags"
-          :key="index">
+        <div class="px-4 py-1 border rounded-custom border-grayColor" v-for="(tag, index) in content.tags" :key="index">
           <sofa-normal-text :color="'text-grayColor'" :customClass="'!whitespace-nowrap'">{{ tag }}</sofa-normal-text>
         </div>
       </div>
     </div>
 
-    <div :class="`w-full flex flex-row gap-4 items-center border-b border-[#F1F6FA] mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${hasPadding ? 'px-4' : ''
+    <div :class="`w-full flex flex-row gap-4 items-center border-b border-lightGray mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${hasPadding ? 'px-4' : ''
       }`">
       <sofa-normal-text :color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'" :customClass="`!font-semibold cursor-pointer pb-2  ${selectedTab == tab.key && !isMinimal
         ? 'border-b-2 border-bodyBlack'
@@ -149,7 +148,7 @@
     <div :class="`w-full flex flex-col h-full  rounded-b-[16px]  ${hasPadding ? 'px-4' : ''
       } overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
       <div class="w-full flex flex-col gap-3 h-full overflow-y-auto" v-if="hasAccess">
-        <div class="w-full bg-backgroundGray px-4 py-4 flex flex-col gap-2 rounded-custom"
+        <div class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom"
           v-for="(question, index) in content.questions" :key="index">
           <div class="flex flex-row items-center gap-2">
             <sofa-normal-text :color="'text-grayColor'" :content="question.type" />
@@ -201,7 +200,7 @@
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
       } overflow-y-auto py-2 relative pb-4`" v-if="selectedTab == 'creator'">
-      <div class="w-full bg-[#F1F6FA] rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
+      <div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
         <div>
           <sofa-avatar :photoUrl="content.user.photoUrl" :size="'150'" :customClass="'hidden mdlg:!inline-block'" />
 
@@ -264,15 +263,14 @@
     </div>
 
     <div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-      } overflow-y-auto py-2 relative pb-4`"
-      v-if="selectedTab == 'similar_courses' && type == 'course'">
+      } overflow-y-auto py-2 relative pb-4`" v-if="selectedTab == 'similar_courses' && type == 'course'">
       <div
         class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide"
         v-if="similarContents?.length">
         <div
           class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
           <sofa-activity-card v-for="(activity, index) in similarContents" :key="index" :activity="activity"
-            :customClass="'!bg-[#F1F6FA] cursor-pointer'"
+            :customClass="'!bg-lightGray cursor-pointer'"
             @click="Logic.Common.GoToRoute(`/marketplace/${activity.id}`)" />
         </div>
       </div>
@@ -290,8 +288,7 @@
   </div>
 
   <!-- Smaller screen purchase buttons -->
-  <div class="md:!hidden flex flex-col w-full bg-white p-4"
-    v-if="showBuyButton && type == 'course'">
+  <div class="md:!hidden flex flex-col w-full bg-white p-4" v-if="showBuyButton && type == 'course'">
     <sofa-button :padding="'px-6 py-3'" v-if="!hasAccess" :customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'
       } w-full`" @click="buyAction && content.status == 'published' ? buyAction() : null">
       {{

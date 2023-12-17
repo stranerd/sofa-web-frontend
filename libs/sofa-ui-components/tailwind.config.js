@@ -16,7 +16,6 @@ module.exports = {
         grayColor: "#78828C",
         darkBody: "#050F19",
         darkLightGray: "#E1E6EB",
-        backgroundGray: "#f1f6fb",
         lightGrayVaraint: "#F1F6FA",
         lightBlue: "#E2F3FD",
       },

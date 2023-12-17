@@ -16,7 +16,7 @@
         </div>
 
         <div
-          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
+          class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
           <sofa-normal-text :customClass="'!font-bold !text-base'">
             {{ title }}
           </sofa-normal-text>
@@ -40,9 +40,9 @@
           </div>
 
           <div class="flex flex-col w-full">
-            <sofa-textarea :padding="'px-3 py-4'" :custom-class="'bg-backgroundGray rounded-custom'"
+            <sofa-textarea :padding="'px-3 py-4'" :custom-class="'bg-lightGray rounded-custom'"
               :placeholder="'Write a short message'" v-model="formData.review"
-              :text-area-style="'!bg-backgroundGray rounded-custom'">
+              :text-area-style="'!bg-lightGray rounded-custom'">
             </sofa-textarea>
           </div>
 

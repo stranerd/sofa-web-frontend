@@ -7,8 +7,10 @@
     }">
       <template v-slot:top-extras>
         <div class="flex items-center gap-3">
-          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor'" @click="onClickAddTutor" v-if="conversation.user.id === id" />
-          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
+          <sofa-icon :customClass="'h-[17px] cursor-pointer mdlg:hidden'" :name="'tutor'" @click="onClickAddTutor"
+            v-if="conversation.user.id === id" />
+          <sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'"
+            @click="showMoreOptions = true" />
         </div>
       </template>
       <ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
@@ -54,7 +56,7 @@
             Tutor help
           </sofa-normal-text>
         </div>
-        <sofa-normal-text :customClass="'text-left'" :color="'text-[#E1E6EB]'">
+        <sofa-normal-text :customClass="'text-left'" :color="'text-darkLightGray'">
           Need extra help with your work?
         </sofa-normal-text>
         <sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'"
@@ -65,8 +67,8 @@
 
       <div v-if="conversation.user.id === id"
         class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
-        <a class="w-full flex items-center justify-start gap-2 text-primaryRed" v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
-          @click="onClickEndSession">
+        <a class="w-full flex items-center justify-start gap-2 text-primaryRed"
+          v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended" @click="onClickEndSession">
           <sofa-icon :customClass="'h-[16px] fill-current'" :name="'tutor'" />
           <sofa-normal-text :color="'text-inherit'">End conversation</sofa-normal-text>
         </a>
@@ -86,7 +88,7 @@
 
           <sofa-header-text :size="'xl'" :content="user?.bio.name.full" />
 
-          <sofa-normal-text :customClass="'text-center'" :color="'text-[#78828C]'">
+          <sofa-normal-text :customClass="'text-center'" :color="'text-grayColor'">
             {{ user?.bio.description }}
           </sofa-normal-text>
         </div>
@@ -110,12 +112,15 @@
             <ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
           </div>
 
-          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-[#F1F6FA] flex flex-col gap-4" v-if="conversation.user.id === id">
-            <a class="w-full flex items-center justify-start gap-2 text-primaryRed" v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended" @click="onClickEndSession">
+          <div class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-lightGray flex flex-col gap-4"
+            v-if="conversation.user.id === id">
+            <a class="w-full flex items-center justify-start gap-2 text-primaryRed"
+              v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended" @click="onClickEndSession">
               <SofaIcon class="h-[16px] fill-current" name="tutor" />
               <SofaNormalText color="text-inherit" content="End conversation" />
             </a>
-            <a class="w-full flex items-center justify-start gap-2 text-primaryGreen" @click="onClickAddTutor" v-else-if="!conversation.tutor">
+            <a class="w-full flex items-center justify-start gap-2 text-primaryGreen" @click="onClickAddTutor"
+              v-else-if="!conversation.tutor">
               <SofaIcon class="h-[16px] fill-current" name="tutor" />
               <SofaNormalText color="text-inherit" content="Message a tutor" />
             </a>
@@ -132,7 +137,8 @@
 
     <!-- Rate and review modal -->
     <RateAndReviewModal v-if="showRateAndReviewTutor && conversation.tutor" :close="() => showRateAndReviewTutor = false"
-      title="Session ended, rate tutor" :tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
+      title="Session ended, rate tutor"
+      :tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
       @OnReviewSubmitted="(data) => end({ rating: data.ratings, message: data.review })" />
   </ChatLayout>
 </template>

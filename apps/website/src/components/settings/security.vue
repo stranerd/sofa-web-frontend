@@ -6,17 +6,17 @@
         Password
       </sofa-header-text>
 
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="password" :name="'Current password'" ref="oldPassword"
         :placeholder="'Current password'" :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
         v-model="passwordResetForm.old_password" :update-value="passwordResetForm.old_password" />
 
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="password" :name="'New password'" ref="password"
         :placeholder="'New password'" :rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
         v-model="passwordResetForm.new_password" :update-value="passwordResetForm.new_password" />
 
-      <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor '"
+      <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
         :padding="'md:!py-4 md:!px-4 px-3 py-3'" type="password" :name="'Confirm new password'" ref="new.password"
         :placeholder="'Confirm new password'" :rules="[
           FormValidations.RequiredRule,

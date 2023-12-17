@@ -2,7 +2,7 @@
   <component :is="as"
     :class="`mdlg:!w-full ${isWrapped ? 'w-full' : 'w-[220px]'
       }  shadow-custom mdlg:!shadow-none flex ${isWrapped ? 'w-full' : 'flex-row '
-      }  items-start gap-3 px-3 py-3 justify-between rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] mdlg:!bg-ligthGray bg-white  ${customClass}`">
+      }  items-start gap-3 px-3 py-3 justify-between rounded-custom mdlg:bg-lightGray bg-white  ${customClass}`">
     <div :class="`flex mdlg:!flex-row  ${isWrapped
       ? ' flex-row'
       : ' flex-col'
@@ -27,7 +27,8 @@
             <div class="flex flex-row justify-end" v-if="hasEdit" @click.stop="editAction ? editAction() : null">
               <sofa-icon :customClass="'h-[16px]'" :name="'edit-gray'" />
             </div>
-            <div class="flex flex-row justify-end" v-if="hasBookmark && Logic.Common.isLarge" @click.stop="bookmarkAction ? bookmarkAction() : null">
+            <div class="flex flex-row justify-end" v-if="hasBookmark && Logic.Common.isLarge"
+              @click.stop="bookmarkAction ? bookmarkAction() : null">
               <sofa-icon :customClass="'h-[16px]'" :name="'bookmark'" />
             </div>
 
@@ -65,7 +66,8 @@
           </div>
 
           <div class="flex items-center gap-2 flex-grow justify-between w-full">
-            <a @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)" class="gap-2 flex items-center">
+            <a @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)"
+              class="gap-2 flex items-center">
               <sofa-avatar :size="'20'" :photoUrl="activity.user.bio.photo?.link" :user-id="activity.user.id" />
               <sofa-normal-text :customClass="'!whitespace-nowrap !line-clamp-1'">
                 {{
@@ -88,8 +90,8 @@
   </component>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
 import { Logic } from "sofa-logic"
+import { defineComponent } from "vue"
 import SofaAvatar from "../SofaAvatar"
 import SofaBadge from "../SofaBadge"
 import SofaButton from "../SofaButton"
@@ -109,7 +111,7 @@ export default defineComponent({
   props: {
     customClass: {
       type: String,
-      default: "bg-ligthGray",
+      default: "bg-lightGray",
     },
     as: {
       type: String,

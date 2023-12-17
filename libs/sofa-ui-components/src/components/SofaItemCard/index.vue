@@ -72,7 +72,7 @@ export default defineComponent({
   props: {
     customClass: {
       type: String,
-      default: "border-2 rounded-[16px] border-[#E1E6EB]",
+      default: "border-2 rounded-[16px] border-darkLightGray",
     },
     content: {
       type: Object as () => any,

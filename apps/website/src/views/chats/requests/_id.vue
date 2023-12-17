@@ -6,7 +6,7 @@
 			userNames: ['You', otherUser?.bio.name.first].filter(Boolean)
 		}">
 			<div class="w-full flex items-start justify-start p-4 pb-[90px]">
-				<div class="w-[90%] rounded-custom bg-[#E2F3FD] p-3 flex items-start justify-start">
+				<div class="w-[90%] rounded-custom bg-lightBlue p-3 flex items-start justify-start">
 					<sofa-normal-text :customClass="'text-left'">
 						{{ conversation.title }}
 					</sofa-normal-text>

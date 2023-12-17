@@ -127,7 +127,7 @@
         <div
           class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 overflow-y-auto h-full lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
           <div
-            class="w-full flex flex-row justify-between items-center sticky bg-white z-40 top-0 left-0 md:!hidden py-2 pt-3 border-[#F1F6FA] border-b px-4">
+            class="w-full flex flex-row justify-between items-center sticky bg-white z-40 top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               Course details
             </sofa-normal-text>
@@ -158,7 +158,7 @@
           </div>
 
           <div
-            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-[#F1F6FA] border-b px-4">
+            class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
             <sofa-normal-text :customClass="'!font-bold !text-base'">
               Choose payment method
             </sofa-normal-text>
@@ -167,7 +167,7 @@
 
           <div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
             <!-- Wallet -->
-            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-[#F1F6FA] ${selectedMethodId == 'payWithWallet'
+            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${selectedMethodId == 'payWithWallet'
               ? 'border-primaryBlue border-2'
               : ''
               }  rounded-custom cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
@@ -191,7 +191,7 @@
               <sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
             </div>
 
-            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-[#F1F6FA]  ${selectedMethodId == method.id
+            <div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id
               ? 'border-primaryBlue border-2'
               : ''
               }  rounded-custom cursor-pointer `" @click="selectedMethodId = method.id"

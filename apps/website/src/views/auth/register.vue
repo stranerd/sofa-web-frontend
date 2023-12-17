@@ -4,13 +4,13 @@
       <AuthProvider />
 
       <div class="w-full flex flex-col gap-4">
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="email" :name="'Email'" ref="email" v-model="factory.email" :placeholder="'Email'"
           :error="factory.errors.email" />
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" :type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
           :error="factory.errors.password" v-model="factory.password" />
-        <sofa-text-field :custom-class="'rounded-custom !bg-lightGrayVaraint !placeholder:text-grayColor'"
+        <sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
           :padding="'md:p-4 p-3'" type="password" :name="'Confirm password'" ref="confirm_new_password"
           v-model="factory.cPassword" :placeholder="'Confirm password'" :error="factory.errors.cPassword" />
       </div>
