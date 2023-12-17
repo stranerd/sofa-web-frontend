@@ -7,15 +7,15 @@ import { addToArray, formatNumber, groupBy, pluralize } from 'valleyed'
 export { addToArray, formatNumber, groupBy, pluralize }
 
 export const copyToClipboard = async (text: string) => {
-	throw new Error('Not implemented')
+	throw new Error(`Not implemented: ${text}`)
 	// await Clipboard.write({ string: text })
 }
 
-export const share = async ({ title, text, url }: { title: string, text: string, url: string }) => {
-	if (1) throw new Error('Not implemented')
+export const share = async (data: { title: string, text: string, url: string }) => {
+	throw new Error(`Not implemented: ${data}`)
 	/* const { value } = await Share.canShare()
 	if (value) await Share.share({
-		title, text, url, dialogTitle: title
+		...data, dialogTitle: data.title
 	})
 	else {
 		await copyToClipboard(url)
@@ -31,7 +31,7 @@ export const unParseURL = (url: string) => !isWeb ? url.replace(ngrokURL, localU
 
 export const formatCurrency = (currency: string) => {
 	const currencies = {
-		NGN: '&#8358;', USD: '$'
+		NGN: '₦', USD: '$'
 	} as Record<string, string>
 	return currencies[currency] ?? currencies.USD
 }

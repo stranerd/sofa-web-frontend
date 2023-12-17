@@ -4,7 +4,7 @@
   "description": "UI components for SOFA",
   "author": "",
   "scripts": {
-    "lint": "eslint --fix ./src/**/*.{ts,vue}"
+    "lint": "eslint --fix ./src"
   },
   "main": "src/index.ts",
   "dependencies": {

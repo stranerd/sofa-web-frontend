@@ -70,8 +70,8 @@ export interface SingleUser {
     }
     organizationsIn: { id: string, type: 'student' | 'teacher' }[]
     editing: {
-		  quizzes: { id: string, questionId: string } | null
-	  }
+      quizzes: { id: string, questionId: string } | null
+    }
   }
   type?: {
     type: string

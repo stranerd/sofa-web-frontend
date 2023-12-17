@@ -1,7 +1,5 @@
 import { IUserRepository } from '../irepositories/iusers'
 
-const searchFields = ['bio.firstName', 'bio.lastName', 'bio.fullName', 'bio.email']
-
 export class UsersUseCase {
 	private repository: () => IUserRepository
 

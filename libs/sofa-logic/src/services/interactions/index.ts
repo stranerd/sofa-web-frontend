@@ -4,8 +4,8 @@ import TagsApi from './TagsApi'
 import ViewsApi from './ViewsApi'
 
 export const InteractionApi = {
-  tag: new TagsApi(),
-  reports: new ReportsApi(),
-  reviews: new ReviewsApi(),
-  views: new ViewsApi(),
+	tag: new TagsApi(),
+	reports: new ReportsApi(),
+	reviews: new ReviewsApi(),
+	views: new ViewsApi(),
 }

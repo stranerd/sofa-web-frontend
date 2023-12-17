@@ -48,7 +48,7 @@ export class MembersUseCase {
 		return await this.repository(organizationId).listenToMany(
 			{ all: true },
 			listener,
-			(entity) => true
+			() => true
 		)
 	}
 }

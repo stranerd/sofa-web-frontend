@@ -81,7 +81,7 @@ export interface FetchRule {
   method: string
   params: any[]
   requireAuth: boolean
-  ignoreProperty: boolean | Function
+  ignoreProperty: boolean | (() => boolean)
   useRouteId: boolean
   useRouteQuery?: boolean
   queries?: string[]

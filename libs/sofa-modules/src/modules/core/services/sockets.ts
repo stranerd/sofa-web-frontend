@@ -19,10 +19,9 @@ export type Listeners<Model> = {
 
 type SocketReturn = { code: StatusCodes, message: string, channel: string }
 
-export async function listenOnSocket<Model> (channel: string, listeners: Listeners<Model>, onleave: Function = () => {}) {
+export async function listenOnSocket<Model> (channel: string, listeners: Listeners<Model>) {
 	const { accessToken } = await getTokens()
-	// @ts-ignore
-	if (!socket || (!socket.auth.token && accessToken) || (accessToken && socket.auth.token !== accessToken)) {
+	if (!socket || (!socket.auth['token'] && accessToken) || (accessToken && socket.auth['token'] !== accessToken)) {
 		const url = new URL(`${apiBase}/socket.io`)
 		socket = io(url.origin, {
 			path: url.pathname,
@@ -41,7 +40,9 @@ export async function listenOnSocket<Model> (channel: string, listeners: Listene
 	})
 	return () => {
 		try {
-			socket?.emit('leave', { channel: finalChannel }, (ret: SocketReturn) => onleave(ret))
+			socket?.emit('leave', { channel: finalChannel }, () => {
+				/* any cleanup fn */
+			})
 		} catch (e) {
 			console.log(e)
 		}

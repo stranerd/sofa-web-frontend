@@ -4,8 +4,8 @@ import PhoneApi from './PhoneApi'
 import UserApi from './UserApi'
 
 export const AuthApi = {
-  identities: new IdentitiesApi(),
-  passwords: new PasswordsApi(),
-  phone: new PhoneApi(),
-  user: new UserApi(),
+	identities: new IdentitiesApi(),
+	passwords: new PasswordsApi(),
+	phone: new PhoneApi(),
+	user: new UserApi(),
 }

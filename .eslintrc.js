@@ -21,6 +21,9 @@ module.exports = {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'vue/multi-word-component-names': 'off',
 		'vue/no-mutating-props': 'off',
+		'@typescript-eslint/no-non-null-assertion': 'off',
+		'@typescript-eslint/no-empty-function': 'off',
+		'no-empty': 'off',
 		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'vue/html-indent': ['warn', 'tab', {
 			attribute: 1,

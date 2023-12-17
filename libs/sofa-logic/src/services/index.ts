@@ -9,13 +9,13 @@ import { StudyApi } from './study'
 import { UserApi } from './users'
 
 export const $api = {
-  auth: AuthApi,
-  conversations: ConversationApi,
-  interactions: InteractionApi,
-  notifications: NotificationApi,
-  payment: PaymentApi,
-  plays: PlayApi,
-  schools: SchoolApi,
-  study: StudyApi,
-  users: UserApi,
+	auth: AuthApi,
+	conversations: ConversationApi,
+	interactions: InteractionApi,
+	notifications: NotificationApi,
+	payment: PaymentApi,
+	plays: PlayApi,
+	schools: SchoolApi,
+	study: StudyApi,
+	users: UserApi,
 }

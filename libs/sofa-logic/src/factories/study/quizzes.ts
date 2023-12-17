@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 
 export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizInput> {
-	public topicId: string = ''
+	public topicId = ''
 	public tagIds: string[] = []
 	#tagString = ref('')
 

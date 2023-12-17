@@ -51,7 +51,7 @@ export class ClassRepository implements IClassRepository {
 	}
 
 	async delete (id: string) {
-		return await this.client.delete<{}, boolean>(`/${id}`, {})
+		return await this.client.delete<unknown, boolean>(`/${id}`, {})
 	}
 
 	async update (id: string, data: ClassToModel) {

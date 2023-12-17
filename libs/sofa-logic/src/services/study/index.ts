@@ -5,9 +5,9 @@ import MyStudyApi from './MyStudyApi'
 import QuizzesApi from './QuizzesApi'
 
 export const StudyApi = {
-  course: new CoursesApi(),
-  file: new FilesApi(),
-  folder: new FoldersApi(),
-  quiz: new QuizzesApi(),
-  my_study: new MyStudyApi(),
+	course: new CoursesApi(),
+	file: new FilesApi(),
+	folder: new FoldersApi(),
+	quiz: new QuizzesApi(),
+	my_study: new MyStudyApi(),
 }

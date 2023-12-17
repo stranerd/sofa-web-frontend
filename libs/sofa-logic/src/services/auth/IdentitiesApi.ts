@@ -4,37 +4,37 @@ import { ReadOnlyApiService } from '../common/ReadOnlyService'
 import { AuthResponse } from '../../logic/types/domains/auth'
 
 export default class IdentitiesApi extends ReadOnlyApiService {
-  constructor() {
-    super('auth/identities')
-  }
+	constructor() {
+		super('auth/identities')
+	}
 
-  public async googleSignIn(data: GoogleAuthInput) {
-    try {
-      const response: AxiosResponse<AuthResponse> = await this.axiosInstance.post(
-        this.getUrl() + '/google',
-        data,
-      )
+	public async googleSignIn(data: GoogleAuthInput) {
+		try {
+			const response: AxiosResponse<AuthResponse> = await this.axiosInstance.post(
+				this.getUrl() + '/google',
+				data,
+			)
 
-      return response
-    } catch (err) {
-      this.handleErrors(err)
-      if (err.response) {
-      }
-    }
-  }
+			return response
+		} catch (err) {
+			this.handleErrors(err)
+			if (err.response) {
+			}
+		}
+	}
 
-  public async appleSignIn(data: AppleAuthInput) {
-    try {
-      const response: AxiosResponse<AuthResponse> = await this.axiosInstance.post(
-        this.getUrl() + '/apple',
-        data,
-      )
+	public async appleSignIn(data: AppleAuthInput) {
+		try {
+			const response: AxiosResponse<AuthResponse> = await this.axiosInstance.post(
+				this.getUrl() + '/apple',
+				data,
+			)
 
-      return response
-    } catch (err) {
-      this.handleErrors(err)
-      if (err.response) {
-      }
-    }
-  }
+			return response
+		} catch (err) {
+			this.handleErrors(err)
+			if (err.response) {
+			}
+		}
+	}
 }

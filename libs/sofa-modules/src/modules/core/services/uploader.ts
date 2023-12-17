@@ -23,14 +23,7 @@ export class UploadedFile {
 	readonly data: Blob
 	readonly ref: File
 
-	constructor ({
-		             name,
-		             path,
-		             type,
-		             size,
-		             data,
-		             ref
-	             }: { name: string, path: string, type: string, size: number, data: Blob, ref: File }) {
+	constructor ({ name, path, type, size, data, ref }: { name: string, path: string, type: string, size: number, data: Blob, ref: File }) {
 		this.name = name
 		this.path = path
 		this.type = type

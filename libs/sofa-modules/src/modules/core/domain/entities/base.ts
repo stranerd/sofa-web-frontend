@@ -14,8 +14,7 @@ export class BaseEntity {
 			.filter((k) => k !== 'constructor')
 			.forEach((key) => {
 				const value = this[key as keyof BaseEntity]
-				// @ts-ignore
-				json[key] = value?.toJSON?.() ?? value
+				json[key] = (value as any)?.toJSON?.() ?? value
 			})
 		return json
 	}

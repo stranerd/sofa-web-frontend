@@ -7,5 +7,5 @@ export * from './factories'
 export * from './logic'
 
 declare module 'valleyed/lib/types' {
-    interface File extends FileData {}
+    type File = FileData
 }

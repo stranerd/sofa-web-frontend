@@ -15,18 +15,18 @@ import * as valleyed from 'valleyed'
 const study = new Study()
 
 export const Logic = {
-  ...valleyed,
-  Auth: new Auth(),
-  Common: new Common(),
-  Form: new Form(),
-  Conversations: new Conversations(),
-  Notifications: new Notifications(),
-  Payment: new Payment(),
-  Plays: new Plays(),
-  Schools: new Schools(),
-  Study: study,
-  Users: new Users(),
-  Interactions: new Interactions(),
+	...valleyed,
+	Auth: new Auth(),
+	Common: new Common(),
+	Form: new Form(),
+	Conversations: new Conversations(),
+	Notifications: new Notifications(),
+	Payment: new Payment(),
+	Plays: new Plays(),
+	Schools: new Schools(),
+	Study: study,
+	Users: new Users(),
+	Interactions: new Interactions(),
 }
 
 export type TransformedQuestion = ReturnType<typeof study['transformQuestion']>

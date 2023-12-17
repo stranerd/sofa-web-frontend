@@ -37,11 +37,11 @@ export class AnnouncementRepository implements IAnnouncementRepository {
 	}
 
 	async delete (id: string) {
-		return await this.client.delete<{}, boolean>(`/${id}`, {})
+		return await this.client.delete<unknown, boolean>(`/${id}`, {})
 	}
 
 	async markRead () {
-		return await this.client.post<{}, boolean>('/read', {})
+		return await this.client.post<unknown, boolean>('/read', {})
 	}
 
 	async listenToOne (id: string, listeners: Listeners<AnnouncementEntity>) {
