@@ -35,7 +35,7 @@
 import OrganizationLayout from '@/components/organizations/organizations/OrganizationLayout.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components/src'
+import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 

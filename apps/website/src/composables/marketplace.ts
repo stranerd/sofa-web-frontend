@@ -59,6 +59,6 @@ export const extractContent = (item: Quiz | Course): ContentDetails => {
 		authUserId: Logic.Auth.AuthUser.id,
 		type,
 		ratings: item.ratings,
-		route: `/marketplace/${item.id}?${type}`
+		route: `/marketplace/${item.id}?type=${type}`
 	}
 }
