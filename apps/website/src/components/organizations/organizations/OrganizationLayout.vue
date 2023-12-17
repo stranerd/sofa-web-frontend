@@ -20,7 +20,7 @@
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
-							<SofaHeaderText class="!text-base !font-bold" :content="user.orgName" />
+							<SofaHeaderText class="!text-base" :content="user.orgName" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
 							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 						</div>
@@ -42,7 +42,8 @@
 				</div>
 			</div>
 
-			<div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
+			<div v-if="!user.roles.isVerified"
+				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<div class="w-full flex gap-2 items-center">
 					<SofaNormalText class="!font-bold" content="Get verified" />
 					<SofaIcon name="verify" class="h-[16px]" />
@@ -102,8 +103,7 @@
 			<div class="flex gap-2 items-center">
 				<SofaTextField customClass="!bg-lightGray" v-model="addMembersEmails" padding="p-4" name="Emails"
 					placeholder="Email, comma seperated" borderColor="border-transparent" />
-				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
-					textColor="text-white"
+				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white"
 					@click="addMembers(addModalType).then((succeeded) => succeeded ? addModalType = null : null)">
 					Invite
 				</SofaButton>
@@ -125,15 +125,19 @@
 
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
-import { Logic } from 'sofa-logic'
+import { useManageOrganizationMembers } from '@/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
+import { Logic } from 'sofa-logic'
 import {
-	SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton,
-	SofaTextField, SofaModal2 as SofaModal
+	SofaAvatar, SofaBadge,
+	SofaButton,
+	SofaHeaderText, SofaIcon,
+	SofaModal2 as SofaModal,
+	SofaNormalText,
+	SofaTextField
 } from 'sofa-ui-components'
 import { computed, defineProps, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useManageOrganizationMembers } from '@/composables/organizations/members'
 
 const props = defineProps({
 	title: {
@@ -156,7 +160,7 @@ const rightCommands = [
 	{ label: 'Add a teacher', action: () => extras.value.openAddModal(MemberTypes.teacher) },
 	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
 	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
-	{ label: 'Create a class', action: () => Logic.Common.GoToRoute('/organzation/classes/create') },
+	//{ label: 'Create a class', action: () => Logic.Common.GoToRoute('/organzation/classes/create') },
 ]
 
 const { id, user } = useAuth()
@@ -164,7 +168,7 @@ const { addMembersEmails, addMembers, removeMember, acceptMember } = useManageOr
 
 const options = [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/organization/dashboard' },
-	{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
+	//{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
 	{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
 	{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
 ]

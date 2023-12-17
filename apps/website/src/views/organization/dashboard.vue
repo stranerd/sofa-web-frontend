@@ -4,13 +4,13 @@
 			<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-6">
 				<SofaHeaderText color="text-inherit" class="!text-lg !font-bold" content="Overview" />
 
-				<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+				<div class="grid grid-cols-2 md:grid-cols-2 gap-4">
 					<div v-for="stat in [
-							{ label: 'Classes', value: user.account.meta.classes, icon: 'classes', color: '#3296C8' },
-							{ label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
-							{ label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
+							// { label: 'Classes', value: user.account.meta.classes, icon: 'classes', color: '#3296C8' },
+							// { label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
 							{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
 							{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
+							{ label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
 							{ label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
 						]" :key="stat.label"
 						class="flex items-center gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">

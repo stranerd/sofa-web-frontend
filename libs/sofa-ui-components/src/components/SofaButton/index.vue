@@ -58,7 +58,7 @@ export default defineComponent({
 
 <style scoped>
 .shadow-button {
-  box-shadow: 0 3px #999;
+  box-shadow: 0 2px #999;
 }
 
 .shadow-button:active {

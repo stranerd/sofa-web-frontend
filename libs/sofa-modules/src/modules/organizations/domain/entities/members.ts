@@ -27,4 +27,11 @@ export class MemberEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
+
+	search (value: string) {
+		if (!value) return true
+		return [
+			this.email, this.user?.bio.name.full ?? ''
+		].some(field => field.toLowerCase().includes(value.toLowerCase()))
+	}
 }

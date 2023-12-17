@@ -16,34 +16,41 @@
 			</SofaButton>
 		</div>
 	</div>
-	<div v-else class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 md:p-6">
-		<div class="flex gap-4 items-center">
-			<SofaTextField class="!w-auto" customClass="!bg-lightGray" padding="p-4" placeholder="Search" type="search"
-				borderColor="border-transparent" />
+	<div v-else class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 md:gap-6 py-4 md:py-6">
+		<div class="flex gap-4 items-center px-4 md:px-6">
+			<div class="flex items-center border border-darkLightGray rounded-custom pl-4 md:min-w-[300px]">
+				<SofaIcon name="search" class="h-[16px]" />
+				<SofaTextField v-model="searchValue" class="w-full" padding="p-4" placeholder="Search" type="search"
+					borderColor="!border-none" />
+			</div>
 			<SofaButton class="ml-auto" customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 				textColor="text-white" @click="emits('openAddModal', type)">
 				Add {{ label }}
 			</SofaButton>
 		</div>
 		<div class="w-full bg-darkLightGray h-[1px]" />
-		<template v-for="member in [...pending, ...nonPending]" :key="member.id">
-			<div class="flex gap-2 items-center w-full">
-				<SofaAvatar :photoUrl="member.user?.bio.photo?.link" size="28" />
-				<SofaNormalText color="text-inherit"
-					:content="`${member.user?.bio.name.full ?? member.email}${member.pending ? ' wants to edit' : ''}`"
-					class="truncate flex-grow" />
-				<template v-if="member.pending">
-					<SofaNormalText as="a" color="text-primaryRed" content="Decline"
-						@click="emits('acceptMember', member, false)" />
-					<div class="h-full bg-darkLightGray w-[1px]" />
-					<SofaNormalText as="a" color="text-primaryGreen" content="Accept"
-						@click="emits('acceptMember', member, true)" />
-				</template>
-				<SofaNormalText v-else as="a" color="text-primaryRed" content="Remove"
-					@click="emits('removeMember', member)" />
-			</div>
-			<div v-if="nonPending.at(-1)?.id !== member.id" class="w-full bg-darkLightGray h-[1px]" />
-		</template>
+		<div class="flex flex-col gap-4 md:gap-6">
+			<SofaNormalText v-if="!pending.length && !nonPending.length" color="text-inherit"
+				content="No member matches the search query" />
+			<template v-for="member in [...pending, ...nonPending]" :key="member.id">
+				<div class="flex gap-2 items-center w-full px-4 md:px-6">
+					<SofaAvatar :photoUrl="member.user?.bio.photo?.link" size="28" />
+					<SofaNormalText color="text-inherit"
+						:content="`${member.user?.bio.name.full ?? member.email}${member.pending ? ' sent a request' : ''}`"
+						class="truncate flex-grow" />
+					<template v-if="member.pending">
+						<SofaNormalText as="a" color="text-primaryRed" content="Decline"
+							@click="emits('acceptMember', member, false)" />
+						<div class="h-full bg-darkLightGray w-[1px]" />
+						<SofaNormalText as="a" color="text-primaryGreen" content="Accept"
+							@click="emits('acceptMember', member, true)" />
+					</template>
+					<SofaNormalText v-else as="a" color="text-primaryRed" content="Remove"
+						@click="emits('removeMember', member)" />
+				</div>
+				<div v-if="nonPending.at(-1)?.id !== member.id" class="w-full bg-darkLightGray h-[1px]" />
+			</template>
+		</div>
 	</div>
 </template>
 
@@ -57,7 +64,7 @@ import {
 	SofaNormalText,
 	SofaTextField
 } from 'sofa-ui-components'
-import { PropType, computed, defineEmits, defineProps } from 'vue'
+import { PropType, computed, defineEmits, defineProps, ref } from 'vue'
 
 const emits = defineEmits<{
 	openAddModal: [type: MemberTypes]
@@ -86,6 +93,8 @@ const props = defineProps({
 
 const label = computed(() => props.type === MemberTypes.student ? 'students' : 'teachers')
 
-const pending = computed(() => props.members.filter(m => m.pending))
-const nonPending = computed(() => props.members.filter(m => !m.pending))
+const searchValue = ref('')
+
+const pending = computed(() => props.members.filter(m => m.pending && m.search(searchValue.value)))
+const nonPending = computed(() => props.members.filter(m => !m.pending && m.search(searchValue.value)))
 </script>
