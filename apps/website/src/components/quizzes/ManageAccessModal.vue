@@ -10,7 +10,7 @@
 			<div class="flex gap-4 items-center">
 				<SofaTextField customClass="rounded-custom !bg-lightGray" padding="p-4" name="Emails"
 					placeholder="Email, comma seperated" borderColor="border-transparent" v-model="searchValue" />
-				<SofaButton customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 					textColor="text-white" @click="addUsers">
 					Add
 				</SofaButton>

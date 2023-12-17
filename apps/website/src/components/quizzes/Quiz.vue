@@ -30,7 +30,7 @@
 		<div v-if="leftButton || rightButton" class="px-4 py-2 md:py-4 w-full flex justify-center shadow-customInverted"
 			:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-center">
-				<SofaButton class="!w-full md:!w-auto mr-auto" customClass="w-full md:font-semibold whitespace-nowrap"
+				<SofaButton class="w-full md:w-auto mr-auto" customClass="md:font-semibold"
 					padding="py-3 md:px-6" v-if="leftButton" :disabled="leftButton.disabled" :bgColor="leftButton.bgColor"
 					:textColor="leftButton.textColor" @click="leftButton.click">
 					{{ leftButton.label }}
@@ -40,7 +40,7 @@
 					{{ index + 1 }}/{{ questions.length }}
 				</span>
 
-				<SofaButton class="!w-full md:!w-auto ml-auto" customClass="w-full md:font-semibold whitespace-nowrap"
+				<SofaButton class="w-full md:w-auto ml-auto" customClass="md:font-semibold"
 					padding="py-3 md:px-6" v-if="rightButton" :disabled="rightButton.disabled"
 					:bgColor="rightButton.bgColor" :textColor="rightButton.textColor" @click="rightButton.click">
 					{{ rightButton.label }}

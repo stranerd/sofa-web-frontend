@@ -65,8 +65,7 @@
 					<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" @click="close"
 						class="hidden mdlg:inline-block" customClass="border border-gray-100">Exit</SofaButton>
 
-					<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close" customClass="mdlg:w-auto w-full">Start
-					</SofaButton>
+					<SofaButton padding="px-5 py-3 mdlg:py-2" @click="close" class="mdlg:w-auto w-full">Start</SofaButton>
 				</div>
 			</div>
 		</div>

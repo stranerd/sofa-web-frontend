@@ -42,7 +42,7 @@
 				</div>
 			</div>
 
-			<div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-3">
+			<div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<div class="w-full flex gap-2 items-center">
 					<SofaNormalText class="!font-bold" content="Get verified" />
 					<SofaIcon name="verify" class="h-[16px]" />
@@ -52,7 +52,7 @@
 					more audience, and sell on marketplace.
 				</SofaNormalText>
 
-				<SofaButton :hasDoubleLayer="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification')">
+				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification')">
 					Apply here
 				</SofaButton>
 			</div>
@@ -102,7 +102,7 @@
 			<div class="flex gap-2 items-center">
 				<SofaTextField customClass="!bg-lightGray" v-model="addMembersEmails" padding="p-4" name="Emails"
 					placeholder="Email, comma seperated" borderColor="border-transparent" />
-				<SofaButton customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 					textColor="text-white"
 					@click="addMembers(addModalType).then((succeeded) => succeeded ? addModalType = null : null)">
 					Invite

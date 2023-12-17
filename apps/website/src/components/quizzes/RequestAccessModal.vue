@@ -8,18 +8,18 @@
 				:content="hasRequested ? 'You will get notified when the quiz owner responds' : 'You do not have access to collaborate on this quiz'" />
 
 			<div class="w-full flex mt-2 items-center justify-center gap-4">
-				<SofaButton v-if="hasRequested" class="!w-full md:!w-auto"
-					customClass="w-full md:font-semibold whitespace-nowrap" padding="py-3 md:px-6" bgColor="bg-primaryBlue"
+				<SofaButton v-if="hasRequested" class="w-full md:w-auto"
+					customClass="md:font-semibold" padding="py-3 md:px-6" bgColor="bg-primaryBlue"
 					textColor="text-white" @click="Logic.Common.goBack">
 					Done
 				</SofaButton>
-				<SofaButton v-if="!hasRequested" class="!w-full md:!w-auto mr-auto"
-					customClass="w-full md:font-semibold whitespace-nowrap" padding="py-3 md:px-6"
+				<SofaButton v-if="!hasRequested" class="w-full md:w-auto mr-auto"
+					customClass="md:font-semibold" padding="py-3 md:px-6"
 					bgColor="bg-white border border-gray-100" textColor="text-grayColor" @click="Logic.Common.goBack">
 					Cancel
 				</SofaButton>
-				<SofaButton v-if="!hasRequested" class="!w-full md:!w-auto ml-auto"
-					customClass="w-full md:font-semibold whitespace-nowrap" padding="py-3 md:px-6" bgColor="bg-primaryBlue"
+				<SofaButton v-if="!hasRequested" class="w-full md:w-auto ml-auto"
+					customClass="md:font-semibold" padding="py-3 md:px-6" bgColor="bg-primaryBlue"
 					textColor="text-white" @click="emits('requestAccess', true)">
 					Request
 				</SofaButton>

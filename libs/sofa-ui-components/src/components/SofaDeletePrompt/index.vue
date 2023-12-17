@@ -11,7 +11,7 @@
             :textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
             :bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')" padding="px-4 py-2"
             @click="button.action?.()"
-            :customClass="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-2  md:!w-auto w-full`">
+            :class="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-2  md:w-auto w-full`">
             {{ button.label }}
           </SofaButton>
         </div>

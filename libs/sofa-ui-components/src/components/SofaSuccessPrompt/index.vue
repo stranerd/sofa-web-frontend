@@ -9,7 +9,7 @@
 
       <SofaButton v-if="!button.hide" :textColor="button.textColor ?? 'text-white'"
         :bgColor="button.bgColor ?? 'bg-primaryBlue'" padding="px-4 py-2" @click="button.action?.()"
-        customClass="border-transparent border-2  md:!w-auto w-full">
+        class="border-transparent border-2  md:w-auto w-full">
         {{ button.label }}
       </SofaButton>
     </div>

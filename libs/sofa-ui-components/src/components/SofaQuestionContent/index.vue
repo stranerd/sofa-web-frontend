@@ -48,9 +48,7 @@
       <SofaFileAttachment :isWrapper="true" accept="image/*" class="!w-full flex flex-col"
         v-model:local-file-url="localFileUrl" v-model="factory.questionMedia">
         <template v-slot:content>
-          <div class="w-full flex flex-col">
-            <SofaButton customClass="w-full" padding="py-3">Add image (optional)</SofaButton>
-          </div>
+          <SofaButton class="w-full" padding="py-3">Add image (optional)</SofaButton>
         </template>
       </SofaFileAttachment>
     </div>

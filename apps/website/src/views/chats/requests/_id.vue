@@ -17,7 +17,7 @@
 				<div class="w-full grid grid-cols-2 gap-4">
 					<div class="col-span-1 flex flex-col">
 						<sofa-button :bgColor="'bg-primaryRed'" :textColor="'text-white'"
-							:customClass="'w-full rounded-custom'" :padding="'py-3'" :has-double-layer="false"
+							:customClass="'w-full rounded-custom'" :padding="'py-3'" :hasShadow="false"
 							@click="accept(false)">
 							Decline
 						</sofa-button>
@@ -25,7 +25,7 @@
 
 					<div class="col-span-1 flex flex-col">
 						<sofa-button :bgColor="'bg-primaryGreen'" :textColor="'text-white'"
-							:customClass="'w-full rounded-custom'" :padding="'py-3'" :has-double-layer="false"
+							:customClass="'w-full rounded-custom'" :padding="'py-3'" :hasShadow="false"
 							@click="accept(true)">
 							Accept
 						</sofa-button>

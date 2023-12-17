@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-3">
+      <div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
         <div class="w-full flex gap-2 items-center">
           <SofaNormalText class="!font-bold" content="Get verified" />
           <SofaIcon name="verify" class="h-[16px]" />
@@ -46,13 +46,13 @@
           more audience, and sell on marketplace.
         </SofaNormalText>
 
-        <SofaButton :hasDoubleLayer="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification')">
+        <SofaButton :hasShadow="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification')">
           Apply here
         </SofaButton>
       </div>
 
       <div v-if="userType.isTeacher && user.tutor.topics.length === 0"
-        class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-3">
+        class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
         <div class="w-full flex gap-2 items-center">
           <SofaNormalText class="!font-bold" content="Apply to teach subjects" />
           <SofaIcon name="tutor-bagde" class="h-[16px]" />
@@ -62,7 +62,7 @@
           Complete your test after this application and we will reach out to you with your result.
         </SofaNormalText>
 
-        <SofaButton :hasDoubleLayer="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification/tutor')">
+        <SofaButton :hasShadow="false" padding="py-2 px-6" @click="Logic.Common.GoToRoute('/verification/tutor')">
           Apply here
         </SofaButton>
       </div>

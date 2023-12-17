@@ -87,7 +87,7 @@
         </SofaButton>
 
         <SofaButton class="w-full md:w-auto" :disabled="currentStep == 2 && !factory.isValid('tutorId')"
-          padding="px-5 py-3 md:!py-2" customClass="mdlg:!w-auto w-full" @click="handleAddTutor">
+          padding="px-5 py-3 md:!py-2" @click="handleAddTutor">
           {{ currentStep == 2 ? "Send request" : "Next" }}
         </SofaButton>
       </div>

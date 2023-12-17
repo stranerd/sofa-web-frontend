@@ -20,7 +20,7 @@
 		<div class="flex gap-4 items-center">
 			<SofaTextField class="!w-auto" customClass="!bg-lightGray" padding="p-4" placeholder="Search" type="search"
 				borderColor="border-transparent" />
-			<SofaButton class="ml-auto" customClass="w-full font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
+			<SofaButton class="ml-auto" customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
 				textColor="text-white" @click="emits('openAddModal', type)">
 				Add {{ label }}
 			</SofaButton>
