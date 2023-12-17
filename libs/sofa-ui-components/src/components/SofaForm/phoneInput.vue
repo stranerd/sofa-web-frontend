@@ -4,8 +4,7 @@
 
 <script lang="ts" setup>
 import { Phone } from 'sofa-logic'
-import { PropType, ref } from 'vue'
-// @ts-ignore
+import { defineEmits, defineProps, PropType, ref } from 'vue'
 import { VueTelInput } from 'vue-tel-input'
 
 const props = defineProps({

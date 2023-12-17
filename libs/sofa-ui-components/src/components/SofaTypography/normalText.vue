@@ -6,20 +6,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue"
+import { computed, defineComponent } from 'vue'
 export default defineComponent({
 	props: {
 		size: {
 			type: String,
-			default: "base",
+			default: 'base',
 		},
 		color: {
 			type: String,
-			default: "text-bodyBlack",
+			default: 'text-bodyBlack',
 		},
 		customClass: {
 			type: String,
-			default: "",
+			default: '',
 		},
 		isHtml: {
 			type: Boolean,
@@ -27,14 +27,14 @@ export default defineComponent({
 		},
 		content: {
 			type: String,
-			default: "",
+			default: '',
 		},
 		as: {
 			type: String,
-			default: "span"
+			default: 'span'
 		}
 	},
-	name: "RoofNormalText",
+	name: 'RoofNormalText',
 	setup (props) {
 		const cls = computed(() => [
 			props.content ? 'body' : '', props.customClass, props.color,

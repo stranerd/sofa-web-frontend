@@ -4,64 +4,34 @@
   "description": "UI components for SOFA",
   "author": "",
   "scripts": {
-    "serve": "webpack serve",
-    "build": "webpack --mode=production --node-env=production && npm run build:style",
-    "build:style": "npx tailwindcss -i ./src/styles/index.css -o dist/library.css && cleancss -o dist/library.min.css dist/library.css",
-    "watch:style": "npx tailwindcss -i ./src/styles/index.css -o dist/library.min.css --watch",
-    "watch": "webpack --watch"
-  },
-  "engines": {
-    "node": ">= 18.0.0"
+    "lint": "eslint --fix ./src/**/*.{ts,vue}"
   },
   "main": "src/index.ts",
   "dependencies": {
     "@tato30/vue-pdf": "^1.8.1",
-    "@vue/compiler-sfc": "^3.2.45",
     "chart.js": "^4.4.0",
     "gsap": "^3.12.2",
     "mathlive": "^0.96.0",
     "sofa-logic": "workspace:^",
     "sofa-modules": "workspace:^",
     "video.js": "^8.3.0",
+    "vue": "^3.3.11",
     "vue-inline-svg": "^3.1.2",
-    "vue-loader": "^17.0.1",
     "vue-tel-input": "^8.3.1",
     "vue3-editor": "^0.1.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.0",
-    "@types/editorjs__header": "^2.6.0",
     "@types/node": "^20.7.1",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
-    "@typescript-eslint/parser": "^5.6.0",
-    "@vue/eslint-config-typescript": "^9.1.0",
     "autoprefixer": "^10.4.16",
-    "clean-css-cli": "^5.6.2",
-    "css-loader": "^6.7.3",
-    "cypress": "^8.7.0",
-    "declaration-bundler-webpack-plugin": "^1.0.3",
-    "eslint": "^8.4.1",
-    "eslint-plugin-vue": "^8.2.0",
-    "fork-ts-checker-webpack-plugin": "^9.0.2",
     "postcss": "^8.4.30",
-    "rimraf": "^3.0.2",
     "sass": "^1.54.9",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
     "tailwind-scrollbar": "^3.0.0",
     "tailwindcss": "^3.3.3",
-    "ts-loader": "^9.4.2",
-    "typescript": "^4.3.5",
-    "vue": "^3.3.11",
-    "vue-cli-plugin-tailwind": "~3.0.0",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
-  },
-  "peerDependencies": {
-    "vue": "^3.2.21",
-    "vue-router": "^4.0.12"
+    "typescript": "^4.3.5"
   },
   "license": "ISC"
 }

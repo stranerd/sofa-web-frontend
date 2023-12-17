@@ -1,78 +1,78 @@
 <template>
-  <div
-    id=""
-    :class="`${customClass} blend-in `"
-    :style="`
+	<div
+		id=""
+		:class="`${customClass} blend-in `"
+		:style="`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center; ${
-      imageUrl || loadDirectly
-        ? `background-image:url(${loadDirectly ? photoUrl : imageUrl});`
-        : ''
-    }  ${customStyle}`"
-  >
-    <slot />
-  </div>
+			imageUrl || loadDirectly
+				? `background-image:url(${loadDirectly ? photoUrl : imageUrl});`
+				: ''
+		}  ${customStyle}`"
+	>
+		<slot />
+	</div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onMounted, toRef, watch } from "vue";
+import { defineComponent, ref, onMounted, toRef, watch } from 'vue'
 
 export default defineComponent({
-  name: "SofaImageLoader",
-  props: {
-    photoUrl: {
-      type: String,
-      required: true,
-    },
-    customClass: {
-      type: String,
-      default: "",
-    },
-    customStyle: {
-      type: String,
-      default: "",
-    },
-    loadDirectly: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const image = ref("");
-    const imageUrl = ref("");
+	name: 'SofaImageLoader',
+	props: {
+		photoUrl: {
+			type: String,
+			required: true,
+		},
+		customClass: {
+			type: String,
+			default: '',
+		},
+		customStyle: {
+			type: String,
+			default: '',
+		},
+		loadDirectly: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	setup(props) {
+		const image = ref('')
+		const imageUrl = ref('')
 
-    const setImage = () => {
-      imageUrl.value = props.photoUrl || "";
+		const setImage = () => {
+			imageUrl.value = props.photoUrl || ''
 
-      const highResImage = new Image();
+			const highResImage = new Image()
 
-      highResImage.onload = function () {
-        image.value = imageUrl.value;
-      };
+			highResImage.onload = function () {
+				image.value = imageUrl.value
+			}
 
-      highResImage.src = imageUrl.value;
-    };
+			highResImage.src = imageUrl.value
+		}
 
-    onMounted(() => {
-      if (!props.loadDirectly) {
-        setImage();
-      }
-    });
+		onMounted(() => {
+			if (!props.loadDirectly) {
+				setImage()
+			}
+		})
 
-    const photoUrlRef = toRef(props, "photoUrl");
+		const photoUrlRef = toRef(props, 'photoUrl')
 
-    watch(photoUrlRef, () => {
-      if (!props.loadDirectly) {
-        setImage();
-      }
-    });
+		watch(photoUrlRef, () => {
+			if (!props.loadDirectly) {
+				setImage()
+			}
+		})
 
-    return {
-      image,
-      imageUrl,
-    };
-  },
-});
+		return {
+			image,
+			imageUrl,
+		}
+	},
+})
 </script>
 <!-- <style scoped>
   .blend-in {

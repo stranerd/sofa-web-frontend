@@ -12,26 +12,26 @@ export default defineComponent({
 	props: {
 		size: {
 			type: String,
-			default: "lg",
+			default: 'lg',
 		},
 		color: {
 			type: String,
-			default: "text-darkBody",
+			default: 'text-darkBody',
 		},
 		customClass: {
 			type: String,
-			default: "",
+			default: '',
 		},
 		content: {
 			type: String,
-			default: "",
+			default: '',
 		},
 		as: {
 			type: String,
 			default: 'h3'
 		}
 	},
-	name: "RoofHeaderText",
+	name: 'RoofHeaderText',
 	setup (props) {
 		const cls = computed(() => [
 			'font-semibold text-header',
