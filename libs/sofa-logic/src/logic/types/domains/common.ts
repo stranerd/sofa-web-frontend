@@ -1,7 +1,11 @@
+import { Media } from '@modules/core'
+
 export interface ValidationError {
   field: string
   message: string
 }
+
+export type FileData = Media
 
 export interface Paginated<D> {
   pages: {
@@ -17,15 +21,6 @@ export interface Paginated<D> {
     count: number
   }
   results: D[]
-}
-
-export interface FileData {
-  name: string
-  type: string
-  size: number
-  path: string
-  timestamp: number
-  link: string
 }
 
 export interface ContentDetails {

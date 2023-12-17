@@ -85,9 +85,9 @@ export default defineComponent({
 		const fileListArray = ref<any[]>([])
 
 		const toDataURL = (url: string, callback: any) => {
-			var xhr = new XMLHttpRequest()
+			const xhr = new XMLHttpRequest()
 			xhr.onload = function () {
-				var reader = new FileReader()
+				const reader = new FileReader()
 				reader.onloadend = function () {
 					callback(reader.result)
 				}

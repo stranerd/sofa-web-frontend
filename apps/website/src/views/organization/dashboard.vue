@@ -8,7 +8,7 @@
 					<div v-for="stat in [
 							{ label: 'Classes', value: user.account.meta.classes, icon: 'classes', color: '#3296C8' },
 							{ label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
-							{ label: 'Teachers', value: user.account.meta.lessons, icon: 'tutor', color: '#FA9632' },
+							{ label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
 							{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
 							{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
 							{ label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },

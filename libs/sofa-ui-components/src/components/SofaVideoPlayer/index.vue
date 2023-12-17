@@ -43,7 +43,7 @@ export default defineComponent({
 	},
 	name: 'SofaVideoPlayer',
 	setup(props: any) {
-		let player = ref<videojs.Player>()
+		const player = ref<videojs.Player>()
 		const videoPlayer = ref()
 		const videoIsPlaying = ref(false)
 		const options = {

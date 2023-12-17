@@ -1,7 +1,7 @@
 <template>
 	<OrganizationLayout title="Students">
 		<template v-slot="{ extras }">
-			<MembersList :image="require('@/assets/images/class-students.png')" :type="MemberTypes.student"
+			<MembersList :image="studentsImage" :type="MemberTypes.student"
 				:members="students" :messages="messages" @openAddModal="extras.openAddModal"
 				@acceptMember="extras.acceptMember" @removeMember="extras.removeMember" />
 		</template>
@@ -17,6 +17,7 @@ import { generateMiddlewares } from '@/middlewares'
 import { MemberTypes } from '@modules/organizations'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import studentsImage from '@/assets/images/class-students.png'
 
 export default defineComponent({
 	components: { OrganizationLayout, MembersList },
@@ -35,7 +36,7 @@ export default defineComponent({
 
 		const { id } = useAuth()
 		const { students } = useOrganizationMembers(id.value)
-		return { students, messages, MemberTypes }
+		return { students, messages, MemberTypes, studentsImage }
 	},
 })
 </script>
