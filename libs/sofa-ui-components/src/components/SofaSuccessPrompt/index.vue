@@ -1,6 +1,6 @@
 <template>
-  <SofaModal :close="() => close?.()">
-    <div class="flex flex-col gap-2 relative mdlg:p-6 p-4 py-6 items-center justify-center">
+  <SofaModal :close="() => close?.()" maxWidth="md:max-w-[30%]">
+    <div class="flex flex-col gap-2 relative mdlg:p-6 p-4 py-6 items-center justify-center text-center">
       <SofaIcon name="success-modal-icon" class="h-[39px]" />
 
       <SofaHeaderText v-if="title" class="text-xl" :content="title" />

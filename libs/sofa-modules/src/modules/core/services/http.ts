@@ -110,7 +110,9 @@ export class HttpClient {
 		const baseUrl = this.client.defaults.baseURL ?? ''
 		const isFromOurServer = baseUrl.startsWith(apiBase)
 		if (!isFromOurServer) return ''
-		return new URL(baseUrl).pathname
+		const path = baseUrl.split(apiBase)[1]
+		if (path.startsWith('/')) return path.slice(1)
+		return path
 	}
 }
 

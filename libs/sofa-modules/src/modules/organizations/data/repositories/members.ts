@@ -65,7 +65,7 @@ export class MemberRepository implements IMemberRepository {
 	}
 
 	async remove (data: { email: string, type: MemberTypes, organizationId: string }) {
-		return await this.client.delete<{ type: MemberTypes, email: string }, boolean>('/', data)
+		return await this.client.post<{ type: MemberTypes, email: string }, boolean>('/remove', data)
 	}
 
 	async accept (data: { email: string, type: MemberTypes, organizationId: string, accept: boolean }) {

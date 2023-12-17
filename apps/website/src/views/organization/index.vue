@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import OrganizationLayout from "@/components/users/organizations/OrganizationLayout.vue"
+import OrganizationLayout from "@/components/organizations/organizations/OrganizationLayout.vue"
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { defineComponent } from "vue"

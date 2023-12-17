@@ -90,17 +90,46 @@ export const useManageOrganizationMembers = (id: string) => {
 	}
 
 	const removeMember = async (member: MemberEntity) => {
+		let succeeded = false
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure you want to remove this member?',
 			sub: '',
 			right: { label: 'Yes, remove' }
 		})
 		if (!confirmed) return
-		console.log(member)
+		await setError('')
+		try {
+			await setLoading(true)
+			await MembersUseCases.remove({ organizationId: id, email: member.email, type: member.type })
+			await setMessage('Member removed')
+			succeeded = true
+		} catch (e) {
+			await setError(e)
+		}
+		await setLoading(false)
+		return succeeded
 	}
 
 	const acceptMember = async (member: MemberEntity, accept: boolean) => {
-		console.log(member, accept)
+		let succeeded = false
+		const key = accept ? 'accept' : 'reject'
+		const confirmed = await Logic.Common.confirm({
+			title: `Are you sure you want to ${key} this member?`,
+			sub: '',
+			right: { label: `Yes, ${key}` }
+		})
+		if (!confirmed) return
+		await setError('')
+		try {
+			await setLoading(true)
+			await MembersUseCases.accept({ organizationId: id, email: member.email, type: member.type, accept })
+			await setMessage(`Member ${key}ed`)
+			succeeded = true
+		} catch (e) {
+			await setError(e)
+		}
+		await setLoading(false)
+		return succeeded
 	}
 
 	return {

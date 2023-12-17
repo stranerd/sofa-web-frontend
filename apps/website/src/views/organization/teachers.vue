@@ -1,8 +1,8 @@
 <template>
-	<OrganizationLayout title="Students">
+	<OrganizationLayout title="Teachers">
 		<template v-slot="{ extras }">
-			<MembersList :image="require('@/assets/images/class-students.png')" :type="MemberTypes.student"
-				:members="students" :messages="messages" @openAddModal="extras.openAddModal"
+			<MembersList :image="require('@/assets/images/class-teachers.png')" :type="MemberTypes.teacher"
+				:members="teachers" :messages="messages" @openAddModal="extras.openAddModal"
 				@acceptMember="extras.acceptMember" @removeMember="extras.removeMember" />
 		</template>
 	</OrganizationLayout>
@@ -20,22 +20,22 @@ import { useMeta } from "vue-meta"
 
 export default defineComponent({
 	components: { OrganizationLayout, MembersList },
-	name: "OrganizationStudentsPage",
+	name: "OrganizationTeachersPage",
 	middlewares: { goBackRoute: '/organization' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup () {
-		useMeta({ title: "Students" })
+		useMeta({ title: "Teachers" })
 
 		const messages = [
-			'Add students from your physical class here.',
-			'Students here get your classes, courses, and quizzes for FREE.',
-			'Your students can revisit live classes for revision purposes.',
-			'No loss of study resources so students can keep coming back to them.'
+			'You can assign lessons to teachers.',
+			'Send announcements to all teachers at once.',
+			'Teachers can make announcements to students.',
+			'Manage your all teachers in the same space.'
 		]
 
 		const { id } = useAuth()
-		const { students } = useOrganizationMembers(id.value)
-		return { students, messages, MemberTypes }
+		const { teachers } = useOrganizationMembers(id.value)
+		return { teachers, messages, MemberTypes }
 	},
 })
 </script>
