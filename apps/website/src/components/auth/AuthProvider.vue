@@ -1,38 +1,35 @@
 <template>
-	<div class="w-full flex flex-col items-center gap-4">
-		<GoogleLogin :callback="onSuccessGoogle" />
-
-		<vue-apple-login v-if="false" color="white" :border="false" logoSize="large" mode="center-align" type="sign in"
-			:onSuccess="onSuccessApple" class="border border-darkLightGray rounded-lg text-[1em]" :onFailure="onFailure">
-			Sign in with Apple
-		</vue-apple-login>
+	<div class="w-full flex flex-col gap-4">
+		<SofaButton bgColor="bg-transparent" padding="px-8 py-5" :hasShadow="false" :disabled="googleLoading"
+			:loading="appleLoading" class="border-2 border-darkLightGray font-bold" @click="googleSignin">
+			<div class="flex gap-2 items-center normal-case">
+				<SofaIcon name="google" class="text-[16px]" />
+				<SofaNormalText content="Sign in with Google" />
+			</div>
+		</SofaButton>
+		<SofaButton bgColor="bg-transparent" padding="px-8 py-5" :hasShadow="false" v-if="showAppleSignin"
+			:disabled="appleLoading" :loading="appleLoading" class="border-2 border-darkLightGray font-bold"
+			@click="appleSignin">
+			<span class="flex gap-2 items-center normal-case">
+				<SofaIcon name="apple" class="text-[16px]" />
+				<SofaNormalText content="Sign in with Apple" />
+			</span>
+		</SofaButton>
 	</div>
 	<div class="w-full flex gap-3 items-center">
 		<div class="border border-darkLightGray w-full"></div>
-		<sofa-normal-text :color="'text-grayColor'" :customClass="'!whitespace-nowrap'">Or use email</sofa-normal-text>
+		<SofaNormalText color="text-grayColor" class="!whitespace-nowrap">Or use email</SofaNormalText>
 		<div class="border border-darkLightGray w-full"></div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { createSession } from '@/composables/auth/session'
-import { Logic } from 'sofa-logic'
-import { SofaNormalText } from 'sofa-ui-components'
+import { useAppleSignin, useGoogleSignin } from '@/composables/auth/signin'
+import { isIos, isWeb } from '@utils/constants'
+import { SofaButton, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 
-const onSuccessGoogle = (data: any) => {
-	Logic.Auth.GoogleSignIn({
-		accessToken: '',
-		idToken: data.credential,
-	})
-		.then(createSession)
-		.catch((error) => Logic.Common.showError(error?.message ?? ''))
-}
+const { loading: googleLoading, signin: googleSignin } = useGoogleSignin()
+const { loading: appleLoading, signin: appleSignin } = useAppleSignin()
 
-const onSuccessApple = (data: any) => {
-	console.log(data)
-}
-
-const onFailure = () => {
-	//
-}
+const showAppleSignin = isWeb || isIos
 </script>

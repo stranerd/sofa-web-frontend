@@ -26,6 +26,12 @@ importers:
 
   apps/website:
     dependencies:
+      '@capacitor-community/apple-sign-in':
+        specifier: ^5.0.0
+        version: 5.0.0(@capacitor/core@5.6.0)
+      '@codetrix-studio/capacitor-google-auth':
+        specifier: ^3.3.6
+        version: 3.3.6(@capacitor/core@5.6.0)
       sofa-logic:
         specifier: workspace:^1.0.0
         version: link:../../libs/sofa-logic
@@ -38,18 +44,12 @@ importers:
       vue:
         specifier: ^3.3.11
         version: 3.3.11(typescript@4.9.5)
-      vue-apple-login:
-        specifier: ^2.0.1
-        version: 2.0.1(typescript@4.9.5)
       vue-meta:
         specifier: ^3.0.0-alpha.7
         version: 3.0.0-alpha.10(vue@3.3.11)
       vue-router:
         specifier: ^4.0.12
         version: 4.2.4(vue@3.3.11)
-      vue3-google-login:
-        specifier: ^2.0.18
-        version: 2.0.20(vue@3.3.11)
       vue3-slider:
         specifier: ^1.9.0
         version: 1.9.0(vue@3.3.11)
@@ -252,6 +252,30 @@ packages:
       '@babel/helper-string-parser': 7.22.5
       '@babel/helper-validator-identifier': 7.22.19
       to-fast-properties: 2.0.0
+
+  /@capacitor-community/apple-sign-in@5.0.0(@capacitor/core@5.6.0):
+    resolution: {integrity: sha512-Cz0cuJKv/KnIHMy9f4Gbc2kWhpxsLYv/NXNhc9mYRi9pYAdfhLSo/fvkcJSRs/g1PvNMA0FDDk0Hx2GHZLA5SQ==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.6.0
+      '@types/scriptjs': 0.0.2
+      scriptjs: 2.5.9
+    dev: false
+
+  /@capacitor/core@5.6.0:
+    resolution: {integrity: sha512-xJhCOUGPHw0QYDA3YH+CmL6qiV9DH4Ij3yPxSenymjrtLuXI197u9ddCZwGEwgVIkh9kGZBBKzsNkn89SZ2gdQ==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /@codetrix-studio/capacitor-google-auth@3.3.6(@capacitor/core@5.6.0):
+    resolution: {integrity: sha512-SiMjYq5O2rWzEdKrmu3VZQ2nmFdq6LUXPzsNbjs4Ri6WTJVCtzp1HI12t4Dcwi5YoSw8g94Iyi3Can8msj57QA==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.6.0
+    dev: false
 
   /@cortex-js/compute-engine@0.12.4:
     resolution: {integrity: sha512-lU3+NP24jG9RMThNKcoYlpXfHLPAX43rdHrveXKl1OcYy92ayzHiilqeTop0oRUfAUxbnZF0m+bG2+dTvLdePw==}
@@ -746,6 +770,10 @@ packages:
   /@types/node@20.7.1:
     resolution: {integrity: sha512-LT+OIXpp2kj4E2S/p91BMe+VgGX2+lfO+XTpfXhh+bCk2LkQtHZSub8ewFBMGP5ClysPjTDFa4sMI8Q3n4T0wg==}
     dev: true
+
+  /@types/scriptjs@0.0.2:
+    resolution: {integrity: sha512-GFrUgzGYfNX3VWZwMyzr0JrBwzLv5Kes4BQBvo6hXdRy14/GBbpCiVwwB7v1o2xIEvFf+9GyznmYhuesQQjSag==}
+    dev: false
 
   /@types/semver@7.5.6:
     resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==}
@@ -3135,6 +3163,10 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /scriptjs@2.5.9:
+    resolution: {integrity: sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==}
+    dev: false
+
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
@@ -3457,6 +3489,10 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
 
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: false
+
   /tsutils@3.21.0(typescript@4.9.5):
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
     engines: {node: '>= 6'}
@@ -3667,14 +3703,6 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vue-apple-login@2.0.1(typescript@4.9.5):
-    resolution: {integrity: sha512-jlMxdJwJF9IaSvRQCxWz2pjh2kR1gII39pNObyh+Qpp97ANzkRqfaJx2K4Tf5CKfwP89uoaVQ6bgqTnAIitXyg==}
-    dependencies:
-      vue: 3.3.11(typescript@4.9.5)
-    transitivePeerDependencies:
-      - typescript
-    dev: false
-
   /vue-eslint-parser@8.3.0(eslint@8.49.0):
     resolution: {integrity: sha512-dzHGG3+sYwSf6zFBa0Gi9ZDshD7+ad14DGOdTLjruRVgZXe2J+DcZ9iUhyR48z5g1PqRa20yt3Njna/veLJL/g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3752,14 +3780,6 @@ packages:
     dependencies:
       core-js: 3.32.2
       quill: 1.3.7
-      vue: 3.3.11(typescript@4.9.5)
-    dev: false
-
-  /vue3-google-login@2.0.20(vue@3.3.11):
-    resolution: {integrity: sha512-JGXW0gx1Lg6zPSBWoquT+1TVS35V/zhSgkmzBjz+IfJzMN6cSBWLg1ELRF/47VGI8bmDFH8XgpxPqs3CTDHN5g==}
-    peerDependencies:
-      vue: ^3.0.3
-    dependencies:
       vue: 3.3.11(typescript@4.9.5)
     dev: false
 

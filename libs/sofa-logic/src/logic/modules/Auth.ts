@@ -3,11 +3,7 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { AuthUser } from '../types/domains/auth'
 import {
-	UpdateUserProfileInput
-} from '../types/forms/auth'
-import {
-	AppleAuthInput,
-	GoogleAuthInput,
+	UpdateUserProfileInput,
 	UpdatePasswordInput,
 	UpdatePhoneInput
 } from './../types/forms/auth'
@@ -18,8 +14,6 @@ export default class Auth extends Common {
 	public AuthUser: AuthUser | undefined = undefined
 	public UpdateUserProfileForm: UpdateUserProfileInput | undefined
 	public UpdatePasswordForm: UpdatePasswordInput | undefined
-	public GoogleSignInForm: GoogleAuthInput | undefined
-	public AppleSignInForm: AppleAuthInput | undefined
 	public SendPhoneVerificationForm: UpdatePhoneInput | undefined
 
 	async getRedirectToRoute () {
@@ -55,34 +49,6 @@ export default class Auth extends Common {
 					// error handler
 				})
 		}
-	}
-
-	public GoogleSignIn = (GoogleSignInForm: GoogleAuthInput) => {
-		Logic.Common.showLoading()
-		return $api.auth.identities
-			.googleSignIn(GoogleSignInForm)
-			.then((response) => {
-				this.AuthUser = response.data.user
-				Logic.Common.hideLoading()
-				return response.data
-			}).catch((e) => {
-				Logic.Common.hideLoading()
-				throw e
-			})
-	}
-
-	public AppleSignIn = (AppleSignInForm: AppleAuthInput) => {
-		Logic.Common.showLoading()
-		return $api.auth.identities
-			.appleSignIn(AppleSignInForm)
-			.then((response) => {
-				this.AuthUser = response.data.user
-				Logic.Common.hideLoading()
-				return response.data
-			}).catch((e) => {
-				Logic.Common.hideLoading()
-				throw e
-			})
 	}
 
 	public UpdatePassword = (formIsValid: boolean) => {

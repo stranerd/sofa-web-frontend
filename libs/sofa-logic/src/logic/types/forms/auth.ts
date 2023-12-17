@@ -11,40 +11,9 @@ export interface UpdateUserProfileInput {
   }[]
 }
 
-export interface UpdateUserRoleInput {
-  role: string
-  userId: string
-  value: boolean
-}
-
-export interface SignInInput {
-  email: string
-  password: string
-}
-
-export interface VerifyWithTokenInput {
-  token: string
-}
-
-export interface SendResetPasswordInput {
-  email: string
-}
-
 export interface UpdatePasswordInput {
   oldPassword: string
   password: string
-}
-
-export interface GoogleAuthInput {
-  idToken: string
-  accessToken: string
-}
-
-export interface AppleAuthInput {
-  idToken: string
-  email: string
-  firstName: string
-  lastName: string
 }
 
 export interface UpdatePhoneInput {

@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export const useErrorHandler = () => {
 	const errorState = ref('')
 	const setError = async (error: any, skipAlert = false) => {
-		errorState.value = error.message ?? error
+		errorState.value = error?.message ?? error?.error ?? error
 		if (errorState.value && !skipAlert) Logic.Common.showAlert({ message: errorState.value, type: 'error' })
 	}
 	return { error: errorState, setError }
