@@ -16,11 +16,7 @@
 					<sofa-header-text :customClass="'text-left mdlg:!text-3xl !text-2xl'">
 						{{
 							showMoney
-								? Logic.Common.convertToMoney(
-									UserWallet.balance.amount,
-									true,
-									UserWallet.balance.currency.toString().toLocaleLowerCase()
-								)
+								? Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
 								: "****"
 						}}
 					</sofa-header-text>
@@ -87,17 +83,15 @@
 			</div>
 
 			<div class="w-full flex flex-col gap-2" v-if="transactions.length">
-				<div v-for="(transaction, index) in transactions" :key="index" :class="`w-full flex flex-col gap-1 pb-2 cursor-pointer  ${index != transactions.length - 1
-					? 'border-b border-lightGray'
-					: ''
-				}`" @click="showTransactionInfo(transaction.data)">
+				<a v-for="(transaction, index) in transactions" :key="index"
+					:class="`w-full flex flex-col gap-1 pb-2 ${index != transactions.length - 1 ? 'border-b border-lightGray' : ''}`"
+					@click="showTransactionInfo(transaction.data)">
 					<div class="w-full flex flex-row items-center justify-between">
 						<sofa-normal-text :customClass="'text-left'">
 							{{ transaction.title }}
 						</sofa-normal-text>
-						<sofa-normal-text :customClass="'!font-bold'" :color="`${getTransactionColor(transaction.status)}`">
-							{{ transaction.type == "credit" ? "+" : "" }}
-							{{ Logic.Common.convertToMoney(transaction.amount, true, "ngn") }}
+						<sofa-normal-text :customClass="'!font-bold'" :color="getTransactionColor(transaction)">
+							{{ Logic.Common.formatPrice(transaction.amount, transaction.currency) }}
 						</sofa-normal-text>
 					</div>
 					<div class="w-full flex flex-row justify-start gap-2 items-center">
@@ -105,7 +99,7 @@
 							{{ transaction.time }}
 						</sofa-normal-text>
 					</div>
-				</div>
+				</a>
 				<div class="w-full flex flex-row items-center justify-center border-t border-lightGray pt-3 cursor-pointer"
 					v-if="AllTransactions.pages.next" @click="loadMoreTransactions()">
 					<sofa-normal-text :color="'text-primaryPink'">load more</sofa-normal-text>
@@ -116,19 +110,12 @@
 				:subTitle="'All you wallet transaction would show up here'" />
 		</div>
 	</div>
-	<sofa-modal v-if="showModal" :close="() => {
-		showModal = false
-	}
-	" :can-close="false">
-		<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
-			@click.stop="() => {
-				//
-			}
-			">
+	<sofa-modal v-if="showModal" :close="() => showModal = false" :can-close="false">
+		<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
-				<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex" v-if="modalContent == 'fund_wallet' || modalContent == 'withdraw_money'
-				">
+				<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex"
+					v-if="modalContent == 'fund_wallet' || modalContent == 'withdraw_money'">
 					<sofa-header-text :customClass="'text-xl'" :content="modalTitle" />
 				</div>
 				<div class="w-full hidden flex-row justify-between items-center mdlg:!flex"
@@ -158,27 +145,20 @@
 					</sofa-text-field>
 
 					<div class="w-full flex flex-col gap-2 border-t border-lightGray pt-3">
-						<div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${fundWalletMethod == 'online'
-							? 'border-primaryBlue  border-2'
-							: ''
-						}  rounded-custom cursor-pointer `" @click="payOnline()">
+						<a :class="`w-full flex items-center gap-3 p-3 bg-lightGray ${fundWalletMethod == 'online' ? 'border-primaryBlue  border-2' : ''}  rounded-custom`"
+							@click="payOnline()">
 							<sofa-icon :customClass="'h-[20px]'" :name="'website'" />
 							<sofa-normal-text> Pay online </sofa-normal-text>
-						</div>
+						</a>
 
-						<div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${fundWalletMethod == method.id
-							? 'border-primaryBlue border-2'
-							: ''
-						}  rounded-custom cursor-pointer `" @click="
-							fundWalletMethod
-								? (fundWalletMethod = '')
-								: (fundWalletMethod = method.id)
-						" v-for="(method, index) in PaymentMethods.results" :key="index">
+						<a :class="`w-full flex items-center gap-3 p-3 bg-lightGray ${fundWalletMethod == method.id ? 'border-primaryBlue border-2' : ''}  rounded-custom`"
+							@click="fundWalletMethod ? (fundWalletMethod = '') : (fundWalletMethod = method.id)"
+							v-for="(method, index) in PaymentMethods.results" :key="index">
 							<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
 							<sofa-normal-text>
 								**** **** **** {{ method.data.last4Digits }}
 							</sofa-normal-text>
-						</div>
+						</a>
 
 						<div class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer border-2 rounded-custom border-darkLightGray"
 							@click="Logic.Payment.initialPayment()">
@@ -194,13 +174,7 @@
 							{{ transactionTitle }}
 						</sofa-normal-text>
 						<sofa-header-text :customClass="'text-left mdlg:!text-3xl !text-2xl'">
-							{{
-								Logic.Common.convertToMoney(
-									transactionDetails.amount,
-									true,
-									"ngn"
-								)
-							}}
+							{{ transactionDetails.amount }}
 						</sofa-header-text>
 					</div>
 
@@ -358,46 +332,27 @@ export default defineComponent({
 
 		const transactions = ref([])
 
-		const getTransactionColor = (status: string) => {
-			let currentColor = ''
-			switch (status) {
-				case 'initialized':
-					currentColor = 'text-primaryOrange'
-					break
-				case 'fulfilled':
-					currentColor = 'text-primaryOrange'
-					break
-				case 'failed':
-					currentColor = 'text-primaryRed'
-					break
-				case 'settled':
-					currentColor = 'text-primaryGreen'
-					break
-				default:
-					currentColor = 'text-primaryOrange'
-					break
-			}
-
-			return currentColor
+		const getTransactionColor = (transaction: any) => {
+			if (transaction.status === 'failed') return 'text-primaryRed'
+			if (transaction.status === 'initialized' || transaction.status === 'fulfilled') return 'text-primaryOrange'
+			return transaction.amount >= 0 ? 'text-primaryGreen' : 'text-primaryRed'
 		}
 
 		const setTransactions = () => {
 			transactions.value.length = 0
 			AllTransactions.value.results.forEach((transaction) => {
-				if (transaction.data.type !== 'newCard') transactions.value.push({
+				if (transaction.data.type !== 'newCard' && transaction.amount !== 0) transactions.value.push({
 					title: transaction.title,
-					type: transaction.amount > 0 ? 'credit' : 'debit',
 					time: formatTime(transaction.createdAt),
 					amount: transaction.amount,
+					currency: transaction.currency,
 					data: transaction,
 					status: transaction.status,
-					fullData: transaction.createdAt,
+					createdAt: transaction.createdAt,
 				})
 			})
 
-			transactions.value.sort(
-				(a, b) => b.fullData - a.fullData
-			)
+			transactions.value.sort((a, b) => b.createdAt - a.createdAt)
 		}
 
 		const setCommercialBankOptions = () => {
@@ -446,11 +401,7 @@ export default defineComponent({
 			transactionDetails.title = transaction.title
 
 			transactionTitle.value = transactionType
-			transactionDetails.amount = Logic.Common.convertToMoney(
-				transaction.amount,
-				false,
-				'ngn'
-			)
+			transactionDetails.amount = Logic.Common.formatPrice(transaction.amount, transaction.currency)
 			transactionDetails.time = formatTime(transaction.createdAt)
 
 			modalTitle.value = 'Transaction details'
@@ -498,11 +449,7 @@ export default defineComponent({
 
 					if (amount < 1000) {
 						Logic.Common.showAlert({
-							message: `Withdrawal amount cannot be less than ${Logic.Common.convertToMoney(
-								1000,
-								false,
-								'ngn'
-							)}`,
+							message: `Withdrawal amount cannot be less than ${Logic.Common.formatPrice(1000)}`,
 							type: 'warning',
 						})
 						return
@@ -555,11 +502,7 @@ export default defineComponent({
 
 			if (amount < 200) {
 				Logic.Common.showAlert({
-					message: `Funding amount cannot be less than ${Logic.Common.convertToMoney(
-						200,
-						false,
-						'ngn'
-					)}`,
+					message: `Funding amount cannot be less than ${Logic.Common.formatPrice(200)}`,
 					type: 'warning',
 				})
 				return

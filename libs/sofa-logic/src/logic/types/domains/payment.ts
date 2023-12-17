@@ -87,11 +87,12 @@ export interface Purchase {
 export interface Plan {
   hash: string
   id: string
-  name: string
+  title: string
   interval: string
   active: boolean
   amount: number
   currency: string
+  usersFor: string[]
   data: {
     questions: number
     recordings: number

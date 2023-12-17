@@ -207,6 +207,7 @@ export interface ResourceType {
     sub: string
     color: string
   }
+  price?: Course['price']
   progress: number
   id: string
   status: string

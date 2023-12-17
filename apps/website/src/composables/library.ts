@@ -60,6 +60,7 @@ export const createCourseData = (course: Course): ResourceType => {
 			main: 'Course',
 			sub: `${course.sections.length} topics`,
 		},
+		price: course.price,
 		progress: 0,
 		subject: Logic.Study.GetTagName(course.topicId),
 		user: course.user,

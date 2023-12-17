@@ -145,7 +145,7 @@ const filteredTutors = computed(() => tutors.value
 		photo_url: t.bio.photo?.link || '',
 		ratings: {
 			count: t.account.ratings.count,
-			value: Logic.Common.convertToMoney(t.account.ratings.avg, false,),
+			value: Logic.Common.formatNumber(t.account.ratings.avg, 2),
 		},
 		subjects: t.tutor.topics
 			.map((item) => topics.find((t) => t.id === item)?.title)

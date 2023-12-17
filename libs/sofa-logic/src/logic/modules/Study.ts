@@ -114,6 +114,7 @@ export default class Study extends Common {
 	public contentDetails = reactive<ContentDetails>({
 		type: 'course',
 		price: 0,
+		currency: 'NGN',
 		image: '/images/default.png',
 		title: '',
 		status: '',

@@ -41,15 +41,8 @@
 		</div>
 
 		<!--  Payment modal -->
-		<sofa-modal v-if="showMakePaymentModal" :close="() => {
-			showMakePaymentModal = false
-		}
-		">
-			<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative"
-				@click.stop="() => {
-					//
-				}
-				">
+		<sofa-modal v-if="showMakePaymentModal" :close="() => showMakePaymentModal = false">
+			<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
@@ -68,21 +61,18 @@
 
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 						<!-- Wallet -->
-						<div :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${selectedMethodId == 'payWithWallet'
-							? 'border-primaryBlue  border-2'
-							: ''
-						}  rounded-custom cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
+						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${selectedMethodId == 'payWithWallet'
+							? 'border-primaryBlue  border-2': ''} rounded-custom`" @click="selectedMethodId = 'payWithWallet'">
 							<sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
 							<sofa-normal-text>
 								Wallet (<span class="!font-semibold">{{
-									Logic.Common.convertToMoney(
+									Logic.Common.formatPrice(
 										UserWallet.balance.amount,
-										true,
-										"ngn"
+										UserWallet.balance.currency
 									)
 								}}</span>)
 							</sofa-normal-text>
-						</div>
+						</a>
 
 						<!-- Pay online -->
 
@@ -92,16 +82,13 @@
 							<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
 						</div>
 
-						<div :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id
-								? 'border-primaryBlue border-2'
-								: ''
-							}  rounded-custom cursor-pointer `" @click="selectedMethodId = method.id"
+						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id ? 'border-primaryBlue border-2' : '' }  rounded-custom`" @click="selectedMethodId = method.id"
 							v-for="(method, index) in PaymentMethods.results" :key="index">
 							<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
 							<sofa-normal-text>
 								**** **** **** {{ method.data.last4Digits }}
 							</sofa-normal-text>
-						</div>
+						</a>
 					</div>
 
 					<div
@@ -115,8 +102,10 @@
 						</div>
 
 						<div class="md:!w-auto col-span-2 flex flex-col">
-							<sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'" :padding="'px-4 md:!py-1 py-3'"
-								:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`" @click="buyCourse()">
+							<sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'"
+								:padding="'px-4 md:!py-1 py-3'"
+								:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
+								@click="buyCourse()">
 								Make payment
 							</sofa-button>
 						</div>
@@ -138,6 +127,7 @@ import {
 	shareMaterialLink
 } from '@/composables/library'
 import { otherTasks } from '@/composables/quiz'
+import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
 import {
 	SofaButton,
@@ -149,7 +139,6 @@ import {
 } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	components: {
@@ -335,6 +324,7 @@ export default defineComponent({
 				contentDetails.type = 'course'
 				contentDetails.title = SingleCourse.value.title
 				contentDetails.price = SingleCourse.value.price.amount
+				contentDetails.currency = SingleCourse.value.price.currency
 				contentDetails.status = SingleCourse.value.status
 				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.png'
 				contentDetails.info = SingleCourse.value.description
@@ -353,7 +343,7 @@ export default defineComponent({
 				contentDetails.user.roles = SingleCourse.value.user.roles
 
 				contentDetails.content.materialsCount =
-          SingleCourse.value.coursables.length
+					SingleCourse.value.coursables.length
 
 				contentDetails.ratings.label = `${SingleCourse.value.ratings.count} rating${SingleCourse.value.ratings.count > 1 ? 's' : ''}`
 				contentDetails.ratings.avg = SingleCourse.value.ratings.avg
@@ -398,8 +388,7 @@ export default defineComponent({
 							if (quizData?.length) {
 								contentDetails.content.sections[index].data.push({
 									isLocked: true,
-									sub: `${quizData[0].questions.length} question${quizData[0].questions.length > 1 ? 's' : ''
-									}`,
+									sub: `${quizData[0].questions.length} question${quizData[0].questions.length > 1 ? 's' : ''}`,
 									title: quizData[0].title,
 									type: 'Quiz',
 								})

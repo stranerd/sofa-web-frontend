@@ -29,13 +29,6 @@ const ngrokURL = 'https://local.stranerd.eu.ngrok.io'
 export const parseURL = (url: string) => url.replace(isWeb ? ngrokURL : localURL, isWeb ? localURL : ngrokURL)
 export const unParseURL = (url: string) => !isWeb ? url.replace(ngrokURL, localURL) : url
 
-export const formatCurrency = (currency: string) => {
-	const currencies = {
-		NGN: '₦', USD: '$'
-	} as Record<string, string>
-	return currencies[currency] ?? currencies.USD
-}
-
 export const formatDuration = (duration: number) => {
 	duration = duration < 0 ? 0 : duration
 	const hours = Math.floor(duration / 3600)

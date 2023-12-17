@@ -12,11 +12,7 @@
 							<sofa-badge :customClass="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
 								{{
 									content.price > 0
-										? `${Logic.Common.convertToMoney(
-											content.price,
-											false,
-											"ngn"
-										)}`
+										? Logic.Common.formatPrice(content.price, content.currency)
 										: "Start"
 								}}
 							</sofa-badge>
@@ -95,11 +91,7 @@
 							">
 								{{
 									content.price > 0
-										? `Buy ${Logic.Common.convertToMoney(
-											content.price,
-											false,
-											"ngn"
-										)}`
+										? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
 										: "Start"
 								}}
 							</sofa-button>
@@ -293,7 +285,7 @@
 		} w-full`" @click="buyAction && content.status == 'published' ? buyAction() : null">
 			{{
 				content.price > 0
-					? `Buy ${Logic.Common.convertToMoney(content.price, false, "ngn")}`
+					? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
 					: "Start"
 			}}
 		</sofa-button>
@@ -304,8 +296,8 @@
 	</div>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
-import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
+import { ContentDetails, Logic } from 'sofa-logic'
+import { defineComponent, onMounted, PropType, ref, toRef, watch } from 'vue'
 import SofaActivityCard from '../SofaActivityCard'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
@@ -339,7 +331,7 @@ export default defineComponent({
 			default: '',
 		},
 		content: {
-			type: Object as () => any,
+			type: Object as PropType<ContentDetails>,
 		},
 		close: {
 			type: Function,

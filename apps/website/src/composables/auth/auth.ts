@@ -45,9 +45,10 @@ export const useAuth = () => {
 	const isSubscribed = computed(() => !!store.wallet.value?.subscription.active)
 
 	const userType = computed(() => ({
-		isStudent: store.user.value?.type.type === 'student',
-		isTeacher: store.user.value?.type.type === 'teacher',
-		isOrg: store.user.value?.type.type === 'organization',
+		isStudent: store.user.value?.type?.type === 'student',
+		isTeacher: store.user.value?.type?.type === 'teacher',
+		isOrg: store.user.value?.type?.type === 'organization',
+		type: store.user.value?.type?.type ?? 'student'
 	}))
 
 	const userAi = computed(() => ({

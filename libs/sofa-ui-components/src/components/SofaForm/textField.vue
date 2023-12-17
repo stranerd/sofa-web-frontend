@@ -10,12 +10,14 @@
 				<span>
 					<slot name="inner-prefix" />
 				</span>
-				<input v-model="content" :placeholder="placeholder" @blur="checkValidation()" @keypress="isNumber" :disabled="disabled" :type="fieldType" @keyup="detectKey"
+				<input v-model="content" :placeholder="placeholder" @blur="checkValidation()" @keypress="isNumber"
+					:disabled="disabled" :type="fieldType" @keyup="detectKey"
 					class="flex-grow bg-transparent text-darkBody placeholder-grayColor input w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 				<slot name="inner-suffix" />
 				<span class="flex gap-2 items-center">
-					<SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'" :customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'" v-if="type == 'password'"
-						@click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
+					<SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'"
+						:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
+						v-if="type == 'password'" @click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
 					<SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
 				</span>
 			</div>
@@ -123,16 +125,11 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			if (props.defaultValue)  content.value = props.defaultValue
+			if (props.defaultValue) content.value = props.defaultValue
 			if (props.type) fieldType.value = props.type
 
 			if (props.isFormatted) {
-				content.value = Logic.Common.convertToMoney(
-					content.value ? content.value.toString().replace(/,/g, '') : 0,
-					false,
-					'',
-					false
-				)
+				content.value = Logic.Common.formatNumber(parseFloat(content.value), 2)
 			}
 		})
 		const validationStatus = ref(true)
@@ -188,8 +185,7 @@ export default defineComponent({
 				validationStatus.value = true
 			} else {
 				validationStatus.value = false
-				errorMessage.value = `${props.name} must be more than ${count - 1
-				} characters`
+				errorMessage.value = `${props.name} must be more than ${count - 1} characters`
 			}
 		}
 
@@ -198,8 +194,7 @@ export default defineComponent({
 				validationStatus.value = true
 			} else {
 				validationStatus.value = false
-				errorMessage.value = `${props.name} must be less than ${count + 1
-				} characters`
+				errorMessage.value = `${props.name} must be less than ${count + 1} characters`
 			}
 		}
 
@@ -254,12 +249,7 @@ export default defineComponent({
 		watch(content, () => {
 			checkValidation()
 			if (props.isFormatted) {
-				content.value = Logic.Common.convertToMoney(
-					content.value ? content.value.toString().replace(/,/g, '') : 0,
-					false,
-					'',
-					false
-				)
+				content.value = Logic.Common.formatNumber(parseFloat(content.value), 2)
 			}
 		})
 
@@ -280,8 +270,8 @@ export default defineComponent({
 			const charCode = evt.which ? evt.which : evt.keyCode
 			if (
 				charCode > 31 &&
-        (charCode < 48 || charCode > 57) &&
-        charCode !== 46
+				(charCode < 48 || charCode > 57) &&
+				charCode !== 46
 			) {
 				evt.preventDefault()
 			} else {

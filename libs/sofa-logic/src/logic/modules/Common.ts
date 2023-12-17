@@ -1,6 +1,6 @@
 import { listenOnSocket } from '@modules/core'
+import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
-import currency from 'currency.js'
 import { reactive } from 'vue'
 import {
 	NavigationGuardNext,
@@ -35,11 +35,6 @@ export default class Common {
 		const min = Math.floor(seconds / 60)
 		const sec = seconds % 60
 		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
-	}
-
-	public AvailableCurrencies = {
-		NGN: '₦',
-		USD: '$',
 	}
 
 	constructor () {
@@ -179,7 +174,7 @@ export default class Common {
 
 	public goBack = () => {
 		const ignoreBackRoute = this.route?.query.ignoreBackRoute ?? null
-		const goBackRoute = this.route?.meta.middlewares?.goBackRoute
+		const goBackRoute = (this.route?.meta.middlewares as any)?.goBackRoute
 		if (typeof goBackRoute == 'function' && !ignoreBackRoute) this.GoToRoute(goBackRoute())
 		else if (typeof goBackRoute == 'string' && !ignoreBackRoute) this.GoToRoute(goBackRoute)
 		else window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
@@ -187,34 +182,20 @@ export default class Common {
 
 	public daysDiff (a: Date, b: Date) {
 		const _MS_PER_DAY = 1000 * 60 * 60 * 24
-		const utc1 = new Date(a.getFullYear(), a.getMonth(), a.getDate())
-		const utc2 = new Date(b.getFullYear(), b.getMonth(), b.getDate())
+		const utc1 = new Date(a.getFullYear(), a.getMonth(), a.getDate()).getTime()
+		const utc2 = new Date(b.getFullYear(), b.getMonth(), b.getDate()).getTime()
 		return Math.floor((utc2 - utc1) / _MS_PER_DAY)
 	}
 
-	public convertToMoney = (
-		float: any,
-		withZeros = true,
-		currencyType = 'ngn',
-		withSymbol = true,
-	) => {
-		let currencySymbol = ''
-		if (currencyType == 'usd') {
-			currencySymbol = '$'
-		} else if (currencyType == 'ngn') {
-			currencySymbol = '₦'
+	public formatNumber = formatNumber
+
+	public formatPrice = (price: number, currency = 'NGN') => {
+		const currencies = {
+			NGN: '₦',
+			USD: '$',
 		}
-		if (!withSymbol) {
-			currencySymbol = ''
-		}
-		if (withZeros) {
-			return currency(float, {
-				separator: ',',
-				symbol: currencySymbol,
-			}).format()
-		} else {
-			return currencySymbol + new Intl.NumberFormat().format(parseFloat(float))
-		}
+		const symbol = currencies[currency.toUpperCase()] ?? ''
+		return `${symbol}${Intl.NumberFormat().format(price)}`
 	}
 
 	public searchArray = (arr: any[], searchKey: string) => {

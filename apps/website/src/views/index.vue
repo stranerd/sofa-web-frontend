@@ -21,7 +21,7 @@
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
 							<SofaNormalText class="font-bold">
-								{{ Logic.Common.convertToMoney(user.account.rankings.overall.value, false, "") }} xp
+								{{ Logic.Common.formatNumber(user.account.rankings.overall.value, 2) }} xp
 							</SofaNormalText>
 							<SofaNormalText color="text-bodyBlack" content="Point" />
 						</div>

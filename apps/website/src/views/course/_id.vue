@@ -173,13 +173,7 @@
 						}  rounded-custom cursor-pointer `" @click="selectedMethodId = 'payWithWallet'">
 							<sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
 							<sofa-normal-text>
-								Wallet (<span class="!font-semibold">{{
-									Logic.Common.convertToMoney(
-										UserWallet.balance.amount,
-										true,
-										"ngn"
-									)
-								}}</span>)
+								Wallet (<span class="!font-semibold">{{ Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency) }}</span>)
 							</sofa-normal-text>
 						</div>
 

@@ -35,7 +35,7 @@
 		<template v-else>
 			<div class="w-full flex flex-col">
 				<sofa-empty-state :title="'You have no access'" :subTitle="'Get this course to start learning with it'"
-					:custom-class="'h-[380px]'" :actionLabel="`${SingleCourse.price.amount ? 'Buy' : 'Get'} ${SingleCourse.price.amount ? Logic.Common.convertToMoney(SingleCourse.price.amount, false, 'ngn') : 'for free'}`"
+					:custom-class="'h-[380px]'" :actionLabel="`${SingleCourse.price.amount ? 'Buy' : 'Get'} ${SingleCourse.price.amount ? Logic.Common.formatPrice(SingleCourse.price.amount, SingleCourse.price.currency) : 'for free'}`"
 					:action="buyCourse" :icon="{ name: 'lock-white', size: 'h-[28px]' }" :titleStyle="'mdlg:!text-xl'" />
 			</div>
 		</template>

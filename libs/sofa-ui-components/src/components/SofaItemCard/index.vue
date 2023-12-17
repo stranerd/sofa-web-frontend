@@ -1,14 +1,10 @@
 <template>
 	<component :is="as" :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer rounded-custom ${customClass}`">
-		<sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photo-url="content.image">
-			<div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
-				v-if="content.price > 0">
+		<sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative"
+			:photo-url="content.image">
+			<div class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2" v-if="content.price?.amount > 0">
 				<sofa-badge :customClass="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
-					{{
-						content.price > 0
-							? `${Logic.Common.convertToMoney(content.price, false, "ngn")}`
-							: "Start"
-					}}
+					{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
 				</sofa-badge>
 			</div>
 		</sofa-image-loader>
@@ -46,13 +42,14 @@
 				<sofa-icon v-if="content.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
 			</a>
 
-			<sofa-icon @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'" :customClass="'h-[18px] '" />
+			<sofa-icon @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'"
+				:customClass="'h-[18px] '" />
 		</div>
 	</component>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
-import { defineComponent } from 'vue'
+import { Logic, ResourceType } from 'sofa-logic'
+import { defineComponent, PropType } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
@@ -75,7 +72,7 @@ export default defineComponent({
 			default: 'border-2 rounded-[16px] border-darkLightGray',
 		},
 		content: {
-			type: Object as () => any,
+			type: Object as PropType<ResourceType>,
 		},
 		bookmarkAction: {
 			type: Function,
