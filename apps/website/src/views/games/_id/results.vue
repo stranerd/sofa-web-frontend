@@ -11,11 +11,11 @@
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=games')
 							}" :leftButton="gameExtras.canEnd ? {
-	label: 'End',
-	bgColor: 'bg-deepGray border border-white',
-	textColor: 'text-white',
-	click: gameExtras.end
-} : undefined">
+								label: 'End',
+								bgColor: 'bg-deepGray border border-white',
+								textColor: 'text-white',
+								click: gameExtras.end
+							} : undefined">
 							<template v-slot:header>
 								<div />
 							</template>
@@ -68,7 +68,7 @@ export default defineComponent({
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
-			title: "Results",
+			title: 'Results',
 		})
 
 		return { Logic }

@@ -1,34 +1,34 @@
 <template>
-  <div class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
-    <a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer">
-      <div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
-        <div class="flip-card-front">
-          <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
-            :content="question.question" />
-        </div>
-        <div class="flip-card-back">
-          <SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
-            :content="question.answer" />
-        </div>
-      </div>
-    </a>
-  </div>
+	<div class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
+		<a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer">
+			<div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
+				<div class="flip-card-front">
+					<SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
+						:content="question.question" />
+				</div>
+				<div class="flip-card-back">
+					<SofaHeaderText class="!font-semibold md:!text-xl text-base w-full" color="text-inherit"
+						:content="question.answer" />
+				</div>
+			</div>
+		</a>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import { TransformedQuestion } from "sofa-logic"
-import { SofaHeaderText } from "sofa-ui-components"
-import { defineProps, PropType, ref } from "vue"
+import { TransformedQuestion } from 'sofa-logic'
+import { SofaHeaderText } from 'sofa-ui-components'
+import { defineProps, PropType, ref } from 'vue'
 
 defineProps({
-  question: {
-    type: Object as PropType<TransformedQuestion>,
-    required: true
-  },
-  isDark: {
-    type: Boolean,
-    required: true
-  }
+	question: {
+		type: Object as PropType<TransformedQuestion>,
+		required: true
+	},
+	isDark: {
+		type: Boolean,
+		required: true
+	}
 })
 
 const showAnswer = ref(false)

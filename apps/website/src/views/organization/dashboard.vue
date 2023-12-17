@@ -6,13 +6,13 @@
 
 				<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 					<div v-for="stat in [
-						{ label: 'Classes', value: user.account.meta.classes, icon: 'classes', color: '#3296C8' },
-						{ label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
-						{ label: 'Teachers', value: user.account.meta.lessons, icon: 'tutor', color: '#FA9632' },
-						{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
-						{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
-						{ label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
-					]" :key="stat.label"
+							{ label: 'Classes', value: user.account.meta.classes, icon: 'classes', color: '#3296C8' },
+							{ label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
+							{ label: 'Teachers', value: user.account.meta.lessons, icon: 'tutor', color: '#FA9632' },
+							{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
+							{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
+							{ label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
+						]" :key="stat.label"
 						class="flex items-center gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">
 						<div class="flex flex-col items-start">
 							<SofaHeaderText size="xl" color="text-inherit !font-normal"
@@ -32,21 +32,21 @@
 </template>
 
 <script lang="ts">
-import OrganizationLayout from "@/components/organizations/organizations/OrganizationLayout.vue"
+import OrganizationLayout from '@/components/organizations/organizations/OrganizationLayout.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components/src'
-import { defineComponent } from "vue"
-import { useMeta } from "vue-meta"
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	components: { OrganizationLayout, SofaHeaderText, SofaNormalText, SofaIcon },
-	name: "OrganizationDashboardPage",
+	name: 'OrganizationDashboardPage',
 	middlewares: { goBackRoute: '/organization' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup () {
 		useMeta({
-			title: "Home",
+			title: 'Home',
 		})
 
 		return { Logic }

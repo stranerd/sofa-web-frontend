@@ -37,22 +37,22 @@
 </template>
 
 <script lang="ts">
-import ChatContent from "@/components/conversations/ChatContent.vue"
-import ChatLayout from "@/components/conversations/ChatLayout.vue"
+import ChatContent from '@/components/conversations/ChatContent.vue'
+import ChatLayout from '@/components/conversations/ChatLayout.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useConversation } from '@/composables/conversations/conversations'
 import { SofaButton, SofaNormalText } from 'sofa-ui-components'
-import { computed, defineComponent } from "vue"
-import { useMeta } from "vue-meta"
-import { useRoute } from "vue-router"
+import { computed, defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	components: { ChatLayout, ChatContent, SofaButton, SofaNormalText },
-	name: "ChatsRequestsIdPage",
-	middlewares: { goBackRoute: "/chats" },
+	name: 'ChatsRequestsIdPage',
+	middlewares: { goBackRoute: '/chats' },
 	setup () {
 		useMeta({
-			title: "Request",
+			title: 'Request',
 		})
 
 		const { id: authId } = useAuth()

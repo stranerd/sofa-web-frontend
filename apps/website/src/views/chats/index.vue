@@ -25,14 +25,14 @@
 
 <script lang="ts">
 import ChatLayout from '@/components/conversations/ChatLayout.vue'
-import ChatList from "@/components/conversations/ChatList.vue"
+import ChatList from '@/components/conversations/ChatList.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList } from '@/composables/conversations/conversations'
 import { generateMiddlewares } from '@/middlewares'
-import { Logic } from "sofa-logic"
-import { SofaIcon, SofaNormalText } from "sofa-ui-components"
-import { defineComponent } from "vue"
-import { useMeta } from "vue-meta"
+import { Logic } from 'sofa-logic'
+import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	components: {
@@ -41,11 +41,11 @@ export default defineComponent({
 		ChatLayout,
 		ChatList,
 	},
-	name: "ChatsIndexPage",
+	name: 'ChatsIndexPage',
 	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/chats/new' : undefined ]),
 	setup () {
 		useMeta({
-			title: "Chat",
+			title: 'Chat',
 		})
 
 		const { userType } = useAuth()

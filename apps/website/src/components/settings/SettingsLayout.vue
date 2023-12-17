@@ -30,9 +30,9 @@
 					<div
 						class="border-t-2 border-darkLightGray mdlg:border-0 mt-1 mdlg:mt-0 pt-4 mdlg:pt-0 flex flex-col gap-3 mdlg:gap-0">
 						<a v-for="action in [
-							{ title: 'Logout', onClick: signout },
-							{ title: 'Delete account', onClick: deleteAccount }
-						]" :key="action.title" @click="action.onClick"
+								{ title: 'Logout', onClick: signout },
+								{ title: 'Delete account', onClick: deleteAccount }
+							]" :key="action.title" @click="action.onClick"
 							class="bg-white p-4 mdlg:p-2 rounded-custom shadow-custom mdlg:border-none mdlg:shadow-none mdlg:rounded-lg mdlg:hover:bg-lightBlue">
 							<sofa-normal-text color="text-primaryRed">
 								{{ action.title }}
@@ -51,8 +51,8 @@
 
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
-import { Logic } from "sofa-logic"
-import { SofaHeaderText, SofaIcon, SofaNormalText } from "sofa-ui-components"
+import { Logic } from 'sofa-logic'
+import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 
 defineProps({
@@ -71,66 +71,66 @@ const { userType, auth, signout, deleteAccount } = useAuth()
 
 const settingOptions = [
 	{
-		title: "Account",
+		title: 'Account',
 		subPages: [
 			{
-				title: "Profile",
-				to: "/settings/profile",
+				title: 'Profile',
+				to: '/settings/profile',
 				show: () => true,
 			},
 			{
-				title: "Organizations",
-				to: "/settings/organizations",
+				title: 'Organizations',
+				to: '/settings/organizations',
 				show: () => !userType.value.isOrg
 			},
 			{
-				title: "Verification",
-				to: "/verification",
+				title: 'Verification',
+				to: '/verification',
 				show: () => !auth.value?.roles.isVerified,
 			},
 			{
-				title: "Tutor Application",
-				to: "/verification/tutor",
+				title: 'Tutor Application',
+				to: '/verification/tutor',
 				show: () => userType.value.isTeacher,
 			},
 		],
 	},
 	{
-		title: "Billing",
+		title: 'Billing',
 		subPages: [
 			{
-				title: "Wallet",
-				to: "/settings/wallet",
+				title: 'Wallet',
+				to: '/settings/wallet',
 				show: () => true,
 			},
 			{
-				title: "Subscription",
-				to: "/settings/subscription",
+				title: 'Subscription',
+				to: '/settings/subscription',
 				show: () => true,
 			},
 		],
 	},
 	{
-		title: "Preferences",
+		title: 'Preferences',
 		subPages: [
 			{
-				title: "Notifications",
-				to: "/settings/notifications",
+				title: 'Notifications',
+				to: '/settings/notifications',
 				show: () => true,
 			},
 			{
-				title: "Security",
-				to: "/settings/security",
+				title: 'Security',
+				to: '/settings/security',
 				show: () => true,
 			},
 		],
 	},
 	{
-		title: "Support",
+		title: 'Support',
 		subPages: [
 			{
-				title: "Contact us",
-				to: "/settings/contact_us",
+				title: 'Contact us',
+				to: '/settings/contact_us',
 				show: () => true,
 			},
 		],

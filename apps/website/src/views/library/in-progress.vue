@@ -12,15 +12,15 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from "@/components/library/LibraryLayout.vue"
+import LibraryLayout from '@/components/library/LibraryLayout.vue'
 import { createGameData, createTestData } from '@/composables/library'
 import { useMyGames } from '@/composables/plays/games-list'
 import { useMyTests } from '@/composables/plays/tests-list'
 import { useQuizzesInList } from '@/composables/study/quizzes-list'
 import { generateMiddlewares } from '@/middlewares'
-import { Logic } from "sofa-logic"
-import { SofaEmptyState, SofaProgressItemCard } from "sofa-ui-components"
-import { computed, defineComponent } from "vue"
+import { Logic } from 'sofa-logic'
+import { SofaEmptyState, SofaProgressItemCard } from 'sofa-ui-components'
+import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -29,8 +29,8 @@ export default defineComponent({
 		SofaProgressItemCard,
 		SofaEmptyState,
 	},
-	name: "LibraryInProgressPage",
-	middlewares: { goBackRoute: "/library" },
+	name: 'LibraryInProgressPage',
+	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()
@@ -41,12 +41,12 @@ export default defineComponent({
 		const { quizzes } = useQuizzesInList(computed(() => [...ongoingGames.value, ...ongoingTests.value].map((p) => p.quizId)))
 
 		const data = computed(() => {
-			if (tab.value === "all") return [
+			if (tab.value === 'all') return [
 				...ongoingGames.value.map((g) => createGameData(g, quizzes.value)),
 				...ongoingTests.value.map((t) => createTestData(t, quizzes.value)),
 			].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === "games") return ongoingGames.value.map((g) => createGameData(g, quizzes.value))
-			if (tab.value === "tests") return ongoingTests.value.map((t) => createTestData(t, quizzes.value))
+			if (tab.value === 'games') return ongoingGames.value.map((g) => createGameData(g, quizzes.value))
+			if (tab.value === 'tests') return ongoingTests.value.map((t) => createTestData(t, quizzes.value))
 			return []
 		})
 

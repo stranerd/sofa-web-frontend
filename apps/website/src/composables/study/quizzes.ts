@@ -47,7 +47,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		try {
 			await store[id].setLoading(true)
 			store[id].quiz.value = await Logic.Study.GetQuiz(id)
-			if (store[id].quiz.value) Logic.Interactions.CreateView({ entity: { id: id, type: "quizzes" } }).catch() // dont await, run in bg
+			if (store[id].quiz.value) Logic.Interactions.CreateView({ entity: { id: id, type: 'quizzes' } }).catch() // dont await, run in bg
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)
@@ -99,9 +99,9 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	}
 
 	const deleteQuestion = async (questionId: string) => {
-		if (store[id].quiz.value?.status === "published") return Logic.Common.showAlert({
-			message: "You cannot delete questions from published quiz",
-			type: "warning",
+		if (store[id].quiz.value?.status === 'published') return Logic.Common.showAlert({
+			message: 'You cannot delete questions from published quiz',
+			type: 'warning',
 		})
 
 		const confirmed = await Logic.Common.confirm({

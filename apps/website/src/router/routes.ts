@@ -19,7 +19,7 @@ const makeRoute = async (page: string[]) => {
 const allPages = require.context('../views', true, /\.vue$/)
 	.keys()
 	.map((key) => key.slice(2)
-	.replace('.vue', '').split('/'))
+		.replace('.vue', '').split('/'))
 	.map((path) => {
 		let parent = null as null | string
 		const nestedIndex = path.findIndex((p) => p.startsWith('^'))

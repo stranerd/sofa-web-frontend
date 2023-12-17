@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { MemberEntity, MemberTypes } from "@modules/organizations"
+import { MemberEntity, MemberTypes } from '@modules/organizations'
 import {
 	SofaAvatar,
 	SofaButton,

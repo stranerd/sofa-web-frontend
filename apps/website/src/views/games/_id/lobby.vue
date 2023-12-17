@@ -15,11 +15,11 @@
 									else return await gameExtras.join(true)
 								}
 							}" :leftButton="{
-	label: 'Close',
-	bgColor: 'bg-deepGray border border-white',
-	textColor: 'text-white',
-	click: () => Logic.Common.GoToRoute('/library')
-}">
+								label: 'Close',
+								bgColor: 'bg-deepGray border border-white',
+								textColor: 'text-white',
+								click: () => Logic.Common.GoToRoute('/library')
+							}">
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom"
@@ -112,7 +112,7 @@ export default defineComponent({
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
-			title: "Lobby",
+			title: 'Lobby',
 		})
 
 		const share = async (quiz: IQuiz) => await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)

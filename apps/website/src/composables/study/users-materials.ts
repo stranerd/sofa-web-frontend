@@ -25,7 +25,7 @@ export const useUsersMaterials = (id: string) => {
 			await store[id].setLoading(true)
 			store[id].user.value = await Logic.Users.GetUser(id)
 			const query: QueryParams = {
-				where: [{ field: "user.id", value: id }, { field: 'status', value: 'published' }],
+				where: [{ field: 'user.id', value: id }, { field: 'status', value: 'published' }],
 				all: true, // TODO: implement pagination
 				sort: [{ field: 'createdAt', desc: true }]
 			}

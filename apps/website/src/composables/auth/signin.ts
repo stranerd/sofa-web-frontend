@@ -98,7 +98,7 @@ export const useEmailVerification = () => {
 		await setLoading(true)
 		try {
 			await AuthUseCases.sendVerificationEmail()
-			await setMessage(`An OTP was just sent to your mail`)
+			await setMessage('An OTP was just sent to your mail')
 			sent.value = true
 		} catch (error) {
 			await setError(error)

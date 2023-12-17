@@ -74,7 +74,7 @@ export default defineComponent({
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
-			title: "Results",
+			title: 'Results',
 		})
 
 		return { Logic }

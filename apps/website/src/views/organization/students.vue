@@ -9,22 +9,22 @@
 </template>
 
 <script lang="ts">
-import MembersList from "@/components/organizations/members/MembersList.vue"
-import OrganizationLayout from "@/components/organizations/organizations/OrganizationLayout.vue"
+import MembersList from '@/components/organizations/members/MembersList.vue'
+import OrganizationLayout from '@/components/organizations/organizations/OrganizationLayout.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationMembers } from '@/composables/organizations/members'
 import { generateMiddlewares } from '@/middlewares'
-import { MemberTypes } from "@modules/organizations"
-import { defineComponent } from "vue"
-import { useMeta } from "vue-meta"
+import { MemberTypes } from '@modules/organizations'
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	components: { OrganizationLayout, MembersList },
-	name: "OrganizationStudentsPage",
+	name: 'OrganizationStudentsPage',
 	middlewares: { goBackRoute: '/organization' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup () {
-		useMeta({ title: "Students" })
+		useMeta({ title: 'Students' })
 
 		const messages = [
 			'Add students from your physical class here.',

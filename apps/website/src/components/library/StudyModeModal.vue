@@ -4,7 +4,7 @@
 			@click.stop="() => {
 				//
 			}
-				">
+			">
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 				<div
@@ -12,8 +12,8 @@
 					<sofa-normal-text :customClass="'!font-bold !text-base'">
 						{{
 							selectedQuizMode == "game"
-							? "Start quiz game"
-							: "Choose Study Mode"
+								? "Start quiz game"
+								: "Choose Study Mode"
 						}}
 					</sofa-normal-text>
 					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showStudyMode = false" />
@@ -35,7 +35,7 @@
 							AllQuzzies?.results.find(
 								(item) => item.id == selectedQuizId
 							)?.user.id
-							" @click="goToEdit">Edit Quiz</sofa-button>
+						" @click="goToEdit">Edit Quiz</sofa-button>
 					</div>
 				</div>
 
@@ -68,7 +68,7 @@ import {
 	showMoreOptionHandler,
 	showMoreOptions,
 	showStudyMode,
-} from "@/composables/library"
+} from '@/composables/library'
 import {
 	createQuizGame,
 	goToStudyMode,
@@ -76,16 +76,16 @@ import {
 	selectedQuizId,
 	selectedQuizMode,
 	userIsParticipating,
-} from "@/composables/quiz"
-import { Logic } from "sofa-logic"
+} from '@/composables/quiz'
+import { Logic } from 'sofa-logic'
 import {
 	SofaButton,
 	SofaIcon,
 	SofaIconCard,
 	SofaModal,
 	SofaNormalText
-} from "sofa-ui-components"
-import { defineComponent } from "vue"
+} from 'sofa-ui-components'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
 	components: {
@@ -95,7 +95,7 @@ export default defineComponent({
 		SofaIconCard,
 		SofaButton,
 	},
-	name: "StudyModeModal",
+	name: 'StudyModeModal',
 	setup () {
 		const goToEdit = () => {
 			showStudyMode.value = false

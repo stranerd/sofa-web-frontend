@@ -167,10 +167,10 @@ import { useAuth } from '@/composables/auth/auth'
 import { moreOptions, showMoreOptions } from '@/composables/library'
 import { useEditFolder, useMyFolders } from '@/composables/study/folders'
 import { useMyOrganizations } from '@/composables/users/organizations'
-import { Logic } from "sofa-logic"
-import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from "sofa-ui-components"
+import { Logic } from 'sofa-logic'
+import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineProps } from 'vue'
-import { useMeta } from "vue-meta"
+import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
 const { isAdmin } = useAuth()
@@ -212,8 +212,8 @@ const libraryOptions = computed(() => [
 				id: 'draft',
 			},
 			{
-				name: "Tutors",
-				id: "tutors",
+				name: 'Tutors',
+				id: 'tutors',
 				hide: !isAdmin.value
 			},
 		],

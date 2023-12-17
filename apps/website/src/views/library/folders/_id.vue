@@ -22,14 +22,14 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from "@/composables/library"
+import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from '@/composables/library'
 import { useCoursesInList } from '@/composables/study/courses-list'
 import { useFolder } from '@/composables/study/folders'
 import { useQuizzesInList } from '@/composables/study/quizzes-list'
 import { generateMiddlewares } from '@/middlewares'
-import { Logic } from "sofa-logic"
-import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
-import { computed, defineComponent } from "vue"
+import { Logic } from 'sofa-logic'
+import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
+import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -39,7 +39,7 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaActivityCard,
 	},
-	name: "LibraryFoldersIdPage",
+	name: 'LibraryFoldersIdPage',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {

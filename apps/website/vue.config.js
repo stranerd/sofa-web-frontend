@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path')
 module.exports = {
 	runtimeCompiler: true,
 	css: {
@@ -14,18 +14,18 @@ module.exports = {
 	configureWebpack: {
 		resolve: {
 			alias: {
-				"@": path.resolve(__dirname, "./src"),
-				"@app": path.resolve(__dirname, "./src"),
-				"@modules": path.resolve('./node_modules/sofa-modules/src/modules'),
-				"@utils": path.resolve('./node_modules/sofa-modules/src/utils'),
+				'@': path.resolve(__dirname, './src'),
+				'@app': path.resolve(__dirname, './src'),
+				'@modules': path.resolve('./node_modules/sofa-modules/src/modules'),
+				'@utils': path.resolve('./node_modules/sofa-modules/src/utils'),
 			},
 			extensions: ['.js', '.vue', '.json', '.ts']
 		}
 	},
 	chainWebpack: config => {
 		config.module
-		.rule('vue')
-		.use('vue-loader')
+			.rule('vue')
+			.use('vue-loader')
 			.tap((options) => {
 				options.compilerOptions ??= {}
 				options.compilerOptions.isCustomElement = (tag) => {

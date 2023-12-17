@@ -125,14 +125,14 @@
 
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
-import { Logic } from "sofa-logic"
-import { MemberTypes } from "@modules/organizations"
+import { Logic } from 'sofa-logic'
+import { MemberTypes } from '@modules/organizations'
 import {
 	SofaAvatar, SofaBadge, SofaHeaderText, SofaIcon, SofaNormalText, SofaButton,
 	SofaTextField, SofaModal2 as SofaModal
-} from "sofa-ui-components"
+} from 'sofa-ui-components'
 import { computed, defineProps, ref } from 'vue'
-import { useMeta } from "vue-meta"
+import { useMeta } from 'vue-meta'
 import { useManageOrganizationMembers } from '@/composables/organizations/members'
 
 const props = defineProps({
@@ -156,7 +156,7 @@ const rightCommands = [
 	{ label: 'Add a teacher', action: () => extras.value.openAddModal(MemberTypes.teacher) },
 	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
 	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
-	{ label: 'Create a class', action: () => Logic.Common.GoToRoute(`/organzation/classes/create`) },
+	{ label: 'Create a class', action: () => Logic.Common.GoToRoute('/organzation/classes/create') },
 ]
 
 const { id, user } = useAuth()

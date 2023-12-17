@@ -13,17 +13,17 @@
 							return isDone = true
 						}
 					}" :leftButton="{
-	label: isDone ? 'Restart' : 'Show later',
-	bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
-	textColor: isDone ? 'text-grayColor' : 'text-white',
-	click: () => {
-		if (isDone) {
-			extras.reset()
-			return isDone = false
-		}
-		return extras.moveCurrrentQuestionToEnd()
-	}
-}">
+						label: isDone ? 'Restart' : 'Show later',
+						bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
+						textColor: isDone ? 'text-grayColor' : 'text-white',
+						click: () => {
+							if (isDone) {
+								extras.reset()
+								return isDone = false
+							}
+							return extras.moveCurrrentQuestionToEnd()
+						}
+					}">
 					<template v-slot>
 						<div v-if="isDone" class="flex flex-col gap-1">
 							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit"
@@ -84,7 +84,7 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',
-	middlewares: { goBackRoute: "/library" },
+	middlewares: { goBackRoute: '/library' },
 	components: {
 		QuizWrapper, Quiz, Flashcard, SofaHeaderText, SofaNormalText,
 		SofaButton, SofaIcon, SofaModal, SofaCheckbox
@@ -92,7 +92,7 @@ export default defineComponent({
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
-			title: "Flashcards",
+			title: 'Flashcards',
 		})
 
 		const storageKey = 'flashcards-info'
@@ -104,7 +104,7 @@ export default defineComponent({
 		const close = () => showInfoModal.value = false
 
 		watch(dontShowAgain, () => {
-			if (dontShowAgain.value) localStorage.setItem(storageKey, "true")
+			if (dontShowAgain.value) localStorage.setItem(storageKey, 'true')
 			else localStorage.removeItem(storageKey)
 		}, { immediate: true })
 

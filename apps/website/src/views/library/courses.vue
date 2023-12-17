@@ -18,14 +18,14 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from "@/components/library/LibraryLayout.vue"
-import { createCourseData, openCourse, showMoreOptionHandler } from "@/composables/library"
+import LibraryLayout from '@/components/library/LibraryLayout.vue'
+import { createCourseData, openCourse, showMoreOptionHandler } from '@/composables/library'
 import { useMyCourses } from '@/composables/study/courses-list'
 import { useRecent } from '@/composables/study/study'
 import { generateMiddlewares } from '@/middlewares'
-import { Logic } from "sofa-logic"
-import { SofaActivityCard, SofaEmptyState, SofaIcon } from "sofa-ui-components"
-import { computed, defineComponent } from "vue"
+import { Logic } from 'sofa-logic'
+import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
+import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -35,8 +35,8 @@ export default defineComponent({
 		SofaActivityCard,
 		SofaEmptyState,
 	},
-	name: "LibraryCoursesPage",
-	middlewares: { goBackRoute: "/library" },
+	name: 'LibraryCoursesPage',
+	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		const route = useRoute()
@@ -46,9 +46,9 @@ export default defineComponent({
 		const { courses: recentCourses } = useRecent()
 
 		const data = computed(() => {
-			if (tab.value === "recent") return recentCourses.value.map(createCourseData)
-			else if (tab.value === "published") return published.value.map(createCourseData)
-			else if (tab.value === "draft") return draft.value.map(createCourseData)
+			if (tab.value === 'recent') return recentCourses.value.map(createCourseData)
+			else if (tab.value === 'published') return published.value.map(createCourseData)
+			else if (tab.value === 'draft') return draft.value.map(createCourseData)
 			return []
 		})
 

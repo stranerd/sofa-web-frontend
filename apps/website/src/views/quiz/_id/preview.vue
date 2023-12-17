@@ -31,11 +31,11 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
-	middlewares: { goBackRoute: "/library" },
+	middlewares: { goBackRoute: '/library' },
 	components: { QuizWrapper, Quiz },
 	setup () {
 		useMeta({
-			title: "Preview",
+			title: 'Preview',
 		})
 	}
 })

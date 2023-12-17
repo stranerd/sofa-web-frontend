@@ -131,10 +131,10 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 	watch(store[id].game, async (cur, old) => {
 		if (!cur) return
 		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions)) Logic.Plays.GetGameQuestions(id)
-				.then((questions) => {
-					store[id].questions.splice(0, store[id].questions.length, ...questions)
-				})
-				.catch()
+			.then((questions) => {
+				store[id].questions.splice(0, store[id].questions.length, ...questions)
+			})
+			.catch()
 		if (!skip.questions) Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
 			.then((answers) => {
 				store[id].answer.value = answers.results.at(0) ?? null

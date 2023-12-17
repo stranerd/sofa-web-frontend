@@ -11,11 +11,11 @@
 								textColor: 'text-bodyBlack',
 								click: testExtras.start
 							}" :leftButton="{
-	label: 'Close',
-	bgColor: 'bg-deepGray border border-white',
-	textColor: 'text-white',
-	click: () => Logic.Common.GoToRoute('/library')
-}">
+								label: 'Close',
+								bgColor: 'bg-deepGray border border-white',
+								textColor: 'text-white',
+								click: () => Logic.Common.GoToRoute('/library')
+							}">
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div
@@ -56,7 +56,7 @@ export default defineComponent({
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup () {
 		useMeta({
-			title: "Lobby",
+			title: 'Lobby',
 		})
 
 		return { Logic }
