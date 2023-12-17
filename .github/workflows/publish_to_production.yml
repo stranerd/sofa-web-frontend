@@ -48,9 +48,6 @@ jobs:
           ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
         run: echo "$ENV_SECRETS" > env.json
 
-      - name: Setup secrets
-        run: pnpm -w run envs
-
       - name: Build apps
         run: pnpm --filter ./apps/website build
 
