@@ -17,7 +17,7 @@
 				<sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
 			</div>
 		</div>
-		<div class="w-full bg-white rounded-[16px] flex flex-grow overflow-y-auto gap-3">
+		<div class="w-full bg-white rounded-[16px] flex flex-col flex-grow overflow-y-auto">
 			<sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
 				:buyAction="buyCourse" :hasAccess="userHasAccess" :similarContents="similarContents" :type="contentType"
 				:contentId="contentDetails.id" :otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)"
@@ -32,7 +32,7 @@
 					share: () => {
 						shareMaterialLink(
 							contentDetails?.type ?? ('' as any),
-							`/marketplace/${contentDetails?.id}?type=${contentDetails?.id}`,
+							contentDetails.route,
 							contentDetails?.title ?? '',
 						)
 					},
@@ -62,7 +62,7 @@
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 						<!-- Wallet -->
 						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${selectedMethodId == 'payWithWallet'
-							? 'border-primaryBlue  border-2': ''} rounded-custom`" @click="selectedMethodId = 'payWithWallet'">
+							? 'border-primaryBlue  border-2' : ''} rounded-custom`" @click="selectedMethodId = 'payWithWallet'">
 							<sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
 							<sofa-normal-text>
 								Wallet (<span class="!font-semibold">{{
@@ -82,8 +82,9 @@
 							<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
 						</div>
 
-						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id ? 'border-primaryBlue border-2' : '' }  rounded-custom`" @click="selectedMethodId = method.id"
-							v-for="(method, index) in PaymentMethods.results" :key="index">
+						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''}  rounded-custom`"
+							@click="selectedMethodId = method.id" v-for="(method, index) in PaymentMethods.results"
+							:key="index">
 							<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
 							<sofa-normal-text>
 								**** **** **** {{ method.data.last4Digits }}
@@ -119,8 +120,7 @@
 <script lang="ts">
 import { scrollToTop } from '@/composables'
 import {
-	createCourseData,
-	createQuizData,
+	extractResource,
 	openQuiz,
 	reportMaterial,
 	saveToFolder,
@@ -321,6 +321,7 @@ export default defineComponent({
 			if (SingleCourse.value) {
 				contentType.value = 'course'
 				contentDetails.id = SingleCourse.value.id
+				contentDetails.route = `/marketplace/${SingleCourse.value.id}?type=course`
 				contentDetails.type = 'course'
 				contentDetails.title = SingleCourse.value.title
 				contentDetails.price = SingleCourse.value.price.amount
@@ -426,6 +427,7 @@ export default defineComponent({
 				contentType.value = 'quiz'
 				contentDetails.type = 'quiz'
 				contentDetails.id = SingleQuiz.value.id
+				contentDetails.route = `/marketplace/${SingleQuiz.value.id}?type=quiz`
 				contentDetails.title = SingleQuiz.value.title
 				contentDetails.price = 0
 				contentDetails.status = SingleQuiz.value.status
@@ -516,7 +518,7 @@ export default defineComponent({
 					similarContents.value.length = 0
 					if (data) {
 						data.forEach((quiz) => {
-							similarContents.value.push(createQuizData(quiz))
+							similarContents.value.push(extractResource(quiz))
 						})
 					}
 				})
@@ -527,7 +529,7 @@ export default defineComponent({
 					similarContents.value.length = 0
 					if (data) {
 						data.forEach((course) => {
-							similarContents.value.push(createCourseData(course))
+							similarContents.value.push(extractResource(course))
 						})
 					}
 				})

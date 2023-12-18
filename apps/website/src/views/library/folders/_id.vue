@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from '@/composables/library'
+import { extractResource, openCourse, openQuiz, showMoreOptionHandler } from '@/composables/library'
 import { useCoursesInList } from '@/composables/study/courses-list'
 import { useFolder } from '@/composables/study/folders'
 import { useQuizzesInList } from '@/composables/study/quizzes-list'
@@ -53,11 +53,10 @@ export default defineComponent({
 
 		const data = computed(() => {
 			if (tab.value === 'all') return [
-				...courses.value.map(createCourseData),
-				...quizzes.value.map(createQuizData)
-			].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === 'courses') return courses.value.map(createCourseData)
-			if (tab.value === 'quizzes') return quizzes.value.map(createQuizData)
+				...courses.value, ...quizzes.value
+			].sort((a, b) => b.createdAt - a.createdAt).map(extractResource)
+			if (tab.value === 'courses') return courses.value.map(extractResource)
+			if (tab.value === 'quizzes') return quizzes.value.map(extractResource)
 			return []
 		})
 

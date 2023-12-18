@@ -56,9 +56,7 @@
 								<sofa-item-card :content="content"
 									custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
 									v-for="(content, index) in resourceContents" :key="index" @click="
-										Logic.Common.GoToRoute(
-											'/marketplace/' + content.id + '?type=course'
-										)
+										Logic.Common.GoToRoute(content.route)
 									" :bookmark-action="() => saveToFolder(content)" />
 							</div>
 
@@ -67,9 +65,7 @@
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
 									<sofa-activity-card v-for="(activity, index) in resourceContents" :key="index" :activity="activity"
 										:custom-class="'cursor-pointer'" @click="
-											Logic.Common.GoToRoute(
-												'/marketplace/' + activity.id + '?type=course'
-											)
+											Logic.Common.GoToRoute(activity.route)
 										" :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
 								</div>
 							</div>
@@ -99,22 +95,14 @@
 							<div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.isLarge">
 								<sofa-item-card :content="content"
 									custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									v-for="(content, index) in quizContents" :key="index" @click="
-										Logic.Common.GoToRoute(
-											'/marketplace/' + content.id + '?type=quiz'
-										)
-									" :bookmark-action="() => saveToFolder(content)" />
+									v-for="(content, index) in quizContents" :key="index" @click="Logic.Common.GoToRoute(content.route)" :bookmark-action="() => saveToFolder(content)" />
 							</div>
 
 							<div
 								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
 									<sofa-activity-card v-for="(activity, index) in quizContents" :key="index" :activity="activity"
-										:custom-class="'cursor-pointer'" @click="
-											Logic.Common.GoToRoute(
-												'/marketplace/' + activity.id + '?type=quiz'
-											)
-										" :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
+										:custom-class="'cursor-pointer'" @click="Logic.Common.GoToRoute(activity.route)" :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
 								</div>
 							</div>
 						</div>
@@ -164,10 +152,7 @@
 
 <script lang="ts">
 import MarketplaceFilter, { SelectedOption } from '@/components/marketplace/Filter.vue'
-import {
-	createCourseData,
-	createQuizData, saveToFolder
-} from '@/composables/library'
+import { extractResource, saveToFolder } from '@/composables/library'
 import { search } from '@/composables/marketplace'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
 import {
@@ -254,8 +239,8 @@ export default defineComponent({
 
 		const AllCourses = ref(Logic.Study.AllCourses)
 		const AllQuzzies = ref(Logic.Study.AllQuzzies)
-		const resourceContents = computed(() => AllCourses.value.results.map(createCourseData))
-		const quizContents = computed(() => AllQuzzies.value.results.map(createQuizData))
+		const resourceContents = computed(() => AllCourses.value.results.map(extractResource))
+		const quizContents = computed(() => AllQuzzies.value.results.map(extractResource))
 		const showFilter = ref(false)
 		const selectedFilterOption = ref(filterOptions[0].id)
 		const searchQuery = ref(Logic.Common.route.query?.q?.toString() ?? '')

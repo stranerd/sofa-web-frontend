@@ -55,7 +55,7 @@ export class UserEntity extends BaseEntity {
 	}
 
 	get orgName () {
-		if (this.type.type === UserType.organization) return this.type.name
+		if (this.type.type === UserType.organization) return this.type.name ?? this.bio.name.full
 		return this.bio.name.full
 	}
 }

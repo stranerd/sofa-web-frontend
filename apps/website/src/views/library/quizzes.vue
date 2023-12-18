@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { createQuizData, openQuiz, showMoreOptionHandler } from '@/composables/library'
+import { extractResource, openQuiz, showMoreOptionHandler } from '@/composables/library'
 import { useMyQuizzes, useTutorQuizzes } from '@/composables/study/quizzes-list'
 import { useRecent } from '@/composables/study/study'
 import { generateMiddlewares } from '@/middlewares'
@@ -47,10 +47,10 @@ export default defineComponent({
 		const { quizzes: recentQuizzes } = useRecent()
 
 		const data = computed(() => {
-			if (tab.value === 'tutors') return tutorQuizzes.value.map(createQuizData)
-			else if (tab.value === 'recent') return recentQuizzes.value.map(createQuizData)
-			else if (tab.value === 'published') return published.value.map(createQuizData)
-			else if (tab.value === 'draft') return draft.value.map(createQuizData)
+			if (tab.value === 'tutors') return tutorQuizzes.value.map(extractResource)
+			else if (tab.value === 'recent') return recentQuizzes.value.map(extractResource)
+			else if (tab.value === 'published') return published.value.map(extractResource)
+			else if (tab.value === 'draft') return draft.value.map(extractResource)
 			return []
 		})
 

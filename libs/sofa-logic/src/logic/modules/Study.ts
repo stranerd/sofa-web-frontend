@@ -113,6 +113,7 @@ export default class Study extends Common {
 	public quizQuestionDeleted = Math.random() * 100000
 	public contentDetails = reactive<ContentDetails>({
 		type: 'course',
+		route: '/marketplace/',
 		price: 0,
 		currency: 'NGN',
 		image: '/images/default.png',

@@ -116,13 +116,7 @@
 							class="mdlg:!w-full mdlg:!grid mdlg:!grid-cols-5 mdlg:!gap-4 mdlg:!px-0 flex flex-row gap-3 py-0 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
 							<sofa-item-card :content="content"
 								custom-class="!col-span-1 mdlg:!w-auto w-[220px] !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-								v-for="(content, index) in userMaterials" :key="index" @click="
-									Logic.Common.GoToRoute(
-										'/marketplace/' +
-											content.id +
-											`?type=${content.labels.main.toLowerCase()}`
-									)
-								"></sofa-item-card>
+								v-for="(content, index) in userMaterials" :key="index" @click="Logic.Common.GoToRoute(content.route)" />
 						</div>
 					</div>
 
@@ -239,10 +233,10 @@
 
 <script lang="ts">
 import { scrollToTop } from '@/composables'
-import { createCourseData, createQuizData } from '@/composables/library'
+import { extractResource } from '@/composables/library'
 import { profileLinks } from '@/composables/profile'
 import { useMyOrganizations } from '@/composables/users/organizations'
-import { Conditions, Logic, QueryParams } from 'sofa-logic'
+import { Conditions, Logic, QueryParams, ResourceType } from 'sofa-logic'
 import {
 	SofaAvatar,
 	SofaButton,
@@ -309,7 +303,7 @@ export default defineComponent({
 		const singleUser = ref(Logic.Users.SingleUser)
 		const allCourses = ref(Logic.Study.AllCourses)
 		const allQuizzes = ref(Logic.Study.AllQuzzies)
-		const userMaterials = ref<any[]>([])
+		const userMaterials = ref<ResourceType[]>([])
 
 		const { code: joinCode, requestToJoinOrganization } = useMyOrganizations()
 
@@ -408,18 +402,13 @@ export default defineComponent({
 		const setMaterials = () => {
 			userMaterials.value.length = 0
 			allCourses.value?.results?.forEach((course) => {
-				userMaterials.value.push(createCourseData(course))
+				userMaterials.value.push(extractResource(course))
 			})
 			allQuizzes.value?.results?.forEach((quiz) => {
-				userMaterials.value.push(createQuizData(quiz))
+				userMaterials.value.push(extractResource(quiz))
 			})
 
-			if (
-				allCourses.value?.results.length ||
-        allQuizzes.value?.results.length
-			) {
-				userHasResources.value = true
-			}
+			if (allCourses.value?.results.length ||  allQuizzes.value?.results.length) userHasResources.value = true
 		}
 
 		const fetchMaterials = () => {

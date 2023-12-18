@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { createCourseData, openCourse, showMoreOptionHandler } from '@/composables/library'
+import { extractResource, openCourse, showMoreOptionHandler } from '@/composables/library'
 import { useMyPurchasedCourses } from '@/composables/study/courses-list'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
@@ -44,7 +44,7 @@ export default defineComponent({
 		const { courses } = useMyPurchasedCourses()
 
 		const data = computed(() => {
-			if (tab.value === 'all') return courses.value.map(createCourseData)
+			if (tab.value === 'all') return courses.value.map(extractResource)
 			return []
 		})
 

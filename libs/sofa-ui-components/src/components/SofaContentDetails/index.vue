@@ -101,13 +101,7 @@
 							</sofa-button>
 						</div>
 						<div class="md:!flex hidden flex-col" v-if="type == 'quiz'">
-							<sofa-button :padding="'px-6 py-1'" @click="
-								hasAccess
-									? openQuiz()
-									: Logic.Common.GoToRoute(
-										`/marketplace/${content.id}?type=course`
-									)
-							">
+							<sofa-button :padding="'px-6 py-1'" @click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(content.route)">
 								{{ hasAccess ? "Start" : "Go to course" }}
 							</sofa-button>
 						</div>
@@ -137,8 +131,7 @@
 			<sofa-content :data="content.content" :hasAccess="hasAccess" />
 		</div>
 
-		<div :class="`w-full flex flex-col h-full  rounded-b-[16px]  ${hasPadding ? 'px-4' : ''
-		} overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
+		<div :class="`w-full flex flex-col h-full  rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
 			<div class="w-full flex flex-col gap-3 h-full overflow-y-auto" v-if="hasAccess">
 				<div class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom"
 					v-for="(question, index) in content.questions" :key="index">
@@ -158,35 +151,21 @@
 
 			<div class="w-full flex flex-col gap-3 pb-4" v-if="!hasAccess">
 				<sofa-empty-state :title="'You have no access'" :subTitle="'Get the course it is in to use'"
-					:actionLabel="'Go to course'" :action="() => {
-						Logic.Common.GoToRoute(
-							`/marketplace/${content.courseId}?type=course`
-						)
-					}
-					" :icon="{
-						name: 'lock-white',
-						size: 'h-[28px]',
-					}" />
+					:actionLabel="'Go to course'" :action="() => Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)"
+					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
 
 			<div v-if="type == 'quiz'"
 				class="w-full flex flex-row items-center justify-center mdlg:!pt-3 mdlg:!relative fixed bottom-0 mdlg:!pb-0 mdlg:hidden pt-4 pb-4 mdlg:!px-0 px-4 z-[50] bg-white left-0 mdlg:!bottom-auto mdlg:!left-auto">
 				<div class="md:!w-auto w-full flex flex-col">
-					<sofa-button :padding="'md:!py-1 py-3 px-4'" :customClass="'md:!w-auto w-full'" @click="
-						hasAccess
-							? openQuiz()
-							: Logic.Common.GoToRoute(
-								`/marketplace/${content.courseId}?type=course`
-							)
-					">
+					<sofa-button :padding="'md:!py-1 py-3 px-4'" :customClass="'md:!w-auto w-full'" @click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)">
 						{{ hasAccess ? "Start" : "Go to course" }}
 					</sofa-button>
 				</div>
 			</div>
 		</div>
 
-		<div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-		} overflow-y-auto py-2 relative`" v-if="selectedTab == 'ratings'">
+		<div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`" v-if="selectedTab == 'ratings'">
 			<sofa-content-ratings :data="content.ratings" />
 		</div>
 
@@ -263,7 +242,7 @@
 					class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
 					<sofa-activity-card v-for="(activity, index) in similarContents" :key="index" :activity="activity"
 						:customClass="'!bg-lightGray cursor-pointer'"
-						@click="Logic.Common.GoToRoute(`/marketplace/${activity.id}`)" />
+						@click="Logic.Common.GoToRoute(activity.route)" />
 				</div>
 			</div>
 			<template v-else>
@@ -296,7 +275,7 @@
 	</div>
 </template>
 <script lang="ts">
-import { ContentDetails, Logic } from 'sofa-logic'
+import { ContentDetails, Logic, ResourceType } from 'sofa-logic'
 import { defineComponent, onMounted, PropType, ref, toRef, watch } from 'vue'
 import SofaActivityCard from '../SofaActivityCard'
 import SofaAvatar from '../SofaAvatar'
@@ -369,7 +348,7 @@ export default defineComponent({
 			default: false,
 		},
 		similarContents: {
-			type: Array as () => any[],
+			type: Array as () => ResourceType[],
 		},
 		otherTasks: {
 			type: Array as () => any[],

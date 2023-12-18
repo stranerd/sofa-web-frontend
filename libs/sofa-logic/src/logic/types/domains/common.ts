@@ -25,6 +25,7 @@ export interface Paginated<D> {
 
 export interface ContentDetails {
   type: string
+  route: string
   price: number
   currency: string
   image: string

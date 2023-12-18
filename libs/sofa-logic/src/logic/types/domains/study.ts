@@ -202,6 +202,7 @@ export interface ResourceType {
   user: SingleUser
   authUserId: string | undefined
   subject: string
+  route: string
   labels: {
     main: string
     sub: string

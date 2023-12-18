@@ -31,12 +31,13 @@ export const saveToFolder = (activity: { id: string, type: string }) => {
 export const createQuizData = (quiz: Quiz): ResourceType => {
 	return {
 		title: quiz.title,
-		image: quiz.photo ? quiz.photo.link : '/images/default.png',
+		image: quiz.photo?.link ?? '/images/default.png',
 		labels: {
 			color: 'pink',
 			main: 'Quiz - Learn',
 			sub: `${quiz.questions.length} questions`,
 		},
+		route: `/marketplace/${quiz.id}?type=quiz`,
 		progress: 0,
 		subject: Logic.Study.GetTagName(quiz.topicId),
 		id: quiz.id,
@@ -54,13 +55,14 @@ export const createQuizData = (quiz: Quiz): ResourceType => {
 export const createCourseData = (course: Course): ResourceType => {
 	return {
 		title: course.title,
-		image: course.photo ? course.photo.link : '/images/default.png',
+		image: course.photo?.link ?? '/images/default.png',
 		labels: {
 			color: 'orange',
 			main: 'Course',
 			sub: `${course.sections.length} topics`,
 		},
 		price: course.price,
+		route: `/marketplace/${course.id}?type=course`,
 		progress: 0,
 		subject: Logic.Study.GetTagName(course.topicId),
 		user: course.user,
@@ -73,6 +75,11 @@ export const createCourseData = (course: Course): ResourceType => {
 		ratings: course.ratings,
 		createdAt: course.createdAt,
 	}
+}
+
+export const extractResource = (material: Course | Quiz) => {
+	if (material.__type === 'QuizEntity') return createQuizData(material)
+	return createCourseData(material)
 }
 
 export const createGameData = (p: Game, quizzes: Quiz[]) => {
@@ -216,7 +223,7 @@ const moreOptions = reactive([
 			showMoreOptions.value = false
 			shareMaterialLink(
 				selectedItem.value?.type ?? ('' as any),
-				`/marketplace/${selectedItem.value?.id}?type=${selectedItem.value?.id}`,
+				selectedItem.value?.route ?? '',
 				selectedItem.value?.title ?? '',
 			)
 		},

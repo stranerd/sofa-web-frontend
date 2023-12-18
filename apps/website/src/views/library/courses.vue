@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { createCourseData, openCourse, showMoreOptionHandler } from '@/composables/library'
+import { extractResource, openCourse, showMoreOptionHandler } from '@/composables/library'
 import { useMyCourses } from '@/composables/study/courses-list'
 import { useRecent } from '@/composables/study/study'
 import { generateMiddlewares } from '@/middlewares'
@@ -46,9 +46,9 @@ export default defineComponent({
 		const { courses: recentCourses } = useRecent()
 
 		const data = computed(() => {
-			if (tab.value === 'recent') return recentCourses.value.map(createCourseData)
-			else if (tab.value === 'published') return published.value.map(createCourseData)
-			else if (tab.value === 'draft') return draft.value.map(createCourseData)
+			if (tab.value === 'recent') return recentCourses.value.map(extractResource)
+			else if (tab.value === 'published') return published.value.map(extractResource)
+			else if (tab.value === 'draft') return draft.value.map(extractResource)
 			return []
 		})
 

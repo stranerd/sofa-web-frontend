@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/library/LibraryLayout.vue'
-import { createCourseData, createQuizData, openCourse, openQuiz, showMoreOptionHandler } from '@/composables/library'
+import { extractResource, openCourse, openQuiz, showMoreOptionHandler } from '@/composables/library'
 import { useUsersMaterials } from '@/composables/study/users-materials'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
@@ -48,11 +48,10 @@ export default defineComponent({
 
 		const data = computed(() => {
 			if (tab.value === 'all') return [
-				...courses.map(createCourseData),
-				...quizzes.map(createQuizData)
-			].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === 'courses') return courses.map(createCourseData)
-			if (tab.value === 'quizzes') return quizzes.map(createQuizData)
+				...courses, ...quizzes
+			].sort((a, b) => b.createdAt - a.createdAt).map(extractResource)
+			if (tab.value === 'courses') return courses.map(extractResource)
+			if (tab.value === 'quizzes') return quizzes.map(extractResource)
 			return []
 		})
 
