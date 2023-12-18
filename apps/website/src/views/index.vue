@@ -1,5 +1,5 @@
 <template>
-	<HomeLayout title="Dashboard">
+	<HomeLayout title="Dashboard" :index="true">
 		<HomeForStudents v-if="userType.isStudent" />
 		<HomeForNonStudents v-else />
 	</HomeLayout>

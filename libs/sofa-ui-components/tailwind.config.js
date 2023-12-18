@@ -17,7 +17,7 @@ module.exports = {
 				fadedPurple: '#EFF4F9',
 				deepGray: '#141618',
 				skyBlue: '#E6F5FF',
-				lightGray: '#F1F6FB',
+				lightGray: '#F1F6FA',
 				hoverBlue: '#7DC8FA',
 				darkBody: '#050F19',
 				darkLightGray: '#E1E6EB',

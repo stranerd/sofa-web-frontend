@@ -1,10 +1,21 @@
 import { Logic } from 'sofa-logic'
+import { NetworkError, StatusCodes } from '@modules/core'
 import { ref } from 'vue'
+import { useAuth } from '../auth/auth'
 
 export const useErrorHandler = () => {
 	const errorState = ref('')
 	const setError = async (error: any, skipAlert = false) => {
-		errorState.value = error?.message ?? error?.error ?? error
+		if (error instanceof NetworkError) {
+			errorState.value = error.errors
+				.map(({ message, field }) => `${Logic.capitalize(field ?? 'Error')}: ${message}`)
+				.join('\n')
+			if ([
+				StatusCodes.NotAuthenticated,
+				StatusCodes.AccessTokenExpired,
+				StatusCodes.RefreshTokenMisused
+			].includes(error.statusCode)) await useAuth().signout()
+		} else errorState.value = error?.message ?? error?.error ?? error
 		if (errorState.value && !skipAlert) Logic.Common.showAlert({ message: errorState.value, type: 'error' })
 	}
 	return { error: errorState, setError }

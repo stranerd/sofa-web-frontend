@@ -65,15 +65,6 @@
 		</template>
 
 		<template v-slot:middle-session>
-			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
-				<div class="bg-white flex flex-col shadow-custom rounded-custom">
-					<router-link :to="item.route" class="w-full flex items-center gap-3 p-4 border-b border-lightGray"
-						v-for="item in options" :key="item.route">
-						<SofaIcon :name="item.icon" class="h-[16px] fill-current" />
-						<SofaNormalText color="text-inherit" :content="item.title" />
-					</router-link>
-				</div>
-			</div>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto">
 				<slot :user="user!" :extras="extras" />
 			</div>
