@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-6">
-		<SofaHeaderText color="text-inherit" class="!text-lg !font-bold" content="Overview" />
+		<SofaNormalText class="!font-bold" content="Overview" />
 
 		<div class="grid grid-cols-2 md:grid-cols-2 gap-4">
 			<div v-for="stat in [
@@ -58,7 +58,7 @@ import { computed } from 'vue'
 
 const { id, user } = useAuth()
 
-const { courses, quizzes } = useUsersMaterials(id.value)
+const { courses, quizzes } = useUsersMaterials(id.value, { user: true })
 const materials = computed(() => [...quizzes, ...courses]
 	.sort((a, b) => b.createdAt - a.createdAt)
 	.map(extractContent))
