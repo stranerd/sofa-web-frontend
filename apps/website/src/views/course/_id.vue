@@ -19,14 +19,14 @@
 							</div>
 						</div>
 
-						<sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked"
+						<sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked(SingleCourse)"
 							v-model="selectedMaterial" />
 					</div>
 				</div>
 			</div>
 			<div :class="`mdlg:col-span-8 flex flex-col col-span-full ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
 			} `">
-				<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked" :selected-material="selectedMaterial"
+				<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selected-material="selectedMaterial"
 					:show-study-mode="() => {
 						showStudyMode = true
 					}
@@ -53,7 +53,7 @@
 						</sofa-normal-text>
 					</div>
 
-					<sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked"
+					<sofa-course-content @OnMaterialSelected="handleItemSelected" :lockContent="!isUnlocked(SingleCourse)"
 						v-model="selectedMaterial" @onCourseContentSet="handleCourseContentSet" />
 				</template>
 
@@ -61,7 +61,7 @@
 					<div class="flex flex-col w-full">
 						<div :class="`w-full flex flex-col col-span-full  ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
 						} `">
-							<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked" :selected-material="selectedMaterial"
+							<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selected-material="selectedMaterial"
 								:show-study-mode="() => {
 									showStudyMode = true
 								}
@@ -243,6 +243,7 @@
 <script lang="ts">
 import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
 import CourseContent from '@/components/courses/content.vue'
+import { useHasAccess } from '@/composables/study/study'
 import { Conditions, Logic } from 'sofa-logic'
 import {
 	SofaButton,
@@ -253,7 +254,7 @@ import {
 	SofaModal,
 	SofaNormalText,
 } from 'sofa-ui-components'
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
@@ -284,14 +285,6 @@ export default defineComponent({
 				property: 'Tags',
 				method: 'GetTags',
 				params: [],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
-				domain: 'Payment',
-				property: 'PurchasedItems',
-				method: 'GetUserPurchases',
-				params: [false],
 				requireAuth: true,
 				ignoreProperty: false,
 			},
@@ -343,7 +336,6 @@ export default defineComponent({
 
 		const UserWallet = ref(Logic.Payment.UserWallet)
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
-		const PurchasedItems = ref(Logic.Payment.PurchasedItems)
 		const selectedMethodId = ref('')
 		const showMakePaymentModal = ref(false)
 
@@ -361,12 +353,7 @@ export default defineComponent({
 
 		const showRateCourse = ref(false)
 
-		const isUnlocked = computed(() => [
-			PurchasedItems.value.includes(SingleCourse.value?.id),
-			SingleCourse.value?.user.id === Logic.Auth.AuthUser?.id,
-			SingleCourse.value?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
-			Logic.Users.UserProfile?.account.organizationsIn.find((o) => o.id === SingleCourse.value?.user.id) && SingleCourse.value?.user.roles.isSubscribed
-		].some((x) => x))
+		const { hasAccess: isUnlocked } = useHasAccess()
 
 		const handleItemSelected = (data: any) => {
 			if (data) {
@@ -397,7 +384,7 @@ export default defineComponent({
 		}
 
 		const selectItem = (material: any) => {
-			if (PurchasedItems.value.includes(SingleCourse.value?.id)) {
+			if (isUnlocked.value(SingleCourse.value)) {
 				selectedMaterial.value = {
 					id: material.id,
 					data: material.data,
@@ -493,7 +480,6 @@ export default defineComponent({
 
 		onMounted(() => {
 			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
-			Logic.Payment.watchProperty('PurchasedItems', PurchasedItems)
 			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
@@ -523,7 +509,6 @@ export default defineComponent({
 			PaymentMethods,
 			showMakePaymentModal,
 			selectedMethodId,
-			PurchasedItems,
 			UserWallet,
 			courseContents,
 			showRateCourse,

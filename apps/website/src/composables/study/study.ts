@@ -1,6 +1,8 @@
 import { Course, Logic, Quiz } from 'sofa-logic'
 import { Ref, computed, onMounted, ref } from 'vue'
+import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useMyPurchases } from '../payment/purchases'
 
 const store: Record<string, {
 	materials: Ref<(Quiz | Course)[]>,
@@ -55,4 +57,22 @@ export const useRecent = () => {
 		.filter((m) => m.__type === 'CourseEntity') as Course[])
 
 	return { quizzes, courses }
+}
+
+export const useHasAccess = () => {
+	const { user } = useAuth()
+	const { purchasesCoursesIds } = useMyPurchases()
+	const hasAccess = computed(() => (material: Quiz | Course | null) => {
+		if (!material) return false
+		return [
+			material.__type === 'QuizEntity' && !material.courseId,
+			purchasesCoursesIds.value.includes(material.__type === 'QuizEntity' ? material.courseId : material.id),
+			material.user.id === user.value?.id,
+			material.__type === 'QuizEntity' && material.access.members.includes(user.value?.id),
+			material.user.roles?.isOfficialAccount && user.value?.roles.isSubscribed,
+			user.value?.account.organizationsIn.find((o) => o.id === material.user.id) && material.user.roles.isSubscribed
+		].some((v) => v)
+	})
+
+	return { hasAccess }
 }

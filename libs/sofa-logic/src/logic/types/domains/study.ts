@@ -197,6 +197,7 @@ export interface QuizQuestion {
 }
 
 export interface ResourceType {
+  original: Course | Quiz
   title: string
   image: string
   user: SingleUser

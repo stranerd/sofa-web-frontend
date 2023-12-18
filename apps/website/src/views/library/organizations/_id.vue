@@ -1,5 +1,5 @@
 <template>
-	<LibraryLayout :title="user?.type?.name ?? user?.bio.name.full ?? 'Not found'" :options="[
+	<LibraryLayout :title="user?.orgName ?? 'Not found'" :options="[
 		{ name: 'All', id: 'all' },
 		{ name: 'Courses', id: 'courses' },
 		{ name: 'Quizzes', id: 'quizzes' },

@@ -6,7 +6,7 @@ import {
 	Test
 } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
-import { selectedQuizId, selectedQuizMode } from './quiz'
+import { selectedQuiz, selectedQuizMode } from './quiz'
 
 const AllQuzzies = ref(Logic.Study.AllQuzzies)
 
@@ -30,6 +30,7 @@ export const saveToFolder = (activity: { id: string, type: string }) => {
 
 export const createQuizData = (quiz: Quiz): ResourceType => {
 	return {
+		original: quiz,
 		title: quiz.title,
 		image: quiz.photo?.link ?? '/images/default.png',
 		labels: {
@@ -54,6 +55,7 @@ export const createQuizData = (quiz: Quiz): ResourceType => {
 
 export const createCourseData = (course: Course): ResourceType => {
 	return {
+		original: course,
 		title: course.title,
 		image: course.photo?.link ?? '/images/default.png',
 		labels: {
@@ -142,22 +144,16 @@ const addMaterialToFolder = (
 	Logic.Study.SaveItemToFolder(true)
 }
 
-const openQuiz = <T extends Pick<ResourceType, 'status' | 'user' | 'id'>>(activity: T) => {
-	if (
-		activity.status == 'draft' &&
-    activity.user.id === Logic.Users.UserProfile?.id
-	)
+const openQuiz = (activity: ResourceType) => {
+	if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id)
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
-	selectedQuizId.value = activity.id
+	selectedQuiz.value = activity.original as Quiz
 	showStudyMode.value = true
 	selectedQuizMode.value = ''
 }
 
 const openCourse = (activity: ResourceType) => {
-	if (
-		activity.status == 'draft' &&
-    activity.user.id === Logic.Users.UserProfile?.id
-	)
+	if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id)
 		return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
 	Logic.Common.GoToRoute(`/course/${activity.id}`)
 }

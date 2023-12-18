@@ -43,19 +43,19 @@ export class UserEntity extends BaseEntity {
 	}
 
 	get isOnline () {
-		return this.status.connections.length > 0
+		return this.rawThis.status.connections.length > 0
 	}
 
 	get lastSeen () {
-		return this.isOnline ? Date.now() : this.status.lastUpdatedAt
+		return this.rawThis.isOnline ? Date.now() : this.rawThis.status.lastUpdatedAt
 	}
 
 	get score () {
-		return this.account.rankings.overall.value
+		return this.rawThis.account.rankings.overall.value
 	}
 
 	get orgName () {
-		if (this.type.type === UserType.organization) return this.type.name ?? this.bio.name.full
-		return this.bio.name.full
+		if (this.rawThis.type.type === UserType.organization) return this.rawThis.type.name
+		return this.rawThis.bio.name.full
 	}
 }

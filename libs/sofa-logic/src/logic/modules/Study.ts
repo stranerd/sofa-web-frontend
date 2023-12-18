@@ -112,6 +112,7 @@ export default class Study extends Common {
 	public quizDataUpdate = Math.random() * 100000
 	public quizQuestionDeleted = Math.random() * 100000
 	public contentDetails = reactive<ContentDetails>({
+		original: null,
 		type: 'course',
 		route: '/marketplace/',
 		price: 0,

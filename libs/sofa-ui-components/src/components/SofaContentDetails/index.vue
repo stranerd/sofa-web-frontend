@@ -92,7 +92,7 @@
 								{{
 									content.price > 0
 										? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
-										: "Start"
+										: "Get course for free"
 								}}
 							</sofa-button>
 							<sofa-button v-else :padding="'px-6 py-1'" :customClass="'w-auto'"
@@ -265,7 +265,7 @@
 			{{
 				content.price > 0
 					? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
-					: "Start"
+					: "Get course for free"
 			}}
 		</sofa-button>
 		<sofa-button v-else :padding="'px-6 py-3'" :customClass="'w-full'"

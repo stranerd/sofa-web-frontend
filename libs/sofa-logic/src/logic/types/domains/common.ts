@@ -1,4 +1,5 @@
 import { Media } from '@modules/core'
+import { Course, Quiz } from './study'
 
 export interface ValidationError {
   field: string
@@ -24,6 +25,7 @@ export interface Paginated<D> {
 }
 
 export interface ContentDetails {
+  original: Quiz | Course | null
   type: string
   route: string
   price: number

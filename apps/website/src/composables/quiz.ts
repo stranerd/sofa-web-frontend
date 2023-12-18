@@ -1,20 +1,20 @@
-import { Logic } from 'sofa-logic'
+import { Logic, Quiz } from 'sofa-logic'
 import { ref } from 'vue'
 import { showStudyMode } from './library'
 
-export const selectedQuizId = ref('')
+export const selectedQuiz = ref<Quiz | null>(null)
 
 export const selectedQuizMode = ref('')
 
 export const userIsParticipating = ref(true)
 
-export const goToStudyMode = async (id: string, type: string) => {
-	selectedQuizId.value = id
+export const goToStudyMode = async (quiz: Quiz, type: string) => {
+	selectedQuiz.value = quiz
 	selectedQuizMode.value = type
 
-	await Logic.Study.GoToStudyMode(type, id)
-
 	if (type == 'game') return showStudyMode.value = true
+
+	await Logic.Study.GoToStudyMode(type, quiz.id)
 	showStudyMode.value = false
 }
 
@@ -62,11 +62,11 @@ export const otherTasks = [
 ]
 
 export const createQuizGame = async () => {
-	if (!selectedQuizId.value) return
+	if (!selectedQuiz.value) return
 	Logic.Common.showLoading()
 
 	Logic.Plays.CreateGameForm = {
-		quizId: selectedQuizId.value,
+		quizId: selectedQuiz.value?.id,
 		join: userIsParticipating.value
 	}
 

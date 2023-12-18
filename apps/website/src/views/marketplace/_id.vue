@@ -19,7 +19,7 @@
 		</div>
 		<div class="w-full bg-white rounded-[16px] flex flex-col flex-grow overflow-y-auto">
 			<sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
-				:buyAction="buyCourse" :hasAccess="userHasAccess" :similarContents="similarContents" :type="contentType"
+				:buyAction="buyCourse" :hasAccess="userHasAccess(contentDetails.original)" :similarContents="similarContents" :type="contentType"
 				:contentId="contentDetails.id" :otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)"
 				:actions="{
 					report: () => {
@@ -127,6 +127,7 @@ import {
 	shareMaterialLink
 } from '@/composables/library'
 import { otherTasks } from '@/composables/quiz'
+import { useHasAccess } from '@/composables/study/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
 import {
@@ -137,7 +138,7 @@ import {
 	SofaModal,
 	SofaNormalText,
 } from 'sofa-ui-components'
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
@@ -229,14 +230,6 @@ export default defineComponent({
 			},
 			{
 				domain: 'Payment',
-				property: 'PurchasedItems',
-				method: 'GetUserPurchases',
-				params: [false],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
-				domain: 'Payment',
 				property: 'PaymentMethods',
 				method: 'GetPaymentMethods',
 				params: [
@@ -267,13 +260,7 @@ export default defineComponent({
 
 		const UserWallet = ref(Logic.Payment.UserWallet)
 
-		const userHasAccess = computed(() => [
-			PurchasedItems.value.includes(SingleCourse.value?.id),
-			contentDetails?.user.id === Logic.Auth.AuthUser?.id,
-			contentDetails?.user.roles?.isOfficialAccount && Logic.Auth.AuthUser?.roles?.isSubscribed,
-			Logic.Users.UserProfile?.account.organizationsIn.find((o) => o.id === contentDetails?.user.id) && contentDetails?.user.roles.isSubscribed
-		].some((x) => x))
-
+		const { hasAccess: userHasAccess } = useHasAccess()
 
 		const tabItems = [
 			{
@@ -305,7 +292,6 @@ export default defineComponent({
 		const AllQuestions = ref(Logic.Study.AllQuestions)
 
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
-		const PurchasedItems = ref(Logic.Payment.PurchasedItems)
 
 		const AllReviews = ref(Logic.Study.AllReviews)
 
@@ -319,6 +305,7 @@ export default defineComponent({
 
 		const setCourseData = () => {
 			if (SingleCourse.value) {
+				contentDetails.original = SingleCourse.value
 				contentType.value = 'course'
 				contentDetails.id = SingleCourse.value.id
 				contentDetails.route = `/marketplace/${SingleCourse.value.id}?type=course`
@@ -424,6 +411,7 @@ export default defineComponent({
 
 		const setQuizData = () => {
 			if (SingleQuiz.value) {
+				contentDetails.original = SingleQuiz.value
 				contentType.value = 'quiz'
 				contentDetails.type = 'quiz'
 				contentDetails.id = SingleQuiz.value.id
@@ -557,7 +545,6 @@ export default defineComponent({
 				contentType.value = Logic.Common.route.query?.type?.toString()
 			}
 			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
-			Logic.Payment.watchProperty('PurchasedItems', PurchasedItems)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleCourseFiles', SingleCourseFiles)
 			Logic.Study.watchProperty('SingleCourseQuizzes', SingleCourseQuizzes)
@@ -601,7 +588,6 @@ export default defineComponent({
 			PaymentMethods,
 			showMakePaymentModal,
 			selectedMethodId,
-			PurchasedItems,
 			UserWallet,
 			similarContents,
 			SingleQuiz,

@@ -6,6 +6,7 @@ import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
+import { useHasAccess } from './study'
 
 const store = {} as Record<string, {
 	quiz: Ref<Quiz | null>
@@ -36,8 +37,10 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	const router = useRouter()
 	const { id: authId } = useAuth()
 
-	const canFetchUsers = computed(() => !skip.members && store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id).includes(authId.value))
-	const canFetchQuestions = computed(() => !skip.questions && store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id).includes(authId.value))
+	const { hasAccess } = useHasAccess()
+
+	const canFetchUsers = computed(() => !skip.members && hasAccess.value(store[id].quiz.value))
+	const canFetchQuestions = computed(() => !skip.questions && hasAccess.value(store[id].quiz.value))
 
 	const { users: members } = useUsersInList(computed(() => canFetchUsers.value ? store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id, ...store[id].quiz.value.access.requests) ?? [] :[]), !skip.members)
 	const { questions } = useQuestionsInList(id, computed(() => canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : []), !skip.questions)

@@ -1,9 +1,10 @@
 import { Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
 import { Ref, onMounted, reactive, ref } from 'vue'
+import { UserEntity, UsersUseCases } from '@modules/users'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const store = {} as Record<string, {
-	user: Ref<SingleUser | null>
+	user: Ref<UserEntity | null>
 	quizzes: Quiz[]
 	courses: Course[]
 	fetched: Ref<boolean>
@@ -23,7 +24,7 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			if (!skip.user) store[id].user.value = await Logic.Users.GetUser(id)
+			if (!skip.user) store[id].user.value = await UsersUseCases.find(id)
 			const query: QueryParams = {
 				where: [{ field: 'user.id', value: id }, { field: 'status', value: 'published' }],
 				all: true, // TODO: implement pagination

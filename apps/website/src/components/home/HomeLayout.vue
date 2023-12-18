@@ -119,7 +119,7 @@
 				</div>
 			</div>
 
-			<div v-if="!userType.isStudent && !user.roles.isVerified"
+			<div v-if="!user.roles.isVerified"
 				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<div class="w-full flex gap-2 items-center">
 					<SofaNormalText class="!font-bold" content="Get verified" />
@@ -256,6 +256,6 @@ const extras = computed(() => ({
 }))
 
 const shareUrl = `${window.location.origin}/profile/${id.value}`
-const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.orgName}`, shareUrl)
+const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.orgName ?? ''}`, shareUrl)
 const copy = () => Logic.Common.copy(shareUrl)
 </script>
