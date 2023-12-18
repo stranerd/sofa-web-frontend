@@ -247,12 +247,14 @@ const { addMembersEmails, addMembers, removeMember, acceptMember } = useManageOr
 const { conversations } = useConversationsList()
 const { factory, createConversation } = useCreateConversation()
 
-const options = [
+const options = computed(() => [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/' },
 	//{ title: 'Classes', icon: 'classes', route: '/classes' },
-	{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
-	{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
-]
+	...(userType.value.isOrg ? [
+		{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
+		{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
+	] : []),
+])
 
 const addModalType = ref<MemberTypes | null>(null)
 

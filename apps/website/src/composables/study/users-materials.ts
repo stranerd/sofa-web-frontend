@@ -9,7 +9,7 @@ const store = {} as Record<string, {
 	fetched: Ref<boolean>
 } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
 
-export const useUsersMaterials = (id: string) => {
+export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> = {}) => {
 	store[id] ??= {
 		user: ref(null),
 		quizzes: reactive([]),
@@ -23,7 +23,7 @@ export const useUsersMaterials = (id: string) => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			store[id].user.value = await Logic.Users.GetUser(id)
+			if (!skip.user) store[id].user.value = await Logic.Users.GetUser(id)
 			const query: QueryParams = {
 				where: [{ field: 'user.id', value: id }, { field: 'status', value: 'published' }],
 				all: true, // TODO: implement pagination

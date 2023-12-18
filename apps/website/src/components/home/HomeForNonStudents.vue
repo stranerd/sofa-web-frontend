@@ -8,8 +8,8 @@
 					// { label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
 					{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
 					{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
-					{ label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
-					{ label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
+					// { label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
+					// { label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
 				]" :key="stat.label"
 				class="flex items-center gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">
 				<div class="flex flex-col items-start">
@@ -25,12 +25,41 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
+		<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
+			<SofaNormalText class="!font-bold" content="My study materials" />
+			<SofaNormalText color="text-primaryPink" as="router-link" to="/library" class="mdlg:hidden"
+				content="View all" />
+		</div>
+
+		<div v-if="materials.length"
+			class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+			<SofaActivityCard v-for="activity in materials.slice(4)" as="router-link" :key="activity.id"
+				:activity="activity" :to="activity.route" :hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)"
+				class="flex-shrink-0" />
+		</div>
+		<SofaEmptyState v-else title="No materials found" subTitle="You have not created any materials so far"
+			customClass="!h-[230px] mr-4 mdlg:mr-0" />
+
+		<SofaNormalText v-if="materials.length" color="text-primaryPink" class="pr-4 hidden mdlg:inline" as="router-link"
+			to="/library" content="View all" />
+	</div>
 </template>
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
+import { saveToFolder } from '@/composables/library'
+import { extractContent } from '@/composables/marketplace'
+import { useUsersMaterials } from '@/composables/study/users-materials'
 import { Logic } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { SofaActivityCard, SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { computed } from 'vue'
 
-const { user } = useAuth()
+const { id, user } = useAuth()
+
+const { courses, quizzes } = useUsersMaterials(id.value)
+const materials = computed(() => [...quizzes, ...courses]
+	.sort((a, b) => b.createdAt - a.createdAt)
+	.map(extractContent))
 </script>
