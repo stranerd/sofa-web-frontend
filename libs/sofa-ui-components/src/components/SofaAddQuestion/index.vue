@@ -22,7 +22,7 @@
 					</div>
 
 					<div class="w-full h-[144px] bg-cover"
-						:style="`background-image: url('/images/${Logic.Study.getQuestionTypeImage(element.type)}.svg')`">
+						:style="`background-image: url('/images/${Logic.Study.getQuestionTypeImage(factory.entityId === element.id ? factory.type : element.type)}.svg')`">
 						<div class="h-full w-full hidden group-hover:flex gap-3 items-center justify-center">
 							<a @click.stop="emits('duplicateQuestion', element)"
 								class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center">

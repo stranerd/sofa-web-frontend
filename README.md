@@ -1,11 +1,5 @@
 # Getting Started
 
-## Installation
-pnpm i
-
-## Running project
-pnpm --filter ./apps/website dev
-
 ```bash
 $ git clone https://github.com/stranerd/sofa-web-frontend
 $ cd sofa-web-frontend
