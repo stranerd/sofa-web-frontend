@@ -4,7 +4,9 @@ import { Notify } from '@utils/dialog' */
 import { isWeb } from '@utils/constants'
 import { addToArray, formatNumber, groupBy, pluralize } from 'valleyed'
 
-export { addToArray, formatNumber, groupBy, pluralize }
+import * as valleyed from 'valleyed'
+
+export { addToArray, formatNumber, groupBy, pluralize, valleyed }
 
 export const copyToClipboard = async (text: string) => {
 	throw new Error(`Not implemented: ${text}`)

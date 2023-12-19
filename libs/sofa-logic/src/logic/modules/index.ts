@@ -10,7 +10,7 @@ import Schools from './Schools'
 import Study from './Study'
 import Users from './Users'
 
-import * as valleyed from 'valleyed'
+import { valleyed } from '@utils/commons'
 
 const study = new Study()
 
