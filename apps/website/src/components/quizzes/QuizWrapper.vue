@@ -70,19 +70,19 @@ const { time: runTime, countdown: runCountdown } = useCountdown()
 const index = ref(0)
 const selectedQuestionId = ref(props.selectedQuestion)
 const answers = reactive<Record<string, any>>({})
-const currentQuestion = computed(() => quizQuestions.value.at(index.value))
+const currentQuestionByIndex = computed(() => quizQuestions.value.at(index.value))
 const currentQuestionById = computed(() => quizQuestions.value.find((q) => q.id === selectedQuestionId.value))
 const answer = computed({
-	get: () => currentQuestion.value ? answers[currentQuestion.value.id] ?? currentQuestion.value.defaultAnswer : [],
+	get: () => currentQuestionByIndex.value ? answers[currentQuestionByIndex.value.id] ?? currentQuestionByIndex.value.defaultAnswer : [],
 	set: (val) => {
-		answers[currentQuestion.value?.id] = val
+		answers[currentQuestionByIndex.value?.id] = val
 	}
 })
 const quizFactory = new QuizFactory()
 const questionFactory = new QuestionFactory()
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
-	const question = currentQuestion.value
+	const question = currentQuestionByIndex.value
 	if (!question) return null
 	if (props.showAnswer && question.data) {
 		if (question.strippedData.type === 'multipleChoice') {
@@ -115,13 +115,13 @@ const moveCurrrentQuestionToEnd = () => {
 
 const nextQ = async (newIndex: number) => {
 	index.value = newIndex
-	if (props.useTimer) runCountdown({ time: currentQuestion.value?.timeLimit }).then(submitAnswer)
+	if (props.useTimer) runCountdown({ time: currentQuestionByIndex.value?.timeLimit }).then(submitAnswer)
 }
 
 const submitAnswer = async () => {
-	if (!currentQuestion.value) return
+	if (!currentQuestionByIndex.value) return
 	const res = await props.submit?.({
-		questionId: currentQuestion.value.id,
+		questionId: currentQuestionByIndex.value.id,
 		answer: answer.value
 	})
 	if (!res) return
@@ -130,8 +130,8 @@ const submitAnswer = async () => {
 }
 
 const saveCurrentQuestion = async () => {
-	if (!currentQuestion.value || !questionFactory.valid) return
-	await saveQuestion(currentQuestion.value.id, await questionFactory.toModel())
+	if (!currentQuestionById.value || !questionFactory.valid) return
+	await saveQuestion(currentQuestionById.value.id, await questionFactory.toModel())
 }
 
 const updateQuiz = async () => {
@@ -159,7 +159,7 @@ const extras = computed(() => ({
 		answer.value = v
 	},
 	get fractionTimeLeft () {
-		const duration = currentQuestion.value?.timeLimit ?? 0
+		const duration = currentQuestionByIndex.value?.timeLimit ?? 0
 		if (duration === 0) return 0
 		return runTime.value / duration
 	},
@@ -174,7 +174,7 @@ const extras = computed(() => ({
 	currentQuestionById: currentQuestionById.value,
 	started: started.value,
 	startCountdown: startTime.value,
-	question: currentQuestion.value,
+	question: currentQuestionByIndex.value,
 	questionFactory, quizFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions, deleteQuestion, addQuestion, duplicateQuestion, deleteQuiz,
