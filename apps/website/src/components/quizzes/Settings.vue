@@ -4,11 +4,13 @@
 		<div class="flex flex-col flex-grow overflow-y-auto gap-4">
 			<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 				<div class="col-span-1 w-full flex flex-col gap-3">
-					<SofaTextField custom-class="rounded-custom !bg-lightGray" padding="md:!p-4 p-3" type="text" name="Title"
-						v-model="factory.title" placeholder="Title" borderColor="border-transparent" :error="factory.errors.title" />
+					<SofaTextField custom-class="rounded-custom !bg-lightGray" padding="md:!p-4 p-3" type="text"
+						name="Title" v-model="factory.title" placeholder="Title" borderColor="border-transparent"
+						:error="factory.errors.title" />
 
-					<SofaTextarea :hasTitle="false" :rows="4" textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
-						placeholder="Description" v-model="factory.description" :error="factory.errors.description" />
+					<SofaTextarea :hasTitle="false" :rows="4"
+						textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3 resize-none" placeholder="Description"
+						v-model="factory.description" :error="factory.errors.description" />
 
 					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
 						name="Topic" placeholder="Topic" :autoComplete="true" borderColor="border-transparent"
@@ -20,10 +22,11 @@
 					<SofaImageLoader customClass="w-full md:!h-full h-[220px] rounded-custom relative"
 						:photoUrl="quizImageUrl ? quizImageUrl : '/images/default.png'">
 						<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
-							<SofaFileAttachment :isWrapper="true" v-model="factory.photo" accept="image/png, image/gif, image/jpeg"
-								v-model:localFileUrl="quizImageUrl">
+							<SofaFileAttachment :isWrapper="true" v-model="factory.photo"
+								accept="image/png, image/gif, image/jpeg" v-model:localFileUrl="quizImageUrl">
 								<template v-slot:content>
-									<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
+									<div
+										class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
 										<SofaIcon class="h-[18px]" name="camera-white" />
 										<SofaNormalText color="text-white" content="Add cover photo" />
 									</div>
@@ -42,7 +45,8 @@
 					<template v-for="(item, index) in factory.tags" :key="index">
 						<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">
 							<SofaNormalText color="text-grayColor" :content="item" />
-							<SofaIcon @click="factory.removeTag(index)" name="circle-close" class="h-[17px] cursor-pointer" />
+							<SofaIcon @click="factory.removeTag(index)" name="circle-close"
+								class="h-[17px] cursor-pointer" />
 						</div>
 					</template>
 				</div>
@@ -110,7 +114,7 @@ const props = defineProps({
 const emits = defineEmits(['updateQuiz', 'publishQuiz'])
 
 const { isAdmin } = useAuth()
-const quizImageUrl = ref(props.quiz.photo?.link ?? '')
+const quizImageUrl = ref(props.factory.photo?.link ?? '')
 
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()

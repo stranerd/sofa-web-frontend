@@ -5,7 +5,8 @@ const isObject = (val: any) => val !== null && typeof val === 'object'
 const smartUnref = (val: any) => isObject(val) && !isRef(val) ? deepUnref(val) : unref(val)
 
 const deepUnref = (val: any) => {
-	const checkedVal = isRef(val) ? unref(val) : val
+	if (!isRef(val)) return val
+	const checkedVal = unref(val)
 	if (!isObject(checkedVal)) return checkedVal
 	if (Array.isArray(checkedVal)) return checkedVal.map(smartUnref)
 
