@@ -1,8 +1,9 @@
 import { Conversation, CreateConversationInput } from '../../logic'
-import { v } from 'valleyed'
+import { valleyed } from '@utils/commons'
 import { BaseFactory } from '@modules/core'
 
 
+const v = valleyed.v
 export class ConversationFactory extends BaseFactory<Conversation, CreateConversationInput, CreateConversationInput> {
 	readonly rules = {
 		body: v.string().min(1, true),

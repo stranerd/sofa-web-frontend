@@ -89,7 +89,7 @@
 					<div class="w-full flex flex-col bg-white px-4 mdlg:py-4 flex-grow h-full overflow-y-auto"
 						:class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
 						<SofaQuestionContent v-if="!showSettingModal && extras.currentQuestionById"
-							:factory="extras.questionFactory" />
+							:factory="extras.questionFactory" :key="extras.currentQuestionById.id" />
 						<QuizSettings v-if="showSettingModal && !Logic.Common.isLarge" :quiz="quiz" :factory="extras.quizFactory"
 							:close="() => showSettingModal = false" @updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
 							@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />

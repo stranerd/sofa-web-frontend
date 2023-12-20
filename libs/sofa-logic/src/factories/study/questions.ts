@@ -1,4 +1,4 @@
-import { v } from 'valleyed'
+import { valleyed } from '@utils/commons'
 import { FileData, Logic, Question } from '../../logic'
 import { BaseFactory } from '@modules/core'
 
@@ -26,6 +26,7 @@ type Keys = Omit<QuestionToModel, 'data'> & {
 	indicator: string, fillInBlanksAnswers: FillOrDragOption[], dragAnswersAnswers: FillOrDragOption[]
 }
 
+const v = valleyed.v
 export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys> {
 	readonly rules = {
 		question: v.string().min(1, true).requiredIf(() => !this.isFillInBlanks && !this.isDragAnswers),

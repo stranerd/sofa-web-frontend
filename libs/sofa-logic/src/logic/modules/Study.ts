@@ -1,5 +1,5 @@
+import { valleyed } from '@utils/commons'
 import stringSimilarity from 'string-similarity'
-import { Differ, capitalize, stripHTML } from 'valleyed'
 import { reactive } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
@@ -28,6 +28,7 @@ import {
 } from '../types/forms/study'
 import Common from './Common'
 
+const { Differ, capitalize, stripHTML } = valleyed
 const wrap = (v: string) => `<p>${v}</p>`
 
 export default class Study extends Common {

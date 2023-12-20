@@ -30,8 +30,8 @@
 
 		<div v-else class="w-full flex items-start p-4 rounded-custom bg-lightGray gap-3">
 			<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
-			<SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full resize-none" :placeholder="factory.questionPlaceholder"
-				:richEditor="true" v-model="factory.question" />
+			<SofaTextarea textAreaStyle="bg-transparent h-[130px] w-full resize-none"
+				:placeholder="factory.questionPlaceholder" :richEditor="true" v-model="factory.question" />
 		</div>
 
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
@@ -61,11 +61,13 @@
 			<template v-if="factory.isMultipleChoice">
 				<div v-for="(_, index) in factory.multipleOptions" :key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
+					<SofaIcon :name="Logic.Study.getShape(index)"
+						:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
 						class="hidden md:inline self-start" />
 					<SofaTextarea :rows="1" :richEditor="true" class="flex-1" textAreaStyle="p-0"
 						:placeholder="`Enter answer ${index + 1}`" v-model="factory.multipleOptions[index]" />
-					<SofaIcon name="remove" class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
+					<SofaIcon name="remove"
+						class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
 						v-if="factory.canRemoveOption" @click="factory.removeOption(index)" />
 					<SofaIcon @click="factory.toggleMultipleChoicAnswer(index)"
 						:name="factory.multipleAnswers.includes(index) ? 'selected' : 'not-selected'"
@@ -75,51 +77,62 @@
 			<template v-if="factory.isTrueOrFalse">
 				<div v-for="(option, index) in [true, false]" :key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
+					<SofaIcon :name="Logic.Study.getShape(index)"
+						:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
 						class="hidden md:inline self-start" />
 					<SofaNormalText color="text-inherit" class="flex-1 capitalize" :content="option.toString()" />
 					<SofaIcon @click="factory.trueOrFalseAnswer = option"
-						:name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'" class="w-[23px] cursor-pointer" />
+						:name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'"
+						class="w-[23px] cursor-pointer" />
 				</div>
 			</template>
 			<template v-if="factory.isWriteAnswer">
 				<div v-for="(_, index) in factory.writeAnswerAnswers" :key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
+					<SofaIcon :name="Logic.Study.getShape(index)"
+						:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
 						class="hidden md:inline self-start" />
 					<SofaTextarea :rows="index === 0 ? 3 : 1" :richEditor="true" class="flex-1" textAreaStyle="p-0"
 						:placeholder="index === 0 ? 'Enter answer' : `Add optional answer ${index}`"
 						v-model="factory.writeAnswerAnswers[index]" />
-					<SofaIcon name="remove" class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
+					<SofaIcon name="remove"
+						class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
 						v-if="factory.canRemoveOption" @click="factory.removeOption(index)" />
 				</div>
 			</template>
 			<template v-if="factory.isMatch">
 				<div v-for="(_, index) in factory.matchSet" :key="index" class="flex items-center gap-4 group">
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
+						<SofaIcon :name="Logic.Study.getShape(index)"
+							:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
 							class="hidden md:inline self-start" />
 						<SofaTextarea :rows="1" :richEditor="true" class="flex-1" textAreaStyle="p-0"
 							:placeholder="`Enter word/sentence ${index + 1}`" v-model="factory.matchSet[index].q" />
 					</div>
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
+						<SofaIcon :name="Logic.Study.getShape(index)"
+							:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
 							class="hidden md:inline self-start" />
-						<SofaTextarea :rows="1" :richEditor="true" class="flex-1" textAreaStyle="p-0" placeholder="Enter answer"
-							v-model="factory.matchSet[index].a" />
+						<SofaTextarea :rows="1" :richEditor="true" class="flex-1" textAreaStyle="p-0"
+							placeholder="Enter answer" v-model="factory.matchSet[index].a" />
 					</div>
-					<SofaIcon name="remove" class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
+					<SofaIcon name="remove"
+						class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
 						v-if="factory.canRemoveOption" @click="factory.removeOption(index)" />
 				</div>
 			</template>
-			<Draggable v-if="factory.isSequence" :list="factory.sequenceAnswers" class="w-full flex flex-col gap-4" itemKey="">
+			<Draggable v-if="factory.isSequence" :list="factory.sequenceAnswers" class="w-full flex flex-col gap-4"
+				itemKey="">
 				<template #item="{ index }">
-					<div class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="Logic.Study.getShape(index)" :class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
+					<div
+						class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
+						<SofaIcon :name="Logic.Study.getShape(index)"
+							:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
 							class="hidden md:inline self-start" />
 						<SofaTextarea :rows="1" :richEditor="true" class="flex-1" textAreaStyle="p-0"
 							:placeholder="`Enter word/sentence ${index + 1}`" v-model="factory.sequenceAnswers[index]" />
-						<SofaIcon name="remove" class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
+						<SofaIcon name="remove"
+							class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
 							v-if="factory.canRemoveOption" @click="factory.removeOption(index)" />
 					</div>
 				</template>
@@ -143,7 +156,7 @@
 
 <script lang="ts" setup>
 import { Logic, QuestionFactory } from 'sofa-logic'
-import { PropType, defineProps, ref, toRef, watch } from 'vue'
+import { PropType, defineProps, ref } from 'vue'
 import Draggable from 'vuedraggable'
 import SofaButton from '../SofaButton'
 import { SofaCustomInput, SofaFileAttachment, SofaTextarea } from '../SofaForm'
@@ -159,11 +172,4 @@ const props = defineProps({
 })
 
 const localFileUrl = ref(props.factory.questionMedia?.link ?? '')
-
-const factoryWatcher = toRef(props, 'factory')
-
-watch(factoryWatcher, () => {
-	localFileUrl.value = factoryWatcher.value.questionMedia?.link ?? ''
-})
-
 </script>

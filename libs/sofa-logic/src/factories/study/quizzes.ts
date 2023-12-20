@@ -1,9 +1,9 @@
-import { v } from 'valleyed'
+import { valleyed } from '@utils/commons'
 import { CreateQuizInput, Quiz } from '../../logic'
 import { BaseFactory } from '@modules/core'
 import { ref } from 'vue'
 
-
+const v = valleyed.v
 export class QuizFactory extends BaseFactory<Quiz, CreateQuizInput, CreateQuizInput> {
 	public topicId = ''
 	public tagIds: string[] = []
