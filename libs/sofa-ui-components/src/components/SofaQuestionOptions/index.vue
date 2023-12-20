@@ -38,7 +38,7 @@
 		</div>
 
 		<div class="rounded-b-xl w-full p-4 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4 text-bodyBlack">
-			<a class="w-full flex md:hidden items-center justify-start gap-3" @click="emits('showCurrentlyEditing')">
+			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('showCurrentlyEditing')">
 				<SofaIcon name="edit" class="h-[16px] stroke-grayColor" />
 				<SofaNormalText color="text-inherit" content="Currently editing" />
 				<div class="flex flex-row-reverse items-center ml-auto">
@@ -51,15 +51,15 @@
 				</div>
 			</a>
 			<a :class="{ 'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges }"
-				class="text-primaryGreen w-full flex md:hidden items-center justify-start gap-3" @click="emits('saveQuestion')">
+				class="text-primaryGreen w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('saveQuestion')">
 				<SofaIcon name="save" class="h-[16px] stroke-current" />
 				<SofaNormalText color="text-inherit" content="Save question" />
 			</a>
-			<a class="w-full flex md:hidden items-center justify-start gap-3" @click="emits('duplicateQuestion', question)">
+			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('duplicateQuestion', question)">
 				<SofaIcon name="copy" class="h-[16px]" />
 				<SofaNormalText color="text-inherit" content="Duplicate question" />
 			</a>
-			<a v-if="quiz.status !== 'published'" class="w-full flex md:hidden items-center justify-start gap-3"
+			<a v-if="quiz.status !== 'published'" class="w-full flex mdlg:hidden items-center justify-start gap-3"
 				@click="emits('deleteQuestion', question.id)">
 				<SofaIcon name="trash" class="h-[16px]" />
 				<SofaNormalText color="text-primaryRed" content="Delete question" />

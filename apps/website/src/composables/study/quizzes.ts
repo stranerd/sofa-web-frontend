@@ -42,7 +42,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	const canFetchUsers = computed(() => !skip.members && hasAccess.value(store[id].quiz.value))
 	const canFetchQuestions = computed(() => !skip.questions && hasAccess.value(store[id].quiz.value))
 
-	const { users: members } = useUsersInList(computed(() => canFetchUsers.value ? store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id, ...store[id].quiz.value.access.requests) ?? [] :[]), !skip.members)
+	const { users: members } = useUsersInList(computed(() => canFetchUsers.value ? store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id, ...store[id].quiz.value.access.requests) ?? [] : []), !skip.members)
 	const { questions } = useQuestionsInList(id, computed(() => canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : []), !skip.questions)
 
 	const fetchQuiz = async () => {
