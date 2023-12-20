@@ -11,7 +11,7 @@
 	<router-view :key="$route.path" />
 	<SofaAlert v-for="(alert, i) in loaderSetup.alerts" :key="i" :close="() => loaderSetup.alerts.splice(i, 1)"
 		:content="alert.message" :type="alert.type" />
-	<study-mode-modal />
+	<study-mode-modal v-if="showStudyMode" />
 	<!-- Save to folder -->
 	<save-to-folder v-if="selectedFolderMaterailToAdd" :material="selectedFolderMaterailToAdd"
 		:close="() => selectedFolderMaterailToAdd = null" />
@@ -61,6 +61,7 @@ import StudyModeModal from './components/library/StudyModeModal.vue'
 import { showAddItem } from './composables'
 import { useAuth } from './composables/auth/auth'
 import {
+	showStudyMode,
 	reportMaterialSetup,
 	selectedFolderMaterailToAdd,
 	sendReportMaterial,
