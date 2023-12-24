@@ -119,15 +119,15 @@ const quizImageUrl = ref(props.factory.photo?.link ?? '')
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()
 
-const loadTopic = () => {
+watch(topics, () => {
 	if (!topics.length) return
 	if (props.factory.topicId && !props.factory.topic) {
 		const topic = topics.find((t) => t.id === props.factory.topicId)
 		if (topic) props.factory.topic = topic.title
 	}
-}
+}, { immediate: true })
 
-const loadTags = () => {
+watch(tags, () => {
 	if (!tags.length) return
 	if (props.factory.tagIds.length && !props.factory.tags.length) {
 		const myTags = tags.filter((t) => props.factory.tagIds.includes(t.id))
@@ -135,8 +135,5 @@ const loadTags = () => {
 			.map((t) => myTags.find((mt) => t === mt.id)?.title)
 			.filter(Boolean)
 	}
-}
-
-watch(topics, loadTopic, { immediate: true })
-watch(tags, loadTags, { immediate: true })
+}, { immediate: true })
 </script>
