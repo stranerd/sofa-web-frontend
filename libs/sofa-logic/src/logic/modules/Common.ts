@@ -175,7 +175,7 @@ export default class Common {
 	public goBack = () => {
 		const ignoreBackRoute = this.route?.query.ignoreBackRoute ?? null
 		const goBackRoute = (this.route?.meta.middlewares as any)?.goBackRoute
-		if (typeof goBackRoute == 'function' && !ignoreBackRoute) this.GoToRoute(goBackRoute())
+		if (typeof goBackRoute == 'function' && !ignoreBackRoute) this.GoToRoute(goBackRoute(this.route))
 		else if (typeof goBackRoute == 'string' && !ignoreBackRoute) this.GoToRoute(goBackRoute)
 		else window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
 	}
