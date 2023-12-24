@@ -268,29 +268,27 @@ export class QuestionFactory extends BaseFactory<Question, QuestionToModel, Keys
 	loadEntity = (entity: Question) => {
 		this.reset()
 		this.entityId = entity.id
-		this.question = this.defaults.question = entity.question
-		this.questionMedia = this.defaults.questionMedia = entity.questionMedia
-		this.explanation = this.defaults.explanation = entity.explanation
-		this.timeLimit = this.defaults.timeLimit = entity.timeLimit
-		this.type = this.defaults.type = entity.data.type
+		this.question = entity.question
+		this.questionMedia = entity.questionMedia
+		this.explanation = entity.explanation
+		this.timeLimit = entity.timeLimit
+		this.type = entity.data.type
 		if (this.isMultipleChoice) {
-			this.multipleOptions = this.defaults.multipleOptions = entity.data.options
-			this.multipleAnswers = this.defaults.multipleAnswers = entity.data.answers
+			this.multipleOptions = entity.data.options
+			this.multipleAnswers = entity.data.answers
 		}
-		if (this.isTrueOrFalse) this.trueOrFalseAnswer = this.defaults.trueOrFalseAnswer = entity.data.answer
-		if (this.isWriteAnswer) this.writeAnswerAnswers = this.defaults.writeAnswerAnswers = entity.data.answers
-		if (this.isSequence) this.sequenceAnswers = this.defaults.sequenceAnswers = entity.data.answers
+		if (this.isTrueOrFalse) this.trueOrFalseAnswer = entity.data.answer
+		if (this.isWriteAnswer) this.writeAnswerAnswers = entity.data.answers
+		if (this.isSequence) this.sequenceAnswers = entity.data.answers
 		if (this.isFillInBlanks) {
 			this.set('indicator', entity.data.indicator)
-			this.defaults.explanation = entity.data.indicator
-			this.fillInBlanksAnswers = this.defaults.fillInBlanksAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
+			this.fillInBlanksAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
 		}
 		if (this.isDragAnswers) {
 			this.set('indicator', entity.data.indicator)
-			this.defaults.explanation = entity.data.indicator
-			this.dragAnswersAnswers = this.defaults.dragAnswersAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
+			this.dragAnswersAnswers = this.buildOptions(entity.question, entity.data.indicator, entity.data.answers)
 		}
-		if (this.isMatch) this.matchSet = this.defaults.matchSet = entity.data.set
+		if (this.isMatch) this.matchSet = entity.data.set
 	}
 
 	private get constructedData () {
