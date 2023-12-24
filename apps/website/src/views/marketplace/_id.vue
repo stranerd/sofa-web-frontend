@@ -19,9 +19,9 @@
 		</div>
 		<div class="w-full bg-white rounded-[16px] flex flex-col flex-grow overflow-y-auto">
 			<sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
-				:buyAction="buyCourse" :hasAccess="userHasAccess(contentDetails.original)" :similarContents="similarContents" :type="contentType"
-				:contentId="contentDetails.id" :otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)"
-				:actions="{
+				:buyAction="buyCourse" :hasAccess="userHasAccess(contentDetails.original)"
+				:similarContents="similarContents" :type="contentType" :contentId="contentDetails.id"
+				:otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)" :actions="{
 					report: () => {
 						reportMaterial(
 							contentDetails?.type,
@@ -558,7 +558,7 @@ export default defineComponent({
 				setCourseData()
 				setSimilarContents()
 				// create course view
-				if (SingleCourse.value) Logic.Interactions.CreateView({
+				if (SingleCourse.value && SingleCourse.value.status === 'published') Logic.Interactions.CreateView({
 					entity: {
 						id: SingleCourse.value.id,
 						type: 'courses',
@@ -569,7 +569,7 @@ export default defineComponent({
 			if (contentType.value == 'quiz') {
 				setQuizData()
 				setSimilarContents()
-				if (SingleQuiz.value) Logic.Interactions.CreateView({
+				if (SingleQuiz.value && SingleQuiz.value.status === 'published') Logic.Interactions.CreateView({
 					entity: {
 						id: SingleQuiz.value.id,
 						type: 'quizzes',

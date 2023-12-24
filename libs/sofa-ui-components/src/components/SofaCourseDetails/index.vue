@@ -204,6 +204,8 @@ export default defineComponent({
 					message: 'All changes have been saved',
 					type: 'success',
 				})
+			}).finally(() => {
+				Logic.Common.hideLoading()
 			})
 		}
 

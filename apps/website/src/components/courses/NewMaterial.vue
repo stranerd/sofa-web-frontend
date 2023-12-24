@@ -214,7 +214,8 @@ export default defineComponent({
 		const setQuizzes = () => {
 			allQuizzes.value.length = 0
 			AllQuzzies.value.results.forEach((quiz) => {
-				allQuizzes.value.push({
+				const canAddQuiz = quiz.user.id === Logic.Auth.AuthUser?.id && quiz.courseId === null
+				if (canAddQuiz) allQuizzes.value.push({
 					key: quiz.id,
 					value: quiz.title,
 				})

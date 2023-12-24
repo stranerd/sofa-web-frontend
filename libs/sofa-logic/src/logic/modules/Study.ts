@@ -1260,6 +1260,7 @@ export default class Study extends Common {
 				.then((response) => {
 					localStorage.removeItem('couse_section_update')
 					this.SingleCourse = response.data
+					Logic.Common.hideLoading()
 					Logic.Common.showAlert({
 						message: 'All changes have been saved',
 						type: 'success',
@@ -1268,7 +1269,7 @@ export default class Study extends Common {
 					return response.data
 				})
 				.catch((error) => {
-					Logic.Common.hideLoading
+					Logic.Common.hideLoading()
 					Logic.Common.showError(capitalize(error.response.data[0]?.message))
 				})
 		}

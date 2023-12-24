@@ -27,10 +27,7 @@
 			<div :class="`mdlg:col-span-8 flex flex-col col-span-full ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
 			} `">
 				<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selected-material="selectedMaterial"
-					:show-study-mode="() => {
-						showStudyMode = true
-					}
-					" :single-course="SingleCourse" />
+					:single-course="SingleCourse" />
 			</div>
 		</div>
 
@@ -62,10 +59,7 @@
 						<div :class="`w-full flex flex-col col-span-full  ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'
 						} `">
 							<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selected-material="selectedMaterial"
-								:show-study-mode="() => {
-									showStudyMode = true
-								}
-								" :single-course="SingleCourse" />
+								:single-course="SingleCourse" />
 						</div>
 					</div>
 				</template>
@@ -341,8 +335,6 @@ export default defineComponent({
 
 		const CourseReview = ref(Logic.Study.SingleReview)
 
-		const showStudyMode = ref(false)
-
 		const selectedMaterial = ref<any>()
 
 		const showCourseContent = ref(false)
@@ -430,11 +422,6 @@ export default defineComponent({
 			},
 		]
 
-		const goToStudyMode = (type: string) => {
-			Logic.Study.GoToStudyMode(type, selectedMaterial.value.data?.id || '')
-			showStudyMode.value = false
-		}
-
 		const rateCourse = (data: any) => {
 			Logic.Study.AddReviewForm = {
 				entity: {
@@ -484,7 +471,7 @@ export default defineComponent({
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
-			Logic.Interactions.CreateView({
+			if (SingleCourse.value.status === 'published') Logic.Interactions.CreateView({
 				entity: {
 					id: SingleCourse.value?.id,
 					type: 'courses',
@@ -501,9 +488,7 @@ export default defineComponent({
 			handleItemSelected,
 			showCourseContent,
 			showCourseInfo,
-			showStudyMode,
 			otherTasks,
-			goToStudyMode,
 			buyCourse,
 			isUnlocked,
 			PaymentMethods,

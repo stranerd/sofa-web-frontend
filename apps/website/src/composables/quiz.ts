@@ -72,9 +72,10 @@ export const createQuizGame = async () => {
 
 	await Logic.Plays.CreateGame(true).then(async (game) => {
 		if (game) {
-			Logic.Common.hideLoading()
 			showStudyMode.value = false
 			await Logic.Common.GoToRoute( `/games/${game.id}`)
 		}
+	}).finally(() => {
+		Logic.Common.hideLoading()
 	})
 }

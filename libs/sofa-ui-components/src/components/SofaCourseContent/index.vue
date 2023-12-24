@@ -61,6 +61,7 @@
 	</div>
 </template>
 <script lang="ts">
+import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import { ContentDetails, Course, Logic, Question, Quiz, SofaFile } from 'sofa-logic'
@@ -74,7 +75,6 @@ import {
 } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
-import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	components: {
@@ -118,6 +118,7 @@ export default defineComponent({
 				id: material.id,
 				data: material.data,
 				details: material.details,
+				original: material.original,
 				type: material.type.split('-')[0],
 				name: material.name,
 			}
@@ -189,6 +190,7 @@ export default defineComponent({
 							description: mediaFile.description,
 							id: mediaFile.id,
 						},
+						original: mediaFile,
 						data: {
 							zoom: 100,
 							fullScreen: false,
@@ -211,6 +213,7 @@ export default defineComponent({
 							description: mediaFile.description,
 							id: mediaFile.id,
 						},
+						original: mediaFile,
 						data: {
 							zoom: 100,
 							fullScreen: false,
@@ -231,6 +234,7 @@ export default defineComponent({
 							description: mediaFile.description,
 							id: mediaFile.id,
 						},
+						original: mediaFile,
 						data: {
 							pages: {
 								total: 3,
@@ -325,6 +329,7 @@ export default defineComponent({
 											id: quiz.id,
 											type: 'quiz-course',
 											data: contentDetails,
+											original: quiz,
 											hover: false,
 										})
 
@@ -336,6 +341,7 @@ export default defineComponent({
 										name: quiz.title,
 										id: quiz.id,
 										type: 'quiz-course',
+										original: quiz,
 										data: [],
 										hover: false,
 									})
@@ -348,6 +354,7 @@ export default defineComponent({
 						id: quiz.id,
 						type: 'quiz-course',
 						data: [],
+						original: quiz,
 						hover: false,
 					})
 				}

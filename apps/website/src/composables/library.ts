@@ -144,8 +144,8 @@ const addMaterialToFolder = (
 	Logic.Study.SaveItemToFolder(true)
 }
 
-const openQuiz = (activity: ResourceType) => {
-	if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id)
+const openQuiz = (activity: ResourceType, force = false) => {
+	if (!force && activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id)
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
 	selectedQuiz.value = activity.original as Quiz
 	showStudyMode.value = true

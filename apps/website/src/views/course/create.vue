@@ -128,20 +128,20 @@
 
 				<template v-if="selectedMaterial?.type == 'document'">
 					<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-						<sofa-document-reader :documentUrl="selectedMaterial.data.documentUrl" />
+						<sofa-document-reader :key="selectedMaterial.details.id" :documentUrl="selectedMaterial.data.documentUrl" />
 					</div>
 				</template>
 
 				<template v-if="selectedMaterial?.type == 'image'">
 					<div class="w-full flex flex-col">
-						<sofa-image-loader :customClass="'w-full h-[400px] rounded-[12px]'"
+						<sofa-image-loader :key="selectedMaterial.details.id" :customClass="'w-full h-[400px] rounded-[12px]'"
 							:photoUrl="selectedMaterial.data.imageUrl" />
 					</div>
 				</template>
 
 				<template v-if="selectedMaterial?.type == 'video'">
 					<div class="w-full flex flex-col">
-						<sofa-video-player :videoUrl="selectedMaterial.data.videoUrl" />
+						<sofa-video-player :key="selectedMaterial.details.id" :videoUrl="selectedMaterial.data.videoUrl" />
 					</div>
 				</template>
 			</div>
@@ -222,7 +222,7 @@
 			<div
 				class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col gap-4 h-full justify-between relative overflow-y-auto">
 				<template v-if="selectedMaterial">
-					<sofa-course-details :data="selectedMaterial.details" :type="selectedMaterial.type" :close="() => { }" />
+					<sofa-course-details :key="selectedMaterial.details.id" :data="selectedMaterial.details" :type="selectedMaterial.type" :close="() => { }" />
 				</template>
 			</div>
 		</template>

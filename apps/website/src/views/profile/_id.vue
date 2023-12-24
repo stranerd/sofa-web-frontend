@@ -467,6 +467,7 @@ export default defineComponent({
 				})
 				.catch((error) => {
 					console.log(error)
+					Logic.Common.hideLoading()
 				})
 		}
 

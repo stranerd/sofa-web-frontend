@@ -7,7 +7,7 @@
 			</div>
 			<template v-if="selectedMaterial?.type == 'quiz'">
 				<sofa-empty-state :title="'Test yourself'" :subTitle="'Evaluate your level of knowledge'" :actionLabel="'Start'"
-					:action="showStudyMode" :icon="{
+					:action="() => openQuiz(extractResource(selectedMaterial.original), true)" :icon="{
 						name: 'test-white',
 						size: 'h-[40px]',
 					}" :titleStyle="'mdlg:!text-xl '" />
@@ -15,20 +15,20 @@
 
 			<template v-if="selectedMaterial?.type == 'document'">
 				<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-					<sofa-document-reader :documentUrl="selectedMaterial.data.documentUrl" />
+					<sofa-document-reader :key="selectedMaterial.id" :documentUrl="selectedMaterial.data.documentUrl" />
 				</div>
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'image'">
 				<div class="w-full flex flex-col">
-					<sofa-image-loader :customClass="'w-full h-[400px] rounded-[12px]'"
+					<sofa-image-loader :key="selectedMaterial.id" :customClass="'w-full h-[400px] rounded-[12px]'"
 						:photoUrl="selectedMaterial.data.imageUrl" />
 				</div>
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'video'">
 				<div class="w-full flex flex-col">
-					<sofa-video-player :videoUrl="selectedMaterial.data.videoUrl" />
+					<sofa-video-player :key="selectedMaterial.id" :videoUrl="selectedMaterial.data.videoUrl" />
 				</div>
 			</template>
 		</template>
@@ -50,6 +50,7 @@ import {
 	SofaImageLoader,
 	SofaVideoPlayer,
 } from 'sofa-ui-components'
+import { openQuiz, extractResource } from '../../composables/library'
 import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
@@ -74,12 +75,6 @@ export default defineComponent({
 				//
 			},
 		},
-		showStudyMode: {
-			type: Function,
-			default: () => {
-				//
-			},
-		},
 	},
 	setup () {
 		const SingleCourse = ref(Logic.Study.SingleCourse)
@@ -90,6 +85,7 @@ export default defineComponent({
 
 		return {
 			Logic,
+			openQuiz, extractResource,
 			SingleCourse,
 		}
 	},
