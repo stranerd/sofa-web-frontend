@@ -58,4 +58,23 @@ export class UserEntity extends BaseEntity {
 		if (this.rawThis.type.type === UserType.organization) return this.rawThis.type.name
 		return this.rawThis.bio.name.full
 	}
+
+	get userType () {
+		const type = this.rawThis.type?.type ?? UserType.student
+		return {
+			isStudent: type === UserType.student,
+			isTeacher: type === UserType.teacher,
+			isOrg: type === UserType.organization,
+			type
+		}
+	}
+
+	static getDefaultUserType () {
+		return {
+			isStudent: true,
+			isTeacher: false,
+			isOrg: false,
+			type: UserType.student
+		}
+	}
 }

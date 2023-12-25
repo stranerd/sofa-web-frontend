@@ -234,6 +234,10 @@ const profileLinks = reactive([
 	},
 ])
 
+export const socials = profileLinks.reduce((acc, cur) => {
+	return { ...acc, [cur.ref]: cur.icon }
+}, {} as Record<string, string>)
+
 const allLinks = reactive([
 	{
 		icon: 'website',

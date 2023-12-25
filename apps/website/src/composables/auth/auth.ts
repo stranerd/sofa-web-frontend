@@ -44,12 +44,7 @@ export const useAuth = () => {
 	const isAdmin = computed(() => !!store.user.value?.roles.isAdmin || !!store.user.value?.roles.isSuperAdmin)
 	const isSubscribed = computed(() => !!store.wallet.value?.subscription.active)
 
-	const userType = computed(() => ({
-		isStudent: store.user.value?.type?.type === 'student',
-		isTeacher: store.user.value?.type?.type === 'teacher',
-		isOrg: store.user.value?.type?.type === 'organization',
-		type: store.user.value?.type?.type ?? 'student'
-	}))
+	const userType = computed(() => store.user.value?.userType ?? UserEntity.getDefaultUserType())
 
 	const userAi = computed(() => ({
 		name: store.user.value?.ai?.name ?? 'Dr. Sofa',

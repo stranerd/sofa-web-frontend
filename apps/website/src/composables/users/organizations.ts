@@ -20,17 +20,20 @@ export const useMyOrganizations = () => {
 	})))
 
 	const requestToJoinOrganization = async (id: string) => {
-		if (loading.value || !code.value) return
+		if (loading.value || !code.value) return false
 		setError('')
 		setLoading(true)
+		let succeeded = false
 		try {
 			await MembersUseCases.request({ type: MemberTypes.student, organizationId: id, code: code.value })
 			await setMessage('Your join request has been sent')
 			code.value = ''
+			succeeded = true
 		} catch (e) {
 			setError(e)
 		}
 		setLoading(false)
+		return succeeded
 	}
 
 	const leaveOrganization = async (id: string) => {
