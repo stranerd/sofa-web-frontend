@@ -283,10 +283,10 @@ const setSchoolsOption = () => {
 		})
 
 		if (Logic.Users.UserProfile?.type?.type == 'student') {
-			updateUserEducationForm.institution = educationOptions.schools.filter(
+			updateUserEducationForm.institution = educationOptions.schools.find(
 				(item) =>
 					item.extraId == Logic.Users.UserProfile.type.school.institutionId,
-			)[0]?.value
+			)?.value
 		}
 	})
 }

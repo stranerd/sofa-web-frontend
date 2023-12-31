@@ -120,13 +120,13 @@
 					</sofa-header-text>
 
 					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'  px-3 py-3'" :name="'Country'" ref="country" :placeholder="'Country'"
-						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :auto-complete="true"
-						@on-option-selected="countryIsSelected" v-model="updateProfileForm.country" :options="allCountries" />
+						:name="'Country'" ref="country" :placeholder="'Country'"
+						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+						v-model="updateProfileForm.country" :options="allCountries" />
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'px-3 py-3'"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
 						:name="'State'" ref="state" :placeholder="'State'" :rules="[FormValidations.RequiredRule]"
-						:borderColor="'border-transparent'" :auto-complete="true" v-model="updateProfileForm.state"
+						:borderColor="'border-transparent'" v-model="updateProfileForm.state"
 						:options="allStates" />
 				</div>
 			</template>
@@ -146,8 +146,8 @@
 					</div>
 
 					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'  px-3 py-3'" :name="'Subject'" ref="Subject" :placeholder="'Select subject'"
-						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :auto-complete="true"
+						:name="'Subject'" ref="Subject" :placeholder="'Select subject'"
+						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
 						:options="allTopics" v-model="tutorRequestForm.topicId" />
 				</div>
 
@@ -290,6 +290,8 @@ export default defineComponent({
 		watch(Countries, () => {
 			setCountry()
 		})
+
+		watch(() => updateProfileForm.country, countryIsSelected)
 
 		const handleNextAction = () => {
 			if (currentStep.value == 'profile') {

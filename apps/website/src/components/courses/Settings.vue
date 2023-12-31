@@ -12,9 +12,9 @@
 					:placeholder="'Description'" ref="description" v-model="courseSettingForm.description" />
 
 				<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Topic'" ref="topic" :placeholder="'Topic'"
-					:rules="[FormValidations.RequiredRule]" :autoComplete="true" :borderColor="'border-transparent'"
-					:options="allTopics" :update-value="courseSettingForm.topic" :can-use-custom="true"
+					:name="'Topic'" ref="topic" :placeholder="'Topic'"
+					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+					:options="allTopics" :can-use-custom="true"
 					v-model="courseSettingForm.topic" />
 
 				<sofa-text-field v-if="Logic.Users.UserProfile.roles.isVerified"

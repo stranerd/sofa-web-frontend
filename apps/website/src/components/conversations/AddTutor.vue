@@ -17,9 +17,7 @@
 					</div>
 
 					<div class="w-full flex flex-col pt-3" v-if="currentStep === 2">
-						<SofaSelect placeholder="Select subject" padding="px-2 py-4" customClass="rounded-custom border"
-							:options="allTopics" :autoComplete="true" v-model="selectedTopic">
-						</SofaSelect>
+						<SofaSelect placeholder="Select subject" customClass="rounded-custom border" :options="allTopics" v-model="selectedTopic" />
 					</div>
 				</div>
 

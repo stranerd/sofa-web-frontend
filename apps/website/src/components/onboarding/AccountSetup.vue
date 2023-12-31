@@ -51,7 +51,7 @@
 					:placeholder="currentAccountType != 'organization' ? 'Bio' : 'About the organization'"
 					v-model="updateProfileForm.description" />
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
 					:padding="'md:p-4 p-3'" type="text" :name="'organization Code'" ref="organization_code"
 					:placeholder="'Set organization code'" :rules="[
 						FormValidations.RequiredRule,
@@ -64,12 +64,12 @@
 
 				<div class="w-full grid grid-cols-2 gap-4">
 					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1'"
-						:padding="'p-3'" :name="'Country'" ref="country" :placeholder="'Country'"
-						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :auto-complete="true"
-						@on-option-selected="countryIsSelected" v-model="updateProfileForm.country" :options="allCountries" />
+						:name="'Country'" ref="country" :placeholder="'Select country'"
+						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+						v-model="updateProfileForm.country" :options="allCountries" />
 					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1'"
-						:padding="'p-3'" :name="'State'" ref="state" :placeholder="'State'" :rules="[FormValidations.RequiredRule]"
-						:borderColor="'border-transparent'" :auto-complete="true" v-model="updateProfileForm.state"
+						:name="'State'" ref="state" :placeholder="'Select state'" :rules="[FormValidations.RequiredRule]"
+						:borderColor="'border-transparent'" v-model="updateProfileForm.state"
 						:options="allStates" />
 				</div>
 			</div>
@@ -78,32 +78,31 @@
 		<template v-if="tab === 'type'">
 			<div class="w-full flex flex-col gap-4 py-3">
 				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:p-4 p-3'" :name="'School'" ref="school" :placeholder="'Where do you teach at the moment?'"
-					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :options="educationOptions.schools"
-					v-if="updateUserEducationForm.type == 'teacher'" v-model="updateUserEducationForm.tutorSchool" />
+					:name="'School'" ref="school" :placeholder="'Where do you teach at the moment?'"
+					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+					:options="educationOptions.schools" v-if="updateUserEducationForm.type == 'teacher'"
+					v-model="updateUserEducationForm.tutorSchool" />
 
-				<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'md:p-4 p-3'"
-					:name="'Level'" ref="level" :placeholder="'Select education level'"
-					v-if="updateUserEducationForm.type == 'student'" :rules="[FormValidations.RequiredRule]"
-					:borderColor="'border-transparent'" :options="educationOptions.levels" v-model="updateUserEducationForm.level"
-					@OnOptionSelected="setSchoolsOption" />
+				<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :name="'Level'"
+					ref="level" :placeholder="'Select education level'" v-if="updateUserEducationForm.type == 'student'"
+					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+					:options="educationOptions.levels" v-model="updateUserEducationForm.level" />
 
 				<template v-if="updateUserEducationForm.type === 'student' && updateUserEducationForm.level === 'college'">
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'md:p-4 p-3'"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
 						:name="'School'" ref="school" :placeholder="'School'" :rules="[FormValidations.RequiredRule]"
 						:borderColor="'border-transparent'" :options="educationOptions.schools"
-						v-model="updateUserEducationForm.school" :update-value="updateUserEducationForm.institution"
-						@OnOptionSelected="handleSchoolSelection" />
+						v-model="updateUserEducationForm.school" />
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'md:p-4 p-3'"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
 						:name="'Faculty'" ref="faculty" :placeholder="'Faculty'" :rules="[FormValidations.RequiredRule]"
 						:borderColor="'border-transparent'" :options="educationOptions.faculties"
-						v-model="updateUserEducationForm.faculty" @OnOptionSelected="setDepartmentsOptions" />
+						v-model="updateUserEducationForm.faculty" />
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'md:p-4 p-3'"
-						:name="'Department'" ref="department" :placeholder="'Department'" :rules="[FormValidations.RequiredRule]"
-						:borderColor="'border-transparent'" :options="educationOptions.departments"
-						v-model="updateUserEducationForm.department" />
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+						:name="'Department'" ref="department" :placeholder="'Department'"
+						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+						:options="educationOptions.departments" v-model="updateUserEducationForm.department" />
 				</template>
 				<template v-if="updateUserEducationForm.type === 'student' && updateUserEducationForm.level === 'aspirant'">
 					<div class="w-full flex flex-col gap-4">
@@ -113,10 +112,9 @@
 
 						<div class="w-full flex flex-row gap-2 items-center">
 							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-								:padding="'md:p-4 p-3'" :name="'Exams'" ref="exams" :placeholder="'Select exam'"
+								:name="'Exams'" ref="exams" :placeholder="'Select exam'"
 								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-								:options="educationOptions.schools" v-model="updateUserEducationForm.school"
-								:update-value="updateUserEducationForm.school" />
+								:options="educationOptions.schools" v-model="updateUserEducationForm.school" />
 							<sofa-button :padding="'py-3 px-4'" @click.prevent="addExam()">Add</sofa-button>
 						</div>
 
@@ -125,7 +123,7 @@
 								:color="updateUserEducationForm.selectedExamId === item.institutionId ? 'purple' : 'gray'"
 								:customClass="'!flex !flex-row items-center gap-2 cursor-pointer'" @click.prevent="
 									updateUserEducationForm.selectedExamId = item.institutionId
-									setExamCourses();
+								setExamCourses();
 								">
 								{{ educationOptions.schools.find((i) => i.key == item.institutionId)?.value }}
 								<span class="pl-2">
@@ -138,9 +136,10 @@
 
 						<template v-if="updateUserEducationForm.selectedExamId">
 							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-								:padding="'md:p-4 p-3'" :name="'Courses'" ref="courses" :placeholder="'Select exam subjects'"
-								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'" :is-multiple="true"
-								v-if="!updateUserEducationForm.fetchingCourse" :options="educationOptions.examCourses"
+								:name="'Courses'" ref="courses" :placeholder="'Select exam subjects'"
+								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+								:is-multiple="true" v-if="!updateUserEducationForm.fetchingCourse"
+								:options="educationOptions.examCourses"
 								v-model="updateUserEducationForm.exams.filter((i) => i.institutionId === updateUserEducationForm.selectedExamId)[0].courseIds" />
 						</template>
 					</div>
@@ -160,17 +159,20 @@
 					Enter the 6-digit code sent to {{ updatePhoneForm.phone.code + "" + updatePhoneForm.phone.number }}
 				</sofa-normal-text>
 				<div class="w-full md:!w-[60%] flex flex-col gap-4">
-					<sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="() => { }" v-model="updatePhoneForm.otp" />
+					<sofa-otp-input :numberOfInput="6" :type="'tel'" :onChangeOTP="() => { }"
+						v-model="updatePhoneForm.otp" />
 				</div>
 
 				<div class="w-full flex items-center justify-center gap-1 pt-3">
 					<sofa-normal-text :color="'text-grayColor'">Didn’t receive code?</sofa-normal-text>
-					<sofa-normal-text :color="'text-primaryBlue'" :customClass="'cursor-pointer'" @click="UpdatePhone">Resend
+					<sofa-normal-text :color="'text-primaryBlue'" :customClass="'cursor-pointer'"
+						@click="UpdatePhone">Resend
 						code</sofa-normal-text>
 				</div>
 
 				<div class="w-full flex items-center justify-center gap-2">
-					<sofa-normal-text :color="'text-primaryBlue'" :customClass="'cursor-pointer'" @click="tab = 'phone'">Change
+					<sofa-normal-text :color="'text-primaryBlue'" :customClass="'cursor-pointer'"
+						@click="tab = 'phone'">Change
 						number</sofa-normal-text>
 				</div>
 			</div>
@@ -224,10 +226,10 @@ import {
 	SofaImageLoader,
 	SofaNormalText,
 	SofaOtpInput,
+	SofaPhoneInput,
 	SofaSelect,
 	SofaTextField,
-	SofaTextarea,
-	SofaPhoneInput
+	SofaTextarea
 } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 
@@ -333,16 +335,6 @@ export default defineComponent({
 			}
 		}
 
-		const handleSchoolSelection = (option: any) => {
-			updateUserEducationForm.institution = option.extraId
-
-			if (updateUserEducationForm.level == 'aspirant') {
-				//
-			} else {
-				setFacultiesOptions()
-			}
-		}
-
 		const addExam = () => {
 			if (updateUserEducationForm.school) {
 				if (
@@ -359,7 +351,7 @@ export default defineComponent({
 					})
 					setExamCourses()
 					updateUserEducationForm.selectedExamId =
-            updateUserEducationForm.institution
+						updateUserEducationForm.institution
 				}
 				updateUserEducationForm.school = ''
 			}
@@ -388,7 +380,6 @@ export default defineComponent({
 					updateUserEducationForm.faculty = UserProfile.value.type.school.facultyId
 					updateUserEducationForm.department = UserProfile.value.type.school.departmentId
 
-					handleSchoolSelection({ extraId: updateUserEducationForm.institution })
 				}
 
 				if (UserProfile.value?.type?.school?.type == 'aspirant') {
@@ -400,6 +391,10 @@ export default defineComponent({
 		watch(Countries, () => {
 			setCountry()
 		})
+
+		watch(() => updateProfileForm.country, countryIsSelected)
+		watch(() => updateUserEducationForm.level, setSchoolsOption)
+		watch(() => updateUserEducationForm.faculty, setDepartmentsOptions)
 
 		onMounted(() => {
 			Logic.Auth.watchProperty('AuthUser', AuthUser)
@@ -428,7 +423,6 @@ export default defineComponent({
 			setSchoolsOption,
 			setFacultiesOptions,
 			setDepartmentsOptions,
-			handleSchoolSelection,
 			handleAccountSetup,
 			countryIsSelected,
 			addExam,

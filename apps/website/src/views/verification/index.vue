@@ -133,8 +133,8 @@
 
 						<div class="w-full flex flex-col gap-4">
 							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-								:padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="capitalize(addMaterialType)" :ref="addMaterialType"
-								:placeholder="'Select material'" :rules="[FormValidations.RequiredRule]" :autoComplete="false"
+								:name="capitalize(addMaterialType)" :ref="addMaterialType"
+								:placeholder="'Select material'" :rules="[FormValidations.RequiredRule]"
 								:borderColor="'border-transparent'" :options="allMaterials" :hasTitle="true" v-model="selectedMaterial">
 								<template v-slot:title> Choose a material </template>
 							</sofa-select>

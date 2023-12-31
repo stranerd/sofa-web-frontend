@@ -12,8 +12,8 @@
 						textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3 resize-none" placeholder="Description"
 						v-model="factory.description" :error="factory.errors.description" />
 
-					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
-						name="Topic" placeholder="Topic" :autoComplete="true" borderColor="border-transparent"
+					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+						name="Topic" placeholder="Topic" borderColor="border-transparent"
 						:error="factory.errors.topic" :options="topics.map((t) => ({ key: t.title, value: t.title }))"
 						:canUseCustom="true" v-model="factory.topic" />
 				</div>

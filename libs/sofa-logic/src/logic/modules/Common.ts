@@ -189,13 +189,16 @@ export default class Common {
 
 	public formatNumber = formatNumber
 
-	public formatPrice = (price: number, currency = 'NGN') => {
+	public getCurrency (currency: string) {
 		const currencies = {
 			NGN: '₦',
 			USD: '$',
 		}
-		const symbol = currencies[currency.toUpperCase()] ?? ''
-		return `${symbol}${Intl.NumberFormat().format(price)}`
+		return currencies[currency.toUpperCase()] ?? ''
+	}
+
+	public formatPrice = (price: number, currency = 'NGN') => {
+		return `${this.getCurrency(currency)}${Intl.NumberFormat().format(price)}`
 	}
 
 	public searchArray = (arr: any[], searchKey: string) => {
