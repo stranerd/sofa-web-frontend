@@ -20,6 +20,7 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 
 	set country (value: string) {
 		this.set('country', value)
+		this.resetProp('state')
 	}
 
 	get state () {

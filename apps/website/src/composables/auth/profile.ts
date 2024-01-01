@@ -14,17 +14,20 @@ export const useProfileUpdate = () => {
 	watch(auth, () => auth.value && factory.loadEntity(auth.value))
 
 	const updateProfile = async (skipAlert = false) => {
+		let succeeded = false
 		await setError('')
 		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true, skipAlert)
 				await AuthUseCases.updateProfile(factory)
 				await setMessage('Profile updated successfully!', skipAlert)
+				succeeded = true
 			} catch (error) {
 				await setError(error)
 			}
 			await setLoading(false, skipAlert)
 		} else factory.validateAll()
+		return succeeded
 	}
 
 	return { error, loading, factory, updateProfile }

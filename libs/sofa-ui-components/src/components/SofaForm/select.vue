@@ -1,6 +1,5 @@
 <template>
-	<div class="flex flex-col gap-2 w-full relative" :tabIndex="tabIndex" @focus="showOptions = true"
-		@blur="showOptions = false">
+	<div class="flex flex-col gap-2 w-full relative" :tabIndex="-1" @focusout="showOptions = false">
 		<SofaNormalText v-if="hasTitle" customClass="">
 			<slot name="title" />
 		</SofaNormalText>
@@ -84,12 +83,11 @@ const props = defineProps({
 const emits = defineEmits(['update:modelValue'])
 
 const showOptions = ref(false)
-const tabIndex = Math.random()
 const searchValue = ref('')
 
 const filteredOptions = computed(() => {
-	const search = searchValue.value
-	const options = props.options.filter((opt) => opt.key.includes(search) || opt.value.includes(search))
+	const search = searchValue.value.toLowerCase()
+	const options = props.options.filter((opt) => opt.key.toLowerCase().includes(search) || opt.value.toLowerCase().includes(search))
 	if (props.canUseCustom && search) options.unshift({ key: search, value: search })
 	return options
 })
@@ -106,15 +104,16 @@ const value = computed({
 
 const itemIsSelected = (key: string) => {
 	if (!props.isMultiple) return key === props.modelValue
-	return value.value.some((v) => v === key)
+	return Array.isArray(value.value) && value.value.some((v) => v === key)
 }
 
 const selectValue = (option: SelectOption) => {
 	if (!option) return
+	showOptions.value = false
 	const v = option.key
 	if (!props.isMultiple) return value.value = v
 	const isSelected = itemIsSelected(v)
-	if (isSelected) return value.value = value.value.filter((o) => o !== v)
+	if (isSelected) return value.value = Array.isArray(value.value) ? value.value.filter((o) => o !== v) : []
 	else return value.value = [...value.value, v]
 }
 </script>

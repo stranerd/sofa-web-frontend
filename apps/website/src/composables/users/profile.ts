@@ -1,5 +1,5 @@
-import { UserAiFactory, UserTypeFactory, UsersUseCases } from '@modules/users'
-import { ref, watch } from 'vue'
+import { UserAiFactory, UserLocationFactory, UserTypeFactory, UsersUseCases } from '@modules/users'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 
@@ -58,4 +58,55 @@ export const useUserAiUpdate = () => {
 	}
 
 	return { error, loading, factory, updateAi }
+}
+
+const locationStore = {
+	countries: ref<Awaited<ReturnType<typeof UsersUseCases['getCountries']>>>([]),
+	fetched: ref(false)
+}
+
+export const useUserLocationUpdate = () => {
+	const factory = new UserLocationFactory()
+	const { error, setError } = useErrorHandler()
+	const { loading, setLoading } = useLoadingHandler()
+	const { setMessage } = useSuccessHandler()
+	const { user } = useAuth()
+
+	if (user.value) factory.loadEntity(user.value)
+	watch(user, () => user.value && factory.loadEntity(user.value))
+
+	onMounted(async () => {
+		if (locationStore.fetched.value || loading.value) return
+		await setLoading(true)
+		try {
+			locationStore.countries.value = await UsersUseCases.getCountries()
+			locationStore.fetched.value = true
+		} catch (error) {
+			await setError(error)
+		}
+		await setLoading(false)
+	})
+
+	const updateLocation = async (skipAlert = false) => {
+		let succeeded = false
+		await setError('')
+		if (factory.valid && !loading.value) {
+			try {
+				await setLoading(true)
+				await UsersUseCases.updateLocation(factory)
+				await setMessage('Updated successfully!', skipAlert)
+				succeeded = true
+			} catch (error) {
+				await setError(error)
+			}
+			await setLoading(false)
+		} else factory.validateAll()
+		return succeeded
+	}
+
+	const countries = computed(() => locationStore.countries.value.map((c) => c.name))
+	const states = computed(() => locationStore.countries.value.find((c) => c.name.toLowerCase() === factory.country.toLowerCase())
+		?.states.map((s) => s.name) ?? [])
+
+	return { error, loading, factory, countries, states, updateLocation }
 }
