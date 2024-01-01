@@ -1,7 +1,4 @@
-import {
-	Conditions, CreateTutorRequestForm,
-	Logic, SelectOption
-} from 'sofa-logic'
+import { Conditions, CreateTutorRequestForm, Logic, SelectOption } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
 const currentSetupOption = ref<'profile' | 'education' | 'phone'>('profile')
@@ -27,35 +24,6 @@ const updateProfileForm = reactive({
 	photo: undefined,
 	country: '',
 	state: '',
-})
-
-const userSocials = reactive({
-	socials: [
-		{
-			ref: 'website',
-			link: '',
-		},
-		{
-			ref: 'tiktok',
-			link: '',
-		},
-		{
-			ref: 'youtube',
-			link: '',
-		},
-		{
-			ref: 'instagram',
-			link: '',
-		},
-		{
-			ref: 'twitter',
-			link: '',
-		},
-		{
-			ref: 'facebook',
-			link: '',
-		},
-	],
 })
 
 const tutorRequestForm = reactive<CreateTutorRequestForm>({
@@ -94,15 +62,6 @@ const updateVerificationForm = reactive({
 	content: {
 		quizzes: [],
 		courses: [],
-	},
-	socials: {
-		facebook: '',
-		instagram: '',
-		linkedIn: '',
-		tiktok: '',
-		twitter: '',
-		website: '',
-		youtube: '',
 	},
 })
 
@@ -182,72 +141,6 @@ const educationOptions = reactive({
 	departments: [],
 	examCourses: [],
 })
-
-const profileLinks = reactive([
-	{
-		icon: 'website',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'website',
-		show: false,
-	},
-	{
-		icon: 'youtube',
-		link: '',
-		iconSize: 'h-[19px]',
-		ref: 'youtube',
-		show: false,
-	},
-	{
-		icon: 'instagram-social',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'instagram',
-		show: false,
-	},
-	{
-		icon: 'tiktok-social',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'tiktok',
-		show: false,
-	},
-	{
-		icon: 'facebook-social',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'facebook',
-		show: false,
-	},
-	{
-		icon: 'twitter-social',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'twitter',
-		show: false,
-	},
-])
-
-export const socials = profileLinks.reduce((acc, cur) => {
-	return { ...acc, [cur.ref]: cur.icon }
-}, {} as Record<string, string>)
-
-const allLinks = reactive([
-	{
-		icon: 'website',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'website',
-		show: false,
-	},
-	{
-		icon: 'tiktok-social',
-		link: '',
-		iconSize: 'h-[20px]',
-		ref: 'tiktok',
-		show: false,
-	},
-])
 
 const setSchoolsOption = () => {
 	Logic.Schools.GetInstitutions({}).then(() => {
@@ -487,15 +380,7 @@ const createTutorRequest = () => {
 	}
 }
 
-const addNewLink = (ref: string) => {
-	const currentLink = profileLinks.filter((item) => item.ref == ref)
-
-	if (currentLink.length) {
-		allLinks.push(currentLink[0])
-	}
-}
-
 export {
-	Countries, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, addNewLink, allCountries, allLinks, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
-	updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
+	Countries, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, allCountries, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, educationOptions, phoneVerificationState, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
+	updateUserEducationForm, updateUserLocation, updateVerificationForm
 }

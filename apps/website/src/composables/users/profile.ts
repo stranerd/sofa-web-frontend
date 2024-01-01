@@ -1,4 +1,4 @@
-import { UserAiFactory, UserLocationFactory, UserTypeFactory, UsersUseCases } from '@modules/users'
+import { UserAiFactory, UserLocationFactory, UserSocials, UserSocialsFactory, UserTypeFactory, UsersUseCases } from '@modules/users'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
@@ -109,4 +109,43 @@ export const useUserLocationUpdate = () => {
 		?.states.map((s) => s.name) ?? [])
 
 	return { error, loading, factory, countries, states, updateLocation }
+}
+
+export const socials = {
+	[UserSocials.website]: 'website',
+	[UserSocials.youtube]: 'youtube',
+	[UserSocials.instagram]: 'instagram-social',
+	[UserSocials.tiktok]: 'tiktok-social',
+	[UserSocials.facebook]: 'facebook-social',
+	[UserSocials.twitter]: 'twitter-social',
+}
+
+export const useUserSocialsUpdate = () => {
+	const factory = new UserSocialsFactory()
+	const { error, setError } = useErrorHandler()
+	const { loading, setLoading } = useLoadingHandler()
+	const { setMessage } = useSuccessHandler()
+	const { user } = useAuth()
+
+	if (user.value) factory.loadEntity(user.value)
+	watch(user, () => user.value && factory.loadEntity(user.value))
+
+	const updateSocials = async (skipAlert = false) => {
+		let succeeded = false
+		await setError('')
+		if (factory.valid && !loading.value) {
+			try {
+				await setLoading(true)
+				await UsersUseCases.updateSocials(factory)
+				await setMessage('Updated successfully!', skipAlert)
+				succeeded = true
+			} catch (error) {
+				await setError(error)
+			}
+			await setLoading(false)
+		} else factory.validateAll()
+		return succeeded
+	}
+
+	return { error, loading, factory, updateSocials }
 }

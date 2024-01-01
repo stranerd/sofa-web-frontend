@@ -5,21 +5,17 @@
 		</SofaNormalText>
 		<div class="w-full flex items-center group" :class="{ 'opacity-50': disabled }" :tabindex="tabIndex">
 			<slot name="outer-prefix" />
-			<div class="flew-grow w-full gap-1 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
+			<div class="flew-grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
 				:class="{ '!border-red-500 !border': validationStatus == false || error, [`${borderColor} ${padding} ${customClass}`]: true }">
-				<span>
-					<slot name="inner-prefix" />
-				</span>
+				<slot name="inner-prefix" />
 				<input v-model="content" :placeholder="placeholder" @blur="checkValidation()" @keypress="isNumber"
 					:disabled="disabled" :type="fieldType" @keyup="detectKey"
 					class="flex-grow bg-transparent text-darkBody placeholder-grayColor input w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 				<slot name="inner-suffix" />
-				<span class="flex gap-2 items-center">
-					<SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'"
-						:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
-						v-if="type == 'password'" @click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
-					<SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
-				</span>
+				<SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'"
+					:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
+					v-if="type == 'password'" @click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
+				<SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
 			</div>
 			<slot name="outer-suffix" />
 		</div>

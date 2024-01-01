@@ -60,7 +60,7 @@
 				Social links
 			</sofa-header-text>
 
-			<social-media-update />
+			<SocialMediaUpdate :factory="socialsFactory" />
 		</div>
 	</div>
 </template>
@@ -69,6 +69,7 @@
 import SocialMediaUpdate from '@/components/onboarding/SocialMediaUpdate.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useProfileUpdate } from '@/composables/auth/profile'
+import { useUserSocialsUpdate } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaButton,
@@ -84,10 +85,17 @@ import AccountSetup from '../onboarding/AccountSetup.vue'
 
 const { auth, userType } = useAuth()
 const { factory, updateProfile } = useProfileUpdate()
+const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 watch(factory.values, () => {
 	Logic.Common.debounce(() => {
 		updateProfile(true)
+	}, 1000)
+})
+
+watch(socialsFactory.values, () => {
+	Logic.Common.debounce(() => {
+		updateSocials(true)
 	}, 1000)
 })
 </script>

@@ -144,9 +144,9 @@
 <script lang="ts">
 import { useAuth } from '@/composables/auth/auth'
 import { extractResource, saveToFolder } from '@/composables/library'
-import { socials } from '@/composables/profile'
 import { useUsersMaterials } from '@/composables/study/users-materials'
 import { useMyOrganizations } from '@/composables/users/organizations'
+import { socials } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaAvatar,

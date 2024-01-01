@@ -1,142 +1,63 @@
 <template>
-	<sofa-text-field v-for="(item, index) in allLinks" :key="index" :placeholder="capitalize(item.ref)" :name="'Website'"
-		ref="socials.website" :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-		:rules="[FormValidations.UrlRule]" v-model="item.link" :update-value="item.link">
+	<SofaTextField v-for="(item, index) in factory.socials" :key="index" :placeholder="`Add ${item[0]} link`" type="url"
+		:error="factory.getUrlError(item[1])" customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+		v-model="item[1]">
 		<template v-slot:inner-prefix>
-			<sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
+			<SofaIcon :name="socials[item[0]]" class="h-[20px]" />
 		</template>
-
 		<template v-slot:inner-suffix>
-			<sofa-icon :name="'trash'" :customClass="` h-[16px] cursor-pointer `" @click.stop="
-				selecteLinkIndex = index
-				showDeletePrompt = true;
-			" />
+			<SofaIcon name="trash" class="h-[16px]" @click="deleteItem(index)" />
 		</template>
-	</sofa-text-field>
+	</SofaTextField>
 
 	<div class="w-full flex flex-col gap-3">
-		<a class="w-full flex flex-row items-center justify-between gap-3 py-3 px-3 rounded-custom border-2 border-darkLightGray"
-			@click="
-				showAddNewItems ? (showAddNewItems = false) : (showAddNewItems = true)
-			">
-			<div class="flex flex-row items-center gap-3">
-				<sofa-icon :name="'box-plus'" :customClass="'h-[20px]'" />
-				<sofa-normal-text :color="'text-grayColor'">
-					Add link
-				</sofa-normal-text>
+		<a class="w-full flex items-center justify-between gap-3 p-3 rounded-custom border-2 border-darkLightGray"
+			@click="showAddNewItems = !showAddNewItems">
+			<div class="flex items-center gap-3">
+				<SofaIcon name="box-plus" class="h-[20px]" />
+				<SofaNormalText color="text-grayColor" content="Add link" />
 			</div>
 
-			<div>
-				<sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="showAddNewItems ? 'chevron-up' : 'chevron-down'" />
-			</div>
+			<SofaIcon class="h-[7px]" :name="showAddNewItems ? 'chevron-up' : 'chevron-down'" />
 		</a>
 
 		<div class="w-full flex flex-col gap-2" v-if="showAddNewItems">
-			<a class="w-full flex flex-row items-center justify-start gap-3 py-3 px-3 rounded-custom border-2 border-darkLightGray"
-				@click="addNewLink(item.ref)" v-for="(item, index) in profileLinks" :key="index">
-				<sofa-icon :name="item.icon" :customClass="`${item.iconSize} cursor-pointer `" />
-				<sofa-normal-text :color="'text-grayColor'">
-					{{ capitalize(item.ref) }}
-				</sofa-normal-text>
+			<a class="w-full flex items-center justify-start gap-3 p-3 rounded-custom border-2 border-darkLightGray"
+				@click="factory.addNewSocial(key)" v-for="(icon, key) in socials" :key="key">
+				<SofaIcon :name="icon" class="h-[20px]" />
+				<SofaNormalText color="text-grayColor" class="capitalize" :content="key" />
 			</a>
 		</div>
 	</div>
-
-	<sofa-delete-prompt v-if="showDeletePrompt" :title="'Are you sure?'"
-		:subTitle="`This action is permanent. The saved social link would be lost`" :close="() => {
-			showDeletePrompt = false
-		}
-		" :buttons="[
-			{
-				label: 'No',
-				isClose: true,
-				action: () => {
-					showDeletePrompt = false
-				},
-			},
-			{
-				label: 'Yes, delete',
-				isClose: false,
-				action: () => {
-					removeItem()
-				},
-			},
-		]" />
 </template>
-<script lang="ts">
-import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'
-import {
-	SofaTextField,
-	SofaNormalText,
-	SofaIcon,
-	SofaDeletePrompt,
-} from 'sofa-ui-components'
-import { FormValidations } from '@/composables'
-import { profileLinks, allLinks, addNewLink } from '@/composables/profile'
+
+<script lang="ts" setup>
+import { socials } from '@/composables/users/profile'
+import { UserSocialsFactory } from '@modules/users'
 import { Logic } from 'sofa-logic'
+import {
+	SofaIcon,
+	SofaNormalText,
+	SofaTextField
+} from 'sofa-ui-components'
+import { ref } from 'vue'
 
-export default defineComponent({
-	components: {
-		SofaTextField,
-		SofaNormalText,
-		SofaIcon,
-		SofaDeletePrompt,
-	},
-	setup () {
-		const showAddNewItems = ref(false)
-		const showDeletePrompt = ref(false)
-		const selecteLinkIndex = ref(0)
-
-		const removeItem = () => {
-			allLinks.splice(selecteLinkIndex.value, 1)
-			showDeletePrompt.value = false
-		}
-
-		onMounted(() => {
-			allLinks.length = 0
-			const userSocials = Logic.Users.UserProfile.socials
-			userSocials.forEach((item) => {
-				const currentLinkInfo = profileLinks.filter(
-					(eachItem) => eachItem.ref == item.ref
-				)
-
-				allLinks.push({
-					icon: currentLinkInfo[0]?.icon || '',
-					iconSize: currentLinkInfo[0]?.iconSize || '',
-					link: item.link,
-					ref: item.ref,
-					show: true,
-				})
-			})
-		})
-
-		watch(allLinks, () => {
-			Logic.Common.debounce(() => {
-				Logic.Users.UpdateUserSocialForm = {
-					socials: allLinks
-						.filter((item) => item.link)
-						.map((item) => {
-							return {
-								ref: item.ref,
-								link: item.link,
-							}
-						}),
-				}
-				Logic.Users.UpdateUserSocial()
-			}, 500)
-		})
-
-		return {
-			FormValidations,
-			showAddNewItems,
-			profileLinks,
-			allLinks,
-			showDeletePrompt,
-			selecteLinkIndex,
-			addNewLink,
-			capitalize,
-			removeItem,
-		}
-	},
+const props = defineProps({
+	factory: {
+		type: UserSocialsFactory,
+		required: true
+	}
 })
+
+const deleteItem = async (index: number) => {
+	const confirm = await Logic.Common.confirm({
+		title: 'Are you sure?',
+		sub: 'This action is permanent. The saved social link would be lost',
+		right: { label: 'Yes, delete' }
+	})
+	if (!confirm) return
+	props.factory.removeSocial(index)
+}
+
+const showAddNewItems = ref(false)
 </script>
