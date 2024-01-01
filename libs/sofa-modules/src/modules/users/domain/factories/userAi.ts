@@ -50,7 +50,6 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi & { lo
 	}
 
 	loadEntity = (entity: UserEntity) => {
-		if (!entity.type) return
 		this.entityId = entity.id
 		if (entity.ai) {
 			this.name = entity.ai.name

@@ -199,8 +199,8 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 	}
 
 	loadEntity = (entity: UserEntity) => {
-		if (!entity.type) return
 		this.entityId = entity.id
+		if (!entity.type) return
 		this.type = entity.type.type
 		if (entity.type.type === UserType.student) {
 			if (entity.type.school.type === UserSchoolType.college) {

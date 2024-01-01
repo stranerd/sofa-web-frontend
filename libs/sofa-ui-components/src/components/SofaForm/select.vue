@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-2 w-full relative" :tabIndex="-1" @focusout="showOptions = false">
+	<div class="flex flex-col gap-2 w-full relative group" :tabIndex="-1">
 		<SofaNormalText v-if="hasTitle" customClass="">
 			<slot name="title" />
 		</SofaNormalText>
@@ -18,10 +18,10 @@
 			<SofaIcon name="angle-small-down" class="h-[7px] pr-1" />
 		</div>
 		<div v-if="showOptions"
-			class="w-full h-full mdlg:h-auto left-0 top-0 fixed mdlg:absolute flex-col bg-white z-[100] mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
+			class="group-focus-within:flex hidden w-full h-full mdlg:h-auto left-0 top-0 fixed mdlg:absolute flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
 			<div class="w-full py-2 gap-3 flex items-center justify-between" v-if="autoComplete">
 				<SofaTextField placeholder="Search" v-model="searchValue"
-					customClass="w-full !border-none bg-[whitesmoke]" />
+					customClass="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" @click="showOptions = false" name="circle-close" />
 			</div>
 			<a class="p-3 gap-3 w-full flex items-center hover:bg-gray-100" v-for="(item, index) in filteredOptions"

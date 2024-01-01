@@ -17,12 +17,12 @@
 				<div class="w-full flex flex-col items-center justify-center pt-3">
 					<sofa-image-loader
 						:customClass="`w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-						:photoUrl="profileImageUrl ?? ''">
-						<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileImageUrl" />
+						:photoUrl="profileFactory.localPhotoLink">
+						<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileFactory.localPhotoLink" />
 						<sofa-file-attachment :isWrapper="true"
 							:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-							:accept="'image/png, image/gif, image/jpeg'" v-model="updateProfileForm.photo"
-							v-model:localFileUrl="profileImageUrl">
+							:accept="'image/png, image/gif, image/jpeg'" v-model="profileFactory.photo"
+							v-model:localFileUrl="profileFactory.localPhotoLink">
 							<template v-slot:content>
 								<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
 							</template>
@@ -30,15 +30,13 @@
 					</sofa-image-loader>
 				</div>
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:p-4 p-3'" type="text" :name="'First name'" ref="name.first" :placeholder="'First Name'"
-					:rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first"
-					:borderColor="'border-transparent'" v-if="currentAccountType != 'organization'" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					padding="md:p-4 p-3" type="text" placeholder="First Name" :error="profileFactory.errors.first"
+					v-model="profileFactory.first" borderColor="border-transparent" />
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:p-4 p-3'" type="text" :name="'Last name'" ref="name.last" :placeholder="'Last Name'"
-					:rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last"
-					:borderColor="'border-transparent'" v-if="currentAccountType != 'organization'" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					padding="md:p-4 p-3" type="text" placeholder="Last Name" :error="profileFactory.errors.last"
+					v-model="profileFactory.last" borderColor="border-transparent" />
 
 				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
 					:padding="'md:p-4 p-3'" type="text" :name="'organization name'" ref="organization_name"
@@ -46,10 +44,11 @@
 					v-model="updateProfileForm.organization_name" :borderColor="'border-transparent'"
 					:default-value="updateProfileForm.organization_name" v-if="currentAccountType == 'organization'" />
 
-				<sofa-textarea :hasTitle="false"
-					:textAreaStyle="'h-[90px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:p-4 p-3 resize-none'"
+				<SofaTextarea
+					textAreaStyle="h-[90px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:p-4 p-3 resize-none"
+					:error="profileFactory.errors.description"
 					:placeholder="currentAccountType != 'organization' ? 'Bio' : 'About the organization'"
-					v-model="updateProfileForm.description" />
+					v-model="profileFactory.description" />
 
 				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
 					:padding="'md:p-4 p-3'" type="text" :name="'organization Code'" ref="organization_code"
@@ -63,14 +62,13 @@
 					:default-value="updateProfileForm.organization_code" v-if="currentAccountType == 'organization'" />
 
 				<div class="w-full grid grid-cols-2 gap-4">
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1'"
-						:name="'Country'" ref="country" :placeholder="'Select country'"
-						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-						v-model="updateProfileForm.country" :options="allCountries" />
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1'"
-						:name="'State'" ref="state" :placeholder="'Select state'" :rules="[FormValidations.RequiredRule]"
-						:borderColor="'border-transparent'" v-model="updateProfileForm.state"
-						:options="allStates" />
+					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1"
+						placeholder="Country" :error="locationFactory.errors.country" borderColor="border-transparent"
+						v-model="locationFactory.country" :options="countries.map((c) => ({ key: c, value: c }))" />
+
+					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1"
+						placeholder="State" :error="locationFactory.errors.state" borderColor="border-transparent"
+						v-model="locationFactory.state" :options="states.map((s) => ({ key: s, value: s }))" />
 				</div>
 			</div>
 		</template>
@@ -196,17 +194,13 @@
 </template>
 <script lang="ts">
 import { FormValidations } from '@/composables'
+import { useAuth } from '@/composables/auth/auth'
+import { useProfileUpdate } from '@/composables/auth/profile'
 import {
-	Countries,
 	UpdatePhone,
-	UpdateProfile,
 	UpdateUserEducation,
 	VerifyPhone,
-	allCountries,
-	allStates,
-	countryIsSelected,
 	educationOptions,
-	setCountry,
 	setDepartmentsOptions,
 	setExamCourses,
 	setFacultiesOptions,
@@ -214,8 +208,8 @@ import {
 	updatePhoneForm,
 	updateProfileForm,
 	updateUserEducationForm,
-	updateUserLocation,
 } from '@/composables/profile'
+import { useUserLocationUpdate } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaBadge,
@@ -268,6 +262,10 @@ export default defineComponent({
 	setup (props) {
 		const profileImageUrl = ref('')
 
+		const { auth } = useAuth()
+		const { factory: profileFactory, updateProfile } = useProfileUpdate()
+		const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
+
 		const formComp = ref<any>()
 		const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
 		const currentAccountType = computed(() => UserProfile.value?.type?.type ?? Logic.Common.route?.query?.type?.toString() ?? 'student')
@@ -314,8 +312,10 @@ export default defineComponent({
 						updateProfileForm.name.first = fullNameArray[0]
 						updateProfileForm.name.last = fullNameArray[1] ?? ''
 					}
-					await UpdateProfile(formComp.value)
-					await updateUserLocation()
+					await Promise.all([
+						updateProfile(true),
+						updateLocation(true)
+					])
 					tab.value = updateUserEducationForm.type === 'organization' ? 'phone' : 'type'
 				} else if (tab.value === 'type') {
 					await UpdateUserEducation(true)
@@ -358,13 +358,7 @@ export default defineComponent({
 		}
 
 		const setDefaultVerificationData = () => {
-			profileImageUrl.value = UserProfile.value?.bio.photo?.link ?? ''
-			updateProfileForm.name.first = UserProfile.value?.bio.name.first
-			updateProfileForm.name.last = UserProfile.value?.bio.name.last
-			updateProfileForm.description = UserProfile.value?.bio.description
-			updateProfileForm.country = UserProfile.value?.location?.country
-			updateProfileForm.state = UserProfile.value?.location?.state
-			updatePhoneForm.phone = AuthUser.value?.phone
+			updatePhoneForm.phone = auth.value?.phone
 			if (currentAccountType.value == 'teacher') {
 				updateUserEducationForm.type = 'teacher'
 				updateUserEducationForm.tutorSchool = UserProfile.value?.type?.school.toString()
@@ -388,43 +382,32 @@ export default defineComponent({
 			}
 		}
 
-		watch(Countries, () => {
-			setCountry()
-		})
-
-		watch(() => updateProfileForm.country, countryIsSelected)
 		watch(() => updateUserEducationForm.level, setSchoolsOption)
 		watch(() => updateUserEducationForm.faculty, setDepartmentsOptions)
 
 		onMounted(() => {
-			Logic.Auth.watchProperty('AuthUser', AuthUser)
 			Logic.Users.watchProperty('UserProfile', UserProfile)
-			Logic.Users.watchProperty('Countries', Countries)
 			setDefaultVerificationData()
-			if (!Countries.value) Logic.Users.GetCountries().then(setCountry)
 			setSchoolsOption()
 		})
 
 		return {
+			profileFactory, locationFactory, countries, states,
 			tab,
 			isDisabled,
 			accountSetupOptions,
 			FormValidations,
 			updatePhoneForm,
-			profileImageUrl,
 			formComp,
 			updateProfileForm,
 			currentAccountType,
 			educationOptions,
 			updateUserEducationForm,
-			allCountries,
-			allStates,
 			Logic,
 			setSchoolsOption,
 			setFacultiesOptions,
 			setDepartmentsOptions,
 			handleAccountSetup,
-			countryIsSelected,
 			addExam,
 			setExamCourses,
 			UpdatePhone,

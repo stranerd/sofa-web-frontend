@@ -39,7 +39,6 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, { socials: UserS
 	}
 
 	loadEntity = (entity: UserEntity) => {
-		if (!entity.type) return
 		this.entityId = entity.id
 		this.socials = entity.socials.map(({ ref, link }) => [ref, link])
 	}
