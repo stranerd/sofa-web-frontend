@@ -1,6 +1,6 @@
 import {
 	Conditions, CreateTutorRequestForm,
-	CustomizeAIInput, Logic, SelectOption
+	Logic, SelectOption
 } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
@@ -56,12 +56,6 @@ const userSocials = reactive({
 			link: '',
 		},
 	],
-})
-
-const customizeAIForm = reactive<CustomizeAIInput>({
-	name: '',
-	tagline: '',
-	photo: undefined,
 })
 
 const tutorRequestForm = reactive<CreateTutorRequestForm>({
@@ -373,35 +367,6 @@ const UpdateProfile = async (formComp: any, showLoader = true) => {
 	)
 }
 
-const CustomizeAI = (formComp: any) => {
-	Logic.Users.CustomizeAIForm = {
-		name: customizeAIForm.name,
-		tagline: customizeAIForm.tagline,
-		photo: customizeAIForm.photo,
-	}
-
-	let formState = false
-
-	if (formComp) {
-		formState = formComp.validate()
-	} else {
-		formState = true
-	}
-
-	Logic.Users.CustomizeAI(formState)
-		.then(() => {
-			showCustomizeAI.value = false
-			Logic.Users.GetUserProfile()
-		})
-		.catch((error) => {
-			if (formComp) {
-				Logic.Common.showValidationError(error, formComp)
-			} else {
-				Logic.Common.hideLoading()
-			}
-		})
-}
-
 const UpdateUserEducation = async (useLoader = true) => {
 	if (updateUserEducationForm.type === 'student') {
 		if (updateUserEducationForm.level === 'aspirant') {
@@ -531,6 +496,6 @@ const addNewLink = (ref: string) => {
 }
 
 export {
-	Countries, CustomizeAI, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, addNewLink, allCountries, allLinks, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, customizeAIForm, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
+	Countries, UpdatePhone, UpdateProfile, UpdateUserEducation, VerifyPhone, accountSetupOptions, addNewLink, allCountries, allLinks, allRequests, allStates, allStudents, autoCreateVerification, countryIsSelected, createTutorRequest, currentSetupOption, educationOptions, phoneVerificationState, profileLinks, selectedMember, setCountry, setDepartmentsOptions, setExamCourses, setFacultiesOptions, setSchoolsOption, showAccountSetup, showCustomizeAI, showRemoveMember, submitVerification, tutorRequestForm, updatePhoneForm, updateProfileForm,
 	updateUserEducationForm, updateUserLocation, updateVerificationForm, userSocials
 }

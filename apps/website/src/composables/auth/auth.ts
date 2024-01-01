@@ -1,7 +1,7 @@
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthUseCases } from '@modules/auth'
-import { Logic, Wallet } from 'sofa-logic'
 import { UserEntity, UsersUseCases } from '@modules/users'
+import { Logic, Wallet } from 'sofa-logic'
 import { computed, ref } from 'vue'
 
 const store = {
@@ -47,9 +47,9 @@ export const useAuth = () => {
 	const userType = computed(() => store.user.value?.userType ?? UserEntity.getDefaultUserType())
 
 	const userAi = computed(() => ({
-		name: store.user.value?.ai?.name ?? 'Dr. Sofa',
+		name: store.user.value?.ai?.name ?? UserEntity.defaultAi,
 		tagline: store.user.value?.ai?.tagline ?? '',
-		image: store.user.value?.ai?.photo?.link ?? '/images/icons/robot.svg'
+		image: store.user.value?.ai?.photo?.link ?? UserEntity.defaultAiPhotoLink
 	}))
 
 	const setAuthUser = async (details: AuthDetails | null) => {

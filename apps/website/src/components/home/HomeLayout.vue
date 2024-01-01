@@ -77,8 +77,8 @@
 					<div class="flex flex-col gap-1">
 						<SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
 						<SofaNormalText :content="userAi.tagline" />
-						<SofaNormalText color="text-primaryPink" as="a" content="Customise"
-							@click="showCustomizeAI = true" />
+						<SofaNormalText color="text-primaryPink" as="a" content="Customize"
+							@click="showCustomizeAi = true" />
 					</div>
 				</div>
 
@@ -153,7 +153,7 @@
 			</div>
 		</template>
 	</dashboard-layout>
-	<CustomizeBot :close="() => showCustomizeAI = false" v-if="showCustomizeAI" />
+	<CustomizeBot :close="() => showCustomizeAi = false" v-if="showCustomizeAi" />
 	<SofaModal v-if="addModalType">
 		<div class="flex flex-col p-4 gap-4 md:p-6 md:gap-6 justify-between">
 			<div class="flex gap-2 justify-between items-center">
@@ -196,7 +196,7 @@ import CustomizeBot from '@/components/onboarding/CustomizeBot.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@/composables/conversations/conversations'
 import { useManageOrganizationMembers } from '@/composables/organizations/members'
-import { showCustomizeAI } from '@/composables/profile'
+import { showCustomizeAi } from '@/composables/users/profile'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import {
