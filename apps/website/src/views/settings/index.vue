@@ -13,6 +13,7 @@ export default defineComponent({
 	components: { SettingsLayout },
 	name: 'SettingsIndexPage',
 	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/settings/profile' : undefined]),
+	middlewares: { goBackRoute: '/' },
 	setup () {
 		useMeta({
 			title: 'Settings',
