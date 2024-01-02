@@ -1,5 +1,5 @@
 import { useListener } from '@app/composables/core/listener'
-import { AuthDetails, AuthUseCases } from '@modules/auth'
+import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
 import { UserEntity, UsersUseCases } from '@modules/users'
 import { Logic, Wallet } from 'sofa-logic'
 import { computed, ref } from 'vue'
@@ -51,6 +51,8 @@ export const useAuth = () => {
 		tagline: store.user.value?.ai?.tagline ?? '',
 		image: store.user.value?.ai?.photo?.link ?? UserEntity.defaultAiPhotoLink
 	}))
+
+	const hasPassword = computed( () => !!store.auth.value?.authTypes.includes(AuthTypes.email),)
 
 	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
@@ -104,7 +106,7 @@ export const useAuth = () => {
 
 	return {
 		id, bio, user: store.user, auth: store.auth, wallet: store.wallet,
-		isLoggedIn, isEmailVerified, isAdmin, isSubscribed, userType, userAi,
+		isLoggedIn, isEmailVerified, isAdmin, isSubscribed, userType, userAi, hasPassword,
 		setAuthUser, signin, signout, deleteAccount
 	}
 }
