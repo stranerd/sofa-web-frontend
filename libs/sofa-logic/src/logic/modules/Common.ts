@@ -1,3 +1,4 @@
+import { AuthDetails } from '@modules/auth'
 import { listenOnSocket } from '@modules/core'
 import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
@@ -26,10 +27,20 @@ import { ValidationError } from '../types/domains/common'
 export default class Common {
 	public window = reactive({ width: window.innerWidth })
 	public router: Router | undefined = undefined
-
 	public route: RouteLocationNormalizedLoaded | undefined = undefined
-
 	public watchInterval: number | undefined = undefined
+	private redirectToName = 'redirect-to'
+	public AuthUser: AuthDetails | undefined = undefined
+
+	async getRedirectToRoute () {
+		const value = localStorage.getItem(this.redirectToName)
+		if (value) localStorage.removeItem(this.redirectToName)
+		return value ?? '/'
+	}
+
+	async setRedirectToRoute (value: string) {
+		localStorage.setItem(this.redirectToName, value)
+	}
 
 	prettifyTime = (seconds: number) => {
 		const min = Math.floor(seconds / 60)
@@ -256,7 +267,7 @@ export default class Common {
 
 		try {
 			fetchRules?.forEach((rule) => {
-				if (rule.requireAuth && !Logic.Auth.AuthUser) {
+				if (rule.requireAuth && !Logic.Common.AuthUser) {
 					window.location.href = '/auth/login'
 					throw BreakException
 				}
@@ -295,7 +306,7 @@ export default class Common {
 								rule.params.forEach((param) => {
 									if (typeof param !== 'object') return
 									param.where?.forEach((item) => {
-										if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Auth.AuthUser.id
+										if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Common.AuthUser.id
 									})
 								})
 								domain[rule.method]?.(...rule.params).then(resolve)

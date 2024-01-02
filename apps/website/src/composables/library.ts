@@ -46,7 +46,7 @@ export const createQuizData = (quiz: Quiz): ResourceType => {
 		showMore: false,
 		userId: quiz.user.id,
 		type: 'quiz',
-		authUserId: Logic.Auth.AuthUser.id,
+		authUserId: Logic.Common.AuthUser.id,
 		user: quiz.user,
 		ratings: quiz.ratings,
 		createdAt: quiz.createdAt,
@@ -68,7 +68,7 @@ export const createCourseData = (course: Course): ResourceType => {
 		progress: 0,
 		subject: Logic.Study.GetTagName(course.topicId),
 		user: course.user,
-		authUserId: Logic.Auth.AuthUser?.id,
+		authUserId: Logic.Common.AuthUser?.id,
 		id: course.id,
 		status: course.status,
 		showMore: false,
@@ -88,7 +88,7 @@ export const createGameData = (p: Game, quizzes: Quiz[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
 	const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
-	const userPosition = allScores.indexOf(p.scores[Logic.Auth.AuthUser.id])
+	const userPosition = allScores.indexOf(p.scores[Logic.Common.AuthUser.id])
 
 	return {
 		id: p.id,
@@ -109,7 +109,7 @@ export const createGameData = (p: Game, quizzes: Quiz[]) => {
 export const createTestData = (p: Test, quizzes: Quiz[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
-	const userCorrectAnswers = (p.scores[Logic.Auth.AuthUser.id] ?? 0) / 10
+	const userCorrectAnswers = (p.scores[Logic.Common.AuthUser.id] ?? 0) / 10
 	const percentage = (userCorrectAnswers / p.questions.length) * 100
 	const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
 		percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
@@ -145,7 +145,7 @@ const addMaterialToFolder = (
 }
 
 const openQuiz = (activity: ResourceType, force = false) => {
-	if (!force && activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id)
+	if (!force && activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id)
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
 	selectedQuiz.value = activity.original as Quiz
 	showStudyMode.value = true
@@ -153,7 +153,7 @@ const openQuiz = (activity: ResourceType, force = false) => {
 }
 
 const openCourse = (activity: ResourceType) => {
-	if (activity.status == 'draft' && activity.user.id === Logic.Users.UserProfile?.id)
+	if (activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id)
 		return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
 	Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
@@ -199,7 +199,7 @@ const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => selectedItem.value?.user.id === Logic.Users.UserProfile?.id,
+		show: () => selectedItem.value?.user.id === Logic.Common.AuthUser?.id,
 		action: () => {
 			showMoreOptions.value = false
 			if (selectedItem.value?.type == 'course') {
@@ -227,7 +227,7 @@ const moreOptions = reactive([
 	{
 		icon: 'report-option',
 		title: 'Report',
-		show: () => selectedItem.value?.user.id != Logic.Users.UserProfile?.id,
+		show: () => selectedItem.value?.user.id != Logic.Common.AuthUser?.id,
 		action: () => {
 			showMoreOptions.value = false
 			reportMaterial(

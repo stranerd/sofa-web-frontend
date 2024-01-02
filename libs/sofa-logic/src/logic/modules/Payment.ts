@@ -56,12 +56,12 @@ export default class Payment extends Common {
 						currency: 'NGN',
 						payment_options: 'card',
 						meta: {
-							user_id: Logic.Auth.AuthUser?.id,
+							user_id: Logic.Common.AuthUser?.id,
 						},
 						customer: {
-							email: Logic.Auth.AuthUser.email,
-							phone_number: `${Logic.Auth.AuthUser.phone?.code}${Logic.Auth.AuthUser.phone?.number}`,
-							name: Logic.Auth.AuthUser.name.full,
+							email: Logic.Common.AuthUser.email,
+							phone_number: `${Logic.Common.AuthUser.phone?.code}${Logic.Common.AuthUser.phone?.number}`,
+							name: Logic.Common.AuthUser.allNames.full,
 						},
 						onclose: function () {
 							//
@@ -81,7 +81,7 @@ export default class Payment extends Common {
 												{
 													field: 'userId',
 													condition: Conditions.eq,
-													value: Logic.Auth.AuthUser?.id,
+													value: Logic.Common.AuthUser?.id,
 												},
 											],
 										}
@@ -167,7 +167,7 @@ export default class Payment extends Common {
 					where: [
 						{
 							field: 'user.id',
-							value: Logic.Auth.AuthUser?.id,
+							value: Logic.Common.AuthUser?.id,
 							condition: Conditions.eq,
 						},
 					],
@@ -220,7 +220,7 @@ export default class Payment extends Common {
 							{
 								field: 'userId',
 								condition: Conditions.eq,
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 							},
 						],
 					})
@@ -277,7 +277,7 @@ export default class Payment extends Common {
 							{
 								field: 'userId',
 								condition: Conditions.eq,
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 							},
 						],
 					})
@@ -349,7 +349,7 @@ export default class Payment extends Common {
 						{
 							field: 'userId',
 							condition: Conditions.eq,
-							value: Logic.Auth.AuthUser?.id,
+							value: Logic.Common.AuthUser?.id,
 						},
 					],
 				})
@@ -376,7 +376,7 @@ export default class Payment extends Common {
 						{
 							field: 'userId',
 							condition: Conditions.eq,
-							value: Logic.Auth.AuthUser?.id,
+							value: Logic.Common.AuthUser?.id,
 						},
 					],
 				})

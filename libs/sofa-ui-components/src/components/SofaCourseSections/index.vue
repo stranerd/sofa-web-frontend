@@ -9,7 +9,7 @@
 								option?.opened
 									? (option.opened = false)
 									: (option.opened = true)
-								">
+							">
 								<div class="flex flex-row items-center gap-2">
 									<sofa-normal-text :customClass="'!font-bold'" v-if="!option.edit">{{
 										option.name == "unsectioned" ? "Unsectioned" : option.name
@@ -36,20 +36,20 @@
 										<div :class="`w-full flex flex-row items-center relative justify-between gap-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${selectedMaterial?.id == element.id
 											? 'bg-lightBlue'
 											: 'bg-white'
-											}`" @mouseover="element.hover = true" @mouseleave="element.hover = false" @click.stop="
-		selectedMaterial = {
-			id: element.id,
-			data: element.data,
-			details: element.details,
-			type: element.type.split('-')[0],
-		}
-	handleItemSelected();
-	">
+										}`" @mouseover="element.hover = true" @mouseleave="element.hover = false" @click.stop="
+											selectedMaterial = {
+												id: element.id,
+												data: element.data,
+												details: element.details,
+												type: element.type.split('-')[0],
+											}
+											handleItemSelected();
+										">
 											<div class="flex flex-row items-center gap-2">
 												<sofa-icon :customClass="'h-[17px]'" :name="element.type" />
 												<sofa-normal-text
 													:customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'">{{
-														element.name }}</sofa-normal-text>
+													element.name }}</sofa-normal-text>
 											</div>
 
 											<div
@@ -67,8 +67,8 @@
 
 								<div class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer" @click="
 									selectedMaterial = undefined
-								selectedSection = index
-								handleItemSelected();
+									selectedSection = index
+									handleItemSelected();
 								" v-if="option.name != 'unsectioned'">
 									<sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
 									<sofa-normal-text :color="'text-primaryPurple'">

@@ -1,7 +1,6 @@
 import { CreateTutorRequestForm, Logic } from 'sofa-logic'
 import { reactive, ref } from 'vue'
 
-const showAccountSetup = ref(false)
 const showCustomizeAI = ref(false)
 
 const tutorRequestForm = reactive<CreateTutorRequestForm>({
@@ -15,14 +14,6 @@ const updateVerificationForm = reactive({
 		quizzes: [],
 		courses: [],
 	},
-})
-
-const updatePhoneForm = reactive({
-	phone: {
-		code: '+234',
-		number: '',
-	},
-	otp: '',
 })
 
 const accountSetupOptions = reactive([
@@ -45,27 +36,6 @@ const accountSetupOptions = reactive([
 		show: true,
 	},
 ])
-
-const UpdatePhone = async () => {
-	Logic.Auth.SendPhoneVerificationForm = {
-		phone: {
-			code: updatePhoneForm.phone.code,
-			// TODO: substring is used to remove 0 if no starts with zero, might only work for 9ja numbers, so needs a more robust solution
-			number: updatePhoneForm.phone.number?.substring(updatePhoneForm.phone.number?.charAt(0) == '0' ? 1 : 0)
-		},
-	}
-
-	return await Logic.Auth.SendPhoneVerification(true)
-}
-
-const VerifyPhone = async () => {
-	if (updatePhoneForm.otp) {
-		Logic.Auth.VerifyPhone(updatePhoneForm.otp).then(() => {
-			showAccountSetup.value = false
-			Logic.Common.GoToRoute('/')
-		})
-	}
-}
 
 const submitVerification = async (useLoader = true) => {
 	Logic.Users.CreateVerificationForm = {
@@ -119,6 +89,6 @@ const createTutorRequest = () => {
 }
 
 export {
-	UpdatePhone, VerifyPhone, accountSetupOptions, autoCreateVerification, createTutorRequest, showAccountSetup, showCustomizeAI, submitVerification, tutorRequestForm, updatePhoneForm,
+	accountSetupOptions, autoCreateVerification, createTutorRequest, showCustomizeAI, submitVerification, tutorRequestForm,
 	updateVerificationForm
 }

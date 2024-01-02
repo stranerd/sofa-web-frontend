@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useAuth } from './auth/auth'
 
 export const useHomeTasks = () => {
-	const { user, userType } = useAuth()
+	const { auth, user, userType } = useAuth()
 
 	const profileSteps = computed(() => user.value ? [
 		{
@@ -11,7 +11,7 @@ export const useHomeTasks = () => {
 			subTitle: 'Picture, name and bio',
 			icon: 'add-profile',
 			iconSize: 'h-[46px]',
-			isDone: Logic.Users.CheckUserTaskState('profile_setup'),
+			isDone: user.value?.checkTaskState('profile_setup'),
 			action: () => Logic.Common.GoToRoute('/settings/profile#profile')
 		},
 		{
@@ -19,7 +19,7 @@ export const useHomeTasks = () => {
 			subTitle: 'Current place you teach at',
 			icon: 'add-education',
 			iconSize: 'h-[46px]',
-			isDone: Logic.Users.CheckUserTaskState('education_setup'),
+			isDone: user.value?.checkTaskState('education_setup'),
 			action: () => Logic.Common.GoToRoute('/settings/profile#type')
 		},
 		{
@@ -27,7 +27,7 @@ export const useHomeTasks = () => {
 			subTitle: 'Enter your phone number',
 			icon: 'add-phone',
 			iconSize: 'h-[46px]',
-			isDone: Logic.Users.CheckUserTaskState('phone_setup'),
+			isDone: !!auth.value?.phone,
 			action: () => Logic.Common.GoToRoute('/settings/profile#contact')
 		}
 	] : [])
@@ -38,7 +38,7 @@ export const useHomeTasks = () => {
 			subTitle: 'Build a customized quiz with different question types and study modes',
 			icon: 'pink-question',
 			iconSize: 'h-[46px]',
-			isDone: Logic.Users.CheckUserTaskState('create_quiz'),
+			isDone: user.value?.checkTaskState('create_quiz'),
 			action: () => Logic.Common.GoToRoute('/quiz/create')
 		},
 		{
@@ -46,7 +46,7 @@ export const useHomeTasks = () => {
 			subTitle: 'Develop and publish a series of educational material on a particular subject',
 			icon: 'orange-list',
 			iconSize: 'h-[46px]',
-			isDone: Logic.Users.CheckUserTaskState('create_course'),
+			isDone: user.value?.checkTaskState('create_course'),
 			action: () => Logic.Common.GoToRoute('/course/create')
 		}
 	] : [])
@@ -56,7 +56,7 @@ export const useHomeTasks = () => {
 			title: 'Learn a quiz',
 			subTitle: 'Practice alone with a quiz',
 			icon: 'learn-quiz',
-			isDone: Logic.Users.CheckUserTaskState('learn_quiz'),
+			isDone: user.value?.checkTaskState('learn_quiz'),
 			iconSize: 'h-[46px]',
 			action: () => Logic.Common.GoToRoute('/marketplace')
 		},
@@ -64,7 +64,7 @@ export const useHomeTasks = () => {
 			title: 'Study flashcards',
 			subTitle: 'Learn flashcards on a quiz',
 			icon: 'study-flashcard',
-			isDone: Logic.Users.CheckUserTaskState('quiz_flashcard'),
+			isDone: user.value?.checkTaskState('quiz_flashcard'),
 			iconSize: 'h-[46px]',
 			action: () => Logic.Common.GoToRoute('/marketplace')
 		},
@@ -72,7 +72,7 @@ export const useHomeTasks = () => {
 			title: 'Play a quiz game ',
 			subTitle: 'Challenge your friends',
 			icon: 'play-quiz',
-			isDone: Logic.Users.CheckUserTaskState('quiz_game'),
+			isDone: user.value?.checkTaskState('quiz_game'),
 			iconSize: 'h-[46px]',
 			action: () => Logic.Common.GoToRoute('/marketplace')
 		}

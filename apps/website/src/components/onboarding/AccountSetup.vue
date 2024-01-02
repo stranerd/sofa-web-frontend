@@ -262,7 +262,7 @@ export default defineComponent({
 			else if (tab.value === 'phone-verify') await completeVerification().then(async (res) => {
 				if (!res) return
 				if (props.isProfilePhone) tab.value = 'phone'
-				else await Logic.Common.GoToRoute(await Logic.Auth.getRedirectToRoute())
+				else await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
 			})
 		}
 

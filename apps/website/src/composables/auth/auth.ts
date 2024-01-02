@@ -15,7 +15,6 @@ const store = {
 		}
 		const setUser = async (user: UserEntity) => {
 			store.user.value = user
-			Logic.Users.UserProfile = user as any
 		}
 		const setWallet = async (wallet: Wallet) => {
 			store.wallet.value = wallet
@@ -57,10 +56,9 @@ export const useAuth = () => {
 	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
 		store.auth.value = details
-		Logic.Auth.AuthUser = details as any
+		Logic.Common.AuthUser = details as any
 		if (details?.id) {
 			store.user.value = await UsersUseCases.find(details.id)
-			Logic.Users.UserProfile = store.user.value as any
 			store.wallet.value = await Logic.Payment.GetUserWallet()
 		} else store.user.value = null
 	}

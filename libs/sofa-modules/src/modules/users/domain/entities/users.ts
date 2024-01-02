@@ -69,6 +69,17 @@ export class UserEntity extends BaseEntity {
 		}
 	}
 
+	checkTaskState (task: 'profile_setup' | 'education_setup' | 'create_quiz' | 'create_course' | 'learn_quiz' | 'quiz_flashcard' | 'quiz_game') {
+		if (task === 'profile_setup') return !!this.bio.name?.first && !!this.bio.name?.last
+		if (task === 'education_setup') return !!this.type
+		if (task === 'create_quiz') return !!this.account.meta.quizzes
+		if (task === 'create_course') return !!this.account.meta.courses
+		if (task === 'learn_quiz') return !!localStorage.getItem('quiz_action_practice')
+		if (task === 'quiz_flashcard') return !!localStorage.getItem('quiz_action_flashcard')
+		if (task === 'quiz_game') return localStorage.getItem('quiz_action_game')
+		return false
+	}
+
 	static defaultAi = 'Dr. Sofa'
 	static defaultAiPhotoLink  = '/images/icons/robot.svg'
 

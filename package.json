@@ -7,7 +7,8 @@
     "node": ">= 18.0.0"
   },
   "scripts": {
-    "envs": "node bin/copy-env-app.js"
+    "envs": "node bin/copy-env-app.js",
+    "lint": "pnpm -r lint"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.14.0",

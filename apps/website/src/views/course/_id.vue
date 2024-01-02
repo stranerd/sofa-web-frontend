@@ -13,7 +13,7 @@
 							</sofa-header-text>
 
 							<div v-if="!CourseReview &&
-								Logic.Auth.AuthUser.id != SingleCourse?.user.id
+								Logic.Common.AuthUser.id != SingleCourse?.user.id
 							">
 								<sofa-button :custom-class="''" :padding="'px-4 py-1'" @click="showRateCourse = true">Rate</sofa-button>
 							</div>
@@ -213,7 +213,7 @@
 		</sofa-modal>
 
 		<!-- Rating floating button sm -->
-		<Teleport to="body" v-if="!CourseReview && Logic.Auth.AuthUser.id != SingleCourse?.user.id && !Logic.Common.isLarge">
+		<Teleport to="body" v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id && !Logic.Common.isLarge">
 			<span class="absolute bottom-[3%] right-[2%] z-[1000] flex flex-row items-center justify-center h-[70px] w-[70px]">
 				<span
 					class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
@@ -309,7 +309,7 @@ export default defineComponent({
 							{
 								field: 'userId',
 								condition: Conditions.eq,
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 							},
 						],
 					},

@@ -97,7 +97,7 @@ export const useMessage = (message: Message) => {
 		await Logic.Conversations.MarkMessages(message.conversationId).catch()
 	}
 	onMounted(async () => {
-		if (!message.readAt[Logic.Auth.AuthUser?.id]) await markMessageRead()
+		if (!message.readAt[Logic.Common.AuthUser?.id]) await markMessageRead()
 	})
 	return { markMessageRead }
 }

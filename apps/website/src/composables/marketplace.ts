@@ -56,7 +56,7 @@ export const extractContent = (item: Quiz | Course): ContentDetails => {
 		},
 		price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
 		user: item.user,
-		authUserId: Logic.Auth.AuthUser.id,
+		authUserId: Logic.Common.AuthUser.id,
 		type,
 		ratings: item.ratings,
 		route: `/marketplace/${item.id}?type=${type}`

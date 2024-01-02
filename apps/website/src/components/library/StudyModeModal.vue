@@ -23,7 +23,7 @@
 				</sofa-icon-card>
 
 				<sofa-button :customClass="'w-full'" :padding="'py-3'"
-					v-if="Logic.Auth.AuthUser?.id == selectedQuiz?.user.id" @click="goToEdit">Edit Quiz</sofa-button>
+					v-if="Logic.Common.AuthUser?.id == selectedQuiz?.user.id" @click="goToEdit">Edit Quiz</sofa-button>
 			</div>
 
 			<div class="w-full flex flex-col gap-3 p-4" v-else>

@@ -238,7 +238,7 @@ export default defineComponent({
 							{
 								field: 'userId',
 								condition: Conditions.eq,
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 							},
 						],
 					},

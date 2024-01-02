@@ -216,7 +216,7 @@ export default defineComponent({
 							{
 								field: 'userId',
 								condition: Conditions.eq,
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 							},
 						],
 					},
@@ -232,7 +232,7 @@ export default defineComponent({
 						where: [
 							{
 								field: 'user.id',
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 								condition: Conditions.eq,
 							},
 						],
@@ -250,7 +250,7 @@ export default defineComponent({
 						where: [
 							{
 								field: 'user.id',
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 								condition: Conditions.eq,
 							},
 						],
