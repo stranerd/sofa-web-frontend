@@ -22,7 +22,7 @@
 					<sofa-header-text :customClass="'!font-bold'">
 						Personal information
 					</sofa-header-text>
-					<sofa-normal-text> Edit your profile </sofa-normal-text>
+					<sofa-normal-text>Edit your profile</sofa-normal-text>
 				</div>
 
 				<div class="w-full flex flex-col items-center justify-center pt-3">

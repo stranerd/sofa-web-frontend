@@ -1,9 +1,9 @@
 <template>
-	<SofaTextField v-for="(item, index) in factory.socials" :key="index" :placeholder="`Add ${item[0]} link`" type="url"
-		:error="factory.getUrlError(item[1])" customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
-		v-model="item[1]">
+	<SofaTextField v-for="(item, index) in factory.getSocials()" :key="index" :placeholder="`Add ${item.ref} link`" type="url"
+		:error="item.error" customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+		v-model="item.link">
 		<template v-slot:inner-prefix>
-			<SofaIcon :name="socials[item[0]]" class="h-[20px]" />
+			<SofaIcon :name="socials[item.ref]" class="h-[20px]" />
 		</template>
 		<template v-slot:inner-suffix>
 			<SofaIcon name="trash" class="h-[16px]" @click="deleteItem(index)" />
