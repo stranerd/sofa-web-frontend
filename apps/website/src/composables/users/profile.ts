@@ -1,4 +1,5 @@
-import { UserAiFactory, UserLocationFactory, UserSocials, UserSocialsFactory, UserTypeFactory, UsersUseCases } from '@modules/users'
+import { UserAiFactory, UserLocationFactory, UserSocials, UserSocialsFactory, UserType, UserTypeFactory, UsersUseCases } from '@modules/users'
+import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
@@ -10,21 +11,26 @@ export const useUserTypeUpdate = () => {
 	const { setMessage } = useSuccessHandler()
 	const { user } = useAuth()
 
+	const type = Logic.Common.route?.query?.type as UserType
+	if (type && Object.values(UserType).includes(type)) factory.type = type
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	const updateType = async () => {
+	const updateType = async (skipAlert = false) => {
 		await setError('')
+		let succeeded = false
 		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true)
 				await UsersUseCases.updateType(factory)
-				await setMessage('Updated successfully!')
+				await setMessage('Updated successfully!', skipAlert)
+				succeeded = true
 			} catch (error) {
 				await setError(error)
 			}
 			await setLoading(false)
 		} else factory.validateAll()
+		return succeeded
 	}
 
 	return { error, loading, factory, updateType }

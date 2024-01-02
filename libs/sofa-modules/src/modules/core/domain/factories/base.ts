@@ -1,20 +1,14 @@
 import { Differ, VCore } from 'valleyed'
-import { isRef, reactive, ref, unref } from 'vue'
+import { isProxy, isReactive, isRef, reactive, ref, toRaw } from 'vue'
 
-const isObject = (val: any) => val !== null && typeof val === 'object'
-const smartUnref = (val: any) => isObject(val) && !isRef(val) ? deepUnref(val) : unref(val)
-
-const deepUnref = (val: any) => {
-	if (!isRef(val)) return val
-	const checkedVal = unref(val)
-	if (!isObject(checkedVal)) return checkedVal
-	if (Array.isArray(checkedVal)) return checkedVal.map(smartUnref)
-
-	return Object.entries(checkedVal)
-		.reduce((acc, [key, value]) => {
-			acc[key] = smartUnref(value)
-			return acc
-		}, {} as Record<string, any>)
+export function deepToRaw(input: any) {
+	if (Array.isArray(input)) return input.map(deepToRaw)
+	if (isRef(input) || isReactive(input) || isProxy(input)) return deepToRaw(toRaw(input))
+	if (input && typeof input === 'object') return Object.keys(input).reduce((acc, key) => {
+		acc[key as keyof typeof acc] = deepToRaw(input[key])
+		return acc
+	}, {} as any)
+	return input
 }
 
 export abstract class BaseFactory<E, T, K extends Record<string, any>> {
@@ -76,7 +70,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	}
 
 	checkValidity (property: keyof K, value: any) {
-		return this.rules[property].parse(deepUnref(value), true)
+		return this.rules[property].parse(deepToRaw(value), true)
 	}
 
 	reset () {

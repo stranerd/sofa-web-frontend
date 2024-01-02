@@ -3,16 +3,16 @@ import { DepartmentFromModel } from '../../data/models/departments'
 
 export class DepartmentEntity extends BaseEntity {
 	public readonly id: string
-	public readonly name: string
+	public readonly title: string
 	public readonly institutionId: string
 	public readonly facultyId: string
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, name, institutionId, facultyId, createdAt, updatedAt }: DepartmentFromModel) {
+	constructor ({ id, title, institutionId, facultyId, createdAt, updatedAt }: DepartmentFromModel) {
 		super()
 		this.id = id
-		this.name = name
+		this.title = title
 		this.institutionId = institutionId
 		this.facultyId = facultyId
 		this.createdAt = createdAt

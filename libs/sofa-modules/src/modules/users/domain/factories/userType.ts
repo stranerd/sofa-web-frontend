@@ -1,5 +1,6 @@
 import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
+import { reactive } from 'vue'
 import { UserEntity } from '../entities/users'
 import { UserSchoolType, UserType, UserTypeData } from '../types'
 
@@ -36,18 +37,21 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			v.object({
 				institutionId: v.string().min(1),
 				courseIds: v.array(v.string().min(1)).min(1),
-				start: v.time().asStamp(),
-				end: v.time().min(val?.start).asStamp(),
+				startDate: v.time().asStamp(),
+				endDate: v.time().min(val?.start).asStamp(),
 			}).parse(val)
 		)).requiredIf(() => this.isStudent && this.isAspirantType),
 
-		school: v.string().min(1).requiredIf(() => this.isStudent),
+		school: v.string().min(1).requiredIf(() => this.isTeacher),
 
 		name: v.string().min(1).requiredIf(() => this.isOrganization),
 		code: v.string().min(6).requiredIf(() => this.isOrganization),
 	}
 	reserved = ['type']
-	insts = [] as string[]
+	extras = reactive({
+		insts: [] as string[],
+		activeInst: null as string | null,
+	})
 
 	constructor () {
 		super({
@@ -108,7 +112,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 	}
 
 	get institutions () {
-		return this.insts
+		return this.extras.insts
 	}
 
 	set institutions (institutionIds: string[]) {
@@ -117,8 +121,16 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			institutionId, courseIds: [], startDate: now, endDate: now,
 			...(this.exams.find((e) => e.institutionId === institutionId) ?? {})
 		}))
-		this.insts.length = 0
-		this.insts.push(...this.exams.map((e) => e.institutionId))
+		this.institutions.splice(0, this.institutions.length, ...this.exams.map((e) => e.institutionId))
+		if (this.activeInst && !this.institutions.includes(this.activeInst)) this.activeInst = null
+	}
+
+	get activeInst () {
+		return this.extras.activeInst
+	}
+
+	set activeInst (institutionId: string | null) {
+		this.extras.activeInst = institutionId
 	}
 
 	get school () {
@@ -209,7 +221,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 				this.departmentId = entity.type.school.departmentId
 			} else {
 				this.set('exams', entity.type.school.exams)
-				this.insts = entity.type.school.exams.map((e) => e.institutionId)
+				this.institutions = entity.type.school.exams.map((e) => e.institutionId)
 			}
 		} else if (entity.type.type === UserType.teacher) {
 			this.school = entity.type.school

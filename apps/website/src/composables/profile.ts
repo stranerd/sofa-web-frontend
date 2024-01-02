@@ -307,7 +307,7 @@ const UpdatePhone = async () => {
 	return await Logic.Auth.SendPhoneVerification(true)
 }
 
-const VerifyPhone = () => {
+const VerifyPhone = async () => {
 	if (updatePhoneForm.otp) {
 		Logic.Auth.VerifyPhone(updatePhoneForm.otp).then(() => {
 			showAccountSetup.value = false

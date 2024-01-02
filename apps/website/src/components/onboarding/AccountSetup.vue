@@ -1,5 +1,5 @@
 <template>
-	<sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
+	<div class="w-full flex flex-col gap-4">
 		<div class="w-full flex gap-3" v-if="!isProfileEducation && !isProfilePhone">
 			<a v-for="option in accountSetupOptions.filter((o) => !o.hide)" :key="option.id"
 				class="p-3 rounded-custom flex items-center gap-2 justify-center w-full"
@@ -24,42 +24,33 @@
 							:accept="'image/png, image/gif, image/jpeg'" v-model="profileFactory.photo"
 							v-model:localFileUrl="profileFactory.localPhotoLink">
 							<template v-slot:content>
-								<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
+								<SofaIcon class="h-[18px]" name="camera-white" />
 							</template>
 						</sofa-file-attachment>
 					</sofa-image-loader>
 				</div>
 
-				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
-					padding="md:p-4 p-3" type="text" placeholder="First Name" :error="profileFactory.errors.first"
-					v-model="profileFactory.first" borderColor="border-transparent" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+					type="text" placeholder="First Name" :error="profileFactory.errors.first" v-model="profileFactory.first"
+					borderColor="border-transparent" />
 
-				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
-					padding="md:p-4 p-3" type="text" placeholder="Last Name" :error="profileFactory.errors.last"
-					v-model="profileFactory.last" borderColor="border-transparent" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+					type="text" placeholder="Last Name" :error="profileFactory.errors.last" v-model="profileFactory.last"
+					borderColor="border-transparent" />
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:p-4 p-3'" type="text" :name="'organization name'" ref="organization_name"
-					:placeholder="'Organization name'" :rules="[FormValidations.RequiredRule]"
-					v-model="updateProfileForm.organization_name" :borderColor="'border-transparent'"
-					:default-value="updateProfileForm.organization_name" v-if="currentAccountType == 'organization'" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+					type="text" placeholder="Organization name" :error="typeFactory.errors.name" v-model="typeFactory.name"
+					borderColor="border-transparent" v-if="typeFactory.isOrganization" />
 
 				<SofaTextarea
 					textAreaStyle="h-[90px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:p-4 p-3 resize-none"
 					:error="profileFactory.errors.description"
-					:placeholder="currentAccountType != 'organization' ? 'Bio' : 'About the organization'"
+					:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'"
 					v-model="profileFactory.description" />
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-					:padding="'md:p-4 p-3'" type="text" :name="'organization Code'" ref="organization_code"
-					:placeholder="'Set organization code'" :rules="[
-						FormValidations.RequiredRule,
-						FormValidations.customValidator(
-							updateProfileForm.organization_code.length >= 6,
-							'Join code must be more than 5 characters'
-						),
-					]" v-model="updateProfileForm.organization_code" :borderColor="'border-transparent'"
-					:default-value="updateProfileForm.organization_code" v-if="currentAccountType == 'organization'" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+					type="text" placeholder="Set organization code" :error="typeFactory.errors.code"
+					v-model="typeFactory.code" borderColor="border-transparent" v-if="typeFactory.isOrganization" />
 
 				<div class="w-full grid grid-cols-2 gap-4">
 					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor col-span-1"
@@ -75,71 +66,57 @@
 
 		<template v-if="tab === 'type'">
 			<div class="w-full flex flex-col gap-4 py-3">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:name="'School'" ref="school" :placeholder="'Where do you teach at the moment?'"
-					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-					:options="educationOptions.schools" v-if="updateUserEducationForm.type == 'teacher'"
-					v-model="updateUserEducationForm.tutorSchool" />
+				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+					type="text" placeholder="Where do you teach at the moment?" :error="typeFactory.errors.school"
+					v-model="typeFactory.school" borderColor="border-transparent" v-if="typeFactory.isTeacher" />
 
-				<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :name="'Level'"
-					ref="level" :placeholder="'Select education level'" v-if="updateUserEducationForm.type == 'student'"
-					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-					:options="educationOptions.levels" v-model="updateUserEducationForm.level" />
+				<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					placeholder="Select education level" :error="typeFactory.errors.schoolType"
+					borderColor="border-transparent" v-model="typeFactory.schoolType" v-if="typeFactory.isStudent"
+					:options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" />
 
-				<template v-if="updateUserEducationForm.type === 'student' && updateUserEducationForm.level === 'college'">
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:name="'School'" ref="school" :placeholder="'School'" :rules="[FormValidations.RequiredRule]"
-						:borderColor="'border-transparent'" :options="educationOptions.schools"
-						v-model="updateUserEducationForm.school" />
+				<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
+					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+						placeholder="Select school" :error="typeFactory.errors.institutionId"
+						borderColor="border-transparent" v-model="typeFactory.institutionId"
+						:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:name="'Faculty'" ref="faculty" :placeholder="'Faculty'" :rules="[FormValidations.RequiredRule]"
-						:borderColor="'border-transparent'" :options="educationOptions.faculties"
-						v-model="updateUserEducationForm.faculty" />
+					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+						placeholder="Select faculty" :error="typeFactory.errors.facultyId" borderColor="border-transparent"
+						v-model="typeFactory.facultyId"
+						:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:name="'Department'" ref="department" :placeholder="'Department'"
-						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-						:options="educationOptions.departments" v-model="updateUserEducationForm.department" />
+					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+						placeholder="Select department" :error="typeFactory.errors.departmentId"
+						borderColor="border-transparent" v-model="typeFactory.departmentId"
+						:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
 				</template>
-				<template v-if="updateUserEducationForm.type === 'student' && updateUserEducationForm.level === 'aspirant'">
+				<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
 					<div class="w-full flex flex-col gap-4">
-						<sofa-normal-text :custom-class="'!font-semibold !text-left'">
-							Your exams
-						</sofa-normal-text>
+						<SofaNormalText class="!font-semibold" content="Your exams" />
 
-						<div class="w-full flex flex-row gap-2 items-center">
-							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-								:name="'Exams'" ref="exams" :placeholder="'Select exam'"
-								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-								:options="educationOptions.schools" v-model="updateUserEducationForm.school" />
-							<sofa-button :padding="'py-3 px-4'" @click.prevent="addExam()">Add</sofa-button>
+						<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+							v-model="typeFactory.institutions" placeholder="Select exams" borderColor="border-transparent"
+							:isMultiple="true" :options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
+
+						<div class="w-full flex flex-wrap gap-3">
+							<SofaBadge
+								v-for="institution in typeFactory.institutions.map((id) => gatewayExams.find((i) => i.id === id)).filter(Boolean)"
+								:key="institution.id" :color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
+								customClass="flex items-center gap-2" as="a"
+								@click.prevent="typeFactory.activeInst = institution.id">
+								{{ institution.title }}
+								<SofaIcon
+									:name="typeFactory.activeInst === institution.id ? 'circle-close-white' : 'circle-close'"
+									class="h-[17px]" />
+							</SofaBadge>
 						</div>
 
-						<div class="w-full flex flex-row flex-wrap gap-3">
-							<sofa-badge v-for="(item, index) in updateUserEducationForm.exams" :key="index"
-								:color="updateUserEducationForm.selectedExamId === item.institutionId ? 'purple' : 'gray'"
-								:customClass="'!flex !flex-row items-center gap-2 cursor-pointer'" @click.prevent="
-									updateUserEducationForm.selectedExamId = item.institutionId
-								setExamCourses();
-								">
-								{{ educationOptions.schools.find((i) => i.key == item.institutionId)?.value }}
-								<span class="pl-2">
-									<sofa-icon
-										:name="updateUserEducationForm.selectedExamId == item.institutionId ? 'circle-close-white' : 'circle-close'"
-										:customClass="'h-[17px]'" />
-								</span>
-							</sofa-badge>
-						</div>
-
-						<template v-if="updateUserEducationForm.selectedExamId">
-							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-								:name="'Courses'" ref="courses" :placeholder="'Select exam subjects'"
-								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-								:is-multiple="true" v-if="!updateUserEducationForm.fetchingCourse"
-								:options="educationOptions.examCourses"
-								v-model="updateUserEducationForm.exams.filter((i) => i.institutionId === updateUserEducationForm.selectedExamId)[0].courseIds" />
-						</template>
+						<SofaSelect v-if="typeFactory.activeInst"
+							customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+							placeholder="Select exam subjects" borderColor="border-transparent" :isMultiple="true"
+							:options="courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))"
+							v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds" />
 					</div>
 				</template>
 			</div>
@@ -176,7 +153,7 @@
 			</div>
 		</template>
 
-		<div class="w-full flex flex-col items-center md:py-0 px-0 py-4">
+		<div class="w-full flex flex-col items-center md:py-0 py-4">
 			<div v-if="isProfileEducation || isProfilePhone" class="w-full flex justify-end">
 				<sofa-button :disabled="isDisabled" :customClass="'!w-full'" :padding="'px-4 py-3'"
 					@click.prevent="handleAccountSetup">
@@ -190,32 +167,21 @@
 				</sofa-button>
 			</div>
 		</div>
-	</sofa-form-wrapper>
+	</div>
 </template>
 <script lang="ts">
-import { FormValidations } from '@/composables'
 import { useAuth } from '@/composables/auth/auth'
 import { useProfileUpdate } from '@/composables/auth/profile'
-import {
-	UpdatePhone,
-	UpdateUserEducation,
-	VerifyPhone,
-	educationOptions,
-	setDepartmentsOptions,
-	setExamCourses,
-	setFacultiesOptions,
-	setSchoolsOption,
-	updatePhoneForm,
-	updateProfileForm,
-	updateUserEducationForm,
-} from '@/composables/profile'
-import { useUserLocationUpdate } from '@/composables/users/profile'
+import { UpdatePhone, VerifyPhone, updatePhoneForm } from '@/composables/profile'
+import { useChooseSchool } from '@/composables/school'
+import { useCourseList } from '@/composables/school/courses'
+import { useUserLocationUpdate, useUserTypeUpdate } from '@/composables/users/profile'
+import { UserSchoolType } from '@modules/users'
 import { Logic } from 'sofa-logic'
 import {
 	SofaBadge,
 	SofaButton,
 	SofaFileAttachment,
-	SofaFormWrapper,
 	SofaIcon,
 	SofaImageLoader,
 	SofaNormalText,
@@ -225,7 +191,7 @@ import {
 	SofaTextField,
 	SofaTextarea
 } from 'sofa-ui-components'
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
 	components: {
@@ -237,7 +203,6 @@ export default defineComponent({
 		SofaSelect,
 		SofaFileAttachment,
 		SofaImageLoader,
-		SofaFormWrapper,
 		SofaOtpInput,
 		SofaBadge,
 		SofaPhoneInput,
@@ -260,167 +225,76 @@ export default defineComponent({
 	},
 	name: 'AccountSetup',
 	setup (props) {
-		const profileImageUrl = ref('')
-
-		const { auth } = useAuth()
+		const { auth, user } = useAuth()
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()
 		const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
+		const { factory: typeFactory, updateType } = useUserTypeUpdate()
 
-		const formComp = ref<any>()
 		const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
-		const currentAccountType = computed(() => UserProfile.value?.type?.type ?? Logic.Common.route?.query?.type?.toString() ?? 'student')
-		const AuthUser = ref(Logic.Auth.AuthUser)
-		const UserProfile = ref(Logic.Users.UserProfile)
-
-		const isDisabled = computed(() => tab.value === 'phone' ? !updatePhoneForm.phone : false)
+		const isDisabled = computed(() => {
+			if (tab.value === 'profile') return !profileFactory.valid || !locationFactory.valid || (typeFactory.isOrganization && !typeFactory.valid)
+			else if (tab.value === 'type') return !typeFactory.isOrganization && !typeFactory.valid
+			else if (tab.value === 'phone') return !updatePhoneForm.phone
+			else if (tab.value === 'phone-verify') return !updatePhoneForm.otp
+			return false
+		})
 
 		const accountSetupOptions = computed(() => [
 			{
 				name: 'Profile',
 				id: 'profile',
 				hide: false,
-				done: !!UserProfile.value?.bio.description && !!UserProfile.value?.location && (currentAccountType.value === 'organization' ? UserProfile.value?.type?.type === 'organization' : true),
+				done: !!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
 			},
 			{
-				name: currentAccountType.value === 'teacher' ? 'Experience' : 'Education',
+				name: typeFactory.isTeacher ? 'Experience' : 'Education',
 				id: 'type',
-				hide: currentAccountType.value === 'organization',
-				done: !!UserProfile.value?.type
+				hide: typeFactory.isOrganization,
+				done: !!user.value?.type
 			},
 			{
 				name: 'Phone',
 				id: 'phone',
 				hide: false,
-				done: !!AuthUser.value?.phone
+				done: !!auth.value?.phone
 			},
 		])
 
 		const handleAccountSetup = async () => {
 			if (isDisabled.value) return
 			try {
-				if (tab.value === 'profile') {
-					if (updateUserEducationForm.type === 'organization') {
-						Logic.Users.UpdateUserForm = {
-							data: {
-								type: 'organization',
-								name: updateProfileForm.organization_name,
-								code: updateProfileForm.organization_code,
-							},
-						}
-						await Logic.Users.UpdateUser(true, false)
-						const fullNameArray = updateProfileForm.organization_name.split(' ')
-						updateProfileForm.name.first = fullNameArray[0]
-						updateProfileForm.name.last = fullNameArray[1] ?? ''
-					}
-					await Promise.all([
-						updateProfile(true),
-						updateLocation(true)
-					])
-					tab.value = updateUserEducationForm.type === 'organization' ? 'phone' : 'type'
-				} else if (tab.value === 'type') {
-					await UpdateUserEducation(true)
-					if (!props.isProfileEducation) tab.value = 'phone'
-				}
-				else if (tab.value === 'phone') {
-					await UpdatePhone()
-					tab.value = 'phone-verify'
-				}
-				else if (tab.value === 'phone-verify') {
-					await VerifyPhone()
+				if (tab.value === 'profile') await Promise.all([
+					typeFactory.isOrganization ? updateType(true) : true,
+					updateProfile(true),
+					updateLocation(true)
+				]).then((res) => {
+					if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
+				})
+				else if (tab.value === 'type') await updateType(true).then((res) => {
+					if (res && !props.isProfileEducation) tab.value = 'phone'
+				})
+				else if (tab.value === 'phone') await UpdatePhone().then(() => tab.value = 'phone-verify')
+				else if (tab.value === 'phone-verify') await VerifyPhone().then(async () => {
 					if (props.isProfilePhone) tab.value = 'phone'
 					else await Logic.Common.GoToRoute(await Logic.Auth.getRedirectToRoute())
-				}
+				})
 			} catch (e) {
-				Logic.Common.showValidationError(e, formComp.value)
+				// Logic.Common.showValidationError(e, formComp.value)
 			}
 		}
 
-		const addExam = () => {
-			if (updateUserEducationForm.school) {
-				if (
-					updateUserEducationForm.exams.filter(
-						(item) => item.institutionId == updateUserEducationForm.school
-					).length == 0
-				) {
-					updateUserEducationForm.institution = updateUserEducationForm.school
-					updateUserEducationForm.exams.push({
-						institutionId: updateUserEducationForm.institution,
-						courseIds: [],
-						startDate: new Date().getTime(),
-						endDate: new Date().getTime(),
-					})
-					setExamCourses()
-					updateUserEducationForm.selectedExamId =
-						updateUserEducationForm.institution
-				}
-				updateUserEducationForm.school = ''
-			}
-		}
+		const { courses, fetchInstitutionCourses } = useCourseList()
+		const { schools, gatewayExams, filteredFaculties, filteredDepartments } = useChooseSchool(typeFactory)
 
-		const setDefaultVerificationData = () => {
-			updatePhoneForm.phone = auth.value?.phone
-			if (currentAccountType.value == 'teacher') {
-				updateUserEducationForm.type = 'teacher'
-				updateUserEducationForm.tutorSchool = UserProfile.value?.type?.school.toString()
-			} else if (currentAccountType.value == 'organization') {
-				updateUserEducationForm.type = 'organization'
-				updateProfileForm.organization_name = UserProfile.value?.type?.name ?? UserProfile.value?.bio.name.full ?? ''
-			} else {
-				updateUserEducationForm.type = 'student'
-				updateUserEducationForm.level = UserProfile.value?.type?.school?.type
-
-				if (UserProfile.value?.type?.school?.type == 'college') {
-					updateUserEducationForm.institution = UserProfile.value.type.school.institutionId
-					updateUserEducationForm.faculty = UserProfile.value.type.school.facultyId
-					updateUserEducationForm.department = UserProfile.value.type.school.departmentId
-
-				}
-
-				if (UserProfile.value?.type?.school?.type == 'aspirant') {
-					updateUserEducationForm.exams = UserProfile.value.type.school.exams as any
-				}
-			}
-		}
-
-		watch(() => updateUserEducationForm.level, setSchoolsOption)
-		watch(() => updateUserEducationForm.faculty, setDepartmentsOptions)
-
-		onMounted(() => {
-			Logic.Users.watchProperty('UserProfile', UserProfile)
-			setDefaultVerificationData()
-			setSchoolsOption()
-		})
+		watch(() => typeFactory.exams, async () => {
+			await Promise.all(typeFactory.exams.map(async (exam) => fetchInstitutionCourses(exam.institutionId)))
+		}, { immediate: true })
 
 		return {
-			profileFactory, locationFactory, countries, states,
-			tab,
-			isDisabled,
-			accountSetupOptions,
-			FormValidations,
-			updatePhoneForm,
-			formComp,
-			updateProfileForm,
-			currentAccountType,
-			educationOptions,
-			updateUserEducationForm,
-			Logic,
-			setSchoolsOption,
-			setFacultiesOptions,
-			setDepartmentsOptions,
-			handleAccountSetup,
-			addExam,
-			setExamCourses,
-			UpdatePhone,
+			profileFactory, locationFactory, typeFactory, countries, states, UserSchoolType,
+			schools, gatewayExams, filteredFaculties, filteredDepartments, courses,
+			tab, isDisabled, accountSetupOptions, updatePhoneForm, handleAccountSetup, UpdatePhone,
 		}
-	},
-	data () {
-		return {
-			parentRefs: null,
-		}
-	},
-	mounted () {
-		const parentRefs: any = this.$refs
-		this.parentRefs = parentRefs
-	},
+	}
 })
 </script>
