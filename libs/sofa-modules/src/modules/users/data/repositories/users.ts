@@ -3,7 +3,7 @@ import { apiBase } from '@utils/environment'
 import { UserEntity } from '../../domain/entities/users'
 import { IUserRepository } from '../../domain/irepositories/iusers'
 import { UserAccount, UserAi, UserLocation, UserSocialsType, UserTypeData } from '../../domain/types'
-import { UserFromModel } from '../models/user'
+import { UserFromModel } from '../models/users'
 
 export class UserRepository implements IUserRepository {
 	private static instance: UserRepository

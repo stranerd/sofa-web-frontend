@@ -114,7 +114,7 @@
 <script lang="ts">
 import { UserEntity } from '@modules/users'
 import { Conditions, Logic, SingleUser } from 'sofa-logic'
-import { defineComponent, onMounted, ref } from 'vue'
+import { PropType, defineComponent, onMounted, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
@@ -175,7 +175,7 @@ export default defineComponent({
 			default: () => [],
 		},
 		user: {
-			type: UserEntity,
+			type: Object as PropType<UserEntity>,
 			required: false
 		}
 	},

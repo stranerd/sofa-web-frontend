@@ -1,5 +1,5 @@
 import { BaseEntity } from '@modules/core'
-import { UserFromModel } from '../../data/models/user'
+import { UserFromModel } from '../../data/models/users'
 import {
 	AuthRoleType,
 	UserAccount,

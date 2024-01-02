@@ -15,7 +15,7 @@ export const useMyOrganizations = () => {
 
 	const organizations = computed(() => orgs.value.map((u) => ({
 		id: u.id,
-		name: u.type?.name ?? u.bio.name.full,
+		name: u.orgName(),
 		photo: u.bio.photo?.link
 	})))
 

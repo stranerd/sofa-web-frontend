@@ -3,7 +3,7 @@ import { v } from 'valleyed'
 import { UserEntity } from '../entities/users'
 import { UserSocials, UserSocialsType } from '../types'
 
-export class UserSocialsFactory extends BaseFactory<UserEntity, { socials: UserSocialsType }, { socials: UserSocialsType }> {
+export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType, { socials: UserSocialsType }> {
 	readonly rules = {
 		socials: v.array(
 			v.object({
@@ -64,7 +64,7 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, { socials: UserS
 	toModel = async () => {
 		if (this.valid) {
 			const { socials } = this.validValues
-			return { socials }
+			return socials
 		} else {
 			throw new Error('Validation errors')
 		}

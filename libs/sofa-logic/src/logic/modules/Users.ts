@@ -25,15 +25,6 @@ export default class Users extends Common {
 	public UpdateUserVerificationForm: VerificationStatusInput | undefined
 	public CreateTutorRequestForm: CreateTutorRequestForm | undefined
 
-	public GetUsers = (filters: QueryParams, updateItems = true) => {
-		return $api.users.users.fetch(filters).then((response) => {
-			if (updateItems) {
-				this.AllUsers = response.data
-			}
-			return response.data as Paginated<SingleUser>
-		})
-	}
-
 	public GetTutorRequest = (id: string) => {
 		return $api.users.tutor_request.get(id).then((response) => {
 			this.SingleTutorRequest = response.data

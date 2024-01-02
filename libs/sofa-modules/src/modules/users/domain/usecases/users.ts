@@ -1,10 +1,11 @@
-import { HttpClient } from '@modules/core'
+import { Conditions, HttpClient, Listeners, QueryParams } from '@modules/core'
+import { UserEntity } from '../entities/users'
 import { UserAiFactory } from '../factories/userAi'
 import { UserLocationFactory } from '../factories/userLocation'
 import { UserSocialsFactory } from '../factories/userSocials'
 import { UserTypeFactory } from '../factories/userType'
 import { IUserRepository } from '../irepositories/iusers'
-import { UserAccount } from '../types'
+import { UserAccount, UserType } from '../types'
 
 interface Country {
   name: string
@@ -24,6 +25,47 @@ export class UsersUseCase {
 
 	async find (id: string) {
 		return await this.repository().find(id)
+	}
+
+	async getInEmails (emails: string[]) {
+		const query: QueryParams = {
+			where: [{ field: 'bio.email', condition: Conditions.in, value: emails }],
+			all: true
+		}
+		return (await this.repository().get(query)).results
+	}
+
+	async getAllTeachers () {
+		return await this.repository().get({
+			where: [{ field: 'type.type', value: UserType.teacher }],
+			all: true
+		})
+	}
+
+	async listenToAllTeachers (listener: Listeners<UserEntity>) {
+		return await this.repository().listenToMany({
+			where: [{ field: 'type.type', value: UserType.teacher }],
+			all: true
+		}, listener, (entity) => entity.userType.isTeacher)
+	}
+
+	async getInList (ids: string[]) {
+		const users = await this.repository().get({
+			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+			all: true
+		})
+		return users.results
+	}
+
+	async listenToOne (id: string, listeners: Listeners<UserEntity>) {
+		return await this.repository().listenToOne(id, listeners)
+	}
+
+	async listenToInList (ids: () => string[], listener: Listeners<UserEntity>) {
+		return await this.repository().listenToMany({
+			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+			all: true
+		}, listener, (entity) => ids().includes(entity.id))
 	}
 
 	async updateType (factory: UserTypeFactory) {
