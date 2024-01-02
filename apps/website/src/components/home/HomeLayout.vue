@@ -20,7 +20,7 @@
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
-							<SofaHeaderText class="!text-base" :content="user.orgName" />
+							<SofaHeaderText class="!text-base" :content="user.orgName()" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
 							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 						</div>
@@ -256,6 +256,6 @@ const extras = computed(() => ({
 }))
 
 const shareUrl = `${window.location.origin}/profile/${id.value}`
-const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.orgName ?? ''}`, shareUrl)
+const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.orgName() ?? ''}`, shareUrl)
 const copy = () => Logic.Common.copy(shareUrl)
 </script>
