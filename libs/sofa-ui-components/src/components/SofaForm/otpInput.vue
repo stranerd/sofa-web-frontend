@@ -73,10 +73,6 @@ export default defineComponent({
 			type: Function,
 			required: false,
 		},
-		type: {
-			type: String,
-			default: 'text',
-		},
 	},
 	emits: ['update:modelValue'],
 	setup (props: any, context) {

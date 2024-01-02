@@ -45,31 +45,39 @@ export const usePhoneUpdate = () => {
 	if (auth.value) factory.loadEntity(auth.value)
 	watch(auth, () => auth.value && factory.loadEntity(auth.value))
 
-	const completeVerification = async () => {
-		if (loading.value) return
+	const completeVerification = async (skipAlert = false) => {
+		if (loading.value) return false
+		let succeeded = false
 		await setError('')
 		await setLoading(true)
 		try {
 			await AuthUseCases.completePhoneVerification(token.value)
-			await setMessage('Phone number updated successfully!')
+			await setMessage('Phone number updated successfully!', skipAlert)
+			sent.value = false
+			succeeded = true
 		} catch (error) {
 			await setError(error)
 		}
 		await setLoading(false)
+		return succeeded
 	}
-	const sendVerificationText = async () => {
-		if (!factory.valid) return
-		if (loading.value) return
+	const sendVerificationText = async (skipAlert = false) => {
+
+		if (!factory.valid) return false
+		if (loading.value) return false
+		let succeeded = false
 		await setError('')
 		await setLoading(true)
 		try {
 			await AuthUseCases.sendVerificationText(factory)
-			await setMessage('An OTP was just sent to your number.')
+			await setMessage('An OTP was just sent to your number.', skipAlert)
+			succeeded = true
 			sent.value = true
 		} catch (error) {
 			await setError(error)
 		}
 		await setLoading(false)
+		return succeeded
 	}
 
 	return {
