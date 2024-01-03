@@ -25,7 +25,7 @@
 			</template>
 		</VueEditor>
 		<textarea v-else v-model="comp" :placeholder="placeholder" :rows="rows" :disabled="disabled" :tabindex="0"
-			:class="`w-full p-3 text-darkBody placeholder-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
+			:class="`w-full p-3 text-darkBody placeholder:text-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
     </textarea>
 		<div v-if="error" class="w-full flex pt-1 justify-start">
 			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />

@@ -21,8 +21,8 @@
 						<div class="w-[20px] mdlg:!hidden">
 							<sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
 						</div>
-						<sofa-text-field :customClass="'!border-none w-full'" :placeholder="'Search for anything'"
-							:padding="'px-3 mdlg:!pl-0 py-3'" v-model="searchQuery">
+						<sofa-text-field :customClass="'!border-none w-full mdlg:!pl-0'" :placeholder="'Search for anything'"
+							v-model="searchQuery">
 						</sofa-text-field>
 					</div>
 

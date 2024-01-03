@@ -47,16 +47,16 @@
 						</sofa-image-loader>
 					</div>
 
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-						padding="p-3" type="text" placeholder="First Name" :error="profileFactory.errors.first"
+					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+						type="text" placeholder="First Name" :error="profileFactory.errors.first"
 						v-model="profileFactory.first" borderColor="border-transparent" />
 
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-						padding="p-3" type="text" placeholder="Last Name" :error="profileFactory.errors.last"
+					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+						type="text" placeholder="Last Name" :error="profileFactory.errors.last"
 						v-model="profileFactory.last" borderColor="border-transparent" />
 
 					<sofa-textarea :hasTitle="false"
-						textAreaStyle="h-[90px] rounded-custom !bg-lightGray placeholder:text-grayColor md:p-4 p-3 resize-none"
+						textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 						placeholder="Bio" v-model="profileFactory.description" />
 				</div>
 
@@ -112,11 +112,11 @@
 						Location
 					</sofa-header-text>
 
-					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" placeholder="Country"
+					<SofaSelect customClass="rounded-custom !bg-lightGray" placeholder="Country"
 						:error="locationFactory.errors.country" borderColor="border-transparent"
 						v-model="locationFactory.country" :options="countries.map((c) => ({ key: c, value: c }))" />
 
-					<SofaSelect customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" placeholder="State"
+					<SofaSelect customClass="rounded-custom !bg-lightGray" placeholder="State"
 						:error="locationFactory.errors.state" borderColor="border-transparent"
 						v-model="locationFactory.state" :options="states.map((s) => ({ key: s, value: s }))" />
 				</div>
@@ -136,7 +136,7 @@
 						</sofa-normal-text>
 					</div>
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray'"
 						:name="'Subject'" ref="Subject" :placeholder="'Select subject'"
 						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
 						:options="topics.map((t) => ({ key: t.id, value: t.title }))" v-model="tutorRequestForm.topicId" />

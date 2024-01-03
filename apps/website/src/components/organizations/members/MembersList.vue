@@ -20,7 +20,7 @@
 		<div class="flex gap-4 items-center px-4 md:px-6">
 			<div class="flex items-center border border-darkLightGray rounded-custom pl-4 md:min-w-[300px]">
 				<SofaIcon name="search" class="h-[16px]" />
-				<SofaTextField v-model="searchValue" class="w-full" padding="p-4" placeholder="Search" type="search"
+				<SofaTextField v-model="searchValue" class="w-full" placeholder="Search" type="search"
 					borderColor="!border-none" />
 			</div>
 			<SofaButton class="ml-auto" customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"

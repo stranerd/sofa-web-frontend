@@ -30,14 +30,14 @@
 								:content="option.title" />
 							<SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
 						</a>
-						<SofaTextField padding="px-3 py-4" customClass="border rounded-custom" placeholder="Others"
+						<SofaTextField customClass="border rounded-custom" placeholder="Others"
 							v-model="selectedhelpOptionOthers" />
 					</div>
 				</template>
 
 				<template v-if="currentStep == 1">
 					<div class="w-full flex flex-col gap-3 px-4 md:px-0">
-						<SofaTextarea padding="px-3 py-4" customClass="bg-lightGray rounded-custom"
+						<SofaTextarea customClass="bg-lightGray rounded-custom"
 							placeholder="Tell the tutor why you need him/her" v-model="factory.body"
 							textAreaStyle="!bg-lightGray rounded-custom">
 						</SofaTextarea>

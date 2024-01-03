@@ -36,8 +36,8 @@
 				<div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
 					<sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
 					<sofa-text-field
-						customClass="bg-transparent text-bodyBlack placeholder-grayColor w-full focus:outline-none"
-						placeholder="Search " :padding="'px-1 py-0'" v-model="searchQuery" @onEnter="initiateSearch" />
+						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
+						placeholder="Search" padding="px-1" v-model="searchQuery" @onEnter="initiateSearch" />
 				</div>
 			</div>
 

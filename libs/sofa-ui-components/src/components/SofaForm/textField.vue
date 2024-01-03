@@ -10,7 +10,7 @@
 				<slot name="inner-prefix" />
 				<input v-model="content" :placeholder="placeholder" @blur="checkValidation()" @keypress="isNumber"
 					:disabled="disabled" :type="fieldType" @keyup="detectKey"
-					class="flex-grow bg-transparent text-darkBody placeholder-grayColor input w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
+					class="flex-grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 				<slot name="inner-suffix" />
 				<SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'"
 					:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
@@ -42,7 +42,7 @@ export default defineComponent({
 	props: {
 		padding: {
 			type: String,
-			default: 'p-3',
+			default: 'p-3 md:p-4',
 		},
 		placeholder: {
 			type: String,

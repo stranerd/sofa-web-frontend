@@ -121,8 +121,8 @@
 			</div>
 
 			<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-				<SofaTextField v-model="joinCode" custom-class="rounded-custom !bg-lightGray !placeholder:text-grayColor"
-					padding="p-3" type="text" placeholder="Enter Join Code" borderColor="border-transparent" />
+				<SofaTextField v-model="joinCode" custom-class="rounded-custom !bg-lightGray"
+					type="text" placeholder="Enter Join Code" borderColor="border-transparent" />
 			</div>
 
 			<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">

@@ -1,6 +1,6 @@
 <template>
 	<SofaTextField v-for="(item, index) in factory.getSocials()" :key="index" :placeholder="`Add ${item.ref} link`" type="url"
-		:error="item.error" customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+		:error="item.error" customClass="rounded-custom !bg-lightGray"
 		v-model="item.link">
 		<template v-slot:inner-prefix>
 			<SofaIcon :name="socials[item.ref]" class="h-[20px]" />

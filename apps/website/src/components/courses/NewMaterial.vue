@@ -112,7 +112,7 @@
 				</div>
 
 				<div class="w-full flex flex-col gap-4">
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray'"
 						:name="'Quiz'" ref="quiz" :placeholder="'Quiz'"
 						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
 						:options="allQuizzes" :hasTitle="true" v-model="selectedQuiz">

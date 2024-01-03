@@ -2,24 +2,24 @@
 	<sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
 		<div class="w-full md:!grid md:!grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Title'" ref="title"
+				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+					type="text" :name="'Title'" ref="title"
 					v-model="courseSettingForm.title" :update-value="courseSettingForm.title" :placeholder="'Title'"
 					:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" />
 
 				<sofa-textarea :hasTitle="false"
-					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
 					:placeholder="'Description'" ref="description" v-model="courseSettingForm.description" />
 
-				<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+				<sofa-select :custom-class="'rounded-custom !bg-lightGray'"
 					:name="'Topic'" ref="topic" :placeholder="'Topic'"
 					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
 					:options="allTopics" :can-use-custom="true"
 					v-model="courseSettingForm.topic" />
 
 				<sofa-text-field v-if="auth.roles.isVerified"
-					:custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Price'" ref="price.amount"
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="text" :name="'Price'" ref="price.amount"
 					v-model="courseSettingForm.price" :update-value="courseSettingForm.price" :placeholder="'Price'"
 					:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" :isFormatted="true">
 					<template v-slot:inner-prefix>
@@ -47,8 +47,8 @@
 		</div>
 
 		<div class="w-full flex flex-col gap-2">
-			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-				:padding="'md:!py-4 md:!px-4 px-3 py-4'" :name="'Tags'" ref="tags"
+			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+				:name="'Tags'" ref="tags"
 				:placeholder="'Tags (Comma separated for multiple)'" :borderColor="'border-transparent'"
 				v-model="courseSettingForm.tagString" />
 			<div class="w-full flex flex-row flex-wrap items-center">

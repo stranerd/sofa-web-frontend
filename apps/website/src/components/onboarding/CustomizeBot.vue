@@ -25,12 +25,12 @@
 						</SofaFileAttachment>
 					</SofaImageLoader>
 
-					<SofaTextField customClass="rounded-custom !bg-lightGray placeholder:text-grayColor"
-						padding="md:p-4 p-3" type="text" borderColor="border-transparent" placeholder="Name"
+					<SofaTextField customClass="rounded-custom !bg-lightGray"
+						type="text" borderColor="border-transparent" placeholder="Name"
 						:error="factory.errors.name" v-model="factory.name" />
 
-					<SofaTextField customClass="rounded-custom !bg-lightGray placeholder:text-grayColor"
-						padding="md:p-4 p-3" type="text" borderColor="border-transparent" placeholder="Tagline"
+					<SofaTextField customClass="rounded-custom !bg-lightGray"
+						type="text" borderColor="border-transparent" placeholder="Tagline"
 						:error="factory.errors.tagline" v-model="factory.tagline" />
 				</div>
 

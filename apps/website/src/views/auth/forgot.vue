@@ -2,7 +2,7 @@
 	<auth-layout :title="sent ? 'Reset your password' : 'Forgot your password'"
 		:subTitle="sent ? undefined : 'Enter the email address associated with your account and we’ll send you a link to reset your password'">
 		<form v-if="!sent" class="flex flex-col gap-6 w-full" @submit.prevent="sendResetEmail">
-			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'" :padding="'md:p-4 p-3'"
+			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
 				type="text" :name="'Email'" ref="email" v-model="factory.email" :placeholder="'Email'"
 				:error="factory.errors.email" />
 
@@ -15,16 +15,16 @@
 
 		<form v-else class="flex flex-col gap-6 w-full" @submit.prevent="resetPassword">
 			<div class="w-full flex flex-col gap-4">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-					:padding="'md:p-4 p-3'" type="tel" :name="'Token'" ref="token" v-model="factory.token"
+				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+					type="tel" :name="'Token'" ref="token" v-model="factory.token"
 					:placeholder="'Enter 6-digit token'" :error="factory.errors.token" />
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-					:padding="'md:p-4 p-3'" type="password" :name="'New password'" ref="new_password" v-model="factory.password"
+				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+					type="password" :name="'New password'" ref="new_password" v-model="factory.password"
 					:placeholder="'New password'" :error="factory.errors.password" />
 
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor'"
-					:padding="'md:p-4 p-3'" type="password" :name="'Confirm password'" ref="confirm_new_password"
+				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+					type="password" :name="'Confirm password'" ref="confirm_new_password"
 					v-model="factory.cPassword" :placeholder="'Confirm new password'" :error="factory.errors.cPassword" />
 			</div>
 

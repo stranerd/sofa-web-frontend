@@ -11,8 +11,8 @@
 				</div>
 			</div>
 
-			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-				:padding="'md:!py-3 md:!px-3 px-3 py-3'" type="text" :name="'Youtube video link'" ref="video_link"
+			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+				type="text" :name="'Youtube video link'" ref="video_link"
 				v-model="addVideoForm.link" :placeholder="'Paste link here'" :borderColor="'border-transparent'"
 				:rules="[Logic.Form.RequiredRule]">
 				<template v-slot:inner-prefix>

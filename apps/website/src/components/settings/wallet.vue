@@ -135,8 +135,8 @@
 				</div>
 
 				<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4" v-if="modalContent == 'fund_wallet'">
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'px-3 py-3'" type="text" :name="'Amount'" ref="amount" :placeholder="'Amount'"
+					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+						type="text" :name="'Amount'" ref="amount" :placeholder="'Amount'"
 						:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" :isFormatted="true"
 						v-model="fundWalletAmount">
 						<template v-slot:inner-prefix>
@@ -192,8 +192,8 @@
 				</div>
 
 				<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4" v-if="modalContent == 'withdraw_money'">
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'px-3 py-3'" type="text" :name="'Amount'" ref="amount" :placeholder="'Amount'"
+					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+						type="text" :name="'Amount'" ref="amount" :placeholder="'Amount'"
 						:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]" :isFormatted="true"
 						v-model="withdrawForm.amount">
 						<template v-slot:inner-prefix>
@@ -203,13 +203,13 @@
 						</template>
 					</sofa-text-field>
 
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'px-3 py-3'" type="tel" :name="'Account number'" ref="account_number"
+					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
+						type="tel" :name="'Account number'" ref="account_number"
 						:placeholder="'Account number'" :borderColor="'border-transparent'"
 						:rules="[Logic.Form.RequiredRule]" v-model="withdrawForm.account_number">
 					</sofa-text-field>
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :name="'Bank'"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray'" :name="'Bank'"
 						ref="bank" :placeholder="'Bank'" :borderColor="'border-transparent'"
 						:rules="[Logic.Form.RequiredRule]"
 						:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))"

@@ -82,7 +82,7 @@
 					</div>
 				</div>
 
-				<SofaTextField placeholder="What can I do for you?" padding="p-3" customClass="border"
+				<SofaTextField placeholder="What can I do for you?" customClass="border"
 					v-model="factory.body">
 					<template v-slot:inner-suffix>
 						<SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
@@ -168,7 +168,7 @@
 				<SofaIcon class="h-[16px] fill-current ml-auto" name="circle-close" />
 			</div>
 			<div class="flex gap-2 items-center">
-				<SofaTextField customClass="!bg-lightGray" v-model="addMembersEmails" padding="p-4" name="Emails"
+				<SofaTextField customClass="!bg-lightGray" v-model="addMembersEmails" name="Emails"
 					placeholder="Email, comma seperated" borderColor="border-transparent" />
 				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white"
 					@click="addMembers(addModalType).then((succeeded) => succeeded ? addModalType = null : null)">

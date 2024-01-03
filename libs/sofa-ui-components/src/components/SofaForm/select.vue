@@ -6,7 +6,7 @@
 		<div class="flex items-center gap-1 justify-between w-full rounded-md px-3 py-4" :class="customClass"
 			@click="showOptions = true">
 			<input :value="selectedOptions.at(0)?.value" :placeholder="placeholder" v-if="!isMultiple"
-				class="flex-grow bg-transparent placeholder-grayColor text-darkBody w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
+				class="flex-grow bg-transparent placeholder:text-grayColor text-darkBody w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 			<div v-else class="w-full flex whitespace-nowrap overflow-x-auto scrollbar-hide gap-2 text-darkBody">
 				<template v-if="value.length">
 					<template v-for="option in selectedOptions" :key="option">

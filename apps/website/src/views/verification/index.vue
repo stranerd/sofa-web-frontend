@@ -42,19 +42,19 @@
 				</div>
 
 				<SofaTextField placeholder="Enter name" :hasTitle="true"
-					customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					customClass="rounded-custom !bg-lightGray"
 					:error="profileFactory.errors.first" v-model="profileFactory.first">
 					<template v-slot:title>First Name</template>
 				</SofaTextField>
 
 				<SofaTextField placeholder="Enter name" :hasTitle="true"
-					customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					customClass="rounded-custom !bg-lightGray"
 					:error="profileFactory.errors.last" v-model="profileFactory.last">
 					<template v-slot:title>Last Name</template>
 				</SofaTextField>
 
 				<SofaTextarea placeholder="Description of yourself" :hasTitle="true"
-					textAreaStyle="rounded-custom !bg-lightGray !placeholder:text-grayColor resize-none"
+					textAreaStyle="rounded-custom !bg-lightGray"
 					:error="profileFactory.errors.description" v-model="profileFactory.description">
 					<template v-slot:title>Bio</template>
 				</SofaTextarea>
@@ -114,7 +114,7 @@
 						</div>
 
 						<div class="w-full flex flex-col gap-4">
-							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
+							<sofa-select :custom-class="'rounded-custom !bg-lightGray'"
 								:name="capitalize(addMaterialType)" :ref="addMaterialType" :placeholder="'Select material'"
 								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
 								:options="allMaterials" :hasTitle="true" v-model="selectedMaterial">

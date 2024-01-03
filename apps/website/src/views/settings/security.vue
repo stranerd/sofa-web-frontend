@@ -5,15 +5,15 @@
 				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
 				<SofaHeaderText size="xl" content="Password" />
 
-				<SofaTextField v-if="hasPassword" customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+				<SofaTextField v-if="hasPassword" customClass="rounded-custom !bg-lightGray"
 					type="password" placeholder="Current password" :error="factory.errors.oldPassword"
 					borderColor="border-transparent" v-model="factory.oldPassword" />
 
-				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+				<SofaTextField customClass="rounded-custom !bg-lightGray"
 					type="password" placeholder="New password" :error="factory.errors.password"
 					borderColor="border-transparent" v-model="factory.password" />
 
-				<SofaTextField customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor" padding="md:p-4 p-3"
+				<SofaTextField customClass="rounded-custom !bg-lightGray"
 					type="password" placeholder="Confirm new password" :error="factory.errors.cPassword"
 					borderColor="border-transparent" v-model="factory.cPassword" />
 
