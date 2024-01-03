@@ -145,9 +145,10 @@ const addMaterialToFolder = (
 }
 
 const openQuiz = (activity: ResourceType, force = false) => {
-	if (!force && activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id)
+	const original = activity.original as Quiz
+	if (!force && ((activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
-	selectedQuiz.value = activity.original as Quiz
+	selectedQuiz.value = original
 	showStudyMode.value = true
 	selectedQuizMode.value = ''
 }
