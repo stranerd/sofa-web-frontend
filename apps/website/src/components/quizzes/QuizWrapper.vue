@@ -12,6 +12,7 @@ import { Logic, Question, QuestionFactory, QuizFactory, SingleUser } from 'sofa-
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 import { useRoute, useRouter } from 'vue-router'
+import { UsersUseCases } from '@modules/users'
 
 const props = defineProps({
 	id: {
@@ -220,6 +221,6 @@ watch([currentQuestionById, quizQuestions, quiz], () => {
 	const v = selectedQuestionId.value
 	router.push(`${quizPath}?q=${v}`).catch()
 	const edit = user.value?.account.editing.quizzes
-	if (edit?.id !== props.id || edit?.questionId !== v) Logic.Users.updateUserEditingQuizzes({ id: props.id, questionId: v }).catch()
+	if (edit?.id !== props.id || edit?.questionId !== v) UsersUseCases.updateEditingQuizzes({ id: props.id, questionId: v }).catch()
 }, { immediate: true })
 </script>

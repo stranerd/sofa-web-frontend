@@ -113,8 +113,8 @@
 
 				<div class="w-full flex flex-col gap-4">
 					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Quiz'" ref="quiz" :placeholder="'Quiz'"
-						:rules="[FormValidations.RequiredRule]" :autoComplete="false" :borderColor="'border-transparent'"
+						:name="'Quiz'" ref="quiz" :placeholder="'Quiz'"
+						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
 						:options="allQuizzes" :hasTitle="true" v-model="selectedQuiz">
 						<template v-slot:title> Choose a quiz </template>
 					</sofa-select>
@@ -214,7 +214,7 @@ export default defineComponent({
 		const setQuizzes = () => {
 			allQuizzes.value.length = 0
 			AllQuzzies.value.results.forEach((quiz) => {
-				const canAddQuiz = quiz.user.id === Logic.Auth.AuthUser?.id && quiz.courseId === null
+				const canAddQuiz = quiz.user.id === Logic.Common.AuthUser?.id && quiz.courseId === null
 				if (canAddQuiz) allQuizzes.value.push({
 					key: quiz.id,
 					value: quiz.title,
@@ -270,7 +270,7 @@ export default defineComponent({
 				where: [
 					{
 						field: 'user.id',
-						value: Logic.Auth.AuthUser?.id,
+						value: Logic.Common.AuthUser?.id,
 						condition: Conditions.eq,
 					},
 				],

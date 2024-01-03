@@ -12,12 +12,12 @@
 					:placeholder="'Description'" ref="description" v-model="courseSettingForm.description" />
 
 				<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="'Topic'" ref="topic" :placeholder="'Topic'"
-					:rules="[FormValidations.RequiredRule]" :autoComplete="true" :borderColor="'border-transparent'"
-					:options="allTopics" :update-value="courseSettingForm.topic" :can-use-custom="true"
+					:name="'Topic'" ref="topic" :placeholder="'Topic'"
+					:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+					:options="allTopics" :can-use-custom="true"
 					v-model="courseSettingForm.topic" />
 
-				<sofa-text-field v-if="Logic.Users.UserProfile.roles.isVerified"
+				<sofa-text-field v-if="auth.roles.isVerified"
 					:custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
 					:padding="'md:!py-4 md:!px-4 px-3 py-3'" type="text" :name="'Price'" ref="price.amount"
 					v-model="courseSettingForm.price" :update-value="courseSettingForm.price" :placeholder="'Price'"
@@ -100,6 +100,7 @@
 </template>
 <script lang="ts">
 import { FormValidations } from '@/composables'
+import { useAuth } from '@/composables/auth/auth'
 import {
 	allGenericTags,
 	allTopics,
@@ -154,6 +155,7 @@ export default defineComponent({
 		const newTags = ref('')
 
 		const formComp = ref<any>()
+		const { auth } = useAuth()
 
 		const courseImageUrl = ref('')
 
@@ -214,6 +216,7 @@ export default defineComponent({
 		})
 
 		return {
+			auth,
 			courseSettingForm,
 			Logic,
 			FormValidations,

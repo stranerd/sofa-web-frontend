@@ -113,10 +113,10 @@
 
 	<SofaModal v-if="showModal" :close="() => showModal = false">
 		<div class="flex flex-col md:gap-5 gap-3 relative mdlg:p-6 items-center">
-			<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${user.orgName}`" />
+			<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${user.orgName()}`" />
 
 			<div class="w-full flex justify-between items-center mdlg:hidden py-2 border-lightGray border-b px-4">
-				<SofaNormalText class="!font-bold !text-base" :content="`Join ${user.orgName}`" />
+				<SofaNormalText class="!font-bold !text-base" :content="`Join ${user.orgName()}`" />
 				<SofaIcon class="h-[19px]" name="circle-close" @click="showModal = false" />
 			</div>
 
@@ -144,9 +144,9 @@
 <script lang="ts">
 import { useAuth } from '@/composables/auth/auth'
 import { extractResource, saveToFolder } from '@/composables/library'
-import { socials } from '@/composables/profile'
 import { useUsersMaterials } from '@/composables/study/users-materials'
 import { useMyOrganizations } from '@/composables/users/organizations'
+import { socials } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaAvatar,

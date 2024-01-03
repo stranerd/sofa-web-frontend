@@ -66,6 +66,7 @@ import {
 	selectedFolderMaterailToAdd,
 	sendReportMaterial,
 } from './composables/library'
+import { UsersUseCases } from '@modules/users'
 
 useMeta({
 	title: 'Home',
@@ -83,6 +84,6 @@ watch([route, user], async () => {
 	const path = route.fullPath
 	const quizzes = user.value?.account.editing?.quizzes
 	if (!quizzes) return
-	if (!path.startsWith(`/quiz/${quizzes.id}/edit`)) Logic.Users.updateUserEditingQuizzes(null).catch()
+	if (!path.startsWith(`/quiz/${quizzes.id}/edit`)) UsersUseCases.updateEditingQuizzes(null).catch()
 }, { immediate: true })
 </script>

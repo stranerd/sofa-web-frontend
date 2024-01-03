@@ -1,7 +1,7 @@
 import { useListener } from '@app/composables/core/listener'
-import { AuthDetails, AuthUseCases } from '@modules/auth'
-import { Logic, Wallet } from 'sofa-logic'
+import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
 import { UserEntity, UsersUseCases } from '@modules/users'
+import { Logic, Wallet } from 'sofa-logic'
 import { computed, ref } from 'vue'
 
 const store = {
@@ -15,7 +15,6 @@ const store = {
 		}
 		const setUser = async (user: UserEntity) => {
 			store.user.value = user
-			Logic.Users.UserProfile = user as any
 		}
 		const setWallet = async (wallet: Wallet) => {
 			store.wallet.value = wallet
@@ -47,18 +46,19 @@ export const useAuth = () => {
 	const userType = computed(() => store.user.value?.userType ?? UserEntity.getDefaultUserType())
 
 	const userAi = computed(() => ({
-		name: store.user.value?.ai?.name ?? 'Dr. Sofa',
+		name: store.user.value?.ai?.name ?? UserEntity.defaultAi,
 		tagline: store.user.value?.ai?.tagline ?? '',
-		image: store.user.value?.ai?.photo?.link ?? '/images/icons/robot.svg'
+		image: store.user.value?.ai?.photo?.link ?? UserEntity.defaultAiPhotoLink
 	}))
+
+	const hasPassword = computed( () => !!store.auth.value?.authTypes.includes(AuthTypes.email),)
 
 	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
 		store.auth.value = details
-		Logic.Auth.AuthUser = details as any
+		Logic.Common.AuthUser = details as any
 		if (details?.id) {
 			store.user.value = await UsersUseCases.find(details.id)
-			Logic.Users.UserProfile = store.user.value as any
 			store.wallet.value = await Logic.Payment.GetUserWallet()
 		} else store.user.value = null
 	}
@@ -104,7 +104,7 @@ export const useAuth = () => {
 
 	return {
 		id, bio, user: store.user, auth: store.auth, wallet: store.wallet,
-		isLoggedIn, isEmailVerified, isAdmin, isSubscribed, userType, userAi,
+		isLoggedIn, isEmailVerified, isAdmin, isSubscribed, userType, userAi, hasPassword,
 		setAuthUser, signin, signout, deleteAccount
 	}
 }

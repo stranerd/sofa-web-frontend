@@ -6,35 +6,34 @@
 			{
 				IsOutlined: true,
 				name: 'Exit',
-				handler: cancle,
+				handler: Logic.Common.goBack,
 			},
 			{
 				IsOutlined: false,
 				name: 'Submit',
-				handler: submitVerification,
+				disabled: !profileFactory.valid || !socialsFactory.valid,
+				handler: submit,
 			},
 		],
-	}" :wrap="true" :hide="{
-		bottom: true,
-	}">
+	}" :wrap="true" :hide="{ bottom: true }">
 		<template v-slot:left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<div class="w-full flex flex-col">
 					<sofa-header-text :customClass="'!font-bold'">
 						Personal information
 					</sofa-header-text>
-					<sofa-normal-text> Edit your profile </sofa-normal-text>
+					<sofa-normal-text>Edit your profile</sofa-normal-text>
 				</div>
 
 				<div class="w-full flex flex-col items-center justify-center pt-3">
 					<sofa-image-loader
 						:customClass="`w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-						:photoUrl="profileImageUrl">
-						<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileImageUrl" />
+						:photoUrl="profileFactory.localPhotoLink">
+						<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileFactory.localPhotoLink" />
 						<sofa-file-attachment :isWrapper="true"
 							:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-							:accept="'image/png, image/gif, image/jpeg'" v-model="updateProfileForm.photo"
-							v-model:localFileUrl="profileImageUrl">
+							:accept="'image/png, image/gif, image/jpeg'" v-model="profileFactory.photo"
+							v-model:localFileUrl="profileFactory.localPhotoLink">
 							<template v-slot:content>
 								<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
 							</template>
@@ -42,23 +41,23 @@
 					</sofa-image-loader>
 				</div>
 
-				<sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'First name'" ref="name.first"
-					:custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.first">
-					<template v-slot:title> First Name </template>
-				</sofa-text-field>
+				<SofaTextField placeholder="Enter name" :hasTitle="true"
+					customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					:error="profileFactory.errors.first" v-model="profileFactory.first">
+					<template v-slot:title>First Name</template>
+				</SofaTextField>
 
-				<sofa-text-field :placeholder="'Enter name'" :hasTitle="true" :name="'Last name'" ref="name.last"
-					:custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-					:rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.name.last">
-					<template v-slot:title> Last Name </template>
-				</sofa-text-field>
+				<SofaTextField placeholder="Enter name" :hasTitle="true"
+					customClass="rounded-custom !bg-lightGray !placeholder:text-grayColor"
+					:error="profileFactory.errors.last" v-model="profileFactory.last">
+					<template v-slot:title>Last Name</template>
+				</SofaTextField>
 
-				<sofa-textarea :placeholder="'Description of yourself'" :hasTitle="true" :name="'Bio'" ref="description"
-					:text-area-style="'rounded-custom !bg-lightGray !placeholder:text-grayColor resize-none'"
-					:rules="[FormValidations.RequiredRule]" v-model="updateProfileForm.description">
-					<template v-slot:title> Bio </template>
-				</sofa-textarea>
+				<SofaTextarea placeholder="Description of yourself" :hasTitle="true"
+					textAreaStyle="rounded-custom !bg-lightGray !placeholder:text-grayColor resize-none"
+					:error="profileFactory.errors.description" v-model="profileFactory.description">
+					<template v-slot:title>Bio</template>
+				</SofaTextarea>
 			</div>
 		</template>
 
@@ -77,15 +76,10 @@
 						<template v-for="(content, index) in selectedMaterialList" :key="index">
 							<template v-if="!Logic.Common.isOnlyMobile">
 								<sofa-activity-card v-if="content.subject" :activity="content"
-									:customClass="'!bg-lightGray !w-full cursor-pointer'" @click="
-										Logic.Common.GoToRoute('/course/create?id=' + content.id)
-									"></sofa-activity-card>
+									:customClass="'!bg-lightGray !w-full cursor-pointer'" />
 							</template>
 							<template v-else>
-								<sofa-activity-card :activity="content" :customClass="'!bg-lightGray'" :is-wrapped="true" @click="
-									Logic.Common.GoToRoute('/course/create?id=' + content.id)
-								">
-								</sofa-activity-card>
+								<sofa-activity-card :activity="content" :customClass="'!bg-lightGray'" :is-wrapped="true" />
 							</template>
 						</template>
 
@@ -102,22 +96,10 @@
 				</div>
 			</div>
 
-			<!-- Smaller screen CTA -->
-			<div
-				class="w-full flex flex-col md:!hidden bg-lightGray px-4 py-4 fixed bottom-0 left-0 items-center z-50 justify-center">
-				<div class="w-full flex flex-col">
-					<sofa-button :padding="'py-3'" :customClass="'w-full'" @click="submitVerification()">Submit</sofa-button>
-				</div>
-			</div>
-
 			<!-- Add material modal -->
 			<sofa-modal v-if="showAddMaterial" :close="() => showAddMaterial = false" :canClose="false">
 				<div
-					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] w-full flex flex-col justify-end md:!justify-start items-center relative"
-					@click.stop="() => {
-						//
-					}
-					">
+					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] w-full flex flex-col justify-end md:!justify-start items-center relative">
 					<div
 						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 pt-0 pb-3 px-4 md:!rounded-[16px] rounded-t-[19px] items-center justify-center">
 						<div class="w-full text-center hidden md:!inline-block">
@@ -133,9 +115,9 @@
 
 						<div class="w-full flex flex-col gap-4">
 							<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-								:padding="'md:!py-4 md:!px-4 px-3 py-3'" :name="capitalize(addMaterialType)" :ref="addMaterialType"
-								:placeholder="'Select material'" :rules="[FormValidations.RequiredRule]" :autoComplete="false"
-								:borderColor="'border-transparent'" :options="allMaterials" :hasTitle="true" v-model="selectedMaterial">
+								:name="capitalize(addMaterialType)" :ref="addMaterialType" :placeholder="'Select material'"
+								:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
+								:options="allMaterials" :hasTitle="true" v-model="selectedMaterial">
 								<template v-slot:title> Choose a material </template>
 							</sofa-select>
 
@@ -147,7 +129,8 @@
 								</sofa-button>
 
 								<div class="mdlg:!w-auto w-full">
-									<sofa-button :padding="'px-5 py-2'" :customClass="'mdlg:!w-auto w-full'" @click="addMaterial()">
+									<sofa-button :padding="'px-5 py-2'" :customClass="'mdlg:!w-auto w-full'"
+										@click="addMaterial()">
 										Add
 									</sofa-button>
 								</div>
@@ -159,7 +142,7 @@
 		</template>
 
 		<template v-slot:right-session>
-			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex flex-col justify-start">
 					<sofa-header-text :customClass="'!font-bold flex flex-row justify-start'">
 						Add links (optional)
@@ -167,42 +150,44 @@
 					<sofa-normal-text>Your educational website and socials</sofa-normal-text>
 				</div>
 
-				<social-media-update />
+				<SocialMediaUpdate :factory="socialsFactory" />
+			</div>
+
+			<!-- Smaller screen CTA -->
+			<div class="w-full flex flex-col md:hidden py-4 sticky bottom-0 left-0 items-center justify-center">
+				<SofaButton :disabled="!profileFactory.valid || !socialsFactory.valid" padding="py-3" class="w-full"
+					@click="submit">Submit</SofaButton>
 			</div>
 		</template>
 	</dashboard-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, capitalize, watch } from 'vue'
-import { useMeta } from 'vue-meta'
-import { FormValidations, scrollToTop } from '@/composables'
+import SocialMediaUpdate from '@/components/onboarding/SocialMediaUpdate.vue'
+import { FormValidations } from '@/composables'
+import { useProfileUpdate } from '@/composables/auth/profile'
+import { ContentDetails, extractContent } from '@/composables/marketplace'
 import {
-	SofaIcon,
-	SofaNormalText,
+	submitVerification,
+	updateVerificationForm,
+} from '@/composables/profile'
+import { useUserSocialsUpdate } from '@/composables/users/profile'
+import { Conditions, Logic, SelectOption } from 'sofa-logic'
+import {
+	SofaActivityCard,
+	SofaButton,
+	SofaFileAttachment,
 	SofaHeaderText,
+	SofaIcon,
+	SofaImageLoader,
+	SofaModal,
+	SofaNormalText,
+	SofaSelect,
 	SofaTextField,
 	SofaTextarea,
-	SofaImageLoader,
-	SofaFileAttachment,
-	SofaModal,
-	SofaButton,
-	SofaSelect,
-	SofaActivityCard,
 } from 'sofa-ui-components'
-import { Logic } from 'sofa-logic'
-import { Conditions } from 'sofa-logic'
-import {
-	UpdateProfile,
-	submitVerification,
-	updateProfileForm,
-	updateVerificationForm,
-	userSocials,
-} from '@/composables/profile'
-import { SelectOption } from 'sofa-logic'
-import { ContentDetails, extractContent } from '@/composables/marketplace'
-import SocialMediaUpdate from '@/components/onboarding/SocialMediaUpdate.vue'
-import { useAuth } from '@/composables/auth/auth'
+import { capitalize, defineComponent, onMounted, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	components: {
@@ -231,7 +216,7 @@ export default defineComponent({
 							{
 								field: 'userId',
 								condition: Conditions.eq,
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 							},
 						],
 					},
@@ -247,7 +232,7 @@ export default defineComponent({
 						where: [
 							{
 								field: 'user.id',
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 								condition: Conditions.eq,
 							},
 						],
@@ -265,7 +250,7 @@ export default defineComponent({
 						where: [
 							{
 								field: 'user.id',
-								value: Logic.Auth.AuthUser?.id,
+								value: Logic.Common.AuthUser?.id,
 								condition: Conditions.eq,
 							},
 						],
@@ -273,23 +258,6 @@ export default defineComponent({
 				],
 				requireAuth: true,
 				ignoreProperty: true,
-			},
-			{
-				domain: 'Study',
-				property: 'Tags',
-				method: 'GetTags',
-				params: [
-					{
-						where: [
-							{
-								field: 'type',
-								value: 'topics',
-								condition: 'eq',
-							},
-						],
-					},
-				],
-				requireAuth: true,
 			},
 		],
 	},
@@ -299,7 +267,8 @@ export default defineComponent({
 			title: 'Verification application',
 		})
 
-		const { user } = useAuth()
+		const { factory: profileFactory, updateProfile } = useProfileUpdate()
+		const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 		const AllQuzzies = ref(Logic.Study.AllQuzzies)
 		const AllCourses = ref(Logic.Study.AllCourses)
@@ -317,16 +286,7 @@ export default defineComponent({
 
 		const UserVerification = ref(Logic.Users.Verifications.results[0])
 
-		const profileImageUrl = ref('')
-
 		const setDefaultValues = () => {
-			if (user.value) {
-				updateProfileForm.description = user.value.bio.description
-				updateProfileForm.name.first = user.value.bio.name.first
-				updateProfileForm.name.last = user.value.bio.name.last
-				profileImageUrl.value = user.value.bio.photo?.link
-			}
-
 			if (UserVerification.value) {
 				UserVerification.value.content.courses.forEach((courseId) => {
 					selectedMaterial.value = courseId
@@ -337,13 +297,7 @@ export default defineComponent({
 					selectedMaterial.value = quizId
 					addMaterial()
 				})
-
-				updateVerificationForm.socials = UserVerification.value.socials
 			}
-		}
-
-		const cancle = () => {
-			Logic.Common.goBack()
 		}
 
 		const setMaterialsOptions = () => {
@@ -381,7 +335,6 @@ export default defineComponent({
 
 		const showAddMaterialHandler = () => {
 			setMaterialsOptions()
-			selectedMaterial.value
 			showAddMaterial.value = true
 		}
 
@@ -398,36 +351,31 @@ export default defineComponent({
 				) {
 					selectedMaterialList.value.push(currentMaterial[0])
 
-					if (currentMaterial[0].type == 'quiz') {
-						updateVerificationForm.content.quizzes.push(currentMaterial[0].id)
-					}
-					if (currentMaterial[0].type == 'course') {
-						updateVerificationForm.content.courses.push(currentMaterial[0].id)
-					}
+					if (currentMaterial[0].type == 'quiz') updateVerificationForm.content.quizzes.push(currentMaterial[0].id)
+					if (currentMaterial[0].type == 'course') updateVerificationForm.content.courses.push(currentMaterial[0].id)
 				}
 			}
 			showAddMaterial.value = false
 		}
 
+		const submit = async () => {
+			await Promise.all([updateProfile(true), updateSocials(true)])
+				.then((res) => {
+					if (res.every(Boolean)) submitVerification()
+				})
+		}
+
 		onMounted(() => {
-			scrollToTop()
 			setMaterials()
 			setMaterialsOptions()
 			setDefaultValues()
 		})
 
-		watch(updateProfileForm, () => {
-			Logic.Common.debounce(() => {
-				UpdateProfile(undefined, false)
-			}, 500)
-		})
-
 		return {
+			profileFactory, submit, socialsFactory,
 			quizContents,
 			courseContents,
-			updateProfileForm,
 			FormValidations,
-			profileImageUrl,
 			updateVerificationForm,
 			selectedMaterialList,
 			showAddMaterial,
@@ -435,13 +383,10 @@ export default defineComponent({
 			Logic,
 			allMaterials,
 			selectedMaterial,
-			userSocials,
 			showAddNewItems,
 			addMaterial,
 			showAddMaterialHandler,
-			submitVerification,
 			capitalize,
-			cancle,
 		}
 	},
 })

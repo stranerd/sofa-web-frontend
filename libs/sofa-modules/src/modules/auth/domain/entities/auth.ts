@@ -60,7 +60,7 @@ export type NewUser = Pick<AuthDetails, 'email' | 'photo' | 'description' | 'nam
 	password: string
 }
 
-export type UserBio = Pick<AuthDetails, 'email' | 'description' | 'photo' | 'phone'> & {
+export type UserBio = Pick<AuthDetails, 'description' | 'photo'> & {
 	name: AuthDetails['allNames']
 }
 

@@ -1,22 +1,23 @@
-import { Conditions, Logic, QueryParams, SingleUser } from 'sofa-logic'
+import { UserEntity, UsersUseCases } from '@modules/users'
+import { Logic, QueryParams, SingleUser } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const searchStore = {
-	users: reactive<SingleUser[]>([]),
+	users: reactive<UserEntity[]>([]),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 }
 
 const store = {
-	tutors: ref<SingleUser[]>([]),
+	tutors: ref<UserEntity[]>([]),
 	fetched: ref(false),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
-		return Logic.Common.listenToMany<SingleUser>('users/users', {
+		return await UsersUseCases.listenToAllTeachers({
 			created: async (entity) => {
 				Logic.addToArray(store.tutors.value, entity, (e) => e.id, (e) => e.account.ratings.avg)
 			},
@@ -26,7 +27,7 @@ const store = {
 			deleted: async (entity) => {
 				store.tutors.value = store.tutors.value.filter((m) => m.id !== entity.id)
 			}
-		}, (user) => user.type?.type === 'teacher')
+		})
 	})
 }
 
@@ -35,10 +36,7 @@ export const useTutorsList = () => {
 		try {
 			await store.setError('')
 			await store.setLoading(true)
-			const tutors = await Logic.Users.GetUsers({
-				where: [{ field: 'type.type', value: 'teacher' }],
-				all: true
-			}, false)
+			const tutors = await UsersUseCases.getAllTeachers()
 			tutors.results.forEach((r) => Logic.addToArray(store.tutors.value, r, (e) => e.id, (e) => e.account.ratings.avg))
 			store.fetched.value = true
 		} catch (e) {
@@ -61,13 +59,13 @@ export const useTutorsList = () => {
 export const useSearchUsers = () => {
 	const searchValue = ref('')
 
-	const searchUsers = async (condition: QueryParams) => {
+	const searchUsersByEmails = async (emails: string[]) => {
 		try {
 			await searchStore.setError('')
 			await searchStore.setLoading(true)
 			searchStore.users.length = 0
-			const users = await Logic.Users.GetUsers(condition, false)
-			users.results.forEach((r) => Logic.addToArray(searchStore.users, r, (e) => e.id, (e) => e.bio.name.first))
+			const users = await UsersUseCases.getInEmails(emails)
+			users.forEach((r) => Logic.addToArray(searchStore.users, r, (e) => e.id, (e) => e.bio.name.first))
 			searchValue.value = ''
 		} catch (e) {
 			await searchStore.setError(e)
@@ -75,32 +73,26 @@ export const useSearchUsers = () => {
 		await searchStore.setLoading(false)
 		return searchStore.users
 	}
-	return { ...searchStore, searchValue, searchUsers }
+	return { ...searchStore, searchValue, searchUsersByEmails }
 }
 
 export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
 	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users])
 
-	const { items: users, addToList } = useItemsInList('users', ids, allUsers, async (notFetched: string[]) => {
-		const users = await Logic.Users.GetUsers({
-			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
-			all: true
-		})
-		return users.results
-	})
+	const { items: users, addToList } = useItemsInList('users', ids, allUsers, UsersUseCases.getInList)
 
 	const listener = useListener(async () => {
-		return await Logic.Common.listenToMany<SingleUser>('users/users', {
-			created: addToList, updated: addToList, deleted: () => {/* */}
-		},  (e) => ids.value.includes(e.id))
+		return await UsersUseCases.listenToInList(() => ids.value, {
+			created: addToList, updated: addToList, deleted: () => {}
+		})
 	})
 
-	onMounted(() => {
-		if (listen) listener.start()
+	onMounted(async () => {
+		if (listen) await listener.start()
 	})
 
-	onUnmounted(() => {
-		if (listen) listener.close()
+	onUnmounted(async () => {
+		if (listen) await listener.close()
 	})
 
 	return { users }

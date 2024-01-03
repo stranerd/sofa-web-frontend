@@ -1,9 +1,9 @@
-import { $api } from '../../services'
-import Common from './Common'
 import { Logic } from '..'
-import { Notification } from '../types/domains/notifications'
+import { $api } from '../../services'
 import { Paginated, QueryParams } from '../types'
 import { Conditions } from '../types/common'
+import { Notification } from '../types/domains/notifications'
+import Common from './Common'
 
 export default class Notifications extends Common {
 	constructor() {
@@ -41,7 +41,7 @@ export default class Notifications extends Common {
 						{
 							field: 'userId',
 							condition: Conditions.eq,
-							value: Logic.Auth.AuthUser?.id,
+							value: Logic.Common.AuthUser?.id,
 						},
 					],
 				})

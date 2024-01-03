@@ -198,7 +198,7 @@
 						v-model="withdrawForm.amount">
 						<template v-slot:inner-prefix>
 							<sofa-normal-text>
-								{{ Logic.Common.AvailableCurrencies[UserWallet.balance.currency] || "" }}
+								{{ Logic.Common.getCurrency(UserWallet.balance.currency) }}
 							</sofa-normal-text>
 						</template>
 					</sofa-text-field>
@@ -209,11 +209,11 @@
 						:rules="[Logic.Form.RequiredRule]" v-model="withdrawForm.account_number">
 					</sofa-text-field>
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '"
-						:padding="'px-3 py-3'" :name="'Bank'" ref="bank" :placeholder="'Bank'"
-						:borderColor="'border-transparent'" :rules="[Logic.Form.RequiredRule]"
+					<sofa-select :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :name="'Bank'"
+						ref="bank" :placeholder="'Bank'" :borderColor="'border-transparent'"
+						:rules="[Logic.Form.RequiredRule]"
 						:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))"
-						:auto-complete="true" v-model="withdrawForm.bank">
+						v-model="withdrawForm.bank">
 					</sofa-select>
 				</div>
 
@@ -557,7 +557,7 @@ export default defineComponent({
 						{
 							field: 'userId',
 							condition: Conditions.eq,
-							value: Logic.Auth.AuthUser?.id,
+							value: Logic.Common.AuthUser?.id,
 						},
 					],
 					sort: [

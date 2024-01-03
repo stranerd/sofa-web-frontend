@@ -10,13 +10,7 @@
 					</sofa-normal-text>
 				</router-link>
 			</div>
-			<div class="w-full flex flex-col px-4 gap-3 pt-1" v-if="conversations.length || requests.length">
-				<div class="w-full flex gap-2 items-center" v-if="userType.isStudent">
-					<sofa-normal-text :customClass="'!font-bold'">
-						All chats
-					</sofa-normal-text>
-				</div>
-
+			<div class="w-full flex flex-col px-4 gap-3 pt-1">
 				<ChatList :customClass="'!bg-white shadow-custom'" />
 			</div>
 		</div>
@@ -27,7 +21,6 @@
 import ChatLayout from '@/components/conversations/ChatLayout.vue'
 import ChatList from '@/components/conversations/ChatList.vue'
 import { useAuth } from '@/composables/auth/auth'
-import { useConversationsList } from '@/composables/conversations/conversations'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
@@ -42,16 +35,13 @@ export default defineComponent({
 		ChatList,
 	},
 	name: 'ChatsIndexPage',
-	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/chats/new' : undefined ]),
+	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/chats/new' : undefined]),
 	setup () {
 		useMeta({
 			title: 'Chat',
 		})
-
 		const { userType } = useAuth()
-		const { conversations, requests } = useConversationsList()
-
-		return { conversations, userType, requests }
+		return { userType }
 	},
 })
 </script>

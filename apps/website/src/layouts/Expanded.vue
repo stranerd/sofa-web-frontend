@@ -1,9 +1,7 @@
 <template>
-	<SofaTopBar :tabs="tabs"
-		:subpage-actions="topbarOptions.actions" :title="topbarOptions.title" :type="topbarOptions.type"
-		:showAddItem="handleShowAddItem" v-if="!hide.top" :custom-class="'hidden mdlg:!flex'" />
-	<div
-		:class="`h-full w-full overflow-y-auto mx-auto flex-grow relative mdlg:!gap-5 flex flex-col items-center lg:text-sm mdlg:text-[12px] text-xs ${width} ${layoutStyle}`"
+	<SofaTopBar :tabs="tabs" :subpage-actions="topbarOptions.actions" :title="topbarOptions.title" :user="user"
+		:type="topbarOptions.type" :showAddItem="handleShowAddItem" v-if="!hide.top" :custom-class="'hidden mdlg:!flex'" />
+	<div :class="`h-full w-full overflow-y-auto mx-auto flex-grow pb-5 relative mdlg:gap-5 flex flex-col items-center lg:text-sm mdlg:text-[12px] text-xs ${width} ${layoutStyle}`"
 		:style="bgImage ? `background-image: url(${bgImage})` : ''">
 		<slot />
 	</div>
@@ -19,10 +17,10 @@ import { handleShowAddItem } from '../composables'
 defineProps({
 	topbarOptions: {
 		type: Object as () => {
-      type: string
-      title: string
-      actions: any[]
-    },
+			type: string
+			title: string
+			actions: any[]
+		},
 		default: () => {
 			return {
 				type: 'main',
@@ -49,7 +47,7 @@ defineProps({
 	},
 })
 
-const { userType } = useAuth()
+const { user, userType } = useAuth()
 
 const tabs = computed(() => [
 	{

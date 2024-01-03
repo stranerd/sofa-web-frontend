@@ -667,8 +667,6 @@ export default class Study extends Common {
 				value: userId,
 				condition: Conditions.eq,
 			})
-
-			await Logic.Users.GetUser(userId)
 		}
 
 		whereQuery.push({
@@ -711,8 +709,6 @@ export default class Study extends Common {
 				value: userId,
 				condition: Conditions.eq,
 			})
-
-			await Logic.Users.GetUser(userId)
 		}
 
 		whereQuery.push({
@@ -966,7 +962,7 @@ export default class Study extends Common {
 					},
 					{
 						field: 'user.id',
-						value: Logic.Auth.AuthUser.id,
+						value: Logic.Common.AuthUser.id,
 						condition: Conditions.eq,
 					},
 				],
@@ -1346,7 +1342,7 @@ export default class Study extends Common {
 					where: [
 						{
 							field: 'user.id',
-							value: Logic.Auth.AuthUser?.id,
+							value: Logic.Common.AuthUser?.id,
 							condition: Conditions.eq,
 						},
 					],

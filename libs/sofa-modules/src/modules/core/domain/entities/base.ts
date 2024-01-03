@@ -1,15 +1,10 @@
 import { getRandomValue } from 'valleyed'
-import { isProxy, toRaw } from 'vue'
 
 export class BaseEntity {
 	public hash: string
 
 	constructor () {
 		this.hash = getRandomValue()
-	}
-
-	get rawThis () {
-		return isProxy(this) ? toRaw(this) : this
 	}
 
 	toJSON () {

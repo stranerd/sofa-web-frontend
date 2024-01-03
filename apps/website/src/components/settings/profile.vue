@@ -7,11 +7,11 @@
 			<div class="w-full flex flex-row items-center justify-start py-2 gap-4">
 				<sofa-image-loader
 					:customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-					:photoUrl="profileImageUrl">
-					<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileImageUrl" />
+					:photoUrl="factory.localPhotoLink">
+					<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!factory.localPhotoLink" />
 					<sofa-file-attachment :isWrapper="true"
 						:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-						accept="image/*" v-model="factory.photo" v-model:localFileUrl="profileImageUrl">
+						accept="image/*" v-model="factory.photo" v-model:localFileUrl="factory.localPhotoLink">
 						<template v-slot:content>
 							<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
 						</template>
@@ -22,12 +22,12 @@
 			</div>
 
 			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'p-3'"
-				type="text" :name="'First name'" :placeholder="'First Name'" :error="factory.errors.first" v-model="factory.first"
-				:borderColor="'border-transparent'" />
+				type="text" :name="'First name'" :placeholder="'First Name'" :error="factory.errors.first"
+				v-model="factory.first" :borderColor="'border-transparent'" />
 
 			<sofa-text-field :custom-class="'rounded-custom !bg-lightGray !placeholder:text-grayColor '" :padding="'p-3'"
-				type="text" :name="'Last name'" :placeholder="'Last Name'" :error="factory.errors.last" v-model="factory.last"
-				:borderColor="'border-transparent'" />
+				type="text" :name="'Last name'" :placeholder="'Last Name'" :error="factory.errors.last"
+				v-model="factory.last" :borderColor="'border-transparent'" />
 
 			<sofa-textarea :hasTitle="false" :error="factory.errors.description"
 				:textAreaStyle="'h-[90px] rounded-custom !bg-lightGray !placeholder:text-grayColor md:!py-4 md:!px-4 px-3 py-3 resize-none'"
@@ -60,13 +60,16 @@
 				Social links
 			</sofa-header-text>
 
-			<social-media-update />
+			<SocialMediaUpdate :factory="socialsFactory" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import SocialMediaUpdate from '@/components/onboarding/SocialMediaUpdate.vue'
+import { useAuth } from '@/composables/auth/auth'
+import { useProfileUpdate } from '@/composables/auth/profile'
+import { useUserSocialsUpdate } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaButton,
@@ -77,18 +80,22 @@ import {
 	SofaTextField,
 	SofaTextarea,
 } from 'sofa-ui-components'
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 import AccountSetup from '../onboarding/AccountSetup.vue'
-import { useProfileUpdate } from '@/composables/auth/profile'
-import { useAuth } from '@/composables/auth/auth'
 
 const { auth, userType } = useAuth()
-const profileImageUrl = ref(auth.value?.photo?.link ?? '')
 const { factory, updateProfile } = useProfileUpdate()
+const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 watch(factory.values, () => {
 	Logic.Common.debounce(() => {
 		updateProfile(true)
+	}, 1000)
+})
+
+watch(socialsFactory.values, () => {
+	Logic.Common.debounce(() => {
+		updateSocials(true)
 	}, 1000)
 })
 </script>

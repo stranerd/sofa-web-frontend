@@ -1,6 +1,6 @@
 <template>
 	<SofaTopBar :tabs="tabs" :subpage-actions="topbarOptions.actions" :title="topbarOptions.title"
-		:type="topbarOptions.type" :showAddItem="handleShowAddItem"
+		:type="topbarOptions.type" :showAddItem="handleShowAddItem" :user="user"
 		:custom-class="`${hide.top ? 'hidden mdlg:!flex' : 'flex'}`" :badges="topbarOptions.badges" />
 	<div class="flex-grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
 		<div v-if="!hide.left" :class="wrap ? 'px-4' : 'hidden p-4 h-full w-full overflow-y-auto'"
@@ -62,7 +62,7 @@ defineProps({
 	},
 })
 
-const { userType } = useAuth()
+const { user, userType } = useAuth()
 
 const tabs = computed(() => [
 	{

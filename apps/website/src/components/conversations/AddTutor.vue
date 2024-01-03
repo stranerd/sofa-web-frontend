@@ -3,7 +3,7 @@
 		<div class="flex flex-col items-center">
 			<div class="w-full flex flex-col h-full gap-3 md:gap-4 mdlg:px-6 md:px-4 overflow-y-auto">
 				<div
-					class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-1 border-lightGray border-b md:border-0 p-4 md:gap-2">
+					class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-[1] border-lightGray border-b md:border-0 p-4 md:gap-2">
 					<SofaHeaderText class="text-xl hidden md:inline-block " content="Add a tutor" />
 
 					<div class="flex w-full md:hidden items-center gap-2 justify-between">
@@ -17,9 +17,7 @@
 					</div>
 
 					<div class="w-full flex flex-col pt-3" v-if="currentStep === 2">
-						<SofaSelect placeholder="Select subject" padding="px-2 py-4" customClass="rounded-custom border"
-							:options="allTopics" :autoComplete="true" v-model="selectedTopic">
-						</SofaSelect>
+						<SofaSelect placeholder="Select subject" customClass="rounded-custom border" :options="allTopics" v-model="selectedTopic" />
 					</div>
 				</div>
 

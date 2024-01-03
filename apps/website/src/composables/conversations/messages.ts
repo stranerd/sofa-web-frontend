@@ -1,8 +1,8 @@
 import { Conversation, Logic, Message, MessageFactory } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
+import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
-import { useAuth } from '../auth/auth'
 
 const store = {} as Record<string, {
 	messages: Ref<Message[]>
@@ -78,7 +78,7 @@ export const useMessages = (conversation: Conversation) => {
 				photoUrl: cur.bio.photo?.link ?? null
 			}
 			return acc
-		}, { 'ai-bot': { name: userAi.value?.name ?? 'Dr. Sofa', photoUrl: userAi.value?.image ?? '/images/icons/robot.svg' } } as Record<string, { name: string, photoUrl: string | null }>)
+		}, { 'ai-bot': { name: userAi.value.name, photoUrl: userAi.value.image } } as Record<string, { name: string, photoUrl: string | null }>)
 	)
 
 	return {
@@ -97,7 +97,7 @@ export const useMessage = (message: Message) => {
 		await Logic.Conversations.MarkMessages(message.conversationId).catch()
 	}
 	onMounted(async () => {
-		if (!message.readAt[Logic.Auth.AuthUser?.id]) await markMessageRead()
+		if (!message.readAt[Logic.Common.AuthUser?.id]) await markMessageRead()
 	})
 	return { markMessageRead }
 }

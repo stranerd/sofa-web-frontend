@@ -3,7 +3,7 @@
 		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
 		<template v-if="type == 'main'">
 			<div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-				<sofa-avatar :size="'32'" :photoUrl="UserProfile?.bio?.photo?.link"
+				<sofa-avatar :size="'32'" :photoUrl="user?.bio?.photo?.link"
 					@click="Logic.Common.GoToRoute('/settings')" />
 
 				<div class="py-4 cursor-pointer flex flex-row items-center justify-center">
@@ -56,7 +56,7 @@
 					</div>
 				</div>
 
-				<sofa-avatar :size="'36'" :photoUrl="UserProfile?.bio?.photo?.link"
+				<sofa-avatar :size="'36'" :photoUrl="user?.bio?.photo?.link"
 					@click="Logic.Common.GoToRoute('/settings/profile')" />
 			</div>
 		</template>
@@ -101,7 +101,8 @@
 
 		<!-- Notification modal -->
 		<sofa-modal v-if="showNotification" :close="() => showNotification = false" :custom-class="'mdlg:!hidden'">
-			<div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
+			<div
+				class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-3 px-4 pb-5 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<notification :close="() => showNotification = false" />
@@ -111,8 +112,9 @@
 	</div>
 </template>
 <script lang="ts">
+import { UserEntity } from '@modules/users'
 import { Conditions, Logic, SingleUser } from 'sofa-logic'
-import { defineComponent, onMounted, ref } from 'vue'
+import { PropType, defineComponent, onMounted, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
@@ -172,25 +174,25 @@ export default defineComponent({
 			}[],
 			default: () => [],
 		},
+		user: {
+			type: Object as PropType<UserEntity>,
+			required: false
+		}
 	},
 	name: 'SofaTopBar',
 	setup () {
-		const UserProfile = ref<SingleUser>(Logic.Users.UserProfile)
-
 		const showNotification = ref(false)
 
 		const searchQuery = ref('')
 
 		onMounted(() => {
-			Logic.Users.watchProperty('UserProfile', UserProfile)
-
 			// get user notifications
 			Logic.Notifications.GetNotifications({
 				where: [
 					{
 						field: 'userId',
 						condition: Conditions.eq,
-						value: Logic.Auth.AuthUser?.id,
+						value: Logic.Common.AuthUser?.id,
 					},
 				],
 			})
@@ -203,7 +205,6 @@ export default defineComponent({
 		}
 		return {
 			Logic,
-			UserProfile,
 			showNotification,
 			searchQuery,
 			initiateSearch,

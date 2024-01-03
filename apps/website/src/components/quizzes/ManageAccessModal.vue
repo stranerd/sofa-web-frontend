@@ -87,14 +87,11 @@ const emits = defineEmits<{
 	close: []
 }>()
 
-const { searchUsers, searchValue } = useSearchUsers()
+const { searchUsersByEmails, searchValue } = useSearchUsers()
 
 const addUsers = async () => {
 	const emails = searchValue.value.toLowerCase().split(',').map((e) => e.trim())
-	const users = await searchUsers({
-		where: [{ field: 'bio.email', condition: Conditions.in, value: emails }],
-		all: true
-	})
+	const users = await searchUsersByEmails(emails)
 	if (users.length) emits('manageMembers', users.map((u) => u.id), true)
 }
 
