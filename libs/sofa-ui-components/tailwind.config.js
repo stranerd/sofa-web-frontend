@@ -33,15 +33,9 @@ module.exports = {
 			},
 		},
 		screens: {
-			sm: '640px',
-			// => @media (min-width: 640px) { ... }
-
+			sm: '360px',
 			md: '768px',
-			// => @media (min-width: 768px) { ... }
-
 			mdlg: '1000px',
-			// => @media (min-width: 768px) { ... }
-
 			lg: '1580px',
 		},
 		fontSize: {

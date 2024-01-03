@@ -9,10 +9,10 @@
 						// { label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
 						{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
 						{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
-						// { label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
-						// { label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
+					// { label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
+					// { label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
 					]" :key="stat.label"
-					class="flex items-center gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">
+					class="flex flex-col-reverse sm:flex-row items-start sm:items-center gap-2 sm:gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">
 					<div class="flex flex-col items-start">
 						<SofaHeaderText size="xl" color="text-inherit !font-normal"
 							:content="Logic.formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
@@ -42,7 +42,8 @@
 				class="flex-shrink-0" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">
-			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />
+			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far"
+				customClass="!h-[230px]" />
 		</div>
 
 		<SofaNormalText v-if="materials.length" color="text-primaryPink" class="pr-4 hidden mdlg:inline" as="router-link"

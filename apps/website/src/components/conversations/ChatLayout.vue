@@ -7,7 +7,7 @@
 	<dashboard-layout v-else>
 		<template v-slot:left-session>
 			<div
-				class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-2xl gap-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin flex flex-col">
+				class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-2xl gap-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:scrollbar-thin flex flex-col">
 				<router-link class="w-full flex items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 p-3"
 					to="/chats/new" v-if="userType.isStudent">
 					<sofa-icon name="box-add-pink" custom-class="h-[17px]" />

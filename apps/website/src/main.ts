@@ -2,8 +2,7 @@ import { createApp } from 'vue'
 import { createMetaManager } from 'vue-meta'
 import App from './App.vue'
 
-// You can disable this if you dont want TailwindCss
-import './assets/app.css'
+import './assets/styles/index.scss'
 
 import { globalPlugins } from './plugins'
 import { routerPromise } from './router'
