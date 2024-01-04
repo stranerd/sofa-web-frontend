@@ -27,17 +27,15 @@ export class ClassRepository implements IClassRepository {
 	}
 
 	async listenToOne (id: string, listeners: Listeners<ClassEntity>) {
-		const listener = listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
-		return listener
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 	}
 
 	async listenToMany (query: QueryParams, listeners: Listeners<ClassEntity>, matches: (entity: ClassEntity) => boolean) {
-		const listener = listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return listener
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 
 	async add (data: ClassToModel) {

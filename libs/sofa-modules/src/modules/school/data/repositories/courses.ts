@@ -1,4 +1,4 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenOnSocket } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { apiBase } from '@utils/environment'
 import { CourseEntity } from '../../domain/entities/courses'
 import { ICourseRepository } from '../../domain/irepositories/icourses'
@@ -36,18 +36,16 @@ export class CourseRepository implements ICourseRepository {
 		}
 	}
 
-	async listenToOne (id: string, listeners: Listeners<CourseFromModel>) {
-		const listener = listenOnSocket(`${this.client.socketPath}/${id}`, listeners)
+	async listenToOne (id: string, listeners: Listeners<CourseEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
-		return listener
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 	}
 
-	async listenToMany (query: QueryParams, listeners: Listeners<CourseFromModel>) {
-		const listener = listenOnSocket(this.client.socketPath, listeners)
+	async listenToMany (query: QueryParams, listeners: Listeners<CourseEntity>, matches: (entity: CourseEntity) => boolean) {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return listener
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 
 	async delete (id: string) {

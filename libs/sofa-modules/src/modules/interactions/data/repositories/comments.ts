@@ -1,4 +1,4 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenOnSocket } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { apiBase } from '@utils/environment'
 import { CommentEntity } from '../../domain/entities/comments'
 import { ICommentRepository } from '../../domain/irepositories/comments'
@@ -36,18 +36,16 @@ export class CommentRepository implements ICommentRepository {
 		}
 	}
 
-	async listenToOne (id: string, listeners: Listeners<CommentFromModel>) {
-		const listener = listenOnSocket(`${this.client.socketPath}/${id}`, listeners)
+	async listenToOne (id: string, listeners: Listeners<CommentEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
-		return listener
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 	}
 
-	async listenToMany (query: QueryParams, listeners: Listeners<CommentFromModel>) {
-		const listener = listenOnSocket(this.client.socketPath, listeners)
+	async listenToMany (query: QueryParams, listeners: Listeners<CommentEntity>, matches: (entity: CommentEntity) => boolean) {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return listener
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 
 	async delete (id: string) {

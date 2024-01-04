@@ -1,4 +1,4 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenOnSocket } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { apiBase } from '@utils/environment'
 import { DepartmentEntity } from '../../domain/entities/departments'
 import { IDepartmentRepository } from '../../domain/irepositories/idepartments'
@@ -36,18 +36,16 @@ export class DepartmentRepository implements IDepartmentRepository {
 		}
 	}
 
-	async listenToOne (id: string, listeners: Listeners<DepartmentFromModel>) {
-		const listener = listenOnSocket(`${this.client.socketPath}/${id}`, listeners)
+	async listenToOne (id: string, listeners: Listeners<DepartmentEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
-		return listener
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 	}
 
-	async listenToMany (query: QueryParams, listeners: Listeners<DepartmentFromModel>) {
-		const listener = listenOnSocket(this.client.socketPath, listeners)
+	async listenToMany (query: QueryParams, listeners: Listeners<DepartmentEntity>, matches: (entity: DepartmentEntity) => boolean) {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return listener
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 
 	async delete (id: string) {

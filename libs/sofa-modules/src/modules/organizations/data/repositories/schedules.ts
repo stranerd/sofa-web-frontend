@@ -46,16 +46,14 @@ export class ScheduleRepository implements IScheduleRepository {
 	}
 
 	async listenToOne (id: string, listeners: Listeners<ScheduleEntity>) {
-		const listener = listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
-		return listener
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 	}
 
 	async listenToMany (query: QueryParams, listeners: Listeners<ScheduleEntity>, matches: (entity: ScheduleEntity) => boolean) {
-		const listener = listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return listener
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 }

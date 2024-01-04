@@ -1,4 +1,4 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenOnSocket } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { apiBase } from '@utils/environment'
 import { ViewEntity } from '../../domain/entities/views'
 import { IViewRepository } from '../../domain/irepositories/views'
@@ -36,18 +36,16 @@ export class ViewRepository implements IViewRepository {
 		}
 	}
 
-	async listenToOne (id: string, listeners: Listeners<ViewFromModel>) {
-		const listener = listenOnSocket(`${this.client.socketPath}/${id}`, listeners)
+	async listenToOne (id: string, listeners: Listeners<ViewEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
-		return listener
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
 	}
 
-	async listenToMany (query: QueryParams, listeners: Listeners<ViewFromModel>) {
-		const listener = listenOnSocket(this.client.socketPath, listeners)
+	async listenToMany (query: QueryParams, listeners: Listeners<ViewEntity>, matches: (entity: ViewEntity) => boolean) {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return listener
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 
 	async delete (id: string) {
