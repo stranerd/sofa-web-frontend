@@ -5,22 +5,22 @@ import { InstitutionEntity } from '../entities/institutions'
 
 export class InstitutionFactory extends BaseFactory<InstitutionEntity, InstitutionToModel, InstitutionToModel> {
 	readonly rules = {
-		name: v.string().min(1),
+		title: v.string().min(1),
 		isGateway: v.boolean()
 	}
 
 	reserved = []
 
 	constructor () {
-		super({ name: '', isGateway: false })
+		super({ title: '', isGateway: false })
 	}
 
-	get name () {
-		return this.values.name
+	get title () {
+		return this.values.title
 	}
 
-	set name (value: string) {
-		this.set('name', value.toLowerCase())
+	set title (value: string) {
+		this.set('title', value.toLowerCase())
 	}
 
 	get isGateway () {
@@ -32,14 +32,14 @@ export class InstitutionFactory extends BaseFactory<InstitutionEntity, Instituti
 	}
 
 	loadEntity = (entity: InstitutionEntity) => {
-		this.name = entity.name
+		this.title = entity.title
 		this.isGateway = entity.isGateway
 	}
 
 	toModel = async () => {
 		if (this.valid) {
-			const { name, isGateway } = this.validValues
-			return { name, isGateway }
+			const { title, isGateway } = this.validValues
+			return { title, isGateway }
 		} else {
 			throw new Error('Validation errors')
 		}

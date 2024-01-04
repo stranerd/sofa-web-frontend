@@ -12,7 +12,7 @@ import { Logic, Question, QuestionFactory, QuizFactory, SingleUser } from 'sofa-
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
 import QuestionDisplay from './QuestionDisplay.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { UsersUseCases } from '@modules/users'
+import { UserEntity, UsersUseCases } from '@modules/users'
 
 const props = defineProps({
 	id: {
@@ -170,7 +170,7 @@ const extras = computed(() => ({
 		return quizQuestions.value.reduce((acc, cur) => {
 			acc[cur.id] = online.filter((m) => m.account.editing.quizzes?.questionId === cur.id)
 			return acc
-		}, {} as Record<string, SingleUser[]>)
+		}, {} as Record<string, UserEntity[]>)
 	},
 	currentQuestionById: currentQuestionById.value,
 	started: started.value,

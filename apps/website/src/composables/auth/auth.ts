@@ -20,16 +20,8 @@ const store = {
 			store.wallet.value = wallet
 		}
 		const listeners = [
-			await Logic.Common.listenToOne(`users/users/${id}`, {
-				created: setUser,
-				updated: setUser,
-				deleted: setUser
-			}),
-			await Logic.Common.listenToOne('payment/wallets',{
-				created: setWallet,
-				updated: setWallet,
-				deleted: setWallet
-			})
+			await UsersUseCases.listenToOne(id, { created: setUser, updated: setUser, deleted: setUser }),
+			await Logic.Common.listenToOne('payment/wallets',{ created: setWallet, updated: setWallet, deleted: setWallet })
 		]
 		return () => Promise.all(listeners.map((l) => l()))
 	})
@@ -40,7 +32,7 @@ export const useAuth = () => {
 	const bio = computed(() => store.user.value?.bio)
 	const isLoggedIn = computed(() => !!id.value && !!store.user.value)
 	const isEmailVerified = computed(() => !!store.auth.value?.isEmailVerified)
-	const isAdmin = computed(() => !!store.user.value?.roles.isAdmin || !!store.user.value?.roles.isSuperAdmin)
+	const isAdmin = computed(() => !!store.auth.value?.roles.isAdmin || !!store.auth.value?.roles.isSuperAdmin)
 	const isSubscribed = computed(() => !!store.wallet.value?.subscription.active)
 
 	const userType = computed(() => store.user.value?.userType ?? UserEntity.getDefaultUserType())

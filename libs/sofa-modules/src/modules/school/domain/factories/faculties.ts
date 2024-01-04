@@ -5,22 +5,22 @@ import { FacultyEntity } from '../entities/faculties'
 
 export class FacultyFactory extends BaseFactory<FacultyEntity, FacultyToModel, FacultyToModel> {
 	readonly rules = {
-		name: v.string().min(1),
+		title: v.string().min(1),
 		institutionId: v.string().min(1)
 	}
 
 	reserved = []
 
 	constructor () {
-		super({ name: '', institutionId: '' })
+		super({ title: '', institutionId: '' })
 	}
 
-	get name () {
-		return this.values.name
+	get title () {
+		return this.values.title
 	}
 
-	set name (value: string) {
-		this.set('name', value.toLowerCase())
+	set title (value: string) {
+		this.set('title', value.toLowerCase())
 	}
 
 	get institutionId () {
@@ -32,14 +32,14 @@ export class FacultyFactory extends BaseFactory<FacultyEntity, FacultyToModel, F
 	}
 
 	loadEntity = (entity: FacultyEntity) => {
-		this.name = entity.name
+		this.title = entity.title
 		this.institutionId = entity.institutionId
 	}
 
 	toModel = async () => {
 		if (this.valid) {
-			const { name, institutionId } = this.validValues
-			return { name, institutionId }
+			const { title, institutionId } = this.validValues
+			return { title, institutionId }
 		} else {
 			throw new Error('Validation errors')
 		}

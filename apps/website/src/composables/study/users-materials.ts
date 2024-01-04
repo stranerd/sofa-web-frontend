@@ -1,4 +1,4 @@
-import { Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
+import { Course, Logic, QueryParams, Quiz } from 'sofa-logic'
 import { Ref, onMounted, reactive, ref } from 'vue'
 import { UserEntity, UsersUseCases } from '@modules/users'
 import { useErrorHandler, useLoadingHandler } from '../core/states'

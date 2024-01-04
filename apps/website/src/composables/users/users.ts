@@ -1,5 +1,5 @@
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { Logic, QueryParams, SingleUser } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -79,7 +79,7 @@ export const useSearchUsers = () => {
 export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
 	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users])
 
-	const { items: users, addToList } = useItemsInList('users', ids, allUsers, UsersUseCases.getInList)
+	const { items: users, addToList } = useItemsInList('users', ids, allUsers, (items) => UsersUseCases.getInList(items))
 
 	const listener = useListener(async () => {
 		return await UsersUseCases.listenToInList(() => ids.value, {

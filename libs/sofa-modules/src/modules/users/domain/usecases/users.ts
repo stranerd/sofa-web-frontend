@@ -17,14 +17,14 @@ interface Country {
 }
 
 export class UsersUseCase {
-	private repository: () => IUserRepository
+	private repository: IUserRepository
 
 	constructor (repository: () => IUserRepository) {
-		this.repository = repository
+		this.repository = repository()
 	}
 
 	async find (id: string) {
-		return await this.repository().find(id)
+		return await this.repository.find(id)
 	}
 
 	async getInEmails (emails: string[]) {
@@ -32,25 +32,25 @@ export class UsersUseCase {
 			where: [{ field: 'bio.email', condition: Conditions.in, value: emails }],
 			all: true
 		}
-		return (await this.repository().get(query)).results
+		return (await this.repository.get(query)).results
 	}
 
 	async getAllTeachers () {
-		return await this.repository().get({
+		return await this.repository.get({
 			where: [{ field: 'type.type', value: UserType.teacher }],
 			all: true
 		})
 	}
 
 	async listenToAllTeachers (listener: Listeners<UserEntity>) {
-		return await this.repository().listenToMany({
+		return await this.repository.listenToMany({
 			where: [{ field: 'type.type', value: UserType.teacher }],
 			all: true
 		}, listener, (entity) => entity.userType.isTeacher)
 	}
 
 	async getInList (ids: string[]) {
-		const users = await this.repository().get({
+		const users = await this.repository.get({
 			where: [{ field: 'id', value: ids, condition: Conditions.in }],
 			all: true
 		})
@@ -58,38 +58,38 @@ export class UsersUseCase {
 	}
 
 	async listenToOne (id: string, listeners: Listeners<UserEntity>) {
-		return await this.repository().listenToOne(id, listeners)
+		return await this.repository.listenToOne(id, listeners)
 	}
 
 	async listenToInList (ids: () => string[], listener: Listeners<UserEntity>) {
-		return await this.repository().listenToMany({
-			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+		return await this.repository.listenToMany({
+			where: [{ field: 'id', value: ids(), condition: Conditions.in }],
 			all: true
 		}, listener, (entity) => ids().includes(entity.id))
 	}
 
 	async updateType (factory: UserTypeFactory) {
-		return await this.repository().updateType(await factory.toModel())
+		return await this.repository.updateType(await factory.toModel())
 	}
 
 	async updateAi (factory: UserAiFactory) {
-		return await this.repository().updateAi(await factory.toModel())
+		return await this.repository.updateAi(await factory.toModel())
 	}
 
 	async updateOrgCode (value: { code: string }) {
-		return await this.repository().updateOrgCode(value)
+		return await this.repository.updateOrgCode(value)
 	}
 
 	async updateLocation (factory: UserLocationFactory) {
-		return await this.repository().updateLocation(await factory.toModel())
+		return await this.repository.updateLocation(await factory.toModel())
 	}
 
 	async updateSocials (factory: UserSocialsFactory) {
-		return await this.repository().updateSocials(await factory.toModel())
+		return await this.repository.updateSocials(await factory.toModel())
 	}
 
 	async updateEditingQuizzes (quizzes: UserAccount['editing']['quizzes']) {
-		return await this.repository().updateEditingQuizzes(quizzes)
+		return await this.repository.updateEditingQuizzes(quizzes)
 	}
 
 	async getCountries () {

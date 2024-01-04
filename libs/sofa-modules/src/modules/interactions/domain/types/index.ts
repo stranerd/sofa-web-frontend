@@ -12,7 +12,7 @@ export type Interaction = {
 	id: string
 }
 
-export type InteractionEntity = Interaction & { userId: string }
+export type InteractionEntity = Interaction & { userId?: string }
 
 export enum CommentMeta {
 	comments = 'comments',

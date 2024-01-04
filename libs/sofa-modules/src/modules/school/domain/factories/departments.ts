@@ -5,7 +5,7 @@ import { DepartmentEntity } from '../entities/departments'
 
 export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentToModel, DepartmentToModel> {
 	readonly rules = {
-		name: v.string().min(1),
+		title: v.string().min(1),
 		facultyId: v.string().min(1),
 		tagId: v.string().min(1)
 	}
@@ -13,15 +13,15 @@ export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentT
 	reserved = []
 
 	constructor () {
-		super({ name: '', facultyId: '' })
+		super({ title: '', facultyId: '' })
 	}
 
-	get name () {
-		return this.values.name
+	get title () {
+		return this.values.title
 	}
 
-	set name (value: string) {
-		this.set('name', value.toLowerCase())
+	set title (value: string) {
+		this.set('title', value.toLowerCase())
 	}
 
 	get facultyId () {
@@ -33,14 +33,14 @@ export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentT
 	}
 
 	loadEntity = (entity: DepartmentEntity) => {
-		this.name = entity.name
+		this.title = entity.title
 		this.facultyId = entity.facultyId
 	}
 
 	toModel = async () => {
 		if (this.valid) {
-			const { name, facultyId } = this.validValues
-			return { name, facultyId }
+			const { title, facultyId } = this.validValues
+			return { title, facultyId }
 		} else {
 			throw new Error('Validation errors')
 		}
