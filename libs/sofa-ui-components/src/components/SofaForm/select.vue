@@ -92,7 +92,7 @@ const filteredOptions = computed(() => {
 	return options
 })
 
-const selectedOptions = computed(() => props.options.filter((o) => value.value === o.key || value.value.includes(o.key)))
+const selectedOptions = computed(() => props.options.filter((o) => props.isMultiple ? value.value.includes(o.key) : value.value === o.key))
 
 const value = computed({
 	get: () => {

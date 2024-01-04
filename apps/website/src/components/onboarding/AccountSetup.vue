@@ -1,5 +1,5 @@
 <template>
-	<form @submit="handleAccountSetup" class="w-full flex flex-col gap-4">
+	<form @submit.prevent="handleAccountSetup" class="w-full flex flex-col gap-4">
 		<div class="w-full flex gap-3" v-if="!isProfileEducation && !isProfilePhone">
 			<a v-for="option in accountSetupOptions.filter((o) => !o.hide)" :key="option.id"
 				class="p-3 rounded-custom flex items-center gap-2 justify-center w-full"
