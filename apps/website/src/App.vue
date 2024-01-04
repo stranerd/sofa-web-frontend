@@ -5,7 +5,7 @@
 	</div>
 	<metainfo>
 		<template #title="{ content }">
-			{{ content ? `${content} | SOFA` : `SOFA` }}
+			{{ content ? `${content} | Dummy SOFA` : `Dummy SOFA` }}
 		</template>
 	</metainfo>
 	<router-view :key="$route.path" />
@@ -51,6 +51,7 @@
 <script lang="ts" setup>
 import AddMaterialModal from '@/components/common/AddMaterialModal.vue'
 import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
+import { UsersUseCases } from '@modules/users'
 import { Logic } from 'sofa-logic'
 import { SofaAlert, SofaDeletePrompt, SofaSuccessPrompt } from 'sofa-ui-components'
 import { watch } from 'vue'
@@ -61,12 +62,11 @@ import StudyModeModal from './components/library/StudyModeModal.vue'
 import { showAddItem } from './composables'
 import { useAuth } from './composables/auth/auth'
 import {
-	showStudyMode,
 	reportMaterialSetup,
 	selectedFolderMaterailToAdd,
 	sendReportMaterial,
+	showStudyMode,
 } from './composables/library'
-import { UsersUseCases } from '@modules/users'
 
 useMeta({
 	title: 'Home',
