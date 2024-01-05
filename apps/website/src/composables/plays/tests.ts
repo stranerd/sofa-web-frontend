@@ -1,9 +1,9 @@
-import { AddQuestionAnswer, Test, GameParticipantAnswer, Logic, Question } from 'sofa-logic'
+import { AddQuestionAnswer, GameParticipantAnswer, Logic, Question, Test } from 'sofa-logic'
 import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
-import { useAuth } from '../auth/auth'
-import { useRoute, useRouter } from 'vue-router'
 
 const store = {} as Record<string, {
 	test: Ref<Test | null>
@@ -98,7 +98,7 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 	}
 
 	const alertAndNav = async (route: string, message?: string) => {
-		if (message) Logic.Common.showAlert({ message, type: 'info' })
+		// if (message) Logic.Common.showAlert({ message, type: 'info' })
 		await router.replace(route)
 	}
 
