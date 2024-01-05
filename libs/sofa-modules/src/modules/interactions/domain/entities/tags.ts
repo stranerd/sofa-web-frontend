@@ -11,7 +11,7 @@ export class TagEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, title, type, parent, meta, createdAt, updatedAt }: TagFromModel) {
+	constructor({ id, title, type, parent, meta, createdAt, updatedAt }: TagFromModel) {
 		super()
 		this.id = id
 		this.title = title

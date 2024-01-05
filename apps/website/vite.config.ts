@@ -8,7 +8,7 @@ export default defineConfig({
 		vue({
 			template: {
 				compilerOptions: {
-					isCustomElement: tag => ['math-field'].includes(tag),
+					isCustomElement: (tag) => ['math-field'].includes(tag),
 				},
 			},
 		}),
@@ -30,13 +30,13 @@ export default defineConfig({
 			'@modules': path.resolve('./node_modules/sofa-modules/src/modules'),
 			'@utils': path.resolve('./node_modules/sofa-modules/src/utils'),
 		},
-		extensions: ['.js', '.vue', '.json', '.ts']
+		extensions: ['.js', '.vue', '.json', '.ts'],
 	},
 	build: {
-		minify: 'terser'
+		minify: 'terser',
 	},
 	server: {
-		port: 8080
+		port: 8080,
 	},
 	/* css: {
 		preprocessorOptions: {

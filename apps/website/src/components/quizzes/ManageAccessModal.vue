@@ -3,15 +3,22 @@
 		<div class="flex flex-col gap-6 p-4 md:p-8">
 			<div class="w-full flex items-center gap-4 justify-between text-deepGray">
 				<SofaHeaderText size="xl" class="!font-bold" content="Invite" />
-				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer"
-					@click="emits('close')" />
+				<SofaIcon name="close-white" class="rounded-full h-[32px] fill-current cursor-pointer" @click="emits('close')" />
 			</div>
 
 			<div class="flex gap-4 items-center">
-				<SofaTextField customClass="rounded-custom !bg-lightGray" name="Emails"
-					placeholder="Email, comma seperated" borderColor="border-transparent" v-model="searchValue" />
-				<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue"
-					textColor="text-white" @click="addUsers">
+				<SofaTextField
+					customClass="rounded-custom !bg-lightGray"
+					name="Emails"
+					placeholder="Email, comma seperated"
+					borderColor="border-transparent"
+					v-model="searchValue" />
+				<SofaButton
+					customClass="font-semibold"
+					padding="py-3 px-6"
+					bgColor="bg-primaryBlue"
+					textColor="text-white"
+					@click="addUsers">
 					Add
 				</SofaButton>
 			</div>
@@ -22,12 +29,16 @@
 				<div class="w-full flex flex-col gap-2">
 					<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
 						<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
-						<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`"
+						<SofaNormalText
+							color="text-deepGray"
+							:content="`${request.bio.name.full} wants to edit`"
 							class="truncate flex-grow" />
-						<SofaNormalText as="a" color="text-primaryRed" content="Deny"
-							@click="emits('grantAccess', request.id, false)" />
+						<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="emits('grantAccess', request.id, false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
-						<SofaNormalText as="a" color="text-primaryGreen" content="Approve"
+						<SofaNormalText
+							as="a"
+							color="text-primaryGreen"
+							content="Approve"
 							@click="emits('grantAccess', request.id, true)" />
 					</div>
 				</div>
@@ -40,7 +51,10 @@
 					<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
 					<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
 					<template v-if="member.id !== quiz.user.id">
-						<SofaNormalText as="a" color="text-primaryRed" content="Remove"
+						<SofaNormalText
+							as="a"
+							color="text-primaryRed"
+							content="Remove"
 							@click="emits('manageMembers', [member.id], false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />
 					</template>
@@ -67,18 +81,26 @@
 <script lang="ts" setup>
 import { useSearchUsers } from '@/composables/users/users'
 import { Conditions, Logic, Quiz, SingleUser } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaAvatar, SofaNormalText, SofaTextField, SofaButton } from 'sofa-ui-components'
+import {
+	SofaHeaderText,
+	SofaIcon,
+	SofaModal2 as SofaModal,
+	SofaAvatar,
+	SofaNormalText,
+	SofaTextField,
+	SofaButton,
+} from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
 		type: Object as PropType<Quiz>,
-		required: true
+		required: true,
 	},
 	users: {
 		type: Array as PropType<SingleUser[]>,
-		required: true
-	}
+		required: true,
+	},
 })
 
 const emits = defineEmits<{
@@ -90,9 +112,17 @@ const emits = defineEmits<{
 const { searchUsersByEmails, searchValue } = useSearchUsers()
 
 const addUsers = async () => {
-	const emails = searchValue.value.toLowerCase().split(',').map((e) => e.trim())
+	const emails = searchValue.value
+		.toLowerCase()
+		.split(',')
+		.map((e) => e.trim())
 	const users = await searchUsersByEmails(emails)
-	if (users.length) emits('manageMembers', users.map((u) => u.id), true)
+	if (users.length)
+		emits(
+			'manageMembers',
+			users.map((u) => u.id),
+			true,
+		)
 }
 
 const members = computed(() => props.users.filter((u) => props.quiz.access.members.includes(u.id)))

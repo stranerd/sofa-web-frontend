@@ -10,7 +10,7 @@ const store = {
 	departments: ref([] as DepartmentEntity[]),
 	faculties: {} as Record<string, boolean>,
 	...useErrorHandler(),
-	...useLoadingHandler()
+	...useLoadingHandler(),
 }
 
 const fetchDepartments = async (facultyId: string) => {
@@ -19,7 +19,15 @@ const fetchDepartments = async (facultyId: string) => {
 	await store.setLoading(true)
 	try {
 		const departments = await DepartmentsUseCases.getFacultyDepartments(facultyId)
-		departments.results.forEach((c) => addToArray(store.departments.value, c, (e) => e.id, (e) => e.name, true))
+		departments.results.forEach((c) =>
+			addToArray(
+				store.departments.value,
+				c,
+				(e) => e.id,
+				(e) => e.name,
+				true,
+			),
+		)
 		store.fetched.value = true
 		store.faculties[facultyId] = true
 	} catch (error) {
@@ -36,8 +44,15 @@ export const useDepartment = (facultyId: string, id: string) => {
 	const department = computed({
 		get: () => store.departments.value.find((s) => s.id === id) ?? null,
 		set: (c) => {
-			if (c) addToArray(store.departments.value, c, (e) => e.id, (e) => e.name, true)
-		}
+			if (c)
+				addToArray(
+					store.departments.value,
+					c,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
+		},
 	})
 	onMounted(async () => {
 		if (!store.faculties[facultyId]) await fetchDepartments(facultyId)
@@ -65,10 +80,18 @@ export const useCreateDepartment = () => {
 			await setLoading(true)
 			try {
 				const department = await DepartmentsUseCases.add(factory)
-				addToArray(store.departments.value, department, (e) => e.id, (e) => e.name, true)
+				addToArray(
+					store.departments.value,
+					department,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 				factory.reset()
 				await setMessage('Department created successfully')
-				await router.push(`/admin/school/institutions/${department.institutionId}/faculties/${department.facultyId}/departments/${department.id}`)
+				await router.push(
+					`/admin/school/institutions/${department.institutionId}/faculties/${department.facultyId}/departments/${department.id}`,
+				)
 			} catch (error) {
 				await setError(error)
 			}
@@ -98,10 +121,18 @@ export const useEditDepartment = () => {
 			await setLoading(true)
 			try {
 				const updatedDepartment = await DepartmentsUseCases.update(editingDepartment!.id, factory)
-				addToArray(store.departments.value, updatedDepartment, (e) => e.id, (e) => e.name, true)
+				addToArray(
+					store.departments.value,
+					updatedDepartment,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 				factory.reset()
 				await setMessage('Department updated successfully')
-				await router.push(`/admin/school/institutions/${updatedDepartment.institutionId}/faculties/${updatedDepartment.facultyId}/departments/${updatedDepartment.id}`)
+				await router.push(
+					`/admin/school/institutions/${updatedDepartment.institutionId}/faculties/${updatedDepartment.facultyId}/departments/${updatedDepartment.id}`,
+				)
 			} catch (error) {
 				await setError(error)
 			}
@@ -122,14 +153,13 @@ export const useDeleteDepartment = (departmentId: string) => {
 		const accepted = await Logic.Common.confirm({
 			title: 'Are you sure you want to delete this department?',
 			sub: '',
-			right: { label: 'Yes, delete' }
+			right: { label: 'Yes, delete' },
 		})
 		if (accepted) {
 			await setLoading(true)
 			try {
 				await DepartmentsUseCases.delete(departmentId)
-				store.departments.value = store.departments.value
-					.filter((s) => s.id !== departmentId)
+				store.departments.value = store.departments.value.filter((s) => s.id !== departmentId)
 				await setMessage('Department deleted successfully')
 			} catch (error) {
 				await setError(error)

@@ -1,23 +1,27 @@
 <template>
 	<expanded-layout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="($route.params.id as string)">
+		<QuizWrapper :id="$route.params.id as string">
 			<template v-slot="{ quiz, questions, extras }">
-				<Quiz :index="extras.index" :title="quiz.title" :questions="questions" v-model:answer="extras.answer"
+				<Quiz
+					:index="extras.index"
+					:title="quiz.title"
+					:questions="questions"
+					v-model:answer="extras.answer"
 					:optionState="extras.optionState"
 					:rightButton="{
 						label: 'Next',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
 						disabled: !extras.canNext,
-						click: extras.next
-					}" :leftButton="{
+						click: extras.next,
+					}"
+					:leftButton="{
 						label: 'Prev',
 						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',
 						disabled: !extras.canPrev,
-						click: extras.previous
-					}"
-				/>
+						click: extras.previous,
+					}" />
 			</template>
 		</QuizWrapper>
 	</expanded-layout>
@@ -33,13 +37,13 @@ import { RouteLocationNormalized } from 'vue-router'
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
 	middlewares: {
-		goBackRoute: (route: RouteLocationNormalized) => `/quiz/${route.params.id}/edit`
+		goBackRoute: (route: RouteLocationNormalized) => `/quiz/${route.params.id}/edit`,
 	},
 	components: { QuizWrapper, Quiz },
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Preview',
 		})
-	}
+	},
 })
 </script>

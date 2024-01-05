@@ -1,24 +1,24 @@
 import { FileData } from '../domains'
 
 export interface CreateConversationInput {
-  body: string
-  tutorId: string | null
+	body: string
+	tutorId: string | null
 }
 
 export interface UpdateConversationInput {
-  title: string
+	title: string
 }
 
 export interface StarMessageInput {
-  starred: boolean
+	starred: boolean
 }
 
 export interface CreateMessageInput {
-  body: string
-  media: FileData | null
+	body: string
+	media: FileData | null
 }
 
 export interface EndConversationInput {
-  rating: number
-  message: string
+	rating: number
+	message: string
 }

@@ -12,9 +12,7 @@ export default class TestApi extends ModelApiService {
 
 	public async getTestQuestions(testId: string) {
 		try {
-			const response: AxiosResponse<Question[]> = await this.axiosInstance.get(
-				this.getUrl() + `/${testId}/questions`,
-			)
+			const response: AxiosResponse<Question[]> = await this.axiosInstance.get(this.getUrl() + `/${testId}/questions`)
 
 			return response
 		} catch (err) {
@@ -26,9 +24,12 @@ export default class TestApi extends ModelApiService {
 
 	public async getTestAnswers(testId: string, filters: QueryParams) {
 		try {
-			const response: AxiosResponse<Paginated<GameParticipantAnswer>> = await this.axiosInstance.get(this.getUrl() + `/${testId}/answers`, {
-				params: filters,
-			})
+			const response: AxiosResponse<Paginated<GameParticipantAnswer>> = await this.axiosInstance.get(
+				this.getUrl() + `/${testId}/answers`,
+				{
+					params: filters,
+				},
+			)
 
 			return response
 		} catch (err) {
@@ -40,9 +41,7 @@ export default class TestApi extends ModelApiService {
 
 	public async startTest(testId: string) {
 		try {
-			const response: AxiosResponse<Test> = await this.axiosInstance.post(
-				this.getUrl() + `/${testId}/start`,
-			)
+			const response: AxiosResponse<Test> = await this.axiosInstance.post(this.getUrl() + `/${testId}/start`)
 			return response
 		} catch (err) {
 			this.handleErrors(err)
@@ -53,9 +52,7 @@ export default class TestApi extends ModelApiService {
 
 	public async endTest(testId: string) {
 		try {
-			const response: AxiosResponse<Test> = await this.axiosInstance.post(
-				this.getUrl() + `/${testId}/end`,
-			)
+			const response: AxiosResponse<Test> = await this.axiosInstance.post(this.getUrl() + `/${testId}/end`)
 			return response
 		} catch (err) {
 			this.handleErrors(err)
@@ -66,10 +63,7 @@ export default class TestApi extends ModelApiService {
 
 	public async answerTestQuestion(testId: string, data: AddQuestionAnswer) {
 		try {
-			const response: AxiosResponse<GameParticipantAnswer> = await this.axiosInstance.post(
-				this.getUrl() + `/${testId}/answers`,
-				data,
-			)
+			const response: AxiosResponse<GameParticipantAnswer> = await this.axiosInstance.post(this.getUrl() + `/${testId}/answers`, data)
 
 			return response
 		} catch (err) {

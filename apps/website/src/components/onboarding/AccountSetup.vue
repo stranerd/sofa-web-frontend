@@ -1,7 +1,9 @@
 <template>
 	<form @submit.prevent="handleAccountSetup" class="w-full flex flex-col gap-4">
 		<div class="w-full flex gap-3" v-if="!isProfileEducation && !isProfilePhone">
-			<a v-for="option in accountSetupOptions.filter((o) => !o.hide)" :key="option.id"
+			<a
+				v-for="option in accountSetupOptions.filter((o) => !o.hide)"
+				:key="option.id"
 				class="p-3 rounded-custom flex items-center gap-2 justify-center w-full"
 				:class="tab === option.id ? 'bg-primaryPurple' : option.done ? 'bg-primaryGreen' : 'bg-lightGray'"
 				@click="tab = option.id">
@@ -18,9 +20,11 @@
 					:customClass="`w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
 					:photoUrl="profileFactory.localPhotoLink">
 					<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileFactory.localPhotoLink" />
-					<sofa-file-attachment :isWrapper="true"
+					<sofa-file-attachment
+						:isWrapper="true"
 						:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-						:accept="'image/png, image/gif, image/jpeg'" v-model="profileFactory.photo"
+						:accept="'image/png, image/gif, image/jpeg'"
+						v-model="profileFactory.photo"
 						v-model:localFileUrl="profileFactory.localPhotoLink">
 						<template v-slot:content>
 							<SofaIcon class="h-[18px]" name="camera-white" />
@@ -29,17 +33,30 @@
 				</sofa-image-loader>
 			</div>
 
-			<SofaTextField customClass="rounded-custom !bg-lightGray"
-				type="text" placeholder="First Name" :error="profileFactory.errors.first" v-model="profileFactory.first"
+			<SofaTextField
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="First Name"
+				:error="profileFactory.errors.first"
+				v-model="profileFactory.first"
 				borderColor="border-transparent" />
 
-			<SofaTextField customClass="rounded-custom !bg-lightGray"
-				type="text" placeholder="Last Name" :error="profileFactory.errors.last" v-model="profileFactory.last"
+			<SofaTextField
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="Last Name"
+				:error="profileFactory.errors.last"
+				v-model="profileFactory.last"
 				borderColor="border-transparent" />
 
-			<SofaTextField customClass="rounded-custom !bg-lightGray"
-				type="text" placeholder="Organization name" :error="typeFactory.errors.name" v-model="typeFactory.name"
-				borderColor="border-transparent" v-if="typeFactory.isOrganization" />
+			<SofaTextField
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="Organization name"
+				:error="typeFactory.errors.name"
+				v-model="typeFactory.name"
+				borderColor="border-transparent"
+				v-if="typeFactory.isOrganization" />
 
 			<SofaTextarea
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
@@ -47,59 +64,99 @@
 				:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'"
 				v-model="profileFactory.description" />
 
-			<SofaTextField customClass="rounded-custom !bg-lightGray"
-				type="text" placeholder="Set organization code" :error="typeFactory.errors.code" v-model="typeFactory.code"
-				borderColor="border-transparent" v-if="typeFactory.isOrganization" />
+			<SofaTextField
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="Set organization code"
+				:error="typeFactory.errors.code"
+				v-model="typeFactory.code"
+				borderColor="border-transparent"
+				v-if="typeFactory.isOrganization" />
 
 			<div class="w-full grid grid-cols-2 gap-4">
-				<SofaSelect customClass="rounded-custom !bg-lightGray col-span-1"
-					placeholder="Country" :error="locationFactory.errors.country" borderColor="border-transparent"
-					v-model="locationFactory.country" :options="countries.map((c) => ({ key: c, value: c }))" />
+				<SofaSelect
+					customClass="rounded-custom !bg-lightGray col-span-1"
+					placeholder="Country"
+					:error="locationFactory.errors.country"
+					borderColor="border-transparent"
+					v-model="locationFactory.country"
+					:options="countries.map((c) => ({ key: c, value: c }))" />
 
-				<SofaSelect customClass="rounded-custom !bg-lightGray col-span-1"
-					placeholder="State" :error="locationFactory.errors.state" borderColor="border-transparent"
-					v-model="locationFactory.state" :options="states.map((s) => ({ key: s, value: s }))" />
+				<SofaSelect
+					customClass="rounded-custom !bg-lightGray col-span-1"
+					placeholder="State"
+					:error="locationFactory.errors.state"
+					borderColor="border-transparent"
+					v-model="locationFactory.state"
+					:options="states.map((s) => ({ key: s, value: s }))" />
 			</div>
 		</div>
 
 		<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
-			<SofaTextField customClass="rounded-custom !bg-lightGray"
-				type="text" placeholder="Where do you teach at the moment?" :error="typeFactory.errors.school"
-				v-model="typeFactory.school" borderColor="border-transparent" v-if="typeFactory.isTeacher" />
+			<SofaTextField
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="Where do you teach at the moment?"
+				:error="typeFactory.errors.school"
+				v-model="typeFactory.school"
+				borderColor="border-transparent"
+				v-if="typeFactory.isTeacher" />
 
-			<SofaSelect customClass="rounded-custom !bg-lightGray"
-				placeholder="Select education level" :error="typeFactory.errors.schoolType" borderColor="border-transparent"
-				v-model="typeFactory.schoolType" v-if="typeFactory.isStudent"
+			<SofaSelect
+				customClass="rounded-custom !bg-lightGray"
+				placeholder="Select education level"
+				:error="typeFactory.errors.schoolType"
+				borderColor="border-transparent"
+				v-model="typeFactory.schoolType"
+				v-if="typeFactory.isStudent"
 				:options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" />
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
-				<SofaSelect customClass="rounded-custom !bg-lightGray"
-					placeholder="Select school" :error="typeFactory.errors.institutionId" borderColor="border-transparent"
-					v-model="typeFactory.institutionId" :options="schools.map((s) => ({ key: s.id, value: s.title }))" />
+				<SofaSelect
+					customClass="rounded-custom !bg-lightGray"
+					placeholder="Select school"
+					:error="typeFactory.errors.institutionId"
+					borderColor="border-transparent"
+					v-model="typeFactory.institutionId"
+					:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
 
-				<SofaSelect customClass="rounded-custom !bg-lightGray"
-					placeholder="Select faculty" :error="typeFactory.errors.facultyId" borderColor="border-transparent"
+				<SofaSelect
+					customClass="rounded-custom !bg-lightGray"
+					placeholder="Select faculty"
+					:error="typeFactory.errors.facultyId"
+					borderColor="border-transparent"
 					v-model="typeFactory.facultyId"
 					:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
 
-				<SofaSelect customClass="rounded-custom !bg-lightGray"
-					placeholder="Select department" :error="typeFactory.errors.departmentId"
-					borderColor="border-transparent" v-model="typeFactory.departmentId"
+				<SofaSelect
+					customClass="rounded-custom !bg-lightGray"
+					placeholder="Select department"
+					:error="typeFactory.errors.departmentId"
+					borderColor="border-transparent"
+					v-model="typeFactory.departmentId"
 					:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
 			</template>
 			<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
 				<div class="w-full flex flex-col gap-4">
 					<SofaNormalText class="!font-semibold" content="Your exams" />
 
-					<SofaSelect customClass="rounded-custom !bg-lightGray"
-						v-model="typeFactory.institutions" placeholder="Select exams" borderColor="border-transparent"
-						:isMultiple="true" :options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
+					<SofaSelect
+						customClass="rounded-custom !bg-lightGray"
+						v-model="typeFactory.institutions"
+						placeholder="Select exams"
+						borderColor="border-transparent"
+						:isMultiple="true"
+						:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
 
 					<div class="w-full flex flex-wrap gap-3">
 						<SofaBadge
-							v-for="institution in typeFactory.institutions.map((id) => gatewayExams.find((i) => i.id === id)).filter(Boolean)"
-							:key="institution.id" :color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
-							customClass="flex items-center gap-2" as="a"
+							v-for="institution in typeFactory.institutions
+								.map((id) => gatewayExams.find((i) => i.id === id))
+								.filter(Boolean)"
+							:key="institution.id"
+							:color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
+							customClass="flex items-center gap-2"
+							as="a"
 							@click.prevent="typeFactory.activeInst = institution.id">
 							{{ institution.title }}
 							<SofaIcon
@@ -108,10 +165,15 @@
 						</SofaBadge>
 					</div>
 
-					<SofaSelect v-if="typeFactory.activeInst"
+					<SofaSelect
+						v-if="typeFactory.activeInst"
 						customClass="rounded-custom !bg-lightGray"
-						placeholder="Select exam subjects" borderColor="border-transparent" :isMultiple="true"
-						:options="courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))"
+						placeholder="Select exam subjects"
+						borderColor="border-transparent"
+						:isMultiple="true"
+						:options="
+							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
+						"
 						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds" />
 				</div>
 			</template>
@@ -134,8 +196,7 @@
 				<SofaNormalText color="text-primaryBlue" as="a" content="Resend code" @click="sendVerificationText" />
 			</div>
 
-			<SofaNormalText color="text-primaryBlue" class="mx-auto" as="a" content="Change number"
-				@click="tab = 'phone'" />
+			<SofaNormalText color="text-primaryBlue" class="mx-auto" as="a" content="Change number" @click="tab = 'phone'" />
 		</div>
 
 		<div class="w-full flex flex-col items-center md:py-0 py-4">
@@ -145,9 +206,7 @@
 				</SofaButton>
 			</div>
 			<div v-else class="flex flex-col w-full">
-				<SofaButton :disabled="isDisabled" class="w-full" padding="md:py-4 py-3" type="submit">
-					Continue
-				</SofaButton>
+				<SofaButton :disabled="isDisabled" class="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
 			</div>
 		</div>
 	</form>
@@ -172,7 +231,7 @@ import {
 	SofaPhoneInput,
 	SofaSelect,
 	SofaTextField,
-	SofaTextarea
+	SofaTextarea,
 } from 'sofa-ui-components'
 import { computed, defineComponent, ref, watch } from 'vue'
 
@@ -207,7 +266,7 @@ export default defineComponent({
 		},
 	},
 	name: 'AccountSetup',
-	setup (props) {
+	setup(props) {
 		const { auth, user } = useAuth()
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()
 		const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
@@ -216,7 +275,8 @@ export default defineComponent({
 
 		const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
 		const isDisabled = computed(() => {
-			if (tab.value === 'profile') return !profileFactory.valid || !locationFactory.valid || (typeFactory.isOrganization && !typeFactory.valid)
+			if (tab.value === 'profile')
+				return !profileFactory.valid || !locationFactory.valid || (typeFactory.isOrganization && !typeFactory.valid)
 			else if (tab.value === 'type') return !typeFactory.isOrganization && !typeFactory.valid
 			else if (tab.value === 'phone') return !phoneFactory.valid
 			else if (tab.value === 'phone-verify') return !token.value
@@ -228,56 +288,78 @@ export default defineComponent({
 				name: 'Profile',
 				id: 'profile',
 				hide: false,
-				done: !!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
+				done:
+					!!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
 			},
 			{
 				name: typeFactory.isTeacher ? 'Experience' : 'Education',
 				id: 'type',
 				hide: typeFactory.isOrganization,
-				done: !!user.value?.type
+				done: !!user.value?.type,
 			},
 			{
 				name: 'Phone',
 				id: 'phone',
 				hide: false,
-				done: !!auth.value?.phone
+				done: !!auth.value?.phone,
 			},
 		])
 
 		const handleAccountSetup = async () => {
 			if (isDisabled.value) return
-			if (tab.value === 'profile') await Promise.all([
-				typeFactory.isOrganization ? updateType(true) : true,
-				updateProfile(true),
-				updateLocation(true)
-			]).then((res) => {
-				if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
-			})
-			else if (tab.value === 'type') await updateType(true).then((res) => {
-				if (res && !props.isProfileEducation) tab.value = 'phone'
-			})
-			else if (tab.value === 'phone') await sendVerificationText().then((res) => {
-				if (res) tab.value = 'phone-verify'
-			})
-			else if (tab.value === 'phone-verify') await completeVerification().then(async (res) => {
-				if (!res) return
-				if (props.isProfilePhone) tab.value = 'phone'
-				else await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
-			})
+			if (tab.value === 'profile')
+				await Promise.all([typeFactory.isOrganization ? updateType(true) : true, updateProfile(true), updateLocation(true)]).then(
+					(res) => {
+						if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
+					},
+				)
+			else if (tab.value === 'type')
+				await updateType(true).then((res) => {
+					if (res && !props.isProfileEducation) tab.value = 'phone'
+				})
+			else if (tab.value === 'phone')
+				await sendVerificationText().then((res) => {
+					if (res) tab.value = 'phone-verify'
+				})
+			else if (tab.value === 'phone-verify')
+				await completeVerification().then(async (res) => {
+					if (!res) return
+					if (props.isProfilePhone) tab.value = 'phone'
+					else await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
+				})
 		}
 
 		const { courses, fetchInstitutionCourses } = useCourseList()
 		const { schools, gatewayExams, filteredFaculties, filteredDepartments } = useChooseSchool(typeFactory)
 
-		watch(() => typeFactory.exams, async () => {
-			await Promise.all(typeFactory.exams.map(async (exam) => fetchInstitutionCourses(exam.institutionId)))
-		}, { immediate: true })
+		watch(
+			() => typeFactory.exams,
+			async () => {
+				await Promise.all(typeFactory.exams.map(async (exam) => fetchInstitutionCourses(exam.institutionId)))
+			},
+			{ immediate: true },
+		)
 
 		return {
-			profileFactory, locationFactory, typeFactory, countries, states, UserSchoolType,
-			schools, gatewayExams, filteredFaculties, filteredDepartments, courses,
-			tab, isDisabled, accountSetupOptions, phoneFactory, token, handleAccountSetup, sendVerificationText,
+			profileFactory,
+			locationFactory,
+			typeFactory,
+			countries,
+			states,
+			UserSchoolType,
+			schools,
+			gatewayExams,
+			filteredFaculties,
+			filteredDepartments,
+			courses,
+			tab,
+			isDisabled,
+			accountSetupOptions,
+			phoneFactory,
+			token,
+			handleAccountSetup,
+			sendVerificationText,
 		}
-	}
+	},
 })
 </script>

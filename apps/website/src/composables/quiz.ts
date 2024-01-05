@@ -12,7 +12,7 @@ export const goToStudyMode = async (quiz: Quiz, type: string) => {
 	selectedQuiz.value = quiz
 	selectedQuizMode.value = type
 
-	if (type == 'game') return showStudyMode.value = true
+	if (type == 'game') return (showStudyMode.value = true)
 
 	await Logic.Study.GoToStudyMode(type, quiz.id)
 	showStudyMode.value = false
@@ -67,15 +67,17 @@ export const createQuizGame = async () => {
 
 	Logic.Plays.CreateGameForm = {
 		quizId: selectedQuiz.value?.id,
-		join: userIsParticipating.value
+		join: userIsParticipating.value,
 	}
 
-	await Logic.Plays.CreateGame(true).then(async (game) => {
-		if (game) {
-			showStudyMode.value = false
-			await Logic.Common.GoToRoute( `/games/${game.id}`)
-		}
-	}).finally(() => {
-		Logic.Common.hideLoading()
-	})
+	await Logic.Plays.CreateGame(true)
+		.then(async (game) => {
+			if (game) {
+				showStudyMode.value = false
+				await Logic.Common.GoToRoute(`/games/${game.id}`)
+			}
+		})
+		.finally(() => {
+			Logic.Common.hideLoading()
+		})
 }

@@ -13,16 +13,26 @@ const store = {
 	listener: useListener(async () => {
 		return Logic.Common.listenToMany<Conversation>('conversations/conversations', {
 			created: async (entity) => {
-				Logic.addToArray(store.conversations.value, entity, (e) => e.id, (e) => (e.last?.createdAt ?? 0))
+				Logic.addToArray(
+					store.conversations.value,
+					entity,
+					(e) => e.id,
+					(e) => e.last?.createdAt ?? 0,
+				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(store.conversations.value, entity, (e) => e.id, (e) => (e.last?.createdAt ?? 0))
+				Logic.addToArray(
+					store.conversations.value,
+					entity,
+					(e) => e.id,
+					(e) => e.last?.createdAt ?? 0,
+				)
 			},
 			deleted: async (entity) => {
 				store.conversations.value = store.conversations.value.filter((m) => m.id !== entity.id)
-			}
+			},
 		})
-	})
+	}),
 }
 
 export const useConversationsList = () => {
@@ -33,7 +43,14 @@ export const useConversationsList = () => {
 			await store.setError('')
 			await store.setLoading(true)
 			const conversations = await Logic.Conversations.GetConversations({ all: true })
-			conversations.results.forEach((r) => Logic.addToArray(store.conversations.value, r, (e) => e.id, (e) => (e.last?.createdAt ?? 0)))
+			conversations.results.forEach((r) =>
+				Logic.addToArray(
+					store.conversations.value,
+					r,
+					(e) => e.id,
+					(e) => e.last?.createdAt ?? 0,
+				),
+			)
 			store.fetched.value = true
 		} catch (e) {
 			await store.setError(e)
@@ -42,19 +59,18 @@ export const useConversationsList = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */!store.loading.value) await fetchConversations()
+		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchConversations()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
 
-	const conversations = computed(() => store.conversations.value
-		.filter((c) => !c.pending && (c.tutor?.id === authId.value ? c.accepted?.is : true)))
-	const requests = computed(() => store.conversations.value
-		.filter((c) => c.pending && c.tutor?.id === authId.value))
-	const pending = computed(() => store.conversations.value
-		.filter((c) => c.pending && c.user.id === authId.value))
+	const conversations = computed(() =>
+		store.conversations.value.filter((c) => !c.pending && (c.tutor?.id === authId.value ? c.accepted?.is : true)),
+	)
+	const requests = computed(() => store.conversations.value.filter((c) => c.pending && c.tutor?.id === authId.value))
+	const pending = computed(() => store.conversations.value.filter((c) => c.pending && c.user.id === authId.value))
 
 	return { ...store, conversations, requests, pending }
 }
@@ -88,7 +104,7 @@ export const useConversation = (id: string) => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All messages in this conversation would be lost',
-			right: { label: 'Yes, delete' }
+			right: { label: 'Yes, delete' },
 		})
 		if (!confirmed) return
 		if (loading.loading.value) return
@@ -121,7 +137,6 @@ export const useConversation = (id: string) => {
 		await loading.setLoading(false)
 	}
 
-
 	return { ...conversationList, conversation, end, deleteConv, accept }
 }
 
@@ -140,11 +155,12 @@ export const useCreateConversation = () => {
 				const conversation = await Logic.Conversations.CreateConversation(data)
 				factory.reset()
 				await router.push(`/chats/${conversation.id}`)
-				if (conversation.tutor) await Logic.Common.success({
-					title: 'Tutor request sent!',
-					sub: 'You will get notified when the tutor responds',
-					button: { label: 'Done' }
-				})
+				if (conversation.tutor)
+					await Logic.Common.success({
+						title: 'Tutor request sent!',
+						sub: 'You will get notified when the tutor responds',
+						button: { label: 'Done' },
+					})
 			} catch (error) {
 				await setError(error)
 			}

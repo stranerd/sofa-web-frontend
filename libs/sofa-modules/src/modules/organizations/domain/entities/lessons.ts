@@ -11,7 +11,7 @@ export class LessonEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, classId, title, users, createdAt, updatedAt }: LessonFromModel) {
+	constructor({ id, organizationId, classId, title, users, createdAt, updatedAt }: LessonFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId

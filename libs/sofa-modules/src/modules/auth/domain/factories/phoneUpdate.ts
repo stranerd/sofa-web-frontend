@@ -4,20 +4,20 @@ import { AuthDetails, Phone } from '../entities/auth'
 
 export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone: Phone | null }> {
 	readonly rules = {
-		phone: v.any().addRule(isValidPhone())
+		phone: v.any().addRule(isValidPhone()),
 	}
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ phone: null })
 	}
 
-	get phone () {
+	get phone() {
 		return this.values.phone
 	}
 
-	set phone (phone: Phone | null) {
+	set phone(phone: Phone | null) {
 		this.set('phone', phone)
 	}
 
@@ -33,13 +33,14 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 	}
 }
 
-
-const isValidPhone = (error?: string) => makeRule<Phone>((value) => {
-	return v.object({
-		code: v.string().custom((val) => {
-			return val.startsWith('+') &&
-							v.force.number(val.slice(1)).parse(val).valid
-		}, error ?? 'invalid phone code'),
-		number: v.force.number(error ?? 'invalid phone number').transform((val) => val.toString())
-	}).parse(value)
-})
+const isValidPhone = (error?: string) =>
+	makeRule<Phone>((value) => {
+		return v
+			.object({
+				code: v.string().custom((val) => {
+					return val.startsWith('+') && v.force.number(val.slice(1)).parse(val).valid
+				}, error ?? 'invalid phone code'),
+				number: v.force.number(error ?? 'invalid phone number').transform((val) => val.toString()),
+			})
+			.parse(value)
+	})

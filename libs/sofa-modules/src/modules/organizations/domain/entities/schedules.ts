@@ -13,7 +13,7 @@ export class ScheduleEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, classId, lessonId, user, title, time, createdAt, updatedAt }: ScheduleFromModel) {
+	constructor({ id, organizationId, classId, lessonId, user, title, time, createdAt, updatedAt }: ScheduleFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId

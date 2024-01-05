@@ -3,8 +3,8 @@ import { Logic } from 'sofa-logic'
 import { NavigationGuardWithThis, RouteLocationNormalized } from 'vue-router'
 
 type MiddleWareArgs = {
-	to: RouteLocationNormalized,
-	from: RouteLocationNormalized | null,
+	to: RouteLocationNormalized
+	from: RouteLocationNormalized | null
 	goBackToNonAuth: () => string
 }
 
@@ -54,19 +54,21 @@ export const isOrg = defineMiddleware(async ({ to }) => {
 const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg }
 type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
 
-export const generateMiddlewares = (middlewares: Middleware[]): NavigationGuardWithThis<undefined> => async (to, fromRoute) => {
-	const from = fromRoute.name ? fromRoute : null
-	let redirect = null
-	for (const middleware of middlewares) {
-		const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware
-		const goBackToNonAuth = () => {
-			const backPath = from?.fullPath ?? '/'
-			return backPath.startsWith('/auth/') ? '/' : backPath
+export const generateMiddlewares =
+	(middlewares: Middleware[]): NavigationGuardWithThis<undefined> =>
+	async (to, fromRoute) => {
+		const from = fromRoute.name ? fromRoute : null
+		let redirect = null
+		for (const middleware of middlewares) {
+			const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware
+			const goBackToNonAuth = () => {
+				const backPath = from?.fullPath ?? '/'
+				return backPath.startsWith('/auth/') ? '/' : backPath
+			}
+			const path = await callback?.({ to, from, goBackToNonAuth }).catch(() => null)
+			if (!path) continue
+			redirect = path
+			break
 		}
-		const path = await callback?.({ to, from, goBackToNonAuth }).catch(() => null)
-		if (!path) continue
-		redirect = path
-		break
+		if (redirect) return redirect === from?.fullPath ? false : redirect
 	}
-	if (redirect) return redirect === from?.fullPath ? false : redirect
-}

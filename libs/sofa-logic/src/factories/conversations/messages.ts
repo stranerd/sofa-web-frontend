@@ -3,32 +3,32 @@ import { FileData, Message } from '../../logic'
 import { BaseFactory } from '@modules/core'
 
 type Content = FileData | null
-type Keys = { body: string, media: Content | null }
+type Keys = { body: string; media: Content | null }
 
 const v = valleyed.v
 export class MessageFactory extends BaseFactory<Message, Keys, Keys> {
 	readonly rules = {
 		body: v.string(),
-		media: v.file().nullable()
+		media: v.file().nullable(),
 	}
 
-	constructor () {
+	constructor() {
 		super({ body: '', media: null })
 	}
 
-	get body () {
+	get body() {
 		return this.values.body
 	}
 
-	set body (value: string) {
+	set body(value: string) {
 		this.set('body', value)
 	}
 
-	get media () {
+	get media() {
 		return this.values.media
 	}
 
-	set media (value: Content) {
+	set media(value: Content) {
 		this.set('media', value)
 	}
 

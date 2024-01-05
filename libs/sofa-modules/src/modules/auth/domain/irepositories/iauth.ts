@@ -4,7 +4,10 @@ export interface IAuthRepository {
 	getAuthUser: () => Promise<AuthDetails | null>
 	signinWithEmail: (email: string, password: string, extras: AuthExtras) => Promise<AfterAuthUser>
 	signinWithGoogle: (data: { idToken: string }, extras: AuthExtras) => Promise<AfterAuthUser>
-	signinWithApple: (data: { firstName: string | null, lastName: string | null, email: string | null, idToken: string }, extras: AuthExtras) => Promise<AfterAuthUser>
+	signinWithApple: (
+		data: { firstName: string | null; lastName: string | null; email: string | null; idToken: string },
+		extras: AuthExtras,
+	) => Promise<AfterAuthUser>
 	signupWithEmail: (data: NewUser, extras: AuthExtras) => Promise<AfterAuthUser>
 	sendVerificationEmail: () => Promise<void>
 	completeEmailVerification: (token: string) => Promise<AfterAuthUser>
@@ -17,5 +20,5 @@ export interface IAuthRepository {
 	session: (afterAuth: AfterAuthUser) => Promise<AuthDetails>
 	signout: () => Promise<void>
 	deleteAccount: () => Promise<void>
-	updateRole: (data: { id: string, value: boolean, role: AuthRoles }) => Promise<boolean>
+	updateRole: (data: { id: string; value: boolean; role: AuthRoles }) => Promise<boolean>
 }

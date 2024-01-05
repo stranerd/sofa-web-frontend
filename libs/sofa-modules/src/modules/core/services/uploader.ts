@@ -23,7 +23,7 @@ export class UploadedFile {
 	readonly data: Blob
 	readonly ref: File
 
-	constructor ({ name, path, type, size, data, ref }: { name: string, path: string, type: string, size: number, data: Blob, ref: File }) {
+	constructor({ name, path, type, size, data, ref }: { name: string; path: string; type: string; size: number; data: Blob; ref: File }) {
 		this.name = name
 		this.path = path
 		this.type = type
@@ -32,11 +32,11 @@ export class UploadedFile {
 		this.ref = ref
 	}
 
-	get link () {
+	get link() {
 		return window.URL.createObjectURL(this.data)
 	}
 
-	static async convertBase64ToBlob (b64: string) {
+	static async convertBase64ToBlob(b64: string) {
 		const byteCharacters = atob(b64)
 		const byteNumbers = new Array(byteCharacters.length)
 		for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i)
@@ -46,5 +46,5 @@ export class UploadedFile {
 }
 
 declare module 'valleyed/lib/types' {
-    interface File extends UploadedFile, Media {}
+	interface File extends UploadedFile, Media {}
 }

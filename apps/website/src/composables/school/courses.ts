@@ -14,7 +14,7 @@ const store = {
 	searchValue: ref(''),
 	searchResults: ref([] as CourseEntity[]),
 	...useErrorHandler(),
-	...useLoadingHandler()
+	...useLoadingHandler(),
 }
 
 const fetchDepartmentCourses = async (departmentId: string) => {
@@ -23,7 +23,15 @@ const fetchDepartmentCourses = async (departmentId: string) => {
 	await store.setLoading(true)
 	try {
 		const courses = await CoursesUseCases.getDepartmentCourses(departmentId)
-		courses.results.forEach((c) => addToArray(store.courses.value, c, (e) => e.id, (e) => e.name, true))
+		courses.results.forEach((c) =>
+			addToArray(
+				store.courses.value,
+				c,
+				(e) => e.id,
+				(e) => e.name,
+				true,
+			),
+		)
 		store.fetched.value = true
 		store.departments[departmentId] = true
 	} catch (error) {
@@ -40,7 +48,13 @@ const fetchFacultyCourses = async (facultyId: string, general = false) => {
 	try {
 		const courses = await CoursesUseCases.getFacultyCourses(facultyId, general)
 		courses.results.forEach((c) => {
-			addToArray(store.courses.value, c, (e) => e.id, (e) => e.name, true)
+			addToArray(
+				store.courses.value,
+				c,
+				(e) => e.id,
+				(e) => e.name,
+				true,
+			)
 			if (c.departmentId) store.departments[c.departmentId] = true
 			else store.faculties[`${c.facultyId}-general`] = true
 		})
@@ -60,7 +74,13 @@ const fetchInstitutionCourses = async (institutionId: string, general = false) =
 	try {
 		const courses = await CoursesUseCases.getInstitutionCourses(institutionId, general)
 		courses.results.forEach((c) => {
-			addToArray(store.courses.value, c, (e) => e.id, (e) => e.name, true)
+			addToArray(
+				store.courses.value,
+				c,
+				(e) => e.id,
+				(e) => e.name,
+				true,
+			)
 			if (c.facultyId) {
 				store.faculties[c.facultyId] = true
 				if (c.departmentId) store.departments[c.departmentId] = true
@@ -95,8 +115,11 @@ export const useCourseList = () => {
 	})
 
 	return {
-		...store, search,
-		fetchDepartmentCourses, fetchFacultyCourses, fetchInstitutionCourses
+		...store,
+		search,
+		fetchDepartmentCourses,
+		fetchFacultyCourses,
+		fetchInstitutionCourses,
 	}
 }
 
@@ -104,20 +127,38 @@ export const useCourse = (id: string) => {
 	const course = computed({
 		get: () => store.courses.value.find((s) => s.id === id) ?? null,
 		set: (c) => {
-			if (c) addToArray(store.courses.value, c, (e) => e.id, (e) => e.name, true)
-		}
+			if (c)
+				addToArray(
+					store.courses.value,
+					c,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
+		},
 	})
 	onMounted(async () => {
 		if (!course.value) {
 			const c = await CoursesUseCases.find(id)
-			if (c) addToArray(store.courses.value, c, (e) => e.id, (e) => e.name, true)
+			if (c)
+				addToArray(
+					store.courses.value,
+					c,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 		}
 	})
 
 	return { course }
 }
 
-let creatingCourseEntity = null as { institutionId: string, facultyId: string | null, departmentId: string | null } | null
+let creatingCourseEntity = null as {
+	institutionId: string
+	facultyId: string | null
+	departmentId: string | null
+} | null
 export const openCourseCreateModal = async (institutionId: string, facultyId: string | null, departmentId: string | null) => {
 	creatingCourseEntity = { institutionId, facultyId, departmentId }
 }
@@ -138,7 +179,13 @@ export const useCreateCourse = () => {
 			await setLoading(true)
 			try {
 				const course = await CoursesUseCases.add(factory)
-				addToArray(store.courses.value, course, (e) => e.id, (e) => e.name, true)
+				addToArray(
+					store.courses.value,
+					course,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 				factory.reset()
 				await setMessage('Course created successfully')
 			} catch (error) {
@@ -169,7 +216,13 @@ export const useEditCourse = () => {
 			await setLoading(true)
 			try {
 				const updatedCourse = await CoursesUseCases.update(editingCourse!.id, factory)
-				addToArray(store.courses.value, updatedCourse, (e) => e.id, (e) => e.name, true)
+				addToArray(
+					store.courses.value,
+					updatedCourse,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 				factory.reset()
 				await setMessage('Course updated successfully')
 			} catch (error) {
@@ -192,14 +245,13 @@ export const useDeleteCourse = (courseId: string) => {
 		const accepted = await Logic.Common.confirm({
 			title: 'Are you sure you want to delete this course?',
 			sub: '',
-			right: { label: 'Yes, delete' }
+			right: { label: 'Yes, delete' },
 		})
 		if (accepted) {
 			await setLoading(true)
 			try {
 				await CoursesUseCases.delete(courseId)
-				store.courses.value = store.courses.value
-					.filter((s) => s.id !== courseId)
+				store.courses.value = store.courses.value.filter((s) => s.id !== courseId)
 				await setMessage('Course deleted successfully')
 			} catch (error) {
 				await setError(error)

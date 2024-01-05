@@ -2,7 +2,7 @@
 	<expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
 		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
 			<sofa-normal-text :color="'text-grayColor w-full flex flex-row justify-start gap-1'">
-				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ "Marketplace " }}</span>
+				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ 'Marketplace ' }}</span>
 				<span> / {{ contentDetails.title }}</span>
 			</sofa-normal-text>
 		</div>
@@ -10,92 +10,94 @@
 			class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
 			<sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 			<sofa-normal-text :customClass="'!font-bold !text-base'">
-				{{
-					contentType == "course" ? "Course details" : "Quiz details"
-				}}</sofa-normal-text>
+				{{ contentType == 'course' ? 'Course details' : 'Quiz details' }}</sofa-normal-text
+			>
 			<div>
 				<sofa-icon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
 			</div>
 		</div>
 		<div class="w-full bg-white rounded-[16px] flex flex-col flex-grow overflow-y-auto">
-			<sofa-content-details :content="contentDetails" :customClass="'!rounded-none'" :showBuyButton="true"
-				:buyAction="buyCourse" :hasAccess="userHasAccess(contentDetails.original)"
-				:similarContents="similarContents" :type="contentType" :contentId="contentDetails.id"
-				:otherTasks="otherTasks" :openQuiz="() => openQuiz(contentDetails as any)" :actions="{
+			<sofa-content-details
+				:content="contentDetails"
+				:customClass="'!rounded-none'"
+				:showBuyButton="true"
+				:buyAction="buyCourse"
+				:hasAccess="userHasAccess(contentDetails.original)"
+				:similarContents="similarContents"
+				:type="contentType"
+				:contentId="contentDetails.id"
+				:otherTasks="otherTasks"
+				:openQuiz="() => openQuiz(contentDetails as any)"
+				:actions="{
 					report: () => {
-						reportMaterial(
-							contentDetails?.type,
-							contentDetails?.title,
-							contentDetails?.id
-						)
+						reportMaterial(contentDetails?.type, contentDetails?.title, contentDetails?.id)
 					},
 					share: () => {
-						shareMaterialLink(
-							contentDetails?.type ?? ('' as any),
-							contentDetails.route,
-							contentDetails?.title ?? '',
-						)
+						shareMaterialLink(contentDetails?.type ?? ('' as any), contentDetails.route, contentDetails?.title ?? '')
 					},
-					save: () => saveToFolder(contentDetails)
+					save: () => saveToFolder(contentDetails),
 				}" />
 		</div>
 
 		<!--  Payment modal -->
-		<sofa-modal v-if="showMakePaymentModal" :close="() => showMakePaymentModal = false">
+		<sofa-modal v-if="showMakePaymentModal" :close="() => (showMakePaymentModal = false)">
 			<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
-						<sofa-header-text :customClass="'text-xl'">
-							Choose payment method
-						</sofa-header-text>
+						<sofa-header-text :customClass="'text-xl'"> Choose payment method </sofa-header-text>
 					</div>
 
 					<div
 						class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
-						<sofa-normal-text :customClass="'!font-bold !text-base'">
-							Choose payment method
-						</sofa-normal-text>
+						<sofa-normal-text :customClass="'!font-bold !text-base'"> Choose payment method </sofa-normal-text>
 						<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMakePaymentModal = false" />
 					</div>
 
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 						<!-- Wallet -->
-						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${selectedMethodId == 'payWithWallet'
-							? 'border-primaryBlue  border-2' : ''} rounded-custom`" @click="selectedMethodId = 'payWithWallet'">
+						<a
+							:class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${
+								selectedMethodId == 'payWithWallet' ? 'border-primaryBlue  border-2' : ''
+							} rounded-custom`"
+							@click="selectedMethodId = 'payWithWallet'">
 							<sofa-icon :customClass="'h-[20px]'" :name="'wallet'" />
 							<sofa-normal-text>
 								Wallet (<span class="!font-semibold">{{
-									Logic.Common.formatPrice(
-										UserWallet.balance.amount,
-										UserWallet.balance.currency
-									)
-								}}</span>)
+									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
+								}}</span
+								>)
 							</sofa-normal-text>
 						</a>
 
 						<!-- Pay online -->
 
-						<div class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
+						<div
+							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
 							@click="Logic.Payment.initialPayment()">
 							<sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
 							<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
 						</div>
 
-						<a :class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''}  rounded-custom`"
-							@click="selectedMethodId = method.id" v-for="(method, index) in PaymentMethods.results"
+						<a
+							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
+								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
+							}  rounded-custom`"
+							@click="selectedMethodId = method.id"
+							v-for="(method, index) in PaymentMethods.results"
 							:key="index">
 							<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
-							<sofa-normal-text>
-								**** **** **** {{ method.data.last4Digits }}
-							</sofa-normal-text>
+							<sofa-normal-text> **** **** **** {{ method.data.last4Digits }} </sofa-normal-text>
 						</a>
 					</div>
 
 					<div
 						class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
 						<div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
-							<sofa-button :textColor="'text-grayColor'" :bgColor="'bg-white'" :padding="'px-4 py-1'"
+							<sofa-button
+								:textColor="'text-grayColor'"
+								:bgColor="'bg-white'"
+								:padding="'px-4 py-1'"
 								:customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
 								@click="showMakePaymentModal = false">
 								Exit
@@ -103,7 +105,9 @@
 						</div>
 
 						<div class="md:!w-auto col-span-2 flex flex-col">
-							<sofa-button :textColor="'text-white'" :bgColor="'bg-primaryBlue'"
+							<sofa-button
+								:textColor="'text-white'"
+								:bgColor="'bg-primaryBlue'"
 								:padding="'px-4 md:!py-1 py-3'"
 								:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
 								@click="buyCourse()">
@@ -119,25 +123,12 @@
 
 <script lang="ts">
 import { scrollToTop } from '@/composables'
-import {
-	extractResource,
-	openQuiz,
-	reportMaterial,
-	saveToFolder,
-	shareMaterialLink
-} from '@/composables/library'
+import { extractResource, openQuiz, reportMaterial, saveToFolder, shareMaterialLink } from '@/composables/library'
 import { otherTasks } from '@/composables/quiz'
 import { useHasAccess } from '@/composables/study/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
-import {
-	SofaButton,
-	SofaContentDetails,
-	SofaHeaderText,
-	SofaIcon,
-	SofaModal,
-	SofaNormalText,
-} from 'sofa-ui-components'
+import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -249,7 +240,7 @@ export default defineComponent({
 		],
 	},
 	name: 'MarketplaceInfoPage',
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Course Info',
 		})
@@ -324,16 +315,15 @@ export default defineComponent({
 					return Logic.Study.GetTagName(id)
 				})
 				contentDetails.user.name = SingleCourse.value.user.bio.name.full
-				contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo
-					? SingleCourse.value.user.bio.photo.link
-					: ''
+				contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo ? SingleCourse.value.user.bio.photo.link : ''
 				contentDetails.user.id = SingleCourse.value.user.id
 				contentDetails.user.roles = SingleCourse.value.user.roles
 
-				contentDetails.content.materialsCount =
-					SingleCourse.value.coursables.length
+				contentDetails.content.materialsCount = SingleCourse.value.coursables.length
 
-				contentDetails.ratings.label = `${SingleCourse.value.ratings.count} rating${SingleCourse.value.ratings.count > 1 ? 's' : ''}`
+				contentDetails.ratings.label = `${SingleCourse.value.ratings.count} rating${
+					SingleCourse.value.ratings.count > 1 ? 's' : ''
+				}`
 				contentDetails.ratings.avg = SingleCourse.value.ratings.avg
 				contentDetails.ratings.count = SingleCourse.value.ratings.count
 
@@ -370,9 +360,7 @@ export default defineComponent({
 
 					section.items.forEach((item) => {
 						if (item.type == 'quiz') {
-							const quizData = SingleCourseQuizzes.value?.filter(
-								(quiz) => quiz.id == item.id
-							)
+							const quizData = SingleCourseQuizzes.value?.filter((quiz) => quiz.id == item.id)
 							if (quizData?.length) {
 								contentDetails.content.sections[index].data.push({
 									isLocked: true,
@@ -382,9 +370,7 @@ export default defineComponent({
 								})
 							}
 						} else {
-							const fileData = SingleCourseFiles.value?.filter(
-								(file) => file.id == item.id
-							)
+							const fileData = SingleCourseFiles.value?.filter((file) => file.id == item.id)
 
 							if (fileData?.length) {
 								if (fileData[0].type == 'video') {
@@ -419,9 +405,7 @@ export default defineComponent({
 				contentDetails.title = SingleQuiz.value.title
 				contentDetails.price = 0
 				contentDetails.status = SingleQuiz.value.status
-				contentDetails.image = SingleQuiz.value.photo
-					? SingleQuiz.value.photo.link
-					: '/images/default.png'
+				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.png'
 				contentDetails.info = SingleQuiz.value.description
 				contentDetails.lastUpdated = `Last updated ${formatTime(SingleQuiz.value.createdAt)}`
 				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`
@@ -432,9 +416,7 @@ export default defineComponent({
 				})
 
 				contentDetails.user.name = SingleQuiz.value.user?.bio.name.full
-				contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo
-					? SingleQuiz.value.user.bio.photo.link
-					: ''
+				contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo ? SingleQuiz.value.user.bio.photo.link : ''
 				contentDetails.user.id = SingleQuiz.value.user.id
 				contentDetails.user.roles = SingleQuiz.value.user.roles
 
@@ -558,23 +540,25 @@ export default defineComponent({
 				setCourseData()
 				setSimilarContents()
 				// create course view
-				if (SingleCourse.value && SingleCourse.value.status === 'published') Logic.Interactions.CreateView({
-					entity: {
-						id: SingleCourse.value.id,
-						type: 'courses',
-					},
-				}).catch()
+				if (SingleCourse.value && SingleCourse.value.status === 'published')
+					Logic.Interactions.CreateView({
+						entity: {
+							id: SingleCourse.value.id,
+							type: 'courses',
+						},
+					}).catch()
 			}
 
 			if (contentType.value == 'quiz') {
 				setQuizData()
 				setSimilarContents()
-				if (SingleQuiz.value && SingleQuiz.value.status === 'published') Logic.Interactions.CreateView({
-					entity: {
-						id: SingleQuiz.value.id,
-						type: 'quizzes',
-					},
-				}).catch()
+				if (SingleQuiz.value && SingleQuiz.value.status === 'published')
+					Logic.Interactions.CreateView({
+						entity: {
+							id: SingleQuiz.value.id,
+							type: 'quizzes',
+						},
+					}).catch()
 			}
 		})
 

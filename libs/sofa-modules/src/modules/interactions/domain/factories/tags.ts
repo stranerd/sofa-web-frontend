@@ -8,36 +8,36 @@ export class TagFactory extends BaseFactory<TagEntity, TagToModel, TagToModel> {
 	readonly rules = {
 		title: v.string().min(1),
 		type: v.in(Object.values(TagTypes)),
-		parent: v.string().min(1).nullable()
+		parent: v.string().min(1).nullable(),
 	}
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ title: '', type: TagTypes.topics, parent: null })
 	}
 
-	get title () {
+	get title() {
 		return this.values.title
 	}
 
-	set title (value: string) {
+	set title(value: string) {
 		this.set('title', value)
 	}
 
-	get type () {
+	get type() {
 		return this.values.type
 	}
 
-	set type (value: string) {
+	set type(value: string) {
 		this.set('type', value)
 	}
 
-	get parent () {
+	get parent() {
 		return this.values.parent
 	}
 
-	set parent (value: string | null) {
+	set parent(value: string | null) {
 		this.set('parent', value)
 	}
 

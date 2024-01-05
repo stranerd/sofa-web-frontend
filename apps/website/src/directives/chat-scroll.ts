@@ -21,7 +21,7 @@ const defaultConfig: Config = {
 	smooth: true,
 	notSmoothOnInit: true,
 	always: false,
-	scrollonremoved: true
+	scrollonremoved: true,
 }
 
 let globalObserver = null as null | MutationObserver
@@ -44,7 +44,7 @@ export const ChatScroll: ObjectDirective = {
 			const removedNodes = e[e.length - 1].removedNodes.length
 
 			if (config.scrollonremoved) {
-				if (pause || addedNodes != 1 && removedNodes != 1) return
+				if (pause || (addedNodes != 1 && removedNodes != 1)) return
 			} else if (pause || addedNodes != 1) return
 
 			let smooth = !!config.smooth
@@ -57,5 +57,5 @@ export const ChatScroll: ObjectDirective = {
 	},
 	unmounted: () => {
 		globalObserver?.disconnect()
-	}
+	},
 }

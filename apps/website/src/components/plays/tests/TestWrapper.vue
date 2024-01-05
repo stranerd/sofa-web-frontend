@@ -10,24 +10,24 @@ import { computed, defineProps } from 'vue'
 const props = defineProps({
 	id: {
 		type: String,
-		required: true
+		required: true,
 	},
 	skipQuestions: {
 		type: Boolean,
 		required: false,
-		default: false
+		default: false,
 	},
 	skipStatusNav: {
 		type: Boolean,
 		required: false,
-		default: false
-	}
+		default: false,
+	},
 })
 
-const {
-	test, questions, fetched, answer,
-	start, end, submitAnswer
-} = useTest(props.id, { questions: props.skipQuestions, statusNav: props.skipStatusNav })
+const { test, questions, fetched, answer, start, end, submitAnswer } = useTest(props.id, {
+	questions: props.skipQuestions,
+	statusNav: props.skipStatusNav,
+})
 const { id, user } = useAuth()
 
 const extras = computed(() => ({
@@ -35,12 +35,13 @@ const extras = computed(() => ({
 	canEnd: test.value && test.value.userId === id.value && test.value.status === 'started',
 	authId: id.value,
 	answers: answer.value?.data ?? null,
-	start, end,
-	submit: async (data?: { questionId: string, answer: any }) => {
+	start,
+	end,
+	submit: async (data?: { questionId: string; answer: any }) => {
 		if (data) return await submitAnswer(data)
 		return await end()
 	},
-	get scores () {
+	get scores() {
 		return Object.entries(test.value.scores ?? {})
 			.sort((a, b) => b[1] - a[1])
 			.map((res, i, orgArr) => ({
@@ -49,7 +50,7 @@ const extras = computed(() => ({
 				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
 				user: user.value,
 				isWinner: orgArr[0]?.[1] === res[1],
-				get label () {
+				get label() {
 					if (this.percent === 100) return 'Perfect!'
 					if (this.percent >= 90) return 'Outstanding!'
 					if (this.percent >= 80) return 'Excellent Work!'
@@ -57,15 +58,15 @@ const extras = computed(() => ({
 					if (this.percent >= 60) return 'Nice effort!'
 					return 'Study harder!'
 				},
-				get color () {
+				get color() {
 					if (this.percent >= 80) return 'text-[#4BAF7D]'
 					if (this.percent >= 70) return 'text-[#ADAF4B]'
 					if (this.percent >= 60) return 'text-[#FA9632]'
 					return 'text-[#F55F5F]'
 				},
-				get bgColor () {
+				get bgColor() {
 					return this.color.split('[')[1].split(']')[0]
-				}
+				},
 			}))
 	},
 }))

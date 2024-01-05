@@ -15,11 +15,9 @@ export class ModelApiService extends ReadOnlyApiService {
 		},
 	): Promise<AxiosResponse<any, any>> {
 		try {
-			const response = await this.axiosInstance.post(
-				url ? url : this.getUrl(),
-				data,
-				{ onUploadProgress: onUploadProgress },
-			)
+			const response = await this.axiosInstance.post(url ? url : this.getUrl(), data, {
+				onUploadProgress: onUploadProgress,
+			})
 
 			return response
 		} catch (err) {
@@ -37,11 +35,9 @@ export class ModelApiService extends ReadOnlyApiService {
 		},
 	): Promise<AxiosResponse<any, any>> {
 		try {
-			const response: AxiosResponse = await this.axiosInstance.put(
-				url ? url : this.getUrl(id),
-				data,
-				{ onUploadProgress: onUploadProgress },
-			)
+			const response: AxiosResponse = await this.axiosInstance.put(url ? url : this.getUrl(id), data, {
+				onUploadProgress: onUploadProgress,
+			})
 
 			return response
 		} catch (err) {
@@ -49,9 +45,7 @@ export class ModelApiService extends ReadOnlyApiService {
 		}
 	}
 
-	public async delete(
-		id: string | undefined,
-	): Promise<AxiosResponse<any, any>> {
+	public async delete(id: string | undefined): Promise<AxiosResponse<any, any>> {
 		if (!id) throw Error('Id is not provided')
 		try {
 			const response = await this.axiosInstance.delete(this.getUrl(id))

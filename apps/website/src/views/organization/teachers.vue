@@ -1,9 +1,14 @@
 <template>
 	<HomeLayout title="Teachers">
 		<template v-slot="{ extras }">
-			<MembersList :image="teachersImage" :type="MemberTypes.teacher"
-				:members="teachers" :messages="messages" @openAddModal="extras.openAddModal"
-				@acceptMember="extras.acceptMember" @removeMember="extras.removeMember" />
+			<MembersList
+				:image="teachersImage"
+				:type="MemberTypes.teacher"
+				:members="teachers"
+				:messages="messages"
+				@openAddModal="extras.openAddModal"
+				@acceptMember="extras.acceptMember"
+				@removeMember="extras.removeMember" />
 		</template>
 	</HomeLayout>
 </template>
@@ -24,14 +29,14 @@ export default defineComponent({
 	name: 'OrganizationTeachersPage',
 	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
-	setup () {
+	setup() {
 		useMeta({ title: 'Teachers' })
 
 		const messages = [
 			'You can assign lessons to teachers.',
 			'Send announcements to all teachers at once.',
 			'Teachers can make announcements to students.',
-			'Manage your all teachers in the same space.'
+			'Manage your all teachers in the same space.',
 		]
 
 		const { id } = useAuth()

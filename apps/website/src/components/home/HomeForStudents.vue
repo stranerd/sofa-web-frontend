@@ -1,6 +1,7 @@
 <template>
 	<template v-for="task in tasks" :key="task.title">
-		<div v-if="task.list.find((s) => !s.isDone)"
+		<div
+			v-if="task.list.find((s) => !s.isDone)"
 			class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:!bg-white rounded-2xl flex flex-col mdlg:gap-4 gap-1">
 			<div class="w-full flex gap-2 items-center">
 				<SofaNormalText class="!font-bold" :content="task.title" />
@@ -8,8 +9,7 @@
 
 			<div
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" @click="item.action?.()"
-					class="flex-shrink-0">
+				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" @click="item.action?.()" class="flex-shrink-0">
 					<template v-slot:title>
 						<SofaNormalText customClass="!font-bold" :content="item.title" />
 					</template>
@@ -22,22 +22,33 @@
 		<div class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
 			<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
 				<SofaNormalText class="!font-bold" :content="material.title" />
-				<SofaNormalText color="text-primaryPink" as="router-link" to="/marketplace" class="mdlg:hidden"
-					content="View all" />
+				<SofaNormalText color="text-primaryPink" as="router-link" to="/marketplace" class="mdlg:hidden" content="View all" />
 			</div>
 
-			<div v-if="material.list.length"
+			<div
+				v-if="material.list.length"
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
-				<SofaActivityCard v-for="activity in material.list.slice(0, 4)" as="router-link" :key="activity.id"
-					:activity="activity" :to="activity.route" :hasBookmark="true"
-					:bookmarkAction="() => saveToFolder(activity)" class="flex-shrink-0" />
+				<SofaActivityCard
+					v-for="activity in material.list.slice(0, 4)"
+					as="router-link"
+					:key="activity.id"
+					:activity="activity"
+					:to="activity.route"
+					:hasBookmark="true"
+					:bookmarkAction="() => saveToFolder(activity)"
+					class="flex-shrink-0" />
 			</div>
 			<div v-else class="pr-4 mdlg:pr-0">
 				<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
 			</div>
 
-			<SofaNormalText v-if="material.list.length" color="text-primaryPink" class="pr-4 hidden mdlg:inline"
-				as="router-link" to="/marketplace" content="View all" />
+			<SofaNormalText
+				v-if="material.list.length"
+				color="text-primaryPink"
+				class="pr-4 hidden mdlg:inline"
+				as="router-link"
+				to="/marketplace"
+				content="View all" />
 		</div>
 	</template>
 
@@ -50,8 +61,7 @@
 					There are lots of quizzes and courses that you can learn from, so start searching!
 				</SofaNormalText>
 			</div>
-			<SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-deepGray"
-				@click="$router.push('/marketplace')">
+			<SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-deepGray" @click="$router.push('/marketplace')">
 				Explore more
 			</SofaButton>
 		</div>
@@ -59,7 +69,8 @@
 
 	<router-link
 		class="fixed bottom-[80px] right-2 z-[100] px-3 py-2 bg-primaryPurple text-white flex mdlg:hidden items-center rounded-custom gap-2"
-		style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)" to="/chats/new">
+		style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)"
+		to="/chats/new">
 		<SofaNormalText color="text-inherit" content="Ask me anything" />
 		<SofaIcon name="robot" class="w-[24px] h-[24px]" />
 	</router-link>
@@ -86,8 +97,27 @@ const tasks = computed(() => [
 ])
 
 const materials = computed(() => [
-	{ list: suggested.value.map(extractContent), title: 'Suggested for you', emptyTitle: 'No suggested materials', emptySub: 'We could not find any suggested materials' },
-	{ list: recent.value.map(extractContent), title: 'Recent study materials', emptyTitle: 'No recent materials', emptySub: 'We could not find any recent materials' },
-	...(myOrgs.value.length ? [{ list: myOrgs.value.map(extractContent), title: 'From your organizations', emptyTitle: 'No materials found', emptySub: 'We could not find any materials from your organizations' }] : []),
+	{
+		list: suggested.value.map(extractContent),
+		title: 'Suggested for you',
+		emptyTitle: 'No suggested materials',
+		emptySub: 'We could not find any suggested materials',
+	},
+	{
+		list: recent.value.map(extractContent),
+		title: 'Recent study materials',
+		emptyTitle: 'No recent materials',
+		emptySub: 'We could not find any recent materials',
+	},
+	...(myOrgs.value.length
+		? [
+				{
+					list: myOrgs.value.map(extractContent),
+					title: 'From your organizations',
+					emptyTitle: 'No materials found',
+					emptySub: 'We could not find any materials from your organizations',
+				},
+			]
+		: []),
 ])
 </script>

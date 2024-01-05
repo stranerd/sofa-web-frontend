@@ -12,8 +12,8 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	components: { LibraryLayout },
 	name: 'LibraryPage',
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => Logic.Common.isLarge ? '/library/quizzes' : undefined]),
-	setup () {
+	beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => (Logic.Common.isLarge ? '/library/quizzes' : undefined)]),
+	setup() {
 		useMeta({
 			title: 'Library',
 		})

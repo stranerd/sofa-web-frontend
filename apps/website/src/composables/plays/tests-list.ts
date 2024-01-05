@@ -11,18 +11,32 @@ const store = {
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Test>('plays/tests', {
-			created: async (entity) => {
-				Logic.addToArray(store.tests.value, entity, (e) => e.id, (e) => e.createdAt)
+		return Logic.Common.listenToMany<Test>(
+			'plays/tests',
+			{
+				created: async (entity) => {
+					Logic.addToArray(
+						store.tests.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					Logic.addToArray(
+						store.tests.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.tests.value = store.tests.value.filter((m) => m.id !== entity.id)
+				},
 			},
-			updated: async (entity) => {
-				Logic.addToArray(store.tests.value, entity, (e) => e.id, (e) => e.createdAt)
-			},
-			deleted: async (entity) => {
-				store.tests.value = store.tests.value.filter((m) => m.id !== entity.id)
-			}
-		}, (e) => e.userId === id.value)
-	})
+			(e) => e.userId === id.value,
+		)
+	}),
 }
 
 export const useMyTests = () => {
@@ -34,9 +48,16 @@ export const useMyTests = () => {
 			await store.setLoading(true)
 			const tests = await Logic.Plays.GetTests({
 				where: [{ field: 'userId', value: id.value }],
-				all: true
+				all: true,
 			})
-			tests.results.forEach((r) => Logic.addToArray(store.tests.value, r, (e) => e.id, (e) => e.createdAt))
+			tests.results.forEach((r) =>
+				Logic.addToArray(
+					store.tests.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
 			store.fetched.value = true
 		} catch (e) {
 			await store.setError(e)
@@ -45,17 +66,15 @@ export const useMyTests = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */!store.loading.value) await fetchTests()
+		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchTests()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
 
-	const ongoing = computed(() => store.tests.value
-		.filter((p) => [PlayStatus.created, PlayStatus.started].includes(p.status)))
-	const ended = computed(() => store.tests.value
-		.filter((p) => [PlayStatus.ended, PlayStatus.scored].includes(p.status)))
+	const ongoing = computed(() => store.tests.value.filter((p) => [PlayStatus.created, PlayStatus.started].includes(p.status)))
+	const ended = computed(() => store.tests.value.filter((p) => [PlayStatus.ended, PlayStatus.scored].includes(p.status)))
 
 	return { ...store, ongoing, ended }
 }

@@ -8,7 +8,7 @@ let socket = null as Socket<any, any> | null
 export enum EmitTypes {
 	created = 'created',
 	updated = 'updated',
-	deleted = 'deleted'
+	deleted = 'deleted',
 }
 
 export type Listeners<Model> = {
@@ -17,15 +17,15 @@ export type Listeners<Model> = {
 	[EmitTypes.deleted]: (model: Model) => void | Promise<void>
 }
 
-type SocketReturn = { code: StatusCodes, message: string, channel: string }
+type SocketReturn = { code: StatusCodes; message: string; channel: string }
 
-export async function listenOnSocket<Model> (channel: string, listeners: Listeners<Model>) {
+export async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>) {
 	const { accessToken } = await getTokens()
 	if (!socket || (!socket.auth['token'] && accessToken) || (accessToken && socket.auth['token'] !== accessToken)) {
 		const url = new URL(`${apiBase}/socket.io`)
 		socket = io(url.origin, {
 			path: url.pathname,
-			auth: { token: accessToken }
+			auth: { token: accessToken },
 		})
 	}
 
@@ -33,7 +33,7 @@ export async function listenOnSocket<Model> (channel: string, listeners: Listene
 	socket.emit('join', { channel }, (res: SocketReturn) => {
 		finalChannel = res.channel
 		if (res.code !== StatusCodes.Ok) return
-		socket?.on(finalChannel, async (data: { channel: string, type: EmitTypes, data: Model }) => {
+		socket?.on(finalChannel, async (data: { channel: string; type: EmitTypes; data: Model }) => {
 			if (finalChannel !== data.channel) return
 			await listeners[data.type]?.(data.data)
 		})
@@ -49,7 +49,7 @@ export async function listenOnSocket<Model> (channel: string, listeners: Listene
 	}
 }
 
-export async function listenToOne<Model, Entity> (channel: string, listeners: Listeners<Entity>, mapper: (model: Model) => Entity) {
+export async function listenToOne<Model, Entity>(channel: string, listeners: Listeners<Entity>, mapper: (model: Model) => Entity) {
 	return listenOnSocket<Model>(channel, {
 		created: async (model) => await listeners.created(mapper(model)),
 		updated: async (model) => await listeners.updated(mapper(model)),
@@ -57,11 +57,11 @@ export async function listenToOne<Model, Entity> (channel: string, listeners: Li
 	})
 }
 
-export async function listenToMany<Model, Entity> (
+export async function listenToMany<Model, Entity>(
 	channel: string,
 	listeners: Listeners<Entity>,
 	mapper: (model: Model) => Entity,
-	matches: (entity: Entity) => boolean = () => true
+	matches: (entity: Entity) => boolean = () => true,
 ) {
 	return listenOnSocket<Model>(channel, {
 		created: async (model) => {
@@ -75,10 +75,10 @@ export async function listenToMany<Model, Entity> (
 		deleted: async (model) => {
 			const entity = mapper(model)
 			if (matches(entity)) await listeners.deleted(entity)
-		}
+		},
 	})
 }
 
-export async function closeSocket () {
+export async function closeSocket() {
 	socket?.disconnect()
 }

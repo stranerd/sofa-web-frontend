@@ -4,11 +4,7 @@ import { $api } from '../../services'
 import { QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
 import { Report, Review, View } from '../types/domains/interactions'
-import {
-	AddReportInput,
-	AddReviewInput,
-	AddViewInput,
-} from '../types/forms/common'
+import { AddReportInput, AddReviewInput, AddViewInput } from '../types/forms/common'
 import Common from './Common'
 
 export default class Interactions extends Common {
@@ -65,12 +61,10 @@ export default class Interactions extends Common {
 	}
 
 	public CreateView = (CreateViewForm: AddViewInput) => {
-		return $api.interactions.views
-			.post(null, CreateViewForm)
-			.then((response) => {
-				this.SingleView = response.data
-				return this.SingleView
-			})
+		return $api.interactions.views.post(null, CreateViewForm).then((response) => {
+			this.SingleView = response.data
+			return this.SingleView
+		})
 	}
 
 	public CreateReview = (formIsValid: boolean) => {
@@ -107,10 +101,8 @@ export default class Interactions extends Common {
 	}
 
 	public DeleteReport = (id: string) => {
-		return $api.interactions.reports
-			.delete(id)
-			.catch((error) => {
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
+		return $api.interactions.reports.delete(id).catch((error) => {
+			Logic.Common.showError(capitalize(error.response.data[0]?.message))
+		})
 	}
 }

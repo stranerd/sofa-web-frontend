@@ -1,5 +1,5 @@
 export enum Currencies {
-	NGN = 'NGN'
+	NGN = 'NGN',
 }
 
 export type Saleable = {

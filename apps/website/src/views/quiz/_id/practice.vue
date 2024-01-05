@@ -1,9 +1,13 @@
 <template>
 	<expanded-layout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="($route.params.id as string)" :showAnswer="showSolution" :isAnswerRight="isCorrect">
+		<QuizWrapper :id="$route.params.id as string" :showAnswer="showSolution" :isAnswerRight="isCorrect">
 			<template v-slot="{ quiz, questions, extras }">
-				<Quiz :index="extras.index" :title="isDone ? 'Practice completed' : quiz.title" v-model:answer="extras.answer"
-					:questions="questions" :optionState="extras.optionState"
+				<Quiz
+					:index="extras.index"
+					:title="isDone ? 'Practice completed' : quiz.title"
+					v-model:answer="extras.answer"
+					:questions="questions"
+					:optionState="extras.optionState"
 					:rightButton="{
 						label: isDone || showSolution ? 'Continue' : 'Check',
 						bgColor: 'bg-primaryBlue',
@@ -12,16 +16,17 @@
 							if (isDone) return Logic.Common.goBack()
 							if (!showSolution) {
 								isCorrect = Logic.Study.checkAnswer(extras.question, extras.answer)
-								return showSolution = true
+								return (showSolution = true)
 							}
 							if (extras.canNext) {
 								showSolution = false
 								return extras.next()
 							}
 							showSolution = false
-							return isDone = true
-						}
-					}" :leftButton="{
+							return (isDone = true)
+						},
+					}"
+					:leftButton="{
 						label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
 						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',
@@ -29,14 +34,15 @@
 						click: () => {
 							if (isDone) {
 								extras.reset()
-								return isDone = false
-							}
-							else if (showSolution) return showSolution = false
+								return (isDone = false)
+							} else if (showSolution) return (showSolution = false)
 							else if (extras.canNext) return extras.next()
-						}
+						},
 					}">
 					<template v-if="showSolution" v-slot:header>
-						<div class="w-full p-4 md:py-8 flex items-center justify-center gap-2" :class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
+						<div
+							class="w-full p-4 md:py-8 flex items-center justify-center gap-2"
+							:class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
 							<SofaIcon class="h-[22px]" :name="isCorrect ? 'white-checkbox' : 'white-wrong'" />
 							<SofaHeaderText :size="'xl'" :color="'text-white'" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
 						</div>
@@ -77,7 +83,7 @@ export default defineComponent({
 	middlewares: { goBackRoute: '/library' },
 	components: { QuizWrapper, Quiz, SofaHeaderText, SofaIcon, SofaNormalText },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Practice',
 		})
@@ -87,6 +93,6 @@ export default defineComponent({
 		const isCorrect = ref(false)
 
 		return { showSolution, isDone, Logic, isCorrect }
-	}
+	},
 })
 </script>

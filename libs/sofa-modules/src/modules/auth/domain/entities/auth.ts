@@ -9,14 +9,14 @@ export enum AuthRoles {
 	isAdmin = 'isAdmin',
 	isSuperAdmin = 'isSuperAdmin',
 	isSubscribed = 'isSubscribed',
-	isVerified = 'isVerified'
+	isVerified = 'isVerified',
 }
 
 export enum AuthTypes {
 	google = 'google',
 	email = 'email',
 	facebook = 'facebook',
-	twitter = 'twitter'
+	twitter = 'twitter',
 }
 
 export type AfterAuthUser = {
@@ -52,7 +52,7 @@ export type AuthExtras = {
 }
 
 export type Phone = {
-	code: string,
+	code: string
 	number: string
 }
 

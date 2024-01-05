@@ -14,5 +14,5 @@ export const storage = {
 	remove: async (key: string) => {
 		// await Preferences.remove({ key })
 		localStorage.removeItem(key)
-	}
+	},
 }

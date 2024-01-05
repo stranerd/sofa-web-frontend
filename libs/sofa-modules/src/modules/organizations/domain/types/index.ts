@@ -3,7 +3,7 @@ export type { EmbeddedUser } from '@modules/users'
 
 export enum MemberTypes {
 	teacher = 'teacher',
-	student = 'student'
+	student = 'student',
 }
 
 export type AnnouncementFilter = {

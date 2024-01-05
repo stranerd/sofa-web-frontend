@@ -8,10 +8,7 @@ export default class NotificationsApi extends ReadOnlyApiService {
 
 	public async toggleNotification(data: { id: string; seen: boolean }) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-				this.getUrl() + `/${data.id}/seen`,
-				data,
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.put(this.getUrl() + `/${data.id}/seen`, data)
 
 			return response
 		} catch (err) {
@@ -23,10 +20,7 @@ export default class NotificationsApi extends ReadOnlyApiService {
 
 	public async toggleAllNotification(seen: boolean) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-				this.getUrl() + '/seen',
-				{ seen },
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.put(this.getUrl() + '/seen', { seen })
 
 			return response
 		} catch (err) {

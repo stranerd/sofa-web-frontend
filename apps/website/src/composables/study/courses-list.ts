@@ -13,20 +13,33 @@ const store = {
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Course>('study/courses', {
-			created: async (entity) => {
-				Logic.addToArray(store.courses.value, entity, (e) => e.id, (e) => e.createdAt)
+		return Logic.Common.listenToMany<Course>(
+			'study/courses',
+			{
+				created: async (entity) => {
+					Logic.addToArray(
+						store.courses.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					Logic.addToArray(
+						store.courses.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.courses.value = store.courses.value.filter((m) => m.id !== entity.id)
+				},
 			},
-			updated: async (entity) => {
-				Logic.addToArray(store.courses.value, entity, (e) => e.id, (e) => e.createdAt)
-			},
-			deleted: async (entity) => {
-				store.courses.value = store.courses.value.filter((m) => m.id !== entity.id)
-			}
-		}, (e) => e.user.id === id.value)
-	})
+			(e) => e.user.id === id.value,
+		)
+	}),
 }
-
 
 export const useMyCourses = () => {
 	const { id } = useAuth()
@@ -37,9 +50,16 @@ export const useMyCourses = () => {
 			await store.setLoading(true)
 			const courses = await Logic.Study.GetCourses({
 				where: [{ field: 'user.id', value: id.value }],
-				all: true
+				all: true,
 			})
-			courses.results.forEach((r) => Logic.addToArray(store.courses.value, r, (e) => e.id, (e) => e.createdAt))
+			courses.results.forEach((r) =>
+				Logic.addToArray(
+					store.courses.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
 			store.fetched.value = true
 		} catch (e) {
 			await store.setError(e)
@@ -48,17 +68,15 @@ export const useMyCourses = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */!store.loading.value) await fetchCourses()
+		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchCourses()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
 
-	const published = computed(() => store.courses.value
-		.filter((m) => m.status === 'published'))
-	const draft = computed(() => store.courses.value
-		.filter((m) => m.status === 'draft'))
+	const published = computed(() => store.courses.value.filter((m) => m.status === 'published'))
+	const draft = computed(() => store.courses.value.filter((m) => m.status === 'draft'))
 
 	return { ...store, published, draft }
 }
@@ -66,12 +84,9 @@ export const useMyCourses = () => {
 export const useMyPurchasedCourses = () => {
 	const { purchasesCoursesIds } = useMyPurchases()
 	const { courses: fetchedCourses } = useCoursesInList(purchasesCoursesIds)
-	const courses = computed(() => purchasesCoursesIds.value
-		.map((id) => fetchedCourses.value.find((c) => c.id === id))
-		.filter(Boolean))
+	const courses = computed(() => purchasesCoursesIds.value.map((id) => fetchedCourses.value.find((c) => c.id === id)).filter(Boolean))
 	return { courses }
 }
-
 
 export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 	const allCourses = computed(() => [...store.courses.value])
@@ -79,15 +94,23 @@ export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, async (notFetched: string[]) => {
 		const courses = await Logic.Study.GetCourses({
 			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
-			all: true
+			all: true,
 		})
 		return courses.results
 	})
 
 	const listener = useListener(async () => {
-		return await Logic.Common.listenToMany<Course>('study/courses', {
-			created: addToList, updated: addToList, deleted: () => {/* */}
-		},  (e) => ids.value.includes(e.id))
+		return await Logic.Common.listenToMany<Course>(
+			'study/courses',
+			{
+				created: addToList,
+				updated: addToList,
+				deleted: () => {
+					/* */
+				},
+			},
+			(e) => ids.value.includes(e.id),
+		)
 	})
 
 	onMounted(() => {

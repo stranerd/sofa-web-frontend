@@ -8,8 +8,12 @@ export interface ILessonRepository {
 	find: (id: string) => Promise<LessonEntity | null>
 	update: (id: string, data: LessonToModel) => Promise<LessonEntity | null>
 	delete: (id: string) => Promise<boolean>
-	join: (data: { id: string, join: boolean }) => Promise<LessonEntity | null>
-	manageTeachers: (data: { id: string, userId: string, add: boolean }) => Promise<LessonEntity | null>
+	join: (data: { id: string; join: boolean }) => Promise<LessonEntity | null>
+	manageTeachers: (data: { id: string; userId: string; add: boolean }) => Promise<LessonEntity | null>
 	listenToOne: (id: string, listeners: Listeners<LessonEntity>) => Promise<() => void>
-	listenToMany: (query: QueryParams, listeners: Listeners<LessonEntity>, matches: (entity: LessonEntity) => boolean) => Promise<() => void>
+	listenToMany: (
+		query: QueryParams,
+		listeners: Listeners<LessonEntity>,
+		matches: (entity: LessonEntity) => boolean,
+	) => Promise<() => void>
 }

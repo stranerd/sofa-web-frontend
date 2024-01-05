@@ -9,5 +9,9 @@ export interface IScheduleRepository {
 	update: (id: string, data: ScheduleToModel) => Promise<ScheduleEntity | null>
 	delete: (id: string) => Promise<boolean>
 	listenToOne: (id: string, listeners: Listeners<ScheduleEntity>) => Promise<() => void>
-	listenToMany: (query: QueryParams, listeners: Listeners<ScheduleEntity>, matches: (entity: ScheduleEntity) => boolean) => Promise<() => void>
+	listenToMany: (
+		query: QueryParams,
+		listeners: Listeners<ScheduleEntity>,
+		matches: (entity: ScheduleEntity) => boolean,
+	) => Promise<() => void>
 }

@@ -5,16 +5,28 @@
 		</SofaNormalText>
 		<div class="w-full flex items-center group" :class="{ 'opacity-50': disabled }" :tabindex="tabIndex">
 			<slot name="outer-prefix" />
-			<div class="flew-grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
-				:class="{ '!border-red-500 !border': validationStatus == false || error, [`${borderColor} ${padding} ${customClass}`]: true }">
+			<div
+				class="flew-grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
+				:class="{
+					'!border-red-500 !border': validationStatus == false || error,
+					[`${borderColor} ${padding} ${customClass}`]: true,
+				}">
 				<slot name="inner-prefix" />
-				<input v-model="content" :placeholder="placeholder" @blur="checkValidation()" @keypress="isNumber"
-					:disabled="disabled" :type="fieldType" @keyup="detectKey"
+				<input
+					v-model="content"
+					:placeholder="placeholder"
+					@blur="checkValidation()"
+					@keypress="isNumber"
+					:disabled="disabled"
+					:type="fieldType"
+					@keyup="detectKey"
 					class="flex-grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 				<slot name="inner-suffix" />
-				<SofaIcon :name="fieldType == 'password' ? 'show' : 'hide'"
+				<SofaIcon
+					:name="fieldType == 'password' ? 'show' : 'hide'"
 					:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
-					v-if="type == 'password'" @click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
+					v-if="type == 'password'"
+					@click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
 				<SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
 			</div>
 			<slot name="outer-suffix" />
@@ -93,17 +105,17 @@ export default defineComponent({
 		},
 		error: {
 			type: String,
-			default: ''
-		}
+			default: '',
+		},
 	},
 	name: 'SofaTextField',
 	emits: ['update:modelValue', 'onEnter'],
-	setup (props, context) {
+	setup(props, context) {
 		const content = computed({
 			get: () => props.modelValue,
 			set: (value) => {
 				context.emit('update:modelValue', value)
-			}
+			},
 		})
 
 		const fieldType = ref('text')
@@ -264,11 +276,7 @@ export default defineComponent({
 
 			evt = evt ? evt : window.event
 			const charCode = evt.which ? evt.which : evt.keyCode
-			if (
-				charCode > 31 &&
-				(charCode < 48 || charCode > 57) &&
-				charCode !== 46
-			) {
+			if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
 				evt.preventDefault()
 			} else {
 				return true

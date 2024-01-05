@@ -8,12 +8,9 @@ export default class TutorRequestApi extends ModelApiService {
 
 	public async acceptOrRejectTutorRequest(requestId: string, status: boolean) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-				this.getUrl() + `/${requestId}/accept`,
-				{
-					accept: status,
-				},
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.put(this.getUrl() + `/${requestId}/accept`, {
+				accept: status,
+			})
 
 			return response
 		} catch (err) {

@@ -10,24 +10,24 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 	}
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ country: '', state: '' })
 	}
 
-	get country () {
+	get country() {
 		return this.values.country
 	}
 
-	set country (value: string) {
+	set country(value: string) {
 		this.set('country', value)
 		this.resetProp('state')
 	}
 
-	get state () {
+	get state() {
 		return this.values.state
 	}
 
-	set state (value: string) {
+	set state(value: string) {
 		this.set('state', value)
 	}
 

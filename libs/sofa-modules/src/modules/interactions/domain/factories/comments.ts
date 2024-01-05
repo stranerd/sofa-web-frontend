@@ -5,20 +5,20 @@ import { CommentEntity } from '../entities/comments'
 
 export class CommentFactory extends BaseFactory<CommentEntity, Omit<CommentToModel, 'entity'>, Omit<CommentToModel, 'entity'>> {
 	readonly rules = {
-		body: v.string().min(1)
+		body: v.string().min(1),
 	}
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ body: '' })
 	}
 
-	get body () {
+	get body() {
 		return this.values.body
 	}
 
-	set body (value: string) {
+	set body(value: string) {
 		this.set('body', value)
 	}
 

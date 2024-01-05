@@ -1,30 +1,39 @@
 <template>
-	<expanded-layout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
-		<TestWrapper :id="($route.params.id as string)" :skipQuestions="true">
+	<expanded-layout
+		layoutStyle="!justify-between bg-deepGray text-white"
+		:hide="{ top: true, bottom: true }"
+		bgImage="/images/game-bg.png">
+		<TestWrapper :id="$route.params.id as string" :skipQuestions="true">
 			<template v-slot="{ test, extras: testExtras, questions }">
 				<QuizWrapper :id="test.quizId" :questions="questions">
 					<template v-slot="{ quiz, questions, extras }">
-						<Quiz :index="extras.index" :title="quiz.title" :questions="questions" :showCounter="false"
-							v-model:answer="extras.answer" :optionState="extras.optionState" :isDark="true" :rightButton="{
+						<Quiz
+							:index="extras.index"
+							:title="quiz.title"
+							:questions="questions"
+							:showCounter="false"
+							v-model:answer="extras.answer"
+							:optionState="extras.optionState"
+							:isDark="true"
+							:rightButton="{
 								label: testExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
-								click: testExtras.start
-							}" :leftButton="{
+								click: testExtras.start,
+							}"
+							:leftButton="{
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
 								textColor: 'text-white',
-								click: () => Logic.Common.GoToRoute('/library')
+								click: () => Logic.Common.GoToRoute('/library'),
 							}">
 							<template v-slot:header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div
 										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom flex-col justify-center items-center">
 										<SofaNormalText color="text-inherit" content="You are about to take a test" />
-										<SofaHeaderText :content="quiz.title" color="text-inherit" class="!font-extrabold"
-											size="xl" />
-										<SofaNormalText color="text-inherit"
-											:content="`${test.questions.length} questions`" />
+										<SofaHeaderText :content="quiz.title" color="text-inherit" class="!font-extrabold" size="xl" />
+										<SofaNormalText color="text-inherit" :content="`${test.questions.length} questions`" />
 									</div>
 								</div>
 							</template>
@@ -54,12 +63,12 @@ export default defineComponent({
 	name: 'TestsIdLobbyPage',
 	components: { TestWrapper, QuizWrapper, Quiz, SofaHeaderText, SofaNormalText },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Lobby',
 		})
 
 		return { Logic }
-	}
+	},
 })
 </script>

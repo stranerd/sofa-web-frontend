@@ -1,21 +1,21 @@
 export interface CreateTutorRequestForm {
-  topicId: string
-  verification: Blob
-  qualification: Blob[]
+	topicId: string
+	verification: Blob
+	qualification: Blob[]
 }
 
 export interface CreateVerificationInput {
-  content: {
-    quizzes: string[]
-    courses: string[]
-  }
+	content: {
+		quizzes: string[]
+		courses: string[]
+	}
 }
 
 export interface VerificationStatusInput {
-  accept: boolean
-  id: string
+	accept: boolean
+	id: string
 }
 
 export interface PushNotificationTokenInput {
-  token: string
+	token: string
 }

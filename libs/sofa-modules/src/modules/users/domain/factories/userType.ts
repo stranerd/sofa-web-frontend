@@ -29,23 +29,50 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 
 		schoolType: v.in(Object.values(UserSchoolType)).requiredIf(() => this.isStudent),
 
-		institutionId: v.string().min(1).requiredIf(() => this.isStudent && this.isCollegeType),
-		facultyId: v.string().min(1).requiredIf(() => this.isStudent && this.isCollegeType),
-		departmentId: v.string().min(1).requiredIf(() => this.isStudent && this.isCollegeType),
+		institutionId: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isStudent && this.isCollegeType),
+		facultyId: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isStudent && this.isCollegeType),
+		departmentId: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isStudent && this.isCollegeType),
 
-		exams: v.array(v.any().addRule((val: any) =>
-			v.object({
-				institutionId: v.string().min(1),
-				courseIds: v.array(v.string().min(1)).min(1),
-				startDate: v.time().asStamp(),
-				endDate: v.time().min(val?.start).asStamp(),
-			}).parse(val)
-		)).requiredIf(() => this.isStudent && this.isAspirantType),
+		exams: v
+			.array(
+				v.any().addRule((val: any) =>
+					v
+						.object({
+							institutionId: v.string().min(1),
+							courseIds: v.array(v.string().min(1)).min(1),
+							startDate: v.time().asStamp(),
+							endDate: v
+								.time()
+								.min(val?.start)
+								.asStamp(),
+						})
+						.parse(val),
+				),
+			)
+			.requiredIf(() => this.isStudent && this.isAspirantType),
 
-		school: v.string().min(1).requiredIf(() => this.isTeacher),
+		school: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isTeacher),
 
-		name: v.string().min(1).requiredIf(() => this.isOrganization),
-		code: v.string().min(6).requiredIf(() => this.isOrganization),
+		name: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isOrganization),
+		code: v
+			.string()
+			.min(6)
+			.requiredIf(() => this.isOrganization),
 	}
 	reserved = ['type']
 	extras = reactive({
@@ -53,160 +80,170 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		activeInst: null as string | null,
 	})
 
-	constructor () {
+	constructor() {
 		super({
-			type: UserType.student, schoolType: UserSchoolType.college, institutionId: '', facultyId: '', departmentId: '', exams: [],
-			school: '', name: '', code: '',
+			type: UserType.student,
+			schoolType: UserSchoolType.college,
+			institutionId: '',
+			facultyId: '',
+			departmentId: '',
+			exams: [],
+			school: '',
+			name: '',
+			code: '',
 		})
 	}
 
-	get type () {
+	get type() {
 		return this.values.type
 	}
 
-	set type (value: UserType) {
+	set type(value: UserType) {
 		this.set('type', value)
 	}
 
-	get schoolType () {
+	get schoolType() {
 		return this.values.schoolType
 	}
 
-	set schoolType (value: UserSchoolType) {
+	set schoolType(value: UserSchoolType) {
 		this.set('schoolType', value)
 	}
 
-	get institutionId () {
+	get institutionId() {
 		return this.values.institutionId
 	}
 
-	set institutionId (value: string) {
+	set institutionId(value: string) {
 		this.set('institutionId', value)
 		this.resetProp('facultyId')
 		this.resetProp('departmentId')
 	}
 
-	get facultyId () {
+	get facultyId() {
 		return this.values.facultyId
 	}
 
-	set facultyId (value: string) {
+	set facultyId(value: string) {
 		this.set('facultyId', value)
 		this.resetProp('departmentId')
 	}
 
-	get departmentId () {
+	get departmentId() {
 		return this.values.departmentId
 	}
 
-	set departmentId (value: string) {
+	set departmentId(value: string) {
 		this.set('departmentId', value)
 	}
 
-	get exams () {
+	get exams() {
 		return this.values.exams
 	}
 
-	set exams (exams: Exam[]) {
+	set exams(exams: Exam[]) {
 		this.set('exams', exams, true)
 	}
 
-	get institutions () {
+	get institutions() {
 		return this.extras.insts
 	}
 
-	set institutions (institutionIds: string[]) {
+	set institutions(institutionIds: string[]) {
 		const now = Date.now()
 		this.exams = institutionIds.map((institutionId) => ({
-			institutionId, courseIds: [], startDate: now, endDate: now,
-			...(this.exams.find((e) => e.institutionId === institutionId) ?? {})
+			institutionId,
+			courseIds: [],
+			startDate: now,
+			endDate: now,
+			...(this.exams.find((e) => e.institutionId === institutionId) ?? {}),
 		}))
 		this.institutions.splice(0, this.institutions.length, ...this.exams.map((e) => e.institutionId))
 		if (this.activeInst && !this.institutions.includes(this.activeInst)) this.activeInst = null
 	}
 
-	get activeInst () {
+	get activeInst() {
 		return this.extras.activeInst
 	}
 
-	set activeInst (institutionId: string | null) {
+	set activeInst(institutionId: string | null) {
 		this.extras.activeInst = institutionId
 	}
 
-	get school () {
+	get school() {
 		return this.values.school
 	}
 
-	set school (value: string) {
+	set school(value: string) {
 		this.set('school', value)
 	}
 
-	get name () {
+	get name() {
 		return this.values.name
 	}
 
-	set name (value: string) {
+	set name(value: string) {
 		this.set('name', value)
 	}
 
-	get code () {
+	get code() {
 		return this.values.code
 	}
 
-	set code (value: string) {
+	set code(value: string) {
 		this.set('code', value)
 	}
 
-	get isStudent () {
+	get isStudent() {
 		return this.type === UserType.student
 	}
 
-	get isTeacher () {
+	get isTeacher() {
 		return this.type === UserType.teacher
 	}
 
-	get isOrganization () {
+	get isOrganization() {
 		return this.type === UserType.organization
 	}
 
-	get isCollegeType () {
+	get isCollegeType() {
 		return this.schoolType === UserSchoolType.college
 	}
 
-	get isAspirantType () {
+	get isAspirantType() {
 		return this.schoolType === UserSchoolType.aspirant
 	}
 
-	getInstitution (institutionId: string) {
+	getInstitution(institutionId: string) {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const classThis = this
 		const obj = this.exams.find((e) => e.institutionId === institutionId)!
 		return {
 			...obj,
-			get courseIds () {
+			get courseIds() {
 				return obj.courseIds
 			},
-			set courseIds (value: string[]) {
+			set courseIds(value: string[]) {
 				obj.courseIds = value
 				// eslint-disable-next-line no-self-assign
 				classThis.exams = classThis.exams
 			},
-			get startTime () {
+			get startTime() {
 				return new Date(obj.startDate).toISOString().substring(0, 10)
 			},
-			set startTime (value: string) {
+			set startTime(value: string) {
 				obj.startDate = new Date(value).getTime()
 				// eslint-disable-next-line no-self-assign
 				classThis.exams = classThis.exams
 			},
-			get endTime () {
+			get endTime() {
 				return new Date(obj.endDate).toISOString().substring(0, 10)
 			},
-			set endTime (value: string) {
+			set endTime(value: string) {
 				obj.endDate = new Date(value).getTime()
 				// eslint-disable-next-line no-self-assign
 				classThis.exams = classThis.exams
-			}
+			},
 		}
 	}
 
@@ -231,20 +268,24 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		}
 	}
 
-	toModel = async () :Promise<UserTypeData> => {
+	toModel = async (): Promise<UserTypeData> => {
 		if (this.valid) {
 			const { institutionId, facultyId, departmentId, exams, school, name, code } = this.validValues
 			if (this.isTeacher) return { type: UserType.teacher, school }
 			if (this.isOrganization) return { type: UserType.organization, name, code }
 			return {
 				type: UserType.student,
-				school: this.isCollegeType ? {
-					type: UserSchoolType.college,
-					institutionId, facultyId, departmentId
-				} : {
-					type: UserSchoolType.aspirant,
-					exams
-				}
+				school: this.isCollegeType
+					? {
+							type: UserSchoolType.college,
+							institutionId,
+							facultyId,
+							departmentId,
+						}
+					: {
+							type: UserSchoolType.aspirant,
+							exams,
+						},
 			}
 		} else {
 			throw new Error('Validation errors')

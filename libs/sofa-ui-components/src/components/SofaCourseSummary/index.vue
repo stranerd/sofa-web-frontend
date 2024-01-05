@@ -1,6 +1,7 @@
 <template>
 	<div class="flex flex-col gap-3 h-full w-full px-4" v-if="data">
-		<sofa-image-loader :customClass="'w-full rounded-custom h-[200px]'"
+		<sofa-image-loader
+			:customClass="'w-full rounded-custom h-[200px]'"
 			:photoUrl="data.photo ? data.photo.link : '/images/default.png'" />
 
 		<sofa-normal-text :customClass="'text-left font-bold'">
@@ -9,15 +10,11 @@
 
 		<div class="w-full flex items-center gap-2 flex-row">
 			<sofa-normal-text :color="'text-primaryPurplePink'">
-				{{ data.sections.length }} section{{
-					data.sections.length > 1 ? "s" : ""
-				}}
+				{{ data.sections.length }} section{{ data.sections.length > 1 ? 's' : '' }}
 			</sofa-normal-text>
 			<span class="w-[4px] h-[4px] rounded-full bg-primaryPurplePink"></span>
 			<sofa-normal-text :color="'text-primaryPurplePink'">
-				{{ data.coursables.length }} material{{
-					data.coursables.length > 1 ? "s" : ""
-				}}
+				{{ data.coursables.length }} material{{ data.coursables.length > 1 ? 's' : '' }}
 			</sofa-normal-text>
 		</div>
 
@@ -29,9 +26,7 @@
 			<div class="flex flex-row gap-1 items-center">
 				<sofa-ratings :count="4" :size="'h-[14px] mdlg:!h-[15px]'" />
 				<sofa-normal-text> {{ 4 }}.0 </sofa-normal-text>
-				<sofa-normal-text :color="'text-grayColor pl-2'">
-					({{ "24 ratings" }})
-				</sofa-normal-text>
+				<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ '24 ratings' }}) </sofa-normal-text>
 			</div>
 
 			<div class="w-full flex flex-row items-center">
@@ -45,9 +40,7 @@
 
 			<div class="w-full flex flex-row items-center gap-2">
 				<sofa-icon :customClass="'h-[16px]'" :name="'calendar-black'" />
-				<sofa-normal-text>
-					Last updated {{ formatTime(data.updatedAt) }}
-				</sofa-normal-text>
+				<sofa-normal-text> Last updated {{ formatTime(data.updatedAt) }} </sofa-normal-text>
 			</div>
 		</div>
 	</div>
@@ -84,9 +77,10 @@ export default defineComponent({
 		},
 	},
 	name: 'SofaCourseSummary',
-	setup () {
+	setup() {
 		return {
-			Logic, formatTime
+			Logic,
+			formatTime,
 		}
 	},
 })

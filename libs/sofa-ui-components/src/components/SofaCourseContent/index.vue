@@ -1,16 +1,18 @@
 <template>
 	<div class="flex flex-col h-full w-full relative pb-4">
-		<div class="flex flex-col w-full gap-2 p-4 border-lightGray border-t" v-for="(option, index) in sectionOptions"
-			:key="index">
+		<div class="flex flex-col w-full gap-2 p-4 border-lightGray border-t" v-for="(option, index) in sectionOptions" :key="index">
 			<template v-if="option">
 				<template v-if="option.name != 'unsectioned'">
-					<a class="w-full flex items-center justify-between px-1" @click="() => {
-						option.opened = !option.opened
-						selectedSection = index
-					}">
+					<a
+						class="w-full flex items-center justify-between px-1"
+						@click="
+							() => {
+								option.opened = !option.opened
+								selectedSection = index
+							}
+						">
 						<sofa-normal-text :customClass="'!font-bold'">{{ option.name }}</sofa-normal-text>
-						<sofa-icon :customClass="'h-[7px] cursor-pointer'"
-							:name="option.opened ? 'chevron-up' : 'chevron-down'" />
+						<sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
 					</a>
 				</template>
 
@@ -18,23 +20,28 @@
 					<div class="w-full gap-1">
 						<!-- For larger screens -->
 						<template v-if="!Logic.Common.isOnlyMobile">
-							<a v-for="(material, index) in option.materials" :key="index"
+							<a
+								v-for="(material, index) in option.materials"
+								:key="index"
 								class="w-full flex flex-col gap-1 rounded-lg p-3 hover:bg-lightBlue"
-								:class="{ 'opacity-80': lockContent, 'bg-lightBlue': selectedMaterial?.id === material.id, 'bg-white': selectedMaterial?.id !== material.id }"
+								:class="{
+									'opacity-80': lockContent,
+									'bg-lightBlue': selectedMaterial?.id === material.id,
+									'bg-white': selectedMaterial?.id !== material.id,
+								}"
 								@click.stop="selectItem(material)">
 								<div class="w-full flex justify-between items-center">
 									<sofa-normal-text :customClass="'!text-left !line-clamp-1'">
 										{{ material.name }}
 									</sofa-normal-text>
 									<sofa-icon :customClass="'h-[25px]'" v-if="lockContent" :name="'locked-content'" />
-									<sofa-icon :customClass="'h-[18px]'" v-else-if="itemIsStudied(material.id)"
-										name="selected" />
+									<sofa-icon :customClass="'h-[18px]'" v-else-if="itemIsStudied(material.id)" name="selected" />
 								</div>
 								<div class="w-full flex gap-2 items-center">
 									<div class="flex items-center gap-1">
 										<sofa-icon :customClass="'h-[17px]'" :name="material.type" />
 										<sofa-normal-text :color="'text-grayColor'" :customClass="'!text-left !capitalize'">
-											{{ material.type.split("-")[0] }}
+											{{ material.type.split('-')[0] }}
 										</sofa-normal-text>
 									</div>
 
@@ -44,7 +51,9 @@
 						</template>
 						<template v-else>
 							<div class="w-full flex flex-col gap-3 pt-2">
-								<div v-for="(material, index) in option.materials" :key="index"
+								<div
+									v-for="(material, index) in option.materials"
+									:key="index"
 									class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue"
 									@click.stop="selectItem(material)">
 									<sofa-icon :customClass="'h-[18px]'" :name="material.type" />
@@ -65,14 +74,7 @@ import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import { ContentDetails, Course, Logic, Question, Quiz, SofaFile } from 'sofa-logic'
-import {
-	capitalize,
-	defineComponent,
-	onMounted,
-	reactive,
-	ref,
-	watch
-} from 'vue'
+import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
@@ -100,7 +102,7 @@ export default defineComponent({
 	},
 	emits: ['update:modelValue', 'OnMaterialSelected', 'onCourseContentSet'],
 	name: 'SofaCourseContent',
-	setup (props, context) {
+	setup(props, context) {
 		const selectedSection = ref(0)
 
 		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
@@ -150,33 +152,21 @@ export default defineComponent({
 				selectedMaterial.value.type == 'image' ||
 				selectedMaterial.value.type == 'video'
 			) {
-				localStorage.setItem(
-					`course_${SingleCourse.value.id}_material_${selectedMaterial.value.id}`,
-					'done'
-				)
+				localStorage.setItem(`course_${SingleCourse.value.id}_material_${selectedMaterial.value.id}`, 'done')
 			}
 		}
 
 		const saveSectionToLocalStorage = (autoLoad = false) => {
 			if (!autoLoad) {
-				localStorage.setItem(
-					'course_content_sections' + SingleCourse.value.id,
-					JSON.stringify(staticSectionOptions.value)
-				)
+				localStorage.setItem('course_content_sections' + SingleCourse.value.id, JSON.stringify(staticSectionOptions.value))
 			}
 
-			const sectionOptionsData = JSON.parse(
-				localStorage.getItem('course_content_sections' + SingleCourse.value.id)
-			)
+			const sectionOptionsData = JSON.parse(localStorage.getItem('course_content_sections' + SingleCourse.value.id))
 			sectionOptions.length = 0
 			sectionOptions.push(...sectionOptionsData)
 		}
 
-		const setSectionMaterial = async (
-			mediaFile: SofaFile | undefined,
-			quiz: Quiz | undefined,
-			index: number
-		) => {
+		const setSectionMaterial = async (mediaFile: SofaFile | undefined, quiz: Quiz | undefined, index: number) => {
 			if (mediaFile) {
 				const { accessToken } = await getTokens()
 				const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`
@@ -265,25 +255,21 @@ export default defineComponent({
 											if (eachQuestion.data.type == 'multipleChoice') {
 												answers = eachQuestion.data.options[eachQuestion.data.answers[0]]
 											} else if (eachQuestion.data.type == 'trueOrFalse') {
-												answers = `${capitalize(
-													eachQuestion.data.answer.toString()
-												)}`
+												answers = `${capitalize(eachQuestion.data.answer.toString())}`
 											} else if (
 												eachQuestion.data.type == 'writeAnswer' ||
 												eachQuestion.data.type == 'sequence' ||
 												eachQuestion.data.type == 'dragAnswers' ||
 												eachQuestion.data.type == 'fillInBlanks'
 											) {
-												answers = capitalize(
-													eachQuestion.data.answers?.join(', ')
-												)
+												answers = capitalize(eachQuestion.data.answers?.join(', '))
 											} else if (eachQuestion.data.type == 'match') {
 												answers = capitalize(
 													eachQuestion.data.set
 														.map((item) => {
 															return item.a
 														})
-														.join(', ')
+														.join(', '),
 												)
 											}
 											return {
@@ -294,25 +280,19 @@ export default defineComponent({
 											}
 										})
 
-										const contentDetails = reactive<ContentDetails>(
-											Logic.Study.contentDetails
-										)
+										const contentDetails = reactive<ContentDetails>(Logic.Study.contentDetails)
 
 										contentDetails.title = quiz.title
 										contentDetails.id = quiz.id
 										contentDetails.price = 0
-										contentDetails.image = quiz.photo
-											? quiz.photo.link
-											: '/images/default.png'
+										contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.png'
 										contentDetails.info = quiz.description
 										contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
 										contentDetails.tags = quiz.tagIds.map((id) => {
 											return Logic.Study.GetTagName(id)
 										})
 										contentDetails.user.name = quiz.user.bio.name.full
-										contentDetails.user.photoUrl = quiz.user.bio.photo
-											? quiz.user.bio.photo.link
-											: ''
+										contentDetails.user.photoUrl = quiz.user.bio.photo ? quiz.user.bio.photo.link : ''
 
 										contentDetails.content.materialsCount = quiz.questions.length
 
@@ -346,7 +326,7 @@ export default defineComponent({
 										hover: false,
 									})
 								})
-						})
+						}),
 					)
 				} else {
 					staticSectionOptions.value[index].materials.push({
@@ -373,40 +353,38 @@ export default defineComponent({
 			staticSectionOptions.value.length = 0
 			selectedSection.value = index
 
-			if (
-				localStorage.getItem('course_content_sections' + SingleCourse.value.id)
-			) {
+			if (localStorage.getItem('course_content_sections' + SingleCourse.value.id)) {
 				saveSectionToLocalStorage(true)
 			}
 
 			let hasQuiz = false
 
-			await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
-				staticSectionOptions.value.push({
-					name: section.label,
-					id: Logic.Common.makeId(),
-					materials: [],
-					opened: index == selectedSection.value,
-					edit: false,
-				})
+			await Promise.all(
+				SingleCourse.value.sections.map(async (section, index) => {
+					staticSectionOptions.value.push({
+						name: section.label,
+						id: Logic.Common.makeId(),
+						materials: [],
+						opened: index == selectedSection.value,
+						edit: false,
+					})
 
-				await Promise.all(section.items.map(async (item) => {
-					if (item.type == 'quiz') {
-						const quizData = SingleCourseQuizzes.value.filter(
-							(quiz) => quiz.id == item.id
-						)
-						if (quizData.length) {
-							await setSectionMaterial(undefined, quizData[0], index)
-						}
-						hasQuiz = true
-					} else {
-						const fileData = SingleCourseFiles.value.filter(
-							(file) => file.id == item.id
-						)
-						await setSectionMaterial(fileData[0], undefined, index)
-					}
-				}))
-			}))
+					await Promise.all(
+						section.items.map(async (item) => {
+							if (item.type == 'quiz') {
+								const quizData = SingleCourseQuizzes.value.filter((quiz) => quiz.id == item.id)
+								if (quizData.length) {
+									await setSectionMaterial(undefined, quizData[0], index)
+								}
+								hasQuiz = true
+							} else {
+								const fileData = SingleCourseFiles.value.filter((file) => file.id == item.id)
+								await setSectionMaterial(fileData[0], undefined, index)
+							}
+						}),
+					)
+				}),
+			)
 
 			if (!hasQuiz) {
 				saveSectionToLocalStorage()

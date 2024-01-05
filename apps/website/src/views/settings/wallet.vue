@@ -81,7 +81,7 @@ export default defineComponent({
 		goBackRoute: '/settings',
 	},
 	name: 'WalletSettingPage',
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Wallet',
 		})

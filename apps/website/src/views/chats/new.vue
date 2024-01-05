@@ -1,23 +1,28 @@
 <template>
 	<ChatLayout title="Chat">
-		<ChatContent class="h-full" :data="{
-			title: 'New chat',
-			photoUrl: userAi.image,
-			userNames: ['You', userAi.name]
-		}">
-			<div class="grid w-full gap-4 py-2 mdlg:!grid-cols-3"
-				style="grid-template-columns: repeat(auto-fit, minmax(150px,  1fr))">
-				<div class="col-span-1 flex flex-col gap-2 items-center p-3 mdlg:p-5 rounded-2xl bg-fadedPurple"
-					v-for="(content, index) in contentList" :key="index">
+		<ChatContent
+			class="h-full"
+			:data="{
+				title: 'New chat',
+				photoUrl: userAi.image,
+				userNames: ['You', userAi.name],
+			}">
+			<div class="grid w-full gap-4 py-2 mdlg:!grid-cols-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))">
+				<div
+					class="col-span-1 flex flex-col gap-2 items-center p-3 mdlg:p-5 rounded-2xl bg-fadedPurple"
+					v-for="(content, index) in contentList"
+					:key="index">
 					<sofa-icon :name="content.icon" :customClass="'h-[39px]'" />
 					<sofa-normal-text :customClass="'!font-bold'">{{ content.title }}</sofa-normal-text>
 					<sofa-normal-text>{{ content.body }}</sofa-normal-text>
 				</div>
 			</div>
 			<template v-slot:bottom>
-				<form @submit.prevent="createConversation"
+				<form
+					@submit.prevent="createConversation"
 					class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-					<input v-model=factory.body
+					<input
+						v-model="factory.body"
 						:class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
 						placeholder="Enter message" />
 					<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
@@ -75,7 +80,7 @@ export default defineComponent({
 	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText },
 	name: 'ChatsNewPage',
 	middlewares: { goBackRoute: '/' },
-	setup () {
+	setup() {
 		useMeta({
 			title: 'New Chat',
 		})

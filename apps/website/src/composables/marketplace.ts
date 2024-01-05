@@ -1,25 +1,25 @@
 import { Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
 
 export interface ContentDetails {
-  id: string
-  subject?: string
-  title?: string
-  image?: string
-  labels?: {
-    main: string
-    sub: string
-    color: string
-  }
-  user: SingleUser
-  authUserId: string | undefined
-  price?: number
-  ratings: {
-    avg: number
-    count: number
-    total: number
-  }
-  type: 'quiz' | 'course'
-  route: string
+	id: string
+	subject?: string
+	title?: string
+	image?: string
+	labels?: {
+		main: string
+		sub: string
+		color: string
+	}
+	user: SingleUser
+	authUserId: string | undefined
+	price?: number
+	ratings: {
+		avg: number
+		count: number
+		total: number
+	}
+	type: 'quiz' | 'course'
+	route: string
 }
 
 export const search = async (query: QueryParams, returnCoursables = false) => {
@@ -29,8 +29,8 @@ export const search = async (query: QueryParams, returnCoursables = false) => {
 		Logic.Study.GetCourses(query).catch(),
 		Logic.Study.GetQuizzes({
 			...query,
-			where: query.where.concat(...(returnCoursables ? [{ field: 'courseId', value: null }] : []))
-		}).catch()
+			where: query.where.concat(...(returnCoursables ? [{ field: 'courseId', value: null }] : [])),
+		}).catch(),
 	]
 
 	await Promise.all(allRequests)
@@ -59,6 +59,6 @@ export const extractContent = (item: Quiz | Course): ContentDetails => {
 		authUserId: Logic.Common.AuthUser.id,
 		type,
 		ratings: item.ratings,
-		route: `/marketplace/${item.id}?type=${type}`
+		route: `/marketplace/${item.id}?type=${type}`,
 	}
 }

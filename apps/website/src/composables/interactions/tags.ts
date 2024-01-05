@@ -12,16 +12,28 @@ const topicStore = {
 	listener: useListener(async () => {
 		return TagsUseCases.listenToAllTopics({
 			created: async (entity) => {
-				Logic.addToArray(topicStore.topics, entity, (e) => e.id, (e) => e.title, true)
+				Logic.addToArray(
+					topicStore.topics,
+					entity,
+					(e) => e.id,
+					(e) => e.title,
+					true,
+				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(topicStore.topics, entity, (e) => e.id, (e) => e.title, true)
+				Logic.addToArray(
+					topicStore.topics,
+					entity,
+					(e) => e.id,
+					(e) => e.title,
+					true,
+				)
 			},
 			deleted: async (entity) => {
 				topicStore.topics = topicStore.topics.filter((m) => m.id !== entity.id)
-			}
+			},
 		})
-	})
+	}),
 }
 
 const genericStore = {
@@ -32,16 +44,26 @@ const genericStore = {
 	listener: useListener(async () => {
 		return TagsUseCases.listenToAllGeneric({
 			created: async (entity) => {
-				Logic.addToArray(genericStore.tags, entity, (e) => e.id, (e) => e.meta.total)
+				Logic.addToArray(
+					genericStore.tags,
+					entity,
+					(e) => e.id,
+					(e) => e.meta.total,
+				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(genericStore.tags, entity, (e) => e.id, (e) => e.meta.total)
+				Logic.addToArray(
+					genericStore.tags,
+					entity,
+					(e) => e.id,
+					(e) => e.meta.total,
+				)
 			},
 			deleted: async (entity) => {
 				genericStore.tags = genericStore.tags.filter((m) => m.id !== entity.id)
-			}
+			},
 		})
-	})
+	}),
 }
 
 export const useTopicsList = () => {
@@ -51,7 +73,15 @@ export const useTopicsList = () => {
 			await topicStore.setError('')
 			await topicStore.setLoading(true)
 			const tags = await TagsUseCases.getAllTopics()
-			tags.results.forEach((r) => Logic.addToArray(topicStore.topics, r, (e) => e.id, (e) => e.title, true))
+			tags.results.forEach((r) =>
+				Logic.addToArray(
+					topicStore.topics,
+					r,
+					(e) => e.id,
+					(e) => e.title,
+					true,
+				),
+			)
 			topicStore.fetched.value = true
 		} catch (e) {
 			await topicStore.setError(e)
@@ -77,7 +107,14 @@ export const useGenericTagsList = () => {
 			await genericStore.setError('')
 			await genericStore.setLoading(true)
 			const tags = await TagsUseCases.getAllGeneric()
-			tags.results.forEach((r) => Logic.addToArray(genericStore.tags, r, (e) => e.id, (e) => e.meta.total))
+			tags.results.forEach((r) =>
+				Logic.addToArray(
+					genericStore.tags,
+					r,
+					(e) => e.id,
+					(e) => e.meta.total,
+				),
+			)
 			genericStore.fetched.value = true
 		} catch (e) {
 			await genericStore.setError(e)

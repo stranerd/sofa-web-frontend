@@ -26,10 +26,7 @@ export default class Notifications extends Common {
 	}
 
 	public ToggleSeenNotifications = (id: string, seen: boolean) => {
-		return $api.notifications.notifications
-			.toggleNotification({ id, seen })
-			.then()
-			.catch()
+		return $api.notifications.notifications.toggleNotification({ id, seen }).then().catch()
 	}
 
 	public ToggleAllNotifications = (seen: boolean) => {
@@ -50,16 +47,10 @@ export default class Notifications extends Common {
 	}
 
 	public SubscribeDevice = (token: string) => {
-		return $api.notifications.pushTokens
-			.subscribeDevice({ token })
-			.then()
-			.catch()
+		return $api.notifications.pushTokens.subscribeDevice({ token }).then().catch()
 	}
 
 	public UnSubscribeToken = (token: string) => {
-		return $api.notifications.pushTokens
-			.unsubscribeDevice({ token })
-			.then()
-			.catch()
+		return $api.notifications.pushTokens.unsubscribeDevice({ token }).then().catch()
 	}
 }

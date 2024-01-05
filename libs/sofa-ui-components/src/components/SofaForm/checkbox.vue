@@ -1,7 +1,6 @@
 <template>
 	<div :class="`flex w-full flex-col gap-2 ${customClass}`">
-		<div @click="selected ? (selected = false) : (selected = true)"
-			class="flex w-full flex-row gap-2 items-center cursor-pointer">
+		<div @click="selected ? (selected = false) : (selected = true)" class="flex w-full flex-row gap-2 items-center cursor-pointer">
 			<span :class="`${iconWidth}`">
 				<sofa-icon :name="`${selected ? 'checkbox-active' : 'checkbox'}`" :customClass="`md:!h-[18px] h-[20px]`" />
 			</span>
@@ -39,7 +38,7 @@ export default defineComponent({
 	},
 	name: 'SofaCheckbox',
 	emits: ['update:modelValue', 'onSelected'],
-	setup (prop, context) {
+	setup(prop, context) {
 		const selected = ref(false)
 
 		watch(selected, () => {

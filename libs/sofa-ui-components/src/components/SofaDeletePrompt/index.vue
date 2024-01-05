@@ -7,11 +7,15 @@
 
 			<div class="w-full md:flex justify-between items-center grid grid-cols-2 gap-3 mt-3">
 				<div class="md:w-auto col-span-1 flex flex-col" v-for="(button, index) in buttons" :key="index">
-					<SofaButton v-if="!button.hide"
+					<SofaButton
+						v-if="!button.hide"
 						:textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
-						:bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')" padding="px-4 py-2"
+						:bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')"
+						padding="px-4 py-2"
 						@click="button.action?.()"
-						:class="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-2  md:w-auto w-full`">
+						:class="`${
+							button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'
+						} border-2  md:w-auto w-full`">
 						{{ button.label }}
 					</SofaButton>
 				</div>
@@ -39,14 +43,16 @@ defineProps({
 		default: '',
 	},
 	buttons: {
-		type: Array as PropType<{
-			label: string
-			hide?: boolean
-			bgColor?: string
-			textColor?: string
-			isClose?: boolean
-			action: () => void
-		}[]>,
+		type: Array as PropType<
+			{
+				label: string
+				hide?: boolean
+				bgColor?: string
+				textColor?: string
+				isClose?: boolean
+				action: () => void
+			}[]
+		>,
 		required: true,
 	},
 })

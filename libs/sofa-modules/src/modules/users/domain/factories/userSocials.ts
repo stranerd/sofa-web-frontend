@@ -5,12 +5,14 @@ import { UserSocials, UserSocialsType } from '../types'
 
 export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType, { socials: UserSocialsType }> {
 	readonly rules = {
-		socials: v.array(
-			v.object({
-				ref: v.in(Object.values(UserSocials)),
-				link: v.string().url()
-			})
-		).min(1),
+		socials: v
+			.array(
+				v.object({
+					ref: v.in(Object.values(UserSocials)),
+					link: v.string().url(),
+				}),
+			)
+			.min(1),
 	}
 	reserved = []
 

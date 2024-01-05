@@ -1,18 +1,14 @@
 <template>
 	<expanded-layout :hide="{ bottom: true }" width="mdlg:!w-[60%] lg:!w-[45%]">
-		<div
-			class="w-full flex mdlg:!hidden flex-row items-center gap-3 z-50 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
+		<div class="w-full flex mdlg:!hidden flex-row items-center gap-3 z-50 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
 			<sofa-icon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-			<sofa-normal-text :customClass="'!font-bold !text-base'">
-				Become a tutor</sofa-normal-text>
+			<sofa-normal-text :customClass="'!font-bold !text-base'"> Become a tutor</sofa-normal-text>
 			<div class="invisible">Hello</div>
 		</div>
 		<div class="w-full flex flex-col flex-grow overflow-y-auto gap-5 mdlg:px-0 px-4 pb-4">
 			<!-- Top bar for larger screens -->
 			<div class="w-full hidden flex-row items-center justify-between mdlg:!flex pt-4">
-				<sofa-header-text :customClass="'!text-2xl !font-bold'">
-					Become a tutor
-				</sofa-header-text>
+				<sofa-header-text :customClass="'!text-2xl !font-bold'"> Become a tutor </sofa-header-text>
 				<div class="flex flex-row items-center gap-2">
 					<sofa-button :padding="'px-5 py-2'" @click="handleNextAction">Next</sofa-button>
 				</div>
@@ -20,25 +16,23 @@
 
 			<div class="w-full grid grid-cols-2 gap-2">
 				<div class="col-span-1 h-[8px] rounded-[99px] bg-deepGray"></div>
-				<div
-					:class="`col-span-1 h-[8px] rounded-[99px] ${currentStep === 'test' ? 'bg-deepGray' : 'bg-darkLightGray'}`">
-				</div>
+				<div :class="`col-span-1 h-[8px] rounded-[99px] ${currentStep === 'test' ? 'bg-deepGray' : 'bg-darkLightGray'}`"></div>
 			</div>
 
 			<!-- Profile -->
 			<template v-if="currentStep == 'profile'">
 				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<sofa-header-text :size="'xl'" :customClass="'text-left'">
-						Profile
-					</sofa-header-text>
+					<sofa-header-text :size="'xl'" :customClass="'text-left'"> Profile </sofa-header-text>
 					<div class="w-full flex flex-row items-center justify-start py-2 gap-4">
 						<sofa-image-loader
 							:customClass="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
 							:photoUrl="profileFactory.localPhotoLink">
 							<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileFactory.localPhotoLink" />
-							<sofa-file-attachment :isWrapper="true"
+							<sofa-file-attachment
+								:isWrapper="true"
 								:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-								:accept="'image/*'" v-model="profileFactory.photo"
+								:accept="'image/*'"
+								v-model="profileFactory.photo"
 								v-model:localFileUrl="profileFactory.localPhotoLink">
 								<template v-slot:content>
 									<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
@@ -47,38 +41,49 @@
 						</sofa-image-loader>
 					</div>
 
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-						type="text" placeholder="First Name" :error="profileFactory.errors.first"
-						v-model="profileFactory.first" borderColor="border-transparent" />
+					<sofa-text-field
+						:custom-class="'rounded-custom !bg-lightGray'"
+						type="text"
+						placeholder="First Name"
+						:error="profileFactory.errors.first"
+						v-model="profileFactory.first"
+						borderColor="border-transparent" />
 
-					<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-						type="text" placeholder="Last Name" :error="profileFactory.errors.last"
-						v-model="profileFactory.last" borderColor="border-transparent" />
+					<sofa-text-field
+						:custom-class="'rounded-custom !bg-lightGray'"
+						type="text"
+						placeholder="Last Name"
+						:error="profileFactory.errors.last"
+						v-model="profileFactory.last"
+						borderColor="border-transparent" />
 
-					<sofa-textarea :hasTitle="false"
+					<sofa-textarea
+						:hasTitle="false"
 						textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
-						placeholder="Bio" v-model="profileFactory.description" />
+						placeholder="Bio"
+						v-model="profileFactory.description" />
 				</div>
 
 				<!-- Qualifications -->
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<sofa-header-text :size="'xl'" :customClass="'text-left'">
-						Qualification
-					</sofa-header-text>
+					<sofa-header-text :size="'xl'" :customClass="'text-left'"> Qualification </sofa-header-text>
 
-					<sofa-file-attachment :isWrapper="true"
+					<sofa-file-attachment
+						:isWrapper="true"
 						:customClass="'rounded-custom border-2 border-dashed border-primaryPurple bg-lightGray py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
-						v-model="tutorRequestForm.qualification" accept="application/pdf, image/*" :is-multiple="true">
+						v-model="tutorRequestForm.qualification"
+						accept="application/pdf, image/*"
+						:is-multiple="true">
 						<template v-slot:content>
 							<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
 								<sofa-icon :name="'upload-purple'" :customClass="'h-[16px]'" />
 
 								<sofa-normal-text :color="'text-primaryPurple'" :customClass="'text-center'">
 									{{
-										tutorRequestForm.qualification.length ? `${tutorRequestForm.qualification.map((item) =>
-											item.name).join(", ")}`
-										: "Upload PDFs or images of your degree, results, transcripts, e.t.c."
+										tutorRequestForm.qualification.length
+											? `${tutorRequestForm.qualification.map((item) => item.name).join(', ')}`
+											: 'Upload PDFs or images of your degree, results, transcripts, e.t.c.'
 									}}
 								</sofa-normal-text>
 							</div>
@@ -88,13 +93,13 @@
 
 				<!-- Verification -->
 				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<sofa-header-text :size="'xl'" :customClass="'text-left'">
-						Verification
-					</sofa-header-text>
+					<sofa-header-text :size="'xl'" :customClass="'text-left'"> Verification </sofa-header-text>
 
-					<sofa-file-attachment :isWrapper="true"
+					<sofa-file-attachment
+						:isWrapper="true"
 						:customClass="'rounded-custom border-2 border-dashed border-primaryPurple  bg-lightGray py-4 px-4 items-center jusify-center flex !flex-row gap-2'"
-						v-model="tutorRequestForm.verification" accept="image/*">
+						v-model="tutorRequestForm.verification"
+						accept="image/*">
 						<template v-slot:content>
 							<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
 								<sofa-icon :name="'upload-purple'" :customClass="'h-[16px]'" />
@@ -108,17 +113,23 @@
 
 				<!-- Location -->
 				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<sofa-header-text :size="'xl'" :customClass="'text-left'">
-						Location
-					</sofa-header-text>
+					<sofa-header-text :size="'xl'" :customClass="'text-left'"> Location </sofa-header-text>
 
-					<SofaSelect customClass="rounded-custom !bg-lightGray" placeholder="Country"
-						:error="locationFactory.errors.country" borderColor="border-transparent"
-						v-model="locationFactory.country" :options="countries.map((c) => ({ key: c, value: c }))" />
+					<SofaSelect
+						customClass="rounded-custom !bg-lightGray"
+						placeholder="Country"
+						:error="locationFactory.errors.country"
+						borderColor="border-transparent"
+						v-model="locationFactory.country"
+						:options="countries.map((c) => ({ key: c, value: c }))" />
 
-					<SofaSelect customClass="rounded-custom !bg-lightGray" placeholder="State"
-						:error="locationFactory.errors.state" borderColor="border-transparent"
-						v-model="locationFactory.state" :options="states.map((s) => ({ key: s, value: s }))" />
+					<SofaSelect
+						customClass="rounded-custom !bg-lightGray"
+						placeholder="State"
+						:error="locationFactory.errors.state"
+						borderColor="border-transparent"
+						v-model="locationFactory.state"
+						:options="states.map((s) => ({ key: s, value: s }))" />
 				</div>
 			</template>
 
@@ -128,38 +139,33 @@
 				<!-- Select subject -->
 				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 					<div class="w-full flex flex-col gap-1">
-						<sofa-header-text :size="'xl'" :customClass="'text-left'">
-							Subject
-						</sofa-header-text>
-						<sofa-normal-text>
-							Choose the subject you want to teach
-						</sofa-normal-text>
+						<sofa-header-text :size="'xl'" :customClass="'text-left'"> Subject </sofa-header-text>
+						<sofa-normal-text> Choose the subject you want to teach </sofa-normal-text>
 					</div>
 
-					<sofa-select :custom-class="'rounded-custom !bg-lightGray'"
-						:name="'Subject'" ref="Subject" :placeholder="'Select subject'"
-						:rules="[FormValidations.RequiredRule]" :borderColor="'border-transparent'"
-						:options="topics.map((t) => ({ key: t.id, value: t.title }))" v-model="tutorRequestForm.topicId" />
+					<sofa-select
+						:custom-class="'rounded-custom !bg-lightGray'"
+						:name="'Subject'"
+						ref="Subject"
+						:placeholder="'Select subject'"
+						:rules="[FormValidations.RequiredRule]"
+						:borderColor="'border-transparent'"
+						:options="topics.map((t) => ({ key: t.id, value: t.title }))"
+						v-model="tutorRequestForm.topicId" />
 				</div>
 
 				<!-- Subject test -->
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
 					<div class="w-full flex flex-col gap-1">
-						<sofa-header-text :size="'xl'" :customClass="'text-left'">
-							Test
-						</sofa-header-text>
-						<sofa-normal-text>
-							Pass a test on the subject you selected
-						</sofa-normal-text>
+						<sofa-header-text :size="'xl'" :customClass="'text-left'"> Test </sofa-header-text>
+						<sofa-normal-text> Pass a test on the subject you selected </sofa-normal-text>
 					</div>
 				</div>
 			</template>
 		</div>
 		<!-- Button for smaller screens -->
 		<div class="w-full flex flex-col bg-white px-4 py-4 mdlg:hidden">
-			<sofa-button :padding="'py-3'" :customClass="'!w-full'" @click="handleNextAction">
-				Next
-			</sofa-button>
+			<sofa-button :padding="'py-3'" :customClass="'!w-full'" @click="handleNextAction"> Next </sofa-button>
 		</div>
 	</expanded-layout>
 </template>
@@ -168,10 +174,7 @@
 import { FormValidations } from '@/composables'
 import { useProfileUpdate } from '@/composables/auth/profile'
 import { useTopicsList } from '@/composables/interactions/tags'
-import {
-	createTutorRequest,
-	tutorRequestForm
-} from '@/composables/profile'
+import { createTutorRequest, tutorRequestForm } from '@/composables/profile'
 import { useUserLocationUpdate } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
@@ -201,7 +204,7 @@ export default defineComponent({
 		SofaSelect,
 	},
 	name: 'BecomeATutorPage',
-	setup () {
+	setup() {
 		useMeta({ title: 'Become a tutor' })
 
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()
@@ -212,8 +215,8 @@ export default defineComponent({
 
 		const handleNextAction = async () => {
 			if (currentStep.value == 'profile') {
-				if (tutorRequestForm.qualification.length && tutorRequestForm.verification) await Promise.all([updateProfile(true), updateLocation(true)])
-					.then((res) => {
+				if (tutorRequestForm.qualification.length && tutorRequestForm.verification)
+					await Promise.all([updateProfile(true), updateLocation(true)]).then((res) => {
 						if (res.every(Boolean)) currentStep.value = 'test'
 					})
 				else Logic.Common.showAlert({ message: 'Please upload the required documents', type: 'warning' })
@@ -223,7 +226,11 @@ export default defineComponent({
 		}
 
 		return {
-			profileFactory, locationFactory, countries, states, topics,
+			profileFactory,
+			locationFactory,
+			countries,
+			states,
+			topics,
 			Logic,
 			FormValidations,
 			currentStep,

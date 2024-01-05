@@ -1,17 +1,24 @@
-const getPath = (page: string[]) => page.map((path) => {
-	if (path === 'index') return ''
-	if (path === '~') return ':pathMatch(.*)*'
-	// prolly insignificant if (path.startsWith('^')) path = path.replace('^', '')
-	if (path.startsWith('_')) path = path.replace('_', ':')
-	return path
-}).join('/').replace(new RegExp('///', 'g'), '/').replace(new RegExp('//', 'g'), '/')
+const getPath = (page: string[]) =>
+	page
+		.map((path) => {
+			if (path === 'index') return ''
+			if (path === '~') return ':pathMatch(.*)*'
+			// prolly insignificant if (path.startsWith('^')) path = path.replace('^', '')
+			if (path.startsWith('_')) path = path.replace('_', ':')
+			return path
+		})
+		.join('/')
+		.replace(new RegExp('///', 'g'), '/')
+		.replace(new RegExp('//', 'g'), '/')
 
 const makeRoute = async (page: string[], importFn: () => Promise<any>) => {
 	const path = '/' + getPath(page)
 	const { default: component } = await importFn()
-	const {  middlewares, name, layout } = component
+	const { middlewares, name, layout } = component
 	return {
-		path, name, component,
+		path,
+		name,
+		component,
 		meta: { layout: layout ?? 'AppDefaultLayout', middlewares: middlewares ?? {} },
 	}
 }
@@ -27,7 +34,8 @@ const allPages = Object.entries(import.meta.glob('../views/**/*.vue', { eager: f
 
 const nestedPages = allPages.filter((page) => page.parent)
 
-export const routes = allPages.filter((page) => !page.parent)
+export const routes = allPages
+	.filter((page) => !page.parent)
 	.map(async (page) => {
 		const path = getPath(page.path)
 		const childrenPages = nestedPages.filter((p) => p.parent === path)

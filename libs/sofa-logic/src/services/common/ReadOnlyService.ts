@@ -7,16 +7,11 @@ export class ReadOnlyApiService extends BaseApiService {
 		super(resource)
 	}
 
-	public async fetch(
-		filters: QueryParams = {},
-	): Promise<AxiosResponse<any, any>> {
+	public async fetch(filters: QueryParams = {}): Promise<AxiosResponse<any, any>> {
 		try {
-			const response: AxiosResponse = await this.axiosInstance.get(
-				this.getUrl(),
-				{
-					params: filters,
-				},
-			)
+			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl(), {
+				params: filters,
+			})
 
 			return response
 		} catch (err) {
@@ -30,9 +25,7 @@ export class ReadOnlyApiService extends BaseApiService {
 				id = 'empty'
 			}
 
-			const response: AxiosResponse = await this.axiosInstance.get(
-				this.getUrl(id),
-			)
+			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl(id))
 
 			return response
 		} catch (err) {
@@ -44,9 +37,7 @@ export class ReadOnlyApiService extends BaseApiService {
 		try {
 			if (!query) throw Error('query is not provided')
 
-			const response: AxiosResponse = await this.axiosInstance.get(
-				this.getUrl() + '?q=' + query,
-			)
+			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl() + '?q=' + query)
 
 			return response
 		} catch (err) {

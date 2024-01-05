@@ -7,44 +7,49 @@ export { AuthRoleType, UserBio }
 export enum UserType {
 	student = 'student',
 	teacher = 'teacher',
-	organization = 'organization'
+	organization = 'organization',
 }
 
 export enum UserSchoolType {
 	'aspirant' = 'aspirant',
-	'college' = 'college'
+	'college' = 'college',
 }
 
-export type UserTypeData = {
-	type: UserType.student,
-	school: {
-		type: UserSchoolType.aspirant
-		exams: {
-			institutionId: string
-			courseIds: string[]
-			startDate: number
-			endDate: number
-		}[]
-	} | {
-		type: UserSchoolType.college
-		institutionId: string
-		facultyId: string
-		departmentId: string
-	}
-} | {
-	type: UserType.teacher,
-	school: string
-} | {
-	type: UserType.organization,
-	name: string,
-	code: string
-}
+export type UserTypeData =
+	| {
+			type: UserType.student
+			school:
+				| {
+						type: UserSchoolType.aspirant
+						exams: {
+							institutionId: string
+							courseIds: string[]
+							startDate: number
+							endDate: number
+						}[]
+				  }
+				| {
+						type: UserSchoolType.college
+						institutionId: string
+						facultyId: string
+						departmentId: string
+				  }
+	  }
+	| {
+			type: UserType.teacher
+			school: string
+	  }
+	| {
+			type: UserType.organization
+			name: string
+			code: string
+	  }
 
 export enum RankingTimes {
 	daily = 'daily',
 	weekly = 'weekly',
 	monthly = 'monthly',
-	overall = 'overall'
+	overall = 'overall',
 }
 
 export type EmbeddedUser = {
@@ -84,14 +89,14 @@ export interface UserAccount {
 		longestStreak: number
 		lastEvaluatedAt: number
 	}
-	rankings: Record<RankingTimes, { value: number, lastUpdatedAt: number }>
+	rankings: Record<RankingTimes, { value: number; lastUpdatedAt: number }>
 	ratings: Ratings
-	organizationsIn: { id: string, type: MemberTypes }[]
+	organizationsIn: { id: string; type: MemberTypes }[]
 	settings: {
 		notifications: boolean
 	}
 	editing: {
-		quizzes: { id: string, questionId: string } | null
+		quizzes: { id: string; questionId: string } | null
 	}
 }
 
@@ -126,7 +131,7 @@ export enum UserSocials {
 	tiktok = 'tiktok',
 }
 
-export type UserSocialsType = { ref: UserSocials, link: string }[]
+export type UserSocialsType = { ref: UserSocials; link: string }[]
 
 export type UserLocation = {
 	country: string

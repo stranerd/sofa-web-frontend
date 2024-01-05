@@ -6,15 +6,19 @@ import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
 
-const store = {} as Record<string, {
-	game: Ref<Game | null>
-	questions: Question[]
-	answer: Ref<GameParticipantAnswer | null>
-	fetched: Ref<boolean>
-	listener: ReturnType<typeof useListener>
-} & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
+const store = {} as Record<
+	string,
+	{
+		game: Ref<Game | null>
+		questions: Question[]
+		answer: Ref<GameParticipantAnswer | null>
+		fetched: Ref<boolean>
+		listener: ReturnType<typeof useListener>
+	} & ReturnType<typeof useErrorHandler> &
+		ReturnType<typeof useLoadingHandler>
+>
 
-export const useGame = (id: string, skip: { questions: boolean, participants: boolean, statusNav: boolean }) => {
+export const useGame = (id: string, skip: { questions: boolean; participants: boolean; statusNav: boolean }) => {
 	const { id: authId } = useAuth()
 	const route = useRoute()
 	const router = useRouter()
@@ -28,22 +32,25 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 		questions: reactive([]),
 		answer: ref(null),
 		fetched: ref(false),
-		listener: useListener(async () => await Logic.Common.listenToOne<Game>(`plays/games/${id}`, {
-			created: async (entity) => {
-				store[id].game.value = entity
-			},
-			updated: async (entity) => {
-				store[id].game.value = entity
-			},
-			deleted: async (entity) => {
-				store[id].game.value = entity
-			}
-		})),
+		listener: useListener(
+			async () =>
+				await Logic.Common.listenToOne<Game>(`plays/games/${id}`, {
+					created: async (entity) => {
+						store[id].game.value = entity
+					},
+					updated: async (entity) => {
+						store[id].game.value = entity
+					},
+					deleted: async (entity) => {
+						store[id].game.value = entity
+					},
+				}),
+		),
 		...useErrorHandler(),
-		...useLoadingHandler()
+		...useLoadingHandler(),
 	}
 
-	const { users: participants } = useUsersInList(computed(() => skip.participants ? [] : store[id].game.value?.participants ?? []))
+	const { users: participants } = useUsersInList(computed(() => (skip.participants ? [] : store[id].game.value?.participants ?? [])))
 
 	const fetchGame = async () => {
 		await store[id].setError('')
@@ -130,20 +137,23 @@ export const useGame = (id: string, skip: { questions: boolean, participants: bo
 
 	watch(store[id].game, async (cur, old) => {
 		if (!cur) return
-		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions)) Logic.Plays.GetGameQuestions(id)
-			.then((questions) => {
-				store[id].questions.splice(0, store[id].questions.length, ...questions)
-			})
-			.catch()
-		if (!skip.questions) Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
-			.then((answers) => {
-				store[id].answer.value = answers.results.at(0) ?? null
-			}).catch()
+		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions))
+			Logic.Plays.GetGameQuestions(id)
+				.then((questions) => {
+					store[id].questions.splice(0, store[id].questions.length, ...questions)
+				})
+				.catch()
+		if (!skip.questions)
+			Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
+				.then((answers) => {
+					store[id].answer.value = answers.results.at(0) ?? null
+				})
+				.catch()
 		if (!skip.statusNav) gameWatcherCb()
 	})
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchGame()
+		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchGame()
 		await store[id].listener.start()
 		await gameWatcherCb()
 	})

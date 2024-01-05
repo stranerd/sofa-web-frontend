@@ -1,7 +1,6 @@
 <template>
 	<component :is="as" :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer rounded-custom ${customClass}`">
-		<sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative"
-			:photo-url="content.image">
+		<sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photo-url="content.image">
 			<div class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2" v-if="content.price?.amount > 0">
 				<sofa-badge :customClass="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
 					{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
@@ -15,10 +14,10 @@
 			<sofa-normal-text :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">
 				{{ content.labels.main }}
 			</sofa-normal-text>
-			<span
-				:class="`h-[5px] w-[5px] rounded-full ${content.labels.color == 'pink' ? 'bg-primaryPurplePink' : 'bg-primaryPurple'}`" />
+			<span :class="`h-[5px] w-[5px] rounded-full ${content.labels.color == 'pink' ? 'bg-primaryPurplePink' : 'bg-primaryPurple'}`" />
 			<sofa-normal-text :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">{{
-				content.labels.sub }}</sofa-normal-text>
+				content.labels.sub
+			}}</sofa-normal-text>
 		</div>
 
 		<div class="w-full flex flex-row gap-2 items-center">
@@ -42,8 +41,7 @@
 				<sofa-icon v-if="content.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
 			</a>
 
-			<sofa-icon @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'"
-				:customClass="'h-[18px] '" />
+			<sofa-icon @click.stop="bookmarkAction ? bookmarkAction() : null" :name="'bookmark'" :customClass="'h-[18px] '" />
 		</div>
 	</component>
 </template>
@@ -79,11 +77,11 @@ export default defineComponent({
 		},
 		as: {
 			type: String,
-			default: 'div'
-		}
+			default: 'div',
+		},
 	},
 	name: 'SofaItemCard',
-	setup () {
+	setup() {
 		return {
 			Logic,
 		}

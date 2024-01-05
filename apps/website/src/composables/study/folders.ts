@@ -12,18 +12,32 @@ const store = {
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Folder>('study/folders', {
-			created: async (entity) => {
-				Logic.addToArray(store.folders.value, entity, (e) => e.id, (e) => e.createdAt)
+		return Logic.Common.listenToMany<Folder>(
+			'study/folders',
+			{
+				created: async (entity) => {
+					Logic.addToArray(
+						store.folders.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					Logic.addToArray(
+						store.folders.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.folders.value = store.folders.value.filter((m) => m.id !== entity.id)
+				},
 			},
-			updated: async (entity) => {
-				Logic.addToArray(store.folders.value, entity, (e) => e.id, (e) => e.createdAt)
-			},
-			deleted: async (entity) => {
-				store.folders.value = store.folders.value.filter((m) => m.id !== entity.id)
-			}
-		}, (e) => e.user.id === id.value)
-	})
+			(e) => e.user.id === id.value,
+		)
+	}),
 }
 
 export const useMyFolders = () => {
@@ -35,9 +49,16 @@ export const useMyFolders = () => {
 			await store.setLoading(true)
 			const folders = await Logic.Study.getFolders({
 				where: [{ field: 'user.id', value: id.value }],
-				all: true
+				all: true,
 			})
-			folders.results.forEach((r) => Logic.addToArray(store.folders.value, r, (e) => e.id, (e) => e.createdAt))
+			folders.results.forEach((r) =>
+				Logic.addToArray(
+					store.folders.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
 			store.fetched.value = true
 		} catch (e) {
 			await store.setError(e)
@@ -46,7 +67,7 @@ export const useMyFolders = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */!store.loading.value) await fetchFolders()
+		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchFolders()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -85,7 +106,7 @@ export const useEditFolder = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All items in the folder will be removed',
-			right: { label: 'Yes, delete' }
+			right: { label: 'Yes, delete' },
 		})
 		if (!confirmed) return
 		try {
@@ -115,7 +136,6 @@ export const useEditFolder = () => {
 
 	return { factory, edit, saveFolder, generateNewFolder, deleteFolder }
 }
-
 
 export const useFolder = (id: string) => {
 	const folderList = useMyFolders()

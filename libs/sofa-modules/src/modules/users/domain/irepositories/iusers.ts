@@ -3,7 +3,7 @@ import { UserEntity } from '../entities/users'
 import { UserAccount, UserAi, UserLocation, UserSocialsType, UserTypeData } from '../types'
 
 export interface IUserRepository {
-	find: (id: string) => Promise<UserEntity | null>,
+	find: (id: string) => Promise<UserEntity | null>
 	get: (query: QueryParams) => Promise<QueryResults<UserEntity>>
 	listenToOne: (id: string, listener: Listeners<UserEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listener: Listeners<UserEntity>, matches: (entity: UserEntity) => boolean) => Promise<() => void>

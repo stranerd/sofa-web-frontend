@@ -8,12 +8,9 @@ export default class MetaApi extends ModelApiService {
 
 	public async sendMessage(message: string) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.post(
-				this.getUrl() + '/messages',
-				{
-					message,
-				},
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.post(this.getUrl() + '/messages', {
+				message,
+			})
 			return response
 		} catch (err) {
 			this.handleErrors(err)

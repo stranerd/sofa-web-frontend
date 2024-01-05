@@ -21,7 +21,9 @@
 						<div class="w-[20px] mdlg:!hidden">
 							<sofa-icon :name="'search-black'" :custom-class="'h-[17px]'" />
 						</div>
-						<sofa-text-field :customClass="'!border-none w-full mdlg:!pl-0'" :placeholder="'Search for anything'"
+						<sofa-text-field
+							:customClass="'!border-none w-full mdlg:!pl-0'"
+							:placeholder="'Search for anything'"
 							v-model="searchQuery">
 						</sofa-text-field>
 					</div>
@@ -33,40 +35,51 @@
 
 				<div class="w-full flex gap-3 items-center mdlg:px-0 pl-4">
 					<span
-						:class="`px-6 py-2 ${item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'} rounded-custom flex flex-row items-center justify-center gap-1  cursor-pointer `"
-						v-for="(item, index) in filterOptions" :key="index" @click="selectedFilterOption = item.id">
-						<sofa-normal-text :color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'}`"
-							:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+						:class="`px-6 py-2 ${
+							item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'
+						} rounded-custom flex flex-row items-center justify-center gap-1  cursor-pointer `"
+						v-for="(item, index) in filterOptions"
+						:key="index"
+						@click="selectedFilterOption = item.id">
+						<sofa-normal-text
+							:color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'}`"
+							:custom-class="'!font-semibold'"
+							:content="item.name" />
 					</span>
 				</div>
 
 				<!-- Course contents -->
 
-				<div class="w-full flex flex-col gap-3 mdlg:px-0 pl-4" v-if="selectedFilterOption == 'all' || selectedFilterOption == 'courses'
-				">
+				<div
+					class="w-full flex flex-col gap-3 mdlg:px-0 pl-4"
+					v-if="selectedFilterOption == 'all' || selectedFilterOption == 'courses'">
 					<div class="w-full flex flex-col justify-start items-start" v-if="selectedFilterOption == 'all'">
-						<sofa-normal-text :customClass="'font-bold'">
-							Courses
-						</sofa-normal-text>
+						<sofa-normal-text :customClass="'font-bold'"> Courses </sofa-normal-text>
 					</div>
 
 					<template v-if="resourceContents.length">
 						<div class="w-full flex flex-col gap-3">
 							<div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.isLarge">
-								<sofa-item-card :content="content"
+								<sofa-item-card
+									:content="content"
 									custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									v-for="(content, index) in resourceContents" :key="index" @click="
-										Logic.Common.GoToRoute(content.route)
-									" :bookmark-action="() => saveToFolder(content)" />
+									v-for="(content, index) in resourceContents"
+									:key="index"
+									@click="Logic.Common.GoToRoute(content.route)"
+									:bookmark-action="() => saveToFolder(content)" />
 							</div>
 
 							<div
 								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<sofa-activity-card v-for="(activity, index) in resourceContents" :key="index" :activity="activity"
-										:custom-class="'cursor-pointer'" @click="
-											Logic.Common.GoToRoute(activity.route)
-										" :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
+									<sofa-activity-card
+										v-for="(activity, index) in resourceContents"
+										:key="index"
+										:activity="activity"
+										:custom-class="'cursor-pointer'"
+										@click="Logic.Common.GoToRoute(activity.route)"
+										:has-bookmark="true"
+										:bookmark-action="() => saveToFolder(activity)" />
 								</div>
 							</div>
 						</div>
@@ -74,35 +87,46 @@
 
 					<template v-else>
 						<div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
-							<sofa-empty-state :title="'No result found'"
-								:subTitle="'We could not find any course that matches your search'" :actionLabel="'Clear search'"
-								:action="() => searchQuery = ''" />
+							<sofa-empty-state
+								:title="'No result found'"
+								:subTitle="'We could not find any course that matches your search'"
+								:actionLabel="'Clear search'"
+								:action="() => (searchQuery = '')" />
 						</div>
 					</template>
 				</div>
 
 				<!-- Quiz contents -->
-				<div class="w-full flex flex-col gap-3 mdlg:px-0 pl-4" v-if="selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'
-				">
+				<div
+					class="w-full flex flex-col gap-3 mdlg:px-0 pl-4"
+					v-if="selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'">
 					<div class="w-full flex flex-col justify-start items-start" v-if="selectedFilterOption == 'all'">
-						<sofa-normal-text :customClass="'font-bold'">
-							Quizzes
-						</sofa-normal-text>
+						<sofa-normal-text :customClass="'font-bold'"> Quizzes </sofa-normal-text>
 					</div>
 
 					<template v-if="quizContents.length">
 						<div class="w-full flex flex-col gap-3">
 							<div class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4" v-if="Logic.Common.isLarge">
-								<sofa-item-card :content="content"
+								<sofa-item-card
+									:content="content"
 									custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									v-for="(content, index) in quizContents" :key="index" @click="Logic.Common.GoToRoute(content.route)" :bookmark-action="() => saveToFolder(content)" />
+									v-for="(content, index) in quizContents"
+									:key="index"
+									@click="Logic.Common.GoToRoute(content.route)"
+									:bookmark-action="() => saveToFolder(content)" />
 							</div>
 
 							<div
 								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<sofa-activity-card v-for="(activity, index) in quizContents" :key="index" :activity="activity"
-										:custom-class="'cursor-pointer'" @click="Logic.Common.GoToRoute(activity.route)" :has-bookmark="true" :bookmark-action="() => saveToFolder(activity)" />
+									<sofa-activity-card
+										v-for="(activity, index) in quizContents"
+										:key="index"
+										:activity="activity"
+										:custom-class="'cursor-pointer'"
+										@click="Logic.Common.GoToRoute(activity.route)"
+										:has-bookmark="true"
+										:bookmark-action="() => saveToFolder(activity)" />
 								</div>
 							</div>
 						</div>
@@ -110,9 +134,11 @@
 
 					<template v-else>
 						<div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
-							<sofa-empty-state :title="'No result found'"
-								:subTitle="'We could not find any quiz that matches your search'" :actionLabel="'Clear search'"
-								:action="() => searchQuery = ''" />
+							<sofa-empty-state
+								:title="'No result found'"
+								:subTitle="'We could not find any quiz that matches your search'"
+								:actionLabel="'Clear search'"
+								:action="() => (searchQuery = '')" />
 						</div>
 					</template>
 				</div>
@@ -120,8 +146,7 @@
 
 			<!-- Bottom filter for sm screens -->
 			<div class="bg-lightGray mdlg:!hidden p-4 flex flex-col w-full">
-				<div class="bg-primaryPurple rounded-custom py-3 flex items-center justify-center gap-2"
-					@click="showFilter = true">
+				<div class="bg-primaryPurple rounded-custom py-3 flex items-center justify-center gap-2" @click="showFilter = true">
 					<sofa-icon :customClass="'h-[14px]'" :name="'filter-white'" />
 					<sofa-normal-text :customClass="'!font-semibold !text-sm'" :color="'text-white'">Filter</sofa-normal-text>
 					<span class="w-[24px] h-[24px] bg-white rounded-full flex items-center justify-center">
@@ -130,12 +155,11 @@
 				</div>
 			</div>
 
-			<sofa-modal v-if="showFilter" :close="() => showFilter = false" :customClass="'mdlg:!hidden'">
+			<sofa-modal v-if="showFilter" :close="() => (showFilter = false)" :customClass="'mdlg:!hidden'">
 				<div
 					:class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4 relative overflow-y-auto`"
-					@click.stop="() => { }">
-					<div
-						class="w-full flex px-4 py-3 justify-between items-center bg-white sticky top-0 left-0 border-b border-lightGray">
+					@click.stop="() => {}">
+					<div class="w-full flex px-4 py-3 justify-between items-center bg-white sticky top-0 left-0 border-b border-lightGray">
 						<div class="flex items-center gap-3">
 							<sofa-icon :customClass="'h-[13px]'" :name="'filter'" />
 							<sofa-normal-text :customClass="'!font-bold !text-base'" content="Filters" />
@@ -143,7 +167,7 @@
 						<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showFilter = false" />
 					</div>
 
-					<marketplace-filter :close="() => showFilter = false" v-model="selectedOptions" />
+					<marketplace-filter :close="() => (showFilter = false)" v-model="selectedOptions" />
 				</div>
 			</sofa-modal>
 		</template>
@@ -155,15 +179,7 @@ import MarketplaceFilter, { SelectedOption } from '@/components/marketplace/Filt
 import { extractResource, saveToFolder } from '@/composables/library'
 import { search } from '@/composables/marketplace'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
-import {
-	SofaActivityCard,
-	SofaEmptyState,
-	SofaIcon,
-	SofaItemCard,
-	SofaModal,
-	SofaNormalText,
-	SofaTextField,
-} from 'sofa-ui-components'
+import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -217,7 +233,7 @@ export default defineComponent({
 		],
 	},
 	name: 'MarketplaceSearchPage',
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Search',
 		})
@@ -246,16 +262,20 @@ export default defineComponent({
 		const searchQuery = ref(Logic.Common.route.query?.q?.toString() ?? '')
 
 		const selectedOptions = reactive<SelectedOption[]>([
-			...(Logic.Common.route.query?.userId && Logic.Common.route.query?.userName ? [{
-				name: Logic.Common.route.query.userName.toString(),
-				id: Logic.Common.route.query.userId.toString(),
-				type: 'user',
-				query: {
-					field: 'user.id',
-					value: Logic.Common.route.query.userId.toString(),
-					condition: Conditions.eq
-				}
-			}] : [])
+			...(Logic.Common.route.query?.userId && Logic.Common.route.query?.userName
+				? [
+						{
+							name: Logic.Common.route.query.userName.toString(),
+							id: Logic.Common.route.query.userId.toString(),
+							type: 'user',
+							query: {
+								field: 'user.id',
+								value: Logic.Common.route.query.userId.toString(),
+								condition: Conditions.eq,
+							},
+						},
+					]
+				: []),
 		])
 
 		const fetchSearchResults = () => {
@@ -266,16 +286,18 @@ export default defineComponent({
 						value: 'published',
 						condition: Conditions.eq,
 					},
-					...selectedOptions.map((option) => option.query)
+					...selectedOptions.map((option) => option.query),
 				],
 				sort: [{ field: 'createdAt', desc: true }],
 				limit: 20,
-				...(searchQuery.value ? {
-					search: {
-						value: searchQuery.value,
-						fields: ['title', 'user.bio.name.first', 'user.bio.name.last', 'user.bio.name.full'],
-					}
-				} : {})
+				...(searchQuery.value
+					? {
+							search: {
+								value: searchQuery.value,
+								fields: ['title', 'user.bio.name.first', 'user.bio.name.last', 'user.bio.name.full'],
+							},
+						}
+					: {}),
 			}
 
 			Logic.Common.debounce(() => {
@@ -309,7 +331,7 @@ export default defineComponent({
 
 <style scoped>
 .textarea[contenteditable]:empty::before {
-  content: "Enter message";
-  color: #78828c;
+	content: 'Enter message';
+	color: #78828c;
 }
 </style>

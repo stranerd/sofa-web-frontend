@@ -13,11 +13,13 @@ export const useMyOrganizations = () => {
 	const { message, setMessage } = useSuccessHandler()
 	const code = ref('')
 
-	const organizations = computed(() => orgs.value.map((u) => ({
-		id: u.id,
-		name: u.orgName,
-		photo: u.bio.photo?.link
-	})))
+	const organizations = computed(() =>
+		orgs.value.map((u) => ({
+			id: u.id,
+			name: u.orgName,
+			photo: u.bio.photo?.link,
+		})),
+	)
 
 	const requestToJoinOrganization = async (id: string) => {
 		if (loading.value || !code.value) return false
@@ -40,7 +42,7 @@ export const useMyOrganizations = () => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure you want to leave this organization?',
 			sub: 'This action is permanent. You will lose access to all current and future resources of this organization.',
-			right: { label: 'Yes, leave' }
+			right: { label: 'Yes, leave' },
 		})
 		if (!confirmed) return
 		if (loading.value) return
@@ -48,7 +50,7 @@ export const useMyOrganizations = () => {
 		setLoading(true)
 		try {
 			const types = user.value?.account.organizationsIn.filter((o) => o.id === id) ?? []
-			await Promise.all(types.map(({ type })=> MembersUseCases.leave({ organizationId: id, type })))
+			await Promise.all(types.map(({ type }) => MembersUseCases.leave({ organizationId: id, type })))
 			await setMessage('You have been removed from this organization.')
 		} catch (e) {
 			setError(e)
@@ -57,7 +59,12 @@ export const useMyOrganizations = () => {
 	}
 
 	return {
-		organizations, error, loading, message, code,
-		requestToJoinOrganization, leaveOrganization
+		organizations,
+		error,
+		loading,
+		message,
+		code,
+		requestToJoinOrganization,
+		leaveOrganization,
 	}
 }

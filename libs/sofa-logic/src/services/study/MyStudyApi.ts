@@ -9,9 +9,7 @@ export default class MyStudyApi extends BaseApiService {
 
 	public async getRecentMaterials() {
 		try {
-			const response: AxiosResponse<
-        (Course | Quiz)[]
-      > = await this.axiosInstance.get(this.getUrl() + '/recent')
+			const response: AxiosResponse<(Course | Quiz)[]> = await this.axiosInstance.get(this.getUrl() + '/recent')
 
 			return response
 		} catch (err) {
@@ -23,9 +21,7 @@ export default class MyStudyApi extends BaseApiService {
 
 	public async getByMyOrgsMaterials() {
 		try {
-			const response: AxiosResponse<
-        (Course | Quiz)[]
-      > = await this.axiosInstance.get(this.getUrl() + '/byMyOrgs')
+			const response: AxiosResponse<(Course | Quiz)[]> = await this.axiosInstance.get(this.getUrl() + '/byMyOrgs')
 
 			return response
 		} catch (err) {
@@ -37,9 +33,7 @@ export default class MyStudyApi extends BaseApiService {
 
 	public async getSuggestedMaterials() {
 		try {
-			const response: AxiosResponse<
-        (Course | Quiz)[]
-      > = await this.axiosInstance.get(this.getUrl() + '/suggested')
+			const response: AxiosResponse<(Course | Quiz)[]> = await this.axiosInstance.get(this.getUrl() + '/suggested')
 
 			return response
 		} catch (err) {
@@ -51,9 +45,7 @@ export default class MyStudyApi extends BaseApiService {
 
 	public async getLatestMaterials() {
 		try {
-			const response: AxiosResponse<
-        (Course | Quiz)[]
-      > = await this.axiosInstance.get(this.getUrl() + '/latest')
+			const response: AxiosResponse<(Course | Quiz)[]> = await this.axiosInstance.get(this.getUrl() + '/latest')
 
 			return response
 		} catch (err) {
@@ -65,9 +57,7 @@ export default class MyStudyApi extends BaseApiService {
 
 	public async getPopularMaterials() {
 		try {
-			const response: AxiosResponse<
-        (Course | Quiz)[]
-      > = await this.axiosInstance.get(this.getUrl() + '/popular')
+			const response: AxiosResponse<(Course | Quiz)[]> = await this.axiosInstance.get(this.getUrl() + '/popular')
 
 			return response
 		} catch (err) {
@@ -79,9 +69,7 @@ export default class MyStudyApi extends BaseApiService {
 
 	public async getRatedMaterials() {
 		try {
-			const response: AxiosResponse<
-        (Course | Quiz)[]
-      > = await this.axiosInstance.get(this.getUrl() + '/rated')
+			const response: AxiosResponse<(Course | Quiz)[]> = await this.axiosInstance.get(this.getUrl() + '/rated')
 
 			return response
 		} catch (err) {

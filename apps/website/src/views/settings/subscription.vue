@@ -2,9 +2,7 @@
 	<SettingsLayout title="Subscription">
 		<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<sofa-header-text :size="'xl'" :customClass="'text-left'">
-					My subscription
-				</sofa-header-text>
+				<sofa-header-text :size="'xl'" :customClass="'text-left'"> My subscription </sofa-header-text>
 
 				<sofa-normal-text :customClass="'text-left'" v-if="wallet.subscription.active == false">
 					You have no active subscription
@@ -17,9 +15,7 @@
 							</sofa-header-text>
 
 							<div class="w-full flex flex-col gap-1 pb-1">
-								<sofa-normal-text>
-									Expires {{ formatTime(wallet.subscription.current.expiredAt) }}
-								</sofa-normal-text>
+								<sofa-normal-text> Expires {{ formatTime(wallet.subscription.current.expiredAt) }} </sofa-normal-text>
 								<sofa-normal-text v-if="wallet.subscription.current.expiredAt > Date.now()">
 									{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
 									days left
@@ -27,13 +23,13 @@
 								<sofa-normal-text v-else> Expired </sofa-normal-text>
 							</div>
 
-							<div v-if="wallet.subscription.current.expiredAt > Date.now()"
+							<div
+								v-if="wallet.subscription.current.expiredAt > Date.now()"
 								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
 								@click="autoRenewIsOn = !autoRenewIsOn">
 								<sofa-normal-text :customClass="'!font-bold'">Auto-renewal</sofa-normal-text>
 								<div class="!w-auto">
-									<sofa-icon :customClass="'h-[17px]'"
-										:name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
+									<sofa-icon :customClass="'h-[17px]'" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
 								</div>
 							</div>
 						</div>
@@ -42,7 +38,8 @@
 			</div>
 
 			<template v-if="wallet.subscription.active">
-				<div v-if="userType.isOrg && myApplicablePlan"
+				<div
+					v-if="userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 					<sofa-header-text :size="'xl'" class="text-left capitalize">
 						{{ myApplicablePlan.title }}
@@ -51,28 +48,23 @@
 					<div class="w-full flex flex-col gap-2">
 						<div class="flex flex-row gap-2 items-center">
 							<sofa-header-text :customClass="'text-left !text-2xl !font-bold'">
-								{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }} per
-								student
+								{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }} per student
 							</sofa-header-text>
-							<sofa-normal-text :customClass="'!text-2xl'">
-								/ month
-							</sofa-normal-text>
+							<sofa-normal-text :customClass="'!text-2xl'"> / month </sofa-normal-text>
 						</div>
 
 						<sofa-normal-text :customClass="'text-left'">
-							Provide cost-free access to your paid courses for your physical
-							students.
+							Provide cost-free access to your paid courses for your physical students.
 						</sofa-normal-text>
 
 						<div class="flex flex-row pt-3">
-							<sofa-button :padding="'px-5 py-2'" @click="subscibeToPlan(myApplicablePlan.id)">
-								Subscribe
-							</sofa-button>
+							<sofa-button :padding="'px-5 py-2'" @click="subscibeToPlan(myApplicablePlan.id)"> Subscribe </sofa-button>
 						</div>
 					</div>
 				</div>
 
-				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom"
+				<div
+					class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom"
 					v-if="!userType.isOrg && myApplicablePlan">
 					<sofa-header-text :size="'xl'" :customClass="'text-left w-full pb-2 border-b border-lightGray'">
 						{{ myApplicablePlan.title }}
@@ -82,14 +74,16 @@
 						<sofa-header-text :customClass="'text-left !text-2xl !font-bold'">
 							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
 						</sofa-header-text>
-						<sofa-normal-text :customClass="'!text-2xl'">
-							/ month
-						</sofa-normal-text>
+						<sofa-normal-text :customClass="'!text-2xl'"> / month </sofa-normal-text>
 					</div>
 
 					<div class="w-full flex flex-col gap-3">
-						<div :class="`w-full flex-col flex gap-1 pb-2 items-start ${index != subscriptionInfo.length - 1 ? 'border-b border-lightGray' : ''} `"
-							v-for="(info, index) in subscriptionInfo" :key="index">
+						<div
+							:class="`w-full flex-col flex gap-1 pb-2 items-start ${
+								index != subscriptionInfo.length - 1 ? 'border-b border-lightGray' : ''
+							} `"
+							v-for="(info, index) in subscriptionInfo"
+							:key="index">
 							<sofa-icon :customClass="'h-[23px] '" :name="info.icon" />
 							<sofa-normal-text :customClass="'text-left !font-bold'">
 								{{ info.title }}
@@ -102,8 +96,7 @@
 
 					<div class="w-full flex flex-row">
 						<div class="w-auto flex flex-row">
-							<sofa-button @click="subscibeToPlan(myApplicablePlan.id)" :padding="'px-7 py-2'"
-								:customClass="'!w-auto'">
+							<sofa-button @click="subscibeToPlan(myApplicablePlan.id)" :padding="'px-7 py-2'" :customClass="'!w-auto'">
 								Subscribe
 							</sofa-button>
 						</div>
@@ -145,7 +138,7 @@ export default defineComponent({
 		goBackRoute: '/settings',
 	},
 	name: 'SubscriptionSettingPage',
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Subscription',
 		})
@@ -179,15 +172,11 @@ export default defineComponent({
 		const plans = ref(Logic.Payment.AllPlans)
 
 		const myApplicablePlan = computed(() => {
-			return plans.value.results.find(
-				(item) => item.usersFor.includes(userType.value.type)
-			) ?? null
+			return plans.value.results.find((item) => item.usersFor.includes(userType.value.type)) ?? null
 		})
 
 		const myPlan = computed(() => {
-			return plans.value.results.find(
-				(item) => item.id == wallet.value.subscription.current?.id
-			) ?? null
+			return plans.value.results.find((item) => item.id == wallet.value.subscription.current?.id) ?? null
 		})
 
 		const subscibeToPlan = (id: string) => {
@@ -202,10 +191,13 @@ export default defineComponent({
 		}
 
 		return {
-			Logic, formatTime,
-			myApplicablePlan, myPlan,
+			Logic,
+			formatTime,
+			myApplicablePlan,
+			myPlan,
 			subscriptionInfo,
-			wallet, userType,
+			wallet,
+			userType,
 			autoRenewIsOn,
 			subscibeToPlan,
 		}

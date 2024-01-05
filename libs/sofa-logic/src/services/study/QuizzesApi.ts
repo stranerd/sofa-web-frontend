@@ -1,10 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { Paginated, QueryParams } from '../../logic/types'
 import { Question, Quiz } from '../../logic/types/domains/study'
-import {
-	CreateQuestionInput,
-	ReorderQuizInput,
-} from '../../logic/types/forms/study'
+import { CreateQuestionInput, ReorderQuizInput } from '../../logic/types/forms/study'
 import { ModelApiService } from '../common/ModelService'
 
 export default class QuizzesApi extends ModelApiService {
@@ -14,9 +11,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async similarQuizzes(quizId: string) {
 		try {
-			const response: AxiosResponse<Quiz[]> = await this.axiosInstance.get(
-				this.getUrl() + `/${quizId}/similar`,
-			)
+			const response: AxiosResponse<Quiz[]> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/similar`)
 
 			return response
 		} catch (err) {
@@ -25,16 +20,12 @@ export default class QuizzesApi extends ModelApiService {
 			}
 		}
 	}
-
 
 	public async tutorQuizzes(filters: QueryParams) {
 		try {
-			const response: AxiosResponse<Paginated<Quiz>> = await this.axiosInstance.get(
-				this.getUrl() + '/tutors',
-				{
-					params: filters,
-				},
-			)
+			const response: AxiosResponse<Paginated<Quiz>> = await this.axiosInstance.get(this.getUrl() + '/tutors', {
+				params: filters,
+			})
 
 			return response
 		} catch (err) {
@@ -44,12 +35,11 @@ export default class QuizzesApi extends ModelApiService {
 		}
 	}
 
-
 	public async getQuestions(quizId: string, filters: QueryParams) {
 		try {
-			const response: AxiosResponse<Paginated<
-        Question
-      >> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions`, { params: filters })
+			const response: AxiosResponse<Paginated<Question>> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions`, {
+				params: filters,
+			})
 
 			return response
 		} catch (err) {
@@ -61,9 +51,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async getQuestion(quizId: string, questionId: string) {
 		try {
-			const response: AxiosResponse<Question> = await this.axiosInstance.get(
-				this.getUrl() + `/${quizId}/questions/${questionId}`,
-			)
+			const response: AxiosResponse<Question> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions/${questionId}`)
 
 			return response
 		} catch (err) {
@@ -75,10 +63,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async createQuestion(quizId: string, data: CreateQuestionInput) {
 		try {
-			const response: AxiosResponse<Question> = await this.axiosInstance.post(
-				this.getUrl() + `/${quizId}/questions`,
-				data,
-			)
+			const response: AxiosResponse<Question> = await this.axiosInstance.post(this.getUrl() + `/${quizId}/questions`, data)
 
 			return response
 		} catch (err) {
@@ -90,9 +75,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async publishQuiz(quizId: string) {
 		try {
-			const response: AxiosResponse<Quiz> = await this.axiosInstance.post(
-				this.getUrl() + `/${quizId}/publish`,
-			)
+			const response: AxiosResponse<Quiz> = await this.axiosInstance.post(this.getUrl() + `/${quizId}/publish`)
 
 			return response
 		} catch (err) {
@@ -104,10 +87,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async reorderQuiz(quizId: string, data: ReorderQuizInput) {
 		try {
-			const response: AxiosResponse<Quiz> = await this.axiosInstance.post(
-				this.getUrl() + `/${quizId}/reorder`,
-				data,
-			)
+			const response: AxiosResponse<Quiz> = await this.axiosInstance.post(this.getUrl() + `/${quizId}/reorder`, data)
 
 			return response
 		} catch (err) {
@@ -134,9 +114,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async deleteQuestion(quizId: string, questionId: string) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.delete(
-				this.getUrl() + `/${quizId}/questions/${questionId}`,
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.delete(this.getUrl() + `/${quizId}/questions/${questionId}`)
 
 			return response
 		} catch (err) {
@@ -146,12 +124,9 @@ export default class QuizzesApi extends ModelApiService {
 		}
 	}
 
-	public async requestAccess (quizId, add: boolean) {
+	public async requestAccess(quizId, add: boolean) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.post(
-				this.getUrl(quizId) + '/access/request',
-				{ add }
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.post(this.getUrl(quizId) + '/access/request', { add })
 
 			return response
 		} catch (err) {
@@ -161,12 +136,9 @@ export default class QuizzesApi extends ModelApiService {
 		}
 	}
 
-	public async grantAccess (quizId, userId: string, grant: boolean) {
+	public async grantAccess(quizId, userId: string, grant: boolean) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.post(
-				this.getUrl(quizId) + '/access/grant',
-				{ userId, grant }
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.post(this.getUrl(quizId) + '/access/grant', { userId, grant })
 
 			return response
 		} catch (err) {
@@ -176,12 +148,12 @@ export default class QuizzesApi extends ModelApiService {
 		}
 	}
 
-	public async manageMembers (quizId, userIds: string[], grant: boolean) {
+	public async manageMembers(quizId, userIds: string[], grant: boolean) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.post(
-				this.getUrl(quizId) + '/access/members/manage',
-				{ userIds, grant }
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.post(this.getUrl(quizId) + '/access/members/manage', {
+				userIds,
+				grant,
+			})
 
 			return response
 		} catch (err) {

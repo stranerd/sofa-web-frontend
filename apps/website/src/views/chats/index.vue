@@ -2,12 +2,11 @@
 	<ChatLayout title="Chats" :index="true">
 		<div class="flex flex-col gap-4 py-4">
 			<div class="w-full flex flex-col px-4" v-if="userType.isStudent">
-				<router-link to="/chats/new"
+				<router-link
+					to="/chats/new"
 					class="w-full rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg flex gap-3 items-center justify-start p-4 bg-primaryPurple">
 					<sofa-icon :name="'box-add-white'" :custom-class="'h-[25px]'" />
-					<sofa-normal-text :color="'text-white'" :custom-class="'text-left !text-sm'">
-						New chat
-					</sofa-normal-text>
+					<sofa-normal-text :color="'text-white'" :custom-class="'text-left !text-sm'"> New chat </sofa-normal-text>
 				</router-link>
 			</div>
 			<div class="w-full flex flex-col px-4 gap-3 pt-1">
@@ -35,8 +34,8 @@ export default defineComponent({
 		ChatList,
 	},
 	name: 'ChatsIndexPage',
-	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/chats/new' : undefined]),
-	setup () {
+	beforeRouteEnter: generateMiddlewares([async () => (Logic.Common.isLarge ? '/chats/new' : undefined)]),
+	setup() {
 		useMeta({
 			title: 'Chat',
 		})

@@ -1,25 +1,38 @@
 <template>
 	<SettingsLayout title="Security">
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-			<form @submit.prevent="updatePassword" ref="formComp"
+			<form
+				@submit.prevent="updatePassword"
+				ref="formComp"
 				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
 				<SofaHeaderText size="xl" content="Password" />
 
-				<SofaTextField v-if="hasPassword" customClass="rounded-custom !bg-lightGray"
-					type="password" placeholder="Current password" :error="factory.errors.oldPassword"
-					borderColor="border-transparent" v-model="factory.oldPassword" />
+				<SofaTextField
+					v-if="hasPassword"
+					customClass="rounded-custom !bg-lightGray"
+					type="password"
+					placeholder="Current password"
+					:error="factory.errors.oldPassword"
+					borderColor="border-transparent"
+					v-model="factory.oldPassword" />
 
-				<SofaTextField customClass="rounded-custom !bg-lightGray"
-					type="password" placeholder="New password" :error="factory.errors.password"
-					borderColor="border-transparent" v-model="factory.password" />
+				<SofaTextField
+					customClass="rounded-custom !bg-lightGray"
+					type="password"
+					placeholder="New password"
+					:error="factory.errors.password"
+					borderColor="border-transparent"
+					v-model="factory.password" />
 
-				<SofaTextField customClass="rounded-custom !bg-lightGray"
-					type="password" placeholder="Confirm new password" :error="factory.errors.cPassword"
-					borderColor="border-transparent" v-model="factory.cPassword" />
+				<SofaTextField
+					customClass="rounded-custom !bg-lightGray"
+					type="password"
+					placeholder="Confirm new password"
+					:error="factory.errors.cPassword"
+					borderColor="border-transparent"
+					v-model="factory.cPassword" />
 
-				<SofaButton :disabled="!factory.valid" type="submit" padding="px-7 py-2" class="self-end">
-					Update
-				</SofaButton>
+				<SofaButton :disabled="!factory.valid" type="submit" padding="px-7 py-2" class="self-end"> Update </SofaButton>
 			</form>
 		</div>
 	</SettingsLayout>
@@ -38,7 +51,7 @@ export default defineComponent({
 	},
 	name: 'SecuritySettingPage',
 	middlewares: { goBackRoute: '/settings' },
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Security',
 		})

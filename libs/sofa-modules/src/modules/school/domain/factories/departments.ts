@@ -7,28 +7,28 @@ export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentT
 	readonly rules = {
 		title: v.string().min(1),
 		facultyId: v.string().min(1),
-		tagId: v.string().min(1)
+		tagId: v.string().min(1),
 	}
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ title: '', facultyId: '' })
 	}
 
-	get title () {
+	get title() {
 		return this.values.title
 	}
 
-	set title (value: string) {
+	set title(value: string) {
 		this.set('title', value.toLowerCase())
 	}
 
-	get facultyId () {
+	get facultyId() {
 		return this.values.facultyId
 	}
 
-	set facultyId (value: string) {
+	set facultyId(value: string) {
 		this.set('facultyId', value)
 	}
 

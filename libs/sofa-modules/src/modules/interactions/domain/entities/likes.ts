@@ -11,7 +11,7 @@ export class LikeEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, value, entity, user, createdAt, updatedAt }: LikeFromModel) {
+	constructor({ id, value, entity, user, createdAt, updatedAt }: LikeFromModel) {
 		super()
 		this.id = id
 		this.value = value

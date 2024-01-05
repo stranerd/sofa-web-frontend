@@ -8,13 +8,16 @@
 			</div>
 			<div v-if="tabs.length">
 				<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
-					<router-link class="px-6 py-2 rounded-custom flex items-center justify-center"
+					<router-link
+						class="px-6 py-2 rounded-custom flex items-center justify-center"
 						:class="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'"
-						v-for="(item, index) in tabs.filter((t) => !t.hide)" :key="item.id"
+						v-for="(item, index) in tabs.filter((t) => !t.hide)"
+						:key="item.id"
 						:to="`${$route.path}?tab=${item.id}`">
 						<sofa-normal-text
 							:color="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'text-white' : 'text-deepGray'"
-							:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+							:custom-class="'!font-semibold'"
+							:content="item.name" />
 					</router-link>
 				</div>
 			</div>
@@ -27,8 +30,11 @@
 	<dashboard-layout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template v-slot:left-session>
 			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
-				<router-link class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
-					v-for="item in libraryOptions" :key="item.routePath" :to="item.routePath"
+				<router-link
+					class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
+					v-for="item in libraryOptions"
+					:key="item.routePath"
+					:to="item.routePath"
 					exact-active-class="bg-lightBlue font-semibold">
 					<sofa-icon :name="item.icon" :custom-class="'h-[17px]'" />
 					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
@@ -39,22 +45,30 @@
 					<sofa-normal-text :color="'text-primaryPink'" as="a" @click="generateNewFolder">Add</sofa-normal-text>
 				</div>
 
-				<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
+				<component
+					:is="item.id === factory.entityId ? 'span' : 'router-link'"
 					class="w-full flex items-center justify-start text-left gap-3 p-3 relative rounded-[8px] hover:bg-lightBlue group folder-link"
-					v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
+					v-for="item in folders"
+					:key="item.id"
+					:to="`/library/folders/${item.id}`"
 					exact-active-class="bg-lightBlue font-semibold">
 					<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
 
-					<sofa-custom-input v-if="item.id === factory.entityId"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white" :autoFocus="true"
-						v-model="factory.title" placeholder="Folder name" @onBlur="saveFolder" @onEnter="saveFolder" />
+					<sofa-custom-input
+						v-if="item.id === factory.entityId"
+						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+						:autoFocus="true"
+						v-model="factory.title"
+						placeholder="Folder name"
+						@onBlur="saveFolder"
+						@onEnter="saveFolder" />
 					<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
-					<div v-if="item.id !== factory.entityId"
+					<div
+						v-if="item.id !== factory.entityId"
 						class="px-3 ml-auto justify-center rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 						<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
-						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray"
-							@click.stop.prevent="deleteFolder(item)" />
+						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
 					</div>
 				</component>
 
@@ -64,7 +78,9 @@
 					</div>
 					<router-link
 						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
-						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
+						:to="`/library/organizations/${item.id}`"
+						v-for="item in organizations"
+						:key="item.id"
 						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text class="truncate">{{ item.name }}</sofa-normal-text>
@@ -76,9 +92,11 @@
 		<template v-slot:middle-session>
 			<div v-if="index" class="w-full flex flex-col gap-4 px-4 mdlg:!hidden">
 				<div class="bg-white flex flex-col shadow-custom rounded-custom">
-					<router-link :to="item.routePath"
+					<router-link
+						:to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-lightGray"
-						v-for="item in libraryOptions" :key="item.routePath">
+						v-for="item in libraryOptions"
+						:key="item.routePath">
 						<sofa-icon :name="item.icon" :custom-class="'h-[16px]'" />
 						<sofa-normal-text>{{ item.title }}</sofa-normal-text>
 					</router-link>
@@ -90,22 +108,29 @@
 						<sofa-normal-text :color="'text-primaryPink'" @click="generateNewFolder">Add</sofa-normal-text>
 					</div>
 
-					<component :is="item.id === factory.entityId ? 'span' : 'router-link'"
+					<component
+						:is="item.id === factory.entityId ? 'span' : 'router-link'"
 						class="w-full flex items-center relative gap-3 p-4 rounded-custom text-left bg-white shadow-custom group folder-link"
-						v-for="item in folders" :key="item.id" :to="`/library/folders/${item.id}`"
+						v-for="item in folders"
+						:key="item.id"
+						:to="`/library/folders/${item.id}`"
 						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'folder'" :custom-class="'h-[16px]'" />
-						<sofa-custom-input v-if="item.id === factory.entityId" v-model="factory.title"
-							placeholder="Folder name" :autoFocus="true"
+						<sofa-custom-input
+							v-if="item.id === factory.entityId"
+							v-model="factory.title"
+							placeholder="Folder name"
+							:autoFocus="true"
 							customClass="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-lightGray rounded cursor-text"
-							@onBlur="saveFolder" @onEnter="saveFolder" />
+							@onBlur="saveFolder"
+							@onEnter="saveFolder" />
 						<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
-						<div v-if="item.id !== factory.entityId"
+						<div
+							v-if="item.id !== factory.entityId"
 							class="ml-auto justify-center hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
 							<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
-							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray"
-								@click.stop.prevent="deleteFolder(item)" />
+							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
 						</div>
 					</component>
 				</div>
@@ -116,7 +141,9 @@
 					</div>
 					<router-link
 						class="w-full flex items-center relative justify-start gap-2 p-4 rounded-custom bg-white shadow-custom"
-						:to="`/library/organizations/${item.id}`" v-for="item in organizations" :key="item.id"
+						:to="`/library/organizations/${item.id}`"
+						v-for="item in organizations"
+						:key="item.id"
 						exact-active-class="bg-lightBlue font-semibold">
 						<sofa-icon :name="'organization'" :custom-class="'h-[20px]'" />
 						<sofa-normal-text class="truncate">{{ item.name }}</sofa-normal-text>
@@ -126,13 +153,20 @@
 			<div v-else class="w-full flex flex-col gap-4 mdlg:!pl-3 mdlg:!pr-7 h-full">
 				<div class="w-full flex gap-2 justify-between items-center" v-if="tabs.length">
 					<div class="w-full flex-nowrap overflow-x-auto scrollbar-hide flex gap-3 items-center">
-						<router-link class="px-6 py-2 rounded-custom flex items-center justify-center"
-							:class="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'"
-							v-for="(item, index) in tabs.filter((t) => !t.hide)" :key="item.id"
+						<router-link
+							class="px-6 py-2 rounded-custom flex items-center justify-center"
+							:class="
+								(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'bg-primaryPurple' : 'bg-white'
+							"
+							v-for="(item, index) in tabs.filter((t) => !t.hide)"
+							:key="item.id"
 							:to="`${$route.path}?tab=${item.id}`">
 							<sofa-normal-text
-								:color="(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'text-white' : 'text-deepGray'"
-								:custom-class="'!font-semibold'">{{ item.name }}</sofa-normal-text>
+								:color="
+									(currentTab && item.id === currentTab) || (!currentTab && index === 0) ? 'text-white' : 'text-deepGray'
+								"
+								:class="'!font-semibold'"
+								:content="item.name" />
 						</router-link>
 					</div>
 				</div>
@@ -143,16 +177,18 @@
 		</template>
 	</dashboard-layout>
 
-	<sofa-modal v-if="showMoreOptions" :close="() => showMoreOptions = false">
+	<sofa-modal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
 		<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
 			<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
-				<div
-					class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-lightGray border-b">
+				<div class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-lightGray border-b">
 					<sofa-normal-text :customClass="'!font-bold !text-base'">Options</sofa-normal-text>
 					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
 				</div>
 
-				<a class="w-full flex items-center gap-2 p-4" v-for="item in moreOptions" :key="item.title"
+				<a
+					class="w-full flex items-center gap-2 p-4"
+					v-for="item in moreOptions"
+					:key="item.title"
 					@click.stop.prevent="item.action()">
 					<sofa-icon :name="item.icon" :customClass="'h-[15px]'" />
 					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
@@ -214,7 +250,7 @@ const libraryOptions = computed(() => [
 			{
 				name: 'Tutors',
 				id: 'tutors',
-				hide: !isAdmin.value
+				hide: !isAdmin.value,
 			},
 		],
 	},
@@ -267,17 +303,17 @@ const libraryOptions = computed(() => [
 const props = defineProps({
 	title: {
 		type: String,
-		required: true
+		required: true,
 	},
 	index: {
 		type: Boolean,
 		required: false,
-		default: false
+		default: false,
 	},
 	options: {
 		type: Array as PropType<{ name: string; id: string; hide?: boolean }[]>,
-		required: false
-	}
+		required: false,
+	},
 })
 
 const route = useRoute()
@@ -288,7 +324,9 @@ const { factory, edit, saveFolder, generateNewFolder, deleteFolder } = useEditFo
 
 const { organizations } = useMyOrganizations()
 
-useMeta(computed(() => ({
-	title: props.title
-})))
+useMeta(
+	computed(() => ({
+		title: props.title,
+	})),
+)
 </script>

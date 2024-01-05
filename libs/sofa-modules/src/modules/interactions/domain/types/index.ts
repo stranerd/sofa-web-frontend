@@ -16,7 +16,7 @@ export type InteractionEntity = Interaction & { userId?: string }
 
 export enum CommentMeta {
 	comments = 'comments',
-	total = 'total'
+	total = 'total',
 }
 
 export enum TagMeta {
@@ -26,10 +26,10 @@ export enum TagMeta {
 	documents = 'documents',
 	videos = 'videos',
 
-	total = 'total'
+	total = 'total',
 }
 
 export enum TagTypes {
 	generic = 'generic',
-	topics = 'topics'
+	topics = 'topics',
 }

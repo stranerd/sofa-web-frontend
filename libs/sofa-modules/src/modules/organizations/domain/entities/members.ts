@@ -10,11 +10,11 @@ export class MemberEntity extends BaseEntity {
 	public readonly organizationId: string
 	public readonly pending: boolean
 	public readonly withCode: boolean
-	public readonly accepted: { is: boolean, at: number } | null
+	public readonly accepted: { is: boolean; at: number } | null
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, email, user, type, organizationId, pending, withCode, accepted, createdAt, updatedAt }: MemberFromModel) {
+	constructor({ id, email, user, type, organizationId, pending, withCode, accepted, createdAt, updatedAt }: MemberFromModel) {
 		super()
 		this.id = id
 		this.email = email
@@ -28,10 +28,8 @@ export class MemberEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 
-	search (value: string) {
+	search(value: string) {
 		if (!value) return true
-		return [
-			this.email, this.user?.bio.name.full ?? ''
-		].some(field => field.toLowerCase().includes(value.toLowerCase()))
+		return [this.email, this.user?.bio.name.full ?? ''].some((field) => field.toLowerCase().includes(value.toLowerCase()))
 	}
 }

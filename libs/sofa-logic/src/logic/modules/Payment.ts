@@ -3,20 +3,8 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
-import {
-	CommercialBanks,
-	PaymentMethod,
-	Plan,
-	Purchase,
-	Transaction,
-	Wallet,
-} from '../types/domains/payment'
-import {
-	FundWalletInput,
-	MakePurchaseInput,
-	UpdateAccountNumberInput,
-	WithdrawalFromWalletInput,
-} from './../types/forms/payment'
+import { CommercialBanks, PaymentMethod, Plan, Purchase, Transaction, Wallet } from '../types/domains/payment'
+import { FundWalletInput, MakePurchaseInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from './../types/forms/payment'
 import Common from './Common'
 
 export default class Payment extends Common {
@@ -155,9 +143,8 @@ export default class Payment extends Common {
 		})
 	}
 
-	public async GetMyPurchases (filters: QueryParams) {
-		return $api.payment.purchase.fetch(filters)
-			.then((response) => response.data as Paginated<Purchase>)
+	public async GetMyPurchases(filters: QueryParams) {
+		return $api.payment.purchase.fetch(filters).then((response) => response.data as Paginated<Purchase>)
 	}
 
 	public GetUserPurchases = (fetchItems: boolean) => {

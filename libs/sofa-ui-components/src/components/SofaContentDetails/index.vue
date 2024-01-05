@@ -1,28 +1,25 @@
 <template>
-	<div
-		:class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] overflow-y-auto rounded-custom ${customClass}`">
+	<div :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] overflow-y-auto rounded-custom ${customClass}`">
 		<div :class="`w-full flex flex-col gap-2 ${padding} relative`">
 			<div
 				class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
 				<div :class="` ${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
-					<sofa-image-loader :customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative'"
+					<sofa-image-loader
+						:customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative'"
 						:photoUrl="content.image">
-						<div class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
+						<div
+							class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2"
 							v-if="content.price > 0 && !hasAccess">
 							<sofa-badge :customClass="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
-								{{
-									content.price > 0
-										? Logic.Common.formatPrice(content.price, content.currency)
-										: "Start"
-								}}
+								{{ content.price > 0 ? Logic.Common.formatPrice(content.price, content.currency) : 'Start' }}
 							</sofa-badge>
 						</div>
 					</sofa-image-loader>
 				</div>
-				<div :class="`flex flex-col gap-2 flex-grow   ${hasPadding
-					? 'mdlg:!w-[75%] mdlg:!pl-[25%]'
-					: 'mdlg:!w-[67%] mdlg:!pl-[33%]'
-				}`">
+				<div
+					:class="`flex flex-col gap-2 flex-grow   ${
+						hasPadding ? 'mdlg:!w-[75%] mdlg:!pl-[25%]' : 'mdlg:!w-[67%] mdlg:!pl-[33%]'
+					}`">
 					<div class="w-full flex flex-row items-center justify-between">
 						<sofa-header-text :content="content.title" />
 
@@ -36,21 +33,17 @@
 						{{ content.info }}
 					</sofa-normal-text>
 					<div class="flex flex-row gap-2 items-center">
-						<sofa-normal-text :color="content.labels.color == 'pink'
-							? 'text-primaryPurplePink'
-							: 'text-primaryPurple'
-						">
+						<sofa-normal-text :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">
 							{{ content.labels.main }}
 						</sofa-normal-text>
-						<span :class="`h-[5px] w-[5px] rounded-full ${content.labels.color == 'pink'
-							? 'bg-primaryPurplePink'
-							: 'bg-primaryPurple'
-						}`">
+						<span
+							:class="`h-[5px] w-[5px] rounded-full ${
+								content.labels.color == 'pink' ? 'bg-primaryPurplePink' : 'bg-primaryPurple'
+							}`">
 						</span>
-						<sofa-normal-text :color="content.labels.color == 'pink'
-							? 'text-primaryPurplePink'
-							: 'text-primaryPurple'
-						">{{ content.labels.sub }}</sofa-normal-text>
+						<sofa-normal-text :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">{{
+							content.labels.sub
+						}}</sofa-normal-text>
 					</div>
 
 					<div class="w-full flex flex-row gap-2 items-center" v-if="!isMinimal">
@@ -59,9 +52,7 @@
 							<sofa-normal-text>
 								{{ content.ratings.avg }}
 							</sofa-normal-text>
-							<sofa-normal-text :color="'text-grayColor pl-2'">
-								({{ content.ratings.label }})
-							</sofa-normal-text>
+							<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ content.ratings.label }}) </sofa-normal-text>
 						</div>
 					</div>
 
@@ -74,8 +65,7 @@
 								</sofa-normal-text>
 							</div>
 
-							<span :class="`h-[5px] w-[5px] rounded-full bg-bodyBlack`" v-if="!isMinimal">
-							</span>
+							<span :class="`h-[5px] w-[5px] rounded-full bg-bodyBlack`" v-if="!isMinimal"> </span>
 
 							<sofa-normal-text>
 								{{ content.lastUpdated }}
@@ -83,26 +73,28 @@
 						</div>
 
 						<div class="md:!flex hidden flex-col" v-if="showBuyButton && type == 'course'">
-							<sofa-button v-if="!hasAccess" :padding="'px-6 py-1'" :customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'
-							}`" @click="
-								buyAction && content.status == 'published'
-									? buyAction()
-									: null
-							">
+							<sofa-button
+								v-if="!hasAccess"
+								:padding="'px-6 py-1'"
+								:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'}`"
+								@click="buyAction && content.status == 'published' ? buyAction() : null">
 								{{
 									content.price > 0
 										? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
-										: "Get course for free"
+										: 'Get course for free'
 								}}
 							</sofa-button>
-							<sofa-button v-else :padding="'px-6 py-1'" :customClass="'w-auto'"
+							<sofa-button
+								v-else
+								:padding="'px-6 py-1'"
+								:customClass="'w-auto'"
 								@click="Logic.Common.GoToRoute('/course/' + content.id)">
 								Go to course
 							</sofa-button>
 						</div>
 						<div class="md:!flex hidden flex-col" v-if="type == 'quiz'">
 							<sofa-button :padding="'px-6 py-1'" @click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(content.route)">
-								{{ hasAccess ? "Start" : "Go to course" }}
+								{{ hasAccess ? 'Start' : 'Go to course' }}
 							</sofa-button>
 						</div>
 					</div>
@@ -116,25 +108,36 @@
 			</div>
 		</div>
 
-		<div :class="`w-full flex flex-row gap-4 items-center border-b border-lightGray mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${hasPadding ? 'px-4' : ''
-		}`">
-			<sofa-normal-text :color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'" :customClass="`!font-semibold cursor-pointer pb-2  ${selectedTab == tab.key && !isMinimal
-				? 'border-b-2 border-bodyBlack'
-				: ''
-			}`" v-for="(tab, index) in tabs" @click="selectedTab = tab.key" :key="index">
+		<div
+			:class="`w-full flex flex-row gap-4 items-center border-b border-lightGray mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${
+				hasPadding ? 'px-4' : ''
+			}`">
+			<sofa-normal-text
+				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
+				:customClass="`!font-semibold cursor-pointer pb-2  ${
+					selectedTab == tab.key && !isMinimal ? 'border-b-2 border-bodyBlack' : ''
+				}`"
+				v-for="(tab, index) in tabs"
+				@click="selectedTab = tab.key"
+				:key="index">
 				{{ tab.name }}
 			</sofa-normal-text>
 		</div>
 
-		<div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-		} overflow-y-auto py-2 relative`" v-if="selectedTab == 'content'">
+		<div
+			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`"
+			v-if="selectedTab == 'content'">
 			<sofa-content :data="content.content" :hasAccess="hasAccess" />
 		</div>
 
-		<div :class="`w-full flex flex-col h-full  rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`" v-if="selectedTab == 'questions'">
+		<div
+			:class="`w-full flex flex-col h-full  rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`"
+			v-if="selectedTab == 'questions'">
 			<div class="w-full flex flex-col gap-3 h-full overflow-y-auto" v-if="hasAccess">
-				<div class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom"
-					v-for="(question, index) in content.questions" :key="index">
+				<div
+					class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom"
+					v-for="(question, index) in content.questions"
+					:key="index">
 					<div class="flex flex-row items-center gap-2">
 						<sofa-normal-text :color="'text-grayColor'" :content="question.type" />
 
@@ -150,27 +153,37 @@
 			</div>
 
 			<div class="w-full flex flex-col gap-3 pb-4" v-if="!hasAccess">
-				<sofa-empty-state :title="'You have no access'" :subTitle="'Get the course it is in to use'"
-					:actionLabel="'Go to course'" :action="() => Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)"
+				<sofa-empty-state
+					:title="'You have no access'"
+					:subTitle="'Get the course it is in to use'"
+					:actionLabel="'Go to course'"
+					:action="() => Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)"
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
 
-			<div v-if="type == 'quiz'"
+			<div
+				v-if="type == 'quiz'"
 				class="w-full flex flex-row items-center justify-center mdlg:!pt-3 mdlg:!relative fixed bottom-0 mdlg:!pb-0 mdlg:hidden pt-4 pb-4 mdlg:!px-0 px-4 z-[50] bg-white left-0 mdlg:!bottom-auto mdlg:!left-auto">
 				<div class="md:!w-auto w-full flex flex-col">
-					<sofa-button :padding="'md:!py-1 py-3 px-4'" :customClass="'md:!w-auto w-full'" @click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)">
-						{{ hasAccess ? "Start" : "Go to course" }}
+					<sofa-button
+						:padding="'md:!py-1 py-3 px-4'"
+						:customClass="'md:!w-auto w-full'"
+						@click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)">
+						{{ hasAccess ? 'Start' : 'Go to course' }}
 					</sofa-button>
 				</div>
 			</div>
 		</div>
 
-		<div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`" v-if="selectedTab == 'ratings'">
+		<div
+			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`"
+			v-if="selectedTab == 'ratings'">
 			<sofa-content-ratings :data="content.ratings" />
 		</div>
 
-		<div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-		} overflow-y-auto py-2 relative pb-4`" v-if="selectedTab == 'creator'">
+		<div
+			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative pb-4`"
+			v-if="selectedTab == 'creator'">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
 				<div>
 					<sofa-avatar :photoUrl="content.user.photoUrl" :size="'150'" :customClass="'hidden mdlg:!inline-block'" />
@@ -180,9 +193,7 @@
 
 				<div class="flex flex-col gap-1">
 					<div class="flex flex-row gap-2 items-center">
-						<sofa-normal-text :customClass="'!font-bold'">{{
-							content.user.name
-						}}</sofa-normal-text>
+						<sofa-normal-text :customClass="'!font-bold'">{{ content.user.name }}</sofa-normal-text>
 						<sofa-icon :customClass="'h-[16px]'" :name="'verify'" />
 					</div>
 
@@ -233,25 +244,32 @@
 			<!-- <div class="w-full !h-[100px]"></div> -->
 		</div>
 
-		<div :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''
-		} overflow-y-auto py-2 relative pb-4`" v-if="selectedTab == 'similar_courses' && type == 'course'">
+		<div
+			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative pb-4`"
+			v-if="selectedTab == 'similar_courses' && type == 'course'">
 			<div
 				class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide"
 				v-if="similarContents?.length">
 				<div
 					class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-					<sofa-activity-card v-for="(activity, index) in similarContents" :key="index" :activity="activity"
+					<sofa-activity-card
+						v-for="(activity, index) in similarContents"
+						:key="index"
+						:activity="activity"
 						:customClass="'!bg-lightGray cursor-pointer'"
 						@click="Logic.Common.GoToRoute(activity.route)" />
 				</div>
 			</div>
 			<template v-else>
 				<div class="w-full flex flex-col gap-3">
-					<sofa-empty-state :title="'No similar course found'"
-						:subTitle="'Discover thousands of materials to buy, created by verified experts'" :actionLabel="'Marketplace'"
-						:action="() => {
-							Logic.Common.GoToRoute('/marketplace')
-						}
+					<sofa-empty-state
+						:title="'No similar course found'"
+						:subTitle="'Discover thousands of materials to buy, created by verified experts'"
+						:actionLabel="'Marketplace'"
+						:action="
+							() => {
+								Logic.Common.GoToRoute('/marketplace')
+							}
 						" />
 				</div>
 			</template>
@@ -260,16 +278,14 @@
 
 	<!-- Smaller screen purchase buttons -->
 	<div class="md:!hidden flex flex-col w-full bg-white p-4" v-if="showBuyButton && type == 'course'">
-		<sofa-button :padding="'px-6 py-3'" v-if="!hasAccess" :customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'
-		} w-full`" @click="buyAction && content.status == 'published' ? buyAction() : null">
-			{{
-				content.price > 0
-					? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
-					: "Get course for free"
-			}}
+		<sofa-button
+			:padding="'px-6 py-3'"
+			v-if="!hasAccess"
+			:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'} w-full`"
+			@click="buyAction && content.status == 'published' ? buyAction() : null">
+			{{ content.price > 0 ? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
 		</sofa-button>
-		<sofa-button v-else :padding="'px-6 py-3'" :customClass="'w-full'"
-			@click="Logic.Common.GoToRoute('/course/' + content.id)">
+		<sofa-button v-else :padding="'px-6 py-3'" :customClass="'w-full'" @click="Logic.Common.GoToRoute('/course/' + content.id)">
 			Go to course
 		</sofa-button>
 	</div>
@@ -353,7 +369,7 @@ export default defineComponent({
 		otherTasks: {
 			type: Array as () => any[],
 			required: false,
-			default: () => []
+			default: () => [],
 		},
 		actions: {
 			type: Object as () => {
@@ -367,7 +383,7 @@ export default defineComponent({
 		},
 	},
 	name: 'SofaContentDetails',
-	setup (props) {
+	setup(props) {
 		const selectedTab = ref('content')
 
 		const tabs = ref([])
@@ -398,7 +414,7 @@ export default defineComponent({
 					{
 						name: 'Ratings',
 						key: 'ratings',
-					}
+					},
 					// {
 					//   name: "Creator",
 					//   key: "creator",

@@ -3,7 +3,7 @@ import { v } from 'valleyed'
 import { AuthDetails, ProfileUpdate } from '../entities/auth'
 
 type Content = UploadedFile | Media | null
-type Keys = { first: string, last: string, description: string, photo: Content }
+type Keys = { first: string; last: string; description: string; photo: Content }
 
 export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate, Keys & { localPhotoLink: string | undefined }> {
 	readonly rules = {
@@ -11,53 +11,53 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		last: v.string().min(1).trim(),
 		description: v.string(),
 		photo: v.file().image().nullable(),
-		localPhotoLink: v.string().nullish()
+		localPhotoLink: v.string().nullish(),
 	}
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ first: '', last: '', description: '', photo: null, localPhotoLink: '' })
 	}
 
-	get first () {
+	get first() {
 		return this.values.first
 	}
 
-	set first (value: string) {
+	set first(value: string) {
 		this.set('first', value)
 	}
 
-	get last () {
+	get last() {
 		return this.values.last
 	}
 
-	set last (value: string) {
+	set last(value: string) {
 		this.set('last', value)
 	}
 
-	get description () {
+	get description() {
 		return this.values.description
 	}
 
-	set description (value: string) {
+	set description(value: string) {
 		this.set('description', value)
 	}
 
-	get photo () {
+	get photo() {
 		return this.values.photo!
 	}
 
-	set photo (photo: Content) {
+	set photo(photo: Content) {
 		this.set('photo', photo)
 		if (photo) this.localPhotoLink = photo.link
 	}
 
-	get localPhotoLink () {
+	get localPhotoLink() {
 		return this.values.localPhotoLink
 	}
 
-	set localPhotoLink (value: string | undefined) {
+	set localPhotoLink(value: string | undefined) {
 		this.set('localPhotoLink', value)
 	}
 
@@ -65,8 +65,9 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		if (this.valid) {
 			const { first, last, description, photo } = this.validValues
 			return {
-				name: { first, last }, description,
-				photo: (photo ?? null) as Media
+				name: { first, last },
+				description,
+				photo: (photo ?? null) as Media,
 			}
 		} else throw new Error('Validation errors')
 	}

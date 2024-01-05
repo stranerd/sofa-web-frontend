@@ -2,9 +2,7 @@
 	<div class="w-full flex flex-col h-full gap-4 relative" v-if="data">
 		<div
 			class="flex flex-row gap-2 justify-between items-center px-4 py-4 mdlg:!pt-0 border-b sticky top-0 left-0 bg-white border-[#F2F5F8]">
-			<sofa-normal-text :customClass="'!text-sm !font-bold'">
-				Details
-			</sofa-normal-text>
+			<sofa-normal-text :customClass="'!text-sm !font-bold'"> Details </sofa-normal-text>
 			<sofa-icon :customClass="'h-[19px] mdlg:!hidden '" :name="'circle-close'" @click="close()" />
 		</div>
 		<div class="flex flex-col gap-3 h-full w-full px-4">
@@ -33,9 +31,7 @@
 					<div class="flex flex-row gap-1 items-center">
 						<sofa-ratings :count="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
 						<sofa-normal-text> {{ data.ratings.avg }} </sofa-normal-text>
-						<sofa-normal-text :color="'text-grayColor pl-2'">
-							({{ data.ratings.label }})
-						</sofa-normal-text>
+						<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ data.ratings.label }}) </sofa-normal-text>
 					</div>
 
 					<div class="w-full flex flex-row items-center">
@@ -49,75 +45,107 @@
 
 					<div class="w-full flex flex-row items-center gap-2">
 						<sofa-icon :customClass="'h-[16px]'" :name="'calendar-black'" />
-						<sofa-normal-text>
-							Last updated {{ data.last_updated }}
-						</sofa-normal-text>
+						<sofa-normal-text> Last updated {{ data.last_updated }} </sofa-normal-text>
 					</div>
 				</div>
 			</template>
 
 			<template v-if="type == 'document'">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					type="text" :name="'Document title'" ref="document_title"
-					v-model="dataReactive.title" :updateValue="dataReactive.title" :placeholder="'Document title'" :hasTitle="true"
-					:rules="[Logic.Form.RequiredRule]" :borderColor="'border-transparent'">
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="text"
+					:name="'Document title'"
+					ref="document_title"
+					v-model="dataReactive.title"
+					:updateValue="dataReactive.title"
+					:placeholder="'Document title'"
+					:hasTitle="true"
+					:rules="[Logic.Form.RequiredRule]"
+					:borderColor="'border-transparent'">
 					<template v-slot:title> Document title </template>
 				</sofa-text-field>
 
-				<sofa-textarea :hasTitle="false"
+				<sofa-textarea
+					:hasTitle="false"
 					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'" v-model="dataReactive.description" />
+					:placeholder="'Description'"
+					v-model="dataReactive.description" />
 			</template>
 
 			<template v-if="type == 'image'">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					type="text" :name="'Image title'" ref="image_title"
-					v-model="dataReactive.title" :placeholder="'Image title'" :hasTitle="true" :rules="[Logic.Form.RequiredRule]"
-					:updateValue="dataReactive.title" :borderColor="'border-transparent'">
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="text"
+					:name="'Image title'"
+					ref="image_title"
+					v-model="dataReactive.title"
+					:placeholder="'Image title'"
+					:hasTitle="true"
+					:rules="[Logic.Form.RequiredRule]"
+					:updateValue="dataReactive.title"
+					:borderColor="'border-transparent'">
 					<template v-slot:title> Image title </template>
 				</sofa-text-field>
 
-				<sofa-textarea :hasTitle="false"
+				<sofa-textarea
+					:hasTitle="false"
 					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'" v-model="dataReactive.description" />
+					:placeholder="'Description'"
+					v-model="dataReactive.description" />
 			</template>
 
 			<template v-if="type == 'video'">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					type="text" :name="'Video title'" ref="video_title"
-					v-model="dataReactive.title" :placeholder="'Video title'" :hasTitle="true" :rules="[Logic.Form.RequiredRule]"
-					:updateValue="dataReactive.title" :borderColor="'border-transparent'">
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="text"
+					:name="'Video title'"
+					ref="video_title"
+					v-model="dataReactive.title"
+					:placeholder="'Video title'"
+					:hasTitle="true"
+					:rules="[Logic.Form.RequiredRule]"
+					:updateValue="dataReactive.title"
+					:borderColor="'border-transparent'">
 					<template v-slot:title> Video title </template>
 				</sofa-text-field>
 
-				<sofa-textarea :hasTitle="false"
+				<sofa-textarea
+					:hasTitle="false"
 					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'" v-model="dataReactive.description" />
+					:placeholder="'Description'"
+					v-model="dataReactive.description" />
 			</template>
 			<div v-if="type != 'quiz'" class="w-full flex flex-row items-center justify-end">
-				<sofa-button :padding="'px-4 py-2'" @click="updateFile()">
-					Save changes
-				</sofa-button>
+				<sofa-button :padding="'px-4 py-2'" @click="updateFile()"> Save changes </sofa-button>
 			</div>
 		</div>
 
 		<div
 			class="sticky bottom-0 left-0 bg-white rounded-b-[12px] w-full px-4 py-4 border-t-2 border-[#F2F5F8] z-50 flex flex-col gap-3 scrollbar-hide">
-			<div class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer" @click="
-				selectedMaterialId = data.id
-				showDeleteMaterial = true;
-			">
+			<div
+				class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer"
+				@click="
+					() => {
+						selectedMaterialId = data.id
+						showDeleteMaterial = true
+					}
+				">
 				<sofa-icon :name="'trash'" :customClass="'h-[16px]'" />
 				<sofa-normal-text :color="'text-primaryRed'">Delete {{ type }}</sofa-normal-text>
 			</div>
 		</div>
 	</div>
 
-	<sofa-delete-prompt v-if="showDeleteMaterial" :title="'Are you sure you?'"
-		:subTitle="`This action is permanent. You won't be able to undo this.`" :close="() => {
-			showDeleteMaterial = false
-		}
-		" :buttons="[
+	<sofa-delete-prompt
+		v-if="showDeleteMaterial"
+		:title="'Are you sure you?'"
+		:subTitle="`This action is permanent. You won't be able to undo this.`"
+		:close="
+			() => {
+				showDeleteMaterial = false
+			}
+		"
+		:buttons="[
 			{
 				label: 'No',
 				isClose: true,
@@ -176,7 +204,7 @@ export default defineComponent({
 		},
 	},
 	name: 'SofaCourseDetails',
-	setup (props) {
+	setup(props) {
 		const dataRef = toRef(props, 'data')
 		const showDeleteMaterial = ref(false)
 		const selectedMaterialId = ref('')
@@ -199,14 +227,16 @@ export default defineComponent({
 
 			Logic.Common.showLoading()
 
-			Logic.Study.UpdateFile(true, dataRef.value.id)?.then(() => {
-				Logic.Common.showAlert({
-					message: 'All changes have been saved',
-					type: 'success',
+			Logic.Study.UpdateFile(true, dataRef.value.id)
+				?.then(() => {
+					Logic.Common.showAlert({
+						message: 'All changes have been saved',
+						type: 'success',
+					})
 				})
-			}).finally(() => {
-				Logic.Common.hideLoading()
-			})
+				.finally(() => {
+					Logic.Common.hideLoading()
+				})
 		}
 
 		const deleteFile = (id: string) => {

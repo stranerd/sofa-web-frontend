@@ -20,4 +20,13 @@ export const FacultiesUseCases = new FacultiesUseCase(FacultyRepository.getInsta
 export const DepartmentsUseCases = new DepartmentsUseCase(DepartmentRepository.getInstance)
 export const CoursesUseCases = new CoursesUseCase(CourseRepository.getInstance)
 
-export { CourseEntity, CourseFactory, DepartmentEntity, DepartmentFactory, FacultyEntity, FacultyFactory, InstitutionEntity, InstitutionFactory }
+export {
+	CourseEntity,
+	CourseFactory,
+	DepartmentEntity,
+	DepartmentFactory,
+	FacultyEntity,
+	FacultyFactory,
+	InstitutionEntity,
+	InstitutionFactory,
+}

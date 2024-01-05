@@ -4,7 +4,7 @@ export interface MemberFromModel extends MemberToModel {
 	id: string
 	withCode: boolean
 	pending: boolean
-	accepted: { is: boolean, at: number } | null
+	accepted: { is: boolean; at: number } | null
 	user: EmbeddedUser | null
 	createdAt: number
 	updatedAt: number

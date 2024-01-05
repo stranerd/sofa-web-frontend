@@ -12,7 +12,7 @@ export class CommentEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, body, entity, user, meta, createdAt, updatedAt }: CommentFromModel) {
+	constructor({ id, body, entity, user, meta, createdAt, updatedAt }: CommentFromModel) {
 		super()
 		this.id = id
 		this.body = body
@@ -23,7 +23,7 @@ export class CommentEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 
-	get canReply () {
+	get canReply() {
 		return this.entity.type !== InteractionEntities.comments
 	}
 }

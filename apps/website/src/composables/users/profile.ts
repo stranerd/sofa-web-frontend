@@ -1,4 +1,12 @@
-import { UserAiFactory, UserLocationFactory, UserSocials, UserSocialsFactory, UserType, UserTypeFactory, UsersUseCases } from '@modules/users'
+import {
+	UserAiFactory,
+	UserLocationFactory,
+	UserSocials,
+	UserSocialsFactory,
+	UserType,
+	UserTypeFactory,
+	UsersUseCases,
+} from '@modules/users'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
@@ -67,8 +75,8 @@ export const useUserAiUpdate = () => {
 }
 
 const locationStore = {
-	countries: ref<Awaited<ReturnType<typeof UsersUseCases['getCountries']>>>([]),
-	fetched: ref(false)
+	countries: ref<Awaited<ReturnType<(typeof UsersUseCases)['getCountries']>>>([]),
+	fetched: ref(false),
 }
 
 export const useUserLocationUpdate = () => {
@@ -111,8 +119,11 @@ export const useUserLocationUpdate = () => {
 	}
 
 	const countries = computed(() => locationStore.countries.value.map((c) => c.name))
-	const states = computed(() => locationStore.countries.value.find((c) => c.name.toLowerCase() === factory.country.toLowerCase())
-		?.states.map((s) => s.name) ?? [])
+	const states = computed(
+		() =>
+			locationStore.countries.value.find((c) => c.name.toLowerCase() === factory.country.toLowerCase())?.states.map((s) => s.name) ??
+			[],
+	)
 
 	return { error, loading, factory, countries, states, updateLocation }
 }

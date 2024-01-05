@@ -1,6 +1,4 @@
-export const types = {
-
-}
+export const types = {}
 
 export * from './common'
 export * from './domains'

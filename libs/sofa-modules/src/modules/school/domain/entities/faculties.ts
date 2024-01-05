@@ -8,7 +8,7 @@ export class FacultyEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, title, institutionId, createdAt, updatedAt }: FacultyFromModel) {
+	constructor({ id, title, institutionId, createdAt, updatedAt }: FacultyFromModel) {
 		super()
 		this.id = id
 		this.title = title

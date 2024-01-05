@@ -10,10 +10,7 @@ export default class FoldersApi extends ModelApiService {
 
 	public async saveItemToFolder(data: SaveItemToFolderInput) {
 		try {
-			const response: AxiosResponse<Folder> = await this.axiosInstance.put(
-				this.getUrl() + `/${data.id}/save`,
-				data,
-			)
+			const response: AxiosResponse<Folder> = await this.axiosInstance.put(this.getUrl() + `/${data.id}/save`, data)
 
 			return response
 		} catch (err) {

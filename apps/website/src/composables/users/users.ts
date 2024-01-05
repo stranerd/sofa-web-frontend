@@ -19,16 +19,26 @@ const store = {
 	listener: useListener(async () => {
 		return await UsersUseCases.listenToAllTeachers({
 			created: async (entity) => {
-				Logic.addToArray(store.tutors.value, entity, (e) => e.id, (e) => e.account.ratings.avg)
+				Logic.addToArray(
+					store.tutors.value,
+					entity,
+					(e) => e.id,
+					(e) => e.account.ratings.avg,
+				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(store.tutors.value, entity, (e) => e.id, (e) => e.account.ratings.avg)
+				Logic.addToArray(
+					store.tutors.value,
+					entity,
+					(e) => e.id,
+					(e) => e.account.ratings.avg,
+				)
 			},
 			deleted: async (entity) => {
 				store.tutors.value = store.tutors.value.filter((m) => m.id !== entity.id)
-			}
+			},
 		})
-	})
+	}),
 }
 
 export const useTutorsList = () => {
@@ -37,7 +47,14 @@ export const useTutorsList = () => {
 			await store.setError('')
 			await store.setLoading(true)
 			const tutors = await UsersUseCases.getAllTeachers()
-			tutors.results.forEach((r) => Logic.addToArray(store.tutors.value, r, (e) => e.id, (e) => e.account.ratings.avg))
+			tutors.results.forEach((r) =>
+				Logic.addToArray(
+					store.tutors.value,
+					r,
+					(e) => e.id,
+					(e) => e.account.ratings.avg,
+				),
+			)
 			store.fetched.value = true
 		} catch (e) {
 			await store.setError(e)
@@ -46,7 +63,7 @@ export const useTutorsList = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */!store.loading.value) await fetchTutors()
+		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchTutors()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -65,7 +82,14 @@ export const useSearchUsers = () => {
 			await searchStore.setLoading(true)
 			searchStore.users.length = 0
 			const users = await UsersUseCases.getInEmails(emails)
-			users.forEach((r) => Logic.addToArray(searchStore.users, r, (e) => e.id, (e) => e.bio.name.first))
+			users.forEach((r) =>
+				Logic.addToArray(
+					searchStore.users,
+					r,
+					(e) => e.id,
+					(e) => e.bio.name.first,
+				),
+			)
 			searchValue.value = ''
 		} catch (e) {
 			await searchStore.setError(e)
@@ -83,7 +107,9 @@ export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
 
 	const listener = useListener(async () => {
 		return await UsersUseCases.listenToInList(() => ids.value, {
-			created: addToList, updated: addToList, deleted: () => {}
+			created: addToList,
+			updated: addToList,
+			deleted: () => {},
 		})
 	})
 

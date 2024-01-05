@@ -8,27 +8,35 @@ import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from './study'
 
-const store = {} as Record<string, {
-	quiz: Ref<Quiz | null>
-	fetched: Ref<boolean>
-	listener: ReturnType<typeof useListener>
-} & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler> & ReturnType<typeof useSuccessHandler>>
+const store = {} as Record<
+	string,
+	{
+		quiz: Ref<Quiz | null>
+		fetched: Ref<boolean>
+		listener: ReturnType<typeof useListener>
+	} & ReturnType<typeof useErrorHandler> &
+		ReturnType<typeof useLoadingHandler> &
+		ReturnType<typeof useSuccessHandler>
+>
 
-export const useQuiz = (id: string, skip: { questions: boolean, members: boolean }) => {
+export const useQuiz = (id: string, skip: { questions: boolean; members: boolean }) => {
 	store[id] ??= {
 		quiz: ref(null),
 		fetched: ref(false),
-		listener: useListener(async () => await Logic.Common.listenToOne<Quiz>(`study/quizzes/${id}`, {
-			created: async (entity) => {
-				store[id].quiz.value = entity
-			},
-			updated: async (entity) => {
-				store[id].quiz.value = entity
-			},
-			deleted: async (entity) => {
-				store[id].quiz.value = entity
-			}
-		})),
+		listener: useListener(
+			async () =>
+				await Logic.Common.listenToOne<Quiz>(`study/quizzes/${id}`, {
+					created: async (entity) => {
+						store[id].quiz.value = entity
+					},
+					updated: async (entity) => {
+						store[id].quiz.value = entity
+					},
+					deleted: async (entity) => {
+						store[id].quiz.value = entity
+					},
+				}),
+		),
 		...useErrorHandler(),
 		...useLoadingHandler(),
 		...useSuccessHandler(),
@@ -42,8 +50,19 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	const canFetchUsers = computed(() => !skip.members && hasAccess.value(store[id].quiz.value))
 	const canFetchQuestions = computed(() => !skip.questions && hasAccess.value(store[id].quiz.value))
 
-	const { users: members } = useUsersInList(computed(() => canFetchUsers.value ? store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id, ...store[id].quiz.value.access.requests) ?? [] : []), !skip.members)
-	const { questions } = useQuestionsInList(id, computed(() => canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : []), !skip.questions)
+	const { users: members } = useUsersInList(
+		computed(() =>
+			canFetchUsers.value
+				? store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id, ...store[id].quiz.value.access.requests) ?? []
+				: [],
+		),
+		!skip.members,
+	)
+	const { questions } = useQuestionsInList(
+		id,
+		computed(() => (canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : [])),
+		!skip.questions,
+	)
 
 	const fetchQuiz = async () => {
 		await store[id].setError('')
@@ -102,15 +121,16 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	}
 
 	const deleteQuestion = async (questionId: string) => {
-		if (store[id].quiz.value?.status === 'published') return Logic.Common.showAlert({
-			message: 'You cannot delete questions from published quiz',
-			type: 'warning',
-		})
+		if (store[id].quiz.value?.status === 'published')
+			return Logic.Common.showAlert({
+				message: 'You cannot delete questions from published quiz',
+				type: 'warning',
+			})
 
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
-			sub: 'This action is permanent. You won\'t be able to undo this.',
-			right: { label: 'Yes, delete' }
+			sub: "This action is permanent. You won't be able to undo this.",
+			right: { label: 'Yes, delete' },
 		})
 		if (!confirmed) return
 
@@ -165,7 +185,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. You will lose all saved questions in this quiz.',
-			right: { label: 'Yes, delete' }
+			right: { label: 'Yes, delete' },
 		})
 		if (!confirmed) return
 		await store[id].setError('')
@@ -218,7 +238,7 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	}
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchQuiz()
+		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchQuiz()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {
@@ -226,11 +246,20 @@ export const useQuiz = (id: string, skip: { questions: boolean, members: boolean
 	})
 
 	return {
-		...store[id], members, questions,
-		reorderQuestions, deleteQuestion, duplicateQuestion,
-		addQuestion,saveQuestion,
-		updateQuiz, publishQuiz, deleteQuiz,
-		requestAccess, grantAccess, manageMembers
+		...store[id],
+		members,
+		questions,
+		reorderQuestions,
+		deleteQuestion,
+		duplicateQuestion,
+		addQuestion,
+		saveQuestion,
+		updateQuiz,
+		publishQuiz,
+		deleteQuiz,
+		requestAccess,
+		grantAccess,
+		manageMembers,
 	}
 }
 
@@ -252,8 +281,9 @@ export const useCreateQuiz = () => {
 				topic: 'Physics',
 			})
 			await Promise.all(
-				[Logic.Study.getQuestionTypeTemplate('multipleChoice'), Logic.Study.getQuestionTypeTemplate('trueOrFalse')]
-					.map((q) => Logic.Study.CreateQuestion(quiz.id, q))
+				[Logic.Study.getQuestionTypeTemplate('multipleChoice'), Logic.Study.getQuestionTypeTemplate('trueOrFalse')].map((q) =>
+					Logic.Study.CreateQuestion(quiz.id, q),
+				),
 			).catch()
 			await setLoading(false)
 			return quiz.id

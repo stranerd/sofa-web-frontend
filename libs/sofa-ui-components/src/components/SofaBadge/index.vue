@@ -1,5 +1,7 @@
 <template>
-	<component :is="as" class="px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs rounded-custom"
+	<component
+		:is="as"
+		class="px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs rounded-custom"
 		:class="{
 			[customClass]: true,
 			'bg-primaryPurple text-white': color === 'purple',
@@ -37,8 +39,8 @@ export default defineComponent({
 		as: {
 			type: String,
 			required: false,
-			default: 'span'
-		}
+			default: 'span',
+		},
 	},
 	name: 'SofaBadge',
 })

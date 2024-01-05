@@ -9,9 +9,7 @@ export default class PaymentMethodsApi extends ModelApiService {
 
 	public async makePrimaryPaymentMethod(methodId: string) {
 		try {
-			const response: AxiosResponse<PaymentMethod> = await this.axiosInstance.put(
-				this.getUrl() + `/${methodId}/primary`,
-			)
+			const response: AxiosResponse<PaymentMethod> = await this.axiosInstance.put(this.getUrl() + `/${methodId}/primary`)
 
 			return response
 		} catch (err) {

@@ -10,7 +10,10 @@
 				</a>
 
 				<div v-if="isOpen('type')" class="w-full grid grid-cols-2 gap-3">
-					<a v-for="type in Logic.Study.getAllQuestionTypes()" :key="type.value" @click="factory.type = type.value"
+					<a
+						v-for="type in Logic.Study.getAllQuestionTypes()"
+						:key="type.value"
+						@click="factory.type = type.value"
 						class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center rounded-lg"
 						:class="factory.type === type.value ? 'bg-skyBlue' : 'bg-[#F2F5F8]'">
 						<SofaIcon :name="type.icon" class="h-[50px]" />
@@ -28,7 +31,10 @@
 				</a>
 
 				<div v-if="isOpen('timeLimit')" class="w-full flex flex-wrap gap-3">
-					<a v-for="time in [5, 10, 20, 30, 60, 90, 120, 180, 240, 300]" :key="time" @click="factory.timeLimit = time"
+					<a
+						v-for="time in [5, 10, 20, 30, 60, 90, 120, 180, 240, 300]"
+						:key="time"
+						@click="factory.timeLimit = time"
 						class="rounded-lg flex px-4 py-2 items-center justify-center gap-1"
 						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'">
 						<SofaNormalText class="text-center" color="text-inherit" :content="Logic.Common.prettifyTime(time)" />
@@ -50,8 +56,10 @@
 					</template>
 				</div>
 			</a>
-			<a :class="{ 'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges }"
-				class="text-primaryGreen w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('saveQuestion')">
+			<a
+				:class="{ 'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges }"
+				class="text-primaryGreen w-full flex mdlg:hidden items-center justify-start gap-3"
+				@click="emits('saveQuestion')">
 				<SofaIcon name="save" class="h-[16px] stroke-current" />
 				<SofaNormalText color="text-inherit" content="Save question" />
 			</a>
@@ -59,13 +67,14 @@
 				<SofaIcon name="copy" class="h-[16px]" />
 				<SofaNormalText color="text-inherit" content="Duplicate question" />
 			</a>
-			<a v-if="quiz.status !== 'published'" class="w-full flex mdlg:hidden items-center justify-start gap-3"
+			<a
+				v-if="quiz.status !== 'published'"
+				class="w-full flex mdlg:hidden items-center justify-start gap-3"
 				@click="emits('deleteQuestion', question.id)">
 				<SofaIcon name="trash" class="h-[16px]" />
 				<SofaNormalText color="text-primaryRed" content="Delete question" />
 			</a>
-			<a v-if="quiz.status !== 'published'" class="w-full flex items-center justify-start gap-3"
-				@click="emits('deleteQuiz')">
+			<a v-if="quiz.status !== 'published'" class="w-full flex items-center justify-start gap-3" @click="emits('deleteQuiz')">
 				<SofaIcon name="trash" class="h-[16px]" />
 				<SofaNormalText color="text-primaryRed" content="Delete quiz" />
 			</a>
@@ -83,20 +92,20 @@ import { SofaNormalText } from '../SofaTypography'
 defineProps({
 	quiz: {
 		type: Object as PropType<Quiz>,
-		required: true
+		required: true,
 	},
 	question: {
 		type: Object as PropType<TransformedQuestion>,
-		required: true
+		required: true,
 	},
 	factory: {
 		type: Object as PropType<QuestionFactory>,
-		required: true
+		required: true,
 	},
 	users: {
 		type: Object as PropType<Record<string, SingleUser[]>>,
-		required: true
-	}
+		required: true,
+	},
 })
 
 const emits = defineEmits(['showCurrentlyEditing', 'duplicateQuestion', 'saveQuestion', 'deleteQuestion', 'deleteQuiz'])

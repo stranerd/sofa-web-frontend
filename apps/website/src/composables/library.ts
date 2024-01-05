@@ -1,10 +1,4 @@
-import {
-	Course,
-	Game,
-	Logic, PlayStatus, Quiz,
-	ResourceType,
-	Test
-} from 'sofa-logic'
+import { Course, Game, Logic, PlayStatus, Quiz, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
 import { selectedQuiz, selectedQuizMode } from './quiz'
 
@@ -13,18 +7,18 @@ const AllQuzzies = ref(Logic.Study.AllQuzzies)
 const showStudyMode = ref(false)
 
 const reportMaterialSetup = reactive<{
-  show: boolean
-  type: 'course' | 'quiz'
-  id: string
+	show: boolean
+	type: 'course' | 'quiz'
+	id: string
 }>({
 	show: false,
 	type: 'course',
 	id: '',
 })
 
-export const selectedFolderMaterailToAdd = ref<{ id: string, type: string }>()
+export const selectedFolderMaterailToAdd = ref<{ id: string; type: string }>()
 
-export const saveToFolder = (activity: { id: string, type: string }) => {
+export const saveToFolder = (activity: { id: string; type: string }) => {
 	selectedFolderMaterailToAdd.value = activity
 }
 
@@ -111,8 +105,8 @@ export const createTestData = (p: Test, quizzes: Quiz[]) => {
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
 	const userCorrectAnswers = (p.scores[Logic.Common.AuthUser.id] ?? 0) / 10
 	const percentage = (userCorrectAnswers / p.questions.length) * 100
-	const textColor = percentage >= 90 ? 'text-[#4BAF7D]' :
-		percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
+	const textColor =
+		percentage >= 90 ? 'text-[#4BAF7D]' : percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
 	return {
 		id: p.id,
 		inProgress: !ended,
@@ -128,12 +122,7 @@ export const createTestData = (p: Test, quizzes: Quiz[]) => {
 	}
 }
 
-const addMaterialToFolder = (
-	folderId: string,
-	type: 'quizzes' | 'courses',
-	itemId: string,
-	add: boolean,
-) => {
+const addMaterialToFolder = (folderId: string, type: 'quizzes' | 'courses', itemId: string, add: boolean) => {
 	Logic.Study.SaveItemToFolderForm = {
 		add,
 		id: folderId,
@@ -187,11 +176,7 @@ const selectedItem = ref<ResourceType | undefined>(undefined)
 
 const showMoreOptions = ref(false)
 
-const shareMaterialLink = async (
-	type: 'quiz' | 'course',
-	link: string,
-	title: string,
-) => {
+const shareMaterialLink = async (type: 'quiz' | 'course', link: string, title: string) => {
 	const baseUrl = window.location.origin
 	Logic.Common.share(`${capitalize(type)} on SOFA`, `View ${title} on SOFA`, `${baseUrl}${link}`)
 }
@@ -218,11 +203,7 @@ const moreOptions = reactive([
 		show: () => selectedItem.value?.status == 'published',
 		action: () => {
 			showMoreOptions.value = false
-			shareMaterialLink(
-				selectedItem.value?.type ?? ('' as any),
-				selectedItem.value?.route ?? '',
-				selectedItem.value?.title ?? '',
-			)
+			shareMaterialLink(selectedItem.value?.type ?? ('' as any), selectedItem.value?.route ?? '', selectedItem.value?.title ?? '')
 		},
 	},
 	{
@@ -231,11 +212,7 @@ const moreOptions = reactive([
 		show: () => selectedItem.value?.user.id != Logic.Common.AuthUser?.id,
 		action: () => {
 			showMoreOptions.value = false
-			reportMaterial(
-				selectedItem.value?.type,
-				selectedItem.value?.title,
-				selectedItem.value?.id,
-			)
+			reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
 		},
 	},
 	{
@@ -250,7 +227,17 @@ const moreOptions = reactive([
 ])
 
 export {
-	AllQuzzies, addMaterialToFolder, moreOptions, openCourse, openQuiz,
-	reportMaterial, reportMaterialSetup, selectedItem, sendReportMaterial,
-	shareMaterialLink, showMoreOptionHandler, showMoreOptions, showStudyMode
+	AllQuzzies,
+	addMaterialToFolder,
+	moreOptions,
+	openCourse,
+	openQuiz,
+	reportMaterial,
+	reportMaterialSetup,
+	selectedItem,
+	sendReportMaterial,
+	shareMaterialLink,
+	showMoreOptionHandler,
+	showMoreOptions,
+	showStudyMode,
 }

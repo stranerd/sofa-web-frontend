@@ -1,11 +1,11 @@
 module.exports = {
-	'extends': ['../../.eslintrc.js'],
-	'settings': {
+	extends: ['../../.eslintrc.js'],
+	settings: {
 		'import/resolver': {
-			'typescript': {
-				'alwaysTryTypes': true,
-				'project': ['tsconfig.json', '**/tsconfig.json']
-			}
-		}
+			typescript: {
+				alwaysTryTypes: true,
+				project: ['tsconfig.json', '**/tsconfig.json'],
+			},
+		},
 	},
 }

@@ -16,10 +16,10 @@ const store = {
 	emailSignup: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
 	googleSignin: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
 	appleSignin: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
-	emailVerification: { email: ref(''), ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() }
+	emailVerification: { email: ref(''), ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
 }
 
-export const getReferrerId = async () => await storage.get('referrer') ?? store.referrerId.value
+export const getReferrerId = async () => (await storage.get('referrer')) ?? store.referrerId.value
 
 export const setReferrerId = async (id: string) => {
 	store.referrerId.value = id
@@ -39,7 +39,7 @@ export const useEmailSignin = () => {
 			await setLoading(true)
 			try {
 				const user = await AuthUseCases.signinWithEmail(factory, {
-					referrer: await getReferrerId()
+					referrer: await getReferrerId(),
 				})
 				await createSession(user)
 				await storage.remove('referrer')
@@ -72,8 +72,7 @@ export const useEmailSignup = () => {
 	return { factory, loading, error, signup }
 }
 
-
-export const setEmailVerificationEmail = (email: string) => store.emailVerification.email.value = email
+export const setEmailVerificationEmail = (email: string) => (store.emailVerification.email.value = email)
 export const getEmailVerificationEmail = () => store.emailVerification.email.value
 
 export const useEmailVerification = () => {
@@ -112,8 +111,14 @@ export const useEmailVerification = () => {
 	onMounted(sendVerificationEmail)
 
 	return {
-		token, sent, email, loading, error, message,
-		sendVerificationEmail, completeVerification
+		token,
+		sent,
+		email,
+		loading,
+		error,
+		message,
+		sendVerificationEmail,
+		completeVerification,
 	}
 }
 
@@ -127,9 +132,7 @@ export const useGoogleSignin = () => {
 				const googleUser = await GoogleAuth.signIn()
 				const { idToken } = googleUser.authentication
 				await GoogleAuth.signOut()
-				const user = await AuthUseCases.signinWithGoogle(
-					{ idToken },
-					{ referrer: await getReferrerId() })
+				const user = await AuthUseCases.signinWithGoogle({ idToken }, { referrer: await getReferrerId() })
 				await createSession(user)
 				await storage.remove('referrer')
 			} catch (error) {
@@ -143,7 +146,7 @@ export const useGoogleSignin = () => {
 		try {
 			GoogleAuth.initialize({
 				clientId: googleClientId,
-				scopes: ['profile', 'email']
+				scopes: ['profile', 'email'],
 			})
 		} catch (err) {
 			await setError(err)
@@ -163,14 +166,19 @@ export const useAppleSignin = () => {
 				const clientId = isWeb ? packageName.replace('.app', '') : packageName
 				const redirectURI = 'https://' + clientId.split('.').reverse().join('.')
 				const { response } = await SignInWithApple.authorize({
-					clientId, redirectURI, scopes: 'name email'
+					clientId,
+					redirectURI,
+					scopes: 'name email',
 				})
-				const user = await AuthUseCases.signinWithApple({
-					firstName: response.givenName,
-					lastName: response.familyName,
-					email: response.email,
-					idToken: response.identityToken
-				}, { referrer: await getReferrerId() })
+				const user = await AuthUseCases.signinWithApple(
+					{
+						firstName: response.givenName,
+						lastName: response.familyName,
+						email: response.email,
+						idToken: response.identityToken,
+					},
+					{ referrer: await getReferrerId() },
+				)
 				await createSession(user)
 				await storage.remove('referrer')
 			} catch (error) {

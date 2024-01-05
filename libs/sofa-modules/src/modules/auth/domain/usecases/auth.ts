@@ -10,78 +10,80 @@ import { IAuthRepository } from '../irepositories/iauth'
 export class AuthUseCase {
 	private repository: IAuthRepository
 
-	constructor (repository: () => IAuthRepository) {
+	constructor(repository: () => IAuthRepository) {
 		this.repository = repository()
 	}
 
-	async completeEmailVerification (token: string) {
+	async completeEmailVerification(token: string) {
 		return await this.repository.completeEmailVerification(token)
 	}
 
-	async getAuthUser () {
+	async getAuthUser() {
 		return await this.repository.getAuthUser()
 	}
 
-	async resetPassword (factory: PasswordResetFactory) {
+	async resetPassword(factory: PasswordResetFactory) {
 		const { token, password } = await factory.toModel()
 		return await this.repository.resetPassword(token, password)
 	}
 
-	async sendPasswordResetEmail (email: string) {
+	async sendPasswordResetEmail(email: string) {
 		return await this.repository.sendPasswordResetEmail(email)
 	}
 
-	async sendVerificationEmail () {
+	async sendVerificationEmail() {
 		return await this.repository.sendVerificationEmail()
 	}
 
-	async sessionSignin (afterAuth: AfterAuthUser) {
+	async sessionSignin(afterAuth: AfterAuthUser) {
 		return await this.repository.session(afterAuth)
 	}
 
-	async sessionSignout () {
+	async sessionSignout() {
 		return await this.repository.signout()
 	}
 
-	async deleteAccount () {
+	async deleteAccount() {
 		return await this.repository.deleteAccount()
 	}
 
-	async signinWithGoogle (data: { idToken: string }, extras: AuthExtras) {
+	async signinWithGoogle(data: { idToken: string }, extras: AuthExtras) {
 		return await this.repository.signinWithGoogle(data, extras)
 	}
 
-	async signinWithApple (data: { firstName: string | null, lastName: string | null, email: string | null, idToken: string }, extras: AuthExtras) {
+	async signinWithApple(
+		data: { firstName: string | null; lastName: string | null; email: string | null; idToken: string },
+		extras: AuthExtras,
+	) {
 		return await this.repository.signinWithApple(data, extras)
 	}
 
-	async signinWithEmail (factory: EmailSigninFactory, extras: AuthExtras) {
+	async signinWithEmail(factory: EmailSigninFactory, extras: AuthExtras) {
 		const { email, password } = await factory.toModel()
 		return await this.repository.signinWithEmail(email, password, extras)
 	}
 
-	async signupWithEmail (factory: EmailSignupFactory, extras: AuthExtras) {
+	async signupWithEmail(factory: EmailSignupFactory, extras: AuthExtras) {
 		return await this.repository.signupWithEmail(await factory.toModel(), extras)
 	}
 
-	async updatePassword (factory: PasswordUpdateFactory) {
+	async updatePassword(factory: PasswordUpdateFactory) {
 		return await this.repository.updatePassword(await factory.toModel())
 	}
 
-	async updateProfile (factory: ProfileUpdateFactory) {
+	async updateProfile(factory: ProfileUpdateFactory) {
 		return await this.repository.updateProfile(await factory.toModel())
 	}
 
-	async updateRole (id: string, role: AuthRoles, value: boolean) {
+	async updateRole(id: string, role: AuthRoles, value: boolean) {
 		return await this.repository.updateRole({ id, value, role })
 	}
 
-	async sendVerificationText (factory: PhoneUpdateFactory) {
+	async sendVerificationText(factory: PhoneUpdateFactory) {
 		return await this.repository.sendVerificationText(await factory.toModel())
 	}
 
-	async completePhoneVerification (token: string) {
+	async completePhoneVerification(token: string) {
 		return await this.repository.completePhoneVerification(token)
 	}
-
 }

@@ -1,17 +1,23 @@
 <template>
 	<LibraryLayout title="Quizzes">
 		<template v-if="data.length">
-			<sofa-activity-card v-for="activity in data" :key="activity.id" :activity="activity"
-				:isWrapped="!Logic.Common.isLarge" :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
+			<sofa-activity-card
+				v-for="activity in data"
+				:key="activity.id"
+				:activity="activity"
+				:isWrapped="!Logic.Common.isLarge"
+				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click.stop="openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon name="more-options-horizontal" customClass="h-[6px]"
-						@click.stop="showMoreOptionHandler(activity)" />
+					<sofa-icon name="more-options-horizontal" customClass="h-[6px]" @click.stop="showMoreOptionHandler(activity)" />
 				</div>
 			</sofa-activity-card>
 		</template>
 
-		<sofa-empty-state v-else :title="'You have no quizzes here'" :actionLabel="'Explore'"
+		<sofa-empty-state
+			v-else
+			:title="'You have no quizzes here'"
+			:actionLabel="'Explore'"
 			:subTitle="'Discover thousands of quizzes and save them here for easy access'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
@@ -38,9 +44,9 @@ export default defineComponent({
 	name: 'LibraryQuizzesPage',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup () {
+	setup() {
 		const route = useRoute()
-		const tab = computed(() => route.query.tab as string ?? 'recent')
+		const tab = computed(() => (route.query.tab as string) ?? 'recent')
 
 		const { published, draft } = useMyQuizzes()
 		const { quizzes: tutorQuizzes } = useTutorQuizzes()

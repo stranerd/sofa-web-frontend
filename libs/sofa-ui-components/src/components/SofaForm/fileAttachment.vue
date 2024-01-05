@@ -2,7 +2,9 @@
 	<div :class="`flex w-full flex-col gap-2 ${customClass}`">
 		<template v-if="isWrapper">
 			<div class="flex flex-row flex-wrap w-full relative">
-				<input type="file" :style="`
+				<input
+					type="file"
+					:style="`
             opacity: 0;
             width: 100%;
             height: 100%;
@@ -10,27 +12,26 @@
             overflow: hidden;
             position: absolute;
             z-index: 100;
-          `" :accept="accept" :multiple="isMultiple" @change="uploadHandler" />
+          `"
+					:accept="accept"
+					:multiple="isMultiple"
+					@change="uploadHandler" />
 				<div class="w-full flex flex-col justify-center items-center">
 					<slot name="content" />
 				</div>
 			</div>
 		</template>
 		<template v-else>
-			<div
-				class="rounded flex flex-row items-center justify-start relative gap-2 px-1 py-4 bg-grayBackground border-dashed">
-				<input type="file" style="
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            overflow: hidden;
-            position: absolute;
-            z-index: 10;
-          " :accept="accept" :multiple="isMultiple" @change="uploadHandler" />
+			<div class="rounded flex flex-row items-center justify-start relative gap-2 px-1 py-4 bg-grayBackground border-dashed">
+				<input
+					type="file"
+					style="opacity: 0; width: 100%; height: 100%; left: 0; overflow: hidden; position: absolute; z-index: 10"
+					:accept="accept"
+					:multiple="isMultiple"
+					@change="uploadHandler" />
 				<sofa-icon :name="`${iconName}`" :customClass="'h-[15px]'" />
 				<sofa-normal-text color="text-paragraphTextLight" customClass="w-full text-left line-clamp-1">
-					{{ selectedFileName != "" ? selectedFileName : placeholder }}
+					{{ selectedFileName != '' ? selectedFileName : placeholder }}
 				</sofa-normal-text>
 			</div>
 		</template>
@@ -77,7 +78,7 @@ export default defineComponent({
 	},
 	emits: ['update:modelValue', 'update:localFileUrl', 'update:base64Data'],
 	name: 'SofaFileAttachment',
-	setup (props: any, context: any) {
+	setup(props: any, context: any) {
 		const files = ref<FileList>()
 
 		const selectedFileName = ref('')
@@ -113,10 +114,7 @@ export default defineComponent({
 				if (files.value) {
 					fr.readAsDataURL(files.value[0])
 					fr.addEventListener('load', () => {
-						context.emit(
-							'update:localFileUrl',
-							fr.result?.toString() ? fr.result?.toString() : ''
-						)
+						context.emit('update:localFileUrl', fr.result?.toString() ? fr.result?.toString() : '')
 						toDataURL(fr.result?.toString() || '', (dataUrl: any) => {
 							context.emit('update:base64Data', dataUrl)
 						})
@@ -132,10 +130,7 @@ export default defineComponent({
 					const file = files.value?.item(index)
 					fileListArray.value.push(file)
 				}
-				context.emit(
-					'update:modelValue',
-					props.isMultiple ? fileListArray.value : fileListArray.value[0]
-				)
+				context.emit('update:modelValue', props.isMultiple ? fileListArray.value : fileListArray.value[0])
 			}
 		})
 
@@ -155,10 +150,7 @@ export default defineComponent({
 			fileListArray.value = fileListArray.value.filter((file, fileIndex) => {
 				return fileIndex != index
 			})
-			context.emit(
-				'update:modelValue',
-				props.isMultiple ? fileListArray.value : fileListArray.value[0]
-			)
+			context.emit('update:modelValue', props.isMultiple ? fileListArray.value : fileListArray.value[0])
 		}
 
 		return {

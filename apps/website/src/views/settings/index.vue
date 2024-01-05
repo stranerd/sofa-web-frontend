@@ -12,9 +12,9 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	components: { SettingsLayout },
 	name: 'SettingsIndexPage',
-	beforeRouteEnter: generateMiddlewares([async () => Logic.Common.isLarge ? '/settings/profile' : undefined]),
+	beforeRouteEnter: generateMiddlewares([async () => (Logic.Common.isLarge ? '/settings/profile' : undefined)]),
 	middlewares: { goBackRoute: '/' },
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Settings',
 		})

@@ -3,13 +3,7 @@ import { listenOnSocket } from '@modules/core'
 import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
 import { reactive } from 'vue'
-import {
-	NavigationGuardNext,
-	RouteLocationNormalized,
-	RouteLocationNormalizedLoaded,
-	RouteLocationRaw,
-	Router,
-} from 'vue-router'
+import { NavigationGuardNext, RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import { Logic } from '..'
 import {
 	Confirmation,
@@ -20,7 +14,7 @@ import {
 	Listeners,
 	LoaderSetup,
 	SuccessConfirmation,
-	SuccessConfirmationSetup
+	SuccessConfirmationSetup,
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
 
@@ -32,13 +26,13 @@ export default class Common {
 	private redirectToName = 'redirect-to'
 	public AuthUser: AuthDetails | undefined = undefined
 
-	async getRedirectToRoute () {
+	async getRedirectToRoute() {
 		const value = localStorage.getItem(this.redirectToName)
 		if (value) localStorage.removeItem(this.redirectToName)
 		return value ?? '/'
 	}
 
-	async setRedirectToRoute (value: string) {
+	async setRedirectToRoute(value: string) {
 		localStorage.setItem(this.redirectToName, value)
 	}
 
@@ -48,21 +42,21 @@ export default class Common {
 		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
 	}
 
-	constructor () {
+	constructor() {
 		window.addEventListener('resize', () => {
 			this.window.width = window.innerWidth
 		})
 	}
 
-	public async listenToSocket<Model> (channel: string, listeners: Listeners<Model>) {
+	public async listenToSocket<Model>(channel: string, listeners: Listeners<Model>) {
 		return listenOnSocket<Model>(channel, listeners)
 	}
 
-	public async listenToOne<Model> (channel: string, listeners: Listeners<Model>) {
+	public async listenToOne<Model>(channel: string, listeners: Listeners<Model>) {
 		return this.listenToSocket(channel, listeners)
 	}
 
-	async listenToMany<Model> (channel: string, listeners: Listeners<Model>, matches: (entity: Model) => boolean = () => true) {
+	async listenToMany<Model>(channel: string, listeners: Listeners<Model>, matches: (entity: Model) => boolean = () => true) {
 		return this.listenToSocket<Model>(channel, {
 			created: async (model) => {
 				if (matches(model)) await listeners.created(model)
@@ -72,7 +66,7 @@ export default class Common {
 			},
 			deleted: async (model) => {
 				if (matches(model)) await listeners.deleted(model)
-			}
+			},
 		})
 	}
 
@@ -88,11 +82,7 @@ export default class Common {
 		return Logic.getRandomValue()
 	}
 
-	public showValidationError = (
-		error: AxiosError,
-		formElement: any,
-		customErrorMessage: string | undefined = undefined,
-	) => {
+	public showValidationError = (error: AxiosError, formElement: any, customErrorMessage: string | undefined = undefined) => {
 		const validationErrors = error?.response?.data as ValidationError[]
 
 		let errorMessage = ''
@@ -111,7 +101,8 @@ export default class Common {
 	}
 
 	public ordinalSuffixOf(i: number) {
-		const j = i % 10, k = i % 100
+		const j = i % 10,
+			k = i % 100
 		if (j == 1 && k != 11) return i + 'st'
 		if (j == 2 && k != 12) return i + 'nd'
 		if (j == 3 && k != 13) return i + 'rd'
@@ -127,34 +118,38 @@ export default class Common {
 	public confirmations = reactive<ConfirmationSetup[]>([])
 	public successes = reactive<SuccessConfirmationSetup[]>([])
 
-	public async confirm (confirmation: Confirmation) {
+	public async confirm(confirmation: Confirmation) {
 		return this.confirm_logic(this.confirmations, confirmation)
 	}
 
-	public async success (confirmation: SuccessConfirmation) {
+	public async success(confirmation: SuccessConfirmation) {
 		return this.confirm_logic(this.successes, confirmation)
 	}
 
-	private async confirm_logic<I extends ConfirmationBase, J extends ConfirmationBase & ConfirmationSetupBase> (confirmations: J[], confirmation: I) {
+	private async confirm_logic<I extends ConfirmationBase, J extends ConfirmationBase & ConfirmationSetupBase>(
+		confirmations: J[],
+		confirmation: I,
+	) {
 		return new Promise<boolean>((res) => {
 			const id = Logic.getRandomValue()
 			confirmations.push({
-				...confirmation, id,
+				...confirmation,
+				id,
 				close: (val: boolean) => {
 					const index = confirmations.findIndex((c) => c.id === id)
 					if (index === -1) return res(false)
 					confirmations.splice(index, 1)
 					res(val)
-				}
+				},
 			} as any)
 		})
 	}
 
-	public get isOnlyMobile () {
+	public get isOnlyMobile() {
 		return this.window.width <= 640
 	}
 
-	public get isLarge () {
+	public get isLarge() {
 		return this.window.width > 1000
 	}
 
@@ -191,7 +186,7 @@ export default class Common {
 		else window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
 	}
 
-	public daysDiff (a: Date, b: Date) {
+	public daysDiff(a: Date, b: Date) {
 		const _MS_PER_DAY = 1000 * 60 * 60 * 24
 		const utc1 = new Date(a.getFullYear(), a.getMonth(), a.getDate()).getTime()
 		const utc2 = new Date(b.getFullYear(), b.getMonth(), b.getDate()).getTime()
@@ -200,7 +195,7 @@ export default class Common {
 
 	public formatNumber = formatNumber
 
-	public getCurrency (currency: string) {
+	public getCurrency(currency: string) {
 		const currencies = {
 			NGN: '₦',
 			USD: '$',
@@ -251,11 +246,7 @@ export default class Common {
 		watchAction()
 	}
 
-	public preFetchRouteData = async (
-		routeTo: RouteLocationNormalized,
-		routeFrom: RouteLocationNormalized,
-		next: NavigationGuardNext,
-	) => {
+	public preFetchRouteData = async (routeTo: RouteLocationNormalized, routeFrom: RouteLocationNormalized, next: NavigationGuardNext) => {
 		const allActions: Promise<any>[] = []
 		const routeMiddlewares: any = routeTo.meta.middlewares
 
@@ -278,7 +269,7 @@ export default class Common {
 				if (rule.condition) {
 					switch (rule.condition.routeSearchItem) {
 						case 'fullPath':
-							addRuleToRequest = routeTo['fullPath'].includes( rule.condition.searchQuery)
+							addRuleToRequest = routeTo['fullPath'].includes(rule.condition.searchQuery)
 							break
 						case 'params':
 							addRuleToRequest = routeTo['params'][rule.condition.searchQuery] ? true : false
@@ -294,11 +285,16 @@ export default class Common {
 				if (addRuleToRequest) {
 					const domain = Logic[rule.domain]
 
-					if (domain[rule.property] == undefined || (typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) || rule.ignoreProperty) {
+					if (
+						domain[rule.property] == undefined ||
+						(typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) ||
+						rule.ignoreProperty
+					) {
 						if (rule.useRouteId) rule.params.unshift(routeTo.params.id.toString())
-						if (rule.useRouteQuery) rule.queries?.forEach((item) => {
-							rule.params.unshift(routeTo.query[item])
-						})
+						if (rule.useRouteQuery)
+							rule.queries?.forEach((item) => {
+								rule.params.unshift(routeTo.query[item])
+							})
 
 						allActions.push(
 							new Promise((resolve) => {
@@ -341,7 +337,7 @@ export default class Common {
 		return false
 	}
 
-	public async share (title: string, text: string, url = window.location.href)  {
+	public async share(title: string, text: string, url = window.location.href) {
 		try {
 			await navigator.share({ title, text, url })
 		} catch (err) {
@@ -349,7 +345,7 @@ export default class Common {
 		}
 	}
 
-	public async copy (text: string, message = 'Copied!', type: LoaderSetup['alerts'][number]['type'] = 'success') {
+	public async copy(text: string, message = 'Copied!', type: LoaderSetup['alerts'][number]['type'] = 'success') {
 		const result = await window.navigator.permissions.query({ name: 'clipboard-write' as any })
 		if (result.state === 'granted' || result.state === 'prompt') {
 			await window.navigator.clipboard.writeText(text)

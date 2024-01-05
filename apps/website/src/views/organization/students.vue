@@ -1,8 +1,13 @@
 <template>
 	<HomeLayout title="Students">
 		<template v-slot="{ extras }">
-			<MembersList :image="studentsImage" :type="MemberTypes.student" :members="students" :messages="messages"
-				@openAddModal="extras.openAddModal" @acceptMember="extras.acceptMember"
+			<MembersList
+				:image="studentsImage"
+				:type="MemberTypes.student"
+				:members="students"
+				:messages="messages"
+				@openAddModal="extras.openAddModal"
+				@acceptMember="extras.acceptMember"
 				@removeMember="extras.removeMember" />
 		</template>
 	</HomeLayout>
@@ -24,14 +29,14 @@ export default defineComponent({
 	name: 'OrganizationStudentsPage',
 	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
-	setup () {
+	setup() {
 		useMeta({ title: 'Students' })
 
 		const messages = [
 			'Add students from your physical class here.',
 			'Students here get your classes, courses, and quizzes for FREE.',
 			'Your students can revisit live classes for revision purposes.',
-			'No loss of study resources so students can keep coming back to them.'
+			'No loss of study resources so students can keep coming back to them.',
 		]
 
 		const { id } = useAuth()

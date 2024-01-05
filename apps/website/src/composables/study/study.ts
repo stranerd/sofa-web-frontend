@@ -4,10 +4,14 @@ import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useMyPurchases } from '../payment/purchases'
 
-const store: Record<string, {
-	materials: Ref<(Quiz | Course)[]>,
-	fetched: Ref<boolean>
-} & ReturnType<typeof useLoadingHandler> & ReturnType<typeof useErrorHandler>> = {}
+const store: Record<
+	string,
+	{
+		materials: Ref<(Quiz | Course)[]>
+		fetched: Ref<boolean>
+	} & ReturnType<typeof useLoadingHandler> &
+		ReturnType<typeof useErrorHandler>
+> = {}
 
 const handlers = {
 	recent: Logic.Study.GetRecentMaterials,
@@ -15,7 +19,7 @@ const handlers = {
 	rated: Logic.Study.GetRatedMaterials,
 	suggested: Logic.Study.GetSuggestedMaterials,
 	latest: Logic.Study.GetLatestMaterials,
-	myOrgs: Logic.Study.GetByMyOrgsMaterials
+	myOrgs: Logic.Study.GetByMyOrgsMaterials,
 }
 
 export const useMyStudy = (key: keyof typeof handlers, alwaysRefetch = false) => {
@@ -51,10 +55,8 @@ export const useMyStudy = (key: keyof typeof handlers, alwaysRefetch = false) =>
 export const useRecent = () => {
 	const recent = useMyStudy('recent', true)
 
-	const quizzes = computed(() => recent.materials.value
-		.filter((m) => m.__type === 'QuizEntity') as Quiz[])
-	const courses = computed(() => recent.materials.value
-		.filter((m) => m.__type === 'CourseEntity') as Course[])
+	const quizzes = computed(() => recent.materials.value.filter((m) => m.__type === 'QuizEntity') as Quiz[])
+	const courses = computed(() => recent.materials.value.filter((m) => m.__type === 'CourseEntity') as Course[])
 
 	return { quizzes, courses }
 }
@@ -70,7 +72,7 @@ export const useHasAccess = () => {
 			material.user.id === user.value?.id,
 			material.__type === 'QuizEntity' && material.access.members.includes(user.value?.id),
 			material.user.roles?.isOfficialAccount && user.value?.roles.isSubscribed,
-			user.value?.account.organizationsIn.find((o) => o.id === material.user.id) && material.user.roles.isSubscribed
+			user.value?.account.organizationsIn.find((o) => o.id === material.user.id) && material.user.roles.isSubscribed,
 		].some((v) => v)
 	})
 

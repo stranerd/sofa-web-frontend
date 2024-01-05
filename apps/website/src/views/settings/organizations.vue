@@ -1,7 +1,8 @@
 <template>
 	<SettingsLayout title="Organizations">
 		<div class="w-full flex flex-col gap-4 px-4 mdlg:px-0">
-			<div class="w-full flex flex-col gap-4 mdlg:bg-white mdlg:rounded-2xl mdlg:p-4 mdlg:shadow-custom"
+			<div
+				class="w-full flex flex-col gap-4 mdlg:bg-white mdlg:rounded-2xl mdlg:p-4 mdlg:shadow-custom"
 				:class="{ 'bg-white rounded-[8px] p-3': organizations.length > 0 }">
 				<SofaHeaderText size="xl" cass="mx-auto hidden mdlg:flex" content="Organizations" />
 
@@ -27,12 +28,15 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	components: {
-		SettingsLayout, SofaHeaderText,
-		SofaNormalText, SofaEmptyState, SofaAvatar,
+		SettingsLayout,
+		SofaHeaderText,
+		SofaNormalText,
+		SofaEmptyState,
+		SofaAvatar,
 	},
 	name: 'SettingsOrganizationsPage',
 	middlewares: { goBackRoute: '/settings' },
-	setup () {
+	setup() {
 		useMeta({ title: 'Organizations' })
 		const { organizations, leaveOrganization } = useMyOrganizations()
 		return { organizations, leaveOrganization }

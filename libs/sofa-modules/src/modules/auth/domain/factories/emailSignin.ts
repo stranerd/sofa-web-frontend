@@ -10,23 +10,23 @@ export class EmailSigninFactory extends BaseFactory<null, AuthUser, AuthUser> {
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ email: '', password: '' })
 	}
 
-	get email () {
+	get email() {
 		return this.values.email
 	}
 
-	set email (value: string) {
+	set email(value: string) {
 		this.set('email', value)
 	}
 
-	get password () {
+	get password() {
 		return this.values.password
 	}
 
-	set password (value: string) {
+	set password(value: string) {
 		this.set('password', value)
 	}
 

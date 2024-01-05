@@ -1,12 +1,7 @@
 import { $api } from '../../services'
 import Common from './Common'
 import { Paginated } from '../types/domains/common'
-import {
-	Department,
-	DepartmentCourse,
-	Faculty,
-	Institution,
-} from '../types/domains/schools'
+import { Department, DepartmentCourse, Faculty, Institution } from '../types/domains/schools'
 import { QueryParams } from '../types/common'
 import {
 	CreateDepartmentCourseInput,
@@ -188,30 +183,18 @@ export default class Schools extends Common {
 	}
 
 	public DeleteInstitution = (id: string) => {
-		return $api.schools.institution
-			.delete(id)
-			.then()
-			.catch()
+		return $api.schools.institution.delete(id).then().catch()
 	}
 
 	public DeleteFaculty = (id: string) => {
-		return $api.schools.faculty
-			.delete(id)
-			.then()
-			.catch()
+		return $api.schools.faculty.delete(id).then().catch()
 	}
 
 	public DeleteDepartment = (id: string) => {
-		return $api.schools.department
-			.delete(id)
-			.then()
-			.catch()
+		return $api.schools.department.delete(id).then().catch()
 	}
 
 	public DeleteDepartmentCourse = (id: string) => {
-		return $api.schools.course
-			.delete(id)
-			.then()
-			.catch()
+		return $api.schools.course.delete(id).then().catch()
 	}
 }

@@ -16,8 +16,7 @@
 			<div class="min-w-[80px] w-full flex gap-2 items-end justify-end py-4" v-else>
 				<div class="flex flex-row items-end gap-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
 					<div class="p-3 rounded-custom text-left bg-darkLightGray">
-						<sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body">
-						</sofa-normal-text>
+						<sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body"> </sofa-normal-text>
 					</div>
 					<sofa-avatar :photoUrl="users[message.userId]?.photoUrl" :size="'27'" />
 				</div>
@@ -43,8 +42,8 @@ import { PropType, defineProps } from 'vue'
 const props = defineProps({
 	conversation: {
 		type: Object as PropType<Conversation>,
-		required: true
-	}
+		required: true,
+	},
 })
 
 const { id } = useAuth()
@@ -53,27 +52,27 @@ const { messages, users } = useMessages(props.conversation)
 
 <style scoped>
 .loader span {
-  background: #3219af;
-  animation: loader 0.8s infinite alternate;
+	background: #3219af;
+	animation: loader 0.8s infinite alternate;
 }
 
 .loader span:nth-of-type(2) {
-  animation-delay: 0.2s;
+	animation-delay: 0.2s;
 }
 
 .loader span:nth-of-type(3) {
-  animation-delay: 0.6s;
+	animation-delay: 0.6s;
 }
 
 @keyframes loader {
-  0% {
-    opacity: 0.9;
-    transform: scale(0.5);
-  }
+	0% {
+		opacity: 0.9;
+		transform: scale(0.5);
+	}
 
-  100% {
-    opacity: 0.1;
-    transform: scale(1);
-  }
+	100% {
+		opacity: 0.1;
+		transform: scale(1);
+	}
 }
 </style>

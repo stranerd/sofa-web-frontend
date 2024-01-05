@@ -12,30 +12,31 @@ import { useRouter } from 'vue-router'
 const props = defineProps({
 	id: {
 		type: String,
-		required: true
+		required: true,
 	},
 	skipQuestions: {
 		type: Boolean,
 		required: false,
-		default: false
+		default: false,
 	},
 	skipParticipants: {
 		type: Boolean,
 		required: false,
-		default: false
+		default: false,
 	},
 	skipStatusNav: {
 		type: Boolean,
 		required: false,
-		default: false
-	}
+		default: false,
+	},
 })
 
 const router = useRouter()
-const {
-	game, participants, questions, fetched, answer,
-	start, end, join, submitAnswer
-} = useGame(props.id, { questions: props.skipQuestions, participants: props.skipParticipants, statusNav: props.skipStatusNav })
+const { game, participants, questions, fetched, answer, start, end, join, submitAnswer } = useGame(props.id, {
+	questions: props.skipQuestions,
+	participants: props.skipParticipants,
+	statusNav: props.skipStatusNav,
+})
 const { id } = useAuth()
 
 const extras = computed(() => ({
@@ -45,14 +46,16 @@ const extras = computed(() => ({
 	canJoin: game.value && !game.value.participants.includes(id.value),
 	authId: id.value,
 	answers: answer.value?.data ?? null,
-	start, end, join,
-	submit: async (data?: { questionId: string, answer: any }) => {
+	start,
+	end,
+	join,
+	submit: async (data?: { questionId: string; answer: any }) => {
 		if (data) return await submitAnswer(data)
 		await router.push(`/games/${props.id}/results`)
 		return true
 	},
 	isParticipant: game.value?.participants.includes(id.value),
-	get scores () {
+	get scores() {
 		return Object.entries(game.value.scores ?? {})
 			.sort((a, b) => b[1] - a[1])
 			.map((res, i, orgArr) => ({

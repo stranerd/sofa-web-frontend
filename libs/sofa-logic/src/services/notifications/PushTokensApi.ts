@@ -9,10 +9,7 @@ export default class PushTokensApi extends ReadOnlyApiService {
 
 	public async subscribeDevice(data: PushNotificationTokenInput) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-				this.getUrl() + '/subscribe',
-				data,
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.put(this.getUrl() + '/subscribe', data)
 
 			return response
 		} catch (err) {
@@ -24,10 +21,7 @@ export default class PushTokensApi extends ReadOnlyApiService {
 
 	public async unsubscribeDevice(data: PushNotificationTokenInput) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-				this.getUrl() + '/unsubscribe',
-				data,
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.put(this.getUrl() + '/unsubscribe', data)
 
 			return response
 		} catch (err) {

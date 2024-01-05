@@ -11,7 +11,7 @@ import { defineProps } from 'vue'
 const props = defineProps({
 	documentUrl: {
 		type: String,
-		default: 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf'
+		default: 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf',
 	},
 })
 

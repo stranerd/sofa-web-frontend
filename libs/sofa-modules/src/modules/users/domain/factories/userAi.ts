@@ -8,44 +8,44 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi & { lo
 		name: v.string().min(1),
 		tagline: v.string().min(1),
 		photo: v.file().image().nullable(),
-		localPhotoLink: v.string().nullish()
+		localPhotoLink: v.string().nullish(),
 	}
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ name: UserEntity.defaultAi, tagline: '', photo: null, localPhotoLink: UserEntity.defaultAiPhotoLink })
 	}
 
-	get name () {
+	get name() {
 		return this.values.name
 	}
 
-	set name (value: string) {
+	set name(value: string) {
 		this.set('name', value)
 	}
 
-	get tagline () {
+	get tagline() {
 		return this.values.tagline
 	}
 
-	set tagline (value: string) {
+	set tagline(value: string) {
 		this.set('tagline', value)
 	}
 
-	get photo () {
+	get photo() {
 		return this.values.photo
 	}
 
-	set photo (value: UserAi['photo']) {
+	set photo(value: UserAi['photo']) {
 		this.set('photo', value)
 		if (value) this.localPhotoLink = value?.link
 	}
 
-	get localPhotoLink () {
+	get localPhotoLink() {
 		return this.values.localPhotoLink
 	}
 
-	set localPhotoLink (value: string | undefined) {
+	set localPhotoLink(value: string | undefined) {
 		this.set('localPhotoLink', value)
 	}
 

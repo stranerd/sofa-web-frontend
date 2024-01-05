@@ -1,9 +1,6 @@
 import { AxiosResponse } from 'axios'
 import { Course } from '../../logic/types/domains/study'
-import {
-	AddItemToCourseInput,
-	UpdateCourseSectionsInput,
-} from '../../logic/types/forms/study'
+import { AddItemToCourseInput, UpdateCourseSectionsInput } from '../../logic/types/forms/study'
 import { ModelApiService } from '../common/ModelService'
 
 export default class CoursesApi extends ModelApiService {
@@ -13,9 +10,7 @@ export default class CoursesApi extends ModelApiService {
 
 	public async similarCourses(courseId: string) {
 		try {
-			const response: AxiosResponse<Course[]> = await this.axiosInstance.get(
-				this.getUrl() + `/${courseId}/similar`,
-			)
+			const response: AxiosResponse<Course[]> = await this.axiosInstance.get(this.getUrl() + `/${courseId}/similar`)
 
 			return response
 		} catch (err) {
@@ -27,10 +22,7 @@ export default class CoursesApi extends ModelApiService {
 
 	public async moveItemIntoCourse(data: AddItemToCourseInput) {
 		try {
-			const response: AxiosResponse<Course> = await this.axiosInstance.post(
-				this.getUrl() + `/${data.id}/move`,
-				data,
-			)
+			const response: AxiosResponse<Course> = await this.axiosInstance.post(this.getUrl() + `/${data.id}/move`, data)
 
 			return response
 		} catch (err) {
@@ -42,10 +34,7 @@ export default class CoursesApi extends ModelApiService {
 
 	public async updateCourseSections(data: UpdateCourseSectionsInput) {
 		try {
-			const response: AxiosResponse<Course> = await this.axiosInstance.post(
-				this.getUrl() + `/${data.id}/sections`,
-				data,
-			)
+			const response: AxiosResponse<Course> = await this.axiosInstance.post(this.getUrl() + `/${data.id}/sections`, data)
 
 			return response
 		} catch (err) {
@@ -57,9 +46,7 @@ export default class CoursesApi extends ModelApiService {
 
 	public async publishCourse(courseId: string) {
 		try {
-			const response: AxiosResponse<Course> = await this.axiosInstance.post(
-				this.getUrl() + `/${courseId}/publish`,
-			)
+			const response: AxiosResponse<Course> = await this.axiosInstance.post(this.getUrl() + `/${courseId}/publish`)
 
 			return response
 		} catch (err) {
@@ -71,9 +58,7 @@ export default class CoursesApi extends ModelApiService {
 
 	public async freezeCourse(courseId: string) {
 		try {
-			const response: AxiosResponse<Course> = await this.axiosInstance.post(
-				this.getUrl() + `/${courseId}/freeze`,
-			)
+			const response: AxiosResponse<Course> = await this.axiosInstance.post(this.getUrl() + `/${courseId}/freeze`)
 
 			return response
 		} catch (err) {

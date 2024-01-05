@@ -7,7 +7,7 @@ const googleClients = JSON.parse(import.meta.env.VITE_GOOGLE_CLIENT_IDS ?? '{}')
 const googleClientIds = {
 	web: googleClients.web ?? '',
 	android: googleClients.web ?? '',
-	ios: googleClients.ios ?? ''
+	ios: googleClients.ios ?? '',
 }
 
 export const googleClientId = isIos ? googleClientIds.ios : isAndroid ? googleClientIds.android : googleClientIds.web

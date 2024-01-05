@@ -74,11 +74,9 @@ export default class Plays extends Common {
 	}
 
 	public GetParticipantAnswer = (gameId: string, participantId: string) => {
-		return $api.plays.game
-			.getParticipantAnswer(gameId, participantId)
-			.then((response) => {
-				this.ParticipantAnswer = response.data
-			})
+		return $api.plays.game.getParticipantAnswer(gameId, participantId).then((response) => {
+			this.ParticipantAnswer = response.data
+		})
 	}
 
 	public GetTestQuizQuestions = (testId: string) => {
@@ -211,12 +209,10 @@ export default class Plays extends Common {
 	}
 
 	public StartTest = (testId: string) => {
-		return $api.plays.test
-			.startTest(testId)
-			.then((response) => {
-				this.SingleTest = response.data
-				return response.data
-			})
+		return $api.plays.test.startTest(testId).then((response) => {
+			this.SingleTest = response.data
+			return response.data
+		})
 	}
 
 	public EndGame = (gameId: string) => {
@@ -240,27 +236,20 @@ export default class Plays extends Common {
 	}
 
 	public AnswerGameQuestion = (gameId: string, AnswerGameQuestionForm: AddQuestionAnswer) => {
-		return $api.plays.game
-			.answerGameQuestion(gameId, AnswerGameQuestionForm)
-			.then((response) => {
-				this.ParticipantAnswer = response.data
-				return this.ParticipantAnswer
-			})
+		return $api.plays.game.answerGameQuestion(gameId, AnswerGameQuestionForm).then((response) => {
+			this.ParticipantAnswer = response.data
+			return this.ParticipantAnswer
+		})
 	}
 
 	public AnswerTestQuestion = (testId: string, AnswerGameQuestionForm: AddQuestionAnswer) => {
-		return $api.plays.test
-			.answerTestQuestion(testId, AnswerGameQuestionForm)
-			.then((response) => {
-				this.ParticipantAnswer = response.data
-				return this.ParticipantAnswer
-			})
+		return $api.plays.test.answerTestQuestion(testId, AnswerGameQuestionForm).then((response) => {
+			this.ParticipantAnswer = response.data
+			return this.ParticipantAnswer
+		})
 	}
 
 	public DeleteGame = (id: string) => {
-		return $api.plays.game
-			.delete(id)
-			.then()
-			.catch()
+		return $api.plays.game.delete(id).then().catch()
 	}
 }

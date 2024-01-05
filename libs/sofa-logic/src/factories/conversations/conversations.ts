@@ -2,7 +2,6 @@ import { Conversation, CreateConversationInput } from '../../logic'
 import { valleyed } from '@utils/commons'
 import { BaseFactory } from '@modules/core'
 
-
 const v = valleyed.v
 export class ConversationFactory extends BaseFactory<Conversation, CreateConversationInput, CreateConversationInput> {
 	readonly rules = {
@@ -10,23 +9,23 @@ export class ConversationFactory extends BaseFactory<Conversation, CreateConvers
 		tutorId: v.string().min(1).nullable(),
 	}
 
-	constructor () {
+	constructor() {
 		super({ body: '', tutorId: null })
 	}
 
-	get body () {
+	get body() {
 		return this.values.body
 	}
 
-	set body (value: string) {
+	set body(value: string) {
 		this.set('body', value)
 	}
 
-	get tutorId () {
+	get tutorId() {
 		return this.values.tutorId
 	}
 
-	set tutorId (value: string | null) {
+	set tutorId(value: string | null) {
 		this.set('tutorId', value)
 	}
 

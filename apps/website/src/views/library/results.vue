@@ -1,12 +1,19 @@
 <template>
 	<LibraryLayout title="Results">
 		<template v-if="data.length">
-			<sofa-progress-item-card v-for="play in data" :key="play.id" :content="play"
-				:custom-class="'!bg-white shadow-custom cursor-pointer'" @click="play.action()" />
+			<sofa-progress-item-card
+				v-for="play in data"
+				:key="play.id"
+				:content="play"
+				:custom-class="'!bg-white shadow-custom cursor-pointer'"
+				@click="play.action()" />
 		</template>
 
-		<sofa-empty-state v-else :title="'You have no practice item here'"
-			:subTitle="'Discover thousands of materials to buy, created by verified experts'" :actionLabel="'Marketplace'"
+		<sofa-empty-state
+			v-else
+			:title="'You have no practice item here'"
+			:subTitle="'Discover thousands of materials to buy, created by verified experts'"
+			:actionLabel="'Marketplace'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
 </template>
@@ -32,19 +39,20 @@ export default defineComponent({
 	name: 'LibraryResultsPage',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup () {
+	setup() {
 		const route = useRoute()
-		const tab = computed(() => route.query.tab as string ?? 'all')
+		const tab = computed(() => (route.query.tab as string) ?? 'all')
 
 		const { ended: endedGames } = useMyGames()
 		const { ended: endedTests } = useMyTests()
 		const { quizzes } = useQuizzesInList(computed(() => [...endedGames.value, ...endedTests.value].map((p) => p.quizId)))
 
 		const data = computed(() => {
-			if (tab.value === 'all') return [
-				...endedGames.value.map((g) => createGameData(g, quizzes.value)),
-				...endedTests.value.map((t) => createTestData(t, quizzes.value)),
-			].sort((a, b) => b.createdAt - a.createdAt)
+			if (tab.value === 'all')
+				return [
+					...endedGames.value.map((g) => createGameData(g, quizzes.value)),
+					...endedTests.value.map((t) => createTestData(t, quizzes.value)),
+				].sort((a, b) => b.createdAt - a.createdAt)
 			if (tab.value === 'games') return endedGames.value.map((g) => createGameData(g, quizzes.value))
 			if (tab.value === 'tests') return endedTests.value.map((t) => createTestData(t, quizzes.value))
 			return []

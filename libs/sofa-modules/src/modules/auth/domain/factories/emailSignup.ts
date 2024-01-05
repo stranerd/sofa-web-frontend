@@ -20,82 +20,91 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		email: v.string().email(),
 		photo: v.file().image().nullable(),
 		password: v.string().min(8).max(16),
-		cPassword: v.string().min(8).max(16)
+		cPassword: v
+			.string()
+			.min(8)
+			.max(16)
 			.custom((val) => isEqualTo(this.password)(val).valid, 'is not equal'),
-		termsAccepted: v.is(true)
+		termsAccepted: v.is(true),
 	}
 
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({
-			first: 'new', last: 'user', email: '', password: '', cPassword: '',
-			description: '', photo: null, termsAccepted: false
+			first: 'new',
+			last: 'user',
+			email: '',
+			password: '',
+			cPassword: '',
+			description: '',
+			photo: null,
+			termsAccepted: false,
 		})
 	}
 
-	get first () {
+	get first() {
 		return this.values.first
 	}
 
-	set first (value: string) {
+	set first(value: string) {
 		this.set('first', value)
 	}
 
-	get last () {
+	get last() {
 		return this.values.last
 	}
 
-	set last (value: string) {
+	set last(value: string) {
 		this.set('last', value)
 	}
 
-	get description () {
+	get description() {
 		return this.values.description
 	}
 
-	set description (value: string) {
+	set description(value: string) {
 		this.set('description', value)
 	}
 
-	get photo () {
+	get photo() {
 		return this.values.photo
 	}
 
-	set photo (value: Content) {
+	set photo(value: Content) {
 		this.set('photo', value)
 	}
 
-	get email () {
+	get email() {
 		return this.values.email
 	}
 
-	set email (value: string) {
+	set email(value: string) {
 		this.set('email', value)
 	}
 
-	get password () {
+	get password() {
 		return this.values.password
 	}
 
-	set password (value: string) {
+	set password(value: string) {
 		this.set('password', value)
 		this.set('cPassword', '')
 	}
 
-	get cPassword () {
+	get cPassword() {
 		return this.values.cPassword
 	}
 
-	set cPassword (value: string) {
+	set cPassword(value: string) {
 		this.set('cPassword', value)
 	}
 
-	get termsAccepted () {
+	get termsAccepted() {
 		return this.values.termsAccepted
 	}
 
-	set termsAccepted (value: boolean) {
+	set termsAccepted(value: boolean) {
 		this.set('termsAccepted', value)
 	}
 
@@ -103,8 +112,11 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		if (this.valid) {
 			const { first, last, email, password, description, photo } = this.validValues
 			return {
-				name: { first, last }, email, password, description,
-				photo: photo as Media
+				name: { first, last },
+				email,
+				password,
+				description,
+				photo: photo as Media,
 			}
 		} else throw new Error('Validation errors')
 	}

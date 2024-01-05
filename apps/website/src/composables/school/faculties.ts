@@ -10,7 +10,7 @@ const store = {
 	faculties: ref([] as FacultyEntity[]),
 	institutions: {} as Record<string, boolean>,
 	...useErrorHandler(),
-	...useLoadingHandler()
+	...useLoadingHandler(),
 }
 
 const fetchFaculties = async (institutionId: string) => {
@@ -19,7 +19,15 @@ const fetchFaculties = async (institutionId: string) => {
 	await store.setLoading(true)
 	try {
 		const faculties = await FacultiesUseCases.getInstitutionFaculties(institutionId)
-		faculties.results.forEach((c) => addToArray(store.faculties.value, c, (e) => e.id, (e) => e.name, true))
+		faculties.results.forEach((c) =>
+			addToArray(
+				store.faculties.value,
+				c,
+				(e) => e.id,
+				(e) => e.name,
+				true,
+			),
+		)
 		store.fetched.value = true
 		store.institutions[institutionId] = true
 	} catch (error) {
@@ -36,8 +44,15 @@ export const useFaculty = (institutionId: string, id: string) => {
 	const faculty = computed({
 		get: () => store.faculties.value.find((s) => s.id === id) ?? null,
 		set: (c) => {
-			if (c) addToArray(store.faculties.value, c, (e) => e.id, (e) => e.name, true)
-		}
+			if (c)
+				addToArray(
+					store.faculties.value,
+					c,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
+		},
 	})
 	onMounted(async () => {
 		if (!store.institutions[institutionId]) await fetchFaculties(institutionId)
@@ -65,7 +80,13 @@ export const useCreateFaculty = () => {
 			await setLoading(true)
 			try {
 				const faculty = await FacultiesUseCases.add(factory)
-				addToArray(store.faculties.value, faculty, (e) => e.id, (e) => e.name, true)
+				addToArray(
+					store.faculties.value,
+					faculty,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 				factory.reset()
 				await setMessage('Faculty created successfully')
 				await router.push(`/admin/school/institutions/${faculty.institutionId}/faculties/${faculty.id}`)
@@ -98,7 +119,13 @@ export const useEditFaculty = () => {
 			await setLoading(true)
 			try {
 				const updatedFaculty = await FacultiesUseCases.update(editingFaculty!.id, factory)
-				addToArray(store.faculties.value, updatedFaculty, (e) => e.id, (e) => e.name, true)
+				addToArray(
+					store.faculties.value,
+					updatedFaculty,
+					(e) => e.id,
+					(e) => e.name,
+					true,
+				)
 				factory.reset()
 				await setMessage('Faculty updated successfully')
 				await router.push(`/admin/school/institutions/${updatedFaculty.institutionId}/faculties/${updatedFaculty.id}`)
@@ -122,14 +149,13 @@ export const useDeleteFaculty = (facultyId: string) => {
 		const accepted = await Logic.Common.confirm({
 			title: 'Are you sure you want to delete this faculty?',
 			sub: '',
-			right: { label: 'Yes, delete' }
+			right: { label: 'Yes, delete' },
 		})
 		if (accepted) {
 			await setLoading(true)
 			try {
 				await FacultiesUseCases.delete(facultyId)
-				store.faculties.value = store.faculties.value
-					.filter((s) => s.id !== facultyId)
+				store.faculties.value = store.faculties.value.filter((s) => s.id !== facultyId)
 				await setMessage('Faculty deleted successfully')
 			} catch (error) {
 				await setError(error)

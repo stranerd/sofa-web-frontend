@@ -22,7 +22,7 @@ export default {
 
 <style>
 svg {
-  width: auto;
-  height: auto;
+	width: auto;
+	height: auto;
 }
 </style>

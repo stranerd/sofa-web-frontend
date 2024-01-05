@@ -9,9 +9,7 @@ export default class FilesApi extends ModelApiService {
 
 	public async getFileMedia(fileId: string) {
 		try {
-			const response: AxiosResponse<FileData> = await this.axiosInstance.get(
-				this.getUrl() + `/${fileId}/media`,
-			)
+			const response: AxiosResponse<FileData> = await this.axiosInstance.get(this.getUrl() + `/${fileId}/media`)
 
 			return response
 		} catch (err) {

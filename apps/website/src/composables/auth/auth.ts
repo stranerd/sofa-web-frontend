@@ -10,9 +10,10 @@ const store = {
 	wallet: ref(null as Wallet | null),
 	listener: useListener(async () => {
 		const id = store.auth.value?.id as string | undefined
-		if (!id) return () => {
-			//
-		}
+		if (!id)
+			return () => {
+				//
+			}
 		const setUser = async (user: UserEntity) => {
 			store.user.value = user
 		}
@@ -21,10 +22,14 @@ const store = {
 		}
 		const listeners = [
 			await UsersUseCases.listenToOne(id, { created: setUser, updated: setUser, deleted: setUser }),
-			await Logic.Common.listenToOne('payment/wallets',{ created: setWallet, updated: setWallet, deleted: setWallet })
+			await Logic.Common.listenToOne('payment/wallets', {
+				created: setWallet,
+				updated: setWallet,
+				deleted: setWallet,
+			}),
 		]
 		return () => Promise.all(listeners.map((l) => l()))
-	})
+	}),
 }
 
 export const useAuth = () => {
@@ -40,10 +45,10 @@ export const useAuth = () => {
 	const userAi = computed(() => ({
 		name: store.user.value?.ai?.name ?? UserEntity.defaultAi,
 		tagline: store.user.value?.ai?.tagline ?? '',
-		image: store.user.value?.ai?.photo?.link ?? UserEntity.defaultAiPhotoLink
+		image: store.user.value?.ai?.photo?.link ?? UserEntity.defaultAiPhotoLink,
 	}))
 
-	const hasPassword = computed( () => !!store.auth.value?.authTypes.includes(AuthTypes.email),)
+	const hasPassword = computed(() => !!store.auth.value?.authTypes.includes(AuthTypes.email))
 
 	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
@@ -63,7 +68,7 @@ export const useAuth = () => {
 		remembered
 		await Promise.all([
 			// setupPush(id.value),
-			startProfileListener()
+			startProfileListener(),
 		])
 		return true
 	}
@@ -95,8 +100,21 @@ export const useAuth = () => {
 	}
 
 	return {
-		id, bio, user: store.user, auth: store.auth, wallet: store.wallet,
-		isLoggedIn, isEmailVerified, isAdmin, isSubscribed, userType, userAi, hasPassword,
-		setAuthUser, signin, signout, deleteAccount
+		id,
+		bio,
+		user: store.user,
+		auth: store.auth,
+		wallet: store.wallet,
+		isLoggedIn,
+		isEmailVerified,
+		isAdmin,
+		isSubscribed,
+		userType,
+		userAi,
+		hasPassword,
+		setAuthUser,
+		signin,
+		signout,
+		deleteAccount,
 	}
 }

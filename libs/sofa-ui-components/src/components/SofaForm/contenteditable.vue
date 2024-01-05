@@ -1,8 +1,14 @@
 <template>
 	<span
 		:class="`${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
-		:placeholder="placeholder" :contenteditable="true" @input="onInput" @blur="onBlur" @keydown.enter.prevent="onEnter"
-		:id="`content-${tabIndex}`">{{ textContent }}</span>
+		:placeholder="placeholder"
+		:contenteditable="true"
+		@input="onInput"
+		@blur="onBlur"
+		@keydown.enter.prevent="onEnter"
+		:id="`content-${tabIndex}`">
+		{{ textContent }}
+	</span>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
@@ -32,12 +38,12 @@ export default defineComponent({
 		},
 		trim: {
 			type: Boolean,
-			default: true
-		}
+			default: true,
+		},
 	},
 	name: 'SofaCustomInput',
 	emits: ['update:modelValue', 'onBlur', 'onContentChange', 'onEnter'],
-	setup (props, context) {
+	setup(props, context) {
 		const textContent = ref(props.modelValue ?? '')
 
 		const modelValueRef = toRef(props, 'modelValue')
@@ -49,9 +55,13 @@ export default defineComponent({
 			context.emit('onContentChange', textContent.value)
 		})
 
-		watch(modelValueRef, () => {
-			textContent.value = modelValueRef.value
-		}, { immediate: true })
+		watch(
+			modelValueRef,
+			() => {
+				textContent.value = modelValueRef.value
+			},
+			{ immediate: true },
+		)
 
 		const onInput = (e: any) => {
 			textContent.value = props.trim ? e.target.innerText.trim() : e.target.innerText
@@ -113,7 +123,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .customInput[contenteditable]:empty::before {
-  content: attr(placeholder);
-  color: #78828c;
+	content: attr(placeholder);
+	color: #78828c;
 }
 </style>

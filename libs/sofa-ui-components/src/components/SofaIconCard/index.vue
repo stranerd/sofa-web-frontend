@@ -38,12 +38,12 @@ export default defineComponent({
 		},
 		data: {
 			type: Object as () => {
-        title: string
-        subTitle: string
-        icon: string
-        iconSize: string
-        isDone?: any
-      },
+				title: string
+				subTitle: string
+				icon: string
+				iconSize: string
+				isDone?: any
+			},
 		},
 		showArrow: {
 			type: Boolean,

@@ -11,8 +11,8 @@ const props = defineProps({
 	modelValue: {
 		type: Object as PropType<Phone | null>,
 		default: null,
-		validator: (p: any) => p === null || (typeof p.code === 'string' && typeof p.number === 'string')
-	}
+		validator: (p: any) => p === null || (typeof p.code === 'string' && typeof p.number === 'string'),
+	},
 })
 
 const emit = defineEmits<{
@@ -21,15 +21,20 @@ const emit = defineEmits<{
 
 const phone = ref((props.modelValue?.code ?? '') + (props.modelValue?.number ?? ''))
 const update = (event: any) => {
-	emit('update:modelValue', event.valid ? {
-		code: '+' + event.countryCallingCode,
-		number: event.nationalNumber
-	} : null)
+	emit(
+		'update:modelValue',
+		event.valid
+			? {
+					code: '+' + event.countryCallingCode,
+					number: event.nationalNumber,
+				}
+			: null,
+	)
 }
 </script>
 
 <style>
-@import "vue-tel-input/vue-tel-input.css";
+@import 'vue-tel-input/vue-tel-input.css';
 
 .vti__dropdown.open,
 .vti__dropdown.disabled,
@@ -43,4 +48,5 @@ const update = (event: any) => {
 .vti__selection .vti__country-code,
 .vti__dropdown-arrow {
 	color: inherit !important;
-}</style>
+}
+</style>

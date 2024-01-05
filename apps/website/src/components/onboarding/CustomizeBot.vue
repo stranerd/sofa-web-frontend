@@ -16,33 +16,46 @@
 						customClass="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
 						:photoUrl="factory.localPhotoLink">
 						<SofaIcon class="h-[50px]" name="user" v-if="!factory.localPhotoLink" />
-						<SofaFileAttachment :isWrapper="true"
+						<SofaFileAttachment
+							:isWrapper="true"
 							customClass="absolute bottom-0 right-0 bg-black bg-opacity-50 rounded-full aspect-square !w-[40px] flex items-center justify-center"
-							accept="image/*" v-model="factory.photo" v-model:localFileUrl="factory.localPhotoLink">
+							accept="image/*"
+							v-model="factory.photo"
+							v-model:localFileUrl="factory.localPhotoLink">
 							<template v-slot:content>
 								<SofaIcon class="h-[18px]" name="camera-white" />
 							</template>
 						</SofaFileAttachment>
 					</SofaImageLoader>
 
-					<SofaTextField customClass="rounded-custom !bg-lightGray"
-						type="text" borderColor="border-transparent" placeholder="Name"
-						:error="factory.errors.name" v-model="factory.name" />
+					<SofaTextField
+						customClass="rounded-custom !bg-lightGray"
+						type="text"
+						borderColor="border-transparent"
+						placeholder="Name"
+						:error="factory.errors.name"
+						v-model="factory.name" />
 
-					<SofaTextField customClass="rounded-custom !bg-lightGray"
-						type="text" borderColor="border-transparent" placeholder="Tagline"
-						:error="factory.errors.tagline" v-model="factory.tagline" />
+					<SofaTextField
+						customClass="rounded-custom !bg-lightGray"
+						type="text"
+						borderColor="border-transparent"
+						placeholder="Tagline"
+						:error="factory.errors.tagline"
+						v-model="factory.tagline" />
 				</div>
 
 				<div class="w-full flex items-center justify-between">
-					<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor"
-						class="border border-gray-100" @click="close">
+					<SofaButton
+						padding="px-5 py-2"
+						bgColor="bg-white"
+						textColor="text-grayColor"
+						class="border border-gray-100"
+						@click="close">
 						Exit
 					</SofaButton>
 
-					<SofaButton padding="px-5 py-2" type="submit" :disabled="!factory.valid || loading">
-						Save
-					</SofaButton>
+					<SofaButton padding="px-5 py-2" type="submit" :disabled="!factory.valid || loading"> Save </SofaButton>
 				</div>
 			</form>
 		</div>

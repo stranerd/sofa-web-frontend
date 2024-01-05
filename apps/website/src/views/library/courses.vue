@@ -1,17 +1,23 @@
 <template>
 	<LibraryLayout title="Courses">
 		<template v-if="data.length">
-			<sofa-activity-card v-for="activity in data" :key="activity.id" :activity="activity"
-				:isWrapped="!Logic.Common.isLarge" :custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
+			<sofa-activity-card
+				v-for="activity in data"
+				:key="activity.id"
+				:activity="activity"
+				:isWrapped="!Logic.Common.isLarge"
+				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="openCourse(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon :name="'more-options-horizontal'" :customClass="'h-[6px]'"
-						@click.stop="showMoreOptionHandler(activity)" />
+					<sofa-icon :name="'more-options-horizontal'" :customClass="'h-[6px]'" @click.stop="showMoreOptionHandler(activity)" />
 				</div>
 			</sofa-activity-card>
 		</template>
 
-		<sofa-empty-state v-else :title="'You have no course here'" :actionLabel="'Explore'"
+		<sofa-empty-state
+			v-else
+			:title="'You have no course here'"
+			:actionLabel="'Explore'"
 			:subTitle="'Discover thousands of courses and save them here for easy access'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
@@ -38,9 +44,9 @@ export default defineComponent({
 	name: 'LibraryCoursesPage',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup () {
+	setup() {
 		const route = useRoute()
-		const tab = computed(() => route.query.tab as string ?? 'recent')
+		const tab = computed(() => (route.query.tab as string) ?? 'recent')
 
 		const { published, draft } = useMyCourses()
 		const { courses: recentCourses } = useRecent()

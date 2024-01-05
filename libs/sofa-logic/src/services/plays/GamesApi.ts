@@ -27,9 +27,12 @@ export default class GamesApi extends ModelApiService {
 
 	public async getGameAnswers(gameId: string, filters: QueryParams) {
 		try {
-			const response: AxiosResponse<Paginated<GameParticipantAnswer>> = await this.axiosInstance.get(this.getUrl() + `/${gameId}/answers`, {
-				params: filters,
-			})
+			const response: AxiosResponse<Paginated<GameParticipantAnswer>> = await this.axiosInstance.get(
+				this.getUrl() + `/${gameId}/answers`,
+				{
+					params: filters,
+				},
+			)
 
 			return response
 		} catch (err) {
@@ -41,9 +44,7 @@ export default class GamesApi extends ModelApiService {
 
 	public async getGameQuestions(gameId: string) {
 		try {
-			const response: AxiosResponse<Question[]> = await this.axiosInstance.get(
-				this.getUrl() + `/${gameId}/questions`,
-			)
+			const response: AxiosResponse<Question[]> = await this.axiosInstance.get(this.getUrl() + `/${gameId}/questions`)
 
 			return response
 		} catch (err) {
@@ -56,14 +57,11 @@ export default class GamesApi extends ModelApiService {
 	public async joinGame(
 		gameId: string,
 		data: {
-      join: boolean
-    },
+			join: boolean
+		},
 	) {
 		try {
-			const response: AxiosResponse<Game> = await this.axiosInstance.post(
-				this.getUrl() + `/${gameId}/join`,
-				data,
-			)
+			const response: AxiosResponse<Game> = await this.axiosInstance.post(this.getUrl() + `/${gameId}/join`, data)
 
 			return response
 		} catch (err) {
@@ -75,9 +73,7 @@ export default class GamesApi extends ModelApiService {
 
 	public async startGame(gameId: string) {
 		try {
-			const response: AxiosResponse<Game> = await this.axiosInstance.post(
-				this.getUrl() + `/${gameId}/start`,
-			)
+			const response: AxiosResponse<Game> = await this.axiosInstance.post(this.getUrl() + `/${gameId}/start`)
 
 			return response
 		} catch (err) {
@@ -89,9 +85,7 @@ export default class GamesApi extends ModelApiService {
 
 	public async endGame(gameId: string) {
 		try {
-			const response: AxiosResponse<Game> = await this.axiosInstance.post(
-				this.getUrl() + `/${gameId}/end`,
-			)
+			const response: AxiosResponse<Game> = await this.axiosInstance.post(this.getUrl() + `/${gameId}/end`)
 			return response
 		} catch (err) {
 			this.handleErrors(err)
@@ -102,10 +96,7 @@ export default class GamesApi extends ModelApiService {
 
 	public async answerGameQuestion(gameId: string, data: AddQuestionAnswer) {
 		try {
-			const response: AxiosResponse<GameParticipantAnswer> = await this.axiosInstance.post(
-				this.getUrl() + `/${gameId}/answers`,
-				data,
-			)
+			const response: AxiosResponse<GameParticipantAnswer> = await this.axiosInstance.post(this.getUrl() + `/${gameId}/answers`, data)
 
 			return response
 		} catch (err) {

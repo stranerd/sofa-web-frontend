@@ -4,15 +4,30 @@
 			<AuthProvider />
 
 			<div class="w-full flex flex-col gap-4">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					type="email" :name="'Email'" ref="email" v-model="factory.email" :placeholder="'Email'"
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="email"
+					:name="'Email'"
+					ref="email"
+					v-model="factory.email"
+					:placeholder="'Email'"
 					:error="factory.errors.email" />
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					:type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
-					:error="factory.errors.password" v-model="factory.password" />
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					type="password" :name="'Confirm password'" ref="confirm_new_password"
-					v-model="factory.cPassword" :placeholder="'Confirm password'" :error="factory.errors.cPassword" />
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					:type="'password'"
+					:placeholder="'Password'"
+					:name="'Password'"
+					ref="password"
+					:error="factory.errors.password"
+					v-model="factory.password" />
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="password"
+					:name="'Confirm password'"
+					ref="confirm_new_password"
+					v-model="factory.cPassword"
+					:placeholder="'Confirm password'"
+					:error="factory.errors.cPassword" />
 			</div>
 
 			<div class="flex flex-col items-center gap-2">
@@ -46,12 +61,7 @@
 import AuthProvider from '@/components/auth/AuthProvider.vue'
 import { useEmailSignup } from '@/composables/auth/signin'
 import { generateMiddlewares } from '@/middlewares'
-import {
-	SofaButton,
-	SofaCheckbox,
-	SofaNormalText,
-	SofaTextField
-} from 'sofa-ui-components'
+import { SofaButton, SofaCheckbox, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -65,10 +75,10 @@ export default defineComponent({
 	},
 	name: 'AuthRegisterPage',
 	beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
-	setup () {
+	setup() {
 		useMeta({ title: 'Create Your Account' })
 		const { factory, signup } = useEmailSignup()
 		return { factory, signup }
-	}
+	},
 })
 </script>

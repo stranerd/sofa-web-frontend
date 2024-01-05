@@ -1,13 +1,18 @@
 <template>
 	<!-- create item action -->
-	<sofa-modal :close="() => {
-		close ? close() : null
-	}
-	" :can-close="canClose">
-		<div class="mdlg:!w-[60%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
-			@click.stop="() => {
-				//
+	<sofa-modal
+		:close="
+			() => {
+				close ? close() : null
 			}
+		"
+		:can-close="canClose">
+		<div
+			class="mdlg:!w-[60%] lg:!w-[50%] mdlg:!h-full w-full h-auto md:w-[70%] flex flex-col items-center relative"
+			@click.stop="
+				() => {
+					//
+				}
 			">
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
@@ -40,16 +45,20 @@
 					</div>
 
 					<div class="flex flex-col w-full">
-						<sofa-textarea :padding="'px-3 py-4'" :custom-class="'bg-lightGray rounded-custom'"
-							:placeholder="'Write a short message'" v-model="formData.review"
+						<sofa-textarea
+							:padding="'px-3 py-4'"
+							:custom-class="'bg-lightGray rounded-custom'"
+							:placeholder="'Write a short message'"
+							v-model="formData.review"
 							:text-area-style="'!bg-lightGray rounded-custom'">
 						</sofa-textarea>
 					</div>
 
 					<div class="w-full flex flex-row items-center justify-center">
 						<div class="w-full md:w-auto flex flex-col">
-							<sofa-button @click="submitReview()" :padding="'px-5 md:py-2 py-3'"
-								:customClass="'!w-full'">Submit</sofa-button>
+							<sofa-button @click="submitReview()" :padding="'px-5 md:py-2 py-3'" :customClass="'!w-full'">
+								Submit
+							</sofa-button>
 						</div>
 					</div>
 				</div>
@@ -59,16 +68,7 @@
 </template>
 <script lang="ts">
 import { showAddItem } from '@/composables'
-import {
-	SofaAvatar,
-	SofaButton,
-	SofaHeaderText,
-	SofaIcon,
-	SofaModal,
-	SofaNormalText,
-	SofaRatings,
-	SofaTextarea,
-} from 'sofa-ui-components'
+import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaRatings, SofaTextarea } from 'sofa-ui-components'
 import { defineComponent, reactive } from 'vue'
 
 export default defineComponent({
@@ -92,9 +92,9 @@ export default defineComponent({
 		},
 		tutor: {
 			type: Object as () => {
-        name: string
-        photo: string
-      },
+				name: string
+				photo: string
+			},
 		},
 		canClose: {
 			type: Boolean,
@@ -106,7 +106,7 @@ export default defineComponent({
 		},
 	},
 	emits: ['OnReviewSubmitted'],
-	setup (props, context) {
+	setup(props, context) {
 		const formData = reactive({
 			ratings: 1,
 			review: '',

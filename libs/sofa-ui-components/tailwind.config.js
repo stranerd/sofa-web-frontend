@@ -29,7 +29,7 @@ module.exports = {
 				itemBox: '0px 16px 12px rgba(130, 130, 140, 0.1)',
 			},
 			borderRadius: {
-				custom: '1rem 0.5rem 1rem 0.5rem'
+				custom: '1rem 0.5rem 1rem 0.5rem',
 			},
 		},
 		screens: {
@@ -48,9 +48,5 @@ module.exports = {
 			'3xl': '1.5rem',
 		},
 	},
-	plugins: [
-		require('@tailwindcss/typography'),
-		require('tailwind-scrollbar-hide'),
-		require('tailwind-scrollbar'),
-	],
+	plugins: [require('@tailwindcss/typography'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar')],
 }

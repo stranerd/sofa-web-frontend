@@ -2,16 +2,8 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
-import {
-	SingleUser,
-	TutorRequest,
-	UserVerification,
-} from '../types/domains/users'
-import {
-	CreateTutorRequestForm,
-	CreateVerificationInput,
-	VerificationStatusInput
-} from '../types/forms/users'
+import { SingleUser, TutorRequest, UserVerification } from '../types/domains/users'
+import { CreateTutorRequestForm, CreateVerificationInput, VerificationStatusInput } from '../types/forms/users'
 import Common from './Common'
 
 export default class Users extends Common {
@@ -35,9 +27,7 @@ export default class Users extends Common {
 		return $api.users.tutor_request.fetch(filters).then((response) => {
 			this.AllTutorRequests = response.data
 			if (isPersonal) {
-				this.SingleTutorRequest = this.AllTutorRequests.results.length
-					? this.AllTutorRequests.results[0]
-					: undefined
+				this.SingleTutorRequest = this.AllTutorRequests.results.length ? this.AllTutorRequests.results[0] : undefined
 			}
 		})
 	}
@@ -77,10 +67,7 @@ export default class Users extends Common {
 
 	public UpdateUserVerification = (formIsValid: boolean) => {
 		if (formIsValid && this.UpdateUserVerificationForm) {
-			return $api.users.verifications
-				.updateUserVerification(this.UpdateUserVerificationForm)
-				.then()
-				.catch()
+			return $api.users.verifications.updateUserVerification(this.UpdateUserVerificationForm).then().catch()
 		}
 	}
 
@@ -102,11 +89,9 @@ export default class Users extends Common {
 	}
 
 	public AcceptOrRejectTutorRequest = (requestId: string, status: boolean) => {
-		return $api.users.tutor_request
-			.acceptOrRejectTutorRequest(requestId, status)
-			.then((response) => {
-				return response.data
-			})
+		return $api.users.tutor_request.acceptOrRejectTutorRequest(requestId, status).then((response) => {
+			return response.data
+		})
 	}
 
 	public SendFeedbackMessage = (message: string) => {

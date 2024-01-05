@@ -5,17 +5,14 @@
 		:style="`
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center; ${
-			imageUrl || loadDirectly
-				? `background-image:url(${loadDirectly ? photoUrl : imageUrl});`
-				: ''
-		}  ${customStyle}`"
-	>
+    background-position: center;
+	${imageUrl || loadDirectly ? `background-image:url(${loadDirectly ? photoUrl : imageUrl});` : ''}
+	${customStyle}`">
 		<slot />
 	</div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onMounted, toRef, watch } from 'vue'
+import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
 
 export default defineComponent({
 	name: 'SofaImageLoader',

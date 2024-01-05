@@ -1,16 +1,11 @@
 <template>
 	<div :class="`${customClass} w-full h-[180px] relative `">
-		<div
-			class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center"
-		>
+		<div class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center">
 			<sofa-header-text size="xl" :customClass="textStyle">
 				<slot />
 			</sofa-header-text>
 		</div>
-		<canvas
-			:id="`pieChart${randomIndex}`"
-			class="w-full z-40 absolute h-full"
-		></canvas>
+		<canvas :id="`pieChart${randomIndex}`" class="w-full z-40 absolute h-full"></canvas>
 	</div>
 </template>
 <script lang="ts">
@@ -80,7 +75,7 @@ export default defineComponent({
 								},
 							},
 						},
-					})
+					}),
 				)
 
 				pieChart.value = chartData

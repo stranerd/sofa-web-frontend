@@ -32,7 +32,7 @@ const addCourseFileForm = reactive<CreateDocumentInput>({
 	id: '',
 })
 
-const  getTopics = (useId = false) => {
+const getTopics = (useId = false) => {
 	const data = []
 	Logic.Study.Tags?.results?.forEach((tag) => {
 		if (tag.type == 'topics') {
@@ -112,12 +112,7 @@ const updateCourse = (formComp: any) => {
 			amount: parseFloat(courseSettingForm.price.replace(/,/g, '')),
 			currency: 'NGN',
 		},
-		tags: courseSettingForm.tags
-			.concat(
-				...courseSettingForm.tagString.split(',')
-					.map((item) => item.trim()),
-			)
-			.filter(Boolean),
+		tags: courseSettingForm.tags.concat(...courseSettingForm.tagString.split(',').map((item) => item.trim())).filter(Boolean),
 		title: courseSettingForm.title,
 		topic: courseSettingForm.topic,
 		photo: courseSettingForm.photo,
@@ -153,17 +148,13 @@ const updateCourseSections = () => {
 			sections: updateCourseSectionForm.sections,
 		}
 
-		const unsectionedSection = updateCourseSectionForm.sections.filter(
-			(item) => {
-				return item.label == 'unsectioned'
-			},
-		)[0]
+		const unsectionedSection = updateCourseSectionForm.sections.filter((item) => {
+			return item.label == 'unsectioned'
+		})[0]
 
-		Logic.Study.UpdateCourseSectionForm.sections = updateCourseSectionForm.sections.filter(
-			(item) => {
-				return item.label != 'unsectioned'
-			},
-		)
+		Logic.Study.UpdateCourseSectionForm.sections = updateCourseSectionForm.sections.filter((item) => {
+			return item.label != 'unsectioned'
+		})
 
 		Logic.Study.UpdateCourseSectionForm.sections.push(unsectionedSection)
 
@@ -225,5 +216,18 @@ const addQuizToCourse = (quizId: string) => {
 }
 
 export {
-	addCourseFile, addCourseFileForm, addQuizToCourse, allGenericTags, allTopics, courseSettingForm, courseSettingSaved, createCourse, getGenericTags, getTopics, hasUnsavedChanges, updateCourse, updateCourseSectionForm, updateCourseSections
+	addCourseFile,
+	addCourseFileForm,
+	addQuizToCourse,
+	allGenericTags,
+	allTopics,
+	courseSettingForm,
+	courseSettingSaved,
+	createCourse,
+	getGenericTags,
+	getTopics,
+	hasUnsavedChanges,
+	updateCourse,
+	updateCourseSectionForm,
+	updateCourseSections,
 }

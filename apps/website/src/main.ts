@@ -14,9 +14,7 @@ const init = async () => {
 
 	for (const plugin of globalPlugins) await plugin({ app, router }).catch()
 
-	app.use(router)
-		.use(createMetaManager())
-		.mount('#app')
+	app.use(router).use(createMetaManager()).mount('#app')
 
 	await router.isReady().catch()
 }

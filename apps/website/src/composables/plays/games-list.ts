@@ -11,18 +11,32 @@ const store = {
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Game>('plays/games', {
-			created: async (entity) => {
-				Logic.addToArray(store.games.value, entity, (e) => e.id, (e) => e.createdAt)
+		return Logic.Common.listenToMany<Game>(
+			'plays/games',
+			{
+				created: async (entity) => {
+					Logic.addToArray(
+						store.games.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					Logic.addToArray(
+						store.games.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.games.value = store.games.value.filter((m) => m.id !== entity.id)
+				},
 			},
-			updated: async (entity) => {
-				Logic.addToArray(store.games.value, entity, (e) => e.id, (e) => e.createdAt)
-			},
-			deleted: async (entity) => {
-				store.games.value = store.games.value.filter((m) => m.id !== entity.id)
-			}
-		}, (e) => e.user.id === id.value || e.participants.includes(id.value))
-	})
+			(e) => e.user.id === id.value || e.participants.includes(id.value),
+		)
+	}),
 }
 
 export const useMyGames = () => {
@@ -34,10 +48,20 @@ export const useMyGames = () => {
 			await store.setLoading(true)
 			const games = await Logic.Plays.GetGames({
 				whereType: QueryKeys.or,
-				where: [{ field: 'user.id', value: id.value }, { field: 'participants', value: id.value }],
-				all: true
+				where: [
+					{ field: 'user.id', value: id.value },
+					{ field: 'participants', value: id.value },
+				],
+				all: true,
 			})
-			games.results.forEach((r) => Logic.addToArray(store.games.value, r, (e) => e.id, (e) => e.createdAt))
+			games.results.forEach((r) =>
+				Logic.addToArray(
+					store.games.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
 			store.fetched.value = true
 		} catch (e) {
 			await store.setError(e)
@@ -46,17 +70,15 @@ export const useMyGames = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */!store.loading.value) await fetchGames()
+		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchGames()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
 
-	const ongoing = computed(() => store.games.value
-		.filter((p) => [PlayStatus.created, PlayStatus.started].includes(p.status)))
-	const ended = computed(() => store.games.value
-		.filter((p) => [PlayStatus.ended, PlayStatus.scored].includes(p.status)))
+	const ongoing = computed(() => store.games.value.filter((p) => [PlayStatus.created, PlayStatus.started].includes(p.status)))
+	const ended = computed(() => store.games.value.filter((p) => [PlayStatus.ended, PlayStatus.scored].includes(p.status)))
 
 	return { ...store, ongoing, ended }
 }

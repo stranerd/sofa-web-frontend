@@ -1,5 +1,5 @@
 <template>
-	<div  />
+	<div />
 </template>
 
 <script lang="ts">
@@ -9,9 +9,12 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
 	name: 'ProfilePage',
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => {
-		const { id } = useAuth()
-		return `/profile/${id.value}`
-	}])
+	beforeRouteEnter: generateMiddlewares([
+		'isAuthenticated',
+		async () => {
+			const { id } = useAuth()
+			return `/profile/${id.value}`
+		},
+	]),
 })
 </script>

@@ -1,14 +1,18 @@
 <template>
 	<div class="flex flex-row items-center justify-around gap-1 z-40">
 		<span v-for="index in numberOfInput" :key="index + '' + uniqueKey">
-			<input :id="'' + uniqueKey + index" v-model="otps[index - 1]" type="tel"
+			<input
+				:id="'' + uniqueKey + index"
+				v-model="otps[index - 1]"
+				type="tel"
 				class="md:!w-[53px] md:!h-[53px] w-[40px] h-[40px] text-lg text-center text-darkBody focus:outline-none !bg-lightGray rounded-custom"
-				:disabled="isDisabled" @keypress="onKeyPress" @keyup.right="focusInputByRef('' + uniqueKey + (index + 1))"
+				:disabled="isDisabled"
+				@keypress="onKeyPress"
+				@keyup.right="focusInputByRef('' + uniqueKey + (index + 1))"
 				@keyup.left="focusInputByRef('' + uniqueKey + (index - 1))"
-				@keyup.delete="focusInputByRef('' + uniqueKey + (index - 1))" @paste="onPaste" @input="
-					onInput($event, '' + uniqueKey + (index + 1))
-					setValue();
-				" />
+				@keyup.delete="focusInputByRef('' + uniqueKey + (index - 1))"
+				@paste="onPaste"
+				@input="onInput($event, '' + uniqueKey + (index + 1))" />
 		</span>
 	</div>
 </template>
@@ -75,7 +79,7 @@ export default defineComponent({
 		},
 	},
 	emits: ['update:modelValue'],
-	setup (props: any, context) {
+	setup(props: any, context) {
 		const otps = ref<string[]>([])
 
 		const otp = computed(() => {
@@ -131,6 +135,7 @@ export default defineComponent({
 			focusInputByRef(id)
 
 			event.preventDefault()
+			setValue()
 		}
 
 		const setValue = () => {
@@ -139,8 +144,7 @@ export default defineComponent({
 
 		const onPaste = (event: any) => {
 			// Getting copy text
-			const clipboardData =
-        event.clipboardData || event.originalEvent.clipboardData
+			const clipboardData = event.clipboardData || event.originalEvent.clipboardData
 			const pastedData = clipboardData.getData('Text')
 			const arrayOfNumbers = pastedData.split('')
 

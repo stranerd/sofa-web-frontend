@@ -6,14 +6,7 @@ import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import {
-	Course,
-	Folder,
-	Question,
-	QuestionAnswer,
-	Quiz,
-	SofaFile,
-} from '../types/domains/study'
+import { Course, Folder, Question, QuestionAnswer, Quiz, SofaFile } from '../types/domains/study'
 import { AddReviewInput, AddTagInput } from '../types/forms/common'
 import {
 	AddItemToCourseInput,
@@ -73,20 +66,20 @@ export default class Study extends Common {
 	public RatedMaterials: (Course | Quiz)[] | undefined
 	public PopularMaterials: (Course | Quiz)[] | undefined
 	public HomeMaterials:
-    | {
-        recent: (Course | Quiz)[]
-        my_org: (Course | Quiz)[]
-        suggested: (Course | Quiz)[]
-      }
-    | undefined
+		| {
+				recent: (Course | Quiz)[]
+				my_org: (Course | Quiz)[]
+				suggested: (Course | Quiz)[]
+		  }
+		| undefined
 
 	public MarketplaceMaterials:
-    | {
-        lastest: (Course | Quiz)[]
-        rated: (Course | Quiz)[]
-        popular: (Course | Quiz)[]
-      }
-    | undefined
+		| {
+				lastest: (Course | Quiz)[]
+				rated: (Course | Quiz)[]
+				popular: (Course | Quiz)[]
+		  }
+		| undefined
 	public SingleReview: Review | undefined
 	public AllReviews: Paginated<Review> | undefined
 
@@ -163,32 +156,32 @@ export default class Study extends Common {
 		questions: [],
 	})
 
-	public getQuestionTypeLabel (type: Question['strippedData']['type']) {
+	public getQuestionTypeLabel(type: Question['strippedData']['type']) {
 		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
 		return data.extras.label
 	}
 
-	public getQuestionTypeIcon (type: Question['strippedData']['type']) {
+	public getQuestionTypeIcon(type: Question['strippedData']['type']) {
 		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
 		return data.extras.icon
 	}
 
-	public getQuestionTypeImage (type: Question['strippedData']['type']) {
+	public getQuestionTypeImage(type: Question['strippedData']['type']) {
 		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
 		return data.extras.image
 	}
 
-	public getQuestionTypeTemplate (type: Question['strippedData']['type']) :CreateQuestionInput {
+	public getQuestionTypeTemplate(type: Question['strippedData']['type']): CreateQuestionInput {
 		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
 		return data.template
 	}
 
-	public getAllQuestionTypes () {
+	public getAllQuestionTypes() {
 		return Object.entries(this.questionTypes).map(([key, t]) => ({
 			label: t.extras.label,
 			value: key as Question['strippedData']['type'],
 			icon: t.extras.icon,
-			image: t.extras.image
+			image: t.extras.image,
 		}))
 	}
 
@@ -204,14 +197,14 @@ export default class Study extends Common {
 				data: {
 					type: 'multipleChoice' as const,
 					options: ['a', 'b', 'c', 'd'].map(wrap),
-					answers: [0,1]
-				}
+					answers: [0, 1],
+				},
 			},
 			extras: {
 				label: 'Multiple choice',
 				image: 'multiple_choice',
-				icon: 'multiple-choice-type'
-			}
+				icon: 'multiple-choice-type',
+			},
 		},
 		writeAnswer: {
 			template: {
@@ -221,14 +214,14 @@ export default class Study extends Common {
 				explanation: '',
 				data: {
 					type: 'writeAnswer' as const,
-					answers: ['a', 'b'].map(wrap)
-				}
+					answers: ['a', 'b'].map(wrap),
+				},
 			},
 			extras: {
 				label: 'Write answer',
 				image: 'write_answer',
-				icon: 'write-answer-type'
-			}
+				icon: 'write-answer-type',
+			},
 		},
 		trueOrFalse: {
 			template: {
@@ -238,14 +231,14 @@ export default class Study extends Common {
 				explanation: '',
 				data: {
 					type: 'trueOrFalse' as const,
-					answer: true
-				}
+					answer: true,
+				},
 			},
 			extras: {
 				label: 'True/False',
 				icon: 'true-false-type',
-				image: 'true_false'
-			}
+				image: 'true_false',
+			},
 		},
 		fillInBlanks: {
 			template: {
@@ -256,14 +249,14 @@ export default class Study extends Common {
 				data: {
 					type: 'fillInBlanks' as const,
 					indicator: this.indicator,
-					answers: ['a', 'b']
-				}
+					answers: ['a', 'b'],
+				},
 			},
 			extras: {
 				label: 'Fill in blank(s)',
 				image: 'fill_in_blank',
-				icon: 'fill-in-blanks-type'
-			}
+				icon: 'fill-in-blanks-type',
+			},
 		},
 		dragAnswers: {
 			template: {
@@ -274,14 +267,14 @@ export default class Study extends Common {
 				data: {
 					type: 'dragAnswers' as const,
 					indicator: this.indicator,
-					answers: ['a', 'b']
-				}
+					answers: ['a', 'b'],
+				},
 			},
 			extras: {
 				label: 'Drag answers',
 				image: 'drag_answer',
-				icon: 'drag-answers-type'
-			}
+				icon: 'drag-answers-type',
+			},
 		},
 		sequence: {
 			template: {
@@ -291,14 +284,14 @@ export default class Study extends Common {
 				explanation: '',
 				data: {
 					type: 'sequence' as const,
-					answers: ['a', 'b', 'c', 'd', 'e', 'f'].map(wrap)
-				}
+					answers: ['a', 'b', 'c', 'd', 'e', 'f'].map(wrap),
+				},
 			},
 			extras: {
 				label: 'Sequence',
 				image: 'sequence',
-				icon: 'sequence-type'
-			}
+				icon: 'sequence-type',
+			},
 		},
 		match: {
 			template: {
@@ -313,25 +306,23 @@ export default class Study extends Common {
 						{ q: 'Left 2', a: 'Right 2' },
 						{ q: 'Left 3', a: 'Right 3' },
 						{ q: 'Left 4', a: 'Right 4' },
-					].map((s) => ({ q: wrap(s.q), a: wrap(s.a) }))
-				}
+					].map((s) => ({ q: wrap(s.q), a: wrap(s.a) })),
+				},
 			},
 			extras: {
 				label: 'Match',
 				image: 'match',
-				icon: 'match-type'
-			}
-		}
+				icon: 'match-type',
+			},
+		},
 	}
 
 	public GetTagName = (id: string) => {
-		const Tag = [
-			...(this.Tags?.results || []),
-			...(this.AllTopics?.results || []),
-			...(this.AllOtherTags?.results || []),
-		].filter((tag) => {
-			return tag.id == id
-		})
+		const Tag = [...(this.Tags?.results || []), ...(this.AllTopics?.results || []), ...(this.AllOtherTags?.results || [])].filter(
+			(tag) => {
+				return tag.id == id
+			},
+		)
 
 		if (Tag.length) {
 			return Tag[0].title
@@ -387,9 +378,8 @@ export default class Study extends Common {
 		})
 	}
 
-	public async getFolders (filters: QueryParams) {
-		return $api.study.folder.fetch(filters)
-			.then((response) => response.data)
+	public async getFolders(filters: QueryParams) {
+		return $api.study.folder.fetch(filters).then((response) => response.data)
 	}
 
 	public GetFolders = async (filters: QueryParams, showLoader = false) => {
@@ -437,38 +427,42 @@ export default class Study extends Common {
 	public GetFolder = async (id: string) => {
 		const folder: Folder | null = (await $api.study.folder.get(id)).data
 
-		if (folder) await Promise.all([
-			$api.study.course.fetch({
-				where: [
-					{
-						field: 'id',
-						value: folder.saved.courses,
-						condition: Conditions.in,
-					},
-				],
-				all: true,
-			}).then((response) => {
-				folder.courses = response.data.results
-			}),
-			$api.study.quiz
-				.fetch({
-					where: [
-						{
-							field: 'id',
-							value: folder.saved.quizzes,
-							condition: Conditions.in,
-						},
-					],
-					all: true,
-				}).then((response) => {
-					folder.quizzes = response.data.results
-				})
-		])
+		if (folder)
+			await Promise.all([
+				$api.study.course
+					.fetch({
+						where: [
+							{
+								field: 'id',
+								value: folder.saved.courses,
+								condition: Conditions.in,
+							},
+						],
+						all: true,
+					})
+					.then((response) => {
+						folder.courses = response.data.results
+					}),
+				$api.study.quiz
+					.fetch({
+						where: [
+							{
+								field: 'id',
+								value: folder.saved.quizzes,
+								condition: Conditions.in,
+							},
+						],
+						all: true,
+					})
+					.then((response) => {
+						folder.quizzes = response.data.results
+					}),
+			])
 		this.SingleFolder = folder
 		return folder
 	}
 
-	public GetQuizzes = (filters: QueryParams, updateItems = true) :Promise<Paginated<Quiz>> => {
+	public GetQuizzes = (filters: QueryParams, updateItems = true): Promise<Paginated<Quiz>> => {
 		return $api.study.quiz.fetch(filters).then((response) => {
 			if (updateItems) this.AllQuzzies = response.data
 			return response.data
@@ -490,7 +484,7 @@ export default class Study extends Common {
 		})
 	}
 
-	public GetQuestions = (quizId: string, filters: QueryParams = {}) :Promise<Paginated<Question> | undefined> => {
+	public GetQuestions = (quizId: string, filters: QueryParams = {}): Promise<Paginated<Question> | undefined> => {
 		if (!quizId || quizId == 'empty') return undefined
 		return $api.study.quiz
 			.getQuestions(quizId, filters)
@@ -504,14 +498,16 @@ export default class Study extends Common {
 			})
 	}
 
-	private compare (a: string, b: string, quality = 0.95) {
-		return stringSimilarity.compareTwoStrings(
-			stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
-			stripHTML(b).toLowerCase().replaceAll(' ', '').trim()
-		) >= quality
+	private compare(a: string, b: string, quality = 0.95) {
+		return (
+			stringSimilarity.compareTwoStrings(
+				stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
+				stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
+			) >= quality
+		)
 	}
 
-	checkAnswer (question: Question, answer: any): boolean {
+	checkAnswer(question: Question, answer: any): boolean {
 		if (!question.data) return false
 
 		if (question.data.type === 'multipleChoice') {
@@ -522,37 +518,29 @@ export default class Study extends Common {
 			return question.data.answers.some((a) => this.compare(a, answer))
 		} else if (question.data.type === 'fillInBlanks') {
 			const answers = question.data.answers
-			return Array.isArray(answer) &&
-				answer.length === answers.length &&
-				answer.every((a, i) => this.compare(a, answers[i]))
+			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i]))
 		} else if (question.data.type === 'dragAnswers') {
 			const answers = question.data.answers
-			return Array.isArray(answer) &&
-				answer.length === answers.length &&
-				answer.every((a, i) => this.compare(a, answers[i], 1))
+			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i], 1))
 		} else if (question.data.type === 'sequence') {
 			const answers = question.data.answers
-			return Array.isArray(answer) &&
-				answer.length === answers.length &&
-				answer.every((a, i) => this.compare(a, answers[i], 1))
+			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i], 1))
 		} else if (question.data.type === 'match') {
 			const questions = question.data.set
-			return Array.isArray(answer) &&
-				answer.length === questions.length &&
-				answer.every((a, i) => this.compare(a, questions[i].a, 1))
+			return Array.isArray(answer) && answer.length === questions.length && answer.every((a, i) => this.compare(a, questions[i].a, 1))
 		}
 		return false
 	}
 
-	public transformQuestion (question: Question) {
+	public transformQuestion(question: Question) {
 		const type = question.strippedData.type
 
 		return {
 			...question,
-			get type () {
+			get type() {
 				return type
 			},
-			get instruction () {
+			get instruction() {
 				if (type === 'multipleChoice') return 'Choose the right answer(s)'
 				if (type === 'writeAnswer') return 'Type your answer'
 				if (type === 'trueOrFalse') return 'Choose an answer'
@@ -562,11 +550,11 @@ export default class Study extends Common {
 				if (type === 'match') return 'Drag items on the right side to rearrange'
 				return ''
 			},
-			get splitQuestions () {
+			get splitQuestions() {
 				if (type === 'fillInBlanks' || type === 'dragAnswers') return question.question.split(question.strippedData.indicator)
 				return []
 			},
-			get defaultAnswer () : QuestionAnswer {
+			get defaultAnswer(): QuestionAnswer {
 				if (type === 'multipleChoice') return []
 				if (type === 'writeAnswer') return ''
 				if (type === 'trueOrFalse') return '' as unknown as boolean
@@ -576,19 +564,19 @@ export default class Study extends Common {
 				if (type === 'match') return this.matchAnswers
 				return undefined
 			},
-			get dragAnswers () {
+			get dragAnswers() {
 				if (type === 'dragAnswers') return question.strippedData.answers
 				return []
 			},
-			get matchQuestions () {
+			get matchQuestions() {
 				if (type === 'match') return question.strippedData.questions
 				return []
 			},
-			get matchAnswers () {
+			get matchAnswers() {
 				if (type === 'match') return question.strippedData.answers
 				return []
 			},
-			get answer () {
+			get answer() {
 				if (!question.data) return ''
 				if (type === 'multipleChoice') return question.data.answers.map((idx) => question.data.options[idx]).join('<br>')
 				if (type === 'writeAnswer') return question.data.answers.join('<br>-- or --<br>')
@@ -596,21 +584,16 @@ export default class Study extends Common {
 				if (['fillInBlanks', 'dragAnswers', 'sequence'].includes(type)) return question.data.answers.join('<br>')
 				if (type === 'match') return question.data.set.map((s) => s.a).join('<br>')
 				return ''
-			}
+			},
 		}
 	}
 
-	public getShape (index: number) {
-		const shapes = [
-			'circle',
-			'triangle',
-			'square',
-			'kite'
-		]
+	public getShape(index: number) {
+		const shapes = ['circle', 'triangle', 'square', 'kite']
 		return shapes[index % shapes.length]
 	}
 
-	public getShapeSize (shape: string) {
+	public getShapeSize(shape: string) {
 		if (shape == 'circle') return 'md:h-[23px] h-[20px]'
 		if (shape == 'triangle') return 'md:h-[23px] h-[20px]'
 		if (shape == 'square') return 'md:h-[23px] h-[20px]'
@@ -624,10 +607,7 @@ export default class Study extends Common {
 		})
 	}
 
-	public GetCourses = (
-		filters: QueryParams,
-		updateItems = true,
-	): Promise<Paginated<Course>> => {
+	public GetCourses = (filters: QueryParams, updateItems = true): Promise<Paginated<Course>> => {
 		return $api.study.course.fetch(filters).then((response) => {
 			if (updateItems) this.AllCourses = response.data
 			return response.data
@@ -646,11 +626,7 @@ export default class Study extends Common {
 		})
 	}
 
-	public GetCoursesWithQuery = async (
-		query = 'nill',
-		tagId = '',
-		userId = '',
-	) => {
+	public GetCoursesWithQuery = async (query = 'nill', tagId = '', userId = '') => {
 		const whereQuery = []
 
 		if (tagId && tagId != 'nill') {
@@ -688,11 +664,7 @@ export default class Study extends Common {
 			})
 	}
 
-	public GetQuizzesWithQuery = async (
-		query = 'nill',
-		tagId = '',
-		userId = '',
-	) => {
+	public GetQuizzesWithQuery = async (query = 'nill', tagId = '', userId = '') => {
 		const whereQuery = []
 
 		if (tagId && tagId != 'nill') {
@@ -766,9 +738,7 @@ export default class Study extends Common {
 
 							await this.UpdateCourseSection()
 							Logic.Common.hideLoading()
-							Logic.Common.GoToRoute(
-								`/course/create?id=${Logic.Study.SingleCourse.id}`,
-							)
+							Logic.Common.GoToRoute(`/course/create?id=${Logic.Study.SingleCourse.id}`)
 						})
 						.catch(() => {
 							resolve('')
@@ -782,12 +752,8 @@ export default class Study extends Common {
 		}
 		return new Promise((resolve) => {
 			$api.study.course.get(id).then((response) => {
-				const allCourseableFiles = response.data?.coursables
-					?.filter((item) => item.type == 'file')
-					.map((item) => item.id)
-				const allCourseableQuizzes = response.data?.coursables
-					?.filter((item) => item.type == 'quiz')
-					.map((item) => item.id)
+				const allCourseableFiles = response.data?.coursables?.filter((item) => item.type == 'file').map((item) => item.id)
+				const allCourseableQuizzes = response.data?.coursables?.filter((item) => item.type == 'quiz').map((item) => item.id)
 
 				const allCoursableDataRequests: Promise<any>[] = []
 
@@ -1008,21 +974,17 @@ export default class Study extends Common {
 	}
 
 	public CreateFolder = (CreateFolderForm: CreateFolderInput) => {
-		return $api.study.folder
-			.post(null, CreateFolderForm)
-			.then((response) => {
-				this.SingleFolder = response.data
-				return this.SingleFolder
-			})
+		return $api.study.folder.post(null, CreateFolderForm).then((response) => {
+			this.SingleFolder = response.data
+			return this.SingleFolder
+		})
 	}
 
 	public UpdateFolder = (id: string, UpdateFolderForm: CreateFolderInput) => {
-		return $api.study.folder
-			.put(null, id, UpdateFolderForm)
-			.then((response) => {
-				this.SingleFolder = response.data
-				return this.SingleFolder
-			})
+		return $api.study.folder.put(null, id, UpdateFolderForm).then((response) => {
+			this.SingleFolder = response.data
+			return this.SingleFolder
+		})
 	}
 
 	public SaveItemToFolder = (formIsValid: boolean) => {
@@ -1034,9 +996,7 @@ export default class Study extends Common {
 					this.SingleFolder = response.data
 					Logic.Common.hideLoading()
 					Logic.Common.showAlert({
-						message: this.SaveItemToFolderForm.add
-							? 'Material added to folder'
-							: 'Material removed from folder',
+						message: this.SaveItemToFolderForm.add ? 'Material added to folder' : 'Material removed from folder',
 						type: 'success',
 					})
 					return response.data
@@ -1070,30 +1030,21 @@ export default class Study extends Common {
 	}
 
 	public CreateQuiz = (CreateQuizForm: CreateQuizInput) => {
-		return $api.study.quiz
-			.post(null, CreateQuizForm)
-			.then((response) => {
-				this.SingleQuiz = response.data
-				return this.SingleQuiz
-			})
+		return $api.study.quiz.post(null, CreateQuizForm).then((response) => {
+			this.SingleQuiz = response.data
+			return this.SingleQuiz
+		})
 	}
 
 	public UpdateQuiz = (id: string, UpdateQuizForm: CreateQuizInput) => {
-		return $api.study.quiz
-			.put(null, id, UpdateQuizForm)
-			.then((response) => {
-				this.SingleQuiz = response.data
-				return response.data
-			})
+		return $api.study.quiz.put(null, id, UpdateQuizForm).then((response) => {
+			this.SingleQuiz = response.data
+			return response.data
+		})
 	}
 
-	public SaveCourseChangesToLocal = (
-		UpdateCourseSections: UpdateCourseSectionsInput,
-	) => {
-		localStorage.setItem(
-			'couse_section_update',
-			JSON.stringify(UpdateCourseSections),
-		)
+	public SaveCourseChangesToLocal = (UpdateCourseSections: UpdateCourseSectionsInput) => {
+		localStorage.setItem('couse_section_update', JSON.stringify(UpdateCourseSections))
 	}
 
 	public SaveCourseLocalChanges = () => {
@@ -1102,15 +1053,12 @@ export default class Study extends Common {
 
 			this.UpdateCourseSectionForm = content
 
-			const unsectioned = this.UpdateCourseSectionForm.sections.filter(
-				(item) => item.label == 'unsectioned',
-			)[0]
+			const unsectioned = this.UpdateCourseSectionForm.sections.filter((item) => item.label == 'unsectioned')[0]
 			if (unsectioned) {
 				if (unsectioned.items.length > 0) {
 					Logic.Common.showAlert({
 						type: 'error',
-						message:
-              'Unsectioned has to be empty. Please, move all your materials to a section.',
+						message: 'Unsectioned has to be empty. Please, move all your materials to a section.',
 					})
 					return
 				} else {
@@ -1123,40 +1071,32 @@ export default class Study extends Common {
 		}
 	}
 
-	public async PublishQuiz (id: string) {
-		return $api.study.quiz
-			.publishQuiz(id)
-			.then((response) => {
-				this.SingleQuiz = response.data
-				return response.data
-			})
+	public async PublishQuiz(id: string) {
+		return $api.study.quiz.publishQuiz(id).then((response) => {
+			this.SingleQuiz = response.data
+			return response.data
+		})
 	}
 
 	public ReorderQuizQuestions = (id: string, ReorderQuizQuestionsForm: ReorderQuizInput) => {
-		return $api.study.quiz
-			.reorderQuiz(id, ReorderQuizQuestionsForm)
-			.then((response) => {
-				this.SingleQuiz = response.data
-				return this.SingleQuiz
-			})
+		return $api.study.quiz.reorderQuiz(id, ReorderQuizQuestionsForm).then((response) => {
+			this.SingleQuiz = response.data
+			return this.SingleQuiz
+		})
 	}
 
 	public CreateQuestion = (quizId: string, CreateQuestionForm: CreateQuestionInput) => {
-		return $api.study.quiz
-			.createQuestion(quizId, CreateQuestionForm)
-			.then((response) => {
-				this.SingleQuestion = response.data
-				return this.SingleQuestion
-			})
+		return $api.study.quiz.createQuestion(quizId, CreateQuestionForm).then((response) => {
+			this.SingleQuestion = response.data
+			return this.SingleQuestion
+		})
 	}
 
 	public UpdateQuestion = (quizId: string, questionId: string, UpdateQuestionForm: CreateQuestionInput) => {
-		return $api.study.quiz
-			.updateQuestion(quizId, questionId, UpdateQuestionForm)
-			.then((response) => {
-				this.UpdatedQuestion = response.data
-				return this.UpdatedQuestion
-			})
+		return $api.study.quiz.updateQuestion(quizId, questionId, UpdateQuestionForm).then((response) => {
+			this.UpdatedQuestion = response.data
+			return this.UpdatedQuestion
+		})
 	}
 
 	public CreateCourse = (formIsValid: boolean) => {
@@ -1207,10 +1147,7 @@ export default class Study extends Common {
 
 					if (!this.MoveItemToCourseForm.add) {
 						currentSections.forEach((item) => {
-							item.items = item.items.filter(
-								(eachitem) =>
-									eachitem.id != this.MoveItemToCourseForm.coursableId,
-							)
+							item.items = item.items.filter((eachitem) => eachitem.id != this.MoveItemToCourseForm.coursableId)
 						})
 
 						this.UpdateCourseSectionForm = {
@@ -1224,9 +1161,7 @@ export default class Study extends Common {
 					} else {
 						// remove items not in coursable
 						currentSections.forEach((item) => {
-							item.items = item.items.filter((eachitem) =>
-								this.SingleCourse.coursables.includes(eachitem),
-							)
+							item.items = item.items.filter((eachitem) => this.SingleCourse.coursables.includes(eachitem))
 						})
 
 						this.UpdateCourseSectionForm = {
@@ -1326,10 +1261,7 @@ export default class Study extends Common {
 		}
 	}
 	public DeleteTag = (id: string) => {
-		return $api.interactions.tag
-			.delete(id)
-			.then()
-			.catch()
+		return $api.interactions.tag.delete(id).then().catch()
 	}
 
 	public DeleteFolder = (id: string) => {
@@ -1354,26 +1286,19 @@ export default class Study extends Common {
 	}
 
 	public DeleteQuiz = (id: string) => {
-		return $api.study.quiz
-			.delete(id)
-			.then((response) => {
-				return response.data
-			})
+		return $api.study.quiz.delete(id).then((response) => {
+			return response.data
+		})
 	}
 
 	public DeleteQuestion = (id: string, quizId: string) => {
-		return $api.study.quiz
-			.deleteQuestion(quizId, id)
-			.then((response) => {
-				return response.data
-			})
+		return $api.study.quiz.deleteQuestion(quizId, id).then((response) => {
+			return response.data
+		})
 	}
 
 	public DeleteCourse = (id: string) => {
-		return $api.study.course
-			.delete(id)
-			.then()
-			.catch()
+		return $api.study.course.delete(id).then().catch()
 	}
 
 	public DeleteFile = (id: string) => {
@@ -1390,21 +1315,15 @@ export default class Study extends Common {
 			})
 	}
 
-	public async requestAccess (id: string, add: boolean) {
-		return $api.study.quiz
-			.requestAccess(id, add)
-			.then((res) => res.data)
+	public async requestAccess(id: string, add: boolean) {
+		return $api.study.quiz.requestAccess(id, add).then((res) => res.data)
 	}
 
-	public async grantAccess (id: string, userId: string, grant: boolean) {
-		return $api.study.quiz
-			.grantAccess(id, userId, grant)
-			.then((res) => res.data)
+	public async grantAccess(id: string, userId: string, grant: boolean) {
+		return $api.study.quiz.grantAccess(id, userId, grant).then((res) => res.data)
 	}
 
-	public async manageMembers (id: string, userIds: string[], grant: boolean) {
-		return $api.study.quiz
-			.manageMembers(id, userIds, grant)
-			.then((res) => res.data)
+	public async manageMembers(id: string, userIds: string[], grant: boolean) {
+		return $api.study.quiz.manageMembers(id, userIds, grant).then((res) => res.data)
 	}
 }

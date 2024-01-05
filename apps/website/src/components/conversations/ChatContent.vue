@@ -1,25 +1,29 @@
 <template>
 	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between flex-grow h-full flex-col">
-		<div
-			class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-darkLightGray text-left">
+		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-darkLightGray text-left">
 			<div class="flex items-center gap-3 flex-1">
 				<sofa-icon class="mdlg:hidden" customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
 				<sofa-avatar :photoUrl="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" />
 				<div class="flex flex-col w-full">
-					<sofa-custom-input v-model="title"
+					<sofa-custom-input
+						v-model="title"
 						:customClass="'!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base'"
-						@onContentChange="submitTitle" @onBlur="editTitle = false" :autoFocus="true"
+						@onContentChange="submitTitle"
+						@onBlur="editTitle = false"
+						:autoFocus="true"
 						v-if="canEditTitle && editTitle"></sofa-custom-input>
-					<SofaNormalText v-else @click="editTitle = canEditTitle"
-						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1" :content="data.title" />
+					<SofaNormalText
+						v-else
+						@click="editTitle = canEditTitle"
+						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1"
+						:content="data.title" />
 					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
 				</div>
 			</div>
 			<slot v-if="!editTitle" name="top-extras" />
 		</div>
 
-		<div
-			class="w-full bg-white flex flex-col items-start justify-start gap-2 h-full flex-grow overflow-y-auto px-4 py-2">
+		<div class="w-full bg-white flex flex-col items-start justify-start gap-2 h-full flex-grow overflow-y-auto px-4 py-2">
 			<slot />
 		</div>
 
@@ -41,17 +45,17 @@ const props = defineProps({
 			photoUrl: string | null
 			userNames: string[]
 		}>,
-		required: true
+		required: true,
 	},
 	canEditTitle: {
 		type: Boolean,
 		required: false,
-		default: false
+		default: false,
 	},
 	updateTitle: {
 		type: Function as PropType<(title: string) => Promise<void>>,
-		required: false
-	}
+		required: false,
+	},
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -66,7 +70,11 @@ const submitTitle = () => {
 	editTitle.value = false
 }
 
-watch(title, () => {
-	emits('update:modelValue', title.value)
-}, { immediate: true })
+watch(
+	title,
+	() => {
+		emits('update:modelValue', title.value)
+	},
+	{ immediate: true },
+)
 </script>

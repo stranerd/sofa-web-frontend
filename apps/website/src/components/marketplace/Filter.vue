@@ -3,8 +3,11 @@
 		<div class="w-full flex flex-col gap-3 px-4" v-if="selectedOptions.length">
 			<div class="w-full flex items-center gap-2 justify-between">
 				<sofa-normal-text :customClass="'!font-bold'">Applied filters</sofa-normal-text>
-				<sofa-normal-text :color="'text-primaryPink'" :customClass="'cursor-pointer'"
-					@click="selectedOptions.length = 0">Clear all</sofa-normal-text>
+				<sofa-normal-text
+					content="Clear all"
+					:color="'text-primaryPink'"
+					:customClass="'cursor-pointer'"
+					@click="selectedOptions.length = 0" />
 			</div>
 
 			<div class="flex gap-3 flex-wrap items-center">
@@ -18,8 +21,7 @@
 		</div>
 
 		<div class="w-full flex flex-col gap-3 px-4" v-for="(option, index) in searchOptions" :key="index">
-			<a class="w-full flex items-center justify-between"
-				@click="openOption = option.name === openOption ? '' : option.name">
+			<a class="w-full flex items-center justify-between" @click="openOption = option.name === openOption ? '' : option.name">
 				<div class="flex items-center gap-2">
 					<sofa-icon :customClass="'h-[16px]'" :name="option.icon" />
 					<sofa-normal-text :customClass="'!font-bold'" :content="option.name" />
@@ -28,10 +30,14 @@
 			</a>
 
 			<div class="w-full flex flex-wrap gap-3" v-if="option.name === openOption">
-				<a :class="`px-4 py-2 ${optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-lightGray'} rounded-custom flex items-center justify-center gap-1`"
-					v-for="(item, index) in option.options" :key="index" @click="toggleOption(item)">
-					<sofa-normal-text :color="`${optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'}`"
-						:content="item.name" />
+				<a
+					:class="`px-4 py-2 ${
+						optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-lightGray'
+					} rounded-custom flex items-center justify-center gap-1`"
+					v-for="(item, index) in option.options"
+					:key="index"
+					@click="toggleOption(item)">
+					<sofa-normal-text :color="`${optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'}`" :content="item.name" />
 				</a>
 			</div>
 		</div>
@@ -49,14 +55,14 @@ import { SofaButton, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent, reactive, ref, watch } from 'vue'
 
 export type SelectedOption = {
-  name: string
-  id: string
-  type: string
-  query: {
-    field: string
-    value: any
-    condition: Conditions
-  }
+	name: string
+	id: string
+	type: string
+	query: {
+		field: string
+		value: any
+		condition: Conditions
+	}
 }
 
 export default defineComponent({
@@ -66,7 +72,7 @@ export default defineComponent({
 		},
 		modelValue: {
 			type: Array as () => SelectedOption[],
-			default: () => []
+			default: () => [],
 		},
 	},
 	components: {
@@ -75,15 +81,19 @@ export default defineComponent({
 		SofaButton,
 	},
 	emits: ['update:modelValue'],
-	setup (props, context) {
+	setup(props, context) {
 		const AllTopics = ref(Logic.Study.AllTopics)
 		const AllOtherTags = ref(Logic.Study.AllOtherTags)
 
 		const selectedOptions = reactive(props.modelValue)
 
-		watch(selectedOptions, (value) => {
-			context.emit('update:modelValue', value)
-		}, { immediate: true })
+		watch(
+			selectedOptions,
+			(value) => {
+				context.emit('update:modelValue', value)
+			},
+			{ immediate: true },
+		)
 
 		const searchOptions = computed(() => [
 			{

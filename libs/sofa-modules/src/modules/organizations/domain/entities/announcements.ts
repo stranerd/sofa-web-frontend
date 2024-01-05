@@ -13,7 +13,7 @@ export class AnnouncementEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, classId, user, body, filter, readAt, createdAt, updatedAt }: AnnouncementFromModel) {
+	constructor({ id, organizationId, classId, user, body, filter, readAt, createdAt, updatedAt }: AnnouncementFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId

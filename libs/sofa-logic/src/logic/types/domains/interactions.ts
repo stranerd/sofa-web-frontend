@@ -1,62 +1,62 @@
 import { SingleUser } from './users'
 
 export interface Tags {
-  hash: string
-  id: string
-  type: string
-  title: string
-  parent?: string
-  meta: {
-    courses: number
-    quizzes: number
-    images: number
-    documents: number
-    videos: number
-    total: number
-  }
-  createdAt: number
-  updatedAt: number
+	hash: string
+	id: string
+	type: string
+	title: string
+	parent?: string
+	meta: {
+		courses: number
+		quizzes: number
+		images: number
+		documents: number
+		videos: number
+		total: number
+	}
+	createdAt: number
+	updatedAt: number
 }
 
 export interface View {
-  hash: string
-  id: string
-  entity: {
-    id: string
-    type: string
-    userId: string
-  }
-  user: SingleUser
-  createdAt: number
-  updatedAt: number
+	hash: string
+	id: string
+	entity: {
+		id: string
+		type: string
+		userId: string
+	}
+	user: SingleUser
+	createdAt: number
+	updatedAt: number
 }
 
 export interface Review {
-  hash: string
-  id: string
-  entity: {
-    id: string
-    type: string
-    userId: string
-  }
-  user: SingleUser
-  rating: number
-  message: string
-  createdAt: number
-  updatedAt: number
+	hash: string
+	id: string
+	entity: {
+		id: string
+		type: string
+		userId: string
+	}
+	user: SingleUser
+	rating: number
+	message: string
+	createdAt: number
+	updatedAt: number
 }
 
 export interface Report {
-  __type: 'ReportEntity'
-  hash: string
-  id: string
-  entity: {
-    id: string
-    type: string
-    userId: string
-  }
-  user: SingleUser
-  message: string
-  createdAt: number
-  updatedAt: number
+	__type: 'ReportEntity'
+	hash: string
+	id: string
+	entity: {
+		id: string
+		type: string
+		userId: string
+	}
+	user: SingleUser
+	message: string
+	createdAt: number
+	updatedAt: number
 }

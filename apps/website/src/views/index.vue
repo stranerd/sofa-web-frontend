@@ -18,7 +18,7 @@ export default defineComponent({
 	components: { HomeLayout, HomeForStudents, HomeForNonStudents },
 	name: 'IndexPage',
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Dashboard',
 		})

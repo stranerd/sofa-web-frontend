@@ -4,12 +4,22 @@
 			<AuthProvider />
 
 			<div class="w-full flex flex-col gap-4">
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					type="text" :name="'Email'" ref="email" v-model="factory.email" :placeholder="'Email'"
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					type="text"
+					:name="'Email'"
+					ref="email"
+					v-model="factory.email"
+					:placeholder="'Email'"
 					:error="factory.errors.email" />
-				<sofa-text-field :custom-class="'rounded-custom !bg-lightGray'"
-					:type="'password'" :placeholder="'Password'" :name="'Password'" ref="password"
-					:error="factory.errors.password" v-model="factory.password" />
+				<sofa-text-field
+					:custom-class="'rounded-custom !bg-lightGray'"
+					:type="'password'"
+					:placeholder="'Password'"
+					:name="'Password'"
+					ref="password"
+					:error="factory.errors.password"
+					v-model="factory.password" />
 			</div>
 
 			<div class="w-full flex flex-col">
@@ -46,10 +56,10 @@ export default defineComponent({
 	components: { AuthProvider, SofaNormalText, SofaTextField, SofaButton },
 	name: 'AuthLoginPage',
 	beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
-	setup () {
+	setup() {
 		useMeta({ title: 'Login To Your Account' })
 		const { factory, signin } = useEmailSignin()
 		return { factory, signin }
-	}
+	},
 })
 </script>

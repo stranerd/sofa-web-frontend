@@ -18,7 +18,6 @@ export const createSession = async (afterAuth: AfterAuthUser) => {
 	if (successful) await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
 }
 
-
 export const useRedirectToAuth = () => {
 	const route = useRoute()
 	const router = useRouter()

@@ -1,5 +1,6 @@
 <template>
-	<button :disabled="loading || disabled"
+	<button
+		:disabled="loading || disabled"
 		class="focus:outline-none disabled:opacity-30 relative rounded-custom flex gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs justify-center whitespace-nowrap"
 		:class="{
 			'opacity-75': loading,
@@ -52,17 +53,17 @@ export default defineComponent({
 			default: false,
 		},
 	},
-	name: 'SofaButton'
+	name: 'SofaButton',
 })
 </script>
 
 <style scoped>
 .shadow-button {
-  box-shadow: 0 2px #999;
+	box-shadow: 0 2px #999;
 }
 
 .shadow-button:active {
-  transform: translateY(2px);
-  box-shadow: none;
+	transform: translateY(2px);
+	box-shadow: none;
 }
 </style>

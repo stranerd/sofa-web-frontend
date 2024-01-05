@@ -1,11 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { ReadOnlyApiService } from '../common/ReadOnlyService'
 import { CommercialBanks, Wallet } from '../../logic/types/domains/payment'
-import {
-	FundWalletInput,
-	UpdateAccountNumberInput,
-	WithdrawalFromWalletInput,
-} from '../../logic/types/forms/payment'
+import { FundWalletInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from '../../logic/types/forms/payment'
 
 export default class WalletsApi extends ReadOnlyApiService {
 	constructor() {
@@ -14,9 +10,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async getUserWallet() {
 		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.get(
-				this.getUrl(),
-			)
+			const response: AxiosResponse<Wallet> = await this.axiosInstance.get(this.getUrl())
 
 			return response
 		} catch (err) {
@@ -28,9 +22,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async getCommercialBanks() {
 		try {
-			const response: AxiosResponse<
-        CommercialBanks[]
-      > = await this.axiosInstance.get(this.getUrl() + '/account/banks/NG')
+			const response: AxiosResponse<CommercialBanks[]> = await this.axiosInstance.get(this.getUrl() + '/account/banks/NG')
 
 			return response
 		} catch (err) {
@@ -42,10 +34,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async subscribeToPlan(data: { planId: string }) {
 		try {
-			const response: AxiosResponse<any> = await this.axiosInstance.post(
-				this.getUrl() + '/subscriptions',
-				data,
-			)
+			const response: AxiosResponse<any> = await this.axiosInstance.post(this.getUrl() + '/subscriptions', data)
 
 			return response
 		} catch (err) {
@@ -57,10 +46,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async fundWallet(data: FundWalletInput) {
 		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
-				this.getUrl() + '/fund',
-				data,
-			)
+			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(this.getUrl() + '/fund', data)
 
 			return response
 		} catch (err) {
@@ -72,10 +58,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async updateAccountNumber(data: UpdateAccountNumberInput) {
 		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
-				this.getUrl() + '/account',
-				data,
-			)
+			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(this.getUrl() + '/account', data)
 
 			return response
 		} catch (err) {
@@ -87,10 +70,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async verifyAccountNumber(data: UpdateAccountNumberInput) {
 		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
-				this.getUrl() + '/account/verify',
-				data,
-			)
+			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(this.getUrl() + '/account/verify', data)
 
 			return response
 		} catch (err) {
@@ -102,10 +82,7 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async withdrawFromWallet(data: WithdrawalFromWalletInput) {
 		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
-				this.getUrl() + '/withdraw',
-				data,
-			)
+			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(this.getUrl() + '/withdraw', data)
 
 			return response
 		} catch (err) {
@@ -117,12 +94,9 @@ export default class WalletsApi extends ReadOnlyApiService {
 
 	public async toggleSubscriptionRenew(renew: boolean) {
 		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(
-				this.getUrl() + '/subscriptions/renewal/toggle',
-				{
-					renew,
-				},
-			)
+			const response: AxiosResponse<Wallet> = await this.axiosInstance.post(this.getUrl() + '/subscriptions/renewal/toggle', {
+				renew,
+			})
 
 			return response
 		} catch (err) {

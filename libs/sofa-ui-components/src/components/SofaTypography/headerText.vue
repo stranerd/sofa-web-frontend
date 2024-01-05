@@ -28,45 +28,47 @@ export default defineComponent({
 		},
 		as: {
 			type: String,
-			default: 'h3'
-		}
+			default: 'h3',
+		},
 	},
 	name: 'RoofHeaderText',
-	setup (props) {
-		const cls = computed(() => [
-			'font-semibold text-header',
-			props.content ? 'body' : '',
-			props.size == 'xl' ? 'lg:text-3xl mdlg:text-xl text-lg' : '',
-			props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
-			props.size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : '',
-			props.size == 'xs' ? 'mdlg:!text-[12px] text-xs' : '',
-			props.customClass,
-			props.color,
-		].join(' '))
+	setup(props) {
+		const cls = computed(() =>
+			[
+				'font-semibold text-header',
+				props.content ? 'body' : '',
+				props.size == 'xl' ? 'lg:text-3xl mdlg:text-xl text-lg' : '',
+				props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
+				props.size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : '',
+				props.size == 'xs' ? 'mdlg:!text-[12px] text-xs' : '',
+				props.customClass,
+				props.color,
+			].join(' '),
+		)
 		return { cls }
-	}
+	},
 })
 </script>
 
 <style lang="scss" scoped>
 .body {
-  font-family: inherit;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
+	font-family: inherit;
+	word-wrap: break-word;
+	word-break: break-word;
+	overflow-wrap: break-word;
 
-  p {
-    margin-bottom: 0.25rem;
-  }
+	p {
+		margin-bottom: 0.25rem;
+	}
 
-  & > p:last-child {
-    margin-bottom: 0;
-  }
+	& > p:last-child {
+		margin-bottom: 0;
+	}
 
-  * {
-    word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
+	* {
+		word-wrap: break-word;
+		word-break: break-word;
+		overflow-wrap: break-word;
+	}
 }
 </style>

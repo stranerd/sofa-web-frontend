@@ -11,7 +11,7 @@ import {
 	UserStatus,
 	UserTutor,
 	UserType,
-	UserTypeData
+	UserTypeData,
 } from '../types'
 
 export class UserEntity extends BaseEntity {
@@ -27,7 +27,7 @@ export class UserEntity extends BaseEntity {
 	public readonly socials: UserSocialsType
 	public readonly location: UserLocation | null
 
-	constructor ({ id, bio, roles, account, status, dates, type, tutor, ai, socials, location }: UserFromModel) {
+	constructor({ id, bio, roles, account, status, dates, type, tutor, ai, socials, location }: UserFromModel) {
 		super()
 		this.id = id
 		this.bio = bio
@@ -42,34 +42,36 @@ export class UserEntity extends BaseEntity {
 		this.location = location
 	}
 
-	get isOnline () {
+	get isOnline() {
 		return this.status.connections.length > 0
 	}
 
-	get lastSeen () {
+	get lastSeen() {
 		return this.isOnline ? Date.now() : this.status.lastUpdatedAt
 	}
 
-	get score () {
+	get score() {
 		return this.account.rankings.overall.value
 	}
 
-	get orgName () {
+	get orgName() {
 		if (this.type.type === UserType.organization) return this.type.name
 		return this.bio.name.full
 	}
 
-	get userType () {
+	get userType() {
 		const type = this.type?.type ?? UserType.student
 		return {
 			isStudent: type === UserType.student,
 			isTeacher: type === UserType.teacher,
 			isOrg: type === UserType.organization,
-			type
+			type,
 		}
 	}
 
-	checkTaskState (task: 'profile_setup' | 'education_setup' | 'create_quiz' | 'create_course' | 'learn_quiz' | 'quiz_flashcard' | 'quiz_game') {
+	checkTaskState(
+		task: 'profile_setup' | 'education_setup' | 'create_quiz' | 'create_course' | 'learn_quiz' | 'quiz_flashcard' | 'quiz_game',
+	) {
 		if (task === 'profile_setup') return !!this.bio.name?.first && !!this.bio.name?.last
 		if (task === 'education_setup') return !!this.type
 		if (task === 'create_quiz') return !!this.account.meta.quizzes
@@ -81,14 +83,14 @@ export class UserEntity extends BaseEntity {
 	}
 
 	static defaultAi = 'Dr. Sofa'
-	static defaultAiPhotoLink  = '/images/icons/robot.svg'
+	static defaultAiPhotoLink = '/images/icons/robot.svg'
 
-	static getDefaultUserType () {
+	static getDefaultUserType() {
 		return {
 			isStudent: true,
 			isTeacher: false,
 			isOrg: false,
-			type: UserType.student
+			type: UserType.student,
 		}
 	}
 }

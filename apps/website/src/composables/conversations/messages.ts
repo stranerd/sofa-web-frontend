@@ -4,12 +4,16 @@ import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
-const store = {} as Record<string, {
-	messages: Ref<Message[]>
-	fetched: Ref<boolean>
-	hasMore: Ref<boolean>
-	listener: ReturnType<typeof useListener>
-} & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
+const store = {} as Record<
+	string,
+	{
+		messages: Ref<Message[]>
+		fetched: Ref<boolean>
+		hasMore: Ref<boolean>
+		listener: ReturnType<typeof useListener>
+	} & ReturnType<typeof useErrorHandler> &
+		ReturnType<typeof useLoadingHandler>
+>
 
 export const useMessages = (conversation: Conversation) => {
 	const conversationId = conversation.id
@@ -17,25 +21,42 @@ export const useMessages = (conversation: Conversation) => {
 	const { userAi } = useAuth()
 
 	if (store[conversationId] === undefined) {
-		const listener = useListener(async () => await Logic.Common.listenToMany<Message>(`conversations/conversations/${conversationId}/messages`, {
-			created: async (entity) => {
-				Logic.addToArray(store[conversationId].messages.value, entity, (e) => e.id, (e) => e.createdAt)
-			},
-			updated: async (entity) => {
-				Logic.addToArray(store[conversationId].messages.value, entity, (e) => e.id, (e) => e.createdAt)
-			},
-			deleted: async (entity) => {
-				const index = store[conversationId].messages.value.findIndex((c) => c.id === entity.id)
-				if (index !== -1) store[conversationId].messages.value.splice(index, 1)
-			}
-		}, (e) => e.createdAt >= (store[conversationId].messages.value.at(-1)?.createdAt ?? 0)))
+		const listener = useListener(
+			async () =>
+				await Logic.Common.listenToMany<Message>(
+					`conversations/conversations/${conversationId}/messages`,
+					{
+						created: async (entity) => {
+							Logic.addToArray(
+								store[conversationId].messages.value,
+								entity,
+								(e) => e.id,
+								(e) => e.createdAt,
+							)
+						},
+						updated: async (entity) => {
+							Logic.addToArray(
+								store[conversationId].messages.value,
+								entity,
+								(e) => e.id,
+								(e) => e.createdAt,
+							)
+						},
+						deleted: async (entity) => {
+							const index = store[conversationId].messages.value.findIndex((c) => c.id === entity.id)
+							if (index !== -1) store[conversationId].messages.value.splice(index, 1)
+						},
+					},
+					(e) => e.createdAt >= (store[conversationId].messages.value.at(-1)?.createdAt ?? 0),
+				),
+		)
 		store[conversationId] = {
 			messages: ref([]),
 			fetched: ref(false),
 			hasMore: ref(false),
 			listener,
 			...useErrorHandler(),
-			...useLoadingHandler()
+			...useLoadingHandler(),
 		}
 	}
 
@@ -45,11 +66,18 @@ export const useMessages = (conversation: Conversation) => {
 			await store[conversationId].setLoading(true)
 			const c = await Logic.Conversations.GetMessages(conversationId, {
 				sort: [{ field: 'createdAt', desc: true }],
-				all: true
+				all: true,
 				// limit: CHAT_PAGINATION_LIMIT
 			})
 			store[conversationId].hasMore.value = !!c.pages.next
-			c.results.map((c) => Logic.addToArray(store[conversationId].messages.value, c, (e) => e.id, (e) => e.createdAt))
+			c.results.map((c) =>
+				Logic.addToArray(
+					store[conversationId].messages.value,
+					c,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
 			store[conversationId].fetched.value = true
 		} catch (e) {
 			await store[conversationId].setError(e)
@@ -63,22 +91,27 @@ export const useMessages = (conversation: Conversation) => {
 	}
 
 	onMounted(async () => {
-		if (/* !store[conversationId].fetched.value &&  */!store[conversationId].loading.value) await fetchMessages()
+		if (/* !store[conversationId].fetched.value &&  */ !store[conversationId].loading.value) await fetchMessages()
 		await store[conversationId].listener.start()
 	})
 	onUnmounted(async () => {
 		await store[conversationId].listener.close()
 	})
 
-	const users = computed(() => [conversation.user, conversation.tutor]
-		.filter(Boolean)
-		.reduce((acc, cur) => {
-			acc[cur.id] = {
-				name: cur.bio.name.full,
-				photoUrl: cur.bio.photo?.link ?? null
-			}
-			return acc
-		}, { 'ai-bot': { name: userAi.value.name, photoUrl: userAi.value.image } } as Record<string, { name: string, photoUrl: string | null }>)
+	const users = computed(() =>
+		[conversation.user, conversation.tutor].filter(Boolean).reduce(
+			(acc, cur) => {
+				acc[cur.id] = {
+					name: cur.bio.name.full,
+					photoUrl: cur.bio.photo?.link ?? null,
+				}
+				return acc
+			},
+			{ 'ai-bot': { name: userAi.value.name, photoUrl: userAi.value.image } } as Record<
+				string,
+				{ name: string; photoUrl: string | null }
+			>,
+		),
 	)
 
 	return {
@@ -88,7 +121,7 @@ export const useMessages = (conversation: Conversation) => {
 		loading: store[conversationId].loading,
 		error: store[conversationId].error,
 		hasMore: store[conversationId].hasMore,
-		fetchOlderMessages
+		fetchOlderMessages,
 	}
 }
 

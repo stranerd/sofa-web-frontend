@@ -5,15 +5,19 @@ import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
-const store = {} as Record<string, {
-	test: Ref<Test | null>
-	questions: Question[]
-	answer: Ref<GameParticipantAnswer | null>
-	fetched: Ref<boolean>
-	listener: ReturnType<typeof useListener>
-} & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>
+const store = {} as Record<
+	string,
+	{
+		test: Ref<Test | null>
+		questions: Question[]
+		answer: Ref<GameParticipantAnswer | null>
+		fetched: Ref<boolean>
+		listener: ReturnType<typeof useListener>
+	} & ReturnType<typeof useErrorHandler> &
+		ReturnType<typeof useLoadingHandler>
+>
 
-export const useTest = (id: string, skip: { questions: boolean, statusNav: boolean }) => {
+export const useTest = (id: string, skip: { questions: boolean; statusNav: boolean }) => {
 	const { id: authId } = useAuth()
 	const route = useRoute()
 	const router = useRouter()
@@ -27,19 +31,22 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 		questions: reactive([]),
 		answer: ref(null),
 		fetched: ref(false),
-		listener: useListener(async () => await Logic.Common.listenToOne<Test>(`plays/tests/${id}`, {
-			created: async (entity) => {
-				store[id].test.value = entity
-			},
-			updated: async (entity) => {
-				store[id].test.value = entity
-			},
-			deleted: async (entity) => {
-				store[id].test.value = entity
-			}
-		})),
+		listener: useListener(
+			async () =>
+				await Logic.Common.listenToOne<Test>(`plays/tests/${id}`, {
+					created: async (entity) => {
+						store[id].test.value = entity
+					},
+					updated: async (entity) => {
+						store[id].test.value = entity
+					},
+					deleted: async (entity) => {
+						store[id].test.value = entity
+					},
+				}),
+		),
 		...useErrorHandler(),
-		...useLoadingHandler()
+		...useLoadingHandler(),
 	}
 
 	const fetchTest = async () => {
@@ -114,20 +121,23 @@ export const useTest = (id: string, skip: { questions: boolean, statusNav: boole
 
 	watch(store[id].test, async (cur, old) => {
 		if (!cur) return
-		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions)) Logic.Plays.GetTestQuestions(id)
-			.then((questions) => {
-				store[id].questions.splice(0, store[id].questions.length, ...questions)
-			})
-			.catch()
-		if (!skip.questions) Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
-			.then((answers) => {
-				store[id].answer.value = answers.results.at(0) ?? null
-			}).catch()
+		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions))
+			Logic.Plays.GetTestQuestions(id)
+				.then((questions) => {
+					store[id].questions.splice(0, store[id].questions.length, ...questions)
+				})
+				.catch()
+		if (!skip.questions)
+			Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
+				.then((answers) => {
+					store[id].answer.value = answers.results.at(0) ?? null
+				})
+				.catch()
 		if (!skip.statusNav) testWatcherCb()
 	})
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */!store[id].loading.value) await fetchTest()
+		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchTest()
 		await store[id].listener.start()
 		await testWatcherCb()
 	})

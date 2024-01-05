@@ -8,11 +8,13 @@ import { generateMiddlewares } from '../../middlewares'
 
 export default defineComponent({
 	name: 'AdminTutors',
-	beforeRouteEnter: generateMiddlewares([async () => {
-		console.log('AdminTutors')
-	}]),
-	setup () {
+	beforeRouteEnter: generateMiddlewares([
+		async () => {
+			console.log('AdminTutors')
+		},
+	]),
+	setup() {
 		return {}
-	}
+	},
 })
 </script>

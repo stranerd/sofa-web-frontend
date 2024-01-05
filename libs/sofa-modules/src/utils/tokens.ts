@@ -12,8 +12,8 @@ export const saveTokens = async ({ accessToken, refreshToken }: Tokens) => {
 }
 
 export const getTokens = async (): Promise<Tokens> => {
-	const accessToken = await storage.get(ACCESS_TOKEN_NAME) ?? null
-	const refreshToken = await storage.get(REFRESH_TOKEN_NAME) ?? null
+	const accessToken = (await storage.get(ACCESS_TOKEN_NAME)) ?? null
+	const refreshToken = (await storage.get(REFRESH_TOKEN_NAME)) ?? null
 	return { accessToken, refreshToken }
 }
 

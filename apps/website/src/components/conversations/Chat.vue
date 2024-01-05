@@ -1,9 +1,10 @@
 <template>
-	<router-link :to="chat.route"
+	<router-link
+		:to="chat.route"
 		:class="`w-full flex items-center justify-between relative gap-3 p-3 rounded-custom hover:bg-lightBlue ${customClass}`"
 		exact-active-class="bg-lightBlue">
 		<div class="flex gap-2 w-full">
-			<sofa-avatar :photoUrl="chat.photoUrl" size="40"  />
+			<sofa-avatar :photoUrl="chat.photoUrl" size="40" />
 			<div class="flex flex-col">
 				<sofa-normal-text :customClass="'!font-semibold text-left !line-clamp-1'">
 					{{ chat.title }}
@@ -34,12 +35,12 @@ export default defineComponent({
 	props: {
 		chat: {
 			type: Object as () => {
-        route: string,
-        title: string,
-        lastMessage: string,
-        lastMessageTime: string
-        photoUrl: string | null
-      },
+				route: string
+				title: string
+				lastMessage: string
+				lastMessageTime: string
+				photoUrl: string | null
+			},
 			required: true,
 		},
 		customClass: {
@@ -47,7 +48,7 @@ export default defineComponent({
 			default: '',
 		},
 	},
-	setup () {
+	setup() {
 		return {}
 	},
 })

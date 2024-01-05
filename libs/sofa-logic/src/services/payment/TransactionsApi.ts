@@ -8,9 +8,7 @@ export default class TransactionsApi extends ModelApiService {
 
 	public async fulfillTransaction(transactionId: string) {
 		try {
-			const response: AxiosResponse<boolean> = await this.axiosInstance.put(
-				this.getUrl() + `/${transactionId}/fulfill`,
-			)
+			const response: AxiosResponse<boolean> = await this.axiosInstance.put(this.getUrl() + `/${transactionId}/fulfill`)
 
 			return response
 		} catch (err) {
@@ -23,8 +21,8 @@ export default class TransactionsApi extends ModelApiService {
 	public async getFlutterwaveKey() {
 		try {
 			const response: AxiosResponse<{
-        publicKey: string
-      }> = await this.axiosInstance.get(this.getUrl() + '/flutterwave/secrets')
+				publicKey: string
+			}> = await this.axiosInstance.get(this.getUrl() + '/flutterwave/secrets')
 
 			return response
 		} catch (err) {

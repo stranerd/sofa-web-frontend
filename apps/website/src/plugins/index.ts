@@ -10,7 +10,7 @@ import SubPageLayout from '../layouts/SubPage.vue'
 import { deleteTokens, getTokens } from '@utils/tokens'
 import { AuthUseCases } from '@modules/auth'
 
-type PluginFunction = (args: { app: App, router: Router }) => Promise<void>
+type PluginFunction = (args: { app: App; router: Router }) => Promise<void>
 const definePlugin = (plugin: PluginFunction) => plugin
 
 const registerLayouts = definePlugin(async ({ app }) => {

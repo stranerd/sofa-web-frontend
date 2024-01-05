@@ -14,7 +14,7 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor ({ id, organizationId, title, description, photo, user, frozen, price, createdAt, updatedAt }: ClassFromModel) {
+	constructor({ id, organizationId, title, description, photo, user, frozen, price, createdAt, updatedAt }: ClassFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId

@@ -62,7 +62,6 @@ export const usePhoneUpdate = () => {
 		return succeeded
 	}
 	const sendVerificationText = async (skipAlert = false) => {
-
 		if (!factory.valid) return false
 		if (loading.value) return false
 		let succeeded = false
@@ -81,7 +80,13 @@ export const usePhoneUpdate = () => {
 	}
 
 	return {
-		token, sent, factory, loading, error, message,
-		sendVerificationText, completeVerification
+		token,
+		sent,
+		factory,
+		loading,
+		error,
+		message,
+		sendVerificationText,
+		completeVerification,
 	}
 }

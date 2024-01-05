@@ -1,8 +1,7 @@
 <template>
 	<div :class="`col-span-1 flex gap-3 p-3 rounded-custom bg-white ${customClass}`">
 		<div class="w-[110px] flex flex-col">
-			<sofa-image-loader custom-class="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom relative"
-				:photo-url="content.image">
+			<sofa-image-loader custom-class="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom relative" :photo-url="content.image">
 			</sofa-image-loader>
 		</div>
 		<div class="flex flex-col w-full gap-2">
@@ -55,7 +54,7 @@ export default defineComponent({
 		},
 	},
 	name: 'SofaProgressItemCard',
-	setup () {
+	setup() {
 		return {
 			Logic,
 		}

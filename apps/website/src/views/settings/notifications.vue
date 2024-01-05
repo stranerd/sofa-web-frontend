@@ -20,7 +20,7 @@ export default defineComponent({
 	},
 	name: 'SettingsNotificationsPage',
 	middlewares: { goBackRoute: '/settings' },
-	setup () {
+	setup() {
 		useMeta({
 			title: 'Notifications',
 		})

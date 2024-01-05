@@ -3,14 +3,11 @@
 		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
 		<template v-if="type == 'main'">
 			<div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-				<sofa-avatar :size="'32'" :photoUrl="user?.bio?.photo?.link"
-					@click="Logic.Common.GoToRoute('/settings')" />
+				<sofa-avatar :size="'32'" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
 
 				<div class="py-4 cursor-pointer flex flex-row items-center justify-center">
 					<img src="/images/logo.svg" class="h-[24px]" v-if="!title" />
-					<sofa-normal-text :customClass="'!font-bold !text-base'">{{
-						title
-					}}</sofa-normal-text>
+					<sofa-normal-text :customClass="'!font-bold !text-base'">{{ title }}</sofa-normal-text>
 				</div>
 
 				<div class="w-[30px] h-[30px] flex flex-row items-center justify-center" @click="showNotification = true">
@@ -23,11 +20,21 @@
 				</router-link>
 
 				<router-link
-					:class="`py-4 flex items-center justify-center gap-2 ${Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''}`"
-					:to="tab.path" v-for="(tab, index) in tabs" :key="index">
-					<SofaIcon :name="tab.icon"
-						:class="{ '!fill-primaryPurple': Logic.Common.tabIsActive(tab.path), [tab.icon_size]: true, 'fill-bodyBlack': true }" />
-					<sofa-normal-text :customClass="'font-bold'"
+					:class="`py-4 flex items-center justify-center gap-2 ${
+						Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''
+					}`"
+					:to="tab.path"
+					v-for="(tab, index) in tabs"
+					:key="index">
+					<SofaIcon
+						:name="tab.icon"
+						:class="{
+							'!fill-primaryPurple': Logic.Common.tabIsActive(tab.path),
+							[tab.icon_size]: true,
+							'fill-bodyBlack': true,
+						}" />
+					<sofa-normal-text
+						:customClass="'font-bold'"
 						:color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
 						{{ tab.name }}
 					</sofa-normal-text>
@@ -37,7 +44,10 @@
 					<sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
 					<sofa-text-field
 						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
-						placeholder="Search" padding="px-1" v-model="searchQuery" @onEnter="initiateSearch" />
+						placeholder="Search"
+						padding="px-1"
+						v-model="searchQuery"
+						@onEnter="initiateSearch" />
 				</div>
 			</div>
 
@@ -46,18 +56,19 @@
 					<SofaIcon name="plus-white" />
 				</SofaButton>
 				<div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
-					<div class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
+					<div
+						class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
 						@click="showNotification = true">
 						<sofa-icon :customClass="'h-[16px]'" :name="'bell'" />
 					</div>
-					<div v-if="showNotification"
+					<div
+						v-if="showNotification"
 						class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom rounded-custom pb-3 px-4 absolute top-[140%] right-0 z-[100] hidden mdlg:flex flex-col">
-						<notification :close="() => showNotification = false" />
+						<notification :close="() => (showNotification = false)" />
 					</div>
 				</div>
 
-				<sofa-avatar :size="'36'" :photoUrl="user?.bio?.photo?.link"
-					@click="Logic.Common.GoToRoute('/settings/profile')" />
+				<sofa-avatar :size="'36'" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
 			</div>
 		</template>
 
@@ -76,8 +87,10 @@
 				<template v-for="(action, index) in subpageActions" :key="index">
 					<template v-if="action.isIcon && !action.hide">
 						<div class="flex flex-row gap-4 border-r border-darkLightGray items-center pr-3 cursor-pointer">
-							<div class="flex flex-row gap-2 items-center"
-								v-for="(icon, index) in action.data.filter((d) => !d.hide)" :key="index"
+							<div
+								class="flex flex-row gap-2 items-center"
+								v-for="(icon, index) in action.data.filter((d) => !d.hide)"
+								:key="index"
 								@click="icon.handler()">
 								<sofa-icon :name="icon.icon" :customClass="icon.size" />
 
@@ -88,24 +101,35 @@
 						</div>
 					</template>
 					<template v-else-if="!action.hide">
-						<sofa-button v-if="!action.IsOutlined" :disabled="action.disabled" :padding="'px-4 py-1'"
-							:customClass="`!font-semibold ${action.class ?? ''}`" @click="action.handler()">{{ action.name
-							}}</sofa-button>
-						<sofa-button :disabled="action.disabled" :bgColor="'bg-white'" :textColor="'text-grayColor'"
+						<sofa-button
+							v-if="!action.IsOutlined"
+							:disabled="action.disabled"
+							:padding="'px-4 py-1'"
+							:customClass="`!font-semibold ${action.class ?? ''}`"
+							@click="action.handler()">
+							{{ action.name }}
+						</sofa-button>
+						<sofa-button
+							:disabled="action.disabled"
+							:bgColor="'bg-white'"
+							:textColor="'text-grayColor'"
 							:customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
-							@click="action.handler()" v-else :padding="'px-4 py-1'">{{ action.name }}</sofa-button>
+							@click="action.handler()"
+							v-else
+							:padding="'px-4 py-1'">
+							{{ action.name }}
+						</sofa-button>
 					</template>
 				</template>
 			</div>
 		</template>
 
 		<!-- Notification modal -->
-		<sofa-modal v-if="showNotification" :close="() => showNotification = false" :custom-class="'mdlg:!hidden'">
-			<div
-				class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
+		<sofa-modal v-if="showNotification" :close="() => (showNotification = false)" :custom-class="'mdlg:!hidden'">
+			<div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-3 px-4 pb-5 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
-					<notification :close="() => showNotification = false" />
+					<notification :close="() => (showNotification = false)" />
 				</div>
 			</div>
 		</sofa-modal>
@@ -113,7 +137,7 @@
 </template>
 <script lang="ts">
 import { UserEntity } from '@modules/users'
-import { Conditions, Logic, SingleUser } from 'sofa-logic'
+import { Conditions, Logic } from 'sofa-logic'
 import { PropType, defineComponent, onMounted, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
@@ -148,10 +172,10 @@ export default defineComponent({
 		},
 		tabs: {
 			type: Array as () => {
-				name: string,
-				path: string,
-				icon: string,
-				icon_size: string,
+				name: string
+				path: string
+				icon: string
+				icon_size: string
 			}[],
 			default: () => [],
 		},
@@ -176,11 +200,11 @@ export default defineComponent({
 		},
 		user: {
 			type: Object as PropType<UserEntity>,
-			required: false
-		}
+			required: false,
+		},
 	},
 	name: 'SofaTopBar',
-	setup () {
+	setup() {
 		const showNotification = ref(false)
 
 		const searchQuery = ref('')

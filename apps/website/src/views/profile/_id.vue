@@ -25,13 +25,30 @@
 					<div
 						class="flex mdlg:flex-row flex-col mdlg:gap-4 mdlg:justify-end items-start gap-3 mdlg:items-center md:w-auto w-full">
 						<div class="flex items-center gap-4 justify-start mdlg:justify-start md:w-auto w-full">
-							<div v-for="item in [
-								{ title: 'Quizzes', icon: 'profile-quiz', value: user.account.meta.publishedQuizzes },
-								{ title: 'Courses', icon: 'profile-course', value: user.account.meta.publishedCourses },
-								...(user.userType.isOrg ? [
-									{ title: 'Students', icon: 'profile-followers', value: user.account.meta.students },
-								] : []),
-							]" :key="item.title" class="flex mdlg:flex-row mdlg:gap-2 flex-col gap-1 items-center">
+							<div
+								v-for="item in [
+									{
+										title: 'Quizzes',
+										icon: 'profile-quiz',
+										value: user.account.meta.publishedQuizzes,
+									},
+									{
+										title: 'Courses',
+										icon: 'profile-course',
+										value: user.account.meta.publishedCourses,
+									},
+									...(user.userType.isOrg
+										? [
+											{
+												title: 'Students',
+												icon: 'profile-followers',
+												value: user.account.meta.students,
+											},
+										]
+										: []),
+								]"
+								:key="item.title"
+								class="flex mdlg:flex-row mdlg:gap-2 flex-col gap-1 items-center">
 								<SofaIcon :name="item.icon" class="h-[40px]" />
 								<div class="flex flex-col items-center">
 									<SofaNormalText :content="item.title" />
@@ -40,7 +57,8 @@
 							</div>
 						</div>
 
-						<SofaButton padding="px-6 py-2"
+						<SofaButton
+							padding="px-6 py-2"
 							v-if="user.userType.isOrg && !authUser.account.organizationsIn.find((o) => o.id === user.id)"
 							@click="showModal = true">
 							Join
@@ -49,10 +67,14 @@
 				</div>
 
 				<div class="w-full flex gap-6 items-center">
-					<SofaNormalText v-for="item in ['content', 'about']" :key="item" as="router-link"
+					<SofaNormalText
+						v-for="item in ['content', 'about']"
+						:key="item"
+						as="router-link"
 						:to="`/profile/${user.id}?tab=${item}`"
 						class="!font-semibold capitalize pb-2 border-b-2 border-transparent text-deepGray"
-						:class="{ '!text-primaryPurple !border-primaryPurple': currentTab === item }" :content="item" />
+						:class="{ '!text-primaryPurple !border-primaryPurple': currentTab === item }"
+						:content="item" />
 				</div>
 			</div>
 		</div>
@@ -63,29 +85,39 @@
 				<div class="w-full mdlg:px-0 px-4" v-if="materials.length">
 					<div class="w-full px-4 py-1 bg-white rounded-custom flex gap-1 items-center justify-start">
 						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField customClass="!border-none w-full flex-grow" placeholder="Search"
-							v-model="searchQuery" />
+						<SofaTextField customClass="!border-none w-full flex-grow" placeholder="Search" v-model="searchQuery" />
 					</div>
 				</div>
 
 				<div class="w-full flex flex-col mdlg:gap-4 gap-3 pl-4 mdlg:pl-0">
 					<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
 						<SofaNormalText class="!font-bold" content="Resources" />
-						<SofaNormalText color="text-primaryPink" as="router-link" content="View all"
+						<SofaNormalText
+							color="text-primaryPink"
+							as="router-link"
+							content="View all"
 							:to="`/marketplace/search?userId=${user.id}&userName=${user.bio.name.full}`" />
 					</div>
 
-					<div v-if="materials.length"
+					<div
+						v-if="materials.length"
 						class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap md:flex-wrap overflow-x-auto scrollbar-hide">
-						<SofaItemCard v-for="activity in filteredMaterials" as="router-link" :key="activity.id"
-							:hasBookmark="true" :bookmarkAction="() => saveToFolder(activity)" :content="activity"
+						<SofaItemCard
+							v-for="activity in filteredMaterials"
+							as="router-link"
+							:key="activity.id"
+							:hasBookmark="true"
+							:bookmarkAction="() => saveToFolder(activity)"
+							:content="activity"
 							:to="activity.route"
 							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
-						<SofaEmptyState :title="`${user.bio.name.full} has no published materials yet`"
+						<SofaEmptyState
+							:title="`${user.bio.name.full} has no published materials yet`"
 							subTitle="Discover thousands of other materials on SOFA marketplace"
-							:actionLabel="'Marketplace'" :action="() => Logic.Common.GoToRoute('/marketplace')" />
+							:actionLabel="'Marketplace'"
+							:action="() => Logic.Common.GoToRoute('/marketplace')" />
 					</div>
 				</div>
 			</div>
@@ -111,7 +143,7 @@
 		</template>
 	</expanded-layout>
 
-	<SofaModal v-if="showModal" :close="() => showModal = false">
+	<SofaModal v-if="showModal" :close="() => (showModal = false)">
 		<div class="flex flex-col md:gap-5 gap-3 relative mdlg:p-6 items-center">
 			<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${user.orgName}`" />
 
@@ -121,19 +153,30 @@
 			</div>
 
 			<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-				<SofaTextField v-model="joinCode" custom-class="rounded-custom !bg-lightGray"
-					type="text" placeholder="Enter Join Code" borderColor="border-transparent" />
+				<SofaTextField
+					v-model="joinCode"
+					custom-class="rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="Enter Join Code"
+					borderColor="border-transparent" />
 			</div>
 
 			<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">
-				<SofaButton textColor="text-grayColor" bgColor="bg-white" padding="px-4 py-1"
-					class="hidden md:inline-block border-2 border-gray-100 md:w-auto w-full" @click="showModal = false">
+				<SofaButton
+					textColor="text-grayColor"
+					bgColor="bg-white"
+					padding="px-4 py-1"
+					class="hidden md:inline-block border-2 border-gray-100 md:w-auto w-full"
+					@click="showModal = false">
 					Cancel
 				</SofaButton>
 
-				<SofaButton textColor="text-white" bgColor="bg-primaryBlue" padding="px-4 md:py-1 py-3"
+				<SofaButton
+					textColor="text-white"
+					bgColor="bg-primaryBlue"
+					padding="px-4 md:py-1 py-3"
 					class="border-2 border-transparent md:w-auto w-full"
-					@click="requestToJoinOrganization(user.id).then((succeeded) => succeeded ? showModal = false : null)">
+					@click="requestToJoinOrganization(user.id).then((succeeded) => (succeeded ? (showModal = false) : null))">
 					Continue
 				</SofaButton>
 			</div>
@@ -176,17 +219,16 @@ export default defineComponent({
 		SofaModal,
 	},
 	name: 'ProfileIdPage',
-	setup () {
+	setup() {
 		useMeta({ title: 'Public Profile' })
 
 		const { user: authUser } = useAuth()
 		const route = useRoute()
-		const currentTab = computed(() => route.query.tab as string | undefined ?? 'content')
+		const currentTab = computed(() => (route.query.tab as string | undefined) ?? 'content')
 		const id = route.params.id as string
 		const { user, courses, quizzes } = useUsersMaterials(id)
-		const materials = computed(() => [...courses, ...quizzes]
-			.map((item) => extractResource(item))
-			.sort((a, b) => b.createdAt - a.createdAt)
+		const materials = computed(() =>
+			[...courses, ...quizzes].map((item) => extractResource(item)).sort((a, b) => b.createdAt - a.createdAt),
 		)
 		const filteredMaterials = computed(() => {
 			const query = searchQuery.value.toLowerCase()
@@ -200,9 +242,17 @@ export default defineComponent({
 		const searchQuery = ref('')
 
 		return {
-			authUser, user, materials, filteredMaterials,
-			Logic, currentTab, socials, searchQuery,
-			showModal, joinCode, requestToJoinOrganization,
+			authUser,
+			user,
+			materials,
+			filteredMaterials,
+			Logic,
+			currentTab,
+			socials,
+			searchQuery,
+			showModal,
+			joinCode,
+			requestToJoinOrganization,
 			saveToFolder,
 		}
 	},

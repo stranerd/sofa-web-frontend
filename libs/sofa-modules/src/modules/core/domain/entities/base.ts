@@ -3,11 +3,11 @@ import { getRandomValue } from 'valleyed'
 export class BaseEntity {
 	public hash: string
 
-	constructor () {
+	constructor() {
 		this.hash = getRandomValue()
 	}
 
-	toJSON () {
+	toJSON() {
 		const json = Object.assign({}, this) as Record<string, any>
 		const proto = Object.getPrototypeOf(this)
 		Object.getOwnPropertyNames(proto)

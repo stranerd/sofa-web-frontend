@@ -4,7 +4,7 @@
 			<div class="w-full flex flex-col h-full gap-3 md:gap-4 mdlg:px-6 md:px-4 overflow-y-auto">
 				<div
 					class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-[1] border-lightGray border-b md:border-0 p-4 md:gap-2">
-					<SofaHeaderText class="text-xl hidden md:inline-block " content="Add a tutor" />
+					<SofaHeaderText class="text-xl hidden md:inline-block" content="Add a tutor" />
 
 					<div class="flex w-full md:hidden items-center gap-2 justify-between">
 						<SofaHeaderText class="!font-bold" content="Add a tutor" />
@@ -12,33 +12,45 @@
 					</div>
 
 					<div class="w-full grid grid-cols-3 gap-2 py-3">
-						<div class="col-span-1 h-2 rounded-full" v-for="(_, index) in 3" :key="index"
+						<div
+							class="col-span-1 h-2 rounded-full"
+							v-for="(_, index) in 3"
+							:key="index"
 							:class="index <= currentStep ? 'bg-deepGray' : 'bg-darkLightGray'" />
 					</div>
 
 					<div class="w-full flex flex-col pt-3" v-if="currentStep === 2">
-						<SofaSelect placeholder="Select subject" customClass="rounded-custom border" :options="allTopics" v-model="selectedTopic" />
+						<SofaSelect
+							placeholder="Select subject"
+							customClass="rounded-custom border"
+							:options="allTopics"
+							v-model="selectedTopic" />
 					</div>
 				</div>
 
 				<template v-if="currentStep == 0">
 					<div class="w-full flex flex-col gap-3 px-4 md:px-0">
 						<SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
-						<a class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
-							v-for="(option, index) in helpOptions" :key="index" @click="selectedhelpOption = option.key">
-							<SofaNormalText :color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
+						<a
+							class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
+							v-for="(option, index) in helpOptions"
+							:key="index"
+							@click="selectedhelpOption = option.key">
+							<SofaNormalText
+								:color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
 								:content="option.title" />
 							<SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
 						</a>
-						<SofaTextField customClass="border rounded-custom" placeholder="Others"
-							v-model="selectedhelpOptionOthers" />
+						<SofaTextField customClass="border rounded-custom" placeholder="Others" v-model="selectedhelpOptionOthers" />
 					</div>
 				</template>
 
 				<template v-if="currentStep == 1">
 					<div class="w-full flex flex-col gap-3 px-4 md:px-0">
-						<SofaTextarea customClass="bg-lightGray rounded-custom"
-							placeholder="Tell the tutor why you need him/her" v-model="factory.body"
+						<SofaTextarea
+							customClass="bg-lightGray rounded-custom"
+							placeholder="Tell the tutor why you need him/her"
+							v-model="factory.body"
 							textAreaStyle="!bg-lightGray rounded-custom">
 						</SofaTextarea>
 					</div>
@@ -47,9 +59,12 @@
 				<template v-if="currentStep == 2">
 					<div class="w-full flex flex-col gap-3 md:px-0 px-4 flex-grow">
 						<template v-if="filteredTutors.length">
-							<a class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
+							<a
+								class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
 								:class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
-								v-for="(tutor, index) in filteredTutors" :key="index" @click="factory.tutorId = tutor.id">
+								v-for="(tutor, index) in filteredTutors"
+								:key="index"
+								@click="factory.tutorId = tutor.id">
 								<SofaAvatar size="60" :photoUrl="tutor.photo_url" :showOnline="true" :online="tutor.online" />
 								<div class="w-full flex flex-col flex-grow gap-1">
 									<div class="flex gap-2 items-center">
@@ -62,7 +77,8 @@
 										<SofaIcon name="star-full" class="h-[16px]" />
 										<div class="flex gap-1 items-center">
 											<SofaNormalText :content="tutor.ratings.value" />
-											<SofaNormalText color="text-grayColor"
+											<SofaNormalText
+												color="text-grayColor"
 												:content="`(${tutor.ratings.count}) rating${tutor.ratings.count > 1 ? 's' : ''}`" />
 										</div>
 									</div>
@@ -79,14 +95,22 @@
 			</div>
 
 			<div class="w-full flex items-center justify-between p-4">
-				<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" class="hidden md:!inline-block"
-					customClass="border border-gray-100" @click="emits('close')">
+				<SofaButton
+					padding="px-5 py-2"
+					bgColor="bg-white"
+					textColor="text-grayColor"
+					class="hidden md:!inline-block"
+					customClass="border border-gray-100"
+					@click="emits('close')">
 					Exit
 				</SofaButton>
 
-				<SofaButton class="w-full md:w-auto" :disabled="currentStep == 2 && !factory.isValid('tutorId')"
-					padding="px-5 py-3 md:!py-2" @click="handleAddTutor">
-					{{ currentStep == 2 ? "Send request" : "Next" }}
+				<SofaButton
+					class="w-full md:w-auto"
+					:disabled="currentStep == 2 && !factory.isValid('tutorId')"
+					padding="px-5 py-3 md:!py-2"
+					@click="handleAddTutor">
+					{{ currentStep == 2 ? 'Send request' : 'Next' }}
 				</SofaButton>
 			</div>
 		</div>
@@ -129,32 +153,35 @@ const { tutors } = useTutorsList()
 const { topics } = useTopicsList()
 const { factory, createConversation } = useCreateConversation()
 
-const allTopics = computed(() => topics.map((t) => ({
-	key: t.id,
-	value: t.title
-})))
+const allTopics = computed(() =>
+	topics.map((t) => ({
+		key: t.id,
+		value: t.title,
+	})),
+)
 
-const filteredTutors = computed(() => tutors.value
-	.filter((t) => t.tutor.topics.includes(selectedTopic.value))
-	.map((t) => ({
-		id: t.id,
-		name: t.bio.name.full,
-		online: t.status.connections.length > 0,
-		photo_url: t.bio.photo?.link || '',
-		ratings: {
-			count: t.account.ratings.count,
-			value: Logic.Common.formatNumber(t.account.ratings.avg, 2),
-		},
-		subjects: t.tutor.topics
-			.map((item) => topics.find((t) => t.id === item)?.title)
-			.filter(Boolean)
-			.join(', '),
-	}))
+const filteredTutors = computed(() =>
+	tutors.value
+		.filter((t) => t.tutor.topics.includes(selectedTopic.value))
+		.map((t) => ({
+			id: t.id,
+			name: t.bio.name.full,
+			online: t.status.connections.length > 0,
+			photo_url: t.bio.photo?.link || '',
+			ratings: {
+				count: t.account.ratings.count,
+				value: Logic.Common.formatNumber(t.account.ratings.avg, 2),
+			},
+			subjects: t.tutor.topics
+				.map((item) => topics.find((t) => t.id === item)?.title)
+				.filter(Boolean)
+				.join(', '),
+		})),
 )
 
 const handleAddTutor = async () => {
-	if (currentStep.value === 0) return currentStep.value = 1
-	if (currentStep.value === 1 && factory.isValid('body')) return currentStep.value = 2
+	if (currentStep.value === 0) return (currentStep.value = 1)
+	if (currentStep.value === 1 && factory.isValid('body')) return (currentStep.value = 2)
 	if (currentStep.value === 2 && factory.isValid('tutorId')) return createConversation().then(() => emits('close'))
 }
 </script>

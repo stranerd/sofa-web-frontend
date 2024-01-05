@@ -9,5 +9,9 @@ export interface IAnnouncementRepository {
 	delete: (id: string) => Promise<boolean>
 	markRead: (userId: string) => Promise<boolean>
 	listenToOne: (id: string, listeners: Listeners<AnnouncementEntity>) => Promise<() => void>
-	listenToMany: (query: QueryParams, listeners: Listeners<AnnouncementEntity>, matches: (entity: AnnouncementEntity) => boolean) => Promise<() => void>
+	listenToMany: (
+		query: QueryParams,
+		listeners: Listeners<AnnouncementEntity>,
+		matches: (entity: AnnouncementEntity) => boolean,
+	) => Promise<() => void>
 }

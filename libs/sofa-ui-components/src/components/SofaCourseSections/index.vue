@@ -5,51 +5,69 @@
 				<template v-for="(option, index) in sectionOptions" :key="index">
 					<div :class="`flex flex-col w-full gap-3`">
 						<template v-if="option">
-							<div class="w-full flex flex-row items-center justify-between cursor-pointer" @click="
-								option?.opened
-									? (option.opened = false)
-									: (option.opened = true)
-							">
+							<div
+								class="w-full flex flex-row items-center justify-between cursor-pointer"
+								@click="option?.opened ? (option.opened = false) : (option.opened = true)">
 								<div class="flex flex-row items-center gap-2">
 									<sofa-normal-text :customClass="'!font-bold'" v-if="!option.edit">{{
-										option.name == "unsectioned" ? "Unsectioned" : option.name
+										option.name == 'unsectioned' ? 'Unsectioned' : option.name
 									}}</sofa-normal-text>
-									<input v-else @click.stop="null"
+									<input
+										v-else
+										@click.stop="null"
 										class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
-										v-model="option.name" autofocus placeholder="Section name"
+										v-model="option.name"
+										autofocus
+										placeholder="Section name"
 										@blur="option.edit = false" />
 								</div>
 								<div class="flex flex-row items-center gap-3">
-									<sofa-icon @click.stop="option.edit = true" :customClass="'h-[15px] cursor-pointer'"
-										:name="'edit-gray'" v-if="option.name != 'unsectioned'" />
-									<sofa-icon @click.stop="removeSection(index)" :customClass="'h-[15px] cursor-pointer'"
-										:name="'trash-gray'" v-if="option.name != 'unsectioned'" />
-									<sofa-icon :customClass="'h-[7px] cursor-pointer'"
+									<sofa-icon
+										@click.stop="option.edit = true"
+										:customClass="'h-[15px] cursor-pointer'"
+										:name="'edit-gray'"
+										v-if="option.name != 'unsectioned'" />
+									<sofa-icon
+										@click.stop="removeSection(index)"
+										:customClass="'h-[15px] cursor-pointer'"
+										:name="'trash-gray'"
+										v-if="option.name != 'unsectioned'" />
+									<sofa-icon
+										:customClass="'h-[7px] cursor-pointer'"
 										:name="option.opened ? 'chevron-up' : 'chevron-down'" />
 								</div>
 							</div>
 
 							<template v-if="option.opened">
-								<draggable v-model="option.materials" group="course-item" class="w-full gap-3" item-key="id"
+								<draggable
+									v-model="option.materials"
+									group="course-item"
+									class="w-full gap-3"
+									item-key="id"
 									handle=".handle">
 									<template #item="{ element }">
-										<div :class="`w-full flex flex-row items-center relative justify-between gap-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${selectedMaterial?.id == element.id
-											? 'bg-lightBlue'
-											: 'bg-white'
-										}`" @mouseover="element.hover = true" @mouseleave="element.hover = false" @click.stop="
-											selectedMaterial = {
-												id: element.id,
-												data: element.data,
-												details: element.details,
-												type: element.type.split('-')[0],
-											}
-											handleItemSelected();
-										">
+										<div
+											:class="`w-full flex flex-row items-center relative justify-between gap-2 px-2 py-2  rounded-[8px] cursor-pointer hover:bg-lightBlue ${
+												selectedMaterial?.id == element.id ? 'bg-lightBlue' : 'bg-white'
+											}`"
+											@mouseover="element.hover = true"
+											@mouseleave="element.hover = false"
+											@click.stop="
+												() => {
+													selectedMaterial = {
+														id: element.id,
+														data: element.data,
+														details: element.details,
+														type: element.type.split('-')[0],
+													}
+													handleItemSelected()
+												}
+											">
 											<div class="flex flex-row items-center gap-2">
 												<sofa-icon :customClass="'h-[17px]'" :name="element.type" />
 												<sofa-normal-text
-													:customClass="'px-3 !line-clamp-2  text-left whitespace-nowrap overflow-x-hidden'">{{
-													element.name }}</sofa-normal-text>
+													class="px-3 !line-clamp-2 text-left whitespace-nowrap overflow-x-hidden"
+													:content="element.name" />
 											</div>
 
 											<div
@@ -65,15 +83,18 @@
 									</template>
 								</draggable>
 
-								<div class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer" @click="
-									selectedMaterial = undefined
-									selectedSection = index
-									handleItemSelected();
-								" v-if="option.name != 'unsectioned'">
+								<div
+									class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer"
+									@click="
+										() => {
+											selectedMaterial = undefined
+											selectedSection = index
+											handleItemSelected()
+										}
+									"
+									v-if="option.name != 'unsectioned'">
 									<sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
-									<sofa-normal-text :color="'text-primaryPurple'">
-										Add study material
-									</sofa-normal-text>
+									<sofa-normal-text :color="'text-primaryPurple'"> Add study material </sofa-normal-text>
 								</div>
 							</template>
 						</template>
@@ -83,9 +104,7 @@
 
 			<div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
 				<sofa-icon :customClass="'h-[17px]'" :name="'box-add-pink'" />
-				<sofa-normal-text :color="'text-primaryPink'">
-					Add section
-				</sofa-normal-text>
+				<sofa-normal-text :color="'text-primaryPink'"> Add section </sofa-normal-text>
 			</div>
 		</div>
 	</div>
@@ -95,14 +114,7 @@ import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import { Course, Logic, Question, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
-import {
-	capitalize,
-	defineComponent,
-	onMounted,
-	reactive,
-	ref,
-	watch,
-} from 'vue'
+import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
@@ -134,7 +146,7 @@ export default defineComponent({
 	},
 	name: 'SofaCourseSections',
 	emits: ['update:modelValue', 'OnMaterialSelected'],
-	setup (props, context) {
+	setup(props, context) {
 		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
 		const SingleFile = ref<SofaFile>(Logic.Study.SingleFile)
 		const SingleQuiz = ref<Quiz>(Logic.Study.SingleQuiz)
@@ -164,12 +176,7 @@ export default defineComponent({
 			}, 300)
 		}
 
-		const setSectionMaterial = async (
-			mediaFile: SofaFile | undefined,
-			quiz: Quiz | undefined,
-			save = false,
-			index: number
-		) => {
+		const setSectionMaterial = async (mediaFile: SofaFile | undefined, quiz: Quiz | undefined, save = false, index: number) => {
 			if (mediaFile) {
 				const { accessToken } = await getTokens()
 				const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`
@@ -251,8 +258,7 @@ export default defineComponent({
 							let answers = ''
 
 							if (eachQuestion.data.type == 'multipleChoice') {
-								answers =
-									eachQuestion.data.options[eachQuestion.data.answers[0]]
+								answers = eachQuestion.data.options[eachQuestion.data.answers[0]]
 							} else if (eachQuestion.data.type == 'trueOrFalse') {
 								answers = `${capitalize(eachQuestion.data.answer.toString())}`
 							} else if (
@@ -268,7 +274,7 @@ export default defineComponent({
 										.map((item) => {
 											return item.a
 										})
-										.join(', ')
+										.join(', '),
 								)
 							}
 							return {
@@ -297,7 +303,7 @@ export default defineComponent({
 									photoUrl: `${quiz.user.bio?.photo?.link}`,
 									name: `${quiz.user.bio?.name?.full}`,
 								},
-								last_updated: formatTime(quiz.createdAt)
+								last_updated: formatTime(quiz.createdAt),
 							},
 							original: quiz,
 							data: allQuestions,
@@ -321,12 +327,7 @@ export default defineComponent({
 		watch(NewCoursableItem, () => {
 			if (sectionOptions.length) {
 				Logic.Common.debounce(async () => {
-					await setSectionMaterial(
-						SingleFile.value,
-						SingleQuiz.value,
-						true,
-						selectedSection.value
-					)
+					await setSectionMaterial(SingleFile.value, SingleQuiz.value, true, selectedSection.value)
 				}, 500)
 			}
 		})
@@ -339,16 +340,12 @@ export default defineComponent({
 
 		const addItemToSection = async (item: any, index: any) => {
 			if (item.type == 'quiz') {
-				const quizData = SingleCourseQuizzes.value?.filter(
-					(quiz) => quiz.id == item.id
-				)
+				const quizData = SingleCourseQuizzes.value?.filter((quiz) => quiz.id == item.id)
 				if (quizData.length) {
 					await setSectionMaterial(undefined, quizData[0], false, index)
 				}
 			} else {
-				const fileData = SingleCourseFiles.value?.filter(
-					(file) => file.id == item.id
-				)
+				const fileData = SingleCourseFiles.value?.filter((file) => file.id == item.id)
 				await setSectionMaterial(fileData[0], undefined, false, index)
 			}
 		}
@@ -359,34 +356,34 @@ export default defineComponent({
 
 			selectedSection.value = index
 
-			await Promise.all(SingleCourse.value.sections.map(async (section, index) => {
-				staticSectionOptions.value.push({
-					name: section.label,
-					id: Logic.Common.makeId(),
-					materials: [],
-					opened: index == selectedSection.value,
-					edit: false,
-				})
+			await Promise.all(
+				SingleCourse.value.sections.map(async (section, index) => {
+					staticSectionOptions.value.push({
+						name: section.label,
+						id: Logic.Common.makeId(),
+						materials: [],
+						opened: index == selectedSection.value,
+						edit: false,
+					})
 
-				staticPropSections.value.push({
-					items: section.items,
-					label: section.label,
-				})
+					staticPropSections.value.push({
+						items: section.items,
+						label: section.label,
+					})
 
-				await Promise.all(section.items.map(async (item) => {
-					await addItemToSection(item, index)
-				}))
-			}))
-
-			let remainCoursableItems = JSON.parse(
-				JSON.stringify(SingleCourse.value.coursables)
+					await Promise.all(
+						section.items.map(async (item) => {
+							await addItemToSection(item, index)
+						}),
+					)
+				}),
 			)
+
+			let remainCoursableItems = JSON.parse(JSON.stringify(SingleCourse.value.coursables))
 
 			SingleCourse.value.sections.forEach((items) => {
 				items.items.forEach((eachItem) => {
-					const itemIndex = remainCoursableItems.findIndex(
-						(x) => x.id == eachItem.id
-					)
+					const itemIndex = remainCoursableItems.findIndex((x) => x.id == eachItem.id)
 					if (itemIndex != -1) {
 						remainCoursableItems = remainCoursableItems.filter((thisItem) => {
 							return thisItem.id != eachItem.id
@@ -395,11 +392,9 @@ export default defineComponent({
 				})
 			})
 
-			const unsectionedSection = SingleCourse.value.sections.filter(
-				(section) => {
-					return section.label == 'unsectioned'
-				}
-			)
+			const unsectionedSection = SingleCourse.value.sections.filter((section) => {
+				return section.label == 'unsectioned'
+			})
 
 			let unsectionedIndex = SingleCourse.value.sections.length - 1
 
@@ -433,8 +428,7 @@ export default defineComponent({
 
 		const addNewSection = () => {
 			const currentSectionsLenght = props.sectionInput.sections.length
-			const newSectionPosition =
-				currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1
+			const newSectionPosition = currentSectionsLenght - 1 < 0 ? 0 : currentSectionsLenght - 1
 			props.sectionInput.sections.splice(newSectionPosition, 0, {
 				items: [],
 				label: `Section ${sectionOptions.length}`,
@@ -476,10 +470,7 @@ export default defineComponent({
 			Logic.Study.watchProperty('UpdatedFile', UpdatedFile)
 			Logic.Study.watchProperty('SingleQuiz', SingleQuiz)
 
-			Logic.Study.watchProperty(
-				'SelectedMaterialDetails',
-				SelectedMaterialDetails
-			)
+			Logic.Study.watchProperty('SelectedMaterialDetails', SelectedMaterialDetails)
 			if (SingleCourse.value) {
 				await setSections()
 			}
@@ -488,21 +479,17 @@ export default defineComponent({
 		const updateLatestSection = () => {
 			sectionOptions.forEach((option, index) => {
 				if (option) {
-					props.sectionInput.sections[index].items = option.materials.map(
-						(item) => {
-							return {
-								id: item.id,
-								type: item.type.includes('quiz') ? 'quiz' : 'file',
-							}
+					props.sectionInput.sections[index].items = option.materials.map((item) => {
+						return {
+							id: item.id,
+							type: item.type.includes('quiz') ? 'quiz' : 'file',
 						}
-					)
+					})
 					props.sectionInput.sections[index].label = option.name
 				} else {
-					props.sectionInput.sections = props.sectionInput.sections.filter(
-						(item, itemIndex) => {
-							return index != itemIndex
-						}
-					)
+					props.sectionInput.sections = props.sectionInput.sections.filter((item, itemIndex) => {
+						return index != itemIndex
+					})
 				}
 			})
 
@@ -514,11 +501,9 @@ export default defineComponent({
 		})
 
 		const removeSection = async (index: number) => {
-			SingleCourse.value.sections = SingleCourse.value.sections.filter(
-				(section, eachIndex) => {
-					return index != eachIndex
-				}
-			)
+			SingleCourse.value.sections = SingleCourse.value.sections.filter((section, eachIndex) => {
+				return index != eachIndex
+			})
 
 			await setSections()
 

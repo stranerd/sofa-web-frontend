@@ -45,7 +45,7 @@ const submitVerification = async (useLoader = true) => {
 	await Logic.Users.CreateVerification(true, useLoader)
 	Logic.Common.showAlert({
 		message: 'Verification submitted. You will get an email after your account has been reviewed',
-		type: 'success'
+		type: 'success',
 	})
 	await Logic.Common.GoToRoute('/')
 }
@@ -64,11 +64,7 @@ const autoCreateVerification = () => {
 }
 
 const createTutorRequest = () => {
-	if (
-		tutorRequestForm.qualification.length &&
-    tutorRequestForm.topicId &&
-    tutorRequestForm.verification
-	) {
+	if (tutorRequestForm.qualification.length && tutorRequestForm.topicId && tutorRequestForm.verification) {
 		Logic.Users.CreateTutorRequestForm = {
 			qualification: tutorRequestForm.qualification,
 			topicId: tutorRequestForm.topicId,
@@ -89,6 +85,11 @@ const createTutorRequest = () => {
 }
 
 export {
-	accountSetupOptions, autoCreateVerification, createTutorRequest, showCustomizeAI, submitVerification, tutorRequestForm,
-	updateVerificationForm
+	accountSetupOptions,
+	autoCreateVerification,
+	createTutorRequest,
+	showCustomizeAI,
+	submitVerification,
+	tutorRequestForm,
+	updateVerificationForm,
 }
