@@ -14,15 +14,15 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 	}
 	reserved = []
 
-	constructor () {
+	constructor() {
 		super({ socials: [] })
 	}
 
-	private get socials () {
+	private get socials() {
 		return this.values.socials
 	}
 
-	private set socials (value: UserSocialsType) {
+	private set socials(value: UserSocialsType) {
 		this.set('socials', value)
 	}
 
@@ -34,19 +34,19 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 		this.socials = this.socials.filter((_, i) => i !== index)
 	}
 
-	getSocials () {
+	getSocials() {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this
 		const newSocials = this.socials.map((s) => ({
 			...s,
-			get link () {
+			get link() {
 				return s.link
 			},
-			set link (value: string) {
+			set link(value: string) {
 				s.link = value
 				that.socials = newSocials
 			},
-			get error () {
+			get error() {
 				if (!s.link) return ''
 				const val = v.string().url().parse(s.link)
 				if (val.valid) return ''

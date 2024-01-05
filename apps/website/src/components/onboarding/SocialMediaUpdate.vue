@@ -1,5 +1,5 @@
 <template>
-	<SofaTextField v-for="(item, index) in factory.getSocials()" :key="index" :placeholder="`Add ${item.ref} link`" type="url"
+	<SofaTextField v-for="(item, index) in factory.getSocials()" :key="index" :placeholder="`Enter ${item.ref} link`" type="url"
 		:error="item.error" customClass="rounded-custom !bg-lightGray"
 		v-model="item.link">
 		<template v-slot:inner-prefix>
