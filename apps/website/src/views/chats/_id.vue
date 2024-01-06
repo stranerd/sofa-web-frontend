@@ -13,6 +13,7 @@
 					<sofa-icon
 						:customClass="'h-[17px] cursor-pointer mdlg:hidden'"
 						:name="'tutor'"
+						:fill=" chatIsActive ? '#3219AF' : ''"
 						@click="onClickAddTutor"
 						v-if="conversation.user.id === id" />
 					<sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
@@ -249,6 +250,15 @@ export default defineComponent({
 			if (confirmed) showRateAndReviewTutor.value = true
 		}
 
+		const chatIsActive = computed(()=>{
+			if(conversation.value.pending === false && conversation.value.accepted.is === true && conversation.value.ended === null) {
+				return true
+			} else {
+				return false
+			}
+		})
+
+
 		return {
 			wallet,
 			id,
@@ -265,6 +275,7 @@ export default defineComponent({
 			onClickEndSession,
 			end,
 			deleteConv,
+			chatIsActive
 		}
 	},
 })

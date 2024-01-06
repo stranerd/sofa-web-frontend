@@ -1,5 +1,5 @@
 <template>
-	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer" :class="customClass" />
+	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer" :class="customClass" :fill="fill" />
 </template>
 
 <script lang="ts">
@@ -14,6 +14,11 @@ export default {
 			type: String,
 			required: false,
 		},
+		fill: {
+			type: String,
+			default: '',
+			required: false,
+		}
 	},
 	components: { InlineSvg },
 	name: 'RoofIcon',
