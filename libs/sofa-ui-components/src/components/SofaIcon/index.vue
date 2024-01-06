@@ -18,7 +18,7 @@ export default {
 			type: String,
 			default: '',
 			required: false,
-		}
+		},
 	},
 	components: { InlineSvg },
 	name: 'RoofIcon',
