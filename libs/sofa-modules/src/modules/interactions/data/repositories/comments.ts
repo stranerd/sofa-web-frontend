@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { CommentEntity } from '../../domain/entities/comments'
 import { ICommentRepository } from '../../domain/irepositories/comments'
 import { CommentFromModel, CommentToModel } from '../models/comments'
@@ -10,7 +9,7 @@ export class CommentRepository implements ICommentRepository {
 	private mapper = (model: CommentFromModel | null) => (model ? new CommentEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/interactions/comments`)
+		this.client = new HttpClient('/interactions/comments')
 	}
 
 	static getInstance() {

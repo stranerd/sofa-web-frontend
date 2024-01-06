@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { ViewEntity } from '../../domain/entities/views'
 import { IViewRepository } from '../../domain/irepositories/views'
 import { ViewFromModel, ViewToModel } from '../models/views'
@@ -10,7 +9,7 @@ export class ViewRepository implements IViewRepository {
 	private mapper = (model: ViewFromModel | null) => (model ? new ViewEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/interactions/views`)
+		this.client = new HttpClient('/interactions/views')
 	}
 
 	static getInstance() {

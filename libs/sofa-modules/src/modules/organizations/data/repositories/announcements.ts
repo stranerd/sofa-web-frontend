@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { AnnouncementEntity } from '../../domain/entities/announcements'
 import { IAnnouncementRepository } from '../../domain/irepositories/announcements'
 import { AnnouncementFromModel, AnnouncementToModel } from '../models/announcements'
@@ -10,7 +9,7 @@ export class AnnouncementRepository implements IAnnouncementRepository {
 	private mapper = (model: AnnouncementFromModel | null) => (model ? new AnnouncementEntity(model) : null)
 
 	private constructor(organizationId: string, classId: string) {
-		this.client = new HttpClient(`${apiBase}/organizations/${organizationId}/classes/${classId}/announcements`)
+		this.client = new HttpClient(`/organizations/${organizationId}/classes/${classId}/announcements`)
 	}
 
 	static getInstance(organizationId: string, classId: string) {

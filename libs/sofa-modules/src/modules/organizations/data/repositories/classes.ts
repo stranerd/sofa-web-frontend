@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { ClassEntity } from '../../domain/entities/classes'
 import { IClassRepository } from '../../domain/irepositories/classes'
 import { ClassFromModel, ClassToModel } from '../models/classes'
@@ -10,7 +9,7 @@ export class ClassRepository implements IClassRepository {
 	private mapper = (model: ClassFromModel | null) => (model ? new ClassEntity(model) : null)
 
 	private constructor(organizationId: string) {
-		this.client = new HttpClient(`${apiBase}/organizations/${organizationId}/classes`)
+		this.client = new HttpClient(`/organizations/${organizationId}/classes`)
 	}
 
 	static getInstance(organizationId: string) {

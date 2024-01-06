@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { TagEntity } from '../../domain/entities/tags'
 import { ITagRepository } from '../../domain/irepositories/tags'
 import { TagFromModel, TagToModel } from '../models/tags'
@@ -10,7 +9,7 @@ export class TagRepository implements ITagRepository {
 	private mapper = (model: TagFromModel | null) => (model ? new TagEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/interactions/tags`)
+		this.client = new HttpClient('/interactions/tags')
 	}
 
 	static getInstance() {
