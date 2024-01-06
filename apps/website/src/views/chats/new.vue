@@ -9,7 +9,7 @@
 			}">
 			<div class="flex flex-col items-center justify-center text-center gap-4 h-full w-[90%] md:w-1/2 mx-auto">
 				<div class="flex flex-col gap-1">
-					<img :src="userAi.image" class="w-[96px] h-[96px] pb-1"/>
+					<img :src="userAi.image" class="w-[96px] h-[96px] pb-1" />
 					<sofa-header-text>{{ content.name }}</sofa-header-text>
 					<p>{{ content.title }}</p>
 				</div>
@@ -17,7 +17,6 @@
 					<sofa-normal-text>{{ content.body1 }}</sofa-normal-text>
 					<sofa-normal-text>{{ content.body2 }}</sofa-normal-text>
 				</div>
-				
 			</div>
 			<template v-slot:bottom>
 				<form
@@ -45,16 +44,15 @@ import { SofaIcon, SofaNormalText, SofaHeaderText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
-export const content = 
-	{
-		name: 'Dr. Stranerd',
-		title: 'AI assistant',
-		body1: 'Hello! I am here to answer all your questions on any subject 24/7.',
-		body2: 'You can also add a tutor if you require further assistance'
-	}
+export const content = {
+	name: 'Dr. Stranerd',
+	title: 'AI assistant',
+	body1: 'Hello! I am here to answer all your questions on any subject 24/7.',
+	body2: 'You can also add a tutor if you require further assistance',
+}
 
 export default defineComponent({
-	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText, SofaHeaderText},
+	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText, SofaHeaderText },
 	name: 'ChatsNewPage',
 	middlewares: { goBackRoute: '/' },
 	setup() {
