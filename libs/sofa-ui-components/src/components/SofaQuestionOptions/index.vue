@@ -5,13 +5,13 @@
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('type')">
 					<SofaIcon class="h-[18px]" name="question-type" />
 					<SofaNormalText class="!font-bold" content="Question type" />
-					<SofaNormalText :content="QuestionEntity.getQuestionTypeLabel(factory.type)" class="ml-auto" />
+					<SofaNormalText :content="QuestionEntity.getLabel(factory.type)" class="ml-auto" />
 					<SofaIcon class="h-[7px]" :name="isOpen('type') ? 'chevron-up' : 'chevron-down'" />
 				</a>
 
 				<div v-if="isOpen('type')" class="w-full grid grid-cols-2 gap-3">
 					<a
-						v-for="type in QuestionEntity.getAllQuestionTypes()"
+						v-for="type in QuestionEntity.getAllTypes()"
 						:key="type.value"
 						class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center rounded-lg"
 						:class="factory.type === type.value ? 'bg-skyBlue' : 'bg-[#F2F5F8]'"
@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts" setup>
-import { QuestionEntity, QuizEntity, QuestionFactory } from '@modules/study'
+import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 import { Logic, SingleUser } from 'sofa-logic'
 import { PropType, defineEmits, defineProps, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'

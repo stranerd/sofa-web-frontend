@@ -16,11 +16,11 @@
 <script lang="ts" setup>
 import { QuestionEntity } from '@modules/study'
 import { SofaHeaderText } from 'sofa-ui-components'
-import { defineProps, ref } from 'vue'
+import { PropType, defineProps, ref } from 'vue'
 
 defineProps({
 	question: {
-		type: QuestionEntity,
+		type: Object as PropType<QuestionEntity>,
 		required: true,
 	},
 	isDark: {

@@ -35,6 +35,7 @@ export class QuestionEntity extends BaseEntity {
 		questionMedia,
 		timeLimit,
 		data,
+		strippedData,
 		createdAt,
 		updatedAt,
 	}: QuestionConstructorArgs) {
@@ -47,6 +48,7 @@ export class QuestionEntity extends BaseEntity {
 		this.questionMedia = questionMedia
 		this.timeLimit = timeLimit
 		this.data = data
+		this.strippedData = strippedData
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
@@ -139,27 +141,27 @@ export class QuestionEntity extends BaseEntity {
 		return ''
 	}
 
-	static getQuestionTypeLabel(type: QuestionTypes) {
+	static getLabel(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
 		return data.extras.label
 	}
 
-	static getQuestionTypeIcon(type: QuestionTypes) {
+	static getIcon(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
 		return data.extras.icon
 	}
 
-	static getQuestionTypeImage(type: QuestionTypes) {
+	static getImage(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
 		return data.extras.image
 	}
 
-	static getQuestionTypeTemplate(type: QuestionTypes) {
+	static getTemplate(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
 		return data.template
 	}
 
-	static getAllQuestionTypes() {
+	static getAllTypes() {
 		return Object.entries(questionTypes).map(([key, t]) => ({
 			label: t.extras.label,
 			value: key as QuestionTypes,

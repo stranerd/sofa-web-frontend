@@ -8,6 +8,7 @@ import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/s
 import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from './study'
+import { InteractionEntities, ViewsUseCases } from '@modules/interactions'
 
 const store = {} as Record<
 	string,
@@ -72,7 +73,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		try {
 			await store[id].setLoading(true)
 			store[id].quiz.value = await QuizzesUseCases.find(id)
-			if (store[id].quiz.value) Logic.Interactions.CreateView({ entity: { id: id, type: 'quizzes' } }).catch() // dont await, run in bg
+			if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)
@@ -101,7 +102,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.PublishQuiz(id)
+			await QuizzesUseCases.publish(id)
 			await store[id].setMessage('Quiz published')
 			succeeded = true
 		} catch (e) {
@@ -152,7 +153,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			const data = QuestionEntity.getQuestionTypeTemplate(type)
+			const data = QuestionEntity.getTemplate(type)
 			await QuestionsUseCases.add(id, data)
 		} catch (e) {
 			await store[id].setError(e)
@@ -210,7 +211,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.requestAccess(id, add)
+			await QuizzesUseCases.requestAccess(id, add)
 			await store[id].setMessage('Request sent')
 		} catch (e) {
 			await store[id].setError(e)
@@ -222,7 +223,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.grantAccess(id, userId, grant)
+			await QuizzesUseCases.grantAccess(id, userId, grant)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -233,7 +234,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.manageMembers(id, userIds, grant)
+			await QuizzesUseCases.addMembers(id, userIds, grant)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -241,7 +242,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	}
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchQuiz()
+		if (!store[id].fetched.value && !store[id].loading.value) await fetchQuiz()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {
@@ -279,10 +280,9 @@ export const useCreateQuiz = () => {
 			const factory = new QuizFactory()
 			const quiz = await QuizzesUseCases.add(factory)
 			await Promise.all(
-				[
-					QuestionEntity.getQuestionTypeTemplate(QuestionTypes.multipleChoice),
-					QuestionEntity.getQuestionTypeTemplate(QuestionTypes.trueOrFalse),
-				].map((q) => QuestionsUseCases.add(quiz.id, q)),
+				[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
+					QuestionsUseCases.add(quiz.id, q),
+				),
 			).catch()
 			await setLoading(false)
 			return quiz.id

@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Logic } from 'sofa-logic'
-import { defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'

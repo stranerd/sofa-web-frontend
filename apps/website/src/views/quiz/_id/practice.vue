@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
+	<expanded-layout layout-style="!justify-between !pb-0" :hide="{ top: true, bottom: true }">
 		<QuizWrapper :id="$route.params.id as string" :show-answer="showSolution" :is-answer-right="isCorrect">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz

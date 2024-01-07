@@ -11,7 +11,7 @@
 						<span class="w-[4px] h-[4px] rounded-full bg-deepGray" />
 						<SofaNormalText
 							class="!font-bold truncate"
-							:content="QuestionEntity.getQuestionTypeLabel(factory.entityId === element.id ? factory.type : element.type)" />
+							:content="QuestionEntity.getLabel(factory.entityId === element.id ? factory.type : element.type)" />
 
 						<div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
 							<template v-for="(user, i) in users[element.id] ?? []" :key="user.id">
@@ -25,7 +25,7 @@
 
 					<div
 						class="w-full h-[144px] bg-cover"
-						:style="`background-image: url('/images/${QuestionEntity.getQuestionTypeImage(
+						:style="`background-image: url('/images/${QuestionEntity.getImage(
 							factory.entityId === element.id ? factory.type : element.type,
 						)}.svg')`">
 						<div class="h-full w-full hidden group-hover:flex gap-3 items-center justify-center">
@@ -103,7 +103,7 @@ const props = defineProps({
 		required: true,
 	},
 	quiz: {
-		type: QuizEntity,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 	factory: {

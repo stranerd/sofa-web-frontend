@@ -62,7 +62,7 @@ export const useMyCourses = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchCourses()
+		if (!store.fetched.value && !store.loading.value) await fetchCourses()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

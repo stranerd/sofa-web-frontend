@@ -103,9 +103,7 @@
 
 						<SofaNormalText
 							class="!font-bold !text-sm"
-							:content="
-								showSettingModal ? 'Update quiz' : QuestionEntity.getQuestionTypeLabel(extras.currentQuestionById?.type)
-							" />
+							:content="showSettingModal ? 'Update quiz' : QuestionEntity.getLabel(extras.currentQuestionById?.type)" />
 
 						<div class="flex items-center gap-3" :class="{ invisible: showSettingModal }">
 							<SofaIcon class="h-[18px]" name="share-option" @click="showShareModal = true" />
@@ -242,7 +240,7 @@
 
 					<div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
 						<a
-							v-for="type in QuestionEntity.getAllQuestionTypes()"
+							v-for="type in QuestionEntity.getAllTypes()"
 							:key="type.value"
 							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-skyBlue bg-[#F2F5F8] rounded-lg"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
@@ -270,26 +268,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
+import ManageAccessModal from '@/components/quizzes/ManageAccessModal.vue'
+import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import RequestAccessModal from '@/components/quizzes/RequestAccessModal.vue'
+import QuizSettings from '@/components/quizzes/Settings.vue'
+import { generateMiddlewares } from '@/middlewares'
+import { QuestionEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import {
+	SofaAddQuestion,
 	SofaAvatar,
 	SofaEmptyState,
-	SofaIcon,
-	SofaNormalText,
-	SofaQuestionOptions,
-	SofaModal2 as SofaModal,
-	SofaAddQuestion,
-	SofaQuestionContent,
 	SofaHeaderText,
+	SofaIcon,
+	SofaModal2 as SofaModal,
+	SofaNormalText,
+	SofaQuestionContent,
+	SofaQuestionOptions,
 } from 'sofa-ui-components'
-import { Logic } from 'sofa-logic'
-import { QuestionEntity } from '@modules/study'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
-import QuizSettings from '@/components/quizzes/Settings.vue'
-import RequestAccessModal from '@/components/quizzes/RequestAccessModal.vue'
-import ManageAccessModal from '@/components/quizzes/ManageAccessModal.vue'
-import { generateMiddlewares } from '@/middlewares'
+import { defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdEdit',

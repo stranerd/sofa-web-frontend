@@ -11,8 +11,6 @@ export class QuizRepository implements IQuizRepository {
 	constructor() {
 		this.client = new HttpClient('/study/quizzes')
 	}
-	publish: (id: string, userId: string) => Promise<QuizEntity>
-	reorder: (id: string, questionIds: string[]) => Promise<QuizEntity>
 
 	static getInstance() {
 		if (!QuizRepository.instance) QuizRepository.instance = new QuizRepository()
@@ -87,5 +85,15 @@ export class QuizRepository implements IQuizRepository {
 
 	async addMembers(id: string, data: { userIds: string[]; grant: boolean }) {
 		return await this.client.post<typeof data, boolean>(`/${id}/access/members/manage`, data)
+	}
+
+	async publish(id: string) {
+		const d = await this.client.post<any, QuizFromModel>(`/${id}/publish`, {})
+		return this.mapper(d)
+	}
+
+	async reorder(id: string, questionIds: string[]) {
+		const d = await this.client.post<any, QuizFromModel>(`/${id}/reorder`, { questionIds })
+		return this.mapper(d)
 	}
 }

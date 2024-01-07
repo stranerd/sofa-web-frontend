@@ -70,6 +70,7 @@
 	</div>
 </template>
 <script lang="ts">
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
@@ -77,7 +78,6 @@ import { ContentDetails, Course, Logic, Quiz, SofaFile } from 'sofa-logic'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
-import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export default defineComponent({
 	name: 'SofaCourseContent',
@@ -246,7 +246,7 @@ export default defineComponent({
 								.then((questions) => {
 									const allQuestions = questions.results.map((q) => {
 										return {
-											type: QuestionEntity.getQuestionTypeLabel(q.data.type),
+											type: QuestionEntity.getLabel(q.data.type),
 											duration: Logic.Common.prettifyTime(q.timeLimit),
 											content: q.question,
 											answer: q.answer,

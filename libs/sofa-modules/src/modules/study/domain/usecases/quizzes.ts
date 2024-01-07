@@ -30,6 +30,10 @@ export class QuizzesUseCase {
 		return await this.repository.reorder(id, questions)
 	}
 
+	async publish(id: string) {
+		return await this.repository.publish(id)
+	}
+
 	async getUserQuizzes(userId: string) {
 		const conditions: QueryParams = {
 			where: [{ field: 'user.id', value: userId }],
@@ -79,5 +83,17 @@ export class QuizzesUseCase {
 
 	async listenToTutorQuizzes(listener: Listeners<QuizEntity>) {
 		return await this.repository.listenToManyTutors({ all: true }, listener, () => true)
+	}
+
+	async requestAccess(id: string, add: boolean) {
+		return await this.repository.requestAccess(id, { add })
+	}
+
+	public async grantAccess(id: string, userId: string, grant: boolean) {
+		return await this.repository.grantAccess(id, { userId, grant })
+	}
+
+	public async addMembers(id: string, userIds: string[], grant: boolean) {
+		return await this.repository.addMembers(id, { userIds, grant })
 	}
 }

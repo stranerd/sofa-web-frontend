@@ -9,7 +9,7 @@ export class QuestionRepository implements IQuestionRepository {
 	private mapper = (model: QuestionFromModel | null) => (model ? new QuestionEntity(model) : null)
 
 	private constructor(quizId: string) {
-		this.client = new HttpClient(`/study/${quizId}/questions`)
+		this.client = new HttpClient(`/study/quizzes/${quizId}/questions`)
 	}
 
 	static getInstance(quizId: string) {

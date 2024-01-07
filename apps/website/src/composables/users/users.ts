@@ -63,7 +63,7 @@ export const useTutorsList = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchTutors()
+		if (!store.fetched.value && !store.loading.value) await fetchTutors()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

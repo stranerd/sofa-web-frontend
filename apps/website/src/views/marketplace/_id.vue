@@ -128,7 +128,7 @@ import { otherTasks } from '@/composables/quiz'
 import { useHasAccess } from '@/composables/study/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
-import { QuestionsUseCases } from 'sofa-modules/src/modules/study'
+import { QuestionsUseCases, QuestionEntity } from '@modules/study'
 import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -439,7 +439,7 @@ export default defineComponent({
 				QuestionsUseCases.getAllQuestions(SingleQuiz.value.id).then((questions) => {
 					questions.results.forEach((question) => {
 						contentDetails.questions.push({
-							type: question.type,
+							type: QuestionEntity.getLabel(question.type),
 							content: question.question,
 							duration: Logic.Common.prettifyTime(question.timeLimit),
 							answer: '',

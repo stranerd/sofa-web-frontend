@@ -110,6 +110,7 @@
 	</div>
 </template>
 <script lang="ts">
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
@@ -118,7 +119,6 @@ import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
-import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export default defineComponent({
 	name: 'SofaCourseSections',
@@ -255,7 +255,7 @@ export default defineComponent({
 				QuestionsUseCases.getAllQuestions(quiz.id).then((questions) => {
 					const allQuestions = questions.results.map((q) => {
 						return {
-							type: QuestionEntity.getQuestionTypeLabel(q.data.type),
+							type: QuestionEntity.getLabel(q.data.type),
 							duration: Logic.Common.prettifyTime(q.timeLimit),
 							content: q.question,
 							answer: q.answer,

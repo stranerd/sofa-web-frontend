@@ -45,27 +45,6 @@ export default class Study extends Common {
 		descriptions: '',
 	})
 	public UpdatedFile: SofaFile | undefined
-	public RecentMaterials: (Course | Quiz)[] | undefined
-	public MyOrgMaterials: (Course | Quiz)[] | undefined
-	public SuggestedMaterials: (Course | Quiz)[] | undefined
-	public LatestMaterials: (Course | Quiz)[] | undefined
-	public RatedMaterials: (Course | Quiz)[] | undefined
-	public PopularMaterials: (Course | Quiz)[] | undefined
-	public HomeMaterials:
-		| {
-				recent: (Course | Quiz)[]
-				my_org: (Course | Quiz)[]
-				suggested: (Course | Quiz)[]
-		  }
-		| undefined
-
-	public MarketplaceMaterials:
-		| {
-				lastest: (Course | Quiz)[]
-				rated: (Course | Quiz)[]
-				popular: (Course | Quiz)[]
-		  }
-		| undefined
 	public SingleReview: Review | undefined
 	public AllReviews: Paginated<Review> | undefined
 
@@ -74,15 +53,10 @@ export default class Study extends Common {
 	public UpdateCourseForm: CreateCourseInput | undefined
 	public CreateFileForm: CreateDocumentInput | undefined
 	public UpdateFileForm: CreateDocumentInput | undefined
-	public ReorderQuizQuestionsForm: ReorderQuizInput | undefined
 	public MoveItemToCourseForm: AddItemToCourseInput | undefined
 	public UpdateCourseSectionForm: UpdateCourseSectionsInput | undefined
 	public AddReviewForm: AddReviewInput | undefined
 
-	public questionSettings = reactive([])
-	public selectedQuestion = reactive({})
-	public quizDataUpdate = Math.random() * 100000
-	public quizQuestionDeleted = Math.random() * 100000
 	public contentDetails = reactive<ContentDetails>({
 		original: null,
 		type: 'course',
@@ -551,20 +525,6 @@ export default class Study extends Common {
 		}
 	}
 
-	public async PublishQuiz(id: string) {
-		return $api.study.quiz.publishQuiz(id).then((response) => {
-			this.SingleQuiz = response.data
-			return response.data
-		})
-	}
-
-	public ReorderQuizQuestions = (id: string, ReorderQuizQuestionsForm: ReorderQuizInput) => {
-		return $api.study.quiz.reorderQuiz(id, ReorderQuizQuestionsForm).then((response) => {
-			this.SingleQuiz = response.data
-			return this.SingleQuiz
-		})
-	}
-
 	public CreateCourse = (formIsValid: boolean) => {
 		if (formIsValid && this.CreateCourseForm) {
 			Logic.Common.showLoading()
@@ -743,17 +703,5 @@ export default class Study extends Common {
 				//
 				Logic.Common.hideLoading()
 			})
-	}
-
-	public async requestAccess(id: string, add: boolean) {
-		return $api.study.quiz.requestAccess(id, add).then((res) => res.data)
-	}
-
-	public async grantAccess(id: string, userId: string, grant: boolean) {
-		return $api.study.quiz.grantAccess(id, userId, grant).then((res) => res.data)
-	}
-
-	public async manageMembers(id: string, userIds: string[], grant: boolean) {
-		return $api.study.quiz.manageMembers(id, userIds, grant).then((res) => res.data)
 	}
 }

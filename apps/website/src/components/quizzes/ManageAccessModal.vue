@@ -95,7 +95,7 @@ import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: QuizEntity,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 	users: {

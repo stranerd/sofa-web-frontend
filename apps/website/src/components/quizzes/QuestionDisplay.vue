@@ -190,7 +190,7 @@ import Draggable from 'vuedraggable'
 
 const props = defineProps({
 	question: {
-		type: QuestionEntity,
+		type: Object as PropType<QuestionEntity>,
 		required: true,
 	},
 	modelValue: {

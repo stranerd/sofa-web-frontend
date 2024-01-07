@@ -96,7 +96,7 @@ export const useMyQuizzes = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchQuizzes()
+		if (!store.fetched.value && !store.loading.value) await fetchQuizzes()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -133,7 +133,7 @@ export const useTutorQuizzes = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !tutorStore.fetched.value &&  */ !tutorStore.loading.value && isAdmin.value) await fetchQuizzes()
+		if (!tutorStore.fetched.value && !tutorStore.loading.value && isAdmin.value) await fetchQuizzes()
 		await tutorStore.listener.start()
 	})
 	onUnmounted(async () => {

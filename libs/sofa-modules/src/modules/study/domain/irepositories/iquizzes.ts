@@ -10,7 +10,7 @@ export interface IQuizRepository {
 	similar: (id: string) => Promise<QuizEntity[]>
 	update: (id: string, data: QuizToModel) => Promise<QuizEntity>
 	delete: (id: string) => Promise<void>
-	publish: (id: string, userId: string) => Promise<QuizEntity>
+	publish: (id: string) => Promise<QuizEntity>
 	reorder: (id: string, questionIds: string[]) => Promise<QuizEntity>
 	requestAccess(id: string, data: { add: boolean }): Promise<boolean>
 	grantAccess(id: string, data: { userId: string; grant: boolean }): Promise<boolean>

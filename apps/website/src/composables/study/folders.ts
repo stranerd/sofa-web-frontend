@@ -61,7 +61,7 @@ export const useMyFolders = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchFolders()
+		if (!store.fetched.value && !store.loading.value) await fetchFolders()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

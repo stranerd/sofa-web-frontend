@@ -71,8 +71,8 @@
 
 <script lang="ts" setup>
 import QuestionDisplay from '@/components/quizzes/QuestionDisplay.vue'
-import { Logic } from 'sofa-logic'
 import { QuestionEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
