@@ -83,19 +83,20 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, QuestionFactory, Quiz, SingleUser, TransformedQuestion } from 'sofa-logic'
-import { defineEmits, defineProps, PropType, ref } from 'vue'
+import { QuestionEntity, QuizEntity } from '@modules/study'
+import { Logic, QuestionFactory, SingleUser } from 'sofa-logic'
+import { PropType, defineEmits, defineProps, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
 defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 	question: {
-		type: Object as PropType<TransformedQuestion>,
+		type: Object as PropType<QuestionEntity>,
 		required: true,
 	},
 	factory: {

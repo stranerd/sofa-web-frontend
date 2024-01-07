@@ -1,5 +1,5 @@
 import { BaseEntity } from '@modules/core'
-import { CoursableData, Publishable } from '../types'
+import { CoursableData, DraftStatus, Publishable } from '../types'
 
 export class PublishableEntity extends BaseEntity implements Publishable {
 	public readonly id: string
@@ -39,6 +39,14 @@ export class PublishableEntity extends BaseEntity implements Publishable {
 		this.status = status
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
+	}
+
+	get isPublished() {
+		return this.status === DraftStatus.published
+	}
+
+	get isDraft() {
+		return this.status === DraftStatus.draft
 	}
 }
 

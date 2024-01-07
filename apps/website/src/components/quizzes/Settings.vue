@@ -108,12 +108,11 @@
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@/composables/interactions/tags'
-import { Quiz, QuizFactory } from 'sofa-logic'
+import { QuizEntity, QuizFactory } from '@modules/study'
 import {
 	SofaButton,
 	SofaCheckbox,
 	SofaFileAttachment,
-	SofaFormWrapper,
 	SofaIcon,
 	SofaImageLoader,
 	SofaNormalText,
@@ -125,11 +124,11 @@ import { PropType, defineEmits, defineProps, ref, watch } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: QuizEntity,
 		required: true,
 	},
 	factory: {
-		type: Object as PropType<QuizFactory>,
+		type: QuizFactory,
 		required: true,
 	},
 	close: {

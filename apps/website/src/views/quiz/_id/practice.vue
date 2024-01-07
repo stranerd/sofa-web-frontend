@@ -15,7 +15,7 @@
 						click: () => {
 							if (isDone) return Logic.Common.goBack()
 							if (!showSolution) {
-								isCorrect = Logic.Study.checkAnswer(extras.question, extras.answer)
+								isCorrect = extras.question.checkAnswer(extras.answer)
 								return (showSolution = true)
 							}
 							if (extras.canNext) {

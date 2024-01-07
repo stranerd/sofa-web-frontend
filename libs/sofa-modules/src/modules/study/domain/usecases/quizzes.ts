@@ -26,6 +26,10 @@ export class QuizzesUseCase {
 		return await this.repository.find(id)
 	}
 
+	async reorder(id: string, questions: string[]) {
+		return await this.repository.reorder(id, questions)
+	}
+
 	async getUserQuizzes(userId: string) {
 		const conditions: QueryParams = {
 			where: [{ field: 'user.id', value: userId }],

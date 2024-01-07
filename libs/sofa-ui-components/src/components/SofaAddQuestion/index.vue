@@ -85,7 +85,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, Question, QuestionFactory, Quiz, SingleUser, TransformedQuestion } from 'sofa-logic'
+import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
+import { Logic, SingleUser } from 'sofa-logic'
 import { PropType, computed, defineEmits, defineProps, reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import SofaAvatar from '../SofaAvatar'
@@ -98,15 +99,15 @@ const props = defineProps({
 		required: true,
 	},
 	questions: {
-		type: Array as PropType<TransformedQuestion[]>,
+		type: Array as PropType<QuestionEntity[]>,
 		required: true,
 	},
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: QuizEntity,
 		required: true,
 	},
 	factory: {
-		type: Object as PropType<QuestionFactory>,
+		type: QuestionFactory,
 		required: true,
 	},
 	users: {
@@ -128,7 +129,7 @@ const questionsRef = toRef(props, 'questions')
 const reactiveQuestions = reactive([...questionsRef.value])
 const canEmit = ref(false)
 
-const selectQuestion = (question: Question) => {
+const selectQuestion = (question: QuestionEntity) => {
 	selectedQuestionId.value = question.id
 }
 

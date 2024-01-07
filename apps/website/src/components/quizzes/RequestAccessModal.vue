@@ -52,13 +52,14 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
-import { Logic, Quiz } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
-import { PropType, computed, defineEmits, defineProps } from 'vue'
+import { computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: QuizEntity,
 		required: true,
 	},
 })

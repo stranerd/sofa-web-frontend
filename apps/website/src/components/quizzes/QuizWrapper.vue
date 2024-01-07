@@ -8,11 +8,11 @@
 import { useAuth } from '@/composables/auth/auth'
 import { useCountdown } from '@/composables/core/time'
 import { useQuiz } from '@/composables/study/quizzes'
-import { Logic, Question, QuestionFactory, QuizFactory, SingleUser } from 'sofa-logic'
-import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
-import QuestionDisplay from './QuestionDisplay.vue'
-import { useRoute, useRouter } from 'vue-router'
+import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
+import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import QuestionDisplay from './QuestionDisplay.vue'
 
 const props = defineProps({
 	id: {
@@ -25,7 +25,7 @@ const props = defineProps({
 		default: '',
 	},
 	questions: {
-		type: Array as PropType<Question[]>,
+		type: Array as PropType<QuestionEntity[]>,
 		required: false,
 	},
 	showAnswer: {
@@ -61,6 +61,8 @@ const {
 	quiz,
 	questions,
 	fetched,
+	quizFactory,
+	questionFactory,
 	deleteQuiz,
 	saveQuestion,
 	updateQuiz: update,
@@ -74,10 +76,8 @@ const {
 	grantAccess,
 	manageMembers,
 } = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
-const reorderedQuestions = ref<Question[] | null>(null)
-const quizQuestions = computed(() =>
-	(reorderedQuestions.value ?? props.questions ?? questions.value ?? []).map(Logic.Study.transformQuestion),
-)
+const reorderedQuestions = ref<QuestionEntity[] | null>(null)
+const quizQuestions = computed(() => reorderedQuestions.value ?? props.questions ?? questions.value ?? [])
 
 const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
@@ -93,33 +93,35 @@ const answer = computed({
 		answers[currentQuestionByIndex.value?.id] = val
 	},
 })
-const quizFactory = new QuizFactory()
-const questionFactory = new QuestionFactory()
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
 	const question = currentQuestionByIndex.value
 	if (!question) return null
 	if (props.showAnswer && question.data) {
-		if (question.strippedData.type === 'multipleChoice') {
+		if (question.data.type === QuestionTypes.multipleChoice) {
 			if (question.data.answers.includes(index)) return 'right'
 			if (answer.value.includes(index)) return 'wrong'
 		}
-		if (question.strippedData.type === 'trueOrFalse') {
+		if (question.data.type === QuestionTypes.trueOrFalse) {
 			if (question.data.answer === val) return 'right'
 			if (answer.value === val) return 'wrong'
 		}
-		if (question.data.type === 'writeAnswer') return props.isAnswerRight ? 'right' : 'wrong'
-		if (['fillInBlanks', 'dragAnswers', 'sequence'].includes(question.data.type)) {
+		if (question.data.type === QuestionTypes.writeAnswer) return props.isAnswerRight ? 'right' : 'wrong'
+		if (
+			question.data.type === QuestionTypes.dragAnswers ||
+			question.data.type === QuestionTypes.fillInBlanks ||
+			question.data.type === QuestionTypes.sequence
+		) {
 			if (props.isAnswerRight) return 'right'
 			return question.data.answers[index] === val ? 'right' : 'wrong'
 		}
-		if (question.data.type === 'match') {
+		if (question.data.type === QuestionTypes.match) {
 			if (props.isAnswerRight) return 'right'
 			return question.data.set[index]?.a === val ? 'right' : 'wrong'
 		}
 	}
-	if (question.strippedData.type === 'trueOrFalse' && answer.value === val) return 'selected'
-	if (question.strippedData.type === 'multipleChoice' && answer.value.includes(index)) return 'selected'
+	if (question.strippedData.type === QuestionTypes.trueOrFalse && answer.value === val) return 'selected'
+	if (question.strippedData.type === QuestionTypes.multipleChoice && answer.value.includes(index)) return 'selected'
 	return null
 }
 
@@ -146,7 +148,7 @@ const submitAnswer = async () => {
 
 const saveCurrentQuestion = async () => {
 	if (!currentQuestionById.value || !questionFactory.valid) return
-	await saveQuestion(currentQuestionById.value.id, await questionFactory.toModel())
+	await saveQuestion(currentQuestionById.value.id, questionFactory)
 }
 
 const updateQuiz = async () => {

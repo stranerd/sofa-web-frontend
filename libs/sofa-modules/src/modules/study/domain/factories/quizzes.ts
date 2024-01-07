@@ -21,10 +21,10 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 
 	constructor() {
 		super({
-			title: '',
-			description: '',
+			title: 'Untitle Quiz',
+			description: 'Here is the quiz description',
 			photo: null,
-			topic: '',
+			topic: 'Physics',
 			tags: [],
 			isForTutors: false,
 			courseId: null,

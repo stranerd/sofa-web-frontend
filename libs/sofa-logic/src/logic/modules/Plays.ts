@@ -1,3 +1,4 @@
+import { QuestionEntity } from '@modules/study'
 import { capitalize } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
@@ -35,14 +36,10 @@ export default class Plays extends Common {
 		})
 	}
 
-	public GetTest = async (id: string | undefined, skipExtras = false) => {
+	public GetTest = async (id: string | undefined) => {
 		if (!id || id == 'nill') return null
 		const response = await $api.plays.test.get(id)
 		this.SingleTest = response.data
-		if (!this.SingleTest || skipExtras) return this.SingleTest
-
-		if (this.SingleTest?.status == 'started') await this.GetTestQuizQuestions(this.SingleTest.id)
-
 		return this.SingleTest
 	}
 
@@ -79,59 +76,15 @@ export default class Plays extends Common {
 		})
 	}
 
-	public GetTestQuizQuestions = (testId: string) => {
-		return $api.plays.test.getTestQuestions(testId).then((response) => {
-			Logic.Study.AllQuestions = {
-				results: response.data,
-				docs: {
-					count: response.data.length,
-					limit: 0,
-					total: response.data.length,
-				},
-				pages: {
-					current: 1,
-					last: 1,
-					start: 1,
-				},
-			}
-		})
-	}
-
 	public GetGameQuestions = (gameId: string) => {
 		return $api.plays.game.getGameQuestions(gameId).then((response) => {
-			Logic.Study.AllQuestions = {
-				results: response.data,
-				docs: {
-					count: response.data.length,
-					limit: 0,
-					total: response.data.length,
-				},
-				pages: {
-					current: 1,
-					last: 1,
-					start: 1,
-				},
-			}
-			return response.data
+			return response.data.map((i) => new QuestionEntity(i as any))
 		})
 	}
 
 	public GetTestQuestions = (testId: string) => {
 		return $api.plays.test.getTestQuestions(testId).then((response) => {
-			Logic.Study.AllQuestions = {
-				results: response.data,
-				docs: {
-					count: response.data.length,
-					limit: 0,
-					total: response.data.length,
-				},
-				pages: {
-					current: 1,
-					last: 1,
-					start: 1,
-				},
-			}
-			return response.data
+			return response.data.map((i) => new QuestionEntity(i as any))
 		})
 	}
 

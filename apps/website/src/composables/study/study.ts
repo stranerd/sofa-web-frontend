@@ -3,6 +3,7 @@ import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useMyPurchases } from '../payment/purchases'
+import { QuizEntity, CourseEntity } from '@modules/study'
 
 const store: Record<
 	string,
@@ -64,7 +65,7 @@ export const useRecent = () => {
 export const useHasAccess = () => {
 	const { user } = useAuth()
 	const { purchasesCoursesIds } = useMyPurchases()
-	const hasAccess = computed(() => (material: Quiz | Course | null) => {
+	const hasAccess = computed(() => (material: Quiz | QuizEntity | CourseEntity | Course | null) => {
 		if (!material) return false
 		return [
 			material.__type === 'QuizEntity' && !material.courseId,

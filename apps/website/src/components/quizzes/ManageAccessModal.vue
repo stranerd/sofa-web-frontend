@@ -80,21 +80,22 @@
 
 <script lang="ts" setup>
 import { useSearchUsers } from '@/composables/users/users'
-import { Conditions, Logic, Quiz, SingleUser } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
+import { Logic, SingleUser } from 'sofa-logic'
 import {
+	SofaAvatar,
+	SofaButton,
 	SofaHeaderText,
 	SofaIcon,
 	SofaModal2 as SofaModal,
-	SofaAvatar,
 	SofaNormalText,
 	SofaTextField,
-	SofaButton,
 } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: QuizEntity,
 		required: true,
 	},
 	users: {

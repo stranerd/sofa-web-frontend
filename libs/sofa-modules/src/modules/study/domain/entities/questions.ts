@@ -1,6 +1,6 @@
 import { BaseEntity, Media } from '@modules/core'
 import stringSimilarity from 'string-similarity'
-import { Differ, stripHTML } from 'valleyed'
+import { Differ, capitalize, stripHTML } from 'valleyed'
 import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
 
 export class QuestionEntity extends BaseEntity {
@@ -42,7 +42,7 @@ export class QuestionEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 
-	private compare(a: string, b: string, quality = 0.95) {
+	compare(a: string, b: string, quality = 0.95) {
 		return (
 			stringSimilarity.compareTwoStrings(
 				stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
@@ -72,6 +72,71 @@ export class QuestionEntity extends BaseEntity {
 			return Array.isArray(answer) && answer.length === questions.length && answer.every((a, i) => this.compare(a, questions[i].a, 1))
 		}
 		return false
+	}
+
+	get type() {
+		return this.strippedData.type
+	}
+
+	get instruction() {
+		if (this.strippedData.type === QuestionTypes.multipleChoice) return 'Choose the right answer(s)'
+		if (this.strippedData.type === QuestionTypes.writeAnswer) return 'Type your answer'
+		if (this.strippedData.type === QuestionTypes.trueOrFalse) return 'Choose an answer'
+		if (this.strippedData.type === QuestionTypes.fillInBlanks) return 'Fill in the gaps'
+		if (this.strippedData.type === QuestionTypes.dragAnswers) return 'Drag answers'
+		if (this.strippedData.type === QuestionTypes.sequence) return 'Drag to rearrange'
+		if (this.strippedData.type === QuestionTypes.match) return 'Drag items on the right side to rearrange'
+		return ''
+	}
+
+	get splitQuestions() {
+		if (this.strippedData.type === 'fillInBlanks' || this.strippedData.type === 'dragAnswers')
+			return this.question.split(this.strippedData.indicator)
+		return []
+	}
+
+	get defaultAnswer() {
+		if (this.strippedData.type === QuestionTypes.multipleChoice) return []
+		if (this.strippedData.type === QuestionTypes.writeAnswer) return ''
+		if (this.strippedData.type === QuestionTypes.trueOrFalse) return '' as unknown as boolean
+		if (this.strippedData.type === QuestionTypes.fillInBlanks) return new Array(this.splitQuestions.length - 1).fill('')
+		if (this.strippedData.type === QuestionTypes.dragAnswers) return []
+		if (this.strippedData.type === QuestionTypes.sequence) return this.strippedData.answers
+		if (this.strippedData.type === QuestionTypes.match) return this.matchAnswers
+		return undefined
+	}
+
+	get dragAnswers() {
+		if (this.strippedData.type === QuestionTypes.dragAnswers) return this.strippedData.answers
+		return []
+	}
+
+	get matchQuestions() {
+		if (this.strippedData.type === QuestionTypes.match) return this.strippedData.questions
+		return []
+	}
+
+	get matchAnswers() {
+		if (this.strippedData.type === QuestionTypes.match) return this.strippedData.answers
+		return []
+	}
+
+	get answer() {
+		if (!this.data) return ''
+		if (this.data.type === QuestionTypes.multipleChoice) {
+			const options = this.data.options
+			return this.data.answers.map((idx) => options[idx]).join('<br>')
+		}
+		if (this.data.type === QuestionTypes.writeAnswer) return this.data.answers.join('<br>-- or --<br>')
+		if (this.data.type === QuestionTypes.trueOrFalse) return capitalize(this.data.answer.toString())
+		if (
+			this.data.type === QuestionTypes.fillInBlanks ||
+			this.data.type === QuestionTypes.dragAnswers ||
+			this.data.type === QuestionTypes.sequence
+		)
+			return this.data.answers.join('<br>')
+		if (this.data.type === QuestionTypes.match) return this.data.set.map((s) => s.a).join('<br>')
+		return ''
 	}
 }
 

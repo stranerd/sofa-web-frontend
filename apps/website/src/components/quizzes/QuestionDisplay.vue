@@ -182,14 +182,15 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, TransformedQuestion } from 'sofa-logic'
+import { QuestionEntity, QuestionTypes } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaIcon, SofaNormalText, SofaTextarea } from 'sofa-ui-components'
 import { PropType, defineEmits, defineProps, reactive, watch } from 'vue'
 import Draggable from 'vuedraggable'
 
 const props = defineProps({
 	question: {
-		type: Object as PropType<TransformedQuestion>,
+		type: QuestionEntity,
 		required: true,
 	},
 	modelValue: {
@@ -222,7 +223,7 @@ const answer = reactive({
 watch(
 	answer,
 	() => {
-		if (props.question.type === 'dragAnswers') emits('update:modelValue', answer.drag.flat(1))
+		if (props.question.type === QuestionTypes.dragAnswers) emits('update:modelValue', answer.drag.flat(1))
 		else emits('update:modelValue', answer.value)
 	},
 	{ immediate: true },

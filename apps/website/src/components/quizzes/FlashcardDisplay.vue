@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { TransformedQuestion } from 'sofa-logic'
+import { QuestionEntity } from '@modules/study'
 import { SofaHeaderText } from 'sofa-ui-components'
-import { defineProps, PropType, ref } from 'vue'
+import { defineProps, ref } from 'vue'
 
 defineProps({
 	question: {
-		type: Object as PropType<TransformedQuestion>,
+		type: QuestionEntity,
 		required: true,
 	},
 	isDark: {

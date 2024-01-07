@@ -5,12 +5,13 @@ import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
+import { QuestionEntity } from '@modules/study'
 
 const store = {} as Record<
 	string,
 	{
 		game: Ref<Game | null>
-		questions: Question[]
+		questions: QuestionEntity[]
 		answer: Ref<GameParticipantAnswer | null>
 		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>

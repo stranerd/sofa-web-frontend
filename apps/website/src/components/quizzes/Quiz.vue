@@ -71,7 +71,8 @@
 
 <script lang="ts" setup>
 import QuestionDisplay from '@/components/quizzes/QuestionDisplay.vue'
-import { Logic, TransformedQuestion } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
+import { QuestionEntity } from '@modules/study'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
@@ -89,7 +90,7 @@ const props = defineProps({
 		required: true,
 	},
 	questions: {
-		type: Array as PropType<TransformedQuestion[]>,
+		type: Array as PropType<QuestionEntity[]>,
 		required: true,
 	},
 	answer: {

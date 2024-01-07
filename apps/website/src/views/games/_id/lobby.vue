@@ -124,6 +124,7 @@ import Quiz from '@/components/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Quiz as IQuiz, Logic } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
 import { SofaAvatar, SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -146,7 +147,7 @@ export default defineComponent({
 			title: 'Lobby',
 		})
 
-		const share = async (quiz: IQuiz) => await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)
+		const share = async (quiz: QuizEntity) => await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)
 		const copy = () => Logic.Common.copy(window.location.href)
 
 		return { share, copy, Logic }

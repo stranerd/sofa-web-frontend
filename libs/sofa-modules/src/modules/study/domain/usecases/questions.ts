@@ -1,4 +1,4 @@
-import { Listeners, QueryParams } from '@modules/core'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { QuestionEntity } from '../entities/questions'
 import { QuestionFactory } from '../factories/questions'
 import { IQuestionRepository } from '../irepositories/iquestions'
@@ -43,8 +43,25 @@ export class QuestionsUseCase {
 			all: true,
 		}
 
-		return await this.repository(quizId).listenToMany(conditions, listener, (entity) => {
-			return entity.quizId === quizId
+		return await this.repository(quizId).listenToMany(conditions, listener, () => true)
+	}
+
+	async getInList(quizId: string, ids: string[]) {
+		const quizzes = await this.repository(quizId).get({
+			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+			all: true,
 		})
+		return quizzes.results
+	}
+
+	async listenToInList(quizId: string, ids: () => string[], listener: Listeners<QuestionEntity>) {
+		return await this.repository(quizId).listenToMany(
+			{
+				where: [{ field: 'id', value: ids(), condition: Conditions.in }],
+				all: true,
+			},
+			listener,
+			(entity) => ids().includes(entity.id),
+		)
 	}
 }
