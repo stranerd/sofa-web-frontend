@@ -1,4 +1,3 @@
-import { EmbeddedUser } from '@modules/users'
 import { FolderSaved } from '../../domain/types'
 
 export interface FolderFromModel extends FolderToModel {
@@ -10,5 +9,4 @@ export interface FolderFromModel extends FolderToModel {
 
 export interface FolderToModel {
 	title: string
-	user: EmbeddedUser
 }

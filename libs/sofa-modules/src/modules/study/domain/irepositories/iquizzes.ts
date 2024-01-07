@@ -8,7 +8,7 @@ export interface IQuizRepository {
 	find: (id: string) => Promise<QuizEntity | null>
 	similar: (id: string) => Promise<QuizEntity[]>
 	update: (id: string, data: QuizToModel) => Promise<QuizEntity>
-	delete: (id: string, isAdmin: boolean) => Promise<void>
+	delete: (id: string) => Promise<void>
 	publish: (id: string, userId: string) => Promise<QuizEntity>
 	reorder: (id: string, questionIds: string[]) => Promise<QuizEntity>
 	requestAccess(id: string, data: { add: boolean }): Promise<boolean>

@@ -4,6 +4,7 @@ import { Differ, stripHTML } from 'valleyed'
 import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
 
 export class QuestionEntity extends BaseEntity {
+	static indicator = '----------'
 	public readonly id: string
 	public readonly userId: string
 	public readonly quizId: string

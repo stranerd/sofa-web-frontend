@@ -1,15 +1,16 @@
-import { CoursableData, QuizAccess, QuizMeta } from '../../domain/types'
+import { CoursableData, Publishable, QuizAccess, QuizMeta } from '../../domain/types'
 
-export interface QuizFromModel extends QuizToModel {
+export interface QuizFromModel extends QuizToModel, Publishable {
 	id: string
 	questions: string[]
 	access: QuizAccess
-	ratings: CoursableData['ratings']
 	meta: Record<QuizMeta, number>
 	createdAt: number
 	updatedAt: number
 }
 
-export interface QuizToModel extends Omit<CoursableData, 'ratings'> {
+export interface QuizToModel extends Omit<CoursableData, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status'> {
+	topic: string
+	tags: string[]
 	isForTutors: boolean
 }
