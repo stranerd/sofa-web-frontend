@@ -28,7 +28,7 @@ const fetchDepartmentCourses = async (departmentId: string) => {
 				store.courses.value,
 				c,
 				(e) => e.id,
-				(e) => e.name,
+				(e) => e.title,
 				true,
 			),
 		)
@@ -52,7 +52,7 @@ const fetchFacultyCourses = async (facultyId: string, general = false) => {
 				store.courses.value,
 				c,
 				(e) => e.id,
-				(e) => e.name,
+				(e) => e.title,
 				true,
 			)
 			if (c.departmentId) store.departments[c.departmentId] = true
@@ -78,7 +78,7 @@ const fetchInstitutionCourses = async (institutionId: string, general = false) =
 				store.courses.value,
 				c,
 				(e) => e.id,
-				(e) => e.name,
+				(e) => e.title,
 				true,
 			)
 			if (c.facultyId) {
@@ -132,7 +132,7 @@ export const useCourse = (id: string) => {
 					store.courses.value,
 					c,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 		},
@@ -145,7 +145,7 @@ export const useCourse = (id: string) => {
 					store.courses.value,
 					c,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 		}
@@ -183,7 +183,7 @@ export const useCreateCourse = () => {
 					store.courses.value,
 					course,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()
@@ -220,7 +220,7 @@ export const useEditCourse = () => {
 					store.courses.value,
 					updatedCourse,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()

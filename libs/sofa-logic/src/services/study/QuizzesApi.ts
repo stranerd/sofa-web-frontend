@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { Paginated, QueryParams } from '../../logic/types'
 import { Quiz } from '../../logic/types/domains/study'
-import { CreateQuestionInput, ReorderQuizInput } from '../../logic/types/forms/study'
+import { ReorderQuizInput } from '../../logic/types/forms/study'
 import { ModelApiService } from '../common/ModelService'
 
 export default class QuizzesApi extends ModelApiService {
@@ -61,18 +61,6 @@ export default class QuizzesApi extends ModelApiService {
 		}
 	}
 
-	public async createQuestion(quizId: string, data: CreateQuestionInput) {
-		try {
-			const response = await this.axiosInstance.post(this.getUrl() + `/${quizId}/questions`, data)
-
-			return response
-		} catch (err) {
-			this.handleErrors(err)
-			if (err.response) {
-			}
-		}
-	}
-
 	public async publishQuiz(quizId: string) {
 		try {
 			const response: AxiosResponse<Quiz> = await this.axiosInstance.post(this.getUrl() + `/${quizId}/publish`)
@@ -88,18 +76,6 @@ export default class QuizzesApi extends ModelApiService {
 	public async reorderQuiz(quizId: string, data: ReorderQuizInput) {
 		try {
 			const response: AxiosResponse<Quiz> = await this.axiosInstance.post(this.getUrl() + `/${quizId}/reorder`, data)
-
-			return response
-		} catch (err) {
-			this.handleErrors(err)
-			if (err.response) {
-			}
-		}
-	}
-
-	public async updateQuestion(quizId: string, questionId, data: CreateQuestionInput) {
-		try {
-			const response = await this.axiosInstance.put(this.getUrl() + `/${quizId}/questions/${questionId}`, data)
 
 			return response
 		} catch (err) {

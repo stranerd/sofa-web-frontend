@@ -1,4 +1,4 @@
-import { AddQuestionAnswer, Game, GameParticipantAnswer, Logic, Question } from 'sofa-logic'
+import { AddQuestionAnswer, Game, GameParticipantAnswer, Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'

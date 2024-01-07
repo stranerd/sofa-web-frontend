@@ -1,7 +1,10 @@
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { defineConfig } from 'vite'
+import Checker from 'vite-plugin-checker'
 // import Pages from 'vite-plugin-pages'
+
+const isDev = process.env.NODE_ENV === 'development'
 
 export default defineConfig({
 	plugins: [
@@ -12,6 +15,14 @@ export default defineConfig({
 				},
 			},
 		}),
+		...(isDev ? [
+			Checker({
+				typescript: true,
+				// vueTsc: true,
+				eslint: { lintCommand: 'eslint ./src' }
+				// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
+			})
+		] : [])
 		/* Pages({
 			dirs: 'src/views',
 			routeStyle: 'nuxt',

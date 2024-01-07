@@ -1,5 +1,5 @@
 import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
-import { CreateQuizInput, Logic } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -80,12 +80,12 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const updateQuiz = async (data: CreateQuizInput) => {
+	const updateQuiz = async (factory: QuizFactory) => {
 		let succeeded = false
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.UpdateQuiz(id, data)
+			await QuizzesUseCases.update(id, factory)
 			await store[id].setMessage('Quiz saved')
 			succeeded = true
 		} catch (e) {

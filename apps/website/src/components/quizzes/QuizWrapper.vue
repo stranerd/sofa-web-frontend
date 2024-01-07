@@ -153,7 +153,7 @@ const saveCurrentQuestion = async () => {
 
 const updateQuiz = async () => {
 	if (!quizFactory.valid) return
-	return await update(await quizFactory.toModel())
+	return await update(quizFactory)
 }
 
 const extras = computed(() => ({
