@@ -1,7 +1,9 @@
-export { Saleable } from '@modules/payment'
+export type { Saleable } from '@modules/payment'
 export * from './questions'
 import { Media, Ratings } from '@modules/core'
 import { EmbeddedUser } from '@modules/users'
+
+export type StudyKeys = 'rated' | 'popular' | 'latest' | 'suggested' | 'recent' | 'byMyOrgs'
 
 export enum FileType {
 	video = 'video',

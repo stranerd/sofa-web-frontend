@@ -6,7 +6,7 @@ import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
 import { Course, Quiz, SofaFile } from '../types/domains/study'
-import { AddReviewInput, AddTagInput } from '../types/forms/common'
+import { AddReviewInput } from '../types/forms/common'
 import {
 	AddItemToCourseInput,
 	CreateCourseInput,
@@ -70,8 +70,6 @@ export default class Study extends Common {
 	public AllReviews: Paginated<Review> | undefined
 
 	// Form input
-	public CreateTagForm: AddTagInput | undefined
-	public UpdateTagForm: AddTagInput | undefined
 	public CreateCourseForm: CreateCourseInput | undefined
 	public UpdateCourseForm: CreateCourseInput | undefined
 	public CreateFileForm: CreateDocumentInput | undefined
@@ -436,65 +434,6 @@ export default class Study extends Common {
 		}
 	}
 
-	public GetHomeMaterials = async () => {
-		this.HomeMaterials = {
-			recent: await this.GetRecentMaterials(),
-			my_org: await this.GetByMyOrgsMaterials(),
-			suggested: await this.GetSuggestedMaterials(),
-		}
-	}
-
-	public GetMarketplaceMaterials = async () => {
-		const [latest, rated, popular] = await Promise.all([
-			this.GetLatestMaterials(),
-			this.GetRatedMaterials(),
-			this.GetPopularMaterials(),
-		])
-		this.MarketplaceMaterials = { lastest: latest, rated, popular }
-	}
-
-	public GetRecentMaterials = () => {
-		return $api.study.my_study.getRecentMaterials().then((response) => {
-			this.RecentMaterials = response.data
-			return response.data
-		})
-	}
-
-	public GetByMyOrgsMaterials = () => {
-		return $api.study.my_study.getByMyOrgsMaterials().then((response) => {
-			this.MyOrgMaterials = response.data
-			return response.data
-		})
-	}
-
-	public GetSuggestedMaterials = () => {
-		return $api.study.my_study.getSuggestedMaterials().then((response) => {
-			this.SuggestedMaterials = response.data
-			return response.data
-		})
-	}
-
-	public GetLatestMaterials = () => {
-		return $api.study.my_study.getLatestMaterials().then((response) => {
-			this.LatestMaterials = response.data
-			return response.data
-		})
-	}
-
-	public GetPopularMaterials = () => {
-		return $api.study.my_study.getPopularMaterials().then((response) => {
-			this.PopularMaterials = response.data
-			return response.data
-		})
-	}
-
-	public GetRatedMaterials = () => {
-		return $api.study.my_study.getRatedMaterials().then((response) => {
-			this.RatedMaterials = response.data
-			return response.data
-		})
-	}
-
 	public GetFiles = (filters: QueryParams) => {
 		return $api.study.file.fetch(filters).then((response) => {
 			this.AllFiles = response.data
@@ -561,28 +500,6 @@ export default class Study extends Common {
 			this.SingleMediaFile = response.data
 			return response.data
 		})
-	}
-
-	public CreateTag = (formIsValid: boolean) => {
-		if (formIsValid && this.CreateTagForm) {
-			return $api.interactions.tag
-				.post(null, this.CreateTagForm)
-				.then((response) => {
-					this.SingleTag = response.data
-				})
-				.catch()
-		}
-	}
-
-	public UpdateTag = (formIsValid: boolean, id: string) => {
-		if (formIsValid && this.UpdateTagForm) {
-			return $api.interactions.tag
-				.put(null, id, this.CreateTagForm)
-				.then((response) => {
-					this.SingleTag = response.data
-				})
-				.catch()
-		}
 	}
 
 	public AddReview = () => {
@@ -808,21 +725,6 @@ export default class Study extends Common {
 					Logic.Common.showError(capitalize(error.response.data[0]?.message))
 				})
 		}
-	}
-	public DeleteTag = (id: string) => {
-		return $api.interactions.tag.delete(id).then().catch()
-	}
-
-	public DeleteQuiz = (id: string) => {
-		return $api.study.quiz.delete(id).then((response) => {
-			return response.data
-		})
-	}
-
-	public DeleteQuestion = (id: string, quizId: string) => {
-		return $api.study.quiz.deleteQuestion(quizId, id).then((response) => {
-			return response.data
-		})
 	}
 
 	public DeleteCourse = (id: string) => {

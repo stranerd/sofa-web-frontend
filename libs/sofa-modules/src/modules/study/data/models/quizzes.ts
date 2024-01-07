@@ -2,6 +2,7 @@ import { CoursableData, Publishable, QuizAccess, QuizMeta } from '../../domain/t
 
 export interface QuizFromModel extends QuizToModel, Publishable {
 	id: string
+	__type: 'QuizEntity'
 	questions: string[]
 	access: QuizAccess
 	meta: Record<QuizMeta, number>

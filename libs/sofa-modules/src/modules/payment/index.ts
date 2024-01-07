@@ -9,3 +9,13 @@ export type Saleable = {
 		currency: Currencies
 	}
 }
+
+export enum Purchasables {
+	courses = 'courses',
+}
+
+export type PurchaseData = {
+	type: Purchasables
+	id: string
+	userId: string
+}

@@ -88,7 +88,7 @@ const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()
 
 const { materials: recent } = useMyStudy('recent')
 const { materials: suggested } = useMyStudy('suggested')
-const { materials: myOrgs } = useMyStudy('myOrgs')
+const { materials: myOrgs } = useMyStudy('byMyOrgs')
 
 const tasks = computed(() => [
 	{ list: profileSteps.value, title: 'Complete your account setup' },

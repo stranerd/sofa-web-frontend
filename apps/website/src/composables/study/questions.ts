@@ -6,8 +6,8 @@ import { useListener } from '../core/listener'
 export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, listen = false) => {
 	const allQuestions = computed(() => [] as QuestionEntity[])
 
-	const { items: questions, addToList } = useItemsInList('questions', ids, allQuestions, async (notFetched: string[]) => {
-		return await QuestionsUseCases.getInList(quizId, notFetched)
+	const { items: questions, addToList } = useItemsInList('questions', ids, allQuestions, async (ids: string[]) => {
+		return await QuestionsUseCases.getInList(quizId, ids)
 	})
 
 	const listener = useListener(async () => {

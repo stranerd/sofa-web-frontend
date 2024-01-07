@@ -74,7 +74,7 @@ const createCourseData = (course: Course): ResourceType => {
 
 export const extractResource = (material: Course | CourseEntity | Quiz | QuizEntity) => {
 	const m = material as any
-	if (m.__type === 'QuizEntity' || m instanceof QuizEntity) return createQuizData(m)
+	if (m.__type === 'QuizEntity') return createQuizData(m)
 	return createCourseData(m)
 }
 

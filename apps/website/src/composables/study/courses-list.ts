@@ -85,7 +85,7 @@ export const useMyPurchasedCourses = () => {
 export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 	const allCourses = computed(() => [...store.courses.value])
 
-	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, CoursesUseCases.getInList)
+	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, (ids) => CoursesUseCases.getInList(ids))
 
 	const listener = useListener(async () => {
 		return await CoursesUseCases.listenToInList(() => ids.value, {

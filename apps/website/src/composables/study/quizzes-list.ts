@@ -146,7 +146,7 @@ export const useTutorQuizzes = () => {
 export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
 	const allQuizzes = computed(() => [...store.quizzes.value, ...tutorStore.quizzes.value])
 
-	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, QuizzesUseCases.getInList)
+	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, (ids) => QuizzesUseCases.getInList(ids))
 
 	const listener = useListener(async () => {
 		return await QuizzesUseCases.listenToInList(() => ids.value, {
