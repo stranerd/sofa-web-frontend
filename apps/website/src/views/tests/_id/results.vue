@@ -21,16 +21,7 @@
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=tests'),
 							}"
-							:left-button="
-								testExtras.canEnd
-									? {
-										label: 'End',
-										bgColor: 'bg-deepGray border border-white',
-										textColor: 'text-white',
-										click: testExtras.end,
-									}
-									: undefined
-							">
+							:left-button="testExtras.canEnd ? { ...leftButton, click: testExtras.end } : undefined">
 							<template #header>
 								<div />
 							</template>
@@ -109,7 +100,13 @@ export default defineComponent({
 			title: 'Results',
 		})
 
-		return { Logic }
+		const leftButton = {
+			label: 'End',
+			bgColor: 'bg-deepGray border border-white',
+			textColor: 'text-white',
+		}
+
+		return { Logic, leftButton }
 	},
 })
 </script>

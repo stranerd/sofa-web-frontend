@@ -38,13 +38,7 @@
 										value: user.account.meta.publishedCourses,
 									},
 									...(user.userType.isOrg
-										? [
-											{
-												title: 'Students',
-												icon: 'profile-followers',
-												value: user.account.meta.students,
-											},
-										]
+										? [{ title: 'Students', icon: 'profile-followers', value: user.account.meta.students }]
 										: []),
 								]"
 								:key="item.title"

@@ -21,16 +21,7 @@
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=games'),
 							}"
-							:left-button="
-								gameExtras.canEnd
-									? {
-										label: 'End',
-										bgColor: 'bg-deepGray border border-white',
-										textColor: 'text-white',
-										click: gameExtras.end,
-									}
-									: undefined
-							">
+							:left-button="gameExtras.canEnd ? { ...leftButton, click: gameExtras.end } : undefined">
 							<template #header>
 								<div />
 							</template>
@@ -102,7 +93,13 @@ export default defineComponent({
 			title: 'Results',
 		})
 
-		return { Logic }
+		const leftButton = {
+			label: 'End',
+			bgColor: 'bg-deepGray border border-white',
+			textColor: 'text-white',
+		}
+
+		return { Logic, leftButton }
 	},
 })
 </script>
