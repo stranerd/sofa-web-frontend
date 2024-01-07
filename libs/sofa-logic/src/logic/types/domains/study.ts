@@ -1,21 +1,6 @@
 import { FileData } from './common'
 import { SingleUser } from './users'
 
-export interface Folder {
-	hash: string
-	id: string
-	title: string
-	saved: {
-		courses: string[]
-		quizzes: string[]
-	}
-	courses: Course[]
-	quizzes: Quiz[]
-	user: SingleUser
-	createdAt: number
-	updatedAt: number
-}
-
 export interface Quiz {
 	hash: string
 	id: string

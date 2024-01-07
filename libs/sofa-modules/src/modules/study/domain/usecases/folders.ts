@@ -1,8 +1,8 @@
 import { Listeners, QueryParams } from '@modules/core'
-import { FolderFromModel } from '../../data/models/folders'
 import { FolderEntity } from '../entities/folders'
 import { FolderFactory } from '../factories/folders'
 import { IFolderRepository } from '../irepositories/ifolders'
+import { FolderSaved } from '../types'
 
 export class FoldersUseCase {
 	private repository: IFolderRepository
@@ -19,8 +19,8 @@ export class FoldersUseCase {
 		return await this.repository.delete(id)
 	}
 
-	async updateProp(folderId: string, type: keyof FolderFromModel['saved'], values: string[], add: boolean) {
-		return await this.repository.updateProp(folderId, { type, values, add })
+	async updateProp(folderId: string, data: { type: FolderSaved; values: string[]; add: boolean }) {
+		return await this.repository.updateProp(folderId, data)
 	}
 
 	async update(id: string, factory: FolderFactory) {

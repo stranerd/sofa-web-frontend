@@ -1,16 +1,5 @@
 import { FileData } from '../domains'
 
-export interface CreateFolderInput {
-	title: string
-}
-
-export interface SaveItemToFolderInput {
-	type: string
-	propIds: string[]
-	add: boolean
-	id: string
-}
-
 export interface CreateQuizInput {
 	title: string
 	description: string

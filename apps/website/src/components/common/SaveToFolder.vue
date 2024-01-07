@@ -56,8 +56,8 @@
 </template>
 
 <script lang="ts" setup>
-import { addMaterialToFolder } from '@/composables/library'
 import { useEditFolder, useMyFolders } from '@/composables/study/folders'
+import { FolderSaved } from '@modules/study'
 import { SofaCustomInput, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 
@@ -71,12 +71,15 @@ const props = defineProps({
 	},
 })
 
-const { folders } = useMyFolders()
+const { folders, saveItem } = useMyFolders()
 const { factory, saveFolder, generateNewFolder } = useEditFolder()
 
 const handleFolderSelected = (folderId: string, add = true) => {
-	if (props.material) {
-		addMaterialToFolder(folderId, props.material.type == 'course' ? 'courses' : 'quizzes', props.material.id, add)
-	}
+	if (props.material)
+		saveItem(folderId, {
+			type: props.material.type === 'course' ? FolderSaved.courses : FolderSaved.quizzes,
+			values: [props.material.id],
+			add,
+		})
 }
 </script>

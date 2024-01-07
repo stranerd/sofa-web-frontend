@@ -6,17 +6,15 @@ import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import { Course, Folder, Question, QuestionAnswer, Quiz, SofaFile } from '../types/domains/study'
+import { Course, Question, QuestionAnswer, Quiz, SofaFile } from '../types/domains/study'
 import { AddReviewInput, AddTagInput } from '../types/forms/common'
 import {
 	AddItemToCourseInput,
 	CreateCourseInput,
 	CreateDocumentInput,
-	CreateFolderInput,
 	CreateQuestionInput,
 	CreateQuizInput,
 	ReorderQuizInput,
-	SaveItemToFolderInput,
 	UpdateCourseSectionsInput,
 } from '../types/forms/study'
 import Common from './Common'
@@ -33,10 +31,6 @@ export default class Study extends Common {
 	public AllTopics: Paginated<Tags> | undefined
 	public AllOtherTags: Paginated<Tags> | undefined
 	public SingleTag: Tags | undefined
-	public AllFolders: Paginated<Folder> | undefined
-	public AllFoldersCourses: Course[] | undefined
-	public AllFoldersQuizzes: Quiz[] | undefined
-	public SingleFolder: Folder | undefined
 	public AllQuzzies: Paginated<Quiz> | undefined
 	public TutorQuizzes: Paginated<Quiz> | undefined
 	public SingleQuiz: Quiz | undefined
@@ -47,7 +41,6 @@ export default class Study extends Common {
 	public SingleCourse: Course | undefined
 	public AllFiles: Paginated<SofaFile> | undefined
 	public SingleFile: SofaFile | undefined
-	public SaveItemToFolderForm: SaveItemToFolderInput | undefined
 	public SingleMediaFile: FileData | undefined
 	public NewCoursableItem: any
 	public CoursableItemRemoved: any
@@ -86,8 +79,6 @@ export default class Study extends Common {
 	// Form input
 	public CreateTagForm: AddTagInput | undefined
 	public UpdateTagForm: AddTagInput | undefined
-	public CreateFolderForm: CreateFolderInput | undefined
-	public UpdateFolderForm: CreateFolderInput | undefined
 	public CreateQuizForm: CreateQuizInput | undefined
 	public UpdateQuizForm: CreateQuizInput | undefined
 	public CreateQuestionForm: CreateQuestionInput | undefined
@@ -376,90 +367,6 @@ export default class Study extends Common {
 		return $api.interactions.tag.get(id).then((response) => {
 			this.SingleTag = response.data
 		})
-	}
-
-	public async getFolders(filters: QueryParams) {
-		return $api.study.folder.fetch(filters).then((response) => response.data)
-	}
-
-	public GetFolders = async (filters: QueryParams, showLoader = false) => {
-		if (showLoader) Logic.Common.showLoading()
-
-		const response = await $api.study.folder.fetch(filters)
-		const allFolderCourses: string[] = []
-		const allFolderQuizzes: string[] = []
-		this.AllFolders = response.data
-
-		this.AllFolders.results.forEach((folder) => {
-			allFolderCourses.push(...folder.saved.courses)
-			allFolderQuizzes.push(...folder.saved.quizzes)
-		})
-
-		const allQuizzes = await $api.study.quiz.fetch({
-			where: [
-				{
-					field: 'id',
-					condition: Conditions.in,
-					value: [...new Set(allFolderQuizzes)],
-				},
-			],
-		})
-
-		this.AllFoldersQuizzes = allQuizzes.data.results
-
-		const allCourses = await $api.study.course.fetch({
-			where: [
-				{
-					field: 'id',
-					condition: Conditions.in,
-					value: [...new Set(allFolderCourses)],
-				},
-			],
-		})
-
-		this.AllFoldersCourses = allCourses.data.results
-
-		if (showLoader) Logic.Common.hideLoading()
-
-		return this.AllFolders
-	}
-
-	public GetFolder = async (id: string) => {
-		const folder: Folder | null = (await $api.study.folder.get(id)).data
-
-		if (folder)
-			await Promise.all([
-				$api.study.course
-					.fetch({
-						where: [
-							{
-								field: 'id',
-								value: folder.saved.courses,
-								condition: Conditions.in,
-							},
-						],
-						all: true,
-					})
-					.then((response) => {
-						folder.courses = response.data.results
-					}),
-				$api.study.quiz
-					.fetch({
-						where: [
-							{
-								field: 'id',
-								value: folder.saved.quizzes,
-								condition: Conditions.in,
-							},
-						],
-						all: true,
-					})
-					.then((response) => {
-						folder.quizzes = response.data.results
-					}),
-			])
-		this.SingleFolder = folder
-		return folder
 	}
 
 	public GetQuizzes = (filters: QueryParams, updateItems = true): Promise<Paginated<Quiz>> => {
@@ -973,41 +880,6 @@ export default class Study extends Common {
 		}
 	}
 
-	public CreateFolder = (CreateFolderForm: CreateFolderInput) => {
-		return $api.study.folder.post(null, CreateFolderForm).then((response) => {
-			this.SingleFolder = response.data
-			return this.SingleFolder
-		})
-	}
-
-	public UpdateFolder = (id: string, UpdateFolderForm: CreateFolderInput) => {
-		return $api.study.folder.put(null, id, UpdateFolderForm).then((response) => {
-			this.SingleFolder = response.data
-			return this.SingleFolder
-		})
-	}
-
-	public SaveItemToFolder = (formIsValid: boolean) => {
-		if (formIsValid && this.SaveItemToFolderForm) {
-			Logic.Common.showLoading()
-			return $api.study.folder
-				.saveItemToFolder(this.SaveItemToFolderForm)
-				.then((response) => {
-					this.SingleFolder = response.data
-					Logic.Common.hideLoading()
-					Logic.Common.showAlert({
-						message: this.SaveItemToFolderForm.add ? 'Material added to folder' : 'Material removed from folder',
-						type: 'success',
-					})
-					return response.data
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-				})
-		}
-	}
-
 	public AddReview = () => {
 		if (this.AddReviewForm) {
 			Logic.Common.showLoading()
@@ -1262,27 +1134,6 @@ export default class Study extends Common {
 	}
 	public DeleteTag = (id: string) => {
 		return $api.interactions.tag.delete(id).then().catch()
-	}
-
-	public DeleteFolder = (id: string) => {
-		Logic.Common.showLoading()
-		return $api.study.folder
-			.delete(id)
-			.then(() => {
-				Logic.Common.hideLoading()
-				Logic.Study.GetFolders({
-					where: [
-						{
-							field: 'user.id',
-							value: Logic.Common.AuthUser?.id,
-							condition: Conditions.eq,
-						},
-					],
-				})
-			})
-			.catch(() => {
-				Logic.Common.hideLoading()
-			})
 	}
 
 	public DeleteQuiz = (id: string) => {

@@ -122,17 +122,6 @@ export const createTestData = (p: Test, quizzes: Quiz[]) => {
 	}
 }
 
-const addMaterialToFolder = (folderId: string, type: 'quizzes' | 'courses', itemId: string, add: boolean) => {
-	Logic.Study.SaveItemToFolderForm = {
-		add,
-		id: folderId,
-		propIds: [itemId],
-		type,
-	}
-
-	Logic.Study.SaveItemToFolder(true)
-}
-
 const openQuiz = (activity: ResourceType, force = false) => {
 	const original = activity.original as Quiz
 	if (!force && ((activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
@@ -228,7 +217,6 @@ const moreOptions = reactive([
 
 export {
 	AllQuzzies,
-	addMaterialToFolder,
 	moreOptions,
 	openCourse,
 	openQuiz,

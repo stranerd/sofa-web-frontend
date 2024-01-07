@@ -1,4 +1,5 @@
-import { Folder, FolderFactory, Logic } from 'sofa-logic'
+import { FolderEntity, FolderFactory, FolderSaved, FoldersUseCases } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -6,37 +7,33 @@ import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const store = {
-	folders: ref<Folder[]>([]),
+	folders: ref<FolderEntity[]>([]),
 	fetched: ref(false),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Folder>(
-			'study/folders',
-			{
-				created: async (entity) => {
-					Logic.addToArray(
-						store.folders.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					Logic.addToArray(
-						store.folders.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					store.folders.value = store.folders.value.filter((m) => m.id !== entity.id)
-				},
+		return await FoldersUseCases.listenToUserFolders(id.value, {
+			created: async (entity) => {
+				Logic.addToArray(
+					store.folders.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
 			},
-			(e) => e.user.id === id.value,
-		)
+			updated: async (entity) => {
+				Logic.addToArray(
+					store.folders.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			deleted: async (entity) => {
+				store.folders.value = store.folders.value.filter((m) => m.id !== entity.id)
+			},
+		})
 	}),
 }
 
@@ -47,10 +44,7 @@ export const useMyFolders = () => {
 		try {
 			await store.setError('')
 			await store.setLoading(true)
-			const folders = await Logic.Study.getFolders({
-				where: [{ field: 'user.id', value: id.value }],
-				all: true,
-			})
+			const folders = await FoldersUseCases.getUserFolders(id.value)
 			folders.results.forEach((r) =>
 				Logic.addToArray(
 					store.folders.value,
@@ -74,7 +68,18 @@ export const useMyFolders = () => {
 		await store.listener.close()
 	})
 
-	return { ...store }
+	const saveItem = async (id: string, data: { type: FolderSaved; values: string[]; add: boolean }) => {
+		try {
+			await store.setError('')
+			await store.setLoading(true)
+			await FoldersUseCases.updateProp(id, data)
+		} catch (e) {
+			await store.setError(e)
+		}
+		await store.setLoading(false)
+	}
+
+	return { ...store, saveItem }
 }
 
 export const useEditFolder = () => {
@@ -83,18 +88,17 @@ export const useEditFolder = () => {
 	const { setError } = useErrorHandler()
 	const route = useRoute()
 
-	const edit = (folder: Folder) => {
+	const edit = (folder: FolderEntity) => {
 		factory.loadEntity(folder)
 	}
 
 	const saveFolder = async () => {
 		const id = factory.entityId
 		if (!id || !factory.valid) return factory.reset()
-		const data = await factory.toModel()
 		try {
 			await setError('')
 			await setLoading(true)
-			await Logic.Study.UpdateFolder(id, data)
+			await FoldersUseCases.update(id, factory)
 			factory.reset()
 		} catch (e) {
 			await setError(e)
@@ -102,7 +106,7 @@ export const useEditFolder = () => {
 		await setLoading(false)
 	}
 
-	const deleteFolder = async (folder: Folder) => {
+	const deleteFolder = async (folder: FolderEntity) => {
 		const confirmed = await Logic.Common.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All items in the folder will be removed',
@@ -112,7 +116,7 @@ export const useEditFolder = () => {
 		try {
 			await setError('')
 			await setLoading(true)
-			await Logic.Study.DeleteFolder(folder.id)
+			await FoldersUseCases.delete(folder.id)
 			if (factory.entityId === folder.id) factory.reset()
 			if (`/library/folders/${folder.id}` === route.path) await Logic.Common.GoToRoute('/library')
 		} catch (e) {
@@ -122,11 +126,12 @@ export const useEditFolder = () => {
 	}
 
 	const generateNewFolder = async () => {
-		const title = `New folder (${Logic.getRandomValue()})`
+		const factory = new FolderFactory()
+		factory.title = `New folder (${Logic.getRandomValue()})`
 		try {
 			await setError('')
 			await setLoading(true)
-			const folder = await Logic.Study.CreateFolder({ title })
+			const folder = await FoldersUseCases.add(factory)
 			edit(folder)
 		} catch (e) {
 			await setError(e)
