@@ -12,11 +12,11 @@
 			</div>
 		</div>
 	</sub-page-layout>
-	<dashboard-layout v-else :topbarOptions="{ title }">
-		<template v-slot:left-session>
+	<dashboard-layout v-else :topbar-options="{ title }">
+		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div class="w-full flex items-center gap-3">
-					<SofaAvatar size="84" :photoUrl="user.bio.photo?.link" />
+					<SofaAvatar size="84" :photo-url="user.bio.photo?.link" />
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
@@ -29,7 +29,7 @@
 					</div>
 				</div>
 
-				<div class="w-full grid grid-cols-2 gap-3" v-if="userType.isStudent">
+				<div v-if="userType.isStudent" class="w-full grid grid-cols-2 gap-3">
 					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
@@ -53,9 +53,9 @@
 
 					<div class="w-full flex flex-col gap-1">
 						<router-link
-							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
 							v-for="item in options"
 							:key="item.route"
+							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
 							:to="item.route"
 							exact-active-class="bg-lightBlue font-semibold">
 							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
@@ -66,13 +66,13 @@
 			</div>
 		</template>
 
-		<template v-slot:middle-session>
+		<template #middle-session>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto">
 				<slot :user="user!" :extras="extras" />
 			</div>
 		</template>
 
-		<template v-slot:right-session>
+		<template #right-session>
 			<div v-if="userType.isStudent" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex items-center gap-3">
 					<img :src="userAi.image" alt="" class="w-[84px] aspect-square rounded-full" />
@@ -83,8 +83,8 @@
 					</div>
 				</div>
 
-				<SofaTextField placeholder="What can I do for you?" customClass="border" v-model="factory.body">
-					<template v-slot:inner-suffix>
+				<SofaTextField v-model="factory.body" placeholder="What can I do for you?" custom-class="border">
+					<template #inner-suffix>
 						<SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
 					</template>
 				</SofaTextField>
@@ -92,17 +92,17 @@
 				<div class="w-full flex items-center gap-2">
 					<SofaBadge
 						color="gray"
-						:isInverted="true"
+						:is-inverted="true"
 						as="a"
-						customClass="!py-2 !px-4"
+						custom-class="!py-2 !px-4"
 						@click="Logic.Common.GoToRoute('/quiz/create')">
 						Create a quiz
 					</SofaBadge>
 					<SofaBadge
 						color="gray"
-						:isInverted="true"
+						:is-inverted="true"
 						as="a"
-						customClass="!py-2 !px-4"
+						custom-class="!py-2 !px-4"
 						@click="Logic.Common.GoToRoute('/course/create')">
 						Create a course
 					</SofaBadge>
@@ -110,15 +110,15 @@
 			</div>
 
 			<div
-				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4"
-				v-if="(conversations.length && userType.isStudent) || userType.isTeacher">
+				v-if="(conversations.length && userType.isStudent) || userType.isTeacher"
+				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<SofaNormalText class="!font-bold" content="Recent chats" />
 
 				<template v-if="conversations.length">
 					<ChatList :limit="3" />
 					<SofaNormalText color="text-primaryPink" as="router-link" to="/chats" content="See all" />
 				</template>
-				<SofaEmptyState v-else title="No chat" subTitle="Your active chats will show up here" actionLabel="" />
+				<SofaEmptyState v-else title="No chat" sub-title="Your active chats will show up here" action-label="" />
 			</div>
 
 			<div v-if="userType.isOrg" class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
@@ -129,7 +129,7 @@
 						v-for="command in rightCommands"
 						:key="command.label"
 						color="gray"
-						:isInverted="true"
+						:is-inverted="true"
 						as="a"
 						class="!py-3 !px-4 truncate"
 						@click="command.action">
@@ -147,7 +147,7 @@
 					Join the elite that create the highest quality study materials, reach more audience, and sell on marketplace.
 				</SofaNormalText>
 
-				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification')"> Apply here </SofaButton>
+				<SofaButton :has-shadow="false" padding="py-2 px-6" @click="$router.push('/verification')"> Apply here </SofaButton>
 			</div>
 
 			<div
@@ -162,11 +162,11 @@
 					Complete your test after this application and we will reach out to you with your result.
 				</SofaNormalText>
 
-				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
+				<SofaButton :has-shadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
 			</div>
 		</template>
 	</dashboard-layout>
-	<CustomizeBot :close="() => (showCustomizeAi = false)" v-if="showCustomizeAi" />
+	<CustomizeBot v-if="showCustomizeAi" :close="() => (showCustomizeAi = false)" />
 	<SofaModal v-if="addModalType">
 		<div class="flex flex-col p-4 gap-4 md:p-6 md:gap-6 justify-between">
 			<div class="flex gap-2 justify-between items-center">
@@ -180,16 +180,16 @@
 			</div>
 			<div class="flex gap-2 items-center">
 				<SofaTextField
-					customClass="!bg-lightGray"
 					v-model="addMembersEmails"
+					custom-class="!bg-lightGray"
 					name="Emails"
 					placeholder="Email, comma seperated"
-					borderColor="border-transparent" />
+					border-color="border-transparent" />
 				<SofaButton
-					customClass="font-semibold"
+					custom-class="font-semibold"
 					padding="py-3 px-6"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
+					bg-color="bg-primaryBlue"
+					text-color="text-white"
 					@click="addMembers(addModalType).then((succeeded) => (succeeded ? (addModalType = null) : null))">
 					Invite
 				</SofaButton>

@@ -8,6 +8,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
+	name: 'RoofNormalText',
 	props: {
 		size: {
 			type: String,
@@ -34,7 +35,6 @@ export default defineComponent({
 			default: 'span',
 		},
 	},
-	name: 'RoofNormalText',
 	setup(props) {
 		const cls = computed(() =>
 			[

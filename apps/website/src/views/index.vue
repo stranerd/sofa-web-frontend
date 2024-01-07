@@ -15,8 +15,8 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
-	components: { HomeLayout, HomeForStudents, HomeForNonStudents },
 	name: 'IndexPage',
+	components: { HomeLayout, HomeForStudents, HomeForNonStudents },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
 		useMeta({

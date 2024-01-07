@@ -9,9 +9,9 @@
 
 			<div
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" @click="item.action?.()" class="flex-shrink-0">
-					<template v-slot:title>
-						<SofaNormalText customClass="!font-bold" :content="item.title" />
+				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" class="flex-shrink-0" @click="item.action?.()">
+					<template #title>
+						<SofaNormalText custom-class="!font-bold" :content="item.title" />
 					</template>
 				</SofaIconCard>
 			</div>
@@ -30,16 +30,16 @@
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
 				<SofaActivityCard
 					v-for="activity in material.list.slice(0, 4)"
-					as="router-link"
 					:key="activity.id"
+					as="router-link"
 					:activity="activity"
 					:to="activity.route"
-					:hasBookmark="true"
-					:bookmarkAction="() => saveToFolder(activity)"
+					:has-bookmark="true"
+					:bookmark-action="() => saveToFolder(activity)"
 					class="flex-shrink-0" />
 			</div>
 			<div v-else class="pr-4 mdlg:pr-0">
-				<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
+				<SofaEmptyState :title="material.emptyTitle" :sub-title="material.emptySub" custom-class="!h-[230px]" />
 			</div>
 
 			<SofaNormalText
@@ -61,7 +61,7 @@
 					There are lots of quizzes and courses that you can learn from, so start searching!
 				</SofaNormalText>
 			</div>
-			<SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-deepGray" @click="$router.push('/marketplace')">
+			<SofaButton bg-color="bg-white" padding="py-1 px-3" text-color="text-deepGray" @click="$router.push('/marketplace')">
 				Explore more
 			</SofaButton>
 		</div>

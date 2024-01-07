@@ -14,9 +14,9 @@
 							:content="QuestionEntity.getQuestionTypeLabel(factory.entityId === element.id ? factory.type : element.type)" />
 
 						<div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
-							<template v-for="(user, index) in users[element.id] ?? []" :key="user.id">
-								<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="28" class="-ml-1" />
-								<SofaAvatar v-if="index === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
+							<template v-for="(user, i) in users[element.id] ?? []" :key="user.id">
+								<SofaAvatar v-if="i < 3" :photo-url="user.bio.photo?.link" size="28" class="-ml-1" />
+								<SofaAvatar v-if="i === 3" bg-color="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
 									<span>{{ users[element.id].length - 3 }}+</span>
 								</SofaAvatar>
 							</template>
@@ -30,14 +30,14 @@
 						)}.svg')`">
 						<div class="h-full w-full hidden group-hover:flex gap-3 items-center justify-center">
 							<a
-								@click.stop="emits('duplicateQuestion', element)"
-								class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center">
+								class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
+								@click.stop="emits('duplicateQuestion', element)">
 								<SofaIcon name="duplicate-quiz" class="h-[24px]" />
 							</a>
 							<a
 								v-if="quiz.status !== 'published'"
-								@click.stop="emits('deleteQuestion', element.id)"
-								class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center">
+								class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
+								@click.stop="emits('deleteQuestion', element.id)">
 								<SofaIcon name="delete-quiz" class="h-[24px]" />
 							</a>
 						</div>

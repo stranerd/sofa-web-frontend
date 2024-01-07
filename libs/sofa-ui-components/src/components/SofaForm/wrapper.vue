@@ -7,13 +7,15 @@
 import { defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
+	name: 'RoofFormWrapper',
 	components: {},
 	props: {
 		parentRefs: {
+			type: Object,
 			required: false,
+			default: null,
 		},
 	},
-	name: 'RoofFormWrapper',
 	setup(props: any) {
 		const formWrapper = ref<any>(null)
 

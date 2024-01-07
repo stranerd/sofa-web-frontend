@@ -1,21 +1,21 @@
 <template>
 	<expanded-layout
-		layoutStyle="!justify-between bg-deepGray text-white"
+		layout-style="!justify-between bg-deepGray text-white"
 		:hide="{ top: true, bottom: true }"
-		bgImage="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skipQuestions="true">
-			<template v-slot="{ game, extras: gameExtras, questions, participants }">
-				<QuizWrapper :id="game.quizId" :questions="questions">
-					<template v-slot="{ quiz, questions, extras }">
+		bg-image="/images/game-bg.png">
+		<GameWrapper :id="$route.params.id as string" :skip-questions="true">
+			<template #default="{ game, extras: gameExtras, questions: gameQuestions, participants }">
+				<QuizWrapper :id="game.quizId" :questions="gameQuestions">
+					<template #default="{ quiz, questions, extras }">
 						<Quiz
+							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:showCounter="false"
-							v-model:answer="extras.answer"
-							:optionState="extras.optionState"
-							:isDark="true"
-							:rightButton="{
+							:show-counter="false"
+							:option-state="extras.optionState"
+							:is-dark="true"
+							:right-button="{
 								label: gameExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
@@ -25,13 +25,13 @@
 									else return await gameExtras.join(true)
 								},
 							}"
-							:leftButton="{
+							:left-button="{
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
 								textColor: 'text-white',
 								click: () => Logic.Common.GoToRoute('/library'),
 							}">
-							<template v-slot:header>
+							<template #header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div
 										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom"
@@ -53,8 +53,8 @@
 										</template>
 										<template v-else>
 											<SofaImageLoader
-												:photoUrl="quiz.photo?.link"
-												customClass="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
+												:photo-url="quiz.photo?.link"
+												custom-class="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
 											<div class="w-full flex flex-col h-full gap-2">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="quiz.title" size="xl" class="text-left !line-clamp-1" />
@@ -70,7 +70,7 @@
 														}`" />
 												</div>
 												<div class="w-full flex items-start gap-2 flex-nowrap">
-													<SofaAvatar size="20" :photoUrl="quiz.user.bio.photo?.link" />
+													<SofaAvatar size="20" :photo-url="quiz.user.bio.photo?.link" />
 													<SofaNormalText
 														color="text-bodyBlack"
 														class="!font-semibold"
@@ -82,7 +82,7 @@
 								</div>
 							</template>
 
-							<template v-slot>
+							<template #default>
 								<div class="w-full h-full overflow-y-auto flex flex-col gap-4 my-auto py-4 items-center">
 									<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" content="Lobby" />
 									<SofaNormalText

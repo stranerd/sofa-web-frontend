@@ -1,7 +1,7 @@
 <template>
 	<ChatLayout title="Chats" :index="true">
 		<div class="flex flex-col gap-4 py-4">
-			<div class="w-full flex flex-col px-4" v-if="userType.isStudent">
+			<div v-if="userType.isStudent" class="w-full flex flex-col px-4">
 				<router-link
 					to="/chats/new"
 					class="w-full rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg flex gap-3 items-center justify-start p-4 bg-primaryPurple">
@@ -10,7 +10,7 @@
 				</router-link>
 			</div>
 			<div class="w-full flex flex-col px-4 gap-3 pt-1">
-				<ChatList :customClass="'!bg-white shadow-custom'" />
+				<ChatList :custom-class="'!bg-white shadow-custom'" />
 			</div>
 		</div>
 	</ChatLayout>
@@ -27,13 +27,13 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'ChatsIndexPage',
 	components: {
 		SofaIcon,
 		SofaNormalText,
 		ChatLayout,
 		ChatList,
 	},
-	name: 'ChatsIndexPage',
 	beforeRouteEnter: generateMiddlewares([async () => (Logic.Common.isLarge ? '/chats/new' : undefined)]),
 	setup() {
 		useMeta({

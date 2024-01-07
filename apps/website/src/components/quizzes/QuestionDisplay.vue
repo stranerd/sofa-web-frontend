@@ -59,8 +59,8 @@
 		<template v-if="question.strippedData.type === 'writeAnswer'">
 			<div class="w-full rounded-xl gap-3 border-2" :class="buildClass(answer.value)">
 				<SofaTextarea
-					placeholder="Write your answer here"
 					v-model="answer.value"
+					placeholder="Write your answer here"
 					text-area-style="focus:outline-none !bg-transparent !text-inherit p-3 placeholder:!text-inherit w-full text-base placeholder:text-base" />
 			</div>
 		</template>
@@ -73,9 +73,9 @@
 						class="min-w-[160px] rounded-xl p-3 flex items-center justify-center border-2"
 						:class="buildClass(answer.value[index - 1], index - 1)">
 						<input
+							v-model="answer.value[index - 1]"
 							placeholder="answer here"
-							class="w-full focus:outline-none placeholder:md:text-2xl text-inherit bg-transparent placeholder:text-base placeholder:text-inherit md:text-2xl text-base"
-							v-model="answer.value[index - 1]" />
+							class="w-full focus:outline-none placeholder:md:text-2xl text-inherit bg-transparent placeholder:text-base placeholder:text-inherit md:text-2xl text-base" />
 					</div>
 					<SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
 				</template>
@@ -87,11 +87,11 @@
 				<template v-for="(content, index) in question.splitQuestions" :key="index">
 					<Draggable
 						v-if="index !== 0"
+						:id="`drag-answer-${index - 1}`"
 						:list="answer.drag[index - 1]"
-						itemKey=""
+						item-key=""
 						group="dragAnswers"
 						:move="move"
-						:id="`drag-answer-${index - 1}`"
 						class="md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 flex items-center justify-center border-2"
 						:class="buildClass(answer.drag[index - 1][0], index - 1)">
 						<template #item="{ element }">
@@ -106,11 +106,11 @@
 				</template>
 
 				<Draggable
+					id="drag-options"
 					:list="answer.dragOptions"
-					itemKey=""
+					item-key=""
 					group="dragAnswers"
 					:move="move"
-					id="drag-options"
 					class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
 					<template #item="{ element }">
 						<div
@@ -124,7 +124,7 @@
 		</template>
 
 		<template v-if="question.strippedData.type === 'sequence'">
-			<Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" itemKey="">
+			<Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" item-key="">
 				<template #item="{ element, index }">
 					<div class="w-full flex items-center gap-3 cursor-move">
 						<div class="p-3 rounded-xl border-2" :class="buildClass(element, index)">
@@ -144,12 +144,12 @@
 			</Draggable>
 		</template>
 
-		<div class="w-full grid grid-cols-2 gap-4" v-if="question.type === 'match'">
+		<div v-if="question.type === 'match'" class="w-full grid grid-cols-2 gap-4">
 			<Draggable
 				:list="question.matchQuestions"
 				group="match-questions"
 				class="col-span-1 flex flex-col gap-2"
-				itemKey=""
+				item-key=""
 				:disabled="true">
 				<template #item="{ element, index }">
 					<div
@@ -164,7 +164,7 @@
 				</template>
 			</Draggable>
 
-			<Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" itemKey="">
+			<Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" item-key="">
 				<template #item="{ element, index }">
 					<div
 						class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-2 gap-3 cursor-move"

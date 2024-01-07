@@ -22,6 +22,7 @@ const props = defineProps({
 	close: {
 		type: Function,
 		required: false,
+		default: null,
 	},
 	maxWidth: {
 		type: String,

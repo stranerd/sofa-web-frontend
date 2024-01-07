@@ -2,35 +2,35 @@
 	<SettingsLayout title="Security">
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
 			<form
-				@submit.prevent="updatePassword"
 				ref="formComp"
-				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
+				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom"
+				@submit.prevent="updatePassword">
 				<SofaHeaderText size="xl" content="Password" />
 
 				<SofaTextField
 					v-if="hasPassword"
-					customClass="rounded-custom !bg-lightGray"
+					v-model="factory.oldPassword"
+					custom-class="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Current password"
 					:error="factory.errors.oldPassword"
-					borderColor="border-transparent"
-					v-model="factory.oldPassword" />
+					border-color="border-transparent" />
 
 				<SofaTextField
-					customClass="rounded-custom !bg-lightGray"
+					v-model="factory.password"
+					custom-class="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="New password"
 					:error="factory.errors.password"
-					borderColor="border-transparent"
-					v-model="factory.password" />
+					border-color="border-transparent" />
 
 				<SofaTextField
-					customClass="rounded-custom !bg-lightGray"
+					v-model="factory.cPassword"
+					custom-class="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Confirm new password"
 					:error="factory.errors.cPassword"
-					borderColor="border-transparent"
-					v-model="factory.cPassword" />
+					border-color="border-transparent" />
 
 				<SofaButton :disabled="!factory.valid" type="submit" padding="px-7 py-2" class="self-end"> Update </SofaButton>
 			</form>
@@ -46,10 +46,10 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'SecuritySettingPage',
 	components: {
 		SettingsLayout,
 	},
-	name: 'SecuritySettingPage',
 	middlewares: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({

@@ -8,16 +8,16 @@
 			<div class="w-full flex flex-col">
 				<div class="flex flex-row items-center gap-2">
 					<slot name="title" />
-					<sofa-icon :customClass="'h-[12px]'" :name="'right-arrow'" v-if="showArrow" />
+					<sofa-icon v-if="showArrow" :custom-class="'h-[12px]'" :name="'right-arrow'" />
 				</div>
-				<sofa-normal-text :customClass="'text-left w-full !line-clamp-1'">
+				<sofa-normal-text :custom-class="'text-left w-full !line-clamp-1'">
 					{{ data.subTitle }}
 				</sofa-normal-text>
 			</div>
 		</div>
 
 		<div class="w-[45px] text-right">
-			<sofa-icon :customClass="'h-[22px] inline-block'" :name="'selected'" v-if="data.isDone" />
+			<sofa-icon v-if="data.isDone" :custom-class="'h-[22px] inline-block'" :name="'selected'" />
 		</div>
 	</div>
 </template>
@@ -27,6 +27,7 @@ import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
+	name: 'SofaIconCard',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -44,12 +45,12 @@ export default defineComponent({
 				iconSize: string
 				isDone?: any
 			},
+			required: true,
 		},
 		showArrow: {
 			type: Boolean,
 			default: true,
 		},
 	},
-	name: 'SofaIconCard',
 })
 </script>

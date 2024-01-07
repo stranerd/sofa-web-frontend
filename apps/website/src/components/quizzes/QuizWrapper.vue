@@ -27,6 +27,7 @@ const props = defineProps({
 	questions: {
 		type: Array as PropType<QuestionEntity[]>,
 		required: false,
+		default: null,
 	},
 	showAnswer: {
 		type: Boolean,
@@ -46,6 +47,7 @@ const props = defineProps({
 	submit: {
 		type: Function as PropType<(data?: { questionId: string; answer: any }) => Promise<boolean>>,
 		required: false,
+		default: null,
 	},
 	skipMembers: {
 		type: Boolean,
@@ -56,7 +58,7 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-const { id, user } = useAuth()
+const { id: authId, user } = useAuth()
 const {
 	quiz,
 	questions,
@@ -182,7 +184,7 @@ const extras = computed(() => ({
 	},
 	get usersByQuestions() {
 		const allMembers = quiz.value?.access.members.concat(quiz.value.user.id) ?? []
-		const online = members.value.filter((u) => u.id !== id.value && u.status.connections.length > 0 && allMembers.includes(u.id))
+		const online = members.value.filter((u) => u.id !== authId.value && u.status.connections.length > 0 && allMembers.includes(u.id))
 		return quizQuestions.value.reduce(
 			(acc, cur) => {
 				acc[cur.id] = online.filter((m) => m.account.editing.quizzes?.questionId === cur.id)
@@ -224,8 +226,8 @@ const extras = computed(() => ({
 		reorderedQuestions.value = null
 		index.value = 0
 	},
-	isMine: quiz.value?.user.id === id.value,
-	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(id.value),
+	isMine: quiz.value?.user.id === authId.value,
+	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(authId.value),
 }))
 
 watch(

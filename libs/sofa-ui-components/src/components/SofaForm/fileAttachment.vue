@@ -29,8 +29,8 @@
 					:accept="accept"
 					:multiple="isMultiple"
 					@change="uploadHandler" />
-				<sofa-icon :name="`${iconName}`" :customClass="'h-[15px]'" />
-				<sofa-normal-text color="text-paragraphTextLight" customClass="w-full text-left line-clamp-1">
+				<sofa-icon :name="`${iconName}`" :custom-class="'h-[15px]'" />
+				<sofa-normal-text color="text-paragraphTextLight" custom-class="w-full text-left line-clamp-1">
 					{{ selectedFileName != '' ? selectedFileName : placeholder }}
 				</sofa-normal-text>
 			</div>
@@ -43,6 +43,7 @@ import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
 export default defineComponent({
+	name: 'SofaFileAttachment',
 	components: {
 		SofaNormalText,
 		SofaIcon,
@@ -61,7 +62,9 @@ export default defineComponent({
 			default: '*',
 		},
 		modelValue: {
+			type: Object,
 			required: false,
+			default: null,
 		},
 		isWrapper: {
 			type: Boolean,
@@ -77,7 +80,6 @@ export default defineComponent({
 		},
 	},
 	emits: ['update:modelValue', 'update:localFileUrl', 'update:base64Data'],
-	name: 'SofaFileAttachment',
 	setup(props: any, context: any) {
 		const files = ref<FileList>()
 

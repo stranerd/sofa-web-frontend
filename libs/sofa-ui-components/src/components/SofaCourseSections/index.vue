@@ -9,31 +9,31 @@
 								class="w-full flex flex-row items-center justify-between cursor-pointer"
 								@click="option?.opened ? (option.opened = false) : (option.opened = true)">
 								<div class="flex flex-row items-center gap-2">
-									<sofa-normal-text :customClass="'!font-bold'" v-if="!option.edit">{{
+									<sofa-normal-text v-if="!option.edit" :custom-class="'!font-bold'">{{
 										option.name == 'unsectioned' ? 'Unsectioned' : option.name
 									}}</sofa-normal-text>
 									<input
 										v-else
-										@click.stop="null"
-										class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
 										v-model="option.name"
+										class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
 										autofocus
 										placeholder="Section name"
+										@click.stop="null"
 										@blur="option.edit = false" />
 								</div>
 								<div class="flex flex-row items-center gap-3">
 									<sofa-icon
-										@click.stop="option.edit = true"
-										:customClass="'h-[15px] cursor-pointer'"
+										v-if="option.name != 'unsectioned'"
+										:custom-class="'h-[15px] cursor-pointer'"
 										:name="'edit-gray'"
-										v-if="option.name != 'unsectioned'" />
+										@click.stop="option.edit = true" />
 									<sofa-icon
-										@click.stop="removeSection(index)"
-										:customClass="'h-[15px] cursor-pointer'"
+										v-if="option.name != 'unsectioned'"
+										:custom-class="'h-[15px] cursor-pointer'"
 										:name="'trash-gray'"
-										v-if="option.name != 'unsectioned'" />
+										@click.stop="removeSection(index)" />
 									<sofa-icon
-										:customClass="'h-[7px] cursor-pointer'"
+										:custom-class="'h-[7px] cursor-pointer'"
 										:name="option.opened ? 'chevron-up' : 'chevron-down'" />
 								</div>
 							</div>
@@ -64,7 +64,7 @@
 												}
 											">
 											<div class="flex flex-row items-center gap-2">
-												<sofa-icon :customClass="'h-[17px]'" :name="element.type" />
+												<sofa-icon :custom-class="'h-[17px]'" :name="element.type" />
 												<sofa-normal-text
 													class="px-3 !line-clamp-2 text-left whitespace-nowrap overflow-x-hidden"
 													:content="element.name" />
@@ -77,13 +77,14 @@
                         :name="'trash-gray'"
                       /> -->
 
-												<sofa-icon :customClass="'h-[19px] handle'" :name="'reorder-gray'" />
+												<sofa-icon :custom-class="'h-[19px] handle'" :name="'reorder-gray'" />
 											</div>
 										</div>
 									</template>
 								</draggable>
 
 								<div
+									v-if="option.name != 'unsectioned'"
 									class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer"
 									@click="
 										() => {
@@ -91,9 +92,8 @@
 											selectedSection = index
 											handleItemSelected()
 										}
-									"
-									v-if="option.name != 'unsectioned'">
-									<sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
+									">
+									<sofa-icon :custom-class="'h-[17px]'" :name="'box-add-purple'" />
 									<sofa-normal-text :color="'text-primaryPurple'"> Add study material </sofa-normal-text>
 								</div>
 							</template>
@@ -103,7 +103,7 @@
 			</template>
 
 			<div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
-				<sofa-icon :customClass="'h-[17px]'" :name="'box-add-pink'" />
+				<sofa-icon :custom-class="'h-[17px]'" :name="'box-add-pink'" />
 				<sofa-normal-text :color="'text-primaryPink'"> Add section </sofa-normal-text>
 			</div>
 		</div>
@@ -121,6 +121,7 @@ import { SofaNormalText } from '../SofaTypography'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export default defineComponent({
+	name: 'SofaCourseSections',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -137,6 +138,7 @@ export default defineComponent({
 		},
 		sectionInput: {
 			type: Object as () => UpdateCourseSectionsInput,
+			required: true,
 		},
 		updateSections: {
 			type: Function,
@@ -145,7 +147,6 @@ export default defineComponent({
 			},
 		},
 	},
-	name: 'SofaCourseSections',
 	emits: ['update:modelValue', 'OnMaterialSelected'],
 	setup(props, context) {
 		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)

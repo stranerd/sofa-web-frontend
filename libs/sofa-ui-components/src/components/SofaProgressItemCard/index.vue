@@ -6,7 +6,7 @@
 		</div>
 		<div class="flex flex-col w-full gap-2">
 			<div class="w-full flex items-center justify-between">
-				<sofa-normal-text :customClass="'!font-bold !line-clamp-1'">
+				<sofa-normal-text :custom-class="'!font-bold !line-clamp-1'">
 					{{ content.title }}
 				</sofa-normal-text>
 			</div>
@@ -17,14 +17,14 @@
 			</div>
 
 			<div class="w-full flex items-center justify-between">
-				<sofa-normal-text :color="content.label_color" :customClass="'font-semibold'">
+				<sofa-normal-text :color="content.label_color" :custom-class="'font-semibold'">
 					{{ content.label }}
 				</sofa-normal-text>
-				<div class="flex flex-row items-center gap-2" v-if="content.type == 'game'">
+				<div v-if="content.type == 'game'" class="flex flex-row items-center gap-2">
 					<sofa-normal-text :color="'text-grayColor'">
 						{{ content.participants }}
 					</sofa-normal-text>
-					<sofa-icon :name="'participant'" :customClass="'h-[15px]'" />
+					<sofa-icon :name="'participant'" :custom-class="'h-[15px]'" />
 				</div>
 			</div>
 		</div>
@@ -39,6 +39,7 @@ import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
+	name: 'SofaProgressItemCard',
 	components: {
 		SofaIcon,
 		SofaImageLoader,
@@ -50,10 +51,10 @@ export default defineComponent({
 			default: '',
 		},
 		content: {
-			type: Object as () => any,
+			type: Object as PropType<any>,
+			required: true,
 		},
 	},
-	name: 'SofaProgressItemCard',
 	setup() {
 		return {
 			Logic,

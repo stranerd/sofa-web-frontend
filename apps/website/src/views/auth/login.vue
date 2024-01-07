@@ -1,29 +1,29 @@
 <template>
-	<auth-layout title="Welcome back" subTitle="Let the progress continue">
+	<auth-layout title="Welcome back" sub-title="Let the progress continue">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signin">
 			<AuthProvider />
 
 			<div class="w-full flex flex-col gap-4">
 				<sofa-text-field
+					ref="email"
+					v-model="factory.email"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					type="text"
 					:name="'Email'"
-					ref="email"
-					v-model="factory.email"
 					:placeholder="'Email'"
 					:error="factory.errors.email" />
 				<sofa-text-field
+					ref="password"
+					v-model="factory.password"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					:type="'password'"
 					:placeholder="'Password'"
 					:name="'Password'"
-					ref="password"
-					:error="factory.errors.password"
-					v-model="factory.password" />
+					:error="factory.errors.password" />
 			</div>
 
 			<div class="w-full flex flex-col">
-				<sofa-button :disabled="!factory.valid" :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit">
+				<sofa-button :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit">
 					Login
 				</sofa-button>
 			</div>
@@ -53,8 +53,8 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
-	components: { AuthProvider, SofaNormalText, SofaTextField, SofaButton },
 	name: 'AuthLoginPage',
+	components: { AuthProvider, SofaNormalText, SofaTextField, SofaButton },
 	beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
 	setup() {
 		useMeta({ title: 'Login To Your Account' })

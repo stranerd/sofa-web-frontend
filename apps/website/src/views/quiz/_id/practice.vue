@@ -1,14 +1,14 @@
 <template>
-	<expanded-layout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="$route.params.id as string" :showAnswer="showSolution" :isAnswerRight="isCorrect">
-			<template v-slot="{ quiz, questions, extras }">
+	<expanded-layout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
+		<QuizWrapper :id="$route.params.id as string" :show-answer="showSolution" :is-answer-right="isCorrect">
+			<template #default="{ quiz, questions, extras }">
 				<Quiz
+					v-model:answer="extras.answer"
 					:index="extras.index"
 					:title="isDone ? 'Practice completed' : quiz.title"
-					v-model:answer="extras.answer"
 					:questions="questions"
-					:optionState="extras.optionState"
-					:rightButton="{
+					:option-state="extras.optionState"
+					:right-button="{
 						label: isDone || showSolution ? 'Continue' : 'Check',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
@@ -26,7 +26,7 @@
 							return (isDone = true)
 						},
 					}"
-					:leftButton="{
+					:left-button="{
 						label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
 						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',
@@ -39,7 +39,7 @@
 							else if (extras.canNext) return extras.next()
 						},
 					}">
-					<template v-if="showSolution" v-slot:header>
+					<template v-if="showSolution" #header>
 						<div
 							class="w-full p-4 md:py-8 flex items-center justify-center gap-2"
 							:class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
@@ -47,13 +47,13 @@
 							<SofaHeaderText :size="'xl'" :color="'text-white'" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
 						</div>
 					</template>
-					<template v-if="isDone" v-slot>
+					<template v-if="isDone" #default>
 						<div class="flex flex-col gap-1">
 							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
 							<SofaNormalText color="text-inherit" content="You have mastered this quiz" />
 						</div>
 					</template>
-					<template v-if="showSolution" v-slot:postBody>
+					<template v-if="showSolution" #postBody>
 						<div class="w-full flex flex-col gap-2 items-start">
 							<SofaHeaderText size="xl" content="Answer" />
 							<SofaNormalText :content="extras.question.answer" />

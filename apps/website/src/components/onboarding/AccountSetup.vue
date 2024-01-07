@@ -1,6 +1,6 @@
 <template>
-	<form @submit.prevent="handleAccountSetup" class="w-full flex flex-col gap-4">
-		<div class="w-full flex gap-3" v-if="!isProfileEducation && !isProfilePhone">
+	<form class="w-full flex flex-col gap-4" @submit.prevent="handleAccountSetup">
+		<div v-if="!isProfileEducation && !isProfilePhone" class="w-full flex gap-3">
 			<a
 				v-for="option in accountSetupOptions.filter((o) => !o.hide)"
 				:key="option.id"
@@ -10,23 +10,23 @@
 				<sofa-normal-text :color="option.done || tab === option.id ? 'text-white' : 'text-grayColor'">
 					{{ option.name }}
 				</sofa-normal-text>
-				<sofa-icon v-if="option.done" :customClass="'h-[14px]'" :name="'done'" />
+				<sofa-icon v-if="option.done" :custom-class="'h-[14px]'" :name="'done'" />
 			</a>
 		</div>
 
 		<div v-if="tab === 'profile'" class="w-full flex flex-col gap-4 py-3">
 			<div class="w-full flex flex-col items-center justify-center pt-3">
 				<sofa-image-loader
-					:customClass="`w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-					:photoUrl="profileFactory.localPhotoLink">
-					<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileFactory.localPhotoLink" />
+					:custom-class="`w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
+					:photo-url="profileFactory.localPhotoLink">
+					<sofa-icon v-if="!profileFactory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
 					<sofa-file-attachment
-						:isWrapper="true"
-						:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-						:accept="'image/png, image/gif, image/jpeg'"
 						v-model="profileFactory.photo"
-						v-model:localFileUrl="profileFactory.localPhotoLink">
-						<template v-slot:content>
+						v-model:localFileUrl="profileFactory.localPhotoLink"
+						:is-wrapper="true"
+						:custom-class="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
+						:accept="'image/png, image/gif, image/jpeg'">
+						<template #content>
 							<SofaIcon class="h-[18px]" name="camera-white" />
 						</template>
 					</sofa-file-attachment>
@@ -34,106 +34,106 @@
 			</div>
 
 			<SofaTextField
-				customClass="rounded-custom !bg-lightGray"
+				v-model="profileFactory.first"
+				custom-class="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="First Name"
 				:error="profileFactory.errors.first"
-				v-model="profileFactory.first"
-				borderColor="border-transparent" />
+				border-color="border-transparent" />
 
 			<SofaTextField
-				customClass="rounded-custom !bg-lightGray"
+				v-model="profileFactory.last"
+				custom-class="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="Last Name"
 				:error="profileFactory.errors.last"
-				v-model="profileFactory.last"
-				borderColor="border-transparent" />
+				border-color="border-transparent" />
 
 			<SofaTextField
-				customClass="rounded-custom !bg-lightGray"
+				v-if="typeFactory.isOrganization"
+				v-model="typeFactory.name"
+				custom-class="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="Organization name"
 				:error="typeFactory.errors.name"
-				v-model="typeFactory.name"
-				borderColor="border-transparent"
-				v-if="typeFactory.isOrganization" />
+				border-color="border-transparent" />
 
 			<SofaTextarea
-				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+				v-model="profileFactory.description"
+				text-area-style="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 				:error="profileFactory.errors.description"
-				:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'"
-				v-model="profileFactory.description" />
+				:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
 
 			<SofaTextField
-				customClass="rounded-custom !bg-lightGray"
+				v-if="typeFactory.isOrganization"
+				v-model="typeFactory.code"
+				custom-class="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="Set organization code"
 				:error="typeFactory.errors.code"
-				v-model="typeFactory.code"
-				borderColor="border-transparent"
-				v-if="typeFactory.isOrganization" />
+				border-color="border-transparent" />
 
 			<div class="w-full grid grid-cols-2 gap-4">
 				<SofaSelect
-					customClass="rounded-custom !bg-lightGray col-span-1"
+					v-model="locationFactory.country"
+					custom-class="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Country"
 					:error="locationFactory.errors.country"
-					borderColor="border-transparent"
-					v-model="locationFactory.country"
+					border-color="border-transparent"
 					:options="countries.map((c) => ({ key: c, value: c }))" />
 
 				<SofaSelect
-					customClass="rounded-custom !bg-lightGray col-span-1"
+					v-model="locationFactory.state"
+					custom-class="rounded-custom !bg-lightGray col-span-1"
 					placeholder="State"
 					:error="locationFactory.errors.state"
-					borderColor="border-transparent"
-					v-model="locationFactory.state"
+					border-color="border-transparent"
 					:options="states.map((s) => ({ key: s, value: s }))" />
 			</div>
 		</div>
 
 		<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
 			<SofaTextField
-				customClass="rounded-custom !bg-lightGray"
+				v-if="typeFactory.isTeacher"
+				v-model="typeFactory.school"
+				custom-class="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="Where do you teach at the moment?"
 				:error="typeFactory.errors.school"
-				v-model="typeFactory.school"
-				borderColor="border-transparent"
-				v-if="typeFactory.isTeacher" />
+				border-color="border-transparent" />
 
 			<SofaSelect
-				customClass="rounded-custom !bg-lightGray"
+				v-if="typeFactory.isStudent"
+				v-model="typeFactory.schoolType"
+				custom-class="rounded-custom !bg-lightGray"
 				placeholder="Select education level"
 				:error="typeFactory.errors.schoolType"
-				borderColor="border-transparent"
-				v-model="typeFactory.schoolType"
-				v-if="typeFactory.isStudent"
+				border-color="border-transparent"
 				:options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" />
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 				<SofaSelect
-					customClass="rounded-custom !bg-lightGray"
+					v-model="typeFactory.institutionId"
+					custom-class="rounded-custom !bg-lightGray"
 					placeholder="Select school"
 					:error="typeFactory.errors.institutionId"
-					borderColor="border-transparent"
-					v-model="typeFactory.institutionId"
+					border-color="border-transparent"
 					:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
 
 				<SofaSelect
-					customClass="rounded-custom !bg-lightGray"
+					v-model="typeFactory.facultyId"
+					custom-class="rounded-custom !bg-lightGray"
 					placeholder="Select faculty"
 					:error="typeFactory.errors.facultyId"
-					borderColor="border-transparent"
-					v-model="typeFactory.facultyId"
+					border-color="border-transparent"
 					:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
 
 				<SofaSelect
-					customClass="rounded-custom !bg-lightGray"
+					v-model="typeFactory.departmentId"
+					custom-class="rounded-custom !bg-lightGray"
 					placeholder="Select department"
 					:error="typeFactory.errors.departmentId"
-					borderColor="border-transparent"
-					v-model="typeFactory.departmentId"
+					border-color="border-transparent"
 					:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
 			</template>
 			<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
@@ -141,11 +141,11 @@
 					<SofaNormalText class="!font-semibold" content="Your exams" />
 
 					<SofaSelect
-						customClass="rounded-custom !bg-lightGray"
 						v-model="typeFactory.institutions"
+						custom-class="rounded-custom !bg-lightGray"
 						placeholder="Select exams"
-						borderColor="border-transparent"
-						:isMultiple="true"
+						border-color="border-transparent"
+						:is-multiple="true"
 						:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
 
 					<div class="w-full flex flex-wrap gap-3">
@@ -155,7 +155,7 @@
 								.filter(Boolean)"
 							:key="institution.id"
 							:color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
-							customClass="flex items-center gap-2"
+							custom-class="flex items-center gap-2"
 							as="a"
 							@click.prevent="typeFactory.activeInst = institution.id">
 							{{ institution.title }}
@@ -167,14 +167,14 @@
 
 					<SofaSelect
 						v-if="typeFactory.activeInst"
-						customClass="rounded-custom !bg-lightGray"
+						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
+						custom-class="rounded-custom !bg-lightGray"
 						placeholder="Select exam subjects"
-						borderColor="border-transparent"
-						:isMultiple="true"
+						border-color="border-transparent"
+						:is-multiple="true"
 						:options="
 							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
-						"
-						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds" />
+						" />
 				</div>
 			</template>
 		</div>
@@ -188,7 +188,7 @@
 				Enter the 6-digit code sent to {{ phoneFactory.phone.code + phoneFactory.phone.number }}
 			</SofaNormalText>
 			<div class="w-full md:!w-[60%] flex flex-col gap-4">
-				<SofaOtpInput :numberOfInput="6" v-model="token" />
+				<SofaOtpInput v-model="token" :number-of-input="6" />
 			</div>
 
 			<div class="w-full flex items-center justify-center gap-1 pt-3">
@@ -236,6 +236,7 @@ import {
 import { computed, defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
+	name: 'AccountSetup',
 	components: {
 		SofaNormalText,
 		SofaIcon,
@@ -250,12 +251,6 @@ export default defineComponent({
 		SofaPhoneInput,
 	},
 	props: {
-		name: {
-			type: String,
-		},
-		customClass: {
-			type: String,
-		},
 		isProfileEducation: {
 			type: Boolean,
 			default: false,
@@ -265,7 +260,6 @@ export default defineComponent({
 			default: false,
 		},
 	},
-	name: 'AccountSetup',
 	setup(props) {
 		const { auth, user } = useAuth()
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()

@@ -1,14 +1,14 @@
 <template>
-	<div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4" v-if="userType.isTeacher && requests.length">
+	<div v-if="userType.isTeacher && requests.length" class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4">
 		<a :class="`w-full flex items-center justify-between ${extraStyle}`" @click="showRequests = !showRequests">
-			<sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'" :content="`Requests (${requests.length})`" />
-			<sofa-icon :name="showRequests ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
+			<sofa-header-text :custom-class="'text-left mdlg:!text-base text-sm'" :content="`Requests (${requests.length})`" />
+			<sofa-icon :name="showRequests ? 'chevron-up' : 'chevron-down'" :custom-class="'h-[7px] cursor-pointer'" />
 		</a>
-		<div class="w-full flex flex-col gap-3" v-if="showRequests">
+		<div v-if="showRequests" class="w-full flex flex-col gap-3">
 			<Chat
-				:customClass="customClass"
 				v-for="request in requests"
 				:key="request.hash"
+				:custom-class="customClass"
 				:chat="{
 					route: `/chats/requests/${request.id}`,
 					title: request.user.bio.name.full,
@@ -18,16 +18,16 @@
 				}" />
 		</div>
 	</div>
-	<div class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4" v-if="pending.length">
+	<div v-if="pending.length" class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4">
 		<a :class="`w-full flex items-center justify-between ${extraStyle}`" @click="showPending = !showPending">
-			<sofa-header-text :customClass="'text-left mdlg:!text-base text-sm'" :content="`Pending (${pending.length})`" />
-			<sofa-icon :name="showPending ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
+			<sofa-header-text :custom-class="'text-left mdlg:!text-base text-sm'" :content="`Pending (${pending.length})`" />
+			<sofa-icon :name="showPending ? 'chevron-up' : 'chevron-down'" :custom-class="'h-[7px] cursor-pointer'" />
 		</a>
-		<div class="w-full flex flex-col gap-3" v-if="showPending">
+		<div v-if="showPending" class="w-full flex flex-col gap-3">
 			<Chat
-				:customClass="customClass"
 				v-for="request in pending.slice(0, limit)"
 				:key="request.hash"
+				:custom-class="customClass"
 				:chat="{
 					route: `/chats/${request.id}`,
 					title: request.user.bio.name.full,
@@ -38,9 +38,9 @@
 		</div>
 	</div>
 	<Chat
-		:customClass="customClass"
 		v-for="chat in conversations.slice(0, limit)"
 		:key="chat.hash"
+		:custom-class="customClass"
 		:chat="{
 			route: `/chats/${chat.id}`,
 			title: chat.title,
@@ -71,6 +71,7 @@ defineProps({
 	limit: {
 		type: Number,
 		required: false,
+		default: undefined,
 	},
 })
 

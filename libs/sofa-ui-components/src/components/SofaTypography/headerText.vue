@@ -9,6 +9,7 @@
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
+	name: 'RoofHeaderText',
 	props: {
 		size: {
 			type: String,
@@ -31,7 +32,6 @@ export default defineComponent({
 			default: 'h3',
 		},
 	},
-	name: 'RoofHeaderText',
 	setup(props) {
 		const cls = computed(() =>
 			[

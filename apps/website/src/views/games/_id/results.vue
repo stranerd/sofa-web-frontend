@@ -1,27 +1,27 @@
 <template>
 	<expanded-layout
-		layoutStyle="!justify-between bg-deepGray text-white"
+		layout-style="!justify-between bg-deepGray text-white"
 		:hide="{ top: true, bottom: true }"
-		bgImage="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
-			<template v-slot="{ game, extras: gameExtras, questions }">
-				<QuizWrapper :id="game.quizId" :questions="questions">
-					<template v-slot="{ quiz, questions, extras }">
+		bg-image="/images/game-bg.png">
+		<GameWrapper :id="$route.params.id as string" :skip-questions="true" :skip-status-nav="true">
+			<template #default="{ game, extras: gameExtras, questions: gameQuestions }">
+				<QuizWrapper :id="game.quizId" :questions="gameQuestions">
+					<template #default="{ quiz, questions, extras }">
 						<Quiz
+							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:showCounter="false"
-							v-model:answer="extras.answer"
-							:optionState="extras.optionState"
-							:isDark="true"
-							:rightButton="{
+							:show-counter="false"
+							:option-state="extras.optionState"
+							:is-dark="true"
+							:right-button="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=games'),
 							}"
-							:leftButton="
+							:left-button="
 								gameExtras.canEnd
 									? {
 										label: 'End',
@@ -31,11 +31,11 @@
 									}
 									: undefined
 							">
-							<template v-slot:header>
+							<template #header>
 								<div />
 							</template>
 
-							<template v-slot>
+							<template #default>
 								<div class="w-full h-full flex flex-col overflow-y-auto">
 									<div class="flex flex-col gap-4 my-auto py-4 items-center">
 										<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" content="Scoreboard" />
@@ -59,7 +59,7 @@
 												color="text-deepGray"
 												class="!font-semibold"
 												:content="score.user.id === gameExtras.authId ? 'You' : score.user.bio.name.full" />
-											<SofaIcon name="game-winner" class="h-[23px]" v-if="score.isWinner" />
+											<SofaIcon v-if="score.isWinner" name="game-winner" class="h-[23px]" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold ml-auto"

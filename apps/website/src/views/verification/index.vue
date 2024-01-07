@@ -1,6 +1,6 @@
 <template>
 	<dashboard-layout
-		:topbarOptions="{
+		:topbar-options="{
 			type: 'subpage',
 			title: 'Account verification',
 			actions: [
@@ -19,64 +19,64 @@
 		}"
 		:wrap="true"
 		:hide="{ bottom: true }">
-		<template v-slot:left-session>
+		<template #left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<div class="w-full flex flex-col">
-					<sofa-header-text :customClass="'!font-bold'"> Personal information </sofa-header-text>
+					<sofa-header-text :custom-class="'!font-bold'"> Personal information </sofa-header-text>
 					<sofa-normal-text>Edit your profile</sofa-normal-text>
 				</div>
 
 				<div class="w-full flex flex-col items-center justify-center pt-3">
 					<sofa-image-loader
-						:customClass="`w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-						:photoUrl="profileFactory.localPhotoLink">
-						<sofa-icon :customClass="'h-[50px]'" :name="'user'" v-if="!profileFactory.localPhotoLink" />
+						:custom-class="`w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
+						:photo-url="profileFactory.localPhotoLink">
+						<sofa-icon v-if="!profileFactory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
 						<sofa-file-attachment
-							:isWrapper="true"
-							:customClass="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-							:accept="'image/png, image/gif, image/jpeg'"
 							v-model="profileFactory.photo"
-							v-model:localFileUrl="profileFactory.localPhotoLink">
-							<template v-slot:content>
-								<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
+							v-model:localFileUrl="profileFactory.localPhotoLink"
+							:is-wrapper="true"
+							:custom-class="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
+							:accept="'image/png, image/gif, image/jpeg'">
+							<template #content>
+								<sofa-icon :custom-class="'h-[18px]'" :name="'camera-white'" />
 							</template>
 						</sofa-file-attachment>
 					</sofa-image-loader>
 				</div>
 
 				<SofaTextField
+					v-model="profileFactory.first"
 					placeholder="Enter name"
-					:hasTitle="true"
-					customClass="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.first"
-					v-model="profileFactory.first">
-					<template v-slot:title>First Name</template>
+					:has-title="true"
+					custom-class="rounded-custom !bg-lightGray"
+					:error="profileFactory.errors.first">
+					<template #title>First Name</template>
 				</SofaTextField>
 
 				<SofaTextField
+					v-model="profileFactory.last"
 					placeholder="Enter name"
-					:hasTitle="true"
-					customClass="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.last"
-					v-model="profileFactory.last">
-					<template v-slot:title>Last Name</template>
+					:has-title="true"
+					custom-class="rounded-custom !bg-lightGray"
+					:error="profileFactory.errors.last">
+					<template #title>Last Name</template>
 				</SofaTextField>
 
 				<SofaTextarea
+					v-model="profileFactory.description"
 					placeholder="Description of yourself"
-					:hasTitle="true"
-					textAreaStyle="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.description"
-					v-model="profileFactory.description">
-					<template v-slot:title>Bio</template>
+					:has-title="true"
+					text-area-style="rounded-custom !bg-lightGray"
+					:error="profileFactory.errors.description">
+					<template #title>Bio</template>
 				</SofaTextarea>
 			</div>
 		</template>
 
-		<template v-slot:middle-session>
+		<template #middle-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<div class="w-full flex flex-col items-start">
-					<sofa-header-text :customClass="'!font-bold flex flex-row justify-start'"> Page content </sofa-header-text>
+					<sofa-header-text :custom-class="'!font-bold flex flex-row justify-start'"> Page content </sofa-header-text>
 					<sofa-normal-text>Add 3 study materials you’ve created </sofa-normal-text>
 				</div>
 
@@ -87,16 +87,16 @@
 								<sofa-activity-card
 									v-if="content.subject"
 									:activity="content"
-									:customClass="'!bg-lightGray !w-full cursor-pointer'" />
+									:custom-class="'!bg-lightGray !w-full cursor-pointer'" />
 							</template>
 							<template v-else>
-								<sofa-activity-card :activity="content" :customClass="'!bg-lightGray'" :is-wrapped="true" />
+								<sofa-activity-card :activity="content" :custom-class="'!bg-lightGray'" :is-wrapped="true" />
 							</template>
 						</template>
 
 						<div class="w-full flex flex-col">
 							<SofaButton padding="p-4" @click="showAddMaterialHandler()">
-								<sofa-icon :name="'box-add-white'" :customClass="'h-[18px]'"></sofa-icon>
+								<sofa-icon :name="'box-add-white'" :custom-class="'h-[18px]'"></sofa-icon>
 								Add Content
 							</SofaButton>
 						</div>
@@ -105,46 +105,46 @@
 			</div>
 
 			<!-- Add material modal -->
-			<sofa-modal v-if="showAddMaterial" :close="() => (showAddMaterial = false)" :canClose="false">
+			<sofa-modal v-if="showAddMaterial" :close="() => (showAddMaterial = false)" :can-close="false">
 				<div
 					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] w-full flex flex-col justify-end md:!justify-start items-center relative">
 					<div
 						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 pt-0 pb-3 px-4 md:!rounded-[16px] rounded-t-[19px] items-center justify-center">
 						<div class="w-full text-center hidden md:!inline-block">
-							<sofa-header-text :customClass="'!text-xl !font-bold '">Add a Material</sofa-header-text>
+							<sofa-header-text :custom-class="'!text-xl !font-bold '">Add a Material</sofa-header-text>
 						</div>
 
 						<div class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden">
-							<sofa-normal-text :customClass="'!font-bold !text-base'"> Add a Material </sofa-normal-text>
-							<sofa-icon :customClass="'h-[16px]'" :name="'circle-close'" @click="showAddMaterial = false" />
+							<sofa-normal-text :custom-class="'!font-bold !text-base'"> Add a Material </sofa-normal-text>
+							<sofa-icon :custom-class="'h-[16px]'" :name="'circle-close'" @click="showAddMaterial = false" />
 						</div>
 
 						<div class="w-full flex flex-col gap-4">
 							<sofa-select
+								:ref="addMaterialType"
+								v-model="selectedMaterial"
 								:custom-class="'rounded-custom !bg-lightGray'"
 								:name="capitalize(addMaterialType)"
-								:ref="addMaterialType"
 								:placeholder="'Select material'"
 								:rules="[FormValidations.RequiredRule]"
-								:borderColor="'border-transparent'"
+								:border-color="'border-transparent'"
 								:options="allMaterials"
-								:hasTitle="true"
-								v-model="selectedMaterial">
-								<template v-slot:title> Choose a material </template>
+								:has-title="true">
+								<template #title> Choose a material </template>
 							</sofa-select>
 
 							<div class="w-full flex flex-row items-center justify-between z-[50] bg-white">
 								<sofa-button
 									:padding="'px-5 py-2'"
-									:bgColor="'bg-white'"
-									:textColor="'text-grayColor'"
-									:customClass="'border border-gray-100 hidden mdlg:!inline-block'"
+									:bg-color="'bg-white'"
+									:text-color="'text-grayColor'"
+									:custom-class="'border border-gray-100 hidden mdlg:!inline-block'"
 									@click.prevent="showAddMaterial = false">
 									Exit
 								</sofa-button>
 
 								<div class="mdlg:!w-auto w-full">
-									<sofa-button :padding="'px-5 py-2'" :customClass="'mdlg:!w-auto w-full'" @click="addMaterial()">
+									<sofa-button :padding="'px-5 py-2'" :custom-class="'mdlg:!w-auto w-full'" @click="addMaterial()">
 										Add
 									</sofa-button>
 								</div>
@@ -155,10 +155,10 @@
 			</sofa-modal>
 		</template>
 
-		<template v-slot:right-session>
+		<template #right-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex flex-col justify-start">
-					<sofa-header-text :customClass="'!font-bold flex flex-row justify-start'"> Add links (optional) </sofa-header-text>
+					<sofa-header-text :custom-class="'!font-bold flex flex-row justify-start'"> Add links (optional) </sofa-header-text>
 					<sofa-normal-text>Your educational website and socials</sofa-normal-text>
 				</div>
 
@@ -200,6 +200,7 @@ import { capitalize, defineComponent, onMounted, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'VerificationIndexPage',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -271,7 +272,6 @@ export default defineComponent({
 			},
 		],
 	},
-	name: 'VerificationIndexPage',
 	setup() {
 		useMeta({
 			title: 'Verification application',

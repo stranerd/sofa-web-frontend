@@ -7,13 +7,13 @@
 				<SofaHeaderText size="xl" cass="mx-auto hidden mdlg:flex" content="Organizations" />
 
 				<div v-if="organizations.length" class="w-full flex flex-col gap-4">
-					<div class="w-full flex gap-2 items-center" v-for="org in organizations" :key="org.id">
-						<SofaAvatar :photoUrl="org.photo" size="23" />
+					<div v-for="org in organizations" :key="org.id" class="w-full flex gap-2 items-center">
+						<SofaAvatar :photo-url="org.photo" size="23" />
 						<SofaNormalText :content="org.name" class="truncate flex-1" />
 						<SofaNormalText as="a" content="Leave" color="text-primaryRed" @click="leaveOrganization" />
 					</div>
 				</div>
-				<SofaEmptyState v-else title="No organization" subTitle="Your are not a member of any organization" />
+				<SofaEmptyState v-else title="No organization" sub-title="Your are not a member of any organization" />
 			</div>
 		</div>
 	</SettingsLayout>
@@ -27,6 +27,7 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'SettingsOrganizationsPage',
 	components: {
 		SettingsLayout,
 		SofaHeaderText,
@@ -34,7 +35,6 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaAvatar,
 	},
-	name: 'SettingsOrganizationsPage',
 	middlewares: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({ title: 'Organizations' })

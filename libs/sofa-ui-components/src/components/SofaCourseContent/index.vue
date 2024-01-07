@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col h-full w-full relative pb-4">
-		<div class="flex flex-col w-full gap-2 p-4 border-lightGray border-t" v-for="(option, index) in sectionOptions" :key="index">
+		<div v-for="(option, index) in sectionOptions" :key="index" class="flex flex-col w-full gap-2 p-4 border-lightGray border-t">
 			<template v-if="option">
 				<template v-if="option.name != 'unsectioned'">
 					<a
@@ -11,8 +11,8 @@
 								selectedSection = index
 							}
 						">
-						<sofa-normal-text :customClass="'!font-bold'">{{ option.name }}</sofa-normal-text>
-						<sofa-icon :customClass="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
+						<sofa-normal-text :custom-class="'!font-bold'">{{ option.name }}</sofa-normal-text>
+						<sofa-icon :custom-class="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
 					</a>
 				</template>
 
@@ -21,8 +21,8 @@
 						<!-- For larger screens -->
 						<template v-if="!Logic.Common.isOnlyMobile">
 							<a
-								v-for="(material, index) in option.materials"
-								:key="index"
+								v-for="(material, i) in option.materials"
+								:key="i"
 								class="w-full flex flex-col gap-1 rounded-lg p-3 hover:bg-lightBlue"
 								:class="{
 									'opacity-80': lockContent,
@@ -31,16 +31,16 @@
 								}"
 								@click.stop="selectItem(material)">
 								<div class="w-full flex justify-between items-center">
-									<sofa-normal-text :customClass="'!text-left !line-clamp-1'">
+									<sofa-normal-text :custom-class="'!text-left !line-clamp-1'">
 										{{ material.name }}
 									</sofa-normal-text>
-									<sofa-icon :customClass="'h-[25px]'" v-if="lockContent" :name="'locked-content'" />
-									<sofa-icon :customClass="'h-[18px]'" v-else-if="itemIsStudied(material.id)" name="selected" />
+									<sofa-icon v-if="lockContent" :custom-class="'h-[25px]'" :name="'locked-content'" />
+									<sofa-icon v-else-if="itemIsStudied(material.id)" :custom-class="'h-[18px]'" name="selected" />
 								</div>
 								<div class="w-full flex gap-2 items-center">
 									<div class="flex items-center gap-1">
-										<sofa-icon :customClass="'h-[17px]'" :name="material.type" />
-										<sofa-normal-text :color="'text-grayColor'" :customClass="'!text-left !capitalize'">
+										<sofa-icon :custom-class="'h-[17px]'" :name="material.type" />
+										<sofa-normal-text :color="'text-grayColor'" :custom-class="'!text-left !capitalize'">
 											{{ material.type.split('-')[0] }}
 										</sofa-normal-text>
 									</div>
@@ -52,12 +52,12 @@
 						<template v-else>
 							<div class="w-full flex flex-col gap-3 pt-2">
 								<div
-									v-for="(material, index) in option.materials"
-									:key="index"
+									v-for="(material, i) in option.materials"
+									:key="i"
 									class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue"
 									@click.stop="selectItem(material)">
-									<sofa-icon :customClass="'h-[18px]'" :name="material.type" />
-									<sofa-normal-text :customClass="'!text-left !line-clamp-1'" :color="'text-deepGray'">
+									<sofa-icon :custom-class="'h-[18px]'" :name="material.type" />
+									<sofa-normal-text :custom-class="'!text-left !line-clamp-1'" :color="'text-deepGray'">
 										{{ material.name }}
 									</sofa-normal-text>
 								</div>
@@ -80,6 +80,7 @@ import { SofaNormalText } from '../SofaTypography'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export default defineComponent({
+	name: 'SofaCourseContent',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -89,12 +90,9 @@ export default defineComponent({
 			type: String,
 			default: '',
 		},
-		close: {
-			type: Function,
-			required: false,
-		},
 		modelValue: {
 			type: Object,
+			required: true,
 		},
 		lockContent: {
 			type: Boolean,
@@ -102,7 +100,6 @@ export default defineComponent({
 		},
 	},
 	emits: ['update:modelValue', 'OnMaterialSelected', 'onCourseContentSet'],
-	name: 'SofaCourseContent',
 	setup(props, context) {
 		const selectedSection = ref(0)
 

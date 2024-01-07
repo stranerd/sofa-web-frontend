@@ -1,21 +1,21 @@
 <template>
-	<expanded-layout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+	<expanded-layout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
 		<QuizWrapper :id="$route.params.id as string">
-			<template v-slot="{ quiz, questions, extras }">
+			<template #default="{ quiz, questions, extras }">
 				<Quiz
+					v-model:answer="extras.answer"
 					:index="extras.index"
 					:title="quiz.title"
 					:questions="questions"
-					v-model:answer="extras.answer"
-					:optionState="extras.optionState"
-					:rightButton="{
+					:option-state="extras.optionState"
+					:right-button="{
 						label: 'Next',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
 						disabled: !extras.canNext,
 						click: extras.next,
 					}"
-					:leftButton="{
+					:left-button="{
 						label: 'Prev',
 						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',

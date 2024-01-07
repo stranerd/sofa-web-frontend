@@ -2,23 +2,23 @@
 	<div v-chat-scroll class="w-full flex flex-col overflow-y-auto scrollbar-hide gap-4">
 		<template v-for="message in messages" :key="message.hash">
 			<div
-				class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start"
-				v-if="message.userId !== id">
-				<sofa-avatar :photoUrl="users[message.userId]?.photoUrl" :size="'27'" />
+				v-if="message.userId !== id"
+				class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start">
+				<sofa-avatar :photo-url="users[message.userId]?.photoUrl" class="flex-shrink-0" :size="'27'" />
 				<div class="p-3 rounded-custom text-left bg-lightBlue flex flex-col gap-1 justify-start">
-					<sofa-normal-text :customClass="'!font-semibold'" :color="'text-[#3296C8]'">
+					<sofa-normal-text :custom-class="'!font-semibold'" :color="'text-[#3296C8]'">
 						{{ users[message.userId]?.name }}
 					</sofa-normal-text>
-					<sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body"></sofa-normal-text>
+					<sofa-normal-text :custom-class="'text-left'" :is-html="true" :content="message.body"></sofa-normal-text>
 				</div>
 			</div>
 
-			<div class="min-w-[80px] w-full flex gap-2 items-end justify-end py-4" v-else>
+			<div v-else class="min-w-[80px] w-full flex gap-2 items-end justify-end py-4">
 				<div class="flex flex-row items-end gap-2 max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%]">
 					<div class="p-3 rounded-custom text-left bg-darkLightGray">
-						<sofa-normal-text :customClass="'text-left'" :isHtml="true" :content="message.body"> </sofa-normal-text>
+						<sofa-normal-text :custom-class="'text-left'" :is-html="true" :content="message.body"> </sofa-normal-text>
 					</div>
-					<sofa-avatar :photoUrl="users[message.userId]?.photoUrl" :size="'27'" />
+					<sofa-avatar :photo-url="users[message.userId]?.photoUrl" class="flex-shrink-0" :size="'27'" />
 				</div>
 			</div>
 		</template>

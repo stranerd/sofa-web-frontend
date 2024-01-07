@@ -1,47 +1,47 @@
 <template>
-	<form @submit.prevent="emits('updateQuiz')" class="w-full h-full flex flex-col gap-4 text-grayColor">
+	<form class="w-full h-full flex flex-col gap-4 text-grayColor" @submit.prevent="emits('updateQuiz')">
 		<div class="flex flex-col flex-grow overflow-y-auto gap-4">
 			<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 				<div class="col-span-1 w-full flex flex-col gap-3">
 					<SofaTextField
+						v-model="factory.title"
 						custom-class="rounded-custom !bg-lightGray"
 						type="text"
 						name="Title"
-						v-model="factory.title"
 						placeholder="Title"
-						borderColor="border-transparent"
+						border-color="border-transparent"
 						:error="factory.errors.title" />
 
 					<SofaTextarea
-						:hasTitle="false"
-						:rows="4"
-						textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-						placeholder="Description"
 						v-model="factory.description"
+						:has-title="false"
+						:rows="4"
+						text-area-style="rounded-custom !bg-lightGray md:p-4 p-3"
+						placeholder="Description"
 						:error="factory.errors.description" />
 
 					<SofaSelect
-						customClass="rounded-custom !bg-lightGray"
+						v-model="factory.topic"
+						custom-class="rounded-custom !bg-lightGray"
 						name="Topic"
 						placeholder="Topic"
-						borderColor="border-transparent"
+						border-color="border-transparent"
 						:error="factory.errors.topic"
 						:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-						:canUseCustom="true"
-						v-model="factory.topic" />
+						:can-use-custom="true" />
 				</div>
 
 				<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 					<SofaImageLoader
-						customClass="w-full md:!h-full h-[220px] rounded-custom relative"
-						:photoUrl="quizImageUrl ? quizImageUrl : '/images/default.png'">
+						custom-class="w-full md:!h-full h-[220px] rounded-custom relative"
+						:photo-url="quizImageUrl ? quizImageUrl : '/images/default.png'">
 						<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 							<SofaFileAttachment
-								:isWrapper="true"
 								v-model="factory.photo"
-								accept="image/png, image/gif, image/jpeg"
-								v-model:localFileUrl="quizImageUrl">
-								<template v-slot:content>
+								v-model:localFileUrl="quizImageUrl"
+								:is-wrapper="true"
+								accept="image/png, image/gif, image/jpeg">
+								<template #content>
 									<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
 										<SofaIcon class="h-[18px]" name="camera-white" />
 										<SofaNormalText color="text-white" content="Add cover photo" />
@@ -55,16 +55,16 @@
 
 			<div class="w-full flex flex-col gap-2">
 				<SofaTextField
-					customClass="rounded-custom !bg-lightGray"
+					v-model="factory.tagString"
+					custom-class="rounded-custom !bg-lightGray"
 					name="Tags"
 					placeholder="Tags (Comma separated for multiple)"
-					borderColor="border-transparent"
-					v-model="factory.tagString" />
+					border-color="border-transparent" />
 				<div class="w-full flex flex-wrap gap-2 items-center">
 					<template v-for="(item, index) in factory.tags" :key="index">
 						<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">
 							<SofaNormalText color="text-grayColor" :content="item" />
-							<SofaIcon @click="factory.removeTag(index)" name="circle-close" class="h-[17px] cursor-pointer" />
+							<SofaIcon name="circle-close" class="h-[17px] cursor-pointer" @click="factory.removeTag(index)" />
 						</div>
 					</template>
 				</div>
@@ -80,9 +80,9 @@
 			<SofaButton
 				type="button"
 				padding="px-5 py-2"
-				bgColor="bg-white"
-				textColor="text-grayColor"
-				customClass="border border-gray-100 hidden mdlg:inline-block"
+				bg-color="bg-white"
+				text-color="text-grayColor"
+				custom-class="border border-gray-100 hidden mdlg:inline-block"
 				@click.prevent="close">
 				Exit
 			</SofaButton>
@@ -92,11 +92,11 @@
 					Save
 				</SofaButton>
 				<SofaButton
+					v-if="quiz.status !== 'published'"
 					type="button"
 					:disabled="!factory.valid"
 					padding="px-5 mdlg:py-2 py-3"
 					class="mdlg:w-auto w-full"
-					v-if="quiz.status !== 'published'"
 					@click.prevent="emits('publishQuiz')">
 					Publish
 				</SofaButton>

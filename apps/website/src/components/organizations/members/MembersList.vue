@@ -10,8 +10,8 @@
 				<SofaNormalText color="text-grayColor" :content="message" />
 			</div>
 			<SofaButton
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
+				bg-color="bg-primaryBlue"
+				text-color="text-white"
 				class="self-start mt-2"
 				padding="px-6 py-3"
 				@click="emits('openAddModal', type)">
@@ -23,14 +23,14 @@
 		<div class="flex gap-4 items-center px-4 md:px-6">
 			<div class="flex items-center border border-darkLightGray rounded-custom pl-4 md:min-w-[300px]">
 				<SofaIcon name="search" class="h-[16px]" />
-				<SofaTextField v-model="searchValue" class="w-full" placeholder="Search" type="search" borderColor="!border-none" />
+				<SofaTextField v-model="searchValue" class="w-full" placeholder="Search" type="search" border-color="!border-none" />
 			</div>
 			<SofaButton
 				class="ml-auto"
-				customClass="font-semibold"
+				custom-class="font-semibold"
 				padding="py-3 px-6"
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
+				bg-color="bg-primaryBlue"
+				text-color="text-white"
 				@click="emits('openAddModal', type)">
 				Add {{ label }}
 			</SofaButton>
@@ -43,7 +43,7 @@
 				content="No member matches the search query" />
 			<template v-for="member in [...pending, ...nonPending]" :key="member.id">
 				<div class="flex gap-2 items-center w-full px-4 md:px-6">
-					<SofaAvatar :photoUrl="member.user?.bio.photo?.link" size="28" />
+					<SofaAvatar :photo-url="member.user?.bio.photo?.link" size="28" />
 					<SofaNormalText
 						color="text-inherit"
 						:content="`${member.user?.bio.name.full ?? member.email}${member.pending ? ' sent a request' : ''}`"
