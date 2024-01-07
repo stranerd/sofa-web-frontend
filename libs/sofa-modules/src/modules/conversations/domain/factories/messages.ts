@@ -1,12 +1,9 @@
-import { valleyed } from '@utils/commons'
-import { FileData, Message } from '../../logic'
-import { BaseFactory } from '@modules/core'
+import { BaseFactory, Media } from '@modules/core'
+import { v } from 'valleyed'
+import { MessageToModel } from '../../data/models/messages'
+import { MessageEntity } from '../entities/messages'
 
-type Content = FileData | null
-type Keys = { body: string; media: Content | null }
-
-const v = valleyed.v
-export class MessageFactory extends BaseFactory<Message, Keys, Keys> {
+export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, MessageToModel> {
 	readonly rules = {
 		body: v.string(),
 		media: v.file().nullable(),
@@ -28,7 +25,7 @@ export class MessageFactory extends BaseFactory<Message, Keys, Keys> {
 		return this.values.media
 	}
 
-	set media(value: Content) {
+	set media(value: Media | null) {
 		this.set('media', value)
 	}
 
@@ -41,7 +38,7 @@ export class MessageFactory extends BaseFactory<Message, Keys, Keys> {
 		}
 	}
 
-	loadEntity = (entity: Message) => {
+	loadEntity = (entity: MessageEntity) => {
 		this.entityId = entity.id
 		this.body = entity.body
 		this.media = entity.media

@@ -1,9 +1,9 @@
-import { Conversation, CreateConversationInput } from '../../logic'
-import { valleyed } from '@utils/commons'
 import { BaseFactory } from '@modules/core'
+import { v } from 'valleyed'
+import { CreateConversationToModel } from '../../data/models/conversations'
+import { ConversationEntity } from '../entities/conversations'
 
-const v = valleyed.v
-export class ConversationFactory extends BaseFactory<Conversation, CreateConversationInput, CreateConversationInput> {
+export class ConversationFactory extends BaseFactory<ConversationEntity, CreateConversationToModel, CreateConversationToModel> {
 	readonly rules = {
 		body: v.string().min(1, true),
 		tutorId: v.string().min(1).nullable(),
@@ -29,7 +29,7 @@ export class ConversationFactory extends BaseFactory<Conversation, CreateConvers
 		this.set('tutorId', value)
 	}
 
-	loadEntity = (entity: Conversation) => {
+	loadEntity = (entity: ConversationEntity) => {
 		this.entityId = entity.id
 		this.body = entity.title
 		this.tutorId = entity.tutor?.id ?? null

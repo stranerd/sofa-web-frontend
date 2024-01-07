@@ -1,5 +1,4 @@
 export * from './common'
-export * from './conversations'
 export * from './payment'
 export * from './plays'
 export * from './schools'

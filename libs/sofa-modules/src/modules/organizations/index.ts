@@ -3,11 +3,11 @@ import { ClassRepository } from './data/repositories/classes'
 import { LessonRepository } from './data/repositories/lessons'
 import { MemberRepository } from './data/repositories/members'
 import { ScheduleRepository } from './data/repositories/schedules'
-import { AnnouncementsUseCase } from './domain/useCases/announcements'
-import { ClassesUseCase } from './domain/useCases/classes'
-import { LessonsUseCase } from './domain/useCases/lessons'
-import { MembersUseCase } from './domain/useCases/members'
-import { SchedulesUseCase } from './domain/useCases/schedules'
+import { AnnouncementsUseCase } from './domain/usecases/announcements'
+import { ClassesUseCase } from './domain/usecases/classes'
+import { LessonsUseCase } from './domain/usecases/lessons'
+import { MembersUseCase } from './domain/usecases/members'
+import { SchedulesUseCase } from './domain/usecases/schedules'
 
 export const AnnouncementsUseCases = new AnnouncementsUseCase(AnnouncementRepository.getInstance)
 export const ClassesUseCases = new ClassesUseCase(ClassRepository.getInstance)

@@ -1,4 +1,5 @@
-import { Conversation, Logic, Message, MessageFactory } from 'sofa-logic'
+import { ConversationEntity, MessageEntity, MessageFactory, MessagesUseCases } from '@modules/conversations'
+import { Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
@@ -7,7 +8,7 @@ import { useErrorHandler, useLoadingHandler } from '../core/states'
 const store = {} as Record<
 	string,
 	{
-		messages: Ref<Message[]>
+		messages: Ref<MessageEntity[]>
 		fetched: Ref<boolean>
 		hasMore: Ref<boolean>
 		listener: ReturnType<typeof useListener>
@@ -15,41 +16,40 @@ const store = {} as Record<
 		ReturnType<typeof useLoadingHandler>
 >
 
-export const useMessages = (conversation: Conversation) => {
+export const useMessages = (conversation: ConversationEntity) => {
 	const conversationId = conversation.id
 
 	const { userAi } = useAuth()
 
 	if (store[conversationId] === undefined) {
-		const listener = useListener(
-			async () =>
-				await Logic.Common.listenToMany<Message>(
-					`conversations/conversations/${conversationId}/messages`,
-					{
-						created: async (entity) => {
-							Logic.addToArray(
-								store[conversationId].messages.value,
-								entity,
-								(e) => e.id,
-								(e) => e.createdAt,
-							)
-						},
-						updated: async (entity) => {
-							Logic.addToArray(
-								store[conversationId].messages.value,
-								entity,
-								(e) => e.id,
-								(e) => e.createdAt,
-							)
-						},
-						deleted: async (entity) => {
-							const index = store[conversationId].messages.value.findIndex((c) => c.id === entity.id)
-							if (index !== -1) store[conversationId].messages.value.splice(index, 1)
-						},
+		const listener = useListener(() => {
+			return MessagesUseCases.listen(
+				conversationId,
+				{
+					created: async (entity) => {
+						Logic.addToArray(
+							store[conversationId].messages.value,
+							entity,
+							(e) => e.id,
+							(e) => e.createdAt,
+						)
 					},
-					(e) => e.createdAt >= (store[conversationId].messages.value.at(-1)?.createdAt ?? 0),
-				),
-		)
+					updated: async (entity) => {
+						Logic.addToArray(
+							store[conversationId].messages.value,
+							entity,
+							(e) => e.id,
+							(e) => e.createdAt,
+						)
+					},
+					deleted: async (entity) => {
+						const index = store[conversationId].messages.value.findIndex((c) => c.id === entity.id)
+						if (index !== -1) store[conversationId].messages.value.splice(index, 1)
+					},
+				},
+				store[conversationId].messages.value.at(-1)?.createdAt,
+			)
+		})
 		store[conversationId] = {
 			messages: ref([]),
 			fetched: ref(false),
@@ -64,11 +64,7 @@ export const useMessages = (conversation: Conversation) => {
 		await store[conversationId].setError('')
 		try {
 			await store[conversationId].setLoading(true)
-			const c = await Logic.Conversations.GetMessages(conversationId, {
-				sort: [{ field: 'createdAt', desc: true }],
-				all: true,
-				// limit: CHAT_PAGINATION_LIMIT
-			})
+			const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
 			store[conversationId].hasMore.value = !!c.pages.next
 			c.results.map((c) =>
 				Logic.addToArray(
@@ -91,7 +87,7 @@ export const useMessages = (conversation: Conversation) => {
 	}
 
 	onMounted(async () => {
-		if (/* !store[conversationId].fetched.value &&  */ !store[conversationId].loading.value) await fetchMessages()
+		if (!store[conversationId].fetched.value && !store[conversationId].loading.value) await fetchMessages()
 		await store[conversationId].listener.start()
 	})
 	onUnmounted(async () => {
@@ -125,12 +121,14 @@ export const useMessages = (conversation: Conversation) => {
 	}
 }
 
-export const useMessage = (message: Message) => {
+export const useMessage = (message: MessageEntity) => {
+	const { id } = useAuth()
+
 	const markMessageRead = async () => {
-		await Logic.Conversations.MarkMessages(message.conversationId).catch()
+		await MessagesUseCases.markRead(message.conversationId).catch()
 	}
 	onMounted(async () => {
-		if (!message.readAt[Logic.Common.AuthUser?.id]) await markMessageRead()
+		if (!message.readAt[id.value]) await markMessageRead()
 	})
 	return { markMessageRead }
 }
@@ -145,7 +143,7 @@ export const useCreateMessage = (conversationId: string) => {
 		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true)
-				await Logic.Conversations.CreateMessage(conversationId, await factory.toModel())
+				await MessagesUseCases.add(conversationId, factory)
 				factory.reset()
 			} catch (error) {
 				await setError(error)

@@ -1,5 +1,8 @@
 <template>
-	<div v-chat-scroll class="w-full flex flex-col overflow-y-auto scrollbar-hide gap-4">
+	<div
+		v-chat-scroll
+		class="w-full flex flex-col overflow-y-auto scrollbar-hide gap-4"
+		@scroll-top="() => hasMore && fetchOlderMessages()">
 		<template v-for="message in messages" :key="message.hash">
 			<div
 				v-if="message.userId !== id"
@@ -35,44 +38,17 @@
 import { useAuth } from '@/composables/auth/auth'
 import { useMessages } from '@/composables/conversations/messages'
 import { ChatScroll as vChatScroll } from '@/directives/chat-scroll'
-import { Conversation } from 'sofa-logic'
+import { ConversationEntity } from '@modules/conversations'
 import { SofaAvatar, SofaNormalText } from 'sofa-ui-components'
 import { PropType, defineProps } from 'vue'
 
 const props = defineProps({
 	conversation: {
-		type: Object as PropType<Conversation>,
+		type: Object as PropType<ConversationEntity>,
 		required: true,
 	},
 })
 
 const { id } = useAuth()
-const { messages, users } = useMessages(props.conversation)
+const { messages, users, hasMore, fetchOlderMessages } = useMessages(props.conversation)
 </script>
-
-<style scoped>
-.loader span {
-	background: #3219af;
-	animation: loader 0.8s infinite alternate;
-}
-
-.loader span:nth-of-type(2) {
-	animation-delay: 0.2s;
-}
-
-.loader span:nth-of-type(3) {
-	animation-delay: 0.6s;
-}
-
-@keyframes loader {
-	0% {
-		opacity: 0.9;
-		transform: scale(0.5);
-	}
-
-	100% {
-		opacity: 0.1;
-		transform: scale(1);
-	}
-}
-</style>
