@@ -1,5 +1,5 @@
-import { QuestionEntity, QuestionFactory, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
-import { CreateQuizInput, Logic, Question } from 'sofa-logic'
+import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
+import { CreateQuizInput, Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -148,12 +148,12 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const addQuestion = async (type: Question['strippedData']['type']) => {
+	const addQuestion = async (type: QuestionTypes) => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			const data = Logic.Study.getQuestionTypeTemplate(type)
-			await Logic.Study.CreateQuestion(id, data)
+			const data = QuestionEntity.getQuestionTypeTemplate(type)
+			await QuestionsUseCases.add(id, data)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -176,9 +176,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			const factory = new QuestionFactory()
-			factory.loadEntity(question)
-			await QuestionsUseCases.add(id, factory)
+			await QuestionsUseCases.add(id, question)
 			await store[id].setMessage('Question duplicated')
 		} catch (e) {
 			await store[id].setError(e)
@@ -281,9 +279,10 @@ export const useCreateQuiz = () => {
 			const factory = new QuizFactory()
 			const quiz = await QuizzesUseCases.add(factory)
 			await Promise.all(
-				[Logic.Study.getQuestionTypeTemplate('multipleChoice'), Logic.Study.getQuestionTypeTemplate('trueOrFalse')].map((q) =>
-					Logic.Study.CreateQuestion(quiz.id, q),
-				),
+				[
+					QuestionEntity.getQuestionTypeTemplate(QuestionTypes.multipleChoice),
+					QuestionEntity.getQuestionTypeTemplate(QuestionTypes.trueOrFalse),
+				].map((q) => QuestionsUseCases.add(quiz.id, q)),
 			).catch()
 			await setLoading(false)
 			return quiz.id

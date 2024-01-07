@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 import { Paginated, QueryParams } from '../../logic/types'
-import { Question, Quiz } from '../../logic/types/domains/study'
+import { Quiz } from '../../logic/types/domains/study'
 import { CreateQuestionInput, ReorderQuizInput } from '../../logic/types/forms/study'
 import { ModelApiService } from '../common/ModelService'
 
@@ -37,7 +37,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async getQuestions(quizId: string, filters: QueryParams) {
 		try {
-			const response: AxiosResponse<Paginated<Question>> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions`, {
+			const response = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions`, {
 				params: filters,
 			})
 
@@ -51,7 +51,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async getQuestion(quizId: string, questionId: string) {
 		try {
-			const response: AxiosResponse<Question> = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions/${questionId}`)
+			const response = await this.axiosInstance.get(this.getUrl() + `/${quizId}/questions/${questionId}`)
 
 			return response
 		} catch (err) {
@@ -63,7 +63,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async createQuestion(quizId: string, data: CreateQuestionInput) {
 		try {
-			const response: AxiosResponse<Question> = await this.axiosInstance.post(this.getUrl() + `/${quizId}/questions`, data)
+			const response = await this.axiosInstance.post(this.getUrl() + `/${quizId}/questions`, data)
 
 			return response
 		} catch (err) {
@@ -99,10 +99,7 @@ export default class QuizzesApi extends ModelApiService {
 
 	public async updateQuestion(quizId: string, questionId, data: CreateQuestionInput) {
 		try {
-			const response: AxiosResponse<Question> = await this.axiosInstance.put(
-				this.getUrl() + `/${quizId}/questions/${questionId}`,
-				data,
-			)
+			const response = await this.axiosInstance.put(this.getUrl() + `/${quizId}/questions/${questionId}`, data)
 
 			return response
 		} catch (err) {

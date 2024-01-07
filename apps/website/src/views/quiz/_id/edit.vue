@@ -104,7 +104,7 @@
 						<SofaNormalText
 							class="!font-bold !text-sm"
 							:content="
-								showSettingModal ? 'Update quiz' : Logic.Study.getQuestionTypeLabel(extras.currentQuestionById?.type) ?? ''
+								showSettingModal ? 'Update quiz' : QuestionEntity.getQuestionTypeLabel(extras.currentQuestionById?.type)
 							" />
 
 						<div class="flex items-center gap-3" :class="{ invisible: showSettingModal }">
@@ -243,7 +243,7 @@
 					<div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
 						<a
 							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-skyBlue bg-[#F2F5F8] rounded-lg"
-							v-for="type in Logic.Study.getAllQuestionTypes()"
+							v-for="type in QuestionEntity.getAllQuestionTypes()"
 							:key="type.value"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
 							<SofaIcon :name="type.icon" class="h-[50px]" />
@@ -284,6 +284,7 @@ import {
 	SofaHeaderText,
 } from 'sofa-ui-components'
 import { Logic } from 'sofa-logic'
+import { QuestionEntity } from '@modules/study'
 import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
 import QuizSettings from '@/components/quizzes/Settings.vue'
 import RequestAccessModal from '@/components/quizzes/RequestAccessModal.vue'
@@ -333,6 +334,7 @@ export default defineComponent({
 		}
 
 		return {
+			QuestionEntity,
 			showAddQuestionModal,
 			showCurrentlyEditingModal,
 			showShareModal,

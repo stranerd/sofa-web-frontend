@@ -105,9 +105,6 @@ importers:
       sofa-modules:
         specifier: workspace:^
         version: link:../sofa-modules
-      string-similarity:
-        specifier: ^4.0.4
-        version: 4.0.4
       vue:
         specifier: ^3.3.11
         version: 3.3.11(typescript@4.9.5)

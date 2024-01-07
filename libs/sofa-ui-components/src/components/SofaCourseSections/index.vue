@@ -113,11 +113,12 @@
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
-import { Course, Logic, Question, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
-import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { Course, Logic, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export default defineComponent({
 	components: {
@@ -250,69 +251,43 @@ export default defineComponent({
 			}
 
 			if (quiz) {
-				Logic.Study.GetQuestions(quiz.id).then((response) => {
-					if (response) {
-						const questions: Question[] = response.results
-
-						const allQuestions = questions.map((eachQuestion) => {
-							let answers = ''
-
-							if (eachQuestion.data.type == 'multipleChoice') {
-								answers = eachQuestion.data.options[eachQuestion.data.answers[0]]
-							} else if (eachQuestion.data.type == 'trueOrFalse') {
-								answers = `${capitalize(eachQuestion.data.answer.toString())}`
-							} else if (
-								eachQuestion.data.type == 'writeAnswer' ||
-								eachQuestion.data.type == 'sequence' ||
-								eachQuestion.data.type == 'dragAnswers' ||
-								eachQuestion.data.type == 'fillInBlanks'
-							) {
-								answers = capitalize(eachQuestion.data.answers?.join(', '))
-							} else if (eachQuestion.data.type == 'match') {
-								answers = capitalize(
-									eachQuestion.data.set
-										.map((item) => {
-											return item.a
-										})
-										.join(', '),
-								)
-							}
-							return {
-								type: Logic.Study.getQuestionTypeLabel(eachQuestion.data.type),
-								duration: Logic.Common.prettifyTime(eachQuestion.timeLimit),
-								content: eachQuestion.question,
-								answer: answers,
-							}
-						})
-
-						staticSectionOptions.value[index].materials.push({
-							name: quiz.title,
-							id: quiz.id,
-							type: 'quiz-course',
-							details: {
-								image_url: quiz.photo?.link || '',
-								title: quiz.title,
-								type: 'Quiz',
-								questions: `${quiz.questions.length} questions`,
-								description: quiz.description,
-								ratings: {
-									avg: Math.round(quiz.ratings.avg),
-									label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? 's' : ''}`,
-								},
-								user: {
-									photoUrl: `${quiz.user.bio?.photo?.link}`,
-									name: `${quiz.user.bio?.name?.full}`,
-								},
-								last_updated: formatTime(quiz.createdAt),
-							},
-							original: quiz,
-							data: allQuestions,
-							hover: false,
-						})
-
-						if (save) {
-							addSectionMaterial(SingleQuiz.value.id, 'quiz')
+				QuestionsUseCases.getAllQuestions(quiz.id).then((questions) => {
+					const allQuestions = questions.results.map((q) => {
+						return {
+							type: QuestionEntity.getQuestionTypeLabel(q.data.type),
+							duration: Logic.Common.prettifyTime(q.timeLimit),
+							content: q.question,
+							answer: q.answer,
 						}
+					})
+
+					staticSectionOptions.value[index].materials.push({
+						name: quiz.title,
+						id: quiz.id,
+						type: 'quiz-course',
+						details: {
+							image_url: quiz.photo?.link || '',
+							title: quiz.title,
+							type: 'Quiz',
+							questions: `${quiz.questions.length} questions`,
+							description: quiz.description,
+							ratings: {
+								avg: Math.round(quiz.ratings.avg),
+								label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? 's' : ''}`,
+							},
+							user: {
+								photoUrl: `${quiz.user.bio?.photo?.link}`,
+								name: `${quiz.user.bio?.name?.full}`,
+							},
+							last_updated: formatTime(quiz.createdAt),
+						},
+						original: quiz,
+						data: allQuestions,
+						hover: false,
+					})
+
+					if (save) {
+						addSectionMaterial(SingleQuiz.value.id, 'quiz')
 					}
 				})
 			}

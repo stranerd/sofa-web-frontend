@@ -215,7 +215,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, QuestionFactory } from 'sofa-logic'
+import { QuestionFactory } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { PropType, defineProps, ref } from 'vue'
 import Draggable from 'vuedraggable'
 import SofaButton from '../SofaButton'

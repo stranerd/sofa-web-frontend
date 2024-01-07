@@ -2,9 +2,18 @@ import { BaseEntity, Media } from '@modules/core'
 import stringSimilarity from 'string-similarity'
 import { Differ, capitalize, stripHTML } from 'valleyed'
 import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
+import { questionTypes } from './questions-extras'
+
+const compare = (a: string, b: string, quality = 0.95) => {
+	return (
+		stringSimilarity.compareTwoStrings(
+			stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
+			stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
+		) >= quality
+	)
+}
 
 export class QuestionEntity extends BaseEntity {
-	static indicator = '----------'
 	public readonly id: string
 	public readonly userId: string
 	public readonly quizId: string
@@ -42,34 +51,25 @@ export class QuestionEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 
-	compare(a: string, b: string, quality = 0.95) {
-		return (
-			stringSimilarity.compareTwoStrings(
-				stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
-				stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
-			) >= quality
-		)
-	}
-
 	checkAnswer(answer: any): boolean {
 		if (this.data.type === QuestionTypes.multipleChoice) {
 			return Array.isArray(answer) && Differ.equal(answer.sort(), this.data.answers.sort())
 		} else if (this.data.type === QuestionTypes.trueOrFalse) {
 			return answer === this.data.answer
 		} else if (this.data.type === QuestionTypes.writeAnswer) {
-			return this.data.answers.some((a) => this.compare(a, answer))
+			return this.data.answers.some((a) => compare(a, answer))
 		} else if (this.data.type === QuestionTypes.fillInBlanks) {
 			const answers = this.data.answers
-			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i]))
+			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => compare(a, answers[i]))
 		} else if (this.data.type === QuestionTypes.dragAnswers) {
 			const answers = this.data.answers
-			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i], 1))
+			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => compare(a, answers[i], 1))
 		} else if (this.data.type === QuestionTypes.sequence) {
 			const answers = this.data.answers
-			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i], 1))
+			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => compare(a, answers[i], 1))
 		} else if (this.data.type === QuestionTypes.match) {
 			const questions = this.data.set
-			return Array.isArray(answer) && answer.length === questions.length && answer.every((a, i) => this.compare(a, questions[i].a, 1))
+			return Array.isArray(answer) && answer.length === questions.length && answer.every((a, i) => compare(a, questions[i].a, 1))
 		}
 		return false
 	}
@@ -137,6 +137,35 @@ export class QuestionEntity extends BaseEntity {
 			return this.data.answers.join('<br>')
 		if (this.data.type === QuestionTypes.match) return this.data.set.map((s) => s.a).join('<br>')
 		return ''
+	}
+
+	static getQuestionTypeLabel(type: QuestionTypes) {
+		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
+		return data.extras.label
+	}
+
+	static getQuestionTypeIcon(type: QuestionTypes) {
+		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
+		return data.extras.icon
+	}
+
+	static getQuestionTypeImage(type: QuestionTypes) {
+		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
+		return data.extras.image
+	}
+
+	static getQuestionTypeTemplate(type: QuestionTypes) {
+		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
+		return data.template
+	}
+
+	static getAllQuestionTypes() {
+		return Object.entries(questionTypes).map(([key, t]) => ({
+			label: t.extras.label,
+			value: key as QuestionTypes,
+			icon: t.extras.icon,
+			image: t.extras.image,
+		}))
 	}
 }
 

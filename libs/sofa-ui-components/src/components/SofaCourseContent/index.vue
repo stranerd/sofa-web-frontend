@@ -73,10 +73,11 @@
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
-import { ContentDetails, Course, Logic, Question, Quiz, SofaFile } from 'sofa-logic'
-import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { ContentDetails, Course, Logic, Quiz, SofaFile } from 'sofa-logic'
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export default defineComponent({
 	components: {
@@ -244,77 +245,51 @@ export default defineComponent({
 				if (!props.lockContent) {
 					allRequests.push(
 						new Promise((resolve) => {
-							Logic.Study.GetQuestions(quiz.id)
-								.then((response) => {
-									if (response) {
-										const questions: Question[] = response.results ?? []
-
-										const allQuestions = questions.map((eachQuestion) => {
-											let answers = ''
-
-											if (eachQuestion.data.type == 'multipleChoice') {
-												answers = eachQuestion.data.options[eachQuestion.data.answers[0]]
-											} else if (eachQuestion.data.type == 'trueOrFalse') {
-												answers = `${capitalize(eachQuestion.data.answer.toString())}`
-											} else if (
-												eachQuestion.data.type == 'writeAnswer' ||
-												eachQuestion.data.type == 'sequence' ||
-												eachQuestion.data.type == 'dragAnswers' ||
-												eachQuestion.data.type == 'fillInBlanks'
-											) {
-												answers = capitalize(eachQuestion.data.answers?.join(', '))
-											} else if (eachQuestion.data.type == 'match') {
-												answers = capitalize(
-													eachQuestion.data.set
-														.map((item) => {
-															return item.a
-														})
-														.join(', '),
-												)
-											}
-											return {
-												type: Logic.Study.getQuestionTypeLabel(eachQuestion.data.type),
-												duration: Logic.Common.prettifyTime(eachQuestion.timeLimit),
-												content: eachQuestion.question,
-												answer: answers,
-											}
-										})
-
-										const contentDetails = reactive<ContentDetails>(Logic.Study.contentDetails)
-
-										contentDetails.title = quiz.title
-										contentDetails.id = quiz.id
-										contentDetails.price = 0
-										contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.png'
-										contentDetails.info = quiz.description
-										contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
-										contentDetails.tags = quiz.tagIds.map((id) => {
-											return Logic.Study.GetTagName(id)
-										})
-										contentDetails.user.name = quiz.user.bio.name.full
-										contentDetails.user.photoUrl = quiz.user.bio.photo ? quiz.user.bio.photo.link : ''
-
-										contentDetails.content.materialsCount = quiz.questions.length
-
-										contentDetails.labels = {
-											color: 'purple',
-											main: 'Quiz',
-											sub: `${quiz.questions.length} question${quiz.questions.length > 1 ? 's' : ''}`,
+							QuestionsUseCases.getAllQuestions(quiz.id)
+								.then((questions) => {
+									const allQuestions = questions.results.map((q) => {
+										return {
+											type: QuestionEntity.getQuestionTypeLabel(q.data.type),
+											duration: Logic.Common.prettifyTime(q.timeLimit),
+											content: q.question,
+											answer: q.answer,
 										}
+									})
 
-										contentDetails.questions = allQuestions
+									const contentDetails = reactive<ContentDetails>(Logic.Study.contentDetails)
 
-										staticSectionOptions.value[index].materials.push({
-											name: quiz.title,
-											id: quiz.id,
-											type: 'quiz-course',
-											data: contentDetails,
-											original: quiz,
-											hover: false,
-										})
+									contentDetails.title = quiz.title
+									contentDetails.id = quiz.id
+									contentDetails.price = 0
+									contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.png'
+									contentDetails.info = quiz.description
+									contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
+									contentDetails.tags = quiz.tagIds.map((id) => {
+										return Logic.Study.GetTagName(id)
+									})
+									contentDetails.user.name = quiz.user.bio.name.full
+									contentDetails.user.photoUrl = quiz.user.bio.photo ? quiz.user.bio.photo.link : ''
 
-										resolve('')
+									contentDetails.content.materialsCount = quiz.questions.length
+
+									contentDetails.labels = {
+										color: 'purple',
+										main: 'Quiz',
+										sub: `${quiz.questions.length} question${quiz.questions.length > 1 ? 's' : ''}`,
 									}
+
+									contentDetails.questions = allQuestions
+
+									staticSectionOptions.value[index].materials.push({
+										name: quiz.title,
+										id: quiz.id,
+										type: 'quiz-course',
+										data: contentDetails,
+										original: quiz,
+										hover: false,
+									})
+
+									resolve('')
 								})
 								.catch(() => {
 									staticSectionOptions.value[index].materials.push({

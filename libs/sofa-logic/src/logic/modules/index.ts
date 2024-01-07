@@ -26,5 +26,3 @@ export const Logic = {
 	Users: new Users(),
 	Interactions: new Interactions(),
 }
-
-export type TransformedQuestion = ReturnType<(typeof study)['transformQuestion']>

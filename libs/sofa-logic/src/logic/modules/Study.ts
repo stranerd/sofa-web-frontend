@@ -1,25 +1,22 @@
 import { valleyed } from '@utils/commons'
-import stringSimilarity from 'string-similarity'
 import { reactive } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import { Course, Question, QuestionAnswer, Quiz, SofaFile } from '../types/domains/study'
+import { Course, Quiz, SofaFile } from '../types/domains/study'
 import { AddReviewInput, AddTagInput } from '../types/forms/common'
 import {
 	AddItemToCourseInput,
 	CreateCourseInput,
 	CreateDocumentInput,
-	CreateQuestionInput,
-	CreateQuizInput,
 	ReorderQuizInput,
 	UpdateCourseSectionsInput,
 } from '../types/forms/study'
 import Common from './Common'
 
-const { Differ, capitalize, stripHTML } = valleyed
+const { capitalize } = valleyed
 const wrap = (v: string) => `<p>${v}</p>`
 
 export default class Study extends Common {
@@ -34,8 +31,6 @@ export default class Study extends Common {
 	public AllQuzzies: Paginated<Quiz> | undefined
 	public TutorQuizzes: Paginated<Quiz> | undefined
 	public SingleQuiz: Quiz | undefined
-	public AllQuestions: Paginated<Question> | undefined
-	public SingleQuestion: Question | undefined
 	public AllCourses: Paginated<Course> | undefined
 	public PurchasedCourses: Paginated<Course> | undefined
 	public SingleCourse: Course | undefined
@@ -44,7 +39,6 @@ export default class Study extends Common {
 	public SingleMediaFile: FileData | undefined
 	public NewCoursableItem: any
 	public CoursableItemRemoved: any
-	public UpdatedQuestion: Question | undefined
 	public SingleCourseFiles: SofaFile[] | undefined
 	public SingleCourseQuizzes: Quiz[] | undefined
 	public SelectedMaterialDetails = reactive({
@@ -79,10 +73,6 @@ export default class Study extends Common {
 	// Form input
 	public CreateTagForm: AddTagInput | undefined
 	public UpdateTagForm: AddTagInput | undefined
-	public CreateQuizForm: CreateQuizInput | undefined
-	public UpdateQuizForm: CreateQuizInput | undefined
-	public CreateQuestionForm: CreateQuestionInput | undefined
-	public UpdateQuestionForm: CreateQuestionInput | undefined
 	public CreateCourseForm: CreateCourseInput | undefined
 	public UpdateCourseForm: CreateCourseInput | undefined
 	public CreateFileForm: CreateDocumentInput | undefined
@@ -146,167 +136,6 @@ export default class Study extends Common {
 		},
 		questions: [],
 	})
-
-	public getQuestionTypeLabel(type: Question['strippedData']['type']) {
-		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
-		return data.extras.label
-	}
-
-	public getQuestionTypeIcon(type: Question['strippedData']['type']) {
-		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
-		return data.extras.icon
-	}
-
-	public getQuestionTypeImage(type: Question['strippedData']['type']) {
-		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
-		return data.extras.image
-	}
-
-	public getQuestionTypeTemplate(type: Question['strippedData']['type']): CreateQuestionInput {
-		const data = this.questionTypes[type] ?? this.questionTypes['multipleChoice']
-		return data.template
-	}
-
-	public getAllQuestionTypes() {
-		return Object.entries(this.questionTypes).map(([key, t]) => ({
-			label: t.extras.label,
-			value: key as Question['strippedData']['type'],
-			icon: t.extras.icon,
-			image: t.extras.image,
-		}))
-	}
-
-	public indicator = '----------'
-
-	public questionTypes = {
-		multipleChoice: {
-			template: {
-				question: wrap('Enter question'),
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'multipleChoice' as const,
-					options: ['a', 'b', 'c', 'd'].map(wrap),
-					answers: [0, 1],
-				},
-			},
-			extras: {
-				label: 'Multiple choice',
-				image: 'multiple_choice',
-				icon: 'multiple-choice-type',
-			},
-		},
-		writeAnswer: {
-			template: {
-				question: wrap('Enter question'),
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'writeAnswer' as const,
-					answers: ['a', 'b'].map(wrap),
-				},
-			},
-			extras: {
-				label: 'Write answer',
-				image: 'write_answer',
-				icon: 'write-answer-type',
-			},
-		},
-		trueOrFalse: {
-			template: {
-				question: wrap('Enter question'),
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'trueOrFalse' as const,
-					answer: true,
-				},
-			},
-			extras: {
-				label: 'True/False',
-				icon: 'true-false-type',
-				image: 'true_false',
-			},
-		},
-		fillInBlanks: {
-			template: {
-				question: `Enter question ${this.indicator} and another ${this.indicator}`,
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'fillInBlanks' as const,
-					indicator: this.indicator,
-					answers: ['a', 'b'],
-				},
-			},
-			extras: {
-				label: 'Fill in blank(s)',
-				image: 'fill_in_blank',
-				icon: 'fill-in-blanks-type',
-			},
-		},
-		dragAnswers: {
-			template: {
-				question: `Enter question ${this.indicator} and another ${this.indicator}`,
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'dragAnswers' as const,
-					indicator: this.indicator,
-					answers: ['a', 'b'],
-				},
-			},
-			extras: {
-				label: 'Drag answers',
-				image: 'drag_answer',
-				icon: 'drag-answers-type',
-			},
-		},
-		sequence: {
-			template: {
-				question: wrap('Enter question'),
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'sequence' as const,
-					answers: ['a', 'b', 'c', 'd', 'e', 'f'].map(wrap),
-				},
-			},
-			extras: {
-				label: 'Sequence',
-				image: 'sequence',
-				icon: 'sequence-type',
-			},
-		},
-		match: {
-			template: {
-				question: wrap('Enter question'),
-				questionMedia: null,
-				timeLimit: 30,
-				explanation: '',
-				data: {
-					type: 'match' as const,
-					set: [
-						{ q: 'Left 1', a: 'Right 1' },
-						{ q: 'Left 2', a: 'Right 2' },
-						{ q: 'Left 3', a: 'Right 3' },
-						{ q: 'Left 4', a: 'Right 4' },
-					].map((s) => ({ q: wrap(s.q), a: wrap(s.a) })),
-				},
-			},
-			extras: {
-				label: 'Match',
-				image: 'match',
-				icon: 'match-type',
-			},
-		},
-	}
 
 	public GetTagName = (id: string) => {
 		const Tag = [...(this.Tags?.results || []), ...(this.AllTopics?.results || []), ...(this.AllOtherTags?.results || [])].filter(
@@ -391,110 +220,6 @@ export default class Study extends Common {
 		})
 	}
 
-	public GetQuestions = (quizId: string, filters: QueryParams = {}): Promise<Paginated<Question> | undefined> => {
-		if (!quizId || quizId == 'empty') return undefined
-		return $api.study.quiz
-			.getQuestions(quizId, filters)
-			.then((response) => {
-				this.AllQuestions = response.data
-				return this.AllQuestions
-			})
-			.catch(() => {
-				this.AllQuestions = undefined
-				return undefined
-			})
-	}
-
-	private compare(a: string, b: string, quality = 0.95) {
-		return (
-			stringSimilarity.compareTwoStrings(
-				stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
-				stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
-			) >= quality
-		)
-	}
-
-	checkAnswer(question: Question, answer: any): boolean {
-		if (!question.data) return false
-
-		if (question.data.type === 'multipleChoice') {
-			return Array.isArray(answer) && Differ.equal(answer.sort(), [...question.data.answers].sort())
-		} else if (question.data.type === 'trueOrFalse') {
-			return answer === question.data.answer
-		} else if (question.data.type === 'writeAnswer') {
-			return question.data.answers.some((a) => this.compare(a, answer))
-		} else if (question.data.type === 'fillInBlanks') {
-			const answers = question.data.answers
-			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i]))
-		} else if (question.data.type === 'dragAnswers') {
-			const answers = question.data.answers
-			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i], 1))
-		} else if (question.data.type === 'sequence') {
-			const answers = question.data.answers
-			return Array.isArray(answer) && answer.length === answers.length && answer.every((a, i) => this.compare(a, answers[i], 1))
-		} else if (question.data.type === 'match') {
-			const questions = question.data.set
-			return Array.isArray(answer) && answer.length === questions.length && answer.every((a, i) => this.compare(a, questions[i].a, 1))
-		}
-		return false
-	}
-
-	public transformQuestion(question: Question) {
-		const type = question.strippedData.type
-
-		return {
-			...question,
-			get type() {
-				return type
-			},
-			get instruction() {
-				if (type === 'multipleChoice') return 'Choose the right answer(s)'
-				if (type === 'writeAnswer') return 'Type your answer'
-				if (type === 'trueOrFalse') return 'Choose an answer'
-				if (type === 'fillInBlanks') return 'Fill in the gaps'
-				if (type === 'dragAnswers') return 'Drag answers'
-				if (type === 'sequence') return 'Drag to rearrange'
-				if (type === 'match') return 'Drag items on the right side to rearrange'
-				return ''
-			},
-			get splitQuestions() {
-				if (type === 'fillInBlanks' || type === 'dragAnswers') return question.question.split(question.strippedData.indicator)
-				return []
-			},
-			get defaultAnswer(): QuestionAnswer {
-				if (type === 'multipleChoice') return []
-				if (type === 'writeAnswer') return ''
-				if (type === 'trueOrFalse') return '' as unknown as boolean
-				if (type === 'fillInBlanks') return new Array(this.splitQuestions.length - 1).fill('')
-				if (type === 'dragAnswers') return []
-				if (type === 'sequence') return question.strippedData.answers
-				if (type === 'match') return this.matchAnswers
-				return undefined
-			},
-			get dragAnswers() {
-				if (type === 'dragAnswers') return question.strippedData.answers
-				return []
-			},
-			get matchQuestions() {
-				if (type === 'match') return question.strippedData.questions
-				return []
-			},
-			get matchAnswers() {
-				if (type === 'match') return question.strippedData.answers
-				return []
-			},
-			get answer() {
-				if (!question.data) return ''
-				if (type === 'multipleChoice') return question.data.answers.map((idx) => question.data.options[idx]).join('<br>')
-				if (type === 'writeAnswer') return question.data.answers.join('<br>-- or --<br>')
-				if (type === 'trueOrFalse') return capitalize(question.data.answer.toString())
-				if (['fillInBlanks', 'dragAnswers', 'sequence'].includes(type)) return question.data.answers.join('<br>')
-				if (type === 'match') return question.data.set.map((s) => s.a).join('<br>')
-				return ''
-			},
-		}
-	}
-
 	public getShape(index: number) {
 		const shapes = ['circle', 'triangle', 'square', 'kite']
 		return shapes[index % shapes.length]
@@ -506,12 +231,6 @@ export default class Study extends Common {
 		if (shape == 'square') return 'md:h-[23px] h-[20px]'
 		if (shape == 'kite') return 'md:h-[23px] h-[20px]'
 		return 'h-[23px]'
-	}
-
-	public GetQuestion = (quidId: string, questionId: string) => {
-		return $api.study.quiz.getQuestion(quidId, questionId).then((response) => {
-			this.SingleQuestion = response.data
-		})
 	}
 
 	public GetCourses = (filters: QueryParams, updateItems = true): Promise<Paginated<Course>> => {
@@ -901,20 +620,6 @@ export default class Study extends Common {
 		}
 	}
 
-	public CreateQuiz = (CreateQuizForm: CreateQuizInput) => {
-		return $api.study.quiz.post(null, CreateQuizForm).then((response) => {
-			this.SingleQuiz = response.data
-			return this.SingleQuiz
-		})
-	}
-
-	public UpdateQuiz = (id: string, UpdateQuizForm: CreateQuizInput) => {
-		return $api.study.quiz.put(null, id, UpdateQuizForm).then((response) => {
-			this.SingleQuiz = response.data
-			return response.data
-		})
-	}
-
 	public SaveCourseChangesToLocal = (UpdateCourseSections: UpdateCourseSectionsInput) => {
 		localStorage.setItem('couse_section_update', JSON.stringify(UpdateCourseSections))
 	}
@@ -954,20 +659,6 @@ export default class Study extends Common {
 		return $api.study.quiz.reorderQuiz(id, ReorderQuizQuestionsForm).then((response) => {
 			this.SingleQuiz = response.data
 			return this.SingleQuiz
-		})
-	}
-
-	public CreateQuestion = (quizId: string, CreateQuestionForm: CreateQuestionInput) => {
-		return $api.study.quiz.createQuestion(quizId, CreateQuestionForm).then((response) => {
-			this.SingleQuestion = response.data
-			return this.SingleQuestion
-		})
-	}
-
-	public UpdateQuestion = (quizId: string, questionId: string, UpdateQuestionForm: CreateQuestionInput) => {
-		return $api.study.quiz.updateQuestion(quizId, questionId, UpdateQuestionForm).then((response) => {
-			this.UpdatedQuestion = response.data
-			return this.UpdatedQuestion
 		})
 	}
 
