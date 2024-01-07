@@ -72,4 +72,12 @@ export class QuizzesUseCase {
 			(entity) => ids().includes(entity.id),
 		)
 	}
+
+	async getTutorQuizzes() {
+		return await this.repository.getTutors({ all: true })
+	}
+
+	async listenToTutorQuizzes(listener: Listeners<QuizEntity>) {
+		return await this.repository.listenToManyTutors({ all: true }, listener, () => true)
+	}
 }

@@ -42,6 +42,14 @@ export class QuizRepository implements IQuizRepository {
 		}
 	}
 
+	async getTutors(query: QueryParams) {
+		const d = await this.client.get<QueryParams, QueryResults<QuizFromModel>>('/tutors', query)
+		return {
+			...d,
+			results: d.results.map(this.mapper),
+		}
+	}
+
 	async listenToOne(id: string, listeners: Listeners<QuizEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
@@ -52,6 +60,12 @@ export class QuizRepository implements IQuizRepository {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
 		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
+	}
+
+	async listenToManyTutors(query: QueryParams, listeners: Listeners<QuizEntity>, matches: (entity: QuizEntity) => boolean) {
+		const models = await this.get(query)
+		await Promise.all(models.results.map(listeners.updated))
+		return await listenToMany(`${this.client.socketPath}/tutors`, listeners, this.mapper, matches)
 	}
 
 	async delete(id: string) {

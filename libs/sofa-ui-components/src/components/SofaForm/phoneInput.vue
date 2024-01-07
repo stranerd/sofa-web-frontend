@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Phone } from 'sofa-logic'
+import { Phone } from '@modules/auth'
 import { defineEmits, defineProps, PropType, ref } from 'vue'
 import { VueTelInput } from 'vue-tel-input'
 

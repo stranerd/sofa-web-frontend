@@ -128,6 +128,7 @@ import { otherTasks } from '@/composables/quiz'
 import { useHasAccess } from '@/composables/study/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
+import { QuestionsUseCases } from 'sofa-modules/src/modules/study'
 import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -184,18 +185,6 @@ export default defineComponent({
 				property: 'AllReviews',
 				method: 'GetReviews',
 				params: ['quizzes'],
-				useRouteId: true,
-				ignoreProperty: true,
-				condition: {
-					routeSearchItem: 'fullPath',
-					searchQuery: 'quiz',
-				},
-			},
-			{
-				domain: 'Study',
-				property: 'AllQuestions',
-				method: 'GetQuestions',
-				params: [],
 				useRouteId: true,
 				ignoreProperty: true,
 				condition: {
@@ -280,7 +269,6 @@ export default defineComponent({
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
 
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
-		const AllQuestions = ref(Logic.Study.AllQuestions)
 
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
 
@@ -448,12 +436,14 @@ export default defineComponent({
 				})
 
 				contentDetails.questions.length = 0
-				AllQuestions.value?.results.forEach((question) => {
-					contentDetails.questions.push({
-						type: question.type,
-						content: question.question,
-						duration: Logic.Common.prettifyTime(question.timeLimit),
-						answer: '',
+				QuestionsUseCases.getAllQuestions(SingleQuiz.value.id).then((questions) => {
+					questions.results.forEach((question) => {
+						contentDetails.questions.push({
+							type: question.type,
+							content: question.question,
+							duration: Logic.Common.prettifyTime(question.timeLimit),
+							answer: '',
+						})
 					})
 				})
 			}

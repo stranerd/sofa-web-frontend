@@ -17,7 +17,6 @@ import {
 import Common from './Common'
 
 const { capitalize } = valleyed
-const wrap = (v: string) => `<p>${v}</p>`
 
 export default class Study extends Common {
 	constructor() {
@@ -192,23 +191,10 @@ export default class Study extends Common {
 			})
 	}
 
-	public GetTag = (id: string) => {
-		return $api.interactions.tag.get(id).then((response) => {
-			this.SingleTag = response.data
-		})
-	}
-
 	public GetQuizzes = (filters: QueryParams, updateItems = true): Promise<Paginated<Quiz>> => {
 		return $api.study.quiz.fetch(filters).then((response) => {
 			if (updateItems) this.AllQuzzies = response.data
 			return response.data
-		})
-	}
-
-	public GetTutorQuizzes = (filters: QueryParams) => {
-		return $api.study.quiz.tutorQuizzes(filters).then((response) => {
-			this.TutorQuizzes = response.data
-			return this.TutorQuizzes
 		})
 	}
 

@@ -1,8 +1,7 @@
+import { CourseEntity, QuizEntity } from '@modules/study'
 import { Course, Game, Logic, PlayStatus, Quiz, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
 import { selectedQuiz, selectedQuizMode } from './quiz'
-
-const AllQuzzies = ref(Logic.Study.AllQuzzies)
 
 const showStudyMode = ref(false)
 
@@ -22,7 +21,7 @@ export const saveToFolder = (activity: { id: string; type: string }) => {
 	selectedFolderMaterailToAdd.value = activity
 }
 
-export const createQuizData = (quiz: Quiz): ResourceType => {
+const createQuizData = (quiz: Quiz): ResourceType => {
 	return {
 		original: quiz,
 		title: quiz.title,
@@ -47,7 +46,7 @@ export const createQuizData = (quiz: Quiz): ResourceType => {
 	}
 }
 
-export const createCourseData = (course: Course): ResourceType => {
+const createCourseData = (course: Course): ResourceType => {
 	return {
 		original: course,
 		title: course.title,
@@ -73,12 +72,13 @@ export const createCourseData = (course: Course): ResourceType => {
 	}
 }
 
-export const extractResource = (material: Course | Quiz) => {
-	if (material.__type === 'QuizEntity') return createQuizData(material)
-	return createCourseData(material)
+export const extractResource = (material: Course | CourseEntity | Quiz | QuizEntity) => {
+	const m = material as any
+	if (m.__type === 'QuizEntity' || m instanceof QuizEntity) return createQuizData(m)
+	return createCourseData(m)
 }
 
-export const createGameData = (p: Game, quizzes: Quiz[]) => {
+export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
 	const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
@@ -100,7 +100,7 @@ export const createGameData = (p: Game, quizzes: Quiz[]) => {
 	}
 }
 
-export const createTestData = (p: Test, quizzes: Quiz[]) => {
+export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
 	const userCorrectAnswers = (p.scores[Logic.Common.AuthUser.id] ?? 0) / 10
@@ -216,7 +216,6 @@ const moreOptions = reactive([
 ])
 
 export {
-	AllQuzzies,
 	moreOptions,
 	openCourse,
 	openQuiz,

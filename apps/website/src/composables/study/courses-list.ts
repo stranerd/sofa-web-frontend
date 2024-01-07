@@ -1,4 +1,5 @@
-import { Conditions, Course, Logic } from 'sofa-logic'
+import { CourseEntity, CoursesUseCases } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useItemsInList } from '../core/hooks'
@@ -7,37 +8,33 @@ import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useMyPurchases } from '../payment/purchases'
 
 const store = {
-	courses: ref<Course[]>([]),
+	courses: ref<CourseEntity[]>([]),
 	fetched: ref(false),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Course>(
-			'study/courses',
-			{
-				created: async (entity) => {
-					Logic.addToArray(
-						store.courses.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					Logic.addToArray(
-						store.courses.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					store.courses.value = store.courses.value.filter((m) => m.id !== entity.id)
-				},
+		return CoursesUseCases.listenToUserCourses(id.value, {
+			created: async (entity) => {
+				Logic.addToArray(
+					store.courses.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
 			},
-			(e) => e.user.id === id.value,
-		)
+			updated: async (entity) => {
+				Logic.addToArray(
+					store.courses.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			deleted: async (entity) => {
+				store.courses.value = store.courses.value.filter((m) => m.id !== entity.id)
+			},
+		})
 	}),
 }
 
@@ -48,10 +45,7 @@ export const useMyCourses = () => {
 		try {
 			await store.setError('')
 			await store.setLoading(true)
-			const courses = await Logic.Study.GetCourses({
-				where: [{ field: 'user.id', value: id.value }],
-				all: true,
-			})
+			const courses = await CoursesUseCases.getUserCourses(id.value)
 			courses.results.forEach((r) =>
 				Logic.addToArray(
 					store.courses.value,
@@ -91,26 +85,16 @@ export const useMyPurchasedCourses = () => {
 export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 	const allCourses = computed(() => [...store.courses.value])
 
-	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, async (notFetched: string[]) => {
-		const courses = await Logic.Study.GetCourses({
-			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
-			all: true,
-		})
-		return courses.results
-	})
+	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, CoursesUseCases.getInList)
 
 	const listener = useListener(async () => {
-		return await Logic.Common.listenToMany<Course>(
-			'study/courses',
-			{
-				created: addToList,
-				updated: addToList,
-				deleted: () => {
-					/* */
-				},
+		return await CoursesUseCases.listenToInList(() => ids.value, {
+			created: addToList,
+			updated: addToList,
+			deleted: () => {
+				/* */
 			},
-			(e) => ids.value.includes(e.id),
-		)
+		})
 	})
 
 	onMounted(() => {

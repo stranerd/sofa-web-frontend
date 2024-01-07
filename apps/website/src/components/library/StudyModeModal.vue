@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { AllQuzzies, moreOptions, openQuiz, showMoreOptionHandler, showMoreOptions, showStudyMode } from '@/composables/library'
+import { moreOptions, openQuiz, showMoreOptionHandler, showMoreOptions, showStudyMode } from '@/composables/library'
 import { createQuizGame, otherTasks, selectedQuiz, selectedQuizMode, userIsParticipating } from '@/composables/quiz'
 import { useHasAccess } from '@/composables/study/study'
 import { Logic } from 'sofa-logic'
@@ -91,7 +91,6 @@ export default defineComponent({
 			selectedQuizMode,
 			userIsParticipating,
 			createQuizGame,
-			AllQuzzies,
 			showMoreOptionHandler,
 			showMoreOptions,
 			moreOptions,
