@@ -155,7 +155,7 @@
 				<div class="w-full flex flex-col items-start gap-4 bg-white p-4">
 					<div class="flex w-full items-center gap-2 justify-between">
 						<div class="flex items-center gap-1">
-							<sofa-icon class="h-[24px]" :name="'add-tutor-purple'" />
+							<sofa-icon class="h-[24px]" :name="'add-tutor-white'" :custom-class="'fill-primaryPurple'" />
 							<SofaHeaderText class="!font-bold !text-primaryPurple" content="Tutor help" />
 						</div>
 						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
