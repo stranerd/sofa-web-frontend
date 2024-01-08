@@ -1,5 +1,5 @@
 import { QueryParams } from '@modules/core'
-import { ClassToModel } from '../../data/models/classes'
+import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
 
 export class ClassesUseCase {
@@ -9,8 +9,12 @@ export class ClassesUseCase {
 		this.repository = repository
 	}
 
-	async add(data: ClassToModel) {
-		return await this.repository(data.organizationId).add(data)
+	async add(organizationId: string, factory: ClassFactory) {
+		return await this.repository(organizationId).add(await factory.toModel())
+	}
+
+	async update(organizationId: string, id: string, factory: ClassFactory) {
+		return await this.repository(organizationId).update(id, await factory.toModel())
 	}
 
 	async delete(data: { id: string; organizationId: string }) {
