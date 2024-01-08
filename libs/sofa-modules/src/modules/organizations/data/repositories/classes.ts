@@ -4,16 +4,17 @@ import { IClassRepository } from '../../domain/irepositories/classes'
 import { ClassFromModel, ClassToModel } from '../models/classes'
 
 export class ClassRepository implements IClassRepository {
-	private static instances: Record<string, ClassRepository> = {}
+	private static instance: ClassRepository
 	private client: HttpClient
 	private mapper = (model: ClassFromModel | null) => (model ? new ClassEntity(model) : null)
 
-	private constructor(organizationId: string) {
-		this.client = new HttpClient(`/organizations/${organizationId}/classes`)
+	private constructor() {
+		this.client = new HttpClient('/organizations/classes')
 	}
 
-	static getInstance(organizationId: string) {
-		return (ClassRepository.instances[organizationId] ??= new ClassRepository(organizationId))
+	static getInstance() {
+		if (!ClassRepository.instance) ClassRepository.instance = new ClassRepository()
+		return ClassRepository.instance
 	}
 
 	async get(query: QueryParams) {
