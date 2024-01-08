@@ -127,7 +127,7 @@ import {
 	SofaButton,
 	SofaHeaderText,
 	SofaIcon,
-	SofaModal,
+	SofaModal2 as SofaModal,
 	SofaNormalText,
 	SofaSelect,
 	SofaTextField,
