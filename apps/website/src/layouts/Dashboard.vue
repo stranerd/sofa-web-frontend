@@ -17,13 +17,14 @@
 		</div>
 
 		<div
-			class="flex-1 mdlg:overflow-y-auto mdlg:!py-5 mdlg:px-0 gap-2 flex flex-col lg:text-sm mdlg:text-[12px] text-xs"
+			class="flex-1 mdlg:overflow-y-auto mdlg:py-5 mdlg:px-0 gap-2 flex flex-col lg:text-sm mdlg:text-[12px] text-xs"
 			:class="{
 				[bgColor]: true,
 				'px-4 w-full mdlg:w-auto': wrap,
 				'overflow-y-auto': !wrap,
 				'mdlg:gap-5': !hide.bottom,
 				'mdlg:gap-0': hide.bottom,
+				'!pb-0': noBottomPadding,
 			}">
 			<slot name="middle-session" />
 		</div>
@@ -73,6 +74,10 @@ defineProps({
 		default: '',
 	},
 	wrap: {
+		type: Boolean,
+		default: false,
+	},
+	noBottomPadding: {
 		type: Boolean,
 		default: false,
 	},

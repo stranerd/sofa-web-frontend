@@ -62,8 +62,8 @@
 				v-if="conversation.user.id === id && !conversation.tutor"
 				class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
 				<div class="w-full flex flex-row gap-2 items-center justify-start">
-					<sofa-icon :custom-class="'h-[24px]'" :name="'add-tutor-white'" />
-					<sofa-normal-text :color="'text-white'" :custom-class="'!text-base !font-bold'"> Tutor help </sofa-normal-text>
+					<sofa-icon class="h-[24px] fill-white" name="add-tutor" />
+					<sofa-normal-text :color="'text-white'" :custom-class="'!text-base !font-bold'" content="Tutor help" />
 				</div>
 				<sofa-normal-text :custom-class="'text-left'" :color="'text-darkLightGray'">
 					Need extra help with your work?
@@ -105,68 +105,62 @@
 		</template>
 
 		<!-- More options for smaller screens -->
-		<sofa-modal v-if="showMoreOptions" :close="() => (showMoreOptions = false)" :custom-class="`mdlg:!hidden`">
-			<div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => (showMoreOptions = false)">
-				<div class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
-					<router-link
-						v-if="conversation.user.id === id"
-						to="/chats/new"
-						class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
-						<sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
-						<sofa-normal-text :color="'text-primaryPink'"> New chat </sofa-normal-text>
-					</router-link>
+		<SofaModal
+			v-if="showMoreOptions && !Logic.Common.isLarge"
+			:close="() => (showMoreOptions = false)"
+			max-width="w-[80%] md:w-[60%] ml-auto">
+			<div class="flex flex-col gap-4 relative overflow-y-auto h-full">
+				<router-link
+					v-if="conversation.user.id === id"
+					to="/chats/new"
+					class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
+					<sofa-icon :name="'box-add-pink'" class="h-[17px]" />
+					<sofa-normal-text :color="'text-primaryPink'" content="New chat" />
+				</router-link>
 
-					<div class="w-full flex flex-col gap-2">
-						<ChatList :custom-class="'!rounded-none'" :extra-style="'px-3'" />
-					</div>
+				<ChatList :custom-class="'!rounded-none'" :extra-style="'px-3'" />
 
-					<div
-						v-if="conversation.user.id === id"
-						class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-lightGray flex flex-col gap-4">
-						<a
-							v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
-							class="w-full flex items-center justify-start gap-2 text-primaryRed"
-							@click="onClickEndSession">
-							<SofaIcon class="h-[16px] fill-current" name="tutor" />
-							<SofaNormalText color="text-inherit" content="End conversation" />
-						</a>
-						<a
-							v-else-if="!conversation.tutor"
-							class="w-full flex items-center justify-start gap-2 text-primaryGreen"
-							@click="onClickAddTutor">
-							<SofaIcon class="h-[16px] fill-current" name="tutor" />
-							<SofaNormalText color="text-inherit" content="Message a tutor" />
-						</a>
-						<a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
-							<SofaIcon class="h-[16px]" name="trash" />
-							<SofaNormalText color="text-primaryRed" content="Delete conversation" />
-						</a>
-					</div>
+				<div
+					v-if="conversation.user.id === id"
+					class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-lightGray flex flex-col gap-4">
+					<a
+						v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
+						class="w-full flex items-center justify-start gap-2 text-primaryRed"
+						@click="onClickEndSession">
+						<SofaIcon class="h-[16px] fill-current" name="tutor" />
+						<SofaNormalText color="text-inherit" content="End conversation" />
+					</a>
+					<a
+						v-else-if="!conversation.tutor"
+						class="w-full flex items-center justify-start gap-2 text-primaryGreen"
+						@click="onClickAddTutor">
+						<SofaIcon class="h-[16px] fill-current" name="tutor" />
+						<SofaNormalText color="text-inherit" content="Message a tutor" />
+					</a>
+					<a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
+						<SofaIcon class="h-[16px]" name="trash" />
+						<SofaNormalText color="text-primaryRed" content="Delete conversation" />
+					</a>
 				</div>
 			</div>
-		</sofa-modal>
+		</SofaModal>
 
 		<!-- Tutor help mobile popup -->
-		<sofa-modal-2
-			v-if="showAddTutorModalConfirmation"
-			:close="() => (showAddTutorModalConfirmation = false)"
-			:custom-class="`mdlg:!hidden`">
-			<div class="flex lex-col items-center">
-				<div class="w-full flex flex-col items-start gap-4 bg-white p-4">
-					<div class="flex w-full items-center gap-2 justify-between">
-						<div class="flex items-center gap-1">
-							<sofa-icon class="h-[24px]" :name="'add-tutor-white'" :custom-class="'fill-primaryPurple'" />
-							<SofaHeaderText class="!font-bold !text-primaryPurple" content="Tutor help" />
-						</div>
-						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
+		<SofaModal v-if="showAddTutorModalConfirmation && !Logic.Common.isLarge" :close="() => (showAddTutorModalConfirmation = false)">
+			<div class="w-full flex flex-col items-start gap-4 p-4">
+				<div class="flex w-full items-center gap-2 justify-between">
+					<div class="flex items-center gap-1">
+						<SofaIcon class="h-[24px] fill-primaryPurple" name="add-tutor" />
+						<SofaHeaderText class="!font-bold !text-primaryPurple" content="Tutor help" />
 					</div>
-					<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
-					<sofa-button :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="onClickAddTutor">
-						Add a tutor
-					</sofa-button>
+					<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
 				</div>
+				<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
+				<sofa-button :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="onClickAddTutor">
+					Add a tutor
+				</sofa-button>
 			</div>
-		</sofa-modal-2>
+		</SofaModal>
 
 		<AddTutor v-if="showAddTutor" @close="showAddTutor = false" />
 
@@ -191,7 +185,7 @@ import { useAuth } from '@/composables/auth/auth'
 import { useConversation } from '@/composables/conversations/conversations'
 import { useCreateMessage } from '@/composables/conversations/messages'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaModal2 } from 'sofa-ui-components'
+import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
@@ -211,7 +205,6 @@ export default defineComponent({
 		SofaHeaderText,
 		RateAndReviewModal,
 		ConversationMessages,
-		SofaModal2,
 	},
 	middlewares: { goBackRoute: '/chats' },
 	setup() {
@@ -279,6 +272,7 @@ export default defineComponent({
 			id,
 			user,
 			userAi,
+			Logic,
 			factory,
 			createMessage,
 			conversation,
