@@ -52,8 +52,8 @@ export const content = {
 }
 
 export default defineComponent({
-	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText, SofaHeaderText },
 	name: 'ChatsNewPage',
+	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText, SofaHeaderText },
 	middlewares: { goBackRoute: '/' },
 	setup() {
 		useMeta({
