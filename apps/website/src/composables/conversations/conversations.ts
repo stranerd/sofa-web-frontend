@@ -1,4 +1,5 @@
-import { Conversation, ConversationFactory, Logic } from 'sofa-logic'
+import { ConversationEntity, ConversationFactory, ConversationsUseCases } from '@modules/conversations'
+import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -6,12 +7,12 @@ import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
 
 const store = {
-	conversations: ref<Conversation[]>([]),
+	conversations: ref<ConversationEntity[]>([]),
 	fetched: ref(false),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
-		return Logic.Common.listenToMany<Conversation>('conversations/conversations', {
+		return await ConversationsUseCases.listenToAll({
 			created: async (entity) => {
 				Logic.addToArray(
 					store.conversations.value,
@@ -42,7 +43,7 @@ export const useConversationsList = () => {
 		try {
 			await store.setError('')
 			await store.setLoading(true)
-			const conversations = await Logic.Conversations.GetConversations({ all: true })
+			const conversations = await ConversationsUseCases.getAll()
 			conversations.results.forEach((r) =>
 				Logic.addToArray(
 					store.conversations.value,
@@ -59,7 +60,7 @@ export const useConversationsList = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchConversations()
+		if (!store.fetched.value && !store.loading.value) await fetchConversations()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -91,7 +92,7 @@ export const useConversation = (id: string) => {
 		error.setError('')
 		loading.setLoading(true)
 		try {
-			await Logic.Conversations.end(id, reviewData)
+			await ConversationsUseCases.end(id, reviewData)
 			await setMessage('Conversation has ended')
 			await Logic.Common.GoToRoute('/chats')
 		} catch (e) {
@@ -111,7 +112,7 @@ export const useConversation = (id: string) => {
 		error.setError('')
 		loading.setLoading(true)
 		try {
-			await Logic.Conversations.DeleteConversation(id)
+			await ConversationsUseCases.delete(id)
 			await setMessage('Conversation deleted')
 			await Logic.Common.GoToRoute('/chats')
 		} catch (e) {
@@ -127,7 +128,7 @@ export const useConversation = (id: string) => {
 		try {
 			const conv = conversation.value
 			if (!conv || !conv.pending || conv.tutor.id !== authId.value) return
-			await Logic.Conversations.accept(id, accepted)
+			await ConversationsUseCases.accept(id, accepted)
 			await setMessage(`Request has been ${accepted ? 'accepted' : 'rejected'} successfully`)
 			if (accepted) await router.push(`/chats/${id}`)
 			else await router.push('/chats')
@@ -151,8 +152,7 @@ export const useCreateConversation = () => {
 		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true)
-				const data = await factory.toModel()
-				const conversation = await Logic.Conversations.CreateConversation(data)
+				const conversation = await ConversationsUseCases.add(factory)
 				factory.reset()
 				await router.push(`/chats/${conversation.id}`)
 				if (conversation.tutor)

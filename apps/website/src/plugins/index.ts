@@ -14,7 +14,7 @@ type PluginFunction = (args: { app: App; router: Router }) => Promise<void>
 const definePlugin = (plugin: PluginFunction) => plugin
 
 const registerLayouts = definePlugin(async ({ app }) => {
-	app.component('dashboard-layout', DashboardLayout)
+	app.component('DashboardLayout', DashboardLayout)
 		.component('expanded-layout', ExpandedLayout)
 		.component('sub-page-layout', SubPageLayout)
 		.component('auth-layout', AuthLayout)

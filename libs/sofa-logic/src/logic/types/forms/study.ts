@@ -1,46 +1,5 @@
-import { FileData } from '../domains'
-
-export interface CreateFolderInput {
-	title: string
-}
-
-export interface SaveItemToFolderInput {
-	type: string
-	propIds: string[]
-	add: boolean
-	id: string
-}
-
-export interface CreateQuizInput {
-	title: string
-	description: string
-	photo: FileData | null
-	isForTutors: boolean
-	topic: string
-	tags: string[]
-	courseId: string | null
-}
-
 export interface ReorderQuizInput {
 	questions: string[]
-}
-
-export interface CreateQuestionInput {
-	question: string
-	questionMedia: FileData | null
-	timeLimit: number
-	data: {
-		type: 'multipleChoice' | 'writeAnswer' | 'trueOrFalse' | 'fillInBlanks' | 'dragAnswers' | 'sequence' | 'match'
-		options?: string[]
-		answers?: any[]
-		indicator?: string
-		answer?: boolean
-		set?: {
-			q: string
-			a: string
-		}[]
-	}
-	explanation: string
 }
 
 export interface CreateCourseInput {

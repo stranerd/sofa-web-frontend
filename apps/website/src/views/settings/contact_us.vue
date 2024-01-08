@@ -11,11 +11,11 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'ContactUsSettingPage',
 	components: {
 		SettingsLayout,
 		SettingContact,
 	},
-	name: 'ContactUsSettingPage',
 	middlewares: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({

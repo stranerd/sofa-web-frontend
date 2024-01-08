@@ -1,67 +1,67 @@
 <template>
 	<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 		<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-			<sofa-header-text :size="'xl'" :customClass="'text-left'"> Wallet </sofa-header-text>
+			<sofa-header-text :size="'xl'" :custom-class="'text-left'"> Wallet </sofa-header-text>
 
 			<div class="w-full flex flex-col gap-1">
 				<div class="flex flex-row items-center gap-2">
 					<sofa-normal-text>Balance</sofa-normal-text>
 					<sofa-icon
-						:customClass="`${showMoney ? 'h-[10px]' : 'h-[15px]'} cursor-pointer`"
+						:custom-class="`${showMoney ? 'h-[10px]' : 'h-[15px]'} cursor-pointer`"
 						:name="showMoney ? 'hide' : 'show'"
 						@click="showMoney ? (showMoney = false) : (showMoney = true)" />
 				</div>
 
 				<div class="w-full flex flex-col items-left">
-					<sofa-header-text :customClass="'text-left mdlg:!text-3xl !text-2xl'">
+					<sofa-header-text :custom-class="'text-left mdlg:!text-3xl !text-2xl'">
 						{{ showMoney ? Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency) : '****' }}
 					</sofa-header-text>
 				</div>
 
 				<div class="mt-3 grid grid-cols-2 gap-3 pt-4">
 					<div
-						@click="showFundWallet()"
-						class="col-span-1 flex flex-row items-center py-3 px-3 gap-2 cursor-pointer rounded-custom justify-center border-2 border-darkLightGray">
-						<sofa-icon :customClass="'h-[16px]'" :name="'fund-wallet'" />
-						<sofa-normal-text :customClass="'text-grayColor'">Fund wallet</sofa-normal-text>
+						class="col-span-1 flex flex-row items-center py-3 px-3 gap-2 cursor-pointer rounded-custom justify-center border-2 border-darkLightGray"
+						@click="showFundWallet()">
+						<sofa-icon :custom-class="'h-[16px]'" :name="'fund-wallet'" />
+						<sofa-normal-text :custom-class="'text-grayColor'">Fund wallet</sofa-normal-text>
 					</div>
 
 					<div
-						@click="showWalletWithdraw()"
-						class="col-span-1 flex flex-row items-center py-3 px-3 gap-2 rounded-custom cursor-pointer justify-center border-2 border-darkLightGray">
-						<sofa-icon :customClass="'h-[16px]'" :name="'withdraw-wallet'" />
-						<sofa-normal-text :customClass="'text-grayColor'">Withdraw</sofa-normal-text>
+						class="col-span-1 flex flex-row items-center py-3 px-3 gap-2 rounded-custom cursor-pointer justify-center border-2 border-darkLightGray"
+						@click="showWalletWithdraw()">
+						<sofa-icon :custom-class="'h-[16px]'" :name="'withdraw-wallet'" />
+						<sofa-normal-text :custom-class="'text-grayColor'">Withdraw</sofa-normal-text>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom pb-7">
-			<sofa-header-text :size="'xl'" :customClass="'text-left'"> Payment method </sofa-header-text>
+			<sofa-header-text :size="'xl'" :custom-class="'text-left'"> Payment method </sofa-header-text>
 
 			<a class="w-full flex flex-row items-center gap-3 p-3" @click="Logic.Payment.initialPayment()">
-				<sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
+				<sofa-icon :custom-class="'h-[18px]'" :name="'add-card'" />
 				<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
 			</a>
 
 			<div
-				:class="`w-full flex flex-row items-center gap-3 p-3 border-2 border-darkLightGray justify-between rounded-custom`"
 				v-for="(method, index) in PaymentMethods.results"
-				:key="index">
+				:key="index"
+				:class="`w-full flex flex-row items-center gap-3 p-3 border-2 border-darkLightGray justify-between rounded-custom`">
 				<div class="flex flex-row items-center gap-3">
-					<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
+					<sofa-icon :custom-class="'h-[20px]'" :name="'card'" />
 					<sofa-normal-text> **** **** **** {{ method.data.last4Digits }} </sofa-normal-text>
 				</div>
 
 				<div class="flex flex-row items-center gap-4">
-					<span class="px-4 py-1 bg-primaryGreen rounded-[14px] cursor-pointer" v-if="method.primary">
-						<sofa-normal-text :color="'text-white'" :customClass="'!text-xs'">Primary</sofa-normal-text>
+					<span v-if="method.primary" class="px-4 py-1 bg-primaryGreen rounded-[14px] cursor-pointer">
+						<sofa-normal-text :color="'text-white'" :custom-class="'!text-xs'">Primary</sofa-normal-text>
 					</span>
-					<a class="px-4 py-1 bg-primaryPurple rounded-[14px]" v-else @click="Logic.Payment.MakeMethodPrimary(method.id)">
-						<sofa-normal-text :color="'text-white'" :customClass="'!text-xs'">Set as primary</sofa-normal-text>
+					<a v-else class="px-4 py-1 bg-primaryPurple rounded-[14px]" @click="Logic.Payment.MakeMethodPrimary(method.id)">
+						<sofa-normal-text :color="'text-white'" :custom-class="'!text-xs'">Set as primary</sofa-normal-text>
 					</a>
 					<sofa-icon
-						:customClass="'h-[20px] cursor-pointer'"
+						:custom-class="'h-[20px] cursor-pointer'"
 						:name="'remove'"
 						@click="
 							() => {
@@ -75,22 +75,22 @@
 
 		<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 			<div class="w-full flex flex-row items-center justify-between border-b border-lightGray pb-2">
-				<sofa-header-text :size="'xl'" :customClass="'text-left'"> Transaction history </sofa-header-text>
+				<sofa-header-text :size="'xl'" :custom-class="'text-left'"> Transaction history </sofa-header-text>
 
-				<sofa-icon :customClass="'h-[20px]'" :name="'calendar'" />
+				<sofa-icon :custom-class="'h-[20px]'" :name="'calendar'" />
 			</div>
 
-			<div class="w-full flex flex-col gap-2" v-if="transactions.length">
+			<div v-if="transactions.length" class="w-full flex flex-col gap-2">
 				<a
 					v-for="(transaction, index) in transactions"
 					:key="index"
 					:class="`w-full flex flex-col gap-1 pb-2 ${index != transactions.length - 1 ? 'border-b border-lightGray' : ''}`"
 					@click="showTransactionInfo(transaction.data)">
 					<div class="w-full flex flex-row items-center justify-between">
-						<sofa-normal-text :customClass="'text-left'">
+						<sofa-normal-text :custom-class="'text-left'">
 							{{ transaction.title }}
 						</sofa-normal-text>
-						<sofa-normal-text :customClass="'!font-bold'" :color="getTransactionColor(transaction)">
+						<sofa-normal-text :custom-class="'!font-bold'" :color="getTransactionColor(transaction)">
 							{{ Logic.Common.formatPrice(transaction.amount, transaction.currency) }}
 						</sofa-normal-text>
 					</div>
@@ -101,14 +101,14 @@
 					</div>
 				</a>
 				<div
-					class="w-full flex flex-row items-center justify-center border-t border-lightGray pt-3 cursor-pointer"
 					v-if="AllTransactions.pages.next"
+					class="w-full flex flex-row items-center justify-center border-t border-lightGray pt-3 cursor-pointer"
 					@click="loadMoreTransactions()">
 					<sofa-normal-text :color="'text-primaryPink'">load more</sofa-normal-text>
 				</div>
 			</div>
 
-			<sofa-empty-state v-else :title="'No transaction yet'" :subTitle="'All you wallet transaction would show up here'" />
+			<sofa-empty-state v-else :title="'No transaction yet'" :sub-title="'All you wallet transaction would show up here'" />
 		</div>
 	</div>
 	<sofa-modal v-if="showModal" :close="() => (showModal = false)" :can-close="false">
@@ -116,37 +116,37 @@
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 				<div
-					class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex"
-					v-if="modalContent == 'fund_wallet' || modalContent == 'withdraw_money'">
-					<sofa-header-text :customClass="'text-xl'" :content="modalTitle" />
+					v-if="modalContent == 'fund_wallet' || modalContent == 'withdraw_money'"
+					class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
+					<sofa-header-text :custom-class="'text-xl'" :content="modalTitle" />
 				</div>
-				<div class="w-full hidden flex-row justify-between items-center mdlg:!flex" v-if="modalContent == 'transaction_info'">
-					<sofa-header-text :customClass="'text-xl'">
+				<div v-if="modalContent == 'transaction_info'" class="w-full hidden flex-row justify-between items-center mdlg:!flex">
+					<sofa-header-text :custom-class="'text-xl'">
 						{{ modalTitle }}
 					</sofa-header-text>
-					<sofa-icon :customClass="'h-[20px] cursor-pointer'" :name="'circle-close'" @click="showModal = false" />
+					<sofa-icon :custom-class="'h-[20px] cursor-pointer'" :name="'circle-close'" @click="showModal = false" />
 				</div>
 
 				<div
 					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
-					<sofa-normal-text :customClass="'!font-bold !text-base'">
+					<sofa-normal-text :custom-class="'!font-bold !text-base'">
 						{{ modalTitle }}
 					</sofa-normal-text>
-					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showModal = false" />
+					<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showModal = false" />
 				</div>
 
-				<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4" v-if="modalContent == 'fund_wallet'">
+				<div v-if="modalContent == 'fund_wallet'" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 					<sofa-text-field
+						ref="amount"
+						v-model="fundWalletAmount"
 						:custom-class="'rounded-custom !bg-lightGray'"
 						type="text"
 						:name="'Amount'"
-						ref="amount"
 						:placeholder="'Amount'"
-						:borderColor="'border-transparent'"
+						:border-color="'border-transparent'"
 						:rules="[Logic.Form.RequiredRule]"
-						:isFormatted="true"
-						v-model="fundWalletAmount">
-						<template v-slot:inner-prefix>
+						:is-formatted="true">
+						<template #inner-prefix>
 							<sofa-normal-text>₦</sofa-normal-text>
 						</template>
 					</sofa-text-field>
@@ -157,36 +157,36 @@
 								fundWalletMethod == 'online' ? 'border-primaryBlue  border-2' : ''
 							}  rounded-custom`"
 							@click="payOnline()">
-							<sofa-icon :customClass="'h-[20px]'" :name="'website'" />
+							<sofa-icon :custom-class="'h-[20px]'" :name="'website'" />
 							<sofa-normal-text> Pay online </sofa-normal-text>
 						</a>
 
 						<a
+							v-for="(method, index) in PaymentMethods.results"
+							:key="index"
 							:class="`w-full flex items-center gap-3 p-3 bg-lightGray ${
 								fundWalletMethod == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom`"
-							@click="fundWalletMethod ? (fundWalletMethod = '') : (fundWalletMethod = method.id)"
-							v-for="(method, index) in PaymentMethods.results"
-							:key="index">
-							<sofa-icon :customClass="'h-[20px]'" :name="'card'" />
+							@click="fundWalletMethod ? (fundWalletMethod = '') : (fundWalletMethod = method.id)">
+							<sofa-icon :custom-class="'h-[20px]'" :name="'card'" />
 							<sofa-normal-text> **** **** **** {{ method.data.last4Digits }} </sofa-normal-text>
 						</a>
 
 						<div
 							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer border-2 rounded-custom border-darkLightGray"
 							@click="Logic.Payment.initialPayment()">
-							<sofa-icon :customClass="'h-[18px]'" :name="'add-card'" />
+							<sofa-icon :custom-class="'h-[18px]'" :name="'add-card'" />
 							<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
 						</div>
 					</div>
 				</div>
 
-				<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4" v-if="modalContent == 'transaction_info'">
+				<div v-if="modalContent == 'transaction_info'" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 					<div class="w-full flex flex-col px-4 py-4 justify-start border-2 border-darkLightGray rounded-custom">
 						<sofa-normal-text>
 							{{ transactionTitle }}
 						</sofa-normal-text>
-						<sofa-header-text :customClass="'text-left mdlg:!text-3xl !text-2xl'">
+						<sofa-header-text :custom-class="'text-left mdlg:!text-3xl !text-2xl'">
 							{{ transactionDetails.amount }}
 						</sofa-header-text>
 					</div>
@@ -199,25 +199,25 @@
 							<sofa-normal-text :color="'text-grayColor'">
 								{{ capitalize(index.split('_').join(' ')) }}
 							</sofa-normal-text>
-							<sofa-normal-text :customClass="'!font-semibold'" :color="'text-deepGray'">
+							<sofa-normal-text :custom-class="'!font-semibold'" :color="'text-deepGray'">
 								{{ item }}
 							</sofa-normal-text>
 						</div>
 					</div>
 				</div>
 
-				<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4" v-if="modalContent == 'withdraw_money'">
+				<div v-if="modalContent == 'withdraw_money'" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 					<sofa-text-field
+						ref="amount"
+						v-model="withdrawForm.amount"
 						:custom-class="'rounded-custom !bg-lightGray'"
 						type="text"
 						:name="'Amount'"
-						ref="amount"
 						:placeholder="'Amount'"
-						:borderColor="'border-transparent'"
+						:border-color="'border-transparent'"
 						:rules="[Logic.Form.RequiredRule]"
-						:isFormatted="true"
-						v-model="withdrawForm.amount">
-						<template v-slot:inner-prefix>
+						:is-formatted="true">
+						<template #inner-prefix>
 							<sofa-normal-text>
 								{{ Logic.Common.getCurrency(UserWallet.balance.currency) }}
 							</sofa-normal-text>
@@ -225,37 +225,37 @@
 					</sofa-text-field>
 
 					<sofa-text-field
+						ref="account_number"
+						v-model="withdrawForm.account_number"
 						:custom-class="'rounded-custom !bg-lightGray'"
 						type="tel"
 						:name="'Account number'"
-						ref="account_number"
 						:placeholder="'Account number'"
-						:borderColor="'border-transparent'"
-						:rules="[Logic.Form.RequiredRule]"
-						v-model="withdrawForm.account_number">
+						:border-color="'border-transparent'"
+						:rules="[Logic.Form.RequiredRule]">
 					</sofa-text-field>
 
 					<sofa-select
+						ref="bank"
+						v-model="withdrawForm.bank"
 						:custom-class="'rounded-custom !bg-lightGray'"
 						:name="'Bank'"
-						ref="bank"
 						:placeholder="'Bank'"
-						:borderColor="'border-transparent'"
+						:border-color="'border-transparent'"
 						:rules="[Logic.Form.RequiredRule]"
-						:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))"
-						v-model="withdrawForm.bank">
+						:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))">
 					</sofa-select>
 				</div>
 
 				<div
-					class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4"
-					v-if="modalContent != 'transaction_info'">
+					v-if="modalContent != 'transaction_info'"
+					class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
 					<div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
 						<sofa-button
-							:textColor="'text-grayColor'"
-							:bgColor="'bg-white'"
+							:text-color="'text-grayColor'"
+							:bg-color="'bg-white'"
 							:padding="'px-4 py-1'"
-							:customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
+							:custom-class="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
 							@click="showModal = false">
 							Cancel
 						</sofa-button>
@@ -263,10 +263,10 @@
 
 					<div class="md:!w-auto col-span-2 flex flex-col">
 						<sofa-button
-							:textColor="'text-white'"
-							:bgColor="'bg-primaryBlue'"
+							:text-color="'text-white'"
+							:bg-color="'bg-primaryBlue'"
 							:padding="'px-4 md:!py-1 py-3'"
-							:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
+							:custom-class="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
 							@click="handleContinue()">
 							Continue
 						</sofa-button>
@@ -280,7 +280,7 @@
 	<sofa-delete-prompt
 		v-if="showDeleteMethod"
 		:title="'Are you sure?'"
-		:subTitle="`This action is permanent.`"
+		:sub-title="`This action is permanent.`"
 		:close="() => (showDeleteMethod = false)"
 		:buttons="[
 			{

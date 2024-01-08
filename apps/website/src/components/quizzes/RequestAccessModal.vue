@@ -18,30 +18,30 @@
 				<SofaButton
 					v-if="hasRequested"
 					class="w-full md:w-auto"
-					customClass="md:font-semibold"
+					custom-class="md:font-semibold"
 					padding="py-3 md:px-6"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
+					bg-color="bg-primaryBlue"
+					text-color="text-white"
 					@click="Logic.Common.goBack">
 					Done
 				</SofaButton>
 				<SofaButton
 					v-if="!hasRequested"
 					class="w-full md:w-auto mr-auto"
-					customClass="md:font-semibold"
+					custom-class="md:font-semibold"
 					padding="py-3 md:px-6"
-					bgColor="bg-white border border-gray-100"
-					textColor="text-grayColor"
+					bg-color="bg-white border border-gray-100"
+					text-color="text-grayColor"
 					@click="Logic.Common.goBack">
 					Cancel
 				</SofaButton>
 				<SofaButton
 					v-if="!hasRequested"
 					class="w-full md:w-auto ml-auto"
-					customClass="md:font-semibold"
+					custom-class="md:font-semibold"
 					padding="py-3 md:px-6"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
+					bg-color="bg-primaryBlue"
+					text-color="text-white"
 					@click="emits('requestAccess', true)">
 					Request
 				</SofaButton>
@@ -52,13 +52,14 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
-import { Logic, Quiz } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 })

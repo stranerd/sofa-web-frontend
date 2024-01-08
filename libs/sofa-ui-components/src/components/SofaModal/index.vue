@@ -2,9 +2,9 @@
 	<component :is="Teleport" to="body">
 		<transition name="fade" appear>
 			<div
+				id="innerModal"
 				:class="`fixed top-0 w-[100dvw] h-[dwh] bg-black text-white !bg-opacity-40 flex flex-col overflow-y-hidden items-center mdlg:!justify-center justify-end ${customClass}`"
-				style="z-index: 1000"
-				id="innerModal">
+				style="z-index: 1000">
 				<div class="h-full w-full absolute top-0 left-0" @click="closeModal" />
 				<div
 					class="w-full flex flex-col mdlg:h-auto h-full md:justify-center justify-end relative items-center mdlg:max-h-[85%] overflow-y-auto overflow-x-hidden">
@@ -24,6 +24,7 @@ const Teleport = teleport_ as {
 }
 
 export default {
+	name: 'RoofModal',
 	props: {
 		canClose: {
 			type: Boolean,
@@ -32,13 +33,13 @@ export default {
 		close: {
 			type: Function,
 			required: false,
+			default: null,
 		},
 		customClass: {
 			type: String,
 			default: '',
 		},
 	},
-	name: 'RoofModal',
 	setup(props: any) {
 		const closeModal = () => {
 			if (props.canClose) {

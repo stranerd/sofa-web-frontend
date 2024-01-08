@@ -18,8 +18,8 @@ export class NetworkError extends Error {
 export class HttpClient {
 	private readonly client: AxiosInstance
 
-	constructor(baseURL = apiBase) {
-		this.client = axios.create({ baseURL })
+	constructor(baseURL = '') {
+		this.client = axios.create({ baseURL: `${apiBase}${baseURL}` })
 		this.client.interceptors.request.use(
 			async (config) => {
 				const isFromOurServer = this.client.defaults.baseURL?.startsWith(apiBase)

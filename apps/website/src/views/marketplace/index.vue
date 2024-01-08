@@ -1,9 +1,9 @@
 <template>
-	<expanded-layout layoutStyle="mdlg:pb-4">
+	<expanded-layout layout-style="mdlg:pb-4">
 		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple justify-center items-center">
 			<SofaHeaderText color="text-white" size="xl" class="!font-extrabold" content="All contents made by verified creators" />
 
-			<SofaNormalText color="text-white" :customClass="'w-[48%] text-center flex items-center justify-center'">
+			<SofaNormalText color="text-white" :custom-class="'w-[48%] text-center flex items-center justify-center'">
 				Everything here is carefully reviewed to ensure the highest quality and accuracy. By purchasing from our marketplace, you
 				can have confidence in the credibility of the creators and the value of the materials.
 			</SofaNormalText>
@@ -17,10 +17,10 @@
 						content="Filter"
 						@click="Logic.Common.GoToRoute('/marketplace/search')" />
 					<SofaTextField
-						class="flex-1"
-						customClass="!border-none w-full"
-						placeholder="Search for anything"
 						v-model="searchQuery"
+						class="flex-1"
+						custom-class="!border-none w-full"
+						placeholder="Search for anything"
 						@onEnter="handleSearch" />
 				</div>
 
@@ -33,10 +33,10 @@
 				<SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
 				<SofaIcon name="search-black" class="h-[15px] cursor-pointer" @click="handleSearch" />
 				<SofaTextField
-					class="flex-1"
-					customClass="!border-none w-full !px-0"
-					placeholder="Search"
 					v-model="searchQuery"
+					class="flex-1"
+					custom-class="!border-none w-full !px-0"
+					placeholder="Search"
 					@onEnter="handleSearch" />
 			</div>
 		</div>
@@ -57,16 +57,16 @@
 					<div v-if="material.list.length" class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
 						<SofaItemCard
 							v-for="activity in material.list.slice(0, 4)"
-							as="router-link"
 							:key="activity.id"
+							as="router-link"
 							:content="activity"
 							:to="activity.route"
-							:hasBookmark="true"
-							:bookmarkAction="() => saveToFolder(activity)"
+							:has-bookmark="true"
+							:bookmark-action="() => saveToFolder(activity)"
 							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
-						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
+						<SofaEmptyState :title="material.emptyTitle" :sub-title="material.emptySub" custom-class="!h-[230px]" />
 					</div>
 				</div>
 			</template>
@@ -84,6 +84,7 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'MarketPlaceIndexPage',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -92,7 +93,6 @@ export default defineComponent({
 		SofaHeaderText,
 		SofaEmptyState,
 	},
-	name: 'MarketPlaceIndexPage',
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
 		useMeta({

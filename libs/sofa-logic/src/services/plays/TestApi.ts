@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
-import { Question } from '../../logic/types/domains/study'
 import { GameParticipantAnswer, Test } from '../../logic/types/domains/plays'
 import { AddQuestionAnswer } from '../../logic/types/forms/plays'
 import { Paginated, QueryParams } from '../../logic'
@@ -12,7 +11,7 @@ export default class TestApi extends ModelApiService {
 
 	public async getTestQuestions(testId: string) {
 		try {
-			const response: AxiosResponse<Question[]> = await this.axiosInstance.get(this.getUrl() + `/${testId}/questions`)
+			const response = await this.axiosInstance.get(this.getUrl() + `/${testId}/questions`)
 
 			return response
 		} catch (err) {

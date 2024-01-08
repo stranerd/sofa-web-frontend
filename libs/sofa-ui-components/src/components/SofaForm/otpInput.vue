@@ -76,6 +76,7 @@ export default defineComponent({
 		onChangeOTP: {
 			type: Function,
 			required: false,
+			default: null,
 		},
 	},
 	emits: ['update:modelValue'],

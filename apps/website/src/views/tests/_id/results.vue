@@ -1,41 +1,32 @@
 <template>
 	<expanded-layout
-		layoutStyle="!justify-between bg-deepGray text-white"
+		layout-style="!justify-between bg-deepGray text-white"
 		:hide="{ top: true, bottom: true }"
-		bgImage="/images/game-bg.png">
-		<TestWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
-			<template v-slot="{ test, extras: testExtras, questions }">
-				<QuizWrapper :id="test.quizId" :questions="questions">
-					<template v-slot="{ quiz, questions, extras }">
+		bg-image="/images/game-bg.png">
+		<TestWrapper :id="$route.params.id as string" :skip-questions="true" :skip-status-nav="true">
+			<template #default="{ test, extras: testExtras, questions: testQuestions }">
+				<QuizWrapper :id="test.quizId" :questions="testQuestions">
+					<template #default="{ quiz, questions, extras }">
 						<Quiz
+							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:showCounter="false"
-							v-model:answer="extras.answer"
-							:optionState="extras.optionState"
-							:isDark="true"
-							:rightButton="{
+							:show-counter="false"
+							:option-state="extras.optionState"
+							:is-dark="true"
+							:right-button="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=tests'),
 							}"
-							:leftButton="
-								testExtras.canEnd
-									? {
-										label: 'End',
-										bgColor: 'bg-deepGray border border-white',
-										textColor: 'text-white',
-										click: testExtras.end,
-									}
-									: undefined
-							">
-							<template v-slot:header>
+							:left-button="testExtras.canEnd ? { ...leftButton, click: testExtras.end } : undefined">
+							<template #header>
 								<div />
 							</template>
 
-							<template v-slot>
+							<template #default>
 								<div class="w-full h-full flex flex-col overflow-y-auto">
 									<div class="flex flex-col gap-4 my-auto py-4 items-center">
 										<SofaNormalText
@@ -60,8 +51,8 @@
 														},
 													],
 												}"
-												cutoutPercentage="90%"
-												:textStyle="`!text-3xl ${score.color}`">
+												cutout-percentage="90%"
+												:text-style="`!text-3xl ${score.color}`">
 												{{ Logic.formatNumber(score.percent, 1) }}%
 											</SofaPieChart>
 											<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" :content="score.label" />
@@ -109,7 +100,13 @@ export default defineComponent({
 			title: 'Results',
 		})
 
-		return { Logic }
+		const leftButton = {
+			label: 'End',
+			bgColor: 'bg-deepGray border border-white',
+			textColor: 'text-white',
+		}
+
+		return { Logic, leftButton }
 	},
 })
 </script>

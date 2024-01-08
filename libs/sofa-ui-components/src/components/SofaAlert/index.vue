@@ -21,6 +21,7 @@ import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
+	name: 'SofaAlert',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -36,9 +37,9 @@ export default defineComponent({
 		},
 		close: {
 			type: Function,
+			default: null,
 		},
 	},
-	name: 'SofaAlert',
 	setup(props) {
 		onMounted(() => {
 			//

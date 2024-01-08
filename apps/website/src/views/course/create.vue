@@ -1,6 +1,6 @@
 <template>
 	<dashboard-layout
-		:topbarOptions="{
+		:topbar-options="{
 			type: 'subpage',
 			title: SingleCourse ? SingleCourse.title : 'Create a course',
 			actions: [
@@ -37,32 +37,32 @@
 			bottom: true,
 			top: true,
 		}"
-		:bgColor="'mdlg:!bg-lightGray bg-white'">
-		<template v-slot:left-session>
+		:bg-color="'mdlg:!bg-lightGray bg-white'">
+		<template #left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
 				<sofa-course-sections
-					v-model="selectedMaterial"
-					:sectionInput="updateCourseSectionForm"
-					:updateSections="updateCourseSections"
 					v-if="Logic.Common.isLarge && SingleCourse"
+					v-model="selectedMaterial"
+					:section-input="updateCourseSectionForm"
+					:update-sections="updateCourseSections"
 					:close="() => {}" />
 			</div>
 		</template>
 
-		<template v-slot:middle-session>
+		<template #middle-session>
 			<!-- Top bar for smaller screens -->
 			<div
 				class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-lightGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
-				<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
-				<sofa-normal-text :customClass="'!font-bold !text-sm'">
+				<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
+				<sofa-normal-text :custom-class="'!font-bold !text-sm'">
 					{{ mobileTitle }}
 				</sofa-normal-text>
 
 				<div :class="`flex flex-row items-center gap-3 ${showSettingModal ? 'invisible' : ''} `">
 					<sofa-icon
-						:customClass="'h-[18px]'"
-						:name="'cog'"
 						v-if="!showSettingModal"
+						:custom-class="'h-[18px]'"
+						:name="'cog'"
 						@click="
 							() => {
 								showSettingModal = true
@@ -72,7 +72,7 @@
 
 					<sofa-icon
 						v-if="selectedMaterial"
-						:customClass="'h-[6px]'"
+						:custom-class="'h-[6px]'"
 						:name="'more-options-horizontal'"
 						@click="showMateterialDetails()" />
 				</div>
@@ -81,21 +81,21 @@
 			<template v-if="showSettingModal">
 				<div class="w-full mdlg:!hidden flex-col bg-white py-2 px-4 md:!flex">
 					<course-settings
-						@OnCourseUpdated="handleCourseSettingSaved"
 						:course="SingleCourse"
-						:close="() => (showSettingModal = false)" />
+						:close="() => (showSettingModal = false)"
+						@OnCourseUpdated="handleCourseSettingSaved" />
 				</div>
 			</template>
 
 			<template v-if="currentContent == 'sections' && !showSettingModal">
 				<div class="w-full mdlg:!hidden flex-col h-full flex-grow bg-white py-2 px-4 md:!flex">
 					<sofa-course-sections
-						v-model="selectedMaterial"
-						@OnMaterialSelected="handleItemSelected"
-						:sectionInput="updateCourseSectionForm"
-						:updateSections="updateCourseSections"
 						v-if="!Logic.Common.isLarge && SingleCourse"
-						:close="() => {}" />
+						v-model="selectedMaterial"
+						:section-input="updateCourseSectionForm"
+						:update-sections="updateCourseSections"
+						:close="() => {}"
+						@OnMaterialSelected="handleItemSelected" />
 
 					<div class="h-[100px]"></div>
 				</div>
@@ -119,9 +119,9 @@
 
 					<div class="w-full flex flex-col gap-3">
 						<div
-							class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom"
 							v-for="(question, index) in selectedMaterial.data"
-							:key="index">
+							:key="index"
+							class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom">
 							<div class="flex flex-row items-center gap-2">
 								<sofa-normal-text :color="'text-grayColor'">
 									{{ question.type }}
@@ -134,11 +134,11 @@
 								</sofa-normal-text>
 							</div>
 
-							<sofa-normal-text :customClass="'text-left !font-bold'">
+							<sofa-normal-text :custom-class="'text-left !font-bold'">
 								{{ question.content }}
 							</sofa-normal-text>
 
-							<sofa-normal-text :customClass="'text-left'">
+							<sofa-normal-text :custom-class="'text-left'">
 								{{ question.answer }}
 							</sofa-normal-text>
 						</div>
@@ -147,7 +147,7 @@
 
 				<template v-if="selectedMaterial?.type == 'document'">
 					<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-						<sofa-document-reader :key="selectedMaterial.details.id" :documentUrl="selectedMaterial.data.documentUrl" />
+						<sofa-document-reader :key="selectedMaterial.details.id" :document-url="selectedMaterial.data.documentUrl" />
 					</div>
 				</template>
 
@@ -155,14 +155,14 @@
 					<div class="w-full flex flex-col">
 						<sofa-image-loader
 							:key="selectedMaterial.details.id"
-							:customClass="'w-full h-[400px] rounded-[12px]'"
-							:photoUrl="selectedMaterial.data.imageUrl" />
+							:custom-class="'w-full h-[400px] rounded-[12px]'"
+							:photo-url="selectedMaterial.data.imageUrl" />
 					</div>
 				</template>
 
 				<template v-if="selectedMaterial?.type == 'video'">
 					<div class="w-full flex flex-col">
-						<sofa-video-player :key="selectedMaterial.details.id" :videoUrl="selectedMaterial.data.videoUrl" />
+						<sofa-video-player :key="selectedMaterial.details.id" :video-url="selectedMaterial.data.videoUrl" />
 					</div>
 				</template>
 			</div>
@@ -171,7 +171,7 @@
 			<div class="mdlg:!hidden fixed left-0 bottom-0 px-4 py-4 bg-white flex flex-col w-full z-0">
 				<div :class="`w-full flex flex-col ${hasUnsavedChanges ? '' : 'opacity-50'}`">
 					<sofa-button
-						:customClass="'w-full'"
+						:custom-class="'w-full'"
 						:padding="'py-3'"
 						@click="hasUnsavedChanges ? Logic.Study.SaveCourseLocalChanges() : null">
 						Save changes
@@ -186,7 +186,7 @@
 						showMoreOptions = false
 					}
 				"
-				:customClass="'mdlg:!hidden'">
+				:custom-class="'mdlg:!hidden'">
 				<div
 					:class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0  ${
 						modalData.content != 'material_details' ? 'h-auto' : 'h-[95%]'
@@ -197,26 +197,26 @@
 						}
 					">
 					<div
-						class="w-full flex flex-row px-4 pt-3 justify-between items-center sticky top-0 left-0"
-						v-if="modalData.content != 'material_details'">
-						<sofa-normal-text :customClass="'!font-bold !text-base'">
+						v-if="modalData.content != 'material_details'"
+						class="w-full flex flex-row px-4 pt-3 justify-between items-center sticky top-0 left-0">
+						<sofa-normal-text :custom-class="'!font-bold !text-base'">
 							{{ modalData.title }}
 						</sofa-normal-text>
-						<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
+						<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
 					</div>
 
-					<div class="w-full flex flex-col px-4 pb-4" v-if="modalData.content == 'add_material'">
-						<new-course-material @OnItemSelected="handleAddMaterialChanged" v-if="SingleCourse" />
+					<div v-if="modalData.content == 'add_material'" class="w-full flex flex-col px-4 pb-4">
+						<new-course-material v-if="SingleCourse" @OnItemSelected="handleAddMaterialChanged" />
 					</div>
 
-					<div class="w-full flex flex-col px-4 pb-4" v-if="modalData.content == 'add_video'">
+					<div v-if="modalData.content == 'add_video'" class="w-full flex flex-col px-4 pb-4">
 						<add-video />
 					</div>
 
 					<sofa-course-details
+						v-if="modalData.content == 'material_details' && SingleCourse"
 						:data="selectedMaterial?.details"
 						:type="selectedMaterial?.type"
-						v-if="modalData.content == 'material_details' && SingleCourse"
 						:close="
 							() => {
 								showMoreOptions = false
@@ -234,8 +234,8 @@
 						!SingleCourse ? Logic.Common.goBack() : null
 					}
 				"
-				:customClass="'hidden mdlg:!flex'"
-				:canClose="false">
+				:custom-class="'hidden mdlg:!flex'"
+				:can-close="false">
 				<div
 					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
 					@click.stop="
@@ -245,24 +245,24 @@
 					">
 					<div
 						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-						<sofa-header-text :customClass="'!text-xl !font-bold'">{{
+						<sofa-header-text :custom-class="'!text-xl !font-bold'">{{
 							SingleCourse ? 'Settings' : 'Create a course'
 						}}</sofa-header-text>
 
 						<course-settings
-							@OnCourseUpdated="handleCourseSettingSaved"
 							:course="SingleCourse"
 							:close="
 								() => {
 									showSettingModal = false
 								}
-							" />
+							"
+							@OnCourseUpdated="handleCourseSettingSaved" />
 					</div>
 				</div>
 			</sofa-modal>
 		</template>
 
-		<template v-slot:right-session>
+		<template #right-session>
 			<div
 				class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col gap-4 h-full justify-between relative overflow-y-auto">
 				<template v-if="selectedMaterial">
@@ -302,6 +302,7 @@ const SofaDocumentReader = defineAsyncComponent(() => import('sofa-ui-components
 const SofaVideoPlayer = defineAsyncComponent(() => import('sofa-ui-components/src/components/SofaVideoPlayer/index.vue'))
 
 export default defineComponent({
+	name: 'CreateCourse',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -360,7 +361,6 @@ export default defineComponent({
 			},
 		],
 	},
-	name: 'CreateCourse',
 	setup() {
 		useMeta({
 			mobileTitle: 'Create Course',

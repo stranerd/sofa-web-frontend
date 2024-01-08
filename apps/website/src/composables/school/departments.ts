@@ -24,7 +24,7 @@ const fetchDepartments = async (facultyId: string) => {
 				store.departments.value,
 				c,
 				(e) => e.id,
-				(e) => e.name,
+				(e) => e.title,
 				true,
 			),
 		)
@@ -49,7 +49,7 @@ export const useDepartment = (facultyId: string, id: string) => {
 					store.departments.value,
 					c,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 		},
@@ -84,7 +84,7 @@ export const useCreateDepartment = () => {
 					store.departments.value,
 					department,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()
@@ -125,7 +125,7 @@ export const useEditDepartment = () => {
 					store.departments.value,
 					updatedDepartment,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()

@@ -2,15 +2,15 @@
 	<SofaTextField
 		v-for="(item, index) in factory.getSocials()"
 		:key="index"
+		v-model="item.link"
 		:placeholder="`Enter ${item.ref} link`"
 		type="url"
 		:error="item.error"
-		customClass="rounded-custom !bg-lightGray"
-		v-model="item.link">
-		<template v-slot:inner-prefix>
+		custom-class="rounded-custom !bg-lightGray">
+		<template #inner-prefix>
 			<SofaIcon :name="socials[item.ref]" class="h-[20px]" />
 		</template>
-		<template v-slot:inner-suffix>
+		<template #inner-suffix>
 			<SofaIcon name="trash" class="h-[16px]" @click="deleteItem(index)" />
 		</template>
 	</SofaTextField>
@@ -27,12 +27,12 @@
 			<SofaIcon class="h-[7px]" :name="showAddNewItems ? 'chevron-up' : 'chevron-down'" />
 		</a>
 
-		<div class="w-full flex flex-col gap-2" v-if="showAddNewItems">
+		<div v-if="showAddNewItems" class="w-full flex flex-col gap-2">
 			<a
-				class="w-full flex items-center justify-start gap-3 p-3 rounded-custom border-2 border-darkLightGray"
-				@click="factory.addNewSocial(key)"
 				v-for="(icon, key) in socials"
-				:key="key">
+				:key="key"
+				class="w-full flex items-center justify-start gap-3 p-3 rounded-custom border-2 border-darkLightGray"
+				@click="factory.addNewSocial(key)">
 				<SofaIcon :name="icon" class="h-[20px]" />
 				<SofaNormalText color="text-grayColor" class="capitalize" :content="key" />
 			</a>

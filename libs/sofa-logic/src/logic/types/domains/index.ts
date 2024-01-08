@@ -1,5 +1,4 @@
 export * from './common'
-export * from './conversations'
 export * from './interactions'
 export * from './notifications'
 export * from './payment'

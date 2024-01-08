@@ -15,17 +15,17 @@
 				<input
 					v-model="content"
 					:placeholder="placeholder"
-					@blur="checkValidation()"
-					@keypress="isNumber"
 					:disabled="disabled"
 					:type="fieldType"
-					@keyup="detectKey"
-					class="flex-grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
+					class="flex-grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs"
+					@blur="checkValidation()"
+					@keypress="isNumber"
+					@keyup="detectKey" />
 				<slot name="inner-suffix" />
 				<SofaIcon
-					:name="fieldType == 'password' ? 'show' : 'hide'"
-					:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
 					v-if="type == 'password'"
+					:name="fieldType == 'password' ? 'show' : 'hide'"
+					:custom-class="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
 					@click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
 				<SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
 			</div>
@@ -47,6 +47,7 @@ import SofaIcon from '../SofaIcon'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
 export default defineComponent({
+	name: 'SofaTextField',
 	components: {
 		SofaNormalText,
 		SofaIcon,
@@ -71,8 +72,10 @@ export default defineComponent({
 		rules: {
 			type: Object as () => FormRule[],
 			required: false,
+			default: null,
 		},
 		modelValue: {
+			type: String,
 			default: '',
 		},
 		defaultValue: {
@@ -108,7 +111,6 @@ export default defineComponent({
 			default: '',
 		},
 	},
-	name: 'SofaTextField',
 	emits: ['update:modelValue', 'onEnter'],
 	setup(props, context) {
 		const content = computed({

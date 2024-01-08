@@ -1,10 +1,12 @@
 <template>
-	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer" :class="customClass" :fill="fill" />
+	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer" :class="customClass" />
 </template>
 
 <script lang="ts">
 import InlineSvg from 'vue-inline-svg'
 export default {
+	name: 'RoofIcon',
+	components: { InlineSvg },
 	props: {
 		name: {
 			type: String,
@@ -13,15 +15,9 @@ export default {
 		customClass: {
 			type: String,
 			required: false,
-		},
-		fill: {
-			type: String,
 			default: '',
-			required: false,
 		},
 	},
-	components: { InlineSvg },
-	name: 'RoofIcon',
 }
 </script>
 

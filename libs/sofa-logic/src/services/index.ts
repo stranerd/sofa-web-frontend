@@ -1,4 +1,3 @@
-import { ConversationApi } from './conversations'
 import { InteractionApi } from './interactions'
 import { NotificationApi } from './notifications'
 import { PaymentApi } from './payment'
@@ -8,7 +7,6 @@ import { StudyApi } from './study'
 import { UserApi } from './users'
 
 export const $api = {
-	conversations: ConversationApi,
 	interactions: InteractionApi,
 	notifications: NotificationApi,
 	payment: PaymentApi,

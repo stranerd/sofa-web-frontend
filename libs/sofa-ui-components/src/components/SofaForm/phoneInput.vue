@@ -1,9 +1,9 @@
 <template>
-	<VueTelInput v-model="phone" mode="international" @validate="update" class="flex" />
+	<VueTelInput v-model="phone" mode="international" class="flex" @validate="update" />
 </template>
 
 <script lang="ts" setup>
-import { Phone } from 'sofa-logic'
+import { Phone } from '@modules/auth'
 import { defineEmits, defineProps, PropType, ref } from 'vue'
 import { VueTelInput } from 'vue-tel-input'
 
@@ -21,15 +21,7 @@ const emit = defineEmits<{
 
 const phone = ref((props.modelValue?.code ?? '') + (props.modelValue?.number ?? ''))
 const update = (event: any) => {
-	emit(
-		'update:modelValue',
-		event.valid
-			? {
-					code: '+' + event.countryCallingCode,
-					number: event.nationalNumber,
-				}
-			: null,
-	)
+	emit('update:modelValue', event.valid ? { code: '+' + event.countryCallingCode, number: event.nationalNumber } : null)
 }
 </script>
 

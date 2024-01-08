@@ -1,67 +1,67 @@
 <template>
-	<sofa-form-wrapper :parentRefs="parentRefs" ref="formComp" class="w-full flex flex-col gap-4">
+	<sofa-form-wrapper ref="formComp" :parent-refs="parentRefs" class="w-full flex flex-col gap-4">
 		<div class="w-full md:!grid md:!grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
 				<sofa-text-field
+					ref="title"
+					v-model="courseSettingForm.title"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					type="text"
 					:name="'Title'"
-					ref="title"
-					v-model="courseSettingForm.title"
 					:update-value="courseSettingForm.title"
 					:placeholder="'Title'"
-					:borderColor="'border-transparent'"
+					:border-color="'border-transparent'"
 					:rules="[Logic.Form.RequiredRule]" />
 
 				<sofa-textarea
-					:hasTitle="false"
-					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'"
 					ref="description"
-					v-model="courseSettingForm.description" />
+					v-model="courseSettingForm.description"
+					:has-title="false"
+					:text-area-style="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
+					:placeholder="'Description'" />
 
 				<sofa-select
+					ref="topic"
+					v-model="courseSettingForm.topic"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					:name="'Topic'"
-					ref="topic"
 					:placeholder="'Topic'"
 					:rules="[FormValidations.RequiredRule]"
-					:borderColor="'border-transparent'"
+					:border-color="'border-transparent'"
 					:options="allTopics"
-					:can-use-custom="true"
-					v-model="courseSettingForm.topic" />
+					:can-use-custom="true" />
 
 				<sofa-text-field
 					v-if="auth.roles.isVerified"
+					ref="price.amount"
+					v-model="courseSettingForm.price"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					type="text"
 					:name="'Price'"
-					ref="price.amount"
-					v-model="courseSettingForm.price"
 					:update-value="courseSettingForm.price"
 					:placeholder="'Price'"
-					:borderColor="'border-transparent'"
+					:border-color="'border-transparent'"
 					:rules="[Logic.Form.RequiredRule]"
-					:isFormatted="true">
-					<template v-slot:inner-prefix>
+					:is-formatted="true">
+					<template #inner-prefix>
 						<sofa-normal-text>₦</sofa-normal-text>
 					</template>
 				</sofa-text-field>
 			</div>
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 				<sofa-image-loader
-					:customClass="'w-full md:!h-full h-[220px] rounded-custom relative'"
-					:photoUrl="courseImageUrl ? courseImageUrl : '/images/default.png'">
+					:custom-class="'w-full md:!h-full h-[220px] rounded-custom relative'"
+					:photo-url="courseImageUrl ? courseImageUrl : '/images/default.png'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full flex-row items-center justify-center">
 						<sofa-file-attachment
-							:isWrapper="true"
 							v-model="courseSettingForm.photo"
-							:accept="'image/png, image/gif, image/jpeg'"
-							v-model:localFileUrl="courseImageUrl">
-							<template v-slot:content>
+							v-model:localFileUrl="courseImageUrl"
+							:is-wrapper="true"
+							:accept="'image/png, image/gif, image/jpeg'">
+							<template #content>
 								<div
 									class="px-4 py-3 flex flex-row items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
-									<sofa-icon :customClass="'h-[18px]'" :name="'camera-white'" />
+									<sofa-icon :custom-class="'h-[18px]'" :name="'camera-white'" />
 									<sofa-normal-text :color="'text-white'">Add cover photo</sofa-normal-text>
 								</div>
 							</template>
@@ -73,23 +73,23 @@
 
 		<div class="w-full flex flex-col gap-2">
 			<sofa-text-field
+				ref="tags"
+				v-model="courseSettingForm.tagString"
 				:custom-class="'rounded-custom !bg-lightGray'"
 				:name="'Tags'"
-				ref="tags"
 				:placeholder="'Tags (Comma separated for multiple)'"
-				:borderColor="'border-transparent'"
-				v-model="courseSettingForm.tagString" />
+				:border-color="'border-transparent'" />
 			<div class="w-full flex flex-row flex-wrap items-center">
 				<template v-for="(item, index) in courseSettingForm.tags" :key="index">
-					<div class="py-2 pr-2" v-if="item != 'Not set'">
+					<div v-if="item != 'Not set'" class="py-2 pr-2">
 						<div class="py-2 px-3 border-2 flex flex-row items-center gap-2 rounded-custom border-darkLightGray">
 							<sofa-normal-text :color="'text-grayColor'">
 								{{ item }}
 							</sofa-normal-text>
 							<sofa-icon
-								@click="courseSettingForm.tags = courseSettingForm.tags.filter((tag) => item != tag)"
 								:name="'circle-close'"
-								:customClass="'h-[17px] cursor-pointer'"></sofa-icon>
+								:custom-class="'h-[17px] cursor-pointer'"
+								@click="courseSettingForm.tags = courseSettingForm.tags.filter((tag) => item != tag)"></sofa-icon>
 						</div>
 					</div>
 				</template>
@@ -100,9 +100,9 @@
 			class="w-full flex flex-row items-center justify-between mdlg:!relative fixed z-[50] bottom-0 left-0 mdlg:!bottom-auto mdlg:!left-auto bg-white mdlg:!py-0 mdlg:!px-0 py-4 px-4">
 			<sofa-button
 				:padding="'px-5 py-2'"
-				:bgColor="'bg-white'"
-				:textColor="'text-grayColor'"
-				:customClass="'border border-gray-100 hidden mdlg:!inline-block'"
+				:bg-color="'bg-white'"
+				:text-color="'text-grayColor'"
+				:custom-class="'border border-gray-100 hidden mdlg:!inline-block'"
 				@click.prevent="course ? close() : Logic.Common.goBack()">
 				Exit
 			</sofa-button>
@@ -111,16 +111,16 @@
 				<div :class="`mdlg:!w-auto  flex flex-col ${course && course.status != 'published' ? 'col-span-1' : 'col-span-full'}`">
 					<sofa-button
 						:padding="'px-5 mdlg:!py-2 py-3'"
-						:customClass="'mdlg:!w-auto w-full'"
+						:custom-class="'mdlg:!w-auto w-full'"
 						@click.prevent="course ? updateCourse(formComp) : createCourse(formComp)">
 						{{ course ? 'Save' : 'Create' }}
 					</sofa-button>
 				</div>
 				<div class="mdlg:!w-auto col-span-1 flex flex-col">
 					<sofa-button
-						:padding="'px-5 mdlg:!py-2 py-3'"
-						:customClass="'mdlg:!w-auto w-full'"
 						v-if="course && course.status != 'published'"
+						:padding="'px-5 mdlg:!py-2 py-3'"
+						:custom-class="'mdlg:!w-auto w-full'"
 						@click.prevent="Logic.Study.PublishCourse(course.id)">
 						Publish
 					</sofa-button>
@@ -157,6 +157,7 @@ import {
 import { defineComponent, onMounted, ref, watch } from 'vue'
 
 export default defineComponent({
+	name: 'CourseSettings',
 	components: {
 		SofaIcon,
 		SofaTextField,
@@ -175,12 +176,13 @@ export default defineComponent({
 		},
 		course: {
 			type: Object as () => Course,
+			default: null,
 		},
 		close: {
 			type: Function,
+			required: true,
 		},
 	},
-	name: 'CourseSettings',
 	emits: ['OnCourseUpdated'],
 	setup(props, context) {
 		const newTags = ref('')

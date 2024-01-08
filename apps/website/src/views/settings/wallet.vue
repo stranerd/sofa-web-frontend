@@ -12,6 +12,7 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'WalletSettingPage',
 	components: {
 		SettingsLayout,
 		SettingWallet,
@@ -80,7 +81,6 @@ export default defineComponent({
 		],
 		goBackRoute: '/settings',
 	},
-	name: 'WalletSettingPage',
 	setup() {
 		useMeta({
 			title: 'Wallet',

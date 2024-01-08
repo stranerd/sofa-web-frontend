@@ -1,21 +1,6 @@
 import { FileData } from './common'
 import { SingleUser } from './users'
 
-export interface Folder {
-	hash: string
-	id: string
-	title: string
-	saved: {
-		courses: string[]
-		quizzes: string[]
-	}
-	courses: Course[]
-	quizzes: Quiz[]
-	user: SingleUser
-	createdAt: number
-	updatedAt: number
-}
-
 export interface Quiz {
 	hash: string
 	id: string
@@ -46,64 +31,6 @@ export interface Quiz {
 	}
 	__type: 'QuizEntity'
 }
-
-export interface Question {
-	hash: string
-	id: string
-	userId: string
-	quizId: string
-	key: string
-	type: string
-	question: string
-	questionMedia: FileData | null
-	timeLimit: number
-	explanation: string
-	data: {
-		type: 'multipleChoice' | 'writeAnswer' | 'trueOrFalse' | 'fillInBlanks' | 'dragAnswers' | 'sequence' | 'match'
-		indicator?: string
-		options?: string[]
-		questions?: any[]
-		answers?: any[]
-		answer?: boolean
-		set?: {
-			q: string
-			a: string
-		}[]
-	}
-	strippedData:
-		| {
-				type: 'multipleChoice'
-				options: string[]
-		  }
-		| {
-				type: 'trueOrFalse'
-		  }
-		| {
-				type: 'writeAnswer'
-		  }
-		| {
-				type: 'fillInBlanks'
-				indicator: string
-		  }
-		| {
-				type: 'dragAnswers'
-				indicator: string
-				answers: string[]
-		  }
-		| {
-				type: 'sequence'
-				answers: string[]
-		  }
-		| {
-				type: 'match'
-				questions: string[]
-				answers: string[]
-		  }
-	createdAt: number
-	updatedAt: number
-}
-
-export type QuestionAnswer = string[] | number[] | boolean | string
 
 export interface Course {
 	hash: string
@@ -155,45 +82,6 @@ export interface SofaFile {
 	status: string
 	createdAt: number
 	updatedAt: number
-}
-
-export interface SofaMediaFile {
-	name: string
-	type: string
-	size: number
-	duration: number
-	path: string
-	timestamp: number
-	link: string
-}
-
-export interface QuizQuestion {
-	title: string
-	info: string
-	question: string
-	duration: string
-	answer?: string
-	userAnswer?: string
-	id: string
-	timeLimit: number
-	currentTime: number
-	explanation: string
-	options: {
-		type: string
-		data: {
-			content: {
-				label: string
-				type: string
-				value?: string
-				extraClass?: string
-				shape?: string
-				id?: string
-				content?: any[]
-			}[]
-			shape?: string
-			hover?: boolean
-		}[]
-	}
 }
 
 export interface ResourceType {

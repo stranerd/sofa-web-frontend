@@ -9,24 +9,24 @@
 			}">
 			<div class="grid w-full gap-4 py-2 mdlg:!grid-cols-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))">
 				<div
-					class="col-span-1 flex flex-col gap-2 items-center p-3 mdlg:p-5 rounded-2xl bg-fadedPurple"
 					v-for="(content, index) in contentList"
-					:key="index">
-					<sofa-icon :name="content.icon" :customClass="'h-[39px]'" />
-					<sofa-normal-text :customClass="'!font-bold'">{{ content.title }}</sofa-normal-text>
+					:key="index"
+					class="col-span-1 flex flex-col gap-2 items-center p-3 mdlg:p-5 rounded-2xl bg-fadedPurple">
+					<sofa-icon :name="content.icon" :custom-class="'h-[39px]'" />
+					<sofa-normal-text :custom-class="'!font-bold'">{{ content.title }}</sofa-normal-text>
 					<sofa-normal-text>{{ content.body }}</sofa-normal-text>
 				</div>
 			</div>
-			<template v-slot:bottom>
+			<template #bottom>
 				<form
-					@submit.prevent="createConversation"
-					class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
+					class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1"
+					@submit.prevent="createConversation">
 					<input
 						v-model="factory.body"
 						:class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
 						placeholder="Enter message" />
 					<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
-						<sofa-icon :name="'send'" :customClass="'h-[19px]'" />
+						<sofa-icon :name="'send'" :custom-class="'h-[19px]'" />
 					</button>
 				</form>
 			</template>
@@ -77,8 +77,8 @@ export const contentList = [
 ]
 
 export default defineComponent({
-	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText },
 	name: 'ChatsNewPage',
+	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText },
 	middlewares: { goBackRoute: '/' },
 	setup() {
 		useMeta({

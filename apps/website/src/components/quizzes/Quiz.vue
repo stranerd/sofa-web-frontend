@@ -2,12 +2,12 @@
 	<slot name="header">
 		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom" :class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
-				<SofaIcon class="md:hidden" :customClass="'h-[19px]'" :name="'circle-close'" @click="Logic.Common.goBack()" />
-				<SofaHeaderText :size="'xl'" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
+				<SofaIcon class="md:hidden" :custom-class="'h-[19px]'" :name="'circle-close'" @click="Logic.Common.goBack()" />
+				<SofaHeaderText :size="'xl'" custom-class="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
 				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${index + 1}/${questions.length}`" color="text-inherit" />
 				<SofaNormalText
 					class="hidden md:inline"
-					:customClass="'!text-base cursor-pointer whitespace-nowrap'"
+					:custom-class="'!text-base cursor-pointer whitespace-nowrap'"
 					color="text-inherit"
 					content="Exit"
 					@click="Logic.Common.goBack()" />
@@ -23,9 +23,9 @@
 					:key="question.id"
 					v-model="answer"
 					:question="question"
-					:isDark="isDark"
+					:is-dark="isDark"
 					:title="title"
-					:optionState="optionState" />
+					:option-state="optionState" />
 				<slot name="postBody" />
 			</slot>
 		</div>
@@ -38,13 +38,13 @@
 			:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-center">
 				<SofaButton
-					class="w-full md:w-auto mr-auto"
-					customClass="md:font-semibold"
-					padding="py-3 md:px-6"
 					v-if="leftButton"
+					class="w-full md:w-auto mr-auto"
+					custom-class="md:font-semibold"
+					padding="py-3 md:px-6"
 					:disabled="leftButton.disabled"
-					:bgColor="leftButton.bgColor"
-					:textColor="leftButton.textColor"
+					:bg-color="leftButton.bgColor"
+					:text-color="leftButton.textColor"
 					@click="leftButton.click">
 					{{ leftButton.label }}
 				</SofaButton>
@@ -54,13 +54,13 @@
 				</span>
 
 				<SofaButton
-					class="w-full md:w-auto ml-auto"
-					customClass="md:font-semibold"
-					padding="py-3 md:px-6"
 					v-if="rightButton"
+					class="w-full md:w-auto ml-auto"
+					custom-class="md:font-semibold"
+					padding="py-3 md:px-6"
 					:disabled="rightButton.disabled"
-					:bgColor="rightButton.bgColor"
-					:textColor="rightButton.textColor"
+					:bg-color="rightButton.bgColor"
+					:text-color="rightButton.textColor"
 					@click="rightButton.click">
 					{{ rightButton.label }}
 				</SofaButton>
@@ -71,7 +71,8 @@
 
 <script lang="ts" setup>
 import QuestionDisplay from '@/components/quizzes/QuestionDisplay.vue'
-import { Logic, TransformedQuestion } from 'sofa-logic'
+import { QuestionEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
@@ -89,7 +90,7 @@ const props = defineProps({
 		required: true,
 	},
 	questions: {
-		type: Array as PropType<TransformedQuestion[]>,
+		type: Array as PropType<QuestionEntity[]>,
 		required: true,
 	},
 	answer: {
@@ -109,10 +110,12 @@ const props = defineProps({
 	rightButton: {
 		type: Object as PropType<ButtonConfig>,
 		required: false,
+		default: null,
 	},
 	leftButton: {
 		type: Object as PropType<ButtonConfig>,
 		required: false,
+		default: null,
 	},
 	optionState: {
 		type: Function as PropType<InstanceType<typeof QuestionDisplay>['$props']['optionState']>,

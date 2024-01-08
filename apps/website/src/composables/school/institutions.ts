@@ -22,7 +22,7 @@ const fetchInstitutions = async () => {
 				store.institutions.value,
 				i,
 				(e) => e.id,
-				(e) => e.name,
+				(e) => e.title,
 				true,
 			),
 		)
@@ -52,7 +52,7 @@ export const useInstitution = (id: string) => {
 					store.institutions.value,
 					i,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 		},
@@ -81,7 +81,7 @@ export const useCreateInstitution = () => {
 					store.institutions.value,
 					institution,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()
@@ -120,7 +120,7 @@ export const useEditInstitution = () => {
 					store.institutions.value,
 					updatedInstitution,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()

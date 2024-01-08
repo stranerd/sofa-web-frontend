@@ -37,14 +37,14 @@ const { game, participants, questions, fetched, answer, start, end, join, submit
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
 })
-const { id } = useAuth()
+const { id: authId } = useAuth()
 
 const extras = computed(() => ({
-	isMine: game.value && game.value.user.id === id.value,
+	isMine: game.value && game.value.user.id === authId.value,
 	canStart: game.value && game.value.status === 'created',
-	canEnd: game.value && game.value.user.id === id.value && game.value.status === 'started',
-	canJoin: game.value && !game.value.participants.includes(id.value),
-	authId: id.value,
+	canEnd: game.value && game.value.user.id === authId.value && game.value.status === 'started',
+	canJoin: game.value && !game.value.participants.includes(authId.value),
+	authId: authId.value,
 	answers: answer.value?.data ?? null,
 	start,
 	end,
@@ -54,7 +54,7 @@ const extras = computed(() => ({
 		await router.push(`/games/${props.id}/results`)
 		return true
 	},
-	isParticipant: game.value?.participants.includes(id.value),
+	isParticipant: game.value?.participants.includes(authId.value),
 	get scores() {
 		return Object.entries(game.value.scores ?? {})
 			.sort((a, b) => b[1] - a[1])

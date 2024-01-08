@@ -10,21 +10,21 @@
 			}">
 			<div class="w-full flex items-start justify-start p-4 pb-[90px]">
 				<div class="w-[90%] rounded-custom bg-lightBlue p-3 flex items-start justify-start">
-					<sofa-normal-text :customClass="'text-left'">
+					<sofa-normal-text :custom-class="'text-left'">
 						{{ conversation.title }}
 					</sofa-normal-text>
 				</div>
 			</div>
 
-			<template v-slot:bottom>
+			<template #bottom>
 				<div class="w-full grid grid-cols-2 gap-4">
 					<div class="col-span-1 flex flex-col">
 						<sofa-button
-							:bgColor="'bg-primaryRed'"
-							:textColor="'text-white'"
-							:customClass="'w-full rounded-custom'"
+							:bg-color="'bg-primaryRed'"
+							:text-color="'text-white'"
+							:custom-class="'w-full rounded-custom'"
 							:padding="'py-3'"
-							:hasShadow="false"
+							:has-shadow="false"
 							@click="accept(false)">
 							Decline
 						</sofa-button>
@@ -32,11 +32,11 @@
 
 					<div class="col-span-1 flex flex-col">
 						<sofa-button
-							:bgColor="'bg-primaryGreen'"
-							:textColor="'text-white'"
-							:customClass="'w-full rounded-custom'"
+							:bg-color="'bg-primaryGreen'"
+							:text-color="'text-white'"
+							:custom-class="'w-full rounded-custom'"
 							:padding="'py-3'"
-							:hasShadow="false"
+							:has-shadow="false"
 							@click="accept(true)">
 							Accept
 						</sofa-button>
@@ -58,8 +58,8 @@ import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
-	components: { ChatLayout, ChatContent, SofaButton, SofaNormalText },
 	name: 'ChatsRequestsIdPage',
+	components: { ChatLayout, ChatContent, SofaButton, SofaNormalText },
 	middlewares: { goBackRoute: '/chats' },
 	setup() {
 		useMeta({

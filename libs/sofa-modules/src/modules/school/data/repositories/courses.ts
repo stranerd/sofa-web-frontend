@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { CourseEntity } from '../../domain/entities/courses'
 import { ICourseRepository } from '../../domain/irepositories/icourses'
 import { CourseFromModel, CourseToModel } from '../models/courses'
@@ -10,7 +9,7 @@ export class CourseRepository implements ICourseRepository {
 	private mapper = (model: CourseFromModel | null) => (model ? new CourseEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/school/courses`)
+		this.client = new HttpClient('/school/courses')
 	}
 
 	static getInstance() {

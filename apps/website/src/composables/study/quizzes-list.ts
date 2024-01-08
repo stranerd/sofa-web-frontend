@@ -1,4 +1,5 @@
-import { Conditions, Logic, Quiz } from 'sofa-logic'
+import { QuizEntity, QuizzesUseCases } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useItemsInList } from '../core/hooks'
@@ -6,76 +7,68 @@ import { useListener } from '../core/listener'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const store = {
-	quizzes: ref<Quiz[]>([]),
+	quizzes: ref<QuizEntity[]>([]),
 	fetched: ref(false),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Quiz>(
-			'study/quizzes',
-			{
-				created: async (entity) => {
-					Logic.addToArray(
-						store.quizzes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					Logic.addToArray(
-						store.quizzes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					store.quizzes.value = store.quizzes.value.filter((m) => m.id !== entity.id)
-				},
+		return QuizzesUseCases.listenToUserQuizzes(id.value, {
+			created: async (entity) => {
+				Logic.addToArray(
+					store.quizzes.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
 			},
-			(e) => e.user.id === id.value,
-		)
+			updated: async (entity) => {
+				Logic.addToArray(
+					store.quizzes.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			deleted: async (entity) => {
+				store.quizzes.value = store.quizzes.value.filter((m) => m.id !== entity.id)
+			},
+		})
 	}),
 }
 
 const tutorStore = {
-	quizzes: ref<Quiz[]>([]),
+	quizzes: ref<QuizEntity[]>([]),
 	fetched: ref(false),
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
-		const { id, isAdmin } = useAuth()
+		const { isAdmin } = useAuth()
 		if (!isAdmin.value)
 			return () => {
 				/**/
 			}
-		return Logic.Common.listenToMany<Quiz>(
-			'study/quizzes/tutors',
-			{
-				created: async (entity) => {
-					Logic.addToArray(
-						tutorStore.quizzes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					Logic.addToArray(
-						tutorStore.quizzes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					tutorStore.quizzes.value = tutorStore.quizzes.value.filter((m) => m.id !== entity.id)
-				},
+		return QuizzesUseCases.listenToTutorQuizzes({
+			created: async (entity) => {
+				Logic.addToArray(
+					tutorStore.quizzes.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
 			},
-			(e) => e.user.id === id.value && e.isForTutors,
-		)
+			updated: async (entity) => {
+				Logic.addToArray(
+					tutorStore.quizzes.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			deleted: async (entity) => {
+				tutorStore.quizzes.value = tutorStore.quizzes.value.filter((m) => m.id !== entity.id)
+			},
+		})
 	}),
 }
 
@@ -86,10 +79,7 @@ export const useMyQuizzes = () => {
 		try {
 			await store.setError('')
 			await store.setLoading(true)
-			const quizzes = await Logic.Study.GetQuizzes({
-				where: [{ field: 'user.id', value: id.value }],
-				all: true,
-			})
+			const quizzes = await QuizzesUseCases.getUserQuizzes(id.value)
 			quizzes.results.forEach((r) =>
 				Logic.addToArray(
 					store.quizzes.value,
@@ -106,7 +96,7 @@ export const useMyQuizzes = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchQuizzes()
+		if (!store.fetched.value && !store.loading.value) await fetchQuizzes()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -126,10 +116,7 @@ export const useTutorQuizzes = () => {
 		try {
 			await tutorStore.setError('')
 			await tutorStore.setLoading(true)
-			const quizzes = await Logic.Study.GetTutorQuizzes({
-				where: [{ field: 'user.id', value: id.value }],
-				all: true,
-			})
+			const quizzes = await QuizzesUseCases.getTutorQuizzes()
 			quizzes.results.forEach((r) =>
 				Logic.addToArray(
 					tutorStore.quizzes.value,
@@ -146,7 +133,7 @@ export const useTutorQuizzes = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !tutorStore.fetched.value &&  */ !tutorStore.loading.value && isAdmin.value) await fetchQuizzes()
+		if (!tutorStore.fetched.value && !tutorStore.loading.value && isAdmin.value) await fetchQuizzes()
 		await tutorStore.listener.start()
 	})
 	onUnmounted(async () => {
@@ -159,26 +146,16 @@ export const useTutorQuizzes = () => {
 export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
 	const allQuizzes = computed(() => [...store.quizzes.value, ...tutorStore.quizzes.value])
 
-	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, async (notFetched: string[]) => {
-		const quizzes = await Logic.Study.GetQuizzes({
-			where: [{ field: 'id', value: notFetched, condition: Conditions.in }],
-			all: true,
-		})
-		return quizzes.results
-	})
+	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, (ids) => QuizzesUseCases.getInList(ids))
 
 	const listener = useListener(async () => {
-		return await Logic.Common.listenToMany<Quiz>(
-			'study/quizzes',
-			{
-				created: addToList,
-				updated: addToList,
-				deleted: () => {
-					/* */
-				},
+		return await QuizzesUseCases.listenToInList(() => ids.value, {
+			created: addToList,
+			updated: addToList,
+			deleted: () => {
+				/* */
 			},
-			(e) => ids.value.includes(e.id),
-		)
+		})
 	})
 
 	onMounted(() => {

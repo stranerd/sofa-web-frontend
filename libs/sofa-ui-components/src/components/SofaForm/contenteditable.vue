@@ -1,12 +1,12 @@
 <template>
 	<span
+		:id="`content-${tabIndex}`"
 		:class="`${customClass} !bg-white !text-left customInput focus:outline-none w-auto !text-bodyBlack placeholder:text-grayColor py-2 px-2`"
 		:placeholder="placeholder"
 		:contenteditable="true"
 		@input="onInput"
 		@blur="onBlur"
-		@keydown.enter.prevent="onEnter"
-		:id="`content-${tabIndex}`">
+		@keydown.enter.prevent="onEnter">
 		{{ textContent }}
 	</span>
 </template>
@@ -14,11 +14,13 @@
 import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
 
 export default defineComponent({
+	name: 'SofaCustomInput',
 	components: {},
 	props: {
 		modelValue: {
 			type: String,
 			required: false,
+			default: '',
 		},
 		customClass: {
 			type: String,
@@ -41,7 +43,6 @@ export default defineComponent({
 			default: true,
 		},
 	},
-	name: 'SofaCustomInput',
 	emits: ['update:modelValue', 'onBlur', 'onContentChange', 'onEnter'],
 	setup(props, context) {
 		const textContent = ref(props.modelValue ?? '')

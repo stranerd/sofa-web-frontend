@@ -10,6 +10,7 @@ export enum AuthRoles {
 	isSuperAdmin = 'isSuperAdmin',
 	isSubscribed = 'isSubscribed',
 	isVerified = 'isVerified',
+	isOfficialAccount = 'isOfficialAccount',
 }
 
 export enum AuthTypes {

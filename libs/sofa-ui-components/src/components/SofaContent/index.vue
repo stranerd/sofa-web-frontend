@@ -12,48 +12,48 @@
       </sofa-normal-text> -->
 		</div>
 
-		<div class="w-full flex flex-col gap-3" v-for="(section, index) in data.sections" :key="index">
+		<div v-for="(section, index) in data.sections" :key="index" class="w-full flex flex-col gap-3">
 			<div
 				class="w-full bg-lightGray cursor-pointer rounded-custom px-4 py-4 flex flex-row items-center justify-between"
 				@click.stop="section.opened ? (section.opened = false) : (section.opened = true)">
-				<sofa-normal-text :customClass="'!font-bold text-left !line-clamp-1'">
+				<sofa-normal-text :custom-class="'!font-bold text-left !line-clamp-1'">
 					{{ section.title }}
 				</sofa-normal-text>
 
 				<div class="flex flex-row items-center gap-2">
 					<sofa-normal-text>{{ section.data.length }} materials </sofa-normal-text>
-					<sofa-icon :customClass="'h-[7px]'" :name="section.opened ? 'chevron-up' : 'chevron-down'" />
+					<sofa-icon :custom-class="'h-[7px]'" :name="section.opened ? 'chevron-up' : 'chevron-down'" />
 				</div>
 			</div>
 
 			<template v-if="section.opened">
 				<div
-					:class="`w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row items-center justify-between   `"
-					v-for="(eachData, index) in section.data"
-					:key="index">
+					v-for="(eachData, i) in section.data"
+					:key="i"
+					:class="`w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row items-center justify-between   `">
 					<div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''}`">
-						<sofa-icon :customClass="'h-[42px]'" :name="`${eachData.type.toLowerCase()}-content`" />
+						<sofa-icon :custom-class="'h-[42px]'" :name="`${eachData.type.toLowerCase()}-content`" />
 						<div class="flex flex-col gap-1">
-							<sofa-normal-text :customClass="'!font-bold text-left  !line-clamp-1'">{{ eachData.title }}</sofa-normal-text>
+							<sofa-normal-text :custom-class="'!font-bold text-left  !line-clamp-1'">{{ eachData.title }}</sofa-normal-text>
 							<div class="flex flex-row items-center gap-2">
 								<sofa-normal-text
-									:color="'text-grayColor'"
 									v-if="!Logic.Common.isOnlyMobile"
-									:customClass="'text-left !line-clamp-1'">
+									:color="'text-grayColor'"
+									:custom-class="'text-left !line-clamp-1'">
 									{{ eachData.type }}
 								</sofa-normal-text>
 								<span
 									v-if="!Logic.Common.isOnlyMobile"
 									:class="`h-[5px] w-[5px] rounded-full bg-grayColor  hidden md:!inline-block`">
 								</span>
-								<sofa-normal-text :color="'text-grayColor'" :customClass="'text-left !line-clamp-1'">
+								<sofa-normal-text :color="'text-grayColor'" :custom-class="'text-left !line-clamp-1'">
 									{{ eachData.sub }}
 								</sofa-normal-text>
 							</div>
 						</div>
 					</div>
 
-					<sofa-icon :customClass="'h-[40px]'" v-if="!hasAccess" :name="'locked-content'" />
+					<sofa-icon v-if="!hasAccess" :custom-class="'h-[40px]'" :name="'locked-content'" />
 				</div>
 			</template>
 		</div>
@@ -68,6 +68,7 @@ import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
+	name: 'SofaContent',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -86,7 +87,6 @@ export default defineComponent({
 			default: false,
 		},
 	},
-	name: 'SofaContent',
 	setup() {
 		return {
 			Logic,

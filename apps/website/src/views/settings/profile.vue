@@ -11,11 +11,11 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'ProfileSettingPage',
 	components: {
 		SettingsLayout,
 		SettingProfile,
 	},
-	name: 'ProfileSettingPage',
 	middlewares: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({

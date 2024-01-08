@@ -2,6 +2,7 @@ import { getRandomValue } from 'valleyed'
 
 export class BaseEntity {
 	public hash: string
+	public __type = this.constructor.name
 
 	constructor() {
 		this.hash = getRandomValue()
