@@ -1,7 +1,7 @@
 <template>
 	<SofaModal>
 		<div class="flex flex-col gap-4 mdlg:p-6 p-4">
-			<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex" v-if="!Logic.Common.isOnlyMobile">
+			<div v-if="!Logic.Common.isOnlyMobile" class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
 				<SofaHeaderText class="!text-xl" content="Customize AI" />
 			</div>
 
@@ -10,46 +10,46 @@
 				<SofaIcon class="h-[19px]" name="circle-close" />
 			</div>
 
-			<form @submit.prevent="updateAi" class="w-full flex flex-col gap-8">
+			<form class="w-full flex flex-col gap-8" @submit.prevent="updateAi">
 				<div class="w-full flex flex-col items-center gap-4 py-3">
 					<SofaImageLoader
-						customClass="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-						:photoUrl="factory.localPhotoLink">
-						<SofaIcon class="h-[50px]" name="user" v-if="!factory.localPhotoLink" />
+						custom-class="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
+						:photo-url="factory.localPhotoLink">
+						<SofaIcon v-if="!factory.localPhotoLink" class="h-[50px]" name="user" />
 						<SofaFileAttachment
-							:isWrapper="true"
-							customClass="absolute bottom-0 right-0 bg-black bg-opacity-50 rounded-full aspect-square !w-[40px] flex items-center justify-center"
-							accept="image/*"
 							v-model="factory.photo"
-							v-model:localFileUrl="factory.localPhotoLink">
-							<template v-slot:content>
+							v-model:localFileUrl="factory.localPhotoLink"
+							:is-wrapper="true"
+							custom-class="absolute bottom-0 right-0 bg-black bg-opacity-50 rounded-full aspect-square !w-[40px] flex items-center justify-center"
+							accept="image/*">
+							<template #content>
 								<SofaIcon class="h-[18px]" name="camera-white" />
 							</template>
 						</SofaFileAttachment>
 					</SofaImageLoader>
 
 					<SofaTextField
-						customClass="rounded-custom !bg-lightGray"
+						v-model="factory.name"
+						custom-class="rounded-custom !bg-lightGray"
 						type="text"
-						borderColor="border-transparent"
+						border-color="border-transparent"
 						placeholder="Name"
-						:error="factory.errors.name"
-						v-model="factory.name" />
+						:error="factory.errors.name" />
 
 					<SofaTextField
-						customClass="rounded-custom !bg-lightGray"
+						v-model="factory.tagline"
+						custom-class="rounded-custom !bg-lightGray"
 						type="text"
-						borderColor="border-transparent"
+						border-color="border-transparent"
 						placeholder="Tagline"
-						:error="factory.errors.tagline"
-						v-model="factory.tagline" />
+						:error="factory.errors.tagline" />
 				</div>
 
 				<div class="w-full flex items-center justify-between">
 					<SofaButton
 						padding="px-5 py-2"
-						bgColor="bg-white"
-						textColor="text-grayColor"
+						bg-color="bg-white"
+						text-color="text-grayColor"
 						class="border border-gray-100"
 						@click="close">
 						Exit

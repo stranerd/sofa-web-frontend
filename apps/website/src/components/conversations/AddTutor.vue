@@ -13,18 +13,18 @@
 
 					<div class="w-full grid grid-cols-3 gap-2 py-3">
 						<div
-							class="col-span-1 h-2 rounded-full"
 							v-for="(_, index) in 3"
 							:key="index"
+							class="col-span-1 h-2 rounded-full"
 							:class="index <= currentStep ? 'bg-deepGray' : 'bg-darkLightGray'" />
 					</div>
 
-					<div class="w-full flex flex-col pt-3" v-if="currentStep === 2">
+					<div v-if="currentStep === 2" class="w-full flex flex-col pt-3">
 						<SofaSelect
+							v-model="selectedTopic"
 							placeholder="Select subject"
-							customClass="rounded-custom border"
-							:options="allTopics"
-							v-model="selectedTopic" />
+							custom-class="rounded-custom border"
+							:options="allTopics" />
 					</div>
 				</div>
 
@@ -32,26 +32,26 @@
 					<div class="w-full flex flex-col gap-3 px-4 md:px-0">
 						<SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
 						<a
-							class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
 							v-for="(option, index) in helpOptions"
 							:key="index"
+							class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
 							@click="selectedhelpOption = option.key">
 							<SofaNormalText
 								:color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
 								:content="option.title" />
 							<SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
 						</a>
-						<SofaTextField customClass="border rounded-custom" placeholder="Others" v-model="selectedhelpOptionOthers" />
+						<SofaTextField v-model="selectedhelpOptionOthers" custom-class="border rounded-custom" placeholder="Others" />
 					</div>
 				</template>
 
 				<template v-if="currentStep == 1">
 					<div class="w-full flex flex-col gap-3 px-4 md:px-0">
 						<SofaTextarea
-							customClass="bg-lightGray rounded-custom"
-							placeholder="Tell the tutor why you need him/her"
 							v-model="factory.body"
-							textAreaStyle="!bg-lightGray rounded-custom">
+							custom-class="bg-lightGray rounded-custom"
+							placeholder="Tell the tutor why you need him/her"
+							text-area-style="!bg-lightGray rounded-custom">
 						</SofaTextarea>
 					</div>
 				</template>
@@ -60,12 +60,12 @@
 					<div class="w-full flex flex-col gap-3 md:px-0 px-4 flex-grow">
 						<template v-if="filteredTutors.length">
 							<a
-								class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
-								:class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
 								v-for="(tutor, index) in filteredTutors"
 								:key="index"
+								class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
+								:class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
 								@click="factory.tutorId = tutor.id">
-								<SofaAvatar size="60" :photoUrl="tutor.photo_url" :showOnline="true" :online="tutor.online" />
+								<SofaAvatar size="60" :photo-url="tutor.photo_url" :show-online="true" :online="tutor.online" />
 								<div class="w-full flex flex-col flex-grow gap-1">
 									<div class="flex gap-2 items-center">
 										<SofaNormalText class="!font-bold" :content="tutor.name" />
@@ -97,10 +97,10 @@
 			<div class="w-full flex items-center justify-between p-4">
 				<SofaButton
 					padding="px-5 py-2"
-					bgColor="bg-white"
-					textColor="text-grayColor"
+					bg-color="bg-white"
+					text-color="text-grayColor"
 					class="hidden md:!inline-block"
-					customClass="border border-gray-100"
+					custom-class="border border-gray-100"
 					@click="emits('close')">
 					Exit
 				</SofaButton>

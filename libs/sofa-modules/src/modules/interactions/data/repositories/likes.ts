@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { LikeEntity } from '../../domain/entities/likes'
 import { ILikeRepository } from '../../domain/irepositories/likes'
 import { LikeFromModel, LikeToModel } from '../models/likes'
@@ -10,7 +9,7 @@ export class LikeRepository implements ILikeRepository {
 	private mapper = (model: LikeFromModel | null) => (model ? new LikeEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/interactions/likes`)
+		this.client = new HttpClient('/interactions/likes')
 	}
 
 	static getInstance() {

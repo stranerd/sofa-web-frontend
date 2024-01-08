@@ -1,7 +1,7 @@
 <template>
 	<div
-		class="fixed top-0 left-0 h-full w-full bg-black opacity-80 z-[100000000000] cursor-not-allowed"
-		v-if="loaderSetup.loading || loaderSetup.loaders.length">
+		v-if="loaderSetup.loading || loaderSetup.loaders.length"
+		class="fixed top-0 left-0 h-full w-full bg-black opacity-80 z-[100000000000] cursor-not-allowed">
 		<div class="loader-bar" />
 	</div>
 	<metainfo>
@@ -26,7 +26,7 @@
 	<rate-and-review-modal
 		v-if="reportMaterialSetup.show"
 		:close="() => (reportMaterialSetup.show = false)"
-		:canClose="true"
+		:can-close="true"
 		:has-ratings="false"
 		:title="`Report this ${reportMaterialSetup.type}`"
 		@on-review-submitted="sendReportMaterial" />
@@ -35,7 +35,7 @@
 		v-for="confirmation in confirmations"
 		:key="confirmation.id"
 		:title="confirmation.title"
-		:subTitle="confirmation.sub"
+		:sub-title="confirmation.sub"
 		:close="() => confirmation.close(false)"
 		:buttons="[
 			{
@@ -59,7 +59,7 @@
 		v-for="confirmation in successes"
 		:key="confirmation.id"
 		:title="confirmation.title"
-		:subTitle="confirmation.sub"
+		:sub-title="confirmation.sub"
 		:close="() => confirmation.close(false)"
 		:button="{
 			label: confirmation.button?.label ?? 'Ok',

@@ -9,31 +9,31 @@
 								class="w-full flex flex-row items-center justify-between cursor-pointer"
 								@click="option?.opened ? (option.opened = false) : (option.opened = true)">
 								<div class="flex flex-row items-center gap-2">
-									<sofa-normal-text :customClass="'!font-bold'" v-if="!option.edit">{{
+									<sofa-normal-text v-if="!option.edit" :custom-class="'!font-bold'">{{
 										option.name == 'unsectioned' ? 'Unsectioned' : option.name
 									}}</sofa-normal-text>
 									<input
 										v-else
-										@click.stop="null"
-										class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
 										v-model="option.name"
+										class="outline-none focus:outline-slate-200 font-semibold px-2 placeholder:font-normal mdlg:text-base text-xs w-full border !bg-white border-gray-100 rounded !text-bodyBlack"
 										autofocus
 										placeholder="Section name"
+										@click.stop="null"
 										@blur="option.edit = false" />
 								</div>
 								<div class="flex flex-row items-center gap-3">
 									<sofa-icon
-										@click.stop="option.edit = true"
-										:customClass="'h-[15px] cursor-pointer'"
+										v-if="option.name != 'unsectioned'"
+										:custom-class="'h-[15px] cursor-pointer'"
 										:name="'edit-gray'"
-										v-if="option.name != 'unsectioned'" />
+										@click.stop="option.edit = true" />
 									<sofa-icon
-										@click.stop="removeSection(index)"
-										:customClass="'h-[15px] cursor-pointer'"
+										v-if="option.name != 'unsectioned'"
+										:custom-class="'h-[15px] cursor-pointer'"
 										:name="'trash-gray'"
-										v-if="option.name != 'unsectioned'" />
+										@click.stop="removeSection(index)" />
 									<sofa-icon
-										:customClass="'h-[7px] cursor-pointer'"
+										:custom-class="'h-[7px] cursor-pointer'"
 										:name="option.opened ? 'chevron-up' : 'chevron-down'" />
 								</div>
 							</div>
@@ -64,7 +64,7 @@
 												}
 											">
 											<div class="flex flex-row items-center gap-2">
-												<sofa-icon :customClass="'h-[17px]'" :name="element.type" />
+												<sofa-icon :custom-class="'h-[17px]'" :name="element.type" />
 												<sofa-normal-text
 													class="px-3 !line-clamp-2 text-left whitespace-nowrap overflow-x-hidden"
 													:content="element.name" />
@@ -77,13 +77,14 @@
                         :name="'trash-gray'"
                       /> -->
 
-												<sofa-icon :customClass="'h-[19px] handle'" :name="'reorder-gray'" />
+												<sofa-icon :custom-class="'h-[19px] handle'" :name="'reorder-gray'" />
 											</div>
 										</div>
 									</template>
 								</draggable>
 
 								<div
+									v-if="option.name != 'unsectioned'"
 									class="px-2 py-2 flex flex-row w-full items-center gap-2 cursor-pointer"
 									@click="
 										() => {
@@ -91,9 +92,8 @@
 											selectedSection = index
 											handleItemSelected()
 										}
-									"
-									v-if="option.name != 'unsectioned'">
-									<sofa-icon :customClass="'h-[17px]'" :name="'box-add-purple'" />
+									">
+									<sofa-icon :custom-class="'h-[17px]'" :name="'box-add-purple'" />
 									<sofa-normal-text :color="'text-primaryPurple'"> Add study material </sofa-normal-text>
 								</div>
 							</template>
@@ -103,23 +103,25 @@
 			</template>
 
 			<div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
-				<sofa-icon :customClass="'h-[17px]'" :name="'box-add-pink'" />
+				<sofa-icon :custom-class="'h-[17px]'" :name="'box-add-pink'" />
 				<sofa-normal-text :color="'text-primaryPink'"> Add section </sofa-normal-text>
 			</div>
 		</div>
 	</div>
 </template>
 <script lang="ts">
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
-import { Course, Logic, Question, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
-import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { Course, Logic, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
+	name: 'SofaCourseSections',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -136,6 +138,7 @@ export default defineComponent({
 		},
 		sectionInput: {
 			type: Object as () => UpdateCourseSectionsInput,
+			required: true,
 		},
 		updateSections: {
 			type: Function,
@@ -144,7 +147,6 @@ export default defineComponent({
 			},
 		},
 	},
-	name: 'SofaCourseSections',
 	emits: ['update:modelValue', 'OnMaterialSelected'],
 	setup(props, context) {
 		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
@@ -250,69 +252,43 @@ export default defineComponent({
 			}
 
 			if (quiz) {
-				Logic.Study.GetQuestions(quiz.id).then((response) => {
-					if (response) {
-						const questions: Question[] = response.results
-
-						const allQuestions = questions.map((eachQuestion) => {
-							let answers = ''
-
-							if (eachQuestion.data.type == 'multipleChoice') {
-								answers = eachQuestion.data.options[eachQuestion.data.answers[0]]
-							} else if (eachQuestion.data.type == 'trueOrFalse') {
-								answers = `${capitalize(eachQuestion.data.answer.toString())}`
-							} else if (
-								eachQuestion.data.type == 'writeAnswer' ||
-								eachQuestion.data.type == 'sequence' ||
-								eachQuestion.data.type == 'dragAnswers' ||
-								eachQuestion.data.type == 'fillInBlanks'
-							) {
-								answers = capitalize(eachQuestion.data.answers?.join(', '))
-							} else if (eachQuestion.data.type == 'match') {
-								answers = capitalize(
-									eachQuestion.data.set
-										.map((item) => {
-											return item.a
-										})
-										.join(', '),
-								)
-							}
-							return {
-								type: Logic.Study.getQuestionTypeLabel(eachQuestion.data.type),
-								duration: Logic.Common.prettifyTime(eachQuestion.timeLimit),
-								content: eachQuestion.question,
-								answer: answers,
-							}
-						})
-
-						staticSectionOptions.value[index].materials.push({
-							name: quiz.title,
-							id: quiz.id,
-							type: 'quiz-course',
-							details: {
-								image_url: quiz.photo?.link || '',
-								title: quiz.title,
-								type: 'Quiz',
-								questions: `${quiz.questions.length} questions`,
-								description: quiz.description,
-								ratings: {
-									avg: Math.round(quiz.ratings.avg),
-									label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? 's' : ''}`,
-								},
-								user: {
-									photoUrl: `${quiz.user.bio?.photo?.link}`,
-									name: `${quiz.user.bio?.name?.full}`,
-								},
-								last_updated: formatTime(quiz.createdAt),
-							},
-							original: quiz,
-							data: allQuestions,
-							hover: false,
-						})
-
-						if (save) {
-							addSectionMaterial(SingleQuiz.value.id, 'quiz')
+				QuestionsUseCases.getAllQuestions(quiz.id).then((questions) => {
+					const allQuestions = questions.results.map((q) => {
+						return {
+							type: QuestionEntity.getLabel(q.data.type),
+							duration: Logic.Common.prettifyTime(q.timeLimit),
+							content: q.question,
+							answer: q.answer,
 						}
+					})
+
+					staticSectionOptions.value[index].materials.push({
+						name: quiz.title,
+						id: quiz.id,
+						type: 'quiz-course',
+						details: {
+							image_url: quiz.photo?.link || '',
+							title: quiz.title,
+							type: 'Quiz',
+							questions: `${quiz.questions.length} questions`,
+							description: quiz.description,
+							ratings: {
+								avg: Math.round(quiz.ratings.avg),
+								label: `${quiz.ratings.count} rating${quiz.ratings.count > 1 ? 's' : ''}`,
+							},
+							user: {
+								photoUrl: `${quiz.user.bio?.photo?.link}`,
+								name: `${quiz.user.bio?.name?.full}`,
+							},
+							last_updated: formatTime(quiz.createdAt),
+						},
+						original: quiz,
+						data: allQuestions,
+						hover: false,
+					})
+
+					if (save) {
+						addSectionMaterial(SingleQuiz.value.id, 'quiz')
 					}
 				})
 			}

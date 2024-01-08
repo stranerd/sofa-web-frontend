@@ -20,6 +20,7 @@ import { defineComponent } from 'vue'
 import SofaIcon from '../SofaIcon'
 
 export default defineComponent({
+	name: 'SofaButton',
 	components: {
 		SofaIcon,
 	},
@@ -53,7 +54,6 @@ export default defineComponent({
 			default: false,
 		},
 	},
-	name: 'SofaButton',
 })
 </script>
 

@@ -11,11 +11,11 @@
 				v-for="activity in data"
 				:key="activity.id"
 				:activity="activity"
-				:isWrapped="!Logic.Common.isLarge"
+				:is-wrapped="!Logic.Common.isLarge"
 				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="activity.type === 'course' ? openCourse(activity) : openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon :name="'more-options-horizontal'" :customClass="'h-[6px]'" @click.stop="showMoreOptionHandler(activity)" />
+					<sofa-icon :name="'more-options-horizontal'" :custom-class="'h-[6px]'" @click.stop="showMoreOptionHandler(activity)" />
 				</div>
 			</sofa-activity-card>
 		</template>
@@ -23,7 +23,7 @@
 		<sofa-empty-state
 			v-else
 			:title="'This organization has no items'"
-			:subTitle="'Whenever this organization creates an item, you will see it here'" />
+			:sub-title="'Whenever this organization creates an item, you will see it here'" />
 	</LibraryLayout>
 </template>
 
@@ -38,13 +38,13 @@ import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
+	name: 'LibraryOrganizationsIdPage',
 	components: {
 		LibraryLayout,
 		SofaIcon,
 		SofaEmptyState,
 		SofaActivityCard,
 	},
-	name: 'LibraryOrganizationsIdPage',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {

@@ -23,6 +23,7 @@ import SofaImageLoader from '../SofaImageLoader/index.vue'
 import SofaIcon from '../SofaIcon'
 
 export default defineComponent({
+	name: 'SofaAvatar',
 	components: {
 		SofaImageLoader,
 		SofaIcon,
@@ -60,7 +61,6 @@ export default defineComponent({
 			required: false,
 		},
 	},
-	name: 'SofaAvatar',
 	setup() {
 		const randomIndex = Math.floor(Math.random() * 5)
 

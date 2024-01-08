@@ -8,34 +8,34 @@
 				photoUrl: otherUsers.at(0).photo ?? null,
 				userNames: ['You', ...otherUsers.map((u) => u.name)],
 			}">
-			<template v-slot:top-extras>
+			<template #top-extras>
 				<div class="flex items-center gap-3">
 					<sofa-icon
-						:customClass="'h-[17px] cursor-pointer mdlg:hidden'"
+						v-if="conversation.user.id === id"
+						:custom-class="'h-[17px] cursor-pointer mdlg:hidden'"
 						:name="'tutor'"
-						@click="onClickAddTutor"
-						v-if="conversation.user.id === id" />
-					<sofa-icon :customClass="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
+						@click="onClickAddTutor" />
+					<sofa-icon :custom-class="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
 				</div>
 			</template>
-			<ConversationMessages :conversation="conversation" id="MessagesScrollContainer" />
-			<template v-slot:bottom>
+			<ConversationMessages id="MessagesScrollContainer" :conversation="conversation" />
+			<template #bottom>
 				<form
-					@submit.prevent="createMessage"
-					class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
+					class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1"
+					@submit.prevent="createMessage">
 					<input
 						v-model="factory.body"
 						:disabled="!conversation.accepted?.is"
 						:class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
 						placeholder="Enter message" />
 					<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
-						<sofa-icon :name="'send'" :customClass="'h-[19px]'" />
+						<sofa-icon :name="'send'" :custom-class="'h-[19px]'" />
 					</button>
 				</form>
 			</template>
 		</ChatContent>
 
-		<template v-if="conversation" v-slot:right-extras>
+		<template v-if="conversation" #right-extras>
 			<div
 				v-if="conversation.user.id === id && !conversation.tutor"
 				class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
@@ -45,11 +45,11 @@
 						class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
 					<div class="flex flex-col gap-1">
-						<sofa-header-text :customClass="'!text-base !font-bold'" :content="userAi.name" />
+						<sofa-header-text :custom-class="'!text-base !font-bold'" :content="userAi.name" />
 					</div>
 				</div>
 				<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
-					<sofa-normal-text :customClass="'text-left'" :color="'text-deepGray'">
+					<sofa-normal-text :custom-class="'text-left'" :color="'text-deepGray'">
 						Hello! I am here to respond to your messages in every chat 24/7.
 						<br /><br />
 						Let us work towards your highest ever academic achievements.
@@ -61,10 +61,10 @@
 				v-if="conversation.user.id === id && !conversation.tutor"
 				class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
 				<div class="w-full flex flex-row gap-2 items-center justify-start">
-					<sofa-icon :customClass="'h-[24px]'" :name="'add-tutor-white'" />
-					<sofa-normal-text :color="'text-white'" :customClass="'!text-base !font-bold'"> Tutor help </sofa-normal-text>
+					<sofa-icon :custom-class="'h-[24px]'" :name="'add-tutor-white'" />
+					<sofa-normal-text :color="'text-white'" :custom-class="'!text-base !font-bold'"> Tutor help </sofa-normal-text>
 				</div>
-				<sofa-normal-text :customClass="'text-left'" :color="'text-darkLightGray'">
+				<sofa-normal-text :custom-class="'text-left'" :color="'text-darkLightGray'">
 					Need extra help with your work?
 				</sofa-normal-text>
 				<sofa-button :bg-color="'bg-white'" :text-color="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
@@ -74,15 +74,15 @@
 
 			<div v-if="conversation.user.id === id" class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<a
-					class="w-full flex items-center justify-start gap-2 text-primaryRed"
 					v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
+					class="w-full flex items-center justify-start gap-2 text-primaryRed"
 					@click="onClickEndSession">
-					<sofa-icon :customClass="'h-[16px] fill-current'" :name="'tutor'" />
+					<sofa-icon :custom-class="'h-[16px] fill-current'" :name="'tutor'" />
 					<sofa-normal-text :color="'text-inherit'">End conversation</sofa-normal-text>
 				</a>
 
 				<a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
-					<sofa-icon :customClass="'h-[16px]'" :name="'trash'" />
+					<sofa-icon :custom-class="'h-[16px]'" :name="'trash'" />
 					<sofa-normal-text :color="'text-primaryRed'">Delete conversation</sofa-normal-text>
 				</a>
 			</div>
@@ -91,12 +91,12 @@
 			<template v-if="conversation.tutor?.id === id">
 				<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
 					<router-link to="/profile" class="w-full flex flex-col items-center justify-center gap-3">
-						<sofa-avatar :size="'180'" :photoUrl="user?.bio.photo?.link" />
+						<sofa-avatar :size="'180'" :photo-url="user?.bio.photo?.link" />
 					</router-link>
 
 					<sofa-header-text :size="'xl'" :content="user?.bio.name.full" />
 
-					<sofa-normal-text :customClass="'text-center'" :color="'text-grayColor'">
+					<sofa-normal-text :custom-class="'text-center'" :color="'text-grayColor'">
 						{{ user?.bio.description }}
 					</sofa-normal-text>
 				</div>
@@ -104,35 +104,35 @@
 		</template>
 
 		<!-- More options for smaller screens -->
-		<sofa-modal :close="() => (showMoreOptions = false)" v-if="showMoreOptions" :customClass="`mdlg:!hidden`">
+		<sofa-modal v-if="showMoreOptions" :close="() => (showMoreOptions = false)" :custom-class="`mdlg:!hidden`">
 			<div :class="`w-full top-0 px-0 pt-0 h-full flex flex-col`" @click.stop="() => (showMoreOptions = false)">
 				<div class="w-[80%] md:!w-[60%] flex flex-col bg-white left-[20%] md:!left-[40%] gap-4 relative overflow-y-auto h-full">
 					<router-link
-						to="/chats/new"
 						v-if="conversation.user.id === id"
+						to="/chats/new"
 						class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
 						<sofa-icon :name="'box-add-pink'" :custom-class="'h-[17px]'" />
 						<sofa-normal-text :color="'text-primaryPink'"> New chat </sofa-normal-text>
 					</router-link>
 
 					<div class="w-full flex flex-col gap-2">
-						<ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
+						<ChatList :custom-class="'!rounded-none'" :extra-style="'px-3'" />
 					</div>
 
 					<div
-						class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-lightGray flex flex-col gap-4"
-						v-if="conversation.user.id === id">
+						v-if="conversation.user.id === id"
+						class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-lightGray flex flex-col gap-4">
 						<a
-							class="w-full flex items-center justify-start gap-2 text-primaryRed"
 							v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
+							class="w-full flex items-center justify-start gap-2 text-primaryRed"
 							@click="onClickEndSession">
 							<SofaIcon class="h-[16px] fill-current" name="tutor" />
 							<SofaNormalText color="text-inherit" content="End conversation" />
 						</a>
 						<a
+							v-else-if="!conversation.tutor"
 							class="w-full flex items-center justify-start gap-2 text-primaryGreen"
-							@click="onClickAddTutor"
-							v-else-if="!conversation.tutor">
+							@click="onClickAddTutor">
 							<SofaIcon class="h-[16px] fill-current" name="tutor" />
 							<SofaNormalText color="text-inherit" content="Message a tutor" />
 						</a>
@@ -174,6 +174,7 @@ import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
+	name: 'ChatsIdPage',
 	components: {
 		ChatLayout,
 		ChatList,
@@ -188,7 +189,6 @@ export default defineComponent({
 		RateAndReviewModal,
 		ConversationMessages,
 	},
-	name: 'ChatsIdPage',
 	middlewares: { goBackRoute: '/chats' },
 	setup() {
 		useMeta({

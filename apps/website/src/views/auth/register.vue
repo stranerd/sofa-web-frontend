@@ -1,31 +1,31 @@
 <template>
-	<auth-layout title="Create your account" subTitle="Join the School Of Future Africa">
+	<auth-layout title="Create your account" sub-title="Join the School Of Future Africa">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signup">
 			<AuthProvider />
 
 			<div class="w-full flex flex-col gap-4">
 				<sofa-text-field
+					ref="email"
+					v-model="factory.email"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					type="email"
 					:name="'Email'"
-					ref="email"
-					v-model="factory.email"
 					:placeholder="'Email'"
 					:error="factory.errors.email" />
 				<sofa-text-field
+					ref="password"
+					v-model="factory.password"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					:type="'password'"
 					:placeholder="'Password'"
 					:name="'Password'"
-					ref="password"
-					:error="factory.errors.password"
-					v-model="factory.password" />
+					:error="factory.errors.password" />
 				<sofa-text-field
+					ref="confirm_new_password"
+					v-model="factory.cPassword"
 					:custom-class="'rounded-custom !bg-lightGray'"
 					type="password"
 					:name="'Confirm password'"
-					ref="confirm_new_password"
-					v-model="factory.cPassword"
 					:placeholder="'Confirm password'"
 					:error="factory.errors.cPassword" />
 			</div>
@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<sofa-button :disabled="!factory.valid" :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit">
+				<sofa-button :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit">
 					Sign Up
 				</sofa-button>
 			</div>
@@ -66,6 +66,7 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'AuthRegisterPage',
 	components: {
 		AuthProvider,
 		SofaNormalText,
@@ -73,7 +74,6 @@ export default defineComponent({
 		SofaCheckbox,
 		SofaButton,
 	},
-	name: 'AuthRegisterPage',
 	beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
 	setup() {
 		useMeta({ title: 'Create Your Account' })

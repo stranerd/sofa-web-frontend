@@ -10,8 +10,8 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
-	components: { LibraryLayout },
 	name: 'LibraryPage',
+	components: { LibraryLayout },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated', async () => (Logic.Common.isLarge ? '/library/quizzes' : undefined)]),
 	setup() {
 		useMeta({

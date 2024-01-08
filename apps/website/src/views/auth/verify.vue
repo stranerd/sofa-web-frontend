@@ -1,12 +1,12 @@
 <template>
-	<auth-layout title="Verify your email" :subTitle="`Enter the 6-digit code sent to your email ${email}`">
+	<auth-layout title="Verify your email" :sub-title="`Enter the 6-digit code sent to your email ${email}`">
 		<form class="flex flex-col gap-6 w-full items-center justify-center" @submit.prevent="completeVerification">
 			<div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col gap-4">
-				<SofaOtpInput :numberOfInput="6" v-model="token" />
+				<SofaOtpInput v-model="token" :number-of-input="6" />
 			</div>
 
 			<div class="w-full flex flex-col">
-				<sofa-button :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Verify </sofa-button>
+				<sofa-button :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Verify </sofa-button>
 			</div>
 		</form>
 
@@ -27,12 +27,12 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'AuthVerifyPage',
 	components: {
 		SofaNormalText,
 		SofaButton,
 		SofaOtpInput,
 	},
-	name: 'AuthVerifyPage',
 	beforeRouteEnter: generateMiddlewares([
 		async () => {
 			if (!getEmailVerificationEmail()) return '/auth/signin'

@@ -11,29 +11,29 @@
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-1 lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 				<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-					<sofa-header-text :customClass="'text-xl'" content="Create study material" />
+					<sofa-header-text :custom-class="'text-xl'" content="Create study material" />
 				</div>
 
 				<div
 					class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
-					<sofa-normal-text :customClass="'!font-bold !text-base'"> Create study material </sofa-normal-text>
-					<sofa-icon :customClass="'h-[19px]'" :name="'circle-close'" @click="close ? close() : null" />
+					<sofa-normal-text :custom-class="'!font-bold !text-base'"> Create study material </sofa-normal-text>
+					<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="close ? close() : null" />
 				</div>
 
 				<div class="w-full flex flex-col gap-3 px-4 py-4">
 					<sofa-icon-card
-						:data="item"
 						v-for="(item, index) in studyMaterialItems"
 						:key="index"
+						:data="item"
+						:custom-class="'!bg-lightGray !w-full !shadow-none'"
 						@click="
 							() => {
 								item.action()
 								showAddItem = false
 							}
-						"
-						:customClass="'!bg-lightGray !w-full !shadow-none'">
-						<template v-slot:title>
-							<sofa-normal-text :customClass="'!font-bold'">
+						">
+						<template #title>
+							<sofa-normal-text :custom-class="'!font-bold'">
 								{{ item.title }}
 							</sofa-normal-text>
 						</template>
@@ -60,6 +60,7 @@ export default defineComponent({
 	props: {
 		close: {
 			type: Function,
+			default: null,
 		},
 	},
 	setup() {

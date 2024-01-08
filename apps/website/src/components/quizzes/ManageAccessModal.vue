@@ -8,16 +8,16 @@
 
 			<div class="flex gap-4 items-center">
 				<SofaTextField
-					customClass="rounded-custom !bg-lightGray"
+					v-model="searchValue"
+					custom-class="rounded-custom !bg-lightGray"
 					name="Emails"
 					placeholder="Email, comma seperated"
-					borderColor="border-transparent"
-					v-model="searchValue" />
+					border-color="border-transparent" />
 				<SofaButton
-					customClass="font-semibold"
+					custom-class="font-semibold"
 					padding="py-3 px-6"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
+					bg-color="bg-primaryBlue"
+					text-color="text-white"
 					@click="addUsers">
 					Add
 				</SofaButton>
@@ -28,7 +28,7 @@
 
 				<div class="w-full flex flex-col gap-2">
 					<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
-						<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
+						<SofaAvatar :photo-url="request.bio.photo?.link" size="28" />
 						<SofaNormalText
 							color="text-deepGray"
 							:content="`${request.bio.name.full} wants to edit`"
@@ -48,7 +48,7 @@
 
 			<div class="w-full flex flex-col gap-2">
 				<div v-for="member in [quiz.user, ...members]" :key="member.id" class="flex gap-2 items-center w-full">
-					<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
+					<SofaAvatar :photo-url="member.bio.photo?.link" size="28" />
 					<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
 					<template v-if="member.id !== quiz.user.id">
 						<SofaNormalText
@@ -80,21 +80,22 @@
 
 <script lang="ts" setup>
 import { useSearchUsers } from '@/composables/users/users'
-import { Conditions, Logic, Quiz, SingleUser } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
+import { Logic, SingleUser } from 'sofa-logic'
 import {
+	SofaAvatar,
+	SofaButton,
 	SofaHeaderText,
 	SofaIcon,
 	SofaModal2 as SofaModal,
-	SofaAvatar,
 	SofaNormalText,
 	SofaTextField,
-	SofaButton,
 } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 	users: {

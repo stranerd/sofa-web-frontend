@@ -63,7 +63,7 @@ export const useTutorsList = () => {
 	}
 
 	onMounted(async () => {
-		if (/* !store.fetched.value &&  */ !store.loading.value) await fetchTutors()
+		if (!store.fetched.value && !store.loading.value) await fetchTutors()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -103,7 +103,7 @@ export const useSearchUsers = () => {
 export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
 	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users])
 
-	const { items: users, addToList } = useItemsInList('users', ids, allUsers, (items) => UsersUseCases.getInList(items))
+	const { items: users, addToList } = useItemsInList('users', ids, allUsers, (ids) => UsersUseCases.getInList(ids))
 
 	const listener = useListener(async () => {
 		return await UsersUseCases.listenToInList(() => ids.value, {

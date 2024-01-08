@@ -1,4 +1,5 @@
-import { CreateQuestionInput, CreateQuizInput, Logic, Question, Quiz } from 'sofa-logic'
+import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -7,11 +8,12 @@ import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/s
 import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from './study'
+import { InteractionEntities, ViewsUseCases } from '@modules/interactions'
 
 const store = {} as Record<
 	string,
 	{
-		quiz: Ref<Quiz | null>
+		quiz: Ref<QuizEntity | null>
 		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	} & ReturnType<typeof useErrorHandler> &
@@ -25,7 +27,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		fetched: ref(false),
 		listener: useListener(
 			async () =>
-				await Logic.Common.listenToOne<Quiz>(`study/quizzes/${id}`, {
+				await QuizzesUseCases.listenToOne(id, {
 					created: async (entity) => {
 						store[id].quiz.value = entity
 					},
@@ -44,6 +46,8 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 
 	const router = useRouter()
 	const { id: authId } = useAuth()
+	const quizFactory = new QuizFactory()
+	const questionFactory = new QuestionFactory()
 
 	const { hasAccess } = useHasAccess()
 
@@ -68,8 +72,8 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			store[id].quiz.value = await Logic.Study.GetQuiz(id)
-			if (store[id].quiz.value) Logic.Interactions.CreateView({ entity: { id: id, type: 'quizzes' } }).catch() // dont await, run in bg
+			store[id].quiz.value = await QuizzesUseCases.find(id)
+			if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)
@@ -77,12 +81,12 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const updateQuiz = async (data: CreateQuizInput) => {
+	const updateQuiz = async (factory: QuizFactory) => {
 		let succeeded = false
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.UpdateQuiz(id, data)
+			await QuizzesUseCases.update(id, factory)
 			await store[id].setMessage('Quiz saved')
 			succeeded = true
 		} catch (e) {
@@ -98,7 +102,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.PublishQuiz(id)
+			await QuizzesUseCases.publish(id)
 			await store[id].setMessage('Quiz published')
 			succeeded = true
 		} catch (e) {
@@ -113,7 +117,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			store[id].quiz.value = await Logic.Study.ReorderQuizQuestions(id, { questions })
+			store[id].quiz.value = await QuizzesUseCases.reorder(id, questions)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -121,7 +125,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	}
 
 	const deleteQuestion = async (questionId: string) => {
-		if (store[id].quiz.value?.status === 'published')
+		if (store[id].quiz.value?.isPublished)
 			return Logic.Common.showAlert({
 				message: 'You cannot delete questions from published quiz',
 				type: 'warning',
@@ -137,7 +141,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.DeleteQuestion(questionId, id)
+			await QuestionsUseCases.delete(id, questionId)
 			await store[id].setMessage('Question has been deleted.')
 		} catch (e) {
 			await store[id].setError(e)
@@ -145,23 +149,23 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const addQuestion = async (type: Question['strippedData']['type']) => {
+	const addQuestion = async (type: QuestionTypes) => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			const data = Logic.Study.getQuestionTypeTemplate(type)
-			await Logic.Study.CreateQuestion(id, data)
+			const data = QuestionEntity.getTemplate(type)
+			await QuestionsUseCases.add(id, data)
 		} catch (e) {
 			await store[id].setError(e)
 		}
 		await store[id].setLoading(false)
 	}
 
-	const saveQuestion = async (questionId: string, data: CreateQuestionInput) => {
+	const saveQuestion = async (questionId: string, factory: QuestionFactory) => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.UpdateQuestion(id, questionId, data)
+			await QuestionsUseCases.update(id, questionId, factory)
 			await store[id].setMessage('Question saved')
 		} catch (e) {
 			await store[id].setError(e)
@@ -169,11 +173,11 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setLoading(false)
 	}
 
-	const duplicateQuestion = async (question: Question) => {
+	const duplicateQuestion = async (question: QuestionEntity) => {
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.CreateQuestion(id, question)
+			await QuestionsUseCases.add(id, question)
 			await store[id].setMessage('Question duplicated')
 		} catch (e) {
 			await store[id].setError(e)
@@ -191,7 +195,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.DeleteQuiz(id)
+			await QuizzesUseCases.delete(id)
 			await router.push('/library')
 		} catch (e) {
 			await store[id].setError(e)
@@ -207,7 +211,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.requestAccess(id, add)
+			await QuizzesUseCases.requestAccess(id, add)
 			await store[id].setMessage('Request sent')
 		} catch (e) {
 			await store[id].setError(e)
@@ -219,7 +223,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.grantAccess(id, userId, grant)
+			await QuizzesUseCases.grantAccess(id, userId, grant)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -230,7 +234,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			await Logic.Study.manageMembers(id, userIds, grant)
+			await QuizzesUseCases.addMembers(id, userIds, grant)
 		} catch (e) {
 			await store[id].setError(e)
 		}
@@ -238,7 +242,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	}
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchQuiz()
+		if (!store[id].fetched.value && !store[id].loading.value) await fetchQuiz()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {
@@ -249,6 +253,8 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		...store[id],
 		members,
 		questions,
+		quizFactory,
+		questionFactory,
 		reorderQuestions,
 		deleteQuestion,
 		duplicateQuestion,
@@ -271,18 +277,11 @@ export const useCreateQuiz = () => {
 		await setError('')
 		try {
 			await setLoading(true)
-			const quiz = await Logic.Study.CreateQuiz({
-				title: 'Untitled Quiz',
-				description: 'Here is the quiz description',
-				photo: null,
-				courseId: null,
-				tags: [],
-				isForTutors: false,
-				topic: 'Physics',
-			})
+			const factory = new QuizFactory()
+			const quiz = await QuizzesUseCases.add(factory)
 			await Promise.all(
-				[Logic.Study.getQuestionTypeTemplate('multipleChoice'), Logic.Study.getQuestionTypeTemplate('trueOrFalse')].map((q) =>
-					Logic.Study.CreateQuestion(quiz.id, q),
+				[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
+					QuestionsUseCases.add(quiz.id, q),
 				),
 			).catch()
 			await setLoading(false)

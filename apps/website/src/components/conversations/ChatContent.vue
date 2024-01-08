@@ -2,21 +2,21 @@
 	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between flex-grow h-full flex-col">
 		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-darkLightGray text-left">
 			<div class="flex items-center gap-3 flex-1">
-				<sofa-icon class="mdlg:hidden" customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-				<sofa-avatar :photoUrl="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" />
+				<sofa-icon class="mdlg:hidden" custom-class="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
+				<sofa-avatar :photo-url="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" />
 				<div class="flex flex-col w-full">
 					<sofa-custom-input
+						v-if="canEditTitle && editTitle"
 						v-model="title"
-						:customClass="'!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base'"
+						:custom-class="'!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base'"
+						:auto-focus="true"
 						@onContentChange="submitTitle"
-						@onBlur="editTitle = false"
-						:autoFocus="true"
-						v-if="canEditTitle && editTitle"></sofa-custom-input>
+						@onBlur="editTitle = false"></sofa-custom-input>
 					<SofaNormalText
 						v-else
-						@click="editTitle = canEditTitle"
 						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1"
-						:content="data.title" />
+						:content="data.title"
+						@click="editTitle = canEditTitle" />
 					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
 				</div>
 			</div>
@@ -55,6 +55,7 @@ const props = defineProps({
 	updateTitle: {
 		type: Function as PropType<(title: string) => Promise<void>>,
 		required: false,
+		default: null,
 	},
 })
 

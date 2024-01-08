@@ -1,6 +1,6 @@
 <template>
 	<HomeLayout title="Teachers">
-		<template v-slot="{ extras }">
+		<template #default="{ extras }">
 			<MembersList
 				:image="teachersImage"
 				:type="MemberTypes.teacher"
@@ -25,8 +25,8 @@ import { useMeta } from 'vue-meta'
 import teachersImage from '@/assets/images/class-teachers.png'
 
 export default defineComponent({
-	components: { HomeLayout, MembersList },
 	name: 'OrganizationTeachersPage',
+	components: { HomeLayout, MembersList },
 	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup() {

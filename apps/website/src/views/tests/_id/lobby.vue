@@ -1,33 +1,33 @@
 <template>
 	<expanded-layout
-		layoutStyle="!justify-between bg-deepGray text-white"
+		layout-style="!justify-between bg-deepGray text-white"
 		:hide="{ top: true, bottom: true }"
-		bgImage="/images/game-bg.png">
-		<TestWrapper :id="$route.params.id as string" :skipQuestions="true">
-			<template v-slot="{ test, extras: testExtras, questions }">
-				<QuizWrapper :id="test.quizId" :questions="questions">
-					<template v-slot="{ quiz, questions, extras }">
+		bg-image="/images/game-bg.png">
+		<TestWrapper :id="$route.params.id as string" :skip-questions="true">
+			<template #default="{ test, extras: testExtras, questions: testQuestions }">
+				<QuizWrapper :id="test.quizId" :questions="testQuestions">
+					<template #default="{ quiz, questions, extras }">
 						<Quiz
+							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:showCounter="false"
-							v-model:answer="extras.answer"
-							:optionState="extras.optionState"
-							:isDark="true"
-							:rightButton="{
+							:show-counter="false"
+							:option-state="extras.optionState"
+							:is-dark="true"
+							:right-button="{
 								label: testExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
 								click: testExtras.start,
 							}"
-							:leftButton="{
+							:left-button="{
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
 								textColor: 'text-white',
 								click: () => Logic.Common.GoToRoute('/library'),
 							}">
-							<template v-slot:header>
+							<template #header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 									<div
 										class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom flex-col justify-center items-center">
@@ -38,7 +38,7 @@
 								</div>
 							</template>
 
-							<template v-slot>
+							<template #default>
 								<div />
 							</template>
 						</Quiz>

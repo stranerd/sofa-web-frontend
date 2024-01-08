@@ -1,4 +1,5 @@
-import { AddQuestionAnswer, GameParticipantAnswer, Logic, Question, Test } from 'sofa-logic'
+import { QuestionEntity } from '@modules/study'
+import { AddQuestionAnswer, GameParticipantAnswer, Logic, Test } from 'sofa-logic'
 import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -9,7 +10,7 @@ const store = {} as Record<
 	string,
 	{
 		test: Ref<Test | null>
-		questions: Question[]
+		questions: QuestionEntity[]
 		answer: Ref<GameParticipantAnswer | null>
 		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
@@ -53,7 +54,7 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		await store[id].setError('')
 		try {
 			await store[id].setLoading(true)
-			store[id].test.value = await Logic.Plays.GetTest(id, true)
+			store[id].test.value = await Logic.Plays.GetTest(id)
 			store[id].fetched.value = true
 		} catch (e) {
 			await store[id].setError(e)

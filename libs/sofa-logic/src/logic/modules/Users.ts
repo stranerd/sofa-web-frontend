@@ -2,12 +2,11 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
-import { SingleUser, TutorRequest, UserVerification } from '../types/domains/users'
+import { TutorRequest, UserVerification } from '../types/domains/users'
 import { CreateTutorRequestForm, CreateVerificationInput, VerificationStatusInput } from '../types/forms/users'
 import Common from './Common'
 
 export default class Users extends Common {
-	public AllUsers: Paginated<SingleUser> | undefined
 	public Verification: UserVerification | undefined
 	public Verifications: Paginated<UserVerification> | undefined
 	public AllTutorRequests: Paginated<TutorRequest> | undefined

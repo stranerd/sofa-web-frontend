@@ -23,6 +23,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
+	name: 'SofaBadge',
 	props: {
 		color: {
 			type: String,
@@ -42,6 +43,5 @@ export default defineComponent({
 			default: 'span',
 		},
 	},
-	name: 'SofaBadge',
 })
 </script>

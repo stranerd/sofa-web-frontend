@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { FacultyEntity } from '../../domain/entities/faculties'
 import { IFacultyRepository } from '../../domain/irepositories/ifaculties'
 import { FacultyFromModel, FacultyToModel } from '../models/faculties'
@@ -10,7 +9,7 @@ export class FacultyRepository implements IFacultyRepository {
 	private mapper = (model: FacultyFromModel | null) => (model ? new FacultyEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/school/faculties`)
+		this.client = new HttpClient('/school/faculties')
 	}
 
 	static getInstance() {

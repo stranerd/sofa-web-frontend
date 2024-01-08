@@ -3,7 +3,7 @@ export const REFRESH_TOKEN_NAME = 'refresh-token'
 export const REDIRECT_SESSION_NAME = 'redirect-to'
 
 export const PAGINATION_LIMIT = 20
-export const CHAT_PAGINATION_LIMIT = 20
+export const CHAT_PAGINATION_LIMIT = 50
 export const SEARCH_PAGINATION_LIMIT = 50
 
 export const isWeb = true // Capacitor.getPlatform() === 'web'

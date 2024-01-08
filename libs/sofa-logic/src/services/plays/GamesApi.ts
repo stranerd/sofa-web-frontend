@@ -2,7 +2,6 @@ import { AddQuestionAnswer } from './../../logic/types/forms/plays'
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
 import { Game, GameParticipantAnswer } from '../../logic/types/domains/plays'
-import { Question } from '../../logic/types/domains/study'
 import { Paginated } from '../../logic/types/domains/common'
 import { QueryParams } from '../../logic/types/common'
 
@@ -44,7 +43,7 @@ export default class GamesApi extends ModelApiService {
 
 	public async getGameQuestions(gameId: string) {
 		try {
-			const response: AxiosResponse<Question[]> = await this.axiosInstance.get(this.getUrl() + `/${gameId}/questions`)
+			const response = await this.axiosInstance.get(this.getUrl() + `/${gameId}/questions`)
 
 			return response
 		} catch (err) {
