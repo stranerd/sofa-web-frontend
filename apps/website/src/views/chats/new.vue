@@ -10,8 +10,8 @@
 			<div class="flex flex-col items-center justify-center text-center gap-4 h-full w-[90%] md:w-1/2 mx-auto">
 				<div class="flex flex-col gap-1">
 					<img :src="userAi.image" class="w-[96px] h-[96px] pb-1" />
-					<sofa-header-text>{{ content.name }}</sofa-header-text>
-					<p>{{ content.title }}</p>
+					<sofa-header-text>{{ userAi.name }}</sofa-header-text>
+					<sofa-normal-text>{{ content.title }}</sofa-normal-text>
 				</div>
 				<div class="bg-fadedPurple flex flex-col px-3 py-4 text-center rounded-2xl">
 					<sofa-normal-text>{{ content.body1 }}</sofa-normal-text>
@@ -45,7 +45,6 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export const content = {
-	name: 'Dr. Stranerd',
 	title: 'AI assistant',
 	body1: 'Hello! I am here to answer all your questions on any subject 24/7.',
 	body2: 'You can also add a tutor if you require further assistance',
