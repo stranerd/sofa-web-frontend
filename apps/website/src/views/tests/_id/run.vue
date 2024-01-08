@@ -1,17 +1,22 @@
 <template>
 	<expanded-layout
-		layoutStyle="!justify-between bg-deepGray text-white"
+		layout-style="!justify-between bg-deepGray text-white"
 		:hide="{ top: true, bottom: true }"
-		bgImage="/images/game-bg.png">
+		bg-image="/images/game-bg.png">
 		<TestWrapper :id="$route.params.id as string">
-			<template v-slot="{ test, questions, extras: testExtras }">
-				<QuizWrapper v-if="testExtras.isMine" :id="test.quizId" :questions="questions" :useTimer="true" :submit="testExtras.submit">
-					<template v-slot:prestart="{ quiz, extras }">
+			<template #default="{ test, questions: testQuestions, extras: testExtras }">
+				<QuizWrapper
+					v-if="testExtras.isMine"
+					:id="test.quizId"
+					:questions="testQuestions"
+					:use-timer="true"
+					:submit="testExtras.submit">
+					<template #prestart="{ quiz, extras }">
 						<div class="w-full my-auto flex flex-col gap-6 items-center">
 							<SofaHeaderText content="Test is starting" size="xl" />
 							<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
 								<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="quiz.title" size="xl" />
-								<SofaNormalText color="text-inherit" :content="`${questions.length} questions`" size="lg" />
+								<SofaNormalText color="text-inherit" :content="`${testQuestions.length} questions`" size="lg" />
 							</div>
 							<div
 								class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white text-bodyBlack">
@@ -19,22 +24,22 @@
 							</div>
 						</div>
 					</template>
-					<template v-slot="{ questions, extras }">
+					<template #default="{ questions, extras }">
 						<Quiz
+							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="`Question ${extras.index + 1}`"
-							:showCounter="false"
+							:show-counter="false"
 							:questions="questions"
-							v-model:answer="extras.answer"
-							:optionState="extras.optionState"
-							:isDark="true"
-							:rightButton="{
+							:option-state="extras.optionState"
+							:is-dark="true"
+							:right-button="{
 								label: 'Continue',
 								bgColor: 'bg-primaryBlue',
 								textColor: 'text-white',
 								click: extras.submitAnswer,
 							}">
-							<template v-slot:header>
+							<template #header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center">
 									<div class="flex gap-2 lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full">
 										<div

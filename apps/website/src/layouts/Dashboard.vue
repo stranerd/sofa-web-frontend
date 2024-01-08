@@ -4,7 +4,7 @@
 		:subpage-actions="topbarOptions.actions"
 		:title="topbarOptions.title"
 		:type="topbarOptions.type"
-		:showAddItem="handleShowAddItem"
+		:show-add-item="handleShowAddItem"
 		:user="user"
 		:custom-class="`${hide.top ? 'hidden mdlg:!flex' : 'flex'}`"
 		:badges="topbarOptions.badges" />
@@ -35,7 +35,7 @@
 			<slot name="right-session" />
 		</div>
 	</div>
-	<SofaBottomBar :showAddItem="handleShowAddItem" v-if="!hide.bottom" />
+	<SofaBottomBar v-if="!hide.bottom" :show-add-item="handleShowAddItem" />
 </template>
 
 <script lang="ts" setup>

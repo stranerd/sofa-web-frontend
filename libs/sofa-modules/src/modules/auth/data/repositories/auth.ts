@@ -1,5 +1,4 @@
 import { HttpClient, closeSocket } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { deleteTokens, saveTokens } from '@utils/tokens'
 import {
 	AfterAuthUser,
@@ -18,7 +17,7 @@ export class AuthRepository implements IAuthRepository {
 	private client: HttpClient
 
 	private constructor() {
-		this.client = new HttpClient(`${apiBase}/auth`)
+		this.client = new HttpClient('/auth')
 	}
 
 	static getInstance() {

@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-lightGray rounded-lg">
-		<VuePDF :pdf="pdf" :textLayer="true" :fitParent="true" class="!overflow-y-auto" />
+		<VuePDF :pdf="pdf" :text-layer="true" :fit-parent="true" class="!overflow-y-auto" />
 	</div>
 </template>
 

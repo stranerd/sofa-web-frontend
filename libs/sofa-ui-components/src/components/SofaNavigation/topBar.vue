@@ -3,15 +3,15 @@
 		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
 		<template v-if="type == 'main'">
 			<div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-				<sofa-avatar :size="'32'" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
+				<sofa-avatar :size="'32'" :photo-url="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
 
 				<div class="py-4 cursor-pointer flex flex-row items-center justify-center">
-					<img src="/images/logo.svg" class="h-[24px]" v-if="!title" />
-					<sofa-normal-text :customClass="'!font-bold !text-base'">{{ title }}</sofa-normal-text>
+					<img v-if="!title" src="/images/logo.svg" class="h-[24px]" />
+					<sofa-normal-text :custom-class="'!font-bold !text-base'">{{ title }}</sofa-normal-text>
 				</div>
 
 				<div class="w-[30px] h-[30px] flex flex-row items-center justify-center" @click="showNotification = true">
-					<sofa-icon :customClass="'h-[22px]'" :name="'bell'" />
+					<sofa-icon :custom-class="'h-[22px]'" :name="'bell'" />
 				</div>
 			</div>
 			<div class="hidden flex-row gap-5 items-center justify-start flex-grow mdlg:!flex lg:!flex">
@@ -20,12 +20,12 @@
 				</router-link>
 
 				<router-link
+					v-for="tab in tabs"
+					:key="tab.name"
 					:class="`py-4 flex items-center justify-center gap-2 ${
 						Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''
 					}`"
-					:to="tab.path"
-					v-for="(tab, index) in tabs"
-					:key="index">
+					:to="tab.path">
 					<SofaIcon
 						:name="tab.icon"
 						:class="{
@@ -34,19 +34,19 @@
 							'fill-bodyBlack': true,
 						}" />
 					<sofa-normal-text
-						:customClass="'font-bold'"
+						:custom-class="'font-bold'"
 						:color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
 						{{ tab.name }}
 					</sofa-normal-text>
 				</router-link>
 
 				<div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
-					<sofa-icon :customClass="'h-[15px]'" :name="'search'"></sofa-icon>
+					<sofa-icon :custom-class="'h-[15px]'" :name="'search'"></sofa-icon>
 					<sofa-text-field
-						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
+						v-model="searchQuery"
+						custom-class="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
 						placeholder="Search"
 						padding="px-1"
-						v-model="searchQuery"
 						@onEnter="initiateSearch" />
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 					<div
 						class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
 						@click="showNotification = true">
-						<sofa-icon :customClass="'h-[16px]'" :name="'bell'" />
+						<sofa-icon :custom-class="'h-[16px]'" :name="'bell'" />
 					</div>
 					<div
 						v-if="showNotification"
@@ -68,16 +68,16 @@
 					</div>
 				</div>
 
-				<sofa-avatar :size="'36'" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
+				<sofa-avatar :size="'36'" :photo-url="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
 			</div>
 		</template>
 
 		<template v-if="type == 'subpage'">
 			<div class="flex flex-row gap-4 items-center">
-				<sofa-icon :customClass="'h-[12px] cursor-pointer'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-				<sofa-header-text :customClass="'!font-bold py-4'" :content="title" />
-				<div class="flex flex-row gap-2 items-center" v-if="badges.length">
-					<sofa-badge :color="item.color" v-for="(item, index) in badges" :key="index">
+				<sofa-icon :custom-class="'h-[12px] cursor-pointer'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
+				<sofa-header-text :custom-class="'!font-bold py-4'" :content="title" />
+				<div v-if="badges.length" class="flex flex-row gap-2 items-center">
+					<sofa-badge v-for="(item, index) in badges" :key="index" :color="item.color">
 						{{ item.text }}
 					</sofa-badge>
 				</div>
@@ -88,11 +88,11 @@
 					<template v-if="action.isIcon && !action.hide">
 						<div class="flex flex-row gap-4 border-r border-darkLightGray items-center pr-3 cursor-pointer">
 							<div
+								v-for="(icon, i) in action.data.filter((d) => !d.hide)"
+								:key="i"
 								class="flex flex-row gap-2 items-center"
-								v-for="(icon, index) in action.data.filter((d) => !d.hide)"
-								:key="index"
 								@click="icon.handler()">
-								<sofa-icon :name="icon.icon" :customClass="icon.size" />
+								<sofa-icon :name="icon.icon" :custom-class="icon.size" />
 
 								<sofa-normal-text>
 									{{ icon.name }}
@@ -105,18 +105,18 @@
 							v-if="!action.IsOutlined"
 							:disabled="action.disabled"
 							:padding="'px-4 py-1'"
-							:customClass="`!font-semibold ${action.class ?? ''}`"
+							:custom-class="`!font-semibold ${action.class ?? ''}`"
 							@click="action.handler()">
 							{{ action.name }}
 						</sofa-button>
 						<sofa-button
-							:disabled="action.disabled"
-							:bgColor="'bg-white'"
-							:textColor="'text-grayColor'"
-							:customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
-							@click="action.handler()"
 							v-else
-							:padding="'px-4 py-1'">
+							:disabled="action.disabled"
+							:bg-color="'bg-white'"
+							:text-color="'text-grayColor'"
+							:custom-class="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
+							:padding="'px-4 py-1'"
+							@click="action.handler()">
 							{{ action.name }}
 						</sofa-button>
 					</template>
@@ -150,6 +150,7 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 import notification from './notification.vue'
 
 export default defineComponent({
+	name: 'SofaTopBar',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -201,9 +202,9 @@ export default defineComponent({
 		user: {
 			type: Object as PropType<UserEntity>,
 			required: false,
+			default: null,
 		},
 	},
-	name: 'SofaTopBar',
 	setup() {
 		const showNotification = ref(false)
 

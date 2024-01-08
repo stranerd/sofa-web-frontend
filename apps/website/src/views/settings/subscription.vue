@@ -2,9 +2,9 @@
 	<SettingsLayout title="Subscription">
 		<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<sofa-header-text :size="'xl'" :customClass="'text-left'"> My subscription </sofa-header-text>
+				<sofa-header-text :size="'xl'" :custom-class="'text-left'"> My subscription </sofa-header-text>
 
-				<sofa-normal-text :customClass="'text-left'" v-if="wallet.subscription.active == false">
+				<sofa-normal-text v-if="wallet.subscription.active == false" :custom-class="'text-left'">
 					You have no active subscription
 				</sofa-normal-text>
 				<template v-else-if="wallet.subscription.current">
@@ -27,9 +27,9 @@
 								v-if="wallet.subscription.current.expiredAt > Date.now()"
 								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
 								@click="autoRenewIsOn = !autoRenewIsOn">
-								<sofa-normal-text :customClass="'!font-bold'">Auto-renewal</sofa-normal-text>
+								<sofa-normal-text :custom-class="'!font-bold'">Auto-renewal</sofa-normal-text>
 								<div class="!w-auto">
-									<sofa-icon :customClass="'h-[17px]'" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
+									<sofa-icon :custom-class="'h-[17px]'" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
 								</div>
 							</div>
 						</div>
@@ -47,13 +47,13 @@
 
 					<div class="w-full flex flex-col gap-2">
 						<div class="flex flex-row gap-2 items-center">
-							<sofa-header-text :customClass="'text-left !text-2xl !font-bold'">
+							<sofa-header-text :custom-class="'text-left !text-2xl !font-bold'">
 								{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }} per student
 							</sofa-header-text>
-							<sofa-normal-text :customClass="'!text-2xl'"> / month </sofa-normal-text>
+							<sofa-normal-text :custom-class="'!text-2xl'"> / month </sofa-normal-text>
 						</div>
 
-						<sofa-normal-text :customClass="'text-left'">
+						<sofa-normal-text :custom-class="'text-left'">
 							Provide cost-free access to your paid courses for your physical students.
 						</sofa-normal-text>
 
@@ -64,31 +64,31 @@
 				</div>
 
 				<div
-					class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom"
-					v-if="!userType.isOrg && myApplicablePlan">
-					<sofa-header-text :size="'xl'" :customClass="'text-left w-full pb-2 border-b border-lightGray'">
+					v-if="!userType.isOrg && myApplicablePlan"
+					class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
+					<sofa-header-text :size="'xl'" :custom-class="'text-left w-full pb-2 border-b border-lightGray'">
 						{{ myApplicablePlan.title }}
 					</sofa-header-text>
 
 					<div class="flex flex-row gap-2 items-center">
-						<sofa-header-text :customClass="'text-left !text-2xl !font-bold'">
+						<sofa-header-text :custom-class="'text-left !text-2xl !font-bold'">
 							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
 						</sofa-header-text>
-						<sofa-normal-text :customClass="'!text-2xl'"> / month </sofa-normal-text>
+						<sofa-normal-text :custom-class="'!text-2xl'"> / month </sofa-normal-text>
 					</div>
 
 					<div class="w-full flex flex-col gap-3">
 						<div
+							v-for="(info, index) in subscriptionInfo"
+							:key="index"
 							:class="`w-full flex-col flex gap-1 pb-2 items-start ${
 								index != subscriptionInfo.length - 1 ? 'border-b border-lightGray' : ''
-							} `"
-							v-for="(info, index) in subscriptionInfo"
-							:key="index">
-							<sofa-icon :customClass="'h-[23px] '" :name="info.icon" />
-							<sofa-normal-text :customClass="'text-left !font-bold'">
+							} `">
+							<sofa-icon :custom-class="'h-[23px] '" :name="info.icon" />
+							<sofa-normal-text :custom-class="'text-left !font-bold'">
 								{{ info.title }}
 							</sofa-normal-text>
-							<sofa-normal-text :color="'text-grayColor'" :customClass="'text-left'">
+							<sofa-normal-text :color="'text-grayColor'" :custom-class="'text-left'">
 								{{ info.value }}
 							</sofa-normal-text>
 						</div>
@@ -96,7 +96,7 @@
 
 					<div class="w-full flex flex-row">
 						<div class="w-auto flex flex-row">
-							<sofa-button @click="subscibeToPlan(myApplicablePlan.id)" :padding="'px-7 py-2'" :customClass="'!w-auto'">
+							<sofa-button :padding="'px-7 py-2'" :custom-class="'!w-auto'" @click="subscibeToPlan(myApplicablePlan.id)">
 								Subscribe
 							</sofa-button>
 						</div>
@@ -117,6 +117,7 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'SubscriptionSettingPage',
 	components: {
 		SettingsLayout,
 		SofaHeaderText,
@@ -137,7 +138,6 @@ export default defineComponent({
 		],
 		goBackRoute: '/settings',
 	},
-	name: 'SubscriptionSettingPage',
 	setup() {
 		useMeta({
 			title: 'Subscription',

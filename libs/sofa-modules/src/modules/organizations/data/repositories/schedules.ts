@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { ScheduleEntity } from '../../domain/entities/schedules'
 import { IScheduleRepository } from '../../domain/irepositories/schedules'
 import { ScheduleFromModel, ScheduleToModel } from '../models/schedules'
@@ -10,7 +9,7 @@ export class ScheduleRepository implements IScheduleRepository {
 	private mapper = (model: ScheduleFromModel | null) => (model ? new ScheduleEntity(model) : null)
 
 	private constructor(organizationId: string, classId: string) {
-		this.client = new HttpClient(`${apiBase}/organizations/${organizationId}/classes/${classId}/schedules`)
+		this.client = new HttpClient(`/organizations/${organizationId}/classes/${classId}/schedules`)
 	}
 
 	static getInstance(organizationId: string, classId: string) {
@@ -43,6 +42,14 @@ export class ScheduleRepository implements IScheduleRepository {
 
 	async delete(id: string) {
 		return await this.client.delete<unknown, boolean>(`/${id}`, {})
+	}
+
+	async start(id: string) {
+		return await this.client.post<unknown, boolean>(`/${id}/start`, {})
+	}
+
+	async end(id: string) {
+		return await this.client.post<unknown, boolean>(`/${id}/end`, {})
 	}
 
 	async listenToOne(id: string, listeners: Listeners<ScheduleEntity>) {

@@ -4,12 +4,7 @@
 	</span>
 
 	<div class="flex flex-col gap-3 pt-8">
-		<div
-			v-for="(tab, index) in tabs"
-			:key="index"
-			@mouseover="hoverTab = tab.icon"
-			@mouseleave="hoverTab = ''"
-			:class="`flex flex-col`">
+		<div v-for="tab in tabs" :key="tab.name" :class="`flex flex-col`" @mouseover="hoverTab = tab.icon" @mouseleave="hoverTab = ''">
 			<router-link
 				:to="tab.path"
 				:class="`flex flex-row py-2 items-center px-4 gap-3 rounded w-full ${
@@ -48,6 +43,7 @@ import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
 export default defineComponent({
+	name: 'SofaSideBar',
 	components: {
 		SofaNormalText,
 		SofaIcon,
@@ -59,6 +55,7 @@ export default defineComponent({
 		},
 		tabs: {
 			type: Array as () => any[],
+			required: true,
 		},
 		logoPath: {
 			type: String,
@@ -69,7 +66,6 @@ export default defineComponent({
 			default: 'h-[22px]',
 		},
 	},
-	name: 'SofaSideBar',
 	setup() {
 		const hoverTab = ref('')
 

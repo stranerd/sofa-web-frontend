@@ -1,10 +1,10 @@
 <template>
-	<div class="flex flex-col gap-3 h-full w-full px-4" v-if="data">
+	<div v-if="data" class="flex flex-col gap-3 h-full w-full px-4">
 		<sofa-image-loader
-			:customClass="'w-full rounded-custom h-[200px]'"
-			:photoUrl="data.photo ? data.photo.link : '/images/default.png'" />
+			:custom-class="'w-full rounded-custom h-[200px]'"
+			:photo-url="data.photo ? data.photo.link : '/images/default.png'" />
 
-		<sofa-normal-text :customClass="'text-left font-bold'">
+		<sofa-normal-text :custom-class="'text-left font-bold'">
 			{{ data.title }}
 		</sofa-normal-text>
 
@@ -18,7 +18,7 @@
 			</sofa-normal-text>
 		</div>
 
-		<sofa-normal-text :customClass="'text-left'">
+		<sofa-normal-text :custom-class="'text-left'">
 			{{ data.description }}
 		</sofa-normal-text>
 
@@ -31,7 +31,7 @@
 
 			<div class="w-full flex flex-row items-center">
 				<div class="gap-2 flex flex-row items-center">
-					<sofa-avatar :size="'20'" :photoUrl="data.user.bio.photo?.link" />
+					<sofa-avatar :size="'20'" :photo-url="data.user.bio.photo?.link" />
 					<sofa-normal-text>
 						{{ data.user.bio.name.full }}
 					</sofa-normal-text>
@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="w-full flex flex-row items-center gap-2">
-				<sofa-icon :customClass="'h-[16px]'" :name="'calendar-black'" />
+				<sofa-icon :custom-class="'h-[16px]'" :name="'calendar-black'" />
 				<sofa-normal-text> Last updated {{ formatTime(data.updatedAt) }} </sofa-normal-text>
 			</div>
 		</div>
@@ -56,6 +56,7 @@ import { SofaNormalText } from '../SofaTypography'
 import { formatTime } from '@utils/dates'
 
 export default defineComponent({
+	name: 'SofaCourseSummary',
 	components: {
 		SofaIcon,
 		SofaNormalText,
@@ -68,15 +69,11 @@ export default defineComponent({
 			type: String,
 			default: '',
 		},
-		close: {
-			type: Function,
-			required: false,
-		},
 		data: {
 			type: Object as () => Course,
+			default: null,
 		},
 	},
-	name: 'SofaCourseSummary',
 	setup() {
 		return {
 			Logic,

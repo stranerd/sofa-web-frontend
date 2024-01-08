@@ -1,13 +1,13 @@
 <template>
 	<div class="flex flex-col gap-2 w-full relative group" :tabIndex="-1">
-		<SofaNormalText v-if="hasTitle" customClass="">
+		<SofaNormalText v-if="hasTitle" custom-class="">
 			<slot name="title" />
 		</SofaNormalText>
 		<div class="flex items-center gap-1 justify-between w-full rounded-md px-3 py-4" :class="customClass" @click="showOptions = true">
 			<input
+				v-if="!isMultiple"
 				:value="selectedOptions.at(0)?.value"
 				:placeholder="placeholder"
-				v-if="!isMultiple"
 				class="flex-grow bg-transparent placeholder:text-grayColor text-darkBody w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 			<div v-else class="w-full flex whitespace-nowrap overflow-x-auto scrollbar-hide gap-2 text-darkBody">
 				<template v-if="value.length">
@@ -22,14 +22,14 @@
 		<div
 			v-if="showOptions"
 			class="group-focus-within:flex hidden w-full h-full mdlg:h-auto left-0 top-0 fixed mdlg:absolute flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
-			<div class="w-full py-2 gap-3 flex items-center justify-between" v-if="autoComplete">
-				<SofaTextField placeholder="Search" v-model="searchValue" customClass="w-full !bg-lightGray !placeholder:text-grayColor" />
-				<SofaIcon class="h-[16px] pr-2" @click="showOptions = false" name="circle-close" />
+			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
+				<SofaTextField v-model="searchValue" placeholder="Search" custom-class="w-full !bg-lightGray !placeholder:text-grayColor" />
+				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
 			</div>
 			<a
-				class="p-3 gap-3 w-full flex items-center hover:bg-gray-100"
 				v-for="(item, index) in filteredOptions"
 				:key="index"
+				class="p-3 gap-3 w-full flex items-center hover:bg-gray-100"
 				@click="selectValue(item)">
 				<SofaIcon :name="itemIsSelected(item.key) ? 'checkbox-active' : 'checkbox'" class="h-[16px]" />
 				<SofaNormalText :content="item.value" />

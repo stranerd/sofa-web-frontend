@@ -1,8 +1,8 @@
 <template>
 	<div :class="`w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-custom bg-primaryPurple ${customClass}`">
-		<sofa-icon :customClass="icon ? icon.size : 'h-[28px]'" :name="icon ? icon.name : 'attention-white'" />
+		<sofa-icon :custom-class="icon ? icon.size : 'h-[28px]'" :name="icon ? icon.name : 'attention-white'" />
 		<div class="w-full flex flex-col gap-2 justify-center items-center py-2">
-			<sofa-header-text :color="'text-white'" :content="title" :customClass="`!font-semibold ${titleStyle}`" />
+			<sofa-header-text :color="'text-white'" :content="title" :custom-class="`!font-semibold ${titleStyle}`" />
 			<sofa-normal-text
 				:color="'text-white'"
 				:content="subTitle"
@@ -11,10 +11,10 @@
 		<sofa-button
 			v-if="action"
 			:custom-class="'!whitespace-nowrap'"
-			:bgColor="'bg-white'"
+			:bg-color="'bg-white'"
 			padding="py-1 px-4"
-			@click="action ? action() : null"
-			:textColor="'text-deepGray !font-semibold'">
+			:text-color="'text-deepGray !font-semibold'"
+			@click="action ? action() : null">
 			{{ actionLabel }}
 		</sofa-button>
 	</div>
@@ -26,6 +26,7 @@ import SofaIcon from '../SofaIcon'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
+	name: 'SofaEmptyState',
 	components: {
 		SofaIcon,
 		SofaButton,
@@ -51,6 +52,7 @@ export default defineComponent({
 		},
 		action: {
 			type: Function,
+			default: null,
 		},
 		actionLabel: {
 			type: String,
@@ -61,8 +63,8 @@ export default defineComponent({
 				name: string
 				size: string
 			},
+			default: null,
 		},
 	},
-	name: 'SofaEmptyState',
 })
 </script>

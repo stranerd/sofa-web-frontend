@@ -5,6 +5,8 @@
 <script lang="ts">
 import InlineSvg from 'vue-inline-svg'
 export default {
+	name: 'RoofIcon',
+	components: { InlineSvg },
 	props: {
 		name: {
 			type: String,
@@ -13,10 +15,9 @@ export default {
 		customClass: {
 			type: String,
 			required: false,
+			default: '',
 		},
 	},
-	components: { InlineSvg },
-	name: 'RoofIcon',
 }
 </script>
 

@@ -5,17 +5,17 @@
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('type')">
 					<SofaIcon class="h-[18px]" name="question-type" />
 					<SofaNormalText class="!font-bold" content="Question type" />
-					<SofaNormalText :content="Logic.Study.getQuestionTypeLabel(factory.type)" class="ml-auto" />
+					<SofaNormalText :content="QuestionEntity.getLabel(factory.type)" class="ml-auto" />
 					<SofaIcon class="h-[7px]" :name="isOpen('type') ? 'chevron-up' : 'chevron-down'" />
 				</a>
 
 				<div v-if="isOpen('type')" class="w-full grid grid-cols-2 gap-3">
 					<a
-						v-for="type in Logic.Study.getAllQuestionTypes()"
+						v-for="type in QuestionEntity.getAllTypes()"
 						:key="type.value"
-						@click="factory.type = type.value"
 						class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center rounded-lg"
-						:class="factory.type === type.value ? 'bg-skyBlue' : 'bg-[#F2F5F8]'">
+						:class="factory.type === type.value ? 'bg-skyBlue' : 'bg-[#F2F5F8]'"
+						@click="factory.type = type.value">
 						<SofaIcon :name="type.icon" class="h-[50px]" />
 						<SofaNormalText class="text-center" :content="type.label" />
 					</a>
@@ -34,9 +34,9 @@
 					<a
 						v-for="time in [5, 10, 20, 30, 60, 90, 120, 180, 240, 300]"
 						:key="time"
-						@click="factory.timeLimit = time"
 						class="rounded-lg flex px-4 py-2 items-center justify-center gap-1"
-						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'">
+						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'"
+						@click="factory.timeLimit = time">
 						<SofaNormalText class="text-center" color="text-inherit" :content="Logic.Common.prettifyTime(time)" />
 					</a>
 				</div>
@@ -49,8 +49,8 @@
 				<SofaNormalText color="text-inherit" content="Currently editing" />
 				<div class="flex flex-row-reverse items-center ml-auto">
 					<template v-for="(user, index) in users[question.id] ?? []" :key="user.id">
-						<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="28" class="-ml-1" />
-						<SofaAvatar v-if="index === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
+						<SofaAvatar v-if="index < 3" :photo-url="user.bio.photo?.link" size="28" class="-ml-1" />
+						<SofaAvatar v-if="index === 3" bg-color="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
 							<span>{{ users[question.id].length - 3 }}+</span>
 						</SofaAvatar>
 					</template>
@@ -83,19 +83,20 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic, QuestionFactory, Quiz, SingleUser, TransformedQuestion } from 'sofa-logic'
-import { defineEmits, defineProps, PropType, ref } from 'vue'
+import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
+import { Logic, SingleUser } from 'sofa-logic'
+import { PropType, defineEmits, defineProps, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
 defineProps({
 	quiz: {
-		type: Object as PropType<Quiz>,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 	question: {
-		type: Object as PropType<TransformedQuestion>,
+		type: Object as PropType<QuestionEntity>,
 		required: true,
 	},
 	factory: {

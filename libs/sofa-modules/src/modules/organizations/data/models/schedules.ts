@@ -1,7 +1,8 @@
-import { EmbeddedUser, ScheduleTime } from '../../domain/types'
+import { EmbeddedUser, ScheduleStatus, ScheduleTime } from '../../domain/types'
 
 export interface ScheduleFromModel extends ScheduleToModel {
 	id: string
+	status: ScheduleStatus
 	createdAt: number
 	updatedAt: number
 }

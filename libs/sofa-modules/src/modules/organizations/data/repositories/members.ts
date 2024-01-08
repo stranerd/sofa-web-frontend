@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { MemberEntity } from '../../domain/entities/members'
 import { IMemberRepository } from '../../domain/irepositories/members'
 import { MemberTypes } from '../../domain/types'
@@ -11,7 +10,7 @@ export class MemberRepository implements IMemberRepository {
 	private mapper = (model: MemberFromModel | null) => (model ? new MemberEntity(model) : null)
 
 	private constructor(organizationId: string) {
-		this.client = new HttpClient(`${apiBase}/organizations/${organizationId}/members`)
+		this.client = new HttpClient(`/organizations/${organizationId}/members`)
 	}
 
 	static getInstance(organizationId: string) {

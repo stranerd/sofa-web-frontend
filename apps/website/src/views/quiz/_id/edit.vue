@@ -1,11 +1,11 @@
 <template>
-	<QuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string" :skipMembers="false">
-		<template v-slot="{ quiz, extras, members }">
+	<QuizWrapper :id="$route.params.id as string" :selected-question="$route.query.q as string" :skip-members="false">
+		<template #default="{ quiz, extras, members }">
 			<dashboard-layout
 				v-if="extras.canEdit"
 				:hide="{ bottom: true, top: true }"
-				bgColor="mdlg:bg-lightGray bg-white"
-				:topbarOptions="{
+				bg-color="mdlg:bg-lightGray bg-white"
+				:topbar-options="{
 					type: 'subpage',
 					title: quiz.title,
 					actions: [
@@ -49,7 +49,7 @@
 					],
 					badges: [{ text: quiz.status, color: quiz.status === 'published' ? 'green' : 'gray' }],
 				}">
-				<template v-slot:left-session>
+				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
 						<SofaAddQuestion
 							v-model:questionId="extras.selectedQuestionId"
@@ -64,7 +64,7 @@
 					</div>
 				</template>
 
-				<template v-slot:right-session>
+				<template #right-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto justify-between">
 						<SofaQuestionOptions
 							v-if="extras.currentQuestionById"
@@ -96,16 +96,14 @@
 					</div>
 				</template>
 
-				<template v-slot:middle-session>
+				<template #middle-session>
 					<!-- Top bar for smaller screens -->
 					<div class="w-full flex mdlg:!hidden justify-between items-center bg-lightGray p-4">
 						<SofaIcon class="h-[19px]" name="circle-close" @click="handleMobileGoback" />
 
 						<SofaNormalText
 							class="!font-bold !text-sm"
-							:content="
-								showSettingModal ? 'Update quiz' : Logic.Study.getQuestionTypeLabel(extras.currentQuestionById?.type) ?? ''
-							" />
+							:content="showSettingModal ? 'Update quiz' : QuestionEntity.getLabel(extras.currentQuestionById?.type)" />
 
 						<div class="flex items-center gap-3" :class="{ invisible: showSettingModal }">
 							<SofaIcon class="h-[18px]" name="share-option" @click="showShareModal = true" />
@@ -120,8 +118,8 @@
 						:class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
 						<SofaQuestionContent
 							v-if="!showSettingModal && extras.currentQuestionById"
-							:factory="extras.questionFactory"
-							:key="extras.currentQuestionById.id" />
+							:key="extras.currentQuestionById.id"
+							:factory="extras.questionFactory" />
 						<QuizSettings
 							v-if="showSettingModal && !Logic.Common.isLarge"
 							:quiz="quiz"
@@ -146,7 +144,7 @@
 				</template>
 			</dashboard-layout>
 
-			<RequestAccessModal :quiz="quiz" v-else-if="quiz" @requestAccess="extras.requestAccess" />
+			<RequestAccessModal v-else-if="quiz" :quiz="quiz" @requestAccess="extras.requestAccess" />
 
 			<ManageAccessModal
 				v-if="showShareModal"
@@ -218,7 +216,7 @@
 							v-for="(user, index) in extras.usersByQuestions[extras.currentQuestionById?.id] ?? []"
 							:key="user.id"
 							class="flex items-center gap-2">
-							<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="36" class="-ml-1" />
+							<SofaAvatar v-if="index < 3" :photo-url="user.bio.photo?.link" size="36" class="-ml-1" />
 							<SofaNormalText :content="user.bio.name.full" size="lg" />
 						</div>
 						<SofaNormalText
@@ -242,9 +240,9 @@
 
 					<div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
 						<a
-							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-skyBlue bg-[#F2F5F8] rounded-lg"
-							v-for="type in Logic.Study.getAllQuestionTypes()"
+							v-for="type in QuestionEntity.getAllTypes()"
 							:key="type.value"
+							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-skyBlue bg-[#F2F5F8] rounded-lg"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
 							<SofaIcon :name="type.icon" class="h-[50px]" />
 							<SofaNormalText :content="type.label" />
@@ -254,15 +252,15 @@
 			</SofaModal>
 		</template>
 
-		<template v-slot:notfound>
+		<template #notfound>
 			<div class="w-full flex flex-col items-center justify-center p-4">
 				<div class="mdlg:w-[60%] w-full h-full flex flex-col">
 					<SofaEmptyState
 						title="Quiz not found"
-						subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
-						actionLabel="Go to marketplace"
+						sub-title="Quiz doesn't exist. Check out other materials in the marketplace"
+						action-label="Go to marketplace"
 						:action="() => Logic.Common.GoToRoute('/marketplace')"
-						titleStyle="mdlg:!text-xl" />
+						title-style="mdlg:!text-xl" />
 				</div>
 			</div>
 		</template>
@@ -270,27 +268,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
+import ManageAccessModal from '@/components/quizzes/ManageAccessModal.vue'
+import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import RequestAccessModal from '@/components/quizzes/RequestAccessModal.vue'
+import QuizSettings from '@/components/quizzes/Settings.vue'
+import { generateMiddlewares } from '@/middlewares'
+import { QuestionEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import {
+	SofaAddQuestion,
 	SofaAvatar,
 	SofaEmptyState,
-	SofaIcon,
-	SofaNormalText,
-	SofaQuestionOptions,
-	SofaModal2 as SofaModal,
-	SofaAddQuestion,
-	SofaQuestionContent,
 	SofaHeaderText,
+	SofaIcon,
+	SofaModal2 as SofaModal,
+	SofaNormalText,
+	SofaQuestionContent,
+	SofaQuestionOptions,
 } from 'sofa-ui-components'
-import { Logic } from 'sofa-logic'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
-import QuizSettings from '@/components/quizzes/Settings.vue'
-import RequestAccessModal from '@/components/quizzes/RequestAccessModal.vue'
-import ManageAccessModal from '@/components/quizzes/ManageAccessModal.vue'
-import { generateMiddlewares } from '@/middlewares'
+import { defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
+	name: 'QuizIdEdit',
 	components: {
 		QuizWrapper,
 		SofaIcon,
@@ -306,7 +306,6 @@ export default defineComponent({
 		RequestAccessModal,
 		ManageAccessModal,
 	},
-	name: 'QuizIdEdit',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
@@ -333,6 +332,7 @@ export default defineComponent({
 		}
 
 		return {
+			QuestionEntity,
 			showAddQuestionModal,
 			showCurrentlyEditingModal,
 			showShareModal,

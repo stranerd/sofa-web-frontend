@@ -46,16 +46,16 @@
 			class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
 			<SofaActivityCard
 				v-for="activity in materials.slice(0, 4)"
-				as="router-link"
 				:key="activity.id"
+				as="router-link"
 				:activity="activity"
 				:to="activity.route"
-				:hasBookmark="true"
-				:bookmarkAction="() => saveToFolder(activity)"
+				:has-bookmark="true"
+				:bookmark-action="() => saveToFolder(activity)"
 				class="flex-shrink-0" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">
-			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />
+			<SofaEmptyState title="No materials found" sub-title="You have not created any materials so far" custom-class="!h-[230px]" />
 		</div>
 
 		<SofaNormalText

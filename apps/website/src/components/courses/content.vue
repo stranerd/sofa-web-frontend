@@ -4,24 +4,24 @@
 		class="w-full px-4 relative md:py-4 bg-white mdlg:!rounded-[16px] overflow-y-auto flex-grow max-h-full h-fit flex flex-col gap-4 mdlg:min-h-[400px]">
 		<template v-if="isUnlocked">
 			<div class="w-full flex flex-col items-start justify-start">
-				<sofa-header-text :customClass="'!font-bold !text-lg'" :content="selectedMaterial?.name" />
+				<sofa-header-text :custom-class="'!font-bold !text-lg'" :content="selectedMaterial?.name" />
 			</div>
 			<template v-if="selectedMaterial?.type == 'quiz'">
 				<sofa-empty-state
 					:title="'Test yourself'"
-					:subTitle="'Evaluate your level of knowledge'"
-					:actionLabel="'Start'"
+					:sub-title="'Evaluate your level of knowledge'"
+					:action-label="'Start'"
 					:action="() => openQuiz(extractResource(selectedMaterial.original), true)"
 					:icon="{
 						name: 'test-white',
 						size: 'h-[40px]',
 					}"
-					:titleStyle="'mdlg:!text-xl '" />
+					:title-style="'mdlg:!text-xl '" />
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'document'">
 				<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-					<sofa-document-reader :key="selectedMaterial.id" :documentUrl="selectedMaterial.data.documentUrl" />
+					<sofa-document-reader :key="selectedMaterial.id" :document-url="selectedMaterial.data.documentUrl" />
 				</div>
 			</template>
 
@@ -29,14 +29,14 @@
 				<div class="w-full flex flex-col">
 					<sofa-image-loader
 						:key="selectedMaterial.id"
-						:customClass="'w-full h-[400px] rounded-[12px]'"
-						:photoUrl="selectedMaterial.data.imageUrl" />
+						:custom-class="'w-full h-[400px] rounded-[12px]'"
+						:photo-url="selectedMaterial.data.imageUrl" />
 				</div>
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'video'">
 				<div class="w-full flex flex-col">
-					<sofa-video-player :key="selectedMaterial.id" :videoUrl="selectedMaterial.data.videoUrl" />
+					<sofa-video-player :key="selectedMaterial.id" :video-url="selectedMaterial.data.videoUrl" />
 				</div>
 			</template>
 		</template>
@@ -44,16 +44,16 @@
 			<div class="w-full flex flex-col">
 				<sofa-empty-state
 					:title="'You have no access'"
-					:subTitle="'Get this course to start learning with it'"
+					:sub-title="'Get this course to start learning with it'"
 					:custom-class="'h-[380px]'"
-					:actionLabel="`${SingleCourse.price.amount ? 'Buy' : 'Get'} ${
+					:action-label="`${SingleCourse.price.amount ? 'Buy' : 'Get'} ${
 						SingleCourse.price.amount
 							? Logic.Common.formatPrice(SingleCourse.price.amount, SingleCourse.price.currency)
 							: 'for free'
 					}`"
 					:action="buyCourse"
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }"
-					:titleStyle="'mdlg:!text-xl'" />
+					:title-style="'mdlg:!text-xl'" />
 			</div>
 		</template>
 	</div>
@@ -79,6 +79,7 @@ export default defineComponent({
 		},
 		selectedMaterial: {
 			type: Object as () => any,
+			default: null,
 		},
 		buyCourse: {
 			type: Function,

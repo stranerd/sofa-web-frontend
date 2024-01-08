@@ -5,11 +5,11 @@
 		:loop="true"
 		:volume="0.6"
 		:autoplay="false"
+		class="w-full min-h-[400px]"
 		@play="videoIsPlaying = true"
 		@pause="videoIsPlaying = false"
-		@ended="videoIsPlaying = false"
-		class="w-full min-h-[400px]">
-		<template v-if="!videoIsPlaying" v-slot="{ player }">
+		@ended="videoIsPlaying = false">
+		<template v-if="!videoIsPlaying" #default="{ player }">
 			<div class="flex items-center justify-center absolute h-full w-full top-0 left-0 bg-black bg-opacity-60">
 				<SofaIcon name="play-video" class="h-[18px]" @click="player.play()" />
 			</div>
@@ -23,6 +23,7 @@ import 'video.js/dist/video-js.min.css'
 import { defineComponent, ref } from 'vue'
 import SofaIcon from '../SofaIcon'
 export default defineComponent({
+	name: 'SofaVideoPlayer',
 	components: {
 		SofaIcon,
 		VideoPlayer,
@@ -33,7 +34,6 @@ export default defineComponent({
 			default: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
 		},
 	},
-	name: 'SofaVideoPlayer',
 	setup() {
 		const videoIsPlaying = ref(false)
 		return { videoIsPlaying }

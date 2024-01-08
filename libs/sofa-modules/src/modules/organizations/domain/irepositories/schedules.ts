@@ -8,6 +8,8 @@ export interface IScheduleRepository {
 	find: (id: string) => Promise<ScheduleEntity | null>
 	update: (id: string, data: ScheduleToModel) => Promise<ScheduleEntity | null>
 	delete: (id: string) => Promise<boolean>
+	start: (id: string) => Promise<boolean>
+	end: (id: string) => Promise<boolean>
 	listenToOne: (id: string, listeners: Listeners<ScheduleEntity>) => Promise<() => void>
 	listenToMany: (
 		query: QueryParams,

@@ -24,7 +24,7 @@ const fetchFaculties = async (institutionId: string) => {
 				store.faculties.value,
 				c,
 				(e) => e.id,
-				(e) => e.name,
+				(e) => e.title,
 				true,
 			),
 		)
@@ -49,7 +49,7 @@ export const useFaculty = (institutionId: string, id: string) => {
 					store.faculties.value,
 					c,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 		},
@@ -84,7 +84,7 @@ export const useCreateFaculty = () => {
 					store.faculties.value,
 					faculty,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()
@@ -123,7 +123,7 @@ export const useEditFaculty = () => {
 					store.faculties.value,
 					updatedFaculty,
 					(e) => e.id,
-					(e) => e.name,
+					(e) => e.title,
 					true,
 				)
 				factory.reset()

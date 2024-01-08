@@ -1,5 +1,5 @@
 <template>
-	<SofaModal :close="() => close?.()" maxWidth="md:max-w-[30%]">
+	<SofaModal :close="() => close?.()" max-width="md:max-w-[30%]">
 		<div class="flex flex-col gap-2 relative mdlg:p-6 p-4 py-6 items-center justify-center text-center">
 			<SofaIcon name="success-modal-icon" class="h-[39px]" />
 
@@ -9,11 +9,11 @@
 
 			<SofaButton
 				v-if="!button.hide"
-				:textColor="button.textColor ?? 'text-white'"
-				:bgColor="button.bgColor ?? 'bg-primaryBlue'"
+				:text-color="button.textColor ?? 'text-white'"
+				:bg-color="button.bgColor ?? 'bg-primaryBlue'"
 				padding="px-4 py-2"
-				@click="button.action?.()"
-				class="border-transparent border-2 md:w-auto w-full">
+				class="border-transparent border-2 md:w-auto w-full"
+				@click="button.action?.()">
 				{{ button.label }}
 			</SofaButton>
 		</div>
@@ -30,6 +30,7 @@ import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 defineProps({
 	close: {
 		type: Function,
+		required: true,
 	},
 	title: {
 		type: String,
@@ -47,6 +48,7 @@ defineProps({
 			textColor?: string
 			action: () => void
 		}>,
+		required: true,
 	},
 })
 </script>

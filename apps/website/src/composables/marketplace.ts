@@ -1,4 +1,6 @@
+import { CourseEntity, QuizEntity } from '@modules/study'
 import { Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
+import { toRaw } from 'vue'
 
 export interface ContentDetails {
 	id: string
@@ -42,19 +44,21 @@ export const search = async (query: QueryParams, returnCoursables = false) => {
 		})
 }
 
-export const extractContent = (item: Quiz | Course): ContentDetails => {
-	const type = item.__type == 'CourseEntity' ? 'course' : 'quiz'
+export const extractContent = (content: Quiz | QuizEntity | CourseEntity | Course): ContentDetails => {
+	const item = content as any
+	const isCourse = item.__type === 'CourseEntity'
+	const type = isCourse ? 'course' : 'quiz'
 	return {
 		id: item.id,
 		subject: Logic.Study.GetTagName(item.topicId),
 		title: item.title,
-		image: item.photo ? item.photo.link : '/images/default.png',
+		image: item.photo?.link ?? '/images/default.png',
 		labels: {
-			main: type === 'course' ? 'Course' : 'Quiz',
-			sub: item.__type == 'CourseEntity' ? `${item.coursables.length} materials` : `${item.questions.length} questions`,
-			color: type === 'course' ? 'orange' : 'pink',
+			main: isCourse ? 'Course' : 'Quiz',
+			sub: isCourse ? `${item.coursables.length} materials` : `${item.questions.length} questions`,
+			color: isCourse ? 'orange' : 'pink',
 		},
-		price: item.__type == 'CourseEntity' ? item.price?.amount : 0,
+		price: isCourse ? item.price?.amount : 0,
 		user: item.user,
 		authUserId: Logic.Common.AuthUser.id,
 		type,

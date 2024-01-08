@@ -1,9 +1,9 @@
 <template>
 	<div class="w-full flex flex-col gap-4">
 		<SofaButton
-			bgColor="bg-transparent"
+			bg-color="bg-transparent"
 			padding="px-8 py-5"
-			:hasShadow="false"
+			:has-shadow="false"
 			:disabled="googleLoading"
 			:loading="appleLoading"
 			class="border-2 border-darkLightGray font-bold"
@@ -14,10 +14,10 @@
 			</div>
 		</SofaButton>
 		<SofaButton
-			bgColor="bg-transparent"
-			padding="px-8 py-5"
-			:hasShadow="false"
 			v-if="showAppleSignin"
+			bg-color="bg-transparent"
+			padding="px-8 py-5"
+			:has-shadow="false"
 			:disabled="appleLoading"
 			:loading="appleLoading"
 			class="border-2 border-darkLightGray font-bold"

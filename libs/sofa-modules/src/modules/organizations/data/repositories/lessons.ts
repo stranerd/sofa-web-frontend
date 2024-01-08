@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { LessonEntity } from '../../domain/entities/lessons'
 import { ILessonRepository } from '../../domain/irepositories/lessons'
 import { LessonFromModel, LessonToModel } from '../models/lessons'
@@ -10,7 +9,7 @@ export class LessonRepository implements ILessonRepository {
 	private mapper = (model: LessonFromModel | null) => (model ? new LessonEntity(model) : null)
 
 	private constructor(organizationId: string, classId: string) {
-		this.client = new HttpClient(`${apiBase}/organizations/${organizationId}/classes/${classId}/lessons`)
+		this.client = new HttpClient(`/organizations/${organizationId}/classes/${classId}/lessons`)
 	}
 
 	static getInstance(organizationId: string, classId: string) {

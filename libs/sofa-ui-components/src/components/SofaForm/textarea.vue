@@ -1,6 +1,6 @@
 <template>
 	<div class="flex w-full flex-col content">
-		<sofa-normal-text v-if="hasTitle" customClass="!pb-4 font-bold">
+		<sofa-normal-text v-if="hasTitle" custom-class="!pb-4 font-bold">
 			<slot name="title" />
 		</sofa-normal-text>
 		<VueEditor
@@ -9,11 +9,11 @@
 			:editor-options="editorOptions"
 			:disabled="disabled"
 			:style="`min-height: ${rows}em`"
-			@ready="(v) => (quill = v)"
 			:class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
 			:placeholder="placeholder"
-			:tabindex="0">
-			<template v-slot:toolbar>
+			:tabindex="0"
+			@ready="(v) => (quill = v)">
+			<template #toolbar>
 				<div :id="toolbarId" :class="{ '!hidden': disabled }">
 					<button class="ql-bold"></button>
 					<button class="ql-italic"></button>
@@ -55,6 +55,7 @@ import { Quill, VueEditor } from 'vue3-editor'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
 export default defineComponent({
+	name: 'SofaTextarea',
 	components: {
 		SofaNormalText,
 		VueEditor,
@@ -62,7 +63,7 @@ export default defineComponent({
 	props: {
 		modelValue: {
 			type: String,
-			required: false,
+			default: '',
 		},
 		rows: {
 			type: Number,
@@ -81,9 +82,6 @@ export default defineComponent({
 		labelStyle: {
 			type: String,
 			default: '',
-		},
-		toolsToUse: {
-			type: Array as () => string[],
 		},
 		placeholder: {
 			type: String,
@@ -107,7 +105,6 @@ export default defineComponent({
 			default: '',
 		},
 	},
-	name: 'SofaTextarea',
 	emits: ['update:modelValue'],
 	setup(props, context) {
 		const editorId = Math.random().toString(32).slice(2)

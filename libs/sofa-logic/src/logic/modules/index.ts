@@ -1,5 +1,4 @@
 import Common from './Common'
-import Conversations from './Conversations'
 import Form from './Form'
 import Interactions from './Interactions'
 import Notifications from './Notifications'
@@ -17,7 +16,6 @@ export const Logic = {
 	...valleyed,
 	Common: new Common(),
 	Form: new Form(),
-	Conversations: new Conversations(),
 	Notifications: new Notifications(),
 	Payment: new Payment(),
 	Plays: new Plays(),
@@ -26,5 +24,3 @@ export const Logic = {
 	Users: new Users(),
 	Interactions: new Interactions(),
 }
-
-export type TransformedQuestion = ReturnType<(typeof study)['transformQuestion']>

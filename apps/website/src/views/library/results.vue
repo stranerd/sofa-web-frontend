@@ -12,8 +12,8 @@
 		<sofa-empty-state
 			v-else
 			:title="'You have no practice item here'"
-			:subTitle="'Discover thousands of materials to buy, created by verified experts'"
-			:actionLabel="'Marketplace'"
+			:sub-title="'Discover thousands of materials to buy, created by verified experts'"
+			:action-label="'Marketplace'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
 </template>
@@ -31,12 +31,12 @@ import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
+	name: 'LibraryResultsPage',
 	components: {
 		LibraryLayout,
 		SofaProgressItemCard,
 		SofaEmptyState,
 	},
-	name: 'LibraryResultsPage',
 	middlewares: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {

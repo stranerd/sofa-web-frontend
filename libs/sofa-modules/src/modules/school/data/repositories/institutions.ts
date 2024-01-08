@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { InstitutionEntity } from '../../domain/entities/institutions'
 import { IInstitutionRepository } from '../../domain/irepositories/iinstitutions'
 import { InstitutionFromModel, InstitutionToModel } from '../models/institutions'
@@ -10,7 +9,7 @@ export class InstitutionRepository implements IInstitutionRepository {
 	private mapper = (model: InstitutionFromModel | null) => (model ? new InstitutionEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/school/institutions`)
+		this.client = new HttpClient('/school/institutions')
 	}
 
 	static getInstance() {

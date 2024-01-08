@@ -11,6 +11,7 @@
 import { onMounted, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 export default {
+	name: 'SofaRatings',
 	components: {
 		SofaIcon,
 	},
@@ -33,7 +34,6 @@ export default {
 		},
 	},
 	emits: ['update:modelValue'],
-	name: 'SofaRatings',
 	setup(props: any, context: any) {
 		const ratings = ref(0)
 		onMounted(() => {

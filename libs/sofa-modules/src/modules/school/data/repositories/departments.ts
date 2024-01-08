@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { DepartmentEntity } from '../../domain/entities/departments'
 import { IDepartmentRepository } from '../../domain/irepositories/idepartments'
 import { DepartmentFromModel, DepartmentToModel } from '../models/departments'
@@ -10,7 +9,7 @@ export class DepartmentRepository implements IDepartmentRepository {
 	private mapper = (model: DepartmentFromModel | null) => (model ? new DepartmentEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/school/departments`)
+		this.client = new HttpClient('/school/departments')
 	}
 
 	static getInstance() {

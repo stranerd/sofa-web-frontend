@@ -1,5 +1,4 @@
 import { HttpClient, Listeners, listenToMany, listenToOne, QueryParams, QueryResults } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { UserEntity } from '../../domain/entities/users'
 import { IUserRepository } from '../../domain/irepositories/iusers'
 import { UserAccount, UserAi, UserLocation, UserSocialsType, UserTypeData } from '../../domain/types'
@@ -11,7 +10,7 @@ export class UserRepository implements IUserRepository {
 	private mapper = (model: UserFromModel | null) => (model ? new UserEntity(model) : null)
 
 	constructor() {
-		this.client = new HttpClient(`${apiBase}/users/users`)
+		this.client = new HttpClient('/users/users')
 	}
 
 	static getInstance() {

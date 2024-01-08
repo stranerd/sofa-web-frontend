@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
+	<expanded-layout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layout-style="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="user.bio.name.full" />
@@ -10,13 +10,13 @@
 			<div class="w-full flex flex-col px-4 pt-4 gap-6 bg-white mdlg:rounded-b-2xl">
 				<div class="w-full flex mdlg:flex-row flex-col justify-between items-start mdlg:gap-0 gap-4">
 					<div class="flex gap-3 items-start">
-						<SofaAvatar :photoUrl="user.bio.photo?.link" size="110" customClass="-mt-[71px]" />
+						<SofaAvatar :photo-url="user.bio.photo?.link" size="110" custom-class="-mt-[71px]" />
 
 						<div class="flex flex-col">
 							<div class="flex items-center gap-2">
 								<SofaHeaderText class="!font-bold" :content="user.bio.name.full" />
-								<SofaIcon name="verify" class="h-[16px]" v-if="user.roles.isVerified" />
-								<SofaIcon name="tutor-bagde" class="h-[18px]" v-if="user.userType.isTeacher" />
+								<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[16px]" />
+								<SofaIcon v-if="user.userType.isTeacher" name="tutor-bagde" class="h-[18px]" />
 							</div>
 							<SofaNormalText class="capitalize" :content="user.userType.type" />
 						</div>
@@ -38,13 +38,7 @@
 										value: user.account.meta.publishedCourses,
 									},
 									...(user.userType.isOrg
-										? [
-											{
-												title: 'Students',
-												icon: 'profile-followers',
-												value: user.account.meta.students,
-											},
-										]
+										? [{ title: 'Students', icon: 'profile-followers', value: user.account.meta.students }]
 										: []),
 								]"
 								:key="item.title"
@@ -58,8 +52,8 @@
 						</div>
 
 						<SofaButton
-							padding="px-6 py-2"
 							v-if="user.userType.isOrg && !authUser.account.organizationsIn.find((o) => o.id === user.id)"
+							padding="px-6 py-2"
 							@click="showModal = true">
 							Join
 						</SofaButton>
@@ -82,10 +76,10 @@
 		<!-- Content sections -->
 		<template v-if="currentTab == 'content'">
 			<div class="w-full flex flex-col gap-3 py-4">
-				<div class="w-full mdlg:px-0 px-4" v-if="materials.length">
+				<div v-if="materials.length" class="w-full mdlg:px-0 px-4">
 					<div class="w-full px-4 py-1 bg-white rounded-custom flex gap-1 items-center justify-start">
 						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField customClass="!border-none w-full flex-grow" placeholder="Search" v-model="searchQuery" />
+						<SofaTextField v-model="searchQuery" custom-class="!border-none w-full flex-grow" placeholder="Search" />
 					</div>
 				</div>
 
@@ -104,10 +98,10 @@
 						class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap md:flex-wrap overflow-x-auto scrollbar-hide">
 						<SofaItemCard
 							v-for="activity in filteredMaterials"
-							as="router-link"
 							:key="activity.id"
-							:hasBookmark="true"
-							:bookmarkAction="() => saveToFolder(activity)"
+							as="router-link"
+							:has-bookmark="true"
+							:bookmark-action="() => saveToFolder(activity)"
 							:content="activity"
 							:to="activity.route"
 							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
@@ -115,8 +109,8 @@
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
 							:title="`${user.bio.name.full} has no published materials yet`"
-							subTitle="Discover thousands of other materials on SOFA marketplace"
-							:actionLabel="'Marketplace'"
+							sub-title="Discover thousands of other materials on SOFA marketplace"
+							:action-label="'Marketplace'"
 							:action="() => Logic.Common.GoToRoute('/marketplace')" />
 					</div>
 				</div>
@@ -158,13 +152,13 @@
 					custom-class="rounded-custom !bg-lightGray"
 					type="text"
 					placeholder="Enter Join Code"
-					borderColor="border-transparent" />
+					border-color="border-transparent" />
 			</div>
 
 			<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">
 				<SofaButton
-					textColor="text-grayColor"
-					bgColor="bg-white"
+					text-color="text-grayColor"
+					bg-color="bg-white"
 					padding="px-4 py-1"
 					class="hidden md:inline-block border-2 border-gray-100 md:w-auto w-full"
 					@click="showModal = false">
@@ -172,8 +166,8 @@
 				</SofaButton>
 
 				<SofaButton
-					textColor="text-white"
-					bgColor="bg-primaryBlue"
+					text-color="text-white"
+					bg-color="bg-primaryBlue"
 					padding="px-4 md:py-1 py-3"
 					class="border-2 border-transparent md:w-auto w-full"
 					@click="requestToJoinOrganization(user.id).then((succeeded) => (succeeded ? (showModal = false) : null))">
@@ -207,6 +201,7 @@ import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
+	name: 'ProfileIdPage',
 	components: {
 		SofaNormalText,
 		SofaIcon,
@@ -218,7 +213,6 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaModal,
 	},
-	name: 'ProfileIdPage',
 	setup() {
 		useMeta({ title: 'Public Profile' })
 
