@@ -161,11 +161,7 @@
 						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
 					</div>
 					<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
-					<sofa-button
-						:bg-color="'bg-primaryPurple'"
-						:text-color="'!text-white'"
-						:padding="'px-6 py-4'"
-						@click="onClickAddTutor">
+					<sofa-button :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="onClickAddTutor">
 						Add a tutor
 					</sofa-button>
 				</div>
