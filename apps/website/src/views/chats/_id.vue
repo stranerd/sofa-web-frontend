@@ -15,7 +15,7 @@
 						:class="{ 'fill-primaryPurple': conversation.isActive }"
 						class="h-[17px] mdlg:hidden"
 						name="tutor"
-						@click="onClickAddTutor" />
+						@click="showAddTutorModalConfirmation = true" />
 					<SofaIcon class="h-[23px] mdlg:hidden" name="menu" @click="showMoreOptions = true" />
 				</div>
 			</template>
@@ -146,6 +146,28 @@
 			</div>
 		</sofa-modal>
 
+		<!-- Tutor help mobile popup -->
+		<sofa-modal-2
+			v-if="showAddTutorModalConfirmation"
+			:close="() => (showAddTutorModalConfirmation = false)"
+			:custom-class="`mdlg:!hidden`">
+			<div class="flex lex-col items-center">
+				<div class="w-full flex flex-col items-start gap-4 bg-white p-4">
+					<div class="flex w-full items-center gap-2 justify-between">
+						<div class="flex items-center gap-1">
+							<sofa-icon class="h-[24px]" :name="'add-tutor-white'" :custom-class="'fill-primaryPurple'" />
+							<SofaHeaderText class="!font-bold !text-primaryPurple" content="Tutor help" />
+						</div>
+						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
+					</div>
+					<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
+					<sofa-button :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="onClickAddTutor">
+						Add a tutor
+					</sofa-button>
+				</div>
+			</div>
+		</sofa-modal-2>
+
 		<AddTutor v-if="showAddTutor" @close="showAddTutor = false" />
 
 		<!-- Rate and review modal -->
@@ -169,7 +191,7 @@ import { useAuth } from '@/composables/auth/auth'
 import { useConversation } from '@/composables/conversations/conversations'
 import { useCreateMessage } from '@/composables/conversations/messages'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaModal2 } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
@@ -189,6 +211,7 @@ export default defineComponent({
 		SofaHeaderText,
 		RateAndReviewModal,
 		ConversationMessages,
+		SofaModal2,
 	},
 	middlewares: { goBackRoute: '/chats' },
 	setup() {
@@ -218,6 +241,7 @@ export default defineComponent({
 		})
 
 		const showAddTutor = ref(false)
+		const showAddTutorModalConfirmation = ref(false)
 		const showMoreOptions = ref(false)
 		const showRateAndReviewTutor = ref(false)
 
@@ -263,6 +287,7 @@ export default defineComponent({
 			showMoreOptions,
 			onClickAddTutor,
 			showRateAndReviewTutor,
+			showAddTutorModalConfirmation,
 			onClickEndSession,
 			end,
 			deleteConv,
