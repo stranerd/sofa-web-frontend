@@ -146,6 +146,7 @@
 			</div>
 		</sofa-modal>
 
+		<!-- Tutor help mobile popup -->
 		<sofa-modal-2
 			v-if="showAddTutorModalConfirmation"
 			:close="() => (showAddTutorModalConfirmation = false)"
@@ -155,16 +156,15 @@
 					<div class="flex w-full items-center gap-2 justify-between">
 						<div class="flex items-center gap-1">
 							<sofa-icon class="h-[24px]" :name="'add-tutor-purple'" />
-							<SofaHeaderText class="!font-bold !text-primaryPurple !text-xl" content="Tutor help" />
+							<SofaHeaderText class="!font-bold !text-primaryPurple" content="Tutor help" />
 						</div>
 						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
 					</div>
-					<SofaNormalText color="" content="Need extra help with your work?" class="!text-lg !text-deppGray" />
+					<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
 					<sofa-button
 						:bg-color="'bg-primaryPurple'"
 						:text-color="'!text-white'"
 						:padding="'px-6 py-4'"
-						:custom-class="'!text-lg'"
 						@click="onClickAddTutor">
 						Add a tutor
 					</sofa-button>
