@@ -10,12 +10,13 @@
 			}">
 			<template #top-extras>
 				<div class="flex items-center gap-3">
-					<sofa-icon
+					<SofaIcon
 						v-if="conversation.user.id === id"
-						:custom-class="'h-[17px] cursor-pointer mdlg:hidden'"
-						:name="'tutor'"
+						:class="{ 'fill-primaryPurple': conversation.isActive }"
+						class="h-[17px] mdlg:hidden"
+						name="tutor"
 						@click="onClickAddTutor" />
-					<sofa-icon :custom-class="'h-[23px] mdlg:hidden cursor-pointer'" :name="'menu'" @click="showMoreOptions = true" />
+					<SofaIcon class="h-[23px] mdlg:hidden" name="menu" @click="showMoreOptions = true" />
 				</div>
 			</template>
 			<ConversationMessages id="MessagesScrollContainer" :conversation="conversation" />
@@ -26,10 +27,10 @@
 					<input
 						v-model="factory.body"
 						:disabled="!conversation.accepted?.is"
-						:class="`w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto`"
+						class="w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto"
 						placeholder="Enter message" />
 					<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
-						<sofa-icon :name="'send'" :custom-class="'h-[19px]'" />
+						<SofaIcon name="send" class="h-[19px]" />
 					</button>
 				</form>
 			</template>
