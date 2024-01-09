@@ -265,7 +265,7 @@ const { factory, createConversation } = useCreateConversation()
 
 const options = computed(() => [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/' },
-	{ title: 'Classes', icon: 'classes', route: '/classes' },
+	{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
 	...(userType.value.isOrg
 		? [
 				{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
