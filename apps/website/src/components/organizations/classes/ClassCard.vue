@@ -24,11 +24,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { SofaHeaderText, SofaIcon, SofaNormalText, SofaImageLoader } from 'sofa-ui-components'
+import { SofaIcon, SofaNormalText, SofaImageLoader } from 'sofa-ui-components'
 
 export default defineComponent({
 	name: 'ClassCard',
-	components: { SofaNormalText, SofaIcon, SofaHeaderText, SofaImageLoader },
+	components: { SofaNormalText, SofaIcon, SofaImageLoader },
 	props: {
 		classObj: {
 			type: Object as () => any,
