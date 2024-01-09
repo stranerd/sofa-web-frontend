@@ -12,7 +12,11 @@
 						<SofaNormalText :content="content" color="text-grayColor" />
 					</div>
 				</div>
-				<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-4 px-6'" @click="showCreateClassModal = true">
+				<SofaButton
+					:bg-color="'bg-primaryBlue'"
+					:text-color="'text-white'"
+					:padding="'py-4 px-6'"
+					@click="showCreateClassModal = true">
 					Create a class
 				</SofaButton>
 			</div>
@@ -29,9 +33,9 @@
 					placeholder="Search"
 					padding="px-1" />
 			</div>
-			<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-3 px-4'" @click="showCreateClassModal = true"
-				>Create a class</SofaButton
-			>
+			<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-3 px-4'" @click="showCreateClassModal = true">
+				Create a class
+			</SofaButton>
 		</div>
 		<ClassCard v-for="cl in classes" :key="cl.id" :class-obj="cl" :is-wrapped="false" :type="'org'">
 			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">

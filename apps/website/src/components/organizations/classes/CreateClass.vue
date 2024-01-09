@@ -59,18 +59,18 @@
 					</div>
 				</div>
 				<div class="flex items-center justify-between">
-					<SofaButton :bg-color="'bg-grayColor'" :text-color="'text-white'" :padding="'py-4 px-6'" @click="$emit('close')"
-						>Cancel</SofaButton
-					>
-					<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-4 px-6'">Save</SofaButton>
+					<SofaButton :bg-color="'bg-grayColor'" :text-color="'text-white'" :padding="'py-4 px-6'" @click="$emit('close')">
+						Cancel
+					</SofaButton>
+					<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-4 px-6'"> Save </SofaButton>
 				</div>
 			</form>
 		</div>
 	</SofaModal2>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { ref, defineEmits } from 'vue'
 import {
 	SofaModal2,
 	SofaIcon,
@@ -82,30 +82,12 @@ import {
 	SofaFileAttachment,
 	SofaNormalText,
 } from 'sofa-ui-components'
-
-export default defineComponent({
-	components: {
-		SofaModal2,
-		SofaIcon,
-		SofaHeaderText,
-		SofaButton,
-		SofaTextField,
-		SofaTextarea,
-		SofaImageLoader,
-		SofaFileAttachment,
-		SofaNormalText,
-	},
-	setup() {
-		const classForm = ref({
-			name: '',
-			desc: '',
-			price: '',
-			photo: {},
-			localPhotoLink: '/images/stranerd.png',
-		})
-		return {
-			classForm,
-		}
-	},
+const emit = defineEmits(['close'])
+const classForm = ref({
+	name: '',
+	desc: '',
+	price: '',
+	photo: {},
+	localPhotoLink: '/images/stranerd.png',
 })
 </script>
