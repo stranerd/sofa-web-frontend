@@ -7,14 +7,26 @@
 			</sofa-image-loader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<sofa-normal-text :custom-class="'!font-bold w-full text-left !line-clamp-1'">{{ classObj.title }}</sofa-normal-text>
-				<div class="flex items-center gap-1">
+				<div v-show="type === 'teacher'" class="flex items-center gap-1">
 					<sofa-icon name="notebook-black" custom-class="h-[16px]" />
 					<sofa-normal-text color="text-deepGray">
 						{{ classObj.course }}
 					</sofa-normal-text>
 				</div>
-				<sofa-normal-text color="text-grayColor">
+				<sofa-normal-text v-show="type === 'teacher'" color="text-grayColor">
 					{{ classObj.no_of_students }}
+				</sofa-normal-text>
+				<div v-show="type === 'org'" class="flex items-center gap-2">
+					<sofa-normal-text color="text-grayColor">
+						{{ classObj.no_of_lessons }}
+					</sofa-normal-text>
+					<div class="w-[5px] h-[5px] bg-grayColor rounded-[50%]"></div>
+					<sofa-normal-text color="text-grayColor">
+						{{ classObj.no_of_students }}
+					</sofa-normal-text>
+				</div>
+				<sofa-normal-text v-show="type === 'org'" color="text-grayColor" size="lg" custom-class="font-bold">
+					{{ classObj.price }}
 				</sofa-normal-text>
 			</div>
 			<slot />
@@ -33,6 +45,11 @@ export default defineComponent({
 		classObj: {
 			type: Object as () => any,
 			required: true,
+		},
+		type: {
+			type: String,
+			required: true,
+			default: 'teacher',
 		},
 	},
 	setup() {
