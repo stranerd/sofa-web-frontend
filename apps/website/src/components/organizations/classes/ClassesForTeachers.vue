@@ -7,7 +7,7 @@
 		</div>
 	</div>
 	<div v-else class="flex flex-col gap-4">
-		<ClassCard v-for="cl in classes" :classObj="cl" :is-wrapped="false">
+		<ClassCard v-for="cl in classes" :class-obj="cl" :is-wrapped="false">
 			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 				<sofa-icon name="share-gray" custom-class="h-[16px]" />
 			</div>

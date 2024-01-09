@@ -1,7 +1,7 @@
 <template>
-    <HomeLayout title="Teachers">
+	<HomeLayout title="Teachers">
 		<ClassesForTeachers v-if="userType.isTeacher" />
-        <ClassesForOrganization v-if="userType.isOrg" />
+		<ClassesForOrganization v-if="userType.isOrg" />
 	</HomeLayout>
 </template>
 
@@ -13,13 +13,13 @@ import ClassesForOrganization from '@/components/organizations/classes/ClassesFo
 import { useAuth } from '@/composables/auth/auth'
 
 export default defineComponent({
-    name: 'OrganizationClassesPage',
+	name: 'OrganizationClassesPage',
 	components: { HomeLayout, ClassesForTeachers, ClassesForOrganization },
-    setup(){
-        const { userType } = useAuth()
-        return {
-            userType
-        }
-    }
+	setup() {
+		const { userType } = useAuth()
+		return {
+			userType,
+		}
+	},
 })
 </script>
