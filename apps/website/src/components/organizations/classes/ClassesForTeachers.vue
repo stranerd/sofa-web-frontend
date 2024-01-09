@@ -7,6 +7,14 @@
 		</div>
 	</div>
 	<div v-else class="flex flex-col gap-4">
+		<div class="bg-white w-full px-4 py-3 rounded-[24px] flex flex-row items-center gap-2 border border-darkLightGray">
+			<sofa-icon :custom-class="'h-[15px]'" :name="'search'"></sofa-icon>
+			<sofa-text-field
+				v-model="searchQuery"
+				custom-class="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
+				placeholder="Search"
+				padding="px-1" />
+		</div>
 		<ClassCard v-for="cl in classes" :key="cl.id" :class-obj="cl" :is-wrapped="false">
 			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 				<sofa-icon name="share-gray" custom-class="h-[16px]" />
@@ -16,19 +24,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { defineComponent, ref } from 'vue'
+import { SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import ClassCard from './ClassCard.vue'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
-	components: { SofaHeaderText, SofaNormalText, SofaIcon, ClassCard },
+	components: { SofaHeaderText, SofaNormalText, SofaIcon, ClassCard, SofaTextField },
 	setup() {
 		const emptyClassContent = {
 			imageURL: '/images/empty-class.png',
 			title: 'You are not in any class',
 			content: 'Contact your organization to add you to a class.',
 		}
+
+		const searchQuery = ref('')
 
 		const classes = [
 			{
@@ -71,6 +81,7 @@ export default defineComponent({
 		return {
 			emptyClassContent,
 			classes,
+			searchQuery,
 		}
 	},
 })
