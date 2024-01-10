@@ -9,7 +9,7 @@ type Keys = Omit<ClassToModel, 'price'> & ClassToModel['price']
 export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & { localPhotoLink: string | undefined }> {
 	readonly rules = {
 		title: v.string().min(1),
-		description: v.string(),
+		description: v.string().min(1),
 		photo: v.file().nullable(),
 		amount: v.number().gte(0),
 		currency: v.in(Object.values(Currencies)),
@@ -23,7 +23,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 			photo: null,
 			amount: 0,
 			currency: Currencies.NGN,
-			localPhotoLink: '',
+			localPhotoLink: '/images/stranerd.png',
 		})
 	}
 
@@ -68,13 +68,6 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 		this.set('currency', value)
 	}
 
-	get organizationId() {
-		return this.values.organizationId
-	}
-
-	set organizationId(value: string) {
-		this.set('organizationId', value)
-	}
 
 	get localPhotoLink() {
 		return this.values.localPhotoLink

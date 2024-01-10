@@ -70,6 +70,7 @@
 						:bg-color="'bg-primaryBlue'"
 						:text-color="'text-white'"
 						:padding="'py-4 px-6'"
+						:disabled="!classFactory.valid"
 						custom-class="w-full mdlg:w-auto">
 						Save
 					</SofaButton>
@@ -80,7 +81,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineEmits } from 'vue'
+import { defineEmits } from 'vue'
 import {
 	SofaModal2,
 	SofaIcon,
