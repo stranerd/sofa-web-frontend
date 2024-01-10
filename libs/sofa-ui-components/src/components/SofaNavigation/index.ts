@@ -1,5 +1,4 @@
-import SofaTopBar from './topBar.vue'
 import SofaBottomBar from './bottomBar.vue'
-import SofaSideBar from './sideBar.vue'
+import SofaTopBar from './topBar.vue'
 
-export { SofaTopBar, SofaBottomBar, SofaSideBar }
+export { SofaBottomBar, SofaTopBar }

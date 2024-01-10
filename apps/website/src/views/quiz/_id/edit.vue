@@ -51,7 +51,7 @@
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<SofaAddQuestion
+						<EditQuestionsList
 							v-model:questionId="extras.selectedQuestionId"
 							:quiz="quiz"
 							:users="extras.usersByQuestions"
@@ -66,7 +66,7 @@
 
 				<template #right-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto justify-between">
-						<SofaQuestionOptions
+						<EditQuestionOptions
 							v-if="extras.currentQuestionById"
 							:quiz="quiz"
 							:question="extras.currentQuestionById"
@@ -116,7 +116,7 @@
 					<div
 						class="w-full flex flex-col bg-white px-4 mdlg:py-4 flex-grow h-full overflow-y-auto"
 						:class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
-						<SofaQuestionContent
+						<EditQuestionBody
 							v-if="!showSettingModal && extras.currentQuestionById"
 							:key="extras.currentQuestionById.id"
 							:factory="extras.questionFactory" />
@@ -129,8 +129,8 @@
 							@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
 					</div>
 
-					<!-- Add question for smaller screens -->
-					<SofaAddQuestion
+					<!-- Question list for smaller screens -->
+					<EditQuestionsList
 						v-if="!Logic.Common.isLarge && !showSettingModal"
 						v-model:questionId="extras.selectedQuestionId"
 						:quiz="quiz"
@@ -175,7 +175,7 @@
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
 					</div>
 
-					<SofaQuestionOptions
+					<EditQuestionOptions
 						v-if="extras.currentQuestionById"
 						:quiz="quiz"
 						:question="extras.currentQuestionById"
@@ -271,21 +271,14 @@
 import ManageAccessModal from '@/components/study/quizzes/ManageAccessModal.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import RequestAccessModal from '@/components/study/quizzes/RequestAccessModal.vue'
+import EditQuestionsList from '@/components/study/quizzes/EditQuestionsList.vue'
+import EditQuestionOptions from '@/components/study/quizzes/EditQuestionOptions.vue'
+import EditQuestionBody from '@/components/study/quizzes/EditQuestionBody.vue'
 import QuizSettings from '@/components/study/quizzes/Settings.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import {
-	SofaAddQuestion,
-	SofaAvatar,
-	SofaEmptyState,
-	SofaHeaderText,
-	SofaIcon,
-	SofaModal2 as SofaModal,
-	SofaNormalText,
-	SofaQuestionContent,
-	SofaQuestionOptions,
-} from 'sofa-ui-components'
+import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -297,11 +290,11 @@ export default defineComponent({
 		SofaAvatar,
 		SofaEmptyState,
 		SofaNormalText,
-		SofaQuestionOptions,
 		SofaModal,
 		QuizSettings,
-		SofaAddQuestion,
-		SofaQuestionContent,
+		EditQuestionsList,
+		EditQuestionOptions,
+		EditQuestionBody,
 		SofaHeaderText,
 		RequestAccessModal,
 		ManageAccessModal,

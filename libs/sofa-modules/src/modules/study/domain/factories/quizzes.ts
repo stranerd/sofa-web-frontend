@@ -44,7 +44,6 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 	}
 
 	set photo(value: Media) {
-		console.log(value, v.file().parse(value))
 		this.set('photo', value)
 	}
 

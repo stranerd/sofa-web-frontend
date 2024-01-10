@@ -203,13 +203,9 @@
 <script lang="ts" setup>
 import { QuestionFactory } from '@modules/study'
 import { Logic } from 'sofa-logic'
+import { SofaButton, SofaCustomInput, SofaFileInput, SofaIcon, SofaImageLoader, SofaNormalText, SofaTextarea } from 'sofa-ui-components'
 import { PropType, defineProps } from 'vue'
 import Draggable from 'vuedraggable'
-import SofaButton from '../SofaButton'
-import { SofaCustomInput, SofaFileInput, SofaTextarea } from '../SofaForm'
-import SofaIcon from '../SofaIcon'
-import SofaImageLoader from '../SofaImageLoader'
-import { SofaNormalText } from '../SofaTypography'
 
 defineProps({
 	factory: {
