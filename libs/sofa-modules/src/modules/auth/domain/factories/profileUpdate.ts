@@ -17,7 +17,7 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 	reserved = []
 
 	constructor() {
-		super({ first: '', last: '', description: '', photo: null, localPhotoLink: '' })
+		super({ first: '', last: '', description: '', photo: null, localPhotoLink: undefined })
 	}
 
 	get first() {
@@ -50,7 +50,7 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 
 	set photo(photo: Content) {
 		this.set('photo', photo)
-		if (photo) this.localPhotoLink = photo.link
+		if (photo?.link) this.localPhotoLink = photo.link
 	}
 
 	get localPhotoLink() {

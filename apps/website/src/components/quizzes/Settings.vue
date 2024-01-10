@@ -34,11 +34,11 @@
 				<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 					<SofaImageLoader
 						custom-class="w-full md:!h-full h-[220px] rounded-custom relative"
-						:photo-url="quizImageUrl ? quizImageUrl : '/images/default.png'">
+						:photo-url="factory.localPhotoLink ?? '/images/default.png'">
 						<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 							<SofaFileAttachment
 								v-model="factory.photo"
-								v-model:localFileUrl="quizImageUrl"
+								v-model:localFileUrl="factory.localPhotoLink"
 								:is-wrapper="true"
 								accept="image/png, image/gif, image/jpeg">
 								<template #content>
@@ -120,7 +120,7 @@ import {
 	SofaTextField,
 	SofaTextarea,
 } from 'sofa-ui-components'
-import { PropType, defineEmits, defineProps, ref, watch } from 'vue'
+import { PropType, defineEmits, defineProps, watch } from 'vue'
 
 const props = defineProps({
 	quiz: {
@@ -140,7 +140,6 @@ const props = defineProps({
 const emits = defineEmits(['updateQuiz', 'publishQuiz'])
 
 const { isAdmin } = useAuth()
-const quizImageUrl = ref(props.factory.photo?.link ?? '')
 
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()

@@ -38,7 +38,7 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi & { lo
 
 	set photo(value: UserAi['photo']) {
 		this.set('photo', value)
-		if (value) this.localPhotoLink = value?.link
+		if (value?.link) this.localPhotoLink = value.link
 	}
 
 	get localPhotoLink() {

@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
 
-export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToModel> {
+export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToModel & { localPhotoLink: string | undefined }> {
 	public topicId = ''
 	public tagIds: string[] = []
 	#tagString = ref('')
@@ -17,6 +17,7 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		tags: v.array(v.string().min(1)).set(),
 		isForTutors: v.boolean(),
 		courseId: v.string().min(1).nullable(),
+		localPhotoLink: v.string().nullish(),
 	}
 
 	constructor() {
@@ -28,6 +29,7 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 			tags: [],
 			isForTutors: false,
 			courseId: null,
+			localPhotoLink: '/images/default.png',
 		})
 	}
 
@@ -44,7 +46,17 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 	}
 
 	set photo(value: Media) {
+		console.log(value, v.file().parse(value))
 		this.set('photo', value)
+		if (value?.link) this.localPhotoLink = value.link
+	}
+
+	get localPhotoLink() {
+		return this.values.localPhotoLink
+	}
+
+	set localPhotoLink(value: string | undefined) {
+		this.set('localPhotoLink', value)
 	}
 
 	get description() {
