@@ -8,7 +8,6 @@ type Keys = Omit<ClassToModel, 'price'> & ClassToModel['price']
 
 export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & { localPhotoLink: string | undefined }> {
 	readonly rules = {
-		organizationId: v.string().min(1),
 		title: v.string().min(1),
 		description: v.string(),
 		photo: v.file().nullable(),
@@ -17,11 +16,8 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 		localPhotoLink: v.string().nullish(),
 	}
 
-	reserved = ['organizationId']
-
 	constructor() {
 		super({
-			organizationId: '',
 			title: '',
 			description: '',
 			photo: null,
@@ -90,9 +86,8 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 
 	toModel = async () => {
 		if (this.valid) {
-			const { organizationId, title, description, photo, amount, currency } = this.validValues
+			const { title, description, photo, amount, currency } = this.validValues
 			return {
-				organizationId,
 				title,
 				description,
 				photo,

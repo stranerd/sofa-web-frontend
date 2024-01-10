@@ -3,29 +3,29 @@ import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
 
 export class ClassesUseCase {
-	private repository: IClassRepository
+	private repository: (organizationId: string) => IClassRepository
 
-	constructor(repository: () => IClassRepository) {
-		this.repository = repository()
+	constructor(repository: (organizationId: string) => IClassRepository) {
+		this.repository = repository
 	}
 
-	async add(factory: ClassFactory) {
-		return await this.repository.add(await factory.toModel())
+	async add(organizationId: string, factory: ClassFactory) {
+		return await this.repository(organizationId).add(await factory.toModel())
 	}
 
-	async update(id: string, factory: ClassFactory) {
-		return await this.repository.update(id, await factory.toModel())
+	async update(organizationId: string, id: string, factory: ClassFactory) {
+		return await this.repository(organizationId).update(id, await factory.toModel())
 	}
 
-	async delete(id: string) {
-		return await this.repository.delete(id)
+	async delete(data: { id: string; organizationId: string }) {
+		return await this.repository(data.organizationId).delete(data.id)
 	}
 
-	async find(id: string) {
-		return await this.repository.find(id)
+	async find(organizationId: string, classId: string) {
+		return await this.repository(organizationId).find(classId)
 	}
 
-	async get(query: QueryParams) {
-		return await this.repository.get(query)
+	async get(organizationId: string, query: QueryParams) {
+		return await this.repository(organizationId).get(query)
 	}
 }
