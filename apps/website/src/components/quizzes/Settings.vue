@@ -124,11 +124,11 @@ import { PropType, defineEmits, defineProps, ref, watch } from 'vue'
 
 const props = defineProps({
 	quiz: {
-		type: QuizEntity,
+		type: Object as PropType<QuizEntity>,
 		required: true,
 	},
 	factory: {
-		type: QuizFactory,
+		type: Object as PropType<QuizFactory>,
 		required: true,
 	},
 	close: {
