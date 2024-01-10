@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-2 w-full relative group" :tabIndex="-1">
+	<div class="flex flex-col w-full relative group" :tabIndex="-1">
 		<SofaNormalText v-if="hasTitle" custom-class="">
 			<slot name="title" />
 		</SofaNormalText>
@@ -18,6 +18,9 @@
 				<SofaNormalText v-else color="text-grayColor" :content="placeholder" />
 			</div>
 			<SofaIcon name="angle-small-down" class="h-[7px] pr-1" />
+		</div>
+		<div v-if="error" class="w-full flex pt-1 justify-start">
+			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
 		</div>
 		<div
 			v-if="showOptions"

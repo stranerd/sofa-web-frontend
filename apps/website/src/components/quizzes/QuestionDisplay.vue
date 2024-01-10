@@ -24,7 +24,7 @@
 					'hover:bg-primaryBlue hover:border-primaryBlue': isDark,
 					'hover:bg-skyBlue hover:border-hoverBlue': !isDark,
 				}"
-				@click="answer.value.includes(index) ? answer.value.splice(answer.value.indexOf(index), 1) : answer.value.push(index)">
+				@click="selectMultipleChoiceAnswer(index)">
 				<div class="flex-grow flex gap-3 items-center">
 					<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
 					<SofaHeaderText
@@ -235,6 +235,13 @@ const move = (e: { from: HTMLElement; to: HTMLElement; draggedContext: { element
 	if (e.to.id === optionsId) return true
 	const toId = Number(e.to.id.split(answersId)[1])
 	if (answer.drag[toId].length) return false
+}
+
+const selectMultipleChoiceAnswer = (index: number) => {
+	if (props.question.strippedData.type !== QuestionTypes.multipleChoice) return
+	if (answer.value.includes(index)) return answer.value.splice(answer.value.indexOf(index), 1)
+	if (answer.value.length < props.question.strippedData.noOfAnswers) return answer.value.push(index)
+	return answer.value.splice(answer.value.length - 1, 1, index)
 }
 
 const buildClass = (...args: Parameters<(typeof props)['optionState']>) => ({

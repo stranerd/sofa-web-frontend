@@ -81,7 +81,8 @@ export class QuestionEntity extends BaseEntity {
 	}
 
 	get instruction() {
-		if (this.strippedData.type === QuestionTypes.multipleChoice) return 'Choose the right answer(s)'
+		if (this.strippedData.type === QuestionTypes.multipleChoice)
+			return `Choose ${this.strippedData.noOfAnswers} right answer${this.strippedData.noOfAnswers > 1 ? 's' : ''}`
 		if (this.strippedData.type === QuestionTypes.writeAnswer) return 'Type your answer'
 		if (this.strippedData.type === QuestionTypes.trueOrFalse) return 'Choose an answer'
 		if (this.strippedData.type === QuestionTypes.fillInBlanks) return 'Fill in the gaps'

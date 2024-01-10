@@ -1,8 +1,5 @@
 <template>
-	<expanded-layout
-		layout-style="!justify-between bg-deepGray text-white"
-		:hide="{ top: true, bottom: true }"
-		bg-image="/images/game-bg.png">
+	<expanded-layout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
 		<TestWrapper :id="$route.params.id as string" :skip-questions="true" :skip-status-nav="true">
 			<template #default="{ test, extras: testExtras, questions: testQuestions }">
 				<QuizWrapper :id="test.quizId" :questions="testQuestions">
@@ -14,7 +11,6 @@
 							:questions="questions"
 							:show-counter="false"
 							:option-state="extras.optionState"
-							:is-dark="true"
 							:right-button="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
