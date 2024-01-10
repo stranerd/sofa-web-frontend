@@ -1,5 +1,5 @@
 <template>
-	<HomeLayout title="Teachers">
+	<HomeLayout title="Classes">
 		<ClassesForTeachers v-if="userType.isTeacher" />
 		<ClassesForOrganization v-if="userType.isOrg" />
 	</HomeLayout>

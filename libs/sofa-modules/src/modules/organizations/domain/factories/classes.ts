@@ -6,7 +6,7 @@ import { ClassEntity } from '../entities/classes'
 
 type Keys = Omit<ClassToModel, 'price'> & ClassToModel['price']
 
-export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
+export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & { localPhotoLink: string | undefined }> {
 	readonly rules = {
 		organizationId: v.string().min(1),
 		title: v.string().min(1),
@@ -14,6 +14,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 		photo: v.file().nullable(),
 		amount: v.number().gte(0),
 		currency: v.in(Object.values(Currencies)),
+		localPhotoLink: v.string().nullish(),
 	}
 
 	reserved = ['organizationId']
@@ -26,6 +27,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 			photo: null,
 			amount: 0,
 			currency: Currencies.NGN,
+			localPhotoLink: '',
 		})
 	}
 
@@ -51,6 +53,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 
 	set photo(value: Media | null) {
 		this.set('photo', value)
+		if (value) this.localPhotoLink = value.link
 	}
 
 	get amount() {
@@ -75,6 +78,14 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 
 	set organizationId(value: string) {
 		this.set('organizationId', value)
+	}
+
+	get localPhotoLink() {
+		return this.values.localPhotoLink
+	}
+
+	set localPhotoLink(value: string | undefined) {
+		this.set('localPhotoLink', value)
 	}
 
 	toModel = async () => {

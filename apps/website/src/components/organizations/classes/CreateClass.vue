@@ -6,19 +6,19 @@
 				<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="$emit('close')" />
 			</div>
 			<!-- Form -->
-			<form class="flex flex-col gap-8" @submit.prevent>
-				<div class="flex flex-col mdlg:flex-row items-center gap-8 mdlg:gap-4">
+			<form class="flex flex-col gap-8" @submit.prevent="createClass">
+				<div class="flex flex-col mdlg:flex-row items-start gap-4">
 					<div class="w-full mdlg:w-1/2">
-						<div class="w-full flex flex-col items-center justify-center pt-3">
+						<div class="w-full flex flex-col justify-center">
 							<sofa-image-loader
-								:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-primaryPurple border border-grayColor rounded-bl-[16px] rounded-tr-[16px] rounded-tl-[8px] rounded-tl-[8px] !object-contain !bg-contain`"
-								:photo-url="classForm.localPhotoLink">
-								<sofa-icon v-if="!classForm.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
+								:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-primaryPurple border border-grayColor rounded-custom !object-contain !bg-contain`"
+								:photo-url="classFactory.localPhotoLink">
+								<sofa-icon v-if="!classFactory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
 								<sofa-file-attachment
-									v-model="classForm.photo"
-									v-model:localFileUrl="classForm.localPhotoLink"
+									v-model="classFactory.photo"
+									v-model:localFileUrl="classFactory.localPhotoLink"
 									:is-wrapper="true"
-									:custom-class="`absolute bottom-0 right-0 left-0 bg-black bg-opacity-50 rounded-bl-[16px] rounded-tl-[8px] !h-[50px] !w-full flex items-center justify-center`"
+									:custom-class="`absolute bottom-0 right-0 left-0 bg-black bg-opacity-50 rounded-custom !h-[50px] !w-full flex items-center justify-center`"
 									:accept="'image/png, image/gif, image/jpeg'">
 									<template #content>
 										<div class="w-full flex items-center justify-center gap-3">
@@ -32,37 +32,47 @@
 					</div>
 					<div class="w-full mdlg:w-1/2 flex flex-col gap-4">
 						<SofaTextField
-							v-model="classForm.name"
+							v-model="classFactory.title"
 							custom-class="rounded-custom !bg-lightGray"
 							type="text"
 							placeholder="Name your class"
-							:error="classForm.name"
+							:error="classFactory.errors.title"
 							border-color="border-transparent" />
 						<SofaTextarea
-							v-model="classForm.desc"
+							v-model="classFactory.description"
 							text-area-style="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
-							:error="classForm.desc"
+							:error="classFactory.errors.description"
 							:placeholder="'Describe your class'" />
-						<SofaTextField
-							v-model="classForm.price"
+						<SofaNumberField
+							v-model="classFactory.amount"
 							custom-class="rounded-custom !bg-lightGray"
-							type="number"
 							placeholder="Price per month"
-							:error="classForm.name"
+							:error="classFactory.errors.amount"
 							border-color="border-transparent">
 							<template #inner-suffix>
 								<div class="flex items-center gap-1 border-l-2 border-darkLightGray px-2 py-1">
 									<SofaNormalText custom-class="font-bold text-deepGray !text-xl"> ₦ </SofaNormalText>
 								</div>
 							</template>
-						</SofaTextField>
+						</SofaNumberField>
 					</div>
 				</div>
 				<div class="flex items-center justify-between">
-					<SofaButton :bg-color="'bg-grayColor'" :text-color="'text-white'" :padding="'py-4 px-6'" @click="$emit('close')">
+					<SofaButton
+						:bg-color="'bg-grayColor'"
+						:text-color="'text-white'"
+						:padding="'py-4 px-6'"
+						custom-class="hidden mdlg:block"
+						@click="$emit('close')">
 						Cancel
 					</SofaButton>
-					<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-4 px-6'"> Save </SofaButton>
+					<SofaButton
+						:bg-color="'bg-primaryBlue'"
+						:text-color="'text-white'"
+						:padding="'py-4 px-6'"
+						custom-class="w-full mdlg:w-auto">
+						Save
+					</SofaButton>
 				</div>
 			</form>
 		</div>
@@ -81,13 +91,15 @@ import {
 	SofaImageLoader,
 	SofaFileAttachment,
 	SofaNormalText,
+	SofaNumberField,
 } from 'sofa-ui-components'
+import { useCreateClass } from '@/composables/organizations/classes'
+
+import { useAuth } from '@/composables/auth/auth'
+
+const { id } = useAuth()
+
+const { factory: classFactory, createClass } = useCreateClass(id.value)
+
 const emit = defineEmits(['close'])
-const classForm = ref({
-	name: '',
-	desc: '',
-	price: '',
-	photo: {},
-	localPhotoLink: '/images/stranerd.png',
-})
 </script>
