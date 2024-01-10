@@ -36,7 +36,10 @@
 
 			<template v-if="selectedMaterial?.type == 'video'">
 				<div class="w-full flex flex-col">
-					<sofa-video-player :key="selectedMaterial.id" :video-url="selectedMaterial.data.videoUrl" />
+					<sofa-video-player
+						:key="selectedMaterial.id"
+						:video-url="selectedMaterial.data.videoUrl"
+						:type="selectedMaterial.details.media.type" />
 				</div>
 			</template>
 		</template>
@@ -58,11 +61,12 @@
 		</template>
 	</div>
 </template>
+
 <script lang="ts">
 import { Logic } from 'sofa-logic'
 import { SofaDocumentReader, SofaEmptyState, SofaHeaderText, SofaImageLoader, SofaVideoPlayer } from 'sofa-ui-components'
-import { openQuiz, extractResource } from '@/composables/library'
 import { defineComponent, onMounted, ref } from 'vue'
+import { extractResource, openQuiz } from '@/composables/library'
 
 export default defineComponent({
 	components: {

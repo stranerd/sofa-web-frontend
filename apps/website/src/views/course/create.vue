@@ -162,7 +162,10 @@
 
 				<template v-if="selectedMaterial?.type == 'video'">
 					<div class="w-full flex flex-col">
-						<sofa-video-player :key="selectedMaterial.details.id" :video-url="selectedMaterial.data.videoUrl" />
+						<sofa-video-player
+							:key="selectedMaterial.details.id"
+							:video-url="selectedMaterial.data.videoUrl"
+							:type="selectedMaterial.details.media.type" />
 					</div>
 				</template>
 			</div>
@@ -398,7 +401,7 @@ export default defineComponent({
 		const currentContent = ref('')
 
 		watch(selectedMaterial, () => {
-			// console.log(selectedMaterial.value);
+			console.log(selectedMaterial.value)
 		})
 
 		watch(showSettingModal, () => {

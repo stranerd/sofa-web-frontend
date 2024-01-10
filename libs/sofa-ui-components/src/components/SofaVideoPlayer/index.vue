@@ -1,6 +1,6 @@
 <template>
 	<VideoPlayer
-		src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+		:sources="[{ src: videoUrl, type }]"
 		:controls="true"
 		:loop="true"
 		:volume="0.6"
@@ -31,7 +31,12 @@ export default defineComponent({
 	props: {
 		videoUrl: {
 			type: String,
-			default: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+			required: true,
+		},
+		type: {
+			type: String,
+			required: false,
+			default: undefined,
 		},
 	},
 	setup() {
