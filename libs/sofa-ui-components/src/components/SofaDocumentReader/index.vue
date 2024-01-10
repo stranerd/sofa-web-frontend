@@ -1,19 +1,20 @@
 <template>
 	<div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-lightGray rounded-lg">
-		<VuePDF :pdf="pdf" :text-layer="true" :fit-parent="true" class="!overflow-y-auto" />
+		<VuePDF v-for="page in pages" :key="page" :page="page" :pdf="pdf" text-layer annotation-layer fit-parent class="h-full" />
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
+import '@tato30/vue-pdf/style.css'
 import { defineProps } from 'vue'
 
 const props = defineProps({
 	documentUrl: {
 		type: String,
-		default: 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf',
+		required: true,
 	},
 })
 
-const { pdf } = usePDF(props.documentUrl)
+const { pdf, pages } = usePDF(props.documentUrl)
 </script>

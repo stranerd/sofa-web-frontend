@@ -400,10 +400,6 @@ export default defineComponent({
 
 		const currentContent = ref('')
 
-		watch(selectedMaterial, () => {
-			console.log(selectedMaterial.value)
-		})
-
 		watch(showSettingModal, () => {
 			if (showSettingModal.value) {
 				mobileTitle.value = 'Create course'
