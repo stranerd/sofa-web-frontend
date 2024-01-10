@@ -61,7 +61,7 @@
 <script lang="ts">
 import { Logic } from 'sofa-logic'
 import { SofaDocumentReader, SofaEmptyState, SofaHeaderText, SofaImageLoader, SofaVideoPlayer } from 'sofa-ui-components'
-import { openQuiz, extractResource } from '../../composables/library'
+import { openQuiz, extractResource } from '@/composables/library'
 import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({

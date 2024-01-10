@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/library/LibraryLayout.vue'
+import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { extractResource, openCourse, showMoreOptionHandler } from '@/composables/library'
 import { useMyCourses } from '@/composables/study/courses-list'
 import { useRecent } from '@/composables/study/study'

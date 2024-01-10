@@ -268,10 +268,10 @@
 </template>
 
 <script lang="ts">
-import ManageAccessModal from '@/components/quizzes/ManageAccessModal.vue'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
-import RequestAccessModal from '@/components/quizzes/RequestAccessModal.vue'
-import QuizSettings from '@/components/quizzes/Settings.vue'
+import ManageAccessModal from '@/components/study/quizzes/ManageAccessModal.vue'
+import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
+import RequestAccessModal from '@/components/study/quizzes/RequestAccessModal.vue'
+import QuizSettings from '@/components/study/quizzes/Settings.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'

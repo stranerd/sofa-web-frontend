@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/library/LibraryLayout.vue'
+import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { extractResource, openQuiz, showMoreOptionHandler } from '@/composables/library'
 import { useMyQuizzes, useTutorQuizzes } from '@/composables/study/quizzes-list'
 import { useRecent } from '@/composables/study/study'

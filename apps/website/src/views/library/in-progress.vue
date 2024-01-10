@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/library/LibraryLayout.vue'
+import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { createGameData, createTestData } from '@/composables/library'
 import { useMyGames } from '@/composables/plays/games-list'
 import { useMyTests } from '@/composables/plays/tests-list'

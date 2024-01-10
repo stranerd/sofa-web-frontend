@@ -72,8 +72,8 @@
 
 <script lang="ts">
 import TestWrapper from '@/components/plays/tests/TestWrapper.vue'
-import Quiz from '@/components/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import Quiz from '@/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaNormalText, SofaPieChart } from 'sofa-ui-components'

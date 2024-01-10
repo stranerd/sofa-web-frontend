@@ -87,9 +87,9 @@
 </template>
 
 <script lang="ts">
-import Flashcard from '@/components/quizzes/FlashcardDisplay.vue'
-import Quiz from '@/components/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import Flashcard from '@/components/study/quizzes/FlashcardDisplay.vue'
+import Quiz from '@/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { storage } from 'sofa-modules/src/utils/storage'
