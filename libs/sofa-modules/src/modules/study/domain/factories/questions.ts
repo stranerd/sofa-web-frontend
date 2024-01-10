@@ -18,7 +18,6 @@ type Keys = Omit<QuestionToModel, 'data'> & {
 	indicator: string
 	fillInBlanksAnswers: FillOrDragOption[]
 	dragAnswersAnswers: FillOrDragOption[]
-	localQuestionMediaLink: string | undefined
 }
 
 export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel, Keys> {
@@ -28,7 +27,6 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 			.min(1, true)
 			.requiredIf(() => !this.isFillInBlanks && !this.isDragAnswers),
 		questionMedia: v.file().image().nullable(),
-		localQuestionMediaLink: v.string().nullish(),
 		explanation: v.string(),
 		timeLimit: v.number().gt(0).lte(300).round(),
 		type: v.in(Object.values(QuestionTypes)),
@@ -107,7 +105,6 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 			fillInBlanksAnswers: [],
 			dragAnswersAnswers: [],
 			matchSet: [],
-			localQuestionMediaLink: undefined,
 		})
 	}
 
@@ -125,15 +122,6 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 
 	set questionMedia(value: Media | null) {
 		this.set('questionMedia', value)
-		if (value?.link) this.localQuestionMediaLink = value.link
-	}
-
-	get localQuestionMediaLink() {
-		return this.values.localQuestionMediaLink
-	}
-
-	set localQuestionMediaLink(value: string | undefined) {
-		this.set('localQuestionMediaLink', value)
 	}
 
 	get timeLimit() {

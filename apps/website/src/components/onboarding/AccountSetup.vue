@@ -18,18 +18,14 @@
 			<div class="w-full flex flex-col items-center justify-center pt-3">
 				<sofa-image-loader
 					:custom-class="`w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-					:photo-url="profileFactory.localPhotoLink">
-					<sofa-icon v-if="!profileFactory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
-					<sofa-file-attachment
+					:photo-url="profileFactory.photo?.link">
+					<sofa-icon v-if="!profileFactory.photo" :custom-class="'h-[50px]'" :name="'user'" />
+					<SofaFileInput
 						v-model="profileFactory.photo"
-						v-model:localFileUrl="profileFactory.localPhotoLink"
-						:is-wrapper="true"
-						:custom-class="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
-						:accept="'image/png, image/gif, image/jpeg'">
-						<template #content>
-							<SofaIcon class="h-[18px]" name="camera-white" />
-						</template>
-					</sofa-file-attachment>
+						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
+						accept="image/*">
+						<SofaIcon class="h-[18px]" name="camera-white" />
+					</SofaFileInput>
 				</sofa-image-loader>
 			</div>
 
@@ -223,7 +219,7 @@ import { Logic } from 'sofa-logic'
 import {
 	SofaBadge,
 	SofaButton,
-	SofaFileAttachment,
+	SofaFileInput,
 	SofaIcon,
 	SofaImageLoader,
 	SofaNormalText,
@@ -244,7 +240,7 @@ export default defineComponent({
 		SofaTextarea,
 		SofaButton,
 		SofaSelect,
-		SofaFileAttachment,
+		SofaFileInput,
 		SofaImageLoader,
 		SofaOtpInput,
 		SofaBadge,

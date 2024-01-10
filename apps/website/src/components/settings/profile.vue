@@ -5,18 +5,14 @@
 			<div class="w-full flex flex-row items-center justify-start py-2 gap-4">
 				<sofa-image-loader
 					:custom-class="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
-					:photo-url="factory.localPhotoLink">
-					<sofa-icon v-if="!factory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
-					<sofa-file-attachment
+					:photo-url="factory.photo?.link">
+					<sofa-icon v-if="!factory.photo" :custom-class="'h-[50px]'" :name="'user'" />
+					<SofaFileInput
 						v-model="factory.photo"
-						v-model:localFileUrl="factory.localPhotoLink"
-						:is-wrapper="true"
-						:custom-class="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center`"
+						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full h-[40px] w-[40px] flex items-center justify-center"
 						accept="image/*">
-						<template #content>
-							<sofa-icon :custom-class="'h-[18px]'" :name="'camera-white'" />
-						</template>
-					</sofa-file-attachment>
+						<sofa-icon class="h-[18px]" name="camera-white" />
+					</SofaFileInput>
 				</sofa-image-loader>
 
 				<sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile')">View profile</sofa-button>
@@ -86,7 +82,7 @@ import { useAuth } from '@/composables/auth/auth'
 import { useProfileUpdate } from '@/composables/auth/profile'
 import { useUserSocialsUpdate } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaFileAttachment, SofaHeaderText, SofaIcon, SofaImageLoader, SofaTextField, SofaTextarea } from 'sofa-ui-components'
+import { SofaButton, SofaFileInput, SofaHeaderText, SofaIcon, SofaImageLoader, SofaTextField, SofaTextarea } from 'sofa-ui-components'
 import { watch } from 'vue'
 import AccountSetup from '../onboarding/AccountSetup.vue'
 

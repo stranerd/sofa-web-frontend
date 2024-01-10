@@ -34,20 +34,14 @@
 				<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 					<SofaImageLoader
 						custom-class="w-full md:!h-full h-[220px] rounded-custom relative"
-						:photo-url="factory.localPhotoLink ?? '/images/default.png'">
+						:photo-url="factory.photo?.link ?? '/images/default.png'">
 						<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
-							<SofaFileAttachment
-								v-model="factory.photo"
-								v-model:localFileUrl="factory.localPhotoLink"
-								:is-wrapper="true"
-								accept="image/png, image/gif, image/jpeg">
-								<template #content>
-									<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
-										<SofaIcon class="h-[18px]" name="camera-white" />
-										<SofaNormalText color="text-white" content="Add cover photo" />
-									</div>
-								</template>
-							</SofaFileAttachment>
+							<SofaFileInput v-model="factory.photo" accept="image/*">
+								<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
+									<SofaIcon class="h-[18px]" name="camera-white" />
+									<SofaNormalText color="text-white" content="Add cover photo" />
+								</div>
+							</SofaFileInput>
 						</div>
 					</SofaImageLoader>
 				</div>
@@ -112,7 +106,7 @@ import { QuizEntity, QuizFactory } from '@modules/study'
 import {
 	SofaButton,
 	SofaCheckbox,
-	SofaFileAttachment,
+	SofaFileInput,
 	SofaIcon,
 	SofaImageLoader,
 	SofaNormalText,

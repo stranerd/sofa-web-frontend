@@ -41,33 +41,19 @@
 
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
 			<SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />
-			<SofaFileAttachment
-				v-model:localFileUrl="factory.localQuestionMediaLink"
-				v-model="factory.questionMedia"
-				:is-wrapper="true"
-				accept="image/*"
-				class="!w-auto">
-				<template #content>
-					<SofaButton bg-color="bg-white" text-color="text-bodyBlack">Add Image</SofaButton>
-				</template>
-			</SofaFileAttachment>
+			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-auto">
+				<SofaButton bg-color="bg-white" text-color="text-bodyBlack">Add Image</SofaButton>
+			</SofaFileInput>
 		</div>
 
 		<div class="w-full flex md:hidden flex-col">
-			<SofaFileAttachment
-				v-model:local-file-url="factory.localQuestionMediaLink"
-				v-model="factory.questionMedia"
-				:is-wrapper="true"
-				accept="image/*"
-				class="!w-full flex flex-col">
-				<template #content>
-					<SofaButton class="w-full" padding="py-3">Add image (optional)</SofaButton>
-				</template>
-			</SofaFileAttachment>
+			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-full flex flex-col">
+				<SofaButton class="w-full" padding="py-3">Add image (optional)</SofaButton>
+			</SofaFileInput>
 		</div>
 
-		<div v-if="factory.localQuestionMediaLink" class="w-full flex flex-col items-center justify-center">
-			<SofaImageLoader :photo-url="factory.localQuestionMediaLink" custom-class="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
+		<div v-if="factory.questionMedia" class="w-full flex flex-col items-center justify-center">
+			<SofaImageLoader :photo-url="factory.questionMedia.link" custom-class="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
 		</div>
 
 		<div v-if="!factory.isFillInBlanks && !factory.isDragAnswers" class="flex flex-col gap-4">
@@ -220,7 +206,7 @@ import { Logic } from 'sofa-logic'
 import { PropType, defineProps } from 'vue'
 import Draggable from 'vuedraggable'
 import SofaButton from '../SofaButton'
-import { SofaCustomInput, SofaFileAttachment, SofaTextarea } from '../SofaForm'
+import { SofaCustomInput, SofaFileInput, SofaTextarea } from '../SofaForm'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'

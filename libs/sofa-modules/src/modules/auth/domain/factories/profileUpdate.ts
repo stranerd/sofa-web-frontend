@@ -5,19 +5,18 @@ import { AuthDetails, ProfileUpdate } from '../entities/auth'
 type Content = UploadedFile | Media | null
 type Keys = { first: string; last: string; description: string; photo: Content }
 
-export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate, Keys & { localPhotoLink: string | undefined }> {
+export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate, Keys> {
 	readonly rules = {
 		first: v.string().min(1).trim(),
 		last: v.string().min(1).trim(),
 		description: v.string(),
 		photo: v.file().image().nullable(),
-		localPhotoLink: v.string().nullish(),
 	}
 
 	reserved = []
 
 	constructor() {
-		super({ first: '', last: '', description: '', photo: null, localPhotoLink: undefined })
+		super({ first: '', last: '', description: '', photo: null })
 	}
 
 	get first() {
@@ -50,15 +49,6 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 
 	set photo(photo: Content) {
 		this.set('photo', photo)
-		if (photo?.link) this.localPhotoLink = photo.link
-	}
-
-	get localPhotoLink() {
-		return this.values.localPhotoLink
-	}
-
-	set localPhotoLink(value: string | undefined) {
-		this.set('localPhotoLink', value)
 	}
 
 	toModel = async () => {

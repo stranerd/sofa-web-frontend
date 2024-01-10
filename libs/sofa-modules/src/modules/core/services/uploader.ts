@@ -15,25 +15,25 @@ export const parseMedia = (media: Media) => {
 	return media
 }
 
-export class UploadedFile {
+export class UploadedFile implements Media {
 	readonly name: string
 	readonly path: string
+	readonly link: string
 	readonly type: string
 	readonly size: number
+	readonly duration = 0
+	readonly timestamp = Date.now()
 	readonly data: Blob
 	readonly ref: File
 
-	constructor({ name, path, type, size, data, ref }: { name: string; path: string; type: string; size: number; data: Blob; ref: File }) {
-		this.name = name
-		this.path = path
-		this.type = type
-		this.size = size
-		this.data = data
-		this.ref = ref
-	}
-
-	get link() {
-		return window.URL.createObjectURL(this.data)
+	constructor({ file }: { file: File }) {
+		this.name = file.name
+		this.path = file.webkitRelativePath
+		this.link = window.URL.createObjectURL(file)
+		this.type = file.type
+		this.size = file.size
+		this.data = file.slice()
+		this.ref = file
 	}
 
 	static async convertBase64ToBlob(b64: string) {

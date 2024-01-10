@@ -14,18 +14,14 @@
 				<div class="w-full flex flex-col items-center gap-4 py-3">
 					<SofaImageLoader
 						custom-class="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-						:photo-url="factory.localPhotoLink">
-						<SofaIcon v-if="!factory.localPhotoLink" class="h-[50px]" name="user" />
-						<SofaFileAttachment
+						:photo-url="factory.photo?.link ?? UserEntity.defaultAiPhotoLink">
+						<SofaIcon v-if="!factory.photo" class="h-[50px]" name="user" />
+						<SofaFileInput
 							v-model="factory.photo"
-							v-model:localFileUrl="factory.localPhotoLink"
-							:is-wrapper="true"
-							custom-class="absolute bottom-0 right-0 bg-black bg-opacity-50 rounded-full aspect-square !w-[40px] flex items-center justify-center"
+							class="absolute bottom-0 right-0 bg-black bg-opacity-50 rounded-full aspect-square w-[40px] flex items-center justify-center"
 							accept="image/*">
-							<template #content>
-								<SofaIcon class="h-[18px]" name="camera-white" />
-							</template>
-						</SofaFileAttachment>
+							<SofaIcon class="h-[18px]" name="camera-white" />
+						</SofaFileInput>
 					</SofaImageLoader>
 
 					<SofaTextField
@@ -65,9 +61,10 @@
 <script lang="ts" setup>
 import { useUserAiUpdate } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
+import { UserEntity } from '@modules/users'
 import {
 	SofaButton,
-	SofaFileAttachment,
+	SofaFileInput,
 	SofaHeaderText,
 	SofaIcon,
 	SofaImageLoader,
