@@ -11,7 +11,7 @@
 					<div class="w-full mdlg:w-1/2">
 						<div class="w-full flex flex-col justify-center">
 							<sofa-image-loader
-								:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-primaryPurple border border-grayColor rounded-custom !object-contain !bg-contain`"
+								:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
 								:photo-url="classFactory.localPhotoLink">
 								<sofa-icon v-if="!classFactory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
 								<sofa-file-attachment

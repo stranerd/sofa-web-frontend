@@ -28,4 +28,10 @@ export class ClassesUseCase {
 	async get(organizationId: string, query: QueryParams) {
 		return await this.repository(organizationId).get(query)
 	}
+
+	async getAll(organizationId: string) {
+		return await this.repository(organizationId).get({
+			all: true
+		})
+	}
 }

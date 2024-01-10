@@ -39,7 +39,7 @@
 		</div>
 		<ClassCard v-for="cl in classes" :key="cl.id" :class-obj="cl" :is-wrapped="false" :type="'org'">
 			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-				<sofa-icon name="more-options-horizontal" custom-class="h-[6px]" />
+				<sofa-icon name="more-options-horizontal" custom-class="h-[6px]" @click.stop="showMoreOptionHandler(cl)" />
 			</div>
 		</ClassCard>
 	</div>
@@ -51,6 +51,7 @@ import { defineComponent, ref } from 'vue'
 import { SofaHeaderText, SofaNormalText, SofaButton, SofaIcon, SofaTextField } from 'sofa-ui-components'
 import CreateClass from './CreateClass.vue'
 import ClassCard from './ClassCard.vue'
+import { useMyClasses, showMoreOptionHandler } from '@/composables/organizations/classes'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
@@ -67,56 +68,16 @@ export default defineComponent({
 			],
 		}
 
+		const { classes } = useMyClasses()
 		const showCreateClassModal = ref(false)
-		const searchQuery = ref('')
-		const classes = [
-			{
-				id: 1,
-				image: '/images/waec-exam.png',
-				title: 'WAEC EXAM',
-				price: 'N21,000/month',
-				no_of_students: '128 students',
-				no_of_lessons: '30 lessons',
-			},
-			{
-				id: 2,
-				image: '/images/chemistry.png',
-				title: 'WAEC EXAM',
-				price: 'N21,000/month',
-				no_of_students: '128 students',
-				no_of_lessons: '30 lessons',
-			},
-			{
-				id: 3,
-				image: '/images/waec.png',
-				title: 'WAEC EXAM',
-				price: 'N21,000/month',
-				no_of_students: '128 students',
-				no_of_lessons: '30 lessons',
-			},
-			{
-				id: 4,
-				image: '/images/pendulum.png',
-				title: 'WAEC EXAM',
-				price: 'N21,000/month',
-				no_of_students: '128 students',
-				no_of_lessons: '30 lessons',
-			},
-			{
-				id: 5,
-				image: '/images/physics.png',
-				title: 'WAEC EXAM',
-				price: 'N21,000/month',
-				no_of_students: '128 students',
-				no_of_lessons: '30 lessons',
-			},
-		]
+		const searchQuery = ref('')	
 
 		return {
 			emptyClassContent,
 			classes,
 			showCreateClassModal,
 			searchQuery,
+			showMoreOptionHandler,
 		}
 	},
 })

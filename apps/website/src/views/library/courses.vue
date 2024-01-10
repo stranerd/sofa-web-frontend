@@ -58,6 +58,7 @@ export default defineComponent({
 			return []
 		})
 
+
 		return { Logic, openCourse, data, showMoreOptionHandler }
 	},
 })

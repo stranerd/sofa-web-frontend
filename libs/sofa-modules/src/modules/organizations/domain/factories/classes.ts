@@ -23,7 +23,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 			photo: null,
 			amount: 0,
 			currency: Currencies.NGN,
-			localPhotoLink: '/images/stranerd.png',
+			localPhotoLink: ClassEntity.defaultPhotoURL,
 		})
 	}
 
@@ -67,7 +67,6 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 	set currency(value: Currencies) {
 		this.set('currency', value)
 	}
-
 
 	get localPhotoLink() {
 		return this.values.localPhotoLink
