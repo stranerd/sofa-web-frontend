@@ -13,10 +13,9 @@
 							<sofa-image-loader
 								:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
 								:photo-url="classFactory.photo?.link ?? '/images/default.png'">
-								<div class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
-									<sofa-file-input
-									v-model="classFactory.photo"
-									accept="image/*">				
+								<div
+									class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
+									<sofa-file-input v-model="classFactory.photo" accept="image/*">
 										<div class="w-full flex items-center justify-center gap-3">
 											<SofaIcon class="h-[18px]" name="camera-white" />
 											<SofaNormalText content="Add cover photo" color="text-white" />
@@ -99,8 +98,8 @@ const { factory: classFactory, createClass, created } = useCreateClass(id.value)
 
 const emit = defineEmits(['close'])
 
-watch(created, ()=>{
-	if(created.value){
+watch(created, () => {
+	if (created.value) {
 		emit('close')
 	}
 })

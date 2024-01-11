@@ -42,7 +42,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -50,7 +50,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -58,7 +58,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'delete-quiz',
 		title: 'Delete',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -108,19 +108,18 @@ export const useCreateClass = (organizationId: string) => {
 	const { error, setError } = useErrorHandler()
 	const { loading, setLoading } = useLoadingHandler()
 	const factory = new ClassFactory()
-	const created = ref(false);
+	const created = ref(false)
 
 	const createClass = async () => {
 		await setError('')
 		if (factory.valid && !loading.value) {
 			try {
 				await setLoading(true)
-				await ClassesUseCases.add(organizationId, factory)
-					.then((data) => {
-						if (data) {
-							created.value = true
-						}
-					})
+				await ClassesUseCases.add(organizationId, factory).then((data) => {
+					if (data) {
+						created.value = true
+					}
+				})
 				factory.reset()
 			} catch (error) {
 				await setError(error)
