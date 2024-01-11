@@ -23,8 +23,8 @@ export class BaseApiService {
 				} else {
 					const formData: FormData = new FormData()
 					Object.entries(config.data ?? {}).forEach(([key, val]) => {
-						if (val instanceof UploadedFile) formData.set(key, val.ref)
-						else if (Array.isArray(val) && val[0] instanceof UploadedFile) val.forEach((file) => formData.append(key, file.ref))
+						if (UploadedFile.is(val)) formData.set(key, val.ref)
+						else if (Array.isArray(val) && UploadedFile.is(val[0])) val.forEach((file) => formData.append(key, file.ref))
 						else if (val instanceof Blob) formData.set(key, val)
 						else if (Array.isArray(val) && val[0] instanceof Blob) val.forEach((file) => formData.append(key, file))
 						else if (val !== undefined) formData.set(key, JSON.stringify(val))
