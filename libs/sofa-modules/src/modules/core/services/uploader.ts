@@ -45,7 +45,7 @@ export class UploadedFile implements Media {
 	}
 
 	static is(val: any): val is UploadedFile {
-		return val?.constructor?.name === this.constructor.name
+		return val?.constructor?.name === 'UploadedFile'
 	}
 }
 

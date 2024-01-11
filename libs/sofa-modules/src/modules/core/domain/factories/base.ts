@@ -3,8 +3,8 @@ import { isProxy, isReactive, isRef, reactive, ref, toRaw } from 'vue'
 
 export function deepToRaw(input: any) {
 	if (Array.isArray(input)) return input.map(deepToRaw)
-	if (isRef(input) || isReactive(input) || isProxy(input)) return deepToRaw(toRaw(input))
-	if (input && typeof input === 'object')
+	if (isRef(input) || isReactive(input) || isProxy(input)) return toRaw(input)
+	if (input?.constructor?.name === 'Object')
 		return Object.keys(input).reduce((acc, key) => {
 			acc[key as keyof typeof acc] = deepToRaw(input[key])
 			return acc
@@ -89,6 +89,6 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 			Object.keys(this.defaults).forEach((key) => this.set(key, this.values[key]))
 			throw new Error('Validation errors')
 		}
-		return await this.model()
+		return deepToRaw(await this.model())
 	}
 }
