@@ -6,14 +6,13 @@ import { ClassEntity } from '../entities/classes'
 
 type Keys = Omit<ClassToModel, 'price'> & ClassToModel['price']
 
-export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & { localPhotoLink: string | undefined }> {
+export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 	readonly rules = {
 		title: v.string().min(1),
 		description: v.string().min(1),
 		photo: v.file().image().nullable(),
 		amount: v.number().gte(0),
 		currency: v.in(Object.values(Currencies)),
-		localPhotoLink: v.string().nullish(),
 	}
 
 	constructor() {
@@ -23,7 +22,6 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 			photo: null,
 			amount: 0,
 			currency: Currencies.NGN,
-			localPhotoLink: ClassEntity.defaultPhotoURL,
 		})
 	}
 
@@ -49,7 +47,6 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 
 	set photo(value: Media | null) {
 		this.set('photo', value)
-		if (value) this.localPhotoLink = value.link
 	}
 
 	get amount() {
@@ -66,14 +63,6 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys & 
 
 	set currency(value: Currencies) {
 		this.set('currency', value)
-	}
-
-	get localPhotoLink() {
-		return this.values.localPhotoLink
-	}
-
-	set localPhotoLink(value: string | undefined) {
-		this.set('localPhotoLink', value)
 	}
 
 	toModel = async () => {

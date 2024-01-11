@@ -12,21 +12,17 @@
 						<div class="w-full flex flex-col justify-center">
 							<sofa-image-loader
 								:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
-								:photo-url="classFactory.localPhotoLink">
-								<sofa-icon v-if="!classFactory.localPhotoLink" :custom-class="'h-[50px]'" :name="'user'" />
-								<sofa-file-attachment
+								:photo-url="classFactory.photo?.link ?? '/images/default.png'">
+								<div class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
+									<sofa-file-input
 									v-model="classFactory.photo"
-									v-model:localFileUrl="classFactory.localPhotoLink"
-									:is-wrapper="true"
-									:custom-class="`absolute bottom-0 right-0 left-0 bg-black bg-opacity-50 rounded-custom !h-[50px] !w-full flex items-center justify-center`"
-									:accept="'image/png, image/gif, image/jpeg'">
-									<template #content>
+									accept="image/*">				
 										<div class="w-full flex items-center justify-center gap-3">
 											<SofaIcon class="h-[18px]" name="camera-white" />
 											<SofaNormalText content="Add cover photo" color="text-white" />
 										</div>
-									</template>
-								</sofa-file-attachment>
+									</sofa-file-input>
+								</div>
 							</sofa-image-loader>
 						</div>
 					</div>
@@ -80,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits } from 'vue'
+import { defineEmits, watch } from 'vue'
 import {
 	SofaModal2,
 	SofaIcon,
@@ -89,7 +85,7 @@ import {
 	SofaTextField,
 	SofaTextarea,
 	SofaImageLoader,
-	SofaFileAttachment,
+	SofaFileInput,
 	SofaNormalText,
 	SofaNumberField,
 } from 'sofa-ui-components'
@@ -99,7 +95,13 @@ import { useAuth } from '@/composables/auth/auth'
 
 const { id } = useAuth()
 
-const { factory: classFactory, createClass } = useCreateClass(id.value)
+const { factory: classFactory, createClass, created } = useCreateClass(id.value)
 
 const emit = defineEmits(['close'])
+
+watch(created, ()=>{
+	if(created.value){
+		emit('close')
+	}
+})
 </script>
