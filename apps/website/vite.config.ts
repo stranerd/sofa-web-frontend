@@ -19,7 +19,7 @@ export default defineConfig({
 			Checker({
 				typescript: true,
 				vueTsc: true,
-				eslint: { lintCommand: 'eslint ./src' }
+				// eslint: { lintCommand: 'eslint ./src' }
 				// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
 			})
 		] : [])

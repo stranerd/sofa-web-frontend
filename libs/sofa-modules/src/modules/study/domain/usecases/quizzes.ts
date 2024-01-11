@@ -77,12 +77,22 @@ export class QuizzesUseCase {
 		)
 	}
 
-	async getTutorQuizzes() {
-		return await this.repository.getTutors({ all: true })
+	async getTutorQuizzes(userId: string) {
+		return await this.repository.getTutors({
+			where: [{ field: 'user.id', value: userId }],
+			all: true,
+		})
 	}
 
-	async listenToTutorQuizzes(listener: Listeners<QuizEntity>) {
-		return await this.repository.listenToManyTutors({ all: true }, listener, () => true)
+	async listenToTutorQuizzes(userId: string, listener: Listeners<QuizEntity>) {
+		return await this.repository.listenToManyTutors(
+			{
+				where: [{ field: 'user.id', value: userId }],
+				all: true,
+			},
+			listener,
+			(quiz) => quiz.user.id === userId,
+		)
 	}
 
 	async requestAccess(id: string, add: boolean) {

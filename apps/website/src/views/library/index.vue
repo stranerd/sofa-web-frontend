@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/library/LibraryLayout.vue'
+import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'

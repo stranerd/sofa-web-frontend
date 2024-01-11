@@ -120,22 +120,26 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		if (['ended', 'scored'].includes(g.status) && route.path !== results) return await alertAndNav(results, 'Test has ended')
 	}
 
-	watch(store[id].test, async (cur, old) => {
-		if (!cur) return
-		if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions))
-			Logic.Plays.GetTestQuestions(id)
-				.then((questions) => {
-					store[id].questions.splice(0, store[id].questions.length, ...questions)
-				})
-				.catch()
-		if (!skip.questions)
-			Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
-				.then((answers) => {
-					store[id].answer.value = answers.results.at(0) ?? null
-				})
-				.catch()
-		if (!skip.statusNav) testWatcherCb()
-	})
+	watch(
+		store[id].test,
+		async (cur, old) => {
+			if (!cur) return
+			if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions))
+				Logic.Plays.GetTestQuestions(id)
+					.then((questions) => {
+						store[id].questions.splice(0, store[id].questions.length, ...questions)
+					})
+					.catch()
+			if (!skip.questions)
+				Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
+					.then((answers) => {
+						store[id].answer.value = answers.results.at(0) ?? null
+					})
+					.catch()
+			if (!skip.statusNav) testWatcherCb()
+		},
+		{ immediate: true },
+	)
 
 	onMounted(async () => {
 		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchTest()

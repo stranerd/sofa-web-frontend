@@ -74,6 +74,7 @@ export interface SofaFile {
 	title: string
 	description: string
 	photo?: FileData
+	media: FileData
 	type: string
 	courseId?: string
 	user: SingleUser

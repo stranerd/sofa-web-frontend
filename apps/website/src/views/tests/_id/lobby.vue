@@ -1,8 +1,5 @@
 <template>
-	<expanded-layout
-		layout-style="!justify-between bg-deepGray text-white"
-		:hide="{ top: true, bottom: true }"
-		bg-image="/images/game-bg.png">
+	<expanded-layout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
 		<TestWrapper :id="$route.params.id as string" :skip-questions="true">
 			<template #default="{ test, extras: testExtras, questions: testQuestions }">
 				<QuizWrapper :id="test.quizId" :questions="testQuestions">
@@ -14,7 +11,6 @@
 							:questions="questions"
 							:show-counter="false"
 							:option-state="extras.optionState"
-							:is-dark="true"
 							:right-button="{
 								label: testExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
@@ -51,8 +47,8 @@
 
 <script lang="ts">
 import TestWrapper from '@/components/plays/tests/TestWrapper.vue'
-import Quiz from '@/components/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import Quiz from '@/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaNormalText } from 'sofa-ui-components'

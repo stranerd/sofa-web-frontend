@@ -1,4 +1,4 @@
-import { HttpClient } from '@modules/core'
+import { HttpClient, UploadedFile } from '@modules/core'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
@@ -23,7 +23,9 @@ export class BaseApiService {
 				} else {
 					const formData: FormData = new FormData()
 					Object.entries(config.data ?? {}).forEach(([key, val]) => {
-						if (val instanceof Blob) formData.set(key, val)
+						if (val instanceof UploadedFile) formData.set(key, val.ref)
+						else if (Array.isArray(val) && val[0] instanceof UploadedFile) val.forEach((file) => formData.append(key, file.ref))
+						else if (val instanceof Blob) formData.set(key, val)
 						else if (Array.isArray(val) && val[0] instanceof Blob) val.forEach((file) => formData.append(key, file))
 						else if (val !== undefined) formData.set(key, JSON.stringify(val))
 					})

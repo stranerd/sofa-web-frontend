@@ -4,7 +4,7 @@
   "description": "Frontend Logic for SOFA",
   "main": "src/index.ts",
   "scripts": {
-    "lint": "eslint --fix ./src"
+    "lint:fix": "eslint --fix ./src"
   },
   "devDependencies": {
     "@types/node": "^20.7.1",

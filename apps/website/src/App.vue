@@ -73,17 +73,17 @@
 <script lang="ts" setup>
 import AddMaterialModal from '@/components/common/AddMaterialModal.vue'
 import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
+import { UsersUseCases } from '@modules/users'
 import { Logic } from 'sofa-logic'
 import { SofaAlert, SofaDeletePrompt, SofaSuccessPrompt } from 'sofa-ui-components'
 import { watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import SaveToFolder from './components/common/SaveToFolder.vue'
-import StudyModeModal from './components/library/StudyModeModal.vue'
+import SaveToFolder from './components/study/SaveToFolder.vue'
+import StudyModeModal from './components/study/StudyModeModal.vue'
 import { showAddItem } from './composables'
 import { useAuth } from './composables/auth/auth'
-import { showStudyMode, reportMaterialSetup, selectedFolderMaterailToAdd, sendReportMaterial } from './composables/library'
-import { UsersUseCases } from '@modules/users'
+import { reportMaterialSetup, selectedFolderMaterailToAdd, sendReportMaterial, showStudyMode } from './composables/library'
 
 useMeta({
 	title: 'Home',

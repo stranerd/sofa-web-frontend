@@ -162,7 +162,10 @@
 
 				<template v-if="selectedMaterial?.type == 'video'">
 					<div class="w-full flex flex-col">
-						<sofa-video-player :key="selectedMaterial.details.id" :video-url="selectedMaterial.data.videoUrl" />
+						<sofa-video-player
+							:key="selectedMaterial.details.id"
+							:video-url="selectedMaterial.data.videoUrl"
+							:type="selectedMaterial.details.media.type" />
 					</div>
 				</template>
 			</div>
@@ -278,23 +281,23 @@
 </template>
 
 <script lang="ts">
+import AddVideo from '@/components/study/courses/AddVideo.vue'
+import NewCourseMaterial from '@/components/study/courses/NewMaterial.vue'
+import CourseSettings from '@/components/study/courses/Settings.vue'
+import { scrollToTop } from '@/composables'
+import { Logic } from 'sofa-logic'
+import {
+	SofaButton,
+	SofaCourseDetails,
+	SofaCourseSections,
+	SofaHeaderText,
+	SofaIcon,
+	SofaImageLoader,
+	SofaModal,
+	SofaNormalText,
+} from 'sofa-ui-components'
 import { capitalize, defineAsyncComponent, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { scrollToTop } from '@/composables'
-import {
-	SofaIcon,
-	SofaNormalText,
-	SofaCourseSections,
-	SofaModal,
-	SofaHeaderText,
-	SofaCourseDetails,
-	SofaImageLoader,
-	SofaButton,
-} from 'sofa-ui-components'
-import { Logic } from 'sofa-logic'
-import CourseSettings from '@/components/courses/Settings.vue'
-import NewCourseMaterial from '@/components/courses/NewMaterial.vue'
-import AddVideo from '@/components/courses/AddVideo.vue'
 
 import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@/composables/course'
 import { Course } from 'sofa-logic'
@@ -396,10 +399,6 @@ export default defineComponent({
 		})
 
 		const currentContent = ref('')
-
-		watch(selectedMaterial, () => {
-			// console.log(selectedMaterial.value);
-		})
 
 		watch(showSettingModal, () => {
 			if (showSettingModal.value) {

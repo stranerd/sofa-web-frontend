@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/library/LibraryLayout.vue'
+import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { extractResource, openCourse, openQuiz, showMoreOptionHandler } from '@/composables/library'
 import { useUsersMaterials } from '@/composables/study/users-materials'
 import { generateMiddlewares } from '@/middlewares'

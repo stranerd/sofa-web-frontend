@@ -3,17 +3,16 @@ import { v } from 'valleyed'
 import { UserEntity } from '../entities/users'
 import { UserAi } from '../types'
 
-export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi & { localPhotoLink: string | undefined }> {
+export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi> {
 	readonly rules = {
 		name: v.string().min(1),
 		tagline: v.string().min(1),
 		photo: v.file().image().nullable(),
-		localPhotoLink: v.string().nullish(),
 	}
 	reserved = []
 
 	constructor() {
-		super({ name: UserEntity.defaultAi, tagline: '', photo: null, localPhotoLink: UserEntity.defaultAiPhotoLink })
+		super({ name: UserEntity.defaultAi, tagline: '', photo: null })
 	}
 
 	get name() {
@@ -38,15 +37,6 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi & { lo
 
 	set photo(value: UserAi['photo']) {
 		this.set('photo', value)
-		if (value) this.localPhotoLink = value?.link
-	}
-
-	get localPhotoLink() {
-		return this.values.localPhotoLink
-	}
-
-	set localPhotoLink(value: string | undefined) {
-		this.set('localPhotoLink', value)
 	}
 
 	loadEntity = (entity: UserEntity) => {

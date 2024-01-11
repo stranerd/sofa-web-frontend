@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-2 w-full relative group" :tabIndex="-1">
+	<div class="flex flex-col w-full relative group" :tabIndex="-1">
 		<SofaNormalText v-if="hasTitle" custom-class="">
 			<slot name="title" />
 		</SofaNormalText>
@@ -19,9 +19,12 @@
 			</div>
 			<SofaIcon name="angle-small-down" class="h-[7px] pr-1" />
 		</div>
+		<div v-if="error" class="w-full flex pt-1 justify-start">
+			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
+		</div>
 		<div
 			v-if="showOptions"
-			class="group-focus-within:flex hidden w-full h-full mdlg:h-auto left-0 top-0 fixed mdlg:absolute flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
+			class="group-focus-within:flex hidden w-full mdlg:w-auto mdlg:min-w-[320px] h-full mdlg:h-auto left-0 top-0 mdlg:left-[unset] mdlg:top-[unset] fixed flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
 			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
 				<SofaTextField v-model="searchValue" placeholder="Search" custom-class="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
@@ -97,9 +100,11 @@ const filteredOptions = computed(() => {
 	return options
 })
 
-const selectedOptions = computed(() =>
-	props.options.filter((o) => (props.isMultiple ? value.value.includes(o.key) : value.value === o.key)),
-)
+const selectedOptions = computed(() => {
+	const options = props.options.filter((o) => (props.isMultiple ? value.value.includes(o.key) : value.value === o.key))
+	if (props.canUseCustom && options.length === 0) options.unshift({ key: value.value, value: value.value as string })
+	return options
+})
 
 const value = computed({
 	get: () => {

@@ -43,12 +43,12 @@ const tutorStore = {
 	...useLoadingHandler(),
 	...useErrorHandler(),
 	listener: useListener(async () => {
-		const { isAdmin } = useAuth()
+		const { id, isAdmin } = useAuth()
 		if (!isAdmin.value)
 			return () => {
 				/**/
 			}
-		return QuizzesUseCases.listenToTutorQuizzes({
+		return QuizzesUseCases.listenToTutorQuizzes(id.value, {
 			created: async (entity) => {
 				Logic.addToArray(
 					tutorStore.quizzes.value,
@@ -116,7 +116,7 @@ export const useTutorQuizzes = () => {
 		try {
 			await tutorStore.setError('')
 			await tutorStore.setLoading(true)
-			const quizzes = await QuizzesUseCases.getTutorQuizzes()
+			const quizzes = await QuizzesUseCases.getTutorQuizzes(id.value)
 			quizzes.results.forEach((r) =>
 				Logic.addToArray(
 					tutorStore.quizzes.value,

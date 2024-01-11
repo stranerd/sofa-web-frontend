@@ -41,33 +41,19 @@
 
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
 			<SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />
-			<SofaFileAttachment
-				v-model:localFileUrl="localFileUrl"
-				v-model="factory.questionMedia"
-				:is-wrapper="true"
-				accept="image/*"
-				class="!w-auto">
-				<template #content>
-					<SofaButton bg-color="bg-white" text-color="text-bodyBlack">Add Image</SofaButton>
-				</template>
-			</SofaFileAttachment>
+			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-auto">
+				<SofaButton bg-color="bg-white" text-color="text-bodyBlack">Add Image</SofaButton>
+			</SofaFileInput>
 		</div>
 
 		<div class="w-full flex md:hidden flex-col">
-			<SofaFileAttachment
-				v-model:local-file-url="localFileUrl"
-				v-model="factory.questionMedia"
-				:is-wrapper="true"
-				accept="image/*"
-				class="!w-full flex flex-col">
-				<template #content>
-					<SofaButton class="w-full" padding="py-3">Add image (optional)</SofaButton>
-				</template>
-			</SofaFileAttachment>
+			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-full flex flex-col">
+				<SofaButton class="w-full" padding="py-3">Add image (optional)</SofaButton>
+			</SofaFileInput>
 		</div>
 
-		<div v-if="localFileUrl" class="w-full flex flex-col items-center justify-center">
-			<SofaImageLoader :photo-url="localFileUrl" custom-class="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
+		<div v-if="factory.questionMedia" class="w-full flex flex-col items-center justify-center">
+			<SofaImageLoader :photo-url="factory.questionMedia.link" custom-class="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
 		</div>
 
 		<div v-if="!factory.isFillInBlanks && !factory.isDragAnswers" class="flex flex-col gap-4">
@@ -217,20 +203,14 @@
 <script lang="ts" setup>
 import { QuestionFactory } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PropType, defineProps, ref } from 'vue'
+import { SofaButton, SofaCustomInput, SofaFileInput, SofaIcon, SofaImageLoader, SofaNormalText, SofaTextarea } from 'sofa-ui-components'
+import { PropType, defineProps } from 'vue'
 import Draggable from 'vuedraggable'
-import SofaButton from '../SofaButton'
-import { SofaCustomInput, SofaFileAttachment, SofaTextarea } from '../SofaForm'
-import SofaIcon from '../SofaIcon'
-import SofaImageLoader from '../SofaImageLoader'
-import { SofaNormalText } from '../SofaTypography'
 
-const props = defineProps({
+defineProps({
 	factory: {
 		type: Object as PropType<QuestionFactory>,
 		required: true,
 	},
 })
-
-const localFileUrl = ref(props.factory.questionMedia?.link ?? '')
 </script>

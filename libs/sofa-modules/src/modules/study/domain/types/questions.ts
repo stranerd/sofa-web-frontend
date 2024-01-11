@@ -45,6 +45,7 @@ export type StrippedQuestionData =
 	| {
 			type: QuestionTypes.multipleChoice
 			options: string[]
+			noOfAnswers: number
 	  }
 	| {
 			type: QuestionTypes.trueOrFalse

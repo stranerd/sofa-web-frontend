@@ -87,11 +87,12 @@
 </template>
 
 <script lang="ts">
-import Flashcard from '@/components/quizzes/FlashcardDisplay.vue'
-import Quiz from '@/components/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/quizzes/QuizWrapper.vue'
+import Flashcard from '@/components/study/quizzes/FlashcardDisplay.vue'
+import Quiz from '@/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
+import { storage } from 'sofa-modules/src/utils/storage'
 import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -111,7 +112,7 @@ export default defineComponent({
 		SofaCheckbox,
 	},
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
-	setup() {
+	async setup() {
 		useMeta({
 			title: 'Flashcards',
 		})
@@ -119,16 +120,20 @@ export default defineComponent({
 		const storageKey = 'flashcards-info'
 
 		const isDone = ref(false)
-		const showInfoModal = ref(!localStorage.getItem(storageKey))
+		const showInfoModal = ref(false)
 		const dontShowAgain = ref(false)
 
 		const close = () => (showInfoModal.value = false)
 
+		storage.get(storageKey).then((value) => {
+			showInfoModal.value = !value
+		})
+
 		watch(
 			dontShowAgain,
-			() => {
-				if (dontShowAgain.value) localStorage.setItem(storageKey, 'true')
-				else localStorage.removeItem(storageKey)
+			async () => {
+				if (dontShowAgain.value) await storage.set(storageKey, 'true')
+				else await storage.remove(storageKey)
 			},
 			{ immediate: true },
 		)

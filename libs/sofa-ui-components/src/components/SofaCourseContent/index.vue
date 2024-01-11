@@ -176,6 +176,7 @@ export default defineComponent({
 						details: {
 							title: mediaFile.title,
 							description: mediaFile.description,
+							media: mediaFile.media,
 							id: mediaFile.id,
 						},
 						original: mediaFile,
@@ -199,6 +200,7 @@ export default defineComponent({
 							link: mediaUrl,
 							duration: '4m 44s',
 							description: mediaFile.description,
+							media: mediaFile.media,
 							id: mediaFile.id,
 						},
 						original: mediaFile,
@@ -220,6 +222,7 @@ export default defineComponent({
 							title: mediaFile.title,
 							pages: '3',
 							description: mediaFile.description,
+							media: mediaFile.media,
 							id: mediaFile.id,
 						},
 						original: mediaFile,
