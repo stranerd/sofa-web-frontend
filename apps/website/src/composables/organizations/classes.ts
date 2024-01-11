@@ -3,6 +3,7 @@ import { Logic } from 'sofa-logic'
 import { useListener } from '../core/listener'
 import { useAsyncFn } from '../core/hooks'
 import { useAuth } from '../auth/auth'
+import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { computed, onMounted, onUnmounted, ref, reactive } from 'vue'
 
 const store = {
@@ -42,7 +43,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -50,7 +51,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -58,7 +59,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'delete-quiz',
 		title: 'Delete',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
