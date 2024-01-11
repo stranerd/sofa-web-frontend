@@ -6,6 +6,46 @@ import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { computed, onMounted, onUnmounted, ref, reactive } from 'vue'
 
+export const factory = new ClassFactory()
+export const selectedClass = ref<ClassEntity | undefined>(undefined)
+export const showMoreOptions = ref(false)
+export const showCreateAndEditClassModal = ref(false)
+export const isEdit = ref(false)
+export const updated = ref(false)
+export const moreOptions = reactive([
+	{
+		icon: 'edit-option',
+		title: 'Edit',
+		show: () => { },
+		action: () => {
+			isEdit.value = true
+			showCreateAndEditClassModal.value = true
+			showMoreOptions.value = false
+		},
+	},
+	{
+		icon: 'share-option',
+		title: 'Share',
+		show: () => { },
+		action: () => {
+			showMoreOptions.value = false
+		},
+	},
+	{
+		icon: 'delete-quiz',
+		title: 'Delete',
+		show: () => { },
+		action: async () => {
+			const data = {
+				id: selectedClass.value.id,
+				organizationId: selectedClass.value.organizationId,
+			}
+			await useDeleteClass(data).deleteClass()
+			selectedClass.value = undefined
+		},
+	},
+])
+
 const store = {
 	classes: ref<ClassEntity[]>([]),
 	fetched: ref(false),
@@ -37,42 +77,9 @@ const store = {
 	}),
 }
 
-export const selectedItem = ref<ClassEntity | undefined>(undefined)
-export const showMoreOptions = ref(false)
-export const moreOptions = reactive([
-	{
-		icon: 'edit-option',
-		title: 'Edit',
-		show: () => { },
-		action: () => {
-			showMoreOptions.value = false
-		},
-	},
-	{
-		icon: 'share-option',
-		title: 'Share',
-		show: () => { },
-		action: () => {
-			showMoreOptions.value = false
-		},
-	},
-	{
-		icon: 'delete-quiz',
-		title: 'Delete',
-		show: () => { },
-		action: async () => {
-			let data = {
-				id: selectedItem.value.id,
-				organizationId: selectedItem.value.organizationId
-			}
-			await useDeleteClass(data).deleteClass()
-		},
-	},
-])
-
 export const showMoreOptionHandler = (data: ClassEntity) => {
 	showMoreOptions.value = true
-	selectedItem.value = data
+	selectedClass.value = data
 }
 
 export const useMyClasses = () => {
@@ -110,8 +117,6 @@ export const useMyClasses = () => {
 }
 
 export const useCreateClass = (organizationId: string) => {
-	const factory = new ClassFactory()
-	const created = ref(false)
 
 	const {
 		asyncFn: createClass,
@@ -120,18 +125,16 @@ export const useCreateClass = (organizationId: string) => {
 	} = useAsyncFn(async () => {
 		await ClassesUseCases.add(organizationId, factory).then((data) => {
 			if (data) {
-				created.value = true
+				updated.value = true
 			}
 		})
 		factory.reset()
 	})
 
-	return { error, loading, factory, createClass, created }
+	return { error, loading, factory, createClass }
 }
 
 export const useUpdateClass = (organizationId: string, id: string) => {
-	const factory = new ClassFactory()
-	const updated = ref(false)
 
 	const {
 		asyncFn: updateClass,
@@ -140,32 +143,35 @@ export const useUpdateClass = (organizationId: string, id: string) => {
 	} = useAsyncFn(async () => {
 		await ClassesUseCases.update(organizationId, id, factory).then((data) => {
 			if (data) {
+				Logic.Common.showAlert({
+					message: 'Class updated successfully',
+					type: 'success',
+				})
+				selectedClass.value = undefined
 				updated.value = true
 			}
 		})
+		selectedClass.value = undefined
 		factory.reset()
 	})
 
-	return { error, loading, factory, createClass, updated }
+	return { error, loading, factory, updateClass }
 }
 
-
-export const useDeleteClass = (data: { id: string, organizationId: string }) => {
-
+export const useDeleteClass = (data: { id: string; organizationId: string }) => {
 	const deleteClass = async () => {
 		try {
 			await store.setError('')
 			await store.setLoading(true)
-			await ClassesUseCases.delete(data)
-				.then((data) => {
-					if (data) {
-						showMoreOptions.value = false
-						Logic.Common.showAlert({
-							message: 'Class deleted successfully',
-							type: 'success',
-						})
-					}
-				})
+			await ClassesUseCases.delete(data).then((data) => {
+				if (data) {
+					showMoreOptions.value = false
+					Logic.Common.showAlert({
+						message: 'Class deleted successfully',
+						type: 'success',
+					})
+				}
+			})
 		} catch (e) {
 			await store.setError(e)
 		}

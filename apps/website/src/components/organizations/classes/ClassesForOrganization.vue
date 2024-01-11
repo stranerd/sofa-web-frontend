@@ -16,7 +16,7 @@
 					:bg-color="'bg-primaryBlue'"
 					:text-color="'text-white'"
 					:padding="'py-4 px-6'"
-					@click="showCreateClassModal = true">
+					@click="showCreateAndEditClassModal = true">
 					Create a class
 				</SofaButton>
 			</div>
@@ -33,7 +33,7 @@
 					placeholder="Search"
 					padding="px-1" />
 			</div>
-			<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-3 px-4'" @click="showCreateClassModal = true">
+			<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-3 px-4'" @click="openCreateClassModal">
 				Create a class
 			</SofaButton>
 		</div>
@@ -42,6 +42,7 @@
 				<sofa-icon name="more-options-horizontal" custom-class="h-[6px]" @click.stop="showMoreOptionHandler(cl)" />
 			</div>
 		</ClassCard>
+		<!-- Options modal -->
 		<sofa-modal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
 			<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
 				<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
@@ -58,8 +59,7 @@
 						@click.stop.prevent="item.action()">
 						<sofa-icon
 							:name="item.icon"
-							:custom-class="'h-[15px]'"
-							:class="item.icon === 'delete-quiz' ? 'fill-primaryRed' : ''" />
+							:class="item.icon === 'delete-quiz' ? 'fill-primaryRed h-[18px]' : 'h-[15px]'" />
 						<sofa-normal-text :custom-class="item.icon === 'delete-quiz' ? '!text-primaryRed' : ''">
 							{{ item.title }}
 						</sofa-normal-text>
@@ -68,19 +68,19 @@
 			</div>
 		</sofa-modal>
 	</div>
-	<CreateClass v-if="showCreateClassModal" @close="showCreateClassModal = false" />
+	<CreateAndEditClass v-if="showCreateAndEditClassModal" @close="showCreateAndEditClassModal = false" :selected-class="selectedClass" :is-edit="isEdit" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { SofaHeaderText, SofaNormalText, SofaButton, SofaIcon, SofaTextField, SofaModal } from 'sofa-ui-components'
-import CreateClass from './CreateClass.vue'
+import CreateAndEditClass from './CreateAndEditClass.vue'
 import ClassCard from './ClassCard.vue'
-import { useMyClasses, showMoreOptionHandler, moreOptions, showMoreOptions } from '@/composables/organizations/classes'
+import { useMyClasses, showMoreOptionHandler, moreOptions, showMoreOptions, showCreateAndEditClassModal, selectedClass, isEdit } from '@/composables/organizations/classes'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
-	components: { SofaHeaderText, SofaNormalText, SofaButton, SofaIcon, CreateClass, ClassCard, SofaTextField, SofaModal },
+	components: { SofaHeaderText, SofaNormalText, SofaButton, SofaIcon, CreateAndEditClass, ClassCard, SofaTextField, SofaModal },
 	setup() {
 		const emptyClassContent = {
 			imageURL: '/images/empty-class.png',
@@ -94,17 +94,24 @@ export default defineComponent({
 		}
 
 		const { classes } = useMyClasses()
-		const showCreateClassModal = ref(false)
 		const searchQuery = ref('')
+
+		const openCreateClassModal = () => {
+			showCreateAndEditClassModal.value = true
+			isEdit.value = false
+		}
 
 		return {
 			emptyClassContent,
 			classes,
-			showCreateClassModal,
+			showCreateAndEditClassModal,
 			searchQuery,
 			showMoreOptionHandler,
 			showMoreOptions,
 			moreOptions,
+			selectedClass,
+			isEdit,
+			openCreateClassModal
 		}
 	},
 })

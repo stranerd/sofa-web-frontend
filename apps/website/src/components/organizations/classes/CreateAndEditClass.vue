@@ -2,11 +2,11 @@
 	<SofaModal2 :close="() => $emit('close')">
 		<div class="p-4 bg-white flex flex-col gap-8">
 			<div class="flex w-full items-center gap-2 justify-between mdlg:justify-center">
-				<SofaHeaderText class="!font-bold !text-deepGray" content="Create a class" />
+				<SofaHeaderText class="!font-bold !text-deepGray" :content="isEdit ? 'Edit Class' : 'Create a class'" />
 				<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="$emit('close')" />
 			</div>
 			<!-- Form -->
-			<form class="flex flex-col gap-8" @submit.prevent="createClass">
+			<form class="flex flex-col gap-8" @submit.prevent="submitForm">
 				<div class="flex flex-col mdlg:flex-row items-start gap-4">
 					<div class="w-full mdlg:w-1/2">
 						<div class="w-full flex flex-col justify-center">
@@ -65,6 +65,7 @@
 						:bg-color="'bg-primaryBlue'"
 						:text-color="'text-white'"
 						:padding="'py-4 px-6'"
+						:disabled="!classFactory.valid"
 						custom-class="w-full mdlg:w-auto">
 						Save
 					</SofaButton>
@@ -75,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, watch } from 'vue'
+import { defineEmits, watch, defineProps, PropType, onMounted } from 'vue'
 import {
 	SofaModal2,
 	SofaIcon,
@@ -88,19 +89,53 @@ import {
 	SofaNormalText,
 	SofaNumberField,
 } from 'sofa-ui-components'
-import { useCreateClass } from '@/composables/organizations/classes'
-
+import { useCreateClass, useUpdateClass, factory, updated } from '@/composables/organizations/classes'
 import { useAuth } from '@/composables/auth/auth'
+import { ClassEntity } from 'sofa-modules/src/modules/organizations'
 
 const { id } = useAuth()
 
-const { factory: classFactory, createClass, created } = useCreateClass(id.value)
+const { createClass } = useCreateClass(id.value)
+
+const classFactory = factory
 
 const emit = defineEmits(['close'])
 
-watch(created, () => {
-	if (created.value) {
+const props = defineProps({
+	selectedClass: Object as PropType<ClassEntity>,
+	isEdit: {
+		type: Boolean,
+		default: false
+	}
+})
+
+const setDefaultValues = () => {
+	updated.value = false
+	if(props.selectedClass){
+		classFactory.amount = props.selectedClass.price.amount
+		classFactory.description = props.selectedClass.description
+		classFactory.title = props.selectedClass.title
+		classFactory.photo = props.selectedClass.photo
+	}
+}
+
+const submitForm = () => {
+	if(props.isEdit){
+		const { updateClass } = useUpdateClass(id.value, props.selectedClass.id)
+		updateClass()
+	}else {
+		createClass()
+	}
+}
+
+
+watch(updated, () => {
+	if (updated.value) {
 		emit('close')
 	}
+})
+
+onMounted(()=>{
+	setDefaultValues()
 })
 </script>
