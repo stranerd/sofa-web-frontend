@@ -359,7 +359,7 @@ export default defineComponent({
 		}
 
 		const submit = async () => {
-			await Promise.all([updateProfile(), updateSocials(true)]).then((res) => {
+			await Promise.all([updateProfile(), updateSocials()]).then((res) => {
 				if (res.every(Boolean)) submitVerification()
 			})
 		}

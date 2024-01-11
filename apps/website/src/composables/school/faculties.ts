@@ -16,21 +16,24 @@ const {
 	asyncFn: fetchFaculties,
 	loading,
 	error,
-} = useAsyncFn(async (institutionId: string) => {
-	if (store.institutions[institutionId]) return
-	const faculties = await FacultiesUseCases.getInstitutionFaculties(institutionId)
-	faculties.results.forEach((c) =>
-		addToArray(
-			store.faculties.value,
-			c,
-			(e) => e.id,
-			(e) => e.title,
-			true,
-		),
-	)
-	store.fetched.value = true
-	store.institutions[institutionId] = true
-})
+} = useAsyncFn(
+	async (institutionId: string) => {
+		if (store.institutions[institutionId]) return
+		const faculties = await FacultiesUseCases.getInstitutionFaculties(institutionId)
+		faculties.results.forEach((c) =>
+			addToArray(
+				store.faculties.value,
+				c,
+				(e) => e.id,
+				(e) => e.title,
+				true,
+			),
+		)
+		store.fetched.value = true
+		store.institutions[institutionId] = true
+	},
+	{ key: 'school/faculties/all' },
+)
 
 export const useFacultyList = () => {
 	return { ...store, loading, error, fetchFaculties }

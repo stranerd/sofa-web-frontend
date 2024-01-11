@@ -2,16 +2,13 @@ import { CourseEntity, CoursesUseCases } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { Refable, useItemsInList } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useMyPurchases } from '../payment/purchases'
 
 const store = {
 	courses: ref<CourseEntity[]>([]),
 	fetched: ref(false),
-	...useLoadingHandler(),
-	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return CoursesUseCases.listenToUserCourses(id.value, {
@@ -41,10 +38,12 @@ const store = {
 export const useMyCourses = () => {
 	const { id } = useAuth()
 
-	const fetchCourses = async () => {
-		try {
-			await store.setError('')
-			await store.setLoading(true)
+	const {
+		asyncFn: fetchCourses,
+		loading,
+		error,
+	} = useAsyncFn(
+		async () => {
 			const courses = await CoursesUseCases.getUserCourses(id.value)
 			courses.results.forEach((r) =>
 				Logic.addToArray(
@@ -55,14 +54,12 @@ export const useMyCourses = () => {
 				),
 			)
 			store.fetched.value = true
-		} catch (e) {
-			await store.setError(e)
-		}
-		await store.setLoading(false)
-	}
+		},
+		{ key: 'study/courses/mine' },
+	)
 
 	onMounted(async () => {
-		if (!store.fetched.value && !store.loading.value) await fetchCourses()
+		if (!store.fetched.value) await fetchCourses()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -72,7 +69,7 @@ export const useMyCourses = () => {
 	const published = computed(() => store.courses.value.filter((m) => m.status === 'published'))
 	const draft = computed(() => store.courses.value.filter((m) => m.status === 'draft'))
 
-	return { ...store, published, draft }
+	return { ...store, loading, error, published, draft }
 }
 
 export const useMyPurchasedCourses = () => {

@@ -48,18 +48,21 @@ export const useOrganizationMembers = (id: string) => {
 		asyncFn: fetchMembers,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const members = await MembersUseCases.getAllMembers(id)
-		members.results.forEach((m) => {
-			Logic.addToArray(
-				store[id].members,
-				m,
-				(q) => q.id,
-				(e) => e.id,
-			)
-		})
-		store[id].fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const members = await MembersUseCases.getAllMembers(id)
+			members.results.forEach((m) => {
+				Logic.addToArray(
+					store[id].members,
+					m,
+					(q) => q.id,
+					(e) => e.id,
+				)
+			})
+			store[id].fetched.value = true
+		},
+		{ key: 'organizations/members/all' },
+	)
 
 	onMounted(async () => {
 		if (!store[id].fetched.value) await fetchMembers()

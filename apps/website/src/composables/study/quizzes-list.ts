@@ -2,15 +2,12 @@ import { QuizEntity, QuizzesUseCases } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { Refable, useItemsInList } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const store = {
 	quizzes: ref<QuizEntity[]>([]),
 	fetched: ref(false),
-	...useLoadingHandler(),
-	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return QuizzesUseCases.listenToUserQuizzes(id.value, {
@@ -40,8 +37,6 @@ const store = {
 const tutorStore = {
 	quizzes: ref<QuizEntity[]>([]),
 	fetched: ref(false),
-	...useLoadingHandler(),
-	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id, isAdmin } = useAuth()
 		if (!isAdmin.value)
@@ -75,10 +70,12 @@ const tutorStore = {
 export const useMyQuizzes = () => {
 	const { id } = useAuth()
 
-	const fetchQuizzes = async () => {
-		try {
-			await store.setError('')
-			await store.setLoading(true)
+	const {
+		asyncFn: fetchQuizzes,
+		loading,
+		error,
+	} = useAsyncFn(
+		async () => {
 			const quizzes = await QuizzesUseCases.getUserQuizzes(id.value)
 			quizzes.results.forEach((r) =>
 				Logic.addToArray(
@@ -89,14 +86,12 @@ export const useMyQuizzes = () => {
 				),
 			)
 			store.fetched.value = true
-		} catch (e) {
-			await store.setError(e)
-		}
-		await store.setLoading(false)
-	}
+		},
+		{ key: 'study/quizzes/mine' },
+	)
 
 	onMounted(async () => {
-		if (!store.fetched.value && !store.loading.value) await fetchQuizzes()
+		if (!store.fetched.value) await fetchQuizzes()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -106,16 +101,18 @@ export const useMyQuizzes = () => {
 	const published = computed(() => store.quizzes.value.filter((m) => m.status === 'published'))
 	const draft = computed(() => store.quizzes.value.filter((m) => m.status === 'draft'))
 
-	return { ...store, published, draft }
+	return { ...store, loading, error, published, draft }
 }
 
 export const useTutorQuizzes = () => {
 	const { id, isAdmin } = useAuth()
 
-	const fetchQuizzes = async () => {
-		try {
-			await tutorStore.setError('')
-			await tutorStore.setLoading(true)
+	const {
+		asyncFn: fetchQuizzes,
+		loading,
+		error,
+	} = useAsyncFn(
+		async () => {
 			const quizzes = await QuizzesUseCases.getTutorQuizzes(id.value)
 			quizzes.results.forEach((r) =>
 				Logic.addToArray(
@@ -126,21 +123,19 @@ export const useTutorQuizzes = () => {
 				),
 			)
 			tutorStore.fetched.value = true
-		} catch (e) {
-			await tutorStore.setError(e)
-		}
-		await tutorStore.setLoading(false)
-	}
+		},
+		{ key: 'study/quizzes/tutor/mine' },
+	)
 
 	onMounted(async () => {
-		if (!tutorStore.fetched.value && !tutorStore.loading.value && isAdmin.value) await fetchQuizzes()
+		if (!tutorStore.fetched.value && isAdmin.value) await fetchQuizzes()
 		await tutorStore.listener.start()
 	})
 	onUnmounted(async () => {
 		await tutorStore.listener.close()
 	})
 
-	return { ...tutorStore }
+	return { ...tutorStore, loading, error }
 }
 
 export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {

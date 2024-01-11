@@ -47,10 +47,13 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		),
 	}
 
-	const { asyncFn: fetchTest } = useAsyncFn(async () => {
-		store[id].test.value = await Logic.Plays.GetTest(id)
-		store[id].fetched.value = true
-	})
+	const { asyncFn: fetchTest } = useAsyncFn(
+		async () => {
+			store[id].test.value = await Logic.Plays.GetTest(id)
+			store[id].fetched.value = true
+		},
+		{ key: `plays/tests/${id}` },
+	)
 
 	const { asyncFn: start } = useAsyncFn(async () => {
 		await Logic.Plays.StartTest(id)

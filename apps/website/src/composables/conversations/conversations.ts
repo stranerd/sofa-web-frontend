@@ -42,18 +42,21 @@ export const useConversationsList = () => {
 		asyncFn: fetchConversations,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const conversations = await ConversationsUseCases.getAll()
-		conversations.results.forEach((r) =>
-			Logic.addToArray(
-				store.conversations.value,
-				r,
-				(e) => e.id,
-				(e) => e.last?.createdAt ?? 0,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const conversations = await ConversationsUseCases.getAll()
+			conversations.results.forEach((r) =>
+				Logic.addToArray(
+					store.conversations.value,
+					r,
+					(e) => e.id,
+					(e) => e.last?.createdAt ?? 0,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'conversations/conversations/all' },
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchConversations()

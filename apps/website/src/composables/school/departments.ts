@@ -16,21 +16,24 @@ const {
 	asyncFn: fetchDepartments,
 	loading,
 	error,
-} = useAsyncFn(async (facultyId: string) => {
-	if (store.faculties[facultyId]) return
-	const departments = await DepartmentsUseCases.getFacultyDepartments(facultyId)
-	departments.results.forEach((c) =>
-		addToArray(
-			store.departments.value,
-			c,
-			(e) => e.id,
-			(e) => e.title,
-			true,
-		),
-	)
-	store.fetched.value = true
-	store.faculties[facultyId] = true
-})
+} = useAsyncFn(
+	async (facultyId: string) => {
+		if (store.faculties[facultyId]) return
+		const departments = await DepartmentsUseCases.getFacultyDepartments(facultyId)
+		departments.results.forEach((c) =>
+			addToArray(
+				store.departments.value,
+				c,
+				(e) => e.id,
+				(e) => e.title,
+				true,
+			),
+		)
+		store.fetched.value = true
+		store.faculties[facultyId] = true
+	},
+	{ key: 'school/departments/all' },
+)
 
 export const useDepartmentList = () => {
 	return { ...store, loading, error, fetchDepartments }
