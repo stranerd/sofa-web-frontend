@@ -10,13 +10,11 @@ import {
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
+import { useAsyncFn } from '../core/hooks'
+import { useSuccessHandler } from '../core/states'
 
 export const useUserTypeUpdate = () => {
 	const factory = new UserTypeFactory()
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
-	const { setMessage } = useSuccessHandler()
 	const { user } = useAuth()
 
 	const type = Logic.Common.route?.query?.type as UserType
@@ -24,22 +22,14 @@ export const useUserTypeUpdate = () => {
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	const updateType = async (skipAlert = false) => {
-		await setError('')
-		let succeeded = false
-		if (!loading.value) {
-			try {
-				await setLoading(true)
-				await UsersUseCases.updateType(factory)
-				await setMessage('Updated successfully!', skipAlert)
-				succeeded = true
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-		return succeeded
-	}
+	const {
+		asyncFn: updateType,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await UsersUseCases.updateType(factory)
+		return true
+	})
 
 	return { error, loading, factory, updateType }
 }
@@ -48,28 +38,21 @@ export const showCustomizeAi = ref(false)
 
 export const useUserAiUpdate = () => {
 	const factory = new UserAiFactory()
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	const { setMessage } = useSuccessHandler()
 	const { user } = useAuth()
 
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	const updateAi = async () => {
-		await setError('')
-		if (!loading.value) {
-			try {
-				await setLoading(true)
-				await UsersUseCases.updateAi(factory)
-				await setMessage('Updated successfully!')
-				showCustomizeAi.value = false
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: updateAi,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await UsersUseCases.updateAi(factory)
+		await setMessage('Updated successfully!')
+		showCustomizeAi.value = false
+	})
 
 	return { error, loading, factory, updateAi }
 }
@@ -81,42 +64,28 @@ const locationStore = {
 
 export const useUserLocationUpdate = () => {
 	const factory = new UserLocationFactory()
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
-	const { setMessage } = useSuccessHandler()
 	const { user } = useAuth()
 
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	onMounted(async () => {
-		if (locationStore.fetched.value || loading.value) return
-		await setLoading(true)
-		try {
-			locationStore.countries.value = await UsersUseCases.getCountries()
-			locationStore.fetched.value = true
-		} catch (error) {
-			await setError(error)
-		}
-		await setLoading(false)
+	const { asyncFn: fetchCountries } = useAsyncFn(async () => {
+		locationStore.countries.value = await UsersUseCases.getCountries()
+		locationStore.fetched.value = true
 	})
 
-	const updateLocation = async (skipAlert = false) => {
-		let succeeded = false
-		await setError('')
-		if (!loading.value) {
-			try {
-				await setLoading(true)
-				await UsersUseCases.updateLocation(factory)
-				await setMessage('Updated successfully!', skipAlert)
-				succeeded = true
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-		return succeeded
-	}
+	onMounted(async () => {
+		if (!locationStore.fetched.value) await fetchCountries()
+	})
+
+	const {
+		asyncFn: updateLocation,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await UsersUseCases.updateLocation(factory)
+		return true
+	})
 
 	const countries = computed(() => locationStore.countries.value.map((c) => c.name))
 	const states = computed(
@@ -139,30 +108,19 @@ export const socials = {
 
 export const useUserSocialsUpdate = () => {
 	const factory = new UserSocialsFactory()
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
-	const { setMessage } = useSuccessHandler()
 	const { user } = useAuth()
 
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	const updateSocials = async (skipAlert = false) => {
-		let succeeded = false
-		await setError('')
-		if (!loading.value) {
-			try {
-				await setLoading(true)
-				await UsersUseCases.updateSocials(factory)
-				await setMessage('Updated successfully!', skipAlert)
-				succeeded = true
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-		return succeeded
-	}
+	const {
+		asyncFn: updateSocials,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await UsersUseCases.updateSocials(factory)
+		return true
+	})
 
 	return { error, loading, factory, updateSocials }
 }

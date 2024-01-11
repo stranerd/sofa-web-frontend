@@ -212,7 +212,7 @@ export default defineComponent({
 		const handleNextAction = async () => {
 			if (currentStep.value == 'profile') {
 				if (tutorRequestForm.qualification.length && tutorRequestForm.verification)
-					await Promise.all([updateProfile(), updateLocation(true)]).then((res) => {
+					await Promise.all([updateProfile(), updateLocation()]).then((res) => {
 						if (res.every(Boolean)) currentStep.value = 'test'
 					})
 				else Logic.Common.showAlert({ message: 'Please upload the required documents', type: 'warning' })

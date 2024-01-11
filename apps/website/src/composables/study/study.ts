@@ -2,7 +2,7 @@ import { CourseEntity, QuizEntity, StudyKeys, StudyUseCases } from '@modules/stu
 import { Course, Quiz } from 'sofa-logic'
 import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useAsyncFn } from '../core/hooks'
 import { useMyPurchases } from '../payment/purchases'
 
 const store: Record<
@@ -10,36 +10,30 @@ const store: Record<
 	{
 		materials: Ref<(QuizEntity | CourseEntity)[]>
 		fetched: Ref<boolean>
-	} & ReturnType<typeof useLoadingHandler> &
-		ReturnType<typeof useErrorHandler>
+	}
 > = {}
 
 export const useMyStudy = (key: StudyKeys, alwaysRefetch = false) => {
 	store[key] ??= {
 		materials: ref([]),
 		fetched: ref(false),
-		...useLoadingHandler(),
-		...useErrorHandler(),
 	}
 
-	const fetchMaterials = async () => {
-		try {
-			await store[key].setError('')
-			await store[key].setLoading(true)
-			const materials = await StudyUseCases.get(key)
-			store[key].materials.value = materials
-			store[key].fetched.value = true
-		} catch (e) {
-			await store[key].setError(e)
-		}
-		await store[key].setLoading(false)
-	}
-
-	onMounted(async () => {
-		if ((!store[key].fetched.value || alwaysRefetch) && !store[key].loading.value) await fetchMaterials()
+	const {
+		asyncFn: fetchMaterials,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const materials = await StudyUseCases.get(key)
+		store[key].materials.value = materials
+		store[key].fetched.value = true
 	})
 
-	return { ...store[key] }
+	onMounted(async () => {
+		if (!store[key].fetched.value || alwaysRefetch) await fetchMaterials()
+	})
+
+	return { ...store[key], loading, error }
 }
 
 export const useRecent = () => {
