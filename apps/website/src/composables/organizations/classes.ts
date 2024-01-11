@@ -43,7 +43,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => {},
+		show: () => { },
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -51,7 +51,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => {},
+		show: () => { },
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -59,9 +59,13 @@ export const moreOptions = reactive([
 	{
 		icon: 'delete-quiz',
 		title: 'Delete',
-		show: () => {},
-		action: () => {
-			showMoreOptions.value = false
+		show: () => { },
+		action: async () => {
+			let data = {
+				id: selectedItem.value.id,
+				organizationId: selectedItem.value.organizationId
+			}
+			await useDeleteClass(data).deleteClass()
 		},
 	},
 ])
@@ -123,4 +127,50 @@ export const useCreateClass = (organizationId: string) => {
 	})
 
 	return { error, loading, factory, createClass, created }
+}
+
+export const useUpdateClass = (organizationId: string, id: string) => {
+	const factory = new ClassFactory()
+	const updated = ref(false)
+
+	const {
+		asyncFn: updateClass,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await ClassesUseCases.update(organizationId, id, factory).then((data) => {
+			if (data) {
+				updated.value = true
+			}
+		})
+		factory.reset()
+	})
+
+	return { error, loading, factory, createClass, updated }
+}
+
+
+export const useDeleteClass = (data: { id: string, organizationId: string }) => {
+
+	const deleteClass = async () => {
+		try {
+			await store.setError('')
+			await store.setLoading(true)
+			await ClassesUseCases.delete(data)
+				.then((data) => {
+					if (data) {
+						showMoreOptions.value = false
+						Logic.Common.showAlert({
+							message: 'Class deleted successfully',
+							type: 'success',
+						})
+					}
+				})
+		} catch (e) {
+			await store.setError(e)
+		}
+		await store.setLoading(false)
+	}
+
+	return { deleteClass }
 }
