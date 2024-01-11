@@ -18,7 +18,7 @@ const store = {
 					store.classes.value,
 					entity,
 					(e) => e.id,
-					(e) => e.createdAt
+					(e) => e.createdAt,
 				)
 			},
 			updated: async (entity) => {
@@ -26,14 +26,14 @@ const store = {
 					store.classes.value,
 					entity,
 					(e) => e.id,
-					(e) => e.createdAt
+					(e) => e.createdAt,
 				)
 			},
 			deleted: async (entity) => {
 				store.classes.value = store.classes.value.filter((m) => m.id !== entity.id)
-			}
+			},
 		})
-	})
+	}),
 }
 
 export const selectedItem = ref<ClassEntity | undefined>(undefined)
@@ -42,7 +42,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -50,7 +50,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -58,7 +58,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'delete-quiz',
 		title: 'Delete',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -84,7 +84,7 @@ export const useMyClasses = () => {
 					r,
 					(e) => e.id,
 					(e) => e.createdAt,
-				)
+				),
 			)
 			store.fetched.value = true
 		} catch (e) {
@@ -103,7 +103,6 @@ export const useMyClasses = () => {
 
 	return { ...store }
 }
-
 
 export const useCreateClass = (organizationId: string) => {
 	const { error, setError } = useErrorHandler()
