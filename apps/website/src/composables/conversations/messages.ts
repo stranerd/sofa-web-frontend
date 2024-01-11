@@ -61,19 +61,22 @@ export const useMessages = (conversation: ConversationEntity) => {
 		asyncFn: fetchMessages,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
-		store[conversationId].hasMore.value = !!c.pages.next
-		c.results.map((c) =>
-			Logic.addToArray(
-				store[conversationId].messages.value,
-				c,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store[conversationId].fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
+			store[conversationId].hasMore.value = !!c.pages.next
+			c.results.map((c) =>
+				Logic.addToArray(
+					store[conversationId].messages.value,
+					c,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store[conversationId].fetched.value = true
+		},
+		{ key: `conversations/messages/${conversationId}` },
+	)
 
 	const fetchOlderMessages = async () => {
 		fetchMessages()

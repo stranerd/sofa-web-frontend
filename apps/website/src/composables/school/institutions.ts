@@ -15,19 +15,22 @@ const {
 	asyncFn: fetchInstitutions,
 	loading,
 	error,
-} = useAsyncFn(async () => {
-	const institutions = await InstitutionsUseCases.get()
-	institutions.results.forEach((i) =>
-		addToArray(
-			store.institutions.value,
-			i,
-			(e) => e.id,
-			(e) => e.title,
-			true,
-		),
-	)
-	store.fetched.value = true
-})
+} = useAsyncFn(
+	async () => {
+		const institutions = await InstitutionsUseCases.get()
+		institutions.results.forEach((i) =>
+			addToArray(
+				store.institutions.value,
+				i,
+				(e) => e.id,
+				(e) => e.title,
+				true,
+			),
+		)
+		store.fetched.value = true
+	},
+	{ key: 'school/institutions/all' },
+)
 
 export const useInstitutionList = (skipHooks = false) => {
 	const schools = computed(() => store.institutions.value.filter((i) => !i.isGateway))

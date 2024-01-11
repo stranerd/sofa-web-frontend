@@ -69,10 +69,13 @@ export const useUserLocationUpdate = () => {
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	const { asyncFn: fetchCountries } = useAsyncFn(async () => {
-		locationStore.countries.value = await UsersUseCases.getCountries()
-		locationStore.fetched.value = true
-	})
+	const { asyncFn: fetchCountries } = useAsyncFn(
+		async () => {
+			locationStore.countries.value = await UsersUseCases.getCountries()
+			locationStore.fetched.value = true
+		},
+		{ key: 'users/users/countries' },
+	)
 
 	onMounted(async () => {
 		if (!locationStore.fetched.value) await fetchCountries()

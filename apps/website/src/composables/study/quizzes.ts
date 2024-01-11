@@ -65,11 +65,14 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		!skip.questions,
 	)
 
-	const { asyncFn: fetchQuiz } = useAsyncFn(async () => {
-		store[id].quiz.value = await QuizzesUseCases.find(id)
-		if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
-		store[id].fetched.value = true
-	})
+	const { asyncFn: fetchQuiz } = useAsyncFn(
+		async () => {
+			store[id].quiz.value = await QuizzesUseCases.find(id)
+			if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
+			store[id].fetched.value = true
+		},
+		{ key: `study/quizzes/${id}` },
+	)
 
 	const { asyncFn: updateQuiz } = useAsyncFn(async (factory: QuizFactory) => {
 		await QuizzesUseCases.update(id, factory)

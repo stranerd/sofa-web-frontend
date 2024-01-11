@@ -42,18 +42,21 @@ export const useMyFolders = () => {
 		asyncFn: fetchFolders,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const folders = await FoldersUseCases.getUserFolders(id.value)
-		folders.results.forEach((r) =>
-			Logic.addToArray(
-				store.folders.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const folders = await FoldersUseCases.getUserFolders(id.value)
+			folders.results.forEach((r) =>
+				Logic.addToArray(
+					store.folders.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'study/folders/mine' },
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchFolders()

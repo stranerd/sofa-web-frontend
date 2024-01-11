@@ -44,25 +44,28 @@ export const useMyGames = () => {
 		asyncFn: fetchGames,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const games = await Logic.Plays.GetGames({
-			whereType: QueryKeys.or,
-			where: [
-				{ field: 'user.id', value: id.value },
-				{ field: 'participants', value: id.value },
-			],
-			all: true,
-		})
-		games.results.forEach((r) =>
-			Logic.addToArray(
-				store.games.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const games = await Logic.Plays.GetGames({
+				whereType: QueryKeys.or,
+				where: [
+					{ field: 'user.id', value: id.value },
+					{ field: 'participants', value: id.value },
+				],
+				all: true,
+			})
+			games.results.forEach((r) =>
+				Logic.addToArray(
+					store.games.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'plays/games/mine' },
+	)
 
 	onMounted(async () => {
 		/* if (!store.fetched.value) */ await fetchGames()

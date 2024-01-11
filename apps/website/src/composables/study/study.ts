@@ -23,11 +23,14 @@ export const useMyStudy = (key: StudyKeys, alwaysRefetch = false) => {
 		asyncFn: fetchMaterials,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const materials = await StudyUseCases.get(key)
-		store[key].materials.value = materials
-		store[key].fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const materials = await StudyUseCases.get(key)
+			store[key].materials.value = materials
+			store[key].fetched.value = true
+		},
+		{ key: `study/study/${key}` },
+	)
 
 	onMounted(async () => {
 		if (!store[key].fetched.value || alwaysRefetch) await fetchMaterials()

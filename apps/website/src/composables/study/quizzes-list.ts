@@ -74,18 +74,21 @@ export const useMyQuizzes = () => {
 		asyncFn: fetchQuizzes,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const quizzes = await QuizzesUseCases.getUserQuizzes(id.value)
-		quizzes.results.forEach((r) =>
-			Logic.addToArray(
-				store.quizzes.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const quizzes = await QuizzesUseCases.getUserQuizzes(id.value)
+			quizzes.results.forEach((r) =>
+				Logic.addToArray(
+					store.quizzes.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'study/quizzes/mine' },
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchQuizzes()
@@ -108,18 +111,21 @@ export const useTutorQuizzes = () => {
 		asyncFn: fetchQuizzes,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const quizzes = await QuizzesUseCases.getTutorQuizzes(id.value)
-		quizzes.results.forEach((r) =>
-			Logic.addToArray(
-				tutorStore.quizzes.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		tutorStore.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const quizzes = await QuizzesUseCases.getTutorQuizzes(id.value)
+			quizzes.results.forEach((r) =>
+				Logic.addToArray(
+					tutorStore.quizzes.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			tutorStore.fetched.value = true
+		},
+		{ key: 'study/quizzes/tutor/mine' },
+	)
 
 	onMounted(async () => {
 		if (!tutorStore.fetched.value && isAdmin.value) await fetchQuizzes()

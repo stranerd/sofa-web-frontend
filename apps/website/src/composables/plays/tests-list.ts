@@ -44,21 +44,24 @@ export const useMyTests = () => {
 		asyncFn: fetchTests,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const tests = await Logic.Plays.GetTests({
-			where: [{ field: 'userId', value: id.value }],
-			all: true,
-		})
-		tests.results.forEach((r) =>
-			Logic.addToArray(
-				store.tests.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const tests = await Logic.Plays.GetTests({
+				where: [{ field: 'userId', value: id.value }],
+				all: true,
+			})
+			tests.results.forEach((r) =>
+				Logic.addToArray(
+					store.tests.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'plays/tests/mine' },
+	)
 
 	onMounted(async () => {
 		/* if (!store.fetched.value) */ await fetchTests()

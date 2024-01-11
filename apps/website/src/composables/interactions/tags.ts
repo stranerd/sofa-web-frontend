@@ -67,19 +67,22 @@ export const useTopicsList = () => {
 		asyncFn: fetchTopics,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const tags = await TagsUseCases.getAllTopics()
-		tags.results.forEach((r) =>
-			Logic.addToArray(
-				topicStore.topics,
-				r,
-				(e) => e.id,
-				(e) => e.title,
-				true,
-			),
-		)
-		topicStore.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const tags = await TagsUseCases.getAllTopics()
+			tags.results.forEach((r) =>
+				Logic.addToArray(
+					topicStore.topics,
+					r,
+					(e) => e.id,
+					(e) => e.title,
+					true,
+				),
+			)
+			topicStore.fetched.value = true
+		},
+		{ key: 'interactions/tags/topics' },
+	)
 
 	onMounted(async () => {
 		if (!topicStore.fetched.value) await fetchTopics()
@@ -97,18 +100,21 @@ export const useGenericTagsList = () => {
 		asyncFn: fetchGeneric,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const tags = await TagsUseCases.getAllGeneric()
-		tags.results.forEach((r) =>
-			Logic.addToArray(
-				genericStore.tags,
-				r,
-				(e) => e.id,
-				(e) => e.meta.total,
-			),
-		)
-		genericStore.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const tags = await TagsUseCases.getAllGeneric()
+			tags.results.forEach((r) =>
+				Logic.addToArray(
+					genericStore.tags,
+					r,
+					(e) => e.id,
+					(e) => e.meta.total,
+				),
+			)
+			genericStore.fetched.value = true
+		},
+		{ key: 'interactions/tags/generic' },
+	)
 
 	onMounted(async () => {
 		if (!genericStore.fetched.value) await fetchGeneric()

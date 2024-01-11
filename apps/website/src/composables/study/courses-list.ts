@@ -42,18 +42,21 @@ export const useMyCourses = () => {
 		asyncFn: fetchCourses,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const courses = await CoursesUseCases.getUserCourses(id.value)
-		courses.results.forEach((r) =>
-			Logic.addToArray(
-				store.courses.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const courses = await CoursesUseCases.getUserCourses(id.value)
+			courses.results.forEach((r) =>
+				Logic.addToArray(
+					store.courses.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'study/courses/mine' },
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchCourses()

@@ -41,18 +41,21 @@ export const useTutorsList = () => {
 		asyncFn: fetchTutors,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const tutors = await UsersUseCases.getAllTeachers()
-		tutors.results.forEach((r) =>
-			Logic.addToArray(
-				store.tutors.value,
-				r,
-				(e) => e.id,
-				(e) => e.account.ratings.avg,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const tutors = await UsersUseCases.getAllTeachers()
+			tutors.results.forEach((r) =>
+				Logic.addToArray(
+					store.tutors.value,
+					r,
+					(e) => e.id,
+					(e) => e.account.ratings.avg,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'users/users/teachers' },
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchTutors()
