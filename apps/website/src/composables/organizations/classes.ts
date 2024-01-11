@@ -8,7 +8,7 @@ export const useCreateClass = (organizationId: string) => {
 
 	const createClass = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			try {
 				await setLoading(true)
 				await ClassesUseCases.add(organizationId, factory)
@@ -17,7 +17,7 @@ export const useCreateClass = (organizationId: string) => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { error, loading, factory, createClass }

@@ -70,7 +70,7 @@ export const useConversationsList = () => {
 export const useConversation = (id: string) => {
 	const { id: authId } = useAuth()
 	const router = useRouter()
-	const conversationList = useConversationsList()
+	useConversationsList()
 	const conversation = computed(() => store.conversations.value.find((q) => q.id === id) ?? null)
 	const { setMessage } = useSuccessHandler()
 	const { asyncFn: end } = useAsyncFn(async (reviewData: { rating: number; message: string }) => {
@@ -113,17 +113,15 @@ export const useCreateConversation = () => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		if (factory.valid) {
-			const conversation = await ConversationsUseCases.add(factory)
-			factory.reset()
-			await router.push(`/chats/${conversation.id}`)
-			if (conversation.tutor)
-				await Logic.Common.success({
-					title: 'Tutor request sent!',
-					sub: 'You will get notified when the tutor responds',
-					button: { label: 'Done' },
-				})
-		} else factory.validateAll()
+		const conversation = await ConversationsUseCases.add(factory)
+		factory.reset()
+		await router.push(`/chats/${conversation.id}`)
+		if (conversation.tutor)
+			await Logic.Common.success({
+				title: 'Tutor request sent!',
+				sub: 'You will get notified when the tutor responds',
+				button: { label: 'Done' },
+			})
 	})
 
 	return { error, loading, factory, createConversation }

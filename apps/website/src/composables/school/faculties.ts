@@ -76,7 +76,7 @@ export const useCreateFaculty = () => {
 
 	const createFaculty = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const faculty = await FacultiesUseCases.add(factory)
@@ -94,7 +94,7 @@ export const useCreateFaculty = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, createFaculty }
@@ -115,7 +115,7 @@ export const useEditFaculty = () => {
 
 	const editFaculty = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const updatedFaculty = await FacultiesUseCases.update(editingFaculty!.id, factory)
@@ -133,7 +133,7 @@ export const useEditFaculty = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, editFaculty }

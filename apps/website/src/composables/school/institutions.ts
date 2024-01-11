@@ -73,7 +73,7 @@ export const useCreateInstitution = () => {
 
 	const createInstitution = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const institution = await InstitutionsUseCases.add(factory)
@@ -91,7 +91,7 @@ export const useCreateInstitution = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, createInstitution }
@@ -112,7 +112,7 @@ export const useEditInstitution = () => {
 
 	const editInstitution = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const updatedInstitution = await InstitutionsUseCases.update(editingInstitution!.id, factory)
@@ -130,7 +130,7 @@ export const useEditInstitution = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, editInstitution }

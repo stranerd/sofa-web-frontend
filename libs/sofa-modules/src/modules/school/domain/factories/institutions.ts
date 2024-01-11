@@ -36,12 +36,8 @@ export class InstitutionFactory extends BaseFactory<InstitutionEntity, Instituti
 		this.isGateway = entity.isGateway
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { title, isGateway } = this.validValues
-			return { title, isGateway }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { title, isGateway } = this.validValues
+		return { title, isGateway }
 	}
 }

@@ -1,14 +1,12 @@
-import { BaseFactory, Media, UploadedFile } from '@modules/core'
+import { BaseFactory, Media } from '@modules/core'
 import { isEqualTo, v } from 'valleyed'
 import { NewUser } from '../entities/auth'
 
-type Content = UploadedFile | Media | null
-
-type Keys = Omit<NewUser, 'name' | 'photo'> & {
+type Keys = Omit<NewUser, 'name'> & {
 	first: string
 	last: string
 	cPassword: string
-	photo: Content
+	photo: Media
 	termsAccepted: boolean
 }
 
@@ -71,7 +69,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		return this.values.photo
 	}
 
-	set photo(value: Content) {
+	set photo(value: Media) {
 		this.set('photo', value)
 	}
 
@@ -108,17 +106,15 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		this.set('termsAccepted', value)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { first, last, email, password, description, photo } = this.validValues
-			return {
-				name: { first, last },
-				email,
-				password,
-				description,
-				photo: photo as Media,
-			}
-		} else throw new Error('Validation errors')
+	model = async () => {
+		const { first, last, email, password, description, photo } = this.validValues
+		return {
+			name: { first, last },
+			email,
+			password,
+			description,
+			photo: photo as Media,
+		}
 	}
 
 	loadEntity = (entity: null) => {

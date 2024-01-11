@@ -268,27 +268,23 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		}
 	}
 
-	toModel = async (): Promise<UserTypeData> => {
-		if (this.valid) {
-			const { institutionId, facultyId, departmentId, exams, school, name, code } = this.validValues
-			if (this.isTeacher) return { type: UserType.teacher, school }
-			if (this.isOrganization) return { type: UserType.organization, name, code }
-			return {
-				type: UserType.student,
-				school: this.isCollegeType
-					? {
-							type: UserSchoolType.college,
-							institutionId,
-							facultyId,
-							departmentId,
-						}
-					: {
-							type: UserSchoolType.aspirant,
-							exams,
-						},
-			}
-		} else {
-			throw new Error('Validation errors')
+	model = async (): Promise<UserTypeData> => {
+		const { institutionId, facultyId, departmentId, exams, school, name, code } = this.validValues
+		if (this.isTeacher) return { type: UserType.teacher, school }
+		if (this.isOrganization) return { type: UserType.organization, name, code }
+		return {
+			type: UserType.student,
+			school: this.isCollegeType
+				? {
+						type: UserSchoolType.college,
+						institutionId,
+						facultyId,
+						departmentId,
+					}
+				: {
+						type: UserSchoolType.aspirant,
+						exams,
+					},
 		}
 	}
 }

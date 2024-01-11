@@ -121,12 +121,8 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		this.courseId = entity.courseId
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { title, description, photo, topic, tags, isForTutors, courseId } = this.validValues
-			return { title, description, photo, topic, tags, isForTutors, courseId }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { title, description, photo, topic, tags, isForTutors, courseId } = this.validValues
+		return { title, description, photo, topic, tags, isForTutors, courseId }
 	}
 }

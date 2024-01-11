@@ -48,12 +48,8 @@ export class TagFactory extends BaseFactory<TagEntity, TagToModel, TagToModel> {
 		this.parent = entity.parent
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { title, type, parent } = this.validValues
-			return { title, type, parent }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { title, type, parent } = this.validValues
+		return { title, type, parent }
 	}
 }

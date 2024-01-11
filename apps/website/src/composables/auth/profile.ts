@@ -16,7 +16,7 @@ export const useProfileUpdate = () => {
 	const updateProfile = async (skipAlert = false) => {
 		let succeeded = false
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			try {
 				await setLoading(true, skipAlert)
 				await AuthUseCases.updateProfile(factory)
@@ -26,7 +26,7 @@ export const useProfileUpdate = () => {
 				await setError(error)
 			}
 			await setLoading(false, skipAlert)
-		} else factory.validateAll()
+		}
 		return succeeded
 	}
 

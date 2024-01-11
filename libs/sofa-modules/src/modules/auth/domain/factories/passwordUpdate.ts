@@ -53,11 +53,9 @@ export class PasswordUpdateFactory extends BaseFactory<null, PasswordUpdate, Key
 		}
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { oldPassword, password } = this.validValues
-			return { oldPassword, password }
-		} else throw new Error('Validation errors')
+	model = async () => {
+		const { oldPassword, password } = this.validValues
+		return { oldPassword, password }
 	}
 
 	loadEntity = (entity: null) => {

@@ -76,7 +76,7 @@ export const useCreateDepartment = () => {
 
 	const createDepartment = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const department = await DepartmentsUseCases.add(factory)
@@ -96,7 +96,7 @@ export const useCreateDepartment = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, createDepartment }
@@ -117,7 +117,7 @@ export const useEditDepartment = () => {
 
 	const editDepartment = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const updatedDepartment = await DepartmentsUseCases.update(editingDepartment!.id, factory)
@@ -137,7 +137,7 @@ export const useEditDepartment = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, editDepartment }

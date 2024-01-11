@@ -39,12 +39,8 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 		}
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { country, state } = this.validValues
-			return { country, state }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { country, state } = this.validValues
+		return { country, state }
 	}
 }

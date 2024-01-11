@@ -175,7 +175,7 @@ export const useCreateCourse = () => {
 
 	const createCourse = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const course = await CoursesUseCases.add(factory)
@@ -192,7 +192,7 @@ export const useCreateCourse = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, createCourse }
@@ -212,7 +212,7 @@ export const useEditCourse = () => {
 
 	const editCourse = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const updatedCourse = await CoursesUseCases.update(editingCourse!.id, factory)
@@ -229,7 +229,7 @@ export const useEditCourse = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { factory, loading, error, editCourse }

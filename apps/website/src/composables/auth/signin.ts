@@ -35,7 +35,7 @@ export const useEmailSignin = () => {
 	const { error, loading, setError, setLoading } = store.emailSignin
 	const signin = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const user = await AuthUseCases.signinWithEmail(factory, {
@@ -47,7 +47,7 @@ export const useEmailSignin = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 	return { factory, loading, error, signin }
 }
@@ -57,7 +57,7 @@ export const useEmailSignup = () => {
 	const { error, loading, setError, setLoading } = store.emailSignup
 	const signup = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			await setLoading(true)
 			try {
 				const user = await AuthUseCases.signupWithEmail(factory, { referrer: await getReferrerId() })
@@ -67,7 +67,7 @@ export const useEmailSignup = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 	return { factory, loading, error, signup }
 }

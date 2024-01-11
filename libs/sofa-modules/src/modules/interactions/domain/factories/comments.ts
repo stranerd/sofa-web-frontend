@@ -26,12 +26,8 @@ export class CommentFactory extends BaseFactory<CommentEntity, Omit<CommentToMod
 		this.body = entity.body
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { body } = this.validValues
-			return { body }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { body } = this.validValues
+		return { body }
 	}
 }
