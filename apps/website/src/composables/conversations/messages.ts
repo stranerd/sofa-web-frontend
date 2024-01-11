@@ -2,8 +2,8 @@ import { ConversationEntity, MessageEntity, MessageFactory, MessagesUseCases } f
 import { Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
+import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const store = {} as Record<
 	string,
@@ -12,8 +12,7 @@ const store = {} as Record<
 		fetched: Ref<boolean>
 		hasMore: Ref<boolean>
 		listener: ReturnType<typeof useListener>
-	} & ReturnType<typeof useErrorHandler> &
-		ReturnType<typeof useLoadingHandler>
+	}
 >
 
 export const useMessages = (conversation: ConversationEntity) => {
@@ -55,39 +54,34 @@ export const useMessages = (conversation: ConversationEntity) => {
 			fetched: ref(false),
 			hasMore: ref(false),
 			listener,
-			...useErrorHandler(),
-			...useLoadingHandler(),
 		}
 	}
 
-	const fetchMessages = async () => {
-		await store[conversationId].setError('')
-		try {
-			await store[conversationId].setLoading(true)
-			const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
-			store[conversationId].hasMore.value = !!c.pages.next
-			c.results.map((c) =>
-				Logic.addToArray(
-					store[conversationId].messages.value,
-					c,
-					(e) => e.id,
-					(e) => e.createdAt,
-				),
-			)
-			store[conversationId].fetched.value = true
-		} catch (e) {
-			await store[conversationId].setError(e)
-		}
-		await store[conversationId].setLoading(false)
-	}
+	const {
+		asyncFn: fetchMessages,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
+		store[conversationId].hasMore.value = !!c.pages.next
+		c.results.map((c) =>
+			Logic.addToArray(
+				store[conversationId].messages.value,
+				c,
+				(e) => e.id,
+				(e) => e.createdAt,
+			),
+		)
+		store[conversationId].fetched.value = true
+	})
 
 	const fetchOlderMessages = async () => {
-		await fetchMessages()
+		fetchMessages()
 		await store[conversationId].listener.restart()
 	}
 
 	onMounted(async () => {
-		if (!store[conversationId].fetched.value && !store[conversationId].loading.value) await fetchMessages()
+		if (!store[conversationId].fetched.value) await fetchMessages()
 		await store[conversationId].listener.start()
 	})
 	onUnmounted(async () => {
@@ -114,8 +108,8 @@ export const useMessages = (conversation: ConversationEntity) => {
 		users,
 		messages: computed(() => [...store[conversationId].messages.value].reverse()),
 		fetched: store[conversationId].fetched,
-		loading: store[conversationId].loading,
-		error: store[conversationId].error,
+		loading,
+		error,
 		hasMore: store[conversationId].hasMore,
 		fetchOlderMessages,
 	}
@@ -134,23 +128,15 @@ export const useMessage = (message: MessageEntity) => {
 }
 
 export const useCreateMessage = (conversationId: string) => {
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	const factory = new MessageFactory()
-
-	const createMessage = async () => {
-		await setError('')
-		if (factory.valid && !loading.value) {
-			try {
-				await setLoading(true)
-				await MessagesUseCases.add(conversationId, factory)
-				factory.reset()
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		} else factory.validateAll()
-	}
+	const {
+		asyncFn: createMessage,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await MessagesUseCases.add(conversationId, factory)
+		factory.reset()
+	})
 
 	return { error, loading, factory, createMessage }
 }

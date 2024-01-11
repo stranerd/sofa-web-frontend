@@ -26,12 +26,8 @@ export class FolderFactory extends BaseFactory<FolderEntity, FolderToModel, Fold
 		this.title = entity.title
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { title } = this.validValues
-			return { title }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { title } = this.validValues
+		return { title }
 	}
 }

@@ -46,12 +46,8 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Cour
 		this.departmentId = entity.departmentId
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { title, institutionId, departmentId } = this.validValues
-			return { title, institutionId, departmentId }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { title, institutionId, departmentId } = this.validValues
+		return { title, institutionId, departmentId }
 	}
 }

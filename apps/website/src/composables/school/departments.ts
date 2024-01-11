@@ -1,43 +1,39 @@
-import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '@/composables/core/states'
+import { useSuccessHandler } from '@/composables/core/states'
 import { DepartmentEntity, DepartmentFactory, DepartmentsUseCases } from '@modules/school'
 import { addToArray } from '@utils/commons'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAsyncFn } from '../core/hooks'
 
 const store = {
 	fetched: ref(false),
 	departments: ref([] as DepartmentEntity[]),
 	faculties: {} as Record<string, boolean>,
-	...useErrorHandler(),
-	...useLoadingHandler(),
 }
 
-const fetchDepartments = async (facultyId: string) => {
+const {
+	asyncFn: fetchDepartments,
+	loading,
+	error,
+} = useAsyncFn(async (facultyId: string) => {
 	if (store.faculties[facultyId]) return
-	await store.setError('')
-	await store.setLoading(true)
-	try {
-		const departments = await DepartmentsUseCases.getFacultyDepartments(facultyId)
-		departments.results.forEach((c) =>
-			addToArray(
-				store.departments.value,
-				c,
-				(e) => e.id,
-				(e) => e.title,
-				true,
-			),
-		)
-		store.fetched.value = true
-		store.faculties[facultyId] = true
-	} catch (error) {
-		await store.setError(error)
-	}
-	await store.setLoading(false)
-}
+	const departments = await DepartmentsUseCases.getFacultyDepartments(facultyId)
+	departments.results.forEach((c) =>
+		addToArray(
+			store.departments.value,
+			c,
+			(e) => e.id,
+			(e) => e.title,
+			true,
+		),
+	)
+	store.fetched.value = true
+	store.faculties[facultyId] = true
+})
 
 export const useDepartmentList = () => {
-	return { ...store, fetchDepartments }
+	return { ...store, loading, error, fetchDepartments }
 }
 
 export const useDepartment = (facultyId: string, id: string) => {
@@ -69,35 +65,28 @@ export const openDepartmentCreateModal = async (facultyId: string) => {
 export const useCreateDepartment = () => {
 	const router = useRouter()
 	const factory = new DepartmentFactory()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	if (creatingFacultyDepartment) factory.facultyId = creatingFacultyDepartment
 
-	const createDepartment = async () => {
-		await setError('')
-		if (factory.valid && !loading.value) {
-			await setLoading(true)
-			try {
-				const department = await DepartmentsUseCases.add(factory)
-				addToArray(
-					store.departments.value,
-					department,
-					(e) => e.id,
-					(e) => e.title,
-					true,
-				)
-				factory.reset()
-				await setMessage('Department created successfully')
-				await router.push(
-					`/admin/school/institutions/${department.institutionId}/faculties/${department.facultyId}/departments/${department.id}`,
-				)
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		} else factory.validateAll()
-	}
+	const {
+		asyncFn: createDepartment,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const department = await DepartmentsUseCases.add(factory)
+		addToArray(
+			store.departments.value,
+			department,
+			(e) => e.id,
+			(e) => e.title,
+			true,
+		)
+		factory.reset()
+		await setMessage('Department created successfully')
+		await router.push(
+			`/admin/school/institutions/${department.institutionId}/faculties/${department.facultyId}/departments/${department.id}`,
+		)
+	})
 
 	return { factory, loading, error, createDepartment }
 }
@@ -110,63 +99,54 @@ export const openDepartmentEditModal = async (department: DepartmentEntity) => {
 export const useEditDepartment = () => {
 	const router = useRouter()
 	const factory = new DepartmentFactory()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	if (editingDepartment) factory.loadEntity(editingDepartment)
 
-	const editDepartment = async () => {
-		await setError('')
-		if (factory.valid && !loading.value) {
-			await setLoading(true)
-			try {
-				const updatedDepartment = await DepartmentsUseCases.update(editingDepartment!.id, factory)
-				addToArray(
-					store.departments.value,
-					updatedDepartment,
-					(e) => e.id,
-					(e) => e.title,
-					true,
-				)
-				factory.reset()
-				await setMessage('Department updated successfully')
-				await router.push(
-					`/admin/school/institutions/${updatedDepartment.institutionId}/faculties/${updatedDepartment.facultyId}/departments/${updatedDepartment.id}`,
-				)
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		} else factory.validateAll()
-	}
+	const {
+		asyncFn: editDepartment,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const updatedDepartment = await DepartmentsUseCases.update(editingDepartment!.id, factory)
+		addToArray(
+			store.departments.value,
+			updatedDepartment,
+			(e) => e.id,
+			(e) => e.title,
+			true,
+		)
+		factory.reset()
+		await setMessage('Department updated successfully')
+		await router.push(
+			`/admin/school/institutions/${updatedDepartment.institutionId}/faculties/${updatedDepartment.facultyId}/departments/${updatedDepartment.id}`,
+		)
+	})
 
 	return { factory, loading, error, editDepartment }
 }
 
 export const useDeleteDepartment = (departmentId: string) => {
-	const { loading, setLoading } = useLoadingHandler()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
 
-	const deleteDepartment = async () => {
-		await setError('')
-		const accepted = await Logic.Common.confirm({
-			title: 'Are you sure you want to delete this department?',
-			sub: '',
-			right: { label: 'Yes, delete' },
-		})
-		if (accepted) {
-			await setLoading(true)
-			try {
-				await DepartmentsUseCases.delete(departmentId)
-				store.departments.value = store.departments.value.filter((s) => s.id !== departmentId)
-				await setMessage('Department deleted successfully')
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: deleteDepartment,
+		loading,
+		error,
+	} = useAsyncFn(
+		async () => {
+			await DepartmentsUseCases.delete(departmentId)
+			store.departments.value = store.departments.value.filter((s) => s.id !== departmentId)
+			await setMessage('Department deleted successfully')
+		},
+		{
+			pre: async () =>
+				await Logic.Common.confirm({
+					title: 'Are you sure you want to delete this department?',
+					sub: '',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
 
 	return { loading, error, deleteDepartment }
 }

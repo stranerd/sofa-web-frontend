@@ -21,11 +21,9 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 		this.set('phone', phone)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { phone } = this.validValues
-			return phone!
-		} else throw new Error('Validation errors')
+	model = async () => {
+		const { phone } = this.validValues
+		return phone!
 	}
 
 	loadEntity = (entity: AuthDetails) => {

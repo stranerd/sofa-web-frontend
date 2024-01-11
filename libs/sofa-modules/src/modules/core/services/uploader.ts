@@ -43,6 +43,10 @@ export class UploadedFile implements Media {
 		const byteArray = new Uint8Array(byteNumbers)
 		return new Blob([byteArray])
 	}
+
+	static is(val: any): val is UploadedFile {
+		return val?.constructor?.name === 'UploadedFile'
+	}
 }
 
 declare module 'valleyed/lib/types' {

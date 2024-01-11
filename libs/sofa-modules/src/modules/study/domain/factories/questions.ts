@@ -361,19 +361,15 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 		return {} as never
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { questionMedia, explanation, timeLimit, indicator } = this.validValues
+	model = async () => {
+		const { questionMedia, explanation, timeLimit, indicator } = this.validValues
 
-			const question = this.isFillInBlanks
-				? this.deconstructOptions(this.fillInBlanksAnswers, indicator).question
-				: this.isDragAnswers
-					? this.deconstructOptions(this.dragAnswersAnswers, indicator).question
-					: this.validValues.question
+		const question = this.isFillInBlanks
+			? this.deconstructOptions(this.fillInBlanksAnswers, indicator).question
+			: this.isDragAnswers
+				? this.deconstructOptions(this.dragAnswersAnswers, indicator).question
+				: this.validValues.question
 
-			return { question, questionMedia, explanation, timeLimit, data: this.constructedData }
-		} else {
-			throw new Error('Validation errors')
-		}
+		return { question, questionMedia, explanation, timeLimit, data: this.constructedData }
 	}
 }

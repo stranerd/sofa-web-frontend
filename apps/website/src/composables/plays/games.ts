@@ -1,11 +1,11 @@
+import { QuestionEntity } from '@modules/study'
 import { AddQuestionAnswer, Game, GameParticipantAnswer, Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
+import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
-import { QuestionEntity } from '@modules/study'
 
 const store = {} as Record<
 	string,
@@ -15,8 +15,7 @@ const store = {} as Record<
 		answer: Ref<GameParticipantAnswer | null>
 		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
-	} & ReturnType<typeof useErrorHandler> &
-		ReturnType<typeof useLoadingHandler>
+	}
 >
 
 export const useGame = (id: string, skip: { questions: boolean; participants: boolean; statusNav: boolean }) => {
@@ -47,80 +46,48 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 					},
 				}),
 		),
-		...useErrorHandler(),
-		...useLoadingHandler(),
 	}
 
 	const { users: participants } = useUsersInList(computed(() => (skip.participants ? [] : store[id].game.value?.participants ?? [])))
 
-	const fetchGame = async () => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			store[id].game.value = await Logic.Plays.GetGame(id)
-			store[id].fetched.value = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: fetchGame, loading } = useAsyncFn(async () => {
+		store[id].game.value = await Logic.Plays.GetGame(id)
+		store[id].fetched.value = true
+	})
 
-	const start = async () => {
-		await store[id].setError('')
-		if (store[id].game.value?.status !== 'created') return
-		try {
-			await store[id].setLoading(true)
-			await Logic.Plays.StartGame(id)
-			await router.push(store[id].game.value?.participants.includes(authId.value) ? run : results)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: start } = useAsyncFn(async () => {
+		await Logic.Plays.StartGame(id)
+		await router.push(store[id].game.value?.participants.includes(authId.value) ? run : results)
+	})
 
-	const end = async () => {
-		await store[id].setError('')
-		if (store[id].game.value?.status !== 'started') return false
-		const confirmed = confirm('Ending the game now will automically end it for all participants currently taking the tests!')
-		if (!confirmed) return false
-		let succeeded = false
-		try {
-			await store[id].setLoading(true)
+	const { asyncFn: end } = useAsyncFn(
+		async () => {
 			await Logic.Plays.EndGame(id)
-			succeeded = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-		return succeeded
-	}
+			return true
+		},
+		{
+			pre: async () => {
+				if (store[id].game.value?.status !== 'started') return false
+				return await Logic.Common.confirm({
+					title: 'Are you sure you want to end this game?',
+					sub: 'Ending the game now will automically end it for all participants currently taking the test!',
+					right: { label: 'Yes, end' },
+					left: { label: 'Cancel' },
+				})
+			},
+		},
+	)
 
-	const join = async (join: boolean) => {
-		await store[id].setError('')
+	const { asyncFn: join } = useAsyncFn(async (join: boolean) => {
 		if (join && store[id].game.value?.participants.includes(authId.value)) return
 		if (!join && !store[id].game.value?.participants.includes(authId.value)) return
-		try {
-			await store[id].setLoading(true)
-			await Logic.Plays.JoinGame(id, join)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		await Logic.Plays.JoinGame(id, join)
+	})
 
-	const submitAnswer = async (data: AddQuestionAnswer) => {
-		let succeeded = false
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await Logic.Plays.AnswerGameQuestion(id, data)
-			succeeded = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-		return succeeded
-	}
+	const { asyncFn: submitAnswer } = useAsyncFn(async (data: AddQuestionAnswer) => {
+		await Logic.Plays.AnswerGameQuestion(id, data)
+		return true
+	})
 
 	const alertAndNav = async (route: string, message?: string) => {
 		// if (message) Logic.Common.showAlert({ message, type: 'info' })
@@ -158,7 +125,7 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 	)
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchGame()
+		/* if (!store[id].fetched.value) */ await fetchGame()
 		await store[id].listener.start()
 		await gameWatcherCb()
 	})

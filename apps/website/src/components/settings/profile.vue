@@ -92,7 +92,7 @@ const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 watch(factory.values, () => {
 	Logic.Common.debounce(() => {
-		updateProfile(true)
+		updateProfile()
 	}, 1000)
 })
 

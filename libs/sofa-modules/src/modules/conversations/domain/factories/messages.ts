@@ -29,13 +29,9 @@ export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, M
 		this.set('media', value)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { body, media } = this.validValues
-			return { body, media }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { body, media } = this.validValues
+		return { body, media }
 	}
 
 	loadEntity = (entity: MessageEntity) => {

@@ -54,11 +54,9 @@ export class PasswordResetFactory extends BaseFactory<null, { password: string; 
 		this.set('cPassword', value)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { password, token } = this.validValues
-			return { password, token }
-		} else throw new Error('Validation errors')
+	model = async () => {
+		const { password, token } = this.validValues
+		return { password, token }
 	}
 
 	loadEntity = (entity: null) => {

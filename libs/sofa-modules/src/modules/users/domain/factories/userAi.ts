@@ -48,12 +48,8 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi> {
 		}
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { name, tagline, photo } = this.validValues
-			return { name, tagline, photo }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { name, tagline, photo } = this.validValues
+		return { name, tagline, photo }
 	}
 }

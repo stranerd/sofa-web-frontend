@@ -27,7 +27,7 @@ export const useUserTypeUpdate = () => {
 	const updateType = async (skipAlert = false) => {
 		await setError('')
 		let succeeded = false
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			try {
 				await setLoading(true)
 				await UsersUseCases.updateType(factory)
@@ -37,7 +37,7 @@ export const useUserTypeUpdate = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 		return succeeded
 	}
 
@@ -58,7 +58,7 @@ export const useUserAiUpdate = () => {
 
 	const updateAi = async () => {
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			try {
 				await setLoading(true)
 				await UsersUseCases.updateAi(factory)
@@ -68,7 +68,7 @@ export const useUserAiUpdate = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 	}
 
 	return { error, loading, factory, updateAi }
@@ -104,7 +104,7 @@ export const useUserLocationUpdate = () => {
 	const updateLocation = async (skipAlert = false) => {
 		let succeeded = false
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			try {
 				await setLoading(true)
 				await UsersUseCases.updateLocation(factory)
@@ -114,7 +114,7 @@ export const useUserLocationUpdate = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 		return succeeded
 	}
 
@@ -150,7 +150,7 @@ export const useUserSocialsUpdate = () => {
 	const updateSocials = async (skipAlert = false) => {
 		let succeeded = false
 		await setError('')
-		if (factory.valid && !loading.value) {
+		if (!loading.value) {
 			try {
 				await setLoading(true)
 				await UsersUseCases.updateSocials(factory)
@@ -160,7 +160,7 @@ export const useUserSocialsUpdate = () => {
 				await setError(error)
 			}
 			await setLoading(false)
-		} else factory.validateAll()
+		}
 		return succeeded
 	}
 

@@ -1,9 +1,8 @@
-import { BaseFactory, Media, UploadedFile } from '@modules/core'
+import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { AuthDetails, ProfileUpdate } from '../entities/auth'
 
-type Content = UploadedFile | Media | null
-type Keys = { first: string; last: string; description: string; photo: Content }
+type Keys = { first: string; last: string; description: string; photo: Media }
 
 export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate, Keys> {
 	readonly rules = {
@@ -47,19 +46,17 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		return this.values.photo!
 	}
 
-	set photo(photo: Content) {
+	set photo(photo: Media) {
 		this.set('photo', photo)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { first, last, description, photo } = this.validValues
-			return {
-				name: { first, last },
-				description,
-				photo: (photo ?? null) as Media,
-			}
-		} else throw new Error('Validation errors')
+	model = async () => {
+		const { first, last, description, photo } = this.validValues
+		return {
+			name: { first, last },
+			description,
+			photo: (photo ?? null) as Media,
+		}
 	}
 
 	loadEntity = (entity: AuthDetails) => {

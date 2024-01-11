@@ -1,7 +1,7 @@
 import { ClassFactory, ClassesUseCases, ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useAsyncFn } from '../core/hooks'
 import { useAuth } from '../auth/auth'
 import { computed, onMounted, onUnmounted, ref, reactive } from 'vue'
 
@@ -42,7 +42,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => {},
+		show: () => { },
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -50,7 +50,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => {},
+		show: () => { },
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -58,7 +58,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'delete-quiz',
 		title: 'Delete',
-		show: () => {},
+		show: () => { },
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -105,28 +105,21 @@ export const useMyClasses = () => {
 }
 
 export const useCreateClass = (organizationId: string) => {
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	const factory = new ClassFactory()
 	const created = ref(false)
 
-	const createClass = async () => {
-		await setError('')
-		if (factory.valid && !loading.value) {
-			try {
-				await setLoading(true)
-				await ClassesUseCases.add(organizationId, factory).then((data) => {
-					if (data) {
-						created.value = true
-					}
-				})
-				factory.reset()
-			} catch (error) {
-				await setError(error)
+	const {
+		asyncFn: createClass,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await ClassesUseCases.add(organizationId, factory).then((data) => {
+			if (data) {
+				created.value = true
 			}
-			await setLoading(false)
-		} else factory.validateAll()
-	}
+		})
+		factory.reset()
+	})
 
 	return { error, loading, factory, createClass, created }
 }

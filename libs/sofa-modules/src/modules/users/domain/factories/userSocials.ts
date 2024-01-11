@@ -63,12 +63,8 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 		this.socials = entity.socials
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { socials } = this.validValues
-			return socials
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { socials } = this.validValues
+		return socials
 	}
 }

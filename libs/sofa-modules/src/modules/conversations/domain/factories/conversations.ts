@@ -35,12 +35,8 @@ export class ConversationFactory extends BaseFactory<ConversationEntity, CreateC
 		this.tutorId = entity.tutor?.id ?? null
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { body, tutorId } = this.validValues
-			return { body, tutorId }
-		} else {
-			throw new Error('Validation errors')
-		}
+	model = async () => {
+		const { body, tutorId } = this.validValues
+		return { body, tutorId }
 	}
 }

@@ -1,5 +1,3 @@
-import { SingleUser } from './users'
-
 export interface PaymentMethod {
 	hash: string
 	id: string
@@ -70,7 +68,7 @@ export interface Wallet {
 export interface Purchase {
 	hash: string
 	id: string
-	user: SingleUser
+	userId: string
 	price: {
 		amount: number
 		currency: string
