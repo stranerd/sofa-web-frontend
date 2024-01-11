@@ -70,7 +70,6 @@
 						:bg-color="'bg-primaryBlue'"
 						:text-color="'text-white'"
 						:padding="'py-4 px-6'"
-						:disabled="!classFactory.valid"
 						custom-class="w-full mdlg:w-auto">
 						Save
 					</SofaButton>

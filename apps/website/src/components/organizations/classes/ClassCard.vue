@@ -26,7 +26,7 @@
 					</sofa-normal-text>
 				</div>
 				<sofa-normal-text v-show="type === 'org'" color="text-grayColor" size="lg" custom-class="font-bold">
-					{{ '₦' + classObj.price.amount }}
+					{{ '₦' + classObj.price.amount.toLocaleString() }}
 				</sofa-normal-text>
 			</div>
 			<slot />
@@ -37,7 +37,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { SofaIcon, SofaNormalText, SofaImageLoader } from 'sofa-ui-components'
-import { ClassEntity } from 'sofa-modules/src/modules/organizations';
+import { ClassEntity } from 'sofa-modules/src/modules/organizations'
 
 export default defineComponent({
 	name: 'ClassCard',
