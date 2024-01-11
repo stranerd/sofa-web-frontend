@@ -96,16 +96,15 @@ const { id } = useAuth()
 
 const { updateClass, factory: classFactory, updated } = useUpdateClass(id.value, selectedClass.value.id)
 
-
 const emit = defineEmits(['close'])
 
 const setDefaultValues = () => {
-    if(selectedClass.value){
-        classFactory.amount = selectedClass.value.price.amount
-        classFactory.description = selectedClass.value.description
-        classFactory.title = selectedClass.value.title
-        classFactory.photo = selectedClass.value.photo
-    }
+	if (selectedClass.value) {
+		classFactory.amount = selectedClass.value.price.amount
+		classFactory.description = selectedClass.value.description
+		classFactory.title = selectedClass.value.title
+		classFactory.photo = selectedClass.value.photo
+	}
 }
 
 watch(updated, () => {
@@ -114,8 +113,7 @@ watch(updated, () => {
 	}
 })
 
-onMounted(()=>{
-    setDefaultValues()
+onMounted(() => {
+	setDefaultValues()
 })
-
 </script>

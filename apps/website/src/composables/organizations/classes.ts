@@ -9,13 +9,13 @@ import { computed, onMounted, onUnmounted, ref, reactive } from 'vue'
 export const selectedClass = ref<ClassEntity | undefined>(undefined)
 export const showMoreOptions = ref(false)
 export const showCreateClassModal = ref(false)
-export const showEditClassModal = ref(false);
+export const showEditClassModal = ref(false)
 
 export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showEditClassModal.value = true
 			showMoreOptions.value = false
@@ -24,7 +24,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => { },
+		show: () => {},
 		action: () => {
 			showMoreOptions.value = false
 		},
@@ -32,7 +32,7 @@ export const moreOptions = reactive([
 	{
 		icon: 'delete-quiz',
 		title: 'Delete',
-		show: () => { },
+		show: () => {},
 		action: async () => {
 			const data = {
 				id: selectedClass.value.id,
@@ -115,9 +115,8 @@ export const useMyClasses = () => {
 }
 
 export const useCreateClass = (organizationId: string) => {
-
 	const factory = new ClassFactory()
-	const created = ref(false);
+	const created = ref(false)
 
 	const {
 		asyncFn: createClass,
@@ -137,7 +136,7 @@ export const useCreateClass = (organizationId: string) => {
 
 export const useUpdateClass = (organizationId: string, id: string) => {
 	const factory = new ClassFactory()
-	const updated = ref(false);
+	const updated = ref(false)
 	const {
 		asyncFn: updateClass,
 		loading,

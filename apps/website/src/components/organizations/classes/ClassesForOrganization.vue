@@ -66,9 +66,7 @@
 			</div>
 		</sofa-modal>
 	</div>
-	<CreateClassModal
-		v-if="showCreateClassModal"
-		@close="showCreateClassModal = false" />
+	<CreateClassModal v-if="showCreateClassModal" @close="showCreateClassModal = false" />
 	<EditClassModal v-if="showEditClassModal" @close="showEditClassModal = false" />
 </template>
 
@@ -85,12 +83,22 @@ import {
 	showMoreOptions,
 	showCreateClassModal,
 	selectedClass,
-	showEditClassModal
+	showEditClassModal,
 } from '@/composables/organizations/classes'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
-	components: { SofaHeaderText, SofaNormalText, SofaButton, SofaIcon, CreateClassModal, ClassCard, SofaTextField, SofaModal, EditClassModal },
+	components: {
+		SofaHeaderText,
+		SofaNormalText,
+		SofaButton,
+		SofaIcon,
+		CreateClassModal,
+		ClassCard,
+		SofaTextField,
+		SofaModal,
+		EditClassModal,
+	},
 	setup() {
 		const emptyClassContent = {
 			imageURL: '/images/empty-class.png',
@@ -105,8 +113,6 @@ export default defineComponent({
 
 		const { classes } = useMyClasses()
 		const searchQuery = ref('')
-
-		
 
 		return {
 			emptyClassContent,

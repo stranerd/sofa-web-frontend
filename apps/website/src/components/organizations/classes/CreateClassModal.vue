@@ -96,15 +96,11 @@ const { id } = useAuth()
 
 const { createClass, factory: classFactory, created } = useCreateClass(id.value)
 
-
 const emit = defineEmits(['close'])
-
-
 
 watch(created, () => {
 	if (created.value) {
 		emit('close')
 	}
 })
-
 </script>
