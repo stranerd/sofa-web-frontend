@@ -1,10 +1,11 @@
 import { Media } from '@modules/core'
-import { EmbeddedUser, Saleable } from '../../domain/types'
+import { ClassLesson, EmbeddedUser, Saleable } from '../../domain/types'
 
 export interface ClassFromModel extends ClassToModel, Saleable {
 	id: string
 	organizationId: string
 	user: EmbeddedUser
+	lessons: ClassLesson[]
 	createdAt: number
 	updatedAt: number
 }

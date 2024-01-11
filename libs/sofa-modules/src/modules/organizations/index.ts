@@ -17,7 +17,6 @@ export const SchedulesUseCases = new SchedulesUseCase(ScheduleRepository.getInst
 
 export { AnnouncementEntity } from './domain/entities/announcements'
 export { ClassEntity } from './domain/entities/classes'
-export { LessonEntity } from './domain/entities/lessons'
 export { MemberEntity } from './domain/entities/members'
 export { ScheduleEntity } from './domain/entities/schedules'
 export { ClassFactory } from './domain/factories/classes'

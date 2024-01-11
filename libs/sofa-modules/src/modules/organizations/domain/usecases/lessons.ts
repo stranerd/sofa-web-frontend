@@ -1,5 +1,4 @@
-import { QueryParams } from '@modules/core'
-import { LessonToModel } from '../../data/models/lessons'
+import { LessonFactory } from '../factories/lessons'
 import { ILessonRepository } from '../irepositories/lessons'
 
 export class LessonsUseCase {
@@ -9,19 +8,23 @@ export class LessonsUseCase {
 		this.repository = repository
 	}
 
-	async add(data: LessonToModel) {
-		return await this.repository(data.organizationId, data.classId).add(data)
+	async add(organizationId: string, classId: string, factory: LessonFactory) {
+		return await this.repository(organizationId, classId).add(await factory.toModel())
+	}
+
+	async update(organizationId: string, classId: string, id: string, factory: LessonFactory) {
+		return await this.repository(organizationId, classId).update(id, await factory.toModel())
 	}
 
 	async delete(data: { organizationId: string; classId: string; id: string }) {
 		return await this.repository(data.organizationId, data.classId).delete(data.id)
 	}
 
-	async find(organizationId: string, classId: string, id: string) {
-		return await this.repository(organizationId, classId).find(id)
+	async join(organizationId: string, classId: string, id: string, join: boolean) {
+		return await this.repository(organizationId, classId).join({ id, join })
 	}
 
-	async get(organizationId: string, classId: string, query: QueryParams) {
-		return await this.repository(organizationId, classId).get(query)
+	async manageTeachers(organizationId: string, classId: string, id: string, userId: string, add: boolean) {
+		return await this.repository(organizationId, classId).manageTeachers({ id, userId, add })
 	}
 }
