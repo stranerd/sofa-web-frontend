@@ -6,20 +6,18 @@ import { useAuth } from '../auth/auth'
 import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { computed, onMounted, onUnmounted, ref, reactive } from 'vue'
 
-export const factory = new ClassFactory()
 export const selectedClass = ref<ClassEntity | undefined>(undefined)
 export const showMoreOptions = ref(false)
-export const showCreateAndEditClassModal = ref(false)
-export const isEdit = ref(false)
-export const updated = ref(false)
+export const showCreateClassModal = ref(false)
+export const showEditClassModal = ref(false);
+
 export const moreOptions = reactive([
 	{
 		icon: 'edit-option',
 		title: 'Edit',
 		show: () => { },
 		action: () => {
-			isEdit.value = true
-			showCreateAndEditClassModal.value = true
+			showEditClassModal.value = true
 			showMoreOptions.value = false
 		},
 	},
@@ -118,6 +116,9 @@ export const useMyClasses = () => {
 
 export const useCreateClass = (organizationId: string) => {
 
+	const factory = new ClassFactory()
+	const created = ref(false);
+
 	const {
 		asyncFn: createClass,
 		loading,
@@ -125,17 +126,18 @@ export const useCreateClass = (organizationId: string) => {
 	} = useAsyncFn(async () => {
 		await ClassesUseCases.add(organizationId, factory).then((data) => {
 			if (data) {
-				updated.value = true
+				created.value = true
 			}
 		})
 		factory.reset()
 	})
 
-	return { error, loading, factory, createClass }
+	return { error, loading, factory, createClass, created }
 }
 
 export const useUpdateClass = (organizationId: string, id: string) => {
-
+	const factory = new ClassFactory()
+	const updated = ref(false);
 	const {
 		asyncFn: updateClass,
 		loading,
@@ -152,10 +154,9 @@ export const useUpdateClass = (organizationId: string, id: string) => {
 			}
 		})
 		selectedClass.value = undefined
-		factory.reset()
 	})
 
-	return { error, loading, factory, updateClass }
+	return { error, loading, factory, updateClass, updated }
 }
 
 export const useDeleteClass = (data: { id: string; organizationId: string }) => {
