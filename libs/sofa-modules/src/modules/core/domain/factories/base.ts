@@ -15,7 +15,7 @@ export function deepToRaw(input: any) {
 export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
-	abstract toModel: () => Promise<T>
+	abstract model: () => T | Promise<T>
 	abstract loadEntity: (entity: E) => void
 	reserved: string[]
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
@@ -66,10 +66,6 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 
 	isValid = (property: keyof K) => this.checkValidity(property, this.values[property]).valid
 
-	validateAll() {
-		Object.keys(this.defaults).forEach((key) => this.set(key, this.values[key]))
-	}
-
 	checkValidity(property: keyof K, value: any) {
 		return this.rules[property].parse(deepToRaw(value), true)
 	}
@@ -86,5 +82,13 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 		this.values[property] = this.defaults[property]
 		this.validValues[property] = this.defaults[property]
 		this.errors[property] = ''
+	}
+
+	async toModel() {
+		if (!this.valid) {
+			Object.keys(this.defaults).forEach((key) => this.set(key, this.values[key]))
+			throw new Error('Validation errors')
+		}
+		return await this.model()
 	}
 }

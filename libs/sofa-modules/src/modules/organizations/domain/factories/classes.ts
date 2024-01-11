@@ -65,17 +65,13 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 		this.set('currency', value)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { title, description, photo, amount, currency } = this.validValues
-			return {
-				title,
-				description,
-				photo,
-				price: { amount, currency },
-			}
-		} else {
-			throw new Error('Validation errors')
+	model = async () => {
+		const { title, description, photo, amount, currency } = this.validValues
+		return {
+			title,
+			description,
+			photo,
+			price: { amount, currency },
 		}
 	}
 

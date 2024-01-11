@@ -3,8 +3,8 @@ import { AddQuestionAnswer, GameParticipantAnswer, Logic, Test } from 'sofa-logi
 import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
+import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 
 const store = {} as Record<
 	string,
@@ -14,8 +14,7 @@ const store = {} as Record<
 		answer: Ref<GameParticipantAnswer | null>
 		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
-	} & ReturnType<typeof useErrorHandler> &
-		ReturnType<typeof useLoadingHandler>
+	}
 >
 
 export const useTest = (id: string, skip: { questions: boolean; statusNav: boolean }) => {
@@ -46,64 +45,29 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 					},
 				}),
 		),
-		...useErrorHandler(),
-		...useLoadingHandler(),
 	}
 
-	const fetchTest = async () => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			store[id].test.value = await Logic.Plays.GetTest(id)
-			store[id].fetched.value = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: fetchTest } = useAsyncFn(async () => {
+		store[id].test.value = await Logic.Plays.GetTest(id)
+		store[id].fetched.value = true
+	})
 
-	const start = async () => {
-		await store[id].setError('')
-		if (store[id].test.value?.status !== 'created') return
-		try {
-			await store[id].setLoading(true)
-			await Logic.Plays.StartTest(id)
-			await router.push(run)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: start } = useAsyncFn(async () => {
+		await Logic.Plays.StartTest(id)
+		await router.push(run)
+	})
 
-	const end = async () => {
-		await store[id].setError('')
+	const { asyncFn: end } = useAsyncFn(async () => {
 		if (store[id].test.value?.status !== 'started') return false
-		let succeeded = false
-		try {
-			await store[id].setLoading(true)
-			await Logic.Plays.EndTest(id)
-			await router.push(results)
-			succeeded = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-		return succeeded
-	}
+		await Logic.Plays.EndTest(id)
+		await router.push(results)
+		return true
+	})
 
-	const submitAnswer = async (data: AddQuestionAnswer) => {
-		let succeeded = false
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await Logic.Plays.AnswerTestQuestion(id, data)
-			succeeded = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-		return succeeded
-	}
+	const { asyncFn: submitAnswer } = useAsyncFn(async (data: AddQuestionAnswer) => {
+		await Logic.Plays.AnswerTestQuestion(id, data)
+		return true
+	})
 
 	const alertAndNav = async (route: string, message?: string) => {
 		// if (message) Logic.Common.showAlert({ message, type: 'info' })
@@ -142,7 +106,7 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 	)
 
 	onMounted(async () => {
-		if (/* !store[id].fetched.value &&  */ !store[id].loading.value) await fetchTest()
+		/* if (!store[id].fetched.value) */ await fetchTest()
 		await store[id].listener.start()
 		await testWatcherCb()
 	})

@@ -30,11 +30,9 @@ export class EmailSigninFactory extends BaseFactory<null, AuthUser, AuthUser> {
 		this.set('password', value)
 	}
 
-	toModel = async () => {
-		if (this.valid) {
-			const { email, password } = this.validValues
-			return { email, password }
-		} else throw new Error('Validation errors')
+	model = async () => {
+		const { email, password } = this.validValues
+		return { email, password }
 	}
 
 	loadEntity = (entity: null) => {
