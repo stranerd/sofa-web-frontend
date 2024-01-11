@@ -97,46 +97,47 @@ export const useManageOrganizationMembers = (id: string) => {
 	})
 
 	const {
-		asyncFn: removeMemberFn,
+		asyncFn: removeMember,
 		loading: removeMemberLoading,
 		error: removeMemberError,
-	} = useAsyncFn(async (member: MemberEntity) => {
-		await MembersUseCases.remove({ organizationId: id, email: member.email, type: member.type })
-		await setMessage('Member removed')
-		return true
-	})
-
-	const removeMember = async (member: MemberEntity) => {
-		const confirmed = await Logic.Common.confirm({
-			title: 'Are you sure you want to remove this member?',
-			sub: '',
-			right: { label: 'Yes, remove' },
-		})
-		if (!confirmed) return false
-		return await removeMemberFn(member)
-	}
+	} = useAsyncFn(
+		async (member: MemberEntity) => {
+			await MembersUseCases.remove({ organizationId: id, email: member.email, type: member.type })
+			await setMessage('Member removed')
+			return true
+		},
+		{
+			pre: async () =>
+				await Logic.Common.confirm({
+					title: 'Are you sure you want to remove this member?',
+					sub: '',
+					right: { label: 'Yes, remove' },
+				}),
+		},
+	)
 
 	const {
-		asyncFn: acceptMemberFn,
+		asyncFn: acceptMember,
 		loading: acceptMemberLoading,
 		error: acceptMemberError,
-	} = useAsyncFn(async (member: MemberEntity, accept: boolean) => {
-		const key = accept ? 'accept' : 'reject'
-		await MembersUseCases.accept({ organizationId: id, email: member.email, type: member.type, accept })
-		await setMessage(`Member ${key}ed`)
-		return true
-	})
-
-	const acceptMember = async (member: MemberEntity, accept: boolean) => {
-		const key = accept ? 'accept' : 'reject'
-		const confirmed = await Logic.Common.confirm({
-			title: `Are you sure you want to ${key} this member?`,
-			sub: '',
-			right: { label: `Yes, ${key}` },
-		})
-		if (!confirmed) return false
-		return await acceptMemberFn(member, accept)
-	}
+	} = useAsyncFn(
+		async (member: MemberEntity, accept: boolean) => {
+			const key = accept ? 'accept' : 'reject'
+			await MembersUseCases.accept({ organizationId: id, email: member.email, type: member.type, accept })
+			await setMessage(`Member ${key}ed`)
+			return true
+		},
+		{
+			pre: async (_, accept) => {
+				const key = accept ? 'accept' : 'reject'
+				return await Logic.Common.confirm({
+					title: `Are you sure you want to ${key} this member?`,
+					sub: '',
+					right: { label: `Yes, ${key}` },
+				})
+			},
+		},
+	)
 
 	return {
 		message,

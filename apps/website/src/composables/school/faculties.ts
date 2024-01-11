@@ -1,43 +1,39 @@
-import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '@/composables/core/states'
+import { useSuccessHandler } from '@/composables/core/states'
 import { FacultiesUseCases, FacultyEntity, FacultyFactory } from '@modules/school'
 import { addToArray } from '@utils/commons'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAsyncFn } from '../core/hooks'
 
 const store = {
 	fetched: ref(false),
 	faculties: ref([] as FacultyEntity[]),
 	institutions: {} as Record<string, boolean>,
-	...useErrorHandler(),
-	...useLoadingHandler(),
 }
 
-const fetchFaculties = async (institutionId: string) => {
+const {
+	asyncFn: fetchFaculties,
+	loading,
+	error,
+} = useAsyncFn(async (institutionId: string) => {
 	if (store.institutions[institutionId]) return
-	await store.setError('')
-	await store.setLoading(true)
-	try {
-		const faculties = await FacultiesUseCases.getInstitutionFaculties(institutionId)
-		faculties.results.forEach((c) =>
-			addToArray(
-				store.faculties.value,
-				c,
-				(e) => e.id,
-				(e) => e.title,
-				true,
-			),
-		)
-		store.fetched.value = true
-		store.institutions[institutionId] = true
-	} catch (error) {
-		await store.setError(error)
-	}
-	await store.setLoading(false)
-}
+	const faculties = await FacultiesUseCases.getInstitutionFaculties(institutionId)
+	faculties.results.forEach((c) =>
+		addToArray(
+			store.faculties.value,
+			c,
+			(e) => e.id,
+			(e) => e.title,
+			true,
+		),
+	)
+	store.fetched.value = true
+	store.institutions[institutionId] = true
+})
 
 export const useFacultyList = () => {
-	return { ...store, fetchFaculties }
+	return { ...store, loading, error, fetchFaculties }
 }
 
 export const useFaculty = (institutionId: string, id: string) => {
@@ -69,33 +65,26 @@ export const openFacultyCreateModal = async (institutionId: string) => {
 export const useCreateFaculty = () => {
 	const router = useRouter()
 	const factory = new FacultyFactory()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	if (creatingInstitutionFaculty) factory.institutionId = creatingInstitutionFaculty
 
-	const createFaculty = async () => {
-		await setError('')
-		if (!loading.value) {
-			await setLoading(true)
-			try {
-				const faculty = await FacultiesUseCases.add(factory)
-				addToArray(
-					store.faculties.value,
-					faculty,
-					(e) => e.id,
-					(e) => e.title,
-					true,
-				)
-				factory.reset()
-				await setMessage('Faculty created successfully')
-				await router.push(`/admin/school/institutions/${faculty.institutionId}/faculties/${faculty.id}`)
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: createFaculty,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const faculty = await FacultiesUseCases.add(factory)
+		addToArray(
+			store.faculties.value,
+			faculty,
+			(e) => e.id,
+			(e) => e.title,
+			true,
+		)
+		factory.reset()
+		await setMessage('Faculty created successfully')
+		await router.push(`/admin/school/institutions/${faculty.institutionId}/faculties/${faculty.id}`)
+	})
 
 	return { factory, loading, error, createFaculty }
 }
@@ -108,61 +97,52 @@ export const openFacultyEditModal = async (faculty: FacultyEntity) => {
 export const useEditFaculty = () => {
 	const router = useRouter()
 	const factory = new FacultyFactory()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
-	const { loading, setLoading } = useLoadingHandler()
 	if (editingFaculty) factory.loadEntity(editingFaculty)
 
-	const editFaculty = async () => {
-		await setError('')
-		if (!loading.value) {
-			await setLoading(true)
-			try {
-				const updatedFaculty = await FacultiesUseCases.update(editingFaculty!.id, factory)
-				addToArray(
-					store.faculties.value,
-					updatedFaculty,
-					(e) => e.id,
-					(e) => e.title,
-					true,
-				)
-				factory.reset()
-				await setMessage('Faculty updated successfully')
-				await router.push(`/admin/school/institutions/${updatedFaculty.institutionId}/faculties/${updatedFaculty.id}`)
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: editFaculty,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const updatedFaculty = await FacultiesUseCases.update(editingFaculty!.id, factory)
+		addToArray(
+			store.faculties.value,
+			updatedFaculty,
+			(e) => e.id,
+			(e) => e.title,
+			true,
+		)
+		factory.reset()
+		await setMessage('Faculty updated successfully')
+		await router.push(`/admin/school/institutions/${updatedFaculty.institutionId}/faculties/${updatedFaculty.id}`)
+	})
 
 	return { factory, loading, error, editFaculty }
 }
 
 export const useDeleteFaculty = (facultyId: string) => {
-	const { loading, setLoading } = useLoadingHandler()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
 
-	const deleteFaculty = async () => {
-		await setError('')
-		const accepted = await Logic.Common.confirm({
-			title: 'Are you sure you want to delete this faculty?',
-			sub: '',
-			right: { label: 'Yes, delete' },
-		})
-		if (accepted) {
-			await setLoading(true)
-			try {
-				await FacultiesUseCases.delete(facultyId)
-				store.faculties.value = store.faculties.value.filter((s) => s.id !== facultyId)
-				await setMessage('Faculty deleted successfully')
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: deleteFaculty,
+		loading,
+		error,
+	} = useAsyncFn(
+		async () => {
+			await FacultiesUseCases.delete(facultyId)
+			store.faculties.value = store.faculties.value.filter((s) => s.id !== facultyId)
+			await setMessage('Faculty deleted successfully')
+		},
+		{
+			pre: async () =>
+				Logic.Common.confirm({
+					title: 'Are you sure you want to delete this faculty?',
+					sub: '',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
 
 	return { loading, error, deleteFaculty }
 }

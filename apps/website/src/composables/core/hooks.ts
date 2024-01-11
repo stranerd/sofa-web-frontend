@@ -2,16 +2,18 @@ import { Logic } from 'sofa-logic'
 import { ComputedRef, Ref, computed, reactive, watch } from 'vue'
 import { useErrorHandler, useLoadingHandler } from './states'
 
-type UseAsyncFnOptions = {
+type UseAsyncFnOptions<T extends (...args: any[]) => any> = {
 	hideLoading?: boolean
 	hideError?: boolean
+	pre?: (...args: Parameters<T>) => boolean | Promise<boolean>
 }
-export const useAsyncFn = <T extends (...args: any[]) => Promise<any>>(fn: T, opts: Partial<UseAsyncFnOptions> = {}) => {
+export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Partial<UseAsyncFnOptions<T>> = {}) => {
 	const { setError, error } = useErrorHandler()
 	const { setLoading, loading } = useLoadingHandler()
 	const asyncFn = async (...args: Parameters<T>) => {
 		let result: ReturnType<T> | null = null
 		if (loading.value) return result
+		if (opts.pre && !(await opts.pre(...args))) return result
 		try {
 			await setError('', opts.hideError)
 			await setLoading(true, opts.hideLoading)

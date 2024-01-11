@@ -88,14 +88,24 @@ export const useConversation = (id: string) => {
 		await router.push('/chats')
 	})
 	const {
-		asyncFn: deleteConvFn,
+		asyncFn: deleteConv,
 		loading: deleteConvLoading,
 		error: deleteConvError,
-	} = useAsyncFn(async () => {
-		await ConversationsUseCases.delete(id)
-		await setMessage('Conversation deleted')
-		await router.push('/chats')
-	})
+	} = useAsyncFn(
+		async () => {
+			await ConversationsUseCases.delete(id)
+			await setMessage('Conversation deleted')
+			await router.push('/chats')
+		},
+		{
+			pre: async () =>
+				await Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: 'This action is permanent. All messages in this conversation would be lost',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
 	const {
 		asyncFn: accept,
 		loading: acceptLoading,
@@ -108,16 +118,6 @@ export const useConversation = (id: string) => {
 		if (accepted) await router.push(`/chats/${id}`)
 		else await router.push('/chats')
 	})
-
-	const deleteConv = async () => {
-		const confirmed = await Logic.Common.confirm({
-			title: 'Are you sure?',
-			sub: 'This action is permanent. All messages in this conversation would be lost',
-			right: { label: 'Yes, delete' },
-		})
-		if (!confirmed) return
-		await deleteConvFn()
-	}
 
 	return {
 		conversation,

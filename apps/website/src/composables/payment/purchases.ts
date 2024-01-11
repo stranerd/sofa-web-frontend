@@ -62,8 +62,7 @@ export const useMyPurchases = () => {
 	})
 
 	onMounted(async () => {
-		// TODO: replace condition
-		if (/* !store.fetched.value */ id) await fetchPurchases()
+		/* if (!store.fetched.value) */ await fetchPurchases()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
