@@ -1,5 +1,5 @@
 import { createSession } from '@app/composables/auth/session'
-import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '@app/composables/core/states'
+import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
 import { SignInWithApple } from '@capacitor-community/apple-sign-in'
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth'
 import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/auth'
@@ -9,14 +9,11 @@ import { googleClientId, packageName } from '@utils/environment'
 import { storage } from '@utils/storage'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAsyncFn } from '../core/hooks'
 
 const store = {
 	referrerId: ref(undefined as string | undefined),
-	emailSignin: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
-	emailSignup: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
-	googleSignin: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
-	appleSignin: { ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
-	emailVerification: { email: ref(''), ...useErrorHandler(), ...useLoadingHandler(), ...useSuccessHandler() },
+	emailVerification: { email: ref(''), ...useSuccessHandler() },
 }
 
 export const getReferrerId = async () => (await storage.get('referrer')) ?? store.referrerId.value
@@ -32,43 +29,29 @@ export const saveReferrerId = async () => {
 
 export const useEmailSignin = () => {
 	const factory = new EmailSigninFactory()
-	const { error, loading, setError, setLoading } = store.emailSignin
-	const signin = async () => {
-		await setError('')
-		if (!loading.value) {
-			await setLoading(true)
-			try {
-				const user = await AuthUseCases.signinWithEmail(factory, {
-					referrer: await getReferrerId(),
-				})
-				await createSession(user)
-				await storage.remove('referrer')
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: signin,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const user = await AuthUseCases.signinWithEmail(factory, { referrer: await getReferrerId() })
+		await createSession(user)
+		await storage.remove('referrer')
+	})
 	return { factory, loading, error, signin }
 }
 
 export const useEmailSignup = () => {
 	const factory = new EmailSignupFactory()
-	const { error, loading, setError, setLoading } = store.emailSignup
-	const signup = async () => {
-		await setError('')
-		if (!loading.value) {
-			await setLoading(true)
-			try {
-				const user = await AuthUseCases.signupWithEmail(factory, { referrer: await getReferrerId() })
-				await createSession(user)
-				await storage.remove('referrer')
-			} catch (error) {
-				await setError(error)
-			}
-			await setLoading(false)
-		}
-	}
+	const {
+		asyncFn: signup,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const user = await AuthUseCases.signupWithEmail(factory, { referrer: await getReferrerId() })
+		await createSession(user)
+		await storage.remove('referrer')
+	})
 	return { factory, loading, error, signup }
 }
 
@@ -79,68 +62,70 @@ export const useEmailVerification = () => {
 	const router = useRouter()
 	const sent = ref(false)
 	const token = ref('')
-	const { email, error, loading, message, setError, setLoading, setMessage } = store.emailVerification
-	const completeVerification = async () => {
-		await setError('')
-		await setLoading(true)
+	const { email, message, setMessage } = store.emailVerification
+
+	const {
+		asyncFn: completeVerification,
+		loading: completeVerificationLoading,
+		error: completeVerificationError,
+	} = useAsyncFn(async () => {
 		try {
 			const user = await AuthUseCases.completeEmailVerification(token.value)
 			await createSession(user)
 		} catch (error) {
-			await setError(error)
 			if (error instanceof NetworkError && error.statusCode === StatusCodes.InvalidToken) {
-				await setError('Invalid or expired token. Proceed to signin!')
 				await router.push('/auth/signin')
-			} else await setError(error)
+				throw new Error('Invalid or expired token. Proceed to signin!')
+			} else throw error
 		}
-		await setLoading(false)
-	}
-	const sendVerificationEmail = async () => {
+	})
+
+	const {
+		asyncFn: sendVerificationEmail,
+		loading: sendVerificationEmailLoading,
+		error: sendVerificationEmailError,
+	} = useAsyncFn(async () => {
 		if (!email.value) return
-		await setError('')
-		await setLoading(true)
-		try {
-			await AuthUseCases.sendVerificationEmail()
-			await setMessage('An OTP was just sent to your mail')
-			sent.value = true
-		} catch (error) {
-			await setError(error)
-		}
-		await setLoading(false)
-	}
+		await AuthUseCases.sendVerificationEmail()
+		await setMessage('An OTP was just sent to your mail')
+		sent.value = true
+	})
+
 	onMounted(sendVerificationEmail)
 
 	return {
 		token,
 		sent,
 		email,
-		loading,
-		error,
 		message,
 		sendVerificationEmail,
+		sendVerificationEmailLoading,
+		sendVerificationEmailError,
 		completeVerification,
+		completeVerificationLoading,
+		completeVerificationError,
 	}
 }
 
 export const useGoogleSignin = () => {
-	const { error, loading, setError, setLoading } = store.googleSignin
-	const signin = async () => {
-		await setError('')
-		if (!loading.value) {
-			await setLoading(true)
-			try {
-				const googleUser = await GoogleAuth.signIn()
-				const { idToken } = googleUser.authentication
-				await GoogleAuth.signOut()
-				const user = await AuthUseCases.signinWithGoogle({ idToken }, { referrer: await getReferrerId() })
-				await createSession(user)
-				await storage.remove('referrer')
-			} catch (error) {
-				await setError(error ?? 'Error signing in with google')
-			}
-			await setLoading(false)
+	const { setError } = useErrorHandler()
+
+	const {
+		asyncFn: signin,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		try {
+			const googleUser = await GoogleAuth.signIn()
+			const { idToken } = googleUser.authentication
+			await GoogleAuth.signOut()
+			const user = await AuthUseCases.signinWithGoogle({ idToken }, { referrer: await getReferrerId() })
+			await createSession(user)
+			await storage.remove('referrer')
+		} catch (error) {
+			throw error ?? 'Error signing in with google'
 		}
-	}
+	})
 
 	onMounted(async () => {
 		try {
@@ -153,39 +138,37 @@ export const useGoogleSignin = () => {
 		}
 	})
 
-	return { loading, error, signin, setError }
+	return { loading, error, signin }
 }
 
 export const useAppleSignin = () => {
-	const { error, loading, setError, setLoading } = store.appleSignin
-	const signin = async () => {
-		await setError('')
-		if (!loading.value) {
-			await setLoading(true)
-			try {
-				const clientId = isWeb ? packageName.replace('.app', '') : packageName
-				const redirectURI = 'https://' + clientId.split('.').reverse().join('.')
-				const { response } = await SignInWithApple.authorize({
-					clientId,
-					redirectURI,
-					scopes: 'name email',
-				})
-				const user = await AuthUseCases.signinWithApple(
-					{
-						firstName: response.givenName,
-						lastName: response.familyName,
-						email: response.email,
-						idToken: response.identityToken,
-					},
-					{ referrer: await getReferrerId() },
-				)
-				await createSession(user)
-				await storage.remove('referrer')
-			} catch (error) {
-				await setError('Error signing in with apple')
-			}
-			await setLoading(false)
+	const {
+		asyncFn: signin,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		try {
+			const clientId = isWeb ? packageName.replace('.app', '') : packageName
+			const redirectURI = 'https://' + clientId.split('.').reverse().join('.')
+			const { response } = await SignInWithApple.authorize({
+				clientId,
+				redirectURI,
+				scopes: 'name email',
+			})
+			const user = await AuthUseCases.signinWithApple(
+				{
+					firstName: response.givenName,
+					lastName: response.familyName,
+					email: response.email,
+					idToken: response.identityToken,
+				},
+				{ referrer: await getReferrerId() },
+			)
+			await createSession(user)
+			await storage.remove('referrer')
+		} catch (error) {
+			throw 'Error signing in with apple'
 		}
-	}
-	return { loading, error, signin, setError }
+	})
+	return { loading, error, signin }
 }

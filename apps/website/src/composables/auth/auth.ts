@@ -10,10 +10,7 @@ const store = {
 	wallet: ref(null as Wallet | null),
 	listener: useListener(async () => {
 		const id = store.auth.value?.id as string | undefined
-		if (!id)
-			return () => {
-				//
-			}
+		if (!id) return () => {}
 		const setUser = async (user: UserEntity) => {
 			store.user.value = user
 		}

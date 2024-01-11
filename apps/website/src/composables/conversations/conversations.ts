@@ -10,18 +10,6 @@ import { useSuccessHandler } from '../core/states'
 const store = {
 	conversations: ref<ConversationEntity[]>([]),
 	fetched: ref(false),
-	...useAsyncFn(async () => {
-		const conversations = await ConversationsUseCases.getAll()
-		conversations.results.forEach((r) =>
-			Logic.addToArray(
-				store.conversations.value,
-				r,
-				(e) => e.id,
-				(e) => e.last?.createdAt ?? 0,
-			),
-		)
-		store.fetched.value = true
-	}),
 	listener: useListener(async () => {
 		return await ConversationsUseCases.listenToAll({
 			created: async (entity) => {
@@ -50,8 +38,25 @@ const store = {
 export const useConversationsList = () => {
 	const { id: authId } = useAuth()
 
+	const {
+		asyncFn: fetchConversations,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const conversations = await ConversationsUseCases.getAll()
+		conversations.results.forEach((r) =>
+			Logic.addToArray(
+				store.conversations.value,
+				r,
+				(e) => e.id,
+				(e) => e.last?.createdAt ?? 0,
+			),
+		)
+		store.fetched.value = true
+	})
+
 	onMounted(async () => {
-		if (!store.fetched.value && !store.loading.value) await store.asyncFn()
+		if (!store.fetched.value) await fetchConversations()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -64,7 +69,7 @@ export const useConversationsList = () => {
 	const requests = computed(() => store.conversations.value.filter((c) => c.pending && c.tutor?.id === authId.value))
 	const pending = computed(() => store.conversations.value.filter((c) => c.pending && c.user.id === authId.value))
 
-	return { ...store, conversations, requests, pending }
+	return { ...store, loading, error, conversations, requests, pending }
 }
 
 export const useConversation = (id: string) => {
@@ -73,17 +78,29 @@ export const useConversation = (id: string) => {
 	useConversationsList()
 	const conversation = computed(() => store.conversations.value.find((q) => q.id === id) ?? null)
 	const { setMessage } = useSuccessHandler()
-	const { asyncFn: end } = useAsyncFn(async (reviewData: { rating: number; message: string }) => {
+	const {
+		asyncFn: end,
+		loading: endLoading,
+		error: endError,
+	} = useAsyncFn(async (reviewData: { rating: number; message: string }) => {
 		await ConversationsUseCases.end(id, reviewData)
 		await setMessage('Conversation has ended')
 		await router.push('/chats')
 	})
-	const { asyncFn: deleteConvFn } = useAsyncFn(async () => {
+	const {
+		asyncFn: deleteConvFn,
+		loading: deleteConvLoading,
+		error: deleteConvError,
+	} = useAsyncFn(async () => {
 		await ConversationsUseCases.delete(id)
 		await setMessage('Conversation deleted')
 		await router.push('/chats')
 	})
-	const { asyncFn: accept } = useAsyncFn(async (accepted: boolean) => {
+	const {
+		asyncFn: accept,
+		loading: acceptLoading,
+		error: acceptError,
+	} = useAsyncFn(async (accepted: boolean) => {
 		const conv = conversation.value
 		if (!conv || !conv.pending || conv.tutor.id !== authId.value) return
 		await ConversationsUseCases.accept(id, accepted)
@@ -102,7 +119,18 @@ export const useConversation = (id: string) => {
 		await deleteConvFn()
 	}
 
-	return { conversation, end, deleteConv, accept }
+	return {
+		conversation,
+		end,
+		endLoading,
+		endError,
+		deleteConv,
+		deleteConvLoading,
+		deleteConvError,
+		accept,
+		acceptLoading,
+		acceptError,
+	}
 }
 
 export const useCreateConversation = () => {

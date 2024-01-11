@@ -3,8 +3,8 @@ import { ComputedRef, Ref, computed, reactive, watch } from 'vue'
 import { useErrorHandler, useLoadingHandler } from './states'
 
 type UseAsyncFnOptions = {
-	skipLoading?: boolean
-	skipError?: boolean
+	hideLoading?: boolean
+	hideError?: boolean
 }
 export const useAsyncFn = <T extends (...args: any[]) => Promise<any>>(fn: T, opts: Partial<UseAsyncFnOptions> = {}) => {
 	const { setError, error } = useErrorHandler()
@@ -13,16 +13,16 @@ export const useAsyncFn = <T extends (...args: any[]) => Promise<any>>(fn: T, op
 		let result: ReturnType<T> | null = null
 		if (loading.value) return result
 		try {
-			await setError('', opts.skipError)
-			await setLoading(true, opts.skipLoading)
+			await setError('', opts.hideError)
+			await setLoading(true, opts.hideLoading)
 			result = await fn(...args)
 		} catch (e) {
-			await setError(e, opts.skipError)
+			await setError(e, opts.hideError)
 		}
-		await setLoading(false, opts.skipLoading)
+		await setLoading(false, opts.hideLoading)
 		return result
 	}
-	return { asyncFn, error, setError, loading, setLoading }
+	return { asyncFn, error, loading }
 }
 
 const store: Record<

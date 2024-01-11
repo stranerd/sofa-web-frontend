@@ -298,7 +298,7 @@ export default defineComponent({
 		const handleAccountSetup = async () => {
 			if (isDisabled.value) return
 			if (tab.value === 'profile')
-				await Promise.all([typeFactory.isOrganization ? updateType(true) : true, updateProfile(true), updateLocation(true)]).then(
+				await Promise.all([typeFactory.isOrganization ? updateType(true) : true, updateProfile(), updateLocation(true)]).then(
 					(res) => {
 						if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
 					},

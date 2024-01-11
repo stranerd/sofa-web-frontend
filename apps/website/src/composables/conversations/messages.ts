@@ -12,7 +12,7 @@ const store = {} as Record<
 		fetched: Ref<boolean>
 		hasMore: Ref<boolean>
 		listener: ReturnType<typeof useListener>
-	} & ReturnType<typeof useAsyncFn>
+	}
 >
 
 export const useMessages = (conversation: ConversationEntity) => {
@@ -54,30 +54,34 @@ export const useMessages = (conversation: ConversationEntity) => {
 			fetched: ref(false),
 			hasMore: ref(false),
 			listener,
-			...useAsyncFn(async () => {
-				await store[conversationId].setLoading(true)
-				const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
-				store[conversationId].hasMore.value = !!c.pages.next
-				c.results.map((c) =>
-					Logic.addToArray(
-						store[conversationId].messages.value,
-						c,
-						(e) => e.id,
-						(e) => e.createdAt,
-					),
-				)
-				store[conversationId].fetched.value = true
-			}),
 		}
 	}
 
+	const {
+		asyncFn: fetchMessages,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
+		store[conversationId].hasMore.value = !!c.pages.next
+		c.results.map((c) =>
+			Logic.addToArray(
+				store[conversationId].messages.value,
+				c,
+				(e) => e.id,
+				(e) => e.createdAt,
+			),
+		)
+		store[conversationId].fetched.value = true
+	})
+
 	const fetchOlderMessages = async () => {
-		await store[conversationId].asyncFn()
+		fetchMessages()
 		await store[conversationId].listener.restart()
 	}
 
 	onMounted(async () => {
-		if (!store[conversationId].fetched.value && !store[conversationId].loading.value) await store[conversationId].asyncFn()
+		if (!store[conversationId].fetched.value) await fetchMessages()
 		await store[conversationId].listener.start()
 	})
 	onUnmounted(async () => {
@@ -104,8 +108,8 @@ export const useMessages = (conversation: ConversationEntity) => {
 		users,
 		messages: computed(() => [...store[conversationId].messages.value].reverse()),
 		fetched: store[conversationId].fetched,
-		loading: store[conversationId].loading,
-		error: store[conversationId].error,
+		loading,
+		error,
 		hasMore: store[conversationId].hasMore,
 		fetchOlderMessages,
 	}
