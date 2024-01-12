@@ -19,7 +19,7 @@ export const useOrganizationMembers = (id: string) => {
 		members: reactive([]),
 		fetched: ref(false),
 		listener: useListener(() =>
-			MembersUseCases.listenToAllMembers(id, {
+			MembersUseCases.listenToAll(id, {
 				created: (entity) => {
 					Logic.addToArray(
 						store[id].members,
@@ -50,7 +50,7 @@ export const useOrganizationMembers = (id: string) => {
 		error,
 	} = useAsyncFn(
 		async () => {
-			const members = await MembersUseCases.getAllMembers(id)
+			const members = await MembersUseCases.getAll(id)
 			members.results.forEach((m) => {
 				Logic.addToArray(
 					store[id].members,
