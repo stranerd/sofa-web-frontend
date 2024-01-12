@@ -19,7 +19,7 @@
 							}" :left-button="{
 	label: 'Close',
 	bgColor: 'bg-deepGray border border-white',
-	textColor: 'text-green',
+	textColor: 'text-white',
 	click: () => Logic.Common.GoToRoute('/library'),
 }">
 							<template #header>
