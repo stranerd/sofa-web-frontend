@@ -1,7 +1,3 @@
-export interface ReorderQuizInput {
-	questions: string[]
-}
-
 export interface CreateCourseInput {
 	title: string
 	description: string

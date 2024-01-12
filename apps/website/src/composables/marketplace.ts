@@ -1,6 +1,5 @@
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Course, Logic, QueryParams, Quiz, SingleUser } from 'sofa-logic'
-import { toRaw } from 'vue'
 
 export interface ContentDetails {
 	id: string

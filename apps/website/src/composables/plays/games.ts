@@ -94,6 +94,7 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 
 	const alertAndNav = async (route: string, message?: string) => {
 		// if (message) Logic.Common.showAlert({ message, type: 'info' })
+		message
 		await router.replace(route)
 	}
 
