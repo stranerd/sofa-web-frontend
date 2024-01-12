@@ -1,4 +1,3 @@
-import { QueryParams } from '@modules/core'
 import { AnnouncementToModel } from '../../data/models/announcements'
 import { IAnnouncementRepository } from '../irepositories/announcements'
 
@@ -15,10 +14,6 @@ export class AnnouncementsUseCase {
 
 	async find(organizationId: string, classId: string, id: string) {
 		return await this.repository(organizationId, classId).find(id)
-	}
-
-	async get(organizationId: string, classId: string, query: QueryParams) {
-		return await this.repository(organizationId, classId).get(query)
 	}
 
 	async markRead(input: { organizationId: string; classId: string; userId: string }) {

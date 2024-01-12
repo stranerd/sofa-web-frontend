@@ -1,7 +1,7 @@
-import { Listeners, QueryParams } from '@modules/core'
+import { Listeners } from '@modules/core'
+import { MemberEntity } from '../entities/members'
 import { IMemberRepository } from '../irepositories/members'
 import { MemberTypes } from '../types'
-import { MemberEntity } from '../entities/members'
 
 export class MembersUseCase {
 	repository: (organizationId: string) => IMemberRepository
@@ -12,10 +12,6 @@ export class MembersUseCase {
 
 	async find(organizationId: string, email: string) {
 		return await this.repository(organizationId).find(email)
-	}
-
-	async get(organizationId: string, input: QueryParams) {
-		return await this.repository(organizationId).get(input)
 	}
 
 	async add(input: { organizationId: string; emails: string[]; type: MemberTypes }) {
@@ -38,13 +34,13 @@ export class MembersUseCase {
 		return await this.repository(data.organizationId).remove(data)
 	}
 
-	async getAllMembers(organizationId: string) {
+	async getAll(organizationId: string) {
 		return await this.repository(organizationId).get({
 			all: true,
 		})
 	}
 
-	async listenToAllMembers(organizationId: string, listener: Listeners<MemberEntity>) {
+	async listenToAll(organizationId: string, listener: Listeners<MemberEntity>) {
 		return await this.repository(organizationId).listenToMany({ all: true }, listener, () => true)
 	}
 }

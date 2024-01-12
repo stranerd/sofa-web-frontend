@@ -9,8 +9,8 @@ type Keys = Omit<ClassToModel, 'price'> & ClassToModel['price']
 export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 	readonly rules = {
 		title: v.string().min(1),
-		description: v.string(),
-		photo: v.file().nullable(),
+		description: v.string().min(1),
+		photo: v.file().image().nullable(),
 		amount: v.number().gte(0),
 		currency: v.in(Object.values(Currencies)),
 	}
