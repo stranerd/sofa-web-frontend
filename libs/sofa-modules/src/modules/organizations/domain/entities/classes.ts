@@ -33,4 +33,10 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	get picture() {
 		return this.photo?.link ?? '/images/default.png'
 	}
+
+	search(query: string) {
+		return [this.title, this.description, ...this.lessons.map((l) => l.title)].some((text) =>
+			text.toLowerCase().includes(query.toLowerCase()),
+		)
+	}
 }

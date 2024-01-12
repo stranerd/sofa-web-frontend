@@ -68,15 +68,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useCreateClass } from '@/composables/organizations/classes'
 import { ClassFactory } from '@modules/organizations'
 import {
 	SofaButton,
 	SofaFileInput,
-	SofaHeaderText,
 	SofaIcon,
 	SofaImageLoader,
-	SofaModal2,
 	SofaNormalText,
 	SofaNumberField,
 	SofaTextField,

@@ -139,7 +139,8 @@ export default defineComponent({
 				icon: 'share-option',
 				title: 'Share',
 				action: () => {
-					// TODO: implement filtering search
+					// TODO: implement share impl
+					// Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)
 					showMoreOptions.value = false
 				},
 			},
