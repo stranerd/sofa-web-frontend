@@ -69,11 +69,21 @@ export const useMyClasses = () => {
 	)
 
 	const { setMessage } = useSuccessHandler()
-	const { asyncFn: deleteClass } = useAsyncFn(async (classInst: ClassEntity) => {
-		await ClassesUseCases.delete(classInst)
-		showMoreOptions.value = false
-		setMessage('Class deleted successfully')
-	})
+	const { asyncFn: deleteClass } = useAsyncFn(
+		async (classInst: ClassEntity) => {
+			await ClassesUseCases.delete(classInst)
+			showMoreOptions.value = false
+			setMessage('Class deleted successfully')
+		},
+		{
+			pre: async (classInst) =>
+				await Logic.Common.confirm({
+					title: `Delete ${classInst.title}`,
+					sub: 'Are you sure you want to delete this class?',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchClasses()
