@@ -35,3 +35,7 @@ export type ClassLesson = {
 		teachers: string[]
 	}
 }
+
+export type ClassMembers = {
+	students: string[]
+}

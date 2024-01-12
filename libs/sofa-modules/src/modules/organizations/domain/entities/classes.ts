@@ -1,6 +1,6 @@
 import { BaseEntity, Media } from '@modules/core'
 import { ClassFromModel } from '../../data/models/classes'
-import { ClassLesson, EmbeddedUser, Saleable } from '../types'
+import { ClassLesson, ClassMembers, EmbeddedUser, Saleable } from '../types'
 
 export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly id: string
@@ -12,10 +12,24 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly frozen: Saleable['frozen']
 	public readonly price: Saleable['price']
 	public readonly lessons: ClassLesson[]
+	public readonly members: ClassMembers
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, organizationId, title, description, photo, user, lessons, frozen, price, createdAt, updatedAt }: ClassFromModel) {
+	constructor({
+		id,
+		organizationId,
+		title,
+		description,
+		photo,
+		user,
+		lessons,
+		members,
+		frozen,
+		price,
+		createdAt,
+		updatedAt,
+	}: ClassFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId
@@ -26,6 +40,7 @@ export class ClassEntity extends BaseEntity implements Saleable {
 		this.frozen = frozen
 		this.price = price
 		this.lessons = lessons
+		this.members = members
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}

@@ -9,14 +9,14 @@
 				<sofa-normal-text class="!font-bold w-full text-left !line-clamp-1" :content="classObj.title" />
 				<div class="flex items-center gap-2">
 					<sofa-normal-text color="text-grayColor">
-						{{ 0 }}
+						{{ classObj.lessons.length }} {{ pluralize(classObj.lessons.length, 'lesson', 'lessons') }}
 					</sofa-normal-text>
 					<div class="w-[5px] h-[5px] bg-grayColor rounded-[50%]"></div>
 					<sofa-normal-text color="text-grayColor">
-						{{ 0 }}
+						{{ classObj.members.students.length }} {{ pluralize(classObj.members.students.length, 'student', 'students') }}
 					</sofa-normal-text>
 				</div>
-				<sofa-normal-text color="text-grayColor" size="lg" custom-class="font-bold">
+				<sofa-normal-text color="text-grayColor" size="lg" class="font-bold">
 					{{ Logic.Common.formatPrice(classObj.price.amount, classObj.price.currency) }}
 				</sofa-normal-text>
 			</div>
@@ -26,8 +26,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ClassEntity } from '@modules/organizations'
+import { pluralize } from '@utils/commons'
 import { Logic } from 'sofa-logic'
-import { ClassEntity } from 'sofa-modules/src/modules/organizations'
 import { SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
 import { PropType, defineProps } from 'vue'
 
