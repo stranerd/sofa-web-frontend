@@ -1,45 +1,56 @@
 import { Logic } from 'sofa-logic'
 import { Ref, Component as Vue, ref } from 'vue'
 
-const merge = (...args: string[]) => args.join('')
+type Args = Record<string, any>
+type ModalsDef<K extends string = string, C = Vue> = Record<K, { component: C; args?: Args; modalArgs?: Args }>
 
-const spreadModals = <T>(type: string, modals: Record<string, T>) =>
+const merge = (...args: string[]) => args.join('-')
+
+const spreadModals = (type: string, modals: ModalsDef) =>
 	Object.fromEntries(Object.entries(modals).map(([key, val]) => [merge(type, key), { component: val, type }]))
 
-const registerModals = (stack: Ref<string[]>, modals: Record<string, any>) => {
+const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 	const registeredTypes = {}
 
 	const close = async (id: string) => {
 		stack.value = stack.value.filter((comp) => comp !== id)
 	}
 
-	const open = async (id: string, ...args: any[]) => {
+	const open = async (id: string, args: any) => {
 		if (Object.keys(modals).includes(id) && !stack.value.includes(id)) {
 			stack.value.push(id)
 			modals[id].args = args
 		}
 	}
 
-	function register<Key extends string>(type: string, modalObject: Record<Key, Vue>) {
-		type Result = Record<`open${Capitalize<Key>}` | `close${Capitalize<Key>}`, () => void> & { closeAll: () => void }
+	function register<Key extends string, C extends Vue & (abstract new (...args: any) => any)>(
+		type: string,
+		modalObject: ModalsDef<Key, C>,
+	) {
+		type Result = Record<
+			`open${Capitalize<Key>}`,
+			(args: Omit<InstanceType<(typeof modalObject)[Key]['component']>['$props'], 'close'>) => void
+		> &
+			Record<`close${Capitalize<Key>}`, () => void> & { closeAll: () => void }
 
 		if (registeredTypes[type]) return registeredTypes[type] as Result
 
 		Object.assign(modals, spreadModals(type, modalObject))
 
+		const keys = Object.keys(modalObject)
+
 		const helpers = Object.fromEntries(
-			Object.keys(modalObject)
-				.map((key) => Logic.capitalize(key))
+			keys
 				.map((key) => {
 					return [
-						[`open${key}`, async (...args: any[]) => open(merge(type, key), ...args)],
-						[`close${key}`, async () => close(merge(type, key))],
+						[`open${Logic.capitalize(key)}`, (args: Args) => open(merge(type, Logic.capitalize(key)), args)],
+						[`close${Logic.capitalize(key)}`, () => close(merge(type, Logic.capitalize(key)))],
 					]
 				})
-				.reduce((acc, curr) => acc.concat(curr), []),
-		) as Record<`open${Capitalize<Key>}` | `close${Capitalize<Key>}`, () => void>
+				.flat(1),
+		)
 
-		const closeAll = () => Object.keys(modalObject).forEach((key) => helpers[`close${Logic.capitalize(key) as Capitalize<Key>}`]?.())
+		const closeAll = () => keys.forEach((key) => helpers[`close${Logic.capitalize(key)}`]?.())
 
 		registeredTypes[type] = { ...helpers, closeAll }
 		return registeredTypes[type] as Result
@@ -49,12 +60,12 @@ const registerModals = (stack: Ref<string[]>, modals: Record<string, any>) => {
 }
 
 export const useModal = (stack: Ref<string[]>) => {
-	const modals = {} as Record<string, { component: Vue; args: any[] }>
+	const modals: ModalsDef = {}
 	return { stack, modals, ...registerModals(stack, modals) }
 }
 
 export const usePopover = (stack: Ref<string[]>) => {
-	const popovers = {} as Record<string, { component: Vue; args: any[] }>
+	const popovers: ModalsDef = {}
 	return { stack, popovers, ...registerModals(stack, popovers) }
 }
 
