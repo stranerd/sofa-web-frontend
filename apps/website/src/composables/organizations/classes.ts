@@ -97,7 +97,7 @@ export const useCreateClass = (organizationId: string) => {
 	} = useAsyncFn(async () => {
 		const classInst = await ClassesUseCases.add(organizationId, factory)
 		factory.reset()
-		useOrganizationModal().closeCreateClass()
+		useOrganizationModal().createClass.close()
 		await router.push(classInst.pageLink)
 		return true
 	})
@@ -118,7 +118,7 @@ export const useUpdateClass = (organizationId: string, classInst: ClassEntity) =
 		await ClassesUseCases.update(organizationId, classInst.id, factory)
 		setMessage('Class updated successfully')
 		factory.reset()
-		useOrganizationModal().closeEditClass()
+		useOrganizationModal().editClass.close()
 		return true
 	})
 

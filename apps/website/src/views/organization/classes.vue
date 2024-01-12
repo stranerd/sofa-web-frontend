@@ -74,7 +74,7 @@ import { useOrganizationModal } from '@/composables/core/modals'
 import { useMyClasses } from '@/composables/organizations/classes'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
-import { ClassEntity } from 'sofa-modules/src/modules/organizations'
+import { ClassEntity } from '@modules/organizations'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 
@@ -119,9 +119,8 @@ export default defineComponent({
 				icon: 'edit-option',
 				title: 'Edit',
 				action: () => {
-					useOrganizationModal().openEditClass({
+					useOrganizationModal().editClass.open({
 						organizationId: organizationId.value,
-						// @ts-expect-error TODO: type for open modal
 						classInst: selectedClass.value,
 					})
 					showMoreOptions.value = false
@@ -149,7 +148,7 @@ export default defineComponent({
 			},
 		]
 
-		const createClass = () => useOrganizationModal().openCreateClass({ organizationId: organizationId.value })
+		const createClass = () => useOrganizationModal().createClass.open({ organizationId: organizationId.value })
 
 		const showMoreOptions = ref(false)
 		const selectedClass = ref<ClassEntity | null>(null)

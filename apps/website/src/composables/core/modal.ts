@@ -1,8 +1,9 @@
-import { Logic } from 'sofa-logic'
 import { Component, Ref, ref } from 'vue'
 
+type Comp = Component & (abstract new (...args: any) => any)
 type Args = Record<string, any>
-type ModalsDef<K extends string = string, C = Component> = Record<K, { component: C; args?: Args; modalArgs?: Args }>
+type ModalArgs = { closeOnClickOutside?: boolean } & Record<string, any>
+type ModalsDef<K extends string = string, C = Comp> = Record<K, { component: C; args?: Args; modalArgs?: ModalArgs }>
 
 const merge = (...args: string[]) => args.join('-')
 
@@ -16,22 +17,20 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 		stack.value = stack.value.filter((comp) => comp !== id)
 	}
 
-	const open = (id: string, args: any) => {
+	const open = (id: string, args: Args) => {
 		if (Object.keys(modals).includes(id) && !stack.value.includes(id)) {
 			stack.value.push(id)
 			modals[id].args = args
 		}
 	}
 
-	function register<Key extends string, C extends Component & (abstract new (...args: any) => any)>(
-		type: string,
-		modalObject: ModalsDef<Key, C>,
-	) {
-		type Result = Record<
-			`open${Capitalize<Key>}`,
-			(args: Omit<InstanceType<(typeof modalObject)[Key]['component']>['$props'], 'close'>) => void
-		> &
-			Record<`close${Capitalize<Key>}`, () => void> & { closeAll: () => void }
+	function register<M extends ModalsDef<string>>(type: string, modalObject: M) {
+		type Result = {
+			[K in keyof M]: {
+				open: (args: Omit<InstanceType<M[K]['component']>['$props'], 'close'>) => void
+				close: () => void
+			}
+		} & { closeAll: () => void }
 
 		if (registeredTypes[type]) return registeredTypes[type] as Result
 
@@ -40,17 +39,16 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 		const keys = Object.keys(modalObject)
 
 		const helpers = Object.fromEntries(
-			keys
-				.map((key) => {
-					return [
-						[`open${Logic.capitalize(key)}`, (args: Args) => open(merge(type, Logic.capitalize(key)), args)],
-						[`close${Logic.capitalize(key)}`, () => close(merge(type, Logic.capitalize(key)))],
-					]
-				})
-				.flat(1),
+			keys.map((key) => [
+				key,
+				{
+					open: (args: Args) => open(merge(type, key), args),
+					close: () => close(merge(type, key)),
+				},
+			]),
 		)
 
-		const closeAll = () => keys.forEach((key) => helpers[`close${Logic.capitalize(key)}`]?.())
+		const closeAll = () => keys.forEach((key) => helpers[key]?.close?.())
 
 		registeredTypes[type] = { ...helpers, closeAll }
 		return registeredTypes[type] as Result

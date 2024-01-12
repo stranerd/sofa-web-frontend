@@ -1,4 +1,4 @@
-import { QuestionEntity, QuestionsUseCases } from 'sofa-modules/src/modules/study'
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { computed, onMounted, onUnmounted } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
