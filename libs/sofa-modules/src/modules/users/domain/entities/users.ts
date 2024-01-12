@@ -69,6 +69,10 @@ export class UserEntity extends BaseEntity {
 		}
 	}
 
+	get shareLink() {
+		return `${window.location.origin}/profile/${this.id}`
+	}
+
 	checkTaskState(
 		task: 'profile_setup' | 'education_setup' | 'create_quiz' | 'create_course' | 'learn_quiz' | 'quiz_flashcard' | 'quiz_game',
 	) {

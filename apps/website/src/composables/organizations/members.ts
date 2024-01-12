@@ -4,6 +4,7 @@ import { computed, onMounted, onUnmounted, reactive, Ref, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { useOrganizationModal } from '../core/modals'
 
 const store = {} as Record<
 	string,
@@ -96,7 +97,7 @@ export const useManageOrganizationMembers = (id: string) => {
 		await MembersUseCases.add({ organizationId: id, emails, type })
 		await setMessage('Members added')
 		addMembersEmails.value = ''
-		return true
+		useOrganizationModal().addMember.close()
 	})
 
 	const {

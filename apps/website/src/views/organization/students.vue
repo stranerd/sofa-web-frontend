@@ -1,14 +1,7 @@
 <template>
 	<HomeLayout title="Students">
-		<template #default="{ extras }">
-			<MembersList
-				:image="studentsImage"
-				:type="MemberTypes.student"
-				:members="students"
-				:messages="messages"
-				@open-add-modal="extras.openAddModal"
-				@accept-member="extras.acceptMember"
-				@remove-member="extras.removeMember" />
+		<template #default="{ user }">
+			<MembersList :org="user" :image="studentsImage" :type="MemberTypes.student" :members="students" :messages="messages" />
 		</template>
 	</HomeLayout>
 </template>

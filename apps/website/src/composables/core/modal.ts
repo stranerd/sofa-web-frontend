@@ -25,7 +25,7 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 		}
 	}
 
-	function register<M extends ModalsDef<string>>(type: string, modalObject: M) {
+	function register<M extends ModalsDef>(type: string, modalObject: M) {
 		type Result = {
 			[K in keyof M]: {
 				open: (args: Omit<InstanceType<M[K]['component']>['$props'], 'close'>, e?: Event) => void

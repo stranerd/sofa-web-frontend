@@ -1,28 +1,21 @@
 <template>
 	<HomeLayout title="Teachers">
-		<template #default="{ extras }">
-			<MembersList
-				:image="teachersImage"
-				:type="MemberTypes.teacher"
-				:members="teachers"
-				:messages="messages"
-				@open-add-modal="extras.openAddModal"
-				@accept-member="extras.acceptMember"
-				@remove-member="extras.removeMember" />
+		<template #default="{ user }">
+			<MembersList :org="user" :image="teachersImage" :type="MemberTypes.teacher" :members="teachers" :messages="messages" />
 		</template>
 	</HomeLayout>
 </template>
 
 <script lang="ts">
-import MembersList from '@/components/organizations/members/MembersList.vue'
+import teachersImage from '@/assets/images/class-teachers.png'
 import HomeLayout from '@/components/home/HomeLayout.vue'
+import MembersList from '@/components/organizations/members/MembersList.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationMembers } from '@/composables/organizations/members'
 import { generateMiddlewares } from '@/middlewares'
 import { MemberTypes } from '@modules/organizations'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import teachersImage from '@/assets/images/class-teachers.png'
 
 export default defineComponent({
 	name: 'OrganizationTeachersPage',

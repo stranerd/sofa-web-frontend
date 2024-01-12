@@ -8,7 +8,7 @@
 			</div>
 
 			<div class="w-full flex flex-col gap-3 px-4 h-full overflow-y-auto">
-				<slot :user="user!" :extras="extras" />
+				<slot :user="user!" />
 			</div>
 		</div>
 	</sub-page-layout>
@@ -68,7 +68,7 @@
 
 		<template #middle-session>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :user="user!" :extras="extras" />
+				<slot :user="user!" />
 			</div>
 		</template>
 
@@ -79,7 +79,7 @@
 					<div class="flex flex-col gap-1">
 						<SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
 						<SofaNormalText :content="userAi.tagline" />
-						<SofaNormalText color="text-primaryPink" as="a" content="Customize" @click="showCustomizeAi = true" />
+						<SofaNormalText color="text-primaryPink" as="a" content="Customize" @click="customizeAi" />
 					</div>
 				</div>
 
@@ -166,56 +166,13 @@
 			</div>
 		</template>
 	</dashboard-layout>
-	<CustomizeBot v-if="showCustomizeAi" :close="() => (showCustomizeAi = false)" />
-	<SofaModal v-if="addModalType">
-		<div class="flex flex-col p-4 gap-4 md:p-6 md:gap-6 justify-between">
-			<div class="flex gap-2 justify-between items-center">
-				<SofaHeaderText :content="addModalType === MemberTypes.teacher ? 'Add teachers' : 'Add students'" />
-				<SofaIcon class="h-[19px]" name="circle-close" @click="addModalType = null" />
-			</div>
-			<div v-if="addModalType === MemberTypes.student" class="bg-primaryPurple text-white flex items-center gap-2 p-4 rounded-custom">
-				<SofaIcon class="h-[16px] fill-current" name="info" />
-				<SofaNormalText color="text-inherit" content="Students added get your classes, courses, and quizzes for FREE" />
-				<SofaIcon class="h-[16px] fill-current ml-auto" name="circle-close" />
-			</div>
-			<div class="flex gap-2 items-center">
-				<SofaTextField
-					v-model="addMembersEmails"
-					custom-class="!bg-lightGray"
-					name="Emails"
-					placeholder="Email, comma seperated"
-					border-color="border-transparent" />
-				<SofaButton
-					custom-class="font-semibold"
-					padding="py-3 px-6"
-					bg-color="bg-primaryBlue"
-					text-color="text-white"
-					@click="addMembers(addModalType).then((succeeded) => (succeeded ? (addModalType = null) : null))">
-					Invite
-				</SofaButton>
-			</div>
-			<div class="bg-darkLightGray h-[1px] w-full" />
-			<div class="flex gap-4 justify-between items-center">
-				<a class="text-primaryBlue flex items-center gap-1" @click="copy">
-					<SofaIcon class="w-[16px] fill-current" name="copy" />
-					<SofaNormalText color="text-inherit" content="Copy" />
-				</a>
-				<a class="text-primaryBlue flex items-center gap-1" @click="share">
-					<SofaIcon class="w-[16px] fill-current" name="share" />
-					<SofaNormalText color="text-inherit" content="Share" />
-				</a>
-			</div>
-		</div>
-	</SofaModal>
 </template>
 
 <script setup lang="ts">
 import ChatList from '@/components/conversations/ChatList.vue'
-import CustomizeBot from '@/components/onboarding/CustomizeBot.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@/composables/conversations/conversations'
-import { useManageOrganizationMembers } from '@/composables/organizations/members'
-import { showCustomizeAi } from '@/composables/users/profile'
+import { useOrganizationModal, useUserModal } from '@/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import {
@@ -225,11 +182,10 @@ import {
 	SofaEmptyState,
 	SofaHeaderText,
 	SofaIcon,
-	SofaModal2 as SofaModal,
 	SofaNormalText,
 	SofaTextField,
 } from 'sofa-ui-components'
-import { computed, defineProps, ref } from 'vue'
+import { computed, defineProps } from 'vue'
 import { useMeta } from 'vue-meta'
 
 const props = defineProps({
@@ -250,40 +206,30 @@ useMeta(
 	})),
 )
 
-const rightCommands = [
-	{ label: 'Add a student', action: () => extras.value.openAddModal(MemberTypes.student) },
-	{ label: 'Add a teacher', action: () => extras.value.openAddModal(MemberTypes.teacher) },
-	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
-	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
-	//{ label: 'Create a class', action: () => Logic.Common.GoToRoute('/organzation/classes/create') },
-]
-
 const { id, user, userAi, userType } = useAuth()
-const { addMembersEmails, addMembers, removeMember, acceptMember } = useManageOrganizationMembers(id.value)
 const { conversations } = useConversationsList()
 const { factory, createConversation } = useCreateConversation()
 
+const customizeAi = () => useUserModal().customizeAi.open({})
+
+const rightCommands = computed(() => [
+	{ label: 'Add a student', action: () => useOrganizationModal().addMember.open({ type: MemberTypes.student, org: user.value! }) },
+	{ label: 'Add a teacher', action: () => useOrganizationModal().addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
+	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
+	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
+	...(userType.value.isOrg
+		? [{ label: 'Create a class', action: () => useOrganizationModal().createClass.open({ organizationId: id.value }) }]
+		: []),
+])
+
 const options = computed(() => [
 	{ title: 'Dashboard', icon: 'dashboard', route: '/' },
-	{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
 	...(userType.value.isOrg
 		? [
+				{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
 				{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
 				{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
 			]
 		: []),
 ])
-
-const addModalType = ref<MemberTypes | null>(null)
-
-const extras = computed(() => ({
-	isAdmin: user.value?.id === id.value,
-	openAddModal: (type: MemberTypes) => (addModalType.value = type),
-	removeMember,
-	acceptMember,
-}))
-
-const shareUrl = `${window.location.origin}/profile/${id.value}`
-const share = async () => await Logic.Common.share('Join organization', `Join to become a member of ${user.value?.orgName ?? ''}`, shareUrl)
-const copy = () => Logic.Common.copy(shareUrl)
 </script>

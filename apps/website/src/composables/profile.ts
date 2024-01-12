@@ -1,7 +1,5 @@
 import { CreateTutorRequestForm, Logic } from 'sofa-logic'
-import { reactive, ref } from 'vue'
-
-const showCustomizeAI = ref(false)
+import { reactive } from 'vue'
 
 const tutorRequestForm = reactive<CreateTutorRequestForm>({
 	qualification: [],
@@ -15,27 +13,6 @@ const updateVerificationForm = reactive({
 		courses: [],
 	},
 })
-
-const accountSetupOptions = reactive([
-	{
-		name: 'Profile',
-		status: 'active',
-		id: 'profile',
-		show: true,
-	},
-	{
-		name: 'Education',
-		status: 'inactive',
-		id: 'education',
-		show: true,
-	},
-	{
-		name: 'Phone',
-		status: 'inactive',
-		id: 'phone',
-		show: true,
-	},
-])
 
 const submitVerification = async (useLoader = true) => {
 	Logic.Users.CreateVerificationForm = {
@@ -84,12 +61,4 @@ const createTutorRequest = () => {
 	}
 }
 
-export {
-	accountSetupOptions,
-	autoCreateVerification,
-	createTutorRequest,
-	showCustomizeAI,
-	submitVerification,
-	tutorRequestForm,
-	updateVerificationForm,
-}
+export { autoCreateVerification, createTutorRequest, submitVerification, tutorRequestForm, updateVerificationForm }
