@@ -14,8 +14,8 @@ export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Parti
 	const key = opts.key ?? Logic.getRandomValue()
 	asyncStore[key] ??= { ...useErrorHandler(), ...useLoadingHandler() }
 	const { setError, error, setLoading, loading } = asyncStore[key]
-	const asyncFn = async (...args: Parameters<T>) => {
-		let result: ReturnType<T> | null = null
+	const asyncFn = async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>> | null> => {
+		let result: Awaited<ReturnType<T> | null> = null
 		if (loading.value) return result
 		if (opts.pre && !(await opts.pre(...args))) return result
 		try {
