@@ -26,7 +26,7 @@
 		<div v-else class="flex flex-col gap-4">
 			<div class="flex items-center justify-between">
 				<div
-					class="bg-white w-[60%] mdlg:w-[40%] px-4 py-3 rounded-[24px] flex flex-row items-center gap-2 border border-darkLightGray">
+					class="bg-white w-[60%] mdlg:w-[50%] px-4 py-3 rounded-[24px] flex flex-row items-center gap-2 border border-darkLightGray">
 					<sofa-icon :custom-class="'h-[15px]'" :name="'search'"></sofa-icon>
 					<sofa-text-field
 						v-model="searchQuery"
@@ -42,7 +42,7 @@
 					Create a class
 				</SofaButton>
 			</div>
-			<ClassCard v-for="cl in classes" :key="cl.id" :class-obj="cl">
+			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :class-obj="cl">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 					<sofa-icon name="more-options-horizontal" class="h-[6px]" @click.stop="showMoreOptionHandler(cl)" />
 				</div>
@@ -92,7 +92,8 @@ import {
 } from '@/composables/organizations/classes'
 import { generateMiddlewares } from '@/middlewares'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
@@ -124,7 +125,15 @@ export default defineComponent({
 
 		const { id } = useAuth()
 		const { classes, deleteClass } = useMyClasses()
-		const searchQuery = ref('') // TODO: implement filtering search
+		const searchQuery = ref('')
+
+		const filteredClassess = computed(()=>{
+			if(searchQuery.value){
+				return classes.value.filter((c) => c.search(searchQuery.value) )
+			} else {
+				return classes.value
+			}
+		})
 
 		const moreOptions = [
 			{
@@ -139,8 +148,8 @@ export default defineComponent({
 				icon: 'share-option',
 				title: 'Share',
 				action: () => {
-					// TODO: implement share impl
-					// Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)
+					const baseUrl = window.location.href
+					Logic.Common.share('Join class on SOFA', `Join ${selectedClass.value.title} class on SOFA`, `${baseUrl}/${selectedClass.value.id}`)
 					showMoreOptions.value = false
 				},
 			},
@@ -164,6 +173,7 @@ export default defineComponent({
 			showMoreOptionHandler,
 			showMoreOptions,
 			moreOptions,
+			filteredClassess
 		}
 	},
 })
