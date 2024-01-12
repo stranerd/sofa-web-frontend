@@ -3,7 +3,7 @@
 		<div class="flex flex-row items-center gap-2 mdlg:gap-4 w-full">
 			<sofa-image-loader
 				:photo-url="classObj.picture"
-				custom-class="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor  rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] relative">
+				custom-class="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
 			</sofa-image-loader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<sofa-normal-text :custom-class="'!font-bold w-full text-left !line-clamp-1'">{{ classObj.title }}</sofa-normal-text>

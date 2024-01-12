@@ -15,8 +15,6 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	static defaultPhotoURL = '/images/default.png'
-
 	constructor({ id, organizationId, title, description, photo, user, lessons, frozen, price, createdAt, updatedAt }: ClassFromModel) {
 		super()
 		this.id = id
