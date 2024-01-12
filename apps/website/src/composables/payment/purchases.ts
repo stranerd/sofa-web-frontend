@@ -45,21 +45,24 @@ export const useMyPurchases = () => {
 		asyncFn: fetchPurchases,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const purchases = await Logic.Payment.GetMyPurchases({
-			where: [{ field: 'userId', value: id.value }],
-			all: true,
-		})
-		purchases.results.forEach((r) =>
-			Logic.addToArray(
-				store.purchases,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	})
+	} = useAsyncFn(
+		async () => {
+			const purchases = await Logic.Payment.GetMyPurchases({
+				where: [{ field: 'userId', value: id.value }],
+				all: true,
+			})
+			purchases.results.forEach((r) =>
+				Logic.addToArray(
+					store.purchases,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'payments/purchases/mine' },
+	)
 
 	onMounted(async () => {
 		/* if (!store.fetched.value) */ await fetchPurchases()

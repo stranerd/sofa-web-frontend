@@ -1,4 +1,4 @@
-import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '@/composables/core/states'
+import { useSuccessHandler } from '@/composables/core/states'
 import { InstitutionEntity, InstitutionFactory, InstitutionsUseCases } from '@modules/school'
 import { addToArray } from '@utils/commons'
 import { Logic } from 'sofa-logic'
@@ -15,19 +15,22 @@ const {
 	asyncFn: fetchInstitutions,
 	loading,
 	error,
-} = useAsyncFn(async () => {
-	const institutions = await InstitutionsUseCases.get()
-	institutions.results.forEach((i) =>
-		addToArray(
-			store.institutions.value,
-			i,
-			(e) => e.id,
-			(e) => e.title,
-			true,
-		),
-	)
-	store.fetched.value = true
-})
+} = useAsyncFn(
+	async () => {
+		const institutions = await InstitutionsUseCases.get()
+		institutions.results.forEach((i) =>
+			addToArray(
+				store.institutions.value,
+				i,
+				(e) => e.id,
+				(e) => e.title,
+				true,
+			),
+		)
+		store.fetched.value = true
+	},
+	{ key: 'school/institutions/all' },
+)
 
 export const useInstitutionList = (skipHooks = false) => {
 	const schools = computed(() => store.institutions.value.filter((i) => !i.isGateway))
@@ -119,11 +122,13 @@ export const useEditInstitution = () => {
 }
 
 export const useDeleteInstitution = (institutionId: string) => {
-	const { loading, setLoading } = useLoadingHandler()
-	const { error, setError } = useErrorHandler()
 	const { setMessage } = useSuccessHandler()
 
-	const { asyncFn: deleteInstitution } = useAsyncFn(
+	const {
+		asyncFn: deleteInstitution,
+		loading,
+		error,
+	} = useAsyncFn(
 		async () => {
 			await InstitutionsUseCases.delete(institutionId)
 			store.institutions.value = store.institutions.value.filter((s) => s.id !== institutionId)

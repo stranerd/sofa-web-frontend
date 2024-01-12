@@ -16,13 +16,22 @@ export type ScheduleTime = {
 	end: number
 }
 
-export type LessonMembers = {
-	students: string[]
-	teachers: string[]
-}
-
 export enum ScheduleStatus {
 	created = 'created',
 	started = 'started',
 	ended = 'ended',
+}
+
+export type LessonToModel = {
+	title: string
+	teachers: string[]
+}
+
+export type ClassLesson = {
+	id: string
+	title: string
+	users: {
+		students: string[]
+		teachers: string[]
+	}
 }

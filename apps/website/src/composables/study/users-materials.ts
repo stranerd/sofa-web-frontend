@@ -1,7 +1,7 @@
+import { UserEntity, UsersUseCases } from '@modules/users'
 import { Course, Logic, QueryParams, Quiz } from 'sofa-logic'
 import { Ref, onMounted, reactive, ref } from 'vue'
-import { UserEntity, UsersUseCases } from '@modules/users'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { useAsyncFn } from '../core/hooks'
 
 const store = {} as Record<
 	string,
@@ -10,8 +10,7 @@ const store = {} as Record<
 		quizzes: Quiz[]
 		courses: Course[]
 		fetched: Ref<boolean>
-	} & ReturnType<typeof useErrorHandler> &
-		ReturnType<typeof useLoadingHandler>
+	}
 >
 
 export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> = {}) => {
@@ -20,14 +19,14 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 		quizzes: reactive([]),
 		courses: reactive([]),
 		fetched: ref(false),
-		...useErrorHandler(),
-		...useLoadingHandler(),
 	}
 
-	const fetchUserAndMaterials = async () => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
+	const {
+		asyncFn: fetchUserAndMaterials,
+		loading,
+		error,
+	} = useAsyncFn(
+		async () => {
 			if (!skip.user) store[id].user.value = await UsersUseCases.find(id)
 			const query: QueryParams = {
 				where: [
@@ -58,15 +57,13 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 				),
 			)
 			store[id].fetched.value = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		},
+		{ key: `study/user-materials/${id}` },
+	)
 
 	onMounted(async () => {
-		if (!store[id].fetched.value && !store[id].loading.value) await fetchUserAndMaterials()
+		if (!store[id].fetched.value) await fetchUserAndMaterials()
 	})
 
-	return { ...store[id] }
+	return { ...store[id], loading, error }
 }

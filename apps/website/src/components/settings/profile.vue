@@ -98,7 +98,7 @@ watch(factory.values, () => {
 
 watch(socialsFactory.values, () => {
 	Logic.Common.debounce(() => {
-		updateSocials(true)
+		updateSocials()
 	}, 1000)
 })
 </script>

@@ -6,7 +6,7 @@ export interface IScheduleRepository {
 	add: (data: ScheduleToModel) => Promise<ScheduleEntity>
 	get: (condition: QueryParams) => Promise<QueryResults<ScheduleEntity>>
 	find: (id: string) => Promise<ScheduleEntity | null>
-	update: (id: string, data: ScheduleToModel) => Promise<ScheduleEntity | null>
+	update: (id: string, data: ScheduleToModel) => Promise<ScheduleEntity>
 	delete: (id: string) => Promise<boolean>
 	start: (id: string) => Promise<boolean>
 	end: (id: string) => Promise<boolean>

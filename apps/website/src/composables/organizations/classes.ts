@@ -85,18 +85,21 @@ export const useMyClasses = () => {
 		asyncFn: fetchClasses,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
-		const classes = await ClassesUseCases.getAll(id.value)
-		classes.results.forEach((r) =>
-			Logic.addToArray(
-				store.classes.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-		store.fetched.value = true
-	}, {})
+	} = useAsyncFn(
+		async () => {
+			const classes = await ClassesUseCases.getAll(id.value)
+			classes.results.forEach((r) =>
+				Logic.addToArray(
+					store.classes.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+			store.fetched.value = true
+		},
+		{ key: 'organizations/classes/mine' },
+	)
 
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchClasses()

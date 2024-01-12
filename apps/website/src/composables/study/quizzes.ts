@@ -1,14 +1,15 @@
+import { InteractionEntities, ViewsUseCases } from '@modules/interactions'
 import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
+import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useErrorHandler, useLoadingHandler, useSuccessHandler } from '../core/states'
+import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from './study'
-import { InteractionEntities, ViewsUseCases } from '@modules/interactions'
 
 const store = {} as Record<
 	string,
@@ -16,9 +17,7 @@ const store = {} as Record<
 		quiz: Ref<QuizEntity | null>
 		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
-	} & ReturnType<typeof useErrorHandler> &
-		ReturnType<typeof useLoadingHandler> &
-		ReturnType<typeof useSuccessHandler>
+	} & ReturnType<typeof useSuccessHandler>
 >
 
 export const useQuiz = (id: string, skip: { questions: boolean; members: boolean }) => {
@@ -39,8 +38,6 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 					},
 				}),
 		),
-		...useErrorHandler(),
-		...useLoadingHandler(),
 		...useSuccessHandler(),
 	}
 
@@ -68,181 +65,113 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		!skip.questions,
 	)
 
-	const fetchQuiz = async () => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
+	const { asyncFn: fetchQuiz } = useAsyncFn(
+		async () => {
 			store[id].quiz.value = await QuizzesUseCases.find(id)
 			if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
 			store[id].fetched.value = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		},
+		{ key: `study/quizzes/${id}` },
+	)
 
-	const updateQuiz = async (factory: QuizFactory) => {
-		let succeeded = false
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await QuizzesUseCases.update(id, factory)
-			await store[id].setMessage('Quiz saved')
-			succeeded = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-		return succeeded
-	}
+	const { asyncFn: updateQuiz } = useAsyncFn(async (factory: QuizFactory) => {
+		await QuizzesUseCases.update(id, factory)
+		await store[id].setMessage('Quiz saved')
+		return true
+	})
 
-	const publishQuiz = async () => {
+	const { asyncFn: publishQuiz } = useAsyncFn(async () => {
 		if (store[id].quiz.value?.status === 'published') return true
-		let succeeded = false
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await QuizzesUseCases.publish(id)
-			await store[id].setMessage('Quiz published')
-			succeeded = true
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-		return succeeded
-	}
+		await QuizzesUseCases.publish(id)
+		await store[id].setMessage('Quiz published')
+		return true
+	})
 
-	const reorderQuestions = async (questions: string[]) => {
+	const { asyncFn: reorderQuestions } = useAsyncFn(async (questions: string[]) => {
 		if (store[id].quiz.value?.questions.length !== questions.length) return
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			store[id].quiz.value = await QuizzesUseCases.reorder(id, questions)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		store[id].quiz.value = await QuizzesUseCases.reorder(id, questions)
+	})
 
-	const deleteQuestion = async (questionId: string) => {
-		if (store[id].quiz.value?.isPublished)
-			return Logic.Common.showAlert({
-				message: 'You cannot delete questions from published quiz',
-				type: 'warning',
-			})
-
-		const confirmed = await Logic.Common.confirm({
-			title: 'Are you sure?',
-			sub: "This action is permanent. You won't be able to undo this.",
-			right: { label: 'Yes, delete' },
-		})
-		if (!confirmed) return
-
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
+	const { asyncFn: deleteQuestion } = useAsyncFn(
+		async (questionId: string) => {
 			await QuestionsUseCases.delete(id, questionId)
 			await store[id].setMessage('Question has been deleted.')
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		},
+		{
+			pre: async () => {
+				if (store[id].quiz.value?.isPublished) {
+					Logic.Common.showAlert({
+						message: 'You cannot delete questions from published quiz',
+						type: 'warning',
+					})
+					return false
+				}
 
-	const addQuestion = async (type: QuestionTypes) => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			const data = QuestionEntity.getTemplate(type)
-			await QuestionsUseCases.add(id, data)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+				return await Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: "This action is permanent. You won't be able to undo this.",
+					right: { label: 'Yes, delete' },
+				})
+			},
+		},
+	)
 
-	const saveQuestion = async (questionId: string, factory: QuestionFactory) => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await QuestionsUseCases.update(id, questionId, factory)
-			await store[id].setMessage('Question saved')
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: addQuestion } = useAsyncFn(async (type: QuestionTypes) => {
+		const data = QuestionEntity.getTemplate(type)
+		await QuestionsUseCases.add(id, data)
+	})
 
-	const duplicateQuestion = async (question: QuestionEntity) => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await QuestionsUseCases.add(id, question)
-			await store[id].setMessage('Question duplicated')
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: saveQuestion } = useAsyncFn(async (questionId: string, factory: QuestionFactory) => {
+		await QuestionsUseCases.update(id, questionId, factory)
+		await store[id].setMessage('Question saved')
+	})
 
-	const deleteQuiz = async () => {
-		const confirmed = await Logic.Common.confirm({
-			title: 'Are you sure?',
-			sub: 'This action is permanent. You will lose all saved questions in this quiz.',
-			right: { label: 'Yes, delete' },
-		})
-		if (!confirmed) return
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
+	const { asyncFn: duplicateQuestion } = useAsyncFn(async (question: QuestionEntity) => {
+		await QuestionsUseCases.add(id, question)
+		await store[id].setMessage('Question duplicated')
+	})
+
+	const { asyncFn: deleteQuiz } = useAsyncFn(
+		async () => {
 			await QuizzesUseCases.delete(id)
 			await router.push('/library')
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		},
+		{
+			pre: async () =>
+				await Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: 'This action is permanent. You will lose all saved questions in this quiz.',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
 
-	const requestAccess = async (add: boolean) => {
-		if (store[id].quiz.value?.user.id === authId.value) return
-		if (store[id].quiz.value?.access.members.includes(authId.value)) return
-		if (add && store[id].quiz.value?.access.requests.includes(authId.value)) return
-		if (!add && !store[id].quiz.value?.access.requests.includes(authId.value)) return
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
+	const { asyncFn: requestAccess } = useAsyncFn(
+		async (add: boolean) => {
 			await QuizzesUseCases.requestAccess(id, add)
 			await store[id].setMessage('Request sent')
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+		},
+		{
+			pre: async (add) => {
+				if (store[id].quiz.value?.user.id === authId.value) return false
+				if (store[id].quiz.value?.access.members.includes(authId.value)) return false
+				if (add && store[id].quiz.value?.access.requests.includes(authId.value)) return false
+				if (!add && !store[id].quiz.value?.access.requests.includes(authId.value)) return false
+				return true
+			},
+		},
+	)
 
-	const grantAccess = async (userId: string, grant: boolean) => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await QuizzesUseCases.grantAccess(id, userId, grant)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: grantAccess } = useAsyncFn(async (userId: string, grant: boolean) => {
+		await QuizzesUseCases.grantAccess(id, userId, grant)
+	})
 
-	const manageMembers = async (userIds: string[], grant: boolean) => {
-		await store[id].setError('')
-		try {
-			await store[id].setLoading(true)
-			await QuizzesUseCases.addMembers(id, userIds, grant)
-		} catch (e) {
-			await store[id].setError(e)
-		}
-		await store[id].setLoading(false)
-	}
+	const { asyncFn: manageMembers } = useAsyncFn(async (userIds: string[], grant: boolean) => {
+		await QuizzesUseCases.addMembers(id, userIds, grant)
+	})
 
 	onMounted(async () => {
-		if (!store[id].fetched.value && !store[id].loading.value) await fetchQuiz()
+		if (!store[id].fetched.value) await fetchQuiz()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {
@@ -270,28 +199,20 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 }
 
 export const useCreateQuiz = () => {
-	const { error, setError } = useErrorHandler()
-	const { loading, setLoading } = useLoadingHandler()
-
-	const createQuiz = async () => {
-		await setError('')
-		try {
-			await setLoading(true)
-			const factory = new QuizFactory()
-			const quiz = await QuizzesUseCases.add(factory)
-			await Promise.all(
-				[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
-					QuestionsUseCases.add(quiz.id, q),
-				),
-			).catch()
-			await setLoading(false)
-			return quiz.id
-		} catch (e) {
-			await setLoading(false)
-			await setError(e)
-			return null
-		}
-	}
+	const {
+		asyncFn: createQuiz,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const factory = new QuizFactory()
+		const quiz = await QuizzesUseCases.add(factory)
+		await Promise.all(
+			[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
+				QuestionsUseCases.add(quiz.id, q),
+			),
+		).catch()
+		return quiz.id
+	})
 
 	return { createQuiz, error, loading }
 }
