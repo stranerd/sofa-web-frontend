@@ -34,34 +34,7 @@
 					Create a class
 				</SofaButton>
 			</div>
-			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :class-obj="cl">
-				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon name="more-options-horizontal" class="h-[6px]" @click.stop="showMoreOptionHandler(cl)" />
-				</div>
-			</ClassCard>
-			<!-- Options modal -->
-			<sofa-modal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
-				<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
-					<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
-						<div
-							class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden py-2 px-4 border-lightGray border-b">
-							<sofa-normal-text :custom-class="'!font-bold !text-base'">Options</sofa-normal-text>
-							<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
-						</div>
-
-						<a
-							v-for="item in moreOptions"
-							:key="item.title"
-							class="w-full flex items-center gap-2 p-4"
-							@click.stop.prevent="item.action()">
-							<sofa-icon :name="item.icon" :class="item.icon === 'delete-quiz' ? 'fill-primaryRed h-[18px]' : 'h-[15px]'" />
-							<sofa-normal-text :custom-class="item.icon === 'delete-quiz' ? '!text-primaryRed' : ''">
-								{{ item.title }}
-							</sofa-normal-text>
-						</a>
-					</div>
-				</div>
-			</sofa-modal>
+			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :class-obj="cl" />
 		</div>
 	</HomeLayout>
 </template>
@@ -73,9 +46,7 @@ import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationModal } from '@/composables/core/modals'
 import { useMyClasses } from '@/composables/organizations/classes'
 import { generateMiddlewares } from '@/middlewares'
-import { Logic } from 'sofa-logic'
-import { ClassEntity } from '@modules/organizations'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
+import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -88,7 +59,6 @@ export default defineComponent({
 		SofaIcon,
 		ClassCard,
 		SofaTextField,
-		SofaModal,
 	},
 	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
@@ -104,9 +74,8 @@ export default defineComponent({
 			],
 		}
 
-		const { id } = useAuth()
-		const organizationId = id
-		const { classes, deleteClass } = useMyClasses()
+		const { id: organizationId } = useAuth()
+		const { classes } = useMyClasses()
 		const searchQuery = ref('')
 
 		const filteredClassess = computed(() => {
@@ -114,58 +83,13 @@ export default defineComponent({
 			else return classes.value
 		})
 
-		const moreOptions = [
-			{
-				icon: 'edit-option',
-				title: 'Edit',
-				action: () => {
-					useOrganizationModal().editClass.open({
-						organizationId: organizationId.value,
-						classInst: selectedClass.value,
-					})
-					showMoreOptions.value = false
-				},
-			},
-			{
-				icon: 'share-option',
-				title: 'Share',
-				action: () => {
-					Logic.Common.share(
-						`Join ${selectedClass.value.title} class on SOFA`,
-						selectedClass.value.description,
-						selectedClass.value.shareLink,
-					)
-					showMoreOptions.value = false
-				},
-			},
-			{
-				icon: 'delete-quiz',
-				title: 'Delete',
-				action: async () => {
-					await deleteClass(selectedClass.value)
-					showMoreOptions.value = false
-				},
-			},
-		]
-
 		const createClass = () => useOrganizationModal().createClass.open({ organizationId: organizationId.value })
 
-		const showMoreOptions = ref(false)
-		const selectedClass = ref<ClassEntity | null>(null)
-		const showMoreOptionHandler = (data: ClassEntity) => {
-			showMoreOptions.value = true
-			selectedClass.value = data
-		}
-
 		return {
-			id,
 			emptyClassContent,
 			classes,
-			searchQuery,
-			showMoreOptionHandler,
-			showMoreOptions,
-			moreOptions,
 			filteredClassess,
+			searchQuery,
 			createClass,
 		}
 	},

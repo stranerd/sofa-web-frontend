@@ -60,22 +60,6 @@ export const useMyClasses = () => {
 		{ key: 'organizations/classes/mine' },
 	)
 
-	const { setMessage } = useSuccessHandler()
-	const { asyncFn: deleteClass } = useAsyncFn(
-		async (classInst: ClassEntity) => {
-			await ClassesUseCases.delete(classInst)
-			setMessage('Class deleted successfully')
-		},
-		{
-			pre: async (classInst) =>
-				await Logic.Common.confirm({
-					title: `Delete ${classInst.title}`,
-					sub: 'Are you sure you want to delete this class?',
-					right: { label: 'Yes, delete' },
-				}),
-		},
-	)
-
 	onMounted(async () => {
 		if (!store.fetched.value) await fetchClasses()
 		await store.listener.start()
@@ -84,7 +68,7 @@ export const useMyClasses = () => {
 		await store.listener.close()
 	})
 
-	return { ...store, loading, error, deleteClass }
+	return { ...store, loading, error }
 }
 
 export const useCreateClass = (organizationId: string) => {
@@ -123,4 +107,28 @@ export const useUpdateClass = (organizationId: string, classInst: ClassEntity) =
 	})
 
 	return { error, loading, factory, updateClass }
+}
+
+export const useDeleteClass = () => {
+	const { setMessage } = useSuccessHandler()
+	const {
+		asyncFn: deleteClass,
+		loading,
+		error,
+	} = useAsyncFn(
+		async (classInst: ClassEntity) => {
+			await ClassesUseCases.delete(classInst)
+			setMessage('Class deleted successfully')
+		},
+		{
+			pre: async (classInst) =>
+				await Logic.Common.confirm({
+					title: `Delete ${classInst.title}`,
+					sub: 'Are you sure you want to delete this class?',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
+
+	return { loading, error, deleteClass }
 }

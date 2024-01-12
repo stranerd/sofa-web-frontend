@@ -20,22 +20,23 @@
 					{{ Logic.Common.formatPrice(classObj.price.amount, classObj.price.currency) }}
 				</sofa-normal-text>
 			</div>
-			<slot />
+
+			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
+				<sofa-icon name="more-options-horizontal" class="h-[6px]" @click.stop="moreOptionsHandler" />
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import { useOrganizationPopover } from '@/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
 import { pluralize } from '@utils/commons'
 import { Logic } from 'sofa-logic'
-import { SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
-import { PropType, defineProps } from 'vue'
+import { SofaImageLoader, SofaNormalText, SofaIcon } from 'sofa-ui-components'
+import { defineProps } from 'vue'
 
-defineProps({
-	classObj: {
-		type: Object as PropType<ClassEntity>,
-		required: true,
-	},
-})
+const props = defineProps<{ classObj: ClassEntity }>()
+
+const moreOptionsHandler = () => useOrganizationPopover().classCardMoreOptions.open({ classInst: props.classObj })
 </script>
