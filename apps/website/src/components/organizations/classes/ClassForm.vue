@@ -49,7 +49,7 @@
 			<SofaButton
 				:bg-color="'bg-grayColor'"
 				:text-color="'text-white'"
-				:padding="'py-4 px-6'"
+				:padding="'py-3 px-6'"
 				custom-class="hidden mdlg:block"
 				@click="cancel">
 				Cancel
@@ -58,7 +58,7 @@
 				:bg-color="'bg-primaryBlue'"
 				type="submit"
 				:text-color="'text-white'"
-				:padding="'py-4 px-6'"
+				:padding="'py-3 px-6'"
 				:disabled="!factory.valid"
 				custom-class="w-full mdlg:w-auto">
 				Save

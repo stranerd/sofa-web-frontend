@@ -1,17 +1,12 @@
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import { onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useSuccessHandler } from '../core/states'
-import { useRouter } from 'vue-router'
 import { useOrganizationModal } from '../core/modals'
-
-export const selectedClass = ref<ClassEntity | null>(null)
-export const showMoreOptions = ref(false)
-export const showCreateClassModal = ref(false)
-export const showEditClassModal = ref(false)
+import { useSuccessHandler } from '../core/states'
 
 const store = {
 	classes: ref<ClassEntity[]>([]),
@@ -42,11 +37,6 @@ const store = {
 	}),
 }
 
-export const showMoreOptionHandler = (data: ClassEntity) => {
-	showMoreOptions.value = true
-	selectedClass.value = data
-}
-
 export const useMyClasses = () => {
 	const { id } = useAuth()
 
@@ -74,7 +64,6 @@ export const useMyClasses = () => {
 	const { asyncFn: deleteClass } = useAsyncFn(
 		async (classInst: ClassEntity) => {
 			await ClassesUseCases.delete(classInst)
-			showMoreOptions.value = false
 			setMessage('Class deleted successfully')
 		},
 		{

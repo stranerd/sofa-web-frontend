@@ -13,11 +13,7 @@
 							<SofaNormalText :content="content" color="text-grayColor" />
 						</div>
 					</div>
-					<SofaButton
-						:bg-color="'bg-primaryBlue'"
-						:text-color="'text-white'"
-						:padding="'py-4 px-6'"
-						@click="showCreateClassModal = true">
+					<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-4 px-6'" @click="createClass">
 						Create a class
 					</SofaButton>
 				</div>
@@ -34,11 +30,7 @@
 						placeholder="Search"
 						padding="px-1" />
 				</div>
-				<SofaButton
-					:bg-color="'bg-primaryBlue'"
-					:text-color="'text-white'"
-					:padding="'py-3 px-4'"
-					@click="showCreateClassModal = true">
+				<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-3 px-4'" @click="createClass">
 					Create a class
 				</SofaButton>
 			</div>
@@ -78,16 +70,11 @@
 import HomeLayout from '@/components/home/HomeLayout.vue'
 import ClassCard from '@/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@/composables/auth/auth'
-import {
-	selectedClass,
-	showCreateClassModal,
-	showEditClassModal,
-	showMoreOptionHandler,
-	showMoreOptions,
-	useMyClasses,
-} from '@/composables/organizations/classes'
+import { useOrganizationModal } from '@/composables/core/modals'
+import { useMyClasses } from '@/composables/organizations/classes'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
+import { ClassEntity } from 'sofa-modules/src/modules/organizations'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 
@@ -118,6 +105,7 @@ export default defineComponent({
 		}
 
 		const { id } = useAuth()
+		const organizationId = id
 		const { classes, deleteClass } = useMyClasses()
 		const searchQuery = ref('')
 
@@ -131,7 +119,11 @@ export default defineComponent({
 				icon: 'edit-option',
 				title: 'Edit',
 				action: () => {
-					showEditClassModal.value = true
+					useOrganizationModal().openEditClass({
+						organizationId: organizationId.value,
+						// @ts-expect-error TODO: type for open modal
+						classInst: selectedClass.value,
+					})
 					showMoreOptions.value = false
 				},
 			},
@@ -157,17 +149,25 @@ export default defineComponent({
 			},
 		]
 
+		const createClass = () => useOrganizationModal().openCreateClass({ organizationId: organizationId.value })
+
+		const showMoreOptions = ref(false)
+		const selectedClass = ref<ClassEntity | null>(null)
+		const showMoreOptionHandler = (data: ClassEntity) => {
+			showMoreOptions.value = true
+			selectedClass.value = data
+		}
+
 		return {
 			id,
 			emptyClassContent,
 			classes,
-			showCreateClassModal,
-			showEditClassModal,
 			searchQuery,
 			showMoreOptionHandler,
 			showMoreOptions,
 			moreOptions,
 			filteredClassess,
+			createClass,
 		}
 	},
 })

@@ -1,3 +1,4 @@
+import { allModals, allPopovers } from '@/composables/core/modals'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { createRouter, createWebHistory } from 'vue-router'

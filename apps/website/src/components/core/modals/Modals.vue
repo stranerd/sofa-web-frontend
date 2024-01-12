@@ -1,5 +1,5 @@
 <template>
-	<SofaModal v-for="key in mStack" :key="key" v-bind="modals[key].modalArgs ?? {}" :close="() => mClose(key)">
+	<SofaModal v-for="key in mStack" :key="key" v-bind="modals[key].modalArgs ?? {}">
 		<component :is="modals[key].component" v-bind="modals[key].args ?? {}" :close="() => mClose(key)" />
 	</SofaModal>
 	<SofaModal v-for="key in pStack" :key="key" v-bind="popovers[key].modalArgs ?? {}" :close="() => pClose(key)">
