@@ -1,10 +1,10 @@
-import { ClassFactory, ClassesUseCases, ClassEntity } from '@modules/organizations'
+import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { useListener } from '../core/listener'
-import { useAsyncFn } from '../core/hooks'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
-import { computed, onMounted, onUnmounted, ref, reactive } from 'vue'
+import { useAsyncFn } from '../core/hooks'
+import { useListener } from '../core/listener'
+import { useSuccessHandler } from '../core/states'
 
 export const selectedClass = ref<ClassEntity | undefined>(undefined)
 export const showMoreOptions = ref(false)
@@ -47,11 +47,9 @@ export const moreOptions = reactive([
 const store = {
 	classes: ref<ClassEntity[]>([]),
 	fetched: ref(false),
-	...useLoadingHandler(),
-	...useErrorHandler(),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return ClassesUseCases.listenToAllClasses(id.value, {
+		return ClassesUseCases.listenToAll(id.value, {
 			created: async (entity) => {
 				Logic.addToArray(
 					store.classes.value,
@@ -83,35 +81,32 @@ export const showMoreOptionHandler = (data: ClassEntity) => {
 export const useMyClasses = () => {
 	const { id } = useAuth()
 
-	const fetchClasses = async () => {
-		try {
-			await store.setError('')
-			await store.setLoading(true)
-			const classes = await ClassesUseCases.getAll(id.value)
-			classes.results.forEach((r) =>
-				Logic.addToArray(
-					store.classes.value,
-					r,
-					(e) => e.id,
-					(e) => e.createdAt,
-				),
-			)
-			store.fetched.value = true
-		} catch (e) {
-			await store.setError(e)
-		}
-		await store.setLoading(false)
-	}
+	const {
+		asyncFn: fetchClasses,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const classes = await ClassesUseCases.getAll(id.value)
+		classes.results.forEach((r) =>
+			Logic.addToArray(
+				store.classes.value,
+				r,
+				(e) => e.id,
+				(e) => e.createdAt,
+			),
+		)
+		store.fetched.value = true
+	}, {})
 
 	onMounted(async () => {
-		if (!store.fetched.value && !store.loading.value) await fetchClasses()
+		if (!store.fetched.value) await fetchClasses()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
 
-	return { ...store }
+	return { ...store, loading, error }
 }
 
 export const useCreateClass = (organizationId: string) => {
@@ -123,35 +118,27 @@ export const useCreateClass = (organizationId: string) => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await ClassesUseCases.add(organizationId, factory).then((data) => {
-			if (data) {
-				created.value = true
-			}
-		})
+		await ClassesUseCases.add(organizationId, factory)
+		created.value = true
 		factory.reset()
 	})
 
 	return { error, loading, factory, createClass, created }
 }
 
-export const useUpdateClass = (organizationId: string, id: string) => {
+export const useUpdateClass = (organizationId: string, classInst: ClassEntity) => {
 	const factory = new ClassFactory()
+	factory.loadEntity(classInst)
+	const { setMessage } = useSuccessHandler()
 	const updated = ref(false)
 	const {
 		asyncFn: updateClass,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await ClassesUseCases.update(organizationId, id, factory).then((data) => {
-			if (data) {
-				Logic.Common.showAlert({
-					message: 'Class updated successfully',
-					type: 'success',
-				})
-				selectedClass.value = undefined
-				updated.value = true
-			}
-		})
+		await ClassesUseCases.update(organizationId, classInst.id, factory)
+		setMessage('Class updated successfully')
+		updated.value = true
 		selectedClass.value = undefined
 	})
 
@@ -159,24 +146,16 @@ export const useUpdateClass = (organizationId: string, id: string) => {
 }
 
 export const useDeleteClass = (data: { id: string; organizationId: string }) => {
-	const deleteClass = async () => {
-		try {
-			await store.setError('')
-			await store.setLoading(true)
-			await ClassesUseCases.delete(data).then((data) => {
-				if (data) {
-					showMoreOptions.value = false
-					Logic.Common.showAlert({
-						message: 'Class deleted successfully',
-						type: 'success',
-					})
-				}
-			})
-		} catch (e) {
-			await store.setError(e)
-		}
-		await store.setLoading(false)
-	}
+	const { setMessage } = useSuccessHandler()
+	const {
+		asyncFn: deleteClass,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await ClassesUseCases.delete(data)
+		showMoreOptions.value = false
+		setMessage('Class deleted successfully')
+	})
 
-	return { deleteClass }
+	return { deleteClass, loading, error }
 }

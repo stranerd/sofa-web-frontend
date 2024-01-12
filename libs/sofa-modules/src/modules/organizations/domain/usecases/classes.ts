@@ -26,23 +26,17 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).find(classId)
 	}
 
-	async get(organizationId: string, query: QueryParams) {
-		return await this.repository(organizationId).get(query)
-	}
-
 	async getAll(organizationId: string) {
 		return await this.repository(organizationId).get({
 			all: true,
 		})
 	}
 
-	async listenToAllClasses(organizationId: string, listener: Listeners<ClassEntity>) {
+	async listenToAll(organizationId: string, listener: Listeners<ClassEntity>) {
 		const conditions: QueryParams = {
 			all: true,
 		}
 
-		return await this.repository(organizationId).listenToMany(conditions, listener, (entity) => {
-			return true
-		})
+		return await this.repository(organizationId).listenToMany(conditions, listener, () => true)
 	}
 }

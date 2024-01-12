@@ -3,7 +3,7 @@
 		<div class="p-4 bg-white flex flex-col gap-8">
 			<div class="flex w-full items-center gap-2 justify-between mdlg:justify-center">
 				<SofaHeaderText class="!font-bold !text-deepGray" :content="'Create a class'" />
-				<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="$emit('close')" />
+				<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="emit('close')" />
 			</div>
 			<!-- Form -->
 			<form class="flex flex-col gap-8" @submit.prevent="createClass">
@@ -58,7 +58,7 @@
 						:text-color="'text-white'"
 						:padding="'py-4 px-6'"
 						custom-class="hidden mdlg:block"
-						@click="$emit('close')">
+						@click="emit('close')">
 						Cancel
 					</SofaButton>
 					<SofaButton

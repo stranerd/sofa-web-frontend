@@ -94,7 +94,7 @@ import { useAuth } from '@/composables/auth/auth'
 
 const { id } = useAuth()
 
-const { updateClass, factory: classFactory, updated } = useUpdateClass(id.value, selectedClass.value.id)
+const { updateClass, factory: classFactory, updated } = useUpdateClass(id.value, selectedClass.value)
 
 const emit = defineEmits(['close'])
 
