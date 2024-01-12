@@ -2,6 +2,7 @@ import { CourseEntity, QuizEntity } from '@modules/study'
 import { Course, Game, Logic, PlayStatus, Quiz, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
 import { selectedQuiz, selectedQuizMode } from './quiz'
+import { saveToFolder } from './study/folders'
 
 const showStudyMode = ref(false)
 
@@ -14,12 +15,6 @@ const reportMaterialSetup = reactive<{
 	type: 'course',
 	id: '',
 })
-
-export const selectedFolderMaterailToAdd = ref<{ id: string; type: string }>()
-
-export const saveToFolder = (activity: { id: string; type: string }) => {
-	selectedFolderMaterailToAdd.value = activity
-}
 
 const createQuizData = (quiz: Quiz): ResourceType => {
 	return {

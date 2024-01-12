@@ -6,11 +6,6 @@
 	</metainfo>
 	<router-view :key="$route.path" />
 	<study-mode-modal v-if="showStudyMode" />
-	<!-- Save to folder -->
-	<save-to-folder
-		v-if="selectedFolderMaterailToAdd"
-		:material="selectedFolderMaterailToAdd"
-		:close="() => (selectedFolderMaterailToAdd = null)" />
 	<!-- Report material -->
 	<rate-and-review-modal
 		v-if="reportMaterialSetup.show"
@@ -27,11 +22,10 @@
 import AddMaterialModal from '@/components/common/AddMaterialModal.vue'
 import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
 import Modals from '@/components/core/modals/Modals.vue'
-import SaveToFolder from '@/components/study/SaveToFolder.vue'
 import StudyModeModal from '@/components/study/StudyModeModal.vue'
 import { showAddItem } from '@/composables'
 import { useAuth } from '@/composables/auth/auth'
-import { reportMaterialSetup, selectedFolderMaterailToAdd, sendReportMaterial, showStudyMode } from '@/composables/library'
+import { reportMaterialSetup, sendReportMaterial, showStudyMode } from '@/composables/library'
 import { UsersUseCases } from '@modules/users'
 import { watch } from 'vue'
 import { useMeta } from 'vue-meta'

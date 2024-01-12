@@ -1,8 +1,8 @@
-import { Component, Ref, ref } from 'vue'
+import { Component, Ref, computed, ref } from 'vue'
 
 type Comp = Component & (abstract new (...args: any) => any)
 type Args = Record<string, any>
-type ModalArgs = { closeOnClickOutside?: boolean } & Record<string, any>
+type ModalArgs = { closeOnClickOutside?: boolean; popover?: boolean } & Record<string, any>
 type ModalsDef<K extends string = string, C = Comp> = Record<K, { component: C; args?: Args; modalArgs?: ModalArgs; event?: Event }>
 
 const merge = (...args: string[]) => args.join('-')
@@ -58,15 +58,12 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 	return { register, open, close }
 }
 
-export const useModal = (stack: Ref<string[]>) => {
-	const modals: ModalsDef = {}
-	return { stack, modals, ...registerModals(stack, modals) }
+const useModal = () => {
+	const stack = ref<string[]>([])
+	const modalsDef: ModalsDef = {}
+	const modals = computed(() => stack.value.filter((key) => modalsDef[key] && !modalsDef[key].modalArgs?.popover))
+	const popovers = computed(() => stack.value.filter((key) => modalsDef[key] && modalsDef[key].modalArgs?.popover))
+	return { stack, modals, popovers, modalsDef, ...registerModals(stack, modalsDef) }
 }
 
-export const usePopover = (stack: Ref<string[]>) => {
-	const popovers: ModalsDef = {}
-	return { stack, popovers, ...registerModals(stack, popovers) }
-}
-
-export const modal = useModal(ref([]))
-export const popover = usePopover(ref([]))
+export const modal = useModal()

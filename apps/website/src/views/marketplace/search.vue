@@ -176,7 +176,8 @@
 
 <script lang="ts">
 import MarketplaceFilter, { SelectedOption } from '@/components/marketplace/Filter.vue'
-import { extractResource, saveToFolder } from '@/composables/library'
+import { extractResource } from '@/composables/library'
+import { saveToFolder } from '@/composables/study/folders'
 import { search } from '@/composables/marketplace'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'

@@ -105,7 +105,7 @@ export interface ResourceType {
 	showMore: boolean
 	userId: string
 	createdAt: number
-	type: 'course' | 'quiz' | string
+	type: 'course' | 'quiz'
 	ratings: {
 		avg: number
 		count: number

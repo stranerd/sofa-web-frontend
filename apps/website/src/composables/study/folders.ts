@@ -5,6 +5,14 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { useStudyModal } from '../core/modals'
+
+export const saveToFolder = (activity: { id: string; type: 'course' | 'quiz' }) => {
+	useStudyModal().saveToFolder.open({
+		id: activity.id,
+		type: activity.type === 'course' ? FolderSaved.courses : FolderSaved.quizzes,
+	})
+}
 
 const store = {
 	folders: ref<FolderEntity[]>([]),

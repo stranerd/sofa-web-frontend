@@ -180,7 +180,8 @@
 
 <script lang="ts">
 import { useAuth } from '@/composables/auth/auth'
-import { extractResource, saveToFolder } from '@/composables/library'
+import { extractResource } from '@/composables/library'
+import { saveToFolder } from '@/composables/study/folders'
 import { useUsersMaterials } from '@/composables/study/users-materials'
 import { useMyOrganizations } from '@/composables/users/organizations'
 import { socials } from '@/composables/users/profile'

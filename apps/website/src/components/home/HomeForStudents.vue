@@ -78,7 +78,7 @@
 
 <script lang="ts" setup>
 import { useHomeTasks } from '@/composables/home'
-import { saveToFolder } from '@/composables/library'
+import { saveToFolder } from '@/composables/study/folders'
 import { extractContent } from '@/composables/marketplace'
 import { useMyStudy } from '@/composables/study/study'
 import { SofaActivityCard, SofaButton, SofaEmptyState, SofaIcon, SofaIconCard, SofaNormalText } from 'sofa-ui-components'

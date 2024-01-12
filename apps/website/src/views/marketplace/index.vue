@@ -75,7 +75,8 @@
 </template>
 
 <script lang="ts">
-import { extractResource, saveToFolder } from '@/composables/library'
+import { extractResource } from '@/composables/library'
+import { saveToFolder } from '@/composables/study/folders'
 import { useMyStudy } from '@/composables/study/study'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'

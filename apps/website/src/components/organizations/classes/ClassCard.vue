@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useOrganizationPopover } from '@/composables/core/modals'
+import { useOrganizationModal } from '@/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
 import { pluralize } from '@utils/commons'
 import { Logic } from 'sofa-logic'
@@ -38,5 +38,5 @@ import { defineProps } from 'vue'
 
 const props = defineProps<{ classObj: ClassEntity }>()
 
-const moreOptionsHandler = (e: Event) => useOrganizationPopover().classCardMoreOptions.open({ classInst: props.classObj }, e)
+const moreOptionsHandler = (e: Event) => useOrganizationModal().classCardMoreOptions.open({ classInst: props.classObj }, e)
 </script>

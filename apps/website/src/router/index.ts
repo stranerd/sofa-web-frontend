@@ -1,4 +1,4 @@
-import { modal, popover } from '@/composables/core/modal'
+import { modal } from '@/composables/core/modal'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -16,7 +16,6 @@ export const routerPromise = Promise.all(routes).then((routes) => {
 
 	router.beforeEach((to, from, next) => {
 		modal.stack.value.forEach(modal.close)
-		popover.stack.value.forEach(popover.close)
 		Logic.Common.preFetchRouteData(to, from, next)
 	})
 

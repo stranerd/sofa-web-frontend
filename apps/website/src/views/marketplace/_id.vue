@@ -123,7 +123,8 @@
 
 <script lang="ts">
 import { scrollToTop } from '@/composables'
-import { extractResource, openQuiz, reportMaterial, saveToFolder, shareMaterialLink } from '@/composables/library'
+import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@/composables/library'
+import { saveToFolder } from '@/composables/study/folders'
 import { otherTasks } from '@/composables/quiz'
 import { useHasAccess } from '@/composables/study/study'
 import { formatTime } from '@utils/dates'

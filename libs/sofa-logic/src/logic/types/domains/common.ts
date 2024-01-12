@@ -26,7 +26,7 @@ export interface Paginated<D> {
 
 export interface ContentDetails {
 	original: Quiz | Course | null
-	type: string
+	type: 'quiz' | 'course'
 	route: string
 	price: number
 	currency: string

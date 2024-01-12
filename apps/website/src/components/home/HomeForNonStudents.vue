@@ -65,7 +65,7 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
-import { saveToFolder } from '@/composables/library'
+import { saveToFolder } from '@/composables/study/folders'
 import { extractContent } from '@/composables/marketplace'
 import { useUsersMaterials } from '@/composables/study/users-materials'
 import { Logic } from 'sofa-logic'

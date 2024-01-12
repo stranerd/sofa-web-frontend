@@ -1,17 +1,17 @@
 <template>
 	<SofaModal
-		v-for="key in mStack"
+		v-for="key in modals"
 		:key="key"
-		v-bind="modals[key].modalArgs ?? {}"
-		:close="modals[key].modalArgs?.closeOnClickOutside ?? false ? () => mClose(key) : null">
-		<component :is="modals[key].component" v-bind="modals[key].args ?? {}" :close="() => mClose(key)" />
+		v-bind="modalsDef[key].modalArgs ?? {}"
+		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? false ? () => close(key) : null">
+		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
 	<SofaModal
-		v-for="key in pStack"
+		v-for="key in popovers"
 		:key="key"
-		v-bind="popovers[key].modalArgs ?? {}"
-		:close="popovers[key].modalArgs?.closeOnClickOutside ?? true ? () => pClose(key) : null">
-		<component :is="popovers[key].component" v-bind="popovers[key].args ?? {}" :close="() => pClose(key)" />
+		v-bind="modalsDef[key].modalArgs ?? {}"
+		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : null">
+		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
 	<SofaDeletePrompt
 		v-for="confirmation in confirmations"
@@ -64,12 +64,11 @@
 </template>
 
 <script lang="ts" setup>
-import { modal, popover } from '@/composables/core/modal'
+import { modal } from '@/composables/core/modal'
 import { Logic } from 'sofa-logic'
 import { SofaAlert, SofaDeletePrompt, SofaModal2 as SofaModal, SofaSuccessPrompt } from 'sofa-ui-components'
 
-const { modals, stack: mStack, close: mClose } = modal
-const { popovers, stack: pStack, close: pClose } = popover
+const { modals, popovers, modalsDef, close } = modal
 
 const loaderSetup = Logic.Common.loaderSetup
 const confirmations = Logic.Common.confirmations
