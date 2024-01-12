@@ -49,8 +49,12 @@ export class ClassEntity extends BaseEntity implements Saleable {
 		return this.photo?.link ?? '/images/default.png'
 	}
 
+	get pageLink() {
+		return `/organizations/${this.organizationId}/classes/${this.id}`
+	}
+
 	get shareLink() {
-		return `${window.location.origin}/organizations/${this.organizationId}/classes/${this.id}`
+		return `${window.location.origin}${this.pageLink}`
 	}
 
 	search(query: string) {

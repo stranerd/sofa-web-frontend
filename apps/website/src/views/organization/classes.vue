@@ -71,16 +71,12 @@
 				</div>
 			</sofa-modal>
 		</div>
-		<CreateClassModal v-if="showCreateClassModal" :organization-id="id" @close="showCreateClassModal = false" />
-		<EditClassModal v-if="showEditClassModal" :organization-id="id" @close="showEditClassModal = false" />
 	</HomeLayout>
 </template>
 
 <script lang="ts">
 import HomeLayout from '@/components/home/HomeLayout.vue'
 import ClassCard from '@/components/organizations/classes/ClassCard.vue'
-import CreateClassModal from '@/components/organizations/classes/CreateClassModal.vue'
-import EditClassModal from '@/components/organizations/classes/EditClassModal.vue'
 import { useAuth } from '@/composables/auth/auth'
 import {
 	selectedClass,
@@ -103,11 +99,9 @@ export default defineComponent({
 		SofaNormalText,
 		SofaButton,
 		SofaIcon,
-		CreateClassModal,
 		ClassCard,
 		SofaTextField,
 		SofaModal,
-		EditClassModal,
 	},
 	middlewares: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),

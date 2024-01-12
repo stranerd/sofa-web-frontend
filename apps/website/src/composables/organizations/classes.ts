@@ -5,6 +5,8 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { useRouter } from 'vue-router'
+import { useOrganizationModal } from '../core/modals'
 
 export const selectedClass = ref<ClassEntity | null>(null)
 export const showMoreOptions = ref(false)
@@ -97,35 +99,37 @@ export const useMyClasses = () => {
 }
 
 export const useCreateClass = (organizationId: string) => {
+	const router = useRouter()
 	const factory = new ClassFactory()
 	const {
 		asyncFn: createClass,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await ClassesUseCases.add(organizationId, factory)
+		const classInst = await ClassesUseCases.add(organizationId, factory)
 		factory.reset()
+		useOrganizationModal().closeCreateClass()
+		await router.push(classInst.pageLink)
 		return true
 	})
 
 	return { error, loading, factory, createClass }
 }
 
-export const useUpdateClass = (organizationId: string) => {
+export const useUpdateClass = (organizationId: string, classInst: ClassEntity) => {
 	const factory = new ClassFactory()
 	const { setMessage } = useSuccessHandler()
-	if (selectedClass.value) factory.loadEntity(selectedClass.value)
-	else showEditClassModal.value = false
+	factory.loadEntity(classInst)
 
 	const {
 		asyncFn: updateClass,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await ClassesUseCases.update(organizationId, selectedClass.value.id, factory)
+		await ClassesUseCases.update(organizationId, classInst.id, factory)
 		setMessage('Class updated successfully')
 		factory.reset()
-		selectedClass.value = null
+		useOrganizationModal().closeEditClass()
 		return true
 	})
 

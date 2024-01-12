@@ -14,6 +14,8 @@ export const routerPromise = Promise.all(routes).then((routes) => {
 	})
 
 	router.beforeEach((to, from, next) => {
+		allModals.map((modal) => modal().closeAll())
+		allPopovers.map((popover) => popover().closeAll())
 		Logic.Common.preFetchRouteData(to, from, next)
 	})
 

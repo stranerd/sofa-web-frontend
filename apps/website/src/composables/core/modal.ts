@@ -1,29 +1,29 @@
 import { Logic } from 'sofa-logic'
-import { Ref, Component as Vue, ref } from 'vue'
+import { Component, Ref, ref } from 'vue'
 
 type Args = Record<string, any>
-type ModalsDef<K extends string = string, C = Vue> = Record<K, { component: C; args?: Args; modalArgs?: Args }>
+type ModalsDef<K extends string = string, C = Component> = Record<K, { component: C; args?: Args; modalArgs?: Args }>
 
 const merge = (...args: string[]) => args.join('-')
 
 const spreadModals = (type: string, modals: ModalsDef) =>
-	Object.fromEntries(Object.entries(modals).map(([key, val]) => [merge(type, key), { component: val, type }]))
+	Object.fromEntries(Object.entries(modals).map(([key, val]) => [merge(type, key), { ...val, type }]))
 
 const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 	const registeredTypes = {}
 
-	const close = async (id: string) => {
+	const close = (id: string) => {
 		stack.value = stack.value.filter((comp) => comp !== id)
 	}
 
-	const open = async (id: string, args: any) => {
+	const open = (id: string, args: any) => {
 		if (Object.keys(modals).includes(id) && !stack.value.includes(id)) {
 			stack.value.push(id)
 			modals[id].args = args
 		}
 	}
 
-	function register<Key extends string, C extends Vue & (abstract new (...args: any) => any)>(
+	function register<Key extends string, C extends Component & (abstract new (...args: any) => any)>(
 		type: string,
 		modalObject: ModalsDef<Key, C>,
 	) {
