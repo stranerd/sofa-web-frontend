@@ -1,4 +1,3 @@
-import { QueryParams } from '@modules/core'
 import { ScheduleToModel } from '../../data/models/schedules'
 import { IScheduleRepository } from '../irepositories/schedules'
 
@@ -27,9 +26,5 @@ export class SchedulesUseCase {
 
 	async find(organizationId: string, classId: string, id: string) {
 		return await this.repository(organizationId, classId).find(id)
-	}
-
-	async get(organizationId: string, classId: string, query: QueryParams) {
-		return await this.repository(organizationId, classId).get(query)
 	}
 }

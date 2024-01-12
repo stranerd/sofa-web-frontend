@@ -9,7 +9,7 @@
 				:photo-url="activity.image"
 				:custom-class="`mdlg:!h-[115px]  ${
 					isWrapped ? ' h-[100px] w-[150px]' : '  h-[120px] w-full'
-				} mdlg:!w-[200px]  rounded-tl-[16px] rounded-br-[16px] rounded-tr-[8px] rounded-bl-[8px] relative`">
+				} mdlg:!w-[200px] rounded-custom relative`">
 				<div
 					v-if="activity.progress > 0"
 					:class="`absolute bottom-0 left-0 w-full px-2 rounded-b-[12px] bg-black bg-opacity-50  ${

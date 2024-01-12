@@ -7,13 +7,7 @@ import { ContentDetails, FileData, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
 import { Course, Quiz, SofaFile } from '../types/domains/study'
 import { AddReviewInput } from '../types/forms/common'
-import {
-	AddItemToCourseInput,
-	CreateCourseInput,
-	CreateDocumentInput,
-	ReorderQuizInput,
-	UpdateCourseSectionsInput,
-} from '../types/forms/study'
+import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
 
 const { capitalize } = valleyed

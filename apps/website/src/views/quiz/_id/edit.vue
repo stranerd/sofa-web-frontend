@@ -57,10 +57,10 @@
 							:users="extras.usersByQuestions"
 							:questions="extras.sortedQuestions"
 							:factory="extras.questionFactory"
-							@addQuestion="showAddQuestionModal = true"
-							@duplicateQuestion="(question) => extras.duplicateQuestion(question)"
-							@deleteQuestion="(id) => extras.deleteQuestion(id)"
-							@reorderQuestions="(ids) => extras.reorderQuestions(ids)" />
+							@add-question="showAddQuestionModal = true"
+							@duplicate-question="(question) => extras.duplicateQuestion(question)"
+							@delete-question="(id) => extras.deleteQuestion(id)"
+							@reorder-questions="(ids) => extras.reorderQuestions(ids)" />
 					</div>
 				</template>
 
@@ -73,21 +73,21 @@
 							:factory="extras.questionFactory"
 							:users="extras.usersByQuestions"
 							:close="() => (showMoreOptions = false)"
-							@showCurrentlyEditing="showCurrentlyEditingModal = true"
-							@saveQuestion="extras.saveCurrentQuestion()"
-							@duplicateQuestion="
+							@show-currently-editing="showCurrentlyEditingModal = true"
+							@save-question="extras.saveCurrentQuestion()"
+							@duplicate-question="
 								(question) => {
 									showMoreOptions = false
 									extras.duplicateQuestion(question)
 								}
 							"
-							@deleteQuestion="
+							@delete-question="
 								(id) => {
 									showMoreOptions = false
 									extras.deleteQuestion(id)
 								}
 							"
-							@deleteQuiz="
+							@delete-quiz="
 								() => {
 									showMoreOptions = false
 									extras.deleteQuiz()
@@ -125,8 +125,8 @@
 							:quiz="quiz"
 							:factory="extras.quizFactory"
 							:close="() => (showSettingModal = false)"
-							@updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
-							@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
+							@update-quiz="extras.updateQuiz().then(handleSettingSaved)"
+							@publish-quiz="extras.publishQuiz().then(handleSettingSaved)" />
 					</div>
 
 					<!-- Question list for smaller screens -->
@@ -137,21 +137,21 @@
 						:users="extras.usersByQuestions"
 						:factory="extras.questionFactory"
 						:questions="extras.sortedQuestions"
-						@addQuestion="showAddQuestionModal = true"
-						@duplicateQuestion="(question) => extras.duplicateQuestion(question)"
-						@deleteQuestion="(id) => extras.deleteQuestion(id)"
-						@reorderQuestions="(ids) => extras.reorderQuestions(ids)" />
+						@add-question="showAddQuestionModal = true"
+						@duplicate-question="(question) => extras.duplicateQuestion(question)"
+						@delete-question="(id) => extras.deleteQuestion(id)"
+						@reorder-questions="(ids) => extras.reorderQuestions(ids)" />
 				</template>
 			</dashboard-layout>
 
-			<RequestAccessModal v-else-if="quiz" :quiz="quiz" @requestAccess="extras.requestAccess" />
+			<RequestAccessModal v-else-if="quiz" :quiz="quiz" @request-access="extras.requestAccess" />
 
 			<ManageAccessModal
 				v-if="showShareModal"
 				:quiz="quiz"
 				:users="members"
-				@grantAccess="extras.grantAccess"
-				@manageMembers="extras.manageMembers"
+				@grant-access="extras.grantAccess"
+				@manage-members="extras.manageMembers"
 				@close="showShareModal = false" />
 
 			<!-- Larger screen setings modal -->
@@ -162,8 +162,8 @@
 						:quiz="quiz"
 						:factory="extras.quizFactory"
 						:close="() => (showSettingModal = false)"
-						@updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
-						@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
+						@update-quiz="extras.updateQuiz().then(handleSettingSaved)"
+						@publish-quiz="extras.publishQuiz().then(handleSettingSaved)" />
 				</div>
 			</SofaModal>
 
@@ -182,21 +182,21 @@
 						:users="extras.usersByQuestions"
 						:factory="extras.questionFactory"
 						:close="() => (showMoreOptions = false)"
-						@showCurrentlyEditing="showCurrentlyEditingModal = true"
-						@saveQuestion="extras.saveCurrentQuestion()"
-						@duplicateQuestion="
+						@show-currently-editing="showCurrentlyEditingModal = true"
+						@save-question="extras.saveCurrentQuestion()"
+						@duplicate-question="
 							(question) => {
 								showMoreOptions = false
 								extras.duplicateQuestion(question)
 							}
 						"
-						@deleteQuestion="
+						@delete-question="
 							(id) => {
 								showMoreOptions = false
 								extras.deleteQuestion(id)
 							}
 						"
-						@deleteQuiz="
+						@delete-quiz="
 							() => {
 								showMoreOptions = false
 								extras.deleteQuiz()

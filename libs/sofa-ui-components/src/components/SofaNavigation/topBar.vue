@@ -47,7 +47,7 @@
 						custom-class="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
 						placeholder="Search"
 						padding="px-1"
-						@onEnter="initiateSearch" />
+						@on-enter="initiateSearch" />
 				</div>
 			</div>
 

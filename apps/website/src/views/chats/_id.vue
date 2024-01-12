@@ -170,7 +170,7 @@
 			:close="() => (showRateAndReviewTutor = false)"
 			title="Session ended, rate tutor"
 			:tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
-			@OnReviewSubmitted="(data) => end({ rating: data.ratings, message: data.review })" />
+			@on-review-submitted="(data) => end({ rating: data.ratings, message: data.review })" />
 	</ChatLayout>
 </template>
 

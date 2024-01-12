@@ -83,7 +83,7 @@
 					<course-settings
 						:course="SingleCourse"
 						:close="() => (showSettingModal = false)"
-						@OnCourseUpdated="handleCourseSettingSaved" />
+						@on-course-updated="handleCourseSettingSaved" />
 				</div>
 			</template>
 
@@ -95,7 +95,7 @@
 						:section-input="updateCourseSectionForm"
 						:update-sections="updateCourseSections"
 						:close="() => {}"
-						@OnMaterialSelected="handleItemSelected" />
+						@on-material-selected="handleItemSelected" />
 
 					<div class="h-[100px]"></div>
 				</div>
@@ -209,7 +209,7 @@
 					</div>
 
 					<div v-if="modalData.content == 'add_material'" class="w-full flex flex-col px-4 pb-4">
-						<new-course-material v-if="SingleCourse" @OnItemSelected="handleAddMaterialChanged" />
+						<new-course-material v-if="SingleCourse" @on-item-selected="handleAddMaterialChanged" />
 					</div>
 
 					<div v-if="modalData.content == 'add_video'" class="w-full flex flex-col px-4 pb-4">
@@ -259,7 +259,7 @@
 									showSettingModal = false
 								}
 							"
-							@OnCourseUpdated="handleCourseSettingSaved" />
+							@on-course-updated="handleCourseSettingSaved" />
 					</div>
 				</div>
 			</sofa-modal>

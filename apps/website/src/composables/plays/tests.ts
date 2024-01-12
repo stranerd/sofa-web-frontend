@@ -74,6 +74,7 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 
 	const alertAndNav = async (route: string, message?: string) => {
 		// if (message) Logic.Common.showAlert({ message, type: 'info' })
+		message
 		await router.replace(route)
 	}
 

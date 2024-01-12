@@ -60,8 +60,8 @@
 						custom-class="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
 						:auto-focus="true"
 						placeholder="Folder name"
-						@onBlur="saveFolder"
-						@onEnter="saveFolder" />
+						@on-blur="saveFolder"
+						@on-enter="saveFolder" />
 					<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
 					<div
@@ -122,8 +122,8 @@
 							placeholder="Folder name"
 							:auto-focus="true"
 							custom-class="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-lightGray rounded cursor-text"
-							@onBlur="saveFolder"
-							@onEnter="saveFolder" />
+							@on-blur="saveFolder"
+							@on-enter="saveFolder" />
 						<sofa-normal-text v-else class="truncate w-full">{{ item.title }}</sofa-normal-text>
 
 						<div
