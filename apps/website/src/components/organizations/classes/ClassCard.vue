@@ -38,5 +38,5 @@ import { defineProps } from 'vue'
 
 const props = defineProps<{ classObj: ClassEntity }>()
 
-const moreOptionsHandler = () => useOrganizationPopover().classCardMoreOptions.open({ classInst: props.classObj })
+const moreOptionsHandler = (e: Event) => useOrganizationPopover().classCardMoreOptions.open({ classInst: props.classObj }, e)
 </script>

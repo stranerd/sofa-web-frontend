@@ -3,7 +3,7 @@ import { Component, Ref, ref } from 'vue'
 type Comp = Component & (abstract new (...args: any) => any)
 type Args = Record<string, any>
 type ModalArgs = { closeOnClickOutside?: boolean } & Record<string, any>
-type ModalsDef<K extends string = string, C = Comp> = Record<K, { component: C; args?: Args; modalArgs?: ModalArgs }>
+type ModalsDef<K extends string = string, C = Comp> = Record<K, { component: C; args?: Args; modalArgs?: ModalArgs; event?: Event }>
 
 const merge = (...args: string[]) => args.join('-')
 
@@ -17,17 +17,18 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 		stack.value = stack.value.filter((comp) => comp !== id)
 	}
 
-	const open = (id: string, args: Args) => {
+	const open = (id: string, args: Args, event?: Event) => {
 		if (Object.keys(modals).includes(id) && !stack.value.includes(id)) {
 			stack.value.push(id)
 			modals[id].args = args
+			modals[id].event = event
 		}
 	}
 
 	function register<M extends ModalsDef<string>>(type: string, modalObject: M) {
 		type Result = {
 			[K in keyof M]: {
-				open: (args: Omit<InstanceType<M[K]['component']>['$props'], 'close'>) => void
+				open: (args: Omit<InstanceType<M[K]['component']>['$props'], 'close'>, e?: Event) => void
 				close: () => void
 			}
 		} & { closeAll: () => void }
@@ -42,7 +43,7 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 			keys.map((key) => [
 				key,
 				{
-					open: (args: Args) => open(merge(type, key), args),
+					open: (args: Args, event?: Event) => open(merge(type, key), args, event),
 					close: () => close(merge(type, key)),
 				},
 			]),
