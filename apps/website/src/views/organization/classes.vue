@@ -127,9 +127,9 @@ export default defineComponent({
 		const { classes, deleteClass } = useMyClasses()
 		const searchQuery = ref('')
 
-		const filteredClassess = computed(()=>{
-			if(searchQuery.value){
-				return classes.value.filter((c) => c.search(searchQuery.value) )
+		const filteredClassess = computed(() => {
+			if (searchQuery.value) {
+				return classes.value.filter((c) => c.search(searchQuery.value))
 			} else {
 				return classes.value
 			}
@@ -149,7 +149,11 @@ export default defineComponent({
 				title: 'Share',
 				action: () => {
 					const baseUrl = window.location.href
-					Logic.Common.share('Join class on SOFA', `Join ${selectedClass.value.title} class on SOFA`, `${baseUrl}/${selectedClass.value.id}`)
+					Logic.Common.share(
+						'Join class on SOFA',
+						`Join ${selectedClass.value.title} class on SOFA`,
+						`${baseUrl}/${id.value}/classes/${selectedClass.value.id}`,
+					)
 					showMoreOptions.value = false
 				},
 			},
@@ -173,7 +177,7 @@ export default defineComponent({
 			showMoreOptionHandler,
 			showMoreOptions,
 			moreOptions,
-			filteredClassess
+			filteredClassess,
 		}
 	},
 })
