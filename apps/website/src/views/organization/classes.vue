@@ -91,9 +91,9 @@ import {
 	useMyClasses,
 } from '@/composables/organizations/classes'
 import { generateMiddlewares } from '@/middlewares'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
-import { defineComponent, ref, computed } from 'vue'
 import { Logic } from 'sofa-logic'
+import { SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
+import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
@@ -128,11 +128,8 @@ export default defineComponent({
 		const searchQuery = ref('')
 
 		const filteredClassess = computed(() => {
-			if (searchQuery.value) {
-				return classes.value.filter((c) => c.search(searchQuery.value))
-			} else {
-				return classes.value
-			}
+			if (searchQuery.value) return classes.value.filter((c) => c.search(searchQuery.value))
+			else return classes.value
 		})
 
 		const moreOptions = [
@@ -148,11 +145,10 @@ export default defineComponent({
 				icon: 'share-option',
 				title: 'Share',
 				action: () => {
-					const baseUrl = window.location.href
 					Logic.Common.share(
-						'Join class on SOFA',
 						`Join ${selectedClass.value.title} class on SOFA`,
-						`${baseUrl}/${id.value}/classes/${selectedClass.value.id}`,
+						selectedClass.value.description,
+						selectedClass.value.shareLink,
 					)
 					showMoreOptions.value = false
 				},
