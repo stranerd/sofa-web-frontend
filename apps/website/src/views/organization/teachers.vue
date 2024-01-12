@@ -6,9 +6,9 @@
 				:type="MemberTypes.teacher"
 				:members="teachers"
 				:messages="messages"
-				@openAddModal="extras.openAddModal"
-				@acceptMember="extras.acceptMember"
-				@removeMember="extras.removeMember" />
+				@open-add-modal="extras.openAddModal"
+				@accept-member="extras.acceptMember"
+				@remove-member="extras.removeMember" />
 		</template>
 	</HomeLayout>
 </template>

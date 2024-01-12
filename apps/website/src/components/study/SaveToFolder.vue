@@ -27,8 +27,8 @@
 								v-model="factory.title"
 								:custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`"
 								placeholder="Folder name"
-								@onBlur="saveFolder"
-								@onEnter="saveFolder" />
+								@on-blur="saveFolder"
+								@on-enter="saveFolder" />
 
 							<sofa-normal-text v-else class="truncate w-full">
 								{{ item.title }}

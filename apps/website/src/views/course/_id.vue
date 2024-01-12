@@ -20,7 +20,7 @@
 						<sofa-course-content
 							v-model="selectedMaterial"
 							:lock-content="!isUnlocked(SingleCourse)"
-							@OnMaterialSelected="handleItemSelected" />
+							@on-material-selected="handleItemSelected" />
 					</div>
 				</div>
 			</div>
@@ -55,8 +55,8 @@
 					<sofa-course-content
 						v-model="selectedMaterial"
 						:lock-content="!isUnlocked(SingleCourse)"
-						@OnMaterialSelected="handleItemSelected"
-						@onCourseContentSet="handleCourseContentSet" />
+						@on-material-selected="handleItemSelected"
+						@on-course-content-set="handleCourseContentSet" />
 				</template>
 
 				<template v-else>

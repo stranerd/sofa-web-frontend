@@ -21,7 +21,7 @@
 						class="flex-1"
 						custom-class="!border-none w-full"
 						placeholder="Search for anything"
-						@onEnter="handleSearch" />
+						@on-enter="handleSearch" />
 				</div>
 
 				<SofaIcon name="search-black" class="h-[17px] cursor-pointer w-[20px]" @click="handleSearch" />
@@ -37,7 +37,7 @@
 					class="flex-1"
 					custom-class="!border-none w-full !px-0"
 					placeholder="Search"
-					@onEnter="handleSearch" />
+					@on-enter="handleSearch" />
 			</div>
 		</div>
 

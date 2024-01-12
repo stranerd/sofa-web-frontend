@@ -10,8 +10,8 @@
 						v-model="title"
 						:custom-class="'!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base'"
 						:auto-focus="true"
-						@onContentChange="submitTitle"
-						@onBlur="editTitle = false"></sofa-custom-input>
+						@on-content-change="submitTitle"
+						@on-blur="editTitle = false"></sofa-custom-input>
 					<SofaNormalText
 						v-else
 						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1"
