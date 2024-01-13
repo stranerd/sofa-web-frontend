@@ -26,7 +26,6 @@
 				:similar-contents="similarContents"
 				:type="contentType"
 				:content-id="contentDetails.id"
-				:other-tasks="otherTasks"
 				:open-quiz="() => openQuiz(contentDetails as any)"
 				:actions="{
 					report: () => {
@@ -125,7 +124,6 @@
 import { scrollToTop } from '@/composables'
 import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
-import { otherTasks } from '@/composables/quiz'
 import { useHasAccess } from '@/composables/study/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
@@ -554,7 +552,6 @@ export default defineComponent({
 		})
 
 		return {
-			otherTasks,
 			tabItems,
 			Logic,
 			selectedTab,

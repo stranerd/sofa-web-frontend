@@ -5,6 +5,7 @@ import CreateClass from '@/components/organizations/classes/CreateClassModal.vue
 import EditClass from '@/components/organizations/classes/EditClassModal.vue'
 import AddMember from '@/components/organizations/members/AddMemberModal.vue'
 import SaveToFolder from '@/components/study/folders/SaveToFolderModal.vue'
+import ChooseStudyMode from '@/components/study/quizzes/ChooseStudyModeModal.vue'
 import CustomizeAi from '@/components/users/users/CustomizeAiModal.vue'
 
 export const useOrganizationModal = () =>
@@ -18,6 +19,7 @@ export const useOrganizationModal = () =>
 export const useStudyModal = () =>
 	modal.register('Study', {
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
+		chooseStudyMode: { component: ChooseStudyMode, modalArgs: { closeOnClickOutside: true } },
 	})
 
 export const useUserModal = () =>

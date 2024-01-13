@@ -366,11 +366,6 @@ export default defineComponent({
 			type: Array as () => ResourceType[],
 			default: () => [],
 		},
-		otherTasks: {
-			type: Array as () => any[],
-			required: false,
-			default: () => [],
-		},
 		actions: {
 			type: Object as () => {
 				report: () => void

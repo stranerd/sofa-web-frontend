@@ -1,8 +1,8 @@
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Course, Game, Logic, PlayStatus, Quiz, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
-import { selectedQuiz, selectedQuizMode } from './quiz'
 import { saveToFolder } from './study/folders'
+import { useStudyModal } from './core/modals'
 
 const showStudyMode = ref(false)
 
@@ -118,12 +118,10 @@ export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 }
 
 const openQuiz = (activity: ResourceType, force = false) => {
-	const original = activity.original as Quiz
+	const original = activity.original as QuizEntity
 	if (!force && ((activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
-	selectedQuiz.value = original
-	showStudyMode.value = true
-	selectedQuizMode.value = ''
+	useStudyModal().chooseStudyMode.open({ quiz: original })
 }
 
 const openCourse = (activity: ResourceType) => {

@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col gap-4 mdlg:p-6 p-4">
-		<div v-if="!Logic.Common.isOnlyMobile" class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
+		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
 			<SofaHeaderText class="!text-xl" content="Customize AI" />
 		</div>
 
@@ -59,7 +59,6 @@
 <script lang="ts" setup>
 import { useUserAiUpdate } from '@/composables/users/profile'
 import { UserEntity } from '@modules/users'
-import { Logic } from 'sofa-logic'
 import { SofaButton, SofaFileInput, SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 
 defineProps<{
