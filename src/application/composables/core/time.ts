@@ -10,19 +10,16 @@ export const useCountdown = (skipClearOnUnmounted = false) => {
 				clearInterval(interval)
 				time.value = data?.time ?? 0
 				if (time.value <= 0) return
-				interval = setInterval(
-					async () => {
-						const newValue = time.value - 1
-						if (newValue <= 0) {
-							clearInterval(interval)
-							res()
-						} else {
-							time.value--
-							await data?.fn?.()
-						}
-					},
-					data?.interval ?? 1000,
-				)
+				interval = setInterval(async () => {
+					const newValue = time.value - 1
+					if (newValue <= 0) {
+						clearInterval(interval)
+						res()
+					} else {
+						time.value--
+						await data?.fn?.()
+					}
+				}, data?.interval ?? 1000)
 			} catch (e) {
 				rej(e.message)
 			}

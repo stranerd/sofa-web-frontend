@@ -25,8 +25,8 @@ export class BaseApiService {
 					Object.entries(config.data ?? {}).forEach(([key, val]) => {
 						if (UploadedFile.is(val)) formData.set(key, val.ref)
 						else if (Array.isArray(val) && UploadedFile.is(val[0])) val.forEach((file) => formData.append(key, file.ref))
-						else if (val instanceof Blob) formData.set(key, val)
-						else if (Array.isArray(val) && val[0] instanceof Blob) val.forEach((file) => formData.append(key, file))
+						else if (val instanceof File) formData.set(key, val)
+						else if (Array.isArray(val) && val[0] instanceof File) val.forEach((file) => formData.append(key, file))
 						else if (val !== undefined) formData.set(key, JSON.stringify(val))
 					})
 

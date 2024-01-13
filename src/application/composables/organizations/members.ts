@@ -1,10 +1,11 @@
 import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
+import { addToArray, v } from 'valleyed'
 import { computed, onMounted, onUnmounted, reactive, Ref, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useSuccessHandler } from '../core/states'
 import { useOrganizationModal } from '../core/modals'
+import { useSuccessHandler } from '../core/states'
 
 const store = {} as Record<
 	string,
@@ -22,7 +23,7 @@ export const useOrganizationMembers = (id: string) => {
 		listener: useListener(() =>
 			MembersUseCases.listenToAll(id, {
 				created: (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store[id].members,
 						entity,
 						(q) => q.id,
@@ -30,7 +31,7 @@ export const useOrganizationMembers = (id: string) => {
 					)
 				},
 				updated: (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store[id].members,
 						entity,
 						(q) => q.id,
@@ -53,7 +54,7 @@ export const useOrganizationMembers = (id: string) => {
 		async () => {
 			const members = await MembersUseCases.getAll(id)
 			members.results.forEach((m) => {
-				Logic.addToArray(
+				addToArray(
 					store[id].members,
 					m,
 					(q) => q.id,
@@ -92,7 +93,7 @@ export const useManageOrganizationMembers = (id: string) => {
 		const emails = addMembersEmails.value
 			.split(',')
 			.map((e) => e.trim())
-			.filter((e) => Logic.v.string().email().parse(e).valid)
+			.filter((e) => v.string().email().parse(e).valid)
 		if (emails.length === 0) throw 'no valid emails found in list'
 		await MembersUseCases.add({ organizationId: id, emails, type })
 		await setMessage('Members added')

@@ -1,9 +1,9 @@
 import { ConversationEntity, MessageEntity, MessageFactory, MessagesUseCases } from '@modules/conversations'
-import { Logic } from 'sofa-logic'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { addToArray } from 'valleyed'
 
 const store = {} as Record<
 	string,
@@ -26,7 +26,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 				conversationId,
 				{
 					created: async (entity) => {
-						Logic.addToArray(
+						addToArray(
 							store[conversationId].messages.value,
 							entity,
 							(e) => e.id,
@@ -34,7 +34,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 						)
 					},
 					updated: async (entity) => {
-						Logic.addToArray(
+						addToArray(
 							store[conversationId].messages.value,
 							entity,
 							(e) => e.id,
@@ -66,7 +66,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 			const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
 			store[conversationId].hasMore.value = !!c.pages.next
 			c.results.map((c) =>
-				Logic.addToArray(
+				addToArray(
 					store[conversationId].messages.value,
 					c,
 					(e) => e.id,

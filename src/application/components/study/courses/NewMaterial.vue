@@ -255,7 +255,7 @@ export default defineComponent({
 			else context.emit('OnItemSelected', 'video')
 		}
 
-		const addFile = (file: Blob, type: 'video' | 'image' | 'document') => {
+		const addFile = (file: File, type: 'video' | 'image' | 'document') => {
 			addCourseFileForm.description = `${capitalize(type)} file for ${SingleCourse.value.title}`
 			addCourseFileForm.media = file
 			addCourseFileForm.tagIds = []

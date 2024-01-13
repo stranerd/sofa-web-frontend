@@ -2,6 +2,7 @@ import { AuthDetails } from '@modules/auth'
 import { listenOnSocket } from '@modules/core'
 import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
+import { getRandomValue, isString } from 'valleyed'
 import { reactive } from 'vue'
 import { NavigationGuardNext, RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import { Logic } from '..'
@@ -79,7 +80,7 @@ export default class Common {
 	}
 
 	public makeId = () => {
-		return Logic.getRandomValue()
+		return getRandomValue()
 	}
 
 	public showValidationError = (error: AxiosError, formElement: any, customErrorMessage: string | undefined = undefined) => {
@@ -131,7 +132,7 @@ export default class Common {
 		confirmation: I,
 	) {
 		return new Promise<boolean>((res) => {
-			const id = Logic.getRandomValue()
+			const id = getRandomValue()
 			confirmations.push({
 				...confirmation,
 				id,
@@ -210,7 +211,7 @@ export default class Common {
 	public searchArray = (arr: any[], searchKey: string) => {
 		return arr.filter((obj) => {
 			return Object.keys(obj).some((key) => {
-				return Logic.isString()(obj[key]).valid ? obj[key].includes(searchKey) : false
+				return isString()(obj[key]).valid ? obj[key].includes(searchKey) : false
 			})
 		})
 	}

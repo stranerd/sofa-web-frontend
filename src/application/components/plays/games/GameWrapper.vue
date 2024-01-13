@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
 import { useGame } from '@/composables/plays/games'
-import { Logic } from 'sofa-logic'
+import { formatNumber } from 'valleyed'
 import { computed, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -60,7 +60,7 @@ const extras = computed(() => ({
 			.sort((a, b) => b[1] - a[1])
 			.map((res, i, orgArr) => ({
 				score: res[1],
-				percentage: Logic.formatNumber((res[1] / game.value.questions.length) * 10, 1),
+				percentage: formatNumber((res[1] / game.value.questions.length) * 10, 1),
 				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
 				user: participants.value.find((p) => p.id === res[0]),
 				isWinner: orgArr[0]?.[1] === res[1],

@@ -1,7 +1,7 @@
 export interface CreateCourseInput {
 	title: string
 	description: string
-	photo?: Blob
+	photo?: File
 	topic: string
 	tags: string[]
 	price: {
@@ -35,7 +35,7 @@ export interface CreateDocumentInput {
 	title: string
 	description: string
 	tagIds: string[]
-	media?: Blob
+	media?: File
 	topicId: string
 	id: string
 }

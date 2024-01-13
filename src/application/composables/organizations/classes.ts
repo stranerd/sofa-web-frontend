@@ -1,5 +1,6 @@
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -15,7 +16,7 @@ const store = {
 		const { id } = useAuth()
 		return ClassesUseCases.listenToAll(id.value, {
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.classes.value,
 					entity,
 					(e) => e.id,
@@ -23,7 +24,7 @@ const store = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.classes.value,
 					entity,
 					(e) => e.id,
@@ -48,7 +49,7 @@ export const useMyClasses = () => {
 		async () => {
 			const classes = await ClassesUseCases.getAll(id.value)
 			classes.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.classes.value,
 					r,
 					(e) => e.id,

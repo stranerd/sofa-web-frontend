@@ -1,8 +1,8 @@
 import { TagEntity, TagsUseCases } from '@modules/interactions'
-import { Logic } from 'sofa-logic'
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { addToArray } from 'valleyed'
 
 const topicStore = {
 	topics: reactive<TagEntity[]>([]),
@@ -10,7 +10,7 @@ const topicStore = {
 	listener: useListener(async () => {
 		return TagsUseCases.listenToAllTopics({
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					topicStore.topics,
 					entity,
 					(e) => e.id,
@@ -19,7 +19,7 @@ const topicStore = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					topicStore.topics,
 					entity,
 					(e) => e.id,
@@ -40,7 +40,7 @@ const genericStore = {
 	listener: useListener(async () => {
 		return TagsUseCases.listenToAllGeneric({
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					genericStore.tags,
 					entity,
 					(e) => e.id,
@@ -48,7 +48,7 @@ const genericStore = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					genericStore.tags,
 					entity,
 					(e) => e.id,
@@ -71,7 +71,7 @@ export const useTopicsList = () => {
 		async () => {
 			const tags = await TagsUseCases.getAllTopics()
 			tags.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					topicStore.topics,
 					r,
 					(e) => e.id,
@@ -104,7 +104,7 @@ export const useGenericTagsList = () => {
 		async () => {
 			const tags = await TagsUseCases.getAllGeneric()
 			tags.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					genericStore.tags,
 					r,
 					(e) => e.id,

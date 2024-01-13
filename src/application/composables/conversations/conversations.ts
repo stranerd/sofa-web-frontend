@@ -1,5 +1,6 @@
 import { ConversationEntity, ConversationFactory, ConversationsUseCases } from '@modules/conversations'
 import { Logic } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -13,7 +14,7 @@ const store = {
 	listener: useListener(async () => {
 		return await ConversationsUseCases.listenToAll({
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.conversations.value,
 					entity,
 					(e) => e.id,
@@ -21,7 +22,7 @@ const store = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.conversations.value,
 					entity,
 					(e) => e.id,
@@ -46,7 +47,7 @@ export const useConversationsList = () => {
 		async () => {
 			const conversations = await ConversationsUseCases.getAll()
 			conversations.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.conversations.value,
 					r,
 					(e) => e.id,

@@ -1,5 +1,5 @@
 import { CourseEntity, CoursesUseCases } from '@modules/study'
-import { Logic } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
@@ -13,7 +13,7 @@ const store = {
 		const { id } = useAuth()
 		return CoursesUseCases.listenToUserCourses(id.value, {
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.courses.value,
 					entity,
 					(e) => e.id,
@@ -21,7 +21,7 @@ const store = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.courses.value,
 					entity,
 					(e) => e.id,
@@ -46,7 +46,7 @@ export const useMyCourses = () => {
 		async () => {
 			const courses = await CoursesUseCases.getUserCourses(id.value)
 			courses.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.courses.value,
 					r,
 					(e) => e.id,

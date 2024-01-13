@@ -1,5 +1,6 @@
 import { QuestionEntity } from '@modules/study'
 import { AddQuestionAnswer, Game, GameParticipantAnswer, Logic } from 'sofa-logic'
+import { Differ } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -111,7 +112,7 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 		store[id].game,
 		async (cur, old) => {
 			if (!cur) return
-			if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions))
+			if (!skip.questions && !Differ.equal(cur.questions, old?.questions))
 				Logic.Plays.GetGameQuestions(id)
 					.then((questions) => {
 						store[id].questions.splice(0, store[id].questions.length, ...questions)

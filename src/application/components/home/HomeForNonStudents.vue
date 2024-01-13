@@ -19,7 +19,7 @@
 						<SofaHeaderText
 							size="xl"
 							color="text-inherit !font-normal"
-							:content="Logic.formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
+							:content="formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
 						<SofaNormalText size="lg" color="text-inherit" :content="stat.label" />
 					</div>
 					<div class="flex p-2 md:p-4 rounded-full items-center justify-center" :style="`background-color: ${stat.color}50`">
@@ -65,11 +65,11 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
-import { saveToFolder } from '@/composables/study/folders'
 import { extractContent } from '@/composables/marketplace'
+import { saveToFolder } from '@/composables/study/folders'
 import { useUsersMaterials } from '@/composables/study/users-materials'
-import { Logic } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 
 const { id, user } = useAuth()

@@ -1,8 +1,8 @@
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { addToArray } from 'valleyed'
 
 const searchStore = {
 	users: reactive<UserEntity[]>([]),
@@ -14,7 +14,7 @@ const store = {
 	listener: useListener(async () => {
 		return await UsersUseCases.listenToAllTeachers({
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.tutors.value,
 					entity,
 					(e) => e.id,
@@ -22,7 +22,7 @@ const store = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.tutors.value,
 					entity,
 					(e) => e.id,
@@ -45,7 +45,7 @@ export const useTutorsList = () => {
 		async () => {
 			const tutors = await UsersUseCases.getAllTeachers()
 			tutors.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.tutors.value,
 					r,
 					(e) => e.id,
@@ -79,7 +79,7 @@ export const useSearchUsers = () => {
 		searchStore.users.length = 0
 		const users = await UsersUseCases.getInEmails(emails)
 		users.forEach((r) =>
-			Logic.addToArray(
+			addToArray(
 				searchStore.users,
 				r,
 				(e) => e.id,

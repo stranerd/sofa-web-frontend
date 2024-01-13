@@ -6,6 +6,7 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useStudyModal } from '../core/modals'
+import { addToArray, getRandomValue } from 'valleyed'
 
 export const saveToFolder = (activity: { id: string; type: 'course' | 'quiz' }) => {
 	useStudyModal().saveToFolder.open({
@@ -21,7 +22,7 @@ const store = {
 		const { id } = useAuth()
 		return await FoldersUseCases.listenToUserFolders(id.value, {
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.folders.value,
 					entity,
 					(e) => e.id,
@@ -29,7 +30,7 @@ const store = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.folders.value,
 					entity,
 					(e) => e.id,
@@ -54,7 +55,7 @@ export const useMyFolders = () => {
 		async () => {
 			const folders = await FoldersUseCases.getUserFolders(id.value)
 			folders.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.folders.value,
 					r,
 					(e) => e.id,
@@ -114,7 +115,7 @@ export const useEditFolder = () => {
 
 	const { asyncFn: generateNewFolder } = useAsyncFn(async () => {
 		const factory = new FolderFactory()
-		factory.title = `New folder (${Logic.getRandomValue()})`
+		factory.title = `New folder (${getRandomValue()})`
 		const folder = await FoldersUseCases.add(factory)
 		edit(folder)
 	})

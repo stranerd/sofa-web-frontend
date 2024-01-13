@@ -86,10 +86,11 @@
 
 <script lang="ts" setup>
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
-import { Logic, SingleUser } from 'sofa-logic'
+import { SingleUser } from 'sofa-logic'
 import { PropType, computed, defineEmits, defineProps, reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { SofaAvatar, SofaIcon, SofaNormalText } from 'sofa-ui-components'
+import { Differ } from 'valleyed'
 
 const props = defineProps({
 	questionId: {
@@ -138,6 +139,6 @@ watch(questionsRef, () => {
 
 watch(reactiveQuestions, () => {
 	const ids = reactiveQuestions.map((q) => q.id)
-	if (canEmit.value && !Logic.Differ.equal(props.quiz.questions, ids)) emits('reorderQuestions', ids)
+	if (canEmit.value && !Differ.equal(props.quiz.questions, ids)) emits('reorderQuestions', ids)
 })
 </script>

@@ -2,6 +2,7 @@ import { UserEntity, UsersUseCases } from '@modules/users'
 import { Course, Logic, QueryParams, Quiz } from 'sofa-logic'
 import { Ref, onMounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
+import { addToArray } from 'valleyed'
 
 const store = {} as Record<
 	string,
@@ -41,7 +42,7 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 				Logic.Study.GetQuizzes({ ...query, where: [...query.where, { field: 'courseId', value: null }] }),
 			])
 			courses.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store[id].courses,
 					r,
 					(e) => e.id,
@@ -49,7 +50,7 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 				),
 			)
 			quizzes.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store[id].quizzes,
 					r,
 					(e) => e.id,

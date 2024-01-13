@@ -1,5 +1,6 @@
 import { QuestionEntity } from '@modules/study'
 import { AddQuestionAnswer, GameParticipantAnswer, Logic, Test } from 'sofa-logic'
+import { Differ } from 'valleyed'
 import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -92,7 +93,7 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		store[id].test,
 		async (cur, old) => {
 			if (!cur) return
-			if (!skip.questions && !Logic.Differ.equal(cur.questions, old?.questions))
+			if (!skip.questions && !Differ.equal(cur.questions, old?.questions))
 				Logic.Plays.GetTestQuestions(id)
 					.then((questions) => {
 						store[id].questions.splice(0, store[id].questions.length, ...questions)

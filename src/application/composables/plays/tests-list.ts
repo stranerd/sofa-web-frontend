@@ -1,4 +1,5 @@
 import { Logic, PlayStatus, Test } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
@@ -13,7 +14,7 @@ const store = {
 			'plays/tests',
 			{
 				created: async (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store.tests.value,
 						entity,
 						(e) => e.id,
@@ -21,7 +22,7 @@ const store = {
 					)
 				},
 				updated: async (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store.tests.value,
 						entity,
 						(e) => e.id,
@@ -51,7 +52,7 @@ export const useMyTests = () => {
 				all: true,
 			})
 			tests.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.tests.value,
 					r,
 					(e) => e.id,

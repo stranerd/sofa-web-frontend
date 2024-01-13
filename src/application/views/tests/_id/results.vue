@@ -49,7 +49,7 @@
 												}"
 												cutout-percentage="90%"
 												:text-style="`!text-3xl ${score.color}`">
-												{{ Logic.formatNumber(score.percent, 1) }}%
+												{{ formatNumber(score.percent, 1) }}%
 											</SofaPieChart>
 											<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" :content="score.label" />
 											<SofaNormalText
@@ -77,6 +77,7 @@ import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaNormalText, SofaPieChart } from 'sofa-ui-components'
+import { formatNumber } from 'valleyed'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -102,7 +103,7 @@ export default defineComponent({
 			textColor: 'text-white',
 		}
 
-		return { Logic, leftButton }
+		return { Logic, leftButton, formatNumber }
 	},
 })
 </script>

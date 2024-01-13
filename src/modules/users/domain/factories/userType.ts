@@ -50,10 +50,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 							institutionId: v.string().min(1),
 							courseIds: v.array(v.string().min(1)).min(1),
 							startDate: v.time().asStamp(),
-							endDate: v
-								.time()
-								.min(val?.start)
-								.asStamp(),
+							endDate: v.time().min(val?.start).asStamp(),
 						})
 						.parse(val),
 				),

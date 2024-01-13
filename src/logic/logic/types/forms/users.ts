@@ -1,7 +1,7 @@
 export interface CreateTutorRequestForm {
 	topicId: string
-	verification: Blob
-	qualification: Blob[]
+	verification: File
+	qualification: File[]
 }
 
 export interface CreateVerificationInput {

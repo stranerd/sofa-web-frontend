@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { addToArray } from 'valleyed'
 
 const store = {
 	purchases: reactive<Purchase[]>([]),
@@ -13,7 +14,7 @@ const store = {
 			'payment/purchases',
 			{
 				created: async (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store.purchases,
 						entity,
 						(e) => e.id,
@@ -21,7 +22,7 @@ const store = {
 					)
 				},
 				updated: async (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store.purchases,
 						entity,
 						(e) => e.id,
@@ -52,7 +53,7 @@ export const useMyPurchases = () => {
 				all: true,
 			})
 			purchases.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.purchases,
 					r,
 					(e) => e.id,

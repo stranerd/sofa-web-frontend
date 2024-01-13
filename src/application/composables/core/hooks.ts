@@ -1,4 +1,4 @@
-import { Logic } from 'sofa-logic'
+import { addToArray, getRandomValue } from 'valleyed'
 import { ComputedRef, Ref, computed, reactive, watch } from 'vue'
 import { useErrorHandler, useLoadingHandler } from './states'
 
@@ -11,7 +11,7 @@ type UseAsyncFnOptions<T extends (...args: any[]) => any> = {
 	key?: string
 }
 export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Partial<UseAsyncFnOptions<T>> = {}) => {
-	const key = opts.key ?? Logic.getRandomValue()
+	const key = opts.key ?? getRandomValue()
 	asyncStore[key] ??= { ...useErrorHandler(), ...useLoadingHandler() }
 	const { setError, error, setLoading, loading } = asyncStore[key]
 	const asyncFn = async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>> | null> => {
@@ -66,7 +66,7 @@ export const useItemsInList = <T extends { id: string }>(
 
 	const addToList = (...items: T[]) => {
 		items.forEach((item) => {
-			Logic.addToArray(
+			addToArray(
 				store[key].items,
 				item,
 				(e) => e.id,

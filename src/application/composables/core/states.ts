@@ -2,12 +2,13 @@ import { NetworkError, StatusCodes } from '@modules/core'
 import { Logic } from 'sofa-logic'
 import { ref } from 'vue'
 import { useAuth } from '../auth/auth'
+import { capitalize, getRandomValue } from 'valleyed'
 
 export const useErrorHandler = () => {
 	const errorState = ref('')
 	const setError = async (error: any, skipAlert = false) => {
 		if (error instanceof NetworkError) {
-			errorState.value = error.errors.map(({ message, field }) => `${Logic.capitalize(field ?? 'Error')}: ${message}`).join('\n')
+			errorState.value = error.errors.map(({ message, field }) => `${capitalize(field ?? 'Error')}: ${message}`).join('\n')
 			if ([StatusCodes.NotAuthenticated, StatusCodes.AccessTokenExpired, StatusCodes.RefreshTokenMisused].includes(error.statusCode))
 				await useAuth().signout()
 		} else errorState.value = error?.message ?? error?.error ?? error
@@ -17,7 +18,7 @@ export const useErrorHandler = () => {
 }
 
 export const useLoadingHandler = () => {
-	const id = Logic.getRandomValue()
+	const id = getRandomValue()
 	const loadingState = ref(false)
 	const setLoading = async (loading: boolean, skipAlert = false) => {
 		loadingState.value = loading

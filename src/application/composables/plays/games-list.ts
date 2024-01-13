@@ -1,4 +1,5 @@
 import { Game, Logic, PlayStatus, QueryKeys } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
@@ -13,7 +14,7 @@ const store = {
 			'plays/games',
 			{
 				created: async (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store.games.value,
 						entity,
 						(e) => e.id,
@@ -21,7 +22,7 @@ const store = {
 					)
 				},
 				updated: async (entity) => {
-					Logic.addToArray(
+					addToArray(
 						store.games.value,
 						entity,
 						(e) => e.id,
@@ -55,7 +56,7 @@ export const useMyGames = () => {
 				all: true,
 			})
 			games.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.games.value,
 					r,
 					(e) => e.id,

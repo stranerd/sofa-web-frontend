@@ -1,5 +1,5 @@
 import { QuizEntity, QuizzesUseCases } from '@modules/study'
-import { Logic } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
@@ -12,7 +12,7 @@ const store = {
 		const { id } = useAuth()
 		return QuizzesUseCases.listenToUserQuizzes(id.value, {
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.quizzes.value,
 					entity,
 					(e) => e.id,
@@ -20,7 +20,7 @@ const store = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					store.quizzes.value,
 					entity,
 					(e) => e.id,
@@ -45,7 +45,7 @@ const tutorStore = {
 			}
 		return QuizzesUseCases.listenToTutorQuizzes(id.value, {
 			created: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					tutorStore.quizzes.value,
 					entity,
 					(e) => e.id,
@@ -53,7 +53,7 @@ const tutorStore = {
 				)
 			},
 			updated: async (entity) => {
-				Logic.addToArray(
+				addToArray(
 					tutorStore.quizzes.value,
 					entity,
 					(e) => e.id,
@@ -78,7 +78,7 @@ export const useMyQuizzes = () => {
 		async () => {
 			const quizzes = await QuizzesUseCases.getUserQuizzes(id.value)
 			quizzes.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					store.quizzes.value,
 					r,
 					(e) => e.id,
@@ -115,7 +115,7 @@ export const useTutorQuizzes = () => {
 		async () => {
 			const quizzes = await QuizzesUseCases.getTutorQuizzes(id.value)
 			quizzes.results.forEach((r) =>
-				Logic.addToArray(
+				addToArray(
 					tutorStore.quizzes.value,
 					r,
 					(e) => e.id,
