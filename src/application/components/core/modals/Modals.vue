@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { modal } from '@/composables/core/modal'
+import { modal } from '@app/composables/core/modal'
 import { Logic } from 'sofa-logic'
 import { SofaAlert, SofaDeletePrompt, SofaModal2 as SofaModal, SofaSuccessPrompt } from 'sofa-ui-components'
 

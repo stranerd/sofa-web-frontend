@@ -7,11 +7,11 @@
 </template>
 
 <script lang="ts">
-import teachersImage from '@/assets/images/class-teachers.png'
-import HomeLayout from '@/components/home/HomeLayout.vue'
-import MembersList from '@/components/organizations/members/MembersList.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { useOrganizationMembers } from '@/composables/organizations/members'
+import teachersImage from '@app/assets/images/class-teachers.png'
+import HomeLayout from '@app/components/home/HomeLayout.vue'
+import MembersList from '@app/components/organizations/members/MembersList.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

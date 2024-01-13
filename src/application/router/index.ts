@@ -1,7 +1,7 @@
-import { modal } from '@/composables/core/modal'
-import { runMiddlewares } from '@/middlewares'
-import { Logic } from 'sofa-logic'
+import { modal } from '@app/composables/core/modal'
+import { runMiddlewares } from '@app/middlewares'
 import { RouteConfig } from '@typing/routes'
+import { Logic } from 'sofa-logic'
 import { createRouter, createWebHistory } from 'vue-router'
 // @ts-expect-error - no types
 import routes from '~pages'

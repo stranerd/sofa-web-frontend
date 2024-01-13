@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
+import { useAuth } from '@app/composables/auth/auth'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'

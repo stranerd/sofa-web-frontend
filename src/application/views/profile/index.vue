@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { useAuth } from '@/composables/auth/auth'
+import { useAuth } from '@app/composables/auth/auth'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

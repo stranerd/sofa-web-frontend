@@ -31,10 +31,10 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/study/LibraryLayout.vue'
-import { extractResource, openCourse, openQuiz } from '@/composables/library'
-import { handleShowMaterialMoreOptions } from '@/composables/study'
-import { useUsersMaterials } from '@/composables/study/users-materials'
+import LibraryLayout from '@app/components/study/LibraryLayout.vue'
+import { extractResource, openCourse, openQuiz } from '@app/composables/library'
+import { handleShowMaterialMoreOptions } from '@app/composables/study'
+import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { Logic } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'

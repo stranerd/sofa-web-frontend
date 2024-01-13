@@ -35,9 +35,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useMessages } from '@/composables/conversations/messages'
-import { ChatScroll as vChatScroll } from '@/directives/chat-scroll'
+import { useAuth } from '@app/composables/auth/auth'
+import { useMessages } from '@app/composables/conversations/messages'
+import { ChatScroll as vChatScroll } from '@app/directives/chat-scroll'
 import { ConversationEntity } from '@modules/conversations'
 import { SofaAvatar, SofaNormalText } from 'sofa-ui-components'
 import { PropType, defineProps } from 'vue'

@@ -36,10 +36,10 @@
 </template>
 
 <script lang="ts">
-import ChatContent from '@/components/conversations/ChatContent.vue'
-import ChatLayout from '@/components/conversations/ChatLayout.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { useCreateConversation } from '@/composables/conversations/conversations'
+import ChatContent from '@app/components/conversations/ChatContent.vue'
+import ChatLayout from '@app/components/conversations/ChatLayout.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useCreateConversation } from '@app/composables/conversations/conversations'
 import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

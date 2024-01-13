@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/study/LibraryLayout.vue'
+import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

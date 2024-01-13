@@ -1,15 +1,15 @@
 import { modal } from './modal'
 
-import ClassCardMoreOptions from '@/components/organizations/classes/ClassCardMoreOptionsModal.vue'
-import CreateClass from '@/components/organizations/classes/CreateClassModal.vue'
-import EditClass from '@/components/organizations/classes/EditClassModal.vue'
-import AddMember from '@/components/organizations/members/AddMemberModal.vue'
-import JoinOrganization from '@/components/organizations/members/JoinOrganizationModal.vue'
-import AddMaterial from '@/components/study/AddMaterialModal.vue'
-import MaterialMoreOptions from '@/components/study/MaterialMoreOptionsModal.vue'
-import SaveToFolder from '@/components/study/folders/SaveToFolderModal.vue'
-import ChooseStudyMode from '@/components/study/quizzes/ChooseStudyModeModal.vue'
-import CustomizeAi from '@/components/users/users/CustomizeAiModal.vue'
+import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
+import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
+import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
+import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
+import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
+import AddMaterial from '@app/components/study/AddMaterialModal.vue'
+import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
+import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
+import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
+import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 
 export const useOrganizationModal = () =>
 	modal.register('Organization', {

@@ -139,12 +139,12 @@
 </template>
 
 <script lang="ts">
-import { useAuth } from '@/composables/auth/auth'
-import { useOrganizationModal } from '@/composables/core/modals'
-import { extractResource } from '@/composables/library'
-import { saveToFolder } from '@/composables/study/folders'
-import { useUsersMaterials } from '@/composables/study/users-materials'
-import { socials } from '@/composables/users/profile'
+import { useAuth } from '@app/composables/auth/auth'
+import { useOrganizationModal } from '@app/composables/core/modals'
+import { extractResource } from '@app/composables/library'
+import { saveToFolder } from '@app/composables/study/folders'
+import { useUsersMaterials } from '@app/composables/study/users-materials'
+import { socials } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaAvatar,

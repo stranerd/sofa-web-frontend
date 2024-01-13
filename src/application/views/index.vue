@@ -6,10 +6,10 @@
 </template>
 
 <script lang="ts">
-import HomeForNonStudents from '@/components/home/HomeForNonStudents.vue'
-import HomeForStudents from '@/components/home/HomeForStudents.vue'
-import HomeLayout from '@/components/home/HomeLayout.vue'
-import { useAuth } from '@/composables/auth/auth'
+import HomeForNonStudents from '@app/components/home/HomeForNonStudents.vue'
+import HomeForStudents from '@app/components/home/HomeForStudents.vue'
+import HomeLayout from '@app/components/home/HomeLayout.vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 

@@ -61,8 +61,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useConversationsList } from '@/composables/conversations/conversations'
+import { useAuth } from '@app/composables/auth/auth'
+import { useConversationsList } from '@app/composables/conversations/conversations'
 import { formatTime } from '@utils/dates'
 import { SofaHeaderText, SofaIcon } from 'sofa-ui-components'
 import { defineProps, ref } from 'vue'

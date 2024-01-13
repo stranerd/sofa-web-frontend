@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useCreateClass } from '@/composables/organizations/classes'
+import { useCreateClass } from '@app/composables/organizations/classes'
 import { SofaHeaderText, SofaIcon } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 import ClassForm from './ClassForm.vue'

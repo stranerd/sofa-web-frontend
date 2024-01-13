@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
-import { useMyOrganizations } from '@/composables/users/organizations'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { useMyOrganizations } from '@app/composables/users/organizations'
 import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

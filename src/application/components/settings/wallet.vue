@@ -301,7 +301,7 @@
 		]" />
 </template>
 <script lang="ts">
-import { FormValidations } from '@/composables'
+import { FormValidations } from '@app/composables'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic, SelectOption, Transaction } from 'sofa-logic'
 import {

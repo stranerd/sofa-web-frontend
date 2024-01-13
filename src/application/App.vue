@@ -17,10 +17,10 @@
 </template>
 
 <script lang="ts" setup>
-import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
-import Modals from '@/components/core/modals/Modals.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { reportMaterialSetup, sendReportMaterial } from '@/composables/library'
+import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
+import Modals from '@app/components/core/modals/Modals.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { reportMaterialSetup, sendReportMaterial } from '@app/composables/library'
 import { UsersUseCases } from '@modules/users'
 import { watch } from 'vue'
 import { useMeta } from 'vue-meta'

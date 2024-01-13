@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { useCreateQuiz } from '@/composables/study/quizzes'
+import { useCreateQuiz } from '@app/composables/study/quizzes'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
-import SettingContact from '@/components/settings/contact.vue'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import SettingContact from '@app/components/settings/contact.vue'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 

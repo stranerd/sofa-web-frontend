@@ -1,4 +1,4 @@
-import { useAuth } from '@/composables/auth/auth'
+import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
 import { RouteLocationNormalized } from 'vue-router'
 

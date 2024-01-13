@@ -47,8 +47,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useHasAccess } from '@/composables/study'
+import { useAuth } from '@app/composables/auth/auth'
+import { useHasAccess } from '@app/composables/study'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaEmptyState, SofaIcon, SofaIconCard, SofaNormalText } from 'sofa-ui-components'

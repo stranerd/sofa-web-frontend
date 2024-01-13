@@ -73,9 +73,9 @@
 </template>
 
 <script lang="ts">
-import TestWrapper from '@/components/plays/tests/TestWrapper.vue'
-import Quiz from '@/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
+import TestWrapper from '@app/components/plays/tests/TestWrapper.vue'
+import Quiz from '@app/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'

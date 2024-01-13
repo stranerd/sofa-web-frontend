@@ -119,9 +119,9 @@
 </template>
 
 <script lang="ts">
-import GameWrapper from '@/components/plays/games/GameWrapper.vue'
-import Quiz from '@/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
+import GameWrapper from '@app/components/plays/games/GameWrapper.vue'
+import Quiz from '@app/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { SofaAvatar, SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText } from 'sofa-ui-components'

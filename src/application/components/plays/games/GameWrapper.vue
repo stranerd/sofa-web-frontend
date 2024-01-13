@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useGame } from '@/composables/plays/games'
+import { useAuth } from '@app/composables/auth/auth'
+import { useGame } from '@app/composables/plays/games'
 import { formatNumber } from 'valleyed'
 import { computed, defineProps } from 'vue'
 import { useRouter } from 'vue-router'

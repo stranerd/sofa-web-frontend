@@ -63,10 +63,10 @@
 </template>
 
 <script lang="ts">
+import { extractResource, openQuiz } from '@app/composables/library'
 import { Logic } from 'sofa-logic'
 import { SofaDocumentReader, SofaEmptyState, SofaHeaderText, SofaImageLoader, SofaVideoPlayer } from 'sofa-ui-components'
 import { defineComponent, onMounted, ref } from 'vue'
-import { extractResource, openQuiz } from '@/composables/library'
 
 export default defineComponent({
 	components: {

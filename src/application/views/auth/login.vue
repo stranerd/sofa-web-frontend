@@ -45,8 +45,8 @@
 </template>
 
 <script lang="ts">
-import AuthProvider from '@/components/auth/AuthProvider.vue'
-import { useEmailSignin } from '@/composables/auth/signin'
+import AuthProvider from '@app/components/auth/AuthProvider.vue'
+import { useEmailSignin } from '@app/composables/auth/signin'
 import { SofaButton, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

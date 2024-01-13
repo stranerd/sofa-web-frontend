@@ -11,7 +11,7 @@
 		"importHelpers": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"noImplicitAny": false,
+		"noImplicitAny": false, // TODO: remove in future
 		"allowSyntheticDefaultImports": true,
 		"sourceMap": true,
 		"allowJs": true,
@@ -20,9 +20,6 @@
 			"vite/client"
 		],
 		"paths": {
-			"@/*": [
-				"src/application/*"
-			],
 			"@app/*": [
 				"src/application/*"
 			],

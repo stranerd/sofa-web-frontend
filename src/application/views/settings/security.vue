@@ -39,9 +39,9 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { usePasswordUpdate } from '@/composables/auth/passwords'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { usePasswordUpdate } from '@app/composables/auth/passwords'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 

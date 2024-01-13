@@ -100,8 +100,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useGenericTagsList, useTopicsList } from '@/composables/interactions/tags'
+import { useAuth } from '@app/composables/auth/auth'
+import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { QuizEntity, QuizFactory } from '@modules/study'
 import {
 	SofaButton,

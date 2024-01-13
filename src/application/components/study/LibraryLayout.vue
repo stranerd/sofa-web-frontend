@@ -175,9 +175,9 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/composables/auth/auth'
-import { useEditFolder, useMyFolders } from '@/composables/study/folders'
-import { useMyOrganizations } from '@/composables/users/organizations'
+import { useAuth } from '@app/composables/auth/auth'
+import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
+import { useMyOrganizations } from '@app/composables/users/organizations'
 import { Logic } from 'sofa-logic'
 import { SofaCustomInput, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineProps } from 'vue'

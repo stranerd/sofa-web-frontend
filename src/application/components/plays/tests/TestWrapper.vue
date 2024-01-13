@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useTest } from '@/composables/plays/tests'
+import { useAuth } from '@app/composables/auth/auth'
+import { useTest } from '@app/composables/plays/tests'
 import { computed, defineProps } from 'vue'
 
 const props = defineProps({

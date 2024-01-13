@@ -173,8 +173,8 @@
 	</sofa-modal>
 </template>
 <script lang="ts">
-import { FormValidations } from '@/composables'
-import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@/composables/course'
+import { FormValidations } from '@app/composables'
+import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
 import { Conditions, Logic } from 'sofa-logic'
 import { SofaButton, SofaFileAttachment, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaSelect } from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'

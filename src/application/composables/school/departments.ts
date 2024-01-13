@@ -1,4 +1,4 @@
-import { useSuccessHandler } from '@/composables/core/states'
+import { useSuccessHandler } from '@app/composables/core/states'
 import { DepartmentEntity, DepartmentFactory, DepartmentsUseCases } from '@modules/school'
 import { addToArray } from '@utils/commons'
 import { Logic } from 'sofa-logic'

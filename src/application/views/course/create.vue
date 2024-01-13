@@ -281,9 +281,9 @@
 </template>
 
 <script lang="ts">
-import AddVideo from '@/components/study/courses/AddVideo.vue'
-import NewCourseMaterial from '@/components/study/courses/NewMaterial.vue'
-import CourseSettings from '@/components/study/courses/Settings.vue'
+import AddVideo from '@app/components/study/courses/AddVideo.vue'
+import NewCourseMaterial from '@app/components/study/courses/NewMaterial.vue'
+import CourseSettings from '@app/components/study/courses/Settings.vue'
 import { Logic } from 'sofa-logic'
 import {
 	SofaButton,
@@ -300,7 +300,7 @@ import {
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
-import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@/composables/course'
+import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@app/composables/course'
 
 export default defineComponent({
 	name: 'CreateCourse',

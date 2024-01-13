@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { usePasswordReset } from '@/composables/auth/passwords'
+import { usePasswordReset } from '@app/composables/auth/passwords'
 import { SofaButton, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

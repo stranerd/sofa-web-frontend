@@ -87,9 +87,9 @@
 </template>
 
 <script lang="ts">
-import Flashcard from '@/components/study/quizzes/FlashcardDisplay.vue'
-import Quiz from '@/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
+import Flashcard from '@app/components/study/quizzes/FlashcardDisplay.vue'
+import Quiz from '@app/components/study/quizzes/Quiz.vue'
+import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { storage } from '@utils/storage'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'

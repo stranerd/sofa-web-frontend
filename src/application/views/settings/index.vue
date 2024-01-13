@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

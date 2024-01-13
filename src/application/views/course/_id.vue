@@ -258,9 +258,9 @@
 	</expanded-layout>
 </template>
 <script lang="ts">
-import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
-import CourseContent from '@/components/study/courses/content.vue'
-import { useHasAccess } from '@/composables/study'
+import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
+import CourseContent from '@app/components/study/courses/content.vue'
+import { useHasAccess } from '@app/composables/study'
 import { Conditions, Logic } from 'sofa-logic'
 import { SofaButton, SofaCourseContent, SofaCourseSummary, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref } from 'vue'

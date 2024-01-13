@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
+import { useAuth } from '@app/composables/auth/auth'
 import { SofaBottomBar, SofaTopBar } from 'sofa-ui-components'
 import { computed, defineProps } from 'vue'
 import { handleShowAddMaterial } from '../composables/study'

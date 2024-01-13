@@ -209,11 +209,11 @@
 </template>
 
 <script lang="ts">
-import { useAuth } from '@/composables/auth/auth'
-import { usePhoneUpdate, useProfileUpdate } from '@/composables/auth/profile'
-import { useChooseSchool } from '@/composables/school'
-import { useCourseList } from '@/composables/school/courses'
-import { useUserLocationUpdate, useUserTypeUpdate } from '@/composables/users/profile'
+import { useAuth } from '@app/composables/auth/auth'
+import { usePhoneUpdate, useProfileUpdate } from '@app/composables/auth/profile'
+import { useChooseSchool } from '@app/composables/school'
+import { useCourseList } from '@app/composables/school/courses'
+import { useUserLocationUpdate, useUserTypeUpdate } from '@app/composables/users/profile'
 import { UserSchoolType } from '@modules/users'
 import { Logic } from 'sofa-logic'
 import {

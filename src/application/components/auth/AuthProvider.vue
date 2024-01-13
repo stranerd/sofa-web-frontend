@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAppleSignin, useGoogleSignin } from '@/composables/auth/signin'
+import { useAppleSignin, useGoogleSignin } from '@app/composables/auth/signin'
 import { isIos, isWeb } from '@utils/constants'
 import { SofaButton, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 

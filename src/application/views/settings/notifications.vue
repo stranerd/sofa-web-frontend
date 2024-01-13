@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 

@@ -75,9 +75,9 @@
 </template>
 
 <script lang="ts">
-import { extractResource } from '@/composables/library'
-import { saveToFolder } from '@/composables/study/folders'
-import { useMyStudy } from '@/composables/study'
+import { extractResource } from '@app/composables/library'
+import { useMyStudy } from '@app/composables/study'
+import { saveToFolder } from '@app/composables/study/folders'
 import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaItemCard, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'

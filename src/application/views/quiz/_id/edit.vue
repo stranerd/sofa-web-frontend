@@ -268,13 +268,13 @@
 </template>
 
 <script lang="ts">
-import EditQuestionBody from '@/components/study/quizzes/EditQuestionBody.vue'
-import EditQuestionOptions from '@/components/study/quizzes/EditQuestionOptions.vue'
-import EditQuestionsList from '@/components/study/quizzes/EditQuestionsList.vue'
-import ManageAccessModal from '@/components/study/quizzes/ManageAccessModal.vue'
-import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
-import RequestAccessModal from '@/components/study/quizzes/RequestAccessModal.vue'
-import QuizSettings from '@/components/study/quizzes/Settings.vue'
+import EditQuestionBody from '@app/components/study/quizzes/EditQuestionBody.vue'
+import EditQuestionOptions from '@app/components/study/quizzes/EditQuestionOptions.vue'
+import EditQuestionsList from '@app/components/study/quizzes/EditQuestionsList.vue'
+import ManageAccessModal from '@app/components/study/quizzes/ManageAccessModal.vue'
+import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
+import RequestAccessModal from '@app/components/study/quizzes/RequestAccessModal.vue'
+import QuizSettings from '@app/components/study/quizzes/Settings.vue'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'

@@ -130,8 +130,8 @@
 	</sofa-form-wrapper>
 </template>
 <script lang="ts">
-import { FormValidations } from '@/composables'
-import { useAuth } from '@/composables/auth/auth'
+import { FormValidations } from '@app/composables'
+import { useAuth } from '@app/composables/auth/auth'
 import {
 	allGenericTags,
 	allTopics,
@@ -141,7 +141,7 @@ import {
 	getGenericTags,
 	getTopics,
 	updateCourse,
-} from '@/composables/course'
+} from '@app/composables/course'
 import { CourseEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import {

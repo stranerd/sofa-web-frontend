@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import AccountSetup from '@/components/onboarding/AccountSetup.vue'
+import AccountSetup from '@app/components/onboarding/AccountSetup.vue'
 import { UserType } from '@modules/users'
 import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'

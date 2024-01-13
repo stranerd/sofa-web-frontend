@@ -27,10 +27,10 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/study/LibraryLayout.vue'
-import { extractResource, openCourse } from '@/composables/library'
-import { handleShowMaterialMoreOptions } from '@/composables/study'
-import { useMyPurchasedCourses } from '@/composables/study/courses-list'
+import LibraryLayout from '@app/components/study/LibraryLayout.vue'
+import { extractResource, openCourse } from '@app/composables/library'
+import { handleShowMaterialMoreOptions } from '@app/composables/study'
+import { useMyPurchasedCourses } from '@app/composables/study/courses-list'
 import { Logic } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'

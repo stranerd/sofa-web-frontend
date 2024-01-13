@@ -63,12 +63,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useAuth } from '@app/composables/auth/auth'
+import { useConversationsList } from '@app/composables/conversations/conversations'
 import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 import ChatList from './ChatList.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { useConversationsList } from '@/composables/conversations/conversations'
 
 defineProps({
 	title: {

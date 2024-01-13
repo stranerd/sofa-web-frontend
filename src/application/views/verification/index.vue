@@ -172,12 +172,12 @@
 </template>
 
 <script lang="ts">
-import SocialMediaUpdate from '@/components/onboarding/SocialMediaUpdate.vue'
-import { FormValidations } from '@/composables'
-import { useProfileUpdate } from '@/composables/auth/profile'
-import { ContentDetails, extractContent } from '@/composables/marketplace'
-import { submitVerification, updateVerificationForm } from '@/composables/profile'
-import { useUserSocialsUpdate } from '@/composables/users/profile'
+import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
+import { FormValidations } from '@app/composables'
+import { useProfileUpdate } from '@app/composables/auth/profile'
+import { ContentDetails, extractContent } from '@app/composables/marketplace'
+import { submitVerification, updateVerificationForm } from '@app/composables/profile'
+import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { Conditions, Logic, SelectOption } from 'sofa-logic'
 import {
 	SofaActivityCard,

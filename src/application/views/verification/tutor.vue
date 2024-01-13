@@ -167,11 +167,11 @@
 </template>
 
 <script lang="ts">
-import { FormValidations } from '@/composables'
-import { useProfileUpdate } from '@/composables/auth/profile'
-import { useTopicsList } from '@/composables/interactions/tags'
-import { createTutorRequest, tutorRequestForm } from '@/composables/profile'
-import { useUserLocationUpdate } from '@/composables/users/profile'
+import { FormValidations } from '@app/composables'
+import { useProfileUpdate } from '@app/composables/auth/profile'
+import { useTopicsList } from '@app/composables/interactions/tags'
+import { createTutorRequest, tutorRequestForm } from '@app/composables/profile'
+import { useUserLocationUpdate } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
 	SofaButton,

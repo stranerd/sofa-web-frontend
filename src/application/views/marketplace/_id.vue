@@ -117,9 +117,9 @@
 </template>
 
 <script lang="ts">
-import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@/composables/library'
-import { useHasAccess } from '@/composables/study'
-import { saveToFolder } from '@/composables/study/folders'
+import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@app/composables/library'
+import { useHasAccess } from '@app/composables/study'
+import { saveToFolder } from '@app/composables/study/folders'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'

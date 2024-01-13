@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
-import SettingProfile from '@/components/settings/profile.vue'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import SettingProfile from '@app/components/settings/profile.vue'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 

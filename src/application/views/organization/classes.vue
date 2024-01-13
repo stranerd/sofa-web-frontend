@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts">
-import HomeLayout from '@/components/home/HomeLayout.vue'
-import ClassCard from '@/components/organizations/classes/ClassCard.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { useOrganizationModal } from '@/composables/core/modals'
-import { useMyClasses } from '@/composables/organizations/classes'
+import HomeLayout from '@app/components/home/HomeLayout.vue'
+import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useOrganizationModal } from '@app/composables/core/modals'
+import { useMyClasses } from '@app/composables/organizations/classes'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 

@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
-import SettingWallet from '@/components/settings/wallet.vue'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import SettingWallet from '@app/components/settings/wallet.vue'
 import { Conditions, Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'

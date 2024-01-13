@@ -64,10 +64,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { extractContent } from '@/composables/marketplace'
-import { saveToFolder } from '@/composables/study/folders'
-import { useUsersMaterials } from '@/composables/study/users-materials'
+import { useAuth } from '@app/composables/auth/auth'
+import { extractContent } from '@app/composables/marketplace'
+import { saveToFolder } from '@app/composables/study/folders'
+import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { SofaActivityCard, SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { formatNumber } from 'valleyed'
 import { computed } from 'vue'

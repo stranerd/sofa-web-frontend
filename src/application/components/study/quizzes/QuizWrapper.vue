@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@/composables/auth/auth'
-import { useCountdown } from '@/composables/core/time'
-import { useQuiz } from '@/composables/study/quizzes'
+import { useAuth } from '@app/composables/auth/auth'
+import { useCountdown } from '@app/composables/core/time'
+import { useQuiz } from '@app/composables/study/quizzes'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
 import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'

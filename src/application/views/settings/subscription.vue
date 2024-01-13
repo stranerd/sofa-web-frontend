@@ -108,8 +108,8 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'
-import { useAuth } from '@/composables/auth/auth'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'

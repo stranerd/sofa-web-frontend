@@ -36,10 +36,10 @@
 	</div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import { SofaHeaderText, SofaIcon, SofaTextarea, SofaButton } from 'sofa-ui-components'
-import { FormValidations } from '@/composables'
+import { FormValidations } from '@app/composables'
 import { Logic } from 'sofa-logic'
+import { SofaButton, SofaHeaderText, SofaIcon, SofaTextarea } from 'sofa-ui-components'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
 	components: {

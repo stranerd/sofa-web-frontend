@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useManageOrganizationMembers } from '@/composables/organizations/members'
+import { useManageOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaTextField, SofaNormalText, SofaButton } from 'sofa-ui-components'
+import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 
 const props = defineProps<{

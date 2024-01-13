@@ -169,10 +169,10 @@
 </template>
 
 <script setup lang="ts">
-import ChatList from '@/components/conversations/ChatList.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { useConversationsList, useCreateConversation } from '@/composables/conversations/conversations'
-import { useOrganizationModal, useUserModal } from '@/composables/core/modals'
+import ChatList from '@app/components/conversations/ChatList.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
+import { useOrganizationModal, useUserModal } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import {

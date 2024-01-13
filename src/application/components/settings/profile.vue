@@ -77,10 +77,10 @@
 </template>
 
 <script lang="ts" setup>
-import SocialMediaUpdate from '@/components/onboarding/SocialMediaUpdate.vue'
-import { useAuth } from '@/composables/auth/auth'
-import { useProfileUpdate } from '@/composables/auth/profile'
-import { useUserSocialsUpdate } from '@/composables/users/profile'
+import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useProfileUpdate } from '@app/composables/auth/profile'
+import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaFileInput, SofaHeaderText, SofaIcon, SofaImageLoader, SofaTextField, SofaTextarea } from 'sofa-ui-components'
 import { watch } from 'vue'

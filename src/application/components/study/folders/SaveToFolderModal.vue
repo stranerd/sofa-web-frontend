@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useEditFolder, useMyFolders } from '@/composables/study/folders'
+import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { FolderSaved } from '@modules/study'
 import { SofaCustomInput, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'

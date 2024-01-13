@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/composables/auth/auth'
+import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'

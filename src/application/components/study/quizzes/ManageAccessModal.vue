@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useSearchUsers } from '@/composables/users/users'
+import { useSearchUsers } from '@app/composables/users/users'
 import { QuizEntity } from '@modules/study'
 import { Logic, SingleUser } from 'sofa-logic'
 import {

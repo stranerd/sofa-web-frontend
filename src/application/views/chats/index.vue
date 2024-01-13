@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts">
-import ChatLayout from '@/components/conversations/ChatLayout.vue'
-import ChatList from '@/components/conversations/ChatList.vue'
-import { useAuth } from '@/composables/auth/auth'
+import ChatLayout from '@app/components/conversations/ChatLayout.vue'
+import ChatList from '@app/components/conversations/ChatList.vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
 import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'

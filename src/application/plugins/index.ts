@@ -1,5 +1,5 @@
-import { useAuth } from '@/composables/auth/auth'
-import { setEmailVerificationEmail } from '@/composables/auth/signin'
+import { useAuth } from '@app/composables/auth/auth'
+import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AuthUseCases } from '@modules/auth'
 import { deleteTokens, getTokens } from '@utils/tokens'
 import { App } from 'vue'

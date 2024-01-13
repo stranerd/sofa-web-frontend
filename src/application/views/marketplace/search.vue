@@ -175,10 +175,10 @@
 </template>
 
 <script lang="ts">
-import MarketplaceFilter, { SelectedOption } from '@/components/marketplace/Filter.vue'
-import { extractResource } from '@/composables/library'
-import { search } from '@/composables/marketplace'
-import { saveToFolder } from '@/composables/study/folders'
+import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
+import { extractResource } from '@app/composables/library'
+import { search } from '@app/composables/marketplace'
+import { saveToFolder } from '@app/composables/study/folders'
 import { DraftStatus } from '@modules/study'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'

@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import LibraryLayout from '@/components/study/LibraryLayout.vue'
-import { createGameData, createTestData } from '@/composables/library'
-import { useMyGames } from '@/composables/plays/games-list'
-import { useMyTests } from '@/composables/plays/tests-list'
-import { useQuizzesInList } from '@/composables/study/quizzes-list'
+import LibraryLayout from '@app/components/study/LibraryLayout.vue'
+import { createGameData, createTestData } from '@app/composables/library'
+import { useMyGames } from '@app/composables/plays/games-list'
+import { useMyTests } from '@app/composables/plays/tests-list'
+import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaProgressItemCard } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'

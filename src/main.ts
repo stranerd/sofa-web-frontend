@@ -1,11 +1,11 @@
+import App from '@app/App.vue'
 import { createApp } from 'vue'
 import { createMetaManager } from 'vue-meta'
-import App from '@/App.vue'
 
-import '@/assets/styles/index.scss'
+import '@app/assets/styles/index.scss'
 
-import { globalPlugins } from '@/plugins'
-import { routerPromise } from '@/router'
+import { globalPlugins } from '@app/plugins'
+import { routerPromise } from '@app/router'
 
 const init = async () => {
 	const router = await routerPromise

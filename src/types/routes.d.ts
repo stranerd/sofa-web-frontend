@@ -1,4 +1,4 @@
-import { Middleware } from '@/middlewares'
+import { Middleware } from '@app/middlewares'
 import { FetchRule } from 'sofa-logic'
 import { Route } from 'vue-router'
 
