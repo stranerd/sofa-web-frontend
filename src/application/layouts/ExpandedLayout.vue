@@ -24,11 +24,11 @@ import { handleShowAddMaterial } from '../composables/study'
 
 defineProps({
 	topbarOptions: {
-		type: Object as () => {
-			type: string
-			title: string
-			actions: any[]
-		},
+		type: Object as () => Partial<{
+			type?: string
+			title?: string
+			actions?: any[]
+		}>,
 		default: () => {
 			return {
 				type: 'main',
@@ -46,7 +46,7 @@ defineProps({
 		default: '',
 	},
 	hide: {
-		type: Object as PropType<{ top: boolean; bottom: boolean }>,
+		type: Object as PropType<Partial<{ top?: boolean; bottom?: boolean }>>,
 		default: () => ({ top: false, bottom: false }),
 	},
 	bgImage: {

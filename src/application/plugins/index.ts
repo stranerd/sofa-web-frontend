@@ -1,24 +1,12 @@
+import { useAuth } from '@/composables/auth/auth'
+import { setEmailVerificationEmail } from '@/composables/auth/signin'
+import { AuthUseCases } from '@modules/auth'
+import { deleteTokens, getTokens } from '@utils/tokens'
 import { App } from 'vue'
 import { Router } from 'vue-router'
 
-import { useAuth } from '@/composables/auth/auth'
-import { setEmailVerificationEmail } from '@/composables/auth/signin'
-import AuthLayout from '../layouts/Auth.vue'
-import DashboardLayout from '../layouts/Dashboard.vue'
-import ExpandedLayout from '../layouts/Expanded.vue'
-import SubPageLayout from '../layouts/SubPage.vue'
-import { deleteTokens, getTokens } from '@utils/tokens'
-import { AuthUseCases } from '@modules/auth'
-
 type PluginFunction = (args: { app: App; router: Router }) => Promise<void>
 const definePlugin = (plugin: PluginFunction) => plugin
-
-const registerLayouts = definePlugin(async ({ app }) => {
-	app.component('DashboardLayout', DashboardLayout)
-		.component('expanded-layout', ExpandedLayout)
-		.component('sub-page-layout', SubPageLayout)
-		.component('auth-layout', AuthLayout)
-})
 
 const cssListeners = definePlugin(async () => {
 	const hasNoGapSupport = () => {
@@ -60,4 +48,4 @@ const parseLoggedInUser = definePlugin(async ({ router }) => {
 	}
 })
 
-export const globalPlugins = [parseLoggedInUser, registerLayouts, cssListeners]
+export const globalPlugins = [parseLoggedInUser, cssListeners]

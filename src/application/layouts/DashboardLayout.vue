@@ -47,15 +47,15 @@ import { handleShowAddMaterial } from '../composables/study'
 
 defineProps({
 	topbarOptions: {
-		type: Object as () => {
-			type: string
+		type: Object as () => Partial<{
+			type?: string
 			title: string
-			actions: any[]
-			badges: {
+			actions?: any[]
+			badges?: {
 				text: string
 				color: string
 			}[]
-		},
+		}>,
 		default: () => {
 			return {
 				type: 'main',
@@ -66,7 +66,7 @@ defineProps({
 		},
 	},
 	hide: {
-		type: Object as () => Partial<{ top: boolean; bottom: boolean; left: boolean; right: boolean }>,
+		type: Object as () => Partial<{ top?: boolean; bottom?: boolean; left?: boolean; right?: boolean }>,
 		default: () => ({ top: false, bottom: false, left: false, right: false }),
 	},
 	bgColor: {

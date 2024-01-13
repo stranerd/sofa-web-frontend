@@ -1,9 +1,12 @@
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import Checker from 'vite-plugin-checker'
+import Compression from 'vite-plugin-compression'
 import Pages from 'vite-plugin-pages'
 
+const skipCompression = !!process.env.SKIP_COMPRESSION
 const isDev = process.env.NODE_ENV === 'development'
 
 export default defineConfig({
@@ -15,16 +18,6 @@ export default defineConfig({
 				},
 			},
 		}),
-		...(isDev
-			? [
-					Checker({
-						typescript: true,
-						vueTsc: true,
-						// eslint: { lintCommand: 'eslint ./src' }
-						// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
-					}),
-				]
-			: []),
 		Pages({
 			importMode: 'sync',
 			dirs: 'src/application/views',
@@ -36,6 +29,31 @@ export default defineConfig({
 				return { ...route, path: path.join('/') }
 			},
 		}),
+		Components({
+			dirs: ['src/application/components', 'src/application/layouts'],
+			dts: 'src/types/components.d.ts',
+			types: [{ from: 'vue-router', names: ['RouterLink', 'RouterView'] }],
+			resolvers: [
+				(componentName) => {
+					if (componentName.toLowerCase().startsWith('sofa'))
+						return {
+							name: componentName,
+							from: 'src/ui-components',
+						}
+				},
+			],
+		}),
+		...(!skipCompression ? [Compression({ algorithm: 'brotliCompress' })] : []),
+		...(isDev
+			? [
+					Checker({
+						typescript: true,
+						vueTsc: true,
+						// eslint: { lintCommand: 'eslint ./src' }
+						// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
+					}),
+				]
+			: []),
 	],
 	resolve: {
 		alias: {
