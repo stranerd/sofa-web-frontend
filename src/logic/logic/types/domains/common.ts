@@ -1,5 +1,5 @@
 import { Media } from '@modules/core'
-import { Course, Quiz } from './study'
+import { CourseEntity, QuizEntity } from '@modules/study'
 
 export interface ValidationError {
 	field: string
@@ -25,7 +25,7 @@ export interface Paginated<D> {
 }
 
 export interface ContentDetails {
-	original: Quiz | Course | null
+	original: QuizEntity | CourseEntity | null
 	type: 'quiz' | 'course'
 	route: string
 	price: number

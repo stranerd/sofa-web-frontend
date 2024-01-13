@@ -68,13 +68,13 @@
 				<SofaNormalText color="text-inherit" content="Duplicate question" />
 			</a>
 			<a
-				v-if="quiz.status !== 'published'"
+				v-if="!quiz.isPublished"
 				class="w-full flex mdlg:hidden items-center justify-start gap-3"
 				@click="emits('deleteQuestion', question.id)">
 				<SofaIcon name="trash" class="h-[16px]" />
 				<SofaNormalText color="text-primaryRed" content="Delete question" />
 			</a>
-			<a v-if="quiz.status !== 'published'" class="w-full flex items-center justify-start gap-3" @click="emits('deleteQuiz')">
+			<a v-if="!quiz.isPublished" class="w-full flex items-center justify-start gap-3" @click="emits('deleteQuiz')">
 				<SofaIcon name="trash" class="h-[16px]" />
 				<SofaNormalText color="text-primaryRed" content="Delete quiz" />
 			</a>

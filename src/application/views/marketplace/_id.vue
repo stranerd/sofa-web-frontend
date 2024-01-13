@@ -524,7 +524,7 @@ export default defineComponent({
 				setCourseData()
 				setSimilarContents()
 				// create course view
-				if (SingleCourse.value && SingleCourse.value.status === 'published')
+				if (SingleCourse.value && SingleCourse.value.isPublished)
 					Logic.Interactions.CreateView({
 						entity: {
 							id: SingleCourse.value.id,
@@ -536,7 +536,7 @@ export default defineComponent({
 			if (contentType.value == 'quiz') {
 				setQuizData()
 				setSimilarContents()
-				if (SingleQuiz.value && SingleQuiz.value.status === 'published')
+				if (SingleQuiz.value && SingleQuiz.value.isPublished)
 					Logic.Interactions.CreateView({
 						entity: {
 							id: SingleQuiz.value.id,

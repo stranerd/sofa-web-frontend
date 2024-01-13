@@ -1,5 +1,5 @@
 import { AuthDetails } from '@modules/auth'
-import { listenOnSocket } from '@modules/core'
+import { listenToMany, listenToOne } from '@modules/core'
 import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
 import { getRandomValue, isString } from 'valleyed'
@@ -49,26 +49,21 @@ export default class Common {
 		})
 	}
 
-	public async listenToSocket<Model>(channel: string, listeners: Listeners<Model>) {
-		return listenOnSocket<Model>(channel, listeners)
+	public async listenToOne<Model, Entity = Model>(
+		channel: string,
+		listeners: Listeners<Entity>,
+		mapper: (model: Model) => Entity = (model) => model as unknown as Entity,
+	) {
+		return listenToOne<Model, Entity>(channel, listeners, mapper)
 	}
 
-	public async listenToOne<Model>(channel: string, listeners: Listeners<Model>) {
-		return this.listenToSocket(channel, listeners)
-	}
-
-	async listenToMany<Model>(channel: string, listeners: Listeners<Model>, matches: (entity: Model) => boolean = () => true) {
-		return this.listenToSocket<Model>(channel, {
-			created: async (model) => {
-				if (matches(model)) await listeners.created(model)
-			},
-			updated: async (model) => {
-				if (matches(model)) await listeners.updated(model)
-			},
-			deleted: async (model) => {
-				if (matches(model)) await listeners.deleted(model)
-			},
-		})
+	async listenToMany<Model, Entity = Model>(
+		channel: string,
+		listeners: Listeners<Entity>,
+		matches: (entity: Entity) => boolean = () => true,
+		mapper: (model: Model) => Entity = (model) => model as unknown as Entity,
+	) {
+		return listenToMany<Model, Entity>(channel, listeners, mapper, matches)
 	}
 
 	public SetRouter = (router: Router) => {

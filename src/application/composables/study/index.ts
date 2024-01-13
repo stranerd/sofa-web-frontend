@@ -1,5 +1,5 @@
 import { CourseEntity, QuizEntity, StudyKeys, StudyUseCases } from '@modules/study'
-import { Course, Quiz, ResourceType } from 'sofa-logic'
+import { ResourceType } from 'sofa-logic'
 import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
@@ -51,8 +51,8 @@ export const useMyStudy = (key: StudyKeys, alwaysRefetch = false) => {
 export const useRecent = () => {
 	const recent = useMyStudy('recent', true)
 
-	const quizzes = computed(() => recent.materials.value.filter((m) => m instanceof QuizEntity) as QuizEntity[])
-	const courses = computed(() => recent.materials.value.filter((m) => m instanceof CourseEntity) as CourseEntity[])
+	const quizzes = computed(() => recent.materials.value.filter((m) => m.isQuiz()) as QuizEntity[])
+	const courses = computed(() => recent.materials.value.filter((m) => m.isCourse()) as CourseEntity[])
 
 	return { quizzes, courses }
 }
@@ -60,15 +60,13 @@ export const useRecent = () => {
 export const useHasAccess = () => {
 	const { user } = useAuth()
 	const { purchasesCoursesIds } = useMyPurchases()
-	const hasAccess = computed(() => (m: Quiz | QuizEntity | CourseEntity | Course | null) => {
-		if (!m) return false
-		const material = m as any
-		const isQuiz = material.__type === 'QuizEntity'
+	const hasAccess = computed(() => (material: QuizEntity | CourseEntity | null) => {
+		if (!material) return false
 		return [
-			isQuiz && !material.courseId,
-			purchasesCoursesIds.value.includes(isQuiz ? material.courseId : material.id),
+			material.isQuiz() && !material.courseId,
+			purchasesCoursesIds.value.includes(material.isCourse() ? material.id : material.courseId),
 			material.user.id === user.value?.id,
-			isQuiz && material.access.members.includes(user.value?.id),
+			material.isQuiz() && material.access.members.includes(user.value?.id),
 			material.user.roles?.isOfficialAccount && user.value?.roles.isSubscribed,
 			user.value?.account.organizationsIn.find((o) => o.id === material.user.id) && material.user.roles.isSubscribed,
 		].some((v) => v)

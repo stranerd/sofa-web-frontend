@@ -47,7 +47,7 @@
 							handler: () => extras.saveCurrentQuestion(),
 						},
 					],
-					badges: [{ text: quiz.status, color: quiz.status === 'published' ? 'green' : 'gray' }],
+					badges: [{ text: quiz.status, color: quiz.isPublished ? 'green' : 'gray' }],
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">

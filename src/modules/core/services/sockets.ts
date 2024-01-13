@@ -19,7 +19,7 @@ export type Listeners<Model> = {
 
 type SocketReturn = { code: StatusCodes; message: string; channel: string }
 
-export async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>) {
+async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>) {
 	const { accessToken } = await getTokens()
 	if (!socket || (!socket.auth['token'] && accessToken) || (accessToken && socket.auth['token'] !== accessToken)) {
 		const url = new URL(`${apiBase}/socket.io`)

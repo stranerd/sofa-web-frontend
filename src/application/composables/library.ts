@@ -1,5 +1,5 @@
 import { CourseEntity, QuizEntity } from '@modules/study'
-import { Course, Game, Logic, PlayStatus, Quiz, ResourceType, Test } from 'sofa-logic'
+import { Game, Logic, PlayStatus, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
 import { useStudyModal } from './core/modals'
 
@@ -15,7 +15,7 @@ const reportMaterialSetup = reactive<{
 	id: '',
 })
 
-const createQuizData = (quiz: Quiz): ResourceType => {
+const createQuizData = (quiz: QuizEntity): ResourceType => {
 	return {
 		original: quiz,
 		title: quiz.title,
@@ -40,7 +40,7 @@ const createQuizData = (quiz: Quiz): ResourceType => {
 	}
 }
 
-const createCourseData = (course: Course): ResourceType => {
+const createCourseData = (course: CourseEntity): ResourceType => {
 	return {
 		original: course,
 		title: course.title,
@@ -66,7 +66,7 @@ const createCourseData = (course: Course): ResourceType => {
 	}
 }
 
-export const extractResource = (material: Course | CourseEntity | Quiz | QuizEntity) => {
+export const extractResource = (material: CourseEntity | QuizEntity) => {
 	const m = material as any
 	if (m.__type === 'QuizEntity') return createQuizData(m)
 	return createCourseData(m)
@@ -118,13 +118,13 @@ export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 
 const openQuiz = (activity: ResourceType, force = false) => {
 	const original = activity.original as QuizEntity
-	if (!force && ((activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
+	if (!force && ((activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
 	useStudyModal().chooseStudyMode.open({ quiz: original })
 }
 
 const openCourse = (activity: ResourceType) => {
-	if (activity.status == 'draft' && activity.user.id === Logic.Common.AuthUser?.id)
+	if (activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id)
 		return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
 	Logic.Common.GoToRoute(`/course/${activity.id}`)
 }

@@ -35,7 +35,7 @@
 								<SofaIcon name="duplicate-quiz" class="h-[24px]" />
 							</a>
 							<a
-								v-if="quiz.status !== 'published'"
+								v-if="!quiz.isPublished"
 								class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
 								@click.stop="emits('deleteQuestion', element.id)">
 								<SofaIcon name="delete-quiz" class="h-[24px]" />

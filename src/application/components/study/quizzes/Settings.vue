@@ -86,7 +86,7 @@
 					Save
 				</SofaButton>
 				<SofaButton
-					v-if="quiz.status !== 'published'"
+					v-if="!quiz.isPublished"
 					type="button"
 					:disabled="!factory.valid"
 					padding="px-5 mdlg:py-2 py-3"

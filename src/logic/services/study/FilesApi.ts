@@ -1,21 +1,11 @@
-import { AxiosResponse } from 'axios'
+import { FileEntity } from '@modules/study'
+import { FileFromModel } from '@modules/study/data/models/files'
 import { ModelApiService } from '../common/ModelService'
-import { FileData } from '../../logic/types/domains/common'
 
-export default class FilesApi extends ModelApiService {
+export default class FilesApi extends ModelApiService<FileFromModel, FileEntity> {
 	constructor() {
 		super('study/files')
 	}
 
-	public async getFileMedia(fileId: string) {
-		try {
-			const response: AxiosResponse<FileData> = await this.axiosInstance.get(this.getUrl() + `/${fileId}/media`)
-
-			return response
-		} catch (err) {
-			this.handleErrors(err)
-			if (err.response) {
-			}
-		}
-	}
+	mapper = (data: FileFromModel) => new FileEntity(data)
 }

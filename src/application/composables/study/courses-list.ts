@@ -66,8 +66,8 @@ export const useMyCourses = () => {
 		await store.listener.close()
 	})
 
-	const published = computed(() => store.courses.value.filter((m) => m.status === 'published'))
-	const draft = computed(() => store.courses.value.filter((m) => m.status === 'draft'))
+	const published = computed(() => store.courses.value.filter((m) => m.isPublished))
+	const draft = computed(() => store.courses.value.filter((m) => m.isDraft))
 
 	return { ...store, loading, error, published, draft }
 }

@@ -482,7 +482,7 @@ export default defineComponent({
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
-			if (SingleCourse.value.status === 'published')
+			if (SingleCourse.value.isPublished)
 				Logic.Interactions.CreateView({
 					entity: {
 						id: SingleCourse.value?.id,

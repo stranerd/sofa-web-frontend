@@ -4,9 +4,9 @@ import ClassCardMoreOptions from '@/components/organizations/classes/ClassCardMo
 import CreateClass from '@/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@/components/organizations/classes/EditClassModal.vue'
 import AddMember from '@/components/organizations/members/AddMemberModal.vue'
-import SaveToFolder from '@/components/study/folders/SaveToFolderModal.vue'
 import AddMaterial from '@/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@/components/study/MaterialMoreOptionsModal.vue'
+import SaveToFolder from '@/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@/components/study/quizzes/ChooseStudyModeModal.vue'
 import CustomizeAi from '@/components/users/users/CustomizeAiModal.vue'
 

@@ -29,7 +29,7 @@
 			badges: [
 				{
 					text: SingleCourse.status,
-					color: SingleCourse.status != 'published' ? 'gray' : 'green',
+					color: SingleCourse.isPublished ? 'gray' : 'green',
 				},
 			],
 		}"
@@ -301,7 +301,6 @@ import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vu
 import { useMeta } from 'vue-meta'
 
 import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@/composables/course'
-import { Course } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'CreateCourse',
@@ -368,7 +367,7 @@ export default defineComponent({
 			mobileTitle: 'Create Course',
 		})
 
-		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
+		const SingleCourse = ref(Logic.Study.SingleCourse)
 
 		const create = () => {
 			Logic.Common.GoToRoute('/')

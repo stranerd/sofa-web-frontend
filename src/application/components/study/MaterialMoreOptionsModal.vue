@@ -17,18 +17,16 @@ import { useAuth } from '@/composables/auth/auth'
 // import { reportMaterial, shareMaterialLink } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
 import { CourseEntity, QuizEntity } from '@modules/study'
-import { Course, Logic, Quiz } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
 import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineProps } from 'vue'
 
 const props = defineProps<{
 	close: () => void
-	material: Course | Quiz | CourseEntity | QuizEntity
+	material: CourseEntity | QuizEntity
 }>()
 
 const { id } = useAuth()
-
-const isQuiz = computed(() => props.material.__type === 'QuizEntity')
 
 const moreOptions = computed(() => [
 	{
@@ -37,17 +35,17 @@ const moreOptions = computed(() => [
 		show: () => props.material?.user.id === id.value,
 		action: () => {
 			props.close()
-			if (isQuiz.value) Logic.Common.GoToRoute(`/quiz/${props.material.id}/edit`)
+			if (props.material.isQuiz()) Logic.Common.GoToRoute(`/quiz/${props.material.id}/edit`)
 			else Logic.Common.GoToRoute(`/course/create?id=${props.material.id}`)
 		},
 	},
 	{
 		icon: 'share-option',
 		title: 'Share',
-		show: () => props.material.status === 'published',
+		show: () => props.material.isPublished,
 		action: () => {
 			props.close()
-			//shareMaterialLink(isQuiz.value ? 'quiz' : 'course', selectedItem.value?.route ?? '', props.material.title)
+			//TODO:shareMaterialLink(isQuiz.value ? 'quiz' : 'course', selectedItem.value?.route ?? '', props.material.title)
 		},
 	},
 	{
@@ -56,16 +54,16 @@ const moreOptions = computed(() => [
 		show: () => props.material.user.id !== id.value,
 		action: () => {
 			props.close()
-			//reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
+			//TODO:reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
 		},
 	},
 	{
 		icon: 'save',
 		title: 'Save/unsave to folder',
-		show: () => props.material.status == 'published',
+		show: () => props.material.isPublished,
 		action: () => {
 			props.close()
-			saveToFolder({ id: props.material.id, type: isQuiz.value ? 'quiz' : 'course' })
+			saveToFolder({ id: props.material.id, type: props.material.isQuiz() ? 'quiz' : 'course' })
 		},
 	},
 ])

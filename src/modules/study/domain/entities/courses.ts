@@ -1,3 +1,4 @@
+import { CourseFromModel } from '../../data/models/courses'
 import { Coursable, CourseMeta, CourseSections, Publishable, Saleable } from '../types'
 import { PublishableEntity } from './coursables'
 
@@ -8,7 +9,7 @@ export class CourseEntity extends PublishableEntity implements Publishable, Sale
 	public readonly price: Saleable['price']
 	public readonly meta: Record<CourseMeta, number>
 
-	constructor(data: CourseConstructorArgs) {
+	constructor(data: CourseFromModel) {
 		super(data)
 		this.coursables = data.coursables
 		this.sections = data.sections
@@ -17,13 +18,3 @@ export class CourseEntity extends PublishableEntity implements Publishable, Sale
 		this.meta = data.meta
 	}
 }
-
-type CourseConstructorArgs = Publishable &
-	Saleable & {
-		id: string
-		coursables: { id: string; type: Coursable }[]
-		sections: CourseSections
-		meta: Record<CourseMeta, number>
-		createdAt: number
-		updatedAt: number
-	}

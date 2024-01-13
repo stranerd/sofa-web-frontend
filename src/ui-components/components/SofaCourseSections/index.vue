@@ -110,11 +110,11 @@
 	</div>
 </template>
 <script lang="ts">
-import { QuestionEntity, QuestionsUseCases } from '@modules/study'
+import { FileEntity, QuestionEntity, QuestionsUseCases, QuizEntity } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
-import { Course, Logic, Quiz, SofaFile, UpdateCourseSectionsInput } from 'sofa-logic'
+import { Logic, UpdateCourseSectionsInput } from 'sofa-logic'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
@@ -149,11 +149,11 @@ export default defineComponent({
 	},
 	emits: ['update:modelValue', 'OnMaterialSelected'],
 	setup(props, context) {
-		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
-		const SingleFile = ref<SofaFile>(Logic.Study.SingleFile)
-		const SingleQuiz = ref<Quiz>(Logic.Study.SingleQuiz)
-		const SingleCourseFiles = ref<SofaFile[]>(Logic.Study.SingleCourseFiles)
-		const SingleCourseQuizzes = ref<Quiz[]>(Logic.Study.SingleCourseQuizzes)
+		const SingleCourse = ref(Logic.Study.SingleCourse)
+		const SingleFile = ref(Logic.Study.SingleFile)
+		const SingleQuiz = ref(Logic.Study.SingleQuiz)
+		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
+		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
 		const NewCoursableItem = ref(Logic.Study.NewCoursableItem)
 		const CoursableItemRemoved = ref(Logic.Study.CoursableItemRemoved)
 		const SelectedMaterialDetails = ref(Logic.Study.SelectedMaterialDetails)
@@ -178,7 +178,7 @@ export default defineComponent({
 			}, 300)
 		}
 
-		const setSectionMaterial = async (mediaFile: SofaFile | undefined, quiz: Quiz | undefined, save = false, index: number) => {
+		const setSectionMaterial = async (mediaFile: FileEntity | undefined, quiz: QuizEntity | undefined, save = false, index: number) => {
 			if (mediaFile) {
 				const { accessToken } = await getTokens()
 				const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`
@@ -480,9 +480,7 @@ export default defineComponent({
 		})
 
 		const removeSection = async (index: number) => {
-			SingleCourse.value.sections = SingleCourse.value.sections.filter((section, eachIndex) => {
-				return index != eachIndex
-			})
+			SingleCourse.value.sections.slice(index, 1)
 
 			await setSections()
 

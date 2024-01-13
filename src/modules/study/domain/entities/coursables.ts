@@ -1,10 +1,13 @@
 import { BaseEntity } from '@modules/core'
 import { CoursableData, DraftStatus, Publishable } from '../types'
+import type { QuizEntity } from './quizzes'
+import type { CourseEntity } from './courses'
+import type { FileEntity } from './files'
 
 export class PublishableEntity extends BaseEntity implements Publishable {
 	public readonly id: string
-	public readonly title: Publishable['title']
-	public readonly description: Publishable['description']
+	public title: Publishable['title']
+	public description: Publishable['description']
 	public readonly photo: Publishable['photo']
 	public readonly user: Publishable['user']
 	public readonly topicId: Publishable['topicId']
@@ -47,6 +50,18 @@ export class PublishableEntity extends BaseEntity implements Publishable {
 
 	get isDraft() {
 		return this.status === DraftStatus.draft
+	}
+
+	isQuiz(): this is QuizEntity {
+		return this.__type === 'QuizEntity'
+	}
+
+	isCourse(): this is CourseEntity {
+		return this.__type === 'CoursableEntity'
+	}
+
+	isFile(): this is FileEntity {
+		return this.__type === 'FileEntity'
 	}
 }
 

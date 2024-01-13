@@ -70,11 +70,11 @@
 	</div>
 </template>
 <script lang="ts">
-import { QuestionEntity, QuestionsUseCases } from '@modules/study'
+import { FileEntity, QuestionEntity, QuestionsUseCases, QuizEntity } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
-import { ContentDetails, Course, Logic, Quiz, SofaFile } from 'sofa-logic'
+import { ContentDetails, Logic } from 'sofa-logic'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
@@ -103,7 +103,7 @@ export default defineComponent({
 	setup(props, context) {
 		const selectedSection = ref(0)
 
-		const SingleCourse = ref<Course>(Logic.Study.SingleCourse)
+		const SingleCourse = ref(Logic.Study.SingleCourse)
 		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
 
@@ -164,7 +164,7 @@ export default defineComponent({
 			sectionOptions.push(...sectionOptionsData)
 		}
 
-		const setSectionMaterial = async (mediaFile: SofaFile | undefined, quiz: Quiz | undefined, index: number) => {
+		const setSectionMaterial = async (mediaFile: FileEntity | undefined, quiz: QuizEntity | undefined, index: number) => {
 			if (mediaFile) {
 				const { accessToken } = await getTokens()
 				const mediaUrl = `${apiBase}/study/files/${mediaFile.id}/media?AccessToken=${accessToken}`

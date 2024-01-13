@@ -183,6 +183,7 @@ import { Conditions, Logic, QueryParams } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
+import { DraftStatus } from '@modules/study'
 
 export default defineComponent({
 	name: 'MarketplaceSearchPage',
@@ -284,7 +285,7 @@ export default defineComponent({
 				where: [
 					{
 						field: 'status',
-						value: 'published',
+						value: DraftStatus.published,
 						condition: Conditions.eq,
 					},
 					...selectedOptions.map((option) => option.query),

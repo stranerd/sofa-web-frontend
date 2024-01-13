@@ -46,14 +46,15 @@
 	</div>
 </template>
 <script lang="ts">
-import { Course, Logic } from 'sofa-logic'
+import { CourseEntity } from '@modules/study'
+import { formatTime } from '@utils/dates'
+import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaNormalText } from '../SofaTypography'
-import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	name: 'SofaCourseSummary',
@@ -70,7 +71,7 @@ export default defineComponent({
 			default: '',
 		},
 		data: {
-			type: Object as () => Course,
+			type: Object as () => CourseEntity,
 			default: null,
 		},
 	},

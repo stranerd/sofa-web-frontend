@@ -1,6 +1,7 @@
 import { BaseEntity, Media } from '@modules/core'
 import stringSimilarity from 'string-similarity'
 import { Differ, capitalize, stripHTML } from 'valleyed'
+import { QuestionFromModel } from '../../data/models/questions'
 import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
 import { questionTypes } from './questions-extras'
 
@@ -38,7 +39,7 @@ export class QuestionEntity extends BaseEntity {
 		strippedData,
 		createdAt,
 		updatedAt,
-	}: QuestionConstructorArgs) {
+	}: QuestionFromModel) {
 		super()
 		this.id = id
 		this.userId = userId
@@ -170,18 +171,4 @@ export class QuestionEntity extends BaseEntity {
 			image: t.extras.image,
 		}))
 	}
-}
-
-type QuestionConstructorArgs = {
-	id: string
-	userId: string
-	quizId: string
-	question: string
-	explanation: string
-	questionMedia: Media | null
-	timeLimit: number
-	data: QuestionData
-	strippedData: StrippedQuestionData
-	createdAt: number
-	updatedAt: number
 }

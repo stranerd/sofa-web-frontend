@@ -1,5 +1,6 @@
 import { BaseEntity } from '@modules/core'
 import { EmbeddedUser } from '@modules/users'
+import { FolderFromModel } from '../../data/models/folders'
 import { FolderSaved } from '../types'
 
 export class FolderEntity extends BaseEntity {
@@ -10,7 +11,7 @@ export class FolderEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, title, saved, user, createdAt, updatedAt }: FolderConstructorArgs) {
+	constructor({ id, title, saved, user, createdAt, updatedAt }: FolderFromModel) {
 		super()
 		this.id = id
 		this.title = title
@@ -19,13 +20,4 @@ export class FolderEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type FolderConstructorArgs = {
-	id: string
-	title: string
-	saved: Record<FolderSaved, string[]>
-	user: EmbeddedUser
-	createdAt: number
-	updatedAt: number
 }

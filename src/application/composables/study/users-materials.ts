@@ -1,15 +1,17 @@
+import { CourseEntity, QuizEntity } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { Course, Logic, QueryParams, Quiz } from 'sofa-logic'
+import { Logic, QueryParams } from 'sofa-logic'
+import { addToArray } from 'valleyed'
 import { Ref, onMounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
-import { addToArray } from 'valleyed'
+import { DraftStatus } from '@modules/study'
 
 const store = {} as Record<
 	string,
 	{
 		user: Ref<UserEntity | null>
-		quizzes: Quiz[]
-		courses: Course[]
+		quizzes: QuizEntity[]
+		courses: CourseEntity[]
 		fetched: Ref<boolean>
 	}
 >
@@ -32,7 +34,7 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 			const query: QueryParams = {
 				where: [
 					{ field: 'user.id', value: id },
-					{ field: 'status', value: 'published' },
+					{ field: 'status', value: DraftStatus.published },
 				],
 				all: true, // TODO: implement pagination
 				sort: [{ field: 'createdAt', desc: true }],

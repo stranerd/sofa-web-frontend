@@ -1,11 +1,11 @@
+import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 import { valleyed } from '@utils/commons'
 import { reactive } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
-import { ContentDetails, FileData, Paginated } from '../types/domains/common'
+import { ContentDetails, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import { Course, Quiz, SofaFile } from '../types/domains/study'
 import { AddReviewInput } from '../types/forms/common'
 import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
@@ -21,24 +21,23 @@ export default class Study extends Common {
 	public AllTopics: Paginated<Tags> | undefined
 	public AllOtherTags: Paginated<Tags> | undefined
 	public SingleTag: Tags | undefined
-	public AllQuzzies: Paginated<Quiz> | undefined
-	public TutorQuizzes: Paginated<Quiz> | undefined
-	public SingleQuiz: Quiz | undefined
-	public AllCourses: Paginated<Course> | undefined
-	public PurchasedCourses: Paginated<Course> | undefined
-	public SingleCourse: Course | undefined
-	public AllFiles: Paginated<SofaFile> | undefined
-	public SingleFile: SofaFile | undefined
-	public SingleMediaFile: FileData | undefined
+	public AllQuzzies: Paginated<QuizEntity> | undefined
+	public TutorQuizzes: Paginated<QuizEntity> | undefined
+	public SingleQuiz: QuizEntity | undefined
+	public AllCourses: Paginated<CourseEntity> | undefined
+	public PurchasedCourses: Paginated<CourseEntity> | undefined
+	public SingleCourse: CourseEntity | undefined
+	public AllFiles: Paginated<FileEntity> | undefined
+	public SingleFile: FileEntity | undefined
 	public NewCoursableItem: any
 	public CoursableItemRemoved: any
-	public SingleCourseFiles: SofaFile[] | undefined
-	public SingleCourseQuizzes: Quiz[] | undefined
+	public SingleCourseFiles: FileEntity[] | undefined
+	public SingleCourseQuizzes: QuizEntity[] | undefined
 	public SelectedMaterialDetails = reactive({
 		title: '',
 		descriptions: '',
 	})
-	public UpdatedFile: SofaFile | undefined
+	public UpdatedFile: FileEntity | undefined
 	public SingleReview: Review | undefined
 	public AllReviews: Paginated<Review> | undefined
 
@@ -157,7 +156,7 @@ export default class Study extends Common {
 			})
 	}
 
-	public GetQuizzes = (filters: QueryParams, updateItems = true): Promise<Paginated<Quiz>> => {
+	public GetQuizzes = (filters: QueryParams, updateItems = true) => {
 		return $api.study.quiz.fetch(filters).then((response) => {
 			if (updateItems) this.AllQuzzies = response.data
 			return response.data
@@ -185,7 +184,7 @@ export default class Study extends Common {
 		return 'h-[23px]'
 	}
 
-	public GetCourses = (filters: QueryParams, updateItems = true): Promise<Paginated<Course>> => {
+	public GetCourses = (filters: QueryParams, updateItems = true) => {
 		return $api.study.course.fetch(filters).then((response) => {
 			if (updateItems) this.AllCourses = response.data
 			return response.data
@@ -392,10 +391,9 @@ export default class Study extends Common {
 			Logic.Common.showLoading()
 			await Logic.Plays.CreateTest(quizId)
 				.then(async (data) => {
-					Logic.Common.hideLoading()
 					await Logic.Common.GoToRoute(`/tests/${data.id}`)
 				})
-				.catch(() => {
+				.finally(() => {
 					Logic.Common.hideLoading()
 				})
 			return
@@ -461,13 +459,6 @@ export default class Study extends Common {
 
 				return response.data
 			})
-	}
-
-	public GetFileMedia = (fileId: string) => {
-		return $api.study.file.getFileMedia(fileId).then((response) => {
-			this.SingleMediaFile = response.data
-			return response.data
-		})
 	}
 
 	public AddReview = () => {

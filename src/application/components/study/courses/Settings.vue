@@ -108,7 +108,7 @@
 			</sofa-button>
 
 			<div class="mdlg:!w-auto w-full mdlg:!flex mdlg:!flex-row mdlg:!gap-3 grid grid-cols-2 gap-2 items-center">
-				<div :class="`mdlg:!w-auto  flex flex-col ${course && course.status != 'published' ? 'col-span-1' : 'col-span-full'}`">
+				<div :class="`mdlg:!w-auto  flex flex-col ${course && !course.isPublished ? 'col-span-1' : 'col-span-full'}`">
 					<sofa-button
 						:padding="'px-5 mdlg:!py-2 py-3'"
 						:custom-class="'mdlg:!w-auto w-full'"
@@ -118,7 +118,7 @@
 				</div>
 				<div class="mdlg:!w-auto col-span-1 flex flex-col">
 					<sofa-button
-						v-if="course && course.status != 'published'"
+						v-if="course && !course.isPublished"
 						:padding="'px-5 mdlg:!py-2 py-3'"
 						:custom-class="'mdlg:!w-auto w-full'"
 						@click.prevent="Logic.Study.PublishCourse(course.id)">
@@ -142,7 +142,8 @@ import {
 	getTopics,
 	updateCourse,
 } from '@/composables/course'
-import { Course, Logic } from 'sofa-logic'
+import { CourseEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import {
 	SofaButton,
 	SofaFileAttachment,
@@ -175,7 +176,7 @@ export default defineComponent({
 			default: '',
 		},
 		course: {
-			type: Object as () => Course,
+			type: Object as () => CourseEntity,
 			default: null,
 		},
 		close: {

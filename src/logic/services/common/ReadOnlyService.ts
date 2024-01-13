@@ -1,25 +1,34 @@
 import { AxiosResponse } from 'axios'
-import { BaseApiService } from './BaseService'
+import { Paginated } from 'src/logic/logic'
 import { QueryParams } from '../../logic/types/common'
+import { BaseApiService } from './BaseService'
 
-export class ReadOnlyApiService extends BaseApiService {
+export class ReadOnlyApiService<M = any, E = M> extends BaseApiService {
 	constructor(resource: string) {
 		super(resource)
 	}
 
-	public async fetch(filters: QueryParams = {}): Promise<AxiosResponse<any, any>> {
+	mapper: (data: M) => E = (data: M) => data as unknown as E
+
+	public async fetch(filters: QueryParams = {}): Promise<AxiosResponse<Paginated<E>>> {
 		try {
 			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl(), {
 				params: filters,
 			})
 
-			return response
+			return {
+				...response,
+				data: {
+					...response.data,
+					results: response.data.results.map(this.mapper),
+				},
+			}
 		} catch (err) {
 			this.handleErrors(err)
 		}
 	}
 
-	public async get(id: string): Promise<AxiosResponse<any, any>> {
+	public async get(id: string): Promise<AxiosResponse<E>> {
 		try {
 			if (!id) {
 				id = 'empty'
@@ -27,19 +36,10 @@ export class ReadOnlyApiService extends BaseApiService {
 
 			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl(id))
 
-			return response
-		} catch (err) {
-			this.handleErrors(err)
-		}
-	}
-
-	public async search(query: string): Promise<AxiosResponse<any, any>> {
-		try {
-			if (!query) throw Error('query is not provided')
-
-			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl() + '?q=' + query)
-
-			return response
+			return {
+				...response,
+				data: response.data ? this.mapper(response.data) : response.data,
+			}
 		} catch (err) {
 			this.handleErrors(err)
 		}

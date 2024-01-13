@@ -81,7 +81,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	})
 
 	const { asyncFn: publishQuiz } = useAsyncFn(async () => {
-		if (store[id].quiz.value?.status === 'published') return true
+		if (store[id].quiz.value?.isPublished) return true
 		await QuizzesUseCases.publish(id)
 		await store[id].setMessage('Quiz published')
 		return true
