@@ -24,10 +24,10 @@
 				"src/application/*"
 			],
 			"@modules/*": [
-				"node_modules/sofa-modules/src/modules/*"
+				"src/modules/*"
 			],
 			"@utils/*": [
-				"node_modules/sofa-modules/src/utils/*"
+				"src/utils/*"
 			],
 			"sofa-logic": [
 				"src/logic/index.ts"

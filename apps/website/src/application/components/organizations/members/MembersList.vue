@@ -60,7 +60,7 @@
 import { useOrganizationModal } from '@/composables/core/modals'
 import { useManageOrganizationMembers } from '@/composables/organizations/members'
 import { MemberEntity, MemberTypes } from '@modules/organizations'
-import { UserEntity } from 'sofa-modules/src/modules/users'
+import { UserEntity } from '@modules/users'
 import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineProps, ref } from 'vue'
 

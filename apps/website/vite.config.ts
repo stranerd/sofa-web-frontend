@@ -38,8 +38,8 @@ export default defineConfig({
 		alias: {
 			'@': path.resolve(__dirname, './src/application'),
 			'@app': path.resolve(__dirname, './src/application'),
-			'@modules': path.resolve('./node_modules/sofa-modules/src/modules'),
-			'@utils': path.resolve('./node_modules/sofa-modules/src/utils'),
+			'@modules': path.resolve('./src/modules'),
+			'@utils': path.resolve('./src/utils'),
 			'sofa-logic': path.resolve('./src/logic'),
 			'sofa-ui-components': path.resolve('./src/ui-components'),
 		},
