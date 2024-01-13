@@ -181,12 +181,12 @@ export default defineComponent({
 			}
 		}
 
-		const isCondition = (condition: any, errMsg: string) => {
+		const isCondition = (condition: any, errMsg?: string) => {
 			if (condition) {
 				validationStatus.value = true
 			} else {
 				validationStatus.value = false
-				errorMessage.value = errMsg
+				errorMessage.value = errMsg ?? ''
 			}
 		}
 
@@ -208,12 +208,12 @@ export default defineComponent({
 			}
 		}
 
-		const isRegex = (regex: any, errMsg: string) => {
+		const isRegex = (regex: any, errMsg?: string) => {
 			if (content.value.match(regex)) {
 				validationStatus.value = true
 			} else {
 				validationStatus.value = false
-				errorMessage.value = errMsg
+				errorMessage.value = errMsg ?? ''
 			}
 		}
 

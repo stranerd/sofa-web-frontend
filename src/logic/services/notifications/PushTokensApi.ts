@@ -14,8 +14,6 @@ export default class PushTokensApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -26,8 +24,6 @@ export default class PushTokensApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

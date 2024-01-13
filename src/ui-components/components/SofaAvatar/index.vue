@@ -62,12 +62,7 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const randomIndex = Math.floor(Math.random() * 5)
-
-		return {
-			randomIndex,
-			Logic,
-		}
+		return { Logic }
 	},
 })
 </script>

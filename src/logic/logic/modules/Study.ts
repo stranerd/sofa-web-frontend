@@ -204,7 +204,7 @@ export default class Study extends Common {
 	}
 
 	public GetCoursesWithQuery = async (query = 'nill', tagId = '', userId = '') => {
-		const whereQuery = []
+		const whereQuery: QueryParams['where'] = []
 
 		if (tagId && tagId != 'nill') {
 			whereQuery.push({
@@ -242,7 +242,7 @@ export default class Study extends Common {
 	}
 
 	public GetQuizzesWithQuery = async (query = 'nill', tagId = '', userId = '') => {
-		const whereQuery = []
+		const whereQuery: QueryParams['where'] = []
 
 		if (tagId && tagId != 'nill') {
 			whereQuery.push({
@@ -296,11 +296,12 @@ export default class Study extends Common {
 						topic: 'Physics',
 					}
 
+					// @ts-expect-error this might be undefined
 					this.CreateCourse(true)
 						.then(async () => {
 							// create two default sections
 							Logic.Study.UpdateCourseSectionForm = {
-								id: Logic.Study.SingleCourse.id,
+								id: Logic.Study.SingleCourse?.id ?? '',
 								sections: [
 									{
 										items: [],
@@ -315,7 +316,7 @@ export default class Study extends Common {
 
 							await this.UpdateCourseSection()
 							Logic.Common.hideLoading()
-							Logic.Common.GoToRoute(`/course/create?id=${Logic.Study.SingleCourse.id}`)
+							Logic.Common.GoToRoute(`/course/create?id=${Logic.Study.SingleCourse?.id}`)
 						})
 						.catch(() => {
 							resolve('')
@@ -445,7 +446,7 @@ export default class Study extends Common {
 					},
 					{
 						field: 'user.id',
-						value: Logic.Common.AuthUser.id,
+						value: Logic.Common.AuthUser?.id,
 						condition: Conditions.eq,
 					},
 				],
@@ -488,12 +489,12 @@ export default class Study extends Common {
 
 	public SaveCourseLocalChanges = () => {
 		if (localStorage.getItem('couse_section_update')) {
-			const content = JSON.parse(localStorage.getItem('couse_section_update'))
+			const content = JSON.parse(localStorage.getItem('couse_section_update')!)
 
 			this.UpdateCourseSectionForm = content
 
-			const unsectioned = this.UpdateCourseSectionForm.sections.filter((item) => item.label == 'unsectioned')[0]
-			if (unsectioned) {
+			const unsectioned = this.UpdateCourseSectionForm?.sections.filter((item) => item.label == 'unsectioned')[0]
+			if (unsectioned && this.UpdateCourseSectionForm) {
 				if (unsectioned.items.length > 0) {
 					Logic.Common.showAlert({
 						type: 'error',
@@ -556,9 +557,9 @@ export default class Study extends Common {
 
 					const currentSections = this.SingleCourse.sections
 
-					if (!this.MoveItemToCourseForm.add) {
+					if (!this.MoveItemToCourseForm?.add) {
 						currentSections.forEach((item) => {
-							item.items = item.items.filter((eachitem) => eachitem.id != this.MoveItemToCourseForm.coursableId)
+							item.items = item.items.filter((eachitem) => eachitem.id != this.MoveItemToCourseForm?.coursableId)
 						})
 
 						this.UpdateCourseSectionForm = {
@@ -572,7 +573,7 @@ export default class Study extends Common {
 					} else {
 						// remove items not in coursable
 						currentSections.forEach((item) => {
-							item.items = item.items.filter((eachitem) => this.SingleCourse.coursables.includes(eachitem))
+							item.items = item.items.filter((eachitem) => this.SingleCourse?.coursables.includes(eachitem))
 						})
 
 						this.UpdateCourseSectionForm = {

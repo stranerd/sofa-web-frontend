@@ -14,8 +14,6 @@ export default class PaymentMethodsApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

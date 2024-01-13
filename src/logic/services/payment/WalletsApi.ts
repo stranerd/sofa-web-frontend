@@ -15,8 +15,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -27,8 +25,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -39,8 +35,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -51,8 +45,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -63,8 +55,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -75,8 +65,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -87,8 +75,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -101,8 +87,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

@@ -163,6 +163,8 @@
 		]" />
 </template>
 <script lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Logic } from 'sofa-logic'
 import { defineComponent, reactive, ref, toRef, watch } from 'vue'
 import SofaAvatar from '../SofaAvatar'

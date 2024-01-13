@@ -17,7 +17,7 @@ export default class Payment extends Common {
 	public UserWallet: Wallet | undefined
 	public AllPlans: Paginated<Plan> | undefined
 	public AllTransactions: Paginated<Transaction> | undefined
-	public PurchasedItems: string[]
+	public PurchasedItems: string[] = []
 	public AllCommercialBanks: CommercialBanks[] | undefined
 
 	public MakePurchaseForm: MakePurchaseInput | undefined
@@ -47,9 +47,9 @@ export default class Payment extends Common {
 							user_id: Logic.Common.AuthUser?.id,
 						},
 						customer: {
-							email: Logic.Common.AuthUser.email,
-							phone_number: `${Logic.Common.AuthUser.phone?.code}${Logic.Common.AuthUser.phone?.number}`,
-							name: Logic.Common.AuthUser.allNames.full,
+							email: Logic.Common.AuthUser?.email,
+							phone_number: `${Logic.Common.AuthUser?.phone?.code}${Logic.Common.AuthUser?.phone?.number}`,
+							name: Logic.Common.AuthUser?.allNames.full,
 						},
 						onclose: function () {
 							//
@@ -162,7 +162,7 @@ export default class Payment extends Common {
 				.then((response) => {
 					const purchases: Paginated<Purchase> = response.data
 
-					const allItems = []
+					const allItems: string[] = []
 
 					purchases.results.forEach((item) => {
 						allItems.push(item.data.id)

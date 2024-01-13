@@ -110,6 +110,8 @@
 	</div>
 </template>
 <script lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { FileEntity, QuestionEntity, QuestionsUseCases, QuizEntity } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'

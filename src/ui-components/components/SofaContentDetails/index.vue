@@ -291,6 +291,8 @@
 	</div>
 </template>
 <script lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { ContentDetails, Logic, ResourceType } from 'sofa-logic'
 import { defineComponent, onMounted, PropType, ref, toRef, watch } from 'vue'
 import SofaActivityCard from '../SofaActivityCard'

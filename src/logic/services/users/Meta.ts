@@ -14,8 +14,6 @@ export default class MetaApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

@@ -20,8 +20,6 @@ export default class QuizzesApi extends ModelApiService<QuizFromModel, QuizEntit
 			}
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

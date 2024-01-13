@@ -21,8 +21,6 @@ export default class CoursesApi extends ModelApiService<CourseFromModel, CourseE
 			}
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -36,8 +34,6 @@ export default class CoursesApi extends ModelApiService<CourseFromModel, CourseE
 			}
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -51,8 +47,6 @@ export default class CoursesApi extends ModelApiService<CourseFromModel, CourseE
 			}
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -66,8 +60,6 @@ export default class CoursesApi extends ModelApiService<CourseFromModel, CourseE
 			}
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -81,8 +73,6 @@ export default class CoursesApi extends ModelApiService<CourseFromModel, CourseE
 			}
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

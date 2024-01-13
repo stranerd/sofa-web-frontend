@@ -10,7 +10,7 @@
 			]"
 			:key="tab.path ?? tab.name"
 			class="col-span-1 flex flex-col items-center justify-center"
-			@click="() => tab.onClick?.() ?? Logic.Common.GoToRoute(tab.path)">
+			@click="() => tab.onClick?.() ?? (tab.path && Logic.Common.GoToRoute(tab.path))">
 			<div v-if="tab.onClick" class="h-[52px] w-[52px] rounded-full flex justify-center items-center bg-primaryPurple">
 				<SofaIcon :name="tab.icon" class="h-[17px]" />
 			</div>

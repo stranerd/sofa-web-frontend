@@ -81,8 +81,8 @@ export default defineComponent({
 			const sel = window.getSelection()
 			range.selectNodeContents(target)
 			range.collapse(false)
-			sel.removeAllRanges()
-			sel.addRange(range)
+			sel?.removeAllRanges()
+			sel?.addRange(range)
 			target.focus()
 			range.detach() // optimization
 

@@ -2,7 +2,7 @@ import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { AuthDetails, ProfileUpdate } from '../entities/auth'
 
-type Keys = { first: string; last: string; description: string; photo: Media }
+type Keys = { first: string; last: string; description: string; photo: Media | null }
 
 export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate, Keys> {
 	readonly rules = {
@@ -43,10 +43,10 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 	}
 
 	get photo() {
-		return this.values.photo!
+		return this.values.photo
 	}
 
-	set photo(photo: Media) {
+	set photo(photo: Media | null) {
 		this.set('photo', photo)
 	}
 
@@ -55,7 +55,7 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		return {
 			name: { first, last },
 			description,
-			photo: (photo ?? null) as Media,
+			photo,
 		}
 	}
 

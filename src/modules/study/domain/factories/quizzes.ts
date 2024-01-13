@@ -43,7 +43,7 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		return this.values.photo
 	}
 
-	set photo(value: Media) {
+	set photo(value: Media | null) {
 		this.set('photo', value)
 	}
 

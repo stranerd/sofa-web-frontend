@@ -17,7 +17,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	errors: Record<keyof K, string>
 	abstract model: () => T | Promise<T>
 	abstract loadEntity: (entity: E) => void
-	reserved: string[]
+	reserved: string[] = []
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
 	protected readonly defaults: K
 	public readonly values: K

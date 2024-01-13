@@ -32,6 +32,6 @@ export class ConversationEntity extends BaseEntity {
 	}
 
 	get isActive() {
-		return !this.pending && this.accepted.is && !this.ended && !!this.tutor
+		return !this.pending && this.accepted?.is && !this.ended && !!this.tutor
 	}
 }

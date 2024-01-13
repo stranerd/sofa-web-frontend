@@ -6,7 +6,7 @@ type Keys = Omit<NewUser, 'name'> & {
 	first: string
 	last: string
 	cPassword: string
-	photo: Media
+	photo: Media | null
 	termsAccepted: boolean
 }
 
@@ -69,7 +69,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		return this.values.photo
 	}
 
-	set photo(value: Media) {
+	set photo(value: Media | null) {
 		this.set('photo', value)
 	}
 
@@ -113,7 +113,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 			email,
 			password,
 			description,
-			photo: photo as Media,
+			photo: photo,
 		}
 	}
 

@@ -19,8 +19,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -36,8 +34,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -48,8 +44,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -65,8 +59,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -77,8 +69,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -88,8 +78,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -100,8 +88,6 @@ export default class GamesApi extends ModelApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

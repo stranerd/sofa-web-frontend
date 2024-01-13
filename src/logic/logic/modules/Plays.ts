@@ -23,7 +23,7 @@ export default class Plays extends Common {
 		})
 	}
 
-	public GetTest = async (id: string | undefined) => {
+	public GetTest = async (id: string) => {
 		const response = await $api.plays.test.get(id)
 		return response.data as Test | null
 	}
@@ -46,7 +46,7 @@ export default class Plays extends Common {
 		})
 	}
 
-	public GetGame = async (id: string | undefined) => {
+	public GetGame = async (id: string) => {
 		const response = await $api.plays.game.get(id)
 		return response.data as Game | null
 	}

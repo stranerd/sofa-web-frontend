@@ -16,8 +16,6 @@ export default class VerificationsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -28,8 +26,6 @@ export default class VerificationsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -42,8 +38,6 @@ export default class VerificationsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

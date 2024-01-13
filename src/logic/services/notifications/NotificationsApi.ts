@@ -13,8 +13,6 @@ export default class NotificationsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 
@@ -25,8 +23,6 @@ export default class NotificationsApi extends ReadOnlyApiService {
 			return response
 		} catch (err) {
 			this.handleErrors(err)
-			if (err.response) {
-			}
 		}
 	}
 }

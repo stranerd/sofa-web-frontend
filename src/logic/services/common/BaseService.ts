@@ -18,7 +18,7 @@ export class BaseApiService {
 			async (config) => {
 				config.baseURL = apiBase
 
-				if (config.method.toLowerCase() === 'get') {
+				if (config.method?.toLowerCase() === 'get') {
 					config.params = Object.fromEntries(Object.entries(config.params ?? {}).map(([key, val]) => [key, JSON.stringify(val)]))
 				} else {
 					const formData: FormData = new FormData()
@@ -54,7 +54,7 @@ export class BaseApiService {
 
 				try {
 					await new HttpClient().getNewTokens()
-					return this.axiosInstance.request(error.config)
+					return this.axiosInstance.request(error.config as any)
 				} catch {
 					return Promise.reject(error)
 				}
@@ -66,7 +66,7 @@ export class BaseApiService {
 		return id ? `/${this.resource}/${id}` : `/${this.resource}`
 	}
 
-	public handleErrors(err: AxiosError | any): void {
+	public handleErrors(err: AxiosError | any): never {
 		throw err
 	}
 }
