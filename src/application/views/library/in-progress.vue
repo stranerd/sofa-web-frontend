@@ -37,7 +37,7 @@ export default defineComponent({
 		SofaProgressItemCard,
 		SofaEmptyState,
 	},
-	middlewares: { goBackRoute: '/library' },
+	routeConfig: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
 		const route = useRoute()

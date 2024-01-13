@@ -206,7 +206,7 @@ export default defineComponent({
 		RateAndReviewModal,
 		ConversationMessages,
 	},
-	middlewares: { goBackRoute: '/chats' },
+	routeConfig: { goBackRoute: '/chats' },
 	setup() {
 		useMeta({
 			title: 'Chat',

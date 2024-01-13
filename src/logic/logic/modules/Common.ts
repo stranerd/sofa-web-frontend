@@ -242,13 +242,17 @@ export default class Common {
 		watchAction()
 	}
 
-	public preFetchRouteData = async (routeTo: RouteLocationNormalized, routeFrom: RouteLocationNormalized, next: NavigationGuardNext) => {
+	public preFetchRouteData = async (
+		config: Record<string, any>,
+		routeTo: RouteLocationNormalized,
+		routeFrom: RouteLocationNormalized,
+		next: NavigationGuardNext,
+	) => {
 		const allActions: Promise<any>[] = []
-		const routeMiddlewares: any = routeTo.meta.middlewares
 
 		// handle fetchRules
 
-		const fetchRules: FetchRule[] = routeMiddlewares?.fetchRules
+		const fetchRules: FetchRule[] = config.fetchRules
 
 		const BreakException = {}
 

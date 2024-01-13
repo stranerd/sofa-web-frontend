@@ -177,13 +177,13 @@
 <script lang="ts">
 import MarketplaceFilter, { SelectedOption } from '@/components/marketplace/Filter.vue'
 import { extractResource } from '@/composables/library'
-import { saveToFolder } from '@/composables/study/folders'
 import { search } from '@/composables/marketplace'
+import { saveToFolder } from '@/composables/study/folders'
+import { DraftStatus } from '@modules/study'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { DraftStatus } from '@modules/study'
 
 export default defineComponent({
 	name: 'MarketplaceSearchPage',
@@ -197,7 +197,7 @@ export default defineComponent({
 		SofaActivityCard,
 		SofaModal,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Study',

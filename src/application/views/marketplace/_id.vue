@@ -118,8 +118,8 @@
 
 <script lang="ts">
 import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@/composables/library'
-import { saveToFolder } from '@/composables/study/folders'
 import { useHasAccess } from '@/composables/study'
+import { saveToFolder } from '@/composables/study/folders'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
@@ -137,7 +137,7 @@ export default defineComponent({
 		SofaHeaderText,
 		SofaButton,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Study',

@@ -125,7 +125,7 @@ export default defineComponent({
 		SofaButton,
 		SofaIcon,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Payment',

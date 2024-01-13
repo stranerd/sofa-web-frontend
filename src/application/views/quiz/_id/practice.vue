@@ -80,7 +80,7 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdPracticePage',
-	middlewares: { goBackRoute: '/library' },
+	routeConfig: { goBackRoute: '/library' },
 	components: { QuizWrapper, Quiz, SofaHeaderText, SofaIcon, SofaNormalText },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {

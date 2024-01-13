@@ -36,7 +36,7 @@ import { RouteLocationNormalized } from 'vue-router'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
-	middlewares: {
+	routeConfig: {
 		goBackRoute: (route: RouteLocationNormalized) => `/quiz/${route.params.id}/edit`,
 	},
 	components: { QuizWrapper, Quiz },

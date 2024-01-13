@@ -289,12 +289,12 @@ import {
 	SofaButton,
 	SofaCourseDetails,
 	SofaCourseSections,
+	SofaDocumentReader,
 	SofaHeaderText,
 	SofaIcon,
 	SofaImageLoader,
 	SofaModal,
 	SofaNormalText,
-	SofaDocumentReader,
 	SofaVideoPlayer,
 } from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
@@ -319,7 +319,7 @@ export default defineComponent({
 		AddVideo,
 		SofaButton,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Study',

@@ -2,7 +2,7 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { defineConfig } from 'vite'
 import Checker from 'vite-plugin-checker'
-// import Pages from 'vite-plugin-pages'
+import Pages from 'vite-plugin-pages'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -25,16 +25,17 @@ export default defineConfig({
 					}),
 				]
 			: []),
-		/* Pages({
-			dirs: 'src/views',
+		Pages({
+			importMode: 'sync',
+			dirs: 'src/application/views',
 			routeStyle: 'nuxt',
 			extendRoute: (route: any) => {
 				const path = route.path.split('/')
 				const lastIndex = path.length - 1
 				if (path[lastIndex] && path[lastIndex].includes(':')) path[lastIndex] = path[lastIndex] + '/'
 				return { ...route, path: path.join('/') }
-			}
-		}), */
+			},
+		}),
 	],
 	resolve: {
 		alias: {

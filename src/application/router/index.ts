@@ -2,7 +2,8 @@ import { modal } from '@/composables/core/modal'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { createRouter, createWebHistory } from 'vue-router'
-import { routes } from './routes'
+// @ts-expect-error - no types
+import routes from '~pages'
 
 export const routerPromise = Promise.all(routes).then((routes) => {
 	const router = createRouter({
@@ -16,7 +17,8 @@ export const routerPromise = Promise.all(routes).then((routes) => {
 
 	router.beforeEach((to, from, next) => {
 		modal.stack.value.forEach(modal.close)
-		Logic.Common.preFetchRouteData(to, from, next)
+		const routeConfig = to.matched[0]?.components['default']?.['routeConfig'] ?? {}
+		Logic.Common.preFetchRouteData(routeConfig, to, from, next)
 	})
 
 	router.afterEach((route) => {

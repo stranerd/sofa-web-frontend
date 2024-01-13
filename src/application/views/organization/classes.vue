@@ -60,7 +60,7 @@ export default defineComponent({
 		ClassCard,
 		SofaTextField,
 	},
-	middlewares: { goBackRoute: '/' },
+	routeConfig: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup() {
 		const emptyClassContent = {

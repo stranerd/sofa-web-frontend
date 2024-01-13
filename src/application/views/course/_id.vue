@@ -279,7 +279,7 @@ export default defineComponent({
 		CourseContent,
 		RateAndReviewModal,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Study',

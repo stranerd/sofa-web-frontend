@@ -35,7 +35,7 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaAvatar,
 	},
-	middlewares: { goBackRoute: '/settings' },
+	routeConfig: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({ title: 'Organizations' })
 		const { organizations, leaveOrganization } = useMyOrganizations()

@@ -17,7 +17,7 @@ export default defineComponent({
 		SettingsLayout,
 		SettingWallet,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Payment',

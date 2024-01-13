@@ -33,8 +33,8 @@
 <script lang="ts">
 import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { extractResource, openCourse, openQuiz } from '@/composables/library'
-import { useCoursesInList } from '@/composables/study/courses-list'
 import { handleShowMaterialMoreOptions } from '@/composables/study'
+import { useCoursesInList } from '@/composables/study/courses-list'
 import { useFolder } from '@/composables/study/folders'
 import { useQuizzesInList } from '@/composables/study/quizzes-list'
 import { generateMiddlewares } from '@/middlewares'
@@ -51,7 +51,7 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaActivityCard,
 	},
-	middlewares: { goBackRoute: '/library' },
+	routeConfig: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
 		const route = useRoute()

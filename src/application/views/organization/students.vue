@@ -20,7 +20,7 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	name: 'OrganizationStudentsPage',
 	components: { HomeLayout, MembersList },
-	middlewares: { goBackRoute: '/' },
+	routeConfig: { goBackRoute: '/' },
 	beforeRouteEnter: generateMiddlewares(['isOrg']),
 	setup() {
 		useMeta({ title: 'Students' })

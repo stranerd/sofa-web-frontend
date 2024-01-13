@@ -211,7 +211,7 @@ export default defineComponent({
 		SofaActivityCard,
 		SocialMediaUpdate,
 	},
-	middlewares: {
+	routeConfig: {
 		fetchRules: [
 			{
 				domain: 'Users',

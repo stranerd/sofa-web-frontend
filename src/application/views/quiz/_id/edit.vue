@@ -268,12 +268,12 @@
 </template>
 
 <script lang="ts">
+import EditQuestionBody from '@/components/study/quizzes/EditQuestionBody.vue'
+import EditQuestionOptions from '@/components/study/quizzes/EditQuestionOptions.vue'
+import EditQuestionsList from '@/components/study/quizzes/EditQuestionsList.vue'
 import ManageAccessModal from '@/components/study/quizzes/ManageAccessModal.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import RequestAccessModal from '@/components/study/quizzes/RequestAccessModal.vue'
-import EditQuestionsList from '@/components/study/quizzes/EditQuestionsList.vue'
-import EditQuestionOptions from '@/components/study/quizzes/EditQuestionOptions.vue'
-import EditQuestionBody from '@/components/study/quizzes/EditQuestionBody.vue'
 import QuizSettings from '@/components/study/quizzes/Settings.vue'
 import { generateMiddlewares } from '@/middlewares'
 import { QuestionEntity } from '@modules/study'
@@ -299,7 +299,7 @@ export default defineComponent({
 		RequestAccessModal,
 		ManageAccessModal,
 	},
-	middlewares: { goBackRoute: '/library' },
+	routeConfig: { goBackRoute: '/library' },
 	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
 		useMeta({
