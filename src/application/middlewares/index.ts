@@ -1,6 +1,6 @@
 import { useAuth } from '@/composables/auth/auth'
 import { Logic } from 'sofa-logic'
-import { NavigationGuardWithThis, RouteLocationNormalized } from 'vue-router'
+import { RouteLocationNormalized } from 'vue-router'
 
 type MiddleWareArgs = {
 	to: RouteLocationNormalized
@@ -56,21 +56,19 @@ export type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
 
 const wrapInAsync = async <T>(fn: () => T) => await fn()
 
-export const generateMiddlewares =
-	(middlewares: Middleware[]): NavigationGuardWithThis<undefined> =>
-	async (to, fromRoute) => {
-		const from = fromRoute.name ? fromRoute : null
-		let redirect = null
-		for (const middleware of middlewares) {
-			const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware
-			const goBackToNonAuth = () => {
-				const backPath = from?.fullPath ?? '/'
-				return backPath.startsWith('/auth/') ? '/' : backPath
-			}
-			const path = await wrapInAsync(() => callback?.({ to, from, goBackToNonAuth })).catch(() => null)
-			if (!path) continue
-			redirect = path
-			break
+export const runMiddlewares = async (to: RouteLocationNormalized, from: RouteLocationNormalized, middlewares: Middleware[]) => {
+	from = from?.name ? from : null
+	let redirect: string | undefined
+	for (const middleware of middlewares) {
+		const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware
+		const goBackToNonAuth = () => {
+			const backPath = from?.fullPath ?? '/'
+			return backPath.startsWith('/auth/') ? '/' : backPath
 		}
-		if (redirect) return redirect === from?.fullPath ? false : redirect
+		const path = await wrapInAsync(() => callback?.({ to, from, goBackToNonAuth })).catch(() => null)
+		if (!path) continue
+		redirect = path
+		break
 	}
+	return redirect
+}

@@ -29,6 +29,9 @@
 			"@utils/*": [
 				"src/utils/*"
 			],
+			"@typing/*": [
+				"src/types/*"
+			],
 			"sofa-logic": [
 				"src/logic/index.ts"
 			],

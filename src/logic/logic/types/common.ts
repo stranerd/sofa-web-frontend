@@ -1,21 +1,6 @@
 export { Conditions, EmitTypes, QueryKeys } from '@modules/core'
 export type { Listeners, QueryParams, QueryResults } from '@modules/core'
 
-export enum StatusCodes {
-	success = '200',
-	unuthenticated = '401',
-	unauthorized = '403',
-	badRequest = '400',
-	validationError = '422',
-	expiredAccessToken = '461',
-}
-
-export type SocketReturn = {
-	code: StatusCodes
-	message: string
-	channel: string
-}
-
 export interface FormRule {
 	type:
 		| 'isRequired'
@@ -80,9 +65,9 @@ export interface FetchRule {
 	property: string
 	method: string
 	params: any[]
-	requireAuth: boolean
-	ignoreProperty: boolean | (() => boolean)
-	useRouteId: boolean
+	requireAuth?: boolean
+	ignoreProperty?: boolean | (() => boolean)
+	useRouteId?: boolean
 	useRouteQuery?: boolean
 	queries?: string[]
 	alignCurrency?: boolean
@@ -92,10 +77,4 @@ export interface FetchRule {
 		routeSearchItem: 'fullPath' | 'params' | 'query'
 		searchQuery: string
 	}
-}
-
-export interface FormContentRule {
-	max: number
-	characterToAdd: string
-	addAfterCount: number
 }

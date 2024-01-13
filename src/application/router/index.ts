@@ -1,6 +1,7 @@
 import { modal } from '@/composables/core/modal'
-import { generateMiddlewares } from '@/middlewares'
+import { runMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
+import { RouteConfig } from '@typing/routes'
 import { createRouter, createWebHistory } from 'vue-router'
 // @ts-expect-error - no types
 import routes from '~pages'
@@ -11,14 +12,13 @@ export const routerPromise = Promise.all(routes).then((routes) => {
 		routes,
 	})
 
-	routes.forEach((route) => {
-		route.component.beforeRouteEnter ??= generateMiddlewares(['isAuthenticated'])
-	})
-
-	router.beforeEach((to, from, next) => {
+	router.beforeEach(async (to, from) => {
 		modal.stack.value.forEach(modal.close)
-		const routeConfig = to.matched[0]?.components['default']?.['routeConfig'] ?? {}
-		Logic.Common.preFetchRouteData(routeConfig, to, from, next)
+		const routeConfig: RouteConfig = to.matched[0]?.components['default']?.['routeConfig'] ?? {}
+		const redirect = await runMiddlewares(to, from, routeConfig.middlewares ?? ['isAuthenticated'])
+		if (redirect) return redirect === from?.fullPath ? false : redirect
+		const redirect2 = await Logic.Common.preFetchRouteData(routeConfig, to)
+		if (redirect2) return redirect2 === from?.fullPath ? false : redirect2
 	})
 
 	router.afterEach((route) => {

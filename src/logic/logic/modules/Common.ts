@@ -1,17 +1,17 @@
 import { AuthDetails } from '@modules/auth'
 import { listenToMany, listenToOne } from '@modules/core'
+import { RouteConfig } from '@typing/routes'
 import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
 import { getRandomValue, isString } from 'valleyed'
 import { reactive } from 'vue'
-import { NavigationGuardNext, RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
+import { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import { Logic } from '..'
 import {
 	Confirmation,
 	ConfirmationBase,
 	ConfirmationSetup,
 	ConfirmationSetupBase,
-	FetchRule,
 	Listeners,
 	LoaderSetup,
 	SuccessConfirmation,
@@ -211,12 +211,7 @@ export default class Common {
 		})
 	}
 
-	public debounce = (
-		method = () => {
-			//
-		},
-		delay = 500,
-	) => {
+	public debounce = (method = () => {}, delay = 500) => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		if (typeof window.LIT !== 'undefined') {
@@ -242,93 +237,73 @@ export default class Common {
 		watchAction()
 	}
 
-	public preFetchRouteData = async (
-		config: Record<string, any>,
-		routeTo: RouteLocationNormalized,
-		routeFrom: RouteLocationNormalized,
-		next: NavigationGuardNext,
-	) => {
-		const allActions: Promise<any>[] = []
+	public preFetchRouteData = async (config: RouteConfig, routeTo: RouteLocationNormalized) => {
+		const allActions: Promise<unknown>[] = []
 
-		// handle fetchRules
+		const fetchRules = config.fetchRules ?? []
 
-		const fetchRules: FetchRule[] = config.fetchRules
+		for (const rule of fetchRules) {
+			if (rule.requireAuth && !Logic.Common.AuthUser) return '/auth/login'
+			if (rule.shouldSkip?.()) continue
+			let addRuleToRequest = true
 
-		const BreakException = {}
-
-		try {
-			fetchRules?.forEach((rule) => {
-				if (rule.requireAuth && !Logic.Common.AuthUser) {
-					window.location.href = '/auth/login'
-					throw BreakException
+			if (rule.condition) {
+				switch (rule.condition.routeSearchItem) {
+					case 'fullPath':
+						addRuleToRequest = routeTo['fullPath'].includes(rule.condition.searchQuery)
+						break
+					case 'params':
+						addRuleToRequest = routeTo['params'][rule.condition.searchQuery] ? true : false
+						break
+					case 'query':
+						addRuleToRequest = routeTo['query'][rule.condition.searchQuery] ? true : false
+						break
+					default:
+						break
 				}
+			}
 
-				if (rule.shouldSkip?.()) return
-				let addRuleToRequest = true
+			if (addRuleToRequest) {
+				const domain = Logic[rule.domain]
 
-				if (rule.condition) {
-					switch (rule.condition.routeSearchItem) {
-						case 'fullPath':
-							addRuleToRequest = routeTo['fullPath'].includes(rule.condition.searchQuery)
-							break
-						case 'params':
-							addRuleToRequest = routeTo['params'][rule.condition.searchQuery] ? true : false
-							break
-						case 'query':
-							addRuleToRequest = routeTo['query'][rule.condition.searchQuery] ? true : false
-							break
-						default:
-							break
-					}
-				}
+				if (
+					domain[rule.property] == undefined ||
+					(typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) ||
+					rule.ignoreProperty
+				) {
+					if (rule.useRouteId) rule.params.unshift(routeTo.params.id.toString())
+					if (rule.useRouteQuery)
+						rule.queries?.forEach((item) => {
+							rule.params.unshift(routeTo.query[item])
+						})
 
-				if (addRuleToRequest) {
-					const domain = Logic[rule.domain]
-
-					if (
-						domain[rule.property] == undefined ||
-						(typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) ||
-						rule.ignoreProperty
-					) {
-						if (rule.useRouteId) rule.params.unshift(routeTo.params.id.toString())
-						if (rule.useRouteQuery)
-							rule.queries?.forEach((item) => {
-								rule.params.unshift(routeTo.query[item])
-							})
-
-						allActions.push(
-							new Promise((resolve) => {
-								// update userid
-								rule.params.forEach((param) => {
-									if (typeof param !== 'object') return
-									param.where?.forEach((item) => {
-										if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Common.AuthUser.id
-									})
+					allActions.push(
+						new Promise((resolve) => {
+							// update userid
+							rule.params.forEach((param) => {
+								if (typeof param !== 'object') return
+								param.where?.forEach((item) => {
+									if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Common.AuthUser.id
 								})
-								domain[rule.method]?.(...rule.params).then(resolve)
-							}),
-						)
-					} else {
-						if (rule.silentUpdate) {
-							// run in silence
-							rule.params = [...new Set(rule.params)]
-							domain[rule.method]?.(...rule.params)
-						}
+							})
+							domain[rule.method]?.(...rule.params).then(resolve)
+						}),
+					)
+				} else {
+					if (rule.silentUpdate) {
+						// run in silence
+						rule.params = [...new Set(rule.params)]
+						domain[rule.method]?.(...rule.params)
 					}
 				}
-			})
-		} catch (error) {
-			if (error !== BreakException) throw error
+			}
 		}
-
-		// save user activities
 
 		if (allActions.length > 0) {
 			this.showLoading()
 			await Promise.all(allActions)
+			this.hideLoading()
 		}
-		this.hideLoading()
-		return next()
 	}
 
 	tabIsActive = (tab: string) => {
