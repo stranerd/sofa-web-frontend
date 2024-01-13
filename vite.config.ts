@@ -15,14 +15,16 @@ export default defineConfig({
 				},
 			},
 		}),
-		...(isDev ? [
-			Checker({
-				typescript: true,
-				vueTsc: true,
-				// eslint: { lintCommand: 'eslint ./src' }
-				// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
-			})
-		] : [])
+		...(isDev
+			? [
+					Checker({
+						typescript: true,
+						vueTsc: true,
+						// eslint: { lintCommand: 'eslint ./src' }
+						// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
+					}),
+				]
+			: []),
 		/* Pages({
 			dirs: 'src/views',
 			routeStyle: 'nuxt',

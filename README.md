@@ -6,22 +6,22 @@ $ cd sofa-web-frontend
 $ pnpm install
 
 # To run web in dev mode
-$ pnpm --filter ./apps/website dev
+$ pnpm dev
 
 # To run android in dev mode
-$ yarn run:android
+$ pnpm run:android
 
 # To run ios in dev mode
-$ yarn run:ios
+$ pnpm run:ios
 
 # To build web
-$ pnpm --filter ./apps/website build
+$ pnpm build
 
 # To build android
-$ yarn bin:project:appBuild android Release|Debug bundle|assemble
+$ pnpm bin:project:appBuild android Release|Debug bundle|assemble
 
 # To build ios
-$ yarn bin:project:appBuild ios Release|Debug
+$ pnpm bin:project:appBuild ios Release|Debug
 ```
 
 ## Dev Tools
