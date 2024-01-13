@@ -10,14 +10,13 @@ import HomeForNonStudents from '@/components/home/HomeForNonStudents.vue'
 import HomeForStudents from '@/components/home/HomeForStudents.vue'
 import HomeLayout from '@/components/home/HomeLayout.vue'
 import { useAuth } from '@/composables/auth/auth'
-import { generateMiddlewares } from '@/middlewares'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'IndexPage',
 	components: { HomeLayout, HomeForStudents, HomeForNonStudents },
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Dashboard',

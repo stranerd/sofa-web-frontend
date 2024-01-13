@@ -20,7 +20,6 @@
 import ChatLayout from '@/components/conversations/ChatLayout.vue'
 import ChatList from '@/components/conversations/ChatList.vue'
 import { useAuth } from '@/composables/auth/auth'
-import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
@@ -34,7 +33,7 @@ export default defineComponent({
 		ChatLayout,
 		ChatList,
 	},
-	beforeRouteEnter: generateMiddlewares([async () => (Logic.Common.isLarge ? '/chats/new' : undefined)]),
+	routeConfig: { middlewares: [() => (Logic.Common.isLarge ? '/chats/new' : undefined)] },
 	setup() {
 		useMeta({
 			title: 'Chat',

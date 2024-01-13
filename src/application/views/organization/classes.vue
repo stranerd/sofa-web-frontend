@@ -45,7 +45,6 @@ import ClassCard from '@/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationModal } from '@/composables/core/modals'
 import { useMyClasses } from '@/composables/organizations/classes'
-import { generateMiddlewares } from '@/middlewares'
 import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 
@@ -60,8 +59,7 @@ export default defineComponent({
 		ClassCard,
 		SofaTextField,
 	},
-	routeConfig: { goBackRoute: '/' },
-	beforeRouteEnter: generateMiddlewares(['isOrg']),
+	routeConfig: { goBackRoute: '/', middlewares: ['isOrg'] },
 	setup() {
 		const emptyClassContent = {
 			imageURL: '/images/empty-class.png',

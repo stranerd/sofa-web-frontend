@@ -47,7 +47,6 @@
 <script lang="ts">
 import AuthProvider from '@/components/auth/AuthProvider.vue'
 import { useEmailSignin } from '@/composables/auth/signin'
-import { generateMiddlewares } from '@/middlewares'
 import { SofaButton, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -55,7 +54,7 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	name: 'AuthLoginPage',
 	components: { AuthProvider, SofaNormalText, SofaTextField, SofaButton },
-	beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
+	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Login To Your Account' })
 		const { factory, signin } = useEmailSignin()

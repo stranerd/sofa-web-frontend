@@ -12,7 +12,6 @@ import HomeLayout from '@/components/home/HomeLayout.vue'
 import MembersList from '@/components/organizations/members/MembersList.vue'
 import { useAuth } from '@/composables/auth/auth'
 import { useOrganizationMembers } from '@/composables/organizations/members'
-import { generateMiddlewares } from '@/middlewares'
 import { MemberTypes } from '@modules/organizations'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -20,8 +19,7 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	name: 'OrganizationTeachersPage',
 	components: { HomeLayout, MembersList },
-	routeConfig: { goBackRoute: '/' },
-	beforeRouteEnter: generateMiddlewares(['isOrg']),
+	routeConfig: { goBackRoute: '/', middlewares: ['isOrg'] },
 	setup() {
 		useMeta({ title: 'Teachers' })
 

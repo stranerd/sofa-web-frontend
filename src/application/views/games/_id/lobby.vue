@@ -122,7 +122,6 @@
 import GameWrapper from '@/components/plays/games/GameWrapper.vue'
 import Quiz from '@/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
-import { generateMiddlewares } from '@/middlewares'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { SofaAvatar, SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
@@ -141,7 +140,7 @@ export default defineComponent({
 		SofaNormalText,
 		SofaImageLoader,
 	},
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Lobby',

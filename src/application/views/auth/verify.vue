@@ -21,7 +21,6 @@
 
 <script lang="ts">
 import { getEmailVerificationEmail, useEmailVerification } from '@/composables/auth/signin'
-import { generateMiddlewares } from '@/middlewares'
 import { SofaButton, SofaNormalText, SofaOtpInput } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -33,11 +32,7 @@ export default defineComponent({
 		SofaButton,
 		SofaOtpInput,
 	},
-	beforeRouteEnter: generateMiddlewares([
-		async () => {
-			if (!getEmailVerificationEmail()) return '/auth/signin'
-		},
-	]),
+	routeConfig: { middlewares: [() => (getEmailVerificationEmail() ? undefined : '/auth/signin')] },
 	setup() {
 		useMeta({ title: 'Verify your email' })
 

@@ -211,7 +211,7 @@ export const useCreateQuiz = () => {
 				QuestionsUseCases.add(quiz.id, q),
 			),
 		).catch()
-		return quiz.id
+		return quiz
 	})
 
 	return { createQuiz, error, loading }

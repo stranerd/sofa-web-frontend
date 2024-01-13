@@ -24,7 +24,6 @@ import { createGameData, createTestData } from '@/composables/library'
 import { useMyGames } from '@/composables/plays/games-list'
 import { useMyTests } from '@/composables/plays/tests-list'
 import { useQuizzesInList } from '@/composables/study/quizzes-list'
-import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaProgressItemCard } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
@@ -37,8 +36,7 @@ export default defineComponent({
 		SofaProgressItemCard,
 		SofaEmptyState,
 	},
-	routeConfig: { goBackRoute: '/library' },
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()
 		const tab = computed(() => (route.query.tab as string) ?? 'all')

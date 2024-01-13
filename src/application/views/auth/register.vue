@@ -60,7 +60,6 @@
 <script lang="ts">
 import AuthProvider from '@/components/auth/AuthProvider.vue'
 import { useEmailSignup } from '@/composables/auth/signin'
-import { generateMiddlewares } from '@/middlewares'
 import { SofaButton, SofaCheckbox, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -74,7 +73,7 @@ export default defineComponent({
 		SofaCheckbox,
 		SofaButton,
 	},
-	beforeRouteEnter: generateMiddlewares(['isNotAuthenticated']),
+	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Create Your Account' })
 		const { factory, signup } = useEmailSignup()

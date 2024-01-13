@@ -35,7 +35,6 @@ import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { extractResource, openCourse, openQuiz } from '@/composables/library'
 import { handleShowMaterialMoreOptions } from '@/composables/study'
 import { useUsersMaterials } from '@/composables/study/users-materials'
-import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
@@ -49,8 +48,7 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaActivityCard,
 	},
-	routeConfig: { goBackRoute: '/library' },
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()
 		const tab = computed(() => (route.query.tab as string) ?? 'all')

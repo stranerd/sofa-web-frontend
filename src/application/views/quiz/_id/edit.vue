@@ -275,7 +275,6 @@ import ManageAccessModal from '@/components/study/quizzes/ManageAccessModal.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
 import RequestAccessModal from '@/components/study/quizzes/RequestAccessModal.vue'
 import QuizSettings from '@/components/study/quizzes/Settings.vue'
-import { generateMiddlewares } from '@/middlewares'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
@@ -299,8 +298,7 @@ export default defineComponent({
 		RequestAccessModal,
 		ManageAccessModal,
 	},
-	routeConfig: { goBackRoute: '/library' },
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Edit Quiz',

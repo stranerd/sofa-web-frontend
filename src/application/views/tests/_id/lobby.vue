@@ -49,7 +49,6 @@
 import TestWrapper from '@/components/plays/tests/TestWrapper.vue'
 import Quiz from '@/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
-import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
@@ -58,7 +57,7 @@ import { useMeta } from 'vue-meta'
 export default defineComponent({
 	name: 'TestsIdLobbyPage',
 	components: { TestWrapper, QuizWrapper, Quiz, SofaHeaderText, SofaNormalText },
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Lobby',

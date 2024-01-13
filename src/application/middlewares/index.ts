@@ -8,7 +8,7 @@ type MiddleWareArgs = {
 	goBackToNonAuth: () => string
 }
 
-type MiddlewareFunction = (d: MiddleWareArgs) => Promise<string | void>
+type MiddlewareFunction = (d: MiddleWareArgs) => string | void | Promise<string | void>
 
 export const defineMiddleware = (middleware: MiddlewareFunction) => middleware
 
@@ -52,7 +52,9 @@ export const isOrg = defineMiddleware(async ({ to }) => {
 })
 
 const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg }
-type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
+export type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
+
+const wrapInAsync = async <T>(fn: () => T) => await fn()
 
 export const generateMiddlewares =
 	(middlewares: Middleware[]): NavigationGuardWithThis<undefined> =>
@@ -65,7 +67,7 @@ export const generateMiddlewares =
 				const backPath = from?.fullPath ?? '/'
 				return backPath.startsWith('/auth/') ? '/' : backPath
 			}
-			const path = await callback?.({ to, from, goBackToNonAuth }).catch(() => null)
+			const path = await wrapInAsync(() => callback?.({ to, from, goBackToNonAuth })).catch(() => null)
 			if (!path) continue
 			redirect = path
 			break

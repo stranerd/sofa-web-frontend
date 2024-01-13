@@ -90,7 +90,6 @@
 import Flashcard from '@/components/study/quizzes/FlashcardDisplay.vue'
 import Quiz from '@/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
-import { generateMiddlewares } from '@/middlewares'
 import { storage } from '@utils/storage'
 import { Logic } from 'sofa-logic'
 import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
@@ -99,7 +98,6 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',
-	routeConfig: { goBackRoute: '/library' },
 	components: {
 		QuizWrapper,
 		Quiz,
@@ -111,7 +109,7 @@ export default defineComponent({
 		SofaModal,
 		SofaCheckbox,
 	},
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	async setup() {
 		useMeta({
 			title: 'Flashcards',

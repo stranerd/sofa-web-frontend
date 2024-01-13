@@ -28,12 +28,11 @@
 
 <script lang="ts">
 import AccountSetup from '@/components/onboarding/AccountSetup.vue'
-import { generateMiddlewares } from '@/middlewares'
+import { UserType } from '@modules/users'
 import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { UserType } from '@modules/users'
 
 export default defineComponent({
 	name: 'OnboardingPage',
@@ -42,14 +41,16 @@ export default defineComponent({
 		SofaIcon,
 		SofaNormalText,
 	},
-	beforeRouteEnter: generateMiddlewares([
-		'isOnboarding',
-		async ({ to }) => {
-			const type = to.query.type as UserType | undefined
-			if (!type || Object.values(UserType).includes(type)) return
-			return '/onboarding'
-		},
-	]),
+	routeConfig: {
+		middlewares: [
+			'isOnboarding',
+			({ to }) => {
+				const type = to.query.type as UserType | undefined
+				if (!type || Object.values(UserType).includes(type)) return
+				return '/onboarding'
+			},
+		],
+	},
 	setup() {
 		useMeta({ title: 'Setup Your Account' })
 		const route = useRoute()

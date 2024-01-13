@@ -72,7 +72,6 @@
 <script lang="ts">
 import Quiz from '@/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@/components/study/quizzes/QuizWrapper.vue'
-import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
@@ -80,9 +79,8 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdPracticePage',
-	routeConfig: { goBackRoute: '/library' },
+	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	components: { QuizWrapper, Quiz, SofaHeaderText, SofaIcon, SofaNormalText },
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
 	setup() {
 		useMeta({
 			title: 'Practice',

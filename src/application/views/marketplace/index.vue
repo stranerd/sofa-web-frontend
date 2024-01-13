@@ -78,7 +78,6 @@
 import { extractResource } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
 import { useMyStudy } from '@/composables/study'
-import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaItemCard, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
@@ -94,7 +93,7 @@ export default defineComponent({
 		SofaHeaderText,
 		SofaEmptyState,
 	},
-	beforeRouteEnter: generateMiddlewares(['isAuthenticated']),
+	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Marketplace',
