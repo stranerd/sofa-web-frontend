@@ -294,14 +294,14 @@ import {
 	SofaImageLoader,
 	SofaModal,
 	SofaNormalText,
+	SofaDocumentReader,
+	SofaVideoPlayer,
 } from 'sofa-ui-components'
-import { capitalize, defineAsyncComponent, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@/composables/course'
 import { Course } from 'sofa-logic'
-const SofaDocumentReader = defineAsyncComponent(() => import('sofa-ui-components/src/components/SofaDocumentReader/index.vue'))
-const SofaVideoPlayer = defineAsyncComponent(() => import('sofa-ui-components/src/components/SofaVideoPlayer/index.vue'))
 
 export default defineComponent({
 	name: 'CreateCourse',
