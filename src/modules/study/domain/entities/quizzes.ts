@@ -15,4 +15,8 @@ export class QuizEntity extends CoursableEntity implements CoursableData {
 		this.access = data.access
 		this.isForTutors = data.isForTutors
 	}
+
+	get shareLink() {
+		return `${window.location.origin}/marketplace/${this.id}?type=quiz`
+	}
 }

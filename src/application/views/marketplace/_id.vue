@@ -28,12 +28,8 @@
 				:content-id="contentDetails.id"
 				:open-quiz="() => openQuiz(contentDetails as any)"
 				:actions="{
-					report: () => {
-						reportMaterial(contentDetails?.type, contentDetails?.title, contentDetails?.id)
-					},
-					share: () => {
-						shareMaterialLink(contentDetails?.type ?? ('' as any), contentDetails.route, contentDetails?.title ?? '')
-					},
+					report: () => reportMaterial(contentDetails?.original),
+					share: () => shareMaterialLink(contentDetails?.original),
 					save: () => saveToFolder(contentDetails),
 				}" />
 		</div>

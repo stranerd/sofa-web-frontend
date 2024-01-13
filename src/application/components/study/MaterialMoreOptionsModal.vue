@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
-// import { reportMaterial, shareMaterialLink } from '@/composables/library'
+import { reportMaterial, shareMaterialLink } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
@@ -45,7 +45,7 @@ const moreOptions = computed(() => [
 		show: () => props.material.isPublished,
 		action: () => {
 			props.close()
-			//TODO:shareMaterialLink(isQuiz.value ? 'quiz' : 'course', selectedItem.value?.route ?? '', props.material.title)
+			shareMaterialLink(props.material)
 		},
 	},
 	{
@@ -54,7 +54,7 @@ const moreOptions = computed(() => [
 		show: () => props.material.user.id !== id.value,
 		action: () => {
 			props.close()
-			//TODO:reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
+			reportMaterial(props.material)
 		},
 	},
 	{

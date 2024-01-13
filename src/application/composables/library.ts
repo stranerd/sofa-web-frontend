@@ -129,9 +129,9 @@ const openCourse = (activity: ResourceType) => {
 	Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
 
-const reportMaterial = (type: any, name: string, id: string) => {
-	reportMaterialSetup.type = type
-	reportMaterialSetup.id = id
+const reportMaterial = (material: QuizEntity | CourseEntity) => {
+	reportMaterialSetup.id = material.id
+	reportMaterialSetup.type = material.isQuiz() ? 'quiz' : 'course'
 	reportMaterialSetup.show = true
 }
 
@@ -147,9 +147,8 @@ const sendReportMaterial = (data: any) => {
 	Logic.Interactions.CreateReport(true)
 }
 
-const shareMaterialLink = async (type: 'quiz' | 'course', link: string, title: string) => {
-	const baseUrl = window.location.origin
-	Logic.Common.share(`${capitalize(type)} on SOFA`, `View ${title} on SOFA`, `${baseUrl}${link}`)
+const shareMaterialLink = (material: QuizEntity | CourseEntity) => {
+	Logic.Common.share(`${capitalize(material.isQuiz() ? 'quiz' : 'course')} on SOFA`, `View ${material.title} on SOFA`, material.shareLink)
 }
 
 export { openCourse, openQuiz, reportMaterial, reportMaterialSetup, sendReportMaterial, shareMaterialLink, showStudyMode }
