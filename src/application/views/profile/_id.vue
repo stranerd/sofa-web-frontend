@@ -54,7 +54,7 @@
 						<SofaButton
 							v-if="user.userType.isOrg && !authUser.account.organizationsIn.find((o) => o.id === user.id)"
 							padding="px-6 py-2"
-							@click="showModal = true">
+							@click="joinOrgHandler">
 							Join
 						</SofaButton>
 					</div>
@@ -136,54 +136,14 @@
 			</div>
 		</template>
 	</expanded-layout>
-
-	<SofaModal v-if="showModal" :close="() => (showModal = false)">
-		<div class="flex flex-col md:gap-5 gap-3 relative mdlg:p-6 items-center">
-			<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${user.orgName}`" />
-
-			<div class="w-full flex justify-between items-center mdlg:hidden py-2 border-lightGray border-b px-4">
-				<SofaNormalText class="!font-bold !text-base" :content="`Join ${user.orgName}`" />
-				<SofaIcon class="h-[19px]" name="circle-close" @click="showModal = false" />
-			</div>
-
-			<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-				<SofaTextField
-					v-model="joinCode"
-					custom-class="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Enter Join Code"
-					border-color="border-transparent" />
-			</div>
-
-			<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">
-				<SofaButton
-					text-color="text-grayColor"
-					bg-color="bg-white"
-					padding="px-4 py-1"
-					class="hidden md:inline-block border-2 border-gray-100 md:w-auto w-full"
-					@click="showModal = false">
-					Cancel
-				</SofaButton>
-
-				<SofaButton
-					text-color="text-white"
-					bg-color="bg-primaryBlue"
-					padding="px-4 md:py-1 py-3"
-					class="border-2 border-transparent md:w-auto w-full"
-					@click="requestToJoinOrganization(user.id).then((succeeded) => (succeeded ? (showModal = false) : null))">
-					Continue
-				</SofaButton>
-			</div>
-		</div>
-	</SofaModal>
 </template>
 
 <script lang="ts">
 import { useAuth } from '@/composables/auth/auth'
+import { useOrganizationModal } from '@/composables/core/modals'
 import { extractResource } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
 import { useUsersMaterials } from '@/composables/study/users-materials'
-import { useMyOrganizations } from '@/composables/users/organizations'
 import { socials } from '@/composables/users/profile'
 import { Logic } from 'sofa-logic'
 import {
@@ -193,7 +153,6 @@ import {
 	SofaHeaderText,
 	SofaIcon,
 	SofaItemCard,
-	SofaModal2 as SofaModal,
 	SofaNormalText,
 	SofaTextField,
 } from 'sofa-ui-components'
@@ -212,7 +171,6 @@ export default defineComponent({
 		SofaTextField,
 		SofaItemCard,
 		SofaEmptyState,
-		SofaModal,
 	},
 	setup() {
 		useMeta({ title: 'Public Profile' })
@@ -230,9 +188,7 @@ export default defineComponent({
 			if (!query) return materials.value
 			return materials.value.filter((item) => [item.title].some((v) => v.toLowerCase().includes(query)))
 		})
-		const showModal = ref(false)
-
-		const { code: joinCode, requestToJoinOrganization } = useMyOrganizations()
+		const joinOrgHandler = () => useOrganizationModal().joinOrganization.open({ org: user.value })
 
 		const searchQuery = ref('')
 
@@ -245,9 +201,7 @@ export default defineComponent({
 			currentTab,
 			socials,
 			searchQuery,
-			showModal,
-			joinCode,
-			requestToJoinOrganization,
+			joinOrgHandler,
 			saveToFolder,
 		}
 	},

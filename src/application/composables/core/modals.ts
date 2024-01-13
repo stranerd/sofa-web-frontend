@@ -4,6 +4,7 @@ import ClassCardMoreOptions from '@/components/organizations/classes/ClassCardMo
 import CreateClass from '@/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@/components/organizations/classes/EditClassModal.vue'
 import AddMember from '@/components/organizations/members/AddMemberModal.vue'
+import JoinOrganization from '@/components/organizations/members/JoinOrganizationModal.vue'
 import AddMaterial from '@/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@/components/study/MaterialMoreOptionsModal.vue'
 import SaveToFolder from '@/components/study/folders/SaveToFolderModal.vue'
@@ -15,6 +16,7 @@ export const useOrganizationModal = () =>
 		addMember: { component: AddMember },
 		createClass: { component: CreateClass },
 		editClass: { component: EditClass },
+		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
 	})
 
