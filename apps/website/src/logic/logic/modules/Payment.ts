@@ -4,7 +4,7 @@ import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
 import { CommercialBanks, PaymentMethod, Plan, Purchase, Transaction, Wallet } from '../types/domains/payment'
-import { FundWalletInput, MakePurchaseInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from './../types/forms/payment'
+import { FundWalletInput, MakePurchaseInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from '../types/forms/payment'
 import Common from './Common'
 
 export default class Payment extends Common {

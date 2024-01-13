@@ -1,9 +1,9 @@
-import { AddQuestionAnswer } from './../../logic/types/forms/plays'
 import { AxiosResponse } from 'axios'
-import { ModelApiService } from '../common/ModelService'
-import { Game, GameParticipantAnswer } from '../../logic/types/domains/plays'
-import { Paginated } from '../../logic/types/domains/common'
 import { QueryParams } from '../../logic/types/common'
+import { Paginated } from '../../logic/types/domains/common'
+import { Game, GameParticipantAnswer } from '../../logic/types/domains/plays'
+import { AddQuestionAnswer } from '../../logic/types/forms/plays'
+import { ModelApiService } from '../common/ModelService'
 
 export default class GamesApi extends ModelApiService {
 	constructor() {

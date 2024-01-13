@@ -29,6 +29,9 @@
 			"@utils/*": [
 				"node_modules/sofa-modules/src/utils/*"
 			],
+			"sofa-logic": [
+				"src/logic/index.ts"
+			],
 			"sofa-ui-components": [
 				"src/ui-components/index.ts"
 			]

@@ -1,8 +1,8 @@
-import { CreateVerificationInput, VerificationStatusInput } from './../../logic/types/forms/users'
-import { UserVerification } from './../../logic/types/domains/users'
 import { AxiosResponse } from 'axios'
-import { ReadOnlyApiService } from '../common/ReadOnlyService'
 import { Country } from '../../logic/types/domains/common'
+import { UserVerification } from '../../logic/types/domains/users'
+import { CreateVerificationInput, VerificationStatusInput } from '../../logic/types/forms/users'
+import { ReadOnlyApiService } from '../common/ReadOnlyService'
 
 export default class VerificationsApi extends ReadOnlyApiService {
 	constructor() {
