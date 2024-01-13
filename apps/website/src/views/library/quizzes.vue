@@ -26,8 +26,8 @@
 <script lang="ts">
 import LibraryLayout from '@/components/study/LibraryLayout.vue'
 import { extractResource, openQuiz, showMoreOptionHandler } from '@/composables/library'
+import { useRecent } from '@/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@/composables/study/quizzes-list'
-import { useRecent } from '@/composables/study/study'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'

@@ -52,7 +52,7 @@
 			</div>
 
 			<div class="hidden mdlg:!flex lg:!flex flex-row items-center gap-4">
-				<SofaButton padding="p-2 rounded-full" @click="showAddItem()">
+				<SofaButton padding="p-2 rounded-full" @click="showAddItem">
 					<SofaIcon name="plus-white" />
 				</SofaButton>
 				<div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
@@ -189,7 +189,7 @@ export default defineComponent({
 			default: 'flex',
 		},
 		showAddItem: {
-			type: Function,
+			type: Function as PropType<() => void>,
 			required: true,
 		},
 		badges: {

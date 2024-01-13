@@ -77,7 +77,7 @@
 <script lang="ts">
 import { extractResource } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
-import { useMyStudy } from '@/composables/study/study'
+import { useMyStudy } from '@/composables/study'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
 import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaItemCard, SofaNormalText, SofaTextField } from 'sofa-ui-components'

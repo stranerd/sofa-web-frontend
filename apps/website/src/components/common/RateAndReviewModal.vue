@@ -67,7 +67,6 @@
 	</sofa-modal>
 </template>
 <script lang="ts">
-import { showAddItem } from '@/composables'
 import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaRatings, SofaTextarea } from 'sofa-ui-components'
 import { defineComponent, reactive } from 'vue'
 
@@ -121,7 +120,6 @@ export default defineComponent({
 		}
 
 		return {
-			showAddItem,
 			formData,
 			submitReview,
 		}

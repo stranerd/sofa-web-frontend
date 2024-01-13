@@ -121,13 +121,12 @@
 </template>
 
 <script lang="ts">
-import { scrollToTop } from '@/composables'
 import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@/composables/library'
 import { saveToFolder } from '@/composables/study/folders'
-import { useHasAccess } from '@/composables/study/study'
+import { useHasAccess } from '@/composables/study'
+import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
-import { QuestionsUseCases, QuestionEntity } from '@modules/study'
 import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -497,7 +496,6 @@ export default defineComponent({
 
 		watch(SingleCourse, () => {
 			if (SingleCourse.value) {
-				scrollToTop()
 				setCourseData()
 				setSimilarContents()
 			}
@@ -505,7 +503,6 @@ export default defineComponent({
 
 		watch(SingleQuiz, () => {
 			if (SingleQuiz.value) {
-				scrollToTop()
 				setQuizData()
 				setSimilarContents()
 			}
@@ -522,8 +519,6 @@ export default defineComponent({
 			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Study.watchProperty('SingleQuiz', SingleQuiz)
 			Logic.Study.watchProperty('AllReviews', AllReviews)
-
-			scrollToTop()
 
 			if (contentType.value == 'course') {
 				setCourseData()

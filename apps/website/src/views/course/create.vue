@@ -284,7 +284,6 @@
 import AddVideo from '@/components/study/courses/AddVideo.vue'
 import NewCourseMaterial from '@/components/study/courses/NewMaterial.vue'
 import CourseSettings from '@/components/study/courses/Settings.vue'
-import { scrollToTop } from '@/composables'
 import { Logic } from 'sofa-logic'
 import {
 	SofaButton,
@@ -472,7 +471,6 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			scrollToTop()
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			showSettingModal.value = false
 			mobileTitle.value = 'Content'

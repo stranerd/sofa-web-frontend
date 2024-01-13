@@ -13,15 +13,12 @@
 		:has-ratings="false"
 		:title="`Report this ${reportMaterialSetup.type}`"
 		@on-review-submitted="sendReportMaterial" />
-	<add-material-modal v-if="showAddItem" :close="() => (showAddItem = false)" />
 	<Modals />
 </template>
 
 <script lang="ts" setup>
-import AddMaterialModal from '@/components/common/AddMaterialModal.vue'
 import RateAndReviewModal from '@/components/common/RateAndReviewModal.vue'
 import Modals from '@/components/core/modals/Modals.vue'
-import { showAddItem } from '@/composables'
 import { useAuth } from '@/composables/auth/auth'
 import { reportMaterialSetup, sendReportMaterial } from '@/composables/library'
 import { UsersUseCases } from '@modules/users'

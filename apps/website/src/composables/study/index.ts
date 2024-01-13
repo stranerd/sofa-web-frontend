@@ -4,6 +4,11 @@ import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useMyPurchases } from '../payment/purchases'
+import { useStudyModal } from '../core/modals'
+
+export const handleShowAddMaterial = () => {
+	useStudyModal().addMaterial.open({})
+}
 
 const store: Record<
 	string,

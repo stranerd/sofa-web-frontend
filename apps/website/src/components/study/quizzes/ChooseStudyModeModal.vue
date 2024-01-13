@@ -47,12 +47,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useHasAccess } from '@/composables/study/study'
-import { Logic } from 'sofa-logic'
+import { useAuth } from '@/composables/auth/auth'
+import { useHasAccess } from '@/composables/study'
 import { QuizEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 import { SofaButton, SofaEmptyState, SofaIcon, SofaIconCard, SofaNormalText } from 'sofa-ui-components'
 import { defineProps, ref } from 'vue'
-import { useAuth } from '@/composables/auth/auth'
 
 const props = defineProps<{
 	close: () => void

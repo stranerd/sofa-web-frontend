@@ -4,7 +4,7 @@
 		:subpage-actions="topbarOptions.actions"
 		:title="topbarOptions.title"
 		:type="topbarOptions.type"
-		:show-add-item="handleShowAddItem"
+		:show-add-item="handleShowAddMaterial"
 		:user="user"
 		:custom-class="`${hide.top ? 'hidden mdlg:!flex' : 'flex'}`"
 		:badges="topbarOptions.badges" />
@@ -36,14 +36,14 @@
 			<slot name="right-session" />
 		</div>
 	</div>
-	<SofaBottomBar v-if="!hide.bottom" :show-add-item="handleShowAddItem" />
+	<SofaBottomBar v-if="!hide.bottom" :show-add-item="handleShowAddMaterial" />
 </template>
 
 <script lang="ts" setup>
 import { useAuth } from '@/composables/auth/auth'
 import { SofaBottomBar, SofaTopBar } from 'sofa-ui-components'
 import { computed, defineProps } from 'vue'
-import { handleShowAddItem } from '../composables'
+import { handleShowAddMaterial } from '../composables/study'
 
 defineProps({
 	topbarOptions: {
