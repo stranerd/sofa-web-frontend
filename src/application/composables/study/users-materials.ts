@@ -41,7 +41,7 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 			}
 			const [courses, quizzes] = await Promise.all([
 				Logic.Study.GetCourses(query),
-				Logic.Study.GetQuizzes({ ...query, where: [...query.where, { field: 'courseId', value: null }] }),
+				Logic.Study.GetQuizzes({ ...query, where: [...query.where!, { field: 'courseId', value: null }] }),
 			])
 			courses.results.forEach((r) =>
 				addToArray(

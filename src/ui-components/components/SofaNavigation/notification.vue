@@ -5,7 +5,9 @@
 			<sofa-icon :custom-class="'h-[19px] cursor-pointer'" :name="'circle-close'" @click="close ? close() : null" />
 		</div>
 		<div v-if="AllNotifications?.results.length" class="w-full flex flex-col gap-3">
-			<div v-for="(item, index) in AllNotifications.results" :key="index"
+			<div
+				v-for="(item, index) in AllNotifications.results"
+				:key="index"
 				:class="`w-full flex flex-row items-start justify-between ${item.seen ? 'opacity-80' : ''}`">
 				<div class="flex flex-col gap-1">
 					<sofa-normal-text :custom-class="'text-left'">
@@ -22,8 +24,7 @@
 		</div>
 		<div v-else class="w-full flex flex-col gap-2 flex-grow items-center justify-center h-full">
 			<sofa-icon :name="'empty-notification'" :custom-class="'h-[48px]'" />
-			<sofa-normal-text :color="'text-grayColor'" :custom-class="'!text-center'"> You have no notifications
-			</sofa-normal-text>
+			<sofa-normal-text :color="'text-grayColor'" :custom-class="'!text-center'"> You have no notifications </sofa-normal-text>
 		</div>
 	</div>
 </template>
@@ -46,7 +47,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup () {
+	setup() {
 		const AllNotifications = ref(Logic.Notifications.AllNotifications)
 
 		onMounted(() => {

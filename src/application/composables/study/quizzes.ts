@@ -53,8 +53,8 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 
 	const { users: members } = useUsersInList(
 		computed(() =>
-			canFetchUsers.value
-				? store[id].quiz.value?.access.members.concat(store[id].quiz.value.user.id, ...store[id].quiz.value.access.requests) ?? []
+			canFetchUsers.value && store[id].quiz.value
+				? store[id].quiz.value?.access.members.concat(store[id].quiz.value!.user.id, ...store[id].quiz.value!.access.requests) ?? []
 				: [],
 		),
 		!skip.members,

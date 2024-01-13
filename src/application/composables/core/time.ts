@@ -2,7 +2,7 @@ import { onUnmounted, ref } from 'vue'
 
 export const useCountdown = (skipClearOnUnmounted = false) => {
 	const time = ref(0)
-	let interval: ReturnType<typeof setTimeout> = null
+	let interval: ReturnType<typeof setTimeout> | undefined
 
 	const countdown = (data: Partial<{ fn: () => Promise<void>; time: number; interval: number }>) =>
 		new Promise<void>((res, rej) => {
@@ -20,7 +20,7 @@ export const useCountdown = (skipClearOnUnmounted = false) => {
 						await data?.fn?.()
 					}
 				}, data?.interval ?? 1000)
-			} catch (e) {
+			} catch (e: any) {
 				rej(e.message)
 			}
 		})

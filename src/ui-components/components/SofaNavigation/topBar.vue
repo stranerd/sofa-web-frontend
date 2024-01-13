@@ -52,7 +52,7 @@
 			</div>
 
 			<div class="hidden mdlg:!flex lg:!flex flex-row items-center gap-4">
-				<SofaButton padding="p-2 rounded-full" @click="showAddItem">
+				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
 					<SofaIcon name="plus-white" />
 				</SofaButton>
 				<div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
@@ -135,10 +135,11 @@
 		</sofa-modal>
 	</div>
 </template>
-<script lang="ts">
-import { UserEntity } from '@modules/users'
+<script lang="ts" setup>
+import { useAuth } from '@app/composables/auth/auth'
+import { handleShowAddMaterial } from '@app/composables/study'
 import { Conditions, Logic } from 'sofa-logic'
-import { PropType, defineComponent, onMounted, ref } from 'vue'
+import { onMounted, ref, defineProps, withDefaults, computed } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
@@ -149,91 +150,84 @@ import { SofaHeaderText } from '../SofaTypography'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import notification from './notification.vue'
 
-export default defineComponent({
-	name: 'SofaTopBar',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-		SofaAvatar,
-		SofaButton,
-		SofaHeaderText,
-		SofaModal,
-		notification,
-		SofaTextField,
-		SofaBadge,
-	},
-	props: {
-		subpageActions: {
-			type: Array as () => any[],
-			default: () => [],
-		},
-		title: {
-			type: String,
-			default: '',
-		},
-		tabs: {
-			type: Array as () => {
-				name: string
-				path: string
-				icon: string
-				icon_size: string
-			}[],
-			default: () => [],
-		},
-		type: {
-			type: String,
-			default: 'main',
-		},
-		customClass: {
-			type: String,
-			default: 'flex',
-		},
-		showAddItem: {
-			type: Function as PropType<() => void>,
-			required: true,
-		},
+withDefaults(
+	defineProps<{
+		subpageActions?: any[]
+		title?: string
+		type?: string
+		customClass?: string
 		badges: {
-			type: Array as () => {
-				text: string
-				color: string
-			}[],
-			default: () => [],
-		},
-		user: {
-			type: Object as PropType<UserEntity>,
-			required: false,
-			default: null,
-		},
+			text: string
+			color: string
+		}[]
+	}>(),
+	{
+		subpageActions: () => [],
+		title: '',
+		type: 'main',
+		customClass: 'flex',
+		badges: () => [],
 	},
-	setup() {
-		const showNotification = ref(false)
+)
 
-		const searchQuery = ref('')
+const { user, userType } = useAuth()
+const showNotification = ref(false)
 
-		onMounted(() => {
-			// get user notifications
-			Logic.Notifications.GetNotifications({
-				where: [
-					{
-						field: 'userId',
-						condition: Conditions.eq,
-						value: Logic.Common.AuthUser?.id,
-					},
-				],
-			})
-		})
+const searchQuery = ref('')
 
-		const initiateSearch = () => {
-			if (searchQuery.value.length > 1) {
-				Logic.Common.GoToRoute('/marketplace/search?q=' + searchQuery.value)
-			}
-		}
-		return {
-			Logic,
-			showNotification,
-			searchQuery,
-			initiateSearch,
-		}
-	},
+onMounted(() => {
+	// get user notifications
+	Logic.Notifications.GetNotifications({
+		where: [
+			{
+				field: 'userId',
+				condition: Conditions.eq,
+				value: Logic.Common.AuthUser?.id,
+			},
+		],
+	})
 })
+
+const initiateSearch = () => {
+	if (searchQuery.value.length > 1) {
+		Logic.Common.GoToRoute('/marketplace/search?q=' + searchQuery.value)
+	}
+}
+
+const tabs = computed(() => [
+	{
+		name: 'Home',
+		path: '/',
+		icon: 'home',
+		icon_size: 'h-[18px]',
+	},
+	...(userType.value.isOrg
+		? []
+		: [
+				{
+					name: 'Chat',
+					path: '/chats',
+					icon: 'chat',
+					icon_size: 'h-[18px]',
+				},
+			]),
+	{
+		name: 'Library',
+		path: '/library',
+		icon: 'library',
+		icon_size: 'h-[18px]',
+	},
+	// {
+	//   name: "Analytics",
+	//   path: "/analytics",
+	//   icon: "analytics",
+	//   icon_size: "h-[18px]",
+	// },
+	{
+		name: 'Marketplace',
+		path: '/marketplace',
+		icon: 'marketplace',
+		icon_size: 'h-[18px]',
+	},
+])
 </script>

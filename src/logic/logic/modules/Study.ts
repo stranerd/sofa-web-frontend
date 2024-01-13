@@ -296,9 +296,8 @@ export default class Study extends Common {
 						topic: 'Physics',
 					}
 
-					// @ts-expect-error this might be undefined
 					this.CreateCourse(true)
-						.then(async () => {
+						?.then(async () => {
 							// create two default sections
 							Logic.Study.UpdateCourseSectionForm = {
 								id: Logic.Study.SingleCourse?.id ?? '',

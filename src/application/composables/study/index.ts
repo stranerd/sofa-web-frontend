@@ -58,15 +58,15 @@ export const useRecent = () => {
 }
 
 export const useHasAccess = () => {
-	const { user } = useAuth()
+	const { id, user } = useAuth()
 	const { purchasesCoursesIds } = useMyPurchases()
 	const hasAccess = computed(() => (material: QuizEntity | CourseEntity | null) => {
 		if (!material) return false
 		return [
 			material.isQuiz() && !material.courseId,
-			purchasesCoursesIds.value.includes(material.isCourse() ? material.id : material.courseId),
+			purchasesCoursesIds.value.includes(material.isCourse() ? material.id : material.courseId ?? ''),
 			material.user.id === user.value?.id,
-			material.isQuiz() && material.access.members.includes(user.value?.id),
+			material.isQuiz() && material.access.members.includes(id.value),
 			material.user.roles?.isOfficialAccount && user.value?.roles.isSubscribed,
 			user.value?.account.organizationsIn.find((o) => o.id === material.user.id) && material.user.roles.isSubscribed,
 		].some((v) => v)

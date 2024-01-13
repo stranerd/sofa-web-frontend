@@ -1,7 +1,9 @@
 <template>
 	<component :is="as" :class="`col-span-1 flex flex-col gap-2 px-3 py-3 cursor-pointer rounded-custom ${customClass}`">
 		<sofa-image-loader custom-class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photo-url="content.image">
-			<div v-if="content.price && content.price?.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
+			<div
+				v-if="content.price && content.price?.amount > 0"
+				class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 				<sofa-badge :custom-class="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
 					{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
 				</sofa-badge>

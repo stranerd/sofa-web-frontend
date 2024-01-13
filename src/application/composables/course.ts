@@ -4,7 +4,7 @@ import { reactive, ref } from 'vue'
 const courseSettingForm = reactive({
 	title: '',
 	description: '',
-	tags: [],
+	tags: [] as string[],
 	photo: undefined,
 	topic: '',
 	price: '0',
@@ -33,7 +33,7 @@ const addCourseFileForm = reactive<CreateDocumentInput>({
 })
 
 const getTopics = (useId = false) => {
-	const data = []
+	const data: { key: string; value: string }[] = []
 	Logic.Study.Tags?.results?.forEach((tag) => {
 		if (tag.type == 'topics') {
 			if (useId) {
@@ -54,7 +54,7 @@ const getTopics = (useId = false) => {
 }
 
 const getGenericTags = () => {
-	const data = []
+	const data: { key: string; value: string }[] = []
 	Logic.Study.Tags?.results?.forEach((tag) => {
 		if (tag.type == 'generic') {
 			data.push({
@@ -121,7 +121,7 @@ const updateCourse = (formComp: any) => {
 	const formState: boolean = formComp.validate()
 	courseSettingSaved.value = false
 
-	Logic.Study.UpdateCourse(formState, Logic.Study.SingleCourse.id)
+	Logic.Study.UpdateCourse(formState, Logic.Study.SingleCourse?.id ?? '')
 		?.then((data) => {
 			if (data) {
 				courseSettingSaved.value = true
@@ -174,16 +174,16 @@ const addCourseFile = () => {
 		id: '',
 	}
 
-	Logic.Study.CreateFile(true).then((data) => {
+	Logic.Study.CreateFile(true)?.then((data) => {
 		if (data) {
 			// empty quiz
 			Logic.Study.SingleQuiz = undefined
 			// move item to course
 			Logic.Study.MoveItemToCourseForm = {
 				add: true,
-				coursableId: Logic.Study.SingleFile.id,
+				coursableId: Logic.Study.SingleFile?.id ?? '',
 				type: 'file',
-				id: Logic.Study.SingleCourse.id,
+				id: Logic.Study.SingleCourse?.id ?? '',
 			}
 			Logic.Study.MoveItemToCourse(true)
 
@@ -202,9 +202,9 @@ const addQuizToCourse = (quizId: string) => {
 			add: true,
 			coursableId: quizId,
 			type: 'quiz',
-			id: Logic.Study.SingleCourse.id,
+			id: Logic.Study.SingleCourse?.id ?? '',
 		}
-		Logic.Study.MoveItemToCourse(true).then((data) => {
+		Logic.Study.MoveItemToCourse(true)?.then((data) => {
 			if (data) {
 				Logic.Common.showAlert({
 					message: 'Quiz added.',

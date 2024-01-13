@@ -30,7 +30,7 @@ export const search = async (query: QueryParams, returnCoursables = false) => {
 		Logic.Study.GetCourses(query).catch(),
 		Logic.Study.GetQuizzes({
 			...query,
-			where: query.where.concat(...(returnCoursables ? [{ field: 'courseId', value: null }] : [])),
+			where: query.where!.concat(...(returnCoursables ? [{ field: 'courseId', value: null }] : [])),
 		}).catch(),
 	]
 
@@ -59,7 +59,7 @@ export const extractContent = (content: QuizEntity | CourseEntity): ContentDetai
 		},
 		price: isCourse ? item.price?.amount : 0,
 		user: item.user,
-		authUserId: Logic.Common.AuthUser.id,
+		authUserId: Logic.Common.AuthUser?.id,
 		type,
 		ratings: item.ratings,
 		route: `/marketplace/${item.id}?type=${type}`,

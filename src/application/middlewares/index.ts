@@ -56,8 +56,8 @@ export type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
 
 const wrapInAsync = async <T>(fn: () => T) => await fn()
 
-export const runMiddlewares = async (to: RouteLocationNormalized, from: RouteLocationNormalized, middlewares: Middleware[]) => {
-	from = from?.name ? from : null
+export const runMiddlewares = async (to: RouteLocationNormalized, fromRoute: RouteLocationNormalized, middlewares: Middleware[]) => {
+	const from = fromRoute?.name ? fromRoute : null
 	let redirect: string | undefined
 	for (const middleware of middlewares) {
 		const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware

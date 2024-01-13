@@ -116,7 +116,7 @@ export const useConversation = (id: string) => {
 		error: acceptError,
 	} = useAsyncFn(async (accepted: boolean) => {
 		const conv = conversation.value
-		if (!conv || !conv.pending || conv.tutor.id !== authId.value) return
+		if (!conv || !conv.pending || conv.tutor?.id !== authId.value) return
 		await ConversationsUseCases.accept(id, accepted)
 		await setMessage(`Request has been ${accepted ? 'accepted' : 'rejected'} successfully`)
 		if (accepted) await router.push(`/chats/${id}`)

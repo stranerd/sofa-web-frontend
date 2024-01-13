@@ -4,7 +4,7 @@ import { reactive } from 'vue'
 const tutorRequestForm = reactive<CreateTutorRequestForm>({
 	qualification: [],
 	topicId: '',
-	verification: undefined,
+	verification: undefined as any,
 })
 
 const updateVerificationForm = reactive({
@@ -28,7 +28,7 @@ const submitVerification = async (useLoader = true) => {
 }
 
 const autoCreateVerification = () => {
-	if (Logic.Users.Verifications.results.length == 0) {
+	if (Logic.Users.Verifications?.results.length == 0) {
 		Logic.Users.CreateVerificationForm = {
 			content: {
 				quizzes: [],
@@ -48,7 +48,7 @@ const createTutorRequest = () => {
 			verification: tutorRequestForm.verification,
 		}
 		Logic.Users.CreateTutorRequest()
-			.then((res) => {
+			?.then((res) => {
 				Logic.Common.GoToRoute(`/tests/${res.testId}`)
 			})
 			.catch((e) => {

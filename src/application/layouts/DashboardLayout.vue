@@ -1,12 +1,9 @@
 <template>
 	<SofaTopBar
-		:tabs="tabs"
 		:subpage-actions="topbarOptions.actions"
 		:title="topbarOptions.title"
 		:type="topbarOptions.type"
-		:show-add-item="handleShowAddMaterial"
-		:user="user"
-		:custom-class="`${hide.top ? 'hidden mdlg:!flex' : 'flex'}`"
+		:custom-class="hide.top ? 'hidden mdlg:!flex' : 'flex'"
 		:badges="topbarOptions.badges" />
 	<div class="flex-grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
 		<div
@@ -40,9 +37,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@app/composables/auth/auth'
 import { SofaBottomBar, SofaTopBar } from 'sofa-ui-components'
-import { computed, defineProps } from 'vue'
+import { defineProps } from 'vue'
 import { handleShowAddMaterial } from '../composables/study'
 
 defineProps({
@@ -82,43 +78,4 @@ defineProps({
 		default: false,
 	},
 })
-
-const { user, userType } = useAuth()
-
-const tabs = computed(() => [
-	{
-		name: 'Home',
-		path: '/',
-		icon: 'home',
-		icon_size: 'h-[18px]',
-	},
-	...(userType.value.isOrg
-		? []
-		: [
-				{
-					name: 'Chat',
-					path: '/chats',
-					icon: 'chat',
-					icon_size: 'h-[18px]',
-				},
-			]),
-	{
-		name: 'Library',
-		path: '/library',
-		icon: 'library',
-		icon_size: 'h-[18px]',
-	},
-	// {
-	//   name: "Analytics",
-	//   path: "/analytics",
-	//   icon: "analytics",
-	//   icon_size: "h-[18px]",
-	// },
-	{
-		name: 'Marketplace',
-		path: '/marketplace',
-		icon: 'marketplace',
-		icon_size: 'h-[18px]',
-	},
-])
 </script>

@@ -33,7 +33,7 @@ const createQuizData = (quiz: QuizEntity): ResourceType => {
 		showMore: false,
 		userId: quiz.user.id,
 		type: 'quiz',
-		authUserId: Logic.Common.AuthUser.id,
+		authUserId: Logic.Common.AuthUser?.id,
 		user: quiz.user,
 		ratings: quiz.ratings,
 		createdAt: quiz.createdAt,
@@ -76,7 +76,7 @@ export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
 	const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
-	const userPosition = allScores.indexOf(p.scores[Logic.Common.AuthUser.id])
+	const userPosition = allScores.indexOf(p.scores[Logic.Common.AuthUser?.id ?? ''])
 
 	return {
 		id: p.id,
@@ -97,7 +97,7 @@ export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
 export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
 	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
-	const userCorrectAnswers = (p.scores[Logic.Common.AuthUser.id] ?? 0) / 10
+	const userCorrectAnswers = (p.scores[Logic.Common.AuthUser?.id ?? ''] ?? 0) / 10
 	const percentage = (userCorrectAnswers / p.questions.length) * 100
 	const textColor =
 		percentage >= 90 ? 'text-[#4BAF7D]' : percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
