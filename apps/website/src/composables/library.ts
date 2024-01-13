@@ -1,7 +1,6 @@
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Course, Game, Logic, PlayStatus, Quiz, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
-import { saveToFolder } from './study/folders'
 import { useStudyModal } from './core/modals'
 
 const showStudyMode = ref(false)
@@ -130,12 +129,6 @@ const openCourse = (activity: ResourceType) => {
 	Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
 
-const showMoreOptionHandler = (data: ResourceType) => {
-	showMoreOptions.value = true
-	selectedItem.value = data
-	data.showMore = true
-}
-
 const reportMaterial = (type: any, name: string, id: string) => {
 	reportMaterialSetup.type = type
 	reportMaterialSetup.id = id
@@ -154,70 +147,9 @@ const sendReportMaterial = (data: any) => {
 	Logic.Interactions.CreateReport(true)
 }
 
-const selectedItem = ref<ResourceType | undefined>(undefined)
-
-const showMoreOptions = ref(false)
-
 const shareMaterialLink = async (type: 'quiz' | 'course', link: string, title: string) => {
 	const baseUrl = window.location.origin
 	Logic.Common.share(`${capitalize(type)} on SOFA`, `View ${title} on SOFA`, `${baseUrl}${link}`)
 }
 
-const moreOptions = reactive([
-	{
-		icon: 'edit-option',
-		title: 'Edit',
-		show: () => selectedItem.value?.user.id === Logic.Common.AuthUser?.id,
-		action: () => {
-			showMoreOptions.value = false
-			if (selectedItem.value?.type == 'course') {
-				Logic.Common.GoToRoute(`/course/create?id=${selectedItem.value?.id}`)
-			}
-
-			if (selectedItem.value?.type == 'quiz') {
-				Logic.Common.GoToRoute(`/quiz/${selectedItem.value?.id}/edit`)
-			}
-		},
-	},
-	{
-		icon: 'share-option',
-		title: 'Share',
-		show: () => selectedItem.value?.status == 'published',
-		action: () => {
-			showMoreOptions.value = false
-			shareMaterialLink(selectedItem.value?.type ?? ('' as any), selectedItem.value?.route ?? '', selectedItem.value?.title ?? '')
-		},
-	},
-	{
-		icon: 'report-option',
-		title: 'Report',
-		show: () => selectedItem.value?.user.id != Logic.Common.AuthUser?.id,
-		action: () => {
-			showMoreOptions.value = false
-			reportMaterial(selectedItem.value?.type, selectedItem.value?.title, selectedItem.value?.id)
-		},
-	},
-	{
-		icon: 'save',
-		title: 'Save/unsave to folder',
-		show: () => selectedItem.value?.status == 'published',
-		action: () => {
-			showMoreOptions.value = false
-			saveToFolder(selectedItem.value)
-		},
-	},
-])
-
-export {
-	moreOptions,
-	openCourse,
-	openQuiz,
-	reportMaterial,
-	reportMaterialSetup,
-	selectedItem,
-	sendReportMaterial,
-	shareMaterialLink,
-	showMoreOptionHandler,
-	showMoreOptions,
-	showStudyMode,
-}
+export { openCourse, openQuiz, reportMaterial, reportMaterialSetup, sendReportMaterial, shareMaterialLink, showStudyMode }

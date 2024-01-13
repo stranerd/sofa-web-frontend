@@ -1,5 +1,5 @@
 import { CourseEntity, QuizEntity, StudyKeys, StudyUseCases } from '@modules/study'
-import { Course, Quiz } from 'sofa-logic'
+import { Course, Quiz, ResourceType } from 'sofa-logic'
 import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
@@ -8,6 +8,10 @@ import { useStudyModal } from '../core/modals'
 
 export const handleShowAddMaterial = () => {
 	useStudyModal().addMaterial.open({})
+}
+
+export const handleShowMaterialMoreOptions = (data: ResourceType) => {
+	useStudyModal().materialMoreOptionsModal.open({ material: data.original })
 }
 
 const store: Record<

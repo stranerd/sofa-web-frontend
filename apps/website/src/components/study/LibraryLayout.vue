@@ -172,35 +172,14 @@
 			</div>
 		</template>
 	</dashboard-layout>
-
-	<sofa-modal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
-		<div class="mdlg:w-[300px] mdlg:!h-full w-full h-auto flex flex-col items-center relative">
-			<div class="bg-white w-full flex flex-col md:!rounded-[16px] rounded-t-2xl">
-				<div class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-lightGray border-b">
-					<sofa-normal-text :custom-class="'!font-bold !text-base'">Options</sofa-normal-text>
-					<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
-				</div>
-
-				<a
-					v-for="item in moreOptions"
-					:key="item.title"
-					class="w-full flex items-center gap-2 p-4"
-					@click.stop.prevent="item.action()">
-					<sofa-icon :name="item.icon" :custom-class="'h-[15px]'" />
-					<sofa-normal-text>{{ item.title }}</sofa-normal-text>
-				</a>
-			</div>
-		</div>
-	</sofa-modal>
 </template>
 
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth/auth'
-import { moreOptions, showMoreOptions } from '@/composables/library'
 import { useEditFolder, useMyFolders } from '@/composables/study/folders'
 import { useMyOrganizations } from '@/composables/users/organizations'
 import { Logic } from 'sofa-logic'
-import { SofaCustomInput, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaCustomInput, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineProps } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'

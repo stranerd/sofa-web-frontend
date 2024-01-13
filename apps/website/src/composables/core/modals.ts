@@ -1,11 +1,12 @@
 import { modal } from './modal'
 
-import ClassCardMoreOptions from '@/components/organizations/classes/ClassCardMoreOptions.vue'
+import ClassCardMoreOptions from '@/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@/components/organizations/classes/EditClassModal.vue'
 import AddMember from '@/components/organizations/members/AddMemberModal.vue'
 import SaveToFolder from '@/components/study/folders/SaveToFolderModal.vue'
-import AddMaterialModal from '@/components/study/AddMaterialModal.vue'
+import AddMaterial from '@/components/study/AddMaterialModal.vue'
+import MaterialMoreOptions from '@/components/study/MaterialMoreOptionsModal.vue'
 import ChooseStudyMode from '@/components/study/quizzes/ChooseStudyModeModal.vue'
 import CustomizeAi from '@/components/users/users/CustomizeAiModal.vue'
 
@@ -19,9 +20,10 @@ export const useOrganizationModal = () =>
 
 export const useStudyModal = () =>
 	modal.register('Study', {
-		addMaterial: { component: AddMaterialModal, modalArgs: { closeOnClickOutside: true } },
-		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
+		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
 		chooseStudyMode: { component: ChooseStudyMode, modalArgs: { closeOnClickOutside: true } },
+		materialMoreOptionsModal: { component: MaterialMoreOptions, modalArgs: { popover: true } },
+		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
 	})
 
 export const useUserModal = () =>

@@ -9,7 +9,10 @@
 				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click.stop="openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon name="more-options-horizontal" custom-class="h-[6px]" @click.stop="showMoreOptionHandler(activity)" />
+					<sofa-icon
+						name="more-options-horizontal"
+						custom-class="h-[6px]"
+						@click.stop="handleShowMaterialMoreOptions(activity)" />
 				</div>
 			</sofa-activity-card>
 		</template>
@@ -25,8 +28,8 @@
 
 <script lang="ts">
 import LibraryLayout from '@/components/study/LibraryLayout.vue'
-import { extractResource, openQuiz, showMoreOptionHandler } from '@/composables/library'
-import { useRecent } from '@/composables/study'
+import { extractResource, openQuiz } from '@/composables/library'
+import { useRecent, handleShowMaterialMoreOptions } from '@/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@/composables/study/quizzes-list'
 import { generateMiddlewares } from '@/middlewares'
 import { Logic } from 'sofa-logic'
@@ -60,7 +63,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, data, showMoreOptionHandler, openQuiz }
+		return { Logic, data, openQuiz, handleShowMaterialMoreOptions }
 	},
 })
 </script>
