@@ -7,7 +7,7 @@ import { UserFromModel } from '../models/users'
 export class UserRepository implements IUserRepository {
 	private static instance: UserRepository
 	private client: HttpClient
-	private mapper = (model: UserFromModel | null) => (model ? new UserEntity(model) : null)
+	private mapper = (model: UserFromModel | null) => (model ? new UserEntity(model) : null) as UserEntity
 
 	constructor() {
 		this.client = new HttpClient('/users/users')

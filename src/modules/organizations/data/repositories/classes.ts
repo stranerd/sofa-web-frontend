@@ -6,7 +6,7 @@ import { ClassFromModel, ClassToModel } from '../models/classes'
 export class ClassRepository implements IClassRepository {
 	private static instances: Record<string, ClassRepository> = {}
 	private client: HttpClient
-	private mapper = (model: ClassFromModel | null) => (model ? new ClassEntity(model) : null)
+	private mapper = (model: ClassFromModel | null) => (model ? new ClassEntity(model) : null) as ClassEntity
 
 	private constructor(organizationId: string) {
 		this.client = new HttpClient(`/organizations/${organizationId}/classes`)

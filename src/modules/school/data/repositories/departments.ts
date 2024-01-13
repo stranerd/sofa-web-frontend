@@ -6,7 +6,7 @@ import { DepartmentFromModel, DepartmentToModel } from '../models/departments'
 export class DepartmentRepository implements IDepartmentRepository {
 	private static instance: DepartmentRepository
 	private client: HttpClient
-	private mapper = (model: DepartmentFromModel | null) => (model ? new DepartmentEntity(model) : null)
+	private mapper = (model: DepartmentFromModel | null) => (model ? new DepartmentEntity(model) : null) as DepartmentEntity
 
 	constructor() {
 		this.client = new HttpClient('/school/departments')

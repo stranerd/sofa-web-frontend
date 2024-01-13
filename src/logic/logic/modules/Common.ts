@@ -21,11 +21,27 @@ import { ValidationError } from '../types/domains/common'
 
 export default class Common {
 	public window = reactive({ width: window.innerWidth })
-	public router: Router | undefined = undefined
-	public route: RouteLocationNormalizedLoaded | undefined = undefined
+	#router: Router | undefined = undefined
+	#route: RouteLocationNormalizedLoaded | undefined = undefined
 	public watchInterval: number | undefined = undefined
 	private redirectToName = 'redirect-to'
 	public AuthUser: AuthDetails | undefined = undefined
+
+	get route() {
+		return this.#route!
+	}
+
+	set route(route: RouteLocationNormalizedLoaded) {
+		this.#route = route
+	}
+
+	get router() {
+		return this.#router!
+	}
+
+	set router(router: Router) {
+		this.#router = router
+	}
 
 	async getRedirectToRoute() {
 		const value = localStorage.getItem(this.redirectToName)
@@ -283,7 +299,7 @@ export default class Common {
 							rule.params.forEach((param) => {
 								if (typeof param !== 'object') return
 								param.where?.forEach((item) => {
-									if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Common.AuthUser.id
+									if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Common.AuthUser?.id
 								})
 							})
 							domain[rule.method]?.(...rule.params).then(resolve)

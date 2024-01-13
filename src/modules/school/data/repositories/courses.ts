@@ -6,7 +6,7 @@ import { CourseFromModel, CourseToModel } from '../models/courses'
 export class CourseRepository implements ICourseRepository {
 	private static instance: CourseRepository
 	private client: HttpClient
-	private mapper = (model: CourseFromModel | null) => (model ? new CourseEntity(model) : null)
+	private mapper = (model: CourseFromModel | null) => (model ? new CourseEntity(model) : null) as CourseEntity
 
 	constructor() {
 		this.client = new HttpClient('/school/courses')

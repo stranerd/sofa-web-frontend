@@ -6,7 +6,7 @@ import { ViewFromModel, ViewToModel } from '../models/views'
 export class ViewRepository implements IViewRepository {
 	private static instance: ViewRepository
 	private client: HttpClient
-	private mapper = (model: ViewFromModel | null) => (model ? new ViewEntity(model) : null)
+	private mapper = (model: ViewFromModel | null) => (model ? new ViewEntity(model) : null) as ViewEntity
 
 	constructor() {
 		this.client = new HttpClient('/interactions/views')

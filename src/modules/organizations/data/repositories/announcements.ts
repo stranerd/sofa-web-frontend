@@ -6,7 +6,7 @@ import { AnnouncementFromModel, AnnouncementToModel } from '../models/announceme
 export class AnnouncementRepository implements IAnnouncementRepository {
 	private static instances: Record<string, AnnouncementRepository> = {}
 	private client: HttpClient
-	private mapper = (model: AnnouncementFromModel | null) => (model ? new AnnouncementEntity(model) : null)
+	private mapper = (model: AnnouncementFromModel | null) => (model ? new AnnouncementEntity(model) : null) as AnnouncementEntity
 
 	private constructor(organizationId: string, classId: string) {
 		this.client = new HttpClient(`/organizations/${organizationId}/classes/${classId}/announcements`)

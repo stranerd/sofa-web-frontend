@@ -6,7 +6,7 @@ import { FileFromModel, FileToModel } from '../models/files'
 export class FileRepository implements IFileRepository {
 	private static instance: FileRepository
 	private client: HttpClient
-	private mapper = (model: FileFromModel | null) => (model ? new FileEntity(model) : null)
+	private mapper = (model: FileFromModel | null) => (model ? new FileEntity(model) : null) as FileEntity
 
 	constructor() {
 		this.client = new HttpClient('/study/files')

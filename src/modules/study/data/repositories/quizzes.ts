@@ -6,7 +6,7 @@ import { QuizFromModel, QuizToModel } from '../models/quizzes'
 export class QuizRepository implements IQuizRepository {
 	private static instance: QuizRepository
 	private client: HttpClient
-	private mapper = (model: QuizFromModel | null) => (model ? new QuizEntity(model) : null)
+	private mapper = (model: QuizFromModel | null) => (model ? new QuizEntity(model) : null) as QuizEntity
 
 	constructor() {
 		this.client = new HttpClient('/study/quizzes')

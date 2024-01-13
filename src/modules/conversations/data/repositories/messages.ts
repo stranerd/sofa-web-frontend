@@ -6,7 +6,7 @@ import { MessageFromModel, MessageToModel } from '../models/messages'
 export class MessageRepository implements IMessageRepository {
 	private static instances: Record<string, MessageRepository> = {}
 	private client: HttpClient
-	private mapper = (model: MessageFromModel | null) => (model ? new MessageEntity(model) : null)
+	private mapper = (model: MessageFromModel | null) => (model ? new MessageEntity(model) : null) as MessageEntity
 
 	private constructor(conversationId: string) {
 		this.client = new HttpClient(`/conversations/conversations/${conversationId}/messages`)

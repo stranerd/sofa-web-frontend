@@ -6,7 +6,7 @@ import { ConversationFromModel, CreateConversationToModel, UpdateConversationToM
 export class ConversationRepository implements IConversationRepository {
 	private static instance: ConversationRepository
 	private client: HttpClient
-	private mapper = (model: ConversationFromModel | null) => (model ? new ConversationEntity(model) : null)
+	private mapper = (model: ConversationFromModel | null) => (model ? new ConversationEntity(model) : null) as ConversationEntity
 
 	constructor() {
 		this.client = new HttpClient('/conversations/conversations')

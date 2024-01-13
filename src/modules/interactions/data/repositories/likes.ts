@@ -6,7 +6,7 @@ import { LikeFromModel, LikeToModel } from '../models/likes'
 export class LikeRepository implements ILikeRepository {
 	private static instance: LikeRepository
 	private client: HttpClient
-	private mapper = (model: LikeFromModel | null) => (model ? new LikeEntity(model) : null)
+	private mapper = (model: LikeFromModel | null) => (model ? new LikeEntity(model) : null) as LikeEntity
 
 	constructor() {
 		this.client = new HttpClient('/interactions/likes')

@@ -7,7 +7,7 @@ import { FolderSaved } from '../../domain/types'
 export class FolderRepository implements IFolderRepository {
 	private static instance: FolderRepository
 	private client: HttpClient
-	private mapper = (model: FolderFromModel | null) => (model ? new FolderEntity(model) : null)
+	private mapper = (model: FolderFromModel | null) => (model ? new FolderEntity(model) : null) as FolderEntity
 
 	constructor() {
 		this.client = new HttpClient('/study/folders')

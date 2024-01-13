@@ -6,7 +6,7 @@ import { InstitutionFromModel, InstitutionToModel } from '../models/institutions
 export class InstitutionRepository implements IInstitutionRepository {
 	private static instance: InstitutionRepository
 	private client: HttpClient
-	private mapper = (model: InstitutionFromModel | null) => (model ? new InstitutionEntity(model) : null)
+	private mapper = (model: InstitutionFromModel | null) => (model ? new InstitutionEntity(model) : null) as InstitutionEntity
 
 	constructor() {
 		this.client = new HttpClient('/school/institutions')

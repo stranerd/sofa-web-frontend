@@ -6,7 +6,7 @@ import { CommentFromModel, CommentToModel } from '../models/comments'
 export class CommentRepository implements ICommentRepository {
 	private static instance: CommentRepository
 	private client: HttpClient
-	private mapper = (model: CommentFromModel | null) => (model ? new CommentEntity(model) : null)
+	private mapper = (model: CommentFromModel | null) => (model ? new CommentEntity(model) : null) as CommentEntity
 
 	constructor() {
 		this.client = new HttpClient('/interactions/comments')

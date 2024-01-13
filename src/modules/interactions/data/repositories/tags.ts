@@ -6,7 +6,7 @@ import { TagFromModel, TagToModel } from '../models/tags'
 export class TagRepository implements ITagRepository {
 	private static instance: TagRepository
 	private client: HttpClient
-	private mapper = (model: TagFromModel | null) => (model ? new TagEntity(model) : null)
+	private mapper = (model: TagFromModel | null) => (model ? new TagEntity(model) : null) as TagEntity
 
 	constructor() {
 		this.client = new HttpClient('/interactions/tags')

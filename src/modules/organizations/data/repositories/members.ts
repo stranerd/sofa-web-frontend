@@ -7,7 +7,7 @@ import { MemberFromModel } from '../models/members'
 export class MemberRepository implements IMemberRepository {
 	private static instances: Record<string, MemberRepository> = {}
 	private client: HttpClient
-	private mapper = (model: MemberFromModel | null) => (model ? new MemberEntity(model) : null)
+	private mapper = (model: MemberFromModel | null) => (model ? new MemberEntity(model) : null) as MemberEntity
 
 	private constructor(organizationId: string) {
 		this.client = new HttpClient(`/organizations/${organizationId}/members`)

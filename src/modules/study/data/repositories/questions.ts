@@ -6,7 +6,7 @@ import { QuestionFromModel, QuestionToModel } from '../models/questions'
 export class QuestionRepository implements IQuestionRepository {
 	private static instances: Record<string, QuestionRepository> = {}
 	private client: HttpClient
-	private mapper = (model: QuestionFromModel | null) => (model ? new QuestionEntity(model) : null)
+	private mapper = (model: QuestionFromModel | null) => (model ? new QuestionEntity(model) : null) as QuestionEntity
 
 	private constructor(quizId: string) {
 		this.client = new HttpClient(`/study/quizzes/${quizId}/questions`)

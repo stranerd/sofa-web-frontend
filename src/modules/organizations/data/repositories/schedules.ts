@@ -6,7 +6,7 @@ import { ScheduleFromModel, ScheduleToModel } from '../models/schedules'
 export class ScheduleRepository implements IScheduleRepository {
 	private static instances: Record<string, ScheduleRepository> = {}
 	private client: HttpClient
-	private mapper = (model: ScheduleFromModel | null) => (model ? new ScheduleEntity(model) : null)
+	private mapper = (model: ScheduleFromModel | null) => (model ? new ScheduleEntity(model) : null) as ScheduleEntity
 
 	private constructor(organizationId: string, classId: string) {
 		this.client = new HttpClient(`/organizations/${organizationId}/classes/${classId}/schedules`)

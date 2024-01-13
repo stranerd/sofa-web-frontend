@@ -6,7 +6,7 @@ import { FacultyFromModel, FacultyToModel } from '../models/faculties'
 export class FacultyRepository implements IFacultyRepository {
 	private static instance: FacultyRepository
 	private client: HttpClient
-	private mapper = (model: FacultyFromModel | null) => (model ? new FacultyEntity(model) : null)
+	private mapper = (model: FacultyFromModel | null) => (model ? new FacultyEntity(model) : null) as FacultyEntity
 
 	constructor() {
 		this.client = new HttpClient('/school/faculties')
