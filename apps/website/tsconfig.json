@@ -18,10 +18,10 @@
 		],
 		"paths": {
 			"@/*": [
-				"src/*"
+				"src/application/*"
 			],
 			"@app/*": [
-				"src/*"
+				"src/application/*"
 			],
 			"@modules/*": [
 				"node_modules/sofa-modules/src/modules/*"
