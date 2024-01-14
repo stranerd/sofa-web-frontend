@@ -5,22 +5,12 @@
 		</template>
 	</metainfo>
 	<router-view :key="$route.path" />
-	<!-- Report material -->
-	<rate-and-review-modal
-		v-if="reportMaterialSetup.show"
-		:close="() => (reportMaterialSetup.show = false)"
-		:can-close="true"
-		:has-ratings="false"
-		:title="`Report this ${reportMaterialSetup.type}`"
-		@on-review-submitted="sendReportMaterial" />
 	<Modals />
 </template>
 
 <script lang="ts" setup>
-import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
 import Modals from '@app/components/core/modals/Modals.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { reportMaterialSetup, sendReportMaterial } from '@app/composables/library'
 import { UsersUseCases } from '@modules/users'
 import { watch } from 'vue'
 import { useMeta } from 'vue-meta'

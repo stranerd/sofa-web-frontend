@@ -9,6 +9,7 @@
 	<SofaModal
 		v-for="key in popovers"
 		:key="key"
+		max-width="!w-auto"
 		v-bind="modalsDef[key].modalArgs ?? {}"
 		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />

@@ -1,19 +1,7 @@
+import { InteractionEntities } from '@modules/interactions'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Game, Logic, PlayStatus, ResourceType, Test } from 'sofa-logic'
-import { capitalize, reactive, ref } from 'vue'
 import { useModals } from './core/modals'
-
-const showStudyMode = ref(false)
-
-const reportMaterialSetup = reactive<{
-	show: boolean
-	type: 'course' | 'quiz'
-	id: string
-}>({
-	show: false,
-	type: 'course',
-	id: '',
-})
 
 const createQuizData = (quiz: QuizEntity): ResourceType => {
 	return {
@@ -66,11 +54,8 @@ const createCourseData = (course: CourseEntity): ResourceType => {
 	}
 }
 
-export const extractResource = (material: CourseEntity | QuizEntity) => {
-	const m = material as any
-	if (m.__type === 'QuizEntity') return createQuizData(m)
-	return createCourseData(m)
-}
+export const extractResource = (material: CourseEntity | QuizEntity) =>
+	material.isQuiz() ? createQuizData(material) : createCourseData(material)
 
 export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
@@ -117,39 +102,26 @@ export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 	}
 }
 
-const openQuiz = (activity: ResourceType, force = false) => {
+export const openQuiz = (activity: ResourceType, force = false) => {
 	const original = activity.original as QuizEntity
 	if (!force && ((activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
 	useModals().study.chooseStudyMode.open({ quiz: original })
 }
 
-const openCourse = (activity: ResourceType) => {
+export const openCourse = (activity: ResourceType) => {
 	if (activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id)
 		return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
 	Logic.Common.GoToRoute(`/course/${activity.id}`)
 }
 
-const reportMaterial = (material: QuizEntity | CourseEntity) => {
-	reportMaterialSetup.id = material.id
-	reportMaterialSetup.type = material.isQuiz() ? 'quiz' : 'course'
-	reportMaterialSetup.show = true
+export const reportMaterial = (material: QuizEntity | CourseEntity) => {
+	useModals().interactions.createReport.open({
+		id: material.id,
+		type: material.isQuiz() ? InteractionEntities.quizzes : InteractionEntities.courses,
+	})
 }
 
-const sendReportMaterial = (data: any) => {
-	Logic.Interactions.CreateReportForm = {
-		entity: {
-			id: reportMaterialSetup.id,
-			type: reportMaterialSetup.type == 'course' ? 'courses' : 'quizzes',
-		},
-		message: data.review,
-	}
-
-	Logic.Interactions.CreateReport(true)
+export const shareMaterialLink = (material: QuizEntity | CourseEntity) => {
+	Logic.Common.share(`${material.isQuiz() ? 'Quiz' : 'Course'} on SOFA`, `View ${material.title} on SOFA`, material.shareLink)
 }
-
-const shareMaterialLink = (material: QuizEntity | CourseEntity) => {
-	Logic.Common.share(`${capitalize(material.isQuiz() ? 'quiz' : 'course')} on SOFA`, `View ${material.title} on SOFA`, material.shareLink)
-}
-
-export { openCourse, openQuiz, reportMaterial, reportMaterialSetup, sendReportMaterial, shareMaterialLink, showStudyMode }

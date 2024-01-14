@@ -3,6 +3,7 @@ import { modal } from './modal'
 import AddTutor from '@app/components/conversations/AddTutorModal.vue'
 import AddTutorConfirmation from '@app/components/conversations/AddTutorConfirmationModal.vue'
 import ConversationMoreOptions from '@app/components/conversations/ConversationMoreOptionsModal.vue'
+import CreateReport from '@app/components/interactions/reports/CreateReportModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
@@ -16,7 +17,7 @@ import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 
 export const useModals = () => ({
-	conversations: modal.register('Conversation', {
+	conversations: modal.register('Conversations', {
 		addTutor: { component: AddTutor },
 		addTutorConfirmation: { component: AddTutorConfirmation },
 		conversationMoreOptions: {
@@ -24,7 +25,10 @@ export const useModals = () => ({
 			modalArgs: { closeOnClickOutside: true, maxWidth: 'w-[80%] md:w-[60%] ml-auto' },
 		},
 	}),
-	organizations: modal.register('Organization', {
+	interactions: modal.register('Interactions', {
+		createReport: { component: CreateReport, modalArgs: { closeOnClickOutside: true } },
+	}),
+	organizations: modal.register('Organizations', {
 		addMember: { component: AddMember },
 		createClass: { component: CreateClass },
 		editClass: { component: EditClass },
@@ -38,7 +42,7 @@ export const useModals = () => ({
 		manageAccess: { component: ManageAccess },
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
 	}),
-	users: modal.register('User', {
+	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },
 	}),
 })
