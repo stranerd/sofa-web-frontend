@@ -24,7 +24,7 @@
 import { defineProps, PropType } from 'vue'
 import SofaButton from '../SofaButton'
 import SofaIcon from '../SofaIcon'
-import SofaModal from '../SofaModal2'
+import SofaModal from '../SofaModal'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
 defineProps({
@@ -52,3 +52,4 @@ defineProps({
 	},
 })
 </script>
+../SofaModal

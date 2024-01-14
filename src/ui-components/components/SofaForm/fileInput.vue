@@ -18,8 +18,8 @@ import { defineModel, defineProps, ref, withDefaults } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		multiple: boolean
-		accept: string
+		multiple?: boolean
+		accept?: string
 	}>(),
 	{
 		multiple: false,

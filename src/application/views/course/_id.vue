@@ -117,7 +117,7 @@
 
 		<!-- Small screen course info -->
 
-		<sofa-modal
+		<sofa-modal-old
 			v-if="showCourseInfo"
 			:close="
 				() => {
@@ -142,10 +142,10 @@
 					<sofa-course-summary :data="SingleCourse" />
 				</div>
 			</div>
-		</sofa-modal>
+		</sofa-modal-old>
 
 		<!--  Payment modal -->
-		<sofa-modal
+		<sofa-modal-old
 			v-if="showMakePaymentModal"
 			:close="
 				() => {
@@ -234,7 +234,7 @@
 					</div>
 				</div>
 			</div>
-		</sofa-modal>
+		</sofa-modal-old>
 
 		<!-- Rating floating button sm -->
 		<Teleport v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id && !Logic.Common.isLarge" to="body">
@@ -262,7 +262,15 @@ import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
 import CourseContent from '@app/components/study/courses/content.vue'
 import { useHasAccess } from '@app/composables/study'
 import { Conditions, Logic } from 'sofa-logic'
-import { SofaButton, SofaCourseContent, SofaCourseSummary, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import {
+	SofaButton,
+	SofaCourseContent,
+	SofaCourseSummary,
+	SofaHeaderText,
+	SofaIcon,
+	SofaModalOld,
+	SofaNormalText,
+} from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -273,7 +281,7 @@ export default defineComponent({
 		SofaIcon,
 		SofaCourseSummary,
 		SofaCourseContent,
-		SofaModal,
+		SofaModalOld,
 		SofaHeaderText,
 		SofaButton,
 		CourseContent,

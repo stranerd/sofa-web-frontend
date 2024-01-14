@@ -101,7 +101,7 @@
 			</div>
 
 			<!-- Add material modal -->
-			<sofa-modal v-if="showAddMaterial" :close="() => (showAddMaterial = false)" :can-close="false">
+			<sofa-modal-old v-if="showAddMaterial" :close="() => (showAddMaterial = false)" :can-close="false">
 				<div
 					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] w-full flex flex-col justify-end md:!justify-start items-center relative">
 					<div
@@ -148,7 +148,7 @@
 						</div>
 					</div>
 				</div>
-			</sofa-modal>
+			</sofa-modal-old>
 		</template>
 
 		<template #right-session>
@@ -186,7 +186,7 @@ import {
 	SofaHeaderText,
 	SofaIcon,
 	SofaImageLoader,
-	SofaModal,
+	SofaModalOld,
 	SofaNormalText,
 	SofaSelect,
 	SofaTextField,
@@ -205,7 +205,7 @@ export default defineComponent({
 		SofaTextarea,
 		SofaImageLoader,
 		SofaFileInput,
-		SofaModal,
+		SofaModalOld,
 		SofaButton,
 		SofaSelect,
 		SofaActivityCard,

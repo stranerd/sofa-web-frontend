@@ -11,7 +11,7 @@ export const handleShowAddMaterial = () => {
 }
 
 export const handleShowMaterialMoreOptions = (data: ResourceType) => {
-	useStudyModal().materialMoreOptionsModal.open({ material: data.original })
+	useStudyModal().materialMoreOptions.open({ material: data.original })
 }
 
 const store: Record<

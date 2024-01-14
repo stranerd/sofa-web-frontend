@@ -183,7 +183,7 @@
 				</div>
 			</div>
 			<!-- More option / settings for smaller screens -->
-			<sofa-modal
+			<sofa-modal-old
 				v-if="showMoreOptions"
 				:close="
 					() => {
@@ -227,10 +227,10 @@
 							}
 						" />
 				</div>
-			</sofa-modal>
+			</sofa-modal-old>
 
 			<!-- Larger screen setings modal -->
-			<sofa-modal
+			<sofa-modal-old
 				v-if="showSettingModal"
 				:close="
 					() => {
@@ -263,7 +263,7 @@
 							@on-course-updated="handleCourseSettingSaved" />
 					</div>
 				</div>
-			</sofa-modal>
+			</sofa-modal-old>
 		</template>
 
 		<template #right-session>
@@ -294,7 +294,7 @@ import {
 	SofaHeaderText,
 	SofaIcon,
 	SofaImageLoader,
-	SofaModal,
+	SofaModalOld,
 	SofaNormalText,
 	SofaVideoPlayer,
 } from 'sofa-ui-components'
@@ -308,7 +308,7 @@ export default defineComponent({
 	components: {
 		SofaIcon,
 		SofaNormalText,
-		SofaModal,
+		SofaModalOld,
 		SofaCourseSections,
 		SofaHeaderText,
 		SofaCourseDetails,

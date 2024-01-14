@@ -1,6 +1,6 @@
 <template>
 	<!-- create item action -->
-	<sofa-modal
+	<sofa-modal-old
 		:close="
 			() => {
 				close ? close() : null
@@ -64,15 +64,24 @@
 				</div>
 			</div>
 		</div>
-	</sofa-modal>
+	</sofa-modal-old>
 </template>
 <script lang="ts">
-import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaRatings, SofaTextarea } from 'sofa-ui-components'
+import {
+	SofaAvatar,
+	SofaButton,
+	SofaHeaderText,
+	SofaIcon,
+	SofaModalOld,
+	SofaNormalText,
+	SofaRatings,
+	SofaTextarea,
+} from 'sofa-ui-components'
 import { defineComponent, reactive } from 'vue'
 
 export default defineComponent({
 	components: {
-		SofaModal,
+		SofaModalOld,
 		SofaIcon,
 		SofaNormalText,
 		SofaHeaderText,

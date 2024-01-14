@@ -92,7 +92,7 @@ import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { storage } from '@utils/storage'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaButton, SofaCheckbox, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 

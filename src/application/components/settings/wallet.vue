@@ -111,7 +111,7 @@
 			<sofa-empty-state v-else :title="'No transaction yet'" :sub-title="'All you wallet transaction would show up here'" />
 		</div>
 	</div>
-	<sofa-modal v-if="showModal" :close="() => (showModal = false)" :can-close="false">
+	<sofa-modal-old v-if="showModal" :close="() => (showModal = false)" :can-close="false">
 		<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
@@ -274,7 +274,7 @@
 				</div>
 			</div>
 		</div>
-	</sofa-modal>
+	</sofa-modal-old>
 
 	<!-- Delete payment method prompt -->
 	<sofa-delete-prompt
@@ -310,7 +310,7 @@ import {
 	SofaEmptyState,
 	SofaHeaderText,
 	SofaIcon,
-	SofaModal,
+	SofaModalOld,
 	SofaNormalText,
 	SofaSelect,
 	SofaTextField,
@@ -323,7 +323,7 @@ export default defineComponent({
 		SofaIcon,
 		SofaNormalText,
 		SofaEmptyState,
-		SofaModal,
+		SofaModalOld,
 		SofaTextField,
 		SofaButton,
 		SofaSelect,

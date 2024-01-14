@@ -38,7 +38,7 @@ export default defineConfig({
 					if (componentName.toLowerCase().startsWith('sofa'))
 						return {
 							name: componentName,
-							from: 'src/ui-components',
+							from: 'sofa-ui-components',
 						}
 				},
 			],

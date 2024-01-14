@@ -80,7 +80,7 @@
 			</template>
 		</div>
 	</div>
-	<sofa-modal
+	<sofa-modal-old
 		v-if="showAddVideo"
 		:close="
 			() => {
@@ -101,10 +101,10 @@
 				<add-video />
 			</div>
 		</div>
-	</sofa-modal>
+	</sofa-modal-old>
 
 	<!-- Add question modal -->
-	<sofa-modal
+	<sofa-modal-old
 		v-if="showAddQuiz"
 		:close="
 			() => {
@@ -170,13 +170,13 @@
 				</div>
 			</div>
 		</div>
-	</sofa-modal>
+	</sofa-modal-old>
 </template>
 <script lang="ts">
 import { FormValidations } from '@app/composables'
 import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
 import { Conditions, Logic } from 'sofa-logic'
-import { SofaButton, SofaFileAttachment, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText, SofaSelect } from 'sofa-ui-components'
+import { SofaButton, SofaFileAttachment, SofaHeaderText, SofaIcon, SofaModalOld, SofaNormalText, SofaSelect } from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'
 import AddVideo from './AddVideo.vue'
 
@@ -184,7 +184,7 @@ export default defineComponent({
 	name: 'NewCourseMaterial',
 	components: {
 		SofaIcon,
-		SofaModal,
+		SofaModalOld,
 		SofaNormalText,
 		SofaFileAttachment,
 		AddVideo,

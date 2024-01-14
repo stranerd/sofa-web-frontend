@@ -125,27 +125,27 @@
 		</template>
 
 		<!-- Notification modal -->
-		<sofa-modal v-if="showNotification" :close="() => (showNotification = false)" :custom-class="'mdlg:!hidden'">
+		<sofa-modal-old v-if="showNotification" :close="() => (showNotification = false)" :custom-class="'mdlg:!hidden'">
 			<div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-3 px-4 pb-5 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<notification :close="() => (showNotification = false)" />
 				</div>
 			</div>
-		</sofa-modal>
+		</sofa-modal-old>
 	</div>
 </template>
 <script lang="ts" setup>
 import { useAuth } from '@app/composables/auth/auth'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { Conditions, Logic } from 'sofa-logic'
-import { onMounted, ref, defineProps, withDefaults, computed } from 'vue'
+import { computed, defineProps, onMounted, ref, withDefaults } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
 import { SofaTextField } from '../SofaForm'
 import SofaIcon from '../SofaIcon/index.vue'
-import SofaModal from '../SofaModal'
+import SofaModalOld from '../SofaModalOld'
 import { SofaHeaderText } from '../SofaTypography'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import notification from './notification.vue'
@@ -231,3 +231,4 @@ const tabs = computed(() => [
 	},
 ])
 </script>
+../SofaModalOld

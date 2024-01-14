@@ -66,7 +66,7 @@
 <script lang="ts" setup>
 import { modal } from '@app/composables/core/modal'
 import { Logic } from 'sofa-logic'
-import { SofaAlert, SofaDeletePrompt, SofaModal2 as SofaModal, SofaSuccessPrompt } from 'sofa-ui-components'
+import { SofaAlert, SofaDeletePrompt, SofaModal, SofaSuccessPrompt } from 'sofa-ui-components'
 
 const { modals, popovers, modalsDef, close } = modal
 

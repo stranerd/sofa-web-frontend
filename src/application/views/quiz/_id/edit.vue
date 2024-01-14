@@ -15,7 +15,13 @@
 								{
 									name: 'Share',
 									icon: 'share-option',
-									handler: () => (showShareModal = true),
+									handler: () =>
+										openAccessModal({
+											quiz,
+											users: members,
+											grantAccess: extras.grantAccess,
+											manageMembers: extras.manageMembers,
+										}),
 									size: 'h-[20px]',
 									hide: !extras.isMine,
 								},
@@ -112,7 +118,17 @@
 							" />
 
 						<div class="flex items-center gap-3" :class="{ invisible: showSettingModal }">
-							<SofaIcon class="h-[18px]" name="share-option" @click="showShareModal = true" />
+							<SofaIcon
+								class="h-[18px]"
+								name="share-option"
+								@click="
+									openAccessModal({
+										quiz,
+										users: members,
+										grantAccess: extras.grantAccess,
+										manageMembers: extras.manageMembers,
+									})
+								" />
 							<SofaIcon class="h-[18px]" name="cog" @click="showSettingModal = true" />
 							<SofaIcon class="h-[14px]" name="preview" @click="() => Logic.Common.GoToRoute(`/quiz/${quiz.id}/preview`)" />
 							<SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
@@ -126,7 +142,7 @@
 							v-if="!showSettingModal && extras.currentQuestionById"
 							:key="extras.currentQuestionById.id"
 							:factory="extras.questionFactory" />
-						<QuizSettings
+						<QuizForm
 							v-if="showSettingModal && !Logic.Common.isLarge"
 							:quiz="quiz"
 							:factory="extras.quizFactory"
@@ -150,21 +166,15 @@
 				</template>
 			</dashboard-layout>
 
-			<RequestAccessModal v-else-if="quiz" :quiz="quiz" @request-access="extras.requestAccess" />
-
-			<ManageAccessModal
-				v-if="showShareModal"
-				:quiz="quiz"
-				:users="members"
-				@grant-access="extras.grantAccess"
-				@manage-members="extras.manageMembers"
-				@close="showShareModal = false" />
+			<SofaModal v-else-if="quiz">
+				<RequestAccess :quiz="quiz" :request-access="extras.requestAccess" />
+			</SofaModal>
 
 			<!-- Larger screen setings modal -->
 			<SofaModal v-if="showSettingModal && Logic.Common.isLarge">
-				<div class="bg-white w-full flex flex-col gap-4 mdlg:p-6 p-4 rounded-2xl items-center justify-center">
+				<div class="w-full flex flex-col gap-4 mdlg:p-6 p-4 rounded-2xl items-center justify-center">
 					<SofaHeaderText class="!text-xl !font-bold" content="Update quiz" />
-					<QuizSettings
+					<QuizForm
 						:quiz="quiz"
 						:factory="extras.quizFactory"
 						:close="() => (showSettingModal = false)"
@@ -176,7 +186,7 @@
 			<!-- More option / settings for smaller screens -->
 			<SofaModal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
 				<div class="flex flex-col gap-4 justify-between">
-					<div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b bg-white border-[#F2F5F8]">
+					<div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b border-[#F2F5F8]">
 						<SofaNormalText class="!text-sm !font-bold" content="Options" />
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
 					</div>
@@ -277,13 +287,13 @@
 import EditQuestionBody from '@app/components/study/quizzes/EditQuestionBody.vue'
 import EditQuestionOptions from '@app/components/study/quizzes/EditQuestionOptions.vue'
 import EditQuestionsList from '@app/components/study/quizzes/EditQuestionsList.vue'
-import ManageAccessModal from '@app/components/study/quizzes/ManageAccessModal.vue'
+import QuizForm from '@app/components/study/quizzes/QuizForm.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
-import RequestAccessModal from '@app/components/study/quizzes/RequestAccessModal.vue'
-import QuizSettings from '@app/components/study/quizzes/Settings.vue'
+import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
+import { useStudyModal } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaIcon, SofaModal2 as SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -296,13 +306,12 @@ export default defineComponent({
 		SofaEmptyState,
 		SofaNormalText,
 		SofaModal,
-		QuizSettings,
+		QuizForm,
 		EditQuestionsList,
 		EditQuestionOptions,
 		EditQuestionBody,
 		SofaHeaderText,
-		RequestAccessModal,
-		ManageAccessModal,
+		RequestAccess,
 	},
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
@@ -316,12 +325,13 @@ export default defineComponent({
 
 		const showSettingModal = ref(false)
 		const showMoreOptions = ref(false)
-		const showShareModal = ref(false)
 		const showCurrentlyEditingModal = ref(false)
 
 		const handleSettingSaved = (status?: boolean) => {
 			if (status) showSettingModal.value = false
 		}
+
+		const openAccessModal = useStudyModal().manageAccess.open
 
 		const handleMobileGoback = () => {
 			if (showSettingModal.value) showSettingModal.value = false
@@ -332,11 +342,11 @@ export default defineComponent({
 			QuestionEntity,
 			showAddQuestionModal,
 			showCurrentlyEditingModal,
-			showShareModal,
 			showMoreOptions,
 			showSettingModal,
 			interactingQuestionId,
 			handleSettingSaved,
+			openAccessModal,
 			Logic,
 			handleMobileGoback,
 		}

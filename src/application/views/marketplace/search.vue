@@ -155,7 +155,7 @@
 				</div>
 			</div>
 
-			<sofa-modal v-if="showFilter" :close="() => (showFilter = false)" :custom-class="'mdlg:!hidden'">
+			<sofa-modal-old v-if="showFilter" :close="() => (showFilter = false)" :custom-class="'mdlg:!hidden'">
 				<div
 					:class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4 relative overflow-y-auto`"
 					@click.stop="() => {}">
@@ -169,7 +169,7 @@
 
 					<marketplace-filter v-model="selectedOptions" :close="() => (showFilter = false)" />
 				</div>
-			</sofa-modal>
+			</sofa-modal-old>
 		</template>
 	</dashboard-layout>
 </template>
@@ -181,7 +181,7 @@ import { search } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { DraftStatus } from '@modules/study'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
-import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModal, SofaNormalText, SofaTextField } from 'sofa-ui-components'
+import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModalOld, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -195,7 +195,7 @@ export default defineComponent({
 		MarketplaceFilter,
 		SofaEmptyState,
 		SofaActivityCard,
-		SofaModal,
+		SofaModalOld,
 	},
 	routeConfig: {
 		fetchRules: [

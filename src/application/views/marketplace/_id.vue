@@ -35,7 +35,7 @@
 		</div>
 
 		<!--  Payment modal -->
-		<sofa-modal v-if="showMakePaymentModal" :close="() => (showMakePaymentModal = false)">
+		<sofa-modal-old v-if="showMakePaymentModal" :close="() => (showMakePaymentModal = false)">
 			<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
@@ -112,7 +112,7 @@
 					</div>
 				</div>
 			</div>
-		</sofa-modal>
+		</sofa-modal-old>
 	</expanded-layout>
 </template>
 
@@ -123,7 +123,7 @@ import { saveToFolder } from '@app/composables/study/folders'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
-import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
+import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModalOld, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -133,7 +133,7 @@ export default defineComponent({
 		SofaNormalText,
 		SofaContentDetails,
 		SofaIcon,
-		SofaModal,
+		SofaModalOld,
 		SofaHeaderText,
 		SofaButton,
 	},

@@ -9,6 +9,7 @@ import AddMaterial from '@app/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
+import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 
 export const useOrganizationModal = () =>
@@ -24,7 +25,8 @@ export const useStudyModal = () =>
 	modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
 		chooseStudyMode: { component: ChooseStudyMode, modalArgs: { closeOnClickOutside: true } },
-		materialMoreOptionsModal: { component: MaterialMoreOptions, modalArgs: { popover: true } },
+		materialMoreOptions: { component: MaterialMoreOptions, modalArgs: { popover: true } },
+		manageAccess: { component: ManageAccess },
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
 	})
 
