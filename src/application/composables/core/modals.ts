@@ -1,6 +1,8 @@
 import { modal } from './modal'
 
 import AddTutor from '@app/components/conversations/AddTutorModal.vue'
+import AddTutorConfirmation from '@app/components/conversations/AddTutorConfirmationModal.vue'
+import ConversationMoreOptions from '@app/components/conversations/ConversationMoreOptionsModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
@@ -16,6 +18,11 @@ import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 export const useModals = () => ({
 	conversations: modal.register('Conversation', {
 		addTutor: { component: AddTutor },
+		addTutorConfirmation: { component: AddTutorConfirmation },
+		conversationMoreOptions: {
+			component: ConversationMoreOptions,
+			modalArgs: { closeOnClickOutside: true, maxWidth: 'w-[80%] md:w-[60%] ml-auto' },
+		},
 	}),
 	organizations: modal.register('Organization', {
 		addMember: { component: AddMember },

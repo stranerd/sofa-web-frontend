@@ -15,8 +15,8 @@
 						:class="{ 'fill-primaryPurple': conversation.isActive }"
 						class="h-[17px] mdlg:hidden"
 						name="tutor"
-						@click="showAddTutorModalConfirmation = true" />
-					<SofaIcon class="h-[23px] mdlg:hidden" name="menu" @click="showMoreOptions = true" />
+						@click="showAddTutorConfirmation" />
+					<SofaIcon class="h-[23px] mdlg:hidden" name="menu" @click="showMoreOptions" />
 				</div>
 			</template>
 			<ConversationMessages id="MessagesScrollContainer" :conversation="conversation" />
@@ -104,64 +104,6 @@
 			</template>
 		</template>
 
-		<!-- More options for smaller screens -->
-		<SofaModal
-			v-if="conversation && showMoreOptions && !Logic.Common.isLarge"
-			:close="() => (showMoreOptions = false)"
-			max-width="w-[80%] md:w-[60%] ml-auto">
-			<div class="flex flex-col gap-4 relative overflow-y-auto h-full">
-				<router-link
-					v-if="conversation.user.id === id"
-					to="/chats/new"
-					class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
-					<sofa-icon :name="'box-add-pink'" class="h-[17px]" />
-					<sofa-normal-text :color="'text-primaryPink'" content="New chat" />
-				</router-link>
-
-				<ChatList :custom-class="'!rounded-none'" :extra-style="'px-3'" />
-
-				<div
-					v-if="conversation.user.id === id"
-					class="sticky w-full bottom-0 left-0 bg-white z-50 p-4 border-t border-lightGray flex flex-col gap-4">
-					<a
-						v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
-						class="w-full flex items-center justify-start gap-2 text-primaryRed"
-						@click="onClickEndSession">
-						<SofaIcon class="h-[16px] fill-current" name="tutor" />
-						<SofaNormalText color="text-inherit" content="End conversation" />
-					</a>
-					<a
-						v-else-if="!conversation.tutor"
-						class="w-full flex items-center justify-start gap-2 text-primaryGreen"
-						@click="onClickAddTutor">
-						<SofaIcon class="h-[16px] fill-current" name="tutor" />
-						<SofaNormalText color="text-inherit" content="Message a tutor" />
-					</a>
-					<a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
-						<SofaIcon class="h-[16px]" name="trash" />
-						<SofaNormalText color="text-primaryRed" content="Delete conversation" />
-					</a>
-				</div>
-			</div>
-		</SofaModal>
-
-		<!-- Tutor help mobile popup -->
-		<SofaModal v-if="showAddTutorModalConfirmation && !Logic.Common.isLarge" :close="() => (showAddTutorModalConfirmation = false)">
-			<div class="w-full flex flex-col items-start gap-4 p-4">
-				<div class="flex w-full items-center gap-2 justify-between">
-					<div class="flex items-center gap-1">
-						<SofaIcon class="h-[24px] fill-primaryPurple" name="add-tutor" />
-						<SofaHeaderText class="!font-bold !text-primaryPurple" content="Tutor help" />
-					</div>
-					<SofaIcon class="h-[16px]" name="circle-close" @click="showAddTutorModalConfirmation = false" />
-				</div>
-				<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
-				<sofa-button :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="onClickAddTutor">
-					Add a tutor
-				</sofa-button>
-			</div>
-		</SofaModal>
-
 		<!-- Rate and review modal -->
 		<RateAndReviewModal
 			v-if="showRateAndReviewTutor && conversation && conversation.tutor"
@@ -176,7 +118,6 @@
 import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
-import ChatList from '@app/components/conversations/ChatList.vue'
 import ConversationMessages from '@app/components/conversations/Messages.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
@@ -191,7 +132,6 @@ export default defineComponent({
 	name: 'ChatsIdPage',
 	components: {
 		ChatLayout,
-		ChatList,
 		ChatContent,
 		RateAndReviewModal,
 		ConversationMessages,
@@ -223,13 +163,28 @@ export default defineComponent({
 			return res
 		})
 
-		const showAddTutorModalConfirmation = ref(false)
-		const showMoreOptions = ref(false)
 		const showRateAndReviewTutor = ref(false)
 
+		const showMoreOptions = () =>
+			useModals().conversations.conversationMoreOptions.open({
+				conversation: conversation.value!,
+				addTutor: onClickAddTutor,
+				endSession: onClickEndSession,
+				deleteConversation: deleteConv,
+			})
+
+		const showAddTutorConfirmation = () =>
+			useModals().conversations.addTutorConfirmation.open({
+				conversation: conversation.value!,
+				addTutor: onClickAddTutor,
+			})
+
 		const onClickAddTutor = async () => {
-			showMoreOptions.value = false
-			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0) return useModals().conversations.addTutor.open({})
+			useModals().conversations.conversationMoreOptions.close()
+			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0)
+				return useModals().conversations.addTutor.open({
+					conversation: conversation.value!,
+				})
 			if (wallet.value?.subscription.active)
 				return await Logic.Common.confirm({
 					title: 'You have run out of tutor aided conversations',
@@ -269,7 +224,7 @@ export default defineComponent({
 			showMoreOptions,
 			onClickAddTutor,
 			showRateAndReviewTutor,
-			showAddTutorModalConfirmation,
+			showAddTutorConfirmation,
 			onClickEndSession,
 			end,
 			deleteConv,
