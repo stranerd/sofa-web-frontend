@@ -44,12 +44,12 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 
 const props = withDefaults(
 	defineProps<{
-		placeholder: string
-		iconName: string
-		accept: string
-		isWrapper: boolean
-		isMultiple: boolean
-		customClass: string
+		placeholder?: string
+		iconName?: string
+		accept?: string
+		isWrapper?: boolean
+		isMultiple?: boolean
+		customClass?: string
 	}>(),
 	{
 		placeholder: 'Upload File',

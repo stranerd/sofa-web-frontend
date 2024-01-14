@@ -53,19 +53,19 @@ const emit = defineEmits<{
 
 const props = withDefaults(
 	defineProps<{
-		padding: string
-		placeholder: string
-		customClass: string
-		hasTitle: boolean
-		rules: FormRule[]
-		defaultValue: string
-		type: string
-		name: string
-		disabled: boolean
-		updateValue: string
-		isFormatted: boolean
-		borderColor: string
-		error: string
+		padding?: string
+		placeholder?: string
+		customClass?: string
+		hasTitle?: boolean
+		rules?: FormRule[]
+		defaultValue?: string
+		type?: string
+		name?: string
+		disabled?: boolean
+		updateValue?: string
+		isFormatted?: boolean
+		borderColor?: string
+		error?: string
 	}>(),
 	{
 		padding: 'p-3 md:p-4',

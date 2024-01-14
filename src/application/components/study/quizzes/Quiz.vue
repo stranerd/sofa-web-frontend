@@ -87,12 +87,12 @@ const props = withDefaults(
 	defineProps<{
 		index: number
 		questions: QuestionEntity[]
-		isDark: boolean
+		isDark?: boolean
 		title: string
-		rightButton: ButtonConfig | null
-		leftButton: ButtonConfig | null
+		rightButton?: ButtonConfig | null
+		leftButton?: ButtonConfig | null
 		optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
-		showCounter: boolean
+		showCounter?: boolean
 	}>(),
 	{
 		isDark: false,

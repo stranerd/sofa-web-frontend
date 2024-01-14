@@ -58,15 +58,15 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 
 withDefaults(
 	defineProps<{
-		rows: number
-		disabled: boolean
-		hasTitle: boolean
-		labelStyle: string
-		placeholder: string
-		textAreaStyle: string
-		updateValue: string
-		richEditor: boolean
-		error: string
+		rows?: number
+		disabled?: boolean
+		hasTitle?: boolean
+		labelStyle?: string
+		placeholder?: string
+		textAreaStyle?: string
+		updateValue?: string
+		richEditor?: boolean
+		error?: string
 	}>(),
 	{
 		rows: 8,

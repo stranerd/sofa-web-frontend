@@ -12,9 +12,9 @@ import { useRouter } from 'vue-router'
 const props = withDefaults(
 	defineProps<{
 		id: string
-		skipQuestions: boolean
-		skipParticipants: boolean
-		skipStatusNav: boolean
+		skipQuestions?: boolean
+		skipParticipants?: boolean
+		skipStatusNav?: boolean
 	}>(),
 	{
 		skipQuestions: false,

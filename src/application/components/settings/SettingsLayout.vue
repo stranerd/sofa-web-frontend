@@ -61,7 +61,7 @@ import { Logic } from 'sofa-logic'
 withDefaults(
 	defineProps<{
 		title: string
-		index: boolean
+		index?: boolean
 	}>(),
 	{
 		index: false,

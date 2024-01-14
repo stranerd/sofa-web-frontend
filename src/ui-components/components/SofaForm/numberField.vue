@@ -35,14 +35,14 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 
 withDefaults(
 	defineProps<{
-		padding: string
-		placeholder: string
-		customClass: string
-		hasTitle: boolean
-		name: string
-		disabled: boolean
-		borderColor: string
-		error: string
+		padding?: string
+		placeholder?: string
+		customClass?: string
+		hasTitle?: boolean
+		name?: string
+		disabled?: boolean
+		borderColor?: string
+		error?: string
 	}>(),
 	{
 		padding: 'p-3 md:p-4',

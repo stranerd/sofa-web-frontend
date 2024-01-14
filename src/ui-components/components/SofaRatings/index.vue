@@ -13,10 +13,10 @@ import SofaIcon from '../SofaIcon'
 
 const props = withDefaults(
 	defineProps<{
-		count: number
-		customClass: string
-		readonly: boolean
-		size: string
+		count?: number
+		customClass?: string
+		readonly?: boolean
+		size?: string
 	}>(),
 	{
 		count: 5,

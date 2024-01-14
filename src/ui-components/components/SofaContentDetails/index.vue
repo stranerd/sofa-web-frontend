@@ -309,17 +309,17 @@ import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
 const props = withDefaults(
 	defineProps<{
-		customClass: string
+		customClass?: string
 		content: ContentDetails
-		padding: string
-		hasPadding: boolean
-		type: string
-		contentId: string
-		showBuyButton: boolean
-		buyAction: () => void
-		hasAccess: boolean
-		isMinimal: boolean
-		similarContents: ResourceType[]
+		padding?: string
+		hasPadding?: boolean
+		type?: string
+		contentId?: string
+		showBuyButton?: boolean
+		buyAction?: () => void
+		hasAccess?: boolean
+		isMinimal?: boolean
+		similarContents?: ResourceType[]
 		actions: {
 			report: () => void
 			share: () => void
@@ -329,8 +329,7 @@ const props = withDefaults(
 	}>(),
 	{
 		customClass: '',
-		content: {} as ContentDetails,
-		padding: 'px-3 pt-3 mdlg:!px-4 mdlg:!pt-4',
+		padding: 'px-3 pt-3 mdlg:px-4 mdlg:pt-4',
 		hasPadding: true,
 		type: 'course',
 		contentId: '',

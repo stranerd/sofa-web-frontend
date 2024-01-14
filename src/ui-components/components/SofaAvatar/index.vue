@@ -25,13 +25,13 @@ import SofaIcon from '../SofaIcon'
 
 withDefaults(
 	defineProps<{
-		size: string
-		photoUrl: string | null | undefined
-		customClass: string
-		bgColor: string
-		userId: string
-		showOnline: boolean
-		online: boolean
+		size?: string
+		photoUrl?: string | null
+		customClass?: string
+		bgColor?: string
+		userId?: string
+		showOnline?: boolean
+		online?: boolean
 	}>(),
 	{
 		size: '50',

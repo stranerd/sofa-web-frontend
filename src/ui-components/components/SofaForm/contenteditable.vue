@@ -15,12 +15,12 @@ import { onMounted, watch } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		modelValue: string
-		customClass: string
-		placeholder: string
-		updateValue: string
-		autoFocus: boolean
-		trim: boolean
+		modelValue?: string
+		customClass?: string
+		placeholder?: string
+		updateValue?: string
+		autoFocus?: boolean
+		trim?: boolean
 	}>(),
 	{
 		modelValue: '',

@@ -22,10 +22,10 @@ import { ref, watch } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		isDisabled: boolean
-		uniqueKey: string
-		isError: boolean
-		numberOfInput: number
+		isDisabled?: boolean
+		uniqueKey?: string
+		isError?: boolean
+		numberOfInput?: number
 		onChangeOTP?: (val: string) => void
 	}>(),
 	{

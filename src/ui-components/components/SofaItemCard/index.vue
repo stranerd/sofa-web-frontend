@@ -57,10 +57,10 @@ import { SofaNormalText } from '../SofaTypography'
 
 withDefaults(
 	defineProps<{
-		customClass: string
+		customClass?: string
 		content: ResourceType
-		bookmarkAction: () => void
-		as: string
+		bookmarkAction?: () => void
+		as?: string
 	}>(),
 	{
 		customClass: 'border-2 rounded-[16px] border-darkLightGray',

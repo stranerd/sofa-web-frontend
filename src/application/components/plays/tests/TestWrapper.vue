@@ -10,8 +10,8 @@ import { computed } from 'vue'
 const props = withDefaults(
 	defineProps<{
 		id: string
-		skipQuestions: boolean
-		skipStatusNav: boolean
+		skipQuestions?: boolean
+		skipStatusNav?: boolean
 	}>(),
 	{
 		skipQuestions: false,

@@ -29,8 +29,8 @@ import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 withDefaults(
 	defineProps<{
 		close: () => void
-		title: string
-		subTitle: string
+		title?: string
+		subTitle?: string
 		button: {
 			label: string
 			hide?: boolean

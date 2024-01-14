@@ -277,8 +277,8 @@ const libraryOptions = computed(() => [
 const props = withDefaults(
 	defineProps<{
 		title: string
-		index: boolean
-		options: { name: string; id: string; hide?: boolean }[]
+		index?: boolean
+		options?: { name: string; id: string; hide?: boolean }[]
 	}>(),
 	{
 		index: false,

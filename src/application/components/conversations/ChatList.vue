@@ -69,9 +69,9 @@ import Chat from './Chat.vue'
 
 withDefaults(
 	defineProps<{
-		customClass: string
-		extraStyle: string
-		limit: number
+		customClass?: string
+		extraStyle?: string
+		limit?: number
 	}>(),
 	{
 		customClass: '',

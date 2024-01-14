@@ -182,7 +182,7 @@ import { formatNumber } from 'valleyed'
 const props = withDefaults(
 	defineProps<{
 		title: string
-		index: boolean
+		index?: boolean
 	}>(),
 	{
 		index: false,

@@ -71,7 +71,7 @@ import ChatList from './ChatList.vue'
 withDefaults(
 	defineProps<{
 		title: string
-		index: boolean
+		index?: boolean
 	}>(),
 	{
 		index: false,

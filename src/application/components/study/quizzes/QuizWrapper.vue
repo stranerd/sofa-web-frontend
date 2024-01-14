@@ -17,13 +17,13 @@ import QuestionDisplay from './QuestionDisplay.vue'
 const props = withDefaults(
 	defineProps<{
 		id: string
-		selectedQuestion: string
-		questions: QuestionEntity[]
-		showAnswer: boolean
-		isAnswerRight: boolean
-		useTimer: boolean
-		submit: (data?: { questionId: string; answer: any }) => Promise<boolean | undefined>
-		skipMembers: boolean
+		selectedQuestion?: string
+		questions?: QuestionEntity[]
+		showAnswer?: boolean
+		isAnswerRight?: boolean
+		useTimer?: boolean
+		submit?: (data?: { questionId: string; answer: any }) => Promise<boolean | undefined>
+		skipMembers?: boolean
 	}>(),
 	{
 		selectedQuestion: '',
