@@ -35,7 +35,7 @@
 					:activity="activity"
 					:to="activity.route"
 					:has-bookmark="true"
-					:bookmark-action="() => saveToFolder(activity)"
+					:bookmark-action="() => saveToFolder(activity.original)"
 					class="flex-shrink-0" />
 			</div>
 			<div v-else class="pr-4 mdlg:pr-0">

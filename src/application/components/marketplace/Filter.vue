@@ -153,30 +153,32 @@ export default defineComponent({
 			},
 			{
 				name: 'Subject',
-				options: AllTopics.value.results.map((tag) => ({
-					name: tag.title,
-					id: tag.id,
-					type: 'subject',
-					query: {
-						field: 'topicId',
-						value: tag.id,
-						condition: Conditions.eq,
-					},
-				})),
+				options:
+					AllTopics.value?.results.map((tag) => ({
+						name: tag.title,
+						id: tag.id,
+						type: 'subject',
+						query: {
+							field: 'topicId',
+							value: tag.id,
+							condition: Conditions.eq,
+						},
+					})) ?? [],
 				icon: 'subject-filter',
 			},
 			{
 				name: 'Popular tags',
-				options: AllOtherTags.value.results.map((tag) => ({
-					name: tag.title,
-					id: tag.id,
-					type: 'tags',
-					query: {
-						field: 'tagIds',
-						value: tag.id,
-						condition: Conditions.in,
-					},
-				})),
+				options:
+					AllOtherTags.value?.results.map((tag) => ({
+						name: tag.title,
+						id: tag.id,
+						type: 'tags',
+						query: {
+							field: 'tagIds',
+							value: tag.id,
+							condition: Conditions.in,
+						},
+					})) ?? [],
 				icon: 'tag-filter',
 			},
 		])

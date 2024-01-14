@@ -290,7 +290,7 @@ export default defineComponent({
 		const allMaterials = ref<SelectOption[]>([])
 		const selectedMaterial = ref('')
 
-		const UserVerification = ref(Logic.Users.Verifications.results[0])
+		const UserVerification = ref(Logic.Users.Verifications?.results[0])
 
 		const setDefaultValues = () => {
 			if (UserVerification.value) {
@@ -309,14 +309,14 @@ export default defineComponent({
 		const setMaterialsOptions = () => {
 			allMaterials.value.length = 0
 
-			AllCourses.value.results.forEach((course) => {
+			AllCourses.value?.results.forEach((course) => {
 				allMaterials.value.push({
 					key: course.id,
 					value: course.title,
 				})
 			})
 
-			AllQuzzies.value.results.forEach((quiz) => {
+			AllQuzzies.value?.results.forEach((quiz) => {
 				allMaterials.value.push({
 					key: quiz.id,
 					value: quiz.title,
@@ -330,11 +330,11 @@ export default defineComponent({
 		const setMaterials = () => {
 			allMaterialsContents.value.length = 0
 
-			AllQuzzies.value.results.forEach((quiz) => {
+			AllQuzzies.value?.results.forEach((quiz) => {
 				allMaterialsContents.value.push(extractContent(quiz))
 			})
 
-			AllCourses.value.results.forEach((course) => {
+			AllCourses.value?.results.forEach((course) => {
 				allMaterialsContents.value.push(extractContent(course))
 			})
 		}

@@ -65,7 +65,7 @@
 									:key="index"
 									:content="content"
 									custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									:bookmark-action="() => saveToFolder(content)"
+									:bookmark-action="() => saveToFolder(content.original)"
 									@click="Logic.Common.GoToRoute(content.route)" />
 							</div>
 
@@ -78,7 +78,7 @@
 										:activity="activity"
 										:custom-class="'cursor-pointer'"
 										:has-bookmark="true"
-										:bookmark-action="() => saveToFolder(activity)"
+										:bookmark-action="() => saveToFolder(activity.original)"
 										@click="Logic.Common.GoToRoute(activity.route)" />
 								</div>
 							</div>
@@ -112,7 +112,7 @@
 									:key="index"
 									:content="content"
 									custom-class="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									:bookmark-action="() => saveToFolder(content)"
+									:bookmark-action="() => saveToFolder(content.original)"
 									@click="Logic.Common.GoToRoute(content.route)" />
 							</div>
 
@@ -125,7 +125,7 @@
 										:activity="activity"
 										:custom-class="'cursor-pointer'"
 										:has-bookmark="true"
-										:bookmark-action="() => saveToFolder(activity)"
+										:bookmark-action="() => saveToFolder(activity.original)"
 										@click="Logic.Common.GoToRoute(activity.route)" />
 								</div>
 							</div>
@@ -257,8 +257,8 @@ export default defineComponent({
 
 		const AllCourses = ref(Logic.Study.AllCourses)
 		const AllQuzzies = ref(Logic.Study.AllQuzzies)
-		const resourceContents = computed(() => AllCourses.value.results.map(extractResource))
-		const quizContents = computed(() => AllQuzzies.value.results.map(extractResource))
+		const resourceContents = computed(() => AllCourses.value?.results.map(extractResource) ?? [])
+		const quizContents = computed(() => AllQuzzies.value?.results.map(extractResource) ?? [])
 		const showFilter = ref(false)
 		const selectedFilterOption = ref(filterOptions[0].id)
 		const searchQuery = ref(Logic.Common.route.query?.q?.toString() ?? '')

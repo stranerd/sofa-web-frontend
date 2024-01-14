@@ -1,6 +1,6 @@
 <template>
-	<div
-		id=""
+	<component
+		:is="as"
 		:class="`${customClass} blend-in `"
 		:style="`
     background-size: cover;
@@ -9,7 +9,7 @@
 	${imageUrl || loadDirectly ? `background-image:url(${loadDirectly ? photoUrl : imageUrl});` : ''}
 	${customStyle}`">
 		<slot />
-	</div>
+	</component>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
@@ -19,7 +19,8 @@ export default defineComponent({
 	props: {
 		photoUrl: {
 			type: String,
-			required: true,
+			required: false,
+			default: null,
 		},
 		customClass: {
 			type: String,
@@ -32,6 +33,10 @@ export default defineComponent({
 		loadDirectly: {
 			type: Boolean,
 			default: false,
+		},
+		as: {
+			type: String,
+			default: 'div',
 		},
 	},
 	setup(props) {

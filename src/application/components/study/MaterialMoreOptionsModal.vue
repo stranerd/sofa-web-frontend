@@ -63,7 +63,7 @@ const moreOptions = computed(() => [
 		show: () => props.material.isPublished,
 		action: () => {
 			props.close()
-			saveToFolder({ id: props.material.id, type: props.material.isQuiz() ? 'quiz' : 'course' })
+			saveToFolder(props.material)
 		},
 	},
 ])

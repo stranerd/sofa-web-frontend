@@ -487,8 +487,9 @@ export default class Study extends Common {
 	}
 
 	public SaveCourseLocalChanges = () => {
-		if (localStorage.getItem('couse_section_update')) {
-			const content = JSON.parse(localStorage.getItem('couse_section_update')!)
+		const update = localStorage.getItem('couse_section_update')
+		if (update) {
+			const content: any = JSON.parse(update)
 
 			this.UpdateCourseSectionForm = content
 

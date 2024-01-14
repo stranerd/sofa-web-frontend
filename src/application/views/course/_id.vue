@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout width="mdlg:!w-[90%] lg:!w-[77%]" layout-style="mdlg:py-5" :hide="{ bottom: true }">
+	<expanded-layout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layout-style="mdlg:py-5" :hide="{ bottom: true }">
 		<!-- Display for larger screens -->
 		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow">
 			<div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
@@ -12,7 +12,7 @@
 								{{ SingleCourse?.title }}
 							</sofa-header-text>
 
-							<div v-if="!CourseReview && Logic.Common.AuthUser.id != SingleCourse?.user.id">
+							<div v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id">
 								<sofa-button :custom-class="''" :padding="'px-4 py-1'" @click="showRateCourse = true">Rate</sofa-button>
 							</div>
 						</div>
@@ -179,7 +179,7 @@
 							}  rounded-custom cursor-pointer `"
 							@click="selectedMethodId = 'payWithWallet'">
 							<sofa-icon :custom-class="'h-[20px]'" :name="'wallet'" />
-							<sofa-normal-text>
+							<sofa-normal-text v-if="UserWallet">
 								Wallet (<span class="!font-semibold">{{
 									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
 								}}</span
@@ -197,7 +197,7 @@
 						</div>
 
 						<div
-							v-for="(method, index) in PaymentMethods.results"
+							v-for="(method, index) in PaymentMethods?.results ?? []"
 							:key="index"
 							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
@@ -341,7 +341,7 @@ export default defineComponent({
 
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 
-		const mobileTitle = ref(Logic.Study.SingleCourse.title)
+		const mobileTitle = ref(Logic.Study.SingleCourse?.title ?? '')
 
 		const UserWallet = ref(Logic.Payment.UserWallet)
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
@@ -373,7 +373,7 @@ export default defineComponent({
 						const materialContianer = document.getElementById('sm-materials-container')
 
 						if (materialContianer) {
-							document.getElementById(`sm-material-${selectedMaterial.value.id}`).scrollIntoView({
+							document.getElementById(`sm-material-${selectedMaterial.value.id}`)?.scrollIntoView({
 								behavior: 'smooth',
 							})
 						}
@@ -387,7 +387,7 @@ export default defineComponent({
 		}
 
 		const selectItem = (material: any) => {
-			if (isUnlocked.value(SingleCourse.value)) {
+			if (isUnlocked.value(SingleCourse.value ?? null)) {
 				selectedMaterial.value = {
 					id: material.id,
 					data: material.data,
@@ -436,20 +436,20 @@ export default defineComponent({
 		const rateCourse = (data: any) => {
 			Logic.Study.AddReviewForm = {
 				entity: {
-					id: SingleCourse.value.id,
+					id: SingleCourse.value?.id ?? '',
 					type: 'courses',
 				},
 				message: data.review,
 				rating: data.ratings,
 			}
 
-			Logic.Study.AddReview().then(() => {
+			Logic.Study.AddReview()?.then(() => {
 				//
 			})
 		}
 
 		const buyCourse = () => {
-			if (Logic.Common.loaderSetup.loading) return
+			if (Logic.Common.loaderSetup.loading || !SingleCourse.value) return
 
 			if (SingleCourse.value.price.amount > 0 && selectedMethodId.value == '') {
 				showMakePaymentModal.value = true
@@ -462,11 +462,11 @@ export default defineComponent({
 				type: 'courses',
 			}
 
-			Logic.Payment.MakePurchase().then((data) => {
+			Logic.Payment.MakePurchase()?.then((data) => {
 				if (data) {
 					showMakePaymentModal.value = false
 					Logic.Payment.GetUserPurchases(false)
-					Logic.Study.GetCourse(SingleCourse.value.id)
+					Logic.Study.GetCourse(SingleCourse.value!.id)
 				}
 			})
 		}
@@ -482,10 +482,10 @@ export default defineComponent({
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
-			if (SingleCourse.value.isPublished)
+			if (SingleCourse.value?.isPublished)
 				Logic.Interactions.CreateView({
 					entity: {
-						id: SingleCourse.value?.id,
+						id: SingleCourse.value.id,
 						type: 'courses',
 					},
 				}).catch()

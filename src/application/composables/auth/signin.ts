@@ -16,7 +16,7 @@ const store = {
 	emailVerification: { email: ref(''), ...useSuccessHandler() },
 }
 
-export const getReferrerId = async () => (await storage.get('referrer')) ?? store.referrerId.value
+export const getReferrerId = async () => (await storage.get<string>('referrer')) ?? store.referrerId.value
 
 export const setReferrerId = async (id: string) => {
 	store.referrerId.value = id

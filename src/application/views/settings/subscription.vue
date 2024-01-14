@@ -1,6 +1,6 @@
 <template>
 	<SettingsLayout title="Subscription">
-		<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
+		<div v-if="wallet" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 				<sofa-header-text :size="'xl'" :custom-class="'text-left'"> My subscription </sofa-header-text>
 
@@ -172,11 +172,11 @@ export default defineComponent({
 		const plans = ref(Logic.Payment.AllPlans)
 
 		const myApplicablePlan = computed(() => {
-			return plans.value.results.find((item) => item.usersFor.includes(userType.value.type)) ?? null
+			return plans.value?.results.find((item) => item.usersFor.includes(userType.value.type)) ?? null
 		})
 
 		const myPlan = computed(() => {
-			return plans.value.results.find((item) => item.id == wallet.value.subscription.current?.id) ?? null
+			return plans.value?.results.find((item) => item.id == wallet.value?.subscription.current?.id) ?? null
 		})
 
 		const subscibeToPlan = (id: string) => {

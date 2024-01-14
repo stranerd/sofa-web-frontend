@@ -118,7 +118,7 @@ const addUsers = async () => {
 		.split(',')
 		.map((e) => e.trim())
 	const users = await searchUsersByEmails(emails)
-	if (users.length)
+	if (users?.length)
 		emits(
 			'manageMembers',
 			users.map((u) => u.id),

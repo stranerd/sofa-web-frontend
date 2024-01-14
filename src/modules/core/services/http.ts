@@ -72,7 +72,8 @@ export class HttpClient {
 				const formData = new FormData()
 				Object.entries(data as any).forEach(([key, val]) => {
 					if (UploadedFile.is(val)) formData.set(key, val.ref)
-					else if (Array.isArray(val) && UploadedFile.is(val[0])) val.forEach((file) => formData.append(key, file.ref))
+					else if (Array.isArray(val) && UploadedFile.is(val[0]))
+						val.forEach((file) => (UploadedFile.is(file) ? formData.append(key, file.ref) : null))
 					else if (val !== undefined) formData.set(key, JSON.stringify(val))
 				})
 				data = formData as any

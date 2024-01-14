@@ -3,14 +3,14 @@
 		v-for="key in modals"
 		:key="key"
 		v-bind="modalsDef[key].modalArgs ?? {}"
-		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? false ? () => close(key) : null">
+		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? false ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
 	<SofaModal
 		v-for="key in popovers"
 		:key="key"
 		v-bind="modalsDef[key].modalArgs ?? {}"
-		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : null">
+		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
 	<SofaDeletePrompt

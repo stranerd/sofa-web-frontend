@@ -35,7 +35,7 @@
 						as="a"
 						content="- Remove"
 						@click="handleFolderSelected(item.id, false)" />
-					<SofaNormalText v-else color="text-primaryBlue" as="a" content="+ Add" @click="handleFolderSelected(item.id)" />
+					<SofaNormalText v-else color="text-primaryBlue" as="a" content="+ Add" @click="handleFolderSelected(item.id, true)" />
 				</div>
 			</a>
 			<a class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray" @click="generateNewFolder">
@@ -61,7 +61,7 @@ const props = defineProps<{
 const { folders, saveItem } = useMyFolders()
 const { factory, saveFolder, generateNewFolder } = useEditFolder()
 
-const handleFolderSelected = (folderId: string, add = true) =>
+const handleFolderSelected = (folderId: string, add: boolean) =>
 	saveItem(folderId, {
 		type: props.type,
 		values: [props.id],

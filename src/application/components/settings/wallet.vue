@@ -330,10 +330,10 @@ export default defineComponent({
 		SofaDeletePrompt,
 	},
 	setup() {
-		const UserWallet = ref(Logic.Payment.UserWallet)
-		const AllTransactions = ref(Logic.Payment.AllTransactions)
-		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
-		const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks)
+		const UserWallet = ref(Logic.Payment.UserWallet!)
+		const AllTransactions = ref(Logic.Payment.AllTransactions!)
+		const PaymentMethods = ref(Logic.Payment.PaymentMethods!)
+		const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks!)
 		const showDeleteMethod = ref(false)
 
 		const resolvingNumber = ref(false)
@@ -364,7 +364,7 @@ export default defineComponent({
 			time: '8:22 AM',
 		})
 
-		const transactions = ref([])
+		const transactions = ref<any[]>([])
 
 		const getTransactionColor = (transaction: any) => {
 			if (transaction.status === 'failed') return 'text-primaryRed'
@@ -447,7 +447,7 @@ export default defineComponent({
 						methodId: fundWalletMethod.value,
 					}
 					Logic.Payment.FundWallet()
-						.then((data) => {
+						?.then((data) => {
 							if (data) {
 								Logic.Common.showAlert({
 									message: 'Funding successful',
@@ -490,7 +490,7 @@ export default defineComponent({
 					}
 
 					Logic.Payment.WithdrawFromWallet()
-						.then((data) => {
+						?.then((data) => {
 							if (data) {
 								Logic.Common.showAlert({
 									message: 'Withdrawal successful',
@@ -544,7 +544,7 @@ export default defineComponent({
 			setTransactions()
 			if (!AllCommercialBanks.value) {
 				Logic.Payment.GetCommercialBanks().then(() => {
-					AllCommercialBanks.value = Logic.Payment.AllCommercialBanks
+					AllCommercialBanks.value = Logic.Payment.AllCommercialBanks!
 					setCommercialBankOptions()
 				})
 			}
@@ -564,7 +564,7 @@ export default defineComponent({
 					}
 
 					Logic.Payment.VerifyAccountNumber()
-						.then(() => {
+						?.then(() => {
 							// console.log(data);
 						})
 						.catch(() => {

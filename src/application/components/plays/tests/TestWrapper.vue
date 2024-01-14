@@ -42,11 +42,13 @@ const extras = computed(() => ({
 		return await end()
 	},
 	get scores() {
-		return Object.entries(test.value.scores ?? {})
+		const t = test.value
+		if (!t) return []
+		return Object.entries(t.scores)
 			.sort((a, b) => b[1] - a[1])
 			.map((res, i, orgArr) => ({
 				score: res[1],
-				percent: (res[1] / test.value.questions.length) * 10,
+				percent: (res[1] / t.questions.length) * 10,
 				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
 				user: user.value,
 				isWinner: orgArr[0]?.[1] === res[1],

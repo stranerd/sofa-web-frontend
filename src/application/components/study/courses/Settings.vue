@@ -1,5 +1,5 @@
 <template>
-	<sofa-form-wrapper ref="formComp" :parent-refs="parentRefs" class="w-full flex flex-col gap-4">
+	<sofa-form-wrapper ref="formComp" :parent-refs="parentRefs ?? {}" class="w-full flex flex-col gap-4">
 		<div class="w-full md:!grid md:!grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
 				<sofa-text-field
@@ -32,7 +32,7 @@
 					:can-use-custom="true" />
 
 				<sofa-text-field
-					v-if="auth.roles.isVerified"
+					v-if="auth?.roles.isVerified"
 					ref="price.amount"
 					v-model="courseSettingForm.price"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -193,7 +193,7 @@ export default defineComponent({
 
 		const courseImageUrl = ref('')
 
-		const defaultTags = ref([])
+		const defaultTags = ref<string[]>([])
 
 		const preventUpdate = ref(true)
 

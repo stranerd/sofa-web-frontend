@@ -42,14 +42,14 @@
 											" />
 										<div
 											v-for="score in gameExtras.scores"
-											:key="score.user.id"
+											:key="score.user?.id"
 											class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white border-4"
-											:class="score.user.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
+											:class="score.user?.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
 											<SofaNormalText color="text-deepGray" class="!font-semibold" :content="score.position" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold"
-												:content="score.user.id === gameExtras.authId ? 'You' : score.user.bio.name.full" />
+												:content="score.user?.id === gameExtras.authId ? 'You' : score.user?.bio.name.full" />
 											<SofaIcon v-if="score.isWinner" name="game-winner" class="h-[23px]" />
 											<SofaNormalText
 												color="text-deepGray"

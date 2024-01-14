@@ -2,6 +2,7 @@ import { CourseEntity, QuizEntity } from '@modules/study'
 import { Logic, QueryParams, SingleUser } from 'sofa-logic'
 
 export interface ContentDetails {
+	original: CourseEntity | QuizEntity
 	id: string
 	subject?: string
 	title?: string
@@ -43,11 +44,11 @@ export const search = async (query: QueryParams, returnCoursables = false) => {
 		})
 }
 
-export const extractContent = (content: QuizEntity | CourseEntity): ContentDetails => {
-	const item = content as any
-	const isCourse = item.__type === 'CourseEntity'
+export const extractContent = (item: QuizEntity | CourseEntity): ContentDetails => {
+	const isCourse = item.isCourse()
 	const type = isCourse ? 'course' : 'quiz'
 	return {
+		original: item,
 		id: item.id,
 		subject: Logic.Study.GetTagName(item.topicId),
 		title: item.title,

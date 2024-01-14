@@ -56,11 +56,13 @@ const extras = computed(() => ({
 	},
 	isParticipant: game.value?.participants.includes(authId.value),
 	get scores() {
-		return Object.entries(game.value.scores ?? {})
+		const g = game.value
+		if (!g) return []
+		return Object.entries(g.scores)
 			.sort((a, b) => b[1] - a[1])
 			.map((res, i, orgArr) => ({
 				score: res[1],
-				percentage: formatNumber((res[1] / game.value.questions.length) * 10, 1),
+				percentage: formatNumber((res[1] / g.questions.length ?? 0) * 10, 1),
 				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
 				user: participants.value.find((p) => p.id === res[0]),
 				isWinner: orgArr[0]?.[1] === res[1],

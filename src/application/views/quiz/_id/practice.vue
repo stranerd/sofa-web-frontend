@@ -15,7 +15,7 @@
 						click: () => {
 							if (isDone) return Logic.Common.goBack()
 							if (!showSolution) {
-								isCorrect = extras.question.checkAnswer(extras.answer)
+								isCorrect = extras.question?.checkAnswer(extras.answer) ?? false
 								return (showSolution = true)
 							}
 							if (extras.canNext) {
@@ -56,9 +56,9 @@
 					<template v-if="showSolution" #postBody>
 						<div class="w-full flex flex-col gap-2 items-start">
 							<SofaHeaderText size="xl" content="Answer" />
-							<SofaNormalText :content="extras.question.answer" />
+							<SofaNormalText :content="extras.question?.answer" />
 						</div>
-						<div v-if="extras.question.explanation" class="w-full flex flex-col gap-2 items-start">
+						<div v-if="extras.question?.explanation" class="w-full flex flex-col gap-2 items-start">
 							<SofaHeaderText size="xl" content="Explanation" />
 							<SofaNormalText :content="extras.question.explanation" />
 						</div>

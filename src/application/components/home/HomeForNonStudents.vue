@@ -1,5 +1,5 @@
 <template>
-	<div class="px-4 mdlg:px-0">
+	<div v-if="user" class="px-4 mdlg:px-0">
 		<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 			<SofaNormalText class="!font-bold" content="Overview" />
 
@@ -46,7 +46,7 @@
 				:activity="activity"
 				:to="activity.route"
 				:has-bookmark="true"
-				:bookmark-action="() => saveToFolder(activity)"
+				:bookmark-action="() => saveToFolder(activity.original)"
 				class="flex-shrink-0" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">

@@ -103,7 +103,13 @@
 
 						<SofaNormalText
 							class="!font-bold !text-sm"
-							:content="showSettingModal ? 'Update quiz' : QuestionEntity.getLabel(extras.currentQuestionById?.type)" />
+							:content="
+								showSettingModal
+									? 'Update quiz'
+									: extras.currentQuestionById
+										? QuestionEntity.getLabel(extras.currentQuestionById.type)
+										: ''
+							" />
 
 						<div class="flex items-center gap-3" :class="{ invisible: showSettingModal }">
 							<SofaIcon class="h-[18px]" name="share-option" @click="showShareModal = true" />
@@ -213,14 +219,14 @@
 					</div>
 					<div class="flex flex-col gap-4 w-full">
 						<div
-							v-for="(user, index) in extras.usersByQuestions[extras.currentQuestionById?.id] ?? []"
+							v-for="(user, index) in extras.usersByQuestions[extras.currentQuestionById?.id ?? ''] ?? []"
 							:key="user.id"
 							class="flex items-center gap-2">
 							<SofaAvatar v-if="index < 3" :photo-url="user.bio.photo?.link" size="36" class="-ml-1" />
 							<SofaNormalText :content="user.bio.name.full" size="lg" />
 						</div>
 						<SofaNormalText
-							v-if="!(extras.usersByQuestions[extras.currentQuestionById?.id] ?? []).length"
+							v-if="!(extras.usersByQuestions[extras.currentQuestionById?.id ?? ''] ?? []).length"
 							content="No users currently editing this question"
 							size="xl" />
 					</div>
@@ -313,7 +319,7 @@ export default defineComponent({
 		const showShareModal = ref(false)
 		const showCurrentlyEditingModal = ref(false)
 
-		const handleSettingSaved = (status: boolean) => {
+		const handleSettingSaved = (status?: boolean) => {
 			if (status) showSettingModal.value = false
 		}
 

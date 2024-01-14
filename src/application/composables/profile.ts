@@ -9,8 +9,8 @@ const tutorRequestForm = reactive<CreateTutorRequestForm>({
 
 const updateVerificationForm = reactive({
 	content: {
-		quizzes: [],
-		courses: [],
+		quizzes: [] as string[],
+		courses: [] as string[],
 	},
 })
 

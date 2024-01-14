@@ -123,7 +123,7 @@ export default defineComponent({
 
 		const close = () => (showInfoModal.value = false)
 
-		storage.get(storageKey).then((value) => {
+		storage.get<'true'>(storageKey).then((value) => {
 			showInfoModal.value = !value
 		})
 

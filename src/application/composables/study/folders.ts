@@ -1,4 +1,4 @@
-import { FolderEntity, FolderFactory, FolderSaved, FoldersUseCases } from '@modules/study'
+import { CourseEntity, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -8,10 +8,10 @@ import { useListener } from '../core/listener'
 import { useStudyModal } from '../core/modals'
 import { addToArray, getRandomValue } from 'valleyed'
 
-export const saveToFolder = (activity: { id: string; type: 'course' | 'quiz' }) => {
+export const saveToFolder = (item: CourseEntity | QuizEntity) => {
 	useStudyModal().saveToFolder.open({
-		id: activity.id,
-		type: activity.type === 'course' ? FolderSaved.courses : FolderSaved.quizzes,
+		id: item.id,
+		type: item.isCourse() ? FolderSaved.courses : FolderSaved.quizzes,
 	})
 }
 

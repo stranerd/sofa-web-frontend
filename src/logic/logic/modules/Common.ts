@@ -18,6 +18,7 @@ import {
 	SuccessConfirmationSetup,
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
+import { storage } from '@utils/storage'
 
 export default class Common {
 	public window = reactive({ width: window.innerWidth })
@@ -44,13 +45,13 @@ export default class Common {
 	}
 
 	async getRedirectToRoute() {
-		const value = localStorage.getItem(this.redirectToName)
-		if (value) localStorage.removeItem(this.redirectToName)
+		const value = await storage.get<string>(this.redirectToName)
+		if (value) await storage.remove(this.redirectToName)
 		return value ?? '/'
 	}
 
 	async setRedirectToRoute(value: string) {
-		localStorage.setItem(this.redirectToName, value)
+		await storage.set(this.redirectToName, value)
 	}
 
 	prettifyTime = (seconds: number) => {

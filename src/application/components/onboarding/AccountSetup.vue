@@ -181,7 +181,7 @@
 
 		<div v-if="tab === 'phone-verify'" class="w-full flex flex-col items-center justify-center gap-4 py-5">
 			<SofaNormalText color="text-grayColor" class="pb-3">
-				Enter the 6-digit code sent to {{ phoneFactory.phone.code + phoneFactory.phone.number }}
+				Enter the 6-digit code sent to {{ phoneFactory.phoneStr }}
 			</SofaNormalText>
 			<div class="w-full md:!w-[60%] flex flex-col gap-4">
 				<SofaOtpInput v-model="token" :number-of-input="6" />

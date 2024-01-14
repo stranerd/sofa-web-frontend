@@ -200,8 +200,8 @@ export default defineComponent({
 	},
 	emits: ['OnItemSelected'],
 	setup(props, context) {
-		const SingleCourse = ref(Logic.Study.SingleCourse)
-		const AllQuzzies = ref(Logic.Study.AllQuzzies)
+		const SingleCourse = ref(Logic.Study.SingleCourse!)
+		const AllQuzzies = ref(Logic.Study.AllQuzzies!)
 
 		const newMaterialOptions = [
 			{
@@ -230,7 +230,7 @@ export default defineComponent({
 		const imageFile = ref()
 		const documentFile = ref()
 
-		const allQuizzes = ref([])
+		const allQuizzes = ref<{ key: string; value: string }[]>([])
 
 		const setQuizzes = () => {
 			allQuizzes.value.length = 0

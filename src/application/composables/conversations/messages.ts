@@ -92,7 +92,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 	})
 
 	const users = computed(() =>
-		[conversation.user, conversation.tutor!].filter(Boolean).reduce(
+		[conversation.user, conversation.tutor].filter(Boolean).reduce(
 			(acc, cur) => {
 				acc[cur.id] = {
 					name: cur.bio.name.full,

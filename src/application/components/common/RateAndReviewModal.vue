@@ -93,7 +93,7 @@ export default defineComponent({
 		tutor: {
 			type: Object as () => {
 				name: string
-				photo: string
+				photo?: string
 			},
 			required: false,
 			default: null,

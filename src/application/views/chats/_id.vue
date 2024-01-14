@@ -5,7 +5,7 @@
 			class="h-full"
 			:data="{
 				title: conversation.title,
-				photoUrl: otherUsers.at(0).photo ?? null,
+				photoUrl: otherUsers.at(0)?.photo ?? null,
 				userNames: ['You', ...otherUsers.map((u) => u.name)],
 			}">
 			<template #top-extras>
@@ -106,7 +106,7 @@
 
 		<!-- More options for smaller screens -->
 		<SofaModal
-			v-if="showMoreOptions && !Logic.Common.isLarge"
+			v-if="conversation && showMoreOptions && !Logic.Common.isLarge"
 			:close="() => (showMoreOptions = false)"
 			max-width="w-[80%] md:w-[60%] ml-auto">
 			<div class="flex flex-col gap-4 relative overflow-y-auto h-full">
@@ -166,7 +166,7 @@
 
 		<!-- Rate and review modal -->
 		<RateAndReviewModal
-			v-if="showRateAndReviewTutor && conversation.tutor"
+			v-if="showRateAndReviewTutor && conversation && conversation.tutor"
 			:close="() => (showRateAndReviewTutor = false)"
 			title="Session ended, rate tutor"
 			:tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
@@ -227,7 +227,7 @@ export default defineComponent({
 			if (conversation.value.tutor)
 				res.push({
 					name: conversation.value.tutor.bio.name.first,
-					photo: conversation.value.tutor.bio.photo?.link,
+					photo: conversation.value.tutor.bio.photo?.link ?? null,
 				})
 			else res.push({ name: userAi.value.name, photo: userAi.value.image })
 			return res
@@ -240,7 +240,7 @@ export default defineComponent({
 
 		const onClickAddTutor = async () => {
 			showMoreOptions.value = false
-			if (wallet.value?.subscription.data.tutorAidedConversations > 0) return (showAddTutor.value = true)
+			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0) return (showAddTutor.value = true)
 			if (wallet.value?.subscription.active)
 				return await Logic.Common.confirm({
 					title: 'You have run out of tutor aided conversations',

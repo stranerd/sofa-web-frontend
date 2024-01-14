@@ -15,7 +15,7 @@
 	<dashboard-layout v-else :topbar-options="{ title }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
-				<div class="w-full flex items-center gap-3">
+				<div v-if="user" class="w-full flex items-center gap-3">
 					<SofaAvatar size="84" :photo-url="user.bio.photo?.link" />
 
 					<div class="flex flex-col gap-1">
@@ -29,7 +29,7 @@
 					</div>
 				</div>
 
-				<div v-if="userType.isStudent" class="w-full grid grid-cols-2 gap-3">
+				<div v-if="user && userType.isStudent" class="w-full grid grid-cols-2 gap-3">
 					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
@@ -138,7 +138,7 @@
 				</div>
 			</div>
 
-			<div v-if="!user.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
+			<div v-if="!user?.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<div class="w-full flex gap-2 items-center">
 					<SofaNormalText class="!font-bold" content="Get verified" />
 					<SofaIcon name="verify" class="h-[16px]" />
@@ -151,7 +151,7 @@
 			</div>
 
 			<div
-				v-if="userType.isTeacher && user.tutor.topics.length === 0"
+				v-if="userType.isTeacher && user?.tutor.topics.length === 0"
 				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<div class="w-full flex gap-2 items-center">
 					<SofaNormalText class="!font-bold" content="Apply to teach subjects" />

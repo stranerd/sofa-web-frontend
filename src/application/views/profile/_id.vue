@@ -52,7 +52,7 @@
 						</div>
 
 						<SofaButton
-							v-if="user.userType.isOrg && !authUser.account.organizationsIn.find((o) => o.id === user.id)"
+							v-if="user.userType.isOrg && !authUser?.account.organizationsIn.find((o) => o.id === user!.id)"
 							padding="px-6 py-2"
 							@click="joinOrgHandler">
 							Join
@@ -101,7 +101,7 @@
 							:key="activity.id"
 							as="router-link"
 							:has-bookmark="true"
-							:bookmark-action="() => saveToFolder(activity)"
+							:bookmark-action="() => saveToFolder(activity.original)"
 							:content="activity"
 							:to="activity.route"
 							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
@@ -188,7 +188,7 @@ export default defineComponent({
 			if (!query) return materials.value
 			return materials.value.filter((item) => [item.title].some((v) => v.toLowerCase().includes(query)))
 		})
-		const joinOrgHandler = () => useOrganizationModal().joinOrganization.open({ org: user.value })
+		const joinOrgHandler = () => useOrganizationModal().joinOrganization.open({ org: user.value! })
 
 		const searchQuery = ref('')
 

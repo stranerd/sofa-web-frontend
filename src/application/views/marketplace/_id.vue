@@ -28,9 +28,9 @@
 				:content-id="contentDetails.id"
 				:open-quiz="() => openQuiz(contentDetails as any)"
 				:actions="{
-					report: () => reportMaterial(contentDetails?.original),
-					share: () => shareMaterialLink(contentDetails?.original),
-					save: () => saveToFolder(contentDetails),
+					report: () => reportMaterial(contentDetails.original!),
+					share: () => shareMaterialLink(contentDetails.original!),
+					save: () => saveToFolder(contentDetails.original!),
 				}" />
 		</div>
 
@@ -57,7 +57,7 @@
 							} rounded-custom`"
 							@click="selectedMethodId = 'payWithWallet'">
 							<sofa-icon :custom-class="'h-[20px]'" :name="'wallet'" />
-							<sofa-normal-text>
+							<sofa-normal-text v-if="UserWallet">
 								Wallet (<span class="!font-semibold">{{
 									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
 								}}</span
@@ -75,7 +75,7 @@
 						</div>
 
 						<a
-							v-for="(method, index) in PaymentMethods.results"
+							v-for="(method, index) in PaymentMethods?.results"
 							:key="index"
 							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
@@ -446,22 +446,22 @@ export default defineComponent({
 		const buyCourse = () => {
 			if (Logic.Common.loaderSetup.loading) return
 
-			if (SingleCourse.value.price.amount > 0 && selectedMethodId.value == '') {
+			if ((SingleCourse.value?.price.amount ?? 0) > 0 && selectedMethodId.value == '') {
 				showMakePaymentModal.value = true
 				return
 			}
 
 			Logic.Payment.MakePurchaseForm = {
-				id: SingleCourse.value.id,
+				id: SingleCourse.value?.id ?? '',
 				methodId: selectedMethodId.value,
 				type: 'courses',
 			}
 
-			Logic.Payment.MakePurchase().then((data) => {
+			Logic.Payment.MakePurchase()?.then((data) => {
 				if (data) {
 					showMakePaymentModal.value = false
 					Logic.Payment.GetUserPurchases(false)
-					Logic.Common.GoToRoute('/course/' + SingleCourse.value.id)
+					Logic.Common.GoToRoute('/course/' + SingleCourse.value?.id)
 				}
 			})
 		}

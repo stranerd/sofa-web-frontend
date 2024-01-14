@@ -45,7 +45,7 @@ const props = defineProps({
 		default: false,
 	},
 	submit: {
-		type: Function as PropType<(data?: { questionId: string; answer: any }) => Promise<boolean>>,
+		type: Function as PropType<(data?: { questionId: string; answer: any }) => Promise<boolean | undefined>>,
 		required: false,
 		default: null,
 	},
@@ -92,7 +92,7 @@ const currentQuestionById = computed(() => quizQuestions.value.find((q) => q.id 
 const answer = computed({
 	get: () => (currentQuestionByIndex.value ? answers[currentQuestionByIndex.value.id] ?? currentQuestionByIndex.value.defaultAnswer : []),
 	set: (val) => {
-		answers[currentQuestionByIndex.value?.id] = val
+		answers[currentQuestionByIndex.value?.id ?? ''] = val
 	},
 })
 
@@ -101,7 +101,7 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 	if (!question) return null
 	if (props.showAnswer && question.data) {
 		if (question.data.type === QuestionTypes.multipleChoice) {
-			if (question.data.answers.includes(index)) return 'right'
+			if (question.data.answers.includes(index ?? -1)) return 'right'
 			if (answer.value.includes(index)) return 'wrong'
 		}
 		if (question.data.type === QuestionTypes.trueOrFalse) {
@@ -115,11 +115,11 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 			question.data.type === QuestionTypes.sequence
 		) {
 			if (props.isAnswerRight) return 'right'
-			return question.data.answers[index] === val ? 'right' : 'wrong'
+			return question.data.answers[index ?? -1] === val ? 'right' : 'wrong'
 		}
 		if (question.data.type === QuestionTypes.match) {
 			if (props.isAnswerRight) return 'right'
-			return question.data.set[index]?.a === val ? 'right' : 'wrong'
+			return question.data.set[index ?? -1]?.a === val ? 'right' : 'wrong'
 		}
 	}
 	if (question.strippedData.type === QuestionTypes.trueOrFalse && answer.value === val) return 'selected'

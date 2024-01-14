@@ -1,6 +1,8 @@
 <template>
 	<SofaImageLoader
-		:photo-url="photoUrl"
+		:as="userId ? 'router-link' : 'div'"
+		:to="`/profile/${userId}`"
+		:photo-url="photoUrl ?? ''"
 		:custom-class="`rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer ${bgColor} items-center justify-center ${customClass}`"
 		:custom-style="`width: ${size}px; height: ${size}px;`"
 		@click.stop.prevent="userId ? Logic.Common.GoToRoute(`/profile/${userId}`) : null">
@@ -18,7 +20,7 @@
 
 <script lang="ts">
 import { Logic } from 'sofa-logic'
-import { defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 import SofaImageLoader from '../SofaImageLoader/index.vue'
 import SofaIcon from '../SofaIcon'
 
@@ -34,7 +36,7 @@ export default defineComponent({
 			default: '50',
 		},
 		photoUrl: {
-			type: String,
+			type: String as PropType<string | null | undefined>,
 			required: false,
 			default: '',
 		},

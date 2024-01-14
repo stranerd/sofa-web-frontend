@@ -1,5 +1,6 @@
 <template>
 	<dashboard-layout
+		v-if="SingleCourse"
 		:topbar-options="{
 			type: 'subpage',
 			title: SingleCourse ? SingleCourse.title : 'Create a course',

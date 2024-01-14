@@ -113,7 +113,7 @@ const createQuizGame = async () => {
 	}
 
 	await Logic.Plays.CreateGame(true)
-		.then(async (game) => {
+		?.then(async (game) => {
 			await Logic.Common.GoToRoute(`/games/${game.id}`)
 			props.close()
 		})

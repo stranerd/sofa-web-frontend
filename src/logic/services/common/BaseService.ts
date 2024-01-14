@@ -24,9 +24,11 @@ export class BaseApiService {
 					const formData: FormData = new FormData()
 					Object.entries(config.data ?? {}).forEach(([key, val]) => {
 						if (UploadedFile.is(val)) formData.set(key, val.ref)
-						else if (Array.isArray(val) && UploadedFile.is(val[0])) val.forEach((file) => formData.append(key, file.ref))
+						else if (Array.isArray(val) && UploadedFile.is(val[0]))
+							val.forEach((file) => (UploadedFile.is(file) ? formData.append(key, file.ref) : null))
 						else if (val instanceof File) formData.set(key, val)
-						else if (Array.isArray(val) && val[0] instanceof File) val.forEach((file) => formData.append(key, file))
+						else if (Array.isArray(val) && val[0] instanceof File)
+							val.forEach((file) => (file instanceof File ? formData.append(key, file) : null))
 						else if (val !== undefined) formData.set(key, JSON.stringify(val))
 					})
 
