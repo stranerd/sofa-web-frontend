@@ -8,5 +8,5 @@ if (fs.existsSync('env.json')) {
 		const [key, value] = currentValue
 		return accumulator + `VITE_${key.toUpperCase()}=${value}\n`
 	}, '')
-	fs.writeFileSync('./apps/website/.env', envFormattedEntries)
+	fs.writeFileSync('.env', envFormattedEntries)
 } else throw new Error('Env.json doesnt exist. Try creating one by running npm env:copy:example')
