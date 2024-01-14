@@ -112,19 +112,12 @@ import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'SubscriptionSettingPage',
-	components: {
-		SettingsLayout,
-		SofaHeaderText,
-		SofaNormalText,
-		SofaButton,
-		SofaIcon,
-	},
+	components: { SettingsLayout },
 	routeConfig: {
 		fetchRules: [
 			{

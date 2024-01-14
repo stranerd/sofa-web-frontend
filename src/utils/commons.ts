@@ -2,11 +2,7 @@
 import { Share } from '@capacitor/share'
 import { Notify } from '@utils/dialog' */
 import { isWeb } from '@utils/constants'
-import { addToArray, formatNumber, groupBy, pluralize } from 'valleyed'
-
-import * as valleyed from 'valleyed'
-
-export { addToArray, formatNumber, groupBy, pluralize, valleyed }
+import { formatNumber } from 'valleyed'
 
 export const copyToClipboard = async (text: string) => {
 	throw new Error(`Not implemented: ${text}`)

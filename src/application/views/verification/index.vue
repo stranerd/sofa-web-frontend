@@ -179,38 +179,12 @@ import { ContentDetails, extractContent } from '@app/composables/marketplace'
 import { submitVerification, updateVerificationForm } from '@app/composables/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { Conditions, Logic, SelectOption } from 'sofa-logic'
-import {
-	SofaActivityCard,
-	SofaButton,
-	SofaFileInput,
-	SofaHeaderText,
-	SofaIcon,
-	SofaImageLoader,
-	SofaModalOld,
-	SofaNormalText,
-	SofaSelect,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'VerificationIndexPage',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-		SofaHeaderText,
-		SofaTextField,
-		SofaTextarea,
-		SofaImageLoader,
-		SofaFileInput,
-		SofaModalOld,
-		SofaButton,
-		SofaSelect,
-		SofaActivityCard,
-		SocialMediaUpdate,
-	},
+	components: { SocialMediaUpdate },
 	routeConfig: {
 		fetchRules: [
 			{

@@ -41,7 +41,6 @@
 <script lang="ts" setup>
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { UserEntity } from '@modules/users'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 
 defineProps<{

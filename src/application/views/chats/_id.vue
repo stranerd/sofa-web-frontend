@@ -185,7 +185,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
 import { useCreateMessage } from '@app/composables/conversations/messages'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
@@ -195,14 +194,8 @@ export default defineComponent({
 	components: {
 		ChatLayout,
 		ChatList,
-		SofaIcon,
-		SofaNormalText,
 		ChatContent,
 		AddTutor,
-		SofaModal,
-		SofaButton,
-		SofaAvatar,
-		SofaHeaderText,
 		RateAndReviewModal,
 		ConversationMessages,
 	},

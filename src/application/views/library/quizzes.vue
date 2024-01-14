@@ -32,18 +32,12 @@ import { extractResource, openQuiz } from '@app/composables/library'
 import { handleShowMaterialMoreOptions, useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
-import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryQuizzesPage',
-	components: {
-		LibraryLayout,
-		SofaIcon,
-		SofaActivityCard,
-		SofaEmptyState,
-	},
+	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

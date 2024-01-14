@@ -15,7 +15,6 @@
 
 <script lang="ts" setup>
 import { QuestionEntity } from '@modules/study'
-import { SofaHeaderText } from 'sofa-ui-components'
 import { PropType, defineProps, ref } from 'vue'
 
 defineProps({

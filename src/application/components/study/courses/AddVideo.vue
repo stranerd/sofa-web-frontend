@@ -44,17 +44,10 @@
 <script lang="ts">
 import { FormValidations } from '@app/composables'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent, reactive, ref } from 'vue'
 
 export default defineComponent({
 	name: 'AddVideo',
-	components: {
-		SofaIcon,
-		SofaTextField,
-		SofaNormalText,
-		SofaButton,
-	},
 	props: {
 		customClass: {
 			type: String,

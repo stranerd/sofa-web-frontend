@@ -293,7 +293,6 @@ import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useStudyModal } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaIcon, SofaModal, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -301,16 +300,10 @@ export default defineComponent({
 	name: 'QuizIdEdit',
 	components: {
 		QuizWrapper,
-		SofaIcon,
-		SofaAvatar,
-		SofaEmptyState,
-		SofaNormalText,
-		SofaModal,
 		QuizForm,
 		EditQuestionsList,
 		EditQuestionOptions,
 		EditQuestionBody,
-		SofaHeaderText,
 		RequestAccess,
 	},
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },

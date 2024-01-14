@@ -184,7 +184,6 @@
 <script lang="ts" setup>
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaNormalText, SofaTextarea } from 'sofa-ui-components'
 import { PropType, defineEmits, defineProps, reactive, watch } from 'vue'
 import Draggable from 'vuedraggable'
 

@@ -173,33 +173,11 @@ import { useTopicsList } from '@app/composables/interactions/tags'
 import { createTutorRequest, tutorRequestForm } from '@app/composables/profile'
 import { useUserLocationUpdate } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import {
-	SofaButton,
-	SofaFileInput,
-	SofaHeaderText,
-	SofaIcon,
-	SofaImageLoader,
-	SofaNormalText,
-	SofaSelect,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'BecomeATutorPage',
-	components: {
-		SofaNormalText,
-		SofaHeaderText,
-		SofaIcon,
-		SofaButton,
-		SofaTextField,
-		SofaTextarea,
-		SofaFileInput,
-		SofaImageLoader,
-		SofaSelect,
-	},
 	setup() {
 		useMeta({ title: 'Become a tutor' })
 

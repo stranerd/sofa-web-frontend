@@ -32,18 +32,12 @@ import { extractResource, openCourse } from '@app/composables/library'
 import { handleShowMaterialMoreOptions } from '@app/composables/study'
 import { useMyPurchasedCourses } from '@app/composables/study/courses-list'
 import { Logic } from 'sofa-logic'
-import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryPurchasedPage',
-	components: {
-		LibraryLayout,
-		SofaIcon,
-		SofaActivityCard,
-		SofaEmptyState,
-	},
+	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

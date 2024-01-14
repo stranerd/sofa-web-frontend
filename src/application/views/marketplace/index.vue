@@ -79,20 +79,11 @@ import { extractResource } from '@app/composables/library'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { Logic } from 'sofa-logic'
-import { SofaEmptyState, SofaHeaderText, SofaIcon, SofaItemCard, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'MarketPlaceIndexPage',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-		SofaItemCard,
-		SofaTextField,
-		SofaHeaderText,
-		SofaEmptyState,
-	},
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

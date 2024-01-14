@@ -86,7 +86,6 @@
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 import { Logic, SingleUser } from 'sofa-logic'
 import { PropType, defineEmits, defineProps, ref } from 'vue'
-import { SofaAvatar, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 
 defineProps({
 	quiz: {

@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SofaBottomBar, SofaTopBar } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 import { handleShowAddMaterial } from '../composables/study'
 

@@ -262,31 +262,12 @@ import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
 import CourseContent from '@app/components/study/courses/content.vue'
 import { useHasAccess } from '@app/composables/study'
 import { Conditions, Logic } from 'sofa-logic'
-import {
-	SofaButton,
-	SofaCourseContent,
-	SofaCourseSummary,
-	SofaHeaderText,
-	SofaIcon,
-	SofaModalOld,
-	SofaNormalText,
-} from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',
-	components: {
-		SofaNormalText,
-		SofaIcon,
-		SofaCourseSummary,
-		SofaCourseContent,
-		SofaModalOld,
-		SofaHeaderText,
-		SofaButton,
-		CourseContent,
-		RateAndReviewModal,
-	},
+	components: { CourseContent, RateAndReviewModal },
 	routeConfig: {
 		fetchRules: [
 			{

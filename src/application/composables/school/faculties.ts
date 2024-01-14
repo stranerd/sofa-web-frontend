@@ -1,6 +1,6 @@
 import { useSuccessHandler } from '@app/composables/core/states'
 import { FacultiesUseCases, FacultyEntity, FacultyFactory } from '@modules/school'
-import { addToArray } from '@utils/commons'
+import { addToArray } from 'valleyed'
 import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'

@@ -36,18 +36,12 @@ import { extractResource, openCourse, openQuiz } from '@app/composables/library'
 import { handleShowMaterialMoreOptions } from '@app/composables/study'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { Logic } from 'sofa-logic'
-import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryOrganizationsIdPage',
-	components: {
-		LibraryLayout,
-		SofaIcon,
-		SofaEmptyState,
-		SofaActivityCard,
-	},
+	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

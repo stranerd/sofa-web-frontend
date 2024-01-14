@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import { useUpdateClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
-import { SofaHeaderText, SofaIcon } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 import ClassForm from './ClassForm.vue'
 

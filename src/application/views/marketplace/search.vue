@@ -181,22 +181,12 @@ import { search } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { DraftStatus } from '@modules/study'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
-import { SofaActivityCard, SofaEmptyState, SofaIcon, SofaItemCard, SofaModalOld, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'MarketplaceSearchPage',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-		SofaTextField,
-		SofaItemCard,
-		MarketplaceFilter,
-		SofaEmptyState,
-		SofaActivityCard,
-		SofaModalOld,
-	},
+	components: { MarketplaceFilter },
 	routeConfig: {
 		fetchRules: [
 			{

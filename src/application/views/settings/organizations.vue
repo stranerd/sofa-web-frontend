@@ -22,19 +22,12 @@
 <script lang="ts">
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useMyOrganizations } from '@app/composables/users/organizations'
-import { SofaAvatar, SofaEmptyState, SofaHeaderText, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'SettingsOrganizationsPage',
-	components: {
-		SettingsLayout,
-		SofaHeaderText,
-		SofaNormalText,
-		SofaEmptyState,
-		SofaAvatar,
-	},
+	components: { SettingsLayout },
 	routeConfig: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({ title: 'Organizations' })

@@ -68,7 +68,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { extractContent } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
-import { SofaActivityCard, SofaEmptyState, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 

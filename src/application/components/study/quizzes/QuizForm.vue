@@ -103,17 +103,6 @@
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { QuizEntity, QuizFactory } from '@modules/study'
-import {
-	SofaButton,
-	SofaCheckbox,
-	SofaFileInput,
-	SofaIcon,
-	SofaImageLoader,
-	SofaNormalText,
-	SofaSelect,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
 import { PropType, defineEmits, defineProps, watch } from 'vue'
 
 const props = defineProps({

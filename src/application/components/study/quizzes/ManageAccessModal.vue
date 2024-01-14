@@ -70,7 +70,6 @@ import { useSearchUsers } from '@app/composables/users/users'
 import { QuizEntity } from '@modules/study'
 import { UserEntity } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineProps } from 'vue'
 
 const props = defineProps<{

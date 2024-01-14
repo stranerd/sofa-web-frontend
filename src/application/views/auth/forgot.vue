@@ -65,13 +65,11 @@
 
 <script lang="ts">
 import { usePasswordReset } from '@app/composables/auth/passwords'
-import { SofaButton, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'AuthForgotPage',
-	components: { SofaNormalText, SofaTextField, SofaButton },
 	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Forgot password' })

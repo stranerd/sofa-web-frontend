@@ -121,18 +121,7 @@
 import { useCreateConversation } from '@app/composables/conversations/conversations'
 import { useTopicsList } from '@app/composables/interactions/tags'
 import { useTutorsList } from '@app/composables/users/users'
-import { Logic } from 'sofa-logic'
-import {
-	SofaAvatar,
-	SofaButton,
-	SofaHeaderText,
-	SofaIcon,
-	SofaModal,
-	SofaNormalText,
-	SofaSelect,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
+import { formatNumber } from 'valleyed'
 import { computed, defineEmits, ref } from 'vue'
 
 const emits = defineEmits(['close'])
@@ -170,7 +159,7 @@ const filteredTutors = computed(() =>
 			photo_url: t.bio.photo?.link || '',
 			ratings: {
 				count: t.account.ratings.count,
-				value: Logic.Common.formatNumber(t.account.ratings.avg, 2),
+				value: formatNumber(t.account.ratings.avg, 2),
 			},
 			subjects: t.tutor.topics
 				.map((item) => topics.find((t) => t.id === item)?.title)

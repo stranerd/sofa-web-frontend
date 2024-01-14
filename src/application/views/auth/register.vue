@@ -60,19 +60,12 @@
 <script lang="ts">
 import AuthProvider from '@app/components/auth/AuthProvider.vue'
 import { useEmailSignup } from '@app/composables/auth/signin'
-import { SofaButton, SofaCheckbox, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'AuthRegisterPage',
-	components: {
-		AuthProvider,
-		SofaNormalText,
-		SofaTextField,
-		SofaCheckbox,
-		SofaButton,
-	},
+	components: { AuthProvider },
 	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Create Your Account' })

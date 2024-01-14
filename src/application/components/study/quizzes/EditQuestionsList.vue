@@ -89,7 +89,6 @@ import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 import { SingleUser } from 'sofa-logic'
 import { PropType, computed, defineEmits, defineProps, reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
-import { SofaAvatar, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { Differ } from 'valleyed'
 
 const props = defineProps({

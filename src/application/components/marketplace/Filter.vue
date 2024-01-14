@@ -51,7 +51,6 @@
 
 <script lang="ts">
 import { Conditions, Logic } from 'sofa-logic'
-import { SofaButton, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineComponent, reactive, ref, watch } from 'vue'
 
 export type SelectedOption = {
@@ -66,11 +65,6 @@ export type SelectedOption = {
 }
 
 export default defineComponent({
-	components: {
-		SofaNormalText,
-		SofaIcon,
-		SofaButton,
-	},
 	props: {
 		close: {
 			type: Function,

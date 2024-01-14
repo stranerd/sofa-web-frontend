@@ -73,7 +73,6 @@
 import QuestionDisplay from '@app/components/study/quizzes/QuestionDisplay.vue'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { PropType, computed, defineEmits, defineProps } from 'vue'
 
 type ButtonConfig = {

@@ -38,18 +38,12 @@ import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
-import { SofaActivityCard, SofaEmptyState, SofaIcon } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryFoldersIdPage',
-	components: {
-		LibraryLayout,
-		SofaIcon,
-		SofaEmptyState,
-		SofaActivityCard,
-	},
+	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

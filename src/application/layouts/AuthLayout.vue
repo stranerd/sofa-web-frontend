@@ -40,17 +40,10 @@
 
 <script lang="ts">
 import { Logic } from 'sofa-logic'
-import { SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
 	name: 'AuthLayout',
-	components: {
-		SofaHeaderText,
-		SofaImageLoader,
-		SofaNormalText,
-		SofaIcon,
-	},
 	props: {
 		title: {
 			type: String,

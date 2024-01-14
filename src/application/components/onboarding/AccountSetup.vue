@@ -208,7 +208,7 @@
 	</form>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { useAuth } from '@app/composables/auth/auth'
 import { usePhoneUpdate, useProfileUpdate } from '@app/composables/auth/profile'
 import { useChooseSchool } from '@app/composables/school'
@@ -216,138 +216,80 @@ import { useCourseList } from '@app/composables/school/courses'
 import { useUserLocationUpdate, useUserTypeUpdate } from '@app/composables/users/profile'
 import { UserSchoolType } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import {
-	SofaBadge,
-	SofaButton,
-	SofaFileInput,
-	SofaIcon,
-	SofaImageLoader,
-	SofaNormalText,
-	SofaOtpInput,
-	SofaPhoneInput,
-	SofaSelect,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
-export default defineComponent({
-	name: 'AccountSetup',
-	components: {
-		SofaNormalText,
-		SofaIcon,
-		SofaTextField,
-		SofaTextarea,
-		SofaButton,
-		SofaSelect,
-		SofaFileInput,
-		SofaImageLoader,
-		SofaOtpInput,
-		SofaBadge,
-		SofaPhoneInput,
-	},
-	props: {
-		isProfileEducation: {
-			type: Boolean,
-			default: false,
-		},
-		isProfilePhone: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	setup(props) {
-		const { auth, user } = useAuth()
-		const { factory: profileFactory, updateProfile } = useProfileUpdate()
-		const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
-		const { factory: typeFactory, updateType } = useUserTypeUpdate()
-		const { factory: phoneFactory, token, sendVerificationText, completeVerification } = usePhoneUpdate()
+const props = defineProps<{
+	isProfileEducation?: boolean
+	isProfilePhone?: boolean
+}>()
 
-		const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
-		const isDisabled = computed(() => {
-			if (tab.value === 'profile')
-				return !profileFactory.valid || !locationFactory.valid || (typeFactory.isOrganization && !typeFactory.valid)
-			else if (tab.value === 'type') return !typeFactory.isOrganization && !typeFactory.valid
-			else if (tab.value === 'phone') return !phoneFactory.valid
-			else if (tab.value === 'phone-verify') return !token.value
-			return false
-		})
+const { auth, user } = useAuth()
+const { factory: profileFactory, updateProfile } = useProfileUpdate()
+const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
+const { factory: typeFactory, updateType } = useUserTypeUpdate()
+const { factory: phoneFactory, token, sendVerificationText, completeVerification } = usePhoneUpdate()
 
-		const accountSetupOptions = computed(() => [
-			{
-				name: 'Profile',
-				id: 'profile',
-				hide: false,
-				done:
-					!!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
-			},
-			{
-				name: typeFactory.isTeacher ? 'Experience' : 'Education',
-				id: 'type',
-				hide: typeFactory.isOrganization,
-				done: !!user.value?.type,
-			},
-			{
-				name: 'Phone',
-				id: 'phone',
-				hide: false,
-				done: !!auth.value?.phone,
-			},
-		])
-
-		const handleAccountSetup = async () => {
-			if (isDisabled.value) return
-			if (tab.value === 'profile')
-				await Promise.all([typeFactory.isOrganization ? updateType() : true, updateProfile(), updateLocation()]).then((res) => {
-					if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
-				})
-			else if (tab.value === 'type')
-				await updateType().then((res) => {
-					if (res && !props.isProfileEducation) tab.value = 'phone'
-				})
-			else if (tab.value === 'phone')
-				await sendVerificationText().then((res) => {
-					if (res) tab.value = 'phone-verify'
-				})
-			else if (tab.value === 'phone-verify')
-				await completeVerification().then(async (res) => {
-					if (!res) return
-					if (props.isProfilePhone) tab.value = 'phone'
-					else await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
-				})
-		}
-
-		const { courses, fetchInstitutionCourses } = useCourseList()
-		const { schools, gatewayExams, filteredFaculties, filteredDepartments } = useChooseSchool(typeFactory)
-
-		watch(
-			() => typeFactory.exams,
-			async () => {
-				await Promise.all(typeFactory.exams.map(async (exam) => fetchInstitutionCourses(exam.institutionId)))
-			},
-			{ immediate: true },
-		)
-
-		return {
-			profileFactory,
-			locationFactory,
-			typeFactory,
-			countries,
-			states,
-			UserSchoolType,
-			schools,
-			gatewayExams,
-			filteredFaculties,
-			filteredDepartments,
-			courses,
-			tab,
-			isDisabled,
-			accountSetupOptions,
-			phoneFactory,
-			token,
-			handleAccountSetup,
-			sendVerificationText,
-		}
-	},
+const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
+const isDisabled = computed(() => {
+	if (tab.value === 'profile')
+		return !profileFactory.valid || !locationFactory.valid || (typeFactory.isOrganization && !typeFactory.valid)
+	else if (tab.value === 'type') return !typeFactory.isOrganization && !typeFactory.valid
+	else if (tab.value === 'phone') return !phoneFactory.valid
+	else if (tab.value === 'phone-verify') return !token.value
+	return false
 })
+
+const accountSetupOptions = computed(() => [
+	{
+		name: 'Profile',
+		id: 'profile',
+		hide: false,
+		done: !!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
+	},
+	{
+		name: typeFactory.isTeacher ? 'Experience' : 'Education',
+		id: 'type',
+		hide: typeFactory.isOrganization,
+		done: !!user.value?.type,
+	},
+	{
+		name: 'Phone',
+		id: 'phone',
+		hide: false,
+		done: !!auth.value?.phone,
+	},
+])
+
+const handleAccountSetup = async () => {
+	if (isDisabled.value) return
+	if (tab.value === 'profile')
+		await Promise.all([typeFactory.isOrganization ? updateType() : true, updateProfile(), updateLocation()]).then((res) => {
+			if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
+		})
+	else if (tab.value === 'type')
+		await updateType().then((res) => {
+			if (res && !props.isProfileEducation) tab.value = 'phone'
+		})
+	else if (tab.value === 'phone')
+		await sendVerificationText().then((res) => {
+			if (res) tab.value = 'phone-verify'
+		})
+	else if (tab.value === 'phone-verify')
+		await completeVerification().then(async (res) => {
+			if (!res) return
+			if (props.isProfilePhone) tab.value = 'phone'
+			else await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
+		})
+}
+
+const { courses, fetchInstitutionCourses } = useCourseList()
+const { schools, gatewayExams, filteredFaculties, filteredDepartments } = useChooseSchool(typeFactory)
+
+watch(
+	() => typeFactory.exams,
+	async () => {
+		await Promise.all(typeFactory.exams.map(async (exam) => fetchInstitutionCourses(exam.institutionId)))
+	},
+	{ immediate: true },
+)
 </script>

@@ -146,32 +146,12 @@ import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import {
-	SofaAvatar,
-	SofaButton,
-	SofaEmptyState,
-	SofaHeaderText,
-	SofaIcon,
-	SofaItemCard,
-	SofaNormalText,
-	SofaTextField,
-} from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'ProfileIdPage',
-	components: {
-		SofaNormalText,
-		SofaIcon,
-		SofaHeaderText,
-		SofaButton,
-		SofaAvatar,
-		SofaTextField,
-		SofaItemCard,
-		SofaEmptyState,
-	},
 	setup() {
 		useMeta({ title: 'Public Profile' })
 

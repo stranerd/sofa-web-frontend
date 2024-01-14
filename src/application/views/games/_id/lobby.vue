@@ -124,22 +124,12 @@ import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'GamesIdLobbyPage',
-	components: {
-		GameWrapper,
-		QuizWrapper,
-		Quiz,
-		SofaAvatar,
-		SofaHeaderText,
-		SofaIcon,
-		SofaNormalText,
-		SofaImageLoader,
-	},
+	components: { GameWrapper, QuizWrapper, Quiz },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

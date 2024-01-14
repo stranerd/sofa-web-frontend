@@ -44,7 +44,6 @@
 import { socials } from '@app/composables/users/profile'
 import { UserSocialsFactory } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { ref } from 'vue'
 
 const props = defineProps({

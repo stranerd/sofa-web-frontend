@@ -51,7 +51,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useHasAccess } from '@app/composables/study'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaEmptyState, SofaIcon, SofaIconCard, SofaNormalText } from 'sofa-ui-components'
 import { defineProps, ref } from 'vue'
 
 const props = defineProps<{

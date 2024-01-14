@@ -144,32 +144,10 @@ import {
 } from '@app/composables/course'
 import { CourseEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import {
-	SofaButton,
-	SofaFileAttachment,
-	SofaFormWrapper,
-	SofaIcon,
-	SofaImageLoader,
-	SofaNormalText,
-	SofaSelect,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 
 export default defineComponent({
 	name: 'CourseSettings',
-	components: {
-		SofaIcon,
-		SofaTextField,
-		SofaTextarea,
-		SofaSelect,
-		SofaImageLoader,
-		SofaNormalText,
-		SofaFileAttachment,
-		SofaButton,
-		SofaFormWrapper,
-	},
 	props: {
 		customClass: {
 			type: String,

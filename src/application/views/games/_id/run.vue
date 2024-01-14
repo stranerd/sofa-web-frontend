@@ -81,13 +81,12 @@ import GameWrapper from '@app/components/plays/games/GameWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { Logic } from 'sofa-logic'
-import { SofaHeaderText, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'GamesIdRunPage',
-	components: { GameWrapper, QuizWrapper, Quiz, SofaHeaderText, SofaNormalText },
+	components: { GameWrapper, QuizWrapper, Quiz },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

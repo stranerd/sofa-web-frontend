@@ -31,9 +31,8 @@
 <script lang="ts" setup>
 import { useOrganizationModal } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
-import { pluralize } from '@utils/commons'
+import { pluralize } from 'valleyed'
 import { Logic } from 'sofa-logic'
-import { SofaIcon, SofaImageLoader, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 
 const props = defineProps<{ classObj: ClassEntity }>()

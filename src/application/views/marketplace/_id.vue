@@ -123,20 +123,11 @@ import { saveToFolder } from '@app/composables/study/folders'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
-import { SofaButton, SofaContentDetails, SofaHeaderText, SofaIcon, SofaModalOld, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
-	components: {
-		SofaNormalText,
-		SofaContentDetails,
-		SofaIcon,
-		SofaModalOld,
-		SofaHeaderText,
-		SofaButton,
-	},
 	routeConfig: {
 		fetchRules: [
 			{

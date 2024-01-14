@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 import { Logic } from 'sofa-logic'
-import { SofaAvatar, SofaCustomInput, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineEmits, defineProps, PropType, ref, watch } from 'vue'
 
 const props = defineProps({

@@ -69,16 +69,6 @@
 
 <script lang="ts" setup>
 import { ClassFactory } from '@modules/organizations'
-import {
-	SofaButton,
-	SofaFileInput,
-	SofaIcon,
-	SofaImageLoader,
-	SofaNormalText,
-	SofaNumberField,
-	SofaTextField,
-	SofaTextarea,
-} from 'sofa-ui-components'
 import { PropType, defineProps } from 'vue'
 
 defineProps({

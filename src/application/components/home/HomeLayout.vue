@@ -34,7 +34,7 @@
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
 							<SofaNormalText class="font-bold">
-								{{ Logic.Common.formatNumber(user.account.rankings.overall.value, 2) }} xp
+								{{ formatNumber(user.account.rankings.overall.value, 2) }} xp
 							</SofaNormalText>
 							<SofaNormalText color="text-bodyBlack" content="Point" />
 						</div>
@@ -175,18 +175,9 @@ import { useConversationsList, useCreateConversation } from '@app/composables/co
 import { useOrganizationModal, useUserModal } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import {
-	SofaAvatar,
-	SofaBadge,
-	SofaButton,
-	SofaEmptyState,
-	SofaHeaderText,
-	SofaIcon,
-	SofaNormalText,
-	SofaTextField,
-} from 'sofa-ui-components'
 import { computed, defineProps } from 'vue'
 import { useMeta } from 'vue-meta'
+import { formatNumber } from 'valleyed'
 
 const props = defineProps({
 	title: {

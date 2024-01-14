@@ -1,7 +1,6 @@
 import { AuthDetails } from '@modules/auth'
 import { listenToMany, listenToOne } from '@modules/core'
 import { RouteConfig } from '@typing/routes'
-import { formatNumber } from '@utils/commons'
 import { AxiosError } from 'axios'
 import { getRandomValue, isString } from 'valleyed'
 import { reactive } from 'vue'
@@ -205,8 +204,6 @@ export default class Common {
 		const utc2 = new Date(b.getFullYear(), b.getMonth(), b.getDate()).getTime()
 		return Math.floor((utc2 - utc1) / _MS_PER_DAY)
 	}
-
-	public formatNumber = formatNumber
 
 	public getCurrency(currency: string) {
 		const currencies = {

@@ -40,7 +40,6 @@ import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCreateConversation } from '@app/composables/conversations/conversations'
-import { SofaHeaderText, SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -52,7 +51,7 @@ export const content = {
 
 export default defineComponent({
 	name: 'ChatsNewPage',
-	components: { ChatLayout, ChatContent, SofaIcon, SofaNormalText, SofaHeaderText },
+	components: { ChatLayout, ChatContent },
 	routeConfig: { goBackRoute: '/' },
 	setup() {
 		useMeta({

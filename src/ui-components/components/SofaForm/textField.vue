@@ -45,6 +45,7 @@ import { FormRule, Logic } from 'sofa-logic'
 import { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import SofaNormalText from '../SofaTypography/normalText.vue'
+import { formatNumber } from 'valleyed'
 
 export default defineComponent({
 	name: 'SofaTextField',
@@ -139,7 +140,7 @@ export default defineComponent({
 			if (props.type) fieldType.value = props.type
 
 			if (props.isFormatted) {
-				content.value = Logic.Common.formatNumber(parseFloat(content.value), 2)
+				content.value = formatNumber(parseFloat(content.value), 2)
 			}
 		})
 		const validationStatus = ref(true)
@@ -259,7 +260,7 @@ export default defineComponent({
 		watch(content, () => {
 			checkValidation()
 			if (props.isFormatted) {
-				content.value = Logic.Common.formatNumber(parseFloat(content.value), 2)
+				content.value = formatNumber(parseFloat(content.value), 2)
 			}
 		})
 

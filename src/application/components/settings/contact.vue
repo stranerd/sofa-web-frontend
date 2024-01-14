@@ -38,16 +38,9 @@
 <script lang="ts">
 import { FormValidations } from '@app/composables'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaTextarea } from 'sofa-ui-components'
 import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
-	components: {
-		SofaHeaderText,
-		SofaIcon,
-		SofaTextarea,
-		SofaButton,
-	},
 	setup() {
 		const message = ref('')
 

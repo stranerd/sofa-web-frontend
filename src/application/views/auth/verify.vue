@@ -21,17 +21,11 @@
 
 <script lang="ts">
 import { getEmailVerificationEmail, useEmailVerification } from '@app/composables/auth/signin'
-import { SofaButton, SofaNormalText, SofaOtpInput } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'AuthVerifyPage',
-	components: {
-		SofaNormalText,
-		SofaButton,
-		SofaOtpInput,
-	},
 	routeConfig: { middlewares: [() => (getEmailVerificationEmail() ? undefined : '/auth/signin')] },
 	setup() {
 		useMeta({ title: 'Verify your email' })

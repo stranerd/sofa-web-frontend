@@ -59,7 +59,6 @@
 <script lang="ts" setup>
 import { useUserAiUpdate } from '@app/composables/users/profile'
 import { UserEntity } from '@modules/users'
-import { SofaButton, SofaFileInput, SofaHeaderText, SofaIcon, SofaImageLoader, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 
 defineProps<{
 	close: () => void

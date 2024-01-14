@@ -19,7 +19,6 @@ import { useOrganizationModal } from '@app/composables/core/modals'
 import { useDeleteClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { defineProps } from 'vue'
 
 const props = defineProps<{

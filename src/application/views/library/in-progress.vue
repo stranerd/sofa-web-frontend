@@ -25,17 +25,12 @@ import { useMyGames } from '@app/composables/plays/games-list'
 import { useMyTests } from '@app/composables/plays/tests-list'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
-import { SofaEmptyState, SofaProgressItemCard } from 'sofa-ui-components'
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryInProgressPage',
-	components: {
-		LibraryLayout,
-		SofaProgressItemCard,
-		SofaEmptyState,
-	},
+	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

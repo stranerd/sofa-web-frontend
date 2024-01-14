@@ -176,22 +176,12 @@
 import { FormValidations } from '@app/composables'
 import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
 import { Conditions, Logic } from 'sofa-logic'
-import { SofaButton, SofaFileAttachment, SofaHeaderText, SofaIcon, SofaModalOld, SofaNormalText, SofaSelect } from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'
 import AddVideo from './AddVideo.vue'
 
 export default defineComponent({
 	name: 'NewCourseMaterial',
-	components: {
-		SofaIcon,
-		SofaModalOld,
-		SofaNormalText,
-		SofaFileAttachment,
-		AddVideo,
-		SofaHeaderText,
-		SofaSelect,
-		SofaButton,
-	},
+	components: { AddVideo },
 	props: {
 		customClass: {
 			type: String,

@@ -61,7 +61,6 @@ import { useOrganizationModal } from '@app/composables/core/modals'
 import { useManageOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberEntity, MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
-import { SofaAvatar, SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineProps, ref } from 'vue'
 
 const props = defineProps<{

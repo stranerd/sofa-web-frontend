@@ -304,31 +304,9 @@
 import { FormValidations } from '@app/composables'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic, SelectOption, Transaction } from 'sofa-logic'
-import {
-	SofaButton,
-	SofaDeletePrompt,
-	SofaEmptyState,
-	SofaHeaderText,
-	SofaIcon,
-	SofaModalOld,
-	SofaNormalText,
-	SofaSelect,
-	SofaTextField,
-} from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 
 export default defineComponent({
-	components: {
-		SofaHeaderText,
-		SofaIcon,
-		SofaNormalText,
-		SofaEmptyState,
-		SofaModalOld,
-		SofaTextField,
-		SofaButton,
-		SofaSelect,
-		SofaDeletePrompt,
-	},
 	setup() {
 		const UserWallet = ref(Logic.Payment.UserWallet!)
 		const AllTransactions = ref(Logic.Payment.AllTransactions!)

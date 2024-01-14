@@ -286,18 +286,6 @@ import AddVideo from '@app/components/study/courses/AddVideo.vue'
 import NewCourseMaterial from '@app/components/study/courses/NewMaterial.vue'
 import CourseSettings from '@app/components/study/courses/Settings.vue'
 import { Logic } from 'sofa-logic'
-import {
-	SofaButton,
-	SofaCourseDetails,
-	SofaCourseSections,
-	SofaDocumentReader,
-	SofaHeaderText,
-	SofaIcon,
-	SofaImageLoader,
-	SofaModalOld,
-	SofaNormalText,
-	SofaVideoPlayer,
-} from 'sofa-ui-components'
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 
@@ -305,21 +293,7 @@ import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from
 
 export default defineComponent({
 	name: 'CreateCourse',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-		SofaModalOld,
-		SofaCourseSections,
-		SofaHeaderText,
-		SofaCourseDetails,
-		SofaDocumentReader,
-		SofaImageLoader,
-		SofaVideoPlayer,
-		CourseSettings,
-		NewCourseMaterial,
-		AddVideo,
-		SofaButton,
-	},
+	components: { CourseSettings, NewCourseMaterial, AddVideo },
 	routeConfig: {
 		fetchRules: [
 			{

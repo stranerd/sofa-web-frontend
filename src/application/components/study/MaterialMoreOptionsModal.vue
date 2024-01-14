@@ -18,7 +18,6 @@ import { reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { saveToFolder } from '@app/composables/study/folders'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { SofaIcon, SofaNormalText } from 'sofa-ui-components'
 import { computed, defineProps } from 'vue'
 
 const props = defineProps<{

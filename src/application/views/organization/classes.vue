@@ -45,20 +45,11 @@ import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useOrganizationModal } from '@app/composables/core/modals'
 import { useMyClasses } from '@app/composables/organizations/classes'
-import { SofaButton, SofaHeaderText, SofaIcon, SofaNormalText, SofaTextField } from 'sofa-ui-components'
 import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
-	components: {
-		HomeLayout,
-		SofaHeaderText,
-		SofaNormalText,
-		SofaButton,
-		SofaIcon,
-		ClassCard,
-		SofaTextField,
-	},
+	components: { HomeLayout, ClassCard },
 	routeConfig: { goBackRoute: '/', middlewares: ['isOrg'] },
 	setup() {
 		const emptyClassContent = {

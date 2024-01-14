@@ -65,17 +65,9 @@
 <script lang="ts">
 import { extractResource, openQuiz } from '@app/composables/library'
 import { Logic } from 'sofa-logic'
-import { SofaDocumentReader, SofaEmptyState, SofaHeaderText, SofaImageLoader, SofaVideoPlayer } from 'sofa-ui-components'
 import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
-	components: {
-		SofaHeaderText,
-		SofaEmptyState,
-		SofaDocumentReader,
-		SofaImageLoader,
-		SofaVideoPlayer,
-	},
 	props: {
 		isUnlocked: {
 			type: Boolean,

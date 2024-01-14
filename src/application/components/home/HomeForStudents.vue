@@ -81,7 +81,6 @@ import { useHomeTasks } from '@app/composables/home'
 import { extractContent } from '@app/composables/marketplace'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
-import { SofaActivityCard, SofaButton, SofaEmptyState, SofaIcon, SofaIconCard, SofaNormalText } from 'sofa-ui-components'
 import { computed } from 'vue'
 
 const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()

@@ -1,5 +1,5 @@
 import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
-import { valleyed } from '@utils/commons'
+import { capitalize } from 'valleyed'
 import { reactive } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
@@ -9,8 +9,6 @@ import { Review, Tags } from '../types/domains/interactions'
 import { AddReviewInput } from '../types/forms/common'
 import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
-
-const { capitalize } = valleyed
 
 export default class Study extends Common {
 	constructor() {

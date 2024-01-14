@@ -82,7 +82,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import { SofaButton, SofaFileInput, SofaHeaderText, SofaIcon, SofaImageLoader, SofaTextField, SofaTextarea } from 'sofa-ui-components'
 import { watch } from 'vue'
 import AccountSetup from '../onboarding/AccountSetup.vue'
 

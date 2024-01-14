@@ -24,14 +24,9 @@
 </template>
 
 <script lang="ts">
-import { SofaAvatar, SofaNormalText } from 'sofa-ui-components'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-	components: {
-		SofaNormalText,
-		SofaAvatar,
-	},
 	props: {
 		chat: {
 			type: Object as () => {

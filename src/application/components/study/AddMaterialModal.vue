@@ -28,8 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SofaHeaderText, SofaIcon, SofaIconCard, SofaNormalText } from 'sofa-ui-components'
-
 defineProps<{
 	close: () => void
 }>()
