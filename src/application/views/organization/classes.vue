@@ -43,7 +43,7 @@
 import HomeLayout from '@app/components/home/HomeLayout.vue'
 import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useOrganizationModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { useMyClasses } from '@app/composables/organizations/classes'
 import { computed, defineComponent, ref } from 'vue'
 
@@ -72,7 +72,7 @@ export default defineComponent({
 			else return classes.value
 		})
 
-		const createClass = () => useOrganizationModal().createClass.open({ organizationId: organizationId.value })
+		const createClass = () => useModals().organizations.createClass.open({ organizationId: organizationId.value })
 
 		return {
 			emptyClassContent,

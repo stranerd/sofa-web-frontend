@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useOrganizationModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
 import { pluralize } from 'valleyed'
 import { Logic } from 'sofa-logic'
@@ -37,5 +37,5 @@ import { defineProps } from 'vue'
 
 const props = defineProps<{ classObj: ClassEntity }>()
 
-const moreOptionsHandler = (e: Event) => useOrganizationModal().classCardMoreOptions.open({ classInst: props.classObj }, e)
+const moreOptionsHandler = (e: Event) => useModals().organizations.classCardMoreOptions.open({ classInst: props.classObj }, e)
 </script>

@@ -13,30 +13,25 @@ import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 
-export const useConversationModal = () =>
-	modal.register('Conversation', {
+export const useModals = () => ({
+	conversations: modal.register('Conversation', {
 		addTutor: { component: AddTutor },
-	})
-
-export const useOrganizationModal = () =>
-	modal.register('Organization', {
+	}),
+	organizations: modal.register('Organization', {
 		addMember: { component: AddMember },
 		createClass: { component: CreateClass },
 		editClass: { component: EditClass },
 		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
-	})
-
-export const useStudyModal = () =>
-	modal.register('Study', {
+	}),
+	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
 		chooseStudyMode: { component: ChooseStudyMode, modalArgs: { closeOnClickOutside: true } },
 		materialMoreOptions: { component: MaterialMoreOptions, modalArgs: { popover: true } },
 		manageAccess: { component: ManageAccess },
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
-	})
-
-export const useUserModal = () =>
-	modal.register('User', {
+	}),
+	users: modal.register('User', {
 		customizeAi: { component: CustomizeAi },
-	})
+	}),
+})

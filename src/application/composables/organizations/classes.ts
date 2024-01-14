@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useOrganizationModal } from '../core/modals'
+import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 
 const store = {
@@ -82,7 +82,7 @@ export const useCreateClass = (organizationId: string) => {
 	} = useAsyncFn(async () => {
 		const classInst = await ClassesUseCases.add(organizationId, factory)
 		factory.reset()
-		useOrganizationModal().createClass.close()
+		useModals().organizations.createClass.close()
 		await router.push(classInst.pageLink)
 		return true
 	})
@@ -103,7 +103,7 @@ export const useUpdateClass = (organizationId: string, classInst: ClassEntity) =
 		await ClassesUseCases.update(organizationId, classInst.id, factory)
 		setMessage('Class updated successfully')
 		factory.reset()
-		useOrganizationModal().editClass.close()
+		useModals().organizations.editClass.close()
 		return true
 	})
 

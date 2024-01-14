@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useOrganizationModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { useDeleteClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
@@ -33,7 +33,7 @@ const moreOptions = [
 		icon: 'edit-option',
 		title: 'Edit',
 		action: () => {
-			useOrganizationModal().editClass.open({
+			useModals().organizations.editClass.open({
 				organizationId: props.classInst.organizationId,
 				classInst: props.classInst,
 			})

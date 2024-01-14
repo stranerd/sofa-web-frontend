@@ -172,7 +172,7 @@
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
-import { useOrganizationModal, useUserModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import { computed, defineProps } from 'vue'
@@ -201,15 +201,15 @@ const { id, user, userAi, userType } = useAuth()
 const { conversations } = useConversationsList()
 const { factory, createConversation } = useCreateConversation()
 
-const customizeAi = () => useUserModal().customizeAi.open({})
+const customizeAi = () => useModals().users.customizeAi.open({})
 
 const rightCommands = computed(() => [
-	{ label: 'Add a student', action: () => useOrganizationModal().addMember.open({ type: MemberTypes.student, org: user.value! }) },
-	{ label: 'Add a teacher', action: () => useOrganizationModal().addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
+	{ label: 'Add a student', action: () => useModals().organizations.addMember.open({ type: MemberTypes.student, org: user.value! }) },
+	{ label: 'Add a teacher', action: () => useModals().organizations.addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
 	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
 	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
 	...(userType.value.isOrg
-		? [{ label: 'Create a class', action: () => useOrganizationModal().createClass.open({ organizationId: id.value }) }]
+		? [{ label: 'Create a class', action: () => useModals().organizations.createClass.open({ organizationId: id.value }) }]
 		: []),
 ])
 

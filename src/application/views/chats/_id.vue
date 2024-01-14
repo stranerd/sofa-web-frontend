@@ -181,7 +181,7 @@ import ConversationMessages from '@app/components/conversations/Messages.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
 import { useCreateMessage } from '@app/composables/conversations/messages'
-import { useConversationModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { Logic } from 'sofa-logic'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -229,7 +229,7 @@ export default defineComponent({
 
 		const onClickAddTutor = async () => {
 			showMoreOptions.value = false
-			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0) return useConversationModal().addTutor.open({})
+			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0) return useModals().conversations.addTutor.open({})
 			if (wallet.value?.subscription.active)
 				return await Logic.Common.confirm({
 					title: 'You have run out of tutor aided conversations',

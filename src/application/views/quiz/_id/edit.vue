@@ -290,7 +290,7 @@ import EditQuestionsList from '@app/components/study/quizzes/EditQuestionsList.v
 import QuizForm from '@app/components/study/quizzes/QuizForm.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
-import { useStudyModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { defineComponent, ref } from 'vue'
@@ -324,7 +324,7 @@ export default defineComponent({
 			if (status) showSettingModal.value = false
 		}
 
-		const openAccessModal = useStudyModal().manageAccess.open
+		const openAccessModal = useModals().study.manageAccess.open
 
 		const handleMobileGoback = () => {
 			if (showSettingModal.value) showSettingModal.value = false

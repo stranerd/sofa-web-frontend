@@ -140,7 +140,7 @@
 
 <script lang="ts">
 import { useAuth } from '@app/composables/auth/auth'
-import { useOrganizationModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { extractResource } from '@app/composables/library'
 import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
@@ -168,7 +168,7 @@ export default defineComponent({
 			if (!query) return materials.value
 			return materials.value.filter((item) => [item.title].some((v) => v.toLowerCase().includes(query)))
 		})
-		const joinOrgHandler = () => useOrganizationModal().joinOrganization.open({ org: user.value! })
+		const joinOrgHandler = () => useModals().organizations.joinOrganization.open({ org: user.value! })
 
 		const searchQuery = ref('')
 

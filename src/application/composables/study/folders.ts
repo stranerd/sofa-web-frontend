@@ -5,11 +5,11 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useStudyModal } from '../core/modals'
+import { useModals } from '../core/modals'
 import { addToArray, getRandomValue } from 'valleyed'
 
 export const saveToFolder = (item: CourseEntity | QuizEntity) => {
-	useStudyModal().saveToFolder.open({
+	useModals().study.saveToFolder.open({
 		id: item.id,
 		type: item.isCourse() ? FolderSaved.courses : FolderSaved.quizzes,
 	})

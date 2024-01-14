@@ -4,7 +4,7 @@ import { addToArray, v } from 'valleyed'
 import { computed, onMounted, onUnmounted, reactive, Ref, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useOrganizationModal } from '../core/modals'
+import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 
 const store = {} as Record<
@@ -98,7 +98,7 @@ export const useManageOrganizationMembers = (id: string) => {
 		await MembersUseCases.add({ organizationId: id, emails, type })
 		await setMessage('Members added')
 		addMembersEmails.value = ''
-		useOrganizationModal().addMember.close()
+		useModals().organizations.addMember.close()
 	})
 
 	const {

@@ -1,7 +1,7 @@
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Game, Logic, PlayStatus, ResourceType, Test } from 'sofa-logic'
 import { capitalize, reactive, ref } from 'vue'
-import { useStudyModal } from './core/modals'
+import { useModals } from './core/modals'
 
 const showStudyMode = ref(false)
 
@@ -120,7 +120,7 @@ const openQuiz = (activity: ResourceType, force = false) => {
 	const original = activity.original as QuizEntity
 	if (!force && ((activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
 		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
-	useStudyModal().chooseStudyMode.open({ quiz: original })
+	useModals().study.chooseStudyMode.open({ quiz: original })
 }
 
 const openCourse = (activity: ResourceType) => {

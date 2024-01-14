@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useOrganizationModal } from '@app/composables/core/modals'
+import { useModals } from '@app/composables/core/modals'
 import { useManageOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberEntity, MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
@@ -72,7 +72,7 @@ const props = defineProps<{
 }>()
 
 const { removeMember, acceptMember } = useManageOrganizationMembers(props.org.id)
-const add = () => useOrganizationModal().addMember.open({ org: props.org, type: props.type })
+const add = () => useModals().organizations.addMember.open({ org: props.org, type: props.type })
 
 const label = computed(() => (props.type === MemberTypes.student ? 'students' : 'teachers'))
 

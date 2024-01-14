@@ -4,14 +4,14 @@ import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useMyPurchases } from '../payment/purchases'
-import { useStudyModal } from '../core/modals'
+import { useModals } from '../core/modals'
 
 export const handleShowAddMaterial = () => {
-	useStudyModal().addMaterial.open({})
+	useModals().study.addMaterial.open({})
 }
 
 export const handleShowMaterialMoreOptions = (data: ResourceType) => {
-	useStudyModal().materialMoreOptions.open({ material: data.original })
+	useModals().study.materialMoreOptions.open({ material: data.original })
 }
 
 const store: Record<
