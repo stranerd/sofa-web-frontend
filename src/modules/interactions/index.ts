@@ -4,6 +4,7 @@ import { ReportRepository } from './data/repositories/reports'
 import { ReviewRepository } from './data/repositories/reviews'
 import { TagRepository } from './data/repositories/tags'
 import { ViewRepository } from './data/repositories/views'
+import { InteractionEntities } from './domain/types'
 import { CommentsUseCase } from './domain/usecases/comments'
 import { LikesUseCase } from './domain/usecases/likes'
 import { ReportsUseCase } from './domain/usecases/reports'
@@ -30,3 +31,12 @@ export { ReviewFactory } from './domain/factories/reviews'
 export { TagFactory } from './domain/factories/tags'
 export { InteractionEntities, TagTypes } from './domain/types'
 export type { Interaction, InteractionEntity } from './domain/types'
+
+export const singulars = {
+	[InteractionEntities.comments]: 'comment',
+	[InteractionEntities.conversations]: 'conversation',
+	[InteractionEntities.courses]: 'course',
+	[InteractionEntities.quizQuestions]: 'question',
+	[InteractionEntities.quizzes]: 'quiz',
+	[InteractionEntities.users]: 'user',
+}

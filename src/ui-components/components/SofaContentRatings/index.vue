@@ -12,7 +12,7 @@
 						</sofa-normal-text>
 						<sofa-normal-text :custom-class="'mdlg:!text-xl  !text-lg'" :color="'text-grayColor'"> /5 </sofa-normal-text>
 					</div>
-					<sofa-ratings :count="data.avg" :size="'h-[15px] mdlg:!h-[17px]'" />
+					<sofa-ratings v-model="data.avg" :size="'h-[15px] mdlg:!h-[17px]'" />
 
 					<sofa-normal-text :color="'text-grayColor'">
 						{{ data.label }}
@@ -54,7 +54,7 @@
 
 			<div class="flex flex-col gap-1">
 				<sofa-normal-text :custom-class="'!font-semibold'">{{ review.user.name }}</sofa-normal-text>
-				<sofa-ratings :count="review.rating" :size="'h-[14px] mdlg:!h-[16px]'" />
+				<sofa-ratings v-model="review.rating" :size="'h-[14px] mdlg:!h-[16px]'" />
 				<sofa-normal-text :custom-class="'text-left'">
 					{{ review.review }}
 				</sofa-normal-text>

@@ -75,7 +75,7 @@
 
 			<div v-if="conversation.user.id === id" class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<a
-					v-if="conversation.tutor && conversation.accepted?.is && !conversation.ended"
+					v-if="conversation.isActive"
 					class="w-full flex items-center justify-start gap-2 text-primaryRed"
 					@click="onClickEndSession">
 					<sofa-icon :custom-class="'h-[16px] fill-current'" :name="'tutor'" />
@@ -103,19 +103,10 @@
 				</div>
 			</template>
 		</template>
-
-		<!-- Rate and review modal -->
-		<RateAndReviewModal
-			v-if="showRateAndReviewTutor && conversation && conversation.tutor"
-			:close="() => (showRateAndReviewTutor = false)"
-			title="Session ended, rate tutor"
-			:tutor="{ name: conversation.tutor.bio.name.full, photo: conversation.tutor.bio.photo?.link }"
-			@on-review-submitted="(data) => end({ rating: data.ratings, message: data.review })" />
 	</ChatLayout>
 </template>
 
 <script lang="ts">
-import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import ConversationMessages from '@app/components/conversations/Messages.vue'
@@ -123,19 +114,15 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
 import { useCreateMessage } from '@app/composables/conversations/messages'
 import { useModals } from '@app/composables/core/modals'
+import { InteractionEntities } from '@modules/interactions'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'ChatsIdPage',
-	components: {
-		ChatLayout,
-		ChatContent,
-		RateAndReviewModal,
-		ConversationMessages,
-	},
+	components: { ChatLayout, ChatContent, ConversationMessages },
 	routeConfig: { goBackRoute: '/chats' },
 	setup() {
 		useMeta({
@@ -162,8 +149,6 @@ export default defineComponent({
 			else res.push({ name: userAi.value.name, photo: userAi.value.image })
 			return res
 		})
-
-		const showRateAndReviewTutor = ref(false)
 
 		const showMoreOptions = () =>
 			useModals().conversations.conversationMoreOptions.open({
@@ -198,17 +183,25 @@ export default defineComponent({
 				right: { label: 'Subscribe', bg: 'bg-primaryBlue' },
 				left: { label: 'Cancel' },
 			})
-			if (confirmed) await Logic.Common.GoToRoute('/settings/subscription')
-			return confirmed
+			if (!confirmed) return
+			await Logic.Common.GoToRoute('/settings/subscription')
 		}
 
 		const onClickEndSession = async () => {
+			if (!conversation.value) return
 			const confirmed = await Logic.Common.confirm({
 				title: 'End session with tutor?',
 				sub: 'Are you sure you want to end this session? The tutor will be removed from this chat',
 				right: { label: 'End session' },
 			})
-			if (confirmed) showRateAndReviewTutor.value = true
+			if (!confirmed) return
+			useModals().interactions.createReview.open({
+				conversation: conversation.value,
+				id: conversation.value.id,
+				type: InteractionEntities.conversations,
+				title: 'Session ended, rate this tutor',
+				submit: end,
+			})
 		}
 
 		return {
@@ -223,7 +216,6 @@ export default defineComponent({
 			otherUsers,
 			showMoreOptions,
 			onClickAddTutor,
-			showRateAndReviewTutor,
 			showAddTutorConfirmation,
 			onClickEndSession,
 			end,

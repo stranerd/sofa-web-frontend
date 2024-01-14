@@ -24,9 +24,9 @@
 
 		<div class="w-full flex flex-col gap-3">
 			<div class="flex flex-row gap-1 items-center">
-				<sofa-ratings :count="4" :size="'h-[14px] mdlg:!h-[15px]'" />
-				<sofa-normal-text> {{ 4 }}.0 </sofa-normal-text>
-				<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ '24 ratings' }}) </sofa-normal-text>
+				<sofa-ratings v-model="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
+				<sofa-normal-text>{{ data.ratings.avg }}</sofa-normal-text>
+				<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ data.ratings.count }} ratings) </sofa-normal-text>
 			</div>
 
 			<div class="w-full flex flex-row items-center">

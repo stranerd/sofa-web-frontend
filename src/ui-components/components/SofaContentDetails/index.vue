@@ -48,11 +48,11 @@
 
 					<div v-if="!isMinimal" class="w-full flex flex-row gap-2 items-center">
 						<div class="flex flex-row gap-1 items-center">
-							<sofa-ratings :count="content.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
+							<sofa-ratings v-model="content.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
 							<sofa-normal-text>
 								{{ content.ratings.avg }}
 							</sofa-normal-text>
-							<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ content.ratings.label }}) </sofa-normal-text>
+							<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ content.ratings.count }} ratings) </sofa-normal-text>
 						</div>
 					</div>
 

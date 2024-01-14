@@ -90,6 +90,7 @@ export const useConversation = (id: string) => {
 		await ConversationsUseCases.end(id, reviewData)
 		await setMessage('Conversation has ended')
 		await router.push('/chats')
+		return true
 	})
 	const {
 		asyncFn: deleteConv,

@@ -13,15 +13,18 @@
 			v-model="factory.message"
 			padding="p-4"
 			placeholder="Why are you reporting this?"
-			text-area-style="!bg-lightGray rounded-custom" />
+			text-area-style="!bg-lightGray rounded-custom"
+			:error="factory.errors.message" />
 
-		<SofaButton padding="px-5 py-3" class="self-center w-full mdlg:w-auto">Submit</SofaButton>
+		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">
+			Submit
+		</SofaButton>
 	</form>
 </template>
 
 <script lang="ts" setup>
 import { useCreateReport } from '@app/composables/interactions/reports'
-import { Interaction, InteractionEntities } from '@modules/interactions'
+import { Interaction, singulars } from '@modules/interactions'
 import { computed } from 'vue'
 
 const props = defineProps<
@@ -31,15 +34,6 @@ const props = defineProps<
 		title?: string
 	}
 >()
-
-const singulars = {
-	[InteractionEntities.comments]: 'comment',
-	[InteractionEntities.conversations]: 'conversation',
-	[InteractionEntities.courses]: 'course',
-	[InteractionEntities.quizQuestions]: 'question',
-	[InteractionEntities.quizzes]: 'quiz',
-	[InteractionEntities.users]: 'user',
-}
 
 const modTitle = computed(() => props.title ?? `Report this ${singulars[props.type] ?? props.type}`)
 

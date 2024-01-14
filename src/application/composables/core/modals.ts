@@ -4,6 +4,7 @@ import AddTutor from '@app/components/conversations/AddTutorModal.vue'
 import AddTutorConfirmation from '@app/components/conversations/AddTutorConfirmationModal.vue'
 import ConversationMoreOptions from '@app/components/conversations/ConversationMoreOptionsModal.vue'
 import CreateReport from '@app/components/interactions/reports/CreateReportModal.vue'
+import CreateReview from '@app/components/interactions/reviews/CreateReviewModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
@@ -27,6 +28,7 @@ export const useModals = () => ({
 	}),
 	interactions: modal.register('Interactions', {
 		createReport: { component: CreateReport, modalArgs: { closeOnClickOutside: true } },
+		createReview: { component: CreateReview, modalArgs: { closeOnClickOutside: true } },
 	}),
 	organizations: modal.register('Organizations', {
 		addMember: { component: AddMember },

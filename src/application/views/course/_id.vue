@@ -13,7 +13,7 @@
 							</sofa-header-text>
 
 							<div v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id">
-								<sofa-button :custom-class="''" :padding="'px-4 py-1'" @click="showRateCourse = true">Rate</sofa-button>
+								<sofa-button :custom-class="''" :padding="'px-4 py-1'" @click="showRateCourse">Rate</sofa-button>
 							</div>
 						</div>
 
@@ -241,33 +241,27 @@
 			<span class="absolute bottom-[3%] right-[2%] z-[1000] flex flex-row items-center justify-center h-[70px] w-[70px]">
 				<span
 					class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
-					@click="showRateCourse = true">
+					@click="showRateCourse">
 					<sofa-icon :name="'star-white'" :custom-class="'h-[15px]'"></sofa-icon>
 					<sofa-normal-text :color="'text-white'"> Rate </sofa-normal-text>
 				</span>
 			</span>
 		</Teleport>
-
-		<!-- Rate course -->
-		<rate-and-review-modal
-			v-if="showRateCourse"
-			:close="() => (showRateCourse = false)"
-			:can-close="true"
-			:title="'Rate this course'"
-			@on-review-submitted="rateCourse" />
 	</expanded-layout>
 </template>
+
 <script lang="ts">
-import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
 import CourseContent from '@app/components/study/courses/content.vue'
+import { useModals } from '@app/composables/core/modals'
 import { useHasAccess } from '@app/composables/study'
+import { InteractionEntities } from '@modules/interactions'
 import { Conditions, Logic } from 'sofa-logic'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',
-	components: { CourseContent, RateAndReviewModal },
+	components: { CourseContent },
 	routeConfig: {
 		fetchRules: [
 			{
@@ -347,8 +341,6 @@ export default defineComponent({
 
 		const showCourseInfo = ref(false)
 
-		const showRateCourse = ref(false)
-
 		const { hasAccess: isUnlocked } = useHasAccess()
 
 		const handleItemSelected = (data: any) => {
@@ -395,47 +387,11 @@ export default defineComponent({
 			}
 		}
 
-		const otherTasks = [
-			{
-				title: 'Practice',
-				subTitle: 'Interactive and comfortable learning',
-				icon: 'learn-quiz',
-				iconSize: 'h-[46px]',
-				key: 'practice',
-				isDone: false,
-			},
-			{
-				title: 'Test',
-				subTitle: 'Evaluate your level of knowledge',
-				icon: 'test',
-				iconSize: 'h-[46px]',
-				key: 'test',
-				isDone: false,
-			},
-			{
-				title: 'Flashcards',
-				subTitle: 'Digital cards to memorize answers',
-				icon: 'study-flashcard',
-				iconSize: 'h-[46px]',
-				key: 'flashcard',
-				isDone: false,
-			},
-		]
-
-		const rateCourse = (data: any) => {
-			Logic.Study.AddReviewForm = {
-				entity: {
-					id: SingleCourse.value?.id ?? '',
-					type: 'courses',
-				},
-				message: data.review,
-				rating: data.ratings,
-			}
-
-			Logic.Study.AddReview()?.then(() => {
-				//
+		const showRateCourse = () =>
+			useModals().interactions.createReview.open({
+				id: SingleCourse.value?.id ?? '',
+				type: InteractionEntities.courses,
 			})
-		}
 
 		const buyCourse = () => {
 			if (Logic.Common.loaderSetup.loading || !SingleCourse.value) return
@@ -489,7 +445,6 @@ export default defineComponent({
 			handleItemSelected,
 			showCourseContent,
 			showCourseInfo,
-			otherTasks,
 			buyCourse,
 			isUnlocked,
 			PaymentMethods,
@@ -501,7 +456,6 @@ export default defineComponent({
 			CourseReview,
 			handleCourseContentSet,
 			selectItem,
-			rateCourse,
 		}
 	},
 })
