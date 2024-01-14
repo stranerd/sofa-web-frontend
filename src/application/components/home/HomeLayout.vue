@@ -175,21 +175,19 @@ import { useConversationsList, useCreateConversation } from '@app/composables/co
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { formatNumber } from 'valleyed'
 
-const props = defineProps({
-	title: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		title: string
+		index: boolean
+	}>(),
+	{
+		index: false,
 	},
-	index: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-})
+)
 
 useMeta(
 	computed(() => ({

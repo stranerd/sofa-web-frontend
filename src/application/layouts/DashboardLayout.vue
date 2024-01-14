@@ -33,48 +33,37 @@
 			<slot name="right-session" />
 		</div>
 	</div>
-	<SofaBottomBar v-if="!hide.bottom" :show-add-item="handleShowAddMaterial" />
+	<SofaBottomBar v-if="!hide.bottom" />
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue'
-import { handleShowAddMaterial } from '../composables/study'
-
-defineProps({
-	topbarOptions: {
-		type: Object as () => Partial<{
-			type?: string
+withDefaults(
+	defineProps<{
+		topbarOptions?: Partial<{
+			type: string
 			title: string
-			actions?: any[]
-			badges?: {
+			actions: any[]
+			badges: {
 				text: string
 				color: string
 			}[]
-		}>,
-		default: () => {
-			return {
-				type: 'main',
-				title: '',
-				actions: [],
-				badges: [],
-			}
-		},
+		}>
+		hide?: Partial<{ top?: boolean; bottom?: boolean; left?: boolean; right?: boolean }>
+		bgColor?: string
+		wrap?: boolean
+		noBottomPadding?: boolean
+	}>(),
+	{
+		topbarOptions: () => ({
+			type: 'main',
+			title: '',
+			actions: [],
+			badges: [],
+		}),
+		hide: () => ({ top: false, bottom: false, left: false, right: false }),
+		bgColor: '',
+		wrap: false,
+		noBottomPadding: false,
 	},
-	hide: {
-		type: Object as () => Partial<{ top?: boolean; bottom?: boolean; left?: boolean; right?: boolean }>,
-		default: () => ({ top: false, bottom: false, left: false, right: false }),
-	},
-	bgColor: {
-		type: String,
-		default: '',
-	},
-	wrap: {
-		type: Boolean,
-		default: false,
-	},
-	noBottomPadding: {
-		type: Boolean,
-		default: false,
-	},
-})
+)
 </script>

@@ -10,43 +10,32 @@
 		:style="bgImage ? `background-image: url(${bgImage})` : ''">
 		<slot />
 	</div>
-	<SofaBottomBar v-if="!hide.bottom" :show-add-item="handleShowAddMaterial" />
+	<SofaBottomBar v-if="!hide.bottom" />
 </template>
 
 <script lang="ts" setup>
-import { PropType, defineProps } from 'vue'
-import { handleShowAddMaterial } from '../composables/study'
-
-defineProps({
-	topbarOptions: {
-		type: Object as () => Partial<{
-			type?: string
-			title?: string
-			actions?: any[]
-		}>,
-		default: () => {
-			return {
-				type: 'main',
-				title: '',
-				actions: [],
-			}
-		},
+withDefaults(
+	defineProps<{
+		topbarOptions?: Partial<{
+			type: string
+			title: string
+			actions: any[]
+		}>
+		width?: string
+		layoutStyle?: string
+		hide?: Partial<{ top?: boolean; bottom?: boolean }>
+		bgImage?: string
+	}>(),
+	{
+		topbarOptions: () => ({
+			type: 'main',
+			title: '',
+			actions: [],
+		}),
+		width: '',
+		layoutStyle: '',
+		hide: () => ({ top: false, bottom: false }),
+		bgImage: '',
 	},
-	width: {
-		type: String,
-		default: '',
-	},
-	layoutStyle: {
-		type: String,
-		default: '',
-	},
-	hide: {
-		type: Object as PropType<Partial<{ top?: boolean; bottom?: boolean }>>,
-		default: () => ({ top: false, bottom: false }),
-	},
-	bgImage: {
-		type: String,
-		default: '',
-	},
-})
+)
 </script>

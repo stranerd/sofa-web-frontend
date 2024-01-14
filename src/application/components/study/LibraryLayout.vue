@@ -179,7 +179,7 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { Logic } from 'sofa-logic'
-import { PropType, computed, defineProps } from 'vue'
+import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
@@ -274,22 +274,17 @@ const libraryOptions = computed(() => [
 	},
 ])
 
-const props = defineProps({
-	title: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		title: string
+		index: boolean
+		options: { name: string; id: string; hide?: boolean }[]
+	}>(),
+	{
+		index: false,
+		options: undefined,
 	},
-	index: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	options: {
-		type: Array as PropType<{ name: string; id: string; hide?: boolean }[]>,
-		required: false,
-		default: null,
-	},
-})
+)
 
 const route = useRoute()
 const currentTab = computed(() => route.query.tab as string | undefined)

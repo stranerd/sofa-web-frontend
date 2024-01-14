@@ -4,7 +4,7 @@
 			v-for="tab in [
 				{ path: '/', icon: 'home' },
 				{ path: '/chats', icon: 'chat' },
-				{ name: 'showAddItem', icon: 'plus-white', onClick: showAddItem },
+				{ name: 'showAddItem', icon: 'plus-white', onClick: handleShowAddMaterial },
 				{ path: '/marketplace', icon: 'marketplace' },
 				{ path: '/library', icon: 'library' },
 			]"
@@ -28,14 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue'
 import { Logic } from 'sofa-logic'
 import SofaIcon from '../SofaIcon/index.vue'
-
-defineProps({
-	showAddItem: {
-		type: Function,
-		required: true,
-	},
-})
+import { handleShowAddMaterial } from '@app/composables/study'
 </script>

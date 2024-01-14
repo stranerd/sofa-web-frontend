@@ -6,30 +6,22 @@
 import { useAuth } from '@app/composables/auth/auth'
 import { useGame } from '@app/composables/plays/games'
 import { formatNumber } from 'valleyed'
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-const props = defineProps({
-	id: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		id: string
+		skipQuestions: boolean
+		skipParticipants: boolean
+		skipStatusNav: boolean
+	}>(),
+	{
+		skipQuestions: false,
+		skipParticipants: false,
+		skipStatusNav: false,
 	},
-	skipQuestions: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	skipParticipants: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	skipStatusNav: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-})
+)
 
 const router = useRouter()
 const { game, participants, questions, fetched, answer, start, end, join, submitAnswer } = useGame(props.id, {

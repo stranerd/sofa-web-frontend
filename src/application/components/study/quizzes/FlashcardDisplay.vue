@@ -15,18 +15,12 @@
 
 <script lang="ts" setup>
 import { QuestionEntity } from '@modules/study'
-import { PropType, defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
-defineProps({
-	question: {
-		type: Object as PropType<QuestionEntity>,
-		required: true,
-	},
-	isDark: {
-		type: Boolean,
-		required: true,
-	},
-})
+defineProps<{
+	question: QuestionEntity
+	isDark: boolean
+}>()
 
 const showAnswer = ref(false)
 </script>

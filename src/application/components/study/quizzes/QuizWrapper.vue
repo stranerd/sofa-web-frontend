@@ -10,51 +10,31 @@ import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { PropType, computed, defineProps, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import QuestionDisplay from './QuestionDisplay.vue'
 
-const props = defineProps({
-	id: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		id: string
+		selectedQuestion: string
+		questions: QuestionEntity[]
+		showAnswer: boolean
+		isAnswerRight: boolean
+		useTimer: boolean
+		submit: (data?: { questionId: string; answer: any }) => Promise<boolean | undefined>
+		skipMembers: boolean
+	}>(),
+	{
+		selectedQuestion: '',
+		questions: undefined,
+		showAnswer: false,
+		isAnswerRight: false,
+		useTimer: false,
+		submit: undefined,
+		skipMembers: true,
 	},
-	selectedQuestion: {
-		type: String,
-		required: false,
-		default: '',
-	},
-	questions: {
-		type: Array as PropType<QuestionEntity[]>,
-		required: false,
-		default: null,
-	},
-	showAnswer: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	isAnswerRight: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	useTimer: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	submit: {
-		type: Function as PropType<(data?: { questionId: string; answer: any }) => Promise<boolean | undefined>>,
-		required: false,
-		default: null,
-	},
-	skipMembers: {
-		type: Boolean,
-		required: false,
-		default: true,
-	},
-})
+)
 
 const router = useRouter()
 const route = useRoute()

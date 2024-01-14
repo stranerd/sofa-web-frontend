@@ -23,37 +23,27 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType } from 'vue'
 import SofaButton from '../SofaButton'
 import SofaModal from '../SofaModal'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
-defineProps({
-	close: {
-		type: Function,
-		required: true,
+withDefaults(
+	defineProps<{
+		close: () => void
+		title?: string
+		subTitle?: string
+		buttons: {
+			label: string
+			hide?: boolean
+			bgColor?: string
+			textColor?: string
+			isClose?: boolean
+			action: () => void
+		}[]
+	}>(),
+	{
+		title: '',
+		subTitle: '',
 	},
-	title: {
-		type: String,
-		default: '',
-	},
-	subTitle: {
-		type: String,
-		default: '',
-	},
-	buttons: {
-		type: Array as PropType<
-			{
-				label: string
-				hide?: boolean
-				bgColor?: string
-				textColor?: string
-				isClose?: boolean
-				action: () => void
-			}[]
-		>,
-		required: true,
-	},
-})
+)
 </script>
-../SofaModal

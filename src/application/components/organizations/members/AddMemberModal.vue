@@ -44,7 +44,6 @@ import { useManageOrganizationMembers } from '@app/composables/organizations/mem
 import { MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { defineProps } from 'vue'
 
 const props = defineProps<{
 	org: UserEntity

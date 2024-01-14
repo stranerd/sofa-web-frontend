@@ -184,27 +184,15 @@
 <script lang="ts" setup>
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PropType, defineProps, reactive, watch } from 'vue'
+import { reactive, watch } from 'vue'
 import Draggable from 'vuedraggable'
 
-const props = defineProps({
-	question: {
-		type: Object as PropType<QuestionEntity>,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	optionState: {
-		type: Function as PropType<(val: boolean | string, index?: number) => 'selected' | 'right' | 'wrong' | null>,
-		required: true,
-	},
-	isDark: {
-		type: Boolean,
-		required: true,
-	},
-})
+const props = defineProps<{
+	question: QuestionEntity
+	title: string
+	optionState: (val: boolean | string, index?: number) => 'selected' | 'right' | 'wrong' | null
+	isDark: boolean
+}>()
 
 const model = defineModel<any>()
 

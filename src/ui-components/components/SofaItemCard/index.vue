@@ -47,48 +47,25 @@
 		</div>
 	</component>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { Logic, ResourceType } from 'sofa-logic'
-import { defineComponent, PropType } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
-import SofaButton from '../SofaButton'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'
 
-export default defineComponent({
-	name: 'SofaItemCard',
-	components: {
-		SofaIcon,
-		SofaImageLoader,
-		SofaNormalText,
-		SofaBadge,
-		SofaButton,
-		SofaAvatar,
+withDefaults(
+	defineProps<{
+		customClass: string
+		content: ResourceType
+		bookmarkAction: () => void
+		as: string
+	}>(),
+	{
+		customClass: 'border-2 rounded-[16px] border-darkLightGray',
+		as: 'div',
+		bookmarkAction: undefined,
 	},
-	props: {
-		customClass: {
-			type: String,
-			default: 'border-2 rounded-[16px] border-darkLightGray',
-		},
-		content: {
-			type: Object as PropType<ResourceType>,
-			required: true,
-		},
-		bookmarkAction: {
-			type: Function,
-			default: null,
-		},
-		as: {
-			type: String,
-			default: 'div',
-		},
-	},
-	setup() {
-		return {
-			Logic,
-		}
-	},
-})
+)
 </script>

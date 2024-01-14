@@ -31,34 +31,25 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { Logic } from 'sofa-logic'
-import { PropType, defineComponent } from 'vue'
+<script lang="ts" setup>
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'
 
-export default defineComponent({
-	name: 'SofaProgressItemCard',
-	components: {
-		SofaIcon,
-		SofaImageLoader,
-		SofaNormalText,
-	},
-	props: {
-		customClass: {
-			type: String,
-			default: '',
-		},
+withDefaults(
+	defineProps<{
+		customClass?: string
 		content: {
-			type: Object as PropType<any>,
-			required: true,
-		},
-	},
-	setup() {
-		return {
-			Logic,
+			image: string
+			title: string
+			type: string
+			label: string
+			label_color: string
+			participants: number
 		}
+	}>(),
+	{
+		customClass: '',
 	},
-})
+)
 </script>

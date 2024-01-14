@@ -39,14 +39,10 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useMessages } from '@app/composables/conversations/messages'
 import { ChatScroll as vChatScroll } from '@app/directives/chat-scroll'
 import { ConversationEntity } from '@modules/conversations'
-import { PropType, defineProps } from 'vue'
 
-const props = defineProps({
-	conversation: {
-		type: Object as PropType<ConversationEntity>,
-		required: true,
-	},
-})
+const props = defineProps<{
+	conversation: ConversationEntity
+}>()
 
 const { id } = useAuth()
 const { messages, users, hasMore, fetchOlderMessages } = useMessages(props.conversation)

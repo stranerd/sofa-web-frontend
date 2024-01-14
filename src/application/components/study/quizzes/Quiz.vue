@@ -73,7 +73,7 @@
 import QuestionDisplay from '@app/components/study/quizzes/QuestionDisplay.vue'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PropType, computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
 type ButtonConfig = {
 	label: string
@@ -83,44 +83,24 @@ type ButtonConfig = {
 	click: () => void
 }
 
-const props = defineProps({
-	index: {
-		type: Number,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		index: number
+		questions: QuestionEntity[]
+		isDark: boolean
+		title: string
+		rightButton: ButtonConfig | null
+		leftButton: ButtonConfig | null
+		optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
+		showCounter: boolean
+	}>(),
+	{
+		isDark: false,
+		rightButton: null,
+		leftButton: null,
+		showCounter: true,
 	},
-	questions: {
-		type: Array as PropType<QuestionEntity[]>,
-		required: true,
-	},
-	isDark: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	rightButton: {
-		type: Object as PropType<ButtonConfig>,
-		required: false,
-		default: null,
-	},
-	leftButton: {
-		type: Object as PropType<ButtonConfig>,
-		required: false,
-		default: null,
-	},
-	optionState: {
-		type: Function as PropType<InstanceType<typeof QuestionDisplay>['$props']['optionState']>,
-		required: true,
-	},
-	showCounter: {
-		type: Boolean,
-		required: false,
-		default: true,
-	},
-})
+)
 
 const answer = defineModel<any>('answer')
 

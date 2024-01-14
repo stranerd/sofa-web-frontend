@@ -203,13 +203,9 @@
 <script lang="ts" setup>
 import { QuestionFactory } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PropType, defineProps } from 'vue'
 import Draggable from 'vuedraggable'
 
-defineProps({
-	factory: {
-		type: Object as PropType<QuestionFactory>,
-		required: true,
-	},
-})
+defineProps<{
+	factory: QuestionFactory
+}>()
 </script>

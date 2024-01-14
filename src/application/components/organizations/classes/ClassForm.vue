@@ -69,20 +69,10 @@
 
 <script lang="ts" setup>
 import { ClassFactory } from '@modules/organizations'
-import { PropType, defineProps } from 'vue'
 
-defineProps({
-	factory: {
-		type: Object as PropType<ClassFactory>,
-		required: true,
-	},
-	submit: {
-		type: Function as PropType<() => void>,
-		required: true,
-	},
-	cancel: {
-		type: Function as PropType<() => void>,
-		required: true,
-	},
-})
+defineProps<{
+	factory: ClassFactory
+	submit: () => void
+	cancel: () => void
+}>()
 </script>

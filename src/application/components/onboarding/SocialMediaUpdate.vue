@@ -46,12 +46,9 @@ import { UserSocialsFactory } from '@modules/users'
 import { Logic } from 'sofa-logic'
 import { ref } from 'vue'
 
-const props = defineProps({
-	factory: {
-		type: UserSocialsFactory,
-		required: true,
-	},
-})
+const props = defineProps<{
+	factory: UserSocialsFactory
+}>()
 
 const deleteItem = async (index: number) => {
 	const confirm = await Logic.Common.confirm({

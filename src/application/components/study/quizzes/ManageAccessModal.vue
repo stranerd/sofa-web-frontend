@@ -70,7 +70,7 @@ import { useSearchUsers } from '@app/composables/users/users'
 import { QuizEntity } from '@modules/study'
 import { UserEntity } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
 	close: () => void

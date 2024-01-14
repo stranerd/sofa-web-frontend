@@ -139,7 +139,7 @@
 import { useAuth } from '@app/composables/auth/auth'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { Conditions, Logic } from 'sofa-logic'
-import { computed, defineProps, onMounted, ref, withDefaults } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
@@ -231,4 +231,3 @@ const tabs = computed(() => [
 	},
 ])
 </script>
-../SofaModalOld

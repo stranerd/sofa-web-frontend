@@ -64,24 +64,21 @@
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList } from '@app/composables/conversations/conversations'
 import { formatTime } from '@utils/dates'
-import { defineProps, ref } from 'vue'
+import { ref } from 'vue'
 import Chat from './Chat.vue'
 
-defineProps({
-	customClass: {
-		type: String,
-		default: '',
+withDefaults(
+	defineProps<{
+		customClass: string
+		extraStyle: string
+		limit: number
+	}>(),
+	{
+		customClass: '',
+		extraStyle: '',
+		limit: undefined,
 	},
-	extraStyle: {
-		type: String,
-		default: '',
-	},
-	limit: {
-		type: Number,
-		required: false,
-		default: undefined,
-	},
-})
+)
 
 const { userType, id, userAi } = useAuth()
 

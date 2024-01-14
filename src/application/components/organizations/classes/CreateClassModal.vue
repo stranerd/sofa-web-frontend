@@ -10,7 +10,6 @@
 
 <script lang="ts" setup>
 import { useCreateClass } from '@app/composables/organizations/classes'
-import { defineProps } from 'vue'
 import ClassForm from './ClassForm.vue'
 
 const props = defineProps<{

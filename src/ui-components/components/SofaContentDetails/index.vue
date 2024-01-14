@@ -290,11 +290,11 @@
 		</sofa-button>
 	</div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ContentDetails, Logic, ResourceType } from 'sofa-logic'
-import { defineComponent, onMounted, PropType, ref, toRef, watch } from 'vue'
+import { ref, toRef, watch } from 'vue'
 import SofaActivityCard from '../SofaActivityCard'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
@@ -307,140 +307,92 @@ import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
-export default defineComponent({
-	name: 'SofaContentDetails',
-	components: {
-		SofaIcon,
-		SofaImageLoader,
-		SofaNormalText,
-		SofaBadge,
-		SofaButton,
-		SofaHeaderText,
-		SofaRatings,
-		SofaAvatar,
-		SofaContent,
-		SofaContentRatings,
-		SofaActivityCard,
-		SofaEmptyState,
-	},
-	props: {
-		customClass: {
-			type: String,
-			default: '',
-		},
-		content: {
-			type: Object as PropType<ContentDetails>,
-			required: true,
-		},
-		padding: {
-			type: String,
-			default: 'px-3 pt-3 mdlg:!px-4 mdlg:!pt-4',
-		},
-		hasPadding: {
-			type: Boolean,
-			default: true,
-		},
-		type: {
-			type: String,
-			default: 'course',
-		},
-		contentId: {
-			type: String,
-			default: '',
-		},
-		showBuyButton: {
-			type: Boolean,
-			default: false,
-		},
-		buyAction: {
-			type: Function,
-			default: null,
-		},
-		hasAccess: {
-			type: Boolean,
-			default: false,
-		},
-		isMinimal: {
-			type: Boolean,
-			default: false,
-		},
-		similarContents: {
-			type: Array as () => ResourceType[],
-			default: () => [],
-		},
+const props = withDefaults(
+	defineProps<{
+		customClass: string
+		content: ContentDetails
+		padding: string
+		hasPadding: boolean
+		type: string
+		contentId: string
+		showBuyButton: boolean
+		buyAction: () => void
+		hasAccess: boolean
+		isMinimal: boolean
+		similarContents: ResourceType[]
 		actions: {
-			type: Object as () => {
-				report: () => void
-				share: () => void
-				save: () => void
+			report: () => void
+			share: () => void
+			save: () => void
+		}
+		openQuiz: () => void
+	}>(),
+	{
+		customClass: '',
+		content: {} as ContentDetails,
+		padding: 'px-3 pt-3 mdlg:!px-4 mdlg:!pt-4',
+		hasPadding: true,
+		type: 'course',
+		contentId: '',
+		showBuyButton: false,
+		buyAction: null,
+		hasAccess: false,
+		isMinimal: false,
+		similarContents: () => [],
+	},
+)
+
+const selectedTab = ref('content')
+
+const tabs = ref([])
+
+const typeRef = toRef(props, 'type')
+
+const setContent = () => {
+	tabs.value.length = 0
+
+	if (props.type == 'quiz') {
+		tabs.value.push({
+			name: 'Questions',
+			key: 'questions',
+		})
+
+		selectedTab.value = 'questions'
+	} else {
+		tabs.value.push({
+			name: 'Content',
+			key: 'content',
+		})
+
+		selectedTab.value = 'content'
+	}
+
+	if (!props.isMinimal) {
+		tabs.value.push(
+			{
+				name: 'Ratings',
+				key: 'ratings',
 			},
-			required: true,
-		},
-		openQuiz: {
-			type: Function,
-			required: true,
-		},
-	},
-	setup(props) {
-		const selectedTab = ref('content')
+			// {
+			//   name: "Creator",
+			//   key: "creator",
+			// }
+		)
+	}
 
-		const tabs = ref([])
-
-		const typeRef = toRef(props, 'type')
-
-		const setContent = () => {
-			tabs.value.length = 0
-
-			if (props.type == 'quiz') {
-				tabs.value.push({
-					name: 'Questions',
-					key: 'questions',
-				})
-
-				selectedTab.value = 'questions'
-			} else {
-				tabs.value.push({
-					name: 'Content',
-					key: 'content',
-				})
-
-				selectedTab.value = 'content'
-			}
-
-			if (!props.isMinimal) {
-				tabs.value.push(
-					{
-						name: 'Ratings',
-						key: 'ratings',
-					},
-					// {
-					//   name: "Creator",
-					//   key: "creator",
-					// }
-				)
-			}
-
-			if (props.type == 'course') {
-				tabs.value.push({
-					name: 'Similar courses',
-					key: 'similar_courses',
-				})
-			}
-		}
-
-		watch(typeRef, () => {
-			setContent()
+	if (props.type == 'course') {
+		tabs.value.push({
+			name: 'Similar courses',
+			key: 'similar_courses',
 		})
+	}
+}
 
-		onMounted(() => {
-			setContent()
-		})
-
-		return {
-			Logic,
-			selectedTab,
-			tabs,
-		}
+watch(
+	typeRef,
+	() => {
+		setContent()
 	},
-})
+	{ immediate: true },
+)
 </script>

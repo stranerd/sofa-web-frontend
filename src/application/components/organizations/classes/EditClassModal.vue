@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import { useUpdateClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
-import { defineProps } from 'vue'
 import ClassForm from './ClassForm.vue'
 
 const props = defineProps<{

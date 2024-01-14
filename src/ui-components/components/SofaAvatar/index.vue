@@ -18,53 +18,29 @@
 	</SofaImageLoader>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { Logic } from 'sofa-logic'
-import { PropType, defineComponent } from 'vue'
 import SofaImageLoader from '../SofaImageLoader/index.vue'
 import SofaIcon from '../SofaIcon'
 
-export default defineComponent({
-	name: 'SofaAvatar',
-	components: {
-		SofaImageLoader,
-		SofaIcon,
+withDefaults(
+	defineProps<{
+		size: string
+		photoUrl: string | null | undefined
+		customClass: string
+		bgColor: string
+		userId: string
+		showOnline: boolean
+		online: boolean
+	}>(),
+	{
+		size: '50',
+		photoUrl: '',
+		customClass: '',
+		bgColor: 'bg-grayColor',
+		userId: '',
+		showOnline: false,
+		online: false,
 	},
-	props: {
-		size: {
-			type: String,
-			default: '50',
-		},
-		photoUrl: {
-			type: String as PropType<string | null | undefined>,
-			required: false,
-			default: '',
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		bgColor: {
-			type: String,
-			default: 'bg-grayColor',
-		},
-		userId: {
-			type: String,
-			default: '',
-		},
-		showOnline: {
-			type: Boolean,
-			default: false,
-			required: false,
-		},
-		online: {
-			type: Boolean,
-			default: false,
-			required: false,
-		},
-	},
-	setup() {
-		return { Logic }
-	},
-})
+)
 </script>

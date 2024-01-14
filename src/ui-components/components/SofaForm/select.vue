@@ -43,46 +43,34 @@
 
 <script lang="ts" setup>
 import { SelectOption } from 'sofa-logic'
-import { computed, defineProps, ref } from 'vue'
+import { computed, ref } from 'vue'
 import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import SofaTextField from './textField.vue'
 
-const props = defineProps({
-	placeholder: {
-		type: String,
-		default: '',
+const props = withDefaults(
+	defineProps<{
+		placeholder?: string
+		options?: SelectOption[]
+		customClass?: string
+		isMultiple?: boolean
+		hasTitle?: boolean
+		autoComplete?: boolean
+		canUseCustom?: boolean
+		error?: string
+	}>(),
+	{
+		placeholder: '',
+		options: () => [],
+		customClass: '',
+		isMultiple: false,
+		hasTitle: false,
+		autoComplete: true,
+		canUseCustom: false,
+		error: '',
 	},
-	options: {
-		type: Array as () => SelectOption[],
-		default: () => [],
-	},
-	customClass: {
-		type: String,
-		default: '',
-	},
-	isMultiple: {
-		type: Boolean,
-		default: false,
-	},
-	hasTitle: {
-		type: Boolean,
-		default: false,
-	},
-	autoComplete: {
-		type: Boolean,
-		default: true,
-	},
-	canUseCustom: {
-		type: Boolean,
-		default: false,
-	},
-	error: {
-		type: String,
-		default: '',
-	},
-})
+)
 
 const showOptions = ref(false)
 const searchValue = ref('')

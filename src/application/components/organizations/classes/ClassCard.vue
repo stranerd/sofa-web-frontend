@@ -33,7 +33,6 @@ import { useModals } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
 import { pluralize } from 'valleyed'
 import { Logic } from 'sofa-logic'
-import { defineProps } from 'vue'
 
 const props = defineProps<{ classObj: ClassEntity }>()
 

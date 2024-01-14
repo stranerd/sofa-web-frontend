@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { Logic } from 'sofa-logic'
-import { defineProps, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
 	data: {

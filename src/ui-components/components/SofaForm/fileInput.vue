@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { Media, UploadedFile } from '@modules/core'
-import { defineModel, defineProps, ref, withDefaults } from 'vue'
+import { ref, withDefaults } from 'vue'
 
 const props = withDefaults(
 	defineProps<{

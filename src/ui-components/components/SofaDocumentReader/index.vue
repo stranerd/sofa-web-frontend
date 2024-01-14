@@ -7,14 +7,10 @@
 <script lang="ts" setup>
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
 import '@tato30/vue-pdf/style.css'
-import { defineProps } from 'vue'
 
-const props = defineProps({
-	documentUrl: {
-		type: String,
-		required: true,
-	},
-})
+const props = defineProps<{
+	documentUrl: string
+}>()
 
 const { pdf, pages } = usePDF(props.documentUrl)
 </script>

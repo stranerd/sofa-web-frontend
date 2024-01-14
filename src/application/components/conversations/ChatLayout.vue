@@ -66,20 +66,17 @@
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList } from '@app/composables/conversations/conversations'
 import { Logic } from 'sofa-logic'
-import { defineProps } from 'vue'
 import ChatList from './ChatList.vue'
 
-defineProps({
-	title: {
-		type: String,
-		required: true,
+withDefaults(
+	defineProps<{
+		title: string
+		index: boolean
+	}>(),
+	{
+		index: false,
 	},
-	index: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-})
+)
 
 const { userType, userAi } = useAuth()
 const { conversations } = useConversationsList()

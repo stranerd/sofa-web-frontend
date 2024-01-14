@@ -19,7 +19,6 @@ import { useModals } from '@app/composables/core/modals'
 import { useDeleteClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { defineProps } from 'vue'
 
 const props = defineProps<{
 	classInst: ClassEntity

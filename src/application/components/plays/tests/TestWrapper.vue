@@ -5,24 +5,19 @@
 <script lang="ts" setup>
 import { useAuth } from '@app/composables/auth/auth'
 import { useTest } from '@app/composables/plays/tests'
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
-const props = defineProps({
-	id: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		id: string
+		skipQuestions: boolean
+		skipStatusNav: boolean
+	}>(),
+	{
+		skipQuestions: false,
+		skipStatusNav: false,
 	},
-	skipQuestions: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	skipStatusNav: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-})
+)
 
 const { test, questions, fetched, answer, start, end, submitAnswer } = useTest(props.id, {
 	questions: props.skipQuestions,

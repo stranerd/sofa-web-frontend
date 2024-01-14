@@ -110,6 +110,7 @@ export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 		label_color: textColor,
 		title: currentQuiz?.title || 'Unknown quiz',
 		type: 'test',
+		participants: 1,
 		action: () => {
 			Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
 		},

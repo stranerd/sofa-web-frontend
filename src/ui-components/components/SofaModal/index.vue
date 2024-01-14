@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Teleport, defineProps, withDefaults } from 'vue'
+import { Teleport } from 'vue'
 
 withDefaults(
 	defineProps<{
