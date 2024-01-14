@@ -1,5 +1,6 @@
 import { modal } from './modal'
 
+import AddTutor from '@app/components/conversations/AddTutorModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
@@ -11,6 +12,11 @@ import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
+
+export const useConversationModal = () =>
+	modal.register('Conversation', {
+		addTutor: { component: AddTutor },
+	})
 
 export const useOrganizationModal = () =>
 	modal.register('Organization', {

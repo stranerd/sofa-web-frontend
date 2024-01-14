@@ -162,8 +162,6 @@
 			</div>
 		</SofaModal>
 
-		<AddTutor v-if="showAddTutor" @close="showAddTutor = false" />
-
 		<!-- Rate and review modal -->
 		<RateAndReviewModal
 			v-if="showRateAndReviewTutor && conversation && conversation.tutor"
@@ -176,7 +174,6 @@
 
 <script lang="ts">
 import RateAndReviewModal from '@app/components/common/RateAndReviewModal.vue'
-import AddTutor from '@app/components/conversations/AddTutor.vue'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import ChatList from '@app/components/conversations/ChatList.vue'
@@ -184,6 +181,7 @@ import ConversationMessages from '@app/components/conversations/Messages.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
 import { useCreateMessage } from '@app/composables/conversations/messages'
+import { useConversationModal } from '@app/composables/core/modals'
 import { Logic } from 'sofa-logic'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -195,7 +193,6 @@ export default defineComponent({
 		ChatLayout,
 		ChatList,
 		ChatContent,
-		AddTutor,
 		RateAndReviewModal,
 		ConversationMessages,
 	},
@@ -226,14 +223,13 @@ export default defineComponent({
 			return res
 		})
 
-		const showAddTutor = ref(false)
 		const showAddTutorModalConfirmation = ref(false)
 		const showMoreOptions = ref(false)
 		const showRateAndReviewTutor = ref(false)
 
 		const onClickAddTutor = async () => {
 			showMoreOptions.value = false
-			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0) return (showAddTutor.value = true)
+			if (wallet.value?.subscription.data.tutorAidedConversations ?? 0 > 0) return useConversationModal().addTutor.open({})
 			if (wallet.value?.subscription.active)
 				return await Logic.Common.confirm({
 					title: 'You have run out of tutor aided conversations',
@@ -270,7 +266,6 @@ export default defineComponent({
 			createMessage,
 			conversation,
 			otherUsers,
-			showAddTutor,
 			showMoreOptions,
 			onClickAddTutor,
 			showRateAndReviewTutor,

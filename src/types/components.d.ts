@@ -11,6 +11,7 @@ declare module 'vue' {
     AddMaterialModal: typeof import('./../application/components/study/AddMaterialModal.vue')['default']
     AddMemberModal: typeof import('./../application/components/organizations/members/AddMemberModal.vue')['default']
     AddTutor: typeof import('./../application/components/conversations/AddTutor.vue')['default']
+    AddTutorModal: typeof import('./../application/components/conversations/AddTutorModal.vue')['default']
     AddVideo: typeof import('./../application/components/study/courses/AddVideo.vue')['default']
     AuthLayout: typeof import('./../application/layouts/AuthLayout.vue')['default']
     AuthProvider: typeof import('./../application/components/auth/AuthProvider.vue')['default']
