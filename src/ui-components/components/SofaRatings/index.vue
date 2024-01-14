@@ -7,46 +7,32 @@
 		<sofa-icon :name="`${ratings >= 5 ? 'star-full' : 'star'}`" :custom-class="size" @click="readonly ? '' : (ratings = 5)" />
 	</a>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
-export default {
-	name: 'SofaRatings',
-	components: {
-		SofaIcon,
+
+const props = withDefaults(
+	defineProps<{
+		count: number
+		customClass: string
+		readonly: boolean
+		size: string
+	}>(),
+	{
+		count: 5,
+		customClass: '',
+		readonly: true,
+		size: 'h-[13px] mdlg:!h-[17px]',
 	},
-	props: {
-		count: {
-			type: Number,
-			default: 5,
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		readonly: {
-			type: Boolean,
-			default: true,
-		},
-		size: {
-			type: String,
-			default: 'h-[13px] mdlg:!h-[17px]',
-		},
-	},
-	emits: ['update:modelValue'],
-	setup(props: any, context: any) {
-		const ratings = ref(0)
-		onMounted(() => {
-			if (props.count) {
-				ratings.value = Math.round(props.count)
-			}
-		})
-		watch(ratings, () => {
-			context.emit('update:modelValue', ratings.value)
-		})
-		return {
-			ratings,
-		}
-	},
-}
+)
+
+const model = defineModel<number>({ default: 0 })
+
+const ratings = ref(0)
+onMounted(() => {
+	if (props.count) ratings.value = Math.round(props.count)
+})
+watch(ratings, () => {
+	model.value = ratings.value
+})
 </script>

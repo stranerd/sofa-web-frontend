@@ -73,7 +73,7 @@
 import QuestionDisplay from '@app/components/study/quizzes/QuestionDisplay.vue'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PropType, computed, defineEmits, defineProps } from 'vue'
+import { PropType, computed, defineProps } from 'vue'
 
 type ButtonConfig = {
 	label: string
@@ -91,11 +91,6 @@ const props = defineProps({
 	questions: {
 		type: Array as PropType<QuestionEntity[]>,
 		required: true,
-	},
-	answer: {
-		type: [Array, String, Boolean] as PropType<any>,
-		required: true,
-		validator: () => true,
 	},
 	isDark: {
 		type: Boolean,
@@ -127,14 +122,7 @@ const props = defineProps({
 	},
 })
 
-const emits = defineEmits(['update:answer'])
-
-const answer = computed({
-	get: () => props.answer,
-	set: (v) => {
-		emits('update:answer', v)
-	},
-})
+const answer = defineModel<any>('answer')
 
 const question = computed(() => props.questions.at(props.index))
 </script>

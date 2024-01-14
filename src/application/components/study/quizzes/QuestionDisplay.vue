@@ -184,18 +184,13 @@
 <script lang="ts" setup>
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PropType, defineEmits, defineProps, reactive, watch } from 'vue'
+import { PropType, defineProps, reactive, watch } from 'vue'
 import Draggable from 'vuedraggable'
 
 const props = defineProps({
 	question: {
 		type: Object as PropType<QuestionEntity>,
 		required: true,
-	},
-	modelValue: {
-		type: [Array, String, Boolean] as PropType<any>,
-		required: true,
-		validator: () => true,
 	},
 	title: {
 		type: String,
@@ -211,19 +206,19 @@ const props = defineProps({
 	},
 })
 
-const emits = defineEmits(['update:modelValue'])
+const model = defineModel<any>()
 
 const answer = reactive({
-	value: props.modelValue,
-	dragOptions: props.question.dragAnswers.filter((x) => !props.modelValue.includes(x)),
-	drag: Array.from({ length: props.question.dragAnswers.length }, (_, idx) => (props.modelValue[idx] ? [props.modelValue[idx]] : [])),
+	value: model.value,
+	dragOptions: props.question.dragAnswers.filter((x) => !model.value.includes(x)),
+	drag: Array.from({ length: props.question.dragAnswers.length }, (_, idx) => (model.value[idx] ? [model.value[idx]] : [])),
 })
 
 watch(
 	answer,
 	() => {
-		if (props.question.type === QuestionTypes.dragAnswers) emits('update:modelValue', answer.drag.flat(1))
-		else emits('update:modelValue', answer.value)
+		if (props.question.type === QuestionTypes.dragAnswers) model.value = answer.drag.flat(1)
+		else model.value = answer.value
 	},
 	{ immediate: true },
 )

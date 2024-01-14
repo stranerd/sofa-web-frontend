@@ -64,9 +64,14 @@
 						:custom-class="'h-[20px] cursor-pointer'"
 						:name="'remove'"
 						@click="
-							() => {
-								selectedMethodId = method.id
-								showDeleteMethod = true
+							async () => {
+								const confirm = await Logic.Common.confirm({
+									title: 'Are you sure?',
+									sub: 'This action is permanent',
+									right: { label: 'Yes, delete' },
+								})
+								if (!confirm) return
+								await Logic.Payment.DeleteMethod(method.id)
 							}
 						" />
 				</div>
@@ -275,30 +280,6 @@
 			</div>
 		</div>
 	</sofa-modal-old>
-
-	<!-- Delete payment method prompt -->
-	<sofa-delete-prompt
-		v-if="showDeleteMethod"
-		:title="'Are you sure?'"
-		:sub-title="`This action is permanent.`"
-		:close="() => (showDeleteMethod = false)"
-		:buttons="[
-			{
-				label: 'No',
-				isClose: true,
-				action: () => {
-					showDeleteMethod = false
-				},
-			},
-			{
-				label: 'Yes, delete',
-				isClose: false,
-				action: () => {
-					Logic.Payment.DeleteMethod(selectedMethodId)
-					showDeleteMethod = false
-				},
-			},
-		]" />
 </template>
 <script lang="ts">
 import { FormValidations } from '@app/composables'
@@ -312,7 +293,6 @@ export default defineComponent({
 		const AllTransactions = ref(Logic.Payment.AllTransactions!)
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods!)
 		const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks!)
-		const showDeleteMethod = ref(false)
 
 		const resolvingNumber = ref(false)
 		const resolvingStatus = ref('')
@@ -596,7 +576,6 @@ export default defineComponent({
 			showMoney,
 			resolvingNumber,
 			resolvingStatus,
-			showDeleteMethod,
 			showFundWallet,
 			handleContinue,
 			showTransactionInfo,

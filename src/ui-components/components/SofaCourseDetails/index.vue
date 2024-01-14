@@ -125,9 +125,14 @@
 			<div
 				class="w-full flex flex-row items-center justify-start gap-3 cursor-pointer"
 				@click="
-					() => {
-						selectedMaterialId = data.id
-						showDeleteMaterial = true
+					async () => {
+						const confirm = await Logic.Common.confirm({
+							title: 'Are you sure?',
+							sub: 'This action is permanent. You won\'t be able to undo this',
+							right: { label: 'Yes, delete' },
+						})
+						if (!confirm) return
+						await deleteFile(data.id)
 					}
 				">
 				<sofa-icon :name="'trash'" :custom-class="'h-[16px]'" />
@@ -135,41 +140,12 @@
 			</div>
 		</div>
 	</div>
-
-	<sofa-delete-prompt
-		v-if="showDeleteMaterial"
-		:title="'Are you sure you?'"
-		:sub-title="`This action is permanent. You won't be able to undo this.`"
-		:close="
-			() => {
-				showDeleteMaterial = false
-			}
-		"
-		:buttons="[
-			{
-				label: 'No',
-				isClose: true,
-				action: () => {
-					showDeleteMaterial = false
-				},
-			},
-			{
-				label: 'Yes, delete',
-				isClose: false,
-				action: () => {
-					deleteMaterial()
-				},
-			},
-		]" />
 </template>
 <script lang="ts">
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { Logic } from 'sofa-logic'
-import { defineComponent, reactive, ref, toRef, watch } from 'vue'
+import { defineComponent, reactive, toRef, watch } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaButton from '../SofaButton'
-import SofaDeletePrompt from '../SofaDeletePrompt'
 import { SofaTextField, SofaTextarea } from '../SofaForm'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
@@ -186,7 +162,6 @@ export default defineComponent({
 		SofaAvatar,
 		SofaTextField,
 		SofaTextarea,
-		SofaDeletePrompt,
 		SofaButton,
 	},
 	props: {
@@ -209,8 +184,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const dataRef = toRef(props, 'data')
-		const showDeleteMaterial = ref(false)
-		const selectedMaterialId = ref('')
 		const dataReactive = reactive(dataRef.value)
 
 		watch(dataRef, () => {
@@ -219,6 +192,7 @@ export default defineComponent({
 		})
 
 		const updateFile = () => {
+			if (!Logic.Study.SingleCourse) return
 			Logic.Study.UpdateFileForm = {
 				type: dataReactive.type,
 				description: dataReactive.description,
@@ -243,6 +217,7 @@ export default defineComponent({
 		}
 
 		const deleteFile = (id: string) => {
+			if (!Logic.Study.SingleCourse) return
 			// remove file from coursable
 			// move item to course
 			Logic.Study.MoveItemToCourseForm = {
@@ -251,10 +226,10 @@ export default defineComponent({
 				type: 'file',
 				id: Logic.Study.SingleCourse.id,
 			}
-			Logic.Study.MoveItemToCourse(true).then((response) => {
+			Logic.Study.MoveItemToCourse(true)?.then((response) => {
 				if (response) {
 					Logic.Study.DeleteFile(id).then(() => {
-						Logic.Study.GetCourse(Logic.Study.SingleCourse.id)
+						Logic.Study.GetCourse(Logic.Study.SingleCourse!.id)
 						Logic.Common.showAlert({
 							message: 'Material has been deleted.',
 							type: 'success',
@@ -266,20 +241,13 @@ export default defineComponent({
 						type: 'error',
 					})
 				}
-				showDeleteMaterial.value = false
 			})
 		}
 
-		const deleteMaterial = () => {
-			deleteFile(selectedMaterialId.value)
-		}
 		return {
 			Logic,
 			dataReactive,
-			showDeleteMaterial,
-			selectedMaterialId,
 			deleteFile,
-			deleteMaterial,
 			updateFile,
 		}
 	},

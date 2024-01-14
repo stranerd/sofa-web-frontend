@@ -5,7 +5,7 @@
 				:id="'' + uniqueKey + index"
 				v-model="otps[index - 1]"
 				type="tel"
-				class="md:!w-[53px] md:!h-[53px] w-[40px] h-[40px] text-lg text-center text-darkBody focus:outline-none !bg-lightGray rounded-custom"
+				class="md:w-[53px] w-[40px] aspect-square text-lg text-center text-darkBody focus:outline-none bg-lightGray rounded-custom"
 				:disabled="isDisabled"
 				@keypress="onKeyPress"
 				@keyup.right="focusInputByRef('' + uniqueKey + (index + 1))"
@@ -17,161 +17,65 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue'
+<script lang="ts" setup>
+import { ref, watch } from 'vue'
 
-export default defineComponent({
-	name: 'SofaOTPInput',
-
-	props: {
-		isDisabled: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		uniqueKey: {
-			type: String,
-			default: 'otpDigit',
-		},
-		isError: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		shouldResetOTP: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		numberOfInput: {
-			type: Number,
-			required: false,
-			default: 4,
-		},
-		otpInputStyle: {
-			type: Object,
-			required: false,
-			default: function () {
-				return {
-					width: '40px',
-					height: '40px',
-					'margin-right': '10px',
-					'text-align': 'center',
-					'font-size': '20px',
-					appearance: 'none',
-					'-webkit-appearance': 'none',
-					'border-radius': '2px',
-				}
-			},
-		},
-		error: {
-			type: Object,
-			required: false,
-			default: function () {
-				return {
-					'border-color': 'red',
-				}
-			},
-		},
-		onChangeOTP: {
-			type: Function,
-			required: false,
-			default: null,
-		},
+const props = withDefaults(
+	defineProps<{
+		isDisabled: boolean
+		uniqueKey: string
+		isError: boolean
+		numberOfInput: number
+		onChangeOTP?: (val: string) => void
+	}>(),
+	{
+		isDisabled: false,
+		uniqueKey: 'otpDigit',
+		isError: false,
+		numberOfInput: 4,
+		onChangeOTP: undefined,
 	},
-	emits: ['update:modelValue'],
-	setup(props: any, context) {
-		const otps = ref<string[]>([])
+)
 
-		const otp = computed(() => {
-			const otp = otps.value.join('')
-			if (otp) return parseInt(otp, 10)
-			return null
-		})
+const otp = defineModel<string>({ default: '' })
 
-		const shouldResetOTP = ref(false)
+const otps = ref<string[]>(otp.value.split('').slice(0, props.numberOfInput))
 
-		const inputStyle = computed(() => {
-			if (props.isError) {
-				return {
-					...props.otpInputStyle,
-					...props.error,
-				}
-			}
-
-			return {
-				...props.otpInputStyle,
-			}
-		})
-
-		const resetOTPInput = () => {
-			otps.value = []
-		}
-
-		const watchResetOtp = (newProp: boolean, oldProp: boolean) => {
-			if (newProp === !oldProp) {
-				resetOTPInput()
-			}
-		}
-
-		watch(shouldResetOTP, watchResetOtp)
-
-		const onKeyPress = (event: any) => {
-			if (event.target.value.length === 1) {
-				return event.preventDefault()
-			}
-		}
-
-		const focusInputByRef = (id: any) => {
-			const element = document.getElementById(id)
-			if (element) {
-				element.focus()
-			}
-		}
-
-		const onInput = (event: any, id: string) => {
-			props.onChangeOTP?.(otp.value)
-			if (event.inputType === 'deleteContentBackward') return false
-
-			focusInputByRef(id)
-
-			event.preventDefault()
-			setValue()
-		}
-
-		const setValue = () => {
-			context.emit('update:modelValue', otp.value)
-		}
-
-		const onPaste = (event: any) => {
-			// Getting copy text
-			const clipboardData = event.clipboardData || event.originalEvent.clipboardData
-			const pastedData = clipboardData.getData('Text')
-			const arrayOfNumbers = pastedData.split('')
-
-			// set the length to 6
-			if (arrayOfNumbers.length > 6) arrayOfNumbers.slice(0, 6)
-
-			otps.value = arrayOfNumbers
-
-			// focus the last input element according to length
-			const id = `${props.uniqueKey}${arrayOfNumbers.length}`
-			focusInputByRef(id)
-
-			event.preventDefault()
-			setValue()
-		}
-
-		return {
-			otp,
-			inputStyle,
-			onPaste,
-			onInput,
-			onKeyPress,
-			focusInputByRef,
-			otps,
-			setValue,
-		}
+watch(
+	() => otps.value,
+	(value) => {
+		if (value.length === props.numberOfInput) otp.value = value.join('')
 	},
-})
+)
+
+const onKeyPress = (event: any) => {
+	if (event.target.value.length === 1) {
+		return event.preventDefault()
+	}
+}
+
+const focusInputByRef = (id: any) => {
+	document.getElementById(id)?.focus()
+}
+
+const onInput = (event: any, id: string) => {
+	props.onChangeOTP?.(otp.value)
+	if (event.inputType === 'deleteContentBackward') return false
+
+	focusInputByRef(id)
+
+	event.preventDefault()
+}
+
+const onPaste = (event: any) => {
+	// Getting copy text
+	const clipboardData = event.clipboardData || event.originalEvent.clipboardData
+	const pastedData = clipboardData.getData('Text')
+	otps.value = pastedData.split('').slice(0, props.numberOfInput)
+
+	// focus the last input element according to length
+	focusInputByRef(`${props.uniqueKey}${otps.value.length}`)
+
+	event.preventDefault()
+}
 </script>

@@ -48,150 +48,105 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import 'mathlive'
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { Quill, VueEditor } from 'vue3-editor'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
-export default defineComponent({
-	name: 'SofaTextarea',
-	components: {
-		SofaNormalText,
-		VueEditor,
+withDefaults(
+	defineProps<{
+		rows: number
+		disabled: boolean
+		hasTitle: boolean
+		labelStyle: string
+		placeholder: string
+		textAreaStyle: string
+		updateValue: string
+		richEditor: boolean
+		error: string
+	}>(),
+	{
+		rows: 8,
+		disabled: false,
+		hasTitle: false,
+		labelStyle: '',
+		placeholder: '',
+		textAreaStyle: 'max-h-[400px] bg-grey100  px-3 py-3 ',
+		updateValue: '',
+		richEditor: false,
+		error: '',
 	},
-	props: {
-		modelValue: {
-			type: String,
-			default: '',
-		},
-		rows: {
-			type: Number,
-			required: false,
-			default: 8,
-		},
-		disabled: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		hasTitle: {
-			type: Boolean,
-			default: false,
-		},
-		labelStyle: {
-			type: String,
-			default: '',
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		textAreaStyle: {
-			type: String,
-			default: 'max-h-[400px] bg-grey100  px-3 py-3 ',
-		},
-		updateValue: {
-			type: String,
-			default: '',
-		},
-		richEditor: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		error: {
-			type: String,
-			default: '',
-		},
-	},
-	emits: ['update:modelValue'],
-	setup(props, context) {
-		const editorId = Math.random().toString(32).slice(2)
-		const toolbarId = `toolbar-${editorId}`
+)
 
-		const quill = ref<Quill>()
-		const mathRef = ref()
-		const showMath = ref(false)
-		const mathText = ref('')
+const editorId = Math.random().toString(32).slice(2)
+const toolbarId = `toolbar-${editorId}`
 
-		const comp = computed({
-			get: () => props.modelValue,
-			set: (v) => context.emit('update:modelValue', v),
-		})
+const quill = ref<Quill>()
+const mathRef = ref()
+const showMath = ref(false)
+const mathText = ref('')
 
-		const saveFormula = (e: Event) => {
-			const target = e.target as HTMLInputElement
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			if (e.data === 'insertLineBreak') {
-				quill.value.theme.tooltip.textbox.value = target.value.slice(2, -2)
-				quill.value.theme.tooltip.root.querySelector('a.ql-action').click()
+const comp = defineModel<string>({ default: '' })
 
-				showMath.value = false
-				mathText.value = ''
-			} else {
-				mathText.value = target.value
-			}
-		}
+const saveFormula = (e: Event) => {
+	const target = e.target as HTMLInputElement
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	if (e.data === 'insertLineBreak') {
+		quill.value.theme.tooltip.textbox.value = target.value.slice(2, -2)
+		quill.value.theme.tooltip.root.querySelector('a.ql-action').click()
 
-		const editorOptions = {
-			modules: {
-				toolbar: {
-					container: `#${toolbarId}`,
-					handlers: {
-						formula() {
-							quill.value.theme.tooltip.edit('formula')
-							quill.value.theme.tooltip.hide()
+		showMath.value = false
+		mathText.value = ''
+	} else {
+		mathText.value = target.value
+	}
+}
 
-							showMath.value = !showMath.value
-							if (showMath.value)
-								setImmediate(() => {
-									mathRef.value.focus()
-									window.mathVirtualKeyboard.show()
-								})
-						},
-					},
+const editorOptions = {
+	modules: {
+		toolbar: {
+			container: `#${toolbarId}`,
+			handlers: {
+				formula() {
+					quill.value.theme.tooltip.edit('formula')
+					quill.value.theme.tooltip.hide()
+
+					showMath.value = !showMath.value
+					if (showMath.value)
+						setImmediate(() => {
+							mathRef.value.focus()
+							window.mathVirtualKeyboard.show()
+						})
 				},
 			},
-		}
-
-		const leaveMathFieldFocus = () => {
-			showMath.value = false
-			window.mathVirtualKeyboard.hide()
-		}
-
-		onMounted(async () => {
-			await window.customElements.whenDefined('math-field')
-			const mf = mathRef.value
-			if (!mf) return
-			mf.defaultMode = 'text'
-			mf.smartMode = false
-			mf.mathModeSpace = '\\:'
-			mf.mathVirtualKeyboardPolicy = 'manual'
-			mf.addEventListener('focusout', leaveMathFieldFocus)
-		})
-
-		onBeforeUnmount(() => {
-			const mf = mathRef.value
-			if (!mf) return
-			mf.removeEventListener('focusout', leaveMathFieldFocus)
-		})
-
-		return {
-			comp,
-			editorId,
-			toolbarId,
-			editorOptions,
-			quill,
-			showMath,
-			mathRef,
-			mathText,
-			saveFormula,
-		}
+		},
 	},
+}
+
+const leaveMathFieldFocus = () => {
+	showMath.value = false
+	window.mathVirtualKeyboard.hide()
+}
+
+onMounted(async () => {
+	await window.customElements.whenDefined('math-field')
+	const mf = mathRef.value
+	if (!mf) return
+	mf.defaultMode = 'text'
+	mf.smartMode = false
+	mf.mathModeSpace = '\\:'
+	mf.mathVirtualKeyboardPolicy = 'manual'
+	mf.addEventListener('focusout', leaveMathFieldFocus)
+})
+
+onBeforeUnmount(() => {
+	const mf = mathRef.value
+	if (!mf) return
+	mf.removeEventListener('focusout', leaveMathFieldFocus)
 })
 </script>
 

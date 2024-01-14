@@ -27,7 +27,7 @@ const props = withDefaults(
 	},
 )
 
-const modelValue = defineModel<Media | Media[] | null>()
+const modelValue = defineModel<Media | Media[] | null>({ default: null })
 
 const fileInput = ref(null as HTMLInputElement | null)
 const openFileSelect = async () => {

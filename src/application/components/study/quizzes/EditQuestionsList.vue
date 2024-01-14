@@ -87,41 +87,25 @@
 <script lang="ts" setup>
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 import { SingleUser } from 'sofa-logic'
-import { PropType, computed, defineEmits, defineProps, reactive, ref, toRef, watch } from 'vue'
+import { reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { Differ } from 'valleyed'
 
-const props = defineProps({
-	questionId: {
-		type: String,
-		required: true,
-	},
-	questions: {
-		type: Array as PropType<QuestionEntity[]>,
-		required: true,
-	},
-	quiz: {
-		type: Object as PropType<QuizEntity>,
-		required: true,
-	},
-	factory: {
-		type: QuestionFactory,
-		required: true,
-	},
-	users: {
-		type: Object as PropType<Record<string, SingleUser[]>>,
-		required: true,
-	},
-})
+const props = defineProps<{
+	questions: QuestionEntity[]
+	quiz: QuizEntity
+	factory: QuestionFactory
+	users: Record<string, SingleUser[]>
+}>()
 
-const emits = defineEmits(['update:questionId', 'addQuestion', 'duplicateQuestion', 'deleteQuestion', 'reorderQuestions'])
+const selectedQuestionId = defineModel<string>('questionId')
 
-const selectedQuestionId = computed({
-	get: () => props.questionId,
-	set: (v) => {
-		emits('update:questionId', v)
-	},
-})
+const emits = defineEmits<{
+	addQuestion: []
+	duplicateQuestion: [QuestionEntity]
+	deleteQuestion: [string]
+	reorderQuestions: [string[]]
+}>()
 
 const questionsRef = toRef(props, 'questions')
 const reactiveQuestions = reactive([...questionsRef.value])

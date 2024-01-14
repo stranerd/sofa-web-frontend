@@ -4,26 +4,16 @@
 
 <script lang="ts" setup>
 import { Phone } from '@modules/auth'
-import { defineEmits, defineProps, PropType, ref } from 'vue'
+import { ref } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { VueTelInput } from 'vue-tel-input'
 
-const props = defineProps({
-	modelValue: {
-		type: Object as PropType<Phone | null>,
-		default: null,
-		validator: (p: any) => p === null || (typeof p.code === 'string' && typeof p.number === 'string'),
-	},
-})
+const model = defineModel<Phone | null>({ default: null })
 
-const emit = defineEmits<{
-	'update:modelValue': [phone: Phone | null]
-}>()
-
-const phone = ref((props.modelValue?.code ?? '') + (props.modelValue?.number ?? ''))
+const phone = ref((model.value?.code ?? '') + (model.value?.number ?? ''))
 const update = (event: any) => {
-	emit('update:modelValue', event.valid ? { code: '+' + event.countryCallingCode, number: event.nationalNumber } : null)
+	model.value = event.valid ? { code: '+' + event.countryCallingCode, number: event.nationalNumber } : null
 }
 </script>
 

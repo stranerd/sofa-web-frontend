@@ -10,116 +10,88 @@
 		{{ textContent }}
 	</span>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
+<script lang="ts" setup>
+import { onMounted, watch } from 'vue'
 
-export default defineComponent({
-	name: 'SofaCustomInput',
-	components: {},
-	props: {
-		modelValue: {
-			type: String,
-			required: false,
-			default: '',
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		updateValue: {
-			type: String,
-			default: '',
-		},
-		autoFocus: {
-			type: Boolean,
-			default: false,
-		},
-		trim: {
-			type: Boolean,
-			default: true,
-		},
+const props = withDefaults(
+	defineProps<{
+		modelValue: string
+		customClass: string
+		placeholder: string
+		updateValue: string
+		autoFocus: boolean
+		trim: boolean
+	}>(),
+	{
+		modelValue: '',
+		customClass: '',
+		placeholder: '',
+		updateValue: '',
+		autoFocus: false,
+		trim: true,
 	},
-	emits: ['update:modelValue', 'onBlur', 'onContentChange', 'onEnter'],
-	setup(props, context) {
-		const textContent = ref(props.modelValue ?? '')
+)
 
-		const modelValueRef = toRef(props, 'modelValue')
+const emit = defineEmits<{
+	onContentChange: [string]
+	onBlur: [boolean]
+	onEnter: [boolean]
+}>()
 
-		const tabIndex = Math.random()
+const textContent = defineModel<string>({ default: '' })
 
-		watch(textContent, () => {
-			context.emit('update:modelValue', textContent.value)
-			context.emit('onContentChange', textContent.value)
-		})
+const tabIndex = Math.random()
 
-		watch(
-			modelValueRef,
-			() => {
-				textContent.value = modelValueRef.value
-			},
-			{ immediate: true },
-		)
+watch(textContent, () => {
+	emit('onContentChange', textContent.value)
+})
 
-		const onInput = (e: any) => {
-			textContent.value = props.trim ? e.target.innerText.trim() : e.target.innerText
-		}
+const onInput = (e: any) => {
+	textContent.value = props.trim ? e.target.innerText.trim() : e.target.innerText
+}
 
-		const onBlur = () => {
-			context.emit('onBlur', true)
-		}
+const onBlur = () => {
+	emit('onBlur', true)
+}
 
-		const onEnter = () => {
-			context.emit('onEnter', true)
-		}
+const onEnter = () => {
+	emit('onEnter', true)
+}
 
-		const setCaretToEnd = (target: any) => {
-			const range = document.createRange()
-			const sel = window.getSelection()
-			range.selectNodeContents(target)
-			range.collapse(false)
-			sel?.removeAllRanges()
-			sel?.addRange(range)
-			target.focus()
-			range.detach() // optimization
+const setCaretToEnd = (target: any) => {
+	const range = document.createRange()
+	const sel = window.getSelection()
+	range.selectNodeContents(target)
+	range.collapse(false)
+	sel?.removeAllRanges()
+	sel?.addRange(range)
+	target.focus()
+	range.detach() // optimization
 
-			// set scroll to the end if multiline
-			target.scrollTop = target.scrollHeight
-		}
+	// set scroll to the end if multiline
+	target.scrollTop = target.scrollHeight
+}
 
-		onMounted(() => {
-			if (props.updateValue) {
-				textContent.value = props.updateValue
+onMounted(() => {
+	if (props.updateValue) {
+		textContent.value = props.updateValue
 
-				setTimeout(() => {
-					const contentField = document.getElementById(`content-${tabIndex}`)
+		setTimeout(() => {
+			const contentField = document.getElementById(`content-${tabIndex}`)
 
-					if (contentField) {
-						contentField.innerText = textContent.value
-					}
-				}, 400)
+			if (contentField) {
+				contentField.innerText = textContent.value
 			}
+		}, 400)
+	}
 
-			if (props.autoFocus) {
-				const contentField = document.getElementById(`content-${tabIndex}`)
+	if (props.autoFocus) {
+		const contentField = document.getElementById(`content-${tabIndex}`)
 
-				setTimeout(() => {
-					setCaretToEnd(contentField)
-				}, 500)
-			}
-		})
-
-		return {
-			textContent,
-			tabIndex,
-			onInput,
-			onBlur,
-			onEnter,
-		}
-	},
+		setTimeout(() => {
+			setCaretToEnd(contentField)
+		}, 500)
+	}
 })
 </script>
 <style scoped>

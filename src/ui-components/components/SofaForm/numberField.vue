@@ -29,72 +29,33 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { Logic } from 'sofa-logic'
-import { computed, defineComponent } from 'vue'
+<script lang="ts" setup>
 import SofaIcon from '../SofaIcon'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
-export default defineComponent({
-	name: 'SofaTextField',
-	components: {
-		SofaNormalText,
-		SofaIcon,
+withDefaults(
+	defineProps<{
+		padding: string
+		placeholder: string
+		customClass: string
+		hasTitle: boolean
+		name: string
+		disabled: boolean
+		borderColor: string
+		error: string
+	}>(),
+	{
+		padding: 'p-3 md:p-4',
+		placeholder: '',
+		customClass: '',
+		hasTitle: false,
+		name: '',
+		disabled: false,
+		borderColor: 'border-darkLightGray',
+		error: '',
 	},
-	props: {
-		padding: {
-			type: String,
-			default: 'p-3 md:p-4',
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		hasTitle: {
-			type: Boolean,
-			default: false,
-		},
-		modelValue: {
-			type: Number,
-			default: 0,
-		},
-		name: {
-			type: String,
-			default: '',
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		borderColor: {
-			type: String,
-			default: 'border-darkLightGray',
-		},
-		error: {
-			type: String,
-			default: '',
-		},
-	},
-	emits: ['update:modelValue', 'onEnter'],
-	setup(props, context) {
-		const content = computed({
-			get: () => props.modelValue,
-			set: (value) => {
-				context.emit('update:modelValue', value)
-			},
-		})
+)
 
-		const tabIndex = Math.random()
-
-		return {
-			content,
-			tabIndex,
-			Logic,
-		}
-	},
-})
+const content = defineModel<number>({ default: 0 })
+const tabIndex = Math.random()
 </script>

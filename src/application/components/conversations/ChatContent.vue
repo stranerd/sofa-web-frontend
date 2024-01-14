@@ -16,7 +16,7 @@
 						v-else
 						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1"
 						:content="data.title"
-						@click="editTitle = canEditTitle" />
+						@click="editTitle = canEditTitle ?? false" />
 					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
 				</div>
 			</div>
@@ -35,30 +35,19 @@
 
 <script setup lang="ts">
 import { Logic } from 'sofa-logic'
-import { defineEmits, defineProps, PropType, ref, watch } from 'vue'
+import { defineProps, ref, watch } from 'vue'
 
-const props = defineProps({
+const props = defineProps<{
 	data: {
-		type: Object as PropType<{
-			title: string
-			photoUrl: string | null
-			userNames: string[]
-		}>,
-		required: true,
-	},
-	canEditTitle: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
-	updateTitle: {
-		type: Function as PropType<(title: string) => Promise<void>>,
-		required: false,
-		default: null,
-	},
-})
+		title: string
+		photoUrl: string | null
+		userNames: string[]
+	}
+	canEditTitle?: boolean
+	updateTitle?: (title: string) => Promise<void>
+}>()
 
-const emits = defineEmits(['update:modelValue'])
+const model = defineModel<string>({ default: '' })
 
 const editTitle = ref(false)
 const title = ref(props.data.title)
@@ -73,7 +62,7 @@ const submitTitle = () => {
 watch(
 	title,
 	() => {
-		emits('update:modelValue', title.value)
+		model.value = title.value
 	},
 	{ immediate: true },
 )

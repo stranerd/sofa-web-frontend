@@ -85,28 +85,22 @@
 <script lang="ts" setup>
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 import { Logic, SingleUser } from 'sofa-logic'
-import { PropType, defineEmits, defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
-defineProps({
-	quiz: {
-		type: Object as PropType<QuizEntity>,
-		required: true,
-	},
-	question: {
-		type: Object as PropType<QuestionEntity>,
-		required: true,
-	},
-	factory: {
-		type: Object as PropType<QuestionFactory>,
-		required: true,
-	},
-	users: {
-		type: Object as PropType<Record<string, SingleUser[]>>,
-		required: true,
-	},
-})
+defineProps<{
+	quiz: QuizEntity
+	question: QuestionEntity
+	factory: QuestionFactory
+	users: Record<string, SingleUser[]>
+}>()
 
-const emits = defineEmits(['showCurrentlyEditing', 'duplicateQuestion', 'saveQuestion', 'deleteQuestion', 'deleteQuiz'])
+const emits = defineEmits<{
+	showCurrentlyEditing: []
+	duplicateQuestion: [QuestionEntity]
+	saveQuestion: []
+	deleteQuestion: [string]
+	deleteQuiz: []
+}>()
 
 const openOptions = ref(['type', 'timeLimit'])
 

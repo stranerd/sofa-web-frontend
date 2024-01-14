@@ -103,24 +103,18 @@
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { QuizEntity, QuizFactory } from '@modules/study'
-import { PropType, defineEmits, defineProps, watch } from 'vue'
+import { watch } from 'vue'
 
-const props = defineProps({
-	quiz: {
-		type: Object as PropType<QuizEntity>,
-		required: true,
-	},
-	factory: {
-		type: Object as PropType<QuizFactory>,
-		required: true,
-	},
-	close: {
-		type: Function as PropType<() => void>,
-		required: true,
-	},
-})
+const props = defineProps<{
+	quiz: QuizEntity
+	factory: QuizFactory
+	close: () => void
+}>()
 
-const emits = defineEmits(['updateQuiz', 'publishQuiz'])
+const emits = defineEmits<{
+	updateQuiz: []
+	publishQuiz: []
+}>()
 
 const { isAdmin } = useAuth()
 

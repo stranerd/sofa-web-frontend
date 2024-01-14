@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
 import { SelectOption } from 'sofa-logic'
-import { computed, defineEmits, defineProps, ref } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
@@ -60,10 +60,6 @@ const props = defineProps({
 	},
 	customClass: {
 		type: String,
-		default: '',
-	},
-	modelValue: {
-		type: [String, Array],
 		default: '',
 	},
 	isMultiple: {
@@ -88,8 +84,6 @@ const props = defineProps({
 	},
 })
 
-const emits = defineEmits(['update:modelValue'])
-
 const showOptions = ref(false)
 const searchValue = ref('')
 
@@ -106,16 +100,18 @@ const selectedOptions = computed(() => {
 	return options
 })
 
+const model = defineModel<string | string[]>({ default: '' })
+
 const value = computed({
 	get: () => {
-		if (props.isMultiple) return Array.isArray(props.modelValue) ? props.modelValue : []
-		return props.modelValue
+		if (props.isMultiple) return Array.isArray(model.value) ? model.value : []
+		return model.value
 	},
-	set: (v) => emits('update:modelValue', v),
+	set: (v) => (model.value = v),
 })
 
 const itemIsSelected = (key: string) => {
-	if (!props.isMultiple) return key === props.modelValue
+	if (!props.isMultiple) return key === model.value
 	return Array.isArray(value.value) && value.value.some((v) => v === key)
 }
 

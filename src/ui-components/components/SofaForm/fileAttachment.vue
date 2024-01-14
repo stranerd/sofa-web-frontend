@@ -37,130 +37,90 @@
 		</template>
 	</div>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
+<script lang="ts" setup>
+import { ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
-export default defineComponent({
-	name: 'SofaFileAttachment',
-	components: {
-		SofaNormalText,
-		SofaIcon,
+const props = withDefaults(
+	defineProps<{
+		placeholder: string
+		iconName: string
+		accept: string
+		isWrapper: boolean
+		isMultiple: boolean
+		customClass: string
+	}>(),
+	{
+		placeholder: 'Upload File',
+		iconName: 'upload',
+		accept: '*',
+		isWrapper: false,
+		isMultiple: false,
+		customClass: '',
 	},
-	props: {
-		placeholder: {
-			type: String,
-			default: 'Upload File',
-		},
-		iconName: {
-			type: String,
-			default: 'upload',
-		},
-		accept: {
-			type: String,
-			default: '*',
-		},
-		modelValue: {
-			type: Object,
-			required: false,
-			default: null,
-		},
-		isWrapper: {
-			type: Boolean,
-			default: false,
-		},
-		isMultiple: {
-			type: Boolean,
-			default: false,
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-	},
-	emits: ['update:modelValue', 'update:localFileUrl', 'update:base64Data'],
-	setup(props: any, context: any) {
-		const files = ref<FileList>()
+)
 
-		const selectedFileName = ref('')
+const files = ref<FileList>()
+const selectedFileName = ref('')
+const model = defineModel<any>({ default: null })
+const localFileUrl = defineModel<string>('localFileUrl', { default: '' })
+const base64Data = defineModel<string>('base64Data', { default: '' })
 
-		const fileListArray = ref<any[]>([])
+const fileListArray = ref<any[]>(model.value ?? [])
 
-		const toDataURL = (url: string, callback: any) => {
-			const xhr = new XMLHttpRequest()
-			xhr.onload = function () {
-				const reader = new FileReader()
-				reader.onloadend = function () {
-					callback(reader.result)
-				}
-				reader.readAsDataURL(xhr.response)
-			}
-			xhr.open('GET', url)
-			xhr.responseType = 'blob'
-			xhr.send()
+const toDataURL = (url: string, callback: any) => {
+	const xhr = new XMLHttpRequest()
+	xhr.onload = function () {
+		const reader = new FileReader()
+		reader.onloadend = function () {
+			callback(reader.result)
 		}
+		reader.readAsDataURL(xhr.response)
+	}
+	xhr.open('GET', url)
+	xhr.responseType = 'blob'
+	xhr.send()
+}
 
-		const uploadHandler = (e: any) => {
-			const input = e.target
+const uploadHandler = (e: any) => {
+	const input = e.target
 
-			if (props.isMultiple) {
-				files.value = input.files
-			} else {
-				files.value = input.files
+	if (props.isMultiple) {
+		files.value = input.files
+	} else {
+		files.value = input.files
 
-				selectedFileName.value = input.files[0].name
+		selectedFileName.value = input.files[0].name
 
-				// create readable url
-				const fr = new FileReader()
-				if (files.value) {
-					fr.readAsDataURL(files.value[0])
-					fr.addEventListener('load', () => {
-						context.emit('update:localFileUrl', fr.result?.toString() ? fr.result?.toString() : '')
-						toDataURL(fr.result?.toString() || '', (dataUrl: any) => {
-							context.emit('update:base64Data', dataUrl)
-						})
-					})
-				}
-			}
-		}
-
-		watch(files, () => {
-			if (files.value) {
-				fileListArray.value = []
-				for (let index = 0; index < files.value.length; index++) {
-					const file = files.value?.item(index)
-					fileListArray.value.push(file)
-				}
-				context.emit('update:modelValue', props.isMultiple ? fileListArray.value : fileListArray.value[0])
-			}
-		})
-
-		watch(props, () => {
-			if (props.placeholder) {
-				selectedFileName.value = ''
-			}
-		})
-
-		onMounted(() => {
-			if (props.modelValue) {
-				fileListArray.value = props.modelValue
-			}
-		})
-
-		const removeFile = (index: number) => {
-			fileListArray.value = fileListArray.value.filter((file, fileIndex) => {
-				return fileIndex != index
+		// create readable url
+		const fr = new FileReader()
+		if (files.value) {
+			fr.readAsDataURL(files.value[0])
+			fr.addEventListener('load', () => {
+				localFileUrl.value = fr.result?.toString() ? fr.result?.toString() : ''
+				toDataURL(fr.result?.toString() || '', (dataUrl: any) => {
+					base64Data.value = dataUrl
+				})
 			})
-			context.emit('update:modelValue', props.isMultiple ? fileListArray.value : fileListArray.value[0])
 		}
+	}
+}
 
-		return {
-			uploadHandler,
-			fileListArray,
-			removeFile,
-			selectedFileName,
+watch(files, () => {
+	if (files.value) {
+		fileListArray.value = []
+		for (let index = 0; index < files.value.length; index++) {
+			const file = files.value?.item(index)
+			fileListArray.value.push(file)
 		}
-	},
+		model.value = props.isMultiple ? fileListArray.value : fileListArray.value[0]
+	}
+})
+
+watch(props, () => {
+	if (props.placeholder) {
+		selectedFileName.value = ''
+	}
 })
 </script>
