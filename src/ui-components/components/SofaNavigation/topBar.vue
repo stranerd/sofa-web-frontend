@@ -156,7 +156,7 @@ withDefaults(
 		title?: string
 		type?: string
 		customClass?: string
-		badges: {
+		badges?: {
 			text: string
 			color: string
 		}[]

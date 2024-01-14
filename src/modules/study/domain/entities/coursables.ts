@@ -57,7 +57,7 @@ export class PublishableEntity extends BaseEntity implements Publishable {
 	}
 
 	isCourse(): this is CourseEntity {
-		return this.__type === 'CoursableEntity'
+		return this.__type === 'CourseEntity'
 	}
 
 	isFile(): this is FileEntity {
