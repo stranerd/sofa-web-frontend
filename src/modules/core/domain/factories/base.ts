@@ -1,14 +1,14 @@
 import { Differ, VCore } from 'valleyed'
 import { isProxy, isReactive, isRef, reactive, ref, toRaw } from 'vue'
 
-export function deepToRaw(input: any) {
-	if (Array.isArray(input)) return input.map(deepToRaw)
+export function deepToRaw<T>(input: T): T {
+	if (Array.isArray(input)) return input.map(deepToRaw) as T
 	if (isRef(input) || isReactive(input) || isProxy(input)) return toRaw(input)
 	if (input?.constructor?.name === 'Object')
-		return Object.keys(input).reduce((acc, key) => {
-			acc[key as keyof typeof acc] = deepToRaw(input[key])
+		return Object.entries(input).reduce((acc, [key, val]) => {
+			acc[key as keyof typeof acc] = deepToRaw(val as T[keyof T])
 			return acc
-		}, {} as any)
+		}, {} as T)
 	return input
 }
 

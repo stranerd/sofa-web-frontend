@@ -88,7 +88,7 @@
 					<template v-if="action.isIcon && !action.hide">
 						<div class="flex flex-row gap-4 border-r border-darkLightGray items-center pr-3 cursor-pointer">
 							<div
-								v-for="(icon, i) in action.data.filter((d) => !d.hide)"
+								v-for="(icon, i) in action.data.filter((d: any) => !d.hide)"
 								:key="i"
 								class="flex flex-row gap-2 items-center"
 								@click="icon.handler()">

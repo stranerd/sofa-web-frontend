@@ -1,4 +1,6 @@
 import { BaseEntity, Media } from '@modules/core'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import stringSimilarity from 'string-similarity'
 import { Differ, capitalize, stripHTML } from 'valleyed'
 import { QuestionFromModel } from '../../data/models/questions'

@@ -5,6 +5,8 @@
 <script lang="ts" setup>
 import { Phone } from '@modules/auth'
 import { defineEmits, defineProps, PropType, ref } from 'vue'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { VueTelInput } from 'vue-tel-input'
 
 const props = defineProps({

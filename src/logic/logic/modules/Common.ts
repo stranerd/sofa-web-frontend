@@ -213,7 +213,7 @@ export default class Common {
 			NGN: '₦',
 			USD: '$',
 		}
-		return currencies[currency.toUpperCase()] ?? ''
+		return currencies[currency.toUpperCase() as keyof typeof currencies] ?? ''
 	}
 
 	public formatPrice = (price: number, currency = 'NGN') => {
@@ -282,9 +282,10 @@ export default class Common {
 
 			if (addRuleToRequest) {
 				const domain = Logic[rule.domain]
+				const method = domain[rule.method as keyof typeof domain] as any
 
 				if (
-					domain[rule.property] == undefined ||
+					domain[rule.property as keyof typeof domain] == undefined ||
 					(typeof rule.ignoreProperty == 'function' && rule.ignoreProperty()) ||
 					rule.ignoreProperty
 				) {
@@ -299,18 +300,18 @@ export default class Common {
 							// update userid
 							rule.params.forEach((param) => {
 								if (typeof param !== 'object') return
-								param.where?.forEach((item) => {
+								param.where?.forEach((item: any) => {
 									if (item.field == 'user.id' || item.field == 'userId') item.value = Logic.Common.AuthUser?.id
 								})
 							})
-							domain[rule.method]?.(...rule.params).then(resolve)
+							method?.(...rule.params).then(resolve)
 						}),
 					)
 				} else {
 					if (rule.silentUpdate) {
 						// run in silence
 						rule.params = [...new Set(rule.params)]
-						domain[rule.method]?.(...rule.params)
+						method?.(...rule.params)
 					}
 				}
 			}

@@ -11,7 +11,7 @@ const spreadModals = (type: string, modals: ModalsDef) =>
 	Object.fromEntries(Object.entries(modals).map(([key, val]) => [merge(type, key), { ...val, type }]))
 
 const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
-	const registeredTypes = {}
+	const registeredTypes: Record<string, any> = {}
 
 	const close = (id: string) => {
 		stack.value = stack.value.filter((comp) => comp !== id)

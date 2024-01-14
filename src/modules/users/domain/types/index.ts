@@ -126,7 +126,6 @@ export enum UserSocials {
 	facebook = 'facebook',
 	twitter = 'twitter',
 	instagram = 'instagram',
-	linkedIn = 'linkedIn',
 	youtube = 'youtube',
 	tiktok = 'tiktok',
 }

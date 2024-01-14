@@ -471,7 +471,7 @@ export default defineComponent({
 			})
 		}
 
-		const handleCourseContentSet = (data) => {
+		const handleCourseContentSet = (data: any) => {
 			courseContents.length = 0
 			courseContents.push(...data)
 		}

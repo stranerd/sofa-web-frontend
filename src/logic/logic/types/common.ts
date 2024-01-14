@@ -1,3 +1,5 @@
+import { Logic } from '../modules'
+
 export { Conditions, EmitTypes, QueryKeys } from '@modules/core'
 export type { Listeners, QueryParams, QueryResults } from '@modules/core'
 
@@ -60,10 +62,14 @@ export interface SuccessConfirmation extends ConfirmationBase {
 
 export interface SuccessConfirmationSetup extends SuccessConfirmation, ConfirmationSetupBase {}
 
+type L = typeof Logic
+type D = keyof L
+type P = string // keyof L[D] // TODO figure out how to make this work
+
 export interface FetchRule {
-	domain: string
-	property: string
-	method: string
+	domain: D
+	property: P
+	method: P // & ((...args: any[]) => any)
 	params: any[]
 	requireAuth?: boolean
 	ignoreProperty?: boolean | (() => boolean)

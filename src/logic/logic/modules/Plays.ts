@@ -59,13 +59,13 @@ export default class Plays extends Common {
 
 	public GetGameQuestions = (gameId: string) => {
 		return $api.plays.game.getGameQuestions(gameId).then((response) => {
-			return response.data.map((i) => new QuestionEntity(i as any))
+			return response.data.map((i: any) => new QuestionEntity(i))
 		})
 	}
 
 	public GetTestQuestions = (testId: string) => {
 		return $api.plays.test.getTestQuestions(testId).then((response) => {
-			return response.data.map((i) => new QuestionEntity(i as any))
+			return response.data.map((i: any) => new QuestionEntity(i))
 		})
 	}
 

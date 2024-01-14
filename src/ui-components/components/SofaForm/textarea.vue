@@ -12,7 +12,7 @@
 			:class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
 			:placeholder="placeholder"
 			:tabindex="0"
-			@ready="(v) => (quill = v)">
+			@ready="(v: any) => (quill = v)">
 			<template #toolbar>
 				<div :id="toolbarId" :class="{ '!hidden': disabled }">
 					<button class="ql-bold"></button>
@@ -51,6 +51,8 @@
 <script lang="ts">
 import 'mathlive'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { Quill, VueEditor } from 'vue3-editor'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 

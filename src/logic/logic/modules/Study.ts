@@ -381,7 +381,7 @@ export default class Study extends Common {
 		})
 	}
 
-	public GoToStudyMode = async (mode: string, quizId) => {
+	public GoToStudyMode = async (mode: string, quizId: string) => {
 		if (mode === 'practice' || mode === 'flashcard') {
 			await Logic.Common.GoToRoute(`/quiz/${quizId}/${mode}`)
 			return

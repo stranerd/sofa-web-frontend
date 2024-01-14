@@ -21,6 +21,8 @@ type SocketReturn = { code: StatusCodes; message: string; channel: string }
 
 async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>) {
 	const { accessToken } = await getTokens()
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	if (!socket || (!socket.auth['token'] && accessToken) || (accessToken && socket.auth['token'] !== accessToken)) {
 		const url = new URL(`${apiBase}/socket.io`)
 		socket = io(url.origin, {
