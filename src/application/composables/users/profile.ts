@@ -59,7 +59,6 @@ export const useUserAiUpdate = () => {
 
 const locationStore = {
 	countries: ref<Awaited<ReturnType<(typeof UsersUseCases)['getCountries']>>>([]),
-	fetched: ref(false),
 }
 
 export const useUserLocationUpdate = () => {
@@ -69,16 +68,15 @@ export const useUserLocationUpdate = () => {
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
 
-	const { asyncFn: fetchCountries } = useAsyncFn(
+	const { asyncFn: fetchCountries, called } = useAsyncFn(
 		async () => {
 			locationStore.countries.value = await UsersUseCases.getCountries()
-			locationStore.fetched.value = true
 		},
 		{ key: 'users/users/countries' },
 	)
 
 	onMounted(async () => {
-		if (!locationStore.fetched.value) await fetchCountries()
+		if (!called.value) await fetchCountries()
 	})
 
 	const {

@@ -7,7 +7,6 @@ import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
 
 const store = {
-	fetched: ref(false),
 	institutions: ref([] as InstitutionEntity[]),
 }
 
@@ -15,6 +14,7 @@ const {
 	asyncFn: fetchInstitutions,
 	loading,
 	error,
+	called,
 } = useAsyncFn(
 	async () => {
 		const institutions = await InstitutionsUseCases.get()
@@ -27,7 +27,6 @@ const {
 				true,
 			),
 		)
-		store.fetched.value = true
 	},
 	{ key: 'school/institutions/all' },
 )
@@ -37,7 +36,7 @@ export const useInstitutionList = (skipHooks = false) => {
 	const gatewayExams = computed(() => store.institutions.value.filter((i) => i.isGateway))
 	onMounted(async () => {
 		if (skipHooks) return
-		if (!store.fetched.value) await fetchInstitutions()
+		if (!called.value) await fetchInstitutions()
 	})
 	return { ...store, loading, error, schools, gatewayExams }
 }
@@ -57,7 +56,7 @@ export const useInstitution = (id: string) => {
 		},
 	})
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchInstitutions()
+		if (!called.value) await fetchInstitutions()
 	})
 
 	return { institution }

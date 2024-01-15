@@ -10,7 +10,6 @@ const searchStore = {
 
 const store = {
 	tutors: ref<UserEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		return await UsersUseCases.listenToAllTeachers({
 			created: async (entity) => {
@@ -41,6 +40,7 @@ export const useTutorsList = () => {
 		asyncFn: fetchTutors,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const tutors = await UsersUseCases.getAllTeachers()
@@ -52,13 +52,12 @@ export const useTutorsList = () => {
 					(e) => e.account.ratings.avg,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'users/users/teachers' },
 	)
 
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchTutors()
+		if (!called.value) await fetchTutors()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

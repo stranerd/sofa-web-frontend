@@ -14,7 +14,6 @@ const store = {} as Record<
 		game: Ref<Game | null>
 		questions: QuestionEntity[]
 		answer: Ref<GameParticipantAnswer | null>
-		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	}
 >
@@ -32,7 +31,6 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 		game: ref(null),
 		questions: reactive([]),
 		answer: ref(null),
-		fetched: ref(false),
 		listener: useListener(
 			async () =>
 				await Logic.Common.listenToOne<Game>(`plays/games/${id}`, {
@@ -54,7 +52,6 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 	const { asyncFn: fetchGame } = useAsyncFn(
 		async () => {
 			store[id].game.value = await Logic.Plays.GetGame(id)
-			store[id].fetched.value = true
 		},
 		{ key: `plays/games/${id}` },
 	)
@@ -130,7 +127,7 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 	)
 
 	onMounted(async () => {
-		/* if (!store[id].fetched.value) */ await fetchGame()
+		/* if (!called.value) */ await fetchGame()
 		await store[id].listener.start()
 		await gameWatcherCb()
 	})

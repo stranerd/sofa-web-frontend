@@ -9,7 +9,6 @@ const store = {} as Record<
 	string,
 	{
 		messages: Ref<MessageEntity[]>
-		fetched: Ref<boolean>
 		hasMore: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	}
@@ -51,7 +50,6 @@ export const useMessages = (conversation: ConversationEntity) => {
 		})
 		store[conversationId] = {
 			messages: ref([]),
-			fetched: ref(false),
 			hasMore: ref(false),
 			listener,
 		}
@@ -61,6 +59,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 		asyncFn: fetchMessages,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const c = await MessagesUseCases.get(conversationId, store[conversationId].messages.value.at(-1)?.createdAt)
@@ -73,7 +72,6 @@ export const useMessages = (conversation: ConversationEntity) => {
 					(e) => e.createdAt,
 				),
 			)
-			store[conversationId].fetched.value = true
 		},
 		{ key: `conversations/messages/${conversationId}` },
 	)
@@ -84,7 +82,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 	}
 
 	onMounted(async () => {
-		if (!store[conversationId].fetched.value) await fetchMessages()
+		if (!called.value) await fetchMessages()
 		await store[conversationId].listener.start()
 	})
 	onUnmounted(async () => {
@@ -110,7 +108,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 	return {
 		users,
 		messages: computed(() => [...store[conversationId].messages.value].reverse()),
-		fetched: store[conversationId].fetched,
+		called,
 		loading,
 		error,
 		hasMore: store[conversationId].hasMore,

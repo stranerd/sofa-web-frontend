@@ -12,7 +12,6 @@ const store = {} as Record<
 		user: Ref<UserEntity | null>
 		quizzes: QuizEntity[]
 		courses: CourseEntity[]
-		fetched: Ref<boolean>
 	}
 >
 
@@ -21,13 +20,13 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 		user: ref(null),
 		quizzes: reactive([]),
 		courses: reactive([]),
-		fetched: ref(false),
 	}
 
 	const {
 		asyncFn: fetchUserAndMaterials,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			if (!skip.user) store[id].user.value = await UsersUseCases.find(id)
@@ -59,13 +58,12 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 					(e) => e.createdAt,
 				),
 			)
-			store[id].fetched.value = true
 		},
 		{ key: `study/user-materials/${id}` },
 	)
 
 	onMounted(async () => {
-		if (!store[id].fetched.value) await fetchUserAndMaterials()
+		if (!called.value) await fetchUserAndMaterials()
 	})
 
 	return { ...store[id], loading, error }

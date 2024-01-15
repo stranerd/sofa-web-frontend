@@ -17,7 +17,6 @@ export const saveToFolder = (item: CourseEntity | QuizEntity) => {
 
 const store = {
 	folders: ref<FolderEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return await FoldersUseCases.listenToUserFolders(id.value, {
@@ -51,6 +50,7 @@ export const useMyFolders = () => {
 		asyncFn: fetchFolders,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const folders = await FoldersUseCases.getUserFolders(id.value)
@@ -62,13 +62,12 @@ export const useMyFolders = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'study/folders/mine' },
 	)
 
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchFolders()
+		if (!called.value) await fetchFolders()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

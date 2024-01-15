@@ -1,8 +1,8 @@
 import { addToArray, getRandomValue } from 'valleyed'
-import { ComputedRef, Ref, computed, reactive, watch } from 'vue'
+import { ComputedRef, Ref, computed, reactive, ref, watch } from 'vue'
 import { useErrorHandler, useLoadingHandler } from './states'
 
-const asyncStore: Record<string, ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>> = {}
+const asyncStore: Record<string, { called: Ref<boolean> } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>> = {}
 
 type UseAsyncFnOptions<T extends (...args: any[]) => any> = {
 	hideLoading?: boolean
@@ -12,8 +12,8 @@ type UseAsyncFnOptions<T extends (...args: any[]) => any> = {
 }
 export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Partial<UseAsyncFnOptions<T>> = {}) => {
 	const key = opts.key ?? getRandomValue()
-	asyncStore[key] ??= { ...useErrorHandler(), ...useLoadingHandler() }
-	const { setError, error, setLoading, loading } = asyncStore[key]
+	asyncStore[key] ??= { ...useErrorHandler(), ...useLoadingHandler(), called: ref(false) }
+	const { setError, error, setLoading, loading, called } = asyncStore[key]
 	const asyncFn = async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>> | undefined> => {
 		let result: Awaited<ReturnType<T>> | undefined
 		if (loading.value) return result
@@ -26,9 +26,10 @@ export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Parti
 			await setError(e, opts.hideError)
 		}
 		await setLoading(false, opts.hideLoading)
+		called.value = true
 		return result
 	}
-	return { asyncFn, error, loading }
+	return { asyncFn, error, loading, called }
 }
 
 const store: Record<

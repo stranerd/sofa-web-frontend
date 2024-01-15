@@ -10,7 +10,6 @@ import { useSuccessHandler } from '../core/states'
 
 const store = {
 	conversations: ref<ConversationEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		return await ConversationsUseCases.listenToAll({
 			created: async (entity) => {
@@ -43,6 +42,7 @@ export const useConversationsList = () => {
 		asyncFn: fetchConversations,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const conversations = await ConversationsUseCases.getAll()
@@ -54,13 +54,12 @@ export const useConversationsList = () => {
 					(e) => e.last?.createdAt ?? 0,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'conversations/conversations/all' },
 	)
 
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchConversations()
+		if (!called.value) await fetchConversations()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

@@ -1,12 +1,11 @@
 import { TagEntity, TagsUseCases } from '@modules/interactions'
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { addToArray } from 'valleyed'
+import { onMounted, onUnmounted, reactive } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { addToArray } from 'valleyed'
 
 const topicStore = {
 	topics: reactive<TagEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		return TagsUseCases.listenToAllTopics({
 			created: async (entity) => {
@@ -36,7 +35,6 @@ const topicStore = {
 
 const genericStore = {
 	tags: reactive<TagEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		return TagsUseCases.listenToAllGeneric({
 			created: async (entity) => {
@@ -67,6 +65,7 @@ export const useTopicsList = () => {
 		asyncFn: fetchTopics,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const tags = await TagsUseCases.getAllTopics()
@@ -79,13 +78,12 @@ export const useTopicsList = () => {
 					true,
 				),
 			)
-			topicStore.fetched.value = true
 		},
 		{ key: 'interactions/tags/topics' },
 	)
 
 	onMounted(async () => {
-		if (!topicStore.fetched.value) await fetchTopics()
+		if (!called.value) await fetchTopics()
 		await topicStore.listener.start()
 	})
 	onUnmounted(async () => {
@@ -100,6 +98,7 @@ export const useGenericTagsList = () => {
 		asyncFn: fetchGeneric,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const tags = await TagsUseCases.getAllGeneric()
@@ -111,13 +110,12 @@ export const useGenericTagsList = () => {
 					(e) => e.meta.total,
 				),
 			)
-			genericStore.fetched.value = true
 		},
 		{ key: 'interactions/tags/generic' },
 	)
 
 	onMounted(async () => {
-		if (!genericStore.fetched.value) await fetchGeneric()
+		if (!called.value) await fetchGeneric()
 		await genericStore.listener.start()
 	})
 	onUnmounted(async () => {

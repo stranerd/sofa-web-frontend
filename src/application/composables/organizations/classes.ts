@@ -11,7 +11,6 @@ import { useSuccessHandler } from '../core/states'
 
 const store = {
 	classes: ref<ClassEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return ClassesUseCases.listenToAll(id.value, {
@@ -45,6 +44,7 @@ export const useMyClasses = () => {
 		asyncFn: fetchClasses,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const classes = await ClassesUseCases.getAll(id.value)
@@ -56,13 +56,12 @@ export const useMyClasses = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'organizations/classes/mine' },
 	)
 
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchClasses()
+		if (!called.value) await fetchClasses()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

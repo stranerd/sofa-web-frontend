@@ -6,7 +6,6 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 
 const store = {
-	fetched: ref(false),
 	courses: ref([] as CourseEntity[]),
 	departments: {} as Record<string, boolean>,
 	faculties: {} as Record<string, boolean>,
@@ -28,7 +27,6 @@ const { asyncFn: fetchDepartmentCourses } = useAsyncFn(async (departmentId: stri
 			true,
 		),
 	)
-	store.fetched.value = true
 	store.departments[departmentId] = true
 })
 
@@ -47,7 +45,6 @@ const { asyncFn: fetchFacultyCourses } = useAsyncFn(async (facultyId: string, ge
 		if (c.departmentId) store.departments[c.departmentId] = true
 		else store.faculties[`${c.facultyId}-general`] = true
 	})
-	store.fetched.value = true
 	store.faculties[key] = true
 })
 
@@ -69,7 +66,6 @@ const { asyncFn: fetchInstitutionCourses } = useAsyncFn(async (institutionId: st
 			else store.faculties[`${c.facultyId}-general`] = true
 		} else store.institutions[`${institutionId}-general`] = true
 	})
-	store.fetched.value = true
 	store.institutions[key] = true
 })
 

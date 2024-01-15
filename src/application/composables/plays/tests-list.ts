@@ -7,7 +7,6 @@ import { useListener } from '../core/listener'
 
 const store = {
 	tests: ref<Test[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return Logic.Common.listenToMany<Test>(
@@ -45,6 +44,7 @@ export const useMyTests = () => {
 		asyncFn: fetchTests,
 		loading,
 		error,
+		// called,
 	} = useAsyncFn(
 		async () => {
 			const tests = await Logic.Plays.GetTests({
@@ -59,13 +59,12 @@ export const useMyTests = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'plays/tests/mine' },
 	)
 
 	onMounted(async () => {
-		/* if (!store.fetched.value) */ await fetchTests()
+		/* if (!called.value) */ await fetchTests()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

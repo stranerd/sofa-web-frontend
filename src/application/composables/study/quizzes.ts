@@ -15,7 +15,6 @@ const store = {} as Record<
 	string,
 	{
 		quiz: Ref<QuizEntity | null>
-		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	} & ReturnType<typeof useSuccessHandler>
 >
@@ -23,7 +22,6 @@ const store = {} as Record<
 export const useQuiz = (id: string, skip: { questions: boolean; members: boolean }) => {
 	store[id] ??= {
 		quiz: ref(null),
-		fetched: ref(false),
 		listener: useListener(
 			async () =>
 				await QuizzesUseCases.listenToOne(id, {
@@ -65,11 +63,10 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 		!skip.questions,
 	)
 
-	const { asyncFn: fetchQuiz } = useAsyncFn(
+	const { asyncFn: fetchQuiz, called } = useAsyncFn(
 		async () => {
 			store[id].quiz.value = await QuizzesUseCases.find(id)
 			if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
-			store[id].fetched.value = true
 		},
 		{ key: `study/quizzes/${id}` },
 	)
@@ -171,7 +168,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	})
 
 	onMounted(async () => {
-		if (!store[id].fetched.value) await fetchQuiz()
+		if (!called.value) await fetchQuiz()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {

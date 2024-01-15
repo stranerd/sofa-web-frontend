@@ -1,7 +1,7 @@
 import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import { addToArray, v } from 'valleyed'
-import { computed, onMounted, onUnmounted, reactive, Ref, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
@@ -11,7 +11,6 @@ const store = {} as Record<
 	string,
 	{
 		members: MemberEntity[]
-		fetched: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	}
 >
@@ -19,7 +18,6 @@ const store = {} as Record<
 export const useOrganizationMembers = (id: string) => {
 	store[id] ??= {
 		members: reactive([]),
-		fetched: ref(false),
 		listener: useListener(() =>
 			MembersUseCases.listenToAll(id, {
 				created: (entity) => {
@@ -50,6 +48,7 @@ export const useOrganizationMembers = (id: string) => {
 		asyncFn: fetchMembers,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const members = await MembersUseCases.getAll(id)
@@ -61,13 +60,12 @@ export const useOrganizationMembers = (id: string) => {
 					(e) => e.id,
 				)
 			})
-			store[id].fetched.value = true
 		},
 		{ key: 'organizations/members/all' },
 	)
 
 	onMounted(async () => {
-		if (!store[id].fetched.value) await fetchMembers()
+		if (!called.value) await fetchMembers()
 		await store[id].listener.start()
 	})
 	onUnmounted(async () => {

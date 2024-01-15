@@ -1,5 +1,5 @@
 import { Logic, Purchase } from 'sofa-logic'
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -7,7 +7,6 @@ import { addToArray } from 'valleyed'
 
 const store = {
 	purchases: reactive<Purchase[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return Logic.Common.listenToMany<Purchase>(
@@ -46,6 +45,7 @@ export const useMyPurchases = () => {
 		asyncFn: fetchPurchases,
 		loading,
 		error,
+		// called,
 	} = useAsyncFn(
 		async () => {
 			const purchases = await Logic.Payment.GetMyPurchases({
@@ -60,13 +60,12 @@ export const useMyPurchases = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'payments/purchases/mine' },
 	)
 
 	onMounted(async () => {
-		/* if (!store.fetched.value) */ await fetchPurchases()
+		/* if (!called.value) */ await fetchPurchases()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

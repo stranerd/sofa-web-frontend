@@ -7,7 +7,6 @@ import { useListener } from '../core/listener'
 
 const store = {
 	quizzes: ref<QuizEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return QuizzesUseCases.listenToUserQuizzes(id.value, {
@@ -36,7 +35,6 @@ const store = {
 
 const tutorStore = {
 	quizzes: ref<QuizEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id, isAdmin } = useAuth()
 		if (!isAdmin.value)
@@ -74,6 +72,7 @@ export const useMyQuizzes = () => {
 		asyncFn: fetchQuizzes,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const quizzes = await QuizzesUseCases.getUserQuizzes(id.value)
@@ -85,13 +84,12 @@ export const useMyQuizzes = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'study/quizzes/mine' },
 	)
 
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchQuizzes()
+		if (!called.value) await fetchQuizzes()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -111,6 +109,7 @@ export const useTutorQuizzes = () => {
 		asyncFn: fetchQuizzes,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const quizzes = await QuizzesUseCases.getTutorQuizzes(id.value)
@@ -122,13 +121,12 @@ export const useTutorQuizzes = () => {
 					(e) => e.createdAt,
 				),
 			)
-			tutorStore.fetched.value = true
 		},
 		{ key: 'study/quizzes/tutor/mine' },
 	)
 
 	onMounted(async () => {
-		if (!tutorStore.fetched.value && isAdmin.value) await fetchQuizzes()
+		if (!called.value && isAdmin.value) await fetchQuizzes()
 		await tutorStore.listener.start()
 	})
 	onUnmounted(async () => {

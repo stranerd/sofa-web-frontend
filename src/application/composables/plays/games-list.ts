@@ -7,7 +7,6 @@ import { useListener } from '../core/listener'
 
 const store = {
 	games: ref<Game[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return Logic.Common.listenToMany<Game>(
@@ -45,6 +44,7 @@ export const useMyGames = () => {
 		asyncFn: fetchGames,
 		loading,
 		error,
+		// called,
 	} = useAsyncFn(
 		async () => {
 			const games = await Logic.Plays.GetGames({
@@ -63,13 +63,12 @@ export const useMyGames = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'plays/games/mine' },
 	)
 
 	onMounted(async () => {
-		/* if (!store.fetched.value) */ await fetchGames()
+		/* if (!called.value) */ await fetchGames()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {

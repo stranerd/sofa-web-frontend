@@ -18,31 +18,29 @@ const store: Record<
 	string,
 	{
 		materials: Ref<(QuizEntity | CourseEntity)[]>
-		fetched: Ref<boolean>
 	}
 > = {}
 
 export const useMyStudy = (key: StudyKeys, alwaysRefetch = false) => {
 	store[key] ??= {
 		materials: ref([]),
-		fetched: ref(false),
 	}
 
 	const {
 		asyncFn: fetchMaterials,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const materials = await StudyUseCases.get(key)
 			store[key].materials.value = materials
-			store[key].fetched.value = true
 		},
 		{ key: `study/study/${key}` },
 	)
 
 	onMounted(async () => {
-		if (!store[key].fetched.value || alwaysRefetch) await fetchMaterials()
+		if (!called.value || alwaysRefetch) await fetchMaterials()
 	})
 
 	return { ...store[key], loading, error }

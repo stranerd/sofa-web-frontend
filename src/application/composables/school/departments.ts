@@ -7,7 +7,6 @@ import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
 
 const store = {
-	fetched: ref(false),
 	departments: ref([] as DepartmentEntity[]),
 	faculties: {} as Record<string, boolean>,
 }
@@ -29,7 +28,6 @@ const {
 				true,
 			),
 		)
-		store.fetched.value = true
 		store.faculties[facultyId] = true
 	},
 	{ key: 'school/departments/all' },

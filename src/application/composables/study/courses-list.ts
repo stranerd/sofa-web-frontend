@@ -8,7 +8,6 @@ import { useMyPurchases } from '../payment/purchases'
 
 const store = {
 	courses: ref<CourseEntity[]>([]),
-	fetched: ref(false),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return CoursesUseCases.listenToUserCourses(id.value, {
@@ -42,6 +41,7 @@ export const useMyCourses = () => {
 		asyncFn: fetchCourses,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const courses = await CoursesUseCases.getUserCourses(id.value)
@@ -53,13 +53,12 @@ export const useMyCourses = () => {
 					(e) => e.createdAt,
 				),
 			)
-			store.fetched.value = true
 		},
 		{ key: 'study/courses/mine' },
 	)
 
 	onMounted(async () => {
-		if (!store.fetched.value) await fetchCourses()
+		if (!called.value) await fetchCourses()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
@@ -74,8 +73,8 @@ export const useMyCourses = () => {
 
 export const useMyPurchasedCourses = () => {
 	const { purchasesCoursesIds } = useMyPurchases()
-	const { courses: fetchedCourses } = useCoursesInList(purchasesCoursesIds)
-	const courses = computed(() => purchasesCoursesIds.value.map((id) => fetchedCourses.value.find((c) => c.id === id)).filter(Boolean))
+	const { courses: coursesInList } = useCoursesInList(purchasesCoursesIds)
+	const courses = computed(() => purchasesCoursesIds.value.map((id) => coursesInList.value.find((c) => c.id === id)).filter(Boolean))
 	return { courses }
 }
 
