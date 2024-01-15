@@ -2,13 +2,13 @@
 	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between flex-grow h-full flex-col">
 		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-darkLightGray text-left">
 			<div class="flex items-center gap-3 flex-1">
-				<SofaIcon class="mdlg:hidden" customClass="h-[15px]" :name="'back-arrow'" @click="Logic.Common.goBack()" />
+				<SofaIcon class="mdlg:hidden" customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 				<SofaAvatar :photoUrl="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" />
 				<div class="flex flex-col w-full">
 					<SofaCustomInput
 						v-if="canEditTitle && editTitle"
 						v-model="title"
-						:customClass="'!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base'"
+						customClass="!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base"
 						:autoFocus="true"
 						@onContentChange="submitTitle"
 						@onBlur="editTitle = false"></SofaCustomInput>

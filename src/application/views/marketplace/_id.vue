@@ -1,25 +1,25 @@
 <template>
 	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
 		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
-			<SofaNormalText :color="'text-grayColor w-full flex flex-row justify-start gap-1'">
+			<SofaNormalText color="text-grayColor w-full flex flex-row justify-start gap-1">
 				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ 'Marketplace ' }}</span>
 				<span> / {{ contentDetails.title }}</span>
 			</SofaNormalText>
 		</div>
 		<div
 			class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
-			<SofaIcon :customClass="'h-[15px]'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-			<SofaNormalText :customClass="'!font-bold !text-base'">
+			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaNormalText customClass="!font-bold !text-base">
 				{{ contentType == 'course' ? 'Course details' : 'Quiz details' }}</SofaNormalText
 			>
 			<div>
-				<SofaIcon :customClass="'h-[15px] invisible'" :name="'back-arrow'" />
+				<SofaIcon customClass="h-[15px] invisible" name="back-arrow" />
 			</div>
 		</div>
 		<div class="w-full bg-white rounded-[16px] flex flex-col flex-grow overflow-y-auto">
 			<SofaContentDetails
 				:content="contentDetails"
-				:customClass="'!rounded-none'"
+				customClass="!rounded-none"
 				:showBuyButton="true"
 				:buyAction="buyCourse"
 				:hasAccess="userHasAccess(contentDetails.original)"
@@ -40,13 +40,13 @@
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
-						<SofaHeaderText :customClass="'text-xl'"> Choose payment method </SofaHeaderText>
+						<SofaHeaderText customClass="text-xl"> Choose payment method </SofaHeaderText>
 					</div>
 
 					<div
 						class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
-						<SofaNormalText :customClass="'!font-bold !text-base'"> Choose payment method </SofaNormalText>
-						<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMakePaymentModal = false" />
+						<SofaNormalText customClass="!font-bold !text-base"> Choose payment method </SofaNormalText>
+						<SofaIcon customClass="h-[19px]" name="circle-close" @click="showMakePaymentModal = false" />
 					</div>
 
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
@@ -56,7 +56,7 @@
 								selectedMethodId == 'payWithWallet' ? 'border-primaryBlue  border-2' : ''
 							} rounded-custom`"
 							@click="selectedMethodId = 'payWithWallet'">
-							<SofaIcon :customClass="'h-[20px]'" :name="'wallet'" />
+							<SofaIcon customClass="h-[20px]" name="wallet" />
 							<SofaNormalText v-if="UserWallet">
 								Wallet (<span class="!font-semibold">{{
 									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
@@ -70,8 +70,8 @@
 						<div
 							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
 							@click="Logic.Payment.initialPayment()">
-							<SofaIcon :customClass="'h-[18px]'" :name="'add-card'" />
-							<SofaNormalText :color="'text-grayColor'">Add credit or debit card</SofaNormalText>
+							<SofaIcon customClass="h-[18px]" name="add-card" />
+							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 						</div>
 
 						<a
@@ -81,7 +81,7 @@
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom`"
 							@click="selectedMethodId = method.id">
-							<SofaIcon :customClass="'h-[20px]'" :name="'card'" />
+							<SofaIcon customClass="h-[20px]" name="card" />
 							<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
 						</a>
 					</div>
@@ -90,10 +90,10 @@
 						class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
 						<div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
 							<SofaButton
-								:textColor="'text-grayColor'"
-								:bgColor="'bg-white'"
-								:padding="'px-4 py-1'"
-								:customClass="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
+								textColor="text-grayColor"
+								bgColor="bg-white"
+								padding="px-4 py-1"
+								customClass="border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full"
 								@click="showMakePaymentModal = false">
 								Exit
 							</SofaButton>
@@ -101,10 +101,10 @@
 
 						<div class="md:!w-auto col-span-2 flex flex-col">
 							<SofaButton
-								:textColor="'text-white'"
-								:bgColor="'bg-primaryBlue'"
-								:padding="'px-4 md:!py-1 py-3'"
-								:customClass="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
+								textColor="text-white"
+								bgColor="bg-primaryBlue"
+								padding="px-4 md:!py-1 py-3"
+								customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
 								@click="buyCourse()">
 								Make payment
 							</SofaButton>

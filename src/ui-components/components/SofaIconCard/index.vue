@@ -8,16 +8,16 @@
 			<div class="w-full flex flex-col">
 				<div class="flex flex-row items-center gap-2">
 					<slot name="title" />
-					<SofaIcon v-if="showArrow" :customClass="'h-[12px]'" :name="'right-arrow'" />
+					<SofaIcon v-if="showArrow" customClass="h-[12px]" name="right-arrow" />
 				</div>
-				<SofaNormalText :customClass="'text-left w-full !line-clamp-1'">
+				<SofaNormalText customClass="text-left w-full !line-clamp-1">
 					{{ data.subTitle }}
 				</SofaNormalText>
 			</div>
 		</div>
 
 		<div class="w-[45px] text-right">
-			<SofaIcon v-if="data.isDone" :customClass="'h-[22px] inline-block'" :name="'selected'" />
+			<SofaIcon v-if="data.isDone" customClass="h-[22px] inline-block" name="selected" />
 		</div>
 	</div>
 </template>

@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div v-if="userType.isTeacher && requests.length" class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4">
-			<a :class="`w-full flex items-center justify-between ${extraStyle}`" @click.stop="showRequests = !showRequests">
-				<SofaHeaderText :customClass="'text-left mdlg:!text-base text-sm'" :content="`Requests (${requests.length})`" />
-				<SofaIcon :name="showRequests ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
+			<a class="w-full flex items-center justify-between" :class="extraStyle" @click.stop="showRequests = !showRequests">
+				<SofaHeaderText customClass="text-left mdlg:!text-base text-sm" :content="`Requests (${requests.length})`" />
+				<SofaIcon :name="showRequests ? 'chevron-up' : 'chevron-down'" customClass="h-[7px] cursor-pointer" />
 			</a>
 			<div v-if="showRequests" class="w-full flex flex-col gap-3 mdlg:gap-0">
 				<Chat
@@ -20,9 +20,9 @@
 			</div>
 		</div>
 		<div v-if="pending.length" class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4">
-			<a :class="`w-full flex items-center justify-between ${extraStyle}`" @click.stop="showPending = !showPending">
-				<SofaHeaderText :customClass="'text-left mdlg:!text-base text-sm'" :content="`Pending (${pending.length})`" />
-				<SofaIcon :name="showPending ? 'chevron-up' : 'chevron-down'" :customClass="'h-[7px] cursor-pointer'" />
+			<a class="w-full flex items-center justify-between" :class="extraStyle" @click.stop="showPending = !showPending">
+				<SofaHeaderText customClass="text-left mdlg:!text-base text-sm" :content="`Pending (${pending.length})`" />
+				<SofaIcon :name="showPending ? 'chevron-up' : 'chevron-down'" customClass="h-[7px] cursor-pointer" />
 			</a>
 			<div v-if="showPending" class="w-full flex flex-col gap-3 mdlg:gap-0">
 				<Chat

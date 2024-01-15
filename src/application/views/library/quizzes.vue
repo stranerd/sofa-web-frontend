@@ -6,7 +6,7 @@
 				:key="activity.id"
 				:activity="activity"
 				:isWrapped="!Logic.Common.isLarge"
-				:customClass="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
+				customClass="mdlg:!bg-white shadow-custom cursor-pointer relative"
 				@click.stop="openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 					<SofaIcon
@@ -19,9 +19,9 @@
 
 		<SofaEmptyState
 			v-else
-			:title="'You have no quizzes here'"
-			:actionLabel="'Explore'"
-			:subTitle="'Discover thousands of quizzes and save them here for easy access'"
+			title="You have no quizzes here"
+			actionLabel="Explore"
+			subTitle="Discover thousands of quizzes and save them here for easy access"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
 </template>

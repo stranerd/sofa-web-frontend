@@ -3,8 +3,8 @@
 		<template #left-session>
 			<div class="w-full shadow-custom pb-6 bg-white rounded-custom relative flex flex-col h-full gap-6 overflow-y-auto">
 				<div class="w-full flex items-center p-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b border-lightGray">
-					<SofaIcon :customClass="'h-[14px]'" :name="'filter'" />
-					<SofaNormalText :customClass="'!font-bold'" content="Filter" />
+					<SofaIcon customClass="h-[14px]" name="filter" />
+					<SofaNormalText customClass="!font-bold" content="Filter" />
 				</div>
 
 				<MarketplaceFilter v-model="selectedOptions" />
@@ -15,21 +15,18 @@
 			<div class="w-full h-full flex flex-col flex-grow overflow-y-auto mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7">
 				<div
 					class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-lightGray mdlg:rounded-custom flex flex-row gap-3 items-center mdlg:!justify-between justify-start">
-					<SofaIcon :customClass="'h-[15px] mdlg:!hidden pl-2'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
+					<SofaIcon customClass="h-[15px] mdlg:!hidden pl-2" name="back-arrow" @click="Logic.Common.goBack()" />
 					<div
 						class="flex flex-row items-center flex-grow rounded-custom w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">
 						<div class="w-[20px] mdlg:!hidden">
-							<SofaIcon :name="'search-black'" :customClass="'h-[17px]'" />
+							<SofaIcon name="search-black" customClass="h-[17px]" />
 						</div>
-						<SofaTextField
-							v-model="searchQuery"
-							:customClass="'!border-none w-full mdlg:!pl-0'"
-							:placeholder="'Search for anything'">
+						<SofaTextField v-model="searchQuery" customClass="!border-none w-full mdlg:!pl-0" placeholder="Search for anything">
 						</SofaTextField>
 					</div>
 
 					<div class="w-[20px] hidden mdlg:!inline-block">
-						<SofaIcon :name="'search-black'" :customClass="'h-[17px]'" />
+						<SofaIcon name="search-black" customClass="h-[17px]" />
 					</div>
 				</div>
 
@@ -43,7 +40,7 @@
 						@click="selectedFilterOption = item.id">
 						<SofaNormalText
 							:color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'}`"
-							:customClass="'!font-semibold'"
+							customClass="!font-semibold"
 							:content="item.name" />
 					</span>
 				</div>
@@ -54,7 +51,7 @@
 					v-if="selectedFilterOption == 'all' || selectedFilterOption == 'courses'"
 					class="w-full flex flex-col gap-3 mdlg:px-0 pl-4">
 					<div v-if="selectedFilterOption == 'all'" class="w-full flex flex-col justify-start items-start">
-						<SofaNormalText :customClass="'font-bold'"> Courses </SofaNormalText>
+						<SofaNormalText customClass="font-bold"> Courses </SofaNormalText>
 					</div>
 
 					<template v-if="resourceContents.length">
@@ -76,7 +73,7 @@
 										v-for="(activity, index) in resourceContents"
 										:key="index"
 										:activity="activity"
-										:customClass="'cursor-pointer'"
+										customClass="cursor-pointer"
 										:hasBookmark="true"
 										:bookmarkAction="() => saveToFolder(activity.original)"
 										@click="Logic.Common.GoToRoute(activity.route)" />
@@ -88,9 +85,9 @@
 					<template v-else>
 						<div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
 							<SofaEmptyState
-								:title="'No result found'"
-								:subTitle="'We could not find any course that matches your search'"
-								:actionLabel="'Clear search'"
+								title="No result found"
+								subTitle="We could not find any course that matches your search"
+								actionLabel="Clear search"
 								:action="() => (searchQuery = '')" />
 						</div>
 					</template>
@@ -101,7 +98,7 @@
 					v-if="selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'"
 					class="w-full flex flex-col gap-3 mdlg:px-0 pl-4">
 					<div v-if="selectedFilterOption == 'all'" class="w-full flex flex-col justify-start items-start">
-						<SofaNormalText :customClass="'font-bold'"> Quizzes </SofaNormalText>
+						<SofaNormalText customClass="font-bold"> Quizzes </SofaNormalText>
 					</div>
 
 					<template v-if="quizContents.length">
@@ -123,7 +120,7 @@
 										v-for="(activity, index) in quizContents"
 										:key="index"
 										:activity="activity"
-										:customClass="'cursor-pointer'"
+										customClass="cursor-pointer"
 										:hasBookmark="true"
 										:bookmarkAction="() => saveToFolder(activity.original)"
 										@click="Logic.Common.GoToRoute(activity.route)" />
@@ -135,9 +132,9 @@
 					<template v-else>
 						<div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
 							<SofaEmptyState
-								:title="'No result found'"
-								:subTitle="'We could not find any quiz that matches your search'"
-								:actionLabel="'Clear search'"
+								title="No result found"
+								subTitle="We could not find any quiz that matches your search"
+								actionLabel="Clear search"
 								:action="() => (searchQuery = '')" />
 						</div>
 					</template>
@@ -147,24 +144,24 @@
 			<!-- Bottom filter for sm screens -->
 			<div class="bg-lightGray mdlg:!hidden p-4 flex flex-col w-full">
 				<div class="bg-primaryPurple rounded-custom py-3 flex items-center justify-center gap-2" @click="showFilter = true">
-					<SofaIcon :customClass="'h-[14px]'" :name="'filter-white'" />
-					<SofaNormalText :customClass="'!font-semibold !text-sm'" :color="'text-white'">Filter</SofaNormalText>
+					<SofaIcon customClass="h-[14px]" name="filter-white" />
+					<SofaNormalText customClass="!font-semibold !text-sm" color="text-white">Filter</SofaNormalText>
 					<span class="w-[24px] h-[24px] bg-white rounded-full flex items-center justify-center">
-						<SofaNormalText :color="'text-primaryPurple'">{{ selectedOptions.length }}</SofaNormalText>
+						<SofaNormalText color="text-primaryPurple">{{ selectedOptions.length }}</SofaNormalText>
 					</span>
 				</div>
 			</div>
 
-			<SofaModalOld v-if="showFilter" :close="() => (showFilter = false)" :customClass="'mdlg:!hidden'">
+			<SofaModalOld v-if="showFilter" :close="() => (showFilter = false)" customClass="mdlg:!hidden">
 				<div
-					:class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4 relative overflow-y-auto`"
+					class="mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4 relative overflow-y-auto"
 					@click.stop="() => {}">
 					<div class="w-full flex px-4 py-3 justify-between items-center bg-white sticky top-0 left-0 border-b border-lightGray">
 						<div class="flex items-center gap-3">
-							<SofaIcon :customClass="'h-[13px]'" :name="'filter'" />
-							<SofaNormalText :customClass="'!font-bold !text-base'" content="Filters" />
+							<SofaIcon customClass="h-[13px]" name="filter" />
+							<SofaNormalText customClass="!font-bold !text-base" content="Filters" />
 						</div>
-						<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="showFilter = false" />
+						<SofaIcon customClass="h-[19px]" name="circle-close" @click="showFilter = false" />
 					</div>
 
 					<MarketplaceFilter v-model="selectedOptions" :close="() => (showFilter = false)" />

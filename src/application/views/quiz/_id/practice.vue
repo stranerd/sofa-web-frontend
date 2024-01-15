@@ -44,7 +44,7 @@
 							class="w-full p-4 md:py-8 flex items-center justify-center gap-2"
 							:class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
 							<SofaIcon class="h-[22px]" :name="isCorrect ? 'white-checkbox' : 'white-wrong'" />
-							<SofaHeaderText :size="'xl'" :color="'text-white'" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
+							<SofaHeaderText size="xl" color="text-white" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
 						</div>
 					</template>
 					<template v-if="isDone" #default>

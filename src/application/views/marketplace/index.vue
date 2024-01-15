@@ -3,7 +3,7 @@
 		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple justify-center items-center">
 			<SofaHeaderText color="text-white" size="xl" class="!font-extrabold" content="All contents made by verified creators" />
 
-			<SofaNormalText color="text-white" :customClass="'w-[48%] text-center flex items-center justify-center'">
+			<SofaNormalText color="text-white" customClass="w-[48%] text-center flex items-center justify-center">
 				Everything here is carefully reviewed to ensure the highest quality and accuracy. By purchasing from our marketplace, you
 				can have confidence in the credibility of the creators and the value of the materials.
 			</SofaNormalText>

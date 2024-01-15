@@ -5,15 +5,15 @@
 				v-for="play in data"
 				:key="play.id"
 				:content="play"
-				:customClass="'!bg-white shadow-custom cursor-pointer'"
+				customClass="!bg-white shadow-custom cursor-pointer"
 				@click="play.action()" />
 		</template>
 
 		<SofaEmptyState
 			v-else
-			:title="'You have no plays in progress'"
-			:subTitle="'Discover thousands of materials to buy, created by verified experts'"
-			:actionLabel="'Marketplace'"
+			title="You have no plays in progress"
+			subTitle="Discover thousands of materials to buy, created by verified experts"
+			actionLabel="Marketplace"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
 </template>

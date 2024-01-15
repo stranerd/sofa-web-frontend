@@ -46,11 +46,11 @@
 						class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
 					<div class="flex flex-col gap-1">
-						<SofaHeaderText :customClass="'!text-base !font-bold'" :content="userAi.name" />
+						<SofaHeaderText customClass="!text-base !font-bold" :content="userAi.name" />
 					</div>
 				</div>
 				<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
-					<SofaNormalText :customClass="'text-left'" :color="'text-deepGray'">
+					<SofaNormalText customClass="text-left" color="text-deepGray">
 						Hello! I am here to respond to your messages in every chat 24/7.
 						<br /><br />
 						Let us work towards your highest ever academic achievements.
@@ -63,10 +63,10 @@
 				class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
 				<div class="w-full flex flex-row gap-2 items-center justify-start">
 					<SofaIcon class="h-[24px] fill-white" name="add-tutor" />
-					<SofaNormalText :color="'text-white'" :customClass="'!text-base !font-bold'" content="Tutor help" />
+					<SofaNormalText color="text-white" customClass="!text-base !font-bold" content="Tutor help" />
 				</div>
-				<SofaNormalText :customClass="'text-left'" :color="'text-darkLightGray'"> Need extra help with your work? </SofaNormalText>
-				<SofaButton :bgColor="'bg-white'" :textColor="'!text-primaryPurple'" :padding="'px-5 py-1'" @click="onClickAddTutor">
+				<SofaNormalText customClass="text-left" color="text-darkLightGray"> Need extra help with your work? </SofaNormalText>
+				<SofaButton bgColor="bg-white" textColor="!text-primaryPurple" padding="px-5 py-1" @click="onClickAddTutor">
 					Message a tutor
 				</SofaButton>
 			</div>
@@ -76,13 +76,13 @@
 					v-if="conversation.isActive"
 					class="w-full flex items-center justify-start gap-2 text-primaryRed"
 					@click="onClickEndSession">
-					<SofaIcon :customClass="'h-[16px] fill-current'" :name="'tutor'" />
-					<SofaNormalText :color="'text-inherit'">End conversation</SofaNormalText>
+					<SofaIcon customClass="h-[16px] fill-current" name="tutor" />
+					<SofaNormalText color="text-inherit">End conversation</SofaNormalText>
 				</a>
 
 				<a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
-					<SofaIcon :customClass="'h-[16px]'" :name="'trash'" />
-					<SofaNormalText :color="'text-primaryRed'">Delete conversation</SofaNormalText>
+					<SofaIcon customClass="h-[16px]" name="trash" />
+					<SofaNormalText color="text-primaryRed">Delete conversation</SofaNormalText>
 				</a>
 			</div>
 
@@ -90,12 +90,12 @@
 			<template v-if="conversation.tutor?.id === id">
 				<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
 					<router-link to="/profile" class="w-full flex flex-col items-center justify-center gap-3">
-						<SofaAvatar :size="'180'" :photoUrl="user?.bio.photo?.link" />
+						<SofaAvatar size="180" :photoUrl="user?.bio.photo?.link" />
 					</router-link>
 
-					<SofaHeaderText :size="'xl'" :content="user?.bio.name.full" />
+					<SofaHeaderText size="xl" :content="user?.bio.name.full" />
 
-					<SofaNormalText :customClass="'text-center'" :color="'text-grayColor'">
+					<SofaNormalText customClass="text-center" color="text-grayColor">
 						{{ user?.bio.description }}
 					</SofaNormalText>
 				</div>

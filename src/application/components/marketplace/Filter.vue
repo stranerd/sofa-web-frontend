@@ -2,19 +2,19 @@
 	<div class="w-full flex flex-col gap-6">
 		<div v-if="selectedOptions.length" class="w-full flex flex-col gap-3 px-4">
 			<div class="w-full flex items-center gap-2 justify-between">
-				<SofaNormalText :customClass="'!font-bold'">Applied filters</SofaNormalText>
+				<SofaNormalText customClass="!font-bold">Applied filters</SofaNormalText>
 				<SofaNormalText
 					content="Clear all"
-					:color="'text-primaryPink'"
-					:customClass="'cursor-pointer'"
+					color="text-primaryPink"
+					customClass="cursor-pointer"
 					@click="selectedOptions.length = 0" />
 			</div>
 
 			<div class="flex gap-3 flex-wrap items-center">
 				<div v-for="(option, index) in selectedOptions" :key="index" class="w-auto pb-2">
 					<span class="px-4 py-2 bg-primaryPurple rounded-custom flex flex-row items-center justify-center gap-1">
-						<SofaNormalText :color="'text-white'" :content="option.name" />
-						<SofaIcon :customClass="'h-[18px] cursor-pointer'" :name="'close-white'" @click="toggleOption(option)" />
+						<SofaNormalText color="text-white" :content="option.name" />
+						<SofaIcon customClass="h-[18px] cursor-pointer" name="close-white" @click="toggleOption(option)" />
 					</span>
 				</div>
 			</div>
@@ -23,21 +23,20 @@
 		<div v-for="(option, index) in searchOptions" :key="index" class="w-full flex flex-col gap-3 px-4">
 			<a class="w-full flex items-center justify-between" @click="openOption = option.name === openOption ? '' : option.name">
 				<div class="flex items-center gap-2">
-					<SofaIcon :customClass="'h-[16px]'" :name="option.icon" />
-					<SofaNormalText :customClass="'!font-bold'" :content="option.name" />
+					<SofaIcon customClass="h-[16px]" :name="option.icon" />
+					<SofaNormalText customClass="!font-bold" :content="option.name" />
 				</div>
-				<SofaIcon :customClass="'h-[7px]'" :name="option.name === openOption ? 'chevron-up' : 'chevron-down'" />
+				<SofaIcon customClass="h-[7px]" :name="option.name === openOption ? 'chevron-up' : 'chevron-down'" />
 			</a>
 
 			<div v-if="option.name === openOption" class="w-full flex flex-wrap gap-3">
 				<a
 					v-for="(item, i) in option.options"
 					:key="i"
-					:class="`px-4 py-2 ${
-						optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-lightGray'
-					} rounded-custom flex items-center justify-center gap-1`"
+					:class="optionIsSelected(item.id) ? 'bg-primaryPurple' : 'bg-lightGray'"
+					class="px-4 py-2 rounded-custom flex items-center justify-center gap-1"
 					@click="toggleOption(item)">
-					<SofaNormalText :color="`${optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'}`" :content="item.name" />
+					<SofaNormalText :color="optionIsSelected(item.id) ? 'text-white' : 'text-deepGray'" :content="item.name" />
 				</a>
 			</div>
 		</div>
@@ -45,7 +44,7 @@
 		<div class="h-[60px]"></div>
 	</div>
 	<div class="w-full flex flex-col bg-white mdlg:!hidden p-4 bottom-0 fixed left-0" @click.prevent="close?.()">
-		<SofaButton :customClass="'w-full'" :padding="'py-3'">Show results</SofaButton>
+		<SofaButton customClass="w-full" padding="py-3">Show results</SofaButton>
 	</div>
 </template>
 

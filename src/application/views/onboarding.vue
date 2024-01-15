@@ -16,9 +16,9 @@
 				:key="userType.value"
 				:to="`/onboarding?type=${userType.value}`"
 				:class="`md:h-[180px] md:w-[180px] h-[120px] w-full cursor-pointer rounded-custom ${userType.bgClass} flex flex-col items-center gap-2 justify-center`">
-				<SofaIcon :customClass="'md:h-[65px] h-[45px]'" :name="userType.icon" />
+				<SofaIcon customClass="md:h-[65px] h-[45px]" :name="userType.icon" />
 
-				<SofaNormalText :customClass="'!font-semibold'" :color="'text-white'">
+				<SofaNormalText customClass="!font-semibold" color="text-white">
 					{{ userType.label }}
 				</SofaNormalText>
 			</router-link>

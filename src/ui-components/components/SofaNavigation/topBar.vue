@@ -3,15 +3,15 @@
 		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
 		<template v-if="type == 'main'">
 			<div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-				<SofaAvatar :size="'32'" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
+				<SofaAvatar size="32" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
 
 				<div class="py-4 cursor-pointer flex flex-row items-center justify-center">
 					<img v-if="!title" src="/images/logo.svg" class="h-[24px]" />
-					<SofaNormalText :customClass="'!font-bold !text-base'">{{ title }}</SofaNormalText>
+					<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
 				</div>
 
 				<div class="w-[30px] h-[30px] flex flex-row items-center justify-center" @click="showNotification = true">
-					<SofaIcon :customClass="'h-[22px]'" :name="'bell'" />
+					<SofaIcon customClass="h-[22px]" name="bell" />
 				</div>
 			</div>
 			<div class="hidden flex-row gap-5 items-center justify-start flex-grow mdlg:!flex lg:!flex">
@@ -34,14 +34,14 @@
 							'fill-bodyBlack': true,
 						}" />
 					<SofaNormalText
-						:customClass="'font-bold'"
+						customClass="font-bold"
 						:color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
 						{{ tab.name }}
 					</SofaNormalText>
 				</router-link>
 
 				<div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
-					<SofaIcon :customClass="'h-[15px]'" :name="'search'"></SofaIcon>
+					<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
 					<SofaTextField
 						v-model="searchQuery"
 						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
@@ -59,7 +59,7 @@
 					<div
 						class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
 						@click="showNotification = true">
-						<SofaIcon :customClass="'h-[16px]'" :name="'bell'" />
+						<SofaIcon customClass="h-[16px]" name="bell" />
 					</div>
 					<div
 						v-if="showNotification"
@@ -68,14 +68,14 @@
 					</div>
 				</div>
 
-				<SofaAvatar :size="'36'" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
+				<SofaAvatar size="36" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
 			</div>
 		</template>
 
 		<template v-if="type == 'subpage'">
 			<div class="flex flex-row gap-4 items-center">
-				<SofaIcon :customClass="'h-[12px] cursor-pointer'" :name="'back-arrow'" @click="Logic.Common.goBack()" />
-				<SofaHeaderText :customClass="'!font-bold py-4'" :content="title" />
+				<SofaIcon customClass="h-[12px] cursor-pointer" name="back-arrow" @click="Logic.Common.goBack()" />
+				<SofaHeaderText customClass="!font-bold py-4" :content="title" />
 				<div v-if="badges.length" class="flex flex-row gap-2 items-center">
 					<SofaBadge v-for="(item, index) in badges" :key="index" :color="item.color">
 						{{ item.text }}
@@ -104,7 +104,7 @@
 						<SofaButton
 							v-if="!action.IsOutlined"
 							:disabled="action.disabled"
-							:padding="'px-4 py-1'"
+							padding="px-4 py-1"
 							:customClass="`!font-semibold ${action.class ?? ''}`"
 							@click="action.handler()">
 							{{ action.name }}
@@ -112,10 +112,10 @@
 						<SofaButton
 							v-else
 							:disabled="action.disabled"
-							:bgColor="'bg-white'"
-							:textColor="'text-grayColor'"
+							bgColor="bg-white"
+							textColor="text-grayColor"
 							:customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
-							:padding="'px-4 py-1'"
+							padding="px-4 py-1"
 							@click="action.handler()">
 							{{ action.name }}
 						</SofaButton>
@@ -125,7 +125,7 @@
 		</template>
 
 		<!-- Notification modal -->
-		<SofaModalOld v-if="showNotification" :close="() => (showNotification = false)" :customClass="'mdlg:!hidden'">
+		<SofaModalOld v-if="showNotification" :close="() => (showNotification = false)" customClass="mdlg:!hidden">
 			<div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-3 px-4 pb-5 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">

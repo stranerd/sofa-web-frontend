@@ -2,12 +2,12 @@
 	<slot name="header">
 		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom" :class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
-				<SofaIcon class="md:hidden" :customClass="'h-[19px]'" :name="'circle-close'" @click="Logic.Common.goBack()" />
-				<SofaHeaderText :size="'xl'" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
+				<SofaIcon class="md:hidden" customClass="h-[19px]" name="circle-close" @click="Logic.Common.goBack()" />
+				<SofaHeaderText size="xl" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
 				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${index + 1}/${questions.length}`" color="text-inherit" />
 				<SofaNormalText
 					class="hidden md:inline"
-					:customClass="'!text-base cursor-pointer whitespace-nowrap'"
+					customClass="!text-base cursor-pointer whitespace-nowrap"
 					color="text-inherit"
 					content="Exit"
 					@click="Logic.Common.goBack()" />

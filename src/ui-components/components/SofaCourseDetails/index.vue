@@ -2,41 +2,41 @@
 	<div v-if="data" class="w-full flex flex-col h-full gap-4 relative">
 		<div
 			class="flex flex-row gap-2 justify-between items-center px-4 py-4 mdlg:!pt-0 border-b sticky top-0 left-0 bg-white border-[#F2F5F8]">
-			<SofaNormalText :customClass="'!text-sm !font-bold'"> Details </SofaNormalText>
-			<SofaIcon :customClass="'h-[19px] mdlg:!hidden '" :name="'circle-close'" @click="close()" />
+			<SofaNormalText customClass="!text-sm !font-bold"> Details </SofaNormalText>
+			<SofaIcon customClass="h-[19px] mdlg:!hidden " name="circle-close" @click="close()" />
 		</div>
 		<div class="flex flex-col gap-3 h-full w-full px-4">
 			<template v-if="type == 'quiz'">
-				<SofaImageLoader :customClass="'w-full rounded-custom h-[200px]'" :photoUrl="data.image_url" />
+				<SofaImageLoader customClass="w-full rounded-custom h-[200px]" :photoUrl="data.image_url" />
 
-				<SofaNormalText :customClass="'text-left font-bold'">
+				<SofaNormalText customClass="text-left font-bold">
 					{{ data.title }}
 				</SofaNormalText>
 
 				<div class="w-full flex items-center gap-2 flex-row">
-					<SofaNormalText :color="'text-primaryPurple'">
+					<SofaNormalText color="text-primaryPurple">
 						{{ data.type }}
 					</SofaNormalText>
 					<span class="w-[4px] h-[4px] rounded-full bg-primaryPurple"></span>
-					<SofaNormalText :color="'text-primaryPurple'">
+					<SofaNormalText color="text-primaryPurple">
 						{{ data.questions }}
 					</SofaNormalText>
 				</div>
 
-				<SofaNormalText :customClass="'text-left'">
+				<SofaNormalText customClass="text-left">
 					{{ data.description }}
 				</SofaNormalText>
 
 				<div class="w-full flex flex-col gap-2">
 					<div class="flex flex-row gap-1 items-center">
-						<SofaRatings v-model="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
+						<SofaRatings v-model="data.ratings.avg" size="h-[14px] mdlg:!h-[15px]" />
 						<SofaNormalText> {{ data.ratings.avg }} </SofaNormalText>
-						<SofaNormalText :color="'text-grayColor pl-2'"> ({{ data.ratings.count }} ratings) </SofaNormalText>
+						<SofaNormalText color="text-grayColor pl-2"> ({{ data.ratings.count }} ratings) </SofaNormalText>
 					</div>
 
 					<div class="w-full flex flex-row items-center">
 						<div class="gap-2 flex flex-row items-center">
-							<SofaAvatar :size="'20'" :photoUrl="data.user.photoUrl" />
+							<SofaAvatar size="20" :photoUrl="data.user.photoUrl" />
 							<SofaNormalText>
 								{{ data.user.name }}
 							</SofaNormalText>
@@ -44,7 +44,7 @@
 					</div>
 
 					<div class="w-full flex flex-row items-center gap-2">
-						<SofaIcon :customClass="'h-[16px]'" :name="'calendar-black'" />
+						<SofaIcon customClass="h-[16px]" name="calendar-black" />
 						<SofaNormalText> Last updated {{ data.last_updated }} </SofaNormalText>
 					</div>
 				</div>
@@ -54,69 +54,69 @@
 				<SofaTextField
 					ref="document_title"
 					v-model="dataReactive.title"
-					:customClass="'rounded-custom !bg-lightGray'"
+					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					:name="'Document title'"
+					name="Document title"
 					:updateValue="dataReactive.title"
-					:placeholder="'Document title'"
+					placeholder="Document title"
 					:hasTitle="true"
 					:rules="[Logic.Form.RequiredRule]"
-					:borderColor="'border-transparent'">
+					borderColor="border-transparent">
 					<template #title> Document title </template>
 				</SofaTextField>
 
 				<SofaTextarea
 					v-model="dataReactive.description"
 					:hasTitle="false"
-					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'" />
+					textAreaStyle="h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none"
+					placeholder="Description" />
 			</template>
 
 			<template v-if="type == 'image'">
 				<SofaTextField
 					ref="image_title"
 					v-model="dataReactive.title"
-					:customClass="'rounded-custom !bg-lightGray'"
+					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					:name="'Image title'"
-					:placeholder="'Image title'"
+					name="Image title"
+					placeholder="Image title"
 					:hasTitle="true"
 					:rules="[Logic.Form.RequiredRule]"
 					:updateValue="dataReactive.title"
-					:borderColor="'border-transparent'">
+					borderColor="border-transparent">
 					<template #title> Image title </template>
 				</SofaTextField>
 
 				<SofaTextarea
 					v-model="dataReactive.description"
 					:hasTitle="false"
-					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'" />
+					textAreaStyle="h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none"
+					placeholder="Description" />
 			</template>
 
 			<template v-if="type == 'video'">
 				<SofaTextField
 					ref="video_title"
 					v-model="dataReactive.title"
-					:customClass="'rounded-custom !bg-lightGray'"
+					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					:name="'Video title'"
-					:placeholder="'Video title'"
+					name="Video title"
+					placeholder="Video title"
 					:hasTitle="true"
 					:rules="[Logic.Form.RequiredRule]"
 					:updateValue="dataReactive.title"
-					:borderColor="'border-transparent'">
+					borderColor="border-transparent">
 					<template #title> Video title </template>
 				</SofaTextField>
 
 				<SofaTextarea
 					v-model="dataReactive.description"
 					:hasTitle="false"
-					:textAreaStyle="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
-					:placeholder="'Description'" />
+					textAreaStyle="h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none"
+					placeholder="Description" />
 			</template>
 			<div v-if="type != 'quiz'" class="w-full flex flex-row items-center justify-end">
-				<SofaButton :padding="'px-4 py-2'" @click="updateFile()"> Save changes </SofaButton>
+				<SofaButton padding="px-4 py-2" @click="updateFile()"> Save changes </SofaButton>
 			</div>
 		</div>
 
@@ -135,8 +135,8 @@
 						await deleteFile(data.id)
 					}
 				">
-				<SofaIcon :name="'trash'" :customClass="'h-[16px]'" />
-				<SofaNormalText :color="'text-primaryRed'">Delete {{ type }}</SofaNormalText>
+				<SofaIcon name="trash" customClass="h-[16px]" />
+				<SofaNormalText color="text-primaryRed">Delete {{ type }}</SofaNormalText>
 			</div>
 		</div>
 	</div>

@@ -7,26 +7,26 @@
 				<SofaTextField
 					ref="email"
 					v-model="factory.email"
-					:customClass="'rounded-custom !bg-lightGray'"
+					customClass="rounded-custom !bg-lightGray"
 					type="email"
-					:name="'Email'"
-					:placeholder="'Email'"
+					name="Email"
+					placeholder="Email"
 					:error="factory.errors.email" />
 				<SofaTextField
 					ref="password"
 					v-model="factory.password"
-					:customClass="'rounded-custom !bg-lightGray'"
-					:type="'password'"
-					:placeholder="'Password'"
-					:name="'Password'"
+					customClass="rounded-custom !bg-lightGray"
+					type="password"
+					placeholder="Password"
+					name="Password"
 					:error="factory.errors.password" />
 				<SofaTextField
 					ref="confirm_new_password"
 					v-model="factory.cPassword"
-					:customClass="'rounded-custom !bg-lightGray'"
+					customClass="rounded-custom !bg-lightGray"
 					type="password"
-					:name="'Confirm password'"
-					:placeholder="'Confirm password'"
+					name="Confirm password"
+					placeholder="Confirm password"
 					:error="factory.errors.cPassword" />
 			</div>
 
@@ -42,16 +42,14 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<SofaButton :disabled="!factory.valid" :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit">
-					Sign Up
-				</SofaButton>
+				<SofaButton :disabled="!factory.valid" customClass="w-full" padding="md:py-4 py-3" type="submit"> Sign Up </SofaButton>
 			</div>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText :color="'text-grayColor'">Have an account?</SofaNormalText>
+			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
 			<router-link to="/auth/login">
-				<SofaNormalText :color="'!text-primaryBlue'">Sign in</SofaNormalText>
+				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
 			</router-link>
 		</div>
 	</AuthLayout>

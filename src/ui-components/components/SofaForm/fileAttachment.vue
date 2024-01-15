@@ -4,15 +4,7 @@
 			<div class="flex flex-row flex-wrap w-full relative">
 				<input
 					type="file"
-					:style="`
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            overflow: hidden;
-            position: absolute;
-            z-index: 100;
-          `"
+					style="opacity: 0; width: 100%; height: 100%; left: 0; overflow: hidden; position: absolute; z-index: 100"
 					:accept="accept"
 					:multiple="isMultiple"
 					@change="uploadHandler" />
@@ -29,7 +21,7 @@
 					:accept="accept"
 					:multiple="isMultiple"
 					@change="uploadHandler" />
-				<SofaIcon :name="`${iconName}`" :customClass="'h-[15px]'" />
+				<SofaIcon :name="`${iconName}`" customClass="h-[15px]" />
 				<SofaNormalText color="text-paragraphTextLight" customClass="w-full text-left line-clamp-1">
 					{{ selectedFileName != '' ? selectedFileName : placeholder }}
 				</SofaNormalText>

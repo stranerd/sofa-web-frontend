@@ -20,22 +20,22 @@
 					</div>
 					<SofaNormalText
 						v-else
-						:customClass="'!text-xs !py-0 font-semibold w-full flex flex-row items-center justify-center'"
-						:color="'text-white'"
+						customClass="!text-xs !py-0 font-semibold w-full flex flex-row items-center justify-center"
+						color="text-white"
 						content="Completed" />
 				</div>
 			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<div class="w-full flex flex-row items-center justify-between">
-					<SofaNormalText :customClass="'!font-bold w-full text-left !line-clamp-1'">{{ activity.title }}</SofaNormalText>
+					<SofaNormalText customClass="!font-bold w-full text-left !line-clamp-1">{{ activity.title }}</SofaNormalText>
 					<div v-if="hasEdit" class="flex flex-row justify-end" @click.stop="editAction ? editAction() : null">
-						<SofaIcon :customClass="'h-[16px]'" :name="'edit-gray'" />
+						<SofaIcon customClass="h-[16px]" name="edit-gray" />
 					</div>
 					<a
 						v-if="hasBookmark && Logic.Common.isLarge"
 						class="flex flex-row justify-end"
 						@click.stop.prevent="bookmarkAction?.()">
-						<SofaIcon :customClass="'h-[16px]'" :name="'bookmark'" />
+						<SofaIcon customClass="h-[16px]" name="bookmark" />
 					</a>
 
 					<template v-if="hasExtra">
@@ -57,11 +57,11 @@
 				</div>
 
 				<div class="w-full flex flex-row gap-2 items-center">
-					<SofaIcon :name="'star-full'" :customClass="'h-[16px]'" />
+					<SofaIcon name="star-full" customClass="h-[16px]" />
 
 					<div class="flex flex-row gap-1 items-center">
 						<SofaNormalText> {{ activity.ratings.avg }} </SofaNormalText>
-						<SofaNormalText :color="'text-grayColor'">
+						<SofaNormalText color="text-grayColor">
 							({{ activity.ratings.count }} rating{{ activity.ratings.count > 1 ? 's' : '' }})
 						</SofaNormalText>
 					</div>
@@ -69,18 +69,18 @@
 
 				<div class="flex items-center gap-2 flex-grow justify-between w-full">
 					<a class="gap-2 flex items-center" @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)">
-						<SofaAvatar :size="'20'" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
-						<SofaNormalText :customClass="'!whitespace-nowrap !line-clamp-1'">
+						<SofaAvatar size="20" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
+						<SofaNormalText customClass="!whitespace-nowrap !line-clamp-1">
 							{{ activity.authUserId === activity.user.id ? 'You' : activity.user.bio.name.full }}
 						</SofaNormalText>
-						<SofaIcon v-if="activity.user.roles.isVerified" :name="'verify'" :customClass="'h-[13px]'" />
-						<SofaIcon v-if="activity.user.type?.type === 'teacher'" :name="'tutor-bagde'" :customClass="'h-[13px]'" />
+						<SofaIcon v-if="activity.user.roles.isVerified" name="verify" customClass="h-[13px]" />
+						<SofaIcon v-if="activity.user.type?.type === 'teacher'" name="tutor-bagde" customClass="h-[13px]" />
 					</a>
 
 					<SofaIcon
 						v-if="!isWrapped"
-						:name="'bookmark'"
-						:customClass="'h-[17px] mdlg:!hidden '"
+						name="bookmark"
+						customClass="h-[17px] mdlg:!hidden "
 						@click.stop.prevent="bookmarkAction?.()" />
 				</div>
 			</div>

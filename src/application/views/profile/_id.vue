@@ -110,7 +110,7 @@
 						<SofaEmptyState
 							:title="`${user.bio.name.full} has no published materials yet`"
 							subTitle="Discover thousands of other materials on SOFA marketplace"
-							:actionLabel="'Marketplace'"
+							actionLabel="Marketplace"
 							:action="() => Logic.Common.GoToRoute('/marketplace')" />
 					</div>
 				</div>

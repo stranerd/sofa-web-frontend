@@ -38,7 +38,7 @@
 			bottom: true,
 			top: true,
 		}"
-		:bgColor="'mdlg:!bg-lightGray bg-white'">
+		bgColor="mdlg:!bg-lightGray bg-white">
 		<template #left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
 				<SofaCourseSections
@@ -54,16 +54,16 @@
 			<!-- Top bar for smaller screens -->
 			<div
 				class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-lightGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
-				<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
-				<SofaNormalText :customClass="'!font-bold !text-sm'">
+				<SofaIcon customClass="h-[19px]" name="circle-close" @click="handleMobileGoback()" />
+				<SofaNormalText customClass="!font-bold !text-sm">
 					{{ mobileTitle }}
 				</SofaNormalText>
 
 				<div :class="`flex flex-row items-center gap-3 ${showSettingModal ? 'invisible' : ''} `">
 					<SofaIcon
 						v-if="!showSettingModal"
-						:customClass="'h-[18px]'"
-						:name="'cog'"
+						customClass="h-[18px]"
+						name="cog"
 						@click="
 							() => {
 								showSettingModal = true
@@ -73,8 +73,8 @@
 
 					<SofaIcon
 						v-if="selectedMaterial"
-						:customClass="'h-[6px]'"
-						:name="'more-options-horizontal'"
+						customClass="h-[6px]"
+						name="more-options-horizontal"
 						@click="showMateterialDetails()" />
 				</div>
 			</div>
@@ -115,7 +115,7 @@
 				<template v-if="selectedMaterial?.type == 'quiz'">
 					<div class="w-full flex flex-row items-center justify-between">
 						<SofaHeaderText> Questions </SofaHeaderText>
-						<SofaNormalText :color="'text-primaryPink'"> Hide answers </SofaNormalText>
+						<SofaNormalText color="text-primaryPink"> Hide answers </SofaNormalText>
 					</div>
 
 					<div class="w-full flex flex-col gap-3">
@@ -124,22 +124,22 @@
 							:key="index"
 							class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom">
 							<div class="flex flex-row items-center gap-2">
-								<SofaNormalText :color="'text-grayColor'">
+								<SofaNormalText color="text-grayColor">
 									{{ question.type }}
 								</SofaNormalText>
 
 								<span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span>
 
-								<SofaNormalText :color="'text-grayColor'">
+								<SofaNormalText color="text-grayColor">
 									{{ question.duration }}
 								</SofaNormalText>
 							</div>
 
-							<SofaNormalText :customClass="'text-left !font-bold'">
+							<SofaNormalText customClass="text-left !font-bold">
 								{{ question.content }}
 							</SofaNormalText>
 
-							<SofaNormalText :customClass="'text-left'">
+							<SofaNormalText customClass="text-left">
 								{{ question.answer }}
 							</SofaNormalText>
 						</div>
@@ -156,7 +156,7 @@
 					<div class="w-full flex flex-col">
 						<SofaImageLoader
 							:key="selectedMaterial.details.id"
-							:customClass="'w-full h-[400px] rounded-[12px]'"
+							customClass="w-full h-[400px] rounded-[12px]"
 							:photoUrl="selectedMaterial.data.imageUrl" />
 					</div>
 				</template>
@@ -175,8 +175,8 @@
 			<div class="mdlg:!hidden fixed left-0 bottom-0 px-4 py-4 bg-white flex flex-col w-full z-0">
 				<div :class="`w-full flex flex-col ${hasUnsavedChanges ? '' : 'opacity-50'}`">
 					<SofaButton
-						:customClass="'w-full'"
-						:padding="'py-3'"
+						customClass="w-full"
+						padding="py-3"
 						@click="hasUnsavedChanges ? Logic.Study.SaveCourseLocalChanges() : null">
 						Save changes
 					</SofaButton>
@@ -190,7 +190,7 @@
 						showMoreOptions = false
 					}
 				"
-				:customClass="'mdlg:!hidden'">
+				customClass="mdlg:!hidden">
 				<div
 					:class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0  ${
 						modalData.content != 'material_details' ? 'h-auto' : 'h-[95%]'
@@ -203,10 +203,10 @@
 					<div
 						v-if="modalData.content != 'material_details'"
 						class="w-full flex flex-row px-4 pt-3 justify-between items-center sticky top-0 left-0">
-						<SofaNormalText :customClass="'!font-bold !text-base'">
+						<SofaNormalText customClass="!font-bold !text-base">
 							{{ modalData.title }}
 						</SofaNormalText>
-						<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
+						<SofaIcon customClass="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
 					</div>
 
 					<div v-if="modalData.content == 'add_material'" class="w-full flex flex-col px-4 pb-4">
@@ -238,7 +238,7 @@
 						!SingleCourse ? Logic.Common.goBack() : null
 					}
 				"
-				:customClass="'hidden mdlg:!flex'"
+				customClass="hidden mdlg:!flex"
 				:canClose="false">
 				<div
 					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
@@ -249,7 +249,7 @@
 					">
 					<div
 						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-						<SofaHeaderText :customClass="'!text-xl !font-bold'">{{
+						<SofaHeaderText customClass="!text-xl !font-bold">{{
 							SingleCourse ? 'Settings' : 'Create a course'
 						}}</SofaHeaderText>
 

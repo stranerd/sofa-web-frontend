@@ -10,7 +10,7 @@
 			}">
 			<div class="w-full flex items-start justify-start p-4 pb-[90px]">
 				<div class="w-[90%] rounded-custom bg-lightBlue p-3 flex items-start justify-start">
-					<SofaNormalText :customClass="'text-left'">
+					<SofaNormalText customClass="text-left">
 						{{ conversation.title }}
 					</SofaNormalText>
 				</div>
@@ -20,10 +20,10 @@
 				<div class="w-full grid grid-cols-2 gap-4">
 					<div class="col-span-1 flex flex-col">
 						<SofaButton
-							:bgColor="'bg-primaryRed'"
-							:textColor="'text-white'"
-							:customClass="'w-full rounded-custom'"
-							:padding="'py-3'"
+							bgColor="bg-primaryRed"
+							textColor="text-white"
+							customClass="w-full rounded-custom"
+							padding="py-3"
 							:hasShadow="false"
 							@click="accept(false)">
 							Decline
@@ -32,10 +32,10 @@
 
 					<div class="col-span-1 flex flex-col">
 						<SofaButton
-							:bgColor="'bg-primaryGreen'"
-							:textColor="'text-white'"
-							:customClass="'w-full rounded-custom'"
-							:padding="'py-3'"
+							bgColor="bg-primaryGreen"
+							textColor="text-white"
+							customClass="w-full rounded-custom"
+							padding="py-3"
 							:hasShadow="false"
 							@click="accept(true)">
 							Accept

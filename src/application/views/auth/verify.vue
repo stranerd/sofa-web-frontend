@@ -6,14 +6,14 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<SofaButton :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Verify </SofaButton>
+				<SofaButton customClass="w-full" padding="md:py-4 py-3" type="submit"> Verify </SofaButton>
 			</div>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText :color="'text-grayColor'">Have an account?</SofaNormalText>
+			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
 			<router-link to="/auth/login">
-				<SofaNormalText :color="'!text-primaryBlue'">Sign in</SofaNormalText>
+				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
 			</router-link>
 		</div>
 	</AuthLayout>

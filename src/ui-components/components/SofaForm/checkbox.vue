@@ -2,7 +2,7 @@
 	<div class="flex w-full flex-col gap-2">
 		<a class="flex w-full gap-2 items-center" @click="selected = !selected">
 			<span class="w-[25px]">
-				<SofaIcon :name="`${selected ? 'checkbox-active' : 'checkbox'}`" :customClass="`md:!h-[18px] h-[20px]`" />
+				<SofaIcon :name="`${selected ? 'checkbox-active' : 'checkbox'}`" customClass="md:!h-[18px] h-[20px]" />
 			</span>
 			<span class="flex gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs">
 				<slot />

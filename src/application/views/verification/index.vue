@@ -22,15 +22,15 @@
 		<template #left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<div class="w-full flex flex-col">
-					<SofaHeaderText :customClass="'!font-bold'"> Personal information </SofaHeaderText>
+					<SofaHeaderText customClass="!font-bold"> Personal information </SofaHeaderText>
 					<SofaNormalText>Edit your profile</SofaNormalText>
 				</div>
 
 				<div class="w-full flex flex-col items-center justify-center pt-3">
 					<SofaImageLoader
-						:customClass="`w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
+						customClass="w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
 						:photoUrl="profileFactory.photo?.link">
-						<SofaIcon v-if="!profileFactory.photo" :customClass="'h-[50px]'" :name="'user'" />
+						<SofaIcon v-if="!profileFactory.photo" customClass="h-[50px]" name="user" />
 						<SofaFileInput
 							v-model="profileFactory.photo"
 							class="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full h-[40px] w-[40px] flex items-center justify-center`"
@@ -72,7 +72,7 @@
 		<template #middle-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<div class="w-full flex flex-col items-start">
-					<SofaHeaderText :customClass="'!font-bold flex flex-row justify-start'"> Page content </SofaHeaderText>
+					<SofaHeaderText customClass="!font-bold flex flex-row justify-start"> Page content </SofaHeaderText>
 					<SofaNormalText>Add 3 study materials you’ve created </SofaNormalText>
 				</div>
 
@@ -83,16 +83,16 @@
 								<SofaActivityCard
 									v-if="content.subject"
 									:activity="content"
-									:customClass="'!bg-lightGray !w-full cursor-pointer'" />
+									customClass="!bg-lightGray !w-full cursor-pointer" />
 							</template>
 							<template v-else>
-								<SofaActivityCard :activity="content" :customClass="'!bg-lightGray'" :isWrapped="true" />
+								<SofaActivityCard :activity="content" customClass="!bg-lightGray" :isWrapped="true" />
 							</template>
 						</template>
 
 						<div class="w-full flex flex-col">
 							<SofaButton padding="p-4" @click="showAddMaterialHandler()">
-								<SofaIcon :name="'box-add-white'" :customClass="'h-[18px]'"></SofaIcon>
+								<SofaIcon name="box-add-white" customClass="h-[18px]"></SofaIcon>
 								Add Content
 							</SofaButton>
 						</div>
@@ -107,23 +107,23 @@
 					<div
 						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 pt-0 pb-3 px-4 md:!rounded-[16px] rounded-t-[19px] items-center justify-center">
 						<div class="w-full text-center hidden md:!inline-block">
-							<SofaHeaderText :customClass="'!text-xl !font-bold '">Add a Material</SofaHeaderText>
+							<SofaHeaderText customClass="!text-xl !font-bold ">Add a Material</SofaHeaderText>
 						</div>
 
 						<div class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden">
-							<SofaNormalText :customClass="'!font-bold !text-base'"> Add a Material </SofaNormalText>
-							<SofaIcon :customClass="'h-[16px]'" :name="'circle-close'" @click="showAddMaterial = false" />
+							<SofaNormalText customClass="!font-bold !text-base"> Add a Material </SofaNormalText>
+							<SofaIcon customClass="h-[16px]" name="circle-close" @click="showAddMaterial = false" />
 						</div>
 
 						<div class="w-full flex flex-col gap-4">
 							<SofaSelect
 								:ref="addMaterialType"
 								v-model="selectedMaterial"
-								:customClass="'rounded-custom !bg-lightGray'"
+								customClass="rounded-custom !bg-lightGray"
 								:name="capitalize(addMaterialType)"
-								:placeholder="'Select material'"
+								placeholder="Select material"
 								:rules="[Logic.Form.RequiredRule]"
-								:borderColor="'border-transparent'"
+								borderColor="border-transparent"
 								:options="allMaterials"
 								:hasTitle="true">
 								<template #title> Choose a material </template>
@@ -131,16 +131,16 @@
 
 							<div class="w-full flex flex-row items-center justify-between z-[50] bg-white">
 								<SofaButton
-									:padding="'px-5 py-2'"
-									:bgColor="'bg-white'"
-									:textColor="'text-grayColor'"
-									:customClass="'border border-gray-100 hidden mdlg:!inline-block'"
+									padding="px-5 py-2"
+									bgColor="bg-white"
+									textColor="text-grayColor"
+									customClass="border border-gray-100 hidden mdlg:!inline-block"
 									@click.prevent="showAddMaterial = false">
 									Exit
 								</SofaButton>
 
 								<div class="mdlg:!w-auto w-full">
-									<SofaButton :padding="'px-5 py-2'" :customClass="'mdlg:!w-auto w-full'" @click="addMaterial()">
+									<SofaButton padding="px-5 py-2" customClass="mdlg:!w-auto w-full" @click="addMaterial()">
 										Add
 									</SofaButton>
 								</div>
@@ -154,7 +154,7 @@
 		<template #right-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex flex-col justify-start">
-					<SofaHeaderText :customClass="'!font-bold flex flex-row justify-start'"> Add links (optional) </SofaHeaderText>
+					<SofaHeaderText customClass="!font-bold flex flex-row justify-start"> Add links (optional) </SofaHeaderText>
 					<SofaNormalText>Your educational website and socials</SofaNormalText>
 				</div>
 

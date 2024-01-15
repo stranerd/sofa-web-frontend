@@ -12,12 +12,12 @@
 				:key="activity.id"
 				:activity="activity"
 				:isWrapped="!Logic.Common.isLarge"
-				:customClass="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
+				customClass="mdlg:!bg-white shadow-custom cursor-pointer relative"
 				@click="activity.type === 'course' ? openCourse(activity) : openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 					<SofaIcon
-						:name="'more-options-horizontal'"
-						:customClass="'h-[6px]'"
+						name="more-options-horizontal"
+						customClass="h-[6px]"
 						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
 				</div>
 			</SofaActivityCard>
@@ -25,8 +25,8 @@
 
 		<SofaEmptyState
 			v-else
-			:title="'There are no items in this folder'"
-			:subTitle="'Save quiz and courses to this folder and you will see them here'" />
+			title="There are no items in this folder"
+			subTitle="Save quiz and courses to this folder and you will see them here" />
 	</LibraryLayout>
 </template>
 

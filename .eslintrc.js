@@ -30,6 +30,7 @@ module.exports = {
 		'vue/no-v-text-v-html-on-component': 'off',
 		'vue/attribute-hyphenation': ['error', 'never'],
 		'vue/v-on-event-hyphenation': ['error', 'never'],
+		'vue/no-useless-v-bind': ['error'],
 		'vue/html-indent': [
 			'error',
 			'tab',

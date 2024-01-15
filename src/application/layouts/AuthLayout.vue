@@ -4,12 +4,12 @@
 			<div class="w-full h-full flex-grow flex flex-col justify-start relative md:p-8 p-4">
 				<div class="w-full flex gap-4 items-center">
 					<a @click="Logic.Common.goBack()">
-						<SofaIcon :customClass="'md:h-[26px] h-[20px] cursor-pointer'" :name="'back-arrow'" />
+						<SofaIcon customClass="md:h-[26px] h-[20px] cursor-pointer" name="back-arrow" />
 					</a>
 
 					<div class="w-full flex flex-col md:justify-center md:items-center justify-start items-start gap-1">
-						<SofaHeaderText :customClass="'md:!text-2xl text-lg'" :content="title" />
-						<SofaNormalText v-if="subTitle" :color="'text-grayColor'" :customClass="'!font-normal'" :content="subTitle" />
+						<SofaHeaderText customClass="md:!text-2xl text-lg" :content="title" />
+						<SofaNormalText v-if="subTitle" color="text-grayColor" customClass="!font-normal" :content="subTitle" />
 					</div>
 				</div>
 
@@ -20,16 +20,16 @@
 		</div>
 
 		<SofaImageLoader
-			:photoUrl="'/images/auth-bg.png'"
-			:customClass="`bg-primaryPurple hidden mdlg:flex flex-col relative lg:w-[55%] mdlg:w-[50%] h-full items-center justify-center pt-9`">
+			photoUrl="/images/auth-bg.png"
+			customClass="bg-primaryPurple hidden mdlg:flex flex-col relative lg:w-[55%] mdlg:w-[50%] h-full items-center justify-center pt-9">
 			<div class="w-full h-full bg-deepGray bg-opacity-75 top-0 left-0 absolute flex flex-col gap-5 px-[14%] py-6 justify-center">
 				<div class="w-full bg-white rounded-custom px-5 py-3">
-					<SofaNormalText :customClass="'!font-bold !text-base gap-2 flex'">
+					<SofaNormalText customClass="!font-bold !text-base gap-2 flex">
 						<span> Did you know? </span>
-						<SofaIcon :name="'idea'" :customClass="'h-[20px]'" />
+						<SofaIcon name="idea" customClass="h-[20px]" />
 					</SofaNormalText>
 				</div>
-				<SofaNormalText :color="'text-white'" :customClass="'text-left !text-2xl'">
+				<SofaNormalText color="text-white" customClass="text-left !text-2xl">
 					The human brain can store about 2.5 petabytes of information? That's roughly equivalent to three million hours of TV
 					shows.
 				</SofaNormalText>

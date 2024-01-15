@@ -4,7 +4,7 @@
 			<div class="w-full mdlg:w-1/2">
 				<div class="w-full flex flex-col justify-center">
 					<SofaImageLoader
-						:customClass="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
+						customClass="w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain"
 						:photoUrl="factory.photo?.link ?? '/images/default.png'">
 						<div
 							class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
@@ -30,7 +30,7 @@
 					v-model="factory.description"
 					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 					:error="factory.errors.description"
-					:placeholder="'Describe your class'" />
+					placeholder="Describe your class" />
 				<SofaNumberField
 					v-model="factory.amount"
 					customClass="rounded-custom !bg-lightGray"
@@ -46,19 +46,14 @@
 			</div>
 		</div>
 		<div class="flex items-center justify-between">
-			<SofaButton
-				:bgColor="'bg-grayColor'"
-				:textColor="'text-white'"
-				:padding="'py-3 px-6'"
-				customClass="hidden mdlg:block"
-				@click="cancel">
+			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block" @click="cancel">
 				Cancel
 			</SofaButton>
 			<SofaButton
-				:bgColor="'bg-primaryBlue'"
+				bgColor="bg-primaryBlue"
 				type="submit"
-				:textColor="'text-white'"
-				:padding="'py-3 px-6'"
+				textColor="text-white"
+				padding="py-3 px-6"
 				:disabled="!factory.valid"
 				customClass="w-full mdlg:w-auto">
 				Save
