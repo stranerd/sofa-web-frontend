@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Welcome back" sub-title="Let the progress continue">
+	<AuthLayout title="Welcome back" subTitle="Let the progress continue">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signin">
 			<AuthProvider />
 
@@ -7,7 +7,7 @@
 				<SofaTextField
 					ref="email"
 					v-model="factory.email"
-					:custom-class="'rounded-custom !bg-lightGray'"
+					:customClass="'rounded-custom !bg-lightGray'"
 					type="text"
 					:name="'Email'"
 					:placeholder="'Email'"
@@ -15,7 +15,7 @@
 				<SofaTextField
 					ref="password"
 					v-model="factory.password"
-					:custom-class="'rounded-custom !bg-lightGray'"
+					:customClass="'rounded-custom !bg-lightGray'"
 					:type="'password'"
 					:placeholder="'Password'"
 					:name="'Password'"
@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<SofaButton :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Login </SofaButton>
+				<SofaButton :disabled="!factory.valid" :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Login </SofaButton>
 			</div>
 		</form>
 

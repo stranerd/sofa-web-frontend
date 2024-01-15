@@ -1,11 +1,11 @@
 <template>
-	<QuizWrapper :id="$route.params.id as string" :selected-question="$route.query.q as string" :skip-members="false">
+	<QuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string" :skipMembers="false">
 		<template #default="{ quiz, extras, members }">
 			<DashboardLayout
 				v-if="extras.canEdit"
 				:hide="{ bottom: true, top: true }"
-				bg-color="mdlg:bg-lightGray bg-white"
-				:topbar-options="{
+				bgColor="mdlg:bg-lightGray bg-white"
+				:topbarOptions="{
 					type: 'subpage',
 					title: quiz.title,
 					actions: [
@@ -63,10 +63,10 @@
 							:users="extras.usersByQuestions"
 							:questions="extras.sortedQuestions"
 							:factory="extras.questionFactory"
-							@add-question="showAddQuestionModal = true"
-							@duplicate-question="(question) => extras.duplicateQuestion(question)"
-							@delete-question="(id) => extras.deleteQuestion(id)"
-							@reorder-questions="(ids) => extras.reorderQuestions(ids)" />
+							@addQuestion="showAddQuestionModal = true"
+							@duplicateQuestion="(question) => extras.duplicateQuestion(question)"
+							@deleteQuestion="(id) => extras.deleteQuestion(id)"
+							@reorderQuestions="(ids) => extras.reorderQuestions(ids)" />
 					</div>
 				</template>
 
@@ -79,21 +79,21 @@
 							:factory="extras.questionFactory"
 							:users="extras.usersByQuestions"
 							:close="() => (showMoreOptions = false)"
-							@show-currently-editing="showCurrentlyEditingModal = true"
-							@save-question="extras.saveCurrentQuestion()"
-							@duplicate-question="
+							@showCurrentlyEditing="showCurrentlyEditingModal = true"
+							@saveQuestion="extras.saveCurrentQuestion()"
+							@duplicateQuestion="
 								(question) => {
 									showMoreOptions = false
 									extras.duplicateQuestion(question)
 								}
 							"
-							@delete-question="
+							@deleteQuestion="
 								(id) => {
 									showMoreOptions = false
 									extras.deleteQuestion(id)
 								}
 							"
-							@delete-quiz="
+							@deleteQuiz="
 								() => {
 									showMoreOptions = false
 									extras.deleteQuiz()
@@ -147,8 +147,8 @@
 							:quiz="quiz"
 							:factory="extras.quizFactory"
 							:close="() => (showSettingModal = false)"
-							@update-quiz="extras.updateQuiz().then(handleSettingSaved)"
-							@publish-quiz="extras.publishQuiz().then(handleSettingSaved)" />
+							@updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
+							@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
 					</div>
 
 					<!-- Question list for smaller screens -->
@@ -159,15 +159,15 @@
 						:users="extras.usersByQuestions"
 						:factory="extras.questionFactory"
 						:questions="extras.sortedQuestions"
-						@add-question="showAddQuestionModal = true"
-						@duplicate-question="(question) => extras.duplicateQuestion(question)"
-						@delete-question="(id) => extras.deleteQuestion(id)"
-						@reorder-questions="(ids) => extras.reorderQuestions(ids)" />
+						@addQuestion="showAddQuestionModal = true"
+						@duplicateQuestion="(question) => extras.duplicateQuestion(question)"
+						@deleteQuestion="(id) => extras.deleteQuestion(id)"
+						@reorderQuestions="(ids) => extras.reorderQuestions(ids)" />
 				</template>
 			</DashboardLayout>
 
 			<SofaModal v-else-if="quiz">
-				<RequestAccess :quiz="quiz" :request-access="extras.requestAccess" />
+				<RequestAccess :quiz="quiz" :requestAccess="extras.requestAccess" />
 			</SofaModal>
 
 			<!-- Larger screen setings modal -->
@@ -178,8 +178,8 @@
 						:quiz="quiz"
 						:factory="extras.quizFactory"
 						:close="() => (showSettingModal = false)"
-						@update-quiz="extras.updateQuiz().then(handleSettingSaved)"
-						@publish-quiz="extras.publishQuiz().then(handleSettingSaved)" />
+						@updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
+						@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
 				</div>
 			</SofaModal>
 
@@ -198,21 +198,21 @@
 						:users="extras.usersByQuestions"
 						:factory="extras.questionFactory"
 						:close="() => (showMoreOptions = false)"
-						@show-currently-editing="showCurrentlyEditingModal = true"
-						@save-question="extras.saveCurrentQuestion()"
-						@duplicate-question="
+						@showCurrentlyEditing="showCurrentlyEditingModal = true"
+						@saveQuestion="extras.saveCurrentQuestion()"
+						@duplicateQuestion="
 							(question) => {
 								showMoreOptions = false
 								extras.duplicateQuestion(question)
 							}
 						"
-						@delete-question="
+						@deleteQuestion="
 							(id) => {
 								showMoreOptions = false
 								extras.deleteQuestion(id)
 							}
 						"
-						@delete-quiz="
+						@deleteQuiz="
 							() => {
 								showMoreOptions = false
 								extras.deleteQuiz()
@@ -232,7 +232,7 @@
 							v-for="(user, index) in extras.usersByQuestions[extras.currentQuestionById?.id ?? ''] ?? []"
 							:key="user.id"
 							class="flex items-center gap-2">
-							<SofaAvatar v-if="index < 3" :photo-url="user.bio.photo?.link" size="36" class="-ml-1" />
+							<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="36" class="-ml-1" />
 							<SofaNormalText :content="user.bio.name.full" size="lg" />
 						</div>
 						<SofaNormalText
@@ -273,10 +273,10 @@
 				<div class="mdlg:w-[60%] w-full h-full flex flex-col">
 					<SofaEmptyState
 						title="Quiz not found"
-						sub-title="Quiz doesn't exist. Check out other materials in the marketplace"
-						action-label="Go to marketplace"
+						subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
+						actionLabel="Go to marketplace"
 						:action="() => Logic.Common.GoToRoute('/marketplace')"
-						title-style="mdlg:!text-xl" />
+						titleStyle="mdlg:!text-xl" />
 				</div>
 			</div>
 		</template>

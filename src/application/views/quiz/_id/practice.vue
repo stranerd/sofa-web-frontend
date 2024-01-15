@@ -1,14 +1,14 @@
 <template>
-	<ExpandedLayout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="$route.params.id as string" :show-answer="showSolution" :is-answer-right="isCorrect">
+	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+		<QuizWrapper :id="$route.params.id as string" :showAnswer="showSolution" :isAnswerRight="isCorrect">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz
 					v-model:answer="extras.answer"
 					:index="extras.index"
 					:title="isDone ? 'Practice completed' : quiz.title"
 					:questions="questions"
-					:option-state="extras.optionState"
-					:right-button="{
+					:optionState="extras.optionState"
+					:rightButton="{
 						label: isDone || showSolution ? 'Continue' : 'Check',
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
@@ -26,7 +26,7 @@
 							return (isDone = true)
 						},
 					}"
-					:left-button="{
+					:leftButton="{
 						label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
 						bgColor: 'bg-white border border-gray-100',
 						textColor: 'text-grayColor',

@@ -12,11 +12,11 @@
 			</div>
 		</div>
 	</SubPageLayout>
-	<DashboardLayout v-else :topbar-options="{ title }">
+	<DashboardLayout v-else :topbarOptions="{ title }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
-					<SofaAvatar size="84" :photo-url="user.bio.photo?.link" />
+					<SofaAvatar size="84" :photoUrl="user.bio.photo?.link" />
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
@@ -57,7 +57,7 @@
 							:key="item.route"
 							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
 							:to="item.route"
-							exact-active-class="bg-lightBlue font-semibold">
+							exactActiveClass="bg-lightBlue font-semibold">
 							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
 							<SofaNormalText color="text-inherit" :content="item.title" />
 						</router-link>
@@ -83,7 +83,7 @@
 					</div>
 				</div>
 
-				<SofaTextField v-model="factory.body" placeholder="What can I do for you?" custom-class="border">
+				<SofaTextField v-model="factory.body" placeholder="What can I do for you?" customClass="border">
 					<template #inner-suffix>
 						<SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
 					</template>
@@ -92,17 +92,17 @@
 				<div class="w-full flex items-center gap-2">
 					<SofaBadge
 						color="gray"
-						:is-inverted="true"
+						:isInverted="true"
 						as="a"
-						custom-class="!py-2 !px-4"
+						customClass="!py-2 !px-4"
 						@click="Logic.Common.GoToRoute('/quiz/create')">
 						Create a quiz
 					</SofaBadge>
 					<SofaBadge
 						color="gray"
-						:is-inverted="true"
+						:isInverted="true"
 						as="a"
-						custom-class="!py-2 !px-4"
+						customClass="!py-2 !px-4"
 						@click="Logic.Common.GoToRoute('/course/create')">
 						Create a course
 					</SofaBadge>
@@ -118,7 +118,7 @@
 					<ChatList :limit="3" />
 					<SofaNormalText color="text-primaryPink" as="router-link" to="/chats" content="See all" />
 				</template>
-				<SofaEmptyState v-else title="No chat" sub-title="Your active chats will show up here" action-label="" />
+				<SofaEmptyState v-else title="No chat" subTitle="Your active chats will show up here" actionLabel="" />
 			</div>
 
 			<div v-if="userType.isOrg" class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
@@ -129,7 +129,7 @@
 						v-for="command in rightCommands"
 						:key="command.label"
 						color="gray"
-						:is-inverted="true"
+						:isInverted="true"
 						as="a"
 						class="!py-3 !px-4 truncate"
 						@click="command.action">
@@ -147,7 +147,7 @@
 					Join the elite that create the highest quality study materials, reach more audience, and sell on marketplace.
 				</SofaNormalText>
 
-				<SofaButton :has-shadow="false" padding="py-2 px-6" @click="$router.push('/verification')"> Apply here </SofaButton>
+				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification')"> Apply here </SofaButton>
 			</div>
 
 			<div
@@ -162,7 +162,7 @@
 					Complete your test after this application and we will reach out to you with your result.
 				</SofaNormalText>
 
-				<SofaButton :has-shadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
+				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
 			</div>
 		</template>
 	</DashboardLayout>

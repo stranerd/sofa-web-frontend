@@ -10,16 +10,16 @@
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
 			<SofaTextField
 				v-model="joinCode"
-				custom-class="rounded-custom !bg-lightGray"
+				customClass="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="Enter Join Code"
-				border-color="border-transparent" />
+				borderColor="border-transparent" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">
 			<SofaButton
-				text-color="text-grayColor"
-				bg-color="bg-white"
+				textColor="text-grayColor"
+				bgColor="bg-white"
 				padding="px-4 py-1"
 				class="hidden md:inline-block border-2 border-gray-100 md:w-auto w-full"
 				@click="close">
@@ -27,8 +27,8 @@
 			</SofaButton>
 
 			<SofaButton
-				text-color="text-white"
-				bg-color="bg-primaryBlue"
+				textColor="text-white"
+				bgColor="bg-primaryBlue"
 				padding="px-4 md:py-1 py-3"
 				class="border-2 border-transparent md:w-auto w-full"
 				@click="requestToJoinOrganization(org.id).then((succeeded) => (succeeded ? close() : null))">

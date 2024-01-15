@@ -10,7 +10,7 @@
 		</div>
 
 		<div v-if="conversation && conversation.tutor" class="w-full flex justify-center items-center gap-2">
-			<SofaAvatar :photo-url="conversation.tutor.bio.photo?.link" size="27" />
+			<SofaAvatar :photoUrl="conversation.tutor.bio.photo?.link" size="27" />
 			<SofaNormalText class="!font-bold" :content="conversation.tutor.bio.name.full" />
 			<SofaIcon name="tutor-bagde" class="h-[20px]" />
 		</div>
@@ -21,7 +21,7 @@
 			v-model="factory.message"
 			padding="p-4"
 			placeholder="Why are you reviewing this?"
-			text-area-style="!bg-lightGray rounded-custom"
+			textAreaStyle="!bg-lightGray rounded-custom"
 			:error="factory.errors.message" />
 
 		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">Submit</SofaButton>

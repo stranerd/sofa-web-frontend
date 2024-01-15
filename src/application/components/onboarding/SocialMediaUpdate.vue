@@ -6,7 +6,7 @@
 		:placeholder="`Enter ${item.ref} link`"
 		type="url"
 		:error="item.error"
-		custom-class="rounded-custom !bg-lightGray">
+		customClass="rounded-custom !bg-lightGray">
 		<template #inner-prefix>
 			<SofaIcon :name="socials[item.ref]" class="h-[20px]" />
 		</template>

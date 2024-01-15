@@ -2,12 +2,12 @@
 	<slot name="header">
 		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom" :class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
-				<SofaIcon class="md:hidden" :custom-class="'h-[19px]'" :name="'circle-close'" @click="Logic.Common.goBack()" />
-				<SofaHeaderText :size="'xl'" custom-class="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
+				<SofaIcon class="md:hidden" :customClass="'h-[19px]'" :name="'circle-close'" @click="Logic.Common.goBack()" />
+				<SofaHeaderText :size="'xl'" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
 				<SofaNormalText class="md:hidden whitespace-nowrap" :content="`${index + 1}/${questions.length}`" color="text-inherit" />
 				<SofaNormalText
 					class="hidden md:inline"
-					:custom-class="'!text-base cursor-pointer whitespace-nowrap'"
+					:customClass="'!text-base cursor-pointer whitespace-nowrap'"
 					color="text-inherit"
 					content="Exit"
 					@click="Logic.Common.goBack()" />
@@ -23,9 +23,9 @@
 					:key="question.id"
 					v-model="answer"
 					:question="question"
-					:is-dark="isDark"
+					:isDark="isDark"
 					:title="title"
-					:option-state="optionState" />
+					:optionState="optionState" />
 				<slot name="postBody" />
 			</slot>
 		</div>
@@ -40,11 +40,11 @@
 				<SofaButton
 					v-if="leftButton"
 					class="w-full md:w-auto mr-auto"
-					custom-class="md:font-semibold"
+					customClass="md:font-semibold"
 					padding="py-3 md:px-6"
 					:disabled="leftButton.disabled"
-					:bg-color="leftButton.bgColor"
-					:text-color="leftButton.textColor"
+					:bgColor="leftButton.bgColor"
+					:textColor="leftButton.textColor"
 					@click="leftButton.click">
 					{{ leftButton.label }}
 				</SofaButton>
@@ -56,11 +56,11 @@
 				<SofaButton
 					v-if="rightButton"
 					class="w-full md:w-auto ml-auto"
-					custom-class="md:font-semibold"
+					customClass="md:font-semibold"
 					padding="py-3 md:px-6"
 					:disabled="rightButton.disabled"
-					:bg-color="rightButton.bgColor"
-					:text-color="rightButton.textColor"
+					:bgColor="rightButton.bgColor"
+					:textColor="rightButton.textColor"
 					@click="rightButton.click">
 					{{ rightButton.label }}
 				</SofaButton>

@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Setup your account" :sub-title="type ? undefined : 'Choose your account type'">
+	<AuthLayout title="Setup your account" :subTitle="type ? undefined : 'Choose your account type'">
 		<AccountSetup v-if="type" />
 		<div v-else class="flex md:flex-row flex-col gap-3 md:gap-6 justify-center items-center w-full">
 			<router-link
@@ -16,9 +16,9 @@
 				:key="userType.value"
 				:to="`/onboarding?type=${userType.value}`"
 				:class="`md:h-[180px] md:w-[180px] h-[120px] w-full cursor-pointer rounded-custom ${userType.bgClass} flex flex-col items-center gap-2 justify-center`">
-				<SofaIcon :custom-class="'md:h-[65px] h-[45px]'" :name="userType.icon" />
+				<SofaIcon :customClass="'md:h-[65px] h-[45px]'" :name="userType.icon" />
 
-				<SofaNormalText :custom-class="'!font-semibold'" :color="'text-white'">
+				<SofaNormalText :customClass="'!font-semibold'" :color="'text-white'">
 					{{ userType.label }}
 				</SofaNormalText>
 			</router-link>

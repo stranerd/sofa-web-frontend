@@ -28,6 +28,8 @@ module.exports = {
 		'no-empty': 'off',
 		'vue/no-v-html': 'off',
 		'vue/no-v-text-v-html-on-component': 'off',
+		'vue/attribute-hyphenation': ['error', 'never'],
+		'vue/v-on-event-hyphenation': ['error', 'never'],
 		'vue/html-indent': [
 			'error',
 			'tab',

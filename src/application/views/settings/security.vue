@@ -10,27 +10,27 @@
 				<SofaTextField
 					v-if="hasPassword"
 					v-model="factory.oldPassword"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Current password"
 					:error="factory.errors.oldPassword"
-					border-color="border-transparent" />
+					borderColor="border-transparent" />
 
 				<SofaTextField
 					v-model="factory.password"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="New password"
 					:error="factory.errors.password"
-					border-color="border-transparent" />
+					borderColor="border-transparent" />
 
 				<SofaTextField
 					v-model="factory.cPassword"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Confirm new password"
 					:error="factory.errors.cPassword"
-					border-color="border-transparent" />
+					borderColor="border-transparent" />
 
 				<SofaButton :disabled="!factory.valid" type="submit" padding="px-7 py-2" class="self-end"> Update </SofaButton>
 			</form>

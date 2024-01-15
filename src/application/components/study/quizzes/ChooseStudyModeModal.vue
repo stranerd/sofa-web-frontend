@@ -1,7 +1,7 @@
 <template>
 	<div v-if="hasAccess(quiz)" class="w-full flex flex-col md:gap-4 gap-2 mdlg:p-6 md:p-4 items-center justify-center">
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden py-3 border-lightGray border-b px-4">
-			<SofaNormalText :custom-class="'!font-bold !text-base'">
+			<SofaNormalText :customClass="'!font-bold !text-base'">
 				{{ showGame ? 'Start quiz game' : 'Choose Study Mode' }}
 			</SofaNormalText>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
@@ -10,12 +10,12 @@
 		<div v-if="showGame" class="w-full flex flex-col gap-3 p-4">
 			<a class="w-full rounded-custom p-4 bg-lightGray flex items-center justify-between" @click="joinGame = !joinGame">
 				<SofaNormalText>Participate</SofaNormalText>
-				<SofaIcon :custom-class="'h-[22px] z-50'" :name="joinGame ? 'toggle-on' : 'toggle-off'" />
+				<SofaIcon :customClass="'h-[22px] z-50'" :name="joinGame ? 'toggle-on' : 'toggle-off'" />
 			</a>
 
 			<div class="w-full flex flex-col items-center justify-between pt-3">
 				<div class="w-full flex flex-col">
-					<SofaButton :padding="'py-3'" :custom-class="'w-full'" @click="createQuizGame">Start</SofaButton>
+					<SofaButton :padding="'py-3'" :customClass="'w-full'" @click="createQuizGame">Start</SofaButton>
 				</div>
 			</div>
 		</div>
@@ -25,10 +25,10 @@
 				v-for="item in otherTasks"
 				:key="item.title"
 				:data="{ ...item, iconSize: 'h-[46px]' }"
-				:custom-class="'!bg-lightGray !w-full !shadow-none'"
+				:customClass="'!bg-lightGray !w-full !shadow-none'"
 				@click="chooseMode(item.value)">
 				<template #title>
-					<SofaNormalText :custom-class="'!font-bold'">
+					<SofaNormalText :customClass="'!font-bold'">
 						{{ item.title }}
 					</SofaNormalText>
 				</template>
@@ -40,8 +40,8 @@
 	<SofaEmptyState
 		v-else
 		title="You have no access to this quiz"
-		sub-title="Get the course it is in to use"
-		action-label="Go to course"
+		subTitle="Get the course it is in to use"
+		actionLabel="Go to course"
 		:action="() => Logic.Common.GoToRoute(`/marketplace/${quiz.courseId}?type=course`)"
 		:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 </template>

@@ -45,12 +45,12 @@
 				as="router-link"
 				:activity="activity"
 				:to="activity.route"
-				:has-bookmark="true"
-				:bookmark-action="() => saveToFolder(activity.original)"
+				:hasBookmark="true"
+				:bookmarkAction="() => saveToFolder(activity.original)"
 				class="flex-shrink-0" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">
-			<SofaEmptyState title="No materials found" sub-title="You have not created any materials so far" custom-class="!h-[230px]" />
+			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />
 		</div>
 
 		<SofaNormalText

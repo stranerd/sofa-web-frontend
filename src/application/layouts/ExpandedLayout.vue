@@ -1,10 +1,10 @@
 <template>
 	<SofaTopBar
 		v-if="!hide.top"
-		:subpage-actions="topbarOptions.actions"
+		:subpageActions="topbarOptions.actions"
 		:title="topbarOptions.title"
 		:type="topbarOptions.type"
-		:custom-class="'hidden mdlg:!flex'" />
+		:customClass="'hidden mdlg:!flex'" />
 	<div
 		:class="`h-full w-full overflow-y-auto mx-auto flex-grow relative mdlg:gap-5 flex flex-col items-center lg:text-sm mdlg:text-[12px] text-xs ${width} ${layoutStyle}`"
 		:style="bgImage ? `background-image: url(${bgImage})` : ''">

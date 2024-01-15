@@ -1,5 +1,5 @@
 <template>
-	<SofaModal :close="() => close?.()" max-width="md:max-w-[30%]">
+	<SofaModal :close="() => close?.()" maxWidth="md:max-w-[30%]">
 		<div class="flex flex-col gap-2 relative mdlg:p-6 p-4 py-6 items-center justify-center text-center">
 			<SofaHeaderText v-if="title" class="text-xl" :content="title" />
 
@@ -9,8 +9,8 @@
 				<div v-for="(button, index) in buttons" :key="index" class="md:w-auto col-span-1 flex flex-col">
 					<SofaButton
 						v-if="!button.hide"
-						:text-color="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
-						:bg-color="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')"
+						:textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
+						:bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')"
 						padding="px-4 py-2"
 						:class="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-2  md:w-auto w-full`"
 						@click="button.action?.()">

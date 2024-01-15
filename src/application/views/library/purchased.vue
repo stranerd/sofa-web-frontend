@@ -5,13 +5,13 @@
 				v-for="activity in data"
 				:key="activity.id"
 				:activity="activity"
-				:is-wrapped="!Logic.Common.isLarge"
-				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
+				:isWrapped="!Logic.Common.isLarge"
+				:customClass="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="openCourse(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 					<SofaIcon
 						:name="'more-options-horizontal'"
-						:custom-class="'h-[6px]'"
+						:customClass="'h-[6px]'"
 						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
 				</div>
 			</SofaActivityCard>
@@ -20,8 +20,8 @@
 		<SofaEmptyState
 			v-else
 			:title="'You have not bought anything'"
-			:action-label="'Marketplace'"
-			:sub-title="'Discover thousands of materials to buy, created by verified experts'"
+			:actionLabel="'Marketplace'"
+			:subTitle="'Discover thousands of materials to buy, created by verified experts'"
 			:action="() => Logic.Common.GoToRoute('/marketplace')" />
 	</LibraryLayout>
 </template>

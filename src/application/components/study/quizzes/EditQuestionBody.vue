@@ -34,15 +34,15 @@
 			<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
 			<SofaTextarea
 				v-model="factory.question"
-				text-area-style="bg-transparent h-[130px] w-full resize-none"
+				textAreaStyle="bg-transparent h-[130px] w-full resize-none"
 				:placeholder="factory.questionPlaceholder"
-				:rich-editor="true" />
+				:richEditor="true" />
 		</div>
 
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
 			<SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />
 			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-auto">
-				<SofaButton bg-color="bg-white" text-color="text-bodyBlack">Add Image</SofaButton>
+				<SofaButton bgColor="bg-white" textColor="text-bodyBlack">Add Image</SofaButton>
 			</SofaFileInput>
 		</div>
 
@@ -53,7 +53,7 @@
 		</div>
 
 		<div v-if="factory.questionMedia" class="w-full flex flex-col items-center justify-center">
-			<SofaImageLoader :photo-url="factory.questionMedia.link" custom-class="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
+			<SofaImageLoader :photoUrl="factory.questionMedia.link" customClass="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
 		</div>
 
 		<div v-if="!factory.isFillInBlanks && !factory.isDragAnswers" class="flex flex-col gap-4">
@@ -69,9 +69,9 @@
 					<SofaTextarea
 						v-model="factory.multipleOptions[index]"
 						:rows="1"
-						:rich-editor="true"
+						:richEditor="true"
 						class="flex-1"
-						text-area-style="p-0"
+						textAreaStyle="p-0"
 						:placeholder="`Enter answer ${index + 1}`" />
 					<SofaIcon
 						v-if="factory.canRemoveOption"
@@ -112,9 +112,9 @@
 					<SofaTextarea
 						v-model="factory.writeAnswerAnswers[index]"
 						:rows="index === 0 ? 3 : 1"
-						:rich-editor="true"
+						:richEditor="true"
 						class="flex-1"
-						text-area-style="p-0"
+						textAreaStyle="p-0"
 						:placeholder="index === 0 ? 'Enter answer' : `Add optional answer ${index}`" />
 					<SofaIcon
 						v-if="factory.canRemoveOption"
@@ -133,9 +133,9 @@
 						<SofaTextarea
 							v-model="factory.matchSet[index].q"
 							:rows="1"
-							:rich-editor="true"
+							:richEditor="true"
 							class="flex-1"
-							text-area-style="p-0"
+							textAreaStyle="p-0"
 							:placeholder="`Enter word/sentence ${index + 1}`" />
 					</div>
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
@@ -146,9 +146,9 @@
 						<SofaTextarea
 							v-model="factory.matchSet[index].a"
 							:rows="1"
-							:rich-editor="true"
+							:richEditor="true"
 							class="flex-1"
-							text-area-style="p-0"
+							textAreaStyle="p-0"
 							placeholder="Enter answer" />
 					</div>
 					<SofaIcon
@@ -158,7 +158,7 @@
 						@click="factory.removeOption(index)" />
 				</div>
 			</template>
-			<Draggable v-if="factory.isSequence" :list="factory.sequenceAnswers" class="w-full flex flex-col gap-4" item-key="">
+			<Draggable v-if="factory.isSequence" :list="factory.sequenceAnswers" class="w-full flex flex-col gap-4" itemKey="">
 				<template #item="{ index }">
 					<div class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
 						<SofaIcon
@@ -168,9 +168,9 @@
 						<SofaTextarea
 							v-model="factory.sequenceAnswers[index]"
 							:rows="1"
-							:rich-editor="true"
+							:richEditor="true"
 							class="flex-1"
-							text-area-style="p-0"
+							textAreaStyle="p-0"
 							:placeholder="`Enter word/sentence ${index + 1}`" />
 						<SofaIcon
 							v-if="factory.canRemoveOption"
@@ -192,9 +192,9 @@
 				<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
 				<SofaTextarea
 					v-model="factory.explanation"
-					text-area-style="bg-transparent h-[130px] w-full !p-0 resize-none"
+					textAreaStyle="bg-transparent h-[130px] w-full !p-0 resize-none"
 					placeholder="Explanation"
-					:rich-editor="true" />
+					:richEditor="true" />
 			</div>
 		</div>
 	</div>

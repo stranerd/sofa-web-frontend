@@ -6,8 +6,8 @@
 		}  items-start gap-3 px-3 py-3 justify-between rounded-custom mdlg:bg-lightGray bg-white  ${customClass}`">
 		<div :class="`flex mdlg:!flex-row  ${isWrapped ? ' flex-row' : ' flex-col'} gap-2 mdlg:gap-3 items-start w-full`">
 			<SofaImageLoader
-				:photo-url="activity.image"
-				:custom-class="`mdlg:!h-[115px]  ${
+				:photoUrl="activity.image"
+				:customClass="`mdlg:!h-[115px]  ${
 					isWrapped ? ' h-[100px] w-[150px]' : '  h-[120px] w-full'
 				} mdlg:!w-[200px] rounded-custom relative`">
 				<div
@@ -20,22 +20,22 @@
 					</div>
 					<SofaNormalText
 						v-else
-						:custom-class="'!text-xs !py-0 font-semibold w-full flex flex-row items-center justify-center'"
+						:customClass="'!text-xs !py-0 font-semibold w-full flex flex-row items-center justify-center'"
 						:color="'text-white'"
 						content="Completed" />
 				</div>
 			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<div class="w-full flex flex-row items-center justify-between">
-					<SofaNormalText :custom-class="'!font-bold w-full text-left !line-clamp-1'">{{ activity.title }}</SofaNormalText>
+					<SofaNormalText :customClass="'!font-bold w-full text-left !line-clamp-1'">{{ activity.title }}</SofaNormalText>
 					<div v-if="hasEdit" class="flex flex-row justify-end" @click.stop="editAction ? editAction() : null">
-						<SofaIcon :custom-class="'h-[16px]'" :name="'edit-gray'" />
+						<SofaIcon :customClass="'h-[16px]'" :name="'edit-gray'" />
 					</div>
 					<a
 						v-if="hasBookmark && Logic.Common.isLarge"
 						class="flex flex-row justify-end"
 						@click.stop.prevent="bookmarkAction?.()">
-						<SofaIcon :custom-class="'h-[16px]'" :name="'bookmark'" />
+						<SofaIcon :customClass="'h-[16px]'" :name="'bookmark'" />
 					</a>
 
 					<template v-if="hasExtra">
@@ -57,7 +57,7 @@
 				</div>
 
 				<div class="w-full flex flex-row gap-2 items-center">
-					<SofaIcon :name="'star-full'" :custom-class="'h-[16px]'" />
+					<SofaIcon :name="'star-full'" :customClass="'h-[16px]'" />
 
 					<div class="flex flex-row gap-1 items-center">
 						<SofaNormalText> {{ activity.ratings.avg }} </SofaNormalText>
@@ -69,18 +69,18 @@
 
 				<div class="flex items-center gap-2 flex-grow justify-between w-full">
 					<a class="gap-2 flex items-center" @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)">
-						<SofaAvatar :size="'20'" :photo-url="activity.user.bio.photo?.link" :user-id="activity.user.id" />
-						<SofaNormalText :custom-class="'!whitespace-nowrap !line-clamp-1'">
+						<SofaAvatar :size="'20'" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
+						<SofaNormalText :customClass="'!whitespace-nowrap !line-clamp-1'">
 							{{ activity.authUserId === activity.user.id ? 'You' : activity.user.bio.name.full }}
 						</SofaNormalText>
-						<SofaIcon v-if="activity.user.roles.isVerified" :name="'verify'" :custom-class="'h-[13px]'" />
-						<SofaIcon v-if="activity.user.type?.type === 'teacher'" :name="'tutor-bagde'" :custom-class="'h-[13px]'" />
+						<SofaIcon v-if="activity.user.roles.isVerified" :name="'verify'" :customClass="'h-[13px]'" />
+						<SofaIcon v-if="activity.user.type?.type === 'teacher'" :name="'tutor-bagde'" :customClass="'h-[13px]'" />
 					</a>
 
 					<SofaIcon
 						v-if="!isWrapped"
 						:name="'bookmark'"
-						:custom-class="'h-[17px] mdlg:!hidden '"
+						:customClass="'h-[17px] mdlg:!hidden '"
 						@click.stop.prevent="bookmarkAction?.()" />
 				</div>
 			</div>

@@ -1,9 +1,9 @@
 <template>
 	<SofaTopBar
-		:subpage-actions="topbarOptions.actions"
+		:subpageActions="topbarOptions.actions"
 		:title="topbarOptions.title"
 		:type="topbarOptions.type"
-		:custom-class="hide.top ? 'hidden mdlg:!flex' : 'flex'"
+		:customClass="hide.top ? 'hidden mdlg:!flex' : 'flex'"
 		:badges="topbarOptions.badges" />
 	<div class="flex-grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
 		<div

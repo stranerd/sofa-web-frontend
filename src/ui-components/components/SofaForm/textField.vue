@@ -25,7 +25,7 @@
 				<SofaIcon
 					v-if="type == 'password'"
 					:name="fieldType == 'password' ? 'show' : 'hide'"
-					:custom-class="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
+					:customClass="fieldType == 'password' ? 'md:!h-[18px] h-[14px]' : 'md:!h-[13px] h-[10px]'"
 					@click.stop="fieldType = fieldType == 'password' ? 'text' : 'password'" />
 				<SofaIcon v-if="!validationStatus || error" name="error-state" class="md:!h-[18px] h-[15px]" />
 			</div>

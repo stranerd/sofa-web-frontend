@@ -1,12 +1,12 @@
 <template>
 	<div class="flex w-full flex-col content">
-		<SofaNormalText v-if="hasTitle" custom-class="!pb-4 font-bold">
+		<SofaNormalText v-if="hasTitle" customClass="!pb-4 font-bold">
 			<slot name="title" />
 		</SofaNormalText>
 		<VueEditor
 			v-if="richEditor"
 			v-model="comp"
-			:editor-options="editorOptions"
+			:editorOptions="editorOptions"
 			:disabled="disabled"
 			:style="`min-height: ${rows}em`"
 			:class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"

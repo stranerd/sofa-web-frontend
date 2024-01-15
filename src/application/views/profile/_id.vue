@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layout-style="mdlg:pt-6">
+	<ExpandedLayout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="user.bio.name.full" />
@@ -10,7 +10,7 @@
 			<div class="w-full flex flex-col px-4 pt-4 gap-6 bg-white mdlg:rounded-b-2xl">
 				<div class="w-full flex mdlg:flex-row flex-col justify-between items-start mdlg:gap-0 gap-4">
 					<div class="flex gap-3 items-start">
-						<SofaAvatar :photo-url="user.bio.photo?.link" size="110" custom-class="-mt-[71px]" />
+						<SofaAvatar :photoUrl="user.bio.photo?.link" size="110" customClass="-mt-[71px]" />
 
 						<div class="flex flex-col">
 							<div class="flex items-center gap-2">
@@ -79,7 +79,7 @@
 				<div v-if="materials.length" class="w-full mdlg:px-0 px-4">
 					<div class="w-full px-4 py-1 bg-white rounded-custom flex gap-1 items-center justify-start">
 						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField v-model="searchQuery" custom-class="!border-none w-full flex-grow" placeholder="Search" />
+						<SofaTextField v-model="searchQuery" customClass="!border-none w-full flex-grow" placeholder="Search" />
 					</div>
 				</div>
 
@@ -100,8 +100,8 @@
 							v-for="activity in filteredMaterials"
 							:key="activity.id"
 							as="router-link"
-							:has-bookmark="true"
-							:bookmark-action="() => saveToFolder(activity.original)"
+							:hasBookmark="true"
+							:bookmarkAction="() => saveToFolder(activity.original)"
 							:content="activity"
 							:to="activity.route"
 							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
@@ -109,8 +109,8 @@
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
 							:title="`${user.bio.name.full} has no published materials yet`"
-							sub-title="Discover thousands of other materials on SOFA marketplace"
-							:action-label="'Marketplace'"
+							subTitle="Discover thousands of other materials on SOFA marketplace"
+							:actionLabel="'Marketplace'"
 							:action="() => Logic.Common.GoToRoute('/marketplace')" />
 					</div>
 				</div>

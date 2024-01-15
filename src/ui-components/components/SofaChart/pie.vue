@@ -1,7 +1,7 @@
 <template>
 	<div :class="`${customClass} w-full h-[180px] relative `">
 		<div class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center">
-			<SofaHeaderText size="xl" :custom-class="textStyle">
+			<SofaHeaderText size="xl" :customClass="textStyle">
 				<slot />
 			</SofaHeaderText>
 		</div>

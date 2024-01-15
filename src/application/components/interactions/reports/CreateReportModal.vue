@@ -13,7 +13,7 @@
 			v-model="factory.message"
 			padding="p-4"
 			placeholder="Why are you reporting this?"
-			text-area-style="!bg-lightGray rounded-custom"
+			textAreaStyle="!bg-lightGray rounded-custom"
 			:error="factory.errors.message" />
 
 		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">

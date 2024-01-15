@@ -8,7 +8,7 @@
 			<SofaNormalText :color="'text-primaryPink'" content="New chat" />
 		</router-link>
 
-		<ChatList :custom-class="'!rounded-none'" :extra-style="'px-3'" />
+		<ChatList :customClass="'!rounded-none'" :extraStyle="'px-3'" />
 
 		<div
 			v-if="conversation.user.id === id"

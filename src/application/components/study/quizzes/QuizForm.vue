@@ -5,36 +5,36 @@
 				<div class="col-span-1 w-full flex flex-col gap-3">
 					<SofaTextField
 						v-model="factory.title"
-						custom-class="rounded-custom !bg-lightGray"
+						customClass="rounded-custom !bg-lightGray"
 						type="text"
 						name="Title"
 						placeholder="Title"
-						border-color="border-transparent"
+						borderColor="border-transparent"
 						:error="factory.errors.title" />
 
 					<SofaTextarea
 						v-model="factory.description"
-						:has-title="false"
+						:hasTitle="false"
 						:rows="4"
-						text-area-style="rounded-custom !bg-lightGray md:p-4 p-3"
+						textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
 						placeholder="Description"
 						:error="factory.errors.description" />
 
 					<SofaSelect
 						v-model="factory.topic"
-						custom-class="rounded-custom !bg-lightGray"
+						customClass="rounded-custom !bg-lightGray"
 						name="Topic"
 						placeholder="Topic"
-						border-color="border-transparent"
+						borderColor="border-transparent"
 						:error="factory.errors.topic"
 						:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-						:can-use-custom="true" />
+						:canUseCustom="true" />
 				</div>
 
 				<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 					<SofaImageLoader
-						custom-class="w-full md:!h-full h-[220px] rounded-custom relative"
-						:photo-url="factory.photo?.link ?? '/images/default.png'">
+						customClass="w-full md:!h-full h-[220px] rounded-custom relative"
+						:photoUrl="factory.photo?.link ?? '/images/default.png'">
 						<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 							<SofaFileInput v-model="factory.photo" accept="image/*">
 								<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
@@ -50,10 +50,10 @@
 			<div class="w-full flex flex-col gap-2">
 				<SofaTextField
 					v-model="factory.tagString"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					name="Tags"
 					placeholder="Tags (Comma separated for multiple)"
-					border-color="border-transparent" />
+					borderColor="border-transparent" />
 				<div class="w-full flex flex-wrap gap-2 items-center">
 					<template v-for="(item, index) in factory.tags" :key="index">
 						<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">
@@ -74,9 +74,9 @@
 			<SofaButton
 				type="button"
 				padding="px-5 py-2"
-				bg-color="bg-white"
-				text-color="text-grayColor"
-				custom-class="border border-gray-100 hidden mdlg:inline-block"
+				bgColor="bg-white"
+				textColor="text-grayColor"
+				customClass="border border-gray-100 hidden mdlg:inline-block"
 				@click.prevent="close">
 				Exit
 			</SofaButton>

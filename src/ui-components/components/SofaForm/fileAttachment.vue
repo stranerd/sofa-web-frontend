@@ -29,8 +29,8 @@
 					:accept="accept"
 					:multiple="isMultiple"
 					@change="uploadHandler" />
-				<SofaIcon :name="`${iconName}`" :custom-class="'h-[15px]'" />
-				<SofaNormalText color="text-paragraphTextLight" custom-class="w-full text-left line-clamp-1">
+				<SofaIcon :name="`${iconName}`" :customClass="'h-[15px]'" />
+				<SofaNormalText color="text-paragraphTextLight" customClass="w-full text-left line-clamp-1">
 					{{ selectedFileName != '' ? selectedFileName : placeholder }}
 				</SofaNormalText>
 			</div>

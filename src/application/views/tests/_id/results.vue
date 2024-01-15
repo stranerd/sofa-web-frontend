@@ -1,6 +1,6 @@
 <template>
-	<ExpandedLayout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
-		<TestWrapper :id="$route.params.id as string" :skip-questions="true" :skip-status-nav="true">
+	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+		<TestWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ test, extras: testExtras, questions: testQuestions }">
 				<QuizWrapper :id="test.quizId" :questions="testQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -9,15 +9,15 @@
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:show-counter="false"
-							:option-state="extras.optionState"
-							:right-button="{
+							:showCounter="false"
+							:optionState="extras.optionState"
+							:rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=tests'),
 							}"
-							:left-button="testExtras.canEnd ? { ...leftButton, click: testExtras.end } : undefined">
+							:leftButton="testExtras.canEnd ? { ...leftButton, click: testExtras.end } : undefined">
 							<template #header>
 								<div />
 							</template>
@@ -47,8 +47,8 @@
 														},
 													],
 												}"
-												cutout-percentage="90%"
-												:text-style="`!text-3xl ${score.color}`">
+												cutoutPercentage="90%"
+												:textStyle="`!text-3xl ${score.color}`">
 												{{ formatNumber(score.percent, 1) }}%
 											</SofaPieChart>
 											<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" :content="score.label" />

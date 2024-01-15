@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full hidden mdlg:flex flex-col gap-4 h-full overflow-y-auto scrollbar-none">
-		<Draggable :list="reactiveQuestions" class="w-full flex flex-col gap-4" item-key="id" group="question-list-lg">
+		<Draggable :list="reactiveQuestions" class="w-full flex flex-col gap-4" itemKey="id" group="question-list-lg">
 			<template #item="{ element, index }">
 				<a
 					class="w-full p-4 group rounded-lg gap-2 flex flex-col"
@@ -15,8 +15,8 @@
 
 						<div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
 							<template v-for="(user, i) in users[element.id] ?? []" :key="user.id">
-								<SofaAvatar v-if="i < 3" :photo-url="user.bio.photo?.link" size="28" class="-ml-1" />
-								<SofaAvatar v-if="i === 3" bg-color="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
+								<SofaAvatar v-if="i < 3" :photoUrl="user.bio.photo?.link" size="28" class="-ml-1" />
+								<SofaAvatar v-if="i === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
 									<span>{{ users[element.id].length - 3 }}+</span>
 								</SofaAvatar>
 							</template>
@@ -60,7 +60,7 @@
 			class="w-full flex flex-nowrap gap-2 items-center whitespace-nowrap"
 			:list="reactiveQuestions"
 			group="question-list-mobile"
-			item-key="id"
+			itemKey="id"
 			direction="horizontal"
 			:disabled="true">
 			<template #item="{ element, index }">

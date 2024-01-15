@@ -1,9 +1,9 @@
 <template>
-	<ExpandedLayout layout-style="mdlg:pb-4">
+	<ExpandedLayout layoutStyle="mdlg:pb-4">
 		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple justify-center items-center">
 			<SofaHeaderText color="text-white" size="xl" class="!font-extrabold" content="All contents made by verified creators" />
 
-			<SofaNormalText color="text-white" :custom-class="'w-[48%] text-center flex items-center justify-center'">
+			<SofaNormalText color="text-white" :customClass="'w-[48%] text-center flex items-center justify-center'">
 				Everything here is carefully reviewed to ensure the highest quality and accuracy. By purchasing from our marketplace, you
 				can have confidence in the credibility of the creators and the value of the materials.
 			</SofaNormalText>
@@ -19,9 +19,9 @@
 					<SofaTextField
 						v-model="searchQuery"
 						class="flex-1"
-						custom-class="!border-none w-full"
+						customClass="!border-none w-full"
 						placeholder="Search for anything"
-						@on-enter="handleSearch" />
+						@onEnter="handleSearch" />
 				</div>
 
 				<SofaIcon name="search-black" class="h-[17px] cursor-pointer w-[20px]" @click="handleSearch" />
@@ -35,9 +35,9 @@
 				<SofaTextField
 					v-model="searchQuery"
 					class="flex-1"
-					custom-class="!border-none w-full !px-0"
+					customClass="!border-none w-full !px-0"
 					placeholder="Search"
-					@on-enter="handleSearch" />
+					@onEnter="handleSearch" />
 			</div>
 		</div>
 
@@ -61,12 +61,12 @@
 							as="router-link"
 							:content="activity"
 							:to="activity.route"
-							:has-bookmark="true"
-							:bookmark-action="() => saveToFolder(activity.original)"
+							:hasBookmark="true"
+							:bookmarkAction="() => saveToFolder(activity.original)"
 							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
-						<SofaEmptyState :title="material.emptyTitle" :sub-title="material.emptySub" custom-class="!h-[230px]" />
+						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
 					</div>
 				</div>
 			</template>

@@ -9,7 +9,7 @@
 								class="w-full flex flex-row items-center justify-between cursor-pointer"
 								@click="option?.opened ? (option.opened = false) : (option.opened = true)">
 								<div class="flex flex-row items-center gap-2">
-									<SofaNormalText v-if="!option.edit" :custom-class="'!font-bold'">{{
+									<SofaNormalText v-if="!option.edit" :customClass="'!font-bold'">{{
 										option.name == 'unsectioned' ? 'Unsectioned' : option.name
 									}}</SofaNormalText>
 									<input
@@ -24,16 +24,16 @@
 								<div class="flex flex-row items-center gap-3">
 									<SofaIcon
 										v-if="option.name != 'unsectioned'"
-										:custom-class="'h-[15px] cursor-pointer'"
+										:customClass="'h-[15px] cursor-pointer'"
 										:name="'edit-gray'"
 										@click.stop="option.edit = true" />
 									<SofaIcon
 										v-if="option.name != 'unsectioned'"
-										:custom-class="'h-[15px] cursor-pointer'"
+										:customClass="'h-[15px] cursor-pointer'"
 										:name="'trash-gray'"
 										@click.stop="removeSection(index)" />
 									<SofaIcon
-										:custom-class="'h-[7px] cursor-pointer'"
+										:customClass="'h-[7px] cursor-pointer'"
 										:name="option.opened ? 'chevron-up' : 'chevron-down'" />
 								</div>
 							</div>
@@ -43,7 +43,7 @@
 									v-model="option.materials"
 									group="course-item"
 									class="w-full gap-3"
-									item-key="id"
+									itemKey="id"
 									handle=".handle">
 									<template #item="{ element }">
 										<div
@@ -64,7 +64,7 @@
 												}
 											">
 											<div class="flex flex-row items-center gap-2">
-												<SofaIcon :custom-class="'h-[17px]'" :name="element.type" />
+												<SofaIcon :customClass="'h-[17px]'" :name="element.type" />
 												<SofaNormalText
 													class="px-3 !line-clamp-2 text-left whitespace-nowrap overflow-x-hidden"
 													:content="element.name" />
@@ -77,7 +77,7 @@
                         :name="'trash-gray'"
                       /> -->
 
-												<SofaIcon :custom-class="'h-[19px] handle'" :name="'reorder-gray'" />
+												<SofaIcon :customClass="'h-[19px] handle'" :name="'reorder-gray'" />
 											</div>
 										</div>
 									</template>
@@ -93,7 +93,7 @@
 											handleItemSelected()
 										}
 									">
-									<SofaIcon :custom-class="'h-[17px]'" :name="'box-add-purple'" />
+									<SofaIcon :customClass="'h-[17px]'" :name="'box-add-purple'" />
 									<SofaNormalText :color="'text-primaryPurple'"> Add study material </SofaNormalText>
 								</div>
 							</template>
@@ -103,7 +103,7 @@
 			</template>
 
 			<div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
-				<SofaIcon :custom-class="'h-[17px]'" :name="'box-add-pink'" />
+				<SofaIcon :customClass="'h-[17px]'" :name="'box-add-pink'" />
 				<SofaNormalText :color="'text-primaryPink'"> Add section </SofaNormalText>
 			</div>
 		</div>

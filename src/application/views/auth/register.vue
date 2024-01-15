@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Create your account" sub-title="Join the School Of Future Africa">
+	<AuthLayout title="Create your account" subTitle="Join the School Of Future Africa">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signup">
 			<AuthProvider />
 
@@ -7,7 +7,7 @@
 				<SofaTextField
 					ref="email"
 					v-model="factory.email"
-					:custom-class="'rounded-custom !bg-lightGray'"
+					:customClass="'rounded-custom !bg-lightGray'"
 					type="email"
 					:name="'Email'"
 					:placeholder="'Email'"
@@ -15,7 +15,7 @@
 				<SofaTextField
 					ref="password"
 					v-model="factory.password"
-					:custom-class="'rounded-custom !bg-lightGray'"
+					:customClass="'rounded-custom !bg-lightGray'"
 					:type="'password'"
 					:placeholder="'Password'"
 					:name="'Password'"
@@ -23,7 +23,7 @@
 				<SofaTextField
 					ref="confirm_new_password"
 					v-model="factory.cPassword"
-					:custom-class="'rounded-custom !bg-lightGray'"
+					:customClass="'rounded-custom !bg-lightGray'"
 					type="password"
 					:name="'Confirm password'"
 					:placeholder="'Confirm password'"
@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<SofaButton :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit">
+				<SofaButton :disabled="!factory.valid" :customClass="'w-full'" :padding="'md:py-4 py-3'" type="submit">
 					Sign Up
 				</SofaButton>
 			</div>

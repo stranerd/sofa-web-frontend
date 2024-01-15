@@ -61,7 +61,7 @@
 				<SofaTextarea
 					v-model="answer.value"
 					placeholder="Write your answer here"
-					text-area-style="focus:outline-none !bg-transparent !text-inherit p-3 placeholder:!text-inherit w-full text-base placeholder:text-base" />
+					textAreaStyle="focus:outline-none !bg-transparent !text-inherit p-3 placeholder:!text-inherit w-full text-base placeholder:text-base" />
 			</div>
 		</template>
 
@@ -89,7 +89,7 @@
 						v-if="index !== 0"
 						:id="`drag-answer-${index - 1}`"
 						:list="answer.drag[index - 1]"
-						item-key=""
+						itemKey=""
 						group="dragAnswers"
 						:move="move"
 						class="md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 flex items-center justify-center border-2"
@@ -108,7 +108,7 @@
 				<Draggable
 					id="drag-options"
 					:list="answer.dragOptions"
-					item-key=""
+					itemKey=""
 					group="dragAnswers"
 					:move="move"
 					class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
@@ -124,7 +124,7 @@
 		</template>
 
 		<template v-if="question.strippedData.type === 'sequence'">
-			<Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" item-key="">
+			<Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" itemKey="">
 				<template #item="{ element, index }">
 					<div class="w-full flex items-center gap-3 cursor-move">
 						<div class="p-3 rounded-xl border-2" :class="buildClass(element, index)">
@@ -149,7 +149,7 @@
 				:list="question.matchQuestions"
 				group="match-questions"
 				class="col-span-1 flex flex-col gap-2"
-				item-key=""
+				itemKey=""
 				:disabled="true">
 				<template #item="{ element, index }">
 					<div
@@ -164,7 +164,7 @@
 				</template>
 			</Draggable>
 
-			<Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" item-key="">
+			<Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" itemKey="">
 				<template #item="{ element, index }">
 					<div
 						class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-2 gap-3 cursor-move"

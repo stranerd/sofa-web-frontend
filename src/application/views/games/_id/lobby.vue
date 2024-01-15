@@ -1,9 +1,6 @@
 <template>
-	<ExpandedLayout
-		layout-style="!justify-between bg-deepGray text-white"
-		:hide="{ top: true, bottom: true }"
-		bg-image="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skip-questions="true">
+	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
+		<GameWrapper :id="$route.params.id as string" :skipQuestions="true">
 			<template #default="{ game, extras: gameExtras, questions: gameQuestions, participants }">
 				<QuizWrapper :id="game.quizId" :questions="gameQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -12,10 +9,10 @@
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:show-counter="false"
-							:option-state="extras.optionState"
-							:is-dark="true"
-							:right-button="{
+							:showCounter="false"
+							:optionState="extras.optionState"
+							:isDark="true"
+							:rightButton="{
 								label: gameExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
@@ -25,7 +22,7 @@
 									else return await gameExtras.join(true)
 								},
 							}"
-							:left-button="{
+							:leftButton="{
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
 								textColor: 'text-white',
@@ -53,8 +50,8 @@
 										</template>
 										<template v-else>
 											<SofaImageLoader
-												:photo-url="quiz.photo?.link"
-												custom-class="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
+												:photoUrl="quiz.photo?.link"
+												customClass="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
 											<div class="w-full flex flex-col h-full gap-2">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="quiz.title" size="xl" class="text-left !line-clamp-1" />
@@ -70,7 +67,7 @@
 														}`" />
 												</div>
 												<div class="w-full flex items-start gap-2 flex-nowrap">
-													<SofaAvatar size="20" :photo-url="quiz.user.bio.photo?.link" />
+													<SofaAvatar size="20" :photoUrl="quiz.user.bio.photo?.link" />
 													<SofaNormalText
 														color="text-bodyBlack"
 														class="!font-semibold"

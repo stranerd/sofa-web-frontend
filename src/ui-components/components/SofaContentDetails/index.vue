@@ -5,12 +5,12 @@
 				class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
 				<div :class="` ${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
 					<SofaImageLoader
-						:custom-class="'mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative'"
-						:photo-url="content.image">
+						:customClass="'mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative'"
+						:photoUrl="content.image">
 						<div
 							v-if="content.price > 0 && !hasAccess"
 							class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
-							<SofaBadge :custom-class="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
+							<SofaBadge :customClass="'!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom'">
 								{{ content.price > 0 ? Logic.Common.formatPrice(content.price, content.currency) : 'Start' }}
 							</SofaBadge>
 						</div>
@@ -24,12 +24,12 @@
 						<SofaHeaderText :content="content.title" />
 
 						<div class="mdlg:!flex flex-row items-center justify-end gap-4 hidden">
-							<SofaIcon :name="'flag'" :custom-class="'h-[16px] cursor-pointer '" @click="actions.report()" />
-							<SofaIcon :name="'share'" :custom-class="'h-[16px] cursor-pointer'" @click="actions.share()" />
-							<SofaIcon :name="'save'" :custom-class="'h-[16px] cursor-pointer'" @click="actions.save()" />
+							<SofaIcon :name="'flag'" :customClass="'h-[16px] cursor-pointer '" @click="actions.report()" />
+							<SofaIcon :name="'share'" :customClass="'h-[16px] cursor-pointer'" @click="actions.share()" />
+							<SofaIcon :name="'save'" :customClass="'h-[16px] cursor-pointer'" @click="actions.save()" />
 						</div>
 					</div>
-					<SofaNormalText :custom-class="'text-left'">
+					<SofaNormalText :customClass="'text-left'">
 						{{ content.info }}
 					</SofaNormalText>
 					<div class="flex flex-row gap-2 items-center">
@@ -59,7 +59,7 @@
 					<div class="w-full flex flex-row items-center gap-2 justify-between">
 						<div class="flex flex-row items-center gap-2">
 							<div v-if="!isMinimal" class="gap-2 flex flex-row items-center">
-								<SofaAvatar :size="'20'" :photo-url="content.user.photoUrl" />
+								<SofaAvatar :size="'20'" :photoUrl="content.user.photoUrl" />
 								<SofaNormalText>
 									{{ content.user.name }}
 								</SofaNormalText>
@@ -76,7 +76,7 @@
 							<SofaButton
 								v-if="!hasAccess"
 								:padding="'px-6 py-1'"
-								:custom-class="`${content.status == 'published' ? '' : 'bg-opacity-50'}`"
+								:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'}`"
 								@click="buyAction && content.status == 'published' ? buyAction() : null">
 								{{
 									content.price > 0
@@ -87,7 +87,7 @@
 							<SofaButton
 								v-else
 								:padding="'px-6 py-1'"
-								:custom-class="'w-auto'"
+								:customClass="'w-auto'"
 								@click="Logic.Common.GoToRoute('/course/' + content.id)">
 								Go to course
 							</SofaButton>
@@ -103,7 +103,7 @@
 
 			<div class="w-full flex flex-row gap-3 items-center py-2 flex-nowrap overflow-x-auto scrollbar-hide">
 				<div v-for="(tag, index) in content.tags" :key="index" class="px-4 py-1 border rounded-custom border-grayColor">
-					<SofaNormalText :color="'text-grayColor'" :custom-class="'!whitespace-nowrap'">{{ tag }}</SofaNormalText>
+					<SofaNormalText :color="'text-grayColor'" :customClass="'!whitespace-nowrap'">{{ tag }}</SofaNormalText>
 				</div>
 			</div>
 		</div>
@@ -116,7 +116,7 @@
 				v-for="(tab, index) in tabs"
 				:key="index"
 				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
-				:custom-class="`!font-semibold cursor-pointer pb-2  ${
+				:customClass="`!font-semibold cursor-pointer pb-2  ${
 					selectedTab == tab.key && !isMinimal ? 'border-b-2 border-bodyBlack' : ''
 				}`"
 				@click="selectedTab = tab.key">
@@ -127,7 +127,7 @@
 		<div
 			v-if="selectedTab == 'content'"
 			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`">
-			<SofaContent :data="content.content" :has-access="hasAccess" />
+			<SofaContent :data="content.content" :hasAccess="hasAccess" />
 		</div>
 
 		<div
@@ -146,7 +146,7 @@
 						<SofaNormalText :color="'text-grayColor'" :content="question.duration" />
 					</div>
 
-					<SofaNormalText :custom-class="'text-left !font-bold'" :content="question.content" />
+					<SofaNormalText :customClass="'text-left !font-bold'" :content="question.content" />
 
 					<!-- <sofa-normal-text :customClass="'text-left'" :content="question.answer" /> -->
 				</div>
@@ -155,8 +155,8 @@
 			<div v-if="!hasAccess" class="w-full flex flex-col gap-3 pb-4">
 				<SofaEmptyState
 					:title="'You have no access'"
-					:sub-title="'Get the course it is in to use'"
-					:action-label="'Go to course'"
+					:subTitle="'Get the course it is in to use'"
+					:actionLabel="'Go to course'"
 					:action="() => Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)"
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
@@ -167,7 +167,7 @@
 				<div class="md:!w-auto w-full flex flex-col">
 					<SofaButton
 						:padding="'md:!py-1 py-3 px-4'"
-						:custom-class="'md:!w-auto w-full'"
+						:customClass="'md:!w-auto w-full'"
 						@click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)">
 						{{ hasAccess ? 'Start' : 'Go to course' }}
 					</SofaButton>
@@ -186,15 +186,15 @@
 			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative pb-4`">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
 				<div>
-					<SofaAvatar :photo-url="content.user.photoUrl" :size="'150'" :custom-class="'hidden mdlg:!inline-block'" />
+					<SofaAvatar :photoUrl="content.user.photoUrl" :size="'150'" :customClass="'hidden mdlg:!inline-block'" />
 
-					<SofaAvatar :photo-url="content.user.photoUrl" :size="'100'" :custom-class="'mdlg:!hidden '" />
+					<SofaAvatar :photoUrl="content.user.photoUrl" :size="'100'" :customClass="'mdlg:!hidden '" />
 				</div>
 
 				<div class="flex flex-col gap-1">
 					<div class="flex flex-row gap-2 items-center">
-						<SofaNormalText :custom-class="'!font-bold'">{{ content.user.name }}</SofaNormalText>
-						<SofaIcon :custom-class="'h-[16px]'" :name="'verify'" />
+						<SofaNormalText :customClass="'!font-bold'">{{ content.user.name }}</SofaNormalText>
+						<SofaIcon :customClass="'h-[16px]'" :name="'verify'" />
 					</div>
 
 					<SofaNormalText>
@@ -209,30 +209,30 @@
 
 					<div class="w-full flex flex-row items-center gap-4 pt-3">
 						<div class="flex flex-row gap-2 items-center">
-							<SofaIcon :custom-class="'h-[40px] hidden mdlg:!inline-block'" :name="'profile-quiz'" />
+							<SofaIcon :customClass="'h-[40px] hidden mdlg:!inline-block'" :name="'profile-quiz'" />
 							<div class="flex flex-col gap-1 items-start justify-start">
 								<SofaNormalText> Quizzes </SofaNormalText>
-								<SofaNormalText :custom-class="'!font-bold mdlg:!text-base'">
+								<SofaNormalText :customClass="'!font-bold mdlg:!text-base'">
 									{{ content.user.stats.quizzes }}
 								</SofaNormalText>
 							</div>
 						</div>
 
 						<div class="flex flex-row gap-2 items-center">
-							<SofaIcon :custom-class="'h-[40px] hidden mdlg:!inline-block'" :name="'profile-course'" />
+							<SofaIcon :customClass="'h-[40px] hidden mdlg:!inline-block'" :name="'profile-course'" />
 							<div class="flex flex-col gap-1 items-start justify-start">
 								<SofaNormalText> Courses </SofaNormalText>
-								<SofaNormalText :custom-class="'!font-bold mdlg:!text-base'">
+								<SofaNormalText :customClass="'!font-bold mdlg:!text-base'">
 									{{ content.user.stats.courses }}
 								</SofaNormalText>
 							</div>
 						</div>
 
 						<div class="flex flex-row gap-2 items-center">
-							<SofaIcon :custom-class="'h-[40px] hidden mdlg:!inline-block'" :name="'profile-followers'" />
+							<SofaIcon :customClass="'h-[40px] hidden mdlg:!inline-block'" :name="'profile-followers'" />
 							<div class="flex flex-col gap-1 items-start justify-start">
 								<SofaNormalText> Followers </SofaNormalText>
-								<SofaNormalText :custom-class="'!font-bold mdlg:!text-base'">
+								<SofaNormalText :customClass="'!font-bold mdlg:!text-base'">
 									{{ content.user.stats.followers }}
 								</SofaNormalText>
 							</div>
@@ -256,7 +256,7 @@
 						v-for="(activity, index) in similarContents"
 						:key="index"
 						:activity="activity"
-						:custom-class="'!bg-lightGray cursor-pointer'"
+						:customClass="'!bg-lightGray cursor-pointer'"
 						@click="Logic.Common.GoToRoute(activity.route)" />
 				</div>
 			</div>
@@ -264,8 +264,8 @@
 				<div class="w-full flex flex-col gap-3">
 					<SofaEmptyState
 						:title="'No similar course found'"
-						:sub-title="'Discover thousands of materials to buy, created by verified experts'"
-						:action-label="'Marketplace'"
+						:subTitle="'Discover thousands of materials to buy, created by verified experts'"
+						:actionLabel="'Marketplace'"
 						:action="
 							() => {
 								Logic.Common.GoToRoute('/marketplace')
@@ -281,11 +281,11 @@
 		<SofaButton
 			v-if="!hasAccess"
 			:padding="'px-6 py-3'"
-			:custom-class="`${content.status == 'published' ? '' : 'bg-opacity-50'} w-full`"
+			:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'} w-full`"
 			@click="buyAction && content.status == 'published' ? buyAction() : null">
 			{{ content.price > 0 ? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
 		</SofaButton>
-		<SofaButton v-else :padding="'px-6 py-3'" :custom-class="'w-full'" @click="Logic.Common.GoToRoute('/course/' + content.id)">
+		<SofaButton v-else :padding="'px-6 py-3'" :customClass="'w-full'" @click="Logic.Common.GoToRoute('/course/' + content.id)">
 			Go to course
 		</SofaButton>
 	</div>

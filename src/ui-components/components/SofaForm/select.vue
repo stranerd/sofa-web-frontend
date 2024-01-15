@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col w-full relative group" :tabIndex="-1">
-		<SofaNormalText v-if="hasTitle" custom-class="">
+		<SofaNormalText v-if="hasTitle" customClass="">
 			<slot name="title" />
 		</SofaNormalText>
 		<div class="flex items-center gap-1 justify-between w-full rounded-md px-3 py-4" :class="customClass" @click="showOptions = true">
@@ -26,7 +26,7 @@
 			v-if="showOptions"
 			class="group-focus-within:flex hidden w-full mdlg:w-auto mdlg:min-w-[320px] h-full mdlg:h-auto left-0 top-0 mdlg:left-[unset] mdlg:top-[unset] fixed flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
 			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
-				<SofaTextField v-model="searchValue" placeholder="Search" custom-class="w-full !bg-lightGray !placeholder:text-grayColor" />
+				<SofaTextField v-model="searchValue" placeholder="Search" customClass="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
 			</div>
 			<a

@@ -12,8 +12,8 @@
 		<div class="w-full flex flex-col gap-8">
 			<div class="w-full flex flex-col items-center gap-4 py-3">
 				<SofaImageLoader
-					custom-class="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-					:photo-url="factory.photo?.link ?? UserEntity.defaultAiPhotoLink">
+					customClass="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
+					:photoUrl="factory.photo?.link ?? UserEntity.defaultAiPhotoLink">
 					<SofaIcon v-if="!factory.photo" class="h-[50px]" name="user" />
 					<SofaFileInput
 						v-model="factory.photo"
@@ -25,28 +25,23 @@
 
 				<SofaTextField
 					v-model="factory.name"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					border-color="border-transparent"
+					borderColor="border-transparent"
 					placeholder="Name"
 					:error="factory.errors.name" />
 
 				<SofaTextField
 					v-model="factory.tagline"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					border-color="border-transparent"
+					borderColor="border-transparent"
 					placeholder="Tagline"
 					:error="factory.errors.tagline" />
 			</div>
 
 			<div class="w-full flex items-center justify-between">
-				<SofaButton
-					padding="px-5 py-2"
-					bg-color="bg-white"
-					text-color="text-grayColor"
-					class="border border-gray-100"
-					@click="close">
+				<SofaButton padding="px-5 py-2" bgColor="bg-white" textColor="text-grayColor" class="border border-gray-100" @click="close">
 					Exit
 				</SofaButton>
 

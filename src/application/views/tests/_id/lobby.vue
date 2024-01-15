@@ -1,6 +1,6 @@
 <template>
-	<ExpandedLayout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
-		<TestWrapper :id="$route.params.id as string" :skip-questions="true">
+	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+		<TestWrapper :id="$route.params.id as string" :skipQuestions="true">
 			<template #default="{ test, extras: testExtras, questions: testQuestions }">
 				<QuizWrapper :id="test.quizId" :questions="testQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -9,15 +9,15 @@
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:show-counter="false"
-							:option-state="extras.optionState"
-							:right-button="{
+							:showCounter="false"
+							:optionState="extras.optionState"
+							:rightButton="{
 								label: testExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
 								click: testExtras.start,
 							}"
-							:left-button="{
+							:leftButton="{
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
 								textColor: 'text-white',

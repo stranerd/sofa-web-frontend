@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[75%] lg:!w-[60%]" layout-style="mdlg:py-5">
+	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
 		<div class="mdlg:hidden w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base">{{ title }}</SofaNormalText>
@@ -17,13 +17,13 @@
 						v-for="option in settingOptions"
 						:key="option.title"
 						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 rounded-custom shadow-custom mdlg:shadow-none mdlg:border-none">
-						<SofaHeaderText size="xl" custom-class="px-2 hidden mdlg:block mb-2" :content="option.title" />
+						<SofaHeaderText size="xl" customClass="px-2 hidden mdlg:block mb-2" :content="option.title" />
 						<template v-for="(optionItem, i) in option.subPages" :key="optionItem.title">
 							<router-link
 								v-if="optionItem.show()"
 								class="w-full flex flex-col items-start p-2 hover:bg-skyBlue rounded-lg"
 								:class="{ 'border-t border-lightGray mdlg:border-none': i !== 0 }"
-								exact-active-class="bg-lightBlue font-semibold"
+								exactActiveClass="bg-lightBlue font-semibold"
 								:to="optionItem.to">
 								<SofaNormalText :content="optionItem.title" />
 							</router-link>

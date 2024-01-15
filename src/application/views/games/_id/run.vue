@@ -1,15 +1,12 @@
 <template>
-	<ExpandedLayout
-		layout-style="!justify-between bg-deepGray text-white"
-		:hide="{ top: true, bottom: true }"
-		bg-image="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skip-participants="true">
+	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
+		<GameWrapper :id="$route.params.id as string" :skipParticipants="true">
 			<template #default="{ game, questions: gameQuestions, extras: gameExtras }">
 				<QuizWrapper
 					v-if="gameExtras.isParticipant"
 					:id="game.quizId"
 					:questions="gameQuestions"
-					:use-timer="true"
+					:useTimer="true"
 					:submit="gameExtras.submit">
 					<template #prestart="{ quiz, extras }">
 						<div class="w-full my-auto flex flex-col gap-6 items-center">
@@ -29,11 +26,11 @@
 							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="`Question ${extras.index + 1}`"
-							:show-counter="false"
+							:showCounter="false"
 							:questions="questions"
-							:option-state="extras.optionState"
-							:is-dark="true"
-							:right-button="{
+							:optionState="extras.optionState"
+							:isDark="true"
+							:rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-primaryBlue',
 								textColor: 'text-white',

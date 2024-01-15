@@ -13,14 +13,14 @@
 			<SofaTextField
 				ref="video_link"
 				v-model="addVideoForm.link"
-				:custom-class="'rounded-custom !bg-lightGray'"
+				:customClass="'rounded-custom !bg-lightGray'"
 				type="text"
 				:name="'Youtube video link'"
 				:placeholder="'Paste link here'"
-				:border-color="'border-transparent'"
+				:borderColor="'border-transparent'"
 				:rules="[Logic.Form.RequiredRule]">
 				<template #inner-prefix>
-					<SofaIcon :custom-class="'h-[15px]'" :name="'youtube'" />
+					<SofaIcon :customClass="'h-[15px]'" :name="'youtube'" />
 				</template>
 			</SofaTextField>
 		</div>
@@ -29,14 +29,14 @@
 			class="w-full flex mdlg:!flex-row flex-col items-center justify-between mdlg:!relative sticky bottom-0 left-0 md:!bottom-auto md:!left-auto bg-white md:!py-0 md:!px-0">
 			<SofaButton
 				:padding="'px-5 py-2'"
-				:bg-color="'bg-white'"
-				:text-color="'text-grayColor'"
-				:custom-class="'border border-gray-100 hidden mdlg:!inline-block'">
+				:bgColor="'bg-white'"
+				:textColor="'text-grayColor'"
+				:customClass="'border border-gray-100 hidden mdlg:!inline-block'">
 				Exit
 			</SofaButton>
 
 			<div class="mdlg:!w-auto w-full flex flex-col">
-				<SofaButton :padding="'px-5 mdlg:!py-2 py-3'" :custom-class="'mdlg:!w-auto w-full'"> Add </SofaButton>
+				<SofaButton :padding="'px-5 mdlg:!py-2 py-3'" :customClass="'mdlg:!w-auto w-full'"> Add </SofaButton>
 			</div>
 		</div>
 	</div>

@@ -8,16 +8,11 @@
 		<div class="flex gap-4 items-center">
 			<SofaTextField
 				v-model="searchValue"
-				custom-class="rounded-custom !bg-lightGray"
+				customClass="rounded-custom !bg-lightGray"
 				name="Emails"
 				placeholder="Email, comma seperated"
-				border-color="border-transparent" />
-			<SofaButton
-				custom-class="font-semibold"
-				padding="py-3 px-6"
-				bg-color="bg-primaryBlue"
-				text-color="text-white"
-				@click="addUsers">
+				borderColor="border-transparent" />
+			<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addUsers">
 				Add
 			</SofaButton>
 		</div>
@@ -27,7 +22,7 @@
 
 			<div class="w-full flex flex-col gap-2">
 				<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
-					<SofaAvatar :photo-url="request.bio.photo?.link" size="28" />
+					<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
 					<SofaNormalText color="text-deepGray" :content="`${request.bio.name.full} wants to edit`" class="truncate flex-grow" />
 					<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="grantAccess(request.id, false)" />
 					<div class="h-full bg-darkLightGray w-[1px]" />
@@ -40,7 +35,7 @@
 
 		<div class="w-full flex flex-col gap-2">
 			<div v-for="member in [quiz.user, ...members]" :key="member.id" class="flex gap-2 items-center w-full">
-				<SofaAvatar :photo-url="member.bio.photo?.link" size="28" />
+				<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
 				<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
 				<template v-if="member.id !== quiz.user.id">
 					<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="manageMembers([member.id], false)" />

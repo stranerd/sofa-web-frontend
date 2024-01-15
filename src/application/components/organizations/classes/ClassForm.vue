@@ -4,8 +4,8 @@
 			<div class="w-full mdlg:w-1/2">
 				<div class="w-full flex flex-col justify-center">
 					<SofaImageLoader
-						:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
-						:photo-url="factory.photo?.link ?? '/images/default.png'">
+						:customClass="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
+						:photoUrl="factory.photo?.link ?? '/images/default.png'">
 						<div
 							class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
 							<SofaFileInput v-model="factory.photo" accept="image/*">
@@ -21,25 +21,25 @@
 			<div class="w-full mdlg:w-1/2 flex flex-col gap-4">
 				<SofaTextField
 					v-model="factory.title"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					type="text"
 					placeholder="Name your class"
 					:error="factory.errors.title"
-					border-color="border-transparent" />
+					borderColor="border-transparent" />
 				<SofaTextarea
 					v-model="factory.description"
-					text-area-style="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 					:error="factory.errors.description"
 					:placeholder="'Describe your class'" />
 				<SofaNumberField
 					v-model="factory.amount"
-					custom-class="rounded-custom !bg-lightGray"
+					customClass="rounded-custom !bg-lightGray"
 					placeholder="Price per month"
 					:error="factory.errors.amount"
-					border-color="border-transparent">
+					borderColor="border-transparent">
 					<template #inner-suffix>
 						<div class="flex items-center gap-1 border-l-2 border-darkLightGray px-2 py-1">
-							<SofaNormalText custom-class="font-bold text-deepGray !text-xl"> ₦ </SofaNormalText>
+							<SofaNormalText customClass="font-bold text-deepGray !text-xl"> ₦ </SofaNormalText>
 						</div>
 					</template>
 				</SofaNumberField>
@@ -47,20 +47,20 @@
 		</div>
 		<div class="flex items-center justify-between">
 			<SofaButton
-				:bg-color="'bg-grayColor'"
-				:text-color="'text-white'"
+				:bgColor="'bg-grayColor'"
+				:textColor="'text-white'"
 				:padding="'py-3 px-6'"
-				custom-class="hidden mdlg:block"
+				customClass="hidden mdlg:block"
 				@click="cancel">
 				Cancel
 			</SofaButton>
 			<SofaButton
-				:bg-color="'bg-primaryBlue'"
+				:bgColor="'bg-primaryBlue'"
 				type="submit"
-				:text-color="'text-white'"
+				:textColor="'text-white'"
 				:padding="'py-3 px-6'"
 				:disabled="!factory.valid"
-				custom-class="w-full mdlg:w-auto">
+				customClass="w-full mdlg:w-auto">
 				Save
 			</SofaButton>
 		</div>

@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
 		<QuizWrapper :id="$route.params.id as string">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz
@@ -7,8 +7,8 @@
 					:index="extras.index"
 					:title="isDone ? 'Flashcards completed' : quiz.title"
 					:questions="questions"
-					:option-state="extras.optionState"
-					:right-button="{
+					:optionState="extras.optionState"
+					:rightButton="{
 						label: isDone ? 'Continue' : 'Mastered',
 						bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
 						textColor: 'text-white',
@@ -18,7 +18,7 @@
 							return (isDone = true)
 						},
 					}"
-					:left-button="{
+					:leftButton="{
 						label: isDone ? 'Restart' : 'Show later',
 						bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
 						textColor: isDone ? 'text-grayColor' : 'text-white',
@@ -35,7 +35,7 @@
 							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
 							<SofaNormalText color="text-inherit" content="You have mastered all flashcards" />
 						</div>
-						<Flashcard v-else-if="extras.question" :key="extras.question.id" :question="extras.question" :is-dark="false" />
+						<Flashcard v-else-if="extras.question" :key="extras.question.id" :question="extras.question" :isDark="false" />
 					</template>
 				</Quiz>
 			</template>
@@ -71,10 +71,10 @@
 				<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
 					<SofaButton
 						padding="px-5 py-2"
-						bg-color="bg-white"
-						text-color="text-grayColor"
+						bgColor="bg-white"
+						textColor="text-grayColor"
 						class="hidden mdlg:inline-block"
-						custom-class="border border-gray-100"
+						customClass="border border-gray-100"
 						@click="close">
 						Exit
 					</SofaButton>

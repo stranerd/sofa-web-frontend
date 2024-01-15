@@ -9,7 +9,7 @@
 	<SofaModal
 		v-for="key in popovers"
 		:key="key"
-		max-width="!w-auto"
+		maxWidth="!w-auto"
 		v-bind="modalsDef[key].modalArgs ?? {}"
 		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
@@ -18,7 +18,7 @@
 		v-for="confirmation in confirmations"
 		:key="confirmation.id"
 		:title="confirmation.title"
-		:sub-title="confirmation.sub"
+		:subTitle="confirmation.sub"
 		:close="() => confirmation.close(false)"
 		:buttons="[
 			{
@@ -42,7 +42,7 @@
 		v-for="confirmation in successes"
 		:key="confirmation.id"
 		:title="confirmation.title"
-		:sub-title="confirmation.sub"
+		:subTitle="confirmation.sub"
 		:close="() => confirmation.close(false)"
 		:button="{
 			label: confirmation.button?.label ?? 'Ok',

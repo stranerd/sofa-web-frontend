@@ -12,15 +12,15 @@
 		<div class="flex gap-2 items-center">
 			<SofaTextField
 				v-model="addMembersEmails"
-				custom-class="!bg-lightGray"
+				customClass="!bg-lightGray"
 				name="Emails"
 				placeholder="Email, comma seperated"
-				border-color="border-transparent" />
+				borderColor="border-transparent" />
 			<SofaButton
-				custom-class="font-semibold"
+				customClass="font-semibold"
 				padding="py-3 px-6"
-				bg-color="bg-primaryBlue"
-				text-color="text-white"
+				bgColor="bg-primaryBlue"
+				textColor="text-white"
 				@click="addMembers(type)">
 				Invite
 			</SofaButton>

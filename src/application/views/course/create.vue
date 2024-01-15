@@ -1,7 +1,7 @@
 <template>
 	<DashboardLayout
 		v-if="SingleCourse"
-		:topbar-options="{
+		:topbarOptions="{
 			type: 'subpage',
 			title: SingleCourse ? SingleCourse.title : 'Create a course',
 			actions: [
@@ -38,14 +38,14 @@
 			bottom: true,
 			top: true,
 		}"
-		:bg-color="'mdlg:!bg-lightGray bg-white'">
+		:bgColor="'mdlg:!bg-lightGray bg-white'">
 		<template #left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
 				<SofaCourseSections
 					v-if="Logic.Common.isLarge && SingleCourse"
 					v-model="selectedMaterial"
-					:section-input="updateCourseSectionForm"
-					:update-sections="updateCourseSections"
+					:sectionInput="updateCourseSectionForm"
+					:updateSections="updateCourseSections"
 					:close="() => {}" />
 			</div>
 		</template>
@@ -54,15 +54,15 @@
 			<!-- Top bar for smaller screens -->
 			<div
 				class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-lightGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
-				<SofaIcon :custom-class="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
-				<SofaNormalText :custom-class="'!font-bold !text-sm'">
+				<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="handleMobileGoback()" />
+				<SofaNormalText :customClass="'!font-bold !text-sm'">
 					{{ mobileTitle }}
 				</SofaNormalText>
 
 				<div :class="`flex flex-row items-center gap-3 ${showSettingModal ? 'invisible' : ''} `">
 					<SofaIcon
 						v-if="!showSettingModal"
-						:custom-class="'h-[18px]'"
+						:customClass="'h-[18px]'"
 						:name="'cog'"
 						@click="
 							() => {
@@ -73,7 +73,7 @@
 
 					<SofaIcon
 						v-if="selectedMaterial"
-						:custom-class="'h-[6px]'"
+						:customClass="'h-[6px]'"
 						:name="'more-options-horizontal'"
 						@click="showMateterialDetails()" />
 				</div>
@@ -84,7 +84,7 @@
 					<CourseSettings
 						:course="SingleCourse"
 						:close="() => (showSettingModal = false)"
-						@on-course-updated="handleCourseSettingSaved" />
+						@onCourseUpdated="handleCourseSettingSaved" />
 				</div>
 			</template>
 
@@ -93,10 +93,10 @@
 					<SofaCourseSections
 						v-if="!Logic.Common.isLarge && SingleCourse"
 						v-model="selectedMaterial"
-						:section-input="updateCourseSectionForm"
-						:update-sections="updateCourseSections"
+						:sectionInput="updateCourseSectionForm"
+						:updateSections="updateCourseSections"
 						:close="() => {}"
-						@on-material-selected="handleItemSelected" />
+						@onMaterialSelected="handleItemSelected" />
 
 					<div class="h-[100px]"></div>
 				</div>
@@ -135,11 +135,11 @@
 								</SofaNormalText>
 							</div>
 
-							<SofaNormalText :custom-class="'text-left !font-bold'">
+							<SofaNormalText :customClass="'text-left !font-bold'">
 								{{ question.content }}
 							</SofaNormalText>
 
-							<SofaNormalText :custom-class="'text-left'">
+							<SofaNormalText :customClass="'text-left'">
 								{{ question.answer }}
 							</SofaNormalText>
 						</div>
@@ -148,7 +148,7 @@
 
 				<template v-if="selectedMaterial?.type == 'document'">
 					<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-						<SofaDocumentReader :key="selectedMaterial.details.id" :document-url="selectedMaterial.data.documentUrl" />
+						<SofaDocumentReader :key="selectedMaterial.details.id" :documentUrl="selectedMaterial.data.documentUrl" />
 					</div>
 				</template>
 
@@ -156,8 +156,8 @@
 					<div class="w-full flex flex-col">
 						<SofaImageLoader
 							:key="selectedMaterial.details.id"
-							:custom-class="'w-full h-[400px] rounded-[12px]'"
-							:photo-url="selectedMaterial.data.imageUrl" />
+							:customClass="'w-full h-[400px] rounded-[12px]'"
+							:photoUrl="selectedMaterial.data.imageUrl" />
 					</div>
 				</template>
 
@@ -165,7 +165,7 @@
 					<div class="w-full flex flex-col">
 						<SofaVideoPlayer
 							:key="selectedMaterial.details.id"
-							:video-url="selectedMaterial.data.videoUrl"
+							:videoUrl="selectedMaterial.data.videoUrl"
 							:type="selectedMaterial.details.media.type" />
 					</div>
 				</template>
@@ -175,7 +175,7 @@
 			<div class="mdlg:!hidden fixed left-0 bottom-0 px-4 py-4 bg-white flex flex-col w-full z-0">
 				<div :class="`w-full flex flex-col ${hasUnsavedChanges ? '' : 'opacity-50'}`">
 					<SofaButton
-						:custom-class="'w-full'"
+						:customClass="'w-full'"
 						:padding="'py-3'"
 						@click="hasUnsavedChanges ? Logic.Study.SaveCourseLocalChanges() : null">
 						Save changes
@@ -190,7 +190,7 @@
 						showMoreOptions = false
 					}
 				"
-				:custom-class="'mdlg:!hidden'">
+				:customClass="'mdlg:!hidden'">
 				<div
 					:class="`mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0  ${
 						modalData.content != 'material_details' ? 'h-auto' : 'h-[95%]'
@@ -203,14 +203,14 @@
 					<div
 						v-if="modalData.content != 'material_details'"
 						class="w-full flex flex-row px-4 pt-3 justify-between items-center sticky top-0 left-0">
-						<SofaNormalText :custom-class="'!font-bold !text-base'">
+						<SofaNormalText :customClass="'!font-bold !text-base'">
 							{{ modalData.title }}
 						</SofaNormalText>
-						<SofaIcon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
+						<SofaIcon :customClass="'h-[19px]'" :name="'circle-close'" @click="showMoreOptions = false" />
 					</div>
 
 					<div v-if="modalData.content == 'add_material'" class="w-full flex flex-col px-4 pb-4">
-						<NewCourseMaterial v-if="SingleCourse" @on-item-selected="handleAddMaterialChanged" />
+						<NewCourseMaterial v-if="SingleCourse" @onItemSelected="handleAddMaterialChanged" />
 					</div>
 
 					<div v-if="modalData.content == 'add_video'" class="w-full flex flex-col px-4 pb-4">
@@ -238,8 +238,8 @@
 						!SingleCourse ? Logic.Common.goBack() : null
 					}
 				"
-				:custom-class="'hidden mdlg:!flex'"
-				:can-close="false">
+				:customClass="'hidden mdlg:!flex'"
+				:canClose="false">
 				<div
 					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
 					@click.stop="
@@ -249,7 +249,7 @@
 					">
 					<div
 						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-						<SofaHeaderText :custom-class="'!text-xl !font-bold'">{{
+						<SofaHeaderText :customClass="'!text-xl !font-bold'">{{
 							SingleCourse ? 'Settings' : 'Create a course'
 						}}</SofaHeaderText>
 
@@ -260,7 +260,7 @@
 									showSettingModal = false
 								}
 							"
-							@on-course-updated="handleCourseSettingSaved" />
+							@onCourseUpdated="handleCourseSettingSaved" />
 					</div>
 				</div>
 			</SofaModalOld>

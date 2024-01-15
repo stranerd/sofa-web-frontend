@@ -1,9 +1,6 @@
 <template>
-	<ExpandedLayout
-		layout-style="!justify-between bg-deepGray text-white"
-		:hide="{ top: true, bottom: true }"
-		bg-image="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skip-questions="true" :skip-status-nav="true">
+	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
+		<GameWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ game, extras: gameExtras, questions: gameQuestions }">
 				<QuizWrapper :id="game.quizId" :questions="gameQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -12,16 +9,16 @@
 							:index="extras.index"
 							:title="quiz.title"
 							:questions="questions"
-							:show-counter="false"
-							:option-state="extras.optionState"
-							:is-dark="true"
-							:right-button="{
+							:showCounter="false"
+							:optionState="extras.optionState"
+							:isDark="true"
+							:rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=games'),
 							}"
-							:left-button="gameExtras.canEnd ? { ...leftButton, click: gameExtras.end } : undefined">
+							:leftButton="gameExtras.canEnd ? { ...leftButton, click: gameExtras.end } : undefined">
 							<template #header>
 								<div />
 							</template>

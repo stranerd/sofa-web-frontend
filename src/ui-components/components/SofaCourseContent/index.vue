@@ -11,8 +11,8 @@
 								selectedSection = index
 							}
 						">
-						<SofaNormalText :custom-class="'!font-bold'">{{ option.name }}</SofaNormalText>
-						<SofaIcon :custom-class="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
+						<SofaNormalText :customClass="'!font-bold'">{{ option.name }}</SofaNormalText>
+						<SofaIcon :customClass="'h-[7px] cursor-pointer'" :name="option.opened ? 'chevron-up' : 'chevron-down'" />
 					</a>
 				</template>
 
@@ -31,16 +31,16 @@
 								}"
 								@click.stop="selectItem(material)">
 								<div class="w-full flex justify-between items-center">
-									<SofaNormalText :custom-class="'!text-left !line-clamp-1'">
+									<SofaNormalText :customClass="'!text-left !line-clamp-1'">
 										{{ material.name }}
 									</SofaNormalText>
-									<SofaIcon v-if="lockContent" :custom-class="'h-[25px]'" :name="'locked-content'" />
-									<SofaIcon v-else-if="itemIsStudied(material.id)" :custom-class="'h-[18px]'" name="selected" />
+									<SofaIcon v-if="lockContent" :customClass="'h-[25px]'" :name="'locked-content'" />
+									<SofaIcon v-else-if="itemIsStudied(material.id)" :customClass="'h-[18px]'" name="selected" />
 								</div>
 								<div class="w-full flex gap-2 items-center">
 									<div class="flex items-center gap-1">
-										<SofaIcon :custom-class="'h-[17px]'" :name="material.type" />
-										<SofaNormalText :color="'text-grayColor'" :custom-class="'!text-left !capitalize'">
+										<SofaIcon :customClass="'h-[17px]'" :name="material.type" />
+										<SofaNormalText :color="'text-grayColor'" :customClass="'!text-left !capitalize'">
 											{{ material.type.split('-')[0] }}
 										</SofaNormalText>
 									</div>
@@ -56,8 +56,8 @@
 									:key="i"
 									class="w-full flex gap-3 items-center py-1 hover:bg-lightBlue"
 									@click.stop="selectItem(material)">
-									<SofaIcon :custom-class="'h-[18px]'" :name="material.type" />
-									<SofaNormalText :custom-class="'!text-left !line-clamp-1'" :color="'text-deepGray'">
+									<SofaIcon :customClass="'h-[18px]'" :name="material.type" />
+									<SofaNormalText :customClass="'!text-left !line-clamp-1'" :color="'text-deepGray'">
 										{{ material.name }}
 									</SofaNormalText>
 								</div>

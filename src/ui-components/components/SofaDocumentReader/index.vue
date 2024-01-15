@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-lightGray rounded-lg">
-		<VuePDF v-for="page in pages" :key="page" :page="page" :pdf="pdf" text-layer annotation-layer fit-parent class="h-full" />
+		<VuePDF v-for="page in pages" :key="page" :page="page" :pdf="pdf" textLayer annotationLayer fitParent class="h-full" />
 	</div>
 </template>
 

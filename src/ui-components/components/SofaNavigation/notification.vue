@@ -1,8 +1,8 @@
 <template>
 	<div class="w-full flex flex-col gap-1 relative overflow-y-auto h-full flex-grow">
 		<div class="w-full flex flex-row items-center justify-between sticky top-0 left-0 bg-white py-3 z-10">
-			<SofaHeaderText :custom-class="'!font-bold !text-base'"> Notifications </SofaHeaderText>
-			<SofaIcon :custom-class="'h-[19px] cursor-pointer'" :name="'circle-close'" @click="close ? close() : null" />
+			<SofaHeaderText :customClass="'!font-bold !text-base'"> Notifications </SofaHeaderText>
+			<SofaIcon :customClass="'h-[19px] cursor-pointer'" :name="'circle-close'" @click="close ? close() : null" />
 		</div>
 		<div v-if="AllNotifications?.results.length" class="w-full flex flex-col gap-3">
 			<div
@@ -10,10 +10,10 @@
 				:key="index"
 				:class="`w-full flex flex-row items-start justify-between ${item.seen ? 'opacity-80' : ''}`">
 				<div class="flex flex-col gap-1">
-					<SofaNormalText :custom-class="'text-left'">
+					<SofaNormalText :customClass="'text-left'">
 						{{ item.body }}
 					</SofaNormalText>
-					<SofaNormalText :color="'text-grayColor'" :custom-class="'!text-left'">
+					<SofaNormalText :color="'text-grayColor'" :customClass="'!text-left'">
 						{{ formatTime(item.createdAt) }}
 					</SofaNormalText>
 				</div>
@@ -23,8 +23,8 @@
 			</div>
 		</div>
 		<div v-else class="w-full flex flex-col gap-2 flex-grow items-center justify-center h-full">
-			<SofaIcon :name="'empty-notification'" :custom-class="'h-[48px]'" />
-			<SofaNormalText :color="'text-grayColor'" :custom-class="'!text-center'"> You have no notifications </SofaNormalText>
+			<SofaIcon :name="'empty-notification'" :customClass="'h-[48px]'" />
+			<SofaNormalText :color="'text-grayColor'" :customClass="'!text-center'"> You have no notifications </SofaNormalText>
 		</div>
 	</div>
 </template>

@@ -1,12 +1,12 @@
 <template>
-	<ExpandedLayout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
 		<TestWrapper :id="$route.params.id as string">
 			<template #default="{ test, questions: testQuestions, extras: testExtras }">
 				<QuizWrapper
 					v-if="testExtras.isMine"
 					:id="test.quizId"
 					:questions="testQuestions"
-					:use-timer="true"
+					:useTimer="true"
 					:submit="testExtras.submit">
 					<template #prestart="{ quiz, extras }">
 						<div class="w-full my-auto flex flex-col gap-6 items-center">
@@ -26,10 +26,10 @@
 							v-model:answer="extras.answer"
 							:index="extras.index"
 							:title="`Question ${extras.index + 1}`"
-							:show-counter="false"
+							:showCounter="false"
 							:questions="questions"
-							:option-state="extras.optionState"
-							:right-button="{
+							:optionState="extras.optionState"
+							:rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-primaryBlue',
 								textColor: 'text-white',

@@ -2,8 +2,8 @@
 	<div class="bg-white shadow-custom rounded-custom p-4 relative">
 		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
 			<SofaImageLoader
-				:photo-url="classObj.picture"
-				custom-class="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
+				:photoUrl="classObj.picture"
+				customClass="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
 			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<SofaNormalText class="!font-bold w-full text-left !line-clamp-1" :content="classObj.title" />

@@ -9,11 +9,11 @@
 					<SofaHeaderText :content="emptyClassContent.title" size="xl" />
 					<div class="flex flex-col gap-2 py-2">
 						<div v-for="(content, index) in emptyClassContent.contents" :key="index" class="flex items-center gap-1">
-							<SofaIcon :custom-class="'h-[16px]'" :name="'checkmark-circle'" />
+							<SofaIcon :customClass="'h-[16px]'" :name="'checkmark-circle'" />
 							<SofaNormalText :content="content" color="text-grayColor" />
 						</div>
 					</div>
-					<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-4 px-6'" @click="createClass">
+					<SofaButton :bgColor="'bg-primaryBlue'" :textColor="'text-white'" :padding="'py-4 px-6'" @click="createClass">
 						Create a class
 					</SofaButton>
 				</div>
@@ -23,18 +23,18 @@
 			<div class="flex items-center justify-between">
 				<div
 					class="bg-white w-[60%] mdlg:w-[50%] px-4 py-3 rounded-[24px] flex flex-row items-center gap-2 border border-darkLightGray">
-					<SofaIcon :custom-class="'h-[15px]'" :name="'search'"></SofaIcon>
+					<SofaIcon :customClass="'h-[15px]'" :name="'search'"></SofaIcon>
 					<SofaTextField
 						v-model="searchQuery"
-						custom-class="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
+						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
 						placeholder="Search"
 						padding="px-1" />
 				</div>
-				<SofaButton :bg-color="'bg-primaryBlue'" :text-color="'text-white'" :padding="'py-3 px-4'" @click="createClass">
+				<SofaButton :bgColor="'bg-primaryBlue'" :textColor="'text-white'" :padding="'py-3 px-4'" @click="createClass">
 					Create a class
 				</SofaButton>
 			</div>
-			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :class-obj="cl" />
+			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classObj="cl" />
 		</div>
 	</HomeLayout>
 </template>

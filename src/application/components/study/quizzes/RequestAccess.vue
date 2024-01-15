@@ -12,30 +12,30 @@
 			<SofaButton
 				v-if="hasRequested"
 				class="w-full md:w-auto"
-				custom-class="md:font-semibold"
+				customClass="md:font-semibold"
 				padding="py-3 md:px-6"
-				bg-color="bg-primaryBlue"
-				text-color="text-white"
+				bgColor="bg-primaryBlue"
+				textColor="text-white"
 				@click="Logic.Common.goBack">
 				Done
 			</SofaButton>
 			<SofaButton
 				v-if="!hasRequested"
 				class="w-full md:w-auto mr-auto"
-				custom-class="md:font-semibold"
+				customClass="md:font-semibold"
 				padding="py-3 md:px-6"
-				bg-color="bg-white border border-gray-100"
-				text-color="text-grayColor"
+				bgColor="bg-white border border-gray-100"
+				textColor="text-grayColor"
 				@click="Logic.Common.goBack">
 				Cancel
 			</SofaButton>
 			<SofaButton
 				v-if="!hasRequested"
 				class="w-full md:w-auto ml-auto"
-				custom-class="md:font-semibold"
+				customClass="md:font-semibold"
 				padding="py-3 md:px-6"
-				bg-color="bg-primaryBlue"
-				text-color="text-white"
+				bgColor="bg-primaryBlue"
+				textColor="text-white"
 				@click="requestAccess(true)">
 				Request
 			</SofaButton>
