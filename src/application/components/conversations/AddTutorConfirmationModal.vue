@@ -8,9 +8,9 @@
 			<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 		</div>
 		<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
-		<sofa-button :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="addTutor">
+		<SofaButton :bg-color="'bg-primaryPurple'" :text-color="'!text-white'" :padding="'px-6 py-4'" @click="addTutor">
 			Add a tutor
-		</sofa-button>
+		</SofaButton>
 	</div>
 </template>
 

@@ -15,9 +15,9 @@
 				:key="item.id"
 				class="w-full flex items-center gap-3 justify-between p-4 rounded-custom bg-lightGray">
 				<div class="flex items-center w-full gap-3">
-					<sofa-icon :name="'folder'" :custom-class="'h-[18px]'" />
+					<SofaIcon :name="'folder'" :custom-class="'h-[18px]'" />
 
-					<sofa-custom-input
+					<SofaCustomInput
 						v-if="item.id === factory.entityId"
 						v-model="factory.title"
 						:custom-class="`lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white`"

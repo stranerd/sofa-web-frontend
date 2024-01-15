@@ -1,24 +1,24 @@
 <template>
 	<div v-if="auth" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 		<div id="profile" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-			<sofa-header-text :size="'xl'" :custom-class="'text-left'"> Personal info </sofa-header-text>
+			<SofaHeaderText :size="'xl'" :custom-class="'text-left'"> Personal info </SofaHeaderText>
 			<div class="w-full flex flex-row items-center justify-start py-2 gap-4">
-				<sofa-image-loader
+				<SofaImageLoader
 					:custom-class="`w-[90px] h-[90px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
 					:photo-url="factory.photo?.link">
-					<sofa-icon v-if="!factory.photo" :custom-class="'h-[50px]'" :name="'user'" />
+					<SofaIcon v-if="!factory.photo" :custom-class="'h-[50px]'" :name="'user'" />
 					<SofaFileInput
 						v-model="factory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full h-[40px] w-[40px] flex items-center justify-center"
 						accept="image/*">
-						<sofa-icon class="h-[18px]" name="camera-white" />
+						<SofaIcon class="h-[18px]" name="camera-white" />
 					</SofaFileInput>
-				</sofa-image-loader>
+				</SofaImageLoader>
 
-				<sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile')">View profile</sofa-button>
+				<SofaButton :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/profile')">View profile</SofaButton>
 			</div>
 
-			<sofa-text-field
+			<SofaTextField
 				v-model="factory.first"
 				:custom-class="'rounded-custom !bg-lightGray'"
 				type="text"
@@ -27,7 +27,7 @@
 				:error="factory.errors.first"
 				:border-color="'border-transparent'" />
 
-			<sofa-text-field
+			<SofaTextField
 				v-model="factory.last"
 				:custom-class="'rounded-custom !bg-lightGray'"
 				type="text"
@@ -36,7 +36,7 @@
 				:error="factory.errors.last"
 				:border-color="'border-transparent'" />
 
-			<sofa-textarea
+			<SofaTextarea
 				v-model="factory.description"
 				:has-title="false"
 				:error="factory.errors.description"
@@ -45,9 +45,9 @@
 		</div>
 
 		<div id="contact" class="w-full flex flex-col bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-			<sofa-header-text :size="'xl'" :custom-class="'text-left mb-4'"> Contact info </sofa-header-text>
+			<SofaHeaderText :size="'xl'" :custom-class="'text-left mb-4'"> Contact info </SofaHeaderText>
 
-			<sofa-text-field
+			<SofaTextField
 				ref="name.first"
 				v-model="auth.email"
 				:custom-class="'rounded-custom !bg-lightGray'"
@@ -61,15 +61,15 @@
 		</div>
 
 		<div v-if="!userType.isOrg" id="type" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-			<sofa-header-text :size="'xl'" :custom-class="'text-left'">
+			<SofaHeaderText :size="'xl'" :custom-class="'text-left'">
 				{{ userType.isTeacher ? 'Experience' : 'Education' }}
-			</sofa-header-text>
+			</SofaHeaderText>
 
 			<AccountSetup :is-profile-education="true" />
 		</div>
 
 		<div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-			<sofa-header-text :size="'xl'" :custom-class="'text-left'"> Social links </sofa-header-text>
+			<SofaHeaderText :size="'xl'" :custom-class="'text-left'"> Social links </SofaHeaderText>
 
 			<SocialMediaUpdate :factory="socialsFactory" />
 		</div>

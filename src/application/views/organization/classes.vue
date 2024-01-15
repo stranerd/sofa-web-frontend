@@ -23,8 +23,8 @@
 			<div class="flex items-center justify-between">
 				<div
 					class="bg-white w-[60%] mdlg:w-[50%] px-4 py-3 rounded-[24px] flex flex-row items-center gap-2 border border-darkLightGray">
-					<sofa-icon :custom-class="'h-[15px]'" :name="'search'"></sofa-icon>
-					<sofa-text-field
+					<SofaIcon :custom-class="'h-[15px]'" :name="'search'"></SofaIcon>
+					<SofaTextField
 						v-model="searchQuery"
 						custom-class="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
 						placeholder="Search"

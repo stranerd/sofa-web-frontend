@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layout-style="mdlg:py-5" :hide="{ bottom: true }">
+	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layout-style="mdlg:py-5" :hide="{ bottom: true }">
 		<!-- Display for larger screens -->
 		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow">
 			<div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
@@ -8,16 +8,16 @@
 						class="flex flex-col h-full overflow-y-auto relative scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:!scrollbar-thin">
 						<div
 							class="w-full px-4 py-4 sticky top-0 left-0 bg-white z-30 rounded-t-[16px] flex flex-row items-center justify-between">
-							<sofa-header-text :custom-class="'!font-bold !text-left !line-clamp-1'">
+							<SofaHeaderText :custom-class="'!font-bold !text-left !line-clamp-1'">
 								{{ SingleCourse?.title }}
-							</sofa-header-text>
+							</SofaHeaderText>
 
 							<div v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id">
-								<sofa-button :custom-class="''" :padding="'px-4 py-1'" @click="showRateCourse">Rate</sofa-button>
+								<SofaButton :custom-class="''" :padding="'px-4 py-1'" @click="showRateCourse">Rate</SofaButton>
 							</div>
 						</div>
 
-						<sofa-course-content
+						<SofaCourseContent
 							v-model="selectedMaterial"
 							:lock-content="!isUnlocked(SingleCourse)"
 							@on-material-selected="handleItemSelected" />
@@ -37,22 +37,22 @@
 			<!-- Top bar for smaller screens -->
 			<div
 				class="w-full flex flex-row mdlg:!hidden justify-between items-center z-[100] bg-white px-4 py-4 sticky top-0 left-0 overflow-y-auto">
-				<sofa-icon :custom-class="'h-[15px]'" :name="'back-arrow'" @click="handleMobileGoback()" />
+				<SofaIcon :custom-class="'h-[15px]'" :name="'back-arrow'" @click="handleMobileGoback()" />
 			</div>
 
 			<!-- Content for smaller screens -->
 			<div class="w-full flex flex-col gap-2 overflow-y-auto relative flex-grow">
 				<template v-if="!showCourseContent">
 					<div class="w-full flex flex-col gap-2 px-4 pb-3 items-start justify-start sticky top-0 left-0">
-						<sofa-header-text :custom-class="'!font-bold !text-xl !text-left'">
+						<SofaHeaderText :custom-class="'!font-bold !text-xl !text-left'">
 							{{ SingleCourse.title }}
-						</sofa-header-text>
-						<sofa-normal-text :custom-class="'text-left'">
+						</SofaHeaderText>
+						<SofaNormalText :custom-class="'text-left'">
 							{{ SingleCourse.description }}
-						</sofa-normal-text>
+						</SofaNormalText>
 					</div>
 
-					<sofa-course-content
+					<SofaCourseContent
 						v-model="selectedMaterial"
 						:lock-content="!isUnlocked(SingleCourse)"
 						@on-material-selected="handleItemSelected"
@@ -76,9 +76,9 @@
 			<div
 				v-if="selectedMaterial && showCourseContent"
 				:class="`absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col gap-2 items-center justify-center w-full `">
-				<sofa-normal-text :custom-class="'!font-bold'">
+				<SofaNormalText :custom-class="'!font-bold'">
 					{{ SingleCourse.title }}
-				</sofa-normal-text>
+				</SofaNormalText>
 				<div class="w-full flex flex-row gap-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 					<div
 						id="sm-materials-container"
@@ -91,21 +91,21 @@
 										selectedMaterial.id == item.id ? 'bg-primaryPurple' : 'bg-white border-2 border-grayColor'
 									}  flex flex-col gap-1`"
 									@click="selectItem(item)">
-									<sofa-normal-text
+									<SofaNormalText
 										:color="`${selectedMaterial.id == item.id ? '!text-white' : '!text-bodyBlack'} `"
 										:custom-class="'!text-left'">
 										{{ section.name }} - {{ item.name }}
-									</sofa-normal-text>
+									</SofaNormalText>
 
 									<div class="w-full flex flex-row items-center gap-2">
-										<sofa-icon
+										<SofaIcon
 											:name="`${item.type}${selectedMaterial.id == item.id ? '-white' : ''}`"
 											:custom-class="'h-[15px]'" />
-										<sofa-normal-text
+										<SofaNormalText
 											:color="`${selectedMaterial.id == item.id ? '!text-white' : '!text-bodyBlack'} `"
 											:custom-class="'!text-left'">
 											{{ item.type.split('-')[0] }}
-										</sofa-normal-text>
+										</SofaNormalText>
 									</div>
 								</div>
 							</template>
@@ -117,7 +117,7 @@
 
 		<!-- Small screen course info -->
 
-		<sofa-modal-old
+		<SofaModalOld
 			v-if="showCourseInfo"
 			:close="
 				() => {
@@ -135,17 +135,17 @@
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 overflow-y-auto h-full lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-4 md:!px-4 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<div
 						class="w-full flex flex-row justify-between items-center sticky bg-white z-40 top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
-						<sofa-normal-text :custom-class="'!font-bold !text-base'"> Course details </sofa-normal-text>
-						<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showCourseInfo = false" />
+						<SofaNormalText :custom-class="'!font-bold !text-base'"> Course details </SofaNormalText>
+						<SofaIcon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showCourseInfo = false" />
 					</div>
 
-					<sofa-course-summary :data="SingleCourse" />
+					<SofaCourseSummary :data="SingleCourse" />
 				</div>
 			</div>
-		</sofa-modal-old>
+		</SofaModalOld>
 
 		<!--  Payment modal -->
-		<sofa-modal-old
+		<SofaModalOld
 			v-if="showMakePaymentModal"
 			:close="
 				() => {
@@ -162,13 +162,13 @@
 				<div
 					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
 					<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
-						<sofa-header-text :custom-class="'text-xl'"> Choose payment method </sofa-header-text>
+						<SofaHeaderText :custom-class="'text-xl'"> Choose payment method </SofaHeaderText>
 					</div>
 
 					<div
 						class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
-						<sofa-normal-text :custom-class="'!font-bold !text-base'"> Choose payment method </sofa-normal-text>
-						<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showMakePaymentModal = false" />
+						<SofaNormalText :custom-class="'!font-bold !text-base'"> Choose payment method </SofaNormalText>
+						<SofaIcon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showMakePaymentModal = false" />
 					</div>
 
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
@@ -178,13 +178,13 @@
 								selectedMethodId == 'payWithWallet' ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom cursor-pointer `"
 							@click="selectedMethodId = 'payWithWallet'">
-							<sofa-icon :custom-class="'h-[20px]'" :name="'wallet'" />
-							<sofa-normal-text v-if="UserWallet">
+							<SofaIcon :custom-class="'h-[20px]'" :name="'wallet'" />
+							<SofaNormalText v-if="UserWallet">
 								Wallet (<span class="!font-semibold">{{
 									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
 								}}</span
 								>)
-							</sofa-normal-text>
+							</SofaNormalText>
 						</div>
 
 						<!-- Pay online -->
@@ -192,8 +192,8 @@
 						<div
 							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
 							@click="Logic.Payment.initialPayment()">
-							<sofa-icon :custom-class="'h-[18px]'" :name="'add-card'" />
-							<sofa-normal-text :color="'text-grayColor'">Add credit or debit card</sofa-normal-text>
+							<SofaIcon :custom-class="'h-[18px]'" :name="'add-card'" />
+							<SofaNormalText :color="'text-grayColor'">Add credit or debit card</SofaNormalText>
 						</div>
 
 						<div
@@ -203,38 +203,38 @@
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom cursor-pointer `"
 							@click="selectedMethodId = method.id">
-							<sofa-icon :custom-class="'h-[20px]'" :name="'card'" />
-							<sofa-normal-text> **** **** **** {{ method.data.last4Digits }} </sofa-normal-text>
+							<SofaIcon :custom-class="'h-[20px]'" :name="'card'" />
+							<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
 						</div>
 					</div>
 
 					<div
 						class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
 						<div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
-							<sofa-button
+							<SofaButton
 								:text-color="'text-grayColor'"
 								:bg-color="'bg-white'"
 								:padding="'px-4 py-1'"
 								:custom-class="`border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full`"
 								@click="showMakePaymentModal = false">
 								Exit
-							</sofa-button>
+							</SofaButton>
 						</div>
 
 						<div class="md:!w-auto col-span-2 flex flex-col">
-							<sofa-button
+							<SofaButton
 								:text-color="'text-white'"
 								:bg-color="'bg-primaryBlue'"
 								:padding="'px-4 md:!py-1 py-3'"
 								:custom-class="`border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full`"
 								@click="buyCourse()">
 								Make payment
-							</sofa-button>
+							</SofaButton>
 						</div>
 					</div>
 				</div>
 			</div>
-		</sofa-modal-old>
+		</SofaModalOld>
 
 		<!-- Rating floating button sm -->
 		<Teleport v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id && !Logic.Common.isLarge" to="body">
@@ -242,12 +242,12 @@
 				<span
 					class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
 					@click="showRateCourse">
-					<sofa-icon :name="'star-white'" :custom-class="'h-[15px]'"></sofa-icon>
-					<sofa-normal-text :color="'text-white'"> Rate </sofa-normal-text>
+					<SofaIcon :name="'star-white'" :custom-class="'h-[15px]'"></SofaIcon>
+					<SofaNormalText :color="'text-white'"> Rate </SofaNormalText>
 				</span>
 			</span>
 		</Teleport>
-	</expanded-layout>
+	</ExpandedLayout>
 </template>
 
 <script lang="ts">

@@ -1,11 +1,11 @@
 <template>
-	<auth-layout
+	<AuthLayout
 		:title="sent ? 'Reset your password' : 'Forgot your password'"
 		:sub-title="
 			sent ? undefined : 'Enter the email address associated with your account and we’ll send you a link to reset your password'
 		">
 		<form v-if="!sent" class="flex flex-col gap-6 w-full" @submit.prevent="sendResetEmail">
-			<sofa-text-field
+			<SofaTextField
 				ref="email"
 				v-model="factory.email"
 				:custom-class="'rounded-custom !bg-lightGray'"
@@ -15,13 +15,13 @@
 				:error="factory.errors.email" />
 
 			<div class="w-full flex flex-col">
-				<sofa-button :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Continue </sofa-button>
+				<SofaButton :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Continue </SofaButton>
 			</div>
 		</form>
 
 		<form v-else class="flex flex-col gap-6 w-full" @submit.prevent="resetPassword">
 			<div class="w-full flex flex-col gap-4">
-				<sofa-text-field
+				<SofaTextField
 					ref="token"
 					v-model="factory.token"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -30,7 +30,7 @@
 					:placeholder="'Enter 6-digit token'"
 					:error="factory.errors.token" />
 
-				<sofa-text-field
+				<SofaTextField
 					ref="new_password"
 					v-model="factory.password"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -39,7 +39,7 @@
 					:placeholder="'New password'"
 					:error="factory.errors.password" />
 
-				<sofa-text-field
+				<SofaTextField
 					ref="confirm_new_password"
 					v-model="factory.cPassword"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -50,17 +50,17 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<sofa-button :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Continue </sofa-button>
+				<SofaButton :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Continue </SofaButton>
 			</div>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<sofa-normal-text :color="'text-grayColor'">Don’t have an account?</sofa-normal-text>
+			<SofaNormalText :color="'text-grayColor'">Don’t have an account?</SofaNormalText>
 			<router-link to="/auth/register">
-				<sofa-normal-text :color="'!text-primaryBlue'">Sign up</sofa-normal-text>
+				<SofaNormalText :color="'!text-primaryBlue'">Sign up</SofaNormalText>
 			</router-link>
 		</div>
-	</auth-layout>
+	</AuthLayout>
 </template>
 
 <script lang="ts">

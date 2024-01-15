@@ -10,16 +10,16 @@
 			}">
 			<div class="w-full flex items-start justify-start p-4 pb-[90px]">
 				<div class="w-[90%] rounded-custom bg-lightBlue p-3 flex items-start justify-start">
-					<sofa-normal-text :custom-class="'text-left'">
+					<SofaNormalText :custom-class="'text-left'">
 						{{ conversation.title }}
-					</sofa-normal-text>
+					</SofaNormalText>
 				</div>
 			</div>
 
 			<template #bottom>
 				<div class="w-full grid grid-cols-2 gap-4">
 					<div class="col-span-1 flex flex-col">
-						<sofa-button
+						<SofaButton
 							:bg-color="'bg-primaryRed'"
 							:text-color="'text-white'"
 							:custom-class="'w-full rounded-custom'"
@@ -27,11 +27,11 @@
 							:has-shadow="false"
 							@click="accept(false)">
 							Decline
-						</sofa-button>
+						</SofaButton>
 					</div>
 
 					<div class="col-span-1 flex flex-col">
-						<sofa-button
+						<SofaButton
 							:bg-color="'bg-primaryGreen'"
 							:text-color="'text-white'"
 							:custom-class="'w-full rounded-custom'"
@@ -39,7 +39,7 @@
 							:has-shadow="false"
 							@click="accept(true)">
 							Accept
-						</sofa-button>
+						</SofaButton>
 					</div>
 				</div>
 			</template>

@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout layout-style="mdlg:pb-4">
+	<ExpandedLayout layout-style="mdlg:pb-4">
 		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple justify-center items-center">
 			<SofaHeaderText color="text-white" size="xl" class="!font-extrabold" content="All contents made by verified creators" />
 
@@ -71,7 +71,7 @@
 				</div>
 			</template>
 		</div>
-	</expanded-layout>
+	</ExpandedLayout>
 </template>
 
 <script lang="ts">

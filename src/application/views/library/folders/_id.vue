@@ -7,7 +7,7 @@
 			{ name: 'Quizzes', id: 'quizzes' },
 		]">
 		<template v-if="data.length">
-			<sofa-activity-card
+			<SofaActivityCard
 				v-for="activity in data"
 				:key="activity.id"
 				:activity="activity"
@@ -15,15 +15,15 @@
 				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="activity.type === 'course' ? openCourse(activity) : openQuiz(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon
+					<SofaIcon
 						:name="'more-options-horizontal'"
 						:custom-class="'h-[6px]'"
 						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
 				</div>
-			</sofa-activity-card>
+			</SofaActivityCard>
 		</template>
 
-		<sofa-empty-state
+		<SofaEmptyState
 			v-else
 			:title="'There are no items in this folder'"
 			:sub-title="'Save quiz and courses to this folder and you will see them here'" />

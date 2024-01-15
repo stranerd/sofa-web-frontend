@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout
+	<ExpandedLayout
 		layout-style="!justify-between bg-deepGray text-white"
 		:hide="{ top: true, bottom: true }"
 		bg-image="/images/game-bg.png">
@@ -115,7 +115,7 @@
 				</QuizWrapper>
 			</template>
 		</GameWrapper>
-	</expanded-layout>
+	</ExpandedLayout>
 </template>
 
 <script lang="ts">

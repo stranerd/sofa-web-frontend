@@ -1,7 +1,7 @@
 <template>
 	<LibraryLayout title="Results">
 		<template v-if="data.length">
-			<sofa-progress-item-card
+			<SofaProgressItemCard
 				v-for="play in data"
 				:key="play.id"
 				:content="play"
@@ -9,7 +9,7 @@
 				@click="play.action()" />
 		</template>
 
-		<sofa-empty-state
+		<SofaEmptyState
 			v-else
 			:title="'You have no practice item here'"
 			:sub-title="'Discover thousands of materials to buy, created by verified experts'"

@@ -3,19 +3,19 @@
 		<div class="flex flex-col mdlg:flex-row items-start gap-4">
 			<div class="w-full mdlg:w-1/2">
 				<div class="w-full flex flex-col justify-center">
-					<sofa-image-loader
+					<SofaImageLoader
 						:custom-class="`w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain`"
 						:photo-url="factory.photo?.link ?? '/images/default.png'">
 						<div
 							class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
-							<sofa-file-input v-model="factory.photo" accept="image/*">
+							<SofaFileInput v-model="factory.photo" accept="image/*">
 								<div class="w-full flex items-center justify-center gap-3">
 									<SofaIcon class="h-[18px]" name="camera-white" />
 									<SofaNormalText content="Add cover photo" color="text-white" />
 								</div>
-							</sofa-file-input>
+							</SofaFileInput>
 						</div>
-					</sofa-image-loader>
+					</SofaImageLoader>
 				</div>
 			</div>
 			<div class="w-full mdlg:w-1/2 flex flex-col gap-4">

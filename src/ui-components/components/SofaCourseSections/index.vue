@@ -39,7 +39,7 @@
 							</div>
 
 							<template v-if="option.opened">
-								<draggable
+								<Draggable
 									v-model="option.materials"
 									group="course-item"
 									class="w-full gap-3"
@@ -81,7 +81,7 @@
 											</div>
 										</div>
 									</template>
-								</draggable>
+								</Draggable>
 
 								<div
 									v-if="option.name != 'unsectioned'"
@@ -118,7 +118,7 @@ import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import { Logic, UpdateCourseSectionsInput } from 'sofa-logic'
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
-import draggable from 'vuedraggable'
+import Draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 
@@ -127,7 +127,7 @@ export default defineComponent({
 	components: {
 		SofaIcon,
 		SofaNormalText,
-		draggable,
+		Draggable,
 	},
 	props: {
 		customClass: {

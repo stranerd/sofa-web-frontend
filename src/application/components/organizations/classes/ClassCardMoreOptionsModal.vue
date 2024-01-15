@@ -1,15 +1,15 @@
 <template>
 	<div class="w-full flex flex-col">
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden py-2 px-4 border-lightGray border-b">
-			<sofa-normal-text :custom-class="'!font-bold !text-base'">Options</sofa-normal-text>
-			<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="close" />
+			<SofaNormalText :custom-class="'!font-bold !text-base'">Options</SofaNormalText>
+			<SofaIcon :custom-class="'h-[19px]'" :name="'circle-close'" @click="close" />
 		</div>
 
 		<a v-for="item in moreOptions" :key="item.title" class="w-full flex items-center gap-2 p-4" @click.stop.prevent="item.action()">
-			<sofa-icon :name="item.icon" :class="item.icon === 'delete-quiz' ? 'fill-primaryRed h-[18px]' : 'h-[15px]'" />
-			<sofa-normal-text :custom-class="item.icon === 'delete-quiz' ? '!text-primaryRed' : ''">
+			<SofaIcon :name="item.icon" :class="item.icon === 'delete-quiz' ? 'fill-primaryRed h-[18px]' : 'h-[15px]'" />
+			<SofaNormalText :custom-class="item.icon === 'delete-quiz' ? '!text-primaryRed' : ''">
 				{{ item.title }}
-			</sofa-normal-text>
+			</SofaNormalText>
 		</a>
 	</div>
 </template>

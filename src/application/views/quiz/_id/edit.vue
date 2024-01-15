@@ -1,7 +1,7 @@
 <template>
 	<QuizWrapper :id="$route.params.id as string" :selected-question="$route.query.q as string" :skip-members="false">
 		<template #default="{ quiz, extras, members }">
-			<dashboard-layout
+			<DashboardLayout
 				v-if="extras.canEdit"
 				:hide="{ bottom: true, top: true }"
 				bg-color="mdlg:bg-lightGray bg-white"
@@ -164,7 +164,7 @@
 						@delete-question="(id) => extras.deleteQuestion(id)"
 						@reorder-questions="(ids) => extras.reorderQuestions(ids)" />
 				</template>
-			</dashboard-layout>
+			</DashboardLayout>
 
 			<SofaModal v-else-if="quiz">
 				<RequestAccess :quiz="quiz" :request-access="extras.requestAccess" />

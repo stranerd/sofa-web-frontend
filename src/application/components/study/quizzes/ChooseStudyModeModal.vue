@@ -1,40 +1,40 @@
 <template>
 	<div v-if="hasAccess(quiz)" class="w-full flex flex-col md:gap-4 gap-2 mdlg:p-6 md:p-4 items-center justify-center">
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden py-3 border-lightGray border-b px-4">
-			<sofa-normal-text :custom-class="'!font-bold !text-base'">
+			<SofaNormalText :custom-class="'!font-bold !text-base'">
 				{{ showGame ? 'Start quiz game' : 'Choose Study Mode' }}
-			</sofa-normal-text>
-			<sofa-icon class="h-[19px]" name="circle-close" @click="close" />
+			</SofaNormalText>
+			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
 		<div v-if="showGame" class="w-full flex flex-col gap-3 p-4">
 			<a class="w-full rounded-custom p-4 bg-lightGray flex items-center justify-between" @click="joinGame = !joinGame">
-				<sofa-normal-text>Participate</sofa-normal-text>
-				<sofa-icon :custom-class="'h-[22px] z-50'" :name="joinGame ? 'toggle-on' : 'toggle-off'" />
+				<SofaNormalText>Participate</SofaNormalText>
+				<SofaIcon :custom-class="'h-[22px] z-50'" :name="joinGame ? 'toggle-on' : 'toggle-off'" />
 			</a>
 
 			<div class="w-full flex flex-col items-center justify-between pt-3">
 				<div class="w-full flex flex-col">
-					<sofa-button :padding="'py-3'" :custom-class="'w-full'" @click="createQuizGame">Start</sofa-button>
+					<SofaButton :padding="'py-3'" :custom-class="'w-full'" @click="createQuizGame">Start</SofaButton>
 				</div>
 			</div>
 		</div>
 
 		<div v-else class="w-full flex flex-col gap-3 px-4 py-2 md:p-0">
-			<sofa-icon-card
+			<SofaIconCard
 				v-for="item in otherTasks"
 				:key="item.title"
 				:data="{ ...item, iconSize: 'h-[46px]' }"
 				:custom-class="'!bg-lightGray !w-full !shadow-none'"
 				@click="chooseMode(item.value)">
 				<template #title>
-					<sofa-normal-text :custom-class="'!font-bold'">
+					<SofaNormalText :custom-class="'!font-bold'">
 						{{ item.title }}
-					</sofa-normal-text>
+					</SofaNormalText>
 				</template>
-			</sofa-icon-card>
+			</SofaIconCard>
 
-			<sofa-button v-if="id === quiz.user.id" class="w-full" padding="p-3" @click="goToEdit"> Edit Quiz </sofa-button>
+			<SofaButton v-if="id === quiz.user.id" class="w-full" padding="p-3" @click="goToEdit"> Edit Quiz </SofaButton>
 		</div>
 	</div>
 	<SofaEmptyState

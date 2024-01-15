@@ -7,26 +7,26 @@
 				class="p-3 rounded-custom flex items-center gap-2 justify-center w-full"
 				:class="tab === option.id ? 'bg-primaryPurple' : option.done ? 'bg-primaryGreen' : 'bg-lightGray'"
 				@click="tab = option.id">
-				<sofa-normal-text :color="option.done || tab === option.id ? 'text-white' : 'text-grayColor'">
+				<SofaNormalText :color="option.done || tab === option.id ? 'text-white' : 'text-grayColor'">
 					{{ option.name }}
-				</sofa-normal-text>
-				<sofa-icon v-if="option.done" :custom-class="'h-[14px]'" :name="'done'" />
+				</SofaNormalText>
+				<SofaIcon v-if="option.done" :custom-class="'h-[14px]'" :name="'done'" />
 			</a>
 		</div>
 
 		<div v-if="tab === 'profile'" class="w-full flex flex-col gap-4 py-3">
 			<div class="w-full flex flex-col items-center justify-center pt-3">
-				<sofa-image-loader
+				<SofaImageLoader
 					:custom-class="`w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full`"
 					:photo-url="profileFactory.photo?.link">
-					<sofa-icon v-if="!profileFactory.photo" :custom-class="'h-[50px]'" :name="'user'" />
+					<SofaIcon v-if="!profileFactory.photo" :custom-class="'h-[50px]'" :name="'user'" />
 					<SofaFileInput
 						v-model="profileFactory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
 						accept="image/*">
 						<SofaIcon class="h-[18px]" name="camera-white" />
 					</SofaFileInput>
-				</sofa-image-loader>
+				</SofaImageLoader>
 			</div>
 
 			<SofaTextField

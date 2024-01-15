@@ -2,34 +2,34 @@
 	<SettingsLayout title="Subscription">
 		<div v-if="wallet" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<sofa-header-text :size="'xl'" :custom-class="'text-left'"> My subscription </sofa-header-text>
+				<SofaHeaderText :size="'xl'" :custom-class="'text-left'"> My subscription </SofaHeaderText>
 
-				<sofa-normal-text v-if="wallet.subscription.active == false" :custom-class="'text-left'">
+				<SofaNormalText v-if="wallet.subscription.active == false" :custom-class="'text-left'">
 					You have no active subscription
-				</sofa-normal-text>
+				</SofaNormalText>
 				<template v-else-if="wallet.subscription.current">
 					<div class="w-full flex flex-col gap-3">
 						<div class="w-full flex flex-col gap-2 items-start">
-							<sofa-header-text :color="'text-primaryPurple !text-2xl !font-extrabold'">
+							<SofaHeaderText :color="'text-primaryPurple !text-2xl !font-extrabold'">
 								{{ myPlan?.title ?? 'Stranerd Premium' }}
-							</sofa-header-text>
+							</SofaHeaderText>
 
 							<div class="w-full flex flex-col gap-1 pb-1">
-								<sofa-normal-text> Expires {{ formatTime(wallet.subscription.current.expiredAt) }} </sofa-normal-text>
-								<sofa-normal-text v-if="wallet.subscription.current.expiredAt > Date.now()">
+								<SofaNormalText> Expires {{ formatTime(wallet.subscription.current.expiredAt) }} </SofaNormalText>
+								<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()">
 									{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
 									days left
-								</sofa-normal-text>
-								<sofa-normal-text v-else> Expired </sofa-normal-text>
+								</SofaNormalText>
+								<SofaNormalText v-else> Expired </SofaNormalText>
 							</div>
 
 							<div
 								v-if="wallet.subscription.current.expiredAt > Date.now()"
 								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
 								@click="autoRenewIsOn = !autoRenewIsOn">
-								<sofa-normal-text :custom-class="'!font-bold'">Auto-renewal</sofa-normal-text>
+								<SofaNormalText :custom-class="'!font-bold'">Auto-renewal</SofaNormalText>
 								<div class="!w-auto">
-									<sofa-icon :custom-class="'h-[17px]'" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
+									<SofaIcon :custom-class="'h-[17px]'" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
 								</div>
 							</div>
 						</div>
@@ -41,24 +41,24 @@
 				<div
 					v-if="userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<sofa-header-text :size="'xl'" class="text-left capitalize">
+					<SofaHeaderText :size="'xl'" class="text-left capitalize">
 						{{ myApplicablePlan.title }}
-					</sofa-header-text>
+					</SofaHeaderText>
 
 					<div class="w-full flex flex-col gap-2">
 						<div class="flex flex-row gap-2 items-center">
-							<sofa-header-text :custom-class="'text-left !text-2xl !font-bold'">
+							<SofaHeaderText :custom-class="'text-left !text-2xl !font-bold'">
 								{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }} per student
-							</sofa-header-text>
-							<sofa-normal-text :custom-class="'!text-2xl'"> / month </sofa-normal-text>
+							</SofaHeaderText>
+							<SofaNormalText :custom-class="'!text-2xl'"> / month </SofaNormalText>
 						</div>
 
-						<sofa-normal-text :custom-class="'text-left'">
+						<SofaNormalText :custom-class="'text-left'">
 							Provide cost-free access to your paid courses for your physical students.
-						</sofa-normal-text>
+						</SofaNormalText>
 
 						<div class="flex flex-row pt-3">
-							<sofa-button :padding="'px-5 py-2'" @click="subscibeToPlan(myApplicablePlan.id)"> Subscribe </sofa-button>
+							<SofaButton :padding="'px-5 py-2'" @click="subscibeToPlan(myApplicablePlan.id)"> Subscribe </SofaButton>
 						</div>
 					</div>
 				</div>
@@ -66,15 +66,15 @@
 				<div
 					v-if="!userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-					<sofa-header-text :size="'xl'" :custom-class="'text-left w-full pb-2 border-b border-lightGray'">
+					<SofaHeaderText :size="'xl'" :custom-class="'text-left w-full pb-2 border-b border-lightGray'">
 						{{ myApplicablePlan.title }}
-					</sofa-header-text>
+					</SofaHeaderText>
 
 					<div class="flex flex-row gap-2 items-center">
-						<sofa-header-text :custom-class="'text-left !text-2xl !font-bold'">
+						<SofaHeaderText :custom-class="'text-left !text-2xl !font-bold'">
 							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
-						</sofa-header-text>
-						<sofa-normal-text :custom-class="'!text-2xl'"> / month </sofa-normal-text>
+						</SofaHeaderText>
+						<SofaNormalText :custom-class="'!text-2xl'"> / month </SofaNormalText>
 					</div>
 
 					<div class="w-full flex flex-col gap-3">
@@ -84,21 +84,21 @@
 							:class="`w-full flex-col flex gap-1 pb-2 items-start ${
 								index != subscriptionInfo.length - 1 ? 'border-b border-lightGray' : ''
 							} `">
-							<sofa-icon :custom-class="'h-[23px] '" :name="info.icon" />
-							<sofa-normal-text :custom-class="'text-left !font-bold'">
+							<SofaIcon :custom-class="'h-[23px] '" :name="info.icon" />
+							<SofaNormalText :custom-class="'text-left !font-bold'">
 								{{ info.title }}
-							</sofa-normal-text>
-							<sofa-normal-text :color="'text-grayColor'" :custom-class="'text-left'">
+							</SofaNormalText>
+							<SofaNormalText :color="'text-grayColor'" :custom-class="'text-left'">
 								{{ info.value }}
-							</sofa-normal-text>
+							</SofaNormalText>
 						</div>
 					</div>
 
 					<div class="w-full flex flex-row">
 						<div class="w-auto flex flex-row">
-							<sofa-button :padding="'px-7 py-2'" :custom-class="'!w-auto'" @click="subscibeToPlan(myApplicablePlan.id)">
+							<SofaButton :padding="'px-7 py-2'" :custom-class="'!w-auto'" @click="subscibeToPlan(myApplicablePlan.id)">
 								Subscribe
-							</sofa-button>
+							</SofaButton>
 						</div>
 					</div>
 				</div>

@@ -6,13 +6,13 @@
 					v-if="item.type == 'quiz'"
 					class="col-span-1 rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center"
 					@click="showAddQuiz = true">
-					<sofa-icon :name="item.icon" :custom-class="'h-[22px]'"> </sofa-icon>
-					<sofa-normal-text :custom-class="'!font-bold'">
+					<SofaIcon :name="item.icon" :custom-class="'h-[22px]'"> </SofaIcon>
+					<SofaNormalText :custom-class="'!font-bold'">
 						{{ item.name }}
-					</sofa-normal-text>
+					</SofaNormalText>
 				</a>
 
-				<sofa-file-attachment
+				<SofaFileAttachment
 					v-if="item.type == 'image'"
 					v-model="imageFile"
 					:is-wrapper="true"
@@ -21,15 +21,15 @@
 					<template #content>
 						<a
 							class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
-							<sofa-icon :name="item.icon" :custom-class="'h-[22px]'"> </sofa-icon>
-							<sofa-normal-text :custom-class="'!font-bold'">
+							<SofaIcon :name="item.icon" :custom-class="'h-[22px]'"> </SofaIcon>
+							<SofaNormalText :custom-class="'!font-bold'">
 								{{ item.name }}
-							</sofa-normal-text>
+							</SofaNormalText>
 						</a>
 					</template>
-				</sofa-file-attachment>
+				</SofaFileAttachment>
 
-				<sofa-file-attachment
+				<SofaFileAttachment
 					v-if="item.type == 'document'"
 					v-model="documentFile"
 					:is-wrapper="true"
@@ -38,15 +38,15 @@
 					<template #content>
 						<a
 							class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
-							<sofa-icon :name="item.icon" :custom-class="'h-[22px]'"> </sofa-icon>
-							<sofa-normal-text :custom-class="'!font-bold'">
+							<SofaIcon :name="item.icon" :custom-class="'h-[22px]'"> </SofaIcon>
+							<SofaNormalText :custom-class="'!font-bold'">
 								{{ item.name }}
-							</sofa-normal-text>
+							</SofaNormalText>
 						</a>
 					</template>
-				</sofa-file-attachment>
+				</SofaFileAttachment>
 
-				<sofa-file-attachment
+				<SofaFileAttachment
 					v-if="item.type == 'video'"
 					v-model="videoFile"
 					:is-wrapper="true"
@@ -55,13 +55,13 @@
 					<template #content>
 						<a
 							class="w-full rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center">
-							<sofa-icon :name="item.icon" :custom-class="'h-[22px]'"> </sofa-icon>
-							<sofa-normal-text :custom-class="'!font-bold'">
+							<SofaIcon :name="item.icon" :custom-class="'h-[22px]'"> </SofaIcon>
+							<SofaNormalText :custom-class="'!font-bold'">
 								{{ item.name }}
-							</sofa-normal-text>
+							</SofaNormalText>
 						</a>
 					</template>
-				</sofa-file-attachment>
+				</SofaFileAttachment>
 
 				<!-- <div
           v-if="item.type == 'video'"
@@ -80,7 +80,7 @@
 			</template>
 		</div>
 	</div>
-	<sofa-modal-old
+	<SofaModalOld
 		v-if="showAddVideo"
 		:close="
 			() => {
@@ -96,15 +96,15 @@
 			">
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-				<sofa-header-text :custom-class="'text-xl'" content="Add video" />
+				<SofaHeaderText :custom-class="'text-xl'" content="Add video" />
 
 				<AddVideo />
 			</div>
 		</div>
-	</sofa-modal-old>
+	</SofaModalOld>
 
 	<!-- Add question modal -->
-	<sofa-modal-old
+	<SofaModalOld
 		v-if="showAddQuiz"
 		:close="
 			() => {
@@ -122,16 +122,16 @@
 			<div
 				class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 pt-0 pb-3 px-4 md:!rounded-[16px] rounded-t-[19px] items-center justify-center">
 				<div class="w-full text-center hidden md:!inline-block">
-					<sofa-header-text :custom-class="'!text-xl !font-bold'" content="Add a quiz" />
+					<SofaHeaderText :custom-class="'!text-xl !font-bold'" content="Add a quiz" />
 				</div>
 
 				<div class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden">
-					<sofa-normal-text :custom-class="'!font-bold !text-base'"> Add a quiz </sofa-normal-text>
-					<sofa-icon :custom-class="'h-[16px]'" :name="'circle-close'" @click="showAddQuiz = false" />
+					<SofaNormalText :custom-class="'!font-bold !text-base'"> Add a quiz </SofaNormalText>
+					<SofaIcon :custom-class="'h-[16px]'" :name="'circle-close'" @click="showAddQuiz = false" />
 				</div>
 
 				<div class="w-full flex flex-col gap-4">
-					<sofa-select
+					<SofaSelect
 						ref="quiz"
 						v-model="selectedQuiz"
 						:custom-class="'rounded-custom !bg-lightGray'"
@@ -142,35 +142,35 @@
 						:options="allQuizzes"
 						:has-title="true">
 						<template #title> Choose a quiz </template>
-					</sofa-select>
+					</SofaSelect>
 
 					<div v-if="!selectedQuiz" class="w-full flex flex-row items-center justify-center py-3">
-						<sofa-button :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/quiz/create')"> Create a quiz </sofa-button>
+						<SofaButton :padding="'px-5 py-2'" @click="Logic.Common.GoToRoute('/quiz/create')"> Create a quiz </SofaButton>
 					</div>
 
 					<div class="w-full flex flex-row items-center justify-between z-[50] bg-white">
-						<sofa-button
+						<SofaButton
 							:padding="'px-5 py-2'"
 							:bg-color="'bg-white'"
 							:text-color="'text-grayColor'"
 							:custom-class="'border border-gray-100 hidden mdlg:!inline-block'"
 							@click.prevent="showAddQuiz = false">
 							Exit
-						</sofa-button>
+						</SofaButton>
 
 						<div class="mdlg:!w-auto w-full">
-							<sofa-button
+							<SofaButton
 								:padding="'px-5 py-2'"
 								:custom-class="'mdlg:!w-auto w-full'"
 								@click="selectedQuiz ? handleAddQuiz() : null">
 								Add
-							</sofa-button>
+							</SofaButton>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</sofa-modal-old>
+	</SofaModalOld>
 </template>
 <script lang="ts">
 import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'

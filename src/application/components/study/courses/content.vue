@@ -4,10 +4,10 @@
 		class="w-full px-4 relative md:py-4 bg-white mdlg:!rounded-[16px] overflow-y-auto flex-grow max-h-full h-fit flex flex-col gap-4 mdlg:min-h-[400px]">
 		<template v-if="isUnlocked">
 			<div class="w-full flex flex-col items-start justify-start">
-				<sofa-header-text :custom-class="'!font-bold !text-lg'" :content="selectedMaterial?.name" />
+				<SofaHeaderText :custom-class="'!font-bold !text-lg'" :content="selectedMaterial?.name" />
 			</div>
 			<template v-if="selectedMaterial?.type == 'quiz'">
-				<sofa-empty-state
+				<SofaEmptyState
 					:title="'Test yourself'"
 					:sub-title="'Evaluate your level of knowledge'"
 					:action-label="'Start'"
@@ -21,13 +21,13 @@
 
 			<template v-if="selectedMaterial?.type == 'document'">
 				<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-					<sofa-document-reader :key="selectedMaterial.id" :document-url="selectedMaterial.data.documentUrl" />
+					<SofaDocumentReader :key="selectedMaterial.id" :document-url="selectedMaterial.data.documentUrl" />
 				</div>
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'image'">
 				<div class="w-full flex flex-col">
-					<sofa-image-loader
+					<SofaImageLoader
 						:key="selectedMaterial.id"
 						:custom-class="'w-full h-[400px] rounded-[12px]'"
 						:photo-url="selectedMaterial.data.imageUrl" />
@@ -36,7 +36,7 @@
 
 			<template v-if="selectedMaterial?.type == 'video'">
 				<div class="w-full flex flex-col">
-					<sofa-video-player
+					<SofaVideoPlayer
 						:key="selectedMaterial.id"
 						:video-url="selectedMaterial.data.videoUrl"
 						:type="selectedMaterial.details.media.type" />
@@ -45,7 +45,7 @@
 		</template>
 		<template v-else>
 			<div class="w-full flex flex-col">
-				<sofa-empty-state
+				<SofaEmptyState
 					:title="'You have no access'"
 					:sub-title="'Get this course to start learning with it'"
 					:custom-class="'h-[380px]'"

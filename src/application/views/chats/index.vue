@@ -5,8 +5,8 @@
 				<router-link
 					to="/chats/new"
 					class="w-full rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg flex gap-3 items-center justify-start p-4 bg-primaryPurple">
-					<sofa-icon :name="'box-add-white'" :custom-class="'h-[25px]'" />
-					<sofa-normal-text :color="'text-white'" :custom-class="'text-left !text-sm'" content="New chat" />
+					<SofaIcon :name="'box-add-white'" :custom-class="'h-[25px]'" />
+					<SofaNormalText :color="'text-white'" :custom-class="'text-left !text-sm'" content="New chat" />
 				</router-link>
 			</div>
 			<div class="w-full flex flex-col px-4 gap-3 pt-1">

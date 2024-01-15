@@ -1,10 +1,10 @@
 <template>
-	<auth-layout title="Create your account" sub-title="Join the School Of Future Africa">
+	<AuthLayout title="Create your account" sub-title="Join the School Of Future Africa">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signup">
 			<AuthProvider />
 
 			<div class="w-full flex flex-col gap-4">
-				<sofa-text-field
+				<SofaTextField
 					ref="email"
 					v-model="factory.email"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -12,7 +12,7 @@
 					:name="'Email'"
 					:placeholder="'Email'"
 					:error="factory.errors.email" />
-				<sofa-text-field
+				<SofaTextField
 					ref="password"
 					v-model="factory.password"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -20,7 +20,7 @@
 					:placeholder="'Password'"
 					:name="'Password'"
 					:error="factory.errors.password" />
-				<sofa-text-field
+				<SofaTextField
 					ref="confirm_new_password"
 					v-model="factory.cPassword"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -31,30 +31,30 @@
 			</div>
 
 			<div class="flex flex-col items-center gap-2">
-				<sofa-checkbox v-model="factory.termsAccepted">
+				<SofaCheckbox v-model="factory.termsAccepted">
 					<span class="text-grayColor text-left">
 						I have read and accepted SOFA’s
 						<a class="text-primaryBlue hover:underline">Terms of Service</a>
 						<span> and </span>
 						<a class="text-primaryBlue hover:underline">Privacy Policy</a>
 					</span>
-				</sofa-checkbox>
+				</SofaCheckbox>
 			</div>
 
 			<div class="w-full flex flex-col">
-				<sofa-button :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit">
+				<SofaButton :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit">
 					Sign Up
-				</sofa-button>
+				</SofaButton>
 			</div>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<sofa-normal-text :color="'text-grayColor'">Have an account?</sofa-normal-text>
+			<SofaNormalText :color="'text-grayColor'">Have an account?</SofaNormalText>
 			<router-link to="/auth/login">
-				<sofa-normal-text :color="'!text-primaryBlue'">Sign in</sofa-normal-text>
+				<SofaNormalText :color="'!text-primaryBlue'">Sign in</SofaNormalText>
 			</router-link>
 		</div>
-	</auth-layout>
+	</AuthLayout>
 </template>
 
 <script lang="ts">

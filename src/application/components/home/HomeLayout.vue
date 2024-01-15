@@ -1,5 +1,5 @@
 <template>
-	<sub-page-layout v-if="!index && !Logic.Common.isLarge">
+	<SubPageLayout v-if="!index && !Logic.Common.isLarge">
 		<div class="w-full h-full flex-1 flex flex-col justify-start relative">
 			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
@@ -11,8 +11,8 @@
 				<slot :user="user!" />
 			</div>
 		</div>
-	</sub-page-layout>
-	<dashboard-layout v-else :topbar-options="{ title }">
+	</SubPageLayout>
+	<DashboardLayout v-else :topbar-options="{ title }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
@@ -165,7 +165,7 @@
 				<SofaButton :has-shadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
 			</div>
 		</template>
-	</dashboard-layout>
+	</DashboardLayout>
 </template>
 
 <script setup lang="ts">

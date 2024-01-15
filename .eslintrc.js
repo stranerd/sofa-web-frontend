@@ -43,8 +43,8 @@ module.exports = {
 			'error',
 			'PascalCase',
 			{
-				registeredComponentsOnly: true,
-				ignores: [],
+				registeredComponentsOnly: false,
+				ignores: ['math-field', 'metainfo', 'router-link', 'router-view', 'transition'],
 			},
 		],
 	},

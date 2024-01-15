@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout layout-style="!justify-between" :hide="{ top: true, bottom: true }">
 		<QuizWrapper :id="$route.params.id as string">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz
@@ -40,7 +40,7 @@
 				</Quiz>
 			</template>
 		</QuizWrapper>
-	</expanded-layout>
+	</ExpandedLayout>
 	<SofaModal v-if="showInfoModal">
 		<div class="flex flex-col p-4 mdlg:p-6 gap-6 items-center justify-center">
 			<div class="w-full flex flex-col gap-2 items-start">

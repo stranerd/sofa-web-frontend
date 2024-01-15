@@ -1,7 +1,7 @@
 <template>
 	<LibraryLayout title="Courses">
 		<template v-if="data.length">
-			<sofa-activity-card
+			<SofaActivityCard
 				v-for="activity in data"
 				:key="activity.id"
 				:activity="activity"
@@ -9,15 +9,15 @@
 				:custom-class="'mdlg:!bg-white shadow-custom cursor-pointer relative'"
 				@click="openCourse(activity)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<sofa-icon
+					<SofaIcon
 						:name="'more-options-horizontal'"
 						:custom-class="'h-[6px]'"
 						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
 				</div>
-			</sofa-activity-card>
+			</SofaActivityCard>
 		</template>
 
-		<sofa-empty-state
+		<SofaEmptyState
 			v-else
 			:title="'You have no course here'"
 			:action-label="'Explore'"

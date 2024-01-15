@@ -1,10 +1,10 @@
 <template>
-	<auth-layout title="Welcome back" sub-title="Let the progress continue">
+	<AuthLayout title="Welcome back" sub-title="Let the progress continue">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signin">
 			<AuthProvider />
 
 			<div class="w-full flex flex-col gap-4">
-				<sofa-text-field
+				<SofaTextField
 					ref="email"
 					v-model="factory.email"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -12,7 +12,7 @@
 					:name="'Email'"
 					:placeholder="'Email'"
 					:error="factory.errors.email" />
-				<sofa-text-field
+				<SofaTextField
 					ref="password"
 					v-model="factory.password"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -23,25 +23,23 @@
 			</div>
 
 			<div class="w-full flex flex-col">
-				<sofa-button :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit">
-					Login
-				</sofa-button>
+				<SofaButton :disabled="!factory.valid" :custom-class="'w-full'" :padding="'md:py-4 py-3'" type="submit"> Login </SofaButton>
 			</div>
 		</form>
 
 		<div class="w-full flex items-center justify-center pt-3">
 			<router-link to="/auth/forgot">
-				<sofa-normal-text :color="'!text-primaryBlue'">Forgot password?</sofa-normal-text>
+				<SofaNormalText :color="'!text-primaryBlue'">Forgot password?</SofaNormalText>
 			</router-link>
 		</div>
 
 		<div class="flex items-center gap-2 pt-3">
-			<sofa-normal-text :color="'text-grayColor'">Don’t have an account?</sofa-normal-text>
+			<SofaNormalText :color="'text-grayColor'">Don’t have an account?</SofaNormalText>
 			<router-link to="/auth/register">
-				<sofa-normal-text :color="'!text-primaryBlue'">Sign up</sofa-normal-text>
+				<SofaNormalText :color="'!text-primaryBlue'">Sign up</SofaNormalText>
 			</router-link>
 		</div>
-	</auth-layout>
+	</AuthLayout>
 </template>
 
 <script lang="ts">

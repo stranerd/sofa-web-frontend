@@ -1,5 +1,5 @@
 <template>
-	<expanded-layout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layout-style="mdlg:pt-6">
+	<ExpandedLayout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layout-style="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="user.bio.name.full" />
@@ -135,7 +135,7 @@
 				</div>
 			</div>
 		</template>
-	</expanded-layout>
+	</ExpandedLayout>
 </template>
 
 <script lang="ts">
