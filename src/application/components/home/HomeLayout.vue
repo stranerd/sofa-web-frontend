@@ -175,9 +175,9 @@ import { useConversationsList, useCreateConversation } from '@app/composables/co
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
+import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
-import { formatNumber } from 'valleyed'
 
 const props = withDefaults(
 	defineProps<{
@@ -220,5 +220,6 @@ const options = computed(() => [
 				{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
 			]
 		: []),
+	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes', route: '/classes' }] : []),
 ])
 </script>

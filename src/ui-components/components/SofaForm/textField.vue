@@ -90,7 +90,7 @@ const defaultValueRef = toRef(props, 'defaultValue')
 watch(
 	defaultValueRef,
 	() => {
-		content.value = props.defaultValue
+		if (props.defaultValue) content.value = props.defaultValue
 	},
 	{ immediate: true },
 )
@@ -109,15 +109,19 @@ const checkValidation = () => {
 
 watch(content, () => checkValidation)
 
-watch(props, () => {
-	if (props.updateValue) {
-		if (props.updateValue == 'empty') {
-			content.value = ''
-		} else {
-			content.value = props.updateValue
+watch(
+	props,
+	() => {
+		if (props.updateValue) {
+			if (props.updateValue == 'empty') {
+				content.value = ''
+			} else {
+				content.value = props.updateValue
+			}
 		}
-	}
-})
+	},
+	{ immediate: true },
+)
 
 const isNumber = (evt: any) => {
 	if (props.type != 'tel') return true

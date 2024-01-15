@@ -22,15 +22,14 @@
 				<router-link
 					v-for="tab in tabs"
 					:key="tab.name"
-					:class="`py-4 flex items-center justify-center gap-2 ${
-						Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''
-					}`"
+					class="py-4 flex items-center justify-center gap-2"
+					:class="Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''"
 					:to="tab.path">
 					<SofaIcon
 						:name="tab.icon"
+						class="h-[18px]"
 						:class="{
 							'!fill-primaryPurple': Logic.Common.tabIsActive(tab.path),
-							[tab.icon_size]: true,
 							'fill-bodyBlack': true,
 						}" />
 					<SofaNormalText
@@ -201,16 +200,26 @@ const tabs = computed(() => [
 		icon: 'home',
 		icon_size: 'h-[18px]',
 	},
-	...(userType.value.isOrg
-		? []
-		: [
+	...(!userType.value.isOrg
+		? [
 				{
 					name: 'Chat',
 					path: '/chats',
 					icon: 'chat',
 					icon_size: 'h-[18px]',
 				},
-			]),
+			]
+		: []),
+	...(userType.value.isStudent
+		? [
+				{
+					name: 'Classes',
+					path: '/classes',
+					icon: 'classes',
+					icon_size: 'h-[18px]',
+				},
+			]
+		: []),
 	{
 		name: 'Library',
 		path: '/library',
