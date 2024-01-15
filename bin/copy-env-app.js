@@ -1,4 +1,4 @@
-const fs = require('fs')
+import * as fs from 'fs'
 
 if (fs.existsSync('env.json')) {
 	const content = fs.readFileSync('env.json').toString()
