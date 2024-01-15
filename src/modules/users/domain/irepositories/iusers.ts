@@ -13,4 +13,5 @@ export interface IUserRepository {
 	updateSocials: (socials: UserSocialsType) => Promise<UserEntity>
 	updateLocation: (location: UserLocation) => Promise<UserEntity>
 	updateEditingQuizzes: (quizzes: UserAccount['editing']['quizzes']) => Promise<UserEntity>
+	updateSavedClasses: (data: { classes: string[]; add: boolean }) => Promise<UserEntity>
 }

@@ -98,6 +98,9 @@ export interface UserAccount {
 	editing: {
 		quizzes: { id: string; questionId: string } | null
 	}
+	saved: {
+		classes: string[]
+	}
 }
 
 export interface UserStatus {

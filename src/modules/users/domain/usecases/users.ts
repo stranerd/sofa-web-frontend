@@ -100,6 +100,10 @@ export class UsersUseCase {
 		return await this.repository.updateEditingQuizzes(quizzes)
 	}
 
+	async updateSavedClasses(data: { classes: string[]; add: boolean }) {
+		return await this.repository.updateSavedClasses(data)
+	}
+
 	async getCountries() {
 		const url = 'https://countriesnow.space/api/v0.1/countries/states'
 		const res = await new HttpClient().get<object, { data: Country[] }>(url, {})

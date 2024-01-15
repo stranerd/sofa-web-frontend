@@ -68,4 +68,8 @@ export class UserRepository implements IUserRepository {
 			quizzes,
 		})
 	}
+
+	async updateSavedClasses(data: { classes: string[]; add: boolean }) {
+		return await this.client.post<{ classes: string[]; add: boolean }, UserEntity>('/saved/classes', data)
+	}
 }
