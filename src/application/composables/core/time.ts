@@ -31,3 +31,13 @@ export const useCountdown = (skipClearOnUnmounted = false) => {
 
 	return { time, countdown }
 }
+
+export const formatCreatedAt = (timestamp: number) => {
+	const date = new Date(timestamp)
+	const options: Intl.DateTimeFormatOptions = {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	}
+	return date.toLocaleDateString('en-US', options)
+}

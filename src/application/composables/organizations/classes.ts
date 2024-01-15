@@ -132,3 +132,16 @@ export const useDeleteClass = () => {
 
 	return { loading, error, deleteClass }
 }
+
+export const useClass = (organizationId: string, classId: string) => {
+	const {
+		asyncFn: fetchClass,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const currentClass = await ClassesUseCases.find(organizationId, classId)
+		return currentClass
+	})
+
+	return { error, loading, fetchClass }
+}
