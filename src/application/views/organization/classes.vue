@@ -8,7 +8,7 @@
 				<div class="flex flex-col items-start gap-1">
 					<SofaHeaderText :content="emptyClassContent.title" size="xl" />
 					<div class="flex flex-col gap-2 py-2">
-						<div v-for="(content, index) in emptyClassContent.contents" :key="index" class="flex items-center gap-1">
+						<div v-for="(content, index) in emptyClassContent.contents" :key="index" class="flex mdlg:items-center gap-1">
 							<SofaIcon customClass="h-[16px]" name="checkmark-circle" />
 							<SofaNormalText :content="content" color="text-grayColor" />
 						</div>
