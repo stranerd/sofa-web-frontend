@@ -94,16 +94,12 @@ useMeta(
 	})),
 )
 
-const { user, userType } = useAuth()
+const { user } = useAuth()
 
 const options = computed(() => [
 	{ title: 'Lessons', icon: 'lessons', route: '/lessons' },
-	...(userType.value.isOrg
-		? [
-				{ title: 'Announcements', icon: 'announcement', route: '/announcements' },
-				{ title: 'Schedule', icon: 'calendar', route: '/schedules' },
-				{ title: 'About', icon: 'info', route: '/about' },
-			]
-		: []),
+	{ title: 'Announcements', icon: 'announcement', route: '/announcements' },
+	{ title: 'Schedule', icon: 'calendar', route: '/schedules' },
+	{ title: 'About', icon: 'info', route: '/about' },
 ])
 </script>
