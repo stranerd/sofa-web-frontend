@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white shadow-custom rounded-custom p-4 relative">
+	<router-link :to="classObj.pageLink" class="bg-white shadow-custom rounded-custom p-4 relative">
 		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
 			<SofaImageLoader
 				:photoUrl="classObj.picture"
@@ -25,7 +25,7 @@
 				<SofaIcon name="more-options-horizontal" class="h-[6px]" @click.stop="moreOptionsHandler" />
 			</div>
 		</div>
-	</div>
+	</router-link>
 </template>
 
 <script lang="ts" setup>

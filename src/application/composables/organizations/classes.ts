@@ -1,7 +1,7 @@
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 import { addToArray } from 'valleyed'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
@@ -131,4 +131,54 @@ export const useDeleteClass = () => {
 	)
 
 	return { loading, error, deleteClass }
+}
+
+const singleClassStore = {} as Record<
+	string,
+	{
+		class: Ref<ClassEntity | null>
+		listener: ReturnType<typeof useListener>
+	}
+>
+
+export const useClass = (organizationId: string, classId: string) => {
+	const key = `${organizationId}-${classId}`
+	singleClassStore[key] ??= {
+		class: ref(null),
+		listener: useListener(async () =>
+			ClassesUseCases.listenToOne(organizationId, classId, {
+				created: async (entity) => {
+					singleClassStore[key].class.value = entity
+				},
+				updated: async (entity) => {
+					singleClassStore[key].class.value = entity
+				},
+				deleted: async (entity) => {
+					singleClassStore[key].class.value = entity
+				},
+			}),
+		),
+	}
+
+	const {
+		asyncFn: fetchClass,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(
+		async () => {
+			singleClassStore[key].class.value = await ClassesUseCases.find(organizationId, classId)
+		},
+		{ key: `organizations/classes/${key}` },
+	)
+
+	onMounted(async () => {
+		if (!called.value) await fetchClass()
+		await singleClassStore[key].listener.start()
+	})
+	onUnmounted(async () => {
+		await singleClassStore[key].listener.close()
+	})
+
+	return { ...singleClassStore[key], error, loading }
 }
