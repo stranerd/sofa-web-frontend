@@ -1,6 +1,6 @@
 <template>
 	<SettingsLayout title="Profile">
-		<setting-profile />
+		<SettingProfile />
 	</SettingsLayout>
 </template>
 

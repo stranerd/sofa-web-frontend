@@ -1,6 +1,6 @@
 <template>
 	<SettingsLayout title="Wallet">
-		<setting-wallet />
+		<SettingWallet />
 	</SettingsLayout>
 </template>
 

@@ -57,7 +57,7 @@
 				:disabled="true"
 				:border-color="'border-transparent'" />
 
-			<account-setup :is-profile-phone="true" />
+			<AccountSetup :is-profile-phone="true" />
 		</div>
 
 		<div v-if="!userType.isOrg" id="type" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
@@ -65,7 +65,7 @@
 				{{ userType.isTeacher ? 'Experience' : 'Education' }}
 			</sofa-header-text>
 
-			<account-setup :is-profile-education="true" />
+			<AccountSetup :is-profile-education="true" />
 		</div>
 
 		<div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">

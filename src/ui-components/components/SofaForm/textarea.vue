@@ -1,8 +1,8 @@
 <template>
 	<div class="flex w-full flex-col content">
-		<sofa-normal-text v-if="hasTitle" custom-class="!pb-4 font-bold">
+		<SofaNormalText v-if="hasTitle" custom-class="!pb-4 font-bold">
 			<slot name="title" />
-		</sofa-normal-text>
+		</SofaNormalText>
 		<VueEditor
 			v-if="richEditor"
 			v-model="comp"

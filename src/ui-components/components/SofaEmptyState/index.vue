@@ -1,14 +1,14 @@
 <template>
 	<div :class="`w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-custom bg-primaryPurple ${customClass}`">
-		<sofa-icon :custom-class="icon ? icon.size : 'h-[28px]'" :name="icon ? icon.name : 'attention-white'" />
+		<SofaIcon :custom-class="icon ? icon.size : 'h-[28px]'" :name="icon ? icon.name : 'attention-white'" />
 		<div class="w-full flex flex-col gap-2 justify-center items-center py-2">
-			<sofa-header-text :color="'text-white'" :content="title" :custom-class="`!font-semibold ${titleStyle}`" />
-			<sofa-normal-text
+			<SofaHeaderText :color="'text-white'" :content="title" :custom-class="`!font-semibold ${titleStyle}`" />
+			<SofaNormalText
 				:color="'text-white'"
 				:content="subTitle"
 				:custom-class="'w-full flex !font-lighter flex-row items-center text-center justify-center '" />
 		</div>
-		<sofa-button
+		<SofaButton
 			v-if="action"
 			:custom-class="'!whitespace-nowrap'"
 			:bg-color="'bg-white'"
@@ -16,7 +16,7 @@
 			:text-color="'text-deepGray !font-semibold'"
 			@click="action ? action() : null">
 			{{ actionLabel }}
-		</sofa-button>
+		</SofaButton>
 	</div>
 </template>
 <script lang="ts">

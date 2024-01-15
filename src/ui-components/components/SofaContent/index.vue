@@ -2,9 +2,9 @@
 	<div class="w-full flex flex-col gap-3 pb-4">
 		<div class="flex flex-row items-center justify-between">
 			<div class="flex flex-row items-center gap-3">
-				<sofa-normal-text> {{ data.sections.length }} sections </sofa-normal-text>
+				<SofaNormalText> {{ data.sections.length }} sections </SofaNormalText>
 				<span :class="`h-[5px] w-[5px] rounded-full bg-bodyBlack`"> </span>
-				<sofa-normal-text>{{ data.materialsCount }} materials</sofa-normal-text>
+				<SofaNormalText>{{ data.materialsCount }} materials</SofaNormalText>
 			</div>
 
 			<!-- <sofa-normal-text :color="'text-primaryPink'">
@@ -16,13 +16,13 @@
 			<div
 				class="w-full bg-lightGray cursor-pointer rounded-custom px-4 py-4 flex flex-row items-center justify-between"
 				@click.stop="section.opened ? (section.opened = false) : (section.opened = true)">
-				<sofa-normal-text :custom-class="'!font-bold text-left !line-clamp-1'">
+				<SofaNormalText :custom-class="'!font-bold text-left !line-clamp-1'">
 					{{ section.title }}
-				</sofa-normal-text>
+				</SofaNormalText>
 
 				<div class="flex flex-row items-center gap-2">
-					<sofa-normal-text>{{ section.data.length }} materials </sofa-normal-text>
-					<sofa-icon :custom-class="'h-[7px]'" :name="section.opened ? 'chevron-up' : 'chevron-down'" />
+					<SofaNormalText>{{ section.data.length }} materials </SofaNormalText>
+					<SofaIcon :custom-class="'h-[7px]'" :name="section.opened ? 'chevron-up' : 'chevron-down'" />
 				</div>
 			</div>
 
@@ -32,28 +32,28 @@
 					:key="i"
 					:class="`w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row items-center justify-between   `">
 					<div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''}`">
-						<sofa-icon :custom-class="'h-[42px]'" :name="`${eachData.type.toLowerCase()}-content`" />
+						<SofaIcon :custom-class="'h-[42px]'" :name="`${eachData.type.toLowerCase()}-content`" />
 						<div class="flex flex-col gap-1">
-							<sofa-normal-text :custom-class="'!font-bold text-left  !line-clamp-1'">{{ eachData.title }}</sofa-normal-text>
+							<SofaNormalText :custom-class="'!font-bold text-left  !line-clamp-1'">{{ eachData.title }}</SofaNormalText>
 							<div class="flex flex-row items-center gap-2">
-								<sofa-normal-text
+								<SofaNormalText
 									v-if="!Logic.Common.isOnlyMobile"
 									:color="'text-grayColor'"
 									:custom-class="'text-left !line-clamp-1'">
 									{{ eachData.type }}
-								</sofa-normal-text>
+								</SofaNormalText>
 								<span
 									v-if="!Logic.Common.isOnlyMobile"
 									:class="`h-[5px] w-[5px] rounded-full bg-grayColor  hidden md:!inline-block`">
 								</span>
-								<sofa-normal-text :color="'text-grayColor'" :custom-class="'text-left !line-clamp-1'">
+								<SofaNormalText :color="'text-grayColor'" :custom-class="'text-left !line-clamp-1'">
 									{{ eachData.sub }}
-								</sofa-normal-text>
+								</SofaNormalText>
 							</div>
 						</div>
 					</div>
 
-					<sofa-icon v-if="!hasAccess" :custom-class="'h-[40px]'" :name="'locked-content'" />
+					<SofaIcon v-if="!hasAccess" :custom-class="'h-[40px]'" :name="'locked-content'" />
 				</div>
 			</template>
 		</div>

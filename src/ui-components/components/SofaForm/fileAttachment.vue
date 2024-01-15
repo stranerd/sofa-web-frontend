@@ -29,10 +29,10 @@
 					:accept="accept"
 					:multiple="isMultiple"
 					@change="uploadHandler" />
-				<sofa-icon :name="`${iconName}`" :custom-class="'h-[15px]'" />
-				<sofa-normal-text color="text-paragraphTextLight" custom-class="w-full text-left line-clamp-1">
+				<SofaIcon :name="`${iconName}`" :custom-class="'h-[15px]'" />
+				<SofaNormalText color="text-paragraphTextLight" custom-class="w-full text-left line-clamp-1">
 					{{ selectedFileName != '' ? selectedFileName : placeholder }}
-				</sofa-normal-text>
+				</SofaNormalText>
 			</div>
 		</template>
 	</div>

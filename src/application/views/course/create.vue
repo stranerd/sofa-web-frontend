@@ -81,7 +81,7 @@
 			<!-- create course for smaller screens -->
 			<template v-if="showSettingModal">
 				<div class="w-full mdlg:!hidden flex-col bg-white py-2 px-4 md:!flex">
-					<course-settings
+					<CourseSettings
 						:course="SingleCourse"
 						:close="() => (showSettingModal = false)"
 						@on-course-updated="handleCourseSettingSaved" />
@@ -109,7 +109,7 @@
 						<div class="w-full flex flex-row items-center justify-center">
 							<sofa-header-text> Add study material </sofa-header-text>
 						</div>
-						<new-course-material />
+						<NewCourseMaterial />
 					</div>
 				</template>
 				<template v-if="selectedMaterial?.type == 'quiz'">
@@ -210,11 +210,11 @@
 					</div>
 
 					<div v-if="modalData.content == 'add_material'" class="w-full flex flex-col px-4 pb-4">
-						<new-course-material v-if="SingleCourse" @on-item-selected="handleAddMaterialChanged" />
+						<NewCourseMaterial v-if="SingleCourse" @on-item-selected="handleAddMaterialChanged" />
 					</div>
 
 					<div v-if="modalData.content == 'add_video'" class="w-full flex flex-col px-4 pb-4">
-						<add-video />
+						<AddVideo />
 					</div>
 
 					<sofa-course-details
@@ -253,7 +253,7 @@
 							SingleCourse ? 'Settings' : 'Create a course'
 						}}</sofa-header-text>
 
-						<course-settings
+						<CourseSettings
 							:course="SingleCourse"
 							:close="
 								() => {

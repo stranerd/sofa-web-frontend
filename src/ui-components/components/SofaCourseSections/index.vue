@@ -9,9 +9,9 @@
 								class="w-full flex flex-row items-center justify-between cursor-pointer"
 								@click="option?.opened ? (option.opened = false) : (option.opened = true)">
 								<div class="flex flex-row items-center gap-2">
-									<sofa-normal-text v-if="!option.edit" :custom-class="'!font-bold'">{{
+									<SofaNormalText v-if="!option.edit" :custom-class="'!font-bold'">{{
 										option.name == 'unsectioned' ? 'Unsectioned' : option.name
-									}}</sofa-normal-text>
+									}}</SofaNormalText>
 									<input
 										v-else
 										v-model="option.name"
@@ -22,17 +22,17 @@
 										@blur="option.edit = false" />
 								</div>
 								<div class="flex flex-row items-center gap-3">
-									<sofa-icon
+									<SofaIcon
 										v-if="option.name != 'unsectioned'"
 										:custom-class="'h-[15px] cursor-pointer'"
 										:name="'edit-gray'"
 										@click.stop="option.edit = true" />
-									<sofa-icon
+									<SofaIcon
 										v-if="option.name != 'unsectioned'"
 										:custom-class="'h-[15px] cursor-pointer'"
 										:name="'trash-gray'"
 										@click.stop="removeSection(index)" />
-									<sofa-icon
+									<SofaIcon
 										:custom-class="'h-[7px] cursor-pointer'"
 										:name="option.opened ? 'chevron-up' : 'chevron-down'" />
 								</div>
@@ -64,8 +64,8 @@
 												}
 											">
 											<div class="flex flex-row items-center gap-2">
-												<sofa-icon :custom-class="'h-[17px]'" :name="element.type" />
-												<sofa-normal-text
+												<SofaIcon :custom-class="'h-[17px]'" :name="element.type" />
+												<SofaNormalText
 													class="px-3 !line-clamp-2 text-left whitespace-nowrap overflow-x-hidden"
 													:content="element.name" />
 											</div>
@@ -77,7 +77,7 @@
                         :name="'trash-gray'"
                       /> -->
 
-												<sofa-icon :custom-class="'h-[19px] handle'" :name="'reorder-gray'" />
+												<SofaIcon :custom-class="'h-[19px] handle'" :name="'reorder-gray'" />
 											</div>
 										</div>
 									</template>
@@ -93,8 +93,8 @@
 											handleItemSelected()
 										}
 									">
-									<sofa-icon :custom-class="'h-[17px]'" :name="'box-add-purple'" />
-									<sofa-normal-text :color="'text-primaryPurple'"> Add study material </sofa-normal-text>
+									<SofaIcon :custom-class="'h-[17px]'" :name="'box-add-purple'" />
+									<SofaNormalText :color="'text-primaryPurple'"> Add study material </SofaNormalText>
 								</div>
 							</template>
 						</template>
@@ -103,8 +103,8 @@
 			</template>
 
 			<div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
-				<sofa-icon :custom-class="'h-[17px]'" :name="'box-add-pink'" />
-				<sofa-normal-text :color="'text-primaryPink'"> Add section </sofa-normal-text>
+				<SofaIcon :custom-class="'h-[17px]'" :name="'box-add-pink'" />
+				<SofaNormalText :color="'text-primaryPink'"> Add section </SofaNormalText>
 			</div>
 		</div>
 	</div>

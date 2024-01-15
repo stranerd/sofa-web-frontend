@@ -2,56 +2,56 @@
 	<div v-if="data" class="w-full flex flex-col h-full gap-4 relative">
 		<div
 			class="flex flex-row gap-2 justify-between items-center px-4 py-4 mdlg:!pt-0 border-b sticky top-0 left-0 bg-white border-[#F2F5F8]">
-			<sofa-normal-text :custom-class="'!text-sm !font-bold'"> Details </sofa-normal-text>
-			<sofa-icon :custom-class="'h-[19px] mdlg:!hidden '" :name="'circle-close'" @click="close()" />
+			<SofaNormalText :custom-class="'!text-sm !font-bold'"> Details </SofaNormalText>
+			<SofaIcon :custom-class="'h-[19px] mdlg:!hidden '" :name="'circle-close'" @click="close()" />
 		</div>
 		<div class="flex flex-col gap-3 h-full w-full px-4">
 			<template v-if="type == 'quiz'">
-				<sofa-image-loader :custom-class="'w-full rounded-custom h-[200px]'" :photo-url="data.image_url" />
+				<SofaImageLoader :custom-class="'w-full rounded-custom h-[200px]'" :photo-url="data.image_url" />
 
-				<sofa-normal-text :custom-class="'text-left font-bold'">
+				<SofaNormalText :custom-class="'text-left font-bold'">
 					{{ data.title }}
-				</sofa-normal-text>
+				</SofaNormalText>
 
 				<div class="w-full flex items-center gap-2 flex-row">
-					<sofa-normal-text :color="'text-primaryPurple'">
+					<SofaNormalText :color="'text-primaryPurple'">
 						{{ data.type }}
-					</sofa-normal-text>
+					</SofaNormalText>
 					<span class="w-[4px] h-[4px] rounded-full bg-primaryPurple"></span>
-					<sofa-normal-text :color="'text-primaryPurple'">
+					<SofaNormalText :color="'text-primaryPurple'">
 						{{ data.questions }}
-					</sofa-normal-text>
+					</SofaNormalText>
 				</div>
 
-				<sofa-normal-text :custom-class="'text-left'">
+				<SofaNormalText :custom-class="'text-left'">
 					{{ data.description }}
-				</sofa-normal-text>
+				</SofaNormalText>
 
 				<div class="w-full flex flex-col gap-2">
 					<div class="flex flex-row gap-1 items-center">
-						<sofa-ratings v-model="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
-						<sofa-normal-text> {{ data.ratings.avg }} </sofa-normal-text>
-						<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ data.ratings.count }} ratings) </sofa-normal-text>
+						<SofaRatings v-model="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
+						<SofaNormalText> {{ data.ratings.avg }} </SofaNormalText>
+						<SofaNormalText :color="'text-grayColor pl-2'"> ({{ data.ratings.count }} ratings) </SofaNormalText>
 					</div>
 
 					<div class="w-full flex flex-row items-center">
 						<div class="gap-2 flex flex-row items-center">
-							<sofa-avatar :size="'20'" :photo-url="data.user.photoUrl" />
-							<sofa-normal-text>
+							<SofaAvatar :size="'20'" :photo-url="data.user.photoUrl" />
+							<SofaNormalText>
 								{{ data.user.name }}
-							</sofa-normal-text>
+							</SofaNormalText>
 						</div>
 					</div>
 
 					<div class="w-full flex flex-row items-center gap-2">
-						<sofa-icon :custom-class="'h-[16px]'" :name="'calendar-black'" />
-						<sofa-normal-text> Last updated {{ data.last_updated }} </sofa-normal-text>
+						<SofaIcon :custom-class="'h-[16px]'" :name="'calendar-black'" />
+						<SofaNormalText> Last updated {{ data.last_updated }} </SofaNormalText>
 					</div>
 				</div>
 			</template>
 
 			<template v-if="type == 'document'">
-				<sofa-text-field
+				<SofaTextField
 					ref="document_title"
 					v-model="dataReactive.title"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -63,9 +63,9 @@
 					:rules="[Logic.Form.RequiredRule]"
 					:border-color="'border-transparent'">
 					<template #title> Document title </template>
-				</sofa-text-field>
+				</SofaTextField>
 
-				<sofa-textarea
+				<SofaTextarea
 					v-model="dataReactive.description"
 					:has-title="false"
 					:text-area-style="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
@@ -73,7 +73,7 @@
 			</template>
 
 			<template v-if="type == 'image'">
-				<sofa-text-field
+				<SofaTextField
 					ref="image_title"
 					v-model="dataReactive.title"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -85,9 +85,9 @@
 					:update-value="dataReactive.title"
 					:border-color="'border-transparent'">
 					<template #title> Image title </template>
-				</sofa-text-field>
+				</SofaTextField>
 
-				<sofa-textarea
+				<SofaTextarea
 					v-model="dataReactive.description"
 					:has-title="false"
 					:text-area-style="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
@@ -95,7 +95,7 @@
 			</template>
 
 			<template v-if="type == 'video'">
-				<sofa-text-field
+				<SofaTextField
 					ref="video_title"
 					v-model="dataReactive.title"
 					:custom-class="'rounded-custom !bg-lightGray'"
@@ -107,16 +107,16 @@
 					:update-value="dataReactive.title"
 					:border-color="'border-transparent'">
 					<template #title> Video title </template>
-				</sofa-text-field>
+				</SofaTextField>
 
-				<sofa-textarea
+				<SofaTextarea
 					v-model="dataReactive.description"
 					:has-title="false"
 					:text-area-style="'h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none'"
 					:placeholder="'Description'" />
 			</template>
 			<div v-if="type != 'quiz'" class="w-full flex flex-row items-center justify-end">
-				<sofa-button :padding="'px-4 py-2'" @click="updateFile()"> Save changes </sofa-button>
+				<SofaButton :padding="'px-4 py-2'" @click="updateFile()"> Save changes </SofaButton>
 			</div>
 		</div>
 
@@ -135,8 +135,8 @@
 						await deleteFile(data.id)
 					}
 				">
-				<sofa-icon :name="'trash'" :custom-class="'h-[16px]'" />
-				<sofa-normal-text :color="'text-primaryRed'">Delete {{ type }}</sofa-normal-text>
+				<SofaIcon :name="'trash'" :custom-class="'h-[16px]'" />
+				<SofaNormalText :color="'text-primaryRed'">Delete {{ type }}</SofaNormalText>
 			</div>
 		</div>
 	</div>

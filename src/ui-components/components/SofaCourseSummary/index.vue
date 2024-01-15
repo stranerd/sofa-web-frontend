@@ -1,46 +1,46 @@
 <template>
 	<div v-if="data" class="flex flex-col gap-3 h-full w-full px-4">
-		<sofa-image-loader
+		<SofaImageLoader
 			:custom-class="'w-full rounded-custom h-[200px]'"
 			:photo-url="data.photo ? data.photo.link : '/images/default.png'" />
 
-		<sofa-normal-text :custom-class="'text-left font-bold'">
+		<SofaNormalText :custom-class="'text-left font-bold'">
 			{{ data.title }}
-		</sofa-normal-text>
+		</SofaNormalText>
 
 		<div class="w-full flex items-center gap-2 flex-row">
-			<sofa-normal-text :color="'text-primaryPurplePink'">
+			<SofaNormalText :color="'text-primaryPurplePink'">
 				{{ data.sections.length }} section{{ data.sections.length > 1 ? 's' : '' }}
-			</sofa-normal-text>
+			</SofaNormalText>
 			<span class="w-[4px] h-[4px] rounded-full bg-primaryPurplePink"></span>
-			<sofa-normal-text :color="'text-primaryPurplePink'">
+			<SofaNormalText :color="'text-primaryPurplePink'">
 				{{ data.coursables.length }} material{{ data.coursables.length > 1 ? 's' : '' }}
-			</sofa-normal-text>
+			</SofaNormalText>
 		</div>
 
-		<sofa-normal-text :custom-class="'text-left'">
+		<SofaNormalText :custom-class="'text-left'">
 			{{ data.description }}
-		</sofa-normal-text>
+		</SofaNormalText>
 
 		<div class="w-full flex flex-col gap-3">
 			<div class="flex flex-row gap-1 items-center">
-				<sofa-ratings v-model="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
-				<sofa-normal-text>{{ data.ratings.avg }}</sofa-normal-text>
-				<sofa-normal-text :color="'text-grayColor pl-2'"> ({{ data.ratings.count }} ratings) </sofa-normal-text>
+				<SofaRatings v-model="data.ratings.avg" :size="'h-[14px] mdlg:!h-[15px]'" />
+				<SofaNormalText>{{ data.ratings.avg }}</SofaNormalText>
+				<SofaNormalText :color="'text-grayColor pl-2'"> ({{ data.ratings.count }} ratings) </SofaNormalText>
 			</div>
 
 			<div class="w-full flex flex-row items-center">
 				<div class="gap-2 flex flex-row items-center">
-					<sofa-avatar :size="'20'" :photo-url="data.user.bio.photo?.link" />
-					<sofa-normal-text>
+					<SofaAvatar :size="'20'" :photo-url="data.user.bio.photo?.link" />
+					<SofaNormalText>
 						{{ data.user.bio.name.full }}
-					</sofa-normal-text>
+					</SofaNormalText>
 				</div>
 			</div>
 
 			<div class="w-full flex flex-row items-center gap-2">
-				<sofa-icon :custom-class="'h-[16px]'" :name="'calendar-black'" />
-				<sofa-normal-text> Last updated {{ formatTime(data.updatedAt) }} </sofa-normal-text>
+				<SofaIcon :custom-class="'h-[16px]'" :name="'calendar-black'" />
+				<SofaNormalText> Last updated {{ formatTime(data.updatedAt) }} </SofaNormalText>
 			</div>
 		</div>
 	</div>

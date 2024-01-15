@@ -98,7 +98,7 @@
 				class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
 				<sofa-header-text :custom-class="'text-xl'" content="Add video" />
 
-				<add-video />
+				<AddVideo />
 			</div>
 		</div>
 	</sofa-modal-old>

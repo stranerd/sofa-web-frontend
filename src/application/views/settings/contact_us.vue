@@ -1,6 +1,6 @@
 <template>
 	<SettingsLayout title="Contact Us">
-		<setting-contact />
+		<SettingContact />
 	</SettingsLayout>
 </template>
 

@@ -7,7 +7,7 @@
 					<sofa-normal-text :custom-class="'!font-bold'" content="Filter" />
 				</div>
 
-				<marketplace-filter v-model="selectedOptions" />
+				<MarketplaceFilter v-model="selectedOptions" />
 			</div>
 		</template>
 
@@ -167,7 +167,7 @@
 						<sofa-icon :custom-class="'h-[19px]'" :name="'circle-close'" @click="showFilter = false" />
 					</div>
 
-					<marketplace-filter v-model="selectedOptions" :close="() => (showFilter = false)" />
+					<MarketplaceFilter v-model="selectedOptions" :close="() => (showFilter = false)" />
 				</div>
 			</sofa-modal-old>
 		</template>
