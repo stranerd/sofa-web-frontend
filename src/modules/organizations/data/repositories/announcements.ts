@@ -21,13 +21,13 @@ export class AnnouncementRepository implements IAnnouncementRepository {
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper(r)!),
+			results: d.results.map((r) => this.mapper(r)),
 		}
 	}
 
 	async add(data: AnnouncementToModel) {
 		const d = await this.client.post<AnnouncementToModel, AnnouncementFromModel>('/', data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async find(id: string) {

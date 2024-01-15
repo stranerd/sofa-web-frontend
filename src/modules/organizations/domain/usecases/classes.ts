@@ -1,7 +1,7 @@
 import { Listeners, QueryParams } from '@modules/core'
+import { ClassEntity } from '../entities/classes'
 import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
-import { ClassEntity } from '../entities/classes'
 
 export class ClassesUseCase {
 	private repository: (organizationId: string) => IClassRepository
@@ -24,6 +24,13 @@ export class ClassesUseCase {
 
 	async find(organizationId: string, classId: string) {
 		return await this.repository(organizationId).find(classId)
+	}
+
+	async explore() {
+		return await this.repository('').get({
+			// TODO: add explore query params
+			all: true,
+		})
 	}
 
 	async getAll(organizationId: string) {

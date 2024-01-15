@@ -22,7 +22,7 @@ export class MemberRepository implements IMemberRepository {
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper(r)!),
+			results: d.results.map((r) => this.mapper(r)),
 		}
 	}
 

@@ -21,18 +21,18 @@ export class MessageRepository implements IMessageRepository {
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper(r)!),
+			results: d.results.map((r) => this.mapper(r)),
 		}
 	}
 
 	async add(data: MessageToModel) {
 		const d = await this.client.post<MessageToModel, MessageFromModel>('/', data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async update(id: string, data: MessageToModel) {
 		const d = await this.client.put<MessageToModel, MessageFromModel>(`/${id}`, data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async find(id: string) {
@@ -58,7 +58,7 @@ export class MessageRepository implements IMessageRepository {
 
 	async star(id: string, starred: boolean) {
 		const d = await this.client.post<unknown, MessageFromModel>(`/${id}/star`, { starred })
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async markRead() {

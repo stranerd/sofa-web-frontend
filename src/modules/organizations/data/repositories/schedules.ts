@@ -21,18 +21,18 @@ export class ScheduleRepository implements IScheduleRepository {
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper(r)!),
+			results: d.results.map((r) => this.mapper(r)),
 		}
 	}
 
 	async add(data: ScheduleToModel) {
 		const d = await this.client.post<ScheduleToModel, ScheduleFromModel>('/', data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async update(id: string, data: ScheduleToModel) {
 		const d = await this.client.put<ScheduleToModel, ScheduleFromModel>(`/${id}`, data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async find(id: string) {

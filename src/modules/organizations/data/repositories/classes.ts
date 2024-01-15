@@ -6,14 +6,25 @@ import { ClassFromModel, ClassToModel } from '../models/classes'
 export class ClassRepository implements IClassRepository {
 	private static instances: Record<string, ClassRepository> = {}
 	private client: HttpClient
+	private exploreClient: HttpClient
 	private mapper = (model: ClassFromModel | null) => (model ? new ClassEntity(model) : null) as ClassEntity
 
 	private constructor(organizationId: string) {
 		this.client = new HttpClient(`/organizations/${organizationId}/classes`)
+		this.exploreClient = new HttpClient('/organizations/classes')
 	}
 
 	static getInstance(organizationId: string) {
 		return (ClassRepository.instances[organizationId] ??= new ClassRepository(organizationId))
+	}
+
+	async explore(query: QueryParams) {
+		const d = await this.exploreClient.get<QueryParams, QueryResults<ClassFromModel>>('/explore', query)
+
+		return {
+			...d,
+			results: d.results.map((r) => this.mapper(r)),
+		}
 	}
 
 	async get(query: QueryParams) {
@@ -21,7 +32,7 @@ export class ClassRepository implements IClassRepository {
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper(r)!),
+			results: d.results.map((r) => this.mapper(r)),
 		}
 	}
 
@@ -39,7 +50,7 @@ export class ClassRepository implements IClassRepository {
 
 	async add(data: ClassToModel) {
 		const d = await this.client.post<ClassToModel, ClassFromModel>('/', data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async find(id: string) {
@@ -53,6 +64,6 @@ export class ClassRepository implements IClassRepository {
 
 	async update(id: string, data: ClassToModel) {
 		const d = await this.client.put<ClassToModel, ClassFromModel>(`/${id}`, data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 }

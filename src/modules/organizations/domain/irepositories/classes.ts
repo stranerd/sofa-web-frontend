@@ -5,6 +5,7 @@ import { ClassEntity } from '../entities/classes'
 export interface IClassRepository {
 	add: (data: ClassToModel) => Promise<ClassEntity>
 	get: (condition: QueryParams) => Promise<QueryResults<ClassEntity>>
+	explore: (condition: QueryParams) => Promise<QueryResults<ClassEntity>>
 	find: (id: string) => Promise<ClassEntity | null>
 	update: (id: string, data: ClassToModel) => Promise<ClassEntity>
 	delete: (id: string) => Promise<boolean>

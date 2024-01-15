@@ -21,18 +21,18 @@ export class QuestionRepository implements IQuestionRepository {
 
 		return {
 			...d,
-			results: d.results.map((r) => this.mapper(r)!),
+			results: d.results.map((r) => this.mapper(r)),
 		}
 	}
 
 	async add(data: QuestionToModel) {
 		const d = await this.client.post<QuestionToModel, QuestionFromModel>('/', data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async update(id: string, data: QuestionToModel) {
 		const d = await this.client.put<QuestionToModel, QuestionFromModel>(`/${id}`, data)
-		return this.mapper(d)!
+		return this.mapper(d)
 	}
 
 	async find(id: string) {
