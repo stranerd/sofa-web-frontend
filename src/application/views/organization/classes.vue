@@ -34,7 +34,9 @@
 					Create a class
 				</SofaButton>
 			</div>
-			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classObj="cl" />
+			<router-link v-for="cl in filteredClassess" :key="cl.id" :to="`/organizations/${organizationId}/classes/${cl.id}/about`">
+				<ClassCard :classObj="cl" />
+			</router-link>
 		</div>
 	</HomeLayout>
 </template>
@@ -80,6 +82,7 @@ export default defineComponent({
 			filteredClassess,
 			searchQuery,
 			createClass,
+			organizationId,
 		}
 	},
 })
