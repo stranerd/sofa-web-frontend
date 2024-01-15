@@ -18,7 +18,7 @@
 					<sofa-icon
 						:name="'more-options-horizontal'"
 						:custom-class="'h-[6px]'"
-						@click.stop="handleShowMaterialMoreOptions(activity)" />
+						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
 				</div>
 			</sofa-activity-card>
 		</template>

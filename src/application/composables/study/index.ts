@@ -10,8 +10,8 @@ export const handleShowAddMaterial = () => {
 	useModals().study.addMaterial.open({})
 }
 
-export const handleShowMaterialMoreOptions = (data: ResourceType) => {
-	useModals().study.materialMoreOptions.open({ material: data.original })
+export const handleShowMaterialMoreOptions = (event: Event, data: ResourceType) => {
+	useModals().study.materialMoreOptions.open({ material: data.original }, event)
 }
 
 const store: Record<
