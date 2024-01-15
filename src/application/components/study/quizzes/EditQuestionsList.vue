@@ -86,16 +86,16 @@
 
 <script lang="ts" setup>
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
-import { SingleUser } from 'sofa-logic'
+import { UserEntity } from '@modules/users'
+import { Differ } from 'valleyed'
 import { reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
-import { Differ } from 'valleyed'
 
 const props = defineProps<{
 	questions: QuestionEntity[]
 	quiz: QuizEntity
 	factory: QuestionFactory
-	users: Record<string, SingleUser[]>
+	users: Record<string, UserEntity[]>
 }>()
 
 const selectedQuestionId = defineModel<string>('questionId')

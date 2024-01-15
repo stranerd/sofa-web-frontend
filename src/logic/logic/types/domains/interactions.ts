@@ -18,19 +18,6 @@ export interface Tags {
 	updatedAt: number
 }
 
-export interface View {
-	hash: string
-	id: string
-	entity: {
-		id: string
-		type: string
-		userId: string
-	}
-	user: SingleUser
-	createdAt: number
-	updatedAt: number
-}
-
 export interface Review {
 	hash: string
 	id: string
@@ -41,21 +28,6 @@ export interface Review {
 	}
 	user: SingleUser
 	rating: number
-	message: string
-	createdAt: number
-	updatedAt: number
-}
-
-export interface Report {
-	__type: 'ReportEntity'
-	hash: string
-	id: string
-	entity: {
-		id: string
-		type: string
-		userId: string
-	}
-	user: SingleUser
 	message: string
 	createdAt: number
 	updatedAt: number

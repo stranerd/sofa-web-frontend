@@ -1,7 +1,7 @@
 import { EmbeddedUser } from '@modules/users'
 import { FileData } from './common'
 
-export interface SingleUser extends EmbeddedUser {}
+export type SingleUser = EmbeddedUser
 
 export interface UserVerification {
 	hash: string

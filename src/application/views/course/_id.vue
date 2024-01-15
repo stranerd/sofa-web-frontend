@@ -253,6 +253,7 @@
 <script lang="ts">
 import CourseContent from '@app/components/study/courses/content.vue'
 import { useModals } from '@app/composables/core/modals'
+import { useCreateView } from '@app/composables/interactions/views'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
 import { Conditions, Logic } from 'sofa-logic'
@@ -421,19 +422,15 @@ export default defineComponent({
 			courseContents.push(...data)
 		}
 
+		const { createView } = useCreateView()
+
 		onMounted(() => {
 			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
 			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
-			if (SingleCourse.value?.isPublished)
-				Logic.Interactions.CreateView({
-					entity: {
-						id: SingleCourse.value.id,
-						type: 'courses',
-					},
-				}).catch()
+			if (SingleCourse.value?.isPublished) createView({ id: SingleCourse.value.id, type: InteractionEntities.courses })
 		})
 
 		return {

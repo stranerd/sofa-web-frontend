@@ -1,11 +1,18 @@
-import ReportsApi from './ReportsApi'
-import ReviewsApi from './ReviewsApi'
-import TagsApi from './TagsApi'
-import ViewsApi from './ViewsApi'
+import { ModelApiService } from '../common/ModelService'
+
+export class ReviewsApi extends ModelApiService {
+	constructor() {
+		super('interactions/reviews')
+	}
+}
+
+export class TagsApi extends ModelApiService {
+	constructor() {
+		super('interactions/tags')
+	}
+}
 
 export const InteractionApi = {
 	tag: new TagsApi(),
-	reports: new ReportsApi(),
 	reviews: new ReviewsApi(),
-	views: new ViewsApi(),
 }

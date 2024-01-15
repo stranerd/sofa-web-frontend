@@ -282,7 +282,6 @@
 	</sofa-modal-old>
 </template>
 <script lang="ts">
-import { FormValidations } from '@app/composables'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic, SelectOption, Transaction } from 'sofa-logic'
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
@@ -556,7 +555,6 @@ export default defineComponent({
 		}
 
 		return {
-			FormValidations,
 			Logic,
 			transactions,
 			UserWallet,

@@ -137,7 +137,7 @@
 						:custom-class="'rounded-custom !bg-lightGray'"
 						:name="'Quiz'"
 						:placeholder="'Quiz'"
-						:rules="[FormValidations.RequiredRule]"
+						:rules="[Logic.Form.RequiredRule]"
 						:border-color="'border-transparent'"
 						:options="allQuizzes"
 						:has-title="true">
@@ -173,7 +173,6 @@
 	</sofa-modal-old>
 </template>
 <script lang="ts">
-import { FormValidations } from '@app/composables'
 import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
 import { Conditions, Logic } from 'sofa-logic'
 import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'
@@ -296,7 +295,6 @@ export default defineComponent({
 
 		return {
 			Logic,
-			FormValidations,
 			newMaterialOptions,
 			showAddVideo,
 			handleShowAddVideo,

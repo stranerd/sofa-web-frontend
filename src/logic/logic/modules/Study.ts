@@ -6,7 +6,6 @@ import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import { AddReviewInput } from '../types/forms/common'
 import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
 
@@ -46,7 +45,6 @@ export default class Study extends Common {
 	public UpdateFileForm: CreateDocumentInput | undefined
 	public MoveItemToCourseForm: AddItemToCourseInput | undefined
 	public UpdateCourseSectionForm: UpdateCourseSectionsInput | undefined
-	public AddReviewForm: AddReviewInput | undefined
 
 	public contentDetails = reactive<ContentDetails>({
 		original: null,
@@ -457,27 +455,6 @@ export default class Study extends Common {
 
 				return response.data
 			})
-	}
-
-	public AddReview = () => {
-		if (this.AddReviewForm) {
-			Logic.Common.showLoading()
-			return $api.interactions.reviews
-				.post(null, this.AddReviewForm)
-				.then((response) => {
-					this.SingleReview = response.data
-					Logic.Common.hideLoading()
-					Logic.Common.showAlert({
-						message: 'Your review has been added',
-						type: 'success',
-					})
-					return response.data
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-				})
-		}
 	}
 
 	public SaveCourseChangesToLocal = (UpdateCourseSections: UpdateCourseSectionsInput) => {

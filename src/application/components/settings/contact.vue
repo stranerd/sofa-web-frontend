@@ -36,7 +36,6 @@
 	</div>
 </template>
 <script lang="ts">
-import { FormValidations } from '@app/composables'
 import { Logic } from 'sofa-logic'
 import { defineComponent, onMounted, ref } from 'vue'
 
@@ -58,7 +57,6 @@ export default defineComponent({
 			}
 		})
 		return {
-			FormValidations,
 			message,
 			sendFeedback,
 		}

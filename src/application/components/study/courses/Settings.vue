@@ -26,7 +26,7 @@
 					:custom-class="'rounded-custom !bg-lightGray'"
 					:name="'Topic'"
 					:placeholder="'Topic'"
-					:rules="[FormValidations.RequiredRule]"
+					:rules="[Logic.Form.RequiredRule]"
 					:border-color="'border-transparent'"
 					:options="allTopics"
 					:can-use-custom="true" />
@@ -130,7 +130,6 @@
 	</sofa-form-wrapper>
 </template>
 <script lang="ts">
-import { FormValidations } from '@app/composables'
 import { useAuth } from '@app/composables/auth/auth'
 import {
 	allGenericTags,
@@ -227,7 +226,6 @@ export default defineComponent({
 			auth,
 			courseSettingForm,
 			Logic,
-			FormValidations,
 			formComp,
 			courseImageUrl,
 			createCourse,

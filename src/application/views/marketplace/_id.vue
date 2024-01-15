@@ -117,9 +117,11 @@
 </template>
 
 <script lang="ts">
+import { useCreateView } from '@app/composables/interactions/views'
 import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
+import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
@@ -481,6 +483,8 @@ export default defineComponent({
 			}
 		}
 
+		const { createView } = useCreateView()
+
 		watch(SingleCourse, () => {
 			if (SingleCourse.value) {
 				setCourseData()
@@ -510,26 +514,13 @@ export default defineComponent({
 			if (contentType.value == 'course') {
 				setCourseData()
 				setSimilarContents()
-				// create course view
-				if (SingleCourse.value && SingleCourse.value.isPublished)
-					Logic.Interactions.CreateView({
-						entity: {
-							id: SingleCourse.value.id,
-							type: 'courses',
-						},
-					}).catch()
+				if (SingleCourse.value?.isPublished) createView({ id: SingleCourse.value.id, type: InteractionEntities.courses })
 			}
 
 			if (contentType.value == 'quiz') {
 				setQuizData()
 				setSimilarContents()
-				if (SingleQuiz.value && SingleQuiz.value.isPublished)
-					Logic.Interactions.CreateView({
-						entity: {
-							id: SingleQuiz.value.id,
-							type: 'quizzes',
-						},
-					}).catch()
+				if (SingleQuiz.value?.isPublished) createView({ id: SingleQuiz.value.id, type: InteractionEntities.quizzes })
 			}
 		})
 

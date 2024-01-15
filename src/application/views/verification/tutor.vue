@@ -145,7 +145,7 @@
 						:custom-class="'rounded-custom !bg-lightGray'"
 						:name="'Subject'"
 						:placeholder="'Select subject'"
-						:rules="[FormValidations.RequiredRule]"
+						:rules="[Logic.Form.RequiredRule]"
 						:border-color="'border-transparent'"
 						:options="topics.map((t) => ({ key: t.id, value: t.title }))" />
 				</div>
@@ -167,7 +167,6 @@
 </template>
 
 <script lang="ts">
-import { FormValidations } from '@app/composables'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useTopicsList } from '@app/composables/interactions/tags'
 import { createTutorRequest, tutorRequestForm } from '@app/composables/profile'
@@ -206,7 +205,6 @@ export default defineComponent({
 			states,
 			topics,
 			Logic,
-			FormValidations,
 			currentStep,
 			tutorRequestForm,
 			handleNextAction,

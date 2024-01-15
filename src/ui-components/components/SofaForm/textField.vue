@@ -41,9 +41,8 @@
 </template>
 
 <script lang="ts" setup>
-import { FormRule } from 'sofa-logic'
-import { formatNumber } from 'valleyed'
-import { onMounted, ref, toRef, watch } from 'vue'
+import { FormRule, Logic } from 'sofa-logic'
+import { ref, toRef, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 
@@ -63,7 +62,6 @@ const props = withDefaults(
 		name?: string
 		disabled?: boolean
 		updateValue?: string
-		isFormatted?: boolean
 		borderColor?: string
 		error?: string
 	}>(),
@@ -78,7 +76,6 @@ const props = withDefaults(
 		name: '',
 		disabled: false,
 		updateValue: '',
-		isFormatted: false,
 		borderColor: 'border-darkLightGray',
 		error: '',
 	},
@@ -86,148 +83,31 @@ const props = withDefaults(
 
 const content = defineModel<string>({ default: '' })
 
-const fieldType = ref('text')
-
-watch(content, () => {
-	setTimeout(() => {
-		checkValidation()
-	}, 500)
-})
+const fieldType = ref(props.type ?? 'text')
 
 const defaultValueRef = toRef(props, 'defaultValue')
 
-watch(defaultValueRef, () => {
-	content.value = props.defaultValue
-})
+watch(
+	defaultValueRef,
+	() => {
+		content.value = props.defaultValue
+	},
+	{ immediate: true },
+)
 
-onMounted(() => {
-	if (props.defaultValue) content.value = props.defaultValue
-	if (props.type) fieldType.value = props.type
-
-	if (props.isFormatted) {
-		content.value = formatNumber(parseFloat(content.value), 2)
-	}
-})
 const validationStatus = ref(true)
 const errorMessage = ref('')
 
-const isRequired = () => {
-	if (content.value) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = `${props.name} is required`
-	}
-}
-
-const isGreaterThan = (count: number) => {
-	if (content.value.length > count) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = `${props.name} must be more than ${count} characters`
-	}
-}
-
-const isLessThan = (count: number) => {
-	if (content.value.length < count) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = `${props.name} must be less than ${count} characters`
-	}
-}
-
-const isEqualsTo = (count: number) => {
-	if (content.value.length == count) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = `${props.name} must be ${count} characters`
-	}
-}
-
-const isCondition = (condition: any, errMsg?: string) => {
-	if (condition) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = errMsg ?? ''
-	}
-}
-
-const isGreaterThanOrEqualsTo = (count: number) => {
-	if (content.value.length >= count) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = `${props.name} must be more than ${count - 1} characters`
-	}
-}
-
-const isLessThanOrEqualsTo = (count: number) => {
-	if (content.value.length <= count) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = `${props.name} must be less than ${count + 1} characters`
-	}
-}
-
-const isRegex = (regex: any, errMsg?: string) => {
-	if (content.value.match(regex)) {
-		validationStatus.value = true
-	} else {
-		validationStatus.value = false
-		errorMessage.value = errMsg ?? ''
-	}
-}
-
 const checkValidation = () => {
-	if (props.rules) {
-		for (let index = 0; index < props.rules.length; index++) {
-			const rule = props.rules[index]
-			if (rule.type == 'isRequired') {
-				isRequired()
-			}
-
-			if (rule.type == 'isGreaterThan') {
-				isGreaterThan(rule.value)
-			}
-
-			if (rule.type == 'isLessThan') {
-				isLessThan(rule.value)
-			}
-
-			if (rule.type == 'isEqualsTo') {
-				isEqualsTo(rule.value)
-			}
-
-			if (rule.type == 'isGreaterThanOrEqualsTo') {
-				isGreaterThanOrEqualsTo(rule.value)
-			}
-
-			if (rule.type == 'isLessThanOrEqualsTo') {
-				isLessThanOrEqualsTo(rule.value)
-			}
-
-			if (rule.type == 'isRegex') {
-				isRegex(rule.value, rule.errorMessage)
-			}
-
-			if (rule.type == 'isCondition') {
-				isCondition(rule.value, rule.errorMessage)
-			}
-		}
-	}
+	if (props.rules)
+		Logic.Form.run(props.rules, {
+			content: content.value,
+			updateValidationStatus: (status: boolean) => (validationStatus.value = status),
+			updateErrorMessage: (message: string) => (errorMessage.value = `${props.name} ${message}`),
+		})
 }
 
-watch(content, () => {
-	checkValidation()
-	if (props.isFormatted) {
-		content.value = formatNumber(parseFloat(content.value), 2)
-	}
-})
+watch(content, () => checkValidation)
 
 watch(props, () => {
 	if (props.updateValue) {
@@ -242,7 +122,7 @@ watch(props, () => {
 const isNumber = (evt: any) => {
 	if (props.type != 'tel') return true
 
-	evt = evt ? evt : window.event
+	evt = evt ?? window.event
 	const charCode = evt.which ? evt.which : evt.keyCode
 	if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
 		evt.preventDefault()

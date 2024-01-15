@@ -122,7 +122,7 @@
 								:custom-class="'rounded-custom !bg-lightGray'"
 								:name="capitalize(addMaterialType)"
 								:placeholder="'Select material'"
-								:rules="[FormValidations.RequiredRule]"
+								:rules="[Logic.Form.RequiredRule]"
 								:border-color="'border-transparent'"
 								:options="allMaterials"
 								:has-title="true">
@@ -173,7 +173,6 @@
 
 <script lang="ts">
 import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
-import { FormValidations } from '@app/composables'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { ContentDetails, extractContent } from '@app/composables/marketplace'
 import { submitVerification, updateVerificationForm } from '@app/composables/profile'
@@ -350,7 +349,6 @@ export default defineComponent({
 			socialsFactory,
 			quizContents,
 			courseContents,
-			FormValidations,
 			updateVerificationForm,
 			selectedMaterialList,
 			showAddMaterial,

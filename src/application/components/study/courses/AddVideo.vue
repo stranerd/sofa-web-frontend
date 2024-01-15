@@ -42,7 +42,6 @@
 	</div>
 </template>
 <script lang="ts">
-import { FormValidations } from '@app/composables'
 import { Logic } from 'sofa-logic'
 import { defineComponent, reactive, ref } from 'vue'
 
@@ -65,7 +64,6 @@ export default defineComponent({
 
 		return {
 			Logic,
-			FormValidations,
 			showAddVideo,
 			videoUploadSteps,
 			addVideoForm,

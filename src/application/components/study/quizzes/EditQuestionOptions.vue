@@ -84,14 +84,15 @@
 
 <script lang="ts" setup>
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
-import { Logic, SingleUser } from 'sofa-logic'
+import { UserEntity } from '@modules/users'
+import { Logic } from 'sofa-logic'
 import { ref } from 'vue'
 
 defineProps<{
 	quiz: QuizEntity
 	question: QuestionEntity
 	factory: QuestionFactory
-	users: Record<string, SingleUser[]>
+	users: Record<string, UserEntity[]>
 }>()
 
 const emits = defineEmits<{
