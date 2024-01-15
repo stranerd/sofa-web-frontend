@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import ClassLayout from '@app/components/class/ClassLayout.vue'
+import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 </script>
