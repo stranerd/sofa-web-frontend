@@ -49,7 +49,7 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 
 	const { users: participants } = useUsersInList(computed(() => (skip.participants ? [] : store[id].game.value?.participants ?? [])))
 
-	const { asyncFn: fetchGame } = useAsyncFn(
+	const { asyncFn: fetchGame, called } = useAsyncFn(
 		async () => {
 			store[id].game.value = await Logic.Plays.GetGame(id)
 		},
@@ -135,5 +135,5 @@ export const useGame = (id: string, skip: { questions: boolean; participants: bo
 		await store[id].listener.close()
 	})
 
-	return { ...store[id], participants, start, end, join, submitAnswer }
+	return { ...store[id], fetched: called, participants, start, end, join, submitAnswer }
 }

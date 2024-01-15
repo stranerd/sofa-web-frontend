@@ -46,7 +46,7 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		),
 	}
 
-	const { asyncFn: fetchTest } = useAsyncFn(
+	const { asyncFn: fetchTest, called } = useAsyncFn(
 		async () => {
 			store[id].test.value = await Logic.Plays.GetTest(id)
 		},
@@ -116,5 +116,5 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		await store[id].listener.close()
 	})
 
-	return { ...store[id], start, end, submitAnswer }
+	return { ...store[id], fetched: called, start, end, submitAnswer }
 }

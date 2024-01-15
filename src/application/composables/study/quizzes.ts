@@ -177,6 +177,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 
 	return {
 		...store[id],
+		fetched: called,
 		members,
 		questions,
 		quizFactory,
