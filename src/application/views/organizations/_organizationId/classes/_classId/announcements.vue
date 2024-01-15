@@ -27,18 +27,31 @@
 	</ClassLayout>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
-const emptyAnnouncementContent = {
-	imageURL: '/images/empty-announcements.png',
-	title: 'Getting started with announcements',
-	contents: [
-		'Reach all students and teachers in this class.',
-		'Make announcements to a specific lesson. ',
-		'Reach anybody, anywhere, at anytime.',
-		'Faster, time-saving, and stress-free communication.',
-	],
-}
-const announcements = ref([])
+import { formatTime } from '@utils/dates'
+import { formatNumber } from 'valleyed'
+import { defineComponent, ref } from 'vue'
+
+export default defineComponent({
+	name: 'OrganizationsOrganizationIdClassesClassIdAnnouncements',
+	components: { ClassLayout },
+	routeConfig: {
+		middlewares: ['isAuthenticated'],
+	},
+	setup() {
+		const emptyAnnouncementContent = {
+			imageURL: '/images/empty-announcements.png',
+			title: 'Getting started with announcements',
+			contents: [
+				'Reach all students and teachers in this class.',
+				'Make announcements to a specific lesson. ',
+				'Reach anybody, anywhere, at anytime.',
+				'Faster, time-saving, and stress-free communication.',
+			],
+		}
+		const announcements = ref([])
+		return { announcements, emptyAnnouncementContent, formatTime, formatNumber }
+	},
+})
 </script>
