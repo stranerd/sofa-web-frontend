@@ -4,6 +4,15 @@
 	</ClassLayout>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+	name: 'OrganizationsOrganizationIdClassesClassIdLessons',
+	components: { ClassLayout },
+	routeConfig: {
+		middlewares: ['isAuthenticated'],
+	},
+})
 </script>

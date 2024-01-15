@@ -10,7 +10,7 @@
 						:photoUrl="classObj.picture">
 					</SofaImageLoader>
 					<div
-						v-for="item in [
+						v-for="(item, i) in [
 							{ title: 'Name', value: classObj.title },
 							{ title: 'Description', value: classObj.description },
 							{ title: 'Created', value: formatTime(classObj.createdAt) },
@@ -20,7 +20,7 @@
 						:key="item.title"
 						class="flex flex-col gap-2 bg-white rounded-2xl shadow-custom p-4 mdlg:bg-transparent mdlg:rounded-none mdlg:shadow-none mdlg:p-0">
 						<SofaNormalText class="text-grayColor">{{ item.title }}</SofaNormalText>
-						<SofaNormalText class="font-bold">{{ item.value }}</SofaNormalText>
+						<SofaNormalText :class="i === 0 ? 'font-bold' : ''">{{ item.value }}</SofaNormalText>
 					</div>
 				</div>
 			</div>
@@ -28,8 +28,20 @@
 	</ClassLayout>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { formatTime } from '@utils/dates'
 import { formatNumber } from 'valleyed'
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+	name: 'OrganizationsOrganizationIdClassesClassIdAbout',
+	components: { ClassLayout },
+	routeConfig: {
+		middlewares: ['isAuthenticated'],
+	},
+	setup() {
+		return { formatTime, formatNumber }
+	},
+})
 </script>

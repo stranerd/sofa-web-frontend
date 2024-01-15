@@ -6,11 +6,11 @@
 				<SofaNormalText class="!font-bold !text-base" :content="pageTitle" />
 				<span class="w-4" />
 			</div>
-			<div class="flex items-center justify-between px-4 border-b border-darkLightGray">
-				<router-link v-for="item in options" :key="item.route" :to="`${currentClass.pageLink}${item.route}`" class="py-4">
+			<div class="flex items-center gap-4 px-4 border-b border-darkLightGray overflow-x-auto">
+				<router-link v-for="item in options" :key="item.route" :to="`${currentClass.pageLink}${item.route}`" class="pb-3">
 					<SofaNormalText
 						class="text-md font-700"
-						:class="$route.path.includes(item.route) ? 'border-b-2 border-black text-deepGray pb-4' : 'text-grayColor'">
+						:class="$route.path.includes(item.route) ? 'border-b-2 border-black text-deepGray pb-3' : 'text-grayColor'">
 						{{ item.title }}
 					</SofaNormalText>
 				</router-link>
@@ -37,7 +37,7 @@
 						<router-link
 							v-for="item in options"
 							:key="item.route"
-							class="w-full flex items-center gap-3 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
+							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
 							:to="`${currentClass.pageLink}${item.route}`"
 							exactActiveClass="bg-lightBlue font-semibold">
 							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
