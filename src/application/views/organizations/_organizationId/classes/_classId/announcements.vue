@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import ClassLayout from '@app/components/class/ClassLayout.vue'
+import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 const emptyAnnouncementContent = {
 	imageURL: '/images/empty-announcements.png',
 	title: 'Getting started with announcements',

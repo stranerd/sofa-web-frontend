@@ -34,9 +34,7 @@
 					Create a class
 				</SofaButton>
 			</div>
-			<router-link v-for="cl in filteredClassess" :key="cl.id" :to="`/organizations/${organizationId}/classes/${cl.id}/about`">
-				<ClassCard :classObj="cl" />
-			</router-link>
+			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classObj="cl" />
 		</div>
 	</HomeLayout>
 </template>

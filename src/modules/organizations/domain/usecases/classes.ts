@@ -26,6 +26,10 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).find(classId)
 	}
 
+	async listenToOne(organizationId: string, classId: string, listeners: Listeners<ClassEntity>) {
+		return await this.repository(organizationId).listenToOne(classId, listeners)
+	}
+
 	async explore() {
 		return await this.repository('').get({
 			// TODO: add explore query params
