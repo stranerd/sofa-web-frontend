@@ -8,8 +8,8 @@ export class AnnouncementsUseCase {
 		this.repository = repository
 	}
 
-	async add(data: AnnouncementToModel) {
-		return await this.repository(data.organizationId, data.classId).add(data)
+	async add(organizationId: string, classId: string, data: AnnouncementToModel) {
+		return await this.repository(organizationId, classId).add(data)
 	}
 
 	async find(organizationId: string, classId: string, id: string) {

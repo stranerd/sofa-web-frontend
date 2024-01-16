@@ -26,15 +26,68 @@
 						</div>
 					</div>
 				</div>
+				<div v-else class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
+					<SofaHeaderText content="Annoucements" />
+					<div class="h-[1px] w-full bg-lightGray" />
+					<div class="flex flex-wrap gap-4 items-center justify-between pb-6">
+						<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
+							<SofaSelect
+								customClass="rounded-custom !bg-transparent border col-span-1"
+								placeholder="Lesson"
+								borderColor="border-darkLightGray"
+								:options="[{ key: '1', value: 'All lessons' }]" />
+							<SofaSelect
+								customClass="rounded-custom !bg-transparent border col-span-1"
+								placeholder="Recipient"
+								borderColor="border-darkLightGray"
+								:options="[{ key: '1', value: 'All students' }]" />
+						</div>
+						<SofaButton
+							customClass="hidden mdlg:block"
+							bgColor="bg-primaryBlue"
+							textColor="text-white"
+							padding="py-3 px-4"
+							@click="createAnnouncemnt">
+							Make an announcement
+						</SofaButton>
+					</div>
+					<AnnouncementCard
+						v-for="(announcement, index) in announcements"
+						:key="index"
+						:userId="userId"
+						:classObj="classObj"
+						:announcement="announcement" />
+					<SofaButton
+						customClass="block mdlg:hidden mt-6"
+						bgColor="bg-primaryBlue"
+						textColor="text-white"
+						padding="py-3 px-4"
+						@click="createAnnouncemnt">
+						Make an announcement
+					</SofaButton>
+				</div>
 			</template>
 			<template v-else>
 				<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 					<SofaHeaderText content="Annoucements" />
 					<div class="h-[1px] w-full bg-lightGray" />
-					<div class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
+					<div
+						v-if="!announcements.length || !classObj.isStudent(userId)"
+						class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
 						<img :src="emptyAnnouncementContent.imageURL" class="w-[84px] h-[84px]" />
 						<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 						<SofaNormalText color="text-grayColor text-center" content="No announcements" />
+					</div>
+					<div v-else>
+						<div>
+							<SofaBadge>{{ 'All' }}</SofaBadge>
+						</div>
+						<AnnouncementCard
+							v-for="(announcement, index) in announcements"
+							:key="index"
+							:userId="userId"
+							:classObj="classObj"
+							:announcement="announcement" />
 					</div>
 				</div>
 			</template>
@@ -78,7 +131,44 @@ export default defineComponent({
 				classId,
 			})
 		}
-		const announcements = ref([])
+		const announcements = ref([
+			{
+				image: '/images/freeman.png',
+				user: { name: 'David Ababio', id: '659d2ebf7d5bec30e04544d5' },
+				announcement:
+					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				lesson: 'Chemistry',
+				audience: 'Teachers',
+				time: '30mins',
+			},
+			{
+				image: '/images/jerry.png',
+				user: { name: 'Jerry', id: '1' },
+				announcement:
+					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				lesson: 'Chemistry',
+				audience: 'Teachers',
+				time: '30mins',
+			},
+			{
+				image: '/images/isaac.png',
+				user: { name: 'David Ababio', id: '1' },
+				announcement:
+					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				lesson: 'Chemistry',
+				audience: 'Teachers',
+				time: '30mins',
+			},
+			{
+				image: '/images/istar.png',
+				user: { name: 'David Ababio', id: '1' },
+				announcement:
+					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				lesson: 'Chemistry',
+				audience: 'Teachers',
+				time: '30mins',
+			},
+		])
 		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId }
 	},
 })

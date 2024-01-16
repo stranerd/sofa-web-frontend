@@ -13,6 +13,7 @@ declare module 'vue' {
     AddTutorConfirmationModal: typeof import('./../application/components/conversations/AddTutorConfirmationModal.vue')['default']
     AddTutorModal: typeof import('./../application/components/conversations/AddTutorModal.vue')['default']
     AddVideo: typeof import('./../application/components/study/courses/AddVideo.vue')['default']
+    AnnouncementCard: typeof import('./../application/components/organizations/classes/AnnouncementCard.vue')['default']
     AuthLayout: typeof import('./../application/layouts/AuthLayout.vue')['default']
     AuthProvider: typeof import('./../application/components/auth/AuthProvider.vue')['default']
     Chat: typeof import('./../application/components/conversations/Chat.vue')['default']
