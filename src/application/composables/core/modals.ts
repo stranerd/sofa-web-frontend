@@ -16,6 +16,7 @@ import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
+import MakeAnnouncement from '@app/components/organizations/classes/MakeAnnouncement.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -36,6 +37,7 @@ export const useModals = () => ({
 		editClass: { component: EditClass },
 		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
+		makeAnnouncement: { component: MakeAnnouncement },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },

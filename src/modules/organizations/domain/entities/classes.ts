@@ -62,4 +62,16 @@ export class ClassEntity extends BaseEntity implements Saleable {
 			text.toLowerCase().includes(query.toLowerCase()),
 		)
 	}
+
+	isTeacher(userId: string) {
+		return this.lessons.some((l) => l.users.teachers.includes(userId))
+	}
+
+	isStudent(userId: string) {
+		return this.members.students.includes(userId) || this.lessons.some((l) => l.users.students.includes(userId))
+	}
+
+	isAdmin(userId: string) {
+		return this.organizationId === userId
+	}
 }

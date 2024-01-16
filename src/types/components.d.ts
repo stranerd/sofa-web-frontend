@@ -45,6 +45,7 @@ declare module 'vue' {
     HomeLayout: typeof import('./../application/components/home/HomeLayout.vue')['default']
     JoinOrganizationModal: typeof import('./../application/components/organizations/members/JoinOrganizationModal.vue')['default']
     LibraryLayout: typeof import('./../application/components/study/LibraryLayout.vue')['default']
+    MakeAnnouncement: typeof import('./../application/components/organizations/classes/MakeAnnouncement.vue')['default']
     ManageAccessModal: typeof import('./../application/components/study/quizzes/ManageAccessModal.vue')['default']
     MaterialMoreOptionsModal: typeof import('./../application/components/study/MaterialMoreOptionsModal.vue')['default']
     MembersList: typeof import('./../application/components/organizations/members/MembersList.vue')['default']
