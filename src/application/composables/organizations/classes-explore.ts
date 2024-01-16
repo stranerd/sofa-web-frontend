@@ -17,8 +17,8 @@ export const useMyClassesIn = () => {
 		error,
 	} = useAsyncFn(
 		async () => {
-			store.classesIn.value = []
 			const classes = await ClassesUseCases.getMyClassesIn(id.value)
+			store.classesIn.value = []
 			classes.results.forEach((r) =>
 				addToArray(
 					store.classesIn.value,
@@ -39,14 +39,15 @@ export const useMyClassesIn = () => {
 }
 
 export const useExploreClasses = () => {
+	const searchQuery = ref('')
 	const {
 		asyncFn: fetchClasses,
 		loading,
 		error,
 	} = useAsyncFn(
 		async () => {
+			const classes = await ClassesUseCases.explore(searchQuery.value)
 			store.classesExplore.value = []
-			const classes = await ClassesUseCases.explore()
 			classes.results.forEach((r) =>
 				addToArray(
 					store.classesExplore.value,
@@ -63,5 +64,5 @@ export const useExploreClasses = () => {
 		await fetchClasses()
 	})
 
-	return { classes: store.classesExplore, loading, error }
+	return { classes: store.classesExplore, searchQuery, loading, error, fetchClasses }
 }

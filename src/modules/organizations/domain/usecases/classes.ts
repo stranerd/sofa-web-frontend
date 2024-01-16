@@ -30,7 +30,8 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).listenToOne(classId, listeners)
 	}
 
-	async explore() {
+	async explore(search: string) {
+		search
 		return await this.repository('').explore({
 			// TODO: add explore query params
 			all: true,
