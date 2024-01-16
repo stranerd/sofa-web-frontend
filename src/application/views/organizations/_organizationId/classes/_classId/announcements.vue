@@ -135,37 +135,33 @@ export default defineComponent({
 			{
 				image: '/images/freeman.png',
 				user: { name: 'David Ababio', id: '659d2ebf7d5bec30e04544d5' },
-				announcement:
-					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
 				lesson: 'Chemistry',
-				audience: 'Teachers',
+				recipient: 'Teachers',
 				time: '30mins',
 			},
 			{
 				image: '/images/jerry.png',
 				user: { name: 'Jerry', id: '1' },
-				announcement:
-					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
 				lesson: 'Chemistry',
-				audience: 'Teachers',
+				recipient: 'Teachers',
 				time: '30mins',
 			},
 			{
 				image: '/images/isaac.png',
 				user: { name: 'David Ababio', id: '1' },
-				announcement:
-					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
 				lesson: 'Chemistry',
-				audience: 'Teachers',
+				recipient: 'Teachers',
 				time: '30mins',
 			},
 			{
 				image: '/images/istar.png',
 				user: { name: 'David Ababio', id: '1' },
-				announcement:
-					'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
+				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
 				lesson: 'Chemistry',
-				audience: 'Teachers',
+				recipient: 'Teachers',
 				time: '30mins',
 			},
 		])
