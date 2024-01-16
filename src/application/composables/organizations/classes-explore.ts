@@ -1,8 +1,9 @@
 import { ClassEntity, ClassesUseCases } from '@modules/organizations'
-import { onMounted, ref } from 'vue'
+import { UsersUseCases } from '@modules/users'
+import { addToArray } from 'valleyed'
+import { computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
-import { addToArray } from 'valleyed'
 
 const store = {
 	classesIn: ref<ClassEntity[]>([]),
@@ -65,4 +66,19 @@ export const useExploreClasses = () => {
 	})
 
 	return { classes: store.classesExplore, searchQuery, loading, error, fetchClasses }
+}
+
+export const useSaveClass = (classInst: ClassEntity) => {
+	const { user } = useAuth()
+	const isSaved = computed(() => user.value?.account.saved.classes.includes(classInst.id))
+
+	const {
+		asyncFn: saveClass,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		await UsersUseCases.updateSavedClasses({ classes: [classInst.id], add: !isSaved.value })
+	})
+
+	return { loading, error, saveClass, isSaved }
 }

@@ -1,5 +1,5 @@
 <template>
-	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer" :class="customClass" />
+	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer shrink-0" :class="customClass" />
 </template>
 
 <script lang="ts">

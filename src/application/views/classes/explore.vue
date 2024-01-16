@@ -20,27 +20,40 @@
 			</form>
 		</div>
 
-		<form class="w-full p-4 flex mdlg:hidden flex-col" @submit.prevent="fetchClasses">
-			<div class="w-full shadow-custom px-4 mdlg:py-2 bg-white rounded-custom flex gap-2 items-center justify-start">
-				<SofaTextField v-model="searchQuery" class="flex-1" customClass="!border-none w-full !px-0" placeholder="Search">
-					<template #inner-prefix>
-						<SofaIcon name="search-black" class="h-[15px]" @click="fetchClasses" />
-					</template>
-				</SofaTextField>
+		<form class="w-full flex mdlg:hidden flex-col px-4" @submit.prevent="fetchClasses">
+			<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray py-4 sticky top-0 left-0">
+				<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+				<SofaNormalText customClass="!font-bold !text-base" content="Explore Classes" />
+				<span class="w-4" />
 			</div>
+			<SofaTextField
+				v-model="searchQuery"
+				class="flex-1"
+				customClass="bg-white !rounded-custom shadow-custom w-full px-4 py-3"
+				placeholder="Search">
+				<template #inner-prefix>
+					<SofaIcon name="search-black" class="h-[15px]" @click="fetchClasses" />
+				</template>
+			</SofaTextField>
 		</form>
 
-		<div class="mdlg:w-[85%] lg:w-[75%] w-full flex flex-col h-full overflow-y-auto gap-8 px-4">Classes</div>
+		<div
+			class="mdlg:w-[85%] lg:w-[75%] w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 lg:grid-cols-5 max-h-full overflow-y-auto gap-3 mdlg:gap-6 px-4 py-8 mdlg:py-12">
+			<ExploreClassCard v-for="classItem in classes" :key="classItem.id" :classInst="classItem" />
+		</div>
 	</ExpandedLayout>
 </template>
 
 <script lang="ts">
+import ExploreClassCard from '@app/components/organizations/classes/ExploreClassCard.vue'
 import { useExploreClasses } from '@app/composables/organizations/classes-explore'
+import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'ClassesExplore',
+	components: { ExploreClassCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
 		goBackRoute: '/classes',
@@ -53,6 +66,7 @@ export default defineComponent({
 		const { searchQuery, classes, fetchClasses } = useExploreClasses()
 
 		return {
+			Logic,
 			searchQuery,
 			classes,
 			fetchClasses,

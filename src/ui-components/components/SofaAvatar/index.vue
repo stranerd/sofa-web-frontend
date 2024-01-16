@@ -3,7 +3,8 @@
 		:as="userId ? 'router-link' : 'div'"
 		:to="`/profile/${userId}`"
 		:photoUrl="photoUrl ?? ''"
-		:customClass="`rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer ${bgColor} items-center justify-center ${customClass}`"
+		class="shrink-0 rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer items-center justify-center"
+		:customClass="`${bgColor} ${customClass}`"
 		:customStyle="`width: ${size}px; height: ${size}px;`"
 		@click.stop.prevent="userId ? Logic.Common.GoToRoute(`/profile/${userId}`) : null">
 		<template v-if="!photoUrl">

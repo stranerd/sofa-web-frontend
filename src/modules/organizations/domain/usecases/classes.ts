@@ -31,9 +31,16 @@ export class ClassesUseCase {
 	}
 
 	async explore(search: string) {
-		search
 		return await this.repository('').explore({
 			// TODO: add explore query params
+			...(search
+				? {
+						search: {
+							value: search,
+							fields: ['title', 'description', 'lessons.title'],
+						},
+					}
+				: {}),
 			all: true,
 		})
 	}
