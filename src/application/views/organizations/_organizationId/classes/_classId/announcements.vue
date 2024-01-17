@@ -135,12 +135,8 @@ export default defineComponent({
 			})
 		}
 
-		const userTypesOption = () => {
-			return [{ key: null, value: 'Both Teachers and Students' }]
-		}
-
 		const { announcements } = useMyAnnouncements(organizationId, classId)
-		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId, userTypesOption }
+		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId }
 	},
 })
 </script>
