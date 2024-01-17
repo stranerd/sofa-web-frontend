@@ -126,14 +126,21 @@ export default defineComponent({
 				'Faster, time-saving, and stress-free communication.',
 			],
 		}
+
 		const createAnnouncemnt = () => {
 			useModals().organizations.makeAnnouncement.open({
 				organizationId,
 				classId,
+				userId: userId.value,
 			})
 		}
+
+		const userTypesOption = () => {
+			return [{ key: null, value: 'Both Teachers and Students' }]
+		}
+
 		const { announcements } = useMyAnnouncements(organizationId, classId)
-		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId }
+		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId, userTypesOption }
 	},
 })
 </script>

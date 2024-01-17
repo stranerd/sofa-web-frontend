@@ -75,6 +75,8 @@ const userTypesOption = computed(() => {
 	 * For teachers, only show student option
 	 * For admins, show student, teachers and both teachers and student options
 	 */
+	if (props) {
+	}
 	return [{ key: null, value: 'Both Teachers and Students' }]
 })
 </script>
