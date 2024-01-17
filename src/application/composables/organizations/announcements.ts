@@ -15,7 +15,7 @@ const store = {} as Record<
 >
 
 export const useMyAnnouncements = (organizationId: string, classId: string) => {
-	if (store[classId] === undefined) {
+	if (store[`${organizationId}-${classId}`] === undefined) {
 		const listener = useListener(() => {
 			return AnnouncementsUseCases.listen(
 				organizationId,
@@ -23,7 +23,7 @@ export const useMyAnnouncements = (organizationId: string, classId: string) => {
 				{
 					created: async (entity) => {
 						addToArray(
-							store[classId].announcements.value,
+							store[`${organizationId}-${classId}`].announcements.value,
 							entity,
 							(e) => e.id,
 							(e) => e.createdAt,
@@ -31,20 +31,22 @@ export const useMyAnnouncements = (organizationId: string, classId: string) => {
 					},
 					updated: async (entity) => {
 						addToArray(
-							store[classId].announcements.value,
+							store[`${organizationId}-${classId}`].announcements.value,
 							entity,
 							(e) => e.id,
 							(e) => e.createdAt,
 						)
 					},
 					deleted: async (entity) => {
-						store[classId].announcements.value = store[classId].announcements.value.filter((m) => m.id !== entity.id)
+						store[`${organizationId}-${classId}`].announcements.value = store[
+							`${organizationId}-${classId}`
+						].announcements.value.filter((m) => m.id !== entity.id)
 					},
 				},
-				store[classId].announcements.value.at(-1)?.createdAt,
+				store[`${organizationId}-${classId}`].announcements.value.at(-1)?.createdAt,
 			)
 		})
-		store[classId] = {
+		store[`${organizationId}-${classId}`] = {
 			announcements: ref([]),
 			hasMore: ref(false),
 			listener,
@@ -56,39 +58,45 @@ export const useMyAnnouncements = (organizationId: string, classId: string) => {
 		loading,
 		error,
 		called,
-	} = useAsyncFn(async () => {
-		const announcements = await AnnouncementsUseCases.get(organizationId, classId, store[classId].announcements.value.at(-1)?.createdAt)
-		store[classId].hasMore.value = !!announcements.pages.next
-		announcements.results.map((announcement) =>
-			addToArray(
-				store[classId].announcements.value,
-				announcement,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-	})
+	} = useAsyncFn(
+		async () => {
+			const announcements = await AnnouncementsUseCases.get(
+				organizationId,
+				classId,
+				store[`${organizationId}-${classId}`].announcements.value.at(-1)?.createdAt,
+			)
+			store[`${organizationId}-${classId}`].hasMore.value = !!announcements.pages.next
+			announcements.results.map((announcement) =>
+				addToArray(
+					store[`${organizationId}-${classId}`].announcements.value,
+					announcement,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+		},
+		{ key: `organizations/classes/${organizationId}-${classId}/announcements` },
+	)
 
 	const fetchOlderAnnouncements = async () => {
 		fetchAnnouncements()
-		await store[classId].listener.start()
+		await store[`${organizationId}-${classId}`].listener.start()
 	}
 
 	onMounted(async () => {
 		if (!called.value) await fetchAnnouncements()
-		await store[classId].listener.start()
+		await store[`${organizationId}-${classId}`].listener.start()
 	})
 
 	onUnmounted(async () => {
-		await store[classId].listener.close()
+		await store[`${organizationId}-${classId}`].listener.close()
 	})
 
 	return {
-		announcements: computed(() => [...store[classId].announcements.value]),
-		called,
+		announcements: computed(() => [...store[`${organizationId}-${classId}`].announcements.value]),
 		loading,
 		error,
-		hasMore: store[classId].hasMore,
+		hasMore: store[`${organizationId}-${classId}`].hasMore,
 		fetchOlderAnnouncements,
 	}
 }
