@@ -77,7 +77,7 @@ const searchValue = ref('')
 
 const filteredOptions = computed(() => {
 	const search = searchValue.value.toLowerCase()
-	const options = props.options.filter((opt) => opt.key.toLowerCase().includes(search) || opt.value.toLowerCase().includes(search))
+	const options = props.options.filter((opt) => opt.key?.toLowerCase().includes(search) || opt.value?.toLowerCase().includes(search))
 	if (props.canUseCustom && search) options.unshift({ key: search, value: search })
 	return options
 })

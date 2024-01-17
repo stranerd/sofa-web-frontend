@@ -99,10 +99,11 @@
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { formatTime } from '@utils/dates'
 import { formatNumber } from 'valleyed'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
+import { useMyAnnouncements } from '@app/composables/organizations/announcements'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdAnnouncements',
@@ -131,40 +132,7 @@ export default defineComponent({
 				classId,
 			})
 		}
-		const announcements = ref([
-			{
-				image: '/images/freeman.png',
-				user: { name: 'David Ababio', id: '659d2ebf7d5bec30e04544d5' },
-				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
-				lesson: 'Chemistry',
-				recipient: 'Teachers',
-				time: '30mins',
-			},
-			{
-				image: '/images/jerry.png',
-				user: { name: 'Jerry', id: '1' },
-				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
-				lesson: 'Chemistry',
-				recipient: 'Teachers',
-				time: '30mins',
-			},
-			{
-				image: '/images/isaac.png',
-				user: { name: 'David Ababio', id: '1' },
-				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
-				lesson: 'Chemistry',
-				recipient: 'Teachers',
-				time: '30mins',
-			},
-			{
-				image: '/images/istar.png',
-				user: { name: 'David Ababio', id: '1' },
-				body: 'Nulla nisl diam, laoreet et nisl suscipit, fringilla scelerisque nunc. Mauris at tortor egestas, ornare eros ac, pharetra erat. Morbi eget sagittis lectus. Mauris mattis faucibus lorem, eget ullamcorper diam posuere ac. Duis eu cursus fel.',
-				lesson: 'Chemistry',
-				recipient: 'Teachers',
-				time: '30mins',
-			},
-		])
+		const { announcements } = useMyAnnouncements(organizationId, classId)
 		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId }
 	},
 })

@@ -4,22 +4,27 @@
 			<SofaHeaderText class="!font-bold !text-deepGray" content="Make an announcement" />
 			<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="close" />
 		</div>
-		<form class="flex flex-col gap-8" @submit.prevent>
+		<form class="flex flex-col gap-8" @submit.prevent="makeAnnouncement">
 			<SofaTextarea
-				v-model="form.content"
+				v-model="factory.body"
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+				:error="factory.errors.body"
 				placeholder="Write announcemnt" />
 			<div class="grid grid-cols-2">
 				<SofaSelect
+					v-model="factory.lessonId"
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select lesson"
 					borderColor="border-transparent"
-					:options="[{ key: '1', value: 'All lessons' }]" />
+					:error="factory.errors.lessonId"
+					:options="lessonOptions" />
 				<SofaSelect
+					v-model="factory.userType"
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select audience"
 					borderColor="border-transparent"
-					:options="[{ key: '1', value: 'All students' }]" />
+					:error="factory.errors.userType"
+					:options="userTypesOption" />
 			</div>
 			<div class="flex items-center justify-between">
 				<SofaButton
@@ -44,13 +49,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-defineProps<{
+import { useMakeAnnouncement } from '@app/composables/organizations/announcements'
+import { computed } from 'vue'
+const props = defineProps<{
 	organizationId: string
 	classId: string
+	userId: string
 	close: () => void
 }>()
-const form = ref({
-	content: '',
+
+const { factory, makeAnnouncement } = useMakeAnnouncement(props.organizationId, props.classId)
+
+const lessonOptions = computed(() => {
+	// TODO
+	/**
+	 * For teachers usertype, only show lessons which the teachers belongs to
+	 * For admins, show every lessons plus the all lessons options
+	 */
+	return [{ key: null, value: 'All lessons' }]
+})
+
+const userTypesOption = computed(() => {
+	// TODO
+	/**
+	 * For teachers, only show student option
+	 * For admins, show student, teachers and both teachers and student options
+	 */
+	return [{ key: null, value: 'Both Teachers and Students' }]
 })
 </script>

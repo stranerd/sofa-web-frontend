@@ -4,22 +4,20 @@ import { AnnouncementToModel } from '@modules/organizations/data/models/announce
 import { AnnouncementEntity } from '../entities/announcements'
 import { MemberTypes } from '../types'
 
-export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, AnnouncementToModel, AnnouncementToModel> {
+type Keys = Omit<AnnouncementToModel, 'filter'> & AnnouncementToModel['filter']
+
+export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, AnnouncementToModel, Keys> {
 	readonly rules = {
 		body: v.string().min(1),
-		filter: v.object({
-			lessonId: v.string().min(1).nullable(),
-			userType: v.in(Object.values(MemberTypes)).nullable(),
-		}),
+		lessonId: v.string().min(1).nullable(),
+		userType: v.in(Object.values(MemberTypes)).nullable(),
 	}
 
 	constructor() {
 		super({
 			body: '',
-			filter: {
-				lessonId: null,
-				userType: null,
-			},
+			lessonId: null,
+			userType: null,
 		})
 	}
 
@@ -31,24 +29,33 @@ export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, Announc
 		this.set('body', value)
 	}
 
-	get filter() {
-		return this.values.filter
+	get lessonId() {
+		return this.values.lessonId as string
 	}
 
-	set filter(value) {
-		this.set('filter', value)
+	set lessonId(value: string) {
+		this.set('lessonId', value)
+	}
+
+	get userType() {
+		return this.values.userType as string
+	}
+
+	set userType(value: string) {
+		this.set('userType', value)
 	}
 
 	model = async () => {
-		const { body, filter } = this.validValues
+		const { body, lessonId, userType } = this.validValues
 		return {
 			body,
-			filter,
+			filter: { lessonId, userType },
 		}
 	}
 
 	loadEntity = (entity: AnnouncementEntity) => {
 		this.body = entity.body
-		this.filter = entity.filter
+		this.lessonId = entity.filter.lessonId as string
+		this.userType = entity.filter.userType as string
 	}
 }

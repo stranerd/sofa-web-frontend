@@ -10,10 +10,10 @@
 				}}</SofaNormalText>
 				<div class="flex items-center gap-1">
 					<div class="h-[5px] w-[5px] bg-grayColor rounded-[50%]"></div>
-					<SofaNormalText color="text-grayColor">{{ announcement.time }}</SofaNormalText>
+					<SofaNormalText color="text-grayColor">{{ time }}</SofaNormalText>
 				</div>
-				<SofaBadge v-if="classObj.isAdmin(userId) || classObj.isTeacher(userId)">{{ announcement.lesson }}</SofaBadge>
-				<SofaBadge customClass="bg-[#6419C8]">{{ announcement.recipient }}</SofaBadge>
+				<SofaBadge v-if="classObj.isAdmin(userId) || classObj.isTeacher(userId)">{{ lesson }}</SofaBadge>
+				<SofaBadge customClass="bg-[#6419C8]">{{ recipient }}</SofaBadge>
 			</div>
 			<SofaNormalText color="text-deepGray">{{ announcement.body }}</SofaNormalText>
 		</div>
@@ -22,8 +22,9 @@
 
 <script lang="ts" setup>
 import { ClassEntity } from '@modules/organizations'
-import { PropType } from 'vue'
-defineProps({
+import { PropType, computed } from 'vue'
+import { useTimeDifference } from '@app/composables/dates'
+const props = defineProps({
 	announcement: {
 		type: Object as any,
 		required: true,
@@ -37,5 +38,32 @@ defineProps({
 		default: '',
 		required: true,
 	},
+})
+
+const recipient = computed(() => {
+	const userType = props.announcement.filter.userType
+	if (userType) {
+		if (userType === 'teacher') {
+			return 'Teachers'
+		} else {
+			return 'Students'
+		}
+	} else {
+		return 'All Members'
+	}
+})
+
+const lesson = computed(() => {
+	const lessonId = props.announcement.filter.lessonId
+	if (lessonId) {
+		return lessonId
+	} else {
+		return 'All Lessons'
+	}
+})
+
+const time = computed(() => {
+	const { time } = useTimeDifference(props.announcement.updatedAt)
+	return time.value
 })
 </script>
