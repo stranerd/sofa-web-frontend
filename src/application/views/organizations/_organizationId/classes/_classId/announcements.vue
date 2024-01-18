@@ -1,7 +1,7 @@
 <template>
 	<ClassLayout>
 		<template #default="{ classObj }">
-			<template v-if="classObj.isAdmin(userId) || classObj.isTeacher(userId)">
+			<template v-if="classObj.isAdmin(id) || classObj.isTeacher(id)">
 				<div
 					v-if="announcements.length === 0"
 					class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
@@ -20,7 +20,7 @@
 									<SofaNormalText :content="content" color="text-grayColor" />
 								</div>
 							</div>
-							<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6" @click="createAnnouncemnt">
+							<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6" @click="createAnnouncement">
 								Make an announcement
 							</SofaButton>
 						</div>
@@ -47,14 +47,13 @@
 							bgColor="bg-primaryBlue"
 							textColor="text-white"
 							padding="py-3 px-4"
-							@click="createAnnouncemnt">
+							@click="createAnnouncement">
 							Make an announcement
 						</SofaButton>
 					</div>
 					<AnnouncementCard
 						v-for="(announcement, index) in announcements"
 						:key="index"
-						:userId="userId"
 						:classObj="classObj"
 						:announcement="announcement" />
 					<SofaButton
@@ -62,7 +61,7 @@
 						bgColor="bg-primaryBlue"
 						textColor="text-white"
 						padding="py-3 px-4"
-						@click="createAnnouncemnt">
+						@click="createAnnouncement">
 						Make an announcement
 					</SofaButton>
 				</div>
@@ -72,20 +71,17 @@
 					<SofaHeaderText content="Annoucements" />
 					<div class="h-[1px] w-full bg-lightGray" />
 					<div
-						v-if="!announcements.length || !classObj.isStudent(userId)"
+						v-if="!announcements.length || !classObj.isStudent(id)"
 						class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
 						<img :src="emptyAnnouncementContent.imageURL" class="w-[84px] h-[84px]" />
 						<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 						<SofaNormalText color="text-grayColor text-center" content="No announcements" />
 					</div>
 					<div v-else>
-						<div>
-							<SofaBadge>{{ 'All' }}</SofaBadge>
-						</div>
+						<SofaBadge>{{ 'All' }}</SofaBadge>
 						<AnnouncementCard
 							v-for="(announcement, index) in announcements"
 							:key="index"
-							:userId="userId"
 							:classObj="classObj"
 							:announcement="announcement" />
 					</div>
@@ -97,23 +93,22 @@
 
 <script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
-import { formatTime } from '@utils/dates'
-import { formatNumber } from 'valleyed'
+import AnnouncementCard from '@app/components/organizations/announcements/AnnouncementCard.vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
+import { useMyAnnouncements } from '@app/composables/organizations/announcements'
 import { defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { useModals } from '@app/composables/core/modals'
-import { useAuth } from '@app/composables/auth/auth'
-import { useMyAnnouncements } from '@app/composables/organizations/announcements'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdAnnouncements',
-	components: { ClassLayout },
+	components: { ClassLayout, AnnouncementCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
 		const route = useRoute()
-		const { id: userId } = useAuth()
+		const { id } = useAuth()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
 		const emptyAnnouncementContent = {
@@ -127,16 +122,15 @@ export default defineComponent({
 			],
 		}
 
-		const createAnnouncemnt = () => {
+		const createAnnouncement = () => {
 			useModals().organizations.makeAnnouncement.open({
 				organizationId,
 				classId,
-				userId: userId.value,
 			})
 		}
 
 		const { announcements } = useMyAnnouncements(organizationId, classId)
-		return { announcements, emptyAnnouncementContent, formatTime, formatNumber, createAnnouncemnt, userId }
+		return { announcements, emptyAnnouncementContent, createAnnouncement, id }
 	},
 })
 </script>

@@ -16,7 +16,7 @@ import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
-import MakeAnnouncement from '@app/components/organizations/classes/announcement/MakeAnnouncement.vue'
+import MakeAnnouncement from '@app/components/organizations/announcements/MakeAnnouncement.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {

@@ -54,7 +54,6 @@ import { computed } from 'vue'
 const props = defineProps<{
 	organizationId: string
 	classId: string
-	userId: string
 	close: () => void
 }>()
 
