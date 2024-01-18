@@ -24,7 +24,7 @@
 				<SofaIcon v-if="classInst.user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 			</router-link>
 
-			<SofaIcon name="bookmark" class="h-[18px]" :class="{ 'fill-primaryBlue': isSaved }" @click.stop.prevent="saveClass" />
+			<SofaIcon :name="isSaved ? 'bookmark-filled' : 'bookmark'" class="h-[18px]" @click.stop.prevent="saveClass" />
 		</div>
 	</router-link>
 </template>
