@@ -49,7 +49,7 @@ export class MessagesUseCase {
 			sort: [{ field: 'createdAt', desc: true }],
 			all: true,
 		}
-		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.gt, value: date })
+		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.gte, value: date })
 
 		return await this.repository(conversationId).listenToMany(conditions, listener, (entity) => {
 			if (date) return entity.createdAt >= date

@@ -5,12 +5,12 @@ export interface AnnouncementFromModel extends AnnouncementToModel {
 	readAt: Record<string, number>
 	createdAt: number
 	updatedAt: number
+	organizationId: string
+	classId: string
+	user: EmbeddedUser
 }
 
 export interface AnnouncementToModel {
-	organizationId: string
-	classId: string
 	filter: AnnouncementFilter
-	user: EmbeddedUser
 	body: string
 }

@@ -6,20 +6,7 @@ export enum TIMES {
 	year = 60 * 60 * 24 * 30 * 12,
 }
 
-export const months = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
-]
+export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
 export const getTwoDigits = (digit: number): string => digit.toString().padStart(2, '0')
 export const formatTimeAsDigits = (date: Date) => {
