@@ -74,4 +74,8 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	isAdmin(userId: string) {
 		return this.organizationId === userId
 	}
+
+	getLesson(id: string) {
+		return this.lessons.find((l) => l.id === id)
+	}
 }

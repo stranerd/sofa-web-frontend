@@ -18,6 +18,7 @@ import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLesson.vue'
 import LessonDetails from '@app/components/organizations/lessons/LessonDetails.vue'
+import MakeAnnouncement from '@app/components/organizations/announcements/MakeAnnouncement.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -40,6 +41,7 @@ export const useModals = () => ({
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
 		createLesson: { component: CreateLesson },
 		lessonDetails: { component: LessonDetails },
+		makeAnnouncement: { component: MakeAnnouncement },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
