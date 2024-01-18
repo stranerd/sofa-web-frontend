@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { useAuth } from '@app/composables/auth/auth'
-import { useTimeDifference } from '@app/composables/dates'
+import { useTimeDifference } from '@app/composables/core/time'
 import { AnnouncementEntity, ClassEntity, MemberTypes } from '@modules/organizations'
 import { computed } from 'vue'
 const props = defineProps<{
