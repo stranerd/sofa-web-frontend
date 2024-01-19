@@ -30,12 +30,13 @@
 			<div class="flex flex-wrap gap-4 items-center justify-between pb-6">
 				<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
 					<SofaSelect
-						v-model="selectedLessonFilter"
+						v-model="filter.lesson"
 						customClass="rounded-custom !bg-transparent border col-span-1"
 						placeholder="Lesson"
 						borderColor="border-darkLightGray"
 						:options="lessonOptions" />
 					<SofaSelect
+						v-model="filter.userType"
 						customClass="rounded-custom !bg-transparent border col-span-1"
 						placeholder="Recipient"
 						borderColor="border-darkLightGray"
@@ -51,7 +52,7 @@
 				</SofaButton>
 			</div>
 			<AnnouncementCard
-				v-for="(announcement, index) in announcements"
+				v-for="(announcement, index) in filteredAnnouncements"
 				:key="index"
 				:classObj="classObj"
 				:announcement="announcement" />
@@ -71,7 +72,7 @@
 import AnnouncementCard from '@app/components/organizations/announcements/AnnouncementCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { defineComponent, PropType, computed, ref, watch } from 'vue'
+import { defineComponent, PropType, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { ClassEntity, AnnouncementEntity } from '@modules/organizations'
 
@@ -94,8 +95,10 @@ export default defineComponent({
 	setup(props) {
 		const route = useRoute()
 		const { id } = useAuth()
-		const selectedLessonFilter = ref('')
-		const selectedUserTypeFilter = ref('')
+		const filter = ref({
+			lesson: '',
+			userType: '',
+		})
 		const organizationId = route.params.organizationId as string
 		const emptyAnnouncementContent = {
 			imageURL: '/images/empty-announcements.png',
@@ -115,21 +118,18 @@ export default defineComponent({
 				classObj: props.classObj,
 			})
 		}
+		const filteredAnnouncements = computed(() => {
+			const announcements = props.announcements
+			return announcements.filter((an) => {
+				const lessonMatch = filter.value.lesson ? an.filter.lessonId === filter.value.lesson : true
+				const userTypeMatch = filter.value.userType ? an.filter.userType === filter.value.userType : true
+				return lessonMatch && userTypeMatch
+			})
+		})
 
 		const lessonOptions = computed(() => {
-			// For teachers, return only lessons where user is a teacher
-			if (props.classObj.isTeacher(id.value)) {
-				const lessons = props.classObj.lessons.filter((lesson) => lesson.users.teachers.includes(id.value))
-				if (lessons.length > 0) {
-					return lessons.map((l) => {
-						return { key: l.id, value: l.title }
-					})
-				} else {
-					return []
-				}
-			}
 			// For admins, return every lessons plus all students
-			if (props.classObj.isAdmin(id.value)) {
+			if (props.classObj.isAdmin(id.value) || props.classObj.isTeacher(id.value)) {
 				const lessons = props.classObj.lessons
 				if (lessons.length > 0) {
 					const options = lessons.map((l) => {
@@ -143,14 +143,9 @@ export default defineComponent({
 			}
 			return []
 		})
-
 		const userTypesOption = computed(() => {
-			// For teachers return only student
-			if (props.classObj.isTeacher(id.value)) {
-				return [{ key: 'student', value: 'Students Only' }]
-			}
-			// For admins, return all user types
-			if (props.classObj.isAdmin(id.value)) {
+			// For admins and teachers,  return all user types
+			if (props.classObj.isAdmin(id.value) || props.classObj.isTeacher(id.value)) {
 				return [
 					{ key: null, value: 'Both Teachers and Students' },
 					{ key: 'student', value: 'Students Only' },
@@ -160,16 +155,14 @@ export default defineComponent({
 			return []
 		})
 
-		watch(selectedLessonFilter, () => {})
-
 		return {
 			emptyAnnouncementContent,
 			createAnnouncement,
 			id,
 			lessonOptions,
 			userTypesOption,
-			selectedLessonFilter,
-			selectedUserTypeFilter,
+			filter,
+			filteredAnnouncements,
 		}
 	},
 })
