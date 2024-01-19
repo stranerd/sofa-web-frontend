@@ -81,9 +81,12 @@
 <script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useModals } from '@app/composables/core/modals'
+import { MemberEntity } from '@modules/organizations'
+import { useOrganizationMembers } from '@app/composables/organizations/members'
+import { SelectOption } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdLessons',
@@ -93,37 +96,17 @@ export default defineComponent({
 	},
 	setup() {
 		const { id: userId } = useAuth()
-		const lessons = ref([
-			{
-				title: 'Mathematics',
-				students: [],
-				teachers: [1],
-			},
-			{
-				title: 'English',
-				students: [],
-				teachers: [2, 3],
-			},
-			{
-				title: 'Literature',
-				students: [],
-				teachers: [],
-			},
-			{
-				title: 'Biology',
-				students: [],
-				teachers: [],
-			},
-			{
-				title: 'Chemistry',
-				students: [],
-				teachers: [],
-			},
-		])
+		const lessons = ref([])
 		const searchQuery = ref('')
 		const route = useRoute()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
+		const { teachers } = useOrganizationMembers(userId.value)
+		const teachersOptions = computed((): SelectOption[] => {
+			return teachers.value.map((teacher: MemberEntity) => {
+				return { key: teacher?.user?.id || '', value: teacher.user?.bio.name.full || '' }
+			})
+		})
 		const emptyLessonContent = {
 			imageURL: '/images/no-lessons.png',
 			title: 'Getting started with lessons',
@@ -135,11 +118,17 @@ export default defineComponent({
 			],
 		}
 		const openCreateClassModal = () => {
-			useModals().organizations.createLesson.open({ organizationId, classId, userId: userId.value })
+			useModals().organizations.createLesson.open({ organizationId, classId, userId: userId.value, teachers: teachersOptions.value })
 		}
 		const openLessonDetails = (val: any) => {
-			useModals().organizations.lessonDetails.open({ organizationId, classId, userId: userId.value, lesson: val })
+			useModals().organizations.lessonDetails.open({
+				organizationId,
+				classId,
+				userId: userId.value,
+				lesson: val,
+			})
 		}
+
 		return {
 			userId,
 			lessons,
@@ -147,6 +136,7 @@ export default defineComponent({
 			openCreateClassModal,
 			searchQuery,
 			openLessonDetails,
+			teachersOptions,
 		}
 	},
 })

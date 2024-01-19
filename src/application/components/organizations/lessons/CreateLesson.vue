@@ -4,13 +4,21 @@
 			<SofaHeaderText class="!font-bold !text-deepGray" content="Create a lesson" />
 			<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="close" />
 		</div>
-		<form class="flex flex-col gap-8" @submit.prevent>
-			<SofaTextarea textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none" placeholder="Enter subject name" />
+		<form class="flex flex-col gap-8" @submit.prevent="createLesson">
+			<SofaTextField
+				v-model="factory.title"
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="Enter subject name"
+				:error="factory.errors.title"
+				borderColor="border-transparent" />
 			<SofaSelect
+				v-model="factory.teacher"
 				customClass="rounded-custom !bg-lightGray col-span-1"
 				placeholder="Assign a teacher"
+				:error="factory.errors.teacher"
 				borderColor="border-transparent"
-				:options="[{ key: null, value: 'Adedeji' }]" />
+				:options="teachers" />
 			<div class="flex items-center justify-between">
 				<SofaButton
 					bgColor="bg-grayColor"
@@ -25,6 +33,7 @@
 					type="submit"
 					textColor="text-white"
 					padding="py-3 px-6"
+					:disabled="!factory.isValid"
 					customClass="w-full mdlg:w-auto">
 					Save
 				</SofaButton>
@@ -34,10 +43,15 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { useCreateLesson } from '@app/composables/organizations/lessons'
+import { SelectOption } from 'sofa-logic'
+const props = defineProps<{
 	organizationId: string
 	classId: string
 	userId: string
+	teachers: SelectOption[]
 	close: () => void
 }>()
+
+const { factory, createLesson } = useCreateLesson(props.organizationId, props.classId)
 </script>
