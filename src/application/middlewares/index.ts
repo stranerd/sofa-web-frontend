@@ -51,13 +51,7 @@ export const isOrg = defineMiddleware(async ({ to }) => {
 	if (!useAuth().userType.value.isOrg) return '/'
 })
 
-export const isOrgOrTeacher = defineMiddleware(async ({ to }) => {
-	const redirect = await checkAuthUser(to.fullPath)
-	if (redirect) return redirect
-	if (!useAuth().userType.value.isOrg && !useAuth().userType.value.isTeacher) return '/'
-})
-
-const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg, isOrgOrTeacher }
+const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg }
 export type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
 
 const wrapInAsync = async <T>(fn: () => T) => await fn()

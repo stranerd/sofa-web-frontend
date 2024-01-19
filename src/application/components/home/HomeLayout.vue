@@ -220,6 +220,5 @@ const options = computed(() => [
 				{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
 			]
 		: []),
-	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes', route: '/organization/classes' }] : []),
 ])
 </script>
