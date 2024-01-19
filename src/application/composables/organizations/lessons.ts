@@ -38,6 +38,7 @@ export const useCreateLesson = (organizationId: string, classId: string) => {
 		error,
 	} = useAsyncFn(async () => {
 		await LessonsUseCases.add(organizationId, classId, factory)
+		factory.reset()
 		useModals().organizations.createLesson.close()
 	})
 	return {
