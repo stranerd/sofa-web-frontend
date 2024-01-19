@@ -51,31 +51,57 @@
 <script setup lang="ts">
 import { useMakeAnnouncement } from '@app/composables/organizations/announcements'
 import { computed } from 'vue'
+import { ClassEntity } from '@modules/organizations'
 const props = defineProps<{
 	organizationId: string
-	classId: string
+	userId: string
+	classObj: ClassEntity
 	close: () => void
 }>()
 
-const { factory, makeAnnouncement } = useMakeAnnouncement(props.organizationId, props.classId)
+const { factory, makeAnnouncement } = useMakeAnnouncement(props.organizationId, props.classObj.id)
 
 const lessonOptions = computed(() => {
-	// TODO
-	/**
-	 * For teachers usertype, only show lessons which the teachers belongs to
-	 * For admins, show every lessons plus the all lessons options
-	 */
-	return [{ key: null, value: 'All lessons' }]
+	// For teachers, return only lessons where user is a teacher
+	if (props.classObj.isTeacher(props.userId)) {
+		const lessons = props.classObj.lessons.filter((lesson) => lesson.users.teachers.includes(props.userId))
+		if (lessons.length > 0) {
+			return lessons.map((l) => {
+				return { key: l.id, value: l.title }
+			})
+		} else {
+			return []
+		}
+	}
+	// For admins, return every lessons plus all students
+	if (props.classObj.isAdmin(props.userId)) {
+		const lessons = props.classObj.lessons
+		if (lessons.length > 0) {
+			const options = lessons.map((l) => {
+				return { key: l.id || null, value: l.title }
+			})
+			options.unshift({ key: null, value: 'All lessons' })
+			return options
+		} else {
+			return [{ key: null, value: 'All lessons' }]
+		}
+	}
+	return []
 })
 
 const userTypesOption = computed(() => {
-	// TODO
-	/**
-	 * For teachers, only show student option
-	 * For admins, show student, teachers and both teachers and student options
-	 */
-	if (props) {
+	// For teachers return only student
+	if (props.classObj.isTeacher(props.userId)) {
+		return [{ key: 'student', value: 'Students Only' }]
 	}
-	return [{ key: null, value: 'Both Teachers and Students' }]
+	// For admins, return all user types
+	if (props.classObj.isAdmin(props.userId)) {
+		return [
+			{ key: null, value: 'Both Teachers and Students' },
+			{ key: 'student', value: 'Students Only' },
+			{ key: 'teacher', value: 'Teachers Only' },
+		]
+	}
+	return []
 })
 </script>

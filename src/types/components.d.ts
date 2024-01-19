@@ -14,6 +14,8 @@ declare module 'vue' {
     AddTutorModal: typeof import('./../application/components/conversations/AddTutorModal.vue')['default']
     AddVideo: typeof import('./../application/components/study/courses/AddVideo.vue')['default']
     AnnouncementCard: typeof import('./../application/components/organizations/announcements/AnnouncementCard.vue')['default']
+    AnnouncementForAdmin: typeof import('./../application/components/organizations/announcements/AnnouncementForAdmin.vue')['default']
+    AnnouncementForNonAdmin: typeof import('./../application/components/organizations/announcements/AnnouncementForNonAdmin.vue')['default']
     AuthLayout: typeof import('./../application/layouts/AuthLayout.vue')['default']
     AuthProvider: typeof import('./../application/components/auth/AuthProvider.vue')['default']
     Chat: typeof import('./../application/components/conversations/Chat.vue')['default']
