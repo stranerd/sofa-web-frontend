@@ -37,7 +37,12 @@
 				Create a lesson
 			</SofaButton>
 		</div>
-		<LessonCard v-for="(lesson, index) in filteredLessons" :key="index" :lesson="lesson" @click="openLessonDetails(lesson)" />
+		<LessonCard
+			v-for="(lesson, index) in filteredLessons"
+			:key="index"
+			:isStudent="classObj.isStudent(userId)"
+			:lesson="lesson"
+			@click="openLessonDetails(lesson)" />
 	</div>
 </template>
 
@@ -102,7 +107,7 @@ export default defineComponent({
 			useModals().organizations.createLesson.open({ organizationId, classId, userId: userId.value, teachers: teachersOptions.value })
 		}
 
-		return { openLessonDetails, searchQuery, openCreateClassModal, teachersOptions, emptyLessonContent, filteredLessons }
+		return { openLessonDetails, searchQuery, openCreateClassModal, teachersOptions, emptyLessonContent, filteredLessons, userId }
 	},
 })
 </script>
