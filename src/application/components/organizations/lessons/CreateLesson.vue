@@ -44,14 +44,19 @@
 
 <script setup lang="ts">
 import { useCreateLesson } from '@app/composables/organizations/lessons'
-import { SelectOption } from 'sofa-logic'
+import { MemberEntity } from '@modules/organizations'
+import { computed } from 'vue'
+
 const props = defineProps<{
 	organizationId: string
 	classId: string
-	userId: string
-	teachers: SelectOption[]
+	teachers: MemberEntity[]
 	close: () => void
 }>()
 
 const { factory, createLesson } = useCreateLesson(props.organizationId, props.classId)
+
+const teachers = computed(() =>
+	props.teachers.filter((t) => !!t.user).map((teacher) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.name.full || '' })),
+)
 </script>

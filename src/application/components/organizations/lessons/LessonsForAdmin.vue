@@ -49,8 +49,7 @@
 <script lang="ts">
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { ClassEntity, MemberEntity } from '@modules/organizations'
-import { SelectOption } from 'sofa-logic'
+import { ClassEntity, ClassLesson, MemberEntity } from '@modules/organizations'
 import { PropType, computed, defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -77,37 +76,31 @@ export default defineComponent({
 			title: 'Getting started with lessons',
 			contents: [
 				'Comprehensive subject based curriculum.',
-				'Assign teachers to manage their specific subjects. ',
-				'Assign teachers to manage their specific subjects. ',
+				'Assign teachers to manage their specific subjects.',
 				'Contains live teaching sessions and study materials.',
+				'Students choose how may lessons to take in a class.',
 			],
 		}
 
-		const teachersOptions = computed((): SelectOption[] =>
-			props.teachers
-				.filter((t) => !!t.user)
-				.map((teacher: MemberEntity) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.name.full || '' })),
-		)
-
 		const filteredLessons = computed(() => {
-			if (searchQuery.value) return props.classObj.lessons.filter((lesson) => lesson.title.includes(searchQuery.value))
+			if (searchQuery.value)
+				return props.classObj.lessons.filter((lesson) => lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()))
 			else return props.classObj.lessons
 		})
 
-		const openLessonDetails = (val: any) => {
+		const openLessonDetails = (val: ClassLesson) => {
 			useModals().organizations.lessonDetails.open({
 				organizationId,
 				classId,
-				userId: userId.value,
 				lesson: val,
 				teachers: props.teachers,
 			})
 		}
 		const openCreateClassModal = () => {
-			useModals().organizations.createLesson.open({ organizationId, classId, userId: userId.value, teachers: teachersOptions.value })
+			useModals().organizations.createLesson.open({ organizationId, classId, teachers: props.teachers })
 		}
 
-		return { openLessonDetails, searchQuery, openCreateClassModal, teachersOptions, emptyLessonContent, filteredLessons, userId }
+		return { openLessonDetails, searchQuery, openCreateClassModal, emptyLessonContent, filteredLessons, userId }
 	},
 })
 </script>

@@ -28,7 +28,7 @@
 							? 'text-primaryPurple pb-4 border-b border-primaryPurple font-bold'
 							: 'text-deepGray font-bold'
 					">
-					Teachers {{ lesson.teachers.length }}
+					Teachers {{ lesson.users.teachers.length }}
 				</SofaNormalText>
 			</button>
 			<button class="pb-3" @click="changeTab('students')">
@@ -72,14 +72,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { MemberEntity } from '@modules/organizations'
+import { ClassLesson, MemberEntity } from '@modules/organizations'
+import { computed, ref } from 'vue'
+
 const props = defineProps<{
 	organizationId: string
 	classId: string
-	userId: string
 	close: () => void
-	lesson: any
+	lesson: ClassLesson
 	teachers: MemberEntity[]
 }>()
 
@@ -89,11 +89,6 @@ const changeTab = (val: string) => {
 	selectedTab.value = val
 }
 
-const lessonTeachers = computed(() => {
-	return props.teachers.filter((teacher) => props.lesson.teachers.includes(teacher?.user?.id))
-})
-
-const lessonStudents = computed(() => {
-	return props.lesson.users.students
-})
+const lessonTeachers = computed(() => props.teachers.filter((teacher) => props.lesson.users.teachers.includes(teacher?.user?.id ?? '')))
+const lessonStudents = computed(() => props.lesson.users.students)
 </script>

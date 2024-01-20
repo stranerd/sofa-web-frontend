@@ -38,13 +38,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from 'vue'
-import { useModals } from '@app/composables/core/modals'
-import { useRoute } from 'vue-router'
+import { defineComponent, PropType } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { ClassEntity } from '@modules/organizations'
 import { MemberEntity } from '@modules/organizations'
-import { SelectOption } from 'sofa-logic'
 export default defineComponent({
 	props: {
 		classObj: {
@@ -56,29 +53,9 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup(props) {
+	setup() {
 		const { id: userId } = useAuth()
-		const route = useRoute()
-		const organizationId = route.params.organizationId as string
-		const classId = route.params.classId as string
-		const searchQuery = ref('')
-		const openLessonDetails = (val: any) => {
-			useModals().organizations.lessonDetails.open({
-				organizationId,
-				classId,
-				userId: userId.value,
-				lesson: val,
-				teachers: props.teachers,
-			})
-		}
-		const teachersOptions = computed((): SelectOption[] => {
-			return props.teachers.map((teacher: MemberEntity) => {
-				return { key: teacher?.user?.id || '', value: teacher.user?.bio.name.full || '' }
-			})
-		})
-		const openCreateClassModal = () => {
-			useModals().organizations.createLesson.open({ organizationId, classId, userId: userId.value, teachers: teachersOptions.value })
-		}
+
 		const emptyLessonContent = {
 			imageURL: '/images/no-lessons.png',
 			title: 'Getting started with lessons',
@@ -89,7 +66,7 @@ export default defineComponent({
 				'Contains live teaching sessions and study materials.',
 			],
 		}
-		return { openLessonDetails, searchQuery, openCreateClassModal, teachersOptions, emptyLessonContent, userId }
+		return { emptyLessonContent, userId }
 	},
 })
 </script>
