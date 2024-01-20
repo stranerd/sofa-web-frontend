@@ -1,5 +1,5 @@
 <template>
-	<div class="p-4 flex flex-col gap-4">
+	<div class="p-4 mdlg:p-6 flex flex-col gap-4">
 		<div class="flex w-full items-center gap-2 justify-between mdlg:justify-center">
 			<SofaHeaderText class="!font-bold !text-deepGray" content="Make an announcement" />
 			<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="close" />
@@ -10,7 +10,7 @@
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 				:error="factory.errors.body"
 				placeholder="Write announcemnt" />
-			<div class="grid grid-cols-2">
+			<div class="grid gap-4 mdlg:gap-6 grid-cols-2">
 				<SofaSelect
 					v-model="factory.lessonId"
 					customClass="rounded-custom !bg-lightGray col-span-1"
