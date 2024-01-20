@@ -47,13 +47,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from 'vue'
-import { useModals } from '@app/composables/core/modals'
-import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
-import { ClassEntity } from '@modules/organizations'
-import { MemberEntity } from '@modules/organizations'
+import { useModals } from '@app/composables/core/modals'
+import { ClassEntity, MemberEntity } from '@modules/organizations'
 import { SelectOption } from 'sofa-logic'
+import { PropType, computed, defineComponent, ref } from 'vue'
+import { useRoute } from 'vue-router'
+
 export default defineComponent({
 	props: {
 		classObj: {
@@ -83,11 +83,11 @@ export default defineComponent({
 			],
 		}
 
-		const teachersOptions = computed((): SelectOption[] => {
-			return props.teachers.map((teacher: MemberEntity) => {
-				return { key: teacher?.user?.id || '', value: teacher.user?.bio.name.full || '' }
-			})
-		})
+		const teachersOptions = computed((): SelectOption[] =>
+			props.teachers
+				.filter((t) => !!t.user)
+				.map((teacher: MemberEntity) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.name.full || '' })),
+		)
 
 		const filteredLessons = computed(() => {
 			if (searchQuery.value) return props.classObj.lessons.filter((lesson) => lesson.title.includes(searchQuery.value))

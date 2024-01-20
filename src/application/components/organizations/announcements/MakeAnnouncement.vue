@@ -16,6 +16,7 @@
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select lesson"
 					borderColor="border-transparent"
+					selectFirstOnMount
 					:error="factory.errors.lessonId"
 					:options="lessonOptions" />
 				<SofaSelect
@@ -23,6 +24,7 @@
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select audience"
 					borderColor="border-transparent"
+					selectFirstOnMount
 					:error="factory.errors.userType"
 					:options="userTypesOption" />
 			</div>
@@ -51,7 +53,7 @@
 <script setup lang="ts">
 import { useMakeAnnouncement } from '@app/composables/organizations/announcements'
 import { computed } from 'vue'
-import { ClassEntity } from '@modules/organizations'
+import { ClassEntity, MemberTypes } from '@modules/organizations'
 const props = defineProps<{
 	organizationId: string
 	userId: string
@@ -65,26 +67,12 @@ const lessonOptions = computed(() => {
 	// For teachers, return only lessons where user is a teacher
 	if (props.classObj.isTeacher(props.userId)) {
 		const lessons = props.classObj.lessons.filter((lesson) => lesson.users.teachers.includes(props.userId))
-		if (lessons.length > 0) {
-			return lessons.map((l) => {
-				return { key: l.id, value: l.title }
-			})
-		} else {
-			return []
-		}
+		return lessons.map((l) => ({ key: l.id, value: l.title }))
 	}
 	// For admins, return every lessons plus all students
 	if (props.classObj.isAdmin(props.userId)) {
 		const lessons = props.classObj.lessons
-		if (lessons.length > 0) {
-			const options = lessons.map((l) => {
-				return { key: l.id || null, value: l.title }
-			})
-			options.unshift({ key: null, value: 'All lessons' })
-			return options
-		} else {
-			return [{ key: null, value: 'All lessons' }]
-		}
+		return [{ key: null as string | null, value: 'All lessons' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
 	}
 	return []
 })
@@ -92,14 +80,14 @@ const lessonOptions = computed(() => {
 const userTypesOption = computed(() => {
 	// For teachers return only student
 	if (props.classObj.isTeacher(props.userId)) {
-		return [{ key: 'student', value: 'Students Only' }]
+		return [{ key: MemberTypes.student, value: 'Students Only' }]
 	}
 	// For admins, return all user types
 	if (props.classObj.isAdmin(props.userId)) {
 		return [
 			{ key: null, value: 'Both Teachers and Students' },
-			{ key: 'student', value: 'Students Only' },
-			{ key: 'teacher', value: 'Teachers Only' },
+			{ key: MemberTypes.student, value: 'Students Only' },
+			{ key: MemberTypes.teacher, value: 'Teachers Only' },
 		]
 	}
 	return []

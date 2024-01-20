@@ -46,16 +46,17 @@
 								v-model="filter.lesson"
 								customClass="rounded-custom !bg-transparent border col-span-1"
 								placeholder="Lesson"
+								selectFirstOnMount
 								borderColor="border-darkLightGray"
-								:options="
-									[{ key: null as string | null, value: 'All lessons' }].concat(
-										classObj.lessons.map((l) => ({ key: l.id, value: l.title })),
-									)
-								" />
+								:options="[
+									{ key: null as string | null, value: 'All lessons' },
+									...classObj.lessons.map((l) => ({ key: l.id, value: l.title })),
+								]" />
 							<SofaSelect
 								v-model="filter.userType"
 								customClass="rounded-custom !bg-transparent border col-span-1"
 								placeholder="Recipient"
+								selectFirstOnMount
 								borderColor="border-darkLightGray"
 								:options="userTypesOption" />
 						</div>
@@ -122,8 +123,8 @@ export default defineComponent({
 		}
 
 		const filter = reactive({
-			lesson: null as unknown as string,
-			userType: null as unknown as string,
+			lesson: null as string | null,
+			userType: null as MemberTypes | null,
 		})
 
 		const userTypesOption = [
@@ -143,8 +144,8 @@ export default defineComponent({
 		const { announcements } = useMyAnnouncements(organizationId, classId)
 		const filteredAnnouncements = computed(() =>
 			announcements.value.filter((an) => {
-				const lessonMatch = filter.lesson ? an.filter.lessonId === filter.lesson : true
-				const userTypeMatch = filter.userType ? an.filter.userType === filter.userType : true
+				const lessonMatch = an.filter.lessonId && filter.lesson ? an.filter.lessonId === filter.lesson : true
+				const userTypeMatch = an.filter.userType && filter.userType ? an.filter.userType === filter.userType : true
 				return lessonMatch && userTypeMatch
 			}),
 		)
