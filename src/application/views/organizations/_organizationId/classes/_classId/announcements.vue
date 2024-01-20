@@ -39,7 +39,7 @@
 			<div v-else class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 mdlg:p-6">
 				<SofaHeaderText class="hidden mdlg:inline-block" content="Annoucements" />
 				<div class="hidden mdlg:inline-block h-[1px] w-full bg-lightGray" />
-				<div v-if="classObj.isAdmin(id) || classObj.isTeacher(id)" class="flex flex-wrap gap-4 items-center justify-between pb-6">
+				<div v-if="classObj.isAdmin(id) || classObj.isTeacher(id)" class="flex flex-wrap gap-4 items-center justify-between">
 					<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
 						<SofaSelect
 							v-model="filter.lesson"
@@ -88,7 +88,7 @@
 					:announcement="announcement" />
 				<SofaButton
 					v-if="classObj.isAdmin(id) || classObj.isTeacher(id)"
-					customClass="block mdlg:hidden mt-6"
+					class="block mdlg:hidden"
 					bgColor="bg-primaryBlue"
 					textColor="text-white"
 					padding="py-3 px-4"
