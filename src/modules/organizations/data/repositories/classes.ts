@@ -66,4 +66,12 @@ export class ClassRepository implements IClassRepository {
 		const d = await this.client.put<ClassToModel, ClassFromModel>(`/${id}`, data)
 		return this.mapper(d)
 	}
+
+	async purchase(id: string) {
+		return await this.client.post<unknown, boolean>(`/${id}/purchase`, {})
+	}
+
+	async cancelPurchase(id: string) {
+		return await this.client.delete<unknown, boolean>(`/${id}/purchase`, {})
+	}
 }

@@ -17,8 +17,8 @@ export interface FormRule {
 	errorMessage: string | undefined
 }
 
-export interface SelectOption {
-	key: any
+export interface SelectOption<T = any> {
+	key: T
 	value: string
 	extras?: string
 	hasIcon?: boolean

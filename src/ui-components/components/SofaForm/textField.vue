@@ -6,7 +6,7 @@
 		<div class="w-full flex items-center group" :class="{ 'opacity-50': disabled }" :tabindex="tabIndex">
 			<slot name="outer-prefix" />
 			<div
-				class="flew-grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
+				class="flex-grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
 				:class="{
 					'!border-red-500 !border': validationStatus == false || error,
 					[`${borderColor} ${padding} ${customClass}`]: true,
@@ -90,7 +90,7 @@ const defaultValueRef = toRef(props, 'defaultValue')
 watch(
 	defaultValueRef,
 	() => {
-		content.value = props.defaultValue
+		if (props.defaultValue) content.value = props.defaultValue
 	},
 	{ immediate: true },
 )
@@ -109,26 +109,24 @@ const checkValidation = () => {
 
 watch(content, () => checkValidation)
 
-watch(props, () => {
-	if (props.updateValue) {
-		if (props.updateValue == 'empty') {
-			content.value = ''
-		} else {
-			content.value = props.updateValue
+watch(
+	props,
+	() => {
+		if (props.updateValue) {
+			if (props.updateValue == 'empty') content.value = ''
+			else content.value = props.updateValue
 		}
-	}
-})
+	},
+	{ immediate: true },
+)
 
 const isNumber = (evt: any) => {
 	if (props.type != 'tel') return true
 
 	evt = evt ?? window.event
 	const charCode = evt.which ? evt.which : evt.keyCode
-	if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-		evt.preventDefault()
-	} else {
-		return true
-	}
+	if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) evt.preventDefault()
+	else return true
 }
 
 const tabIndex = Math.random()

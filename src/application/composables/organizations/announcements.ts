@@ -70,7 +70,7 @@ export const useMyAnnouncements = (organizationId: string, classId: string) => {
 				),
 			)
 		},
-		{ key: `organizations/classes/${organizationId}-${classId}/announcements` },
+		{ key: `organizations/classes/${key}/announcements` },
 	)
 
 	const fetchOlderAnnouncements = async () => {

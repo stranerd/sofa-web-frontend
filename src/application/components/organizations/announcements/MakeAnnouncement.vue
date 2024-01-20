@@ -1,5 +1,5 @@
 <template>
-	<div class="p-4 flex flex-col gap-4">
+	<div class="p-4 mdlg:p-6 flex flex-col gap-4">
 		<div class="flex w-full items-center gap-2 justify-between mdlg:justify-center">
 			<SofaHeaderText class="!font-bold !text-deepGray" content="Make an announcement" />
 			<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="close" />
@@ -10,12 +10,13 @@
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 				:error="factory.errors.body"
 				placeholder="Write announcemnt" />
-			<div class="grid grid-cols-2">
+			<div class="grid gap-4 mdlg:gap-6 grid-cols-2">
 				<SofaSelect
 					v-model="factory.lessonId"
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select lesson"
 					borderColor="border-transparent"
+					selectFirstOnMount
 					:error="factory.errors.lessonId"
 					:options="lessonOptions" />
 				<SofaSelect
@@ -23,6 +24,7 @@
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select audience"
 					borderColor="border-transparent"
+					selectFirstOnMount
 					:error="factory.errors.userType"
 					:options="userTypesOption" />
 			</div>
@@ -51,31 +53,43 @@
 <script setup lang="ts">
 import { useMakeAnnouncement } from '@app/composables/organizations/announcements'
 import { computed } from 'vue'
+import { ClassEntity, MemberTypes } from '@modules/organizations'
 const props = defineProps<{
 	organizationId: string
-	classId: string
+	userId: string
+	classObj: ClassEntity
 	close: () => void
 }>()
 
-const { factory, makeAnnouncement } = useMakeAnnouncement(props.organizationId, props.classId)
+const { factory, makeAnnouncement } = useMakeAnnouncement(props.organizationId, props.classObj.id)
 
 const lessonOptions = computed(() => {
-	// TODO
-	/**
-	 * For teachers usertype, only show lessons which the teachers belongs to
-	 * For admins, show every lessons plus the all lessons options
-	 */
-	return [{ key: null, value: 'All lessons' }]
+	// For teachers, return only lessons where user is a teacher
+	if (props.classObj.isTeacher(props.userId)) {
+		const lessons = props.classObj.lessons.filter((lesson) => lesson.users.teachers.includes(props.userId))
+		return lessons.map((l) => ({ key: l.id, value: l.title }))
+	}
+	// For admins, return every lessons plus all students
+	if (props.classObj.isAdmin(props.userId)) {
+		const lessons = props.classObj.lessons
+		return [{ key: null as string | null, value: 'All lessons' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
+	}
+	return []
 })
 
 const userTypesOption = computed(() => {
-	// TODO
-	/**
-	 * For teachers, only show student option
-	 * For admins, show student, teachers and both teachers and student options
-	 */
-	if (props) {
+	// For teachers return only student
+	if (props.classObj.isTeacher(props.userId)) {
+		return [{ key: MemberTypes.student, value: 'Students Only' }]
 	}
-	return [{ key: null, value: 'Both Teachers and Students' }]
+	// For admins, return all user types
+	if (props.classObj.isAdmin(props.userId)) {
+		return [
+			{ key: null, value: 'Both Teachers and Students' },
+			{ key: MemberTypes.student, value: 'Students Only' },
+			{ key: MemberTypes.teacher, value: 'Teachers Only' },
+		]
+	}
+	return []
 })
 </script>

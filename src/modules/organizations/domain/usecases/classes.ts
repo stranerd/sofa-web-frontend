@@ -50,4 +50,12 @@ export class ClassesUseCase {
 
 		return await this.repository(organizationId).listenToMany(conditions, listener, () => true)
 	}
+
+	async purchase(organizationId: string, classId: string) {
+		return await this.repository(organizationId).purchase(classId)
+	}
+
+	async cancelPurchase(organizationId: string, classId: string) {
+		return await this.repository(organizationId).cancelPurchase(classId)
+	}
 }

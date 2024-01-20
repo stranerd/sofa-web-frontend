@@ -2,14 +2,16 @@ import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { ClassLesson, LessonToModel } from '../types'
 
-export class LessonFactory extends BaseFactory<ClassLesson, LessonToModel, LessonToModel> {
+type Keys = { title: string; teacher: string }
+
+export class LessonFactory extends BaseFactory<ClassLesson, LessonToModel, Keys> {
 	readonly rules = {
 		title: v.string().min(1),
-		teachers: v.array(v.string()),
+		teacher: v.string().min(1),
 	}
 
 	constructor() {
-		super({ title: '', teachers: [] })
+		super({ title: '', teacher: '' })
 	}
 
 	get title() {
@@ -20,9 +22,17 @@ export class LessonFactory extends BaseFactory<ClassLesson, LessonToModel, Lesso
 		this.set('title', value)
 	}
 
+	get teacher() {
+		return this.values.teacher
+	}
+
+	set teacher(value: string) {
+		this.set('teacher', value)
+	}
+
 	model = async () => {
-		const { title, teachers } = this.validValues
-		return { title, teachers }
+		const { title, teacher } = this.validValues
+		return { title, teachers: [teacher] }
 	}
 
 	loadEntity = (entity: ClassLesson) => {

@@ -20,28 +20,19 @@
 		<slot />
 	</component>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-	name: 'SofaBadge',
-	props: {
-		color: {
-			type: String,
-			default: 'purple',
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		isInverted: {
-			type: Boolean,
-			default: false,
-		},
-		as: {
-			type: String,
-			required: false,
-			default: 'span',
-		},
+<script lang="ts" setup>
+withDefaults(
+	defineProps<{
+		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink'
+		customClass?: string
+		isInverted?: boolean
+		as?: string
+	}>(),
+	{
+		color: 'purple',
+		customClass: '',
+		isInverted: false,
+		as: 'span',
 	},
-})
+)
 </script>

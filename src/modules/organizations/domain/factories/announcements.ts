@@ -30,18 +30,18 @@ export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, Announc
 	}
 
 	get lessonId() {
-		return this.values.lessonId as string
+		return this.values.lessonId
 	}
 
-	set lessonId(value: string) {
+	set lessonId(value: string | null) {
 		this.set('lessonId', value)
 	}
 
 	get userType() {
-		return this.values.userType as string
+		return this.values.userType
 	}
 
-	set userType(value: string) {
+	set userType(value: MemberTypes | null) {
 		this.set('userType', value)
 	}
 
@@ -55,7 +55,7 @@ export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, Announc
 
 	loadEntity = (entity: AnnouncementEntity) => {
 		this.body = entity.body
-		this.lessonId = entity.filter.lessonId as string
-		this.userType = entity.filter.userType as string
+		this.lessonId = entity.filter.lessonId
+		this.userType = entity.filter.userType
 	}
 }
