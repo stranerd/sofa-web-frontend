@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-3">
+	<div class="flex gap-3 items-start">
 		<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" />
 		<div class="flex flex-col gap-2">
 			<div class="flex items-center gap-2">
@@ -11,7 +11,7 @@
 					<SofaNormalText color="text-grayColor">{{ time }}</SofaNormalText>
 				</div>
 				<SofaBadge v-if="classObj.isAdmin(id) || classObj.isTeacher(id)">{{ lesson }}</SofaBadge>
-				<SofaBadge customClass="bg-[#6419C8]">{{ recipient }}</SofaBadge>
+				<SofaBadge v-if="classObj.isAdmin(id) || classObj.isTeacher(id)" class="bg-[#6419C8]">{{ recipient }}</SofaBadge>
 			</div>
 			<SofaNormalText color="text-deepGray">{{ announcement.body }}</SofaNormalText>
 		</div>

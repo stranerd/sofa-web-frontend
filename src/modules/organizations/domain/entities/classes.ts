@@ -72,7 +72,7 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	}
 
 	isAdmin(userId: string) {
-		return this.organizationId === userId
+		return this.organizationId !== userId
 	}
 
 	getLesson(id: string) {
