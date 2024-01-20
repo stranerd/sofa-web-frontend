@@ -51,7 +51,7 @@
 												:textStyle="`!text-3xl ${score.color}`">
 												{{ formatNumber(score.percent, 1) }}%
 											</SofaPieChart>
-											<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" :content="score.label" />
+											<SofaHeaderText class="md:!text-3xl text-xl" :content="score.label" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold"
