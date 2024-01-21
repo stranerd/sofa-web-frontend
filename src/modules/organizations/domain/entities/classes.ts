@@ -53,6 +53,10 @@ export class ClassEntity extends BaseEntity implements Saleable {
 		return `/organizations/${this.organizationId}/classes/${this.id}`
 	}
 
+	get explorePageLink() {
+		return `/organizations/${this.organizationId}/classes/${this.id}/explore`
+	}
+
 	get shareLink() {
 		return `${window.location.origin}${this.pageLink}`
 	}

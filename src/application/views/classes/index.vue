@@ -22,7 +22,7 @@
 				</div>
 			</div>
 			<template v-else>
-				<div class="flex flex-col mdlg:flex-row gap-4 justify-between items-center px-4">
+				<div class="flex flex-col mdlg:flex-row gap-4 justify-between items-center px-4 mdlg:px-0">
 					<div class="flex gap-2 mdlg:gap-4 w-full items-center">
 						<a
 							v-for="t in tabs"
@@ -36,6 +36,23 @@
 							<SofaButton padding="py-3 px-5">Explore</SofaButton>
 						</router-link>
 					</div>
+					<div class="w-full flex items-center gap-4">
+						<SofaTextField
+							v-model="searchQuery"
+							class="bg-white border border-darkLightGray rounded-custom flex-1"
+							customClass="!border-none w-full"
+							placeholder="Search">
+							<template #inner-prefix>
+								<SofaIcon name="search-black" class="h-[17px]" />
+							</template>
+						</SofaTextField>
+						<router-link class="hidden mdlg:inline-block" to="/classes/explore">
+							<SofaButton padding="py-3 px-5">Explore</SofaButton>
+						</router-link>
+					</div>
+				</div>
+				<div class="flex flex-col gap-4 items-start px-4 mdlg:px-0">
+					<MyClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst" />
 				</div>
 			</template>
 		</template>
@@ -43,12 +60,14 @@
 </template>
 
 <script lang="ts">
+import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
 import { useMyClassesIn } from '@app/composables/organizations/classes-explore'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'Classes',
+	components: { MyClassCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
 	},
@@ -66,8 +85,14 @@ export default defineComponent({
 		const tabs = ['active', 'saved']
 		const tab = ref(tabs[0])
 
+		const searchQuery = ref('')
 		const { classes } = useMyClassesIn()
-		return { classes, tabs, tab, emptyClassesContent }
+		const filteredClasses = computed(() => {
+			if (!searchQuery.value) return classes.value
+			return classes.value.filter((c) => c.search(searchQuery.value))
+		})
+
+		return { classes, filteredClasses, tabs, tab, emptyClassesContent, searchQuery }
 	},
 })
 </script>
