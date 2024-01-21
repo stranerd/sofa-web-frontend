@@ -27,4 +27,9 @@ export class ScheduleEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
+
+	get isOngoing() {
+		const now = Date.now()
+		return now >= this.time.start && now <= this.time.end
+	}
 }
