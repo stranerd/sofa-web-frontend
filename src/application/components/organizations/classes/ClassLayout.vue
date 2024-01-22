@@ -77,8 +77,9 @@
 
 <script setup lang="ts">
 import { useClass } from '@app/composables/organizations/classes'
+import { useMySchedules } from '@app/composables/organizations/schedules'
 import { Logic } from 'sofa-logic'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
@@ -115,27 +116,8 @@ const options = computed(() => [
 	{ title: 'About', icon: 'info', route: '/about' },
 ])
 
-const schedules = ref([
-	{
-		lessonId: '65a9bb8ab351dbfdf0c0ec50',
-		user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
-		title: 'Mathematics',
-		status: 'active',
-		time: 'Jan 17, 15:00 - 16:00',
-	},
-	{
-		lessonId: '65a9c0f8b351dbfdf0c0ed0f',
-		user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
-		title: 'English',
-		status: 'active',
-		time: 'Jan 17, 15:00 - 16:00',
-	},
-	{
-		lessonId: '65aa62d3b351dbfdf0c0f0b8',
-		user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
-		title: 'Organic chemistry',
-		status: 'active',
-		time: 'Jan 17, 15:00 - 16:00',
-	},
-])
+const organizationId = props.organizationId ?? (route.params.organizationId as string)
+const classId = props.classId ?? (route.params.classId as string)
+
+const { schedules } = useMySchedules(organizationId, classId)
 </script>

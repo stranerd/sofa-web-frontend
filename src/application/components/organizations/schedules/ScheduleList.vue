@@ -14,15 +14,25 @@
 				{{ lesson.title }}
 			</SofaButton>
 		</div>
-		<div class="flex flex-col gap-4 mt-4 mdlg:gap-0 mdlg:mt-2">
+		<div v-if="filteredSchedules.length" class="flex flex-col gap-4 mt-4 mdlg:gap-0 mdlg:mt-2">
 			<ScheduleCard v-for="(schedule, index) in filteredSchedules" :key="index" :schedule="schedule" />
+		</div>
+		<div v-else class="w-full pt-4">
+			<div class="w-full flex flex-col gap-2 items-center justify-center bg-lightGray p-4">
+				<SofaImageLoader
+					customClass="w-[64px] h-[64px] flex items-center justify-center rounded-custom !object-contain"
+					photoUrl="/images/calendar.png">
+				</SofaImageLoader>
+				<SofaNormalText customClass="font-bold"> There’s nothing here </SofaNormalText>
+				<SofaNormalText color="text-grayColor text-center"> There are no live sessions scheduled </SofaNormalText>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { ClassEntity } from '@modules/organizations'
+import { defineComponent, ref, computed, PropType } from 'vue'
+import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 export default defineComponent({
 	props: {
 		classObj: {
@@ -34,7 +44,7 @@ export default defineComponent({
 			default: false,
 		},
 		schedules: {
-			type: Object as any,
+			type: Array as PropType<ScheduleEntity[]>,
 			required: true,
 		},
 	},
@@ -43,7 +53,7 @@ export default defineComponent({
 		const lessonsFilterType = lessons.map((lesson) => {
 			return { id: lesson.id, title: lesson.title }
 		})
-		lessonsFilterType.unshift({ id: null, title: 'All' })
+		lessonsFilterType.unshift({ id: 'all', title: 'All' })
 		const lessonsFilter = lessonsFilterType
 		const selectedLesson = ref(lessonsFilter[0])
 		const schedules = props.schedules.map((schedule) => {
@@ -51,7 +61,7 @@ export default defineComponent({
 			return lesson ? { ...schedule, lessonTitle: lesson.title } : schedule
 		})
 		const filteredSchedules = computed(() => {
-			if (selectedLesson.value.id !== null) {
+			if (selectedLesson.value.id !== 'all') {
 				return schedules.filter((schedule) => {
 					return schedule.lessonId === selectedLesson.value.id
 				})

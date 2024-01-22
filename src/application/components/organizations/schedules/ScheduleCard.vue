@@ -8,9 +8,14 @@
 			<SofaNormalText :content="schedule.user.bio.name.full" color="text-deepGray" />
 		</div>
 		<div class="flex items-center gap-2">
-			<SofaIcon name="calendar" class="h-[17px] fill-current" />
-			<SofaNormalText :content="schedule.time" color="text-deepGray" />
+			<SofaIcon name="calendar" class="h-[17px]" :class="schedule.status === 'started' ? 'fill-primaryRed' : 'fill-current'" />
+			<SofaNormalText :content="schedule.time.start" :color="schedule.status === 'started' ? 'text-primaryRed' : 'text-deepGray'" />
+			<div class="w-[5px] h-[5px] rounded-[50%]" :class="schedule.status === 'started' ? 'bg-primaryRed' : 'bg-deepGray'"></div>
+			<SofaNormalText :content="schedule.time.end" :color="schedule.status === 'started' ? 'text-primaryRed' : 'text-deepGray'" />
 		</div>
+		<SofaButton v-if="schedule.status === 'started'" bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-5">
+			Enter
+		</SofaButton>
 	</div>
 </template>
 

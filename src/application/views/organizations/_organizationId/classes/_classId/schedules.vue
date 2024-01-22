@@ -27,7 +27,10 @@
 
 <script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
+import { useMySchedules } from '@app/composables/organizations/schedules'
+
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdSchedules',
@@ -36,29 +39,10 @@ export default defineComponent({
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
-		const schedules = ref([
-			{
-				lessonId: '65a9bb8ab351dbfdf0c0ec50',
-				user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
-				title: 'Mathematics',
-				status: 'active',
-				time: 'Jan 17, 15:00 - 16:00',
-			},
-			{
-				lessonId: '65a9c0f8b351dbfdf0c0ed0f',
-				user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
-				title: 'English',
-				status: 'active',
-				time: 'Jan 17, 15:00 - 16:00',
-			},
-			{
-				lessonId: '65aa62d3b351dbfdf0c0f0b8',
-				user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
-				title: 'Organic chemistry',
-				status: 'active',
-				time: 'Jan 17, 15:00 - 16:00',
-			},
-		])
+		const route = useRoute()
+		const organizationId = route.params.organizationId as string
+		const classId = route.params.classId as string
+		const { schedules } = useMySchedules(organizationId, classId)
 		return {
 			schedules,
 		}
