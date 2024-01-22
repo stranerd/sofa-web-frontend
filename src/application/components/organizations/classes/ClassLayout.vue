@@ -53,7 +53,7 @@
 			</div>
 		</template>
 		<template #right-session>
-			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
+			<div v-if="schedules.length === 0" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<SofaHeaderText content="Live Sessions" />
 				<div class="h-[1px] w-full bg-lightGray" />
 				<div class="w-full flex flex-col gap-2 items-center justify-center">
@@ -64,6 +64,13 @@
 					<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
 				</div>
 			</div>
+			<div
+				v-else-if="schedules.length && currentClass"
+				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
+				<SofaHeaderText content="Live Sessions" />
+				<div class="mt-4 h-[1px] w-full bg-lightGray" />
+				<ScheduleList :classObj="currentClass" :showFilter="false" :schedules="schedules" />
+			</div>
 		</template>
 	</DashboardLayout>
 </template>
@@ -71,7 +78,7 @@
 <script setup lang="ts">
 import { useClass } from '@app/composables/organizations/classes'
 import { Logic } from 'sofa-logic'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 
@@ -106,5 +113,29 @@ const options = computed(() => [
 	{ title: 'Announcements', icon: 'announcement', route: '/announcements' },
 	{ title: 'Schedule', icon: 'calendar', route: '/schedules' },
 	{ title: 'About', icon: 'info', route: '/about' },
+])
+
+const schedules = ref([
+	{
+		lessonId: '65a9bb8ab351dbfdf0c0ec50',
+		user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
+		title: 'Mathematics',
+		status: 'active',
+		time: 'Jan 17, 15:00 - 16:00',
+	},
+	{
+		lessonId: '65a9c0f8b351dbfdf0c0ed0f',
+		user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
+		title: 'English',
+		status: 'active',
+		time: 'Jan 17, 15:00 - 16:00',
+	},
+	{
+		lessonId: '65aa62d3b351dbfdf0c0f0b8',
+		user: { bio: { name: { full: 'Mr. David Ababio ' }, photo: { link: '/images/dorcas.png' } } },
+		title: 'Organic chemistry',
+		status: 'active',
+		time: 'Jan 17, 15:00 - 16:00',
+	},
 ])
 </script>
