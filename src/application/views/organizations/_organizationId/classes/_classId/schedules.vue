@@ -25,7 +25,7 @@
 					textColor="text-grayColor"
 					bgColor="bg-transparent"
 					class="!shadow-none !rounded-none !py-3 !mx-auto"
-					@click="fetchSchedules">
+					@click="fetchOlderSchedules">
 					Load More
 				</SofaButton>
 			</div>
@@ -50,11 +50,11 @@ export default defineComponent({
 		const route = useRoute()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
-		const { schedules, fetchSchedules, hasMore } = useMySchedules(organizationId, classId)
+		const { schedules, fetchOlderSchedules, hasMore } = useMySchedules(organizationId, classId)
 		return {
 			schedules,
 			hasMore,
-			fetchSchedules,
+			fetchOlderSchedules,
 		}
 	},
 })

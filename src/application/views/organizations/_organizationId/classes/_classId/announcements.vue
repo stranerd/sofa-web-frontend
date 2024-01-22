@@ -91,7 +91,7 @@
 					textColor="text-grayColor"
 					bgColor="bg-transparent"
 					class="!shadow-none !rounded-none"
-					@click="fetchAnnouncements">
+					@click="fetchOlderAnnouncements">
 					Load More
 				</SofaButton>
 				<SofaButton
@@ -159,7 +159,7 @@ export default defineComponent({
 			})
 		}
 
-		const { announcements, hasMore, fetchAnnouncements } = useMyAnnouncements(organizationId, classId)
+		const { announcements, hasMore, fetchOlderAnnouncements } = useMyAnnouncements(organizationId, classId)
 		const filteredAnnouncements = computed(() =>
 			announcements.value.filter((an) => {
 				const lessonMatch = an.filter.lessonId && filter.lesson ? an.filter.lessonId === filter.lesson : true
@@ -170,7 +170,7 @@ export default defineComponent({
 
 		return {
 			announcements,
-			fetchAnnouncements,
+			fetchOlderAnnouncements,
 			filteredAnnouncements,
 			id,
 			emptyAnnouncementContent,
