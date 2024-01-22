@@ -20,6 +20,14 @@
 				<SofaHeaderText customClass="p-4 hidden mdlg:block">{{ 'Schedule' }}</SofaHeaderText>
 				<div class="h-[1px] w-full bg-lightGray" />
 				<ScheduleList :classObj="classObj" :showFilter="true" :schedules="schedules" class="px-4 pb-4" />
+				<SofaButton
+					v-if="hasMore"
+					textColor="text-grayColor"
+					bgColor="bg-transparent"
+					class="!shadow-none !rounded-none !py-3 !mx-auto"
+					@click="fetchSchedules">
+					Load More
+				</SofaButton>
 			</div>
 		</template>
 	</ClassLayout>
@@ -42,9 +50,11 @@ export default defineComponent({
 		const route = useRoute()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
-		const { schedules } = useMySchedules(organizationId, classId)
+		const { schedules, fetchSchedules, hasMore } = useMySchedules(organizationId, classId)
 		return {
 			schedules,
+			hasMore,
+			fetchSchedules,
 		}
 	},
 })

@@ -92,6 +92,7 @@ export const useMyAnnouncements = (organizationId: string, classId: string) => {
 		loading,
 		error,
 		fetchOlderAnnouncements,
+		fetchAnnouncements,
 	}
 }
 

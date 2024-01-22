@@ -91,6 +91,7 @@ export const useMySchedules = (organizationId: string, classId: string) => {
 		loading,
 		error,
 		fetchOlderSchedules,
+		fetchSchedules,
 	}
 }
 

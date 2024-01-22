@@ -87,6 +87,14 @@
 					:classObj="classObj"
 					:announcement="announcement" />
 				<SofaButton
+					v-if="hasMore"
+					textColor="text-grayColor"
+					bgColor="bg-transparent"
+					class="!shadow-none !rounded-none"
+					@click="fetchAnnouncements">
+					Load More
+				</SofaButton>
+				<SofaButton
 					v-if="classObj.isAdmin(id) || classObj.isTeacher(id)"
 					class="block mdlg:hidden"
 					bgColor="bg-primaryBlue"
@@ -151,7 +159,7 @@ export default defineComponent({
 			})
 		}
 
-		const { announcements } = useMyAnnouncements(organizationId, classId)
+		const { announcements, hasMore, fetchAnnouncements } = useMyAnnouncements(organizationId, classId)
 		const filteredAnnouncements = computed(() =>
 			announcements.value.filter((an) => {
 				const lessonMatch = an.filter.lessonId && filter.lesson ? an.filter.lessonId === filter.lesson : true
@@ -162,12 +170,14 @@ export default defineComponent({
 
 		return {
 			announcements,
+			fetchAnnouncements,
 			filteredAnnouncements,
 			id,
 			emptyAnnouncementContent,
 			createAnnouncement,
 			filter,
 			userTypesOption,
+			hasMore,
 		}
 	},
 })
