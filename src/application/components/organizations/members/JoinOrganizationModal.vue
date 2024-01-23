@@ -1,9 +1,9 @@
 <template>
 	<div class="flex flex-col md:gap-5 gap-3 relative mdlg:p-6 items-center">
-		<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${org.orgName}`" />
+		<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${org.publicName}`" />
 
 		<div class="w-full flex justify-between items-center mdlg:hidden py-2 border-lightGray border-b px-4">
-			<SofaNormalText class="!font-bold !text-base" :content="`Join ${org.orgName}`" />
+			<SofaNormalText class="!font-bold !text-base" :content="`Join ${org.publicName}`" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 

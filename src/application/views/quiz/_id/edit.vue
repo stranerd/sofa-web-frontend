@@ -233,7 +233,7 @@
 							:key="user.id"
 							class="flex items-center gap-2">
 							<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" size="36" class="-ml-1" />
-							<SofaNormalText :content="user.orgName" size="lg" />
+							<SofaNormalText :content="user.publicName" size="lg" />
 						</div>
 						<SofaNormalText
 							v-if="!(extras.usersByQuestions[extras.currentQuestionById?.id ?? ''] ?? []).length"

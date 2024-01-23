@@ -54,7 +54,7 @@ export class UserEntity extends BaseEntity {
 		return this.account.rankings.overall.value
 	}
 
-	get orgName() {
+	get publicName() {
 		if (this.type?.type === UserType.organization) return this.type.name
 		return this.bio.name.full
 	}

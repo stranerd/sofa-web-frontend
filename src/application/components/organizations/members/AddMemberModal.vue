@@ -53,6 +53,6 @@ const props = defineProps<{
 
 const { addMembersEmails, addMembers } = useManageOrganizationMembers(props.org.id)
 const share = async () =>
-	await Logic.Common.share('Join organization', `Join to become a member of ${props.org?.orgName}`, props.org.shareLink)
+	await Logic.Common.share('Join organization', `Join to become a member of ${props.org?.publicName}`, props.org.shareLink)
 const copy = () => Logic.Common.copy(props.org.shareLink)
 </script>

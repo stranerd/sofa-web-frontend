@@ -20,7 +20,7 @@
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
-							<SofaHeaderText class="!text-base" :content="user.orgName" />
+							<SofaHeaderText class="!text-base" :content="user.publicName" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
 							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 						</div>
