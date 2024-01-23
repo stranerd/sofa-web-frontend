@@ -93,7 +93,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 		[conversation.user, conversation.tutor].filter(Boolean).reduce(
 			(acc, cur) => {
 				acc[cur.id] = {
-					name: cur.bio.name.full,
+					name: cur.bio.publicName,
 					photoUrl: cur.bio.photo?.link ?? null,
 				}
 				return acc

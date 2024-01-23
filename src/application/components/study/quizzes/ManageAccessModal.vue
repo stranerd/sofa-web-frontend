@@ -34,9 +34,9 @@
 		<div class="bg-darkLightGray h-[1px] w-full" />
 
 		<div class="w-full flex flex-col gap-2">
-			<div v-for="member in [quiz.user, ...members]" :key="member.id" class="flex gap-2 items-center w-full">
+			<div v-for="member in members" :key="member.id" class="flex gap-2 items-center w-full">
 				<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
-				<SofaNormalText color="text-deepGray" :content="member.bio.name.full" class="truncate flex-grow" />
+				<SofaNormalText color="text-deepGray" :content="member.orgName" class="truncate flex-grow" />
 				<template v-if="member.id !== quiz.user.id">
 					<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="manageMembers([member.id], false)" />
 					<div class="h-full bg-darkLightGray w-[1px]" />
@@ -90,7 +90,7 @@ const addUsers = async () => {
 		)
 }
 
-const members = computed(() => props.users.filter((u) => props.quiz.access.members.includes(u.id)))
+const members = computed(() => props.users.filter((u) => [props.quiz.user.id, ...props.quiz.access.members].includes(u.id)))
 const requests = computed(() => props.users.filter((u) => props.quiz.access.requests.includes(u.id)))
 
 const shareUrl = `${window.location.origin}/quiz/${props.quiz.id}/edit`

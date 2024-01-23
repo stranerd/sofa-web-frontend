@@ -54,7 +54,9 @@ export enum RankingTimes {
 
 export type EmbeddedUser = {
 	id: string
-	bio: Pick<UserBio, 'name' | 'description' | 'photo'>
+	bio: Pick<UserBio, 'name' | 'photo'> & {
+		publicName: string
+	}
 	roles: AuthRoleType
 	type: UserTypeData | null
 }

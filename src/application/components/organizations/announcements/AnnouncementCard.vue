@@ -5,7 +5,7 @@
 			<div class="flex flex-col gap-2">
 				<div class="flex items-center gap-2">
 					<SofaNormalText customClass="font-bold">
-						{{ id === announcement.user.id ? 'You' : announcement.user.bio.name.full }}
+						{{ id === announcement.user.id ? 'You' : announcement.user.bio.publicName }}
 					</SofaNormalText>
 					<div class="flex items-center gap-1">
 						<div class="h-[5px] w-[5px] bg-grayColor rounded-full"></div>

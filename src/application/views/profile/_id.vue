@@ -2,7 +2,7 @@
 	<ExpandedLayout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
-			<SofaNormalText class="!font-bold !text-base" :content="user.bio.name.full" />
+			<SofaNormalText class="!font-bold !text-base" :content="user.orgName" />
 			<div />
 		</div>
 
@@ -14,7 +14,7 @@
 
 						<div class="flex flex-col">
 							<div class="flex items-center gap-2">
-								<SofaHeaderText class="!font-bold" :content="user.bio.name.full" />
+								<SofaHeaderText class="!font-bold" :content="user.orgName" />
 								<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[16px]" />
 								<SofaIcon v-if="user.userType.isTeacher" name="tutor-bagde" class="h-[18px]" />
 							</div>
@@ -90,7 +90,7 @@
 							color="text-primaryPink"
 							as="router-link"
 							content="View all"
-							:to="`/marketplace/search?userId=${user.id}&userName=${user.bio.name.full}`" />
+							:to="`/marketplace/search?userId=${user.id}&userName=${user.orgName}`" />
 					</div>
 
 					<div
@@ -108,7 +108,7 @@
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
-							:title="`${user.bio.name.full} has no published materials yet`"
+							:title="`${user.orgName} has no published materials yet`"
 							subTitle="Discover thousands of other materials on SOFA marketplace"
 							actionLabel="Marketplace"
 							:action="() => Logic.Common.GoToRoute('/marketplace')" />

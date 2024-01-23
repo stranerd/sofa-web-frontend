@@ -156,7 +156,7 @@ const filteredTutors = computed(() =>
 		.filter((t) => t.tutor.topics.includes(selectedTopic.value))
 		.map((t) => ({
 			id: t.id,
-			name: t.bio.name.full,
+			name: t.orgName,
 			online: t.status.connections.length > 0,
 			photo_url: t.bio.photo?.link || '',
 			ratings: {

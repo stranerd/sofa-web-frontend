@@ -30,6 +30,6 @@ export class MemberEntity extends BaseEntity {
 
 	search(value: string) {
 		if (!value) return true
-		return [this.email, this.user?.bio.name.full ?? ''].some((field) => field.toLowerCase().includes(value.toLowerCase()))
+		return [this.email, this.user?.bio.publicName ?? ''].some((field) => field.toLowerCase().includes(value.toLowerCase()))
 	}
 }
