@@ -99,7 +99,7 @@
 							<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
 								<sofa-icon :name="'upload-purple'" :custom-class="'h-[16px]'" />
 								<sofa-normal-text :color="'text-primaryPurple'">
-									{{ tutorRequestForm.verification ? tutorRequestForm.verification?.name : 'Upload a valid ID' }}
+									{{ tutorRequestForm.verification?.name ?? 'Upload a valid ID' }}
 								</sofa-normal-text>
 							</div>
 						</template>
