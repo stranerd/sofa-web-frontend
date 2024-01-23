@@ -64,7 +64,6 @@
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 					<sofa-header-text :size="'xl'" :custom-class="'text-left'"> Qualification </sofa-header-text>
-
 					<sofa-file-attachment
 						v-model="tutorRequestForm.qualification"
 						:is-wrapper="true"
@@ -100,7 +99,7 @@
 							<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
 								<sofa-icon :name="'upload-purple'" :custom-class="'h-[16px]'" />
 								<sofa-normal-text :color="'text-primaryPurple'">
-									{{ tutorRequestForm.verification?.name ?? 'Upload a valid ID' }}
+									{{ tutorRequestForm.verification ? tutorRequestForm.verification?.name : 'Upload a valid ID' }}
 								</sofa-normal-text>
 							</div>
 						</template>
@@ -183,6 +182,7 @@ import {
 	SofaSelect,
 	SofaTextField,
 	SofaTextarea,
+	SofaFileAttachment,
 } from 'sofa-ui-components'
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -199,6 +199,7 @@ export default defineComponent({
 		SofaFileInput,
 		SofaImageLoader,
 		SofaSelect,
+		SofaFileAttachment,
 	},
 	setup() {
 		useMeta({ title: 'Become a tutor' })
