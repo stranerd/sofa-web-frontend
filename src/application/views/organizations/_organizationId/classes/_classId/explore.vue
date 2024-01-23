@@ -68,11 +68,15 @@
 			<!-- Class lessons Tab Content -->
 			<div v-if="selectedTab == 'activity'">
 				<!-- Lessons -->
-				<div class="pt-6">
+				<div v-if="currentClass.lessons.length" class="pt-6">
 					<SofaHeaderText content="Lessons" customClass="!text-xl" />
 					<div class="flex flex-col gap-4 mt-3">
 						<LessonCard v-for="lesson in currentClass.lessons" :key="lesson.id" :lesson="lesson" />
 					</div>
+				</div>
+				<div v-else class="flex flex-col gap-4 items-center py-10">
+					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+					<SofaNormalText color="text-grayColor" customClass="font-bold">No lessons created yet!</SofaNormalText>
 				</div>
 			</div>
 			<!-- Similar classes tab content -->
