@@ -46,7 +46,7 @@
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold"
-												:content="score.user?.id === gameExtras.authId ? 'You' : score.user?.bio.name.full" />
+												:content="score.user?.id === gameExtras.authId ? 'You' : score.user?.orgName" />
 											<SofaIcon v-if="score.isWinner" name="game-winner" class="h-[23px]" />
 											<SofaNormalText
 												color="text-deepGray"

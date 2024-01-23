@@ -41,7 +41,7 @@
 					<SofaAvatar :photoUrl="member.user?.bio.photo?.link" size="28" />
 					<SofaNormalText
 						color="text-inherit"
-						:content="`${member.user?.bio.name.full ?? member.email}${member.pending ? ' sent a request' : ''}`"
+						:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
 						class="truncate flex-grow" />
 					<template v-if="member.pending">
 						<SofaNormalText as="a" color="text-primaryRed" content="Decline" @click="acceptMember(member, false)" />

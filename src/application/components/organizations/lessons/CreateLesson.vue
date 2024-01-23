@@ -57,6 +57,6 @@ const props = defineProps<{
 const { factory, createLesson } = useCreateLesson(props.organizationId, props.classId)
 
 const teachers = computed(() =>
-	props.teachers.filter((t) => !!t.user).map((teacher) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.name.full || '' })),
+	props.teachers.filter((t) => !!t.user).map((teacher) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.publicName || '' })),
 )
 </script>

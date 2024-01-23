@@ -11,7 +11,7 @@
 
 		<div v-if="conversation && conversation.tutor" class="w-full flex justify-center items-center gap-2">
 			<SofaAvatar :photoUrl="conversation.tutor.bio.photo?.link" size="27" />
-			<SofaNormalText class="!font-bold" :content="conversation.tutor.bio.name.full" />
+			<SofaNormalText class="!font-bold" :content="conversation.tutor.bio.publicName" />
 			<SofaIcon name="tutor-bagde" class="h-[20px]" />
 		</div>
 

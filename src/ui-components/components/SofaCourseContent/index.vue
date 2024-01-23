@@ -269,7 +269,7 @@ export default defineComponent({
 									contentDetails.tags = quiz.tagIds.map((id) => {
 										return Logic.Study.GetTagName(id)
 									})
-									contentDetails.user.name = quiz.user.bio.name.full
+									contentDetails.user.name = quiz.user.bio.publicName
 									contentDetails.user.photoUrl = quiz.user.bio.photo ? quiz.user.bio.photo.link : ''
 
 									contentDetails.content.materialsCount = quiz.questions.length

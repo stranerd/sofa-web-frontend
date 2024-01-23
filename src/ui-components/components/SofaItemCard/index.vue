@@ -37,7 +37,7 @@
 			<router-link class="gap-2 flex items-center" :to="`/profile/${content.user.id}`">
 				<SofaAvatar size="20" :photoUrl="content.user.bio.photo?.link" :userId="content.user.id" />
 				<SofaNormalText customClass="!whitespace-nowrap !line-clamp-1">
-					{{ content.authUserId === content.user.id ? 'You' : content.user.bio.name.full }}
+					{{ content.authUserId === content.user.id ? 'You' : content.user.bio.publicName }}
 				</SofaNormalText>
 				<SofaIcon v-if="content.user.roles.isVerified" name="verify" customClass="h-[13px]" />
 				<SofaIcon v-if="content.user.type?.type === 'teacher'" name="tutor-bagde" customClass="h-[13px]" />

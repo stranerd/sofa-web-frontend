@@ -283,7 +283,7 @@ export default defineComponent({
 					? {
 							search: {
 								value: searchQuery.value,
-								fields: ['title', 'user.bio.name.first', 'user.bio.name.last', 'user.bio.name.full'],
+								fields: ['title', 'user.bio.name.first', 'user.bio.name.last', 'user.bio.name.full', 'user.bio.publicName'],
 							},
 						}
 					: {}),

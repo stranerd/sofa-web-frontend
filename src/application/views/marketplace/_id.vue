@@ -289,7 +289,7 @@ export default defineComponent({
 				contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
 					return Logic.Study.GetTagName(id)
 				})
-				contentDetails.user.name = SingleCourse.value.user.bio.name.full
+				contentDetails.user.name = SingleCourse.value.user.bio.publicName
 				contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo ? SingleCourse.value.user.bio.photo.link : ''
 				contentDetails.user.id = SingleCourse.value.user.id
 				contentDetails.user.roles = SingleCourse.value.user.roles
@@ -315,7 +315,7 @@ export default defineComponent({
 						rating: review.rating,
 						review: review.message,
 						user: {
-							name: review.user.bio.name.full,
+							name: review.user.bio.publicName,
 							photoUrl: review.user.bio.photo?.link || '',
 							id: review.user.id,
 						},
@@ -390,7 +390,7 @@ export default defineComponent({
 					return Logic.Study.GetTagName(id)
 				})
 
-				contentDetails.user.name = SingleQuiz.value.user?.bio.name.full
+				contentDetails.user.name = SingleQuiz.value.user?.bio.publicName
 				contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo ? SingleQuiz.value.user.bio.photo.link : ''
 				contentDetails.user.id = SingleQuiz.value.user.id
 				contentDetails.user.roles = SingleQuiz.value.user.roles
@@ -415,7 +415,7 @@ export default defineComponent({
 						rating: review.rating,
 						review: review.message,
 						user: {
-							name: review.user.bio.name.full,
+							name: review.user.bio.publicName,
 							photoUrl: review.user.bio.photo?.link || '',
 							id: review.user.id,
 						},

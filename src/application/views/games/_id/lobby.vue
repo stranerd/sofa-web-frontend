@@ -71,7 +71,7 @@
 													<SofaNormalText
 														color="text-bodyBlack"
 														class="!font-semibold"
-														:content="`Hosted by ${quiz.user.bio.name.full}`" />
+														:content="`Hosted by ${game.user.bio.publicName}`" />
 												</div>
 											</div>
 										</template>
@@ -98,7 +98,7 @@
 										<SofaNormalText
 											color="text-deepGray"
 											class="!font-semibold"
-											:content="user.id === gameExtras.authId ? 'You' : user.bio.name.full" />
+											:content="user.id === gameExtras.authId ? 'You' : user.orgName" />
 									</div>
 									<div
 										v-if="participants.length == 0"

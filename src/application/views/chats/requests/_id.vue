@@ -4,7 +4,7 @@
 			v-if="conversation && conversation.pending && conversation.tutor?.id === authId"
 			class="h-full"
 			:data="{
-				title: otherUser?.bio.name.full ?? 'New Request',
+				title: otherUser?.bio.publicName ?? 'New Request',
 				photoUrl: otherUser?.bio.photo?.link ?? null,
 				userNames: ['You', otherUser?.bio.name.first].filter(Boolean),
 			}">

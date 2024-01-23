@@ -12,7 +12,7 @@
 					:customClass="customClass"
 					:chat="{
 						route: `/chats/requests/${request.id}`,
-						title: request.user.bio.name.full,
+						title: request.user.bio.publicName,
 						lastMessage: request.title,
 						lastMessageTime: formatTime(request.createdAt),
 						photoUrl: request.user.bio.photo?.link ?? null,
@@ -32,7 +32,7 @@
 					:customClass="customClass"
 					:chat="{
 						route: `/chats/${request.id}`,
-						title: request.user.bio.name.full,
+						title: request.user.bio.publicName,
 						lastMessage: request.title,
 						lastMessageTime: formatTime(request.createdAt),
 						photoUrl: request.user.bio.photo?.link ?? null,

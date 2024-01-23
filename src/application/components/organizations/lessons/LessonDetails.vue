@@ -52,7 +52,7 @@
 				<div>
 					<SofaAvatar :photoUrl="teacher.user?.bio.photo?.link || ''" customClass="!w-[32px] !h-[32px]" />
 				</div>
-				<SofaNormalText color="text-deepGray">{{ teacher.user?.bio.name.full }}</SofaNormalText>
+				<SofaNormalText color="text-deepGray">{{ teacher.user?.bio.publicName }}</SofaNormalText>
 			</div>
 		</div>
 		<div v-if="selectedTab === 'students'" class="py-4 flex flex-col gap-4">
