@@ -286,9 +286,7 @@ export default defineComponent({
 				contentDetails.labels.color = 'orange'
 				contentDetails.labels.main = 'Course'
 				contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`
-				contentDetails.tags = SingleCourse.value.tagIds.map((id) => {
-					return Logic.Study.GetTagName(id)
-				})
+				contentDetails.tags = SingleCourse.value.tagIds.map((id) => Logic.Study.GetTagName(id))
 				contentDetails.user.name = SingleCourse.value.user.bio.publicName
 				contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo ? SingleCourse.value.user.bio.photo.link : ''
 				contentDetails.user.id = SingleCourse.value.user.id
@@ -386,9 +384,7 @@ export default defineComponent({
 				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`
 				contentDetails.labels.color = 'pink'
 				contentDetails.labels.main = 'Quiz'
-				contentDetails.tags = SingleQuiz.value.tagIds.map((id) => {
-					return Logic.Study.GetTagName(id)
-				})
+				contentDetails.tags = SingleQuiz.value.tagIds.map((id) => Logic.Study.GetTagName(id))
 
 				contentDetails.user.name = SingleQuiz.value.user?.bio.publicName
 				contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo ? SingleQuiz.value.user.bio.photo.link : ''

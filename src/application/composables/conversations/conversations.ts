@@ -10,29 +10,30 @@ import { useSuccessHandler } from '../core/states'
 
 const store = {
 	conversations: ref<ConversationEntity[]>([]),
-	listener: useListener(async () => {
-		return await ConversationsUseCases.listenToAll({
-			created: async (entity) => {
-				addToArray(
-					store.conversations.value,
-					entity,
-					(e) => e.id,
-					(e) => e.last?.createdAt ?? 0,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.conversations.value,
-					entity,
-					(e) => e.id,
-					(e) => e.last?.createdAt ?? 0,
-				)
-			},
-			deleted: async (entity) => {
-				store.conversations.value = store.conversations.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
+	listener: useListener(
+		async () =>
+			await ConversationsUseCases.listenToAll({
+				created: async (entity) => {
+					addToArray(
+						store.conversations.value,
+						entity,
+						(e) => e.id,
+						(e) => e.last?.createdAt ?? 0,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.conversations.value,
+						entity,
+						(e) => e.id,
+						(e) => e.last?.createdAt ?? 0,
+					)
+				},
+				deleted: async (entity) => {
+					store.conversations.value = store.conversations.value.filter((m) => m.id !== entity.id)
+				},
+			}),
+	),
 }
 
 export const useConversationsList = () => {

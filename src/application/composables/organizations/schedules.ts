@@ -16,8 +16,8 @@ const store = {} as Record<
 export const useClassSchedules = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`
 	if (store[key] === undefined) {
-		const listener = useListener(() => {
-			return SchedulesUseCases.listen(
+		const listener = useListener(() =>
+			SchedulesUseCases.listen(
 				organizationId,
 				classId,
 				{
@@ -42,8 +42,8 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 					},
 				},
 				store[key].schedules.value.at(-1)?.createdAt,
-			)
-		})
+			),
+		)
 		store[key] = {
 			schedules: ref([]),
 			hasMore: ref(false),

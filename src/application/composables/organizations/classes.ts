@@ -19,8 +19,8 @@ const orgStore: Record<
 export const useOrganizationClasses = (organizationId: string) => {
 	orgStore[organizationId] ??= {
 		classes: ref([]),
-		listener: useListener(async () => {
-			return ClassesUseCases.listenToAll(organizationId, {
+		listener: useListener(async () =>
+			ClassesUseCases.listenToAll(organizationId, {
 				created: async (entity) => {
 					addToArray(
 						orgStore[organizationId].classes.value,
@@ -40,8 +40,8 @@ export const useOrganizationClasses = (organizationId: string) => {
 				deleted: async (entity) => {
 					orgStore[organizationId].classes.value = orgStore[organizationId].classes.value.filter((m) => m.id !== entity.id)
 				},
-			})
-		}),
+			}),
+		),
 	}
 
 	const {

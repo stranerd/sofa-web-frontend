@@ -90,9 +90,7 @@ export default class Common {
 		this.route = route
 	}
 
-	public makeId = () => {
-		return getRandomValue()
-	}
+	public makeId = () => getRandomValue()
 
 	public showValidationError = (error: AxiosError, formElement: any, customErrorMessage: string | undefined = undefined) => {
 		const validationErrors = error?.response?.data as ValidationError[]
@@ -213,17 +211,10 @@ export default class Common {
 		return currencies[currency.toUpperCase() as keyof typeof currencies] ?? ''
 	}
 
-	public formatPrice = (price: number, currency = 'NGN') => {
-		return `${this.getCurrency(currency)}${Intl.NumberFormat().format(price)}`
-	}
+	public formatPrice = (price: number, currency = 'NGN') => `${this.getCurrency(currency)}${Intl.NumberFormat().format(price)}`
 
-	public searchArray = (arr: any[], searchKey: string) => {
-		return arr.filter((obj) => {
-			return Object.keys(obj).some((key) => {
-				return isString()(obj[key]).valid ? obj[key].includes(searchKey) : false
-			})
-		})
-	}
+	public searchArray = (arr: any[], searchKey: string) =>
+		arr.filter((obj) => Object.keys(obj).some((key) => (isString()(obj[key]).valid ? obj[key].includes(searchKey) : false)))
 
 	public debounce = (method = () => {}, delay = 500) => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -23,6 +23,7 @@ module.exports = {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'vue/multi-word-component-names': 'off',
 		'vue/no-mutating-props': 'off',
+		'arrow-body-style': ['error', 'as-needed'],
 		'@typescript-eslint/no-non-null-assertion': 'off',
 		'@typescript-eslint/no-empty-function': 'off',
 		'no-empty': 'off',

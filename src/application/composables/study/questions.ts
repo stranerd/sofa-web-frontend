@@ -6,19 +6,23 @@ import { useListener } from '../core/listener'
 export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, listen = false) => {
 	const allQuestions = computed(() => [] as QuestionEntity[])
 
-	const { items: questions, addToList } = useItemsInList('questions', ids, allQuestions, async (ids: string[]) => {
-		return await QuestionsUseCases.getInList(quizId, ids)
-	})
+	const { items: questions, addToList } = useItemsInList(
+		'questions',
+		ids,
+		allQuestions,
+		async (ids: string[]) => await QuestionsUseCases.getInList(quizId, ids),
+	)
 
-	const listener = useListener(async () => {
-		return await QuestionsUseCases.listenToInList(quizId, () => ids.value, {
-			created: addToList,
-			updated: addToList,
-			deleted: () => {
-				/* */
-			},
-		})
-	})
+	const listener = useListener(
+		async () =>
+			await QuestionsUseCases.listenToInList(quizId, () => ids.value, {
+				created: addToList,
+				updated: addToList,
+				deleted: () => {
+					/* */
+				},
+			}),
+	)
 
 	onMounted(() => {
 		if (listen) listener.start()

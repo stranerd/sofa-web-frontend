@@ -99,9 +99,7 @@ export default class Study extends Common {
 
 	public GetTagName = (id: string) => {
 		const Tag = [...(this.Tags?.results || []), ...(this.AllTopics?.results || []), ...(this.AllOtherTags?.results || [])].filter(
-			(tag) => {
-				return tag.id == id
-			},
+			(tag) => tag.id == id,
 		)
 
 		if (Tag.length) {
@@ -111,15 +109,14 @@ export default class Study extends Common {
 		}
 	}
 
-	public GetTags = (filters: QueryParams) => {
-		return $api.interactions.tag.fetch(filters).then((response) => {
+	public GetTags = (filters: QueryParams) =>
+		$api.interactions.tag.fetch(filters).then((response) => {
 			this.Tags = response.data
 			return this.Tags
 		})
-	}
 
-	public GetTopics = () => {
-		return $api.interactions.tag
+	public GetTopics = () =>
+		$api.interactions.tag
 			.fetch({
 				where: [
 					{
@@ -133,10 +130,9 @@ export default class Study extends Common {
 				this.AllTopics = response.data
 				return response.data
 			})
-	}
 
-	public GetOtherTags = () => {
-		return $api.interactions.tag
+	public GetOtherTags = () =>
+		$api.interactions.tag
 			.fetch({
 				where: [
 					{
@@ -150,14 +146,12 @@ export default class Study extends Common {
 				this.AllOtherTags = response.data
 				return response.data
 			})
-	}
 
-	public GetQuizzes = (filters: QueryParams, updateItems = true) => {
-		return $api.study.quiz.fetch(filters).then((response) => {
+	public GetQuizzes = (filters: QueryParams, updateItems = true) =>
+		$api.study.quiz.fetch(filters).then((response) => {
 			if (updateItems) this.AllQuzzies = response.data
 			return response.data
 		})
-	}
 
 	public GetQuiz = async (id: string) => {
 		if (!id || id == 'nill') return null
@@ -180,24 +174,15 @@ export default class Study extends Common {
 		return 'h-[23px]'
 	}
 
-	public GetCourses = (filters: QueryParams, updateItems = true) => {
-		return $api.study.course.fetch(filters).then((response) => {
+	public GetCourses = (filters: QueryParams, updateItems = true) =>
+		$api.study.course.fetch(filters).then((response) => {
 			if (updateItems) this.AllCourses = response.data
 			return response.data
 		})
-	}
 
-	public GetSimilarCourses = (courseId: string) => {
-		return $api.study.course.similarCourses(courseId).then((response) => {
-			return response.data
-		})
-	}
+	public GetSimilarCourses = (courseId: string) => $api.study.course.similarCourses(courseId).then((response) => response.data)
 
-	public GetSimilarQuizzes = (quizId: string) => {
-		return $api.study.quiz.similarQuizzes(quizId).then((response) => {
-			return response.data
-		})
-	}
+	public GetSimilarQuizzes = (quizId: string) => $api.study.quiz.similarQuizzes(quizId).then((response) => response.data)
 
 	public GetCoursesWithQuery = async (query = 'nill', tagId = '', userId = '') => {
 		const whereQuery: QueryParams['where'] = []
@@ -396,15 +381,14 @@ export default class Study extends Common {
 		}
 	}
 
-	public GetFiles = (filters: QueryParams) => {
-		return $api.study.file.fetch(filters).then((response) => {
+	public GetFiles = (filters: QueryParams) =>
+		$api.study.file.fetch(filters).then((response) => {
 			this.AllFiles = response.data
 			return response.data
 		})
-	}
 
-	public GetReviews = (uniqueId: string, type: 'quizzes' | 'courses') => {
-		return $api.interactions.reviews
+	public GetReviews = (uniqueId: string, type: 'quizzes' | 'courses') =>
+		$api.interactions.reviews
 			.fetch({
 				where: [
 					{
@@ -423,10 +407,9 @@ export default class Study extends Common {
 				this.AllReviews = response.data
 				return response.data
 			})
-	}
 
-	public GetSingleReview = (uniqueId: string, type: 'quizzes' | 'courses') => {
-		return $api.interactions.reviews
+	public GetSingleReview = (uniqueId: string, type: 'quizzes' | 'courses') =>
+		$api.interactions.reviews
 			.fetch({
 				where: [
 					{
@@ -455,7 +438,6 @@ export default class Study extends Common {
 
 				return response.data
 			})
-	}
 
 	public SaveCourseChangesToLocal = (UpdateCourseSections: UpdateCourseSectionsInput) => {
 		localStorage.setItem('couse_section_update', JSON.stringify(UpdateCourseSections))
@@ -607,8 +589,8 @@ export default class Study extends Common {
 			})
 	}
 
-	public FreezeCourse = (id: string) => {
-		return $api.study.course
+	public FreezeCourse = (id: string) =>
+		$api.study.course
 			.freezeCourse(id)
 			.then((response) => {
 				this.SingleCourse = response.data
@@ -616,7 +598,6 @@ export default class Study extends Common {
 			.catch((error) => {
 				Logic.Common.showError(capitalize(error.response.data[0]?.message))
 			})
-	}
 
 	public CreateFile = (formIsValid: boolean) => {
 		if (formIsValid && this.CreateFileForm) {
@@ -648,9 +629,7 @@ export default class Study extends Common {
 		}
 	}
 
-	public DeleteCourse = (id: string) => {
-		return $api.study.course.delete(id).then().catch()
-	}
+	public DeleteCourse = (id: string) => $api.study.course.delete(id).then().catch()
 
 	public DeleteFile = (id: string) => {
 		Logic.Common.showLoading()

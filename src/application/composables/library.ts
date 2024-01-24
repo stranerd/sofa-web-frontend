@@ -3,56 +3,52 @@ import { CourseEntity, QuizEntity } from '@modules/study'
 import { Game, Logic, PlayStatus, ResourceType, Test } from 'sofa-logic'
 import { useModals } from './core/modals'
 
-const createQuizData = (quiz: QuizEntity): ResourceType => {
-	return {
-		original: quiz,
-		title: quiz.title,
-		image: quiz.photo?.link ?? '/images/default.png',
-		labels: {
-			color: 'pink',
-			main: 'Quiz - Learn',
-			sub: `${quiz.questions.length} questions`,
-		},
-		route: `/marketplace/${quiz.id}?type=quiz`,
-		progress: 0,
-		subject: Logic.Study.GetTagName(quiz.topicId),
-		id: quiz.id,
-		status: quiz.status,
-		showMore: false,
-		userId: quiz.user.id,
-		type: 'quiz',
-		authUserId: Logic.Common.AuthUser?.id,
-		user: quiz.user,
-		ratings: quiz.ratings,
-		createdAt: quiz.createdAt,
-	}
-}
+const createQuizData = (quiz: QuizEntity): ResourceType => ({
+	original: quiz,
+	title: quiz.title,
+	image: quiz.photo?.link ?? '/images/default.png',
+	labels: {
+		color: 'pink',
+		main: 'Quiz - Learn',
+		sub: `${quiz.questions.length} questions`,
+	},
+	route: `/marketplace/${quiz.id}?type=quiz`,
+	progress: 0,
+	subject: Logic.Study.GetTagName(quiz.topicId),
+	id: quiz.id,
+	status: quiz.status,
+	showMore: false,
+	userId: quiz.user.id,
+	type: 'quiz',
+	authUserId: Logic.Common.AuthUser?.id,
+	user: quiz.user,
+	ratings: quiz.ratings,
+	createdAt: quiz.createdAt,
+})
 
-const createCourseData = (course: CourseEntity): ResourceType => {
-	return {
-		original: course,
-		title: course.title,
-		image: course.photo?.link ?? '/images/default.png',
-		labels: {
-			color: 'orange',
-			main: 'Course',
-			sub: `${course.sections.length} topics`,
-		},
-		price: course.price,
-		route: `/marketplace/${course.id}?type=course`,
-		progress: 0,
-		subject: Logic.Study.GetTagName(course.topicId),
-		user: course.user,
-		authUserId: Logic.Common.AuthUser?.id,
-		id: course.id,
-		status: course.status,
-		showMore: false,
-		userId: course.user.id,
-		type: 'course',
-		ratings: course.ratings,
-		createdAt: course.createdAt,
-	}
-}
+const createCourseData = (course: CourseEntity): ResourceType => ({
+	original: course,
+	title: course.title,
+	image: course.photo?.link ?? '/images/default.png',
+	labels: {
+		color: 'orange',
+		main: 'Course',
+		sub: `${course.sections.length} topics`,
+	},
+	price: course.price,
+	route: `/marketplace/${course.id}?type=course`,
+	progress: 0,
+	subject: Logic.Study.GetTagName(course.topicId),
+	user: course.user,
+	authUserId: Logic.Common.AuthUser?.id,
+	id: course.id,
+	status: course.status,
+	showMore: false,
+	userId: course.user.id,
+	type: 'course',
+	ratings: course.ratings,
+	createdAt: course.createdAt,
+})
 
 export const extractResource = (material: CourseEntity | QuizEntity) =>
 	material.isQuiz() ? createQuizData(material) : createCourseData(material)

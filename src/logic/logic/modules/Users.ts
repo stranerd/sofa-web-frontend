@@ -16,32 +16,28 @@ export default class Users extends Common {
 	public UpdateUserVerificationForm: VerificationStatusInput | undefined
 	public CreateTutorRequestForm: CreateTutorRequestForm | undefined
 
-	public GetTutorRequest = (id: string) => {
-		return $api.users.tutor_request.get(id).then((response) => {
+	public GetTutorRequest = (id: string) =>
+		$api.users.tutor_request.get(id).then((response) => {
 			this.SingleTutorRequest = response.data
 		})
-	}
 
-	public GetTutorRequests = (filters: QueryParams, isPersonal: boolean) => {
-		return $api.users.tutor_request.fetch(filters).then((response) => {
+	public GetTutorRequests = (filters: QueryParams, isPersonal: boolean) =>
+		$api.users.tutor_request.fetch(filters).then((response) => {
 			this.AllTutorRequests = response.data
 			if (isPersonal) {
 				this.SingleTutorRequest = this.AllTutorRequests.results.length ? this.AllTutorRequests.results[0] : undefined
 			}
 		})
-	}
 
-	public GetVerifications = (filters: QueryParams) => {
-		return $api.users.verifications.fetch(filters).then((response) => {
+	public GetVerifications = (filters: QueryParams) =>
+		$api.users.verifications.fetch(filters).then((response) => {
 			this.Verifications = response.data
 		})
-	}
 
-	public GetVerification = (id: string) => {
-		return $api.users.verifications.get(id).then((response) => {
+	public GetVerification = (id: string) =>
+		$api.users.verifications.get(id).then((response) => {
 			this.Verification = response.data
 		})
-	}
 
 	public CreateVerification = async (formIsValid: boolean, useLoader = true) => {
 		if (formIsValid && this.CreateVerificationForm) {
@@ -87,11 +83,8 @@ export default class Users extends Common {
 		}
 	}
 
-	public AcceptOrRejectTutorRequest = (requestId: string, status: boolean) => {
-		return $api.users.tutor_request.acceptOrRejectTutorRequest(requestId, status).then((response) => {
-			return response.data
-		})
-	}
+	public AcceptOrRejectTutorRequest = (requestId: string, status: boolean) =>
+		$api.users.tutor_request.acceptOrRejectTutorRequest(requestId, status).then((response) => response.data)
 
 	public SendFeedbackMessage = (message: string) => {
 		Logic.Common.showLoading()

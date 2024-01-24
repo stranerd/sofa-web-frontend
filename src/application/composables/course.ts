@@ -148,13 +148,9 @@ const updateCourseSections = () => {
 			sections: updateCourseSectionForm.sections,
 		}
 
-		const unsectionedSection = updateCourseSectionForm.sections.filter((item) => {
-			return item.label == 'unsectioned'
-		})[0]
+		const unsectionedSection = updateCourseSectionForm.sections.filter((item) => item.label == 'unsectioned')[0]
 
-		Logic.Study.UpdateCourseSectionForm.sections = updateCourseSectionForm.sections.filter((item) => {
-			return item.label != 'unsectioned'
-		})
+		Logic.Study.UpdateCourseSectionForm.sections = updateCourseSectionForm.sections.filter((item) => item.label != 'unsectioned')
 
 		Logic.Study.UpdateCourseSectionForm.sections.push(unsectionedSection)
 

@@ -141,15 +141,16 @@ export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
 
 	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, (ids) => QuizzesUseCases.getInList(ids))
 
-	const listener = useListener(async () => {
-		return await QuizzesUseCases.listenToInList(() => ids.value, {
-			created: addToList,
-			updated: addToList,
-			deleted: () => {
-				/* */
-			},
-		})
-	})
+	const listener = useListener(
+		async () =>
+			await QuizzesUseCases.listenToInList(() => ids.value, {
+				created: addToList,
+				updated: addToList,
+				deleted: () => {
+					/* */
+				},
+			}),
+	)
 
 	onMounted(() => {
 		if (listen) listener.start()

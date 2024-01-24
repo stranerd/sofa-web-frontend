@@ -164,13 +164,9 @@ export default defineComponent({
 
 		const plans = ref(Logic.Payment.AllPlans)
 
-		const myApplicablePlan = computed(() => {
-			return plans.value?.results.find((item) => item.usersFor.includes(userType.value.type)) ?? null
-		})
+		const myApplicablePlan = computed(() => plans.value?.results.find((item) => item.usersFor.includes(userType.value.type)) ?? null)
 
-		const myPlan = computed(() => {
-			return plans.value?.results.find((item) => item.id == wallet.value?.subscription.current?.id) ?? null
-		})
+		const myPlan = computed(() => plans.value?.results.find((item) => item.id == wallet.value?.subscription.current?.id) ?? null)
 
 		const subscibeToPlan = (id: string) => {
 			Logic.Payment.SubscribeToPlan(id).then((data) => {

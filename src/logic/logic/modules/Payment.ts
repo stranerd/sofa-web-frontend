@@ -97,27 +97,24 @@ export default class Payment extends Common {
 			})
 	}
 
-	public GetUserWallet = () => {
-		return $api.payment.wallet.getUserWallet().then((response) => {
+	public GetUserWallet = () =>
+		$api.payment.wallet.getUserWallet().then((response) => {
 			this.UserWallet = response.data
 			return this.UserWallet
 		})
-	}
 
-	public GetCommercialBanks = () => {
-		return $api.payment.wallet.getCommercialBanks().then((response) => {
+	public GetCommercialBanks = () =>
+		$api.payment.wallet.getCommercialBanks().then((response) => {
 			this.AllCommercialBanks = response.data
 		})
-	}
 
-	public GetPlans = (filter: QueryParams) => {
-		return $api.payment.plan.fetch(filter).then((response) => {
+	public GetPlans = (filter: QueryParams) =>
+		$api.payment.plan.fetch(filter).then((response) => {
 			this.AllPlans = response.data
 		})
-	}
 
-	public GetTransactions = (filter: QueryParams, append = false) => {
-		return $api.payment.transaction.fetch(filter).then((response) => {
+	public GetTransactions = (filter: QueryParams, append = false) =>
+		$api.payment.transaction.fetch(filter).then((response) => {
 			if (append) {
 				if (this.AllTransactions) {
 					response.data.results.unshift(...this.AllTransactions.results)
@@ -129,26 +126,23 @@ export default class Payment extends Common {
 				this.AllTransactions = response.data
 			}
 		})
-	}
 
-	public GetPaymentMethods = (filter: QueryParams) => {
-		return $api.payment.paymentMethod.fetch(filter).then((response) => {
+	public GetPaymentMethods = (filter: QueryParams) =>
+		$api.payment.paymentMethod.fetch(filter).then((response) => {
 			this.PaymentMethods = response.data
 		})
-	}
 
-	public GetPaymentMethod = (id: string) => {
-		return $api.payment.paymentMethod.get(id).then((response) => {
+	public GetPaymentMethod = (id: string) =>
+		$api.payment.paymentMethod.get(id).then((response) => {
 			this.PaymentMethod = response.data
 		})
-	}
 
 	public async GetMyPurchases(filters: QueryParams) {
 		return $api.payment.purchase.fetch(filters).then((response) => response.data as Paginated<Purchase>)
 	}
 
-	public GetUserPurchases = (fetchItems: boolean) => {
-		return new Promise((resolve) => {
+	public GetUserPurchases = (fetchItems: boolean) =>
+		new Promise((resolve) => {
 			$api.payment.purchase
 				.fetch({
 					where: [
@@ -193,7 +187,6 @@ export default class Payment extends Common {
 					throw error
 				})
 		})
-	}
 
 	public FundWallet = () => {
 		if (this.FundWalletForm) {
@@ -310,8 +303,8 @@ export default class Payment extends Common {
 			})
 	}
 
-	public ToggleSubscriptionRenew = (renew: boolean) => {
-		return $api.payment.wallet
+	public ToggleSubscriptionRenew = (renew: boolean) =>
+		$api.payment.wallet
 			.toggleSubscriptionRenew(renew)
 			.then((response) => {
 				Logic.Payment.GetUserWallet()
@@ -324,7 +317,6 @@ export default class Payment extends Common {
 			.catch((error) => {
 				Logic.Common.showError(capitalize(error.response.data[0]?.message))
 			})
-	}
 
 	public MakeMethodPrimary = (id: string) => {
 		Logic.Common.showLoading()

@@ -6,8 +6,8 @@ import { useListener } from '../core/listener'
 
 const topicStore = {
 	topics: reactive<TagEntity[]>([]),
-	listener: useListener(async () => {
-		return TagsUseCases.listenToAllTopics({
+	listener: useListener(async () =>
+		TagsUseCases.listenToAllTopics({
 			created: async (entity) => {
 				addToArray(
 					topicStore.topics,
@@ -29,14 +29,14 @@ const topicStore = {
 			deleted: async (entity) => {
 				topicStore.topics = topicStore.topics.filter((m) => m.id !== entity.id)
 			},
-		})
-	}),
+		}),
+	),
 }
 
 const genericStore = {
 	tags: reactive<TagEntity[]>([]),
-	listener: useListener(async () => {
-		return TagsUseCases.listenToAllGeneric({
+	listener: useListener(async () =>
+		TagsUseCases.listenToAllGeneric({
 			created: async (entity) => {
 				addToArray(
 					genericStore.tags,
@@ -56,8 +56,8 @@ const genericStore = {
 			deleted: async (entity) => {
 				genericStore.tags = genericStore.tags.filter((m) => m.id !== entity.id)
 			},
-		})
-	}),
+		}),
+	),
 }
 
 export const useTopicsList = () => {

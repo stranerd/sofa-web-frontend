@@ -256,14 +256,12 @@ export default defineComponent({
 
 			if (quiz) {
 				QuestionsUseCases.getAllQuestions(quiz.id).then((questions) => {
-					const allQuestions = questions.results.map((q) => {
-						return {
-							type: QuestionEntity.getLabel(q.data.type),
-							duration: Logic.Common.prettifyTime(q.timeLimit),
-							content: q.question,
-							answer: q.answer,
-						}
-					})
+					const allQuestions = questions.results.map((q) => ({
+						type: QuestionEntity.getLabel(q.data.type),
+						duration: Logic.Common.prettifyTime(q.timeLimit),
+						content: q.question,
+						answer: q.answer,
+					}))
 
 					staticSectionOptions.value[index].materials.push({
 						name: quiz.title,
@@ -364,16 +362,12 @@ export default defineComponent({
 				items.items.forEach((eachItem) => {
 					const itemIndex = remainCoursableItems.findIndex((x) => x.id == eachItem.id)
 					if (itemIndex != -1) {
-						remainCoursableItems = remainCoursableItems.filter((thisItem) => {
-							return thisItem.id != eachItem.id
-						})
+						remainCoursableItems = remainCoursableItems.filter((thisItem) => thisItem.id != eachItem.id)
 					}
 				})
 			})
 
-			const unsectionedSection = SingleCourse.value.sections.filter((section) => {
-				return section.label == 'unsectioned'
-			})
+			const unsectionedSection = SingleCourse.value.sections.filter((section) => section.label == 'unsectioned')
 
 			let unsectionedIndex = SingleCourse.value.sections.length - 1
 
@@ -458,17 +452,13 @@ export default defineComponent({
 		const updateLatestSection = () => {
 			sectionOptions.forEach((option, index) => {
 				if (option) {
-					props.sectionInput.sections[index].items = option.materials.map((item) => {
-						return {
-							id: item.id,
-							type: item.type.includes('quiz') ? 'quiz' : 'file',
-						}
-					})
+					props.sectionInput.sections[index].items = option.materials.map((item) => ({
+						id: item.id,
+						type: item.type.includes('quiz') ? 'quiz' : 'file',
+					}))
 					props.sectionInput.sections[index].label = option.name
 				} else {
-					props.sectionInput.sections = props.sectionInput.sections.filter((item, itemIndex) => {
-						return index != itemIndex
-					})
+					props.sectionInput.sections = props.sectionInput.sections.filter((item, itemIndex) => index != itemIndex)
 				}
 			})
 

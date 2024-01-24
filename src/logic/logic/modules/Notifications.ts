@@ -13,24 +13,21 @@ export default class Notifications extends Common {
 	public AllNotifications: Paginated<Notification> | undefined
 	public SingleNotification: Notification | undefined
 
-	public GetNotifications = (filters: QueryParams) => {
-		return $api.notifications.notifications.fetch(filters).then((response) => {
+	public GetNotifications = (filters: QueryParams) =>
+		$api.notifications.notifications.fetch(filters).then((response) => {
 			this.AllNotifications = response.data
 		})
-	}
 
-	public GetNotification = (id: string) => {
-		return $api.notifications.notifications.get(id).then((response) => {
+	public GetNotification = (id: string) =>
+		$api.notifications.notifications.get(id).then((response) => {
 			this.SingleNotification = response.data
 		})
-	}
 
-	public ToggleSeenNotifications = (id: string, seen: boolean) => {
-		return $api.notifications.notifications.toggleNotification({ id, seen }).then().catch()
-	}
+	public ToggleSeenNotifications = (id: string, seen: boolean) =>
+		$api.notifications.notifications.toggleNotification({ id, seen }).then().catch()
 
-	public ToggleAllNotifications = (seen: boolean) => {
-		return $api.notifications.notifications
+	public ToggleAllNotifications = (seen: boolean) =>
+		$api.notifications.notifications
 			.toggleAllNotification(seen)
 			.then(() => {
 				Logic.Notifications.GetNotifications({
@@ -44,13 +41,8 @@ export default class Notifications extends Common {
 				})
 			})
 			.catch()
-	}
 
-	public SubscribeDevice = (token: string) => {
-		return $api.notifications.pushTokens.subscribeDevice({ token }).then().catch()
-	}
+	public SubscribeDevice = (token: string) => $api.notifications.pushTokens.subscribeDevice({ token }).then().catch()
 
-	public UnSubscribeToken = (token: string) => {
-		return $api.notifications.pushTokens.unsubscribeDevice({ token }).then().catch()
-	}
+	public UnSubscribeToken = (token: string) => $api.notifications.pushTokens.unsubscribeDevice({ token }).then().catch()
 }

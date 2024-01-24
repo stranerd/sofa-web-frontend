@@ -7,14 +7,11 @@ import { QuestionFromModel } from '../../data/models/questions'
 import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
 import { questionTypes } from './questions-extras'
 
-const compare = (a: string, b: string, quality = 0.95) => {
-	return (
-		stringSimilarity.compareTwoStrings(
-			stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
-			stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
-		) >= quality
-	)
-}
+const compare = (a: string, b: string, quality = 0.95) =>
+	stringSimilarity.compareTwoStrings(
+		stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
+		stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
+	) >= quality
 
 export class QuestionEntity extends BaseEntity {
 	public readonly id: string

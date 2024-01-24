@@ -20,8 +20,8 @@ export const useMessages = (conversation: ConversationEntity) => {
 	const { userAi } = useAuth()
 
 	if (store[conversationId] === undefined) {
-		const listener = useListener(() => {
-			return MessagesUseCases.listen(
+		const listener = useListener(() =>
+			MessagesUseCases.listen(
 				conversationId,
 				{
 					created: async (entity) => {
@@ -46,8 +46,8 @@ export const useMessages = (conversation: ConversationEntity) => {
 					},
 				},
 				store[conversationId].messages.value.at(-1)?.createdAt,
-			)
-		})
+			),
+		)
 		store[conversationId] = {
 			messages: ref([]),
 			hasMore: ref(false),

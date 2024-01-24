@@ -249,14 +249,12 @@ export default defineComponent({
 						new Promise((resolve) => {
 							QuestionsUseCases.getAllQuestions(quiz.id)
 								.then((questions) => {
-									const allQuestions = questions.results.map((q) => {
-										return {
-											type: QuestionEntity.getLabel(q.data.type),
-											duration: Logic.Common.prettifyTime(q.timeLimit),
-											content: q.question,
-											answer: q.answer,
-										}
-									})
+									const allQuestions = questions.results.map((q) => ({
+										type: QuestionEntity.getLabel(q.data.type),
+										duration: Logic.Common.prettifyTime(q.timeLimit),
+										content: q.question,
+										answer: q.answer,
+									}))
 
 									const contentDetails = reactive<ContentDetails>(Logic.Study.contentDetails)
 
@@ -266,9 +264,7 @@ export default defineComponent({
 									contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.png'
 									contentDetails.info = quiz.description
 									contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
-									contentDetails.tags = quiz.tagIds.map((id) => {
-										return Logic.Study.GetTagName(id)
-									})
+									contentDetails.tags = quiz.tagIds.map((id) => Logic.Study.GetTagName(id))
 									contentDetails.user.name = quiz.user.bio.publicName
 									contentDetails.user.photoUrl = quiz.user.bio.photo ? quiz.user.bio.photo.link : ''
 

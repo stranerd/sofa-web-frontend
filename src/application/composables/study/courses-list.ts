@@ -83,15 +83,16 @@ export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 
 	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, (ids) => CoursesUseCases.getInList(ids))
 
-	const listener = useListener(async () => {
-		return await CoursesUseCases.listenToInList(() => ids.value, {
-			created: addToList,
-			updated: addToList,
-			deleted: () => {
-				/* */
-			},
-		})
-	})
+	const listener = useListener(
+		async () =>
+			await CoursesUseCases.listenToInList(() => ids.value, {
+				created: addToList,
+				updated: addToList,
+				deleted: () => {
+					/* */
+				},
+			}),
+	)
 
 	onMounted(() => {
 		if (listen) listener.start()

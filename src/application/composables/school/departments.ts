@@ -33,9 +33,7 @@ const {
 	{ key: 'school/departments/all' },
 )
 
-export const useDepartmentList = () => {
-	return { ...store, loading, error, fetchDepartments }
-}
+export const useDepartmentList = () => ({ ...store, loading, error, fetchDepartments })
 
 export const useDepartment = (facultyId: string, id: string) => {
 	const department = computed({

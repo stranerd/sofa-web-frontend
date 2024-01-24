@@ -36,13 +36,13 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 }
 
 const isValidPhone = (error?: string) =>
-	makeRule<Phone>((value) => {
-		return v
+	makeRule<Phone>((value) =>
+		v
 			.object({
-				code: v.string().custom((val) => {
-					return val.startsWith('+') && v.force.number(val.slice(1)).parse(val).valid
-				}, error ?? 'invalid phone code'),
+				code: v
+					.string()
+					.custom((val) => val.startsWith('+') && v.force.number(val.slice(1)).parse(val).valid, error ?? 'invalid phone code'),
 				number: v.force.number(error ?? 'invalid phone number').transform((val) => val.toString()),
 			})
-			.parse(value)
-	})
+			.parse(value),
+	)

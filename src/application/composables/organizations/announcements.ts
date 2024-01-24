@@ -17,8 +17,8 @@ const store = {} as Record<
 export const useClassAnnouncements = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`
 	if (store[key] === undefined) {
-		const listener = useListener(() => {
-			return AnnouncementsUseCases.listen(
+		const listener = useListener(() =>
+			AnnouncementsUseCases.listen(
 				organizationId,
 				classId,
 				{
@@ -43,8 +43,8 @@ export const useClassAnnouncements = (organizationId: string, classId: string) =
 					},
 				},
 				store[key].announcements.value.at(-1)?.createdAt,
-			)
-		})
+			),
+		)
 		store[key] = {
 			announcements: ref([]),
 			hasMore: ref(false),

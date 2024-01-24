@@ -53,9 +53,7 @@ export class QuizzesUseCase {
 			all: true,
 		}
 
-		return await this.repository.listenToMany(conditions, listener, (entity) => {
-			return entity.user.id === userId
-		})
+		return await this.repository.listenToMany(conditions, listener, (entity) => entity.user.id === userId)
 	}
 
 	async getInList(ids: string[]) {

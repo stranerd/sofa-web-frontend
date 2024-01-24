@@ -10,29 +10,30 @@ const searchStore = {
 
 const store = {
 	tutors: ref<UserEntity[]>([]),
-	listener: useListener(async () => {
-		return await UsersUseCases.listenToAllTeachers({
-			created: async (entity) => {
-				addToArray(
-					store.tutors.value,
-					entity,
-					(e) => e.id,
-					(e) => e.account.ratings.avg,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.tutors.value,
-					entity,
-					(e) => e.id,
-					(e) => e.account.ratings.avg,
-				)
-			},
-			deleted: async (entity) => {
-				store.tutors.value = store.tutors.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
+	listener: useListener(
+		async () =>
+			await UsersUseCases.listenToAllTeachers({
+				created: async (entity) => {
+					addToArray(
+						store.tutors.value,
+						entity,
+						(e) => e.id,
+						(e) => e.account.ratings.avg,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.tutors.value,
+						entity,
+						(e) => e.id,
+						(e) => e.account.ratings.avg,
+					)
+				},
+				deleted: async (entity) => {
+					store.tutors.value = store.tutors.value.filter((m) => m.id !== entity.id)
+				},
+			}),
+	),
 }
 
 export const useTutorsList = () => {
@@ -96,13 +97,14 @@ export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
 
 	const { items: users, addToList } = useItemsInList('users', ids, allUsers, (ids) => UsersUseCases.getInList(ids))
 
-	const listener = useListener(async () => {
-		return await UsersUseCases.listenToInList(() => ids.value, {
-			created: addToList,
-			updated: addToList,
-			deleted: () => {},
-		})
-	})
+	const listener = useListener(
+		async () =>
+			await UsersUseCases.listenToInList(() => ids.value, {
+				created: addToList,
+				updated: addToList,
+				deleted: () => {},
+			}),
+	)
 
 	onMounted(async () => {
 		if (listen) await listener.start()
