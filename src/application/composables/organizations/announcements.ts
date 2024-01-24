@@ -14,7 +14,7 @@ const store = {} as Record<
 	}
 >
 
-export const useMyAnnouncements = (organizationId: string, classId: string) => {
+export const useClassAnnouncements = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`
 	if (store[key] === undefined) {
 		const listener = useListener(() => {

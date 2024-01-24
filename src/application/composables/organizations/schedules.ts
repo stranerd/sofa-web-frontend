@@ -13,7 +13,7 @@ const store = {} as Record<
 	}
 >
 
-export const useMySchedules = (organizationId: string, classId: string) => {
+export const useClassSchedules = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`
 	if (store[key] === undefined) {
 		const listener = useListener(() => {
@@ -94,5 +94,3 @@ export const useMySchedules = (organizationId: string, classId: string) => {
 		fetchSchedules,
 	}
 }
-
-export const useCreateSchedule = () => {}

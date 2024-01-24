@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import { useClass } from '@app/composables/organizations/classes'
-import { useMySchedules } from '@app/composables/organizations/schedules'
+import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { Logic } from 'sofa-logic'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -97,12 +97,12 @@ const props = withDefaults(
 )
 
 const route = useRoute()
-const { class: currentClass } = useClass(
-	props.organizationId ?? (route.params.organizationId as string),
-	props.classId ?? (route.params.classId as string),
-)
-const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
+const organizationId = props.organizationId ?? (route.params.organizationId as string)
+const classId = props.classId ?? (route.params.classId as string)
 
+const { class: currentClass } = useClass(organizationId, classId)
+
+const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
 useMeta(
 	computed(() => ({
 		title: pageTitle.value,
@@ -116,8 +116,5 @@ const options = computed(() => [
 	{ title: 'About', icon: 'info', route: '/about' },
 ])
 
-const organizationId = props.organizationId ?? (route.params.organizationId as string)
-const classId = props.classId ?? (route.params.classId as string)
-
-const { schedules } = useMySchedules(organizationId, classId)
+const { schedules } = useClassSchedules(organizationId, classId)
 </script>

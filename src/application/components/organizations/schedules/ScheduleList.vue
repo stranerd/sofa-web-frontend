@@ -2,20 +2,20 @@
 	<div class="w-full">
 		<div v-if="showFilter" class="flex flex-wrap items-center gap-3 mt-6">
 			<SofaButton
-				v-for="lesson in lessonsFilter"
-				:key="lesson.id"
+				v-for="filter in lessonsFilters"
+				:key="filter.id"
 				:customClass="
-					selectedLesson.id === lesson.id
+					selectedFilter.id === filter.id
 						? 'bg-primaryPurple !text-white !shadow-none'
 						: 'bg-white border border-darkLightGray !text-deepGray !shadow-none'
 				"
 				padding="py-3 px-4"
-				@click="selectedLesson = lesson">
-				{{ lesson.title }}
+				@click="selectedFilter = filter">
+				{{ filter.title }}
 			</SofaButton>
 		</div>
 		<div v-if="filteredSchedules.length" class="flex flex-col gap-4 mt-4 mdlg:gap-0 mdlg:mt-2">
-			<ScheduleCard v-for="(schedule, index) in filteredSchedules" :key="index" :schedule="schedule" />
+			<ScheduleCard v-for="(schedule, index) in filteredSchedules" :key="index" :schedule="schedule" :classObj="classObj" />
 		</div>
 		<div v-else class="w-full pt-4">
 			<div class="w-full flex flex-col gap-2 items-center justify-center bg-lightGray p-4">
@@ -30,47 +30,20 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, PropType } from 'vue'
+<script lang="ts" setup>
 import { ClassEntity, ScheduleEntity } from '@modules/organizations'
-export default defineComponent({
-	props: {
-		classObj: {
-			type: ClassEntity,
-			required: true,
-		},
-		showFilter: {
-			type: Boolean,
-			default: false,
-		},
-		schedules: {
-			type: Array as PropType<ScheduleEntity[]>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const lessons = props.classObj.lessons
-		const lessonsFilterType = lessons.map((lesson) => {
-			return { id: lesson.id, title: lesson.title }
-		})
-		lessonsFilterType.unshift({ id: 'all', title: 'All' })
-		const lessonsFilter = lessonsFilterType
-		const selectedLesson = ref(lessonsFilter[0])
-		const schedules = props.schedules.map((schedule) => {
-			const lesson = lessons.find((lesson) => lesson.id === schedule.lessonId)
-			return lesson ? { ...schedule, lessonTitle: lesson.title } : schedule
-		})
-		const filteredSchedules = computed(() => {
-			if (selectedLesson.value.id !== 'all') {
-				return schedules.filter((schedule) => {
-					return schedule.lessonId === selectedLesson.value.id
-				})
-			} else {
-				return schedules
-			}
-		})
+import { computed, ref } from 'vue'
 
-		return { lessons, selectedLesson, filteredSchedules, lessonsFilter }
-	},
+const props = defineProps<{
+	classObj: ClassEntity
+	showFilter: boolean
+	schedules: ScheduleEntity[]
+}>()
+
+const lessonsFilters = [{ id: 'all', title: 'All' }, ...props.classObj.lessons.map((lesson) => ({ id: lesson.id, title: lesson.title }))]
+const selectedFilter = ref(lessonsFilters[0])
+const filteredSchedules = computed(() => {
+	if (selectedFilter.value.id === 'all') return props.schedules
+	return props.schedules.filter((schedule) => schedule.lessonId === selectedFilter.value.id)
 })
 </script>

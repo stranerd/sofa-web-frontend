@@ -35,8 +35,8 @@
 
 <script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
+import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { defineComponent } from 'vue'
-import { useMySchedules } from '@app/composables/organizations/schedules'
 
 import { useRoute } from 'vue-router'
 
@@ -50,7 +50,7 @@ export default defineComponent({
 		const route = useRoute()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
-		const { schedules, fetchOlderSchedules, hasMore } = useMySchedules(organizationId, classId)
+		const { schedules, fetchOlderSchedules, hasMore } = useClassSchedules(organizationId, classId)
 		return {
 			schedules,
 			hasMore,

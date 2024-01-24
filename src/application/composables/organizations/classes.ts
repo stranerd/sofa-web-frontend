@@ -37,9 +37,7 @@ const store = {
 	}),
 }
 
-export const useMyClasses = () => {
-	const { id } = useAuth()
-
+export const useOrganizationClasses = (organizationId: string) => {
 	const {
 		asyncFn: fetchClasses,
 		loading,
@@ -47,7 +45,7 @@ export const useMyClasses = () => {
 		called,
 	} = useAsyncFn(
 		async () => {
-			const classes = await ClassesUseCases.getAll(id.value)
+			const classes = await ClassesUseCases.getAll(organizationId)
 			classes.results.forEach((r) =>
 				addToArray(
 					store.classes.value,
@@ -57,7 +55,7 @@ export const useMyClasses = () => {
 				),
 			)
 		},
-		{ key: 'organizations/classes/mine' },
+		{ key: `organizations/classes/${organizationId}` },
 	)
 
 	onMounted(async () => {

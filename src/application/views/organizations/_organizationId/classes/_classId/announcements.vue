@@ -112,7 +112,7 @@
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useMyAnnouncements } from '@app/composables/organizations/announcements'
+import { useClassAnnouncements } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
 import { computed, defineComponent, reactive } from 'vue'
 import { useRoute } from 'vue-router'
@@ -159,7 +159,7 @@ export default defineComponent({
 			})
 		}
 
-		const { announcements, hasMore, fetchOlderAnnouncements } = useMyAnnouncements(organizationId, classId)
+		const { announcements, hasMore, fetchOlderAnnouncements } = useClassAnnouncements(organizationId, classId)
 		const filteredAnnouncements = computed(() =>
 			announcements.value.filter((an) => {
 				const lessonMatch = an.filter.lessonId && filter.lesson ? an.filter.lessonId === filter.lesson : true
