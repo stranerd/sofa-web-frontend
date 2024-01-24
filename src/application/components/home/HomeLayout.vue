@@ -20,7 +20,7 @@
 
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
-							<SofaHeaderText class="!text-base" :content="user.orgName" />
+							<SofaHeaderText class="!text-base" :content="user.publicName" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
 							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 						</div>
@@ -175,9 +175,9 @@ import { useConversationsList, useCreateConversation } from '@app/composables/co
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
+import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
-import { formatNumber } from 'valleyed'
 
 const props = withDefaults(
 	defineProps<{
@@ -220,5 +220,6 @@ const options = computed(() => [
 				{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
 			]
 		: []),
+	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes', route: '/classes' }] : []),
 ])
 </script>

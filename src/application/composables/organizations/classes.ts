@@ -3,41 +3,47 @@ import { Logic } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 
-const store = {
-	classes: ref<ClassEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return ClassesUseCases.listenToAll(id.value, {
-			created: async (entity) => {
-				addToArray(
-					store.classes.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.classes.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.classes.value = store.classes.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const orgStore: Record<
+	string,
+	{
+		classes: Ref<ClassEntity[]>
+		listener: ReturnType<typeof useListener>
+	}
+> = {}
 
 export const useOrganizationClasses = (organizationId: string) => {
+	orgStore[organizationId] ??= {
+		classes: ref([]),
+		listener: useListener(async () => {
+			return ClassesUseCases.listenToAll(organizationId, {
+				created: async (entity) => {
+					addToArray(
+						orgStore[organizationId].classes.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						orgStore[organizationId].classes.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					orgStore[organizationId].classes.value = orgStore[organizationId].classes.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	}
+
 	const {
 		asyncFn: fetchClasses,
 		loading,
@@ -48,7 +54,7 @@ export const useOrganizationClasses = (organizationId: string) => {
 			const classes = await ClassesUseCases.getAll(organizationId)
 			classes.results.forEach((r) =>
 				addToArray(
-					store.classes.value,
+					orgStore[organizationId].classes.value,
 					r,
 					(e) => e.id,
 					(e) => e.createdAt,
@@ -60,13 +66,13 @@ export const useOrganizationClasses = (organizationId: string) => {
 
 	onMounted(async () => {
 		if (!called.value) await fetchClasses()
-		await store.listener.start()
+		await orgStore[organizationId].listener.start()
 	})
 	onUnmounted(async () => {
-		await store.listener.close()
+		await orgStore[organizationId].listener.close()
 	})
 
-	return { ...store, loading, error }
+	return { ...orgStore[organizationId], loading, error }
 }
 
 export const useCreateClass = (organizationId: string) => {

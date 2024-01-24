@@ -68,14 +68,14 @@
 				</div>
 
 				<div class="flex items-center gap-2 flex-grow justify-between w-full">
-					<a class="gap-2 flex items-center" @click.stop.prevent="Logic.Common.GoToRoute(`/profile/${activity.user.id}`)">
+					<router-link class="gap-2 flex items-center" :to="`/profile/${activity.user.id}`">
 						<SofaAvatar size="20" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
 						<SofaNormalText customClass="!whitespace-nowrap !line-clamp-1">
 							{{ activity.authUserId === activity.user.id ? 'You' : activity.user.bio.publicName }}
 						</SofaNormalText>
 						<SofaIcon v-if="activity.user.roles.isVerified" name="verify" customClass="h-[13px]" />
 						<SofaIcon v-if="activity.user.type?.type === 'teacher'" name="tutor-bagde" customClass="h-[13px]" />
-					</a>
+					</router-link>
 
 					<SofaIcon
 						v-if="!isWrapped"

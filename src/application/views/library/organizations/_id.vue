@@ -1,6 +1,6 @@
 <template>
 	<LibraryLayout
-		:title="user?.orgName ?? 'Not found'"
+		:title="user?.publicName ?? 'Not found'"
 		:options="[
 			{ name: 'All', id: 'all' },
 			{ name: 'Courses', id: 'courses' },

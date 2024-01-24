@@ -98,7 +98,7 @@
 										<SofaNormalText
 											color="text-deepGray"
 											class="!font-semibold"
-											:content="user.id === gameExtras.authId ? 'You' : user.orgName" />
+											:content="user.id === gameExtras.authId ? 'You' : user.publicName" />
 									</div>
 									<div
 										v-if="participants.length == 0"

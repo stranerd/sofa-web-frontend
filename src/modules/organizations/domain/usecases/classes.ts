@@ -1,4 +1,4 @@
-import { Listeners, QueryParams } from '@modules/core'
+import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 import { ClassEntity } from '../entities/classes'
 import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
@@ -30,11 +30,39 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).listenToOne(classId, listeners)
 	}
 
-	async explore() {
-		return await this.repository('').get({
+	async explore(search: string) {
+		return await this.repository('').explore({
 			// TODO: add explore query params
+			...(search
+				? {
+						search: {
+							value: search,
+							fields: ['title', 'description', 'lessons.title'],
+						},
+					}
+				: {}),
 			all: true,
 		})
+	}
+
+	async getMyClassesIn(userId: string) {
+		return await this.repository('').explore({
+			where: [
+				{ field: 'members.students', value: userId },
+				{ field: 'lessons.users.students', value: userId },
+				{ field: 'lessons.users.teachers', value: userId },
+			],
+			whereType: QueryKeys.or,
+			all: true,
+		})
+	}
+
+	async getInList(ids: string[]) {
+		const classes = await this.repository('').explore({
+			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+			all: true,
+		})
+		return classes.results
 	}
 
 	async getAll(organizationId: string) {

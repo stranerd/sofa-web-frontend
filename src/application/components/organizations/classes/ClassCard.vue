@@ -6,7 +6,7 @@
 				customClass="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
 			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
-				<SofaNormalText class="!font-bold w-full text-left !line-clamp-1" :content="classObj.title" />
+				<SofaNormalText class="!font-bold truncate" :content="classObj.title" />
 				<div class="flex items-center gap-2">
 					<SofaNormalText color="text-grayColor">
 						{{ classObj.lessons.length }} {{ pluralize(classObj.lessons.length, 'lesson', 'lessons') }}
