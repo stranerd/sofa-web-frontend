@@ -44,7 +44,7 @@ import HomeLayout from '@app/components/home/HomeLayout.vue'
 import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useMyClasses } from '@app/composables/organizations/classes'
+import { useOrganizationClasses } from '@app/composables/organizations/classes'
 import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -64,7 +64,7 @@ export default defineComponent({
 		}
 
 		const { id: organizationId } = useAuth()
-		const { classes } = useMyClasses()
+		const { classes } = useOrganizationClasses(organizationId.value)
 		const searchQuery = ref('')
 
 		const filteredClassess = computed(() => {
@@ -80,7 +80,6 @@ export default defineComponent({
 			filteredClassess,
 			searchQuery,
 			createClass,
-			organizationId,
 		}
 	},
 })
