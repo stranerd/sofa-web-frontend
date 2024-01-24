@@ -70,6 +70,8 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SaveToFolderModal: typeof import('./../application/components/study/folders/SaveToFolderModal.vue')['default']
+    ScheduleCard: typeof import('./../application/components/organizations/schedules/ScheduleCard.vue')['default']
+    ScheduleList: typeof import('./../application/components/organizations/schedules/ScheduleList.vue')['default']
     Settings: typeof import('./../application/components/study/courses/Settings.vue')['default']
     SettingsLayout: typeof import('./../application/components/settings/SettingsLayout.vue')['default']
     SocialMediaUpdate: typeof import('./../application/components/onboarding/SocialMediaUpdate.vue')['default']

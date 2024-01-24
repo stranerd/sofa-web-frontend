@@ -16,7 +16,7 @@ const orgStore: Record<
 	}
 > = {}
 
-export const useOrgClasses = (organizationId: string) => {
+export const useOrganizationClasses = (organizationId: string) => {
 	orgStore[organizationId] ??= {
 		classes: ref([]),
 		listener: useListener(async () => {

@@ -53,7 +53,7 @@
 			</div>
 		</template>
 		<template #right-session>
-			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
+			<div v-if="schedules.length === 0" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
 				<SofaHeaderText content="Live Sessions" />
 				<div class="h-[1px] w-full bg-lightGray" />
 				<div class="w-full flex flex-col gap-2 items-center justify-center">
@@ -64,12 +64,20 @@
 					<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
 				</div>
 			</div>
+			<div
+				v-else-if="schedules.length && currentClass"
+				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
+				<SofaHeaderText content="Live Sessions" />
+				<div class="mt-4 h-[1px] w-full bg-lightGray" />
+				<ScheduleList :classObj="currentClass" :showFilter="false" :schedules="schedules" />
+			</div>
 		</template>
 	</DashboardLayout>
 </template>
 
 <script setup lang="ts">
 import { useClass } from '@app/composables/organizations/classes'
+import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { Logic } from 'sofa-logic'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
@@ -89,12 +97,12 @@ const props = withDefaults(
 )
 
 const route = useRoute()
-const { class: currentClass } = useClass(
-	props.organizationId ?? (route.params.organizationId as string),
-	props.classId ?? (route.params.classId as string),
-)
-const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
+const organizationId = props.organizationId ?? (route.params.organizationId as string)
+const classId = props.classId ?? (route.params.classId as string)
 
+const { class: currentClass } = useClass(organizationId, classId)
+
+const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
 useMeta(
 	computed(() => ({
 		title: pageTitle.value,
@@ -107,4 +115,6 @@ const options = computed(() => [
 	{ title: 'Schedule', icon: 'calendar', route: '/schedules' },
 	{ title: 'About', icon: 'info', route: '/about' },
 ])
+
+const { schedules } = useClassSchedules(organizationId, classId)
 </script>

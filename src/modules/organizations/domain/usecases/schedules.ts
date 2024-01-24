@@ -1,5 +1,8 @@
 import { ScheduleToModel } from '../../data/models/schedules'
+import { ScheduleEntity } from '../entities/schedules'
 import { IScheduleRepository } from '../irepositories/schedules'
+import { QueryParams, Conditions, Listeners } from '@modules/core'
+import { CHAT_PAGINATION_LIMIT } from '@utils/constants'
 
 export class SchedulesUseCase {
 	private repository: (organizationId: string, classId: string) => IScheduleRepository
@@ -26,5 +29,29 @@ export class SchedulesUseCase {
 
 	async find(organizationId: string, classId: string, id: string) {
 		return await this.repository(organizationId, classId).find(id)
+	}
+
+	async get(organizationId: string, classId: string, date?: number) {
+		const conditions: QueryParams = {
+			where: [],
+			sort: [{ field: 'createdAt', desc: true }],
+			limit: CHAT_PAGINATION_LIMIT,
+		}
+		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.lt, value: date })
+		return await this.repository(organizationId, classId).get(conditions)
+	}
+
+	async listen(organizationId: string, classId: string, listener: Listeners<ScheduleEntity>, date?: number) {
+		const conditions: QueryParams = {
+			where: [],
+			sort: [{ field: 'createdAt', desc: true }],
+			all: true,
+		}
+		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.gt, value: date })
+
+		return await this.repository(organizationId, classId).listenToMany(conditions, listener, (entity) => {
+			if (date) return entity.createdAt >= date
+			else return true
+		})
 	}
 }

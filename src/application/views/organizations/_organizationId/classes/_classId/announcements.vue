@@ -87,6 +87,14 @@
 					:classObj="classObj"
 					:announcement="announcement" />
 				<SofaButton
+					v-if="hasMore"
+					textColor="text-grayColor"
+					bgColor="bg-transparent"
+					class="!shadow-none !rounded-none"
+					@click="fetchOlderAnnouncements">
+					Load More
+				</SofaButton>
+				<SofaButton
 					v-if="classObj.isAdmin(id) || classObj.isTeacher(id)"
 					class="block mdlg:hidden"
 					bgColor="bg-primaryBlue"
@@ -104,7 +112,7 @@
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useMyAnnouncements } from '@app/composables/organizations/announcements'
+import { useClassAnnouncements } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
 import { computed, defineComponent, reactive } from 'vue'
 import { useRoute } from 'vue-router'
@@ -151,7 +159,7 @@ export default defineComponent({
 			})
 		}
 
-		const { announcements } = useMyAnnouncements(organizationId, classId)
+		const { announcements, hasMore, fetchOlderAnnouncements } = useClassAnnouncements(organizationId, classId)
 		const filteredAnnouncements = computed(() =>
 			announcements.value.filter((an) => {
 				const lessonMatch = an.filter.lessonId && filter.lesson ? an.filter.lessonId === filter.lesson : true
@@ -162,12 +170,14 @@ export default defineComponent({
 
 		return {
 			announcements,
+			fetchOlderAnnouncements,
 			filteredAnnouncements,
 			id,
 			emptyAnnouncementContent,
 			createAnnouncement,
 			filter,
 			userTypesOption,
+			hasMore,
 		}
 	},
 })

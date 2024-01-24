@@ -1,5 +1,5 @@
 import { ClassEntity } from '../entities/classes'
-import { LessonToModel } from '../types'
+import { ClassLesson, LessonToModel } from '../types'
 
 export interface ILessonRepository {
 	add: (data: LessonToModel) => Promise<ClassEntity>
@@ -7,4 +7,5 @@ export interface ILessonRepository {
 	delete: (id: string) => Promise<boolean>
 	join: (data: { id: string; join: boolean }) => Promise<ClassEntity>
 	manageTeachers: (data: { id: string; userId: string; add: boolean }) => Promise<ClassEntity>
+	updateCurriculum: (data: { id: string; curriculum: ClassLesson['curriculum'] }) => Promise<ClassEntity>
 }
