@@ -1,3 +1,5 @@
+import { FileType, QuizModes } from '@modules/study'
+
 export type { Saleable } from '@modules/payment'
 export type { EmbeddedUser } from '@modules/users'
 
@@ -34,8 +36,36 @@ export type ClassLesson = {
 		students: string[]
 		teachers: string[]
 	}
+	curriculum: ClassLessonCurriculumSection[]
 }
 
 export type ClassMembers = {
 	students: string[]
+}
+
+export enum ClassLessonable {
+	quiz = 'quiz',
+	file = 'file',
+	schedule = 'schedule',
+}
+
+type ClassLessonCurriculumSectionItem =
+	| {
+			id: string
+			type: ClassLessonable.quiz
+			quizMode: QuizModes
+	  }
+	| {
+			id: string
+			type: ClassLessonable.file
+			fileType: FileType
+	  }
+	| {
+			id: string
+			type: ClassLessonable.schedule
+	  }
+
+export type ClassLessonCurriculumSection = {
+	label: string
+	items: ClassLessonCurriculumSectionItem[]
 }

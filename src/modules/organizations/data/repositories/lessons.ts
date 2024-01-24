@@ -1,7 +1,7 @@
 import { HttpClient } from '@modules/core'
 import { ClassEntity } from '../../domain/entities/classes'
 import { ILessonRepository } from '../../domain/irepositories/lessons'
-import { LessonToModel } from '../../domain/types'
+import { ClassLesson, LessonToModel } from '../../domain/types'
 import { ClassFromModel } from '../models/classes'
 
 export class LessonRepository implements ILessonRepository {
@@ -42,6 +42,13 @@ export class LessonRepository implements ILessonRepository {
 		const d = await this.client.post<{ userId: string; add: boolean }, ClassFromModel>(`/${data.id}/members/teachers`, {
 			userId: data.userId,
 			add: data.add,
+		})
+		return this.mapper(d)
+	}
+
+	async updateCurriculum(data: { id: string; curriculum: ClassLesson['curriculum'] }) {
+		const d = await this.client.post<{ curriculum: ClassLesson['curriculum'] }, ClassFromModel>(`/${data.id}/curriculum`, {
+			curriculum: data.curriculum,
 		})
 		return this.mapper(d)
 	}
