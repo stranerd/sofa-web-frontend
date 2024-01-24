@@ -57,7 +57,7 @@
 				:disabled="true"
 				:border-color="'border-transparent'" />
 
-			<account-setup :is-profile-phone="true" />
+			<account-setup v-if="0" :is-profile-phone="true" />
 		</div>
 
 		<div v-if="!userType.isOrg" id="type" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">

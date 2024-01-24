@@ -24,14 +24,14 @@ export const useHomeTasks = () => {
 						isDone: user.value?.checkTaskState('education_setup'),
 						action: () => Logic.Common.GoToRoute('/settings/profile#type'),
 					},
-					{
+					/* {
 						title: 'Add phone',
 						subTitle: 'Enter your phone number',
 						icon: 'add-phone',
 						iconSize: 'h-[46px]',
 						isDone: !!auth.value?.phone,
 						action: () => Logic.Common.GoToRoute('/settings/profile#contact'),
-					},
+					}, */
 				]
 			: [],
 	)

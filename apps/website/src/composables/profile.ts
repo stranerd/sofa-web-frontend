@@ -16,27 +16,6 @@ const updateVerificationForm = reactive({
 	},
 })
 
-const accountSetupOptions = reactive([
-	{
-		name: 'Profile',
-		status: 'active',
-		id: 'profile',
-		show: true,
-	},
-	{
-		name: 'Education',
-		status: 'inactive',
-		id: 'education',
-		show: true,
-	},
-	{
-		name: 'Phone',
-		status: 'inactive',
-		id: 'phone',
-		show: true,
-	},
-])
-
 const submitVerification = async (useLoader = true) => {
 	Logic.Users.CreateVerificationForm = {
 		content: updateVerificationForm.content,
@@ -84,12 +63,4 @@ const createTutorRequest = () => {
 	}
 }
 
-export {
-	accountSetupOptions,
-	autoCreateVerification,
-	createTutorRequest,
-	showCustomizeAI,
-	submitVerification,
-	tutorRequestForm,
-	updateVerificationForm,
-}
+export { autoCreateVerification, createTutorRequest, showCustomizeAI, submitVerification, tutorRequestForm, updateVerificationForm }
