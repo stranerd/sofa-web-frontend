@@ -252,34 +252,40 @@ const accountSetupOptions = computed(() => [
 		hide: typeFactory.isOrganization,
 		done: !!user.value?.type,
 	},
-	{
+	/* {
 		name: 'Phone',
 		id: 'phone',
 		hide: false,
 		done: !!auth.value?.phone,
-	},
+	}, */
 ])
 
 const handleAccountSetup = async () => {
 	if (isDisabled.value) return
 	if (tab.value === 'profile')
 		await Promise.all([typeFactory.isOrganization ? updateType() : true, updateProfile(), updateLocation()]).then((res) => {
-			if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
+			// if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
+			if (res.every(Boolean)) typeFactory.isOrganization ? complete() : (tab.value = 'type')
 		})
 	else if (tab.value === 'type')
 		await updateType().then((res) => {
-			if (res && !props.isProfileEducation) tab.value = 'phone'
+			// if (res && !props.isProfileEducation) tab.value = 'phone'
+			if (res && !props.isProfileEducation) complete()
 		})
 	else if (tab.value === 'phone')
 		await sendVerificationText().then((res) => {
 			if (res) tab.value = 'phone-verify'
 		})
 	else if (tab.value === 'phone-verify')
-		await completeVerification().then(async (res) => {
+		await completeVerification().then((res) => {
 			if (!res) return
 			if (props.isProfilePhone) tab.value = 'phone'
-			else await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
+			else complete()
 		})
+}
+
+const complete = async () => {
+	await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
 }
 
 const { courses, fetchInstitutionCourses } = useCourseList()

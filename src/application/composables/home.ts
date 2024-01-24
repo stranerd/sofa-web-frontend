@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useAuth } from './auth/auth'
 
 export const useHomeTasks = () => {
-	const { auth, user, userType } = useAuth()
+	const { user, userType } = useAuth()
 
 	const profileSteps = computed(() =>
 		user.value
@@ -24,14 +24,14 @@ export const useHomeTasks = () => {
 						isDone: user.value?.checkTaskState('education_setup'),
 						action: () => Logic.Common.GoToRoute('/settings/profile#type'),
 					},
-					{
+					/* {
 						title: 'Add phone',
 						subTitle: 'Enter your phone number',
 						icon: 'add-phone',
 						iconSize: 'h-[46px]',
 						isDone: !!auth.value?.phone,
 						action: () => Logic.Common.GoToRoute('/settings/profile#contact'),
-					},
+					}, */
 				]
 			: [],
 	)
