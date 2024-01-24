@@ -37,16 +37,15 @@
 </template>
 
 <script lang="ts" setup>
+import { SofaTopBar } from 'sofa-ui-components'
+
 withDefaults(
 	defineProps<{
 		topbarOptions?: Partial<{
 			type: string
 			title: string
 			actions: any[]
-			badges: {
-				text: string
-				color: string
-			}[]
+			badges: InstanceType<typeof SofaTopBar>['$props']['badges']
 		}>
 		hide?: Partial<{ top?: boolean; bottom?: boolean; left?: boolean; right?: boolean }>
 		bgColor?: string

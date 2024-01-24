@@ -157,7 +157,7 @@ withDefaults(
 		customClass?: string
 		badges?: {
 			text: string
-			color: string
+			color: InstanceType<typeof SofaBadge>['$props']['color']
 		}[]
 	}>(),
 	{

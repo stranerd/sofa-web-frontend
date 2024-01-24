@@ -1,5 +1,5 @@
 <template>
-	<VueTelInput v-model="phone" mode="international" class="flex" :only-countries="['ng']" @validate="update" />
+	<VueTelInput v-model="phone" mode="international" class="flex" :onlyCountries="['ng']" @validate="update" />
 </template>
 
 <script lang="ts" setup>
