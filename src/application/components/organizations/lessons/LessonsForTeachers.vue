@@ -51,6 +51,7 @@
 <script lang="ts">
 import { defineComponent, ref, PropType, computed } from 'vue'
 import { ClassEntity, MemberEntity } from '@modules/organizations'
+// import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 export default defineComponent({
 	props: {
 		classObj: {
@@ -65,6 +66,8 @@ export default defineComponent({
 	setup(props) {
 		const lessons = computed(() => props.classObj.lessons)
 		const selectedLesson = ref(lessons.value[0])
+		// const { quizzes, files, schedules } = useLessonCurriculum(props.classObj, selectedLesson.value)
+		// console.log(schedules.value)
 		const emptyLessonContent = {
 			imageURL: '/images/no-lessons.png',
 			title: '',
