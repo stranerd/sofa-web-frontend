@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="flex items-center gap-6 border-b border-darkLightGray">
-			<!-- <button class="pb-3" @click="changeTab('curriculum')">
+			<button class="pb-3" @click="changeTab('curriculum')">
 				<SofaNormalText
 					:customClass="
 						selectedTab === 'curriculum'
@@ -20,7 +20,7 @@
 					">
 					Curriculum
 				</SofaNormalText>
-			</button> -->
+			</button>
 			<button class="pb-3" @click="changeTab('teachers')">
 				<SofaNormalText
 					:customClass="
@@ -41,6 +41,19 @@
 					Students {{ lesson.users.students.length }}
 				</SofaNormalText>
 			</button>
+		</div>
+		<div v-if="selectedTab === 'curriculum'">
+			<div class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
+				<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
+				<SofaNormalText color="text-grayColor text-center">
+					{{
+						lessonTeachers.length
+							? lessonTeachers[0].user?.bio.publicName + ' has not set the curriculum yet'
+							: 'Teacher has not set the curriculum yet'
+					}}
+				</SofaNormalText>
+			</div>
 		</div>
 		<div v-if="selectedTab === 'teachers'" class="py-4 flex flex-col gap-4">
 			<div v-if="lessonTeachers.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -83,7 +96,7 @@ const props = defineProps<{
 	teachers: MemberEntity[]
 }>()
 
-const selectedTab = ref('teachers')
+const selectedTab = ref('curriculum')
 
 const changeTab = (val: string) => {
 	selectedTab.value = val

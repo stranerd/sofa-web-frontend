@@ -54,4 +54,22 @@ export class SchedulesUseCase {
 			else return true
 		})
 	}
+
+	async getInList(organizationId: string, classId: string, ids: string[]) {
+		const schedules = await this.repository(organizationId, classId).get({
+			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+			all: true,
+		})
+		return schedules.results
+	}
+	async listenToInList(organizationId: string, classId: string, ids: () => string[], listener: Listeners<ScheduleEntity>) {
+		return await this.repository(organizationId, classId).listenToMany(
+			{
+				where: [{ field: 'id', value: ids(), condition: Conditions.in }],
+				all: true,
+			},
+			listener,
+			(entity) => ids().includes(entity.id),
+		)
+	}
 }

@@ -1,6 +1,9 @@
 import { LessonFactory, LessonsUseCases } from '@modules/organizations'
 import { useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
+// import { useQuizzesInList } from '../study/quizzes-list'
+// import { useFilesInList } from '../study/files-list'
+// import { useSchedulesInList } from './schedules'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -20,3 +23,5 @@ export const useCreateLesson = (organizationId: string, classId: string) => {
 		createLesson,
 	}
 }
+
+// export const useLessonCurriculum = (lesson: ClassLesson) => {}
