@@ -22,9 +22,9 @@
 		<div v-if="error" class="w-full flex pt-1 justify-start">
 			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
 		</div>
-		<div
+		<dialog
 			v-if="showOptions"
-			class="group-focus-within:flex hidden w-full mdlg:w-auto mdlg:min-w-[320px] h-full mdlg:h-auto left-0 top-0 mdlg:left-[unset] mdlg:top-[unset] fixed flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
+			class="group-focus-within:flex hidden w-full flex-col z-[100] bg-white overflow-y-auto rounded-md p-3 shadow-md">
 			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
 				<SofaTextField v-model="searchValue" placeholder="Search" custom-class="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
@@ -37,7 +37,7 @@
 				<SofaIcon :name="itemIsSelected(item.key) ? 'checkbox-active' : 'checkbox'" class="h-[16px]" />
 				<SofaNormalText :content="item.value" />
 			</a>
-		</div>
+		</dialog>
 	</div>
 </template>
 
