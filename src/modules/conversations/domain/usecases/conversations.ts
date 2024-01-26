@@ -1,8 +1,7 @@
 import { Listeners } from '@modules/core'
-import { CreateConversationToModel } from '../../data/models/conversations'
 import { ConversationEntity } from '../entities/conversations'
-import { IConversationRepository } from '../irepositories/conversations'
 import { ConversationFactory } from '../factories/conversations'
+import { IConversationRepository } from '../irepositories/conversations'
 
 export class ConversationsUseCase {
 	private repository: IConversationRepository
