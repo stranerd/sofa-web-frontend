@@ -26,7 +26,9 @@
 					{{ lesson.title }}
 				</SofaButton>
 			</div>
-			<div class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
+			<div
+				v-if="selectedLesson.curriculum.length === 0"
+				class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 				<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
 					<img :src="emptyLessonContent.imageURL" class="w-[144px] h-[144px]" />
 				</div>
@@ -41,6 +43,7 @@
 					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6"> Get started </SofaButton>
 				</div>
 			</div>
+			<div v-else class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom"></div>
 		</div>
 	</div>
 </template>
@@ -48,6 +51,7 @@
 <script lang="ts">
 import { defineComponent, ref, PropType, computed } from 'vue'
 import { ClassEntity, MemberEntity } from '@modules/organizations'
+// import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 export default defineComponent({
 	props: {
 		classObj: {
@@ -62,6 +66,8 @@ export default defineComponent({
 	setup(props) {
 		const lessons = computed(() => props.classObj.lessons)
 		const selectedLesson = ref(lessons.value[0])
+		// const { quizzes, files, schedules } = useLessonCurriculum(props.classObj, selectedLesson.value)
+		// console.log(schedules.value)
 		const emptyLessonContent = {
 			imageURL: '/images/no-lessons.png',
 			title: '',
