@@ -24,7 +24,8 @@
 		</div>
 		<div
 			v-if="showOptions"
-			class="group-focus-within:flex hidden w-full mdlg:w-auto mdlg:min-w-[320px] h-full mdlg:h-auto left-0 top-0 mdlg:left-[unset] mdlg:top-[unset] fixed flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md">
+			class="group-focus-within:flex hidden w-full mdlg:w-auto mdlg:min-w-[320px] h-full mdlg:h-auto left-0 top-0 mdlg:left-[unset] mdlg:top-[unset] fixed flex-col bg-white z-10 mdlg:max-h-[320px] overflow-y-auto rounded-md p-3 shadow-md"
+			:class="customOptionsClass">
 			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
 				<SofaTextField v-model="searchValue" placeholder="Search" custom-class="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
@@ -43,7 +44,7 @@
 
 <script lang="ts" setup>
 import { SelectOption } from 'sofa-logic'
-import { computed, defineEmits, defineProps, ref } from 'vue'
+import { computed, defineEmits, defineProps, ref, watch } from 'vue'
 import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
@@ -83,6 +84,10 @@ const props = defineProps({
 		default: false,
 	},
 	error: {
+		type: String,
+		default: '',
+	},
+	customOptionsClass: {
 		type: String,
 		default: '',
 	},

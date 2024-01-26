@@ -113,6 +113,7 @@
 					<SofaSelect
 						v-model="locationFactory.country"
 						custom-class="rounded-custom !bg-lightGray"
+						custom-options-class="mdlg:!absolute"
 						placeholder="Country"
 						:error="locationFactory.errors.country"
 						border-color="border-transparent"
@@ -121,6 +122,7 @@
 					<SofaSelect
 						v-model="locationFactory.state"
 						custom-class="rounded-custom !bg-lightGray"
+						custom-options-class="mdlg:!absolute"
 						placeholder="State"
 						:error="locationFactory.errors.state"
 						border-color="border-transparent"
@@ -184,7 +186,7 @@ import {
 	SofaTextarea,
 	SofaFileAttachment,
 } from 'sofa-ui-components'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useMeta } from 'vue-meta'
 
 export default defineComponent({
