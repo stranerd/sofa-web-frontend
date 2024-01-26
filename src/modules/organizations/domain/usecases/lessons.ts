@@ -1,6 +1,6 @@
+import { LessonCurriculumFactory } from '../factories/lessonCurriculums'
 import { LessonFactory } from '../factories/lessons'
 import { ILessonRepository } from '../irepositories/lessons'
-import { ClassLesson } from '../types'
 
 export class LessonsUseCase {
 	private repository: (organizationId: string, classId: string) => ILessonRepository
@@ -29,7 +29,8 @@ export class LessonsUseCase {
 		return await this.repository(organizationId, classId).manageTeachers({ id, userId, add })
 	}
 
-	async updateCurriculum(organizationId: string, classId: string, id: string, curriculum: ClassLesson['curriculum']) {
+	async updateCurriculum(organizationId: string, classId: string, id: string, factories: LessonCurriculumFactory[]) {
+		const curriculum = await Promise.all(factories.map((factory) => factory.toModel()))
 		return await this.repository(organizationId, classId).updateCurriculum({ id, curriculum })
 	}
 }
