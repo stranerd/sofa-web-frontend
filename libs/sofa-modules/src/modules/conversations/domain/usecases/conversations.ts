@@ -2,6 +2,7 @@ import { Listeners } from '@modules/core'
 import { CreateConversationToModel } from '../../data/models/conversations'
 import { ConversationEntity } from '../entities/conversations'
 import { IConversationRepository } from '../irepositories/conversations'
+import { ConversationFactory } from '../factories/conversations'
 
 export class ConversationsUseCase {
 	private repository: IConversationRepository
@@ -10,8 +11,8 @@ export class ConversationsUseCase {
 		this.repository = repository()
 	}
 
-	async add(data: CreateConversationToModel) {
-		return await this.repository.add(data)
+	async add(factory: ConversationFactory) {
+		return await this.repository.add(await factory.toModel())
 	}
 
 	async update(id: string, title: string) {
