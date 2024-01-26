@@ -137,7 +137,7 @@ export const useDeleteClass = () => {
 	return { loading, error, deleteClass }
 }
 
-export const singleClassStore = {} as Record<
+const singleClassStore = {} as Record<
 	string,
 	{
 		class: Ref<ClassEntity | null>

@@ -1,14 +1,10 @@
-import { FileEntity, FilesUseCases } from '@modules/study'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { FilesUseCases } from '@modules/study'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 
-const store = {
-	files: ref<FileEntity[]>([]),
-}
-
 export const useFilesInList = (ids: Refable<string[]>, listen = false) => {
-	const allFiles = computed(() => [...store.files.value])
+	const allFiles = computed(() => [])
 	const { items: files, addToList } = useItemsInList('files', ids, allFiles, (ids) => FilesUseCases.getInList(ids))
 
 	const listener = useListener(

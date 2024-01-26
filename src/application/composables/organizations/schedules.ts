@@ -1,6 +1,6 @@
 import { ScheduleEntity, SchedulesUseCases } from '@modules/organizations'
 import { addToArray } from 'valleyed'
-import { Ref, onMounted, onUnmounted, ref, computed } from 'vue'
+import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 
@@ -97,7 +97,7 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 
 export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = false) => {
 	const key = `${organizationId}-${classId}`
-	const allSchedules = computed(() => [...store[key].schedules.value])
+	const allSchedules = computed(() => store[key]?.schedules.value ?? [])
 	const { items: schedules, addToList } = useItemsInList('schedules', ids, allSchedules, (ids) =>
 		SchedulesUseCases.getInList(organizationId, classId, ids),
 	)
