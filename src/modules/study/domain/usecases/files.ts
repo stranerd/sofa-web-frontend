@@ -1,12 +1,17 @@
-import { FileEntity } from '../entities/files'
-import { IFileRepository } from '../irepositories/ifiles'
 import { Conditions, Listeners } from '@modules/core'
+import { FileEntity } from '../entities/files'
+import { FileFactory } from '../factories/files'
+import { IFileRepository } from '../irepositories/ifiles'
 
 export class FilesUseCase {
 	private repository: IFileRepository
 
 	constructor(repository: () => IFileRepository) {
 		this.repository = repository()
+	}
+
+	async add(factory: FileFactory) {
+		return await this.repository.add(await factory.toModel())
 	}
 
 	async delete(id: string) {
