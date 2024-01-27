@@ -69,6 +69,7 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 
 	set media(value: Media) {
 		this.set('media', value)
+		if (!this.title && value) this.title = value.name
 	}
 
 	get courseId() {

@@ -14,6 +14,10 @@ export class FilesUseCase {
 		return await this.repository.add(await factory.toModel())
 	}
 
+	async update(id: string, factory: FileFactory) {
+		return await this.repository.update(id, await factory.toModel())
+	}
+
 	async delete(id: string) {
 		return await this.repository.delete(id)
 	}

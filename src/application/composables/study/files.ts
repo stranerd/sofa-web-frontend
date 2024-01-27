@@ -3,17 +3,36 @@ import { Logic } from 'sofa-logic'
 import { useAsyncFn } from '../core/hooks'
 
 export const useCreateFile = () => {
+	const factory = new FileFactory()
+
 	const {
 		asyncFn: createFile,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const factory = new FileFactory()
 		const file = await FilesUseCases.add(factory)
+		factory.reset()
 		return file
 	})
 
 	return { createFile, error, loading }
+}
+
+export const useUpdateFile = (file: FileEntity) => {
+	const factory = new FileFactory()
+	factory.loadEntity(file)
+
+	const {
+		asyncFn: updateFile,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const updatedFile = await FilesUseCases.update(file.id, factory)
+		factory.reset()
+		return updatedFile
+	})
+
+	return { updateFile, error, loading }
 }
 
 export const useDeleteFile = () => {
