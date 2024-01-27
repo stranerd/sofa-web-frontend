@@ -1,4 +1,5 @@
 export { BaseEntity } from './domain/entities/base'
+export { asArray } from './domain/factories/arrays'
 export { BaseFactory } from './domain/factories/base'
 
 export { Conditions, HttpClient, NetworkError, QueryKeys, StatusCodes } from './services/http'

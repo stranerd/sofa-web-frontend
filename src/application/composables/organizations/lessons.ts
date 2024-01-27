@@ -1,5 +1,5 @@
 import { ClassEntity, ClassLesson, ClassLessonable, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
-import { Ref, computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { useFilesInList } from '../study/files-list'
@@ -44,38 +44,24 @@ export const useLessonCurriculum = (classInst: ClassEntity, lesson: ClassLesson)
 }
 
 export const useUpdateCurriculum = (classInst: ClassEntity, lesson: ClassLesson) => {
-	const factories: Ref<LessonCurriculumFactory[]> = ref([])
-
-	const resetFactories = (lesson: ClassLesson) => {
-		factories.value = Array.from({ length: lesson.curriculum.length }, (_, i) => {
-			const f = new LessonCurriculumFactory()
-			f.loadEntity(lesson.curriculum[i])
-			return f
-		})
-	}
-
-	resetFactories(lesson)
-
-	const addNewSection = () => {
-		factories.value.push(new LessonCurriculumFactory())
-	}
+	const factory = new LessonCurriculumFactory()
+	factory.loadEntity(lesson.curriculum)
 
 	const {
 		asyncFn: updateCurriculum,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const updatedClass = await LessonsUseCases.updateCurriculum(classInst.organizationId, classInst.id, lesson.id, factories.value)
+		const updatedClass = await LessonsUseCases.updateCurriculum(classInst.organizationId, classInst.id, lesson.id, factory)
 		const updatedLesson = updatedClass.getLesson(lesson.id)
-		if (updatedLesson) resetFactories(updatedLesson)
+		factory.loadEntity(updatedLesson?.curriculum ?? [])
 		return true
 	})
 
 	return {
-		factories,
+		factory,
 		loading,
 		error,
-		addNewSection,
 		updateCurriculum,
 	}
 }

@@ -29,8 +29,7 @@ export class LessonsUseCase {
 		return await this.repository(organizationId, classId).manageTeachers({ id, userId, add })
 	}
 
-	async updateCurriculum(organizationId: string, classId: string, id: string, factories: LessonCurriculumFactory[]) {
-		const curriculum = await Promise.all(factories.map((factory) => factory.toModel()))
-		return await this.repository(organizationId, classId).updateCurriculum({ id, curriculum })
+	async updateCurriculum(organizationId: string, classId: string, id: string, factory: LessonCurriculumFactory) {
+		return await this.repository(organizationId, classId).updateCurriculum({ id, curriculum: await factory.toModel() })
 	}
 }
