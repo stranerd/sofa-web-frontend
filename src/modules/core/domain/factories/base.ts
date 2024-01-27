@@ -64,7 +64,9 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 		return check.valid
 	}
 
-	isValid = (property: keyof K) => this.checkValidity(property, this.values[property]).valid
+	isValid(property: keyof K) {
+		return this.checkValidity(property, this.values[property]).valid
+	}
 
 	checkValidity(property: keyof K, value: any) {
 		return this.rules[property].parse(deepToRaw(value), true)

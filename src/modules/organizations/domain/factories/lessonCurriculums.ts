@@ -70,5 +70,4 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		this.items = entity.items
 	}
 }
-
 export class LessonCurriculumFactory extends asArray(_CurriculumFactory) {}

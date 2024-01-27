@@ -1,13 +1,11 @@
 import { reactive } from 'vue'
 import { BaseFactory } from './base'
 
-interface FactoryConstructor<E, T, K extends Record<string, any>> {
-	new (): BaseFactory<E, T, K>
-}
+export function asArray<T extends BaseFactory<any, any, any>>(factory: { new (): T }) {
+	type E = T extends BaseFactory<infer E, any, any> ? E : never
 
-export function asArray<E, T, K extends Record<string, any>>(factory: FactoryConstructor<E, T, K>) {
 	return class FactoryArray {
-		#factories: BaseFactory<E, T, K>[] = reactive([])
+		#factories: T[] = reactive([])
 
 		add() {
 			const instance = new factory()
