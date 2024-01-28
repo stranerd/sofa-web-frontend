@@ -74,4 +74,6 @@ export type ScheduleStream = {
 	broadcastId: string
 	stream: string
 	streamKey: string
+	type: 'jitsi'
+	roomId: string
 }
