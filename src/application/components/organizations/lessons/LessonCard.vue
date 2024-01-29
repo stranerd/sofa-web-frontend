@@ -11,7 +11,7 @@
 					{{ lesson.users.students.length }} {{ lesson.users.students.length > 1 ? 'students' : 'student' }}
 				</SofaNormalText>
 				<SofaNormalText v-else color="text-grayColor">
-					{{ '1 resources' }}
+					{{ '0 resources' }}
 				</SofaNormalText>
 			</div>
 		</div>
@@ -29,8 +29,7 @@ defineProps({
 	},
 	isStudent: {
 		type: Boolean,
-		required: true,
-		default: false,
+		default: true,
 	},
 })
 </script>
