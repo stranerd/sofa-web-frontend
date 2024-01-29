@@ -35,4 +35,8 @@ export class ScheduleEntity extends BaseEntity {
 		return now >= this.time.start && now <= this.time.end */
 		return this.status === ScheduleStatus.started
 	}
+
+	get meetingLink() {
+		return `https://meet.jit.si/${this.stream?.roomId ?? this.id}`
+	}
 }
