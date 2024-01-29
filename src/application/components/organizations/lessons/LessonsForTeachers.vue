@@ -12,23 +12,29 @@
 		<div v-else>
 			<SofaHeaderText content="Lessons" />
 			<div class="h-[1px] w-full bg-lightGray" />
-			<div class="flex flex-wrap items-center gap-3 mt-6">
-				<SofaButton
-					v-for="lesson in lessons"
-					:key="lesson.id"
-					:customClass="
-						selectedLesson.id === lesson.id
-							? 'bg-primaryPurple !text-white !shadow-none'
-							: 'bg-white border border-darkLightGray !text-deepGray !shadow-none'
-					"
-					padding="py-3 px-4"
-					@click="selectedLesson = lesson">
-					{{ lesson.title }}
-				</SofaButton>
+			<div class="flex items-center justify-between">
+				<div class="flex flex-wrap items-center gap-3 mt-6">
+					<SofaButton
+						v-for="lesson in lessons"
+						:key="lesson.id"
+						:customClass="
+							selectedLesson.id === lesson.id
+								? 'bg-primaryPurple !text-white !shadow-none'
+								: 'bg-white border border-darkLightGray !text-deepGray !shadow-none'
+						"
+						padding="py-3 px-4"
+						@click="selectedLesson = lesson">
+						{{ lesson.title }}
+					</SofaButton>
+				</div>
+				<div class="hidden mdlg:flex items-center gap-3">
+					<SofaButton customClass="border border-primaryBlue !text-primaryBlue bg-transparent" padding="py-2 px-4">
+						Preview
+					</SofaButton>
+					<SofaButton customClass="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
+				</div>
 			</div>
-			<div
-				v-if="selectedLesson.curriculum.length === 0"
-				class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
+			<div v-if="curriculum.length === 0" class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 				<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
 					<img :src="emptyLessonContent.imageURL" class="w-[144px] h-[144px]" />
 				</div>
@@ -43,15 +49,18 @@
 					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6"> Get started </SofaButton>
 				</div>
 			</div>
-			<div v-else class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom"></div>
+			<div v-else class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
+				<LessonCurriculum :classObj="classObj" :view="CurriculumView.list" :curriculum="curriculum" :lesson="selectedLesson" />
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from 'vue'
-import { ClassEntity, MemberEntity } from '@modules/organizations'
-// import { useLessonCurriculum } from '@app/composables/organizations/lessons'
+import { defineComponent, ref, PropType, computed, watch } from 'vue'
+import { ClassEntity, MemberEntity, ClassLessonable, CurriculumView } from '@modules/organizations'
+import { FileType } from '@modules/study'
+import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 export default defineComponent({
 	props: {
 		classObj: {
@@ -66,8 +75,11 @@ export default defineComponent({
 	setup(props) {
 		const lessons = computed(() => props.classObj.lessons)
 		const selectedLesson = ref(lessons.value[0])
-		// const { quizzes, files, schedules } = useLessonCurriculum(props.classObj, selectedLesson.value)
-		// console.log(schedules.value)
+		const selectedLessonCurriculum = computed(() => selectedLesson.value.curriculum)
+		let { curriculum } = useLessonCurriculum(props.classObj, selectedLessonCurriculum)
+		watch(selectedLesson, () => {
+			;({ curriculum } = useLessonCurriculum(props.classObj, selectedLessonCurriculum))
+		})
 		const emptyLessonContent = {
 			imageURL: '/images/no-lessons.png',
 			title: '',
@@ -78,7 +90,15 @@ export default defineComponent({
 				'Preview and publish your curriculum.',
 			],
 		}
-		return { emptyLessonContent, lessons, selectedLesson }
+		return {
+			emptyLessonContent,
+			lessons,
+			selectedLesson,
+			curriculum,
+			ClassLessonable,
+			FileType,
+			CurriculumView,
+		}
 	},
 })
 </script>

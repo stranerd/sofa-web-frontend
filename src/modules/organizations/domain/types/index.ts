@@ -49,6 +49,11 @@ export enum ClassLessonable {
 	schedule = 'schedule',
 }
 
+export enum CurriculumView {
+	list = 'list',
+	grid = 'grid',
+}
+
 type ClassLessonCurriculumSectionItem =
 	| {
 			id: string

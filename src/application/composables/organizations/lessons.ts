@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ClassEntity, ClassLesson, ClassLessonable, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { useFilesInList } from '../study/files-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useSchedulesInList } from './schedules'
+import { QuizModes } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -25,7 +27,25 @@ export const useCreateLesson = (organizationId: string, classId: string) => {
 	}
 }
 
-export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassLesson['curriculum']>) => {
+export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<ClassLesson['curriculum']>) => {
+	const curr = computed((): ClassLesson['curriculum'] => [
+		{
+			label: 'Section 1',
+			items: [
+				{ type: ClassLessonable.quiz, id: '6570f0fed93c0c9b0b4df5d0', quizMode: QuizModes.test },
+				{ type: ClassLessonable.schedule, id: '65ae74a8a937bae0ac5d8db7' },
+				{ type: ClassLessonable.schedule, id: '65ae7391a937bae0ac5d8d5a' },
+			],
+		},
+		{
+			label: 'Section 2',
+			items: [
+				{ type: ClassLessonable.quiz, id: '655c6ebf1df1665d9b00a771', quizMode: QuizModes.practice },
+				{ type: ClassLessonable.schedule, id: '65ae739da937bae0ac5d8d6a' },
+				{ type: ClassLessonable.quiz, id: '64fbbed96f1695149cedcf41', quizMode: QuizModes.test },
+			],
+		},
+	])
 	const quizIds = computed(() =>
 		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.quiz).map((item) => item.id)),
 	)
@@ -35,6 +55,21 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 	const scheduleIds = computed(() =>
 		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.schedule).map((item) => item.id)),
 	)
+
+	// const scheduleIds = computed(() => [
+	// 	'65ae74a8a937bae0ac5d8db7',
+	// 	'65ae7490a937bae0ac5d8da7',
+	// 	'65ae739da937bae0ac5d8d6a',
+	// 	'65ae7391a937bae0ac5d8d5a',
+	// 	'65ae734da937bae0ac5d8d4a',
+	// ])
+	// const quizIds = computed(() => [
+	// 	'6570f0fed93c0c9b0b4df5d0',
+	// 	'6563141b4f46050228f8c5ed',
+	// 	'655c6ebf1df1665d9b00a771',
+	// 	'650e2429cee12beef94a352e',
+	// 	'64fbbed96f1695149cedcf41',
+	// ])
 
 	const { quizzes } = useQuizzesInList(quizIds, true)
 	const { files } = useFilesInList(fileIds, true)
@@ -61,7 +96,9 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 			return { ...c, items }
 		}),
 	)
-
+	watch(curriculum, () => {
+		console.log(curriculum.value)
+	})
 	return { quizzes, files, schedules, curriculum }
 }
 

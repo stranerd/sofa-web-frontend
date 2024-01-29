@@ -48,6 +48,7 @@ declare module 'vue' {
     HomeLayout: typeof import('./../application/components/home/HomeLayout.vue')['default']
     JoinOrganizationModal: typeof import('./../application/components/organizations/members/JoinOrganizationModal.vue')['default']
     LessonCard: typeof import('./../application/components/organizations/lessons/LessonCard.vue')['default']
+    LessonCurriculum: typeof import('./../application/components/organizations/lessons/LessonCurriculum.vue')['default']
     LessonDetails: typeof import('./../application/components/organizations/lessons/LessonDetails.vue')['default']
     LessonsForAdmin: typeof import('./../application/components/organizations/lessons/LessonsForAdmin.vue')['default']
     LessonsForStudents: typeof import('./../application/components/organizations/lessons/LessonsForStudents.vue')['default']

@@ -4,7 +4,7 @@
 			<SofaHeaderText>{{ lesson.title }}</SofaHeaderText>
 			<div class="flex items-center gap-1">
 				<SofaNormalText color="text-grayColor">
-					{{ lesson.teachers.length }} {{ lesson.teachers.length > 1 ? 'teachers' : 'teacher' }}</SofaNormalText
+					{{ lesson.users.teachers.length }} {{ lesson.users.teachers.length > 1 ? 'teachers' : 'teacher' }}</SofaNormalText
 				>
 				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor"></div>
 				<SofaNormalText v-if="!isStudent" color="text-grayColor">

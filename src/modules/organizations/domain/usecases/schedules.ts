@@ -11,8 +11,8 @@ export class SchedulesUseCase {
 		this.repository = repository
 	}
 
-	async add(data: ScheduleToModel) {
-		return await this.repository(data.organizationId, data.classId).add(data)
+	async add(data: ScheduleToModel, organizationId: string, classId: string) {
+		return await this.repository(organizationId, classId).add(data)
 	}
 
 	async delete(data: { organizationId: string; classId: string; id: string }) {
