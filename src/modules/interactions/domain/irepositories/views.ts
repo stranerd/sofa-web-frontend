@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { ViewToModel } from '../../data/models/views'
 import { ViewEntity } from '../entities/views'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IViewRepository {
 	add: (data: ViewToModel) => Promise<ViewEntity>

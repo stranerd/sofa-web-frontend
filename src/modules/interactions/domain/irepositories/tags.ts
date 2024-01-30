@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { TagToModel } from '../../data/models/tags'
 import { TagEntity } from '../entities/tags'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface ITagRepository {
 	add: (data: TagToModel) => Promise<TagEntity>

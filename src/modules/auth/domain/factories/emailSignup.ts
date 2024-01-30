@@ -1,6 +1,6 @@
-import { BaseFactory, Media } from '@modules/core'
 import { isEqualTo, v } from 'valleyed'
 import { NewUser } from '../entities/auth'
+import { BaseFactory, Media } from '@modules/core'
 
 type Keys = Omit<NewUser, 'name'> & {
 	first: string

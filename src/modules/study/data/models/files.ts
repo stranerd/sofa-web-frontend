@@ -1,5 +1,5 @@
-import { Media } from '@modules/core'
 import { CoursableData, FileType } from '../../domain/types'
+import { Media } from '@modules/core'
 
 export interface FileFromModel extends FileToModel, CoursableData {
 	id: string

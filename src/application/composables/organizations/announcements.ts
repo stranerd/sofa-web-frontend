@@ -1,9 +1,9 @@
-import { AnnouncementEntity, AnnouncementFactory, AnnouncementsUseCases } from '@modules/organizations'
 import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
+import { AnnouncementEntity, AnnouncementFactory, AnnouncementsUseCases } from '@modules/organizations'
 
 const store = {} as Record<
 	string,
@@ -96,17 +96,17 @@ export const useClassAnnouncements = (organizationId: string, classId: string) =
 	}
 }
 
-export const useMakeAnnouncement = (organizationId: string, classId: string) => {
+export const useCreateAnnouncement = (organizationId: string, classId: string) => {
 	const factory = new AnnouncementFactory()
 	const {
-		asyncFn: makeAnnouncement,
+		asyncFn: createAnnouncement,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
 		await AnnouncementsUseCases.add(organizationId, classId, factory)
 		factory.reset()
-		useModals().organizations.makeAnnouncement.close()
+		useModals().organizations.createAnnouncement.close()
 	})
 
-	return { error, loading, makeAnnouncement, factory }
+	return { error, loading, createAnnouncement, factory }
 }

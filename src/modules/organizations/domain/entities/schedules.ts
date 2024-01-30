@@ -1,6 +1,6 @@
-import { BaseEntity } from '@modules/core'
 import { ScheduleFromModel } from '../../data/models/schedules'
 import { EmbeddedUser, ScheduleStatus, ScheduleStream, ScheduleTime } from '../types'
+import { BaseEntity } from '@modules/core'
 
 export class ScheduleEntity extends BaseEntity {
 	public readonly id: string

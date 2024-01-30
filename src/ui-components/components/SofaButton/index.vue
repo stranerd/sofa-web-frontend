@@ -11,19 +11,14 @@
 			[customClass]: true,
 		}">
 		<slot />
-		<SofaIcon v-if="loading" name="loader" class="h-[28px] pl-2" />
 	</button>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import SofaIcon from '../SofaIcon'
 
 export default defineComponent({
 	name: 'SofaButton',
-	components: {
-		SofaIcon,
-	},
 	props: {
 		bgColor: {
 			type: String,

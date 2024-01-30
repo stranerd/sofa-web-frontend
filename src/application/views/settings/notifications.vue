@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 
 export default defineComponent({
 	name: 'SettingsNotificationsPage',

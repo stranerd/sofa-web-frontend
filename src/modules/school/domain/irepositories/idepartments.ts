@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { DepartmentToModel } from '../../data/models/departments'
 import { DepartmentEntity } from '../entities/departments'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IDepartmentRepository {
 	add: (data: DepartmentToModel) => Promise<DepartmentEntity>

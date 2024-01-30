@@ -130,6 +130,7 @@
 	</SofaFormWrapper>
 </template>
 <script lang="ts">
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import {
 	allGenericTags,
@@ -143,7 +144,6 @@ import {
 } from '@app/composables/course'
 import { CourseEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { defineComponent, onMounted, ref, watch } from 'vue'
 
 export default defineComponent({
 	name: 'CourseSettings',

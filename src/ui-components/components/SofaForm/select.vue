@@ -42,13 +42,12 @@
 </template>
 
 <script lang="ts" setup generic="T">
-import { SelectOption } from 'sofa-logic'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import SofaTextField from './textField.vue'
-import { onMounted } from 'vue'
+import { SelectOption } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{

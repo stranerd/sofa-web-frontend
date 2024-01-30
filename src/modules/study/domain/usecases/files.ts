@@ -1,7 +1,7 @@
-import { Conditions, Listeners } from '@modules/core'
 import { FileEntity } from '../entities/files'
 import { FileFactory } from '../factories/files'
 import { IFileRepository } from '../irepositories/ifiles'
+import { Conditions, Listeners } from '@modules/core'
 
 export class FilesUseCase {
 	private repository: IFileRepository

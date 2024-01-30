@@ -83,10 +83,10 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 import { UserEntity } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { ref } from 'vue'
 
 defineProps<{
 	quiz: QuizEntity

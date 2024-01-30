@@ -1,7 +1,7 @@
-import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 import { ClassEntity } from '../entities/classes'
 import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
+import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 
 export class ClassesUseCase {
 	private repository: (organizationId: string) => IClassRepository

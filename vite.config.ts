@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 import Checker from 'vite-plugin-checker'
 import Compression from 'vite-plugin-compression'
 import Pages from 'vite-plugin-pages'
+import { watch } from 'vite-plugin-watch'
 
 const skipCompression = !!process.env.SKIP_COMPRESSION
 const isDev = process.env.NODE_ENV === 'development'
@@ -17,6 +18,10 @@ export default defineConfig({
 					isCustomElement: (tag) => ['math-field'].includes(tag),
 				},
 			},
+		}),
+		watch({
+			pattern: 'public/images/icons/*.svg',
+			command: 'npm run icons:types',
 		}),
 		Pages({
 			importMode: 'sync',
@@ -60,7 +65,6 @@ export default defineConfig({
 			'@app': path.resolve(__dirname, './src/application'),
 			'@modules': path.resolve('./src/modules'),
 			'@utils': path.resolve('./src/utils'),
-			'@typing': path.resolve(__dirname, './src/types'),
 			'sofa-logic': path.resolve('./src/logic'),
 			'sofa-ui-components': path.resolve('./src/ui-components'),
 		},

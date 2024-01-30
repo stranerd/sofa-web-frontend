@@ -1,6 +1,6 @@
-import { BaseFactory } from '@modules/core'
 import { isEqualTo, v } from 'valleyed'
 import { PasswordUpdate } from '../entities/auth'
+import { BaseFactory } from '@modules/core'
 
 type Keys = PasswordUpdate & { cPassword: string }
 

@@ -169,15 +169,15 @@
 </template>
 
 <script setup lang="ts">
+import { formatNumber } from 'valleyed'
+import { computed } from 'vue'
+import { useMeta } from 'vue-meta'
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { formatNumber } from 'valleyed'
-import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
 
 const props = withDefaults(
 	defineProps<{
@@ -212,14 +212,14 @@ const rightCommands = computed(() => [
 ])
 
 const options = computed(() => [
-	{ title: 'Dashboard', icon: 'dashboard', route: '/' },
+	{ title: 'Dashboard', icon: 'dashboard' as const, route: '/' },
 	...(userType.value.isOrg
 		? [
-				{ title: 'Classes', icon: 'classes', route: '/organization/classes' },
-				{ title: 'Teachers', icon: 'tutor', route: '/organization/teachers' },
-				{ title: 'Students', icon: 'user-unfilled', route: '/organization/students' },
+				{ title: 'Classes', icon: 'classes' as const, route: '/organization/classes' },
+				{ title: 'Teachers', icon: 'tutor' as const, route: '/organization/teachers' },
+				{ title: 'Students', icon: 'user-unfilled' as const, route: '/organization/students' },
 			]
 		: []),
-	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes', route: '/classes' }] : []),
+	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes' as const, route: '/classes' }] : []),
 ])
 </script>

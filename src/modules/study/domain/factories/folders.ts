@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { FolderToModel } from '../../data/models/folders'
 import { FolderEntity } from '../entities/folders'
+import { BaseFactory } from '@modules/core'
 
 export class FolderFactory extends BaseFactory<FolderEntity, FolderToModel, FolderToModel> {
 	readonly rules = {

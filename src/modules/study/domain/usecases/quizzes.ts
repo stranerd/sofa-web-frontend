@@ -1,7 +1,7 @@
-import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { QuizEntity } from '../entities/quizzes'
 import { QuizFactory } from '../factories/quizzes'
 import { IQuizRepository } from '../irepositories/iquizzes'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class QuizzesUseCase {
 	private repository: IQuizRepository

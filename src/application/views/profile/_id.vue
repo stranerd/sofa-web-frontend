@@ -29,16 +29,16 @@
 								v-for="item in [
 									{
 										title: 'Quizzes',
-										icon: 'profile-quiz',
+										icon: 'profile-quiz' as const,
 										value: user.account.meta.publishedQuizzes,
 									},
 									{
 										title: 'Courses',
-										icon: 'profile-course',
+										icon: 'profile-course' as const,
 										value: user.account.meta.publishedCourses,
 									},
 									...(user.userType.isOrg
-										? [{ title: 'Students', icon: 'profile-followers', value: user.account.meta.students }]
+										? [{ title: 'Students', icon: 'profile-followers' as const, value: user.account.meta.students }]
 										: []),
 								]"
 								:key="item.title"
@@ -104,7 +104,7 @@
 							:bookmarkAction="() => saveToFolder(activity.original)"
 							:content="activity"
 							:to="activity.route"
-							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
+							class="shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
@@ -139,6 +139,9 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { extractResource } from '@app/composables/library'
@@ -146,9 +149,6 @@ import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'ProfileIdPage',

@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { InstitutionToModel } from '../../data/models/institutions'
 import { InstitutionEntity } from '../entities/institutions'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IInstitutionRepository {
 	add: (data: InstitutionToModel) => Promise<InstitutionEntity>

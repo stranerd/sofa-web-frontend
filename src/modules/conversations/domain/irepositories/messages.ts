@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { MessageToModel } from '../../data/models/messages'
 import { MessageEntity } from '../entities/messages'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IMessageRepository {
 	add: (data: MessageToModel) => Promise<MessageEntity>

@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { ScheduleEntity } from '../../domain/entities/schedules'
 import { IScheduleRepository } from '../../domain/irepositories/schedules'
 import { ScheduleFromModel, ScheduleToModel } from '../models/schedules'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class ScheduleRepository implements IScheduleRepository {
 	private static instances: Record<string, ScheduleRepository> = {}

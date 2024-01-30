@@ -16,7 +16,7 @@
 				</router-link>
 			</div>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto p-4">
-				<slot :classObj="currentClass" />
+				<slot :classInst="currentClass" />
 			</div>
 		</div>
 	</SubPageLayout>
@@ -49,7 +49,7 @@
 		</template>
 		<template #middle-session>
 			<div v-if="currentClass" class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :classObj="currentClass" />
+				<slot :classInst="currentClass" />
 			</div>
 		</template>
 		<template #right-session>
@@ -69,19 +69,19 @@
 				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
 				<SofaHeaderText content="Live Sessions" />
 				<div class="mt-4 h-[1px] w-full bg-lightGray" />
-				<ScheduleList :classObj="currentClass" :showFilter="false" :schedules="schedules" />
+				<ScheduleList :classInst="currentClass" :showFilter="false" :schedules="schedules" />
 			</div>
 		</template>
 	</DashboardLayout>
 </template>
 
 <script setup lang="ts">
-import { useClass } from '@app/composables/organizations/classes'
-import { useClassSchedules } from '@app/composables/organizations/schedules'
-import { Logic } from 'sofa-logic'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
+import { useClass } from '@app/composables/organizations/classes'
+import { useClassSchedules } from '@app/composables/organizations/schedules'
+import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -110,10 +110,10 @@ useMeta(
 )
 
 const options = computed(() => [
-	{ title: 'Lessons', icon: 'lessons', route: '/lessons' },
-	{ title: 'Announcements', icon: 'announcement', route: '/announcements' },
-	{ title: 'Schedule', icon: 'calendar', route: '/schedules' },
-	{ title: 'About', icon: 'info', route: '/about' },
+	{ title: 'Lessons', icon: 'lessons' as const, route: '/lessons' },
+	{ title: 'Announcements', icon: 'announcement' as const, route: '/announcements' },
+	{ title: 'Schedule', icon: 'calendar' as const, route: '/schedules' },
+	{ title: 'About', icon: 'info' as const, route: '/about' },
 ])
 
 const { schedules } = useClassSchedules(organizationId, classId)

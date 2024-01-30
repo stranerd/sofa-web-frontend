@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { CourseEntity } from '../../domain/entities/courses'
 import { ICourseRepository } from '../../domain/irepositories/icourses'
 import { CourseFromModel, CourseToModel } from '../models/courses'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class CourseRepository implements ICourseRepository {
 	private static instance: CourseRepository

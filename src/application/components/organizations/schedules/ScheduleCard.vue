@@ -25,9 +25,9 @@
 import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 
 const props = defineProps<{
-	classObj: ClassEntity
+	classInst: ClassEntity
 	schedule: ScheduleEntity
 }>()
 
-const lesson = props.classObj.getLesson(props.schedule.lessonId)
+const lesson = props.classInst.getLesson(props.schedule.lessonId)
 </script>

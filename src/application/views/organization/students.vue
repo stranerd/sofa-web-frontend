@@ -7,14 +7,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 import studentsImage from '@app/assets/images/class-students.png'
 import HomeLayout from '@app/components/home/HomeLayout.vue'
 import MembersList from '@app/components/organizations/members/MembersList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
-import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'OrganizationStudentsPage',

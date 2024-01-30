@@ -1,8 +1,8 @@
+import { computed, ref } from 'vue'
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
 import { UserEntity, UsersUseCases } from '@modules/users'
 import { Logic, Wallet } from 'sofa-logic'
-import { computed, ref } from 'vue'
 
 const store = {
 	auth: ref(null as AuthDetails | null),

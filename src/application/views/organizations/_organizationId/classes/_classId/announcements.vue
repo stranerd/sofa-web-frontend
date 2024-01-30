@@ -1,11 +1,11 @@
 <template>
 	<ClassLayout>
-		<template #default="{ classObj }">
+		<template #default="{ classInst }">
 			<div
 				v-if="announcements.length === 0"
 				class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 				<div
-					v-if="classObj.isAdmin(id) || classObj.isTeacher(id)"
+					v-if="classInst.isAdmin(id) || classInst.isTeacher(id)"
 					class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 					<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
 						<img :src="emptyAnnouncementContent.imageURL" class="w-[144px] h-[144px]" />
@@ -25,7 +25,7 @@
 							bgColor="bg-primaryBlue"
 							textColor="text-white"
 							padding="py-4 px-6"
-							@click="createAnnouncement(classObj)">
+							@click="createAnnouncement(classInst)">
 							Make an announcement
 						</SofaButton>
 					</div>
@@ -39,7 +39,7 @@
 			<div v-else class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 mdlg:p-6">
 				<SofaHeaderText class="hidden mdlg:inline-block" content="Annoucements" />
 				<div class="hidden mdlg:inline-block h-[1px] w-full bg-lightGray" />
-				<div v-if="classObj.isAdmin(id) || classObj.isTeacher(id)" class="flex flex-wrap gap-4 items-center justify-between">
+				<div v-if="classInst.isAdmin(id) || classInst.isTeacher(id)" class="flex flex-wrap gap-4 items-center justify-between">
 					<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
 						<SofaSelect
 							v-model="filter.lesson"
@@ -49,7 +49,7 @@
 							borderColor="border-darkLightGray"
 							:options="[
 								{ key: null, value: 'All lessons' },
-								...classObj.lessons.map((l) => ({ key: l.id, value: l.title })),
+								...classInst.lessons.map((l) => ({ key: l.id, value: l.title })),
 							]" />
 						<SofaSelect
 							v-model="filter.userType"
@@ -64,13 +64,13 @@
 						bgColor="bg-primaryBlue"
 						textColor="text-white"
 						padding="py-3 px-4"
-						@click="createAnnouncement(classObj)">
+						@click="createAnnouncement(classInst)">
 						Make an announcement
 					</SofaButton>
 				</div>
 				<div v-else class="flex gap-2 mdlg:gap-4 overflow-x-auto scrollbar-hide">
 					<a
-						v-for="l in [{ key: null, value: 'All' }, ...classObj.lessons.map((l) => ({ key: l.id, value: l.title }))]"
+						v-for="l in [{ key: null, value: 'All' }, ...classInst.lessons.map((l) => ({ key: l.id, value: l.title }))]"
 						:key="l.value"
 						class="px-3 py-2 border rounded-custom"
 						:class="{
@@ -84,7 +84,7 @@
 				<AnnouncementCard
 					v-for="(announcement, index) in filteredAnnouncements"
 					:key="index"
-					:classObj="classObj"
+					:classInst="classInst"
 					:announcement="announcement" />
 				<SofaButton
 					v-if="hasMore"
@@ -95,12 +95,12 @@
 					Load More
 				</SofaButton>
 				<SofaButton
-					v-if="classObj.isAdmin(id) || classObj.isTeacher(id)"
+					v-if="classInst.isAdmin(id) || classInst.isTeacher(id)"
 					class="block mdlg:hidden"
 					bgColor="bg-primaryBlue"
 					textColor="text-white"
 					padding="py-3 px-4"
-					@click="createAnnouncement(classObj)">
+					@click="createAnnouncement(classInst)">
 					Make an announcement
 				</SofaButton>
 			</div>
@@ -109,13 +109,13 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useClassAnnouncements } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
-import { computed, defineComponent, reactive } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdAnnouncements',
@@ -151,11 +151,11 @@ export default defineComponent({
 			{ key: MemberTypes.teacher, value: 'Teachers Only' },
 		]
 
-		const createAnnouncement = (classObj: ClassEntity) => {
-			useModals().organizations.makeAnnouncement.open({
+		const createAnnouncement = (classInst: ClassEntity) => {
+			useModals().organizations.createAnnouncement.open({
 				organizationId,
 				userId: id.value,
-				classObj,
+				classInst,
 			})
 		}
 

@@ -1,7 +1,7 @@
+import { useModals } from './core/modals'
 import { InteractionEntities } from '@modules/interactions'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Game, Logic, PlayStatus, ResourceType, Test } from 'sofa-logic'
-import { useModals } from './core/modals'
 
 const createQuizData = (quiz: QuizEntity): ResourceType => ({
 	original: quiz,

@@ -5,14 +5,14 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import QuestionDisplay from './QuestionDisplay.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { computed, reactive, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import QuestionDisplay from './QuestionDisplay.vue'
 
 const props = withDefaults(
 	defineProps<{

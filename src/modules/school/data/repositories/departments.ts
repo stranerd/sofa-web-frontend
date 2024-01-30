@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { DepartmentEntity } from '../../domain/entities/departments'
 import { IDepartmentRepository } from '../../domain/irepositories/idepartments'
 import { DepartmentFromModel, DepartmentToModel } from '../models/departments'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class DepartmentRepository implements IDepartmentRepository {
 	private static instance: DepartmentRepository

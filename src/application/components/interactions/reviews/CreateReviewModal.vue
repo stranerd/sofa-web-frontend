@@ -29,11 +29,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useCreateReview } from '@app/composables/interactions/reviews'
 import { ConversationEntity } from '@modules/conversations'
 import { Interaction, singulars } from '@modules/interactions'
 import { CourseEntity, QuizEntity } from '@modules/study'
-import { computed } from 'vue'
 
 const props = defineProps<
 	Interaction & {

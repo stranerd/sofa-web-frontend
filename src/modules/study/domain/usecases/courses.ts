@@ -1,6 +1,6 @@
-import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { CourseEntity } from '../entities/courses'
 import { ICourseRepository } from '../irepositories/icourses'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class CoursesUseCase {
 	private repository: ICourseRepository

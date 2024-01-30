@@ -1,4 +1,3 @@
-import { BaseEntity } from '@modules/core'
 import { UserFromModel } from '../../data/models/users'
 import {
 	AuthRoleType,
@@ -13,6 +12,7 @@ import {
 	UserType,
 	UserTypeData,
 } from '../types'
+import { BaseEntity } from '@modules/core'
 
 export class UserEntity extends BaseEntity {
 	public readonly id: string

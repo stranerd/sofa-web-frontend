@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { ReportEntity } from '../../domain/entities/reports'
 import { IReportRepository } from '../../domain/irepositories/reports'
 import { ReportFromModel, ReportToModel } from '../models/reports'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class ReportRepository implements IReportRepository {
 	private static instance: ReportRepository

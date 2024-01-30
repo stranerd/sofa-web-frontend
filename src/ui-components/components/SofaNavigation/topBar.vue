@@ -135,9 +135,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import { useAuth } from '@app/composables/auth/auth'
-import { handleShowAddMaterial } from '@app/composables/study'
-import { Conditions, Logic } from 'sofa-logic'
 import { computed, onMounted, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
@@ -148,6 +145,9 @@ import SofaModalOld from '../SofaModalOld'
 import { SofaHeaderText } from '../SofaTypography'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import Notification from './notification.vue'
+import { Conditions, Logic } from 'sofa-logic'
+import { handleShowAddMaterial } from '@app/composables/study'
+import { useAuth } from '@app/composables/auth/auth'
 
 withDefaults(
 	defineProps<{
@@ -197,7 +197,7 @@ const tabs = computed(() => [
 	{
 		name: 'Home',
 		path: '/',
-		icon: 'home',
+		icon: 'home' as const,
 		icon_size: 'h-[18px]',
 	},
 	...(!userType.value.isOrg
@@ -205,7 +205,7 @@ const tabs = computed(() => [
 				{
 					name: 'Chat',
 					path: '/chats',
-					icon: 'chat',
+					icon: 'chat' as const,
 					icon_size: 'h-[18px]',
 				},
 			]
@@ -215,7 +215,7 @@ const tabs = computed(() => [
 				{
 					name: 'Classes',
 					path: '/classes',
-					icon: 'classes',
+					icon: 'classes' as const,
 					icon_size: 'h-[18px]',
 				},
 			]
@@ -223,19 +223,19 @@ const tabs = computed(() => [
 	{
 		name: 'Library',
 		path: '/library',
-		icon: 'library',
+		icon: 'library' as const,
 		icon_size: 'h-[18px]',
 	},
 	// {
 	//   name: "Analytics",
 	//   path: "/analytics",
-	//   icon: "analytics",
+	//   icon: "analytics" as const,
 	//   icon_size: "h-[18px]",
 	// },
 	{
 		name: 'Marketplace',
 		path: '/marketplace',
-		icon: 'marketplace',
+		icon: 'marketplace' as const,
 		icon_size: 'h-[18px]',
 	},
 ])

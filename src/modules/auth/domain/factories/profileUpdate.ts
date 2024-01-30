@@ -1,6 +1,6 @@
-import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { AuthDetails, ProfileUpdate } from '../entities/auth'
+import { BaseFactory, Media } from '@modules/core'
 
 type Keys = { first: string; last: string; description: string; photo: Media | null }
 

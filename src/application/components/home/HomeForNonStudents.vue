@@ -6,12 +6,12 @@
 			<div class="grid grid-cols-2 md:grid-cols-2 gap-4">
 				<div
 					v-for="stat in [
-						// { label: 'Classes', value: user.account.meta.classes, icon: 'classes', color: '#3296C8' },
-						// { label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons', color: '#3219AF' },
-						{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz', color: '#4BAF7D' },
-						{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses', color: '#FF4BC8' },
-						// { label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor', color: '#FA9632' },
-						// { label: 'Students', value: user.account.meta.students, icon: 'user-unfilled', color: '#197DFA' },
+						// { label: 'Classes', value: user.account.meta.classes, icon: 'classes' as const, color: '#3296C8' },
+						// { label: 'Lessons', value: user.account.meta.lessons, icon: 'lessons' as const, color: '#3219AF' },
+						{ label: 'Quizzes', value: user.account.meta.publishedQuizzes, icon: 'quiz' as const, color: '#4BAF7D' },
+						{ label: 'Courses', value: user.account.meta.publishedCourses, icon: 'courses' as const, color: '#FF4BC8' },
+						// { label: 'Teachers', value: user.account.meta.teachers, icon: 'tutor' as const, color: '#FA9632' },
+						// { label: 'Students', value: user.account.meta.students, icon: 'user-unfilled' as const, color: '#197DFA' },
 					]"
 					:key="stat.label"
 					class="flex flex-col-reverse sm:flex-row items-start sm:items-center gap-2 sm:gap-4 justify-between col-span-1 bg-lightGray p-4 md:p-6 rounded-custom">
@@ -47,7 +47,7 @@
 				:to="activity.route"
 				:hasBookmark="true"
 				:bookmarkAction="() => saveToFolder(activity.original)"
-				class="flex-shrink-0" />
+				class="shrink-0" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">
 			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />
@@ -64,12 +64,12 @@
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from 'valleyed'
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { extractContent } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
-import { formatNumber } from 'valleyed'
-import { computed } from 'vue'
 
 const { id, user } = useAuth()
 

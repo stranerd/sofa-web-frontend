@@ -1,8 +1,8 @@
-import { ScheduleEntity, SchedulesUseCases } from '@modules/organizations'
 import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 
 const store = {} as Record<
 	string,
@@ -93,6 +93,18 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 		fetchOlderSchedules,
 		fetchSchedules,
 	}
+}
+
+export const useCreateSchedule = (classInst: ClassEntity, lesson: ClassLesson) => {
+	const factory = new ScheduleFactory()
+
+	const {
+		asyncFn: createSchedule,
+		loading,
+		error,
+	} = useAsyncFn(async () => await SchedulesUseCases.create(classInst.organizationId, classInst.id, lesson.id, factory))
+
+	return { factory, loading, error, createSchedule }
 }
 
 export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = false) => {

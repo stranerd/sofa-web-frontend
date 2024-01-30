@@ -1,8 +1,8 @@
-import { Listeners } from '@modules/core'
 import { ReportEntity } from '../entities/reports'
 import { ReportFactory } from '../factories/reports'
 import { IReportRepository } from '../irepositories/reports'
 import { Interaction } from '../types'
+import { Listeners } from '@modules/core'
 
 export class ReportsUseCase {
 	private repository: IReportRepository

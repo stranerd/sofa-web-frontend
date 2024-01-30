@@ -7,11 +7,21 @@ module.exports = {
 	},
 	extends: [
 		'eslint:recommended',
+		'plugin:import/recommended',
 		'plugin:vue/vue3-recommended',
 		'@vue/typescript/recommended',
 		'eslint-config-prettier',
 		'plugin:prettier/recommended',
 	],
+	settings: {
+		'import/resolver': {
+			typescript: true,
+    		node: true
+		},
+		'import/core-modules': [
+			'~pages'
+		]
+	},
 	parserOptions: {
 		ecmaVersion: 2022,
 		parser: '@typescript-eslint/parser',
@@ -51,5 +61,6 @@ module.exports = {
 				ignores: ['math-field', 'metainfo', 'router-link', 'router-view', 'transition'],
 			},
 		],
+		'import/order': 'error',
 	},
 }

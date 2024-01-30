@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { LikeEntity } from '../../domain/entities/likes'
 import { ILikeRepository } from '../../domain/irepositories/likes'
 import { LikeFromModel, LikeToModel } from '../models/likes'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class LikeRepository implements ILikeRepository {
 	private static instance: LikeRepository

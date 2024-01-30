@@ -21,7 +21,7 @@
 					:accept="accept"
 					:multiple="isMultiple"
 					@change="uploadHandler" />
-				<SofaIcon :name="`${iconName}`" customClass="h-[15px]" />
+				<SofaIcon :name="iconName" customClass="h-[15px]" />
 				<SofaNormalText color="text-paragraphTextLight" customClass="w-full text-left line-clamp-1">
 					{{ selectedFileName != '' ? selectedFileName : placeholder }}
 				</SofaNormalText>
@@ -37,7 +37,7 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 const props = withDefaults(
 	defineProps<{
 		placeholder?: string
-		iconName?: string
+		iconName?: IconName
 		accept?: string
 		isWrapper?: boolean
 		isMultiple?: boolean

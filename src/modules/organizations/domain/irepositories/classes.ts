@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { ClassToModel } from '../../data/models/classes'
 import { ClassEntity } from '../entities/classes'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IClassRepository {
 	add: (data: ClassToModel) => Promise<ClassEntity>

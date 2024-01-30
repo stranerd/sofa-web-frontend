@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { ViewEntity } from '../../domain/entities/views'
 import { IViewRepository } from '../../domain/irepositories/views'
 import { ViewFromModel, ViewToModel } from '../models/views'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class ViewRepository implements IViewRepository {
 	private static instance: ViewRepository

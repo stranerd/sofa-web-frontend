@@ -1,8 +1,8 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { FolderEntity } from '../../domain/entities/folders'
 import { IFolderRepository } from '../../domain/irepositories/ifolders'
 import { FolderFromModel, FolderToModel } from '../models/folders'
 import { FolderSaved } from '../../domain/types'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class FolderRepository implements IFolderRepository {
 	private static instance: FolderRepository

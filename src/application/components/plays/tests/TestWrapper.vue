@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useTest } from '@app/composables/plays/tests'
-import { computed } from 'vue'
 
 const props = withDefaults(
 	defineProps<{

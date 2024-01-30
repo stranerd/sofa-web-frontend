@@ -1,5 +1,3 @@
-import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -7,6 +5,8 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { Logic } from 'sofa-logic'
+import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
 const orgStore: Record<
 	string,

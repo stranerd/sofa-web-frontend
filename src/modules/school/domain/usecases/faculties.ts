@@ -1,6 +1,6 @@
-import { QueryParams } from '@modules/core'
 import { FacultyFactory } from '../factories/faculties'
 import { IFacultyRepository } from '../irepositories/ifaculties'
+import { QueryParams } from '@modules/core'
 
 export class FacultiesUseCase {
 	private repository: IFacultyRepository

@@ -2,23 +2,18 @@
 	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer shrink-0" :class="customClass" />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import InlineSvg from 'vue-inline-svg'
-export default {
-	name: 'RoofIcon',
-	components: { InlineSvg },
-	props: {
-		name: {
-			type: String,
-			required: true,
-		},
-		customClass: {
-			type: String,
-			required: false,
-			default: '',
-		},
+
+withDefaults(
+	defineProps<{
+		name: IconName
+		customClass?: string
+	}>(),
+	{
+		customClass: '',
 	},
-}
+)
 </script>
 
 <style>

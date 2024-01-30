@@ -1,8 +1,8 @@
+import { ref } from 'vue'
+import { capitalize, getRandomValue } from 'valleyed'
+import { useAuth } from '../auth/auth'
 import { NetworkError, StatusCodes } from '@modules/core'
 import { Logic } from 'sofa-logic'
-import { ref } from 'vue'
-import { useAuth } from '../auth/auth'
-import { capitalize, getRandomValue } from 'valleyed'
 
 export const useErrorHandler = () => {
 	const errorState = ref('')

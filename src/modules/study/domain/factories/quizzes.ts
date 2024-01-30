@@ -1,8 +1,8 @@
-import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { ref } from 'vue'
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
+import { BaseFactory, Media } from '@modules/core'
 
 export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToModel> {
 	public topicId = ''

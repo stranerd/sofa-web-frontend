@@ -99,7 +99,7 @@
 
 									<div class="w-full flex flex-row items-center gap-2">
 										<SofaIcon
-											:name="`${item.type}${selectedMaterial.id == item.id ? '-white' : ''}`"
+											:name="`${item.type}${selectedMaterial.id == item.id ? '-white' : ''}` as any"
 											customClass="h-[15px]" />
 										<SofaNormalText
 											:color="`${selectedMaterial.id == item.id ? '!text-white' : '!text-bodyBlack'} `"
@@ -251,14 +251,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import CourseContent from '@app/components/study/courses/content.vue'
 import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
 import { Conditions, Logic } from 'sofa-logic'
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',

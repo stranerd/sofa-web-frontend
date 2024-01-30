@@ -1,7 +1,7 @@
-import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { MessageEntity } from '../entities/messages'
 import { MessageFactory } from '../factories/messages'
 import { IMessageRepository } from '../irepositories/messages'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { CHAT_PAGINATION_LIMIT } from '@utils/constants'
 
 export class MessagesUseCase {

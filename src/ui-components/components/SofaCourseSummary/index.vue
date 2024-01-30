@@ -46,15 +46,15 @@
 <script lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CourseEntity } from '@modules/study'
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaNormalText } from '../SofaTypography'
+import { Logic } from 'sofa-logic'
+import { formatTime } from '@utils/dates'
+import { CourseEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'SofaCourseSummary',

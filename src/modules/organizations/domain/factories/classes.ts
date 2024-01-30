@@ -1,8 +1,8 @@
-import { BaseFactory, Media } from '@modules/core'
-import { Currencies } from '@modules/payment'
 import { v } from 'valleyed'
 import { ClassToModel } from '../../data/models/classes'
 import { ClassEntity } from '../entities/classes'
+import { Currencies } from '@modules/payment'
+import { BaseFactory, Media } from '@modules/core'
 
 type Keys = Omit<ClassToModel, 'price'> & ClassToModel['price']
 

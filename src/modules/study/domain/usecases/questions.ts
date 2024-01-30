@@ -1,8 +1,8 @@
-import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
 import { QuestionFactory } from '../factories/questions'
 import { IQuestionRepository } from '../irepositories/iquestions'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class QuestionsUseCase {
 	private repository: (quizId: string) => IQuestionRepository

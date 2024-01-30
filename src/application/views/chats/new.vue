@@ -36,12 +36,12 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCreateConversation } from '@app/composables/conversations/conversations'
-import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export const content = {
 	title: 'AI assistant',

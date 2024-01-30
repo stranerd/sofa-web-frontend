@@ -43,10 +43,10 @@
 </template>
 
 <script lang="ts">
-import AuthProvider from '@app/components/auth/AuthProvider.vue'
-import { useEmailSignin } from '@app/composables/auth/signin'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import AuthProvider from '@app/components/auth/AuthProvider.vue'
+import { useEmailSignin } from '@app/composables/auth/signin'
 
 export default defineComponent({
 	name: 'AuthLoginPage',

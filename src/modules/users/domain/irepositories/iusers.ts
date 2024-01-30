@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { UserEntity } from '../entities/users'
 import { UserAccount, UserAi, UserLocation, UserSocialsType, UserTypeData } from '../types'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IUserRepository {
 	find: (id: string) => Promise<UserEntity | null>

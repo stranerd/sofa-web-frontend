@@ -1,8 +1,8 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { reactive } from 'vue'
 import { UserEntity } from '../entities/users'
 import { UserSchoolType, UserType, UserTypeData } from '../types'
+import { BaseFactory } from '@modules/core'
 
 type Exam = {
 	institutionId: string

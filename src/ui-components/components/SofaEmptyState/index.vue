@@ -60,7 +60,7 @@ export default defineComponent({
 		},
 		icon: {
 			type: Object as () => {
-				name: string
+				name: IconName
 				size: string
 			},
 			default: null,

@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { FileToModel } from '../../data/models/files'
 import { FileEntity } from '../entities/files'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IFileRepository {
 	add: (data: FileToModel) => Promise<FileEntity>

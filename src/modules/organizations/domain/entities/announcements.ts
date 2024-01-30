@@ -1,6 +1,6 @@
-import { BaseEntity } from '@modules/core'
 import { AnnouncementFromModel } from '../../data/models/announcements'
 import { AnnouncementFilter, EmbeddedUser } from '../types'
+import { BaseEntity } from '@modules/core'
 
 export class AnnouncementEntity extends BaseEntity {
 	public readonly id: string

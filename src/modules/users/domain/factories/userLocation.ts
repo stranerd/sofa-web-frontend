@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { UserEntity } from '../entities/users'
 import { UserLocation } from '../types'
+import { BaseFactory } from '@modules/core'
 
 export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, UserLocation> {
 	readonly rules = {

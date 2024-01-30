@@ -45,11 +45,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 import ExploreClassCard from '@app/components/organizations/classes/ExploreClassCard.vue'
 import { useExploreClasses } from '@app/composables/organizations/classes-explore'
 import { Logic } from 'sofa-logic'
-import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'ClassesExplore',

@@ -1,6 +1,3 @@
-import { AuthDetails } from '@modules/auth'
-import { listenToMany, listenToOne } from '@modules/core'
-import { RouteConfig } from '@typing/routes'
 import { AxiosError } from 'axios'
 import { getRandomValue, isString } from 'valleyed'
 import { reactive } from 'vue'
@@ -17,6 +14,8 @@ import {
 	SuccessConfirmationSetup,
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
+import { listenToMany, listenToOne } from '@modules/core'
+import { AuthDetails } from '@modules/auth'
 import { storage } from '@utils/storage'
 
 export default class Common {

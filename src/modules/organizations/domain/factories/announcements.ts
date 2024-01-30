@@ -1,8 +1,8 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
-import { AnnouncementToModel } from '@modules/organizations/data/models/announcements'
 import { AnnouncementEntity } from '../entities/announcements'
 import { MemberTypes } from '../types'
+import { AnnouncementToModel } from '@modules/organizations/data/models/announcements'
+import { BaseFactory } from '@modules/core'
 
 type Keys = Omit<AnnouncementToModel, 'filter'> & AnnouncementToModel['filter']
 

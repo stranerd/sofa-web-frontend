@@ -1,6 +1,6 @@
+import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '@app/composables/core/states'
 import { Interaction, ReviewFactory, ReviewsUseCases } from '@modules/interactions'
-import { useAsyncFn } from '../core/hooks'
 
 export const useCreateReview = (interaction: Interaction) => {
 	const factory = new ReviewFactory()

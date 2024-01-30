@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuth } from '@app/composables/auth/auth'
-import { useGame } from '@app/composables/plays/games'
 import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useGame } from '@app/composables/plays/games'
+import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(
 	defineProps<{

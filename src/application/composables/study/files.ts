@@ -1,6 +1,6 @@
+import { useAsyncFn } from '../core/hooks'
 import { FileEntity, FileFactory, FilesUseCases } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { useAsyncFn } from '../core/hooks'
 
 export const useCreateFile = () => {
 	const factory = new FileFactory()

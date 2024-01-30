@@ -1,7 +1,7 @@
-import { QuizEntity } from '@modules/study'
-import { QuizFromModel } from '@modules/study/data/models/quizzes'
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
+import { QuizEntity } from '@modules/study'
+import { QuizFromModel } from '@modules/study/data/models/quizzes'
 
 export default class QuizzesApi extends ModelApiService<QuizFromModel, QuizEntity> {
 	constructor() {

@@ -96,12 +96,12 @@
 </template>
 
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useClass } from '@app/composables/organizations/classes'
 import { useMeta } from 'vue-meta'
 import { pluralize } from 'valleyed'
+import { useClass } from '@app/composables/organizations/classes'
+import { Logic } from 'sofa-logic'
 import { formatTime } from '@utils/dates'
 import { useAuth } from '@app/composables/auth/auth'
 export default defineComponent({

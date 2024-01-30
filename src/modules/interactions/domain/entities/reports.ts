@@ -1,6 +1,6 @@
-import { EmbeddedUser } from '@modules/users'
 import { ReportFromModel } from '../../data/models/reports'
 import { InteractionEntity } from '../types'
+import { EmbeddedUser } from '@modules/users'
 import { BaseEntity } from '@modules/core'
 
 export class ReportEntity extends BaseEntity {

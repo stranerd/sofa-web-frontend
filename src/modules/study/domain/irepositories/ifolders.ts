@@ -1,7 +1,7 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { FolderToModel } from '../../data/models/folders'
 import { FolderEntity } from '../entities/folders'
 import { FolderSaved } from '../types'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IFolderRepository {
 	add: (data: FolderToModel) => Promise<FolderEntity>

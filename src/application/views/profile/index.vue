@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import { useAuth } from '@app/composables/auth/auth'
 import { defineComponent } from 'vue'
+import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
 	name: 'ProfilePage',

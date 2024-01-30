@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { ScheduleToModel } from '../../data/models/schedules'
 import { ScheduleEntity } from '../entities/schedules'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IScheduleRepository {
 	add: (data: ScheduleToModel) => Promise<ScheduleEntity>

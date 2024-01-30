@@ -1,9 +1,9 @@
-import { ConversationEntity, MessageEntity, MessageFactory, MessagesUseCases } from '@modules/conversations'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
+import { addToArray } from 'valleyed'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { addToArray } from 'valleyed'
+import { ConversationEntity, MessageEntity, MessageFactory, MessagesUseCases } from '@modules/conversations'
 
 const store = {} as Record<
 	string,

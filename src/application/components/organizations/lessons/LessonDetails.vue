@@ -85,8 +85,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ClassLesson, MemberEntity } from '@modules/organizations'
 import { computed, ref } from 'vue'
+import { ClassLesson, MemberEntity } from '@modules/organizations'
 
 const props = defineProps<{
 	organizationId: string

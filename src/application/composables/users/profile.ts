@@ -1,3 +1,8 @@
+import { computed, onMounted, ref, watch } from 'vue'
+import { useAuth } from '../auth/auth'
+import { useAsyncFn } from '../core/hooks'
+import { useSuccessHandler } from '../core/states'
+import { Logic } from 'sofa-logic'
 import {
 	UserAiFactory,
 	UserLocationFactory,
@@ -7,11 +12,6 @@ import {
 	UserTypeFactory,
 	UsersUseCases,
 } from '@modules/users'
-import { Logic } from 'sofa-logic'
-import { computed, onMounted, ref, watch } from 'vue'
-import { useAuth } from '../auth/auth'
-import { useAsyncFn } from '../core/hooks'
-import { useSuccessHandler } from '../core/states'
 
 export const useUserTypeUpdate = () => {
 	const factory = new UserTypeFactory()
@@ -98,7 +98,7 @@ export const useUserLocationUpdate = () => {
 	return { error, loading, factory, countries, states, updateLocation }
 }
 
-export const socials = {
+export const socials: Record<UserSocials, IconName> = {
 	[UserSocials.website]: 'website',
 	[UserSocials.youtube]: 'youtube',
 	[UserSocials.instagram]: 'instagram-social',

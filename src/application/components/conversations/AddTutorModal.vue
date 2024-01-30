@@ -116,12 +116,12 @@
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from 'valleyed'
+import { computed, ref } from 'vue'
 import { useCreateConversation } from '@app/composables/conversations/conversations'
 import { useTopicsList } from '@app/composables/interactions/tags'
 import { useTutorsList } from '@app/composables/users/users'
 import { ConversationEntity } from '@modules/conversations'
-import { formatNumber } from 'valleyed'
-import { computed, ref } from 'vue'
 
 const props = defineProps<{
 	close: () => void

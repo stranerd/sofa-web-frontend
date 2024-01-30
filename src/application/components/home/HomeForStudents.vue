@@ -9,7 +9,7 @@
 
 			<div
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" class="flex-shrink-0" @click="item.action?.()">
+				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" class="shrink-0" @click="item.action?.()">
 					<template #title>
 						<SofaNormalText customClass="!font-bold" :content="item.title" />
 					</template>
@@ -36,7 +36,7 @@
 					:to="activity.route"
 					:hasBookmark="true"
 					:bookmarkAction="() => saveToFolder(activity.original)"
-					class="flex-shrink-0" />
+					class="shrink-0" />
 			</div>
 			<div v-else class="pr-4 mdlg:pr-0">
 				<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
@@ -77,11 +77,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useHomeTasks } from '@app/composables/home'
 import { extractContent } from '@app/composables/marketplace'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
-import { computed } from 'vue'
 
 const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()
 

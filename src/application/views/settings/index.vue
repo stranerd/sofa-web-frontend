@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
-import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SettingsIndexPage',

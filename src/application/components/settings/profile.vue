@@ -77,13 +77,13 @@
 </template>
 
 <script lang="ts" setup>
+import { watch } from 'vue'
+import AccountSetup from '../onboarding/AccountSetup.vue'
 import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import { watch } from 'vue'
-import AccountSetup from '../onboarding/AccountSetup.vue'
 
 const { auth, userType } = useAuth()
 const { factory, updateProfile } = useProfileUpdate()

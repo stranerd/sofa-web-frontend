@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { MemberEntity } from '../entities/members'
 import { MemberTypes } from '../types'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IMemberRepository {
 	find: (email: string) => Promise<MemberEntity | null>

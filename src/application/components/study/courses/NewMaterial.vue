@@ -173,10 +173,10 @@
 	</SofaModalOld>
 </template>
 <script lang="ts">
-import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
-import { Conditions, Logic } from 'sofa-logic'
 import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'
 import AddVideo from './AddVideo.vue'
+import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
+import { Conditions, Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'NewCourseMaterial',
@@ -192,7 +192,7 @@ export default defineComponent({
 		const SingleCourse = ref(Logic.Study.SingleCourse!)
 		const AllQuzzies = ref(Logic.Study.AllQuzzies!)
 
-		const newMaterialOptions = [
+		const newMaterialOptions: { name: string; type: string; icon: IconName }[] = [
 			{
 				name: 'Quiz',
 				type: 'quiz',

@@ -43,9 +43,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useCreateLesson } from '@app/composables/organizations/lessons'
 import { MemberEntity } from '@modules/organizations'
-import { computed } from 'vue'
 
 const props = defineProps<{
 	organizationId: string

@@ -47,7 +47,7 @@
 		</Draggable>
 
 		<a
-			class="h-[144px] flex-shrink-0 w-full rounded-xl border-2 border-darkLightGray flex items-center justify-center"
+			class="h-[144px] shrink-0 w-full rounded-xl border-2 border-darkLightGray flex items-center justify-center"
 			@click="emits('addQuestion')">
 			<SofaIcon name="add-item" class="h-[30px]" />
 		</a>
@@ -65,7 +65,7 @@
 			:disabled="true">
 			<template #item="{ element, index }">
 				<a
-					class="w-[48px] h-[48px] flex-shrink-0 rounded-custom items-center justify-center flex relative"
+					class="w-[48px] h-[48px] shrink-0 rounded-custom items-center justify-center flex relative"
 					:class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGray'"
 					@click="selectQuestion(element)">
 					<SofaNormalText
@@ -80,16 +80,16 @@
 			</template>
 		</Draggable>
 
-		<SofaIcon class="h-[44px] cursor-pointer flex-shrink-0" name="faded-plus" @click="emits('addQuestion')" />
+		<SofaIcon class="h-[44px] shrink-0" name="faded-plus" @click="emits('addQuestion')" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
-import { UserEntity } from '@modules/users'
 import { Differ } from 'valleyed'
 import { reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
+import { UserEntity } from '@modules/users'
+import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 
 const props = defineProps<{
 	questions: QuestionEntity[]

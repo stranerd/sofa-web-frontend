@@ -23,9 +23,9 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useCreateReport } from '@app/composables/interactions/reports'
 import { Interaction, singulars } from '@modules/interactions'
-import { computed } from 'vue'
 
 const props = defineProps<
 	Interaction & {

@@ -1,6 +1,6 @@
+import { ModelApiService } from '../common/ModelService'
 import { FileEntity } from '@modules/study'
 import { FileFromModel } from '@modules/study/data/models/files'
-import { ModelApiService } from '../common/ModelService'
 
 export default class FilesApi extends ModelApiService<FileFromModel, FileEntity> {
 	constructor() {

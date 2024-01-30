@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="classObj.lessons.length === 0"
+		v-if="classInst.lessons.length === 0"
 		class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 		<div class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 			<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
@@ -40,22 +40,22 @@
 		<LessonCard
 			v-for="(lesson, index) in filteredLessons"
 			:key="index"
-			:isStudent="classObj.isStudent(userId)"
+			:isStudent="classInst.isStudent(userId)"
 			:lesson="lesson"
 			@click="openLessonDetails(lesson)" />
 	</div>
 </template>
 
 <script lang="ts">
+import { PropType, computed, defineComponent, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity, ClassLesson, MemberEntity } from '@modules/organizations'
-import { PropType, computed, defineComponent, ref } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	props: {
-		classObj: {
+		classInst: {
 			type: ClassEntity,
 			required: true,
 		},
@@ -84,8 +84,8 @@ export default defineComponent({
 
 		const filteredLessons = computed(() => {
 			if (searchQuery.value)
-				return props.classObj.lessons.filter((lesson) => lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()))
-			else return props.classObj.lessons
+				return props.classInst.lessons.filter((lesson) => lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()))
+			else return props.classInst.lessons
 		})
 
 		const openLessonDetails = (val: ClassLesson) => {

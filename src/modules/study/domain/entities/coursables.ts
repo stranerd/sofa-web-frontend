@@ -1,8 +1,8 @@
-import { BaseEntity } from '@modules/core'
 import { CoursableData, DraftStatus, Publishable } from '../types'
 import type { QuizEntity } from './quizzes'
 import type { CourseEntity } from './courses'
 import type { FileEntity } from './files'
+import { BaseEntity } from '@modules/core'
 
 export class PublishableEntity extends BaseEntity implements Publishable {
 	public readonly id: string

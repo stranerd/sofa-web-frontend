@@ -1,9 +1,9 @@
+import { App } from 'vue'
+import { Router } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AuthUseCases } from '@modules/auth'
 import { deleteTokens, getTokens } from '@utils/tokens'
-import { App } from 'vue'
-import { Router } from 'vue-router'
 
 type PluginFunction = (args: { app: App; router: Router }) => Promise<void>
 const definePlugin = (plugin: PluginFunction) => plugin

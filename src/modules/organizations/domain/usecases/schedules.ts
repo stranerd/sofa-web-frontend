@@ -1,5 +1,5 @@
-import { ScheduleToModel } from '../../data/models/schedules'
 import { ScheduleEntity } from '../entities/schedules'
+import { ScheduleFactory } from '../factories/schedules'
 import { IScheduleRepository } from '../irepositories/schedules'
 import { QueryParams, Conditions, Listeners } from '@modules/core'
 import { CHAT_PAGINATION_LIMIT } from '@utils/constants'
@@ -11,8 +11,8 @@ export class SchedulesUseCase {
 		this.repository = repository
 	}
 
-	async add(data: ScheduleToModel) {
-		return await this.repository(data.organizationId, data.classId).add(data)
+	async create(organizationId: string, classId: string, lessonId: string, factory: ScheduleFactory) {
+		return await this.repository(organizationId, classId).add({ ...(await factory.toModel()), lessonId })
 	}
 
 	async delete(data: { organizationId: string; classId: string; id: string }) {

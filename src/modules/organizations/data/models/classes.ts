@@ -1,5 +1,5 @@
-import { Media } from '@modules/core'
 import { ClassLesson, ClassMembers, EmbeddedUser, Saleable } from '../../domain/types'
+import { Media } from '@modules/core'
 
 export interface ClassFromModel extends ClassToModel, Saleable {
 	id: string

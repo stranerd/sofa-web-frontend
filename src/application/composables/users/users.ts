@@ -1,8 +1,8 @@
-import { UserEntity, UsersUseCases } from '@modules/users'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { addToArray } from 'valleyed'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { addToArray } from 'valleyed'
+import { UserEntity, UsersUseCases } from '@modules/users'
 
 const searchStore = {
 	users: reactive<UserEntity[]>([]),

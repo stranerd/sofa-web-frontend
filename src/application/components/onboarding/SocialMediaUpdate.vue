@@ -41,10 +41,10 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { socials } from '@app/composables/users/profile'
 import { UserSocialsFactory } from '@modules/users'
 import { Logic } from 'sofa-logic'
-import { ref } from 'vue'
 
 const props = defineProps<{
 	factory: UserSocialsFactory

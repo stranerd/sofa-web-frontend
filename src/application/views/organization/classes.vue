@@ -34,18 +34,18 @@
 					Create a class
 				</SofaButton>
 			</div>
-			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classObj="cl" />
+			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classInst="cl" />
 		</div>
 	</HomeLayout>
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
 import HomeLayout from '@app/components/home/HomeLayout.vue'
 import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useOrganizationClasses } from '@app/composables/organizations/classes'
-import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',

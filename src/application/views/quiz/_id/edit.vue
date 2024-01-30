@@ -284,6 +284,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import EditQuestionBody from '@app/components/study/quizzes/EditQuestionBody.vue'
 import EditQuestionOptions from '@app/components/study/quizzes/EditQuestionOptions.vue'
 import EditQuestionsList from '@app/components/study/quizzes/EditQuestionsList.vue'
@@ -293,8 +295,6 @@ import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdEdit',

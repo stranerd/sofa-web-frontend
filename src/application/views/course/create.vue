@@ -282,12 +282,12 @@
 </template>
 
 <script lang="ts">
+import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { useMeta } from 'vue-meta'
 import AddVideo from '@app/components/study/courses/AddVideo.vue'
 import NewCourseMaterial from '@app/components/study/courses/NewMaterial.vue'
 import CourseSettings from '@app/components/study/courses/Settings.vue'
 import { Logic } from 'sofa-logic'
-import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 
 import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@app/composables/course'
 

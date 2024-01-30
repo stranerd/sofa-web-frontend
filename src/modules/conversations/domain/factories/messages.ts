@@ -1,7 +1,7 @@
-import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { MessageToModel } from '../../data/models/messages'
 import { MessageEntity } from '../entities/messages'
+import { BaseFactory, Media } from '@modules/core'
 
 export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, MessageToModel> {
 	readonly rules = {

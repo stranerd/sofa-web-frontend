@@ -1,6 +1,6 @@
-import { QueryParams } from '@modules/core'
 import { CourseFactory } from '../factories/courses'
 import { ICourseRepository } from '../irepositories/icourses'
+import { QueryParams } from '@modules/core'
 
 export class CoursesUseCase {
 	private repository: ICourseRepository

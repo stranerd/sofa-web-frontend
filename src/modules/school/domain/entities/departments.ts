@@ -1,5 +1,5 @@
-import { BaseEntity } from '@modules/core'
 import { DepartmentFromModel } from '../../data/models/departments'
+import { BaseEntity } from '@modules/core'
 
 export class DepartmentEntity extends BaseEntity {
 	public readonly id: string

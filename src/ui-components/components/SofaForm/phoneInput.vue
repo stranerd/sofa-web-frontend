@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Phone } from '@modules/auth'
 import { ref } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { VueTelInput } from 'vue-tel-input'
+import { Phone } from '@modules/auth'
 
 const model = defineModel<Phone | null>({ default: null })
 

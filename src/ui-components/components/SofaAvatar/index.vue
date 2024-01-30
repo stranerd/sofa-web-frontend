@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic } from 'sofa-logic'
 import SofaImageLoader from '../SofaImageLoader/index.vue'
 import SofaIcon from '../SofaIcon'
+import { Logic } from 'sofa-logic'
 
 withDefaults(
 	defineProps<{

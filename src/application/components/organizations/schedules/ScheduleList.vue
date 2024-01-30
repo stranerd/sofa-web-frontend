@@ -15,7 +15,7 @@
 			</SofaButton>
 		</div>
 		<div v-if="filteredSchedules.length" class="flex flex-col gap-4 mt-4 mdlg:gap-0 mdlg:mt-2">
-			<ScheduleCard v-for="(schedule, index) in filteredSchedules" :key="index" :schedule="schedule" :classObj="classObj" />
+			<ScheduleCard v-for="(schedule, index) in filteredSchedules" :key="index" :schedule="schedule" :classInst="classInst" />
 		</div>
 		<div v-else class="w-full pt-4">
 			<div class="w-full flex flex-col gap-2 items-center justify-center bg-lightGray p-4">
@@ -31,16 +31,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 import { computed, ref } from 'vue'
+import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 
 const props = defineProps<{
-	classObj: ClassEntity
+	classInst: ClassEntity
 	showFilter: boolean
 	schedules: ScheduleEntity[]
 }>()
 
-const lessonsFilters = [{ id: 'all', title: 'All' }, ...props.classObj.lessons.map((lesson) => ({ id: lesson.id, title: lesson.title }))]
+const lessonsFilters = [{ id: 'all', title: 'All' }, ...props.classInst.lessons.map((lesson) => ({ id: lesson.id, title: lesson.title }))]
 const selectedFilter = ref(lessonsFilters[0])
 const filteredSchedules = computed(() => {
 	if (selectedFilter.value.id === 'all') return props.schedules

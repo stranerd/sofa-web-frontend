@@ -1,9 +1,9 @@
-import { Game, Logic, PlayStatus, QueryKeys } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { Game, Logic, PlayStatus, QueryKeys } from 'sofa-logic'
 
 const store = {
 	games: ref<Game[]>([]),

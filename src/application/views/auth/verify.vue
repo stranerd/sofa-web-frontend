@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts">
-import { getEmailVerificationEmail, useEmailVerification } from '@app/composables/auth/signin'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import { getEmailVerificationEmail, useEmailVerification } from '@app/composables/auth/signin'
 
 export default defineComponent({
 	name: 'AuthVerifyPage',

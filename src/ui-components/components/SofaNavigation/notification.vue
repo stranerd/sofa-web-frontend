@@ -29,11 +29,11 @@
 	</div>
 </template>
 <script lang="ts">
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 import { defineComponent, onMounted, ref } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
+import { Logic } from 'sofa-logic'
+import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	components: {

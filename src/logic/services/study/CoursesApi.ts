@@ -1,8 +1,8 @@
-import { CourseEntity } from '@modules/study'
-import { CourseFromModel } from '@modules/study/data/models/courses'
 import { AxiosResponse } from 'axios'
 import { AddItemToCourseInput, UpdateCourseSectionsInput } from '../../logic/types/forms/study'
 import { ModelApiService } from '../common/ModelService'
+import { CourseFromModel } from '@modules/study/data/models/courses'
+import { CourseEntity } from '@modules/study'
 
 export default class CoursesApi extends ModelApiService<CourseFromModel, CourseEntity> {
 	constructor() {

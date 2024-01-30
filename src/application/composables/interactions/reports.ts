@@ -1,6 +1,6 @@
+import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '@app/composables/core/states'
 import { Interaction, ReportFactory, ReportsUseCases } from '@modules/interactions'
-import { useAsyncFn } from '../core/hooks'
 
 export const useCreateReport = (interaction: Interaction) => {
 	const factory = new ReportFactory()

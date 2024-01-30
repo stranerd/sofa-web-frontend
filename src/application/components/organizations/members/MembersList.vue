@@ -57,11 +57,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, ref } from 'vue'
 import { useModals } from '@app/composables/core/modals'
 import { useManageOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberEntity, MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
-import { computed, ref } from 'vue'
 
 const props = defineProps<{
 	image: string

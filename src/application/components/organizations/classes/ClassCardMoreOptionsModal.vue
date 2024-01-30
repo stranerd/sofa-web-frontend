@@ -29,7 +29,7 @@ const { deleteClass } = useDeleteClass()
 
 const moreOptions = [
 	{
-		icon: 'edit-option',
+		icon: 'edit-option' as const,
 		title: 'Edit',
 		action: () => {
 			useModals().organizations.editClass.open({
@@ -40,7 +40,7 @@ const moreOptions = [
 		},
 	},
 	{
-		icon: 'share-option',
+		icon: 'share-option' as const,
 		title: 'Share',
 		action: () => {
 			Logic.Common.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
@@ -48,7 +48,7 @@ const moreOptions = [
 		},
 	},
 	{
-		icon: 'delete-quiz',
+		icon: 'delete-quiz' as const,
 		title: 'Delete',
 		action: async () => {
 			await deleteClass(props.classInst)

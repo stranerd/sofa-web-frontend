@@ -1,5 +1,5 @@
-import { EmbeddedUser } from '@modules/users'
 import { FolderSaved } from '../../domain/types'
+import { EmbeddedUser } from '@modules/users'
 
 export interface FolderFromModel extends FolderToModel {
 	id: string

@@ -1,4 +1,3 @@
-import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 import { capitalize } from 'valleyed'
 import { reactive } from 'vue'
 import { Logic } from '..'
@@ -8,6 +7,7 @@ import { ContentDetails, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
 import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
+import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 
 export default class Study extends Common {
 	constructor() {
@@ -162,15 +162,15 @@ export default class Study extends Common {
 	}
 
 	public getShape(index: number) {
-		const shapes = ['circle', 'triangle', 'square', 'kite']
+		const shapes: IconName[] = ['circle', 'triangle', 'square', 'kite']
 		return shapes[index % shapes.length]
 	}
 
-	public getShapeSize(shape: string) {
-		if (shape == 'circle') return 'md:h-[23px] h-[20px]'
-		if (shape == 'triangle') return 'md:h-[23px] h-[20px]'
-		if (shape == 'square') return 'md:h-[23px] h-[20px]'
-		if (shape == 'kite') return 'md:h-[23px] h-[20px]'
+	public getShapeSize(shape: IconName) {
+		if (shape === 'circle') return 'md:h-[23px] h-[20px]'
+		if (shape === 'triangle') return 'md:h-[23px] h-[20px]'
+		if (shape === 'square') return 'md:h-[23px] h-[20px]'
+		if (shape === 'kite') return 'md:h-[23px] h-[20px]'
 		return 'h-[23px]'
 	}
 

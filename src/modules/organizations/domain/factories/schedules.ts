@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { ScheduleToModel } from '../../data/models/schedules'
 import { ScheduleEntity } from '../entities/schedules'
+import { BaseFactory } from '@modules/core'
 
 type Keys = Omit<ScheduleToModel, 'lessonId' | 'time'> & ScheduleToModel['time']
 

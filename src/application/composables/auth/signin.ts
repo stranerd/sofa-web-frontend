@@ -1,15 +1,15 @@
-import { createSession } from '@app/composables/auth/session'
-import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
 import { SignInWithApple } from '@capacitor-community/apple-sign-in'
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAsyncFn } from '../core/hooks'
+import { createSession } from '@app/composables/auth/session'
+import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
 import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/auth'
 import { NetworkError, StatusCodes } from '@modules/core'
 import { isWeb } from '@utils/constants'
 import { googleClientId, packageName } from '@utils/environment'
 import { storage } from '@utils/storage'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAsyncFn } from '../core/hooks'
 
 const store = {
 	referrerId: ref(undefined as string | undefined),

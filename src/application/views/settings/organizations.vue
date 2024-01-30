@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts">
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
-import { useMyOrganizations } from '@app/composables/users/organizations'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { useMyOrganizations } from '@app/composables/users/organizations'
 
 export default defineComponent({
 	name: 'SettingsOrganizationsPage',

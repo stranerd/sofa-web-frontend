@@ -1,6 +1,6 @@
-import { BaseEntity } from '@modules/core'
 import { MemberFromModel } from '../../data/models/members'
 import { EmbeddedUser, MemberTypes } from '../types'
+import { BaseEntity } from '@modules/core'
 
 export class MemberEntity extends BaseEntity {
 	public readonly id: string

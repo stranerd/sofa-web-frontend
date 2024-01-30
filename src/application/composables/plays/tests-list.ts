@@ -1,9 +1,9 @@
-import { Logic, PlayStatus, Test } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { Logic, PlayStatus, Test } from 'sofa-logic'
 
 const store = {
 	tests: ref<Test[]>([]),

@@ -63,7 +63,7 @@
 							:to="activity.route"
 							:hasBookmark="true"
 							:bookmarkAction="() => saveToFolder(activity.original)"
-							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
+							class="shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
@@ -75,12 +75,12 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import { extractResource } from '@app/composables/library'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'MarketPlaceIndexPage',

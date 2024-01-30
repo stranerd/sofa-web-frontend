@@ -1,6 +1,6 @@
-import { EmbeddedUser } from '@modules/users'
 import { ReviewFromModel } from '../../data/models/reviews'
 import { InteractionEntity } from '../types'
+import { EmbeddedUser } from '@modules/users'
 import { BaseEntity } from '@modules/core'
 
 export class ReviewEntity extends BaseEntity {

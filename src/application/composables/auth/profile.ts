@@ -1,8 +1,8 @@
+import { ref, watch } from 'vue'
+import { useAsyncFn } from '../core/hooks'
 import { useAuth } from '@app/composables/auth/auth'
 import { useSuccessHandler } from '@app/composables/core/states'
 import { AuthUseCases, PhoneUpdateFactory, ProfileUpdateFactory } from '@modules/auth'
-import { ref, watch } from 'vue'
-import { useAsyncFn } from '../core/hooks'
 
 export const useProfileUpdate = () => {
 	const factory = new ProfileUpdateFactory()

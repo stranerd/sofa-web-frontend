@@ -1,8 +1,8 @@
-import { HttpClient } from '@modules/core'
 import { ClassEntity } from '../../domain/entities/classes'
 import { ILessonRepository } from '../../domain/irepositories/lessons'
 import { ClassLesson, LessonToModel } from '../../domain/types'
 import { ClassFromModel } from '../models/classes'
+import { HttpClient } from '@modules/core'
 
 export class LessonRepository implements ILessonRepository {
 	private static instances: Record<string, LessonRepository> = {}

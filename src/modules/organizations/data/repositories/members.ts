@@ -1,8 +1,8 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { MemberEntity } from '../../domain/entities/members'
 import { IMemberRepository } from '../../domain/irepositories/members'
 import { MemberTypes } from '../../domain/types'
 import { MemberFromModel } from '../models/members'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class MemberRepository implements IMemberRepository {
 	private static instances: Record<string, MemberRepository> = {}

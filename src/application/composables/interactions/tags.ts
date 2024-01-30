@@ -1,8 +1,8 @@
-import { TagEntity, TagsUseCases } from '@modules/interactions'
 import { addToArray } from 'valleyed'
 import { onMounted, onUnmounted, reactive } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { TagEntity, TagsUseCases } from '@modules/interactions'
 
 const topicStore = {
 	topics: reactive<TagEntity[]>([]),

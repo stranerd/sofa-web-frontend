@@ -39,8 +39,8 @@
 </template>
 
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'AuthLayout',
