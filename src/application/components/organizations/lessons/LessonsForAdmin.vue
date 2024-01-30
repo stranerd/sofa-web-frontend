@@ -52,6 +52,7 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity, ClassLesson, MemberEntity } from '@modules/organizations'
+import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 
 export default defineComponent({
 	props: {
@@ -89,11 +90,15 @@ export default defineComponent({
 		})
 
 		const openLessonDetails = (val: ClassLesson) => {
+			const LessonCurriculum = ref(val.curriculum)
+			const { curriculum } = useLessonCurriculum(props.classInst, LessonCurriculum)
 			useModals().organizations.lessonDetails.open({
 				organizationId,
 				classId,
 				lesson: val,
 				teachers: props.teachers,
+				curriculum: curriculum.value,
+				classInst: props.classInst,
 			})
 		}
 		const openCreateClassModal = () => {

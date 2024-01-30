@@ -21,6 +21,7 @@ import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
+import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculum.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -45,6 +46,7 @@ export const useModals = () => ({
 		lessonDetails: { component: LessonDetails },
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
+		previewCurriculum: { component: PreviewCurriculum },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },

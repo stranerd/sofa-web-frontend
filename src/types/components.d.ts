@@ -63,6 +63,7 @@ declare module 'vue' {
     Modals: typeof import('./../application/components/core/modals/Modals.vue')['default']
     MyClassCard: typeof import('./../application/components/organizations/classes/MyClassCard.vue')['default']
     NewMaterial: typeof import('./../application/components/study/courses/NewMaterial.vue')['default']
+    PreviewCurriculum: typeof import('./../application/components/organizations/lessons/PreviewCurriculum.vue')['default']
     Profile: typeof import('./../application/components/settings/profile.vue')['default']
     QuestionDisplay: typeof import('./../application/components/study/quizzes/QuestionDisplay.vue')['default']
     Quiz: typeof import('./../application/components/study/quizzes/Quiz.vue')['default']

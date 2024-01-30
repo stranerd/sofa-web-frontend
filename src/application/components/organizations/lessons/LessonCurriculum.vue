@@ -1,10 +1,13 @@
 <template>
 	<div class="w-full flex flex-col gap-4">
-		<div v-for="(section, sectionIndex) in curriculum" :key="sectionIndex">
+		<div
+			v-for="(section, sectionIndex) in curriculum"
+			:key="sectionIndex"
+			:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-2">
 					<SofaHeaderText>{{ section.label }}</SofaHeaderText>
-					<SofaIcon class="h-[16px]" name="edit-gray" />
+					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" />
 				</div>
 				<div class="flex items-center gap-2">
 					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
@@ -12,7 +15,10 @@
 				</div>
 			</div>
 			<div class="flex flex-col gap-4 my-5">
-				<div v-for="(item, itemIndex) in section.items" :key="itemIndex" class="flex items-center gap-4">
+				<div
+					v-for="(item, itemIndex) in section.items"
+					:key="itemIndex"
+					class="flex flex-col mdlg:flex-row mdlg:items-center gap-2 mdlg:gap-4">
 					<div class="flex items-center gap-2 flex-1">
 						<SofaIcon :name="getItemIcon(item)" class="h-[16px]" />
 						<SofaNormalText color="text-deepGray" :content="getItemTitle(item)" class="truncate" />

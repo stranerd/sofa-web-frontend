@@ -43,7 +43,7 @@
 			</button>
 		</div>
 		<div v-if="selectedTab === 'curriculum'">
-			<div class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
+			<div v-if="curriculum.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
 				<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
 				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center">
@@ -53,6 +53,14 @@
 							: 'Teacher has not set the curriculum yet'
 					}}
 				</SofaNormalText>
+			</div>
+			<div v-else>
+				<LessonCurriculum
+					:classInst="classInst"
+					:view="CurriculumView.list"
+					:curriculum="curriculum"
+					:factory="undefined"
+					:lesson="lesson" />
 			</div>
 		</div>
 		<div v-if="selectedTab === 'teachers'" class="py-4 flex flex-col gap-4">
@@ -86,7 +94,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { ClassLesson, MemberEntity } from '@modules/organizations'
+import { ClassLesson, MemberEntity, ClassEntity, CurriculumView } from '@modules/organizations'
 
 const props = defineProps<{
 	organizationId: string
@@ -94,6 +102,8 @@ const props = defineProps<{
 	close: () => void
 	lesson: ClassLesson
 	teachers: MemberEntity[]
+	curriculum: ClassLesson['curriculum']
+	classInst: ClassEntity
 }>()
 
 const selectedTab = ref('curriculum')

@@ -81,9 +81,6 @@ export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<Clas
 			return { ...c, items }
 		}),
 	)
-	watch(curriculum, () => {
-		console.log(curriculum.value)
-	})
 	return { quizzes, files, schedules, curriculum }
 }
 
