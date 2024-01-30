@@ -56,8 +56,7 @@
 					:classInst="classInst"
 					:view="CurriculumView.list"
 					:curriculum="factory.factories"
-					:factory="selectedLesson.users.teachers.includes(id) ? factory : undefined"
-					:lesson="selectedLesson" />
+					:factory="selectedLesson.users.teachers.includes(id) ? factory : undefined" />
 				<SofaButton bgColor="bg-primaryPurple" class="py-3 mdlg:py-4">
 					<SofaIcon name="box-add-white" class="h-[16px]" />
 					Add section
