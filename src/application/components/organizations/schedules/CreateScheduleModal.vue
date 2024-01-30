@@ -8,10 +8,42 @@
 			<SofaNormalText class="!font-bold" content="Add live schedule" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
-
-		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">
-			Submit
-		</SofaButton>
+		<SofaTextField
+			v-model="factory.title"
+			customClass="rounded-custom !bg-lightGray"
+			type="text"
+			placeholder="Session Title"
+			:error="factory.errors.title"
+			borderColor="border-transparent"></SofaTextField>
+		<SofaTextarea textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none" placeholder="Session description" />
+		<div class="flex flex-col gap-4 mdlg:flex-row mdlg:items-center justify-between">
+			<SofaTextField
+				customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="Date"
+				borderColor="border-transparent"></SofaTextField>
+			<div class="flex items-center gap-4 justify-between">
+				<SofaTextField
+					customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="From"
+					borderColor="border-transparent"></SofaTextField>
+				<SofaIcon class="h-[16px]" name="arrow-right-white" customClass="!fill-darkLightGray" />
+				<SofaTextField
+					customClass="w-full mdlg:!w-[200px] rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="To"
+					borderColor="border-transparent"></SofaTextField>
+			</div>
+		</div>
+		<div class="flex items-center justify-between">
+			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block" @click="close">
+				Cancel
+			</SofaButton>
+			<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">
+				Create
+			</SofaButton>
+		</div>
 	</form>
 </template>
 
