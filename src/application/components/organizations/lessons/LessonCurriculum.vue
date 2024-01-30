@@ -18,7 +18,7 @@
 						<SofaNormalText color="text-deepGray" :content="getItemTitle(item)" class="truncate" />
 						<SofaBadge v-if="showLiveBadgeForItem(item)" class="flex-shrink-0"> LIVE </SofaBadge>
 					</div>
-					<div class="flex items-center gap-2 flex-shrink-0">
+					<div class="flex items-center gap-2 shrink-0">
 						<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" />
 						<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
 						<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" />

@@ -47,7 +47,7 @@
 				:to="activity.route"
 				:hasBookmark="true"
 				:bookmarkAction="() => saveToFolder(activity.original)"
-				class="flex-shrink-0" />
+				class="shrink-0" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">
 			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />

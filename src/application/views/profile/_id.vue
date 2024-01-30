@@ -104,7 +104,7 @@
 							:bookmarkAction="() => saveToFolder(activity.original)"
 							:content="activity"
 							:to="activity.route"
-							class="flex-shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
+							class="shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState

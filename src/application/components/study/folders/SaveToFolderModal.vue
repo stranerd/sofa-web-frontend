@@ -28,7 +28,7 @@
 					<SofaNormalText v-else class="truncate w-full" :content="item.title" />
 				</div>
 
-				<div class="flex items-center flex-shrink-0">
+				<div class="flex items-center shrink-0">
 					<SofaNormalText
 						v-if="[...item.saved.courses, ...item.saved.quizzes].includes(id)"
 						color="text-primaryRed"
