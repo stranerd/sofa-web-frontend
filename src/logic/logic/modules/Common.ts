@@ -1,6 +1,5 @@
 import { AuthDetails } from '@modules/auth'
 import { listenToMany, listenToOne } from '@modules/core'
-import { RouteConfig } from '@typing/routes'
 import { AxiosError } from 'axios'
 import { getRandomValue, isString } from 'valleyed'
 import { reactive } from 'vue'
