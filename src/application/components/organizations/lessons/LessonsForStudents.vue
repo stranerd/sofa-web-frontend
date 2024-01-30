@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
-		<div v-if="classObj.lessons.length === 0">
+		<div v-if="classInst.lessons.length === 0">
 			<SofaHeaderText content="Lessons" />
 			<div class="h-[1px] w-full bg-lightGray" />
 			<div class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -14,9 +14,9 @@
 			<div class="h-[1px] w-full bg-lightGray" />
 			<div class="w-full flex flex-col items-center gap-6 mt-6">
 				<LessonCard
-					v-for="(lesson, index) in classObj.lessons"
+					v-for="(lesson, index) in classInst.lessons"
 					:key="index"
-					:isStudent="classObj.isStudent(userId)"
+					:isStudent="classInst.isStudent(userId)"
 					:lesson="lesson"
 					class="w-full" />
 				<div class="w-full flex items-center justify-between">
@@ -38,13 +38,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { ClassEntity } from '@modules/organizations'
-import { MemberEntity } from '@modules/organizations'
+import { ClassEntity, MemberEntity } from '@modules/organizations'
+import { defineComponent, PropType } from 'vue'
 export default defineComponent({
 	props: {
-		classObj: {
+		classInst: {
 			type: ClassEntity,
 			required: true,
 		},

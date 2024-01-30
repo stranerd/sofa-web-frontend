@@ -16,7 +16,7 @@
 				</router-link>
 			</div>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto p-4">
-				<slot :classObj="currentClass" />
+				<slot :classInst="currentClass" />
 			</div>
 		</div>
 	</SubPageLayout>
@@ -49,7 +49,7 @@
 		</template>
 		<template #middle-session>
 			<div v-if="currentClass" class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :classObj="currentClass" />
+				<slot :classInst="currentClass" />
 			</div>
 		</template>
 		<template #right-session>
@@ -69,7 +69,7 @@
 				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
 				<SofaHeaderText content="Live Sessions" />
 				<div class="mt-4 h-[1px] w-full bg-lightGray" />
-				<ScheduleList :classObj="currentClass" :showFilter="false" :schedules="schedules" />
+				<ScheduleList :classInst="currentClass" :showFilter="false" :schedules="schedules" />
 			</div>
 		</template>
 	</DashboardLayout>

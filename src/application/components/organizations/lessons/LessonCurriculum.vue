@@ -47,7 +47,7 @@ import { computed } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		classObj: ClassEntity
+		classInst: ClassEntity
 		view: CurriculumView
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
@@ -60,7 +60,7 @@ const props = withDefaults(
 )
 
 const { curriculum } = useLessonCurriculum(
-	props.classObj,
+	props.classInst,
 	computed(() => props.curriculum),
 )
 
@@ -96,8 +96,8 @@ const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === Cla
 const addSchedule = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index)) return
 	useModals().organizations.createSchedule.open({
-		classInst: props.classObj,
-		lesson: props.classObj.lessons[index],
+		classInst: props.classInst,
+		lesson: props.classInst.lessons[index],
 		afterSubmit: (schedule) => {
 			props.factory!.factories[index].addSchedule(schedule)
 		},

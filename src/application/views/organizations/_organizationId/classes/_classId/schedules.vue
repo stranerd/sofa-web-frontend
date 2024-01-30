@@ -1,6 +1,6 @@
 <template>
 	<ClassLayout>
-		<template #default="{ classObj }">
+		<template #default="{ classInst }">
 			<div v-if="schedules.length === 0" class="w-full bg-white rounded-2xl shadow-custom">
 				<SofaHeaderText customClass="p-4 hidden mdlg:block">{{ 'Schedule' }}</SofaHeaderText>
 				<div class="h-[1px] w-full bg-lightGray" />
@@ -19,7 +19,7 @@
 			<div v-else class="w-full mdlg:bg-white rounded-2xl mdlg:shadow-custom">
 				<SofaHeaderText customClass="p-4 hidden mdlg:block">{{ 'Schedule' }}</SofaHeaderText>
 				<div class="h-[1px] w-full bg-lightGray" />
-				<ScheduleList :classObj="classObj" :showFilter="true" :schedules="schedules" class="px-4 pb-4" />
+				<ScheduleList :classInst="classInst" :showFilter="true" :schedules="schedules" class="px-4 pb-4" />
 				<SofaButton
 					v-if="hasMore"
 					textColor="text-grayColor"

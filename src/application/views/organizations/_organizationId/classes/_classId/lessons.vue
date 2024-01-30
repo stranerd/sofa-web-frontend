@@ -1,9 +1,9 @@
 <template>
 	<ClassLayout>
-		<template #default="{ classObj }">
-			<LessonsForAdmin v-if="classObj.isAdmin(userId)" :classObj="classObj" :teachers="teachers" />
-			<LessonsForTeachers v-if="classObj.isTeacher(userId)" :teachers="teachers" :classObj="classObj" />
-			<LessonsForStudents v-if="classObj.isStudent(userId)" :teachers="teachers" :classObj="classObj" />
+		<template #default="{ classInst }">
+			<LessonsForAdmin v-if="classInst.isAdmin(userId)" :classInst="classInst" :teachers="teachers" />
+			<LessonsForTeachers v-if="classInst.isTeacher(userId)" :teachers="teachers" :classInst="classInst" />
+			<LessonsForStudents v-if="classInst.isStudent(userId)" :teachers="teachers" :classInst="classInst" />
 		</template>
 	</ClassLayout>
 </template>
@@ -11,8 +11,8 @@
 <script lang="ts">
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { defineComponent } from 'vue'
 import { useOrganizationMembers } from '@app/composables/organizations/members'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdLessons',

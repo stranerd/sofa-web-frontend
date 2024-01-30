@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
-		<div v-if="classObj.lessons.length === 0">
+		<div v-if="classInst.lessons.length === 0">
 			<SofaHeaderText content="Lessons" />
 			<div class="h-[1px] w-full bg-lightGray" />
 			<div class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -15,7 +15,7 @@
 			<div class="flex items-center justify-between">
 				<div class="flex flex-wrap items-center gap-3 mt-6">
 					<SofaButton
-						v-for="lesson in classObj.lessons"
+						v-for="lesson in classInst.lessons"
 						:key="lesson.id"
 						:class="
 							selectedLesson.id === lesson.id
@@ -53,7 +53,7 @@
 			</div>
 			<div v-else class="flex flex-col gap-6 p-4 md:p-6 rounded-custom">
 				<LessonCurriculum
-					:classObj="classObj"
+					:classInst="classInst"
 					:view="CurriculumView.list"
 					:curriculum="factory.factories"
 					:factory="selectedLesson.users.teachers.includes(id) ? factory : undefined"
@@ -80,12 +80,12 @@ import { ClassEntity, CurriculumView } from '@modules/organizations'
 import { ref } from 'vue'
 
 const props = defineProps<{
-	classObj: ClassEntity
+	classInst: ClassEntity
 }>()
 
 const { id } = useAuth()
-const selectedLesson = ref(props.classObj.lessons.at(0))
-const { factory } = useUpdateCurriculum(props.classObj, selectedLesson)
+const selectedLesson = ref(props.classInst.lessons.at(0))
+const { factory } = useUpdateCurriculum(props.classInst, selectedLesson)
 
 const emptyLessonContent = {
 	imageURL: '/images/no-lessons.png',

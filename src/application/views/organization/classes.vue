@@ -34,7 +34,7 @@
 					Create a class
 				</SofaButton>
 			</div>
-			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classObj="cl" />
+			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classInst="cl" />
 		</div>
 	</HomeLayout>
 </template>

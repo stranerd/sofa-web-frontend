@@ -1,23 +1,23 @@
 <template>
-	<router-link :to="classObj.pageLink" class="bg-white shadow-custom rounded-custom p-4 relative">
+	<router-link :to="classInst.pageLink" class="bg-white shadow-custom rounded-custom p-4 relative">
 		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
 			<SofaImageLoader
-				:photoUrl="classObj.picture"
+				:photoUrl="classInst.picture"
 				customClass="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
 			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
-				<SofaNormalText class="!font-bold truncate" :content="classObj.title" />
+				<SofaNormalText class="!font-bold truncate" :content="classInst.title" />
 				<div class="flex items-center gap-2">
 					<SofaNormalText color="text-grayColor">
-						{{ classObj.lessons.length }} {{ pluralize(classObj.lessons.length, 'lesson', 'lessons') }}
+						{{ classInst.lessons.length }} {{ pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
 					</SofaNormalText>
 					<div class="w-[5px] h-[5px] bg-grayColor rounded-[50%]"></div>
 					<SofaNormalText color="text-grayColor">
-						{{ classObj.members.students.length }} {{ pluralize(classObj.members.students.length, 'student', 'students') }}
+						{{ classInst.members.students.length }} {{ pluralize(classInst.members.students.length, 'student', 'students') }}
 					</SofaNormalText>
 				</div>
 				<SofaNormalText color="text-grayColor" size="lg" class="font-bold">
-					{{ Logic.Common.formatPrice(classObj.price.amount, classObj.price.currency) }}
+					{{ Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency) }}
 				</SofaNormalText>
 			</div>
 
@@ -31,10 +31,10 @@
 <script lang="ts" setup>
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
-import { pluralize } from 'valleyed'
 import { Logic } from 'sofa-logic'
+import { pluralize } from 'valleyed'
 
-const props = defineProps<{ classObj: ClassEntity }>()
+const props = defineProps<{ classInst: ClassEntity }>()
 
-const moreOptionsHandler = (e: Event) => useModals().organizations.classCardMoreOptions.open({ classInst: props.classObj }, e)
+const moreOptionsHandler = (e: Event) => useModals().organizations.classCardMoreOptions.open({ classInst: props.classInst }, e)
 </script>
