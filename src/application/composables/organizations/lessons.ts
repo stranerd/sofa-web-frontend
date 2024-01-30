@@ -56,21 +56,6 @@ export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<Clas
 		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.schedule).map((item) => item.id)),
 	)
 
-	// const scheduleIds = computed(() => [
-	// 	'65ae74a8a937bae0ac5d8db7',
-	// 	'65ae7490a937bae0ac5d8da7',
-	// 	'65ae739da937bae0ac5d8d6a',
-	// 	'65ae7391a937bae0ac5d8d5a',
-	// 	'65ae734da937bae0ac5d8d4a',
-	// ])
-	// const quizIds = computed(() => [
-	// 	'6570f0fed93c0c9b0b4df5d0',
-	// 	'6563141b4f46050228f8c5ed',
-	// 	'655c6ebf1df1665d9b00a771',
-	// 	'650e2429cee12beef94a352e',
-	// 	'64fbbed96f1695149cedcf41',
-	// ])
-
 	const { quizzes } = useQuizzesInList(quizIds, true)
 	const { files } = useFilesInList(fileIds, true)
 	const { schedules } = useSchedulesInList(classInst.organizationId, classInst.id, scheduleIds, true)
@@ -102,17 +87,22 @@ export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<Clas
 	return { quizzes, files, schedules, curriculum }
 }
 
-export const useUpdateCurriculum = (classInst: ClassEntity, lesson: ClassLesson) => {
+export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<ClassLesson | undefined>) => {
 	const factory = new LessonCurriculumFactory()
-	factory.loadEntity(lesson.curriculum)
+	if (lesson.value) factory.loadEntity(lesson.value.curriculum)
+
+	watch(lesson, (lesson) => {
+		factory.loadEntity(lesson?.curriculum ?? [])
+	})
 
 	const {
 		asyncFn: updateCurriculum,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const updatedClass = await LessonsUseCases.updateCurriculum(classInst.organizationId, classInst.id, lesson.id, factory)
-		const updatedLesson = updatedClass.getLesson(lesson.id)
+		if (!lesson.value) return false
+		const updatedClass = await LessonsUseCases.updateCurriculum(classInst.organizationId, classInst.id, lesson.value.id, factory)
+		const updatedLesson = updatedClass.getLesson(lesson.value.id)
 		factory.loadEntity(updatedLesson?.curriculum ?? [])
 		return true
 	})

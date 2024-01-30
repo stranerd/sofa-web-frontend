@@ -1,23 +1,23 @@
 <template>
 	<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
-		<div v-if="lessons.length === 0">
+		<div v-if="classObj.lessons.length === 0">
 			<SofaHeaderText content="Lessons" />
 			<div class="h-[1px] w-full bg-lightGray" />
 			<div class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
 				<img :src="emptyLessonContent.imageURL" class="w-[84px] h-[84px]" />
-				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
+				<SofaNormalText class="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center" content="No lessons" />
 			</div>
 		</div>
-		<div v-else>
+		<div v-else-if="selectedLesson">
 			<SofaHeaderText content="Lessons" />
 			<div class="h-[1px] w-full bg-lightGray" />
 			<div class="flex items-center justify-between">
 				<div class="flex flex-wrap items-center gap-3 mt-6">
 					<SofaButton
-						v-for="lesson in lessons"
+						v-for="lesson in classObj.lessons"
 						:key="lesson.id"
-						:customClass="
+						:class="
 							selectedLesson.id === lesson.id
 								? 'bg-primaryPurple !text-white !shadow-none'
 								: 'bg-white border border-darkLightGray !text-deepGray !shadow-none'
@@ -28,13 +28,15 @@
 					</SofaButton>
 				</div>
 				<div class="hidden mdlg:flex items-center gap-3">
-					<SofaButton customClass="border border-primaryBlue !text-primaryBlue bg-transparent" padding="py-2 px-4">
+					<SofaButton class="border border-primaryBlue !text-primaryBlue bg-transparent" padding="py-2 px-4">
 						Preview
 					</SofaButton>
-					<SofaButton customClass="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
+					<SofaButton class="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
 				</div>
 			</div>
-			<div v-if="curriculum.length === 0" class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
+			<div
+				v-if="selectedLesson.curriculum.length === 0"
+				class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 				<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
 					<img :src="emptyLessonContent.imageURL" class="w-[144px] h-[144px]" />
 				</div>
@@ -42,63 +44,57 @@
 					<SofaHeaderText :content="`Set up your ${selectedLesson.title} curriculum`" size="xl" />
 					<div class="flex flex-col gap-2 py-2">
 						<div v-for="(content, index) in emptyLessonContent.contents" :key="index" class="flex mdlg:items-center gap-1">
-							<SofaIcon customClass="h-[16px]" name="checkmark-circle" />
+							<SofaIcon class="h-[16px]" name="checkmark-circle" />
 							<SofaNormalText :content="content" color="text-grayColor" />
 						</div>
 					</div>
 					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6"> Get started </SofaButton>
 				</div>
 			</div>
-			<div v-else class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
-				<LessonCurriculum :classObj="classObj" :view="CurriculumView.list" :curriculum="curriculum" :lesson="selectedLesson" />
+			<div v-else class="flex flex-col gap-6 p-4 md:p-6 rounded-custom">
+				<LessonCurriculum
+					:classObj="classObj"
+					:view="CurriculumView.list"
+					:curriculum="factory.factories"
+					:factory="selectedLesson.users.teachers.includes(id) ? factory : undefined"
+					:lesson="selectedLesson" />
+				<SofaButton bgColor="bg-primaryPurple" class="py-3 mdlg:py-4">
+					<SofaIcon name="box-add-white" class="h-[16px]" />
+					Add section
+				</SofaButton>
+				<div class="grid mdlg:hidden grid-cols-2 gap-3">
+					<SofaButton class="border border-primaryBlue !text-primaryBlue bg-transparent" padding="py-2 px-4">
+						Preview
+					</SofaButton>
+					<SofaButton class="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, PropType, computed, watch } from 'vue'
-import { ClassEntity, MemberEntity, ClassLessonable, CurriculumView } from '@modules/organizations'
-import { FileType } from '@modules/study'
-import { useLessonCurriculum } from '@app/composables/organizations/lessons'
-export default defineComponent({
-	props: {
-		classObj: {
-			type: ClassEntity,
-			required: true,
-		},
-		teachers: {
-			type: Array as PropType<MemberEntity[]>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const lessons = computed(() => props.classObj.lessons)
-		const selectedLesson = ref(lessons.value[0])
-		const selectedLessonCurriculum = computed(() => selectedLesson.value.curriculum)
-		let { curriculum } = useLessonCurriculum(props.classObj, selectedLessonCurriculum)
-		watch(selectedLesson, () => {
-			;({ curriculum } = useLessonCurriculum(props.classObj, selectedLessonCurriculum))
-		})
-		const emptyLessonContent = {
-			imageURL: '/images/no-lessons.png',
-			title: '',
-			contents: [
-				'Give each topic a section.',
-				'Add live sessions under sections.',
-				'Add study materials under sections.',
-				'Preview and publish your curriculum.',
-			],
-		}
-		return {
-			emptyLessonContent,
-			lessons,
-			selectedLesson,
-			curriculum,
-			ClassLessonable,
-			FileType,
-			CurriculumView,
-		}
-	},
-})
+<script lang="ts" setup>
+import { useAuth } from '@app/composables/auth/auth'
+import { useUpdateCurriculum } from '@app/composables/organizations/lessons'
+import { ClassEntity, CurriculumView } from '@modules/organizations'
+import { ref } from 'vue'
+
+const props = defineProps<{
+	classObj: ClassEntity
+}>()
+
+const { id } = useAuth()
+const selectedLesson = ref(props.classObj.lessons.at(0))
+const { factory } = useUpdateCurriculum(props.classObj, selectedLesson)
+
+const emptyLessonContent = {
+	imageURL: '/images/no-lessons.png',
+	title: '',
+	contents: [
+		'Give each topic a section.',
+		'Add live sessions under sections.',
+		'Add study materials under sections.',
+		'Preview and publish your curriculum.',
+	],
+}
 </script>
