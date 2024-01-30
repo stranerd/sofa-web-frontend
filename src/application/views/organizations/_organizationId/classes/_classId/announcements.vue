@@ -152,7 +152,7 @@ export default defineComponent({
 		]
 
 		const createAnnouncement = (classObj: ClassEntity) => {
-			useModals().organizations.makeAnnouncement.open({
+			useModals().organizations.createAnnouncement.open({
 				organizationId,
 				userId: id.value,
 				classObj,

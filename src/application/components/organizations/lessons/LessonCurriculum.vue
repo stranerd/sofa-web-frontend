@@ -1,9 +1,9 @@
 <template>
 	<div class="w-full flex flex-col gap-4">
-		<div v-for="(c, index) in curriculum" :key="index">
+		<div v-for="(section, sectionIndex) in curriculum" :key="sectionIndex">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-2">
-					<SofaHeaderText>{{ c.label }}</SofaHeaderText>
+					<SofaHeaderText>{{ section.label }}</SofaHeaderText>
 					<SofaIcon class="h-[16px]" name="edit-gray" />
 				</div>
 				<div class="flex items-center gap-2">
@@ -12,24 +12,22 @@
 				</div>
 			</div>
 			<div class="flex flex-col gap-4 my-5">
-				<div v-for="(item, idx) in c.items" :key="idx">
-					<div class="flex items-center justify-between">
-						<div class="flex items-center gap-2">
-							<SofaIcon :name="getItemIcon(item)" class="h-[16px]" />
-							<SofaNormalText color="text-deepGray" :content="getItemTitle(item)" />
-							<SofaBadge v-if="showLiveBadgeForItem(item)"> LIVE </SofaBadge>
-						</div>
-						<div class="flex items-center gap-2">
-							<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" />
-							<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-							<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" />
-						</div>
+				<div v-for="(item, itemIndex) in section.items" :key="itemIndex" class="flex items-center gap-4">
+					<div class="flex items-center gap-2 flex-1">
+						<SofaIcon :name="getItemIcon(item)" class="h-[16px]" />
+						<SofaNormalText color="text-deepGray" :content="getItemTitle(item)" class="truncate" />
+						<SofaBadge v-if="showLiveBadgeForItem(item)" class="flex-shrink-0"> LIVE </SofaBadge>
+					</div>
+					<div class="flex items-center gap-2 flex-shrink-0">
+						<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" />
+						<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+						<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" />
 					</div>
 				</div>
-				<div v-if="canEdit" class="flex items-center gap-2">
+				<a v-if="canEdit" class="flex items-center gap-2" @click="addSchedule(sectionIndex)">
 					<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
-					<SofaNormalText color="text-primaryBlue" content="Add live session" />
-				</div>
+					<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
+				</a>
 				<div v-if="canEdit" class="flex items-center gap-2">
 					<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
 					<SofaNormalText color="text-primaryPink" content="Add study material" />
@@ -40,6 +38,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
 import { FileType } from '@modules/study'
@@ -93,4 +92,15 @@ const getItemInfo = (item: ExtendedCurriculumItem) => {
 }
 
 const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.isOngoing
+
+const addSchedule = (index: number) => {
+	if (!props.factory || !props.factory.factories.at(index)) return
+	useModals().organizations.createSchedule.open({
+		classInst: props.classObj,
+		lesson: props.classObj.lessons[index],
+		afterSubmit: (schedule) => {
+			props.factory!.factories[index].addSchedule(schedule)
+		},
+	})
+}
 </script>

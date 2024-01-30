@@ -4,7 +4,7 @@
 			<SofaHeaderText class="!font-bold !text-deepGray" content="Make an announcement" />
 			<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="close" />
 		</div>
-		<form class="flex flex-col gap-8" @submit.prevent="makeAnnouncement">
+		<form class="flex flex-col gap-8" @submit.prevent="createAnnouncement">
 			<SofaTextarea
 				v-model="factory.body"
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
@@ -51,9 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import { useMakeAnnouncement } from '@app/composables/organizations/announcements'
-import { computed } from 'vue'
+import { useCreateAnnouncement } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
+import { computed } from 'vue'
 const props = defineProps<{
 	organizationId: string
 	userId: string
@@ -61,7 +61,7 @@ const props = defineProps<{
 	close: () => void
 }>()
 
-const { factory, makeAnnouncement } = useMakeAnnouncement(props.organizationId, props.classObj.id)
+const { factory, createAnnouncement } = useCreateAnnouncement(props.organizationId, props.classObj.id)
 
 const lessonOptions = computed(() => {
 	// For teachers, return only lessons where user is a teacher
