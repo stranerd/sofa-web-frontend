@@ -1,9 +1,9 @@
 <template>
 	<ClassLayout>
 		<template #default="{ classInst }">
-			<!-- <LessonsForAdmin v-if="classInst.isAdmin(userId)" :classInst="classInst" :teachers="teachers" />
-			<LessonsForTeachers v-if="classInst.isTeacher(userId)" :teachers="teachers" :classInst="classInst" /> -->
-			<LessonsForStudents :teachers="teachers" :classInst="classInst" />
+			<LessonsForAdmin v-if="classInst.isAdmin(userId)" :classInst="classInst" :teachers="teachers" />
+			<LessonsForTeachers v-if="classInst.isTeacher(userId)" :teachers="teachers" :classInst="classInst" />
+			<LessonsForStudents v-if="classInst.isStudent(userId)" :teachers="teachers" :classInst="classInst" />
 		</template>
 	</ClassLayout>
 </template>

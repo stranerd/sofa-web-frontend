@@ -11,10 +11,10 @@
 				</div>
 				<div class="flex items-center gap-2">
 					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-					<SofaIcon class="h-[8px]" name="chevron-down" />
+					<SofaIcon class="h-[8px]" name="chevron-down" @click="toggleSection(sectionIndex)" />
 				</div>
 			</div>
-			<div class="flex flex-col gap-4 my-5">
+			<div v-if="isSectionVisible(sectionIndex)" class="flex flex-col gap-4 my-5">
 				<div
 					v-for="(item, itemIndex) in section.items"
 					:key="itemIndex"
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
@@ -118,5 +118,17 @@ const addStudyMaterial = (index: number) => {
 			else props.factory!.factories[index].addQuiz(selected.quiz, selected.mode)
 		},
 	})
+}
+const expandedSections = ref(new Set<number>([0]))
+function toggleSection(index: number): void {
+	if (expandedSections.value.has(index)) {
+		expandedSections.value.delete(index)
+	} else {
+		expandedSections.value.add(index)
+	}
+	expandedSections.value = new Set(expandedSections.value)
+}
+function isSectionVisible(index: number): boolean {
+	return expandedSections.value.has(index)
 }
 </script>

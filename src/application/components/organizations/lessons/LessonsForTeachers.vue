@@ -27,7 +27,7 @@
 						{{ lesson.title }}
 					</SofaButton>
 				</div>
-				<div class="hidden mdlg:flex items-center gap-3">
+				<div v-if="showLessonCurriculum" class="hidden mdlg:flex items-center gap-3">
 					<SofaButton
 						class="border border-primaryBlue !text-primaryBlue bg-transparent"
 						padding="py-2 px-4"
@@ -37,7 +37,7 @@
 					<SofaButton class="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
 				</div>
 			</div>
-			<!-- <div class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
+			<div v-if="!showLessonCurriculum" class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 				<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
 					<img :src="emptyLessonContent.imageURL" class="w-[144px] h-[144px]" />
 				</div>
@@ -49,10 +49,12 @@
 							<SofaNormalText :content="content" color="text-grayColor" />
 						</div>
 					</div>
-					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6"> Get started </SofaButton>
+					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6" @click="showLessonCurriculum = true">
+						Get started
+					</SofaButton>
 				</div>
-			</div> -->
-			<div class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
+			</div>
+			<div v-else class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
 				<LessonCurriculum
 					:classInst="classInst"
 					:view="CurriculumView.list"
@@ -79,7 +81,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useUpdateCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity, CurriculumView } from '@modules/organizations'
@@ -91,6 +93,7 @@ const props = defineProps<{
 
 const { id } = useAuth()
 const selectedLesson = ref(props.classInst.lessons.at(0))
+const showLessonCurriculum = ref(false)
 const { factory } = useUpdateCurriculum(props.classInst, selectedLesson)
 
 const previewCurriculum = () => {
@@ -113,4 +116,11 @@ const emptyLessonContent = {
 		'Preview and publish your curriculum.',
 	],
 }
+onMounted(() => {
+	if (!selectedLesson.value?.curriculum.length) {
+		showLessonCurriculum.value = false
+	} else {
+		showLessonCurriculum.value = true
+	}
+})
 </script>
