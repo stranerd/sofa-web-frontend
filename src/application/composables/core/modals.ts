@@ -15,6 +15,7 @@ import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
+import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
@@ -51,6 +52,7 @@ export const useModals = () => ({
 		materialMoreOptions: { component: MaterialMoreOptions, modalArgs: { popover: true } },
 		manageAccess: { component: ManageAccess },
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
+		selectStudyMaterial: { component: SelectStudyMaterial, modalArgs: { closeOnClickOutside: true } },
 	}),
 	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },

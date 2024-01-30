@@ -74,6 +74,7 @@ declare module 'vue' {
     SaveToFolderModal: typeof import('./../application/components/study/folders/SaveToFolderModal.vue')['default']
     ScheduleCard: typeof import('./../application/components/organizations/schedules/ScheduleCard.vue')['default']
     ScheduleList: typeof import('./../application/components/organizations/schedules/ScheduleList.vue')['default']
+    SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']
     Settings: typeof import('./../application/components/study/courses/Settings.vue')['default']
     SettingsLayout: typeof import('./../application/components/settings/SettingsLayout.vue')['default']
     SocialMediaUpdate: typeof import('./../application/components/onboarding/SocialMediaUpdate.vue')['default']

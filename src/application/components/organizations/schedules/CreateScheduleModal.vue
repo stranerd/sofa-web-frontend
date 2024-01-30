@@ -31,7 +31,7 @@ const { factory, createSchedule } = useCreateSchedule(props.classInst, props.les
 const submit = async () => {
 	const schedule = await createSchedule()
 	if (!schedule) return
-	props.close()
 	props.afterSubmit?.(schedule)
+	props.close()
 }
 </script>

@@ -28,10 +28,10 @@
 					<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
 					<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
 				</a>
-				<div v-if="canEdit" class="flex items-center gap-2">
+				<a v-if="canEdit" class="flex items-center gap-2" @click="addStudyMaterial(sectionIndex)">
 					<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
 					<SofaNormalText color="text-primaryPink" content="Add study material" />
-				</div>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -100,6 +100,16 @@ const addSchedule = (index: number) => {
 		lesson: props.classInst.lessons[index],
 		afterSubmit: (schedule) => {
 			props.factory!.factories[index].addSchedule(schedule)
+		},
+	})
+}
+
+const addStudyMaterial = (index: number) => {
+	if (!props.factory || !props.factory.factories.at(index)) return
+	useModals().study.selectStudyMaterial.open({
+		onSelected: (selected) => {
+			if ('file' in selected) props.factory!.factories[index].addFile(selected.file)
+			else props.factory!.factories[index].addQuiz(selected.quiz, selected.mode)
 		},
 	})
 }
