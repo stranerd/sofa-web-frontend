@@ -1,9 +1,9 @@
+// @ts-expect-error - no types
 import routes from '~pages'
 import { createRouter, createWebHistory } from 'vue-router'
 import { modal } from '@app/composables/core/modal'
 import { runMiddlewares } from '@app/middlewares'
 import { Logic } from 'sofa-logic'
-// @ts-expect-error - no types
 
 export const routerPromise = Promise.all(routes).then((routes) => {
 	const router = createRouter({
