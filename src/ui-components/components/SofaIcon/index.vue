@@ -7,7 +7,7 @@ import InlineSvg from 'vue-inline-svg'
 
 withDefaults(
 	defineProps<{
-		name: string
+		name: IconName
 		customClass?: string
 	}>(),
 	{

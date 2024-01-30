@@ -41,7 +41,7 @@ export default defineComponent({
 			type: Object as () => {
 				title: string
 				subTitle: string
-				icon: string
+				icon: IconName
 				iconSize: string
 				isDone?: any
 			},

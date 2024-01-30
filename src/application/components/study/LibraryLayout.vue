@@ -187,39 +187,45 @@ const { isAdmin } = useAuth()
 const libraryOptions = computed(() => [
 	{
 		title: 'In progress',
-		icon: 'in-progress',
+		icon: 'in-progress' as const,
 		routePath: '/library/in-progress',
 		options: [
 			{
 				name: 'All',
 				id: 'all',
+				hide: false,
 			},
 			{
 				name: 'Tests',
 				id: 'tests',
+				hide: false,
 			},
 			{
 				name: 'Games',
 				id: 'games',
+				hide: false,
 			},
 		],
 	},
 	{
 		title: 'Quizzes',
-		icon: 'quiz',
+		icon: 'quiz' as const,
 		routePath: '/library/quizzes',
 		options: [
 			{
 				name: 'Recent',
 				id: 'recent',
+				hide: false,
 			},
 			{
 				name: 'Published',
 				id: 'published',
+				hide: false,
 			},
 			{
 				name: 'Draft',
 				id: 'draft',
+				hide: false,
 			},
 			{
 				name: 'Tutors',
@@ -230,45 +236,51 @@ const libraryOptions = computed(() => [
 	},
 	{
 		title: 'Courses',
-		icon: 'course-list',
+		icon: 'course-list' as const,
 		routePath: '/library/courses',
 		options: [
 			{
 				name: 'Recent',
 				id: 'recent',
+				hide: false,
 			},
 			{
 				name: 'Published',
 				id: 'published',
+				hide: false,
 			},
 			{
 				name: 'Draft',
 				id: 'draft',
+				hide: false,
 			},
 		],
 	},
 	{
 		title: 'Purchased',
-		icon: 'purchased',
+		icon: 'purchased' as const,
 		routePath: '/library/purchased',
 		options: [],
 	},
 	{
 		title: 'Results',
-		icon: 'results',
+		icon: 'results' as const,
 		routePath: '/library/results',
 		options: [
 			{
 				name: 'All',
 				id: 'all',
+				hide: false,
 			},
 			{
 				name: 'Tests',
 				id: 'tests',
+				hide: false,
 			},
 			{
 				name: 'Games',
 				id: 'games',
+				hide: false,
 			},
 		],
 	},

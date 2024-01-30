@@ -29,7 +29,7 @@ const { id } = useAuth()
 
 const moreOptions = computed(() => [
 	{
-		icon: 'edit-option',
+		icon: 'edit-option' as const,
 		title: 'Edit',
 		show: () => props.material?.user.id === id.value,
 		action: () => {
@@ -39,7 +39,7 @@ const moreOptions = computed(() => [
 		},
 	},
 	{
-		icon: 'share-option',
+		icon: 'share-option' as const,
 		title: 'Share',
 		show: () => props.material.isPublished,
 		action: () => {
@@ -48,7 +48,7 @@ const moreOptions = computed(() => [
 		},
 	},
 	{
-		icon: 'report-option',
+		icon: 'report-option' as const,
 		title: 'Report',
 		show: () => props.material.user.id !== id.value,
 		action: () => {
@@ -57,7 +57,7 @@ const moreOptions = computed(() => [
 		},
 	},
 	{
-		icon: 'save',
+		icon: 'save' as const,
 		title: 'Save/unsave to folder',
 		show: () => props.material.isPublished,
 		action: () => {

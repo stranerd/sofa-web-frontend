@@ -4,12 +4,12 @@
 		<div v-else class="flex md:flex-row flex-col gap-3 md:gap-6 justify-center items-center w-full">
 			<router-link
 				v-for="userType in [
-					{ value: UserType.student, label: 'Student', icon: 'student-auth', bgClass: 'bg-primaryBlue' },
-					{ value: UserType.teacher, label: 'Teacher', icon: 'tutor-auth', bgClass: 'bg-primaryGreen' },
+					{ value: UserType.student, label: 'Student', icon: 'student-auth' as const, bgClass: 'bg-primaryBlue' },
+					{ value: UserType.teacher, label: 'Teacher', icon: 'tutor-auth' as const, bgClass: 'bg-primaryGreen' },
 					{
 						value: UserType.organization,
 						label: 'Organization',
-						icon: 'organization-auth',
+						icon: 'organization-auth' as const,
 						bgClass: 'bg-primaryPurple',
 					},
 				]"

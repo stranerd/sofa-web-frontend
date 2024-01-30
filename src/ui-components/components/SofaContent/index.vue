@@ -32,7 +32,7 @@
 					:key="i"
 					class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row items-center justify-between">
 					<div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''}`">
-						<SofaIcon customClass="h-[42px]" :name="`${eachData.type.toLowerCase()}-content`" />
+						<SofaIcon customClass="h-[42px]" :name="`${eachData.type.toLowerCase()}-content` as any" />
 						<div class="flex flex-col gap-1">
 							<SofaNormalText customClass="!font-bold text-left  !line-clamp-1">{{ eachData.title }}</SofaNormalText>
 							<div class="flex flex-row items-center gap-2">

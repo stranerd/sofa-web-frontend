@@ -99,7 +99,7 @@
 
 									<div class="w-full flex flex-row items-center gap-2">
 										<SofaIcon
-											:name="`${item.type}${selectedMaterial.id == item.id ? '-white' : ''}`"
+											:name="`${item.type}${selectedMaterial.id == item.id ? '-white' : ''}` as any"
 											customClass="h-[15px]" />
 										<SofaNormalText
 											:color="`${selectedMaterial.id == item.id ? '!text-white' : '!text-bodyBlack'} `"

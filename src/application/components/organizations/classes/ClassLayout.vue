@@ -110,10 +110,10 @@ useMeta(
 )
 
 const options = computed(() => [
-	{ title: 'Lessons', icon: 'lessons', route: '/lessons' },
-	{ title: 'Announcements', icon: 'announcement', route: '/announcements' },
-	{ title: 'Schedule', icon: 'calendar', route: '/schedules' },
-	{ title: 'About', icon: 'info', route: '/about' },
+	{ title: 'Lessons', icon: 'lessons' as const, route: '/lessons' },
+	{ title: 'Announcements', icon: 'announcement' as const, route: '/announcements' },
+	{ title: 'Schedule', icon: 'calendar' as const, route: '/schedules' },
+	{ title: 'About', icon: 'info' as const, route: '/about' },
 ])
 
 const { schedules } = useClassSchedules(organizationId, classId)

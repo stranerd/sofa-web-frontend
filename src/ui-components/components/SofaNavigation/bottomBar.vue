@@ -2,11 +2,11 @@
 	<div class="grid grid-cols-5 gap-3 mdlg:!hidden items-center py-2 w-full justify-center bg-lightGray">
 		<a
 			v-for="tab in [
-				{ path: '/', icon: 'home' },
-				{ path: '/chats', icon: 'chat' },
-				{ name: 'showAddItem', icon: 'plus-white', onClick: handleShowAddMaterial },
-				{ path: '/marketplace', icon: 'marketplace' },
-				{ path: '/library', icon: 'library' },
+				{ path: '/', icon: 'home' as const },
+				{ path: '/chats', icon: 'chat' as const },
+				{ name: 'showAddItem', icon: 'plus-white' as const, onClick: handleShowAddMaterial },
+				{ path: '/marketplace', icon: 'marketplace' as const },
+				{ path: '/library', icon: 'library' as const },
 			]"
 			:key="tab.path ?? tab.name"
 			class="col-span-1 flex flex-col items-center justify-center"

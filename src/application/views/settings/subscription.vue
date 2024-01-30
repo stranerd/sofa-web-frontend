@@ -141,22 +141,22 @@ export default defineComponent({
 			{
 				title: 'Expert help',
 				value: 'Get step-by-step solutions from expert tutors and AI, no matter how hard the problem.',
-				icon: 'expert-help',
+				icon: 'expert-help' as const,
 			},
 			{
 				title: 'Customized resources',
 				value: 'Access top learning materials tailored to your curriculum from verified experts.',
-				icon: 'customized-material',
+				icon: 'customized-material' as const,
 			},
 			{
 				title: 'Fun challenges',
 				value: 'Compete against friends and classmates in unlimited gaming challenges.',
-				icon: 'challenges',
+				icon: 'challenges' as const,
 			},
 			{
 				title: 'Study offline',
 				value: 'Stay focused and download our resources for offline studying.',
-				icon: 'study-offline',
+				icon: 'study-offline' as const,
 			},
 		]
 

@@ -162,15 +162,15 @@ export default class Study extends Common {
 	}
 
 	public getShape(index: number) {
-		const shapes = ['circle', 'triangle', 'square', 'kite']
+		const shapes: IconName[] = ['circle', 'triangle', 'square', 'kite']
 		return shapes[index % shapes.length]
 	}
 
-	public getShapeSize(shape: string) {
-		if (shape == 'circle') return 'md:h-[23px] h-[20px]'
-		if (shape == 'triangle') return 'md:h-[23px] h-[20px]'
-		if (shape == 'square') return 'md:h-[23px] h-[20px]'
-		if (shape == 'kite') return 'md:h-[23px] h-[20px]'
+	public getShapeSize(shape: IconName) {
+		if (shape === 'circle') return 'md:h-[23px] h-[20px]'
+		if (shape === 'triangle') return 'md:h-[23px] h-[20px]'
+		if (shape === 'square') return 'md:h-[23px] h-[20px]'
+		if (shape === 'kite') return 'md:h-[23px] h-[20px]'
 		return 'h-[23px]'
 	}
 

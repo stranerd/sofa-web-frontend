@@ -29,16 +29,16 @@
 								v-for="item in [
 									{
 										title: 'Quizzes',
-										icon: 'profile-quiz',
+										icon: 'profile-quiz' as const,
 										value: user.account.meta.publishedQuizzes,
 									},
 									{
 										title: 'Courses',
-										icon: 'profile-course',
+										icon: 'profile-course' as const,
 										value: user.account.meta.publishedCourses,
 									},
 									...(user.userType.isOrg
-										? [{ title: 'Students', icon: 'profile-followers', value: user.account.meta.students }]
+										? [{ title: 'Students', icon: 'profile-followers' as const, value: user.account.meta.students }]
 										: []),
 								]"
 								:key="item.title"

@@ -192,7 +192,7 @@ export default defineComponent({
 		const SingleCourse = ref(Logic.Study.SingleCourse!)
 		const AllQuzzies = ref(Logic.Study.AllQuzzies!)
 
-		const newMaterialOptions = [
+		const newMaterialOptions: { name: string; type: string; icon: IconName }[] = [
 			{
 				name: 'Quiz',
 				type: 'quiz',

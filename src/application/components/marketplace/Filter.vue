@@ -97,7 +97,7 @@ const searchOptions = computed(() => [
 				},
 			},
 		],
-		icon: 'price-filter',
+		icon: 'price-filter' as const,
 	},
 	{
 		name: 'Ratings',
@@ -111,7 +111,7 @@ const searchOptions = computed(() => [
 				condition: Conditions.gte,
 			},
 		})),
-		icon: 'rating-filter',
+		icon: 'rating-filter' as const,
 	},
 	{
 		name: 'Author',
@@ -125,7 +125,7 @@ const searchOptions = computed(() => [
 				condition: Conditions.eq,
 			},
 		})),
-		icon: 'author-filter',
+		icon: 'author-filter' as const,
 	},
 	{
 		name: 'Subject',
@@ -140,7 +140,7 @@ const searchOptions = computed(() => [
 					condition: Conditions.eq,
 				},
 			})) ?? [],
-		icon: 'subject-filter',
+		icon: 'subject-filter' as const,
 	},
 	{
 		name: 'Popular tags',
@@ -155,7 +155,7 @@ const searchOptions = computed(() => [
 					condition: Conditions.in,
 				},
 			})) ?? [],
-		icon: 'tag-filter',
+		icon: 'tag-filter' as const,
 	},
 ])
 

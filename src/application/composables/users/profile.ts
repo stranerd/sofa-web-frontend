@@ -98,7 +98,7 @@ export const useUserLocationUpdate = () => {
 	return { error, loading, factory, countries, states, updateLocation }
 }
 
-export const socials = {
+export const socials: Record<UserSocials, IconName> = {
 	[UserSocials.website]: 'website',
 	[UserSocials.youtube]: 'youtube',
 	[UserSocials.instagram]: 'instagram-social',

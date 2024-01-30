@@ -79,26 +79,25 @@ const otherTasks = [
 	{
 		title: 'Practice',
 		subTitle: 'Interactive and comfortable learning',
-		icon: 'learn-quiz',
+		icon: 'learn-quiz' as const,
 		value: 'practice',
 	},
 	{
 		title: 'Test',
 		subTitle: 'Evaluate your level of knowledge',
-		icon: 'test',
+		icon: 'test' as const,
 		value: 'test',
 	},
 	{
 		title: 'Flashcards',
 		subTitle: 'Digital cards to memorize answers',
-		icon: 'study-flashcard',
-		iconSize: 'h-[46px]',
+		icon: 'study-flashcard' as const,
 		value: 'flashcards',
 	},
 	{
 		title: 'Game',
 		subTitle: 'Battle friends for the highest score',
-		icon: 'play-quiz',
+		icon: 'play-quiz' as const,
 		value: 'game',
 	},
 ]
