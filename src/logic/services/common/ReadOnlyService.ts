@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
-import { Paginated } from 'src/logic/logic'
 import { QueryParams } from '../../logic/types/common'
 import { BaseApiService } from './BaseService'
+import { Paginated } from 'src/logic/logic'
 
 export class ReadOnlyApiService<M = any, E = M> extends BaseApiService {
 	constructor(resource: string) {

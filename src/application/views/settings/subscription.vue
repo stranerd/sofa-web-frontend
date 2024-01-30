@@ -108,12 +108,12 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'SubscriptionSettingPage',

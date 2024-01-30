@@ -1,12 +1,12 @@
-import { CourseEntity, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, QuizEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { addToArray, getRandomValue } from 'valleyed'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
-import { addToArray, getRandomValue } from 'valleyed'
+import { Logic } from 'sofa-logic'
+import { CourseEntity, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, QuizEntity } from '@modules/study'
 
 export const saveToFolder = (item: CourseEntity | QuizEntity) => {
 	useModals().study.saveToFolder.open({

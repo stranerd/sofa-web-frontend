@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useOrganizationMembers } from '@app/composables/organizations/members'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdLessons',

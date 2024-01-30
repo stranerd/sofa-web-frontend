@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { MessageEntity } from '../../domain/entities/messages'
 import { IMessageRepository } from '../../domain/irepositories/messages'
 import { MessageFromModel, MessageToModel } from '../models/messages'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class MessageRepository implements IMessageRepository {
 	private static instances: Record<string, MessageRepository> = {}

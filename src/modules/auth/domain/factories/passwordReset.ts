@@ -1,5 +1,5 @@
-import { BaseFactory } from '@modules/core'
 import { isEqualTo, v } from 'valleyed'
+import { BaseFactory } from '@modules/core'
 
 type Keys = { email: string; token: string; password: string; cPassword: string }
 

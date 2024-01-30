@@ -142,7 +142,6 @@
 	</div>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent, reactive, toRef, watch } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaButton from '../SofaButton'
@@ -151,6 +150,7 @@ import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaNormalText } from '../SofaTypography'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SofaCourseDetails',

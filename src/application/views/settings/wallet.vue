@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import SettingWallet from '@app/components/settings/wallet.vue'
 import { Conditions, Logic } from 'sofa-logic'
-import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'WalletSettingPage',

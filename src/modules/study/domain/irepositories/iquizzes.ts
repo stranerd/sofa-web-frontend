@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IQuizRepository {
 	add: (data: QuizToModel) => Promise<QuizEntity>

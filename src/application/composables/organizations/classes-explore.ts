@@ -1,9 +1,9 @@
-import { ClassEntity, ClassesUseCases } from '@modules/organizations'
-import { UsersUseCases } from '@modules/users'
 import { addToArray } from 'valleyed'
 import { computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
+import { UsersUseCases } from '@modules/users'
+import { ClassEntity, ClassesUseCases } from '@modules/organizations'
 
 const store = {
 	classesIn: ref<ClassEntity[]>([]),

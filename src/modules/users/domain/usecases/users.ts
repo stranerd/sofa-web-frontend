@@ -1,4 +1,3 @@
-import { Conditions, HttpClient, Listeners, QueryParams } from '@modules/core'
 import { UserEntity } from '../entities/users'
 import { UserAiFactory } from '../factories/userAi'
 import { UserLocationFactory } from '../factories/userLocation'
@@ -6,6 +5,7 @@ import { UserSocialsFactory } from '../factories/userSocials'
 import { UserTypeFactory } from '../factories/userType'
 import { IUserRepository } from '../irepositories/iusers'
 import { UserAccount, UserType } from '../types'
+import { Conditions, HttpClient, Listeners, QueryParams } from '@modules/core'
 
 interface Country {
 	name: string

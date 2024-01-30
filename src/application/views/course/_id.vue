@@ -251,14 +251,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import CourseContent from '@app/components/study/courses/content.vue'
 import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
 import { Conditions, Logic } from 'sofa-logic'
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',

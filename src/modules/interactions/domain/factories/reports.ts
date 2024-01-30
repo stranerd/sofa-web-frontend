@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { ReportToModel } from '../../data/models/reports'
 import { ReportEntity } from '../entities/reports'
+import { BaseFactory } from '@modules/core'
 
 export class ReportFactory extends BaseFactory<ReportEntity, Omit<ReportToModel, 'entity'>, Omit<ReportToModel, 'entity'>> {
 	readonly rules = {

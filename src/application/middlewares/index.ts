@@ -1,6 +1,6 @@
+import { RouteLocationNormalized } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
-import { RouteLocationNormalized } from 'vue-router'
 
 type MiddleWareArgs = {
 	to: RouteLocationNormalized

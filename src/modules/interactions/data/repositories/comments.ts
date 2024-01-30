@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { CommentEntity } from '../../domain/entities/comments'
 import { ICommentRepository } from '../../domain/irepositories/comments'
 import { CommentFromModel, CommentToModel } from '../models/comments'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class CommentRepository implements ICommentRepository {
 	private static instance: CommentRepository

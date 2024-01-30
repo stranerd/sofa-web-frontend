@@ -47,11 +47,11 @@
 </template>
 
 <script lang="ts">
+import { PropType, computed, defineComponent, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity, ClassLesson, MemberEntity } from '@modules/organizations'
-import { PropType, computed, defineComponent, ref } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	props: {

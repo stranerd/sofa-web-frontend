@@ -1,5 +1,5 @@
-import { EmbeddedUser } from '@modules/users'
 import { MessageFromModel } from './messages'
+import { EmbeddedUser } from '@modules/users'
 
 export interface ConversationFromModel extends UpdateConversationToModel {
 	id: string

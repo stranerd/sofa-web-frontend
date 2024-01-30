@@ -1,5 +1,3 @@
-import { HttpClient, closeSocket } from '@modules/core'
-import { deleteTokens, saveTokens } from '@utils/tokens'
 import {
 	AfterAuthUser,
 	AuthDetails,
@@ -11,6 +9,8 @@ import {
 	ProfileUpdate,
 } from '../../domain/entities/auth'
 import { IAuthRepository } from '../../domain/irepositories/iauth'
+import { HttpClient, closeSocket } from '@modules/core'
+import { deleteTokens, saveTokens } from '@utils/tokens'
 
 export class AuthRepository implements IAuthRepository {
 	private static instance: AuthRepository

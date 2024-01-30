@@ -29,10 +29,10 @@
 </template>
 
 <script lang="ts">
-import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
-import { formatTime } from '@utils/dates'
 import { formatNumber } from 'valleyed'
 import { defineComponent } from 'vue'
+import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
+import { formatTime } from '@utils/dates'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdAbout',

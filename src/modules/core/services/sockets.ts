@@ -1,7 +1,7 @@
-import { apiBase } from '@utils/environment'
-import { getTokens } from '@utils/tokens'
 import io, { Socket } from 'socket.io-client'
 import { StatusCodes } from './http'
+import { apiBase } from '@utils/environment'
+import { getTokens } from '@utils/tokens'
 
 let socket = null as Socket<any, any> | null
 

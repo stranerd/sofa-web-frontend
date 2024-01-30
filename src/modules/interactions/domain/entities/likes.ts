@@ -1,7 +1,7 @@
-import { BaseEntity } from '@modules/core'
-import { EmbeddedUser } from '@modules/users'
 import { LikeFromModel } from '../../data/models/likes'
 import { InteractionEntity } from '../types'
+import { BaseEntity } from '@modules/core'
+import { EmbeddedUser } from '@modules/users'
 
 export class LikeEntity extends BaseEntity {
 	public readonly id: string

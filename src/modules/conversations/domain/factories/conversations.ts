@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { CreateConversationToModel } from '../../data/models/conversations'
 import { ConversationEntity } from '../entities/conversations'
+import { BaseFactory } from '@modules/core'
 
 export class ConversationFactory extends BaseFactory<ConversationEntity, CreateConversationToModel, CreateConversationToModel> {
 	readonly rules = {

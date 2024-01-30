@@ -1,11 +1,11 @@
-import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 import { addToArray, v } from 'valleyed'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { Logic } from 'sofa-logic'
+import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
 
 const store = {} as Record<
 	string,

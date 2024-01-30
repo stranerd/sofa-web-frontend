@@ -1,8 +1,8 @@
 import { IAnnouncementRepository } from '../irepositories/announcements'
 import { AnnouncementFactory } from '../factories/announcements'
+import { AnnouncementEntity } from '../entities/announcements'
 import { QueryParams, Conditions, Listeners } from '@modules/core'
 import { CHAT_PAGINATION_LIMIT } from '@utils/constants'
-import { AnnouncementEntity } from '../entities/announcements'
 
 export class AnnouncementsUseCase {
 	private repository: (organizationId: string, classId: string) => IAnnouncementRepository

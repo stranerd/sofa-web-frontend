@@ -169,15 +169,15 @@
 </template>
 
 <script setup lang="ts">
+import { formatNumber } from 'valleyed'
+import { computed } from 'vue'
+import { useMeta } from 'vue-meta'
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { formatNumber } from 'valleyed'
-import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
 
 const props = withDefaults(
 	defineProps<{

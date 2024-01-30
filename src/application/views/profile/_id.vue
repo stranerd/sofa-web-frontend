@@ -139,6 +139,9 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { extractResource } from '@app/composables/library'
@@ -146,9 +149,6 @@ import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'ProfileIdPage',

@@ -1,4 +1,3 @@
-import { BaseEntity, Media } from '@modules/core'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import stringSimilarity from 'string-similarity'
@@ -6,6 +5,7 @@ import { Differ, capitalize, stripHTML } from 'valleyed'
 import { QuestionFromModel } from '../../data/models/questions'
 import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
 import { questionTypes } from './questions-extras'
+import { BaseEntity, Media } from '@modules/core'
 
 const compare = (a: string, b: string, quality = 0.95) =>
 	stringSimilarity.compareTwoStrings(

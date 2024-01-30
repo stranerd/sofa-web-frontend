@@ -1,10 +1,10 @@
-import { useSuccessHandler } from '@app/composables/core/states'
-import { DepartmentEntity, DepartmentFactory, DepartmentsUseCases } from '@modules/school'
 import { addToArray } from 'valleyed'
-import { Logic } from 'sofa-logic'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
+import { Logic } from 'sofa-logic'
+import { DepartmentEntity, DepartmentFactory, DepartmentsUseCases } from '@modules/school'
+import { useSuccessHandler } from '@app/composables/core/states'
 
 const store = {
 	departments: ref([] as DepartmentEntity[]),

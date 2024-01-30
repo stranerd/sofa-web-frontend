@@ -117,6 +117,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { useMeta } from 'vue-meta'
 import { useCreateView } from '@app/composables/interactions/views'
 import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
@@ -125,8 +127,6 @@ import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
-import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',

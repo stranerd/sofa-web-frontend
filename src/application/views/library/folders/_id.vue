@@ -31,6 +31,8 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { extractResource, openCourse, openQuiz } from '@app/composables/library'
 import { handleShowMaterialMoreOptions } from '@app/composables/study'
@@ -38,8 +40,6 @@ import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryFoldersIdPage',

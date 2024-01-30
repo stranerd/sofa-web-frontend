@@ -1,5 +1,5 @@
-import { CourseEntity, QuizEntity } from '@modules/study'
 import { SingleUser } from './users'
+import { CourseEntity, QuizEntity } from '@modules/study'
 export interface ResourceType {
 	original: CourseEntity | QuizEntity
 	title: string

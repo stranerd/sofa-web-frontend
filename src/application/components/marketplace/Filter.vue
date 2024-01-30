@@ -177,8 +177,8 @@ const toggleOption = (option: SelectedOption) => {
 </script>
 
 <script lang="ts">
-import { Conditions, Logic } from 'sofa-logic'
 import { computed, reactive, ref, watch } from 'vue'
+import { Conditions, Logic } from 'sofa-logic'
 
 export type SelectedOption = {
 	name: string

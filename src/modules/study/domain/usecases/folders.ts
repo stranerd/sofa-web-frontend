@@ -1,8 +1,8 @@
-import { Listeners, QueryParams } from '@modules/core'
 import { FolderEntity } from '../entities/folders'
 import { FolderFactory } from '../factories/folders'
 import { IFolderRepository } from '../irepositories/ifolders'
 import { FolderSaved } from '../types'
+import { Listeners, QueryParams } from '@modules/core'
 
 export class FoldersUseCase {
 	private repository: IFolderRepository

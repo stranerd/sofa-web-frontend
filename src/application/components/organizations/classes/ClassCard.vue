@@ -29,10 +29,10 @@
 </template>
 
 <script lang="ts" setup>
+import { pluralize } from 'valleyed'
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { pluralize } from 'valleyed'
 
 const props = defineProps<{ classInst: ClassEntity }>()
 

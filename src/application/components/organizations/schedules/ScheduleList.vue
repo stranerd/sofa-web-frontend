@@ -31,8 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 import { computed, ref } from 'vue'
+import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 
 const props = defineProps<{
 	classInst: ClassEntity

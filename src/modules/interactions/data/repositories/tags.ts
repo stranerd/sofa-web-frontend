@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { TagEntity } from '../../domain/entities/tags'
 import { ITagRepository } from '../../domain/irepositories/tags'
 import { TagFromModel, TagToModel } from '../models/tags'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class TagRepository implements ITagRepository {
 	private static instance: TagRepository

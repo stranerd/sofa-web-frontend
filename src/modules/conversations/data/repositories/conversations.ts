@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { ConversationEntity } from '../../domain/entities/conversations'
 import { IConversationRepository } from '../../domain/irepositories/conversations'
 import { ConversationFromModel, CreateConversationToModel, UpdateConversationToModel } from '../models/conversations'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class ConversationRepository implements IConversationRepository {
 	private static instance: ConversationRepository

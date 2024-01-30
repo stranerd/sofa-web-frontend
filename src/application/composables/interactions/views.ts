@@ -1,5 +1,5 @@
-import { Interaction, ViewsUseCases } from '@modules/interactions'
 import { useAsyncFn } from '../core/hooks'
+import { Interaction, ViewsUseCases } from '@modules/interactions'
 
 export const useCreateView = () => {
 	const {

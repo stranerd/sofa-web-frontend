@@ -38,9 +38,9 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { ClassEntity, MemberEntity } from '@modules/organizations'
-import { defineComponent, PropType } from 'vue'
 export default defineComponent({
 	props: {
 		classInst: {

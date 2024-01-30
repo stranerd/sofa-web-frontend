@@ -1,7 +1,7 @@
-import { BaseEntity } from '@modules/core'
-import { EmbeddedUser } from '@modules/users'
 import { ViewFromModel } from '../../data/models/views'
 import { InteractionEntity } from '../types'
+import { BaseEntity } from '@modules/core'
+import { EmbeddedUser } from '@modules/users'
 
 export class ViewEntity extends BaseEntity {
 	public readonly id: string

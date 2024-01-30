@@ -1,8 +1,8 @@
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AfterAuthUser, AuthUseCases } from '@modules/auth'
 import { Logic } from 'sofa-logic'
-import { useRoute, useRouter } from 'vue-router'
 
 export const createSession = async (afterAuth: AfterAuthUser) => {
 	await AuthUseCases.sessionSignin(afterAuth)

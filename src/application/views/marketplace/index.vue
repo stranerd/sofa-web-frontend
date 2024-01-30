@@ -75,12 +75,12 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import { extractResource } from '@app/composables/library'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'MarketPlaceIndexPage',

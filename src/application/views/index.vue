@@ -6,12 +6,12 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 import HomeForNonStudents from '@app/components/home/HomeForNonStudents.vue'
 import HomeForStudents from '@app/components/home/HomeForStudents.vue'
 import HomeLayout from '@app/components/home/HomeLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'IndexPage',

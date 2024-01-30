@@ -1,7 +1,7 @@
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import { HttpClient, UploadedFile } from '@modules/core'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 
 export class BaseApiService {
 	public axiosInstance: AxiosInstance

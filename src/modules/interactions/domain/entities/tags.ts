@@ -1,6 +1,6 @@
-import { BaseEntity } from '@modules/core'
 import { TagFromModel } from '../../data/models/tags'
 import { TagMeta, TagTypes } from '../types'
+import { BaseEntity } from '@modules/core'
 
 export class TagEntity extends BaseEntity {
 	public readonly id: string

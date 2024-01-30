@@ -62,10 +62,10 @@
 	</div>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SofaContent',

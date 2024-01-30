@@ -1,7 +1,7 @@
-import { FilesUseCases } from '@modules/study'
 import { computed, onMounted, onUnmounted } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { FilesUseCases } from '@modules/study'
 
 export const useFilesInList = (ids: Refable<string[]>, listen = false) => {
 	const allFiles = computed(() => [])

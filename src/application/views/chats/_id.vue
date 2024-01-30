@@ -105,6 +105,9 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import ConversationMessages from '@app/components/conversations/Messages.vue'
@@ -114,9 +117,6 @@ import { useCreateMessage } from '@app/composables/conversations/messages'
 import { useModals } from '@app/composables/core/modals'
 import { InteractionEntities } from '@modules/interactions'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'ChatsIdPage',

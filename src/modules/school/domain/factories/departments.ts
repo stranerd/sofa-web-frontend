@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { DepartmentToModel } from '../../data/models/departments'
 import { DepartmentEntity } from '../entities/departments'
+import { BaseFactory } from '@modules/core'
 
 export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentToModel, DepartmentToModel> {
 	readonly rules = {

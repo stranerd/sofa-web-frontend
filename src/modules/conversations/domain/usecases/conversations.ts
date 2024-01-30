@@ -1,7 +1,7 @@
-import { Listeners } from '@modules/core'
 import { ConversationEntity } from '../entities/conversations'
 import { ConversationFactory } from '../factories/conversations'
 import { IConversationRepository } from '../irepositories/conversations'
+import { Listeners } from '@modules/core'
 
 export class ConversationsUseCase {
 	private repository: IConversationRepository

@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { AnnouncementEntity } from '../../domain/entities/announcements'
 import { IAnnouncementRepository } from '../../domain/irepositories/announcements'
 import { AnnouncementFromModel, AnnouncementToModel } from '../models/announcements'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class AnnouncementRepository implements IAnnouncementRepository {
 	private static instances: Record<string, AnnouncementRepository> = {}

@@ -1,6 +1,6 @@
-import { BaseFactory } from '@modules/core'
 import { makeRule, v } from 'valleyed'
 import { AuthDetails, Phone } from '../entities/auth'
+import { BaseFactory } from '@modules/core'
 
 export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone: Phone | null }> {
 	readonly rules = {

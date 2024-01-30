@@ -1,6 +1,6 @@
-import App from '@app/App.vue'
 import { createApp } from 'vue'
 import { createMetaManager } from 'vue-meta'
+import App from '@app/App.vue'
 
 import '@app/assets/styles/index.scss'
 

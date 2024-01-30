@@ -1,7 +1,7 @@
-import { BaseEntity } from '@modules/core'
-import { EmbeddedUser } from '@modules/users'
 import { ConversationFromModel } from '../../data/models/conversations'
 import { MessageEntity } from './messages'
+import { BaseEntity } from '@modules/core'
+import { EmbeddedUser } from '@modules/users'
 
 export class ConversationEntity extends BaseEntity {
 	public readonly id: string

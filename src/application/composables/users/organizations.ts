@@ -1,10 +1,10 @@
-import { MemberTypes, MembersUseCases } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 import { computed, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from './users'
+import { Logic } from 'sofa-logic'
+import { MemberTypes, MembersUseCases } from '@modules/organizations'
 
 export const useMyOrganizations = () => {
 	const { user } = useAuth()

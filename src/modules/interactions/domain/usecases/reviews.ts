@@ -1,8 +1,8 @@
-import { Listeners } from '@modules/core'
 import { ReviewEntity } from '../entities/reviews'
 import { ReviewFactory } from '../factories/reviews'
 import { IReviewRepository } from '../irepositories/reviews'
 import { Interaction } from '../types'
+import { Listeners } from '@modules/core'
 
 export class ReviewsUseCase {
 	private repository: IReviewRepository

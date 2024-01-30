@@ -1,4 +1,3 @@
-import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 import { capitalize } from 'valleyed'
 import { reactive } from 'vue'
 import { Logic } from '..'
@@ -8,6 +7,7 @@ import { ContentDetails, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
 import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
+import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 
 export default class Study extends Common {
 	constructor() {

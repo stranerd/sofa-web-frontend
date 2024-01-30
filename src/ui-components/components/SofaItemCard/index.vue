@@ -48,12 +48,12 @@
 	</component>
 </template>
 <script lang="ts" setup>
-import { Logic, ResourceType } from 'sofa-logic'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'
+import { Logic, ResourceType } from 'sofa-logic'
 
 withDefaults(
 	defineProps<{

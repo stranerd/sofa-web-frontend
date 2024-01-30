@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { AnnouncementToModel } from '../../data/models/announcements'
 import { AnnouncementEntity } from '../entities/announcements'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IAnnouncementRepository {
 	add: (data: AnnouncementToModel) => Promise<AnnouncementEntity>

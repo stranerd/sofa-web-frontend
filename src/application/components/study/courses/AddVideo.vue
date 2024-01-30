@@ -42,8 +42,8 @@
 	</div>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent, reactive, ref } from 'vue'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'AddVideo',

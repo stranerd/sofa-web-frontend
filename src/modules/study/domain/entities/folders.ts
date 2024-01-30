@@ -1,7 +1,7 @@
-import { BaseEntity } from '@modules/core'
-import { EmbeddedUser } from '@modules/users'
 import { FolderFromModel } from '../../data/models/folders'
 import { FolderSaved } from '../types'
+import { BaseEntity } from '@modules/core'
+import { EmbeddedUser } from '@modules/users'
 
 export class FolderEntity extends BaseEntity {
 	public readonly id: string

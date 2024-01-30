@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic } from 'sofa-logic'
 import SofaIcon from '../SofaIcon/index.vue'
+import { Logic } from 'sofa-logic'
 import { handleShowAddMaterial } from '@app/composables/study'
 </script>

@@ -30,10 +30,10 @@
 </template>
 
 <script lang="ts" setup>
+import { pluralize } from 'valleyed'
 import { useSaveClass } from '@app/composables/organizations/classes-explore'
 import { ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
-import { pluralize } from 'valleyed'
 
 const props = defineProps<{
 	classInst: ClassEntity

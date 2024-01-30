@@ -74,10 +74,10 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useUpdateCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity, CurriculumView } from '@modules/organizations'
-import { ref } from 'vue'
 
 const props = defineProps<{
 	classInst: ClassEntity

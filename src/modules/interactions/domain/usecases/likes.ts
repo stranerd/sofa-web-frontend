@@ -1,7 +1,7 @@
-import { Conditions, Listeners, QueryParams } from '@modules/core'
 import { LikeEntity } from '../entities/likes'
 import { ILikeRepository } from '../irepositories/likes'
 import { Interaction, InteractionEntities } from '../types'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class LikesUseCase {
 	private repository: ILikeRepository

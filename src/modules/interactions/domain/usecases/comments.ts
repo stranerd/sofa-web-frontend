@@ -1,8 +1,8 @@
-import { Listeners, QueryParams } from '@modules/core'
 import { CommentEntity } from '../entities/comments'
 import { CommentFactory } from '../factories/comments'
 import { ICommentRepository } from '../irepositories/comments'
 import { Interaction } from '../types'
+import { Listeners, QueryParams } from '@modules/core'
 
 export class CommentsUseCase {
 	private repository: ICommentRepository

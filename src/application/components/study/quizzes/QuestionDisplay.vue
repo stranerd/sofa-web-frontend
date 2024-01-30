@@ -182,10 +182,10 @@
 </template>
 
 <script lang="ts" setup>
-import { QuestionEntity, QuestionTypes } from '@modules/study'
-import { Logic } from 'sofa-logic'
 import { reactive, watch } from 'vue'
 import Draggable from 'vuedraggable'
+import { QuestionEntity, QuestionTypes } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	question: QuestionEntity

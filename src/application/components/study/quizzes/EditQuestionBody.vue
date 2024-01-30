@@ -201,9 +201,9 @@
 </template>
 
 <script lang="ts" setup>
+import Draggable from 'vuedraggable'
 import { QuestionFactory } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import Draggable from 'vuedraggable'
 
 defineProps<{
 	factory: QuestionFactory

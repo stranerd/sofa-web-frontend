@@ -282,9 +282,9 @@
 	</SofaModalOld>
 </template>
 <script lang="ts">
+import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic, SelectOption, Transaction } from 'sofa-logic'
-import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 
 export default defineComponent({
 	setup() {

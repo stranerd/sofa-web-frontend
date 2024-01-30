@@ -100,10 +100,10 @@
 </template>
 
 <script lang="ts" setup>
+import { watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { QuizEntity, QuizFactory } from '@modules/study'
-import { watch } from 'vue'
 
 const props = defineProps<{
 	quiz: QuizEntity

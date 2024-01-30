@@ -1,8 +1,8 @@
-import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { ref } from 'vue'
 import { FileToModel } from '../../data/models/files'
 import { FileEntity } from '../entities/files'
+import { BaseFactory, Media } from '@modules/core'
 
 export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToModel> {
 	public topicId = ''

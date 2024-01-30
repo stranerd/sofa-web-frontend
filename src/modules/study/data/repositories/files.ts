@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { FileEntity } from '../../domain/entities/files'
 import { IFileRepository } from '../../domain/irepositories/ifiles'
 import { FileFromModel, FileToModel } from '../models/files'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class FileRepository implements IFileRepository {
 	private static instance: FileRepository

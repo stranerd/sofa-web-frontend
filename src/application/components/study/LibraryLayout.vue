@@ -175,13 +175,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { Logic } from 'sofa-logic'
-import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 
 const { isAdmin } = useAuth()
 const libraryOptions = computed(() => [

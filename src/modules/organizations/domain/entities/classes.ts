@@ -1,6 +1,6 @@
-import { BaseEntity, Media } from '@modules/core'
 import { ClassFromModel } from '../../data/models/classes'
 import { ClassLesson, ClassMembers, EmbeddedUser, Saleable } from '../types'
+import { BaseEntity, Media } from '@modules/core'
 
 export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly id: string

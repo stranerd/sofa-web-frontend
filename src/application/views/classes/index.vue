@@ -60,10 +60,10 @@
 </template>
 
 <script lang="ts">
-import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
-import { useMyClassesIn } from '@app/composables/organizations/classes-explore'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
+import { useMyClassesIn } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
 	name: 'Classes',

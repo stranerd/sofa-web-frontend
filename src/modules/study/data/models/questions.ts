@@ -1,5 +1,5 @@
-import { Media } from '@modules/core'
 import { QuestionData, StrippedQuestionData } from '../../domain/types'
+import { Media } from '@modules/core'
 
 export interface QuestionFromModel extends QuestionToModel {
 	id: string

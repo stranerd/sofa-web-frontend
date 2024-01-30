@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ClassEntity, ClassLesson, ClassLessonable, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
 import { computed, watch } from 'vue'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { useFilesInList } from '../study/files-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useSchedulesInList } from './schedules'
+import { ClassEntity, ClassLesson, ClassLessonable, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
 import { QuizModes } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {

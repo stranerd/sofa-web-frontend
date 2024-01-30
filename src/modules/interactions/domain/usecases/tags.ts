@@ -1,8 +1,8 @@
-import { Listeners } from '@modules/core'
 import { TagEntity } from '../entities/tags'
 import { TagFactory } from '../factories/tags'
 import { ITagRepository } from '../irepositories/tags'
 import { TagTypes } from '../types'
+import { Listeners } from '@modules/core'
 
 export class TagsUseCase {
 	private repository: ITagRepository

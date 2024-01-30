@@ -1,5 +1,3 @@
-import { ConversationEntity, ConversationFactory, ConversationsUseCases } from '@modules/conversations'
-import { Logic } from 'sofa-logic'
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -7,6 +5,8 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { Logic } from 'sofa-logic'
+import { ConversationEntity, ConversationFactory, ConversationsUseCases } from '@modules/conversations'
 
 const store = {
 	conversations: ref<ConversationEntity[]>([]),

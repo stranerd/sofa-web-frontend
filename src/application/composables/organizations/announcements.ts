@@ -1,9 +1,9 @@
-import { AnnouncementEntity, AnnouncementFactory, AnnouncementsUseCases } from '@modules/organizations'
 import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
+import { AnnouncementEntity, AnnouncementFactory, AnnouncementsUseCases } from '@modules/organizations'
 
 const store = {} as Record<
 	string,

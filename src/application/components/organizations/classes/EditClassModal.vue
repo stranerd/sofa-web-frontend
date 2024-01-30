@@ -9,9 +9,9 @@
 </template>
 
 <script lang="ts" setup>
+import ClassForm from './ClassForm.vue'
 import { useUpdateClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
-import ClassForm from './ClassForm.vue'
 
 const props = defineProps<{
 	organizationId: string

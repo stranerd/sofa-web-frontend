@@ -30,10 +30,10 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useTimeDifference } from '@app/composables/core/time'
 import { AnnouncementEntity, ClassEntity, MemberTypes } from '@modules/organizations'
-import { computed } from 'vue'
 const props = defineProps<{
 	announcement: AnnouncementEntity
 	classInst: ClassEntity

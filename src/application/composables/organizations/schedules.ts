@@ -1,8 +1,8 @@
-import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 
 const store = {} as Record<
 	string,

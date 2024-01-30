@@ -19,14 +19,14 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { createGameData, createTestData } from '@app/composables/library'
 import { useMyGames } from '@app/composables/plays/games-list'
 import { useMyTests } from '@app/composables/plays/tests-list'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryInProgressPage',

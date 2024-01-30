@@ -64,12 +64,12 @@
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from 'valleyed'
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { extractContent } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
-import { formatNumber } from 'valleyed'
-import { computed } from 'vue'
 
 const { id, user } = useAuth()
 

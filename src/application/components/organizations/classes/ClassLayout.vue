@@ -76,12 +76,12 @@
 </template>
 
 <script setup lang="ts">
-import { useClass } from '@app/composables/organizations/classes'
-import { useClassSchedules } from '@app/composables/organizations/schedules'
-import { Logic } from 'sofa-logic'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
+import { useClass } from '@app/composables/organizations/classes'
+import { useClassSchedules } from '@app/composables/organizations/schedules'
+import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{

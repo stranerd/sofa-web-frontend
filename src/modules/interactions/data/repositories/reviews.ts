@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { ReviewEntity } from '../../domain/entities/reviews'
 import { IReviewRepository } from '../../domain/irepositories/reviews'
 import { ReviewFromModel, ReviewToModel } from '../models/reviews'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class ReviewRepository implements IReviewRepository {
 	private static instance: ReviewRepository

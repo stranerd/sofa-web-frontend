@@ -64,9 +64,9 @@
 </template>
 
 <script lang="ts">
-import { usePasswordReset } from '@app/composables/auth/passwords'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import { usePasswordReset } from '@app/composables/auth/passwords'
 
 export default defineComponent({
 	name: 'AuthForgotPage',

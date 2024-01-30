@@ -1,5 +1,5 @@
-import { CreateTutorRequestForm, Logic } from 'sofa-logic'
 import { reactive } from 'vue'
+import { CreateTutorRequestForm, Logic } from 'sofa-logic'
 
 const tutorRequestForm = reactive<CreateTutorRequestForm>({
 	qualification: [],

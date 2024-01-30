@@ -38,12 +38,12 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
 import { FileType } from '@modules/study'
 import { formatTime } from '@utils/dates'
-import { computed } from 'vue'
 
 const props = withDefaults(
 	defineProps<{

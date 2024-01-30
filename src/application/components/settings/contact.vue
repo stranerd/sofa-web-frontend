@@ -36,8 +36,8 @@
 	</div>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent, onMounted, ref } from 'vue'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	setup() {

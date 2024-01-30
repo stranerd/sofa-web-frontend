@@ -89,7 +89,6 @@
 	</component>
 </template>
 <script lang="ts">
-import { Logic } from 'sofa-logic'
 import { defineComponent } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
@@ -97,6 +96,7 @@ import SofaButton from '../SofaButton'
 import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import { SofaNormalText } from '../SofaTypography'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SofaActivityCard',

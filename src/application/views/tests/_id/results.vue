@@ -71,13 +71,13 @@
 </template>
 
 <script lang="ts">
+import { formatNumber } from 'valleyed'
+import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 import TestWrapper from '@app/components/plays/tests/TestWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { Logic } from 'sofa-logic'
-import { formatNumber } from 'valleyed'
-import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'TestsIdResultsPage',

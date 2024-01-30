@@ -85,11 +85,11 @@
 </template>
 
 <script lang="ts" setup>
-import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
-import { UserEntity } from '@modules/users'
 import { Differ } from 'valleyed'
 import { reactive, ref, toRef, watch } from 'vue'
 import Draggable from 'vuedraggable'
+import { UserEntity } from '@modules/users'
+import { QuestionEntity, QuestionFactory, QuizEntity } from '@modules/study'
 
 const props = defineProps<{
 	questions: QuestionEntity[]

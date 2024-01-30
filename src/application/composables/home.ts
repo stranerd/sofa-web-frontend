@@ -1,6 +1,6 @@
-import { Logic } from 'sofa-logic'
 import { computed } from 'vue'
 import { useAuth } from './auth/auth'
+import { Logic } from 'sofa-logic'
 
 export const useHomeTasks = () => {
 	const { user, userType } = useAuth()

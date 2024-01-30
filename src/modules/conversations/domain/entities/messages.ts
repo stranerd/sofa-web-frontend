@@ -1,5 +1,5 @@
-import { BaseEntity, Media } from '@modules/core'
 import { MessageFromModel } from '../../data/models/messages'
+import { BaseEntity, Media } from '@modules/core'
 
 export class MessageEntity extends BaseEntity {
 	public readonly id: string

@@ -1,6 +1,6 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { AuthUser } from '../entities/auth'
+import { BaseFactory } from '@modules/core'
 
 export class EmailSigninFactory extends BaseFactory<null, AuthUser, AuthUser> {
 	readonly rules = {

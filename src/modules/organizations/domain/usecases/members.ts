@@ -1,7 +1,7 @@
-import { Listeners } from '@modules/core'
 import { MemberEntity } from '../entities/members'
 import { IMemberRepository } from '../irepositories/members'
 import { MemberTypes } from '../types'
+import { Listeners } from '@modules/core'
 
 export class MembersUseCase {
 	repository: (organizationId: string) => IMemberRepository

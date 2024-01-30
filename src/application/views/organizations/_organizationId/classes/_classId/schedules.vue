@@ -34,11 +34,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useClassSchedules } from '@app/composables/organizations/schedules'
-import { defineComponent } from 'vue'
-
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdSchedules',

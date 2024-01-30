@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { QuestionEntity } from '../../domain/entities/questions'
 import { IQuestionRepository } from '../../domain/irepositories/iquestions'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class QuestionRepository implements IQuestionRepository {
 	private static instances: Record<string, QuestionRepository> = {}

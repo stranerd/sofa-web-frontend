@@ -1,7 +1,7 @@
-import { Listeners } from '@modules/core'
 import { ViewEntity } from '../entities/views'
 import { IViewRepository } from '../irepositories/views'
 import { Interaction } from '../types'
+import { Listeners } from '@modules/core'
 
 export class ViewsUseCase {
 	private repository: IViewRepository

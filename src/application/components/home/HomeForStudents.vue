@@ -77,11 +77,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useHomeTasks } from '@app/composables/home'
 import { extractContent } from '@app/composables/marketplace'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
-import { computed } from 'vue'
 
 const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()
 

@@ -27,11 +27,11 @@
 </template>
 
 <script lang="ts">
-import AccountSetup from '@app/components/onboarding/AccountSetup.vue'
-import { UserType } from '@modules/users'
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
+import { UserType } from '@modules/users'
+import AccountSetup from '@app/components/onboarding/AccountSetup.vue'
 
 export default defineComponent({
 	name: 'OnboardingPage',

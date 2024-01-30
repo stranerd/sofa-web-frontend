@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { ReviewToModel } from '../../data/models/reviews'
 import { ReviewEntity } from '../entities/reviews'
+import { BaseFactory } from '@modules/core'
 
 export class ReviewFactory extends BaseFactory<ReviewEntity, Omit<ReviewToModel, 'entity'>, Omit<ReviewToModel, 'entity'>> {
 	readonly rules = {

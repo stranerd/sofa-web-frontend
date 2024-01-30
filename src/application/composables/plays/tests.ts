@@ -1,11 +1,11 @@
-import { QuestionEntity } from '@modules/study'
-import { AddQuestionAnswer, GameParticipantAnswer, Logic, Test } from 'sofa-logic'
 import { Differ } from 'valleyed'
 import { Ref, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { AddQuestionAnswer, GameParticipantAnswer, Logic, Test } from 'sofa-logic'
+import { QuestionEntity } from '@modules/study'
 
 const store = {} as Record<
 	string,

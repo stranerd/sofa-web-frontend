@@ -135,9 +135,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import { useAuth } from '@app/composables/auth/auth'
-import { handleShowAddMaterial } from '@app/composables/study'
-import { Conditions, Logic } from 'sofa-logic'
 import { computed, onMounted, ref } from 'vue'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
@@ -148,6 +145,9 @@ import SofaModalOld from '../SofaModalOld'
 import { SofaHeaderText } from '../SofaTypography'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import Notification from './notification.vue'
+import { Conditions, Logic } from 'sofa-logic'
+import { handleShowAddMaterial } from '@app/composables/study'
+import { useAuth } from '@app/composables/auth/auth'
 
 withDefaults(
 	defineProps<{

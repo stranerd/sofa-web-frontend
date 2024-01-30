@@ -51,9 +51,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useCreateAnnouncement } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
-import { computed } from 'vue'
 const props = defineProps<{
 	organizationId: string
 	userId: string

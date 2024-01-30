@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { CreateConversationToModel, UpdateConversationToModel } from '../../data/models/conversations'
 import { ConversationEntity } from '../entities/conversations'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IConversationRepository {
 	add: (data: CreateConversationToModel) => Promise<ConversationEntity>

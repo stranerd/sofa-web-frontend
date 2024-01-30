@@ -1,9 +1,9 @@
-import { BaseFactory } from '@modules/core'
-import { asArray } from '@modules/core/domain/factories/arrays'
-import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
 import { v } from 'valleyed'
 import { ScheduleEntity } from '../entities/schedules'
 import { ClassLessonCurriculumSection, ClassLessonable } from '../types'
+import { BaseFactory } from '@modules/core'
+import { asArray } from '@modules/core/domain/factories/arrays'
+import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
 
 class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, ClassLessonCurriculumSection, ClassLessonCurriculumSection> {
 	readonly rules = {

@@ -1,4 +1,3 @@
-import { QuestionEntity } from '@modules/study'
 import { capitalize } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
@@ -7,6 +6,7 @@ import { Paginated } from '../types/domains/common'
 import { Game, GameParticipantAnswer, Test } from '../types/domains/plays'
 import { AddQuestionAnswer, CreateGameInput } from '../types/forms/plays'
 import Common from './Common'
+import { QuestionEntity } from '@modules/study'
 
 export default class Plays extends Common {
 	constructor() {

@@ -1,7 +1,7 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { CommentToModel } from '../../data/models/comments'
 import { CommentEntity } from '../entities/comments'
+import { BaseFactory } from '@modules/core'
 
 export class CommentFactory extends BaseFactory<CommentEntity, Omit<CommentToModel, 'entity'>, Omit<CommentToModel, 'entity'>> {
 	readonly rules = {

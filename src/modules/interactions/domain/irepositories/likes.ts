@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { LikeToModel } from '../../data/models/likes'
 import { LikeEntity } from '../entities/likes'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface ILikeRepository {
 	add: (data: LikeToModel) => Promise<LikeEntity>

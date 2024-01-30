@@ -1,9 +1,9 @@
+import { ref } from 'vue'
+import { useAsyncFn } from '../core/hooks'
 import { createSession } from '@app/composables/auth/session'
 import { useSuccessHandler } from '@app/composables/core/states'
 import { AuthUseCases, PasswordResetFactory, PasswordUpdateFactory } from '@modules/auth'
 import { NetworkError, StatusCodes } from '@modules/core'
-import { ref } from 'vue'
-import { useAsyncFn } from '../core/hooks'
 
 export const usePasswordReset = () => {
 	const sent = ref(false)

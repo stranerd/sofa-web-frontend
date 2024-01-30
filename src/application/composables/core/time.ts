@@ -1,5 +1,5 @@
-import { TIMES, getTimeFormatted, months } from '@utils/dates'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { TIMES, getTimeFormatted, months } from '@utils/dates'
 
 export const useCountdown = (skipClearOnUnmounted = false) => {
 	const time = ref(0)

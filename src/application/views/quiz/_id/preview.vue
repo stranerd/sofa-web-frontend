@@ -28,11 +28,11 @@
 </template>
 
 <script lang="ts">
-import Quiz from '@app/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { RouteLocationNormalized } from 'vue-router'
+import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
+import Quiz from '@app/components/study/quizzes/Quiz.vue'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',

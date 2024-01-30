@@ -1,7 +1,7 @@
-import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { QuizEntity } from '../../domain/entities/quizzes'
 import { IQuizRepository } from '../../domain/irepositories/iquizzes'
 import { QuizFromModel, QuizToModel } from '../models/quizzes'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class QuizRepository implements IQuizRepository {
 	private static instance: QuizRepository

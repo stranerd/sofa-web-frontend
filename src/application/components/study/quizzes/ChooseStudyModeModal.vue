@@ -47,11 +47,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useHasAccess } from '@app/composables/study'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { ref } from 'vue'
 
 const props = defineProps<{
 	close: () => void

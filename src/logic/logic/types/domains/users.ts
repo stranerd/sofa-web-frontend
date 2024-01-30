@@ -1,5 +1,5 @@
-import { EmbeddedUser } from '@modules/users'
 import { FileData } from './common'
+import { EmbeddedUser } from '@modules/users'
 
 export type SingleUser = EmbeddedUser
 

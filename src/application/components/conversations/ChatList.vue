@@ -61,11 +61,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+import Chat from './Chat.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList } from '@app/composables/conversations/conversations'
 import { formatTime } from '@utils/dates'
-import { ref } from 'vue'
-import Chat from './Chat.vue'
 
 withDefaults(
 	defineProps<{

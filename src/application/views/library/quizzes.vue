@@ -27,13 +27,13 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { extractResource, openQuiz } from '@app/composables/library'
 import { handleShowMaterialMoreOptions, useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
-import { computed, defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'LibraryQuizzesPage',

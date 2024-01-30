@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { saveToFolder } from '@app/composables/study/folders'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { computed } from 'vue'
 
 const props = defineProps<{
 	close: () => void

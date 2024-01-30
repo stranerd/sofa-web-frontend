@@ -109,13 +109,13 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useClassAnnouncements } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
-import { computed, defineComponent, reactive } from 'vue'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdAnnouncements',

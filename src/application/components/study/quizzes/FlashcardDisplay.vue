@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts" setup>
-import { QuestionEntity } from '@modules/study'
 import { ref } from 'vue'
+import { QuestionEntity } from '@modules/study'
 
 defineProps<{
 	question: QuestionEntity

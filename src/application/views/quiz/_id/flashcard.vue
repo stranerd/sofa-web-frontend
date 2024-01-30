@@ -87,13 +87,13 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, watch } from 'vue'
+import { useMeta } from 'vue-meta'
 import Flashcard from '@app/components/study/quizzes/FlashcardDisplay.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { storage } from '@utils/storage'
 import { Logic } from 'sofa-logic'
-import { defineComponent, ref, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',

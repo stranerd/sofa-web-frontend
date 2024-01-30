@@ -34,8 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import { Logic } from 'sofa-logic'
 import { ref, watch } from 'vue'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	data: {

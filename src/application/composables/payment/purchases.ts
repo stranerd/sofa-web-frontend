@@ -1,9 +1,9 @@
-import { Logic, Purchase } from 'sofa-logic'
 import { computed, onMounted, onUnmounted, reactive } from 'vue'
+import { addToArray } from 'valleyed'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { addToArray } from 'valleyed'
+import { Logic, Purchase } from 'sofa-logic'
 
 const store = {
 	purchases: reactive<Purchase[]>([]),

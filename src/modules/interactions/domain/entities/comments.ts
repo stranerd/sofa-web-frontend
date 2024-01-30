@@ -1,7 +1,7 @@
-import { BaseEntity } from '@modules/core'
-import { EmbeddedUser } from '@modules/users'
 import { CommentFromModel } from '../../data/models/comments'
 import { CommentMeta, InteractionEntities, InteractionEntity } from '../types'
+import { BaseEntity } from '@modules/core'
+import { EmbeddedUser } from '@modules/users'
 
 export class CommentEntity extends BaseEntity {
 	public readonly id: string

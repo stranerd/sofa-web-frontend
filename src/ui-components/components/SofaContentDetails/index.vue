@@ -293,7 +293,6 @@
 <script lang="ts" setup>
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { ContentDetails, Logic, ResourceType } from 'sofa-logic'
 import { ref, toRef, watch } from 'vue'
 import SofaActivityCard from '../SofaActivityCard'
 import SofaAvatar from '../SofaAvatar'
@@ -306,6 +305,7 @@ import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
+import { ContentDetails, Logic, ResourceType } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{

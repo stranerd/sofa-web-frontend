@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useCreateClass } from '@app/composables/organizations/classes'
 import ClassForm from './ClassForm.vue'
+import { useCreateClass } from '@app/composables/organizations/classes'
 
 const props = defineProps<{
 	organizationId: string

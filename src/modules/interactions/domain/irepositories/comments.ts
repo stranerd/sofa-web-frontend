@@ -1,6 +1,6 @@
-import { Listeners, QueryParams, QueryResults } from '@modules/core'
 import { CommentToModel } from '../../data/models/comments'
 import { CommentEntity } from '../entities/comments'
+import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface ICommentRepository {
 	add: (data: CommentToModel) => Promise<CommentEntity>

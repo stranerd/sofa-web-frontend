@@ -1,6 +1,6 @@
-import { BaseFactory } from '@modules/core'
 import { v } from 'valleyed'
 import { ClassLesson, LessonToModel } from '../types'
+import { BaseFactory } from '@modules/core'
 
 type Keys = { title: string; teacher: string }
 

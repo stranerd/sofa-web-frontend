@@ -1,8 +1,8 @@
 /* import { Clipboard } from '@capacitor/clipboard'
 import { Share } from '@capacitor/share'
 import { Notify } from '@utils/dialog' */
-import { isWeb } from '@utils/constants'
 import { formatNumber } from 'valleyed'
+import { isWeb } from '@utils/constants'
 
 export const copyToClipboard = async (text: string) => {
 	throw new Error(`Not implemented: ${text}`)

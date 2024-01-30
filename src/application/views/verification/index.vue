@@ -172,14 +172,14 @@
 </template>
 
 <script lang="ts">
+import { capitalize, defineComponent, onMounted, ref } from 'vue'
+import { useMeta } from 'vue-meta'
 import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { ContentDetails, extractContent } from '@app/composables/marketplace'
 import { submitVerification, updateVerificationForm } from '@app/composables/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { Conditions, Logic, SelectOption } from 'sofa-logic'
-import { capitalize, defineComponent, onMounted, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'VerificationIndexPage',

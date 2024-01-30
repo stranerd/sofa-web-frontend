@@ -1,9 +1,9 @@
-import { BaseFactory, Media } from '@modules/core'
 import { v } from 'valleyed'
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
 import { indicator } from '../entities/questions-extras'
 import { QuestionTypes } from '../types'
+import { BaseFactory, Media } from '@modules/core'
 
 type FillOrDragOption = { type: 'q' | 'a'; value: string }
 

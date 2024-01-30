@@ -1,9 +1,9 @@
-import { QuizEntity, QuizzesUseCases } from '@modules/study'
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { QuizEntity, QuizzesUseCases } from '@modules/study'
 
 const store = {
 	quizzes: ref<QuizEntity[]>([]),

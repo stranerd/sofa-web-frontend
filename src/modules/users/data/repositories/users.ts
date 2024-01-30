@@ -1,8 +1,8 @@
-import { HttpClient, Listeners, listenToMany, listenToOne, QueryParams, QueryResults } from '@modules/core'
 import { UserEntity } from '../../domain/entities/users'
 import { IUserRepository } from '../../domain/irepositories/iusers'
 import { UserAccount, UserAi, UserLocation, UserSocialsType, UserTypeData } from '../../domain/types'
 import { UserFromModel } from '../models/users'
+import { HttpClient, Listeners, listenToMany, listenToOne, QueryParams, QueryResults } from '@modules/core'
 
 export class UserRepository implements IUserRepository {
 	private static instance: UserRepository

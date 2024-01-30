@@ -41,10 +41,10 @@
 </template>
 
 <script lang="ts" setup>
-import { FormRule, Logic } from 'sofa-logic'
 import { ref, toRef, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import SofaNormalText from '../SofaTypography/normalText.vue'
+import { FormRule, Logic } from 'sofa-logic'
 
 const emit = defineEmits<{
 	onEnter: [string]
