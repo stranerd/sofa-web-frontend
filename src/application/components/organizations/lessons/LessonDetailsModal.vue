@@ -5,9 +5,7 @@
 			<div class="flex items-center gap-4">
 				<SofaIcon class="h-[16px]" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
 				<SofaIcon class="h-[16px]" name="arrow-right-white" :class="canNext ? 'fill-black' : 'fill-grayColor'" @click="next" />
-				<div>
-					<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
-				</div>
+				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
 		<div class="flex items-center gap-6 border-b border-darkLightGray">
@@ -23,8 +21,7 @@
 				:content="tab.title"
 				:class="selectedTab === tab.key ? 'text-primaryPurple border-primaryPurple' : 'text-deepGray'"
 				@click="selectedTab = tab.key" />
-			<SofaIcon v-if="curriculum_view === CurriculumView.grid" name="list_view" class="h-[20px] ml-auto" @click="toggleView" />
-			<SofaIcon v-else name="grid_view" class="h-[20px] ml-auto" @click="toggleView" />
+			<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 		</div>
 		<div v-if="selectedTab === 'curriculum'">
 			<div v-if="curriculum.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -34,7 +31,7 @@
 					{{ (teachers.at(0)?.publicName ?? 'Teacher') + ' has not set the curriculum yet' }}
 				</SofaNormalText>
 			</div>
-			<LessonCurriculum v-else :classInst="classInst" :view="curriculum_view" :curriculum="curriculum" />
+			<LessonCurriculum v-else :classInst="classInst" :view="curriculumView" :curriculum="curriculum" />
 		</div>
 		<div v-if="selectedTab === 'teachers'" class="py-4 flex flex-col gap-4">
 			<div v-if="teachers.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -64,9 +61,9 @@
 <script lang="ts" setup>
 import { formatNumber } from 'valleyed'
 import { computed, ref } from 'vue'
-import { ClassLesson, ClassEntity, CurriculumView } from '@modules/organizations'
+import { ClassLesson, ClassEntity } from '@modules/organizations'
 import { useUsersInList } from '@app/composables/users/users'
-import { useLessonCurriculum } from '@app/composables/organizations/lessons'
+import { useCurriculumViewToggle, useLessonCurriculum } from '@app/composables/organizations/lessons'
 
 const props = defineProps<{
 	close: () => void
@@ -77,14 +74,8 @@ const props = defineProps<{
 const activeLessonIndex = ref(props.classInst.lessons.findIndex((lesson) => lesson.id === props.lesson.id) ?? 0)
 const activeLesson = computed(() => props.classInst.lessons[activeLessonIndex.value])
 const selectedTab = ref('curriculum')
-const curriculum_view = ref(CurriculumView.list)
-const toggleView = () => {
-	if (curriculum_view.value === CurriculumView.list) {
-		curriculum_view.value = CurriculumView.grid
-	} else {
-		curriculum_view.value = CurriculumView.list
-	}
-}
+
+const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 
 const { curriculum } = useLessonCurriculum(
 	props.classInst,

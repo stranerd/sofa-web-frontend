@@ -8,28 +8,20 @@
 			<SofaNormalText color="text-primaryPurple" class="text-[14px] font-700 pb-2 h-full border-b-2 border-primaryPurple">
 				{{ lesson.title }}
 			</SofaNormalText>
-			<SofaIcon v-if="curriculum_view === CurriculumView.grid" name="list_view" class="h-[20px] ml-auto" @click="toggleView" />
-			<SofaIcon v-else name="grid_view" class="h-[20px] ml-auto" @click="toggleView" />
+			<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 		</div>
-		<LessonCurriculum :classInst="classInst" :view="curriculum_view" :curriculum="curriculum" :isModal="true" />
+		<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" :isModal="true" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { ClassLesson, ClassEntity, CurriculumView } from '@modules/organizations'
+import { ClassLesson, ClassEntity } from '@modules/organizations'
+import { useCurriculumViewToggle } from '@app/composables/organizations/lessons'
 defineProps<{
 	close: () => void
 	lesson: ClassLesson
 	classInst: ClassEntity
 	curriculum: ClassLesson['curriculum']
 }>()
-const curriculum_view = ref(CurriculumView.list)
-const toggleView = () => {
-	if (curriculum_view.value === CurriculumView.list) {
-		curriculum_view.value = CurriculumView.grid
-	} else {
-		curriculum_view.value = CurriculumView.list
-	}
-}
+const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 </script>

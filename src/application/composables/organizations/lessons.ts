@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { useFilesInList } from '../study/files-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useSchedulesInList } from './schedules'
-import { ClassEntity, ClassLesson, ClassLessonable, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
+import {
+	ClassEntity,
+	ClassLesson,
+	ClassLessonable,
+	CurriculumView,
+	LessonCurriculumFactory,
+	LessonFactory,
+	LessonsUseCases,
+} from '@modules/organizations'
 import { QuizModes } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
@@ -25,6 +33,16 @@ export const useCreateLesson = (organizationId: string, classId: string) => {
 		error,
 		createLesson,
 	}
+}
+
+export const useCurriculumViewToggle = () => {
+	const curriculumView = ref(CurriculumView.list)
+	const curriculumViewIcon = computed((): IconName => (curriculumView.value === CurriculumView.list ? 'grid_view' : 'list_view'))
+	const toggleView = () => {
+		curriculumView.value = curriculumView.value === CurriculumView.list ? CurriculumView.grid : CurriculumView.list
+	}
+
+	return { curriculumView, curriculumViewIcon, toggleView }
 }
 
 export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<ClassLesson['curriculum']>) => {

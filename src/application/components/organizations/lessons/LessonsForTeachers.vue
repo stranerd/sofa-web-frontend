@@ -57,7 +57,7 @@
 			<div v-else class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
 				<LessonCurriculum
 					:classInst="classInst"
-					:view="curriculum_view"
+					:view="curriculumView"
 					:curriculum="factory.factories"
 					:factory="canEditLesson ? factory : undefined" />
 				<SofaButton v-if="canEditLesson" bgColor="bg-primaryPurple" class="py-3 mdlg:py-4" @click="factory.add">
@@ -81,8 +81,8 @@
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useUpdateCurriculum } from '@app/composables/organizations/lessons'
-import { ClassEntity, CurriculumView } from '@modules/organizations'
+import { useCurriculumViewToggle, useUpdateCurriculum } from '@app/composables/organizations/lessons'
+import { ClassEntity } from '@modules/organizations'
 import { useModals } from '@app/composables/core/modals'
 
 const props = defineProps<{
@@ -93,7 +93,7 @@ const { id } = useAuth()
 const selectedLesson = ref(props.classInst.lessons.at(0))
 const canEditLesson = computed(() => selectedLesson.value?.users.teachers.includes(id.value))
 const showLessonCurriculum = ref(false)
-const curriculum_view = ref(CurriculumView.list)
+const { curriculumView } = useCurriculumViewToggle()
 const { factory } = useUpdateCurriculum(props.classInst, selectedLesson)
 
 watch(

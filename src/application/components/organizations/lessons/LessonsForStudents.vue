@@ -53,15 +53,10 @@
 							{{ lesson.title }}
 						</SofaButton>
 					</div>
-					<SofaIcon
-						v-if="curriculum_view === CurriculumView.grid"
-						name="list_view"
-						class="h-[20px] ml-auto"
-						@click="toggleView" />
-					<SofaIcon v-else name="grid_view" class="h-[20px] ml-auto" @click="toggleView" />
+					<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 				</div>
 				<div class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
-					<LessonCurriculum :classInst="classInst" :view="curriculum_view" :curriculum="curriculum" />
+					<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" />
 				</div>
 			</div>
 		</div>
@@ -71,8 +66,8 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useLessonCurriculum } from '@app/composables/organizations/lessons'
-import { ClassEntity, CurriculumView } from '@modules/organizations'
+import { useCurriculumViewToggle, useLessonCurriculum } from '@app/composables/organizations/lessons'
+import { ClassEntity } from '@modules/organizations'
 
 const props = defineProps<{
 	classInst: ClassEntity
@@ -85,16 +80,9 @@ const { id: userId } = useAuth()
 const showLessonCurriculum = ref(false)
 const lessons = computed(() => props.classInst.lessons.filter((l) => l.users.students.includes(userId.value)))
 const selectedLesson = ref(lessons.value.at(0))
-const curriculum_view = ref(CurriculumView.list)
 const selectedLessonCurriculum = computed(() => selectedLesson.value?.curriculum ?? [])
 const { curriculum } = useLessonCurriculum(props.classInst, selectedLessonCurriculum)
-const toggleView = () => {
-	if (curriculum_view.value === CurriculumView.list) {
-		curriculum_view.value = CurriculumView.grid
-	} else {
-		curriculum_view.value = CurriculumView.list
-	}
-}
+const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 watch(lessons, () => {
 	showLessonCurriculum.value = !!lessons.value.length
 })
