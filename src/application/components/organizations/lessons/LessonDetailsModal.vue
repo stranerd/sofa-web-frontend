@@ -1,10 +1,10 @@
 <template>
 	<div class="p-4 flex flex-col gap-4">
 		<div class="flex w-full items-center gap-2 justify-between">
-			<SofaHeaderText class="!font-bold !text-deepGray" :content="lesson.title" />
+			<SofaHeaderText class="!font-bold !text-deepGray" :content="activeLesson.title" />
 			<div class="flex items-center gap-4">
-				<SofaIcon class="h-[16px]" name="back-arrow" customClass="!fill-black" />
-				<SofaIcon class="h-[16px]" name="arrow-right-white" customClass="!fill-black" />
+				<SofaIcon class="h-[16px]" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
+				<SofaIcon class="h-[16px]" name="arrow-right-white" :class="canNext ? 'fill-black' : 'fill-grayColor'" @click="next" />
 				<div>
 					<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 				</div>
@@ -14,8 +14,8 @@
 			<SofaNormalText
 				v-for="tab in [
 					{ title: 'Curriculum', key: 'curriculum' },
-					{ title: `Teachers ${formatNumber(lesson.users.teachers.length)}`, key: 'teachers' },
-					{ title: `Students ${formatNumber(lesson.users.students.length)}`, key: 'students' },
+					{ title: `Teachers ${formatNumber(activeLesson.users.teachers.length)}`, key: 'teachers' },
+					{ title: `Students ${formatNumber(activeLesson.users.students.length)}`, key: 'students' },
 				]"
 				:key="tab.key"
 				as="a"
@@ -74,6 +74,8 @@ const props = defineProps<{
 	classInst: ClassEntity
 }>()
 
+const activeLessonIndex = ref(props.classInst.lessons.findIndex((lesson) => lesson.id === props.lesson.id) ?? 0)
+const activeLesson = computed(() => props.classInst.lessons[activeLessonIndex.value])
 const selectedTab = ref('curriculum')
 const curriculum_view = ref(CurriculumView.list)
 const toggleView = () => {
@@ -89,6 +91,15 @@ const { curriculum } = useLessonCurriculum(
 	computed(() => props.lesson.curriculum),
 )
 
-const { users: students } = useUsersInList(computed(() => props.lesson.users.students))
-const { users: teachers } = useUsersInList(computed(() => props.lesson.users.teachers))
+const { users: students } = useUsersInList(computed(() => activeLesson.value.users.students))
+const { users: teachers } = useUsersInList(computed(() => activeLesson.value.users.teachers))
+
+const canNext = computed(() => activeLessonIndex.value < props.classInst.lessons.length - 1)
+const canPrev = computed(() => activeLessonIndex.value > 0)
+const next = () => {
+	if (canNext.value) activeLessonIndex.value++
+}
+const prev = () => {
+	if (canPrev.value) activeLessonIndex.value--
+}
 </script>
