@@ -46,61 +46,43 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { PropType, computed, defineComponent, ref } from 'vue'
-import { useRoute } from 'vue-router'
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { ClassEntity, ClassLesson, MemberEntity } from '@modules/organizations'
+import { ClassEntity, ClassLesson } from '@modules/organizations'
 
-export default defineComponent({
-	props: {
-		classInst: {
-			type: ClassEntity,
-			required: true,
-		},
-		teachers: {
-			type: Array as PropType<MemberEntity[]>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const { id: userId } = useAuth()
-		const route = useRoute()
+const props = defineProps<{
+	classInst: ClassEntity
+}>()
 
-		const organizationId = route.params.organizationId as string
-		const classId = route.params.classId as string
-		const searchQuery = ref('')
-		const emptyLessonContent = {
-			imageURL: '/images/no-lessons.png',
-			title: 'Getting started with lessons',
-			contents: [
-				'Comprehensive subject based curriculum.',
-				'Assign teachers to manage their specific subjects.',
-				'Contains live teaching sessions and study materials.',
-				'Students choose how may lessons to take in a class.',
-			],
-		}
+const { id: userId } = useAuth()
 
-		const filteredLessons = computed(() => {
-			if (searchQuery.value)
-				return props.classInst.lessons.filter((lesson) => lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()))
-			else return props.classInst.lessons
-		})
+const searchQuery = ref('')
+const emptyLessonContent = {
+	imageURL: '/images/no-lessons.png',
+	title: 'Getting started with lessons',
+	contents: [
+		'Comprehensive subject based curriculum.',
+		'Assign teachers to manage their specific subjects.',
+		'Contains live teaching sessions and study materials.',
+		'Students choose how may lessons to take in a class.',
+	],
+}
 
-		const openLessonDetails = (val: ClassLesson) => {
-			useModals().organizations.lessonDetails.open({
-				organizationId,
-				classId,
-				lesson: val,
-				teachers: props.teachers,
-			})
-		}
-		const openCreateClassModal = () => {
-			useModals().organizations.createLesson.open({ organizationId, classId, teachers: props.teachers })
-		}
-
-		return { openLessonDetails, searchQuery, openCreateClassModal, emptyLessonContent, filteredLessons, userId }
-	},
+const filteredLessons = computed(() => {
+	if (searchQuery.value)
+		return props.classInst.lessons.filter((lesson) => lesson.title.toLowerCase().includes(searchQuery.value.toLowerCase()))
+	else return props.classInst.lessons
 })
+
+const openLessonDetails = (lesson: ClassLesson) => {
+	useModals().organizations.lessonDetails.open({
+		classInst: props.classInst,
+		lesson,
+	})
+}
+const openCreateClassModal = () => {
+	useModals().organizations.createLesson.open({ classInst: props.classInst })
+}
 </script>

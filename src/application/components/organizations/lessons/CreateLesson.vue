@@ -45,18 +45,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCreateLesson } from '@app/composables/organizations/lessons'
-import { MemberEntity } from '@modules/organizations'
+import { ClassEntity } from '@modules/organizations'
+import { useOrganizationMembers } from '@app/composables/organizations/members'
 
 const props = defineProps<{
-	organizationId: string
-	classId: string
-	teachers: MemberEntity[]
+	classInst: ClassEntity
 	close: () => void
 }>()
 
-const { factory, createLesson } = useCreateLesson(props.organizationId, props.classId)
+const { factory, createLesson } = useCreateLesson(props.classInst.organizationId, props.classInst.id)
+
+const { teachers: orgTeachers } = useOrganizationMembers(props.classInst.organizationId)
 
 const teachers = computed(() =>
-	props.teachers.filter((t) => !!t.user).map((teacher) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.publicName || '' })),
+	orgTeachers.value
+		.filter((t) => !!t.user)
+		.map((teacher) => ({ key: teacher.user?.id || '', value: teacher.user?.bio.publicName || '' })),
 )
 </script>

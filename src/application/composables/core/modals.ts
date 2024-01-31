@@ -10,7 +10,7 @@ import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCar
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLesson.vue'
-import LessonDetails from '@app/components/organizations/lessons/LessonDetails.vue'
+import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
@@ -21,6 +21,7 @@ import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
+import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -45,6 +46,7 @@ export const useModals = () => ({
 		lessonDetails: { component: LessonDetails },
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
+		previewCurriculum: { component: PreviewCurriculum },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
