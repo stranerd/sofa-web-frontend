@@ -7,6 +7,7 @@ const asyncStore: Record<string, { called: Ref<boolean> } & ReturnType<typeof us
 type UseAsyncFnOptions<T extends (...args: any[]) => any> = {
 	hideLoading?: boolean
 	hideError?: boolean
+	force?: boolean
 	pre?: (...args: Parameters<T>) => boolean | Promise<boolean>
 	key?: string
 }
@@ -16,7 +17,7 @@ export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Parti
 	const { setError, error, setLoading, loading, called } = asyncStore[key]
 	const asyncFn = async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>> | undefined> => {
 		let result: Awaited<ReturnType<T>> | undefined
-		if (loading.value) return result
+		if (loading.value && !opts.force) return result
 		if (opts.pre && !(await opts.pre(...args))) return result
 		try {
 			await setError('', opts.hideError)
@@ -36,7 +37,7 @@ const store: Record<
 	string,
 	{
 		items: { id: string }[]
-	} & ReturnType<typeof useAsyncFn<() => Promise<void>>>
+	}
 > = {}
 
 export type Refable<T> = Ref<T> | ComputedRef<T>
@@ -49,13 +50,19 @@ export const useItemsInList = <T extends { id: string }>(
 ) => {
 	store[key] ??= {
 		items: reactive([]),
-		...useAsyncFn(async () => {
+	}
+
+	const { asyncFn } = useAsyncFn(
+		async () => {
 			const notFetched = [...new Set(unfetched.value)]
 			if (!notFetched.length) return
 			const items = await fetchItems(notFetched)
 			items.forEach((item) => addToList(item))
-		}),
-	}
+		},
+		{
+			force: true,
+		},
+	)
 
 	const allItems = computed(() => [...items.value, ...store[key].items])
 
@@ -63,7 +70,7 @@ export const useItemsInList = <T extends { id: string }>(
 
 	const unfetched = computed(() => ids.value.filter((id) => !filteredItems.value.find((q) => q.id === id)))
 
-	watch(ids, store[key].asyncFn, { immediate: true })
+	watch(ids, asyncFn, { immediate: true })
 
 	const addToList = (...items: T[]) => {
 		items.forEach((item) => {
