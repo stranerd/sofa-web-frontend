@@ -11,10 +11,14 @@
 				</div>
 				<div class="flex items-center gap-2">
 					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-					<SofaIcon class="h-[8px]" name="chevron-down" @click="toggleSection(sectionIndex)" />
+					<SofaIcon
+						class="h-[8px]"
+						name="chevron-down"
+						:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
+						@click="toggleSection(sectionIndex)" />
 				</div>
 			</div>
-			<div v-if="isSectionVisible(sectionIndex)" class="flex flex-col gap-4 my-5">
+			<div v-if="expandedSections.has(sectionIndex)" class="flex flex-col gap-4 my-5">
 				<div
 					v-for="(item, itemIndex) in section.items"
 					:key="itemIndex"
@@ -123,8 +127,5 @@ const expandedSections = ref(new Set<number>([0]))
 function toggleSection(index: number) {
 	if (expandedSections.value.has(index)) expandedSections.value.delete(index)
 	else expandedSections.value.add(index)
-}
-function isSectionVisible(index: number) {
-	return expandedSections.value.has(index)
 }
 </script>

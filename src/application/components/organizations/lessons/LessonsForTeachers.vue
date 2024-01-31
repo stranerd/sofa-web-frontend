@@ -60,11 +60,11 @@
 					:view="CurriculumView.list"
 					:curriculum="factory.factories"
 					:factory="canEditLesson ? factory : undefined" />
-				<SofaButton bgColor="bg-primaryPurple" class="py-3 mdlg:py-4">
+				<SofaButton v-if="canEditLesson" bgColor="bg-primaryPurple" class="py-3 mdlg:py-4" @click="factory.add">
 					<SofaIcon name="box-add-white" class="h-[16px]" />
 					Add section
 				</SofaButton>
-				<div class="grid mdlg:hidden grid-cols-2 gap-3">
+				<div v-if="canEditLesson" class="grid mdlg:hidden grid-cols-2 gap-3">
 					<SofaButton
 						class="border border-primaryBlue !text-primaryBlue bg-transparent"
 						padding="py-2 px-4"
