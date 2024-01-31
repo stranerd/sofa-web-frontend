@@ -14,8 +14,8 @@
 			<SofaNormalText
 				v-for="tab in [
 					{ title: 'Curriculum', key: 'curriculum' },
-					{ title: `Teachers ${lesson.users.teachers.length}`, key: 'teachers' },
-					{ title: `Students ${lesson.users.students.length}`, key: 'students' },
+					{ title: `Teachers ${formatNumber(lesson.users.teachers.length)}`, key: 'teachers' },
+					{ title: `Students ${formatNumber(lesson.users.students.length)}`, key: 'students' },
 				]"
 				:key="tab.key"
 				as="a"
@@ -23,6 +23,8 @@
 				:content="tab.title"
 				:class="selectedTab === tab.key ? 'text-primaryPurple border-primaryPurple' : 'text-deepGray'"
 				@click="selectedTab = tab.key" />
+			<SofaIcon v-if="curriculum_view === CurriculumView.grid" name="list_view" class="h-[20px] ml-auto" @click="toggleView" />
+			<SofaIcon v-else name="grid_view" class="h-[20px] ml-auto" @click="toggleView" />
 		</div>
 		<div v-if="selectedTab === 'curriculum'">
 			<div v-if="curriculum.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -32,7 +34,7 @@
 					{{ (teachers.at(0)?.publicName ?? 'Teacher') + ' has not set the curriculum yet' }}
 				</SofaNormalText>
 			</div>
-			<LessonCurriculum v-else :classInst="classInst" :view="CurriculumView.list" :curriculum="curriculum" />
+			<LessonCurriculum v-else :classInst="classInst" :view="curriculum_view" :curriculum="curriculum" />
 		</div>
 		<div v-if="selectedTab === 'teachers'" class="py-4 flex flex-col gap-4">
 			<div v-if="teachers.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
@@ -40,7 +42,7 @@
 				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center" content="No Teachers" />
 			</div>
-			<div v-for="teacher in teachers" :key="teacher.id" class="flex items-center gap-3">
+			<div v-for="teacher in teachers" v-else :key="teacher.id" class="flex items-center gap-3">
 				<SofaAvatar :photoUrl="teacher.bio.photo?.link" customClass="!w-[32px] !h-[32px]" />
 				<SofaNormalText color="text-deepGray">{{ teacher.publicName }}</SofaNormalText>
 			</div>
@@ -51,15 +53,16 @@
 				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center" content="No Students" />
 			</div>
-			<div v-for="i in 10" :key="i" class="flex items-center gap-3">
-				<SofaAvatar photoUrl="/images/freeman.png" customClass="!w-[32px] !h-[32px]" />
-				<SofaNormalText color="text-deepGray">{{ 'Adedeji Tewogbade' }}</SofaNormalText>
+			<div v-for="student in students" v-else :key="student.id" class="flex items-center gap-3">
+				<SofaAvatar :photoUrl="student.bio.photo?.link" customClass="!w-[32px] !h-[32px]" />
+				<SofaNormalText color="text-deepGray">{{ student.publicName }}</SofaNormalText>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from 'valleyed'
 import { computed, ref } from 'vue'
 import { ClassLesson, ClassEntity, CurriculumView } from '@modules/organizations'
 import { useUsersInList } from '@app/composables/users/users'
@@ -72,6 +75,14 @@ const props = defineProps<{
 }>()
 
 const selectedTab = ref('curriculum')
+const curriculum_view = ref(CurriculumView.list)
+const toggleView = () => {
+	if (curriculum_view.value === CurriculumView.list) {
+		curriculum_view.value = CurriculumView.grid
+	} else {
+		curriculum_view.value = CurriculumView.list
+	}
+}
 
 const { curriculum } = useLessonCurriculum(
 	props.classInst,

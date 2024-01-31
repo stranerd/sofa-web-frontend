@@ -19,19 +19,19 @@
 		<div class="flex flex-col gap-4 mdlg:flex-row mdlg:items-center justify-between">
 			<SofaTextField
 				customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
-				type="text"
+				type="date"
 				placeholder="Date"
 				borderColor="border-transparent" />
 			<div class="flex items-center gap-4 justify-between">
 				<SofaTextField
 					customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
-					type="text"
+					type="time"
 					placeholder="From"
 					borderColor="border-transparent" />
 				<SofaIcon class="h-[16px]" name="arrow-right-white" customClass="!fill-darkLightGray" />
 				<SofaTextField
 					customClass="w-full mdlg:!w-[200px] rounded-custom !bg-lightGray"
-					type="text"
+					type="time"
 					placeholder="To"
 					borderColor="border-transparent" />
 			</div>

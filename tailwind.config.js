@@ -33,10 +33,10 @@ export default {
 			},
 		},
 		screens: {
-			sm: '360px',
+			sm: '420px',
 			md: '768px',
 			mdlg: '1000px',
-			lg: '1580px',
+			lg: '1280px',
 		},
 		fontSize: {
 			xs: '.73rem',

@@ -38,22 +38,30 @@
 			<div v-else>
 				<SofaHeaderText content="Lessons" customClass="hidden mdlg:block" />
 				<div class="hidden mdlg:block h-[1px] w-full bg-lightGray" />
-				<div class="flex flex-wrap items-center gap-3 mdlg:mt-6">
-					<SofaButton
-						v-for="lesson in lessons"
-						:key="lesson.id"
-						:class="
-							selectedLesson?.id === lesson.id
-								? 'bg-primaryPurple !text-white !shadow-none'
-								: 'bg-white border border-darkLightGray !text-deepGray !shadow-none'
-						"
-						padding="py-3 px-4"
-						@click="selectedLesson = lesson">
-						{{ lesson.title }}
-					</SofaButton>
+				<div class="flex items-center justify-between mdlg:mt-6">
+					<div class="flex flex-wrap items-center gap-3">
+						<SofaButton
+							v-for="lesson in lessons"
+							:key="lesson.id"
+							:class="
+								selectedLesson?.id === lesson.id
+									? 'bg-primaryPurple !text-white !shadow-none'
+									: 'bg-white border border-darkLightGray !text-deepGray !shadow-none'
+							"
+							padding="py-3 px-4"
+							@click="selectedLesson = lesson">
+							{{ lesson.title }}
+						</SofaButton>
+					</div>
+					<SofaIcon
+						v-if="curriculum_view === CurriculumView.grid"
+						name="list_view"
+						class="h-[20px] ml-auto"
+						@click="toggleView" />
+					<SofaIcon v-else name="grid_view" class="h-[20px] ml-auto" @click="toggleView" />
 				</div>
 				<div class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
-					<LessonCurriculum :classInst="classInst" :view="CurriculumView.list" :curriculum="curriculum" />
+					<LessonCurriculum :classInst="classInst" :view="curriculum_view" :curriculum="curriculum" />
 				</div>
 			</div>
 		</div>
@@ -77,8 +85,16 @@ const { id: userId } = useAuth()
 const showLessonCurriculum = ref(false)
 const lessons = computed(() => props.classInst.lessons.filter((l) => l.users.students.includes(userId.value)))
 const selectedLesson = ref(lessons.value.at(0))
+const curriculum_view = ref(CurriculumView.list)
 const selectedLessonCurriculum = computed(() => selectedLesson.value?.curriculum ?? [])
 const { curriculum } = useLessonCurriculum(props.classInst, selectedLessonCurriculum)
+const toggleView = () => {
+	if (curriculum_view.value === CurriculumView.list) {
+		curriculum_view.value = CurriculumView.grid
+	} else {
+		curriculum_view.value = CurriculumView.list
+	}
+}
 watch(lessons, () => {
 	showLessonCurriculum.value = !!lessons.value.length
 })

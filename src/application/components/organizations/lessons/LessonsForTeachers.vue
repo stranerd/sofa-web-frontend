@@ -57,7 +57,7 @@
 			<div v-else class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
 				<LessonCurriculum
 					:classInst="classInst"
-					:view="CurriculumView.list"
+					:view="curriculum_view"
 					:curriculum="factory.factories"
 					:factory="canEditLesson ? factory : undefined" />
 				<SofaButton v-if="canEditLesson" bgColor="bg-primaryPurple" class="py-3 mdlg:py-4" @click="factory.add">
@@ -93,6 +93,7 @@ const { id } = useAuth()
 const selectedLesson = ref(props.classInst.lessons.at(0))
 const canEditLesson = computed(() => selectedLesson.value?.users.teachers.includes(id.value))
 const showLessonCurriculum = ref(false)
+const curriculum_view = ref(CurriculumView.list)
 const { factory } = useUpdateCurriculum(props.classInst, selectedLesson)
 
 watch(
