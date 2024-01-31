@@ -18,18 +18,47 @@
 						@click="toggleSection(sectionIndex)" />
 				</div>
 			</div>
-			<div v-if="expandedSections.has(sectionIndex)" class="flex flex-col gap-4 my-5">
+			<div
+				v-if="expandedSections.has(sectionIndex)"
+				class="gap-4 my-5"
+				:class="
+					view === CurriculumView.grid
+						? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 dl:grid-cols-3'
+						: 'grid grid-cols-1'
+				">
 				<div
 					v-for="(item, itemIndex) in section.items"
 					:key="itemIndex"
-					class="flex flex-col mdlg:flex-row mdlg:items-center gap-2 mdlg:gap-4">
+					class="flex gap-2 mdlg:gap-4"
+					:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
 					<div class="flex items-center gap-2 flex-1">
 						<SofaIcon :name="getItemIcon(item)" class="h-[16px]" />
 						<SofaNormalText color="text-deepGray" :content="getItemTitle(item)" class="truncate" />
 						<SofaBadge v-if="showLiveBadgeForItem(item)" class="flex-shrink-0"> LIVE </SofaBadge>
 					</div>
+					<div v-if="view === CurriculumView.grid">
+						<SofaImageLoader
+							v-if="item.type !== ClassLessonable.schedule"
+							:photoUrl="getItemImagePlaceholder(item)"
+							customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom">
+						</SofaImageLoader>
+						<div v-else>
+							<SofaImageLoader
+								v-if="!item.schedule.isOngoing"
+								photoUrl="/images/default.png"
+								customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
+							<div
+								v-else
+								class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
+								<SofaHeaderText content="LIVE" customClass="!uppercase !text-white" />
+							</div>
+						</div>
+					</div>
 					<div class="flex items-center gap-2 shrink-0">
-						<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" />
+						<div class="flex items-center gap-1">
+							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px]" name="info" customClass="!fill-grayColor" />
+							<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" customClass="!capitalize" />
+						</div>
 						<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
 						<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" />
 					</div>
@@ -99,6 +128,11 @@ const getItemInfo = (item: ExtendedCurriculumItem) => {
 	if (item.type == ClassLessonable.quiz) return `${item.quizMode} . ${item.quiz.questions.length} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
 	if (item.type == ClassLessonable.schedule) return `${formatTime(item.schedule.time.start)} - ${formatTime(item.schedule.time.end)}`
+}
+
+const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
+	if (item.type == ClassLessonable.quiz) return item.quiz.photo?.link || '/images/default.png'
+	if (item.type == ClassLessonable.file) return item.file.photo?.link || '/images/default.png'
 }
 
 const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.isOngoing

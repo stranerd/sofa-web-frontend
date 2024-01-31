@@ -33,9 +33,10 @@ export default {
 			},
 		},
 		screens: {
-			sm: '360px',
+			sm: '420px',
 			md: '768px',
 			mdlg: '1000px',
+			dl: '1150px',
 			lg: '1580px',
 		},
 		fontSize: {
