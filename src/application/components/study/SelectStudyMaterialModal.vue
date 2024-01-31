@@ -12,7 +12,8 @@
 			<template v-for="item in newMaterialOptions" :key="item.name">
 				<a
 					v-if="item.type == 'quiz'"
-					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
+					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center"
+					@click="selectQuiz(item)">
 					<SofaIcon :name="item.icon" customClass="h-[22px]!fill-black" />
 					<SofaNormalText customClass="!font-bold">
 						{{ item.name }}
@@ -96,6 +97,13 @@ const uploadFile = (options: (typeof newMaterialOptions)[number], file: Uploaded
 		file,
 		accept: options.extras.accept,
 		afterSubmit: (file) => select({ file }),
+	})
+}
+
+const selectQuiz = (options: (typeof newMaterialOptions)[number]) => {
+	if (options.type !== 'quiz') return
+	useModals().study.selectQuiz.open({
+		onSelected: (quiz) => select({ quiz, mode: options.extras.mode }),
 	})
 }
 </script>

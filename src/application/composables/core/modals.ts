@@ -19,6 +19,7 @@ import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
 import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
+import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
@@ -57,6 +58,7 @@ export const useModals = () => ({
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
 		selectStudyMaterial: { component: SelectStudyMaterial, modalArgs: { closeOnClickOutside: true } },
 		createFile: { component: CreateFile },
+		selectQuiz: { component: SelectQuiz },
 	}),
 	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },
