@@ -17,6 +17,7 @@ import CreateSchedule from '@app/components/organizations/schedules/CreateSchedu
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
 import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
+import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
@@ -55,6 +56,7 @@ export const useModals = () => ({
 		manageAccess: { component: ManageAccess },
 		saveToFolder: { component: SaveToFolder, modalArgs: { closeOnClickOutside: true } },
 		selectStudyMaterial: { component: SelectStudyMaterial, modalArgs: { closeOnClickOutside: true } },
+		createFile: { component: CreateFile },
 	}),
 	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },

@@ -5,78 +5,45 @@
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
-			<SofaNormalText class="!font-bold" content="Add live schedule" />
+			<SofaNormalText class="!font-bold" content="Add study material" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 		<div class="w-full grid grid-cols-2 mdlg:grid-cols-3 place-items-center h-full md:!gap-6 !gap-3">
-			<template v-for="(item, index) in newMaterialOptions" :key="index">
+			<template v-for="item in newMaterialOptions" :key="item.name">
 				<a
 					v-if="item.type == 'quiz'"
 					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
-					<SofaIcon :name="item.icon" customClass="h-[22px]!fill-black"> </SofaIcon>
+					<SofaIcon :name="item.icon" customClass="h-[22px]!fill-black" />
 					<SofaNormalText customClass="!font-bold">
 						{{ item.name }}
 					</SofaNormalText>
 				</a>
 
-				<SofaFileAttachment
-					v-if="item.type == 'image'"
-					v-model="imageFile"
+				<SofaFileInput
+					v-if="item.type === 'file'"
 					:isWrapper="true"
-					customClass="flex flex-col"
-					accept="image/png, image/gif, image/jpeg">
+					class="flex flex-col"
+					:accept="item.extras.accept"
+					@update:modelValue="(media) => uploadFile(item, media)">
 					<template #content>
 						<a
 							class="w-full rounded-custom md:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
-							<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black"> </SofaIcon>
+							<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black" />
 							<SofaNormalText customClass="!font-bold">
 								{{ item.name }}
 							</SofaNormalText>
 						</a>
 					</template>
-				</SofaFileAttachment>
-
-				<SofaFileAttachment
-					v-if="item.type == 'document'"
-					v-model="documentFile"
-					:isWrapper="true"
-					customClass="flex flex-col"
-					accept="application/pdf">
-					<template #content>
-						<a
-							class="w-full rounded-custom md:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
-							<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black"> </SofaIcon>
-							<SofaNormalText customClass="!font-bold">
-								{{ item.name }}
-							</SofaNormalText>
-						</a>
-					</template>
-				</SofaFileAttachment>
-
-				<SofaFileAttachment
-					v-if="item.type == 'video'"
-					v-model="videoFile"
-					:isWrapper="true"
-					customClass="flex flex-col"
-					accept="video/mp4">
-					<template #content>
-						<a
-							class="w-full rounded-custom md:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
-							<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black"> </SofaIcon>
-							<SofaNormalText customClass="!font-bold">
-								{{ item.name }}
-							</SofaNormalText>
-						</a>
-					</template>
-				</SofaFileAttachment>
+				</SofaFileInput>
 			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { FileEntity, QuizEntity, QuizModes } from '@modules/study'
+import { useModals } from '@app/composables/core/modals'
+import { UploadedFile } from '@modules/core'
+import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
@@ -88,38 +55,47 @@ const select = (selected: { file: FileEntity } | { quiz: QuizEntity; mode: QuizM
 	props.close()
 }
 
-select
-const newMaterialOptions: { name: string; type: string; icon: IconName }[] = [
+const newMaterialOptions = [
 	{
 		name: 'Document',
-		type: 'document',
+		type: 'file',
+		extras: { type: FileType.document, accept: 'application/pdf' },
 		icon: 'document-course',
 	},
 	{
 		name: 'Image',
-		type: 'image',
+		type: 'file',
+		extras: { type: FileType.image, accept: 'image/*' },
 		icon: 'image-course',
 	},
 
 	{
 		name: 'Video',
-		type: 'video',
+		type: 'file',
+		extras: { type: FileType.video, accept: 'video/*' },
 		icon: 'video-course',
 	},
 
 	{
 		name: 'Practice',
 		type: 'quiz',
+		extras: { mode: QuizModes.practice },
 		icon: 'open-notebook',
 	},
 	{
 		name: 'Test',
 		type: 'quiz',
+		extras: { mode: QuizModes.test },
 		icon: 'document-text',
 	},
-]
+] as const
 
-const videoFile = ref()
-const imageFile = ref()
-const documentFile = ref()
+const uploadFile = (options: (typeof newMaterialOptions)[number], file: UploadedFile) => {
+	if (options.type !== 'file' || !file) return
+	useModals().study.createFile.open({
+		file,
+		accept: options.extras.accept,
+		afterSubmit: (file) => select({ file }),
+	})
+}
 </script>

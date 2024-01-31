@@ -15,7 +15,7 @@ export const useCreateFile = () => {
 		return file
 	})
 
-	return { createFile, error, loading }
+	return { factory, createFile, error, loading }
 }
 
 export const useUpdateFile = (file: FileEntity) => {
