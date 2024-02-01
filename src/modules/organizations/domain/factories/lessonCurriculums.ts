@@ -29,7 +29,7 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 	}
 
 	constructor() {
-		super({ label: '', items: [] })
+		super({ label: 'Untitled', items: [] })
 	}
 
 	get label() {
