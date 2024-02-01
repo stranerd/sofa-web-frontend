@@ -82,6 +82,8 @@
 								:lesson="lesson"
 								:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
 								:isStudent="false"
+								:classInst="currentClass"
+								:userId="userId"
 								@click="selectedLesson = lesson" />
 						</div>
 					</div>

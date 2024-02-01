@@ -135,3 +135,14 @@ export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<Clas
 		updateCurriculum,
 	}
 }
+
+export const useJoinLesson = () => {
+	const {
+		asyncFn: joinLesson,
+		loading,
+		error,
+	} = useAsyncFn(async (classInst: ClassEntity, lessonId: string, join: boolean) => {
+		await LessonsUseCases.join(classInst.organizationId, classInst.id, lessonId, join)
+	})
+	return { joinLesson, loading, error }
+}
