@@ -42,14 +42,19 @@
 					<img :src="emptyLessonContent.imageURL" class="w-[144px] h-[144px]" />
 				</div>
 				<div class="flex flex-col items-start gap-1">
-					<SofaHeaderText :content="`Set up your ${selectedLesson.title} curriculum`" size="xl" />
+					<SofaHeaderText :content="`Set up ${selectedLesson.title} curriculum`" size="xl" />
 					<div class="flex flex-col gap-2 py-2">
 						<div v-for="(content, index) in emptyLessonContent.contents" :key="index" class="flex mdlg:items-center gap-1">
 							<SofaIcon class="h-[16px]" name="checkmark-circle" />
 							<SofaNormalText :content="content" color="text-grayColor" />
 						</div>
 					</div>
-					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6" @click="showLessonCurriculum = true">
+					<SofaButton
+						v-if="canEditLesson"
+						bgColor="bg-primaryBlue"
+						textColor="text-white"
+						padding="py-4 px-6"
+						@click="showLessonCurriculum = true">
 						Get started
 					</SofaButton>
 				</div>

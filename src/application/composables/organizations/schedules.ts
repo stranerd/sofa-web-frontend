@@ -3,6 +3,7 @@ import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
+import { Logic } from 'sofa-logic'
 
 const store = {} as Record<
 	string,
@@ -133,4 +134,27 @@ export const useSchedulesInList = (organizationId: string, classId: string, ids:
 	})
 
 	return { schedules }
+}
+
+export const useDeleteSchedule = () => {
+	const {
+		asyncFn: deleteSchedule,
+		loading,
+		error,
+	} = useAsyncFn(
+		async (schedule: ScheduleEntity) => {
+			await SchedulesUseCases.delete(schedule)
+			return true
+		},
+		{
+			pre: async () =>
+				await Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: 'This action is permanent.',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
+
+	return { deleteSchedule, error, loading }
 }

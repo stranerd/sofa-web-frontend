@@ -46,11 +46,11 @@
 					</div>
 					<div class="flex items-center gap-2 shrink-0">
 						<div class="flex items-center gap-1">
-							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px]" name="info" customClass="!fill-grayColor" />
-							<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" customClass="!capitalize" />
+							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
+							<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" class="!capitalize" />
 						</div>
 						<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-						<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" />
+						<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click="removeItem(sectionIndex, itemIndex, item)" />
 					</div>
 				</div>
 				<a v-if="canEdit" class="flex items-center gap-2" @click="addSchedule(sectionIndex)">
@@ -68,11 +68,14 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
+import { formatNumber } from 'valleyed'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
 import { FileType } from '@modules/study'
 import { formatTime } from '@utils/dates'
+import { useDeleteFile } from '@app/composables/study/files'
+import { useDeleteSchedule } from '@app/composables/organizations/schedules'
 
 const props = withDefaults(
 	defineProps<{
@@ -92,6 +95,8 @@ const { curriculum } = useLessonCurriculum(
 	props.classInst,
 	computed(() => props.curriculum),
 )
+const { deleteFile } = useDeleteFile()
+const { deleteSchedule } = useDeleteSchedule()
 
 const canEdit = computed(() => props.factory !== undefined)
 
@@ -115,7 +120,7 @@ const getItemIcon = (item: ExtendedCurriculumItem) => {
 }
 
 const getItemInfo = (item: ExtendedCurriculumItem) => {
-	if (item.type == ClassLessonable.quiz) return `${item.quizMode} . ${item.quiz.questions.length} questions`
+	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
 	if (item.type == ClassLessonable.schedule) return `${formatTime(item.schedule.time.start)} - ${formatTime(item.schedule.time.end)}`
 }
@@ -152,5 +157,19 @@ const expandedSections = ref(new Set<number>([0]))
 function toggleSection(index: number) {
 	if (expandedSections.value.has(index)) expandedSections.value.delete(index)
 	else expandedSections.value.add(index)
+}
+
+const removeItem = async (sectionIndex: number, itemIndex: number, item: ExtendedCurriculumItem) => {
+	if (!props.factory || !props.factory.factories.at(sectionIndex)) return
+	const fac = props.factory.factories[sectionIndex]
+	if (item.type === ClassLessonable.file)
+		await deleteFile(item.file).then((deleted) => {
+			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
+		})
+	else if (item.type === ClassLessonable.schedule)
+		await deleteSchedule(item.schedule).then((deleted) => {
+			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
+		})
+	else fac.removeItem(itemIndex)
 }
 </script>

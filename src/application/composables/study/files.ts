@@ -43,6 +43,7 @@ export const useDeleteFile = () => {
 	} = useAsyncFn(
 		async (file: FileEntity) => {
 			await FilesUseCases.delete(file.id)
+			return true
 		},
 		{
 			pre: async () =>

@@ -44,7 +44,7 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		return this.values.items
 	}
 
-	set items(value: ClassLessonCurriculumSection['items']) {
+	private set items(value: ClassLessonCurriculumSection['items']) {
 		this.set('items', value)
 	}
 
@@ -58,6 +58,10 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 
 	addFile(file: FileEntity) {
 		this.items = [...this.items, { type: ClassLessonable.file, id: file.id, fileType: file.type }]
+	}
+
+	removeItem(index: number) {
+		this.items = this.items.filter((_, i) => i !== index)
 	}
 
 	model = async () => {
