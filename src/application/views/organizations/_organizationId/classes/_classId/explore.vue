@@ -52,7 +52,7 @@
 						v-if="user && !currentClass.isEnrolled(user)"
 						padding="py-3 px-5"
 						customClass="hidden mdlg:block self-start mt-3"
-						@click="purchaseClass">
+						@click="purchaseClass(currentClass)">
 						{{ `Enroll ${Logic.Common.formatPrice(currentClass.price.amount, currentClass.price.currency)}/month` }}
 					</SofaButton>
 				</div>
@@ -103,7 +103,7 @@
 		<div
 			v-if="currentClass && user && !currentClass.isEnrolled(user)"
 			class="md:!hidden flex flex-col w-full bg-white p-4"
-			@click="purchaseClass">
+			@click="purchaseClass(currentClass)">
 			<SofaButton padding="px-6 py-3" customClass="w-full">
 				{{ `Enroll ${Logic.Common.formatPrice(currentClass.price.amount, currentClass.price.currency)}/month` }}
 			</SofaButton>
@@ -141,7 +141,7 @@ export default defineComponent({
 		const lessons = computed(() => currentClass.value?.lessons)
 		const selectedLesson = ref(currentClass.value?.lessons[0])
 		const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
-		const { purchaseClass } = usePurchaseClass(currentClass.value)
+		const { purchaseClass } = usePurchaseClass()
 
 		watch(
 			currentClass,
