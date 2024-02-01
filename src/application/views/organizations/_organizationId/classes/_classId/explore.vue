@@ -2,7 +2,7 @@
 	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
 		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
 			<SofaNormalText color="text-grayColor w-full flex flex-row justify-start gap-1">
-				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ 'Explore Classes ' }}</span>
+				<span class="cursor-pointer" @click="Logic.Common.goBack()">Explore Classes</span>
 				<span> / {{ pageTitle }}</span>
 			</SofaNormalText>
 		</div>
@@ -80,10 +80,9 @@
 								v-for="lesson in currentClass.lessons"
 								:key="lesson.id"
 								:lesson="lesson"
+								hideJoin
 								:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
-								:isStudent="false"
 								:classInst="currentClass"
-								:userId="userId"
 								@click="selectedLesson = lesson" />
 						</div>
 					</div>
@@ -123,12 +122,16 @@ import { Logic } from 'sofa-logic'
 import { formatTime } from '@utils/dates'
 import { useAuth } from '@app/composables/auth/auth'
 export default defineComponent({
+	name: 'OrganizationsOrganizationIdClassesClassIdExplore',
+	routeConfig: {
+		middlewares: ['isAuthenticated'],
+	},
 	setup() {
 		const route = useRoute()
 		const { id: userId, user } = useAuth()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
-		const tabs = ref([
+		const tabs = [
 			{
 				name: 'Activity',
 				key: 'activity',
@@ -137,11 +140,11 @@ export default defineComponent({
 				name: 'Similar Classes',
 				key: 'similar_classes',
 			},
-		])
-		const selectedTab = ref('activity')
+		]
+		const selectedTab = ref(tabs[0].key)
 		const { class: currentClass } = useClass(organizationId, classId)
-		const lessons = computed(() => currentClass.value?.lessons)
-		const selectedLesson = ref(currentClass.value?.lessons[0])
+		const lessons = computed(() => currentClass.value?.lessons ?? [])
+		const selectedLesson = ref(lessons.value[0])
 		const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
 		const { purchaseClass } = usePurchaseClass()
 
@@ -155,11 +158,7 @@ export default defineComponent({
 			{ once: true },
 		)
 
-		useMeta(
-			computed(() => ({
-				title: pageTitle.value,
-			})),
-		)
+		useMeta(computed(() => ({ title: pageTitle.value })))
 		const shareClass = () => {
 			if (currentClass.value) {
 				Logic.Common.share(

@@ -1,50 +1,48 @@
 <template>
 	<div class="bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center justify-between">
 		<div>
-			<SofaHeaderText>{{ currentLesson.title }}</SofaHeaderText>
+			<SofaHeaderText>{{ lesson.title }}</SofaHeaderText>
 			<div class="flex items-center gap-1">
 				<SofaNormalText color="text-grayColor">
-					{{ currentLesson.users.teachers.length }}
-					{{ currentLesson.users.teachers.length > 1 ? 'teachers' : 'teacher' }}</SofaNormalText
-				>
+					{{ formatNumber(lesson.users.teachers.length) }}
+					{{ pluralize(lesson.users.teachers.length, 'teacher', 'teachers') }}
+				</SofaNormalText>
 				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor"></div>
 				<SofaNormalText v-if="!isStudent" color="text-grayColor">
-					{{ currentLesson.users.students.length }} {{ currentLesson.users.students.length > 1 ? 'students' : 'student' }}
+					{{ formatNumber(lesson.users.students.length) }}
+					{{ pluralize(lesson.users.students.length, 'student', 'students') }}
 				</SofaNormalText>
 				<SofaNormalText v-else color="text-grayColor">
-					{{ '0 resources' }}
+					{{ formatNumber(resources) }}
+					{{ pluralize(resources, 'resource', 'resources') }}
 				</SofaNormalText>
 			</div>
 		</div>
-		<div v-if="isStudent" @click.stop="selectLesson(currentLesson)">
-			<SofaCheckbox v-model="currentLesson.joined" />
-		</div>
+		<SofaCheckbox v-if="isStudent && !hideJoin" v-model="joined" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { formatNumber, pluralize } from 'valleyed'
 import { ClassLesson, ClassEntity } from '@modules/organizations'
 import { useJoinLesson } from '@app/composables/organizations/lessons'
+import { useAuth } from '@app/composables/auth/auth'
 const props = defineProps<{
 	classInst: ClassEntity
 	lesson: ClassLesson
-	isStudent: boolean
-	userId: string
+	hideJoin?: boolean
 }>()
 
-interface ExtendedClassLesson extends ClassLesson {
-	joined: boolean
-}
+const { id } = useAuth()
+const isStudent = computed(() => props.classInst.isStudent(id.value))
+const resources = props.lesson.curriculum.reduce((acc, cur) => acc + cur.items.length, 0)
 
-const currentLesson = ref<ExtendedClassLesson>({
-	...props.lesson,
-	joined: props.lesson.users.students.includes(props.userId),
-})
+const joined = ref(props.lesson.users.students.includes(id.value))
 
 const { joinLesson } = useJoinLesson()
 
-const selectLesson = async (val: ExtendedClassLesson) => {
-	await joinLesson(props.classInst, props.lesson.id, val.joined)
-}
+watch(joined, async () => {
+	await joinLesson(props.classInst, props.lesson.id, joined.value)
+})
 </script>

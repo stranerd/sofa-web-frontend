@@ -17,10 +17,8 @@
 					<LessonCard
 						v-for="(lesson, index) in classInst.lessons"
 						:key="index"
-						:isStudent="classInst.isStudent(userId)"
 						:lesson="lesson"
 						:classInst="classInst"
-						:userId="userId"
 						class="w-full" />
 					<div class="w-full flex items-center justify-between">
 						<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block">
