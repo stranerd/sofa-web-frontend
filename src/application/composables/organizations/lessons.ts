@@ -45,25 +45,7 @@ export const useCurriculumViewToggle = () => {
 	return { curriculumView, curriculumViewIcon, toggleView }
 }
 
-export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<ClassLesson['curriculum']>) => {
-	const curr = computed((): ClassLesson['curriculum'] => [
-		{
-			label: 'Section 1',
-			items: [
-				{ type: ClassLessonable.quiz, id: '6570f0fed93c0c9b0b4df5d0', quizMode: QuizModes.test },
-				{ type: ClassLessonable.schedule, id: '65ae74a8a937bae0ac5d8db7' },
-				{ type: ClassLessonable.schedule, id: '65ae7391a937bae0ac5d8d5a' },
-			],
-		},
-		{
-			label: 'Section 2',
-			items: [
-				{ type: ClassLessonable.quiz, id: '655c6ebf1df1665d9b00a771', quizMode: QuizModes.practice },
-				{ type: ClassLessonable.schedule, id: '65ae739da937bae0ac5d8d6a' },
-				{ type: ClassLessonable.quiz, id: '64fbbed96f1695149cedcf41', quizMode: QuizModes.test },
-			],
-		},
-	])
+export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassLesson['curriculum']>) => {
 	const quizIds = computed(() =>
 		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.quiz).map((item) => item.id)),
 	)
@@ -96,7 +78,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, _curri: Refable<Clas
 					}
 				})
 				.filter(Boolean)
-			return { ...c, items }
+			return { label: c.label, items }
 		}),
 	)
 	return { quizzes, files, schedules, curriculum }
@@ -134,4 +116,15 @@ export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<Clas
 		extendedCurriculum,
 		updateCurriculum,
 	}
+}
+
+export const useJoinLesson = () => {
+	const {
+		asyncFn: joinLesson,
+		loading,
+		error,
+	} = useAsyncFn(async (classInst: ClassEntity, lessonId: string, join: boolean) => {
+		await LessonsUseCases.join(classInst.organizationId, classInst.id, lessonId, join)
+	})
+	return { joinLesson, loading, error }
 }

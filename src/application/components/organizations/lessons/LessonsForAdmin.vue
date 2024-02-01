@@ -40,7 +40,7 @@
 		<LessonCard
 			v-for="(lesson, index) in filteredLessons"
 			:key="index"
-			:isStudent="classInst.isStudent(userId)"
+			:classInst="classInst"
 			:lesson="lesson"
 			@click="openLessonDetails(lesson)" />
 	</div>
@@ -48,15 +48,12 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
 
 const props = defineProps<{
 	classInst: ClassEntity
 }>()
-
-const { id: userId } = useAuth()
 
 const searchQuery = ref('')
 const emptyLessonContent = {

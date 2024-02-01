@@ -17,8 +17,8 @@
 					<LessonCard
 						v-for="(lesson, index) in classInst.lessons"
 						:key="index"
-						:isStudent="classInst.isStudent(userId)"
 						:lesson="lesson"
+						:classInst="classInst"
 						class="w-full" />
 					<div class="w-full flex items-center justify-between">
 						<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block">
@@ -29,7 +29,8 @@
 							type="submit"
 							textColor="text-white"
 							padding="py-3 px-6"
-							customClass="w-full mdlg:w-auto">
+							customClass="w-full mdlg:w-auto"
+							@click="selectedLessonsDone">
 							Done
 						</SofaButton>
 					</div>
@@ -52,11 +53,19 @@
 							@click="selectedLesson = lesson">
 							{{ lesson.title }}
 						</SofaButton>
+						<SofaButton padding="py-3 px-4" class="bg-primaryBlue" @click="showLessonCurriculum = false">Add lesson</SofaButton>
 					</div>
 					<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 				</div>
-				<div class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
+				<div v-if="curriculum.length > 0" class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
 					<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" />
+				</div>
+				<div v-else class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8 mt-4">
+					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
+					<SofaNormalText color="text-grayColor text-center">
+						{{ 'Teacher of the class has not set the curriculum yet' }}
+					</SofaNormalText>
 				</div>
 			</div>
 		</div>
@@ -83,7 +92,16 @@ const selectedLesson = ref(lessons.value.at(0))
 const selectedLessonCurriculum = computed(() => selectedLesson.value?.curriculum ?? [])
 const { curriculum } = useLessonCurriculum(props.classInst, selectedLessonCurriculum)
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
-watch(lessons, () => {
-	showLessonCurriculum.value = !!lessons.value.length
-})
+const selectedLessonsDone = () => {
+	if (lessons.value.some((l) => l.users.students.includes(userId.value))) {
+		showLessonCurriculum.value = true
+	}
+}
+watch(
+	lessons,
+	() => {
+		showLessonCurriculum.value = lessons.value.some((l) => l.users.students.includes(userId.value))
+	},
+	{ once: true },
+)
 </script>

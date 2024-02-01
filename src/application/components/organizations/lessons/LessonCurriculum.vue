@@ -5,9 +5,17 @@
 			:key="sectionIndex"
 			:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
 			<div class="flex items-center justify-between">
-				<div class="flex items-center gap-2">
-					<SofaHeaderText>{{ section.label }}</SofaHeaderText>
-					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" />
+				<div v-if="factory" class="flex items-center gap-2">
+					<SofaCustomInput
+						v-if="editedLabelSections.has(sectionIndex)"
+						v-model="factory.factories[sectionIndex].label"
+						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+						:autoFocus="true"
+						placeholder="Section label"
+						@onBlur="closeLabelSection(sectionIndex)"
+						@onEnter="closeLabelSection(sectionIndex)" />
+					<SofaHeaderText v-else>{{ section.label }}</SofaHeaderText>
+					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 				</div>
 				<div class="flex items-center gap-2">
 					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
@@ -153,10 +161,19 @@ const addStudyMaterial = (index: number) => {
 		},
 	})
 }
+
 const expandedSections = ref(new Set<number>([0]))
+const editedLabelSections = ref(new Set<number>([]))
 function toggleSection(index: number) {
 	if (expandedSections.value.has(index)) expandedSections.value.delete(index)
 	else expandedSections.value.add(index)
+}
+function toggleLabelSection(index: number) {
+	if (editedLabelSections.value.has(index)) editedLabelSections.value.delete(index)
+	else editedLabelSections.value.add(index)
+}
+function closeLabelSection(index: number) {
+	if (editedLabelSections.value.has(index)) editedLabelSections.value.delete(index)
 }
 
 const removeItem = async (sectionIndex: number, itemIndex: number, item: ExtendedCurriculumItem) => {

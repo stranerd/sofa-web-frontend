@@ -34,7 +34,9 @@
 						@click="previewCurriculum">
 						Preview
 					</SofaButton>
-					<SofaButton class="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
+					<SofaButton :disabled="factory.valid" class="bg-primaryBlue" padding="py-2 px-4" @click="updateCurriculum">
+						Publish
+					</SofaButton>
 				</div>
 			</div>
 			<div v-if="!showLessonCurriculum" class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
@@ -76,7 +78,9 @@
 						@click="previewCurriculum">
 						Preview
 					</SofaButton>
-					<SofaButton class="bg-primaryBlue" padding="py-2 px-4"> Publish </SofaButton>
+					<SofaButton :disabled="factory.valid" class="bg-primaryBlue" padding="py-2 px-4" @click="updateCurriculum">
+						Publish
+					</SofaButton>
 				</div>
 			</div>
 		</div>
@@ -99,7 +103,7 @@ const selectedLesson = ref(props.classInst.lessons.at(0))
 const canEditLesson = computed(() => selectedLesson.value?.users.teachers.includes(id.value))
 const showLessonCurriculum = ref(false)
 const { curriculumView } = useCurriculumViewToggle()
-const { factory } = useUpdateCurriculum(props.classInst, selectedLesson)
+const { factory, updateCurriculum } = useUpdateCurriculum(props.classInst, selectedLesson)
 
 watch(
 	selectedLesson,

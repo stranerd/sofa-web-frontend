@@ -4,32 +4,45 @@
 			<SofaHeaderText>{{ lesson.title }}</SofaHeaderText>
 			<div class="flex items-center gap-1">
 				<SofaNormalText color="text-grayColor">
-					{{ lesson.users.teachers.length }} {{ lesson.users.teachers.length > 1 ? 'teachers' : 'teacher' }}</SofaNormalText
-				>
+					{{ formatNumber(lesson.users.teachers.length) }}
+					{{ pluralize(lesson.users.teachers.length, 'teacher', 'teachers') }}
+				</SofaNormalText>
 				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor"></div>
 				<SofaNormalText v-if="!isStudent" color="text-grayColor">
-					{{ lesson.users.students.length }} {{ lesson.users.students.length > 1 ? 'students' : 'student' }}
+					{{ formatNumber(lesson.users.students.length) }}
+					{{ pluralize(lesson.users.students.length, 'student', 'students') }}
 				</SofaNormalText>
 				<SofaNormalText v-else color="text-grayColor">
-					{{ '0 resources' }}
+					{{ formatNumber(resources) }}
+					{{ pluralize(resources, 'resource', 'resources') }}
 				</SofaNormalText>
 			</div>
 		</div>
-		<div v-if="isStudent" @click.stop>
-			<SofaCheckbox v-model="lesson.selected" />
-		</div>
+		<SofaCheckbox v-if="isStudent && !hideJoin" v-model="joined" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-defineProps({
-	lesson: {
-		type: Object as any,
-		required: true,
-	},
-	isStudent: {
-		type: Boolean,
-		default: true,
-	},
+import { computed, ref, watch } from 'vue'
+import { formatNumber, pluralize } from 'valleyed'
+import { ClassLesson, ClassEntity } from '@modules/organizations'
+import { useJoinLesson } from '@app/composables/organizations/lessons'
+import { useAuth } from '@app/composables/auth/auth'
+const props = defineProps<{
+	classInst: ClassEntity
+	lesson: ClassLesson
+	hideJoin?: boolean
+}>()
+
+const { id } = useAuth()
+const isStudent = computed(() => props.classInst.isStudent(id.value))
+const resources = props.lesson.curriculum.reduce((acc, cur) => acc + cur.items.length, 0)
+
+const joined = ref(props.lesson.users.students.includes(id.value))
+
+const { joinLesson } = useJoinLesson()
+
+watch(joined, async () => {
+	await joinLesson(props.classInst, props.lesson.id, joined.value)
 })
 </script>

@@ -1,15 +1,17 @@
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { BaseFactory } from './base'
 
 export function asArray<T extends BaseFactory<any, any, any>>(factory: { new (): T }) {
 	type E = T extends BaseFactory<infer E, any, any> ? E : never
 
 	return class FactoryArray {
-		#factories: T[] = reactive([])
+		#factories: T[] = []
+		#count = ref(0)
 
 		add() {
 			const instance = new factory()
 			this.#factories.push(instance)
+			this.#markStateChange()
 			return instance
 		}
 
@@ -20,6 +22,7 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 				return instance
 			})
 			this.#factories.splice(0, this.#factories.length, ...factories)
+			this.#markStateChange()
 		}
 
 		reset() {
@@ -28,6 +31,12 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 
 		delete(index: number) {
 			this.#factories.splice(index, 1)
+			this.#markStateChange()
+		}
+
+		#markStateChange() {
+			this.#count.value = 0
+			this.#count.value = this.#factories.length
 		}
 
 		async toModel() {
@@ -35,15 +44,15 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 		}
 
 		get factories() {
-			return this.#factories
+			return Array.from({ length: this.#count.value }, (_, index) => this.#factories[index])
 		}
 
 		get valid() {
-			return this.#factories.every((instance) => instance.valid)
+			return this.factories.every((instance) => instance.valid)
 		}
 
 		get hasChanges() {
-			return this.#factories.some((instance) => instance.hasChanges)
+			return this.factories.some((instance) => instance.hasChanges)
 		}
 	}
 }
