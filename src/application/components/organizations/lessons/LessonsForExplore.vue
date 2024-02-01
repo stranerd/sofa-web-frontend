@@ -1,11 +1,20 @@
 <template>
 	<div class="w-[70%] flex flex-col">
-		<div class="flex items-center justify-between pb-3">
-			<SofaHeaderText content="Curriculum" customClass="!text-xl" />
-			<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
-		</div>
-		<div class="bg-lightGray p-4 rounded-md">
-			<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" class="bg-white rounded-md p-4" />
+		<div class="w-full">
+			<div class="flex items-center justify-between pb-3">
+				<SofaHeaderText content="Curriculum" customClass="!text-xl" />
+				<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
+			</div>
+			<div v-if="curriculum.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray py-10 rounded-md">
+				<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
+				<SofaNormalText color="text-grayColor text-center">
+					{{ 'No curriculum set yet!' }}
+				</SofaNormalText>
+			</div>
+			<div v-else class="bg-lightGray p-4 rounded-md">
+				<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" class="bg-white rounded-md p-4" />
+			</div>
 		</div>
 	</div>
 </template>
