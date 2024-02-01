@@ -1,5 +1,6 @@
 import { ClassFromModel } from '../../data/models/classes'
 import { ClassLesson, ClassMembers, EmbeddedUser, Saleable } from '../types'
+import { UserEntity } from '@modules/users'
 import { BaseEntity, Media } from '@modules/core'
 
 export class ClassEntity extends BaseEntity implements Saleable {
@@ -77,6 +78,10 @@ export class ClassEntity extends BaseEntity implements Saleable {
 
 	isAdmin(userId: string) {
 		return this.organizationId === userId
+	}
+
+	isEnrolled(user: UserEntity) {
+		return user.account.organizationsIn.some((org) => org.id === this.organizationId) || this.members.students.includes(user.id)
 	}
 
 	getLesson(id: string) {

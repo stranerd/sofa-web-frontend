@@ -48,7 +48,11 @@
 							{{ `Last updated ${formatTime(currentClass.updatedAt)}` }}
 						</SofaNormalText>
 					</div>
-					<SofaButton padding="py-3 px-5" customClass="hidden mdlg:block self-start mt-3">
+					<SofaButton
+						v-if="user && !currentClass.isEnrolled(user)"
+						padding="py-3 px-5"
+						customClass="hidden mdlg:block self-start mt-3"
+						@click="purchaseClass">
 						{{ `Enroll ${Logic.Common.formatPrice(currentClass.price.amount, currentClass.price.currency)}/month` }}
 					</SofaButton>
 				</div>
@@ -68,11 +72,20 @@
 			<!-- Class lessons Tab Content -->
 			<div v-if="selectedTab == 'activity'">
 				<!-- Lessons -->
-				<div v-if="currentClass.lessons.length" class="pt-6">
-					<SofaHeaderText content="Lessons" customClass="!text-xl" />
-					<div class="flex flex-col gap-4 mt-3">
-						<LessonCard v-for="lesson in currentClass.lessons" :key="lesson.id" :lesson="lesson" />
+				<div v-if="currentClass.lessons.length" class="flex gap-4 pt-6">
+					<div class="w-[30%] flex flex-col">
+						<SofaHeaderText content="Lessons" customClass="!text-xl" />
+						<div class="flex flex-col gap-4 mt-3">
+							<LessonCard
+								v-for="lesson in currentClass.lessons"
+								:key="lesson.id"
+								:lesson="lesson"
+								:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
+								:isStudent="false"
+								@click="selectedLesson = lesson" />
+						</div>
 					</div>
+					<LessonsForExplore :classInst="currentClass" :lesson="selectedLesson" />
 				</div>
 				<div v-else class="flex flex-col gap-4 items-center py-10">
 					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
@@ -87,7 +100,10 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="currentClass" class="md:!hidden flex flex-col w-full bg-white p-4">
+		<div
+			v-if="currentClass && user && !currentClass.isEnrolled(user)"
+			class="md:!hidden flex flex-col w-full bg-white p-4"
+			@click="purchaseClass">
 			<SofaButton padding="px-6 py-3" customClass="w-full">
 				{{ `Enroll ${Logic.Common.formatPrice(currentClass.price.amount, currentClass.price.currency)}/month` }}
 			</SofaButton>
@@ -96,18 +112,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMeta } from 'vue-meta'
 import { pluralize } from 'valleyed'
-import { useClass } from '@app/composables/organizations/classes'
+import { useClass, usePurchaseClass } from '@app/composables/organizations/classes'
 import { Logic } from 'sofa-logic'
 import { formatTime } from '@utils/dates'
 import { useAuth } from '@app/composables/auth/auth'
 export default defineComponent({
 	setup() {
 		const route = useRoute()
-		const { id: userId } = useAuth()
+		const { id: userId, user } = useAuth()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
 		const tabs = ref([
@@ -122,7 +138,20 @@ export default defineComponent({
 		])
 		const selectedTab = ref('activity')
 		const { class: currentClass } = useClass(organizationId, classId)
+		const lessons = computed(() => currentClass.value?.lessons)
+		const selectedLesson = ref(currentClass.value?.lessons[0])
 		const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
+		const { purchaseClass } = usePurchaseClass(currentClass.value)
+
+		watch(
+			currentClass,
+			() => {
+				if (currentClass.value?.lessons) {
+					selectedLesson.value = currentClass.value.lessons[0]
+				}
+			},
+			{ once: true },
+		)
 
 		useMeta(
 			computed(() => ({
@@ -138,7 +167,21 @@ export default defineComponent({
 				)
 			}
 		}
-		return { Logic, currentClass, pageTitle, pluralize, formatTime, tabs, selectedTab, userId, shareClass }
+		return {
+			Logic,
+			currentClass,
+			pageTitle,
+			pluralize,
+			formatTime,
+			tabs,
+			selectedTab,
+			userId,
+			shareClass,
+			lessons,
+			selectedLesson,
+			purchaseClass,
+			user,
+		}
 	},
 })
 </script>

@@ -54,6 +54,7 @@ declare module 'vue' {
     LessonCurriculum: typeof import('./../application/components/organizations/lessons/LessonCurriculum.vue')['default']
     LessonDetailsModal: typeof import('./../application/components/organizations/lessons/LessonDetailsModal.vue')['default']
     LessonsForAdmin: typeof import('./../application/components/organizations/lessons/LessonsForAdmin.vue')['default']
+    LessonsForExplore: typeof import('./../application/components/organizations/lessons/LessonsForExplore.vue')['default']
     LessonsForStudents: typeof import('./../application/components/organizations/lessons/LessonsForStudents.vue')['default']
     LessonsForTeachers: typeof import('./../application/components/organizations/lessons/LessonsForTeachers.vue')['default']
     LibraryLayout: typeof import('./../application/components/study/LibraryLayout.vue')['default']

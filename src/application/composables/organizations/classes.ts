@@ -186,3 +186,26 @@ export const useClass = (organizationId: string, classId: string) => {
 
 	return { ...singleClassStore[key], error, loading }
 }
+
+export const usePurchaseClass = (classInst: ClassEntity | null) => {
+	const router = useRouter()
+	const {
+		asyncFn: purchaseClass,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(async () => {
+		if (classInst) {
+			const data = await ClassesUseCases.purchase(classInst.organizationId, classInst.id)
+			if (data) {
+				Logic.Common.showAlert({
+					message: 'Successfully enrolled',
+					type: 'success',
+				})
+				await router.push(classInst.pageLink)
+			}
+		}
+	})
+
+	return { purchaseClass, loading, error, called }
+}
