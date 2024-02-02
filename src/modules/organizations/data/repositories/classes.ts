@@ -36,6 +36,11 @@ export class ClassRepository implements IClassRepository {
 		}
 	}
 
+	async similar(id: string) {
+		const d = await this.client.get<any, ClassFromModel[]>(`/${id}/similar`, {})
+		return d.map(this.mapper)
+	}
+
 	async listenToOne(id: string, listeners: Listeners<ClassEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)

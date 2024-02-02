@@ -22,7 +22,7 @@
 			</div>
 
 			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-				<SofaIcon name="more-options-horizontal" class="h-[6px]" @click.stop="moreOptionsHandler" />
+				<SofaIcon name="more-options-horizontal" class="h-[6px]" @click.stop.prevent="moreOptionsHandler" />
 			</div>
 		</div>
 	</router-link>

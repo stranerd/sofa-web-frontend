@@ -73,20 +73,46 @@
 			<div v-if="selectedTab == 'activity'">
 				<!-- Lessons -->
 				<div v-if="currentClass.lessons.length" class="flex gap-4 pt-6">
-					<div class="w-[30%] flex flex-col">
-						<SofaHeaderText content="Lessons" customClass="!text-xl" />
-						<div class="flex flex-col gap-4 mt-3">
-							<LessonCard
-								v-for="lesson in currentClass.lessons"
-								:key="lesson.id"
-								:lesson="lesson"
-								hideJoin
-								:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
-								:classInst="currentClass"
-								@click="selectedLesson = lesson" />
+					<!-- For larger screen -->
+					<div class="w-full hidden mdlg:flex gap-4 pt-6">
+						<div class="flex mdlg:w-[30%] flex-col">
+							<SofaHeaderText content="Lessons" customClass="!text-xl" />
+							<div class="flex flex-col gap-4 mt-3">
+								<LessonCard
+									v-for="lesson in currentClass.lessons"
+									:key="lesson.id"
+									:lesson="lesson"
+									hideJoin
+									:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
+									:classInst="currentClass"
+									@click="selectedLesson = lesson" />
+							</div>
+						</div>
+						<LessonsForExplore :classInst="currentClass" :lesson="selectedLesson" />
+					</div>
+					<div class="w-full mdlg:hidden flex flex-col">
+						<div class="flex flex-col">
+							<SofaHeaderText content="Lessons" customClass="!text-xl" />
+							<div class="flex flex-col gap-4 mt-3">
+								<button
+									v-for="lesson in currentClass.lessons"
+									:key="lesson.id"
+									class="flex items-center justify-between pr-4 rounded-md cursor-pointer"
+									:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : 'bg-lightGray'"
+									@click="openPreviewModal(lesson)">
+									<LessonCard
+										:lesson="lesson"
+										hideJoin
+										:classInst="currentClass"
+										:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : 'bg-lightGray'" />
+									<SofaIcon
+										class="h-[8px]"
+										name="chevron-down"
+										:class="{ 'rotate-180': lesson.id === selectedLesson?.id }" />
+								</button>
+							</div>
 						</div>
 					</div>
-					<LessonsForExplore :classInst="currentClass" :lesson="selectedLesson" />
 				</div>
 				<div v-else class="flex flex-col gap-4 items-center py-10">
 					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
@@ -95,9 +121,15 @@
 			</div>
 			<!-- Similar classes tab content -->
 			<div v-if="selectedTab == 'similar_classes'">
-				<div class="flex flex-col gap-4 items-center py-10">
+				<div v-if="similarClasses.length === 0" class="flex flex-col gap-4 items-center py-10">
 					<img src="/images/empty-class.png" class="w-[84px] h-[84px]" />
 					<SofaNormalText color="text-grayColor" customClass="font-bold">No class found!</SofaNormalText>
+				</div>
+				<div v-else class="w-full">
+					<div
+						class="mdlg:w-[85%] lg:w-full w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 max-h-full overflow-y-auto gap-3 mdlg:gap-6 px-4 py-8 mdlg:py-12">
+						<ExploreClassCard v-for="classItem in similarClasses" :key="classItem.id" :classInst="classItem" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -117,10 +149,12 @@ import { defineComponent, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMeta } from 'vue-meta'
 import { pluralize } from 'valleyed'
-import { useClass, usePurchaseClass } from '@app/composables/organizations/classes'
+import { useClass, usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
 import { Logic } from 'sofa-logic'
 import { formatTime } from '@utils/dates'
 import { useAuth } from '@app/composables/auth/auth'
+import { ClassLesson } from '@modules/organizations'
+import { useModals } from '@app/composables/core/modals'
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdExplore',
 	routeConfig: {
@@ -147,6 +181,19 @@ export default defineComponent({
 		const selectedLesson = ref(lessons.value[0])
 		const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
 		const { purchaseClass } = usePurchaseClass()
+		const { similarClasses } = useSimilarClasses(organizationId, classId)
+
+		const openPreviewModal = (lesson: ClassLesson) => {
+			selectedLesson.value = lesson
+			if (currentClass.value) {
+				useModals().organizations.previewCurriculum.open({
+					lesson: selectedLesson.value,
+					classInst: currentClass.value,
+					curriculum: lesson.curriculum,
+					isPreview: false,
+				})
+			}
+		}
 
 		watch(
 			currentClass,
@@ -182,6 +229,8 @@ export default defineComponent({
 			selectedLesson,
 			purchaseClass,
 			user,
+			similarClasses,
+			openPreviewModal,
 		}
 	},
 })

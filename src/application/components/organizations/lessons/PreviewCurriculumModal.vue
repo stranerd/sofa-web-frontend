@@ -1,13 +1,17 @@
 <template>
 	<div class="p-4 flex flex-col gap-6">
 		<div class="flex w-full items-center gap-2 justify-between">
-			<SofaHeaderText class="!font-bold !text-deepGray" content="Preview" />
-			<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
+			<SofaHeaderText v-if="isPreview" class="!font-bold !text-deepGray" content="Preview" />
+			<SofaIcon class="h-[16px]" :class="isPreview ? '' : 'ml-auto'" name="circle-close" @click="close" />
 		</div>
 		<div class="flex items-center justify-center">
-			<SofaNormalText color="text-primaryPurple" class="text-[14px] font-700 pb-2 h-full border-b-2 border-primaryPurple">
+			<SofaNormalText
+				v-if="isPreview"
+				color="text-primaryPurple"
+				class="text-[14px] font-700 pb-2 h-full border-b-2 border-primaryPurple">
 				{{ lesson.title }}
 			</SofaNormalText>
+			<SofaHeaderText v-else class="!font-bold !text-deepGray" content="Curriculum" />
 			<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 		</div>
 		<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" :isModal="true" />
@@ -15,13 +19,29 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted, onBeforeUnmount } from 'vue'
 import { ClassLesson, ClassEntity } from '@modules/organizations'
 import { useCurriculumViewToggle } from '@app/composables/organizations/lessons'
-defineProps<{
+const props = defineProps<{
 	close: () => void
 	lesson: ClassLesson
 	classInst: ClassEntity
 	curriculum: ClassLesson['curriculum']
+	isPreview: boolean
 }>()
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
+const handleResize = () => {
+	const windowWidth = window.innerWidth
+	const smallScreenBreakpoint = 1000
+	if (windowWidth > smallScreenBreakpoint && !props.isPreview) {
+		props.close()
+	}
+}
+onMounted(() => {
+	window.addEventListener('resize', handleResize)
+	handleResize()
+})
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', handleResize)
+})
 </script>

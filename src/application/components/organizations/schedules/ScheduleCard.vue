@@ -10,11 +10,11 @@
 		<div class="flex items-center gap-2">
 			<SofaIcon name="calendar" class="h-[17px]" :class="schedule.status === 'started' ? 'fill-primaryRed' : 'fill-current'" />
 			<SofaNormalText
-				:content="schedule.time.start.toString()"
+				:content="formatTime(schedule.time.start)"
 				:color="schedule.status === 'started' ? 'text-primaryRed' : 'text-deepGray'" />
 			<div class="w-[5px] h-[5px] rounded-[50%]" :class="schedule.status === 'started' ? 'bg-primaryRed' : 'bg-deepGray'" />
 			<SofaNormalText
-				:content="schedule.time.end.toString()"
+				:content="formatTime(schedule.time.end)"
 				:color="schedule.status === 'started' ? 'text-primaryRed' : 'text-deepGray'" />
 		</div>
 		<SofaButton v-if="schedule.isOngoing" bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-5"> Enter </SofaButton>
@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { ClassEntity, ScheduleEntity } from '@modules/organizations'
-
+import { formatTime } from '@utils/dates'
 const props = defineProps<{
 	classInst: ClassEntity
 	schedule: ScheduleEntity
