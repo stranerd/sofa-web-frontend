@@ -121,6 +121,7 @@ const previewCurriculum = () => {
 			lesson: selectedLesson.value,
 			classInst: props.classInst,
 			curriculum: factory.factories,
+			isPreview: true,
 		})
 	}
 }

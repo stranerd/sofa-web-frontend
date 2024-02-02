@@ -13,4 +13,5 @@ export interface IClassRepository {
 	listenToMany: (query: QueryParams, listeners: Listeners<ClassEntity>, matches: (entity: ClassEntity) => boolean) => Promise<() => void>
 	purchase: (id: string) => Promise<boolean>
 	cancelPurchase: (id: string) => Promise<boolean>
+	similar: (id: string) => Promise<ClassEntity[]>
 }

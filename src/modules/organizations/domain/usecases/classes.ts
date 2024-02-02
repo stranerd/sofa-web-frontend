@@ -71,6 +71,10 @@ export class ClassesUseCase {
 		})
 	}
 
+	async getSimilarClasses(classId: string, organizationId: string) {
+		return await this.repository(organizationId).similar(classId)
+	}
+
 	async listenToAll(organizationId: string, listener: Listeners<ClassEntity>) {
 		const conditions: QueryParams = {
 			all: true,

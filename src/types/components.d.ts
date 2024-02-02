@@ -43,6 +43,8 @@ declare module 'vue' {
     EditQuestionsList: typeof import('./../application/components/study/quizzes/EditQuestionsList.vue')['default']
     ExpandedLayout: typeof import('./../application/layouts/ExpandedLayout.vue')['default']
     ExploreClassCard: typeof import('./../application/components/organizations/classes/ExploreClassCard.vue')['default']
+    ExploreLessonCurriculumModal: typeof import('./../application/components/organizations/lessons/ExploreLessonCurriculumModal.vue')['default']
+    ExploreLessonModal: typeof import('./../application/components/organizations/lessons/ExploreLessonModal.vue')['default']
     Filter: typeof import('./../application/components/marketplace/Filter.vue')['default']
     FlashcardDisplay: typeof import('./../application/components/study/quizzes/FlashcardDisplay.vue')['default']
     GameWrapper: typeof import('./../application/components/plays/games/GameWrapper.vue')['default']

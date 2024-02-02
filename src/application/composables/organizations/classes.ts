@@ -205,3 +205,20 @@ export const usePurchaseClass = () => {
 
 	return { purchaseClass, loading, error, called }
 }
+
+export const useSimilarClasses = (organizationId: string, classId: string) => {
+	const similarClasses = ref<ClassEntity[]>([])
+	const {
+		asyncFn: fetchSimilarClasses,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(async () => {
+		const classes = await ClassesUseCases.getSimilarClasses(classId, organizationId)
+		similarClasses.value = classes
+	})
+	onMounted(async () => {
+		if (!called.value) await fetchSimilarClasses()
+	})
+	return { similarClasses, loading, error }
+}
