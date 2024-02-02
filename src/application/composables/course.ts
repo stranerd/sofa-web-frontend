@@ -24,11 +24,11 @@ const updateCourseSectionForm = reactive<UpdateCourseSectionsInput>({
 
 const addCourseFileForm = reactive<CreateDocumentInput>({
 	description: '',
-	tagIds: [],
+	tags: [],
 	title: '',
 	type: '',
 	media: undefined,
-	topicId: '',
+	topic: '',
 	id: '',
 })
 
@@ -162,11 +162,11 @@ const updateCourseSections = () => {
 const addCourseFile = () => {
 	Logic.Study.CreateFileForm = {
 		description: addCourseFileForm.description,
-		tagIds: addCourseFileForm.tagIds,
+		tags: addCourseFileForm.tags,
 		title: addCourseFileForm.title,
 		type: addCourseFileForm.type,
 		media: addCourseFileForm.media,
-		topicId: addCourseFileForm.topicId,
+		topic: addCourseFileForm.topic,
 		id: '',
 	}
 

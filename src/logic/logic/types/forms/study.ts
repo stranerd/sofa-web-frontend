@@ -34,8 +34,8 @@ export interface CreateDocumentInput {
 	type: string
 	title: string
 	description: string
-	tagIds: string[]
+	tags: string[]
 	media?: File
-	topicId: string
+	topic: string
 	id: string
 }

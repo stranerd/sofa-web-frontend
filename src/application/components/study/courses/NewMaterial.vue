@@ -247,9 +247,9 @@ export default defineComponent({
 		const addFile = (file: File, type: 'video' | 'image' | 'document') => {
 			addCourseFileForm.description = `${capitalize(type)} file for ${SingleCourse.value.title}`
 			addCourseFileForm.media = file
-			addCourseFileForm.tagIds = []
+			addCourseFileForm.tags = []
 			addCourseFileForm.title = `${file.name}`
-			addCourseFileForm.topicId = SingleCourse.value.topicId
+			addCourseFileForm.topic = Logic.Study.GetTagName(SingleCourse.value.topicId) ?? SingleCourse.value.title
 
 			addCourseFile()
 			context.emit('OnItemSelected', '')

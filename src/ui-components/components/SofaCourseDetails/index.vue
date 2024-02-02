@@ -198,8 +198,8 @@ export default defineComponent({
 				description: dataReactive.description,
 				title: dataReactive.title,
 				id: dataRef.value.id,
-				tagIds: [],
-				topicId: Logic.Study.SingleCourse.topicId,
+				tags: [],
+				topic: Logic.Study.GetTagName(Logic.Study.SingleCourse.topicId) ?? Logic.Study.SingleCourse.title,
 			}
 
 			Logic.Common.showLoading()
