@@ -94,10 +94,10 @@
 						<div class="flex flex-col">
 							<SofaHeaderText content="Lessons" customClass="!text-xl" />
 							<div class="flex flex-col gap-4 mt-3">
-								<div
+								<button
 									v-for="lesson in currentClass.lessons"
 									:key="lesson.id"
-									class="flex items-center justify-between pr-4 rounded-md"
+									class="flex items-center justify-between pr-4 rounded-md cursor-pointer"
 									:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : 'bg-lightGray'"
 									@click="openPreviewModal(lesson)">
 									<LessonCard
@@ -109,7 +109,7 @@
 										class="h-[8px]"
 										name="chevron-down"
 										:class="{ 'rotate-180': lesson.id === selectedLesson?.id }" />
-								</div>
+								</button>
 							</div>
 						</div>
 					</div>

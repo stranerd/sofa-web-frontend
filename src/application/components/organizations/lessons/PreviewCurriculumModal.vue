@@ -19,9 +19,10 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted, onBeforeUnmount } from 'vue'
 import { ClassLesson, ClassEntity } from '@modules/organizations'
 import { useCurriculumViewToggle } from '@app/composables/organizations/lessons'
-defineProps<{
+const props = defineProps<{
 	close: () => void
 	lesson: ClassLesson
 	classInst: ClassEntity
@@ -29,4 +30,18 @@ defineProps<{
 	isPreview: boolean
 }>()
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
+const handleResize = () => {
+	const windowWidth = window.innerWidth
+	const smallScreenBreakpoint = 1000
+	if (windowWidth > smallScreenBreakpoint && !props.isPreview) {
+		props.close()
+	}
+}
+onMounted(() => {
+	window.addEventListener('resize', handleResize)
+	handleResize()
+})
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', handleResize)
+})
 </script>
