@@ -31,10 +31,11 @@
 					<SofaButton
 						class="border border-primaryBlue !text-primaryBlue bg-transparent"
 						padding="py-2 px-4"
+						:disabled="!factory.valid"
 						@click="previewCurriculum">
 						Preview
 					</SofaButton>
-					<SofaButton :disabled="factory.valid" class="bg-primaryBlue" padding="py-2 px-4" @click="updateCurriculum">
+					<SofaButton :disabled="!factory.valid" class="bg-primaryBlue" padding="py-2 px-4" @click="updateCurriculum">
 						Publish
 					</SofaButton>
 				</div>
@@ -75,10 +76,11 @@
 					<SofaButton
 						class="border border-primaryBlue !text-primaryBlue bg-transparent"
 						padding="py-2 px-4"
+						:disabled="!factory.valid"
 						@click="previewCurriculum">
 						Preview
 					</SofaButton>
-					<SofaButton :disabled="factory.valid" class="bg-primaryBlue" padding="py-2 px-4" @click="updateCurriculum">
+					<SofaButton :disabled="!factory.valid" class="bg-primaryBlue" padding="py-2 px-4" @click="updateCurriculum">
 						Publish
 					</SofaButton>
 				</div>

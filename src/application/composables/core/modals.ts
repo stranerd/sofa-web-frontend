@@ -9,7 +9,7 @@ import CreateAnnouncement from '@app/components/organizations/announcements/Crea
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
-import CreateLesson from '@app/components/organizations/lessons/CreateLesson.vue'
+import CreateLesson from '@app/components/organizations/lessons/CreateLessonModal.vue'
 import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'

@@ -11,7 +11,7 @@
 		<div class="w-full grid grid-cols-2 mdlg:grid-cols-3 place-items-center h-full md:!gap-6 !gap-3">
 			<template v-for="item in newMaterialOptions" :key="item.name">
 				<a
-					v-if="item.type == 'quiz'"
+					v-if="item.type === 'quiz'"
 					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center"
 					@click="selectQuiz(item)">
 					<SofaIcon :name="item.icon" customClass="h-[22px]!fill-black" />
@@ -23,18 +23,14 @@
 				<SofaFileInput
 					v-if="item.type === 'file'"
 					:isWrapper="true"
-					class="flex flex-col"
 					:accept="item.extras.accept"
 					@update:modelValue="(media) => uploadFile(item, media)">
-					<template #content>
-						<a
-							class="w-full rounded-custom md:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
-							<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black" />
-							<SofaNormalText customClass="!font-bold">
-								{{ item.name }}
-							</SofaNormalText>
-						</a>
-					</template>
+					<a class="w-full rounded-custom md:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center">
+						<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black" />
+						<SofaNormalText customClass="!font-bold">
+							{{ item.name }}
+						</SofaNormalText>
+					</a>
 				</SofaFileInput>
 			</template>
 		</div>

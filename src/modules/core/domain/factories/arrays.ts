@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { BaseFactory } from './base'
 
 export function asArray<T extends BaseFactory<any, any, any>>(factory: { new (): T }) {
@@ -7,6 +7,7 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 	return class FactoryArray {
 		#factories: T[] = []
 		#count = ref(0)
+		private readonly reactiveFactories = computed(() => Array.from({ length: this.#count.value }, (_, index) => this.#factories[index]))
 
 		add() {
 			const instance = new factory()
@@ -44,7 +45,7 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 		}
 
 		get factories() {
-			return Array.from({ length: this.#count.value }, (_, index) => this.#factories[index])
+			return this.reactiveFactories.value
 		}
 
 		get valid() {

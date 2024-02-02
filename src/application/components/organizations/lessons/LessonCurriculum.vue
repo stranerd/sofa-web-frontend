@@ -14,7 +14,7 @@
 						placeholder="Section label"
 						@onBlur="closeLabelSection(sectionIndex)"
 						@onEnter="closeLabelSection(sectionIndex)" />
-					<SofaHeaderText v-else>{{ section.label }}</SofaHeaderText>
+					<SofaHeaderText v-else size="base">{{ section.label }}</SofaHeaderText>
 					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 				</div>
 				<div class="flex items-center gap-2">
