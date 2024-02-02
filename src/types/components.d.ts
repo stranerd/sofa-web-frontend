@@ -31,7 +31,6 @@ declare module 'vue' {
     CreateAnnouncementModal: typeof import('./../application/components/organizations/announcements/CreateAnnouncementModal.vue')['default']
     CreateClassModal: typeof import('./../application/components/organizations/classes/CreateClassModal.vue')['default']
     CreateFileModal: typeof import('./../application/components/study/files/CreateFileModal.vue')['default']
-    CreateLesson: typeof import('./../application/components/organizations/lessons/CreateLesson.vue')['default']
     CreateLessonModal: typeof import('./../application/components/organizations/lessons/CreateLessonModal.vue')['default']
     CreateReportModal: typeof import('./../application/components/interactions/reports/CreateReportModal.vue')['default']
     CreateReviewModal: typeof import('./../application/components/interactions/reviews/CreateReviewModal.vue')['default']

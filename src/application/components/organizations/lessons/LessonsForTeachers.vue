@@ -12,7 +12,7 @@
 		<div v-else-if="selectedLesson">
 			<SofaHeaderText content="Lessons" customClass="hidden mdlg:block" />
 			<div class="hidden mdlg:block h-[1px] w-full bg-lightGray" />
-			<div class="flex items-center justify-between">
+			<div class="flex items-center justify-between gap-2">
 				<div class="flex flex-wrap items-center gap-3 mdlg:mt-6">
 					<SofaButton
 						v-for="lesson in classInst.lessons"
