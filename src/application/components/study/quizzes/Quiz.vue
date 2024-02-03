@@ -71,7 +71,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import QuestionDisplay from '@app/components/study/quizzes/QuestionDisplay.vue'
+import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { QuestionEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 

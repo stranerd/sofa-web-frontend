@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import QuestionDisplay from './QuestionDisplay.vue'
+import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'

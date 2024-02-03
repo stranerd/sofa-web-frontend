@@ -286,9 +286,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import EditQuestionBody from '@app/components/study/quizzes/EditQuestionBody.vue'
-import EditQuestionOptions from '@app/components/study/quizzes/EditQuestionOptions.vue'
-import EditQuestionsList from '@app/components/study/quizzes/EditQuestionsList.vue'
+import EditQuestionBody from '@app/components/study/questions/EditQuestionBody.vue'
+import EditQuestionOptions from '@app/components/study/questions/EditQuestionOptions.vue'
+import EditQuestionsList from '@app/components/study/questions/EditQuestionsList.vue'
 import QuizForm from '@app/components/study/quizzes/QuizForm.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
