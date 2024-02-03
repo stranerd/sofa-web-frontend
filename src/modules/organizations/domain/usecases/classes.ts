@@ -71,7 +71,7 @@ export class ClassesUseCase {
 		})
 	}
 
-	async getSimilarClasses(classId: string, organizationId: string) {
+	async getSimilarClasses(organizationId: string, classId: string) {
 		return await this.repository(organizationId).similar(classId)
 	}
 

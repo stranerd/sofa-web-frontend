@@ -4,77 +4,93 @@
 			v-for="(section, sectionIndex) in curriculum"
 			:key="sectionIndex"
 			:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
-			<div class="flex items-center justify-between">
-				<div v-if="factory" class="flex items-center gap-2">
-					<SofaCustomInput
-						v-if="editedLabelSections.has(sectionIndex)"
-						v-model="factory.factories[sectionIndex].label"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
-						:autoFocus="true"
-						placeholder="Section label"
-						@onBlur="closeLabelSection(sectionIndex)"
-						@onEnter="closeLabelSection(sectionIndex)" />
-					<SofaHeaderText v-else size="base">{{ section.label }}</SofaHeaderText>
-					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
-				</div>
-				<div class="flex items-center gap-2">
-					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-					<SofaIcon
-						class="h-[8px]"
-						name="chevron-down"
-						:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
-						@click="toggleSection(sectionIndex)" />
-				</div>
+			<div class="flex items-center gap-2 justify-between">
+				<SofaCustomInput
+					v-if="factory && editedLabelSections.has(sectionIndex)"
+					v-model="factory.factories[sectionIndex].label"
+					customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+					:autoFocus="true"
+					placeholder="Section label"
+					@onBlur="closeLabelSection(sectionIndex)"
+					@onEnter="closeLabelSection(sectionIndex)" />
+				<SofaHeaderText v-else size="base">{{ section.label }}</SofaHeaderText>
+				<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+				<span class="flex-1" />
+				<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+				<SofaIcon v-if="canEdit && factory" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
+				<SofaIcon
+					class="h-[8px]"
+					name="chevron-down"
+					:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
+					@click="toggleSection(sectionIndex)" />
 			</div>
-			<div
+			<Draggable
 				v-if="expandedSections.has(sectionIndex)"
 				class="gap-4 my-5 grid grid-cols-1"
-				:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''">
-				<div
-					v-for="(item, itemIndex) in section.items"
-					:key="itemIndex"
-					class="flex gap-2 mdlg:gap-4"
-					:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
-					<div class="flex items-center gap-2 flex-1">
-						<SofaIcon :name="getItemIcon(item)" class="h-[16px]" />
-						<SofaNormalText color="text-deepGray" :content="getItemTitle(item)" class="truncate" />
-						<SofaBadge v-if="showLiveBadgeForItem(item)" class="flex-shrink-0"> LIVE </SofaBadge>
-					</div>
-					<div v-if="view === CurriculumView.grid">
-						<SofaImageLoader
-							v-if="item.type !== ClassLessonable.schedule || !item.schedule.isOngoing"
-							:photoUrl="getItemImagePlaceholder(item)"
-							customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom">
-						</SofaImageLoader>
-						<div
-							v-else
-							class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
-							<SofaHeaderText content="LIVE" customClass="!uppercase !text-white" />
+				:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
+				:disabled="!canEdit"
+				:list="canEdit ? factory!.factories[sectionIndex].items : section.items"
+				itemKey=""
+				:group="`sectionItems-${sectionIndex}`">
+				<template #item="{ index: itemIndex }">
+					<div
+						class="flex gap-2 mdlg:gap-4"
+						:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
+						<div class="flex items-center gap-2 flex-1">
+							<SofaIcon :name="getItemIcon(curriculum[sectionIndex].items[itemIndex])" class="h-[16px]" />
+							<SofaNormalText
+								color="text-deepGray"
+								:content="getItemTitle(curriculum[sectionIndex].items[itemIndex])"
+								class="truncate" />
+							<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="flex-shrink-0">
+								LIVE
+							</SofaBadge>
+						</div>
+						<div v-if="view === CurriculumView.grid">
+							<SofaImageLoader
+								v-if="shouldShowItemImage(curriculum[sectionIndex].items[itemIndex])"
+								:photoUrl="getItemImagePlaceholder(curriculum[sectionIndex].items[itemIndex])"
+								customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
+							<div
+								v-else
+								class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
+								<SofaHeaderText content="LIVE" customClass="!uppercase !text-white" />
+							</div>
+						</div>
+						<div class="flex items-center gap-2 shrink-0">
+							<div class="flex items-center gap-1">
+								<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
+								<SofaNormalText
+									color="text-grayColor"
+									:content="getItemInfo(curriculum[sectionIndex].items[itemIndex])"
+									class="!capitalize" />
+							</div>
+							<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+							<SofaIcon
+								v-if="canEdit"
+								class="h-[16px]"
+								name="trash-gray"
+								@click="removeItem(sectionIndex, itemIndex, curriculum[sectionIndex].items[itemIndex])" />
 						</div>
 					</div>
-					<div class="flex items-center gap-2 shrink-0">
-						<div class="flex items-center gap-1">
-							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
-							<SofaNormalText color="text-grayColor" :content="getItemInfo(item)" class="!capitalize" />
-						</div>
-						<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-						<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click="removeItem(sectionIndex, itemIndex, item)" />
-					</div>
-				</div>
-				<a v-if="canEdit" class="flex items-center gap-2" @click="addSchedule(sectionIndex)">
-					<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
-					<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
-				</a>
-				<a v-if="canEdit" class="flex items-center gap-2" @click="addStudyMaterial(sectionIndex)">
-					<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
-					<SofaNormalText color="text-primaryPink" content="Add study material" />
-				</a>
-			</div>
+				</template>
+				<template #footer>
+					<a v-if="canEdit" class="flex items-center gap-2" @click="addSchedule(sectionIndex)">
+						<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
+						<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
+					</a>
+					<a v-if="canEdit" class="flex items-center gap-2" @click="addStudyMaterial(sectionIndex)">
+						<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
+						<SofaNormalText color="text-primaryPink" content="Add study material" />
+					</a>
+				</template>
+			</Draggable>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import Draggable from 'vuedraggable'
 import { computed, ref } from 'vue'
 import { formatNumber } from 'valleyed'
 import { useModals } from '@app/composables/core/modals'
@@ -131,6 +147,11 @@ const getItemInfo = (item: ExtendedCurriculumItem) => {
 	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
 	if (item.type == ClassLessonable.schedule) return `${formatTime(item.schedule.time.start)} - ${formatTime(item.schedule.time.end)}`
+}
+
+const shouldShowItemImage = (item: ExtendedCurriculumItem) => {
+	if (item.type !== ClassLessonable.schedule) return true
+	return !item.schedule.isOngoing
 }
 
 const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {

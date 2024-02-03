@@ -18,14 +18,15 @@
 			</template>
 		</SofaTextField>
 		<div class="h-full max-h-[300px] overflow-y-auto flex flex-col gap-2">
-			<div
+			<a
 				v-for="quiz in filteredQuizzes"
 				:key="quiz.id"
-				class="bg-lightBlue p-4 flex items-center gap-2 cursor-pointer"
+				:class="selectedQuiz === quiz ? 'bg-lightBlue' : 'bg-lightGray'"
+				class="p-4 flex items-center gap-2 rounded-custom"
 				@click="selectedQuiz = quiz">
 				<input v-model="selectedQuiz" type="radio" :value="quiz" />
 				<SofaNormalText :content="quiz.title" />
-			</div>
+			</a>
 		</div>
 		<div class="w-full flex items-center justify-between">
 			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block" @click="close">
@@ -65,7 +66,7 @@ const select = (quiz: QuizEntity | null) => {
 	}
 }
 
-const { quizzes } = useMyQuizzes()
+const { published: quizzes } = useMyQuizzes()
 const filteredQuizzes = computed(() => {
 	if (!searchQuery.value) return quizzes.value
 	return quizzes.value.filter((q) => q.title.includes(searchQuery.value))

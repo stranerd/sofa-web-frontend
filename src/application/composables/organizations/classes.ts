@@ -214,7 +214,7 @@ export const useSimilarClasses = (organizationId: string, classId: string) => {
 		error,
 		called,
 	} = useAsyncFn(async () => {
-		const classes = await ClassesUseCases.getSimilarClasses(classId, organizationId)
+		const classes = await ClassesUseCases.getSimilarClasses(organizationId, classId)
 		similarClasses.value = classes
 	})
 	onMounted(async () => {
