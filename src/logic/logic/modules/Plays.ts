@@ -14,7 +14,6 @@ export default class Plays extends Common {
 	}
 
 	// Form input
-	public CreateGameForm: CreateGameInput | undefined
 	public AnswerGameQuestionForm: AddQuestionAnswer | undefined
 
 	public GetTests = (filters: QueryParams) => $api.plays.test.fetch(filters).then((response) => response.data as Paginated<Test>)
@@ -46,17 +45,14 @@ export default class Plays extends Common {
 	public GetTestQuestions = (testId: string) =>
 		$api.plays.test.getTestQuestions(testId).then((response) => response.data.map((i: any) => new QuestionEntity(i)))
 
-	public CreateGame = (formIsValid: boolean) => {
-		if (formIsValid && this.CreateGameForm) {
-			return $api.plays.game
-				.post(null, this.CreateGameForm)
-				.then((response) => response.data as Game)
-				.catch((error) => {
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-					throw error
-				})
-		}
-	}
+	public CreateGame = (CreateGameForm: CreateGameInput) =>
+		$api.plays.game
+			.post(null, CreateGameForm)
+			.then((response) => response.data as Game)
+			.catch((error) => {
+				Logic.Common.showError(capitalize(error.response.data[0]?.message))
+				throw error
+			})
 
 	public CreateTest = (quizId: string) =>
 		$api.plays.test

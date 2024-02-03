@@ -362,25 +362,6 @@ export default class Study extends Common {
 		})
 	}
 
-	public GoToStudyMode = async (mode: string, quizId: string) => {
-		if (mode === 'practice' || mode === 'flashcard') {
-			await Logic.Common.GoToRoute(`/quiz/${quizId}/${mode}`)
-			return
-		}
-
-		if (mode === 'test') {
-			Logic.Common.showLoading()
-			await Logic.Plays.CreateTest(quizId)
-				.then(async (data) => {
-					await Logic.Common.GoToRoute(`/tests/${data.id}`)
-				})
-				.finally(() => {
-					Logic.Common.hideLoading()
-				})
-			return
-		}
-	}
-
 	public GetFiles = (filters: QueryParams) =>
 		$api.study.file.fetch(filters).then((response) => {
 			this.AllFiles = response.data

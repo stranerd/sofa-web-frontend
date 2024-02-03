@@ -50,7 +50,7 @@
 import { ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useHasAccess } from '@app/composables/study'
-import { QuizEntity } from '@modules/study'
+import { QuizEntity, QuizModes } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
@@ -60,7 +60,7 @@ const props = defineProps<{
 
 const goToEdit = () => {
 	props.close()
-	Logic.Common.GoToRoute(`/quiz/${props.quiz?.id}/edit`)
+	Logic.Common.GoToRoute(`/quiz/${props.quiz.id}/edit`)
 }
 
 const { id } = useAuth()
@@ -69,9 +69,24 @@ const { hasAccess } = useHasAccess()
 const showGame = ref(false)
 const joinGame = ref(false)
 
-const chooseMode = async (mode: string) => {
-	if (mode == 'game') return (showGame.value = true)
-	await Logic.Study.GoToStudyMode(mode, props.quiz.id)
+const chooseMode = async (mode: QuizModes) => {
+	const quizId = props.quiz.id
+	if (mode === QuizModes.game) return (showGame.value = true)
+	if (mode === QuizModes.practice || mode === QuizModes.flashcard) {
+		await Logic.Common.GoToRoute(`/quiz/${quizId}/${mode}`)
+	}
+
+	if (mode === QuizModes.test) {
+		Logic.Common.showLoading()
+		await Logic.Plays.CreateTest(quizId)
+			.then(async (data) => {
+				await Logic.Common.GoToRoute(`/tests/${data.id}`)
+			})
+			.finally(() => {
+				Logic.Common.hideLoading()
+			})
+	}
+
 	props.close()
 }
 
@@ -80,38 +95,32 @@ const otherTasks = [
 		title: 'Practice',
 		subTitle: 'Interactive and comfortable learning',
 		icon: 'learn-quiz' as const,
-		value: 'practice',
+		value: QuizModes.practice,
 	},
 	{
 		title: 'Test',
 		subTitle: 'Evaluate your level of knowledge',
 		icon: 'test' as const,
-		value: 'test',
+		value: QuizModes.test,
 	},
 	{
 		title: 'Flashcards',
 		subTitle: 'Digital cards to memorize answers',
 		icon: 'study-flashcard' as const,
-		value: 'flashcards',
+		value: QuizModes.flashcard,
 	},
 	{
 		title: 'Game',
 		subTitle: 'Battle friends for the highest score',
 		icon: 'play-quiz' as const,
-		value: 'game',
+		value: QuizModes.game,
 	},
 ]
 
 const createQuizGame = async () => {
 	Logic.Common.showLoading()
-
-	Logic.Plays.CreateGameForm = {
-		quizId: props.quiz.id,
-		join: joinGame.value,
-	}
-
-	await Logic.Plays.CreateGame(true)
-		?.then(async (game) => {
+	await Logic.Plays.CreateGame({ quizId: props.quiz.id, join: joinGame.value })
+		.then(async (game) => {
 			await Logic.Common.GoToRoute(`/games/${game.id}`)
 			props.close()
 		})
