@@ -32,6 +32,23 @@ export interface Transaction {
 	updatedAt: number
 }
 
+export type Subscription = {
+	active: boolean
+	current: {
+		activatedAt: number
+		expiredAt: number
+		jobId: string | null
+	} | null
+	next: {
+		renewedAt: number
+	} | null
+	data: {
+		type: 'classes'
+		organizationId: string
+		classId: string
+	}
+}
+
 export interface Wallet {
 	hash: string
 	id: string
@@ -61,6 +78,7 @@ export interface Wallet {
 			renewedAt: string
 		}
 	}
+	subscriptions: Subscription[]
 	createdAt: number
 	updatedAt: number
 }

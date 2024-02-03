@@ -49,11 +49,11 @@
 						</SofaNormalText>
 					</div>
 					<SofaButton
-						v-if="user && !currentClass.isEnrolled(user)"
+						v-if="!enrollInClassProps.hide"
 						padding="py-3 px-5"
 						customClass="hidden mdlg:block self-start mt-3"
-						@click="purchaseClass(currentClass)">
-						{{ `Enroll ${Logic.Common.formatPrice(currentClass.price.amount, currentClass.price.currency)}/month` }}
+						@click="enrollInClassProps.handler">
+						{{ enrollInClassProps.label }}
 					</SofaButton>
 				</div>
 			</div>
@@ -133,36 +133,34 @@
 				</div>
 			</div>
 		</div>
-		<div
-			v-if="currentClass && user && !currentClass.isEnrolled(user)"
-			class="md:!hidden flex flex-col w-full bg-white p-4"
-			@click="purchaseClass(currentClass)">
+		<div v-if="!enrollInClassProps.hide" class="md:!hidden flex flex-col w-full bg-white p-4" @click="enrollInClassProps.handler">
 			<SofaButton padding="px-6 py-3" customClass="w-full">
-				{{ `Enroll ${Logic.Common.formatPrice(currentClass.price.amount, currentClass.price.currency)}/month` }}
+				{{ enrollInClassProps.label }}
 			</SofaButton>
 		</div>
 	</ExpandedLayout>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { Differ, pluralize } from 'valleyed'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { pluralize } from 'valleyed'
-import { useClass, usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
-import { Logic } from 'sofa-logic'
-import { formatTime } from '@utils/dates'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
-import { ClassLesson } from '@modules/organizations'
 import { useModals } from '@app/composables/core/modals'
+import { useClass, usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
+import { ClassLesson } from '@modules/organizations'
+import { formatTime } from '@utils/dates'
+import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdExplore',
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
+		const router = useRouter()
 		const route = useRoute()
-		const { id: userId, user } = useAuth()
+		const { user, wallet } = useAuth()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
 		const tabs = [
@@ -215,6 +213,28 @@ export default defineComponent({
 				)
 			}
 		}
+		const enrollInClassProps = computed(() => {
+			const classInst = currentClass.value
+			if (!classInst) return { hide: true, label: 'Class not found', handler: () => {} }
+			if (classInst.isEnrolled(user.value!))
+				return {
+					label: 'Go to class',
+					handler: () => router.push(classInst.pageLink),
+				}
+			const classSub = wallet.value?.subscriptions.find((sub) =>
+				Differ.equal(sub.data, { organizationId: classInst.organizationId, classId: classInst.id, type: 'classes' }),
+			)
+			if (classSub && !classSub.active)
+				return {
+					label: 'Renew subscription',
+					handler: () => purchaseClass(classInst),
+				}
+			return {
+				label: `Enroll ${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
+				handler: () => purchaseClass(classInst),
+			}
+		})
+
 		return {
 			Logic,
 			currentClass,
@@ -223,14 +243,13 @@ export default defineComponent({
 			formatTime,
 			tabs,
 			selectedTab,
-			userId,
 			shareClass,
 			lessons,
 			selectedLesson,
 			purchaseClass,
-			user,
 			similarClasses,
 			openPreviewModal,
+			enrollInClassProps,
 		}
 	},
 })

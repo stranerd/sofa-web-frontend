@@ -81,7 +81,11 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	}
 
 	isEnrolled(user: UserEntity) {
-		return user.account.organizationsIn.some((org) => org.id === this.organizationId) || this.members.students.includes(user.id)
+		return this.canAccessFromOrg(user) || this.members.students.includes(user.id)
+	}
+
+	canAccessFromOrg(user: UserEntity) {
+		return user.account.organizationsIn.some((org) => org.id === this.organizationId)
 	}
 
 	getLesson(id: string) {
