@@ -2,8 +2,8 @@ import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
+import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 
 const store = {} as Record<
 	string,
@@ -157,4 +157,44 @@ export const useDeleteSchedule = () => {
 	)
 
 	return { deleteSchedule, error, loading }
+}
+
+export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntity) => {
+	const { asyncFn: start } = useAsyncFn(
+		async () => {
+			const updated = await SchedulesUseCases.start({
+				organizationId: schedule.organizationId,
+				classId: schedule.classId,
+				id: schedule.id,
+			})
+			if (!updated.stream) return false
+			Logic.Common.copy(updated.stream.streamKey ?? '')
+			return true
+		},
+		{
+			pre: async () =>
+				Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: 'This action will start the schedule. It will copy your youtube record key to your clipboard and redirect you to the jitsi site. You can always come back here to copy the stream code if needed.',
+					right: { label: 'Yes, start' },
+				}),
+		},
+	)
+
+	const { asyncFn: end } = useAsyncFn(
+		async () => {
+			await SchedulesUseCases.end({ organizationId: schedule.organizationId, classId: schedule.classId, id: schedule.id })
+			return true
+		},
+		{
+			pre: async () =>
+				Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: 'This action will end the schedule. Nobody will be able to join the live anymore.',
+					right: { label: 'Yes, end' },
+				}),
+		},
+	)
+
+	return { start, end }
 }
