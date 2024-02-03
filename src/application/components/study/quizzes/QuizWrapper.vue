@@ -239,7 +239,7 @@ watch(
 	[currentQuestionById, quizQuestions, quiz],
 	() => {
 		if (!extras.value.canEdit || !currentQuestionById.value) return
-		const quizPath = `/quiz/${props.id}/edit`
+		const quizPath = `/quizzes/${props.id}/edit`
 		if (route.path !== quizPath) return
 		const v = selectedQuestionId.value
 		router.push(`${quizPath}?q=${v}`).catch()

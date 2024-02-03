@@ -37,7 +37,7 @@ import Quiz from '@app/components/study/quizzes/Quiz.vue'
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
 	routeConfig: {
-		goBackRoute: (route: RouteLocationNormalized) => `/quiz/${route.params.id}/edit`,
+		goBackRoute: (route: RouteLocationNormalized) => `/quizzes/${route.params.id}/edit`,
 	},
 	components: { QuizWrapper, Quiz },
 	setup() {

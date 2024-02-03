@@ -28,7 +28,7 @@
 								{
 									name: 'Preview',
 									icon: 'preview',
-									handler: () => Logic.Common.GoToRoute(`/quiz/${quiz.id}/preview`),
+									handler: () => Logic.Common.GoToRoute(`/quizzes/${quiz.id}/preview`),
 									size: 'h-[17px]',
 								},
 								{
@@ -130,7 +130,7 @@
 									})
 								" />
 							<SofaIcon class="h-[18px]" name="cog" @click="showSettingModal = true" />
-							<SofaIcon class="h-[14px]" name="preview" @click="() => Logic.Common.GoToRoute(`/quiz/${quiz.id}/preview`)" />
+							<SofaIcon class="h-[14px]" name="preview" @click="() => $router.push(`/quizzes/${quiz.id}/preview`)" />
 							<SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
 						</div>
 					</div>

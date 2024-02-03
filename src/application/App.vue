@@ -30,7 +30,7 @@ watch(
 		const path = route.fullPath
 		const quizzes = user.value?.account.editing?.quizzes
 		if (!quizzes) return
-		if (!path.startsWith(`/quiz/${quizzes.id}/edit`)) UsersUseCases.updateEditingQuizzes(null).catch()
+		if (!path.startsWith(`/quizzes/${quizzes.id}/edit`)) UsersUseCases.updateEditingQuizzes(null).catch()
 	},
 	{ immediate: true },
 )

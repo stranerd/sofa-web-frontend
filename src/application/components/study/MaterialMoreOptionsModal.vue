@@ -34,7 +34,7 @@ const moreOptions = computed(() => [
 		show: () => props.material?.user.id === id.value,
 		action: () => {
 			props.close()
-			if (props.material.isQuiz()) Logic.Common.GoToRoute(`/quiz/${props.material.id}/edit`)
+			if (props.material.isQuiz()) Logic.Common.GoToRoute(`/quizzes/${props.material.id}/edit`)
 			else Logic.Common.GoToRoute(`/course/create?id=${props.material.id}`)
 		},
 	},

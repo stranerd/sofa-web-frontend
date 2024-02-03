@@ -14,7 +14,7 @@ export default defineComponent({
 			async () => {
 				const { createQuiz } = useCreateQuiz()
 				const quiz = await createQuiz()
-				if (quiz) return `/quiz/${quiz.id}/edit`
+				if (quiz) return `/quizzes/${quiz.id}/edit`
 				return '/library'
 			},
 		],

@@ -145,7 +145,7 @@
 					</SofaSelect>
 
 					<div v-if="!selectedQuiz" class="w-full flex flex-row items-center justify-center py-3">
-						<SofaButton padding="px-5 py-2" @click="Logic.Common.GoToRoute('/quiz/create')"> Create a quiz </SofaButton>
+						<SofaButton padding="px-5 py-2" @click="$router.push('/quizzes/create')"> Create a quiz </SofaButton>
 					</div>
 
 					<div class="w-full flex flex-row items-center justify-between z-[50] bg-white">

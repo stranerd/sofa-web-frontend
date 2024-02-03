@@ -101,7 +101,7 @@ export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
 export const openQuiz = (activity: ResourceType, force = false) => {
 	const original = activity.original as QuizEntity
 	if (!force && ((activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
-		return Logic.Common.GoToRoute(`/quiz/${activity.id}/edit`)
+		return Logic.Common.GoToRoute(`/quizzes/${activity.id}/edit`)
 	useModals().study.chooseStudyMode.open({ quiz: original })
 }
 

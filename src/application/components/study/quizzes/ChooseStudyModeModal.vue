@@ -60,7 +60,7 @@ const props = defineProps<{
 
 const goToEdit = () => {
 	props.close()
-	Logic.Common.GoToRoute(`/quiz/${props.quiz.id}/edit`)
+	Logic.Common.GoToRoute(`/quizzes/${props.quiz.id}/edit`)
 }
 
 const { id } = useAuth()
@@ -73,7 +73,7 @@ const chooseMode = async (mode: QuizModes) => {
 	const quizId = props.quiz.id
 	if (mode === QuizModes.game) return (showGame.value = true)
 	if (mode === QuizModes.practice || mode === QuizModes.flashcard) {
-		await Logic.Common.GoToRoute(`/quiz/${quizId}/${mode}`)
+		await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
 	}
 
 	if (mode === QuizModes.test) {

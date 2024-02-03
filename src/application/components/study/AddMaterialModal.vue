@@ -37,7 +37,7 @@ const studyMaterialItems = [
 		title: 'Create a quiz',
 		subTitle: 'Build a customized quiz with different question types and study modes',
 		icon: 'pink-question' as const,
-		route: '/quiz/create',
+		route: '/quizzes/create',
 	},
 	{
 		title: 'Create a course',

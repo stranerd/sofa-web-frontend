@@ -45,7 +45,7 @@ export const useHomeTasks = () => {
 						icon: 'pink-question' as const,
 						iconSize: 'h-[46px]',
 						isDone: user.value?.checkTaskState('create_quiz'),
-						action: () => Logic.Common.GoToRoute('/quiz/create'),
+						action: () => Logic.Common.GoToRoute('/quizzes/create'),
 					},
 					{
 						title: 'Create a course',

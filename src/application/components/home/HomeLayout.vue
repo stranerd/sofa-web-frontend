@@ -90,20 +90,10 @@
 				</SofaTextField>
 
 				<div class="w-full flex items-center gap-2">
-					<SofaBadge
-						color="gray"
-						:isInverted="true"
-						as="a"
-						customClass="!py-2 !px-4"
-						@click="Logic.Common.GoToRoute('/quiz/create')">
+					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/quizzes/create">
 						Create a quiz
 					</SofaBadge>
-					<SofaBadge
-						color="gray"
-						:isInverted="true"
-						as="a"
-						customClass="!py-2 !px-4"
-						@click="Logic.Common.GoToRoute('/course/create')">
+					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/course/create">
 						Create a course
 					</SofaBadge>
 				</div>
@@ -204,7 +194,7 @@ const customizeAi = () => useModals().users.customizeAi.open({})
 const rightCommands = computed(() => [
 	{ label: 'Add a student', action: () => useModals().organizations.addMember.open({ type: MemberTypes.student, org: user.value! }) },
 	{ label: 'Add a teacher', action: () => useModals().organizations.addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
-	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quiz/create') },
+	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quizzes/create') },
 	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
 	...(userType.value.isOrg
 		? [{ label: 'Create a class', action: () => useModals().organizations.createClass.open({ organizationId: id.value }) }]
