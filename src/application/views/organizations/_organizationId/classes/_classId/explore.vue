@@ -224,13 +224,15 @@ export default defineComponent({
 			const classSub = wallet.value?.subscriptions.find((sub) =>
 				Differ.equal(sub.data, { organizationId: classInst.organizationId, classId: classInst.id, type: 'classes' }),
 			)
+			const canAccessForFree = classInst.canAccessFromOrg(user.value!)
 			if (classSub && !classSub.active)
 				return {
-					label: 'Renew subscription',
+					label: 'Renew enrollment',
 					handler: () => purchaseClass(classInst),
 				}
+			const price = `${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`
 			return {
-				label: `Enroll ${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
+				label: `Enroll ${canAccessForFree ? 'for free' : price}`,
 				handler: () => purchaseClass(classInst),
 			}
 		})

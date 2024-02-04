@@ -16,7 +16,7 @@
 						<SofaHeaderText :content="emptyClassesContent.title" />
 						<SofaNormalText :content="emptyClassesContent.sub" color="text-grayColor" />
 						<router-link to="/classes/explore">
-							<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-5">Explore</SofaButton>
+							<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-5">Explore </SofaButton>
 						</router-link>
 					</div>
 				</div>
@@ -63,7 +63,8 @@
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
-import { useMyClassesIn } from '@app/composables/organizations/classes-explore'
+import { useAuth } from '@app/composables/auth/auth'
+import { useClassesInList, useMyClassesIn } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
 	name: 'Classes',
@@ -86,10 +87,14 @@ export default defineComponent({
 		const tab = ref(tabs[0])
 
 		const searchQuery = ref('')
+		const { user } = useAuth()
 		const { classes } = useMyClassesIn()
+		const { classes: savedClasses } = useClassesInList(computed(() => user.value?.account.saved.classes ?? []))
+
 		const filteredClasses = computed(() => {
-			if (!searchQuery.value) return classes.value
-			return classes.value.filter((c) => c.search(searchQuery.value))
+			const list = tab.value === 'saved' ? savedClasses.value : classes.value
+			if (!searchQuery.value) return list
+			return list.filter((c) => c.search(searchQuery.value))
 		})
 
 		return { classes, filteredClasses, tabs, tab, emptyClassesContent, searchQuery }

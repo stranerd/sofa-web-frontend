@@ -1,7 +1,7 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useAsyncFn } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { UsersUseCases } from '@modules/users'
 import { ClassEntity, ClassesUseCases } from '@modules/organizations'
 
@@ -66,6 +66,12 @@ export const useExploreClasses = () => {
 	})
 
 	return { classes: store.classesExplore, searchQuery, loading, error, fetchClasses }
+}
+
+export const useClassesInList = (ids: Refable<string[]>) => {
+	const allClasses = computed(() => [...store.classesIn.value, ...store.classesExplore.value])
+	const { items: classes } = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids))
+	return { classes }
 }
 
 export const useSaveClass = (classInst: ClassEntity) => {
