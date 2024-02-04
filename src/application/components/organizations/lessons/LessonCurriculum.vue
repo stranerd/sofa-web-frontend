@@ -1,12 +1,12 @@
 <template>
-	<Draggable :disabled="!canEdit" :list="curriculum" class="w-full flex flex-col gap-4" itemKey="" group="curriculum">
+	<Draggable v-model="factory.factories" :disabled="!canEdit" class="w-full flex flex-col gap-4" itemKey="" group="curriculum">
 		<template #item="{ index: sectionIndex }">
 			<div :class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
 				<div class="flex items-center gap-2 justify-between">
 					<SofaCustomInput
-						v-if="factory && editedLabelSections.has(sectionIndex)"
+						v-if="canEdit && editedLabelSections.has(sectionIndex)"
 						v-model="factory.factories[sectionIndex].label"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white !px-0"
 						:autoFocus="true"
 						placeholder="Section label"
 						@onBlur="closeLabelSection(sectionIndex)"
@@ -15,11 +15,7 @@
 					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 					<span class="flex-1" />
 					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-					<SofaIcon
-						v-if="canEdit && factory"
-						class="h-[16px]"
-						name="trash-gray"
-						@click.stop.prevent="factory.delete(sectionIndex)" />
+					<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
 					<SofaIcon
 						class="h-[8px]"
 						name="chevron-down"
@@ -31,7 +27,7 @@
 					class="gap-4 my-5 grid grid-cols-1"
 					:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
 					:disabled="!canEdit"
-					:list="canEdit ? factory!.factories[sectionIndex].items : curriculum[sectionIndex].items"
+					:list="factory.factories[sectionIndex].items"
 					itemKey=""
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
@@ -126,6 +122,13 @@ const { deleteFile } = useDeleteFile()
 const { deleteSchedule } = useDeleteSchedule()
 
 const canEdit = computed(() => props.factory !== undefined)
+
+const factory = computed(() => {
+	if (props.factory) return props.factory
+	const f = new LessonCurriculumFactory()
+	f.loadEntity(props.curriculum)
+	return f
+})
 
 type ExtendedCurriculumItem = (typeof curriculum)['value'][number]['items'][number]
 

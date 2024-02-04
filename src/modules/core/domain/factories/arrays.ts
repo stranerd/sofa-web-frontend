@@ -7,7 +7,13 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 	return class FactoryArray {
 		#factories: T[] = []
 		#count = ref(0)
-		private readonly reactiveFactories = computed(() => Array.from({ length: this.#count.value }, (_, index) => this.#factories[index]))
+		private readonly reactiveFactories = computed({
+			get: () => Array.from({ length: this.#count.value }, (_, index) => this.#factories[index]),
+			set: (factories: T[]) => {
+				this.#factories.splice(0, this.#factories.length, ...factories)
+				this.#markStateChange()
+			},
+		})
 
 		add() {
 			const instance = new factory()
@@ -46,6 +52,11 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 
 		get factories() {
 			return this.reactiveFactories.value
+		}
+
+		set factories(factories: T[]) {
+			console.log('factories', factories)
+			this.reactiveFactories.value = factories
 		}
 
 		get valid() {

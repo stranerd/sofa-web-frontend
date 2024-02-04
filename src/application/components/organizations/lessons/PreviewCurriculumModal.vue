@@ -19,9 +19,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onBeforeUnmount } from 'vue'
-import { ClassLesson, ClassEntity } from '@modules/organizations'
+import { watch } from 'vue'
 import { useCurriculumViewToggle } from '@app/composables/organizations/lessons'
+import { ClassEntity, ClassLesson } from '@modules/organizations'
+import { Logic } from 'sofa-logic'
+
 const props = defineProps<{
 	close: () => void
 	lesson: ClassLesson
@@ -30,18 +32,12 @@ const props = defineProps<{
 	isPreview: boolean
 }>()
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
-const handleResize = () => {
-	const windowWidth = window.innerWidth
-	const smallScreenBreakpoint = 1000
-	if (windowWidth > smallScreenBreakpoint && !props.isPreview) {
-		props.close()
-	}
-}
-onMounted(() => {
-	window.addEventListener('resize', handleResize)
-	handleResize()
-})
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', handleResize)
-})
+
+watch(
+	() => Logic.Common.window.width,
+	() => {
+		if (Logic.Common.isLarge && !props.isPreview) props.close()
+	},
+	{ immediate: true },
+)
 </script>
