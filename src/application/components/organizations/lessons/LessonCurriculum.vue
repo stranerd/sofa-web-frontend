@@ -1,105 +1,108 @@
 <template>
-	<div class="w-full flex flex-col gap-4">
-		<div
-			v-for="(section, sectionIndex) in curriculum"
-			:key="sectionIndex"
-			:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
-			<div class="flex items-center gap-2 justify-between">
-				<SofaCustomInput
-					v-if="factory && editedLabelSections.has(sectionIndex)"
-					v-model="factory.factories[sectionIndex].label"
-					customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
-					:autoFocus="true"
-					placeholder="Section label"
-					@onBlur="closeLabelSection(sectionIndex)"
-					@onEnter="closeLabelSection(sectionIndex)" />
-				<SofaHeaderText v-else size="base">{{ section.label }}</SofaHeaderText>
-				<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
-				<span class="flex-1" />
-				<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-				<SofaIcon v-if="canEdit && factory" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
-				<SofaIcon
-					class="h-[8px]"
-					name="chevron-down"
-					:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
-					@click="toggleSection(sectionIndex)" />
-			</div>
-			<Draggable
-				v-if="expandedSections.has(sectionIndex)"
-				class="gap-4 my-5 grid grid-cols-1"
-				:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
-				:disabled="!canEdit"
-				:list="canEdit ? factory!.factories[sectionIndex].items : section.items"
-				itemKey=""
-				:group="`sectionItems-${sectionIndex}`">
-				<template #item="{ index: itemIndex }">
-					<div
-						class="flex gap-2 mdlg:gap-4"
-						:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
-						<div class="flex items-center gap-2 flex-1">
-							<SofaIcon :name="getItemIcon(curriculum[sectionIndex].items[itemIndex])" class="h-[16px]" />
-							<SofaNormalText
-								color="text-deepGray"
-								:content="getItemTitle(curriculum[sectionIndex].items[itemIndex])"
-								class="truncate" />
-							<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="flex-shrink-0">
-								LIVE
-							</SofaBadge>
-						</div>
-						<div v-if="view === CurriculumView.grid">
-							<SofaImageLoader
-								v-if="shouldShowItemImage(curriculum[sectionIndex].items[itemIndex])"
-								:photoUrl="getItemImagePlaceholder(curriculum[sectionIndex].items[itemIndex])"
-								customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
-							<div
-								v-else
-								class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
-								<SofaHeaderText content="LIVE" customClass="!uppercase !text-white" />
-							</div>
-						</div>
-						<div class="flex items-center gap-2 shrink-0">
-							<div class="flex items-center gap-1">
-								<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
+	<Draggable :disabled="!canEdit" :list="curriculum" class="w-full flex flex-col gap-4" itemKey="" group="curriculum">
+		<template #item="{ index: sectionIndex }">
+			<div :class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
+				<div class="flex items-center gap-2 justify-between">
+					<SofaCustomInput
+						v-if="factory && editedLabelSections.has(sectionIndex)"
+						v-model="factory.factories[sectionIndex].label"
+						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+						:autoFocus="true"
+						placeholder="Section label"
+						@onBlur="closeLabelSection(sectionIndex)"
+						@onEnter="closeLabelSection(sectionIndex)" />
+					<SofaHeaderText v-else size="base">{{ curriculum[sectionIndex].label }}</SofaHeaderText>
+					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+					<span class="flex-1" />
+					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+					<SofaIcon
+						v-if="canEdit && factory"
+						class="h-[16px]"
+						name="trash-gray"
+						@click.stop.prevent="factory.delete(sectionIndex)" />
+					<SofaIcon
+						class="h-[8px]"
+						name="chevron-down"
+						:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
+						@click.stop.prevent="toggleSection(sectionIndex)" />
+				</div>
+				<Draggable
+					v-if="expandedSections.has(sectionIndex)"
+					class="gap-4 my-5 grid grid-cols-1"
+					:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
+					:disabled="!canEdit"
+					:list="canEdit ? factory!.factories[sectionIndex].items : curriculum[sectionIndex].items"
+					itemKey=""
+					:group="`sectionItems-${sectionIndex}`">
+					<template #item="{ index: itemIndex }">
+						<div
+							class="flex gap-2 mdlg:gap-4"
+							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
+							<div class="flex items-center gap-2 flex-1">
+								<SofaIcon :name="getItemIcon(curriculum[sectionIndex].items[itemIndex])" class="h-[16px]" />
 								<SofaNormalText
-									color="text-grayColor"
-									:content="getItemInfo(curriculum[sectionIndex].items[itemIndex])"
-									class="!capitalize" />
+									color="text-deepGray"
+									:content="getItemTitle(curriculum[sectionIndex].items[itemIndex])"
+									class="truncate" />
+								<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="flex-shrink-0">
+									LIVE
+								</SofaBadge>
 							</div>
-							<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
-							<SofaIcon
-								v-if="canEdit"
-								class="h-[16px]"
-								name="trash-gray"
-								@click="removeItem(sectionIndex, itemIndex, curriculum[sectionIndex].items[itemIndex])" />
+							<div v-if="view === CurriculumView.grid">
+								<SofaImageLoader
+									v-if="shouldShowItemImage(curriculum[sectionIndex].items[itemIndex])"
+									:photoUrl="getItemImagePlaceholder(curriculum[sectionIndex].items[itemIndex])"
+									customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
+								<div
+									v-else
+									class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
+									<SofaHeaderText content="LIVE" customClass="!uppercase !text-white" />
+								</div>
+							</div>
+							<div class="flex items-center gap-2 shrink-0">
+								<div class="flex items-center gap-1">
+									<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
+									<SofaNormalText
+										color="text-grayColor"
+										:content="getItemInfo(curriculum[sectionIndex].items[itemIndex])"
+										class="!capitalize" />
+								</div>
+								<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+								<SofaIcon
+									v-if="canEdit"
+									class="h-[16px]"
+									name="trash-gray"
+									@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
+							</div>
 						</div>
-					</div>
-				</template>
-				<template #footer>
-					<a v-if="canEdit" class="flex items-center gap-2" @click="addSchedule(sectionIndex)">
-						<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
-						<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
-					</a>
-					<a v-if="canEdit" class="flex items-center gap-2" @click="addStudyMaterial(sectionIndex)">
-						<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
-						<SofaNormalText color="text-primaryPink" content="Add study material" />
-					</a>
-				</template>
-			</Draggable>
-		</div>
-	</div>
+					</template>
+					<template #footer>
+						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
+							<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
+							<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
+						</a>
+						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
+							<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
+							<SofaNormalText color="text-primaryPink" content="Add study material" />
+						</a>
+					</template>
+				</Draggable>
+			</div>
+		</template>
+	</Draggable>
 </template>
 
 <script lang="ts" setup>
-import Draggable from 'vuedraggable'
-import { computed, ref } from 'vue'
 import { formatNumber } from 'valleyed'
+import { computed, ref } from 'vue'
+import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
+import { useDeleteSchedule } from '@app/composables/organizations/schedules'
+import { useDeleteFile } from '@app/composables/study/files'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
 import { FileType } from '@modules/study'
 import { formatTime } from '@utils/dates'
-import { useDeleteFile } from '@app/composables/study/files'
-import { useDeleteSchedule } from '@app/composables/organizations/schedules'
 
 const props = withDefaults(
 	defineProps<{
@@ -197,9 +200,11 @@ function closeLabelSection(index: number) {
 	if (editedLabelSections.value.has(index)) editedLabelSections.value.delete(index)
 }
 
-const removeItem = async (sectionIndex: number, itemIndex: number, item: ExtendedCurriculumItem) => {
+const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	if (!props.factory || !props.factory.factories.at(sectionIndex)) return
 	const fac = props.factory.factories[sectionIndex]
+	const item = curriculum.value.at(sectionIndex)?.items.at(itemIndex)
+	if (!item) return
 	if (item.type === ClassLessonable.file)
 		await deleteFile(item.file).then((deleted) => {
 			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
