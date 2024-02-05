@@ -40,7 +40,7 @@ const props = defineProps<{
 }>()
 
 const { id } = useAuth()
-const { time } = useTimeDifference(props.announcement.updatedAt)
+const { time } = useTimeDifference(props.announcement.createdAt)
 
 const recipient = computed(() => {
 	const userType = props.announcement.filter.userType
