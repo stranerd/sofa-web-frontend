@@ -11,7 +11,7 @@
 			</div>
 
 			<div class="flex gap-3 flex-wrap items-center">
-				<div v-for="(option, index) in selectedOptions" :key="index" class="w-auto pb-2">
+				<div v-for="option in selectedOptions" :key="option.id" class="w-auto pb-2">
 					<span class="px-4 py-2 bg-primaryPurple rounded-custom flex flex-row items-center justify-center gap-1">
 						<SofaNormalText color="text-white" :content="option.name" />
 						<SofaIcon customClass="h-[18px] cursor-pointer" name="close-white" @click="toggleOption(option)" />
@@ -20,7 +20,7 @@
 			</div>
 		</div>
 
-		<div v-for="(option, index) in searchOptions" :key="index" class="w-full flex flex-col gap-3 px-4">
+		<div v-for="option in searchOptions" :key="option.icon" class="w-full flex flex-col gap-3 px-4">
 			<a class="w-full flex items-center justify-between" @click="openOption = option.name === openOption ? '' : option.name">
 				<div class="flex items-center gap-2">
 					<SofaIcon customClass="h-[16px]" :name="option.icon" />

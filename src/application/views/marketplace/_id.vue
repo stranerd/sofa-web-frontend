@@ -75,8 +75,8 @@
 						</div>
 
 						<a
-							v-for="(method, index) in PaymentMethods?.results"
-							:key="index"
+							v-for="method in PaymentMethods?.results"
+							:key="method.hash"
 							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom`"
