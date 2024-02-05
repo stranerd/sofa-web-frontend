@@ -45,8 +45,8 @@
 			</a>
 
 			<div
-				v-for="(method, index) in PaymentMethods.results"
-				:key="index"
+				v-for="method in PaymentMethods.results"
+				:key="method.hash"
 				class="w-full flex flex-row items-center gap-3 p-3 border-2 border-darkLightGray justify-between rounded-custom">
 				<div class="flex flex-row items-center gap-3">
 					<SofaIcon customClass="h-[20px]" name="card" />
@@ -167,8 +167,8 @@
 						</a>
 
 						<a
-							v-for="(method, index) in PaymentMethods.results"
-							:key="index"
+							v-for="method in PaymentMethods.results"
+							:key="method.hash"
 							:class="`w-full flex items-center gap-3 p-3 bg-lightGray ${
 								fundWalletMethod == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom`"

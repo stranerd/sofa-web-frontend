@@ -15,7 +15,7 @@
 			</SofaButton>
 		</div>
 		<div v-if="filteredSchedules.length" class="flex flex-col gap-4 mt-4 mdlg:gap-0 mdlg:mt-2">
-			<ScheduleCard v-for="(schedule, index) in filteredSchedules" :key="index" :schedule="schedule" :classInst="classInst" />
+			<ScheduleCard v-for="schedule in filteredSchedules" :key="schedule.hash" :schedule="schedule" :classInst="classInst" />
 		</div>
 		<div v-else class="w-full pt-4">
 			<div class="w-full flex flex-col gap-2 items-center justify-center bg-lightGray p-4">

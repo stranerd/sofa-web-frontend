@@ -82,8 +82,8 @@
 					</a>
 				</div>
 				<AnnouncementCard
-					v-for="(announcement, index) in filteredAnnouncements"
-					:key="index"
+					v-for="announcement in filteredAnnouncements"
+					:key="announcement.hash"
 					:classInst="classInst"
 					:announcement="announcement" />
 				<SofaButton

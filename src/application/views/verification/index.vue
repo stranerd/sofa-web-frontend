@@ -78,7 +78,7 @@
 
 				<div class="w-full flex flex-col gap-2">
 					<div class="w-full flex flex-col gap-4 md:!gap-4">
-						<template v-for="(content, index) in selectedMaterialList" :key="index">
+						<template v-for="content in selectedMaterialList" :key="content.original.hash">
 							<template v-if="!Logic.Common.isOnlyMobile">
 								<SofaActivityCard
 									v-if="content.subject"

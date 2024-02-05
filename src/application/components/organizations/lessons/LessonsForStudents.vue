@@ -15,8 +15,8 @@
 				<div class="h-[1px] w-full bg-lightGray" />
 				<div class="w-full flex flex-col items-center gap-6 mt-6">
 					<LessonCard
-						v-for="(lesson, index) in classInst.lessons"
-						:key="index"
+						v-for="lesson in classInst.lessons"
+						:key="lesson.id"
 						:lesson="lesson"
 						:classInst="classInst"
 						class="w-full" />
