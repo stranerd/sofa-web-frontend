@@ -24,6 +24,7 @@ import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
+import ViewCuriculumItem from '@app/components/organizations/lessons/ViewCurriculumItem.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -49,6 +50,7 @@ export const useModals = () => ({
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
+		viewCurriculumItem: { component: ViewCuriculumItem },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },

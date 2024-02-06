@@ -67,6 +67,7 @@ declare module 'vue' {
     NewMaterial: typeof import('./../application/components/study/courses/NewMaterial.vue')['default']
     PreviewCurriculumModal: typeof import('./../application/components/organizations/lessons/PreviewCurriculumModal.vue')['default']
     Profile: typeof import('./../application/components/settings/profile.vue')['default']
+    QuestionCard: typeof import('./../application/components/organizations/lessons/QuestionCard.vue')['default']
     QuestionDisplay: typeof import('./../application/components/study/questions/QuestionDisplay.vue')['default']
     Quiz: typeof import('./../application/components/study/quizzes/Quiz.vue')['default']
     QuizForm: typeof import('./../application/components/study/quizzes/QuizForm.vue')['default']
@@ -109,6 +110,7 @@ declare module 'vue' {
     SofaModal: typeof import('sofa-ui-components')['SofaModal']
     SofaModalOld: typeof import('sofa-ui-components')['SofaModalOld']
     SofaNormalText: typeof import('sofa-ui-components')['SofaNormalText']
+    SofaNormaText: typeof import('sofa-ui-components')['SofaNormaText']
     SofaNumberField: typeof import('sofa-ui-components')['SofaNumberField']
     SofaOtpInput: typeof import('sofa-ui-components')['SofaOtpInput']
     SofaPhoneInput: typeof import('sofa-ui-components')['SofaPhoneInput']
@@ -123,6 +125,7 @@ declare module 'vue' {
     SofaVideoPlayer: typeof import('sofa-ui-components')['SofaVideoPlayer']
     SubPageLayout: typeof import('./../application/layouts/SubPageLayout.vue')['default']
     TestWrapper: typeof import('./../application/components/plays/tests/TestWrapper.vue')['default']
+    ViewCurriculumItem: typeof import('./../application/components/organizations/lessons/ViewCurriculumItem.vue')['default']
     Wallet: typeof import('./../application/components/settings/wallet.vue')['default']
   }
 }
