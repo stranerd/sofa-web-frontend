@@ -13,7 +13,12 @@
 				</SofaNormalText>
 			</div>
 			<div v-else class="bg-lightGray p-4 rounded-md">
-				<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" class="bg-white rounded-md p-4" />
+				<LessonCurriculum
+					:classInst="classInst"
+					:view="curriculumView"
+					:curriculum="curriculum"
+					class="bg-white rounded-md p-4"
+					:disableClick="true" />
 			</div>
 		</div>
 	</div>

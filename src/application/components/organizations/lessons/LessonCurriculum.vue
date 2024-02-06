@@ -107,10 +107,12 @@ const props = withDefaults(
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
+		disableClick: boolean
 	}>(),
 	{
 		isModal: false,
 		factory: undefined,
+		disableClick: false,
 	},
 )
 
