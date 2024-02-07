@@ -2,7 +2,7 @@
 	<div class="w-full flex flex-col gap-4">
 		<div class="w-full flex flex-col gap-4">
 			<div class="bg-primaryPurple rounded-custom px-4 py-4 flex flex-col gap-2">
-				<div v-for="(item, index) in videoUploadSteps" :key="index" class="flex flex-row items-center justify-start gap-2">
+				<div v-for="item in videoUploadSteps" :key="item" class="flex flex-row items-center justify-start gap-2">
 					<span class="h-[4px] w-[4px] rounded-full bg-white"> </span>
 					<SofaNormalText color="text-white">
 						{{ item }}

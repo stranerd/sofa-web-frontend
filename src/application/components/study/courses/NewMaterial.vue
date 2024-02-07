@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full flex flex-col gap-4">
 		<div class="w-full grid grid-cols-2 h-full md:!gap-6 gap-3">
-			<template v-for="(item, index) in newMaterialOptions" :key="index">
+			<template v-for="item in newMaterialOptions" :key="item.name">
 				<a
 					v-if="item.type == 'quiz'"
 					class="col-span-1 rounded-custom md:!h-[280px] h-[120px] border-darkLightGray border-2 flex flex-col gap-3 items-center justify-center"

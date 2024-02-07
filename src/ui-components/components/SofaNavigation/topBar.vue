@@ -76,7 +76,7 @@
 				<SofaIcon customClass="h-[12px] cursor-pointer" name="back-arrow" @click="Logic.Common.goBack()" />
 				<SofaHeaderText customClass="!font-bold py-4" :content="title" />
 				<div v-if="badges.length" class="flex flex-row gap-2 items-center">
-					<SofaBadge v-for="(item, index) in badges" :key="index" :color="item.color">
+					<SofaBadge v-for="item in badges" :key="item.text" :color="item.color">
 						{{ item.text }}
 					</SofaBadge>
 				</div>

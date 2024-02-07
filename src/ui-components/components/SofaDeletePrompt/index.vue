@@ -6,7 +6,7 @@
 			<SofaNormalText v-if="subTitle" :content="subTitle" />
 
 			<div class="w-full md:flex justify-between items-center grid grid-cols-2 gap-3 mt-3">
-				<div v-for="(button, index) in buttons" :key="index" class="md:w-auto col-span-1 flex flex-col">
+				<div v-for="button in buttons" :key="button.label" class="md:w-auto col-span-1 flex flex-col">
 					<SofaButton
 						v-if="!button.hide"
 						:textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
