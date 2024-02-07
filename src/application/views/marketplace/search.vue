@@ -58,8 +58,8 @@
 						<div class="w-full flex flex-col gap-3">
 							<div v-if="Logic.Common.isLarge" class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4">
 								<SofaItemCard
-									v-for="(content, index) in resourceContents"
-									:key="index"
+									v-for="content in resourceContents"
+									:key="content.id"
 									:content="content"
 									customClass="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
 									:bookmarkAction="() => saveToFolder(content.original)"
@@ -70,8 +70,8 @@
 								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
 									<SofaActivityCard
-										v-for="(activity, index) in resourceContents"
-										:key="index"
+										v-for="activity in resourceContents"
+										:key="activity.id"
 										:activity="activity"
 										customClass="cursor-pointer"
 										:hasBookmark="true"
@@ -105,8 +105,8 @@
 						<div class="w-full flex flex-col gap-3">
 							<div v-if="Logic.Common.isLarge" class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4">
 								<SofaItemCard
-									v-for="(content, index) in quizContents"
-									:key="index"
+									v-for="content in quizContents"
+									:key="content.id"
 									:content="content"
 									customClass="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
 									:bookmarkAction="() => saveToFolder(content.original)"
@@ -117,8 +117,8 @@
 								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
 									<SofaActivityCard
-										v-for="(activity, index) in quizContents"
-										:key="index"
+										v-for="activity in quizContents"
+										:key="activity.id"
 										:activity="activity"
 										customClass="cursor-pointer"
 										:hasBookmark="true"

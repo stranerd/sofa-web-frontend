@@ -31,8 +31,8 @@
 				<div class="w-full flex flex-col gap-3 px-4 md:px-0">
 					<SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
 					<a
-						v-for="(option, index) in helpOptions"
-						:key="index"
+						v-for="option in helpOptions"
+						:key="option.key"
 						class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
 						@click="selectedhelpOption = option.key">
 						<SofaNormalText
@@ -59,8 +59,8 @@
 				<div class="w-full flex flex-col gap-3 md:px-0 px-4 flex-grow">
 					<template v-if="filteredTutors.length">
 						<a
-							v-for="(tutor, index) in filteredTutors"
-							:key="index"
+							v-for="tutor in filteredTutors"
+							:key="tutor.hash"
 							class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
 							:class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
 							@click="factory.tutorId = tutor.id">
@@ -157,6 +157,7 @@ const filteredTutors = computed(() =>
 		.map((t) => ({
 			id: t.id,
 			name: t.publicName,
+			hash: t.hash,
 			online: t.status.connections.length > 0,
 			photo_url: t.bio.photo?.link || '',
 			ratings: {

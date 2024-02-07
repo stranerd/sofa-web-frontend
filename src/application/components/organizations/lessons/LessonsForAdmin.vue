@@ -38,8 +38,8 @@
 			</SofaButton>
 		</div>
 		<LessonCard
-			v-for="(lesson, index) in filteredLessons"
-			:key="index"
+			v-for="lesson in filteredLessons"
+			:key="lesson.id"
 			:classInst="classInst"
 			:lesson="lesson"
 			@click="openLessonDetails(lesson)" />
