@@ -30,7 +30,7 @@
 			badges: [
 				{
 					text: SingleCourse.status,
-					color: SingleCourse.isPublished ? 'gray' : 'green',
+					color: SingleCourse.isPublished ? 'green' : 'gray',
 				},
 			],
 		}"

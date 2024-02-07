@@ -1,86 +1,36 @@
 <template>
-	<component
-		:is="as"
-		:class="`${customClass} blend-in `"
-		:style="`
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-	${imageUrl || loadDirectly ? `background-image:url(${loadDirectly ? photoUrl : imageUrl});` : ''}
-	${customStyle}`">
+	<component :is="as" :class="[customClass]" :style="styles">
 		<slot />
 	</component>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted, ref, toRef, watch } from 'vue'
 
-export default defineComponent({
-	name: 'SofaImageLoader',
-	props: {
-		photoUrl: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		customStyle: {
-			type: String,
-			default: '',
-		},
-		loadDirectly: {
-			type: Boolean,
-			default: false,
-		},
-		as: {
-			type: String,
-			default: 'div',
-		},
+<script lang="ts" setup>
+import { computed } from 'vue'
+
+const props = withDefaults(
+	defineProps<{
+		photoUrl?: string
+		customClass?: string
+		customStyle?: string
+		as?: string
+	}>(),
+	{
+		photoUrl: undefined,
+		customClass: '',
+		customStyle: '',
+		as: 'div',
 	},
-	setup(props) {
-		const image = ref('')
-		const imageUrl = ref('')
+)
 
-		const setImage = () => {
-			imageUrl.value = props.photoUrl || ''
-
-			const highResImage = new Image()
-
-			highResImage.onload = function () {
-				image.value = imageUrl.value
-			}
-
-			highResImage.src = imageUrl.value
-		}
-
-		onMounted(() => {
-			if (!props.loadDirectly) {
-				setImage()
-			}
-		})
-
-		const photoUrlRef = toRef(props, 'photoUrl')
-
-		watch(photoUrlRef, () => {
-			if (!props.loadDirectly) {
-				setImage()
-			}
-		})
-
-		return {
-			image,
-			imageUrl,
-		}
-	},
-})
+const styles = computed(() =>
+	[
+		'background-size: cover',
+		'background-repeat: no-repeat',
+		'background-position: center',
+		props.photoUrl ? `background-image: url('${props.photoUrl}')` : '',
+		props.customStyle,
+	]
+		.filter(Boolean)
+		.join(';'),
+)
 </script>
-<!-- <style scoped>
-  .blend-in {
-	animation: fadein 0.15s;
-	-moz-animation: fadein 0.15s; /* Firefox */
-	-webkit-animation: fadein 0.15s; /* Safari and Chrome */
-	-o-animation: fadein 0.15s; /* Opera */
-  }
-  </style> -->

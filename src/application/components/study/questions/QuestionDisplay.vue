@@ -12,6 +12,8 @@
 			color="text-inherit"
 			:content="question.question" />
 
+		<SofaImageLoader v-if="question.questionMedia" class="w-full h-[250px]" :photoUrl="question.questionMedia.link" />
+
 		<SofaNormalText color="text-inherit" class="pb-2" :content="question.instruction" />
 
 		<template v-if="question.strippedData.type === 'multipleChoice'">

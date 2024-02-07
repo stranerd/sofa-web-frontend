@@ -385,6 +385,7 @@ export default defineComponent({
 									id: sectionOptions[0].materials[0].id,
 									data: sectionOptions[0].materials[0].data,
 									details: sectionOptions[0].materials[0].details,
+									original: sectionOptions[0].materials[0].original,
 									type: sectionOptions[0].materials[0].type.split('-')[0],
 									isMounted: true,
 									name: sectionOptions[0].materials[0].name,

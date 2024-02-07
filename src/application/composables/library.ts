@@ -51,7 +51,12 @@ const createCourseData = (course: CourseEntity): ResourceType => ({
 })
 
 export const extractResource = (material: CourseEntity | QuizEntity) =>
-	material.isQuiz() ? createQuizData(material) : createCourseData(material)
+	// TODO: remove on revamp courses
+	material.__type === 'QuizEntity' || material.isQuiz?.()
+		? // @ts-expect-error remove on revamp courses
+			createQuizData(new QuizEntity(material))
+		: // @ts-expect-error remove on revamp courses
+			createCourseData(new CourseEntity(material))
 
 export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)

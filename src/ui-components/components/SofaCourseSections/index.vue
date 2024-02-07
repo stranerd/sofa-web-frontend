@@ -54,6 +54,7 @@
 												() => {
 													selectedMaterial = {
 														id: element.id,
+														original: element.original,
 														data: element.data,
 														details: element.details,
 														type: element.type.split('-')[0],
@@ -187,6 +188,7 @@ export default defineComponent({
 						name: mediaFile.title,
 						id: mediaFile.id,
 						type: 'image-course',
+						original: mediaFile,
 						details: {
 							title: mediaFile.title,
 							description: mediaFile.description,
@@ -207,6 +209,7 @@ export default defineComponent({
 						name: mediaFile.title,
 						id: mediaFile.id,
 						type: 'video-course',
+						original: mediaFile,
 						hover: false,
 						details: {
 							title: mediaFile.title,
@@ -229,6 +232,7 @@ export default defineComponent({
 						name: mediaFile.title,
 						id: mediaFile.id,
 						type: 'document-course',
+						original: mediaFile,
 						hover: false,
 						details: {
 							title: mediaFile.title,
