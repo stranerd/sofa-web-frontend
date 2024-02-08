@@ -1,5 +1,6 @@
 import { AccountDetails, Currencies, WithdrawalStatus } from '../types'
 import { BaseEntity } from '@modules/core'
+import { WithdrawalFromModel } from '@modules/payment/data/models/withdrawals'
 
 export class WithdrawalEntity extends BaseEntity {
 	public readonly id: string
@@ -14,19 +15,7 @@ export class WithdrawalEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({
-		id,
-		userId,
-		email,
-		amount,
-		fee,
-		currency,
-		status,
-		account,
-		externalId,
-		createdAt,
-		updatedAt,
-	}: WithdrawalConstructorArgs) {
+	constructor({ id, userId, email, amount, fee, currency, status, account, externalId, createdAt, updatedAt }: WithdrawalFromModel) {
 		super()
 		this.id = id
 		this.userId = userId
@@ -44,18 +33,4 @@ export class WithdrawalEntity extends BaseEntity {
 	getChargedAmount() {
 		return this.amount + this.fee
 	}
-}
-
-type WithdrawalConstructorArgs = {
-	id: string
-	userId: string
-	email: string
-	amount: number
-	fee: number
-	currency: Currencies
-	status: WithdrawalStatus
-	account: AccountDetails
-	externalId: number | null
-	createdAt: number
-	updatedAt: number
 }

@@ -4,6 +4,8 @@ export interface MethodFromModel extends MethodToModel {
 	token: string
 	primary: boolean
 	userId: string
+	createdAt: number
+	updatedAt: number
 }
 
 export interface MethodToModel {

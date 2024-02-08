@@ -1,5 +1,6 @@
 import { PurchaseData, Saleable } from '../types'
 import { BaseEntity } from '@modules/core'
+import { PurchaseFromModel } from '@modules/payment/data/models/purchases'
 
 export class PurchaseEntity extends BaseEntity {
 	public readonly id: string
@@ -9,7 +10,7 @@ export class PurchaseEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, userId, price, data, createdAt, updatedAt }: PurchaseConstructorArgs) {
+	constructor({ id, userId, price, data, createdAt, updatedAt }: PurchaseFromModel) {
 		super()
 		this.id = id
 		this.userId = userId
@@ -18,13 +19,4 @@ export class PurchaseEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type PurchaseConstructorArgs = {
-	id: string
-	price: Saleable['price']
-	userId: string
-	data: PurchaseData
-	createdAt: number
-	updatedAt: number
 }
