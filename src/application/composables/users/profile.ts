@@ -15,7 +15,7 @@ import {
 
 export const useUserTypeUpdate = () => {
 	const factory = new UserTypeFactory()
-	const { user } = useAuth()
+	const { user, setUser } = useAuth()
 
 	const type = Logic.Common.route?.query?.type as UserType
 	if (type && Object.values(UserType).includes(type)) factory.type = type
@@ -27,7 +27,8 @@ export const useUserTypeUpdate = () => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await UsersUseCases.updateType(factory)
+		const updatedUser = await UsersUseCases.updateType(factory)
+		setUser(updatedUser)
 		return true
 	})
 
@@ -39,7 +40,7 @@ export const showCustomizeAi = ref(false)
 export const useUserAiUpdate = () => {
 	const factory = new UserAiFactory()
 	const { setMessage } = useSuccessHandler()
-	const { user } = useAuth()
+	const { user, setUser } = useAuth()
 
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))
@@ -49,7 +50,8 @@ export const useUserAiUpdate = () => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await UsersUseCases.updateAi(factory)
+		const updatedUser = await UsersUseCases.updateAi(factory)
+		setUser(updatedUser)
 		await setMessage('Updated successfully!')
 		showCustomizeAi.value = false
 	})
