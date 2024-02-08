@@ -9,7 +9,7 @@
 			<div class="flex flex-col items-start gap-1">
 				<SofaHeaderText :content="emptyLessonContent.title" size="xl" />
 				<div class="flex flex-col gap-2 py-2">
-					<div v-for="(content, index) in emptyLessonContent.contents" :key="index" class="flex mdlg:items-center gap-1">
+					<div v-for="content in emptyLessonContent.contents" :key="content" class="flex mdlg:items-center gap-1">
 						<SofaIcon customClass="h-[16px]" name="checkmark-circle" />
 						<SofaNormalText :content="content" color="text-grayColor" />
 					</div>

@@ -30,8 +30,8 @@
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
 			</div>
 			<a
-				v-for="(item, index) in filteredOptions"
-				:key="index"
+				v-for="item in filteredOptions"
+				:key="item.key?.toString()"
 				class="p-3 gap-3 w-full flex items-center hover:bg-gray-100"
 				@click="selectValue(item)">
 				<SofaIcon :name="itemIsSelected(item.key) ? 'checkbox-active' : 'checkbox'" class="h-[16px]" />

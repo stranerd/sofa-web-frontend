@@ -1,11 +1,11 @@
 <template>
 	<DashboardLayout :topbarOptions="{ title: 'Classes' }">
 		<template #left-session>
-			<span>Announcements</span>
+			<span />
 		</template>
 
 		<template #right-session>
-			<span>Live Sessions</span>
+			<span />
 		</template>
 
 		<template #middle-session>

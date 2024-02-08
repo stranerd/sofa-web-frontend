@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { reactive, watch } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
@@ -39,14 +39,11 @@ const props = withDefaults(
 
 const otp = defineModel<string>({ default: '' })
 
-const otps = ref<string[]>(otp.value.split('').slice(0, props.numberOfInput))
+const otps = reactive<string[]>(otp.value.split('').slice(0, props.numberOfInput))
 
-watch(
-	() => otps.value,
-	(value) => {
-		if (value.length === props.numberOfInput) otp.value = value.join('')
-	},
-)
+watch(otps, (value) => {
+	if (value.length === props.numberOfInput) otp.value = value.join('')
+})
 
 const onKeyPress = (event: any) => {
 	if (event.target.value.length === 1) {
@@ -71,10 +68,10 @@ const onPaste = (event: any) => {
 	// Getting copy text
 	const clipboardData = event.clipboardData || event.originalEvent.clipboardData
 	const pastedData = clipboardData.getData('Text')
-	otps.value = pastedData.split('').slice(0, props.numberOfInput)
+	otps.splice(0, otps.length, ...pastedData.split('').slice(0, props.numberOfInput))
 
 	// focus the last input element according to length
-	focusInputByRef(`${props.uniqueKey}${otps.value.length}`)
+	focusInputByRef(`${props.uniqueKey}${otps.length}`)
 
 	event.preventDefault()
 }

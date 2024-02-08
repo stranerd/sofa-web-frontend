@@ -6,8 +6,8 @@
 		</div>
 		<div v-if="AllNotifications?.results.length" class="w-full flex flex-col gap-3">
 			<div
-				v-for="(item, index) in AllNotifications.results"
-				:key="index"
+				v-for="item in AllNotifications.results"
+				:key="item.hash"
 				:class="`w-full flex flex-row items-start justify-between ${item.seen ? 'opacity-80' : ''}`">
 				<div class="flex flex-col gap-1">
 					<SofaNormalText customClass="text-left">
