@@ -1,4 +1,5 @@
 import { MethodData } from '../types'
+import { MethodFromModel } from '@modules/payment/data/models/methods'
 import { BaseEntity } from '@modules/core'
 
 export class MethodEntity extends BaseEntity {
@@ -10,7 +11,7 @@ export class MethodEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, data, token, primary, userId, createdAt, updatedAt }: MethodConstructorArgs) {
+	constructor({ id, data, token, primary, userId, createdAt, updatedAt }: MethodFromModel) {
 		super()
 		this.id = id
 		this.data = data
@@ -20,14 +21,4 @@ export class MethodEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type MethodConstructorArgs = {
-	id: string
-	data: MethodData
-	token: string
-	primary: boolean
-	userId: string
-	createdAt: number
-	updatedAt: number
 }

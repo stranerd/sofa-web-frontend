@@ -1,5 +1,6 @@
 import { AccountDetails, Currencies, Subscription, SubscriptionModel } from '../types'
 import { BaseEntity } from '@modules/core'
+import { WalletFromModel } from '@modules/payment/data/models/wallets'
 
 export class WalletEntity extends BaseEntity {
 	public readonly id: string
@@ -11,7 +12,7 @@ export class WalletEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, userId, balance, accounts, subscription, subscriptions, createdAt, updatedAt }: WalletConstructorArgs) {
+	constructor({ id, userId, balance, accounts, subscription, subscriptions, createdAt, updatedAt }: WalletFromModel) {
 		super()
 		this.id = id
 		this.userId = userId
@@ -22,15 +23,4 @@ export class WalletEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type WalletConstructorArgs = {
-	id: string
-	userId: string
-	balance: { amount: number; currency: Currencies }
-	accounts: AccountDetails[]
-	subscription: SubscriptionModel
-	subscriptions: Subscription[]
-	createdAt: number
-	updatedAt: number
 }

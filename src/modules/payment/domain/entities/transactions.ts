@@ -1,5 +1,6 @@
 import { Currencies, TransactionData, TransactionStatus } from '../types'
 import { BaseEntity } from '@modules/core'
+import { TransactionFromModel } from '@modules/payment/data/models/transactions'
 
 export class TransactionEntity extends BaseEntity {
 	public readonly id: string
@@ -13,7 +14,7 @@ export class TransactionEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, userId, email, status, data, title, amount, currency, createdAt, updatedAt }: TransactionConstructorArgs) {
+	constructor({ id, userId, email, status, data, title, amount, currency, createdAt, updatedAt }: TransactionFromModel) {
 		super()
 		this.id = id
 		this.userId = userId
@@ -26,17 +27,4 @@ export class TransactionEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type TransactionConstructorArgs = {
-	id: string
-	userId: string
-	email: string
-	title: string
-	amount: number
-	currency: Currencies
-	status: TransactionStatus
-	data: TransactionData
-	createdAt: number
-	updatedAt: number
 }
