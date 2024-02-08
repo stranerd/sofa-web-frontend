@@ -110,7 +110,6 @@ declare module 'vue' {
     SofaModal: typeof import('sofa-ui-components')['SofaModal']
     SofaModalOld: typeof import('sofa-ui-components')['SofaModalOld']
     SofaNormalText: typeof import('sofa-ui-components')['SofaNormalText']
-    SofaNormaText: typeof import('sofa-ui-components')['SofaNormaText']
     SofaNumberField: typeof import('sofa-ui-components')['SofaNumberField']
     SofaOtpInput: typeof import('sofa-ui-components')['SofaOtpInput']
     SofaPhoneInput: typeof import('sofa-ui-components')['SofaPhoneInput']
