@@ -6,6 +6,7 @@ export interface PurchaseFromModel extends PurchaseToModel {
 	createdAt: number
 	updatedAt: number
 }
+
 export interface PurchaseToModel {
 	data: PurchaseData
 }

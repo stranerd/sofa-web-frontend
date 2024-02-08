@@ -1,6 +1,7 @@
 import { Currencies, Interval, PlanData } from '../types'
-import { UserType } from '@modules/users'
 import { BaseEntity } from '@modules/core'
+import { PlanFromModel } from '@modules/payment/data/models/plans'
+import { UserType } from '@modules/users'
 
 export class PlanEntity extends BaseEntity {
 	public readonly id: string
@@ -14,7 +15,7 @@ export class PlanEntity extends BaseEntity {
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, amount, currency, title, interval, active, data, usersFor, createdAt, updatedAt }: PlanConstructorArgs) {
+	constructor({ id, amount, currency, title, interval, active, data, usersFor, createdAt, updatedAt }: PlanFromModel) {
 		super()
 		this.id = id
 		this.title = title
@@ -27,17 +28,4 @@ export class PlanEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
-}
-
-type PlanConstructorArgs = {
-	id: string
-	title: string
-	amount: number
-	active: boolean
-	currency: Currencies
-	interval: Interval
-	data: PlanData
-	usersFor: UserType[]
-	createdAt: number
-	updatedAt: number
 }
