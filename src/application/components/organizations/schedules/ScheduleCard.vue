@@ -9,9 +9,7 @@
 		</div>
 		<div class="flex items-center gap-2" :class="schedule.isOngoing ? 'text-primaryRed' : 'text-inherit'">
 			<SofaIcon name="calendar" class="h-[17px] fill-current" />
-			<SofaNormalText :content="formatTime(schedule.time.start)" color="text-inherit" />
-			<div class="w-[5px] h-[5px] rounded-[50%] bg-current" />
-			<SofaNormalText :content="formatTime(schedule.time.end)" color="text-inherit" />
+			<SofaNormalText :content="schedule.timeRange" color="text-inherit" />
 		</div>
 		<SofaButton
 			v-if="!buttonProps.hide"
@@ -28,7 +26,6 @@
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { ClassEntity, ScheduleEntity } from '@modules/organizations'
-import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
 import { useStartSchedule } from '@app/composables/organizations/schedules'
 

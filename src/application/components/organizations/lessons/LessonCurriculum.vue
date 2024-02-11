@@ -98,7 +98,6 @@ import { useDeleteSchedule } from '@app/composables/organizations/schedules'
 import { useDeleteFile } from '@app/composables/study/files'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
 import { FileType } from '@modules/study'
-import { formatTime } from '@utils/dates'
 
 const props = withDefaults(
 	defineProps<{
@@ -154,7 +153,7 @@ const getItemIcon = (item: ExtendedCurriculumItem) => {
 const getItemInfo = (item: ExtendedCurriculumItem) => {
 	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
-	if (item.type == ClassLessonable.schedule) return `${formatTime(item.schedule.time.start)} - ${formatTime(item.schedule.time.end)}`
+	if (item.type == ClassLessonable.schedule) return item.schedule.timeRange
 }
 
 const shouldShowItemImage = (item: ExtendedCurriculumItem) => {

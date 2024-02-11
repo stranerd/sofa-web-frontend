@@ -1,6 +1,7 @@
 import { ScheduleFromModel } from '../../data/models/schedules'
 import { EmbeddedUser, ScheduleStatus, ScheduleStream, ScheduleTime } from '../types'
 import { BaseEntity } from '@modules/core'
+import { formatTime, getTimeString } from '@utils/dates'
 
 export class ScheduleEntity extends BaseEntity {
 	public readonly id: string
@@ -61,5 +62,10 @@ export class ScheduleEntity extends BaseEntity {
 
 	get meetingLink() {
 		return `https://meet.jit.si/${this.stream?.roomId ?? this.id}`
+	}
+
+	get timeRange() {
+		const { start, end } = this.time
+		return `${formatTime(start)} &nbsp;&nbsp; ● &nbsp;&nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
 	}
 }

@@ -2,12 +2,9 @@ import { v } from 'valleyed'
 import { ScheduleToModel } from '../../data/models/schedules'
 import { ScheduleEntity } from '../entities/schedules'
 import { BaseFactory } from '@modules/core'
+import { getDateString, getTimeString } from '@utils/dates'
 
 type Keys = Omit<ScheduleToModel, 'lessonId' | 'time'> & { date: Date; start: Date; end: Date }
-
-const getDate = (date: Date) =>
-	[date.getFullYear(), date.getMonth() + 1, date.getDate()].map((v) => v.toString().padStart(2, '0')).join('-')
-const getTime = (date: Date) => [date.getHours(), date.getMinutes()].map((v) => v.toString().padStart(2, '0')).join(':')
 
 export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleToModel, 'lessonId'>, Keys> {
 	readonly rules = {
@@ -42,7 +39,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 	}
 
 	get start() {
-		return getTime(this.values.start)
+		return getTimeString(this.values.start)
 	}
 
 	set start(value: string) {
@@ -50,7 +47,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 	}
 
 	get end() {
-		return getTime(this.values.end)
+		return getTimeString(this.values.end)
 	}
 
 	set end(value: string) {
@@ -58,7 +55,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 	}
 
 	get date() {
-		return getDate(this.values.date)
+		return getDateString(this.values.date)
 	}
 
 	set date(value: string) {
@@ -85,8 +82,8 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 		this.title = entity.title
 		this.description = entity.description
 		const start = new Date(entity.time.start)
-		this.date = getDate(start)
-		this.start = getTime(start)
-		this.end = getTime(new Date(entity.time.end))
+		this.date = getDateString(start)
+		this.start = getTimeString(start)
+		this.end = getTimeString(new Date(entity.time.end))
 	}
 }
