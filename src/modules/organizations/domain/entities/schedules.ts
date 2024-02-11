@@ -51,12 +51,10 @@ export class ScheduleEntity extends BaseEntity {
 	}
 
 	get canEnd() {
-		return this.status === ScheduleStatus.started && this.time.start > Date.now()
+		return this.status === ScheduleStatus.started
 	}
 
 	get isOngoing() {
-		/* const now = Date.now()
-		return now >= this.time.start && now <= this.time.end */
 		return this.status === ScheduleStatus.started
 	}
 
@@ -66,6 +64,6 @@ export class ScheduleEntity extends BaseEntity {
 
 	get timeRange() {
 		const { start, end } = this.time
-		return `${formatTime(start)} &nbsp;&nbsp; ● &nbsp;&nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
+		return `${formatTime(start)} &nbsp; ● &nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
 	}
 }
