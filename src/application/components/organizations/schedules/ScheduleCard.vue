@@ -38,7 +38,7 @@ const props = defineProps<{
 	schedule: ScheduleEntity
 }>()
 
-const { start, end } = useStartSchedule(props.classInst, props.schedule)
+const { join, start, end } = useStartSchedule(props.classInst, props.schedule)
 
 const { id } = useAuth()
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
@@ -52,7 +52,7 @@ const buttons = computed(() => {
 				handler: () => Logic.Common.copy(props.schedule.stream?.streamKey ?? ''),
 			})
 		if (props.schedule.canEnd) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: end })
-	} else if (props.schedule.isOngoing) b.push({ label: 'Enter', handler: () => window.open(props.schedule.meetingLink, '_blank') })
+	} else if (props.schedule.isOngoing) b.push({ label: 'Enter', handler: join })
 	return b
 })
 </script>
