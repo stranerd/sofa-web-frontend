@@ -22,7 +22,7 @@
 						<div class="flex items-center gap-1">
 							<SofaHeaderText class="!text-base" :content="user.publicName" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
-							<SofaIcon v-if="user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
+							<SofaIcon v-if="userType.isTeacher" name="tutor-bagde" class="h-[13px]" />
 						</div>
 						<SofaNormalText class="capitalize" color="text-grayColor" :content="userType.type" />
 						<SofaNormalText color="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
