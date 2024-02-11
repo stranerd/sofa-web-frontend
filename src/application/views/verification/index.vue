@@ -33,7 +33,7 @@
 						<SofaIcon v-if="!profileFactory.photo" customClass="h-[50px]" name="user" />
 						<SofaFileInput
 							v-model="profileFactory.photo"
-							class="`absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full h-[40px] w-[40px] flex items-center justify-center`"
+							class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full h-[40px] w-[40px] flex items-center justify-center"
 							accept="image/*">
 							<SofaIcon class="h-[18px]" name="camera-white" />
 						</SofaFileInput>

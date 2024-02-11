@@ -31,8 +31,9 @@
 					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 					:error="factory.errors.description"
 					placeholder="Describe your class" />
-				<SofaNumberField
+				<SofaTextField
 					v-model="factory.amount"
+					type="number"
 					customClass="rounded-custom !bg-lightGray"
 					placeholder="Price per month"
 					:error="factory.errors.amount"
@@ -42,7 +43,7 @@
 							<SofaNormalText customClass="font-bold text-deepGray !text-xl"> ₦ </SofaNormalText>
 						</div>
 					</template>
-				</SofaNumberField>
+				</SofaTextField>
 			</div>
 		</div>
 		<div class="flex items-center justify-between">

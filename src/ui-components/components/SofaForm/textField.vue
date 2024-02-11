@@ -38,7 +38,7 @@
 	</div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="T">
 import { ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import SofaNormalText from '../SofaTypography/normalText.vue'
@@ -51,11 +51,11 @@ const props = withDefaults(
 		customClass?: string
 		hasTitle?: boolean
 		rules?: FormRule[]
-		defaultValue?: string
+		defaultValue?: T
 		type?: string
 		name?: string
 		disabled?: boolean
-		updateValue?: string
+		updateValue?: T
 		borderColor?: string
 		error?: string
 	}>(),
@@ -65,17 +65,17 @@ const props = withDefaults(
 		customClass: '',
 		hasTitle: false,
 		rules: undefined,
-		defaultValue: '',
+		defaultValue: undefined,
 		type: 'text',
 		name: '',
 		disabled: false,
-		updateValue: '',
+		updateValue: undefined,
 		borderColor: 'border-darkLightGray',
 		error: '',
 	},
 )
 
-const content = defineModel<string>({ default: '' })
+const content = defineModel<T>()
 const showPassword = ref(false)
 
 const validationStatus = ref(true)
@@ -84,7 +84,7 @@ const errorMessage = ref('')
 const checkValidation = () => {
 	if (props.rules)
 		Logic.Form.run(props.rules, {
-			content: content.value,
+			content: content.value as any,
 			updateValidationStatus: (status) => (validationStatus.value = status),
 			updateErrorMessage: (message) => (errorMessage.value = `${props.name} ${message}`),
 		})
@@ -97,7 +97,7 @@ watch(
 	() => {
 		if (props.defaultValue) content.value = props.defaultValue
 		if (props.updateValue) {
-			if (props.updateValue == 'empty') content.value = ''
+			if (props.updateValue == 'empty') content.value = '' as any
 			else content.value = props.updateValue
 		}
 	},

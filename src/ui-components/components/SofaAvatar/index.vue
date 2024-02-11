@@ -3,7 +3,7 @@
 		:as="userId ? 'router-link' : 'div'"
 		:to="`/profile/${userId}`"
 		:photoUrl="photoUrl ?? ''"
-		class="shrink-0 rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer items-center justify-center"
+		class="shrink-0 rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer items-center justify-center relative"
 		:customClass="`${bgColor} ${customClass}`"
 		:customStyle="`width: ${size}px; height: ${size}px;`"
 		@click.stop.prevent="userId ? Logic.Common.GoToRoute(`/profile/${userId}`) : null">
