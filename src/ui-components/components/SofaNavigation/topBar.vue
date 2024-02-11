@@ -39,15 +39,16 @@
 					</SofaNormalText>
 				</router-link>
 
-				<div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
+				<form
+					class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4"
+					@submit.prevent="initiateSearch">
 					<SofaIcon customClass="h-[15px]" name="search" />
 					<SofaTextField
 						v-model="searchQuery"
 						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
 						placeholder="Search"
-						padding="px-1"
-						@onEnter="initiateSearch" />
-				</div>
+						padding="px-1" />
+				</form>
 			</div>
 
 			<div class="hidden mdlg:!flex items-center gap-4">
@@ -147,8 +148,8 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 import Notification from './notification.vue'
 import { Conditions, Logic } from 'sofa-logic'
 import { handleShowAddMaterial } from '@app/composables/study'
-import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
+import { useAuth } from '@app/composables/auth/auth'
 
 withDefaults(
 	defineProps<{

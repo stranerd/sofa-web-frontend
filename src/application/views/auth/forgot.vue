@@ -25,7 +25,7 @@
 					ref="token"
 					v-model="factory.token"
 					customClass="rounded-custom !bg-lightGray"
-					type="tel"
+					type="number"
 					name="Token"
 					placeholder="Enter 6-digit token"
 					:error="factory.errors.token" />
