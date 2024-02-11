@@ -34,9 +34,19 @@
 				<SofaCheckbox v-model="factory.termsAccepted">
 					<span class="text-grayColor text-left">
 						I have read and accepted SOFA’s
-						<a class="text-primaryBlue hover:underline">Terms of Service</a>
+						<SofaNormalText
+							color="text-primaryBlue"
+							as="router-link"
+							to="/legal/terms-of-service"
+							class="hover:underline"
+							content="Terms of Service" />
 						<span> and </span>
-						<a class="text-primaryBlue hover:underline">Privacy Policy</a>
+						<SofaNormalText
+							color="text-primaryBlue"
+							as="router-link"
+							to="/legal/privacy-policy"
+							class="hover:underline"
+							content="Privacy Policy" />
 					</span>
 				</SofaCheckbox>
 			</div>

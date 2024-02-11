@@ -18,7 +18,7 @@
 				<div v-if="user" class="w-full flex items-center gap-3">
 					<SofaAvatar size="84" :photoUrl="user.bio.photo?.link" />
 
-					<div class="flex flex-col gap-1">
+					<div class="flex flex-col">
 						<div class="flex items-center gap-1">
 							<SofaHeaderText class="!text-base" :content="user.publicName" />
 							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
@@ -42,7 +42,9 @@
 					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="streak-new" />
 						<div class="flex flex-col items-start justify-center">
-							<SofaNormalText class="font-bold">{{ user.account.streak.count }} days</SofaNormalText>
+							<SofaNormalText class="font-bold">
+								{{ user.account.streak.count }} {{ pluralize(user.account.streak.count, 'day', 'days') }}
+							</SofaNormalText>
 							<SofaNormalText color="text-bodyBlack">Streak</SofaNormalText>
 						</div>
 					</div>
@@ -75,7 +77,7 @@
 		<template #right-session>
 			<div v-if="userType.isStudent" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex items-center gap-3">
-					<img :src="userAi.image" alt="" class="w-[84px] aspect-square rounded-full" />
+					<SofaAvatar :photoUrl="userAi.image" size="84" />
 					<div class="flex flex-col gap-1">
 						<SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
 						<SofaNormalText :content="userAi.tagline" />
@@ -159,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatNumber } from 'valleyed'
+import { formatNumber, pluralize } from 'valleyed'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import ChatList from '@app/components/conversations/ChatList.vue'
