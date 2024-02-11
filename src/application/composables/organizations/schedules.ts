@@ -164,6 +164,10 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 		window.open(schedule.meetingLink, '_blank')
 	})
 
+	const { asyncFn: rewatch } = useAsyncFn(async () => {
+		window.open(schedule.recordingLink, '_blank')
+	})
+
 	const { asyncFn: start } = useAsyncFn(
 		async () => {
 			const updated = await SchedulesUseCases.start({
@@ -201,5 +205,5 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 		},
 	)
 
-	return { join, start, end }
+	return { join, rewatch, start, end }
 }

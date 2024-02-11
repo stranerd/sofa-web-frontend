@@ -158,7 +158,7 @@ const getItemInfo = (item: ExtendedCurriculumItem) => {
 
 const shouldShowItemImage = (item: ExtendedCurriculumItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
-	return !item.schedule.isOngoing
+	return !item.schedule.canStudentJoin
 }
 
 const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
@@ -167,7 +167,7 @@ const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
 	return '/images/default.png'
 }
 
-const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.isOngoing
+const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
 
 const addSchedule = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return

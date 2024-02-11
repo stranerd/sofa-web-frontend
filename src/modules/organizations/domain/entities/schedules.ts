@@ -60,8 +60,24 @@ export class ScheduleEntity extends BaseEntity {
 		return this.status === ScheduleStatus.started
 	}
 
+	get hasEnded() {
+		return this.status === ScheduleStatus.ended
+	}
+
+	get canTeacherJoin() {
+		return this.isOngoing
+	}
+
+	get canStudentJoin() {
+		return this.isOngoing && this.time.start <= Date.now()
+	}
+
 	get meetingLink() {
 		return `https://meet.jit.si/${this.stream?.roomId ?? this.id}`
+	}
+
+	get recordingLink() {
+		return `https://www.youtube.com/watch?v=${this.stream?.broadcastId}`
 	}
 
 	get timeRange() {

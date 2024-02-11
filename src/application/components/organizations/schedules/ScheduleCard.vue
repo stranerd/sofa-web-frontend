@@ -7,7 +7,7 @@
 			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" class="!w-[24px] !h-[24px]" />
 			<SofaNormalText :content="schedule.user.bio.name.full" color="text-deepGray" />
 		</div>
-		<div class="flex items-center gap-2" :class="schedule.isOngoing ? 'text-primaryRed' : 'text-inherit'">
+		<div class="flex items-center gap-2" :class="schedule.canStudentJoin ? 'text-primaryRed' : 'text-inherit'">
 			<SofaIcon name="calendar" class="h-[17px] fill-current" />
 			<SofaNormalText :content="schedule.timeRange" color="text-inherit" />
 		</div>
@@ -38,22 +38,25 @@ const props = defineProps<{
 	schedule: ScheduleEntity
 }>()
 
-const { join, start, end } = useStartSchedule(props.classInst, props.schedule)
+const { join, rewatch, start, end } = useStartSchedule(props.classInst, props.schedule)
 
 const { id } = useAuth()
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
 const buttons = computed(() => {
 	const b: { label: string; bgColor?: string; handler: () => void }[] = []
 	if (lesson.value?.users.teachers.includes(id.value)) {
-		if (props.schedule.isOngoing) b.push({ label: 'Enter', handler: join })
 		if (props.schedule.canStart) b.push({ label: 'Start', handler: start })
-		if (props.schedule.isOngoing)
-			b.push({
-				label: 'Copy stream key',
-				handler: () => Logic.Common.copy(props.schedule.stream?.streamKey ?? ''),
-			})
+		if (props.schedule.canTeacherJoin)
+			b.push(
+				{ label: 'Enter', handler: join },
+				{
+					label: 'Copy stream key',
+					handler: () => Logic.Common.copy(props.schedule.stream?.streamKey ?? ''),
+				},
+			)
 		if (props.schedule.canEnd) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: end })
-	} else if (props.schedule.isOngoing && props.schedule.time.start <= Date.now()) b.push({ label: 'Enter', handler: join })
+	} else if (props.schedule.canStudentJoin) b.push({ label: 'Enter', handler: join })
+	if (props.schedule.hasEnded) b.push({ label: 'Rewatch', handler: rewatch })
 	return b
 })
 </script>
