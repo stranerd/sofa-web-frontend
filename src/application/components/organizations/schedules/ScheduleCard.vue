@@ -44,15 +44,16 @@ const { id } = useAuth()
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
 const buttons = computed(() => {
 	const b: { label: string; bgColor?: string; handler: () => void }[] = []
+	if (props.schedule.isOngoing) b.push({ label: 'Enter', handler: join })
 	if (lesson.value?.users.teachers.includes(id.value)) {
 		if (props.schedule.canStart) b.push({ label: 'Start', handler: start })
 		if (props.schedule.isOngoing)
 			b.push({
-				label: `Copy stream code - '${props.schedule.stream?.streamKey}'`,
+				label: 'Copy stream key',
 				handler: () => Logic.Common.copy(props.schedule.stream?.streamKey ?? ''),
 			})
 		if (props.schedule.canEnd) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: end })
-	} else if (props.schedule.isOngoing) b.push({ label: 'Enter', handler: join })
+	}
 	return b
 })
 </script>

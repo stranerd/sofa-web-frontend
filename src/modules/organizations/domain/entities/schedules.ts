@@ -47,7 +47,8 @@ export class ScheduleEntity extends BaseEntity {
 	}
 
 	get canStart() {
-		return this.status === ScheduleStatus.created && this.time.start <= Date.now()
+		const fiveMinsB4Start = this.time.start - 5 * 60 * 1000
+		return this.status === ScheduleStatus.created && fiveMinsB4Start <= Date.now()
 	}
 
 	get canEnd() {
@@ -55,7 +56,7 @@ export class ScheduleEntity extends BaseEntity {
 	}
 
 	get isOngoing() {
-		return this.status === ScheduleStatus.started
+		return this.time.start <= Date.now() && this.status === ScheduleStatus.started
 	}
 
 	get meetingLink() {
@@ -64,6 +65,6 @@ export class ScheduleEntity extends BaseEntity {
 
 	get timeRange() {
 		const { start, end } = this.time
-		return `${formatTime(start)} &nbsp; ● &nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
+		return `${formatTime(start, true)} &nbsp; ● &nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
 	}
 }
