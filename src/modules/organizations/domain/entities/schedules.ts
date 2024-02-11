@@ -9,13 +9,27 @@ export class ScheduleEntity extends BaseEntity {
 	public readonly lessonId: string
 	public readonly user: EmbeddedUser
 	public readonly title: string
+	public readonly description: string
 	public readonly status: ScheduleStatus
 	public readonly time: ScheduleTime
 	public readonly stream: ScheduleStream | null
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
-	constructor({ id, organizationId, classId, lessonId, user, title, status, time, stream, createdAt, updatedAt }: ScheduleFromModel) {
+	constructor({
+		id,
+		organizationId,
+		classId,
+		lessonId,
+		user,
+		title,
+		description,
+		status,
+		time,
+		stream,
+		createdAt,
+		updatedAt,
+	}: ScheduleFromModel) {
 		super()
 		this.id = id
 		this.organizationId = organizationId
@@ -23,6 +37,7 @@ export class ScheduleEntity extends BaseEntity {
 		this.lessonId = lessonId
 		this.user = user
 		this.title = title
+		this.description = description
 		this.status = status
 		this.time = time
 		this.stream = stream

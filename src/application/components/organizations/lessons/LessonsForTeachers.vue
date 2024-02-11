@@ -67,6 +67,7 @@
 					:classInst="classInst"
 					:view="curriculumView"
 					:curriculum="factory.factories"
+					:lesson="selectedLesson"
 					:factory="canEditLesson ? factory : undefined" />
 				<SofaButton v-if="canEditLesson" bgColor="bg-primaryPurple" class="py-3 mdlg:py-4" @click="factory.add()">
 					<SofaIcon name="box-add-white" class="h-[16px]" />

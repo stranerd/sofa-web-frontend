@@ -107,10 +107,12 @@ const props = withDefaults(
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
+		lesson?: ClassLesson
 	}>(),
 	{
 		isModal: false,
 		factory: undefined,
+		lesson: undefined,
 	},
 )
 
@@ -169,10 +171,10 @@ const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
 const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.isOngoing
 
 const addSchedule = (index: number) => {
-	if (!props.factory || !props.factory.factories.at(index)) return
+	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return
 	useModals().organizations.createSchedule.open({
 		classInst: props.classInst,
-		lesson: props.classInst.lessons[index],
+		lesson: props.lesson,
 		afterSubmit: (schedule) => {
 			props.factory!.factories[index].addSchedule(schedule)
 		},
