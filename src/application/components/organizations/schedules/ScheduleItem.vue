@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="rounded-custom h-[600px] flex items-center justify-center"
+		class="w-full h-full rounded-custom flex items-center justify-center"
 		:class="schedule.canStart || schedule.canStudentJoin || schedule.canTeacherJoin ? 'bg-primaryRed' : 'bg-primaryPurple'">
 		<div class="flex flex-col items-center gap-3">
 			<SofaHeaderText color="text-white">Live Session</SofaHeaderText>

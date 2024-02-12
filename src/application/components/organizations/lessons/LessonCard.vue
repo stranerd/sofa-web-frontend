@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center gap-4">
-		<div class="w-full">
+		<div>
 			<SofaHeaderText>{{ lesson.title }}</SofaHeaderText>
 			<div class="flex items-center gap-1">
 				<SofaNormalText color="text-grayColor">

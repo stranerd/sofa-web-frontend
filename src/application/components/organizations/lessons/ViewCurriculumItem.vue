@@ -12,13 +12,13 @@
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
-		<div class="w-full overflow-y-hidden">
-			<div v-if="curriculumItem.type === 'schedule'">
+		<div class="w-full overflow-y-hidden h-[350px] mdlg:h-[550px]">
+			<div v-if="curriculumItem.type === 'schedule'" class="h-full">
 				<ScheduleItem :classInst="classInst" :schedule="curriculumItem.schedule" />
 			</div>
 			<div
 				v-if="curriculumItem.type === 'file'"
-				class="w-full rounded-custom h-[600px] flex items-center justify-center bg-lightGray overflow-y-auto">
+				class="w-full rounded-custom h-full flex items-center justify-center bg-lightGray overflow-y-auto">
 				<div v-if="curriculumItem.fileType === FileType.document && mediaUrl" class="w-full h-full">
 					<SofaDocumentReader :documentUrl="mediaUrl" class="!w-full !h-full" />
 				</div>
@@ -31,7 +31,7 @@
 			</div>
 			<div
 				v-if="curriculumItem.type === 'quiz'"
-				class="rounded-custom h-[600px] flex items-center justify-center"
+				class="rounded-custom h-full flex items-center justify-center"
 				:class="quizStarted ? 'bg-lightGray' : 'bg-primaryPurple'">
 				<div v-if="!quizStarted" class="flex flex-col items-center gap-3">
 					<SofaHeaderText color="text-white">{{
