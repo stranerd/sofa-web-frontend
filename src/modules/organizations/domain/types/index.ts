@@ -103,5 +103,4 @@ export type ExtendedClassLessonCurriculumSectionItem =
 			schedule: ScheduleEntity
 	  }
 
-//   Exclude<ClassLesson, 'items'>  & { items: newType }
-export type ExtendCurriculum = (Exclude<ClassLessonCurriculumSection, 'items'> & { items: ExtendedClassLessonCurriculumSectionItem[] })[]
+export type ExtendCurriculum = (Omit<ClassLessonCurriculumSection, 'items'> & { items: ExtendedClassLessonCurriculumSectionItem[] })[]

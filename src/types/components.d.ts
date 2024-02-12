@@ -122,7 +122,6 @@ declare module 'vue' {
     SofaTextarea: typeof import('sofa-ui-components')['SofaTextarea']
     SofaTextField: typeof import('sofa-ui-components')['SofaTextField']
     SofaTopBar: typeof import('sofa-ui-components')['SofaTopBar']
-    SofaVideo: typeof import('sofa-ui-components')['SofaVideo']
     SofaVideoPlayer: typeof import('sofa-ui-components')['SofaVideoPlayer']
     SubPageLayout: typeof import('./../application/layouts/SubPageLayout.vue')['default']
     TestWrapper: typeof import('./../application/components/plays/tests/TestWrapper.vue')['default']
