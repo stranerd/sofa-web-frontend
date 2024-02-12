@@ -46,7 +46,7 @@
 							{{ 'Start' }}
 						</SofaButton>
 					</div>
-					<QuizPractice v-else :quizId="curriculumItem.quiz.id" class="h-[350px] mdlg:h-[550px]" />
+					<QuizPractice v-else :quizId="curriculumItem.quiz.id" :isLesson="true" class="h-[350px] mdlg:h-[550px]" />
 				</template>
 				<template v-if="curriculumItem.quizMode === QuizModes.test">
 					<div
@@ -64,7 +64,7 @@
 							{{ 'Start' }}
 						</SofaButton>
 					</div>
-					<QuizTest v-else-if="quizTestStarted && test" :testId="test?.id" />
+					<QuizTest v-else-if="quizTestStarted && test" :testId="test?.id" :isLesson="true" />
 				</template>
 			</div>
 		</div>

@@ -20,6 +20,7 @@
 						:index="extras.index"
 						:title="`Question ${extras.index + 1}`"
 						:showCounter="false"
+						:isLesson="isLesson"
 						:questions="questions"
 						:optionState="extras.optionState"
 						:rightButton="{
@@ -62,7 +63,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-	testId: string
-}>()
+withDefaults(
+	defineProps<{
+		testId: string
+		isLesson: boolean
+	}>(),
+	{
+		isLesson: false,
+	},
+)
 </script>
