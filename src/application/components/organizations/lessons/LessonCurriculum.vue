@@ -31,8 +31,8 @@
 					itemKey=""
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
-						<div
-							class="flex gap-2 mdlg:gap-4 cursor-pointer"
+						<a
+							class="flex gap-2 mdlg:gap-4"
 							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
 							@click="openCurriculumItem(itemIndex, sectionIndex)">
 							<div class="flex items-center gap-2 flex-1">
@@ -71,7 +71,7 @@
 									name="trash-gray"
 									@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
 							</div>
-						</div>
+						</a>
 					</template>
 					<template #footer>
 						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
@@ -102,8 +102,8 @@ import {
 	ClassLesson,
 	ClassLessonable,
 	CurriculumView,
-	LessonCurriculumFactory,
 	ExtendedClassLessonCurriculumSectionItem,
+	LessonCurriculumFactory,
 } from '@modules/organizations'
 import { FileType } from '@modules/study'
 
@@ -115,7 +115,7 @@ const props = withDefaults(
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
 		lesson?: ClassLesson
-		disableClick: boolean
+		disableClick?: boolean
 	}>(),
 	{
 		isModal: false,
@@ -140,8 +140,6 @@ const factory = computed(() => {
 	f.loadEntity(props.curriculum)
 	return f
 })
-
-// type ExtendedCurriculumItem = (typeof curriculum)['value'][number]['items'][number]
 
 const getItemTitle = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type == ClassLessonable.quiz) return item.quiz.title
@@ -231,13 +229,12 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	else fac.removeItem(itemIndex)
 }
 const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
-	if (!props.disableClick) {
-		useModals().organizations.viewCurriculumItem.open({
-			classInst: props.classInst,
-			curriculum: curriculum.value,
-			itemIndex,
-			sectionIndex,
-		})
-	}
+	if (props.disableClick) return
+	useModals().organizations.viewCurriculumItem.open({
+		classInst: props.classInst,
+		curriculum: curriculum.value,
+		itemIndex,
+		sectionIndex,
+	})
 }
 </script>
