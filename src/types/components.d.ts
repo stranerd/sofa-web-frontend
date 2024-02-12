@@ -77,6 +77,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SaveToFolderModal: typeof import('./../application/components/study/folders/SaveToFolderModal.vue')['default']
     ScheduleCard: typeof import('./../application/components/organizations/schedules/ScheduleCard.vue')['default']
+    ScheduleCurriculumItem: typeof import('./../application/components/organizations/schedules/ScheduleCurriculumItem.vue')['default']
     ScheduleList: typeof import('./../application/components/organizations/schedules/ScheduleList.vue')['default']
     SelectQuizModal: typeof import('./../application/components/study/quizzes/SelectQuizModal.vue')['default']
     SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']

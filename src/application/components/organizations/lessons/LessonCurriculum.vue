@@ -32,8 +32,9 @@
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
 						<div
-							class="flex gap-2 mdlg:gap-4"
-							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
+							class="flex gap-2 mdlg:gap-4 cursor-pointer"
+							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
+							@click="openCurriculumItem(itemIndex, sectionIndex)">
 							<div class="flex items-center gap-2 flex-1">
 								<SofaIcon :name="getItemIcon(curriculum[sectionIndex].items[itemIndex])" class="h-[16px]" />
 								<SofaNormalText
@@ -219,5 +220,15 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
 		})
 	else fac.removeItem(itemIndex)
+}
+const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
+	if (!props.disableClick) {
+		useModals().organizations.viewCurriculumItem.open({
+			classInst: props.classInst,
+			curriculum: curriculum.value,
+			itemIndex,
+			sectionIndex,
+		})
+	}
 }
 </script>
