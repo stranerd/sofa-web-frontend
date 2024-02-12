@@ -29,30 +29,10 @@
 					<SofaVideoPlayer :videoUrl="mediaUrl" :type="curriculumItem.file.media.type" class="!w-full !h-full" />
 				</div>
 			</div>
-			<div
-				v-if="curriculumItem.type === 'quiz'"
-				class="rounded-custom h-full flex items-center justify-center"
-				:class="quizStarted ? 'bg-lightGray' : 'bg-primaryPurple'">
-				<div v-if="!quizStarted" class="flex flex-col items-center gap-3">
-					<SofaHeaderText color="text-white">{{
-						curriculumItem.quizMode === QuizModes.practice ? 'Practice questions' : 'Test yourself'
-					}}</SofaHeaderText>
-					<SofaNormalText color="text-white">{{
-						curriculumItem.quizMode === QuizModes.practice
-							? 'Comfortable learning for topic mastery'
-							: 'Evaluate your level of knowledge'
-					}}</SofaNormalText>
-					<SofaNormalText color="text-white">20 questions</SofaNormalText>
-					<SofaButton
-						bgColor="bg-white"
-						textColor="text-primaryBlue"
-						padding="py-3 px-9"
-						customClass="font-bold"
-						@click="startQuiz">
-						{{ 'Start' }}
-					</SofaButton>
-				</div>
-				<div v-else></div>
+			<div v-if="curriculumItem.type === 'quiz'" class="rounded-custom h-full flex items-center justify-center">
+				<template v-if="curriculumItem.quizMode === QuizModes.practice">
+					<QuizPractice :quizInst="curriculumItem.quiz" />
+				</template>
 			</div>
 		</div>
 		<div class="flex flex-col gap-2">
@@ -130,11 +110,6 @@ const activeItemIndex = ref(props.itemIndex)
 
 const curriculumItem = computed(() => props.curriculum[props.sectionIndex].items[activeItemIndex.value])
 
-const quizStarted = ref(false)
-const startQuiz = () => {
-	quizStarted.value = true
-}
-
 const canNext = computed(() => activeItemIndex.value < props.curriculum[props.sectionIndex].items.length - 1)
 const canPrev = computed(() => activeItemIndex.value > 0)
 const next = () => {
@@ -147,7 +122,6 @@ const prev = () => {
 watch(curriculumItem, async () => {
 	if (curriculumItem.value.type === 'file') {
 		const url = await curriculumItem.value.file.getMediaUrl()
-		console.log(url)
 		mediaUrl.value = url
 	}
 })
@@ -155,7 +129,6 @@ watch(curriculumItem, async () => {
 onBeforeMount(async () => {
 	if (curriculumItem.value.type === 'file') {
 		const url = await curriculumItem.value.file.getMediaUrl()
-		console.log(url)
 		mediaUrl.value = url
 	}
 })

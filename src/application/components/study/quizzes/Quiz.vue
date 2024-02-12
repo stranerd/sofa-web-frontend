@@ -1,6 +1,9 @@
 <template>
 	<slot name="header">
-		<div class="p-4 md:py-8 w-full flex justify-center shadow-custom" :class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
+		<div
+			v-if="!isLesson"
+			class="p-4 md:py-8 w-full flex justify-center shadow-custom"
+			:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-between">
 				<SofaIcon class="md:hidden" customClass="h-[19px]" name="circle-close" @click="Logic.Common.goBack()" />
 				<SofaHeaderText size="xl" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
@@ -16,7 +19,9 @@
 	</slot>
 
 	<div class="w-full h-full flex-grow overflow-y-auto px-4 flex flex-col items-center" :class="{ 'text-white': isDark }">
-		<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center">
+		<div
+			class="w-full h-full overflow-y-auto flex flex-col gap-8 items-center"
+			:class="{ 'lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] justify-center': !isLesson, 'pt-4': isLesson }">
 			<slot>
 				<QuestionDisplay
 					v-if="question"
@@ -35,8 +40,8 @@
 		<div
 			v-if="leftButton || rightButton"
 			class="px-4 py-2 md:py-4 w-full flex justify-center shadow-customInverted"
-			:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
-			<div class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex items-center gap-4 justify-center">
+			:class="{ 'md:bg-white': !isDark && !isLesson, 'text-white': isDark, 'bg-lightGray': isLesson }">
+			<div class="w-full flex items-center gap-4 justify-center" :class="{ 'lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%]': !isLesson }">
 				<SofaButton
 					v-if="leftButton"
 					class="w-full md:w-auto mr-auto"
@@ -93,12 +98,14 @@ const props = withDefaults(
 		leftButton?: ButtonConfig | null
 		optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 		showCounter?: boolean
+		isLesson?: boolean
 	}>(),
 	{
 		isDark: false,
 		rightButton: null,
 		leftButton: null,
 		showCounter: true,
+		isLesson: false,
 	},
 )
 

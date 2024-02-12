@@ -71,6 +71,7 @@ declare module 'vue' {
     QuestionDisplay: typeof import('./../application/components/study/questions/QuestionDisplay.vue')['default']
     Quiz: typeof import('./../application/components/study/quizzes/Quiz.vue')['default']
     QuizForm: typeof import('./../application/components/study/quizzes/QuizForm.vue')['default']
+    QuizPractice: typeof import('./../application/components/study/quizzes/QuizPractice.vue')['default']
     QuizWrapper: typeof import('./../application/components/study/quizzes/QuizWrapper.vue')['default']
     RequestAccess: typeof import('./../application/components/study/quizzes/RequestAccess.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
