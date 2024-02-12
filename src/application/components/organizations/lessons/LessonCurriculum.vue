@@ -99,7 +99,6 @@ import { useDeleteSchedule } from '@app/composables/organizations/schedules'
 import { useDeleteFile } from '@app/composables/study/files'
 import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
 import { FileType } from '@modules/study'
-import { formatTime } from '@utils/dates'
 
 const props = withDefaults(
 	defineProps<{
@@ -108,11 +107,13 @@ const props = withDefaults(
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
+		lesson?: ClassLesson
 		disableClick: boolean
 	}>(),
 	{
 		isModal: false,
 		factory: undefined,
+		lesson: undefined,
 		disableClick: false,
 	},
 )
@@ -155,12 +156,12 @@ const getItemIcon = (item: ExtendedCurriculumItem) => {
 const getItemInfo = (item: ExtendedCurriculumItem) => {
 	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
-	if (item.type == ClassLessonable.schedule) return `${formatTime(item.schedule.time.start)} - ${formatTime(item.schedule.time.end)}`
+	if (item.type == ClassLessonable.schedule) return item.schedule.timeRange
 }
 
 const shouldShowItemImage = (item: ExtendedCurriculumItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
-	return !item.schedule.isOngoing
+	return !item.schedule.canStudentJoin
 }
 
 const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
@@ -169,13 +170,13 @@ const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
 	return '/images/default.png'
 }
 
-const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.isOngoing
+const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
 
 const addSchedule = (index: number) => {
-	if (!props.factory || !props.factory.factories.at(index)) return
+	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return
 	useModals().organizations.createSchedule.open({
 		classInst: props.classInst,
-		lesson: props.classInst.lessons[index],
+		lesson: props.lesson,
 		afterSubmit: (schedule) => {
 			props.factory!.factories[index].addSchedule(schedule)
 		},

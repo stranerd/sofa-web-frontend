@@ -14,5 +14,6 @@ export interface ScheduleFromModel extends ScheduleToModel {
 export interface ScheduleToModel {
 	lessonId: string
 	title: string
+	description: string
 	time: ScheduleTime
 }

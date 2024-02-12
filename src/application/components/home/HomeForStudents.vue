@@ -72,7 +72,7 @@
 		style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)"
 		to="/chats/new">
 		<SofaNormalText color="text-inherit" content="Ask me anything" />
-		<SofaIcon name="robot" class="w-[24px] h-[24px]" />
+		<SofaAvatar :photoUrl="userAi.image" size="24" />
 	</router-link>
 </template>
 
@@ -82,7 +82,9 @@ import { useHomeTasks } from '@app/composables/home'
 import { extractContent } from '@app/composables/marketplace'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
+import { useAuth } from '@app/composables/auth/auth'
 
+const { userAi } = useAuth()
 const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()
 
 const { materials: recent } = useMyStudy('recent')

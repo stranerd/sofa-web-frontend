@@ -64,3 +64,8 @@ export const getDigitalTime = (timeInSecs: number) => {
 	const rest = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
 	return hr + rest
 }
+
+export const getDateString = (date: Date) =>
+	[date.getFullYear(), date.getMonth() + 1, date.getDate()].map((v) => v.toString().padStart(2, '0')).join('-')
+
+export const getTimeString = (date: Date) => [date.getHours(), date.getMinutes()].map((v) => v.toString().padStart(2, '0')).join(':')

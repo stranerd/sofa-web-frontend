@@ -233,7 +233,7 @@
 						ref="account_number"
 						v-model="withdrawForm.account_number"
 						customClass="rounded-custom !bg-lightGray"
-						type="tel"
+						type="number"
 						name="Account number"
 						placeholder="Account number"
 						borderColor="border-transparent"

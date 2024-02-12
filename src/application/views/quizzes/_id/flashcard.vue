@@ -103,7 +103,7 @@ export default defineComponent({
 		Flashcard,
 	},
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
-	async setup() {
+	setup() {
 		useMeta({
 			title: 'Flashcards',
 		})

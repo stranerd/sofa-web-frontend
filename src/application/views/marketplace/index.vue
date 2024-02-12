@@ -9,7 +9,7 @@
 			</SofaNormalText>
 
 			<div class="w-[40%] shadow-custom px-4 py-2 bg-white rounded-custom flex gap-3 items-center justify-between">
-				<div class="flex gap-2 items-center flex-1">
+				<form class="flex gap-2 items-center flex-1" @submit.prevent="handleSearch">
 					<SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
 					<SofaNormalText
 						as="a"
@@ -20,25 +20,21 @@
 						v-model="searchQuery"
 						class="flex-1"
 						customClass="!border-none w-full"
-						placeholder="Search for anything"
-						@onEnter="handleSearch" />
-				</div>
+						placeholder="Search for anything" />
+				</form>
 
 				<SofaIcon name="search-black" class="h-[17px] cursor-pointer w-[20px]" @click="handleSearch" />
 			</div>
 		</div>
 
 		<div class="w-full p-4 flex mdlg:hidden flex-col">
-			<div class="w-full shadow-custom px-4 py-2 bg-white rounded-custom flex gap-2 items-center justify-start">
+			<form
+				class="w-full shadow-custom px-4 py-2 bg-white rounded-custom flex gap-2 items-center justify-start"
+				@submit.prevent="handleSearch">
 				<SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
 				<SofaIcon name="search-black" class="h-[15px] cursor-pointer" @click="handleSearch" />
-				<SofaTextField
-					v-model="searchQuery"
-					class="flex-1"
-					customClass="!border-none w-full !px-0"
-					placeholder="Search"
-					@onEnter="handleSearch" />
-			</div>
+				<SofaTextField v-model="searchQuery" class="flex-1" customClass="!border-none w-full !px-0" placeholder="Search" />
+			</form>
 		</div>
 
 		<div class="mdlg:w-[85%] lg:w-[75%] w-full flex flex-col h-full overflow-y-auto gap-8 mdlg:pl-0 pl-4">
