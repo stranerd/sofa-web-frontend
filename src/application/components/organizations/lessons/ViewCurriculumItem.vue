@@ -3,61 +3,61 @@
 		<div class="flex w-full items-center gap-2 justify-between">
 			<SofaHeaderText class="!font-bold !text-deepGray" :content="title" />
 			<div class="flex items-center gap-4">
-				<SofaIcon class="h-[16px] fill-black" name="back-arrow" />
-				<SofaIcon class="h-[16px] fill-black" name="arrow-right-white" />
+				<SofaIcon class="h-[16px] fill-black" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
+				<SofaIcon
+					class="h-[16px] fill-black"
+					name="arrow-right-white"
+					:class="canNext ? 'fill-black' : 'fill-grayColor'"
+					@click="next" />
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
-		<div class="w-full">
-			<!-- <div
-				v-if="curriculumItem.type === 'schedule'"
-				class="rounded-custom h-[600px] flex items-center justify-center"
-				:class="curriculumItem.schedule.isOngoing ? 'bg-primaryRed' : 'bg-primaryPurple'">
-				<div class="flex flex-col items-center gap-3">
-					<SofaHeaderText color="text-white">Live Session</SofaHeaderText>
-					<div class="flex items-center gap-2">
-						<SofaIcon class="h-[16px] fill-white" name="tutor" />
-						<SofaNormalText color="text-white">{{ curriculumItem.schedule.user.bio.publicName }}</SofaNormalText>
-					</div>
-					<div class="flex items-center gap-2">
-						<SofaIcon name="calendar" class="h-[17px] !fill-white" />
-						<SofaNormalText :content="formatTime(curriculumItem.schedule.time.start)" color="text-white" />
-						<div class="w-[5px] h-[5px] rounded-[50%] bg-white" />
-						<SofaNormalText :content="formatTime(curriculumItem.schedule.time.end)" color="text-white" />
-					</div>
-					<SofaButton
-						bgColor="bg-white"
-						:textColor="curriculumItem.schedule.isOngoing ? 'text-primaryRed' : 'text-primaryBlue'"
-						:class="curriculumItem.schedule.isOngoing ? '' : 'opacity-50 cursor-not-allowed'"
-						padding="py-3 px-9"
-						customClass="font-bold">
-						{{ 'Enter' }}
-					</SofaButton>
+		<div class="w-full overflow-y-hidden">
+			<div v-if="curriculumItem.type === 'schedule'">
+				<ScheduleItem :classInst="classInst" :schedule="curriculumItem.schedule" />
+			</div>
+			<div
+				v-if="curriculumItem.type === 'file'"
+				class="w-full rounded-custom h-[600px] flex items-center justify-center bg-lightGray overflow-y-auto">
+				<div v-if="curriculumItem.fileType === FileType.document && mediaUrl" class="w-full h-full">
+					<SofaDocumentReader :documentUrl="mediaUrl" class="!w-full !h-full" />
 				</div>
-			</div> -->
-			<!-- <div
-				v-if="fileType.type === 'quiz'"
+				<div v-if="curriculumItem.fileType === FileType.image && mediaUrl" class="w-full h-full">
+					<SofaImageLoader :photoUrl="mediaUrl" customClass="!w-full !h-full rounded-custom" />
+				</div>
+				<div v-if="curriculumItem.fileType === FileType.video && mediaUrl" class="w-full h-full">
+					<SofaVideoPlayer :videoUrl="mediaUrl" :type="curriculumItem.file.media.type" class="!w-full !h-full" />
+				</div>
+			</div>
+			<div
+				v-if="curriculumItem.type === 'quiz'"
 				class="rounded-custom h-[600px] flex items-center justify-center"
 				:class="quizStarted ? 'bg-lightGray' : 'bg-primaryPurple'">
 				<div v-if="!quizStarted" class="flex flex-col items-center gap-3">
 					<SofaHeaderText color="text-white">{{
-						fileType.mode === 'practice' ? 'Practice questions' : 'Test yourself'
+						curriculumItem.quizMode === QuizModes.practice ? 'Practice questions' : 'Test yourself'
 					}}</SofaHeaderText>
 					<SofaNormalText color="text-white">{{
-						fileType.mode === 'practice' ? 'Comfortable learning for topic mastery' : 'Evaluate your level of knowledge'
+						curriculumItem.quizMode === QuizModes.practice
+							? 'Comfortable learning for topic mastery'
+							: 'Evaluate your level of knowledge'
 					}}</SofaNormalText>
 					<SofaNormalText color="text-white">20 questions</SofaNormalText>
-					<SofaButton bgColor="bg-white" textColor="text-primaryBlue" padding="py-3 px-9" customClass="font-bold">
+					<SofaButton
+						bgColor="bg-white"
+						textColor="text-primaryBlue"
+						padding="py-3 px-9"
+						customClass="font-bold"
+						@click="startQuiz">
 						{{ 'Start' }}
 					</SofaButton>
 				</div>
 				<div v-else></div>
 			</div>
-			<div v-if="fileType.type === 'file'" class="rounded-custom h-[600px] flex items-center justify-center bg-lightGray"></div> -->
 		</div>
 		<div class="flex flex-col gap-2">
 			<SofaHeaderText>{{ curriculumSection.label }}</SofaHeaderText>
-			<!-- <SofaNormalText>{{ `Mathematics/${curriculumSection.label}` }}</SofaNormalText> -->
+			<SofaNormalText>{{ `${curriculumSection.label}/${fileName}` }}</SofaNormalText>
 		</div>
 		<!-- Question section -->
 		<!-- <div class="flex flex-col items-start gap-6">
@@ -78,24 +78,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount } from 'vue'
-import { ClassEntity, ClassLesson, ClassLessonable } from '@modules/organizations'
+import { computed, ref, watch, onBeforeMount } from 'vue'
+import { ClassEntity, ClassLessonable, ExtendCurriculum } from '@modules/organizations'
 import { FileType, QuizModes } from '@modules/study'
-// import { formatTime } from '@utils/dates'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
-	curriculum: ClassLesson['curriculum']
+	curriculum: ExtendCurriculum
 	itemIndex: number
 	sectionIndex: number
 }>()
-// const curriculumItem = ref();
-// const fileType = ref({
-// 	type: 'file',
-// 	active: true,
-// 	mode: 'practice',
-// })
-// const quizStarted = ref(true)
+
 const title = computed(() => {
 	if (curriculumItem.value.type === ClassLessonable.schedule) {
 		return 'Live Session'
@@ -120,13 +113,50 @@ const title = computed(() => {
 	}
 	return 'Curriculum Item'
 })
-onBeforeMount(() => {
-	console.log(props.curriculum)
-	console.log(props.curriculum[props.sectionIndex].items[props.itemIndex])
+const fileName = computed(() => {
+	if (curriculumItem.value.type === ClassLessonable.file) {
+		return curriculumItem.value.file.title
+	} else if (curriculumItem.value.type === ClassLessonable.quiz) {
+		return curriculumItem.value.quiz.title
+	} else {
+		return curriculumItem.value.schedule.title
+	}
 })
+const mediaUrl = ref('')
+
 const curriculumSection = computed(() => props.curriculum[props.sectionIndex])
-const curriculumItem = computed(() => {
-	console.log(props.curriculum[props.sectionIndex].items[props.itemIndex])
-	return props.curriculum[props.sectionIndex].items[props.itemIndex]
+
+const activeItemIndex = ref(props.itemIndex)
+
+const curriculumItem = computed(() => props.curriculum[props.sectionIndex].items[activeItemIndex.value])
+
+const quizStarted = ref(false)
+const startQuiz = () => {
+	quizStarted.value = true
+}
+
+const canNext = computed(() => activeItemIndex.value < props.curriculum[props.sectionIndex].items.length - 1)
+const canPrev = computed(() => activeItemIndex.value > 0)
+const next = () => {
+	if (canNext.value) activeItemIndex.value++
+}
+const prev = () => {
+	if (canPrev.value) activeItemIndex.value--
+}
+
+watch(curriculumItem, async () => {
+	if (curriculumItem.value.type === 'file') {
+		const url = await curriculumItem.value.file.getMediaUrl()
+		console.log(url)
+		mediaUrl.value = url
+	}
+})
+
+onBeforeMount(async () => {
+	if (curriculumItem.value.type === 'file') {
+		const url = await curriculumItem.value.file.getMediaUrl()
+		console.log(url)
+		mediaUrl.value = url
+	}
 })
 </script>

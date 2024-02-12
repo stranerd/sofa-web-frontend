@@ -1,4 +1,5 @@
-import { FileType, QuizModes } from '@modules/study'
+import { ScheduleEntity } from '../entities/schedules'
+import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
 
 export type { Saleable } from '@modules/payment'
 export type { EmbeddedUser } from '@modules/users'
@@ -82,3 +83,25 @@ export type ScheduleStream = {
 	type: 'jitsi'
 	roomId: string
 }
+
+export type ExtendedClassLessonCurriculumSectionItem =
+	| {
+			id: string
+			type: ClassLessonable.quiz
+			quizMode: QuizModes
+			quiz: QuizEntity
+	  }
+	| {
+			id: string
+			type: ClassLessonable.file
+			fileType: FileType
+			file: FileEntity
+	  }
+	| {
+			id: string
+			type: ClassLessonable.schedule
+			schedule: ScheduleEntity
+	  }
+
+//   Exclude<ClassLesson, 'items'>  & { items: newType }
+export type ExtendCurriculum = (Exclude<ClassLessonCurriculumSection, 'items'> & { items: ExtendedClassLessonCurriculumSectionItem[] })[]

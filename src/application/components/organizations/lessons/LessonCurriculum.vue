@@ -97,7 +97,14 @@ import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { useDeleteSchedule } from '@app/composables/organizations/schedules'
 import { useDeleteFile } from '@app/composables/study/files'
-import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
+import {
+	ClassEntity,
+	ClassLesson,
+	ClassLessonable,
+	CurriculumView,
+	LessonCurriculumFactory,
+	ExtendedClassLessonCurriculumSectionItem,
+} from '@modules/organizations'
 import { FileType } from '@modules/study'
 
 const props = withDefaults(
@@ -134,15 +141,15 @@ const factory = computed(() => {
 	return f
 })
 
-type ExtendedCurriculumItem = (typeof curriculum)['value'][number]['items'][number]
+// type ExtendedCurriculumItem = (typeof curriculum)['value'][number]['items'][number]
 
-const getItemTitle = (item: ExtendedCurriculumItem) => {
+const getItemTitle = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type == ClassLessonable.quiz) return item.quiz.title
 	if (item.type == ClassLessonable.file) return item.file.title
 	if (item.type == ClassLessonable.schedule) return item.schedule.title
 }
 
-const getItemIcon = (item: ExtendedCurriculumItem) => {
+const getItemIcon = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type === ClassLessonable.quiz) return 'quiz'
 	if (item.type === ClassLessonable.schedule) return 'translation'
 	if (item.type === ClassLessonable.file) {
@@ -153,24 +160,25 @@ const getItemIcon = (item: ExtendedCurriculumItem) => {
 	return 'translation'
 }
 
-const getItemInfo = (item: ExtendedCurriculumItem) => {
+const getItemInfo = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
 	if (item.type == ClassLessonable.schedule) return item.schedule.timeRange
 }
 
-const shouldShowItemImage = (item: ExtendedCurriculumItem) => {
+const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
 	return !item.schedule.canStudentJoin
 }
 
-const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
+const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type === ClassLessonable.quiz) return item.quiz.photo?.link ?? '/images/default.png'
 	if (item.type === ClassLessonable.file) return item.file.photo?.link ?? '/images/default.png'
 	return '/images/default.png'
 }
 
-const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
+const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
+	item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
 
 const addSchedule = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return
