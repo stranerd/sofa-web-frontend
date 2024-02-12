@@ -14,7 +14,7 @@
 			<SofaHeaderText v-else class="!font-bold !text-deepGray" content="Curriculum" />
 			<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 		</div>
-		<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" :isModal="true" />
+		<LessonCurriculum :classInst="classInst" :lesson="lesson" :view="curriculumView" :curriculum="curriculum" :isModal="true" />
 	</div>
 </template>
 

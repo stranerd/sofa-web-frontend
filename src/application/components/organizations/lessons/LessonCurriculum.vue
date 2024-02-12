@@ -110,11 +110,11 @@ import { FileType } from '@modules/study'
 const props = withDefaults(
 	defineProps<{
 		classInst: ClassEntity
+		lesson: ClassLesson
 		view: CurriculumView
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
-		lesson?: ClassLesson
 		disableClick?: boolean
 	}>(),
 	{
@@ -230,8 +230,9 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 }
 const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
 	if (props.disableClick) return
-	useModals().organizations.viewCurriculumItem.open({
+	useModals().organizations.viewCurriculum.open({
 		classInst: props.classInst,
+		lesson: props.lesson,
 		curriculum: curriculum.value,
 		itemIndex,
 		sectionIndex,

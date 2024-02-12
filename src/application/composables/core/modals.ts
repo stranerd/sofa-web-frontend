@@ -15,6 +15,7 @@ import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurr
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
+import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumModal.vue'
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
 import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
@@ -25,7 +26,6 @@ import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
-import ViewCuriculumItem from '@app/components/organizations/lessons/ViewCurriculumItem.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -51,7 +51,7 @@ export const useModals = () => ({
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
-		viewCurriculumItem: { component: ViewCuriculumItem },
+		viewCurriculum: { component: ViewCuriculum },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },

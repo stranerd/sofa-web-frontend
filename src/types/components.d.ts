@@ -67,7 +67,7 @@ declare module 'vue' {
     NewMaterial: typeof import('./../application/components/study/courses/NewMaterial.vue')['default']
     PreviewCurriculumModal: typeof import('./../application/components/organizations/lessons/PreviewCurriculumModal.vue')['default']
     Profile: typeof import('./../application/components/settings/profile.vue')['default']
-    QuestionCard: typeof import('./../application/components/organizations/lessons/QuestionCard.vue')['default']
+    QuestionCard: typeof import('./../application/components/organizations/lessons/CurriculumItemViews/QuestionCard.vue')['default']
     QuestionDisplay: typeof import('./../application/components/study/questions/QuestionDisplay.vue')['default']
     Quiz: typeof import('./../application/components/study/quizzes/Quiz.vue')['default']
     QuizForm: typeof import('./../application/components/study/quizzes/QuizForm.vue')['default']
@@ -77,8 +77,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SaveToFolderModal: typeof import('./../application/components/study/folders/SaveToFolderModal.vue')['default']
     ScheduleCard: typeof import('./../application/components/organizations/schedules/ScheduleCard.vue')['default']
-    ScheduleItem: typeof import('./../application/components/organizations/schedules/ScheduleItem.vue')['default']
     ScheduleList: typeof import('./../application/components/organizations/schedules/ScheduleList.vue')['default']
+    ScheduleView: typeof import('./../application/components/organizations/lessons/CurriculumItemViews/ScheduleView.vue')['default']
     SelectQuizModal: typeof import('./../application/components/study/quizzes/SelectQuizModal.vue')['default']
     SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']
     Settings: typeof import('./../application/components/study/courses/Settings.vue')['default']
@@ -125,7 +125,7 @@ declare module 'vue' {
     SofaVideoPlayer: typeof import('sofa-ui-components')['SofaVideoPlayer']
     SubPageLayout: typeof import('./../application/layouts/SubPageLayout.vue')['default']
     TestWrapper: typeof import('./../application/components/plays/tests/TestWrapper.vue')['default']
-    ViewCurriculumItem: typeof import('./../application/components/organizations/lessons/ViewCurriculumItem.vue')['default']
+    ViewCurriculumModal: typeof import('./../application/components/organizations/lessons/ViewCurriculumModal.vue')['default']
     Wallet: typeof import('./../application/components/settings/wallet.vue')['default']
   }
 }
