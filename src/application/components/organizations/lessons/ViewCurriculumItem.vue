@@ -12,13 +12,13 @@
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
-		<div class="w-full overflow-y-hidden h-[350px] mdlg:h-[550px]">
+		<div class="w-full overflow-y-hidden">
 			<div v-if="curriculumItem.type === 'schedule'" class="h-full">
 				<ScheduleItem :classInst="classInst" :schedule="curriculumItem.schedule" />
 			</div>
 			<div
 				v-if="curriculumItem.type === 'file'"
-				class="w-full rounded-custom h-full flex items-center justify-center bg-lightGray overflow-y-auto">
+				class="w-full h-[350px] mdlg:h-[550px] rounded-custom flex items-center justify-center bg-lightGray overflow-y-auto">
 				<div v-if="curriculumItem.fileType === FileType.document && mediaUrl" class="w-full h-full">
 					<SofaDocumentReader :documentUrl="mediaUrl" class="!w-full !h-full" />
 				</div>
@@ -31,7 +31,40 @@
 			</div>
 			<div v-if="curriculumItem.type === 'quiz'" class="rounded-custom h-full flex items-center justify-center">
 				<template v-if="curriculumItem.quizMode === QuizModes.practice">
-					<QuizPractice :quizInst="curriculumItem.quiz" />
+					<div
+						v-if="!quizPracticeStarted"
+						class="h-[400px] w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
+						<SofaHeaderText color="text-white"> Practice questions </SofaHeaderText>
+						<SofaNormalText color="text-white"> Comfortable learning for topic mastery </SofaNormalText>
+						<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length + ' Questions' }}</SofaNormalText>
+						<SofaButton
+							bgColor="bg-white"
+							textColor="text-primaryBlue"
+							padding="py-3 px-9"
+							customClass="font-bold"
+							@click="startQuizPractice">
+							{{ 'Start' }}
+						</SofaButton>
+					</div>
+					<QuizPractice v-else :quizId="curriculumItem.quiz.id" class="h-[350px] mdlg:h-[550px]" />
+				</template>
+				<template v-if="curriculumItem.quizMode === QuizModes.test">
+					<div
+						v-if="!quizTestStarted"
+						class="h-[400px] w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
+						<SofaHeaderText color="text-white"> Test yourself </SofaHeaderText>
+						<SofaNormalText color="text-white"> Evaluate your level of knowledge </SofaNormalText>
+						<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length + ' Questions' }}</SofaNormalText>
+						<SofaButton
+							bgColor="bg-white"
+							textColor="text-primaryBlue"
+							padding="py-3 px-9"
+							customClass="font-bold"
+							@click="startQuizTest(curriculumItem.quiz.id)">
+							{{ 'Start' }}
+						</SofaButton>
+					</div>
+					<QuizTest v-else-if="quizTestStarted && test" :testId="test?.id" />
 				</template>
 			</div>
 		</div>
@@ -61,6 +94,7 @@
 import { computed, ref, watch, onBeforeMount } from 'vue'
 import { ClassEntity, ClassLessonable, ExtendCurriculum } from '@modules/organizations'
 import { FileType, QuizModes } from '@modules/study'
+import { Test, Logic } from 'sofa-logic'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
@@ -117,6 +151,21 @@ const next = () => {
 }
 const prev = () => {
 	if (canPrev.value) activeItemIndex.value--
+}
+
+const quizPracticeStarted = ref(false)
+const startQuizPractice = () => {
+	quizPracticeStarted.value = true
+}
+
+const quizTestStarted = ref(false)
+const test = ref<Test | null>(null)
+const startQuizTest = (id: string) => {
+	Logic.Plays.CreateTest(id).then(async (data: Test) => {
+		await Logic.Plays.StartTest(data.id)
+		test.value = data
+		quizTestStarted.value = true
+	})
 }
 
 watch(curriculumItem, async () => {

@@ -1,14 +1,6 @@
 <template>
-	<div v-if="!quizStarted" class="h-full w-full bg-primaryPurple flex flex-col items-center justify-center gap-3 rounded-custom">
-		<SofaHeaderText color="text-white"> Practice questions </SofaHeaderText>
-		<SofaNormalText color="text-white"> Comfortable learning for topic mastery </SofaNormalText>
-		<SofaNormalText color="text-white">{{ quizInst.questions.length + ' Questions' }}</SofaNormalText>
-		<SofaButton bgColor="bg-white" textColor="text-primaryBlue" padding="py-3 px-9" customClass="font-bold" @click="startQuiz">
-			{{ 'Start' }}
-		</SofaButton>
-	</div>
-	<div v-else class="h-full w-full bg-lightGray rounded-custom overflow-y-auto">
-		<QuizWrapper :id="quizInst.id" :showAnswer="showSolution" :isAnswerRight="isCorrect">
+	<div class="w-full bg-lightGray rounded-custom overflow-y-auto">
+		<QuizWrapper :id="quizId" :showAnswer="showSolution" :isAnswerRight="isCorrect">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz
 					v-model:answer="extras.answer"
@@ -84,17 +76,11 @@
 import { ref } from 'vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
-import { QuizEntity } from '@modules/study'
 import { useModals } from '@app/composables/core/modals'
 defineProps<{
-	quizInst: QuizEntity
+	quizId: string
 }>()
 const showSolution = ref(false)
 const isDone = ref(false)
 const isCorrect = ref(false)
-
-const quizStarted = ref(false)
-const startQuiz = () => {
-	quizStarted.value = true
-}
 </script>
