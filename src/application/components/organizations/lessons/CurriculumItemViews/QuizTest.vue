@@ -31,7 +31,7 @@
 						}">
 						<template #header>
 							<div class="px-4 pt-4 md:pt-8 w-full flex justify-center">
-								<div class="flex gap-2 lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full">
+								<div class="flex gap-2 w-full">
 									<div v-for="i in Array.from({ length: questions.length }, (_, i) => i)" :key="i" class="w-full flex">
 										<div
 											class="h-2 bg-primaryGreen"

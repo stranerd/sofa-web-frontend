@@ -5,11 +5,12 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
+import { useCreateView } from '../interactions/views'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import { Logic } from 'sofa-logic'
 import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
-import { InteractionEntities, ViewsUseCases } from '@modules/interactions'
+import { InteractionEntities } from '@modules/interactions'
 
 const store = {} as Record<
 	string,
@@ -19,7 +20,7 @@ const store = {} as Record<
 	} & ReturnType<typeof useSuccessHandler>
 >
 
-export const useQuiz = (id: string, skip: { questions: boolean; members: boolean }) => {
+export const useQuiz = (id: string, skip: { questions: boolean; members: boolean; createView: boolean }) => {
 	store[id] ??= {
 		quiz: ref(null),
 		listener: useListener(
@@ -45,6 +46,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	const questionFactory = new QuestionFactory()
 
 	const { hasAccess } = useHasAccess()
+	const { createView } = useCreateView()
 
 	const canFetchUsers = computed(() => !skip.members && hasAccess.value(store[id].quiz.value))
 	const canFetchQuestions = computed(() => !skip.questions && hasAccess.value(store[id].quiz.value))
@@ -66,7 +68,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	const { asyncFn: fetchQuiz, called } = useAsyncFn(
 		async () => {
 			store[id].quiz.value = await QuizzesUseCases.find(id)
-			if (store[id].quiz.value) ViewsUseCases.add({ id: id, type: InteractionEntities.quizzes }).catch() // dont await, run in bg
+			if (store[id].quiz.value && !skip.createView) createView({ id: id, type: InteractionEntities.quizzes })
 		},
 		{ key: `study/quizzes/${id}` },
 	)
