@@ -18,7 +18,9 @@
 					:key="buttonProps.label"
 					class="self-start"
 					:bgColor="buttonProps.bgColor ?? 'bg-white'"
-					textColor="text-inherit"
+					:textColor="
+						schedule.canStart(classInst, id) || schedule.canJoin(classInst, id) ? 'text-primaryRed' : 'text-primaryPurple'
+					"
 					padding="py-3 px-5"
 					@click="buttonProps.handler">
 					{{ buttonProps.label }}

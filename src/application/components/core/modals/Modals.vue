@@ -2,7 +2,7 @@
 	<SofaModal
 		v-for="key in modals"
 		:key="key"
-		v-bind="modalsDef[key].modalArgs ?? {}"
+		v-bind="stripKeys(modalsDef[key].modalArgs ?? {}, ['popover', 'closeOnClickOutside'])"
 		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? false ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
@@ -10,7 +10,7 @@
 		v-for="key in popovers"
 		:key="key"
 		maxWidth="!w-auto"
-		v-bind="modalsDef[key].modalArgs ?? {}"
+		v-bind="stripKeys(modalsDef[key].modalArgs ?? {}, ['popover', 'closeOnClickOutside'])"
 		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
@@ -73,4 +73,10 @@ const { modals, popovers, modalsDef, close } = modal
 const loaderSetup = Logic.Common.loaderSetup
 const confirmations = Logic.Common.confirmations
 const successes = Logic.Common.successes
+
+const stripKeys = <T extends Record<string, any>>(obj: T, keys: (keyof T)[]) =>
+	Object.keys(obj).reduce((acc, key: keyof T) => {
+		if (!keys.includes(key)) acc[key] = obj[key]
+		return acc
+	}, {} as T)
 </script>

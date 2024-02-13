@@ -1,5 +1,5 @@
 <template>
-	<div class="p-4 flex flex-col gap-6">
+	<div class="p-4 h-full flex flex-col gap-6">
 		<div class="flex w-full items-center gap-2 justify-between">
 			<SofaHeaderText class="!font-bold !text-deepGray" :content="title" />
 			<div class="flex items-center gap-4">
@@ -42,7 +42,7 @@
 						<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length }} Questions </SofaNormalText>
 						<SofaButton
 							bgColor="bg-white"
-							textColor="text-primaryBlue"
+							textColor="text-primaryPurple"
 							padding="py-3 px-9"
 							customClass="font-bold"
 							@click="startQuizPractice">
@@ -60,7 +60,7 @@
 						<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length }} Questions </SofaNormalText>
 						<SofaButton
 							bgColor="bg-white"
-							textColor="text-primaryBlue"
+							textColor="text-primaryPurple"
 							padding="py-3 px-9"
 							customClass="font-bold"
 							@click="startQuizTest(curriculumItem.quiz.id)">
