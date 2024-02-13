@@ -86,4 +86,5 @@ export type CoursableAccess = {
 		| {
 				gameId: string
 		  }
+		| Record<string, any>
 }

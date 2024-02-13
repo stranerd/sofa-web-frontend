@@ -1,7 +1,13 @@
 <template>
 	<TestWrapper :id="testId" :skipStatusNav="true">
 		<template #default="{ test, questions: testQuestions, extras: testExtras }">
-			<QuizWrapper v-if="testExtras.isMine" :id="test.quizId" :questions="testQuestions" :useTimer="true" :submit="testExtras.submit">
+			<QuizWrapper
+				v-if="testExtras.isMine"
+				:id="test.quizId"
+				:questions="testQuestions"
+				:useTimer="true"
+				:submit="testExtras.submit"
+				:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }">
 				<template #prestart="{ quiz, extras }">
 					<div class="w-full my-auto flex flex-col gap-6 items-center">
 						<SofaHeaderText content="Test is starting" size="xl" />
@@ -63,7 +69,12 @@
 </template>
 
 <script setup lang="ts">
+import { ClassEntity, ClassLesson } from '@modules/organizations'
+
 defineProps<{
+	quizId: string
 	testId: string
+	classInst: ClassEntity
+	lesson: ClassLesson
 }>()
 </script>

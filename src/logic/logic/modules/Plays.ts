@@ -6,7 +6,7 @@ import { Paginated } from '../types/domains/common'
 import { Game, GameParticipantAnswer, Test } from '../types/domains/plays'
 import { AddQuestionAnswer, CreateGameInput } from '../types/forms/plays'
 import Common from './Common'
-import { QuestionEntity } from '@modules/study'
+import { CoursableAccess, QuestionEntity } from '@modules/study'
 
 export default class Plays extends Common {
 	constructor() {
@@ -45,18 +45,18 @@ export default class Plays extends Common {
 	public GetTestQuestions = (testId: string) =>
 		$api.plays.test.getTestQuestions(testId).then((response) => response.data.map((i: any) => new QuestionEntity(i)))
 
-	public CreateGame = (CreateGameForm: CreateGameInput) =>
+	public CreateGame = (CreateGameForm: CreateGameInput, access: CoursableAccess['access']) =>
 		$api.plays.game
-			.post(null, CreateGameForm)
+			.post(null, CreateGameForm, { access })
 			.then((response) => response.data as Game)
 			.catch((error) => {
 				Logic.Common.showError(capitalize(error.response.data[0]?.message))
 				throw error
 			})
 
-	public CreateTest = (quizId: string) =>
+	public CreateTest = (quizId: string, access: CoursableAccess['access']) =>
 		$api.plays.test
-			.post(null, { quizId })
+			.post(null, { quizId }, { access })
 			.then((response) => response.data as Test)
 			.catch((error) => {
 				Logic.Common.showError(capitalize(error.response.data[0]?.message))

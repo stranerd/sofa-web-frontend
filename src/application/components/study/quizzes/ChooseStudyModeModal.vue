@@ -78,7 +78,7 @@ const chooseMode = async (mode: QuizModes) => {
 
 	if (mode === QuizModes.test) {
 		Logic.Common.showLoading()
-		await Logic.Plays.CreateTest(quizId)
+		await Logic.Plays.CreateTest(quizId, {})
 			.then(async (data) => {
 				await Logic.Common.GoToRoute(`/tests/${data.id}`)
 			})
@@ -119,7 +119,7 @@ const otherTasks = [
 
 const createQuizGame = async () => {
 	Logic.Common.showLoading()
-	await Logic.Plays.CreateGame({ quizId: props.quiz.id, join: joinGame.value })
+	await Logic.Plays.CreateGame({ quizId: props.quiz.id, join: joinGame.value }, {})
 		.then(async (game) => {
 			await Logic.Common.GoToRoute(`/games/${game.id}`)
 			props.close()
