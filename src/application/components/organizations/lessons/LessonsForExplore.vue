@@ -13,7 +13,13 @@
 				</SofaNormalText>
 			</div>
 			<div v-else class="bg-lightGray p-4 rounded-md">
-				<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" class="bg-white rounded-md p-4" />
+				<LessonCurriculum
+					:classInst="classInst"
+					:lesson="lesson"
+					:view="curriculumView"
+					:curriculum="curriculum"
+					class="bg-white rounded-md p-4"
+					:disableClick="true" />
 			</div>
 		</div>
 	</div>
@@ -26,10 +32,12 @@ import { ClassEntity, ClassLesson } from '@modules/organizations'
 
 const props = defineProps<{
 	classInst: ClassEntity
-	lesson: ClassLesson | undefined
+	lesson: ClassLesson
 }>()
 
-const selectedLessonCurriculum = computed(() => props.lesson?.curriculum ?? [])
-const { curriculum } = useLessonCurriculum(props.classInst, selectedLessonCurriculum)
+const { curriculum } = useLessonCurriculum(
+	props.classInst,
+	computed(() => props.lesson.curriculum),
+)
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 </script>

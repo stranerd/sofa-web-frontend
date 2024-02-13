@@ -31,9 +31,10 @@
 					itemKey=""
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
-						<div
+						<a
 							class="flex gap-2 mdlg:gap-4"
-							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'">
+							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
+							@click="openCurriculumItem(itemIndex, sectionIndex)">
 							<div class="flex items-center gap-2 flex-1">
 								<SofaIcon :name="getItemIcon(curriculum[sectionIndex].items[itemIndex])" class="h-[16px]" />
 								<SofaNormalText
@@ -70,7 +71,7 @@
 									name="trash-gray"
 									@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
 							</div>
-						</div>
+						</a>
 					</template>
 					<template #footer>
 						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
@@ -96,22 +97,31 @@ import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { useDeleteSchedule } from '@app/composables/organizations/schedules'
 import { useDeleteFile } from '@app/composables/study/files'
-import { ClassEntity, ClassLesson, ClassLessonable, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
+import {
+	ClassEntity,
+	ClassLesson,
+	ClassLessonable,
+	CurriculumView,
+	ExtendedClassLessonCurriculumSectionItem,
+	LessonCurriculumFactory,
+} from '@modules/organizations'
 import { FileType } from '@modules/study'
 
 const props = withDefaults(
 	defineProps<{
 		classInst: ClassEntity
+		lesson: ClassLesson
 		view: CurriculumView
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
-		lesson?: ClassLesson
+		disableClick?: boolean
 	}>(),
 	{
 		isModal: false,
 		factory: undefined,
 		lesson: undefined,
+		disableClick: false,
 	},
 )
 
@@ -131,15 +141,13 @@ const factory = computed(() => {
 	return f
 })
 
-type ExtendedCurriculumItem = (typeof curriculum)['value'][number]['items'][number]
-
-const getItemTitle = (item: ExtendedCurriculumItem) => {
+const getItemTitle = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type == ClassLessonable.quiz) return item.quiz.title
 	if (item.type == ClassLessonable.file) return item.file.title
 	if (item.type == ClassLessonable.schedule) return item.schedule.title
 }
 
-const getItemIcon = (item: ExtendedCurriculumItem) => {
+const getItemIcon = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type === ClassLessonable.quiz) return 'quiz'
 	if (item.type === ClassLessonable.schedule) return 'translation'
 	if (item.type === ClassLessonable.file) {
@@ -150,24 +158,25 @@ const getItemIcon = (item: ExtendedCurriculumItem) => {
 	return 'translation'
 }
 
-const getItemInfo = (item: ExtendedCurriculumItem) => {
+const getItemInfo = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
 	if (item.type == ClassLessonable.schedule) return item.schedule.timeRange
 }
 
-const shouldShowItemImage = (item: ExtendedCurriculumItem) => {
+const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
 	return !item.schedule.canStudentJoin
 }
 
-const getItemImagePlaceholder = (item: ExtendedCurriculumItem) => {
+const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type === ClassLessonable.quiz) return item.quiz.photo?.link ?? '/images/default.png'
 	if (item.type === ClassLessonable.file) return item.file.photo?.link ?? '/images/default.png'
 	return '/images/default.png'
 }
 
-const showLiveBadgeForItem = (item: ExtendedCurriculumItem) => item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
+const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
+	item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
 
 const addSchedule = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return
@@ -218,5 +227,15 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
 		})
 	else fac.removeItem(itemIndex)
+}
+const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
+	if (props.disableClick) return
+	useModals().organizations.viewCurriculum.open({
+		classInst: props.classInst,
+		lesson: props.lesson,
+		curriculum: curriculum.value,
+		itemIndex,
+		sectionIndex,
+	})
 }
 </script>
