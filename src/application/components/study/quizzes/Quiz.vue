@@ -49,7 +49,7 @@
 				:class="{ 'md:bg-white': !isDark && !isInModal, 'text-white': isDark, 'shadow-customInverted': !isInModal }">
 				<div class="w-full flex items-center gap-4 justify-center" :class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal }">
 					<SofaButton
-						v-if="leftButton"
+						v-if="leftButton && !isInModal"
 						class="w-full md:w-auto mr-auto"
 						customClass="md:font-semibold"
 						padding="py-3 md:px-6"
@@ -59,13 +59,19 @@
 						@click="leftButton.click">
 						{{ leftButton.label }}
 					</SofaButton>
+					<SofaIcon
+						v-else-if="leftButton && isInModal"
+						name="round-arrow-left"
+						class="h-[40px]"
+						:class="leftButton.disabled ? 'fill-grayColor' : 'fill-black'"
+						@click="leftButton.click" />
 
 					<span v-if="showCounter" class="px-4 py-2 rounded-lg font-semibold hidden md:inline mx-auto">
 						{{ index + 1 }}/{{ questions.length }}
 					</span>
 
 					<SofaButton
-						v-if="rightButton"
+						v-if="rightButton && !isInModal"
 						class="w-full md:w-auto ml-auto"
 						customClass="md:font-semibold"
 						padding="py-3 md:px-6"
@@ -75,6 +81,12 @@
 						@click="rightButton.click">
 						{{ rightButton.label }}
 					</SofaButton>
+					<SofaIcon
+						v-else-if="rightButton && isInModal"
+						name="round-arrow-right"
+						class="h-[40px]"
+						:class="rightButton.disabled ? 'fill-grayColor' : 'fill-black'"
+						@click="rightButton.click" />
 				</div>
 			</div>
 		</slot>
