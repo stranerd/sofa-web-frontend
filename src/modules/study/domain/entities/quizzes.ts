@@ -1,5 +1,5 @@
 import { QuizFromModel } from '../../data/models/quizzes'
-import { QuizAccess, QuizMeta } from '../types'
+import { QuizAccess, QuizMeta, QuizModes } from '../types'
 import { CoursableEntity } from './coursables'
 
 export class QuizEntity extends CoursableEntity {
@@ -7,6 +7,7 @@ export class QuizEntity extends CoursableEntity {
 	public readonly meta: Record<QuizMeta, number>
 	public readonly access: QuizAccess
 	public readonly isForTutors: boolean
+	public readonly modes: Record<QuizModes, boolean>
 
 	constructor(data: QuizFromModel) {
 		super(data)
@@ -14,6 +15,7 @@ export class QuizEntity extends CoursableEntity {
 		this.meta = data.meta
 		this.access = data.access
 		this.isForTutors = data.isForTutors
+		this.modes = data.modes
 	}
 
 	get shareLink() {

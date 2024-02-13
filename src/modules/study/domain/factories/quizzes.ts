@@ -2,9 +2,12 @@ import { v } from 'valleyed'
 import { ref } from 'vue'
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
+import { QuizModes } from '../types'
 import { BaseFactory, Media } from '@modules/core'
 
-export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToModel> {
+type Keys = Omit<QuizToModel, 'modes'> & Record<`mode${Capitalize<QuizModes>}`, boolean>
+
+export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 	public topicId = ''
 	public tagIds: string[] = []
 	#tagString = ref('')
@@ -17,6 +20,10 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		tags: v.array(v.string().min(1)).set(),
 		isForTutors: v.boolean(),
 		courseId: v.string().min(1).nullable(),
+		modeGame: v.boolean(),
+		modeTest: v.boolean(),
+		modePractice: v.boolean(),
+		modeFlashcard: v.boolean(),
 	}
 
 	constructor() {
@@ -28,6 +35,10 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 			tags: [],
 			isForTutors: false,
 			courseId: null,
+			modeGame: true,
+			modeTest: true,
+			modePractice: true,
+			modeFlashcard: true,
 		})
 	}
 
@@ -79,6 +90,38 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		this.set('courseId', value)
 	}
 
+	get modeGame() {
+		return this.values.modeGame
+	}
+
+	set modeGame(value: boolean) {
+		this.set('modeGame', value)
+	}
+
+	get modeTest() {
+		return this.values.modeTest
+	}
+
+	set modeTest(value: boolean) {
+		this.set('modeTest', value)
+	}
+
+	get modePractice() {
+		return this.values.modePractice
+	}
+
+	set modePractice(value: boolean) {
+		this.set('modePractice', value)
+	}
+
+	get modeFlashcard() {
+		return this.values.modeFlashcard
+	}
+
+	set modeFlashcard(value: boolean) {
+		this.set('modeFlashcard', value)
+	}
+
 	get tags() {
 		return this.values.tags
 	}
@@ -119,10 +162,29 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		this.tagIds = entity.tagIds
 		this.isForTutors = entity.isForTutors
 		this.courseId = entity.courseId
+		this.modeGame = entity.modes.game
+		this.modeTest = entity.modes.test
+		this.modeFlashcard = entity.modes.flashcard
+		this.modePractice = entity.modes.practice
 	}
 
 	model = async () => {
-		const { title, description, photo, topic, tags, isForTutors, courseId } = this.validValues
-		return { title, description, photo, topic, tags, isForTutors, courseId }
+		const { title, description, photo, topic, tags, isForTutors, courseId, modeGame, modeFlashcard, modePractice, modeTest } =
+			this.validValues
+		return {
+			title,
+			description,
+			photo,
+			topic,
+			tags,
+			isForTutors,
+			courseId,
+			modes: {
+				game: modeGame,
+				flashcard: modeFlashcard,
+				practice: modePractice,
+				test: modeTest,
+			},
+		}
 	}
 }

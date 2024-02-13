@@ -22,7 +22,7 @@
 
 		<div v-else class="w-full flex flex-col gap-3 px-4 py-2 md:p-0">
 			<SofaIconCard
-				v-for="item in otherTasks"
+				v-for="item in filteredModes"
 				:key="item.title"
 				:data="{ ...item, iconSize: 'h-[46px]' }"
 				customClass="!bg-lightGray !w-full !shadow-none"
@@ -33,6 +33,8 @@
 					</SofaNormalText>
 				</template>
 			</SofaIconCard>
+
+			<SofaHeaderText v-if="filteredModes.length === 0" content="No modes supported for this quiz" />
 
 			<SofaButton v-if="id === quiz.user.id" class="w-full" padding="p-3" @click="goToEdit"> Edit Quiz </SofaButton>
 		</div>
@@ -47,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useHasAccess } from '@app/composables/study'
 import { QuizEntity, QuizModes } from '@modules/study'
@@ -90,7 +92,7 @@ const chooseMode = async (mode: QuizModes) => {
 	props.close()
 }
 
-const otherTasks = [
+const modes = [
 	{
 		title: 'Practice',
 		subTitle: 'Interactive and comfortable learning',
@@ -116,6 +118,8 @@ const otherTasks = [
 		value: QuizModes.game,
 	},
 ]
+
+const filteredModes = computed(() => modes.filter((t) => props.quiz.modes[t.value]))
 
 const createQuizGame = async () => {
 	Logic.Common.showLoading()
