@@ -5,7 +5,7 @@
 				<Quiz
 					v-model:answer="extras.answer"
 					:index="extras.index"
-					:isLesson="isLesson"
+					:isLesson="true"
 					:title="isDone ? 'Practice completed' : quiz.title"
 					:questions="questions"
 					:optionState="extras.optionState"
@@ -14,9 +14,7 @@
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
 						click: () => {
-							if (isDone) {
-								useModals().organizations.viewCurriculumItem.close()
-							}
+							if (isDone) return useModals().organizations.viewCurriculum.close()
 							if (!showSolution) {
 								isCorrect = extras.question?.checkAnswer(extras.answer) ?? false
 								return (showSolution = true)
@@ -77,15 +75,11 @@ import { ref } from 'vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
-withDefaults(
-	defineProps<{
-		quizId: string
-		isLesson: boolean
-	}>(),
-	{
-		isLesson: false,
-	},
-)
+
+defineProps<{
+	quizId: string
+}>()
+
 const showSolution = ref(false)
 const isDone = ref(false)
 const isCorrect = ref(false)

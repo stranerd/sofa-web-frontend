@@ -46,10 +46,10 @@
 							padding="py-3 px-9"
 							customClass="font-bold"
 							@click="startQuizPractice">
-							{{ 'Start' }}
+							Start
 						</SofaButton>
 					</div>
-					<QuizPractice v-else :quizId="curriculumItem.quiz.id" :isLesson="true" class="flex-grow" />
+					<QuizPractice v-else :quizId="curriculumItem.quiz.id" class="flex-grow" />
 				</template>
 				<template v-if="curriculumItem.quizMode === QuizModes.test">
 					<div
@@ -64,10 +64,10 @@
 							padding="py-3 px-9"
 							customClass="font-bold"
 							@click="startQuizTest(curriculumItem.quiz.id)">
-							{{ 'Start' }}
+							Start
 						</SofaButton>
 					</div>
-					<QuizTest v-else-if="quizTestStarted && test" :testId="test.id" :isLesson="true" class="flex-grow" />
+					<QuizTest v-else-if="test" :testId="test.id" class="flex-grow" />
 				</template>
 			</template>
 		</div>
