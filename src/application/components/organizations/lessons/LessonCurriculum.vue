@@ -106,6 +106,7 @@ import {
 	LessonCurriculumFactory,
 } from '@modules/organizations'
 import { FileType } from '@modules/study'
+import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(
 	defineProps<{
@@ -125,6 +126,7 @@ const props = withDefaults(
 	},
 )
 
+const { id } = useAuth()
 const { curriculum } = useLessonCurriculum(
 	props.classInst,
 	computed(() => props.curriculum),
@@ -166,7 +168,7 @@ const getItemInfo = (item: ExtendedClassLessonCurriculumSectionItem) => {
 
 const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
-	return !item.schedule.canStudentJoin
+	return !item.schedule.canJoin(props.classInst, id.value)
 }
 
 const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem) => {
@@ -176,7 +178,7 @@ const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem)
 }
 
 const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
-	item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
+	item.type === ClassLessonable.schedule && item.schedule.canJoin(props.classInst, id.value)
 
 const addSchedule = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return

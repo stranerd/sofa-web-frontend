@@ -1,5 +1,6 @@
 import { ScheduleFromModel } from '../../data/models/schedules'
 import { EmbeddedUser, ScheduleStatus, ScheduleStream, ScheduleTime } from '../types'
+import { ClassEntity } from './classes'
 import { BaseEntity } from '@modules/core'
 import { formatTime, getTimeString } from '@utils/dates'
 
@@ -46,30 +47,36 @@ export class ScheduleEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 
-	get canStart() {
+	canStart(classInst: ClassEntity, userId: string) {
+		if (this.status !== ScheduleStatus.created) return false
+		const lesson = classInst.getLesson(this.lessonId)
+		if (!lesson) return false
+		const isTeacher = lesson.users.teachers.includes(userId)
+		if (!isTeacher) return false
 		const now = Date.now()
 		const fiveMinsB4Start = this.time.start - 5 * 60 * 1000
-		return this.status === ScheduleStatus.created && fiveMinsB4Start <= now && now < this.time.end
+		return fiveMinsB4Start <= now && now < this.time.end
 	}
 
-	get canEnd() {
-		return this.status === ScheduleStatus.started
-	}
-
-	get isOngoing() {
-		return this.status === ScheduleStatus.started
+	canEnd(classInst: ClassEntity, userId: string) {
+		if (this.status !== ScheduleStatus.started) return false
+		const lesson = classInst.getLesson(this.lessonId)
+		if (!lesson) return false
+		const isTeacher = lesson.users.teachers.includes(userId)
+		return isTeacher
 	}
 
 	get hasEnded() {
 		return this.status === ScheduleStatus.ended
 	}
 
-	get canTeacherJoin() {
-		return this.isOngoing
-	}
-
-	get canStudentJoin() {
-		return this.isOngoing && this.time.start <= Date.now()
+	canJoin(classInst: ClassEntity, userId: string) {
+		if (this.status !== ScheduleStatus.started) return false
+		const lesson = classInst.getLesson(this.lessonId)
+		if (!lesson) return false
+		const isTeacher = lesson.users.teachers.includes(userId)
+		if (isTeacher) return true
+		return this.time.start <= Date.now()
 	}
 
 	get meetingLink() {
