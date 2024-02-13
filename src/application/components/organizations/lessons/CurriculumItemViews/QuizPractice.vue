@@ -1,10 +1,11 @@
 <template>
-	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="$route.params.id as string" :showAnswer="showSolution" :isAnswerRight="isCorrect">
+	<div class="w-full bg-lightGray rounded-custom overflow-y-auto">
+		<QuizWrapper :id="quizId" :showAnswer="showSolution" :isAnswerRight="isCorrect">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz
 					v-model:answer="extras.answer"
 					:index="extras.index"
+					:isInModal="true"
 					:title="isDone ? 'Practice completed' : quiz.title"
 					:questions="questions"
 					:optionState="extras.optionState"
@@ -13,7 +14,7 @@
 						bgColor: 'bg-primaryBlue',
 						textColor: 'text-white',
 						click: () => {
-							if (isDone) return Logic.Common.goBack()
+							if (isDone) return useModals().organizations.viewCurriculum.close()
 							if (!showSolution) {
 								isCorrect = extras.question?.checkAnswer(extras.answer) ?? false
 								return (showSolution = true)
@@ -66,27 +67,18 @@
 				</Quiz>
 			</template>
 		</QuizWrapper>
-	</ExpandedLayout>
+	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
-import { Logic } from 'sofa-logic'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useModals } from '@app/composables/core/modals'
 
-export default defineComponent({
-	name: 'QuizIdPracticePage',
-	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
-	setup() {
-		useMeta({
-			title: 'Practice',
-		})
+defineProps<{
+	quizId: string
+}>()
 
-		const showSolution = ref(false)
-		const isDone = ref(false)
-		const isCorrect = ref(false)
-
-		return { showSolution, isDone, Logic, isCorrect }
-	},
-})
+const showSolution = ref(false)
+const isDone = ref(false)
+const isCorrect = ref(false)
 </script>

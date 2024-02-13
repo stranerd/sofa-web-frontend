@@ -118,15 +118,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import GameWrapper from '@app/components/plays/games/GameWrapper.vue'
-import Quiz from '@app/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'GamesIdLobbyPage',
-	components: { GameWrapper, QuizWrapper, Quiz },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
