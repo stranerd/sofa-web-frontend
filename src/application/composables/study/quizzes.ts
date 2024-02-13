@@ -4,11 +4,12 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
-import { useUsersInList } from '../users/users'
 import { useCreateView } from '../interactions/views'
+import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import { Logic } from 'sofa-logic'
+import { CoursableAccess } from '@modules/study/domain/types'
 import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
 import { InteractionEntities } from '@modules/interactions'
 
@@ -20,7 +21,11 @@ const store = {} as Record<
 	} & ReturnType<typeof useSuccessHandler>
 >
 
-export const useQuiz = (id: string, skip: { questions: boolean; members: boolean; createView: boolean }) => {
+export const useQuiz = (
+	id: string,
+	skip: { questions: boolean; members: boolean; createView: boolean },
+	access: CoursableAccess['access'],
+) => {
 	store[id] ??= {
 		quiz: ref(null),
 		listener: useListener(
@@ -62,6 +67,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 	const { questions } = useQuestionsInList(
 		id,
 		computed(() => (canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : [])),
+		access,
 		!skip.questions,
 	)
 

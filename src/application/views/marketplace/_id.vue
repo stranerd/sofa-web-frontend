@@ -419,7 +419,7 @@ export default defineComponent({
 				})
 
 				contentDetails.questions.length = 0
-				QuestionsUseCases.getAllQuestions(SingleQuiz.value.id).then((questions) => {
+				QuestionsUseCases.getAll(SingleQuiz.value.id).then((questions) => {
 					questions.results.forEach((question) => {
 						contentDetails.questions.push({
 							type: QuestionEntity.getLabel(question.type),
