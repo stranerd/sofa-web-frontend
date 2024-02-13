@@ -1,11 +1,11 @@
 import { FileFromModel } from '../../data/models/files'
-import { CoursableData, FileType } from '../types'
+import { CoursableAccess, FileType } from '../types'
 import { CoursableEntity } from './coursables'
 import { Media } from '@modules/core'
-import { getTokens } from '@utils/tokens'
 import { apiBase } from '@utils/environment'
+import { getTokens } from '@utils/tokens'
 
-export class FileEntity extends CoursableEntity implements CoursableData {
+export class FileEntity extends CoursableEntity {
 	public readonly type: FileType
 	public readonly media: Media
 
@@ -15,8 +15,12 @@ export class FileEntity extends CoursableEntity implements CoursableData {
 		this.media = data.media
 	}
 
-	async getMediaUrl() {
+	async getUrl(access?: CoursableAccess['access']) {
 		const { accessToken } = await getTokens()
-		return `${apiBase}/study/files/${this.id}/media?AccessToken=${accessToken}`
+		const query = new URLSearchParams({
+			AccessToken: JSON.stringify(accessToken ?? ''),
+			access: JSON.stringify(access ?? {}),
+		})
+		return `${apiBase}/study/files/${this.id}/media?${query.toString()}`
 	}
 }

@@ -1,8 +1,8 @@
 import { QuizFromModel } from '../../data/models/quizzes'
-import { CoursableData, QuizAccess, QuizMeta } from '../types'
+import { QuizAccess, QuizMeta } from '../types'
 import { CoursableEntity } from './coursables'
 
-export class QuizEntity extends CoursableEntity implements CoursableData {
+export class QuizEntity extends CoursableEntity {
 	public readonly questions: string[]
 	public readonly meta: Record<QuizMeta, number>
 	public readonly access: QuizAccess

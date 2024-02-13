@@ -69,3 +69,21 @@ export enum QuizModes {
 	game = 'game',
 	flashcard = 'flashcard',
 }
+
+export type CoursableAccess = {
+	access?:
+		| {
+				organizationId: string
+				classId: string
+				lessonId: string
+		  }
+		| {
+				courseId: string
+		  }
+		| {
+				testId: string
+		  }
+		| {
+				gameId: string
+		  }
+}

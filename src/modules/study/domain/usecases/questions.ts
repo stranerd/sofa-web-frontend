@@ -2,6 +2,7 @@ import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
 import { QuestionFactory } from '../factories/questions'
 import { IQuestionRepository } from '../irepositories/iquestions'
+import { CoursableAccess } from '../types'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class QuestionsUseCase {
@@ -23,8 +24,8 @@ export class QuestionsUseCase {
 		return await this.repository(quizId).update(id, await factory.toModel())
 	}
 
-	async find(quizId: string, id: string) {
-		return await this.repository(quizId).find(id)
+	async find(quizId: string, id: string, access?: CoursableAccess['access']) {
+		return await this.repository(quizId).find(id, { access })
 	}
 
 	async getAllQuestions(quizId: string) {

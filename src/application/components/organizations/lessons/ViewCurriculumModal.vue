@@ -161,7 +161,12 @@ watch(
 	async () => {
 		quizPracticeStarted.value = false
 		quizTestStarted.value = false
-		if (curriculumItem.value?.type === ClassLessonable.file) mediaUrl.value = await curriculumItem.value.file.getMediaUrl()
+		if (curriculumItem.value?.type === ClassLessonable.file)
+			mediaUrl.value = await curriculumItem.value.file.getUrl({
+				organizationId: props.classInst.organizationId,
+				classId: props.classInst.id,
+				lessonId: props.lesson.id,
+			})
 	},
 	{ immediate: true },
 )
