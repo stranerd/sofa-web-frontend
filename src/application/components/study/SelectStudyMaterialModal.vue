@@ -98,6 +98,7 @@ const uploadFile = (options: (typeof newMaterialOptions)[number], file: Uploaded
 const selectQuiz = (options: (typeof newMaterialOptions)[number]) => {
 	if (options.type !== 'quiz') return
 	useModals().study.selectQuiz.open({
+		mode: options.extras.mode,
 		onSelected: (quiz) => select({ quiz, mode: options.extras.mode }),
 	})
 }
