@@ -62,8 +62,8 @@
 					<SofaIcon
 						v-else-if="leftButton && isInModal"
 						name="round-arrow-left"
-						class="h-[40px] fill-black"
-						:class="leftButton.disabled ? 'fill-black' : 'fill-grayColor'"
+						class="h-[40px]"
+						:class="leftButton.disabled ? 'fill-grayColor' : 'fill-black'"
 						@click="leftButton.click" />
 
 					<span v-if="showCounter" class="px-4 py-2 rounded-lg font-semibold hidden md:inline mx-auto">
@@ -84,8 +84,8 @@
 					<SofaIcon
 						v-else-if="rightButton && isInModal"
 						name="round-arrow-right"
-						class="h-[40px] fill-black"
-						:class="rightButton.disabled ? 'fill-black' : 'fill-grayColor'"
+						class="h-[40px]"
+						:class="rightButton.disabled ? 'fill-grayColor' : 'fill-black'"
 						@click="rightButton.click" />
 				</div>
 			</div>
