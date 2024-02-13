@@ -53,7 +53,7 @@
 					<SofaIcon :name="curriculumViewIcon" class="h-[20px] ml-auto" @click="toggleView" />
 				</div>
 				<div v-if="curriculum.length > 0" class="flex flex-col gap-6 mdlg:p-6 rounded-custom mt-4 mdlg:mt-0">
-					<LessonCurriculum :classInst="classInst" :view="curriculumView" :curriculum="curriculum" />
+					<LessonCurriculum :classInst="classInst" :lesson="selectedLesson" :view="curriculumView" :curriculum="curriculum" />
 				</div>
 				<div v-else class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8 mt-4">
 					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />

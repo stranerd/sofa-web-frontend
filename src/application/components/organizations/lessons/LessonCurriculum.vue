@@ -31,8 +31,8 @@
 					itemKey=""
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
-						<div
-							class="flex gap-2 mdlg:gap-4 cursor-pointer"
+						<a
+							class="flex gap-2 mdlg:gap-4"
 							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
 							@click="openCurriculumItem(itemIndex, sectionIndex)">
 							<div class="flex items-center gap-2 flex-1">
@@ -71,7 +71,7 @@
 									name="trash-gray"
 									@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
 							</div>
-						</div>
+						</a>
 					</template>
 					<template #footer>
 						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
@@ -102,20 +102,21 @@ import {
 	ClassLesson,
 	ClassLessonable,
 	CurriculumView,
-	LessonCurriculumFactory,
 	ExtendedClassLessonCurriculumSectionItem,
+	LessonCurriculumFactory,
 } from '@modules/organizations'
 import { FileType } from '@modules/study'
+import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(
 	defineProps<{
 		classInst: ClassEntity
+		lesson: ClassLesson
 		view: CurriculumView
 		curriculum: ClassLesson['curriculum']
 		isModal?: boolean
 		factory?: LessonCurriculumFactory
-		lesson?: ClassLesson
-		disableClick: boolean
+		disableClick?: boolean
 	}>(),
 	{
 		isModal: false,
@@ -125,6 +126,7 @@ const props = withDefaults(
 	},
 )
 
+const { id } = useAuth()
 const { curriculum } = useLessonCurriculum(
 	props.classInst,
 	computed(() => props.curriculum),
@@ -140,8 +142,6 @@ const factory = computed(() => {
 	f.loadEntity(props.curriculum)
 	return f
 })
-
-// type ExtendedCurriculumItem = (typeof curriculum)['value'][number]['items'][number]
 
 const getItemTitle = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type == ClassLessonable.quiz) return item.quiz.title
@@ -168,7 +168,7 @@ const getItemInfo = (item: ExtendedClassLessonCurriculumSectionItem) => {
 
 const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
-	return !item.schedule.canStudentJoin
+	return !item.schedule.canJoin(props.classInst, id.value)
 }
 
 const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem) => {
@@ -178,7 +178,7 @@ const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem)
 }
 
 const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
-	item.type === ClassLessonable.schedule && item.schedule.canStudentJoin
+	item.type === ClassLessonable.schedule && item.schedule.canJoin(props.classInst, id.value)
 
 const addSchedule = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return
@@ -231,13 +231,13 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	else fac.removeItem(itemIndex)
 }
 const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
-	if (!props.disableClick) {
-		useModals().organizations.viewCurriculumItem.open({
-			classInst: props.classInst,
-			curriculum: curriculum.value,
-			itemIndex,
-			sectionIndex,
-		})
-	}
+	if (props.disableClick) return
+	useModals().organizations.viewCurriculum.open({
+		classInst: props.classInst,
+		lesson: props.lesson,
+		curriculum: curriculum.value,
+		itemIndex,
+		sectionIndex,
+	})
 }
 </script>

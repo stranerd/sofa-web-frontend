@@ -160,6 +160,10 @@ export const useDeleteSchedule = () => {
 }
 
 export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntity) => {
+	const { asyncFn: copyKey } = useAsyncFn(async (s = schedule) => {
+		if (s.stream) await Logic.Common.copy(s.stream.streamKey)
+	})
+
 	const { asyncFn: join } = useAsyncFn(async () => {
 		window.open(schedule.meetingLink, '_blank')
 	})
@@ -176,7 +180,7 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 				id: schedule.id,
 			})
 			if (!updated.stream) return false
-			Logic.Common.copy(updated.stream.streamKey ?? '')
+			await copyKey(updated)
 			await join()
 			return true
 		},
@@ -205,5 +209,5 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 		},
 	)
 
-	return { join, rewatch, start, end }
+	return { copyKey, join, rewatch, start, end }
 }

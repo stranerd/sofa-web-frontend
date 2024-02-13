@@ -10,7 +10,7 @@ import {
 	ClassLesson,
 	ClassLessonable,
 	CurriculumView,
-	ExtendCurriculum,
+	ExtendedCurriculum,
 	LessonCurriculumFactory,
 	LessonFactory,
 	LessonsUseCases,
@@ -60,7 +60,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 	const { files } = useFilesInList(fileIds, true)
 	const { schedules } = useSchedulesInList(classInst.organizationId, classInst.id, scheduleIds, true)
 
-	const curriculum = computed<ExtendCurriculum>(() =>
+	const curriculum = computed<ExtendedCurriculum>(() =>
 		curr.value.map((c) => {
 			const items = c.items
 				.map((item) => {
