@@ -19,7 +19,7 @@ export type Listeners<Model> = {
 
 type SocketReturn = { code: StatusCodes; message: string; channel: string }
 
-async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>) {
+async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>, query: Record<string, any>) {
 	const { accessToken } = await getTokens()
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
@@ -32,7 +32,7 @@ async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model
 	}
 
 	let finalChannel = ''
-	socket.emit('join', { channel }, (res: SocketReturn) => {
+	socket.emit('join', { channel, query }, (res: SocketReturn) => {
 		finalChannel = res.channel
 		if (res.code !== StatusCodes.Ok) return
 		socket?.on(finalChannel, async (data: { channel: string; type: EmitTypes; data: Model }) => {
@@ -51,12 +51,21 @@ async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model
 	}
 }
 
-export async function listenToOne<Model, Entity>(channel: string, listeners: Listeners<Entity>, mapper: (model: Model) => Entity) {
-	return listenOnSocket<Model>(channel, {
-		created: async (model) => await listeners.created(mapper(model)),
-		updated: async (model) => await listeners.updated(mapper(model)),
-		deleted: async (model) => await listeners.deleted(mapper(model)),
-	})
+export async function listenToOne<Model, Entity>(
+	channel: string,
+	listeners: Listeners<Entity>,
+	mapper: (model: Model) => Entity,
+	query: Record<string, any> = {},
+) {
+	return listenOnSocket<Model>(
+		channel,
+		{
+			created: async (model) => await listeners.created(mapper(model)),
+			updated: async (model) => await listeners.updated(mapper(model)),
+			deleted: async (model) => await listeners.deleted(mapper(model)),
+		},
+		query,
+	)
 }
 
 export async function listenToMany<Model, Entity>(
@@ -64,21 +73,26 @@ export async function listenToMany<Model, Entity>(
 	listeners: Listeners<Entity>,
 	mapper: (model: Model) => Entity,
 	matches: (entity: Entity) => boolean = () => true,
+	query: Record<string, any> = {},
 ) {
-	return listenOnSocket<Model>(channel, {
-		created: async (model) => {
-			const entity = mapper(model)
-			if (matches(entity)) await listeners.created(entity)
+	return listenOnSocket<Model>(
+		channel,
+		{
+			created: async (model) => {
+				const entity = mapper(model)
+				if (matches(entity)) await listeners.created(entity)
+			},
+			updated: async (model) => {
+				const entity = mapper(model)
+				if (matches(entity)) await listeners.updated(entity)
+			},
+			deleted: async (model) => {
+				const entity = mapper(model)
+				if (matches(entity)) await listeners.deleted(entity)
+			},
 		},
-		updated: async (model) => {
-			const entity = mapper(model)
-			if (matches(entity)) await listeners.updated(entity)
-		},
-		deleted: async (model) => {
-			const entity = mapper(model)
-			if (matches(entity)) await listeners.deleted(entity)
-		},
-	})
+		query,
+	)
 }
 
 export async function closeSocket() {
