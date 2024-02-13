@@ -30,7 +30,7 @@ export class WithdrawalEntity extends BaseEntity {
 		this.updatedAt = updatedAt
 	}
 
-	getChargedAmount() {
+	get chargedAmount() {
 		return this.amount + this.fee
 	}
 }
