@@ -151,6 +151,8 @@ declare global {
 		| 'results'
 		| 'right-arrow'
 		| 'robot'
+		| 'round-arrow-left'
+		| 'round-arrow-right'
 		| 'save'
 		| 'search-black'
 		| 'search'
