@@ -9,8 +9,16 @@ import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import { Logic } from 'sofa-logic'
-import { CoursableAccess } from '@modules/study/domain/types'
-import { QuestionEntity, QuestionFactory, QuestionTypes, QuestionsUseCases, QuizEntity, QuizFactory, QuizzesUseCases } from '@modules/study'
+import {
+	CoursableAccess,
+	QuestionEntity,
+	QuestionFactory,
+	QuestionTypes,
+	QuestionsUseCases,
+	QuizEntity,
+	QuizFactory,
+	QuizzesUseCases,
+} from '@modules/study'
 import { InteractionEntities } from '@modules/interactions'
 
 const store = {} as Record<

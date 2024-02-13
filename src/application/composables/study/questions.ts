@@ -1,8 +1,7 @@
 import { computed, onMounted, onUnmounted } from 'vue'
 import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { CoursableAccess } from '@modules/study/domain/types'
-import { QuestionEntity, QuestionsUseCases } from '@modules/study'
+import { CoursableAccess, QuestionEntity, QuestionsUseCases } from '@modules/study'
 
 export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, access: CoursableAccess['access'], listen = false) => {
 	const allQuestions = computed(() => [] as QuestionEntity[])

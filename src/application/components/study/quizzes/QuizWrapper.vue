@@ -11,8 +11,7 @@ import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue
 import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'
-import { QuestionEntity, QuestionTypes } from '@modules/study'
-import { CoursableAccess } from '@modules/study/domain/types'
+import { CoursableAccess, QuestionEntity, QuestionTypes } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
 
 const props = withDefaults(
