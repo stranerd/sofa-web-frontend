@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center justify-between">
+	<div class="w-full bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center gap-4">
 		<div>
 			<SofaHeaderText>{{ lesson.title }}</SofaHeaderText>
 			<div class="flex items-center gap-1">
@@ -18,7 +18,9 @@
 				</SofaNormalText>
 			</div>
 		</div>
-		<SofaCheckbox v-if="isStudent && !hideJoin" v-model="joined" />
+		<div class="ml-auto">
+			<SofaCheckbox v-if="isStudent && !hideJoin" v-model="joined" />
+		</div>
 	</div>
 </template>
 

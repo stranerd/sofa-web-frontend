@@ -31,7 +31,13 @@
 					{{ (teachers.at(0)?.publicName ?? 'Teacher') + ' has not set the curriculum yet' }}
 				</SofaNormalText>
 			</div>
-			<LessonCurriculum v-else :classInst="classInst" :view="curriculumView" :curriculum="curriculum" :isModal="true" />
+			<LessonCurriculum
+				v-else
+				:classInst="classInst"
+				:lesson="lesson"
+				:view="curriculumView"
+				:curriculum="curriculum"
+				:isModal="true" />
 		</div>
 		<div v-if="selectedTab === 'teachers'" class="py-4 flex flex-col gap-4">
 			<div v-if="teachers.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">

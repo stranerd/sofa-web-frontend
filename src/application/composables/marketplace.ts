@@ -45,7 +45,8 @@ export const search = async (query: QueryParams, returnCoursables = false) => {
 }
 
 export const extractContent = (item: QuizEntity | CourseEntity): ContentDetails => {
-	const isCourse = item.isCourse()
+	// TODO: remove on revamp courses
+	const isCourse = item.__type === 'CourseEntity' || item.isCourse()
 	const type = isCourse ? 'course' : 'quiz'
 	return {
 		original: item,
@@ -55,9 +56,11 @@ export const extractContent = (item: QuizEntity | CourseEntity): ContentDetails 
 		image: item.photo?.link ?? '/images/default.png',
 		labels: {
 			main: isCourse ? 'Course' : 'Quiz',
+			// @ts-expect-error remove on revamp courses
 			sub: isCourse ? `${item.coursables.length} materials` : `${item.questions.length} questions`,
 			color: isCourse ? 'orange' : 'pink',
 		},
+		// @ts-expect-error remove on revamp courses
 		price: isCourse ? item.price?.amount : 0,
 		user: item.user,
 		authUserId: Logic.Common.AuthUser?.id,

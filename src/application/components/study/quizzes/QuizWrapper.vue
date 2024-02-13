@@ -24,6 +24,7 @@ const props = withDefaults(
 		useTimer?: boolean
 		submit?: (data?: { questionId: string; answer: any }) => Promise<boolean | undefined>
 		skipMembers?: boolean
+		skipCreateView?: boolean
 	}>(),
 	{
 		selectedQuestion: '',
@@ -57,7 +58,7 @@ const {
 	requestAccess,
 	grantAccess,
 	manageMembers,
-} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers })
+} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers, createView: props.skipCreateView })
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
 const quizQuestions = computed(() => reorderedQuestions.value ?? props.questions ?? questions.value ?? [])
 
@@ -121,7 +122,7 @@ const submitAnswer = async () => {
 	if (!currentQuestionByIndex.value) return
 	const res = await props.submit?.({
 		questionId: currentQuestionByIndex.value.id,
-		answer: answer.value,
+		answer: answer.value ?? false,
 	})
 	if (!res) return
 	if (extras.value.canNext) await nextQ(index.value + 1)

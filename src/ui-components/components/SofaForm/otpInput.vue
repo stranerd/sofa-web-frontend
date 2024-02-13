@@ -4,7 +4,7 @@
 			<input
 				:id="'' + uniqueKey + index"
 				v-model="otps[index - 1]"
-				type="tel"
+				type="number"
 				class="md:w-[53px] w-[40px] aspect-square text-lg text-center text-darkBody focus:outline-none bg-lightGray rounded-custom"
 				:disabled="isDisabled"
 				@keypress="onKeyPress"

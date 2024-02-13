@@ -7,67 +7,48 @@
 			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" class="!w-[24px] !h-[24px]" />
 			<SofaNormalText :content="schedule.user.bio.name.full" color="text-deepGray" />
 		</div>
-		<div class="flex items-center gap-2" :class="schedule.isOngoing ? 'text-primaryRed' : 'text-inherit'">
+		<div class="flex items-center gap-2" :class="schedule.canJoin(classInst, id) ? 'text-primaryRed' : 'text-inherit'">
 			<SofaIcon name="calendar" class="h-[17px] fill-current" />
-			<SofaNormalText :content="formatTime(schedule.time.start)" color="text-inherit" />
-			<div class="w-[5px] h-[5px] rounded-[50%] bg-current" />
-			<SofaNormalText :content="formatTime(schedule.time.end)" color="text-inherit" />
+			<SofaNormalText :content="schedule.timeRange" color="text-inherit" />
 		</div>
-		<SofaButton
-			v-if="!buttonProps.hide"
-			bgColor="bg-primaryBlue"
-			textColor="text-white"
-			padding="py-3 px-5"
-			@click="buttonProps.handler">
-			{{ buttonProps.label }}
-		</SofaButton>
+		<div class="flex flex-wrap items-center gap-2">
+			<SofaButton
+				v-for="buttonProps in buttons"
+				:key="buttonProps.label"
+				class="self-start"
+				:bgColor="buttonProps.bgColor ?? 'bg-primaryBlue'"
+				textColor="text-white"
+				padding="py-3 px-5"
+				@click="buttonProps.handler">
+				{{ buttonProps.label }}
+			</SofaButton>
+		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { ClassEntity, ScheduleEntity } from '@modules/organizations'
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 import { useStartSchedule } from '@app/composables/organizations/schedules'
+import { ClassEntity, ScheduleEntity } from '@modules/organizations'
 
 const props = defineProps<{
 	classInst: ClassEntity
 	schedule: ScheduleEntity
 }>()
 
-const { start, end } = useStartSchedule(props.classInst, props.schedule)
+const { copyKey, join, rewatch, start, end } = useStartSchedule(props.classInst, props.schedule)
 
 const { id } = useAuth()
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
-const buttonProps = computed(() => {
-	if (lesson.value?.users.teachers.includes(id.value)) {
-		if (props.schedule.canStart)
-			return {
-				label: 'Start',
-				handler: start,
-			}
-		if (props.schedule.canEnd)
-			return {
-				label: 'End',
-				handler: end,
-			}
-		if (props.schedule.isOngoing)
-			return {
-				label: `Copy stream code - '${props.schedule.stream?.streamKey}'`,
-				handler: () => Logic.Common.copy(props.schedule.stream?.streamKey ?? ''),
-			}
-	}
-	if (props.schedule.isOngoing)
-		return {
-			label: 'Enter',
-			handler: () => window.open(props.schedule.meetingLink, '_blank'),
-		}
-	return {
-		hide: true,
-		label: 'View',
-		handler: () => {},
-	}
+const buttons = computed(() => {
+	const b: { label: string; bgColor?: string; handler: () => void }[] = []
+	if (props.schedule.canStart(props.classInst, id.value)) b.push({ label: 'Start', handler: start })
+	if (props.schedule.canJoin(props.classInst, id.value)) b.push({ label: 'Enter', handler: join })
+	if (lesson.value?.users.teachers.includes(id.value) && props.schedule.canJoin(props.classInst, id.value))
+		b.push({ label: 'Copy stream key', handler: copyKey })
+	if (props.schedule.canEnd(props.classInst, id.value)) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: end })
+	if (props.schedule.hasEnded) b.push({ label: 'Rewatch', handler: rewatch })
+	return b
 })
 </script>

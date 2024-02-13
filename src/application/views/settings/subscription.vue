@@ -4,7 +4,7 @@
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 				<SofaHeaderText size="xl" customClass="text-left"> My subscription </SofaHeaderText>
 
-				<SofaNormalText v-if="wallet.subscription.active == false" customClass="text-left">
+				<SofaNormalText v-if="!wallet.subscription.active" customClass="text-left">
 					You have no active subscription
 				</SofaNormalText>
 				<template v-else-if="wallet.subscription.current">
@@ -37,7 +37,7 @@
 				</template>
 			</div>
 
-			<template v-if="wallet.subscription.active">
+			<template v-if="!wallet.subscription.active">
 				<div
 					v-if="userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">

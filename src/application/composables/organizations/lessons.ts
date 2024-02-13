@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { computed, ref, watch } from 'vue'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
+import { useSuccessHandler } from '../core/states'
 import { useFilesInList } from '../study/files-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useSchedulesInList } from './schedules'
@@ -10,11 +10,11 @@ import {
 	ClassLesson,
 	ClassLessonable,
 	CurriculumView,
+	ExtendedCurriculum,
 	LessonCurriculumFactory,
 	LessonFactory,
 	LessonsUseCases,
 } from '@modules/organizations'
-import { QuizModes } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -60,7 +60,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 	const { files } = useFilesInList(fileIds, true)
 	const { schedules } = useSchedulesInList(classInst.organizationId, classInst.id, scheduleIds, true)
 
-	const curriculum = computed(() =>
+	const curriculum = computed<ExtendedCurriculum>(() =>
 		curr.value.map((c) => {
 			const items = c.items
 				.map((item) => {
@@ -86,6 +86,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 
 export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<ClassLesson | undefined>) => {
 	const factory = new LessonCurriculumFactory()
+	const { setMessage } = useSuccessHandler()
 	if (lesson.value) factory.loadEntity(lesson.value.curriculum)
 
 	watch(lesson, (lesson) => {
@@ -101,6 +102,7 @@ export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<Clas
 		const updatedClass = await LessonsUseCases.updateCurriculum(classInst.organizationId, classInst.id, lesson.value.id, factory)
 		const updatedLesson = updatedClass.getLesson(lesson.value.id)
 		factory.loadEntity(updatedLesson?.curriculum ?? [])
+		await setMessage('Curriculum updated successfully!')
 		return true
 	})
 

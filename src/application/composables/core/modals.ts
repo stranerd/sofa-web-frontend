@@ -11,20 +11,21 @@ import CreateClass from '@app/components/organizations/classes/CreateClassModal.
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLessonModal.vue'
 import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
+import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
+import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumModal.vue'
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
-import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
+import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
 import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
-import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
+import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
-import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
-import ViewCuriculumItem from '@app/components/organizations/lessons/ViewCurriculumItem.vue'
+import SideBar from '@app/components/users/users/SideBarModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -32,7 +33,7 @@ export const useModals = () => ({
 		addTutorConfirmation: { component: AddTutorConfirmation },
 		conversationMoreOptions: {
 			component: ConversationMoreOptions,
-			modalArgs: { closeOnClickOutside: true, maxWidth: 'w-[80%] md:w-[60%] ml-auto' },
+			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
 		},
 	}),
 	interactions: modal.register('Interactions', {
@@ -50,7 +51,7 @@ export const useModals = () => ({
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
-		viewCurriculumItem: { component: ViewCuriculumItem },
+		viewCurriculum: { component: ViewCuriculum, modalArgs: { maxWidth: 'h-full overflow-y-auto' } },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
@@ -64,5 +65,9 @@ export const useModals = () => ({
 	}),
 	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },
+		sideBar: {
+			component: SideBar,
+			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+		},
 	}),
 })

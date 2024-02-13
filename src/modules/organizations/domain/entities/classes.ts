@@ -1,7 +1,7 @@
 import { ClassFromModel } from '../../data/models/classes'
 import { ClassLesson, ClassMembers, EmbeddedUser, Saleable } from '../types'
-import { UserEntity } from '@modules/users'
 import { BaseEntity, Media } from '@modules/core'
+import { UserEntity } from '@modules/users'
 
 export class ClassEntity extends BaseEntity implements Saleable {
 	public readonly id: string
@@ -59,7 +59,7 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	}
 
 	get shareLink() {
-		return `${window.location.origin}${this.pageLink}`
+		return `${window.location.origin}${this.explorePageLink}`
 	}
 
 	search(query: string) {
@@ -81,7 +81,7 @@ export class ClassEntity extends BaseEntity implements Saleable {
 	}
 
 	isEnrolled(user: UserEntity) {
-		return this.members.students.includes(user.id)
+		return this.members.students.includes(user.id) || this.lessons.some((l) => l.users.teachers.includes(user.id))
 	}
 
 	canAccessFromOrg(user: UserEntity) {

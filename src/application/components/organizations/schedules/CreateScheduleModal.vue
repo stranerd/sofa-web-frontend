@@ -15,21 +15,31 @@
 			placeholder="Session Title"
 			:error="factory.errors.title"
 			borderColor="border-transparent" />
-		<SofaTextarea textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none" placeholder="Session description" />
+		<SofaTextarea
+			v-model="factory.description"
+			:error="factory.errors.description"
+			textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+			placeholder="Session description" />
 		<div class="flex flex-col gap-4 mdlg:flex-row mdlg:items-center justify-between">
 			<SofaTextField
+				v-model="factory.date"
+				:error="factory.errors.date"
 				customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
 				type="date"
 				placeholder="Date"
 				borderColor="border-transparent" />
 			<div class="flex items-center gap-4 justify-between">
 				<SofaTextField
+					v-model="factory.start"
+					:error="factory.errors.start"
 					customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
 					type="time"
 					placeholder="From"
 					borderColor="border-transparent" />
 				<SofaIcon class="h-[16px]" name="arrow-right-white" customClass="!fill-darkLightGray" />
 				<SofaTextField
+					v-model="factory.end"
+					:error="factory.errors.end"
 					customClass="w-full mdlg:!w-[200px] rounded-custom !bg-lightGray"
 					type="time"
 					placeholder="To"

@@ -2,8 +2,8 @@
 	<div
 		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
 		<template v-if="type == 'main'">
-			<div class="mdlg:!hidden lg:!hidden flex flex-row items-center justify-between w-full">
-				<SofaAvatar size="32" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings')" />
+			<div class="mdlg:hidden flex items-center justify-between w-full">
+				<SofaAvatar size="32" :photoUrl="user?.bio?.photo?.link" @click="openSideBar" />
 
 				<div class="py-4 cursor-pointer flex flex-row items-center justify-center">
 					<img v-if="!title" src="/images/logo.svg" class="h-[24px]" />
@@ -14,7 +14,7 @@
 					<SofaIcon customClass="h-[22px]" name="bell" />
 				</div>
 			</div>
-			<div class="hidden flex-row gap-5 items-center justify-start flex-grow mdlg:!flex lg:!flex">
+			<div class="hidden gap-5 items-center justify-start flex-grow mdlg:!flex">
 				<router-link class="py-4 pr-3" to="/">
 					<img src="/images/logo.svg" class="h-[26px]" />
 				</router-link>
@@ -39,18 +39,19 @@
 					</SofaNormalText>
 				</router-link>
 
-				<div class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4">
-					<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
+				<form
+					class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4"
+					@submit.prevent="initiateSearch">
+					<SofaIcon customClass="h-[15px]" name="search" />
 					<SofaTextField
 						v-model="searchQuery"
 						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
 						placeholder="Search"
-						padding="px-1"
-						@onEnter="initiateSearch" />
-				</div>
+						padding="px-1" />
+				</form>
 			</div>
 
-			<div class="hidden mdlg:!flex lg:!flex flex-row items-center gap-4">
+			<div class="hidden mdlg:!flex items-center gap-4">
 				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
 					<SofaIcon name="plus-white" />
 				</SofaButton>
@@ -85,8 +86,8 @@
 			<div class="md:!flex hidden flex-row items-center gap-4">
 				<template v-for="(action, index) in subpageActions" :key="index">
 					<template v-if="action.isIcon && !action.hide">
-						<div class="flex flex-row gap-4 border-r border-darkLightGray items-center pr-3 cursor-pointer">
-							<div
+						<div class="flex gap-4 border-r border-darkLightGray items-center pr-3">
+							<a
 								v-for="(icon, i) in action.data.filter((d: any) => !d.hide)"
 								:key="i"
 								class="flex flex-row gap-2 items-center"
@@ -96,7 +97,7 @@
 								<SofaNormalText>
 									{{ icon.name }}
 								</SofaNormalText>
-							</div>
+							</a>
 						</div>
 					</template>
 					<template v-else-if="!action.hide">
@@ -147,6 +148,7 @@ import SofaNormalText from '../SofaTypography/normalText.vue'
 import Notification from './notification.vue'
 import { Conditions, Logic } from 'sofa-logic'
 import { handleShowAddMaterial } from '@app/composables/study'
+import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
 
 withDefaults(
@@ -170,6 +172,7 @@ withDefaults(
 )
 
 const { user, userType } = useAuth()
+const openSideBar = () => useModals().users.sideBar.open({})
 const showNotification = ref(false)
 
 const searchQuery = ref('')
