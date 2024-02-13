@@ -72,14 +72,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import Quiz from '@app/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'QuizIdPracticePage',
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
-	components: { QuizWrapper, Quiz },
 	setup() {
 		useMeta({
 			title: 'Practice',

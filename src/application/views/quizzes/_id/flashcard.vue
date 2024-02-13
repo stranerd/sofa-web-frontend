@@ -90,16 +90,12 @@
 import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import Flashcard from '@app/components/study/quizzes/FlashcardDisplay.vue'
-import Quiz from '@app/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { storage } from '@utils/storage'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'QuizIdFlashcardPage',
 	components: {
-		QuizWrapper,
-		Quiz,
 		Flashcard,
 	},
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },

@@ -5,7 +5,7 @@
 				<Quiz
 					v-model:answer="extras.answer"
 					:index="extras.index"
-					:isLesson="true"
+					:isInModal="true"
 					:title="isDone ? 'Practice completed' : quiz.title"
 					:questions="questions"
 					:optionState="extras.optionState"
@@ -72,8 +72,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Quiz from '@app/components/study/quizzes/Quiz.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
 
 defineProps<{

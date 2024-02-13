@@ -7,7 +7,7 @@
 			:content="title" />
 
 		<SofaHeaderText
-			v-if="question.data.type !== 'fillInBlanks' && question.data.type !== 'dragAnswers'"
+			v-if="question.data.type !== QuestionTypes.fillInBlanks && question.data.type !== QuestionTypes.dragAnswers"
 			class="!font-bold md:!text-2xl text-base w-full justify-start flex"
 			color="text-inherit"
 			:content="question.question" />
@@ -16,7 +16,7 @@
 
 		<SofaNormalText color="text-inherit" class="pb-2" :content="question.instruction" />
 
-		<template v-if="question.strippedData.type === 'multipleChoice'">
+		<template v-if="question.strippedData.type === QuestionTypes.multipleChoice">
 			<a
 				v-for="(option, index) in question.strippedData.options"
 				:key="index"
@@ -37,7 +37,7 @@
 			</a>
 		</template>
 
-		<template v-if="question.strippedData.type === 'trueOrFalse'">
+		<template v-if="question.strippedData.type === QuestionTypes.trueOrFalse">
 			<a
 				v-for="(option, index) in [true, false]"
 				:key="index"
@@ -58,7 +58,7 @@
 			</a>
 		</template>
 
-		<template v-if="question.strippedData.type === 'writeAnswer'">
+		<template v-if="question.strippedData.type === QuestionTypes.writeAnswer">
 			<div class="w-full rounded-xl gap-3 border-2" :class="buildClass(answer.value)">
 				<SofaTextarea
 					v-model="answer.value"
@@ -67,7 +67,7 @@
 			</div>
 		</template>
 
-		<template v-if="question.strippedData.type === 'fillInBlanks'">
+		<template v-if="question.strippedData.type === QuestionTypes.fillInBlanks">
 			<div class="w-full flex md:gap-3 gap-2 items-center flex-wrap">
 				<template v-for="(content, index) in question.splitQuestions" :key="index">
 					<div
@@ -84,7 +84,7 @@
 			</div>
 		</template>
 
-		<template v-if="question.strippedData.type === 'dragAnswers'">
+		<template v-if="question.strippedData.type === QuestionTypes.dragAnswers">
 			<div class="w-full flex md:gap-3 gap-2 items-center flex-wrap">
 				<template v-for="(content, index) in question.splitQuestions" :key="index">
 					<Draggable
@@ -125,7 +125,7 @@
 			</div>
 		</template>
 
-		<template v-if="question.strippedData.type === 'sequence'">
+		<template v-if="question.strippedData.type === QuestionTypes.sequence">
 			<Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" itemKey="">
 				<template #item="{ element, index }">
 					<div class="w-full flex items-center gap-3 cursor-move">
@@ -146,7 +146,7 @@
 			</Draggable>
 		</template>
 
-		<div v-if="question.type === 'match'" class="w-full grid grid-cols-2 gap-4">
+		<div v-if="question.type === QuestionTypes.match" class="w-full grid grid-cols-2 gap-4">
 			<Draggable
 				:list="question.matchQuestions"
 				group="match-questions"

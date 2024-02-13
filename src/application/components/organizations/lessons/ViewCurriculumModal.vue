@@ -49,7 +49,7 @@
 							Start
 						</SofaButton>
 					</div>
-					<QuizPractice v-else :quizId="curriculumItem.quiz.id" class="flex-grow" />
+					<QuizPractice v-else :quizId="curriculumItem.quiz.id" class="flex-grow bg-lightGray" />
 				</template>
 				<template v-if="curriculumItem.quizMode === QuizModes.test">
 					<div
@@ -67,7 +67,7 @@
 							Start
 						</SofaButton>
 					</div>
-					<QuizTest v-else-if="test" :testId="test.id" class="flex-grow" />
+					<QuizTest v-else-if="test" :testId="test.id" class="flex-grow bg-lightGray" />
 				</template>
 			</template>
 		</div>

@@ -31,15 +31,12 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { RouteLocationNormalized } from 'vue-router'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
-import Quiz from '@app/components/study/quizzes/Quiz.vue'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
 	routeConfig: {
 		goBackRoute: (route: RouteLocationNormalized) => `/quizzes/${route.params.id}/edit`,
 	},
-	components: { QuizWrapper, Quiz },
 	setup() {
 		useMeta({
 			title: 'Preview',

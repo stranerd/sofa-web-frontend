@@ -20,7 +20,7 @@
 						:index="extras.index"
 						:title="`Question ${extras.index + 1}`"
 						:showCounter="false"
-						:isLesson="true"
+						:isInModal="true"
 						:questions="questions"
 						:optionState="extras.optionState"
 						:rightButton="{
