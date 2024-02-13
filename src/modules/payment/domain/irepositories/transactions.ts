@@ -6,6 +6,5 @@ export interface ITransactionRepository {
 	create: (data: TransactionToModel) => Promise<TransactionEntity>
 	get: (query: QueryParams) => Promise<QueryResults<TransactionEntity>>
 	find: (id: string) => Promise<TransactionEntity | null>
-	update: (id: string, data: Partial<TransactionToModel>) => Promise<TransactionEntity | null>
-	delete: (ids: string[]) => Promise<boolean>
+	update: (id: string, data: TransactionToModel) => Promise<TransactionEntity>
 }
