@@ -74,13 +74,13 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 	)
 
 	const fetchOlderSchedules = async () => {
-		fetchSchedules()
-		await store[key].listener.start()
+		await fetchSchedules()
+		await store[key].listener.restart()
 	}
 
 	onMounted(async () => {
 		if (!called.value) await fetchSchedules()
-		await store[key].listener.restart()
+		await store[key].listener.start()
 	})
 
 	onUnmounted(async () => {
