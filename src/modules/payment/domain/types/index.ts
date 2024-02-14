@@ -148,3 +148,14 @@ export enum WithdrawalStatus {
 	completed = 'completed',
 	refunded = 'refunded',
 }
+
+export type BankData = {
+	id: number
+	code: string
+	name: string
+}
+
+export type FundDetails = {
+	amount: number
+	methodId: string
+}

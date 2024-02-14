@@ -1,5 +1,5 @@
 import { MethodFromModel } from '../models/methods'
-import { HttpClient, QueryParams, QueryResults } from '@modules/core'
+import { HttpClient, QueryParams, QueryResults, Listeners, listenToOne, listenToMany } from '@modules/core'
 import { IMethodRepository } from '@modules/payment/domain/irepositories/methods'
 import { MethodEntity } from '@modules/payment/domain/entities/methods'
 
@@ -36,5 +36,17 @@ export class MethodRepository implements IMethodRepository {
 	}
 	async delete(id: string) {
 		return await this.client.delete<unknown, boolean>(`/${id}`, {})
+	}
+
+	async listenToOne(id: string, listeners: Listeners<MethodEntity>) {
+		const model = await this.find(id)
+		if (model) await listeners.updated(model)
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
+	}
+
+	async listenToMany(query: QueryParams, listeners: Listeners<MethodEntity>, matches: (entity: MethodEntity) => boolean) {
+		const models = await this.get(query)
+		await Promise.all(models.results.map(listeners.updated))
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 }

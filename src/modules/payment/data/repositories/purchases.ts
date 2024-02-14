@@ -1,5 +1,5 @@
 import { PurchaseFromModel, PurchaseToModel } from '../models/purchases'
-import { HttpClient, QueryParams, QueryResults } from '@modules/core'
+import { HttpClient, QueryParams, QueryResults, Listeners, listenToMany, listenToOne } from '@modules/core'
 import { IPurchaseRepository } from '@modules/payment/domain/irepositories/purchases'
 import { PurchaseEntity } from '@modules/payment/domain/entities/purchases'
 
@@ -34,5 +34,17 @@ export class PurchaseRepository implements IPurchaseRepository {
 	async create(data: PurchaseToModel) {
 		const d = await this.client.post<PurchaseToModel, PurchaseFromModel>('/', data)
 		return this.mapper(d)
+	}
+
+	async listenToOne(id: string, listeners: Listeners<PurchaseEntity>) {
+		const model = await this.find(id)
+		if (model) await listeners.updated(model)
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
+	}
+
+	async listenToMany(query: QueryParams, listeners: Listeners<PurchaseEntity>, matches: (entity: PurchaseEntity) => boolean) {
+		const models = await this.get(query)
+		await Promise.all(models.results.map(listeners.updated))
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 }

@@ -1,8 +1,8 @@
 import { WalletFromModel } from '../models/wallets'
-import { HttpClient, QueryParams } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, listenToOne } from '@modules/core'
 import { IWalletRepository } from '@modules/payment/domain/irepositories/wallets'
 import { WalletEntity } from '@modules/payment/domain/entities/wallets'
-import { AccountDetails, TransferData, WithdrawData } from '@modules/payment/domain/types'
+import { AccountDetails, BankData, FundDetails, TransferData, WithdrawData } from '@modules/payment/domain/types'
 
 export class WalletRepository implements IWalletRepository {
 	private static instance: WalletRepository
@@ -36,8 +36,26 @@ export class WalletRepository implements IWalletRepository {
 		return this.mapper(d)
 	}
 
+	async verifyAccountNumber(data: Partial<AccountDetails>) {
+		return await this.client.post<Partial<AccountDetails>, string | null>('/account/verify', data)
+	}
+
 	async toggleRenewSubscription(data: { renew: boolean }) {
 		const d = await this.client.post<{ renew: boolean }, WalletEntity>('/subscriptions/renewal/toggle', data)
 		return this.mapper(d)
+	}
+
+	async getBanks() {
+		return await this.client.get<QueryParams, BankData>('/account/banks/NG', {})
+	}
+
+	async fundWallet(data: FundDetails) {
+		return this.client.post<FundDetails, boolean>('/fund', data)
+	}
+
+	async listenToOne(listeners: Listeners<WalletEntity>) {
+		const model = await this.get()
+		if (model) await listeners.updated(model)
+		return await listenToOne(`${this.client.socketPath}/`, listeners, this.mapper)
 	}
 }
