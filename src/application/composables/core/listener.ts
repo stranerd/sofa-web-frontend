@@ -1,22 +1,18 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useListener = (startFn: () => Promise<() => void>) => {
 	let listener = null as null | (() => void)
-	const isRunning = ref(false)
 	const watchers = ref(0)
+	const isRunning = computed(() => watchers.value > 0)
 
 	const close = async () => {
+		if (watchers.value === 1) listener?.()
 		watchers.value--
-		if (watchers.value > 0) return
-		listener?.()
-		isRunning.value = false
 	}
 
 	const start = async () => {
+		if (!isRunning.value) listener = await startFn()
 		watchers.value++
-		if (watchers.value > 1) return
-		listener = await startFn()
-		isRunning.value = true
 	}
 
 	const reset = async (reset: () => Promise<() => void>) => {
