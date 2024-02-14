@@ -5,16 +5,10 @@ import { useListener } from '../core/listener'
 import { TransactionEntity } from '@modules/payment/domain/entities/transactions'
 import { TransactionsUseCases } from '@modules/payment'
 
-type ListenerType = ReturnType<typeof useListener>
-
 const store = {
 	transactions: ref([] as TransactionEntity[]),
 	hasMore: ref<boolean>(false),
-	listener: ref<ListenerType | null>(null),
-}
-
-export const useTransactionsList = () => {
-	store.listener.value = useListener(() =>
+	listener: useListener(() =>
 		TransactionsUseCases.listen(
 			{
 				created: async (entity) => {
@@ -39,8 +33,10 @@ export const useTransactionsList = () => {
 			},
 			store.transactions.value.at(-1)?.createdAt,
 		),
-	)
+	),
+}
 
+export const useTransactionsList = () => {
 	const { called, asyncFn: fetchTransactions } = useAsyncFn(async () => {
 		const transactions = await TransactionsUseCases.get(store.transactions.value.at(-1)?.createdAt)
 		store.hasMore.value = !!transactions.pages.next
@@ -56,16 +52,16 @@ export const useTransactionsList = () => {
 
 	const fetchOlderTransactions = async () => {
 		fetchTransactions()
-		await store.listener.value?.restart()
+		await store.listener.restart()
 	}
 
 	onMounted(async () => {
 		if (!called.value) await fetchTransactions()
-		await store.listener.value?.start()
+		await store.listener.start()
 	})
 
 	onUnmounted(async () => {
-		await store.listener.value?.close()
+		await store.listener.close()
 	})
 
 	return { ...store, fetchOlderTransactions, fetchTransactions }
