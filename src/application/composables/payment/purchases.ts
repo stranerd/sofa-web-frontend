@@ -1,39 +1,35 @@
-import { computed, onMounted, onUnmounted, reactive } from 'vue'
 import { addToArray } from 'valleyed'
+import { computed, onMounted, onUnmounted, reactive } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { Purchase } from 'sofa-logic'
-import { PurchasesUseCases } from '@modules/payment'
+import { Purchasables, PurchaseEntity, PurchasesUseCases } from '@modules/payment'
 
 const store = {
-	purchases: reactive<Purchase[]>([]),
+	purchases: reactive<PurchaseEntity[]>([]),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return PurchasesUseCases.listenToMyPurchases(
-			{
-				created: async (entity) => {
-					addToArray(
-						store.purchases,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					addToArray(
-						store.purchases,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					store.purchases = store.purchases.filter((m) => m.id !== entity.id)
-				},
+		return PurchasesUseCases.listenToMine(id.value, {
+			created: async (entity) => {
+				addToArray(
+					store.purchases,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
 			},
-			id.value,
-		)
+			updated: async (entity) => {
+				addToArray(
+					store.purchases,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			deleted: async (entity) => {
+				store.purchases = store.purchases.filter((m) => m.id !== entity.id)
+			},
+		})
 	}),
 }
 
@@ -44,10 +40,10 @@ export const useMyPurchases = () => {
 		asyncFn: fetchPurchases,
 		loading,
 		error,
-		// called,
+		called,
 	} = useAsyncFn(
 		async () => {
-			const purchases = await PurchasesUseCases.getAll(id.value)
+			const purchases = await PurchasesUseCases.getMine(id.value)
 			purchases.results.forEach((r) =>
 				addToArray(
 					store.purchases,
@@ -61,14 +57,14 @@ export const useMyPurchases = () => {
 	)
 
 	onMounted(async () => {
-		/* if (!called.value) */ await fetchPurchases()
+		if (!called.value) await fetchPurchases()
 		await store.listener.start()
 	})
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
 
-	const purchasesCoursesIds = computed(() => store.purchases.filter((p) => p.data.type === 'courses').map((p) => p.data.id))
+	const purchasesCoursesIds = computed(() => store.purchases.filter((p) => p.data.type === Purchasables.courses).map((p) => p.data.id))
 
 	return { ...store, loading, error, purchasesCoursesIds }
 }

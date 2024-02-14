@@ -3,11 +3,10 @@ import { addToArray } from 'valleyed'
 import { useAsyncFn } from '../core/hooks'
 import { useAuth } from '../auth/auth'
 import { useListener } from '../core/listener'
-import { PlansUseCases } from '@modules/payment'
-import { PlanEntity } from '@modules/payment/domain/entities/plans'
+import { PlanEntity, PlansUseCases } from '@modules/payment'
 
 const store = {
-	plans: ref([] as PlanEntity[]),
+	plans: ref<PlanEntity[]>([]),
 	listener: useListener(async () =>
 		PlansUseCases.listenToAll({
 			created: async (entity) => {
@@ -34,7 +33,7 @@ const store = {
 }
 
 export const usePlansList = () => {
-	const { userType } = useAuth()
+	const { userType, wallet } = useAuth()
 
 	const { called, asyncFn: fetchPlans } = useAsyncFn(async () => {
 		const plans = await PlansUseCases.getAll()
@@ -57,7 +56,13 @@ export const usePlansList = () => {
 		await store.listener.close()
 	})
 
-	const subscriptionPlans = computed(() => store.plans.value.filter((plan) => plan.usersFor.includes(userType.value.type)))
+	const myPlans = computed(() => store.plans.value.filter((plan) => plan.usersFor.includes(userType.value.type)))
 
-	return { subscriptionPlans, ...store }
+	const currentPlan = computed(() => {
+		const planId = wallet.value?.subscription.current?.id ?? null
+		if (!planId) return null
+		return myPlans.value.find((p) => p.id === planId) ?? null
+	})
+
+	return { ...store, myPlans, currentPlan }
 }

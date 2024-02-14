@@ -1,6 +1,6 @@
 import { Currencies, Interval, PlanData } from '../types'
+import { PlanFromModel } from '../../data/models/plans'
 import { BaseEntity } from '@modules/core'
-import { PlanFromModel } from '@modules/payment/data/models/plans'
 import { UserType } from '@modules/users'
 
 export class PlanEntity extends BaseEntity {

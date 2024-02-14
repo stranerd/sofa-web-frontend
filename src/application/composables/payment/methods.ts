@@ -8,7 +8,7 @@ import { MethodsUseCases } from '@modules/payment'
 import { Logic } from 'sofa-logic'
 
 const store = {
-	methods: ref([] as MethodEntity[]),
+	methods: ref<MethodEntity[]>([]),
 	listener: useListener(async () =>
 		MethodsUseCases.listenToAll({
 			created: async (entity) => {
@@ -85,7 +85,7 @@ export const useMethod = (method: MethodEntity) => {
 				await Logic.Common.confirm({
 					title: `Set Primary Method`,
 					sub: 'Are you sure you want to set this payment method as primary?',
-					right: { label: 'Yes' },
+					right: { label: 'Yes', bg: 'bg-primaryBlue' },
 				}),
 		},
 	)

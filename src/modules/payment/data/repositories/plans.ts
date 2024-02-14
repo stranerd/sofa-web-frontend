@@ -1,7 +1,7 @@
+import { PlanEntity } from '../../domain/entities/plans'
+import { IPlanRepository } from '../../domain/irepositories/plans'
 import { PlanFromModel } from '../models/plans'
-import { HttpClient, QueryParams, QueryResults, Listeners, listenToMany, listenToOne } from '@modules/core'
-import { IPlanRepository } from '@modules/payment/domain/irepositories/plans'
-import { PlanEntity } from '@modules/payment/domain/entities/plans'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class PlanRepository implements IPlanRepository {
 	private static instance: PlanRepository

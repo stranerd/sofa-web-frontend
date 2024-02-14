@@ -1,7 +1,7 @@
+import { MethodEntity } from '../../domain/entities/methods'
+import { IMethodRepository } from '../../domain/irepositories/methods'
 import { MethodFromModel } from '../models/methods'
-import { HttpClient, QueryParams, QueryResults, Listeners, listenToOne, listenToMany } from '@modules/core'
-import { IMethodRepository } from '@modules/payment/domain/irepositories/methods'
-import { MethodEntity } from '@modules/payment/domain/entities/methods'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class MethodRepository implements IMethodRepository {
 	private static instance: MethodRepository
@@ -9,7 +9,7 @@ export class MethodRepository implements IMethodRepository {
 	private mapper = (model: MethodFromModel | null) => (model ? new MethodEntity(model) : null) as MethodEntity
 
 	private constructor() {
-		this.client = new HttpClient('payments/methods')
+		this.client = new HttpClient('/payments/methods')
 	}
 
 	static getInstance() {
@@ -34,6 +34,7 @@ export class MethodRepository implements IMethodRepository {
 	async makePrimary(id: string) {
 		return await this.client.post<QueryParams, MethodEntity | null>(`/${id}/primary`, {})
 	}
+
 	async delete(id: string) {
 		return await this.client.delete<unknown, boolean>(`/${id}`, {})
 	}

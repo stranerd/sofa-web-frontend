@@ -1,4 +1,4 @@
-import { MethodData } from '@modules/payment/domain/types'
+import { MethodData } from '../../domain/types'
 export interface MethodFromModel {
 	id: string
 	data: MethodData

@@ -13,14 +13,6 @@ export class MethodsUseCase {
 		return await this.repository.get({ all: true })
 	}
 
-	async get(input: QueryParams) {
-		return await this.repository.get(input)
-	}
-
-	async find(id: string) {
-		return await this.repository.find(id)
-	}
-
 	async makePrimary(id: string) {
 		return await this.repository.makePrimary(id)
 	}

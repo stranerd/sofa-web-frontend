@@ -1,6 +1,6 @@
 import { PurchaseData, Saleable } from '../types'
+import { PurchaseFromModel } from '../../data/models/purchases'
 import { BaseEntity } from '@modules/core'
-import { PurchaseFromModel } from '@modules/payment/data/models/purchases'
 
 export class PurchaseEntity extends BaseEntity {
 	public readonly id: string

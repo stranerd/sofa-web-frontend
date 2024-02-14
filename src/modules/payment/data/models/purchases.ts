@@ -1,4 +1,4 @@
-import { PurchaseData, Saleable } from '@modules/payment/domain/types'
+import { PurchaseData, Saleable } from '../../domain/types'
 export interface PurchaseFromModel extends PurchaseToModel {
 	id: string
 	userId: string

@@ -1,8 +1,8 @@
+import { WalletEntity } from '../../domain/entities/wallets'
+import { IWalletRepository } from '../../domain/irepositories/wallets'
+import { AccountDetails, BankData, CurrencyCountries, FundDetails, TransferData, WithdrawData } from '../../domain/types'
 import { WalletFromModel } from '../models/wallets'
 import { HttpClient, Listeners, QueryParams, listenToOne } from '@modules/core'
-import { IWalletRepository } from '@modules/payment/domain/irepositories/wallets'
-import { WalletEntity } from '@modules/payment/domain/entities/wallets'
-import { AccountDetails, BankData, FundDetails, TransferData, WithdrawData } from '@modules/payment/domain/types'
 
 export class WalletRepository implements IWalletRepository {
 	private static instance: WalletRepository
@@ -45,17 +45,17 @@ export class WalletRepository implements IWalletRepository {
 		return this.mapper(d)
 	}
 
-	async getBanks() {
-		return await this.client.get<QueryParams, BankData>('/account/banks/NG', {})
+	async getBanks(country: CurrencyCountries) {
+		return await this.client.get<object, BankData>(`/account/banks/${country}`, {})
 	}
 
-	async fundWallet(data: FundDetails) {
+	async fund(data: FundDetails) {
 		return this.client.post<FundDetails, boolean>('/fund', data)
 	}
 
-	async listenToOne(listeners: Listeners<WalletEntity>) {
+	async listen(listeners: Listeners<WalletEntity>) {
 		const model = await this.get()
 		if (model) await listeners.updated(model)
-		return await listenToOne(`${this.client.socketPath}/`, listeners, this.mapper)
+		return await listenToOne(this.client.socketPath, listeners, this.mapper)
 	}
 }

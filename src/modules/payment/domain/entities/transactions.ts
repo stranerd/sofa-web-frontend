@@ -1,6 +1,6 @@
 import { Currencies, TransactionData, TransactionStatus } from '../types'
+import { TransactionFromModel } from '../../data/models/transactions'
 import { BaseEntity } from '@modules/core'
-import { TransactionFromModel } from '@modules/payment/data/models/transactions'
 
 export class TransactionEntity extends BaseEntity {
 	public readonly id: string

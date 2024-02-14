@@ -2,7 +2,7 @@ import { ScheduleEntity } from '../entities/schedules'
 import { ScheduleFactory } from '../factories/schedules'
 import { IScheduleRepository } from '../irepositories/schedules'
 import { QueryParams, Conditions, Listeners } from '@modules/core'
-import { CHAT_PAGINATION_LIMIT } from '@utils/constants'
+import { DEFAULT_PAGINATION_LIMIT } from '@utils/constants'
 
 export class SchedulesUseCase {
 	private repository: (organizationId: string, classId: string) => IScheduleRepository
@@ -35,7 +35,7 @@ export class SchedulesUseCase {
 		const conditions: QueryParams = {
 			where: [],
 			sort: [{ field: 'createdAt', desc: true }],
-			limit: CHAT_PAGINATION_LIMIT,
+			limit: DEFAULT_PAGINATION_LIMIT,
 		}
 		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.lt, value: date })
 		return await this.repository(organizationId, classId).get(conditions)

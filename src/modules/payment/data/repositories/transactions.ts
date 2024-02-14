@@ -1,7 +1,7 @@
+import { TransactionEntity } from '../../domain/entities/transactions'
+import { ITransactionRepository } from '../../domain/irepositories/transactions'
 import { TransactionFromModel, TransactionToModel } from '../models/transactions'
-import { HttpClient, QueryParams, QueryResults, Listeners, listenToMany, listenToOne } from '@modules/core'
-import { ITransactionRepository } from '@modules/payment/domain/irepositories/transactions'
-import { TransactionEntity } from '@modules/payment/domain/entities/transactions'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class TransactionRepository implements ITransactionRepository {
 	private static instance: TransactionRepository

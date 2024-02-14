@@ -1,7 +1,7 @@
+import { WithdrawalEntity } from '../../domain/entities/withdrawals'
+import { IWithdrawalRepository } from '../../domain/irepositories/withdrawals'
 import { WithdrawalFromModel } from '../models/withdrawals'
-import { HttpClient, QueryParams, QueryResults, Listeners, listenToMany, listenToOne } from '@modules/core'
-import { IWithdrawalRepository } from '@modules/payment/domain/irepositories/withdrawals'
-import { WithdrawalEntity } from '@modules/payment/domain/entities/withdrawals'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class WithdrawalRepository implements IWithdrawalRepository {
 	private static instance: WithdrawalRepository

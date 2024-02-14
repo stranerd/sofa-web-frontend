@@ -1,4 +1,4 @@
-import { Currencies, Interval, PlanData } from '@modules/payment/domain/types'
+import { Currencies, Interval, PlanData } from '../../domain/types'
 import { UserType } from '@modules/users'
 
 export interface PlanFromModel {

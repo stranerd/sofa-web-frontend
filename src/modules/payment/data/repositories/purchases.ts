@@ -1,7 +1,7 @@
+import { PurchaseEntity } from '../../domain/entities/purchases'
+import { IPurchaseRepository } from '../../domain/irepositories/purchases'
 import { PurchaseFromModel, PurchaseToModel } from '../models/purchases'
-import { HttpClient, QueryParams, QueryResults, Listeners, listenToMany, listenToOne } from '@modules/core'
-import { IPurchaseRepository } from '@modules/payment/domain/irepositories/purchases'
-import { PurchaseEntity } from '@modules/payment/domain/entities/purchases'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class PurchaseRepository implements IPurchaseRepository {
 	private static instance: PurchaseRepository

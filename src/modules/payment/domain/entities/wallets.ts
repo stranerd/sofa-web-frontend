@@ -1,6 +1,7 @@
+import { Differ } from 'valleyed'
 import { AccountDetails, Currencies, Subscription, SubscriptionModel } from '../types'
+import { WalletFromModel } from '../../data/models/wallets'
 import { BaseEntity } from '@modules/core'
-import { WalletFromModel } from '@modules/payment/data/models/wallets'
 
 export class WalletEntity extends BaseEntity {
 	public readonly id: string
@@ -22,5 +23,13 @@ export class WalletEntity extends BaseEntity {
 		this.subscriptions = subscriptions
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
+	}
+
+	private getSubscription(data: Subscription['data']) {
+		return this.subscriptions.find((s) => Differ.equal(s.data, data))
+	}
+
+	getClassSubscription(data: { organizationId: string; classId: string }) {
+		return this.getSubscription({ ...data, type: 'classes' })
 	}
 }

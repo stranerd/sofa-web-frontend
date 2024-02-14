@@ -1,4 +1,4 @@
-import { Currencies, TransactionStatus, TransactionData } from '@modules/payment/domain/types'
+import { Currencies, TransactionStatus, TransactionData } from '../../domain/types'
 
 export interface TransactionFromModel extends TransactionToModel {
 	id: string

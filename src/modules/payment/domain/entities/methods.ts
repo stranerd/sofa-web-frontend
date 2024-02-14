@@ -1,6 +1,6 @@
 import { MethodData } from '../types'
+import { MethodFromModel } from '../../data/models/methods'
 import { BaseEntity } from '@modules/core'
-import { MethodFromModel } from '@modules/payment/data/models/methods'
 
 export class MethodEntity extends BaseEntity {
 	public readonly id: string

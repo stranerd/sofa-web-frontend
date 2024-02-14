@@ -1,6 +1,6 @@
 import { AccountDetails, Currencies, WithdrawalStatus } from '../types'
+import { WithdrawalFromModel } from '../../data/models/withdrawals'
 import { BaseEntity } from '@modules/core'
-import { WithdrawalFromModel } from '@modules/payment/data/models/withdrawals'
 
 export class WithdrawalEntity extends BaseEntity {
 	public readonly id: string
