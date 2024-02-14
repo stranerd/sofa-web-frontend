@@ -1,9 +1,7 @@
 import { capitalize } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
-import { Conditions, QueryParams } from '../types/common'
-import { Paginated } from '../types/domains/common'
-import { CommercialBanks, PaymentMethod, Plan, Purchase, Transaction } from '../types/domains/payment'
+import { CommercialBanks } from '../types/domains/payment'
 import { FundWalletInput, MakePurchaseInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from '../types/forms/payment'
 import Common from './Common'
 
@@ -12,11 +10,6 @@ export default class Payment extends Common {
 		super()
 	}
 
-	public PaymentMethods: Paginated<PaymentMethod> | undefined
-	public PaymentMethod: PaymentMethod | undefined
-	public AllPlans: Paginated<Plan> | undefined
-	public AllTransactions: Paginated<Transaction> | undefined
-	public PurchasedItems: string[] = []
 	public AllCommercialBanks: CommercialBanks[] | undefined
 
 	public MakePurchaseForm: MakePurchaseInput | undefined
@@ -63,16 +56,6 @@ export default class Payment extends Common {
 										message: 'Transaction completed successfully!',
 										type: 'success',
 									})
-									const userQuery = {
-										where: [
-											{
-												field: 'userId',
-												condition: Conditions.eq,
-												value: Logic.Common.AuthUser?.id,
-											},
-										],
-									}
-									Logic.Payment.GetTransactions(userQuery)
 								})
 								.catch((error) => {
 									Logic.Common.showAlert({
@@ -99,101 +82,12 @@ export default class Payment extends Common {
 			this.AllCommercialBanks = response.data
 		})
 
-	public GetPlans = (filter: QueryParams) =>
-		$api.payment.plan.fetch(filter).then((response) => {
-			this.AllPlans = response.data
-		})
-
-	public GetTransactions = (filter: QueryParams, append = false) =>
-		$api.payment.transaction.fetch(filter).then((response) => {
-			if (append) {
-				if (this.AllTransactions) {
-					response.data.results.unshift(...this.AllTransactions.results)
-					this.AllTransactions = response.data
-				} else {
-					this.AllTransactions = response.data
-				}
-			} else {
-				this.AllTransactions = response.data
-			}
-		})
-
-	public GetPaymentMethods = (filter: QueryParams) =>
-		$api.payment.paymentMethod.fetch(filter).then((response) => {
-			this.PaymentMethods = response.data
-		})
-
-	public GetPaymentMethod = (id: string) =>
-		$api.payment.paymentMethod.get(id).then((response) => {
-			this.PaymentMethod = response.data
-		})
-
-	public async GetMyPurchases(filters: QueryParams) {
-		return $api.payment.purchase.fetch(filters).then((response) => response.data as Paginated<Purchase>)
-	}
-
-	public GetUserPurchases = (fetchItems: boolean) =>
-		new Promise((resolve) => {
-			$api.payment.purchase
-				.fetch({
-					where: [
-						{
-							field: 'user.id',
-							value: Logic.Common.AuthUser?.id,
-							condition: Conditions.eq,
-						},
-					],
-				})
-				.then((response) => {
-					const purchases: Paginated<Purchase> = response.data
-
-					const allItems: string[] = []
-
-					purchases.results.forEach((item) => {
-						allItems.push(item.data.id)
-					})
-
-					this.PurchasedItems = allItems
-
-					if (fetchItems) {
-						$api.study.course
-							.fetch({
-								where: [
-									{
-										field: 'id',
-										value: allItems,
-										condition: Conditions.in,
-									},
-								],
-							})
-							.then((response) => {
-								Logic.Study.PurchasedCourses = response.data
-								resolve('')
-							})
-					} else {
-						resolve('')
-					}
-				})
-				.catch((error) => {
-					throw error
-				})
-		})
-
 	public FundWallet = () => {
 		if (this.FundWalletForm) {
 			Logic.Common.showLoading()
 			return $api.payment.wallet
 				.fundWallet(this.FundWalletForm)
 				.then((response) => {
-					Logic.Payment.GetTransactions({
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					})
 					Logic.Common.hideLoading()
 					return response.data
 				})
@@ -240,15 +134,6 @@ export default class Payment extends Common {
 			return $api.payment.wallet
 				.withdrawFromWallet(this.WithdrawalFromWalletForm)
 				.then((response) => {
-					Logic.Payment.GetTransactions({
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					})
 					Logic.Common.hideLoading()
 					return response.data
 				})
@@ -303,57 +188,4 @@ export default class Payment extends Common {
 			.catch((error) => {
 				Logic.Common.showError(capitalize(error.response.data[0]?.message))
 			})
-
-	public MakeMethodPrimary = (id: string) => {
-		Logic.Common.showLoading()
-		return $api.payment.paymentMethod
-			.makePrimaryPaymentMethod(id)
-			.then((response) => {
-				this.GetPaymentMethods({
-					where: [
-						{
-							field: 'userId',
-							condition: Conditions.eq,
-							value: Logic.Common.AuthUser?.id,
-						},
-					],
-				})
-				this.PaymentMethod = response.data
-				Logic.Common.hideLoading()
-				Logic.Common.showAlert({
-					message: 'Payment method set as primary',
-					type: 'success',
-				})
-			})
-			.catch((error) => {
-				Logic.Common.hideLoading()
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
-	}
-
-	public DeleteMethod = (id: string) => {
-		Logic.Common.showLoading()
-		return $api.payment.paymentMethod
-			.delete(id)
-			.then(() => {
-				this.GetPaymentMethods({
-					where: [
-						{
-							field: 'userId',
-							condition: Conditions.eq,
-							value: Logic.Common.AuthUser?.id,
-						},
-					],
-				})
-				Logic.Common.hideLoading()
-				Logic.Common.showAlert({
-					message: 'Payment method deleted',
-					type: 'success',
-				})
-			})
-			.catch((error) => {
-				Logic.Common.hideLoading()
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
-	}
 }

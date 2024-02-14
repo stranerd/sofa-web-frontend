@@ -75,7 +75,7 @@
 						</div>
 
 						<a
-							v-for="method in PaymentMethods?.results"
+							v-for="method in methods"
 							:key="method.hash"
 							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
@@ -126,8 +126,9 @@ import { saveToFolder } from '@app/composables/study/folders'
 import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
-import { Conditions, Logic } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
+import { useMyMethods } from '@app/composables/payment/methods'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
@@ -189,24 +190,6 @@ export default defineComponent({
 				requireAuth: true,
 				ignoreProperty: true,
 			},
-			{
-				domain: 'Payment',
-				property: 'PaymentMethods',
-				method: 'GetPaymentMethods',
-				params: [
-					{
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
 		],
 	},
 	setup() {
@@ -250,7 +233,7 @@ export default defineComponent({
 
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
 
-		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
+		const { methods } = useMyMethods()
 
 		const AllReviews = ref(Logic.Study.AllReviews)
 
@@ -442,7 +425,6 @@ export default defineComponent({
 			Logic.Payment.MakePurchase()?.then((data) => {
 				if (data) {
 					showMakePaymentModal.value = false
-					Logic.Payment.GetUserPurchases(false)
 					Logic.Common.GoToRoute('/course/' + SingleCourse.value?.id)
 				}
 			})
@@ -492,7 +474,6 @@ export default defineComponent({
 			if (Logic.Common.route.query?.type?.toString()) {
 				contentType.value = Logic.Common.route.query?.type?.toString()
 			}
-			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleCourseFiles', SingleCourseFiles)
 			Logic.Study.watchProperty('SingleCourseQuizzes', SingleCourseQuizzes)
@@ -518,7 +499,7 @@ export default defineComponent({
 			selectedTab,
 			contentList,
 			contentDetails,
-			PaymentMethods,
+			methods,
 			showMakePaymentModal,
 			selectedMethodId,
 			wallet,

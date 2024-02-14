@@ -197,8 +197,8 @@
 						</div>
 
 						<div
-							v-for="(method, index) in PaymentMethods?.results ?? []"
-							:key="index"
+							v-for="method in methods"
+							:key="method.hash"
 							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom cursor-pointer `"
@@ -258,8 +258,9 @@ import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
-import { Conditions, Logic } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
+import { useMyMethods } from '@app/composables/payment/methods'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',
@@ -291,24 +292,6 @@ export default defineComponent({
 				requireAuth: true,
 				ignoreProperty: true,
 			},
-			{
-				domain: 'Payment',
-				property: 'PaymentMethods',
-				method: 'GetPaymentMethods',
-				params: [
-					{
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
 		],
 	},
 	setup() {
@@ -321,7 +304,7 @@ export default defineComponent({
 		const mobileTitle = ref(Logic.Study.SingleCourse?.title ?? '')
 
 		const { wallet } = useAuth()
-		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
+		const { methods } = useMyMethods()
 		const selectedMethodId = ref('')
 		const showMakePaymentModal = ref(false)
 
@@ -404,7 +387,6 @@ export default defineComponent({
 			Logic.Payment.MakePurchase()?.then((data) => {
 				if (data) {
 					showMakePaymentModal.value = false
-					Logic.Payment.GetUserPurchases(false)
 					Logic.Study.GetCourse(SingleCourse.value!.id)
 				}
 			})
@@ -418,7 +400,6 @@ export default defineComponent({
 		const { createView } = useCreateView()
 
 		onMounted(() => {
-			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
@@ -436,7 +417,7 @@ export default defineComponent({
 			showCourseInfo,
 			buyCourse,
 			isUnlocked,
-			PaymentMethods,
+			methods,
 			showMakePaymentModal,
 			selectedMethodId,
 			wallet,
