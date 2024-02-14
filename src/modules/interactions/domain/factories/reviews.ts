@@ -15,22 +15,6 @@ export class ReviewFactory extends BaseFactory<ReviewEntity, Omit<ReviewToModel,
 		super({ message: '', rating: 1 })
 	}
 
-	get message() {
-		return this.values.message
-	}
-
-	set message(value: string) {
-		this.set('message', value)
-	}
-
-	get rating() {
-		return this.values.rating
-	}
-
-	set rating(value: number) {
-		this.set('rating', value)
-	}
-
 	loadEntity = (entity: ReviewEntity) => {
 		this.message = entity.message
 	}

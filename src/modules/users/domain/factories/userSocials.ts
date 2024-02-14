@@ -20,14 +20,6 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 		super({ socials: [] })
 	}
 
-	private get socials() {
-		return this.values.socials
-	}
-
-	private set socials(value: UserSocialsType) {
-		this.set('socials', value)
-	}
-
 	addNewSocial = (ref: UserSocials) => {
 		this.socials = [...this.socials, { ref, link: '' }]
 	}

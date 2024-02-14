@@ -13,14 +13,6 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 		super({ phone: null })
 	}
 
-	get phone() {
-		return this.values.phone
-	}
-
-	set phone(phone: Phone | null) {
-		this.set('phone', phone)
-	}
-
 	get phoneStr() {
 		return this.phone?.code ?? '' + this.phone?.number ?? ''
 	}

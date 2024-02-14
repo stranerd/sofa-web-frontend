@@ -5,7 +5,7 @@ import { BaseFactory } from '@modules/core'
 
 export class InstitutionFactory extends BaseFactory<InstitutionEntity, InstitutionToModel, InstitutionToModel> {
 	readonly rules = {
-		title: v.string().min(1),
+		title: v.string().min(1).lower(),
 		isGateway: v.boolean(),
 	}
 
@@ -13,22 +13,6 @@ export class InstitutionFactory extends BaseFactory<InstitutionEntity, Instituti
 
 	constructor() {
 		super({ title: '', isGateway: false })
-	}
-
-	get title() {
-		return this.values.title
-	}
-
-	set title(value: string) {
-		this.set('title', value.toLowerCase())
-	}
-
-	get isGateway() {
-		return this.values.isGateway
-	}
-
-	set isGateway(value: boolean) {
-		this.set('isGateway', value)
 	}
 
 	loadEntity = (entity: InstitutionEntity) => {

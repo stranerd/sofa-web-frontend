@@ -18,38 +18,6 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		super({ first: '', last: '', description: '', photo: null })
 	}
 
-	get first() {
-		return this.values.first
-	}
-
-	set first(value: string) {
-		this.set('first', value)
-	}
-
-	get last() {
-		return this.values.last
-	}
-
-	set last(value: string) {
-		this.set('last', value)
-	}
-
-	get description() {
-		return this.values.description
-	}
-
-	set description(value: string) {
-		this.set('description', value)
-	}
-
-	get photo() {
-		return this.values.photo
-	}
-
-	set photo(photo: Media | null) {
-		this.set('photo', photo)
-	}
-
 	model = async () => {
 		const { first, last, description, photo } = this.validValues
 		return {

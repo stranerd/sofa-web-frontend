@@ -3,7 +3,7 @@ import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
 import { indicator } from '../entities/questions-extras'
 import { QuestionTypes } from '../types'
-import { BaseFactory, Media } from '@modules/core'
+import { BaseFactory } from '@modules/core'
 
 type FillOrDragOption = { type: 'q' | 'a'; value: string }
 
@@ -106,110 +106,6 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 			dragAnswersAnswers: [],
 			matchSet: [],
 		})
-	}
-
-	get question() {
-		return this.values.question
-	}
-
-	set question(value: string) {
-		this.set('question', value)
-	}
-
-	get questionMedia() {
-		return this.values.questionMedia
-	}
-
-	set questionMedia(value: Media | null) {
-		this.set('questionMedia', value)
-	}
-
-	get timeLimit() {
-		return this.values.timeLimit
-	}
-
-	set timeLimit(value: number) {
-		this.set('timeLimit', value)
-	}
-
-	get explanation() {
-		return this.values.explanation
-	}
-
-	set explanation(value: string) {
-		this.set('explanation', value)
-	}
-
-	get type() {
-		return this.values.type
-	}
-
-	set type(value: QuestionTypes) {
-		this.set('type', value)
-	}
-
-	get multipleOptions() {
-		return this.values.multipleOptions
-	}
-
-	set multipleOptions(value: string[]) {
-		this.set('multipleOptions', value)
-	}
-
-	get multipleAnswers() {
-		return this.values.multipleAnswers
-	}
-
-	set multipleAnswers(value: number[]) {
-		this.set('multipleAnswers', value)
-	}
-
-	get trueOrFalseAnswer() {
-		return this.values.trueOrFalseAnswer
-	}
-
-	set trueOrFalseAnswer(value: boolean) {
-		this.set('trueOrFalseAnswer', value)
-	}
-
-	get writeAnswerAnswers() {
-		return this.values.writeAnswerAnswers
-	}
-
-	set writeAnswerAnswers(value: string[]) {
-		this.set('writeAnswerAnswers', value)
-	}
-
-	get sequenceAnswers() {
-		return this.values.sequenceAnswers
-	}
-
-	set sequenceAnswers(value: string[]) {
-		this.set('sequenceAnswers', value)
-	}
-
-	get fillInBlanksAnswers() {
-		return this.values.fillInBlanksAnswers
-	}
-
-	set fillInBlanksAnswers(value: FillOrDragOption[]) {
-		this.set('fillInBlanksAnswers', value)
-	}
-
-	get dragAnswersAnswers() {
-		return this.values.dragAnswersAnswers
-	}
-
-	set dragAnswersAnswers(value: FillOrDragOption[]) {
-		this.set('dragAnswersAnswers', value)
-	}
-
-	get matchSet() {
-		return this.values.matchSet
-	}
-
-	set matchSet(value: { q: string; a: string }[]) {
-		this.set('matchSet', value)
 	}
 
 	get questionPlaceholder() {

@@ -21,37 +21,9 @@ export class PasswordResetFactory extends BaseFactory<null, { password: string; 
 		super({ email: '', password: '', cPassword: '', token: '' })
 	}
 
-	get email() {
-		return this.values.email
-	}
-
-	set email(value: string) {
-		this.set('email', value)
-	}
-
-	get token() {
-		return this.values.token
-	}
-
-	set token(value: string) {
-		this.set('token', value)
-	}
-
-	get password() {
-		return this.values.password
-	}
-
 	set password(value: string) {
 		this.set('password', value)
 		this.set('cPassword', this.cPassword)
-	}
-
-	get cPassword() {
-		return this.values.cPassword!
-	}
-
-	set cPassword(value: string) {
-		this.set('cPassword', value)
 	}
 
 	model = async () => {

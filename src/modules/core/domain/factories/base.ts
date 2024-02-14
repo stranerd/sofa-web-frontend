@@ -12,7 +12,7 @@ export function deepToRaw<T>(input: T): T {
 	return input
 }
 
-export abstract class BaseFactory<E, T, K extends Record<string, any>> {
+abstract class __BaseFactory<E, T, K extends Record<string, any>> {
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
 	abstract model: () => T | Promise<T>
@@ -23,7 +23,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	public readonly values: K
 	protected readonly validValues: K
 
-	protected constructor(keys: K) {
+	constructor(keys: K) {
 		this.defaults = reactive({ ...keys }) as K
 		this.values = reactive({ ...keys }) as K
 		this.validValues = reactive({ ...keys }) as K
@@ -34,6 +34,12 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 			},
 			reactive({}) as Record<keyof K, string>,
 		)
+		Object.keys(keys).forEach((key) => {
+			Object.defineProperty(this, key, {
+				get: this.values[key],
+				set: (value: any) => this.set(key, value),
+			})
+		})
 	}
 
 	get valid() {
@@ -94,3 +100,12 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 		return deepToRaw(await this.model())
 	}
 }
+
+function WithProperties(): new <E, T, K extends Record<string, any>>(
+	...args: ConstructorParameters<typeof __BaseFactory<E, T, K>>
+) => __BaseFactory<E, T, K> & K {
+	return __BaseFactory as any
+}
+
+// @ts-expect-error BaseFactory is assignable to the constraint of type, but K could be instantiated with a different subtype of constraint
+export abstract class BaseFactory<E, T, K extends Record<string, any>> extends WithProperties()<E, T, K> {}

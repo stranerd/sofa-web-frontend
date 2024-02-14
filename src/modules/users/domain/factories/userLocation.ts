@@ -14,21 +14,9 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 		super({ country: '', state: '' })
 	}
 
-	get country() {
-		return this.values.country
-	}
-
 	set country(value: string) {
 		this.set('country', value)
 		this.resetProp('state')
-	}
-
-	get state() {
-		return this.values.state
-	}
-
-	set state(value: string) {
-		this.set('state', value)
 	}
 
 	loadEntity = (entity: UserEntity) => {

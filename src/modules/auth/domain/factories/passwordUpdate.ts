@@ -21,27 +21,15 @@ export class PasswordUpdateFactory extends BaseFactory<null, PasswordUpdate, Key
 		super({ oldPassword: '', password: '', cPassword: '' })
 	}
 
-	get oldPassword() {
-		return this.values.oldPassword!
-	}
-
 	set oldPassword(value: string) {
 		this.set('oldPassword', value)
 		this.set('password', this.password)
 		this.set('cPassword', this.cPassword)
 	}
 
-	get password() {
-		return this.values.password!
-	}
-
 	set password(value: string) {
 		this.set('password', value)
 		this.set('cPassword', this.cPassword)
-	}
-
-	get cPassword() {
-		return this.values.cPassword!
 	}
 
 	set cPassword(value: string) {

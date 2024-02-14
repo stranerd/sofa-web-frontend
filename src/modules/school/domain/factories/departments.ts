@@ -5,7 +5,7 @@ import { BaseFactory } from '@modules/core'
 
 export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentToModel, DepartmentToModel> {
 	readonly rules = {
-		title: v.string().min(1),
+		title: v.string().min(1).lower(),
 		facultyId: v.string().min(1),
 		tagId: v.string().min(1),
 	}
@@ -14,22 +14,6 @@ export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentT
 
 	constructor() {
 		super({ title: '', facultyId: '' })
-	}
-
-	get title() {
-		return this.values.title
-	}
-
-	set title(value: string) {
-		this.set('title', value.toLowerCase())
-	}
-
-	get facultyId() {
-		return this.values.facultyId
-	}
-
-	set facultyId(value: string) {
-		this.set('facultyId', value)
 	}
 
 	loadEntity = (entity: DepartmentEntity) => {
