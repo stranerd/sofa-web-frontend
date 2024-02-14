@@ -77,7 +77,7 @@ export const useMessages = (conversation: ConversationEntity) => {
 	)
 
 	const fetchOlderMessages = async () => {
-		fetchMessages()
+		await fetchMessages()
 		await store[conversationId].listener.restart()
 	}
 
