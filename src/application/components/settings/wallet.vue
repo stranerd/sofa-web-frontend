@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
+	<div v-if="wallet" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 		<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
 			<SofaHeaderText size="xl" customClass="text-left"> Wallet </SofaHeaderText>
 
@@ -14,7 +14,7 @@
 
 				<div class="w-full flex flex-col items-left">
 					<SofaHeaderText customClass="text-left mdlg:!text-3xl !text-2xl">
-						{{ showMoney ? Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency) : '****' }}
+						{{ showMoney ? Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency) : '****' }}
 					</SofaHeaderText>
 				</div>
 
@@ -211,7 +211,7 @@
 					</div>
 				</div>
 
-				<div v-if="modalContent == 'withdraw_money'" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
+				<div v-if="wallet && modalContent == 'withdraw_money'" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 					<SofaTextField
 						ref="amount"
 						v-model="withdrawForm.amount"
@@ -224,7 +224,7 @@
 						:isFormatted="true">
 						<template #inner-prefix>
 							<SofaNormalText>
-								{{ Logic.Common.getCurrency(UserWallet.balance.currency) }}
+								{{ Logic.Common.getCurrency(wallet.balance.currency) }}
 							</SofaNormalText>
 						</template>
 					</SofaTextField>
@@ -285,10 +285,11 @@
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic, SelectOption, Transaction } from 'sofa-logic'
+import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
 	setup() {
-		const UserWallet = ref(Logic.Payment.UserWallet!)
+		const { wallet } = useAuth()
 		const AllTransactions = ref(Logic.Payment.AllTransactions!)
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods!)
 		const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks!)
@@ -494,7 +495,6 @@ export default defineComponent({
 		}
 
 		onMounted(() => {
-			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Payment.watchProperty('AllTransactions', AllTransactions)
 			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
 
@@ -557,7 +557,7 @@ export default defineComponent({
 		return {
 			Logic,
 			transactions,
-			UserWallet,
+			wallet,
 			AllCommercialBanks,
 			AllTransactions,
 			showModal,

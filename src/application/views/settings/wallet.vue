@@ -21,14 +21,6 @@ export default defineComponent({
 		fetchRules: [
 			{
 				domain: 'Payment',
-				property: 'UserWallet',
-				method: 'GetUserWallet',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
-				domain: 'Payment',
 				property: 'AllCommercialBanks',
 				method: 'GetCommercialBanks',
 				params: [],

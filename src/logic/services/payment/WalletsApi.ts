@@ -8,16 +8,6 @@ export default class WalletsApi extends ReadOnlyApiService {
 		super('payment/wallets')
 	}
 
-	public async getUserWallet() {
-		try {
-			const response: AxiosResponse<Wallet> = await this.axiosInstance.get(this.getUrl())
-
-			return response
-		} catch (err) {
-			this.handleErrors(err)
-		}
-	}
-
 	public async getCommercialBanks() {
 		try {
 			const response: AxiosResponse<CommercialBanks[]> = await this.axiosInstance.get(this.getUrl() + '/account/banks/NG')

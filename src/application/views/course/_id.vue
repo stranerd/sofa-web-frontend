@@ -179,9 +179,9 @@
 							}  rounded-custom cursor-pointer `"
 							@click="selectedMethodId = 'payWithWallet'">
 							<SofaIcon customClass="h-[20px]" name="wallet" />
-							<SofaNormalText v-if="UserWallet">
+							<SofaNormalText v-if="wallet">
 								Wallet (<span class="!font-semibold">{{
-									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
+									Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency)
 								}}</span
 								>)
 							</SofaNormalText>
@@ -259,6 +259,7 @@ import { useCreateView } from '@app/composables/interactions/views'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
 import { Conditions, Logic } from 'sofa-logic'
+import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',
@@ -277,14 +278,6 @@ export default defineComponent({
 				domain: 'Study',
 				property: 'Tags',
 				method: 'GetTags',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
-				domain: 'Payment',
-				property: 'UserWallet',
-				method: 'GetUserWallet',
 				params: [],
 				requireAuth: true,
 				ignoreProperty: false,
@@ -327,7 +320,7 @@ export default defineComponent({
 
 		const mobileTitle = ref(Logic.Study.SingleCourse?.title ?? '')
 
-		const UserWallet = ref(Logic.Payment.UserWallet)
+		const { wallet } = useAuth()
 		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
 		const selectedMethodId = ref('')
 		const showMakePaymentModal = ref(false)
@@ -426,7 +419,6 @@ export default defineComponent({
 
 		onMounted(() => {
 			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
-			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
@@ -447,7 +439,7 @@ export default defineComponent({
 			PaymentMethods,
 			showMakePaymentModal,
 			selectedMethodId,
-			UserWallet,
+			wallet,
 			courseContents,
 			showRateCourse,
 			CourseReview,

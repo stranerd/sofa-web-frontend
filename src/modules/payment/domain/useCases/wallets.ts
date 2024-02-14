@@ -1,6 +1,6 @@
 import { WalletEntity } from '../entities/wallets'
 import { IWalletRepository } from '../irepositories/wallets'
-import { AccountDetails, FundDetails, TransferData, WithdrawData } from '../types'
+import { AccountDetails, CurrencyCountries, FundDetails, TransferData, WithdrawData } from '../types'
 import { Listeners } from '@modules/core'
 
 export class WalletsUseCase {
@@ -35,7 +35,7 @@ export class WalletsUseCase {
 	}
 
 	async getBanks() {
-		return await this.repository.getBanks()
+		return await this.repository.getBanks(CurrencyCountries.NG)
 	}
 
 	async fund(data: FundDetails) {

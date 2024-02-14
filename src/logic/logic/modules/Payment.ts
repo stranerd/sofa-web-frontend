@@ -3,7 +3,7 @@ import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { Paginated } from '../types/domains/common'
-import { CommercialBanks, PaymentMethod, Plan, Purchase, Transaction, Wallet } from '../types/domains/payment'
+import { CommercialBanks, PaymentMethod, Plan, Purchase, Transaction } from '../types/domains/payment'
 import { FundWalletInput, MakePurchaseInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from '../types/forms/payment'
 import Common from './Common'
 
@@ -14,7 +14,6 @@ export default class Payment extends Common {
 
 	public PaymentMethods: Paginated<PaymentMethod> | undefined
 	public PaymentMethod: PaymentMethod | undefined
-	public UserWallet: Wallet | undefined
 	public AllPlans: Paginated<Plan> | undefined
 	public AllTransactions: Paginated<Transaction> | undefined
 	public PurchasedItems: string[] = []
@@ -73,7 +72,6 @@ export default class Payment extends Common {
 												},
 											],
 										}
-										Logic.Payment.GetUserWallet()
 										Logic.Payment.GetTransactions(userQuery)
 										Logic.Payment.GetPaymentMethods(userQuery)
 									})
@@ -96,12 +94,6 @@ export default class Payment extends Common {
 				})
 			})
 	}
-
-	public GetUserWallet = () =>
-		$api.payment.wallet.getUserWallet().then((response) => {
-			this.UserWallet = response.data
-			return this.UserWallet
-		})
 
 	public GetCommercialBanks = () =>
 		$api.payment.wallet.getCommercialBanks().then((response) => {
@@ -194,7 +186,6 @@ export default class Payment extends Common {
 			return $api.payment.wallet
 				.fundWallet(this.FundWalletForm)
 				.then((response) => {
-					Logic.Payment.GetUserWallet()
 					Logic.Payment.GetTransactions({
 						where: [
 							{
@@ -220,7 +211,6 @@ export default class Payment extends Common {
 			return $api.payment.wallet
 				.updateAccountNumber(this.UpdateAccountForm)
 				.then((response) => {
-					Logic.Payment.GetUserWallet()
 					Logic.Common.hideLoading()
 					return response.data
 				})
@@ -251,7 +241,6 @@ export default class Payment extends Common {
 			return $api.payment.wallet
 				.withdrawFromWallet(this.WithdrawalFromWalletForm)
 				.then((response) => {
-					Logic.Payment.GetUserWallet()
 					Logic.Payment.GetTransactions({
 						where: [
 							{
@@ -293,7 +282,6 @@ export default class Payment extends Common {
 				planId: planId,
 			})
 			.then((response) => {
-				Logic.Payment.GetUserWallet()
 				Logic.Common.hideLoading()
 				return response.data
 			})
@@ -307,7 +295,6 @@ export default class Payment extends Common {
 		$api.payment.wallet
 			.toggleSubscriptionRenew(renew)
 			.then((response) => {
-				Logic.Payment.GetUserWallet()
 				Logic.Common.showAlert({
 					message: 'Your subscription auto renewal has been updated',
 					type: 'success',

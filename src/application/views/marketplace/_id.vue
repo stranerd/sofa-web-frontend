@@ -57,9 +57,9 @@
 							} rounded-custom`"
 							@click="selectedMethodId = 'payWithWallet'">
 							<SofaIcon customClass="h-[20px]" name="wallet" />
-							<SofaNormalText v-if="UserWallet">
+							<SofaNormalText v-if="wallet">
 								Wallet (<span class="!font-semibold">{{
-									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
+									Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency)
 								}}</span
 								>)
 							</SofaNormalText>
@@ -127,6 +127,7 @@ import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Conditions, Logic } from 'sofa-logic'
+import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
@@ -181,14 +182,6 @@ export default defineComponent({
 				},
 			},
 			{
-				domain: 'Payment',
-				property: 'UserWallet',
-				method: 'GetUserWallet',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
 				domain: 'Study',
 				property: 'Tags',
 				method: 'GetTags',
@@ -225,7 +218,7 @@ export default defineComponent({
 
 		const contentType = ref('course')
 
-		const UserWallet = ref(Logic.Payment.UserWallet)
+		const { wallet } = useAuth()
 
 		const { hasAccess: userHasAccess } = useHasAccess()
 
@@ -503,7 +496,6 @@ export default defineComponent({
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleCourseFiles', SingleCourseFiles)
 			Logic.Study.watchProperty('SingleCourseQuizzes', SingleCourseQuizzes)
-			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Study.watchProperty('SingleQuiz', SingleQuiz)
 			Logic.Study.watchProperty('AllReviews', AllReviews)
 
@@ -529,7 +521,7 @@ export default defineComponent({
 			PaymentMethods,
 			showMakePaymentModal,
 			selectedMethodId,
-			UserWallet,
+			wallet,
 			similarContents,
 			SingleQuiz,
 			contentType,
