@@ -1,5 +1,7 @@
 import { IWalletRepository } from '../irepositories/wallets'
-import { AccountDetails, PlanDataType, Subscription, SubscriptionModel, TransferData, WithdrawData } from '../types'
+import { AccountDetails, FundDetails, TransferData, WithdrawData } from '../types'
+import { WalletEntity } from '../entities/wallets'
+import { Listeners } from '@modules/core'
 
 export class WalletsUseCase {
 	repository: IWalletRepository
@@ -8,28 +10,16 @@ export class WalletsUseCase {
 		this.repository = repo
 	}
 
-	async get(userId: string) {
-		return await this.repository.get(userId)
+	async get() {
+		return await this.repository.get()
 	}
 
-	async updateAmount(data: { userId: string; amount: number }) {
-		return await this.repository.updateAmount(data.userId, data.amount)
+	async toggleRenewSubscription(data: { renew: boolean }) {
+		return await this.repository.toggleRenewSubscription(data)
 	}
 
-	async updateSubscription(data: { id: string; data: Partial<SubscriptionModel> }) {
-		return await this.repository.updateSubscription(data.id, data.data)
-	}
-
-	async toggleRenewSubscription(data: { userId: string; renew: boolean }) {
-		return await this.repository.toggleRenewSubscription(data.userId, data.renew)
-	}
-
-	async updateSubscriptionData(data: { userId: string; key: PlanDataType; value: 1 | -1 }) {
-		return await this.repository.updateSubscriptionData(data.userId, data.key, data.value)
-	}
-
-	async updateAccounts(data: { userId: string; accounts: AccountDetails[] }) {
-		return await this.repository.updateAccounts(data.userId, data.accounts)
+	async updateAccountNumber(data: AccountDetails) {
+		return await this.repository.updateAccountNumber(data)
 	}
 
 	async transfer(data: TransferData) {
@@ -40,7 +30,19 @@ export class WalletsUseCase {
 		return await this.repository.withdraw(data)
 	}
 
-	async updateSubscriptions(data: { id: string; subscription: Subscription }) {
-		return await this.repository.updateSubscriptions(data.id, data.subscription)
+	async verifyAccountNumber(data: AccountDetails) {
+		return await this.repository.verifyAccountNumber(data)
+	}
+
+	async getBanks() {
+		return await this.repository.getBanks()
+	}
+
+	async fundWallet(data: FundDetails) {
+		return await this.repository.fundWallet(data)
+	}
+
+	async listen(listener: Listeners<WalletEntity>) {
+		return await this.repository.listenToOne(listener)
 	}
 }

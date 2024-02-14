@@ -2,24 +2,26 @@ import { computed, ref } from 'vue'
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { Logic, Wallet } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
+import { WalletEntity } from '@modules/payment/domain/entities/wallets'
+import { WalletsUseCases } from '@modules/payment'
 
 const store = {
 	auth: ref(null as AuthDetails | null),
 	user: ref(null as UserEntity | null),
-	wallet: ref(null as Wallet | null),
+	wallet: ref(null as WalletEntity | null),
 	listener: useListener(async () => {
 		const id = store.auth.value?.id as string | undefined
 		if (!id) return () => {}
 		const setUser = async (user: UserEntity) => {
 			store.user.value = user
 		}
-		const setWallet = async (wallet: Wallet) => {
+		const setWallet = async (wallet: WalletEntity) => {
 			store.wallet.value = wallet
 		}
 		const listeners = [
 			await UsersUseCases.listenToOne(id, { created: setUser, updated: setUser, deleted: setUser }),
-			await Logic.Common.listenToOne('payment/wallets', {
+			await WalletsUseCases.listen({
 				created: setWallet,
 				updated: setWallet,
 				deleted: setWallet,
@@ -53,7 +55,7 @@ export const useAuth = () => {
 		Logic.Common.AuthUser = details as any
 		if (details?.id) {
 			store.user.value = await UsersUseCases.find(details.id)
-			store.wallet.value = await Logic.Payment.GetUserWallet()
+			store.wallet.value = await WalletsUseCases.get()
 		} else store.user.value = null
 	}
 
