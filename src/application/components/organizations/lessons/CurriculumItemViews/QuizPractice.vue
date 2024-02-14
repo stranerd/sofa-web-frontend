@@ -1,6 +1,10 @@
 <template>
 	<div class="w-full bg-lightGray rounded-custom overflow-y-auto">
-		<QuizWrapper :id="quizId" :showAnswer="showSolution" :isAnswerRight="isCorrect">
+		<QuizWrapper
+			:id="quizId"
+			:showAnswer="showSolution"
+			:isAnswerRight="isCorrect"
+			:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }">
 			<template #default="{ quiz, questions, extras }">
 				<Quiz
 					v-model:answer="extras.answer"
@@ -73,9 +77,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useModals } from '@app/composables/core/modals'
+import { ClassEntity, ClassLesson } from '@modules/organizations'
 
 defineProps<{
 	quizId: string
+	classInst: ClassEntity
+	lesson: ClassLesson
 }>()
 
 const showSolution = ref(false)

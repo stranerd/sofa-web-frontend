@@ -70,7 +70,7 @@ export default class Users extends Common {
 		if (this.CreateTutorRequestForm) {
 			Logic.Common.showLoading()
 			return $api.users.tutor_request
-				.post(null, this.CreateTutorRequestForm, () => {})
+				.post(null, this.CreateTutorRequestForm)
 				.then((response) => {
 					this.SingleTutorRequest = response.data
 					Logic.Common.hideLoading()

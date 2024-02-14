@@ -259,7 +259,7 @@ export default defineComponent({
 			}
 
 			if (quiz) {
-				QuestionsUseCases.getAllQuestions(quiz.id).then((questions) => {
+				QuestionsUseCases.getAll(quiz.id).then((questions) => {
 					const allQuestions = questions.results.map((q) => ({
 						type: QuestionEntity.getLabel(q.data.type),
 						duration: Logic.Common.prettifyTime(q.timeLimit),

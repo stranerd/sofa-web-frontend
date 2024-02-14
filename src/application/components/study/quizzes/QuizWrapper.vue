@@ -11,7 +11,7 @@ import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue
 import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'
-import { QuestionEntity, QuestionTypes } from '@modules/study'
+import { CoursableAccess, QuestionEntity, QuestionTypes } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
 
 const props = withDefaults(
@@ -25,6 +25,7 @@ const props = withDefaults(
 		submit?: (data?: { questionId: string; answer: any }) => Promise<boolean | undefined>
 		skipMembers?: boolean
 		skipCreateView?: boolean
+		access?: CoursableAccess['access']
 	}>(),
 	{
 		selectedQuestion: '',
@@ -34,6 +35,7 @@ const props = withDefaults(
 		useTimer: false,
 		submit: undefined,
 		skipMembers: true,
+		access: undefined,
 	},
 )
 
@@ -58,7 +60,7 @@ const {
 	requestAccess,
 	grantAccess,
 	manageMembers,
-} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers, createView: props.skipCreateView })
+} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers, createView: props.skipCreateView }, props.access)
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
 const quizQuestions = computed(() => reorderedQuestions.value ?? props.questions ?? questions.value ?? [])
 

@@ -1,5 +1,6 @@
 import { QuestionEntity } from '../../domain/entities/questions'
 import { IQuestionRepository } from '../../domain/irepositories/iquestions'
+import { CoursableAccess } from '../../domain/types'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
@@ -16,8 +17,8 @@ export class QuestionRepository implements IQuestionRepository {
 		return (QuestionRepository.instances[quizId] ??= new QuestionRepository(quizId))
 	}
 
-	async get(query: QueryParams) {
-		const d = await this.client.get<QueryParams, QueryResults<QuestionFromModel>>('/', query)
+	async get(query: QueryParams & CoursableAccess) {
+		const d = await this.client.get<QueryParams & CoursableAccess, QueryResults<QuestionFromModel>>('/', query)
 
 		return {
 			...d,
@@ -35,8 +36,8 @@ export class QuestionRepository implements IQuestionRepository {
 		return this.mapper(d)
 	}
 
-	async find(id: string) {
-		const data = await this.client.get<QueryParams, QuestionFromModel | null>(`/${id}`, {})
+	async find(id: string, access: CoursableAccess) {
+		const data = await this.client.get<CoursableAccess, QuestionFromModel | null>(`/${id}`, access)
 		return this.mapper(data)
 	}
 
@@ -44,15 +45,19 @@ export class QuestionRepository implements IQuestionRepository {
 		return await this.client.delete<unknown, boolean>(`/${id}`, {})
 	}
 
-	async listenToOne(id: string, listeners: Listeners<QuestionEntity>) {
-		const model = await this.find(id)
+	async listenToOne(id: string, listeners: Listeners<QuestionEntity>, query: CoursableAccess) {
+		const model = await this.find(id, query)
 		if (model) await listeners.updated(model)
-		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper, query)
 	}
 
-	async listenToMany(query: QueryParams, listeners: Listeners<QuestionEntity>, matches: (entity: QuestionEntity) => boolean) {
+	async listenToMany(
+		query: QueryParams & CoursableAccess,
+		listeners: Listeners<QuestionEntity>,
+		matches: (entity: QuestionEntity) => boolean,
+	) {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
-		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches, query)
 	}
 }

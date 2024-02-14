@@ -247,7 +247,7 @@ export default defineComponent({
 				if (!props.lockContent) {
 					allRequests.push(
 						new Promise((resolve) => {
-							QuestionsUseCases.getAllQuestions(quiz.id)
+							QuestionsUseCases.getAll(quiz.id)
 								.then((questions) => {
 									const allQuestions = questions.results.map((q) => ({
 										type: QuestionEntity.getLabel(q.data.type),

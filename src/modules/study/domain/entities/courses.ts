@@ -19,6 +19,6 @@ export class CourseEntity extends PublishableEntity implements Publishable, Sale
 	}
 
 	get shareLink() {
-		return `${window.location.origin}/marketplace/${this.id}?type=quiz`
+		return `${window.location.origin}/marketplace/${this.id}?type=course`
 	}
 }

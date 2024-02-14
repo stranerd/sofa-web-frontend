@@ -6,17 +6,10 @@ export class ModelApiService<M = any, E = M> extends ReadOnlyApiService<M, E> {
 		super(resource)
 	}
 
-	public async post(
-		url = null,
-		data: any = {},
-		onUploadProgress = (progressEvent: any) => {
-			// onprogress callback
-			progressEvent
-		},
-	): Promise<AxiosResponse<E>> {
+	public async post(url = null, data: any = {}, query: Record<string, any> = {}): Promise<AxiosResponse<E>> {
 		try {
 			const response = await this.axiosInstance.post(url ? url : this.getUrl(), data, {
-				onUploadProgress: onUploadProgress,
+				params: Object.fromEntries(Object.entries(query).map(([k, v]) => [k, JSON.stringify(v)])),
 			})
 
 			return {
@@ -28,18 +21,10 @@ export class ModelApiService<M = any, E = M> extends ReadOnlyApiService<M, E> {
 		}
 	}
 
-	public async put(
-		url = null,
-		id: string,
-		data: any = {},
-		onUploadProgress: any = (progressEvent: any) => {
-			// onprogress callback
-			progressEvent
-		},
-	): Promise<AxiosResponse<E>> {
+	public async put(url = null, id: string, data: any = {}, query: Record<string, any> = {}): Promise<AxiosResponse<E>> {
 		try {
 			const response: AxiosResponse = await this.axiosInstance.put(url ? url : this.getUrl(id), data, {
-				onUploadProgress: onUploadProgress,
+				params: Object.fromEntries(Object.entries(query).map(([k, v]) => [k, JSON.stringify(v)])),
 			})
 
 			return {

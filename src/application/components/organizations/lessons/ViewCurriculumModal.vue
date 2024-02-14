@@ -49,7 +49,12 @@
 							Start
 						</SofaButton>
 					</div>
-					<QuizPractice v-else :quizId="curriculumItem.quiz.id" class="flex-grow bg-lightGray" />
+					<QuizPractice
+						v-else
+						:quizId="curriculumItem.quiz.id"
+						class="flex-grow bg-lightGray"
+						:classInst="classInst"
+						:lesson="lesson" />
 				</template>
 				<template v-if="curriculumItem.quizMode === QuizModes.test">
 					<div
@@ -67,7 +72,13 @@
 							Start
 						</SofaButton>
 					</div>
-					<QuizTest v-else-if="test" :testId="test.id" class="flex-grow bg-lightGray" />
+					<QuizTest
+						v-else-if="test"
+						:testId="test.id"
+						:quizId="curriculumItem.quiz.id"
+						:classInst="classInst"
+						:lesson="lesson"
+						class="flex-grow bg-lightGray" />
 				</template>
 			</template>
 		</div>
@@ -150,7 +161,11 @@ const startQuizPractice = async () => {
 const quizTestStarted = ref(false)
 const test = ref<Test | null>(null)
 const startQuizTest = async (id: string) => {
-	const data = await Logic.Plays.CreateTest(id)
+	const data = await Logic.Plays.CreateTest(id, {
+		organizationId: props.classInst.organizationId,
+		classId: props.classInst.id,
+		lessonId: props.lesson.id,
+	})
 	await Logic.Plays.StartTest(data.id)
 	test.value = data
 	quizTestStarted.value = true
@@ -161,7 +176,12 @@ watch(
 	async () => {
 		quizPracticeStarted.value = false
 		quizTestStarted.value = false
-		if (curriculumItem.value?.type === ClassLessonable.file) mediaUrl.value = await curriculumItem.value.file.getMediaUrl()
+		if (curriculumItem.value?.type === ClassLessonable.file)
+			mediaUrl.value = await curriculumItem.value.file.getUrl({
+				organizationId: props.classInst.organizationId,
+				classId: props.classInst.id,
+				lessonId: props.lesson.id,
+			})
 	},
 	{ immediate: true },
 )
