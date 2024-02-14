@@ -45,6 +45,7 @@ declare module 'vue' {
     ExploreClassCard: typeof import('./../application/components/organizations/classes/ExploreClassCard.vue')['default']
     Filter: typeof import('./../application/components/marketplace/Filter.vue')['default']
     FlashcardDisplay: typeof import('./../application/components/study/quizzes/FlashcardDisplay.vue')['default']
+    FundWalletModal: typeof import('./../application/components/payment/wallets/FundWalletModal.vue')['default']
     GameWrapper: typeof import('./../application/components/plays/games/GameWrapper.vue')['default']
     HomeForNonStudents: typeof import('./../application/components/home/HomeForNonStudents.vue')['default']
     HomeForStudents: typeof import('./../application/components/home/HomeForStudents.vue')['default']
@@ -62,6 +63,8 @@ declare module 'vue' {
     MaterialMoreOptionsModal: typeof import('./../application/components/study/MaterialMoreOptionsModal.vue')['default']
     MembersList: typeof import('./../application/components/organizations/members/MembersList.vue')['default']
     Messages: typeof import('./../application/components/conversations/Messages.vue')['default']
+    MethodListCard: typeof import('./../application/components/payment/methods/MethodListCard.vue')['default']
+    MethodsList: typeof import('./../application/components/payment/methods/MethodsList.vue')['default']
     Modals: typeof import('./../application/components/core/modals/Modals.vue')['default']
     MyClassCard: typeof import('./../application/components/organizations/classes/MyClassCard.vue')['default']
     NewMaterial: typeof import('./../application/components/study/courses/NewMaterial.vue')['default']
@@ -127,7 +130,10 @@ declare module 'vue' {
     SofaVideoPlayer: typeof import('sofa-ui-components')['SofaVideoPlayer']
     SubPageLayout: typeof import('./../application/layouts/SubPageLayout.vue')['default']
     TestWrapper: typeof import('./../application/components/plays/tests/TestWrapper.vue')['default']
+    TransactionDetailsModal: typeof import('./../application/components/payment/transactions/TransactionDetailsModal.vue')['default']
+    TransactionsList: typeof import('./../application/components/payment/transactions/TransactionsList.vue')['default']
     ViewCurriculumModal: typeof import('./../application/components/organizations/lessons/ViewCurriculumModal.vue')['default']
     Wallet: typeof import('./../application/components/settings/wallet.vue')['default']
+    'Wallet copy': typeof import('./../application/components/settings/wallet copy.vue')['default']
   }
 }

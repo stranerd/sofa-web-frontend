@@ -27,63 +27,61 @@ export default class Payment extends Common {
 
 	public initialPayment = (amount = 0, type = 'newCard') => {
 		Logic.Common.showLoading()
-		$api.payment.transaction
+		return $api.payment.transaction
 			.post(null, { amount, data: { type } })
-			.then((response) => {
+			.then(async (response) => {
 				Logic.Common.hideLoading()
 				const transId = response.data.id
-				$api.payment.transaction.getFlutterwaveKey().then((response) => {
-					const publicToken = response.data.publicKey
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
-					const paymentModal = FlutterwaveCheckout({
-						public_key: publicToken,
-						tx_ref: transId,
-						amount: amount ? amount : 10,
-						currency: 'NGN',
-						payment_options: 'card',
-						meta: {
-							user_id: Logic.Common.AuthUser?.id,
-						},
-						customer: {
-							email: Logic.Common.AuthUser?.email,
-							phone_number: `${Logic.Common.AuthUser?.phone?.code}${Logic.Common.AuthUser?.phone?.number}`,
-							name: Logic.Common.AuthUser?.allNames.full,
-						},
-						onclose: function () {
-							//
-						},
-						callback: () => {
-							setTimeout(() => {
-								$api.payment.transaction
-									.fulfillTransaction(transId)
-									.then(() => {
-										paymentModal.close()
-										Logic.Common.showAlert({
-											message: 'Transaction completed successfully!',
-											type: 'success',
-										})
-										const userQuery = {
-											where: [
-												{
-													field: 'userId',
-													condition: Conditions.eq,
-													value: Logic.Common.AuthUser?.id,
-												},
-											],
-										}
-										Logic.Payment.GetTransactions(userQuery)
-										Logic.Payment.GetPaymentMethods(userQuery)
+				const res = await $api.payment.transaction.getFlutterwaveKey()
+				const publicToken = res.data.publicKey
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				const paymentModal = FlutterwaveCheckout({
+					public_key: publicToken,
+					tx_ref: transId,
+					amount: amount ? amount : 10,
+					currency: 'NGN',
+					payment_options: 'card',
+					meta: {
+						user_id: Logic.Common.AuthUser?.id,
+					},
+					customer: {
+						email: Logic.Common.AuthUser?.email,
+						phone_number: `${Logic.Common.AuthUser?.phone?.code}${Logic.Common.AuthUser?.phone?.number}`,
+						name: Logic.Common.AuthUser?.allNames.full,
+					},
+					onclose: function () {
+						//
+					},
+					callback: () => {
+						setTimeout(() => {
+							$api.payment.transaction
+								.fulfillTransaction(transId)
+								.then(() => {
+									paymentModal.close()
+									Logic.Common.showAlert({
+										message: 'Transaction completed successfully!',
+										type: 'success',
 									})
-									.catch((error) => {
-										Logic.Common.showAlert({
-											message: capitalize(error.response.data[0]?.message),
-											type: 'error',
-										})
+									const userQuery = {
+										where: [
+											{
+												field: 'userId',
+												condition: Conditions.eq,
+												value: Logic.Common.AuthUser?.id,
+											},
+										],
+									}
+									Logic.Payment.GetTransactions(userQuery)
+								})
+								.catch((error) => {
+									Logic.Common.showAlert({
+										message: capitalize(error.response.data[0]?.message),
+										type: 'error',
 									})
-							}, 3000)
-						},
-					})
+								})
+						}, 3000)
+					},
 				})
 			})
 			.catch((error) => {
@@ -92,6 +90,7 @@ export default class Payment extends Common {
 					message: capitalize(error.response.data[0]?.message),
 					type: 'error',
 				})
+				return false
 			})
 	}
 

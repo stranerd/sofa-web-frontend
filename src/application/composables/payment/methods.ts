@@ -1,11 +1,11 @@
-import { onMounted, onUnmounted, ref } from 'vue'
 import { addToArray } from 'valleyed'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { Logic } from 'sofa-logic'
 import { MethodEntity } from '@modules/payment/domain/entities/methods'
 import { MethodsUseCases } from '@modules/payment'
-import { Logic } from 'sofa-logic'
 
 const store = {
 	methods: ref<MethodEntity[]>([]),
@@ -34,7 +34,7 @@ const store = {
 	),
 }
 
-export const useMethodsList = () => {
+export const useMyMethods = () => {
 	const { called, asyncFn: fetchMethods } = useAsyncFn(async () => {
 		const methods = await MethodsUseCases.getAll()
 		methods.results.forEach((r) =>
@@ -55,6 +55,8 @@ export const useMethodsList = () => {
 	onUnmounted(async () => {
 		await store.listener.close()
 	})
+
+	return { ...store }
 }
 
 export const useMethod = (method: MethodEntity) => {
@@ -81,12 +83,14 @@ export const useMethod = (method: MethodEntity) => {
 			setMessage('Method set as primary successfully')
 		},
 		{
-			pre: async () =>
-				await Logic.Common.confirm({
+			pre: async () => {
+				if (method.primary) return false
+				return await Logic.Common.confirm({
 					title: `Set Primary Method`,
 					sub: 'Are you sure you want to set this payment method as primary?',
 					right: { label: 'Yes', bg: 'bg-primaryBlue' },
-				}),
+				})
+			},
 		},
 	)
 
