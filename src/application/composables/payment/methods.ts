@@ -1,4 +1,4 @@
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { addToArray } from 'valleyed'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -49,6 +49,11 @@ export const useMethodsList = () => {
 
 	onMounted(async () => {
 		if (!called.value) await fetchMethods()
+		await store.listener.start()
+	})
+
+	onUnmounted(async () => {
+		await store.listener.close()
 	})
 }
 

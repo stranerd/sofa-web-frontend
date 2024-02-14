@@ -1,7 +1,8 @@
 import { PurchaseToModel } from '../../data/models/purchases'
+import { PurchaseEntity } from '../entities/purchases'
 import { IPurchaseRepository } from '../irepositories/purchases'
 import { Purchasables } from '../types'
-import { QueryParams } from '@modules/core'
+import { Listeners, QueryParams } from '@modules/core'
 
 export class PurchasesUseCase {
 	repository: IPurchaseRepository
@@ -22,6 +23,13 @@ export class PurchasesUseCase {
 		return results.at(0) ?? null
 	}
 
+	async getAll(userId: string) {
+		return await this.repository.get({
+			where: [{ field: 'userId', value: userId }],
+			all: true,
+		})
+	}
+
 	async get(input: QueryParams) {
 		return await this.repository.get(input)
 	}
@@ -32,5 +40,13 @@ export class PurchasesUseCase {
 
 	async create(data: PurchaseToModel) {
 		return await this.repository.create(data)
+	}
+
+	async listenToMyPurchases(listeners: Listeners<PurchaseEntity>, userId: string) {
+		const conditions: QueryParams = {
+			where: [{ field: 'userId', value: userId }],
+			all: true,
+		}
+		return await this.repository.listenToMany(conditions, listeners, () => true)
 	}
 }

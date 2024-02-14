@@ -3,14 +3,14 @@ import { addToArray } from 'valleyed'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { Logic, Purchase } from 'sofa-logic'
+import { Purchase } from 'sofa-logic'
+import { PurchasesUseCases } from '@modules/payment'
 
 const store = {
 	purchases: reactive<Purchase[]>([]),
 	listener: useListener(async () => {
 		const { id } = useAuth()
-		return Logic.Common.listenToMany<Purchase>(
-			'payment/purchases',
+		return PurchasesUseCases.listenToMyPurchases(
 			{
 				created: async (entity) => {
 					addToArray(
@@ -29,11 +29,10 @@ const store = {
 					)
 				},
 				deleted: async (entity) => {
-					const index = store.purchases.findIndex((p) => p.id === entity.id)
-					if (index !== -1) store.purchases.splice(index, 1)
+					store.purchases = store.purchases.filter((m) => m.id !== entity.id)
 				},
 			},
-			(e) => e.userId === id.value,
+			id.value,
 		)
 	}),
 }
@@ -48,10 +47,7 @@ export const useMyPurchases = () => {
 		// called,
 	} = useAsyncFn(
 		async () => {
-			const purchases = await Logic.Payment.GetMyPurchases({
-				where: [{ field: 'userId', value: id.value }],
-				all: true,
-			})
+			const purchases = await PurchasesUseCases.getAll(id.value)
 			purchases.results.forEach((r) =>
 				addToArray(
 					store.purchases,
