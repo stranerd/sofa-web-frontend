@@ -25,7 +25,6 @@ declare module 'vue' {
     ClassCardMoreOptionsModal: typeof import('./../application/components/organizations/classes/ClassCardMoreOptionsModal.vue')['default']
     ClassForm: typeof import('./../application/components/organizations/classes/ClassForm.vue')['default']
     ClassLayout: typeof import('./../application/components/organizations/classes/ClassLayout.vue')['default']
-    Contact: typeof import('./../application/components/settings/contact.vue')['default']
     Content: typeof import('./../application/components/study/courses/content.vue')['default']
     ConversationMoreOptionsModal: typeof import('./../application/components/conversations/ConversationMoreOptionsModal.vue')['default']
     CreateAnnouncementModal: typeof import('./../application/components/organizations/announcements/CreateAnnouncementModal.vue')['default']
@@ -45,7 +44,7 @@ declare module 'vue' {
     ExploreClassCard: typeof import('./../application/components/organizations/classes/ExploreClassCard.vue')['default']
     Filter: typeof import('./../application/components/marketplace/Filter.vue')['default']
     FlashcardDisplay: typeof import('./../application/components/study/quizzes/FlashcardDisplay.vue')['default']
-    FundWalletModal: typeof import('./../application/components/payment/wallets/FundWalletModal.vue')['default']
+    FundWalletModal: typeof import('./../application/components/payment/wallet/FundWalletModal.vue')['default']
     GameWrapper: typeof import('./../application/components/plays/games/GameWrapper.vue')['default']
     HomeForNonStudents: typeof import('./../application/components/home/HomeForNonStudents.vue')['default']
     HomeForStudents: typeof import('./../application/components/home/HomeForStudents.vue')['default']
@@ -133,7 +132,6 @@ declare module 'vue' {
     TransactionDetailsModal: typeof import('./../application/components/payment/transactions/TransactionDetailsModal.vue')['default']
     TransactionsList: typeof import('./../application/components/payment/transactions/TransactionsList.vue')['default']
     ViewCurriculumModal: typeof import('./../application/components/organizations/lessons/ViewCurriculumModal.vue')['default']
-    Wallet: typeof import('./../application/components/settings/wallet.vue')['default']
-    'Wallet copy': typeof import('./../application/components/settings/wallet copy.vue')['default']
+    WithdrawModal: typeof import('./../application/components/payment/wallet/WithdrawModal.vue')['default']
   }
 }

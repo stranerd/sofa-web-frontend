@@ -47,7 +47,6 @@ export const search = async (query: QueryParams, returnCoursables = false) => {
 
 export const extractContent = (item: QuizEntity | CourseEntity): ContentDetails => {
 	item = toRaw(item)
-	console.log({ item })
 	const isCourse = item.isCourse()
 	const type = isCourse ? 'course' : 'quiz'
 	return {
