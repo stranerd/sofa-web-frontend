@@ -23,15 +23,15 @@
 								<SofaNormalText v-else> Expired </SofaNormalText>
 							</div>
 
-							<div
+							<a
 								v-if="wallet.subscription.current.expiredAt > Date.now()"
 								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
-								@click="autoRenewIsOn = !autoRenewIsOn">
+								@click="toggleRenewal">
 								<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
 								<div class="!w-auto">
 									<SofaIcon customClass="h-[17px]" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
 								</div>
-							</div>
+							</a>
 						</div>
 					</div>
 				</template>
@@ -108,7 +108,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
@@ -125,7 +125,6 @@ export default defineComponent({
 			title: 'Subscription',
 		})
 
-		const autoRenewIsOn = ref(true)
 		const subscriptionInfo = [
 			{
 				title: 'Expert help',
@@ -150,6 +149,7 @@ export default defineComponent({
 		] as const
 
 		const { userType, wallet } = useAuth()
+		const autoRenewIsOn = computed(() => !!wallet.value?.subscription.next)
 		const { myPlans, currentPlan: myPlan } = usePlansList()
 
 		const myApplicablePlan = computed(() => myPlans.value.at(0) ?? null)
@@ -165,6 +165,8 @@ export default defineComponent({
 			})
 		}
 
+		const toggleRenewal = () => {}
+
 		return {
 			Logic,
 			formatTime,
@@ -175,6 +177,7 @@ export default defineComponent({
 			userType,
 			autoRenewIsOn,
 			subscibeToPlan,
+			toggleRenewal,
 		}
 	},
 })
