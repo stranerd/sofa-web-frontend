@@ -1,6 +1,7 @@
 import { ClassEntity } from '../entities/classes'
 import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
+import { UserEntity } from '@modules/users'
 import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 
 export class ClassesUseCase {
@@ -45,12 +46,13 @@ export class ClassesUseCase {
 		})
 	}
 
-	async getMyClassesIn(userId: string) {
+	async getMyClassesIn(user: UserEntity) {
 		return await this.repository('').explore({
 			where: [
-				{ field: 'members.students', value: userId },
-				{ field: 'lessons.users.students', value: userId },
-				{ field: 'lessons.users.teachers', value: userId },
+				{ field: 'organizationId', condition: Conditions.in, value: user.myOrgsIn },
+				{ field: 'members.students', value: user.id },
+				{ field: 'lessons.users.students', value: user.id },
+				{ field: 'lessons.users.teachers', value: user.id },
 			],
 			whereType: QueryKeys.or,
 			all: true,

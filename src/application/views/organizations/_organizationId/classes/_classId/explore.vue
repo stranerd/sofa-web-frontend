@@ -222,15 +222,13 @@ export default defineComponent({
 					handler: () => router.push(classInst.pageLink),
 				}
 			const classSub = wallet.value?.getClassSubscription({ organizationId: classInst.organizationId, classId: classInst.id })
-			const canAccessForFree = classInst.canAccessFromOrg(user.value!)
 			if (classSub && !classSub.active)
 				return {
 					label: 'Renew enrollment',
 					handler: () => purchaseClass(classInst),
 				}
-			const price = `${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`
 			return {
-				label: `Enroll ${canAccessForFree ? 'for free' : price}`,
+				label: `Enroll ${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
 				handler: () => purchaseClass(classInst),
 			}
 		})

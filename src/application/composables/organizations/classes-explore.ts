@@ -11,14 +11,14 @@ const store = {
 }
 
 export const useMyClassesIn = () => {
-	const { id } = useAuth()
+	const { user } = useAuth()
 	const {
 		asyncFn: fetchClasses,
 		loading,
 		error,
 	} = useAsyncFn(
 		async () => {
-			const classes = await ClassesUseCases.getMyClassesIn(id.value)
+			const classes = await ClassesUseCases.getMyClassesIn(user.value!)
 			store.classesIn.value = []
 			classes.results.forEach((r) =>
 				addToArray(
