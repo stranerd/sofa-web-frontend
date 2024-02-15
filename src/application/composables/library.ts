@@ -1,3 +1,4 @@
+import { toRaw } from 'vue'
 import { useModals } from './core/modals'
 import { InteractionEntities } from '@modules/interactions'
 import { CourseEntity, QuizEntity } from '@modules/study'
@@ -50,13 +51,10 @@ const createCourseData = (course: CourseEntity): ResourceType => ({
 	createdAt: course.createdAt,
 })
 
-export const extractResource = (material: CourseEntity | QuizEntity) =>
-	// TODO: remove on revamp courses
-	material.__type === 'QuizEntity' || material.isQuiz?.()
-		? // @ts-expect-error remove on revamp courses
-			createQuizData(new QuizEntity(material))
-		: // @ts-expect-error remove on revamp courses
-			createCourseData(new CourseEntity(material))
+export const extractResource = (material: CourseEntity | QuizEntity) => {
+	material = toRaw(material)
+	return material.isQuiz() ? createQuizData(material) : createCourseData(material)
+}
 
 export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
 	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
