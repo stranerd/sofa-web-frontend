@@ -4,7 +4,7 @@
 			<div class="w-full h-full overflow-y-auto flex-1 flex flex-col justify-start relative md:p-8 p-4">
 				<div class="w-full flex gap-4 items-center">
 					<a @click="Logic.Common.goBack()">
-						<SofaIcon customClass="md:h-[26px] h-[20px] cursor-pointer" name="back-arrow" />
+						<SofaIcon customClass="md:h-[26px] h-[20px]" name="back-arrow" />
 					</a>
 
 					<div class="w-full flex flex-col md:justify-center md:items-center justify-start items-start gap-1">

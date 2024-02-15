@@ -188,11 +188,11 @@ export default class Common {
 	}
 
 	public goBack = () => {
-		const ignoreBackRoute = this.route?.query.ignoreBackRoute ?? null
+		const canGoBack = !!this.router?.options.history.state.back
 		const goBackRoute = (this.route?.meta.middlewares as any)?.goBackRoute
-		if (typeof goBackRoute == 'function' && !ignoreBackRoute) this.router?.push(goBackRoute(this.route))
-		else if (typeof goBackRoute == 'string' && !ignoreBackRoute) this.router?.push(goBackRoute)
-		else window.history.length > 1 ? this.router?.go(-1) : this.router?.push('/')
+		const route = typeof goBackRoute === 'function' ? goBackRoute(this.route) : typeof goBackRoute === 'string' ? goBackRoute : '/'
+		if (canGoBack) this.router?.go(-1)
+		else this.router?.replace(route)
 	}
 
 	public daysDiff(a: Date, b: Date) {
