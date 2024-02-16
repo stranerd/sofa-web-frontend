@@ -12,4 +12,5 @@ export interface IWalletRepository {
 	verifyAccountNumber: (account: AccountDetails) => Promise<string | null>
 	fund: (data: FundDetails) => Promise<boolean>
 	listen: (listeners: Listeners<WalletEntity>) => Promise<() => void>
+	subscribeToPlan: (data: { planId: string }) => Promise<WalletEntity>
 }

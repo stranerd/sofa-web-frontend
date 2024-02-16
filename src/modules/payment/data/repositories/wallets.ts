@@ -45,6 +45,11 @@ export class WalletRepository implements IWalletRepository {
 		return this.mapper(d)
 	}
 
+	async subscribeToPlan(data: { planId: string }) {
+		const d = await this.client.post<{ planId: string }, WalletEntity>('/subscriptions', data)
+		return this.mapper(d)
+	}
+
 	async getBanks(country: CurrencyCountries) {
 		return await this.client.get<object, BankData>(`/account/banks/${country}`, {})
 	}
