@@ -9,7 +9,7 @@ export class MethodRepository implements IMethodRepository {
 	private mapper = (model: MethodFromModel | null) => (model ? new MethodEntity(model) : null) as MethodEntity
 
 	private constructor() {
-		this.client = new HttpClient('/payments/methods')
+		this.client = new HttpClient('/payment/methods')
 	}
 
 	static getInstance() {
