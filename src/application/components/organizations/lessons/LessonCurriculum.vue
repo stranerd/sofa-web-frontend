@@ -1,7 +1,9 @@
 <template>
 	<Draggable v-model="factory.factories" :disabled="!canEdit" class="w-full flex flex-col gap-4" itemKey="" group="curriculum">
 		<template #item="{ index: sectionIndex }">
-			<div :class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
+			<div
+				v-if="curriculum[sectionIndex]"
+				:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
 				<div class="flex items-center gap-2 justify-between">
 					<SofaCustomInput
 						v-if="canEdit && editedLabelSections.has(sectionIndex)"
@@ -32,6 +34,7 @@
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
 						<a
+							v-if="curriculum[sectionIndex].items[itemIndex]"
 							class="flex gap-2 mdlg:gap-4"
 							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
 							@click="openCurriculumItem(itemIndex, sectionIndex)">
@@ -93,6 +96,7 @@
 import { formatNumber } from 'valleyed'
 import { computed, ref } from 'vue'
 import Draggable from 'vuedraggable'
+import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { useDeleteSchedule } from '@app/composables/organizations/schedules'
@@ -106,7 +110,6 @@ import {
 	LessonCurriculumFactory,
 } from '@modules/organizations'
 import { FileType } from '@modules/study'
-import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(
 	defineProps<{
