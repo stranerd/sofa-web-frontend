@@ -1,5 +1,5 @@
 <template>
-	<div :class="`w-full flex flex-col gap-2 h-full relative bg-white mdlg:!rounded-[16px] overflow-y-auto rounded-custom ${customClass}`">
+	<div :class="`w-full flex flex-col gap-2 flex-1 relative bg-white mdlg:!rounded-[16px] overflow-y-auto rounded-custom ${customClass}`">
 		<div :class="`w-full flex flex-col gap-2 ${padding} relative`">
 			<div
 				class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
@@ -124,16 +124,14 @@
 			</SofaNormalText>
 		</div>
 
-		<div
-			v-if="selectedTab == 'content'"
-			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`">
+		<div v-if="selectedTab == 'content'" :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
 			<SofaContent :data="content.content" :hasAccess="hasAccess" />
 		</div>
 
 		<div
 			v-if="selectedTab == 'questions'"
-			:class="`w-full flex flex-col h-full  rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`">
-			<div v-if="hasAccess" class="w-full flex flex-col gap-3 h-full overflow-y-auto">
+			:class="`w-full flex flex-col flex-1 rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
+			<div v-if="hasAccess" class="w-full flex flex-col gap-3">
 				<div
 					v-for="(question, index) in content.questions"
 					:key="index"
@@ -161,9 +159,7 @@
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
 
-			<div
-				v-if="type == 'quiz'"
-				class="w-full flex flex-row items-center justify-center mdlg:!pt-3 mdlg:!relative fixed bottom-0 mdlg:!pb-0 mdlg:hidden pt-4 pb-4 mdlg:!px-0 px-4 z-[50] bg-white left-0 mdlg:!bottom-auto mdlg:!left-auto">
+			<div v-if="type == 'quiz'" class="w-full flex items-center justify-center mdlg:pt-3 mdlg:relative mdlg:pb-0 mdlg:hidden py-4">
 				<div class="md:!w-auto w-full flex flex-col">
 					<SofaButton
 						padding="md:!py-1 py-3 px-4"
@@ -175,15 +171,13 @@
 			</div>
 		</div>
 
-		<div
-			v-if="selectedTab == 'ratings'"
-			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative`">
+		<div v-if="selectedTab == 'ratings'" :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
 			<SofaContentRatings :data="content.ratings" />
 		</div>
 
 		<div
 			v-if="selectedTab == 'creator'"
-			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative pb-4`">
+			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
 				<div>
 					<SofaAvatar :photoUrl="content.user.photoUrl" size="150" customClass="hidden mdlg:!inline-block" />
@@ -246,7 +240,7 @@
 
 		<div
 			v-if="selectedTab == 'similar_courses' && type == 'course'"
-			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} overflow-y-auto py-2 relative pb-4`">
+			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
 			<div
 				v-if="similarContents?.length"
 				class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
