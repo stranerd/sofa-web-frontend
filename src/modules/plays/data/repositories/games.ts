@@ -59,7 +59,8 @@ export class GameRepository implements IGameRepository {
 	}
 
 	async getQuestions(id: string) {
-		const d = await this.client.post<QueryParams, QuestionFromModel>(`/${id}/questions`, {})
-		return this.questionMapper(d)
+		let d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
+		d = d.map((r) => this.questionMapper(r))
+		return d
 	}
 }

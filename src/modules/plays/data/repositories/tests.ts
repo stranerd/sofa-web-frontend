@@ -50,10 +50,8 @@ export class TestRepository implements ITestRepository {
 	}
 
 	async getQuestions(id: string) {
-		const d = await this.client.post<QueryParams, QuestionFromModel>(`/${id}/questions`, {})
-		return {
-			...d,
-			results: d.results.map((r) => this.mapper(r)),
-		}
+		let d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
+		d = d.map((r) => this.questionMapper(r))
+		return d
 	}
 }

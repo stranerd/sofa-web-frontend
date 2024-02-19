@@ -11,5 +11,5 @@ export interface IGameRepository {
 	start: (id: string) => Promise<GameEntity>
 	join: (id: string, data: { join: boolean }) => Promise<GameEntity>
 	end: (id: string) => Promise<GameEntity>
-	getQuestions: (id: string) => Promise<QuestionFromModel>
+	getQuestions: (id: string) => Promise<QuestionFromModel[]>
 }

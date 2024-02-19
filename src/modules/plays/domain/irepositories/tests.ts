@@ -9,5 +9,5 @@ export interface ITestRepository {
 	find: (id: string) => Promise<TestEntity | null>
 	start: (id: string) => Promise<TestEntity>
 	end: (id: string) => Promise<TestEntity>
-	getQuestions: (id: string) => Promise<QuestionFromModel>
+	getQuestions: (id: string) => Promise<QuestionFromModel[]>
 }
