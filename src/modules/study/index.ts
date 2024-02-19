@@ -29,3 +29,5 @@ export { QuestionFactory } from './domain/factories/questions'
 export { QuizFactory } from './domain/factories/quizzes'
 export { DraftStatus, FileType, FolderSaved, QuestionTypes, QuizModes } from './domain/types'
 export type { CoursableAccess, StudyKeys } from './domain/types'
+
+export type { QuestionFromModel } from './data/models/questions'

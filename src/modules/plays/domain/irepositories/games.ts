@@ -1,15 +1,7 @@
 import { GameToModel } from '../../data/models/games'
 import { GameEntity } from '../entities/games'
-import { QuestionFromModel } from '@modules/study/data/models/questions'
-import { QueryParams, QueryResults } from '@modules/core'
+import { IPlayRepository } from './plays'
 
-export interface IGameRepository {
-	create: (data: GameToModel) => Promise<GameEntity>
-	get: (condition: QueryParams) => Promise<QueryResults<GameEntity>>
-	find: (id: string) => Promise<GameEntity | null>
-	delete: (id: string) => Promise<boolean>
-	start: (id: string) => Promise<GameEntity | null>
-	join: (id: string, data: { join: boolean }) => Promise<GameEntity | null>
-	end: (id: string) => Promise<GameEntity | null>
-	getQuestions: (id: string) => Promise<QuestionFromModel[]>
+export interface IGameRepository extends IPlayRepository<GameEntity, GameToModel> {
+	join: (id: string, data: { join: boolean }) => Promise<GameEntity>
 }
