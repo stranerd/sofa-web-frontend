@@ -1,18 +1,9 @@
-import { PlayStatus } from '../../domain/types'
+import { PlayFromModel, PlayToModel } from './plays'
 
-export interface TestFromModel extends TestToModel {
-	id: string
-	status: PlayStatus
+export interface TestFromModel extends PlayFromModel {
 	userId: string
-	questions: string[]
-	totalTimeInSec: number
-	scores: Record<string, number>
-	startedAt: number | null
-	endedAt: number | null
-	createdAt: number
-	updatedAt: number
 }
 
-export interface TestToModel {
+export interface TestToModel extends PlayToModel {
 	quizId: string
 }

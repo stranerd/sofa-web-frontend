@@ -1,12 +1,12 @@
 import { PlayTypes } from '../types'
 import { PlayEntity } from './plays'
-import { TestFromModel } from '@modules/plays/data/models/tests'
+import { PracticeFromModel } from '@modules/plays/data/models/practice'
 
-export class TestEntity extends PlayEntity {
+export class PracticeEntity extends PlayEntity {
 	public readonly userId: string
 
-	constructor(data: TestFromModel) {
-		super(PlayTypes.tests, data)
+	constructor(data: PracticeFromModel) {
+		super(PlayTypes.practice, data)
 		this.userId = data.userId
 	}
 
