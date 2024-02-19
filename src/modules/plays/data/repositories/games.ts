@@ -3,11 +3,13 @@ import { HttpClient, QueryParams, QueryResults } from '@modules/core'
 import { IGameRepository } from '@modules/plays/domain/irepositories/games'
 import { GameEntity } from '@modules/plays/domain/entities/games'
 import { QuestionFromModel } from '@modules/study/data/models/questions'
+import { QuestionEntity } from '@modules/study'
 
 export class GameRepository implements IGameRepository {
 	private static instance: GameRepository
 	private client: HttpClient
 	private mapper = (model: GameFromModel | null) => (model ? new GameEntity(model) : null) as GameEntity
+	private questionMapper = (model: QuestionFromModel | null) => (model ? new QuestionEntity(model) : null) as QuestionEntity
 
 	private constructor() {
 		this.client = new HttpClient('/plays/games')
@@ -57,7 +59,7 @@ export class GameRepository implements IGameRepository {
 	}
 
 	async getQuestions(id: string) {
-		const d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
-		return d
+		const d = await this.client.post<QueryParams, QuestionFromModel>(`/${id}/questions`, {})
+		return this.questionMapper(d)
 	}
 }

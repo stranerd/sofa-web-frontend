@@ -3,11 +3,13 @@ import { ITestRepository } from '@modules/plays/domain/irepositories/tests'
 import { HttpClient, QueryParams, QueryResults } from '@modules/core'
 import { TestEntity } from '@modules/plays/domain/entities/tests'
 import { QuestionFromModel } from '@modules/study/data/models/questions'
+import { QuestionEntity } from '@modules/study'
 
 export class TestRepository implements ITestRepository {
 	private static instance: TestRepository
 	private client: HttpClient
 	private mapper = (model: TestFromModel | null) => (model ? new TestEntity(model) : null) as TestEntity
+	private questionMapper = (model: QuestionFromModel | null) => (model ? new QuestionEntity(model) : null) as QuestionEntity
 
 	private constructor() {
 		this.client = new HttpClient('/plays/tests')
@@ -48,7 +50,10 @@ export class TestRepository implements ITestRepository {
 	}
 
 	async getQuestions(id: string) {
-		const d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
-		return d
+		const d = await this.client.post<QueryParams, QuestionFromModel>(`/${id}/questions`, {})
+		return {
+			...d,
+			results: d.results.map((r) => this.mapper(r)),
+		}
 	}
 }

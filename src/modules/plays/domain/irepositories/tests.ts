@@ -7,7 +7,7 @@ export interface ITestRepository {
 	create: (data: TestToModel) => Promise<TestEntity>
 	get: (condition: QueryParams) => Promise<QueryResults<TestEntity>>
 	find: (id: string) => Promise<TestEntity | null>
-	start: (id: string) => Promise<TestEntity | null>
-	end: (id: string) => Promise<TestEntity | null>
-	getQuestions: (id: string) => Promise<QuestionFromModel[]>
+	start: (id: string) => Promise<TestEntity>
+	end: (id: string) => Promise<TestEntity>
+	getQuestions: (id: string) => Promise<QuestionFromModel>
 }
