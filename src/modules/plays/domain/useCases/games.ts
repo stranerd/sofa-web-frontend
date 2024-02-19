@@ -36,4 +36,8 @@ export class GamesUseCase {
 	async end(id: string) {
 		return await this.repository.end(id)
 	}
+
+	async getQuestions(id: string) {
+		return await this.repository.getQuestions(id)
+	}
 }
