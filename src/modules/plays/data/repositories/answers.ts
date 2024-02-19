@@ -1,7 +1,7 @@
 import { AnswerFromModel, AnswerToModel } from '../models/answers'
 import { HttpClient, QueryParams, QueryResults } from '@modules/core'
-import { IAnswerRepository } from '@modules/plays/domain/irepositories/answers'
 import { AnswerEntity } from '@modules/plays/domain/entities/answers'
+import { IAnswerRepository } from '@modules/plays/domain/irepositories/answers'
 
 export class AnswerRepository implements IAnswerRepository {
 	private static instance: AnswerRepository
@@ -26,8 +26,8 @@ export class AnswerRepository implements IAnswerRepository {
 		}
 	}
 
-	async getAnswerParticipants(id: string, answerId: string) {
-		const data = await this.client.get<QueryParams, AnswerFromModel | null>(`/${id}/answers/${answerId}`, {})
+	async getParticipantsAnswer(id: string, userId: string) {
+		const data = await this.client.get<QueryParams, AnswerFromModel | null>(`/${id}/answers/${userId}`, {})
 		return this.mapper(data)
 	}
 

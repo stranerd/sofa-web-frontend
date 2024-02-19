@@ -2,7 +2,7 @@ import { PlayFromModel, PlayToModel } from '../models/plays'
 import { PlayTypes } from '../../domain/types'
 import { IPlayRepository } from '../../domain/irepositories/plays'
 import { PlayEntity } from '../../domain/entities/plays'
-import { HttpClient, QueryParams, QueryResults } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 import { QuestionEntity, QuestionFromModel } from '@modules/study'
 
 export class PlayRepository<E extends PlayEntity, F extends PlayFromModel, T extends PlayToModel> implements IPlayRepository<E, T> {
@@ -50,5 +50,17 @@ export class PlayRepository<E extends PlayEntity, F extends PlayFromModel, T ext
 	async getQuestions(id: string) {
 		const d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
 		return d.map((q) => new QuestionEntity(q))
+	}
+
+	async listenToOne(id: string, listeners: Listeners<E>) {
+		const model = await this.find(id)
+		if (model) await listeners.updated(model)
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
+	}
+
+	async listenToMany(query: QueryParams, listeners: Listeners<E>, matches: (entity: E) => boolean) {
+		const models = await this.get(query)
+		await Promise.all(models.results.map(listeners.updated))
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 }

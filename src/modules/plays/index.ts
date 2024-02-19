@@ -1,9 +1,9 @@
-import { GameRepository } from './data/repositories/games'
 import { AnswerRepository } from './data/repositories/answers'
+import { GameRepository } from './data/repositories/games'
 import { TestRepository } from './data/repositories/tests'
 
-import { GamesUseCase } from './domain/useCases/games'
 import { AnswersUseCase } from './domain/useCases/answers'
+import { GamesUseCase } from './domain/useCases/games'
 import { TestsUseCase } from './domain/useCases/tests'
 
 export const GamesUseCases = new GamesUseCase(GameRepository.getInstance())

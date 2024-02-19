@@ -1,7 +1,7 @@
 import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { IPlayRepository } from '../irepositories/plays'
-import { QueryParams } from '@modules/core'
+import { Listeners, QueryParams } from '@modules/core'
 
 export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends IPlayRepository<E, T>> {
 	protected repository: R
@@ -32,5 +32,9 @@ export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends
 
 	async end(id: string) {
 		return await this.repository.end(id)
+	}
+
+	async listenToOne(playId: string, listeners: Listeners<E>) {
+		return await this.repository.listenToOne(playId, listeners)
 	}
 }

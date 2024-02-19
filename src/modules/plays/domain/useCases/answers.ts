@@ -13,8 +13,8 @@ export class AnswersUseCase {
 		return await this.repository.answer(data)
 	}
 
-	async getAnswerParticipants(id: string, answerId: string) {
-		return await this.repository.getAnswerParticipants(id, answerId)
+	async getParticipantsAnswer(id: string, userId: string) {
+		return await this.repository.getParticipantsAnswer(id, userId)
 	}
 
 	async get(query: QueryParams) {
