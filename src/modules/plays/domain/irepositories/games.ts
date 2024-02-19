@@ -1,5 +1,6 @@
 import { GameToModel } from '../../data/models/games'
 import { GameEntity } from '../entities/games'
+import { QuestionFromModel } from '@modules/study/data/models/questions'
 import { QueryParams, QueryResults } from '@modules/core'
 
 export interface IGameRepository {
@@ -10,4 +11,5 @@ export interface IGameRepository {
 	start: (id: string) => Promise<GameEntity | null>
 	join: (id: string, data: { join: boolean }) => Promise<GameEntity | null>
 	end: (id: string) => Promise<GameEntity | null>
+	getQuestions: (id: string) => Promise<QuestionFromModel[]>
 }

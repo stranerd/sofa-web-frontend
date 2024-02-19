@@ -2,6 +2,7 @@ import { TestFromModel, TestToModel } from '../models/tests'
 import { ITestRepository } from '@modules/plays/domain/irepositories/tests'
 import { HttpClient, QueryParams, QueryResults } from '@modules/core'
 import { TestEntity } from '@modules/plays/domain/entities/tests'
+import { QuestionFromModel } from '@modules/study/data/models/questions'
 
 export class TestRepository implements ITestRepository {
 	private static instance: TestRepository
@@ -44,5 +45,10 @@ export class TestRepository implements ITestRepository {
 	async end(id: string) {
 		const d = await this.client.post<QueryParams, TestFromModel>(`/${id}/end`, {})
 		return this.mapper(d)
+	}
+
+	async getQuestions(id: string) {
+		const d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
+		return d
 	}
 }
