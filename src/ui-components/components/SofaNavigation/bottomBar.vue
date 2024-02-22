@@ -2,7 +2,7 @@
 	<div class="grid grid-cols-5 gap-3 mdlg:!hidden items-center py-2 w-full justify-center bg-lightGray">
 		<a
 			v-for="tab in [
-				{ path: '/', icon: 'home' as const },
+				{ path: '/dashboard', icon: 'home' as const },
 				{ path: '/chats', icon: 'chat' as const },
 				{ name: 'showAddItem', icon: 'plus-white' as const, onClick: handleShowAddMaterial },
 				{ path: '/marketplace', icon: 'marketplace' as const },

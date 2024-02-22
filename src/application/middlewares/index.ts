@@ -14,10 +14,10 @@ export const defineMiddleware = (middleware: MiddlewareFunction) => middleware
 
 export const isAdmin = defineMiddleware(async () => {
 	const { auth } = useAuth()
-	if (!auth.value || !auth.value.roles.isAdmin) return '/'
+	if (!auth.value || !auth.value.roles.isAdmin) return '/dashboard'
 })
 export const isNotAuthenticated = defineMiddleware(async () => {
-	if (useAuth().isLoggedIn.value) return '/'
+	if (useAuth().isLoggedIn.value) return '/dashboard'
 })
 const checkAuthUser = async (to: string) => {
 	if (!useAuth().isLoggedIn.value) {
@@ -48,7 +48,7 @@ export const isSubscribed = defineMiddleware(async ({ goBackToNonAuth }) => {
 export const isOrg = defineMiddleware(async ({ to }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
-	if (!useAuth().userType.value.isOrg) return '/'
+	if (!useAuth().userType.value.isOrg) return '/dashboard'
 })
 
 const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg }

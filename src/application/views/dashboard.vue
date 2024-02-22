@@ -14,7 +14,7 @@ import HomeLayout from '@app/components/home/HomeLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
-	name: 'IndexPage',
+	name: 'DashboardPage',
 	components: { HomeLayout, HomeForStudents, HomeForNonStudents },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
