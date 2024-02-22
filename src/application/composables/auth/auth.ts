@@ -82,7 +82,7 @@ export const useAuth = () => {
 		// await unregisterDeviceOnLogout()
 		await AuthUseCases.sessionSignout()
 		await setAuthUser(null)
-		window.location.assign('/auth/login')
+		window.location.assign('/auth/signin')
 	}
 
 	const deleteAccount = async () => {
@@ -95,7 +95,7 @@ export const useAuth = () => {
 		// await unregisterDeviceOnLogout()
 		await AuthUseCases.deleteAccount()
 		await setAuthUser(null)
-		window.location.assign('/auth/login')
+		window.location.assign('/auth/signin')
 	}
 
 	return {

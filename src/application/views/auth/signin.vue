@@ -1,7 +1,7 @@
 <template>
 	<AuthLayout title="Welcome back" subTitle="Let the progress continue">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signin">
-			<AuthProvider />
+			<AuthProvider :signUp="false" />
 
 			<div class="w-full flex flex-col gap-4">
 				<SofaTextField
@@ -35,7 +35,7 @@
 
 		<div class="flex items-center gap-2 pt-3">
 			<SofaNormalText color="text-grayColor">Don’t have an account?</SofaNormalText>
-			<router-link to="/auth/register">
+			<router-link to="/auth/signup">
 				<SofaNormalText color="!text-primaryBlue">Sign up</SofaNormalText>
 			</router-link>
 		</div>
@@ -49,11 +49,11 @@ import AuthProvider from '@app/components/auth/AuthProvider.vue'
 import { useEmailSignin } from '@app/composables/auth/signin'
 
 export default defineComponent({
-	name: 'AuthLoginPage',
+	name: 'AuthSigninPage',
 	components: { AuthProvider },
 	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
-		useMeta({ title: 'Login To Your Account' })
+		useMeta({ title: 'Sign In To Your Account' })
 		const { factory, signin } = useEmailSignin()
 		return { factory, signin }
 	},

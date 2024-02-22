@@ -22,7 +22,7 @@ export const isNotAuthenticated = defineMiddleware(async () => {
 const checkAuthUser = async (to: string) => {
 	if (!useAuth().isLoggedIn.value) {
 		if (!to.startsWith('/auth/')) await Logic.Common.setRedirectToRoute(to)
-		return '/auth/login'
+		return '/auth/signin'
 	}
 	if (!useAuth().isEmailVerified.value) {
 		if (!to.startsWith('/auth/')) await Logic.Common.setRedirectToRoute(to)
