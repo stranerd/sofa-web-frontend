@@ -1,7 +1,5 @@
 import { useAsyncFn } from '../core/hooks'
-import { FundWalletFactory } from '@modules/payment/domain/factories/wallet/fund'
-import { WalletsUseCases } from '@modules/payment'
-import { WithdrawalFactory } from '@modules/payment/domain/factories/wallet/withdrawal'
+import { FundWalletFactory, WithdrawalFactory, WalletsUseCases } from '@modules/payment'
 
 export const useFundWallet = () => {
 	const factory = new FundWalletFactory()
@@ -23,8 +21,7 @@ export const useWithdrawal = () => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const data = await factory.toModel()
-		await WalletsUseCases.withdraw(data)
+		await WalletsUseCases.withdraw(factory)
 		factory.reset()
 	})
 	return { withdrawFund, loading, error }

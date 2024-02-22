@@ -158,34 +158,4 @@ export default class Payment extends Common {
 				})
 		}
 	}
-
-	public SubscribeToPlan = (planId: string) => {
-		Logic.Common.showLoading()
-		return $api.payment.wallet
-			.subscribeToPlan({
-				planId: planId,
-			})
-			.then((response) => {
-				Logic.Common.hideLoading()
-				return response.data
-			})
-			.catch((error) => {
-				Logic.Common.hideLoading()
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
-	}
-
-	public ToggleSubscriptionRenew = (renew: boolean) =>
-		$api.payment.wallet
-			.toggleSubscriptionRenew(renew)
-			.then((response) => {
-				Logic.Common.showAlert({
-					message: 'Your subscription auto renewal has been updated',
-					type: 'success',
-				})
-				return response.data
-			})
-			.catch((error) => {
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
 }

@@ -27,3 +27,6 @@ export { PurchaseEntity } from './domain/entities/purchases'
 export { TransactionEntity } from './domain/entities/transactions'
 export { WalletEntity } from './domain/entities/wallets'
 export { WithdrawalEntity } from './domain/entities/withdrawals'
+
+export { FundWalletFactory } from './domain/factories/fundWallet'
+export { WithdrawalFactory } from './domain/factories/withdrawal'

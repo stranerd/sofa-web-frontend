@@ -1,5 +1,5 @@
 import { v } from 'valleyed'
-import { CurrencyCountries, WithdrawData } from '../../types'
+import { CurrencyCountries, WithdrawData } from '../types'
 import { BaseFactory } from '@modules/core'
 
 type Keys = Omit<WithdrawData, 'account'> & WithdrawData['account']

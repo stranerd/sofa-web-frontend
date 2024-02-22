@@ -1,10 +1,10 @@
 import { v } from 'valleyed'
-import { FundDetails } from '../../types'
+import { FundDetails } from '../types'
 import { BaseFactory } from '@modules/core'
 
-export class FundWalletFactory extends BaseFactory<FundDetails, FundDetails, FundDetails> {
+export class FundWalletFactory extends BaseFactory<null, FundDetails, FundDetails> {
 	readonly rules = {
-		amount: v.number().gt(99),
+		amount: v.number().gte(200, 'cannot withdraw less than 200'),
 		methodId: v.string().min(1),
 	}
 
@@ -39,8 +39,7 @@ export class FundWalletFactory extends BaseFactory<FundDetails, FundDetails, Fun
 		}
 	}
 
-	loadEntity = (entity: FundDetails) => {
-		this.amount = entity.amount
-		this.methodId = entity.methodId
+	loadEntity = (entity: null) => {
+		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }
