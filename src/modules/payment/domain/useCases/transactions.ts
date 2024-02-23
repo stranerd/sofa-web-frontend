@@ -1,3 +1,4 @@
+import { TransactionToModel } from '../../data/models/transactions'
 import { TransactionEntity } from '../entities/transactions'
 import { ITransactionRepository } from '../irepositories/transactions'
 import { Listeners, QueryParams, Conditions } from '@modules/core'
@@ -8,6 +9,18 @@ export class TransactionsUseCase {
 
 	constructor(repo: ITransactionRepository) {
 		this.repository = repo
+	}
+
+	async getFlutterwaveSecrets() {
+		return this.repository.getFlutterwaveSecrets()
+	}
+
+	async create(data: TransactionToModel) {
+		return await this.repository.create(data)
+	}
+
+	async fulfill(id: string) {
+		return await this.repository.fulfill(id)
 	}
 
 	async get(date?: number) {

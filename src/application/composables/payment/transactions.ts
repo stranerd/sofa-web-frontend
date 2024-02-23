@@ -1,11 +1,13 @@
-import { onMounted, onUnmounted, ref } from 'vue'
 import { addToArray } from 'valleyed'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { TransactionEntity } from '@modules/payment/domain/entities/transactions'
-import { TransactionsUseCases } from '@modules/payment'
+import { loadScript } from '../core/scripts'
+import { domain } from '@utils/environment'
+import { FlutterwaveSecrets, TransactionEntity, TransactionType, TransactionsUseCases } from '@modules/payment'
 
 const store = {
+	flutterwave: null as FlutterwaveSecrets | null,
 	transactions: ref<TransactionEntity[]>([]),
 	hasMore: ref(false),
 }
@@ -66,4 +68,36 @@ export const useMyTransactions = () => {
 	})
 
 	return { ...store, fetchOlderTransactions }
+}
+
+export const createTransaction = async (amount: number, type: TransactionType, description: string) => {
+	const unload = await loadScript('flutterwave', 'https://checkout.flutterwave.com/v3.js')
+	if (!window.FlutterwaveCheckout) return false
+	if (!store.flutterwave) store.flutterwave = await TransactionsUseCases.getFlutterwaveSecrets()
+	const { id, amount: txAmnt, currency, email } = await TransactionsUseCases.create({ amount, data: { type } })
+	await new Promise<void>((res, rej) => {
+		const modal = window.FlutterwaveCheckout({
+			public_key: store.flutterwave!.publicKey,
+			tx_ref: id,
+			amount: txAmnt,
+			currency,
+			customer: { email },
+			payment_options: 'card',
+			customizations: { title: 'Stranerd', description, logo: domain + '/images/logo.svg' },
+			callback: () => {
+				modal.close()
+				res()
+			},
+			onclose: (incomplete: boolean) => (incomplete ? rej('transaction not completed') : res()),
+		})
+	})
+	const res = await TransactionsUseCases.fulfill(id)
+	unload()
+	return res
+}
+
+export const useCreateTransaction = (amount: number, type: TransactionType, description: string) => {
+	const { asyncFn: createTxn, loading, error } = useAsyncFn(async () => await createTransaction(amount, type, description))
+
+	return { error, loading, createTransaction: createTxn }
 }

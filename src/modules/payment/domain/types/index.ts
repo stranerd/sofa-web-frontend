@@ -157,3 +157,7 @@ export type FundDetails = {
 	amount: number
 	methodId: string
 }
+
+export type FlutterwaveSecrets = {
+	publicKey: string
+}

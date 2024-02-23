@@ -1,5 +1,7 @@
 import { useAsyncFn } from '../core/hooks'
-import { FundWalletFactory, WithdrawalFactory, WalletsUseCases } from '@modules/payment'
+import { useModals } from '../core/modals'
+import { createTransaction } from './transactions'
+import { FundWalletFactory, TransactionType, WalletsUseCases, WithdrawalFactory } from '@modules/payment'
 
 export const useFundWallet = () => {
 	const factory = new FundWalletFactory()
@@ -10,8 +12,17 @@ export const useFundWallet = () => {
 	} = useAsyncFn(async () => {
 		await WalletsUseCases.fund(factory)
 		factory.reset()
+		useModals().payment.fundWallet.close()
 	})
-	return { fundWallet, loading, error }
+	const { asyncFn: fundWalletOnline } = useAsyncFn(
+		async () => {
+			await createTransaction(factory.amount, TransactionType.fundWallet, '')
+			factory.reset()
+			useModals().payment.fundWallet.close()
+		},
+		{ pre: () => factory.isValid('amount') },
+	)
+	return { fundWallet, fundWalletOnline, factory, loading, error }
 }
 
 export const useWithdrawal = () => {

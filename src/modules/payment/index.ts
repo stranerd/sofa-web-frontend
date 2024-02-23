@@ -1,5 +1,5 @@
-export { Currencies, Purchasables } from './domain/types'
-export type { Saleable } from './domain/types/purchases'
+export { Currencies, Purchasables, TransactionType } from './domain/types'
+export type { FlutterwaveSecrets, Saleable } from './domain/types'
 import { MethodRepository } from './data/repositories/methods'
 import { PlanRepository } from './data/repositories/plans'
 import { PurchaseRepository } from './data/repositories/purchases'
