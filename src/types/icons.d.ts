@@ -1,7 +1,6 @@
 export {}
 declare global {
 	type IconName =
-		| 'add-card'
 		| 'add-education'
 		| 'add-gray'
 		| 'add-image'

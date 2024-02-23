@@ -190,7 +190,7 @@
 						<!-- Pay online -->
 
 						<div class="w-full flex items-center gap-3 p-3" @click="addMethod">
-							<SofaIcon customClass="h-[18px]" name="add-card" />
+							<SofaIcon customClass="h-[18px]" name="add-gray" />
 							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 						</div>
 

@@ -1,5 +1,6 @@
 import { useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
+import { useSuccessHandler } from '../core/states'
 import { createTransaction } from './transactions'
 import { FundWalletFactory, TransactionType, WalletsUseCases, WithdrawalFactory } from '@modules/payment'
 
@@ -26,6 +27,7 @@ export const useFundWallet = () => {
 }
 
 export const useWithdrawal = () => {
+	const { setMessage } = useSuccessHandler()
 	const factory = new WithdrawalFactory()
 	const {
 		asyncFn: withdraw,
@@ -34,6 +36,8 @@ export const useWithdrawal = () => {
 	} = useAsyncFn(async () => {
 		await WalletsUseCases.withdraw(factory)
 		factory.reset()
+		setMessage('Withdrawal successful!')
+		useModals().payment.withdraw.close()
 	})
 	return { withdraw, factory, loading, error }
 }
