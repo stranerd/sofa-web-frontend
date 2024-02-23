@@ -124,7 +124,7 @@ export type TransferData = {
 
 export type WithdrawData = {
 	amount: number
-	account: AccountDetails
+	account: Omit<AccountDetails, 'bankName' | 'ownerName'>
 }
 
 export enum CurrencyCountries {

@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-4 mdlg:p-6 p-4">
+	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="fundWallet">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
 			<SofaHeaderText customClass="text-xl">Fund wallet</SofaHeaderText>
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 
-		<div class="w-full md:flex justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:py-0 py-4">
+		<div class="w-full md:flex justify-between items-center grid grid-cols-2 mdlg:py-0 py-4">
 			<SofaButton
 				textColor="text-grayColor"
 				bgColor="bg-white"
@@ -55,18 +55,16 @@
 				Cancel
 			</SofaButton>
 
-			<div class="md:!w-auto col-span-2 flex flex-col">
-				<SofaButton
-					textColor="text-white"
-					bgColor="bg-primaryBlue"
-					padding="px-4 md:!py-1 py-3"
-					customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
-					@click="fundWallet">
-					Continue
-				</SofaButton>
-			</div>
+			<SofaButton
+				type="submit"
+				textColor="text-white"
+				bgColor="bg-primaryBlue"
+				padding="px-4 md:py-1 py-3"
+				class="w-full md:w-auto border-2 border-transparent md:min-w-[100px]">
+				Continue
+			</SofaButton>
 		</div>
-	</div>
+	</form>
 </template>
 
 <script lang="ts" setup>

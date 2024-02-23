@@ -28,12 +28,12 @@ export const useFundWallet = () => {
 export const useWithdrawal = () => {
 	const factory = new WithdrawalFactory()
 	const {
-		asyncFn: withdrawFund,
+		asyncFn: withdraw,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
 		await WalletsUseCases.withdraw(factory)
 		factory.reset()
 	})
-	return { withdrawFund, loading, error }
+	return { withdraw, factory, loading, error }
 }

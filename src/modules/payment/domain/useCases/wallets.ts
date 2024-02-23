@@ -1,4 +1,5 @@
 import { WalletEntity } from '../entities/wallets'
+import { AccountUpdateFactory } from '../factories/accounts'
 import { FundWalletFactory } from '../factories/fundWallet'
 import { WithdrawalFactory } from '../factories/withdrawal'
 import { IWalletRepository } from '../irepositories/wallets'
@@ -24,8 +25,8 @@ export class WalletsUseCase {
 		return await this.repository.subscribeToPlan({ planId })
 	}
 
-	async updateAccountNumber(data: AccountDetails) {
-		return await this.repository.updateAccountNumber(data)
+	async updateAccountNumber(factory: AccountUpdateFactory) {
+		return await this.repository.updateAccountNumber(await factory.toModel())
 	}
 
 	async transfer(data: TransferData) {
@@ -36,7 +37,7 @@ export class WalletsUseCase {
 		return await this.repository.withdraw(await factory.toModel())
 	}
 
-	async verifyAccountNumber(data: AccountDetails) {
+	async verifyAccountNumber(data: Partial<AccountDetails>) {
 		return await this.repository.verifyAccountNumber(data)
 	}
 

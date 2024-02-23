@@ -1,5 +1,5 @@
 <template>
-	<div v-if="wallet" class="flex flex-col gap-4 mdlg:p-6 p-4">
+	<form v-if="wallet" class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="withdraw">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
 			<SofaHeaderText customClass="text-xl">Withdraw money</SofaHeaderText>
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
@@ -12,15 +12,11 @@
 
 		<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 			<SofaTextField
-				ref="amount"
-				v-model="withdrawForm.amount"
+				v-model="factory.amount"
 				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				name="Amount"
+				type="number"
 				placeholder="Amount"
-				borderColor="border-transparent"
-				:rules="[Logic.Form.RequiredRule]"
-				:isFormatted="true">
+				borderColor="border-transparent">
 				<template #inner-prefix>
 					<SofaNormalText>
 						{{ Logic.Common.getCurrency(wallet.balance.currency) }}
@@ -47,11 +43,11 @@
 				placeholder="Bank"
 				borderColor="border-transparent"
 				:rules="[Logic.Form.RequiredRule]"
-				:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))">
+				:options="banks.map((bank) => ({ key: bank.code, value: bank.name }))">
 			</SofaSelect>
 		</div>
 
-		<div class="w-full md:flex justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:py-0 py-4">
+		<div class="w-full md:flex justify-between items-center grid grid-cols-2 mdlg:py-0 py-4">
 			<SofaButton
 				textColor="text-grayColor"
 				bgColor="bg-white"
@@ -61,35 +57,32 @@
 				Cancel
 			</SofaButton>
 
-			<div class="md:!w-auto col-span-2 flex flex-col">
-				<SofaButton
-					textColor="text-white"
-					bgColor="bg-primaryBlue"
-					padding="px-4 md:!py-1 py-3"
-					customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
-					@click="submit">
-					Continue
-				</SofaButton>
-			</div>
+			<SofaButton
+				type="submit"
+				textColor="text-white"
+				bgColor="bg-primaryBlue"
+				padding="px-4 md:py-1 py-3"
+				class="w-full md:w-auto border-2 border-transparent md:min-w-[100px]">
+				Continue
+			</SofaButton>
 		</div>
-	</div>
+	</form>
 </template>
 
 <script lang="ts" setup>
-import { capitalize, onMounted, reactive, ref, watch } from 'vue'
-import { Logic, SelectOption } from 'sofa-logic'
+import { capitalize, reactive, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-
-// TODO: cleanup with factory and hook for withdrawals
+import { useAccountsUpdate } from '@app/composables/payment/accounts'
+import { useWithdrawal } from '@app/composables/payment/wallets'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
 }>()
 
 const { wallet } = useAuth()
-
-const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks!)
-const commercialBankOptions = ref<SelectOption[]>([])
+const { banks } = useAccountsUpdate()
+const { factory, withdraw } = useWithdrawal()
 
 const withdrawForm = reactive({
 	amount: '',
@@ -143,25 +136,6 @@ const submit = async () => {
 	}
 }
 
-const setCommercialBankOptions = () => {
-	commercialBankOptions.value.length = 0
-	AllCommercialBanks.value?.forEach((bank) => {
-		commercialBankOptions.value.push({
-			key: bank.code,
-			value: bank.name,
-		})
-	})
-}
-
-onMounted(() => {
-	if (!AllCommercialBanks.value) {
-		Logic.Payment.GetCommercialBanks().then(() => {
-			AllCommercialBanks.value = Logic.Payment.AllCommercialBanks!
-			setCommercialBankOptions()
-		})
-	}
-})
-
 watch(withdrawForm, () => {
 	Logic.Common.debounce(() => {
 		if (withdrawForm.account_number.length >= 10 && withdrawForm.bank) {
@@ -181,4 +155,5 @@ watch(withdrawForm, () => {
 		}
 	})
 })
+submit
 </script>
