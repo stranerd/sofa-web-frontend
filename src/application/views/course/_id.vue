@@ -189,9 +189,7 @@
 
 						<!-- Pay online -->
 
-						<div
-							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
-							@click="Logic.Payment.initialPayment()">
+						<div class="w-full flex items-center gap-3 p-3" @click="addMethod">
 							<SofaIcon customClass="h-[18px]" name="add-card" />
 							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 						</div>
@@ -199,9 +197,9 @@
 						<div
 							v-for="method in methods"
 							:key="method.hash"
-							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
+							:class="`w-full flex items-center gap-3 p-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
-							}  rounded-custom cursor-pointer `"
+							}  rounded-custom `"
 							@click="selectedMethodId = method.id">
 							<SofaIcon customClass="h-[20px]" name="card" />
 							<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
@@ -304,7 +302,7 @@ export default defineComponent({
 		const mobileTitle = ref(Logic.Study.SingleCourse?.title ?? '')
 
 		const { wallet } = useAuth()
-		const { methods } = useMyMethods()
+		const { methods, addMethod } = useMyMethods()
 		const selectedMethodId = ref('')
 		const showMakePaymentModal = ref(false)
 
@@ -418,6 +416,7 @@ export default defineComponent({
 			buyCourse,
 			isUnlocked,
 			methods,
+			addMethod,
 			showMakePaymentModal,
 			selectedMethodId,
 			wallet,

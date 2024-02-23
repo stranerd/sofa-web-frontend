@@ -38,7 +38,7 @@
 					<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
 				</a>
 
-				<a class="w-full flex items-center gap-3 p-3 border-2 rounded-custom border-darkLightGray" @click="addCard">
+				<a class="w-full flex items-center gap-3 p-3 border-2 rounded-custom border-darkLightGray" @click="addMethod">
 					<SofaIcon customClass="h-[18px]" name="add-card" />
 					<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 				</a>
@@ -71,20 +71,12 @@
 
 <script lang="ts" setup>
 import { useMyMethods } from '@app/composables/payment/methods'
-import { useCreateTransaction } from '@app/composables/payment/transactions'
 import { useFundWallet } from '@app/composables/payment/wallets'
-import { TransactionType } from '@modules/payment'
 
 defineProps<{
 	close: () => void
 }>()
 
 const { factory, fundWallet, fundWalletOnline } = useFundWallet()
-const { createTransaction: addCard } = useCreateTransaction(
-	0,
-	TransactionType.newCard,
-	'A test amount will be charged and added to your wallet to see if the card works fine',
-)
-
-const { methods } = useMyMethods()
+const { methods, addMethod } = useMyMethods()
 </script>

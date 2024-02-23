@@ -95,9 +95,3 @@ export const createTransaction = async (amount: number, type: TransactionType, d
 	unload()
 	return res
 }
-
-export const useCreateTransaction = (amount: number, type: TransactionType, description: string) => {
-	const { asyncFn: createTxn, loading, error } = useAsyncFn(async () => await createTransaction(amount, type, description))
-
-	return { error, loading, createTransaction: createTxn }
-}

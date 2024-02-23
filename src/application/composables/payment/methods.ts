@@ -3,9 +3,10 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { createTransaction } from './transactions'
 import { Logic } from 'sofa-logic'
 import { MethodEntity } from '@modules/payment/domain/entities/methods'
-import { MethodsUseCases } from '@modules/payment'
+import { MethodsUseCases, TransactionType } from '@modules/payment'
 
 const store = {
 	methods: ref<MethodEntity[]>([]),
@@ -47,6 +48,15 @@ export const useMyMethods = () => {
 		)
 	})
 
+	const { asyncFn: addMethod } = useAsyncFn(
+		async () =>
+			await createTransaction(
+				0,
+				TransactionType.newCard,
+				'A test amount will be charged and added to your wallet to see if the card works fine',
+			),
+	)
+
 	onMounted(async () => {
 		if (!called.value) await fetchMethods()
 		await store.listener.start()
@@ -56,7 +66,7 @@ export const useMyMethods = () => {
 		await store.listener.close()
 	})
 
-	return { ...store }
+	return { ...store, addMethod }
 }
 
 export const useMethod = (method: MethodEntity) => {

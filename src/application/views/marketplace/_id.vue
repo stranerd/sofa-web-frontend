@@ -67,9 +67,7 @@
 
 						<!-- Pay online -->
 
-						<div
-							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
-							@click="Logic.Payment.initialPayment()">
+						<div class="w-full flex items-center gap-3 p-3" @click="addMethod">
 							<SofaIcon customClass="h-[18px]" name="add-card" />
 							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 						</div>
@@ -77,7 +75,7 @@
 						<a
 							v-for="method in methods"
 							:key="method.hash"
-							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
+							:class="`w-full flex items-center gap-3 p-3 bg-lightGray ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom`"
 							@click="selectedMethodId = method.id">
@@ -233,7 +231,7 @@ export default defineComponent({
 
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
 
-		const { methods } = useMyMethods()
+		const { methods, addMethod } = useMyMethods()
 
 		const AllReviews = ref(Logic.Study.AllReviews)
 
@@ -500,6 +498,7 @@ export default defineComponent({
 			contentList,
 			contentDetails,
 			methods,
+			addMethod,
 			showMakePaymentModal,
 			selectedMethodId,
 			wallet,
