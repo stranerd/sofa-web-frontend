@@ -6,7 +6,7 @@ type Keys = Omit<WithdrawData, 'account'> & WithdrawData['account']
 
 export class WithdrawalFactory extends BaseFactory<WithdrawData, WithdrawData, Keys> {
 	readonly rules = {
-		amount: v.number(),
+		amount: v.number().gte(1000, 'cannot withdraw less than 1000'),
 		country: v.in(Object.values(CurrencyCountries)),
 		bankCode: v.string().min(1),
 		bankNumber: v.string().min(1),

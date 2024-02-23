@@ -1,7 +1,7 @@
 import { Logic } from '..'
 import { $api } from '../../services'
 import { CommercialBanks } from '../types/domains/payment'
-import { MakePurchaseInput, UpdateAccountNumberInput, WithdrawalFromWalletInput } from '../types/forms/payment'
+import { UpdateAccountNumberInput, WithdrawalFromWalletInput } from '../types/forms/payment'
 import Common from './Common'
 
 export default class Payment extends Common {
@@ -11,7 +11,6 @@ export default class Payment extends Common {
 
 	public AllCommercialBanks: CommercialBanks[] | undefined
 
-	public MakePurchaseForm: MakePurchaseInput | undefined
 	public UpdateAccountForm: UpdateAccountNumberInput | undefined
 	public verifyAccountNumberForm: UpdateAccountNumberInput | undefined
 	public WithdrawalFromWalletForm: WithdrawalFromWalletInput | undefined
@@ -20,21 +19,6 @@ export default class Payment extends Common {
 		$api.payment.wallet.getCommercialBanks().then((response) => {
 			this.AllCommercialBanks = response.data
 		})
-
-	public UpdateAccountNumber = () => {
-		if (this.UpdateAccountForm) {
-			Logic.Common.showLoading()
-			return $api.payment.wallet
-				.updateAccountNumber(this.UpdateAccountForm)
-				.then((response) => {
-					Logic.Common.hideLoading()
-					return response.data
-				})
-				.catch(() => {
-					Logic.Common.hideLoading()
-				})
-		}
-	}
 
 	public VerifyAccountNumber = () => {
 		if (this.verifyAccountNumberForm) {
@@ -63,21 +47,6 @@ export default class Payment extends Common {
 				.catch((error) => {
 					Logic.Common.hideLoading()
 					throw error
-				})
-		}
-	}
-
-	public MakePurchase = () => {
-		if (this.MakePurchaseForm) {
-			Logic.Common.showLoading()
-			return $api.payment.purchase
-				.post(null, this.MakePurchaseForm)
-				.then((response) => {
-					Logic.Common.hideLoading()
-					return response.data
-				})
-				.catch(() => {
-					Logic.Common.hideLoading()
 				})
 		}
 	}

@@ -1,9 +1,3 @@
-export interface MakePurchaseInput {
-	type: string
-	id: string
-	methodId: string
-}
-
 export interface UpdateAccountNumberInput {
 	country: string
 	bankCode: string
