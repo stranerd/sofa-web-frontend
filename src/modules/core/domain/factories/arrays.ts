@@ -55,7 +55,6 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 		}
 
 		set factories(factories: T[]) {
-			console.log('factories', factories)
 			this.reactiveFactories.value = factories
 		}
 

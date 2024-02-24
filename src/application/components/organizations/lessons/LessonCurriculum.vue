@@ -1,5 +1,11 @@
 <template>
-	<Draggable v-model="factory.factories" :disabled="!canEdit" class="w-full flex flex-col gap-4" itemKey="" group="curriculum">
+	<Draggable
+		v-model="factory.factories"
+		:disabled="!canEdit"
+		class="w-full flex flex-col gap-4"
+		handle=".sectionHandle"
+		itemKey=""
+		group="curriculum">
 		<template #item="{ index: sectionIndex }">
 			<div
 				v-if="curriculum[sectionIndex]"
@@ -16,7 +22,7 @@
 					<SofaHeaderText v-else size="base">{{ curriculum[sectionIndex].label }}</SofaHeaderText>
 					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 					<span class="flex-1" />
-					<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+					<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle" name="reorder-gray" />
 					<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
 					<SofaIcon
 						class="h-[8px]"
@@ -31,6 +37,7 @@
 					:disabled="!canEdit"
 					:list="factory.factories[sectionIndex].items"
 					itemKey=""
+					handle=".itemHandle"
 					:group="`sectionItems-${sectionIndex}`">
 					<template #item="{ index: itemIndex }">
 						<a
@@ -67,7 +74,7 @@
 										:content="getItemInfo(curriculum[sectionIndex].items[itemIndex])"
 										class="!capitalize" />
 								</div>
-								<SofaIcon v-if="canEdit" class="h-[20px]" name="reorder-gray" />
+								<SofaIcon v-if="canEdit" class="h-[20px] itemHandle" name="reorder-gray" />
 								<SofaIcon
 									v-if="canEdit"
 									class="h-[16px]"
