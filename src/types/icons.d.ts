@@ -163,6 +163,7 @@ declare global {
 		| 'share-option'
 		| 'share'
 		| 'show'
+		| 'solar_play-circle-bold'
 		| 'square'
 		| 'star-full'
 		| 'star-outline'

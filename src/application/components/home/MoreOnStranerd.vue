@@ -76,10 +76,55 @@
 				<img src="/images/quiz.png" class="ml-auto" />
 			</div>
 		</div>
+		<!-- Access preparatory classes -->
+		<div class="w-full bg-[#F9FAFB] h-[389px] flex flex-col justify-center items-center overflow-hidden mb-20">
+			<div class="flex flex-col gap-2">
+				<h4 class="font-bold text-[36px] text-purple text-center leading-[48px]">
+					Access Preparatory Classes for top examinations
+				</h4>
+				<p class="text-[16px] text-center">Access a world of interactive learning with quizzes and courses created</p>
+			</div>
+			<div class="flex items-center">
+				<img v-for="i in 10" :key="i" src="/images/jamb.png" />
+			</div>
+		</div>
+		<!-- Popular Learning centers -->
+		<div class="styled-bg h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
+			<div class="flex flex-col gap-2">
+				<h4 class="font-bold text-[32px] text-white text-center leading-[48px]">Popular learning centers we collaborate with</h4>
+				<p class="text-white text-[16px] text-center">Lorem ipsum dolor sit amet consectetur. Nisi sed bibendum in diam.</p>
+			</div>
+			<Vue3Marquee :duration="200" :pauseOnHover="true">
+				<div v-for="i in 20" :key="i" class="bg-white p-4 rounded-lg flex items-center gap-2 w-[261px] mx-4">
+					<img src="/images/dp.png" />
+					<div class="flex flex-col gap-1">
+						<div class="flex items-center gap-1">
+							<p class="text-[15px] font-medium">Harvard Academy</p>
+							<SofaIcon name="verify" />
+						</div>
+						<span class="text-[12px] text-[#5A5A5A]">Ikeja GRA, Lagos</span>
+					</div>
+				</div>
+			</Vue3Marquee>
+			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Find more</RouterLink>
+		</div>
+		<!-- Get app -->
+		<div class="w-[80%] mx-auto flex items-center justify-between">
+			<div class="w-1/2 flex flex-col items-center gap-4">
+				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
+				<RouterLink to="#"><img src="/images/app-store-badge.png" /></RouterLink>
+				<RouterLink to="#"><img src="/images/playstore-badge.png" /></RouterLink>
+			</div>
+			<div class="w-1/2 flex flex-col items-center">
+				<img src="/images/get-app.png" />
+			</div>
+		</div>
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+import { Vue3Marquee } from 'vue3-marquee'
+</script>
 
 <style scoped>
 .styled-bg {

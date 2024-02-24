@@ -40,26 +40,8 @@
 				<img class="absolute top-0 right-0" src="/images/smiles.png" />
 				<img class="absolute bottom-0 left-0" src="/images/arrow-svg.png" />
 			</div>
-			<div class="-mt-[150px] flex items-center justify-center">
-				<img src="/images/circle.png" class="w-[982px] h-[886px] object-contain" />
-			</div>
-			<div
-				class="-mt-[300px] bg-purple w-[90%] mx-auto h-[214px] rounded-[64px] flex items-center justify-center text-white relative">
-				<div class="w-full grid grid-cols-3 h-[100px]">
-					<div class="flex flex-col items-center justify-center border-r-4 border-white">
-						<p class="text-[48px] font-bold">20+</p>
-						<p class="text-[24px] font-medium">Tutors</p>
-					</div>
-					<div class="flex flex-col items-center justify-center border-r-4 border-white">
-						<p class="text-[48px] font-bold">20,000+</p>
-						<p class="text-[24px] font-medium">Students</p>
-					</div>
-					<div class="flex flex-col items-center justify-center">
-						<p class="text-[48px] font-bold">150+</p>
-						<p class="text-[24px] font-medium">Topics</p>
-					</div>
-				</div>
-				<img class="absolute left-2 -top-[120px]" src="/images/stranerd-rob.png" />
+			<div class="w-[90%] mx-auto flex items-center justify-center">
+				<img src="/images/students-hero-image.png" class="w-full h-[866px] object-contain" />
 			</div>
 		</header>
 		<MoreOnStranerd />
