@@ -25,9 +25,7 @@
 		</slot>
 
 		<div class="w-full h-full flex-grow overflow-y-auto px-4 flex flex-col items-center" :class="{ 'text-white': isDark }">
-			<div
-				class="w-full h-full overflow-y-auto flex flex-col gap-8 items-center justify-center"
-				:class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal }">
+			<div class="w-full flex flex-col gap-8 my-auto" :class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal }">
 				<slot>
 					<QuestionDisplay
 						v-if="question"
