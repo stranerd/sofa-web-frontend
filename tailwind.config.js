@@ -15,6 +15,7 @@ export default {
 				bodyBlack: '#413C46',
 				grayColor: '#78828C',
 				fadedPurple: '#EFF4F9',
+				purple: '#964DDE',
 				deepGray: '#141618',
 				skyBlue: '#E6F5FF',
 				lightGray: '#F1F6FA',
