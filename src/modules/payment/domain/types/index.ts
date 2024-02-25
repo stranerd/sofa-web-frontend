@@ -49,8 +49,8 @@ export type TransactionData =
 			purchaseId: string
 			userId: string
 			serviceCharge: number
-			purchasedType: PurchaseToModel['data']['type']
-			purchasedId: PurchaseToModel['data']['id']
+			purchasedType: PurchaseToModel['type']
+			purchasedId: PurchaseToModel['id']
 	  }
 	| {
 			type: TransactionType.sent

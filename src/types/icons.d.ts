@@ -19,6 +19,7 @@ declare global {
 		| 'auth-goback'
 		| 'author-filter'
 		| 'back-arrow'
+		| 'bank'
 		| 'bell'
 		| 'bookmark-filled'
 		| 'bookmark'

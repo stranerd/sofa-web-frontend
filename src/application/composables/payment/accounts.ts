@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { AccountUpdateFactory, WalletsUseCases } from '@modules/payment'
@@ -11,7 +11,8 @@ export const useAccountsUpdate = () => {
 	const factory = new AccountUpdateFactory()
 	const { wallet } = useAuth()
 
-	const activeAccountFactory = ref(null as (typeof factory.factories)[number] | null)
+	const showAddNewAccount = ref(false)
+	const activeAccountFactory = computed(() => factory.factories.at(-1) ?? null)
 	const accountName = ref(null as string | null)
 
 	if (wallet.value) factory.loadEntity(wallet.value.accounts)
@@ -29,7 +30,8 @@ export const useAccountsUpdate = () => {
 	})
 
 	const addAccount = () => {
-		activeAccountFactory.value = factory.add()
+		factory.add()
+		showAddNewAccount.value = true
 	}
 
 	const {
@@ -38,7 +40,7 @@ export const useAccountsUpdate = () => {
 		error,
 	} = useAsyncFn(async () => {
 		await WalletsUseCases.updateAccountNumber(factory)
-		activeAccountFactory.value = null
+		showAddNewAccount.value = false
 		return true
 	})
 
@@ -57,6 +59,7 @@ export const useAccountsUpdate = () => {
 		loading,
 		accountName,
 		activeAccountFactory,
+		showAddNewAccount,
 		addAccount,
 		updateAccounts,
 		verifyAccountNumber,

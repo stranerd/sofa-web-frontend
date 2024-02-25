@@ -42,7 +42,19 @@
 				</template>
 			</SofaTextField>
 
-			<a class="w-full flex items-center gap-3 p-4 rounded-custom" @click="addAccount">
+			<a
+				v-for="(account, index) in wallet.accounts"
+				:key="index"
+				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray"
+				@click="withdrawalFactory.account = account">
+				<SofaIcon class="h-[18px]" name="bank" />
+				<SofaNormalText class="text-grayColor capitalize flex-1 truncate">
+					{{ account.bankName }}({{ account.bankNumber.slice(account.bankNumber.length - 4) }})
+				</SofaNormalText>
+				<input v-model="withdrawalFactory.account" type="radio" :value="account" />
+			</a>
+
+			<a class="w-full flex items-center gap-3 p-4 rounded-custom border border-lightGray" @click="addAccount">
 				<SofaIcon class="h-[18px]" name="add-gray" />
 				<SofaNormalText class="text-grayColor" content="Add new account" />
 			</a>
@@ -83,11 +95,11 @@ defineProps<{
 }>()
 
 const { wallet } = useAuth()
-const { banks, addAccount, activeAccountFactory, updateAccounts, verifyAccountNumber, accountName } = useAccountsUpdate()
+const { banks, showAddNewAccount, addAccount, activeAccountFactory, updateAccounts, verifyAccountNumber, accountName } = useAccountsUpdate()
 const { factory: withdrawalFactory, withdraw } = useWithdrawal()
 
 const formOptions = computed(() => {
-	if (!activeAccountFactory.value)
+	if (!showAddNewAccount.value || !activeAccountFactory.value)
 		return {
 			btnLabel: 'Continue',
 			handler: withdraw,
