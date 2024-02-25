@@ -80,7 +80,7 @@ export const useTest = (id: string, skip: { questions: boolean; statusNav: boole
 		const g = store[id].test.value
 		if (!g || skip.statusNav) return
 
-		if (g.userId !== authId.value) return await alertAndNav('/library')
+		if (g.user.id !== authId.value) return await alertAndNav('/library')
 		if (g.status === 'created' && route.path !== lobby) return await alertAndNav(lobby, 'Test has not started yet')
 		if (g.status === 'started' && route.path !== run) return await alertAndNav(run, 'Test has started')
 		if (['ended', 'scored'].includes(g.status) && route.path !== results) return await alertAndNav(results, 'Test has ended')

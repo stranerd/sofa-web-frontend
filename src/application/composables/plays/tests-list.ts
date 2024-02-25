@@ -32,7 +32,7 @@ const store = {
 					store.tests.value = store.tests.value.filter((m) => m.id !== entity.id)
 				},
 			},
-			(e) => e.userId === id.value,
+			(e) => e.user.id === id.value,
 		)
 	}),
 }
@@ -48,7 +48,7 @@ export const useMyTests = () => {
 	} = useAsyncFn(
 		async () => {
 			const tests = await Logic.Plays.GetTests({
-				where: [{ field: 'userId', value: id.value }],
+				where: [{ field: 'user.id', value: id.value }],
 				all: true,
 			})
 			tests.results.forEach((r) =>

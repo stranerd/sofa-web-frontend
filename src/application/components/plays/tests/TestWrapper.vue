@@ -24,10 +24,9 @@ const { test, questions, fetched, answer, start, end, submitAnswer } = useTest(p
 	statusNav: props.skipStatusNav,
 })
 const { id: authId, user } = useAuth()
-
 const extras = computed(() => ({
-	isMine: test.value && test.value.userId === authId.value,
-	canEnd: test.value && test.value.userId === authId.value && test.value.status === 'started',
+	isMine: test.value && test.value.user.id === authId.value,
+	canEnd: test.value && test.value.user.id === authId.value && test.value.status === 'started',
 	authId: authId.value,
 	answers: answer.value?.data ?? null,
 	start,
