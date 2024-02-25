@@ -1,9 +1,5 @@
 import { PlayFromModel, PlayToModel } from './plays'
 
-export interface TestFromModel extends PlayFromModel {
-	userId: string
-}
+export interface TestFromModel extends PlayFromModel {}
 
-export interface TestToModel extends PlayToModel {
-	quizId: string
-}
+export interface TestToModel extends PlayToModel {}

@@ -1,4 +1,4 @@
-import { PlayStatus, PlayTypes } from '../types'
+import { EmbeddedUser, PlayStatus, PlayTypes } from '../types'
 import { BaseEntity } from '@modules/core'
 
 export class PlayEntity extends BaseEntity {
@@ -7,6 +7,7 @@ export class PlayEntity extends BaseEntity {
 	public readonly status: PlayStatus
 	public readonly questions: string[]
 	public readonly totalTimeInSec: number
+	public readonly user: EmbeddedUser
 	public readonly scores: Record<string, number>
 	public readonly startedAt: number | null
 	public readonly endedAt: number | null
@@ -15,13 +16,14 @@ export class PlayEntity extends BaseEntity {
 
 	constructor(
 		readonly type: PlayTypes,
-		{ id, quizId, status, questions, totalTimeInSec, scores, startedAt, endedAt, createdAt, updatedAt }: PlaysConstructorArgs,
+		{ id, quizId, status, questions, user, totalTimeInSec, scores, startedAt, endedAt, createdAt, updatedAt }: PlaysConstructorArgs,
 	) {
 		super()
 		this.id = id
 		this.quizId = quizId
 		this.status = status
 		this.questions = questions
+		this.user = user
 		this.totalTimeInSec = totalTimeInSec
 		this.scores = scores
 		this.startedAt = startedAt
@@ -36,6 +38,7 @@ type PlaysConstructorArgs = {
 	quizId: string
 	status: PlayStatus
 	questions: string[]
+	user: EmbeddedUser
 	totalTimeInSec: number
 	scores: Record<string, number>
 	startedAt: number | null

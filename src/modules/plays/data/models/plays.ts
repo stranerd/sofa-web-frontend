@@ -1,4 +1,4 @@
-import { PlayStatus } from '../../domain/types'
+import { EmbeddedUser, PlayStatus } from '../../domain/types'
 
 export interface PlayFromModel {
 	id: string
@@ -8,6 +8,7 @@ export interface PlayFromModel {
 	totalTimeInSec: number
 	scores: Record<string, number>
 	startedAt: number | null
+	user: EmbeddedUser
 	endedAt: number | null
 	createdAt: number
 	updatedAt: number
