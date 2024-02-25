@@ -31,8 +31,8 @@ export class WalletRepository implements IWalletRepository {
 		return await this.client.post<unknown, boolean>('/withdraw', data)
 	}
 
-	async updateAccountNumber(data: Partial<AccountDetails>) {
-		const d = await this.client.post<Partial<AccountDetails>, WalletEntity>('/account', data)
+	async updateAccountNumber(accounts: Partial<AccountDetails>[]) {
+		const d = await this.client.post<{ accounts: Partial<AccountDetails>[] }, WalletEntity>('/account', { accounts })
 		return this.mapper(d)
 	}
 
@@ -45,8 +45,13 @@ export class WalletRepository implements IWalletRepository {
 		return this.mapper(d)
 	}
 
+	async subscribeToPlan(data: { planId: string }) {
+		const d = await this.client.post<{ planId: string }, WalletEntity>('/subscriptions', data)
+		return this.mapper(d)
+	}
+
 	async getBanks(country: CurrencyCountries) {
-		return await this.client.get<object, BankData>(`/account/banks/${country}`, {})
+		return await this.client.get<object, BankData[]>(`/account/banks/${country}`, {})
 	}
 
 	async fund(data: FundDetails) {

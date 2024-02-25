@@ -39,7 +39,7 @@
 				</div>
 			</a>
 			<a class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray" @click="generateNewFolder">
-				<SofaIcon class="h-[18px]" name="add-card" />
+				<SofaIcon class="h-[18px]" name="add-gray" />
 				<SofaNormalText class="text-grayColor" content="Add new folder" />
 			</a>
 		</div>

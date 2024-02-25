@@ -54,23 +54,25 @@
 import { computed } from 'vue'
 import { useCreateAnnouncement } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
+import { useAuth } from '@app/composables/auth/auth'
 const props = defineProps<{
 	organizationId: string
-	userId: string
 	classInst: ClassEntity
 	close: () => void
 }>()
 
+const { user } = useAuth()
 const { factory, createAnnouncement } = useCreateAnnouncement(props.organizationId, props.classInst.id)
 
 const lessonOptions = computed(() => {
+	if (!user.value) return []
 	// For teachers, return only lessons where user is a teacher
-	if (props.classInst.isTeacher(props.userId)) {
-		const lessons = props.classInst.lessons.filter((lesson) => lesson.users.teachers.includes(props.userId))
+	if (props.classInst.isTeacher(user.value)) {
+		const lessons = props.classInst.lessons.filter((lesson) => lesson.users.teachers.includes(user.value!.id))
 		return lessons.map((l) => ({ key: l.id, value: l.title }))
 	}
 	// For admins, return every lessons plus all students
-	if (props.classInst.isAdmin(props.userId)) {
+	if (props.classInst.isAdmin(user.value)) {
 		const lessons = props.classInst.lessons
 		return [{ key: null as string | null, value: 'All lessons' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
 	}
@@ -78,12 +80,13 @@ const lessonOptions = computed(() => {
 })
 
 const userTypesOption = computed(() => {
+	if (!user.value) return []
 	// For teachers return only student
-	if (props.classInst.isTeacher(props.userId)) {
+	if (props.classInst.isTeacher(user.value)) {
 		return [{ key: MemberTypes.student, value: 'Students Only' }]
 	}
 	// For admins, return all user types
-	if (props.classInst.isAdmin(props.userId)) {
+	if (props.classInst.isAdmin(user.value)) {
 		return [
 			{ key: null, value: 'Both Teachers and Students' },
 			{ key: MemberTypes.student, value: 'Students Only' },

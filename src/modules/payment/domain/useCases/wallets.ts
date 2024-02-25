@@ -1,6 +1,9 @@
 import { WalletEntity } from '../entities/wallets'
+import { AccountUpdateFactory } from '../factories/accounts'
+import { FundWalletFactory } from '../factories/fundWallet'
+import { WithdrawalFactory } from '../factories/withdrawal'
 import { IWalletRepository } from '../irepositories/wallets'
-import { AccountDetails, CurrencyCountries, FundDetails, TransferData, WithdrawData } from '../types'
+import { AccountDetails, CurrencyCountries, TransferData } from '../types'
 import { Listeners } from '@modules/core'
 
 export class WalletsUseCase {
@@ -14,23 +17,27 @@ export class WalletsUseCase {
 		return await this.repository.get()
 	}
 
-	async toggleRenewSubscription(data: { renew: boolean }) {
-		return await this.repository.toggleRenewSubscription(data)
+	async toggleRenewSubscription(renew: boolean) {
+		return await this.repository.toggleRenewSubscription({ renew })
 	}
 
-	async updateAccountNumber(data: AccountDetails) {
-		return await this.repository.updateAccountNumber(data)
+	async subscribeToPlan(planId: string) {
+		return await this.repository.subscribeToPlan({ planId })
+	}
+
+	async updateAccountNumber(factory: AccountUpdateFactory) {
+		return await this.repository.updateAccountNumber(await factory.toModel())
 	}
 
 	async transfer(data: TransferData) {
 		return await this.repository.transfer(data)
 	}
 
-	async withdraw(data: WithdrawData) {
-		return await this.repository.withdraw(data)
+	async withdraw(factory: WithdrawalFactory) {
+		return await this.repository.withdraw(await factory.toModel())
 	}
 
-	async verifyAccountNumber(data: AccountDetails) {
+	async verifyAccountNumber(data: Partial<AccountDetails>) {
 		return await this.repository.verifyAccountNumber(data)
 	}
 
@@ -38,8 +45,8 @@ export class WalletsUseCase {
 		return await this.repository.getBanks(CurrencyCountries.NG)
 	}
 
-	async fund(data: FundDetails) {
-		return await this.repository.fund(data)
+	async fund(factory: FundWalletFactory) {
+		return await this.repository.fund(await factory.toModel())
 	}
 
 	async listen(listener: Listeners<WalletEntity>) {

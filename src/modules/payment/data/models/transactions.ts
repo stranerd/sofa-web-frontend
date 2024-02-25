@@ -1,11 +1,12 @@
 import { Currencies, TransactionStatus, TransactionData } from '../../domain/types'
 
-export interface TransactionFromModel extends TransactionToModel {
+export interface TransactionFromModel extends Omit<TransactionToModel, 'data'> {
 	id: string
 	userId: string
 	email: string
 	title: string
 	amount: number
+	data: TransactionData
 	currency: Currencies
 	status: TransactionStatus
 	createdAt: number
@@ -13,5 +14,8 @@ export interface TransactionFromModel extends TransactionToModel {
 }
 
 export interface TransactionToModel {
-	data: TransactionData
+	amount: number
+	data: {
+		type: TransactionData['type']
+	}
 }

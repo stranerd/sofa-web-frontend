@@ -3,9 +3,12 @@ export interface PurchaseFromModel extends PurchaseToModel {
 	id: string
 	userId: string
 	price: Saleable['price']
+	data: PurchaseData
 	createdAt: number
 	updatedAt: number
 }
 export interface PurchaseToModel {
-	data: PurchaseData
+	type: PurchaseData['type']
+	id: PurchaseData['id']
+	methodId: string
 }

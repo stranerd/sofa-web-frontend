@@ -8,7 +8,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
 	name: 'OrganizationsOrganizationIdClassesClassIdIndex',
 	routeConfig: {
-		middlewares: ['isAuthenticated', ({ to }) => `/organizations/${to.params.organizationId}/classes/${to.params.classId}/about`],
+		middlewares: ['isAuthenticated', ({ to }) => `/organizations/${to.params.organizationId}/classes/${to.params.classId}/lessons`],
 	},
 })
 </script>

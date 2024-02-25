@@ -1,11 +1,11 @@
 <template>
 	<ClassLayout>
-		<template #default="{ classInst }">
+		<template v-if="user" #default="{ classInst }">
 			<div
 				v-if="announcements.length === 0"
 				class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 				<div
-					v-if="classInst.isAdmin(id) || classInst.isTeacher(id)"
+					v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
 					class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 					<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
 						<img :src="emptyAnnouncementContent.imageURL" class="w-[144px] h-[144px]" />
@@ -39,7 +39,7 @@
 			<div v-else class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 mdlg:p-6">
 				<SofaHeaderText class="hidden mdlg:inline-block" content="Annoucements" />
 				<div class="hidden mdlg:inline-block h-[1px] w-full bg-lightGray" />
-				<div v-if="classInst.isAdmin(id) || classInst.isTeacher(id)" class="flex flex-wrap gap-4 items-center justify-between">
+				<div v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="flex flex-wrap gap-4 items-center justify-between">
 					<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
 						<SofaSelect
 							v-model="filter.lesson"
@@ -95,7 +95,7 @@
 					Load More
 				</SofaButton>
 				<SofaButton
-					v-if="classInst.isAdmin(id) || classInst.isTeacher(id)"
+					v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
 					class="block mdlg:hidden"
 					bgColor="bg-primaryBlue"
 					textColor="text-white"
@@ -125,7 +125,7 @@ export default defineComponent({
 	},
 	setup() {
 		const route = useRoute()
-		const { id } = useAuth()
+		const { user } = useAuth()
 		const organizationId = route.params.organizationId as string
 		const classId = route.params.classId as string
 
@@ -154,7 +154,6 @@ export default defineComponent({
 		const createAnnouncement = (classInst: ClassEntity) => {
 			useModals().organizations.createAnnouncement.open({
 				organizationId,
-				userId: id.value,
 				classInst,
 			})
 		}
@@ -172,7 +171,7 @@ export default defineComponent({
 			announcements,
 			fetchOlderAnnouncements,
 			filteredAnnouncements,
-			id,
+			user,
 			emptyAnnouncementContent,
 			createAnnouncement,
 			filter,
