@@ -27,7 +27,7 @@ export interface Test {
 	id: string
 	quizId: string
 	status: PlayStatus
-	userId: string
+	user: SingleUser
 	questions: string[]
 	scores: Record<string, number>
 	startedAt: number
