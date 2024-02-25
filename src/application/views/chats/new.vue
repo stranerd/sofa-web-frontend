@@ -52,7 +52,7 @@ export const content = {
 export default defineComponent({
 	name: 'ChatsNewPage',
 	components: { ChatLayout, ChatContent },
-	routeConfig: { goBackRoute: '/' },
+	routeConfig: { goBackRoute: '/dashboard' },
 	setup() {
 		useMeta({
 			title: 'New Chat',

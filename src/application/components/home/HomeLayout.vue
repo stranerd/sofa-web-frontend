@@ -204,7 +204,7 @@ const rightCommands = computed(() => [
 ])
 
 const options = computed(() => [
-	{ title: 'Dashboard', icon: 'dashboard' as const, route: '/' },
+	{ title: 'Dashboard', icon: 'dashboard' as const, route: '/dashboard' },
 	...(userType.value.isOrg
 		? [
 				{ title: 'Classes', icon: 'classes' as const, route: '/organization/classes' },

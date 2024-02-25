@@ -1,7 +1,7 @@
 <template>
 	<AuthLayout title="Create your account" subTitle="Join the School Of Future Africa">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signup">
-			<AuthProvider />
+			<AuthProvider :signUp="true" />
 
 			<div class="w-full flex flex-col gap-4">
 				<SofaTextField
@@ -58,7 +58,7 @@
 
 		<div class="flex items-center gap-2 pt-3">
 			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
-			<router-link to="/auth/login">
+			<router-link to="/auth/signin">
 				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
 			</router-link>
 		</div>
@@ -72,7 +72,7 @@ import AuthProvider from '@app/components/auth/AuthProvider.vue'
 import { useEmailSignup } from '@app/composables/auth/signin'
 
 export default defineComponent({
-	name: 'AuthRegisterPage',
+	name: 'AuthSignupPage',
 	components: { AuthProvider },
 	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {

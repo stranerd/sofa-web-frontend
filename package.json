@@ -12,7 +12,7 @@
     "prebuild": "npm run envs",
     "build": "vite build",
     "preview": "vite preview",
-    "lint:fix": "eslint --fix ./src && echo Done",
+    "lint:fix": "eslint --ext ts,vue --fix ./ && echo Done",
     "envs": "node bin/copy-env-app.js",
     "icons:types": "node bin/build-icons-types.js",
     "lint:staged": "lint-staged",

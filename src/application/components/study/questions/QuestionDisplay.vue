@@ -8,7 +8,7 @@
 
 		<SofaHeaderText
 			v-if="question.data.type !== QuestionTypes.fillInBlanks && question.data.type !== QuestionTypes.dragAnswers"
-			class="!font-bold md:!text-2xl text-base w-full justify-start flex"
+			class="!font-bold md:!text-2xl text-base w-full justify-start"
 			color="text-inherit"
 			:content="question.question" />
 

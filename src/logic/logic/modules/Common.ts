@@ -247,7 +247,7 @@ export default class Common {
 		const fetchRules = config.fetchRules ?? []
 
 		for (const rule of fetchRules) {
-			if (rule.requireAuth && !Logic.Common.AuthUser) return '/auth/login'
+			if (rule.requireAuth && !Logic.Common.AuthUser) return '/auth/signin'
 			if (rule.shouldSkip?.()) continue
 			let addRuleToRequest = true
 

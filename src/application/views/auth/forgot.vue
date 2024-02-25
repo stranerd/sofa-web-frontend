@@ -56,7 +56,7 @@
 
 		<div class="flex items-center gap-2 pt-3">
 			<SofaNormalText color="text-grayColor">Don’t have an account?</SofaNormalText>
-			<router-link to="/auth/register">
+			<router-link to="/auth/signup">
 				<SofaNormalText color="!text-primaryBlue">Sign up</SofaNormalText>
 			</router-link>
 		</div>

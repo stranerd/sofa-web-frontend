@@ -24,7 +24,7 @@ const submitVerification = async (useLoader = true) => {
 		message: 'Verification submitted. You will get an email after your account has been reviewed',
 		type: 'success',
 	})
-	await Logic.Common.GoToRoute('/')
+	await Logic.Common.GoToRoute('/dashboard')
 }
 
 const autoCreateVerification = () => {

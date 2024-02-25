@@ -50,7 +50,7 @@ import { useOrganizationClasses } from '@app/composables/organizations/classes'
 export default defineComponent({
 	name: 'OrganizationClassesPage',
 	components: { HomeLayout, ClassCard },
-	routeConfig: { goBackRoute: '/', middlewares: ['isOrg'] },
+	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {
 		const emptyClassContent = {
 			imageURL: '/images/empty-class.png',

@@ -345,7 +345,7 @@ export default defineComponent({
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 
 		const create = () => {
-			Logic.Common.GoToRoute('/')
+			Logic.Common.GoToRoute('/dashboard')
 		}
 
 		const selectedMaterial = ref<any>()

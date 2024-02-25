@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full shadow-custom bg-lightGray mdlg:bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
+	<div class="w-full mdlg:shadow-custom bg-lightGray mdlg:bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 mdlg:p-6">
 		<div v-if="classInst.lessons.length === 0">
 			<SofaHeaderText content="Lessons" />
 			<div class="h-[1px] w-full bg-lightGray" />

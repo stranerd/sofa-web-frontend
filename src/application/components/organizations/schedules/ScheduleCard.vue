@@ -48,7 +48,7 @@ const buttons = computed(() => {
 	if (lesson.value?.users.teachers.includes(id.value) && props.schedule.canJoin(props.classInst, id.value))
 		b.push({ label: 'Copy stream key', handler: copyKey })
 	if (props.schedule.canEnd(props.classInst, id.value)) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: end })
-	if (props.schedule.hasEnded) b.push({ label: 'Rewatch', handler: rewatch })
+	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', handler: rewatch })
 	return b
 })
 </script>

@@ -24,7 +24,7 @@ export const useRedirectToAuth = () => {
 
 	const redirect = async () => {
 		await Logic.Common.setRedirectToRoute(route.fullPath)
-		if (router) await router.push('/auth/login')
+		if (router) await router.push('/auth/signin')
 	}
 
 	return { redirect }
