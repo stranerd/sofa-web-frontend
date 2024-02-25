@@ -1,5 +1,5 @@
 import { ClassFromModel } from '../../data/models/classes'
-import { ClassLesson, ClassMembers, EmbeddedUser, Saleable } from '../types'
+import { ClassLesson, ClassMembers, EmbeddedUser, MemberTypes, Saleable } from '../types'
 import { BaseEntity, Media } from '@modules/core'
 import { UserEntity } from '@modules/users'
 
@@ -68,16 +68,23 @@ export class ClassEntity extends BaseEntity implements Saleable {
 		)
 	}
 
-	isTeacher(userId: string) {
-		return this.lessons.some((l) => l.users.teachers.includes(userId))
+	isTeacher(user: UserEntity) {
+		return (
+			user.account.organizationsIn.some((o) => o.id === this.organizationId && o.type === MemberTypes.teacher) ||
+			this.lessons.some((l) => l.users.teachers.includes(user.id))
+		)
 	}
 
-	isStudent(userId: string) {
-		return this.members.students.includes(userId) || this.lessons.some((l) => l.users.students.includes(userId))
+	isStudent(user: UserEntity) {
+		return (
+			user.account.organizationsIn.some((o) => o.id === this.organizationId && o.type === MemberTypes.student) ||
+			this.members.students.includes(user.id) ||
+			this.lessons.some((l) => l.users.students.includes(user.id))
+		)
 	}
 
-	isAdmin(userId: string) {
-		return this.organizationId === userId
+	isAdmin(user: UserEntity) {
+		return this.organizationId === user.id
 	}
 
 	isEnrolled(user: UserEntity) {

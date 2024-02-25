@@ -1,29 +1,31 @@
 <template>
-	<div class="bg-white flex flex-col gap-2 rounded-custom shadow-custom p-4 mdlg:p-0 mdlg:shadow-none mdlg:rounded-none">
+	<div v-if="user" class="bg-white flex flex-col gap-2 rounded-custom shadow-custom p-4 mdlg:p-0 mdlg:shadow-none mdlg:rounded-none">
 		<div class="flex gap-3 items-start">
 			<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" class="!w-[24px] !h-[24px] mdlg:!w-[48px] mdlg:!h-[48px]" />
 			<div class="flex flex-col gap-2">
 				<div class="flex items-center gap-2">
 					<SofaNormalText customClass="font-bold">
-						{{ id === announcement.user.id ? 'You' : announcement.user.bio.publicName }}
+						{{ user.id === announcement.user.id ? 'You' : announcement.user.bio.publicName }}
 					</SofaNormalText>
 					<div class="flex items-center gap-1">
 						<div class="h-[5px] w-[5px] bg-grayColor rounded-full"></div>
 						<SofaNormalText color="text-grayColor">{{ time }}</SofaNormalText>
 					</div>
-					<SofaBadge v-if="classInst.isAdmin(id) || classInst.isTeacher(id)" class="hidden mdlg:block">{{ lesson }}</SofaBadge>
-					<SofaBadge v-if="classInst.isAdmin(id) || classInst.isTeacher(id)" class="bg-[#6419C8] hidden mdlg:block">{{
-						recipient
-					}}</SofaBadge>
+					<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="hidden mdlg:block">
+						{{ lesson }}
+					</SofaBadge>
+					<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8] hidden mdlg:block">
+						{{ recipient }}
+					</SofaBadge>
 				</div>
-				<SofaNormalText color="text-deepGray" customClass="hidden mdlg:block">{{ announcement.body }} </SofaNormalText>
+				<SofaNormalText color="text-deepGray" :content="announcement.body" customClass="hidden mdlg:block" />
 			</div>
 		</div>
 		<div class="flex mdlg:hidden items-start flex-col gap-1">
 			<SofaNormalText color="text-deepGray">{{ announcement.body }}</SofaNormalText>
 			<div class="flex items-center gap-1">
-				<SofaBadge v-if="classInst.isAdmin(id) || classInst.isTeacher(id)">{{ lesson }}</SofaBadge>
-				<SofaBadge v-if="classInst.isAdmin(id) || classInst.isTeacher(id)" class="bg-[#6419C8]">{{ recipient }} </SofaBadge>
+				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)">{{ lesson }}</SofaBadge>
+				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8]">{{ recipient }} </SofaBadge>
 			</div>
 		</div>
 	</div>
@@ -39,7 +41,7 @@ const props = defineProps<{
 	classInst: ClassEntity
 }>()
 
-const { id } = useAuth()
+const { user } = useAuth()
 const { time } = useTimeDifference(props.announcement.createdAt)
 
 const recipient = computed(() => {
