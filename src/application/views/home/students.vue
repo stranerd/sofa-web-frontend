@@ -1,5 +1,5 @@
 <template>
-	<main class="flex flex-col gap-[150px]">
+	<main class="flex flex-col gap-[150px] bg-white">
 		<header class="flex flex-col items-center justify-center">
 			<HomeNavbar class="mb-[44px]" />
 			<!-- Link -->

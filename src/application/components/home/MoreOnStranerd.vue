@@ -88,6 +88,54 @@
 				<img v-for="i in 10" :key="i" src="/images/jamb.png" />
 			</div>
 		</div>
+		<!-- Discover  study materials-->
+		<div class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-24 mb-20">
+			<div class="flex flex-col gap-6">
+				<div class="grid grid-cols-2">
+					<div class="flex flex-col gap-6">
+						<div class="flex items-center gap-6">
+							<div class="bg-[#3219AF] w-[50%] h-[350px] rounded-[20px] flex items-center justify-center">
+								<p class="text-center text-white text-[36px] font-bold">Chemistry</p>
+							</div>
+							<div class="bg-[#FCA311] w-[40%] h-[350px] rounded-[20px] flex items-center justify-center">
+								<p class="text-center text-white text-[36px] font-bold">Biology</p>
+							</div>
+						</div>
+					</div>
+					<div class="flex flex-col gap-6">
+						<div class="flex flex-col gap-5">
+							<div class="flex flex-col gap-1">
+								<h4 class="text-[36px] font-bold leading-[54px]">Discover Study Materials By Verified Creators</h4>
+								<p class="text-[16px] leading-[24px]">
+									Explore a Treasure Trove of Learning Resources Curated by Accredited Experts. Dive into a World of
+									Engaging Content Crafted to Elevate Your Education Journey. Immerse Yourself in Rich, Insightful
+									Materials Designed to Fuel Your Curiosity and Drive Success. Unlock the Power of Knowledge with
+									Confidence, Knowing Each Resource Comes from Trusted Sources. Your Path to Excellence Starts Here.
+								</p>
+							</div>
+							<RouterLink to="/register" class="self-start bg-purple text-white py-[16px] px-[32px] rounded-[99px]">
+								Discover creators
+							</RouterLink>
+						</div>
+					</div>
+				</div>
+				<div class="grid grid-cols-2">
+					<div class="flex items-center gap-6">
+						<div class="bg-[#E52237] w-[40%] h-[350px] rounded-[20px] flex items-center justify-center">
+							<p class="text-center text-white text-[36px] font-bold">Physics</p>
+						</div>
+						<div class="bg-[#4ECB71] w-[50%] h-[350px] rounded-[20px] flex items-center justify-center">
+							<p class="text-center text-white text-[36px] font-bold">Government</p>
+						</div>
+					</div>
+					<div class="flex items-center justify-center">
+						<img src="/images/video-placeholder.png" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Testimonials -->
+		<HomeTestimonials class="mb-20" />
 		<!-- Popular Learning centers -->
 		<div class="styled-bg h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
 			<div class="flex flex-col gap-2">
@@ -108,8 +156,10 @@
 			</Vue3Marquee>
 			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Find more</RouterLink>
 		</div>
+		<!-- FAQS -->
+		<HomeFAQS />
 		<!-- Get app -->
-		<div class="w-[80%] mx-auto flex items-center justify-between">
+		<div class="w-[80%] mt-40 mx-auto flex items-center justify-between">
 			<div class="w-1/2 flex flex-col items-center gap-4">
 				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
 				<RouterLink to="#"><img src="/images/app-store-badge.png" /></RouterLink>
