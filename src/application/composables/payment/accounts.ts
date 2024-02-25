@@ -45,7 +45,9 @@ export const useAccountsUpdate = () => {
 	})
 
 	const { asyncFn: verifyAccountNumber } = useAsyncFn(
-		async () => await WalletsUseCases.verifyAccountNumber(await activeAccountFactory.value!.toModel()),
+		async () => {
+			accountName.value = await WalletsUseCases.verifyAccountNumber(await activeAccountFactory.value!.toModel())
+		},
 		{ pre: () => !!activeAccountFactory.value && activeAccountFactory.value.valid },
 	)
 

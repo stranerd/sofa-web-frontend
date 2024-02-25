@@ -1,6 +1,7 @@
 import { TransactionToModel } from '../../data/models/transactions'
 import { TransactionEntity } from '../entities/transactions'
 import { ITransactionRepository } from '../irepositories/transactions'
+import { TransactionStatus } from '../types'
 import { Listeners, QueryParams, Conditions } from '@modules/core'
 import { DEFAULT_PAGINATION_LIMIT } from '@utils/constants'
 
@@ -25,7 +26,7 @@ export class TransactionsUseCase {
 
 	async get(date?: number) {
 		const conditions: QueryParams = {
-			where: [],
+			where: [{ field: 'status', condition: Conditions.ne, value: TransactionStatus.initialized }],
 			sort: [{ field: 'createdAt', desc: true }],
 			limit: DEFAULT_PAGINATION_LIMIT,
 		}
@@ -35,7 +36,7 @@ export class TransactionsUseCase {
 
 	async listen(listeners: Listeners<TransactionEntity>, date?: number) {
 		const conditions: QueryParams = {
-			where: [],
+			where: [{ field: 'status', condition: Conditions.ne, value: TransactionStatus.initialized }],
 			sort: [{ field: 'createdAt', desc: true }],
 			all: true,
 		}
@@ -43,7 +44,7 @@ export class TransactionsUseCase {
 
 		return await this.repository.listenToMany(conditions, listeners, (entity) => {
 			if (date) return entity.createdAt >= date
-			else return true
+			else return entity.status !== TransactionStatus.initialized
 		})
 	}
 }

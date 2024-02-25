@@ -24,7 +24,7 @@
 				:class="selectedQuiz === quiz ? 'bg-lightBlue' : 'bg-lightGray'"
 				class="p-4 flex items-center gap-2 rounded-custom"
 				@click="selectedQuiz = quiz">
-				<input v-model="selectedQuiz" type="radio" :value="quiz" />
+				<SofaRadio v-model="selectedQuiz" name="quiz" :value="quiz" />
 				<SofaNormalText :content="quiz.title" />
 			</a>
 		</div>

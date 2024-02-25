@@ -31,8 +31,8 @@ export class WalletRepository implements IWalletRepository {
 		return await this.client.post<unknown, boolean>('/withdraw', data)
 	}
 
-	async updateAccountNumber(data: Partial<AccountDetails>[]) {
-		const d = await this.client.post<Partial<AccountDetails>[], WalletEntity>('/account', data)
+	async updateAccountNumber(accounts: Partial<AccountDetails>[]) {
+		const d = await this.client.post<{ accounts: Partial<AccountDetails>[] }, WalletEntity>('/account', { accounts })
 		return this.mapper(d)
 	}
 

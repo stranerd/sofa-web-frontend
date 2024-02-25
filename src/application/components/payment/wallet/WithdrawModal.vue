@@ -10,7 +10,7 @@
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
-		<div v-if="activeAccountFactory" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
+		<div v-if="showAddNewAccount && activeAccountFactory" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 			<SofaTextField
 				v-model="activeAccountFactory.bankNumber"
 				customClass="rounded-custom !bg-lightGray"
@@ -26,6 +26,8 @@
 				borderColor="border-transparent"
 				:options="banks.map((bank) => ({ key: bank.code, value: bank.name }))">
 			</SofaSelect>
+
+			<SofaNormalText v-if="accountName" :content="accountName" color="text-primaryGreen" />
 		</div>
 
 		<div v-else class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
@@ -42,19 +44,20 @@
 				</template>
 			</SofaTextField>
 
-			<a
+			<label
 				v-for="(account, index) in wallet.accounts"
 				:key="index"
-				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray"
-				@click="withdrawalFactory.account = account">
+				:for="`account-${index}`"
+				:class="{ 'border border-primaryPurple': index === selectedAccountIndex }"
+				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray">
 				<SofaIcon class="h-[18px]" name="bank" />
 				<SofaNormalText class="text-grayColor capitalize flex-1 truncate">
 					{{ account.bankName }}({{ account.bankNumber.slice(account.bankNumber.length - 4) }})
 				</SofaNormalText>
-				<input v-model="withdrawalFactory.account" type="radio" :value="account" />
-			</a>
+				<SofaRadio :id="`account-${index}`" v-model="selectedAccountIndex" :value="index" name="account" />
+			</label>
 
-			<a class="w-full flex items-center gap-3 p-4 rounded-custom border border-lightGray" @click="addAccount">
+			<a class="w-full flex items-center gap-3 p-4 rounded-custom border-2 border-lightGray" @click="addAccount">
 				<SofaIcon class="h-[18px]" name="add-gray" />
 				<SofaNormalText class="text-grayColor" content="Add new account" />
 			</a>
@@ -84,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useAccountsUpdate } from '@app/composables/payment/accounts'
 import { useWithdrawal } from '@app/composables/payment/wallets'
@@ -97,9 +100,14 @@ defineProps<{
 const { wallet } = useAuth()
 const { banks, showAddNewAccount, addAccount, activeAccountFactory, updateAccounts, verifyAccountNumber, accountName } = useAccountsUpdate()
 const { factory: withdrawalFactory, withdraw } = useWithdrawal()
+const selectedAccountIndex = ref(Number.MAX_SAFE_INTEGER)
+
+watch(selectedAccountIndex, () => {
+	if (wallet.value?.accounts[selectedAccountIndex.value]) withdrawalFactory.account = wallet.value.accounts[selectedAccountIndex.value]
+})
 
 const formOptions = computed(() => {
-	if (!showAddNewAccount.value || !activeAccountFactory.value)
+	if (!showAddNewAccount.value)
 		return {
 			btnLabel: 'Continue',
 			handler: withdraw,
@@ -109,12 +117,12 @@ const formOptions = computed(() => {
 		return {
 			btnLabel: 'Add account',
 			handler: updateAccounts,
-			isValid: activeAccountFactory.value.valid,
+			isValid: activeAccountFactory.value?.valid,
 		}
 	return {
 		btnLabel: 'Verify',
 		handler: verifyAccountNumber,
-		isValid: activeAccountFactory.value.valid,
+		isValid: activeAccountFactory.value?.valid,
 	}
 })
 </script>
