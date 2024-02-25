@@ -1,9 +1,9 @@
 <template>
 	<ClassLayout>
-		<template #default="{ classInst }">
-			<LessonsForAdmin v-if="classInst.isAdmin(userId)" :classInst="classInst" />
-			<LessonsForTeachers v-if="classInst.isTeacher(userId)" :classInst="classInst" />
-			<LessonsForStudents v-if="classInst.isStudent(userId)" :classInst="classInst" />
+		<template v-if="user" #default="{ classInst }">
+			<LessonsForAdmin v-if="classInst.isAdmin(user)" :classInst="classInst" />
+			<LessonsForTeachers v-if="classInst.isTeacher(user)" :classInst="classInst" />
+			<LessonsForStudents v-if="classInst.isStudent(user)" :classInst="classInst" />
 		</template>
 	</ClassLayout>
 </template>
@@ -20,8 +20,8 @@ export default defineComponent({
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
-		const { id: userId } = useAuth()
-		return { userId }
+		const { user } = useAuth()
+		return { user }
 	},
 })
 </script>
