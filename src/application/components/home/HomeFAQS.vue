@@ -1,23 +1,23 @@
 <template>
-	<div class="w-[80%] mx-auto border-[6px] border-black rounded-[30px] p-8 my-20 relative">
-		<h4 class="text-purple font-bold text-[36px] leading-[54px] text-center">Frequently Asked Questions</h4>
+	<div class="w-[90%] mdlg:w-[80%] mx-auto border-[6px] border-black rounded-[30px] p-8 my-20 relative">
+		<h4 class="text-purple font-bold text-[20px] md:text-[36px] leading-[54px] text-center">Frequently Asked Questions</h4>
 		<div class="mt-6 overflow-hidden">
 			<div class="flex items-center gap-4 overflow-x-auto styled-scrollbar pb-6">
 				<button
 					v-for="(question, index) in questions"
 					:key="index"
-					class="border border-[#E6E6E6] font-medium text-[24px] leading-[36px] whitespace-nowrap py-3 px-5 rounded-lg"
+					class="border border-[#E6E6E6] font-medium text-[14px] md:text-[24px] leading-[36px] whitespace-nowrap py-2 px-4 rounded-lg"
 					:class="activeQuestion === question ? 'bg-purple text-white' : ''"
 					@click="activeQuestion = question">
 					{{ question.question }}
 				</button>
 			</div>
 			<div class="bg-[#FCA311] rounded-[15px] p-10 mt-8">
-				<p class="text-white text-[24px] leading-[36px]">{{ activeQuestion.answer }}</p>
+				<p class="text-white text-[14px] md:text-[24px] leading-[18px] md:leading-[36px]">{{ activeQuestion.answer }}</p>
 			</div>
 		</div>
-		<div class="absolute left-0 right-0 -bottom-[240px] flex items-center justify-center">
-			<img class="" src="/images/stranerd-rob.png" />
+		<div class="absolute left-0 right-0 -bottom-24 md:-bottom-[220px] flex items-center justify-center">
+			<img class="w-[96px] h-[116px] md:w-[209px] md:h-[253px]" src="/images/stranerd-rob.png" />
 		</div>
 	</div>
 </template>

@@ -1,6 +1,6 @@
 <template>
 	<footer class="w-full bg-[#F9FAFB]">
-		<div class="w-[90%] h-[280px] grid grid-cols-4 place-content-center mx-auto">
+		<div class="w-[90%] min-h-[280px] py-6 grid grid-cols-3 gap-8 md:gap-0 md:grid-cols-4 place-content-center mx-auto">
 			<div v-for="footerLink in footerLinks" :key="footerLink.title">
 				<p class="text-[16px] pb-2">{{ footerLink.title }}</p>
 				<ul class="flex flex-col gap-2">
@@ -10,8 +10,8 @@
 				</ul>
 			</div>
 		</div>
-		<div class="bg-purple h-[90px]">
-			<div class="w-[90%] h-full mx-auto flex items-center justify-between">
+		<div class="bg-purple min-h-[90px] flex items-center justify-center">
+			<div class="w-[90%] mx-auto flex flex-col md:flex-row items-center py-10 md:py-0 justify-center gap-8 md:justify-between">
 				<p class="text-white">© {{ new Date().getFullYear() }} Stranerd - All rights reserved</p>
 				<div class="flex items-center gap-6">
 					<a v-for="social in socials" :key="social.icon" :href="social.link">

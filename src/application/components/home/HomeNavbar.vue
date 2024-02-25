@@ -2,7 +2,7 @@
 	<nav class="w-full h-[65px] bg-white flex items-center justify-center">
 		<div class="w-[90%] mx-auto flex items-center justify-between">
 			<img src="/images/stranerd_logo.png" />
-			<ul class="flex items-center gap-6">
+			<ul class="hidden mdlg:flex items-center gap-6">
 				<li v-for="link in links" :key="link.label">
 					<RouterLink
 						:to="link.link"
@@ -12,7 +12,7 @@
 					</RouterLink>
 				</li>
 			</ul>
-			<ul class="flex items-center gap-6">
+			<ul class="hidden mdlg:flex items-center gap-6">
 				<li>
 					<RouterLink to="/register" class="bg-purple text-white py-[10px] px-[19px] rounded-lg">Sign up</RouterLink>
 				</li>

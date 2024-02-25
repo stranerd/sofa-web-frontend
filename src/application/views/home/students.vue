@@ -1,5 +1,5 @@
 <template>
-	<main class="flex flex-col gap-[150px] bg-white">
+	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white max-w-[1800px] mx-auto">
 		<header class="flex flex-col items-center justify-center">
 			<HomeNavbar class="mb-[44px]" />
 			<!-- Link -->
@@ -8,24 +8,27 @@
 				style="box-shadow: 0px 4px 16px 0px #00000040">
 				<router-link
 					to="/home/students"
-					class="w-1/2 h-full flex items-center justify-center p-5 bg-purple text-white rounded-[22px]">
+					class="w-1/2 h-full flex items-center justify-center p-5 bg-purple text-white rounded-[22px] text-[14px] md:text-[16px]">
 					Students
 				</router-link>
-				<router-link to="/home/organization" class="w-1/2 h-full flex items-center justify-center p-5"> Organizations </router-link>
+				<router-link to="/home/organization" class="w-1/2 h-full flex items-center justify-center p-5 text-[14px] md:text-[16px]">
+					Organizations
+				</router-link>
 			</div>
-			<div class="w-[90%] min-h-[500px] relative">
-				<div class="w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
-					<h1 class="text-[40px] text-center font-600 leading-[60px] font-semibold">
+			<div class="w-[90%] mdlg:min-h-[500px] relative">
+				<div class="w-[90%] md:w-[70%] mdlg:w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
+					<h1
+						class="text-[18px] leading-[27px] md:text-[30px] md:leading-[40px] mdlg:text-[40px] text-center font-600 mdlg:leading-[60px] font-semibold">
 						Transforming Learning Centers with Our Cutting-Edge
 					</h1>
 					<div
-						class="bg-purple text-white text-[40px] font-600 font-semibold rounded-lg h-[80px] w-[387px] flex items-center justify-center -rotate-6 mb-4">
+						class="bg-purple text-white w-[174px] text-[20px] mdlg:text-[40px] font-600 font-semibold rounded-lg h-[38px] mdlg:h-[80px] mdlg:w-[387px] flex items-center justify-center -rotate-6 mb-4">
 						Infrastructure
 					</div>
-					<p class="text-[16px] leading-[24px]">
+					<p class="text-[14px] md:text-[16px] leading-[24px]">
 						Empower educators, engage learners, and streamline operations with our comprehensive learning platform
 					</p>
-					<div class="flex items-center gap-3">
+					<div class="flex flex-col md:flex-row items-center gap-3">
 						<RouterLink to="/register" class="bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							Get started
 						</RouterLink>
@@ -37,11 +40,11 @@
 						</RouterLink>
 					</div>
 				</div>
-				<img class="absolute top-0 right-0" src="/images/smiles.png" />
-				<img class="absolute bottom-0 left-0" src="/images/arrow-svg.png" />
+				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/smiles.png" />
+				<img class="hidden mdlg:block absolute bottom-0 left-0" src="/images/arrow-svg.png" />
 			</div>
-			<div class="w-[90%] mx-auto flex items-center justify-center">
-				<img src="/images/students-hero-image.png" class="w-full h-[866px] object-contain" />
+			<div class="w-[90%] mt-[30px] mdlg:mt-0 mx-auto flex md:items-center md:justify-center">
+				<img src="/images/students-hero-image.png" class="w-full h-full mdlg:h-[866px] object-cover md:object-contain" />
 			</div>
 		</header>
 		<MoreOnStranerd />

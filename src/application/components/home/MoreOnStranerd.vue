@@ -1,131 +1,154 @@
 <template>
 	<div class="w-full flex flex-col items-center justify-center">
 		<!-- New and exciting ways to study -->
-		<div class="w-full">
-			<h2 class="text-[32px] text-purple font-bold leading-[54px] text-center">New and Exciting Ways to Study</h2>
-			<p class="text-[16px] text-center">Transform your child’s learning experience into something truly engaging and effective</p>
-			<div class="relative w-[90%] mx-auto flex items-center mt-20">
-				<img src="/images/y.png" />
-				<div class="w-1/2 flex items-center justify-center">
-					<img src="/images/bot+human.png" class="w-[500px] h-[500px] object-contain" />
+		<div class="w-[90%] mx-auto">
+			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">New and Exciting Ways to Study</h2>
+			<p class="text-[14px] md:text-[16px] text-center">
+				Transform your child’s learning experience into something truly engaging and effective
+			</p>
+			<div class="relative flex mdlg:flex-row flex-col items-center mt-8 mdlg:mt-20">
+				<img class="hidden mdlg:block" src="/images/y.png" />
+				<div class="w-full mdlg:w-1/2 flex items-center justify-center">
+					<img src="/images/bot+human.png" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
 				</div>
-				<div class="w-1/2 flex flex-col gap-2">
-					<h3 class="text-[36px] font-bold leading-[54px]">Hybrid tutoring</h3>
-					<p class="text-[24px] leading-[36px]">AI + Human Experts</p>
-					<p class="w-4/5 text-[16px] leading-[24px]">
+				<div class="w-full mdlg:w-1/2 flex flex-col items-center mdlg:items-start text-center mdlg:text-left gap-2">
+					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">Hybrid tutoring</h3>
+					<p class="text-[16px] md:text-[24px] leading-[36px]">AI + Human Experts</p>
+					<p class="w-4/5 text-[14px] md:text-[16px] leading-[24px]">
 						Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.
 					</p>
-					<RouterLink to="/register" class="self-start bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+					<RouterLink
+						to="/register"
+						class="mdlg:self-start bg-purple text-[14px] md:text-[16px] text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 						Know more
 					</RouterLink>
 				</div>
-				<img class="absolute right-20 -top-10" src="/images/skewed-green-box.png" />
+				<img class="hidden mdlg:block absolute right-20 -top-10" src="/images/skewed-green-box.png" />
 			</div>
 		</div>
 		<!-- Classes -->
-		<div class="w-[90%] my-20 mx-auto styled-bg h-[600px] rounded-[20px] flex items-center justify-between">
-			<div class="w-1/2 mx-auto flex flex-col pl-[160px] justify-center gap-2">
-				<h3 class="text-white font-bold text-[36px] leading-[54px]">Classes</h3>
-				<h4 class="text-white text-[24px]">Self Paced & Live Classes</h4>
-				<p class="text-white text-[16px] leading-[24px] font-normal">
+		<div
+			class="w-[90%] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			<div
+				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[160px] justify-center gap-2 text-center px-8 mdlg:text-left">
+				<h3 class="text-white font-bold text-[20px] md:text-[36px] leading-[54px]">Classes</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]">Self Paced & Live Classes</h4>
+				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
 					Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the
 					tranquility of self-paced study or immerse yourself in the energy of live classes.
 				</p>
-				<RouterLink to="#" class="self-start bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Know more </RouterLink>
+				<RouterLink
+					to="#"
+					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+					Know more
+				</RouterLink>
 			</div>
-			<div class="w-1/2 flex items-center justify-center">
-				<img src="/images/live-classes.png" />
+			<div
+				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
+				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" src="/images/live-classes.png" />
 			</div>
 		</div>
 		<!-- MarketPlace -->
-		<div class="my-20 h-[600px] flex items-center justify-between">
-			<div class="w-1/2 flex items-center justify-center">
-				<img src="/images/marketplace.png" />
+		<div class="w-[90%] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
+			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
+				<img class="w-[90%] mdlg:w-full mdlg:h-full" src="/images/marketplace.png" />
 			</div>
-			<div class="w-1/2 flex flex-col gap-2">
-				<div class="w-full">
+			<div class="w-full mdlg:w-1/2 flex flex-col mdlg:items-start items-center text-center mdlg:text-left gap-2">
+				<div class="hidden mdlg:block w-full">
 					<img class="ml-auto mr-[10%]" src="/images/marketplace-top.png" />
 				</div>
-				<h3 class="font-bold text-[36px] leading-[54px]">Marketplace</h3>
-				<h4 class="text-[24px]">Explore & Discover materials</h4>
-				<p class="w-3/5 text-[16px] leading-[24px] font-normal">
+				<h3 class="font-bold text-[20px] md:text-[36px] md:leading-[54px]">Marketplace</h3>
+				<h4 class="text-[16px] md:text-[24px]">Explore & Discover materials</h4>
+				<p class="w-3/5 text-[14px] md:text-[16px] leading-[24px] font-normal">
 					Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than
 					just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.
 				</p>
-				<RouterLink to="#" class="self-start bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+				<RouterLink
+					to="#"
+					class="mdlg:self-start bg-purple text-[14px] md:text-[16px] text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
 				</RouterLink>
-				<div class="w-3/5">
+				<div class="hidden mdlg:block w-3/5">
 					<img class="ml-auto" src="/images/marketplace-y.png" />
 				</div>
 			</div>
 		</div>
 		<!-- Create -->
-		<div class="w-[90%] my-20 mx-auto styled-bg h-[600px] rounded-[20px] flex items-center justify-between">
-			<div class="w-1/2 mx-auto flex flex-col pl-[160px] justify-center gap-2">
-				<h3 class="text-white font-bold text-[36px] leading-[54px]">Create</h3>
-				<h4 class="text-white text-[24px]">Quizzes, Courses, Games, Flashcards.</h4>
-				<p class="text-white text-[16px] leading-[24px] font-normal">
+		<div
+			class="w-[90%] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			<div class="w-full mdlg:w-1/2 mx-auto flex flex-col mdlg:pl-[160px] justify-center gap-2 px-8 mdlg:px-0">
+				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">Create</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]">Quizzes, Courses, Games, Flashcards.</h4>
+				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
 					From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging
 					games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse
 					range of resources designed to cater to every learning style and preference.
 				</p>
-				<RouterLink to="#" class="self-start bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Know more </RouterLink>
+				<RouterLink to="#" class="self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+					Know more
+				</RouterLink>
 			</div>
-			<div class="w-1/2 flex items-center justify-center">
+			<div
+				class="abs absolute left-0 right-0 -top-[250px] sm:-top-[400px] mdlg:relative mdlg:-top-0 w-full mdlg:w-1/2 flex items-center justify-center">
 				<img src="/images/quiz.png" class="ml-auto" />
 			</div>
 		</div>
 		<!-- Access preparatory classes -->
 		<div class="w-full bg-[#F9FAFB] h-[389px] flex flex-col justify-center items-center overflow-hidden mb-20">
-			<div class="flex flex-col gap-2">
-				<h4 class="font-bold text-[36px] text-purple text-center leading-[48px]">
+			<div class="w-[90%] mx-auto flex flex-col gap-2">
+				<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
 					Access Preparatory Classes for top examinations
 				</h4>
-				<p class="text-[16px] text-center">Access a world of interactive learning with quizzes and courses created</p>
+				<p class="text-[12px] md:text-[16px] text-center">
+					Access a world of interactive learning with quizzes and courses created
+				</p>
 			</div>
 			<div class="flex items-center">
 				<img v-for="i in 10" :key="i" src="/images/jamb.png" />
 			</div>
 		</div>
 		<!-- Discover  study materials-->
-		<div class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-24 mb-20">
+		<div class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-10 mdlg:p-24 mb-20">
 			<div class="flex flex-col gap-6">
-				<div class="grid grid-cols-2">
-					<div class="flex flex-col gap-6">
+				<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-6 mdlg:gap-0">
+					<div class="order-2 mdlg:order-1 flex flex-col gap-6">
 						<div class="flex items-center gap-6">
-							<div class="bg-[#3219AF] w-[50%] h-[350px] rounded-[20px] flex items-center justify-center">
-								<p class="text-center text-white text-[36px] font-bold">Chemistry</p>
+							<div class="bg-[#3219AF] w-[50%] h-[150px] md:h-[350px] rounded-[20px] flex items-center justify-center">
+								<p class="text-center text-white text-[14px] md:text-[24px] mdlg:text-[36px] font-bold">Chemistry</p>
 							</div>
-							<div class="bg-[#FCA311] w-[40%] h-[350px] rounded-[20px] flex items-center justify-center">
-								<p class="text-center text-white text-[36px] font-bold">Biology</p>
+							<div class="bg-[#FCA311] w-[40%] h-[150px] md:h-[350px] rounded-[20px] flex items-center justify-center">
+								<p class="text-center text-white text-[14px] md:text-[24px] mdlg:text-[36px] font-bold">Biology</p>
 							</div>
 						</div>
 					</div>
-					<div class="flex flex-col gap-6">
+					<div class="order-1 mdlg:order-2 flex flex-col gap-6">
 						<div class="flex flex-col gap-5">
 							<div class="flex flex-col gap-1">
-								<h4 class="text-[36px] font-bold leading-[54px]">Discover Study Materials By Verified Creators</h4>
-								<p class="text-[16px] leading-[24px]">
+								<h4 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">
+									Discover Study Materials By Verified Creators
+								</h4>
+								<p class="text-[14px] md:text-[16px] leading-[24px]">
 									Explore a Treasure Trove of Learning Resources Curated by Accredited Experts. Dive into a World of
 									Engaging Content Crafted to Elevate Your Education Journey. Immerse Yourself in Rich, Insightful
 									Materials Designed to Fuel Your Curiosity and Drive Success. Unlock the Power of Knowledge with
 									Confidence, Knowing Each Resource Comes from Trusted Sources. Your Path to Excellence Starts Here.
 								</p>
 							</div>
-							<RouterLink to="/register" class="self-start bg-purple text-white py-[16px] px-[32px] rounded-[99px]">
+							<RouterLink
+								to="/register"
+								class="self-start bg-purple text-[14px] md:text-[16px] text-white py-[16px] px-[32px] rounded-[99px]">
 								Discover creators
 							</RouterLink>
 						</div>
 					</div>
 				</div>
-				<div class="grid grid-cols-2">
+				<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-6 mdlg:gap-0">
 					<div class="flex items-center gap-6">
-						<div class="bg-[#E52237] w-[40%] h-[350px] rounded-[20px] flex items-center justify-center">
-							<p class="text-center text-white text-[36px] font-bold">Physics</p>
+						<div class="bg-[#E52237] w-[40%] h-[150px] md:h-[350px] rounded-[20px] flex items-center justify-center">
+							<p class="text-center text-white text-[14px] md:text-[24px] mdlg:text-[36px] font-bold">Physics</p>
 						</div>
-						<div class="bg-[#4ECB71] w-[50%] h-[350px] rounded-[20px] flex items-center justify-center">
-							<p class="text-center text-white text-[36px] font-bold">Government</p>
+						<div class="bg-[#4ECB71] w-[50%] h-[150px] md:h-[350px] rounded-[20px] flex items-center justify-center">
+							<p class="text-center text-white text-[14px] md:text-[24px] mdlg:text-[36px] font-bold">Government</p>
 						</div>
 					</div>
 					<div class="flex items-center justify-center">
@@ -137,10 +160,14 @@
 		<!-- Testimonials -->
 		<HomeTestimonials class="mb-20" />
 		<!-- Popular Learning centers -->
-		<div class="styled-bg h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
-			<div class="flex flex-col gap-2">
-				<h4 class="font-bold text-[32px] text-white text-center leading-[48px]">Popular learning centers we collaborate with</h4>
-				<p class="text-white text-[16px] text-center">Lorem ipsum dolor sit amet consectetur. Nisi sed bibendum in diam.</p>
+		<div class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
+			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
+				<h4 class="font-bold text-[20px] md:text-[32px] text-white text-center leading-[48px]">
+					Popular learning centers we collaborate with
+				</h4>
+				<p class="text-white text-[12px] md:text-[16px] text-center">
+					Lorem ipsum dolor sit amet consectetur. Nisi sed bibendum in diam.
+				</p>
 			</div>
 			<Vue3Marquee :duration="200" :pauseOnHover="true">
 				<div v-for="i in 20" :key="i" class="bg-white p-4 rounded-lg flex items-center gap-2 w-[261px] mx-4">
@@ -159,13 +186,13 @@
 		<!-- FAQS -->
 		<HomeFAQS />
 		<!-- Get app -->
-		<div class="w-[80%] mt-40 mx-auto flex items-center justify-between">
-			<div class="w-1/2 flex flex-col items-center gap-4">
+		<div class="w-[80%] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+			<div class="w-full md:w-1/2 order-2 md:order-1 flex flex-col items-center gap-4">
 				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
 				<RouterLink to="#"><img src="/images/app-store-badge.png" /></RouterLink>
 				<RouterLink to="#"><img src="/images/playstore-badge.png" /></RouterLink>
 			</div>
-			<div class="w-1/2 flex flex-col items-center">
+			<div class="w-full order-1 md:order-2 md:w-1/2 flex flex-col items-center">
 				<img src="/images/get-app.png" />
 			</div>
 		</div>
@@ -182,5 +209,20 @@ import { Vue3Marquee } from 'vue3-marquee'
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
+}
+@media (max-width: 600px) {
+	.abs {
+		top: -350px;
+	}
+}
+@media (max-width: 530px) {
+	.abs {
+		top: -300px;
+	}
+}
+@media (max-width: 430px) {
+	.abs {
+		top: -250px;
+	}
 }
 </style>

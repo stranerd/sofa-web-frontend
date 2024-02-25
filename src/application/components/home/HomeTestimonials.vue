@@ -1,7 +1,9 @@
 <template>
-	<div class="w-[80%] flex flex-col gap-16 mx-auto">
-		<h4 class="text-purple font-bold text-[36px] leading-[54px] text-center capitalize">Don’t just take our word for it</h4>
-		<div class="flex items-center overflow-x-hidden gap-8 p-8">
+	<div class="w-[90%] md:w-[80%] flex flex-col gap-4 mdlg:gap-16 mx-auto">
+		<h4 class="text-purple font-bold text-[20px] md:text-[36px] leading-[54px] text-center capitalize">
+			Don’t just take our word for it
+		</h4>
+		<div class="w-full flex items-center overflow-x-hidden gap-8 p-2 md:p-8">
 			<div
 				v-for="(testimonial, index) in testimonials"
 				:key="index"
