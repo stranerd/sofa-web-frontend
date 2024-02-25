@@ -168,7 +168,7 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 	})
 
 	const { asyncFn: join } = useAsyncFn(async () => {
-		await router.push(schedule.meetingLink)
+		await router.push(`${classInst.pageLink}/schedules/${schedule.id}/live`)
 	})
 
 	const { asyncFn: rewatch } = useAsyncFn(async () => {

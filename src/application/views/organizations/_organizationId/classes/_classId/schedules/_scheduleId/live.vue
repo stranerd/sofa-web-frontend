@@ -6,6 +6,14 @@
 				allow="camera; microphone; fullscreen; display-capture; autoplay"
 				:src="schedule.meetingLink"
 				class="w-full h-full" />
+			<div v-else class="w-full h-full flex flex-col gap-2 justify-center items-center p-6">
+				<SofaEmptyState
+					title="This class is not live at the moment"
+					subTitle="Evaluate your level of knowledge"
+					actionLabel="Go Back"
+					:action="() => $router.push(classInst.pageLink)"
+					titleStyle="mdlg:!text-xl" />
+			</div>
 		</template>
 	</ClassLayout>
 </template>
