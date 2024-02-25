@@ -1,9 +1,10 @@
-import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { addToArray } from 'valleyed'
-import { useAsyncFn } from '../core/hooks'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
+import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { PlanEntity, PlansUseCases } from '@modules/payment'
+import { useSuccessHandler } from '../core/states'
+import { PlanEntity, PlansUseCases, WalletsUseCases } from '@modules/payment'
 
 const store = {
 	plans: ref<PlanEntity[]>([]),
@@ -65,4 +66,18 @@ export const usePlansList = () => {
 	})
 
 	return { ...store, myPlans, currentPlan }
+}
+
+export const useSubscription = () => {
+	const { setMessage } = useSuccessHandler()
+	const { asyncFn: subscribeToPlan } = useAsyncFn(async (planId: string) => {
+		await WalletsUseCases.subscribeToPlan(planId)
+		setMessage('Subscription successful')
+	})
+
+	const { asyncFn: toggleRenewPlan } = useAsyncFn(async (renew: boolean) => {
+		await WalletsUseCases.toggleRenewSubscription(renew)
+	})
+
+	return { subscribeToPlan, toggleRenewPlan }
 }

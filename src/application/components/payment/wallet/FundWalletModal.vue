@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-4 mdlg:p-6 p-4">
+	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="fundWallet">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
 			<SofaHeaderText customClass="text-xl">Fund wallet</SofaHeaderText>
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
@@ -12,7 +12,7 @@
 
 		<div class="w-full flex flex-col gap-5">
 			<SofaTextField
-				v-model="fundWalletAmount"
+				v-model="factory.amount"
 				customClass="rounded-custom !bg-lightGray"
 				type="number"
 				placeholder="Amount"
@@ -23,10 +23,7 @@
 			</SofaTextField>
 
 			<div class="w-full flex flex-col gap-2 border-t border-lightGray pt-3">
-				<a
-					class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
-					:class="{ 'border-primaryBlue border-2': fundWalletMethod === 'online' }"
-					@click="payOnline">
+				<a class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom" @click="fundWalletOnline">
 					<SofaIcon customClass="h-[20px]" name="website" />
 					<SofaNormalText> Pay online </SofaNormalText>
 				</a>
@@ -35,22 +32,20 @@
 					v-for="method in methods"
 					:key="method.hash"
 					class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
-					:class="{ 'border-primaryBlue border-2': fundWalletMethod === method.id }"
-					@click="fundWalletMethod ? (fundWalletMethod = null) : (fundWalletMethod = method.id)">
+					:class="{ 'border-primaryBlue border-2': factory.methodId === method.id }"
+					@click="factory.methodId = factory.methodId ? '' : method.id">
 					<SofaIcon customClass="h-[20px]" name="card" />
 					<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
 				</a>
 
-				<a
-					class="w-full flex items-center gap-3 p-3 border-2 rounded-custom border-darkLightGray"
-					@click="Logic.Payment.initialPayment()">
-					<SofaIcon customClass="h-[18px]" name="add-card" />
+				<a class="w-full flex items-center gap-3 p-3 border-2 rounded-custom border-darkLightGray" @click="addMethod">
+					<SofaIcon customClass="h-[18px]" name="add-gray" />
 					<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 				</a>
 			</div>
 		</div>
 
-		<div class="w-full md:flex justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:py-0 py-4">
+		<div class="w-full md:flex justify-between items-center grid grid-cols-2 mdlg:py-0 py-4">
 			<SofaButton
 				textColor="text-grayColor"
 				bgColor="bg-white"
@@ -60,77 +55,26 @@
 				Cancel
 			</SofaButton>
 
-			<div class="md:!w-auto col-span-2 flex flex-col">
-				<SofaButton
-					textColor="text-white"
-					bgColor="bg-primaryBlue"
-					padding="px-4 md:!py-1 py-3"
-					customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
-					@click="submit">
-					Continue
-				</SofaButton>
-			</div>
+			<SofaButton
+				type="submit"
+				textColor="text-white"
+				bgColor="bg-primaryBlue"
+				padding="px-4 md:py-1 py-3"
+				class="w-full md:w-auto border-2 border-transparent md:min-w-[100px]">
+				Continue
+			</SofaButton>
 		</div>
-	</div>
+	</form>
 </template>
 
 <script lang="ts" setup>
-import { capitalize, ref } from 'vue'
 import { useMyMethods } from '@app/composables/payment/methods'
-import { Logic } from 'sofa-logic'
+import { useFundWallet } from '@app/composables/payment/wallets'
 
-// TODO: cleanup with factory and hook for fund wallet
-
-const props = defineProps<{
+defineProps<{
 	close: () => void
 }>()
 
-const fundWalletAmount = ref(0)
-const fundWalletMethod = ref<string | null>(null)
-
-const { methods } = useMyMethods()
-
-const submit = async () => {
-	const amount = fundWalletAmount.value
-	const methodId = fundWalletMethod.value
-	if (methodId) {
-		Logic.Payment.FundWalletForm = {
-			amount,
-			methodId,
-		}
-		Logic.Payment.FundWallet()
-			?.then((data) => {
-				if (data) {
-					Logic.Common.showAlert({
-						message: 'Funding successful',
-						type: 'success',
-					})
-				}
-
-				props.close()
-			})
-			.catch((error) => {
-				Logic.Common.showAlert({
-					message: capitalize(error.response.data[0]?.message),
-					type: 'error',
-				})
-			})
-	} else {
-		Logic.Payment.initialPayment(amount)
-	}
-}
-
-const payOnline = async () => {
-	const amount = fundWalletAmount.value
-
-	if (amount < 200) {
-		Logic.Common.showAlert({
-			message: `Funding amount cannot be less than ${Logic.Common.formatPrice(200)}`,
-			type: 'warning',
-		})
-		return
-	}
-
-	await Logic.Payment.initialPayment(amount, 'fundWallet')
-}
+const { factory, fundWallet, fundWalletOnline } = useFundWallet()
+const { methods, addMethod } = useMyMethods()
 </script>

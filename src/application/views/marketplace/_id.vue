@@ -67,17 +67,15 @@
 
 						<!-- Pay online -->
 
-						<div
-							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
-							@click="Logic.Payment.initialPayment()">
-							<SofaIcon customClass="h-[18px]" name="add-card" />
+						<div class="w-full flex items-center gap-3 p-3" @click="addMethod">
+							<SofaIcon customClass="h-[18px]" name="add-gray" />
 							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 						</div>
 
 						<a
 							v-for="method in methods"
 							:key="method.hash"
-							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
+							:class="`w-full flex items-center gap-3 p-3 bg-lightGray ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
 							}  rounded-custom`"
 							@click="selectedMethodId = method.id">
@@ -119,6 +117,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import { useCreateView } from '@app/composables/interactions/views'
 import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
@@ -129,6 +128,8 @@ import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
 import { useMyMethods } from '@app/composables/payment/methods'
+import { useCreatePurchase } from '@app/composables/payment/purchases'
+import { Purchasables } from '@modules/payment'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
@@ -227,13 +228,16 @@ export default defineComponent({
 			},
 		]
 
+		const route = useRoute()
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
 
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
 
-		const { methods } = useMyMethods()
+		const { methods, addMethod } = useMyMethods()
+
+		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
 
 		const AllReviews = ref(Logic.Study.AllReviews)
 
@@ -408,7 +412,7 @@ export default defineComponent({
 			}
 		}
 
-		const buyCourse = () => {
+		const buyCourse = async () => {
 			if (Logic.Common.loaderSetup.loading) return
 
 			if ((SingleCourse.value?.price.amount ?? 0) > 0 && selectedMethodId.value == '') {
@@ -416,18 +420,12 @@ export default defineComponent({
 				return
 			}
 
-			Logic.Payment.MakePurchaseForm = {
-				id: SingleCourse.value?.id ?? '',
-				methodId: selectedMethodId.value,
-				type: 'courses',
-			}
+			const purchase = await createPurchase(selectedMethodId.value)
 
-			Logic.Payment.MakePurchase()?.then((data) => {
-				if (data) {
-					showMakePaymentModal.value = false
-					Logic.Common.GoToRoute('/course/' + SingleCourse.value?.id)
-				}
-			})
+			if (purchase) {
+				showMakePaymentModal.value = false
+				Logic.Common.GoToRoute('/course/' + SingleCourse.value?.id)
+			}
 		}
 
 		const setSimilarContents = () => {
@@ -500,6 +498,7 @@ export default defineComponent({
 			contentList,
 			contentDetails,
 			methods,
+			addMethod,
 			showMakePaymentModal,
 			selectedMethodId,
 			wallet,

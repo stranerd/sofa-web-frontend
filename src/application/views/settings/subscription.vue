@@ -112,9 +112,9 @@ import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { usePlansList, useSubscription } from '@app/composables/payment/plans'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
-import { usePlansList } from '@app/composables/payment/plans'
 
 export default defineComponent({
 	name: 'SubscriptionSettingPage',
@@ -151,21 +151,17 @@ export default defineComponent({
 		const { userType, wallet } = useAuth()
 		const autoRenewIsOn = computed(() => !!wallet.value?.subscription.next)
 		const { myPlans, currentPlan: myPlan } = usePlansList()
+		const { subscribeToPlan, toggleRenewPlan } = useSubscription()
 
 		const myApplicablePlan = computed(() => myPlans.value.at(0) ?? null)
 
-		const subscibeToPlan = (id: string) => {
-			Logic.Payment.SubscribeToPlan(id).then((data) => {
-				if (data) {
-					Logic.Common.showAlert({
-						message: 'Subscription successful',
-						type: 'success',
-					})
-				}
-			})
+		const subscibeToPlan = async (id: string) => {
+			await subscribeToPlan(id)
 		}
 
-		const toggleRenewal = () => {}
+		const toggleRenewal = async () => {
+			await toggleRenewPlan(autoRenewIsOn.value)
+		}
 
 		return {
 			Logic,
