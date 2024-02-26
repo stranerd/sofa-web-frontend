@@ -39,14 +39,15 @@
 <script lang="ts" setup>
 import { useModals } from '@app/composables/core/modals'
 import { UploadedFile } from '@modules/core'
-import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
+import { PlayTypes } from '@modules/plays'
+import { FileEntity, FileType, QuizEntity } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	onSelected: (selected: { file: FileEntity } | { quiz: QuizEntity; mode: QuizModes }) => void
+	onSelected: (selected: { file: FileEntity } | { quiz: QuizEntity; mode: PlayTypes }) => void
 }>()
 
-const select = (selected: { file: FileEntity } | { quiz: QuizEntity; mode: QuizModes }) => {
+const select = (selected: { file: FileEntity } | { quiz: QuizEntity; mode: PlayTypes }) => {
 	props.onSelected(selected)
 	props.close()
 }
@@ -75,13 +76,13 @@ const newMaterialOptions = [
 	{
 		name: 'Practice',
 		type: 'quiz',
-		extras: { mode: QuizModes.practice },
+		extras: { mode: PlayTypes.practice },
 		icon: 'open-notebook',
 	},
 	{
 		name: 'Test',
 		type: 'quiz',
-		extras: { mode: QuizModes.test },
+		extras: { mode: PlayTypes.tests },
 		icon: 'document-text',
 	},
 ] as const

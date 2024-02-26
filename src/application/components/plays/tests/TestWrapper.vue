@@ -19,7 +19,15 @@ const props = withDefaults(
 	},
 )
 
-const { test, questions, fetched, answer, start, end, submitAnswer } = useTest(props.id, {
+const {
+	play: test,
+	questions,
+	fetched,
+	answer,
+	start,
+	end,
+	submitAnswer,
+} = useTest(props.id, {
 	questions: props.skipQuestions,
 	statusNav: props.skipStatusNav,
 })
@@ -55,13 +63,10 @@ const extras = computed(() => ({
 					return 'Study harder!'
 				},
 				get color() {
-					if (this.percent >= 80) return 'text-[#4BAF7D]'
-					if (this.percent >= 70) return 'text-[#ADAF4B]'
-					if (this.percent >= 60) return 'text-[#FA9632]'
-					return 'text-[#F55F5F]'
+					return test.value?.getLabelColor(authId.value) ?? ''
 				},
 				get bgColor() {
-					return this.color.split('[')[1].split(']')[0]
+					return this.color.split(']')[0].split('[')[1]
 				},
 			}))
 	},

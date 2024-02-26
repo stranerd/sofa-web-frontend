@@ -204,7 +204,7 @@ export const generateHooks = <E extends PlayEntity, T extends PlayToModel>(
 		} = useAsyncFn(async (data: T) => {
 			let play = await useCase.create(data, access)
 			if (options.start) play = await useCase.start(play.id)
-			if (options.nav) await router.push(play.rootPage)
+			if (options.nav) await router.push(options.start ? play.runPage : play.lobbyPage)
 			return play
 		})
 

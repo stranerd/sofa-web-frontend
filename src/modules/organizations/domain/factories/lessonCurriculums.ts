@@ -3,7 +3,8 @@ import { ScheduleEntity } from '../entities/schedules'
 import { ClassLessonCurriculumSection, ClassLessonable } from '../types'
 import { BaseFactory } from '@modules/core'
 import { asArray } from '@modules/core/domain/factories/arrays'
-import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
+import { FileEntity, FileType, QuizEntity } from '@modules/study'
+import { PlayTypes } from '@modules/plays'
 
 class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, ClassLessonCurriculumSection, ClassLessonCurriculumSection> {
 	readonly rules = {
@@ -13,7 +14,7 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 				[ClassLessonable.quiz]: v.object({
 					id: v.string().min(1),
 					type: v.is(ClassLessonable.quiz as const),
-					quizMode: v.in(Object.values(QuizModes)),
+					quizMode: v.in(Object.values(PlayTypes)),
 				}),
 				[ClassLessonable.file]: v.object({
 					id: v.string().min(1),
@@ -52,7 +53,7 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		this.items = [...this.items, { type: ClassLessonable.schedule, id: schedule.id }]
 	}
 
-	addQuiz(quiz: QuizEntity, mode: QuizModes) {
+	addQuiz(quiz: QuizEntity, mode: PlayTypes) {
 		this.items = [...this.items, { type: ClassLessonable.quiz, id: quiz.id, quizMode: mode }]
 	}
 

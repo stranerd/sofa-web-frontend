@@ -43,10 +43,6 @@ export class PlayEntity extends BaseEntity {
 		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
 	}
 
-	get rootPage() {
-		return `/${this.type}/${this.id}`
-	}
-
 	get lobbyPage() {
 		return `/${this.type}/${this.id}/lobby`
 	}
@@ -64,7 +60,7 @@ export class PlayEntity extends BaseEntity {
 			{
 				[PlayTypes.games]: 'game',
 				[PlayTypes.tests]: 'test',
-				[PlayTypes.flashCards]: 'flash card',
+				[PlayTypes.flashcards]: 'flash card',
 				[PlayTypes.practice]: 'practice',
 			}[this.type] ?? ''
 		)
@@ -99,7 +95,7 @@ export class PlayEntity extends BaseEntity {
 	getLabelColor(userId: string) {
 		if (this.isTest()) {
 			const percentage = this.getPercentage(userId)
-			if (percentage >= 90) return 'text-[#4BAF7D]'
+			if (percentage >= 80) return 'text-[#4BAF7D]'
 			if (percentage >= 70) return 'text-[#ADAF4B]'
 			if (percentage >= 50) return 'text-[#3296C8]'
 			return 'text-primaryRed'

@@ -50,10 +50,11 @@
 import { ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useHasAccess } from '@app/composables/study'
-import { QuizEntity, QuizModes } from '@modules/study'
+import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { useCreateTest } from '@app/composables/plays/tests'
 import { useCreateGame } from '@app/composables/plays/games'
+import { PlayTypes } from '@modules/plays'
 
 const props = defineProps<{
 	close: () => void
@@ -73,11 +74,11 @@ const { createPlay: createGame } = useCreateGame({}, { start: false, nav: true }
 const showGame = ref(false)
 const joinGame = ref(false)
 
-const chooseMode = async (mode: QuizModes) => {
+const chooseMode = async (mode: PlayTypes) => {
 	const quizId = props.quiz.id
-	if (mode === QuizModes.game) return (showGame.value = true)
-	if (mode === QuizModes.practice || mode === QuizModes.flashcard) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
-	if (mode === QuizModes.test) await createTest({ quizId })
+	if (mode === PlayTypes.games) return (showGame.value = true)
+	if (mode === PlayTypes.practice || mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
+	if (mode === PlayTypes.tests) await createTest({ quizId })
 
 	props.close()
 }
@@ -91,25 +92,25 @@ const otherTasks = [
 		title: 'Practice',
 		subTitle: 'Interactive and comfortable learning',
 		icon: 'learn-quiz' as const,
-		value: QuizModes.practice,
+		value: PlayTypes.practice,
 	},
 	{
 		title: 'Test',
 		subTitle: 'Evaluate your level of knowledge',
 		icon: 'test' as const,
-		value: QuizModes.test,
+		value: PlayTypes.tests,
 	},
 	{
 		title: 'Flashcards',
 		subTitle: 'Digital cards to memorize answers',
 		icon: 'study-flashcard' as const,
-		value: QuizModes.flashcard,
+		value: PlayTypes.flashcards,
 	},
 	{
 		title: 'Game',
 		subTitle: 'Battle friends for the highest score',
 		icon: 'play-quiz' as const,
-		value: QuizModes.game,
+		value: PlayTypes.games,
 	},
 ]
 </script>

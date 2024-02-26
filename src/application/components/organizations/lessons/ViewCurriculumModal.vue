@@ -33,7 +33,7 @@
 					class="rounded-custom" />
 			</div>
 			<template v-if="curriculumItem.type === ClassLessonable.quiz">
-				<template v-if="curriculumItem.quizMode === QuizModes.practice">
+				<template v-if="curriculumItem.quizMode === PlayTypes.practice">
 					<div
 						v-if="!quizPracticeStarted"
 						class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
@@ -56,7 +56,7 @@
 						:classInst="classInst"
 						:lesson="lesson" />
 				</template>
-				<template v-if="curriculumItem.quizMode === QuizModes.test">
+				<template v-if="curriculumItem.quizMode === PlayTypes.tests">
 					<div
 						v-if="!quizTestStarted"
 						class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
@@ -93,8 +93,8 @@
 import { computed, ref, watch } from 'vue'
 import { useCreateTest } from '@app/composables/plays/tests'
 import { ClassEntity, ClassLesson, ClassLessonable, ExtendedCurriculum } from '@modules/organizations'
-import { TestEntity } from '@modules/plays'
-import { FileType, QuizModes } from '@modules/study'
+import { PlayTypes, TestEntity } from '@modules/plays'
+import { FileType } from '@modules/study'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
@@ -107,8 +107,8 @@ const props = defineProps<{
 const title = computed(() => {
 	if (curriculumItem.value?.type === ClassLessonable.schedule) return 'Live Session'
 	if (curriculumItem.value?.type === ClassLessonable.quiz) {
-		if (curriculumItem.value.quizMode === QuizModes.practice) return 'Practice'
-		if (curriculumItem.value.quizMode === QuizModes.test) return 'Test'
+		if (curriculumItem.value.quizMode === PlayTypes.practice) return 'Practice'
+		if (curriculumItem.value.quizMode === PlayTypes.tests) return 'Test'
 		else return curriculumItem.value.quizMode
 	}
 	if (curriculumItem.value?.type === ClassLessonable.file) {

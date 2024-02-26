@@ -1,5 +1,7 @@
+import { computed } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
+import { useUsersInList } from '../users/users'
 import { generateHooks } from './plays'
 import { GamesUseCases, PlayTypes } from '@modules/plays'
 
@@ -7,11 +9,14 @@ const { useMyPlays: useMyGames, singleStore, usePlay, useCreatePlay: useCreateGa
 
 export { useCreateGame, useMyGames }
 
-export const useGame = (...args: Parameters<typeof usePlay>) => {
-	const id = args[0]
-	const plays = usePlay(...args)
+export const useGame = (id: string, skip: Parameters<typeof usePlay>[1] & { participants: boolean }) => {
+	const plays = usePlay(id, skip)
 
 	const { id: authId } = useAuth()
+
+	const { users: participants } = useUsersInList(
+		computed(() => (skip.participants ? [] : singleStore[id].play.value?.participants ?? [])),
+	)
 
 	const { asyncFn: join } = useAsyncFn(async (join: boolean) => {
 		const p = singleStore[id].play.value
@@ -20,5 +25,5 @@ export const useGame = (...args: Parameters<typeof usePlay>) => {
 		await GamesUseCases.join(id, { join })
 	})
 
-	return { ...plays, join }
+	return { ...plays, participants, join }
 }

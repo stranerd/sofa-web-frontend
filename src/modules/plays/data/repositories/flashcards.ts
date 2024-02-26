@@ -11,7 +11,7 @@ export class FlashCardRepository
 	private static instance: FlashCardRepository
 
 	private constructor() {
-		super(PlayTypes.flashCards, (model: FlashCardFromModel | null) => (model ? new FlashCardEntity(model) : null) as FlashCardEntity)
+		super(PlayTypes.flashcards, (model: FlashCardFromModel | null) => (model ? new FlashCardEntity(model) : null) as FlashCardEntity)
 	}
 
 	static getInstance() {

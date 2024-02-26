@@ -4,6 +4,6 @@ import { PlayEntity } from './plays'
 
 export class FlashCardEntity extends PlayEntity {
 	constructor(data: FlashCardFromModel) {
-		super(PlayTypes.flashCards, data)
+		super(PlayTypes.flashcards, data)
 	}
 }

@@ -1,5 +1,6 @@
 import { ScheduleEntity } from '../entities/schedules'
-import { FileEntity, FileType, QuizEntity, QuizModes } from '@modules/study'
+import { PlayTypes } from '@modules/plays'
+import { FileEntity, FileType, QuizEntity } from '@modules/study'
 
 export type { Saleable } from '@modules/payment'
 export type { EmbeddedUser } from '@modules/users'
@@ -59,7 +60,7 @@ type ClassLessonCurriculumSectionItem =
 	| {
 			id: string
 			type: ClassLessonable.quiz
-			quizMode: QuizModes
+			quizMode: PlayTypes
 	  }
 	| {
 			id: string
@@ -89,7 +90,7 @@ export type ExtendedClassLessonCurriculumSectionItem =
 	| {
 			id: string
 			type: ClassLessonable.quiz
-			quizMode: QuizModes
+			quizMode: PlayTypes
 			quiz: QuizEntity
 	  }
 	| {

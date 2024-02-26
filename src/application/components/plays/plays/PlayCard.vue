@@ -5,10 +5,10 @@
 		class="w-full flex gap-3 p-3 rounded-custom bg-white shadow-custom">
 		<SofaImageLoader customClass="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom" :photoUrl="quiz.picture" />
 		<div class="flex flex-col w-full gap-2">
-			<SofaNormalText class="!font-bold !line-clamp-1 mx-auto">
+			<SofaNormalText class="!font-bold line-clamp-1">
 				{{ quiz.title }}
 			</SofaNormalText>
-			<SofaNormalText color="text-grayColor" class="capitalize mx-auto">
+			<SofaNormalText color="text-grayColor" class="capitalize">
 				{{ play.singularizedType }}
 			</SofaNormalText>
 
