@@ -14,14 +14,6 @@ export class CommentFactory extends BaseFactory<CommentEntity, Omit<CommentToMod
 		super({ body: '' })
 	}
 
-	get body() {
-		return this.values.body
-	}
-
-	set body(value: string) {
-		this.set('body', value)
-	}
-
 	loadEntity = (entity: CommentEntity) => {
 		this.body = entity.body
 	}

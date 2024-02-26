@@ -1,139 +1,29 @@
-import { Differ } from 'valleyed'
-import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
-import { useListener } from '../core/listener'
 import { useUsersInList } from '../users/users'
-import { AddQuestionAnswer, Game, GameParticipantAnswer, Logic } from 'sofa-logic'
-import { QuestionEntity } from '@modules/study'
+import { generateHooks } from './plays'
+import { GamesUseCases, PlayTypes } from '@modules/plays'
 
-const store = {} as Record<
-	string,
-	{
-		game: Ref<Game | null>
-		questions: QuestionEntity[]
-		answer: Ref<GameParticipantAnswer | null>
-		listener: ReturnType<typeof useListener>
-	}
->
+const { useMyPlays: useMyGames, singleStore, usePlay, useCreatePlay: useCreateGame } = generateHooks(PlayTypes.games, GamesUseCases)
 
-export const useGame = (id: string, skip: { questions: boolean; participants: boolean; statusNav: boolean }) => {
+export { useCreateGame, useMyGames }
+
+export const useGame = (id: string, skip: Parameters<typeof usePlay>[1] & { participants: boolean }) => {
+	const plays = usePlay(id, skip)
+
 	const { id: authId } = useAuth()
-	const route = useRoute()
-	const router = useRouter()
 
-	const lobby = `/games/${id}/lobby`
-	const run = `/games/${id}/run`
-	const results = `/games/${id}/results`
-
-	store[id] ??= {
-		game: ref(null),
-		questions: reactive([]),
-		answer: ref(null),
-		listener: useListener(
-			async () =>
-				await Logic.Common.listenToOne<Game>(`plays/games/${id}`, {
-					created: async (entity) => {
-						store[id].game.value = entity
-					},
-					updated: async (entity) => {
-						store[id].game.value = entity
-					},
-					deleted: async (entity) => {
-						store[id].game.value = entity
-					},
-				}),
-		),
-	}
-
-	const { users: participants } = useUsersInList(computed(() => (skip.participants ? [] : store[id].game.value?.participants ?? [])))
-
-	const { asyncFn: fetchGame, called } = useAsyncFn(
-		async () => {
-			store[id].game.value = await Logic.Plays.GetGame(id)
-		},
-		{ key: `plays/games/${id}` },
-	)
-
-	const { asyncFn: start } = useAsyncFn(async () => {
-		await Logic.Plays.StartGame(id)
-		await router.push(store[id].game.value?.participants.includes(authId.value) ? run : results)
-	})
-
-	const { asyncFn: end } = useAsyncFn(
-		async () => {
-			await Logic.Plays.EndGame(id)
-			return true
-		},
-		{
-			pre: async () => {
-				if (store[id].game.value?.status !== 'started') return false
-				return await Logic.Common.confirm({
-					title: 'Are you sure you want to end this game?',
-					sub: 'Ending the game now will automically end it for all participants currently taking the test!',
-					right: { label: 'Yes, end' },
-					left: { label: 'Cancel' },
-				})
-			},
-		},
+	const { users: participants } = useUsersInList(
+		computed(() => (skip.participants ? [] : singleStore[id].play.value?.participants ?? [])),
 	)
 
 	const { asyncFn: join } = useAsyncFn(async (join: boolean) => {
-		if (join && store[id].game.value?.participants.includes(authId.value)) return
-		if (!join && !store[id].game.value?.participants.includes(authId.value)) return
-		await Logic.Plays.JoinGame(id, join)
+		const p = singleStore[id].play.value
+		if (!p) return
+		if (join === p.participants.includes(authId.value)) return
+		await GamesUseCases.join(id, { join })
 	})
 
-	const { asyncFn: submitAnswer } = useAsyncFn(async (data: AddQuestionAnswer) => {
-		await Logic.Plays.AnswerGameQuestion(id, data)
-		return true
-	})
-
-	const alertAndNav = async (route: string, message?: string) => {
-		// if (message) Logic.Common.showAlert({ message, type: 'info' })
-		message
-		await router.replace(route)
-	}
-
-	const gameWatcherCb = async () => {
-		const g = store[id].game.value
-		if (!g || skip.statusNav) return
-
-		if (g.status === 'created' && route.path !== lobby) return await alertAndNav(lobby, 'Game has not started yet')
-		if (g.status === 'started' && route.path !== run) return await alertAndNav(run, 'Game has started')
-		if (['ended', 'scored'].includes(g.status) && route.path !== results) return await alertAndNav(results, 'Game has ended')
-	}
-
-	watch(
-		store[id].game,
-		async (cur, old) => {
-			if (!cur) return
-			if (!skip.questions && !Differ.equal(cur.questions, old?.questions))
-				Logic.Plays.GetGameQuestions(id)
-					.then((questions) => {
-						store[id].questions.splice(0, store[id].questions.length, ...questions)
-					})
-					.catch()
-			if (!skip.questions)
-				Logic.Plays.GetGameAnswers(id, { where: [{ field: 'userId', value: authId.value }] })
-					.then((answers) => {
-						store[id].answer.value = answers.results.at(0) ?? null
-					})
-					.catch()
-			if (!skip.statusNav) gameWatcherCb()
-		},
-		{ immediate: true },
-	)
-
-	onMounted(async () => {
-		/* if (!called.value) */ await fetchGame()
-		await store[id].listener.start()
-		await gameWatcherCb()
-	})
-	onUnmounted(async () => {
-		await store[id].listener.close()
-	})
-
-	return { ...store[id], fetched: called, participants, start, end, join, submitAnswer }
+	return { ...plays, participants, join }
 }

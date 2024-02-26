@@ -34,20 +34,20 @@ export class HttpClient {
 		)
 	}
 
-	async get<Body, ReturnValue>(url: string, body: Body): Promise<ReturnValue> {
-		return this.makeRequest<Body, ReturnValue>(url, 'get', body)
+	async get<Query, ReturnValue>(url: string, query: Query): Promise<ReturnValue> {
+		return this.makeRequest<unknown, Query, ReturnValue>(url, 'get', {}, query)
 	}
 
-	async post<Body, ReturnValue>(url: string, body: Body): Promise<ReturnValue> {
-		return this.makeRequest<Body, ReturnValue>(url, 'post', body)
+	async post<Body, ReturnValue, Query = any>(url: string, body: Body, query: Query = {} as any): Promise<ReturnValue> {
+		return this.makeRequest<Body, unknown, ReturnValue>(url, 'post', body, query)
 	}
 
-	async put<Body, ReturnValue>(url: string, body: Body): Promise<ReturnValue> {
-		return this.makeRequest<Body, ReturnValue>(url, 'put', body)
+	async put<Body, ReturnValue, Query = any>(url: string, body: Body, query: Query = {} as any): Promise<ReturnValue> {
+		return this.makeRequest<Body, unknown, ReturnValue>(url, 'put', body, query)
 	}
 
-	async delete<Body, ReturnValue>(url: string, body: Body): Promise<ReturnValue> {
-		return this.makeRequest<Body, ReturnValue>(url, 'delete', body)
+	async delete<Body, ReturnValue, Query = any>(url: string, body: Body, query: Query = {} as any): Promise<ReturnValue> {
+		return this.makeRequest<Body, Query, ReturnValue>(url, 'delete', body, query)
 	}
 
 	async download(url: string) {
@@ -65,7 +65,7 @@ export class HttpClient {
 		}
 	}
 
-	private async makeRequest<Body, ReturnValue>(url: string, method: Method, data: Body): Promise<ReturnValue> {
+	private async makeRequest<Body, Query, ReturnValue>(url: string, method: Method, data: Body, query: Query): Promise<ReturnValue> {
 		try {
 			const isGet = method === 'get'
 			if (!isGet) {
@@ -81,7 +81,8 @@ export class HttpClient {
 			const res = await this.client.request<Body, AxiosResponse<ReturnValue>>({
 				url,
 				method,
-				[isGet ? 'params' : 'data']: data,
+				params: query,
+				data,
 			})
 			return res.data
 		} catch (e) {
@@ -93,7 +94,7 @@ export class HttpClient {
 			if (!isFromOurServer) throw error
 			if (status !== StatusCodes.AccessTokenExpired) throw new NetworkError(status, error.response.data)
 			const res = await this.getNewTokens()
-			if (res) return this.makeRequest(url, method, data)
+			if (res) return this.makeRequest(url, method, data, query)
 			else throw error
 		}
 	}

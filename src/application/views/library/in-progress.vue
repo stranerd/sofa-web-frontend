@@ -1,12 +1,7 @@
 <template>
 	<LibraryLayout title="In Progress">
 		<template v-if="data.length">
-			<SofaProgressItemCard
-				v-for="play in data"
-				:key="play.id"
-				:content="play"
-				customClass="!bg-white shadow-custom cursor-pointer"
-				@click="play.action()" />
+			<PlayCard v-for="play in data" :key="play.id" :play="play" />
 		</template>
 
 		<SofaEmptyState
@@ -14,7 +9,7 @@
 			title="You have no plays in progress"
 			subTitle="Discover thousands of materials to buy, created by verified experts"
 			actionLabel="Marketplace"
-			:action="() => Logic.Common.GoToRoute('/marketplace')" />
+			:action="() => $router.push('/marketplace')" />
 	</LibraryLayout>
 </template>
 
@@ -22,11 +17,8 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { createGameData, createTestData } from '@app/composables/library'
-import { useMyGames } from '@app/composables/plays/games-list'
-import { useMyTests } from '@app/composables/plays/tests-list'
-import { useQuizzesInList } from '@app/composables/study/quizzes-list'
-import { Logic } from 'sofa-logic'
+import { useMyGames } from '@app/composables/plays/games'
+import { useMyTests } from '@app/composables/plays/tests'
 
 export default defineComponent({
 	name: 'LibraryInProgressPage',
@@ -38,20 +30,15 @@ export default defineComponent({
 
 		const { ongoing: ongoingGames } = useMyGames()
 		const { ongoing: ongoingTests } = useMyTests()
-		const { quizzes } = useQuizzesInList(computed(() => [...ongoingGames.value, ...ongoingTests.value].map((p) => p.quizId)))
 
 		const data = computed(() => {
-			if (tab.value === 'all')
-				return [
-					...ongoingGames.value.map((g) => createGameData(g, quizzes.value)),
-					...ongoingTests.value.map((t) => createTestData(t, quizzes.value)),
-				].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === 'games') return ongoingGames.value.map((g) => createGameData(g, quizzes.value))
-			if (tab.value === 'tests') return ongoingTests.value.map((t) => createTestData(t, quizzes.value))
+			if (tab.value === 'all') return [...ongoingGames.value, ...ongoingTests.value].sort((a, b) => b.createdAt - a.createdAt)
+			if (tab.value === 'games') return ongoingGames.value
+			if (tab.value === 'tests') return ongoingTests.value
 			return []
 		})
 
-		return { Logic, data }
+		return { data }
 	},
 })
 </script>

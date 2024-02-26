@@ -54,7 +54,7 @@ export const useModals = () => ({
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
-		viewCurriculum: { component: ViewCuriculum, modalArgs: { maxWidth: 'h-full overflow-y-auto' } },
+		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full overflow-y-auto' } },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },

@@ -41,69 +41,9 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		})
 	}
 
-	get first() {
-		return this.values.first
-	}
-
-	set first(value: string) {
-		this.set('first', value)
-	}
-
-	get last() {
-		return this.values.last
-	}
-
-	set last(value: string) {
-		this.set('last', value)
-	}
-
-	get description() {
-		return this.values.description
-	}
-
-	set description(value: string) {
-		this.set('description', value)
-	}
-
-	get photo() {
-		return this.values.photo
-	}
-
-	set photo(value: Media | null) {
-		this.set('photo', value)
-	}
-
-	get email() {
-		return this.values.email
-	}
-
-	set email(value: string) {
-		this.set('email', value)
-	}
-
-	get password() {
-		return this.values.password
-	}
-
 	set password(value: string) {
 		this.set('password', value)
 		this.set('cPassword', '')
-	}
-
-	get cPassword() {
-		return this.values.cPassword
-	}
-
-	set cPassword(value: string) {
-		this.set('cPassword', value)
-	}
-
-	get termsAccepted() {
-		return this.values.termsAccepted
-	}
-
-	set termsAccepted(value: boolean) {
-		this.set('termsAccepted', value)
 	}
 
 	model = async () => {

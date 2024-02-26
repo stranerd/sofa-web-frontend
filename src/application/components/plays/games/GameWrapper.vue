@@ -24,7 +24,17 @@ const props = withDefaults(
 )
 
 const router = useRouter()
-const { game, participants, questions, fetched, answer, start, end, join, submitAnswer } = useGame(props.id, {
+const {
+	play: game,
+	participants,
+	questions,
+	fetched,
+	answer,
+	start,
+	end,
+	join,
+	submitAnswer,
+} = useGame(props.id, {
 	questions: props.skipQuestions,
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
@@ -42,8 +52,9 @@ const extras = computed(() => ({
 	end,
 	join,
 	submit: async (data?: { questionId: string; answer: any }) => {
+		if (!game.value) return
 		if (data) return await submitAnswer(data)
-		await router.push(`/games/${props.id}/results`)
+		await router.push(game.value.resultsPage)
 		return true
 	},
 	isParticipant: game.value?.participants.includes(authId.value),

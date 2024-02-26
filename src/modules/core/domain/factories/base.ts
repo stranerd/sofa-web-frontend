@@ -1,4 +1,4 @@
-import { Differ, VCore } from 'valleyed'
+import { ClassPropertiesWrapper, Differ, VCore } from 'valleyed'
 import { isProxy, isReactive, isRef, reactive, ref, toRaw } from 'vue'
 
 export function deepToRaw<T>(input: T): T {
@@ -12,7 +12,7 @@ export function deepToRaw<T>(input: T): T {
 	return input
 }
 
-export abstract class BaseFactory<E, T, K extends Record<string, any>> {
+export abstract class BaseFactory<E, T, K extends Record<string, any>> extends ClassPropertiesWrapper<K> {
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
 	abstract model: () => T | Promise<T>
@@ -22,8 +22,16 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> {
 	protected readonly defaults: K
 	public readonly values: K
 	protected readonly validValues: K
+	protected readonly onSet: Partial<Record<keyof K, (value: any) => void>> = {} as any
 
-	protected constructor(keys: K) {
+	constructor(keys: K) {
+		super(keys, {
+			get: (key: keyof K) => this.values[key] as any,
+			set: (key: keyof K, value: any) => {
+				this.set(key, value)
+				this.onSet[key]?.(value)
+			},
+		})
 		this.defaults = reactive({ ...keys }) as K
 		this.values = reactive({ ...keys }) as K
 		this.validValues = reactive({ ...keys }) as K

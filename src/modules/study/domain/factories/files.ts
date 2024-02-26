@@ -31,61 +31,9 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 		})
 	}
 
-	get title() {
-		return this.values.title
-	}
-
-	set title(value: string) {
-		this.set('title', value)
-	}
-
-	get photo() {
-		return this.values.photo
-	}
-
-	set photo(value: Media | null) {
-		this.set('photo', value)
-	}
-
-	get description() {
-		return this.values.description
-	}
-
-	set description(value: string) {
-		this.set('description', value)
-	}
-
-	get topic() {
-		return this.values.topic
-	}
-
-	set topic(value: string) {
-		this.set('topic', value)
-	}
-
-	get media() {
-		return this.values.media
-	}
-
 	set media(value: Media) {
 		this.set('media', value)
 		if (!this.title && value) this.title = value.name
-	}
-
-	get courseId() {
-		return this.values.courseId
-	}
-
-	set courseId(value: string | null) {
-		this.set('courseId', value)
-	}
-
-	get tags() {
-		return this.values.tags
-	}
-
-	set tags(value: string[]) {
-		this.set('tags', value)
 	}
 
 	get tagString() {

@@ -14,22 +14,6 @@ export class LessonFactory extends BaseFactory<ClassLesson, LessonToModel, Keys>
 		super({ title: '', teacher: '' })
 	}
 
-	get title() {
-		return this.values.title
-	}
-
-	set title(value: string) {
-		this.set('title', value)
-	}
-
-	get teacher() {
-		return this.values.teacher
-	}
-
-	set teacher(value: string) {
-		this.set('teacher', value)
-	}
-
 	model = async () => {
 		const { title, teacher } = this.validValues
 		return { title, teachers: [teacher] }

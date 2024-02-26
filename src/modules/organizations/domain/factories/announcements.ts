@@ -21,30 +21,6 @@ export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, Announc
 		})
 	}
 
-	get body() {
-		return this.values.body
-	}
-
-	set body(value: string) {
-		this.set('body', value)
-	}
-
-	get lessonId() {
-		return this.values.lessonId
-	}
-
-	set lessonId(value: string | null) {
-		this.set('lessonId', value)
-	}
-
-	get userType() {
-		return this.values.userType
-	}
-
-	set userType(value: MemberTypes | null) {
-		this.set('userType', value)
-	}
-
 	model = async () => {
 		const { body, lessonId, userType } = this.validValues
 		return {

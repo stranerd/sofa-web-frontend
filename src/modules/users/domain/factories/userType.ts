@@ -76,6 +76,15 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		insts: [] as string[],
 		activeInst: null as string | null,
 	})
+	protected onSet = {
+		institutionId: () => {
+			this.resetProp('facultyId')
+			this.resetProp('departmentId')
+		},
+		facultyId: () => {
+			this.resetProp('departmentId')
+		},
+	}
 
 	constructor() {
 		super({
@@ -89,61 +98,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			name: '',
 			code: '',
 		})
-	}
-
-	get type() {
-		return this.values.type
-	}
-
-	set type(value: UserType) {
-		this.set('type', value)
-	}
-
-	get schoolType() {
-		return this.values.schoolType
-	}
-
-	set schoolType(value: UserSchoolType) {
-		this.set('schoolType', value)
-	}
-
-	get institutionId() {
-		return this.values.institutionId
-	}
-
-	set institutionId(value: string) {
-		this.set('institutionId', value)
-		this.resetProp('facultyId')
-		this.resetProp('departmentId')
-	}
-
-	get facultyId() {
-		return this.values.facultyId
-	}
-
-	set facultyId(value: string) {
-		this.set('facultyId', value)
-		this.resetProp('departmentId')
-	}
-
-	get departmentId() {
-		return this.values.departmentId
-	}
-
-	set departmentId(value: string) {
-		this.set('departmentId', value)
-	}
-
-	get exams() {
-		return this.values.exams
-	}
-
-	set exams(exams: Exam[]) {
-		this.set('exams', exams, true)
-	}
-
-	get institutions() {
-		return this.extras.insts
 	}
 
 	set institutions(institutionIds: string[]) {
@@ -165,30 +119,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 
 	set activeInst(institutionId: string | null) {
 		this.extras.activeInst = institutionId
-	}
-
-	get school() {
-		return this.values.school
-	}
-
-	set school(value: string) {
-		this.set('school', value)
-	}
-
-	get name() {
-		return this.values.name
-	}
-
-	set name(value: string) {
-		this.set('name', value)
-	}
-
-	get code() {
-		return this.values.code
-	}
-
-	set code(value: string) {
-		this.set('code', value)
 	}
 
 	get isStudent() {

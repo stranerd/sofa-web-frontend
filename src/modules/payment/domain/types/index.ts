@@ -49,8 +49,8 @@ export type TransactionData =
 			purchaseId: string
 			userId: string
 			serviceCharge: number
-			purchasedType: PurchaseToModel['data']['type']
-			purchasedId: PurchaseToModel['data']['id']
+			purchasedType: PurchaseToModel['type']
+			purchasedId: PurchaseToModel['id']
 	  }
 	| {
 			type: TransactionType.sent
@@ -123,10 +123,8 @@ export type TransferData = {
 }
 
 export type WithdrawData = {
-	userId: string
-	email: string
 	amount: number
-	account: AccountDetails
+	account: Omit<AccountDetails, 'bankName' | 'ownerName'>
 }
 
 export enum CurrencyCountries {
@@ -158,4 +156,8 @@ export type BankData = {
 export type FundDetails = {
 	amount: number
 	methodId: string
+}
+
+export type FlutterwaveSecrets = {
+	publicKey: string
 }

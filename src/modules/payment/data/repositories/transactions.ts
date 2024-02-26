@@ -1,6 +1,7 @@
 import { TransactionEntity } from '../../domain/entities/transactions'
 import { ITransactionRepository } from '../../domain/irepositories/transactions'
 import { TransactionFromModel, TransactionToModel } from '../models/transactions'
+import { FlutterwaveSecrets } from '../../domain/types'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class TransactionRepository implements ITransactionRepository {
@@ -36,11 +37,6 @@ export class TransactionRepository implements ITransactionRepository {
 		return this.mapper(data)
 	}
 
-	async update(id: string, data: TransactionToModel) {
-		const d = await this.client.put<TransactionToModel, TransactionFromModel>(`/${id}`, data)
-		return this.mapper(d)
-	}
-
 	async listenToOne(id: string, listeners: Listeners<TransactionEntity>) {
 		const model = await this.find(id)
 		if (model) await listeners.updated(model)
@@ -51,5 +47,13 @@ export class TransactionRepository implements ITransactionRepository {
 		const models = await this.get(query)
 		await Promise.all(models.results.map(listeners.updated))
 		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
+	}
+
+	async getFlutterwaveSecrets() {
+		return await this.client.get<any, FlutterwaveSecrets>('/flutterwave/secrets', {})
+	}
+
+	async fulfill(id: string) {
+		return await this.client.put<any, boolean>(`/${id}/fulfill`, {})
 	}
 }

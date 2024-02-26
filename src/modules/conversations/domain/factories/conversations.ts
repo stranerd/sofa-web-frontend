@@ -13,22 +13,6 @@ export class ConversationFactory extends BaseFactory<ConversationEntity, CreateC
 		super({ body: '', tutorId: null })
 	}
 
-	get body() {
-		return this.values.body
-	}
-
-	set body(value: string) {
-		this.set('body', value)
-	}
-
-	get tutorId() {
-		return this.values.tutorId
-	}
-
-	set tutorId(value: string | null) {
-		this.set('tutorId', value)
-	}
-
 	loadEntity = (entity: ConversationEntity) => {
 		this.entityId = entity.id
 		this.body = entity.title

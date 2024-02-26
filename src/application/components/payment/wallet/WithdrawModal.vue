@@ -1,5 +1,5 @@
 <template>
-	<div v-if="wallet" class="flex flex-col gap-4 mdlg:p-6 p-4">
+	<form v-if="wallet" class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="formOptions.handler">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
 			<SofaHeaderText customClass="text-xl">Withdraw money</SofaHeaderText>
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
@@ -10,17 +10,33 @@
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
-		<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
+		<div v-if="showAddNewAccount && activeAccountFactory" class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 			<SofaTextField
-				ref="amount"
-				v-model="withdrawForm.amount"
+				v-model="activeAccountFactory.bankNumber"
 				customClass="rounded-custom !bg-lightGray"
 				type="text"
-				name="Amount"
-				placeholder="Amount"
+				placeholder="Account number"
+				borderColor="border-transparent">
+			</SofaTextField>
+
+			<SofaSelect
+				v-model="activeAccountFactory.bankCode"
+				customClass="rounded-custom !bg-lightGray"
+				placeholder="Bank"
 				borderColor="border-transparent"
-				:rules="[Logic.Form.RequiredRule]"
-				:isFormatted="true">
+				:options="banks.map((bank) => ({ key: bank.code, value: bank.name }))">
+			</SofaSelect>
+
+			<SofaNormalText v-if="accountName" :content="accountName" color="text-primaryGreen" />
+		</div>
+
+		<div v-else class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
+			<SofaTextField
+				v-model="withdrawalFactory.amount"
+				customClass="rounded-custom !bg-lightGray"
+				type="number"
+				placeholder="Amount"
+				borderColor="border-transparent">
 				<template #inner-prefix>
 					<SofaNormalText>
 						{{ Logic.Common.getCurrency(wallet.balance.currency) }}
@@ -28,30 +44,26 @@
 				</template>
 			</SofaTextField>
 
-			<SofaTextField
-				ref="account_number"
-				v-model="withdrawForm.account_number"
-				customClass="rounded-custom !bg-lightGray"
-				type="number"
-				name="Account number"
-				placeholder="Account number"
-				borderColor="border-transparent"
-				:rules="[Logic.Form.RequiredRule]">
-			</SofaTextField>
+			<label
+				v-for="(account, index) in wallet.accounts"
+				:key="index"
+				:for="`account-${index}`"
+				:class="{ 'border border-primaryPurple': index === selectedAccountIndex }"
+				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray">
+				<SofaIcon class="h-[18px]" name="bank" />
+				<SofaNormalText class="text-grayColor capitalize flex-1 truncate">
+					{{ account.bankName }}({{ account.bankNumber.slice(account.bankNumber.length - 4) }})
+				</SofaNormalText>
+				<SofaRadio :id="`account-${index}`" v-model="selectedAccountIndex" :value="index" name="account" />
+			</label>
 
-			<SofaSelect
-				ref="bank"
-				v-model="withdrawForm.bank"
-				customClass="rounded-custom !bg-lightGray"
-				name="Bank"
-				placeholder="Bank"
-				borderColor="border-transparent"
-				:rules="[Logic.Form.RequiredRule]"
-				:options="AllCommercialBanks.map((bank) => ({ key: bank.code, value: bank.name }))">
-			</SofaSelect>
+			<a class="w-full flex items-center gap-3 p-4 rounded-custom border-2 border-lightGray" @click="addAccount">
+				<SofaIcon class="h-[18px]" name="add-gray" />
+				<SofaNormalText class="text-grayColor" content="Add new account" />
+			</a>
 		</div>
 
-		<div class="w-full md:flex justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:py-0 py-4">
+		<div class="w-full md:flex justify-between items-center grid grid-cols-2 mdlg:py-0 py-4">
 			<SofaButton
 				textColor="text-grayColor"
 				bgColor="bg-white"
@@ -61,124 +73,56 @@
 				Cancel
 			</SofaButton>
 
-			<div class="md:!w-auto col-span-2 flex flex-col">
-				<SofaButton
-					textColor="text-white"
-					bgColor="bg-primaryBlue"
-					padding="px-4 md:!py-1 py-3"
-					customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
-					@click="submit">
-					Continue
-				</SofaButton>
-			</div>
+			<SofaButton
+				:disabled="!formOptions.isValid"
+				type="submit"
+				textColor="text-white"
+				bgColor="bg-primaryBlue"
+				padding="px-4 md:py-1 py-3"
+				class="w-full md:w-auto border-2 border-transparent md:min-w-[100px]">
+				{{ formOptions.btnLabel }}
+			</SofaButton>
 		</div>
-	</div>
+	</form>
 </template>
 
 <script lang="ts" setup>
-import { capitalize, onMounted, reactive, ref, watch } from 'vue'
-import { Logic, SelectOption } from 'sofa-logic'
+import { computed, ref, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { useAccountsUpdate } from '@app/composables/payment/accounts'
+import { useWithdrawal } from '@app/composables/payment/wallets'
+import { Logic } from 'sofa-logic'
 
-// TODO: cleanup with factory and hook for withdrawals
-
-const props = defineProps<{
+defineProps<{
 	close: () => void
 }>()
 
 const { wallet } = useAuth()
+const { banks, showAddNewAccount, addAccount, activeAccountFactory, updateAccounts, verifyAccountNumber, accountName } = useAccountsUpdate()
+const { factory: withdrawalFactory, withdraw } = useWithdrawal()
+const selectedAccountIndex = ref(Number.MAX_SAFE_INTEGER)
 
-const AllCommercialBanks = ref(Logic.Payment.AllCommercialBanks!)
-const commercialBankOptions = ref<SelectOption[]>([])
-
-const withdrawForm = reactive({
-	amount: '',
-	account_number: '',
-	bank: '',
+watch(selectedAccountIndex, () => {
+	if (wallet.value?.accounts[selectedAccountIndex.value]) withdrawalFactory.account = wallet.value.accounts[selectedAccountIndex.value]
 })
 
-const submit = async () => {
-	if (withdrawForm.account_number && withdrawForm.amount && withdrawForm.bank) {
-		const amount = parseFloat(withdrawForm.amount.replace(/,/g, ''))
-
-		if (amount < 1000) {
-			Logic.Common.showAlert({
-				message: `Withdrawal amount cannot be less than ${Logic.Common.formatPrice(1000)}`,
-				type: 'warning',
-			})
-			return
+const formOptions = computed(() => {
+	if (!showAddNewAccount.value)
+		return {
+			btnLabel: 'Continue',
+			handler: withdraw,
+			isValid: withdrawalFactory.valid,
 		}
-
-		Logic.Payment.WithdrawalFromWalletForm = {
-			amount,
-			account: {
-				bankCode: withdrawForm.bank,
-				bankNumber: withdrawForm.account_number,
-				country: 'NG',
-			},
+	if (accountName.value)
+		return {
+			btnLabel: 'Add account',
+			handler: updateAccounts,
+			isValid: activeAccountFactory.value?.valid,
 		}
-
-		Logic.Payment.WithdrawFromWallet()
-			?.then((data) => {
-				if (data) {
-					Logic.Common.showAlert({
-						message: 'Withdrawal successful',
-						type: 'success',
-					})
-				} else {
-					Logic.Common.showAlert({
-						message: 'Withdrawal failed',
-						type: 'error',
-					})
-				}
-
-				props.close()
-			})
-			.catch((error) => {
-				Logic.Common.showAlert({
-					message: capitalize(error.response.data[0]?.message),
-					type: 'error',
-				})
-			})
+	return {
+		btnLabel: 'Verify',
+		handler: verifyAccountNumber,
+		isValid: activeAccountFactory.value?.valid,
 	}
-}
-
-const setCommercialBankOptions = () => {
-	commercialBankOptions.value.length = 0
-	AllCommercialBanks.value?.forEach((bank) => {
-		commercialBankOptions.value.push({
-			key: bank.code,
-			value: bank.name,
-		})
-	})
-}
-
-onMounted(() => {
-	if (!AllCommercialBanks.value) {
-		Logic.Payment.GetCommercialBanks().then(() => {
-			AllCommercialBanks.value = Logic.Payment.AllCommercialBanks!
-			setCommercialBankOptions()
-		})
-	}
-})
-
-watch(withdrawForm, () => {
-	Logic.Common.debounce(() => {
-		if (withdrawForm.account_number.length >= 10 && withdrawForm.bank) {
-			Logic.Payment.verifyAccountNumberForm = {
-				bankCode: withdrawForm.bank,
-				bankNumber: withdrawForm.account_number,
-				country: 'NG',
-			}
-
-			Logic.Payment.VerifyAccountNumber()
-				?.then(() => {
-					// console.log(data);
-				})
-				.catch(() => {
-					//
-				})
-		}
-	})
 })
 </script>

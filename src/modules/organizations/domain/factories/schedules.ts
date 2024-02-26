@@ -4,75 +4,59 @@ import { ScheduleEntity } from '../entities/schedules'
 import { BaseFactory } from '@modules/core'
 import { getDateString, getTimeString } from '@utils/dates'
 
-type Keys = Omit<ScheduleToModel, 'lessonId' | 'time'> & { date: Date; start: Date; end: Date }
+type Keys = Omit<ScheduleToModel, 'lessonId' | 'time'> & { timeDate: Date; timeStart: Date; timeEnd: Date }
 
 export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleToModel, 'lessonId'>, Keys> {
 	readonly rules = {
 		title: v.string().min(1),
 		description: v.string().min(1),
-		date: v.time().asDate(),
-		start: v.time().asDate(),
-		end: v.time().asDate(),
+		timeDate: v.time().asDate(),
+		timeStart: v.time().asDate(),
+		timeEnd: v.time().asDate(),
 	}
 
 	constructor() {
 		const tmr = new Date()
 		tmr.setDate(tmr.getDate() + 1)
 		const end = new Date(tmr.getTime() + 2 * 60 * 60 * 1000)
-		super({ title: '', description: '', date: tmr, start: tmr, end })
-	}
-
-	get title() {
-		return this.values.title
-	}
-
-	set title(value: string) {
-		this.set('title', value)
-	}
-
-	get description() {
-		return this.values.description
-	}
-
-	set description(value: string) {
-		this.set('description', value)
+		super({ title: '', description: '', timeDate: tmr, timeStart: tmr, timeEnd: end })
 	}
 
 	get start() {
-		return getTimeString(this.values.start)
+		return getTimeString(this.values.timeStart)
 	}
 
 	set start(value: string) {
-		this.set('start', `${this.date} ${value}`)
+		this.set('timeStart', `${this.date} ${value}`)
 	}
 
 	get end() {
-		return getTimeString(this.values.end)
+		return getTimeString(this.values.timeEnd)
 	}
 
 	set end(value: string) {
-		this.set('end', `${this.date} ${value}`)
+		this.set('timeEnd', `${this.date} ${value}`)
 	}
 
 	get date() {
-		return getDateString(this.values.date)
+		return getDateString(this.values.timeDate)
 	}
 
 	set date(value: string) {
-		const valid = this.set('date', new Date(value))
+		const valid = this.set('timeDate', new Date(value))
 		if (!valid) return
 		this.start = '00:00'
 		this.end = '02:00'
 	}
 
 	model = async () => {
-		const { title, description, start, end } = this.validValues
+		const { title, description, timeStart, timeEnd } = this.validValues
 		return {
 			title,
 			description,
 			time: {
-				start: start.getTime(),
-				end: end.getTime(),
+				start: timeStart.getTime(),
+				end: timeEnd.getTime(),
 			},
 		}
 	}

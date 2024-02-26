@@ -35,7 +35,7 @@ export default defineComponent({
 	setup(props) {
 		const cls = computed(() =>
 			[
-				'font-semibold text-header',
+				'font-semibold flex flex-col',
 				props.content ? 'body' : '',
 				props.size == 'xl' ? 'lg:text-3xl mdlg:text-xl text-lg' : '',
 				props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
