@@ -38,6 +38,7 @@ export default defineComponent({
 	setup(props) {
 		const cls = computed(() =>
 			[
+				'flex flex-col',
 				props.content ? 'body' : '',
 				props.customClass,
 				props.color,

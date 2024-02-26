@@ -1,5 +1,5 @@
-import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import Checker from 'vite-plugin-checker'

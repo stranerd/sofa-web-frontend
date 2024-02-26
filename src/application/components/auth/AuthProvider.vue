@@ -10,7 +10,7 @@
 			@click="googleSignin">
 			<div class="flex gap-2 items-center normal-case">
 				<SofaIcon name="google" class="text-[16px]" />
-				<SofaNormalText content="Sign in with Google" />
+				<SofaNormalText :content="`${message} with Google`" />
 			</div>
 		</SofaButton>
 		<SofaButton
@@ -24,7 +24,7 @@
 			@click="appleSignin">
 			<span class="flex gap-2 items-center normal-case">
 				<SofaIcon name="apple" class="text-[16px]" />
-				<SofaNormalText content="Sign in with Apple" />
+				<SofaNormalText :content="`${message} with Apple`" />
 			</span>
 		</SofaButton>
 	</div>
@@ -36,11 +36,18 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useAppleSignin, useGoogleSignin } from '@app/composables/auth/signin'
 import { isIos, isWeb } from '@utils/constants'
+
+const props = defineProps({
+	signUp: Boolean,
+})
 
 const { loading: googleLoading, signin: googleSignin } = useGoogleSignin()
 const { loading: appleLoading, signin: appleSignin } = useAppleSignin()
 
 const showAppleSignin = isWeb || isIos
+
+const message = computed(() => (props.signUp ? 'Sign up' : 'Sign in'))
 </script>

@@ -12,10 +12,13 @@ import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLessonModal.vue'
 import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
 import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
+import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumModal.vue'
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
-import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumModal.vue'
+import FundWallet from '@app/components/payment/wallet/FundWalletModal.vue'
+import TransactionDetails from '@app/components/payment/transactions/TransactionDetailsModal.vue'
+import Withdraw from '@app/components/payment/wallet/WithdrawModal.vue'
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
 import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
@@ -51,7 +54,7 @@ export const useModals = () => ({
 		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
-		viewCurriculum: { component: ViewCuriculum, modalArgs: { maxWidth: 'h-full overflow-y-auto' } },
+		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full overflow-y-auto' } },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
@@ -69,5 +72,10 @@ export const useModals = () => ({
 			component: SideBar,
 			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
 		},
+	}),
+	payment: modal.register('Payment', {
+		transactionDetails: { component: TransactionDetails },
+		fundWallet: { component: FundWallet },
+		withdraw: { component: Withdraw },
 	}),
 })

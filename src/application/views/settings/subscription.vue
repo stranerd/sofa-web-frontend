@@ -23,15 +23,15 @@
 								<SofaNormalText v-else> Expired </SofaNormalText>
 							</div>
 
-							<div
+							<a
 								v-if="wallet.subscription.current.expiredAt > Date.now()"
 								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
-								@click="autoRenewIsOn = !autoRenewIsOn">
+								@click="toggleRenewal">
 								<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
 								<div class="!w-auto">
 									<SofaIcon customClass="h-[17px]" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
 								</div>
-							</div>
+							</a>
 						</div>
 					</div>
 				</template>
@@ -108,75 +108,59 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { usePlansList, useSubscription } from '@app/composables/payment/plans'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SubscriptionSettingPage',
 	components: { SettingsLayout },
-	routeConfig: {
-		fetchRules: [
-			{
-				domain: 'Payment',
-				property: 'AllPlans',
-				method: 'GetPlans',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-		],
-		goBackRoute: '/settings',
-	},
+	routeConfig: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({
 			title: 'Subscription',
 		})
 
-		const autoRenewIsOn = ref(true)
 		const subscriptionInfo = [
 			{
 				title: 'Expert help',
 				value: 'Get step-by-step solutions from expert tutors and AI, no matter how hard the problem.',
-				icon: 'expert-help' as const,
+				icon: 'expert-help',
 			},
 			{
 				title: 'Customized resources',
 				value: 'Access top learning materials tailored to your curriculum from verified experts.',
-				icon: 'customized-material' as const,
+				icon: 'customized-material',
 			},
 			{
 				title: 'Fun challenges',
 				value: 'Compete against friends and classmates in unlimited gaming challenges.',
-				icon: 'challenges' as const,
+				icon: 'challenges',
 			},
 			{
 				title: 'Study offline',
 				value: 'Stay focused and download our resources for offline studying.',
-				icon: 'study-offline' as const,
+				icon: 'study-offline',
 			},
-		]
+		] as const
 
 		const { userType, wallet } = useAuth()
+		const autoRenewIsOn = computed(() => !!wallet.value?.subscription.next)
+		const { myPlans, currentPlan: myPlan } = usePlansList()
+		const { subscribeToPlan, toggleRenewPlan } = useSubscription()
 
-		const plans = ref(Logic.Payment.AllPlans)
+		const myApplicablePlan = computed(() => myPlans.value.at(0) ?? null)
 
-		const myApplicablePlan = computed(() => plans.value?.results.find((item) => item.usersFor.includes(userType.value.type)) ?? null)
+		const subscibeToPlan = async (id: string) => {
+			await subscribeToPlan(id)
+		}
 
-		const myPlan = computed(() => plans.value?.results.find((item) => item.id == wallet.value?.subscription.current?.id) ?? null)
-
-		const subscibeToPlan = (id: string) => {
-			Logic.Payment.SubscribeToPlan(id).then((data) => {
-				if (data) {
-					Logic.Common.showAlert({
-						message: 'Subscription successful',
-						type: 'success',
-					})
-				}
-			})
+		const toggleRenewal = async () => {
+			await toggleRenewPlan(autoRenewIsOn.value)
 		}
 
 		return {
@@ -189,6 +173,7 @@ export default defineComponent({
 			userType,
 			autoRenewIsOn,
 			subscibeToPlan,
+			toggleRenewal,
 		}
 	},
 })

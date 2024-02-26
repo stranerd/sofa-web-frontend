@@ -1,7 +1,7 @@
 import { CoursableData, DraftStatus, Publishable } from '../types'
-import type { QuizEntity } from './quizzes'
 import type { CourseEntity } from './courses'
 import type { FileEntity } from './files'
+import type { QuizEntity } from './quizzes'
 import { BaseEntity } from '@modules/core'
 
 export class PublishableEntity extends BaseEntity implements Publishable {
@@ -44,6 +44,10 @@ export class PublishableEntity extends BaseEntity implements Publishable {
 		this.updatedAt = updatedAt
 	}
 
+	get picture() {
+		return this.photo?.link ?? '/images/default.png'
+	}
+
 	get isPublished() {
 		return this.status === DraftStatus.published
 	}
@@ -53,15 +57,15 @@ export class PublishableEntity extends BaseEntity implements Publishable {
 	}
 
 	isQuiz(): this is QuizEntity {
-		return this.__type === 'QuizEntity'
+		return this.__type.startsWith('QuizEntity')
 	}
 
 	isCourse(): this is CourseEntity {
-		return this.__type === 'CourseEntity'
+		return this.__type.startsWith('CourseEntity')
 	}
 
 	isFile(): this is FileEntity {
-		return this.__type === 'FileEntity'
+		return this.__type.startsWith('FileEntity')
 	}
 }
 

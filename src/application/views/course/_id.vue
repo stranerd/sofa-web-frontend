@@ -179,9 +179,9 @@
 							}  rounded-custom cursor-pointer `"
 							@click="selectedMethodId = 'payWithWallet'">
 							<SofaIcon customClass="h-[20px]" name="wallet" />
-							<SofaNormalText v-if="UserWallet">
+							<SofaNormalText v-if="wallet">
 								Wallet (<span class="!font-semibold">{{
-									Logic.Common.formatPrice(UserWallet.balance.amount, UserWallet.balance.currency)
+									Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency)
 								}}</span
 								>)
 							</SofaNormalText>
@@ -189,19 +189,17 @@
 
 						<!-- Pay online -->
 
-						<div
-							class="w-full flex flex-row items-center gap-3 px-3 py-3 cursor-pointer"
-							@click="Logic.Payment.initialPayment()">
-							<SofaIcon customClass="h-[18px]" name="add-card" />
+						<div class="w-full flex items-center gap-3 p-3" @click="addMethod">
+							<SofaIcon customClass="h-[18px]" name="add-gray" />
 							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
 						</div>
 
 						<div
-							v-for="(method, index) in PaymentMethods?.results ?? []"
-							:key="index"
-							:class="`w-full flex flex-row items-center gap-3 px-3 py-3 bg-lightGray  ${
+							v-for="method in methods"
+							:key="method.hash"
+							:class="`w-full flex items-center gap-3 p-3 bg-lightGray  ${
 								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
-							}  rounded-custom cursor-pointer `"
+							}  rounded-custom `"
 							@click="selectedMethodId = method.id">
 							<SofaIcon customClass="h-[20px]" name="card" />
 							<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
@@ -227,7 +225,7 @@
 								bgColor="bg-primaryBlue"
 								padding="px-4 md:!py-1 py-3"
 								customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
-								@click="buyCourse()">
+								@click="buyCourse">
 								Make payment
 							</SofaButton>
 						</div>
@@ -253,12 +251,17 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import CourseContent from '@app/components/study/courses/content.vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
+import { useMyMethods } from '@app/composables/payment/methods'
+import { useCreatePurchase } from '@app/composables/payment/purchases'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
-import { Conditions, Logic } from 'sofa-logic'
+import { Purchasables } from '@modules/payment'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',
@@ -282,14 +285,6 @@ export default defineComponent({
 				ignoreProperty: false,
 			},
 			{
-				domain: 'Payment',
-				property: 'UserWallet',
-				method: 'GetUserWallet',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: false,
-			},
-			{
 				domain: 'Study',
 				property: 'SingleReview',
 				method: 'GetSingleReview',
@@ -297,24 +292,6 @@ export default defineComponent({
 				useRouteId: true,
 				requireAuth: true,
 				ignoreProperty: true,
-			},
-			{
-				domain: 'Payment',
-				property: 'PaymentMethods',
-				method: 'GetPaymentMethods',
-				params: [
-					{
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: false,
 			},
 		],
 	},
@@ -327,8 +304,10 @@ export default defineComponent({
 
 		const mobileTitle = ref(Logic.Study.SingleCourse?.title ?? '')
 
-		const UserWallet = ref(Logic.Payment.UserWallet)
-		const PaymentMethods = ref(Logic.Payment.PaymentMethods)
+		const route = useRoute()
+		const { wallet } = useAuth()
+		const { methods, addMethod } = useMyMethods()
+		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
 		const selectedMethodId = ref('')
 		const showMakePaymentModal = ref(false)
 
@@ -394,7 +373,7 @@ export default defineComponent({
 				type: InteractionEntities.courses,
 			})
 
-		const buyCourse = () => {
+		const buyCourse = async () => {
 			if (Logic.Common.loaderSetup.loading || !SingleCourse.value) return
 
 			if (SingleCourse.value.price.amount > 0 && selectedMethodId.value == '') {
@@ -402,19 +381,12 @@ export default defineComponent({
 				return
 			}
 
-			Logic.Payment.MakePurchaseForm = {
-				id: SingleCourse.value.id,
-				methodId: selectedMethodId.value,
-				type: 'courses',
-			}
+			const purchase = await createPurchase(selectedMethodId.value)
 
-			Logic.Payment.MakePurchase()?.then((data) => {
-				if (data) {
-					showMakePaymentModal.value = false
-					Logic.Payment.GetUserPurchases(false)
-					Logic.Study.GetCourse(SingleCourse.value!.id)
-				}
-			})
+			if (purchase) {
+				showMakePaymentModal.value = false
+				Logic.Study.GetCourse(SingleCourse.value!.id)
+			}
 		}
 
 		const handleCourseContentSet = (data: any) => {
@@ -425,8 +397,6 @@ export default defineComponent({
 		const { createView } = useCreateView()
 
 		onMounted(() => {
-			Logic.Payment.watchProperty('PaymentMethods', PaymentMethods)
-			Logic.Payment.watchProperty('UserWallet', UserWallet)
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleReview', CourseReview)
 
@@ -444,10 +414,11 @@ export default defineComponent({
 			showCourseInfo,
 			buyCourse,
 			isUnlocked,
-			PaymentMethods,
+			methods,
+			addMethod,
 			showMakePaymentModal,
 			selectedMethodId,
-			UserWallet,
+			wallet,
 			courseContents,
 			showRateCourse,
 			CourseReview,

@@ -142,7 +142,7 @@
 </template>
 
 <script lang="ts">
-import { Differ, pluralize } from 'valleyed'
+import { pluralize } from 'valleyed'
 import { computed, defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute, useRouter } from 'vue-router'
@@ -221,18 +221,14 @@ export default defineComponent({
 					label: 'Go to class',
 					handler: () => router.push(classInst.pageLink),
 				}
-			const classSub = wallet.value?.subscriptions.find((sub) =>
-				Differ.equal(sub.data, { organizationId: classInst.organizationId, classId: classInst.id, type: 'classes' }),
-			)
-			const canAccessForFree = classInst.canAccessFromOrg(user.value!)
+			const classSub = wallet.value?.getClassSubscription({ organizationId: classInst.organizationId, classId: classInst.id })
 			if (classSub && !classSub.active)
 				return {
 					label: 'Renew enrollment',
 					handler: () => purchaseClass(classInst),
 				}
-			const price = `${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`
 			return {
-				label: `Enroll ${canAccessForFree ? 'for free' : price}`,
+				label: `Enroll ${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
 				handler: () => purchaseClass(classInst),
 			}
 		})

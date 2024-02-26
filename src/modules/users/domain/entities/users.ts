@@ -73,6 +73,10 @@ export class UserEntity extends BaseEntity {
 		return `${window.location.origin}/profile/${this.id}`
 	}
 
+	get myOrgsIn() {
+		return this.account.organizationsIn.map((org) => org.id)
+	}
+
 	checkTaskState(
 		task: 'profile_setup' | 'education_setup' | 'create_quiz' | 'create_course' | 'learn_quiz' | 'quiz_flashcard' | 'quiz_game',
 	) {

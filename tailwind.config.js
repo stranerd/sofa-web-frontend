@@ -48,5 +48,10 @@ export default {
 			'3xl': '1.5rem',
 		},
 	},
-	plugins: [require('@tailwindcss/typography'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar')],
+	plugins: [
+		require('@tailwindcss/typography'),
+		require('tailwind-scrollbar-hide'),
+		require('tailwind-scrollbar'),
+		require('@tailwindcss/forms')({ strategy: 'class' }),
+	],
 }

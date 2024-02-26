@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="hidden gap-5 items-center justify-start flex-grow mdlg:!flex">
-				<router-link class="py-4 pr-3" to="/">
+				<router-link class="py-4 pr-3" to="/dashboard">
 					<img src="/images/logo.svg" class="h-[26px]" />
 				</router-link>
 
@@ -199,7 +199,7 @@ const initiateSearch = () => {
 const tabs = computed(() => [
 	{
 		name: 'Home',
-		path: '/',
+		path: '/dashboard',
 		icon: 'home' as const,
 		icon_size: 'h-[18px]',
 	},

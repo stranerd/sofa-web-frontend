@@ -12,7 +12,7 @@
 
 		<div class="flex items-center gap-2 pt-3">
 			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
-			<router-link to="/auth/login">
+			<router-link to="/auth/signin">
 				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
 			</router-link>
 		</div>

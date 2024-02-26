@@ -118,8 +118,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { QuizEntity } from '@modules/study'
+import { useRoute } from 'vue-router'
 import { Logic } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'GamesIdLobbyPage',
@@ -129,8 +130,13 @@ export default defineComponent({
 			title: 'Lobby',
 		})
 
-		const share = async (quiz: QuizEntity) => await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`)
-		const copy = () => Logic.Common.copy(window.location.href)
+		const route = useRoute()
+
+		const shareLink = `${window.location.origin}/games/${route.params.id}/lobby`
+
+		const share = async (quiz: QuizEntity) =>
+			await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`, shareLink)
+		const copy = () => Logic.Common.copy(shareLink)
 
 		return { share, copy, Logic }
 	},

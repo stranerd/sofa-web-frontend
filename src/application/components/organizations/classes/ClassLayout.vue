@@ -1,5 +1,6 @@
 <template>
-	<SubPageLayout v-if="!index && !Logic.Common.isLarge">
+	<slot v-if="full && currentClass" name="full" :classInst="currentClass" />
+	<SubPageLayout v-else-if="!Logic.Common.isLarge">
 		<div v-if="currentClass" class="w-full h-full flex flex-col justify-start relative">
 			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
@@ -85,12 +86,12 @@ import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
-		index?: boolean
+		full?: boolean
 		organizationId?: string
 		classId?: string
 	}>(),
 	{
-		index: false,
+		full: false,
 		organizationId: undefined,
 		classId: undefined,
 	},

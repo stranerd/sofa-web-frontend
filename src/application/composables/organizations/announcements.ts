@@ -74,13 +74,13 @@ export const useClassAnnouncements = (organizationId: string, classId: string) =
 	)
 
 	const fetchOlderAnnouncements = async () => {
-		fetchAnnouncements()
-		await store[key].listener.start()
+		await fetchAnnouncements()
+		await store[key].listener.restart()
 	}
 
 	onMounted(async () => {
 		if (!called.value) await fetchAnnouncements()
-		await store[key].listener.restart()
+		await store[key].listener.start()
 	})
 
 	onUnmounted(async () => {

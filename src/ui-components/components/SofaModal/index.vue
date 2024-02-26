@@ -6,7 +6,7 @@
 				<div class="h-full w-full absolute top-0 left-0" @click="close" />
 				<div
 					class="z-[1] w-full mdlg:w-[50%] max-h-[100dvh] mdlg:my-[5dvh] mdlg:max-h-[90dvh] overflow-y-auto bg-white text-bodyBlack rounded-t-2xl mdlg:rounded-b-2xl"
-					:class="maxWidth">
+					:class="[maxWidth, containerClass]">
 					<slot />
 				</div>
 			</div>
@@ -21,10 +21,12 @@ withDefaults(
 	defineProps<{
 		close?: () => void
 		maxWidth?: string
+		containerClass?: string
 	}>(),
 	{
 		close: () => {},
 		maxWidth: 'mdlg:max-w-[800px]',
+		containerClass: '',
 	},
 )
 </script>

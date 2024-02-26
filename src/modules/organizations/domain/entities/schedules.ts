@@ -66,10 +66,6 @@ export class ScheduleEntity extends BaseEntity {
 		return isTeacher
 	}
 
-	get hasEnded() {
-		return this.status === ScheduleStatus.ended
-	}
-
 	canJoin(classInst: ClassEntity, userId: string) {
 		if (this.status !== ScheduleStatus.started) return false
 		const lesson = classInst.getLesson(this.lessonId)
@@ -77,6 +73,10 @@ export class ScheduleEntity extends BaseEntity {
 		const isTeacher = lesson.users.teachers.includes(userId)
 		if (isTeacher) return true
 		return this.time.start <= Date.now()
+	}
+
+	canWatch() {
+		return this.stream?.canRewatch ?? false
 	}
 
 	get meetingLink() {

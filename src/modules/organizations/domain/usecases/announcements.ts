@@ -2,7 +2,7 @@ import { IAnnouncementRepository } from '../irepositories/announcements'
 import { AnnouncementFactory } from '../factories/announcements'
 import { AnnouncementEntity } from '../entities/announcements'
 import { QueryParams, Conditions, Listeners } from '@modules/core'
-import { CHAT_PAGINATION_LIMIT } from '@utils/constants'
+import { DEFAULT_PAGINATION_LIMIT } from '@utils/constants'
 
 export class AnnouncementsUseCase {
 	private repository: (organizationId: string, classId: string) => IAnnouncementRepository
@@ -23,7 +23,7 @@ export class AnnouncementsUseCase {
 		const conditions: QueryParams = {
 			where: [],
 			sort: [{ field: 'createdAt', desc: true }],
-			limit: CHAT_PAGINATION_LIMIT,
+			limit: DEFAULT_PAGINATION_LIMIT,
 		}
 		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.lt, value: date })
 		return await this.repository(organizationId, classId).get(conditions)

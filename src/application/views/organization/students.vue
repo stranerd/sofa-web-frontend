@@ -19,7 +19,7 @@ import { MemberTypes } from '@modules/organizations'
 export default defineComponent({
 	name: 'OrganizationStudentsPage',
 	components: { HomeLayout, MembersList },
-	routeConfig: { goBackRoute: '/', middlewares: ['isOrg'] },
+	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {
 		useMeta({ title: 'Students' })
 

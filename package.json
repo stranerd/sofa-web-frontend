@@ -12,7 +12,7 @@
     "prebuild": "npm run envs",
     "build": "vite build",
     "preview": "vite preview",
-    "lint:fix": "eslint --fix ./src && echo Done",
+    "lint:fix": "eslint --ext ts,vue --fix ./ && echo Done",
     "envs": "node bin/copy-env-app.js",
     "icons:types": "node bin/build-icons-types.js",
     "lint:staged": "lint-staged",
@@ -44,6 +44,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/node": "^20.11.17",
