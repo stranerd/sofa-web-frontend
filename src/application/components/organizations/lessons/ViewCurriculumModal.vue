@@ -86,28 +86,15 @@
 			<SofaHeaderText>{{ itemTitle }}</SofaHeaderText>
 			<SofaNormalText>{{ lesson.title }}/{{ curriculumSection.label }}</SofaNormalText>
 		</div>
-		<!-- <div class="flex flex-col items-start gap-6">
-			<SofaHeaderText color="text-primaryPurple" customClass="border-b-2 border-primaryPurple">Questions</SofaHeaderText>
-			<form
-				class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-				<input
-					:disabled="true"
-					class="w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left text-sm overflow-y-auto"
-					placeholder="Ask a question" />
-				<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
-					<SofaIcon name="send" class="h-[19px]" />
-				</button>
-			</form>
-			<QuestionCard />
-		</div> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
+import { useCreateTest } from '@app/composables/plays/tests'
 import { ClassEntity, ClassLesson, ClassLessonable, ExtendedCurriculum } from '@modules/organizations'
+import { TestEntity } from '@modules/plays'
 import { FileType, QuizModes } from '@modules/study'
-import { Logic, Test } from 'sofa-logic'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
@@ -159,15 +146,19 @@ const startQuizPractice = async () => {
 }
 
 const quizTestStarted = ref(false)
-const test = ref<Test | null>(null)
-const startQuizTest = async (id: string) => {
-	const data = await Logic.Plays.CreateTest(id, {
+const test = ref<TestEntity | null>(null)
+const { createPlay: createTest } = useCreateTest(
+	{
 		organizationId: props.classInst.organizationId,
 		classId: props.classInst.id,
 		lessonId: props.lesson.id,
-	})
-	await Logic.Plays.StartTest(data.id)
-	test.value = data
+	},
+	{ start: true, nav: false },
+)
+const startQuizTest = async (id: string) => {
+	const t = await createTest({ quizId: id })
+	if (!t) return
+	test.value = t
 	quizTestStarted.value = true
 }
 

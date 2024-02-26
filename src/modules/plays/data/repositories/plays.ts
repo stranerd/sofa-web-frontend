@@ -3,7 +3,7 @@ import { PlayTypes } from '../../domain/types'
 import { IPlayRepository } from '../../domain/irepositories/plays'
 import { PlayEntity } from '../../domain/entities/plays'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
-import { QuestionEntity, QuestionFromModel } from '@modules/study'
+import { CoursableAccess, QuestionEntity, QuestionFromModel } from '@modules/study'
 
 export class PlayRepository<E extends PlayEntity, F extends PlayFromModel, T extends PlayToModel> implements IPlayRepository<E, T> {
 	protected client: HttpClient
@@ -32,8 +32,8 @@ export class PlayRepository<E extends PlayEntity, F extends PlayFromModel, T ext
 		return await this.client.delete<unknown, boolean>(`/${id}`, {})
 	}
 
-	async create(data: T) {
-		const d = await this.client.post<T, F>('/', data)
+	async create(data: T, access: CoursableAccess['access']) {
+		const d = await this.client.post<T, F>('/', data, { access })
 		return this.mapper(d)
 	}
 

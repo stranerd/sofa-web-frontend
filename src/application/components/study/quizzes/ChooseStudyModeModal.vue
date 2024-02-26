@@ -52,6 +52,8 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useHasAccess } from '@app/composables/study'
 import { QuizEntity, QuizModes } from '@modules/study'
 import { Logic } from 'sofa-logic'
+import { useCreateTest } from '@app/composables/plays/tests'
+import { useCreateGame } from '@app/composables/plays/games'
 
 const props = defineProps<{
 	close: () => void
@@ -65,6 +67,8 @@ const goToEdit = () => {
 
 const { id } = useAuth()
 const { hasAccess } = useHasAccess()
+const { createPlay: createTest } = useCreateTest({}, { start: false, nav: true })
+const { createPlay: createGame } = useCreateGame({}, { start: false, nav: true })
 
 const showGame = ref(false)
 const joinGame = ref(false)
@@ -72,22 +76,14 @@ const joinGame = ref(false)
 const chooseMode = async (mode: QuizModes) => {
 	const quizId = props.quiz.id
 	if (mode === QuizModes.game) return (showGame.value = true)
-	if (mode === QuizModes.practice || mode === QuizModes.flashcard) {
-		await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
-	}
-
-	if (mode === QuizModes.test) {
-		Logic.Common.showLoading()
-		await Logic.Plays.CreateTest(quizId, {})
-			.then(async (data) => {
-				await Logic.Common.GoToRoute(`/tests/${data.id}`)
-			})
-			.finally(() => {
-				Logic.Common.hideLoading()
-			})
-	}
+	if (mode === QuizModes.practice || mode === QuizModes.flashcard) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
+	if (mode === QuizModes.test) await createTest({ quizId })
 
 	props.close()
+}
+
+const createQuizGame = async () => {
+	await createGame({ quizId: props.quiz.id, join: joinGame.value })
 }
 
 const otherTasks = [
@@ -116,16 +112,4 @@ const otherTasks = [
 		value: QuizModes.game,
 	},
 ]
-
-const createQuizGame = async () => {
-	Logic.Common.showLoading()
-	await Logic.Plays.CreateGame({ quizId: props.quiz.id, join: joinGame.value }, {})
-		.then(async (game) => {
-			await Logic.Common.GoToRoute(`/games/${game.id}`)
-			props.close()
-		})
-		.finally(() => {
-			Logic.Common.hideLoading()
-		})
-}
 </script>

@@ -43,6 +43,10 @@ export class PlayEntity extends BaseEntity {
 		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
 	}
 
+	get rootPage() {
+		return `/${this.type}/${this.id}`
+	}
+
 	get lobbyPage() {
 		return `/${this.type}/${this.id}/lobby`
 	}

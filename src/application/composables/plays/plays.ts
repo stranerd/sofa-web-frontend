@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { QuestionEntity } from '@modules/study'
+import { CoursableAccess, QuestionEntity } from '@modules/study'
 import {
 	AnswerEntity,
 	AnswersUseCases,
@@ -194,5 +194,22 @@ export const generateHooks = <E extends PlayEntity, T extends PlayToModel>(
 		return { ...singleStore[id], fetched: called, start, end, submitAnswer }
 	}
 
-	return { myStore, useMyPlays, singleStore, usePlay }
+	const useCreatePlay = (access: CoursableAccess['access'], options: { start: boolean; nav: boolean }) => {
+		const router = useRouter()
+		const {
+			asyncFn: createPlay,
+			loading,
+			error,
+			called,
+		} = useAsyncFn(async (data: T) => {
+			let play = await useCase.create(data, access)
+			if (options.start) play = await useCase.start(play.id)
+			if (options.nav) await router.push(play.rootPage)
+			return play
+		})
+
+		return { createPlay, loading, error, called }
+	}
+
+	return { myStore, useMyPlays, singleStore, usePlay, useCreatePlay }
 }
