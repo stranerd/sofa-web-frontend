@@ -1,4 +1,7 @@
 import { EmbeddedUser, PlayStatus, PlayTypes } from '../types'
+import type { GameEntity } from './games'
+import type { TestEntity } from './tests'
+import { ordinalSuffixOf } from '@utils/commons'
 import { BaseEntity } from '@modules/core'
 
 export class PlayEntity extends BaseEntity {
@@ -50,6 +53,54 @@ export class PlayEntity extends BaseEntity {
 
 	get resultsPage() {
 		return `/${this.type}/${this.id}/results`
+	}
+
+	get singularizedType() {
+		return (
+			{
+				[PlayTypes.games]: 'game',
+				[PlayTypes.tests]: 'test',
+				[PlayTypes.flashCards]: 'flash card',
+				[PlayTypes.practice]: 'practice',
+			}[this.type] ?? ''
+		)
+	}
+
+	isGame(): this is GameEntity {
+		return this.type === PlayTypes.games
+	}
+
+	isTest(): this is TestEntity {
+		return this.type === PlayTypes.tests
+	}
+
+	getPercentage(userId: string) {
+		const correctAnswers = (this.scores[userId] ?? 0) / 10
+		return (correctAnswers / this.questions.length) * 100
+	}
+
+	getPosition(userId: string): string {
+		const participants = this.isGame() ? this.participants : [userId]
+		const scores = Object.values(this.scores).sort((a, b) => b - a)
+		const position = scores.indexOf(this.scores[userId])
+		return ordinalSuffixOf(position !== -1 ? position + 1 : participants.length)
+	}
+
+	getLabel(userId: string): string {
+		if (this.isGame()) return this.getPosition(userId)
+		if (this.isTest()) return `${this.getPercentage(userId).toFixed()}%`
+		return ''
+	}
+
+	getLabelColor(userId: string) {
+		if (this.isTest()) {
+			const percentage = this.getPercentage(userId)
+			if (percentage >= 90) return 'text-[#4BAF7D]'
+			if (percentage >= 70) return 'text-[#ADAF4B]'
+			if (percentage >= 50) return 'text-[#3296C8]'
+			return 'text-primaryRed'
+		}
+		return 'text-[#3296C8]'
 	}
 }
 

@@ -16,8 +16,8 @@ export interface Game {
 	participants: string[]
 	questions: string[]
 	scores: Record<string, number>
-	startedAt?: number
-	endedAt?: number
+	startedAt: number | null
+	endedAt: number | null
 	createdAt: number
 	updatedAt: number
 }
@@ -30,8 +30,8 @@ export interface Test {
 	user: SingleUser
 	questions: string[]
 	scores: Record<string, number>
-	startedAt: number
-	endedAt?: number
+	startedAt: number | null
+	endedAt: number | null
 	createdAt: number
 	updatedAt: number
 }

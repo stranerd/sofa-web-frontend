@@ -119,7 +119,6 @@ declare module 'vue' {
     SofaOtpInput: typeof import('sofa-ui-components')['SofaOtpInput']
     SofaPhoneInput: typeof import('sofa-ui-components')['SofaPhoneInput']
     SofaPieChart: typeof import('sofa-ui-components')['SofaPieChart']
-    SofaProgressItemCard: typeof import('sofa-ui-components')['SofaProgressItemCard']
     SofaRadio: typeof import('sofa-ui-components')['SofaRadio']
     SofaRatings: typeof import('sofa-ui-components')['SofaRatings']
     SofaSelect: typeof import('sofa-ui-components')['SofaSelect']

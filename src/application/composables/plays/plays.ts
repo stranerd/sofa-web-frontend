@@ -16,7 +16,7 @@ import {
 	PlaysUseCase,
 } from '@modules/plays'
 
-export const generateHooks = async <E extends PlayEntity, T extends PlayToModel>(
+export const generateHooks = <E extends PlayEntity, T extends PlayToModel>(
 	type: PlayTypes,
 	useCase: PlaysUseCase<E, T, IPlayRepository<E, T>>,
 ) => {

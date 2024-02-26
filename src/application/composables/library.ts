@@ -2,7 +2,7 @@ import { toRaw } from 'vue'
 import { useModals } from './core/modals'
 import { InteractionEntities } from '@modules/interactions'
 import { CourseEntity, QuizEntity } from '@modules/study'
-import { Game, Logic, PlayStatus, ResourceType, Test } from 'sofa-logic'
+import { Logic, ResourceType } from 'sofa-logic'
 
 const createQuizData = (quiz: QuizEntity): ResourceType => ({
 	original: quiz,
@@ -54,51 +54,6 @@ const createCourseData = (course: CourseEntity): ResourceType => ({
 export const extractResource = (material: CourseEntity | QuizEntity) => {
 	material = toRaw(material)
 	return material.isQuiz() ? createQuizData(material) : createCourseData(material)
-}
-
-export const createGameData = (p: Game, quizzes: QuizEntity[]) => {
-	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
-	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
-	const allScores = ended ? Object.values(p.scores).sort((a, b) => b - a) : []
-	const userPosition = allScores.indexOf(p.scores[Logic.Common.AuthUser?.id ?? ''])
-
-	return {
-		id: p.id,
-		inProgress: !ended,
-		createdAt: p.createdAt,
-		image: currentQuiz?.photo?.link || '/images/default.png',
-		label: Logic.Common.ordinalSuffixOf(userPosition !== -1 ? userPosition + 1 : p.participants.length),
-		label_color: 'text-[#3296C8]',
-		title: currentQuiz?.title || 'Unknown quiz',
-		type: 'game',
-		participants: p.participants.length,
-		action: () => {
-			Logic.Common.GoToRoute(`/games/${p.id}/${ended ? 'results' : 'lobby'}`)
-		},
-	}
-}
-
-export const createTestData = (p: Test, quizzes: QuizEntity[]) => {
-	const currentQuiz = quizzes.find((i) => i.id == p.quizId)
-	const ended = [PlayStatus.scored, PlayStatus.ended].includes(p.status)
-	const userCorrectAnswers = (p.scores[Logic.Common.AuthUser?.id ?? ''] ?? 0) / 10
-	const percentage = (userCorrectAnswers / p.questions.length) * 100
-	const textColor =
-		percentage >= 90 ? 'text-[#4BAF7D]' : percentage >= 70 ? 'text-[#ADAF4B]' : percentage >= 50 ? 'text-[#3296C8]' : 'text-primaryRed'
-	return {
-		id: p.id,
-		inProgress: !ended,
-		createdAt: p.createdAt,
-		image: currentQuiz?.photo?.link || '/images/default.png',
-		label: `${percentage ? percentage.toFixed() : '0'}%`,
-		label_color: textColor,
-		title: currentQuiz?.title || 'Unknown quiz',
-		type: 'test',
-		participants: 1,
-		action: () => {
-			Logic.Common.GoToRoute(`/tests/${p.id}/${ended ? 'results' : 'lobby'}`)
-		},
-	}
 }
 
 export const openQuiz = (activity: ResourceType, force = false) => {

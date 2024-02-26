@@ -44,6 +44,10 @@ export class PublishableEntity extends BaseEntity implements Publishable {
 		this.updatedAt = updatedAt
 	}
 
+	get picture() {
+		return this.photo?.link ?? '/images/default.png'
+	}
+
 	get isPublished() {
 		return this.status === DraftStatus.published
 	}
