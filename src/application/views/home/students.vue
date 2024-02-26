@@ -34,7 +34,7 @@
 						</RouterLink>
 						<RouterLink
 							to="/"
-							class="flex items-center justify-center gap-[10px] border border-purple text-pruple py-[10px] px-[30px] h-[44px] rounded-[22px]">
+							class="flex items-center justify-center gap-[10px] border border-purple text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							<SofaIcon name="solar_play-circle-bold" />
 							<span class="text-purple">Watch video</span>
 						</RouterLink>
@@ -47,9 +47,36 @@
 				<img src="/images/students-hero-image.png" class="w-full h-full mdlg:h-[866px] object-cover md:object-contain" />
 			</div>
 		</header>
-		<MoreOnStranerd />
+		<MoreOnStranerd :content="content" />
 		<HomeFooter />
 	</main>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import { ref } from 'vue'
+const content = ref({
+	study: {
+		title: 'Exciting New Ways to Study',
+		desc: 'Making learning experiences engaging and effective',
+		heading: 'Hybrid tutoring',
+		sub_heading: 'AI + Human Experts',
+		content: 'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
+		link: '#',
+	},
+	classes: {
+		title: 'Classes',
+		heading: 'Self Paced & Live Classes',
+		content:
+			'Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes.',
+		link: '#',
+	},
+	place: {
+		title: 'Marketplace',
+		heading: 'Explore & Discover materials',
+		content:
+			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
+		link: '#',
+	},
+	showCreate: true,
+})
+</script>

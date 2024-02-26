@@ -32,14 +32,14 @@
 						Empower educators, engage learners, and streamline operations with our comprehensive learning platform
 					</p>
 					<div class="flex flex-col md:flex-row items-center gap-3">
-						<RouterLink to="/register" class="bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+						<RouterLink to="/register" class="bg-white text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							Get started
 						</RouterLink>
 						<RouterLink
 							to="/"
-							class="flex items-center justify-center gap-[10px] border border-purple text-pruple py-[10px] px-[30px] h-[44px] rounded-[22px]">
-							<SofaIcon name="solar_play-circle-bold" />
-							<span class="text-purple">Watch video</span>
+							class="flex items-center justify-center gap-[10px] border border-white text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+							<SofaIcon name="solar_play-circle-bold" class="!fill-white" />
+							<span class="text-white">Watch video</span>
 						</RouterLink>
 					</div>
 				</div>
@@ -53,9 +53,37 @@
 			</div>
 			<img class="z-50 w-[90%] mx-auto -mb-10 md:-mb-24 h-full" src="/images/stranerd-stats.png" />
 		</header>
-		<MoreOnStranerd class="mt-[100px] mdlg:mt-[180px]" />
+		<MoreOnStranerd class="mt-[100px] mdlg:mt-[180px]" :content="content" />
 		<HomeFooter />
 	</main>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import { ref } from 'vue'
+const content = ref({
+	study: {
+		title: 'Exciting New Ways to Study',
+		desc: 'Transform your child’s learning experience into something truly engaging and effective',
+		heading: 'Personalized Learning Experience',
+		sub_heading: '',
+		content:
+			"Tailored to your child's unique learning style and pace, our platform delivers personalized lessons and activities that keep them engaged and motivated.",
+		link: '#',
+	},
+	classes: {
+		title: 'Real-time Progress Tracking',
+		heading: '',
+		content:
+			"Stay informed about your child's academic progress with real-time updates and insights, allowing you to identify areas for improvement and celebrate their achievements.",
+		link: '#',
+	},
+	place: {
+		title: 'Expert Resources and Support',
+		heading: '',
+		content:
+			'Access a wealth of educational resources, tips, and support from our team of experts, empowering you to provide the best possible learning environment for your child.',
+		link: '#',
+	},
+	showCreate: false,
+})
+</script>

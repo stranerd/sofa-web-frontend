@@ -2,9 +2,9 @@
 	<div class="w-full flex flex-col items-center justify-center">
 		<!-- New and exciting ways to study -->
 		<div class="w-[90%] mx-auto">
-			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">New and Exciting Ways to Study</h2>
+			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">{{ content.study.title }}</h2>
 			<p class="text-[14px] md:text-[16px] text-center">
-				Transform your child’s learning experience into something truly engaging and effective
+				{{ content.study.desc }}
 			</p>
 			<div class="relative flex mdlg:flex-row flex-col items-center mt-8 mdlg:mt-20">
 				<img class="hidden mdlg:block" src="/images/y.png" />
@@ -12,13 +12,13 @@
 					<img src="/images/bot+human.png" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
 				</div>
 				<div class="w-full mdlg:w-1/2 flex flex-col items-center mdlg:items-start text-center mdlg:text-left gap-2">
-					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">Hybrid tutoring</h3>
-					<p class="text-[16px] md:text-[24px] leading-[36px]">AI + Human Experts</p>
+					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">{{ content.study.heading }}</h3>
+					<p class="text-[16px] md:text-[24px] leading-[36px]">{{ content.study.sub_heading }}</p>
 					<p class="w-4/5 text-[14px] md:text-[16px] leading-[24px]">
-						Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.
+						{{ content.study.content }}
 					</p>
 					<RouterLink
-						to="/register"
+						:to="content.study.link"
 						class="mdlg:self-start bg-purple text-[14px] md:text-[16px] text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 						Know more
 					</RouterLink>
@@ -31,14 +31,13 @@
 			class="w-[90%] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div
 				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[160px] justify-center gap-2 text-center px-8 mdlg:text-left">
-				<h3 class="text-white font-bold text-[20px] md:text-[36px] leading-[54px]">Classes</h3>
-				<h4 class="text-white text-[16px] md:text-[24px]">Self Paced & Live Classes</h4>
+				<h3 class="text-white font-bold text-[20px] md:text-[36px] leading-[54px]">{{ content.classes.title }}</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.classes.heading }}</h4>
 				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
-					Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the
-					tranquility of self-paced study or immerse yourself in the energy of live classes.
+					{{ content.classes.content }}
 				</p>
 				<RouterLink
-					to="#"
+					:to="content.classes.link"
 					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
 				</RouterLink>
@@ -57,14 +56,13 @@
 				<div class="hidden mdlg:block w-full">
 					<img class="ml-auto mr-[10%]" src="/images/marketplace-top.png" />
 				</div>
-				<h3 class="font-bold text-[20px] md:text-[36px] md:leading-[54px]">Marketplace</h3>
-				<h4 class="text-[16px] md:text-[24px]">Explore & Discover materials</h4>
+				<h3 class="font-bold text-[20px] md:text-[36px] md:leading-[54px]">{{ content.place.title }}</h3>
+				<h4 class="text-[16px] md:text-[24px]">{{ content.place.heading }}</h4>
 				<p class="w-3/5 text-[14px] md:text-[16px] leading-[24px] font-normal">
-					Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than
-					just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.
+					{{ content.place.content }}
 				</p>
 				<RouterLink
-					to="#"
+					:to="content.place.link"
 					class="mdlg:self-start bg-purple text-[14px] md:text-[16px] text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
 				</RouterLink>
@@ -75,6 +73,7 @@
 		</div>
 		<!-- Create -->
 		<div
+			v-if="content.showCreate"
 			class="w-[90%] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div class="w-full mdlg:w-1/2 mx-auto flex flex-col mdlg:pl-[160px] justify-center gap-2 px-8 mdlg:px-0">
 				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">Create</h3>
@@ -201,6 +200,12 @@
 
 <script setup>
 import { Vue3Marquee } from 'vue3-marquee'
+defineProps({
+	content: {
+		type: Object,
+		required: true,
+	},
+})
 </script>
 
 <style scoped>
