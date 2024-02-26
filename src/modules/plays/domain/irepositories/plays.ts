@@ -1,6 +1,6 @@
+import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { Listeners, QueryParams, QueryResults } from '@modules/core'
-import { PlayToModel } from '@modules/plays/data/models/plays'
 import { QuestionEntity } from '@modules/study'
 
 export interface IPlayRepository<E extends PlayEntity, T extends PlayToModel> {

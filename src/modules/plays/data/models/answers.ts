@@ -1,4 +1,4 @@
-import { PlayTypes } from '@modules/plays/domain/types'
+import { PlayTypes } from '../../domain/types'
 
 export interface AnswerFromModel {
 	id: string
@@ -12,5 +12,5 @@ export interface AnswerFromModel {
 
 export interface AnswerToModel {
 	questionId: string
-	answer: number[]
+	answer: any
 }

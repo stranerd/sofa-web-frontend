@@ -1,8 +1,8 @@
+import { PracticeEntity } from '../../domain/entities/practice'
+import { IPracticeRepository } from '../../domain/irepositories/practice'
+import { PlayTypes } from '../../domain/types'
 import { PracticeFromModel, PracticeToModel } from '../models/practice'
 import { PlayRepository } from './plays'
-import { PracticeEntity } from '@modules/plays/domain/entities/practice'
-import { PlayTypes } from '@modules/plays/domain/types'
-import { IPracticeRepository } from '@modules/plays/domain/irepositories/practice'
 
 export class PracticeRepository extends PlayRepository<PracticeEntity, PracticeFromModel, PracticeToModel> implements IPracticeRepository {
 	private static instance: PracticeRepository

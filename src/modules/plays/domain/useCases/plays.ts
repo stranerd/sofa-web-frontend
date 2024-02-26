@@ -53,4 +53,8 @@ export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends
 			(e) => e.user.id === userId,
 		)
 	}
+
+	async getQuestions(id: string) {
+		return await this.repository.getQuestions(id)
+	}
 }

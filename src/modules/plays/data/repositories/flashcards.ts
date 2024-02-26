@@ -1,8 +1,8 @@
+import { FlashCardEntity } from '../../domain/entities/flashcards'
+import { IFlashCardRepository } from '../../domain/irepositories/flashcards'
+import { PlayTypes } from '../../domain/types'
 import { FlashCardFromModel, FlashCardToModel } from '../models/flashcards'
 import { PlayRepository } from './plays'
-import { PlayTypes } from '@modules/plays/domain/types'
-import { FlashCardEntity } from '@modules/plays/domain/entities/flashcards'
-import { IFlashCardRepository } from '@modules/plays/domain/irepositories/flashcards'
 
 export class FlashCardRepository
 	extends PlayRepository<FlashCardEntity, FlashCardFromModel, FlashCardToModel>

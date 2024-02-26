@@ -1,8 +1,8 @@
+import { GameEntity } from '../../domain/entities/games'
+import { IGameRepository } from '../../domain/irepositories/games'
+import { PlayTypes } from '../../domain/types'
 import { GameFromModel, GameToModel } from '../models/games'
 import { PlayRepository } from './plays'
-import { IGameRepository } from '@modules/plays/domain/irepositories/games'
-import { GameEntity } from '@modules/plays/domain/entities/games'
-import { PlayTypes } from '@modules/plays/domain/types'
 
 export class GameRepository extends PlayRepository<GameEntity, GameFromModel, GameToModel> implements IGameRepository {
 	private static instance: GameRepository

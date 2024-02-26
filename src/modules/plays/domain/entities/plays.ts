@@ -39,6 +39,18 @@ export class PlayEntity extends BaseEntity {
 	get isEnded() {
 		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
 	}
+
+	get lobbyPage() {
+		return `/${this.type}/${this.id}/lobby`
+	}
+
+	get runPage() {
+		return `/${this.type}/${this.id}/run`
+	}
+
+	get resultsPage() {
+		return `/${this.type}/${this.id}/results`
+	}
 }
 
 type PlaysConstructorArgs = {
