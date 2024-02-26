@@ -1,7 +1,7 @@
 import { QuizEntity } from '../entities/quizzes'
 import { QuizFactory } from '../factories/quizzes'
 import { IQuizRepository } from '../irepositories/iquizzes'
-import { Conditions, Listeners, QueryParams } from '@modules/core'
+import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 
 export class QuizzesUseCase {
 	private repository: IQuizRepository
@@ -36,7 +36,11 @@ export class QuizzesUseCase {
 
 	async getUserQuizzes(userId: string) {
 		const conditions: QueryParams = {
-			where: [{ field: 'user.id', value: userId }],
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'access.members', value: userId },
+			],
+			whereType: QueryKeys.or,
 			all: true,
 		}
 
@@ -49,11 +53,19 @@ export class QuizzesUseCase {
 
 	async listenToUserQuizzes(userId: string, listener: Listeners<QuizEntity>) {
 		const conditions: QueryParams = {
-			where: [{ field: 'user.id', value: userId }],
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'access.members', value: userId },
+			],
+			whereType: QueryKeys.or,
 			all: true,
 		}
 
-		return await this.repository.listenToMany(conditions, listener, (entity) => entity.user.id === userId)
+		return await this.repository.listenToMany(
+			conditions,
+			listener,
+			(entity) => entity.user.id === userId || entity.access.members.includes(userId),
+		)
 	}
 
 	async getInList(ids: string[]) {
@@ -77,7 +89,11 @@ export class QuizzesUseCase {
 
 	async getTutorQuizzes(userId: string) {
 		return await this.repository.getTutors({
-			where: [{ field: 'user.id', value: userId }],
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'access.members', value: userId },
+			],
+			whereType: QueryKeys.or,
 			all: true,
 		})
 	}
@@ -85,11 +101,15 @@ export class QuizzesUseCase {
 	async listenToTutorQuizzes(userId: string, listener: Listeners<QuizEntity>) {
 		return await this.repository.listenToManyTutors(
 			{
-				where: [{ field: 'user.id', value: userId }],
+				where: [
+					{ field: 'user.id', value: userId },
+					{ field: 'access.members', value: userId },
+				],
+				whereType: QueryKeys.or,
 				all: true,
 			},
 			listener,
-			(quiz) => quiz.user.id === userId,
+			(quiz) => quiz.user.id === userId || quiz.access.members.includes(userId),
 		)
 	}
 

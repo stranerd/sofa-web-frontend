@@ -244,8 +244,9 @@ watch(
 		if (!extras.value.canEdit || !currentQuestionById.value) return
 		const quizPath = `/quizzes/${props.id}/edit`
 		if (route.path !== quizPath) return
+		const q = route.query.q as string
 		const v = selectedQuestionId.value
-		router.push(`${quizPath}?q=${v}`).catch()
+		router[q ? 'push' : 'replace'](`${quizPath}?q=${v}`).catch()
 		const edit = user.value?.account.editing.quizzes
 		if (edit?.id !== props.id || edit?.questionId !== v) UsersUseCases.updateEditingQuizzes({ id: props.id, questionId: v }).catch()
 	},
