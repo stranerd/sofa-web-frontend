@@ -1,14 +1,18 @@
 import { AnswerRepository } from './data/repositories/answers'
-import { GameRepository } from './data/repositories/games'
-import { TestRepository } from './data/repositories/tests'
-import { PracticeRepository } from './data/repositories/practice'
 import { FlashCardRepository } from './data/repositories/flashcards'
-
+import { GameRepository } from './data/repositories/games'
+import { PracticeRepository } from './data/repositories/practice'
+import { TestRepository } from './data/repositories/tests'
 import { AnswersUseCase } from './domain/useCases/answers'
-import { GamesUseCase } from './domain/useCases/games'
-import { TestsUseCase } from './domain/useCases/tests'
-import { PracticeUseCase } from './domain/useCases/practice'
 import { FlashCardUseCase } from './domain/useCases/flashcards'
+import { GamesUseCase } from './domain/useCases/games'
+import { PracticeUseCase } from './domain/useCases/practice'
+import { TestsUseCase } from './domain/useCases/tests'
+
+export type { PlayToModel } from './data/models/plays'
+export type { PlayEntity } from './domain/entities/plays'
+export type { IPlayRepository } from './domain/irepositories/plays'
+export type { PlaysUseCase } from './domain/useCases/plays'
 
 export const GamesUseCases = new GamesUseCase(GameRepository.getInstance())
 export const AnswersUseCases = new AnswersUseCase(AnswerRepository.getInstance())
@@ -17,7 +21,7 @@ export const PracticeUseCases = new PracticeUseCase(PracticeRepository.getInstan
 export const FlashCardUseCases = new FlashCardUseCase(FlashCardRepository.getInstance())
 
 export { AnswerEntity } from './domain/entities/answers'
-export { GameEntity } from './domain/entities/games'
-export { TestEntity } from './domain/entities/tests'
-export { PracticeEntity } from './domain/entities/practice'
 export { FlashCardEntity } from './domain/entities/flashcards'
+export { GameEntity } from './domain/entities/games'
+export { PracticeEntity } from './domain/entities/practice'
+export { TestEntity } from './domain/entities/tests'

@@ -31,6 +31,14 @@ export class PlayEntity extends BaseEntity {
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
+
+	get isOngoing() {
+		return [PlayStatus.created, PlayStatus.started].includes(this.status)
+	}
+
+	get isEnded() {
+		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
+	}
 }
 
 type PlaysConstructorArgs = {

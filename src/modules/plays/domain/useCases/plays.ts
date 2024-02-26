@@ -1,7 +1,7 @@
 import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { IPlayRepository } from '../irepositories/plays'
-import { Listeners, QueryParams } from '@modules/core'
+import { Listeners, QueryKeys } from '@modules/core'
 
 export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends IPlayRepository<E, T>> {
 	protected repository: R
@@ -22,10 +22,6 @@ export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends
 		return await this.repository.find(id)
 	}
 
-	async get(query: QueryParams) {
-		return await this.repository.get(query)
-	}
-
 	async start(id: string) {
 		return await this.repository.start(id)
 	}
@@ -36,5 +32,25 @@ export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends
 
 	async listenToOne(playId: string, listeners: Listeners<E>) {
 		return await this.repository.listenToOne(playId, listeners)
+	}
+
+	async getMine(userId: string) {
+		return await this.repository.get({
+			whereType: QueryKeys.or,
+			where: [{ field: 'user.id', value: userId }],
+			all: true,
+		})
+	}
+
+	async listenToMine(userId: string, listeners: Listeners<E>) {
+		return await this.repository.listenToMany(
+			{
+				whereType: QueryKeys.or,
+				where: [{ field: 'user.id', value: userId }],
+				all: true,
+			},
+			listeners,
+			(e) => e.user.id === userId,
+		)
 	}
 }
