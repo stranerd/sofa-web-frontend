@@ -3,9 +3,9 @@
 import stringSimilarity from 'string-similarity'
 import { Differ, capitalize, stripHTML } from 'valleyed'
 import { QuestionFromModel } from '../../data/models/questions'
-import { QuestionData, QuestionTypes, StrippedQuestionData } from '../types'
+import { QuestionTypes } from '../types'
 import { questionTypes } from './questions-extras'
-import { BaseEntity, Media } from '@modules/core'
+import { BaseEntity } from '@modules/core'
 
 const compare = (a: string, b: string, quality = 0.95) =>
 	stringSimilarity.compareTwoStrings(
@@ -13,44 +13,9 @@ const compare = (a: string, b: string, quality = 0.95) =>
 		stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
 	) >= quality
 
-export class QuestionEntity extends BaseEntity {
-	public readonly id: string
-	public readonly userId: string
-	public readonly quizId: string
-	public readonly question: string
-	public readonly explanation: string
-	public readonly questionMedia: Media | null
-	public readonly timeLimit: number
-	public readonly data: QuestionData
-	public readonly strippedData: StrippedQuestionData
-	public readonly createdAt: number
-	public readonly updatedAt: number
-
-	constructor({
-		id,
-		userId,
-		quizId,
-		question,
-		explanation,
-		questionMedia,
-		timeLimit,
-		data,
-		strippedData,
-		createdAt,
-		updatedAt,
-	}: QuestionFromModel) {
-		super()
-		this.id = id
-		this.userId = userId
-		this.quizId = quizId
-		this.question = question
-		this.explanation = explanation
-		this.questionMedia = questionMedia
-		this.timeLimit = timeLimit
-		this.data = data
-		this.strippedData = strippedData
-		this.createdAt = createdAt
-		this.updatedAt = updatedAt
+export class QuestionEntity extends BaseEntity<QuestionFromModel> {
+	constructor(data: QuestionFromModel) {
+		super(data)
 	}
 
 	checkAnswer(answer: any): boolean {

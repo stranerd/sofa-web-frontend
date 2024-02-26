@@ -12,14 +12,6 @@ export class FolderFactory extends BaseFactory<FolderEntity, FolderToModel, Fold
 		super({ title: '' })
 	}
 
-	get title() {
-		return this.values.title
-	}
-
-	set title(value: string) {
-		this.set('title', value)
-	}
-
 	loadEntity = (entity: FolderEntity) => {
 		this.reset()
 		this.entityId = entity.id

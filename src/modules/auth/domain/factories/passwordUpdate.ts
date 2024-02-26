@@ -14,43 +14,24 @@ export class PasswordUpdateFactory extends BaseFactory<null, PasswordUpdate, Key
 			.max(16)
 			.custom((val) => isEqualTo(this.password)(val).valid, 'is not equal'),
 	}
+	protected onSet = {
+		oldPassword: () => {
+			this.set('password', this.password)
+			this.set('cPassword', this.cPassword)
+		},
+		password: () => {
+			this.set('cPassword', this.cPassword)
+		},
+		cPassword: (value: string) => {
+			if (value || this.password) this.set('cPassword', this.cPassword)
+			else this.resetProp('cPassword')
+		},
+	}
 
 	reserved = []
 
 	constructor() {
 		super({ oldPassword: '', password: '', cPassword: '' })
-	}
-
-	get oldPassword() {
-		return this.values.oldPassword!
-	}
-
-	set oldPassword(value: string) {
-		this.set('oldPassword', value)
-		this.set('password', this.password)
-		this.set('cPassword', this.cPassword)
-	}
-
-	get password() {
-		return this.values.password!
-	}
-
-	set password(value: string) {
-		this.set('password', value)
-		this.set('cPassword', this.cPassword)
-	}
-
-	get cPassword() {
-		return this.values.cPassword!
-	}
-
-	set cPassword(value: string) {
-		if (value || this.password) this.set('cPassword', value)
-		else {
-			this.values.cPassword = this.defaults.cPassword
-			this.validValues.cPassword = this.defaults.cPassword
-			this.errors.cPassword = ''
-		}
 	}
 
 	model = async () => {

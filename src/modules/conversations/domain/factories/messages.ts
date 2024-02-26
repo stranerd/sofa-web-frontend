@@ -1,7 +1,7 @@
 import { v } from 'valleyed'
 import { MessageToModel } from '../../data/models/messages'
 import { MessageEntity } from '../entities/messages'
-import { BaseFactory, Media } from '@modules/core'
+import { BaseFactory } from '@modules/core'
 
 export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, MessageToModel> {
 	readonly rules = {
@@ -11,22 +11,6 @@ export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, M
 
 	constructor() {
 		super({ body: '', media: null })
-	}
-
-	get body() {
-		return this.values.body
-	}
-
-	set body(value: string) {
-		this.set('body', value)
-	}
-
-	get media() {
-		return this.values.media
-	}
-
-	set media(value: Media | null) {
-		this.set('media', value)
 	}
 
 	model = async () => {

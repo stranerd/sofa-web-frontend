@@ -1,18 +1,12 @@
 import { FileFromModel } from '../../data/models/files'
-import { CoursableAccess, FileType } from '../types'
+import { CoursableAccess } from '../types'
 import { CoursableEntity } from './coursables'
-import { Media } from '@modules/core'
-import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
+import { apiBase } from '@utils/environment'
 
-export class FileEntity extends CoursableEntity {
-	public readonly type: FileType
-	public readonly media: Media
-
+export class FileEntity extends CoursableEntity<FileFromModel> {
 	constructor(data: FileFromModel) {
 		super(data)
-		this.type = data.type
-		this.media = data.media
 	}
 
 	async getUrl(access?: CoursableAccess['access']) {

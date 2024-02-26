@@ -2,7 +2,7 @@ import { CourseFromModel } from '../../data/models/courses'
 import { Coursable, CourseMeta, CourseSections, Publishable, Saleable } from '../types'
 import { PublishableEntity } from './coursables'
 
-export class CourseEntity extends PublishableEntity implements Publishable, Saleable {
+export class CourseEntity extends PublishableEntity<CourseFromModel> implements Publishable, Saleable {
 	public readonly coursables: { id: string; type: Coursable }[]
 	public readonly sections: CourseSections
 	public readonly frozen: Saleable['frozen']

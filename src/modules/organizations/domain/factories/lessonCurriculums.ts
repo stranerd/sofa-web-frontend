@@ -33,22 +33,6 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		super({ label: 'Untitled', items: [] })
 	}
 
-	get label() {
-		return this.values.label
-	}
-
-	set label(value: string) {
-		this.set('label', value)
-	}
-
-	get items() {
-		return this.values.items
-	}
-
-	private set items(value: ClassLessonCurriculumSection['items']) {
-		this.set('items', value)
-	}
-
 	addSchedule(schedule: ScheduleEntity) {
 		this.items = [...this.items, { type: ClassLessonable.schedule, id: schedule.id }]
 	}

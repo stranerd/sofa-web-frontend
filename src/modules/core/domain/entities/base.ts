@@ -1,22 +1,11 @@
-import { getRandomValue } from 'valleyed'
+import { ClassPropertiesWrapper, getRandomValue } from 'valleyed'
 
-export class BaseEntity {
-	public hash: string
+export class BaseEntity<Keys extends Record<string, any>> extends ClassPropertiesWrapper<Keys> {
+	public hash = getRandomValue()
 	public __type = this.constructor.name
 
-	constructor() {
+	constructor(data: Keys) {
+		super(data)
 		this.hash = getRandomValue()
-	}
-
-	toJSON() {
-		const json = Object.assign({}, this) as Record<string, any>
-		const proto = Object.getPrototypeOf(this)
-		Object.getOwnPropertyNames(proto)
-			.filter((k) => k !== 'constructor')
-			.forEach((key) => {
-				const value = this[key as keyof BaseEntity]
-				json[key] = (value as any)?.toJSON?.() ?? value
-			})
-		return json
 	}
 }

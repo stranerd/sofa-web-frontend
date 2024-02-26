@@ -23,7 +23,7 @@
 		<div class="flex flex-col gap-4 mdlg:flex-row mdlg:items-center justify-between">
 			<SofaTextField
 				v-model="factory.date"
-				:error="factory.errors.date"
+				:error="factory.errors.timeDate"
 				customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
 				type="date"
 				placeholder="Date"
@@ -31,7 +31,7 @@
 			<div class="flex items-center gap-4 justify-between">
 				<SofaTextField
 					v-model="factory.start"
-					:error="factory.errors.start"
+					:error="factory.errors.timeStart"
 					customClass="w-full mdlg:w-[200px] rounded-custom !bg-lightGray"
 					type="time"
 					placeholder="From"
@@ -39,7 +39,7 @@
 				<SofaIcon class="h-[16px]" name="arrow-right-white" customClass="!fill-darkLightGray" />
 				<SofaTextField
 					v-model="factory.end"
-					:error="factory.errors.end"
+					:error="factory.errors.timeEnd"
 					customClass="w-full mdlg:!w-[200px] rounded-custom !bg-lightGray"
 					type="time"
 					placeholder="To"

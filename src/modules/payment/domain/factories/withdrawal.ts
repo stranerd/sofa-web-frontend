@@ -23,22 +23,6 @@ export class WithdrawalFactory extends BaseFactory<null, WithdrawData, WithdrawD
 		})
 	}
 
-	get amount() {
-		return this.values.amount
-	}
-
-	set amount(value: number) {
-		this.set('amount', value)
-	}
-
-	get account() {
-		return this.values.account
-	}
-
-	set account(value: WithdrawData['account']) {
-		this.set('account', value)
-	}
-
 	model = async () => {
 		const { amount, account } = this.validValues
 		return { amount, account }
