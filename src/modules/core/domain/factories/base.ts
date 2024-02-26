@@ -42,12 +42,6 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 			},
 			reactive({}) as Record<keyof K, string>,
 		)
-		Object.keys(keys).forEach((key) => {
-			Object.defineProperty(this, key, {
-				get: this.values[key],
-				set: (value: any) => this.set(key, value),
-			})
-		})
 	}
 
 	get valid() {

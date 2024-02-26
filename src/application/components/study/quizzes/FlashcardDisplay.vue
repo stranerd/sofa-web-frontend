@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-[80%] flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
+	<div class="w-full h-[90%] my-auto flex flex-col items-center gap-2 justify-center [perspective:1000px] md:px-0 px-4">
 		<a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer">
 			<div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
 				<div class="flip-card-front">

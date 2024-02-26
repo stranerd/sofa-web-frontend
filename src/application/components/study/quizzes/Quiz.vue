@@ -25,7 +25,9 @@
 		</slot>
 
 		<div class="w-full h-full flex-grow overflow-y-auto px-4 flex flex-col items-center" :class="{ 'text-white': isDark }">
-			<div class="w-full flex flex-col gap-8 my-auto" :class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal }">
+			<div
+				class="w-full flex flex-col gap-8 my-auto"
+				:class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal, 'flex-1': growMid }">
 				<slot>
 					<QuestionDisplay
 						v-if="question"
@@ -116,6 +118,7 @@ const props = withDefaults(
 		optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 		showCounter?: boolean
 		isInModal?: boolean
+		growMid?: boolean
 	}>(),
 	{
 		isDark: false,
@@ -123,6 +126,7 @@ const props = withDefaults(
 		leftButton: null,
 		showCounter: true,
 		isInModal: false,
+		growMid: false,
 	},
 )
 

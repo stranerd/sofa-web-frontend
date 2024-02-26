@@ -8,6 +8,7 @@
 					:title="isDone ? 'Flashcards completed' : quiz.title"
 					:questions="questions"
 					:optionState="extras.optionState"
+					:growMid="true"
 					:rightButton="{
 						label: isDone ? 'Continue' : 'Mastered',
 						bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
