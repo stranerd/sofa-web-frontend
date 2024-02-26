@@ -38,11 +38,11 @@
 											<SofaHeaderText :content="quiz.title" class="!text-center !font-extrabold" size="xl" />
 
 											<div class="w-full flex items-center justify-center gap-4">
-												<a class="gap-2 items-center flex" @click="share(quiz)">
+												<a class="gap-2 items-center flex" @click="share(game, quiz)">
 													<SofaIcon class="h-[16px]" name="share" />
 													<SofaNormalText color="text-inherit" content="Share" />
 												</a>
-												<a class="gap-2 items-center flex" @click="copy">
+												<a class="gap-2 items-center flex" @click="copy(game)">
 													<SofaIcon class="h-[16px]" name="copy" />
 													<SofaNormalText color="text-inherit" content="Copy" />
 												</a>
@@ -55,7 +55,7 @@
 											<div class="w-full flex flex-col h-full gap-2">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="quiz.title" size="xl" class="text-left !line-clamp-1" />
-													<SofaIcon class="h-[16px] cursor-pointer" name="share" @click="share(quiz)" />
+													<SofaIcon class="h-[16px] cursor-pointer" name="share" @click="share(game, quiz)" />
 												</div>
 												<div class="flex gap-2 items-center">
 													<SofaNormalText color="text-primaryPurple" content="Game" />
@@ -118,9 +118,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import { Logic } from 'sofa-logic'
 import { QuizEntity } from '@modules/study'
+import { GameEntity } from '@modules/plays'
 
 export default defineComponent({
 	name: 'GamesIdLobbyPage',
@@ -130,13 +130,9 @@ export default defineComponent({
 			title: 'Lobby',
 		})
 
-		const route = useRoute()
-
-		const shareLink = `${window.location.origin}/games/${route.params.id}/lobby`
-
-		const share = async (quiz: QuizEntity) =>
-			await Logic.Common.share('Join game on SOFA', `Join and play a game on ${quiz.title}`, shareLink)
-		const copy = () => Logic.Common.copy(shareLink)
+		const share = async (game: GameEntity, quiz: QuizEntity) =>
+			await Logic.Common.share('Join game on SOFA', `Join and play a game on: ${quiz.title}`, game.shareLink)
+		const copy = (game: GameEntity) => Logic.Common.copy(game.shareLink)
 
 		return { share, copy, Logic }
 	},

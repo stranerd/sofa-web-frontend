@@ -20,6 +20,10 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
 	}
 
+	get shareLink() {
+		return `${window.location.origin}${this.lobbyPage}`
+	}
+
 	get lobbyPage() {
 		return `/${this.type}/${this.id}/lobby`
 	}
