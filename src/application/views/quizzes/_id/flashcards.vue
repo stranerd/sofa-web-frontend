@@ -94,7 +94,7 @@ import { storage } from '@utils/storage'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
-	name: 'QuizIdFlashcardPage',
+	name: 'QuizIdFlashcardsPage',
 	components: {
 		Flashcard,
 	},

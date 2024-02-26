@@ -33,7 +33,7 @@
 					class="rounded-custom" />
 			</div>
 			<template v-if="curriculumItem.type === ClassLessonable.quiz">
-				<template v-if="curriculumItem.quizMode === QuizModes.practice">
+				<template v-if="curriculumItem.quizMode === PlayTypes.practice">
 					<div
 						v-if="!quizPracticeStarted"
 						class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
@@ -56,7 +56,7 @@
 						:classInst="classInst"
 						:lesson="lesson" />
 				</template>
-				<template v-if="curriculumItem.quizMode === QuizModes.test">
+				<template v-if="curriculumItem.quizMode === PlayTypes.tests">
 					<div
 						v-if="!quizTestStarted"
 						class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
@@ -86,28 +86,15 @@
 			<SofaHeaderText>{{ itemTitle }}</SofaHeaderText>
 			<SofaNormalText>{{ lesson.title }}/{{ curriculumSection.label }}</SofaNormalText>
 		</div>
-		<!-- <div class="flex flex-col items-start gap-6">
-			<SofaHeaderText color="text-primaryPurple" customClass="border-b-2 border-primaryPurple">Questions</SofaHeaderText>
-			<form
-				class="w-full flex gap-2 items-center bg-fadedPurple rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg mdlg:!rounded-lg px-1">
-				<input
-					:disabled="true"
-					class="w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left text-sm overflow-y-auto"
-					placeholder="Ask a question" />
-				<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
-					<SofaIcon name="send" class="h-[19px]" />
-				</button>
-			</form>
-			<QuestionCard />
-		</div> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
+import { useCreateTest } from '@app/composables/plays/tests'
 import { ClassEntity, ClassLesson, ClassLessonable, ExtendedCurriculum } from '@modules/organizations'
-import { FileType, QuizModes } from '@modules/study'
-import { Logic, Test } from 'sofa-logic'
+import { PlayTypes, TestEntity } from '@modules/plays'
+import { FileType } from '@modules/study'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
@@ -120,8 +107,8 @@ const props = defineProps<{
 const title = computed(() => {
 	if (curriculumItem.value?.type === ClassLessonable.schedule) return 'Live Session'
 	if (curriculumItem.value?.type === ClassLessonable.quiz) {
-		if (curriculumItem.value.quizMode === QuizModes.practice) return 'Practice'
-		if (curriculumItem.value.quizMode === QuizModes.test) return 'Test'
+		if (curriculumItem.value.quizMode === PlayTypes.practice) return 'Practice'
+		if (curriculumItem.value.quizMode === PlayTypes.tests) return 'Test'
 		else return curriculumItem.value.quizMode
 	}
 	if (curriculumItem.value?.type === ClassLessonable.file) {
@@ -159,15 +146,19 @@ const startQuizPractice = async () => {
 }
 
 const quizTestStarted = ref(false)
-const test = ref<Test | null>(null)
-const startQuizTest = async (id: string) => {
-	const data = await Logic.Plays.CreateTest(id, {
+const test = ref<TestEntity | null>(null)
+const { createPlay: createTest } = useCreateTest(
+	{
 		organizationId: props.classInst.organizationId,
 		classId: props.classInst.id,
 		lessonId: props.lesson.id,
-	})
-	await Logic.Plays.StartTest(data.id)
-	test.value = data
+	},
+	{ start: true, nav: false },
+)
+const startQuizTest = async (id: string) => {
+	const t = await createTest({ quizId: id })
+	if (!t) return
+	test.value = t
 	quizTestStarted.value = true
 }
 
