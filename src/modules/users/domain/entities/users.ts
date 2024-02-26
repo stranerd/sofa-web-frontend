@@ -1,45 +1,10 @@
 import { UserFromModel } from '../../data/models/users'
-import {
-	AuthRoleType,
-	UserAccount,
-	UserAi,
-	UserBio,
-	UserDates,
-	UserLocation,
-	UserSocialsType,
-	UserStatus,
-	UserTutor,
-	UserType,
-	UserTypeData,
-} from '../types'
+import { UserType } from '../types'
 import { BaseEntity } from '@modules/core'
 
-export class UserEntity extends BaseEntity {
-	public readonly id: string
-	public readonly bio: UserBio
-	public readonly roles: AuthRoleType
-	public readonly account: UserAccount
-	public readonly status: UserStatus
-	public readonly dates: UserDates
-	public readonly type: UserTypeData | null
-	public readonly tutor: UserTutor
-	public readonly ai: UserAi
-	public readonly socials: UserSocialsType
-	public readonly location: UserLocation | null
-
-	constructor({ id, bio, roles, account, status, dates, type, tutor, ai, socials, location }: UserFromModel) {
-		super()
-		this.id = id
-		this.bio = bio
-		this.roles = roles
-		this.account = account
-		this.status = status
-		this.dates = dates
-		this.type = type
-		this.tutor = tutor
-		this.ai = ai
-		this.socials = socials
-		this.location = location
+export class UserEntity extends BaseEntity<UserFromModel> {
+	constructor(data: UserFromModel) {
+		super(data)
 	}
 
 	get isOnline() {
