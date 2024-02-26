@@ -1,4 +1,4 @@
-import { Differ, VCore } from 'valleyed'
+import { ClassPropertiesWrapper, Differ, VCore } from 'valleyed'
 import { isProxy, isReactive, isRef, reactive, ref, toRaw } from 'vue'
 
 export function deepToRaw<T>(input: T): T {
@@ -12,7 +12,7 @@ export function deepToRaw<T>(input: T): T {
 	return input
 }
 
-abstract class __BaseFactory<E, T, K extends Record<string, any>> {
+export abstract class BaseFactory<E, T, K extends Record<string, any>> extends ClassPropertiesWrapper<K> {
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
 	abstract model: () => T | Promise<T>
@@ -22,8 +22,16 @@ abstract class __BaseFactory<E, T, K extends Record<string, any>> {
 	protected readonly defaults: K
 	public readonly values: K
 	protected readonly validValues: K
+	protected readonly onSet: Partial<Record<keyof K, (value: any) => void>> = {} as any
 
 	constructor(keys: K) {
+		super(keys, {
+			get: (key: keyof K) => this.values[key] as any,
+			set: (key: keyof K, value: any) => {
+				this.set(key, value)
+				this.onSet[key]?.(value)
+			},
+		})
 		this.defaults = reactive({ ...keys }) as K
 		this.values = reactive({ ...keys }) as K
 		this.validValues = reactive({ ...keys }) as K
@@ -100,12 +108,3 @@ abstract class __BaseFactory<E, T, K extends Record<string, any>> {
 		return deepToRaw(await this.model())
 	}
 }
-
-function WithProperties(): new <E, T, K extends Record<string, any>>(
-	...args: ConstructorParameters<typeof __BaseFactory<E, T, K>>
-) => __BaseFactory<E, T, K> & K {
-	return __BaseFactory as any
-}
-
-// @ts-expect-error BaseFactory is assignable to the constraint of type, but K could be instantiated with a different subtype of constraint
-export abstract class BaseFactory<E, T, K extends Record<string, any>> extends WithProperties()<E, T, K> {}

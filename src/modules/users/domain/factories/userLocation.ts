@@ -8,15 +8,15 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 		country: v.string().min(1),
 		state: v.string().min(1),
 	}
+	protected onSet = {
+		country: () => {
+			this.resetProp('state')
+		},
+	}
 	reserved = []
 
 	constructor() {
 		super({ country: '', state: '' })
-	}
-
-	set country(value: string) {
-		this.set('country', value)
-		this.resetProp('state')
 	}
 
 	loadEntity = (entity: UserEntity) => {

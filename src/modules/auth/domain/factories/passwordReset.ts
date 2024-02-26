@@ -14,16 +14,16 @@ export class PasswordResetFactory extends BaseFactory<null, { password: string; 
 			.custom((val) => isEqualTo(this.password)(val).valid, 'is not equal'),
 		email: v.string().email(),
 	}
+	protected onSet = {
+		password: () => {
+			this.set('cPassword', this.cPassword)
+		},
+	}
 
 	reserved = []
 
 	constructor() {
 		super({ email: '', password: '', cPassword: '', token: '' })
-	}
-
-	set password(value: string) {
-		this.set('password', value)
-		this.set('cPassword', this.cPassword)
 	}
 
 	model = async () => {

@@ -76,6 +76,15 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		insts: [] as string[],
 		activeInst: null as string | null,
 	})
+	protected onSet = {
+		institutionId: () => {
+			this.resetProp('facultyId')
+			this.resetProp('departmentId')
+		},
+		facultyId: () => {
+			this.resetProp('departmentId')
+		},
+	}
 
 	constructor() {
 		super({
@@ -89,17 +98,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			name: '',
 			code: '',
 		})
-	}
-
-	set institutionId(value: string) {
-		this.set('institutionId', value)
-		this.resetProp('facultyId')
-		this.resetProp('departmentId')
-	}
-
-	set facultyId(value: string) {
-		this.set('facultyId', value)
-		this.resetProp('departmentId')
 	}
 
 	set institutions(institutionIds: string[]) {

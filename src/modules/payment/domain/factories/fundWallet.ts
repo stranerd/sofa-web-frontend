@@ -15,22 +15,6 @@ export class FundWalletFactory extends BaseFactory<null, FundDetails, FundDetail
 		})
 	}
 
-	get amount() {
-		return this.values.amount
-	}
-
-	set amount(value: number) {
-		this.set('amount', value)
-	}
-
-	get methodId() {
-		return this.values.methodId
-	}
-
-	set methodId(value: string) {
-		this.set('methodId', value)
-	}
-
 	model = async () => {
 		const { amount, methodId } = this.validValues
 		return {
