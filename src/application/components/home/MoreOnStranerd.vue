@@ -58,7 +58,7 @@
 				</div>
 				<h3 class="font-bold text-[20px] md:text-[36px] md:leading-[54px]">{{ content.place.title }}</h3>
 				<h4 class="text-[16px] md:text-[24px]">{{ content.place.heading }}</h4>
-				<p class="w-3/5 text-[14px] md:text-[16px] leading-[24px] font-normal">
+				<p class="md:w-3/5 text-[14px] md:text-[16px] leading-[24px] font-normal">
 					{{ content.place.content }}
 				</p>
 				<RouterLink
@@ -228,6 +228,11 @@ defineProps({
 @media (max-width: 430px) {
 	.abs {
 		top: -250px;
+	}
+}
+@media (max-width: 390px) {
+	.abs {
+		top: -200px;
 	}
 }
 </style>
