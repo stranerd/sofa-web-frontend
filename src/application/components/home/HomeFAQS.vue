@@ -1,6 +1,6 @@
 <template>
-	<div class="w-[90%] mdlg:w-[80%] mx-auto border-[6px] border-black rounded-[30px] p-8 my-20 relative">
-		<h4 class="text-purple font-bold text-[20px] md:text-[36px] leading-[54px] text-center">Frequently Asked Questions</h4>
+	<div class="w-[90%] mdlg:w-[80%] mx-auto border-[6px] border-black rounded-[30px] p-4 md:p-8 my-20 relative">
+		<h4 class="text-purple font-bold text-[20px] md:text-[36px] md:leading-[54px] text-center">Frequently Asked Questions</h4>
 		<div class="mt-6 overflow-hidden">
 			<div class="flex items-center gap-4 overflow-x-auto styled-scrollbar pb-6">
 				<button
@@ -12,7 +12,7 @@
 					{{ question.question }}
 				</button>
 			</div>
-			<div class="bg-[#FCA311] rounded-[15px] p-10 mt-8">
+			<div class="bg-[#FCA311] rounded-[15px] p-4 md:p-10 mt-8">
 				<p class="text-white text-[14px] md:text-[24px] leading-[18px] md:leading-[36px]">{{ activeQuestion.answer }}</p>
 			</div>
 		</div>
