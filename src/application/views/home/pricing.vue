@@ -79,7 +79,7 @@
 						class="absolute w-full mdlg:w-[927px] mx-auto left-0 right-0 styled-bg rounded-[20px]"
 						style="z-index: 100"
 						:class="[showStudentsPricing ? 'h-[350px]' : 'h-[200px]']"
-						:style="`top: ${(height + 40) / 2}px`"></div>
+						:style="dynamicStyle"></div>
 				</div>
 				<img
 					class="hidden mdlg:block absolute left-0"
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 const showStudentsPricing = ref(true)
 
 const student_plan = ref({
@@ -155,9 +155,28 @@ const plan = computed(() => {
 		return org_plan.value
 	}
 })
-
 const first_plan = ref<HTMLDivElement | null>(null)
 const height = computed(() => first_plan.value?.clientHeight || 0)
+const windowWidth = ref(window.innerWidth)
+const dynamicStyle = computed(() => {
+	if (windowWidth.value <= 1000) {
+		return {
+			top: `${(height.value + 40) / 2}px`,
+		}
+	}
+	return {}
+})
+const updateWindowWidth = () => {
+	windowWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+	window.addEventListener('resize', updateWindowWidth)
+})
+
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', updateWindowWidth)
+})
 </script>
 
 <style scoped>
