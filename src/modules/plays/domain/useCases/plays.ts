@@ -1,17 +1,18 @@
 import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { IPlayRepository } from '../irepositories/plays'
+import { PlayTypes } from '../types'
 import { CoursableAccess } from '@modules/study'
-import { Listeners, QueryKeys } from '@modules/core'
+import { Conditions, Listeners, QueryKeys } from '@modules/core'
 
-export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends IPlayRepository<E, T>> {
-	protected repository: R
+export class PlaysUseCase {
+	protected repository: IPlayRepository
 
-	constructor(repository: R) {
+	constructor(repository: IPlayRepository) {
 		this.repository = repository
 	}
 
-	async create(data: T, access: CoursableAccess['access']) {
+	async create(data: PlayToModel, access: CoursableAccess['access']) {
 		return await this.repository.create(data, access)
 	}
 
@@ -31,31 +32,53 @@ export class PlaysUseCase<E extends PlayEntity, T extends PlayToModel, R extends
 		return await this.repository.end(id)
 	}
 
-	async listenToOne(playId: string, listeners: Listeners<E>) {
+	async listenToOne(playId: string, listeners: Listeners<PlayEntity>) {
 		return await this.repository.listenToOne(playId, listeners)
 	}
 
 	async getMine(userId: string) {
 		return await this.repository.get({
 			whereType: QueryKeys.or,
-			where: [{ field: 'user.id', value: userId }],
+			where: [
+				{
+					condition: QueryKeys.and,
+					value: [
+						{ field: 'user.id', value: userId },
+						{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+					],
+				},
+				{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+			],
 			all: true,
 		})
 	}
 
-	async listenToMine(userId: string, listeners: Listeners<E>) {
+	async listenToMine(userId: string, listeners: Listeners<PlayEntity>) {
 		return await this.repository.listenToMany(
 			{
 				whereType: QueryKeys.or,
-				where: [{ field: 'user.id', value: userId }],
+				where: [
+					{
+						condition: QueryKeys.and,
+						value: [
+							{ field: 'user.id', value: userId },
+							{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+						],
+					},
+					{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+				],
 				all: true,
 			},
 			listeners,
-			(e) => e.user.id === userId,
+			(e) => !e.isTest() || e.user.id === userId,
 		)
 	}
 
 	async getQuestions(id: string) {
 		return await this.repository.getQuestions(id)
+	}
+
+	async join(id: string, data: { join: boolean }) {
+		return await this.repository.join(id, data)
 	}
 }

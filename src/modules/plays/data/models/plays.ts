@@ -1,4 +1,4 @@
-import { EmbeddedUser, PlayStatus } from '../../domain/types'
+import { EmbeddedUser, PlayData, PlayStatus, PlayTypes } from '../../domain/types'
 
 export interface PlayFromModel {
 	id: string
@@ -9,6 +9,7 @@ export interface PlayFromModel {
 	scores: Record<string, number>
 	startedAt: number | null
 	user: EmbeddedUser
+	data: PlayData
 	endedAt: number | null
 	createdAt: number
 	updatedAt: number
@@ -16,4 +17,12 @@ export interface PlayFromModel {
 
 export interface PlayToModel {
 	quizId: string
+	data:
+		| {
+				type: Exclude<PlayTypes, PlayTypes.games>
+		  }
+		| {
+				type: PlayTypes.games
+				join: boolean
+		  }
 }

@@ -5,7 +5,7 @@ import { AnswerFromModel, AnswerToModel } from '../models/answers'
 import { HttpClient, QueryParams, QueryResults } from '@modules/core'
 
 export class AnswerRepository implements IAnswerRepository {
-	private static instance: AnswerRepository
+	private static instances: Record<string, AnswerRepository> = {}
 	private client: HttpClient
 	private mapper = (model: AnswerFromModel | null) => (model ? new AnswerEntity(model) : null) as AnswerEntity
 
@@ -14,8 +14,7 @@ export class AnswerRepository implements IAnswerRepository {
 	}
 
 	static getInstance(type: PlayTypes, typeId: string) {
-		if (!AnswerRepository.instance) AnswerRepository.instance = new AnswerRepository(type, typeId)
-		return AnswerRepository.instance
+		return (AnswerRepository.instances[`${type}-${typeId}`] ??= new AnswerRepository(type, typeId))
 	}
 
 	async get(query: QueryParams) {

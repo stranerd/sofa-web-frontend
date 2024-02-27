@@ -1,14 +1,9 @@
-import { EmbeddedUser, PlayStatus, PlayTypes } from '../types'
-import type { GameEntity } from './games'
-import type { TestEntity } from './tests'
+import { EmbeddedUser, PlayData, PlayStatus, PlayTypes } from '../types'
 import { ordinalSuffixOf } from '@utils/commons'
 import { BaseEntity } from '@modules/core'
 
-export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> extends BaseEntity<T> {
-	constructor(
-		readonly type: PlayTypes,
-		data: T,
-	) {
+export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
+	constructor(data: PlaysConstructorArgs) {
 		super(data)
 	}
 
@@ -25,15 +20,15 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 	}
 
 	get lobbyPage() {
-		return `/${this.type}/${this.id}/lobby`
+		return `/${this.data.type}/${this.id}/lobby`
 	}
 
 	get runPage() {
-		return `/${this.type}/${this.id}/run`
+		return `/${this.data.type}/${this.id}/run`
 	}
 
 	get resultsPage() {
-		return `/${this.type}/${this.id}/results`
+		return `/${this.data.type}/${this.id}/results`
 	}
 
 	get singularizedType() {
@@ -43,7 +38,8 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 				[PlayTypes.tests]: 'test',
 				[PlayTypes.flashcards]: 'flash card',
 				[PlayTypes.practice]: 'practice',
-			}[this.type] ?? ''
+				[PlayTypes.assessments]: 'assessment',
+			}[this.data.type] ?? ''
 		)
 	}
 
@@ -55,12 +51,18 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 		return this.status === PlayStatus.started
 	}
 
-	isGame(): this is GameEntity {
-		return this.type === PlayTypes.games
+	get participants() {
+		if (this.data.type === PlayTypes.games) return this.data.participants
+		if (this.data.type === PlayTypes.assessments) return this.data.participants
+		return [this.user.id]
 	}
 
-	isTest(): this is TestEntity {
-		return this.type === PlayTypes.tests
+	isGame() {
+		return this.data.type === PlayTypes.games
+	}
+
+	isTest() {
+		return this.data.type === PlayTypes.tests
 	}
 
 	getPercentage(userId: string) {
@@ -68,14 +70,13 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 		return (correctAnswers / this.questions.length) * 100
 	}
 
-	getPosition(userId: string): string {
-		const participants = this.isGame() ? this.participants : [userId]
+	getPosition(userId: string) {
 		const scores = Object.values(this.scores).sort((a, b) => b - a)
 		const position = scores.indexOf(this.scores[userId])
-		return ordinalSuffixOf(position !== -1 ? position + 1 : participants.length)
+		return ordinalSuffixOf(position !== -1 ? position + 1 : this.participants.length)
 	}
 
-	getLabel(userId: string): string {
+	getLabel(userId: string) {
 		if (this.isGame()) return this.getPosition(userId)
 		if (this.isTest()) return `${this.getPercentage(userId).toFixed()}%`
 		return ''
@@ -99,6 +100,7 @@ type PlaysConstructorArgs = {
 	status: PlayStatus
 	questions: string[]
 	user: EmbeddedUser
+	data: PlayData
 	totalTimeInSec: number
 	scores: Record<string, number>
 	startedAt: number | null

@@ -61,31 +61,39 @@ export type EmbeddedUser = {
 	type: UserTypeData | null
 }
 
+enum UserMeta {
+	connects = 'connects',
+
+	courses = 'courses',
+	publishedCourses = 'publishedCourses',
+	quizzes = 'quizzes',
+	publishedQuizzes = 'publishedQuizzes',
+	documents = 'documents',
+	publishedDocuments = 'publishedDocuments',
+	images = 'images',
+	publishedImages = 'publishedImages',
+	videos = 'videos',
+	publishedVideos = 'publishedVideos',
+	folders = 'folders',
+
+	hostedGames = 'hostedGames',
+	playedGames = 'playedGames',
+	playedTests = 'playedTests',
+	playedPractice = 'playedPractice',
+	playedFlashcards = 'playedFlashcards',
+	hostedAssessments = 'hostedAssessments',
+	playedAssessments = 'playedAssessments',
+
+	students = 'students',
+	teachers = 'teachers',
+	classes = 'classes',
+	lessons = 'lessons',
+
+	total = 'total',
+}
+
 export interface UserAccount {
-	meta: {
-		courses: number
-		publishedCourses: number
-		quizzes: number
-		publishedQuizzes: number
-		documents: number
-		publishedDocuments: number
-		images: number
-		publishedImages: number
-		videos: number
-		publishedVideos: number
-		folders: number
-
-		hostedGames: number
-		playedGames: number
-		playedTests: number
-
-		students: number
-		teachers: number
-		classes: number
-		lessons: number
-
-		total: number
-	}
+	meta: Record<UserMeta, number>
 	streak: {
 		count: number
 		longestStreak: number
