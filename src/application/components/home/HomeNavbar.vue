@@ -35,7 +35,7 @@ const links = [
 	},
 	{
 		label: 'Pricing',
-		link: '/',
+		link: '/home/pricing',
 	},
 	{
 		label: 'About us',

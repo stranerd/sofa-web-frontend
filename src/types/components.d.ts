@@ -46,6 +46,7 @@ declare module 'vue' {
     FlashcardDisplay: typeof import('./../application/components/study/quizzes/FlashcardDisplay.vue')['default']
     FundWalletModal: typeof import('./../application/components/payment/wallet/FundWalletModal.vue')['default']
     GameWrapper: typeof import('./../application/components/plays/games/GameWrapper.vue')['default']
+    HomeDiscoverMaterials: typeof import('./../application/components/home/HomeDiscoverMaterials.vue')['default']
     HomeFAQS: typeof import('./../application/components/home/HomeFAQS.vue')['default']
     HomeFooter: typeof import('./../application/components/home/HomeFooter.vue')['default']
     HomeForNonStudents: typeof import('./../application/components/home/HomeForNonStudents.vue')['default']
