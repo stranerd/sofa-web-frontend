@@ -74,7 +74,7 @@
 		<!-- Create -->
 		<div
 			v-if="content.showCreate"
-			class="w-[90%] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			class="w-[90%] mt-[300px] mb-20 mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div class="w-full mdlg:w-1/2 mx-auto flex flex-col mdlg:pl-[160px] justify-center gap-2 px-8 mdlg:px-0">
 				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">Create</h3>
 				<h4 class="text-white text-[16px] md:text-[24px]">Quizzes, Courses, Games, Flashcards.</h4>
