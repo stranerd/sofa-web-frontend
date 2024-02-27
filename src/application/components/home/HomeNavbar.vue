@@ -31,7 +31,7 @@ const links = [
 	},
 	{
 		label: 'Features',
-		link: '/',
+		link: '/home/features',
 	},
 	{
 		label: 'Pricing',
@@ -39,7 +39,7 @@ const links = [
 	},
 	{
 		label: 'About us',
-		link: '/',
+		link: '/home/about',
 	},
 	{
 		label: 'Contact',
