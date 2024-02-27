@@ -120,7 +120,7 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
 import { QuizEntity } from '@modules/study'
-import { GameEntity } from '@modules/plays'
+import { PlayEntity } from '@modules/plays'
 
 export default defineComponent({
 	name: 'GamesIdLobbyPage',
@@ -130,9 +130,9 @@ export default defineComponent({
 			title: 'Lobby',
 		})
 
-		const share = async (game: GameEntity, quiz: QuizEntity) =>
+		const share = async (game: PlayEntity, quiz: QuizEntity) =>
 			await Logic.Common.share('Join game on SOFA', `Join and play a game on: ${quiz.title}`, game.shareLink)
-		const copy = (game: GameEntity) => Logic.Common.copy(game.shareLink)
+		const copy = (game: PlayEntity) => Logic.Common.copy(game.shareLink)
 
 		return { share, copy, Logic }
 	},

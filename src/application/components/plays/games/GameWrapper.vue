@@ -6,7 +6,7 @@
 import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useGame } from '@app/composables/plays/games'
+import { usePlay } from '@app/composables/plays/plays'
 import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(
@@ -34,7 +34,7 @@ const {
 	end,
 	join,
 	submitAnswer,
-} = useGame(props.id, {
+} = usePlay(props.id, {
 	questions: props.skipQuestions,
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,

@@ -17,8 +17,7 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { useMyGames } from '@app/composables/plays/games'
-import { useMyTests } from '@app/composables/plays/tests'
+import { useMyPlays } from '@app/composables/plays/plays'
 
 export default defineComponent({
 	name: 'LibraryResultsPage',
@@ -28,13 +27,12 @@ export default defineComponent({
 		const route = useRoute()
 		const tab = computed(() => (route.query.tab as string) ?? 'all')
 
-		const { ended: endedGames } = useMyGames()
-		const { ended: endedTests } = useMyTests()
+		const { ended } = useMyPlays()
 
 		const data = computed(() => {
-			if (tab.value === 'all') return [...endedGames.value, ...endedTests.value].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === 'games') return endedGames.value
-			if (tab.value === 'tests') return endedTests.value
+			if (tab.value === 'all') return ended.value
+			if (tab.value === 'games') return ended.value.filter((p) => p.isGame())
+			if (tab.value === 'tests') return ended.value.filter((p) => p.isTest())
 			return []
 		})
 

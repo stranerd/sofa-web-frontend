@@ -47,7 +47,7 @@ export class PlaysUseCase {
 						{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
 					],
 				},
-				{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+				{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.games },
 			],
 			all: true,
 		})
@@ -65,7 +65,7 @@ export class PlaysUseCase {
 							{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
 						],
 					},
-					{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+					{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.games },
 				],
 				all: true,
 			},

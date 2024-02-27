@@ -1,6 +1,6 @@
 import { EmbeddedUser, PlayData, PlayStatus, PlayTypes } from '../types'
-import { ordinalSuffixOf } from '@utils/commons'
 import { BaseEntity } from '@modules/core'
+import { ordinalSuffixOf } from '@utils/commons'
 
 export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 	constructor(data: PlaysConstructorArgs) {
@@ -77,13 +77,14 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 	}
 
 	getLabel(userId: string) {
+		if (this.status !== PlayStatus.scored) return ''
 		if (this.isGame()) return this.getPosition(userId)
 		if (this.isTest()) return `${this.getPercentage(userId).toFixed()}%`
 		return ''
 	}
 
 	getLabelColor(userId: string) {
-		if (this.isTest()) {
+		if (this.status === PlayStatus.scored) {
 			const percentage = this.getPercentage(userId)
 			if (percentage >= 80) return 'text-[#4BAF7D]'
 			if (percentage >= 70) return 'text-[#ADAF4B]'
@@ -91,6 +92,17 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 			return 'text-primaryRed'
 		}
 		return 'text-[#3296C8]'
+	}
+
+	getResultLabel(userId: string) {
+		if (this.status !== PlayStatus.scored) return ''
+		const percentage = this.getPercentage(userId)
+		if (percentage === 100) return 'Perfect!'
+		if (percentage >= 90) return 'Outstanding!'
+		if (percentage >= 80) return 'Excellent Work!'
+		if (percentage >= 70) return 'Good job!'
+		if (percentage >= 60) return 'Nice effort!'
+		return 'Study harder!'
 	}
 }
 

@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useTest } from '@app/composables/plays/tests'
+import { usePlay } from '@app/composables/plays/plays'
 
 const props = withDefaults(
 	defineProps<{
@@ -27,9 +27,10 @@ const {
 	start,
 	end,
 	submitAnswer,
-} = useTest(props.id, {
+} = usePlay(props.id, {
 	questions: props.skipQuestions,
 	statusNav: props.skipStatusNav,
+	participants: true,
 })
 const { id: authId, user } = useAuth()
 const extras = computed(() => ({
@@ -55,12 +56,7 @@ const extras = computed(() => ({
 				user: user.value,
 				isWinner: orgArr[0]?.[1] === res[1],
 				get label() {
-					if (this.percent === 100) return 'Perfect!'
-					if (this.percent >= 90) return 'Outstanding!'
-					if (this.percent >= 80) return 'Excellent Work!'
-					if (this.percent >= 70) return 'Good job!'
-					if (this.percent >= 60) return 'Nice effort!'
-					return 'Study harder!'
+					return test.value?.getResultLabel(authId.value) ?? ''
 				},
 				get color() {
 					return test.value?.getLabelColor(authId.value) ?? ''

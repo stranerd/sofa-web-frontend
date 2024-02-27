@@ -3,6 +3,7 @@ import { PlayRepository } from './data/repositories/plays'
 import { AnswersUseCase } from './domain/useCases/answers'
 import { PlaysUseCase } from './domain/useCases/plays'
 
+export type { PlayToModel } from './data/models/plays'
 export { PlayStatus, PlayTypes } from './domain/types'
 
 export const AnswersUseCases = new AnswersUseCase(AnswerRepository.getInstance)

@@ -91,9 +91,9 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { useCreateTest } from '@app/composables/plays/tests'
+import { useCreatePlay } from '@app/composables/plays/plays'
 import { ClassEntity, ClassLesson, ClassLessonable, ExtendedCurriculum } from '@modules/organizations'
-import { PlayTypes, TestEntity } from '@modules/plays'
+import { PlayEntity, PlayTypes } from '@modules/plays'
 import { FileType } from '@modules/study'
 const props = defineProps<{
 	close: () => void
@@ -146,8 +146,8 @@ const startQuizPractice = async () => {
 }
 
 const quizTestStarted = ref(false)
-const test = ref<TestEntity | null>(null)
-const { createPlay: createTest } = useCreateTest(
+const test = ref<PlayEntity | null>(null)
+const { createPlay } = useCreatePlay(
 	{
 		organizationId: props.classInst.organizationId,
 		classId: props.classInst.id,
@@ -156,7 +156,7 @@ const { createPlay: createTest } = useCreateTest(
 	{ start: true, nav: false },
 )
 const startQuizTest = async (id: string) => {
-	const t = await createTest({ quizId: id })
+	const t = await createPlay({ quizId: id, data: { type: PlayTypes.tests } })
 	if (!t) return
 	test.value = t
 	quizTestStarted.value = true

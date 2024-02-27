@@ -17,8 +17,7 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { useMyGames } from '@app/composables/plays/games'
-import { useMyTests } from '@app/composables/plays/tests'
+import { useMyPlays } from '@app/composables/plays/plays'
 
 export default defineComponent({
 	name: 'LibraryInProgressPage',
@@ -28,13 +27,12 @@ export default defineComponent({
 		const route = useRoute()
 		const tab = computed(() => (route.query.tab as string) ?? 'all')
 
-		const { ongoing: ongoingGames } = useMyGames()
-		const { ongoing: ongoingTests } = useMyTests()
+		const { ongoing } = useMyPlays()
 
 		const data = computed(() => {
-			if (tab.value === 'all') return [...ongoingGames.value, ...ongoingTests.value].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === 'games') return ongoingGames.value
-			if (tab.value === 'tests') return ongoingTests.value
+			if (tab.value === 'all') return ongoing.value
+			if (tab.value === 'games') return ongoing.value.filter((p) => p.isGame())
+			if (tab.value === 'tests') return ongoing.value.filter((p) => p.isTest())
 			return []
 		})
 
