@@ -14,9 +14,9 @@
 			</ul>
 			<ul class="hidden mdlg:flex items-center gap-6">
 				<li>
-					<RouterLink to="/register" class="bg-purple text-white py-[10px] px-[19px] rounded-lg">Sign up</RouterLink>
+					<RouterLink to="/signup" class="bg-purple text-white py-[10px] px-[19px] rounded-lg">Sign up</RouterLink>
 				</li>
-				<li><RouterLink to="/register">Log in</RouterLink></li>
+				<li><RouterLink to="/signin">Log in</RouterLink></li>
 			</ul>
 		</div>
 	</nav>

@@ -7,7 +7,7 @@
 				difference, we invite you to join us on our journey to transform education. Together, we can shape the future of learning
 				and unlock the potential of every learner.
 			</p>
-			<RouterLink to="/register" class="py-[10px] px-[30px] h-[44px] rounded-[22px] bg-white text-black">Sign Up Today</RouterLink>
+			<RouterLink to="/signup" class="py-[10px] px-[30px] h-[44px] rounded-[22px] bg-white text-black">Sign Up Today</RouterLink>
 		</div>
 	</div>
 </template>

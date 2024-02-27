@@ -32,7 +32,7 @@
 						Empower educators, engage learners, and streamline operations with our comprehensive learning platform
 					</p>
 					<div class="flex flex-col md:flex-row items-center gap-3">
-						<RouterLink to="/register" class="bg-white text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
+						<RouterLink to="/signup" class="bg-white text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							Get started
 						</RouterLink>
 						<RouterLink

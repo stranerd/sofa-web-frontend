@@ -24,6 +24,8 @@
 				:class="showStudentsPricing ? 'items-center mdlg:min-h-[500px]' : 'items-start mdlg:min-h-[300px]'">
 				<div class="w-full sm:w-[80%] md:w-[60%] mx-auto flex flex-col mdlg:flex-row items-center gap-10">
 					<div
+						ref="first_plan"
+						:key="showStudentsPricing.toString()"
 						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
 						style="box-shadow: 0px 0px 24px 0px #00000040; z-index: 999999 !important">
 						<div class="flex gap-3 justify-between">
@@ -76,7 +78,8 @@
 					<div
 						class="absolute w-full mdlg:w-[927px] mx-auto left-0 right-0 styled-bg rounded-[20px]"
 						style="z-index: 100"
-						:class="showStudentsPricing ? 'h-[350px]' : 'h-[200px]'"></div>
+						:class="[showStudentsPricing ? 'h-[350px]' : 'h-[200px]']"
+						:style="`top: ${(height + 40) / 2}px`"></div>
 				</div>
 				<img
 					class="hidden mdlg:block absolute left-0"
@@ -91,7 +94,7 @@
 	</main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 const showStudentsPricing = ref(true)
 
@@ -152,6 +155,9 @@ const plan = computed(() => {
 		return org_plan.value
 	}
 })
+
+const first_plan = ref<HTMLDivElement | null>(null)
+const height = computed(() => first_plan.value?.clientHeight || 0)
 </script>
 
 <style scoped>
