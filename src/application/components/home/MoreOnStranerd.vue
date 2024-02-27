@@ -93,7 +93,9 @@
 			</div>
 		</div>
 		<!-- Access preparatory classes -->
-		<div class="w-full bg-[#F9FAFB] h-[389px] flex flex-col justify-center items-center overflow-hidden mb-20">
+		<div
+			v-if="content.showAccess"
+			class="w-full bg-[#F9FAFB] h-[389px] flex flex-col justify-center items-center overflow-hidden mb-20">
 			<div class="w-[90%] mx-auto flex flex-col gap-2">
 				<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
 					Access Preparatory Classes for top examinations
@@ -107,7 +109,7 @@
 			</div>
 		</div>
 		<!-- Discover  study materials-->
-		<div class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-10 mdlg:p-24 mb-20">
+		<div v-if="content.showDiscover" class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-10 mdlg:p-24 mb-20">
 			<div class="flex flex-col gap-6">
 				<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-6 mdlg:gap-0">
 					<div class="order-2 mdlg:order-1 flex flex-col gap-6">
@@ -157,9 +159,11 @@
 			</div>
 		</div>
 		<!-- Testimonials -->
-		<HomeTestimonials class="mb-20" />
+		<HomeTestimonials v-if="content.showTestimonial" class="mb-20" />
 		<!-- Popular Learning centers -->
-		<div class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
+		<div
+			v-if="content.showLearningCenters"
+			class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
 			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
 				<h4 class="font-bold text-[20px] md:text-[32px] text-white text-center leading-[48px]">
 					Popular learning centers we collaborate with
@@ -183,9 +187,9 @@
 			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Find more</RouterLink>
 		</div>
 		<!-- FAQS -->
-		<HomeFAQS />
+		<HomeFAQS v-if="content.showFAQs" />
 		<!-- Get app -->
-		<div class="w-[80%] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+		<div v-if="content.showGetApp" class="w-[80%] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 			<div class="w-full md:w-1/2 order-2 md:order-1 flex flex-col items-center gap-4">
 				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
 				<RouterLink to="#"><img src="/images/app-store-badge.png" /></RouterLink>

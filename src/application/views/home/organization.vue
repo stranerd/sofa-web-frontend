@@ -85,5 +85,11 @@ const content = ref({
 		link: '#',
 	},
 	showCreate: false,
+	showTestimonial: true,
+	showLearningCenters: true,
+	showFAQs: true,
+	showGetApp: true,
+	showDiscover: true,
+	showAccess: true,
 })
 </script>
