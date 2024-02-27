@@ -129,14 +129,14 @@ export const generateHooks = <E extends PlayEntity, T extends PlayToModel>(
 
 		const { asyncFn: start } = useAsyncFn(async () => {
 			const p = singleStore[id].play.value
-			if (!p || p.status !== p.runPage) return
+			if (!p || !p.canStart) return
 			await useCase.start(id)
 			await router.push(p.runPage)
 		})
 
 		const { asyncFn: end } = useAsyncFn(async () => {
 			const p = singleStore[id].play.value
-			if (!p || p.status !== PlayStatus.started) return false
+			if (!p || !p.canEnd) return false
 			await useCase.end(id)
 			await router.push(p.resultsPage)
 			return true

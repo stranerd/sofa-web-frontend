@@ -47,6 +47,14 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 		)
 	}
 
+	get canStart() {
+		return this.status === PlayStatus.created
+	}
+
+	get canEnd() {
+		return this.status === PlayStatus.started
+	}
+
 	isGame(): this is GameEntity {
 		return this.type === PlayTypes.games
 	}
