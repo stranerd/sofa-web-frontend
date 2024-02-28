@@ -1,10 +1,10 @@
 <template>
 	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white max-w-[1800px] mx-auto">
-		<header class="flex flex-col items-center justify-center">
-			<HomeNavbar class="mb-[44px]" />
+		<header class="flex flex-col items-center justify-center relative">
+			<HomeNavbar class="mb-[44px] z-50" />
 			<!-- Link -->
 			<div
-				class="flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
+				class="flex items-center bg-white mt-[44px] h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
 				style="box-shadow: 0px 4px 16px 0px #00000040">
 				<router-link
 					to="/home/students"

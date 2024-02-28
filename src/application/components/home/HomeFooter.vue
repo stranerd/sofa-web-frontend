@@ -2,10 +2,10 @@
 	<footer class="w-full bg-[#F9FAFB]">
 		<div class="w-[90%] min-h-[280px] py-6 grid grid-cols-3 gap-8 md:gap-0 md:grid-cols-4 place-content-center mx-auto">
 			<div v-for="footerLink in footerLinks" :key="footerLink.title">
-				<p class="text-[16px] pb-2">{{ footerLink.title }}</p>
+				<p class="text-[16px] md:text-[18px] pb-2">{{ footerLink.title }}</p>
 				<ul class="flex flex-col gap-2">
 					<li v-for="link in footerLink.links" :key="link.label">
-						<RouterLink :to="link.link" class="text-grayColor">{{ link.label }}</RouterLink>
+						<RouterLink :to="link.link" class="text-grayColor text-[14px] md:text-[16px]">{{ link.label }}</RouterLink>
 					</li>
 				</ul>
 			</div>

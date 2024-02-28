@@ -1,6 +1,9 @@
 <template>
-	<nav class="w-full h-[65px] bg-white flex items-center justify-center">
+	<nav class="w-full h-[65px] bg-white flex items-center justify-center" style="z-index: 9999999 !important">
 		<div class="w-[90%] mx-auto flex items-center justify-between">
+			<button class="block mdlg:hidden" @click="toggleMenu">
+				<SofaIcon name="menu" class="h-[24px]" />
+			</button>
 			<img src="/images/stranerd_logo.png" />
 			<ul class="hidden mdlg:flex items-center gap-6">
 				<li v-for="link in links" :key="link.label">
@@ -18,12 +21,17 @@
 				</li>
 				<li><RouterLink to="/signin">Log in</RouterLink></li>
 			</ul>
+			<RouterLink to="/signup" class="block md:hidden bg-purple text-white py-[10px] px-[19px] rounded-lg text-[14px] md:text-[16px]">
+				Get Started
+			</RouterLink>
 		</div>
 	</nav>
+	<HomeMobileMenu v-if="showMenu" />
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { useMenu } from '@app/composables/core/menu'
 const links = [
 	{
 		label: 'Home',
@@ -43,10 +51,11 @@ const links = [
 	},
 	{
 		label: 'Contact',
-		link: '/',
+		link: '/home/contact',
 	},
 ]
 const route = useRoute()
+const { toggleMenu, showMenu } = useMenu()
 </script>
 
 <style scoped>

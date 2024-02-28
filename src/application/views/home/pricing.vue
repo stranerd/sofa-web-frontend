@@ -4,7 +4,7 @@
 			<HomeNavbar class="mb-[44px]" />
 			<!-- Link -->
 			<div
-				class="flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
+				class="flex items-center bg-white mt-[44px] h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
 				style="box-shadow: 0px 4px 16px 0px #00000040">
 				<button
 					class="w-1/2 h-full flex items-center justify-center p-5 rounded-[22px] text-[14px] md:text-[16px]"
@@ -22,7 +22,7 @@
 			<div
 				class="relative flex justify-center"
 				:class="showStudentsPricing ? 'items-center mdlg:min-h-[500px]' : 'items-start mdlg:min-h-[300px]'">
-				<div class="w-full sm:w-[80%] md:w-[60%] mx-auto flex flex-col mdlg:flex-row items-center gap-10">
+				<div class="w-[90%] sm:w-[80%] md:w-[60%] mx-auto flex flex-col mdlg:flex-row items-center gap-10">
 					<div
 						ref="first_plan"
 						:key="showStudentsPricing.toString()"
@@ -89,7 +89,11 @@
 			<img class="hidden mdlg:block absolute top-[80px] right-0" src="/images/smiles.png" />
 		</header>
 		<HomeDiscoverMaterials />
-		<HomeJoinUs class="w-[80%] mx-auto" />
+		<div class="w-[90%] mx-auto relative">
+			<HomeJoinUs class="w-[80%] mx-auto" />
+			<img class="hidden mdlg:block absolute left-0 bottom-10" src="/images/pricing-left.png" />
+			<img class="hidden mdlg:block absolute -top-16 right-0" src="/images/skewed-green-box.png" />
+		</div>
 		<HomeFooter />
 	</main>
 </template>

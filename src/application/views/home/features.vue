@@ -40,7 +40,7 @@ const content = ref({
 			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
 		link: '#',
 	},
-	showTestimonial: false,
+	showTestimonial: true,
 	showLearningCenters: false,
 	showFAQs: false,
 	showCreate: true,

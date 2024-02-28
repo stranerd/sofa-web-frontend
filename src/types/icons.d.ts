@@ -123,6 +123,7 @@ declare global {
 		| 'organization'
 		| 'participant'
 		| 'personal-learning'
+		| 'phone'
 		| 'pink-question'
 		| 'play-quiz'
 		| 'play-video'

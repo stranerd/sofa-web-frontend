@@ -1,7 +1,7 @@
 <template>
 	<main class="w-full bg-white max-w-[1800px] mx-auto">
 		<header class="flex gap-[44px] flex-col items-center justify-center bg-[#29001a] relative">
-			<HomeNavbar class="z-50" />
+			<HomeNavbar class="" />
 			<!-- Link -->
 			<div
 				class="z-50 flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden"
@@ -17,7 +17,9 @@
 					Organizations
 				</router-link>
 			</div>
-			<div class="z-10 absolute top-[65px] left-0 right-0 w-full bg-[#d500a1] rounded-b-full h-[400px] blur-[100px]"></div>
+			<div
+				class="absolute top-[65px] left-0 right-0 w-full bg-[#d500a1] rounded-b-full h-[400px] blur-[100px]"
+				style="z-index: 10 !important"></div>
 			<div class="z-50 w-[90%] mdlg:min-h-[400px] relative">
 				<div class="w-[90%] md:w-[70%] mdlg:w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
 					<h1
