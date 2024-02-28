@@ -47,24 +47,22 @@ const extras = computed(() => ({
 	get scores() {
 		const t = test.value
 		if (!t) return []
-		return Object.entries(t.scores)
-			.sort((a, b) => b[1] - a[1])
-			.map((res, i, orgArr) => ({
-				score: res[1],
-				percent: (res[1] / t.questions.length) * 10,
-				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
-				user: user.value,
-				isWinner: orgArr[0]?.[1] === res[1],
-				get label() {
-					return test.value?.getResultLabel(authId.value) ?? ''
-				},
-				get color() {
-					return test.value?.getLabelColor(authId.value) ?? ''
-				},
-				get bgColor() {
-					return this.color.split(']')[0].split('[')[1]
-				},
-			}))
+		return t.scores.map((res, i, scores) => ({
+			score: res.value,
+			percent: (res.value / t.questions.length) * 10,
+			position: scores[i - 1]?.value === res.value ? '' : (i + 1).toString(),
+			user: user.value,
+			isWinner: scores[0]?.value === res.value,
+			get label() {
+				return test.value?.getResultLabel(authId.value) ?? ''
+			},
+			get color() {
+				return test.value?.getLabelColor(authId.value) ?? ''
+			},
+			get bgColor() {
+				return this.color.split(']')[0].split('[')[1]
+			},
+		}))
 	},
 }))
 </script>

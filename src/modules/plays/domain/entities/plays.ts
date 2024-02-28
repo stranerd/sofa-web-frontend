@@ -1,4 +1,4 @@
-import { EmbeddedUser, PlayData, PlayStatus, PlayTypes } from '../types'
+import { EmbeddedUser, PlayData, PlayScore, PlayStatus, PlayTypes } from '../types'
 import { BaseEntity } from '@modules/core'
 import { ordinalSuffixOf } from '@utils/commons'
 
@@ -66,13 +66,13 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 	}
 
 	getPercentage(userId: string) {
-		const correctAnswers = (this.scores[userId] ?? 0) / 10
+		const score = this.scores.find((s) => s.userId === userId)
+		const correctAnswers = (score?.value ?? 0) / 10
 		return (correctAnswers / this.questions.length) * 100
 	}
 
 	getPosition(userId: string) {
-		const scores = Object.values(this.scores).sort((a, b) => b - a)
-		const position = scores.indexOf(this.scores[userId])
+		const position = this.scores.findIndex((s) => s.userId === userId)
 		return ordinalSuffixOf(position !== -1 ? position + 1 : this.participants.length)
 	}
 
@@ -114,7 +114,7 @@ type PlaysConstructorArgs = {
 	user: EmbeddedUser
 	data: PlayData
 	totalTimeInSec: number
-	scores: Record<string, number>
+	scores: PlayScore
 	startedAt: number | null
 	endedAt: number | null
 	createdAt: number

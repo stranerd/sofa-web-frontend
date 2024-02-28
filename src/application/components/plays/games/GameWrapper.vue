@@ -61,14 +61,13 @@ const extras = computed(() => ({
 	get scores() {
 		const g = game.value
 		if (!g) return []
-		return Object.entries(g.scores)
-			.sort((a, b) => b[1] - a[1])
-			.map((res, i, orgArr) => ({
-				score: res[1],
-				percentage: formatNumber((res[1] / g.questions.length ?? 0) * 10, 1),
-				position: orgArr[i - 1]?.[1] === res[1] ? '' : (i + 1).toString(),
-				user: participants.value.find((p) => p.id === res[0]),
-				isWinner: orgArr[0]?.[1] === res[1],
+		return g.scores
+			.map((res, i, scores) => ({
+				score: res.value,
+				percentage: formatNumber((res.value / g.questions.length ?? 0) * 10, 1),
+				position: scores[i - 1]?.value === res.value ? '' : (i + 1).toString(),
+				user: participants.value.find((p) => p.id === res.userId),
+				isWinner: scores[0]?.userId === res.userId,
 			}))
 			.filter((res) => !!res.user)
 	},
