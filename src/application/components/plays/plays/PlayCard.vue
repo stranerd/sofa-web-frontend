@@ -13,10 +13,10 @@
 			</SofaNormalText>
 
 			<div class="w-full flex items-center justify-between">
-				<SofaNormalText :color="play.getLabelColor(id)" customClass="font-semibold">
-					{{ play.getLabel(id) }}
+				<SofaNormalText :color="play.getResultColor(id)" customClass="font-semibold">
+					{{ play.getCardLabel(id) }}
 				</SofaNormalText>
-				<div v-if="play.isGame()" class="flex items-center gap-2">
+				<div v-if="play.isGames()" class="flex items-center gap-2">
 					<SofaNormalText color="text-grayColor">
 						{{ play.participants.length }}
 					</SofaNormalText>

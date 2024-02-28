@@ -1,8 +1,8 @@
 import { QuizModes as PlayTypes } from '@modules/study'
 export type { QuestionAnswer as PlayAnswer } from '@modules/study'
 export type { EmbeddedUser } from '@modules/users'
-export type PlayScore = { userId: string; value: number }[]
 export { PlayTypes }
+export type PlayScore = { userId: string; value: number }[]
 
 export enum PlayStatus {
 	created = 'created',
@@ -11,15 +11,23 @@ export enum PlayStatus {
 	scored = 'scored',
 }
 
-export type PlayData =
-	| {
-			type: PlayTypes.games | PlayTypes.assessments
-			participants: string[]
-	  }
-	| {
-			type: PlayTypes.tests
-			forTutors: boolean
-	  }
-	| {
-			type: PlayTypes.practice | PlayTypes.flashcards
-	  }
+export type PlayGamesData = {
+	type: PlayTypes.games
+	participants: string[]
+}
+
+export type PlayAssessmentsData = {
+	type: PlayTypes.assessments
+	participants: string[]
+}
+
+export type PlayTestsData = {
+	type: PlayTypes.tests
+	forTutors: boolean
+}
+
+export type PlayGenericData = {
+	type: PlayTypes.practice | PlayTypes.flashcards
+}
+
+export type PlayData = PlayGamesData | PlayAssessmentsData | PlayTestsData | PlayGenericData

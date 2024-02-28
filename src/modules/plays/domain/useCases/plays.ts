@@ -70,7 +70,7 @@ export class PlaysUseCase {
 				all: true,
 			},
 			listeners,
-			(e) => !e.isTest() || e.user.id === userId,
+			(e) => !e.isTests() || e.user.id === userId,
 		)
 	}
 

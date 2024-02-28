@@ -50,15 +50,9 @@ const extras = computed(() => ({
 				position: scores[i - 1]?.value === res.value ? '' : (i + 1).toString(),
 				user: participants.value.find((p) => p.id === res.userId)!,
 				isWinner: scores[0]?.value === res.value,
-				get label() {
-					return p.getResultLabel(authId.value) ?? ''
-				},
-				get color() {
-					return p.getLabelColor(authId.value) ?? ''
-				},
-				get bgColor() {
-					return this.color.split(']')[0].split('[')[1]
-				},
+				label: p.getResultLabel(authId.value),
+				color: p.getResultColor(authId.value),
+				bgColor: p.getResultColor(authId.value).split(']')[0].split('[')[1],
 			}))
 			.filter((res) => !!res.user)
 	},

@@ -1,4 +1,14 @@
-import { EmbeddedUser, PlayData, PlayScore, PlayStatus, PlayTypes } from '../types'
+import {
+	EmbeddedUser,
+	PlayAssessmentsData,
+	PlayData,
+	PlayGamesData,
+	PlayGenericData,
+	PlayScore,
+	PlayStatus,
+	PlayTestsData,
+	PlayTypes,
+} from '../types'
 import { BaseEntity } from '@modules/core'
 import { ordinalSuffixOf } from '@utils/commons'
 
@@ -57,17 +67,29 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 		return [this.user.id]
 	}
 
-	isGame() {
+	isGames(): this is Omit<PlayEntity, 'data'> & { data: PlayGamesData } {
 		return this.data.type === PlayTypes.games
 	}
 
-	isTest() {
+	isTests(): this is Omit<PlayEntity, 'data'> & { data: PlayTestsData } {
 		return this.data.type === PlayTypes.tests
+	}
+
+	isAssessments(): this is Omit<PlayEntity, 'data'> & { data: PlayAssessmentsData } {
+		return this.data.type === PlayTypes.assessments
+	}
+
+	isPractice(): this is Omit<PlayEntity, 'data'> & { data: PlayGenericData } {
+		return this.data.type === PlayTypes.practice
+	}
+
+	isFlashcards(): this is Omit<PlayEntity, 'data'> & { data: PlayGenericData } {
+		return this.data.type === PlayTypes.flashcards
 	}
 
 	getPercentage(userId: string) {
 		const score = this.scores.find((s) => s.userId === userId)
-		return Number((((score?.value ?? 0) / 10) * 100).toFixed(2))
+		return Number(((score?.value ?? 0) * 100).toFixed(2))
 	}
 
 	getPosition(userId: string) {
@@ -75,22 +97,20 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 		return ordinalSuffixOf(position !== -1 ? position + 1 : this.participants.length)
 	}
 
-	getLabel(userId: string) {
+	getCardLabel(userId: string): string {
 		if (this.status !== PlayStatus.scored) return ''
-		if (this.isGame()) return this.getPosition(userId)
-		if (this.isTest()) return `${this.getPercentage(userId).toFixed()}%`
+		if (this.isGames()) return this.getPosition(userId)
+		if (this.isTests()) return `${this.getPercentage(userId).toFixed()}%`
 		return ''
 	}
 
-	getLabelColor(userId: string) {
-		if (this.status === PlayStatus.scored) {
-			const percentage = this.getPercentage(userId)
-			if (percentage >= 80) return 'text-[#4BAF7D]'
-			if (percentage >= 70) return 'text-[#ADAF4B]'
-			if (percentage >= 50) return 'text-[#3296C8]'
-			return 'text-primaryRed'
-		}
-		return 'text-[#3296C8]'
+	getResultColor(userId: string) {
+		if (this.status !== PlayStatus.scored) return 'text-[#3296C8]'
+		const percentage = this.getPercentage(userId)
+		if (percentage >= 80) return 'text-[#4BAF7D]'
+		if (percentage >= 70) return 'text-[#ADAF4B]'
+		if (percentage >= 50) return 'text-[#3296C8]'
+		return 'text-primaryRed'
 	}
 
 	getResultLabel(userId: string) {

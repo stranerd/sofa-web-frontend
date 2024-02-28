@@ -31,8 +31,8 @@ export default defineComponent({
 
 		const data = computed(() => {
 			if (tab.value === 'all') return ongoing.value
-			if (tab.value === 'games') return ongoing.value.filter((p) => p.isGame())
-			if (tab.value === 'tests') return ongoing.value.filter((p) => p.isTest())
+			if (tab.value === 'games') return ongoing.value.filter((p) => p.isGames())
+			if (tab.value === 'tests') return ongoing.value.filter((p) => p.isTests())
 			return []
 		})
 
