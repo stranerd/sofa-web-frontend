@@ -131,7 +131,8 @@ export const generateHooks = <E extends PlayEntity, T extends PlayToModel>(
 			const p = singleStore[id].play.value
 			if (!p || !p.canStart) return
 			await useCase.start(id)
-			await router.push(p.runPage)
+			const isParticipant = p.isGame() ? p.participants.includes(authId.value) : true
+			await router.push(isParticipant ? p.runPage : p.resultsPage)
 		})
 
 		const { asyncFn: end } = useAsyncFn(async () => {
