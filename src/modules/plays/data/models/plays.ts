@@ -19,7 +19,11 @@ export interface PlayToModel {
 	quizId: string
 	data:
 		| {
-				type: Exclude<PlayTypes, PlayTypes.games>
+				type: Exclude<PlayTypes, PlayTypes.games | PlayTypes.assessments>
+		  }
+		| {
+				type: PlayTypes.assessments
+				endedAt: number
 		  }
 		| {
 				type: PlayTypes.games

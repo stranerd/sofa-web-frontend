@@ -1,5 +1,5 @@
-import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
+import { PlayFactory } from '../factories/plays'
 import { IPlayRepository } from '../irepositories/plays'
 import { PlayTypes } from '../types'
 import { CoursableAccess } from '@modules/study'
@@ -12,8 +12,8 @@ export class PlaysUseCase {
 		this.repository = repository
 	}
 
-	async create(data: PlayToModel, access: CoursableAccess['access']) {
-		return await this.repository.create(data, access)
+	async create(factory: PlayFactory, access: CoursableAccess['access']) {
+		return await this.repository.create(await factory.toModel(), access)
 	}
 
 	async delete(id: string) {

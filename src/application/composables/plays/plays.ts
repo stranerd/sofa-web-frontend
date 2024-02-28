@@ -6,7 +6,7 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useUsersInList } from '../users/users'
 import { CoursableAccess, QuestionEntity } from '@modules/study'
-import { AnswerEntity, AnswersUseCases, PlayEntity, PlayStatus, PlayToModel, PlaysUseCases } from '@modules/plays'
+import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlayStatus, PlaysUseCases } from '@modules/plays'
 
 const myStore = {
 	plays: ref<PlayEntity[]>([]) as Ref<PlayEntity[]>,
@@ -202,18 +202,19 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 
 export const useCreatePlay = (access: CoursableAccess['access'], options: { start: boolean; nav: boolean }) => {
 	const router = useRouter()
+	const factory = new PlayFactory()
 	const {
 		asyncFn: createPlay,
 		loading,
 		error,
 		called,
-	} = useAsyncFn(async (data: PlayToModel, optionsOvr?: Partial<typeof options>) => {
+	} = useAsyncFn(async (optionsOvr?: Partial<typeof options>) => {
 		const allOpts = { ...options, ...(optionsOvr ?? {}) }
-		let play = await PlaysUseCases.create(data, access)
+		let play = await PlaysUseCases.create(factory, access)
 		if (allOpts.start) play = await PlaysUseCases.start(play.id)
 		if (allOpts.nav) await router.push(allOpts.start ? play.runPage : play.lobbyPage)
 		return play
 	})
 
-	return { createPlay, loading, error, called }
+	return { createPlay, factory, loading, error, called }
 }

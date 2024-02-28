@@ -7,17 +7,12 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<div v-if="showGame" class="w-full flex flex-col gap-3 p-4">
-			<a class="w-full rounded-custom p-4 bg-lightGray flex items-center justify-between" @click="joinGame = !joinGame">
-				<SofaNormalText>Participate</SofaNormalText>
-				<SofaIcon customClass="h-[22px] z-50" :name="joinGame ? 'toggle-on' : 'toggle-off'" />
-			</a>
+		<div v-if="showGame" class="w-full flex flex-col gap-6 p-4">
+			<SofaCheckbox v-model="factory.gamesJoin" type="switch" class="w-full justify-between">
+				<SofaNormalText content="Participate" />
+			</SofaCheckbox>
 
-			<div class="w-full flex flex-col items-center justify-between pt-3">
-				<div class="w-full flex flex-col">
-					<SofaButton padding="py-3" customClass="w-full" @click="createQuizGame">Start</SofaButton>
-				</div>
-			</div>
+			<SofaButton padding="py-3" class="w-full" @click="createGame">Start</SofaButton>
 		</div>
 
 		<div v-else class="w-full flex flex-col gap-3 px-4 py-2 md:p-0">
@@ -69,18 +64,23 @@ const goToEdit = () => {
 
 const { id } = useAuth()
 const { hasAccess } = useHasAccess()
-const { createPlay } = useCreatePlay({}, { start: false, nav: true })
+const { factory, createPlay } = useCreatePlay({}, { start: false, nav: true })
 
 const showGame = ref(false)
-const joinGame = ref(false)
 
 const chooseMode = async (mode: PlayTypes) => {
 	const quizId = props.quiz.id
+	factory.quizId = quizId
+	factory.type = mode
 	if (mode === PlayTypes.games) return (showGame.value = true)
 	if (mode === PlayTypes.practice || mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
-	if (mode === PlayTypes.tests) await createPlay({ quizId, data: { type: PlayTypes.tests } })
+	if (mode === PlayTypes.tests) await createPlay()
 
 	props.close()
+}
+
+const createGame = async () => {
+	await createPlay()
 }
 
 const modes = [
@@ -111,8 +111,4 @@ const modes = [
 ] as const
 
 const filteredModes = computed(() => modes.filter((t) => props.quiz.modes[t.value]))
-
-const createQuizGame = async () => {
-	await createPlay({ quizId: props.quiz.id, data: { type: PlayTypes.games, join: joinGame.value } })
-}
 </script>

@@ -49,9 +49,9 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 		if (task === 'education_setup') return !!this.type
 		if (task === 'create_quiz') return !!this.account.meta.quizzes
 		if (task === 'create_course') return !!this.account.meta.courses
-		if (task === 'learn_quiz') return !!localStorage.getItem('quiz_action_practice')
-		if (task === 'quiz_flashcard') return !!localStorage.getItem('quiz_action_flashcard')
-		if (task === 'quiz_game') return localStorage.getItem('quiz_action_game')
+		if (task === 'learn_quiz') return !!this.account.meta.playedPractice
+		if (task === 'quiz_flashcard') return !!this.account.meta.playedFlashcards
+		if (task === 'quiz_game') return !!this.account.meta.hostedGames || !!this.account.meta.playedGames
 		return false
 	}
 

@@ -4,8 +4,9 @@ import { AnswersUseCase } from './domain/useCases/answers'
 import { PlaysUseCase } from './domain/useCases/plays'
 
 export type { PlayToModel } from './data/models/plays'
-export type { PlayAnswer } from './domain/types'
+export { PlayFactory } from './domain/factories/plays'
 export { PlayStatus, PlayTypes } from './domain/types'
+export type { PlayAnswer } from './domain/types'
 
 export const AnswersUseCases = new AnswersUseCase(AnswerRepository.getInstance)
 export const PlaysUseCases = new PlaysUseCase(PlayRepository.getInstance())

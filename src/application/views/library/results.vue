@@ -6,7 +6,7 @@
 
 		<SofaEmptyState
 			v-else
-			title="You have no practice item here"
+			title="You have no results here"
 			subTitle="Discover thousands of materials to buy, created by verified experts"
 			actionLabel="Marketplace"
 			:action="() => $router.push('/marketplace')" />

@@ -64,10 +64,9 @@
 				</div>
 			</div>
 
-			<div v-if="isAdmin" class="flex gap-2 items-center">
-				<span class="whitespace-nowrap">Is tutor assessments?</span>
-				<SofaCheckbox v-model="factory.isForTutors" />
-			</div>
+			<SofaCheckbox v-if="isAdmin" v-model="factory.isForTutors" type="switch">
+				<SofaNormalText content="Is tutor assessments?" />
+			</SofaCheckbox>
 		</div>
 
 		<div class="w-full flex items-center justify-between bg-white mdlg:p-0 py-4">

@@ -147,7 +147,7 @@ const startQuizPractice = async () => {
 
 const quizTestStarted = ref(false)
 const test = ref<PlayEntity | null>(null)
-const { createPlay } = useCreatePlay(
+const { factory, createPlay } = useCreatePlay(
 	{
 		organizationId: props.classInst.organizationId,
 		classId: props.classInst.id,
@@ -156,7 +156,9 @@ const { createPlay } = useCreatePlay(
 	{ start: true, nav: false },
 )
 const startQuizTest = async (id: string) => {
-	const t = await createPlay({ quizId: id, data: { type: PlayTypes.tests } })
+	factory.quizId = id
+	factory.type = PlayTypes.tests
+	const t = await createPlay()
 	if (!t) return
 	test.value = t
 	quizTestStarted.value = true

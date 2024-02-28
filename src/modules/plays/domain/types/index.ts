@@ -19,6 +19,7 @@ export type PlayGamesData = {
 export type PlayAssessmentsData = {
 	type: PlayTypes.assessments
 	participants: string[]
+	endedAt: number
 }
 
 export type PlayTestsData = {
