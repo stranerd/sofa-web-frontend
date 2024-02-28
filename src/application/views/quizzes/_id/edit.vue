@@ -1,5 +1,5 @@
 <template>
-	<QuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string" :skipMembers="false">
+	<EditQuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string">
 		<template #default="{ quiz, extras, members }">
 			<DashboardLayout
 				v-if="extras.canEdit"
@@ -280,7 +280,7 @@
 				</div>
 			</div>
 		</template>
-	</QuizWrapper>
+	</EditQuizWrapper>
 </template>
 
 <script lang="ts">
@@ -290,7 +290,7 @@ import EditQuestionBody from '@app/components/study/questions/EditQuestionBody.v
 import EditQuestionOptions from '@app/components/study/questions/EditQuestionOptions.vue'
 import EditQuestionsList from '@app/components/study/questions/EditQuestionsList.vue'
 import QuizForm from '@app/components/study/quizzes/QuizForm.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
+import EditQuizWrapper from '@app/components/study/quizzes/EditQuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
@@ -299,7 +299,7 @@ import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'QuizIdEdit',
 	components: {
-		QuizWrapper,
+		EditQuizWrapper,
 		QuizForm,
 		EditQuestionsList,
 		EditQuestionOptions,

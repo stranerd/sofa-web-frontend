@@ -1,68 +1,41 @@
 <template>
-	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="quizQuestions" :members="members" />
-	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" :members="members" />
+	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="quizQuestions" />
+	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" />
 	<slot v-if="fetched && !quiz" name="notfound" />
 </template>
 
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'
 import { CoursableAccess, QuestionEntity, QuestionTypes } from '@modules/study'
-import { UserEntity, UsersUseCases } from '@modules/users'
 
 const props = withDefaults(
 	defineProps<{
 		id: string
-		selectedQuestion?: string
 		questions?: QuestionEntity[]
 		showAnswer?: boolean
 		isAnswerRight?: boolean
 		useTimer?: boolean
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
-		skipMembers?: boolean
-		skipCreateView?: boolean
 		access?: CoursableAccess['access']
 		startAt?: string
 	}>(),
 	{
-		selectedQuestion: '',
 		questions: undefined,
 		showAnswer: false,
 		isAnswerRight: false,
 		useTimer: false,
 		submit: undefined,
-		skipMembers: true,
 		access: undefined,
 		startAt: undefined,
 	},
 )
 
-const router = useRouter()
-const route = useRoute()
-const { id: authId, user } = useAuth()
-const {
-	quiz,
-	questions,
-	fetched,
-	quizFactory,
-	questionFactory,
-	deleteQuiz,
-	saveQuestion,
-	updateQuiz: update,
-	publishQuiz,
-	reorderQuestions,
-	deleteQuestion,
-	addQuestion,
-	duplicateQuestion,
-	members,
-	requestAccess,
-	grantAccess,
-	manageMembers,
-} = useQuiz(props.id, { questions: !!props.questions, members: props.skipMembers, createView: props.skipCreateView }, props.access)
+const { id: authId } = useAuth()
+const { quiz, questions, fetched } = useQuiz(props.id, { questions: !!props.questions, members: true }, props.access)
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
 const quizQuestions = computed(() => reorderedQuestions.value ?? props.questions ?? questions.value ?? [])
 
@@ -71,10 +44,8 @@ const { time: startTime, countdown: startCountdown } = useCountdown()
 const { time: runTime, countdown: runCountdown } = useCountdown()
 const startAtQuestionIndex = quizQuestions.value.findIndex((q) => q.id === props.startAt)
 const index = ref(startAtQuestionIndex > -1 ? startAtQuestionIndex : 0)
-const selectedQuestionId = ref(props.selectedQuestion)
 const answers = reactive<Record<string, any>>({})
 const currentQuestionByIndex = computed(() => quizQuestions.value.at(index.value))
-const currentQuestionById = computed(() => quizQuestions.value.find((q) => q.id === selectedQuestionId.value))
 const answer = computed({
 	get: () => (currentQuestionByIndex.value ? answers[currentQuestionByIndex.value.id] ?? currentQuestionByIndex.value.defaultAnswer : []),
 	set: (val) => {
@@ -137,28 +108,12 @@ const submitAnswer = async () => {
 	if (!isLast) await nextQ(index.value + 1)
 }
 
-const saveCurrentQuestion = async () => {
-	if (!currentQuestionById.value || !questionFactory.valid) return
-	await saveQuestion(currentQuestionById.value.id, questionFactory)
-}
-
-const updateQuiz = async () => {
-	if (!quizFactory.valid) return
-	return await update(quizFactory)
-}
-
 const extras = computed(() => ({
 	get index() {
 		return index.value
 	},
 	set index(v) {
 		index.value = v
-	},
-	get selectedQuestionId() {
-		return selectedQuestionId.value
-	},
-	set selectedQuestionId(v) {
-		selectedQuestionId.value = v
 	},
 	get answer() {
 		return answer.value
@@ -171,38 +126,12 @@ const extras = computed(() => ({
 		if (duration === 0) return 0
 		return runTime.value / duration
 	},
-	get usersByQuestions() {
-		const allMembers = quiz.value?.access.members.concat(quiz.value.user.id) ?? []
-		const online = members.value.filter((u) => u.id !== authId.value && u.status.connections.length > 0 && allMembers.includes(u.id))
-		return quizQuestions.value.reduce(
-			(acc, cur) => {
-				acc[cur.id] = online.filter((m) => m.account.editing.quizzes?.questionId === cur.id)
-				return acc
-			},
-			{} as Record<string, UserEntity[]>,
-		)
-	},
-	currentQuestionById: currentQuestionById.value,
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestionByIndex.value,
-	questionFactory,
-	quizFactory,
-	sortedQuestions: quiz.value?.questions.map((qId) => quizQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
-	reorderQuestions,
-	deleteQuestion,
-	addQuestion,
-	duplicateQuestion,
-	deleteQuiz,
 	optionState,
 	submitAnswer,
 	moveCurrrentQuestionToEnd,
-	saveCurrentQuestion,
-	updateQuiz,
-	publishQuiz,
-	requestAccess,
-	grantAccess,
-	manageMembers,
 	next: () => {
 		if (extras.value.canNext) index.value++
 	},
@@ -224,37 +153,11 @@ watch(
 	async () => {
 		const q = quiz.value
 		if (!q) return
-		quizFactory.loadEntity(q)
 		if (!started.value)
 			startCountdown({ time: 3 }).then(() => {
 				started.value = true
 				nextQ(0)
 			})
-	},
-	{ immediate: true },
-)
-
-watch(
-	[currentQuestionById, quizQuestions],
-	() => {
-		const question = currentQuestionById.value
-		if (question) questionFactory.loadEntity(question)
-		else if (quizQuestions.value.length > 0) extras.value.selectedQuestionId = quizQuestions.value[0].id
-	},
-	{ immediate: true },
-)
-
-watch(
-	[currentQuestionById, quizQuestions, quiz],
-	() => {
-		if (!extras.value.canEdit || !currentQuestionById.value) return
-		const quizPath = `/quizzes/${props.id}/edit`
-		if (route.path !== quizPath) return
-		const q = route.query.q as string
-		const v = selectedQuestionId.value
-		router[q ? 'push' : 'replace'](`${quizPath}?q=${v}`).catch()
-		const edit = user.value?.account.editing.quizzes
-		if (edit?.id !== props.id || edit?.questionId !== v) UsersUseCases.updateEditingQuizzes({ id: props.id, questionId: v }).catch()
 	},
 	{ immediate: true },
 )
