@@ -40,6 +40,7 @@ declare module 'vue' {
     EditQuestionBody: typeof import('./../application/components/study/questions/EditQuestionBody.vue')['default']
     EditQuestionOptions: typeof import('./../application/components/study/questions/EditQuestionOptions.vue')['default']
     EditQuestionsList: typeof import('./../application/components/study/questions/EditQuestionsList.vue')['default']
+    EditQuizModal: typeof import('./../application/components/study/quizzes/EditQuizModal.vue')['default']
     EditQuizWrapper: typeof import('./../application/components/study/quizzes/EditQuizWrapper.vue')['default']
     ExpandedLayout: typeof import('./../application/layouts/ExpandedLayout.vue')['default']
     ExploreClassCard: typeof import('./../application/components/organizations/classes/ExploreClassCard.vue')['default']

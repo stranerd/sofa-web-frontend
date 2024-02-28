@@ -5,6 +5,7 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
+import { useModals } from '../core/modals'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import { Logic } from 'sofa-logic'
@@ -127,10 +128,10 @@ export const useEditQuiz = (id: string) => {
 		{ immediate: true },
 	)
 
-	const { asyncFn: updateQuiz } = useAsyncFn(async (factory: QuizFactory) => {
-		await QuizzesUseCases.update(id, factory)
+	const { asyncFn: updateQuiz } = useAsyncFn(async () => {
+		await QuizzesUseCases.update(id, quizFactory)
 		await setMessage('Quiz updated')
-		return true
+		useModals().study.editQuiz.close()
 	})
 
 	const { asyncFn: publishQuiz } = useAsyncFn(
@@ -138,14 +139,14 @@ export const useEditQuiz = (id: string) => {
 			if (quiz.value?.isPublished) return true
 			await QuizzesUseCases.publish(id)
 			await setMessage('Quiz published')
-			return true
+			useModals().study.editQuiz.close()
 		},
 		{
 			pre: async () =>
 				await Logic.Common.confirm({
 					title: 'Are you sure?',
 					sub: "This action is permanent. After publishing a quiz, you won't be able to delete its questions again. However, you can add new and edit existing questions",
-					right: { label: 'Yes, publish' },
+					right: { label: 'Yes, publish', bg: 'bg-primaryBlue' },
 				}),
 		},
 	)

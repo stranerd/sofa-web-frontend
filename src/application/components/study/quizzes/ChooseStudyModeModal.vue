@@ -8,7 +8,7 @@
 		</div>
 
 		<div v-if="showGame" class="w-full flex flex-col gap-6 p-4">
-			<SofaCheckbox v-model="factory.gamesJoin" type="switch" class="w-full justify-between">
+			<SofaCheckbox v-model="factory.gamesJoin" type="switch" class="w-full justify-between p-4 bg-lightGray">
 				<SofaNormalText content="Participate" />
 			</SofaCheckbox>
 

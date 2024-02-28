@@ -1,5 +1,12 @@
 <template>
-	<form class="w-full h-full flex flex-col gap-4 text-grayColor" @submit.prevent="emits('updateQuiz')">
+	<form class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6 text-grayColor" @submit.prevent="updateQuiz">
+		<SofaHeaderText customClass="text-xl hidden mdlg:flex">Update Quiz</SofaHeaderText>
+
+		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden">
+			<SofaNormalText customClass="!font-bold !text-base">Update Quiz</SofaNormalText>
+			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
+		</div>
+
 		<div class="flex flex-col flex-grow overflow-y-auto gap-4">
 			<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 				<div class="col-span-1 w-full flex flex-col gap-3">
@@ -69,7 +76,7 @@
 			</SofaCheckbox>
 		</div>
 
-		<div class="w-full flex items-center justify-between bg-white mdlg:p-0 py-4">
+		<div class="w-full flex items-center justify-between">
 			<SofaButton
 				type="button"
 				padding="px-5 py-2"
@@ -85,12 +92,12 @@
 					Save
 				</SofaButton>
 				<SofaButton
-					v-if="!quiz.isPublished"
+					v-if="!quiz?.isPublished"
 					type="button"
 					:disabled="!factory.valid"
 					padding="px-5 mdlg:py-2 py-3"
 					class="mdlg:w-auto w-full"
-					@click.prevent="emits('publishQuiz')">
+					@click.prevent="publishQuiz">
 					Publish
 				</SofaButton>
 			</div>
@@ -102,18 +109,14 @@
 import { watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
-import { QuizEntity, QuizFactory } from '@modules/study'
+import { useEditQuiz } from '@app/composables/study/quizzes'
 
 const props = defineProps<{
-	quiz: QuizEntity
-	factory: QuizFactory
 	close: () => void
+	id: string
 }>()
 
-const emits = defineEmits<{
-	updateQuiz: []
-	publishQuiz: []
-}>()
+const { quiz, quizFactory: factory, updateQuiz, publishQuiz } = useEditQuiz(props.id)
 
 const { isAdmin } = useAuth()
 
@@ -124,9 +127,9 @@ watch(
 	topics,
 	() => {
 		if (!topics.length) return
-		if (props.factory.topicId && !props.factory.topic) {
-			const topic = topics.find((t) => t.id === props.factory.topicId)
-			if (topic) props.factory.topic = topic.title
+		if (factory.topicId && !factory.topic) {
+			const topic = topics.find((t) => t.id === factory.topicId)
+			if (topic) factory.topic = topic.title
 		}
 	},
 	{ immediate: true },
@@ -136,9 +139,9 @@ watch(
 	tags,
 	() => {
 		if (!tags.length) return
-		if (props.factory.tagIds.length && !props.factory.tags.length) {
-			const myTags = tags.filter((t) => props.factory.tagIds.includes(t.id))
-			props.factory.tags = props.factory.tagIds.map((t) => myTags.find((mt) => t === mt.id)?.title).filter(Boolean)
+		if (factory.tagIds.length && !factory.tags.length) {
+			const myTags = tags.filter((t) => factory.tagIds.includes(t.id))
+			factory.tags = factory.tagIds.map((t) => myTags.find((mt) => t === mt.id)?.title).filter(Boolean)
 		}
 	},
 	{ immediate: true },
