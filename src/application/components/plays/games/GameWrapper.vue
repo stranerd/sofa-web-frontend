@@ -3,11 +3,10 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { usePlay } from '@app/composables/plays/plays'
 import { useAuth } from '@app/composables/auth/auth'
+import { usePlay } from '@app/composables/plays/plays'
 
 const props = withDefaults(
 	defineProps<{
@@ -64,7 +63,7 @@ const extras = computed(() => ({
 		return g.scores
 			.map((res, i, scores) => ({
 				score: res.value,
-				percentage: formatNumber((res.value / g.questions.length ?? 0) * 10, 1),
+				percentage: game.value?.getPercentage(res.userId) ?? 0,
 				position: scores[i - 1]?.value === res.value ? '' : (i + 1).toString(),
 				user: participants.value.find((p) => p.id === res.userId),
 				isWinner: scores[0]?.userId === res.userId,

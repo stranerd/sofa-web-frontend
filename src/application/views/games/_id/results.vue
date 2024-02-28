@@ -51,7 +51,7 @@
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold ml-auto"
-												:content="`${score.score} pts`" />
+												:content="`${score.percentage}%`" />
 										</div>
 									</div>
 								</div>

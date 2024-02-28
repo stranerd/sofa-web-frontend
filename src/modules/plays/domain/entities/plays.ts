@@ -67,8 +67,7 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 
 	getPercentage(userId: string) {
 		const score = this.scores.find((s) => s.userId === userId)
-		const correctAnswers = (score?.value ?? 0) / 10
-		return (correctAnswers / this.questions.length) * 100
+		return Number((((score?.value ?? 0) / 10) * 100).toFixed(2))
 	}
 
 	getPosition(userId: string) {

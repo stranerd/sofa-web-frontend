@@ -49,7 +49,7 @@ const extras = computed(() => ({
 		if (!t) return []
 		return t.scores.map((res, i, scores) => ({
 			score: res.value,
-			percent: (res.value / t.questions.length) * 10,
+			percent: test.value?.getPercentage(res.userId) ?? 0,
 			position: scores[i - 1]?.value === res.value ? '' : (i + 1).toString(),
 			user: user.value,
 			isWinner: scores[0]?.value === res.value,
