@@ -90,7 +90,7 @@
 		</header>
 		<HomeDiscoverMaterials />
 		<div class="w-[90%] mx-auto relative">
-			<HomeJoinUs class="w-[80%] mx-auto" />
+			<HomeJoinUs class="w-full md:w-[90%] mx-auto" />
 			<img class="hidden mdlg:block absolute left-0 bottom-10" src="/images/pricing-left.png" />
 			<img class="hidden mdlg:block absolute -top-16 right-0" src="/images/skewed-green-box.png" />
 		</div>

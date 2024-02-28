@@ -71,9 +71,8 @@
 			<img
 				class="mdlg:absolute mdlg:-top-[120px] mdlg:w-[384px] mdlg:h-[466px] pt-[250px] md:pt-[200px] mdlg:pt-0"
 				src="/images/stranerd-rob.png" />
-			<HomeJoinUs class="w-[80%] mx-auto mt-[100px] mdlg:mt-[360px]" :isContactPage="true" />
+			<HomeJoinUs class="w-[90%] md:w-[80%] mx-auto mt-[100px] mdlg:mt-[360px]" :isContactPage="true" />
 		</section>
-
 		<HomeFooter />
 	</main>
 </template>

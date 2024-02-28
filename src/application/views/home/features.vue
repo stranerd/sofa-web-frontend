@@ -3,14 +3,14 @@
 		<header class="flex flex-col items-center justify-center">
 			<HomeNavbar />
 			<div class="hero w-full h-[400px] py-6 md:h-[800px] flex flex-col items-center justify-center">
-				<div class="w-[80%] mx-auto h-full flex flex-col items-center justify-center gap-4 md:gap-12">
-					<h1 class="text-[40px] text-white text-center font-bold">Features</h1>
+				<div class="w-[90%] md:w-[80%] mx-auto h-full flex flex-col items-center justify-center gap-4 md:gap-12">
+					<h1 class="text-[20px] md:text-[40px] text-white text-center font-bold">Features</h1>
 					<img class="mdlg:h-[533px]" src="/images/features-hero-image.png" />
 				</div>
 			</div>
 		</header>
 		<MoreOnStranerd :content="content" />
-		<HomeJoinUs class="w-[80%] mx-auto" />
+		<HomeJoinUs class="w-[90%] md:w-[80%] mx-auto" />
 		<HomeFooter />
 	</main>
 </template>
