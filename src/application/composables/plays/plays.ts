@@ -78,7 +78,8 @@ const singleStore = {} as Record<
 	{
 		play: Ref<PlayEntity | null>
 		questions: QuestionEntity[]
-		answer: Ref<AnswerEntity | null>
+		answers: Ref<AnswerEntity[]>
+		myAnswer: Ref<AnswerEntity | null>
 		listener: ReturnType<typeof useListener>
 	}
 >
@@ -91,7 +92,8 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 	singleStore[id] ??= {
 		play: ref(null),
 		questions: reactive([]),
-		answer: ref(null),
+		answers: ref([]),
+		myAnswer: ref(null),
 		listener: useListener(
 			async () =>
 				await PlaysUseCases.listenToOne(id, {
@@ -143,11 +145,11 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 
 	const { asyncFn: submitAnswer } = useAsyncFn(async (data: Parameters<typeof AnswersUseCases.answer>[2], isLast: boolean) => {
 		const p = singleStore[id].play.value
-		if (!p || singleStore[id].answer.value?.endedAt) return false
+		if (!p || singleStore[id].myAnswer.value?.endedAt) return false
 		if (!p.participants.includes(authId.value)) return false
-		singleStore[id].answer.value = await AnswersUseCases.answer(p.data.type, p.id, data)
+		singleStore[id].myAnswer.value = await AnswersUseCases.answer(p.data.type, p.id, data)
 		if (isLast) {
-			singleStore[id].answer.value = await AnswersUseCases.end(p.data.type, p.id)
+			singleStore[id].myAnswer.value = await AnswersUseCases.end(p.data.type, p.id)
 			if (p.participants.length === 1) await end()
 			else await router.push(p.resultsPage)
 		}
@@ -178,9 +180,18 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 					})
 					.catch(() => {})
 			if (!skip.questions)
-				AnswersUseCases.getForUser(cur.data.type, cur.id, authId.value)
-					.then((answer) => {
-						singleStore[id].answer.value = answer
+				// TODO: add listeners for answers conditionally
+				AnswersUseCases.get(cur.data.type, cur.id)
+					.then((answers) => {
+						answers.forEach((a) => {
+							if (a.userId === authId.value) singleStore[id].myAnswer.value = a
+							addToArray(
+								singleStore[id].answers.value,
+								a,
+								(e) => e.id,
+								(e) => e.createdAt,
+							)
+						})
 					})
 					.catch(() => {})
 			if (!skip.statusNav) playWatcherCb()

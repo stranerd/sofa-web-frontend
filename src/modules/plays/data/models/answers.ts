@@ -4,6 +4,7 @@ export interface AnswerFromModel {
 	id: string
 	type: PlayTypes
 	typeId: string
+	typeUserId: string
 	userId: string
 	data: Record<string, { value: PlayAnswer; at: number }>
 	endedAt: number | null

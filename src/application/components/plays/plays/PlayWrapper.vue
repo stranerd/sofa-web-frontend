@@ -21,7 +21,7 @@ const props = withDefaults(
 	},
 )
 
-const { play, participants, questions, fetched, answer, start, end, join, submitAnswer } = usePlay(props.id, {
+const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer } = usePlay(props.id, {
 	questions: props.skipQuestions,
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
@@ -34,7 +34,8 @@ const extras = computed(() => ({
 	canEnd: play.value && play.value.user.id === authId.value && play.value.canEnd,
 	canJoin: play.value && !play.value.participants.includes(authId.value),
 	authId: authId.value,
-	answers: answer.value?.data ?? null,
+	answers: myAnswer.value?.data ?? null,
+	startAt: questions.find((q) => !myAnswer.value?.data[q.id])?.id,
 	start,
 	end,
 	join,

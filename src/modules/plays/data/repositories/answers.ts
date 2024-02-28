@@ -2,7 +2,7 @@ import { AnswerEntity } from '../../domain/entities/answers'
 import { IAnswerRepository } from '../../domain/irepositories/answers'
 import { PlayTypes } from '../../domain/types'
 import { AnswerFromModel, AnswerToModel } from '../models/answers'
-import { HttpClient, QueryParams, QueryResults } from '@modules/core'
+import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class AnswerRepository implements IAnswerRepository {
 	private static instances: Record<string, AnswerRepository> = {}
@@ -39,5 +39,17 @@ export class AnswerRepository implements IAnswerRepository {
 	async end() {
 		const d = await this.client.post<any, AnswerFromModel>('/end', {})
 		return this.mapper(d)
+	}
+
+	async listenToOne(id: string, listeners: Listeners<AnswerEntity>) {
+		const model = await this.find(id)
+		if (model) await listeners.updated(model)
+		return await listenToOne(`${this.client.socketPath}/${id}`, listeners, this.mapper)
+	}
+
+	async listenToMany(query: QueryParams, listeners: Listeners<AnswerEntity>, matches: (entity: AnswerEntity) => boolean) {
+		const models = await this.get(query)
+		await Promise.all(models.results.map(listeners.updated))
+		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 }

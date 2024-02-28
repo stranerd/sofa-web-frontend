@@ -26,6 +26,7 @@ const props = withDefaults(
 		skipMembers?: boolean
 		skipCreateView?: boolean
 		access?: CoursableAccess['access']
+		startAt?: string
 	}>(),
 	{
 		selectedQuestion: '',
@@ -36,6 +37,7 @@ const props = withDefaults(
 		submit: undefined,
 		skipMembers: true,
 		access: undefined,
+		startAt: undefined,
 	},
 )
 
@@ -67,7 +69,8 @@ const quizQuestions = computed(() => reorderedQuestions.value ?? props.questions
 const started = ref(!props.useTimer)
 const { time: startTime, countdown: startCountdown } = useCountdown()
 const { time: runTime, countdown: runCountdown } = useCountdown()
-const index = ref(0)
+const startAtQuestionIndex = quizQuestions.value.findIndex((q) => q.id === props.startAt)
+const index = ref(startAtQuestionIndex > -1 ? startAtQuestionIndex : 0)
 const selectedQuestionId = ref(props.selectedQuestion)
 const answers = reactive<Record<string, any>>({})
 const currentQuestionByIndex = computed(() => quizQuestions.value.at(index.value))
