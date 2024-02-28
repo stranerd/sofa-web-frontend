@@ -26,7 +26,7 @@
 				:similarContents="similarContents"
 				:type="contentType"
 				:contentId="contentDetails.id"
-				:openQuiz="() => openQuiz(contentDetails as any)"
+				:openQuiz="() => contentDetails.original && openMaterial(contentDetails.original)"
 				:actions="{
 					report: () => reportMaterial(contentDetails.original!),
 					share: () => shareMaterialLink(contentDetails.original!),
@@ -119,7 +119,7 @@ import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useCreateView } from '@app/composables/interactions/views'
-import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@app/composables/library'
+import { extractResource, openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { InteractionEntities } from '@modules/interactions'
@@ -507,7 +507,7 @@ export default defineComponent({
 			contentType,
 			saveToFolder,
 			userHasAccess,
-			openQuiz,
+			openMaterial,
 			reportMaterial,
 			shareMaterialLink,
 			buyCourse,

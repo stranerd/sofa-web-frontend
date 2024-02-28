@@ -92,8 +92,8 @@ export class QuizRepository implements IQuizRepository {
 		return this.mapper(d)
 	}
 
-	async reorder(id: string, questionIds: string[]) {
-		const d = await this.client.post<any, QuizFromModel>(`/${id}/reorder`, { questionIds })
+	async reorder(id: string, questions: string[]) {
+		const d = await this.client.post<any, QuizFromModel>(`/${id}/reorder`, { questions })
 		return this.mapper(d)
 	}
 }

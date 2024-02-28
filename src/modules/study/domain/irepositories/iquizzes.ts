@@ -11,7 +11,7 @@ export interface IQuizRepository {
 	update: (id: string, data: QuizToModel) => Promise<QuizEntity>
 	delete: (id: string) => Promise<void>
 	publish: (id: string) => Promise<QuizEntity>
-	reorder: (id: string, questionIds: string[]) => Promise<QuizEntity>
+	reorder: (id: string, questions: string[]) => Promise<QuizEntity>
 	requestAccess(id: string, data: { add: boolean }): Promise<boolean>
 	grantAccess(id: string, data: { userId: string; grant: boolean }): Promise<boolean>
 	addMembers(id: string, data: { userIds: string[]; grant: boolean }): Promise<boolean>

@@ -11,7 +11,7 @@
 					title="Test yourself"
 					subTitle="Evaluate your level of knowledge"
 					actionLabel="Start"
-					:action="() => openQuiz(extractResource(selectedMaterial.original), true)"
+					:action="() => openMaterial(selectedMaterial.original, true)"
 					:icon="{
 						name: 'test-white',
 						size: 'h-[40px]',
@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { extractResource, openQuiz } from '@app/composables/library'
+import { extractResource, openMaterial } from '@app/composables/library'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -93,7 +93,7 @@ export default defineComponent({
 
 		return {
 			Logic,
-			openQuiz,
+			openMaterial,
 			extractResource,
 			SingleCourse,
 		}

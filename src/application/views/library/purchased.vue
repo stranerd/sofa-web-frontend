@@ -7,7 +7,7 @@
 				:activity="activity"
 				:isWrapped="!Logic.Common.isLarge"
 				customClass="mdlg:!bg-white shadow-custom cursor-pointer relative"
-				@click="openCourse(activity)">
+				@click="openMaterial(activity.original)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 					<SofaIcon
 						name="more-options-horizontal"
@@ -30,7 +30,7 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { extractResource, openCourse } from '@app/composables/library'
+import { extractResource, openMaterial } from '@app/composables/library'
 import { handleShowMaterialMoreOptions } from '@app/composables/study'
 import { useMyPurchasedCourses } from '@app/composables/study/courses-list'
 import { Logic } from 'sofa-logic'
@@ -50,7 +50,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, openCourse, data, handleShowMaterialMoreOptions }
+		return { Logic, openMaterial, data, handleShowMaterialMoreOptions }
 	},
 })
 </script>

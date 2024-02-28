@@ -24,6 +24,12 @@ export class PublishableEntity<T extends PublishableConstructorArgs = Publishabl
 		return this.status === DraftStatus.draft
 	}
 
+	canEdit(userId: string): boolean {
+		if (this.user.id === userId) return true
+		if (this.isQuiz()) return this.access.members.includes(userId)
+		else return false
+	}
+
 	isQuiz(): this is QuizEntity {
 		return this.__type.startsWith('QuizEntity')
 	}
