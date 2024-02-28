@@ -2,9 +2,12 @@ import { v } from 'valleyed'
 import { ref } from 'vue'
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
+import { QuizModes } from '../types'
 import { BaseFactory } from '@modules/core'
 
-export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToModel> {
+type Keys = Omit<QuizToModel, 'modes'> & Record<`mode${Capitalize<QuizModes>}`, boolean>
+
+export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 	public topicId = ''
 	public tagIds: string[] = []
 	#tagString = ref('')
@@ -17,6 +20,11 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		tags: v.array(v.string().min(1)).set(),
 		isForTutors: v.boolean(),
 		courseId: v.string().min(1).nullable(),
+		modeGames: v.boolean(),
+		modeTests: v.boolean(),
+		modePractice: v.boolean(),
+		modeFlashcards: v.boolean(),
+		modeAssessments: v.boolean(),
 	}
 
 	constructor() {
@@ -28,6 +36,11 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 			tags: [],
 			isForTutors: false,
 			courseId: null,
+			modeGames: true,
+			modeTests: true,
+			modePractice: true,
+			modeFlashcards: true,
+			modeAssessments: true,
 		})
 	}
 
@@ -63,10 +76,43 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, QuizToMode
 		this.tagIds = entity.tagIds
 		this.isForTutors = entity.isForTutors
 		this.courseId = entity.courseId
+		this.modeGames = entity.modes.games
+		this.modeTests = entity.modes.tests
+		this.modeFlashcards = entity.modes.flashcards
+		this.modePractice = entity.modes.practice
+		this.modeAssessments = entity.modes.assessments
 	}
 
 	model = async () => {
-		const { title, description, photo, topic, tags, isForTutors, courseId } = this.validValues
-		return { title, description, photo, topic, tags, isForTutors, courseId }
+		const {
+			title,
+			description,
+			photo,
+			topic,
+			tags,
+			isForTutors,
+			courseId,
+			modeGames,
+			modeFlashcards,
+			modePractice,
+			modeTests,
+			modeAssessments,
+		} = this.validValues
+		return {
+			title,
+			description,
+			photo,
+			topic,
+			tags,
+			isForTutors,
+			courseId,
+			modes: {
+				games: modeGames,
+				flashcards: modeFlashcards,
+				practice: modePractice,
+				tests: modeTests,
+				assessments: modeAssessments,
+			},
+		}
 	}
 }
