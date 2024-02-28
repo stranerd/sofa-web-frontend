@@ -1,8 +1,8 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<TestWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
-			<template #default="{ test, extras: testExtras, questions: testQuestions }">
-				<QuizWrapper :id="test.quizId" :questions="testQuestions">
+		<PlayWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
+			<template #default="{ play, extras: playExtras, questions: playQuestions }">
+				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
 						<Quiz
 							v-model:answer="extras.answer"
@@ -17,7 +17,7 @@
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=tests'),
 							}"
-							:leftButton="testExtras.canEnd ? { ...leftButton, click: testExtras.end } : undefined">
+							:leftButton="playExtras.canEnd ? { ...leftButton, click: playExtras.end } : undefined">
 							<template #header>
 								<div />
 							</template>
@@ -28,19 +28,19 @@
 										<SofaNormalText
 											color="text-white"
 											:content="
-												test.status === 'scored'
+												play.status === 'scored'
 													? ''
-													: test.status === 'ended'
+													: play.status === 'ended'
 														? 'Scores are being calculated'
 														: 'Waiting for test to finish'
 											" />
-										<div v-for="(score, index) in testExtras.scores" :key="index" class="flex flex-col items-center">
+										<div v-for="(score, index) in playExtras.scores" :key="index" class="flex flex-col items-center">
 											<SofaPieChart
 												:data="{
 													labels: ['passed', 'failed'],
 													datasets: [
 														{
-															data: [score.percent, 100 - score.percent],
+															data: [score.percentage, 100 - score.percentage],
 															backgroundColor: [score.bgColor, '#E1E6EB'],
 															hoverOffset: 4,
 															borderRadius: 10,
@@ -49,14 +49,14 @@
 												}"
 												cutoutPercentage="90%"
 												:textStyle="`!text-3xl ${score.color}`">
-												{{ formatNumber(score.percent, 1) }}%
+												{{ formatNumber(score.percentage, 1) }}%
 											</SofaPieChart>
 											<SofaHeaderText class="md:!text-3xl text-xl" :content="score.label" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold"
-												:content="`${Math.round((score.percent * test.questions.length) / 100)}/${
-													test.questions.length
+												:content="`${Math.round((score.percentage * play.questions.length) / 100)}/${
+													play.questions.length
 												} correct answers`" />
 										</div>
 									</div>
@@ -66,7 +66,7 @@
 					</template>
 				</QuizWrapper>
 			</template>
-		</TestWrapper>
+		</PlayWrapper>
 	</ExpandedLayout>
 </template>
 

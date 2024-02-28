@@ -1,8 +1,8 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
-			<template #default="{ game, extras: gameExtras, questions: gameQuestions }">
-				<QuizWrapper :id="game.quizId" :questions="gameQuestions">
+		<PlayWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
+			<template #default="{ play, extras: playExtras, questions: playQuestions }">
+				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
 						<Quiz
 							v-model:answer="extras.answer"
@@ -18,7 +18,7 @@
 								textColor: 'text-bodyBlack',
 								click: () => Logic.Common.GoToRoute('/library/results?tab=games'),
 							}"
-							:leftButton="gameExtras.canEnd ? { ...leftButton, click: gameExtras.end } : undefined">
+							:leftButton="playExtras.canEnd ? { ...leftButton, click: playExtras.end } : undefined">
 							<template #header>
 								<div />
 							</template>
@@ -31,22 +31,22 @@
 											color="text-white"
 											class="-mt-4"
 											:content="
-												game.status === 'scored'
+												play.status === 'scored'
 													? 'Game has ended'
-													: game.status === 'ended'
+													: play.status === 'ended'
 														? 'Scores are being calculated'
 														: 'Waiting for others to finish'
 											" />
 										<div
-											v-for="score in gameExtras.scores"
+											v-for="score in playExtras.scores"
 											:key="score.user?.id"
 											class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white border-4"
-											:class="score.user?.id === gameExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
+											:class="score.user?.id === playExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
 											<SofaNormalText color="text-deepGray" class="!font-semibold" :content="score.position" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold"
-												:content="score.user?.id === gameExtras.authId ? 'You' : score.user?.publicName" />
+												:content="score.user?.id === playExtras.authId ? 'You' : score.user?.publicName" />
 											<SofaIcon v-if="score.isWinner" name="game-winner" class="h-[23px]" />
 											<SofaNormalText
 												color="text-deepGray"
@@ -60,7 +60,7 @@
 					</template>
 				</QuizWrapper>
 			</template>
-		</GameWrapper>
+		</PlayWrapper>
 	</ExpandedLayout>
 </template>
 

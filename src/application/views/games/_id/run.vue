@@ -1,19 +1,19 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
-		<GameWrapper :id="$route.params.id as string" :skipParticipants="true">
-			<template #default="{ game, questions: gameQuestions, extras: gameExtras }">
+		<PlayWrapper :id="$route.params.id as string" :skipParticipants="true">
+			<template #default="{ play, questions: playQuestions, extras: playExtras }">
 				<QuizWrapper
-					v-if="gameExtras.isParticipant"
-					:id="game.quizId"
-					:questions="gameQuestions"
+					v-if="playExtras.isParticipant"
+					:id="play.quizId"
+					:questions="playQuestions"
 					:useTimer="true"
-					:submit="gameExtras.submit">
+					:submit="playExtras.submit">
 					<template #prestart="{ quiz, extras }">
 						<div class="w-full my-auto flex flex-col gap-6 items-center">
 							<SofaHeaderText content="Game is starting" size="xl" />
 							<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
 								<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="quiz.title" size="xl" />
-								<SofaNormalText color="text-inherit" :content="`${gameQuestions.length} questions`" size="lg" />
+								<SofaNormalText color="text-inherit" :content="`${playQuestions.length} questions`" size="lg" />
 							</div>
 							<div
 								class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white text-bodyBlack">
@@ -50,7 +50,7 @@
 					</template>
 				</QuizWrapper>
 			</template>
-		</GameWrapper>
+		</PlayWrapper>
 	</ExpandedLayout>
 </template>
 
