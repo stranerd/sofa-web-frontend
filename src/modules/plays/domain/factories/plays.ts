@@ -13,16 +13,20 @@ type Keys = Omit<PlayToModel, 'data'> & {
 export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 	readonly rules = {
 		quizId: v.string().min(1),
-		title: v.string().min(1).lower(),
 		type: v.in(Object.values(PlayTypes)),
 		gamesJoin: v.boolean().requiredIf(() => this.isGames),
-		assessmentsEndedAt: v.time().min(Date.now()).asStamp(),
+		assessmentsEndedAt: v
+			.time()
+			.min(Date.now())
+			.asStamp()
+			.requiredIf(() => this.isAssessments),
 	}
 
 	reserved = []
 
 	constructor() {
-		super({ quizId: '', type: PlayTypes.practice, gamesJoin: false, assessmentsEndedAt: Date.now() })
+		const assessmentsEndedAt = Date.now() + 1000 * 60 * 60 * 24 * 7
+		super({ quizId: '', type: PlayTypes.practice, gamesJoin: false, assessmentsEndedAt })
 	}
 
 	get isGames() {
