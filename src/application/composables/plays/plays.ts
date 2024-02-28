@@ -141,10 +141,16 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		return true
 	})
 
-	const { asyncFn: submitAnswer } = useAsyncFn(async (data: Parameters<typeof AnswersUseCases.answer>[2]) => {
+	const { asyncFn: submitAnswer } = useAsyncFn(async (data: Parameters<typeof AnswersUseCases.answer>[2], isLast: boolean) => {
 		const p = singleStore[id].play.value
-		if (!p) return false
-		await AnswersUseCases.answer(p.data.type, p.id, data)
+		if (!p || singleStore[id].answer.value?.endedAt) return false
+		if (!p.participants.includes(authId.value)) return false
+		singleStore[id].answer.value = await AnswersUseCases.answer(p.data.type, p.id, data)
+		if (isLast) {
+			singleStore[id].answer.value = await AnswersUseCases.end(p.data.type, p.id)
+			if (p.participants.length === 1) await end()
+			else await router.push(p.resultsPage)
+		}
 		return true
 	})
 

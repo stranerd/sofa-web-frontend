@@ -3,7 +3,8 @@ import { AnswerEntity } from '../entities/answers'
 import { QueryParams, QueryResults } from '@modules/core'
 
 export interface IAnswerRepository {
-	answer: (data: AnswerToModel) => Promise<AnswerEntity | null>
+	answer: (data: AnswerToModel) => Promise<AnswerEntity>
 	get: (condition: QueryParams) => Promise<QueryResults<AnswerEntity>>
 	find: (id: string) => Promise<AnswerEntity | null>
+	end: () => Promise<AnswerEntity>
 }

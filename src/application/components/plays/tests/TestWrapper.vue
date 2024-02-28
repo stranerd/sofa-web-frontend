@@ -40,10 +40,7 @@ const extras = computed(() => ({
 	answers: answer.value?.data ?? null,
 	start,
 	end,
-	submit: async (data?: { questionId: string; answer: any }) => {
-		if (data) return await submitAnswer(data)
-		return await end()
-	},
+	submit: submitAnswer,
 	get scores() {
 		const t = test.value
 		if (!t) return []

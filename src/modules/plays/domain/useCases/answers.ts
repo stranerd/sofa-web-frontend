@@ -17,4 +17,8 @@ export class AnswersUseCase {
 		const answers = await this.repository(type, typeId).get({ where: [{ field: 'user.id', value: userId }] })
 		return answers.results.at(0) ?? null
 	}
+
+	async end(type: PlayTypes, typeId: string) {
+		return await this.repository(type, typeId).end()
+	}
 }

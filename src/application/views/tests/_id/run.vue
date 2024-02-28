@@ -38,29 +38,10 @@
 							<template #header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center">
 									<div class="flex gap-2 lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full">
-										<div
-											v-for="i in Array.from({ length: questions.length }, (_, i) => i)"
-											:key="i"
-											class="w-full flex">
-											<div
-												class="h-2 bg-primaryGreen"
-												:class="{
-													'w-full rounded-full':
-														i < extras.index || (i === extras.index && extras.fractionTimeLeft === 1),
-													'w-0': i > extras.index,
-													'rounded-l-full': i === extras.index,
-												}"
-												:style="i === extras.index ? `width: ${extras.fractionTimeLeft * 100}%;` : ''" />
-											<div
-												class="h-2 bg-darkLightGray"
-												:class="{
-													'w-full rounded-full':
-														i > extras.index || (i === extras.index && extras.fractionTimeLeft === 0),
-													'w-0': i < extras.index,
-													'rounded-r-full': i === extras.index,
-												}"
-												:style="i === extras.index ? `width: ${(1 - extras.fractionTimeLeft) * 100}%;` : ''" />
-										</div>
+										<PlayTimer
+											:length="questions.length"
+											:current="extras.index"
+											:fractionTimeLeft="extras.fractionTimeLeft" />
 									</div>
 								</div>
 							</template>

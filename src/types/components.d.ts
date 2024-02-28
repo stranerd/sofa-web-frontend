@@ -68,6 +68,7 @@ declare module 'vue' {
     MyClassCard: typeof import('./../application/components/organizations/classes/MyClassCard.vue')['default']
     NewMaterial: typeof import('./../application/components/study/courses/NewMaterial.vue')['default']
     PlayCard: typeof import('./../application/components/plays/plays/PlayCard.vue')['default']
+    PlayTimer: typeof import('./../application/components/plays/plays/PlayTimer.vue')['default']
     PreviewCurriculumModal: typeof import('./../application/components/organizations/lessons/PreviewCurriculumModal.vue')['default']
     Profile: typeof import('./../application/components/settings/profile.vue')['default']
     QuestionCard: typeof import('./../application/components/organizations/lessons/CurriculumItemViews/QuestionCard.vue')['default']

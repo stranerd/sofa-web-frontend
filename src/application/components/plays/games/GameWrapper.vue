@@ -4,7 +4,6 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlay } from '@app/composables/plays/plays'
 
@@ -22,7 +21,6 @@ const props = withDefaults(
 	},
 )
 
-const router = useRouter()
 const {
 	play: game,
 	participants,
@@ -50,12 +48,7 @@ const extras = computed(() => ({
 	start,
 	end,
 	join,
-	submit: async (data?: { questionId: string; answer: any }) => {
-		if (!game.value) return
-		if (data) return await submitAnswer(data)
-		await router.push(game.value.resultsPage)
-		return true
-	},
+	submit: submitAnswer,
 	isParticipant: game.value?.participants.includes(authId.value),
 	get scores() {
 		const g = game.value

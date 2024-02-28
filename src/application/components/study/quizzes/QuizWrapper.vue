@@ -22,7 +22,7 @@ const props = withDefaults(
 		showAnswer?: boolean
 		isAnswerRight?: boolean
 		useTimer?: boolean
-		submit?: (data?: { questionId: string; answer: any }) => Promise<boolean | undefined>
+		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 		skipMembers?: boolean
 		skipCreateView?: boolean
 		access?: CoursableAccess['access']
@@ -122,13 +122,16 @@ const nextQ = async (newIndex: number) => {
 
 const submitAnswer = async () => {
 	if (!currentQuestionByIndex.value) return
-	const res = await props.submit?.({
-		questionId: currentQuestionByIndex.value.id,
-		answer: answer.value ?? false,
-	})
+	const isLast = !extras.value.canNext
+	const res = await props.submit?.(
+		{
+			questionId: currentQuestionByIndex.value.id,
+			answer: answer.value ?? false,
+		},
+		isLast,
+	)
 	if (!res) return
-	if (extras.value.canNext) await nextQ(index.value + 1)
-	else await props.submit?.()
+	if (!isLast) await nextQ(index.value + 1)
 }
 
 const saveCurrentQuestion = async () => {
