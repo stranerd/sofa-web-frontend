@@ -52,7 +52,7 @@ export class PlayRepository implements IPlayRepository {
 	}
 
 	async getQuestions(id: string) {
-		const d = await this.client.post<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
+		const d = await this.client.get<QueryParams, QuestionFromModel[]>(`/${id}/questions`, {})
 		return d.map((q) => new QuestionEntity(q))
 	}
 
