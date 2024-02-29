@@ -92,18 +92,62 @@
 			</QuizWrapper>
 		</template>
 	</PlayWrapper>
+	<SofaModal v-if="showInfoModal">
+		<div class="flex flex-col p-4 mdlg:p-6 gap-6 items-center justify-center">
+			<div class="w-full flex flex-col gap-2 items-start">
+				<div class="w-full flex gap-2 justify-between md:justify-center items-center">
+					<SofaHeaderText class="text-xl" content="Flashcards" />
+					<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
+				</div>
+				<SofaNormalText content="Learning quiz questions and answers" />
+			</div>
+			<div class="w-full h-full flex flex-col items-center gap-4">
+				<div class="bg-primaryPurple text-white rounded-custom p-4 w-full flex flex-col gap-2">
+					<div
+						v-for="(item, index) in [
+							'Click on the card to flip it',
+							'Mastered makes card not reappear',
+							'Show later sends card to end of deck',
+							'Both buttons take you to next card',
+						]"
+						:key="index"
+						class="flex items-center justify-start gap-2">
+						<span class="w-1 aspect-square rounded-full bg-white" />
+						<SofaNormalText color="text-inherit" :content="item" />
+					</div>
+				</div>
+				<SofaCheckbox v-model="dontShowAgain" class="!w-auto">
+					<SofaNormalText color="text-inherit" content="Don't show again" />
+				</SofaCheckbox>
+				<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
+					<SofaButton
+						padding="px-5 py-2"
+						bgColor="bg-white"
+						textColor="text-grayColor"
+						class="hidden mdlg:inline-block"
+						customClass="border border-gray-100"
+						@click="close">
+						Exit
+					</SofaButton>
+
+					<SofaButton padding="px-5 py-3 mdlg:py-2" class="mdlg:w-auto w-full" @click="close">Start</SofaButton>
+				</div>
+			</div>
+		</div>
+	</SofaModal>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import PlayWrapper from './PlayWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 import { Logic } from 'sofa-logic'
 import { QuizEntity } from '@modules/study'
+import { storage } from '@utils/storage'
 
-defineProps<{
+const props = defineProps<{
 	playId: string
 	type: PlayTypes
 	isInModal?: boolean
@@ -184,4 +228,25 @@ const generateQuizTitle = (play: PlayEntity, quiz: QuizEntity, extras: QuizWrapp
 	if (play.isPractice()) return isDone.value ? 'Practice completed' : quiz.title
 	return `Question ${extras.index + 1}`
 }
+
+const storageKey = 'flashcards-info'
+
+const showInfoModal = ref(false)
+const dontShowAgain = ref(false)
+
+const close = () => (showInfoModal.value = false)
+
+if (props.type === PlayTypes.flashcards)
+	storage.get<'true'>(storageKey).then((value) => {
+		showInfoModal.value = !value
+	})
+
+watch(
+	dontShowAgain,
+	async () => {
+		if (dontShowAgain.value) await storage.set(storageKey, 'true')
+		else await storage.remove(storageKey)
+	},
+	{ immediate: true },
+)
 </script>
