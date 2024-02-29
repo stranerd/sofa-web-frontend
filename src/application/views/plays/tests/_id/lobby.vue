@@ -52,7 +52,7 @@ import { Logic } from 'sofa-logic'
 import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
-	name: 'TestsIdLobbyPage',
+	name: 'PlaysTestsIdLobbyPage',
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

@@ -6,7 +6,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-	name: 'GamesIdIndexPage',
-	routeConfig: { middlewares: [({ to }) => `/games/${to.params.id}/lobby`] },
+	name: 'PlaysTypeIndexPage',
+	routeConfig: { middlewares: [({ to }) => `/plays/${to.params.type}/${to.params.id}/lobby`] },
 })
 </script>

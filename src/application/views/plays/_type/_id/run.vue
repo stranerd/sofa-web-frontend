@@ -1,14 +1,17 @@
 <template>
-	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout
+		:layoutStyle="`!justify-between ${isDark ? 'bg-deepGray text-white' : ''}`"
+		:hide="{ top: true, bottom: true }"
+		:bgImage="isDark ? '/images/game-bg.png' : undefined">
 		<PlayRun :playId="$route.params.id as string" :type="type" />
 	</ExpandedLayout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { PlayTypes } from '@modules/plays'
+import { PlayEntity, PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'PlaysTypeIdRunPage',
@@ -27,7 +30,8 @@ export default defineComponent({
 
 		const route = useRoute()
 		const type = route.params.type as PlayTypes
-		return { type }
+		const isDark = computed(() => PlayEntity.isDark(type))
+		return { type, isDark }
 	},
 })
 </script>

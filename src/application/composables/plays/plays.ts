@@ -6,7 +6,7 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useUsersInList } from '../users/users'
 import { CoursableAccess, QuestionEntity } from '@modules/study'
-import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlayStatus, PlaysUseCases } from '@modules/plays'
+import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlaysUseCases } from '@modules/plays'
 
 const myStore = {
 	plays: ref<PlayEntity[]>([]) as Ref<PlayEntity[]>,
@@ -68,9 +68,9 @@ export const useMyPlays = () => {
 	})
 
 	const ongoing = computed(() => myStore.plays.value.filter((p) => p.isOngoing))
-	const ended = computed(() => myStore.plays.value.filter((p) => p.isEnded))
+	const closed = computed(() => myStore.plays.value.filter((p) => p.isClosed))
 
-	return { ...myStore, loading, error, ongoing, ended }
+	return { ...myStore, loading, error, ongoing, closed }
 }
 
 const singleStore = {} as Record<
@@ -154,14 +154,14 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 
 	const { asyncFn: start } = useAsyncFn(async () => {
 		const p = singleStore[id].play.value
-		if (!p || !p.canStart) return
+		if (!p || !p.isCreated) return
 		await PlaysUseCases.start(id)
 		await router.push(p.participants.includes(authId.value) ? p.runPage : p.resultsPage)
 	})
 
 	const { asyncFn: end } = useAsyncFn(async (nav = true) => {
 		const p = singleStore[id].play.value
-		if (!p || !p.canEnd) return false
+		if (!p || !p.isStarted) return false
 		await PlaysUseCases.end(id)
 		if (nav) await router.push(p.resultsPage)
 		return true
@@ -194,9 +194,9 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		const p = singleStore[id].play.value
 		if (!p || skip.statusNav) return
 
-		if (p.status === PlayStatus.created && route.path !== p.lobbyPage) return await alertAndNav(p.lobbyPage)
-		if (p.status === PlayStatus.started && route.path !== p.runPage) return await alertAndNav(p.runPage)
-		if (p.isEnded && route.path !== p.resultsPage) return await alertAndNav(p.resultsPage)
+		if (p.isCreated && route.path !== p.lobbyPage) return await alertAndNav(p.lobbyPage)
+		if (p.isStarted && route.path !== p.runPage) return await alertAndNav(p.runPage)
+		if (p.isClosed && route.path !== p.resultsPage) return await alertAndNav(p.resultsPage)
 	}
 
 	watch(

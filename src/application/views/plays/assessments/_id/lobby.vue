@@ -1,6 +1,6 @@
 <template>
-	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
-		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.games" :skipQuestions="true">
+	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.assessments" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions, participants }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -87,8 +87,8 @@
 										class="-mt-4"
 										:content="
 											playExtras.isMine
-												? 'Start game when enough players have joined'
-												: 'Waiting for host to start game'
+												? 'You can start the assessment whenever. Participants can join until the deadline you specified'
+												: 'Waiting for host to start assessment'
 										" />
 									<div
 										v-for="user in participants"
@@ -103,7 +103,7 @@
 									<div
 										v-if="participants.length == 0"
 										class="w-full flex items-center justify-center p-3 rounded-custom border-2 bg-white">
-										<SofaNormalText content="Waiting for players!" />
+										<SofaNormalText content="Waiting for participants!" />
 									</div>
 								</div>
 							</template>
@@ -118,21 +118,21 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { Logic } from 'sofa-logic'
-import { QuizEntity } from '@modules/study'
 import { PlayEntity, PlayTypes } from '@modules/plays'
+import { QuizEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
-	name: 'GamesIdLobbyPage',
+	name: 'PlaysAssessmentsIdLobbyPage',
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Lobby',
 		})
 
-		const share = async (game: PlayEntity, quiz: QuizEntity) =>
-			await Logic.Common.share('Join game on SOFA', `Join and play a game on: ${quiz.title}`, game.shareLink)
-		const copy = (game: PlayEntity) => Logic.Common.copy(game.shareLink)
+		const share = async (play: PlayEntity, quiz: QuizEntity) =>
+			await Logic.Common.share('Join assessment on SOFA', `Join the assessment on: ${quiz.title}`, play.shareLink)
+		const copy = (play: PlayEntity) => Logic.Common.copy(play.shareLink)
 
 		return { share, copy, Logic, PlayTypes }
 	},

@@ -32,8 +32,8 @@ const { id: authId } = useAuth()
 
 const extras = computed(() => ({
 	isMine: play.value && play.value.user.id === authId.value,
-	canStart: play.value && play.value.user.id === authId.value && play.value.canStart,
-	canEnd: play.value && play.value.user.id === authId.value && play.value.canEnd,
+	canStart: play.value && play.value.user.id === authId.value && play.value.isCreated,
+	canEnd: play.value && play.value.user.id === authId.value && play.value.isStarted,
 	canJoin: play.value && !play.value.participants.includes(authId.value),
 	authId: authId.value,
 	answers: myAnswer.value?.allAnswers ?? {},

@@ -1,13 +1,17 @@
-import { PlayAssessmentsData, PlayGamesData, PlayGenericData, PlayStatus, PlayTestsData, PlayTypes } from '../types'
 import { PlayFromModel } from '../../data/models/plays'
+import { PlayAssessmentsData, PlayGamesData, PlayGenericData, PlayStatus, PlayTestsData, PlayTypes } from '../types'
 import { BaseEntity } from '@modules/core'
-import { ordinalSuffixOf } from '@utils/commons'
 import { QuestionEntity } from '@modules/study'
+import { ordinalSuffixOf } from '@utils/commons'
 
 export class PlayEntity extends BaseEntity<PlayFromModel> {
 	constructor(data: PlayFromModel) {
 		data.sources = data.sources?.map((source) => new QuestionEntity(source)) ?? []
 		super(data)
+	}
+
+	static isDark(type: PlayTypes) {
+		return type === PlayTypes.games
 	}
 
 	get hasLobby() {
@@ -19,11 +23,27 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	get isOngoing() {
-		return [PlayStatus.created, PlayStatus.started].includes(this.status)
+		return this.isCreated || this.isStarted
+	}
+
+	get isClosed() {
+		return this.isEnded || this.isScored
+	}
+
+	get isCreated() {
+		return this.status === PlayStatus.created
+	}
+
+	get isStarted() {
+		return this.status === PlayStatus.started
 	}
 
 	get isEnded() {
-		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
+		return this.status === PlayStatus.ended
+	}
+
+	get isScored() {
+		return this.status === PlayStatus.scored
 	}
 
 	get shareLink() {
@@ -32,7 +52,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 
 	get lobbyPage() {
 		if (!this.hasLobby) return this.runPage
-		return `/${this.data.type}/${this.id}/lobby`
+		return `/plays/${this.data.type}/${this.id}/lobby`
 	}
 
 	get runPage() {
@@ -40,7 +60,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	get resultsPage() {
-		return `/${this.data.type}/${this.id}/results`
+		return `/plays/${this.data.type}/${this.id}/results`
 	}
 
 	get singularizedType() {
@@ -55,14 +75,6 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		)
 	}
 
-	get canStart() {
-		return this.status === PlayStatus.created
-	}
-
-	get canEnd() {
-		return this.status === PlayStatus.started
-	}
-
 	get participants() {
 		if (this.data.type === PlayTypes.games) return this.data.participants
 		if (this.data.type === PlayTypes.assessments) return this.data.participants
@@ -70,7 +82,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	get isDark() {
-		return this.isGames()
+		return PlayEntity.isDark(this.data.type)
 	}
 
 	isGames(): this is Omit<PlayEntity, 'data'> & { data: PlayGamesData } {

@@ -1,6 +1,6 @@
 <template>
-	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.tests" :skipQuestions="true" :skipStatusNav="true">
+	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
+		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.games" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -11,11 +11,12 @@
 							:questions="questions"
 							:showCounter="false"
 							:optionState="extras.optionState"
+							:isDark="true"
 							:rightButton="{
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
-								click: () => Logic.Common.GoToRoute('/library/results?tab=tests'),
+								click: () => Logic.Common.GoToRoute('/library/results?tab=games'),
 							}"
 							:leftButton="playExtras.canEnd ? { ...leftButton, click: playExtras.end } : undefined">
 							<template #header>
@@ -25,39 +26,32 @@
 							<template #default>
 								<div class="w-full h-full flex flex-col overflow-y-auto">
 									<div class="flex flex-col gap-4 my-auto py-4 items-center">
+										<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" content="Scoreboard" />
 										<SofaNormalText
 											color="text-white"
+											class="-mt-4"
 											:content="
-												play.status === 'scored'
-													? ''
-													: play.status === 'ended'
+												play.isScored
+													? 'Game has ended'
+													: play.isEnded
 														? 'Scores are being calculated'
-														: 'Waiting for test to finish'
+														: 'Waiting for others to finish'
 											" />
-										<div v-for="(score, index) in playExtras.scores" :key="index" class="flex flex-col items-center">
-											<SofaPieChart
-												:data="{
-													labels: ['passed', 'failed'],
-													datasets: [
-														{
-															data: [score.percentage, 100 - score.percentage],
-															backgroundColor: [score.bgColor, '#E1E6EB'],
-															hoverOffset: 4,
-															borderRadius: 10,
-														},
-													],
-												}"
-												cutoutPercentage="90%"
-												:textStyle="`!text-3xl ${score.color}`">
-												{{ formatNumber(score.percentage, 1) }}%
-											</SofaPieChart>
-											<SofaHeaderText class="md:!text-3xl text-xl" :content="score.label" />
+										<div
+											v-for="score in playExtras.scores"
+											:key="score.user.id"
+											class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white border-4"
+											:class="score.user?.id === playExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
+											<SofaNormalText color="text-deepGray" class="!font-semibold" :content="score.position" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold"
-												:content="`${Math.round((score.percentage * play.questions.length) / 100)}/${
-													play.questions.length
-												} correct answers`" />
+												:content="score.user?.id === playExtras.authId ? 'You' : score.user?.publicName" />
+											<SofaIcon v-if="score.isWinner" name="game-winner" class="h-[23px]" />
+											<SofaNormalText
+												color="text-deepGray"
+												class="!font-semibold ml-auto"
+												:content="`${score.percentage}%`" />
 										</div>
 									</div>
 								</div>
@@ -71,14 +65,13 @@
 </template>
 
 <script lang="ts">
-import { formatNumber } from 'valleyed'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
 import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
-	name: 'TestsIdResultsPage',
+	name: 'PlaysGamesIdResultsPage',
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
@@ -91,7 +84,7 @@ export default defineComponent({
 			textColor: 'text-white',
 		}
 
-		return { Logic, leftButton, formatNumber, PlayTypes }
+		return { Logic, leftButton, PlayTypes }
 	},
 })
 </script>
