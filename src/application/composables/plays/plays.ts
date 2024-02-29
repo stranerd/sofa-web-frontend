@@ -159,11 +159,11 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		await router.push(p.participants.includes(authId.value) ? p.runPage : p.resultsPage)
 	})
 
-	const { asyncFn: end } = useAsyncFn(async () => {
+	const { asyncFn: end } = useAsyncFn(async (nav = true) => {
 		const p = singleStore[id].play.value
 		if (!p || !p.canEnd) return false
 		await PlaysUseCases.end(id)
-		await router.push(p.resultsPage)
+		if (nav) await router.push(p.resultsPage)
 		return true
 	})
 

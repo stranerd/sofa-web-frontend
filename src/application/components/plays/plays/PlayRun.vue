@@ -34,7 +34,7 @@
 						:questions="questions"
 						:optionState="extras.optionState"
 						:leftButton="generateLeftButton(play, questions.length, extras)"
-						:rightButton="generateRightButton(play, extras)">
+						:rightButton="generateRightButton(play, extras, playExtras)">
 						<template v-if="play.isPractice()" #header>
 							<template v-if="showSolution">
 								<div
@@ -114,7 +114,7 @@ const showSolution = ref(false)
 const isDone = ref(false)
 const isCorrect = ref(false)
 
-// type PlayWrapperExtras = Parameters<Exclude<InstanceType<typeof PlayWrapper>['$slots']['default'], undefined>>[0]['extras']
+type PlayWrapperExtras = Parameters<Exclude<InstanceType<typeof PlayWrapper>['$slots']['default'], undefined>>[0]['extras']
 type QuizWrapperExtras = Parameters<Exclude<InstanceType<typeof QuizWrapper>['$slots']['default'], undefined>>[0]['extras']
 
 const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: QuizWrapperExtras) => {
@@ -124,33 +124,50 @@ const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: Q
 			bgColor: 'bg-white border border-gray-100',
 			textColor: 'text-grayColor',
 			disabled: !isDone.value && extras.index === questionsLength - 1,
-			click: () => {
+			click: async () => {
+				// restart clicked
 				if (isDone.value) {
+					// TODO: reset answer in backend
 					extras.reset()
 					return (isDone.value = false)
-				} else if (showSolution.value) return (showSolution.value = false)
-				else if (extras.canNext) return extras.next()
+				}
+				// retry clicked
+				else if (showSolution.value) return (showSolution.value = false)
+				// skip clicked
+				else if (extras.canNext) {
+					await extras.submitAnswer(true)
+					return extras.next()
+				}
 			},
 		}
 	return undefined
 }
 
-const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras) => {
+const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playExtras: PlayWrapperExtras) => {
 	if (play.isPractice())
 		return {
 			label: isDone.value || showSolution.value ? 'Continue' : 'Check',
 			bgColor: 'bg-primaryBlue',
 			textColor: 'text-white',
-			click: () => {
-				if (isDone.value) return Logic.Common.goBack()
+			click: async () => {
+				// continue clicked, but done with practice
+				if (isDone.value) {
+					await playExtras.end(false)
+					return Logic.Common.GoToRoute('/library/results')
+				}
+				// check clicked
 				if (!showSolution.value) {
 					isCorrect.value = extras.question?.checkAnswer(extras.answer) ?? false
-					return (showSolution.value = true)
+					await extras.submitAnswer(true)
+					showSolution.value = true
+					return
 				}
+				// continue clicked but not done with practice
 				if (extras.canNext) {
 					showSolution.value = false
 					return extras.next()
 				}
+				// continue clicked, but after last question
 				showSolution.value = false
 				return (isDone.value = true)
 			},

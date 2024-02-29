@@ -96,20 +96,20 @@ const moveCurrrentQuestionToEnd = () => {
 
 const nextQ = async (newIndex: number) => {
 	index.value = newIndex
-	if (props.useTimer) runCountdown({ time: currentQuestionByIndex.value?.timeLimit }).then(submitAnswer)
+	if (props.useTimer) runCountdown({ time: currentQuestionByIndex.value?.timeLimit }).then(() => submitAnswer())
 }
 
-const submitAnswer = async () => {
+const submitAnswer = async (skipNext = false) => {
 	if (!currentQuestionByIndex.value) return
 	const isLast = !extras.value.canNext
 	const res = await props.submit?.(
 		{
 			questionId: currentQuestionByIndex.value.id,
-			answer: answer.value ?? false,
+			answer: answer.value ?? null,
 		},
 		isLast,
 	)
-	if (!res) return
+	if (!res || skipNext) return
 	if (!isLast) await nextQ(index.value + 1)
 }
 
