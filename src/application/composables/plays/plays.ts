@@ -114,9 +114,32 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		computed(() => (skip.participants ? [] : singleStore[id].play.value?.participants ?? [])),
 	)
 
+	const { asyncFn: fetchQuestions } = useAsyncFn(async () => {
+		if (skip.questions) return
+		const questions = await PlaysUseCases.getQuestions(id)
+		singleStore[id].questions.splice(0, singleStore[id].questions.length, ...questions)
+	})
+
+	const { asyncFn: fetchAnswers } = useAsyncFn(async (play: PlayEntity) => {
+		// TODO: listener for answers
+		if (skip.questions) return
+		const answers = await AnswersUseCases.get(play.data.type, play.id)
+		answers.forEach((a) => {
+			if (a.userId === authId.value) singleStore[id].myAnswer.value = a
+			addToArray(
+				singleStore[id].answers.value,
+				a,
+				(e) => e.id,
+				(e) => e.createdAt,
+			)
+		})
+	})
+
 	const { asyncFn: fetchPlay, called } = useAsyncFn(
 		async () => {
-			singleStore[id].play.value = await PlaysUseCases.find(id)
+			const play = await PlaysUseCases.find(id)
+			if (play) await Promise.all([fetchQuestions(), fetchAnswers(play)])
+			singleStore[id].play.value = play
 		},
 		{ key: `plays/plays/${id}` },
 	)
@@ -173,27 +196,7 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		singleStore[id].play,
 		async (cur, old) => {
 			if (!cur) return
-			if (!skip.questions && !Differ.equal(cur.questions, old?.questions))
-				PlaysUseCases.getQuestions(id)
-					.then((questions) => {
-						singleStore[id].questions.splice(0, singleStore[id].questions.length, ...questions)
-					})
-					.catch(() => {})
-			if (!skip.questions)
-				// TODO: add listeners for answers conditionally
-				AnswersUseCases.get(cur.data.type, cur.id)
-					.then((answers) => {
-						answers.forEach((a) => {
-							if (a.userId === authId.value) singleStore[id].myAnswer.value = a
-							addToArray(
-								singleStore[id].answers.value,
-								a,
-								(e) => e.id,
-								(e) => e.createdAt,
-							)
-						})
-					})
-					.catch(() => {})
+			if (!Differ.equal(cur.questions, old?.questions)) fetchQuestions()
 			if (!skip.statusNav) playWatcherCb()
 		},
 		{ immediate: true },

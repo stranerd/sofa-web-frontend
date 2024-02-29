@@ -6,7 +6,7 @@
 					v-if="playExtras.isParticipant"
 					:id="play.quizId"
 					:questions="playQuestions"
-					:startAt="playExtras.startAt"
+					:answers="playExtras.answers"
 					:useTimer="true"
 					:submit="playExtras.submit">
 					<template #prestart="{ quiz, extras }">

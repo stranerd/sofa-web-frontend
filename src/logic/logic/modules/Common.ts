@@ -188,11 +188,13 @@ export default class Common {
 	}
 
 	public goBack = () => {
-		const canGoBack = !!this.router?.options.history.state.back
 		const goBackRoute = (this.route?.meta.middlewares as any)?.goBackRoute
-		const route = typeof goBackRoute === 'function' ? goBackRoute(this.route) : typeof goBackRoute === 'string' ? goBackRoute : '/'
+		const route =
+			typeof goBackRoute === 'function' ? goBackRoute(this.route) : typeof goBackRoute === 'string' ? goBackRoute : undefined
+		if (route) return this.router?.push(route)
+		const canGoBack = !!this.router?.options.history.state.back
 		if (canGoBack) this.router?.go(-1)
-		else this.router?.replace(route)
+		else this.router?.push('/')
 	}
 
 	public daysDiff(a: Date, b: Date) {

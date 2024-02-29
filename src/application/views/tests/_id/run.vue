@@ -1,12 +1,12 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<PlayWrapper :id="$route.params.id as string">
+		<PlayWrapper :id="$route.params.id as string" :skipParticipants="true">
 			<template #default="{ play, questions: playQuestions, extras: playExtras }">
 				<QuizWrapper
 					v-if="playExtras.isMine"
 					:id="play.quizId"
 					:questions="playQuestions"
-					:startAt="playExtras.startAt"
+					:answers="playExtras.answers"
 					:useTimer="true"
 					:submit="playExtras.submit">
 					<template #prestart="{ quiz, extras }">

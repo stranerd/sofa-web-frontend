@@ -1,11 +1,11 @@
 <template>
-	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="quizQuestions" />
-	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="quizQuestions" :extras="extras" />
+	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="questions" />
+	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="questions" :extras="extras" />
 	<slot v-if="fetched && !quiz" name="notfound" />
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
@@ -21,7 +21,6 @@ const props = withDefaults(
 		useTimer?: boolean
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 		access?: CoursableAccess['access']
-		startAt?: string
 	}>(),
 	{
 		questions: undefined,
@@ -30,27 +29,33 @@ const props = withDefaults(
 		useTimer: false,
 		submit: undefined,
 		access: undefined,
-		startAt: undefined,
 	},
 )
 
 const { id: authId } = useAuth()
-const { quiz, questions, fetched } = useQuiz(props.id, { questions: !!props.questions, members: true }, props.access)
+const { quiz, questions: backup, fetched } = useQuiz(props.id, { questions: !!props.questions, members: true }, props.access)
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
-const quizQuestions = computed(() => reorderedQuestions.value ?? props.questions ?? questions.value ?? [])
+const questions = computed(() => reorderedQuestions.value ?? props.questions ?? backup.value ?? [])
 
-const started = ref(!props.useTimer)
+const started = ref(false)
 const { time: startTime, countdown: startCountdown } = useCountdown()
 const { time: runTime, countdown: runCountdown } = useCountdown()
-const startAtQuestionIndex = quizQuestions.value.findIndex((q) => q.id === props.startAt)
-const index = ref(startAtQuestionIndex > -1 ? startAtQuestionIndex : 0)
-const answers = reactive<Record<string, any>>({})
-const currentQuestionByIndex = computed(() => quizQuestions.value.at(index.value))
+const index = ref(0)
+const answers = defineModel<Record<string, any>>('answers', { default: {} })
+const currentQuestionByIndex = computed(() => questions.value.at(index.value))
 const answer = computed({
-	get: () => (currentQuestionByIndex.value ? answers[currentQuestionByIndex.value.id] ?? currentQuestionByIndex.value.defaultAnswer : []),
+	get: () =>
+		currentQuestionByIndex.value ? answers.value[currentQuestionByIndex.value.id] ?? currentQuestionByIndex.value.defaultAnswer : [],
 	set: (val) => {
-		answers[currentQuestionByIndex.value?.id ?? ''] = val
+		answers.value[currentQuestionByIndex.value?.id ?? ''] = val
+		// for deep reactive, seems models are not deeply reactive
+		answers.value = { ...answers.value }
 	},
+})
+const startAt = computed(() => {
+	const allAnswers = answers.value
+	if (questions.value.length === Object.keys(allAnswers).length) return questions.value.length - 1
+	return questions.value.findIndex((q) => !(q.id in allAnswers))
 })
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
@@ -85,7 +90,7 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 }
 
 const moveCurrrentQuestionToEnd = () => {
-	if (!reorderedQuestions.value) reorderedQuestions.value = [...quizQuestions.value]
+	if (!reorderedQuestions.value) reorderedQuestions.value = [...questions.value]
 	reorderedQuestions.value = reorderedQuestions.value.concat(reorderedQuestions.value.splice(index.value, 1))
 }
 
@@ -139,7 +144,7 @@ const extras = computed(() => ({
 		if (extras.value.canPrev) index.value--
 	},
 	canPrev: index.value > 0,
-	canNext: index.value < quizQuestions.value.length - 1,
+	canNext: index.value < questions.value.length - 1,
 	reset: () => {
 		reorderedQuestions.value = null
 		index.value = 0
@@ -149,15 +154,15 @@ const extras = computed(() => ({
 }))
 
 watch(
-	quiz,
+	[quiz, questions],
 	async () => {
 		const q = quiz.value
 		if (!q) return
-		if (!started.value)
-			startCountdown({ time: 3 }).then(() => {
-				started.value = true
-				nextQ(0)
-			})
+		if (started.value) return
+		const justStarted = startAt.value === -1
+		if (props.useTimer && justStarted) await startCountdown({ time: 3 })
+		started.value = !!questions.value.length
+		nextQ(justStarted ? 0 : startAt.value)
 	},
 	{ immediate: true },
 )
