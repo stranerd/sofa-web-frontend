@@ -1,4 +1,5 @@
 import { EmbeddedUser, PlayData, PlayScore, PlayStatus, PlayTypes } from '../../domain/types'
+import { QuestionEntity } from '@modules/study'
 
 export interface PlayFromModel {
 	id: string
@@ -7,6 +8,7 @@ export interface PlayFromModel {
 	questions: string[]
 	totalTimeInSec: number
 	scores: PlayScore
+	sources: QuestionEntity[]
 	startedAt: number | null
 	user: EmbeddedUser
 	data: PlayData

@@ -1,19 +1,12 @@
-import {
-	EmbeddedUser,
-	PlayAssessmentsData,
-	PlayData,
-	PlayGamesData,
-	PlayGenericData,
-	PlayScore,
-	PlayStatus,
-	PlayTestsData,
-	PlayTypes,
-} from '../types'
+import { PlayAssessmentsData, PlayGamesData, PlayGenericData, PlayStatus, PlayTestsData, PlayTypes } from '../types'
+import { PlayFromModel } from '../../data/models/plays'
 import { BaseEntity } from '@modules/core'
 import { ordinalSuffixOf } from '@utils/commons'
+import { QuestionEntity } from '@modules/study'
 
-export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
-	constructor(data: PlaysConstructorArgs) {
+export class PlayEntity extends BaseEntity<PlayFromModel> {
+	constructor(data: PlayFromModel) {
+		data.sources = data.sources?.map((source) => new QuestionEntity(source)) ?? []
 		super(data)
 	}
 
@@ -123,19 +116,4 @@ export class PlayEntity extends BaseEntity<PlaysConstructorArgs> {
 		if (percentage >= 60) return 'Nice effort!'
 		return 'Study harder!'
 	}
-}
-
-type PlaysConstructorArgs = {
-	id: string
-	quizId: string
-	status: PlayStatus
-	questions: string[]
-	user: EmbeddedUser
-	data: PlayData
-	totalTimeInSec: number
-	scores: PlayScore
-	startedAt: number | null
-	endedAt: number | null
-	createdAt: number
-	updatedAt: number
 }

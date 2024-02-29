@@ -117,7 +117,8 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 	const { asyncFn: fetchQuestions } = useAsyncFn(async () => {
 		if (skip.questions) return
 		const questions = await PlaysUseCases.getQuestions(id)
-		singleStore[id].questions.splice(0, singleStore[id].questions.length, ...questions)
+		const sources = singleStore[id].play.value?.sources ?? []
+		singleStore[id].questions.splice(0, singleStore[id].questions.length, ...(sources.length ? sources : questions))
 	})
 
 	const { asyncFn: fetchAnswers } = useAsyncFn(async (play: PlayEntity) => {
