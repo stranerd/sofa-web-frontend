@@ -44,7 +44,7 @@ export class PlaysUseCase {
 					condition: QueryKeys.and,
 					value: [
 						{ field: 'user.id', value: userId },
-						{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+						{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.tests },
 					],
 				},
 				{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.games },
@@ -62,7 +62,7 @@ export class PlaysUseCase {
 						condition: QueryKeys.and,
 						value: [
 							{ field: 'user.id', value: userId },
-							{ field: 'data.type', condition: Conditions.ne, value: PlayTypes.tests },
+							{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.tests },
 						],
 					},
 					{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.games },

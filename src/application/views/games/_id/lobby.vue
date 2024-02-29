@@ -1,6 +1,6 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
-		<PlayWrapper :id="$route.params.id as string" :skipQuestions="true">
+		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.games" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions, participants }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -120,7 +120,7 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
 import { QuizEntity } from '@modules/study'
-import { PlayEntity } from '@modules/plays'
+import { PlayEntity, PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'GamesIdLobbyPage',
@@ -134,7 +134,7 @@ export default defineComponent({
 			await Logic.Common.share('Join game on SOFA', `Join and play a game on: ${quiz.title}`, game.shareLink)
 		const copy = (game: PlayEntity) => Logic.Common.copy(game.shareLink)
 
-		return { share, copy, Logic }
+		return { share, copy, Logic, PlayTypes }
 	},
 })
 </script>

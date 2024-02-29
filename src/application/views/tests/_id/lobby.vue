@@ -1,6 +1,6 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<PlayWrapper :id="$route.params.id as string" :skipQuestions="true">
+		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.tests" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -49,6 +49,7 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
+import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'TestsIdLobbyPage',
@@ -58,7 +59,7 @@ export default defineComponent({
 			title: 'Lobby',
 		})
 
-		return { Logic }
+		return { Logic, PlayTypes }
 	},
 })
 </script>

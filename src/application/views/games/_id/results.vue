@@ -1,6 +1,6 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
-		<PlayWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
+		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.games" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -68,6 +68,7 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
+import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'GamesIdResultsPage',
@@ -83,7 +84,7 @@ export default defineComponent({
 			textColor: 'text-white',
 		}
 
-		return { Logic, leftButton }
+		return { Logic, leftButton, PlayTypes }
 	},
 })
 </script>

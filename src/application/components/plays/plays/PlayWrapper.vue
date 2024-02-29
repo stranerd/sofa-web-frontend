@@ -6,10 +6,12 @@
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlay } from '@app/composables/plays/plays'
+import { PlayTypes } from '@modules/plays'
 
 const props = withDefaults(
 	defineProps<{
 		id: string
+		type: PlayTypes
 		skipQuestions?: boolean
 		skipParticipants?: boolean
 		skipStatusNav?: boolean

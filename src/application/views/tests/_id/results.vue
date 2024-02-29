@@ -1,6 +1,6 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<PlayWrapper :id="$route.params.id as string" :skipQuestions="true" :skipStatusNav="true">
+		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.tests" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
 					<template #default="{ quiz, questions, extras }">
@@ -75,6 +75,7 @@ import { formatNumber } from 'valleyed'
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
+import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'TestsIdResultsPage',
@@ -90,7 +91,7 @@ export default defineComponent({
 			textColor: 'text-white',
 		}
 
-		return { Logic, leftButton, formatNumber }
+		return { Logic, leftButton, formatNumber, PlayTypes }
 	},
 })
 </script>
