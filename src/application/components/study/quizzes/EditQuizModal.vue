@@ -7,74 +7,79 @@
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
-		<div class="flex flex-col flex-grow overflow-y-auto gap-4">
-			<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
-				<div class="col-span-1 w-full flex flex-col gap-3">
-					<SofaTextField
-						v-model="factory.title"
-						customClass="rounded-custom !bg-lightGray"
-						type="text"
-						name="Title"
-						placeholder="Title"
-						borderColor="border-transparent"
-						:error="factory.errors.title" />
-
-					<SofaTextarea
-						v-model="factory.description"
-						:hasTitle="false"
-						:rows="4"
-						textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-						placeholder="Description"
-						:error="factory.errors.description" />
-
-					<SofaSelect
-						v-model="factory.topic"
-						customClass="rounded-custom !bg-lightGray"
-						name="Topic"
-						placeholder="Topic"
-						borderColor="border-transparent"
-						:error="factory.errors.topic"
-						:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-						:canUseCustom="true" />
-				</div>
-
-				<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
-					<SofaImageLoader
-						customClass="w-full md:!h-full h-[220px] rounded-custom relative"
-						:photoUrl="factory.photo?.link ?? '/images/default.png'">
-						<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
-							<SofaFileInput v-model="factory.photo" accept="image/*">
-								<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
-									<SofaIcon class="h-[18px]" name="camera-white" />
-									<SofaNormalText color="text-white" content="Add cover photo" />
-								</div>
-							</SofaFileInput>
-						</div>
-					</SofaImageLoader>
-				</div>
-			</div>
-
-			<div class="w-full flex flex-col gap-2">
+		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
+			<div class="col-span-1 w-full flex flex-col gap-3">
 				<SofaTextField
-					v-model="factory.tagString"
+					v-model="factory.title"
 					customClass="rounded-custom !bg-lightGray"
-					name="Tags"
-					placeholder="Tags (Comma separated for multiple)"
-					borderColor="border-transparent" />
-				<div class="w-full flex flex-wrap gap-2 items-center">
-					<template v-for="(item, index) in factory.tags" :key="index">
-						<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">
-							<SofaNormalText color="text-grayColor" :content="item" />
-							<SofaIcon name="circle-close" class="h-[17px] cursor-pointer" @click="factory.removeTag(index)" />
-						</div>
-					</template>
-				</div>
+					type="text"
+					name="Title"
+					placeholder="Title"
+					borderColor="border-transparent"
+					:error="factory.errors.title" />
+
+				<SofaTextarea
+					v-model="factory.description"
+					:hasTitle="false"
+					:rows="4"
+					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
+					placeholder="Description"
+					:error="factory.errors.description" />
+
+				<SofaSelect
+					v-model="factory.topic"
+					customClass="rounded-custom !bg-lightGray"
+					name="Topic"
+					placeholder="Topic"
+					borderColor="border-transparent"
+					:error="factory.errors.topic"
+					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
+					:canUseCustom="true" />
 			</div>
 
-			<SofaCheckbox v-if="isAdmin" v-model="factory.isForTutors" type="switch">
-				<SofaNormalText content="Is tutor assessments?" />
+			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
+				<SofaImageLoader
+					customClass="w-full md:!h-full h-[220px] rounded-custom relative"
+					:photoUrl="factory.photo?.link ?? '/images/default.png'">
+					<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
+						<SofaFileInput v-model="factory.photo" accept="image/*">
+							<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
+								<SofaIcon class="h-[18px]" name="camera-white" />
+								<SofaNormalText color="text-white" content="Add cover photo" />
+							</div>
+						</SofaFileInput>
+					</div>
+				</SofaImageLoader>
+			</div>
+		</div>
+
+		<div class="w-full flex flex-col gap-2">
+			<SofaTextField
+				v-model="factory.tagString"
+				customClass="rounded-custom !bg-lightGray"
+				name="Tags"
+				placeholder="Tags (Comma separated for multiple)"
+				borderColor="border-transparent" />
+			<div class="w-full flex flex-wrap gap-2 items-center">
+				<template v-for="(item, index) in factory.tags" :key="index">
+					<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">
+						<SofaNormalText color="text-grayColor" :content="item" />
+						<SofaIcon name="circle-close" class="h-[17px] cursor-pointer" @click="factory.removeTag(index)" />
+					</div>
+				</template>
+			</div>
+		</div>
+
+		<div class="flex gap-4 items-center flex-wrap">
+			<SofaNormalText content="Allowed Modes: " />
+			<SofaCheckbox v-for="mode in modes" :key="mode.value" v-model="factory[mode.key] as any" type="switch">
+				<SofaNormalText :content="mode.value" class="capitalize" />
 			</SofaCheckbox>
 		</div>
+
+		<SofaCheckbox v-if="isAdmin" v-model="factory.isForTutors" type="switch">
+			<SofaNormalText content="Is for tutor assessments?" />
+		</SofaCheckbox>
 
 		<div class="w-full flex items-center justify-between">
 			<SofaButton
@@ -110,6 +115,7 @@ import { watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { useEditQuiz } from '@app/composables/study/quizzes'
+import { QuizModes } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
@@ -122,6 +128,14 @@ const { isAdmin } = useAuth()
 
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()
+
+const modes: { value: QuizModes; key: keyof typeof factory }[] = [
+	{ value: QuizModes.games, key: 'modeGames' },
+	{ value: QuizModes.tests, key: 'modeTests' },
+	{ value: QuizModes.assessments, key: 'modeAssessments' },
+	{ value: QuizModes.practice, key: 'modePractice' },
+	{ value: QuizModes.flashcards, key: 'modeFlashcards' },
+]
 
 watch(
 	topics,
