@@ -131,6 +131,7 @@ export const useEditQuiz = (id: string) => {
 	const { asyncFn: updateQuiz } = useAsyncFn(async () => {
 		await QuizzesUseCases.update(id, quizFactory)
 		await setMessage('Quiz updated')
+		await quizFactory.reset()
 		useModals().study.editQuiz.close()
 	})
 
