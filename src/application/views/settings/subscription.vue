@@ -7,11 +7,11 @@
 				<SofaNormalText v-if="!wallet.subscription.active" customClass="text-left">
 					You have no active subscription
 				</SofaNormalText>
-				<template v-else-if="wallet.subscription.current">
+				<template v-else-if="wallet.subscription.current && currentPlan">
 					<div class="w-full flex flex-col gap-3">
 						<div class="w-full flex flex-col gap-2 items-start">
 							<SofaHeaderText color="text-primaryPurple !text-2xl !font-extrabold">
-								{{ myPlan?.title ?? 'Stranerd Premium' }}
+								{{ currentPlan.title }}
 							</SofaHeaderText>
 
 							<div class="w-full flex flex-col gap-1 pb-1">
@@ -23,15 +23,13 @@
 								<SofaNormalText v-else> Expired </SofaNormalText>
 							</div>
 
-							<a
+							<SofaCheckbox
 								v-if="wallet.subscription.current.expiredAt > Date.now()"
-								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
-								@click="toggleRenewal">
+								v-model="autoRenewIsOn"
+								type="switch"
+								class="w-full flex justify-between py-3 border-t border-darkLightGray">
 								<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
-								<div class="!w-auto">
-									<SofaIcon customClass="h-[17px]" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
-								</div>
-							</a>
+							</SofaCheckbox>
 						</div>
 					</div>
 				</template>
@@ -149,31 +147,29 @@ export default defineComponent({
 		] as const
 
 		const { userType, wallet } = useAuth()
-		const autoRenewIsOn = computed(() => !!wallet.value?.subscription.next)
-		const { myPlans, currentPlan: myPlan } = usePlansList()
+		const autoRenewIsOn = computed({
+			get: () => !!wallet.value?.subscription.next,
+			set: (value) => {
+				toggleRenewPlan(value)
+			},
+		})
+		const { currentPlan, firstPaidPlan: myApplicablePlan } = usePlansList()
 		const { subscribeToPlan, toggleRenewPlan } = useSubscription()
-
-		const myApplicablePlan = computed(() => myPlans.value.at(0) ?? null)
 
 		const subscibeToPlan = async (id: string) => {
 			await subscribeToPlan(id)
-		}
-
-		const toggleRenewal = async () => {
-			await toggleRenewPlan(autoRenewIsOn.value)
 		}
 
 		return {
 			Logic,
 			formatTime,
 			myApplicablePlan,
-			myPlan,
+			currentPlan,
 			subscriptionInfo,
 			wallet,
 			userType,
 			autoRenewIsOn,
 			subscibeToPlan,
-			toggleRenewal,
 		}
 	},
 })

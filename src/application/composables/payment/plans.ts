@@ -61,11 +61,13 @@ export const usePlansList = () => {
 
 	const currentPlan = computed(() => {
 		const planId = wallet.value?.subscription.current?.id ?? null
-		if (!planId) return null
+		if (!planId) return myPlans.value.find((p) => p.amount === 0) ?? null
 		return myPlans.value.find((p) => p.id === planId) ?? null
 	})
 
-	return { ...store, myPlans, currentPlan }
+	const firstPaidPlan = computed(() => myPlans.value.find((p) => p.amount > 0) ?? null)
+
+	return { ...store, myPlans, currentPlan, firstPaidPlan }
 }
 
 export const useSubscription = () => {
