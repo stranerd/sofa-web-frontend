@@ -23,4 +23,8 @@ export class AnswersUseCase {
 	async end(type: PlayTypes, typeId: string) {
 		return await this.repository(type, typeId).end()
 	}
+
+	async reset(type: PlayTypes, typeId: string) {
+		return await this.repository(type, typeId).reset()
+	}
 }

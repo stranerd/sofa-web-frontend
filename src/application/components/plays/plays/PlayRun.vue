@@ -9,7 +9,7 @@
 				:questions="playQuestions"
 				:answers="playExtras.answers"
 				:useTimer="play.isTimed"
-				:submit="playExtras.submit"
+				:submit="playExtras.submitAnswer"
 				:access="access">
 				<template #prestart="{ quiz, extras }">
 					<div class="w-full my-auto flex flex-col gap-6 items-center">
@@ -33,7 +33,7 @@
 						:isInModal="isInModal"
 						:questions="questions"
 						:optionState="extras.optionState"
-						:leftButton="generateLeftButton(play, questions.length, extras)"
+						:leftButton="generateLeftButton(play, questions.length, extras, playExtras)"
 						:rightButton="generateRightButton(play, extras, playExtras)">
 						<template v-if="play.isPractice()" #header>
 							<template v-if="showSolution">
@@ -117,7 +117,7 @@ const isCorrect = ref(false)
 type PlayWrapperExtras = Parameters<Exclude<InstanceType<typeof PlayWrapper>['$slots']['default'], undefined>>[0]['extras']
 type QuizWrapperExtras = Parameters<Exclude<InstanceType<typeof QuizWrapper>['$slots']['default'], undefined>>[0]['extras']
 
-const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: QuizWrapperExtras) => {
+const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: QuizWrapperExtras, playExtras: PlayWrapperExtras) => {
 	if (play.isPractice())
 		return {
 			label: isDone.value ? 'Restart' : showSolution.value ? 'Retry' : 'Skip',
@@ -127,7 +127,7 @@ const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: Q
 			click: async () => {
 				// restart clicked
 				if (isDone.value) {
-					// TODO: reset answer in backend
+					await playExtras.resetAnswer()
 					extras.reset()
 					return (isDone.value = false)
 				}

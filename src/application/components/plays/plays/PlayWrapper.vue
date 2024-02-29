@@ -23,7 +23,7 @@ const props = withDefaults(
 	},
 )
 
-const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer } = usePlay(props.id, {
+const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer, resetAnswer } = usePlay(props.id, {
 	questions: props.skipQuestions,
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
@@ -40,7 +40,8 @@ const extras = computed(() => ({
 	start,
 	end,
 	join,
-	submit: submitAnswer,
+	submitAnswer,
+	resetAnswer,
 	isParticipant: play.value?.participants.includes(authId.value),
 	get scores() {
 		const p = play.value

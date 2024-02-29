@@ -180,6 +180,12 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		return true
 	})
 
+	const { asyncFn: resetAnswer } = useAsyncFn(async () => {
+		const p = singleStore[id].play.value
+		if (!p || p.isTimed) return false
+		singleStore[id].myAnswer.value = await AnswersUseCases.reset(p.data.type, p.id)
+	})
+
 	const alertAndNav = async (route: string) => {
 		await router.replace(route)
 	}
@@ -212,7 +218,7 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		await singleStore[id].listener.close()
 	})
 
-	return { ...singleStore[id], participants, fetched: called, join, start, end, submitAnswer }
+	return { ...singleStore[id], participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
 }
 
 export const useCreatePlay = (access: CoursableAccess['access'], options: { start: boolean; nav: boolean }) => {
