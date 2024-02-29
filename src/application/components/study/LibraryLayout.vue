@@ -205,6 +205,11 @@ const libraryOptions = computed(() => [
 				id: 'games',
 				hide: false,
 			},
+			{
+				name: 'Practice',
+				id: 'practice',
+				hide: false,
+			},
 		],
 	},
 	{
@@ -280,6 +285,11 @@ const libraryOptions = computed(() => [
 			{
 				name: 'Games',
 				id: 'games',
+				hide: false,
+			},
+			{
+				name: 'Practice',
+				id: 'practice',
 				hide: false,
 			},
 		],

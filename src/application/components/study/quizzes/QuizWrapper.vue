@@ -154,14 +154,14 @@ const extras = computed(() => ({
 }))
 
 watch(
-	[quiz, questions],
+	quiz,
 	async () => {
 		const q = quiz.value
 		if (!q) return
 		if (started.value) return
 		const justStarted = startAt.value === -1
 		if (props.useTimer && justStarted) await startCountdown({ time: 3 })
-		started.value = !!questions.value.length
+		started.value = true
 		nextQ(justStarted ? 0 : startAt.value)
 	},
 	{ immediate: true },

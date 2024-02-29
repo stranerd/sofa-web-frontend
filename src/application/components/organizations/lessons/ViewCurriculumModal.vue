@@ -33,53 +33,36 @@
 					class="rounded-custom" />
 			</div>
 			<template v-if="curriculumItem.type === ClassLessonable.quiz">
-				<template v-if="curriculumItem.quizMode === PlayTypes.practice">
-					<div
-						v-if="!quizPracticeStarted"
-						class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
-						<SofaHeaderText color="text-white"> Practice questions </SofaHeaderText>
-						<SofaNormalText color="text-white"> Comfortable learning for topic mastery </SofaNormalText>
-						<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length }} Questions </SofaNormalText>
-						<SofaButton
-							bgColor="bg-white"
-							textColor="text-primaryPurple"
-							padding="py-3 px-9"
-							customClass="font-bold"
-							@click="startQuizPractice">
-							Start
-						</SofaButton>
-					</div>
-					<QuizPractice
-						v-else
-						:quizId="curriculumItem.quiz.id"
-						class="flex-grow bg-lightGray"
-						:classInst="classInst"
-						:lesson="lesson" />
-				</template>
-				<template v-if="curriculumItem.quizMode === PlayTypes.tests">
-					<div
-						v-if="!quizTestStarted"
-						class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
-						<SofaHeaderText color="text-white"> Test yourself </SofaHeaderText>
-						<SofaNormalText color="text-white"> Evaluate your level of knowledge </SofaNormalText>
-						<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length }} Questions </SofaNormalText>
-						<SofaButton
-							bgColor="bg-white"
-							textColor="text-primaryPurple"
-							padding="py-3 px-9"
-							customClass="font-bold"
-							@click="startQuizTest(curriculumItem.quiz.id)">
-							Start
-						</SofaButton>
-					</div>
-					<QuizTest
-						v-else-if="test"
-						:testId="test.id"
-						:quizId="curriculumItem.quiz.id"
-						:classInst="classInst"
-						:lesson="lesson"
-						class="flex-grow bg-lightGray" />
-				</template>
+				<div
+					v-if="!quizPlayStarted"
+					class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
+					<SofaHeaderText color="text-white">
+						{{ curriculumItem.quizMode === PlayTypes.practice ? 'Practice questions' : 'Test yourself' }}
+					</SofaHeaderText>
+					<SofaNormalText color="text-white">
+						{{
+							curriculumItem.quizMode === PlayTypes.practice
+								? 'Comfortable learning for topic mastery'
+								: 'Evaluate your level of knowledge'
+						}}
+					</SofaNormalText>
+					<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length }} Questions </SofaNormalText>
+					<SofaButton
+						bgColor="bg-white"
+						textColor="text-primaryPurple"
+						padding="py-3 px-9"
+						customClass="font-bold"
+						@click="startQuizPlay">
+						Start
+					</SofaButton>
+				</div>
+				<PlayRun
+					v-else-if="play"
+					:playId="play.id"
+					:isInModal="true"
+					class="flex-grow bg-lightGray"
+					:type="curriculumItem.quizMode"
+					:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }" />
 			</template>
 		</div>
 		<div v-if="curriculumSection" class="flex flex-col gap-2">
@@ -140,13 +123,8 @@ const prev = () => {
 	if (canPrev.value) activeItemIndex.value--
 }
 
-const quizPracticeStarted = ref(false)
-const startQuizPractice = async () => {
-	quizPracticeStarted.value = true
-}
-
-const quizTestStarted = ref(false)
-const test = ref<PlayEntity | null>(null)
+const quizPlayStarted = ref(false)
+const play = ref<PlayEntity | null>(null)
 const { factory, createPlay } = useCreatePlay(
 	{
 		organizationId: props.classInst.organizationId,
@@ -155,20 +133,19 @@ const { factory, createPlay } = useCreatePlay(
 	},
 	{ start: true, nav: false },
 )
-const startQuizTest = async (id: string) => {
+const startQuizPlay = async (id: string, type: PlayTypes) => {
 	factory.quizId = id
-	factory.type = PlayTypes.tests
-	const t = await createPlay()
-	if (!t) return
-	test.value = t
-	quizTestStarted.value = true
+	factory.type = type
+	const p = await createPlay()
+	if (!p) return
+	play.value = p
+	quizPlayStarted.value = true
 }
 
 watch(
 	curriculumItem,
 	async () => {
-		quizPracticeStarted.value = false
-		quizTestStarted.value = false
+		quizPlayStarted.value = false
 		if (curriculumItem.value?.type === ClassLessonable.file)
 			mediaUrl.value = await curriculumItem.value.file.getUrl({
 				organizationId: props.classInst.organizationId,

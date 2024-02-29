@@ -73,14 +73,15 @@ const chooseMode = async (mode: PlayTypes) => {
 	factory.quizId = quizId
 	factory.type = mode
 	if (mode === PlayTypes.games) return (showGame.value = true)
-	if (mode === PlayTypes.practice || mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
-	if (mode === PlayTypes.tests) await createPlay()
+	if (mode === PlayTypes.practice) await createPlay({ start: true })
+	if (mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
+	if (mode === PlayTypes.tests) await createPlay({ start: false })
 
 	props.close()
 }
 
 const createGame = async () => {
-	await createPlay()
+	await createPlay({ start: false })
 }
 
 const modes = [

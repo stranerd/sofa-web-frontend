@@ -33,6 +33,7 @@ export default defineComponent({
 			if (tab.value === 'all') return ended.value
 			if (tab.value === 'games') return ended.value.filter((p) => p.isGames())
 			if (tab.value === 'tests') return ended.value.filter((p) => p.isTests())
+			if (tab.value === 'practice') return ended.value.filter((p) => p.isPractice())
 			return []
 		})
 

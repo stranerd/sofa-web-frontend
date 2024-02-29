@@ -37,6 +37,7 @@ export class PlaysUseCase {
 	}
 
 	async getMine(userId: string) {
+		// TODO: implement pagination
 		return await this.repository.get({
 			whereType: QueryKeys.or,
 			where: [
@@ -44,10 +45,10 @@ export class PlaysUseCase {
 					condition: QueryKeys.and,
 					value: [
 						{ field: 'user.id', value: userId },
-						{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.tests },
+						{ field: 'data.type', condition: Conditions.nin, value: [PlayTypes.games, PlayTypes.assessments] },
 					],
 				},
-				{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.games },
+				{ field: 'data.type', condition: Conditions.in, value: [PlayTypes.games, PlayTypes.assessments] },
 			],
 			all: true,
 		})
@@ -62,15 +63,15 @@ export class PlaysUseCase {
 						condition: QueryKeys.and,
 						value: [
 							{ field: 'user.id', value: userId },
-							{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.tests },
+							{ field: 'data.type', condition: Conditions.nin, value: [PlayTypes.games, PlayTypes.assessments] },
 						],
 					},
-					{ field: 'data.type', condition: Conditions.eq, value: PlayTypes.games },
+					{ field: 'data.type', condition: Conditions.in, value: [PlayTypes.games, PlayTypes.assessments] },
 				],
 				all: true,
 			},
 			listeners,
-			(e) => !e.isTests() || e.user.id === userId,
+			(e) => e.isGames() || e.isAssessments() || e.user.id === userId,
 		)
 	}
 

@@ -4,9 +4,11 @@
 			<QuizWrapper
 				v-if="playExtras.isParticipant"
 				:id="play.quizId"
+				:showAnswer="showSolution"
+				:isAnswerRight="isCorrect"
 				:questions="playQuestions"
 				:answers="playExtras.answers"
-				:useTimer="true"
+				:useTimer="play.isTimed"
 				:submit="playExtras.submit"
 				:access="access">
 				<template #prestart="{ quiz, extras }">
@@ -21,23 +23,29 @@
 						</div>
 					</div>
 				</template>
-				<template #default="{ questions, extras }">
+				<template #default="{ quiz, questions, extras }">
 					<Quiz
 						v-model:answer="extras.answer"
 						:index="extras.index"
-						:isDark="dark"
-						:title="`Question ${extras.index + 1}`"
-						:showCounter="false"
-						:isInModal="true"
+						:isDark="play.isDark"
+						:title="generateQuizTitle(play, quiz, extras)"
+						:showCounter="play.isPractice()"
+						:isInModal="isInModal"
 						:questions="questions"
 						:optionState="extras.optionState"
-						:rightButton="{
-							label: 'Continue',
-							bgColor: 'bg-primaryBlue',
-							textColor: 'text-white',
-							click: extras.submitAnswer,
-						}">
-						<template #header>
+						:leftButton="generateLeftButton(play, questions.length, extras)"
+						:rightButton="generateRightButton(play, extras)">
+						<template v-if="play.isPractice()" #header>
+							<template v-if="showSolution">
+								<div
+									class="w-full p-4 md:py-8 flex items-center justify-center gap-2"
+									:class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
+									<SofaIcon class="h-[22px]" :name="isCorrect ? 'white-checkbox' : 'white-wrong'" />
+									<SofaHeaderText size="xl" color="text-white" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
+								</div>
+							</template>
+						</template>
+						<template v-else #header>
 							<div class="px-4 pt-4 md:pt-8 w-full flex justify-center">
 								<div class="flex gap-2 w-full">
 									<div v-for="i in Array.from({ length: questions.length }, (_, i) => i)" :key="i" class="w-full flex">
@@ -63,6 +71,22 @@
 								</div>
 							</div>
 						</template>
+						<template v-if="play.isPractice() && isDone" #default>
+							<div class="flex flex-col gap-1">
+								<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
+								<SofaNormalText color="text-inherit" content="You have mastered this quiz" />
+							</div>
+						</template>
+						<template v-if="play.isPractice() && showSolution" #postBody>
+							<div class="w-full flex flex-col gap-2 items-start">
+								<SofaHeaderText size="xl" content="Answer" />
+								<SofaNormalText :content="extras.question?.answer" />
+							</div>
+							<div v-if="extras.question?.explanation" class="w-full flex flex-col gap-2 items-start">
+								<SofaHeaderText size="xl" content="Explanation" />
+								<SofaNormalText :content="extras.question.explanation" />
+							</div>
+						</template>
 					</Quiz>
 				</template>
 			</QuizWrapper>
@@ -71,14 +95,76 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+import PlayWrapper from './PlayWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
-import { PlayTypes } from '@modules/plays'
+import { PlayEntity, PlayTypes } from '@modules/plays'
+import { Logic } from 'sofa-logic'
+import { QuizEntity } from '@modules/study'
 
 defineProps<{
 	playId: string
 	type: PlayTypes
-	dark?: InstanceType<typeof Quiz>['$props']['isDark']
+	isInModal?: boolean
 	access?: InstanceType<typeof QuizWrapper>['$props']['access']
 }>()
+
+const showSolution = ref(false)
+const isDone = ref(false)
+const isCorrect = ref(false)
+
+// type PlayWrapperExtras = Parameters<Exclude<InstanceType<typeof PlayWrapper>['$slots']['default'], undefined>>[0]['extras']
+type QuizWrapperExtras = Parameters<Exclude<InstanceType<typeof QuizWrapper>['$slots']['default'], undefined>>[0]['extras']
+
+const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: QuizWrapperExtras) => {
+	if (play.isPractice())
+		return {
+			label: isDone.value ? 'Restart' : showSolution.value ? 'Retry' : 'Skip',
+			bgColor: 'bg-white border border-gray-100',
+			textColor: 'text-grayColor',
+			disabled: !isDone.value && extras.index === questionsLength - 1,
+			click: () => {
+				if (isDone.value) {
+					extras.reset()
+					return (isDone.value = false)
+				} else if (showSolution.value) return (showSolution.value = false)
+				else if (extras.canNext) return extras.next()
+			},
+		}
+	return undefined
+}
+
+const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras) => {
+	if (play.isPractice())
+		return {
+			label: isDone.value || showSolution.value ? 'Continue' : 'Check',
+			bgColor: 'bg-primaryBlue',
+			textColor: 'text-white',
+			click: () => {
+				if (isDone.value) return Logic.Common.goBack()
+				if (!showSolution.value) {
+					isCorrect.value = extras.question?.checkAnswer(extras.answer) ?? false
+					return (showSolution.value = true)
+				}
+				if (extras.canNext) {
+					showSolution.value = false
+					return extras.next()
+				}
+				showSolution.value = false
+				return (isDone.value = true)
+			},
+		}
+	return {
+		label: 'Continue',
+		bgColor: 'bg-primaryBlue',
+		textColor: 'text-white',
+		click: extras.submitAnswer,
+	}
+}
+
+const generateQuizTitle = (play: PlayEntity, quiz: QuizEntity, extras: QuizWrapperExtras) => {
+	if (play.isPractice()) return isDone.value ? 'Practice completed' : quiz.title
+	return `Question ${extras.index + 1}`
+}
 </script>

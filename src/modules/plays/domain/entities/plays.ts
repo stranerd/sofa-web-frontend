@@ -10,6 +10,14 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		super(data)
 	}
 
+	get hasLobby() {
+		return ![PlayTypes.practice, PlayTypes.flashcards].includes(this.data.type)
+	}
+
+	get isTimed() {
+		return ![PlayTypes.practice, PlayTypes.flashcards].includes(this.data.type)
+	}
+
 	get isOngoing() {
 		return [PlayStatus.created, PlayStatus.started].includes(this.status)
 	}
@@ -23,11 +31,12 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	get lobbyPage() {
+		if (!this.hasLobby) return this.runPage
 		return `/${this.data.type}/${this.id}/lobby`
 	}
 
 	get runPage() {
-		return `/${this.data.type}/${this.id}/run`
+		return `/plays/${this.data.type}/${this.id}/run`
 	}
 
 	get resultsPage() {
@@ -58,6 +67,10 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		if (this.data.type === PlayTypes.games) return this.data.participants
 		if (this.data.type === PlayTypes.assessments) return this.data.participants
 		return [this.user.id]
+	}
+
+	get isDark() {
+		return this.isGames()
 	}
 
 	isGames(): this is Omit<PlayEntity, 'data'> & { data: PlayGamesData } {
