@@ -207,11 +207,11 @@ const playOptions = [
 		id: PlayTypes.assessments,
 		hide: false,
 	},
-	{
+	/* {
 		name: 'Practice',
 		id: PlayTypes.practice,
 		hide: false,
-	},
+	}, */
 ]
 const libraryOptions = computed(() => [
 	{
