@@ -11,7 +11,7 @@ export interface IClassRepository {
 	delete: (id: string) => Promise<boolean>
 	listenToOne: (id: string, listeners: Listeners<ClassEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listeners: Listeners<ClassEntity>, matches: (entity: ClassEntity) => boolean) => Promise<() => void>
-	purchase: (id: string) => Promise<boolean>
+	purchase: (id: string, methodId: string | null) => Promise<boolean>
 	cancelPurchase: (id: string) => Promise<boolean>
 	similar: (id: string) => Promise<ClassEntity[]>
 }

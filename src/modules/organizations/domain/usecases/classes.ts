@@ -85,8 +85,8 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).listenToMany(conditions, listener, () => true)
 	}
 
-	async purchase(organizationId: string, classId: string) {
-		return await this.repository(organizationId).purchase(classId)
+	async purchase(organizationId: string, classId: string, methodId: string | null) {
+		return await this.repository(organizationId).purchase(classId, methodId)
 	}
 
 	async cancelPurchase(organizationId: string, classId: string) {

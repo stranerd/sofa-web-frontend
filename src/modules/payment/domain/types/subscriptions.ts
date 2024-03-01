@@ -1,5 +1,12 @@
-export type Subscription = {
+export enum PlanDataType {
+	tutorAidedConversations = 'tutorAidedConversations',
+}
+
+export type PlanData = Record<PlanDataType, number>
+
+type Sub = {
 	active: boolean
+	methodId: string | null
 	current: {
 		activatedAt: number
 		expiredAt: number
@@ -13,4 +20,17 @@ export type Subscription = {
 		organizationId: string
 		classId: string
 	}
+}
+
+export type Subscription = Sub & {
+	data: {
+		type: 'classes'
+		organizationId: string
+		classId: string
+	}
+}
+
+export type SubscriptionModel = Sub & {
+	data: PlanData
+	membersDays: number
 }

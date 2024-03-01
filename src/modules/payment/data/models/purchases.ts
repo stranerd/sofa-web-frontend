@@ -1,5 +1,5 @@
 import { PurchaseData, Saleable } from '../../domain/types'
-export interface PurchaseFromModel extends PurchaseToModel {
+export interface PurchaseFromModel {
 	id: string
 	userId: string
 	price: Saleable['price']
@@ -7,8 +7,10 @@ export interface PurchaseFromModel extends PurchaseToModel {
 	createdAt: number
 	updatedAt: number
 }
+
 export interface PurchaseToModel {
 	type: PurchaseData['type']
 	id: PurchaseData['id']
-	methodId: string
+	methodId: string | null
+	payWithWallet: boolean
 }
