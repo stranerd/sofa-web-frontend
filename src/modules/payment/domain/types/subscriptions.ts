@@ -4,17 +4,22 @@ export enum PlanDataType {
 
 export type PlanData = Record<PlanDataType, number>
 
-type Sub = {
+type Sub<G = true> = {
 	active: boolean
 	methodId: string | null
-	current: {
-		activatedAt: number
-		expiredAt: number
-		jobId: string | null
-	} | null
+	current:
+		| ({
+				activatedAt: number
+				expiredAt: number
+				jobId: string | null
+		  } & (G extends true ? object : { id: string }))
+		| null
 	next: {
 		renewedAt: number
 	} | null
+}
+
+export type Subscription = Sub<true> & {
 	data: {
 		type: 'classes'
 		organizationId: string
@@ -22,15 +27,7 @@ type Sub = {
 	}
 }
 
-export type Subscription = Sub & {
-	data: {
-		type: 'classes'
-		organizationId: string
-		classId: string
-	}
-}
-
-export type SubscriptionModel = Sub & {
+export type SubscriptionModel = Sub<false> & {
 	data: PlanData
 	membersDays: number
 }

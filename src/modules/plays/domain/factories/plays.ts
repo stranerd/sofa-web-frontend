@@ -3,6 +3,7 @@ import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { PlayTypes } from '../types'
 import { BaseFactory } from '@modules/core'
+import { getDateTimeString } from '@utils/dates'
 
 const minGracePeriod = 1000 * 60 * 5
 
@@ -52,7 +53,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 	}
 
 	get assessmentsEndedAtDate() {
-		return this.#formatDate(this.assessmentsEndedAt)
+		return getDateTimeString(new Date(this.assessmentsEndedAt))
 	}
 
 	set assessmentsEndedAtDate(date: string) {
@@ -60,13 +61,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 	}
 
 	get minAssessmentsEndedAt() {
-		return this.#formatDate(Date.now() + minGracePeriod)
-	}
-
-	#formatDate = (timestamp: number) => {
-		const date = new Date(timestamp)
-		const pad2 = (n: number) => String(n).padStart(2, '0')
-		return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}T${pad2(date.getHours())}:${pad2(date.getMinutes())}`
+		return getDateTimeString(new Date(Date.now() + minGracePeriod))
 	}
 
 	loadEntity = (entity: PlayEntity) => {

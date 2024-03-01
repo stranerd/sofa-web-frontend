@@ -72,7 +72,6 @@
 				</template>
 			</div>
 
-			<!-- Course content slider -->
 			<div
 				v-if="selectedMaterial && showCourseContent"
 				class="absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col gap-2 items-center justify-center w-full">
