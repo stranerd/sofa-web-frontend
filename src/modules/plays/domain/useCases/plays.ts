@@ -48,7 +48,19 @@ export class PlaysUseCase {
 						{ field: 'data.type', value: PlayTypes.tests },
 					],
 				},
-				{ field: 'data.type', condition: Conditions.in, value: [PlayTypes.games, PlayTypes.assessments] },
+				{
+					condition: QueryKeys.and,
+					value: [
+						{ field: 'data.type', condition: Conditions.in, value: [PlayTypes.games, PlayTypes.assessments] },
+						{
+							condition: QueryKeys.or,
+							value: [
+								{ field: 'user.id', value: userId },
+								{ field: 'data.participants', value: userId },
+							],
+						},
+					],
+				},
 			],
 			all: true,
 		})
@@ -66,12 +78,26 @@ export class PlaysUseCase {
 							{ field: 'data.type', value: PlayTypes.tests },
 						],
 					},
-					{ field: 'data.type', condition: Conditions.in, value: [PlayTypes.games, PlayTypes.assessments] },
+					{
+						condition: QueryKeys.and,
+						value: [
+							{ field: 'data.type', condition: Conditions.in, value: [PlayTypes.games, PlayTypes.assessments] },
+							{
+								condition: QueryKeys.or,
+								value: [
+									{ field: 'user.id', value: userId },
+									{ field: 'data.participants', value: userId },
+								],
+							},
+						],
+					},
 				],
 				all: true,
 			},
 			listeners,
-			(e) => e.isGames() || e.isAssessments() || e.user.id === userId,
+			(e) =>
+				((e.isGames() || e.isAssessments()) && (e.participants.includes(userId) || e.user.id === userId)) ||
+				(e.isTests() && e.user.id === userId),
 		)
 	}
 

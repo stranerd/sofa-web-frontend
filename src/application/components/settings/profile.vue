@@ -90,13 +90,13 @@ const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 watch(factory.values, () => {
 	Logic.Common.debounce(() => {
-		updateProfile()
+		if (factory.valid) updateProfile()
 	}, 1000)
 })
 
 watch(socialsFactory.values, () => {
 	Logic.Common.debounce(() => {
-		updateSocials()
+		if (socialsFactory.valid) updateSocials()
 	}, 1000)
 })
 </script>
