@@ -1,4 +1,4 @@
-import { Differ, addToArray } from 'valleyed'
+import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
@@ -6,7 +6,7 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useUsersInList } from '../users/users'
 import { CoursableAccess, QuestionEntity } from '@modules/study'
-import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlaysUseCases } from '@modules/plays'
+import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlayTypes, PlaysUseCases } from '@modules/plays'
 
 const myStore = {
 	plays: ref<PlayEntity[]>([]) as Ref<PlayEntity[]>,
@@ -84,7 +84,7 @@ const singleStore = {} as Record<
 	}
 >
 
-export const usePlay = (id: string, skip: { questions: boolean; statusNav: boolean; participants: boolean }) => {
+export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean; statusNav: boolean; participants: boolean }) => {
 	const { id: authId } = useAuth()
 	const route = useRoute()
 	const router = useRouter()
@@ -114,33 +114,35 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 		computed(() => (skip.participants ? [] : singleStore[id].play.value?.participants ?? [])),
 	)
 
-	const { asyncFn: fetchQuestions } = useAsyncFn(async () => {
-		if (skip.questions) return
-		const questions = await PlaysUseCases.getQuestions(id)
-		const sources = singleStore[id].play.value?.sources ?? []
-		singleStore[id].questions.splice(0, singleStore[id].questions.length, ...(sources.length ? sources : questions))
-	})
+	const { asyncFn: fetchQuestions, called: fetchedQuestions } = useAsyncFn(
+		async () => {
+			const questions = await PlaysUseCases.getQuestions(id)
+			const sources = singleStore[id].play.value?.sources ?? []
+			singleStore[id].questions.splice(0, singleStore[id].questions.length, ...(sources.length ? sources : questions))
+		},
+		{ pre: () => !skip.questions, key: `plays/plays/${id}/questions` },
+	)
 
-	const { asyncFn: fetchAnswers } = useAsyncFn(async (play: PlayEntity) => {
-		// TODO: listener for answers
-		if (skip.questions) return
-		const answers = await AnswersUseCases.get(play.data.type, play.id)
-		answers.forEach((a) => {
-			if (a.userId === authId.value) singleStore[id].myAnswer.value = a
-			addToArray(
-				singleStore[id].answers.value,
-				a,
-				(e) => e.id,
-				(e) => e.createdAt,
-			)
-		})
-	})
+	const { asyncFn: fetchAnswers, called: fetchedAnswers } = useAsyncFn(
+		async () => {
+			// TODO: listener for answers
+			const answers = await AnswersUseCases.get(type, id)
+			answers.forEach((a) => {
+				if (a.userId === authId.value) singleStore[id].myAnswer.value = a
+				addToArray(
+					singleStore[id].answers.value,
+					a,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			})
+		},
+		{ pre: () => !skip.questions, key: `plays/plays/${id}/answers` },
+	)
 
 	const { asyncFn: fetchPlay, called } = useAsyncFn(
 		async () => {
-			const play = await PlaysUseCases.find(id)
-			if (play) await Promise.all([fetchQuestions(), fetchAnswers(play)])
-			singleStore[id].play.value = play
+			singleStore[id].play.value = await PlaysUseCases.find(id)
 		},
 		{ key: `plays/plays/${id}` },
 	)
@@ -201,16 +203,19 @@ export const usePlay = (id: string, skip: { questions: boolean; statusNav: boole
 
 	watch(
 		singleStore[id].play,
-		async (cur, old) => {
+		async (cur) => {
 			if (!cur) return
-			if (!Differ.equal(cur.questions, old?.questions)) fetchQuestions()
-			if (!skip.statusNav) playWatcherCb()
+			playWatcherCb()
 		},
 		{ immediate: true },
 	)
 
 	onMounted(async () => {
-		if (!called.value) await fetchPlay()
+		await Promise.all([
+			!fetchedQuestions.value && fetchQuestions(),
+			!fetchedAnswers.value && fetchAnswers(),
+			!called.value && fetchPlay(),
+		])
 		await singleStore[id].listener.start()
 		await playWatcherCb()
 	})

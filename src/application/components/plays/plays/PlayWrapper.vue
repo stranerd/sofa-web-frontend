@@ -25,7 +25,7 @@ const props = withDefaults(
 	},
 )
 
-const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer, resetAnswer } = usePlay(props.id, {
+const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer, resetAnswer } = usePlay(props.type, props.id, {
 	questions: props.skipQuestions,
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
