@@ -227,8 +227,9 @@ export default defineComponent({
 					label: 'Renew enrollment',
 					handler: () => purchaseClass(classInst),
 				}
+			const canAccessFree = classInst.canAccessForFree(user.value!)
 			return {
-				label: `Enroll ${Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
+				label: `Enroll for ${canAccessFree ? 'free' : Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
 				handler: () => purchaseClass(classInst),
 			}
 		})

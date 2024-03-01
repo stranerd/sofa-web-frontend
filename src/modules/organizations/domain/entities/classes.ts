@@ -31,18 +31,11 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 	}
 
 	isTeacher(user: UserEntity) {
-		return (
-			user.account.organizationsIn.some((o) => o.id === this.organizationId && o.type === MemberTypes.teacher) ||
-			this.lessons.some((l) => l.users.teachers.includes(user.id))
-		)
+		return this.lessons.some((l) => l.users.teachers.includes(user.id))
 	}
 
 	isStudent(user: UserEntity) {
-		return (
-			user.account.organizationsIn.some((o) => o.id === this.organizationId && o.type === MemberTypes.student) ||
-			this.members.students.includes(user.id) ||
-			this.lessons.some((l) => l.users.students.includes(user.id))
-		)
+		return this.members.students.includes(user.id)
 	}
 
 	isAdmin(user: UserEntity) {
@@ -50,14 +43,17 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 	}
 
 	isEnrolled(user: UserEntity) {
-		return (
-			this.members.students.includes(user.id) ||
-			this.lessons.some((l) => l.users.teachers.includes(user.id)) ||
-			user.account.organizationsIn.some((org) => org.id === this.organizationId)
-		)
+		return this.isTeacher(user) || this.isStudent(user) || this.isAdmin(user)
 	}
 
 	getLesson(id: string) {
 		return this.lessons.find((l) => l.id === id)
+	}
+
+	canAccessForFree(user: UserEntity) {
+		return (
+			this.isEnrolled(user) ||
+			user.account.organizationsIn.some((o) => o.id === this.organizationId && o.type === MemberTypes.student)
+		)
 	}
 }

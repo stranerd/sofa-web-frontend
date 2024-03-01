@@ -49,9 +49,7 @@ export class ClassesUseCase {
 	async getMyClassesIn(user: UserEntity) {
 		return await this.repository('').explore({
 			where: [
-				{ field: 'organizationId', condition: Conditions.in, value: user.myOrgsIn },
 				{ field: 'members.students', value: user.id },
-				{ field: 'lessons.users.students', value: user.id },
 				{ field: 'lessons.users.teachers', value: user.id },
 			],
 			whereType: QueryKeys.or,
