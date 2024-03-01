@@ -46,28 +46,16 @@
 							</template>
 						</template>
 						<template v-else #header>
-							<div class="px-4 pt-4 md:pt-8 w-full flex justify-center">
-								<div class="flex gap-2 w-full">
-									<div v-for="i in Array.from({ length: questions.length }, (_, i) => i)" :key="i" class="w-full flex">
-										<div
-											class="h-2 bg-primaryGreen"
-											:class="{
-												'w-full rounded-full':
-													i < extras.index || (i === extras.index && extras.fractionTimeLeft === 1),
-												'w-0': i > extras.index,
-												'rounded-l-full': i === extras.index,
-											}"
-											:style="i === extras.index ? `width: ${extras.fractionTimeLeft * 100}%;` : ''" />
-										<div
-											class="h-2 bg-darkLightGray"
-											:class="{
-												'w-full rounded-full':
-													i > extras.index || (i === extras.index && extras.fractionTimeLeft === 0),
-												'w-0': i < extras.index,
-												'rounded-r-full': i === extras.index,
-											}"
-											:style="i === extras.index ? `width: ${(1 - extras.fractionTimeLeft) * 100}%;` : ''" />
-									</div>
+							<div class="px-4 pt-4 md:pt-8 w-full flex">
+								<div class="flex lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full mx-auto">
+									<div
+										class="h-2 bg-primaryGreen rounded-l-full"
+										:class="{ 'w-full rounded-full': extras.fractionTimeLeft === 1 }"
+										:style="`width: ${extras.fractionTimeLeft * 100}%;`" />
+									<div
+										class="h-2 bg-darkLightGray rounded-r-full"
+										:class="{ 'w-full rounded-full': extras.fractionTimeLeft === 0 }"
+										:style="`width: ${(1 - extras.fractionTimeLeft) * 100}%;`" />
 								</div>
 							</div>
 						</template>
@@ -226,7 +214,7 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 
 const generateQuizTitle = (play: PlayEntity, quiz: QuizEntity, extras: QuizWrapperExtras) => {
 	if (play.isPractice()) return isDone.value ? 'Practice completed' : quiz.title
-	return `Question ${extras.index + 1}`
+	return `Question ${extras.index + 1} of ${play.questions.length}`
 }
 
 const storageKey = 'flashcards-info'

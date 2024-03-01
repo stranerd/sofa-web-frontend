@@ -43,7 +43,7 @@
 						{
 							IsOutlined: true,
 							name: 'Exit',
-							handler: () => Logic.Common.goBack(),
+							handler: () => $router.push('/library/quizzes'),
 						},
 						{
 							IsOutlined: false,

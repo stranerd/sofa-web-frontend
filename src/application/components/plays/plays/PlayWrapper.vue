@@ -1,5 +1,14 @@
 <template>
-	<slot v-if="fetched && play" :play="play" :participants="participants" :questions="questions" :extras="extras" />
+	<template v-if="fetched && play">
+		<slot
+			v-if="play.canJoinAfterStart && play.isStarted && extras.canJoin"
+			name="joinPostStart"
+			:play="play"
+			:participants="participants"
+			:questions="questions"
+			:extras="extras" />
+		<slot v-else :play="play" :participants="participants" :questions="questions" :extras="extras" />
+	</template>
 </template>
 
 <script lang="ts" setup>
