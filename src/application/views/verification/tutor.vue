@@ -55,7 +55,6 @@
 
 					<SofaTextarea
 						v-model="profileFactory.description"
-						:hasTitle="false"
 						textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 						placeholder="Bio" />
 				</div>

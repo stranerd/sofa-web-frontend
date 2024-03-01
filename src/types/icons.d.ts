@@ -14,7 +14,7 @@ declare global {
 		| 'announcement'
 		| 'apple'
 		| 'arrow-right-white'
-		| 'assignment'
+		| 'assessment'
 		| 'attention-white'
 		| 'auth-goback'
 		| 'author-filter'

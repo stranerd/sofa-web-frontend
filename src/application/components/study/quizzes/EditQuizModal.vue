@@ -20,7 +20,6 @@
 
 				<SofaTextarea
 					v-model="factory.description"
-					:hasTitle="false"
 					:rows="4"
 					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
 					placeholder="Description"

@@ -38,11 +38,11 @@
 											<SofaHeaderText :content="quiz.title" class="!text-center !font-extrabold" size="xl" />
 
 											<div class="w-full flex items-center justify-center gap-4">
-												<a class="gap-2 items-center flex" @click="share(play, quiz)">
+												<a class="gap-2 items-center flex" @click="playExtras.share(quiz)">
 													<SofaIcon class="h-[16px]" name="share" />
 													<SofaNormalText color="text-inherit" content="Share" />
 												</a>
-												<a class="gap-2 items-center flex" @click="copy(play)">
+												<a class="gap-2 items-center flex" @click="playExtras.copy()">
 													<SofaIcon class="h-[16px]" name="copy" />
 													<SofaNormalText color="text-inherit" content="Copy" />
 												</a>
@@ -55,7 +55,7 @@
 											<div class="w-full flex flex-col h-full gap-2">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="quiz.title" size="xl" class="text-left !line-clamp-1" />
-													<SofaIcon class="h-[16px] cursor-pointer" name="share" @click="share(play, quiz)" />
+													<SofaIcon class="h-[16px]" name="share" @click="playExtras.share(quiz)" />
 												</div>
 												<div class="flex gap-2 items-center">
 													<SofaNormalText color="text-primaryPurple" content="Game" />
@@ -119,8 +119,7 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
-import { QuizEntity } from '@modules/study'
-import { PlayEntity, PlayTypes } from '@modules/plays'
+import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'PlaysGamesIdLobbyPage',
@@ -130,11 +129,7 @@ export default defineComponent({
 			title: 'Lobby',
 		})
 
-		const share = async (play: PlayEntity, quiz: QuizEntity) =>
-			await Logic.Common.share('Join game on SOFA', `Join and play a game on: ${quiz.title}`, play.shareLink)
-		const copy = (play: PlayEntity) => Logic.Common.copy(play.shareLink)
-
-		return { share, copy, Logic, PlayTypes }
+		return { Logic, PlayTypes }
 	},
 })
 </script>

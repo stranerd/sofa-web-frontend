@@ -1,8 +1,10 @@
-import { v } from 'valleyed'
+import { v, isLaterThan } from 'valleyed'
 import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { PlayTypes } from '../types'
 import { BaseFactory } from '@modules/core'
+
+const minGracePeriod = 1000 * 60 * 5
 
 type Keys = Omit<PlayToModel, 'data'> & {
 	type: PlayTypes
@@ -17,7 +19,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 		gamesJoin: v.boolean().requiredIf(() => this.isGames),
 		assessmentsEndedAt: v
 			.time()
-			.min(Date.now())
+			.custom((value) => isLaterThan(Date.now() + minGracePeriod)(value).valid, 'cannot be less than current time')
 			.asStamp()
 			.requiredIf(() => this.isAssessments),
 	}
@@ -25,7 +27,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 	reserved = []
 
 	constructor() {
-		const assessmentsEndedAt = Date.now() + 1000 * 60 * 60 * 24 * 7
+		const assessmentsEndedAt = Date.now() + 1000 * 60 * 60 * 24
 		super({ quizId: '', type: PlayTypes.practice, gamesJoin: false, assessmentsEndedAt })
 	}
 
@@ -47,6 +49,24 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 
 	get isAssessments() {
 		return this.values.type === PlayTypes.assessments
+	}
+
+	get assessmentsEndedAtDate() {
+		return this.#formatDate(this.assessmentsEndedAt)
+	}
+
+	set assessmentsEndedAtDate(date: string) {
+		this.assessmentsEndedAt = new Date(date).getTime()
+	}
+
+	get minAssessmentsEndedAt() {
+		return this.#formatDate(Date.now() + minGracePeriod)
+	}
+
+	#formatDate = (timestamp: number) => {
+		const date = new Date(timestamp)
+		const pad2 = (n: number) => String(n).padStart(2, '0')
+		return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}T${pad2(date.getHours())}:${pad2(date.getMinutes())}`
 	}
 
 	loadEntity = (entity: PlayEntity) => {

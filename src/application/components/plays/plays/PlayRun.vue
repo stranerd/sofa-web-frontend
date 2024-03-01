@@ -220,7 +220,7 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 		label: 'Continue',
 		bgColor: 'bg-primaryBlue',
 		textColor: 'text-white',
-		click: extras.submitAnswer,
+		click: () => extras.submitAnswer(false),
 	}
 }
 

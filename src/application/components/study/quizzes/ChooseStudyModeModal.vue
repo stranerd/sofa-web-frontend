@@ -1,21 +1,40 @@
 <template>
-	<div v-if="hasAccess(quiz)" class="w-full flex flex-col md:gap-4 gap-2 mdlg:p-6 md:p-4 items-center justify-center">
-		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden py-3 border-lightGray border-b px-4">
+	<form
+		v-if="hasAccess(quiz)"
+		class="w-full flex flex-col mdlg:gap-6 gap-4 mdlg:p-6 p-4 items-center justify-center"
+		@submit.prevent="submit">
+		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden border-lightGray border-b">
 			<SofaNormalText customClass="!font-bold !text-base">
-				{{ showGame ? 'Start quiz game' : 'Choose Study Mode' }}
+				{{ factory.isGames ? 'Start quiz game' : 'Choose Study Mode' }}
 			</SofaNormalText>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<div v-if="showGame" class="w-full flex flex-col gap-6 p-4">
+		<template v-if="factory.isGames">
 			<SofaCheckbox v-model="factory.gamesJoin" type="switch" class="w-full justify-between p-4 bg-lightGray">
 				<SofaNormalText content="Participate" />
 			</SofaCheckbox>
 
-			<SofaButton padding="py-3" class="w-full" @click="createGame">Start</SofaButton>
-		</div>
+			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
+		</template>
 
-		<div v-else class="w-full flex flex-col gap-3 px-4 py-2 md:p-0">
+		<template v-else-if="factory.isAssessments">
+			<SofaTextField
+				v-model="factory.assessmentsEndedAtDate"
+				:error="factory.errors.assessmentsEndedAt"
+				:min="factory.minAssessmentsEndedAt"
+				customClass="w-full rounded-custom !bg-lightGray"
+				type="datetime-local"
+				placeholder="Ends at"
+				:hasTitle="true"
+				borderColor="border-transparent">
+				<template #title>Ends at:</template>
+			</SofaTextField>
+
+			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
+		</template>
+
+		<div v-else class="w-full flex flex-col gap-3">
 			<SofaIconCard
 				v-for="item in filteredModes"
 				:key="item.title"
@@ -33,7 +52,7 @@
 
 			<SofaButton v-if="id === quiz.user.id" class="w-full" padding="p-3" @click="goToEdit"> Edit Quiz </SofaButton>
 		</div>
-	</div>
+	</form>
 	<SofaEmptyState
 		v-else
 		title="You have no access to this quiz"
@@ -44,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCreatePlay } from '@app/composables/plays/plays'
 import { useHasAccess } from '@app/composables/study'
@@ -66,23 +85,19 @@ const { id } = useAuth()
 const { hasAccess } = useHasAccess()
 const { factory, createPlay } = useCreatePlay({}, { start: false, nav: true })
 
-const showGame = ref(false)
-
 const chooseMode = async (mode: PlayTypes) => {
 	const quizId = props.quiz.id
 	factory.quizId = quizId
 	factory.type = mode
-	if (mode === PlayTypes.games) return (showGame.value = true)
+	if (mode === PlayTypes.games || mode === PlayTypes.assessments) return
 	if (mode === PlayTypes.practice) await createPlay({ start: true })
-	if (mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/${mode}`)
 	if (mode === PlayTypes.tests) await createPlay({ start: false })
+	if (mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/flashcards`)
 
 	props.close()
 }
 
-const createGame = async () => {
-	await createPlay({ start: false })
-}
+const submit = async () => await createPlay({ start: false })
 
 const modes = [
 	{
@@ -108,6 +123,12 @@ const modes = [
 		subTitle: 'Battle friends for the highest score',
 		icon: 'play-quiz',
 		value: PlayTypes.games,
+	},
+	{
+		title: 'Assessment',
+		subTitle: 'Homework/test with a deadline to share to students',
+		icon: 'assessment',
+		value: PlayTypes.assessments,
 	},
 ] as const
 

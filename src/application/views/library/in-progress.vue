@@ -31,10 +31,7 @@ export default defineComponent({
 
 		const data = computed(() => {
 			if (tab.value === 'all') return ongoing.value
-			if (tab.value === 'games') return ongoing.value.filter((p) => p.isGames())
-			if (tab.value === 'tests') return ongoing.value.filter((p) => p.isTests())
-			if (tab.value === 'practice') return ongoing.value.filter((p) => p.isPractice())
-			return []
+			return ongoing.value.filter((p) => p.data.type === tab.value)
 		})
 
 		return { data }

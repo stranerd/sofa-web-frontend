@@ -34,6 +34,7 @@ import { extractResource, openMaterial } from '@app/composables/library'
 import { handleShowMaterialMoreOptions, useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
+import { DraftStatus } from '@modules/study'
 
 export default defineComponent({
 	name: 'LibraryQuizzesPage',
@@ -50,8 +51,8 @@ export default defineComponent({
 		const data = computed(() => {
 			if (tab.value === 'tutors') return tutorQuizzes.value.map(extractResource)
 			else if (tab.value === 'recent') return recentQuizzes.value.map(extractResource)
-			else if (tab.value === 'published') return published.value.map(extractResource)
-			else if (tab.value === 'draft') return draft.value.map(extractResource)
+			else if (tab.value === DraftStatus.published) return published.value.map(extractResource)
+			else if (tab.value === DraftStatus.draft) return draft.value.map(extractResource)
 			return []
 		})
 

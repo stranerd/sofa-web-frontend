@@ -26,16 +26,15 @@
 							<template #default>
 								<div class="w-full h-full flex flex-col overflow-y-auto">
 									<div class="flex flex-col gap-4 my-auto py-4 items-center">
-										<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" content="Scoreboard" />
+										<SofaHeaderText class="md:!text-3xl text-xl" content="Scoreboard" />
 										<SofaNormalText
-											color="text-white"
 											class="-mt-4"
 											:content="
 												play.isScored
 													? 'Assessment has ended'
 													: play.isEnded
 														? 'Scores are being calculated'
-														: 'Waiting for others to finish'
+														: 'Waiting for assessment to finish'
 											" />
 										<div
 											v-for="score in playExtras.scores"

@@ -182,35 +182,43 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { Logic } from 'sofa-logic'
+import { PlayTypes } from '@modules/plays'
+import { DraftStatus } from '@modules/study'
 
 const { isAdmin } = useAuth()
+const playOptions = [
+	{
+		name: 'All',
+		id: 'all',
+		hide: false,
+	},
+	{
+		name: 'Tests',
+		id: PlayTypes.tests,
+		hide: false,
+	},
+	{
+		name: 'Games',
+		id: PlayTypes.games,
+		hide: false,
+	},
+	{
+		name: 'Assessments',
+		id: PlayTypes.assessments,
+		hide: false,
+	},
+	{
+		name: 'Practice',
+		id: PlayTypes.practice,
+		hide: false,
+	},
+]
 const libraryOptions = computed(() => [
 	{
 		title: 'In progress',
 		icon: 'in-progress' as const,
 		routePath: '/library/in-progress',
-		options: [
-			{
-				name: 'All',
-				id: 'all',
-				hide: false,
-			},
-			{
-				name: 'Tests',
-				id: 'tests',
-				hide: false,
-			},
-			{
-				name: 'Games',
-				id: 'games',
-				hide: false,
-			},
-			{
-				name: 'Practice',
-				id: 'practice',
-				hide: false,
-			},
-		],
+		options: playOptions,
 	},
 	{
 		title: 'Quizzes',
@@ -224,12 +232,12 @@ const libraryOptions = computed(() => [
 			},
 			{
 				name: 'Published',
-				id: 'published',
+				id: DraftStatus.published,
 				hide: false,
 			},
 			{
 				name: 'Draft',
-				id: 'draft',
+				id: DraftStatus.draft,
 				hide: false,
 			},
 			{
@@ -251,12 +259,12 @@ const libraryOptions = computed(() => [
 			},
 			{
 				name: 'Published',
-				id: 'published',
+				id: DraftStatus.published,
 				hide: false,
 			},
 			{
 				name: 'Draft',
-				id: 'draft',
+				id: DraftStatus.draft,
 				hide: false,
 			},
 		],
@@ -271,28 +279,7 @@ const libraryOptions = computed(() => [
 		title: 'Results',
 		icon: 'results' as const,
 		routePath: '/library/results',
-		options: [
-			{
-				name: 'All',
-				id: 'all',
-				hide: false,
-			},
-			{
-				name: 'Tests',
-				id: 'tests',
-				hide: false,
-			},
-			{
-				name: 'Games',
-				id: 'games',
-				hide: false,
-			},
-			{
-				name: 'Practice',
-				id: 'practice',
-				hide: false,
-			},
-		],
+		options: playOptions,
 	},
 ])
 

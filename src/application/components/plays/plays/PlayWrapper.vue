@@ -7,6 +7,8 @@ import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlay } from '@app/composables/plays/plays'
 import { PlayTypes } from '@modules/plays'
+import { QuizEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -42,6 +44,13 @@ const extras = computed(() => ({
 	join,
 	submitAnswer,
 	resetAnswer,
+	share: async (quiz: QuizEntity) => {
+		if (play.value)
+			await Logic.Common.share(`Join ${play.value.singularizedType} on SOFA`, `Take a quiz on: ${quiz.title}`, play.value.shareLink)
+	},
+	copy: async () => {
+		if (play.value) await Logic.Common.copy(play.value.shareLink)
+	},
 	isParticipant: play.value?.participants.includes(authId.value),
 	get scores() {
 		const p = play.value
