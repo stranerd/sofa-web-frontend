@@ -6,6 +6,8 @@ export interface PlanFromModel {
 	title: string
 	amount: number
 	active: boolean
+	description: string
+	features: string[]
 	currency: Currencies
 	interval: Interval
 	data: PlanData

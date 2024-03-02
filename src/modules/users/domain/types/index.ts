@@ -1,4 +1,4 @@
-import type { AuthRoleType, UserBio } from '@modules/auth'
+import type { AuthRoleType, Phone, UserBio } from '@modules/auth'
 import { Media, Ratings } from '@modules/core'
 import { MemberTypes } from '@modules/organizations'
 
@@ -140,4 +140,11 @@ export type UserSocialsType = { ref: UserSocials; link: string }[]
 export type UserLocation = {
 	country: string
 	state: string
+}
+
+export type MetaMessageData = {
+	name: string
+	email: string
+	phone: Phone
+	message: string
 }

@@ -33,25 +33,72 @@
 					<div class="mdlg:absolute mdlg:right-0 w-full mdlg:w-1/2 flex justify-center relative" style="z-index: 999">
 						<div class="bg-white rounded-[30px] w-full md:w-[90%] mx-auto py-10" style="box-shadow: 0px 4px 16px 0px #00000066">
 							<p class="text-black text-[20px] md:text-[36px] font-bold text-center">Contact Us Today</p>
-							<form class="flex flex-col w-[90%] md:w-[80%] mx-auto gap-6 pt-8">
-								<div v-for="(input, index) in inputs" :key="index" class="flex flex-col gap-2">
+							<form class="flex flex-col w-[90%] md:w-[80%] mx-auto gap-6 pt-8" @submit.prevent="sendMessage">
+								<!-- Full name -->
+								<div class="flex flex-col gap-2">
 									<label class="flex items-center gap-3">
-										<SofaIcon :name="input.labelIcon" class="!fill-[#686969]" />
-										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">{{ input.labelName }}</p>
+										<SofaIcon name="user" class="!fill-[#686969]" />
+										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">Full Name</p>
 									</label>
 									<input
-										v-if="input.type !== 'textarea'"
-										:type="input.typr"
+										v-model="factory.name"
+										type="text"
 										class="border border-[#5A5A5A] h-[50px] rounded-lg bg-transparent p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
-										:placeholder="input.placeholder" />
+										placeholder="Enter your full name here"
+										required />
+								</div>
+								<!-- Email Address -->
+								<div class="flex flex-col gap-2">
+									<label class="flex items-center gap-3">
+										<SofaIcon name="email-social" class="!fill-[#686969]" />
+										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">Email Address</p>
+									</label>
+									<input
+										v-model="factory.email"
+										type="email"
+										class="border border-[#5A5A5A] h-[50px] rounded-lg bg-transparent p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
+										placeholder="Enter Your Email Address Here"
+										required />
+								</div>
+								<!-- Phone Number -->
+								<div class="flex flex-col gap-2">
+									<label class="flex items-center gap-3">
+										<SofaIcon name="phone" class="!fill-[#686969]" />
+										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">Phone Number</p>
+									</label>
+									<div
+										class="border flex items-center border-[#5A5A5A] h-[50px] rounded-lg bg-transparent text-[14px] md:text-[16px]">
+										<input
+											v-model="factory.phone.code"
+											type="tel"
+											:min="1"
+											:max="4"
+											placeholder="Country code"
+											class="w-1/5 p-2 md:p-4 !h-full outline-none bg-transparent border-r border-[#5A5A5A]" />
+										<input
+											v-model="factory.phone.number"
+											type="tel"
+											:min="7"
+											placeholder="Enter Your Phone Number Here"
+											class="w-3/5 p-2 md:p-4 !h-full bg-transparent outline-none border-none placeholder:text-[#D9D9D9]"
+											required />
+									</div>
+								</div>
+								<!-- Message -->
+								<div class="flex flex-col gap-2">
+									<label class="flex items-center gap-3">
+										<SofaIcon name="edit" class="!fill-[#686969]" />
+										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">Message</p>
+									</label>
 									<textarea
-										v-else
 										id=""
+										v-model="factory.message"
 										name=""
 										cols="30"
 										rows="10"
 										class="border border-[#5A5A5A] h-[80px] mdlg:h-[187px] rounded-lg bg-transparent text-[14px] md:text-[16px] p-4 placeholder:text-[#D9D9D9]"
-										:placeholder="input.placeholder"></textarea>
+										required
+										placeholder="Enter Your Message Here"></textarea>
 								</div>
 								<button
 									type="submit"
@@ -78,41 +125,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const inputs = ref([
-	{
-		labelName: 'Full Name',
-		labelIcon: 'user',
-		placeholder: 'Enter Your Full Name Here',
-		model: '',
-		type: 'text',
-		required: true,
-	},
-	{
-		labelName: 'Email Address',
-		labelIcon: 'email-social',
-		placeholder: 'Enter Your Email Address Here',
-		model: '',
-		required: true,
-		type: 'email',
-	},
-	{
-		labelName: 'Phone Number',
-		labelIcon: 'phone',
-		placeholder: 'Enter Your Phone Number Here',
-		model: '',
-		required: true,
-		type: 'tel',
-	},
-	{
-		labelName: 'Message',
-		labelIcon: 'edit',
-		placeholder: 'Enter Your Message Here',
-		model: '',
-		required: true,
-		type: 'textarea',
-	},
-])
+import { useMetaMessage } from '@app/composables/users/metaMessage'
+const { sendMessage, factory } = useMetaMessage()
 </script>
 
 <style scoped>
