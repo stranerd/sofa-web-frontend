@@ -129,7 +129,7 @@ const previewCurriculum = () => {
 }
 
 const emptyLessonContent = {
-	imageURL: '/images/no-lessons.png',
+	imageURL: '/images/empty-lessons.png',
 	contents: [
 		'Give each topic a section.',
 		'Add live sessions under sections.',

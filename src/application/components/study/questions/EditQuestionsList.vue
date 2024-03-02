@@ -25,7 +25,7 @@
 
 					<div
 						class="w-full h-[144px] bg-cover"
-						:style="`background-image: url('/images/${QuestionEntity.getImage(
+						:style="`background-image: url('/images/questions/${QuestionEntity.getImage(
 							factory.entityId === element.id ? factory.type : element.type,
 						)}.svg')`">
 						<div class="h-full w-full hidden group-hover:flex gap-3 items-center justify-center">

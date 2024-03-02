@@ -53,7 +53,7 @@ export default defineComponent({
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {
 		const emptyClassContent = {
-			imageURL: '/images/empty-class.png',
+			imageURL: '/images/empty-classes.png',
 			title: 'Getting started with classes',
 			contents: [
 				'Teach all subjects of a class in the same place.',

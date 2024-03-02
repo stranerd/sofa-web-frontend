@@ -115,14 +115,14 @@
 					</div>
 				</div>
 				<div v-else class="flex flex-col gap-4 items-center py-10">
-					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+					<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
 					<SofaNormalText color="text-grayColor" customClass="font-bold">No lessons created yet!</SofaNormalText>
 				</div>
 			</div>
 			<!-- Similar classes tab content -->
 			<div v-if="selectedTab == 'similar_classes'">
 				<div v-if="similarClasses.length === 0" class="flex flex-col gap-4 items-center py-10">
-					<img src="/images/empty-class.png" class="w-[84px] h-[84px]" />
+					<img src="/images/empty-classes.png" class="w-[84px] h-[84px]" />
 					<SofaNormalText color="text-grayColor" customClass="font-bold">No class found!</SofaNormalText>
 				</div>
 				<div v-else class="w-full">

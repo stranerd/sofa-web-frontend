@@ -56,7 +56,7 @@
 					<LessonCurriculum :classInst="classInst" :lesson="selectedLesson" :view="curriculumView" :curriculum="curriculum" />
 				</div>
 				<div v-else class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8 mt-4">
-					<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+					<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
 					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 					<SofaNormalText color="text-grayColor text-center">
 						{{ 'Teacher of the class has not set the curriculum yet' }}
@@ -78,7 +78,7 @@ const props = defineProps<{
 }>()
 
 const emptyLessonContent = {
-	imageURL: '/images/no-lessons.png',
+	imageURL: '/images/empty-lessons.png',
 }
 const { id: userId } = useAuth()
 const showLessonCurriculum = ref(false)

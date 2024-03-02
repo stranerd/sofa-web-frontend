@@ -60,7 +60,7 @@
 				<div class="w-full flex flex-col gap-2 items-center justify-center">
 					<SofaImageLoader
 						customClass="w-[64px] h-[64px] flex items-center justify-center rounded-custom !object-contain"
-						photoUrl="/images/calendar.png" />
+						photoUrl="/images/empty-schedules.png" />
 					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 					<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
 				</div>

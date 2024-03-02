@@ -25,9 +25,12 @@
 			background-image: url('/images/game-bg.png');
 		}
 
+		#loader img {
+			filter: brightness(0) invert(1);
+		}
+
 		.animate-bounce {
 			animation: bounce 1s infinite;
-			filter: brightness(0) invert(1);
 		}
 
 		@keyframes bounce {
@@ -61,7 +64,7 @@
 	<div id="app">
 		<div id="loader">
 			<img src="/images/logo.svg" class="animate-bounce" style="height: 5rem;" />
-			<img src="/images/logo-text.svg" class="animate-bounce" style="height: 2rem;" />
+			<img src="/images/logo-text.svg" style="height: 2rem;" />
 		</div>
 	</div>
 <script src="/js/DragDropTouch.js"></script>
