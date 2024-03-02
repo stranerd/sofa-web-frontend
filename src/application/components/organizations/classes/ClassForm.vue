@@ -23,7 +23,7 @@
 					v-model="factory.title"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					placeholder="Name your class"
+					placeholder="Name your class (e.g JAMB Class)"
 					:error="factory.errors.title"
 					borderColor="border-transparent" />
 				<SofaTextarea
