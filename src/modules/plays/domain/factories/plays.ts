@@ -1,9 +1,10 @@
-import { v, isLaterThan } from 'valleyed'
+import { isLaterThan, v, capitalize } from 'valleyed'
 import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { PlayTypes } from '../types'
-import { BaseFactory } from '@modules/core'
 import { getDateTimeString } from '@utils/dates'
+import { BaseFactory } from '@modules/core'
+import { QuizEntity } from '@modules/study'
 
 const minGracePeriod = 1000 * 60 * 5
 
@@ -15,6 +16,7 @@ type Keys = Omit<PlayToModel, 'data'> & {
 
 export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 	readonly rules = {
+		title: v.string().min(1),
 		quizId: v.string().min(1),
 		type: v.in(Object.values(PlayTypes)),
 		gamesJoin: v.boolean().requiredIf(() => this.isGames),
@@ -29,7 +31,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 
 	constructor() {
 		const assessmentsEndedAt = Date.now() + 1000 * 60 * 60 * 24
-		super({ quizId: '', type: PlayTypes.practice, gamesJoin: false, assessmentsEndedAt })
+		super({ title: '', quizId: '', type: null as unknown as PlayTypes, gamesJoin: false, assessmentsEndedAt })
 	}
 
 	get isGames() {
@@ -64,14 +66,21 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 		return getDateTimeString(new Date(Date.now() + minGracePeriod))
 	}
 
+	load(type: PlayTypes, quiz: QuizEntity) {
+		this.quizId = quiz.id
+		this.type = type
+		this.title = capitalize(`${PlayEntity.singularizedType(this.type)} on: ${quiz.title}`)
+	}
+
 	loadEntity = (entity: PlayEntity) => {
 		this.quizId = entity.quizId
 		this.type = entity.data.type
 	}
 
 	model = async () => {
-		const { quizId, type, gamesJoin, assessmentsEndedAt } = this.validValues
+		const { title, quizId, type, gamesJoin, assessmentsEndedAt } = this.validValues
 		return {
+			title,
 			quizId,
 			data:
 				type === PlayTypes.games

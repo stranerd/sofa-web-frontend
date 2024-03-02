@@ -52,7 +52,7 @@
 						textColor="text-primaryPurple"
 						padding="py-3 px-9"
 						customClass="font-bold"
-						@click="startQuizPlay">
+						@click="startQuizPlay(curriculumItem.quiz, curriculumItem.quizMode)">
 						Start
 					</SofaButton>
 				</div>
@@ -77,7 +77,7 @@ import { computed, ref, watch } from 'vue'
 import { useCreatePlay } from '@app/composables/plays/plays'
 import { ClassEntity, ClassLesson, ClassLessonable, ExtendedCurriculum } from '@modules/organizations'
 import { PlayEntity, PlayTypes } from '@modules/plays'
-import { FileType } from '@modules/study'
+import { FileType, QuizEntity } from '@modules/study'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
@@ -133,9 +133,8 @@ const { factory, createPlay } = useCreatePlay(
 	},
 	{ start: true, nav: false },
 )
-const startQuizPlay = async (id: string, type: PlayTypes) => {
-	factory.quizId = id
-	factory.type = type
+const startQuizPlay = async (quiz: QuizEntity, type: PlayTypes) => {
+	factory.load(type, quiz)
 	const p = await createPlay()
 	if (!p) return
 	play.value = p

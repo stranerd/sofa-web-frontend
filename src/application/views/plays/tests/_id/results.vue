@@ -3,11 +3,11 @@
 		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.tests" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
-					<template #default="{ quiz, questions, extras }">
+					<template #default="{ questions, extras }">
 						<Quiz
 							v-model:answer="extras.answer"
 							:index="extras.index"
-							:title="quiz.title"
+							:title="play.title"
 							:questions="questions"
 							:showCounter="false"
 							:isDark="play.isDark"

@@ -6,7 +6,7 @@
 		<SofaImageLoader customClass="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom" :photoUrl="quiz.picture" />
 		<div class="flex flex-col w-full gap-2">
 			<SofaNormalText class="!font-bold line-clamp-1">
-				{{ quiz.title }}
+				{{ play.title || quiz.title }}
 			</SofaNormalText>
 			<SofaNormalText color="text-grayColor" class="capitalize">
 				{{ play.singularizedType }}

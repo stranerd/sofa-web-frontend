@@ -11,10 +11,10 @@
 				:useTimer="play.isTimed"
 				:submit="playExtras.submitAnswer"
 				:access="access">
-				<template #prestart="{ quiz, extras }">
+				<template #prestart="{ extras }">
 					<div class="w-full my-auto flex flex-col gap-6 items-center">
 						<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
-							<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="quiz.title" size="xl" />
+							<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="play.title" size="xl" />
 							<SofaNormalText color="text-inherit" :content="`${playQuestions.length} questions`" size="lg" />
 						</div>
 						<SofaHeaderText content="starting in" size="xl" />
@@ -223,7 +223,7 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 }
 
 const generateQuizTitle = (play: PlayEntity, quiz: QuizEntity, extras: QuizWrapperExtras) => {
-	if (play.isPractice()) return isDone.value ? 'Practice completed' : quiz.title
+	if (play.isPractice()) return isDone.value ? 'Practice completed' : play.title || quiz.title
 	return `Question ${extras.index + 1} of ${play.questions.length}`
 }
 

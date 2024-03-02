@@ -7,7 +7,7 @@
 						<Quiz
 							v-model:answer="extras.answer"
 							:index="extras.index"
-							:title="quiz.title"
+							:title="play.title"
 							:questions="questions"
 							:showCounter="false"
 							:optionState="extras.optionState"
@@ -35,7 +35,7 @@
 										:class="{ 'flex-col justify-center items-center': playExtras.isMine }">
 										<template v-if="playExtras.isMine">
 											<SofaNormalText color="text-grayColor !text-center" content="You are hosting this game" />
-											<SofaHeaderText :content="quiz.title" class="!text-center !font-extrabold" size="xl" />
+											<SofaHeaderText :content="play.title" class="!text-center !font-extrabold" size="xl" />
 
 											<div class="w-full flex items-center justify-center gap-4">
 												<a class="gap-2 items-center flex" @click="playExtras.share(quiz)">
@@ -54,7 +54,7 @@
 												customClass="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
 											<div class="w-full flex flex-col h-full gap-2">
 												<div class="w-full flex items-center justify-between">
-													<SofaHeaderText :content="quiz.title" size="xl" class="text-left !line-clamp-1" />
+													<SofaHeaderText :content="play.title" size="xl" class="text-left !line-clamp-1" />
 													<SofaIcon class="h-[16px]" name="share" @click="playExtras.share(quiz)" />
 												</div>
 												<div class="flex gap-2 items-center">
@@ -67,7 +67,7 @@
 														}`" />
 												</div>
 												<div class="w-full flex items-start gap-2 flex-nowrap">
-													<SofaAvatar size="20" :photoUrl="quiz.user.bio.photo?.link" />
+													<SofaAvatar size="20" :photoUrl="play.user.bio.photo?.link" />
 													<SofaNormalText
 														color="text-bodyBlack"
 														class="!font-semibold"

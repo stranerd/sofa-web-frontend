@@ -14,6 +14,18 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		return [PlayTypes.games, PlayTypes.assessments].includes(type)
 	}
 
+	static singularizedType(type: PlayTypes) {
+		return (
+			{
+				[PlayTypes.games]: 'game',
+				[PlayTypes.tests]: 'test',
+				[PlayTypes.flashcards]: 'flash card',
+				[PlayTypes.practice]: 'practice',
+				[PlayTypes.assessments]: 'assessment',
+			}[type] ?? ''
+		)
+	}
+
 	get hasLobby() {
 		return ![PlayTypes.practice, PlayTypes.flashcards].includes(this.data.type)
 	}
@@ -64,15 +76,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	get singularizedType() {
-		return (
-			{
-				[PlayTypes.games]: 'game',
-				[PlayTypes.tests]: 'test',
-				[PlayTypes.flashcards]: 'flash card',
-				[PlayTypes.practice]: 'practice',
-				[PlayTypes.assessments]: 'assessment',
-			}[this.data.type] ?? ''
-		)
+		return PlayEntity.singularizedType(this.data.type)
 	}
 
 	get participants() {

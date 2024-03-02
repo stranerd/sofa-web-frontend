@@ -3,6 +3,7 @@ import { QuestionEntity } from '@modules/study'
 
 export interface PlayFromModel {
 	id: string
+	title: string
 	quizId: string
 	status: PlayStatus
 	questions: string[]
@@ -18,6 +19,7 @@ export interface PlayFromModel {
 }
 
 export interface PlayToModel {
+	title: string
 	quizId: string
 	data:
 		| {

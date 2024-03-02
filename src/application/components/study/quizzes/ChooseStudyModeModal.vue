@@ -9,17 +9,23 @@
 			</SofaNormalText>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
+		<template v-if="factory.type">
+			<SofaTextField
+				v-model="factory.title"
+				:error="factory.errors.title"
+				customClass="w-full rounded-custom !bg-lightGray"
+				placeholder="Title"
+				:hasTitle="true"
+				borderColor="border-transparent">
+				<template #title>Title</template>
+			</SofaTextField>
 
-		<template v-if="factory.isGames">
-			<SofaCheckbox v-model="factory.gamesJoin" type="switch" class="w-full justify-between p-4 bg-lightGray">
+			<SofaCheckbox v-if="factory.isGames" v-model="factory.gamesJoin" type="switch" class="w-full justify-between p-4 bg-lightGray">
 				<SofaNormalText content="Participate" />
 			</SofaCheckbox>
 
-			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
-		</template>
-
-		<template v-else-if="factory.isAssessments">
 			<SofaTextField
+				v-if="factory.isAssessments"
 				v-model="factory.assessmentsEndedAtDate"
 				:error="factory.errors.assessmentsEndedAt"
 				:min="factory.minAssessmentsEndedAt"
@@ -28,7 +34,7 @@
 				placeholder="Ends at"
 				:hasTitle="true"
 				borderColor="border-transparent">
-				<template #title>Ends at:</template>
+				<template #title>Ends at</template>
 			</SofaTextField>
 
 			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
@@ -58,7 +64,7 @@
 		title="You have no access to this quiz"
 		subTitle="Get the course it is in to use"
 		actionLabel="Go to course"
-		:action="() => Logic.Common.GoToRoute(`/marketplace/${quiz.courseId}?type=course`)"
+		:action="() => $router.push(quiz.noAccessPage)"
 		:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 </template>
 
@@ -85,16 +91,11 @@ const { id } = useAuth()
 const { hasAccess } = useHasAccess()
 const { factory, createPlay } = useCreatePlay({}, { start: false, nav: true })
 
-const chooseMode = async (mode: PlayTypes) => {
+const chooseMode = async (type: PlayTypes) => {
 	const quizId = props.quiz.id
-	factory.quizId = quizId
-	factory.type = mode
-	if (mode === PlayTypes.games || mode === PlayTypes.assessments) return
-	if (mode === PlayTypes.practice) await createPlay({ start: true })
-	if (mode === PlayTypes.tests) await createPlay({ start: false })
-	if (mode === PlayTypes.flashcards) await Logic.Common.GoToRoute(`/quizzes/${quizId}/flashcards`)
-
-	props.close()
+	factory.load(type, props.quiz)
+	if (factory.isPractice) return await createPlay({ start: true }).then(() => props.close())
+	if (factory.isFlashcards) return await Logic.Common.GoToRoute(`/quizzes/${quizId}/flashcards`).then(() => props.close())
 }
 
 const submit = async () => await createPlay({ start: false })
