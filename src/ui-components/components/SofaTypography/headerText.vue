@@ -37,6 +37,7 @@ export default defineComponent({
 			[
 				'font-semibold flex flex-col',
 				props.content ? 'body' : '',
+				props.size == '2xl' ? 'lg:text-4xl mdlg:text-2xl text-xl' : '',
 				props.size == 'xl' ? 'lg:text-3xl mdlg:text-xl text-lg' : '',
 				props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
 				props.size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : '',

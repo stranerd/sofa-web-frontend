@@ -46,6 +46,7 @@ export default {
 			xl: '1.11rem',
 			'2xl': '1.2rem',
 			'3xl': '1.5rem',
+			'4xl': '1.75rem',
 		},
 	},
 	plugins: [

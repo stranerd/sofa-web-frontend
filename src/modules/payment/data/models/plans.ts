@@ -8,6 +8,7 @@ export interface PlanFromModel {
 	active: boolean
 	currency: Currencies
 	interval: Interval
+	lengthInDays: number
 	data: PlanData
 	usersFor: UserType[]
 	createdAt: number
