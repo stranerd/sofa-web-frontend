@@ -64,22 +64,33 @@
 			<template v-if="!wallet.subscription.active">
 				<div
 					v-if="userType.isOrg && myApplicablePlan"
-					class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<SofaHeaderText size="xl" class="capitalize">
-						{{ myApplicablePlan.title }}
-					</SofaHeaderText>
+					class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
+					<SofaHeaderText size="xl" class="capitalize" content="Subscription Plan" />
 
-					<div class="w-full flex flex-col gap-2 items-start">
-						<div class="flex gap-2 items-center">
-							<SofaHeaderText customClass="!text-2xl !font-bold">
-								{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }} per student
-							</SofaHeaderText>
-							<SofaNormalText customClass="!text-2xl"> / {{ myApplicablePlan.intervalInWord }} </SofaNormalText>
-						</div>
+					<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
+						<SofaNormalText class="text-current capitalize">{{ myApplicablePlan.title }}</SofaNormalText>
+						<SofaHeaderText size="2xl" color="text-current">
+							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
+						</SofaHeaderText>
 
-						<SofaNormalText> Provide cost-free access to your paid courses for your physical students. </SofaNormalText>
+						<SofaNormalText class="text-current">per member/month</SofaNormalText>
 
-						<SofaButton padding="px-5 py-2" class="mt-3" @click="subscibeToPlan(myApplicablePlan.id)"> Subscribe </SofaButton>
+						<SofaButton
+							padding="px-5 py-2"
+							class="mt-4"
+							bgColor="bg-white"
+							textColor="text-primaryPurple"
+							@click="subscibeToPlan(myApplicablePlan.id)">
+							Subscribe
+						</SofaButton>
+					</div>
+
+					<div class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
+						<SofaNormalText class="!font-bold">Plan info</SofaNormalText>
+						<SofaNormalText>
+							Giving license to students that pay for and attend your learning center physically so that they get cost-free
+							access to your online classes and quizzes.
+						</SofaNormalText>
 					</div>
 				</div>
 
