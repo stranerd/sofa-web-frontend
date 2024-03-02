@@ -71,15 +71,21 @@ export const usePlansList = () => {
 }
 
 export const useSubscription = () => {
+	const { wallet } = useAuth()
 	const { setMessage } = useSuccessHandler()
 	const { asyncFn: subscribeToPlan } = useAsyncFn(async (planId: string) => {
-		await WalletsUseCases.subscribeToPlan(planId)
+		wallet.value = await WalletsUseCases.subscribeToPlan(planId)
 		setMessage('Subscription successful')
 	})
 
-	const { asyncFn: toggleRenewPlan } = useAsyncFn(async (renew: boolean) => {
-		await WalletsUseCases.toggleRenewSubscription(renew)
+	const { asyncFn: renewPlan } = useAsyncFn(async () => {
+		wallet.value = await WalletsUseCases.renewPlan()
+		setMessage('Renewal successful')
 	})
 
-	return { subscribeToPlan, toggleRenewPlan }
+	const { asyncFn: toggleRenewPlan } = useAsyncFn(async (renew: boolean) => {
+		wallet.value = await WalletsUseCases.toggleRenewSubscription(renew)
+	})
+
+	return { subscribeToPlan, renewPlan, toggleRenewPlan }
 }

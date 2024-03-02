@@ -25,6 +25,10 @@ export class WalletsUseCase {
 		return await this.repository.subscribeToPlan({ planId })
 	}
 
+	async renewPlan() {
+		return await this.repository.renewPlan()
+	}
+
 	async updateAccountNumber(factory: AccountUpdateFactory) {
 		return await this.repository.updateAccountNumber(await factory.toModel())
 	}

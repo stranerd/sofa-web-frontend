@@ -41,12 +41,17 @@ export class WalletRepository implements IWalletRepository {
 	}
 
 	async toggleRenewSubscription(data: { renew: boolean }) {
-		const d = await this.client.post<{ renew: boolean }, WalletEntity>('/subscriptions/renewal/toggle', data)
+		const d = await this.client.post<{ renew: boolean }, WalletEntity>('/subscriptions/renew/toggle', data)
 		return this.mapper(d)
 	}
 
 	async subscribeToPlan(data: { planId: string }) {
 		const d = await this.client.post<{ planId: string }, WalletEntity>('/subscriptions', data)
+		return this.mapper(d)
+	}
+
+	async renewPlan() {
+		const d = await this.client.post<unknown, WalletEntity>('/subscriptions/renew', {})
 		return this.mapper(d)
 	}
 

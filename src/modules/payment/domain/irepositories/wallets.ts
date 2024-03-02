@@ -13,4 +13,5 @@ export interface IWalletRepository {
 	fund: (data: FundDetails) => Promise<boolean>
 	listen: (listeners: Listeners<WalletEntity>) => Promise<() => void>
 	subscribeToPlan: (data: { planId: string }) => Promise<WalletEntity>
+	renewPlan: () => Promise<WalletEntity>
 }

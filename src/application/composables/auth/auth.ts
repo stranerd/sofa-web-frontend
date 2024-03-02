@@ -115,6 +115,5 @@ export const useAuth = () => {
 		signin,
 		signout,
 		deleteAccount,
-		setUser: (user: UserEntity) => (store.user.value = user),
 	}
 }
