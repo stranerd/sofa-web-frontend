@@ -70,6 +70,13 @@
 
 				<SofaAvatar size="36" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
 			</div>
+
+			<SofaButton
+				bgColor="bg-primaryPurple"
+				class="mdlg:hidden rounded-full !p-4 !fixed bottom-[4rem] right-[1.5rem]"
+				@click="handleShowAddMaterial">
+				<SofaIcon name="plus-white" />
+			</SofaButton>
 		</template>
 
 		<template v-if="type == 'subpage'">
@@ -209,16 +216,6 @@ const tabs = computed(() => [
 					name: 'Chat',
 					path: '/chats',
 					icon: 'chat' as const,
-					icon_size: 'h-[18px]',
-				},
-			]
-		: []),
-	...(userType.value.isStudent
-		? [
-				{
-					name: 'Classes',
-					path: '/classes',
-					icon: 'classes' as const,
 					icon_size: 'h-[18px]',
 				},
 			]

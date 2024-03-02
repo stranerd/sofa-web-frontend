@@ -14,14 +14,14 @@
 			</div>
 		</div>
 		<div v-if="user && userType.isStudent" class="w-full grid grid-cols-2 gap-3 px-5">
-			<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
+			<div class="p-4 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 				<SofaIcon class="h-[40px]" name="xp-points" />
 				<div class="flex flex-col items-start justify-center">
 					<SofaNormalText class="font-bold"> {{ formatNumber(user.account.rankings.overall.value, 2) }} xp </SofaNormalText>
 					<SofaNormalText color="text-bodyBlack" content="Point" />
 				</div>
 			</div>
-			<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
+			<div class="p-4 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 				<SofaIcon class="h-[40px]" name="streak-new" />
 				<div class="flex flex-col items-start justify-center">
 					<SofaNormalText class="font-bold">
@@ -36,7 +36,7 @@
 			<router-link
 				v-for="item in routes"
 				:key="item.route"
-				class="w-full flex items-center gap-3 px-5 py-3 text-inherit hover:bg-lightBlue"
+				class="w-full flex items-center gap-3 px-5 py-4 text-inherit hover:bg-lightBlue"
 				:to="item.route"
 				exactActiveClass="bg-lightBlue font-semibold">
 				<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
@@ -52,10 +52,10 @@
 			<div class="h-[1px] bg-lightGray" />
 		</template>
 		<template v-if="user">
-			<SofaNormalText as="a" color="text-primaryRed" content="Log out" class="px-5" @click="signout" />
+			<SofaNormalText as="a" color="text-primaryRed" content="Log out" class="px-6" @click="signout" />
 			<div class="h-[1px] bg-lightGray" />
 		</template>
-		<div class="flex flex-col gap-6 px-5 text-grayColor">
+		<div class="flex flex-col gap-6 px-6 text-grayColor">
 			<SofaNormalText color="text-inherit" as="router-link" to="/legal/privacy-policy" content="Privacy Policy" />
 			<SofaNormalText color="text-inherit" as="router-link" to="/legal/terms-of-service" content="Terms of Service" />
 			<SofaNormalText
@@ -90,7 +90,7 @@ const routes = computed(() => [
 				{ title: 'Teachers', icon: 'tutor' as const, route: '/organization/teachers' },
 				{ title: 'Students', icon: 'user-unfilled' as const, route: '/organization/students' },
 			]
-		: [{ title: 'Classes', icon: 'classes' as const, route: '/classes' }]),
+		: []),
 	{ title: 'Settings', icon: 'cog' as const, route: '/settings' },
 ])
 </script>
