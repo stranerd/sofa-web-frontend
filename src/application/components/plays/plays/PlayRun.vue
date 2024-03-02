@@ -78,10 +78,14 @@
 					</Quiz>
 				</template>
 			</QuizWrapper>
-			<div v-else-if="play.canJoinAfterStart">
-				<SofaNormalText content="You can join this play after it starts" />
+			<div v-else-if="play.canJoinAfterStart && playExtras.canJoin" class="flex flex-col h-full items-center justify-center gap-4">
+				<SofaHeaderText :color="play.isDark ? 'test-white' : undefined" content="Already started" />
+				<div class="flex gap-4 items-center">
+					<SofaButton @click="playExtras.join(true)">Join Now</SofaButton>
+					<SofaButton @click="$router.push(play.resultsPage)">Wait for Results</SofaButton>
+				</div>
 			</div>
-			<div class="flex flex-col h-full items-center justify-center">
+			<div v-else class="flex flex-col h-full items-center justify-center gap-4">
 				<SofaNormalText :content="`You cannot join this ${play.singularizedType} anymore`" />
 			</div>
 		</template>
@@ -137,9 +141,9 @@ import PlayWrapper from './PlayWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { PlayEntity, PlayTypes } from '@modules/plays'
-import { Logic } from 'sofa-logic'
 import { QuizEntity } from '@modules/study'
 import { storage } from '@utils/storage'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	playId: string

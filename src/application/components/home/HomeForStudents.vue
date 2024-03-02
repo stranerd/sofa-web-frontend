@@ -9,7 +9,7 @@
 
 			<div
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-				<SofaIconCard v-for="item in profileSteps" :key="item.title" :data="item" class="shrink-0" @click="item.action?.()">
+				<SofaIconCard v-for="item in task.list" :key="item.title" :data="item" class="shrink-0" @click="item.action?.()">
 					<template #title>
 						<SofaNormalText customClass="!font-bold" :content="item.title" />
 					</template>

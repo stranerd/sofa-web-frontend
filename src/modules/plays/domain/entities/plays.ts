@@ -85,8 +85,8 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		return PlayEntity.isDark(this.data.type)
 	}
 
-	get canJoinAfterStart() {
-		return this.isAssessments()
+	get canJoinAfterStart(): boolean {
+		return this.isAssessments() || this.isGames()
 	}
 
 	isGames(): this is Omit<PlayEntity, 'data'> & { data: PlayGamesData } {

@@ -28,11 +28,9 @@
 					name="Confirm password"
 					placeholder="Confirm password"
 					:error="factory.errors.cPassword" />
-			</div>
 
-			<div class="flex flex-col items-center gap-2">
 				<SofaCheckbox v-model="factory.termsAccepted">
-					<span class="text-grayColor text-left">
+					<span class="text-grayColor text-left flex flex-wrap gap-[4px]">
 						I have read and accepted SOFA’s
 						<SofaNormalText
 							color="text-primaryBlue"

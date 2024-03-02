@@ -49,6 +49,7 @@ export const formatFileSize = (size: number) => {
 }
 
 export const ordinalSuffixOf = (i: number) => {
+	if (i <= 0) return '-'
 	const j = i % 10,
 		k = i % 100
 	if (j == 1 && k != 11) return i + 'st'

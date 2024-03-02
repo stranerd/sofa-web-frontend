@@ -81,8 +81,9 @@
 
 							<template #default>
 								<div class="w-full h-full overflow-y-auto flex flex-col gap-4 my-auto py-4 items-center">
-									<SofaHeaderText class="md:!text-3xl text-xl" content="Lobby" />
+									<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" content="Lobby" />
 									<SofaNormalText
+										color="text-white"
 										class="-mt-4"
 										:content="
 											playExtras.isMine
@@ -101,7 +102,7 @@
 									</div>
 									<div
 										v-if="participants.length == 0"
-										class="w-full flex items-center justify-center p-3 rounded-custom border-2">
+										class="w-full flex items-center justify-center p-3 rounded-custom border-2 bg-white">
 										<SofaNormalText content="Waiting for participants!" />
 									</div>
 								</div>
@@ -117,8 +118,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { PlayTypes } from '@modules/plays'
 import { Logic } from 'sofa-logic'
+import { PlayTypes } from '@modules/plays'
 
 export default defineComponent({
 	name: 'PlaysAssessmentsIdLobbyPage',

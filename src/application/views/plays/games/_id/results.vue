@@ -79,7 +79,7 @@ export default defineComponent({
 		})
 
 		const leftButton = {
-			label: 'End',
+			label: 'End Now',
 			bgColor: 'bg-deepGray border border-white',
 			textColor: 'text-white',
 		}
