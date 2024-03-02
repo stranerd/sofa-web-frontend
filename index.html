@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>SOFA</title>
+	<title>Stranerd</title>
 	<style>
 		#innerModal {
 			margin-top: env(safe-area-inset-top) !important;
@@ -27,6 +27,7 @@
 
 		.animate-bounce {
 			animation: bounce 1s infinite;
+			filter: brightness(0) invert(1);
 		}
 
 		@keyframes bounce {
@@ -59,7 +60,8 @@
 <body id="body">
 	<div id="app">
 		<div id="loader">
-			<img src="/favicon.svg" class="animate-bounce" style="height: 5rem;" />
+			<img src="/images/logo.svg" class="animate-bounce" style="height: 5rem;" />
+			<img src="/images/logo-text.svg" class="animate-bounce" style="height: 2rem;" />
 		</div>
 	</div>
 <script src="/js/DragDropTouch.js"></script>

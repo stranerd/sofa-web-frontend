@@ -109,7 +109,7 @@
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
 							:title="`${user.publicName} has no published materials yet`"
-							subTitle="Discover thousands of other materials on SOFA marketplace"
+							subTitle="Discover thousands of other materials on Stranerd's marketplace"
 							actionLabel="Marketplace"
 							:action="() => $router.push('/marketplace')" />
 					</div>

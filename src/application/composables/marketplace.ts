@@ -54,7 +54,7 @@ export const extractContent = (item: QuizEntity | CourseEntity): ContentDetails 
 		id: item.id,
 		subject: Logic.Study.GetTagName(item.topicId),
 		title: item.title,
-		image: item.photo?.link ?? '/images/default.png',
+		image: item.picture,
 		labels: {
 			main: isCourse ? 'Course' : 'Quiz',
 			sub: item.isCourse() ? `${item.coursables.length} materials` : `${item.questions.length} questions`,

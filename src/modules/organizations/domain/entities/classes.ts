@@ -9,7 +9,7 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 	}
 
 	get picture() {
-		return this.photo?.link ?? '/images/default.png'
+		return this.photo?.link ?? '/images/default.svg'
 	}
 
 	get pageLink() {

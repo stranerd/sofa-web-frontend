@@ -13,7 +13,7 @@ export class PublishableEntity<T extends PublishableConstructorArgs = Publishabl
 	}
 
 	get picture() {
-		return this.photo?.link ?? '/images/default.png'
+		return this.photo?.link ?? '/images/default.svg'
 	}
 
 	get isPublished() {

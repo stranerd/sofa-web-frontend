@@ -261,7 +261,7 @@ export default defineComponent({
 				contentDetails.price = SingleCourse.value.price.amount
 				contentDetails.currency = SingleCourse.value.price.currency
 				contentDetails.status = SingleCourse.value.status
-				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.png'
+				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.svg'
 				contentDetails.info = SingleCourse.value.description
 				contentDetails.lastUpdated = `Last updated ${formatTime(SingleCourse.value.createdAt)}`
 				contentDetails.labels.color = 'orange'
@@ -359,7 +359,7 @@ export default defineComponent({
 				contentDetails.title = SingleQuiz.value.title
 				contentDetails.price = 0
 				contentDetails.status = SingleQuiz.value.status
-				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.png'
+				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.svg'
 				contentDetails.info = SingleQuiz.value.description
 				contentDetails.lastUpdated = `Last updated ${formatTime(SingleQuiz.value.createdAt)}`
 				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`

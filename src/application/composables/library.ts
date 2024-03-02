@@ -7,7 +7,7 @@ import { Logic, ResourceType } from 'sofa-logic'
 const createQuizData = (quiz: QuizEntity): ResourceType => ({
 	original: quiz,
 	title: quiz.title,
-	image: quiz.photo?.link ?? '/images/default.png',
+	image: quiz.photo?.link ?? '/images/default.svg',
 	labels: {
 		color: 'pink',
 		main: 'Quiz - Learn',
@@ -30,7 +30,7 @@ const createQuizData = (quiz: QuizEntity): ResourceType => ({
 const createCourseData = (course: CourseEntity): ResourceType => ({
 	original: course,
 	title: course.title,
-	image: course.photo?.link ?? '/images/default.png',
+	image: course.photo?.link ?? '/images/default.svg',
 	labels: {
 		color: 'orange',
 		main: 'Course',

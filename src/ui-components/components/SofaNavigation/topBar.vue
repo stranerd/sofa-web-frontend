@@ -3,9 +3,9 @@
 		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
 		<template v-if="type == 'main'">
 			<div class="mdlg:hidden flex items-center justify-between w-full">
-				<SofaAvatar size="32" :photoUrl="user?.bio?.photo?.link" @click="openSideBar" />
+				<SofaAvatar size="32" :photoUrl="user?.bio.photo?.link" @click="openSideBar" />
 
-				<div class="py-4 cursor-pointer flex flex-row items-center justify-center">
+				<div class="py-4 flex items-center justify-center">
 					<img v-if="!title" src="/images/logo.svg" class="h-[24px]" />
 					<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
 				</div>
@@ -14,9 +14,10 @@
 					<SofaIcon customClass="h-[22px]" name="bell" />
 				</div>
 			</div>
-			<div class="hidden gap-5 items-center justify-start flex-grow mdlg:!flex">
-				<router-link class="py-4 pr-3" to="/dashboard">
-					<img src="/images/logo.svg" class="h-[26px]" />
+			<div class="hidden gap-5 items-center justify-start flex-grow mdlg:flex">
+				<router-link class="py-2 pr-3 flex items-center gap-1" to="/dashboard">
+					<img src="/images/logo.svg" class="h-[32px]" />
+					<img src="/images/logo-text.svg" class="h-[16px]" />
 				</router-link>
 
 				<router-link

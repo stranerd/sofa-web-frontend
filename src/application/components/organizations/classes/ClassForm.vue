@@ -5,7 +5,7 @@
 				<div class="w-full flex flex-col justify-center">
 					<SofaImageLoader
 						customClass="w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain"
-						:photoUrl="factory.photo?.link ?? '/images/default.png'">
+						:photoUrl="factory.photo?.link ?? '/images/default.svg'">
 						<div
 							class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
 							<SofaFileInput v-model="factory.photo" accept="image/*">

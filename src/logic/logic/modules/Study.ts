@@ -52,7 +52,7 @@ export default class Study extends Common {
 		route: '/marketplace/',
 		price: 0,
 		currency: 'NGN',
-		image: '/images/default.png',
+		image: '/images/default.svg',
 		title: '',
 		status: '',
 		id: '',

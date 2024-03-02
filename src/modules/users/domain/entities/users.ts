@@ -55,7 +55,7 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 		return false
 	}
 
-	static defaultAi = 'Dr. Sofa'
+	static defaultAi = 'Dr. Stranerd'
 	static defaultAiPhotoLink = '/images/icons/robot.svg'
 
 	static getDefaultUserType() {

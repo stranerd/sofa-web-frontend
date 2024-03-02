@@ -50,7 +50,7 @@
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 				<SofaImageLoader
 					customClass="w-full md:!h-full h-[220px] rounded-custom relative"
-					:photoUrl="courseImageUrl ? courseImageUrl : '/images/default.png'">
+					:photoUrl="courseImageUrl ? courseImageUrl : '/images/default.svg'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full flex-row items-center justify-center">
 						<SofaFileAttachment
 							v-model="courseSettingForm.photo"
