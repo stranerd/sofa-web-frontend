@@ -81,8 +81,8 @@
 			<div v-else-if="play.canJoinAfterStart && playExtras.canJoin" class="flex flex-col h-full items-center justify-center gap-4">
 				<SofaHeaderText :color="play.isDark ? 'test-white' : undefined" content="Already started" />
 				<div class="flex gap-4 items-center">
-					<SofaButton @click="playExtras.join(true)">Join Now</SofaButton>
-					<SofaButton @click="$router.push(play.resultsPage)">Wait for Results</SofaButton>
+					<SofaButton class="px-6 py-3" @click="playExtras.join(true)">Join Now</SofaButton>
+					<SofaButton class="px-6 py-3" @click="$router.push(play.resultsPage)">Wait for Results</SofaButton>
 				</div>
 			</div>
 			<div v-else class="flex flex-col h-full items-center justify-center gap-4">
