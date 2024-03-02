@@ -1,7 +1,7 @@
 <template>
 	<div v-if="user" class="w-full bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center gap-4">
 		<div>
-			<SofaHeaderText>{{ lesson.title }}</SofaHeaderText>
+			<SofaHeaderText :content="lesson.title" />
 			<div class="flex items-center gap-1">
 				<SofaNormalText color="text-grayColor">
 					{{ formatNumber(lesson.users.teachers.length) }}

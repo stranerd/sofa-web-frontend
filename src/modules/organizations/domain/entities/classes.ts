@@ -16,12 +16,8 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 		return `/organizations/${this.organizationId}/classes/${this.id}`
 	}
 
-	get explorePageLink() {
-		return `/organizations/${this.organizationId}/classes/${this.id}/explore`
-	}
-
 	get shareLink() {
-		return `${window.location.origin}${this.explorePageLink}`
+		return `${window.location.origin}${this.pageLink}`
 	}
 
 	search(query: string) {

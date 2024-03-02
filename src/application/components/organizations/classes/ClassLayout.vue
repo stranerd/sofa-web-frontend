@@ -1,35 +1,37 @@
 <template>
-	<slot v-if="full && currentClass" name="full" :classInst="currentClass" />
+	<slot v-if="!classInst" name="notfound" />
+	<ExploreClassView v-else-if="!classInst.isEnrolled(user!)" :classInst="classInst" />
+	<slot v-else-if="full" name="full" :classInst="classInst" />
 	<SubPageLayout v-else-if="!Logic.Common.isLarge">
-		<div v-if="currentClass" class="w-full h-full flex flex-col justify-start relative">
+		<div class="w-full h-full flex flex-col justify-start relative">
 			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 				<SofaNormalText class="!font-bold !text-base" :content="pageTitle" />
 				<span class="w-4" />
 			</div>
 			<div class="flex items-center gap-4 px-4 border-b border-darkLightGray overflow-x-auto">
-				<router-link v-for="item in options" :key="item.route" :to="`${currentClass.pageLink}${item.route}`" class="pb-3">
+				<router-link v-for="item in options" :key="item.route" :to="`${classInst.pageLink}${item.route}`" class="pb-3">
 					<SofaNormalText
-						class="text-md font-700"
-						:class="$route.path.includes(item.route) ? 'border-b-2 border-black text-deepGray pb-3' : 'text-grayColor'">
+						class="text-md font-700 border-b-2 pb-2"
+						:class="$route.path.includes(item.route) ? 'border-black text-deepGray' : 'text-grayColor border-transparent'">
 						{{ item.title }}
 					</SofaNormalText>
 				</router-link>
 			</div>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto p-4">
-				<slot :classInst="currentClass" />
+				<slot :classInst="classInst" />
 			</div>
 		</div>
 	</SubPageLayout>
 	<DashboardLayout v-else :topbarOptions="{ title: pageTitle }">
 		<template #left-session>
-			<div v-if="currentClass" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
+			<div v-if="classInst" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div class="w-full flex flex-col gap-5">
 					<SofaImageLoader
 						customClass="w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain"
-						:photoUrl="currentClass.picture">
+						:photoUrl="classInst.picture">
 					</SofaImageLoader>
-					<SofaHeaderText>{{ currentClass.title }}</SofaHeaderText>
+					<SofaHeaderText>{{ classInst.title }}</SofaHeaderText>
 				</div>
 
 				<div>
@@ -39,7 +41,7 @@
 							v-for="item in options"
 							:key="item.route"
 							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
-							:to="`${currentClass.pageLink}${item.route}`"
+							:to="`${classInst.pageLink}${item.route}`"
 							exactActiveClass="bg-lightBlue font-semibold">
 							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
 							<SofaNormalText color="text-inherit" :content="item.title" />
@@ -49,8 +51,8 @@
 			</div>
 		</template>
 		<template #middle-session>
-			<div v-if="currentClass" class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :classInst="currentClass" />
+			<div class="flex flex-col gap-4 h-full overflow-y-auto">
+				<slot :classInst="classInst" />
 			</div>
 		</template>
 		<template #right-session>
@@ -59,18 +61,16 @@
 				<div class="h-[1px] w-full bg-lightGray" />
 				<div class="w-full flex flex-col gap-2 items-center justify-center">
 					<SofaImageLoader
-						customClass="w-[64px] h-[64px] flex items-center justify-center rounded-custom !object-contain"
+						customClass="size-[64px] flex items-center justify-center rounded-custom !object-contain"
 						photoUrl="/images/empty-schedules.png" />
 					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 					<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
 				</div>
 			</div>
-			<div
-				v-else-if="schedules.length && currentClass"
-				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
+			<div v-else-if="schedules.length" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
 				<SofaHeaderText content="Live Sessions" />
 				<div class="mt-4 h-[1px] w-full bg-lightGray" />
-				<ScheduleList :classInst="currentClass" :showFilter="false" :schedules="schedules" />
+				<ScheduleList :classInst="classInst" :showFilter="false" :schedules="schedules" />
 			</div>
 		</template>
 	</DashboardLayout>
@@ -83,6 +83,7 @@ import { useRoute } from 'vue-router'
 import { useClass } from '@app/composables/organizations/classes'
 import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { Logic } from 'sofa-logic'
+import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(
 	defineProps<{
@@ -101,9 +102,10 @@ const route = useRoute()
 const organizationId = props.organizationId ?? (route.params.organizationId as string)
 const classId = props.classId ?? (route.params.classId as string)
 
-const { class: currentClass } = useClass(organizationId, classId)
+const { class: classInst } = useClass(organizationId, classId)
+const { user } = useAuth()
 
-const pageTitle = computed(() => currentClass.value?.title ?? 'Class')
+const pageTitle = computed(() => classInst.value?.title ?? 'Class')
 useMeta(
 	computed(() => ({
 		title: pageTitle.value,
