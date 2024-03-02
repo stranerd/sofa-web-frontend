@@ -68,7 +68,7 @@
 					</div>
 				</div>
 
-				<SofaAvatar size="36" :photoUrl="user?.bio?.photo?.link" @click="Logic.Common.GoToRoute('/settings/profile')" />
+				<SofaAvatar size="36" :photoUrl="user?.bio?.photo?.link" as="router-link" to="/settings/profile" />
 			</div>
 
 			<SofaButton
@@ -144,6 +144,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
@@ -179,6 +180,7 @@ withDefaults(
 )
 
 const { user, userType } = useAuth()
+const router = useRouter()
 const openSideBar = () => useModals().users.sideBar.open({})
 const showNotification = ref(false)
 
@@ -198,9 +200,7 @@ onMounted(() => {
 })
 
 const initiateSearch = () => {
-	if (searchQuery.value.length > 1) {
-		Logic.Common.GoToRoute('/marketplace/search?q=' + searchQuery.value)
-	}
+	if (searchQuery.value.length > 1) router.push('/marketplace/search?q=' + searchQuery.value)
 }
 
 const tabs = computed(() => [

@@ -158,14 +158,14 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		const p = singleStore[id].play.value
 		if (!p || !p.isCreated) return
 		await PlaysUseCases.start(id)
-		await router.push(p.participants.includes(authId.value) ? p.runPage : p.resultsPage)
+		await router.replace(p.participants.includes(authId.value) ? p.runPage : p.resultsPage)
 	})
 
 	const { asyncFn: end } = useAsyncFn(async (nav = true) => {
 		const p = singleStore[id].play.value
 		if (!p || !p.isStarted) return false
 		await PlaysUseCases.end(id)
-		if (nav) await router.push(p.resultsPage)
+		if (nav) await router.replace(p.resultsPage)
 		return true
 	})
 
@@ -177,7 +177,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		if (isLast && p.isTimed) {
 			singleStore[id].myAnswer.value = await AnswersUseCases.end(p.data.type, p.id)
 			if (p.participants.length === 1 && p.participants[0] === p.user.id) await end()
-			else await router.push(p.resultsPage)
+			else await router.replace(p.resultsPage)
 		}
 		return true
 	})

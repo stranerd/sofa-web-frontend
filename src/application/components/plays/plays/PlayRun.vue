@@ -85,7 +85,7 @@
 					:content="`${play.singularizedType} already started`" />
 				<div class="flex gap-4 items-center">
 					<SofaButton class="px-6 py-3" @click="playExtras.join(true)">Join Now</SofaButton>
-					<SofaButton class="px-6 py-3" @click="$router.push(play.resultsPage)">Wait for Results</SofaButton>
+					<SofaButton class="px-6 py-3" @click="$router.replace(play.resultsPage)">Wait for Results</SofaButton>
 				</div>
 			</div>
 			<div v-else class="flex flex-col h-full items-center justify-center gap-4">
@@ -140,13 +140,13 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import PlayWrapper from './PlayWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 import { QuizEntity } from '@modules/study'
 import { storage } from '@utils/storage'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	playId: string
@@ -154,6 +154,8 @@ const props = defineProps<{
 	isInModal?: boolean
 	access?: InstanceType<typeof QuizWrapper>['$props']['access']
 }>()
+
+const router = useRouter()
 
 const showSolution = ref(false)
 const isDone = ref(false)
@@ -198,7 +200,7 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 				// continue clicked, but done with practice
 				if (isDone.value) {
 					await playExtras.end(false)
-					return Logic.Common.GoToRoute('/library/results')
+					return router.push('/library/results')
 				}
 				// check clicked
 				if (!showSolution.value) {

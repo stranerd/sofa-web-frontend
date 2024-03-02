@@ -117,7 +117,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCreateView } from '@app/composables/interactions/views'
 import { extractResource, openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
@@ -229,6 +229,7 @@ export default defineComponent({
 		]
 
 		const route = useRoute()
+		const router = useRouter()
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
@@ -424,7 +425,7 @@ export default defineComponent({
 
 			if (purchase) {
 				showMakePaymentModal.value = false
-				Logic.Common.GoToRoute('/course/' + SingleCourse.value?.id)
+				router.push('/course/' + SingleCourse.value?.id)
 			}
 		}
 

@@ -22,7 +22,7 @@
 			title="You have not bought anything"
 			actionLabel="Marketplace"
 			subTitle="Discover thousands of materials to buy, created by verified experts"
-			:action="() => Logic.Common.GoToRoute('/marketplace')" />
+			:action="() => $router.push('/marketplace')" />
 	</LibraryLayout>
 </template>
 

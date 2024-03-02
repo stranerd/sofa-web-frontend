@@ -28,7 +28,7 @@
 								{
 									name: 'Preview',
 									icon: 'preview',
-									handler: () => Logic.Common.GoToRoute(`/quizzes/${quiz.id}/preview`),
+									handler: () => $router.push(`/quizzes/${quiz.id}/preview`),
 									size: 'h-[17px]',
 								},
 								{
@@ -246,7 +246,7 @@
 						title="Quiz not found"
 						subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
 						actionLabel="Go to marketplace"
-						:action="() => Logic.Common.GoToRoute('/marketplace')"
+						:action="() => $router.push('/marketplace')"
 						titleStyle="mdlg:!text-xl" />
 				</div>
 			</div>

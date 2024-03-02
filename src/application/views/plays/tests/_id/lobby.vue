@@ -22,7 +22,7 @@
 								label: 'Close',
 								bgColor: 'bg-deepGray border border-white',
 								textColor: 'text-white',
-								click: () => Logic.Common.GoToRoute('/library'),
+								click: () => $router.push('/library'),
 							}">
 							<template #header>
 								<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">

@@ -107,7 +107,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import ConversationMessages from '@app/components/conversations/Messages.vue'
@@ -129,6 +129,7 @@ export default defineComponent({
 
 		const { wallet, id, user, userAi } = useAuth()
 		const route = useRoute()
+		const router = useRouter()
 		const { id: conversationId } = route.params
 
 		const { conversation, end, deleteConv } = useConversation(conversationId as string)
@@ -182,7 +183,7 @@ export default defineComponent({
 				left: { label: 'Cancel' },
 			})
 			if (!confirmed) return
-			await Logic.Common.GoToRoute('/settings/subscription')
+			await router.push('/settings/subscription')
 		}
 
 		const onClickEndSession = async () => {

@@ -16,7 +16,7 @@
 								label: 'Continue',
 								bgColor: 'bg-white border border-white',
 								textColor: 'text-bodyBlack',
-								click: () => Logic.Common.GoToRoute('/library/results?tab=games'),
+								click: () => $router.push('/library/results?tab=games'),
 							}"
 							:leftButton="playExtras.canEnd ? { ...leftButton, click: playExtras.end } : undefined">
 							<template #header>

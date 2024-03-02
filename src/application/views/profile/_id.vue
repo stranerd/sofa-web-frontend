@@ -111,7 +111,7 @@
 							:title="`${user.publicName} has no published materials yet`"
 							subTitle="Discover thousands of other materials on SOFA marketplace"
 							actionLabel="Marketplace"
-							:action="() => Logic.Common.GoToRoute('/marketplace')" />
+							:action="() => $router.push('/marketplace')" />
 					</div>
 				</div>
 			</div>

@@ -22,7 +22,7 @@
 			title="You have no course here"
 			actionLabel="Explore"
 			subTitle="Discover thousands of courses and save them here for easy access"
-			:action="() => Logic.Common.GoToRoute('/marketplace')" />
+			:action="() => $router.push('/marketplace')" />
 	</LibraryLayout>
 </template>
 

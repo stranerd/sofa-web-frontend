@@ -22,7 +22,7 @@
 			title="You have no quizzes here"
 			actionLabel="Explore"
 			subTitle="Discover thousands of quizzes and save them here for easy access"
-			:action="() => Logic.Common.GoToRoute('/marketplace')" />
+			:action="() => $router.push('/marketplace')" />
 	</LibraryLayout>
 </template>
 

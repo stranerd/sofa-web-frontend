@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { addToArray, getRandomValue } from 'valleyed'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
@@ -84,6 +84,7 @@ export const useMyFolders = () => {
 export const useEditFolder = () => {
 	const factory = new FolderFactory()
 	const route = useRoute()
+	const router = useRouter()
 
 	const edit = (folder: FolderEntity) => {
 		factory.loadEntity(folder)
@@ -100,7 +101,7 @@ export const useEditFolder = () => {
 		async (folder: FolderEntity) => {
 			await FoldersUseCases.delete(folder.id)
 			if (factory.entityId === folder.id) factory.reset()
-			if (`/library/folders/${folder.id}` === route.path) await Logic.Common.GoToRoute('/library')
+			if (`/library/folders/${folder.id}` === route.path) await router.push('/library')
 		},
 		{
 			pre: async () =>

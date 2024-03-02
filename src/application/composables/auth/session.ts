@@ -1,21 +1,21 @@
-import { useRoute, useRouter } from 'vue-router'
+import { Router, useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AfterAuthUser, AuthUseCases } from '@modules/auth'
 import { Logic } from 'sofa-logic'
 
-export const createSession = async (afterAuth: AfterAuthUser) => {
+export const createSession = async (afterAuth: AfterAuthUser, router: Router) => {
 	await AuthUseCases.sessionSignin(afterAuth)
 
 	if (!afterAuth.user.isEmailVerified) {
 		setEmailVerificationEmail(afterAuth.user.email)
-		return await Logic.Common.GoToRoute('/auth/verify')
+		return await router.push('/auth/verify')
 	}
 
 	const { setAuthUser, signin } = useAuth()
 	await setAuthUser(afterAuth.user)
 	const successful = await signin(false)
-	if (successful) await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
+	if (successful) await router.push(await Logic.Common.getRedirectToRoute())
 }
 
 export const useRedirectToAuth = () => {

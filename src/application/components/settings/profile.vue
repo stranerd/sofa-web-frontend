@@ -15,7 +15,7 @@
 					</SofaFileInput>
 				</SofaImageLoader>
 
-				<SofaButton padding="px-5 py-2" @click="Logic.Common.GoToRoute('/profile')">View profile</SofaButton>
+				<SofaButton padding="px-5 py-2" @click="$router.push('/profile')">View profile</SofaButton>
 			</div>
 
 			<SofaTextField

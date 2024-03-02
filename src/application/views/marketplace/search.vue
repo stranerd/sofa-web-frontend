@@ -61,7 +61,7 @@
 									:content="content"
 									customClass="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
 									:bookmarkAction="() => saveToFolder(content.original)"
-									@click="Logic.Common.GoToRoute(content.route)" />
+									@click="$router.push(content.route)" />
 							</div>
 
 							<div
@@ -74,7 +74,7 @@
 										customClass="cursor-pointer"
 										:hasBookmark="true"
 										:bookmarkAction="() => saveToFolder(activity.original)"
-										@click="Logic.Common.GoToRoute(activity.route)" />
+										@click="$router.push(activity.route)" />
 								</div>
 							</div>
 						</div>
@@ -108,7 +108,7 @@
 									:content="content"
 									customClass="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
 									:bookmarkAction="() => saveToFolder(content.original)"
-									@click="Logic.Common.GoToRoute(content.route)" />
+									@click="$router.push(content.route)" />
 							</div>
 
 							<div
@@ -121,7 +121,7 @@
 										customClass="cursor-pointer"
 										:hasBookmark="true"
 										:bookmarkAction="() => saveToFolder(activity.original)"
-										@click="Logic.Common.GoToRoute(activity.route)" />
+										@click="$router.push(activity.route)" />
 								</div>
 							</div>
 						</div>

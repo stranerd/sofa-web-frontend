@@ -70,32 +70,33 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCreatePlay } from '@app/composables/plays/plays'
 import { useHasAccess } from '@app/composables/study'
 import { PlayTypes } from '@modules/plays'
 import { QuizEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
 	quiz: QuizEntity
 }>()
 
-const goToEdit = () => {
-	props.close()
-	Logic.Common.GoToRoute(`/quizzes/${props.quiz.id}/edit`)
-}
-
 const { id } = useAuth()
 const { hasAccess } = useHasAccess()
+const router = useRouter()
 const { factory, createPlay } = useCreatePlay({}, { start: false, nav: true })
+
+const goToEdit = () => {
+	props.close()
+	router.push(`/quizzes/${props.quiz.id}/edit`)
+}
 
 const chooseMode = async (type: PlayTypes) => {
 	const quizId = props.quiz.id
 	factory.load(type, props.quiz)
 	if (factory.isPractice) return await createPlay({ start: true }).then(() => props.close())
-	if (factory.isFlashcards) return await Logic.Common.GoToRoute(`/quizzes/${quizId}/flashcards`).then(() => props.close())
+	if (factory.isFlashcards) return await router.push(`/quizzes/${quizId}/flashcards`).then(() => props.close())
 }
 
 const submit = async () => await createPlay({ start: false })

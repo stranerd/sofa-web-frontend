@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
 import { createSession } from '@app/composables/auth/session'
 import { useSuccessHandler } from '@app/composables/core/states'
@@ -9,6 +10,7 @@ export const usePasswordReset = () => {
 	const sent = ref(false)
 	const factory = new PasswordResetFactory()
 	const { message, setMessage } = useSuccessHandler()
+	const router = useRouter()
 
 	const { asyncFn: sendResetEmail } = useAsyncFn(async () => {
 		if (factory.isValid('email')) {
@@ -27,7 +29,7 @@ export const usePasswordReset = () => {
 		try {
 			const user = await AuthUseCases.resetPassword(factory)
 			await setMessage('Password reset successfully!')
-			await createSession(user)
+			await createSession(user, router)
 		} catch (error) {
 			if (error instanceof NetworkError && error.statusCode === StatusCodes.InvalidToken) {
 				throw new Error('Invalid or expired OTP. Resend a new OTP to your email')
