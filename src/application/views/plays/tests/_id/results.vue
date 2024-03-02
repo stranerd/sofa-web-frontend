@@ -10,6 +10,7 @@
 							:title="quiz.title"
 							:questions="questions"
 							:showCounter="false"
+							:isDark="play.isDark"
 							:optionState="extras.optionState"
 							:rightButton="{
 								label: 'Continue',

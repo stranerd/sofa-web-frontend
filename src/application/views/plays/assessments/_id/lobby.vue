@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
 		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.assessments" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions, participants }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
@@ -11,7 +11,7 @@
 							:questions="questions"
 							:showCounter="false"
 							:optionState="extras.optionState"
-							:isDark="true"
+							:isDark="play.isDark"
 							:rightButton="{
 								label: playExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',

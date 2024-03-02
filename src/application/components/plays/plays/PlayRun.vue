@@ -78,6 +78,12 @@
 					</Quiz>
 				</template>
 			</QuizWrapper>
+			<div v-else-if="play.canJoinAfterStart">
+				<SofaNormalText content="You can join this play after it starts" />
+			</div>
+			<div class="flex flex-col h-full items-center justify-center">
+				<SofaNormalText :content="`You cannot join this ${play.singularizedType} anymore`" />
+			</div>
 		</template>
 	</PlayWrapper>
 	<SofaModal v-if="showInfoModal">

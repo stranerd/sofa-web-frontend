@@ -11,7 +11,7 @@
 							:questions="questions"
 							:showCounter="false"
 							:optionState="extras.optionState"
-							:isDark="true"
+							:isDark="play.isDark"
 							:rightButton="{
 								label: playExtras.isMine ? 'Start' : 'Join',
 								bgColor: 'bg-white border border-white',

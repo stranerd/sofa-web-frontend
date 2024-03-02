@@ -11,7 +11,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	static isDark(type: PlayTypes) {
-		return type === PlayTypes.games
+		return [PlayTypes.games, PlayTypes.assessments].includes(type)
 	}
 
 	get hasLobby() {
