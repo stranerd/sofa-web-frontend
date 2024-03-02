@@ -7,28 +7,30 @@
 				<SofaNormalText v-if="!wallet.subscription.active"> You have no active subscription </SofaNormalText>
 				<template v-else-if="wallet.subscription.current && currentPlan">
 					<div class="w-full flex flex-col gap-3">
-						<div class="w-full flex flex-col gap-2 items-start">
-							<SofaHeaderText size="2xl" color="text-primaryPurple">
-								{{ currentPlan.title }}
-							</SofaHeaderText>
-
-							<div class="w-full flex flex-col gap-1 pb-1">
-								<SofaNormalText> Expires {{ formatTime(wallet.subscription.current.expiredAt) }} </SofaNormalText>
-								<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()">
-									{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
-									days left
-								</SofaNormalText>
-								<SofaNormalText v-else> Expired </SofaNormalText>
-							</div>
-
-							<SofaCheckbox
-								v-if="wallet.subscription.current.expiredAt > Date.now()"
-								v-model="autoRenewIsOn"
-								type="switch"
-								class="w-full flex justify-between py-3 border-t border-darkLightGray">
-								<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
-							</SofaCheckbox>
+						<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
+							<SofaHeaderText size="2xl" color="text-current" class="capitalize">{{ currentPlan.title }}</SofaHeaderText>
+							<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()" color="text-current">
+								{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
+								days left
+							</SofaNormalText>
+							<SofaNormalText v-else color="text-current"> Expired </SofaNormalText>
 						</div>
+
+						<div v-if="userType.isOrg" class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
+							<SofaNormalText class="!font-bold">Plan info</SofaNormalText>
+							<SofaNormalText>
+								Giving license to students that pay for and attend your learning center physically so that they get
+								cost-free access to your online classes and quizzes.
+							</SofaNormalText>
+						</div>
+
+						<SofaCheckbox
+							v-if="wallet.subscription.current.expiredAt > Date.now()"
+							v-model="autoRenewIsOn"
+							type="switch"
+							class="w-full flex justify-between p-4 border rounded-2xl border-darkLightGray">
+							<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
+						</SofaCheckbox>
 					</div>
 				</template>
 			</div>
@@ -45,13 +47,19 @@
 
 					<SofaNormalText class="text-current">Current Bill</SofaNormalText>
 
-					<SofaButton padding="px-5 py-2" class="mt-4" bgColor="bg-white" textColor="text-primaryPurple" @click="renewPlan()">
+					<SofaButton
+						v-if="wallet.getCurrentBill(currentPlan) > 0"
+						padding="px-5 py-2"
+						class="mt-4"
+						bgColor="bg-white"
+						textColor="text-primaryPurple"
+						@click="renewPlan()">
 						Pay Now
 					</SofaButton>
 				</div>
 
 				<div class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
-					<SofaNormalText class="!font-bold">Current license</SofaNormalText>
+					<SofaNormalText class="!font-bold">Currently licensed</SofaNormalText>
 					<SofaNormalText>{{ wallet.currentAverageMembers }} members</SofaNormalText>
 				</div>
 
