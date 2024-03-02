@@ -1,5 +1,8 @@
 <template>
-	<ExpandedLayout layoutStyle="!justify-between bg-deepGray text-white" :hide="{ top: true, bottom: true }" bgImage="/images/game-bg.png">
+	<ExpandedLayout
+		layoutStyle="!justify-between bg-deepGray text-white"
+		:hide="{ top: true, bottom: true }"
+		bgImage="/images/plays-bg.svg">
 		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.games" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions, participants }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">

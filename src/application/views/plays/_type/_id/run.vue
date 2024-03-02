@@ -2,7 +2,7 @@
 	<ExpandedLayout
 		:layoutStyle="`!justify-between ${isDark ? 'bg-deepGray text-white' : ''}`"
 		:hide="{ top: true, bottom: true }"
-		:bgImage="isDark ? '/images/game-bg.png' : undefined">
+		:bgImage="isDark ? '/images/plays-bg.svg' : undefined">
 		<PlayRun :playId="$route.params.id as string" :type="type" />
 	</ExpandedLayout>
 </template>
