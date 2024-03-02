@@ -13,6 +13,7 @@ export enum UserType {
 export enum UserSchoolType {
 	'aspirant' = 'aspirant',
 	'college' = 'college',
+	'university' = 'university',
 }
 
 export type UserTypeData =
@@ -33,6 +34,9 @@ export type UserTypeData =
 						institutionId: string
 						facultyId: string
 						departmentId: string
+				  }
+				| {
+						type: UserSchoolType.university
 				  }
 	  }
 	| {
