@@ -1,5 +1,5 @@
 <template>
-	<DashboardLayout :hide="{ bottom: true, top: true, right: true }">
+	<DashboardLayout :hide="{ top: true, right: true }">
 		<template #left-session>
 			<div class="w-full shadow-custom pb-6 bg-white rounded-custom relative flex flex-col h-full gap-6 overflow-y-auto">
 				<div class="w-full flex items-center p-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b border-lightGray">
@@ -18,9 +18,7 @@
 					<SofaIcon customClass="h-[15px] mdlg:!hidden pl-2" name="back-arrow" @click="Logic.Common.goBack()" />
 					<div
 						class="flex flex-row items-center flex-grow rounded-custom w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">
-						<div class="w-[20px] mdlg:!hidden">
-							<SofaIcon name="search-black" customClass="h-[17px]" />
-						</div>
+						<SofaIcon name="search-black" customClass="h-[17px] mdlg:hidden" />
 						<SofaTextField v-model="searchQuery" customClass="!border-none w-full mdlg:!pl-0" placeholder="Search for anything">
 						</SofaTextField>
 					</div>
@@ -142,7 +140,7 @@
 			</div>
 
 			<!-- Bottom filter for sm screens -->
-			<div class="bg-lightGray mdlg:!hidden p-4 flex flex-col w-full">
+			<div class="bg-lightGray mdlg:!hidden px-4 flex flex-col w-full">
 				<div class="bg-primaryPurple rounded-custom py-3 flex items-center justify-center gap-2" @click="showFilter = true">
 					<SofaIcon customClass="h-[14px]" name="filter-white" />
 					<SofaNormalText customClass="!font-semibold !text-sm" color="text-white">Filter</SofaNormalText>

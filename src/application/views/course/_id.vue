@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5" :hide="{ bottom: true }">
+	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5">
 		<!-- Display for larger screens -->
 		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow">
 			<div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">

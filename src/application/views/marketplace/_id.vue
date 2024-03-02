@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
+	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
 		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
 			<SofaNormalText color="text-grayColor w-full flex flex-row justify-start gap-1">
 				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ 'Marketplace ' }}</span>

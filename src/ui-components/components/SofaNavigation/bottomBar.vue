@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-3 mdlg:!hidden items-center py-2 w-full justify-around bg-lightGray">
+	<div class="flex gap-3 mdlg:hidden items-center pt-2.5 pb-1 w-full justify-around bg-lightGray">
 		<router-link
 			v-for="tab in [
 				{ path: '/dashboard', icon: 'home' as const },
@@ -9,11 +9,11 @@
 				{ path: '/library', icon: 'library' as const },
 			]"
 			:key="tab.path"
-			class="flex flex-col items-center justify-center"
+			class="flex flex-col items-center justify-start"
 			:to="tab.path">
 			<SofaIcon
 				:name="tab.icon"
-				class="fill-deepGray h-[30px] pb-2"
+				class="fill-deepGray h-[30px] pb-1.5"
 				:class="{ '!fill-primaryPurple': Logic.Common.tabIsActive(tab.path) }" />
 			<span v-if="Logic.Common.tabIsActive(tab.path)" class="w-2 h-1 bg-primaryPurple rounded-lg" />
 		</router-link>
