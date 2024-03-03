@@ -49,7 +49,9 @@
 								<p class="text-[14px]">{{ feature }}</p>
 							</li>
 						</ul>
-						<button class="w-full bg-purple text-white py-[10px] rounded-lg mb-3">Choose Plan</button>
+						<button class="w-full bg-purple text-white py-[10px] rounded-lg mb-3" @click="choosePlan(plan.basic)">
+							Choose Plan
+						</button>
 					</div>
 					<div
 						v-if="plan.plus"
@@ -75,7 +77,9 @@
 								<p class="text-[14px]">{{ feature }}</p>
 							</li>
 						</ul>
-						<button class="w-full bg-purple text-white py-[10px] rounded-lg mb-3">Choose Plan</button>
+						<button class="w-full bg-purple text-white py-[10px] rounded-lg mb-3" @click="choosePlan(plan.plus)">
+							Choose Plan
+						</button>
 					</div>
 					<div
 						class="absolute w-full mdlg:w-[927px] mx-auto left-0 right-0 styled-bg rounded-[20px]"
@@ -101,14 +105,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import { usePlansList } from '@app/composables/payment/plans'
+import { PlanEntity } from '@modules/payment'
 
 const { plans } = usePlansList()
-console.log(plans.value)
-watch(plans, () => {
-	console.log(plans.value)
-})
+const router = useRouter()
 
 const showStudentsPricing = ref(true)
 const orgFreePlan = computed(() => {
@@ -156,6 +159,14 @@ const dynamicStyle = computed(() => {
 })
 const updateWindowWidth = () => {
 	windowWidth.value = window.innerWidth
+}
+
+const choosePlan = (plan: PlanEntity) => {
+	if (plan.amount === 0) {
+		router.push('/dashboard')
+	} else {
+		router.push('/plan-subscription')
+	}
 }
 
 onMounted(() => {
