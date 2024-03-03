@@ -68,6 +68,25 @@ export const usePlansList = () => {
 	return { ...store, myPlans, currentPlan }
 }
 
+export const usePlan = (id: string) => {
+	const plan = ref<PlanEntity | null>(null)
+	const {
+		asyncFn: fetchPlan,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(async () => {
+		const response = await PlansUseCases.find(id)
+		console.log(response)
+	})
+
+	onMounted(async () => {
+		if (!called.value) await fetchPlan()
+	})
+
+	return { plan, fetchPlan, loading, error }
+}
+
 export const useSubscription = () => {
 	const { setMessage } = useSuccessHandler()
 	const { asyncFn: subscribeToPlan } = useAsyncFn(async (planId: string) => {

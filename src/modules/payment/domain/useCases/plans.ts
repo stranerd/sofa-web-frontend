@@ -13,6 +13,10 @@ export class PlansUseCase {
 		return await this.repository.get({ all: true })
 	}
 
+	async find(id: string) {
+		return await this.repository.find(id)
+	}
+
 	async listenToAll(listener: Listeners<PlanEntity>) {
 		const conditions: QueryParams = {
 			all: true,

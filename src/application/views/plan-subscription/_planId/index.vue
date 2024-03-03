@@ -13,8 +13,10 @@
 	</DashboardLayout>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
+import { usePlan } from '@app/composables/payment/plans'
 export default defineComponent({
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
@@ -22,6 +24,14 @@ export default defineComponent({
 	setup() {
 		useMeta({
 			title: 'Plan Subscription',
+		})
+
+		const route = useRoute()
+		const planId = route.params.planId as string
+
+		const { plan } = usePlan(planId)
+		watch(plan, () => {
+			console.log(plan.value)
 		})
 	},
 })

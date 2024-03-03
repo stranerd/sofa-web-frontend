@@ -165,7 +165,7 @@ const choosePlan = (plan: PlanEntity) => {
 	if (plan.amount === 0) {
 		router.push('/dashboard')
 	} else {
-		router.push('/plan-subscription')
+		router.push(`/plan-subscription/${plan.id}`)
 	}
 }
 
