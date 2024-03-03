@@ -237,7 +237,7 @@ export const useCreatePlay = (access: CoursableAccess['access'], options: { star
 	} = useAsyncFn(async (optionsOvr?: Partial<typeof options>) => {
 		const allOpts = { ...options, ...(optionsOvr ?? {}) }
 		let play = await PlaysUseCases.create(factory, access)
-		if (allOpts.start) play = await PlaysUseCases.start(play.id)
+		if (allOpts.start && play.isCreated) play = await PlaysUseCases.start(play.id)
 		if (allOpts.nav) await router.push(allOpts.start ? play.runPage : play.lobbyPage)
 		factory.reset()
 		return play
