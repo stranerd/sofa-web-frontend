@@ -9,7 +9,7 @@
 			</SofaNormalText>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
-		<template v-if="factory.type">
+		<template v-if="factory.type && !(factory.isFlashcards || factory.isPractice)">
 			<SofaTextField
 				v-model="factory.title"
 				:error="factory.errors.title"
