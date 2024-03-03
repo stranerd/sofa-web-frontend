@@ -229,7 +229,7 @@
 						<a
 							v-for="type in QuestionEntity.getAllTypes()"
 							:key="type.value"
-							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-skyBlue bg-[#F2F5F8] rounded-lg"
+							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue bg-[#F2F5F8] rounded-lg"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
 							<SofaIcon :name="type.icon" class="h-[50px]" />
 							<SofaNormalText :content="type.label" />

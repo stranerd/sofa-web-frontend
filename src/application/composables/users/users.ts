@@ -1,5 +1,6 @@
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { addToArray } from 'valleyed'
+import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { UserEntity, UsersUseCases } from '@modules/users'
@@ -93,7 +94,8 @@ export const useSearchUsers = () => {
 }
 
 export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
-	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users])
+	const { user } = useAuth()
+	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users, ...(user.value ? [user.value] : [])])
 
 	const { items: users, addToList } = useItemsInList('users', ids, allUsers, (ids) => UsersUseCases.getInList(ids))
 

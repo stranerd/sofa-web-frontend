@@ -9,6 +9,7 @@ import { usePlay } from '@app/composables/plays/plays'
 import { PlayTypes } from '@modules/plays'
 import { QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
+import { ordinalSuffixOf } from '@utils/commons'
 
 const props = withDefaults(
 	defineProps<{
@@ -59,13 +60,13 @@ const extras = computed(() => ({
 			.map((res, i, scores) => ({
 				score: res.value,
 				percentage: play.value?.getPercentage(res.userId) ?? 0,
-				position: scores[i - 1]?.value === res.value ? '' : (i + 1).toString(),
+				position: scores[i - 1]?.value === res.value ? '' : ordinalSuffixOf(i + 1),
 				user: participants.value.find((p) => p.id === res.userId)!,
 				isWinner: scores[0]?.value === res.value,
 				label: p.getResultLabel(authId.value),
 				color: p.getResultColor(authId.value),
 				bgColor: p.getResultColor(authId.value).split(']')[0].split('[')[1],
-				correct: Math.round(res.value * questions.length),
+				correct: Math.round(res.value * p.questions.length),
 			}))
 			.filter((res) => !!res.user)
 	},

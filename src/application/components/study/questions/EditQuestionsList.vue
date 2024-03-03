@@ -4,7 +4,7 @@
 			<template #item="{ element, index }">
 				<a
 					class="w-full p-4 group rounded-lg gap-2 flex flex-col"
-					:class="selectedQuestionId == element.id ? 'bg-skyBlue' : 'bg-lightGray'"
+					:class="selectedQuestionId == element.id ? 'bg-lightBlue' : 'bg-lightGray'"
 					@click="selectQuestion(element)">
 					<div class="flex items-center gap-2">
 						<SofaNormalText class="!font-bold" :content="`${index + 1}`" />

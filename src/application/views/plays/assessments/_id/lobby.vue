@@ -97,7 +97,7 @@
 										v-for="user in participants"
 										:key="user.id"
 										class="w-full flex items-center justify-center p-3 rounded-custom border-4 bg-white"
-										:class="user.id === playExtras.authId ? 'border-hoverBlue' : 'border-transparent'">
+										:class="user.id === playExtras.authId ? 'border-lightBlue' : 'border-transparent'">
 										<SofaNormalText
 											color="text-deepGray"
 											class="!font-semibold"

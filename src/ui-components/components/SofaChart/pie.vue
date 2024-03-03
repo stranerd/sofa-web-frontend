@@ -1,7 +1,7 @@
 <template>
-	<div :class="`${customClass} w-full h-[180px] relative `">
+	<div class="w-full h-[180px] relative">
 		<div class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center">
-			<SofaHeaderText size="xl" :customClass="textStyle">
+			<SofaHeaderText size="xl" color="text-current" :class="textStyle">
 				<slot />
 			</SofaHeaderText>
 		</div>
@@ -16,29 +16,15 @@ Chart.register(...registerables)
 
 export default defineComponent({
 	name: 'SofaPieChart',
-	components: {
-		SofaHeaderText,
-	},
+	components: { SofaHeaderText },
 	props: {
-		bgColor: {
-			type: String,
-			default: 'bg-primaryOrange',
-		},
 		textStyle: {
 			type: String,
 			default: '',
 		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		padding: {
-			type: String,
-			default: 'py-2 px-4 ',
-		},
 		cutoutPercentage: {
 			type: String,
-			default: '85%',
+			default: '90%',
 		},
 		data: {
 			type: Object as () => any,
@@ -56,7 +42,7 @@ export default defineComponent({
 			const ctx: any = document.getElementById('pieChart' + randomIndex)
 
 			if (ctx && props.data) {
-				const chartData = markRaw(
+				pieChart.value = markRaw(
 					new Chart(ctx, {
 						type: 'doughnut',
 						data: props.data,
@@ -78,23 +64,14 @@ export default defineComponent({
 						},
 					}),
 				)
-
-				pieChart.value = chartData
 			}
 		})
 
-		const updateChart = () => {
-			pieChart.value?.update()
-		}
-
 		watch(dataRef, () => {
-			updateChart()
+			pieChart.value?.update()
 		})
 
-		return {
-			randomIndex,
-			updateChart,
-		}
+		return { randomIndex }
 	},
 })
 </script>

@@ -131,6 +131,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		if (this.status !== PlayStatus.scored) return ''
 		if (this.isGames()) return this.getPosition(userId)
 		if (this.isTests()) return `${this.getPercentage(userId).toFixed()}%`
+		if (this.isAssessments()) return `${this.getPercentage(userId).toFixed()}%`
 		return ''
 	}
 
