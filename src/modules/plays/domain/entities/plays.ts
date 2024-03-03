@@ -14,6 +14,10 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		return [PlayTypes.games, PlayTypes.assessments].includes(type)
 	}
 
+	static hasLeaderboard(type: PlayTypes) {
+		return [PlayTypes.games, PlayTypes.assessments].includes(type)
+	}
+
 	static singularizedType(type: PlayTypes) {
 		return (
 			{

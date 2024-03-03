@@ -7,6 +7,10 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 		super(data)
 	}
 
+	get picture() {
+		return this.bio.photo?.link ?? '/images/default.svg'
+	}
+
 	get isOnline() {
 		return this.status.connections.length > 0
 	}

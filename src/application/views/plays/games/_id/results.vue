@@ -50,7 +50,7 @@
 												color="text-deepGray"
 												class="!font-semibold"
 												:content="score.user?.id === playExtras.authId ? 'You' : score.user?.publicName" />
-											<SofaIcon v-if="score.isWinner" name="game-winner" class="h-[23px]" />
+											<SofaIcon v-if="score.isWinner" name="play-winner" class="h-[23px]" />
 											<SofaNormalText
 												color="text-deepGray"
 												class="!font-semibold ml-auto"

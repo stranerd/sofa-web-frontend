@@ -65,8 +65,12 @@ const extras = computed(() => ({
 				label: p.getResultLabel(authId.value),
 				color: p.getResultColor(authId.value),
 				bgColor: p.getResultColor(authId.value).split(']')[0].split('[')[1],
+				correct: Math.round(res.value * questions.length),
 			}))
 			.filter((res) => !!res.user)
+	},
+	get myScore() {
+		return this.scores.find((s) => s.user.id === authId.value)
 	},
 }))
 </script>
