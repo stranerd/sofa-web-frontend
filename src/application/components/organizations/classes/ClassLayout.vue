@@ -28,7 +28,7 @@
 			<div v-if="classInst" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div class="w-full flex flex-col gap-5">
 					<SofaImageLoader
-						customClass="w-full h-[233px] flex items-center justify-center relative bg-grayColor rounded-custom !object-contain"
+						customClass="w-full h-[233px] flex items-center justify-center relative rounded-custom !object-contain"
 						:photoUrl="classInst.picture">
 					</SofaImageLoader>
 					<SofaHeaderText>{{ classInst.title }}</SofaHeaderText>
