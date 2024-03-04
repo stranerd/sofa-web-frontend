@@ -4,34 +4,40 @@ import { MemberTypes } from '../types'
 import { AnnouncementToModel } from '@modules/organizations/data/models/announcements'
 import { BaseFactory } from '@modules/core'
 
-type Keys = Omit<AnnouncementToModel, 'filter'> & AnnouncementToModel['filter']
+type Keys = Omit<AnnouncementToModel, 'filter'> & {
+	lessonIds: (string | null)[]
+	userTypes: (MemberTypes | null)[]
+}
 
 export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, AnnouncementToModel, Keys> {
 	readonly rules = {
 		body: v.string().min(1),
-		lessonId: v.string().min(1).nullable(),
-		userType: v.in(Object.values(MemberTypes)).nullable(),
+		lessonIds: v.array(v.string().min(1).nullable()).min(1),
+		userTypes: v.array(v.in(Object.values(MemberTypes)).nullable()).min(1),
 	}
 
 	constructor() {
 		super({
 			body: '',
-			lessonId: null,
-			userType: null,
+			lessonIds: [],
+			userTypes: [],
 		})
 	}
 
 	model = async () => {
-		const { body, lessonId, userType } = this.validValues
+		const { body, lessonIds, userTypes } = this.validValues
 		return {
 			body,
-			filter: { lessonId, userType },
+			filter: {
+				lessonIds: lessonIds.includes(null) ? null : (lessonIds as string[]),
+				userTypes: userTypes.includes(null) ? null : (userTypes as MemberTypes[]),
+			},
 		}
 	}
 
 	loadEntity = (entity: AnnouncementEntity) => {
 		this.body = entity.body
-		this.lessonId = entity.filter.lessonId
-		this.userType = entity.filter.userType
+		this.lessonIds = entity.filter.lessonIds ?? [null]
+		this.userTypes = entity.filter.userTypes ?? [null]
 	}
 }

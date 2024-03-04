@@ -11,8 +11,8 @@ export enum MemberTypes {
 }
 
 export type AnnouncementFilter = {
-	lessonId: string | null
-	userType: MemberTypes | null
+	lessonIds: string[] | null
+	userTypes: MemberTypes[] | null
 }
 
 export type ScheduleTime = {

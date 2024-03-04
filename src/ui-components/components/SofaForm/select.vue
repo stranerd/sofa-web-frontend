@@ -24,7 +24,7 @@
 		</div>
 		<dialog
 			v-if="showOptions"
-			class="group-focus-within:flex hidden w-full flex-col z-[100] max-h-[500px] bg-white overflow-y-auto rounded-md p-3 shadow-md">
+			class="group-focus-within:flex hidden fixed w-full flex-col z-[100] max-h-[500px] bg-white overflow-y-auto rounded-md p-3 shadow-md">
 			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
 				<SofaTextField v-model="searchValue" placeholder="Search" customClass="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
