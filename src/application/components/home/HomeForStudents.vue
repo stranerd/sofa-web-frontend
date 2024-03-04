@@ -69,7 +69,7 @@
 
 	<router-link
 		class="fixed bottom-[80px] right-2 z-[100] px-3 py-2 bg-primaryPurple text-white flex mdlg:hidden items-center rounded-custom gap-2"
-		style="box-shadow: 0px 4px 8px rgba(120, 130, 140, 0.05)"
+		style="box-shadow: 0 4px 8px rgba(120, 130, 140, 0.05)"
 		to="/chats/new">
 		<SofaNormalText color="text-inherit" content="Ask me anything" />
 		<SofaAvatar :photoUrl="userAi.image" size="24" />

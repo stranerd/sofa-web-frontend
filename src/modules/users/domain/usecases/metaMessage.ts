@@ -1,4 +1,4 @@
-import { IMetaMessageRepository } from '../irepositories/metaMessage'
+import { IMetaMessageRepository } from '../irepositories/imetaMessage'
 import { MetaMessageData } from '../types'
 
 export class MetaMessageUseCase {

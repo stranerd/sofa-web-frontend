@@ -38,14 +38,6 @@ export const isAuthenticated = defineMiddleware(async ({ to }) => {
 	}
 })
 
-export const isSubscription = defineMiddleware(async ({ to, from }) => {
-	const redirect = await checkAuthUser(to.fullPath)
-	if (redirect) return redirect
-	if (from) {
-		await Logic.Common.setRedirectToRoute(from.fullPath)
-	}
-})
-
 export const isOnboarding = defineMiddleware(async ({ to, goBackToNonAuth }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
@@ -60,7 +52,7 @@ export const isOrg = defineMiddleware(async ({ to }) => {
 	if (!useAuth().userType.value.isOrg) return '/dashboard'
 })
 
-const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg, isSubscription }
+const globalMiddlewares = { isAuthenticated, isNotAuthenticated, isOnboarding, isAdmin, isSubscribed, isOrg }
 export type Middleware = MiddlewareFunction | keyof typeof globalMiddlewares
 
 const wrapInAsync = async <T>(fn: () => T) => await fn()

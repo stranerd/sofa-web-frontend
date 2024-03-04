@@ -1,5 +1,5 @@
 <template>
-	<nav class="w-full h-[65px] bg-white flex items-center justify-center" style="z-index: 9999999 !important">
+	<nav class="w-full h-[65px] bg-white flex items-center justify-center">
 		<div class="w-[90%] mx-auto flex items-center justify-between">
 			<button class="block mdlg:hidden" @click="toggleMenu">
 				<SofaIcon name="menu" class="h-[24px]" />
@@ -17,11 +17,13 @@
 			</ul>
 			<ul class="hidden mdlg:flex items-center gap-6">
 				<li>
-					<RouterLink to="/signup" class="bg-purple text-white py-[10px] px-[19px] rounded-lg">Sign up</RouterLink>
+					<RouterLink to="/auth/signup" class="bg-purple text-white py-[10px] px-[19px] rounded-lg">Sign up</RouterLink>
 				</li>
-				<li><RouterLink to="/signin">Log in</RouterLink></li>
+				<li><RouterLink to="/auth/signin">Log in</RouterLink></li>
 			</ul>
-			<RouterLink to="/signup" class="block md:hidden bg-purple text-white py-[10px] px-[19px] rounded-lg text-[14px] md:text-[16px]">
+			<RouterLink
+				to="/auth/signup"
+				class="block md:hidden bg-purple text-white py-[10px] px-[19px] rounded-lg text-[14px] md:text-[16px]">
 				Get Started
 			</RouterLink>
 		</div>
@@ -60,6 +62,6 @@ const { toggleMenu, showMenu } = useMenu()
 
 <style scoped>
 nav {
-	box-shadow: 0px 4px 24px 0px #00000080;
+	box-shadow: 0 4px 24px 0 #00000080;
 }
 </style>

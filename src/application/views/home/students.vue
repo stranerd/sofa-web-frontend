@@ -5,13 +5,13 @@
 			<!-- Link -->
 			<div
 				class="flex items-center bg-white mt-[44px] h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
-				style="box-shadow: 0px 4px 16px 0px #00000040">
+				style="box-shadow: 0 4px 16px 0 #00000040">
 				<router-link
 					to="/home/students"
 					class="w-1/2 h-full flex items-center justify-center p-5 bg-purple text-white rounded-[22px] text-[14px] md:text-[16px]">
 					Students
 				</router-link>
-				<router-link to="/home/organization" class="w-1/2 h-full flex items-center justify-center p-5 text-[14px] md:text-[16px]">
+				<router-link to="/home/organizations" class="w-1/2 h-full flex items-center justify-center p-5 text-[14px] md:text-[16px]">
 					Organizations
 				</router-link>
 			</div>
@@ -29,7 +29,7 @@
 						Empower educators, engage learners, and streamline operations with our comprehensive learning platform
 					</p>
 					<div class="flex flex-col md:flex-row items-center gap-3">
-						<RouterLink to="/signup" class="bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+						<RouterLink to="/auth/signup" class="bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							Get started
 						</RouterLink>
 						<RouterLink

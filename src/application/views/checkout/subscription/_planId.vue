@@ -14,7 +14,9 @@
 						<SofaHeaderText>Subscription Details</SofaHeaderText>
 						<div class="flex items-center justify-between rounded-custom border border-hoverBlue p-4">
 							<SofaHeaderText>{{ plan.title }}</SofaHeaderText>
-							<SofaHeaderText>{{ plan.currency }}{{ plan.amount.toLocaleString() }}/month</SofaHeaderText>
+							<SofaHeaderText>
+								{{ Logic.Common.formatPrice(plan.amount, plan.currency) }}/{{ plan.intervalInWord }}
+							</SofaHeaderText>
 						</div>
 						<SofaNormalText color="text-grayColor">Your subscription includes:</SofaNormalText>
 						<ul class="flex flex-col gap-3">
@@ -24,24 +26,24 @@
 							</li>
 						</ul>
 					</div>
-					<PaymentMethodCard :showWallet="false" @methodSelected="selectMethod" />
+					<SelectPaymentMethod v-model="methodId" :showWallet="false" />
 				</div>
 				<div class="w-[30%] bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
 					<SofaHeaderText>Summary</SofaHeaderText>
 					<div class="flex flex-col gap-4">
 						<div class="flex items-center justify-between">
 							<SofaNormalText>Item (1)</SofaNormalText>
-							<SofaNormalText>{{ plan.currency }}{{ plan.amount.toLocaleString() }}</SofaNormalText>
+							<SofaNormalText>{{ Logic.Common.formatPrice(plan.amount, plan.currency) }}</SofaNormalText>
 						</div>
 						<div class="flex items-center justify-between">
 							<SofaNormalText>Tax</SofaNormalText>
-							<SofaNormalText>{{ plan.currency }}0</SofaNormalText>
+							<SofaNormalText>{{ Logic.Common.formatPrice(0, plan.currency) }}</SofaNormalText>
 						</div>
 						<hr class="bg-grayColor" />
 						<div class="flex items-center justify-between">
 							<SofaNormalText customClass="font-semibold">Total</SofaNormalText>
 							<SofaNormalText customClass="font-semibold">
-								{{ plan.currency }}{{ plan.amount.toLocaleString() }}
+								{{ Logic.Common.formatPrice(plan.amount, plan.currency) }}
 							</SofaNormalText>
 						</div>
 					</div>
@@ -51,9 +53,9 @@
 					<p class="text-grayColor">
 						Your subscription will renew automatically every month as one payment of
 						<b>{{ plan.currency }}{{ plan.amount.toLocaleString() }}</b> Cancel it anytime from your
-						<router-link to="/settings/subscription" class="text-primaryBlue">subscription</router-link> settings. By making
-						this payment you agree to the
-						<router-link to="/legal/terms-of-service" class="text-primaryBlue">Terms & Conditions</router-link>.
+						<router-link to="/settings/subscription" class="text-primaryBlue">subscription</router-link>
+						settings. By making this payment you agree to the
+						<router-link to="/legal/terms-of-service" class="text-primaryBlue">Terms of Service</router-link>.
 					</p>
 				</div>
 			</div>
@@ -62,15 +64,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { usePlan, useSubscription } from '@app/composables/payment/plans'
-import { MethodEntity } from '@modules/payment'
 import { Logic } from 'sofa-logic'
+
 export default defineComponent({
+	name: 'CheckoutSubscriptionPlanIdPage',
 	routeConfig: {
-		middlewares: ['isSubscription'],
+		middlewares: [
+			async ({ from, to }) => {
+				const back = (to.query.back as string) ?? from?.fullPath
+				if (back) await Logic.Common.setRedirectToRoute(back)
+			},
+			'isAuthenticated',
+		],
 	},
 	setup() {
 		useMeta({
@@ -78,31 +87,21 @@ export default defineComponent({
 		})
 
 		const route = useRoute()
-		const router = useRouter()
 		const planId = route.params.planId as string
-		const methodId = ref('')
+		const methodId = ref(null as string | null)
 
 		const { plan } = usePlan(planId)
 		const { subscribeToPlan } = useSubscription()
 
-		const selectMethod = (method: MethodEntity) => {
-			methodId.value = method.id
-		}
-
-		const planData = computed(() => ({ planId, methodId: methodId.value }))
-
 		const subscribe = async () => {
-			const path = await Logic.Common.getRedirectToRoute()
-			await subscribeToPlan(planData.value)
-			router.push(path)
+			await subscribeToPlan({ planId, methodId: methodId.value })
 		}
 
 		return {
 			plan,
-			selectMethod,
 			subscribe,
-			planData,
 			methodId,
+			Logic,
 		}
 	},
 })

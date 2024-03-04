@@ -8,7 +8,7 @@ import { Logic } from 'sofa-logic'
 export const routerPromise = Promise.all(routes).then((routes) => {
 	const router = createRouter({
 		history: createWebHistory(),
-		routes,
+		routes: routes.map((r: any) => ({ ...r, props: false })),
 	})
 
 	router.beforeEach(async (to, from) => {

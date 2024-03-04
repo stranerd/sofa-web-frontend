@@ -45,7 +45,7 @@ export default class Common {
 	async getRedirectToRoute() {
 		const value = await storage.get<string>(this.redirectToName)
 		if (value) await storage.remove(this.redirectToName)
-		return value ?? '/'
+		return value ?? '/dashboard'
 	}
 
 	async setRedirectToRoute(value: string) {

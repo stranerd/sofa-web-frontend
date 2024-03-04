@@ -1,11 +1,11 @@
 <template>
 	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white max-w-[1800px] mx-auto">
-		<header class="flex flex-col items-center justify-center relative">
-			<HomeNavbar class="mb-[44px]" />
+		<header class="flex flex-col items-center justify-center relative gap-[44px]">
+			<HomeNavbar />
 			<!-- Link -->
 			<div
-				class="flex items-center bg-white mt-[44px] h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
-				style="box-shadow: 0px 4px 16px 0px #00000040">
+				class="flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden"
+				style="box-shadow: 0 4px 16px 0 #00000040">
 				<button
 					class="w-1/2 h-full flex items-center justify-center p-5 rounded-[22px] text-[14px] md:text-[16px]"
 					:class="showStudentsPricing ? 'bg-purple text-white' : ''"
@@ -25,10 +25,10 @@
 				<div class="w-[90%] sm:w-[80%] md:w-[60%] mx-auto flex flex-col mdlg:flex-row items-center gap-10">
 					<div
 						v-if="plan.basic"
-						ref="first_plan"
+						ref="firstPlan"
 						:key="showStudentsPricing.toString()"
 						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
-						style="box-shadow: 0px 0px 24px 0px #00000040; z-index: 999999 !important">
+						style="box-shadow: 0 0 24px 0 #00000040; z-index: 999999 !important">
 						<div class="flex gap-3 justify-between">
 							<div class="flex flex-col gap-2 pt-3">
 								<h2 class="text-[20px] font-bold">{{ plan.basic.title }}</h2>
@@ -56,7 +56,7 @@
 					<div
 						v-if="plan.plus"
 						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
-						style="box-shadow: 0px 0px 24px 0px #00000040; z-index: 999999 !important">
+						style="box-shadow: 0 0 24px 0 #00000040; z-index: 999999 !important">
 						<div class="flex gap-3 justify-between">
 							<div class="flex flex-col pt-3 gap-2">
 								<h2 class="text-[20px] font-bold">{{ plan.plus.title }}</h2>
@@ -105,77 +105,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePlansList } from '@app/composables/payment/plans'
 import { PlanEntity } from '@modules/payment'
+import { Logic } from 'sofa-logic'
 
-const { plans } = usePlansList()
+const { studentsPlans, orgsPlans } = usePlansList()
 const router = useRouter()
 
 const showStudentsPricing = ref(true)
-const orgFreePlan = computed(() => {
-	const plan = plans.value.find((plan) => plan.id === 'organization-plan-free')
-	return plan
-})
-const orgPlusPlan = computed(() => {
-	const plan = plans.value.find((plan) => plan.id === 'organization-plan')
-	return plan
-})
-const studentFreePlan = computed(() => {
-	const plan = plans.value.find((plan) => plan.id === 'free-basic-plan')
-	return plan
-})
-const studentPlusPlan = computed(() => {
-	const plan = plans.value.find((plan) => plan.id === 'premium-plan')
-	return plan
-})
-const student_plan = computed(() => ({
-	basic: studentFreePlan.value,
-	plus: studentPlusPlan.value,
-}))
-const org_plan = computed(() => ({
-	basic: orgFreePlan.value,
-	plus: orgPlusPlan.value,
-}))
 
 const plan = computed(() => {
-	if (showStudentsPricing.value) {
-		return student_plan.value
-	} else {
-		return org_plan.value
+	const plans = showStudentsPricing.value ? studentsPlans.value : orgsPlans.value
+	return {
+		basic: plans.find((plan) => plan.amount === 0),
+		plus: plans.find((plan) => plan.amount !== 0),
 	}
 })
-const first_plan = ref<HTMLDivElement | null>(null)
-const height = computed(() => first_plan.value?.clientHeight || 0)
-const windowWidth = ref(window.innerWidth)
+const firstPlan = ref<HTMLDivElement | null>(null)
+const height = computed(() => firstPlan.value?.clientHeight || 0)
 const dynamicStyle = computed(() => {
-	if (windowWidth.value <= 1000) {
+	if (!Logic.Common.isLarge) {
 		return {
 			top: `${(height.value + 40) / 2}px`,
 		}
 	}
 	return {}
 })
-const updateWindowWidth = () => {
-	windowWidth.value = window.innerWidth
-}
 
 const choosePlan = (plan: PlanEntity) => {
-	if (plan.amount === 0) {
-		router.push('/dashboard')
-	} else {
-		router.push(`/plan-subscription/${plan.id}`)
-	}
+	const backRoute = '/dashboard'
+	if (plan.amount === 0) router.push(backRoute)
+	else router.push({ path: `/checkout/subscription/${plan.id}`, query: { back: backRoute } })
 }
-
-onMounted(() => {
-	window.addEventListener('resize', updateWindowWidth)
-})
-
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateWindowWidth)
-})
 </script>
 
 <style scoped>

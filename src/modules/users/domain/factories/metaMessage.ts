@@ -1,8 +1,9 @@
 import { v } from 'valleyed'
 import { MetaMessageData } from '../types'
 import { BaseFactory } from '@modules/core'
+import { AuthDetails } from '@modules/auth'
 
-export class MetaMessageFactory extends BaseFactory<null, MetaMessageData, MetaMessageData> {
+export class MetaMessageFactory extends BaseFactory<AuthDetails, MetaMessageData, MetaMessageData> {
 	readonly rules = {
 		name: v.string().min(1),
 		email: v.string().min(1),
@@ -18,7 +19,7 @@ export class MetaMessageFactory extends BaseFactory<null, MetaMessageData, MetaM
 			name: '',
 			email: '',
 			phone: {
-				code: '',
+				code: '+234',
 				number: '',
 			},
 			message: '',
@@ -30,7 +31,9 @@ export class MetaMessageFactory extends BaseFactory<null, MetaMessageData, MetaM
 		return { name, email, phone, message }
 	}
 
-	loadEntity = (entity: null) => {
-		throw new Error(`Cannot load an entity into this factory, ${entity}`)
+	loadEntity = (entity: AuthDetails) => {
+		this.name = entity.allNames.full
+		this.email = entity.email
+		if (entity.phone) this.phone = entity.phone
 	}
 }

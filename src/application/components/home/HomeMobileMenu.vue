@@ -16,11 +16,11 @@
 		</ul>
 		<ul class="flex flex-col items-center gap-6 pt-20">
 			<li>
-				<RouterLink to="/signup" class="bg-purple text-white py-[10px] px-[19px] rounded-lg" @click.stop="showMenu = false">
+				<RouterLink to="/auth/signup" class="bg-purple text-white py-[10px] px-[19px] rounded-lg" @click.stop="showMenu = false">
 					Sign up
 				</RouterLink>
 			</li>
-			<li><RouterLink to="/signin" @click.stop="showMenu = false">Log in</RouterLink></li>
+			<li><RouterLink to="/auth/signin" @click.stop="showMenu = false">Log in</RouterLink></li>
 		</ul>
 	</div>
 </template>

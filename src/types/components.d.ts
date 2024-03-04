@@ -94,6 +94,7 @@ declare module 'vue' {
     ScheduleCard: typeof import('./../application/components/organizations/schedules/ScheduleCard.vue')['default']
     ScheduleList: typeof import('./../application/components/organizations/schedules/ScheduleList.vue')['default']
     ScheduleView: typeof import('./../application/components/organizations/lessons/CurriculumItemViews/ScheduleView.vue')['default']
+    SelectPaymentMethod: typeof import('./../application/components/payment/methods/SelectPaymentMethod.vue')['default']
     SelectQuizModal: typeof import('./../application/components/study/quizzes/SelectQuizModal.vue')['default']
     SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']
     Settings: typeof import('./../application/components/study/courses/Settings.vue')['default']

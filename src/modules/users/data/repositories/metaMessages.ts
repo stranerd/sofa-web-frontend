@@ -1,6 +1,6 @@
-import { IMetaMessageRepository } from '@modules/users/domain/irepositories/metaMessage'
+import { IMetaMessageRepository } from '../../domain/irepositories/imetaMessage'
+import { MetaMessageData } from '../../domain/types'
 import { HttpClient } from '@modules/core'
-import { MetaMessageData } from '@modules/users/domain/types'
 
 export class MetaMessageRepository implements IMetaMessageRepository {
 	private static instance: MetaMessageRepository

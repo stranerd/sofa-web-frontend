@@ -1,6 +1,6 @@
-import { IPlanRepository } from '../irepositories/plans'
 import { PlanEntity } from '../entities/plans'
-import { QueryParams, Listeners } from '@modules/core'
+import { IPlanRepository } from '../irepositories/plans'
+import { Listeners, QueryParams } from '@modules/core'
 
 export class PlansUseCase {
 	repository: IPlanRepository
@@ -11,10 +11,6 @@ export class PlansUseCase {
 
 	async getAll() {
 		return await this.repository.get({ all: true })
-	}
-
-	async find(id: string) {
-		return await this.repository.find(id)
 	}
 
 	async listenToAll(listener: Listeners<PlanEntity>) {

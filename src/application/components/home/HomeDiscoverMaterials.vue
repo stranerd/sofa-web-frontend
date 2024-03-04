@@ -26,7 +26,7 @@
 							</p>
 						</div>
 						<RouterLink
-							to="/signin"
+							to="/auth/signin"
 							class="self-start bg-purple text-[14px] md:text-[16px] text-white py-[16px] px-[32px] rounded-[99px]">
 							Discover creators
 						</RouterLink>

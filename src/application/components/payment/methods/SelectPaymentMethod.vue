@@ -11,10 +11,10 @@
 					v-for="method in methods"
 					:key="method.hash"
 					class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
-					@click="selectMethod(method)">
+					@click="selectedMethod = method.id">
 					<SofaIcon customClass="h-[20px]" name="card" />
 					<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
-					<SofaIcon v-if="selectedMethod?.id === method.id" name="checkmark-circle" class="h-[20px] ml-auto" />
+					<SofaIcon v-if="selectedMethod === method.id" name="checkmark-circle" class="h-[20px] ml-auto" />
 					<div v-else class="ml-auto border border-black h-[20px] w-[20px] rounded-full"></div>
 				</a>
 			</div>
@@ -35,53 +35,24 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { useModals } from '@app/composables/core/modals'
 import { useMyMethods } from '@app/composables/payment/methods'
 import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
-import { MethodEntity } from '@modules/payment'
-export default defineComponent({
-	routeConfig: {
-		middlewares: ['isAuthenticated'],
-	},
-	props: {
-		showWallet: {
-			type: Boolean,
-			required: false,
-			default: true,
-		},
-	},
-	emits: ['methodSelected'],
-	setup(props, { emit }) {
-		const selectedMethod = ref<MethodEntity | null>(null)
 
-		const { wallet } = useAuth()
+withDefaults(defineProps<{ showWallet: boolean }>(), { showWallet: true })
 
-		const { addMethod, methods } = useMyMethods()
+const selectedMethod = defineModel<string | null>({ default: null })
 
-		const showFundWallet = () => {
-			useModals().payment.fundWallet.open({})
-		}
+const { wallet } = useAuth()
 
-		const balance = computed(() =>
-			wallet.value ? Logic.Common.formatPrice(wallet.value.balance.amount, wallet.value.balance.currency) : '',
-		)
+const { addMethod, methods } = useMyMethods()
 
-		const selectMethod = (method: MethodEntity) => {
-			selectedMethod.value = method
-			emit('methodSelected', selectedMethod.value)
-		}
+const showFundWallet = () => {
+	useModals().payment.fundWallet.open({})
+}
 
-		return {
-			showFundWallet,
-			addMethod,
-			methods,
-			balance,
-			selectMethod,
-			selectedMethod,
-		}
-	},
-})
+const balance = computed(() => (wallet.value ? Logic.Common.formatPrice(wallet.value.balance.amount, wallet.value.balance.currency) : ''))
 </script>
