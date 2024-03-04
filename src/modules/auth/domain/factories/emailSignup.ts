@@ -12,8 +12,8 @@ type Keys = Omit<NewUser, 'name'> & {
 
 export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 	readonly rules = {
-		first: v.string().min(3),
-		last: v.string().min(3),
+		first: v.string().min(1),
+		last: v.string(),
 		description: v.string(),
 		email: v.string().email(),
 		photo: v.file().image().nullable(),
@@ -30,8 +30,8 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 
 	constructor() {
 		super({
-			first: 'new',
-			last: 'user',
+			first: '',
+			last: '',
 			email: '',
 			password: '',
 			cPassword: '',
