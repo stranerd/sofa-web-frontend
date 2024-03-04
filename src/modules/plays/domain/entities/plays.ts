@@ -128,6 +128,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	getCardLabel(userId: string): string {
+		if (!this.participants.includes(userId)) return 'Host'
 		if (this.status !== PlayStatus.scored) return ''
 		if (this.isGames()) return this.getPosition(userId)
 		if (this.isTests()) return `${this.getPercentage(userId).toFixed()}%`
@@ -136,6 +137,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 	}
 
 	getResultColor(userId: string) {
+		if (!this.participants.includes(userId)) return 'text-[#3296C8]'
 		if (this.status !== PlayStatus.scored) return 'text-[#3296C8]'
 		const percentage = this.getPercentage(userId)
 		if (percentage >= 80) return 'text-[#4BAF7D]'
