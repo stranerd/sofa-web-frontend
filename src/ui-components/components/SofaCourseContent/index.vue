@@ -261,7 +261,7 @@ export default defineComponent({
 									contentDetails.title = quiz.title
 									contentDetails.id = quiz.id
 									contentDetails.price = 0
-									contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.png'
+									contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.svg'
 									contentDetails.info = quiz.description
 									contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
 									contentDetails.tags = quiz.tagIds.map((id) => Logic.Study.GetTagName(id))

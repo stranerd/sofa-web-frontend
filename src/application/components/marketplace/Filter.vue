@@ -51,7 +51,7 @@
 <script lang="ts" setup>
 withDefaults(
 	defineProps<{
-		close: () => void
+		close?: () => void
 	}>(),
 	{
 		close: undefined,

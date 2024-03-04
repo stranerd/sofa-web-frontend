@@ -16,6 +16,8 @@
 					v-model="content"
 					:placeholder="placeholder"
 					:disabled="disabled"
+					:min="min"
+					:max="max"
 					:type="showPassword ? 'text' : type"
 					class="flex-grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs"
 					@blur="checkValidation()" />
@@ -54,6 +56,8 @@ const props = withDefaults(
 		defaultValue?: T
 		type?: string
 		name?: string
+		min?: string | number
+		max?: string | number
 		disabled?: boolean
 		updateValue?: T
 		borderColor?: string
@@ -68,6 +72,8 @@ const props = withDefaults(
 		defaultValue: undefined,
 		type: 'text',
 		name: '',
+		min: undefined,
+		max: undefined,
 		disabled: false,
 		updateValue: undefined,
 		borderColor: 'border-darkLightGray',

@@ -1,23 +1,65 @@
-import { EmbeddedUser, PlayStatus, PlayTypes } from '../types'
-import type { GameEntity } from './games'
-import type { TestEntity } from './tests'
-import { ordinalSuffixOf } from '@utils/commons'
+import { PlayFromModel } from '../../data/models/plays'
+import { PlayAssessmentsData, PlayGamesData, PlayGenericData, PlayStatus, PlayTestsData, PlayTypes } from '../types'
 import { BaseEntity } from '@modules/core'
+import { QuestionEntity } from '@modules/study'
+import { ordinalSuffixOf } from '@utils/commons'
 
-export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> extends BaseEntity<T> {
-	constructor(
-		readonly type: PlayTypes,
-		data: T,
-	) {
+export class PlayEntity extends BaseEntity<PlayFromModel> {
+	constructor(data: PlayFromModel) {
+		data.sources = data.sources?.map((source) => new QuestionEntity(source)) ?? []
 		super(data)
 	}
 
+	static isDark(type: PlayTypes) {
+		return [PlayTypes.games, PlayTypes.assessments].includes(type)
+	}
+
+	static hasLeaderboard(type: PlayTypes) {
+		return [PlayTypes.games, PlayTypes.assessments].includes(type)
+	}
+
+	static singularizedType(type: PlayTypes) {
+		return (
+			{
+				[PlayTypes.games]: 'game',
+				[PlayTypes.tests]: 'test',
+				[PlayTypes.flashcards]: 'flash card',
+				[PlayTypes.practice]: 'practice',
+				[PlayTypes.assessments]: 'assessment',
+			}[type] ?? ''
+		)
+	}
+
+	get hasLobby() {
+		return ![PlayTypes.practice, PlayTypes.flashcards].includes(this.data.type)
+	}
+
+	get isTimed() {
+		return ![PlayTypes.practice, PlayTypes.flashcards].includes(this.data.type)
+	}
+
 	get isOngoing() {
-		return [PlayStatus.created, PlayStatus.started].includes(this.status)
+		return this.isCreated || this.isStarted
+	}
+
+	get isClosed() {
+		return this.isEnded || this.isScored
+	}
+
+	get isCreated() {
+		return this.status === PlayStatus.created
+	}
+
+	get isStarted() {
+		return this.status === PlayStatus.started
 	}
 
 	get isEnded() {
-		return [PlayStatus.ended, PlayStatus.scored].includes(this.status)
+		return this.status === PlayStatus.ended
+	}
+
+	get isScored() {
+		return this.status === PlayStatus.scored
 	}
 
 	get shareLink() {
@@ -25,76 +67,93 @@ export class PlayEntity<T extends PlaysConstructorArgs = PlaysConstructorArgs> e
 	}
 
 	get lobbyPage() {
-		return `/${this.type}/${this.id}/lobby`
+		if (!this.hasLobby) return this.runPage
+		return `/plays/${this.data.type}/${this.id}/lobby`
 	}
 
 	get runPage() {
-		return `/${this.type}/${this.id}/run`
+		return `/plays/${this.data.type}/${this.id}/run`
 	}
 
 	get resultsPage() {
-		return `/${this.type}/${this.id}/results`
+		return `/plays/${this.data.type}/${this.id}/results`
 	}
 
 	get singularizedType() {
-		return (
-			{
-				[PlayTypes.games]: 'game',
-				[PlayTypes.tests]: 'test',
-				[PlayTypes.flashcards]: 'flash card',
-				[PlayTypes.practice]: 'practice',
-			}[this.type] ?? ''
-		)
+		return PlayEntity.singularizedType(this.data.type)
 	}
 
-	isGame(): this is GameEntity {
-		return this.type === PlayTypes.games
+	get participants() {
+		if (this.data.type === PlayTypes.games) return this.data.participants
+		if (this.data.type === PlayTypes.assessments) return this.data.participants
+		return [this.user.id]
 	}
 
-	isTest(): this is TestEntity {
-		return this.type === PlayTypes.tests
+	get isDark() {
+		return PlayEntity.isDark(this.data.type)
+	}
+
+	get canJoinAfterStart(): boolean {
+		return this.isAssessments() || this.isGames()
+	}
+
+	isGames(): this is Omit<PlayEntity, 'data'> & { data: PlayGamesData } {
+		return this.data.type === PlayTypes.games
+	}
+
+	isTests(): this is Omit<PlayEntity, 'data'> & { data: PlayTestsData } {
+		return this.data.type === PlayTypes.tests
+	}
+
+	isAssessments(): this is Omit<PlayEntity, 'data'> & { data: PlayAssessmentsData } {
+		return this.data.type === PlayTypes.assessments
+	}
+
+	isPractice(): this is Omit<PlayEntity, 'data'> & { data: PlayGenericData } {
+		return this.data.type === PlayTypes.practice
+	}
+
+	isFlashcards(): this is Omit<PlayEntity, 'data'> & { data: PlayGenericData } {
+		return this.data.type === PlayTypes.flashcards
 	}
 
 	getPercentage(userId: string) {
-		const correctAnswers = (this.scores[userId] ?? 0) / 10
-		return (correctAnswers / this.questions.length) * 100
+		const score = this.scores.find((s) => s.userId === userId)
+		return Number(((score?.value ?? 0) * 100).toFixed(2))
 	}
 
-	getPosition(userId: string): string {
-		const participants = this.isGame() ? this.participants : [userId]
-		const scores = Object.values(this.scores).sort((a, b) => b - a)
-		const position = scores.indexOf(this.scores[userId])
-		return ordinalSuffixOf(position !== -1 ? position + 1 : participants.length)
+	getPosition(userId: string) {
+		const position = this.scores.findIndex((s) => s.userId === userId)
+		return ordinalSuffixOf(position !== -1 ? position + 1 : this.participants.length)
 	}
 
-	getLabel(userId: string): string {
-		if (this.isGame()) return this.getPosition(userId)
-		if (this.isTest()) return `${this.getPercentage(userId).toFixed()}%`
+	getCardLabel(userId: string): string {
+		if (!this.participants.includes(userId)) return 'Host'
+		if (this.status !== PlayStatus.scored) return ''
+		if (this.isGames()) return this.getPosition(userId)
+		if (this.isTests()) return `${this.getPercentage(userId).toFixed()}%`
+		if (this.isAssessments()) return `${this.getPercentage(userId).toFixed()}%`
 		return ''
 	}
 
-	getLabelColor(userId: string) {
-		if (this.isTest()) {
-			const percentage = this.getPercentage(userId)
-			if (percentage >= 80) return 'text-[#4BAF7D]'
-			if (percentage >= 70) return 'text-[#ADAF4B]'
-			if (percentage >= 50) return 'text-[#3296C8]'
-			return 'text-primaryRed'
-		}
-		return 'text-[#3296C8]'
+	getResultColor(userId: string) {
+		if (!this.participants.includes(userId)) return 'text-[#3296C8]'
+		if (this.status !== PlayStatus.scored) return 'text-[#3296C8]'
+		const percentage = this.getPercentage(userId)
+		if (percentage >= 80) return 'text-[#4BAF7D]'
+		if (percentage >= 70) return 'text-[#ADAF4B]'
+		if (percentage >= 50) return 'text-[#3296C8]'
+		return 'text-primaryRed'
 	}
-}
 
-type PlaysConstructorArgs = {
-	id: string
-	quizId: string
-	status: PlayStatus
-	questions: string[]
-	user: EmbeddedUser
-	totalTimeInSec: number
-	scores: Record<string, number>
-	startedAt: number | null
-	endedAt: number | null
-	createdAt: number
-	updatedAt: number
+	getResultLabel(userId: string) {
+		if (this.status !== PlayStatus.scored) return ''
+		const percentage = this.getPercentage(userId)
+		if (percentage === 100) return 'Perfect!'
+		if (percentage >= 90) return 'Outstanding!'
+		if (percentage >= 80) return 'Excellent Work!'
+		if (percentage >= 70) return 'Good job!'
+		if (percentage >= 60) return 'Nice effort!'
+		return 'Study harder!'
+	}
 }

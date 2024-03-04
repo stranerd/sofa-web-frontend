@@ -1,7 +1,7 @@
 <template>
 	<metainfo>
 		<template #title="{ content }">
-			{{ content ? `${content} | SOFA` : `SOFA` }}
+			{{ content ? `${content} | Stranerd` : 'Stranerd' }}
 		</template>
 	</metainfo>
 	<router-view :key="$route.path" />
@@ -17,7 +17,7 @@ import { useAuth } from '@app/composables/auth/auth'
 import { UsersUseCases } from '@modules/users'
 
 useMeta({
-	title: 'SOFA',
+	title: 'Stranerd',
 	htmlAttrs: { lang: 'en', amp: true },
 })
 

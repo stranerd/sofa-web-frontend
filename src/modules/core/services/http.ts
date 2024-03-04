@@ -77,6 +77,8 @@ export class HttpClient {
 					else if (val !== undefined) formData.set(key, JSON.stringify(val))
 				})
 				data = formData as any
+			} else {
+				query = Object.fromEntries(Object.entries(query as any).map(([key, val]) => [key, JSON.stringify(val)])) as any
 			}
 			const res = await this.client.request<Body, AxiosResponse<ReturnValue>>({
 				url,

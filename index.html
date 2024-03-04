@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>SOFA</title>
+	<title>Stranerd</title>
 	<style>
 		#innerModal {
 			margin-top: env(safe-area-inset-top) !important;
@@ -22,7 +22,11 @@
 			width: 100vw;
 			height: 100vh;
 			background-color: #141618;
-			background-image: url('/images/game-bg.png');
+			background-image: url('/images/plays-bg.svg');
+		}
+
+		#loader img {
+			filter: brightness(0) invert(1);
 		}
 
 		.animate-bounce {
@@ -42,7 +46,7 @@
 	</style>
 	<base href="/" />
 
-	<meta name="color-scheme" content="light dark" />
+	<meta name="color-scheme" content="light only" />
 	<meta
 		name="viewport"
 		content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -59,7 +63,8 @@
 <body id="body">
 	<div id="app">
 		<div id="loader">
-			<img src="/favicon.svg" class="animate-bounce" style="height: 5rem;" />
+			<img src="/images/logo.svg" class="animate-bounce" style="height: 5rem;" />
+			<img src="/images/logo-text.svg" style="height: 2rem;" />
 		</div>
 	</div>
 <script src="/js/DragDropTouch.js"></script>

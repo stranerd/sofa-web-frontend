@@ -9,4 +9,14 @@ export class QuizEntity extends CoursableEntity<QuizFromModel> {
 	get shareLink() {
 		return `${window.location.origin}/marketplace/${this.id}?type=quiz`
 	}
+
+	get noAccessPage() {
+		if (this.courseId) return `/marketplace/${this.courseId}?type=course`
+		return `/marketplace/${this.id}?type=quiz`
+	}
+
+	search(value: string) {
+		if (!value) return true
+		return [this.title, this.description].some((v) => v.toLowerCase().includes(value.toLowerCase()))
+	}
 }

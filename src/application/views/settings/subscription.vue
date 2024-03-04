@@ -2,95 +2,131 @@
 	<SettingsLayout title="Subscription">
 		<div v-if="wallet" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<SofaHeaderText size="xl" customClass="text-left"> My subscription </SofaHeaderText>
+				<SofaHeaderText size="xl"> My subscription </SofaHeaderText>
 
-				<SofaNormalText v-if="!wallet.subscription.active" customClass="text-left">
-					You have no active subscription
-				</SofaNormalText>
-				<template v-else-if="wallet.subscription.current">
+				<SofaNormalText v-if="!wallet.subscription.active"> You have no active subscription </SofaNormalText>
+				<template v-else-if="wallet.subscription.current && currentPlan">
 					<div class="w-full flex flex-col gap-3">
-						<div class="w-full flex flex-col gap-2 items-start">
-							<SofaHeaderText color="text-primaryPurple !text-2xl !font-extrabold">
-								{{ myPlan?.title ?? 'Stranerd Premium' }}
-							</SofaHeaderText>
-
-							<div class="w-full flex flex-col gap-1 pb-1">
-								<SofaNormalText> Expires {{ formatTime(wallet.subscription.current.expiredAt) }} </SofaNormalText>
-								<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()">
-									{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
-									days left
-								</SofaNormalText>
-								<SofaNormalText v-else> Expired </SofaNormalText>
-							</div>
-
-							<a
-								v-if="wallet.subscription.current.expiredAt > Date.now()"
-								class="w-full flex flex-row justify-between items-center gap-4 py-3 pb-1 border-t border-darkLightGray"
-								@click="toggleRenewal">
-								<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
-								<div class="!w-auto">
-									<SofaIcon customClass="h-[17px]" :name="autoRenewIsOn ? 'toggle-on' : 'toggle-off'" />
-								</div>
-							</a>
+						<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
+							<SofaHeaderText size="2xl" color="text-current" class="capitalize">{{ currentPlan.title }}</SofaHeaderText>
+							<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()" color="text-current">
+								{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
+								days left
+							</SofaNormalText>
+							<SofaNormalText v-else color="text-current"> Expired </SofaNormalText>
 						</div>
+
+						<div v-if="userType.isOrg" class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
+							<SofaNormalText class="!font-bold">Plan info</SofaNormalText>
+							<SofaNormalText>
+								Giving license to students that pay for and attend your learning center physically so that they get
+								cost-free access to your online classes and quizzes.
+							</SofaNormalText>
+						</div>
+
+						<SofaCheckbox
+							v-if="wallet.subscription.current.expiredAt > Date.now()"
+							v-model="autoRenewIsOn"
+							type="switch"
+							class="w-full flex justify-between p-4 border rounded-2xl border-darkLightGray">
+							<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
+						</SofaCheckbox>
 					</div>
 				</template>
+			</div>
+
+			<div
+				v-if="userType.isOrg && currentPlan && wallet.subscription.current"
+				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
+				<SofaHeaderText size="xl" class="capitalize" content="Billing Details" />
+
+				<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
+					<SofaHeaderText size="2xl" color="text-current">
+						{{ Logic.Common.formatPrice(wallet.getCurrentBill(currentPlan), currentPlan.currency) }}
+					</SofaHeaderText>
+
+					<SofaNormalText class="text-current">Current Bill</SofaNormalText>
+
+					<SofaButton
+						v-if="wallet.getCurrentBill(currentPlan) > 0"
+						padding="px-5 py-2"
+						class="mt-4"
+						bgColor="bg-white"
+						textColor="text-primaryPurple"
+						@click="renewPlan()">
+						Pay Now
+					</SofaButton>
+				</div>
+
+				<div class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
+					<SofaNormalText class="!font-bold">Currently licensed</SofaNormalText>
+					<SofaNormalText>{{ wallet.currentAverageMembers }} members</SofaNormalText>
+				</div>
+
+				<div v-if="wallet.subscription.active" class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
+					<SofaNormalText class="!font-bold">Next billing date</SofaNormalText>
+					<SofaNormalText>{{ formatTime(wallet.subscription.current.expiredAt) }}</SofaNormalText>
+				</div>
 			</div>
 
 			<template v-if="!wallet.subscription.active">
 				<div
 					v-if="userType.isOrg && myApplicablePlan"
-					class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-					<SofaHeaderText size="xl" class="text-left capitalize">
-						{{ myApplicablePlan.title }}
-					</SofaHeaderText>
+					class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
+					<SofaHeaderText size="xl" class="capitalize" content="Subscription Plan" />
 
-					<div class="w-full flex flex-col gap-2">
-						<div class="flex flex-row gap-2 items-center">
-							<SofaHeaderText customClass="text-left !text-2xl !font-bold">
-								{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }} per student
-							</SofaHeaderText>
-							<SofaNormalText customClass="!text-2xl"> / month </SofaNormalText>
-						</div>
+					<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
+						<SofaNormalText class="text-current capitalize">{{ myApplicablePlan.title }}</SofaNormalText>
+						<SofaHeaderText size="2xl" color="text-current">
+							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
+						</SofaHeaderText>
 
-						<SofaNormalText customClass="text-left">
-							Provide cost-free access to your paid courses for your physical students.
+						<SofaNormalText class="text-current">per member/month</SofaNormalText>
+
+						<SofaButton
+							padding="px-5 py-2"
+							class="mt-4"
+							bgColor="bg-white"
+							textColor="text-primaryPurple"
+							@click="subscibeToPlan(myApplicablePlan.id)">
+							Subscribe
+						</SofaButton>
+					</div>
+
+					<div class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
+						<SofaNormalText class="!font-bold">Plan info</SofaNormalText>
+						<SofaNormalText>
+							Giving license to students that pay for and attend your learning center physically so that they get cost-free
+							access to your online classes and quizzes.
 						</SofaNormalText>
-
-						<div class="flex flex-row pt-3">
-							<SofaButton padding="px-5 py-2" @click="subscibeToPlan(myApplicablePlan.id)"> Subscribe </SofaButton>
-						</div>
 					</div>
 				</div>
 
 				<div
 					v-if="!userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl" customClass="text-left w-full pb-2 border-b border-lightGray">
+					<SofaHeaderText size="xl" class="w-full pb-2 border-b border-lightGray">
 						{{ myApplicablePlan.title }}
 					</SofaHeaderText>
 
 					<div class="flex flex-row gap-2 items-center">
-						<SofaHeaderText customClass="text-left !text-2xl !font-bold">
+						<SofaHeaderText class="!text-2xl !font-bold">
 							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
 						</SofaHeaderText>
-						<SofaNormalText customClass="!text-2xl"> / month </SofaNormalText>
+						<SofaNormalText customClass="!text-2xl"> / {{ myApplicablePlan.intervalInWord }}</SofaNormalText>
 					</div>
 
 					<div class="w-full flex flex-col gap-3">
 						<div
 							v-for="(info, index) in subscriptionInfo"
 							:key="index"
-							:class="`w-full flex-col flex gap-1 pb-2 items-start ${
-								index != subscriptionInfo.length - 1 ? 'border-b border-lightGray' : ''
-							} `">
+							class="w-full flex-col flex gap-1 pb-2 items-start"
+							:class="{ 'border-b border-lightGray': index != subscriptionInfo.length - 1 }">
 							<SofaIcon customClass="h-[23px] " :name="info.icon" />
-							<SofaNormalText customClass="text-left !font-bold">
+							<SofaNormalText customClass="!font-bold">
 								{{ info.title }}
 							</SofaNormalText>
-							<SofaNormalText color="text-grayColor" customClass="text-left">
-								{{ info.value }}
-							</SofaNormalText>
+							<SofaNormalText color="text-grayColor">{{ info.value }}</SofaNormalText>
 						</div>
 					</div>
 
@@ -149,31 +185,30 @@ export default defineComponent({
 		] as const
 
 		const { userType, wallet } = useAuth()
-		const autoRenewIsOn = computed(() => !!wallet.value?.subscription.next)
-		const { myPlans, currentPlan: myPlan } = usePlansList()
-		const { subscribeToPlan, toggleRenewPlan } = useSubscription()
-
-		const myApplicablePlan = computed(() => myPlans.value.at(0) ?? null)
+		const autoRenewIsOn = computed({
+			get: () => !!wallet.value?.subscription.next,
+			set: (value) => {
+				toggleRenewPlan(value)
+			},
+		})
+		const { currentPlan, firstPaidPlan: myApplicablePlan } = usePlansList()
+		const { subscribeToPlan, renewPlan, toggleRenewPlan } = useSubscription()
 
 		const subscibeToPlan = async (id: string) => {
 			await subscribeToPlan({ planId: id })
-		}
-
-		const toggleRenewal = async () => {
-			await toggleRenewPlan(autoRenewIsOn.value)
 		}
 
 		return {
 			Logic,
 			formatTime,
 			myApplicablePlan,
-			myPlan,
+			currentPlan,
 			subscriptionInfo,
 			wallet,
 			userType,
 			autoRenewIsOn,
 			subscibeToPlan,
-			toggleRenewal,
+			renewPlan,
 		}
 	},
 })

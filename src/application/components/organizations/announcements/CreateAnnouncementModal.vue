@@ -1,10 +1,10 @@
 <template>
-	<div class="p-4 mdlg:p-6 flex flex-col gap-4">
+	<form class="p-4 mdlg:p-6 flex flex-col gap-4" @submit.prevent="createAnnouncement">
 		<div class="flex w-full items-center gap-2 justify-between mdlg:justify-center">
 			<SofaHeaderText class="!font-bold !text-deepGray" content="Make an announcement" />
 			<SofaIcon class="!block mdlg:!hidden h-[16px]" name="circle-close" @click="close" />
 		</div>
-		<form class="flex flex-col gap-8" @submit.prevent="createAnnouncement">
+		<div class="flex flex-col gap-8">
 			<SofaTextarea
 				v-model="factory.body"
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
@@ -12,20 +12,20 @@
 				placeholder="Write announcemnt" />
 			<div class="grid gap-4 mdlg:gap-6 grid-cols-2">
 				<SofaSelect
-					v-model="factory.lessonId"
+					v-model="factory.lessonIds"
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select lesson"
 					borderColor="border-transparent"
-					selectFirstOnMount
-					:error="factory.errors.lessonId"
+					isMultiple
+					:error="factory.errors.lessonIds"
 					:options="lessonOptions" />
 				<SofaSelect
-					v-model="factory.userType"
+					v-model="factory.userTypes"
 					customClass="rounded-custom !bg-lightGray col-span-1"
 					placeholder="Select audience"
 					borderColor="border-transparent"
-					selectFirstOnMount
-					:error="factory.errors.userType"
+					isMultiple
+					:error="factory.errors.userTypes"
 					:options="userTypesOption" />
 			</div>
 			<div class="flex items-center justify-between">
@@ -38,6 +38,7 @@
 					Cancel
 				</SofaButton>
 				<SofaButton
+					:disabled="!factory.valid"
 					bgColor="bg-primaryBlue"
 					type="submit"
 					textColor="text-white"
@@ -46,8 +47,8 @@
 					Post
 				</SofaButton>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
 </template>
 
 <script setup lang="ts">
@@ -66,32 +67,28 @@ const { factory, createAnnouncement } = useCreateAnnouncement(props.organization
 
 const lessonOptions = computed(() => {
 	if (!user.value) return []
-	// For teachers, return only lessons where user is a teacher
-	if (props.classInst.isTeacher(user.value)) {
-		const lessons = props.classInst.lessons.filter((lesson) => lesson.users.teachers.includes(user.value!.id))
-		return lessons.map((l) => ({ key: l.id, value: l.title }))
-	}
-	// For admins, return every lessons plus all students
 	if (props.classInst.isAdmin(user.value)) {
 		const lessons = props.classInst.lessons
 		return [{ key: null as string | null, value: 'All lessons' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
+	}
+	if (props.classInst.isTeacher(user.value)) {
+		const lessons = props.classInst.lessons.filter((lesson) => lesson.users.teachers.includes(user.value!.id))
+		return lessons.map((l) => ({ key: l.id, value: l.title }))
 	}
 	return []
 })
 
 const userTypesOption = computed(() => {
 	if (!user.value) return []
-	// For teachers return only student
-	if (props.classInst.isTeacher(user.value)) {
-		return [{ key: MemberTypes.student, value: 'Students Only' }]
-	}
-	// For admins, return all user types
 	if (props.classInst.isAdmin(user.value)) {
 		return [
 			{ key: null, value: 'Both Teachers and Students' },
 			{ key: MemberTypes.student, value: 'Students Only' },
 			{ key: MemberTypes.teacher, value: 'Teachers Only' },
 		]
+	}
+	if (props.classInst.isTeacher(user.value)) {
+		return [{ key: MemberTypes.student, value: 'Students Only' }]
 	}
 	return []
 })

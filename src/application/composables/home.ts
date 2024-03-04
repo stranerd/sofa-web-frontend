@@ -1,9 +1,10 @@
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from './auth/auth'
-import { Logic } from 'sofa-logic'
 
 export const useHomeTasks = () => {
 	const { user, userType } = useAuth()
+	const router = useRouter()
 
 	const profileSteps = computed(() =>
 		user.value
@@ -14,7 +15,7 @@ export const useHomeTasks = () => {
 						icon: 'add-profile' as const,
 						iconSize: 'h-[46px]',
 						isDone: user.value?.checkTaskState('profile_setup'),
-						action: () => Logic.Common.GoToRoute('/settings/profile#profile'),
+						action: () => router.push('/settings/profile#profile'),
 					},
 					{
 						title: userType.value.isTeacher ? 'Add experience' : 'Add education',
@@ -22,7 +23,7 @@ export const useHomeTasks = () => {
 						icon: 'add-education' as const,
 						iconSize: 'h-[46px]',
 						isDone: user.value?.checkTaskState('education_setup'),
-						action: () => Logic.Common.GoToRoute('/settings/profile#type'),
+						action: () => router.push('/settings/profile#type'),
 					},
 					/* {
 						title: 'Add phone',
@@ -30,7 +31,7 @@ export const useHomeTasks = () => {
 						icon: 'add-phone' as const,
 						iconSize: 'h-[46px]',
 						isDone: !!auth.value?.phone,
-						action: () => Logic.Common.GoToRoute('/settings/profile#contact'),
+						action: () => router.push('/settings/profile#contact'),
 					}, */
 				]
 			: [],
@@ -45,7 +46,7 @@ export const useHomeTasks = () => {
 						icon: 'pink-question' as const,
 						iconSize: 'h-[46px]',
 						isDone: user.value?.checkTaskState('create_quiz'),
-						action: () => Logic.Common.GoToRoute('/quizzes/create'),
+						action: () => router.push('/quizzes/create'),
 					},
 					{
 						title: 'Create a course',
@@ -53,7 +54,7 @@ export const useHomeTasks = () => {
 						icon: 'orange-list' as const,
 						iconSize: 'h-[46px]',
 						isDone: user.value?.checkTaskState('create_course'),
-						action: () => Logic.Common.GoToRoute('/course/create'),
+						action: () => router.push('/course/create'),
 					},
 				]
 			: [],
@@ -68,7 +69,7 @@ export const useHomeTasks = () => {
 						icon: 'learn-quiz' as const,
 						isDone: user.value?.checkTaskState('learn_quiz'),
 						iconSize: 'h-[46px]',
-						action: () => Logic.Common.GoToRoute('/marketplace'),
+						action: () => router.push('/marketplace'),
 					},
 					{
 						title: 'Study flashcards',
@@ -76,7 +77,7 @@ export const useHomeTasks = () => {
 						icon: 'study-flashcard' as const,
 						isDone: user.value?.checkTaskState('quiz_flashcard'),
 						iconSize: 'h-[46px]',
-						action: () => Logic.Common.GoToRoute('/marketplace'),
+						action: () => router.push('/marketplace'),
 					},
 					{
 						title: 'Play a quiz game ',
@@ -84,7 +85,7 @@ export const useHomeTasks = () => {
 						icon: 'play-quiz' as const,
 						isDone: user.value?.checkTaskState('quiz_game'),
 						iconSize: 'h-[46px]',
-						action: () => Logic.Common.GoToRoute('/marketplace'),
+						action: () => router.push('/marketplace'),
 					},
 				]
 			: [],

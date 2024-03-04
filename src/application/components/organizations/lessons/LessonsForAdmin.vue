@@ -57,7 +57,7 @@ const props = defineProps<{
 
 const searchQuery = ref('')
 const emptyLessonContent = {
-	imageURL: '/images/no-lessons.png',
+	imageURL: '/images/empty-lessons.png',
 	title: 'Getting started with lessons',
 	contents: [
 		'Comprehensive subject based curriculum.',

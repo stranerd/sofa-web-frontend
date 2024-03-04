@@ -164,6 +164,7 @@
 import { formatNumber, pluralize } from 'valleyed'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRouter } from 'vue-router'
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
@@ -191,13 +192,14 @@ const { id, user, userAi, userType } = useAuth()
 const { conversations } = useConversationsList()
 const { factory, createConversation } = useCreateConversation()
 
+const router = useRouter()
 const customizeAi = () => useModals().users.customizeAi.open({})
 
 const rightCommands = computed(() => [
 	{ label: 'Add a student', action: () => useModals().organizations.addMember.open({ type: MemberTypes.student, org: user.value! }) },
 	{ label: 'Add a teacher', action: () => useModals().organizations.addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
-	{ label: 'Create a quiz', action: () => Logic.Common.GoToRoute('/quizzes/create') },
-	{ label: 'Create a course', action: () => Logic.Common.GoToRoute('/course/create') },
+	{ label: 'Create a quiz', action: () => router.push('/quizzes/create') },
+	{ label: 'Create a course', action: () => router.push('/course/create') },
 	...(userType.value.isOrg
 		? [{ label: 'Create a class', action: () => useModals().organizations.createClass.open({ organizationId: id.value }) }]
 		: []),

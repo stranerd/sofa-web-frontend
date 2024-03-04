@@ -182,9 +182,9 @@ const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => 
 }
 
 const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type === ClassLessonable.quiz) return item.quiz.photo?.link ?? '/images/default.png'
-	if (item.type === ClassLessonable.file) return item.file.photo?.link ?? '/images/default.png'
-	return '/images/default.png'
+	if (item.type === ClassLessonable.quiz) return item.quiz.photo?.link ?? '/images/default.svg'
+	if (item.type === ClassLessonable.file) return item.file.photo?.link ?? '/images/default.svg'
+	return '/images/default.svg'
 }
 
 const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>

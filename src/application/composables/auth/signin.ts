@@ -29,13 +29,14 @@ export const saveReferrerId = async () => {
 
 export const useEmailSignin = () => {
 	const factory = new EmailSigninFactory()
+	const router = useRouter()
 	const {
 		asyncFn: signin,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
 		const user = await AuthUseCases.signinWithEmail(factory, { referrer: await getReferrerId() })
-		await createSession(user)
+		await createSession(user, router)
 		await storage.remove('referrer')
 	})
 	return { factory, loading, error, signin }
@@ -43,13 +44,14 @@ export const useEmailSignin = () => {
 
 export const useEmailSignup = () => {
 	const factory = new EmailSignupFactory()
+	const router = useRouter()
 	const {
 		asyncFn: signup,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
 		const user = await AuthUseCases.signupWithEmail(factory, { referrer: await getReferrerId() })
-		await createSession(user)
+		await createSession(user, router)
 		await storage.remove('referrer')
 	})
 	return { factory, loading, error, signup }
@@ -71,7 +73,7 @@ export const useEmailVerification = () => {
 	} = useAsyncFn(async () => {
 		try {
 			const user = await AuthUseCases.completeEmailVerification(token.value)
-			await createSession(user)
+			await createSession(user, router)
 		} catch (error) {
 			if (error instanceof NetworkError && error.statusCode === StatusCodes.InvalidToken) {
 				await router.push('/auth/signin')
@@ -109,6 +111,7 @@ export const useEmailVerification = () => {
 
 export const useGoogleSignin = () => {
 	const { setError } = useErrorHandler()
+	const router = useRouter()
 
 	const {
 		asyncFn: signin,
@@ -120,7 +123,7 @@ export const useGoogleSignin = () => {
 			const { idToken } = googleUser.authentication
 			await GoogleAuth.signOut()
 			const user = await AuthUseCases.signinWithGoogle({ idToken }, { referrer: await getReferrerId() })
-			await createSession(user)
+			await createSession(user, router)
 			await storage.remove('referrer')
 		} catch (error) {
 			throw error ?? 'Error signing in with google'
@@ -142,6 +145,7 @@ export const useGoogleSignin = () => {
 }
 
 export const useAppleSignin = () => {
+	const router = useRouter()
 	const {
 		asyncFn: signin,
 		loading,
@@ -164,7 +168,7 @@ export const useAppleSignin = () => {
 				},
 				{ referrer: await getReferrerId() },
 			)
-			await createSession(user)
+			await createSession(user, router)
 			await storage.remove('referrer')
 		} catch (error) {
 			throw 'Error signing in with apple'

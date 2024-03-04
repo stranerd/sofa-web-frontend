@@ -105,7 +105,8 @@
 				placeholder="Select education level"
 				:error="typeFactory.errors.schoolType"
 				borderColor="border-transparent"
-				:options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" />
+				:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
+			<!-- :options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" /> -->
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 				<SofaSelect
@@ -210,6 +211,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePhoneUpdate, useProfileUpdate } from '@app/composables/auth/profile'
 import { useChooseSchool } from '@app/composables/school'
@@ -224,6 +226,7 @@ const props = defineProps<{
 }>()
 
 const { auth, user } = useAuth()
+const router = useRouter()
 const { factory: profileFactory, updateProfile } = useProfileUpdate()
 const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
 const { factory: typeFactory, updateType } = useUserTypeUpdate()
@@ -285,7 +288,7 @@ const handleAccountSetup = async () => {
 }
 
 const complete = async () => {
-	await Logic.Common.GoToRoute(await Logic.Common.getRedirectToRoute())
+	await router.push(await Logic.Common.getRedirectToRoute())
 }
 
 const { courses, fetchInstitutionCourses } = useCourseList()

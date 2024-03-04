@@ -10,12 +10,8 @@
 
 			<div class="w-[40%] shadow-custom px-4 py-2 bg-white rounded-custom flex gap-3 items-center justify-between">
 				<form class="flex gap-2 items-center flex-1" @submit.prevent="handleSearch">
-					<SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
-					<SofaNormalText
-						as="a"
-						class="pr-2 border-r border-darkLightGray"
-						content="Filter"
-						@click="Logic.Common.GoToRoute('/marketplace/search')" />
+					<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
+					<SofaNormalText as="router-link" class="pr-2 border-r border-darkLightGray" content="Filter" to="/marketplace/search" />
 					<SofaTextField
 						v-model="searchQuery"
 						class="flex-1"
@@ -31,7 +27,7 @@
 			<form
 				class="w-full shadow-custom px-4 py-2 bg-white rounded-custom flex gap-2 items-center justify-start"
 				@submit.prevent="handleSearch">
-				<SofaIcon name="filter" class="h-[15px] cursor-pointer" @click="Logic.Common.GoToRoute('/marketplace/search')" />
+				<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
 				<SofaIcon name="search-black" class="h-[15px] cursor-pointer" @click="handleSearch" />
 				<SofaTextField v-model="searchQuery" class="flex-1" customClass="!border-none w-full !px-0" placeholder="Search" />
 			</form>
@@ -73,6 +69,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRouter } from 'vue-router'
 import { extractResource } from '@app/composables/library'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
@@ -87,13 +84,14 @@ export default defineComponent({
 		})
 
 		const searchQuery = ref('')
+		const router = useRouter()
 
 		const { materials: latest } = useMyStudy('latest')
 		const { materials: popular } = useMyStudy('popular')
 		const { materials: rated } = useMyStudy('rated')
 
 		const handleSearch = () => {
-			if (searchQuery.value) Logic.Common.GoToRoute('/marketplace/search?q=' + searchQuery.value)
+			if (searchQuery.value) router.push('/marketplace/search?q=' + searchQuery.value)
 		}
 
 		const materials = computed(() => [

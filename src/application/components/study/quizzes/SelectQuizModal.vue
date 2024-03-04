@@ -27,6 +27,7 @@
 				<SofaRadio v-model="selectedQuiz" name="quiz" :value="quiz" />
 				<SofaNormalText :content="quiz.title" />
 			</a>
+			<SofaHeaderText v-if="!filteredQuizzes.length" class="!text-center" content="No quizzes found" />
 		</div>
 		<div class="w-full flex items-center justify-between">
 			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block" @click="close">
@@ -47,12 +48,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { QuizEntity } from '@modules/study'
+import { computed, ref } from 'vue'
 import { useMyQuizzes } from '@app/composables/study/quizzes-list'
+import { QuizEntity, QuizModes } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
+	mode: QuizModes
 	onSelected: (quiz: QuizEntity) => void
 }>()
 
@@ -67,8 +69,5 @@ const select = (quiz: QuizEntity | null) => {
 }
 
 const { published: quizzes } = useMyQuizzes()
-const filteredQuizzes = computed(() => {
-	if (!searchQuery.value) return quizzes.value
-	return quizzes.value.filter((q) => q.title.includes(searchQuery.value))
-})
+const filteredQuizzes = computed(() => quizzes.value.filter((q) => [q.search(searchQuery.value), q.modes[props.mode]].every(Boolean)))
 </script>

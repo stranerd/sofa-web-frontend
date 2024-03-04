@@ -1,3 +1,5 @@
+export type QuestionAnswer = boolean | string | number[] | string[]
+
 export enum QuestionTypes {
 	multipleChoice = 'multipleChoice',
 	trueOrFalse = 'trueOrFalse',

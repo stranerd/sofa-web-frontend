@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout v-if="user" :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
+	<ExpandedLayout v-if="user" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="user.publicName" />
@@ -109,9 +109,9 @@
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
 							:title="`${user.publicName} has no published materials yet`"
-							subTitle="Discover thousands of other materials on SOFA marketplace"
+							subTitle="Discover thousands of other materials on Stranerd's marketplace"
 							actionLabel="Marketplace"
-							:action="() => Logic.Common.GoToRoute('/marketplace')" />
+							:action="() => $router.push('/marketplace')" />
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5" :hide="{ bottom: true }">
+	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5">
 		<!-- Display for larger screens -->
 		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow">
 			<div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
@@ -72,7 +72,6 @@
 				</template>
 			</div>
 
-			<!-- Course content slider -->
 			<div
 				v-if="selectedMaterial && showCourseContent"
 				class="absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col gap-2 items-center justify-center w-full">

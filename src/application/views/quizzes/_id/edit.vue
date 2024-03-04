@@ -1,5 +1,5 @@
 <template>
-	<QuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string" :skipMembers="false">
+	<EditQuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string">
 		<template #default="{ quiz, extras, members }">
 			<DashboardLayout
 				v-if="extras.canEdit"
@@ -28,13 +28,13 @@
 								{
 									name: 'Preview',
 									icon: 'preview',
-									handler: () => Logic.Common.GoToRoute(`/quizzes/${quiz.id}/preview`),
+									handler: () => $router.push(`/quizzes/${quiz.id}/preview`),
 									size: 'h-[17px]',
 								},
 								{
 									name: 'Settings',
 									icon: 'cog',
-									handler: () => (showSettingModal = true),
+									handler: openEditModal,
 									size: 'h-[20px]',
 									hide: !extras.isMine,
 								},
@@ -43,7 +43,7 @@
 						{
 							IsOutlined: true,
 							name: 'Exit',
-							handler: () => Logic.Common.goBack(),
+							handler: () => $router.push('/library/quizzes'),
 						},
 						{
 							IsOutlined: false,
@@ -105,19 +105,13 @@
 				<template #middle-session>
 					<!-- Top bar for smaller screens -->
 					<div class="w-full flex mdlg:!hidden justify-between items-center bg-lightGray p-4">
-						<SofaIcon class="h-[19px]" name="circle-close" @click="handleMobileGoback" />
+						<SofaIcon class="h-[19px]" name="circle-close" @click="Logic.Common.goBack()" />
 
 						<SofaNormalText
 							class="!font-bold !text-sm"
-							:content="
-								showSettingModal
-									? 'Update quiz'
-									: extras.currentQuestionById
-										? QuestionEntity.getLabel(extras.currentQuestionById.type)
-										: ''
-							" />
+							:content="extras.currentQuestionById ? QuestionEntity.getLabel(extras.currentQuestionById.type) : ''" />
 
-						<div class="flex items-center gap-3" :class="{ invisible: showSettingModal }">
+						<div class="flex items-center gap-3">
 							<SofaIcon
 								class="h-[18px]"
 								name="share-option"
@@ -129,31 +123,21 @@
 										manageMembers: extras.manageMembers,
 									})
 								" />
-							<SofaIcon class="h-[18px]" name="cog" @click="showSettingModal = true" />
+							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal()" />
 							<SofaIcon class="h-[14px]" name="preview" @click="() => $router.push(`/quizzes/${quiz.id}/preview`)" />
 							<SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
 						</div>
 					</div>
 
-					<div
-						class="w-full flex flex-col bg-white px-4 mdlg:py-4 flex-grow h-full overflow-y-auto"
-						:class="{ 'mdlg:shadow-custom mdlg:rounded-2xl gap-4': !showSettingModal }">
-						<EditQuestionBody
-							v-if="!showSettingModal && extras.currentQuestionById"
-							:key="extras.currentQuestionById.id"
-							:factory="extras.questionFactory" />
-						<QuizForm
-							v-if="showSettingModal && !Logic.Common.isLarge"
-							:quiz="quiz"
-							:factory="extras.quizFactory"
-							:close="() => (showSettingModal = false)"
-							@updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
-							@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
-					</div>
+					<EditQuestionBody
+						v-if="extras.currentQuestionById"
+						:key="extras.currentQuestionById.id"
+						class="w-full flex flex-col bg-white px-4 mdlg:py-4 mdlg:shadow-custom mdlg:rounded-2xl gap-4 flex-grow h-full overflow-y-auto"
+						:factory="extras.questionFactory" />
 
 					<!-- Question list for smaller screens -->
 					<EditQuestionsList
-						v-if="!Logic.Common.isLarge && !showSettingModal"
+						v-if="!Logic.Common.isLarge"
 						v-model:questionId="extras.selectedQuestionId"
 						:quiz="quiz"
 						:users="extras.usersByQuestions"
@@ -168,19 +152,6 @@
 
 			<SofaModal v-else-if="quiz">
 				<RequestAccess :quiz="quiz" :requestAccess="extras.requestAccess" />
-			</SofaModal>
-
-			<!-- Larger screen setings modal -->
-			<SofaModal v-if="showSettingModal && Logic.Common.isLarge">
-				<div class="w-full flex flex-col gap-4 mdlg:p-6 p-4 rounded-2xl items-center justify-center">
-					<SofaHeaderText class="!text-xl !font-bold" content="Update quiz" />
-					<QuizForm
-						:quiz="quiz"
-						:factory="extras.quizFactory"
-						:close="() => (showSettingModal = false)"
-						@updateQuiz="extras.updateQuiz().then(handleSettingSaved)"
-						@publishQuiz="extras.publishQuiz().then(handleSettingSaved)" />
-				</div>
 			</SofaModal>
 
 			<!-- More option / settings for smaller screens -->
@@ -258,7 +229,7 @@
 						<a
 							v-for="type in QuestionEntity.getAllTypes()"
 							:key="type.value"
-							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-skyBlue bg-[#F2F5F8] rounded-lg"
+							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue bg-[#F2F5F8] rounded-lg"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
 							<SofaIcon :name="type.icon" class="h-[50px]" />
 							<SofaNormalText :content="type.label" />
@@ -275,22 +246,22 @@
 						title="Quiz not found"
 						subTitle="Quiz doesn't exist. Check out other materials in the marketplace"
 						actionLabel="Go to marketplace"
-						:action="() => Logic.Common.GoToRoute('/marketplace')"
+						:action="() => $router.push('/marketplace')"
 						titleStyle="mdlg:!text-xl" />
 				</div>
 			</div>
 		</template>
-	</QuizWrapper>
+	</EditQuizWrapper>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import EditQuestionBody from '@app/components/study/questions/EditQuestionBody.vue'
 import EditQuestionOptions from '@app/components/study/questions/EditQuestionOptions.vue'
 import EditQuestionsList from '@app/components/study/questions/EditQuestionsList.vue'
-import QuizForm from '@app/components/study/quizzes/QuizForm.vue'
-import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
+import EditQuizWrapper from '@app/components/study/quizzes/EditQuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
@@ -299,8 +270,7 @@ import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'QuizIdEdit',
 	components: {
-		QuizWrapper,
-		QuizForm,
+		EditQuizWrapper,
 		EditQuestionsList,
 		EditQuestionOptions,
 		EditQuestionBody,
@@ -312,36 +282,28 @@ export default defineComponent({
 			title: 'Edit Quiz',
 		})
 
+		const route = useRoute()
+
 		const showAddQuestionModal = ref(false)
 
 		const interactingQuestionId = ref('')
 
-		const showSettingModal = ref(false)
 		const showMoreOptions = ref(false)
 		const showCurrentlyEditingModal = ref(false)
 
-		const handleSettingSaved = (status?: boolean) => {
-			if (status) showSettingModal.value = false
-		}
+		const openEditModal = () => useModals().study.editQuiz.open({ id: route.params.id as string })
 
 		const openAccessModal = useModals().study.manageAccess.open
-
-		const handleMobileGoback = () => {
-			if (showSettingModal.value) showSettingModal.value = false
-			else Logic.Common.goBack()
-		}
 
 		return {
 			QuestionEntity,
 			showAddQuestionModal,
 			showCurrentlyEditingModal,
 			showMoreOptions,
-			showSettingModal,
 			interactingQuestionId,
-			handleSettingSaved,
 			openAccessModal,
+			openEditModal,
 			Logic,
-			handleMobileGoback,
 		}
 	},
 })

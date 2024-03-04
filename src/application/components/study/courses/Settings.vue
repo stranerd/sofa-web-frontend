@@ -16,7 +16,6 @@
 				<SofaTextarea
 					ref="description"
 					v-model="courseSettingForm.description"
-					:hasTitle="false"
 					textAreaStyle="h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none"
 					placeholder="Description" />
 
@@ -51,7 +50,7 @@
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 				<SofaImageLoader
 					customClass="w-full md:!h-full h-[220px] rounded-custom relative"
-					:photoUrl="courseImageUrl ? courseImageUrl : '/images/default.png'">
+					:photoUrl="courseImageUrl ? courseImageUrl : '/images/default.svg'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full flex-row items-center justify-center">
 						<SofaFileAttachment
 							v-model="courseSettingForm.photo"

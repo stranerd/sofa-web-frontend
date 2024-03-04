@@ -61,11 +61,13 @@ export const usePlansList = () => {
 
 	const currentPlan = computed(() => {
 		const planId = wallet.value?.subscription.current?.id ?? null
-		if (!planId) return null
+		if (!planId) return myPlans.value.find((p) => p.amount === 0) ?? null
 		return myPlans.value.find((p) => p.id === planId) ?? null
 	})
 
-	return { ...store, myPlans, currentPlan }
+	const firstPaidPlan = computed(() => myPlans.value.find((p) => p.amount > 0) ?? null)
+
+	return { ...store, myPlans, currentPlan, firstPaidPlan }
 }
 
 export const usePlan = (id: string) => {
@@ -88,15 +90,21 @@ export const usePlan = (id: string) => {
 }
 
 export const useSubscription = () => {
+	const { wallet } = useAuth()
 	const { setMessage } = useSuccessHandler()
-	const { asyncFn: subscribeToPlan } = useAsyncFn(async (data: { planId: string; methodId?: string | null }) => {
-		await WalletsUseCases.subscribeToPlan(data)
+	const { asyncFn: subscribeToPlan } = useAsyncFn(async (data: { planId: string; methodId: string | null }) => {
+		wallet.value = await WalletsUseCases.subscribeToPlan(data)
 		setMessage('Subscription successful')
 	})
 
-	const { asyncFn: toggleRenewPlan } = useAsyncFn(async (renew: boolean) => {
-		await WalletsUseCases.toggleRenewSubscription(renew)
+	const { asyncFn: renewPlan } = useAsyncFn(async () => {
+		wallet.value = await WalletsUseCases.renewPlan()
+		setMessage('Renewal successful')
 	})
 
-	return { subscribeToPlan, toggleRenewPlan }
+	const { asyncFn: toggleRenewPlan } = useAsyncFn(async (renew: boolean) => {
+		wallet.value = await WalletsUseCases.toggleRenewSubscription(renew)
+	})
+
+	return { subscribeToPlan, renewPlan, toggleRenewPlan }
 }

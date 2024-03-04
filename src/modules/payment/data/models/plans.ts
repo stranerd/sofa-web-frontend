@@ -10,6 +10,7 @@ export interface PlanFromModel {
 	features: string[]
 	currency: Currencies
 	interval: Interval
+	lengthInDays: number
 	data: PlanData
 	usersFor: UserType[]
 	createdAt: number

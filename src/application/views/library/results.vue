@@ -6,7 +6,7 @@
 
 		<SofaEmptyState
 			v-else
-			title="You have no practice item here"
+			title="You have no results here"
 			subTitle="Discover thousands of materials to buy, created by verified experts"
 			actionLabel="Marketplace"
 			:action="() => $router.push('/marketplace')" />
@@ -17,8 +17,7 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { useMyGames } from '@app/composables/plays/games'
-import { useMyTests } from '@app/composables/plays/tests'
+import { useMyPlays } from '@app/composables/plays/plays'
 
 export default defineComponent({
 	name: 'LibraryResultsPage',
@@ -28,14 +27,11 @@ export default defineComponent({
 		const route = useRoute()
 		const tab = computed(() => (route.query.tab as string) ?? 'all')
 
-		const { ended: endedGames } = useMyGames()
-		const { ended: endedTests } = useMyTests()
+		const { closed } = useMyPlays()
 
 		const data = computed(() => {
-			if (tab.value === 'all') return [...endedGames.value, ...endedTests.value].sort((a, b) => b.createdAt - a.createdAt)
-			if (tab.value === 'games') return endedGames.value
-			if (tab.value === 'tests') return endedTests.value
-			return []
+			if (tab.value === 'all') return closed.value
+			return closed.value.filter((p) => p.data.type === tab.value)
 		})
 
 		return { data }

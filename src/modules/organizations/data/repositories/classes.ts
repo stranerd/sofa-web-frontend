@@ -72,8 +72,8 @@ export class ClassRepository implements IClassRepository {
 		return this.mapper(d)
 	}
 
-	async purchase(id: string) {
-		return await this.client.post<unknown, boolean>(`/${id}/purchase`, {})
+	async purchase(id: string, methodId: string | null) {
+		return await this.client.post<{ methodId: string | null }, boolean>(`/${id}/purchase`, { methodId })
 	}
 
 	async cancelPurchase(id: string) {

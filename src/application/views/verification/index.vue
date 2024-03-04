@@ -17,8 +17,7 @@
 				},
 			],
 		}"
-		:wrap="true"
-		:hide="{ bottom: true }">
+		:wrap="true">
 		<template #left-session>
 			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
 				<div class="w-full flex flex-col">
@@ -162,7 +161,7 @@
 			</div>
 
 			<!-- Smaller screen CTA -->
-			<div class="w-full flex flex-col md:hidden py-4 sticky bottom-0 left-0 items-center justify-center">
+			<div class="w-full flex flex-col md:hidden pt-4 pb-2 sticky bottom-0 left-0 items-center justify-center">
 				<SofaButton :disabled="!profileFactory.valid || !socialsFactory.valid" padding="py-3" class="w-full" @click="submit">
 					Submit
 				</SofaButton>

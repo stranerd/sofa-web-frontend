@@ -13,8 +13,18 @@ export class AnswersUseCase {
 		return await this.repository(type, typeId).answer(data)
 	}
 
-	async getForUser(type: PlayTypes, typeId: string, userId: string) {
-		const answers = await this.repository(type, typeId).get({ where: [{ field: 'user.id', value: userId }] })
-		return answers.results.at(0) ?? null
+	async get(type: PlayTypes, typeId: string) {
+		const answers = await this.repository(type, typeId).get({
+			all: true,
+		})
+		return answers.results
+	}
+
+	async end(type: PlayTypes, typeId: string) {
+		return await this.repository(type, typeId).end()
+	}
+
+	async reset(type: PlayTypes, typeId: string) {
+		return await this.repository(type, typeId).reset()
 	}
 }

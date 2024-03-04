@@ -24,7 +24,6 @@
 
 				<SofaTextarea
 					v-model="message"
-					:hasTitle="false"
 					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3"
 					placeholder="Let us know how we can help" />
 

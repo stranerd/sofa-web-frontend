@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[60%] lg:!w-[45%]">
+	<ExpandedLayout width="mdlg:!w-[60%] lg:!w-[45%]">
 		<div class="w-full flex mdlg:!hidden flex-row items-center gap-3 z-50 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
 			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText customClass="!font-bold !text-base"> Become a tutor</SofaNormalText>
@@ -55,7 +55,6 @@
 
 					<SofaTextarea
 						v-model="profileFactory.description"
-						:hasTitle="false"
 						textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
 						placeholder="Bio" />
 				</div>
@@ -160,7 +159,7 @@
 			</template>
 		</div>
 		<!-- Button for smaller screens -->
-		<div class="w-full flex flex-col bg-white px-4 py-4 mdlg:hidden">
+		<div class="w-full flex flex-col px-4 pt-4 pb-2 mdlg:hidden">
 			<SofaButton padding="py-3" customClass="!w-full" @click="handleNextAction"> Next </SofaButton>
 		</div>
 	</ExpandedLayout>

@@ -15,7 +15,7 @@
 					</SofaFileInput>
 				</SofaImageLoader>
 
-				<SofaButton padding="px-5 py-2" @click="Logic.Common.GoToRoute('/profile')">View profile</SofaButton>
+				<SofaButton padding="px-5 py-2" @click="$router.push('/profile')">View profile</SofaButton>
 			</div>
 
 			<SofaTextField
@@ -38,7 +38,6 @@
 
 			<SofaTextarea
 				v-model="factory.description"
-				:hasTitle="false"
 				:error="factory.errors.description"
 				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3"
 				placeholder="Bio" />
@@ -91,13 +90,13 @@ const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 watch(factory.values, () => {
 	Logic.Common.debounce(() => {
-		updateProfile()
+		if (factory.valid) updateProfile()
 	}, 1000)
 })
 
 watch(socialsFactory.values, () => {
 	Logic.Common.debounce(() => {
-		updateSocials()
+		if (socialsFactory.valid) updateSocials()
 	}, 1000)
 })
 </script>

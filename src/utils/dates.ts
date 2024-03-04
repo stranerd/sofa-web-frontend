@@ -69,3 +69,5 @@ export const getDateString = (date: Date) =>
 	[date.getFullYear(), date.getMonth() + 1, date.getDate()].map((v) => v.toString().padStart(2, '0')).join('-')
 
 export const getTimeString = (date: Date) => [date.getHours(), date.getMinutes()].map((v) => v.toString().padStart(2, '0')).join(':')
+
+export const getDateTimeString = (date: Date) => `${getDateString(date)}T${getTimeString(date)}`

@@ -1,6 +1,5 @@
 import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { Logic } from 'sofa-logic'
@@ -161,14 +160,12 @@ export const useDeleteSchedule = () => {
 }
 
 export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntity) => {
-	const router = useRouter()
-
 	const { asyncFn: copyKey } = useAsyncFn(async (s = schedule) => {
 		if (s.stream) await Logic.Common.copy(s.stream.streamKey)
 	})
 
 	const { asyncFn: join } = useAsyncFn(async () => {
-		await router.push(`${classInst.pageLink}/schedules/${schedule.id}/live`)
+		await window.open(schedule.meetingLink, '_blank')
 	})
 
 	const { asyncFn: rewatch } = useAsyncFn(async () => {

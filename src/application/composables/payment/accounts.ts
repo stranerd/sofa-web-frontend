@@ -39,7 +39,7 @@ export const useAccountsUpdate = () => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		await WalletsUseCases.updateAccountNumber(factory)
+		wallet.value = await WalletsUseCases.updateAccountNumber(factory)
 		showAddNewAccount.value = false
 		return true
 	})

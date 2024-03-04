@@ -32,7 +32,7 @@ export class WalletRepository implements IWalletRepository {
 	}
 
 	async updateAccountNumber(accounts: Partial<AccountDetails>[]) {
-		const d = await this.client.post<{ accounts: Partial<AccountDetails>[] }, WalletEntity>('/account', { accounts })
+		const d = await this.client.post<{ accounts: Partial<AccountDetails>[] }, WalletFromModel>('/account', { accounts })
 		return this.mapper(d)
 	}
 
@@ -41,12 +41,17 @@ export class WalletRepository implements IWalletRepository {
 	}
 
 	async toggleRenewSubscription(data: { renew: boolean }) {
-		const d = await this.client.post<{ renew: boolean }, WalletEntity>('/subscriptions/renewal/toggle', data)
+		const d = await this.client.post<{ renew: boolean }, WalletFromModel>('/subscriptions/renew/toggle', data)
 		return this.mapper(d)
 	}
 
-	async subscribeToPlan(data: { planId: string; methodId?: string | null }) {
-		const d = await this.client.post<{ planId: string; methodId?: string | null }, WalletEntity>('/subscriptions', data)
+	async subscribeToPlan(data: { planId: string; methodId: string | null }) {
+		const d = await this.client.post<{ planId: string; methodId: string | null }, WalletFromModel>('/subscriptions', data)
+		return this.mapper(d)
+	}
+
+	async renewPlan() {
+		const d = await this.client.post<unknown, WalletFromModel>('/subscriptions/renew', {})
 		return this.mapper(d)
 	}
 

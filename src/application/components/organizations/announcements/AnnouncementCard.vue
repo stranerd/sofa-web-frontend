@@ -12,10 +12,10 @@
 						<SofaNormalText color="text-grayColor">{{ time }}</SofaNormalText>
 					</div>
 					<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="hidden mdlg:block">
-						{{ lesson }}
+						{{ lessons }}
 					</SofaBadge>
 					<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8] hidden mdlg:block">
-						{{ recipient }}
+						{{ recipients }}
 					</SofaBadge>
 				</div>
 				<SofaNormalText color="text-deepGray" :content="announcement.body" customClass="hidden mdlg:block" />
@@ -24,8 +24,8 @@
 		<div class="flex mdlg:hidden items-start flex-col gap-1">
 			<SofaNormalText color="text-deepGray">{{ announcement.body }}</SofaNormalText>
 			<div class="flex items-center gap-1">
-				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)">{{ lesson }}</SofaBadge>
-				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8]">{{ recipient }} </SofaBadge>
+				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)">{{ lessons }}</SofaBadge>
+				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8]">{{ recipients }} </SofaBadge>
 			</div>
 		</div>
 	</div>
@@ -44,16 +44,18 @@ const props = defineProps<{
 const { user } = useAuth()
 const { time } = useTimeDifference(props.announcement.createdAt)
 
-const recipient = computed(() => {
-	const userType = props.announcement.filter.userType
-	if (userType === MemberTypes.teacher) return 'Teachers'
-	if (userType === MemberTypes.student) return 'Students'
-	return 'All Members'
+const recipients = computed(() => {
+	const userTypes = props.announcement.filter.userTypes
+	if (!userTypes) return 'All Members'
+	const results: string[] = []
+	if (userTypes.includes(MemberTypes.teacher)) results.push('Teachers')
+	if (userTypes.includes(MemberTypes.student)) results.push('Students')
+	return results.join(', ')
 })
 
-const lesson = computed(() => {
-	const lessonId = props.announcement.filter.lessonId
-	if (lessonId) return props.classInst.getLesson(lessonId)?.title || lessonId
-	else return 'All Lessons'
+const lessons = computed(() => {
+	const lessonIds = props.announcement.filter.lessonIds
+	if (!lessonIds) return 'All Lessons'
+	return lessonIds.map((lessonId) => props.classInst.getLesson(lessonId)?.title ?? lessonId).join(', ')
 })
 </script>

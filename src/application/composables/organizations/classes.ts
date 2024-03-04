@@ -195,7 +195,7 @@ export const usePurchaseClass = () => {
 		error,
 		called,
 	} = useAsyncFn(async (classInst: ClassEntity) => {
-		await ClassesUseCases.purchase(classInst.organizationId, classInst.id)
+		await ClassesUseCases.purchase(classInst.organizationId, classInst.id, null)
 		Logic.Common.showAlert({
 			message: 'Successfully enrolled',
 			type: 'success',

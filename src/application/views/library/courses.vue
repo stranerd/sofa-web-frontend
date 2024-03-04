@@ -7,7 +7,7 @@
 				:activity="activity"
 				:isWrapped="!Logic.Common.isLarge"
 				customClass="mdlg:!bg-white shadow-custom cursor-pointer relative"
-				@click="openCourse(activity)">
+				@click="openMaterial(activity.original)">
 				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 					<SofaIcon
 						name="more-options-horizontal"
@@ -22,7 +22,7 @@
 			title="You have no course here"
 			actionLabel="Explore"
 			subTitle="Discover thousands of courses and save them here for easy access"
-			:action="() => Logic.Common.GoToRoute('/marketplace')" />
+			:action="() => $router.push('/marketplace')" />
 	</LibraryLayout>
 </template>
 
@@ -30,10 +30,11 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { extractResource, openCourse } from '@app/composables/library'
+import { extractResource, openMaterial } from '@app/composables/library'
 import { handleShowMaterialMoreOptions, useRecent } from '@app/composables/study'
 import { useMyCourses } from '@app/composables/study/courses-list'
 import { Logic } from 'sofa-logic'
+import { DraftStatus } from '@modules/study'
 
 export default defineComponent({
 	name: 'LibraryCoursesPage',
@@ -48,12 +49,12 @@ export default defineComponent({
 
 		const data = computed(() => {
 			if (tab.value === 'recent') return recentCourses.value.map(extractResource)
-			else if (tab.value === 'published') return published.value.map(extractResource)
-			else if (tab.value === 'draft') return draft.value.map(extractResource)
+			else if (tab.value === DraftStatus.published) return published.value.map(extractResource)
+			else if (tab.value === DraftStatus.draft) return draft.value.map(extractResource)
 			return []
 		})
 
-		return { Logic, openCourse, data, handleShowMaterialMoreOptions }
+		return { Logic, openMaterial, data, handleShowMaterialMoreOptions }
 	},
 })
 </script>

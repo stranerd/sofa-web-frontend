@@ -74,6 +74,6 @@ export const useCreatePurchase = (id: string, type: Purchasables) => {
 		asyncFn: createPurchase,
 		loading,
 		error,
-	} = useAsyncFn(async (methodId: string) => await PurchasesUseCases.create({ id, type, methodId }))
+	} = useAsyncFn(async (methodId: string) => await PurchasesUseCases.create({ id, type, methodId, payWithWallet: false }))
 	return { createPurchase, loading, error }
 }

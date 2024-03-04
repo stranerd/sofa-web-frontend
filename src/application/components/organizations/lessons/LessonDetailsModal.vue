@@ -25,7 +25,7 @@
 		</div>
 		<div v-if="selectedTab === 'curriculum'">
 			<div v-if="curriculum.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
-				<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+				<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
 				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center">
 					{{ (teachers.at(0)?.publicName ?? 'Teacher') + ' has not set the curriculum yet' }}
@@ -41,7 +41,7 @@
 		</div>
 		<div v-if="selectedTab === 'teachers'" class="py-4 flex flex-col gap-4">
 			<div v-if="teachers.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
-				<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+				<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
 				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center" content="No Teachers" />
 			</div>
@@ -52,7 +52,7 @@
 		</div>
 		<div v-if="selectedTab === 'students'" class="py-4 flex flex-col gap-4">
 			<div v-if="students.length === 0" class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
-				<img src="/images/no-lessons.png" class="w-[84px] h-[84px]" />
+				<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
 				<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 				<SofaNormalText color="text-grayColor text-center" content="No Students" />
 			</div>

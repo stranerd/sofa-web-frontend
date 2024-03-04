@@ -89,7 +89,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 	constructor() {
 		super({
 			type: UserType.student,
-			schoolType: UserSchoolType.college,
+			schoolType: UserSchoolType.university,
 			institutionId: '',
 			facultyId: '',
 			departmentId: '',
@@ -141,6 +141,10 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		return this.schoolType === UserSchoolType.aspirant
 	}
 
+	get isUniversityType() {
+		return this.schoolType === UserSchoolType.university
+	}
+
 	getInstitution(institutionId: string) {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const classThis = this
@@ -183,7 +187,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 				this.institutionId = entity.type.school.institutionId
 				this.facultyId = entity.type.school.facultyId
 				this.departmentId = entity.type.school.departmentId
-			} else {
+			} else if (entity.type.school.type === UserSchoolType.aspirant) {
 				this.set('exams', entity.type.school.exams)
 				this.institutions = entity.type.school.exams.map((e) => e.institutionId)
 			}
@@ -208,10 +212,14 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 						facultyId,
 						departmentId,
 					}
-				: {
-						type: UserSchoolType.aspirant,
-						exams,
-					},
+				: this.isAspirantType
+					? {
+							type: UserSchoolType.aspirant,
+							exams,
+						}
+					: {
+							type: UserSchoolType.university,
+						},
 		}
 	}
 }

@@ -13,7 +13,7 @@ export class PublishableEntity<T extends PublishableConstructorArgs = Publishabl
 	}
 
 	get picture() {
-		return this.photo?.link ?? '/images/default.png'
+		return this.photo?.link ?? '/images/default.svg'
 	}
 
 	get isPublished() {
@@ -22,6 +22,12 @@ export class PublishableEntity<T extends PublishableConstructorArgs = Publishabl
 
 	get isDraft() {
 		return this.status === DraftStatus.draft
+	}
+
+	canEdit(userId: string): boolean {
+		if (this.user.id === userId) return true
+		if (this.isQuiz()) return this.access.members.includes(userId)
+		else return false
 	}
 
 	isQuiz(): this is QuizEntity {

@@ -89,7 +89,6 @@
 
 				<SofaTextarea
 					v-model="dataReactive.description"
-					:hasTitle="false"
 					textAreaStyle="h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none"
 					placeholder="Description" />
 			</template>
@@ -111,7 +110,6 @@
 
 				<SofaTextarea
 					v-model="dataReactive.description"
-					:hasTitle="false"
 					textAreaStyle="h-[60px] rounded-custom !bg-lightGray md:!py-4 md:!px-4 px-3 py-3 resize-none"
 					placeholder="Description" />
 			</template>

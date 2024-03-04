@@ -14,7 +14,7 @@
 						v-for="type in QuestionEntity.getAllTypes()"
 						:key="type.value"
 						class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center rounded-lg"
-						:class="factory.type === type.value ? 'bg-skyBlue' : 'bg-[#F2F5F8]'"
+						:class="factory.type === type.value ? 'bg-lightBlue' : 'bg-[#F2F5F8]'"
 						@click="factory.type = type.value">
 						<SofaIcon :name="type.icon" class="h-[50px]" />
 						<SofaNormalText class="text-center" :content="type.label" />

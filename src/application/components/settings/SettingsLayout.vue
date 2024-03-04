@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
+	<ExpandedLayout width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
 		<div class="mdlg:hidden w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base">{{ title }}</SofaNormalText>
@@ -21,7 +21,7 @@
 						<template v-for="(optionItem, i) in option.subPages" :key="optionItem.title">
 							<router-link
 								v-if="optionItem.show()"
-								class="w-full flex flex-col items-start p-2 hover:bg-skyBlue rounded-lg"
+								class="w-full flex flex-col items-start p-2 hover:bg-lightBlue rounded-lg"
 								:class="{ 'border-t border-lightGray mdlg:border-none': i !== 0 }"
 								exactActiveClass="bg-lightBlue font-semibold"
 								:to="optionItem.to">

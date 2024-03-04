@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout :hide="{ bottom: true }" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
+	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
 		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
 			<SofaNormalText color="text-grayColor w-full flex flex-row justify-start gap-1">
 				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ 'Marketplace ' }}</span>
@@ -26,7 +26,7 @@
 				:similarContents="similarContents"
 				:type="contentType"
 				:contentId="contentDetails.id"
-				:openQuiz="() => openQuiz(contentDetails as any)"
+				:openQuiz="() => contentDetails.original && openMaterial(contentDetails.original)"
 				:actions="{
 					report: () => reportMaterial(contentDetails.original!),
 					share: () => shareMaterialLink(contentDetails.original!),
@@ -117,9 +117,9 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCreateView } from '@app/composables/interactions/views'
-import { extractResource, openQuiz, reportMaterial, shareMaterialLink } from '@app/composables/library'
+import { extractResource, openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { InteractionEntities } from '@modules/interactions'
@@ -229,6 +229,7 @@ export default defineComponent({
 		]
 
 		const route = useRoute()
+		const router = useRouter()
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
@@ -260,7 +261,7 @@ export default defineComponent({
 				contentDetails.price = SingleCourse.value.price.amount
 				contentDetails.currency = SingleCourse.value.price.currency
 				contentDetails.status = SingleCourse.value.status
-				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.png'
+				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.svg'
 				contentDetails.info = SingleCourse.value.description
 				contentDetails.lastUpdated = `Last updated ${formatTime(SingleCourse.value.createdAt)}`
 				contentDetails.labels.color = 'orange'
@@ -358,7 +359,7 @@ export default defineComponent({
 				contentDetails.title = SingleQuiz.value.title
 				contentDetails.price = 0
 				contentDetails.status = SingleQuiz.value.status
-				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.png'
+				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.svg'
 				contentDetails.info = SingleQuiz.value.description
 				contentDetails.lastUpdated = `Last updated ${formatTime(SingleQuiz.value.createdAt)}`
 				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`
@@ -424,7 +425,7 @@ export default defineComponent({
 
 			if (purchase) {
 				showMakePaymentModal.value = false
-				Logic.Common.GoToRoute('/course/' + SingleCourse.value?.id)
+				router.push('/course/' + SingleCourse.value?.id)
 			}
 		}
 
@@ -507,7 +508,7 @@ export default defineComponent({
 			contentType,
 			saveToFolder,
 			userHasAccess,
-			openQuiz,
+			openMaterial,
 			reportMaterial,
 			shareMaterialLink,
 			buyCourse,

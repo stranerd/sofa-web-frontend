@@ -49,9 +49,7 @@ export class ClassesUseCase {
 	async getMyClassesIn(user: UserEntity) {
 		return await this.repository('').explore({
 			where: [
-				{ field: 'organizationId', condition: Conditions.in, value: user.myOrgsIn },
 				{ field: 'members.students', value: user.id },
-				{ field: 'lessons.users.students', value: user.id },
 				{ field: 'lessons.users.teachers', value: user.id },
 			],
 			whereType: QueryKeys.or,
@@ -85,8 +83,8 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).listenToMany(conditions, listener, () => true)
 	}
 
-	async purchase(organizationId: string, classId: string) {
-		return await this.repository(organizationId).purchase(classId)
+	async purchase(organizationId: string, classId: string, methodId: string | null) {
+		return await this.repository(organizationId).purchase(classId, methodId)
 	}
 
 	async cancelPurchase(organizationId: string, classId: string) {

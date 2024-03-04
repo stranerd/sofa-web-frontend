@@ -161,8 +161,8 @@ export default defineComponent({
 		const { announcements, hasMore, fetchOlderAnnouncements } = useClassAnnouncements(organizationId, classId)
 		const filteredAnnouncements = computed(() =>
 			announcements.value.filter((an) => {
-				const lessonMatch = an.filter.lessonId && filter.lesson ? an.filter.lessonId === filter.lesson : true
-				const userTypeMatch = an.filter.userType && filter.userType ? an.filter.userType === filter.userType : true
+				const lessonMatch = an.filter.lessonIds && filter.lesson ? an.filter.lessonIds.includes(filter.lesson) : true
+				const userTypeMatch = an.filter.userTypes && filter.userType ? an.filter.userTypes.includes(filter.userType) : true
 				return lessonMatch && userTypeMatch
 			}),
 		)

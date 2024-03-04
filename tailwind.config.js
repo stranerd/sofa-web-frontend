@@ -17,9 +17,7 @@ export default {
 				fadedPurple: '#EFF4F9',
 				purple: '#964DDE',
 				deepGray: '#141618',
-				skyBlue: '#E6F5FF',
 				lightGray: '#F1F6FA',
-				hoverBlue: '#7DC8FA',
 				darkBody: '#050F19',
 				darkLightGray: '#E1E6EB',
 				lightBlue: '#E2F3FD',
@@ -47,6 +45,7 @@ export default {
 			xl: '1.11rem',
 			'2xl': '1.2rem',
 			'3xl': '1.5rem',
+			'4xl': '1.75rem',
 		},
 	},
 	plugins: [

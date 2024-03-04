@@ -7,7 +7,7 @@ import { Logic, ResourceType } from 'sofa-logic'
 const createQuizData = (quiz: QuizEntity): ResourceType => ({
 	original: quiz,
 	title: quiz.title,
-	image: quiz.photo?.link ?? '/images/default.png',
+	image: quiz.photo?.link ?? '/images/default.svg',
 	labels: {
 		color: 'pink',
 		main: 'Quiz - Learn',
@@ -30,7 +30,7 @@ const createQuizData = (quiz: QuizEntity): ResourceType => ({
 const createCourseData = (course: CourseEntity): ResourceType => ({
 	original: course,
 	title: course.title,
-	image: course.photo?.link ?? '/images/default.png',
+	image: course.photo?.link ?? '/images/default.svg',
 	labels: {
 		color: 'orange',
 		main: 'Course',
@@ -56,17 +56,11 @@ export const extractResource = (material: CourseEntity | QuizEntity) => {
 	return material.isQuiz() ? createQuizData(material) : createCourseData(material)
 }
 
-export const openQuiz = (activity: ResourceType, force = false) => {
-	const original = activity.original as QuizEntity
-	if (!force && ((activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id) || original.isForTutors))
-		return Logic.Common.GoToRoute(`/quizzes/${activity.id}/edit`)
-	useModals().study.chooseStudyMode.open({ quiz: original })
-}
-
-export const openCourse = (activity: ResourceType) => {
-	if (activity.original.isDraft && activity.user.id === Logic.Common.AuthUser?.id)
-		return Logic.Common.GoToRoute(`/course/create?id=${activity.id}`)
-	Logic.Common.GoToRoute(`/course/${activity.id}`)
+export const openMaterial = (material: QuizEntity | CourseEntity, force = false) => {
+	if (!force && ((material.isDraft && material.canEdit(Logic.Common.AuthUser?.id ?? '')) || (material.isQuiz() && material.isForTutors)))
+		return Logic.Common.GoToRoute(material.isQuiz() ? `/quizzes/${material.id}/edit` : `/course/create?id=${material.id}`)
+	if (material.isCourse()) Logic.Common.GoToRoute(`/course/${material.id}`)
+	if (material.isQuiz()) useModals().study.chooseStudyMode.open({ quiz: material })
 }
 
 export const reportMaterial = (material: QuizEntity | CourseEntity) => {

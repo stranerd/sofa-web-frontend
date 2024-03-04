@@ -78,7 +78,7 @@ export default defineComponent({
 		})
 
 		const emptyClassesContent = {
-			imageURL: '/images/empty-class.png',
+			imageURL: '/images/empty-classes.png',
 			title: 'You are not in any class',
 			sub: 'Explore classes to find ones you would like to join',
 		}

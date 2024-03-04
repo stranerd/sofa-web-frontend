@@ -84,16 +84,12 @@
 										: 'Get course for free'
 								}}
 							</SofaButton>
-							<SofaButton
-								v-else
-								padding="px-6 py-1"
-								customClass="w-auto"
-								@click="Logic.Common.GoToRoute('/course/' + content.id)">
+							<SofaButton v-else padding="px-6 py-1" customClass="w-auto" @click="$router.push('/course/' + content.id)">
 								Go to course
 							</SofaButton>
 						</div>
 						<div v-if="type == 'quiz'" class="md:!flex hidden flex-col">
-							<SofaButton padding="px-6 py-1" @click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(content.route)">
+							<SofaButton padding="px-6 py-1" @click="hasAccess ? openQuiz() : $router.push(content.route)">
 								{{ hasAccess ? 'Start' : 'Go to course' }}
 							</SofaButton>
 						</div>
@@ -155,7 +151,7 @@
 					title="You have no access"
 					subTitle="Get the course it is in to use"
 					actionLabel="Go to course"
-					:action="() => Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)"
+					:action="() => $router.push(`/marketplace/${content.courseId}?type=course`)"
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
 
@@ -164,7 +160,7 @@
 					<SofaButton
 						padding="md:!py-1 py-3 px-4"
 						customClass="md:!w-auto w-full"
-						@click="hasAccess ? openQuiz() : Logic.Common.GoToRoute(`/marketplace/${content.courseId}?type=course`)">
+						@click="hasAccess ? openQuiz() : $router.push(`/marketplace/${content.courseId}?type=course`)">
 						{{ hasAccess ? 'Start' : 'Go to course' }}
 					</SofaButton>
 				</div>
@@ -251,7 +247,7 @@
 						:key="index"
 						:activity="activity"
 						customClass="!bg-lightGray cursor-pointer"
-						@click="Logic.Common.GoToRoute(activity.route)" />
+						@click="$router.push(activity.route)" />
 				</div>
 			</div>
 			<template v-else>
@@ -260,11 +256,7 @@
 						title="No similar course found"
 						subTitle="Discover thousands of materials to buy, created by verified experts"
 						actionLabel="Marketplace"
-						:action="
-							() => {
-								Logic.Common.GoToRoute('/marketplace')
-							}
-						" />
+						:action="() => $router.push('/marketplace')" />
 				</div>
 			</template>
 		</div>
@@ -279,7 +271,7 @@
 			@click="buyAction && content.status == 'published' ? buyAction() : null">
 			{{ content.price > 0 ? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
 		</SofaButton>
-		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="Logic.Common.GoToRoute('/course/' + content.id)">
+		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="$router.push('/course/' + content.id)">
 			Go to course
 		</SofaButton>
 	</div>

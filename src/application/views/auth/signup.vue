@@ -4,35 +4,39 @@
 			<AuthProvider :signUp="true" />
 
 			<div class="w-full flex flex-col gap-4">
+				<div class="flex gap-4 items-center">
+					<SofaTextField
+						v-model="factory.first"
+						customClass="rounded-custom !bg-lightGray w-full"
+						placeholder="First Name"
+						:error="factory.errors.first" />
+					<SofaTextField
+						v-model="factory.last"
+						customClass="rounded-custom !bg-lightGray w-full"
+						placeholder="Last Name"
+						:error="factory.errors.last" />
+				</div>
 				<SofaTextField
-					ref="email"
 					v-model="factory.email"
 					customClass="rounded-custom !bg-lightGray"
 					type="email"
-					name="Email"
 					placeholder="Email"
 					:error="factory.errors.email" />
 				<SofaTextField
-					ref="password"
 					v-model="factory.password"
 					customClass="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Password"
-					name="Password"
 					:error="factory.errors.password" />
 				<SofaTextField
-					ref="confirm_new_password"
 					v-model="factory.cPassword"
 					customClass="rounded-custom !bg-lightGray"
 					type="password"
-					name="Confirm password"
 					placeholder="Confirm password"
 					:error="factory.errors.cPassword" />
-			</div>
 
-			<div class="flex flex-col items-center gap-2">
 				<SofaCheckbox v-model="factory.termsAccepted">
-					<span class="text-grayColor text-left">
+					<span class="text-grayColor text-left flex flex-wrap gap-[4px]">
 						I have read and accepted SOFA’s
 						<SofaNormalText
 							color="text-primaryBlue"

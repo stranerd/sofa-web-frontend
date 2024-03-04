@@ -344,10 +344,6 @@ export default defineComponent({
 
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 
-		const create = () => {
-			Logic.Common.GoToRoute('/dashboard')
-		}
-
 		const selectedMaterial = ref<any>()
 
 		const showMoreOptions = ref(false)
@@ -471,7 +467,6 @@ export default defineComponent({
 			handleMobileGoback,
 			showMateterialDetails,
 			handleCourseSettingSaved,
-			create,
 			updateCourseSections,
 		}
 	},

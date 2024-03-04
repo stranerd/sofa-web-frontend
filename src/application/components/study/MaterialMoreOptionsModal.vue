@@ -14,11 +14,11 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { saveToFolder } from '@app/composables/study/folders'
 import { CourseEntity, QuizEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
@@ -26,6 +26,7 @@ const props = defineProps<{
 }>()
 
 const { id } = useAuth()
+const router = useRouter()
 
 const moreOptions = computed(() => [
 	{
@@ -34,8 +35,8 @@ const moreOptions = computed(() => [
 		show: () => props.material?.user.id === id.value,
 		action: () => {
 			props.close()
-			if (props.material.isQuiz()) Logic.Common.GoToRoute(`/quizzes/${props.material.id}/edit`)
-			else Logic.Common.GoToRoute(`/course/create?id=${props.material.id}`)
+			if (props.material.isQuiz()) router.push(`/quizzes/${props.material.id}/edit`)
+			else router.push(`/course/create?id=${props.material.id}`)
 		},
 	},
 	{
