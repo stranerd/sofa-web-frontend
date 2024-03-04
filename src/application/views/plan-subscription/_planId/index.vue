@@ -64,12 +64,13 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { usePlan, useSubscription } from '@app/composables/payment/plans'
 import { MethodEntity } from '@modules/payment'
+import { Logic } from 'sofa-logic'
 export default defineComponent({
 	routeConfig: {
-		middlewares: ['isAuthenticated'],
+		middlewares: ['isSubscription'],
 	},
 	setup() {
 		useMeta({
@@ -77,6 +78,7 @@ export default defineComponent({
 		})
 
 		const route = useRoute()
+		const router = useRouter()
 		const planId = route.params.planId as string
 		const methodId = ref('')
 
@@ -90,7 +92,9 @@ export default defineComponent({
 		const planData = computed(() => ({ planId, methodId: methodId.value }))
 
 		const subscribe = async () => {
+			const path = await Logic.Common.getRedirectToRoute()
 			await subscribeToPlan(planData.value)
+			router.push(path)
 		}
 
 		return {
