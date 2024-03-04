@@ -77,7 +77,7 @@ export const usePlan = (id: string) => {
 		called,
 	} = useAsyncFn(async () => {
 		const response = await PlansUseCases.find(id)
-		console.log(response)
+		plan.value = response
 	})
 
 	onMounted(async () => {
@@ -89,8 +89,8 @@ export const usePlan = (id: string) => {
 
 export const useSubscription = () => {
 	const { setMessage } = useSuccessHandler()
-	const { asyncFn: subscribeToPlan } = useAsyncFn(async (planId: string) => {
-		await WalletsUseCases.subscribeToPlan(planId)
+	const { asyncFn: subscribeToPlan } = useAsyncFn(async (data: { planId: string; methodId?: string | null }) => {
+		await WalletsUseCases.subscribeToPlan(data)
 		setMessage('Subscription successful')
 	})
 

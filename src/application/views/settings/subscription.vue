@@ -156,7 +156,7 @@ export default defineComponent({
 		const myApplicablePlan = computed(() => myPlans.value.at(0) ?? null)
 
 		const subscibeToPlan = async (id: string) => {
-			await subscribeToPlan(id)
+			await subscribeToPlan({ planId: id })
 		}
 
 		const toggleRenewal = async () => {

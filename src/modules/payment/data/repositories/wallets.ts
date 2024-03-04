@@ -45,8 +45,8 @@ export class WalletRepository implements IWalletRepository {
 		return this.mapper(d)
 	}
 
-	async subscribeToPlan(data: { planId: string }) {
-		const d = await this.client.post<{ planId: string }, WalletEntity>('/subscriptions', data)
+	async subscribeToPlan(data: { planId: string; methodId?: string | null }) {
+		const d = await this.client.post<{ planId: string; methodId?: string | null }, WalletEntity>('/subscriptions', data)
 		return this.mapper(d)
 	}
 
