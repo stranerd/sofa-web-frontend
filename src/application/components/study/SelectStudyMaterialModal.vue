@@ -25,7 +25,7 @@
 					:isWrapper="true"
 					:accept="item.extras.accept"
 					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center"
-					@update:modelValue="(media) => uploadFile(item, media)">
+					@update:modelValue="(media) => media && uploadFile(item, media as any)">
 					<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black" />
 					<SofaNormalText customClass="!font-bold">
 						{{ item.name }}
