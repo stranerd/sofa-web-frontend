@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full flex flex-col items-center justify-center">
 		<!-- New and exciting ways to study -->
-		<div class="w-[90%] mx-auto">
+		<div class="w-[90%] mx-auto max-w-[1800px]">
 			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">{{ content.study.title }}</h2>
 			<p class="text-[14px] md:text-[16px] text-center">
 				{{ content.study.desc }}
@@ -29,7 +29,7 @@
 		</div>
 		<!-- Classes -->
 		<div
-			class="w-[90%] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			class="w-[90%] max-w-[1800px] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div
 				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[160px] justify-center gap-2 text-center px-8 mdlg:text-left">
 				<h3 class="text-white font-bold text-[20px] md:text-[36px] leading-[54px]">{{ content.classes.title }}</h3>
@@ -50,7 +50,8 @@
 			</div>
 		</div>
 		<!-- MarketPlace -->
-		<div class="w-[90%] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
+		<div
+			class="w-[90%] max-w-[1800px] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
 			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
 				<img class="w-[90%] mdlg:w-full mdlg:h-full" src="/images/marketplace.png" />
 			</div>
@@ -77,7 +78,7 @@
 		<!-- Create -->
 		<div
 			v-if="content.create.show"
-			class="w-[90%] mt-[250px] mb-20 mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			class="w-[90%] max-w-[1800px] mt-[250px] mb-20 mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div class="w-full mdlg:w-1/2 mx-auto flex flex-col mdlg:pl-[160px] justify-center gap-2 px-8 mdlg:px-0">
 				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">{{ content.create.title }}</h3>
 				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.create.heading }}</h4>
@@ -97,20 +98,20 @@
 			</div>
 		</div>
 		<!-- Access preparatory classes -->
-		<div
-			v-if="content.access.show"
-			class="w-full bg-[#F9FAFB] h-[389px] flex flex-col justify-center items-center overflow-hidden mb-20">
-			<div class="w-[90%] mx-auto flex flex-col gap-2">
-				<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
-					Access Preparatory Classes for top examinations
-				</h4>
-				<p class="text-[12px] md:text-[16px] text-center">
-					Access a world of interactive learning with quizzes and courses created
-				</p>
+		<div v-if="content.access.show" class="w-full bg-[#F9FAFB] h-[389px] mb-20 flex items-center justify-center">
+			<div class="flex flex-col justify-center items-center overflow-hidden w-full max-w-[1800px] mx-auto">
+				<div class="w-[90%] mx-auto flex flex-col gap-2">
+					<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
+						Access Preparatory Classes for top examinations
+					</h4>
+					<p class="text-[12px] md:text-[16px] text-center">
+						Access a world of interactive learning with quizzes and courses created
+					</p>
+				</div>
+				<Vue3Marquee :duration="200" :pauseOnHover="true" class="flex items-center">
+					<img v-for="(image, index) in images" :key="index" :src="image" />
+				</Vue3Marquee>
 			</div>
-			<Vue3Marquee :duration="200" :pauseOnHover="true" class="flex items-center">
-				<img v-for="(image, index) in images" :key="index" :src="image" />
-			</Vue3Marquee>
 		</div>
 		<!-- Discover  study materials-->
 		<HomeDiscoverMaterials v-if="content.discover.show" />
@@ -145,11 +146,13 @@
 		<!-- FAQS -->
 		<HomeFAQS v-if="content.faqs.show" />
 		<!-- Get app -->
-		<div v-if="content.getApp.show" class="w-[80%] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+		<div
+			v-if="content.getApp.show"
+			class="w-[80%] max-w-[1800px] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 			<div class="w-full md:w-1/2 order-2 md:order-1 flex flex-col items-center gap-4">
 				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
-				<RouterLink :to="APPSTORE_LINK"><img src="/images/app-store-badge.png" /></RouterLink>
-				<RouterLink :to="PLAYSTORE_LINK"><img src="/images/playstore-badge.png" /></RouterLink>
+				<a :href="APPSTORE_LINK" target="_blank"><img src="/images/app-store-badge.png" /></a>
+				<a :href="PLAYSTORE_LINK" target="_blank"><img src="/images/playstore-badge.png" /></a>
 			</div>
 			<div class="w-full order-1 md:order-2 md:w-1/2 flex flex-col items-center">
 				<img src="/images/get-app.png" />

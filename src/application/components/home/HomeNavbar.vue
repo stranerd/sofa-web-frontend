@@ -1,6 +1,6 @@
 <template>
 	<nav class="w-full h-[65px] bg-white flex items-center justify-center">
-		<div class="w-[90%] mx-auto flex items-center justify-between">
+		<div class="w-[90%] mx-auto flex items-center justify-between max-w-[1800px]">
 			<button class="block mdlg:hidden">
 				<SofaIcon name="menu" class="h-[24px]" @click="openMobileMenu" />
 			</button>

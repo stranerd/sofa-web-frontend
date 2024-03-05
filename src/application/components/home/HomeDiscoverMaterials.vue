@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-10 mdlg:p-24 mb-20">
+	<div class="bg-[#D6EBFFCC] w-[90%] mx-auto rounded-[30px] p-10 mdlg:p-24 mb-20 max-w-[1800px]">
 		<div class="flex flex-col gap-6">
 			<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-6 mdlg:gap-0">
 				<div class="order-2 mdlg:order-1 flex flex-col gap-6">

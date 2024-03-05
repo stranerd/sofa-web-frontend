@@ -1,10 +1,10 @@
 <template>
-	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white max-w-[1800px] mx-auto">
+	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white mx-auto">
 		<header class="flex flex-col items-center justify-center relative gap-[44px]">
 			<HomeNavbar />
 			<!-- Link -->
 			<div
-				class="flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden"
+				class="flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden max-w-[1800px]"
 				style="box-shadow: 0 4px 16px 0 #00000040">
 				<button
 					class="w-1/2 h-full flex items-center justify-center p-5 rounded-[22px] text-[14px] md:text-[16px]"
@@ -22,7 +22,7 @@
 			<div
 				class="relative flex justify-center"
 				:class="showStudentsPricing ? 'items-center mdlg:min-h-[500px]' : 'items-start mdlg:min-h-[300px]'">
-				<div class="w-[90%] sm:w-[80%] md:w-[60%] mx-auto flex flex-col mdlg:flex-row items-center gap-10">
+				<div class="w-[90%] sm:w-[80%] md:w-[60%] mx-auto flex flex-col mdlg:flex-row items-center gap-10 max-w-[1800px]">
 					<div
 						v-if="plan.basic"
 						ref="firstPlan"

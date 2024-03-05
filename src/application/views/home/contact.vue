@@ -1,10 +1,10 @@
 <template>
-	<main class="w-full flex flex-col bg-white max-w-[1800px] mx-auto">
+	<main class="w-full flex flex-col bg-white mx-auto">
 		<header class="flex flex-col items-center justify-center">
 			<HomeNavbar />
 			<div class="styled-bg h-[1000px] min-h-[800px] mdlg:h-[800px] w-full flex items-center justify-center">
 				<div
-					class="w-[90%] mx-auto flex justify-between relative mt-[230px] sm:mt-[200px] mdlg:mt-0 mdlg:flex-row flex-col gap-10 mdlg:gap-0">
+					class="w-[90%] max-w-[1800px] mx-auto flex justify-between relative mt-[230px] sm:mt-[200px] mdlg:mt-0 mdlg:flex-row flex-col gap-10 mdlg:gap-0">
 					<div class="w-full mdlg:w-1/2 flex flex-col gap-4 mdlg:pr-16 text-center md:text-left">
 						<div class="flex flex-col gap-[10px]">
 							<h1 class="text-[20px] mdlg:text-[40px] text-white leading-[30px] mdlg:leading-[60px] font-normal">

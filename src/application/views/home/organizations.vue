@@ -1,7 +1,7 @@
 <template>
-	<main class="w-full bg-white max-w-[1800px] mx-auto">
+	<main class="w-full bg-white">
 		<header class="flex gap-[44px] flex-col items-center justify-center bg-[#29001a] relative">
-			<HomeNavbar />
+			<HomeNavbar class="!z-50" />
 			<!-- Link -->
 			<div
 				class="z-50 flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden"
@@ -20,7 +20,7 @@
 			<div
 				class="absolute top-[65px] left-0 right-0 w-full bg-[#d500a1] rounded-b-full h-[400px] blur-[100px]"
 				style="z-index: 10 !important"></div>
-			<div class="z-50 w-[90%] mdlg:min-h-[400px] relative">
+			<div class="z-50 w-[90%] mdlg:min-h-[400px] max-w-[1800px] relative">
 				<div class="w-[90%] md:w-[70%] mdlg:w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
 					<h1
 						class="text-[18px] text-white leading-[27px] md:text-[30px] md:leading-[40px] mdlg:text-[40px] text-center font-600 mdlg:leading-[60px] font-semibold">
@@ -48,7 +48,7 @@
 				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/smiles.png" />
 				<img class="hidden mdlg:block absolute -bottom-14 left-0" src="/images/arrow-svg-white.png" />
 			</div>
-			<div class="z-50 w-[90%] mt-[30px] mdlg:mt-0 mx-auto flex md:items-center md:justify-center">
+			<div class="z-50 w-[90%] max-w-[1800px] mt-[30px] mdlg:mt-0 mx-auto flex md:items-center md:justify-center">
 				<img
 					src="/images/organization-hero-image.png"
 					class="w-full h-full mdlg:h-[450px] mdlg:w-[767px] object-cover md:object-contain" />

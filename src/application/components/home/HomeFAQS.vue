@@ -1,5 +1,5 @@
 <template>
-	<div class="w-[90%] mdlg:w-[80%] mx-auto border-[6px] border-black rounded-[30px] p-4 md:p-8 my-20 relative">
+	<div class="w-[90%] mdlg:w-[80%] mx-auto border-[6px] border-black rounded-[30px] p-4 md:p-8 my-20 relative max-w-[1800px]">
 		<h4 class="text-purple font-bold text-[20px] md:text-[36px] md:leading-[54px] text-center">Frequently Asked Questions</h4>
 		<div class="mt-6 overflow-hidden">
 			<div class="flex items-center gap-4 overflow-x-auto styled-scrollbar pb-6">

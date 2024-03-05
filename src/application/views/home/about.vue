@@ -1,5 +1,5 @@
 <template>
-	<main class="w-full flex flex-col gap-20 bg-white max-w-[1800px] mx-auto">
+	<main class="w-full flex flex-col gap-20 bg-white mx-auto">
 		<header class="flex flex-col items-center justify-center">
 			<HomeNavbar />
 			<div class="styled-bg w-full h-[400px] py-6 md:h-[800px] flex flex-col items-center justify-center">
@@ -10,7 +10,7 @@
 			</div>
 		</header>
 		<!-- About us -->
-		<div class="w-[90%] md:w-[80%] mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative">
+		<div class="w-[90%] md:w-[80%] max-w-[1800px] mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative">
 			<div class="w-full order-2 md:order-1 md:w-3/5 flex flex-col gap-1">
 				<h2 class="text-[24px] font-bold about-us-button md:text-left text-center">About Us</h2>
 				<p class="text-[16px]">
@@ -26,7 +26,7 @@
 			<img class="hidden mdlg:block absolute -bottom-10 left-[50%] right-0" src="/images/about-us-vector.png" />
 		</div>
 		<!-- Our Vision -->
-		<div class="w-[90%] md:w-[80%] mx-auto flex md:flex-row flex-col items-center justify-between gap-12">
+		<div class="w-[90%] md:w-[80%] max-w-[1800px] mx-auto flex md:flex-row flex-col items-center justify-between gap-12">
 			<div class="w-[80%] md:w-2/5 flex items-center justify-center">
 				<img src="/images/our-vision.png" class="object-contain" />
 			</div>
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		<!-- Our Mission -->
-		<div class="w-[90%] md:w-[80%] mx-auto flex md:flex-row flex-col items-center justify-between gap-12 relative">
+		<div class="w-[90%] md:w-[80%] max-w-[1800px] mx-auto flex md:flex-row flex-col items-center justify-between gap-12 relative">
 			<div class="w-full md:w-3/5 order-2 md:order-1">
 				<div class="md:pl-[100px] flex flex-col gap-1">
 					<h2 class="text-[24px] font-bold about-us-button md:text-left text-center">Our Mission</h2>
@@ -57,7 +57,7 @@
 		</div>
 		<!-- What sets us apart -->
 		<div
-			class="styled-bg w-[90%] md:w-[80%] min-h-[600px] mdlg:h-[600px] mx-auto rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between gap-6 px-8 py-20 mdlg:px-0 mdlg:py-0">
+			class="styled-bg w-[90%] max-w-[1800px] md:w-[80%] min-h-[600px] mdlg:h-[600px] mx-auto rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between gap-6 px-8 py-20 mdlg:px-0 mdlg:py-0">
 			<div class="mdlg:pl-10 w-full mdlg:w-1/2 order-2 mdlg:order-1 flex flex-col gap-2 justify-center">
 				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">What Sets Us Apart</h3>
 				<ul class="text-white list-disc text-[15px] pl-6">
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 		<!-- Our Values -->
-		<div class="w-[90%] md:w-[80%] mx-auto flex flex-col mdlg:flex-row items-center gap-6 mdlg:gap-20">
+		<div class="w-[90%] md:w-[80%] max-w-[1800px] mx-auto flex flex-col mdlg:flex-row items-center gap-6 mdlg:gap-20">
 			<img src="/images/our-values.png" />
 			<div class="flex flex-col gap-2">
 				<h3 class="text-[24px] font-bold">Our Values</h3>
