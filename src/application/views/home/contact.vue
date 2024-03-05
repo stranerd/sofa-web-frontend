@@ -22,11 +22,11 @@
 						<div class="flex flex-col gap-4">
 							<div class="flex flex-col md:flex-row items-center gap-6">
 								<img src="/images/mail.png" />
-								<p class="text-white">contact@stranerd.com</p>
+								<p class="text-white">{{ CONTACT_EMAIL }}</p>
 							</div>
 							<div class="flex flex-col md:flex-row items-center gap-6">
 								<img src="/images/phone.png" />
-								<p class="text-white">+234-0901-345-1234</p>
+								<p class="text-white">{{ CONTACT_NUMBER }}</p>
 							</div>
 						</div>
 					</div>
@@ -126,6 +126,7 @@
 
 <script setup>
 import { useMetaMessage } from '@app/composables/users/metaMessage'
+import { CONTACT_EMAIL, CONTACT_NUMBER } from '@utils/constants'
 const { sendMessage, factory } = useMetaMessage()
 </script>
 

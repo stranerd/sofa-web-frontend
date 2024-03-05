@@ -77,7 +77,6 @@ declare module 'vue' {
     MoreOnStranerd: typeof import('./../application/components/home/MoreOnStranerd.vue')['default']
     MyClassCard: typeof import('./../application/components/organizations/classes/MyClassCard.vue')['default']
     NewMaterial: typeof import('./../application/components/study/courses/NewMaterial.vue')['default']
-    PaymentMethodCard: typeof import('./../application/components/payment/methods/PaymentMethodCard.vue')['default']
     PlayCard: typeof import('./../application/components/plays/plays/PlayCard.vue')['default']
     PlayRun: typeof import('./../application/components/plays/plays/PlayRun.vue')['default']
     PlayWrapper: typeof import('./../application/components/plays/plays/PlayWrapper.vue')['default']

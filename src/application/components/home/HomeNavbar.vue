@@ -1,8 +1,8 @@
 <template>
 	<nav class="w-full h-[65px] bg-white flex items-center justify-center">
 		<div class="w-[90%] mx-auto flex items-center justify-between">
-			<button class="block mdlg:hidden" @click="toggleMenu">
-				<SofaIcon name="menu" class="h-[24px]" />
+			<button class="block mdlg:hidden">
+				<SofaIcon name="menu" class="h-[24px]" @click="openMobileMenu" />
 			</button>
 			<img src="/images/stranerd_logo.png" />
 			<ul class="hidden mdlg:flex items-center gap-6">
@@ -28,12 +28,11 @@
 			</RouterLink>
 		</div>
 	</nav>
-	<HomeMobileMenu v-if="showMenu" />
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { useMenu } from '@app/composables/core/menu'
+import { useModals } from '@app/composables/core/modals'
 const links = [
 	{
 		label: 'Home',
@@ -57,7 +56,9 @@ const links = [
 	},
 ]
 const route = useRoute()
-const { toggleMenu, showMenu } = useMenu()
+const openMobileMenu = () => {
+	useModals().users.mobileMenu.open({})
+}
 </script>
 
 <style scoped>

@@ -15,38 +15,59 @@
 	</main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-const content = ref({
+import { IMoreOnStranerd } from '@utils/types'
+const content = ref<IMoreOnStranerd>({
 	study: {
 		title: '',
 		desc: '',
 		heading: 'Hybrid tutoring',
 		sub_heading: 'AI + Human Experts',
-		content: 'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
-		link: '#',
+		content:
+			'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
+		link: '',
 	},
 	classes: {
 		title: 'Classes',
 		heading: 'Self Paced & Live Classes',
 		content:
-			'Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes.',
-		link: '#',
+			'Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes. Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes. merse yourself in the energ',
+		link: '',
 	},
 	place: {
 		title: 'Marketplace',
 		heading: 'Explore & Discover materials',
 		content:
-			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
-		link: '#',
+			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources. Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
+		link: '',
 	},
-	showTestimonial: true,
-	showLearningCenters: false,
-	showFAQs: false,
-	showCreate: true,
-	showGetApp: false,
-	showAccess: false,
-	showDiscover: false,
+	create: {
+		title: 'Create',
+		heading: 'Quizzes, Courses, Games, Flashcards.',
+		content:
+			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
+		link: '',
+		show: false,
+	},
+	testimonial: {
+		show: true,
+	},
+	learningCenters: {
+		show: false,
+	},
+	faqs: {
+		show: false,
+	},
+	getApp: {
+		show: false,
+	},
+	access: {
+		show: false,
+	},
+	discover: {
+		show: false,
+	},
 })
 </script>
 

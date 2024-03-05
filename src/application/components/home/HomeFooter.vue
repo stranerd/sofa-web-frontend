@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, YOUTUBE_LINK, WHATSAPP_LINK } from '@utils/constants'
 const footerLinks = [
 	{
 		title: 'About',
@@ -88,23 +89,23 @@ const footerLinks = [
 ]
 const socials = [
 	{
-		link: '#',
+		link: TWITTER_LINK,
 		icon: '/images/twitter.png',
 	},
 	{
-		link: '#',
+		link: INSTAGRAM_LINK,
 		icon: '/images/instagram.png',
 	},
 	{
-		link: '#',
+		link: YOUTUBE_LINK,
 		icon: '/images/youtube.png',
 	},
 	{
-		link: '#',
+		link: WHATSAPP_LINK,
 		icon: '/images/whatsapp.png',
 	},
 	{
-		link: '#',
+		link: TIKTOK_LINK,
 		icon: '/images/tiktok.png',
 	},
 ]

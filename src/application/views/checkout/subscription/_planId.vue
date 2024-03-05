@@ -8,8 +8,8 @@
 			<span />
 		</template>
 		<template #middle-session>
-			<div v-if="plan" class="flex gap-6">
-				<div class="flex flex-col gap-6 w-[70%]">
+			<div v-if="plan" class="flex flex-col mdlg:flex-row gap-6 py-4 mdlg:py-0">
+				<div class="flex flex-col gap-6 w-full mdlg:w-[70%]">
 					<div class="w-full bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
 						<SofaHeaderText>Subscription Details</SofaHeaderText>
 						<div class="flex items-center justify-between rounded-custom border border-hoverBlue p-4">
@@ -28,7 +28,7 @@
 					</div>
 					<SelectPaymentMethod v-model="methodId" :showWallet="false" />
 				</div>
-				<div class="w-[30%] bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
+				<div class="w-full mdlg:w-[30%] bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
 					<SofaHeaderText>Summary</SofaHeaderText>
 					<div class="flex flex-col gap-4">
 						<div class="flex items-center justify-between">
