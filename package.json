@@ -75,7 +75,7 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pages": "^0.32.0",
     "vite-plugin-watch": "^0.2.0",
-    "vue-tsc": "^2.0.4"
+    "vue-tsc": "^1.8.27"
   },
   "description": "Vue Typescript Template"
 }
