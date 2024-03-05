@@ -60,9 +60,10 @@
 	</main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-const content = ref({
+import { IMoreOnStranerd } from '@utils/types'
+const content = ref<IMoreOnStranerd>({
 	study: {
 		title: 'Exciting New Ways to Study',
 		desc: 'Transform your child’s learning experience into something truly engaging and effective',
@@ -86,12 +87,31 @@ const content = ref({
 			'Access a wealth of educational resources, tips, and support from our team of experts, empowering you to provide the best possible learning environment for your child.',
 		link: '#',
 	},
-	showCreate: false,
-	showTestimonial: true,
-	showLearningCenters: true,
-	showFAQs: true,
-	showGetApp: true,
-	showDiscover: true,
-	showAccess: true,
+	create: {
+		title: 'Create',
+		heading: 'Quizzes, Courses, Games, Flashcards.',
+		content:
+			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
+		link: '',
+		show: false,
+	},
+	testimonial: {
+		show: true,
+	},
+	learningCenters: {
+		show: true,
+	},
+	faqs: {
+		show: true,
+	},
+	getApp: {
+		show: true,
+	},
+	access: {
+		show: true,
+	},
+	discover: {
+		show: true,
+	},
 })
 </script>

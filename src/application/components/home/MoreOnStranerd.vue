@@ -18,6 +18,7 @@
 						{{ content.study.content }}
 					</p>
 					<RouterLink
+						v-if="content.study.link.length"
 						:to="content.study.link"
 						class="mdlg:self-start bg-purple text-[14px] md:text-[16px] text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 						Know more
@@ -37,6 +38,7 @@
 					{{ content.classes.content }}
 				</p>
 				<RouterLink
+					v-if="content.classes.link.length"
 					:to="content.classes.link"
 					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
@@ -62,6 +64,7 @@
 					{{ content.place.content }}
 				</p>
 				<RouterLink
+					v-if="content.place.link.length"
 					:to="content.place.link"
 					class="mdlg:self-start bg-purple text-[14px] md:text-[16px] text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
@@ -73,17 +76,18 @@
 		</div>
 		<!-- Create -->
 		<div
-			v-if="content.showCreate"
+			v-if="content.create.show"
 			class="w-[90%] mt-[250px] mb-20 mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div class="w-full mdlg:w-1/2 mx-auto flex flex-col mdlg:pl-[160px] justify-center gap-2 px-8 mdlg:px-0">
-				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">Create</h3>
-				<h4 class="text-white text-[16px] md:text-[24px]">Quizzes, Courses, Games, Flashcards.</h4>
+				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">{{ content.create.title }}</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.create.heading }}</h4>
 				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
-					From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging
-					games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse
-					range of resources designed to cater to every learning style and preference.
+					{{ content.create.content }}
 				</p>
-				<RouterLink to="#" class="self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+				<RouterLink
+					v-if="content.create.link.length"
+					:to="content.create.link"
+					class="self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
 				</RouterLink>
 			</div>
@@ -94,7 +98,7 @@
 		</div>
 		<!-- Access preparatory classes -->
 		<div
-			v-if="content.showAccess"
+			v-if="content.access.show"
 			class="w-full bg-[#F9FAFB] h-[389px] flex flex-col justify-center items-center overflow-hidden mb-20">
 			<div class="w-[90%] mx-auto flex flex-col gap-2">
 				<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
@@ -104,17 +108,17 @@
 					Access a world of interactive learning with quizzes and courses created
 				</p>
 			</div>
-			<div class="flex items-center">
-				<img v-for="i in 10" :key="i" src="/images/jamb.png" />
-			</div>
+			<Vue3Marquee :duration="200" :pauseOnHover="true" class="flex items-center">
+				<img v-for="(image, index) in images" :key="index" :src="image" />
+			</Vue3Marquee>
 		</div>
 		<!-- Discover  study materials-->
-		<HomeDiscoverMaterials v-if="content.showDiscover" />
+		<HomeDiscoverMaterials v-if="content.discover.show" />
 		<!-- Testimonials -->
-		<HomeTestimonials v-if="content.showTestimonial" class="mb-20" />
+		<HomeTestimonials v-if="content.testimonial.show" class="mb-20" />
 		<!-- Popular Learning centers -->
 		<div
-			v-if="content.showLearningCenters"
+			v-if="content.learningCenters.show"
 			class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
 			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
 				<h4 class="font-bold text-[20px] md:text-[32px] text-white text-center leading-[48px]">
@@ -139,13 +143,13 @@
 			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Find more</RouterLink>
 		</div>
 		<!-- FAQS -->
-		<HomeFAQS v-if="content.showFAQs" />
+		<HomeFAQS v-if="content.faqs.show" />
 		<!-- Get app -->
-		<div v-if="content.showGetApp" class="w-[80%] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+		<div v-if="content.getApp.show" class="w-[80%] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 			<div class="w-full md:w-1/2 order-2 md:order-1 flex flex-col items-center gap-4">
 				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
-				<RouterLink to="#"><img src="/images/app-store-badge.png" /></RouterLink>
-				<RouterLink to="#"><img src="/images/playstore-badge.png" /></RouterLink>
+				<RouterLink :to="APPSTORE_LINK"><img src="/images/app-store-badge.png" /></RouterLink>
+				<RouterLink :to="PLAYSTORE_LINK"><img src="/images/playstore-badge.png" /></RouterLink>
 			</div>
 			<div class="w-full order-1 md:order-2 md:w-1/2 flex flex-col items-center">
 				<img src="/images/get-app.png" />
@@ -154,14 +158,18 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from 'vue'
 import { Vue3Marquee } from 'vue3-marquee'
+import { IMoreOnStranerd } from '@utils/types'
+import { APPSTORE_LINK, PLAYSTORE_LINK } from '@utils/constants'
 defineProps({
 	content: {
-		type: Object,
+		type: Object as () => IMoreOnStranerd,
 		required: true,
 	},
 })
+const images = ref(['/images/jamb.png', '/images/jupeb.png', '/images/waec.png', '/images/sat,png', '/images/neco.png', '/images/gce.png'])
 </script>
 
 <style scoped>
