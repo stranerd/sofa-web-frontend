@@ -30,6 +30,7 @@ import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import EditQuiz from '@app/components/study/quizzes/EditQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
+import HomeMobileMenu from '@app/components/home/HomeMobileMenu.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -73,6 +74,10 @@ export const useModals = () => ({
 		sideBar: {
 			component: SideBar,
 			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+		},
+		mobileMenu: {
+			component: HomeMobileMenu,
+			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-full !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
 		},
 	}),
 	payment: modal.register('Payment', {

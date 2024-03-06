@@ -37,6 +37,7 @@ export const isAuthenticated = defineMiddleware(async ({ to }) => {
 		return '/onboarding'
 	}
 })
+
 export const isOnboarding = defineMiddleware(async ({ to, goBackToNonAuth }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect

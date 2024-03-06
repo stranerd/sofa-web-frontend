@@ -1,10 +1,13 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { PlanEntity, PlansUseCases, WalletsUseCases } from '@modules/payment'
+import { Logic } from 'sofa-logic'
+import { UserType } from '@modules/users'
 
 const store = {
 	plans: ref<PlanEntity[]>([]),
@@ -67,15 +70,30 @@ export const usePlansList = () => {
 
 	const firstPaidPlan = computed(() => myPlans.value.find((p) => p.amount > 0) ?? null)
 
-	return { ...store, myPlans, currentPlan, firstPaidPlan }
+	const studentsPlans = computed(() => store.plans.value.filter((p) => p.usersFor.includes(UserType.student)))
+	const orgsPlans = computed(() => store.plans.value.filter((p) => p.usersFor.includes(UserType.organization)))
+
+	return { ...store, myPlans, currentPlan, firstPaidPlan, studentsPlans, orgsPlans }
+}
+
+export const usePlan = (id: string) => {
+	const { plans } = usePlansList()
+
+	const plan = computed(() => plans.value.find((p) => p.id === id) ?? null)
+
+	return { plan }
 }
 
 export const useSubscription = () => {
 	const { wallet } = useAuth()
 	const { setMessage } = useSuccessHandler()
-	const { asyncFn: subscribeToPlan } = useAsyncFn(async (planId: string) => {
-		wallet.value = await WalletsUseCases.subscribeToPlan(planId)
+	const router = useRouter()
+
+	const { asyncFn: subscribeToPlan } = useAsyncFn(async (data: { planId: string; methodId: string | null }) => {
+		wallet.value = await WalletsUseCases.subscribeToPlan(data)
 		setMessage('Subscription successful')
+		const redirect = await Logic.Common.getRedirectToRoute()
+		if (redirect) await router.push(redirect)
 	})
 
 	const { asyncFn: renewPlan } = useAsyncFn(async () => {

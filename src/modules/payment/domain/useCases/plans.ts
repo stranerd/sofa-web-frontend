@@ -1,6 +1,6 @@
-import { IPlanRepository } from '../irepositories/plans'
 import { PlanEntity } from '../entities/plans'
-import { QueryParams, Listeners } from '@modules/core'
+import { IPlanRepository } from '../irepositories/plans'
+import { Listeners, QueryParams } from '@modules/core'
 
 export class PlansUseCase {
 	repository: IPlanRepository

@@ -129,7 +129,7 @@
 					<div class="w-full flex gap-5 items-center">
 						<SofaNormalText v-if="user.socials.length === 0" color="text-grayColor" content="No socials" />
 						<a v-for="(item, index) in user.socials" :key="index" :href="item.link" target="_blank">
-							<SofaIcon :name="socials[item.ref] ?? 'website'" class="h-[20px]" />
+							<SofaIcon :name="socials[item.ref] ?? 'website'" class="h-5 fill-deepGray" />
 						</a>
 					</div>
 				</div>

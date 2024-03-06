@@ -4,7 +4,7 @@
 			{{ content ? `${content} | Stranerd` : 'Stranerd' }}
 		</template>
 	</metainfo>
-	<router-view :key="$route.path" />
+	<RouterView :key="$route.path" />
 	<Modals />
 </template>
 

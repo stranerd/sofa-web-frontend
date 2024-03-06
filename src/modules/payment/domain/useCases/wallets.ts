@@ -21,8 +21,8 @@ export class WalletsUseCase {
 		return await this.repository.toggleRenewSubscription({ renew })
 	}
 
-	async subscribeToPlan(planId: string) {
-		return await this.repository.subscribeToPlan({ planId })
+	async subscribeToPlan(data: { planId: string; methodId: string | null }) {
+		return await this.repository.subscribeToPlan(data)
 	}
 
 	async renewPlan() {

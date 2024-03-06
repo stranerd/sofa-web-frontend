@@ -32,7 +32,8 @@ export class MethodRepository implements IMethodRepository {
 	}
 
 	async makePrimary(id: string) {
-		return await this.client.post<QueryParams, MethodEntity | null>(`/${id}/primary`, {})
+		const data = await this.client.post<QueryParams, MethodFromModel>(`/${id}/primary`, {})
+		return this.mapper(data)
 	}
 
 	async delete(id: string) {

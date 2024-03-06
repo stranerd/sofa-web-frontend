@@ -33,7 +33,7 @@
 				:key="key"
 				class="w-full flex items-center justify-start gap-3 p-3 rounded-custom border-2 border-darkLightGray"
 				@click="factory.addNewSocial(key)">
-				<SofaIcon :name="icon" class="h-[20px]" />
+				<SofaIcon :name="icon" class="h-5 fill-deepGray" />
 				<SofaNormalText color="text-grayColor" class="capitalize" :content="key" />
 			</a>
 		</div>

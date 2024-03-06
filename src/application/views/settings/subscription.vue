@@ -195,7 +195,7 @@ export default defineComponent({
 		const { subscribeToPlan, renewPlan, toggleRenewPlan } = useSubscription()
 
 		const subscibeToPlan = async (id: string) => {
-			await subscribeToPlan(id)
+			await subscribeToPlan({ planId: id, methodId: null })
 		}
 
 		return {

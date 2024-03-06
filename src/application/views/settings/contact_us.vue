@@ -5,16 +5,8 @@
 				<SofaHeaderText size="xl" customClass="text-left" content="Contact details" />
 
 				<div class="w-full flex flex-row items-center gap-5 flex-wrap">
-					<a href="mailto:support@stranerd.com" target="_blank"><SofaIcon customClass="h-[15px]" name="email-social" /></a>
-					<a href="Wa.me/+2348130322791" target="_blank"> <SofaIcon customClass="h-[22px]" name="whatsapp-social" /></a>
-					<a href="https://instagram.com/stranerdapp?igshid=MzRlODBiNWFlZA==" target="_blank">
-						<SofaIcon customClass="h-[18px]" name="instagram-social" />
-					</a>
-					<a href="https://www.tiktok.com/@stranerd?_t=8fCMYT3iCbl&_r=1" target="_blank">
-						<SofaIcon customClass="h-[18px]" name="tiktok-social" />
-					</a>
-					<a href="https://x.com/stranerds?s=21&t=BufB-e-PFvnG949QyKQtgw" target="_blank">
-						<SofaIcon customClass="h-[18px]" name="twitter-social" />
+					<a v-for="social in socials" :key="social.link" :href="social.link" target="_blank">
+						<SofaIcon class="h-5 fill-deepGray" :name="social.icon" />
 					</a>
 				</div>
 			</div>
@@ -27,10 +19,8 @@
 					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3"
 					placeholder="Let us know how we can help" />
 
-				<div class="w-full flex flex-row justify-end">
-					<div class="flex flex-row">
-						<SofaButton padding="px-7 py-2" customClass="!w-auto" @click="sendFeedback()"> Send </SofaButton>
-					</div>
+				<div class="w-full flex justify-end">
+					<SofaButton padding="px-7 py-2" class="w-auto ml-auto" @click="sendFeedback()"> Send </SofaButton>
 				</div>
 			</div>
 		</div>
@@ -41,6 +31,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } from '@utils/constants'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -62,6 +53,33 @@ export default defineComponent({
 			}
 		}
 
+		const socials = [
+			{
+				link: `mailto:${CONTACT_EMAIL}`,
+				icon: 'socials-email',
+			},
+			{
+				link: TWITTER_LINK,
+				icon: 'socials-twitter',
+			},
+			{
+				link: INSTAGRAM_LINK,
+				icon: 'socials-instagram',
+			},
+			{
+				link: YOUTUBE_LINK,
+				icon: 'socials-youtube',
+			},
+			{
+				link: WHATSAPP_LINK,
+				icon: 'socials-whatsapp',
+			},
+			{
+				link: TIKTOK_LINK,
+				icon: 'socials-tiktok',
+			},
+		] as const
+
 		onMounted(() => {
 			if (Logic.Common.route.query?.query?.toString()) {
 				message.value = Logic.Common.route.query?.query?.toString()
@@ -70,6 +88,7 @@ export default defineComponent({
 		return {
 			message,
 			sendFeedback,
+			socials,
 		}
 	},
 })
