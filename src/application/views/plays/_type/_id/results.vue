@@ -27,9 +27,9 @@
 							size="xl"
 							content="Your Result" />
 
-						<div class="flex flex-col items-center flex-grow w-full">
+						<div class="flex flex-col gap-2 items-center flex-grow w-full">
 							<template v-if="tab === 'leaderboard'">
-								<SofaNormalText color="text-current" class="mb-4">
+								<SofaNormalText color="text-current" class="mb-2">
 									{{ extras.scores.length }} {{ pluralize(extras.scores.length, 'participant', 'participants') }}
 								</SofaNormalText>
 								<div
