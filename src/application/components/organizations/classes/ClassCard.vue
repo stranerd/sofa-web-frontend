@@ -1,6 +1,6 @@
 <template>
 	<router-link :to="classInst.pageLink" class="shadow-custom rounded-custom p-4 relative">
-		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
+		<div class="flex items-center gap-2 mdlg:gap-4 w-full" :class="wrap ? 'flex-col md:flex-row' : ''">
 			<SofaImageLoader
 				:photoUrl="classInst.picture"
 				customClass="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
@@ -21,7 +21,7 @@
 				</SofaNormalText>
 			</div>
 
-			<div v-if="showOptionsIcon" class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
+			<div v-if="showOptionsIcon && !wrap" class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 				<SofaIcon name="more-options-horizontal" class="h-[6px]" @click.stop.prevent="moreOptionsHandler" />
 			</div>
 		</div>
@@ -37,10 +37,12 @@ import { Logic } from 'sofa-logic'
 const props = withDefaults(
 	defineProps<{
 		classInst: ClassEntity
-		showOptionsIcon?: boolean // Notice the '?' making it optional
+		showOptionsIcon?: boolean
+		wrap?: boolean
 	}>(),
 	{
 		showOptionsIcon: true,
+		wrap: false,
 	},
 )
 

@@ -1,46 +1,46 @@
 <template>
 	<HomeLayout title="Classes">
-		<div v-if="classes.length === 0" class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
-			<div class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
-				<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
-					<img :src="emptyClassContent.imageURL" class="w-[121px] h-[144px]" />
+		<div class="flex items-center justify-between bg-white rounded-custom px-4 py-2">
+			<div class="w-full mdlg:w-1/2 hidden mdlg:flex items-center gap-2">
+				<SofaIcon name="back-arrow" class="!fill-grayColor" />
+				<p class="flex items-center gap-1"><span class="text-grayColor">Home / </span> Classes</p>
+			</div>
+			<div class="w-full mdlg:w-1/2 justify-self-end flex items-center gap-2">
+				<div class="bg-white w-full mdlg:w-[50%] px-4 py-3 rounded-lg flex flex-row items-center gap-2 border border-darkLightGray">
+					<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
+					<SofaTextField
+						v-model="searchQuery"
+						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-lg"
+						placeholder="Search"
+						padding="px-1" />
 				</div>
-				<div class="flex flex-col items-start gap-1">
-					<SofaHeaderText :content="emptyClassContent.title" size="xl" />
-					<div class="flex flex-col gap-2 py-2">
-						<div v-for="(content, index) in emptyClassContent.contents" :key="index" class="flex mdlg:items-center gap-1">
-							<SofaIcon customClass="h-[16px]" name="checkmark-circle" />
-							<SofaNormalText :content="content" color="text-grayColor" />
-						</div>
-					</div>
-					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6" @click="createClass">
-						Create a class
-					</SofaButton>
-				</div>
+				<SofaButton
+					v-if="classes.length"
+					bgColor="bg-primaryBlue"
+					textColor="text-white"
+					padding="py-3 px-4"
+					customClass="hidden mdlg:block"
+					@click="createClass">
+					Create a class
+				</SofaButton>
 			</div>
 		</div>
+		<div
+			v-if="classes.length === 0"
+			class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 py-10 px-4 mdlg:px-6">
+			<SofaEmptyStateNew
+				title="Getting started with classes"
+				:contents="[
+					'Teach all subjects of a class in the same place',
+					'Create subjects for specific subjects',
+					'Create subjects for specific subjects',
+					'Set a monthly subscription fee for online students',
+				]"
+				imageUrl="/images/classes.png"
+				:firstButton="classesEmptyStateButtonConfig.firstButton" />
+		</div>
 		<div v-else class="flex flex-col gap-4">
-			<div class="grid grid-cols-2 bg-white rounded-custom px-4 py-2">
-				<div class="flex items-center gap-2">
-					<SofaIcon name="back-arrow" class="!fill-grayColor" />
-					<p class="flex items-center gap-1"><span class="text-grayColor">Home / </span> Classes</p>
-				</div>
-				<div class="flex items-center gap-2">
-					<div
-						class="bg-white w-[60%] mdlg:w-[50%] px-4 py-3 rounded-lg flex flex-row items-center gap-2 border border-darkLightGray">
-						<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
-						<SofaTextField
-							v-model="searchQuery"
-							customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-lg"
-							placeholder="Search"
-							padding="px-1" />
-					</div>
-					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-4" @click="createClass">
-						Create a class
-					</SofaButton>
-				</div>
-			</div>
-			<div class="grid grid-cols-2">
+			<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-6">
 				<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classInst="cl" class="bg-white" />
 			</div>
 		</div>
@@ -80,6 +80,15 @@ export default defineComponent({
 			else return classes.value
 		})
 
+		const classesEmptyStateButtonConfig = computed(() => ({
+			firstButton: {
+				label: 'Create a class',
+				action: () => {
+					createClass()
+				},
+			},
+		}))
+
 		const createClass = () => useModals().organizations.createClass.open({ organizationId: organizationId.value })
 
 		return {
@@ -88,6 +97,7 @@ export default defineComponent({
 			filteredClassess,
 			searchQuery,
 			createClass,
+			classesEmptyStateButtonConfig,
 		}
 	},
 })
