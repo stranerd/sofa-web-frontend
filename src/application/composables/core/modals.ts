@@ -75,7 +75,10 @@ export const useModals = () => ({
 			component: SideBar,
 			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
 		},
-		mobileMenu: { component: HomeMobileMenu, modalArgs: { closeOnClickOutside: true } },
+		mobileMenu: {
+			component: HomeMobileMenu,
+			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-full !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+		},
 	}),
 	payment: modal.register('Payment', {
 		transactionDetails: { component: TransactionDetails },

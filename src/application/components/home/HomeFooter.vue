@@ -16,7 +16,7 @@
 				<p class="text-white">© {{ new Date().getFullYear() }} Stranerd - All rights reserved</p>
 				<div class="flex items-center gap-6">
 					<a v-for="social in socials" :key="social.icon" :href="social.link" target="_blank">
-						<img :src="social.icon" />
+						<SofaIcon :name="social.icon" class="h-6 fill-white" />
 					</a>
 				</div>
 			</div>
@@ -91,23 +91,23 @@ const footerLinks = [
 const socials = [
 	{
 		link: TWITTER_LINK,
-		icon: '/images/twitter.png',
+		icon: 'socials-twitter',
 	},
 	{
 		link: INSTAGRAM_LINK,
-		icon: '/images/instagram.png',
+		icon: 'socials-instagram',
 	},
 	{
 		link: YOUTUBE_LINK,
-		icon: '/images/youtube.png',
+		icon: 'socials-youtube',
 	},
 	{
 		link: WHATSAPP_LINK,
-		icon: '/images/whatsapp.png',
+		icon: 'socials-whatsapp',
 	},
 	{
 		link: TIKTOK_LINK,
-		icon: '/images/tiktok.png',
+		icon: 'socials-tiktok',
 	},
-]
+] as const
 </script>

@@ -20,7 +20,7 @@
 				borderColor="border-transparent"
 				:rules="[Logic.Form.RequiredRule]">
 				<template #inner-prefix>
-					<SofaIcon customClass="h-[15px]" name="youtube" />
+					<SofaIcon customClass="h-[15px] fill-deepGray" name="socials-youtube" />
 				</template>
 			</SofaTextField>
 		</div>

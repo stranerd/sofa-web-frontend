@@ -24,7 +24,7 @@
 
 			<div class="w-full flex flex-col gap-2 border-t border-lightGray pt-3">
 				<a class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom" @click="fundWalletOnline">
-					<SofaIcon customClass="h-[20px]" name="website" />
+					<SofaIcon customClass="h-[20px] fill-deepGray" name="socials-website" />
 					<SofaNormalText> Pay online </SofaNormalText>
 				</a>
 

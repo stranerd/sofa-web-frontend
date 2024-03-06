@@ -99,12 +99,12 @@ export const useUserLocationUpdate = () => {
 }
 
 export const socials: Record<UserSocials, IconName> = {
-	[UserSocials.website]: 'website',
-	[UserSocials.youtube]: 'youtube',
-	[UserSocials.instagram]: 'instagram-social',
-	[UserSocials.tiktok]: 'tiktok-social',
-	[UserSocials.facebook]: 'facebook-social',
-	[UserSocials.twitter]: 'twitter-social',
+	[UserSocials.website]: 'socials-website',
+	[UserSocials.youtube]: 'socials-youtube',
+	[UserSocials.instagram]: 'socials-instagram',
+	[UserSocials.tiktok]: 'socials-tiktok',
+	[UserSocials.facebook]: 'socials-facebook',
+	[UserSocials.twitter]: 'socials-twitter',
 }
 
 export const useUserSocialsUpdate = () => {
