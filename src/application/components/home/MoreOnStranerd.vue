@@ -174,7 +174,7 @@ defineProps({
 		required: true,
 	},
 })
-const images = ref(['/images/jamb.png', '/images/jupeb.png', '/images/waec.png', '/images/sat,png', '/images/neco.png', '/images/gce.png'])
+const images = ref(['/images/jamb.png', '/images/jupeb.png', '/images/waec.png', '/images/sat.png', '/images/neco.png', '/images/gce.png'])
 </script>
 
 <script lang="ts">

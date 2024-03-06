@@ -8,7 +8,7 @@
 			<span />
 		</template>
 		<template #middle-session>
-			<div v-if="plan" class="flex flex-col mdlg:flex-row gap-6 py-4 mdlg:py-0">
+			<div v-if="plan" class="flex flex-col mdlg:flex-row gap-6 px-4 mdlg:p-0">
 				<div class="flex flex-col gap-6 w-full mdlg:w-[70%]">
 					<div class="w-full bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
 						<SofaHeaderText>Subscription Details</SofaHeaderText>
