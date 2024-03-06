@@ -1,5 +1,5 @@
 <template>
-	<router-link :to="classInst.pageLink" class="bg-white shadow-custom rounded-custom p-4 relative">
+	<router-link :to="classInst.pageLink" class="shadow-custom rounded-custom p-4 relative">
 		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
 			<SofaImageLoader
 				:photoUrl="classInst.picture"
@@ -21,7 +21,7 @@
 				</SofaNormalText>
 			</div>
 
-			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
+			<div v-if="showOptionsIcon" class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
 				<SofaIcon name="more-options-horizontal" class="h-[6px]" @click.stop.prevent="moreOptionsHandler" />
 			</div>
 		</div>
@@ -34,7 +34,15 @@ import { useModals } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
 
-const props = defineProps<{ classInst: ClassEntity }>()
+const props = withDefaults(
+	defineProps<{
+		classInst: ClassEntity
+		showOptionsIcon?: boolean // Notice the '?' making it optional
+	}>(),
+	{
+		showOptionsIcon: true,
+	},
+)
 
 const moreOptionsHandler = (e: Event) => useModals().organizations.classCardMoreOptions.open({ classInst: props.classInst }, e)
 </script>

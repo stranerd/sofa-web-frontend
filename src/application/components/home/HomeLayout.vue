@@ -12,7 +12,7 @@
 			</div>
 		</div>
 	</SubPageLayout>
-	<DashboardLayout v-else :topbarOptions="{ title }">
+	<DashboardLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
@@ -65,6 +65,19 @@
 						</router-link>
 					</div>
 				</template>
+				<div class="h-[1px] w-full bg-lightGray" />
+				<div v-if="classes.length" class="w-full">
+					<SofaNormalText color="text-grayColor" content="My Classes" />
+
+					<div class="mt-3 flex flex-col gap-2">
+						<div v-for="cl in classes" :key="cl.id" class="flex items-center gap-3">
+							<SofaAvatar size="44" :photoUrl="cl.picture" />
+							<div class="flex flex-col gap-1">
+								<SofaNormalText class="!font-bold truncate" :content="cl.title" />
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</template>
 
@@ -168,6 +181,7 @@ import { useRouter } from 'vue-router'
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
+import { useOrganizationClasses } from '@app/composables/organizations/classes'
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
 import { Logic } from 'sofa-logic'
@@ -212,8 +226,12 @@ const options = computed(() => [
 				{ title: 'Classes', icon: 'classes' as const, route: '/organization/classes' },
 				{ title: 'Teachers', icon: 'tutor' as const, route: '/organization/teachers' },
 				{ title: 'Students', icon: 'user-unfilled' as const, route: '/organization/students' },
+				{ title: 'Analytics', icon: 'analytics' as const, route: '/' },
+				{ title: 'Income', icon: 'income' as const, route: '/' },
 			]
 		: []),
 	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes' as const, route: '/classes' }] : []),
 ])
+
+const { classes } = useOrganizationClasses(id.value)
 </script>

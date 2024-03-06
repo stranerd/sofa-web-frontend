@@ -22,6 +22,7 @@
 				'mdlg:gap-5': !hide.bottom,
 				'mdlg:gap-0': hide.bottom,
 				'!pb-0': noBottomPadding,
+				'mr-5': hide.right,
 			}">
 			<slot name="middle-session" />
 		</div>

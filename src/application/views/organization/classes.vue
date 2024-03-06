@@ -20,21 +20,29 @@
 			</div>
 		</div>
 		<div v-else class="flex flex-col gap-4">
-			<div class="flex items-center justify-between">
-				<div
-					class="bg-white w-[60%] mdlg:w-[50%] px-4 py-3 rounded-[24px] flex flex-row items-center gap-2 border border-darkLightGray">
-					<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
-					<SofaTextField
-						v-model="searchQuery"
-						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
-						placeholder="Search"
-						padding="px-1" />
+			<div class="grid grid-cols-2 bg-white rounded-custom px-4 py-2">
+				<div class="flex items-center gap-2">
+					<SofaIcon name="back-arrow" class="!fill-grayColor" />
+					<p class="flex items-center gap-1"><span class="text-grayColor">Home / </span> Classes</p>
 				</div>
-				<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-4" @click="createClass">
-					Create a class
-				</SofaButton>
+				<div class="flex items-center gap-2">
+					<div
+						class="bg-white w-[60%] mdlg:w-[50%] px-4 py-3 rounded-lg flex flex-row items-center gap-2 border border-darkLightGray">
+						<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
+						<SofaTextField
+							v-model="searchQuery"
+							customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-lg"
+							placeholder="Search"
+							padding="px-1" />
+					</div>
+					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-4" @click="createClass">
+						Create a class
+					</SofaButton>
+				</div>
 			</div>
-			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classInst="cl" />
+			<div class="grid grid-cols-2">
+				<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classInst="cl" class="bg-white" />
+			</div>
 		</div>
 	</HomeLayout>
 </template>

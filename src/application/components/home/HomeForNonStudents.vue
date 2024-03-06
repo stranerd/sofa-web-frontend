@@ -3,13 +3,13 @@
 		<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 			<SofaNormalText class="!font-bold" content="Overview" />
 
-			<div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+			<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 				<div
 					v-for="stat in [
 						{
 							label: 'Classes',
 							value: user.account.meta.classes,
-							icon: 'classes' as const,
+							icon: 'book' as const,
 							color: '#3296C8',
 							hide: !userType.isOrg,
 						},
@@ -32,7 +32,7 @@
 						{
 							label: 'Students',
 							value: user.account.meta.students,
-							icon: 'user-unfilled' as const,
+							icon: 'users-group' as const,
 							color: '#197DFA',
 							hide: !userType.isOrg,
 						},
@@ -54,49 +54,109 @@
 		</div>
 	</div>
 
-	<div class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
-		<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
-			<SofaNormalText class="!font-bold" content="My study materials" />
-			<SofaNormalText color="text-primaryPink" as="router-link" to="/library" class="mdlg:hidden" content="View all" />
+	<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-6">
+		<!-- Classes -->
+		<div class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
+			<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
+				<SofaNormalText class="!font-bold" content="My classes" />
+				<SofaNormalText
+					v-if="classes.length"
+					color="text-primaryBlue"
+					class="hidden mdlg:inline"
+					as="router-link"
+					to="/organization/classes"
+					content="View all" />
+			</div>
+			<div v-if="classes.length">
+				<div v-for="cl in classes" :key="cl.id" class="bg-lightGray rounded-lg px-4">
+					<ClassCard :classInst="cl" :showOptionsIcon="false" />
+				</div>
+			</div>
+			<div v-else class="pr-4 mdlg:pr-0 bg-lightGray py-10 rounded-lg">
+				<SofaEmptyStateNew
+					title="You have no classes"
+					:contents="['Add classes to your organization']"
+					imageUrl="/images/classes.png"
+					:firstButton="classesEmptyStateButtonConfig.firstButton" />
+			</div>
 		</div>
+		<!-- Study Materials -->
+		<div class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
+			<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
+				<SofaNormalText class="!font-bold" content="My study materials" />
+				<SofaNormalText
+					v-if="materials.length"
+					color="text-primaryBlue"
+					class="hidden mdlg:inline"
+					as="router-link"
+					to="/library"
+					content="View all" />
+			</div>
 
-		<div
-			v-if="materials.length"
-			class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
-			<SofaActivityCard
-				v-for="activity in materials.slice(0, 4)"
-				:key="activity.id"
-				as="router-link"
-				:activity="activity"
-				:to="activity.route"
-				:hasBookmark="true"
-				:bookmarkAction="() => saveToFolder(activity.original)"
-				class="shrink-0" />
+			<div
+				v-if="materials.length"
+				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
+				<SofaActivityCard
+					v-for="activity in materials.slice(0, 4)"
+					:key="activity.id"
+					as="router-link"
+					:activity="activity"
+					:to="activity.route"
+					:hasBookmark="true"
+					:bookmarkAction="() => saveToFolder(activity.original)"
+					class="shrink-0" />
+			</div>
+			<div v-else class="pr-4 mdlg:pr-0 bg-lightGray py-10 rounded-lg">
+				<SofaEmptyStateNew
+					title="You have no study materials"
+					:contents="['Add study materials to your organization']"
+					imageUrl="/images/study-material.png"
+					:firstButton="materialsEmptyStateButtonConfig.firstButton"
+					:secondButton="materialsEmptyStateButtonConfig.secondButton" />
+			</div>
 		</div>
-		<div v-else class="pr-4 mdlg:pr-0">
-			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />
-		</div>
-
-		<SofaNormalText
-			v-if="materials.length"
-			color="text-primaryPink"
-			class="pr-4 hidden mdlg:inline"
-			as="router-link"
-			to="/library"
-			content="View all" />
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { extractContent } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
+import { useOrganizationClasses } from '@app/composables/organizations/classes'
+import { useModals } from '@app/composables/core/modals'
 
 const { id, user, userType } = useAuth()
+const router = useRouter()
 
 const { courses, quizzes } = useUsersMaterials(id.value, { user: true })
 const materials = computed(() => [...quizzes, ...courses].sort((a, b) => b.createdAt - a.createdAt).map(extractContent))
+
+const { classes } = useOrganizationClasses(id.value)
+
+const materialsEmptyStateButtonConfig = computed(() => ({
+	firstButton: {
+		label: 'Add course',
+		action: () => {
+			router.push('/course/create')
+		},
+	},
+	secondButton: {
+		label: 'Add quiz',
+		action: () => {
+			router.push('/quizzes/create')
+		},
+	},
+}))
+const classesEmptyStateButtonConfig = computed(() => ({
+	firstButton: {
+		label: 'Add class',
+		action: () => {
+			useModals().organizations.createClass.open({ organizationId: id.value })
+		},
+	},
+}))
 </script>
