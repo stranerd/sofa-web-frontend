@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IMoreOnStranerd } from '@utils/types'
+import type { IMoreOnStranerd } from '@app/components/home/MoreOnStranerd.vue'
 const content = ref<IMoreOnStranerd>({
 	study: {
 		title: 'Exciting New Ways to Study',
@@ -71,28 +71,28 @@ const content = ref<IMoreOnStranerd>({
 		sub_heading: '',
 		content:
 			"Tailored to your child's unique learning style and pace, our platform delivers personalized lessons and activities that keep them engaged and motivated.",
-		link: '#',
+		link: '/home/features#study',
 	},
 	classes: {
 		title: 'Real-time Progress Tracking',
 		heading: '',
 		content:
 			"Stay informed about your child's academic progress with real-time updates and insights, allowing you to identify areas for improvement and celebrate their achievements.",
-		link: '#',
+		link: '/home/features#classes',
 	},
 	place: {
 		title: 'Expert Resources and Support',
 		heading: '',
 		content:
 			'Access a wealth of educational resources, tips, and support from our team of experts, empowering you to provide the best possible learning environment for your child.',
-		link: '#',
+		link: '/home/features#marketplace',
 	},
 	create: {
 		title: 'Create',
 		heading: 'Quizzes, Courses, Games, Flashcards.',
 		content:
 			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
-		link: '',
+		link: '/home/features#create',
 		show: false,
 	},
 	testimonial: {

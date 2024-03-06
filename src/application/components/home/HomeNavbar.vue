@@ -36,7 +36,7 @@ import { useModals } from '@app/composables/core/modals'
 const links = [
 	{
 		label: 'Home',
-		link: '/home/students',
+		link: '/',
 	},
 	{
 		label: 'Features',

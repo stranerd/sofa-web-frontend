@@ -5,11 +5,9 @@ import App from '@app/App.vue'
 import '@app/assets/styles/index.scss'
 
 import { globalPlugins } from '@app/plugins'
-import { routerPromise } from '@app/router'
+import { router } from '@app/router'
 
 const init = async () => {
-	const router = await routerPromise
-
 	const app = createApp(App)
 
 	for (const plugin of globalPlugins) await plugin({ app, router }).catch()

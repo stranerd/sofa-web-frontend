@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IMoreOnStranerd } from '@utils/types'
+import type { IMoreOnStranerd } from '@app/components/home/MoreOnStranerd.vue'
 const content = ref<IMoreOnStranerd>({
 	study: {
 		title: '',

@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full flex flex-col items-center justify-center">
 		<!-- New and exciting ways to study -->
-		<div class="w-[90%] mx-auto max-w-[1800px]">
+		<div id="study" class="w-[90%] mx-auto max-w-[1800px]">
 			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">{{ content.study.title }}</h2>
 			<p class="text-[14px] md:text-[16px] text-center">
 				{{ content.study.desc }}
@@ -29,6 +29,7 @@
 		</div>
 		<!-- Classes -->
 		<div
+			id="classes"
 			class="w-[90%] max-w-[1800px] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div
 				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[160px] justify-center gap-2 text-center px-8 mdlg:text-left">
@@ -51,6 +52,7 @@
 		</div>
 		<!-- MarketPlace -->
 		<div
+			id="marketplace"
 			class="w-[90%] max-w-[1800px] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
 			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
 				<img class="w-[90%] mdlg:w-full mdlg:h-full" src="/images/marketplace.png" />
@@ -78,6 +80,7 @@
 		<!-- Create -->
 		<div
 			v-if="content.create.show"
+			id="create"
 			class="w-[90%] max-w-[1800px] mt-[250px] mb-20 mdlg:my-20 mx-auto styled-bg min-h-[290px] py-8 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div class="w-full mdlg:w-1/2 mx-auto flex flex-col mdlg:pl-[160px] justify-center gap-2 px-8 mdlg:px-0">
 				<h3 class="text-white font-bold text-[20px] md:text-[36px] md:leading-[54px]">{{ content.create.title }}</h3>
@@ -164,7 +167,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Vue3Marquee } from 'vue3-marquee'
-import { IMoreOnStranerd } from '@utils/types'
 import { APPSTORE_LINK, PLAYSTORE_LINK } from '@utils/constants'
 defineProps({
 	content: {
@@ -173,6 +175,34 @@ defineProps({
 	},
 })
 const images = ref(['/images/jamb.png', '/images/jupeb.png', '/images/waec.png', '/images/sat,png', '/images/neco.png', '/images/gce.png'])
+</script>
+
+<script lang="ts">
+interface ShowType {
+	show?: boolean
+}
+
+interface ContentType extends ShowType {
+	title: string
+	desc?: string
+	heading: string
+	sub_heading?: string
+	content: string
+	link: string
+}
+
+export interface IMoreOnStranerd {
+	study: ContentType
+	classes: ContentType
+	place: ContentType
+	create: ContentType
+	testimonial: ShowType
+	learningCenters: ShowType
+	faqs: ShowType
+	getApp: ShowType
+	access: ShowType
+	discover: ShowType
+}
 </script>
 
 <style scoped>

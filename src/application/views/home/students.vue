@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IMoreOnStranerd } from '@utils/types'
+import type { IMoreOnStranerd } from '@app/components/home/MoreOnStranerd.vue'
 const content = ref<IMoreOnStranerd>({
 	study: {
 		title: 'Exciting New Ways to Study',
@@ -62,28 +62,28 @@ const content = ref<IMoreOnStranerd>({
 		heading: 'Hybrid tutoring',
 		sub_heading: 'AI + Human Experts',
 		content: 'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
-		link: '#',
+		link: '/home/features#study',
 	},
 	classes: {
 		title: 'Classes',
 		heading: 'Self Paced & Live Classes',
 		content:
 			'Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes.',
-		link: '#',
+		link: '/home/features#classes',
 	},
 	place: {
 		title: 'Marketplace',
 		heading: 'Explore & Discover materials',
 		content:
 			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
-		link: '#',
+		link: '/home/features#marketplace',
 	},
 	create: {
 		title: 'Create',
 		heading: 'Quizzes, Courses, Games, Flashcards.',
 		content:
 			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
-		link: '',
+		link: '/home/features#create',
 		show: false,
 	},
 	testimonial: {
