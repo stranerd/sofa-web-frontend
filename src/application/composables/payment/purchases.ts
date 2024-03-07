@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, reactive } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { Purchasables, PurchaseEntity, PurchasesUseCases } from '@modules/payment'
+import { Purchasables, PurchaseEntity, PurchasesUseCases, SelectedPaymentMethod } from '@modules/payment'
 
 const store = {
 	purchases: reactive<PurchaseEntity[]>([]),
@@ -74,6 +74,6 @@ export const useCreatePurchase = (id: string, type: Purchasables) => {
 		asyncFn: createPurchase,
 		loading,
 		error,
-	} = useAsyncFn(async (methodId: string) => await PurchasesUseCases.create({ id, type, methodId, payWithWallet: false }))
+	} = useAsyncFn(async (methodId: SelectedPaymentMethod) => await PurchasesUseCases.create({ id, type, methodId }))
 	return { createPurchase, loading, error }
 }

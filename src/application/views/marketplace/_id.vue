@@ -55,10 +55,10 @@
 							v-if="wallet"
 							class="w-full flex flex-row items-center gap-3 p-3 bg-lightGray rounded-custom"
 							:class="{
-								'border-primaryBlue border-2': selectedMethodId == 'payWithWallet',
+								'border-primaryBlue border-2': selectedMethodId == true,
 								'cursor-default pointer-events-none': wallet.balance.amount < contentDetails.price,
 							}"
-							@click="selectedMethodId = 'payWithWallet'">
+							@click="selectedMethodId = true">
 							<SofaIcon customClass="h-[20px]" name="wallet" />
 							<SofaNormalText>
 								Wallet (
@@ -134,7 +134,7 @@ import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
 import { useMyMethods } from '@app/composables/payment/methods'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
-import { Purchasables } from '@modules/payment'
+import { Purchasables, SelectedPaymentMethod } from '@modules/payment'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
@@ -249,7 +249,7 @@ export default defineComponent({
 
 		const similarContents = ref<any[]>([])
 
-		const selectedMethodId = ref('')
+		const selectedMethodId = ref<SelectedPaymentMethod>(null)
 
 		const showMakePaymentModal = ref(false)
 
@@ -419,9 +419,7 @@ export default defineComponent({
 		}
 
 		const buyCourse = async () => {
-			if (Logic.Common.loaderSetup.loading) return
-
-			if ((SingleCourse.value?.price.amount ?? 0) > 0 && selectedMethodId.value == '') {
+			if ((SingleCourse.value?.price.amount ?? 0) > 0 && !selectedMethodId.value) {
 				showMakePaymentModal.value = true
 				return
 			}

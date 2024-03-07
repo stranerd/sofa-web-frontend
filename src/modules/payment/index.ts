@@ -31,3 +31,5 @@ export { WithdrawalEntity } from './domain/entities/withdrawals'
 export { AccountUpdateFactory } from './domain/factories/accounts'
 export { FundWalletFactory } from './domain/factories/fundWallet'
 export { WithdrawalFactory } from './domain/factories/withdrawal'
+
+export type { SelectedPaymentMethod } from './domain/types'

@@ -1,4 +1,4 @@
-import { PurchaseData, Saleable } from '../../domain/types'
+import { PurchaseData, Saleable, SelectedPaymentMethod } from '../../domain/types'
 export interface PurchaseFromModel {
 	id: string
 	userId: string
@@ -11,6 +11,5 @@ export interface PurchaseFromModel {
 export interface PurchaseToModel {
 	type: PurchaseData['type']
 	id: PurchaseData['id']
-	methodId: string | null
-	payWithWallet: boolean
+	methodId: SelectedPaymentMethod
 }

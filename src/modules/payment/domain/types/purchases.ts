@@ -17,3 +17,5 @@ export type PurchaseData = {
 	id: string
 	userId: string
 }
+
+export type SelectedPaymentMethod = string | true | null
