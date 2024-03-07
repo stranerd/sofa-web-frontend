@@ -7,6 +7,16 @@ export class TransactionEntity extends BaseEntity<TransactionFromModel> {
 		super(data)
 	}
 
+	get originalAmount() {
+		if (this.data.type !== TransactionType.purchased) return this.amount
+		return Number((this.amount / (1 - this.data.serviceCharge)).toFixed(2))
+	}
+
+	get serviceAmount() {
+		if (this.data.type !== TransactionType.purchased) return 0
+		return this.originalAmount - this.amount
+	}
+
 	get color() {
 		if (this.status === TransactionStatus.failed) return 'text-primaryRed'
 		if (this.status === TransactionStatus.initialized || this.status === TransactionStatus.fulfilled) return 'text-primaryOrange'
