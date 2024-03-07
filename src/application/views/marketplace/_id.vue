@@ -52,16 +52,21 @@
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 						<!-- Wallet -->
 						<a
-							:class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${
-								selectedMethodId == 'payWithWallet' ? 'border-primaryBlue  border-2' : ''
-							} rounded-custom`"
+							v-if="wallet"
+							class="w-full flex flex-row items-center gap-3 p-3 bg-lightGray rounded-custom"
+							:class="{
+								'border-primaryBlue border-2': selectedMethodId == 'payWithWallet',
+								'cursor-default pointer-events-none': wallet.balance.amount < contentDetails.price,
+							}"
 							@click="selectedMethodId = 'payWithWallet'">
 							<SofaIcon customClass="h-[20px]" name="wallet" />
-							<SofaNormalText v-if="wallet">
-								Wallet (<span class="!font-semibold">{{
-									Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency)
-								}}</span
-								>)
+							<SofaNormalText>
+								Wallet (
+								<span class="!font-semibold">
+									{{ Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency) }}
+								</span>
+								)
+								{{ wallet.balance.amount < contentDetails.price ? '- Insufficient funds' : '' }}
 							</SofaNormalText>
 						</a>
 
