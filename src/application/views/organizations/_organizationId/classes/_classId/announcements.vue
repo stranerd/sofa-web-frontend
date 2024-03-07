@@ -1,66 +1,90 @@
 <template>
 	<ClassLayout>
 		<template v-if="user" #default="{ classInst }">
-			<div
-				v-if="announcements.length === 0"
-				class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
+			<div class="mt-6">
 				<div
-					v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
-					class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
-					<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
-						<img :src="emptyAnnouncementContent.imageURL" class="w-[144px] h-[144px]" />
+					v-if="announcements.length === 0"
+					class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
+					<div
+						v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
+						class="w-full flex items-center justify-center gap-6 px-4 md:px-6 py-10">
+						<SofaEmptyStateNew
+							:title="emptyAnnouncementContent.title"
+							:contents="emptyAnnouncementContent.contents"
+							:imageUrl="emptyAnnouncementContent.imageURL"
+							:firstButton="announcementsEmptyStateButtonConfig.firstButton" />
 					</div>
-					<div class="flex flex-col items-start gap-1">
-						<SofaHeaderText :content="emptyAnnouncementContent.title" size="xl" />
-						<div class="flex flex-col gap-2 py-2">
-							<div
-								v-for="(content, index) in emptyAnnouncementContent.contents"
-								:key="index"
-								class="flex mdlg:items-center gap-1">
-								<SofaIcon customClass="h-[16px]" name="checkmark-circle" />
-								<SofaNormalText :content="content" color="text-grayColor" />
-							</div>
+					<div v-else class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
+						<img :src="emptyAnnouncementContent.imageURL" class="w-[84px] h-[84px]" />
+						<SofaNormalText customClass="font-bold" content="There’s nothing here" />
+						<SofaNormalText color="text-grayColor text-center" content="No announcements" />
+					</div>
+				</div>
+				<div
+					v-else
+					class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 mdlg:p-6">
+					<SofaHeaderText class="hidden mdlg:inline-block" content="Annoucements" />
+					<div class="hidden mdlg:inline-block h-[1px] w-full bg-lightGray" />
+					<div
+						v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
+						class="flex flex-wrap gap-4 items-center justify-between">
+						<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
+							<SofaSelect
+								v-model="filter.lesson"
+								customClass="rounded-custom !bg-transparent border col-span-1"
+								placeholder="Lesson"
+								selectFirstOnMount
+								borderColor="border-darkLightGray"
+								:options="[
+									{ key: null, value: 'All lessons' },
+									...classInst.lessons.map((l) => ({ key: l.id, value: l.title })),
+								]" />
+							<SofaSelect
+								v-model="filter.userType"
+								customClass="rounded-custom !bg-transparent border col-span-1"
+								placeholder="Recipient"
+								selectFirstOnMount
+								borderColor="border-darkLightGray"
+								:options="userTypesOption" />
 						</div>
 						<SofaButton
+							customClass="hidden mdlg:block"
 							bgColor="bg-primaryBlue"
 							textColor="text-white"
-							padding="py-4 px-6"
+							padding="py-3 px-4"
 							@click="createAnnouncement(classInst)">
 							Make an announcement
 						</SofaButton>
 					</div>
-				</div>
-				<div v-else class="flex flex-col items-center justify-center gap-2 bg-lightGray p-8">
-					<img :src="emptyAnnouncementContent.imageURL" class="w-[84px] h-[84px]" />
-					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
-					<SofaNormalText color="text-grayColor text-center" content="No announcements" />
-				</div>
-			</div>
-			<div v-else class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 mdlg:p-6">
-				<SofaHeaderText class="hidden mdlg:inline-block" content="Annoucements" />
-				<div class="hidden mdlg:inline-block h-[1px] w-full bg-lightGray" />
-				<div v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="flex flex-wrap gap-4 items-center justify-between">
-					<div class="w-full mdlg:w-auto grid grid-cols-2 gap-4">
-						<SofaSelect
-							v-model="filter.lesson"
-							customClass="rounded-custom !bg-transparent border col-span-1"
-							placeholder="Lesson"
-							selectFirstOnMount
-							borderColor="border-darkLightGray"
-							:options="[
-								{ key: null, value: 'All lessons' },
-								...classInst.lessons.map((l) => ({ key: l.id, value: l.title })),
-							]" />
-						<SofaSelect
-							v-model="filter.userType"
-							customClass="rounded-custom !bg-transparent border col-span-1"
-							placeholder="Recipient"
-							selectFirstOnMount
-							borderColor="border-darkLightGray"
-							:options="userTypesOption" />
+					<div v-else class="flex gap-2 mdlg:gap-4 overflow-x-auto scrollbar-hide">
+						<a
+							v-for="l in [{ key: null, value: 'All' }, ...classInst.lessons.map((l) => ({ key: l.id, value: l.title }))]"
+							:key="l.value"
+							class="px-3 py-2 border rounded-custom"
+							:class="{
+								'bg-primaryPurple text-white border-primaryPurple': filter.lesson === l.key,
+								'bg-white text-deepGray border-darkLightGray': filter.lesson !== l.key,
+							}"
+							@click="filter.lesson = l.key">
+							{{ l.value }}
+						</a>
 					</div>
+					<AnnouncementCard
+						v-for="announcement in filteredAnnouncements"
+						:key="announcement.hash"
+						:classInst="classInst"
+						:announcement="announcement" />
 					<SofaButton
-						customClass="hidden mdlg:block"
+						v-if="hasMore"
+						textColor="text-grayColor"
+						bgColor="bg-transparent"
+						class="!shadow-none !rounded-none"
+						@click="fetchOlderAnnouncements">
+						Load More
+					</SofaButton>
+					<SofaButton
+						v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
+						class="block mdlg:hidden"
 						bgColor="bg-primaryBlue"
 						textColor="text-white"
 						padding="py-3 px-4"
@@ -68,41 +92,6 @@
 						Make an announcement
 					</SofaButton>
 				</div>
-				<div v-else class="flex gap-2 mdlg:gap-4 overflow-x-auto scrollbar-hide">
-					<a
-						v-for="l in [{ key: null, value: 'All' }, ...classInst.lessons.map((l) => ({ key: l.id, value: l.title }))]"
-						:key="l.value"
-						class="px-3 py-2 border rounded-custom"
-						:class="{
-							'bg-primaryPurple text-white border-primaryPurple': filter.lesson === l.key,
-							'bg-white text-deepGray border-darkLightGray': filter.lesson !== l.key,
-						}"
-						@click="filter.lesson = l.key">
-						{{ l.value }}
-					</a>
-				</div>
-				<AnnouncementCard
-					v-for="announcement in filteredAnnouncements"
-					:key="announcement.hash"
-					:classInst="classInst"
-					:announcement="announcement" />
-				<SofaButton
-					v-if="hasMore"
-					textColor="text-grayColor"
-					bgColor="bg-transparent"
-					class="!shadow-none !rounded-none"
-					@click="fetchOlderAnnouncements">
-					Load More
-				</SofaButton>
-				<SofaButton
-					v-if="classInst.isAdmin(user) || classInst.isTeacher(user)"
-					class="block mdlg:hidden"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
-					padding="py-3 px-4"
-					@click="createAnnouncement(classInst)">
-					Make an announcement
-				</SofaButton>
 			</div>
 		</template>
 	</ClassLayout>
@@ -167,6 +156,13 @@ export default defineComponent({
 			}),
 		)
 
+		const announcementsEmptyStateButtonConfig = computed(() => ({
+			firstButton: {
+				label: 'Make announcement',
+				action: () => {},
+			},
+		}))
+
 		return {
 			announcements,
 			fetchOlderAnnouncements,
@@ -177,6 +173,7 @@ export default defineComponent({
 			filter,
 			userTypesOption,
 			hasMore,
+			announcementsEmptyStateButtonConfig,
 		}
 	},
 })

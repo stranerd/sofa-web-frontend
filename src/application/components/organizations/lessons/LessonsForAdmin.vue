@@ -1,23 +1,13 @@
 <template>
 	<div
 		v-if="classInst.lessons.length === 0"
-		class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
-		<div class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
-			<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
-				<img :src="emptyLessonContent.imageURL" class="w-[144px] h-[144px]" />
-			</div>
-			<div class="flex flex-col items-start gap-1">
-				<SofaHeaderText :content="emptyLessonContent.title" size="xl" />
-				<div class="flex flex-col gap-2 py-2">
-					<div v-for="content in emptyLessonContent.contents" :key="content" class="flex mdlg:items-center gap-1">
-						<SofaIcon customClass="h-[16px]" name="checkmark-circle" />
-						<SofaNormalText :content="content" color="text-grayColor" />
-					</div>
-				</div>
-				<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-4 px-6" @click="openCreateClassModal">
-					Create a Lesson
-				</SofaButton>
-			</div>
+		class="w-full shadow-custom bg-white text-bodyBlack rounded-b-2xl flex flex-col gap-4 p-4 mdlg:p-6">
+		<div class="w-full flex items-center justify-center gap-6 px-4 md:px-6 py-10">
+			<SofaEmptyStateNew
+				:title="emptyLessonContent.title"
+				:contents="emptyLessonContent.contents"
+				:imageUrl="emptyLessonContent.imageURL"
+				:firstButton="subjectsEmptyStateButtonConfig.firstButton" />
 		</div>
 	</div>
 	<div v-else class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
@@ -33,7 +23,7 @@
 					placeholder="Search"
 					padding="px-1" />
 			</div>
-			<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-4" @click="openCreateClassModal">
+			<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-4" @click="openCreateSubjectModal">
 				Create a lesson
 			</SofaButton>
 		</div>
@@ -54,10 +44,9 @@ import { ClassEntity, ClassLesson } from '@modules/organizations'
 const props = defineProps<{
 	classInst: ClassEntity
 }>()
-
 const searchQuery = ref('')
 const emptyLessonContent = {
-	imageURL: '/images/empty-lessons.png',
+	imageURL: '/images/empty-subjects.png',
 	title: 'Getting started with lessons',
 	contents: [
 		'Comprehensive subject based curriculum.',
@@ -79,7 +68,16 @@ const openLessonDetails = (lesson: ClassLesson) => {
 		lesson,
 	})
 }
-const openCreateClassModal = () => {
+const openCreateSubjectModal = () => {
 	useModals().organizations.createLesson.open({ classInst: props.classInst })
 }
+
+const subjectsEmptyStateButtonConfig = computed(() => ({
+	firstButton: {
+		label: 'Add subject',
+		action: () => {
+			openCreateSubjectModal()
+		},
+	},
+}))
 </script>

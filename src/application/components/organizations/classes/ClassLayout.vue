@@ -10,10 +10,17 @@
 				<span class="w-4" />
 			</div>
 			<div class="flex items-center gap-4 px-4 border-b border-darkLightGray overflow-x-auto">
-				<router-link v-for="item in options" :key="item.route" :to="`${classInst.pageLink}${item.route}`" class="pb-3">
-					<SofaNormalText
-						class="text-md font-700 border-b-2 pb-2"
-						:class="$route.path.includes(item.route) ? 'border-black text-deepGray' : 'text-grayColor border-transparent'">
+				<router-link
+					v-for="item in options"
+					:key="item.route"
+					:to="`${classInst.pageLink}${item.route}`"
+					class="py-2 flex items-center gap-2 relative"
+					exactActiveClass="nav-link text-primaryPurple">
+					<SofaIcon
+						:name="item.icon"
+						class="!h-[16px]"
+						:class="$route.path.includes(item.route) ? '!fill-primaryPurple' : '!fill-deepGray'" />
+					<SofaNormalText class="text-md text-inherit font-700">
 						{{ item.title }}
 					</SofaNormalText>
 				</router-link>
@@ -23,65 +30,59 @@
 			</div>
 		</div>
 	</SubPageLayout>
-	<DashboardLayout v-else :topbarOptions="{ title: pageTitle }">
-		<template #left-session>
-			<div v-if="classInst" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
-				<div class="w-full flex flex-col gap-5">
-					<SofaImageLoader
-						customClass="w-full h-[233px] flex items-center justify-center relative rounded-custom !object-contain"
-						:photoUrl="classInst.picture">
-					</SofaImageLoader>
-					<SofaHeaderText>{{ classInst.title }}</SofaHeaderText>
+	<HomeLayout v-else :title="pageTitle">
+		<div class="flex flex-col gap-4 h-full overflow-y-auto">
+			<div class="flex flex-col bg-white rounded-custom">
+				<div
+					class="w-full h-[132px] rounded-t-[16px]"
+					:style="`background: url(${classInst.photo?.link}); background-repeat: no-repeat; background-size:cover; background:position:center`"></div>
+				<div class="flex items-center gap-6 px-6 pt-4">
+					<router-link
+						v-for="item in options"
+						:key="item.route"
+						:to="`${classInst.pageLink}${item.route}`"
+						class="pb-3 flex items-center gap-2 relative"
+						exactActiveClass="text-primaryPurple nav-link">
+						<SofaIcon
+							:name="item.icon"
+							class="!h-[20px]"
+							:class="$route.path.includes(item.route) ? '!fill-primaryPurple' : '!fill-deepGray'" />
+						<SofaNormalText class="text-md text-inherit font-700">
+							{{ item.title }}
+						</SofaNormalText>
+					</router-link>
 				</div>
-
-				<div>
-					<div class="h-[1px] w-full bg-lightGray" />
-					<div class="w-full flex flex-col gap-1">
-						<router-link
-							v-for="item in options"
-							:key="item.route"
-							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
-							:to="`${classInst.pageLink}${item.route}`"
-							exactActiveClass="bg-lightBlue font-semibold">
-							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
-							<SofaNormalText color="text-inherit" :content="item.title" />
-						</router-link>
+			</div>
+			<div>
+				<div class="hidden mdlg:flex items-center justify-between bg-white rounded-custom px-4 mdlg:px-6 py-2">
+					<div class="w-full mdlg:w-1/2 hidden mdlg:flex items-center gap-2">
+						<SofaIcon name="back-arrow" class="!fill-grayColor" />
+						<p class="flex items-center gap-1"><span class="text-grayColor">Home / </span> Class</p>
+					</div>
+					<div class="w-full mdlg:w-1/2 justify-self-end flex items-center gap-2">
+						<div
+							class="bg-white w-full mdlg:w-[70%] px-4 py-3 rounded-lg flex flex-row items-center gap-2 border border-darkLightGray">
+							<SofaIcon customClass="h-[15px]" name="search"></SofaIcon>
+							<SofaTextField
+								v-model="searchQuery"
+								customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-lg"
+								placeholder="Search"
+								padding="px-1" />
+						</div>
+						<QuickActions :buttons="quickActionsOptions" />
 					</div>
 				</div>
-			</div>
-		</template>
-		<template #middle-session>
-			<div class="flex flex-col gap-4 h-full overflow-y-auto">
 				<slot :classInst="classInst" />
 			</div>
-		</template>
-		<template #right-session>
-			<div v-if="schedules.length === 0" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
-				<SofaHeaderText content="Live Sessions" />
-				<div class="h-[1px] w-full bg-lightGray" />
-				<div class="w-full flex flex-col gap-2 items-center justify-center">
-					<SofaImageLoader
-						customClass="size-[64px] flex items-center justify-center rounded-custom !object-contain"
-						photoUrl="/images/empty-schedules.png" />
-					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
-					<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
-				</div>
-			</div>
-			<div v-else-if="schedules.length" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
-				<SofaHeaderText content="Live Sessions" />
-				<div class="mt-4 h-[1px] w-full bg-lightGray" />
-				<ScheduleList :classInst="classInst" :showFilter="false" :schedules="schedules" />
-			</div>
-		</template>
-	</DashboardLayout>
+		</div>
+	</HomeLayout>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useClass } from '@app/composables/organizations/classes'
-import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
 
@@ -111,13 +112,56 @@ useMeta(
 		title: pageTitle.value,
 	})),
 )
-
-const options = computed(() => [
-	{ title: 'Lessons', icon: 'lessons' as const, route: '/lessons' },
-	{ title: 'Announcements', icon: 'announcement' as const, route: '/announcements' },
-	{ title: 'Schedule', icon: 'calendar' as const, route: '/schedules' },
-	{ title: 'About', icon: 'info' as const, route: '/about' },
+const searchQuery = ref('')
+const quickActionsOptions = ref([
+	{
+		label: 'Add a student',
+		action: () => {},
+	},
+	{
+		label: 'Add a teacher',
+		action: () => {},
+	},
+	{
+		label: 'Create a quiz',
+		action: () => {},
+	},
+	{
+		label: 'Create a course',
+		action: () => {},
+	},
+	{
+		label: 'Create a class',
+		action: () => {},
+	},
+	{
+		label: 'Create a subject',
+		action: () => {},
+	},
 ])
 
-const { schedules } = useClassSchedules(organizationId, classId)
+const options = computed(() => [
+	{ title: 'Feeds', icon: 'feeds' as const, route: '/announcements' },
+	{ title: 'Subjects', icon: 'lessons' as const, route: '/lessons' },
+	{ title: 'Live', icon: 'live' as const, route: '/schedules' },
+	{ title: 'Students', icon: 'users-group' as const, route: '#' },
+	{ title: 'Teachers', icon: 'tutor' as const, route: '#' },
+	{ title: 'About', icon: 'info' as const, route: '/about' },
+])
 </script>
+
+<style scoped>
+.nav-link::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 3px;
+	background-color: blue;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	opacity: 1;
+	transition: opacity 0.3s;
+}
+</style>

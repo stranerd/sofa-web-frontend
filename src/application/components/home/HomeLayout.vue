@@ -70,12 +70,17 @@
 					<SofaNormalText color="text-grayColor" content="My Classes" />
 
 					<div class="mt-3 flex flex-col gap-2">
-						<div v-for="cl in classes" :key="cl.id" class="flex items-center gap-3">
+						<router-link
+							v-for="cl in classes"
+							:key="cl.pageLink"
+							class="flex items-center gap-3 rounded-lg p-3 hover:bg-lightBlue"
+							:to="cl.pageLink"
+							activeClass="bg-lightBlue font-semibold">
 							<SofaAvatar size="44" :photoUrl="cl.picture" />
 							<div class="flex flex-col gap-1">
 								<SofaNormalText class="!font-bold truncate" :content="cl.title" />
 							</div>
-						</div>
+						</router-link>
 					</div>
 				</div>
 			</div>

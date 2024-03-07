@@ -76,6 +76,7 @@ declare module 'vue' {
     Profile: typeof import('./../application/components/settings/profile.vue')['default']
     QuestionCard: typeof import('./../application/components/organizations/lessons/CurriculumItemViews/QuestionCard.vue')['default']
     QuestionDisplay: typeof import('./../application/components/study/questions/QuestionDisplay.vue')['default']
+    QuickActions: typeof import('./../application/components/QuickActions.vue')['default']
     Quiz: typeof import('./../application/components/study/quizzes/Quiz.vue')['default']
     QuizWrapper: typeof import('./../application/components/study/quizzes/QuizWrapper.vue')['default']
     RequestAccess: typeof import('./../application/components/study/quizzes/RequestAccess.vue')['default']

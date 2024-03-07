@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col items-center justify-center text-center gap-6">
-		<SofaImageLoader :photoUrl="imageUrl" customClass="!w-[227px] h-[184px]" />
+		<SofaImageLoader :photoUrl="imageUrl" customClass="!w-[227px] min-h-[184px]" />
 		<div class="flex flex-col gap-2">
 			<SofaHeaderText>{{ title }}</SofaHeaderText>
 			<ul :class="contents.length > 1 ? 'list-disc' : 'list-none'" class="flex flex-col items-center justify-center gap-1">
