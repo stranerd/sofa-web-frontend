@@ -3,7 +3,7 @@
 		<div class="bg-white w-full lg:w-[45%] mdlg:w-[50%] h-full flex flex-col items-center justify-center">
 			<div class="w-full h-full overflow-y-auto flex-1 flex flex-col justify-start relative md:p-8 p-4">
 				<div class="w-full flex gap-4 items-center">
-					<a @click="Logic.Common.goBack()">
+					<a v-if="!hideBack" @click="Logic.Common.goBack()">
 						<SofaIcon customClass="md:h-[26px] h-[20px]" name="back-arrow" />
 					</a>
 
@@ -36,25 +36,18 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import { Logic } from 'sofa-logic'
 
-export default defineComponent({
-	name: 'AuthLayout',
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-		subTitle: {
-			type: String,
-			required: false,
-			default: '',
-		},
+withDefaults(
+	defineProps<{
+		title: string
+		subTitle?: string
+		hideBack?: boolean
+	}>(),
+	{
+		subTitle: '',
+		hideBack: false,
 	},
-	setup() {
-		return { Logic }
-	},
-})
+)
 </script>

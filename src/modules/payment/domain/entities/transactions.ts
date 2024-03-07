@@ -10,6 +10,6 @@ export class TransactionEntity extends BaseEntity<TransactionFromModel> {
 	get color() {
 		if (this.status === TransactionStatus.failed) return 'text-primaryRed'
 		if (this.status === TransactionStatus.initialized || this.status === TransactionStatus.fulfilled) return 'text-primaryOrange'
-		return this.amount >= 0 ? 'text-primaryGreen' : 'text-primaryRed'
+		return this.amount >= 0 ? 'text-primaryGreen' : 'text-primaryBlue'
 	}
 }

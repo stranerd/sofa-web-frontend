@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Setup your account" :subTitle="type ? undefined : 'Choose your account type'">
+	<AuthLayout title="Setup your account" :subTitle="type ? undefined : 'Choose your account type'" :hideBack="!type">
 		<AccountSetup v-if="type" />
 		<div v-else class="flex md:flex-row flex-col gap-3 md:gap-6 justify-center items-center w-full">
 			<router-link

@@ -26,7 +26,7 @@
 			</div>
 			<div :class="`mdlg:col-span-8 flex flex-col col-span-full ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'} `">
 				<CourseContent
-					:buyCourse="buyCourse"
+					:buyCourse="() => (showMakePaymentModal = true)"
 					:isUnlocked="isUnlocked(SingleCourse)"
 					:selectedMaterial="selectedMaterial"
 					:singleCourse="SingleCourse" />
@@ -63,7 +63,7 @@
 					<div class="flex flex-col w-full">
 						<div :class="`w-full flex flex-col col-span-full  ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'} `">
 							<CourseContent
-								:buyCourse="buyCourse"
+								:buyCourse="() => (showMakePaymentModal = true)"
 								:isUnlocked="isUnlocked(SingleCourse)"
 								:selectedMaterial="selectedMaterial"
 								:singleCourse="SingleCourse" />
@@ -172,19 +172,24 @@
 
 					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
 						<!-- Wallet -->
-						<div
-							:class="`w-full flex flex-row items-center gap-3 px-3 py-3  bg-lightGray ${
-								selectedMethodId == 'payWithWallet' ? 'border-primaryBlue border-2' : ''
-							}  rounded-custom cursor-pointer `"
-							@click="selectedMethodId = 'payWithWallet'">
+						<a
+							v-if="wallet && SingleCourse"
+							class="w-full flex flex-row items-center gap-3 p-3 bg-lightGray rounded-custom"
+							:class="{
+								'border-primaryBlue border-2': selectedMethodId == true,
+								'cursor-default pointer-events-none': wallet.balance.amount < SingleCourse.price.amount,
+							}"
+							@click="selectedMethodId = true">
 							<SofaIcon customClass="h-[20px]" name="wallet" />
-							<SofaNormalText v-if="wallet">
-								Wallet (<span class="!font-semibold">{{
-									Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency)
-								}}</span
-								>)
+							<SofaNormalText>
+								Wallet (
+								<span class="!font-semibold">
+									{{ Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency) }}
+								</span>
+								)
+								{{ wallet.balance.amount < SingleCourse.price.amount ? '- Insufficient funds' : '' }}
 							</SofaNormalText>
-						</div>
+						</a>
 
 						<!-- Pay online -->
 
@@ -220,6 +225,7 @@
 
 						<div class="md:!w-auto col-span-2 flex flex-col">
 							<SofaButton
+								:disabled="!selectedMethodId"
 								textColor="text-white"
 								bgColor="bg-primaryBlue"
 								padding="px-4 md:!py-1 py-3"
@@ -259,7 +265,7 @@ import { useMyMethods } from '@app/composables/payment/methods'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
 import { useHasAccess } from '@app/composables/study'
 import { InteractionEntities } from '@modules/interactions'
-import { Purchasables } from '@modules/payment'
+import { Purchasables, SelectedPaymentMethod } from '@modules/payment'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -307,7 +313,7 @@ export default defineComponent({
 		const { wallet } = useAuth()
 		const { methods, addMethod } = useMyMethods()
 		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
-		const selectedMethodId = ref('')
+		const selectedMethodId = ref<SelectedPaymentMethod>(null)
 		const showMakePaymentModal = ref(false)
 
 		const CourseReview = ref(Logic.Study.SingleReview)

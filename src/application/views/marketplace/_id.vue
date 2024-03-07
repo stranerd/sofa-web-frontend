@@ -21,7 +21,7 @@
 				:content="contentDetails"
 				customClass="!rounded-none"
 				:showBuyButton="true"
-				:buyAction="buyCourse"
+				:buyAction="() => (showMakePaymentModal = true)"
 				:hasAccess="userHasAccess(contentDetails.original)"
 				:similarContents="similarContents"
 				:type="contentType"
@@ -104,6 +104,7 @@
 
 						<div class="md:!w-auto col-span-2 flex flex-col">
 							<SofaButton
+								:disabled="!selectedMethodId"
 								textColor="text-white"
 								bgColor="bg-primaryBlue"
 								padding="px-4 md:!py-1 py-3"
