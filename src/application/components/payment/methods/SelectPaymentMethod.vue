@@ -6,6 +6,7 @@
 				<a v-if="showWallet" class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom">
 					<SofaIcon customClass="h-[25px]" name="wallet" />
 					<SofaNormalText>Wallet ({{ balance }})</SofaNormalText>
+					<SofaRadio v-model="selectedMethod" :value="true as const" name="payment-method" class="ml-auto" />
 				</a>
 				<a v-for="method in methods" :key="method.hash" class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom">
 					<SofaIcon customClass="h-[20px]" name="card" />
@@ -36,10 +37,11 @@ import { useModals } from '@app/composables/core/modals'
 import { useMyMethods } from '@app/composables/payment/methods'
 import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
+import { SelectedPaymentMethod } from '@modules/payment'
 
 withDefaults(defineProps<{ showWallet: boolean }>(), { showWallet: true })
 
-const selectedMethod = defineModel<string | null>({ default: null })
+const selectedMethod = defineModel<SelectedPaymentMethod>({ default: null })
 
 const { wallet } = useAuth()
 

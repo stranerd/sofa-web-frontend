@@ -1,3 +1,5 @@
+import { SelectedPaymentMethod } from './purchases'
+
 export enum PlanDataType {
 	tutorAidedConversations = 'tutorAidedConversations',
 }
@@ -6,7 +8,7 @@ export type PlanData = Record<PlanDataType, number>
 
 type Sub<G = true> = {
 	active: boolean
-	methodId: string | null
+	methodId: SelectedPaymentMethod
 	current:
 		| ({
 				activatedAt: number

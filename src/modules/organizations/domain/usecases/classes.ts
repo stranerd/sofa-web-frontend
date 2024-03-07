@@ -3,6 +3,7 @@ import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
 import { UserEntity } from '@modules/users'
 import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
+import { SelectedPaymentMethod } from '@modules/payment'
 
 export class ClassesUseCase {
 	private repository: (organizationId: string) => IClassRepository
@@ -83,7 +84,7 @@ export class ClassesUseCase {
 		return await this.repository(organizationId).listenToMany(conditions, listener, () => true)
 	}
 
-	async purchase(organizationId: string, classId: string, methodId: string | null) {
+	async purchase(organizationId: string, classId: string, methodId: SelectedPaymentMethod) {
 		return await this.repository(organizationId).purchase(classId, methodId)
 	}
 

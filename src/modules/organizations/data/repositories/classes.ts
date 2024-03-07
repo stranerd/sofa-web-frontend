@@ -1,6 +1,7 @@
 import { ClassEntity } from '../../domain/entities/classes'
 import { IClassRepository } from '../../domain/irepositories/classes'
 import { ClassFromModel, ClassToModel } from '../models/classes'
+import { SelectedPaymentMethod } from '@modules/payment'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
 export class ClassRepository implements IClassRepository {
@@ -72,8 +73,8 @@ export class ClassRepository implements IClassRepository {
 		return this.mapper(d)
 	}
 
-	async purchase(id: string, methodId: string | null) {
-		return await this.client.post<{ methodId: string | null }, boolean>(`/${id}/purchase`, { methodId })
+	async purchase(id: string, methodId: SelectedPaymentMethod) {
+		return await this.client.post<{ methodId: SelectedPaymentMethod }, boolean>(`/${id}/purchase`, { methodId })
 	}
 
 	async cancelPurchase(id: string) {
