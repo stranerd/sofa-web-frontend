@@ -123,25 +123,14 @@
 							v-for="(question, index) in selectedMaterial.data"
 							:key="index"
 							class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom">
-							<div class="flex flex-row items-center gap-2">
-								<SofaNormalText color="text-grayColor">
-									{{ question.type }}
-								</SofaNormalText>
-
+							<div class="flex items-center gap-2">
+								<SofaNormalText color="text-grayColor" :content="question.type" />
 								<span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span>
-
-								<SofaNormalText color="text-grayColor">
-									{{ question.duration }}
-								</SofaNormalText>
+								<SofaNormalText color="text-grayColor" :content="question.duration" />
 							</div>
 
-							<SofaNormalText customClass="text-left !font-bold">
-								{{ question.content }}
-							</SofaNormalText>
-
-							<SofaNormalText customClass="text-left">
-								{{ question.answer }}
-							</SofaNormalText>
+							<SofaNormalText customClass="text-left !font-bold" :content="question.content" />
+							<SofaNormalText customClass="text-left" :content="question.answer" />
 						</div>
 					</div>
 				</template>
