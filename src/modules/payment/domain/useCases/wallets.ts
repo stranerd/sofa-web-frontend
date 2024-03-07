@@ -3,7 +3,7 @@ import { AccountUpdateFactory } from '../factories/accounts'
 import { FundWalletFactory } from '../factories/fundWallet'
 import { WithdrawalFactory } from '../factories/withdrawal'
 import { IWalletRepository } from '../irepositories/wallets'
-import { AccountDetails, CurrencyCountries, TransferData } from '../types'
+import { AccountDetails, CurrencyCountries, SelectedPaymentMethod, TransferData } from '../types'
 import { Listeners } from '@modules/core'
 
 export class WalletsUseCase {
@@ -21,7 +21,7 @@ export class WalletsUseCase {
 		return await this.repository.toggleRenewSubscription({ renew })
 	}
 
-	async subscribeToPlan(data: { planId: string; methodId: string | null }) {
+	async subscribeToPlan(data: { planId: string; methodId: SelectedPaymentMethod }) {
 		return await this.repository.subscribeToPlan(data)
 	}
 

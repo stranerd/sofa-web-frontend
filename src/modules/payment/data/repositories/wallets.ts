@@ -1,6 +1,14 @@
 import { WalletEntity } from '../../domain/entities/wallets'
 import { IWalletRepository } from '../../domain/irepositories/wallets'
-import { AccountDetails, BankData, CurrencyCountries, FundDetails, TransferData, WithdrawData } from '../../domain/types'
+import {
+	AccountDetails,
+	BankData,
+	CurrencyCountries,
+	FundDetails,
+	SelectedPaymentMethod,
+	TransferData,
+	WithdrawData,
+} from '../../domain/types'
 import { WalletFromModel } from '../models/wallets'
 import { HttpClient, Listeners, QueryParams, listenToOne } from '@modules/core'
 
@@ -45,8 +53,8 @@ export class WalletRepository implements IWalletRepository {
 		return this.mapper(d)
 	}
 
-	async subscribeToPlan(data: { planId: string; methodId: string | null }) {
-		const d = await this.client.post<{ planId: string; methodId: string | null }, WalletFromModel>('/subscriptions', data)
+	async subscribeToPlan(data: { planId: string; methodId: SelectedPaymentMethod }) {
+		const d = await this.client.post<{ planId: string; methodId: SelectedPaymentMethod }, WalletFromModel>('/subscriptions', data)
 		return this.mapper(d)
 	}
 

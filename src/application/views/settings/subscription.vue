@@ -88,7 +88,7 @@
 							class="mt-4"
 							bgColor="bg-white"
 							textColor="text-primaryPurple"
-							@click="subscibeToPlan(myApplicablePlan.id)">
+							@click="subscribeToPlan(myApplicablePlan)">
 							Subscribe
 						</SofaButton>
 					</div>
@@ -132,7 +132,7 @@
 
 					<div class="w-full flex flex-row">
 						<div class="w-auto flex flex-row">
-							<SofaButton padding="px-7 py-2" customClass="!w-auto" @click="subscibeToPlan(myApplicablePlan.id)">
+							<SofaButton padding="px-7 py-2" customClass="!w-auto" @click="subscribeToPlan(myApplicablePlan)">
 								Subscribe
 							</SofaButton>
 						</div>
@@ -146,11 +146,13 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRouter } from 'vue-router'
 import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlansList, useSubscription } from '@app/composables/payment/plans'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
+import { PlanEntity } from '@modules/payment'
 
 export default defineComponent({
 	name: 'SubscriptionSettingPage',
@@ -184,6 +186,7 @@ export default defineComponent({
 			},
 		] as const
 
+		const router = useRouter()
 		const { userType, wallet } = useAuth()
 		const autoRenewIsOn = computed({
 			get: () => !!wallet.value?.subscription.next,
@@ -192,10 +195,10 @@ export default defineComponent({
 			},
 		})
 		const { currentPlan, firstPaidPlan: myApplicablePlan } = usePlansList()
-		const { subscribeToPlan, renewPlan, toggleRenewPlan } = useSubscription()
+		const { renewPlan, toggleRenewPlan } = useSubscription()
 
-		const subscibeToPlan = async (id: string) => {
-			await subscribeToPlan({ planId: id, methodId: null })
+		const subscribeToPlan = async (plan: PlanEntity) => {
+			await router.push(`/checkout/subscription/${plan.id}?back=/settings/subscription`)
 		}
 
 		return {
@@ -207,7 +210,7 @@ export default defineComponent({
 			wallet,
 			userType,
 			autoRenewIsOn,
-			subscibeToPlan,
+			subscribeToPlan,
 			renewPlan,
 		}
 	},

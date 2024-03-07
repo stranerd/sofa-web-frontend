@@ -5,7 +5,7 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
-import { PlanEntity, PlansUseCases, WalletsUseCases } from '@modules/payment'
+import { PlanEntity, PlansUseCases, SelectedPaymentMethod, WalletsUseCases } from '@modules/payment'
 import { Logic } from 'sofa-logic'
 import { UserType } from '@modules/users'
 
@@ -89,7 +89,7 @@ export const useSubscription = () => {
 	const { setMessage } = useSuccessHandler()
 	const router = useRouter()
 
-	const { asyncFn: subscribeToPlan } = useAsyncFn(async (data: { planId: string; methodId: string | null }) => {
+	const { asyncFn: subscribeToPlan } = useAsyncFn(async (data: { planId: string; methodId: SelectedPaymentMethod }) => {
 		wallet.value = await WalletsUseCases.subscribeToPlan(data)
 		setMessage('Subscription successful')
 		const redirect = await Logic.Common.getRedirectToRoute()

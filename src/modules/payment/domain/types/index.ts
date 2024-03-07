@@ -1,6 +1,7 @@
 export * from './purchases'
 export * from './subscriptions'
 import { PurchaseToModel } from '../../data/models/purchases'
+import { SelectedPaymentMethod } from './purchases'
 import { Subscription } from './subscriptions'
 
 export enum Currencies {
@@ -131,7 +132,7 @@ export type BankData = {
 
 export type FundDetails = {
 	amount: number
-	methodId: string | null
+	methodId: Exclude<SelectedPaymentMethod, true>
 }
 
 export type FlutterwaveSecrets = {

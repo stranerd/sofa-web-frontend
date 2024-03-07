@@ -1,5 +1,5 @@
 import { WalletEntity } from '../entities/wallets'
-import { AccountDetails, BankData, CurrencyCountries, FundDetails, TransferData, WithdrawData } from '../types'
+import { AccountDetails, BankData, CurrencyCountries, FundDetails, SelectedPaymentMethod, TransferData, WithdrawData } from '../types'
 import { Listeners } from '@modules/core'
 
 export interface IWalletRepository {
@@ -12,6 +12,6 @@ export interface IWalletRepository {
 	verifyAccountNumber: (account: Partial<AccountDetails>) => Promise<string | null>
 	fund: (data: FundDetails) => Promise<boolean>
 	listen: (listeners: Listeners<WalletEntity>) => Promise<() => void>
-	subscribeToPlan: (data: { planId: string; methodId: string | null }) => Promise<WalletEntity>
+	subscribeToPlan: (data: { planId: string; methodId: SelectedPaymentMethod }) => Promise<WalletEntity>
 	renewPlan: () => Promise<WalletEntity>
 }
