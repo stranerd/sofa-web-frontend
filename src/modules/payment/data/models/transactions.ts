@@ -9,6 +9,9 @@ export interface TransactionFromModel extends Omit<TransactionToModel, 'data'> {
 	data: TransactionData
 	currency: Currencies
 	status: TransactionStatus
+	originalAmount: number
+	serviceAmount: number
+	label: string
 	createdAt: number
 	updatedAt: number
 }
