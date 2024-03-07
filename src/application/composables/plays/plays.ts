@@ -174,8 +174,9 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		if (!p || singleStore[id].myAnswer.value?.endedAt) return false
 		if (!p.participants.includes(authId.value)) return false
 		singleStore[id].myAnswer.value = await AnswersUseCases.answer(p.data.type, p.id, data)
-		if (isLast && p.isTimed) {
-			singleStore[id].myAnswer.value = await AnswersUseCases.end(p.data.type, p.id)
+		const endedAnswer = !!singleStore[id].myAnswer.value?.endedAt
+		if ((endedAnswer || isLast) && p.isTimed) {
+			if (!endedAnswer) singleStore[id].myAnswer.value = await AnswersUseCases.end(p.data.type, p.id)
 			if (p.participants.length === 1 && p.participants[0] === p.user.id) await end()
 			else await router.replace(p.resultsPage)
 		}
@@ -205,6 +206,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		singleStore[id].play,
 		async (cur) => {
 			if (!cur) return
+			if (singleStore[id].myAnswer.value?.endedAt) router.replace(cur.resultsPage)
 			playWatcherCb()
 		},
 		{ immediate: true },
