@@ -212,7 +212,8 @@ export default class Common {
 		return currencies[currency.toUpperCase() as keyof typeof currencies] ?? ''
 	}
 
-	public formatPrice = (price: number, currency = 'NGN') => `${this.getCurrency(currency)}${Intl.NumberFormat().format(price)}`
+	public formatPrice = (price: number, currency = 'NGN') =>
+		`${price < 0 ? '-' : ''}${this.getCurrency(currency)}${Intl.NumberFormat().format(Math.abs(price))}`
 
 	public searchArray = (arr: any[], searchKey: string) =>
 		arr.filter((obj) => Object.keys(obj).some((key) => (isString()(obj[key]).valid ? obj[key].includes(searchKey) : false)))

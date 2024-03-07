@@ -100,6 +100,10 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		})
 	}
 
+	get institutions() {
+		return this.extras.insts
+	}
+
 	set institutions(institutionIds: string[]) {
 		const now = Date.now()
 		this.exams = institutionIds.map((institutionId) => ({

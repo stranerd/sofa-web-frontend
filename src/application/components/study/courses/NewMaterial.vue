@@ -173,7 +173,7 @@
 	</SofaModalOld>
 </template>
 <script lang="ts">
-import { capitalize, defineComponent, onMounted, ref, watch } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import AddVideo from './AddVideo.vue'
 import { addCourseFile, addCourseFileForm, addQuizToCourse } from '@app/composables/course'
 import { Conditions, Logic } from 'sofa-logic'
@@ -245,7 +245,7 @@ export default defineComponent({
 		}
 
 		const addFile = (file: File, type: 'video' | 'image' | 'document') => {
-			addCourseFileForm.description = `${capitalize(type)} file for ${SingleCourse.value.title}`
+			addCourseFileForm.description = `${type} description`
 			addCourseFileForm.media = file
 			addCourseFileForm.tags = []
 			addCourseFileForm.title = `${file.name}`

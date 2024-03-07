@@ -20,9 +20,10 @@
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'document'">
-				<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
-					<SofaDocumentReader :key="selectedMaterial.id" :documentUrl="selectedMaterial.data.documentUrl" />
-				</div>
+				<SofaDocumentReader
+					:key="selectedMaterial.id"
+					:documentUrl="selectedMaterial.data.documentUrl"
+					class="h-[calc(100%-90px)] mdlg:!h-full" />
 			</template>
 
 			<template v-if="selectedMaterial?.type == 'image'">

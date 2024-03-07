@@ -109,7 +109,7 @@ export default defineComponent({
 		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
 
-		const sectionOptions = reactive([])
+		const sectionOptions = ref([])
 
 		const staticSectionOptions = ref([])
 
@@ -136,7 +136,7 @@ export default defineComponent({
 		}
 
 		watch(SingleCourse, async () => {
-			if (sectionOptions.length < SingleCourse.value.sections.length) {
+			if (sectionOptions.value.length < SingleCourse.value.sections.length) {
 				await setSections(SingleCourse.value.sections.length - 1)
 			}
 		})
@@ -161,9 +161,12 @@ export default defineComponent({
 				localStorage.setItem('course_content_sections' + SingleCourse.value.id, JSON.stringify(staticSectionOptions.value))
 			}
 
+			/*
 			const sectionOptionsData = JSON.parse(localStorage.getItem('course_content_sections' + SingleCourse.value.id))
 			sectionOptions.length = 0
 			sectionOptions.push(...sectionOptionsData)
+			*/
+			sectionOptions.value = staticSectionOptions.value
 		}
 
 		const setSectionMaterial = async (mediaFile: FileEntity | undefined, quiz: QuizEntity | undefined, index: number) => {
@@ -365,7 +368,7 @@ export default defineComponent({
 		}
 
 		watch(sectionOptions, () => {
-			context.emit('onCourseContentSet', sectionOptions)
+			context.emit('onCourseContentSet', sectionOptions.value)
 		})
 		onMounted(async () => {
 			if (SingleCourse.value) {
@@ -379,16 +382,16 @@ export default defineComponent({
 						selectedMaterial.value.isMounted = true
 						handleItemSelected()
 					} else {
-						if (sectionOptions[0]) {
-							if (sectionOptions[0].materials[0]) {
+						if (sectionOptions.value[0]) {
+							if (sectionOptions.value[0].materials[0]) {
 								selectedMaterial.value = {
-									id: sectionOptions[0].materials[0].id,
-									data: sectionOptions[0].materials[0].data,
-									details: sectionOptions[0].materials[0].details,
-									original: sectionOptions[0].materials[0].original,
-									type: sectionOptions[0].materials[0].type.split('-')[0],
+									id: sectionOptions.value[0].materials[0].id,
+									data: sectionOptions.value[0].materials[0].data,
+									details: sectionOptions.value[0].materials[0].details,
+									original: sectionOptions.value[0].materials[0].original,
+									type: sectionOptions.value[0].materials[0].type.split('-')[0],
 									isMounted: true,
-									name: sectionOptions[0].materials[0].name,
+									name: sectionOptions.value[0].materials[0].name,
 								}
 								handleItemSelected()
 							}
