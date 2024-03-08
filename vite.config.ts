@@ -28,7 +28,7 @@ export default defineConfig({
 			dirs: 'src/application/views',
 			routeStyle: 'nuxt',
 			extendRoute: (route: any) => {
-				const path = route.path.split('/')
+				const path = route.path.replaceAll('?', '').replaceAll('/:all(.*)/', '/:all(.*)').split('/')
 				const lastIndex = path.length - 1
 				if (path[lastIndex] && path[lastIndex].includes(':')) path[lastIndex] = path[lastIndex] + '/'
 				return { ...route, path: path.join('/') }
