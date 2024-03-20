@@ -57,7 +57,7 @@ export class FolderRepository implements IFolderRepository {
 		return this.mapper(d)
 	}
 
-	async updateProp(id: string, data: { type: FolderSaved; add: boolean; values: string[] }) {
+	async updateProp(id: string, data: { type: FolderSaved; add: boolean; propIds: string[] }) {
 		const d = await this.client.put<typeof data, FolderFromModel>(`/${id}/save`, data)
 		return this.mapper(d)
 	}

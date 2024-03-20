@@ -9,7 +9,7 @@ export interface IFolderRepository {
 	find: (id: string) => Promise<FolderEntity | null>
 	update: (id: string, data: FolderToModel) => Promise<FolderEntity | null>
 	delete: (id: string) => Promise<void>
-	updateProp: (id: string, data: { type: FolderSaved; add: boolean; values: string[] }) => Promise<FolderEntity | null>
+	updateProp: (id: string, data: { type: FolderSaved; add: boolean; propIds: string[] }) => Promise<FolderEntity | null>
 	listenToOne: (id: string, listener: Listeners<FolderEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listener: Listeners<FolderEntity>, matches: (entity: FolderEntity) => boolean) => Promise<() => void>
 }

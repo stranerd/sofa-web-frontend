@@ -19,7 +19,7 @@ export class FoldersUseCase {
 		return await this.repository.delete(id)
 	}
 
-	async updateProp(folderId: string, data: { type: FolderSaved; values: string[]; add: boolean }) {
+	async updateProp(folderId: string, data: { type: FolderSaved; propIds: string[]; add: boolean }) {
 		return await this.repository.updateProp(folderId, data)
 	}
 

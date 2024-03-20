@@ -62,7 +62,7 @@ const { factory, saveFolder, generateNewFolder } = useEditFolder()
 const handleFolderSelected = (folderId: string, add: boolean) =>
 	saveItem(folderId, {
 		type: props.type,
-		values: [props.id],
+		propIds: [props.id],
 		add,
 	})
 </script>

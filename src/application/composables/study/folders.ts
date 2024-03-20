@@ -74,7 +74,7 @@ export const useMyFolders = () => {
 		await store.listener.close()
 	})
 
-	const { asyncFn: saveItem } = useAsyncFn(async (id: string, data: { type: FolderSaved; values: string[]; add: boolean }) => {
+	const { asyncFn: saveItem } = useAsyncFn(async (id: string, data: { type: FolderSaved; propIds: string[]; add: boolean }) => {
 		await FoldersUseCases.updateProp(id, data)
 	})
 
