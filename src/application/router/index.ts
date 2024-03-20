@@ -21,7 +21,8 @@ router.beforeEach(async (to, from) => {
 	modal.stack.value.forEach(modal.close)
 	// @ts-expect-error - no types
 	const routeConfig: RouteConfig = to.matched[0]?.components?.['default']?.['routeConfig'] ?? {}
-	const middlewares = routeConfig.middlewares ?? ['isAuthenticated']
+	const isHomeRoute = to.path.includes('/home') || to.path === '/'
+	const middlewares: RouteConfig['middlewares'] = routeConfig.middlewares ?? (isHomeRoute ? [] : ['isAuthenticated'])
 	const redirect = await runMiddlewares(to, from, middlewares)
 	if (redirect) return redirect === from?.fullPath ? false : redirect
 	const redirect2 = await Logic.Common.preFetchRouteData(routeConfig, to)

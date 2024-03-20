@@ -28,10 +28,10 @@ export default defineConfig({
 			dirs: 'src/application/views',
 			routeStyle: 'nuxt',
 			extendRoute: (route: any) => {
-				const path = route.path.replaceAll('?', '').replaceAll('/:all(.*)/', '/:all(.*)').split('/')
+				const path = route.path.split('/')
 				const lastIndex = path.length - 1
-				if (path[lastIndex] && path[lastIndex].includes(':')) path[lastIndex] = path[lastIndex] + '/'
-				return { ...route, path: path.join('/') }
+				if (path[lastIndex]?.includes(':') && !path[lastIndex].includes('(.*)')) path[lastIndex] = path[lastIndex] + '/'
+				return { ...route, path: path.join('/'), props: false }
 			},
 		}),
 		Components({
