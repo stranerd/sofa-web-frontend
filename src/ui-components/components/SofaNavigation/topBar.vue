@@ -74,6 +74,7 @@
 
 			<SofaButton
 				bgColor="bg-primaryPurple"
+				:hasShadow="false"
 				class="mdlg:hidden rounded-full !p-4 !fixed bottom-[4rem] right-[1.5rem]"
 				@click="handleShowAddMaterial">
 				<SofaIcon name="plus-white" />

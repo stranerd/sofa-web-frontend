@@ -45,8 +45,12 @@
 		</div>
 		<div class="h-[1px] bg-lightGray" />
 		<template v-if="userType.isStudent">
-			<a class="flex items-center gap-2 px-5" @click="customizeAi">
+			<router-link class="flex items-center gap-2 px-5" to="/chats/new">
 				<SofaAvatar :photoUrl="userAi.image" size="24" />
+				<SofaNormalText color="text-inherit" content="Ask me anything" />
+			</router-link>
+			<a class="flex items-center gap-2 px-5" @click="customizeAi">
+				<SofaIcon name="robot" class="h-6" />
 				<SofaNormalText color="text-inherit" content="Customize AI" />
 			</a>
 			<div class="h-[1px] bg-lightGray" />

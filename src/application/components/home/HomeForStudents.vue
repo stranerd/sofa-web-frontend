@@ -66,14 +66,6 @@
 			</SofaButton>
 		</div>
 	</div>
-
-	<router-link
-		class="fixed bottom-[80px] right-2 z-[100] px-3 py-2 bg-primaryPurple text-white flex mdlg:hidden items-center rounded-custom gap-2"
-		style="box-shadow: 0 4px 8px rgba(120, 130, 140, 0.05)"
-		to="/chats/new">
-		<SofaNormalText color="text-inherit" content="Ask me anything" />
-		<SofaAvatar :photoUrl="userAi.image" size="24" />
-	</router-link>
 </template>
 
 <script lang="ts" setup>
@@ -82,9 +74,7 @@ import { useHomeTasks } from '@app/composables/home'
 import { extractContent } from '@app/composables/marketplace'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
-import { useAuth } from '@app/composables/auth/auth'
 
-const { userAi } = useAuth()
 const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()
 
 const { materials: recent } = useMyStudy('recent')
