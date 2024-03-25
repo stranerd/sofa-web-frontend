@@ -76,13 +76,15 @@ export const createTransaction = async (amount: number, type: TransactionType, d
 	if (!store.flutterwave) store.flutterwave = await TransactionsUseCases.getFlutterwaveSecrets()
 	const { id, amount: txAmnt, currency, email } = await TransactionsUseCases.create({ amount, data: { type } })
 	await new Promise<void>((res, rej) => {
+		const supportedMethods = ['card']
+		if (type !== TransactionType.newCard) supportedMethods.push('ussd', 'banktransfer')
 		const modal = window.FlutterwaveCheckout({
 			public_key: store.flutterwave!.publicKey,
 			tx_ref: id,
 			amount: txAmnt,
 			currency,
 			customer: { email },
-			payment_options: 'card',
+			payment_options: supportedMethods.join(', '),
 			customizations: { title: 'Stranerd', description, logo: domain + '/images/logo.svg' },
 			callback: () => {
 				modal.close()
