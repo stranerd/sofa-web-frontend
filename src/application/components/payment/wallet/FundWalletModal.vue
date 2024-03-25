@@ -5,7 +5,7 @@
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
-		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden py-2 border-lightGray border-b">
+		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden pt-2 pb-4 border-lightGray border-b">
 			<SofaNormalText customClass="!font-bold !text-base">Fund wallet</SofaNormalText>
 			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
 		</div>
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 
-		<div class="w-full md:flex justify-between items-center grid grid-cols-2 mdlg:py-0 py-4">
+		<div class="w-full md:flex justify-between items-center">
 			<SofaButton
 				textColor="text-grayColor"
 				bgColor="bg-white"
