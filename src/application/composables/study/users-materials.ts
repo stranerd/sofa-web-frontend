@@ -14,7 +14,7 @@ const store = {} as Record<
 	}
 >
 
-export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> = {}) => {
+export const useUsersMaterials = (id: string) => {
 	store[id] ??= {
 		user: ref(null),
 		quizzes: reactive([]),
@@ -28,7 +28,7 @@ export const useUsersMaterials = (id: string, skip: Partial<{ user: boolean }> =
 		called,
 	} = useAsyncFn(
 		async () => {
-			if (!skip.user) store[id].user.value = await UsersUseCases.find(id)
+			store[id].user.value = await UsersUseCases.find(id)
 			const query: QueryParams = {
 				where: [
 					{ field: 'user.id', value: id },

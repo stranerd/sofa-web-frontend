@@ -87,6 +87,6 @@ import { useUsersMaterials } from '@app/composables/study/users-materials'
 
 const { id, user, userType } = useAuth()
 
-const { courses, quizzes } = useUsersMaterials(id.value, { user: true })
+const { courses, quizzes } = useUsersMaterials(id.value)
 const materials = computed(() => [...quizzes, ...courses].sort((a, b) => b.createdAt - a.createdAt))
 </script>

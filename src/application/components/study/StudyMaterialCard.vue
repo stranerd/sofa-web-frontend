@@ -1,5 +1,9 @@
 <template>
-	<router-link v-if="type === 'item'" :to="content.route" class="shrink-0 bg-white flex flex-col gap-2 p-3 rounded-2xl shadow-itemBox">
+	<router-link
+		v-if="type === 'item'"
+		:to="content.route"
+		v-bind="$attrs"
+		class="shrink-0 bg-white flex flex-col gap-2 p-3 rounded-2xl shadow-itemBox">
 		<SofaImageLoader class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photoUrl="content.image">
 			<div
 				v-if="content.price && content.price?.amount > 0"
