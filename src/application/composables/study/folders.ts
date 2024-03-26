@@ -8,11 +8,8 @@ import { useModals } from '../core/modals'
 import { Logic } from 'sofa-logic'
 import { CourseEntity, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, QuizEntity } from '@modules/study'
 
-export const saveToFolder = (item: CourseEntity | QuizEntity) => {
-	useModals().study.saveToFolder.open({
-		id: item.id,
-		type: item.isCourse() ? FolderSaved.courses : FolderSaved.quizzes,
-	})
+export const saveToFolder = (entity: CourseEntity | QuizEntity) => {
+	useModals().study.saveToFolder.open({ entity })
 }
 
 const store = {

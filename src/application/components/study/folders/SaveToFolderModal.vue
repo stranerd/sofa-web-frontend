@@ -11,31 +11,31 @@
 
 		<div class="w-full flex flex-col gap-3 px-4 py-4">
 			<a
-				v-for="item in folders"
-				:key="item.id"
+				v-for="folder in folders"
+				:key="folder.hash"
 				class="w-full flex items-center gap-3 justify-between p-4 rounded-custom bg-lightGray">
 				<div class="flex items-center w-full gap-3">
 					<SofaIcon name="folder" customClass="h-[18px]" />
 
 					<SofaCustomInput
-						v-if="item.id === factory.entityId"
+						v-if="folder.id === factory.entityId"
 						v-model="factory.title"
 						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white"
 						placeholder="Folder name"
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
 
-					<SofaNormalText v-else class="truncate w-full" :content="item.title" />
+					<SofaNormalText v-else class="truncate w-full" :content="folder.title" />
 				</div>
 
 				<div class="flex items-center shrink-0">
 					<SofaNormalText
-						v-if="[...item.saved.courses, ...item.saved.quizzes].includes(id)"
+						v-if="folder.hasItem(entity)"
 						color="text-primaryRed"
 						as="a"
 						content="- Remove"
-						@click="handleFolderSelected(item.id, false)" />
-					<SofaNormalText v-else color="text-primaryBlue" as="a" content="+ Add" @click="handleFolderSelected(item.id, true)" />
+						@click="handleFolderSelected(folder.id, false)" />
+					<SofaNormalText v-else color="text-primaryBlue" as="a" content="+ Add" @click="handleFolderSelected(folder.id, true)" />
 				</div>
 			</a>
 			<a class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray" @click="generateNewFolder">
@@ -48,12 +48,11 @@
 
 <script lang="ts" setup>
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
-import { FolderSaved } from '@modules/study'
+import { CourseEntity, FolderSaved, QuizEntity } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	id: string
-	type: FolderSaved
+	entity: CourseEntity | QuizEntity
 }>()
 
 const { folders, saveItem } = useMyFolders()
@@ -61,8 +60,8 @@ const { factory, saveFolder, generateNewFolder } = useEditFolder()
 
 const handleFolderSelected = (folderId: string, add: boolean) =>
 	saveItem(folderId, {
-		type: props.type,
-		propIds: [props.id],
+		type: props.entity.isCourse() ? FolderSaved.courses : FolderSaved.quizzes,
+		propIds: [props.entity.id],
 		add,
 	})
 </script>

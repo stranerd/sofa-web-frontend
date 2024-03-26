@@ -148,7 +148,6 @@ import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
 import { search } from '@app/composables/marketplace'
-import { saveToFolder } from '@app/composables/study/folders'
 import { DraftStatus } from '@modules/study'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
 
@@ -282,7 +281,6 @@ export default defineComponent({
 			quizContents,
 			filterOptions,
 			selectedFilterOption,
-			saveToFolder,
 			search,
 		}
 	},

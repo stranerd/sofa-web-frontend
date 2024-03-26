@@ -43,7 +43,7 @@
 				<SofaIcon v-if="content.user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 			</router-link>
 
-			<SofaIcon name="bookmark" class="h-[18px]" @click.stop.prevent="bookmarkAction" />
+			<SofaIcon :name="saveIcon" class="h-[18px]" @click.stop.prevent="bookmarkAction" />
 		</div>
 	</router-link>
 	<component
@@ -64,7 +64,7 @@
 					<SofaIcon
 						v-if="!hasShowMore"
 						class="h-[16px] hidden mdlg:inline"
-						name="bookmark"
+						:name="saveIcon"
 						@click.stop.prevent="bookmarkAction" />
 					<SofaIcon
 						v-if="hasShowMore"
@@ -106,7 +106,7 @@
 						<SofaIcon v-if="activity.user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 					</router-link>
 
-					<SofaIcon v-if="!isWrapped" name="bookmark" class="h-[17px] mdlg:hidden" @click.stop.prevent="bookmarkAction" />
+					<SofaIcon v-if="!isWrapped" :name="saveIcon" class="h-[17px] mdlg:hidden" @click.stop.prevent="bookmarkAction" />
 				</div>
 			</div>
 		</div>
@@ -117,7 +117,8 @@
 import { pluralize } from 'valleyed'
 import { computed } from 'vue'
 import { Logic } from 'sofa-logic'
-import { CourseEntity, FolderSaved, QuizEntity } from '@modules/study'
+import { CourseEntity, QuizEntity } from '@modules/study'
+import { useMyFolders, saveToFolder } from '@app/composables/study/folders'
 import { extractResource } from '@app/composables/library'
 import { extractContent } from '@app/composables/marketplace'
 import { useModals } from '@app/composables/core/modals'
@@ -137,15 +138,15 @@ const props = withDefaults(
 	},
 )
 
+const { folders } = useMyFolders()
+
 const content = computed(() => extractResource(props.material))
 const activity = computed(() => extractContent(props.material))
+const isSaved = computed(() => folders.value.some((folder) => folder.hasItem(props.material)))
+const saveIcon = computed(() => (isSaved.value ? 'bookmark-filled' : 'bookmark'))
 
 const bookmarkAction = () => {
-	const item = props.material
-	useModals().study.saveToFolder.open({
-		id: item.id,
-		type: item.isCourse() ? FolderSaved.courses : FolderSaved.quizzes,
-	})
+	saveToFolder(props.material)
 }
 
 const handleShowMaterialMoreOptions = (event: Event, material: QuizEntity | CourseEntity) => {

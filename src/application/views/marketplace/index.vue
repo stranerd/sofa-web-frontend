@@ -68,7 +68,6 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
 import { useMyStudy } from '@app/composables/study'
-import { saveToFolder } from '@app/composables/study/folders'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -113,7 +112,6 @@ export default defineComponent({
 
 		return {
 			materials,
-			saveToFolder,
 			Logic,
 			searchQuery,
 			handleSearch,

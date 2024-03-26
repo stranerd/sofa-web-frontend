@@ -141,7 +141,6 @@ import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
 import { Logic } from 'sofa-logic'
@@ -176,7 +175,6 @@ export default defineComponent({
 			socials,
 			searchQuery,
 			joinOrgHandler,
-			saveToFolder,
 		}
 	},
 })
