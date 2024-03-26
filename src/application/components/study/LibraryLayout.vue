@@ -16,7 +16,7 @@
 						:to="`${$route.path}?tab=${item.id}`">
 						<SofaNormalText
 							:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-							class="!font-semibold text-nowrap"
+							class="!font-semibold truncate"
 							:content="item.name" />
 					</router-link>
 				</div>
@@ -161,7 +161,7 @@
 							:to="`${$route.path}?tab=${item.id}`">
 							<SofaNormalText
 								:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-								class="!font-semibold text-nowrap"
+								class="!font-semibold truncate"
 								:content="item.name" />
 						</router-link>
 					</div>

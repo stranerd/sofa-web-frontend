@@ -72,7 +72,7 @@
 					<a
 						v-for="l in [{ key: null, value: 'All' }, ...classInst.lessons.map((l) => ({ key: l.id, value: l.title }))]"
 						:key="l.value"
-						class="px-3 py-2 border rounded-custom"
+						class="px-3 py-2 border rounded-custom truncate"
 						:class="{
 							'bg-primaryPurple text-white border-primaryPurple': filter.lesson === l.key,
 							'bg-white text-deepGray border-darkLightGray': filter.lesson !== l.key,
