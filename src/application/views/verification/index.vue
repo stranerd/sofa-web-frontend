@@ -77,7 +77,7 @@
 
 				<div class="w-full flex flex-col gap-2">
 					<div class="w-full flex flex-col gap-4 md:!gap-4">
-						<SofaStudyMaterial
+						<StudyMaterialCard
 							v-for="content in selectedMaterialList"
 							:key="content.original.hash"
 							type="activity"

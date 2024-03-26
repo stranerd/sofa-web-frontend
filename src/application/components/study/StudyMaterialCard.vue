@@ -116,11 +116,6 @@
 <script lang="ts" setup>
 import { pluralize } from 'valleyed'
 import { computed } from 'vue'
-import SofaAvatar from '../SofaAvatar'
-import SofaBadge from '../SofaBadge'
-import SofaIcon from '../SofaIcon'
-import SofaImageLoader from '../SofaImageLoader'
-import { SofaNormalText } from '../SofaTypography'
 import { Logic } from 'sofa-logic'
 import { CourseEntity, FolderSaved, QuizEntity } from '@modules/study'
 import { extractResource } from '@app/composables/library'

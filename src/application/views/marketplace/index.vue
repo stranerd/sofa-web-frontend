@@ -47,7 +47,7 @@
 					</div>
 
 					<div v-if="material.list.length" class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
-						<SofaStudyMaterial
+						<StudyMaterialCard
 							v-for="m in material.list.slice(0, 4)"
 							:key="m.id"
 							type="item"

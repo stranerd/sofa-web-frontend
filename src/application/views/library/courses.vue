@@ -1,7 +1,7 @@
 <template>
 	<LibraryLayout title="Courses">
 		<template v-if="data.length">
-			<SofaStudyMaterial
+			<StudyMaterialCard
 				v-for="activity in data"
 				:key="activity.hash"
 				type="activity"

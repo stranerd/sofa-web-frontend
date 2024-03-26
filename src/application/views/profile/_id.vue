@@ -96,7 +96,7 @@
 					<div
 						v-if="materials.length"
 						class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap md:flex-wrap overflow-x-auto scrollbar-hide">
-						<SofaStudyMaterial
+						<StudyMaterialCard
 							v-for="m in filteredMaterials"
 							:key="m.id"
 							type="item"

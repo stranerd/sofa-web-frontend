@@ -55,13 +55,13 @@
 					<template v-if="resourceContents.length">
 						<div class="w-full flex flex-col gap-3">
 							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
-								<SofaStudyMaterial v-for="m in resourceContents" :key="m.id" type="item" :material="m" class="col-span-1" />
+								<StudyMaterialCard v-for="m in resourceContents" :key="m.id" type="item" :material="m" class="col-span-1" />
 							</div>
 
 							<div
 								class="lg:w-full mdlg:hidden flex gap-3 mdlg:gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<SofaStudyMaterial v-for="m in resourceContents" :key="m.hash" type="activity" :material="m" />
+									<StudyMaterialCard v-for="m in resourceContents" :key="m.hash" type="activity" :material="m" />
 								</div>
 							</div>
 						</div>
@@ -89,13 +89,13 @@
 					<template v-if="quizContents.length">
 						<div class="w-full flex flex-col gap-3">
 							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
-								<SofaStudyMaterial v-for="m in quizContents" :key="m.hash" type="item" :material="m" class="col-span-1" />
+								<StudyMaterialCard v-for="m in quizContents" :key="m.hash" type="item" :material="m" class="col-span-1" />
 							</div>
 
 							<div
 								class="lg:w-full mdlg:hidden flex gap-3 mdlg:gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<SofaStudyMaterial v-for="m in quizContents" :key="m.hash" type="activity" :material="m" />
+									<StudyMaterialCard v-for="m in quizContents" :key="m.hash" type="activity" :material="m" />
 								</div>
 							</div>
 						</div>
