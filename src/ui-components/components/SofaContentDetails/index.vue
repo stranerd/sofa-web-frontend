@@ -242,12 +242,7 @@
 				class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
 				<div
 					class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-					<SofaActivityCard
-						v-for="(activity, index) in similarContents"
-						:key="index"
-						:activity="activity"
-						customClass="!bg-lightGray cursor-pointer"
-						@click="$router.push(activity.route)" />
+					<SofaStudyMaterial v-for="m in similarContents" :key="m.original.hash" type="activity" :material="m.original" />
 				</div>
 			</div>
 			<template v-else>
@@ -280,7 +275,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ref, toRef, watch } from 'vue'
-import SofaActivityCard from '../SofaActivityCard'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'

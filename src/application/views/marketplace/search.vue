@@ -34,7 +34,7 @@
 						:key="index"
 						:class="`px-6 py-2 ${
 							item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'
-						} rounded-custom flex flex-row items-center justify-center gap-1  cursor-pointer `"
+						} rounded-custom flex items-center justify-center gap-1 cursor-pointer`"
 						@click="selectedFilterOption = item.id">
 						<SofaNormalText
 							:color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'}`"
@@ -54,26 +54,14 @@
 
 					<template v-if="resourceContents.length">
 						<div class="w-full flex flex-col gap-3">
-							<div v-if="Logic.Common.isLarge" class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4">
-								<SofaStudyMaterial
-									v-for="m in resourceContents"
-									:key="m.id"
-									type="item"
-									:material="m.original"
-									class="col-span-1" />
+							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
+								<SofaStudyMaterial v-for="m in resourceContents" :key="m.id" type="item" :material="m" class="col-span-1" />
 							</div>
 
 							<div
-								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+								class="lg:w-full mdlg:hidden flex gap-3 mdlg:gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<SofaActivityCard
-										v-for="activity in resourceContents"
-										:key="activity.id"
-										:activity="activity"
-										customClass="cursor-pointer"
-										:hasBookmark="true"
-										:bookmarkAction="() => saveToFolder(activity.original)"
-										@click="$router.push(activity.route)" />
+									<SofaStudyMaterial v-for="m in resourceContents" :key="m.hash" type="activity" :material="m" />
 								</div>
 							</div>
 						</div>
@@ -100,26 +88,14 @@
 
 					<template v-if="quizContents.length">
 						<div class="w-full flex flex-col gap-3">
-							<div v-if="Logic.Common.isLarge" class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4">
-								<SofaStudyMaterial
-									v-for="m in quizContents"
-									:key="m.id"
-									type="item"
-									:material="m.original"
-									class="col-span-1" />
+							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
+								<SofaStudyMaterial v-for="m in quizContents" :key="m.hash" type="item" :material="m" class="col-span-1" />
 							</div>
 
 							<div
-								class="lg:!w-full mdlg:!hidden flex flex-row gap-3 mdlg:!gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+								class="lg:w-full mdlg:hidden flex gap-3 mdlg:gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<SofaActivityCard
-										v-for="activity in quizContents"
-										:key="activity.id"
-										:activity="activity"
-										customClass="cursor-pointer"
-										:hasBookmark="true"
-										:bookmarkAction="() => saveToFolder(activity.original)"
-										@click="$router.push(activity.route)" />
+									<SofaStudyMaterial v-for="m in quizContents" :key="m.hash" type="activity" :material="m" />
 								</div>
 							</div>
 						</div>
@@ -171,7 +147,6 @@
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
-import { extractResource } from '@app/composables/library'
 import { search } from '@app/composables/marketplace'
 import { saveToFolder } from '@app/composables/study/folders'
 import { DraftStatus } from '@modules/study'
@@ -240,8 +215,8 @@ export default defineComponent({
 
 		const AllCourses = ref(Logic.Study.AllCourses)
 		const AllQuzzies = ref(Logic.Study.AllQuzzies)
-		const resourceContents = computed(() => AllCourses.value?.results.map(extractResource) ?? [])
-		const quizContents = computed(() => AllQuzzies.value?.results.map(extractResource) ?? [])
+		const resourceContents = computed(() => AllCourses.value?.results ?? [])
+		const quizContents = computed(() => AllQuzzies.value?.results ?? [])
 		const showFilter = ref(false)
 		const selectedFilterOption = ref(filterOptions[0].id)
 		const searchQuery = ref(Logic.Common.route.query?.q?.toString() ?? '')

@@ -8,7 +8,7 @@ export interface ContentDetails {
 	subject?: string
 	title?: string
 	image?: string
-	labels?: {
+	labels: {
 		main: string
 		sub: string
 		color: string

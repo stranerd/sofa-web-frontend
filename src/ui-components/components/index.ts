@@ -1,4 +1,3 @@
-export { default as SofaActivityCard } from './SofaActivityCard'
 export { default as SofaAlert } from './SofaAlert'
 export { default as SofaAvatar } from './SofaAvatar'
 export { default as SofaBadge } from './SofaBadge'

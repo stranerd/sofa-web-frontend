@@ -77,20 +77,16 @@
 
 				<div class="w-full flex flex-col gap-2">
 					<div class="w-full flex flex-col gap-4 md:!gap-4">
-						<template v-for="content in selectedMaterialList" :key="content.original.hash">
-							<template v-if="!Logic.Common.isOnlyMobile">
-								<SofaActivityCard
-									v-if="content.subject"
-									:activity="content"
-									customClass="!bg-lightGray !w-full cursor-pointer" />
-							</template>
-							<template v-else>
-								<SofaActivityCard :activity="content" customClass="!bg-lightGray" :isWrapped="true" />
-							</template>
-						</template>
+						<SofaStudyMaterial
+							v-for="content in selectedMaterialList"
+							:key="content.original.hash"
+							type="activity"
+							:material="content.original"
+							:isWrapped="!Logic.Common.isLarge"
+							:isRoute="false" />
 
 						<div class="w-full flex flex-col">
-							<SofaButton padding="p-4" @click="showAddMaterialHandler()">
+							<SofaButton padding="p-4" @click="showAddMaterialHandler">
 								<SofaIcon name="box-add-white" customClass="h-[18px]"></SofaIcon>
 								Add Content
 							</SofaButton>

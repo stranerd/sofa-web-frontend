@@ -63,15 +63,7 @@
 		<div
 			v-if="materials.length"
 			class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
-			<SofaActivityCard
-				v-for="activity in materials.slice(0, 4)"
-				:key="activity.id"
-				as="router-link"
-				:activity="activity"
-				:to="activity.route"
-				:hasBookmark="true"
-				:bookmarkAction="() => saveToFolder(activity.original)"
-				class="shrink-0" />
+			<SofaStudyMaterial v-for="m in materials.slice(0, 4)" :key="m.hash" type="activity" :material="m" />
 		</div>
 		<div v-else class="pr-4 mdlg:pr-0">
 			<SofaEmptyState title="No materials found" subTitle="You have not created any materials so far" customClass="!h-[230px]" />
@@ -91,12 +83,10 @@
 import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { extractContent } from '@app/composables/marketplace'
-import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 
 const { id, user, userType } = useAuth()
 
 const { courses, quizzes } = useUsersMaterials(id.value, { user: true })
-const materials = computed(() => [...quizzes, ...courses].sort((a, b) => b.createdAt - a.createdAt).map(extractContent))
+const materials = computed(() => [...quizzes, ...courses].sort((a, b) => b.createdAt - a.createdAt))
 </script>

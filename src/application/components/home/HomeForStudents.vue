@@ -28,15 +28,7 @@
 			<div
 				v-if="material.list.length"
 				class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
-				<SofaActivityCard
-					v-for="activity in material.list.slice(0, 4)"
-					:key="activity.id"
-					as="router-link"
-					:activity="activity"
-					:to="activity.route"
-					:hasBookmark="true"
-					:bookmarkAction="() => saveToFolder(activity.original)"
-					class="shrink-0" />
+				<SofaStudyMaterial v-for="m in material.list.slice(0, 4)" :key="m.hash" type="activity" :material="m" />
 			</div>
 			<div v-else class="pr-4 mdlg:pr-0">
 				<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
@@ -71,9 +63,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useHomeTasks } from '@app/composables/home'
-import { extractContent } from '@app/composables/marketplace'
 import { useMyStudy } from '@app/composables/study'
-import { saveToFolder } from '@app/composables/study/folders'
 
 const { profileSteps, studyMaterialsSteps, takeOnTasks } = useHomeTasks()
 
@@ -89,13 +79,13 @@ const tasks = computed(() => [
 
 const materials = computed(() => [
 	{
-		list: suggested.value.map(extractContent),
+		list: suggested.value,
 		title: 'Suggested for you',
 		emptyTitle: 'No suggested materials',
 		emptySub: 'We could not find any suggested materials',
 	},
 	{
-		list: recent.value.map(extractContent),
+		list: recent.value,
 		title: 'Recent study materials',
 		emptyTitle: 'No recent materials',
 		emptySub: 'We could not find any recent materials',
@@ -103,7 +93,7 @@ const materials = computed(() => [
 	...(myOrgs.value.length
 		? [
 				{
-					list: myOrgs.value.map(extractContent),
+					list: myOrgs.value,
 					title: 'From your organizations',
 					emptyTitle: 'No materials found',
 					emptySub: 'We could not find any materials from your organizations',

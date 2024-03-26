@@ -3,15 +3,10 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useMyPurchases } from '../payment/purchases'
 import { useModals } from '../core/modals'
-import { ResourceType } from 'sofa-logic'
 import { CourseEntity, QuizEntity, StudyKeys, StudyUseCases } from '@modules/study'
 
 export const handleShowAddMaterial = () => {
 	useModals().study.addMaterial.open({})
-}
-
-export const handleShowMaterialMoreOptions = (event: Event, data: ResourceType) => {
-	useModals().study.materialMoreOptions.open({ material: data.original }, event)
 }
 
 const store: Record<

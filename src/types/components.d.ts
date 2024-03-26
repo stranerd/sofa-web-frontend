@@ -100,7 +100,6 @@ declare module 'vue' {
     SettingsLayout: typeof import('./../application/components/settings/SettingsLayout.vue')['default']
     SideBarModal: typeof import('./../application/components/users/users/SideBarModal.vue')['default']
     SocialMediaUpdate: typeof import('./../application/components/onboarding/SocialMediaUpdate.vue')['default']
-    SofaActivityCard: typeof import('sofa-ui-components')['SofaActivityCard']
     SofaAlert: typeof import('sofa-ui-components')['SofaAlert']
     SofaAvatar: typeof import('sofa-ui-components')['SofaAvatar']
     SofaBadge: typeof import('sofa-ui-components')['SofaBadge']

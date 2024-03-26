@@ -7,20 +7,16 @@
 			{ name: 'Quizzes', id: 'quizzes' },
 		]">
 		<template v-if="data.length">
-			<SofaActivityCard
+			<SofaStudyMaterial
 				v-for="activity in data"
-				:key="activity.id"
-				:activity="activity"
+				:key="activity.hash"
+				type="activity"
+				:material="activity"
 				:isWrapped="!Logic.Common.isLarge"
-				customClass="mdlg:!bg-white shadow-custom cursor-pointer relative"
-				@click="openMaterial(activity.original)">
-				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<SofaIcon
-						name="more-options-horizontal"
-						customClass="h-[6px]"
-						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
-				</div>
-			</SofaActivityCard>
+				:isRoute="false"
+				:hasShowMore="true"
+				class="mdlg:!bg-white"
+				@click.stop="openMaterial(activity)" />
 		</template>
 
 		<SofaEmptyState
@@ -34,8 +30,7 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { extractResource, openMaterial } from '@app/composables/library'
-import { handleShowMaterialMoreOptions } from '@app/composables/study'
+import { openMaterial } from '@app/composables/library'
 import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
@@ -55,14 +50,13 @@ export default defineComponent({
 		const { courses } = useCoursesInList(computed(() => folder.value?.saved.courses ?? []))
 
 		const data = computed(() => {
-			if (tab.value === 'all')
-				return [...courses.value, ...quizzes.value].sort((a, b) => b.createdAt - a.createdAt).map(extractResource)
-			if (tab.value === 'courses') return courses.value.map(extractResource)
-			if (tab.value === 'quizzes') return quizzes.value.map(extractResource)
+			if (tab.value === 'all') return [...courses.value, ...quizzes.value].sort((a, b) => b.createdAt - a.createdAt)
+			if (tab.value === 'courses') return courses.value
+			if (tab.value === 'quizzes') return quizzes.value
 			return []
 		})
 
-		return { Logic, folder, openMaterial, data, handleShowMaterialMoreOptions }
+		return { Logic, folder, openMaterial, data }
 	},
 })
 </script>

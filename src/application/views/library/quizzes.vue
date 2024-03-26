@@ -1,20 +1,16 @@
 <template>
 	<LibraryLayout title="Quizzes">
 		<template v-if="data.length">
-			<SofaActivityCard
+			<SofaStudyMaterial
 				v-for="activity in data"
-				:key="activity.id"
-				:activity="activity"
+				:key="activity.hash"
+				type="activity"
+				:material="activity"
 				:isWrapped="!Logic.Common.isLarge"
-				customClass="mdlg:!bg-white shadow-custom cursor-pointer relative"
-				@click.stop="openMaterial(activity.original)">
-				<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-					<SofaIcon
-						name="more-options-horizontal"
-						customClass="h-[6px]"
-						@click.stop="(e) => handleShowMaterialMoreOptions(e, activity)" />
-				</div>
-			</SofaActivityCard>
+				:isRoute="false"
+				:hasShowMore="true"
+				class="mdlg:!bg-white"
+				@click.stop="openMaterial(activity)" />
 		</template>
 
 		<SofaEmptyState
@@ -30,8 +26,8 @@
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import LibraryLayout from '@app/components/study/LibraryLayout.vue'
-import { extractResource, openMaterial } from '@app/composables/library'
-import { handleShowMaterialMoreOptions, useRecent } from '@app/composables/study'
+import { openMaterial } from '@app/composables/library'
+import { useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
 import { Logic } from 'sofa-logic'
 import { DraftStatus } from '@modules/study'
@@ -49,14 +45,14 @@ export default defineComponent({
 		const { quizzes: recentQuizzes } = useRecent()
 
 		const data = computed(() => {
-			if (tab.value === 'tutors') return tutorQuizzes.value.map(extractResource)
-			else if (tab.value === 'recent') return recentQuizzes.value.map(extractResource)
-			else if (tab.value === DraftStatus.published) return published.value.map(extractResource)
-			else if (tab.value === DraftStatus.draft) return draft.value.map(extractResource)
+			if (tab.value === 'tutors') return tutorQuizzes.value
+			else if (tab.value === 'recent') return recentQuizzes.value
+			else if (tab.value === DraftStatus.published) return published.value
+			else if (tab.value === DraftStatus.draft) return draft.value
 			return []
 		})
 
-		return { Logic, data, openMaterial, handleShowMaterialMoreOptions }
+		return { Logic, data, openMaterial }
 	},
 })
 </script>
