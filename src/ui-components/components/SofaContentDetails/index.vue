@@ -155,7 +155,7 @@
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
 
-			<div v-if="type == 'quiz'" class="w-full flex items-center justify-center mdlg:pt-3 mdlg:relative mdlg:pb-0 mdlg:hidden py-4">
+			<div v-if="type == 'quiz'" class="sticky bottom-0 w-full flex items-center justify-center mdlg:pt-3 mdlg:pb-0 mdlg:hidden py-4">
 				<div class="md:!w-auto w-full flex flex-col">
 					<SofaButton
 						padding="md:!py-1 py-3 px-4"
