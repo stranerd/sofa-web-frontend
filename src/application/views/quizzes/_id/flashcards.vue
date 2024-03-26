@@ -32,7 +32,7 @@
 						},
 					}">
 					<template #default>
-						<div v-if="isDone" class="flex flex-col gap-1">
+						<div v-if="isDone" class="flex flex-col gap-1 w-full h-full items-center justify-center">
 							<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
 							<SofaNormalText color="text-inherit" content="You have mastered all flashcards" />
 						</div>
