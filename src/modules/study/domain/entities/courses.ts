@@ -18,7 +18,11 @@ export class CourseEntity extends PublishableEntity<CourseFromModel> implements 
 		this.meta = data.meta
 	}
 
+	get pageLink() {
+		return `/marketplace/${this.id}?type=course`
+	}
+
 	get shareLink() {
-		return `${window.location.origin}/marketplace/${this.id}?type=course`
+		return `${window.location.origin}${this.pageLink}`
 	}
 }

@@ -96,15 +96,12 @@
 					<div
 						v-if="materials.length"
 						class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap md:flex-wrap overflow-x-auto scrollbar-hide">
-						<SofaItemCard
-							v-for="activity in filteredMaterials"
-							:key="activity.id"
-							as="router-link"
-							:hasBookmark="true"
-							:bookmarkAction="() => saveToFolder(activity.original)"
-							:content="activity"
-							:to="activity.route"
-							class="shrink-0 bg-white w-[220px] mdlg:w-[calc((100%-4rem)/5)] shadow-itemBox" />
+						<SofaStudyMaterial
+							v-for="m in filteredMaterials"
+							:key="m.id"
+							type="item"
+							:material="m"
+							class="w-[220px] mdlg:w-[calc((100%-4rem)/5)] border-2 border-darkLightGray" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState
@@ -144,7 +141,6 @@ import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { extractResource } from '@app/composables/library'
 import { saveToFolder } from '@app/composables/study/folders'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
@@ -160,9 +156,7 @@ export default defineComponent({
 		const currentTab = computed(() => (route.query.tab as string | undefined) ?? 'content')
 		const id = route.params.id as string
 		const { user, courses, quizzes } = useUsersMaterials(id)
-		const materials = computed(() =>
-			[...courses, ...quizzes].map((item) => extractResource(item)).sort((a, b) => b.createdAt - a.createdAt),
-		)
+		const materials = computed(() => [...courses, ...quizzes].sort((a, b) => b.createdAt - a.createdAt))
 		const filteredMaterials = computed(() => {
 			const query = searchQuery.value.toLowerCase()
 			if (!query) return materials.value

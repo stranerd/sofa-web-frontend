@@ -55,13 +55,12 @@
 					<template v-if="resourceContents.length">
 						<div class="w-full flex flex-col gap-3">
 							<div v-if="Logic.Common.isLarge" class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4">
-								<SofaItemCard
-									v-for="content in resourceContents"
-									:key="content.id"
-									:content="content"
-									customClass="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									:bookmarkAction="() => saveToFolder(content.original)"
-									@click="$router.push(content.route)" />
+								<SofaStudyMaterial
+									v-for="m in resourceContents"
+									:key="m.id"
+									type="item"
+									:material="m.original"
+									class="col-span-1" />
 							</div>
 
 							<div
@@ -102,13 +101,12 @@
 					<template v-if="quizContents.length">
 						<div class="w-full flex flex-col gap-3">
 							<div v-if="Logic.Common.isLarge" class="w-full mdlg:!grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:!gap-4">
-								<SofaItemCard
-									v-for="content in quizContents"
-									:key="content.id"
-									:content="content"
-									customClass="!col-span-1 !border-none !shadow-itemBox bg-white rounded-[16px] cursor-pointer"
-									:bookmarkAction="() => saveToFolder(content.original)"
-									@click="$router.push(content.route)" />
+								<SofaStudyMaterial
+									v-for="m in quizContents"
+									:key="m.id"
+									type="item"
+									:material="m.original"
+									class="col-span-1" />
 							</div>
 
 							<div

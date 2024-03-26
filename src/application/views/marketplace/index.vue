@@ -47,15 +47,12 @@
 					</div>
 
 					<div v-if="material.list.length" class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide">
-						<SofaItemCard
-							v-for="activity in material.list.slice(0, 4)"
-							:key="activity.id"
-							as="router-link"
-							:content="activity"
-							:to="activity.route"
-							:hasBookmark="true"
-							:bookmarkAction="() => saveToFolder(activity.original)"
-							class="shrink-0 bg-white w-[220px] mdlg:w-[20%] shadow-itemBox" />
+						<SofaStudyMaterial
+							v-for="m in material.list.slice(0, 4)"
+							:key="m.id"
+							type="item"
+							:material="m"
+							class="w-[220px] mdlg:w-[20%] border-2 border-darkLightGray" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
@@ -70,7 +67,6 @@
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
-import { extractResource } from '@app/composables/library'
 import { useMyStudy } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { Logic } from 'sofa-logic'
@@ -96,19 +92,19 @@ export default defineComponent({
 
 		const materials = computed(() => [
 			{
-				list: latest.value.map(extractResource),
+				list: latest.value,
 				title: 'Latest',
 				emptyTitle: 'No result found',
 				emptySub: 'We could not find any latest materials',
 			},
 			{
-				list: popular.value.map(extractResource),
+				list: popular.value,
 				title: 'Most popular',
 				emptyTitle: 'No result found',
 				emptySub: 'We could not find any popular materials',
 			},
 			{
-				list: rated.value.map(extractResource),
+				list: rated.value,
 				title: 'Highest rated',
 				emptyTitle: 'No result found',
 				emptySub: 'We could not find any rated materials',
