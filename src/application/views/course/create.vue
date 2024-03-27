@@ -103,7 +103,7 @@
 			</template>
 
 			<div
-				class="w-full mdlg:!shadow-custom md:!py-5 md:!px-5 px-4 py-2 relative bg-white mdlg:!rounded-[16px] flex-grow h-full flex flex-col gap-4">
+				class="w-full mdlg:!shadow-custom md:!py-5 md:!px-5 px-4 py-2 relative bg-white mdlg:!rounded-[16px] flex-grow flex flex-col gap-4">
 				<template v-if="!selectedMaterial">
 					<div class="w-full mdlg:!flex flex-col hidden gap-4">
 						<div class="w-full flex flex-row items-center justify-center">
@@ -136,7 +136,7 @@
 				</template>
 
 				<template v-if="selectedMaterial?.type == 'document'">
-					<div class="w-full mdlg:!h-full flex-grow flex flex-col" style="height: calc(100vh - 90px)">
+					<div class="w-full mdlg:!h-full flex-grow flex flex-col shrink-0 oveflow-y-auto">
 						<SofaDocumentReader :key="selectedMaterial.details.id" :documentUrl="selectedMaterial.data.documentUrl" />
 					</div>
 				</template>
@@ -161,7 +161,7 @@
 			</div>
 
 			<!-- Bottom save button sm -->
-			<div class="mdlg:!hidden fixed left-0 bottom-0 px-4 py-4 bg-white flex flex-col w-full z-0">
+			<div class="mdlg:hidden sticky bottom-0 px-4 py-4 bg-white flex flex-col w-full z-0">
 				<div :class="`w-full flex flex-col ${hasUnsavedChanges ? '' : 'opacity-50'}`">
 					<SofaButton
 						customClass="w-full"

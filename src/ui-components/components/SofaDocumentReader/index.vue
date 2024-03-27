@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex flex-col h-full overflow-y-auto flex-grow outline-none border border-lightGray rounded-lg">
+	<div class="w-full flex flex-col overflow-y-auto flex-grow outline-none border border-lightGray rounded-lg shrink-0">
 		<VuePDF v-for="page in pages" :key="page" :page="page" :pdf="pdf" textLayer annotationLayer fitParent class="h-full" />
 	</div>
 </template>

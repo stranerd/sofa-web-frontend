@@ -1,32 +1,23 @@
 <template>
 	<div :class="`flex w-full flex-col gap-2 ${customClass}`">
 		<template v-if="isWrapper">
-			<div class="flex flex-row flex-wrap w-full relative">
-				<input
-					type="file"
-					style="opacity: 0; width: 100%; height: 100%; left: 0; overflow: hidden; position: absolute; z-index: 100"
-					:accept="accept"
-					:multiple="isMultiple"
-					@change="uploadHandler" />
+			<a class="flex flex-row flex-wrap w-full relative" @click="openFileSelect">
 				<div class="w-full flex flex-col justify-center items-center">
 					<slot name="content" />
 				</div>
-			</div>
+			</a>
 		</template>
 		<template v-else>
-			<div class="rounded flex flex-row items-center justify-start relative gap-2 px-1 py-4 bg-grayBackground border-dashed">
-				<input
-					type="file"
-					style="opacity: 0; width: 100%; height: 100%; left: 0; overflow: hidden; position: absolute; z-index: 10"
-					:accept="accept"
-					:multiple="isMultiple"
-					@change="uploadHandler" />
+			<a
+				class="rounded flex flex-row items-center justify-start relative gap-2 px-1 py-4 bg-grayBackground border-dashed"
+				@click="openFileSelect">
 				<SofaIcon :name="iconName" customClass="h-[15px]" />
 				<SofaNormalText color="text-paragraphTextLight" customClass="w-full text-left line-clamp-1">
 					{{ selectedFileName != '' ? selectedFileName : placeholder }}
 				</SofaNormalText>
-			</div>
+			</a>
 		</template>
+		<input ref="fileInput" type="file" class="hidden" :accept="accept" :multiple="isMultiple" @change="uploadHandler" />
 	</div>
 </template>
 <script lang="ts" setup>
@@ -53,6 +44,11 @@ const props = withDefaults(
 	},
 )
 
+const fileInput = ref(null as HTMLInputElement | null)
+const openFileSelect = async () => {
+	if (fileInput.value) fileInput.value.value = null as any
+	fileInput.value?.click()
+}
 const files = ref<FileList>()
 const selectedFileName = ref('')
 const model = defineModel<any>({ default: null })

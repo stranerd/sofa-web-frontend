@@ -28,8 +28,7 @@
 				<CourseContent
 					:buyCourse="() => (showMakePaymentModal = true)"
 					:isUnlocked="isUnlocked(SingleCourse)"
-					:selectedMaterial="selectedMaterial"
-					:singleCourse="SingleCourse" />
+					:selectedMaterial="selectedMaterial" />
 			</div>
 		</div>
 
@@ -65,8 +64,7 @@
 							<CourseContent
 								:buyCourse="() => (showMakePaymentModal = true)"
 								:isUnlocked="isUnlocked(SingleCourse)"
-								:selectedMaterial="selectedMaterial"
-								:singleCourse="SingleCourse" />
+								:selectedMaterial="selectedMaterial" />
 						</div>
 					</div>
 				</template>
@@ -74,14 +72,12 @@
 
 			<div
 				v-if="selectedMaterial && showCourseContent"
-				class="absolute bottom-0 left-0 pl-4 py-4 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col gap-2 items-center justify-center w-full">
+				class="pl-4 py-2 bg-white drop-shadow-2xl rounded-t-[16px] flex flex-col gap-2 items-center justify-center w-full">
 				<SofaNormalText customClass="!font-bold">
 					{{ SingleCourse.title }}
 				</SofaNormalText>
-				<div class="w-full flex flex-row gap-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-					<div
-						id="sm-materials-container"
-						class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
+				<div class="w-full flex gap-3 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
+					<div id="sm-materials-container" class="mdlg:!w-full flex gap-3">
 						<template v-for="(section, index) in courseContents" :key="index">
 							<template v-for="(item, itemIndex) in section.materials" :key="itemIndex">
 								<div
