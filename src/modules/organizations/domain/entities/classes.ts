@@ -1,5 +1,5 @@
 import { ClassFromModel } from '../../data/models/classes'
-import { MemberTypes, Saleable } from '../types'
+import { ClassLessonable, MemberTypes, Saleable } from '../types'
 import { BaseEntity } from '@modules/core'
 import { UserEntity } from '@modules/users'
 
@@ -51,5 +51,11 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 			this.isEnrolled(user) ||
 			user.account.organizationsIn.some((o) => o.id === this.organizationId && o.type === MemberTypes.student)
 		)
+	}
+
+	get publishedSessions() {
+		return this.lessons
+			.flatMap((l) => l.curriculum.flatMap((c) => c.items.filter((i) => i.type === ClassLessonable.schedule)))
+			.map((i) => i.id)
 	}
 }

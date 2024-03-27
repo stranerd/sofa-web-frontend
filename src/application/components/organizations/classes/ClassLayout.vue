@@ -56,22 +56,7 @@
 			</div>
 		</template>
 		<template #right-session>
-			<div v-if="schedules.length === 0" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
-				<SofaHeaderText content="Live Sessions" />
-				<div class="h-[1px] w-full bg-lightGray" />
-				<div class="w-full flex flex-col gap-2 items-center justify-center">
-					<SofaImageLoader
-						customClass="size-[64px] flex items-center justify-center rounded-custom !object-contain"
-						photoUrl="/images/empty-schedules.png" />
-					<SofaNormalText customClass="font-bold" content="There’s nothing here" />
-					<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
-				</div>
-			</div>
-			<div v-else-if="schedules.length" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start">
-				<SofaHeaderText content="Live Sessions" />
-				<div class="mt-4 h-[1px] w-full bg-lightGray" />
-				<ScheduleList :classInst="classInst" :showFilter="false" :schedules="schedules" />
-			</div>
+			<SidebarScheduleList :classInst="classInst" />
 		</template>
 	</DashboardLayout>
 </template>
@@ -81,7 +66,6 @@ import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useClass } from '@app/composables/organizations/classes'
-import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
 
@@ -118,6 +102,4 @@ const options = computed(() => [
 	{ title: 'Schedule', icon: 'calendar' as const, route: '/schedules' },
 	{ title: 'About', icon: 'info' as const, route: '/about' },
 ])
-
-const { schedules } = useClassSchedules(organizationId, classId)
 </script>

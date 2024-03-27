@@ -30,6 +30,7 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 
 	canJoin(classInst: ClassEntity, userId: string) {
 		if (this.status !== ScheduleStatus.started) return false
+		if (!this.stream?.roomId) return false
 		const lesson = classInst.getLesson(this.lessonId)
 		if (!lesson) return false
 		const isTeacher = lesson.users.teachers.includes(userId)
