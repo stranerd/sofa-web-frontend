@@ -11,6 +11,7 @@ export default defineComponent({
 	routeConfig: {
 		goBackRoute: '/library',
 		middlewares: [
+			'isAuthenticated',
 			async () => {
 				const { createQuiz } = useCreateQuiz()
 				const quiz = await createQuiz()

@@ -59,7 +59,7 @@ import { useConversation } from '@app/composables/conversations/conversations'
 export default defineComponent({
 	name: 'ChatsRequestsIdPage',
 	components: { ChatLayout, ChatContent },
-	routeConfig: { goBackRoute: '/chats' },
+	routeConfig: { goBackRoute: '/chats', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Request',

@@ -50,7 +50,7 @@ export default defineComponent({
 	components: {
 		SettingsLayout,
 	},
-	routeConfig: { goBackRoute: '/settings' },
+	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Security',

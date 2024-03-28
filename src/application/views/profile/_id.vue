@@ -140,6 +140,7 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
@@ -151,6 +152,7 @@ export default defineComponent({
 		useMeta({ title: 'Public Profile' })
 
 		const { user: authUser } = useAuth()
+		const { runInAuth } = useRedirectToAuth()
 		const route = useRoute()
 		const currentTab = computed(() => (route.query.tab as string | undefined) ?? 'content')
 		const id = route.params.id as string
@@ -161,7 +163,7 @@ export default defineComponent({
 			if (!query) return materials.value
 			return materials.value.filter((item) => [item.title].some((v) => v.toLowerCase().includes(query)))
 		})
-		const joinOrgHandler = () => useModals().organizations.joinOrganization.open({ org: user.value! })
+		const joinOrgHandler = runInAuth(() => useModals().organizations.joinOrganization.open({ org: user.value! }))
 
 		const searchQuery = ref('')
 

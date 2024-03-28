@@ -16,7 +16,7 @@ export default defineComponent({
 		SettingsLayout,
 		SettingProfile,
 	},
-	routeConfig: { goBackRoute: '/settings' },
+	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Profile',

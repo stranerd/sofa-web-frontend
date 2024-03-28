@@ -28,7 +28,7 @@ import { useMyOrganizations } from '@app/composables/users/organizations'
 export default defineComponent({
 	name: 'SettingsOrganizationsPage',
 	components: { SettingsLayout },
-	routeConfig: { goBackRoute: '/settings' },
+	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Organizations' })
 		const { organizations, leaveOrganization } = useMyOrganizations()

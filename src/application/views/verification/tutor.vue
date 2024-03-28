@@ -176,6 +176,7 @@ import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'BecomeATutorPage',
+	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Become a tutor' })
 

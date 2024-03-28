@@ -53,7 +53,7 @@ import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'SettingsWalletPage',
 	components: { SettingsLayout },
-	routeConfig: { goBackRoute: '/settings' },
+	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Wallet',

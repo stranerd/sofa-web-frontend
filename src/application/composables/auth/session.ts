@@ -21,11 +21,17 @@ export const createSession = async (afterAuth: AfterAuthUser, router: Router) =>
 export const useRedirectToAuth = () => {
 	const route = useRoute()
 	const router = useRouter()
+	const { id } = useAuth()
+
+	const runInAuth = async <T>(fn: () => Promise<T>) => {
+		if (id) return await fn()
+		return (await redirect()) as unkwown as T
+	}
 
 	const redirect = async () => {
 		await Logic.Common.setRedirectToRoute(route.fullPath)
 		if (router) await router.push('/auth/signin')
 	}
 
-	return { redirect }
+	return { redirect, runInAuth }
 }

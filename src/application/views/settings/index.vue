@@ -11,7 +11,10 @@ import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'SettingsIndexPage',
 	components: { SettingsLayout },
-	routeConfig: { goBackRoute: '/dashboard', middlewares: [() => (Logic.Common.isLarge ? '/settings/profile' : undefined)] },
+	routeConfig: {
+		goBackRoute: '/dashboard',
+		middlewares: ['isAuthenticated', () => (Logic.Common.isLarge ? '/settings/profile' : undefined)],
+	},
 	setup() {
 		useMeta({
 			title: 'Settings',

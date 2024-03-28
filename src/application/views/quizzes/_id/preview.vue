@@ -36,6 +36,7 @@ export default defineComponent({
 	name: 'QuizIdPreviewPage',
 	routeConfig: {
 		goBackRoute: (route: RouteLocationNormalized) => `/quizzes/${route.params.id}/edit`,
+		middlewares: ['isAuthenticated'],
 	},
 	setup() {
 		useMeta({

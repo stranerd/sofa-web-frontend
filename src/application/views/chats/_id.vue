@@ -121,7 +121,7 @@ import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'ChatsIdPage',
 	components: { ChatLayout, ChatContent, ConversationMessages },
-	routeConfig: { goBackRoute: '/chats' },
+	routeConfig: { goBackRoute: '/chats', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
 			title: 'Chat',
