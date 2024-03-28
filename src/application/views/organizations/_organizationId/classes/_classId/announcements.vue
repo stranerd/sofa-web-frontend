@@ -1,6 +1,6 @@
 <template>
 	<ClassLayout>
-		<template v-if="user" #default="{ classInst }">
+		<template #default="{ classInst, user }">
 			<div
 				v-if="announcements.length === 0"
 				class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
@@ -108,76 +108,53 @@
 	</ClassLayout>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, reactive } from 'vue'
+<script lang="ts" setup>
+import { computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
-import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useClassAnnouncements } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
 
-export default defineComponent({
-	name: 'OrganizationsOrganizationIdClassesClassIdAnnouncements',
-	components: { ClassLayout },
-	routeConfig: {
-		middlewares: ['isAuthenticated'],
-	},
-	setup() {
-		const route = useRoute()
-		const { user } = useAuth()
-		const organizationId = route.params.organizationId as string
-		const classId = route.params.classId as string
+const route = useRoute()
+const organizationId = route.params.organizationId as string
+const classId = route.params.classId as string
 
-		const emptyAnnouncementContent = {
-			imageURL: '/images/empty-announcements.png',
-			title: 'Getting started with announcements',
-			contents: [
-				'Reach all students and teachers in this class.',
-				'Make announcements to a specific lesson. ',
-				'Reach anybody, anywhere, at anytime.',
-				'Faster, time-saving, and stress-free communication.',
-			],
-		}
+const emptyAnnouncementContent = {
+	imageURL: '/images/empty-announcements.png',
+	title: 'Getting started with announcements',
+	contents: [
+		'Reach all students and teachers in this class.',
+		'Make announcements to a specific lesson. ',
+		'Reach anybody, anywhere, at anytime.',
+		'Faster, time-saving, and stress-free communication.',
+	],
+}
 
-		const filter = reactive({
-			lesson: null as string | null,
-			userType: null as MemberTypes | null,
-		})
-
-		const userTypesOption = [
-			{ key: null, value: 'Both Teachers and Students' },
-			{ key: MemberTypes.student, value: 'Students Only' },
-			{ key: MemberTypes.teacher, value: 'Teachers Only' },
-		]
-
-		const createAnnouncement = (classInst: ClassEntity) => {
-			useModals().organizations.createAnnouncement.open({
-				organizationId,
-				classInst,
-			})
-		}
-
-		const { announcements, hasMore, fetchOlderAnnouncements } = useClassAnnouncements(organizationId, classId)
-		const filteredAnnouncements = computed(() =>
-			announcements.value.filter((an) => {
-				const lessonMatch = an.filter.lessonIds && filter.lesson ? an.filter.lessonIds.includes(filter.lesson) : true
-				const userTypeMatch = an.filter.userTypes && filter.userType ? an.filter.userTypes.includes(filter.userType) : true
-				return lessonMatch && userTypeMatch
-			}),
-		)
-
-		return {
-			announcements,
-			fetchOlderAnnouncements,
-			filteredAnnouncements,
-			user,
-			emptyAnnouncementContent,
-			createAnnouncement,
-			filter,
-			userTypesOption,
-			hasMore,
-		}
-	},
+const filter = reactive({
+	lesson: null as string | null,
+	userType: null as MemberTypes | null,
 })
+
+const userTypesOption = [
+	{ key: null, value: 'Both Teachers and Students' },
+	{ key: MemberTypes.student, value: 'Students Only' },
+	{ key: MemberTypes.teacher, value: 'Teachers Only' },
+]
+
+const createAnnouncement = (classInst: ClassEntity) => {
+	useModals().organizations.createAnnouncement.open({
+		organizationId,
+		classInst,
+	})
+}
+
+const { announcements, hasMore, fetchOlderAnnouncements } = useClassAnnouncements(organizationId, classId)
+const filteredAnnouncements = computed(() =>
+	announcements.value.filter((an) => {
+		const lessonMatch = an.filter.lessonIds && filter.lesson ? an.filter.lessonIds.includes(filter.lesson) : true
+		const userTypeMatch = an.filter.userTypes && filter.userType ? an.filter.userTypes.includes(filter.userType) : true
+		return lessonMatch && userTypeMatch
+	}),
+)
 </script>

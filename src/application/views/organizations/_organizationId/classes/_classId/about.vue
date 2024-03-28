@@ -28,20 +28,8 @@
 	</ClassLayout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { formatNumber } from 'valleyed'
-import { defineComponent } from 'vue'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { formatTime } from '@utils/dates'
-
-export default defineComponent({
-	name: 'OrganizationsOrganizationIdClassesClassIdAbout',
-	components: { ClassLayout },
-	routeConfig: {
-		middlewares: ['isAuthenticated'],
-	},
-	setup() {
-		return { formatTime, formatNumber }
-	},
-})
 </script>

@@ -23,10 +23,12 @@ export const useRedirectToAuth = () => {
 	const router = useRouter()
 	const { id } = useAuth()
 
-	const runInAuth = async <T>(fn: () => Promise<T>) => {
-		if (id) return await fn()
-		return (await redirect()) as unkwown as T
-	}
+	const runInAuth =
+		<T>(fn: () => Promise<T>) =>
+		async () => {
+			if (id) return fn()
+			return redirect() as unknown as T
+		}
 
 	const redirect = async () => {
 		await Logic.Common.setRedirectToRoute(route.fullPath)

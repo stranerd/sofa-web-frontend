@@ -56,7 +56,7 @@
 				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
 					<SofaIcon name="plus-white" />
 				</SofaButton>
-				<div class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
+				<div v-if="user" class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
 					<div
 						class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
 						@click="showNotification = true">

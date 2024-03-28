@@ -1,7 +1,7 @@
 <template>
 	<slot v-if="!classInst" name="notfound" />
-	<ExploreClassView v-else-if="!classInst.isEnrolled(user!)" :classInst="classInst" />
-	<slot v-else-if="full" name="full" :classInst="classInst" />
+	<ExploreClassView v-else-if="!user || !classInst.isEnrolled(user)" :classInst="classInst" />
+	<slot v-else-if="full" name="full" :classInst="classInst" :user="user" />
 	<SubPageLayout v-else-if="!Logic.Common.isLarge">
 		<div class="w-full h-full flex flex-col justify-start relative">
 			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
@@ -19,7 +19,7 @@
 				</router-link>
 			</div>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto p-4">
-				<slot :classInst="classInst" />
+				<slot :classInst="classInst" :user="user" />
 			</div>
 		</div>
 	</SubPageLayout>
@@ -52,7 +52,7 @@
 		</template>
 		<template #middle-session>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :classInst="classInst" />
+				<slot :classInst="classInst" :user="user" />
 			</div>
 		</template>
 		<template #right-session>

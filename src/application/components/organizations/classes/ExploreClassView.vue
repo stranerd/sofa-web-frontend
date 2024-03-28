@@ -27,13 +27,13 @@
 					<div class="flex flex-row mdlg:flex-col gap-2">
 						<div class="flex items-center gap-1">
 							<SofaIcon name="lessons" class="fill-black h-[16px]" />
-							<SofaNormalText color="text-deepGray">
+							<SofaNormalText color="text-deepGray" class="line-clamp-1">
 								{{ classInst.lessons.length }} {{ pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
 							</SofaNormalText>
 						</div>
 						<div class="flex items-center gap-1">
 							<SofaIcon name="user-unfilled" class="!fill-black h-[16px]" />
-							<SofaNormalText color="text-deepGray">
+							<SofaNormalText color="text-deepGray" class="line-clamp-1">
 								{{ classInst.members.students.length }}
 								{{ pluralize(classInst.members.students.length, 'student', 'students') }}
 							</SofaNormalText>
@@ -137,6 +137,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
@@ -149,6 +150,7 @@ const props = defineProps<{
 
 const router = useRouter()
 const { user, wallet } = useAuth()
+const { runInAuth } = useRedirectToAuth()
 const tabs = [
 	{
 		name: 'Activity',
@@ -182,21 +184,23 @@ const shareClass = () => {
 }
 const enrollInClassProps = computed(() => {
 	const classInst = props.classInst
-	if (classInst.isEnrolled(user.value!))
-		return {
-			label: 'Go to class',
-			handler: () => router.push(classInst.pageLink),
-		}
-	const classSub = wallet.value?.getClassSubscription({ organizationId: classInst.organizationId, classId: classInst.id })
-	if (classSub && !classSub.active)
-		return {
-			label: 'Renew enrollment',
-			handler: () => purchaseClass(classInst),
-		}
-	const canAccessFree = classInst.canAccessForFree(user.value!)
+	if (user.value && wallet.value) {
+		if (classInst.isEnrolled(user.value))
+			return {
+				label: 'Go to class',
+				handler: () => router.push(classInst.pageLink),
+			}
+		const classSub = wallet.value.getClassSubscription({ organizationId: classInst.organizationId, classId: classInst.id })
+		if (classSub && !classSub.active)
+			return {
+				label: 'Renew enrollment',
+				handler: () => purchaseClass(classInst),
+			}
+	}
+	const canAccessFree = user.value ? classInst.canAccessForFree(user.value) : false
 	return {
 		label: `Enroll for ${canAccessFree ? 'free' : Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
-		handler: () => purchaseClass(classInst),
+		handler: runInAuth(() => purchaseClass(classInst)),
 	}
 })
 </script>

@@ -37,28 +37,13 @@
 	</ClassLayout>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import { useRoute } from 'vue-router'
 import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useClassSchedules } from '@app/composables/organizations/schedules'
 
-export default defineComponent({
-	name: 'OrganizationsOrganizationIdClassesClassIdSchedules',
-	components: { ClassLayout },
-	routeConfig: {
-		middlewares: ['isAuthenticated'],
-	},
-	setup() {
-		const route = useRoute()
-		const organizationId = route.params.organizationId as string
-		const classId = route.params.classId as string
-		const { schedules, fetchOlderSchedules, hasMore } = useClassSchedules(organizationId, classId)
-		return {
-			schedules,
-			hasMore,
-			fetchOlderSchedules,
-		}
-	},
-})
+const route = useRoute()
+const organizationId = route.params.organizationId as string
+const classId = route.params.classId as string
+const { schedules, fetchOlderSchedules, hasMore } = useClassSchedules(organizationId, classId)
 </script>
