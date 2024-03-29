@@ -194,7 +194,6 @@ export const usePurchaseClass = () => {
 		asyncFn: purchaseClass,
 		loading,
 		error,
-		called,
 	} = useAsyncFn(async (classInst: ClassEntity, selectedMethod: SelectedPaymentMethod) => {
 		await ClassesUseCases.purchase(classInst.organizationId, classInst.id, selectedMethod)
 		Logic.Common.showAlert({
@@ -204,7 +203,7 @@ export const usePurchaseClass = () => {
 		await router.push(classInst.pageLink)
 	})
 
-	return { purchaseClass, loading, error, called }
+	return { purchaseClass, loading, error }
 }
 
 export const useSimilarClasses = (organizationId: string, classId: string) => {
@@ -214,10 +213,13 @@ export const useSimilarClasses = (organizationId: string, classId: string) => {
 		loading,
 		error,
 		called,
-	} = useAsyncFn(async () => {
-		const classes = await ClassesUseCases.getSimilarClasses(organizationId, classId)
-		similarClasses.value = classes
-	})
+	} = useAsyncFn(
+		async () => {
+			const classes = await ClassesUseCases.getSimilarClasses(organizationId, classId)
+			similarClasses.value = classes
+		},
+		{ key: `organizations/${organizationId}/classes/${classId}/similar` },
+	)
 	onMounted(async () => {
 		if (!called.value) await fetchSimilarClasses()
 	})

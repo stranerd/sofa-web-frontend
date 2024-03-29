@@ -1,15 +1,17 @@
 <template>
-	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4 bg-white" :hide="{ bottom: true }">
-		<div class="mdlg:flex hidden justify-between items-center w-full">
+	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4" :hide="{ bottom: true }">
+		<div class="mdlg:flex hidden px-4 justify-between items-center w-full">
 			<div class="text-grayColor w-full flex justify-start gap-1">
 				<SofaNormalText as="router-link" to="/classes/explore" class="text-current">Classes</SofaNormalText>
 				<SofaNormalText class="text-current">/ {{ classInst.title }}</SofaNormalText>
 			</div>
 		</div>
-		<div class="block mdlg:!hidden p-4 self-end">
-			<SofaIcon class="h-[16px]" name="circle-close" @click="Logic.Common.goBack()" />
+		<div class="w-full mdlg:!hidden p-4 flex justify-between items-center gap-4">
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaNormalText class="!font-bold !text-base" :content="classInst.title" />
+			<span class="w-4" />
 		</div>
-		<div class="w-full mdlg:rounded-2xl flex flex-col flex-grow overflow-y-auto p-4">
+		<div class="w-full mdlg:rounded-2xl flex flex-col flex-grow overflow-y-auto p-4 bg-white">
 			<div
 				class="w-full flex mdlg:flex md:flex-row mdlg:flex-none flex-col mdlg:items-start h-auto items-start justify-start gap-3 mdlg:gap--3">
 				<div class="mdlg:!w-[33%] w-full">
@@ -64,46 +66,17 @@
 				</SofaNormalText>
 			</div>
 			<div v-if="selectedTab == 'activity'" class="flex-grow overflow-y-auto">
-				<div v-if="classInst.lessons.length" class="flex gap-4">
-					<!-- For larger screen -->
-					<div class="w-full hidden mdlg:flex gap-4">
-						<div class="flex mdlg:w-[30%] flex-col">
-							<SofaHeaderText content="Lessons" customClass="!text-xl" />
-							<div class="flex flex-col gap-4 mt-3">
-								<LessonCard
-									v-for="lesson in classInst.lessons"
-									:key="lesson.id"
-									:lesson="lesson"
-									hideJoin
-									:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
-									:classInst="classInst"
-									@click="selectedLesson = lesson" />
-							</div>
-						</div>
-						<LessonsForExplore :classInst="classInst" :lesson="selectedLesson" />
-					</div>
-					<div class="w-full mdlg:hidden flex flex-col">
-						<div class="flex flex-col">
-							<SofaHeaderText content="Lessons" customClass="!text-xl" />
-							<div class="flex flex-col gap-4 mt-3">
-								<button
-									v-for="lesson in classInst.lessons"
-									:key="lesson.id"
-									class="flex items-center justify-between pr-4 rounded-md cursor-pointer"
-									:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : 'bg-lightGray'"
-									@click="openPreviewModal(lesson)">
-									<LessonCard
-										:lesson="lesson"
-										hideJoin
-										:classInst="classInst"
-										:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : 'bg-lightGray'" />
-									<SofaIcon
-										class="h-[8px]"
-										name="chevron-down"
-										:class="{ 'rotate-180': lesson.id === selectedLesson?.id }" />
-								</button>
-							</div>
-						</div>
+				<div v-if="classInst.lessons.length" class="flex w-full flex-col">
+					<SofaHeaderText content="Lessons" class="!text-xl" />
+					<div class="flex flex-col gap-4 mt-3">
+						<LessonCard
+							v-for="lesson in classInst.lessons"
+							:key="lesson.id"
+							:lesson="lesson"
+							hideJoin
+							:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
+							:classInst="classInst"
+							@click="selectedLesson = lesson" />
 					</div>
 				</div>
 				<div v-else class="flex flex-col gap-4 items-center py-10">
@@ -140,7 +113,7 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
-import { ClassEntity, ClassLesson } from '@modules/organizations'
+import { ClassEntity } from '@modules/organizations'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
 
@@ -169,19 +142,16 @@ const { similarClasses } = useSimilarClasses(props.classInst.organizationId, pro
 
 useMeta({ title: props.classInst.title })
 
-const openPreviewModal = (lesson: ClassLesson) => {
-	selectedLesson.value = lesson
-	useModals().organizations.previewCurriculum.open({
-		lesson: selectedLesson.value,
-		classInst: props.classInst,
-		curriculum: lesson.curriculum,
-		isPreview: false,
-	})
-}
-
 const shareClass = () => {
 	Logic.Common.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
 }
+const purchase = runInAuth(() => {
+	useModals().payment.selectPaymentMethod.open({
+		price: props.classInst.price,
+		showWallet: false,
+		onSelect: () => purchaseClass(props.classInst, null),
+	})
+})
 const enrollInClassProps = computed(() => {
 	const classInst = props.classInst
 	if (user.value && wallet.value) {
@@ -194,13 +164,13 @@ const enrollInClassProps = computed(() => {
 		if (classSub && !classSub.active)
 			return {
 				label: 'Renew enrollment',
-				handler: () => purchaseClass(classInst, null),
+				handler: purchase,
 			}
 	}
 	const canAccessFree = user.value ? classInst.canAccessForFree(user.value) : false
 	return {
 		label: `Enroll for ${canAccessFree ? 'free' : Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
-		handler: runInAuth(() => purchaseClass(classInst, null)),
+		handler: purchase,
 	}
 })
 </script>

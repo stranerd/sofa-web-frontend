@@ -235,7 +235,6 @@ export const useCreatePlay = (access: CoursableAccess['access'], options: { star
 		asyncFn: createPlay,
 		loading,
 		error,
-		called,
 	} = useAsyncFn(async (optionsOvr?: Partial<typeof options>) => {
 		const allOpts = { ...options, ...(optionsOvr ?? {}) }
 		let play = await PlaysUseCases.create(factory, access)
@@ -245,5 +244,5 @@ export const useCreatePlay = (access: CoursableAccess['access'], options: { star
 		return play
 	})
 
-	return { createPlay, factory, loading, error, called }
+	return { createPlay, factory, loading, error }
 }

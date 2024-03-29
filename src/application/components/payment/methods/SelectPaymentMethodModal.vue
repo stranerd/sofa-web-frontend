@@ -10,7 +10,7 @@
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
-		<SelectPaymentMethod v-model="selectedMethod" showWallet :amount="amount" />
+		<SelectPaymentMethod v-model="selectedMethod" :showWallet="showWallet" :price="price" />
 
 		<SofaButton
 			:disabled="!selectedMethod"
@@ -25,14 +25,18 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectedPaymentMethod } from '@modules/payment'
+import { Currencies, SelectedPaymentMethod } from '@modules/payment'
 
-const props = defineProps<{
-	close: () => void
-	amount: number
-	onSelect: (method: SelectedPaymentMethod) => void
-	autoSelect?: boolean
-}>()
+const props = withDefaults(
+	defineProps<{
+		close: () => void
+		price?: { amount: number; currency: Currencies }
+		onSelect: (method: SelectedPaymentMethod) => void
+		autoSelect?: boolean
+		showWallet?: boolean
+	}>(),
+	{ autoSelect: false, showWallet: true, price: undefined },
+)
 
 const selectedMethod = defineModel<SelectedPaymentMethod>({ default: null })
 
@@ -44,6 +48,7 @@ const submit = async () => {
 
 if (props.autoSelect) {
 	selectedMethod.value = true
-	// submit().then()
+	submit().then()
+	props.close()
 }
 </script>

@@ -272,7 +272,7 @@ export default defineComponent({
 		const buyCourse = async () => {
 			if (!SingleCourse.value) return
 			useModals().payment.selectPaymentMethod.open({
-				amount: SingleCourse.value.price.amount,
+				price: SingleCourse.value.price,
 				autoSelect: true,
 				onSelect: (method) => createPurchase(method).then(() => Logic.Study.GetCourse(SingleCourse.value!.id)),
 			})

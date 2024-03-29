@@ -5,9 +5,9 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
-import { PlanEntity, PlansUseCases, SelectedPaymentMethod, WalletsUseCases } from '@modules/payment'
 import { Logic } from 'sofa-logic'
 import { UserType } from '@modules/users'
+import { PlanEntity, PlansUseCases, SelectedPaymentMethod, WalletsUseCases } from '@modules/payment'
 
 const store = {
 	plans: ref<PlanEntity[]>([]),
@@ -39,17 +39,20 @@ const store = {
 export const usePlansList = () => {
 	const { userType, wallet } = useAuth()
 
-	const { called, asyncFn: fetchPlans } = useAsyncFn(async () => {
-		const plans = await PlansUseCases.getAll()
-		plans.results.forEach((r) =>
-			addToArray(
-				store.plans.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-	})
+	const { called, asyncFn: fetchPlans } = useAsyncFn(
+		async () => {
+			const plans = await PlansUseCases.getAll()
+			plans.results.forEach((r) =>
+				addToArray(
+					store.plans.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+		},
+		{ key: 'payment/plans' },
+	)
 
 	onMounted(async () => {
 		if (!called.value) await fetchPlans()

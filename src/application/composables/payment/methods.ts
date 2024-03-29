@@ -36,17 +36,20 @@ const store = {
 }
 
 export const useMyMethods = () => {
-	const { called, asyncFn: fetchMethods } = useAsyncFn(async () => {
-		const methods = await MethodsUseCases.getAll()
-		methods.results.forEach((r) =>
-			addToArray(
-				store.methods.value,
-				r,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-	})
+	const { called, asyncFn: fetchMethods } = useAsyncFn(
+		async () => {
+			const methods = await MethodsUseCases.getAll()
+			methods.results.forEach((r) =>
+				addToArray(
+					store.methods.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+		},
+		{ key: 'payment/methods/mine' },
+	)
 
 	const { asyncFn: addMethod } = useAsyncFn(
 		async () =>

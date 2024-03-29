@@ -41,16 +41,18 @@ import { useModals } from '@app/composables/core/modals'
 import { useMyMethods } from '@app/composables/payment/methods'
 import { useAuth } from '@app/composables/auth/auth'
 import { Logic } from 'sofa-logic'
-import { SelectedPaymentMethod } from '@modules/payment'
+import { Currencies, SelectedPaymentMethod } from '@modules/payment'
 
-withDefaults(
+const props = withDefaults(
 	defineProps<{
 		showWallet?: boolean
 		payOnline?: () => void
-		amount?: number
+		price?: { amount: number; currency: Currencies }
 	}>(),
-	{ showWallet: true, payOnline: undefined, amount: 0 },
+	{ showWallet: true, payOnline: undefined, price: undefined },
 )
+
+const amount = props.price?.amount ?? 0
 
 const selectedMethod = defineModel<SelectedPaymentMethod>({ default: null })
 

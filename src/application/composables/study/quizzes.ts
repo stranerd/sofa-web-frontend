@@ -87,7 +87,6 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 
 	return {
 		...store[id],
-		fetched: called,
 		members,
 		questions,
 	}
@@ -115,7 +114,7 @@ export const useCreateQuiz = () => {
 export const useEditQuiz = (id: string) => {
 	const router = useRouter()
 	const { id: authId } = useAuth()
-	const { quiz, fetched, questions, members } = useQuiz(id, { questions: false, members: false }, {})
+	const { quiz, questions, members } = useQuiz(id, { questions: false, members: false }, {})
 	const quizFactory = new QuizFactory()
 	const questionFactory = new QuestionFactory()
 	const { setMessage } = useSuccessHandler()
@@ -237,7 +236,6 @@ export const useEditQuiz = (id: string) => {
 
 	return {
 		quiz,
-		fetched,
 		questions,
 		members,
 		quizFactory,

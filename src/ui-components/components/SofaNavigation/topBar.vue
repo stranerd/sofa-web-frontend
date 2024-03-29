@@ -223,17 +223,17 @@ const tabs = computed(() => [
 			]
 		: []),
 	{
+		name: 'Classes',
+		path: userType.value.isOrg ? '/organization/classes' : '/classes',
+		icon: 'classes' as const,
+		icon_size: 'h-[18px]',
+	},
+	{
 		name: 'Library',
 		path: '/library',
 		icon: 'library' as const,
 		icon_size: 'h-[18px]',
 	},
-	// {
-	//   name: "Analytics",
-	//   path: "/analytics",
-	//   icon: "analytics" as const,
-	//   icon_size: "h-[18px]",
-	// },
 	{
 		name: 'Marketplace',
 		path: '/marketplace',

@@ -40,18 +40,21 @@ const listener = useListener(() =>
 )
 
 export const useMyTransactions = () => {
-	const { called, asyncFn: fetchTransactions } = useAsyncFn(async () => {
-		const transactions = await TransactionsUseCases.get(store.transactions.value.at(-1)?.createdAt)
-		store.hasMore.value = !!transactions.pages.next
-		transactions.results.map((transaction) =>
-			addToArray(
-				store.transactions.value,
-				transaction,
-				(e) => e.id,
-				(e) => e.createdAt,
-			),
-		)
-	})
+	const { called, asyncFn: fetchTransactions } = useAsyncFn(
+		async () => {
+			const transactions = await TransactionsUseCases.get(store.transactions.value.at(-1)?.createdAt)
+			store.hasMore.value = !!transactions.pages.next
+			transactions.results.map((transaction) =>
+				addToArray(
+					store.transactions.value,
+					transaction,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+		},
+		{ key: 'payment/transactions/mine' },
+	)
 
 	const fetchOlderTransactions = async () => {
 		fetchTransactions()
