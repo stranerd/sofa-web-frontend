@@ -3,6 +3,7 @@ import { modal } from './modal'
 import AddTutorConfirmation from '@app/components/conversations/AddTutorConfirmationModal.vue'
 import AddTutor from '@app/components/conversations/AddTutorModal.vue'
 import ConversationMoreOptions from '@app/components/conversations/ConversationMoreOptionsModal.vue'
+import HomeMobileMenu from '@app/components/home/HomeMobileMenu.vue'
 import CreateReport from '@app/components/interactions/reports/CreateReportModal.vue'
 import CreateReview from '@app/components/interactions/reviews/CreateReviewModal.vue'
 import CreateAnnouncement from '@app/components/organizations/announcements/CreateAnnouncementModal.vue'
@@ -16,8 +17,9 @@ import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumM
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
-import FundWallet from '@app/components/payment/wallet/FundWalletModal.vue'
+import SelectPaymentMethod from '@app/components/payment/methods/SelectPaymentMethodModal.vue'
 import TransactionDetails from '@app/components/payment/transactions/TransactionDetailsModal.vue'
+import FundWallet from '@app/components/payment/wallet/FundWalletModal.vue'
 import Withdraw from '@app/components/payment/wallet/WithdrawModal.vue'
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
@@ -25,12 +27,11 @@ import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.
 import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
+import EditQuiz from '@app/components/study/quizzes/EditQuizModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
-import EditQuiz from '@app/components/study/quizzes/EditQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
-import HomeMobileMenu from '@app/components/home/HomeMobileMenu.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -84,5 +85,6 @@ export const useModals = () => ({
 		transactionDetails: { component: TransactionDetails },
 		fundWallet: { component: FundWallet },
 		withdraw: { component: Withdraw },
+		selectPaymentMethod: { component: SelectPaymentMethod },
 	}),
 })

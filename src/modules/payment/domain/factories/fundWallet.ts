@@ -10,7 +10,7 @@ export class FundWalletFactory extends BaseFactory<null, FundDetails, FundDetail
 
 	constructor() {
 		super({
-			amount: 0,
+			amount: undefined as unknown as number,
 			methodId: '',
 		})
 	}

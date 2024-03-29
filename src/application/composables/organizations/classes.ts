@@ -6,6 +6,7 @@ import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { Logic } from 'sofa-logic'
+import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
 const orgStore: Record<
@@ -194,8 +195,8 @@ export const usePurchaseClass = () => {
 		loading,
 		error,
 		called,
-	} = useAsyncFn(async (classInst: ClassEntity) => {
-		await ClassesUseCases.purchase(classInst.organizationId, classInst.id, null)
+	} = useAsyncFn(async (classInst: ClassEntity, selectedMethod: SelectedPaymentMethod) => {
+		await ClassesUseCases.purchase(classInst.organizationId, classInst.id, selectedMethod)
 		Logic.Common.showAlert({
 			message: 'Successfully enrolled',
 			type: 'success',

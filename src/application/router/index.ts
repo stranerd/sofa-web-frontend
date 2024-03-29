@@ -21,7 +21,7 @@ router.beforeEach(async (to, from) => {
 	modal.stack.value.forEach(modal.close)
 	// @ts-expect-error - no types
 	const routeConfig: RouteConfig = to.matched[0]?.components?.['default']?.['routeConfig'] ?? {}
-	const defaultMiddlewares = routeConfig.fetchRules ? ['isAuthenticated'] : []
+	const defaultMiddlewares: RouteConfig['middlewares'] = routeConfig.fetchRules ? ['isAuthenticated'] : []
 	const middlewares: RouteConfig['middlewares'] = routeConfig.middlewares ?? defaultMiddlewares
 	const redirect = await runMiddlewares(to, from, middlewares)
 	if (redirect) return redirect === from?.fullPath ? false : redirect

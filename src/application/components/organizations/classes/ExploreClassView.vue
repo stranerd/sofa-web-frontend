@@ -194,13 +194,13 @@ const enrollInClassProps = computed(() => {
 		if (classSub && !classSub.active)
 			return {
 				label: 'Renew enrollment',
-				handler: () => purchaseClass(classInst),
+				handler: () => purchaseClass(classInst, null),
 			}
 	}
 	const canAccessFree = user.value ? classInst.canAccessForFree(user.value) : false
 	return {
 		label: `Enroll for ${canAccessFree ? 'free' : Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
-		handler: runInAuth(() => purchaseClass(classInst)),
+		handler: runInAuth(() => purchaseClass(classInst, null)),
 	}
 })
 </script>

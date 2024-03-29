@@ -1,13 +1,13 @@
 <template>
 	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="fundWallet">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
-			<SofaHeaderText customClass="text-xl">Fund wallet</SofaHeaderText>
-			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
+			<SofaHeaderText class="text-xl">Fund wallet</SofaHeaderText>
+			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden pt-2 pb-4 border-lightGray border-b">
-			<SofaNormalText customClass="!font-bold !text-base">Fund wallet</SofaNormalText>
-			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
+			<SofaNormalText class="!font-bold !text-base">Fund wallet</SofaNormalText>
+			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex flex-col gap-5">
@@ -22,27 +22,11 @@
 				</template>
 			</SofaTextField>
 
-			<div class="w-full flex flex-col gap-2 border-t border-lightGray pt-3">
-				<a class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom" @click="fundWalletOnline">
-					<SofaIcon customClass="h-[20px] fill-deepGray" name="socials-website" />
-					<SofaNormalText> Pay online </SofaNormalText>
-				</a>
-
-				<a
-					v-for="method in methods"
-					:key="method.hash"
-					class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
-					:class="{ 'border-primaryBlue border-2': factory.methodId === method.id }"
-					@click="factory.methodId = factory.methodId ? '' : method.id">
-					<SofaIcon customClass="h-[20px]" name="card" />
-					<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
-				</a>
-
-				<a class="w-full flex items-center gap-3 p-3 border-2 rounded-custom border-darkLightGray" @click="addMethod">
-					<SofaIcon customClass="h-[18px]" name="add-gray" />
-					<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
-				</a>
-			</div>
+			<SelectPaymentMethod
+				v-model="factory.methodId"
+				:showWallet="false"
+				:payOnline="fundWalletOnline"
+				class="border-t border-lightGray pt-3" />
 		</div>
 
 		<div class="w-full md:flex justify-between items-center">
@@ -68,7 +52,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMyMethods } from '@app/composables/payment/methods'
 import { useFundWallet } from '@app/composables/payment/wallets'
 
 defineProps<{
@@ -76,5 +59,4 @@ defineProps<{
 }>()
 
 const { factory, fundWallet, fundWalletOnline } = useFundWallet()
-const { methods, addMethod } = useMyMethods()
 </script>

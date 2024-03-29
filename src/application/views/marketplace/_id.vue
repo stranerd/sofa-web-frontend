@@ -10,8 +10,8 @@
 			class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
 			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText customClass="!font-bold !text-base">
-				{{ contentType == 'course' ? 'Course details' : 'Quiz details' }}</SofaNormalText
-			>
+				{{ contentType == 'course' ? 'Course details' : 'Quiz details' }}
+			</SofaNormalText>
 			<div>
 				<SofaIcon customClass="h-[15px] invisible" name="back-arrow" />
 			</div>
@@ -21,7 +21,7 @@
 				:content="contentDetails"
 				customClass="!rounded-none"
 				:showBuyButton="true"
-				:buyAction="() => (showMakePaymentModal = true)"
+				:buyAction="buyCourse"
 				:hasAccess="userHasAccess(contentDetails.original)"
 				:similarContents="similarContents"
 				:type="contentType"
@@ -33,90 +33,6 @@
 					save: () => saveToFolder(contentDetails.original!),
 				}" />
 		</div>
-
-		<!--  Payment modal -->
-		<SofaModalOld v-if="showMakePaymentModal" :close="() => (showMakePaymentModal = false)">
-			<div class="mdlg:!w-[40%] lg:!w-[35%] mdlg:!h-full w-full h-auto md:w-full flex flex-col items-center relative">
-				<div
-					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-5 gap-3 py-0 relative lg:!py-6 mdlg:!px-6 mdlg:!py-6 md:!py-0 md:!px-0 mdlg:!rounded-[16px] rounded-t-[16px] items-center justify-center">
-					<div class="w-full hidden flex-col gap-3 justify-center items-center mdlg:!flex">
-						<SofaHeaderText customClass="text-xl"> Choose payment method </SofaHeaderText>
-					</div>
-
-					<div
-						class="w-full flex flex-row justify-between items-center sticky top-0 left-0 mdlg:!hidden py-2 border-lightGray border-b px-4">
-						<SofaNormalText customClass="!font-bold !text-base"> Choose payment method </SofaNormalText>
-						<SofaIcon customClass="h-[19px]" name="circle-close" @click="showMakePaymentModal = false" />
-					</div>
-
-					<div class="w-full flex flex-col gap-3 mdlg:!px-0 px-4">
-						<!-- Wallet -->
-						<a
-							v-if="wallet"
-							class="w-full flex flex-row items-center gap-3 p-3 bg-lightGray rounded-custom"
-							:class="{
-								'border-primaryBlue border-2': selectedMethodId == true,
-								'cursor-default pointer-events-none': wallet.balance.amount < contentDetails.price,
-							}"
-							@click="selectedMethodId = true">
-							<SofaIcon customClass="h-[20px]" name="wallet" />
-							<SofaNormalText>
-								Wallet (
-								<span class="!font-semibold">
-									{{ Logic.Common.formatPrice(wallet.balance.amount, wallet.balance.currency) }}
-								</span>
-								)
-								{{ wallet.balance.amount < contentDetails.price ? '- Insufficient funds' : '' }}
-							</SofaNormalText>
-						</a>
-
-						<!-- Pay online -->
-
-						<div class="w-full flex items-center gap-3 p-3" @click="addMethod">
-							<SofaIcon customClass="h-[18px]" name="add-gray" />
-							<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
-						</div>
-
-						<a
-							v-for="method in methods"
-							:key="method.hash"
-							:class="`w-full flex items-center gap-3 p-3 bg-lightGray ${
-								selectedMethodId == method.id ? 'border-primaryBlue border-2' : ''
-							}  rounded-custom`"
-							@click="selectedMethodId = method.id">
-							<SofaIcon customClass="h-[20px]" name="card" />
-							<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
-						</a>
-					</div>
-
-					<div
-						class="w-full md:flex flex-row justify-between items-center grid grid-cols-2 md:gap-0 gap-3 mdlg:!px-0 px-4 mdlg:!py-0 py-4">
-						<div class="md:!w-auto col-span-1 md:!flex flex-col hidden">
-							<SofaButton
-								textColor="text-grayColor"
-								bgColor="bg-white"
-								padding="px-4 py-1"
-								customClass="border-2 border-gray-100 md:!min-w-[100px] md:!w-auto w-full"
-								@click="showMakePaymentModal = false">
-								Exit
-							</SofaButton>
-						</div>
-
-						<div class="md:!w-auto col-span-2 flex flex-col">
-							<SofaButton
-								:disabled="!selectedMethodId"
-								textColor="text-white"
-								bgColor="bg-primaryBlue"
-								padding="px-4 md:!py-1 py-3"
-								customClass="border-2 border-transparent md:!min-w-[100px] md:!w-auto w-full"
-								@click="buyCourse()">
-								Make payment
-							</SofaButton>
-						</div>
-					</div>
-				</div>
-			</div>
-		</SofaModalOld>
 	</ExpandedLayout>
 </template>
 
@@ -124,6 +40,7 @@
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute, useRouter } from 'vue-router'
+import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { extractResource, openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
@@ -132,10 +49,8 @@ import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
-import { useAuth } from '@app/composables/auth/auth'
-import { useMyMethods } from '@app/composables/payment/methods'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
-import { Purchasables, SelectedPaymentMethod } from '@modules/payment'
+import { Purchasables } from '@modules/payment'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
@@ -204,35 +119,9 @@ export default defineComponent({
 			title: 'Course Info',
 		})
 
-		const selectedTab = ref('start')
-
 		const contentType = ref('course')
 
-		const { wallet } = useAuth()
-
 		const { hasAccess: userHasAccess } = useHasAccess()
-
-		const tabItems = [
-			{
-				id: 'start',
-				name: 'Start',
-			},
-			{
-				id: 'questions',
-				name: 'Questions',
-			},
-			{
-				id: 'results',
-				name: 'Results',
-			},
-		]
-
-		const contentList = [
-			{
-				title: 'Alkanes',
-				content: '4 materials',
-			},
-		]
 
 		const route = useRoute()
 		const router = useRouter()
@@ -242,17 +131,11 @@ export default defineComponent({
 
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
 
-		const { methods, addMethod } = useMyMethods()
-
 		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
 
 		const AllReviews = ref(Logic.Study.AllReviews)
 
 		const similarContents = ref<any[]>([])
-
-		const selectedMethodId = ref<SelectedPaymentMethod>(null)
-
-		const showMakePaymentModal = ref(false)
 
 		const contentDetails = reactive(Logic.Study.contentDetails)
 
@@ -420,17 +303,12 @@ export default defineComponent({
 		}
 
 		const buyCourse = async () => {
-			if ((SingleCourse.value?.price.amount ?? 0) > 0 && !selectedMethodId.value) {
-				showMakePaymentModal.value = true
-				return
-			}
-
-			const purchase = await createPurchase(selectedMethodId.value)
-
-			if (purchase) {
-				showMakePaymentModal.value = false
-				router.push('/course/' + SingleCourse.value?.id)
-			}
+			if (!SingleCourse.value) return
+			useModals().payment.selectPaymentMethod.open({
+				amount: SingleCourse.value.price.amount,
+				autoSelect: true,
+				onSelect: (method) => createPurchase(method).then(() => router.push('/course/' + SingleCourse.value!.id)),
+			})
 		}
 
 		const setSimilarContents = () => {
@@ -497,16 +375,8 @@ export default defineComponent({
 		})
 
 		return {
-			tabItems,
 			Logic,
-			selectedTab,
-			contentList,
 			contentDetails,
-			methods,
-			addMethod,
-			showMakePaymentModal,
-			selectedMethodId,
-			wallet,
 			similarContents,
 			SingleQuiz,
 			contentType,

@@ -26,7 +26,10 @@
 							</li>
 						</ul>
 					</div>
-					<SelectPaymentMethod v-model="methodId" :showWallet="false" />
+					<div class="w-full bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
+						<SofaHeaderText>Payment Method</SofaHeaderText>
+						<SelectPaymentMethod v-model="methodId" :showWallet="false" />
+					</div>
 				</div>
 				<div class="w-full mdlg:w-[30%] bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
 					<SofaHeaderText>Summary</SofaHeaderText>
