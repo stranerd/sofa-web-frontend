@@ -148,7 +148,6 @@ const shareClass = () => {
 const purchase = runInAuth(() => {
 	useModals().payment.selectPaymentMethod.open({
 		price: props.classInst.price,
-		showWallet: false,
 		onSelect: () => purchaseClass(props.classInst, null),
 	})
 })

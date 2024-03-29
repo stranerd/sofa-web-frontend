@@ -28,7 +28,7 @@
 					</div>
 					<div class="w-full bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
 						<SofaHeaderText>Payment Method</SofaHeaderText>
-						<SelectPaymentMethod v-model="methodId" :showWallet="false" />
+						<SelectPaymentMethod v-model="methodId" :price="plan" />
 					</div>
 				</div>
 				<div class="w-full mdlg:w-[30%] bg-white shadow-custom rounded-custom p-4 mdlg:p-6 flex flex-col gap-4">
@@ -70,8 +70,8 @@
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { usePlan, useSubscription } from '@app/composables/payment/plans'
 import { Logic } from 'sofa-logic'
+import { usePlan, useSubscription } from '@app/composables/payment/plans'
 
 export default defineComponent({
 	name: 'CheckoutSubscriptionPlanIdPage',
