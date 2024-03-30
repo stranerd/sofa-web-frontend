@@ -3,9 +3,9 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
-import { useModals } from '../core/modals'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import { Logic } from 'sofa-logic'
@@ -87,6 +87,7 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 
 	return {
 		...store[id],
+		fetched: called,
 		members,
 		questions,
 	}
@@ -114,7 +115,7 @@ export const useCreateQuiz = () => {
 export const useEditQuiz = (id: string) => {
 	const router = useRouter()
 	const { id: authId } = useAuth()
-	const { quiz, questions, members } = useQuiz(id, { questions: false, members: false }, {})
+	const { quiz, questions, members, fetched } = useQuiz(id, { questions: false, members: false }, {})
 	const quizFactory = new QuizFactory()
 	const questionFactory = new QuestionFactory()
 	const { setMessage } = useSuccessHandler()
@@ -236,6 +237,7 @@ export const useEditQuiz = (id: string) => {
 
 	return {
 		quiz,
+		fetched,
 		questions,
 		members,
 		quizFactory,
