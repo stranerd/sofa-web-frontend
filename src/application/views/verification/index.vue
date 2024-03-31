@@ -1,5 +1,6 @@
 <template>
 	<DashboardLayout
+		:wrap="true"
 		:topbarOptions="{
 			type: 'subpage',
 			title: 'Account verification',
@@ -16,8 +17,7 @@
 					disabled: !profileFactory.valid || !socialsFactory.valid || !verificationFactory.valid,
 				},
 			],
-		}"
-		:wrap="true">
+		}">
 		<template #left-session>
 			<form class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4" @submit.prevent="submit">
 				<div class="w-full flex flex-col">
@@ -114,7 +114,6 @@
 
 						<div class="w-full flex flex-col gap-4">
 							<SofaSelect
-								:ref="addMaterialType"
 								v-model="selectedMaterial"
 								customClass="rounded-custom !bg-lightGray"
 								placeholder="Select material"
@@ -185,23 +184,6 @@ export default defineComponent({
 		middlewares: ['isAuthenticated'],
 		fetchRules: [
 			{
-				domain: 'Users',
-				property: 'Verifications',
-				method: 'GetVerifications',
-				params: [
-					{
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-			},
-			{
 				domain: 'Study',
 				property: 'AllQuzzies',
 				method: 'GetQuizzes',
@@ -251,32 +233,11 @@ export default defineComponent({
 		const AllQuzzies = ref(Logic.Study.AllQuzzies)
 		const AllCourses = ref(Logic.Study.AllCourses)
 
-		const showAddNewItems = ref(false)
-
-		const selectedMaterialList = ref<ContentDetails[]>([])
-
 		const allMaterialsContents = ref<ContentDetails[]>([])
 
 		const showAddMaterial = ref(false)
-		const addMaterialType = ref('course')
 		const allMaterials = ref<SelectOption[]>([])
 		const selectedMaterial = ref('')
-
-		const UserVerification = ref(Logic.Users.Verifications?.results[0])
-
-		const setDefaultValues = () => {
-			if (UserVerification.value) {
-				UserVerification.value.content.courses.forEach((courseId) => {
-					selectedMaterial.value = courseId
-					addMaterial()
-				})
-
-				UserVerification.value.content.quizzes.forEach((quizId) => {
-					selectedMaterial.value = quizId
-					addMaterial()
-				})
-			}
-		}
 
 		const setMaterialsOptions = () => {
 			allMaterials.value.length = 0
@@ -316,7 +277,6 @@ export default defineComponent({
 			if (selectedMaterial.value) {
 				const material = allMaterialsContents.value.find((item) => item.id === selectedMaterial.value)
 				if (!material) return
-				selectedMaterialList.value.push(material)
 				if (material.type == 'quiz') verificationFactory.addQuiz(material.id)
 				if (material.type == 'course') verificationFactory.addCourse(material.id)
 			}
@@ -331,7 +291,6 @@ export default defineComponent({
 		onMounted(() => {
 			setMaterials()
 			setMaterialsOptions()
-			setDefaultValues()
 		})
 
 		return {
@@ -342,12 +301,9 @@ export default defineComponent({
 			content,
 			Logic,
 
-			selectedMaterialList,
 			showAddMaterial,
-			addMaterialType,
 			allMaterials,
 			selectedMaterial,
-			showAddNewItems,
 			addMaterial,
 			showAddMaterialHandler,
 		}

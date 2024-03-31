@@ -14,6 +14,26 @@ export class VerificationsUseCase {
 		return await this.repository.find(id)
 	}
 
+	async getMine(userId: string) {
+		return await this.repository.get({
+			where: [{ field: 'userId', value: userId }],
+			sort: [{ field: 'createdAt', desc: true }],
+			all: true,
+		})
+	}
+
+	async listenToMine(userId: string, listeners: Listeners<VerificationEntity>) {
+		return await this.repository.listenToMany(
+			{
+				where: [{ field: 'userId', value: userId }],
+				sort: [{ field: 'createdAt', desc: true }],
+				all: true,
+			},
+			listeners,
+			(entity) => entity.userId === userId,
+		)
+	}
+
 	async listenToOne(id: string, listeners: Listeners<VerificationEntity>) {
 		return await this.repository.listenToOne(id, listeners)
 	}
