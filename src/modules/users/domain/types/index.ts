@@ -3,6 +3,7 @@ import { Media, Ratings } from '@modules/core'
 import { MemberTypes } from '@modules/organizations'
 
 export { AuthRoleType, UserBio }
+export * from './verifications'
 
 export enum UserType {
 	student = 'student',
