@@ -113,19 +113,21 @@
 						<SofaButton
 							v-if="!action.IsOutlined"
 							:disabled="action.disabled"
+							:type="action.type"
 							padding="px-4 py-1"
-							:customClass="`!font-semibold ${action.class ?? ''}`"
-							@click="action.handler()">
+							:class="`!font-semibold ${action.class ?? ''}`"
+							@click="action.handler">
 							{{ action.name }}
 						</SofaButton>
 						<SofaButton
 							v-else
 							:disabled="action.disabled"
+							:type="action.type"
 							bgColor="bg-white"
 							textColor="text-grayColor"
-							:customClass="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
+							:class="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
 							padding="px-4 py-1"
-							@click="action.handler()">
+							@click="action.handler">
 							{{ action.name }}
 						</SofaButton>
 					</template>

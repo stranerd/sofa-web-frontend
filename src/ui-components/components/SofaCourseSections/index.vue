@@ -92,7 +92,7 @@
 											handleItemSelected()
 										}
 									">
-									<SofaIcon customClass="h-[17px]" name="box-add-purple" />
+									<SofaIcon customClass="h-[17px] fill-primaryPurple" name="box-add" />
 									<SofaNormalText color="text-primaryPurple"> Add study material </SofaNormalText>
 								</div>
 							</template>
@@ -102,7 +102,7 @@
 			</template>
 
 			<div class="py-2 pt-0 flex flex-row w-full items-center gap-2 cursor-pointer" @click.stop="addNewSection()">
-				<SofaIcon customClass="h-[17px]" name="box-add-pink" />
+				<SofaIcon customClass="h-[17px] fill-primaryPink" name="box-add" />
 				<SofaNormalText color="text-primaryPink"> Add section </SofaNormalText>
 			</div>
 		</div>

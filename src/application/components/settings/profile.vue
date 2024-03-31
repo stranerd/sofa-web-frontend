@@ -67,7 +67,7 @@
 			<AccountSetup :isProfileEducation="true" />
 		</div>
 
-		<div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
+		<div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
 			<SofaHeaderText size="xl" customClass="text-left"> Social links </SofaHeaderText>
 
 			<SocialMediaUpdate :factory="socialsFactory" />

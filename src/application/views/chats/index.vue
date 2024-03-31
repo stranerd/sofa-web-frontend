@@ -5,7 +5,7 @@
 				<router-link
 					to="/chats/new"
 					class="w-full rounded-tl-2xl rounded-br-2xl rounded-tr-lg rounded-bl-lg flex gap-3 items-center justify-start p-4 bg-primaryPurple">
-					<SofaIcon name="box-add-white" customClass="h-[25px]" />
+					<SofaIcon name="box-add" customClass="h-[25px] fill-white" />
 					<SofaNormalText color="text-white" customClass="text-left !text-sm" content="New chat" />
 				</router-link>
 			</div>

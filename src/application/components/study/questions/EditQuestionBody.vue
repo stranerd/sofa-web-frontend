@@ -181,7 +181,7 @@
 		</div>
 
 		<a v-if="factory.canAddOption" class="self-end flex justify-end gap-2 items-center" @click="factory.addOption">
-			<SofaIcon name="box-plus" class="h-[24px]" />
+			<SofaIcon name="box-add" class="h-[24px] fill-current" />
 			<SofaNormalText color="text-inherit" content="Add option" />
 		</a>
 
