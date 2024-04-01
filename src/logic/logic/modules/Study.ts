@@ -5,7 +5,7 @@ import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import { AddItemToCourseInput, CreateCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
+import { AddItemToCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
 import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 
@@ -38,9 +38,6 @@ export default class Study extends Common {
 	public SingleReview: Review | undefined
 	public AllReviews: Paginated<Review> | undefined
 
-	// Form input
-	public CreateCourseForm: CreateCourseInput | undefined
-	public UpdateCourseForm: CreateCourseInput | undefined
 	public CreateFileForm: CreateDocumentInput | undefined
 	public UpdateFileForm: CreateDocumentInput | undefined
 	public MoveItemToCourseForm: AddItemToCourseInput | undefined
@@ -261,105 +258,51 @@ export default class Study extends Common {
 			})
 	}
 
-	public GetCourse = (id: string, autoCreate = false) => {
-		if (!id || id == 'nill') {
-			if (autoCreate) {
-				return new Promise((resolve) => {
-					// create course
-					this.CreateCourseForm = {
-						title: 'Untitled Course',
-						description: 'Here is the course description',
-						price: {
-							amount: 0,
-							currency: 'NGN',
+	public GetCourse = async (id: string) => {
+		const response = await $api.study.course.get(id)
+		const allCourseableFiles = response.data?.coursables?.filter((item) => item.type == 'file').map((item) => item.id)
+		const allCourseableQuizzes = response.data?.coursables?.filter((item) => item.type == 'quiz').map((item) => item.id)
+
+		const allCoursableDataRequests: Promise<any>[] = []
+
+		// files
+		allCoursableDataRequests.push(
+			$api.study.file
+				.fetch({
+					where: [
+						{
+							field: 'id',
+							value: allCourseableFiles,
+							condition: Conditions.in,
 						},
-						tags: [],
-						topic: 'Physics',
-					}
-
-					this.CreateCourse(true)
-						?.then(async () => {
-							// create two default sections
-							Logic.Study.UpdateCourseSectionForm = {
-								id: Logic.Study.SingleCourse?.id ?? '',
-								sections: [
-									{
-										items: [],
-										label: 'Introdution',
-									},
-									{
-										items: [],
-										label: 'Section 1',
-									},
-								],
-							}
-
-							await this.UpdateCourseSection()
-							Logic.Common.hideLoading()
-							Logic.Common.GoToRoute(`/course/${Logic.Study.SingleCourse?.id}/edit`)
-						})
-						.catch(() => {
-							resolve('')
-						})
+					],
 				})
-			} else {
-				return new Promise((resolve) => {
-					resolve('')
+				.then((response) => {
+					this.SingleCourseFiles = response.data.results
+				}),
+		)
+
+		// quizzes
+		allCoursableDataRequests.push(
+			$api.study.quiz
+				.fetch({
+					where: [
+						{
+							field: 'id',
+							value: allCourseableQuizzes,
+							condition: Conditions.in,
+						},
+					],
 				})
-			}
-		}
-		return new Promise((resolve) => {
-			$api.study.course.get(id).then((response) => {
-				const allCourseableFiles = response.data?.coursables?.filter((item) => item.type == 'file').map((item) => item.id)
-				const allCourseableQuizzes = response.data?.coursables?.filter((item) => item.type == 'quiz').map((item) => item.id)
+				.then((response) => {
+					this.SingleCourseQuizzes = response.data.results
+				}),
+		)
 
-				const allCoursableDataRequests: Promise<any>[] = []
-
-				// files
-				allCoursableDataRequests.push(
-					$api.study.file
-						.fetch({
-							where: [
-								{
-									field: 'id',
-									value: allCourseableFiles,
-									condition: Conditions.in,
-								},
-							],
-						})
-						.then((response) => {
-							this.SingleCourseFiles = response.data.results
-						}),
-				)
-
-				// quizzes
-
-				allCoursableDataRequests.push(
-					$api.study.quiz
-						.fetch({
-							where: [
-								{
-									field: 'id',
-									value: allCourseableQuizzes,
-									condition: Conditions.in,
-								},
-							],
-						})
-						.then((response) => {
-							this.SingleCourseQuizzes = response.data.results
-						}),
-				)
-
-				Promise.all(allCoursableDataRequests)
-					.then(() => {
-						this.SingleCourse = response.data
-						resolve('')
-					})
-					.catch((error) => {
-						console.log(error)
-					})
-			})
+		await Promise.all(allCoursableDataRequests).catch((error) => {
+			console.log(error)
 		})
+		this.SingleCourse = response.data
 	}
 
 	public GetFiles = (filters: QueryParams) =>
@@ -446,41 +389,6 @@ export default class Study extends Common {
 				}
 			}
 			this.UpdateCourseSection()
-		}
-	}
-
-	public CreateCourse = (formIsValid: boolean) => {
-		if (formIsValid && this.CreateCourseForm) {
-			Logic.Common.showLoading()
-			return $api.study.course
-				.post(null, this.CreateCourseForm)
-				.then((response) => {
-					this.SingleCourse = response.data
-					Logic.Common.hideLoading()
-					return response.data
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					throw error
-				})
-		}
-	}
-
-	public UpdateCourse = (formIsValid: boolean, id: string) => {
-		if (formIsValid && this.UpdateCourseForm) {
-			Logic.Common.showLoading()
-			return $api.study.course
-				.put(null, id, this.UpdateCourseForm)
-				.then((response) => {
-					this.SingleCourse = response.data
-					Logic.Common.hideLoading()
-					return response.data
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-					throw error
-				})
 		}
 	}
 

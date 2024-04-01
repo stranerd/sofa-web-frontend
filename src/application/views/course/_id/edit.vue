@@ -3,7 +3,7 @@
 		v-if="SingleCourse"
 		:topbarOptions="{
 			type: 'subpage',
-			title: SingleCourse ? SingleCourse.title : 'Create a course',
+			title: SingleCourse.title,
 			actions: [
 				{
 					isIcon: true,
@@ -16,7 +16,13 @@
 						},
 					],
 				},
-				...actionButtonItems,
+				{
+					IsOutlined: true,
+					name: 'Exit',
+					handler: () => {
+						Logic.Common.goBack()
+					},
+				},
 				{
 					disabled: !hasUnsavedChanges,
 					name: 'Save',
@@ -38,7 +44,7 @@
 		}"
 		bgColor="mdlg:!bg-lightGray bg-white">
 		<template #left-session>
-			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
+			<div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
 				<SofaCourseSections
 					v-if="Logic.Common.isLarge && SingleCourse"
 					v-model="selectedMaterial"
@@ -51,23 +57,14 @@
 		<template #middle-session>
 			<!-- Top bar for smaller screens -->
 			<div
-				class="w-full flex flex-row mdlg:!hidden justify-between items-center z-50 bg-lightGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
+				class="w-full flex mdlg:!hidden justify-between items-center z-50 bg-lightGray px-4 py-4 sticky top-0 left-0 overflow-y-auto">
 				<SofaIcon customClass="h-[19px]" name="circle-close" @click="handleMobileGoback()" />
 				<SofaNormalText customClass="!font-bold !text-sm">
 					{{ mobileTitle }}
 				</SofaNormalText>
 
-				<div :class="`flex flex-row items-center gap-3 ${showSettingModal ? 'invisible' : ''} `">
-					<SofaIcon
-						v-if="!showSettingModal"
-						customClass="h-[18px]"
-						name="cog"
-						@click="
-							() => {
-								showSettingModal = true
-								currentContent = 'settings'
-							}
-						" />
+				<div class="flex items-center gap-3">
+					<SofaIcon customClass="h-[18px]" name="cog" @click="openEditModal(SingleCourse!)" />
 
 					<SofaIcon
 						v-if="selectedMaterial"
@@ -76,17 +73,8 @@
 						@click="showMateterialDetails()" />
 				</div>
 			</div>
-			<!-- create course for smaller screens -->
-			<template v-if="showSettingModal">
-				<div class="w-full mdlg:!hidden flex-col bg-white py-2 px-4 md:!flex">
-					<CourseSettings
-						:course="SingleCourse"
-						:close="() => (showSettingModal = false)"
-						@onCourseUpdated="handleCourseSettingSaved" />
-				</div>
-			</template>
 
-			<template v-if="currentContent == 'sections' && !showSettingModal">
+			<template v-if="currentContent == 'sections'">
 				<div class="w-full mdlg:!hidden flex-col h-full flex-grow bg-white py-2 px-4 md:!flex">
 					<SofaCourseSections
 						v-if="!Logic.Common.isLarge && SingleCourse"
@@ -120,10 +108,10 @@
 						<div
 							v-for="(question, index) in selectedMaterial.data"
 							:key="index"
-							class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom">
+							class="w-full bg-lightGray p-4 flex flex-col gap-2 rounded-custom">
 							<div class="flex items-center gap-2">
 								<SofaNormalText color="text-grayColor" :content="question.type" />
-								<span class="w-[5px] h-[5px] rounded-full bg-grayColor"> </span>
+								<span class="size-[5px] rounded-full bg-grayColor"> </span>
 								<SofaNormalText color="text-grayColor" :content="question.duration" />
 							</div>
 
@@ -215,42 +203,6 @@
 						" />
 				</div>
 			</SofaModalOld>
-
-			<!-- Larger screen setings modal -->
-			<SofaModalOld
-				v-if="showSettingModal"
-				:close="
-					() => {
-						showSettingModal = false
-						!SingleCourse ? Logic.Common.goBack() : null
-					}
-				"
-				customClass="hidden mdlg:!flex"
-				:canClose="false">
-				<div
-					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] flex flex-col items-center relative"
-					@click.stop="
-						() => {
-							//
-						}
-					">
-					<div
-						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 py-4 px-4 rounded-[16px] items-center justify-center">
-						<SofaHeaderText customClass="!text-xl !font-bold">{{
-							SingleCourse ? 'Settings' : 'Create a course'
-						}}</SofaHeaderText>
-
-						<CourseSettings
-							:course="SingleCourse"
-							:close="
-								() => {
-									showSettingModal = false
-								}
-							"
-							@onCourseUpdated="handleCourseSettingSaved" />
-					</div>
-				</div>
-			</SofaModalOld>
 		</template>
 
 		<template #right-session>
@@ -273,16 +225,15 @@ import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vu
 import { useMeta } from 'vue-meta'
 import AddVideo from '@app/components/study/courses/AddVideo.vue'
 import NewCourseMaterial from '@app/components/study/courses/NewMaterial.vue'
-import CourseSettings from '@app/components/study/courses/Settings.vue'
 import { Logic } from 'sofa-logic'
 
-import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@app/composables/course'
 import { useModals } from '@app/composables/core/modals'
+import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@app/composables/course'
 import { CourseEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'EditCourse',
-	components: { CourseSettings, NewCourseMaterial, AddVideo },
+	components: { NewCourseMaterial, AddVideo },
 	routeConfig: {
 		fetchRules: [
 			{
@@ -335,35 +286,14 @@ export default defineComponent({
 
 		const showMoreOptions = ref(false)
 
-		const showSettingModal = ref(false)
-
-		const mobileTitle = ref('Edit course')
-
-		const actionButtonItems = reactive([
-			{
-				IsOutlined: true,
-				name: 'Exit',
-				handler: () => {
-					Logic.Common.goBack()
-				},
-			},
-		])
+		const mobileTitle = ref('Content')
 
 		const modalData = reactive({
 			title: 'Add study material',
 			content: 'add_material',
 		})
 
-		const currentContent = ref('')
-
-		watch(showSettingModal, () => {
-			if (showSettingModal.value) {
-				mobileTitle.value = 'Create course'
-			} else {
-				mobileTitle.value = 'Content'
-				currentContent.value = 'sections'
-			}
-		})
+		const currentContent = ref('sections')
 
 		const handleAddMaterialChanged = () => {
 			showMoreOptions.value = false
@@ -387,7 +317,6 @@ export default defineComponent({
 				if (currentContent.value == '') {
 					Logic.Common.goBack()
 				} else {
-					showSettingModal.value = false
 					currentContent.value = 'sections'
 				}
 			} else {
@@ -404,12 +333,6 @@ export default defineComponent({
 			}
 		}
 
-		const handleCourseSettingSaved = (status: boolean) => {
-			if (status) {
-				showSettingModal.value = false
-			}
-		}
-
 		watch(currentContent, () => {
 			if (currentContent.value == 'sections') {
 				mobileTitle.value = 'Content'
@@ -419,8 +342,6 @@ export default defineComponent({
 
 		watch(SingleCourse, () => {
 			if (SingleCourse.value) {
-				showSettingModal.value = false
-
 				if (localStorage.getItem('couse_section_update') == null) {
 					hasUnsavedChanges.value = false
 				}
@@ -429,9 +350,6 @@ export default defineComponent({
 
 		onMounted(() => {
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
-			showSettingModal.value = false
-			mobileTitle.value = 'Content'
-			currentContent.value = 'sections'
 			setTimeout(() => {
 				hasUnsavedChanges.value = false
 			}, 1000)
@@ -444,19 +362,16 @@ export default defineComponent({
 			showMoreOptions,
 			Logic,
 			openEditModal,
-			showSettingModal,
 			mobileTitle,
 			currentContent,
 			modalData,
 			updateCourseSectionForm,
-			actionButtonItems,
 			SingleCourse,
 			hasUnsavedChanges,
 			handleAddMaterialChanged,
 			handleItemSelected,
 			handleMobileGoback,
 			showMateterialDetails,
-			handleCourseSettingSaved,
 			updateCourseSections,
 		}
 	},
