@@ -43,7 +43,7 @@ const studyMaterialItems = [
 		title: 'Create a course',
 		subTitle: 'Develop and publish a series of educational material on a particular subject',
 		icon: 'orange-list' as const,
-		route: '/course/create',
+		route: '/courses/create',
 	},
 ]
 </script>

@@ -84,7 +84,7 @@
 										: 'Get course for free'
 								}}
 							</SofaButton>
-							<SofaButton v-else padding="px-6 py-1" customClass="w-auto" @click="$router.push('/course/' + content.id)">
+							<SofaButton v-else padding="px-6 py-1" customClass="w-auto" @click="$router.push('/courses/' + content.id)">
 								Go to course
 							</SofaButton>
 						</div>
@@ -266,7 +266,7 @@
 			@click="buyAction && content.status == 'published' ? buyAction() : null">
 			{{ content.price > 0 ? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
 		</SofaButton>
-		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="$router.push('/course/' + content.id)">
+		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="$router.push('/courses/' + content.id)">
 			Go to course
 		</SofaButton>
 	</div>

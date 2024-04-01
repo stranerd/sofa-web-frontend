@@ -54,7 +54,7 @@ export const useHomeTasks = () => {
 						icon: 'orange-list' as const,
 						iconSize: 'h-[46px]',
 						isDone: user.value?.checkTaskState('create_course'),
-						action: () => router.push('/course/create'),
+						action: () => router.push('/courses/create'),
 					},
 				]
 			: [],

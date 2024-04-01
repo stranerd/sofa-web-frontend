@@ -36,7 +36,7 @@ const moreOptions = computed(() => [
 		action: () => {
 			props.close()
 			if (props.material.isQuiz()) router.push(`/quizzes/${props.material.id}/edit`)
-			else router.push(`/course/${props.material.id}/edit`)
+			else router.push(`/courses/${props.material.id}/edit`)
 		},
 	},
 	{

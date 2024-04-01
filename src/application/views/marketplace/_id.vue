@@ -307,7 +307,7 @@ export default defineComponent({
 			useModals().payment.selectPaymentMethod.open({
 				price: SingleCourse.value.price,
 				autoSelect: true,
-				onSelect: (method) => createPurchase(method).then(() => router.push('/course/' + SingleCourse.value!.id)),
+				onSelect: (method) => createPurchase(method).then(() => router.push('/courses/' + SingleCourse.value!.id)),
 			})
 		}
 

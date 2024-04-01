@@ -4,18 +4,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useCreateQuiz } from '@app/composables/study/quizzes'
+import { useCreateCourse } from '@app/composables/study/courses'
 
 export default defineComponent({
-	name: 'QuizzesCreate',
+	name: 'CoursesCreate',
 	routeConfig: {
 		goBackRoute: '/library',
 		middlewares: [
 			'isAuthenticated',
 			async () => {
-				const { createQuiz } = useCreateQuiz()
-				const quiz = await createQuiz()
-				if (quiz) return `/quizzes/${quiz.id}/edit`
+				const { createCourse } = useCreateCourse()
+				const course = await createCourse()
+				if (course) return `/courses/${course.id}/edit`
 				return '/library'
 			},
 		],
