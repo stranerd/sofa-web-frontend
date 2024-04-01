@@ -8,8 +8,5 @@ import { defineComponent } from 'vue'
 export default defineComponent({
 	name: 'AdminTutors',
 	routeConfig: { middlewares: ['isAdmin'] },
-	setup() {
-		return {}
-	},
 })
 </script>

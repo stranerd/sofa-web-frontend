@@ -52,13 +52,12 @@ import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
-import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
 
 export default defineComponent({
 	name: 'ChatsRequestsIdPage',
-	components: { ChatLayout, ChatContent },
+	components: { ChatContent },
 	routeConfig: { goBackRoute: '/chats', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

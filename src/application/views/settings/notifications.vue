@@ -12,13 +12,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 
 export default defineComponent({
 	name: 'SettingsNotificationsPage',
-	components: {
-		SettingsLayout,
-	},
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

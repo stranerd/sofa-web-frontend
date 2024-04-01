@@ -10,7 +10,6 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import teachersImage from '@app/assets/images/class-teachers.png'
-import HomeLayout from '@app/components/home/HomeLayout.vue'
 import MembersList from '@app/components/organizations/members/MembersList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useOrganizationMembers } from '@app/composables/organizations/members'
@@ -18,7 +17,7 @@ import { MemberTypes } from '@modules/organizations'
 
 export default defineComponent({
 	name: 'OrganizationTeachersPage',
-	components: { HomeLayout, MembersList },
+	components: { MembersList },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {
 		useMeta({ title: 'Teachers' })

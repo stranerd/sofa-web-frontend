@@ -41,7 +41,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
-import HomeLayout from '@app/components/home/HomeLayout.vue'
 import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
@@ -49,7 +48,7 @@ import { useOrganizationClasses } from '@app/composables/organizations/classes'
 
 export default defineComponent({
 	name: 'OrganizationClassesPage',
-	components: { HomeLayout, ClassCard },
+	components: { ClassCard },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {
 		const emptyClassContent = {

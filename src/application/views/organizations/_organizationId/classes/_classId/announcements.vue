@@ -111,7 +111,6 @@
 <script lang="ts" setup>
 import { computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useModals } from '@app/composables/core/modals'
 import { useClassAnnouncements } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'

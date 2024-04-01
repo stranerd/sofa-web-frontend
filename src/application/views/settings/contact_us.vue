@@ -29,12 +29,10 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useMetaMessage } from '@app/composables/users/metaMessage'
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } from '@utils/constants'
 
 export default defineComponent({
 	name: 'ContactUsSettingPage',
-	components: { SettingsLayout },
 	routeConfig: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({

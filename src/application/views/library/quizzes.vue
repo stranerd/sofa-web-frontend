@@ -25,7 +25,6 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { openMaterial } from '@app/composables/library'
 import { useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
@@ -34,7 +33,6 @@ import { DraftStatus } from '@modules/study'
 
 export default defineComponent({
 	name: 'LibraryQuizzesPage',
-	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import ChatList from './ChatList.vue'
+import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList } from '@app/composables/conversations/conversations'
 import { Logic } from 'sofa-logic'

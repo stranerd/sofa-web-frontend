@@ -7,7 +7,3 @@
 		</template>
 	</ClassLayout>
 </template>
-
-<script lang="ts" setup>
-import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
-</script>
