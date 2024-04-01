@@ -1,16 +1,13 @@
 import { v } from 'valleyed'
 import { MetaMessageData } from '../types'
 import { BaseFactory } from '@modules/core'
-import { AuthDetails } from '@modules/auth'
+import { AuthDetails, isValidPhone } from '@modules/auth'
 
 export class MetaMessageFactory extends BaseFactory<AuthDetails, MetaMessageData, MetaMessageData> {
 	readonly rules = {
 		name: v.string().min(1),
 		email: v.string().min(1),
-		phone: v.object({
-			code: v.string().min(1),
-			number: v.string().min(1),
-		}),
+		phone: v.any().addRule(isValidPhone()).nullable(),
 		message: v.string().min(1),
 	}
 
@@ -18,10 +15,7 @@ export class MetaMessageFactory extends BaseFactory<AuthDetails, MetaMessageData
 		super({
 			name: '',
 			email: '',
-			phone: {
-				code: '+234',
-				number: '',
-			},
+			phone: null,
 			message: '',
 		})
 	}

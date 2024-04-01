@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 import { ReadOnlyApiService } from '../common/ReadOnlyService'
-import { PushNotificationTokenInput } from '../../logic/types/forms/users'
+import { PushNotificationTokenInput } from '../../logic/types/'
 
 export default class PushTokensApi extends ReadOnlyApiService {
 	constructor() {

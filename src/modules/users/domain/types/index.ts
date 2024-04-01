@@ -2,8 +2,8 @@ import type { AuthRoleType, Phone, UserBio } from '@modules/auth'
 import { Media, Ratings } from '@modules/core'
 import { MemberTypes } from '@modules/organizations'
 
-export { AuthRoleType, UserBio }
 export * from './verifications'
+export { AuthRoleType, UserBio }
 
 export enum UserType {
 	student = 'student',
@@ -158,6 +158,6 @@ export type UserLocation = {
 export type MetaMessageData = {
 	name: string
 	email: string
-	phone: Phone
+	phone: Phone | null
 	message: string
 }
