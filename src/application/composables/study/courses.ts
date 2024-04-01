@@ -1,11 +1,13 @@
-import { Ref, onMounted, onUnmounted, ref, watch } from 'vue'
+import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { useFilesInList } from './files-list'
+import { useQuizzesInList } from './quizzes-list'
 import { Logic } from 'sofa-logic'
-import { CoursableAccess, CourseEntity, CourseFactory, CoursesUseCases } from '@modules/study'
+import { Coursable, CourseEntity, CourseFactory, CoursesUseCases } from '@modules/study'
 
 const store = {} as Record<
 	string,
@@ -15,8 +17,7 @@ const store = {} as Record<
 	}
 >
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const useCourse = (id: string, skip: { items?: boolean }, access: CoursableAccess['access']) => {
+export const useCourse = (id: string, skip: { items?: boolean }) => {
 	store[id] ??= {
 		course: ref(null),
 		listener: useListener(
@@ -35,6 +36,35 @@ export const useCourse = (id: string, skip: { items?: boolean }, access: Coursab
 		),
 	}
 
+	const { quizzes } = useQuizzesInList(
+		computed(() => (!skip.items ? store[id].course.value?.quizzesIds ?? [] : [])),
+		!skip.items,
+	)
+
+	const { files } = useFilesInList(
+		computed(() => (!skip.items ? store[id].course.value?.filesIds ?? [] : [])),
+		!skip.items,
+	)
+
+	const sections = computed(
+		() =>
+			store[id].course.value?.sections.map((section) => {
+				const items = section.items
+					.map((item) => {
+						if (item.type === Coursable.file) {
+							const file = files.value.find((f) => f.id === item.id)
+							if (file) return { ...item, type: Coursable.file as const, file }
+						}
+						if (item.type === Coursable.quiz) {
+							const quiz = quizzes.value.find((q) => q.id === item.id)
+							if (quiz) return { ...item, type: Coursable.quiz as const, quiz }
+						}
+					})
+					.filter(Boolean)
+				return { label: section.label, items }
+			}) ?? [],
+	)
+
 	const { asyncFn: fetchCourse, called } = useAsyncFn(
 		async () => {
 			store[id].course.value = await CoursesUseCases.find(id)
@@ -50,7 +80,7 @@ export const useCourse = (id: string, skip: { items?: boolean }, access: Coursab
 		await store[id].listener.close()
 	})
 
-	return { ...store[id], fetched: called }
+	return { ...store[id], fetched: called, sections }
 }
 
 export const useCreateCourse = () => {
@@ -72,7 +102,7 @@ export const useCreateCourse = () => {
 
 export const useEditCourse = (id: string) => {
 	const router = useRouter()
-	const { course, fetched } = useCourse(id, {}, {})
+	const { course, fetched } = useCourse(id, {})
 	const courseFactory = new CourseFactory()
 	const { setMessage } = useSuccessHandler()
 
