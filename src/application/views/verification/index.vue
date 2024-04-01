@@ -70,7 +70,7 @@
 			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex flex-col items-start">
 					<SofaHeaderText class="!font-bold"> Page content </SofaHeaderText>
-					<SofaNormalText>Add at least 1 course and 3 quizzes you’ve published </SofaNormalText>
+					<SofaNormalText>Add at least 1 course and 3 quizzes you’ve published. </SofaNormalText>
 				</div>
 
 				<div class="w-full flex flex-col gap-4">
@@ -80,7 +80,15 @@
 						type="activity"
 						:material="material"
 						:isWrapped="!Logic.Common.isLarge"
-						:isRoute="false" />
+						:hasBookmark="false"
+						:isRoute="false">
+						<template #side-icons>
+							<SofaIcon
+								class="h-[20px]"
+								name="circle-close"
+								@click="verificationFactory[material.isCourse() ? 'removeCourse' : 'removeQuiz'](material.id)" />
+						</template>
+					</StudyMaterialCard>
 
 					<SofaButton padding="p-4" @click="showAddNewHandler">
 						<SofaIcon name="box-add" class="h-[18px] fill-white" />
@@ -115,6 +123,7 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useModals } from '@app/composables/core/modals'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
@@ -125,7 +134,13 @@ export default defineComponent({
 	name: 'VerificationIndexPage',
 	components: { SocialMediaUpdate },
 	routeConfig: {
-		middlewares: ['isAuthenticated'],
+		middlewares: [
+			'isAuthenticated',
+			async () => {
+				const { auth } = useAuth()
+				if (auth.value?.roles.isVerified) return '/dashboard'
+			},
+		],
 	},
 	setup() {
 		useMeta({

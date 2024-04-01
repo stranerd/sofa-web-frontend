@@ -15,6 +15,7 @@
 				:material="material"
 				:isWrapped="!Logic.Common.isLarge"
 				:isRoute="false"
+				:hasBookmark="false"
 				:class="{ '!bg-lightBlue': hasMaterial(material) }"
 				@click="toggleMaterial(material)" />
 		</div>

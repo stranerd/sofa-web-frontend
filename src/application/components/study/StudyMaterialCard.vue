@@ -47,7 +47,7 @@
 				<SofaIcon v-if="content.user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 			</router-link>
 
-			<SofaIcon :name="saveIcon" class="h-[18px]" @click.stop.prevent="bookmarkAction" />
+			<SofaIcon v-if="hasBookmark" :name="saveIcon" class="h-[18px]" @click.stop.prevent="bookmarkAction" />
 		</div>
 	</router-link>
 	<component
@@ -63,10 +63,10 @@
 				class="mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom relative"
 				:class="isWrapped ? 'h-[100px] w-[150px]' : 'h-[120px] w-full'" />
 			<div class="flex flex-col gap-2 relative h-full w-full">
-				<div class="w-full flex items-center justify-between">
+				<div class="w-full flex items-center gap-2">
 					<SofaNormalText class="!font-bold flex-1 line-clamp-1">{{ activity.title }}</SofaNormalText>
 					<SofaIcon
-						v-if="!hasShowMore"
+						v-if="!hasShowMore && hasBookmark"
 						class="h-[16px] hidden mdlg:inline"
 						:name="saveIcon"
 						@click.stop.prevent="bookmarkAction" />
@@ -75,6 +75,7 @@
 						name="more-options-horizontal"
 						class="w-[20px]"
 						@click.stop.prevent="(e) => handleShowMaterialMoreOptions(e, material)" />
+					<slot name="side-icons" />
 				</div>
 				<div class="flex gap-2 items-center">
 					<SofaNormalText :color="activity.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">
@@ -110,7 +111,11 @@
 						<SofaIcon v-if="activity.user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
 					</router-link>
 
-					<SofaIcon v-if="!isWrapped" :name="saveIcon" class="h-[17px] mdlg:hidden" @click.stop.prevent="bookmarkAction" />
+					<SofaIcon
+						v-if="!isWrapped && hasBookmark"
+						:name="saveIcon"
+						class="h-[17px] mdlg:hidden"
+						@click.stop.prevent="bookmarkAction" />
 				</div>
 			</div>
 		</div>
@@ -133,11 +138,13 @@ const props = withDefaults(
 		material: QuizEntity | CourseEntity
 		isWrapped?: boolean
 		isRoute?: boolean
+		hasBookmark?: boolean
 		hasShowMore?: boolean
 	}>(),
 	{
 		isWrapped: false,
 		isRoute: true,
+		hasBookmark: true,
 		hasShowMore: false,
 	},
 )
