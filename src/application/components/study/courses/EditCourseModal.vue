@@ -1,9 +1,9 @@
 <template>
-	<form class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6 text-grayColor" @submit.prevent="updateQuiz">
-		<SofaHeaderText class="text-xl hidden mdlg:flex">Update Quiz</SofaHeaderText>
+	<form class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6 text-grayColor" @submit.prevent="updateCourse">
+		<SofaHeaderText class="text-xl hidden mdlg:flex">Update Course</SofaHeaderText>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden">
-			<SofaNormalText class="!font-bold !text-base">Update Quiz</SofaNormalText>
+			<SofaNormalText class="!font-bold !text-base">Update Course</SofaNormalText>
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
@@ -69,17 +69,6 @@
 			</div>
 		</div>
 
-		<div class="flex gap-4 items-center flex-wrap">
-			<SofaNormalText content="Allowed Modes: " />
-			<SofaCheckbox v-for="mode in modes" :key="mode.value" v-model="factory[mode.key] as any" type="switch">
-				<SofaNormalText :content="mode.value" class="capitalize" />
-			</SofaCheckbox>
-		</div>
-
-		<SofaCheckbox v-if="isAdmin" v-model="factory.isForTutors" type="switch">
-			<SofaNormalText content="Is for tutor assessments?" />
-		</SofaCheckbox>
-
 		<div class="w-full flex items-center justify-between">
 			<SofaButton
 				type="button"
@@ -96,12 +85,12 @@
 					Save
 				</SofaButton>
 				<SofaButton
-					v-if="!quiz?.isPublished"
+					v-if="!course?.isPublished"
 					type="button"
 					:disabled="!factory.valid"
 					padding="px-5 mdlg:py-2 py-3"
 					class="mdlg:w-auto w-full"
-					@click.prevent="publishQuiz">
+					@click.prevent="publishCourse">
 					Publish
 				</SofaButton>
 			</div>
@@ -111,31 +100,19 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue'
-import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
-import { useEditQuiz } from '@app/composables/study/quizzes'
-import { QuizEntity, QuizModes } from '@modules/study'
+import { useEditCourse } from '@app/composables/study/courses'
+import { CourseEntity } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	quiz: QuizEntity
+	course: CourseEntity
 }>()
 
-const { quiz, quizFactory: factory, updateQuiz, publishQuiz } = useEditQuiz(props.quiz.id)
-
-const { isAdmin } = useAuth()
+const { course, courseFactory: factory, updateCourse, publishCourse } = useEditCourse(props.course.id)
 
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()
-
-const modes: { value: QuizModes; key: keyof typeof factory }[] = [
-	{ value: QuizModes.games, key: 'modeGames' },
-	{ value: QuizModes.tests, key: 'modeTests' },
-	{ value: QuizModes.assessments, key: 'modeAssessments' },
-	{ value: QuizModes.practice, key: 'modePractice' },
-	{ value: QuizModes.flashcards, key: 'modeFlashcards' },
-]
-
 watch(
 	topics,
 	() => {

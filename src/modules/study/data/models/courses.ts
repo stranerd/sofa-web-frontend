@@ -1,6 +1,6 @@
 import { Coursable, CourseMeta, CourseSections, Publishable, Saleable } from '../../domain/types'
 
-export interface CourseFromModel extends CourseToModel, Publishable {
+export interface CourseFromModel extends CourseToModel, Publishable, Saleable {
 	id: string
 	__type: 'CourseEntity'
 	coursables: { id: string; type: Coursable }[]
@@ -10,7 +10,7 @@ export interface CourseFromModel extends CourseToModel, Publishable {
 	updatedAt: number
 }
 
-export interface CourseToModel extends Omit<Publishable, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status'>, Saleable {
+export interface CourseToModel extends Omit<Publishable, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status'>, Omit<Saleable, 'frozen'> {
 	topic: string
 	tags: string[]
 }

@@ -34,7 +34,7 @@
 								{
 									name: 'Settings',
 									icon: 'cog',
-									handler: openEditModal,
+									handler: () => openEditModal(quiz),
 									size: 'h-[20px]',
 									hide: !extras.isMine,
 								},
@@ -123,7 +123,7 @@
 										manageMembers: extras.manageMembers,
 									})
 								" />
-							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal()" />
+							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal(quiz)" />
 							<SofaIcon class="h-[14px]" name="preview" @click="() => $router.push(`/quizzes/${quiz.id}/preview`)" />
 							<SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
 						</div>
@@ -257,14 +257,13 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import EditQuestionBody from '@app/components/study/questions/EditQuestionBody.vue'
 import EditQuestionOptions from '@app/components/study/questions/EditQuestionOptions.vue'
 import EditQuestionsList from '@app/components/study/questions/EditQuestionsList.vue'
 import EditQuizWrapper from '@app/components/study/quizzes/EditQuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
-import { QuestionEntity } from '@modules/study'
+import { QuestionEntity, QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -282,8 +281,6 @@ export default defineComponent({
 			title: 'Edit Quiz',
 		})
 
-		const route = useRoute()
-
 		const showAddQuestionModal = ref(false)
 
 		const interactingQuestionId = ref('')
@@ -291,7 +288,7 @@ export default defineComponent({
 		const showMoreOptions = ref(false)
 		const showCurrentlyEditingModal = ref(false)
 
-		const openEditModal = () => useModals().study.editQuiz.open({ id: route.params.id as string })
+		const openEditModal = (quiz: QuizEntity) => useModals().study.editQuiz.open({ quiz })
 
 		const openAccessModal = useModals().study.manageAccess.open
 

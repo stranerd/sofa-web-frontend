@@ -28,6 +28,7 @@ import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import EditQuiz from '@app/components/study/quizzes/EditQuizModal.vue'
+import EditCourse from '@app/components/study/courses/EditCourseModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
@@ -70,6 +71,7 @@ export const useModals = () => ({
 		createFile: { component: CreateFile },
 		selectQuiz: { component: SelectQuiz },
 		editQuiz: { component: EditQuiz },
+		editCourse: { component: EditCourse },
 	}),
 	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },
