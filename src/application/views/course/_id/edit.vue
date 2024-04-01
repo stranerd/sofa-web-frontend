@@ -11,9 +11,7 @@
 						{
 							name: 'Settings',
 							icon: 'cog',
-							handler: () => {
-								showSettingModal = true
-							},
+							handler: () => openEditModal(SingleCourse!),
 							size: 'h-[20px]',
 						},
 					],
@@ -279,9 +277,11 @@ import CourseSettings from '@app/components/study/courses/Settings.vue'
 import { Logic } from 'sofa-logic'
 
 import { hasUnsavedChanges, updateCourseSectionForm, updateCourseSections } from '@app/composables/course'
+import { useModals } from '@app/composables/core/modals'
+import { CourseEntity } from '@modules/study'
 
 export default defineComponent({
-	name: 'CreateCourse',
+	name: 'EditCourse',
 	components: { CourseSettings, NewCourseMaterial, AddVideo },
 	routeConfig: {
 		fetchRules: [
@@ -318,17 +318,15 @@ export default defineComponent({
 				domain: 'Study',
 				property: 'SingleCourse',
 				method: 'GetCourse',
-				params: [true],
-				useRouteQuery: true,
-				queries: ['id'],
-				requireAuth: true,
+				params: [],
+				useRouteId: true,
 				ignoreProperty: true,
 			},
 		],
 	},
 	setup() {
 		useMeta({
-			mobileTitle: 'Create Course',
+			mobileTitle: 'Edit Course',
 		})
 
 		const SingleCourse = ref(Logic.Study.SingleCourse)
@@ -339,7 +337,7 @@ export default defineComponent({
 
 		const showSettingModal = ref(false)
 
-		const mobileTitle = ref('Create course')
+		const mobileTitle = ref('Edit course')
 
 		const actionButtonItems = reactive([
 			{
@@ -439,10 +437,13 @@ export default defineComponent({
 			}, 1000)
 		})
 
+		const openEditModal = (course: CourseEntity) => useModals().study.editCourse.open({ course })
+
 		return {
 			selectedMaterial,
 			showMoreOptions,
 			Logic,
+			openEditModal,
 			showSettingModal,
 			mobileTitle,
 			currentContent,
@@ -461,9 +462,3 @@ export default defineComponent({
 	},
 })
 </script>
-<style scoped>
-.textarea[contenteditable]:empty::before {
-	content: 'Enter message';
-	color: #78828c;
-}
-</style>

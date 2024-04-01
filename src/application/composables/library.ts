@@ -58,7 +58,7 @@ export const extractResource = (material: CourseEntity | QuizEntity) => {
 
 export const openMaterial = (material: QuizEntity | CourseEntity, force = false) => {
 	if (!force && ((material.isDraft && material.canEdit(Logic.Common.AuthUser?.id ?? '')) || (material.isQuiz() && material.isForTutors)))
-		return Logic.Common.GoToRoute(material.isQuiz() ? `/quizzes/${material.id}/edit` : `/course/create?id=${material.id}`)
+		return Logic.Common.GoToRoute(material.isQuiz() ? `/quizzes/${material.id}/edit` : `/course/${material.id}/edit`)
 	if (material.isCourse()) Logic.Common.GoToRoute(`/course/${material.id}`)
 	if (material.isQuiz()) useModals().study.chooseStudyMode.open({ quiz: material })
 }

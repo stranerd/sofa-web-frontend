@@ -296,7 +296,7 @@ export default class Study extends Common {
 
 							await this.UpdateCourseSection()
 							Logic.Common.hideLoading()
-							Logic.Common.GoToRoute(`/course/create?id=${Logic.Study.SingleCourse?.id}`)
+							Logic.Common.GoToRoute(`/course/${Logic.Study.SingleCourse?.id}/edit`)
 						})
 						.catch(() => {
 							resolve('')
