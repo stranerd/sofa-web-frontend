@@ -199,7 +199,6 @@ declare global {
 		| 'tutor-review'
 		| 'tutor'
 		| 'unsave'
-		| 'upload-purple'
 		| 'upload'
 		| 'user-unfilled'
 		| 'user'

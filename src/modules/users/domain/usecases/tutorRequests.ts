@@ -18,6 +18,26 @@ export class TutorRequestsUseCase {
 		return await this.repository.listenToOne(id, listeners)
 	}
 
+	async getMine(userId: string) {
+		return await this.repository.get({
+			where: [{ field: 'userId', value: userId }],
+			sort: [{ field: 'createdAt', desc: true }],
+			all: true,
+		})
+	}
+
+	async listenToMine(userId: string, listeners: Listeners<TutorRequestEntity>) {
+		return await this.repository.listenToMany(
+			{
+				where: [{ field: 'userId', value: userId }],
+				sort: [{ field: 'createdAt', desc: true }],
+				all: true,
+			},
+			listeners,
+			(entity) => entity.userId === userId,
+		)
+	}
+
 	async create(factory: TutorRequestFactory) {
 		return await this.repository.create(await factory.toModel())
 	}

@@ -13,6 +13,7 @@ export const TutorRequestsUseCases = new TutorRequestsUseCase(TutorRequestReposi
 export const MetaMessageUseCases = new MetaMessageUseCase(MetaMessageRepository.getInstance)
 
 export { UserEntity } from './domain/entities/users'
+export { TutorRequestEntity } from './domain/entities/tutorRequests'
 export { VerificationEntity } from './domain/entities/verifications'
 export { MetaMessageFactory } from './domain/factories/metaMessage'
 export { TutorRequestFactory } from './domain/factories/tutorRequests'
