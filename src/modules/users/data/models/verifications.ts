@@ -1,10 +1,10 @@
-import { VerificationContent } from '../../domain/types'
+import { VerificationAccepted, VerificationContent } from '../../domain/types'
 
 export interface VerificationFromModel extends VerificationToModel {
 	id: string
 	userId: string
 	pending: boolean
-	accepted: boolean
+	accepted: VerificationAccepted
 	createdAt: number
 	updatedAt: number
 }
