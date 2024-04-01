@@ -209,9 +209,9 @@ const options = computed(() => [
 	{ title: 'Dashboard', icon: 'dashboard' as const, route: '/dashboard' },
 	...(userType.value.isOrg
 		? [
-				{ title: 'Classes', icon: 'classes' as const, route: '/organization/classes' },
-				{ title: 'Teachers', icon: 'tutor' as const, route: '/organization/teachers' },
-				{ title: 'Students', icon: 'user-unfilled' as const, route: '/organization/students' },
+				{ title: 'Classes', icon: 'classes' as const, route: '/dashboard/classes' },
+				{ title: 'Teachers', icon: 'tutor' as const, route: '/dashboard/teachers' },
+				{ title: 'Students', icon: 'user-unfilled' as const, route: '/dashboard/students' },
 			]
 		: []),
 	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes' as const, route: '/classes' }] : []),

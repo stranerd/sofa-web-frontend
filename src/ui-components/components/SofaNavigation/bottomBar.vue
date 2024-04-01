@@ -4,7 +4,7 @@
 			v-for="tab in [
 				{ path: '/dashboard', icon: 'home' as const },
 				...(userType.isOrg ? [] : [{ path: '/chats', icon: 'chat' as const }]),
-				{ path: userType.isOrg ? '/organization/classes' : '/classes', icon: 'classes' as const },
+				{ path: userType.isOrg ? '/dashboard/classes' : '/classes', icon: 'classes' as const },
 				{ path: '/marketplace', icon: 'marketplace' as const },
 				{ path: '/library', icon: 'library' as const },
 			]"
