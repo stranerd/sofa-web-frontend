@@ -20,6 +20,7 @@ declare module 'vue' {
     ChatContent: typeof import('./../application/components/conversations/ChatContent.vue')['default']
     ChatLayout: typeof import('./../application/components/conversations/ChatLayout.vue')['default']
     ChatList: typeof import('./../application/components/conversations/ChatList.vue')['default']
+    ChoosePublishedStudyMaterialModal: typeof import('./../application/components/users/verifications/ChoosePublishedStudyMaterialModal.vue')['default']
     ChooseStudyModeModal: typeof import('./../application/components/study/quizzes/ChooseStudyModeModal.vue')['default']
     ClassCard: typeof import('./../application/components/organizations/classes/ClassCard.vue')['default']
     ClassCardMoreOptionsModal: typeof import('./../application/components/organizations/classes/ClassCardMoreOptionsModal.vue')['default']

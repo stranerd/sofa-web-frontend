@@ -32,6 +32,7 @@ import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
+import ChoosePublishedStudyMaterial from '@app/components/users/verifications/ChoosePublishedStudyMaterialModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -80,6 +81,7 @@ export const useModals = () => ({
 			component: HomeMobileMenu,
 			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-full !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
 		},
+		choosePublishedStudyMaterial: { component: ChoosePublishedStudyMaterial },
 	}),
 	payment: modal.register('Payment', {
 		transactionDetails: { component: TransactionDetails },
