@@ -30,12 +30,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { RouteLocationNormalized } from 'vue-router'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
 	routeConfig: {
-		goBackRoute: (route: RouteLocationNormalized) => `/quizzes/${route.params.id}/edit`,
+		goBackRoute: (route) => `/study/quizzes/${route.params.id}/edit`,
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {

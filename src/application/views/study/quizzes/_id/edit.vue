@@ -28,7 +28,7 @@
 								{
 									name: 'Preview',
 									icon: 'preview',
-									handler: () => $router.push(`/quizzes/${quiz.id}/preview`),
+									handler: () => $router.push(`/study/quizzes/${quiz.id}/preview`),
 									size: 'h-[17px]',
 								},
 								{
@@ -124,7 +124,7 @@
 									})
 								" />
 							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal(quiz)" />
-							<SofaIcon class="h-[14px]" name="preview" @click="() => $router.push(`/quizzes/${quiz.id}/preview`)" />
+							<SofaIcon class="h-[14px]" name="preview" @click="() => $router.push(`/study/quizzes/${quiz.id}/preview`)" />
 							<SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
 						</div>
 					</div>

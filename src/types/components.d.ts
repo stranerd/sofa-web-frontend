@@ -99,7 +99,6 @@ declare module 'vue' {
     SelectPaymentMethodModal: typeof import('./../application/components/payment/methods/SelectPaymentMethodModal.vue')['default']
     SelectQuizModal: typeof import('./../application/components/study/quizzes/SelectQuizModal.vue')['default']
     SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']
-    Settings: typeof import('./../application/components/study/courses/Settings.vue')['default']
     SettingsLayout: typeof import('./../application/components/settings/SettingsLayout.vue')['default']
     SideBarModal: typeof import('./../application/components/users/users/SideBarModal.vue')['default']
     SidebarScheduleList: typeof import('./../application/components/organizations/schedules/SidebarScheduleList.vue')['default']

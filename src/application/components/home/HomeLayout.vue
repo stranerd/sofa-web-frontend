@@ -92,10 +92,10 @@
 				</SofaTextField>
 
 				<div class="w-full flex items-center gap-2">
-					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/quizzes/create">
+					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/study/quizzes/create">
 						Create a quiz
 					</SofaBadge>
-					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/courses/create">
+					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/study/courses/create">
 						Create a course
 					</SofaBadge>
 				</div>
@@ -198,8 +198,8 @@ const customizeAi = () => useModals().users.customizeAi.open({})
 const rightCommands = computed(() => [
 	{ label: 'Add a student', action: () => useModals().organizations.addMember.open({ type: MemberTypes.student, org: user.value! }) },
 	{ label: 'Add a teacher', action: () => useModals().organizations.addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
-	{ label: 'Create a quiz', action: () => router.push('/quizzes/create') },
-	{ label: 'Create a course', action: () => router.push('/courses/create') },
+	{ label: 'Create a quiz', action: () => router.push('/study/quizzes/create') },
+	{ label: 'Create a course', action: () => router.push('/study/courses/create') },
 	...(userType.value.isOrg
 		? [{ label: 'Create a class', action: () => useModals().organizations.createClass.open({ organizationId: id.value }) }]
 		: []),
