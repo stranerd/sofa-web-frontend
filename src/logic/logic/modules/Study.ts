@@ -163,14 +163,6 @@ export default class Study extends Common {
 		return shapes[index % shapes.length]
 	}
 
-	public getShapeSize(shape: IconName) {
-		if (shape === 'circle') return 'md:h-[23px] h-[20px]'
-		if (shape === 'triangle') return 'md:h-[23px] h-[20px]'
-		if (shape === 'square') return 'md:h-[23px] h-[20px]'
-		if (shape === 'kite') return 'md:h-[23px] h-[20px]'
-		return 'h-[23px]'
-	}
-
 	public GetCourses = (filters: QueryParams, updateItems = true) =>
 		$api.study.course.fetch(filters).then((response) => {
 			if (updateItems) this.AllCourses = response.data
@@ -304,12 +296,6 @@ export default class Study extends Common {
 		})
 		this.SingleCourse = response.data
 	}
-
-	public GetFiles = (filters: QueryParams) =>
-		$api.study.file.fetch(filters).then((response) => {
-			this.AllFiles = response.data
-			return response.data
-		})
 
 	public GetReviews = (uniqueId: string, type: 'quizzes' | 'courses') =>
 		$api.interactions.reviews
@@ -464,30 +450,6 @@ export default class Study extends Common {
 		}
 	}
 
-	public PublishCourse = (id: string) => {
-		Logic.Common.showLoading()
-		return $api.study.course
-			.publishCourse(id)
-			.then((response) => {
-				this.SingleCourse = response.data
-				Logic.Common.hideLoading()
-			})
-			.catch((error) => {
-				Logic.Common.hideLoading()
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
-	}
-
-	public FreezeCourse = (id: string) =>
-		$api.study.course
-			.freezeCourse(id)
-			.then((response) => {
-				this.SingleCourse = response.data
-			})
-			.catch((error) => {
-				Logic.Common.showError(capitalize(error.response.data[0]?.message))
-			})
-
 	public CreateFile = (formIsValid: boolean) => {
 		if (formIsValid && this.CreateFileForm) {
 			Logic.Common.showLoading()
@@ -517,8 +479,6 @@ export default class Study extends Common {
 				})
 		}
 	}
-
-	public DeleteCourse = (id: string) => $api.study.course.delete(id).then().catch()
 
 	public DeleteFile = (id: string) => {
 		Logic.Common.showLoading()

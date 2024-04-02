@@ -1,5 +1,4 @@
 export * from './common'
 export * from './interactions'
-export * from './notifications'
 export * from './study'
 export * from './users'
