@@ -32,4 +32,4 @@ export { AccountUpdateFactory } from './domain/factories/accounts'
 export { FundWalletFactory } from './domain/factories/fundWallet'
 export { WithdrawalFactory } from './domain/factories/withdrawal'
 
-export type { SelectedPaymentMethod } from './domain/types'
+export type { SelectedPaymentMethod, Subscription } from './domain/types'
