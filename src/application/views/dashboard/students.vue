@@ -1,9 +1,7 @@
 <template>
-	<HomeLayout title="Students">
-		<template #default="{ user }">
-			<MembersList :org="user" :image="studentsImage" :type="MemberTypes.student" :members="students" :messages="messages" />
-		</template>
-	</HomeLayout>
+	<DashboardLayout title="Students">
+		<MembersList :org="user!" :image="studentsImage" :type="MemberTypes.student" :members="students" :messages="messages" />
+	</DashboardLayout>
 </template>
 
 <script lang="ts">
@@ -29,9 +27,9 @@ export default defineComponent({
 			'No loss of study resources so students can keep coming back to them.',
 		]
 
-		const { id } = useAuth()
+		const { id, user } = useAuth()
 		const { students } = useOrganizationMembers(id.value)
-		return { students, messages, MemberTypes, studentsImage }
+		return { students, messages, MemberTypes, studentsImage, user }
 	},
 })
 </script>

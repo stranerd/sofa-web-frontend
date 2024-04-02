@@ -1,5 +1,5 @@
 <template>
-	<HomeLayout title="Classes">
+	<DashboardLayout title="Classes">
 		<div v-if="classes.length === 0" class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 			<div class="flex flex-col mdlg:flex-row mdlg:items-center gap-6 p-4 md:p-6 rounded-custom">
 				<div class="bg-lightGray w-[241px] h-[241px] flex items-center justify-center rounded-custom">
@@ -36,7 +36,7 @@
 			</div>
 			<ClassCard v-for="cl in filteredClassess" :key="cl.id" :classInst="cl" />
 		</div>
-	</HomeLayout>
+	</DashboardLayout>
 </template>
 
 <script lang="ts">

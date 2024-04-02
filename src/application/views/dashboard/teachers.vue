@@ -1,9 +1,7 @@
 <template>
-	<HomeLayout title="Teachers">
-		<template #default="{ user }">
-			<MembersList :org="user" :image="teachersImage" :type="MemberTypes.teacher" :members="teachers" :messages="messages" />
-		</template>
-	</HomeLayout>
+	<DashboardLayout title="Teachers">
+		<MembersList :org="user!" :image="teachersImage" :type="MemberTypes.teacher" :members="teachers" :messages="messages" />
+	</DashboardLayout>
 </template>
 
 <script lang="ts">
@@ -29,9 +27,9 @@ export default defineComponent({
 			'Manage your all teachers in the same space.',
 		]
 
-		const { id } = useAuth()
+		const { id, user } = useAuth()
 		const { teachers } = useOrganizationMembers(id.value)
-		return { teachers, messages, MemberTypes, teachersImage }
+		return { teachers, messages, MemberTypes, teachersImage, user }
 	},
 })
 </script>

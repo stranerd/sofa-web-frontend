@@ -7,7 +7,7 @@
 		</div>
 
 		<div class="w-full flex flex-col gap-3 px-4 flex-1 overflow-y-auto">
-			<slot :user="user!" />
+			<slot />
 		</div>
 	</ExpandedLayout>
 	<FullLayout v-else :topbarOptions="{ title }">
@@ -68,7 +68,7 @@
 
 		<template #middle-session>
 			<div class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :user="user!" />
+				<slot />
 			</div>
 		</template>
 

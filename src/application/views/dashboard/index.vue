@@ -1,20 +1,20 @@
 <template>
-	<HomeLayout title="Dashboard" :index="true">
-		<HomeForStudents v-if="userType.isStudent" />
-		<HomeForNonStudents v-else />
-	</HomeLayout>
+	<DashboardLayout title="Dashboard" :index="true">
+		<DashboardForStudents v-if="userType.isStudent" />
+		<DashboardForNonStudents v-else />
+	</DashboardLayout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import HomeForNonStudents from '@app/components/home/HomeForNonStudents.vue'
-import HomeForStudents from '@app/components/home/HomeForStudents.vue'
+import DashboardForNonStudents from '@app/components/dashboard/DashboardForNonStudents.vue'
+import DashboardForStudents from '@app/components/dashboard/DashboardForStudents.vue'
 import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
 	name: 'DashboardPage',
-	components: { HomeForStudents, HomeForNonStudents },
+	components: { DashboardForStudents, DashboardForNonStudents },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
