@@ -81,7 +81,7 @@ export const useCreateTutorRequest = () => {
 	} = useAsyncFn(async () => {
 		const tutorRequest = await TutorRequestsUseCases.create(factory)
 		await setMessage('Verification submitted. You will get an email after your account has been reviewed')
-		await router.push(`/plays/tests/${tutorRequest.testId}`)
+		await router.push(tutorRequest.testFinished ? '/dashboard' : `/plays/tests/${tutorRequest.testId}`)
 	})
 
 	return { factory, createTutorRequest, loading, error }

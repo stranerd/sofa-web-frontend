@@ -59,7 +59,7 @@
 						v-model="tutorRequestFactory.qualification"
 						class="rounded-custom border-2 border-dashed border-primaryPurple bg-lightGray p-4"
 						accept="application/pdf, image/*"
-						:isMultiple="true">
+						multiple>
 						<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
 							<SofaIcon name="upload" class="h-[16px] fill-primaryPurple" />
 
@@ -116,6 +116,15 @@
 					<div class="w-full flex flex-col gap-1">
 						<SofaHeaderText size="xl"> Subject </SofaHeaderText>
 						<SofaNormalText> Choose the subject you want to teach </SofaNormalText>
+						<SofaNormalText v-if="currentlyTeaching.length">
+							You are already teaching the following:
+							{{
+								topics
+									.filter((t) => currentlyTeaching.includes(t.id))
+									.map((t) => t.title)
+									.join(', ')
+							}}
+						</SofaNormalText>
 					</div>
 
 					<SofaSelect
@@ -124,7 +133,7 @@
 						placeholder="Select subject"
 						:error="tutorRequestFactory.errors.topicId"
 						borderColor="border-transparent"
-						:options="topics.map((t) => ({ key: t.id, value: t.title }))" />
+						:options="topics.filter((t) => !currentlyTeaching.includes(t.id)).map((t) => ({ key: t.id, value: t.title }))" />
 				</div>
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
@@ -145,6 +154,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useTopicsList } from '@app/composables/interactions/tags'
 import { useUserLocationUpdate } from '@app/composables/users/profile'
@@ -157,10 +167,12 @@ export default defineComponent({
 	setup() {
 		useMeta({ title: 'Become a tutor' })
 
+		const { user } = useAuth()
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()
 		const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
 		const { topics } = useTopicsList()
 		const { factory: tutorRequestFactory, createTutorRequest } = useCreateTutorRequest()
+		const currentlyTeaching = computed(() => user.value?.tutor.topics ?? [])
 
 		const currentStep = ref<'profile' | 'test'>('profile')
 
@@ -195,6 +207,7 @@ export default defineComponent({
 			currentStep,
 			tutorRequestFactory,
 			buttonProps,
+			currentlyTeaching,
 		}
 	},
 })

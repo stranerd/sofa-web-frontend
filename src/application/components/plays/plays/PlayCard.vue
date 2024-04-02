@@ -1,12 +1,11 @@
 <template>
 	<router-link
-		v-if="quiz"
 		:to="play.isClosed ? play.resultsPage : play.lobbyPage"
 		class="w-full flex gap-3 p-3 rounded-custom bg-white shadow-custom">
-		<SofaImageLoader customClass="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom" :photoUrl="quiz.picture" />
+		<SofaImageLoader customClass="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom" :photoUrl="quiz?.picture ?? '/images/default.svg'" />
 		<div class="flex flex-col w-full gap-2">
 			<SofaNormalText class="!font-bold line-clamp-1">
-				{{ play.title || quiz.title }}
+				{{ play.title }}
 			</SofaNormalText>
 			<SofaNormalText color="text-grayColor" class="capitalize">
 				{{ play.singularizedType }}
@@ -29,9 +28,9 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { PlayEntity } from '@modules/plays'
-import { useAuth } from '@app/composables/auth/auth'
 
 const props = defineProps<{
 	play: PlayEntity
