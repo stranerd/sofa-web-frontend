@@ -34,6 +34,7 @@ import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
 import ChoosePublishedStudyMaterial from '@app/components/users/verifications/ChoosePublishedStudyMaterialModal.vue'
+import NotificationsList from '@app/components/notifications/notifications/NotificationsListModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -90,5 +91,8 @@ export const useModals = () => ({
 		fundWallet: { component: FundWallet },
 		withdraw: { component: Withdraw },
 		selectPaymentMethod: { component: SelectPaymentMethod },
+	}),
+	notifications: modal.register('Notifications', {
+		notificationList: { component: NotificationsList, modalArgs: { closeOnClickOutside: true } },
 	}),
 })

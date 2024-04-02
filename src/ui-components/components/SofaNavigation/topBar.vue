@@ -10,9 +10,7 @@
 					<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
 				</div>
 
-				<div class="w-[30px] h-[30px] flex flex-row items-center justify-center" @click="showNotification = true">
-					<SofaIcon customClass="h-[22px]" name="bell" />
-				</div>
+				<NotificationIcon v-if="user" />
 			</div>
 			<div class="hidden gap-5 items-center justify-start flex-grow mdlg:flex">
 				<router-link class="py-2 pr-3 flex items-center gap-1" to="/dashboard">
@@ -56,19 +54,7 @@
 				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
 					<SofaIcon name="plus-white" />
 				</SofaButton>
-				<div v-if="user" class="flex flex-col relative" tabindex="10" @blur="showNotification = false">
-					<div
-						class="w-[36px] h-[36px] flex flex-row items-center justify-center border border-darkLightGray rounded-full cursor-pointer"
-						@click="showNotification = true">
-						<SofaIcon customClass="h-[16px]" name="bell" />
-					</div>
-					<div
-						v-if="showNotification"
-						class="w-[400px] min-h-[250px] max-h-[400px] bg-white shadow-custom rounded-custom pb-3 px-4 absolute top-[140%] right-0 z-[100] hidden mdlg:flex flex-col">
-						<Notification :close="() => (showNotification = false)" />
-					</div>
-				</div>
-
+				<NotificationIcon v-if="user" />
 				<SofaAvatar size="36" :photoUrl="user?.bio?.photo?.link" as="router-link" to="/settings/profile" />
 			</div>
 
@@ -134,31 +120,19 @@
 				</template>
 			</div>
 		</template>
-
-		<!-- Notification modal -->
-		<SofaModalOld v-if="showNotification" :close="() => (showNotification = false)" customClass="mdlg:!hidden">
-			<div class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full w-full h-auto max-h-[80%] md:w-[70%] flex flex-col items-center relative">
-				<div
-					class="bg-white w-full flex flex-col lg:!px-6 md:!gap-4 gap-3 px-4 pb-5 md:!rounded-[16px] rounded-t-[16px] items-center justify-center">
-					<Notification :close="() => (showNotification = false)" />
-				</div>
-			</div>
-		</SofaModalOld>
 	</div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SofaAvatar from '../SofaAvatar'
 import SofaBadge from '../SofaBadge'
 import SofaButton from '../SofaButton'
 import { SofaTextField } from '../SofaForm'
 import SofaIcon from '../SofaIcon/index.vue'
-import SofaModalOld from '../SofaModalOld'
 import { SofaHeaderText } from '../SofaTypography'
 import SofaNormalText from '../SofaTypography/normalText.vue'
-import Notification from './notification.vue'
-import { Conditions, Logic } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
@@ -186,22 +160,8 @@ withDefaults(
 const { user, userType } = useAuth()
 const router = useRouter()
 const openSideBar = () => useModals().users.sideBar.open({})
-const showNotification = ref(false)
 
 const searchQuery = ref('')
-
-onMounted(() => {
-	// get user notifications
-	Logic.Notifications.GetNotifications({
-		where: [
-			{
-				field: 'userId',
-				condition: Conditions.eq,
-				value: Logic.Common.AuthUser?.id,
-			},
-		],
-	})
-})
 
 const initiateSearch = () => {
 	if (searchQuery.value.length > 1) router.push('/marketplace/search?q=' + searchQuery.value)

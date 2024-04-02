@@ -97,6 +97,14 @@ export const useNotificationList = () => {
 		await store[userId].listener.restart()
 	}
 
+	const { asyncFn: markNotificationSeen } = useAsyncFn(
+		async (notification: NotificationEntity) => {
+			if (notification.seen) return
+			await NotificationsUseCases.toggleSeen(notification.id, true)
+		},
+		{ hideLoading: true },
+	)
+
 	onMounted(async () => {
 		if (!called.value) await fetchNotifications()
 		await store[userId].listener.start()
@@ -106,18 +114,5 @@ export const useNotificationList = () => {
 		// await store[userId].listener.close()
 	})
 
-	return { ...store[userId], loading, error, fetched: called, fetchOlderNotifications }
-}
-
-export const useNotification = (notification: NotificationEntity) => {
-	const {
-		asyncFn: markNotificationSeen,
-		loading,
-		error,
-	} = useAsyncFn(async () => {
-		if (notification.seen) return
-		await NotificationsUseCases.toggleSeen(notification.id, true)
-	})
-
-	return { loading, error, markNotificationSeen }
+	return { ...store[userId], loading, error, fetched: called, fetchOlderNotifications, markNotificationSeen }
 }
