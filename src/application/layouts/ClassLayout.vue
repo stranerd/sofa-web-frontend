@@ -2,27 +2,25 @@
 	<slot v-if="!classInst" name="notfound" />
 	<ExploreClassView v-else-if="!user || !classInst.isEnrolled(user)" :classInst="classInst" />
 	<slot v-else-if="full" name="full" :classInst="classInst" :user="user" />
-	<SubPageLayout v-else-if="!Logic.Common.isLarge">
-		<div class="w-full h-full flex flex-col justify-start relative">
-			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
-				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
-				<SofaNormalText class="!font-bold !text-base" :content="pageTitle" />
-				<span class="w-4" />
-			</div>
-			<div class="flex items-center gap-4 px-4 border-b border-darkLightGray overflow-x-auto">
-				<router-link v-for="item in options" :key="item.route" :to="`${classInst.pageLink}${item.route}`" class="pb-3">
-					<SofaNormalText
-						class="text-md font-700 border-b-2 pb-2"
-						:class="$route.path.includes(item.route) ? 'border-black text-deepGray' : 'text-grayColor border-transparent'">
-						{{ item.title }}
-					</SofaNormalText>
-				</router-link>
-			</div>
-			<div class="flex flex-col gap-4 h-full overflow-y-auto p-4">
-				<slot :classInst="classInst" :user="user" />
-			</div>
+	<ExpandedLayout v-else-if="!Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4 sticky top-0">
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaNormalText class="!font-bold !text-base" :content="pageTitle" />
+			<span class="w-4" />
 		</div>
-	</SubPageLayout>
+		<div class="w-full flex items-center gap-4 px-4 border-b border-darkLightGray overflow-x-auto">
+			<router-link v-for="item in options" :key="item.route" :to="`${classInst.pageLink}${item.route}`" class="pb-3">
+				<SofaNormalText
+					class="text-md font-700 border-b-2 pb-1"
+					:class="$route.path.includes(item.route) ? 'border-black text-deepGray' : 'text-grayColor border-transparent'">
+					{{ item.title }}
+				</SofaNormalText>
+			</router-link>
+		</div>
+		<div class="w-full flex flex-col gap-4 flex-1 overflow-y-auto p-4">
+			<slot :classInst="classInst" :user="user" />
+		</div>
+	</ExpandedLayout>
 	<DashboardLayout v-else :topbarOptions="{ title: pageTitle }">
 		<template #left-session>
 			<div v-if="classInst" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">

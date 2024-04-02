@@ -1,17 +1,15 @@
 <template>
-	<SubPageLayout v-if="!index && !Logic.Common.isLarge">
-		<div class="w-full h-full flex-1 flex flex-col justify-start relative">
-			<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
-				<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
-				<SofaNormalText class="!font-bold !text-base" :content="title" />
-				<span class="w-4" />
-			</div>
-
-			<div class="w-full flex flex-col gap-3 px-4 h-full overflow-y-auto">
-				<slot :user="user!" />
-			</div>
+	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaNormalText class="!font-bold !text-base" :content="title" />
+			<span class="w-4" />
 		</div>
-	</SubPageLayout>
+
+		<div class="w-full flex flex-col gap-3 px-4 flex-1 overflow-y-auto">
+			<slot :user="user!" />
+		</div>
+	</ExpandedLayout>
 	<DashboardLayout v-else :topbarOptions="{ title }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">

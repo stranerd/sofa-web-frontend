@@ -1,9 +1,7 @@
 <template>
-	<SubPageLayout v-if="!index && !Logic.Common.isLarge">
-		<div class="h-full w-full">
-			<slot />
-		</div>
-	</SubPageLayout>
+	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+		<slot />
+	</ExpandedLayout>
 	<DashboardLayout v-else :noBottomPadding="true">
 		<template #left-session>
 			<div

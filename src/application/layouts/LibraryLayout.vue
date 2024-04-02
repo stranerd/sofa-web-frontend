@@ -1,32 +1,30 @@
 <template>
-	<SubPageLayout v-if="!index && !Logic.Common.isLarge">
-		<div class="w-full h-full flex-grow flex flex-col justify-start relative">
-			<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray p-4 sticky top-0 left-0">
-				<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
-				<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
-				<span class="w-4" />
-			</div>
-			<div v-if="tabs.length">
-				<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 py-2 gap-3">
-					<router-link
-						v-for="(item, i) in tabs.filter((t) => !t.hide)"
-						:key="item.id"
-						class="px-6 py-2 rounded-custom flex items-center justify-center"
-						:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'bg-primaryPurple' : 'bg-white'"
-						:to="`${$route.path}?tab=${item.id}`">
-						<SofaNormalText
-							:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-							class="!font-semibold truncate"
-							:content="item.name" />
-					</router-link>
-				</div>
-			</div>
-
-			<div class="w-full flex flex-col gap-3 px-4 pt-3 h-full overflow-y-auto">
-				<slot />
+	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+		<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray p-4 sticky top-0 left-0">
+			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
+			<span class="w-4" />
+		</div>
+		<div v-if="tabs.length" class="w-full">
+			<div class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide px-4 pb-2 gap-3">
+				<router-link
+					v-for="(item, i) in tabs.filter((t) => !t.hide)"
+					:key="item.id"
+					class="px-6 py-2 rounded-custom flex items-center justify-center"
+					:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'bg-primaryPurple' : 'bg-white'"
+					:to="`${$route.path}?tab=${item.id}`">
+					<SofaNormalText
+						:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
+						class="!font-semibold truncate"
+						:content="item.name" />
+				</router-link>
 			</div>
 		</div>
-	</SubPageLayout>
+
+		<div class="w-full flex flex-col gap-3 px-4 py-3 flex-1 overflow-y-auto">
+			<slot />
+		</div>
+	</ExpandedLayout>
 	<DashboardLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
@@ -181,9 +179,9 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
-import { Logic } from 'sofa-logic'
 import { PlayTypes } from '@modules/plays'
 import { DraftStatus } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const { isAdmin } = useAuth()
 const playOptions = [
