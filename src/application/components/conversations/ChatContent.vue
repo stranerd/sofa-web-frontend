@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between flex-grow h-full flex-col">
+	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between grow h-full flex-col">
 		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-darkLightGray text-left">
 			<div class="flex items-center gap-3 flex-1">
 				<SofaIcon class="mdlg:hidden" customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
@@ -23,7 +23,7 @@
 			<slot v-if="!editTitle" name="top-extras" />
 		</div>
 
-		<div class="w-full bg-white flex flex-col items-start justify-start gap-2 h-full flex-grow overflow-y-auto px-4 py-2">
+		<div class="w-full bg-white flex flex-col items-start justify-start gap-2 h-full grow overflow-y-auto px-4 py-2">
 			<slot />
 		</div>
 

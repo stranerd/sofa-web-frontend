@@ -27,7 +27,7 @@
 						:color="`${data.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'}`">
 						{{ index }} stars
 					</SofaNormalText>
-					<div class="flex-grow h-[8px] rounded-[8px] bg-darkLightGray relative">
+					<div class="grow h-[8px] rounded-[8px] bg-darkLightGray relative">
 						<div
 							class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
 							:style="`width: ${(data.stats[index] / data.count) * 100}%;`"></div>

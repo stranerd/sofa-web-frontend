@@ -56,7 +56,7 @@
 			</template>
 
 			<template v-if="currentStep == 2">
-				<div class="w-full flex flex-col gap-3 md:px-0 px-4 flex-grow">
+				<div class="w-full flex flex-col gap-3 md:px-0 px-4 grow">
 					<template v-if="filteredTutors.length">
 						<a
 							v-for="tutor in filteredTutors"
@@ -65,7 +65,7 @@
 							:class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
 							@click="factory.tutorId = tutor.id">
 							<SofaAvatar size="60" :photoUrl="tutor.photo_url" :showOnline="true" :online="tutor.online" />
-							<div class="w-full flex flex-col flex-grow gap-1">
+							<div class="w-full flex flex-col grow gap-1">
 								<div class="flex gap-2 items-center">
 									<SofaNormalText class="!font-bold" :content="tutor.name" />
 									<SofaIcon class="h-[17px]" name="tutor-bagde" />

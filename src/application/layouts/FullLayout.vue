@@ -5,7 +5,7 @@
 		:type="topbarOptions.type"
 		:customClass="hide.top ? 'hidden mdlg:!flex' : 'flex'"
 		:badges="topbarOptions.badges" />
-	<div class="flex-grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
+	<div class="grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
 		<div
 			v-if="!hide.left"
 			:class="wrap ? 'px-4' : 'hidden p-4 h-full w-full overflow-y-auto'"

@@ -6,7 +6,7 @@
 		<div class="w-full flex items-center group" :class="{ 'opacity-50': disabled }">
 			<slot name="outer-prefix" />
 			<div
-				class="flex-grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
+				class="grow w-full gap-2 flex items-center justify-between lg:text-sm mdlg:text-[12px] text-xs bg-transparent rounded-lg group-focus-within:!border-primaryBlue"
 				:class="{
 					'!border-red-500 !border': !validationStatus || error,
 					[`${borderColor} ${padding} ${customClass}`]: true,
@@ -19,7 +19,7 @@
 					:min="min"
 					:max="max"
 					:type="showPassword ? 'text' : type"
-					class="flex-grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs"
+					class="grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs"
 					@blur="checkValidation()" />
 				<slot name="inner-suffix" />
 				<SofaIcon

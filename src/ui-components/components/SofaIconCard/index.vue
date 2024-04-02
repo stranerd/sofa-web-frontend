@@ -1,7 +1,7 @@
 <template>
 	<div
 		:class="`w-[280px] mdlg:!w-full ${customClass} cursor-pointer  mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row justify-between items-center mdlg:!bg-lightGray bg-white shadow-custom mdlg:!shadow-none gap-3 rounded-custom`">
-		<div :class="`flex flex-row items-center gap-3 flex-grow  ${data.isDone ? 'opacity-50' : ''}`">
+		<div :class="`flex flex-row items-center gap-3 grow  ${data.isDone ? 'opacity-50' : ''}`">
 			<div>
 				<SofaIcon :customClass="data.iconSize" :name="data.icon" />
 			</div>

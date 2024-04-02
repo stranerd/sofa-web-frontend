@@ -51,7 +51,7 @@
 									color="text-deepGray"
 									:content="getItemTitle(curriculum[sectionIndex].items[itemIndex])"
 									class="truncate" />
-								<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="flex-shrink-0">
+								<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="shrink-0">
 									LIVE
 								</SofaBadge>
 							</div>

@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex flex-col flex-grow mdlg:gap-0 gap-4 relative overflow-y-auto scrollbar-none">
+	<div class="w-full flex flex-col grow mdlg:gap-0 gap-4 relative overflow-y-auto scrollbar-none">
 		<div class="flex flex-col gap-6 h-full overflow-y-auto px-4 mdlg:px-0">
 			<div class="w-full flex flex-col gap-4">
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('type')">
@@ -45,7 +45,7 @@
 
 		<div class="rounded-b-xl w-full p-4 mdlg:pb-0 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4 text-bodyBlack">
 			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('showCurrentlyEditing')">
-				<SofaIcon name="edit" class="h-[16px] stroke-grayColor" />
+				<SofaIcon name="edit" class="h-[16px] fill-grayColor" />
 				<SofaNormalText color="text-inherit" content="Currently editing" />
 				<div class="flex flex-row-reverse items-center ml-auto">
 					<template v-for="(user, index) in users[question.id] ?? []" :key="user.id">
@@ -60,7 +60,7 @@
 				:class="{ 'pointer-events-none !text-grayColor': !factory.valid || !factory.hasChanges }"
 				class="text-primaryGreen w-full flex mdlg:hidden items-center justify-start gap-3"
 				@click="emits('saveQuestion')">
-				<SofaIcon name="save" class="h-[16px] stroke-current" />
+				<SofaIcon name="save" class="h-[16px] fill-current" />
 				<SofaNormalText color="text-inherit" content="Save question" />
 			</a>
 			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('duplicateQuestion', question)">

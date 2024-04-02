@@ -8,7 +8,7 @@
 				v-if="!isMultiple"
 				:value="selectedOptions.at(0)?.value"
 				:placeholder="placeholder"
-				class="flex-grow bg-transparent placeholder:text-grayColor text-darkBody w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
+				class="grow bg-transparent placeholder:text-grayColor text-darkBody w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
 			<div v-else class="w-full flex whitespace-nowrap overflow-x-auto scrollbar-hide gap-2 text-darkBody">
 				<template v-if="Array.isArray(value) && value.length">
 					<template v-for="option in selectedOptions" :key="option">

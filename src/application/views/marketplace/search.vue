@@ -12,12 +12,12 @@
 		</template>
 
 		<template #middle-session>
-			<div class="w-full h-full flex flex-col flex-grow overflow-y-auto mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7">
+			<div class="w-full h-full flex flex-col grow overflow-y-auto mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7">
 				<div
 					class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-lightGray mdlg:rounded-custom flex flex-row gap-3 items-center mdlg:!justify-between justify-start">
 					<SofaIcon customClass="h-[15px] mdlg:!hidden pl-2" name="back-arrow" @click="Logic.Common.goBack()" />
 					<div
-						class="flex flex-row items-center flex-grow rounded-custom w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">
+						class="flex flex-row items-center grow rounded-custom w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">
 						<SofaIcon name="search-black" customClass="h-[17px] mdlg:hidden" />
 						<SofaTextField v-model="searchQuery" customClass="!border-none w-full mdlg:!pl-0" placeholder="Search for anything">
 						</SofaTextField>

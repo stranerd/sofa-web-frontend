@@ -132,7 +132,7 @@
 					<EditQuestionBody
 						v-if="extras.currentQuestionById"
 						:key="extras.currentQuestionById.id"
-						class="w-full flex flex-col bg-white px-4 mdlg:py-4 mdlg:shadow-custom mdlg:rounded-2xl gap-4 flex-grow h-full overflow-y-auto"
+						class="w-full flex flex-col bg-white px-4 mdlg:py-4 mdlg:shadow-custom mdlg:rounded-2xl gap-4 grow h-full overflow-y-auto"
 						:factory="extras.questionFactory" />
 
 					<!-- Question list for smaller screens -->

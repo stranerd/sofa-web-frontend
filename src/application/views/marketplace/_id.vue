@@ -16,7 +16,7 @@
 				<SofaIcon customClass="h-[15px] invisible" name="back-arrow" />
 			</div>
 		</div>
-		<div class="w-full bg-white rounded-[16px] flex flex-col flex-grow overflow-y-auto">
+		<div class="w-full bg-white rounded-[16px] flex flex-col grow overflow-y-auto">
 			<SofaContentDetails
 				:content="contentDetails"
 				customClass="!rounded-none"

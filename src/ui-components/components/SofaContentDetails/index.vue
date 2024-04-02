@@ -16,10 +16,7 @@
 						</div>
 					</SofaImageLoader>
 				</div>
-				<div
-					:class="`flex flex-col gap-2 flex-grow   ${
-						hasPadding ? 'mdlg:!w-[75%] mdlg:!pl-[25%]' : 'mdlg:!w-[67%] mdlg:!pl-[33%]'
-					}`">
+				<div :class="`flex flex-col gap-2 grow   ${hasPadding ? 'mdlg:!w-[75%] mdlg:!pl-[25%]' : 'mdlg:!w-[67%] mdlg:!pl-[33%]'}`">
 					<div class="w-full flex flex-row items-center justify-between">
 						<SofaHeaderText :content="content.title" />
 

@@ -6,7 +6,7 @@
 		:type="topbarOptions.type"
 		customClass="hidden mdlg:!flex" />
 	<div
-		:class="`h-full w-full overflow-y-auto mx-auto flex-grow relative mdlg:gap-5 flex flex-col items-center lg:text-sm mdlg:text-[12px] text-xs ${width} ${layoutStyle}`"
+		:class="`h-full w-full overflow-y-auto mx-auto grow relative mdlg:gap-5 flex flex-col items-center lg:text-sm mdlg:text-[12px] text-xs ${width} ${layoutStyle}`"
 		:style="bgImage ? `background-image: url(${bgImage})` : ''">
 		<slot />
 	</div>

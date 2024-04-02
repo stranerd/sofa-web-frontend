@@ -12,7 +12,7 @@
 
 				<NotificationIcon v-if="user" />
 			</div>
-			<div class="hidden gap-5 items-center justify-start flex-grow mdlg:flex">
+			<div class="hidden gap-5 items-center justify-start grow mdlg:flex">
 				<router-link class="py-2 pr-3 flex items-center gap-1" to="/dashboard">
 					<img src="/images/logo.svg" class="h-[32px]" />
 					<img src="/images/logo-text.svg" class="h-[16px]" />

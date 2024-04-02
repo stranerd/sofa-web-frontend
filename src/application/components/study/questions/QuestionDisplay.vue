@@ -27,7 +27,7 @@
 					'hover:bg-lightBlue hover:border-lightBlue': !isDark,
 				}"
 				@click="selectMultipleChoiceAnswer(index)">
-				<div class="flex-grow flex gap-3 items-center">
+				<div class="grow flex gap-3 items-center">
 					<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
 					<SofaHeaderText
 						:content="option"
@@ -48,7 +48,7 @@
 					'hover:bg-lightBlue hover:border-lightBlue': !isDark,
 				}"
 				@click="answer.value = option">
-				<div class="flex-grow flex gap-3 items-center">
+				<div class="grow flex gap-3 items-center">
 					<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
 					<SofaHeaderText
 						:content="option.toString()"
@@ -135,7 +135,7 @@
 								color="text-inherit"
 								class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex" />
 						</div>
-						<div class="p-3 rounded-xl border-2 flex-grow" :class="buildClass(element, index)">
+						<div class="p-3 rounded-xl border-2 grow" :class="buildClass(element, index)">
 							<SofaHeaderText
 								:content="element"
 								color="text-inherit"
@@ -155,7 +155,7 @@
 				:disabled="true">
 				<template #item="{ element, index }">
 					<div
-						class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-2 gap-3"
+						class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3"
 						:class="buildClass(answer.value[index], index)">
 						<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
 						<SofaHeaderText
@@ -169,7 +169,7 @@
 			<Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" itemKey="">
 				<template #item="{ element, index }">
 					<div
-						class="w-full flex items-center justify-between rounded-xl flex-grow p-3 border-2 gap-3 cursor-move"
+						class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3 cursor-move"
 						:class="buildClass(element, index)">
 						<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(element, index)" />
 						<SofaHeaderText

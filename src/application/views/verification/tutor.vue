@@ -5,7 +5,7 @@
 			<SofaNormalText class="!font-bold !text-base"> Become a tutor</SofaNormalText>
 			<span />
 		</div>
-		<div class="w-full flex flex-col flex-grow overflow-y-auto gap-5 mdlg:px-0 px-4 mdlg:py-4">
+		<div class="w-full flex flex-col grow overflow-y-auto gap-5 mdlg:px-0 px-4 mdlg:py-4">
 			<div class="w-full hidden items-center justify-between mdlg:flex">
 				<SofaHeaderText class="!text-2xl !font-bold"> Become a tutor </SofaHeaderText>
 				<SofaButton :disabled="buttonProps.disabled" padding="px-5 py-2" @click="buttonProps.handler">

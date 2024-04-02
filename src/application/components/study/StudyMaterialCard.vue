@@ -101,7 +101,7 @@
 					</div>
 				</div>
 
-				<div class="flex items-center gap-2 flex-grow justify-between w-full">
+				<div class="flex items-center gap-2 grow justify-between w-full">
 					<router-link class="gap-2 flex items-center" :to="`/profile/${activity.user.id}`">
 						<SofaAvatar size="20" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
 						<SofaNormalText class="whitespace-nowrap line-clamp-1">

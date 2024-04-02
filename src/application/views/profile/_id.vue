@@ -79,7 +79,7 @@
 				<div v-if="materials.length" class="w-full mdlg:px-0 px-4">
 					<div class="w-full px-4 py-1 bg-white rounded-custom flex gap-1 items-center justify-start">
 						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField v-model="searchQuery" customClass="!border-none w-full flex-grow" placeholder="Search" />
+						<SofaTextField v-model="searchQuery" customClass="!border-none w-full grow" placeholder="Search" />
 					</div>
 				</div>
 

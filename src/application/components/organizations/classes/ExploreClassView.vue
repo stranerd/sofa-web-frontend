@@ -11,7 +11,7 @@
 			<SofaNormalText class="!font-bold !text-base" :content="classInst.title" />
 			<span class="w-4" />
 		</div>
-		<div class="w-full mdlg:rounded-2xl flex flex-col flex-grow overflow-y-auto p-4 bg-white">
+		<div class="w-full mdlg:rounded-2xl flex flex-col grow overflow-y-auto p-4 bg-white">
 			<div
 				class="w-full flex mdlg:flex md:flex-row mdlg:flex-none flex-col mdlg:items-start h-auto items-start justify-start gap-3 mdlg:gap--3">
 				<div class="mdlg:!w-[33%] w-full">
@@ -20,7 +20,7 @@
 						:photoUrl="classInst.picture">
 					</SofaImageLoader>
 				</div>
-				<div class="w-full flex flex-col gap-2 flex-grow">
+				<div class="w-full flex flex-col gap-2 grow">
 					<div class="w-full flex flex-row items-center justify-between">
 						<SofaHeaderText :content="classInst.title" />
 						<SofaIcon name="share" class="h-[16px]" @click="shareClass" />
@@ -65,7 +65,7 @@
 					{{ tab.name }}
 				</SofaNormalText>
 			</div>
-			<div v-if="selectedTab == 'activity'" class="flex-grow overflow-y-auto">
+			<div v-if="selectedTab == 'activity'" class="grow overflow-y-auto">
 				<div v-if="classInst.lessons.length" class="flex w-full flex-col">
 					<SofaHeaderText content="Lessons" class="!text-xl" />
 					<div class="flex flex-col gap-4 mt-3">
@@ -84,7 +84,7 @@
 					<SofaNormalText color="text-grayColor" customClass="font-bold">No lessons created yet!</SofaNormalText>
 				</div>
 			</div>
-			<div v-if="selectedTab == 'similar_classes'" class="flex-grow overflow-y-auto">
+			<div v-if="selectedTab == 'similar_classes'" class="grow overflow-y-auto">
 				<div v-if="similarClasses.length === 0" class="flex flex-col gap-4 items-center py-10">
 					<img src="/images/empty-classes.png" class="w-[84px] h-[84px]" />
 					<SofaNormalText color="text-grayColor" customClass="font-bold">No classes found!</SofaNormalText>

@@ -75,7 +75,7 @@
 			</div>
 
 			<template v-if="currentContent == 'sections'">
-				<div class="w-full mdlg:!hidden flex-col h-full flex-grow bg-white py-2 px-4 md:!flex">
+				<div class="w-full mdlg:!hidden flex-col h-full grow bg-white py-2 px-4 md:!flex">
 					<SofaCourseSections
 						v-if="!Logic.Common.isLarge && SingleCourse"
 						v-model="selectedMaterial"
@@ -89,7 +89,7 @@
 			</template>
 
 			<div
-				class="w-full mdlg:!shadow-custom md:!py-5 md:!px-5 px-4 py-2 relative bg-white mdlg:!rounded-[16px] flex-grow flex flex-col gap-4">
+				class="w-full mdlg:!shadow-custom md:!py-5 md:!px-5 px-4 py-2 relative bg-white mdlg:!rounded-[16px] grow flex flex-col gap-4">
 				<template v-if="!selectedMaterial">
 					<div class="w-full mdlg:!flex flex-col hidden gap-4">
 						<div class="w-full flex flex-row items-center justify-center">
@@ -122,7 +122,7 @@
 				</template>
 
 				<template v-if="selectedMaterial?.type == 'document'">
-					<div class="w-full mdlg:!h-full flex-grow flex flex-col shrink-0 oveflow-y-auto">
+					<div class="w-full mdlg:!h-full grow flex flex-col shrink-0 oveflow-y-auto">
 						<SofaDocumentReader :key="selectedMaterial.details.id" :documentUrl="selectedMaterial.data.documentUrl" />
 					</div>
 				</template>

@@ -10,7 +10,7 @@
 			<slot />
 		</div>
 
-		<div :class="index ? 'grid' : 'hidden mdlg:grid'" class="flex-grow overflow-y-auto grid-cols-12 w-full gap-5 text-left">
+		<div :class="index ? 'grid' : 'hidden mdlg:grid'" class="grow overflow-y-auto grid-cols-12 w-full gap-5 text-left">
 			<div class="mdlg:col-span-3 mdlg:flex col-span-full flex-col relative mdlg:px-0 px-4">
 				<div class="flex flex-col gap-3 mdlg:p-4 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:shadow-custom">
 					<div
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 
-			<div class="col-span-full mdlg:col-span-9 flex-grow overflow-y-auto">
+			<div class="col-span-full mdlg:col-span-9 grow overflow-y-auto">
 				<slot />
 			</div>
 		</div>

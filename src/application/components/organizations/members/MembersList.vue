@@ -42,7 +42,7 @@
 					<SofaNormalText
 						color="text-inherit"
 						:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
-						class="truncate flex-grow" />
+						class="truncate grow" />
 					<template v-if="member.pending">
 						<SofaNormalText as="a" color="text-primaryRed" content="Decline" @click="acceptMember(member, false)" />
 						<div class="h-full bg-darkLightGray w-[1px]" />

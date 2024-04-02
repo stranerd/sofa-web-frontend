@@ -6,7 +6,7 @@
 		<PlayWrapper :id="$route.params.id as string" :type="type" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ play, extras }">
 				<div class="flex flex-col lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full h-full p-4 mdlg:p-6 gap-4">
-					<div class="flex flex-grow flex-col items-center text-bodyBlack" :class="{ '!text-white': isDark }">
+					<div class="flex grow flex-col items-center text-bodyBlack" :class="{ '!text-white': isDark }">
 						<template v-if="!play.isClosed || tab === 'leaderboard'">
 							<SofaHeaderText color="text-current" size="2xl" content="Scoreboard" />
 							<SofaNormalText
@@ -27,7 +27,7 @@
 							size="xl"
 							content="Your Result" />
 
-						<div class="flex flex-col gap-2 items-center flex-grow w-full">
+						<div class="flex flex-col gap-2 items-center grow w-full">
 							<template v-if="tab === 'leaderboard'">
 								<SofaNormalText color="text-current" class="mb-2">
 									{{ extras.scores.length }} {{ pluralize(extras.scores.length, 'participant', 'participants') }}
@@ -38,7 +38,7 @@
 									class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white text-deepGray"
 									:class="{ '!bg-lightBlue': score.user.id === extras.authId }">
 									<SofaAvatar :photoUrl="score.user.picture" :size="Logic.Common.isLarge ? '64' : '48'" />
-									<div class="flex-grow">
+									<div class="grow">
 										<SofaNormalText
 											color="text-current"
 											class="!font-semibold truncate"

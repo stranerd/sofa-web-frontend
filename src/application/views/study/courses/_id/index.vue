@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5">
 		<!-- Display for larger screens -->
-		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 flex-grow">
+		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 grow">
 			<div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
 				<div class="w-full shadow-custom bg-white rounded-[16px] h-full flex flex-col pb-4">
 					<div
@@ -37,7 +37,7 @@
 			</div>
 
 			<!-- Content for smaller screens -->
-			<div class="w-full flex flex-col gap-2 overflow-y-auto relative flex-grow">
+			<div class="w-full flex flex-col gap-2 overflow-y-auto relative grow">
 				<template v-if="!showCourseContent">
 					<div class="w-full flex flex-col gap-2 px-4 pb-3 items-start justify-start sticky top-0 left-0">
 						<SofaHeaderText customClass="!font-bold !text-xl !text-left">

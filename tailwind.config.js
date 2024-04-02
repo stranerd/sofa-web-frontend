@@ -4,6 +4,7 @@ export default {
 	theme: {
 		extend: {
 			colors: {
+				current: 'currentColor',
 				primaryPurple: '#3219AF',
 				primaryBlue: '#197DFA',
 				primaryOrange: '#FA9632',

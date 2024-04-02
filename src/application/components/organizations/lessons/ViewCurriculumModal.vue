@@ -12,15 +12,15 @@
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
-		<div v-if="curriculumItem" class="w-full flex flex-col flex-grow">
+		<div v-if="curriculumItem" class="w-full flex flex-col grow">
 			<ScheduleView
 				v-if="curriculumItem.type === ClassLessonable.schedule"
 				:classInst="classInst"
 				:schedule="curriculumItem.schedule"
-				class="flex-grow" />
+				class="grow" />
 			<div
 				v-if="curriculumItem.type === ClassLessonable.file && mediaUrl"
-				class="w-full rounded-custom flex-grow flex items-center justify-center bg-lightGray">
+				class="w-full rounded-custom grow flex items-center justify-center bg-lightGray">
 				<SofaDocumentReader v-if="curriculumItem.fileType === FileType.document" :documentUrl="mediaUrl" class="rounded-custom" />
 				<SofaImageLoader
 					v-if="curriculumItem.fileType === FileType.image"
@@ -35,7 +35,7 @@
 			<template v-if="curriculumItem.type === ClassLessonable.quiz">
 				<div
 					v-if="!quizPlayStarted"
-					class="w-full bg-primaryPurple flex-grow flex flex-col items-center justify-center gap-3 rounded-custom">
+					class="w-full bg-primaryPurple grow flex flex-col items-center justify-center gap-3 rounded-custom">
 					<SofaHeaderText color="text-white">
 						{{ curriculumItem.quizMode === PlayTypes.practice ? 'Practice questions' : 'Test yourself' }}
 					</SofaHeaderText>
@@ -60,7 +60,7 @@
 					v-else-if="play"
 					:playId="play.id"
 					:isInModal="true"
-					class="flex-grow bg-lightGray"
+					class="grow bg-lightGray"
 					:type="curriculumItem.quizMode"
 					:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }" />
 			</template>
