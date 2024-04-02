@@ -1,5 +1,6 @@
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
@@ -84,12 +85,13 @@ export const useCourse = (id: string, skip: { items?: boolean }) => {
 }
 
 export const useCreateCourse = () => {
+	const { auth } = useAuth()
 	const {
 		asyncFn: createCourse,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const factory = new CourseFactory()
+		const factory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 		const course = await CoursesUseCases.add(factory)
 		return await CoursesUseCases.updateSections(course.id, [
 			{ items: [], label: 'Introduction' },
@@ -101,9 +103,10 @@ export const useCreateCourse = () => {
 }
 
 export const useEditCourse = (id: string) => {
+	const { auth } = useAuth()
 	const router = useRouter()
 	const { course, fetched } = useCourse(id, {})
-	const courseFactory = new CourseFactory()
+	const courseFactory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 	const { setMessage } = useSuccessHandler()
 
 	watch(

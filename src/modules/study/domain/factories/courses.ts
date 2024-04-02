@@ -22,16 +22,17 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Keys
 		currency: v.in(Object.values(Currencies)),
 	}
 
-	constructor() {
+	constructor(isVerified: boolean) {
 		super({
 			title: 'Untitled Course',
 			description: 'Here is the course description',
 			photo: null,
 			topic: 'Physics',
 			tags: [],
-			amount: 0,
+			amount: isVerified ? 5000 : 0,
 			currency: Currencies.NGN,
 		})
+		if (isVerified) this.rules.amount.gte(5000, 'minimum amount is ₦5000')
 	}
 
 	get tagString() {

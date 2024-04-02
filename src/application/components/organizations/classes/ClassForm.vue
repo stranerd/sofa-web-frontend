@@ -40,7 +40,9 @@
 					borderColor="border-transparent">
 					<template #inner-suffix>
 						<div class="flex items-center gap-1 border-l-2 border-darkLightGray px-2 py-1">
-							<SofaNormalText customClass="font-bold text-deepGray !text-xl"> ₦ </SofaNormalText>
+							<SofaNormalText class="font-bold text-deepGray !text-xl">
+								{{ Logic.Common.getCurrency(factory.currency) }}
+							</SofaNormalText>
 						</div>
 					</template>
 				</SofaTextField>
@@ -65,6 +67,7 @@
 
 <script lang="ts" setup>
 import { ClassFactory } from '@modules/organizations'
+import { Logic } from 'sofa-logic'
 
 defineProps<{
 	factory: ClassFactory

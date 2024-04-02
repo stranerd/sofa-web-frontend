@@ -7,14 +7,18 @@
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
+		<SofaNormalText v-if="!auth?.roles.isVerified">
+			You need to <router-link class="text-primaryBlue" to="/verification">get verified</router-link> to be able to sell this course
+			on our marketplace
+		</SofaNormalText>
+
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
 				<SofaTextField
 					v-model="factory.title"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					name="Title"
-					placeholder="Title"
+					placeholder="Enter title"
 					borderColor="border-transparent"
 					:error="factory.errors.title" />
 
@@ -22,23 +26,39 @@
 					v-model="factory.description"
 					:rows="4"
 					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-					placeholder="Description"
+					placeholder="Enter description"
 					:error="factory.errors.description" />
 
 				<SofaSelect
 					v-model="factory.topic"
 					customClass="rounded-custom !bg-lightGray"
-					name="Topic"
 					placeholder="Topic"
 					borderColor="border-transparent"
 					:error="factory.errors.topic"
 					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
 					:canUseCustom="true" />
+
+				<SofaTextField
+					v-if="auth?.roles.isVerified"
+					v-model="factory.amount"
+					type="number"
+					customClass="rounded-custom !bg-lightGray"
+					placeholder="Enter price"
+					:error="factory.errors.amount"
+					borderColor="border-transparent">
+					<template #inner-suffix>
+						<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
+							<SofaNormalText class="font-bold text-deepGray !text-xl">
+								{{ Logic.Common.getCurrency(factory.currency) }}
+							</SofaNormalText>
+						</div>
+					</template>
+				</SofaTextField>
 			</div>
 
-			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
+			<div class="col-span-1 flex flex-col w-full pb-4 md:pb-0">
 				<SofaImageLoader
-					class="w-full md:!h-full h-[220px] rounded-custom relative"
+					class="w-full md:h-full h-[220px] rounded-custom relative"
 					:photoUrl="factory.photo?.link ?? '/images/default.svg'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 						<SofaFileInput v-model="factory.photo" accept="image/*">
@@ -100,15 +120,18 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { useEditCourse } from '@app/composables/study/courses'
 import { CourseEntity } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
 	course: CourseEntity
 }>()
 
+const { auth } = useAuth()
 const { course, courseFactory: factory, updateCourse, publishCourse } = useEditCourse(props.course.id)
 
 const { topics } = useTopicsList()
