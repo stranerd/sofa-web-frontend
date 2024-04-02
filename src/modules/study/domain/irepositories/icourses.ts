@@ -10,10 +10,10 @@ export interface ICourseRepository {
 	similar: (id: string) => Promise<CourseEntity[]>
 	update: (id: string, data: CourseToModel) => Promise<CourseEntity>
 	delete: (id: string) => Promise<void>
-	publish: (id: string) => Promise<CourseEntity | null>
-	freeze: (id: string) => Promise<CourseEntity | null>
-	move: (id: string, coursable: { coursableId: string; type: Coursable; add: boolean }) => Promise<CourseEntity | null>
-	updateSections: (id: string, sections: CourseSections) => Promise<CourseEntity | null>
+	publish: (id: string) => Promise<CourseEntity>
+	freeze: (id: string) => Promise<CourseEntity>
+	move: (id: string, coursable: { coursableId: string; type: Coursable; add: boolean }) => Promise<CourseEntity>
+	updateSections: (id: string, sections: CourseSections) => Promise<CourseEntity>
 	listenToOne: (id: string, listener: Listeners<CourseEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listener: Listeners<CourseEntity>, matches: (entity: CourseEntity) => boolean) => Promise<() => void>
 }

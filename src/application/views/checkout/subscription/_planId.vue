@@ -1,5 +1,5 @@
 <template>
-	<DashboardLayout :topbarOptions="{ title: 'Checkout' }">
+	<FullLayout :topbarOptions="{ title: 'Checkout' }">
 		<template #left-session>
 			<span />
 		</template>
@@ -7,6 +7,7 @@
 		<template #right-session>
 			<span />
 		</template>
+
 		<template #middle-session>
 			<div v-if="plan" class="flex flex-col mdlg:flex-row gap-6 px-4 mdlg:p-0">
 				<div class="flex flex-col gap-6 w-full mdlg:w-[70%]">
@@ -63,7 +64,7 @@
 				</div>
 			</div>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts">

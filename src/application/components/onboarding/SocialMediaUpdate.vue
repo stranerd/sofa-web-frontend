@@ -8,7 +8,7 @@
 		:error="item.error"
 		customClass="rounded-custom !bg-lightGray">
 		<template #inner-prefix>
-			<SofaIcon :name="socials[item.ref]" class="h-[20px]" />
+			<SofaIcon :name="socials[item.ref]" class="h-5 fill-deepGray" />
 		</template>
 		<template #inner-suffix>
 			<SofaIcon name="trash" class="h-[16px]" @click="deleteItem(index)" />
@@ -20,7 +20,7 @@
 			class="w-full flex items-center justify-between gap-3 p-3 rounded-custom border-2 border-darkLightGray"
 			@click="showAddNewItems = !showAddNewItems">
 			<div class="flex items-center gap-3">
-				<SofaIcon name="box-plus" class="h-[20px]" />
+				<SofaIcon name="box-add" class="h-[20px] fill-grayColor" />
 				<SofaNormalText color="text-grayColor" content="Add link" />
 			</div>
 

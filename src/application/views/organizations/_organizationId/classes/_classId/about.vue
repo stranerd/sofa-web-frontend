@@ -30,6 +30,5 @@
 
 <script lang="ts" setup>
 import { formatNumber } from 'valleyed'
-import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { formatTime } from '@utils/dates'
 </script>

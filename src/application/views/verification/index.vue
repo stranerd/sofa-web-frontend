@@ -1,5 +1,6 @@
 <template>
-	<DashboardLayout
+	<FullLayout
+		:wrap="true"
 		:topbarOptions="{
 			type: 'subpage',
 			title: 'Account verification',
@@ -12,36 +13,33 @@
 				{
 					IsOutlined: false,
 					name: 'Submit',
-					disabled: !profileFactory.valid || !socialsFactory.valid,
+					disabled: !profileFactory.valid || !socialsFactory.valid || !verificationFactory.valid,
 					handler: submit,
 				},
 			],
-		}"
-		:wrap="true">
+		}">
 		<template #left-session>
-			<div class="w-full shadow-custom px-4 py-4 bg-white rounded-[16px] flex flex-col gap-4">
+			<form class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4" @submit.prevent="submit">
 				<div class="w-full flex flex-col">
-					<SofaHeaderText customClass="!font-bold"> Personal information </SofaHeaderText>
+					<SofaHeaderText class="!font-bold"> Personal information </SofaHeaderText>
 					<SofaNormalText>Edit your profile</SofaNormalText>
 				</div>
 
-				<div class="w-full flex flex-col items-center justify-center pt-3">
-					<SofaImageLoader
-						customClass="w-[96px] h-[96px] flex flex-row items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-						:photoUrl="profileFactory.photo?.link">
-						<SofaIcon v-if="!profileFactory.photo" customClass="h-[50px]" name="user" />
-						<SofaFileInput
-							v-model="profileFactory.photo"
-							class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full h-[40px] w-[40px] flex items-center justify-center"
-							accept="image/*">
-							<SofaIcon class="h-[18px]" name="camera-white" />
-						</SofaFileInput>
-					</SofaImageLoader>
-				</div>
+				<SofaImageLoader
+					class="size-[96px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full mx-auto"
+					:photoUrl="profileFactory.photo?.link">
+					<SofaIcon v-if="!profileFactory.photo" class="h-[50px]" name="user" />
+					<SofaFileInput
+						v-model="profileFactory.photo"
+						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full size-[40px] flex items-center justify-center"
+						accept="image/*">
+						<SofaIcon class="h-[18px]" name="camera-white" />
+					</SofaFileInput>
+				</SofaImageLoader>
 
 				<SofaTextField
 					v-model="profileFactory.first"
-					placeholder="Enter name"
+					placeholder="Enter first name"
 					:hasTitle="true"
 					customClass="rounded-custom !bg-lightGray"
 					:error="profileFactory.errors.first">
@@ -50,7 +48,7 @@
 
 				<SofaTextField
 					v-model="profileFactory.last"
-					placeholder="Enter name"
+					placeholder="Enter last name"
 					:hasTitle="true"
 					customClass="rounded-custom !bg-lightGray"
 					:error="profileFactory.errors.last">
@@ -65,296 +63,116 @@
 					:error="profileFactory.errors.description">
 					<template #title>Bio</template>
 				</SofaTextarea>
-			</div>
+			</form>
 		</template>
 
 		<template #middle-session>
-			<div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col gap-4">
+			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex flex-col items-start">
-					<SofaHeaderText customClass="!font-bold flex flex-row justify-start"> Page content </SofaHeaderText>
-					<SofaNormalText>Add 3 study materials you’ve created </SofaNormalText>
+					<SofaHeaderText class="!font-bold"> Page content </SofaHeaderText>
+					<SofaNormalText>Add at least 1 course and 3 quizzes you’ve published. </SofaNormalText>
 				</div>
 
-				<div class="w-full flex flex-col gap-2">
-					<div class="w-full flex flex-col gap-4 md:!gap-4">
-						<StudyMaterialCard
-							v-for="content in selectedMaterialList"
-							:key="content.original.hash"
-							type="activity"
-							:material="content.original"
-							:isWrapped="!Logic.Common.isLarge"
-							:isRoute="false" />
+				<div class="w-full flex flex-col gap-4">
+					<StudyMaterialCard
+						v-for="material in [...content.courses, ...content.quizzes]"
+						:key="material.hash"
+						type="activity"
+						:material="material"
+						:isWrapped="!Logic.Common.isLarge"
+						:hasBookmark="false"
+						:isRoute="false">
+						<template #side-icons>
+							<SofaIcon
+								class="h-[20px]"
+								name="circle-close"
+								@click="verificationFactory[material.isCourse() ? 'removeCourse' : 'removeQuiz'](material.id)" />
+						</template>
+					</StudyMaterialCard>
 
-						<div class="w-full flex flex-col">
-							<SofaButton padding="p-4" @click="showAddMaterialHandler">
-								<SofaIcon name="box-add-white" customClass="h-[18px]"></SofaIcon>
-								Add Content
-							</SofaButton>
-						</div>
-					</div>
+					<SofaButton padding="p-4" @click="showAddNewHandler">
+						<SofaIcon name="box-add" class="h-[18px] fill-white" />
+						Add Content
+					</SofaButton>
 				</div>
 			</div>
-
-			<!-- Add material modal -->
-			<SofaModalOld v-if="showAddMaterial" :close="() => (showAddMaterial = false)" :canClose="false">
-				<div
-					class="mdlg:!w-[50%] lg:!w-[50%] mdlg:!h-full h-[95%] md:w-[70%] w-full flex flex-col justify-end md:!justify-start items-center relative">
-					<div
-						class="bg-white w-full flex flex-col lg:!px-6 gap-4 lg:!py-6 mdlg:!px-6 mdlg:!py-6 pt-0 pb-3 px-4 md:!rounded-[16px] rounded-t-[19px] items-center justify-center">
-						<div class="w-full text-center hidden md:!inline-block">
-							<SofaHeaderText customClass="!text-xl !font-bold ">Add a Material</SofaHeaderText>
-						</div>
-
-						<div class="w-full flex flex-row justify-between items-center sticky top-0 left-0 md:!hidden">
-							<SofaNormalText customClass="!font-bold !text-base"> Add a Material </SofaNormalText>
-							<SofaIcon customClass="h-[16px]" name="circle-close" @click="showAddMaterial = false" />
-						</div>
-
-						<div class="w-full flex flex-col gap-4">
-							<SofaSelect
-								:ref="addMaterialType"
-								v-model="selectedMaterial"
-								customClass="rounded-custom !bg-lightGray"
-								:name="capitalize(addMaterialType)"
-								placeholder="Select material"
-								:rules="[Logic.Form.RequiredRule]"
-								borderColor="border-transparent"
-								:options="allMaterials"
-								:hasTitle="true">
-								<template #title> Choose a material </template>
-							</SofaSelect>
-
-							<div class="w-full flex flex-row items-center justify-between z-[50] bg-white">
-								<SofaButton
-									padding="px-5 py-2"
-									bgColor="bg-white"
-									textColor="text-grayColor"
-									customClass="border border-gray-100 hidden mdlg:!inline-block"
-									@click.prevent="showAddMaterial = false">
-									Exit
-								</SofaButton>
-
-								<div class="mdlg:!w-auto w-full">
-									<SofaButton padding="px-5 py-2" customClass="mdlg:!w-auto w-full" @click="addMaterial()">
-										Add
-									</SofaButton>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</SofaModalOld>
 		</template>
 
 		<template #right-session>
-			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
-				<div class="w-full flex flex-col justify-start">
-					<SofaHeaderText customClass="!font-bold flex flex-row justify-start"> Add links (optional) </SofaHeaderText>
+			<form class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4" @submit.prevent="submit">
+				<div class="w-full flex flex-col">
+					<SofaHeaderText class="!font-bold"> Add links (optional) </SofaHeaderText>
 					<SofaNormalText>Your educational website and socials</SofaNormalText>
 				</div>
 
 				<SocialMediaUpdate :factory="socialsFactory" />
-			</div>
 
-			<!-- Smaller screen CTA -->
-			<div class="w-full flex flex-col md:hidden pt-4 pb-2 sticky bottom-0 left-0 items-center justify-center">
-				<SofaButton :disabled="!profileFactory.valid || !socialsFactory.valid" padding="py-3" class="w-full" @click="submit">
+				<SofaButton
+					:disabled="!profileFactory.valid || !socialsFactory.valid || !verificationFactory.valid"
+					padding="p-3"
+					class="mdlg:hidden w-full sticky bottom-0"
+					type="submit">
 					Submit
 				</SofaButton>
-			</div>
+			</form>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts">
-import { capitalize, defineComponent, onMounted, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
-import { ContentDetails, extractContent } from '@app/composables/marketplace'
-import { submitVerification, updateVerificationForm } from '@app/composables/profile'
+import { useModals } from '@app/composables/core/modals'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
-import { Conditions, Logic, SelectOption } from 'sofa-logic'
+import { useCreateVerification } from '@app/composables/users/verifications'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'VerificationIndexPage',
 	components: { SocialMediaUpdate },
 	routeConfig: {
-		fetchRules: [
-			{
-				domain: 'Users',
-				property: 'Verifications',
-				method: 'GetVerifications',
-				params: [
-					{
-						where: [
-							{
-								field: 'userId',
-								condition: Conditions.eq,
-								value: Logic.Common.AuthUser?.id,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-			},
-			{
-				domain: 'Study',
-				property: 'AllQuzzies',
-				method: 'GetQuizzes',
-				params: [
-					{
-						where: [
-							{
-								field: 'user.id',
-								value: Logic.Common.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: true,
-			},
-			{
-				domain: 'Study',
-				property: 'AllCourses',
-				method: 'GetCourses',
-				params: [
-					{
-						where: [
-							{
-								field: 'user.id',
-								value: Logic.Common.AuthUser?.id,
-								condition: Conditions.eq,
-							},
-						],
-					},
-				],
-				requireAuth: true,
-				ignoreProperty: true,
+		middlewares: [
+			'isAuthenticated',
+			async () => {
+				const { auth } = useAuth()
+				if (auth.value?.roles.isVerified) return '/dashboard'
 			},
 		],
 	},
 	setup() {
 		useMeta({
-			title: 'Verification application',
+			title: 'Become a verified creator',
 		})
 
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()
 		const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
+		const { factory: verificationFactory, content, createVerification } = useCreateVerification()
 
-		const AllQuzzies = ref(Logic.Study.AllQuzzies)
-		const AllCourses = ref(Logic.Study.AllCourses)
-
-		const showAddNewItems = ref(false)
-
-		const selectedMaterialList = ref<ContentDetails[]>([])
-
-		const allMaterialsContents = ref<ContentDetails[]>([])
-
-		const showAddMaterial = ref(false)
-		const addMaterialType = ref('course')
-		const allMaterials = ref<SelectOption[]>([])
-		const selectedMaterial = ref('')
-
-		const UserVerification = ref(Logic.Users.Verifications?.results[0])
-
-		const setDefaultValues = () => {
-			if (UserVerification.value) {
-				UserVerification.value.content.courses.forEach((courseId) => {
-					selectedMaterial.value = courseId
-					addMaterial()
-				})
-
-				UserVerification.value.content.quizzes.forEach((quizId) => {
-					selectedMaterial.value = quizId
-					addMaterial()
-				})
-			}
-		}
-
-		const setMaterialsOptions = () => {
-			allMaterials.value.length = 0
-
-			AllCourses.value?.results.forEach((course) => {
-				allMaterials.value.push({
-					key: course.id,
-					value: course.title,
-				})
+		const showAddNewHandler = () =>
+			useModals().users.choosePublishedStudyMaterial.open({
+				selected: { courses: verificationFactory.courses, quizzes: verificationFactory.quizzes },
+				onAdd: (materials) => {
+					verificationFactory.courses = materials.courses
+					verificationFactory.quizzes = materials.quizzes
+				},
 			})
-
-			AllQuzzies.value?.results.forEach((quiz) => {
-				allMaterials.value.push({
-					key: quiz.id,
-					value: quiz.title,
-				})
-			})
-		}
-		const quizContents = ref<ContentDetails[]>([])
-
-		const courseContents = ref<ContentDetails[]>([])
-
-		const setMaterials = () => {
-			allMaterialsContents.value.length = 0
-
-			AllQuzzies.value?.results.forEach((quiz) => {
-				allMaterialsContents.value.push(extractContent(quiz))
-			})
-
-			AllCourses.value?.results.forEach((course) => {
-				allMaterialsContents.value.push(extractContent(course))
-			})
-		}
-
-		const showAddMaterialHandler = () => {
-			setMaterialsOptions()
-			showAddMaterial.value = true
-		}
-
-		const addMaterial = () => {
-			if (selectedMaterial.value) {
-				const currentMaterial = allMaterialsContents.value.filter((item) => item.id == selectedMaterial.value)
-
-				if (selectedMaterialList.value.filter((item) => item.id == selectedMaterial.value).length == 0) {
-					selectedMaterialList.value.push(currentMaterial[0])
-
-					if (currentMaterial[0].type == 'quiz') updateVerificationForm.content.quizzes.push(currentMaterial[0].id)
-					if (currentMaterial[0].type == 'course') updateVerificationForm.content.courses.push(currentMaterial[0].id)
-				}
-			}
-			showAddMaterial.value = false
-		}
 
 		const submit = async () => {
-			await Promise.all([updateProfile(), updateSocials()]).then((res) => {
-				if (res.every(Boolean)) submitVerification()
-			})
+			const res = await Promise.all([updateProfile(), updateSocials()])
+			if (res.every(Boolean)) await createVerification()
 		}
-
-		onMounted(() => {
-			setMaterials()
-			setMaterialsOptions()
-			setDefaultValues()
-		})
 
 		return {
 			profileFactory,
 			submit,
 			socialsFactory,
-			quizContents,
-			courseContents,
-			updateVerificationForm,
-			selectedMaterialList,
-			showAddMaterial,
-			addMaterialType,
+			verificationFactory,
+			content,
 			Logic,
-			allMaterials,
-			selectedMaterial,
-			showAddNewItems,
-			addMaterial,
-			showAddMaterialHandler,
-			capitalize,
+			showAddNewHandler,
 		}
 	},
 })

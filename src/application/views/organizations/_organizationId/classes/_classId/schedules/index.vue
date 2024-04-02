@@ -39,7 +39,6 @@
 
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
-import ClassLayout from '@app/components/organizations/classes/ClassLayout.vue'
 import { useClassSchedules } from '@app/composables/organizations/schedules'
 
 const route = useRoute()

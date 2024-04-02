@@ -14,6 +14,10 @@ export class QuizEntity extends CoursableEntity<QuizFromModel> {
 		return `${window.location.origin}${this.pageLink}`
 	}
 
+	get accessShareLink() {
+		return `${window.location.origin}/study/quizzes/${this.id}/edit`
+	}
+
 	get noAccessPage() {
 		if (this.courseId) return `/marketplace/${this.courseId}?type=course`
 		return `/marketplace/${this.id}?type=quiz`

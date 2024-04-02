@@ -1,5 +1,7 @@
 import { CourseEntity } from '../entities/courses'
+import { CourseFactory } from '../factories/courses'
 import { ICourseRepository } from '../irepositories/icourses'
+import { CourseSections } from '../types'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class CoursesUseCase {
@@ -7,6 +9,22 @@ export class CoursesUseCase {
 
 	constructor(repository: () => ICourseRepository) {
 		this.repository = repository()
+	}
+
+	async add(factory: CourseFactory) {
+		return await this.repository.add(await factory.toModel())
+	}
+
+	async update(id: string, factory: CourseFactory) {
+		return await this.repository.update(id, await factory.toModel())
+	}
+
+	async publish(id: string) {
+		return await this.repository.publish(id)
+	}
+
+	async updateSections(id: string, sections: CourseSections) {
+		return await this.repository.updateSections(id, sections)
 	}
 
 	async delete(id: string) {

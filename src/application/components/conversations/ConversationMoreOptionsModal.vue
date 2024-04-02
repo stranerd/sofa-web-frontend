@@ -4,7 +4,7 @@
 			v-if="conversation.user.id === id"
 			to="/chats/new"
 			class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
-			<SofaIcon name="box-add-pink" class="h-[17px]" />
+			<SofaIcon name="box-add" class="h-[17px] fill-primaryPink" />
 			<SofaNormalText color="text-primaryPink" content="New chat" />
 		</router-link>
 

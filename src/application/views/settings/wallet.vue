@@ -45,14 +45,12 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import { useMeta } from 'vue-meta'
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SettingsWalletPage',
-	components: { SettingsLayout },
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

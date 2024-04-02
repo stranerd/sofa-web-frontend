@@ -1,8 +1,8 @@
 <template>
 	<SettingsLayout title="Contact Us">
 		<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
-			<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<SofaHeaderText size="xl" customClass="text-left" content="Contact details" />
+			<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
+				<SofaHeaderText size="xl" content="Contact details" />
 
 				<div class="w-full flex flex-row items-center gap-5 flex-wrap">
 					<a v-for="social in socials" :key="social.link" :href="social.link" target="_blank">
@@ -11,47 +11,35 @@
 				</div>
 			</div>
 
-			<div class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<SofaHeaderText size="xl" customClass="text-left" content="Give feedback" />
+			<form class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom" @submit.prevent="sendMessage">
+				<SofaHeaderText size="xl" content="Give feedback" />
 
 				<SofaTextarea
-					v-model="message"
-					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3"
+					v-model="factory.message"
+					textAreaStyle="rounded-custom !bg-lightGray"
 					placeholder="Let us know how we can help" />
 
-				<div class="w-full flex justify-end">
-					<SofaButton padding="px-7 py-2" class="w-auto ml-auto" @click="sendFeedback()"> Send </SofaButton>
-				</div>
-			</div>
+				<SofaButton padding="px-7 py-2" class="w-auto ml-auto" type="submit"> Send </SofaButton>
+			</form>
 		</div>
 	</SettingsLayout>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
+import { useMetaMessage } from '@app/composables/users/metaMessage'
 import { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } from '@utils/constants'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'ContactUsSettingPage',
-	components: { SettingsLayout },
 	routeConfig: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({
 			title: 'Contact Us',
 		})
 
-		const message = ref('')
-
-		const sendFeedback = () => {
-			if (message.value.length > 7) {
-				Logic.Users.SendFeedbackMessage(message.value).then(() => {
-					message.value = ''
-				})
-			}
-		}
+		const { sendMessage, factory } = useMetaMessage()
 
 		const socials = [
 			{
@@ -80,14 +68,9 @@ export default defineComponent({
 			},
 		] as const
 
-		onMounted(() => {
-			if (Logic.Common.route.query?.query?.toString()) {
-				message.value = Logic.Common.route.query?.query?.toString()
-			}
-		})
 		return {
-			message,
-			sendFeedback,
+			factory,
+			sendMessage,
 			socials,
 		}
 	},

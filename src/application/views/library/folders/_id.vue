@@ -29,7 +29,6 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { openMaterial } from '@app/composables/library'
 import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
@@ -38,7 +37,6 @@ import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryFoldersIdPage',
-	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

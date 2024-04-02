@@ -147,7 +147,6 @@
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlansList, useSubscription } from '@app/composables/payment/plans'
 import { formatTime } from '@utils/dates'
@@ -156,7 +155,6 @@ import { PlanEntity } from '@modules/payment'
 
 export default defineComponent({
 	name: 'SubscriptionSettingPage',
-	components: { SettingsLayout },
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

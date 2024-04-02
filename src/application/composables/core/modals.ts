@@ -28,10 +28,13 @@ import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import EditQuiz from '@app/components/study/quizzes/EditQuizModal.vue'
+import EditCourse from '@app/components/study/courses/EditCourseModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
+import ChoosePublishedStudyMaterial from '@app/components/users/verifications/ChoosePublishedStudyMaterialModal.vue'
+import NotificationsList from '@app/components/notifications/notifications/NotificationsListModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -69,6 +72,7 @@ export const useModals = () => ({
 		createFile: { component: CreateFile },
 		selectQuiz: { component: SelectQuiz },
 		editQuiz: { component: EditQuiz },
+		editCourse: { component: EditCourse },
 	}),
 	users: modal.register('Users', {
 		customizeAi: { component: CustomizeAi },
@@ -80,11 +84,15 @@ export const useModals = () => ({
 			component: HomeMobileMenu,
 			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-full !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
 		},
+		choosePublishedStudyMaterial: { component: ChoosePublishedStudyMaterial },
 	}),
 	payment: modal.register('Payment', {
 		transactionDetails: { component: TransactionDetails },
 		fundWallet: { component: FundWallet },
 		withdraw: { component: Withdraw },
 		selectPaymentMethod: { component: SelectPaymentMethod },
+	}),
+	notifications: modal.register('Notifications', {
+		notificationList: { component: NotificationsList, modalArgs: { closeOnClickOutside: true } },
 	}),
 })

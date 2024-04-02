@@ -1,10 +1,10 @@
-import { Route } from 'vue-router'
+import { RouteLocationNormalized } from 'vue-router'
 import { Middleware } from '@app/middlewares'
 import { FetchRule } from 'sofa-logic'
 
 declare global {
 	type RouteConfig = Partial<{
-		goBackRoute: string | ((route: Route) => string)
+		goBackRoute: string | ((route: RouteLocationNormalized) => string)
 		middlewares: Middleware[]
 		fetchRules: FetchRule[]
 	}>

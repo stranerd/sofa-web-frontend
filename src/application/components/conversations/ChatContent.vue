@@ -4,7 +4,7 @@
 			<div class="flex items-center gap-3 flex-1">
 				<SofaIcon class="mdlg:hidden" customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 				<SofaAvatar :photoUrl="data.photoUrl" :size="Logic.Common.isLarge ? '40' : '34'" />
-				<div class="flex flex-col w-full">
+				<div class="flex flex-col">
 					<SofaCustomInput
 						v-if="canEditTitle && editTitle"
 						v-model="title"
@@ -14,7 +14,7 @@
 						@onBlur="editTitle = false"></SofaCustomInput>
 					<SofaNormalText
 						v-else
-						class="!font-bold w-full !text-sm mdlg:!text-base line-clamp-1"
+						class="!font-bold w-full !text-sm mdlg:!text-base !line-clamp-1"
 						:content="data.title"
 						@click="editTitle = canEditTitle ?? false" />
 					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />

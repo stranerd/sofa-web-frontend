@@ -37,13 +37,13 @@ const studyMaterialItems = [
 		title: 'Create a quiz',
 		subTitle: 'Build a customized quiz with different question types and study modes',
 		icon: 'pink-question' as const,
-		route: '/quizzes/create',
+		route: '/study/quizzes/create',
 	},
 	{
 		title: 'Create a course',
 		subTitle: 'Develop and publish a series of educational material on a particular subject',
 		icon: 'orange-list' as const,
-		route: '/course/create',
+		route: '/study/courses/create',
 	},
 ]
 </script>

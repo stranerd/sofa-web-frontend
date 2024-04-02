@@ -29,14 +29,12 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import LibraryLayout from '@app/components/study/LibraryLayout.vue'
 import { openMaterial } from '@app/composables/library'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryOrganizationsIdPage',
-	components: { LibraryLayout },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		const route = useRoute()

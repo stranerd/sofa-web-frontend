@@ -109,7 +109,6 @@ import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute, useRouter } from 'vue-router'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
-import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import ConversationMessages from '@app/components/conversations/Messages.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
@@ -120,7 +119,7 @@ import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'ChatsIdPage',
-	components: { ChatLayout, ChatContent, ConversationMessages },
+	components: { ChatContent, ConversationMessages },
 	routeConfig: { goBackRoute: '/chats', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

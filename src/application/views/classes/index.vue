@@ -1,5 +1,5 @@
 <template>
-	<DashboardLayout :topbarOptions="{ title: 'Classes' }">
+	<FullLayout :topbarOptions="{ title: 'Classes' }">
 		<template #left-session>
 			<span />
 		</template>
@@ -56,7 +56,7 @@
 				</div>
 			</template>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts">

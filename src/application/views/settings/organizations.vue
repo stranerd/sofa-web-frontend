@@ -22,12 +22,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import SettingsLayout from '@app/components/settings/SettingsLayout.vue'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 
 export default defineComponent({
 	name: 'SettingsOrganizationsPage',
-	components: { SettingsLayout },
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Organizations' })

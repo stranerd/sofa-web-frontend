@@ -1,15 +1,3 @@
-export interface CreateCourseInput {
-	title: string
-	description: string
-	photo?: File
-	topic: string
-	tags: string[]
-	price: {
-		amount: number
-		currency: string
-	}
-}
-
 export interface AddItemToCourseInput {
 	type: string
 	coursableId: string

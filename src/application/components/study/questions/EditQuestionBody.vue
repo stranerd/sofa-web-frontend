@@ -60,10 +60,7 @@
 					v-for="(_, index) in factory.multipleOptions"
 					:key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon
-						:name="Logic.Study.getShape(index)"
-						:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-						class="hidden md:inline self-start" />
+					<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 					<SofaTextarea
 						v-model="factory.multipleOptions[index]"
 						:rows="1"
@@ -87,10 +84,7 @@
 					v-for="(option, index) in [true, false]"
 					:key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon
-						:name="Logic.Study.getShape(index)"
-						:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-						class="hidden md:inline self-start" />
+					<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 					<SofaNormalText color="text-inherit" class="flex-1 capitalize" :content="option.toString()" />
 					<SofaIcon
 						:name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'"
@@ -103,10 +97,7 @@
 					v-for="(_, index) in factory.writeAnswerAnswers"
 					:key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon
-						:name="Logic.Study.getShape(index)"
-						:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-						class="hidden md:inline self-start" />
+					<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 					<SofaTextarea
 						v-model="factory.writeAnswerAnswers[index]"
 						:rows="index === 0 ? 3 : 1"
@@ -124,10 +115,7 @@
 			<template v-if="factory.isMatch">
 				<div v-for="(_, index) in factory.matchSet" :key="index" class="flex items-center gap-4 group">
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon
-							:name="Logic.Study.getShape(index)"
-							:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-							class="hidden md:inline self-start" />
+						<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 						<SofaTextarea
 							v-model="factory.matchSet[index].q"
 							:rows="1"
@@ -137,10 +125,7 @@
 							:placeholder="`Enter word/sentence ${index + 1}`" />
 					</div>
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon
-							:name="Logic.Study.getShape(index)"
-							:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-							class="hidden md:inline self-start" />
+						<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 						<SofaTextarea
 							v-model="factory.matchSet[index].a"
 							:rows="1"
@@ -159,10 +144,7 @@
 			<Draggable v-if="factory.isSequence" :list="factory.sequenceAnswers" class="w-full flex flex-col gap-4" itemKey="">
 				<template #item="{ index }">
 					<div class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon
-							:name="Logic.Study.getShape(index)"
-							:class="Logic.Study.getShapeSize(Logic.Study.getShape(index))"
-							class="hidden md:inline self-start" />
+						<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] md:h-[23px] self-start" />
 						<SofaTextarea
 							v-model="factory.sequenceAnswers[index]"
 							:rows="1"
@@ -181,7 +163,7 @@
 		</div>
 
 		<a v-if="factory.canAddOption" class="self-end flex justify-end gap-2 items-center" @click="factory.addOption">
-			<SofaIcon name="box-plus" class="h-[24px]" />
+			<SofaIcon name="box-add" class="h-[24px] fill-current" />
 			<SofaNormalText color="text-inherit" content="Add option" />
 		</a>
 

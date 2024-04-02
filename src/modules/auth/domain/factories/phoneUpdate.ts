@@ -27,7 +27,7 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 	}
 }
 
-const isValidPhone = (error?: string) =>
+export const isValidPhone = (error?: string) =>
 	makeRule<Phone>((value) =>
 		v
 			.object({

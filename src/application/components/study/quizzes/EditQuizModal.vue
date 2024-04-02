@@ -1,10 +1,10 @@
 <template>
 	<form class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6 text-grayColor" @submit.prevent="updateQuiz">
-		<SofaHeaderText customClass="text-xl hidden mdlg:flex">Update Quiz</SofaHeaderText>
+		<SofaHeaderText class="text-xl hidden mdlg:flex">Update Quiz</SofaHeaderText>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden">
-			<SofaNormalText customClass="!font-bold !text-base">Update Quiz</SofaNormalText>
-			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
+			<SofaNormalText class="!font-bold !text-base">Update Quiz</SofaNormalText>
+			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
@@ -38,7 +38,7 @@
 
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
 				<SofaImageLoader
-					customClass="w-full md:!h-full h-[220px] rounded-custom relative"
+					class="w-full md:!h-full h-[220px] rounded-custom relative"
 					:photoUrl="factory.photo?.link ?? '/images/default.svg'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 						<SofaFileInput v-model="factory.photo" accept="image/*">
@@ -86,7 +86,7 @@
 				padding="px-5 py-2"
 				bgColor="bg-white"
 				textColor="text-grayColor"
-				customClass="border border-gray-100 hidden mdlg:inline-block"
+				class="border border-gray-100 hidden mdlg:inline-block"
 				@click.prevent="close">
 				Exit
 			</SofaButton>
@@ -114,14 +114,14 @@ import { watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { useEditQuiz } from '@app/composables/study/quizzes'
-import { QuizModes } from '@modules/study'
+import { QuizEntity, QuizModes } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	id: string
+	quiz: QuizEntity
 }>()
 
-const { quiz, quizFactory: factory, updateQuiz, publishQuiz } = useEditQuiz(props.id)
+const { quiz, quizFactory: factory, updateQuiz, publishQuiz } = useEditQuiz(props.quiz.id)
 
 const { isAdmin } = useAuth()
 

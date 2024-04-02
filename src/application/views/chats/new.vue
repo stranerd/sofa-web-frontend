@@ -39,7 +39,6 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
-import ChatLayout from '@app/components/conversations/ChatLayout.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCreateConversation } from '@app/composables/conversations/conversations'
 
@@ -51,7 +50,7 @@ export const content = {
 
 export default defineComponent({
 	name: 'ChatsNewPage',
-	components: { ChatLayout, ChatContent },
+	components: { ChatContent },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

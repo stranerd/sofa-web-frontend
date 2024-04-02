@@ -85,11 +85,11 @@
 					</template>
 					<template #footer>
 						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
-							<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryBlue" />
+							<SofaIcon name="box-add" class="h-[16px] fill-primaryBlue" />
 							<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
 						</a>
 						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
-							<SofaIcon name="box-add-white" class="h-[16px] !fill-primaryPink" />
+							<SofaIcon name="box-add" class="h-[16px] fill-primaryPink" />
 							<SofaNormalText color="text-primaryPink" content="Add study material" />
 						</a>
 					</template>

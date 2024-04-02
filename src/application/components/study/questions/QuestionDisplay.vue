@@ -244,7 +244,7 @@ const buildIconClass = (...args: Parameters<(typeof props)['optionState']>) => (
 	'!stroke-primaryRed': props.optionState(...args) === 'wrong',
 	'!stroke-lightBlue': props.optionState(...args) === 'selected' && !props.isDark,
 	'!stroke-white': props.optionState(...args) === 'selected' && props.isDark,
-	[Logic.Study.getShapeSize(Logic.Study.getShape(args[1] ?? 0))]: true,
+	'h-[20px] md:h-[23px]': true,
 })
 </script>
 
