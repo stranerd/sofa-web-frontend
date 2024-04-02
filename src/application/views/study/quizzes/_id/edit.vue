@@ -1,7 +1,7 @@
 <template>
 	<EditQuizWrapper :id="$route.params.id as string" :selectedQuestion="$route.query.q as string">
 		<template #default="{ quiz, extras, members }">
-			<DashboardLayout
+			<FullLayout
 				v-if="extras.canEdit"
 				:hide="{ bottom: true, top: true }"
 				bgColor="mdlg:bg-lightGray bg-white"
@@ -148,7 +148,7 @@
 						@deleteQuestion="(id) => extras.deleteQuestion(id)"
 						@reorderQuestions="(ids) => extras.reorderQuestions(ids)" />
 				</template>
-			</DashboardLayout>
+			</FullLayout>
 
 			<SofaModal v-else-if="quiz">
 				<RequestAccess :quiz="quiz" :requestAccess="extras.requestAccess" />

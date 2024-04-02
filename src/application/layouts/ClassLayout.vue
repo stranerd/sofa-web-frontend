@@ -21,7 +21,7 @@
 			<slot :classInst="classInst" :user="user" />
 		</div>
 	</ExpandedLayout>
-	<DashboardLayout v-else :topbarOptions="{ title: pageTitle }">
+	<FullLayout v-else :topbarOptions="{ title: pageTitle }">
 		<template #left-session>
 			<div v-if="classInst" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div class="w-full flex flex-col gap-5">
@@ -56,7 +56,7 @@
 		<template #right-session>
 			<SidebarScheduleList :classInst="classInst" />
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script setup lang="ts">

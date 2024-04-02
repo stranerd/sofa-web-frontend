@@ -10,7 +10,7 @@
 			<slot :user="user!" />
 		</div>
 	</ExpandedLayout>
-	<DashboardLayout v-else :topbarOptions="{ title }">
+	<FullLayout v-else :topbarOptions="{ title }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
@@ -155,7 +155,7 @@
 				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
 			</div>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script setup lang="ts">

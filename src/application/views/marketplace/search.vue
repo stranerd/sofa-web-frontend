@@ -1,5 +1,5 @@
 <template>
-	<DashboardLayout :hide="{ top: true, right: true }">
+	<FullLayout :hide="{ top: true, right: true }">
 		<template #left-session>
 			<div class="w-full shadow-custom pb-6 bg-white rounded-custom relative flex flex-col h-full gap-6 overflow-y-auto">
 				<div class="w-full flex items-center p-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b border-lightGray">
@@ -140,7 +140,7 @@
 				</div>
 			</SofaModalOld>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts">

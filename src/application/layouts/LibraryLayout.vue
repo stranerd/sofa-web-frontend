@@ -25,7 +25,7 @@
 			<slot />
 		</div>
 	</ExpandedLayout>
-	<DashboardLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
+	<FullLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-[16px] flex flex-col py-4 px-3 gap-1">
 				<router-link
@@ -169,7 +169,7 @@
 				</div>
 			</div>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script setup lang="ts">

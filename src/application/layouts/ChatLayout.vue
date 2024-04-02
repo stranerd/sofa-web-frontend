@@ -2,7 +2,7 @@
 	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
 		<slot />
 	</ExpandedLayout>
-	<DashboardLayout v-else :noBottomPadding="true">
+	<FullLayout v-else :noBottomPadding="true">
 		<template #left-session>
 			<div
 				class="w-full shadow-custom px-4 pb-4 bg-white relative rounded-2xl gap-1 overflow-y-auto scrollbar-thumb-gray-300 scrollbar-track-gray-100 mdlg:scrollbar-thin flex flex-col">
@@ -57,7 +57,7 @@
 		<template #middle-session>
 			<slot />
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts" setup>

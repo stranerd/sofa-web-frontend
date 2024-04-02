@@ -1,5 +1,5 @@
 <template>
-	<DashboardLayout
+	<FullLayout
 		v-if="SingleCourse"
 		:topbarOptions="{
 			type: 'subpage',
@@ -217,7 +217,7 @@
 				</template>
 			</div>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-	<DashboardLayout
+	<FullLayout
 		:wrap="true"
 		:topbarOptions="{
 			type: 'subpage',
@@ -116,7 +116,7 @@
 				</SofaButton>
 			</form>
 		</template>
-	</DashboardLayout>
+	</FullLayout>
 </template>
 
 <script lang="ts">
