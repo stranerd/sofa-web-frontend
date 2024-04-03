@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col w-full relative group" :tabIndex="-1">
+	<div ref="selectRef" class="flex flex-col w-full relative group" :tabIndex="-1">
 		<SofaNormalText v-if="hasTitle" customClass="">
 			<slot name="title" />
 		</SofaNormalText>
@@ -24,7 +24,9 @@
 		</div>
 		<dialog
 			v-if="showOptions"
-			class="group-focus-within:flex hidden fixed w-full flex-col z-[100] max-h-[500px] bg-white overflow-y-auto rounded-md p-3 shadow-md">
+			open
+			class="group-focus-within:flex hidden fixed w-full flex-col z-[1000] max-h-[500px] bg-white overflow-y-auto rounded-md p-3 shadow-md"
+			:style="selectRef ? `width: ${selectRef.offsetWidth}px; margin-top: ${selectRef.offsetHeight}px` : ''">
 			<div v-if="autoComplete" class="w-full py-2 gap-3 flex items-center justify-between">
 				<SofaTextField v-model="searchValue" placeholder="Search" customClass="w-full !bg-lightGray !placeholder:text-grayColor" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
@@ -42,7 +44,7 @@
 </template>
 
 <script lang="ts" setup generic="T">
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
@@ -74,6 +76,7 @@ const props = withDefaults(
 	},
 )
 
+const selectRef = ref<HTMLElement>()
 const showOptions = ref(false)
 const searchValue = ref('')
 

@@ -33,7 +33,7 @@
 					type="submit"
 					textColor="text-white"
 					padding="py-3 px-6"
-					:disabled="!factory.isValid"
+					:disabled="!factory.valid"
 					customClass="w-full mdlg:w-auto">
 					Save
 				</SofaButton>
