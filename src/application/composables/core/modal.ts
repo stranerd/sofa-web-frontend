@@ -3,7 +3,7 @@ import { Component, Ref, computed, ref } from 'vue'
 type Comp = Component & (abstract new (...args: any) => any)
 type Args = Record<string, any>
 type ModalArgs = { closeOnClickOutside?: boolean; popover?: boolean } & Record<string, any>
-type ModalsDef<K extends string = string, C = Comp> = Record<K, { component: C; args?: Args; modalArgs?: ModalArgs; event?: Event }>
+type ModalsDef<K extends string = string, C = Comp> = Record<K, { component: C; args?: Args; modalArgs?: ModalArgs; event?: PointerEvent }>
 
 const merge = (...args: string[]) => args.join('-')
 
@@ -17,7 +17,7 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 		stack.value = stack.value.filter((comp) => comp !== id)
 	}
 
-	const open = (id: string, args: Args, event?: Event) => {
+	const open = (id: string, args: Args, event?: PointerEvent) => {
 		if (Object.keys(modals).includes(id) && !stack.value.includes(id)) {
 			stack.value.push(id)
 			modals[id].args = args
@@ -43,7 +43,7 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 			keys.map((key) => [
 				key,
 				{
-					open: (args: Args, event?: Event) => open(merge(type, key), args, event),
+					open: (args: Args, event?: PointerEvent) => open(merge(type, key), args, event),
 					close: () => close(merge(type, key)),
 				},
 			]),
