@@ -146,9 +146,11 @@ const shareClass = () => {
 	Logic.Common.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
 }
 const purchase = runInAuth(() => {
+	const canAccessFree = user.value ? props.classInst.canAccessForFree(user.value) : false
 	useModals().payment.selectPaymentMethod.open({
 		price: props.classInst.price,
 		onSelect: () => purchaseClass(props.classInst, null),
+		autoSelect: canAccessFree,
 	})
 })
 const enrollInClassProps = computed(() => {

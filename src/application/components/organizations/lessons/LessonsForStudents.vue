@@ -15,10 +15,7 @@
 				<div class="h-[1px] w-full bg-lightGray" />
 				<div class="w-full flex flex-col items-center gap-6 mt-6">
 					<LessonCard v-for="lesson in classInst.lessons" :key="lesson.id" :lesson="lesson" :classInst="classInst" />
-					<div class="w-full flex items-center justify-between">
-						<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block">
-							Clear
-						</SofaButton>
+					<div class="w-full flex items-center justify-end">
 						<SofaButton
 							bgColor="bg-primaryBlue"
 							type="submit"
