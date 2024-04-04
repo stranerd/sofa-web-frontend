@@ -149,7 +149,7 @@ const purchase = runInAuth(() => {
 	const canAccessFree = user.value ? props.classInst.canAccessForFree(user.value) : false
 	useModals().payment.selectPaymentMethod.open({
 		price: props.classInst.price,
-		onSelect: () => purchaseClass(props.classInst, null),
+		onSelect: (method) => purchaseClass(props.classInst, method),
 		autoSelect: canAccessFree,
 	})
 })
