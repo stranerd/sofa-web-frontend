@@ -45,11 +45,13 @@ export class ScheduleRepository implements IScheduleRepository {
 	}
 
 	async start(id: string) {
-		return await this.client.post<unknown, ScheduleEntity>(`/${id}/start`, {})
+		const d = await this.client.post<unknown, ScheduleFromModel>(`/${id}/start`, {})
+		return this.mapper(d)
 	}
 
 	async end(id: string) {
-		return await this.client.post<unknown, ScheduleEntity>(`/${id}/end`, {})
+		const d = await this.client.post<unknown, ScheduleFromModel>(`/${id}/end`, {})
+		return this.mapper(d)
 	}
 
 	async listenToOne(id: string, listeners: Listeners<ScheduleEntity>) {
