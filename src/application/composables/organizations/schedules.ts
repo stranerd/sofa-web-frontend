@@ -164,12 +164,12 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 		if (s.stream) await Logic.Common.copy(s.stream.streamKey)
 	})
 
-	const { asyncFn: join } = useAsyncFn(async () => {
-		await window.open(schedule.meetingLink, '_blank')
+	const { asyncFn: join } = useAsyncFn(async (s = schedule) => {
+		await window.open(s.meetingLink, '_blank')
 	})
 
-	const { asyncFn: rewatch } = useAsyncFn(async () => {
-		await window.open(schedule.recordingLink, '_blank')
+	const { asyncFn: rewatch } = useAsyncFn(async (s = schedule) => {
+		await window.open(s.recordingLink, '_blank')
 	})
 
 	const { asyncFn: start } = useAsyncFn(
@@ -181,7 +181,7 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 			})
 			if (!updated.stream) return false
 			await copyKey(updated)
-			await join()
+			await join(updated)
 			return true
 		},
 		{
