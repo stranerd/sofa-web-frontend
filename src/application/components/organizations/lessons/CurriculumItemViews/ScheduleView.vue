@@ -47,12 +47,12 @@ const { id } = useAuth()
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
 const buttons = computed(() => {
 	const b: { label: string; bgColor?: string; handler: () => void }[] = []
-	if (props.schedule.canStart(props.classInst, id.value)) b.push({ label: 'Start', handler: start })
-	if (props.schedule.canJoin(props.classInst, id.value)) b.push({ label: 'Enter', handler: join })
+	if (props.schedule.canStart(props.classInst, id.value)) b.push({ label: 'Start', handler: () => start() })
+	if (props.schedule.canJoin(props.classInst, id.value)) b.push({ label: 'Enter', handler: () => join() })
 	if (lesson.value?.users.teachers.includes(id.value) && props.schedule.canJoin(props.classInst, id.value))
-		b.push({ label: 'Copy stream key', handler: copyKey })
-	if (props.schedule.canEnd(props.classInst, id.value)) b.push({ label: 'End', handler: end })
-	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', handler: rewatch })
+		b.push({ label: 'Copy stream key', handler: () => copyKey() })
+	if (props.schedule.canEnd(props.classInst, id.value)) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: () => end() })
+	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', handler: () => rewatch() })
 	return b
 })
 </script>
