@@ -15,4 +15,5 @@ export interface QuizToModel extends Omit<CoursableData, 'ratings' | 'topicId' |
 	tags: string[]
 	isForTutors: boolean
 	modes: Record<QuizModes, boolean>
+	timeLimit: number | null
 }
