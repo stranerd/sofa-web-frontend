@@ -32,7 +32,7 @@
     "mathlive": "^0.98.6",
     "socket.io-client": "^4.7.5",
     "string-similarity": "^4.0.4",
-    "valleyed": "^4.2.9",
+    "valleyed": "^4.2.11",
     "video.js": "^8.10.0",
     "vue": "^3.4.21",
     "vue-inline-svg": "^3.1.2",

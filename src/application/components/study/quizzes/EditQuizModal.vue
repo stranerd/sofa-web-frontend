@@ -13,7 +13,6 @@
 					v-model="factory.title"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					name="Title"
 					placeholder="Title"
 					borderColor="border-transparent"
 					:error="factory.errors.title" />
@@ -28,7 +27,6 @@
 				<SofaSelect
 					v-model="factory.topic"
 					customClass="rounded-custom !bg-lightGray"
-					name="Topic"
 					placeholder="Topic"
 					borderColor="border-transparent"
 					:error="factory.errors.topic"
@@ -50,6 +48,30 @@
 					</div>
 				</SofaImageLoader>
 			</div>
+		</div>
+
+		<div class="w-full flex flex-col gap-2">
+			<SofaCheckbox
+				:modelValue="factory.timeLimit === null"
+				type="switch"
+				@update:modelValue="(selected) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
+				<SofaNormalText content="Use individual question times" class="capitalize" />
+			</SofaCheckbox>
+			<SofaTextField
+				v-if="factory.timeLimit !== null"
+				v-model="factory.timeLimit"
+				type="number"
+				:min="1"
+				customClass="rounded-custom !bg-lightGray"
+				placeholder="Enter time limit"
+				:error="factory.errors.timeLimit"
+				borderColor="border-transparent">
+				<template #inner-suffix>
+					<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
+						<SofaNormalText content="s" />
+					</div>
+				</template>
+			</SofaTextField>
 		</div>
 
 		<div class="w-full flex flex-col gap-2">
