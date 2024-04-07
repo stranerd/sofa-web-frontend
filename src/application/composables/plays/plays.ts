@@ -79,7 +79,6 @@ const singleStore = {} as Record<
 		play: Ref<PlayEntity | null>
 		questions: QuestionEntity[]
 		answers: Ref<AnswerEntity[]>
-		myAnswer: Ref<AnswerEntity | null>
 		listener: ReturnType<typeof useListener>
 	}
 >
@@ -93,7 +92,6 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		play: ref(null),
 		questions: reactive([]),
 		answers: ref([]),
-		myAnswer: ref(null),
 		listener: useListener(
 			async () =>
 				await PlaysUseCases.listenToOne(id, {
@@ -109,6 +107,19 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 				}),
 		),
 	}
+
+	const myAnswer = computed({
+		get: () => singleStore[id].answers.value.find((a) => a.userId === authId.value) ?? null,
+		set: (v) => {
+			if (v)
+				addToArray(
+					singleStore[id].answers.value,
+					v,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+		},
+	})
 
 	const { users: participants } = useUsersInList(
 		computed(() => (skip.participants ? [] : singleStore[id].play.value?.participants ?? [])),
@@ -128,7 +139,6 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 			// TODO: listener for answers
 			const answers = await AnswersUseCases.get(type, id)
 			answers.forEach((a) => {
-				if (a.userId === authId.value) singleStore[id].myAnswer.value = a
 				addToArray(
 					singleStore[id].answers.value,
 					a,
@@ -171,12 +181,12 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 
 	const { asyncFn: submitAnswer } = useAsyncFn(async (data: Parameters<typeof AnswersUseCases.answer>[2], isLast: boolean) => {
 		const p = singleStore[id].play.value
-		if (!p || singleStore[id].myAnswer.value?.endedAt) return false
+		if (!p || myAnswer.value?.endedAt) return false
 		if (!p.participants.includes(authId.value)) return false
-		singleStore[id].myAnswer.value = await AnswersUseCases.answer(p.data.type, p.id, data)
-		const endedAnswer = !!singleStore[id].myAnswer.value?.endedAt
+		myAnswer.value = await AnswersUseCases.answer(p.data.type, p.id, data)
+		const endedAnswer = !!myAnswer.value?.endedAt
 		if ((endedAnswer || isLast) && p.isTimed) {
-			if (!endedAnswer) singleStore[id].myAnswer.value = await AnswersUseCases.end(p.data.type, p.id)
+			if (!endedAnswer) myAnswer.value = await AnswersUseCases.end(p.data.type, p.id)
 			if (p.participants.length === 1 && p.participants[0] === p.user.id) await end()
 			else await router.replace(p.resultsPage)
 		}
@@ -186,7 +196,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 	const { asyncFn: resetAnswer } = useAsyncFn(async () => {
 		const p = singleStore[id].play.value
 		if (!p || p.isTimed) return false
-		singleStore[id].myAnswer.value = await AnswersUseCases.reset(p.data.type, p.id)
+		myAnswer.value = await AnswersUseCases.reset(p.data.type, p.id)
 	})
 
 	const alertAndNav = async (route: string) => {
@@ -206,7 +216,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		singleStore[id].play,
 		async (cur) => {
 			if (!cur) return
-			if (singleStore[id].myAnswer.value?.endedAt) router.replace(cur.resultsPage)
+			if (myAnswer.value?.endedAt) router.replace(cur.resultsPage)
 			playWatcherCb()
 		},
 		{ immediate: true },
@@ -225,7 +235,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		await singleStore[id].listener.close()
 	})
 
-	return { ...singleStore[id], participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
+	return { ...singleStore[id], myAnswer, participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
 }
 
 export const useCreatePlay = (access: CoursableAccess['access'], options: { start: boolean; nav: boolean }) => {
