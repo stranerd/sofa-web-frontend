@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts" setup>
+import { divideByZero } from 'valleyed'
 import { computed, ref, watch } from 'vue'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { useAuth } from '@app/composables/auth/auth'
@@ -19,6 +20,8 @@ const props = withDefaults(
 		showAnswer?: boolean
 		isAnswerRight?: boolean
 		useTimer?: boolean
+		totalTime?: number
+		timedOutAt?: number | null
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 		access?: CoursableAccess['access']
 	}>(),
@@ -27,6 +30,8 @@ const props = withDefaults(
 		showAnswer: false,
 		isAnswerRight: false,
 		useTimer: false,
+		totalTime: undefined,
+		timedOutAt: null,
 		submit: undefined,
 		access: undefined,
 	},
@@ -89,6 +94,9 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 	return null
 }
 
+const useGeneralTimer = computed(() => props.useTimer && quiz.value && !!quiz.value?.timeLimit)
+const useSingleQuestionTimer = computed(() => props.useTimer && quiz.value && !quiz.value.timeLimit)
+
 const moveCurrrentQuestionToEnd = () => {
 	if (!reorderedQuestions.value) reorderedQuestions.value = [...questions.value]
 	reorderedQuestions.value = reorderedQuestions.value.concat(reorderedQuestions.value.splice(index.value, 1))
@@ -96,10 +104,11 @@ const moveCurrrentQuestionToEnd = () => {
 
 const nextQ = async (newIndex: number) => {
 	index.value = newIndex
-	if (props.useTimer) runCountdown({ time: currentQuestionByIndex.value?.timeLimit }).then(() => submitAnswer())
+	if (useSingleQuestionTimer.value && currentQuestionByIndex.value)
+		runCountdown({ time: currentQuestionByIndex.value.timeLimit }).then(() => submitAnswer('right'))
 }
 
-const submitAnswer = async (skipNext = false) => {
+const submitAnswer = async (dir: 'left' | 'right', skipChange = false) => {
 	if (!currentQuestionByIndex.value) return
 	const isLast = !extras.value.canNext
 	const res = await props.submit?.(
@@ -107,10 +116,11 @@ const submitAnswer = async (skipNext = false) => {
 			questionId: currentQuestionByIndex.value.id,
 			answer: answer.value ?? null,
 		},
-		isLast,
+		isLast && dir === 'right',
 	)
-	if (!res || skipNext) return
-	if (!isLast) await nextQ(index.value + 1)
+	if (!res || skipChange) return
+	if (!isLast && dir === 'right') await nextQ(index.value + 1)
+	if (extras.value.canPrev && dir === 'left') await nextQ(index.value - 1)
 }
 
 const extras = computed(() => ({
@@ -127,9 +137,16 @@ const extras = computed(() => ({
 		answer.value = v
 	},
 	get fractionTimeLeft() {
-		const duration = currentQuestionByIndex.value?.timeLimit ?? 0
-		if (duration === 0) return 0
-		return runTime.value / duration
+		if (useSingleQuestionTimer.value) {
+			const duration = currentQuestionByIndex.value?.timeLimit ?? 0
+			return divideByZero(runTime.value, duration)
+		}
+		if (useGeneralTimer.value) {
+			const endsIn = Date.now() - (props.timedOutAt ?? 0)
+			if (endsIn <= 0) return 0
+			return divideByZero(endsIn, props.totalTime ?? 0)
+		}
+		return 0
 	},
 	started: started.value,
 	startCountdown: startTime.value,
@@ -163,6 +180,8 @@ watch(
 		if (props.useTimer && justStarted) await startCountdown({ time: 3 })
 		started.value = true
 		nextQ(justStarted ? 0 : startAt.value)
+		const endsIn = Date.now() - (props.timedOutAt ?? 0)
+		if (useGeneralTimer.value) runCountdown({ time: endsIn / 1000 })
 	},
 	{ immediate: true },
 )

@@ -4,11 +4,14 @@
 			<QuizWrapper
 				v-if="playExtras.isParticipant"
 				:id="play.quizId"
+				:key="playExtras.timedOutAt ?? 0"
 				:showAnswer="showSolution"
 				:isAnswerRight="isCorrect"
 				:questions="playQuestions"
 				:answers="playExtras.answers"
 				:useTimer="play.isTimed"
+				:timedOutAt="playExtras.timedOutAt"
+				:totalTime="play.totalTimeInSec"
 				:submit="playExtras.submitAnswer"
 				:access="access">
 				<template #prestart="{ extras }">
@@ -182,8 +185,8 @@ const generateLeftButton = (play: PlayEntity, questionsLength: number, extras: Q
 				else if (showSolution.value) return (showSolution.value = false)
 				// skip clicked
 				else if (extras.canNext) {
-					await extras.submitAnswer(true)
-					return extras.next()
+					extras.answer.value = null
+					return await extras.submitAnswer('right', false)
 				}
 			},
 		}
@@ -200,12 +203,12 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 				// continue clicked, but done with practice
 				if (isDone.value) {
 					await playExtras.end(false)
-					return router.push('/library/results')
+					return await router.push('/library/results')
 				}
 				// check clicked
 				if (!showSolution.value) {
 					isCorrect.value = extras.question?.checkAnswer(extras.answer) ?? false
-					await extras.submitAnswer(true)
+					await extras.submitAnswer('right', true)
 					showSolution.value = true
 					return
 				}
@@ -223,7 +226,7 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 		label: 'Continue',
 		bgColor: 'bg-primaryBlue',
 		textColor: 'text-white',
-		click: () => extras.submitAnswer(false),
+		click: () => extras.submitAnswer('right', false),
 	}
 }
 
