@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCurriculumViewToggle, useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { ClassEntity } from '@modules/organizations'
@@ -78,22 +78,18 @@ const emptyLessonContent = {
 	imageURL: '/images/empty-lessons.png',
 }
 const { id: userId } = useAuth()
-const showLessonCurriculum = ref(false)
 const lessons = computed(() => props.classInst.lessons.filter((l) => l.users.students.includes(userId.value)))
 const selectedLesson = ref(lessons.value.at(0))
+const showLessonCurriculum = ref(!!lessons.value.length)
 const selectedLessonCurriculum = computed(() => selectedLesson.value?.curriculum ?? [])
 const { curriculum } = useLessonCurriculum(props.classInst, selectedLessonCurriculum)
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 const selectedLessonsDone = () => {
-	if (lessons.value.some((l) => l.users.students.includes(userId.value))) {
+	const lesson = lessons.value.at(0)
+	if (lesson) {
 		showLessonCurriculum.value = true
+		selectedLesson.value = lesson
 	}
 }
-watch(
-	lessons,
-	() => {
-		showLessonCurriculum.value = lessons.value.some((l) => l.users.students.includes(userId.value))
-	},
-	{ once: true },
-)
+onMounted(selectedLessonsDone)
 </script>
