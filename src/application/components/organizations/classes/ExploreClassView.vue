@@ -14,12 +14,7 @@
 		<div class="w-full mdlg:rounded-2xl flex flex-col grow overflow-y-auto p-4 bg-white">
 			<div
 				class="w-full flex mdlg:flex md:flex-row mdlg:flex-none flex-col mdlg:items-start h-auto items-start justify-start gap-3 mdlg:gap--3">
-				<div class="mdlg:!w-[33%] w-full">
-					<SofaImageLoader
-						customClass="mdlg:w-full w-full h-[200px] rounded-custom relative !object-cover"
-						:photoUrl="classInst.picture">
-					</SofaImageLoader>
-				</div>
+				<SofaImageLoader class="w-full mdlg:w-[33%] h-[200px] rounded-custom" :photoUrl="classInst.picture"> </SofaImageLoader>
 				<div class="w-full flex flex-col gap-2 grow">
 					<div class="w-full flex flex-row items-center justify-between">
 						<SofaHeaderText :content="classInst.title" />
@@ -42,7 +37,7 @@
 						</div>
 					</div>
 					<div class="flex items-center gap-1">
-						<SofaAvatar :photoUrl="classInst.user.bio.photo?.link" class="!h-[24px] !w-[24px]" />
+						<SofaAvatar :photoUrl="classInst.user.bio.photo?.link" :size="24" />
 						<SofaNormalText :content="classInst.user.bio.name.full" />
 						<div class="h-[5px] w-[5px] rounded-full bg-deepGray"></div>
 						<SofaNormalText>

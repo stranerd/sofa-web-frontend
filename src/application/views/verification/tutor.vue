@@ -21,9 +21,7 @@
 			<template v-if="currentStep === 'profile'">
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
 					<SofaHeaderText size="xl"> Profile </SofaHeaderText>
-					<SofaImageLoader
-						class="size-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-						:photoUrl="profileFactory.photo?.link">
+					<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
 						<SofaIcon v-if="!profileFactory.photo" class="h-[50px]" name="user" />
 						<SofaFileInput
 							v-model="profileFactory.photo"

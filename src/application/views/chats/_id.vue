@@ -90,7 +90,7 @@
 			<template v-if="conversation.tutor?.id === id">
 				<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 justify-center items-center">
 					<router-link to="/profile" class="w-full flex flex-col items-center justify-center gap-3">
-						<SofaAvatar size="180" :photoUrl="user?.bio.photo?.link" />
+						<SofaAvatar :size="180" :photoUrl="user?.bio.photo?.link" />
 					</router-link>
 
 					<SofaHeaderText size="xl" :content="user?.publicName" />

@@ -10,7 +10,7 @@
 			<div class="w-full flex flex-col px-4 pt-4 gap-6 bg-white mdlg:rounded-b-2xl">
 				<div class="w-full flex mdlg:flex-row flex-col justify-between items-start mdlg:gap-0 gap-4">
 					<div class="flex gap-3 items-start">
-						<SofaAvatar :photoUrl="user.bio.photo?.link" size="110" customClass="-mt-[71px]" />
+						<SofaAvatar :photoUrl="user.bio.photo?.link" :size="110" class="-mt-[71px]" />
 
 						<div class="flex flex-col">
 							<div class="flex items-center gap-2">

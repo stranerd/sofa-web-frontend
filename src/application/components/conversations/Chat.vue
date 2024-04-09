@@ -5,7 +5,7 @@
 		:class="customClass"
 		exactActiveClass="bg-lightBlue">
 		<div class="flex gap-2 w-full">
-			<SofaAvatar :photoUrl="chat.photoUrl" size="40" />
+			<SofaAvatar :photoUrl="chat.photoUrl" :size="40" />
 			<div class="flex flex-col">
 				<SofaNormalText customClass="!font-semibold text-left !line-clamp-1">
 					{{ chat.title }}

@@ -14,7 +14,7 @@
 		<template #left-session>
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
-					<SofaAvatar size="84" :photoUrl="user.bio.photo?.link" />
+					<SofaAvatar :size="84" :photoUrl="user.bio.photo?.link" />
 
 					<div class="flex flex-col">
 						<div class="flex items-center gap-1">
@@ -75,7 +75,7 @@
 		<template #right-session>
 			<div v-if="userType.isStudent" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex items-center gap-3">
-					<SofaAvatar :photoUrl="userAi.image" size="84" />
+					<SofaAvatar :photoUrl="userAi.image" :size="84" />
 					<div class="flex flex-col gap-1">
 						<SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
 						<SofaNormalText :content="userAi.tagline" />

@@ -25,9 +25,7 @@
 					<SofaNormalText>Edit your profile</SofaNormalText>
 				</div>
 
-				<SofaImageLoader
-					class="size-[96px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full mx-auto"
-					:photoUrl="profileFactory.photo?.link">
+				<SofaImageLoader class="size-[96px] bg-grayColor rounded-full mx-auto" :photoUrl="profileFactory.photo?.link">
 					<SofaIcon v-if="!profileFactory.photo" class="h-[50px]" name="user" />
 					<SofaFileInput
 						v-model="profileFactory.photo"

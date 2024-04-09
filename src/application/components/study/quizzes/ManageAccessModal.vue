@@ -22,7 +22,7 @@
 
 			<div class="w-full flex flex-col gap-2">
 				<div v-for="request in requests" :key="request.id" class="flex gap-2 items-center w-full">
-					<SofaAvatar :photoUrl="request.bio.photo?.link" size="28" />
+					<SofaAvatar :photoUrl="request.bio.photo?.link" :size="28" />
 					<SofaNormalText color="text-deepGray" :content="`${request.publicName} wants to edit`" class="truncate grow" />
 					<SofaNormalText as="a" color="text-primaryRed" content="Deny" @click="grantAccess(request.id, false)" />
 					<div class="h-full bg-darkLightGray w-[1px]" />
@@ -35,7 +35,7 @@
 
 		<div class="w-full flex flex-col gap-2">
 			<div v-for="member in members" :key="member.id" class="flex gap-2 items-center w-full">
-				<SofaAvatar :photoUrl="member.bio.photo?.link" size="28" />
+				<SofaAvatar :photoUrl="member.bio.photo?.link" :size="28" />
 				<SofaNormalText color="text-deepGray" :content="member.publicName" class="truncate grow" />
 				<template v-if="member.id !== quiz.user.id">
 					<SofaNormalText as="a" color="text-primaryRed" content="Remove" @click="manageMembers([member.id], false)" />

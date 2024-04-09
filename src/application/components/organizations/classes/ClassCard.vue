@@ -3,7 +3,7 @@
 		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
 			<SofaImageLoader
 				:photoUrl="classInst.picture"
-				customClass="!h-[100px] !w-[150px] mdlg:!h-[115px] w-full mdlg:!w-[200px] bg-grayColor rounded-custom relative">
+				class="h-[100px] w-[150px] mdlg:h-[115px] mdlg:w-[200px] bg-grayColor rounded-custom">
 			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<SofaNormalText class="!font-bold truncate" :content="classInst.title" />

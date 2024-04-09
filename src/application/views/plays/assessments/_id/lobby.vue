@@ -52,10 +52,8 @@
 											</div>
 										</template>
 										<template v-else>
-											<SofaImageLoader
-												:photoUrl="quiz.photo?.link"
-												customClass="md:!h-[90px] h-[80px] w-[120px] md:!w-[170px] rounded-custom" />
-											<div class="w-full flex flex-col h-full gap-2">
+											<SofaImageLoader :photoUrl="quiz.photo?.link" customClass="h-[80px] w-[140px] rounded-custom" />
+											<div class="w-full flex flex-col h-full gap-1">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="play.title" size="xl" class="text-left !line-clamp-1" />
 													<SofaIcon class="h-[16px]" name="share" @click="playExtras.share(quiz)" />
@@ -70,7 +68,7 @@
 														}`" />
 												</div>
 												<div class="w-full flex items-start gap-2 flex-nowrap">
-													<SofaAvatar size="20" :photoUrl="play.user.bio.photo?.link" />
+													<SofaAvatar :size="20" :photoUrl="play.user.bio.photo?.link" />
 													<SofaNormalText
 														color="text-bodyBlack"
 														class="!font-semibold"

@@ -10,16 +10,14 @@
 				<SofaNormalText :color="option.done || tab === option.id ? 'text-white' : 'text-grayColor'">
 					{{ option.name }}
 				</SofaNormalText>
-				<SofaIcon v-if="option.done" customClass="h-[14px]" name="done" />
+				<SofaIcon v-if="option.done" class="h-[14px]" name="done" />
 			</a>
 		</div>
 
 		<div v-if="tab === 'profile'" class="w-full flex flex-col gap-4 py-3">
 			<div class="w-full flex flex-col items-center justify-center pt-3">
-				<SofaImageLoader
-					customClass="w-[90px] h-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-					:photoUrl="profileFactory.photo?.link">
-					<SofaIcon v-if="!profileFactory.photo" customClass="h-[50px]" name="user" />
+				<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
+					<SofaIcon v-if="!profileFactory.photo" class="h-[50px]" name="user" />
 					<SofaFileInput
 						v-model="profileFactory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"

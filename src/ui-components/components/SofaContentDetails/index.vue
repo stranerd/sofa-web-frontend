@@ -4,12 +4,8 @@
 			<div
 				class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
 				<div :class="`${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
-					<SofaImageLoader
-						customClass="mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative"
-						:photoUrl="content.image">
-						<div
-							v-if="content.price > 0"
-							class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
+					<SofaImageLoader class="w-full rounded-custom" :photoUrl="content.image">
+						<div v-if="content.price > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
 							<SofaBadge customClass="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
 								{{ Logic.Common.formatPrice(content.price, content.currency) }}
 							</SofaBadge>
@@ -56,7 +52,7 @@
 					<div class="w-full flex flex-row items-center gap-2 justify-between">
 						<div class="flex flex-row items-center gap-2">
 							<div v-if="!isMinimal" class="gap-2 flex flex-row items-center">
-								<SofaAvatar size="20" :photoUrl="content.user.photoUrl" />
+								<SofaAvatar :size="20" :photoUrl="content.user.photoUrl" />
 								<SofaNormalText>
 									{{ content.user.name }}
 								</SofaNormalText>
@@ -176,11 +172,7 @@
 			v-if="selectedTab == 'creator'"
 			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
-				<div>
-					<SofaAvatar :photoUrl="content.user.photoUrl" size="150" customClass="hidden mdlg:!inline-block" />
-
-					<SofaAvatar :photoUrl="content.user.photoUrl" size="100" customClass="mdlg:!hidden " />
-				</div>
+				<SofaAvatar :photoUrl="content.user.photoUrl" :size="Logic.Common.isLarge ? 150 : 100" />
 
 				<div class="flex flex-col gap-1">
 					<div class="flex flex-row gap-2 items-center">

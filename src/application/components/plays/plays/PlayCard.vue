@@ -2,7 +2,7 @@
 	<router-link
 		:to="play.isClosed ? play.resultsPage : play.lobbyPage"
 		class="w-full flex gap-3 p-3 rounded-custom bg-white shadow-custom">
-		<SofaImageLoader customClass="w-[110px] h-[78px] mdlg:h-[80px] rounded-custom" :photoUrl="quiz?.picture ?? '/images/default.svg'" />
+		<SofaImageLoader class="w-[110px] h-[80px] rounded-custom" :photoUrl="quiz?.picture ?? '/images/default.svg'" />
 		<div class="flex flex-col w-full gap-2">
 			<SofaNormalText class="!font-bold line-clamp-1">
 				{{ play.title }}

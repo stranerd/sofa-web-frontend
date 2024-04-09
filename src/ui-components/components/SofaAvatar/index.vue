@@ -1,47 +1,40 @@
 <template>
-	<SofaImageLoader
-		:as="userId ? 'router-link' : as"
+	<component
+		:is="userId ? 'router-link' : as"
 		:to="`/profile/${userId}`"
-		:photoUrl="photoUrl ?? ''"
-		class="shrink-0 rounded-full flex text-xs uppercase font-semibold bg-opacity-10 cursor-pointer items-center justify-center relative"
-		:customClass="`${bgColor} ${customClass}`"
-		:customStyle="`width: ${size}px; height: ${size}px;`">
-		<template v-if="!photoUrl">
-			<slot>
-				<SofaIcon class="w-1/2 h-1/2" name="user" />
-			</slot>
-		</template>
+		class="shrink-0 rounded-full flex font-semibold bg-opacity-10 cursor-pointer items-center justify-center relative"
+		:class="bgColor"
+		:style="`width: ${size}px; height: ${size}px;`">
+		<SofaImageLoader v-if="photoUrl" :photoUrl="photoUrl" class="w-full h-full rounded-full" />
+		<slot v-else>
+			<SofaIcon class="w-1/2 h-1/2" name="user" />
+		</slot>
 		<span
-			v-if="showOnline"
+			v-if="online !== undefined"
 			class="size-[5px] absolute bottom-0 right-0 rounded-full"
 			:class="online ? 'bg-primaryGreen' : 'bg-grayColor'" />
-	</SofaImageLoader>
+	</component>
 </template>
 
 <script lang="ts" setup>
 import SofaImageLoader from '../SofaImageLoader/index.vue'
-import SofaIcon from '../SofaIcon'
 
 withDefaults(
 	defineProps<{
 		as?: string
-		size?: string
+		size?: number
 		photoUrl?: string | null
-		customClass?: string
 		bgColor?: string
 		userId?: string
-		showOnline?: boolean
 		online?: boolean
 	}>(),
 	{
-		as: 'div',
-		size: '50',
-		photoUrl: '',
-		customClass: '',
+		as: 'span',
+		size: 50,
+		photoUrl: null,
 		bgColor: 'bg-grayColor',
-		userId: '',
-		showOnline: false,
-		online: false,
+		userId: undefined,
+		online: undefined,
 	},
 )
 </script>
