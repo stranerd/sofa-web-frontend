@@ -4,7 +4,7 @@
 		<SofaNormalText :content="lesson?.title" color="text-grayColor" />
 		<SofaHeaderText :content="schedule.title" />
 		<div class="flex items-center gap-1">
-			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" class="!w-[24px] !h-[24px]" />
+			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" :size="24" />
 			<SofaNormalText :content="schedule.user.bio.name.full" color="text-deepGray" />
 		</div>
 		<div class="flex items-center gap-2" :class="schedule.canJoin(classInst, id) ? 'text-primaryRed' : 'text-inherit'">

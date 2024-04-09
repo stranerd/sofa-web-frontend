@@ -36,7 +36,7 @@
 
 					<div class="w-full flex flex-row items-center">
 						<div class="gap-2 flex flex-row items-center">
-							<SofaAvatar size="20" :photoUrl="data.user.photoUrl" />
+							<SofaAvatar :size="20" :photoUrl="data.user.photoUrl" />
 							<SofaNormalText>
 								{{ data.user.name }}
 							</SofaNormalText>

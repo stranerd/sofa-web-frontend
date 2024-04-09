@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col py-5 gap-4 text-deepGray">
 		<div v-if="user" class="w-full flex items-center gap-3 px-5">
-			<SofaAvatar size="75" :photoUrl="user.bio.photo?.link" />
+			<SofaAvatar :size="75" :photoUrl="user.bio.photo?.link" />
 
 			<div class="flex flex-col">
 				<div class="flex items-center gap-1">
@@ -46,7 +46,7 @@
 		<div class="h-[1px] bg-lightGray" />
 		<template v-if="userType.isStudent">
 			<router-link class="flex items-center gap-2 px-5" to="/chats/new">
-				<SofaAvatar :photoUrl="userAi.image" size="24" />
+				<SofaAvatar :photoUrl="userAi.image" :size="24" />
 				<SofaNormalText color="text-inherit" content="Ask me anything" />
 			</router-link>
 			<a class="flex items-center gap-2 px-5" @click="customizeAi">

@@ -29,7 +29,7 @@
 
 			<div class="w-full flex flex-row items-center">
 				<div class="gap-2 flex flex-row items-center">
-					<SofaAvatar size="20" :photoUrl="data.user.bio.photo?.link" />
+					<SofaAvatar :size="20" :photoUrl="data.user.bio.photo?.link" />
 					<SofaNormalText>
 						{{ data.user.bio.publicName }}
 					</SofaNormalText>

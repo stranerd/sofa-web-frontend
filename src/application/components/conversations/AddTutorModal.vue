@@ -64,7 +64,7 @@
 							class="w-full rounded-custom bg-lightGray p-4 flex items-center gap-3"
 							:class="{ 'border-2 border-primaryPurple': factory.tutorId === tutor.id }"
 							@click="factory.tutorId = tutor.id">
-							<SofaAvatar size="60" :photoUrl="tutor.photo_url" :showOnline="true" :online="tutor.online" />
+							<SofaAvatar :size="60" :photoUrl="tutor.photo_url" :online="tutor.online" />
 							<div class="w-full flex flex-col grow gap-1">
 								<div class="flex gap-2 items-center">
 									<SofaNormalText class="!font-bold" :content="tutor.name" />

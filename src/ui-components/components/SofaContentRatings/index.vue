@@ -49,7 +49,7 @@
 				hasWhiteBox ? 'bg-white shadow-custom' : 'bg-lightGray'
 			}  rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-start`">
 			<div>
-				<SofaAvatar :photoUrl="review.user.photoUrl" size="44" :userId="review.user.id" />
+				<SofaAvatar :photoUrl="review.user.photoUrl" :size="44" :userId="review.user.id" />
 			</div>
 
 			<div class="flex flex-col gap-1">

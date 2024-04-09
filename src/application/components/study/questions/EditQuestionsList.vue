@@ -15,8 +15,8 @@
 
 						<div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
 							<template v-for="(user, i) in users[element.id] ?? []" :key="user.id">
-								<SofaAvatar v-if="i < 3" :photoUrl="user.bio.photo?.link" size="28" class="-ml-1" />
-								<SofaAvatar v-if="i === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGray" size="28" class="-ml-1">
+								<SofaAvatar v-if="i < 3" :photoUrl="user.bio.photo?.link" :size="28" class="-ml-1" />
+								<SofaAvatar v-if="i === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGray" :size="28" class="-ml-1">
 									<span>{{ users[element.id].length - 3 }}+</span>
 								</SofaAvatar>
 							</template>

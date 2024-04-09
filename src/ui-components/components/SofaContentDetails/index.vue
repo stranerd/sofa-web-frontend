@@ -56,7 +56,7 @@
 					<div class="w-full flex flex-row items-center gap-2 justify-between">
 						<div class="flex flex-row items-center gap-2">
 							<div v-if="!isMinimal" class="gap-2 flex flex-row items-center">
-								<SofaAvatar size="20" :photoUrl="content.user.photoUrl" />
+								<SofaAvatar :size="20" :photoUrl="content.user.photoUrl" />
 								<SofaNormalText>
 									{{ content.user.name }}
 								</SofaNormalText>
@@ -176,11 +176,7 @@
 			v-if="selectedTab == 'creator'"
 			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
-				<div>
-					<SofaAvatar :photoUrl="content.user.photoUrl" size="150" customClass="hidden mdlg:!inline-block" />
-
-					<SofaAvatar :photoUrl="content.user.photoUrl" size="100" customClass="mdlg:!hidden " />
-				</div>
+				<SofaAvatar :photoUrl="content.user.photoUrl" :size="Logic.Common.isLarge ? 150 : 100" />
 
 				<div class="flex flex-col gap-1">
 					<div class="flex flex-row gap-2 items-center">

@@ -42,7 +42,7 @@
 						</div>
 					</div>
 					<div class="flex items-center gap-1">
-						<SofaAvatar :photoUrl="classInst.user.bio.photo?.link" class="!h-[24px] !w-[24px]" />
+						<SofaAvatar :photoUrl="classInst.user.bio.photo?.link" :size="24" />
 						<SofaNormalText :content="classInst.user.bio.name.full" />
 						<div class="h-[5px] w-[5px] rounded-full bg-deepGray"></div>
 						<SofaNormalText>

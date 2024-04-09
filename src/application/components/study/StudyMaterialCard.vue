@@ -39,7 +39,7 @@
 
 		<div v-if="content.user" class="flex gap-2 items-center justify-between pt-1">
 			<router-link class="gap-2 flex items-center" :to="`/profile/${content.user.id}`">
-				<SofaAvatar size="20" :photoUrl="content.user.bio.photo?.link" :userId="content.user.id" />
+				<SofaAvatar :size="20" :photoUrl="content.user.bio.photo?.link" :userId="content.user.id" />
 				<SofaNormalText class="!whitespace-nowrap !line-clamp-1">
 					{{ content.authUserId === content.user.id ? 'You' : content.user.bio.publicName }}
 				</SofaNormalText>
@@ -103,7 +103,7 @@
 
 				<div class="flex items-center gap-2 grow justify-between w-full">
 					<router-link class="gap-2 flex items-center" :to="`/profile/${activity.user.id}`">
-						<SofaAvatar size="20" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
+						<SofaAvatar :size="20" :photoUrl="activity.user.bio.photo?.link" :userId="activity.user.id" />
 						<SofaNormalText class="whitespace-nowrap line-clamp-1">
 							{{ activity.authUserId === activity.user.id ? 'You' : activity.user.bio.publicName }}
 						</SofaNormalText>

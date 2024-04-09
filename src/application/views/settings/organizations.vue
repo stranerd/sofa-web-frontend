@@ -8,7 +8,7 @@
 
 				<div v-if="organizations.length" class="w-full flex flex-col gap-4">
 					<div v-for="org in organizations" :key="org.id" class="w-full flex gap-2 items-center">
-						<SofaAvatar :photoUrl="org.photo" size="23" />
+						<SofaAvatar :photoUrl="org.photo" :size="23" />
 						<SofaNormalText :content="org.name" class="truncate flex-1" />
 						<SofaNormalText as="a" content="Leave" color="text-primaryRed" @click="leaveOrganization" />
 					</div>

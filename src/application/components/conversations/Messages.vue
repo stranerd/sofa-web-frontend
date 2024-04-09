@@ -7,7 +7,7 @@
 			<div
 				v-if="message.userId !== id"
 				class="w-auto min-w-[80px] flex max-w-full md:!max-w-[80%] mdlg:!max-w-[80%] lg:!max-w-[70%] flex-row gap-2 items-end justify-start">
-				<SofaAvatar :photoUrl="users[message.userId]?.photoUrl" class="shrink-0" size="27" />
+				<SofaAvatar :photoUrl="users[message.userId]?.photoUrl" :size="27" />
 				<div class="p-3 rounded-custom text-left bg-lightBlue flex flex-col gap-1 justify-start">
 					<SofaNormalText customClass="!font-semibold" color="text-[#3296C8]">
 						{{ users[message.userId]?.name }}
@@ -21,7 +21,7 @@
 					<div class="p-3 rounded-custom text-left bg-darkLightGray">
 						<SofaNormalText customClass="text-left" :isHtml="true" :content="message.body"> </SofaNormalText>
 					</div>
-					<SofaAvatar :photoUrl="users[message.userId]?.photoUrl" class="shrink-0" size="27" />
+					<SofaAvatar :photoUrl="users[message.userId]?.photoUrl" :size="27" />
 				</div>
 			</div>
 		</template>

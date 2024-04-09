@@ -38,7 +38,7 @@
 				content="No member matches the search query" />
 			<template v-for="member in [...pending, ...nonPending]" :key="member.id">
 				<div class="flex gap-2 items-center w-full px-4 md:px-6">
-					<SofaAvatar :photoUrl="member.user?.bio.photo?.link" size="28" />
+					<SofaAvatar :photoUrl="member.user?.bio.photo?.link" :size="28" />
 					<SofaNormalText
 						color="text-inherit"
 						:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"

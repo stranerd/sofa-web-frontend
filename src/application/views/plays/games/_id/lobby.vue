@@ -70,7 +70,7 @@
 														}`" />
 												</div>
 												<div class="w-full flex items-start gap-2 flex-nowrap">
-													<SofaAvatar size="20" :photoUrl="play.user.bio.photo?.link" />
+													<SofaAvatar :size="20" :photoUrl="play.user.bio.photo?.link" />
 													<SofaNormalText
 														color="text-bodyBlack"
 														class="!font-semibold"

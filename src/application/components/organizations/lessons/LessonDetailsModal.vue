@@ -46,7 +46,7 @@
 				<SofaNormalText color="text-grayColor text-center" content="No Teachers" />
 			</div>
 			<div v-for="teacher in teachers" v-else :key="teacher.id" class="flex items-center gap-3">
-				<SofaAvatar :photoUrl="teacher.bio.photo?.link" customClass="!w-[32px] !h-[32px]" />
+				<SofaAvatar :photoUrl="teacher.bio.photo?.link" :size="32" />
 				<SofaNormalText color="text-deepGray">{{ teacher.publicName }}</SofaNormalText>
 			</div>
 		</div>
@@ -57,7 +57,7 @@
 				<SofaNormalText color="text-grayColor text-center" content="No Students" />
 			</div>
 			<div v-for="student in students" v-else :key="student.id" class="flex items-center gap-3">
-				<SofaAvatar :photoUrl="student.bio.photo?.link" customClass="!w-[32px] !h-[32px]" />
+				<SofaAvatar :photoUrl="student.bio.photo?.link" :size="32" />
 				<SofaNormalText color="text-deepGray">{{ student.publicName }}</SofaNormalText>
 			</div>
 		</div>

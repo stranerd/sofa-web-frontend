@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-white flex flex-col gap-2">
 		<div class="flex gap-3 items-start">
-			<SofaAvatar photoUrl="/images/sam.png" class="!w-[24px] !h-[24px] mdlg:!w-[48px] mdlg:!h-[48px]" />
+			<SofaAvatar photoUrl="/images/sam.png" :size="Logic.Common.isLarge ? 48 : 24" />
 			<div class="flex flex-col gap-2">
 				<div class="flex items-center gap-2">
 					<SofaNormalText customClass="font-bold">
@@ -15,3 +15,7 @@
 		</div>
 	</div>
 </template>
+
+<script lang="ts" setup>
+import { Logic } from 'sofa-logic'
+</script>
