@@ -4,12 +4,8 @@
 			<div
 				class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
 				<div :class="`${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
-					<SofaImageLoader
-						customClass="mdlg:!w-full w-full mdlg:!h-full h-[200px] rounded-custom relative"
-						:photoUrl="content.image">
-						<div
-							v-if="content.price > 0"
-							class="flex flex-row gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
+					<SofaImageLoader class="w-full rounded-custom" :photoUrl="content.image">
+						<div v-if="content.price > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
 							<SofaBadge customClass="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
 								{{ Logic.Common.formatPrice(content.price, content.currency) }}
 							</SofaBadge>

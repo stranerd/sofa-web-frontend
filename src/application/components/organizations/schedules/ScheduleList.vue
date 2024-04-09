@@ -19,10 +19,7 @@
 		</div>
 		<div v-else class="w-full pt-4">
 			<div class="w-full flex flex-col gap-2 items-center justify-center bg-lightGray p-4">
-				<SofaImageLoader
-					customClass="w-[64px] h-[64px] flex items-center justify-center rounded-custom !object-contain"
-					photoUrl="/images/empty-schedules.png">
-				</SofaImageLoader>
+				<SofaImageLoader customClass="w-[64px] rounded-custom" photoUrl="/images/empty-schedules.png"> </SofaImageLoader>
 				<SofaNormalText customClass="font-bold"> There’s nothing here </SofaNormalText>
 				<SofaNormalText color="text-grayColor text-center"> There are no live sessions scheduled </SofaNormalText>
 			</div>

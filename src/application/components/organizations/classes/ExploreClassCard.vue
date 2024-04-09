@@ -1,6 +1,6 @@
 <template>
 	<router-link :to="classInst.pageLink" class="bg-white flex flex-col gap-2 w-full p-3 rounded-custom h-auto">
-		<SofaImageLoader customClass="w-full mdlg:h-[155px] h-[120px] rounded-custom" :photoUrl="classInst.picture" />
+		<SofaImageLoader class="w-full mdlg:h-[155px] h-[120px] rounded-custom" :photoUrl="classInst.picture" />
 		<SofaNormalText class="!font-bold truncate" :content="classInst.title" />
 		<div class="flex gap-2 items-center">
 			<SofaNormalText

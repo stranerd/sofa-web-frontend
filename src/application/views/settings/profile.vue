@@ -4,9 +4,7 @@
 			<div id="profile" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
 				<SofaHeaderText size="xl"> Personal info </SofaHeaderText>
 				<div class="w-full flex items-center justify-start py-2 gap-4">
-					<SofaImageLoader
-						class="size-[90px] flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
-						:photoUrl="factory.photo?.link">
+					<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="factory.photo?.link">
 						<SofaIcon v-if="!factory.photo" class="h-[50px]" name="user" />
 						<SofaFileInput
 							v-model="factory.photo"

@@ -7,7 +7,7 @@
 		</div>
 		<div class="flex flex-col gap-3 h-full w-full px-4">
 			<template v-if="type == 'quiz'">
-				<SofaImageLoader customClass="w-full rounded-custom h-[200px]" :photoUrl="data.image_url" />
+				<SofaImageLoader class="w-full rounded-custom h-[200px]" :photoUrl="data.image_url" />
 
 				<SofaNormalText customClass="text-left font-bold">
 					{{ data.title }}

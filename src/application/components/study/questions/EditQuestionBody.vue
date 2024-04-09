@@ -51,7 +51,7 @@
 		</div>
 
 		<div v-if="factory.questionMedia" class="w-full flex flex-col items-center justify-center">
-			<SofaImageLoader :photoUrl="factory.questionMedia.link" customClass="h-[250px] mdlg:w-[70%] w-full rounded-custom" />
+			<SofaImageLoader :photoUrl="factory.questionMedia.link" class="mdlg:w-[70%] w-full rounded-custom" />
 		</div>
 
 		<div v-if="!factory.isFillInBlanks && !factory.isDragAnswers" class="flex flex-col gap-4">

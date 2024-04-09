@@ -12,7 +12,7 @@
 		<div class="w-full flex flex-col gap-8">
 			<div class="w-full flex flex-col items-center gap-4 py-3">
 				<SofaImageLoader
-					customClass="w-[93px] aspect-square flex items-center justify-center relative bg-grayColor border border-grayColor rounded-full"
+					class="size-[93px] bg-grayColor rounded-full"
 					:photoUrl="factory.photo?.link ?? UserEntity.defaultAiPhotoLink">
 					<SofaIcon v-if="!factory.photo" class="h-[50px]" name="user" />
 					<SofaFileInput

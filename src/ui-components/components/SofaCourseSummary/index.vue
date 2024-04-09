@@ -1,8 +1,8 @@
 <template>
 	<div v-if="data" class="flex flex-col gap-3 h-full w-full px-4">
-		<SofaImageLoader customClass="w-full rounded-custom h-[200px]" :photoUrl="data.photo ? data.photo.link : '/images/default.svg'" />
+		<SofaImageLoader class="w-full rounded-custom h-[200px]" :photoUrl="data.photo ? data.photo.link : '/images/default.svg'" />
 
-		<SofaNormalText customClass="text-left font-bold">
+		<SofaNormalText class="text-left font-bold">
 			{{ data.title }}
 		</SofaNormalText>
 
@@ -16,7 +16,7 @@
 			</SofaNormalText>
 		</div>
 
-		<SofaNormalText customClass="text-left">
+		<SofaNormalText class="text-left">
 			{{ data.description }}
 		</SofaNormalText>
 

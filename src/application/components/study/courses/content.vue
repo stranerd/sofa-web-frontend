@@ -28,10 +28,7 @@
 
 			<template v-if="selectedMaterial?.type == 'image'">
 				<div class="w-full flex flex-col">
-					<SofaImageLoader
-						:key="selectedMaterial.id"
-						customClass="w-full h-[400px] rounded-[12px]"
-						:photoUrl="selectedMaterial.data.imageUrl" />
+					<SofaImageLoader :key="selectedMaterial.id" class="w-full rounded-custom" :photoUrl="selectedMaterial.data.imageUrl" />
 				</div>
 			</template>
 

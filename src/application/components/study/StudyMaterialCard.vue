@@ -4,9 +4,9 @@
 		:to="content.route"
 		v-bind="$attrs"
 		class="shrink-0 bg-white flex flex-col gap-2 p-3 rounded-2xl shadow-itemBox">
-		<SofaImageLoader class="w-full mdlg:!h-[155px] h-[120px] rounded-custom relative" :photoUrl="content.image">
+		<SofaImageLoader class="w-full mdlg:h-[155px] h-[120px] rounded-custom relative" :photoUrl="content.image">
 			<div
-				v-if="content.price && content.price?.amount > 0"
+				v-if="content.price && content.price.amount > 0"
 				class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 				<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
 					{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
@@ -60,8 +60,16 @@
 		<div class="flex mdlg:!flex-row gap-2 mdlg:gap-3 items-start w-full" :class="isWrapped ? 'flex-row' : 'flex-col'">
 			<SofaImageLoader
 				:photoUrl="activity.image"
-				class="mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom relative"
-				:class="isWrapped ? 'h-[100px] w-[150px]' : 'h-[120px] w-full'" />
+				class="mdlg:h-[115px] mdlg:w-[200px] rounded-custom"
+				:class="isWrapped ? 'h-[100px] w-[150px]' : 'h-[120px] w-full'">
+				<div
+					v-if="content.price && content.price.amount > 0"
+					class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
+					<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
+						{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
+					</SofaBadge>
+				</div>
+			</SofaImageLoader>
 			<div class="flex flex-col gap-2 relative h-full w-full">
 				<div class="w-full flex items-center gap-2">
 					<SofaNormalText class="!font-bold flex-1 line-clamp-1">{{ activity.title }}</SofaNormalText>

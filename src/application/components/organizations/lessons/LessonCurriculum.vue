@@ -59,7 +59,7 @@
 								<SofaImageLoader
 									v-if="shouldShowItemImage(curriculum[sectionIndex].items[itemIndex])"
 									:photoUrl="getItemImagePlaceholder(curriculum[sectionIndex].items[itemIndex])"
-									customClass="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
+									class="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
 								<div
 									v-else
 									class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">

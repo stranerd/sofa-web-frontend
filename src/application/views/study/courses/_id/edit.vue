@@ -131,7 +131,7 @@
 					<div class="w-full flex flex-col">
 						<SofaImageLoader
 							:key="selectedMaterial.details.id"
-							customClass="w-full h-[400px] rounded-[12px]"
+							customClass="w-full rounded-custom"
 							:photoUrl="selectedMaterial.data.imageUrl" />
 					</div>
 				</template>

@@ -3,9 +3,7 @@
 		<SofaHeaderText content="Live Sessions" />
 		<div class="h-[1px] w-full bg-lightGray" />
 		<div class="w-full flex flex-col gap-2 items-center justify-center">
-			<SofaImageLoader
-				customClass="size-[64px] flex items-center justify-center rounded-custom !object-contain"
-				photoUrl="/images/empty-schedules.png" />
+			<SofaImageLoader class="w-[64px] rounded-custom" photoUrl="/images/empty-schedules.png" />
 			<SofaNormalText customClass="font-bold" content="There’s nothing here" />
 			<SofaNormalText color="text-grayColor text-center" content="There are no live sessions scheduled" />
 		</div>

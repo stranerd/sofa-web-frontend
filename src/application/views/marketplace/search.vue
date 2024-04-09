@@ -19,8 +19,10 @@
 					<div
 						class="flex flex-row items-center grow rounded-custom w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">
 						<SofaIcon name="search-black" customClass="h-[17px] mdlg:hidden" />
-						<SofaTextField v-model="searchQuery" customClass="!border-none w-full mdlg:!pl-0" placeholder="Search for anything">
-						</SofaTextField>
+						<SofaTextField
+							v-model="searchQuery"
+							customClass="!border-none w-full mdlg:!pl-0"
+							placeholder="Search for anything" />
 					</div>
 
 					<div class="w-[20px] hidden mdlg:!inline-block">
