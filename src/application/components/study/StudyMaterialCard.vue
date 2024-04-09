@@ -81,7 +81,7 @@
 					<SofaIcon
 						v-if="hasShowMore"
 						name="more-options-horizontal"
-						class="w-[20px]"
+						class="w-[20px] h-3"
 						@click.stop.prevent="(e) => handleShowMaterialMoreOptions(e, material)" />
 					<slot name="side-icons" />
 				</div>

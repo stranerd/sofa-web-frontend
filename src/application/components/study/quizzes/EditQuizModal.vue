@@ -37,7 +37,7 @@
 			</div>
 
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
-				<SofaImageLoader class="w-full rounded-custom relative" :photoUrl="factory.photo?.link ?? '/images/default.svg'">
+				<SofaImageLoader class="w-full h-[240px] rounded-custom relative" :photoUrl="factory.photo?.link ?? '/images/default.svg'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 						<SofaFileInput v-model="factory.photo" accept="image/*">
 							<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
