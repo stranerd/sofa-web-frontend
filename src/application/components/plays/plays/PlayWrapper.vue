@@ -40,12 +40,11 @@ const extras = computed(() => ({
 	canJoin: play.value && !play.value.participants.includes(authId.value),
 	authId: authId.value,
 	answers: myAnswer.value?.allAnswers ?? {},
-	get timedOutAt() {
-		if (myAnswer.value) return myAnswer.value.timedOutAt
-		if (play.value) return play.value.totalTimeInSec * 1000 + Date.now()
-		return null
-	},
 	start,
+	startQuiz: async () => {
+		if (!myAnswer.value) await submitAnswer({ questionId: null, answer: null }, false)
+		return myAnswer.value?.timedOutAt ?? null
+	},
 	end,
 	join,
 	submitAnswer,

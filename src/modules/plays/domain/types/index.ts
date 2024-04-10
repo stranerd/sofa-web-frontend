@@ -32,3 +32,8 @@ export type PlayGenericData = {
 }
 
 export type PlayData = PlayGamesData | PlayAssessmentsData | PlayTestsData | PlayGenericData
+
+export enum PlayTiming {
+	general = 'general',
+	perQuestion = 'perQuestion',
+}

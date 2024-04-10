@@ -31,7 +31,7 @@ export class AnswerRepository implements IAnswerRepository {
 		return this.mapper(data)
 	}
 
-	async answer(data: AnswerToModel & { questionId: string; answer: any }) {
+	async answer(data: AnswerToModel & { questionId: string | null; answer: any }) {
 		const d = await this.client.post<AnswerToModel, AnswerFromModel>(`/`, data)
 		return this.mapper(d)
 	}

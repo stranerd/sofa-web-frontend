@@ -14,6 +14,6 @@ export interface AnswerFromModel {
 }
 
 export interface AnswerToModel {
-	questionId: string
+	questionId: string | null
 	answer: PlayAnswer
 }

@@ -1,4 +1,4 @@
-export type QuestionAnswer = boolean | string | number[] | string[]
+export type QuestionAnswer = boolean | string | number[] | string[] | null
 
 export enum QuestionTypes {
 	multipleChoice = 'multipleChoice',

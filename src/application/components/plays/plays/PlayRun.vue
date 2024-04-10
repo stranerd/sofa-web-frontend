@@ -4,14 +4,14 @@
 			<QuizWrapper
 				v-if="playExtras.isParticipant"
 				:id="play.quizId"
-				:key="playExtras.timedOutAt ?? 0"
 				:showAnswer="showSolution"
 				:isAnswerRight="isCorrect"
 				:questions="playQuestions"
 				:answers="playExtras.answers"
 				:useTimer="play.isTimed"
-				:timedOutAt="playExtras.timedOutAt"
+				:timing="play.timing"
 				:totalTime="play.totalTimeInSec"
+				:start="playExtras.startQuiz"
 				:submit="playExtras.submitAnswer"
 				:access="access">
 				<template #prestart="{ extras }">
@@ -243,16 +243,12 @@ const dontShowAgain = ref(false)
 const close = () => (showInfoModal.value = false)
 
 if (props.type === PlayTypes.flashcards)
-	storage.get<'true'>(storageKey).then((value) => {
+	storage.get<true>(storageKey).then((value) => {
 		showInfoModal.value = !value
 	})
 
-watch(
-	dontShowAgain,
-	async () => {
-		if (dontShowAgain.value) await storage.set(storageKey, 'true')
-		else await storage.remove(storageKey)
-	},
-	{ immediate: true },
-)
+watch(dontShowAgain, async () => {
+	if (dontShowAgain.value) await storage.set(storageKey, true)
+	else await storage.remove(storageKey)
+})
 </script>

@@ -5,7 +5,7 @@ import { PlaysUseCase } from './domain/useCases/plays'
 
 export type { PlayToModel } from './data/models/plays'
 export { PlayFactory } from './domain/factories/plays'
-export { PlayStatus, PlayTypes } from './domain/types'
+export { PlayStatus, PlayTypes, PlayTiming } from './domain/types'
 export type { PlayAnswer } from './domain/types'
 
 export const AnswersUseCases = new AnswersUseCase(AnswerRepository.getInstance)

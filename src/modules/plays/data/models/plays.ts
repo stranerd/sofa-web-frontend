@@ -1,4 +1,4 @@
-import { EmbeddedUser, PlayData, PlayScore, PlayStatus, PlayTypes } from '../../domain/types'
+import { EmbeddedUser, PlayData, PlayScore, PlayStatus, PlayTiming, PlayTypes } from '../../domain/types'
 import { QuestionEntity } from '@modules/study'
 
 export interface PlayFromModel {
@@ -8,6 +8,7 @@ export interface PlayFromModel {
 	status: PlayStatus
 	questions: string[]
 	totalTimeInSec: number
+	timing: PlayTiming
 	scores: PlayScore
 	sources: QuestionEntity[]
 	startedAt: number | null

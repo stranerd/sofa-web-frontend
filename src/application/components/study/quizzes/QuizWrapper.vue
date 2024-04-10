@@ -8,10 +8,10 @@
 import { divideByZero } from 'valleyed'
 import { computed, ref, watch } from 'vue'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
-import { useAuth } from '@app/composables/auth/auth'
 import { useCountdown } from '@app/composables/core/time'
 import { useQuiz } from '@app/composables/study/quizzes'
 import { CoursableAccess, QuestionEntity, QuestionTypes } from '@modules/study'
+import { PlayTiming } from '@modules/plays/domain/types'
 
 const props = withDefaults(
 	defineProps<{
@@ -20,8 +20,9 @@ const props = withDefaults(
 		showAnswer?: boolean
 		isAnswerRight?: boolean
 		useTimer?: boolean
+		timing?: PlayTiming
 		totalTime?: number
-		timedOutAt?: number | null
+		start?: () => Promise<number | null>
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 		access?: CoursableAccess['access']
 	}>(),
@@ -31,13 +32,13 @@ const props = withDefaults(
 		isAnswerRight: false,
 		useTimer: false,
 		totalTime: undefined,
-		timedOutAt: null,
+		timing: PlayTiming.perQuestion,
 		submit: undefined,
 		access: undefined,
+		start: undefined,
 	},
 )
 
-const { id: authId } = useAuth()
 const { quiz, questions: backup, fetched } = useQuiz(props.id, { questions: !!props.questions, members: true }, props.access)
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
 const questions = computed(() => reorderedQuestions.value ?? props.questions ?? backup.value ?? [])
@@ -94,9 +95,6 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 	return null
 }
 
-const useGeneralTimer = computed(() => props.useTimer && quiz.value && !!quiz.value?.timeLimit)
-const useSingleQuestionTimer = computed(() => props.useTimer && quiz.value && !quiz.value.timeLimit)
-
 const moveCurrrentQuestionToEnd = () => {
 	if (!reorderedQuestions.value) reorderedQuestions.value = [...questions.value]
 	reorderedQuestions.value = reorderedQuestions.value.concat(reorderedQuestions.value.splice(index.value, 1))
@@ -104,7 +102,7 @@ const moveCurrrentQuestionToEnd = () => {
 
 const nextQ = async (newIndex: number) => {
 	index.value = newIndex
-	if (useSingleQuestionTimer.value && currentQuestionByIndex.value)
+	if (extras.value.usesSingleQuestionTimer && currentQuestionByIndex.value)
 		runCountdown({ time: currentQuestionByIndex.value.timeLimit }).then(() => submitAnswer('right'))
 }
 
@@ -137,17 +135,12 @@ const extras = computed(() => ({
 		answer.value = v
 	},
 	get fractionTimeLeft() {
-		if (useSingleQuestionTimer.value) {
-			const duration = currentQuestionByIndex.value?.timeLimit ?? 0
-			return divideByZero(runTime.value, duration)
-		}
-		if (useGeneralTimer.value) {
-			const endsIn = Date.now() - (props.timedOutAt ?? 0)
-			if (endsIn <= 0) return 0
-			return divideByZero(endsIn, props.totalTime ?? 0)
-		}
+		if (this.usesSingleQuestionTimer) return divideByZero(runTime.value, currentQuestionByIndex.value?.timeLimit ?? 0)
+		if (this.usesGeneralTimer) return divideByZero(runTime.value, props.totalTime ?? 0)
 		return 0
 	},
+	usesGeneralTimer: props.useTimer && props.timing === PlayTiming.general,
+	usesSingleQuestionTimer: props.useTimer && props.timing === PlayTiming.perQuestion,
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestionByIndex.value,
@@ -166,22 +159,21 @@ const extras = computed(() => ({
 		reorderedQuestions.value = null
 		index.value = 0
 	},
-	isMine: quiz.value?.user.id === authId.value,
-	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(authId.value),
 }))
 
 watch(
 	quiz,
 	async () => {
-		const q = quiz.value
-		if (!q) return
-		if (started.value) return
+		if (!quiz.value || started.value) return
 		const justStarted = startAt.value === -1
 		if (props.useTimer && justStarted) await startCountdown({ time: 3 })
-		started.value = true
+		if (props.start) {
+			const timedOutAt = await props.start()
+			const endsIn = (timedOutAt ?? 0) - Date.now()
+			if (extras.value.usesGeneralTimer && endsIn > 0) runCountdown({ time: endsIn / 1000 })
+		}
 		nextQ(justStarted ? 0 : startAt.value)
-		const endsIn = Date.now() - (props.timedOutAt ?? 0)
-		if (useGeneralTimer.value) runCountdown({ time: endsIn / 1000 })
+		started.value = true
 	},
 	{ immediate: true },
 )
