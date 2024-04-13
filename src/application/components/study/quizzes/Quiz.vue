@@ -79,7 +79,7 @@
 						:disabled="rightButton.disabled"
 						:bgColor="rightButton.bgColor"
 						:textColor="rightButton.textColor"
-						@click="rightButton.click">
+						@click="rightButton.click()">
 						{{ rightButton.label }}
 					</SofaButton>
 					<SofaIcon
@@ -87,7 +87,7 @@
 						name="round-arrow-right"
 						class="h-[40px]"
 						:class="rightButton.disabled ? 'fill-grayColor' : 'fill-black'"
-						@click="rightButton.click" />
+						@click="rightButton.click()" />
 				</div>
 			</div>
 		</slot>
@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { divideByZero } from 'valleyed'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
@@ -103,7 +103,7 @@ import { Logic } from 'sofa-logic'
 import { PlayTiming } from '@modules/plays'
 import { useCountdown } from '@app/composables/core/time'
 
-type ButtonConfig = {
+type ButtonConfig = (extras: ExtraTypes) => {
 	label: string
 	bgColor: string
 	textColor: string
@@ -115,8 +115,10 @@ const props = withDefaults(
 	defineProps<{
 		title: string
 		questions: QuestionEntity[]
-		rightButton?: ButtonConfig | null
-		leftButton?: ButtonConfig | null
+
+		answers?: Record<string, any>
+		rightButtonConfig?: ButtonConfig
+		leftButtonConfig?: ButtonConfig
 		isDark?: boolean
 		showCounter?: boolean
 		isInModal?: boolean
@@ -130,8 +132,7 @@ const props = withDefaults(
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 	}>(),
 	{
-		rightButton: null,
-		leftButton: null,
+		answers: () => ({}),
 		isDark: false,
 		showCounter: true,
 		isInModal: false,
@@ -140,9 +141,6 @@ const props = withDefaults(
 		isAnswerRight: false,
 		useTimer: false,
 		timing: PlayTiming.perQuestion,
-		totalTime: undefined,
-		submit: undefined,
-		start: undefined,
 	},
 )
 
@@ -153,13 +151,12 @@ const { time: runTime, countdown: runCountdown } = useCountdown()
 
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
 const questions = computed(() => reorderedQuestions.value ?? props.questions)
-const answers = defineModel<Record<string, any>>('answers', { default: {} })
+const answers = ref<Record<string, any>>(props.answers ?? {})
 const question = computed(() => questions.value.at(index.value))
 const answer = computed({
 	get: () => (question.value ? answers.value[question.value.id] ?? question.value.defaultAnswer : []),
 	set: (val) => {
-		// for deep reactive, seems models are not deeply reactive
-		answers.value = { ...answers.value, [question.value?.id ?? '']: val }
+		if (question.value) answers.value[question.value.id] = val
 	},
 })
 const startAt = computed(() => {
@@ -264,4 +261,16 @@ onMounted(async () => {
 	nextQ(justStarted ? 0 : startAt.value)
 	started.value = true
 })
+
+watch(props.answers, () => {
+	if (props.answers)
+		answers.value = {
+			...answers.value,
+			...props.answers,
+		}
+})
+
+type ExtraTypes = (typeof extras)['value']
+const leftButton = computed(() => props.leftButtonConfig?.(extras.value))
+const rightButton = computed(() => props.rightButtonConfig?.(extras.value))
 </script>
