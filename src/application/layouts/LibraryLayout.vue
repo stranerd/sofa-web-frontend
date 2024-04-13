@@ -47,7 +47,7 @@
 					:is="item.id === factory.entityId ? 'span' : 'router-link'"
 					v-for="item in folders"
 					:key="item.id"
-					class="w-full flex items-center justify-start text-left gap-3 p-3 relative rounded-[8px] hover:bg-lightBlue group folder-link"
+					class="w-full flex items-center justify-start text-left gap-3 px-4 py-3 relative rounded-[8px] hover:bg-lightBlue group folder-link"
 					:to="`/library/folders/${item.id}`"
 					exactActiveClass="bg-lightBlue font-semibold">
 					<SofaIcon name="folder" customClass="h-[16px]" />

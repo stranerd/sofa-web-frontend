@@ -14,6 +14,7 @@ export const useCountdown = (skipClearOnUnmounted = false) => {
 				interval = setInterval(async () => {
 					const newValue = time.value - 1
 					if (newValue <= 0) {
+						time.value = 0
 						clearInterval(interval)
 						res()
 					} else {

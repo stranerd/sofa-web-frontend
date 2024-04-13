@@ -9,7 +9,7 @@
 			</SofaNormalText>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
-		<template v-if="factory.type && !(factory.isFlashcards || factory.isPractice)">
+		<template v-if="factory.type && !factory.canAutoStart">
 			<SofaTextField
 				v-model="factory.title"
 				:error="factory.errors.title"
@@ -94,7 +94,7 @@ const goToEdit = () => {
 
 const chooseMode = async (type: PlayTypes) => {
 	factory.load(type, props.quiz)
-	if (factory.isPractice || factory.isFlashcards) return await createPlay({ start: true }).then(() => props.close())
+	if (factory.canAutoStart) return await createPlay({ start: true }).then(() => props.close())
 }
 
 const submit = async () => await createPlay({ start: false })

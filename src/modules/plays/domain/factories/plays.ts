@@ -1,10 +1,10 @@
-import { isLaterThan, v, capitalize } from 'valleyed'
+import { capitalize, isLaterThan, v } from 'valleyed'
 import { PlayToModel } from '../../data/models/plays'
 import { PlayEntity } from '../entities/plays'
 import { PlayTypes } from '../types'
 import { getDateTimeString } from '@utils/dates'
-import { BaseFactory } from '@modules/core'
 import { QuizEntity } from '@modules/study'
+import { BaseFactory } from '@modules/core'
 
 const minGracePeriod = 1000 * 60 * 5
 
@@ -64,6 +64,10 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 
 	get minAssessmentsEndedAt() {
 		return getDateTimeString(new Date(Date.now() + minGracePeriod))
+	}
+
+	get canAutoStart() {
+		return this.isTests || this.isPractice || this.isFlashcards
 	}
 
 	load(type: PlayTypes, quiz: QuizEntity) {

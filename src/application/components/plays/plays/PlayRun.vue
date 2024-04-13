@@ -1,5 +1,5 @@
 <template>
-	<PlayWrapper :id="playId" :type="type" :skipStatusNav="true" :skipParticipants="true">
+	<PlayWrapper :id="playId" :type="type" :skipParticipants="true">
 		<template #default="{ play, questions, extras }">
 			<component
 				:is="play.isFlashcards() ? PlayFlashcard : play.isPractice() ? PlayPractice : PlayGeneric"
@@ -19,7 +19,7 @@
 				}" />
 			<div v-else-if="play.canJoinAfterStart && extras.canJoin" class="flex flex-col h-full items-center justify-center gap-4">
 				<SofaHeaderText
-					:color="play.isDark ? 'test-white' : undefined"
+					:color="play.isDark ? 'text-white' : undefined"
 					class="capitalize"
 					:content="`${play.singularizedType} already started`" />
 				<div class="flex gap-4 items-center">
