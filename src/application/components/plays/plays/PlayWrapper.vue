@@ -1,15 +1,15 @@
 <template>
-	<slot v-if="fetched && play" :play="play" :participants="participants" :questions="questions" :extras="extras" />
+	<slot v-if="fetched && play" :play="play" :quiz="quiz" :participants="participants" :questions="questions" :extras="extras" />
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlay } from '@app/composables/plays/plays'
+import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { PlayTypes } from '@modules/plays'
-import { QuizEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 import { ordinalSuffixOf } from '@utils/commons'
+import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -26,12 +26,14 @@ const props = withDefaults(
 	},
 )
 
+const { id: authId } = useAuth()
 const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer, resetAnswer } = usePlay(props.type, props.id, {
 	questions: props.skipQuestions,
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
 })
-const { id: authId } = useAuth()
+const { quizzes } = useQuizzesInList(computed(() => (play.value ? [play.value.quizId] : [])))
+const quiz = computed(() => quizzes.value.at(0) ?? null)
 
 const extras = computed(() => ({
 	isMine: play.value && play.value.user.id === authId.value,
@@ -39,6 +41,7 @@ const extras = computed(() => ({
 	canEnd: play.value && play.value.user.id === authId.value && play.value.isStarted,
 	canJoin: play.value && !play.value.participants.includes(authId.value),
 	authId: authId.value,
+	picture: quiz.value?.picture ?? '/images/default.svg',
 	answers: myAnswer.value?.allAnswers ?? {},
 	start,
 	startQuiz: async () => {
@@ -49,9 +52,13 @@ const extras = computed(() => ({
 	join,
 	submitAnswer,
 	resetAnswer,
-	share: async (quiz: QuizEntity) => {
+	share: async () => {
 		if (play.value)
-			await Logic.Common.share(`Join ${play.value.singularizedType} on SOFA`, `Take a quiz on: ${quiz.title}`, play.value.shareLink)
+			await Logic.Common.share(
+				`Join ${play.value.singularizedType} on SOFA`,
+				`Take a quiz on: ${play.value.title}`,
+				play.value.shareLink,
+			)
 	},
 	copy: async () => {
 		if (play.value) await Logic.Common.copy(play.value.shareLink)

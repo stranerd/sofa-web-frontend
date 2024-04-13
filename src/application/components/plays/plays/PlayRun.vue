@@ -26,12 +26,12 @@
 						</div>
 					</div>
 				</template>
-				<template #default="{ quiz, questions, extras }">
+				<template #default="{ questions, extras }">
 					<Quiz
 						v-model:answer="extras.answer"
 						:index="extras.index"
 						:isDark="play.isDark"
-						:title="generateQuizTitle(play, quiz, extras)"
+						:title="generateQuizTitle(play, extras)"
 						:showCounter="play.isPractice()"
 						:isInModal="isInModal"
 						:questions="questions"
@@ -148,7 +148,6 @@ import PlayWrapper from './PlayWrapper.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { PlayEntity, PlayTypes } from '@modules/plays'
-import { QuizEntity } from '@modules/study'
 import { storage } from '@utils/storage'
 
 const props = defineProps<{
@@ -230,8 +229,8 @@ const generateRightButton = (play: PlayEntity, extras: QuizWrapperExtras, playEx
 	}
 }
 
-const generateQuizTitle = (play: PlayEntity, quiz: QuizEntity, extras: QuizWrapperExtras) => {
-	if (play.isPractice()) return isDone.value ? 'Practice completed' : play.title || quiz.title
+const generateQuizTitle = (play: PlayEntity, extras: QuizWrapperExtras) => {
+	if (play.isPractice()) return isDone.value ? 'Practice completed' : play.title
 	return `Question ${extras.index + 1} of ${play.questions.length}`
 }
 

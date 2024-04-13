@@ -6,7 +6,7 @@
 		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.assessments" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions, participants }">
 				<QuizWrapper :id="play.quizId" :questions="playQuestions">
-					<template #default="{ quiz, questions, extras }">
+					<template #default="{ questions, extras }">
 						<Quiz
 							v-model:answer="extras.answer"
 							:index="extras.index"
@@ -41,7 +41,7 @@
 											<SofaHeaderText :content="play.title" class="!text-center !font-extrabold" size="xl" />
 
 											<div class="w-full flex items-center justify-center gap-4">
-												<a class="gap-2 items-center flex" @click="playExtras.share(quiz)">
+												<a class="gap-2 items-center flex" @click="playExtras.share()">
 													<SofaIcon class="h-[16px]" name="share" />
 													<SofaNormalText color="text-inherit" content="Share" />
 												</a>
@@ -52,11 +52,13 @@
 											</div>
 										</template>
 										<template v-else>
-											<SofaImageLoader :photoUrl="quiz.photo?.link" customClass="h-[80px] w-[140px] rounded-custom" />
+											<SofaImageLoader
+												:photoUrl="playExtras.picture"
+												customClass="h-[80px] w-[140px] rounded-custom" />
 											<div class="w-full flex flex-col h-full gap-1">
 												<div class="w-full flex items-center justify-between">
 													<SofaHeaderText :content="play.title" size="xl" class="text-left !line-clamp-1" />
-													<SofaIcon class="h-[16px]" name="share" @click="playExtras.share(quiz)" />
+													<SofaIcon class="h-[16px]" name="share" @click="playExtras.share()" />
 												</div>
 												<div class="flex gap-2 items-center">
 													<SofaNormalText color="text-primaryPurple" content="Assessment" />

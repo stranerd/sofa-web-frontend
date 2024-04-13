@@ -69,7 +69,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 	load(type: PlayTypes, quiz: QuizEntity) {
 		this.quizId = quiz.id
 		this.type = type
-		this.title = capitalize(`${PlayEntity.singularizedType(this.type)} on: ${quiz.title}`)
+		this.title = capitalize(quiz.title)
 	}
 
 	loadEntity = (entity: PlayEntity) => {
