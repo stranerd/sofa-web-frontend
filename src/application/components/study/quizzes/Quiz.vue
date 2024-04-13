@@ -117,6 +117,7 @@ const props = withDefaults(
 		questions: QuestionEntity[]
 
 		answers?: Record<string, any>
+		disabled?: boolean
 		rightButtonConfig?: ButtonConfig
 		leftButtonConfig?: ButtonConfig
 		isDark?: boolean
@@ -133,6 +134,7 @@ const props = withDefaults(
 	}>(),
 	{
 		answers: () => ({}),
+		disabled: false,
 		rightButtonConfig: undefined,
 		leftButtonConfig: undefined,
 		isDark: false,
@@ -161,6 +163,7 @@ const question = computed(() => questions.value.at(index.value))
 const answer = computed({
 	get: () => (question.value ? answers.value[question.value.id] ?? question.value.defaultAnswer : []),
 	set: (val) => {
+		if (props.disabled) return
 		if (question.value) answers.value[question.value.id] = val
 	},
 })
@@ -248,7 +251,12 @@ const extras = computed(() => ({
 	},
 	canPrev: index.value > 0,
 	canNext: index.value < questions.value.length - 1,
+	resetCurrentQuestion: () => {
+		if (!question.value) return
+		answers.value[question.value.id] = question.value.defaultAnswer
+	},
 	reset: () => {
+		answers.value = {}
 		reorderedQuestions.value = null
 		index.value = 0
 	},
@@ -267,13 +275,16 @@ onMounted(async () => {
 	started.value = true
 })
 
-watch(props.answers, () => {
-	if (props.answers)
-		answers.value = {
-			...answers.value,
-			...props.answers,
-		}
-})
+watch(
+	() => props.answers,
+	() => {
+		if (props.answers)
+			answers.value = {
+				...answers.value,
+				...props.answers,
+			}
+	},
+)
 
 type ExtraTypes = (typeof extras)['value']
 const leftButton = computed(() => props.leftButtonConfig?.(extras.value))

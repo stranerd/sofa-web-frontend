@@ -128,8 +128,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 	const { asyncFn: fetchQuestions, called: fetchedQuestions } = useAsyncFn(
 		async () => {
 			const questions = await PlaysUseCases.getQuestions(id)
-			const sources = singleStore[id].play.value?.sources ?? []
-			singleStore[id].questions.splice(0, singleStore[id].questions.length, ...(sources.length ? sources : questions))
+			singleStore[id].questions.splice(0, singleStore[id].questions.length, ...questions)
 		},
 		{ pre: () => !skip.questions, key: `plays/plays/${id}/questions` },
 	)
@@ -235,7 +234,13 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		await singleStore[id].listener.close()
 	})
 
-	return { ...singleStore[id], myAnswer, participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
+	const questions = computed(() => {
+		const play = singleStore[id].play.value
+		if (play?.sources.length) return play.sources
+		return singleStore[id].questions
+	})
+
+	return { ...singleStore[id], questions, myAnswer, participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
 }
 
 export const useCreatePlay = (access: CoursableAccess['access'], options: { start: boolean; nav: boolean }) => {

@@ -4,6 +4,7 @@
 		:title="isDone ? 'Practice completed' : quizProps.title"
 		:showAnswer="showSolution"
 		:isAnswerRight="isCorrect"
+		:disabled="isDone || showSolution"
 		:rightButtonConfig="
 			(extras) => ({
 				label: isDone || showSolution ? 'Continue' : 'Check',
@@ -29,13 +30,15 @@
 				label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
 				bgColor: 'bg-white border border-gray-100',
 				textColor: 'text-grayColor',
-				disabled: !isDone && extras.index === quizProps.questions.length - 1,
 				click: () => {
 					if (isDone) {
 						extras.reset()
 						return (isDone = false)
-					} else if (showSolution) return (showSolution = false)
-					else if (extras.canNext) return extras.next()
+					} else if (showSolution) {
+						extras.resetCurrentQuestion()
+						return (showSolution = false)
+					} else if (extras.canNext) return extras.next()
+					else return (isDone = true)
 				},
 			})
 		">
