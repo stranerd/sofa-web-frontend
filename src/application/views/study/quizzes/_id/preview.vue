@@ -7,7 +7,6 @@
 					:index="extras.index"
 					:title="quiz.title"
 					:questions="questions"
-					:optionState="extras.optionState"
 					:rightButton="{
 						label: 'Next',
 						bgColor: 'bg-primaryBlue',

@@ -6,16 +6,13 @@
 <script lang="ts" setup>
 import { divideByZero } from 'valleyed'
 import { computed, onMounted, ref } from 'vue'
-import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { useCountdown } from '@app/composables/core/time'
-import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { PlayTiming } from '@modules/plays/domain/types'
+import { QuestionEntity } from '@modules/study'
 
 const props = withDefaults(
 	defineProps<{
 		questions: QuestionEntity[]
-		showAnswer?: boolean
-		isAnswerRight?: boolean
 		useTimer?: boolean
 		timing?: PlayTiming
 		totalTime?: number
@@ -23,8 +20,6 @@ const props = withDefaults(
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 	}>(),
 	{
-		showAnswer: false,
-		isAnswerRight: false,
 		useTimer: false,
 		totalTime: undefined,
 		timing: PlayTiming.perQuestion,
@@ -57,37 +52,6 @@ const startAt = computed(() => {
 	if (questions.value.length === Object.keys(allAnswers).length) return questions.value.length - 1
 	return questions.value.findIndex((q) => !(q.id in allAnswers))
 })
-
-const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
-	const question = currentQuestionByIndex.value
-	if (!question) return null
-	if (props.showAnswer && question.data) {
-		if (question.data.type === QuestionTypes.multipleChoice) {
-			if (question.data.answers.includes(index ?? -1)) return 'right'
-			if (answer.value.includes(index)) return 'wrong'
-		}
-		if (question.data.type === QuestionTypes.trueOrFalse) {
-			if (question.data.answer === val) return 'right'
-			if (answer.value === val) return 'wrong'
-		}
-		if (question.data.type === QuestionTypes.writeAnswer) return props.isAnswerRight ? 'right' : 'wrong'
-		if (
-			question.data.type === QuestionTypes.dragAnswers ||
-			question.data.type === QuestionTypes.fillInBlanks ||
-			question.data.type === QuestionTypes.sequence
-		) {
-			if (props.isAnswerRight) return 'right'
-			return question.data.answers[index ?? -1] === val ? 'right' : 'wrong'
-		}
-		if (question.data.type === QuestionTypes.match) {
-			if (props.isAnswerRight) return 'right'
-			return question.data.set[index ?? -1]?.a === val ? 'right' : 'wrong'
-		}
-	}
-	if (question.strippedData.type === QuestionTypes.trueOrFalse && answer.value === val) return 'selected'
-	if (question.strippedData.type === QuestionTypes.multipleChoice && answer.value.includes(index)) return 'selected'
-	return null
-}
 
 const moveCurrrentQuestionToEnd = () => {
 	if (!reorderedQuestions.value) reorderedQuestions.value = [...questions.value]
@@ -138,7 +102,6 @@ const extras = computed(() => ({
 	started: started.value,
 	startCountdown: startTime.value,
 	question: currentQuestionByIndex.value,
-	optionState,
 	submitAnswer,
 	moveCurrrentQuestionToEnd,
 	next: () => {

@@ -96,7 +96,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
-import { QuestionEntity } from '@modules/study'
+import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
 type ButtonConfig = {
@@ -115,10 +115,11 @@ const props = withDefaults(
 		title: string
 		rightButton?: ButtonConfig | null
 		leftButton?: ButtonConfig | null
-		optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 		showCounter?: boolean
 		isInModal?: boolean
 		growMid?: boolean
+		showAnswer?: boolean
+		isAnswerRight?: boolean
 	}>(),
 	{
 		isDark: false,
@@ -127,10 +128,43 @@ const props = withDefaults(
 		showCounter: true,
 		isInModal: false,
 		growMid: false,
+		showAnswer: false,
+		isAnswerRight: false,
 	},
 )
 
 const answer = defineModel<any>('answer')
 
 const question = computed(() => props.questions.at(props.index))
+
+const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
+	const q = question.value
+	if (!q) return null
+	if (props.showAnswer && q.data) {
+		if (q.data.type === QuestionTypes.multipleChoice) {
+			if (q.data.answers.includes(index ?? -1)) return 'right'
+			if (answer.value.includes(index)) return 'wrong'
+		}
+		if (q.data.type === QuestionTypes.trueOrFalse) {
+			if (q.data.answer === val) return 'right'
+			if (answer.value === val) return 'wrong'
+		}
+		if (q.data.type === QuestionTypes.writeAnswer) return props.isAnswerRight ? 'right' : 'wrong'
+		if (
+			q.data.type === QuestionTypes.dragAnswers ||
+			q.data.type === QuestionTypes.fillInBlanks ||
+			q.data.type === QuestionTypes.sequence
+		) {
+			if (props.isAnswerRight) return 'right'
+			return q.data.answers[index ?? -1] === val ? 'right' : 'wrong'
+		}
+		if (q.data.type === QuestionTypes.match) {
+			if (props.isAnswerRight) return 'right'
+			return q.data.set[index ?? -1]?.a === val ? 'right' : 'wrong'
+		}
+	}
+	if (q.strippedData.type === QuestionTypes.trueOrFalse && answer.value === val) return 'selected'
+	if (q.strippedData.type === QuestionTypes.multipleChoice && answer.value.includes(index)) return 'selected'
+	return null
+}
 </script>

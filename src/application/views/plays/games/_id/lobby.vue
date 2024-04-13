@@ -13,7 +13,6 @@
 							:title="play.title"
 							:questions="questions"
 							:showCounter="false"
-							:optionState="extras.optionState"
 							:isDark="play.isDark"
 							:rightButton="{
 								label: playExtras.isMine ? 'Start' : 'Join',

@@ -4,7 +4,6 @@
 		:index="extras.index"
 		:title="isDone ? 'Flashcards completed' : play.title"
 		:questions="questions"
-		:optionState="extras.optionState"
 		:growMid="true"
 		:rightButton="{
 			label: isDone ? 'Continue' : 'Mastered',
