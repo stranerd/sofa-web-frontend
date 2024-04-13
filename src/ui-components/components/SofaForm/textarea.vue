@@ -74,7 +74,7 @@ withDefaults(
 		hasTitle: false,
 		labelStyle: '',
 		placeholder: '',
-		textAreaStyle: 'max-h-[400px] bg-grey100  px-3 py-3 ',
+		textAreaStyle: 'max-h-[400px] bg-grey100 px-3 py-3',
 		updateValue: '',
 		richEditor: false,
 		error: '',
@@ -96,7 +96,10 @@ const saveFormula = (e: Event) => {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	if (e.data === 'insertLineBreak') {
-		quill.value.theme.tooltip.textbox.value = target.value.slice(2, -2)
+		let value = target.value
+		if (value.startsWith('$ ')) value = value.slice(2)
+		if (value.endsWith(' $')) value = value.slice(0, 2)
+		quill.value.theme.tooltip.textbox.value = value
 		quill.value.theme.tooltip.root.querySelector('a.ql-action').click()
 
 		showMath.value = false
@@ -116,11 +119,10 @@ const editorOptions = {
 					quill.value.theme.tooltip.hide()
 
 					showMath.value = !showMath.value
-					if (showMath.value)
-						setImmediate(() => {
-							mathRef.value.focus()
-							window.mathVirtualKeyboard.show()
-						})
+					if (showMath.value) {
+						mathRef.value.focus()
+						window.mathVirtualKeyboard.show()
+					}
 				},
 			},
 		},
@@ -136,8 +138,7 @@ onMounted(async () => {
 	await window.customElements.whenDefined('math-field')
 	const mf = mathRef.value
 	if (!mf) return
-	mf.defaultMode = 'text'
-	mf.smartMode = false
+	mf.smartMode = true
 	mf.mathModeSpace = '\\:'
 	mf.mathVirtualKeyboardPolicy = 'manual'
 	mf.addEventListener('focusout', leaveMathFieldFocus)
