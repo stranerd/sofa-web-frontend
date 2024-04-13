@@ -1,5 +1,7 @@
 export type { Saleable } from '@modules/payment'
 export * from './questions'
+import type { FileEntity } from '../entities/files'
+import type { QuizEntity } from '../entities/quizzes'
 import { Media, Ratings } from '@modules/core'
 import { EmbeddedUser } from '@modules/users'
 
@@ -42,9 +44,21 @@ export type CoursableData = Publishable & {
 	courseId: string | null
 }
 
+export type CourseSectionItem =
+	| {
+			id: string
+			type: Coursable.quiz
+			quizMode: QuizModes
+	  }
+	| {
+			id: string
+			type: Coursable.file
+			fileType: FileType
+	  }
+
 export type CourseSections = {
 	label: string
-	items: { id: string; type: Coursable }[]
+	items: CourseSectionItem[]
 }[]
 
 export enum QuizMeta {
@@ -89,3 +103,19 @@ export enum QuizModes {
 	flashcards = 'flashcards',
 	assessments = 'assessments',
 }
+
+export type ExtendedCourseSectionItem =
+	| {
+			id: string
+			type: Coursable.quiz
+			quizMode: QuizModes
+			quiz: QuizEntity
+	  }
+	| {
+			id: string
+			type: Coursable.file
+			fileType: FileType
+			file: FileEntity
+	  }
+
+export type ExtendedCourseSections = (Omit<CourseSections[number], 'items'> & { items: ExtendedCourseSectionItem[] })[]

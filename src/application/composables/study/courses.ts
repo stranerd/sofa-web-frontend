@@ -1,14 +1,14 @@
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
-import { useAsyncFn } from '../core/hooks'
+import { Refable, useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { useFilesInList } from './files-list'
 import { useQuizzesInList } from './quizzes-list'
 import { Logic } from 'sofa-logic'
-import { Coursable, CourseEntity, CourseFactory, CoursesUseCases } from '@modules/study'
+import { Coursable, CourseEntity, CourseFactory, CoursesUseCases, ExtendedCourseSections } from '@modules/study'
 
 const store = {} as Record<
 	string,
@@ -18,7 +18,7 @@ const store = {} as Record<
 	}
 >
 
-export const useCourse = (id: string, skip: { items?: boolean }) => {
+export const useCourse = (id: string) => {
 	store[id] ??= {
 		course: ref(null),
 		listener: useListener(
@@ -37,35 +37,6 @@ export const useCourse = (id: string, skip: { items?: boolean }) => {
 		),
 	}
 
-	const { quizzes } = useQuizzesInList(
-		computed(() => (!skip.items ? store[id].course.value?.quizzesIds ?? [] : [])),
-		!skip.items,
-	)
-
-	const { files } = useFilesInList(
-		computed(() => (!skip.items ? store[id].course.value?.filesIds ?? [] : [])),
-		!skip.items,
-	)
-
-	const sections = computed(
-		() =>
-			store[id].course.value?.sections.map((section) => {
-				const items = section.items
-					.map((item) => {
-						if (item.type === Coursable.file) {
-							const file = files.value.find((f) => f.id === item.id)
-							if (file) return { ...item, type: Coursable.file as const, file }
-						}
-						if (item.type === Coursable.quiz) {
-							const quiz = quizzes.value.find((q) => q.id === item.id)
-							if (quiz) return { ...item, type: Coursable.quiz as const, quiz }
-						}
-					})
-					.filter(Boolean)
-				return { label: section.label, items }
-			}) ?? [],
-	)
-
 	const { asyncFn: fetchCourse, called } = useAsyncFn(
 		async () => {
 			store[id].course.value = await CoursesUseCases.find(id)
@@ -81,7 +52,7 @@ export const useCourse = (id: string, skip: { items?: boolean }) => {
 		await store[id].listener.close()
 	})
 
-	return { ...store[id], fetched: called, sections }
+	return { ...store[id], fetched: called }
 }
 
 export const useCreateCourse = () => {
@@ -105,7 +76,7 @@ export const useCreateCourse = () => {
 export const useEditCourse = (id: string) => {
 	const { auth } = useAuth()
 	const router = useRouter()
-	const { course, fetched } = useCourse(id, {})
+	const { course, fetched } = useCourse(id)
 	const courseFactory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 	const { setMessage } = useSuccessHandler()
 
@@ -135,7 +106,7 @@ export const useEditCourse = (id: string) => {
 			pre: async () =>
 				await Logic.Common.confirm({
 					title: 'Are you sure?',
-					sub: "This action is permanent. After publishing a course, you won't be able to remove its content again. However, you can add new and edit existing content.",
+					sub: "This action is permanent. After publishing a course, you won't be able to remove its contents again. However, you can add new and edit existing content.",
 					right: { label: 'Yes, publish', bg: 'bg-primaryBlue' },
 				}),
 		},
@@ -164,4 +135,35 @@ export const useEditCourse = (id: string) => {
 		publishCourse,
 		deleteCourse,
 	}
+}
+
+export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
+	const quizIds = computed(() =>
+		sects.value.flatMap((c) => c.items.filter((item) => item.type === Coursable.quiz).map((item) => item.id)),
+	)
+	const fileIds = computed(() =>
+		sects.value.flatMap((c) => c.items.filter((item) => item.type === Coursable.file).map((item) => item.id)),
+	)
+
+	const { quizzes } = useQuizzesInList(quizIds, true)
+	const { files } = useFilesInList(fileIds, true)
+
+	const sections = computed<ExtendedCourseSections>(() =>
+		sects.value.map((c) => {
+			const items = c.items
+				.map((item) => {
+					if (item.type === Coursable.file) {
+						const file = files.value.find((f) => f.id === item.id)
+						if (file) return { ...item, file }
+					}
+					if (item.type === Coursable.quiz) {
+						const quiz = quizzes.value.find((q) => q.id === item.id)
+						if (quiz) return { ...item, quiz }
+					}
+				})
+				.filter(Boolean)
+			return { label: c.label, items }
+		}),
+	)
+	return { quizzes, files, sections }
 }
