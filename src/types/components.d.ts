@@ -84,6 +84,7 @@ declare module 'vue' {
     NotificationModal: typeof import('./../application/components/notifications/notifications/NotificationModal.vue')['default']
     NotificationsListModal: typeof import('./../application/components/notifications/notifications/NotificationsListModal.vue')['default']
     PlayCard: typeof import('./../application/components/plays/plays/PlayCard.vue')['default']
+    PlayFlashcard: typeof import('./../application/components/plays/plays/types/PlayFlashcard.vue')['default']
     PlayRun: typeof import('./../application/components/plays/plays/PlayRun.vue')['default']
     PlayWrapper: typeof import('./../application/components/plays/plays/PlayWrapper.vue')['default']
     PreviewCurriculumModal: typeof import('./../application/components/organizations/lessons/PreviewCurriculumModal.vue')['default']

@@ -93,10 +93,8 @@ const goToEdit = () => {
 }
 
 const chooseMode = async (type: PlayTypes) => {
-	const quizId = props.quiz.id
 	factory.load(type, props.quiz)
-	if (factory.isPractice) return await createPlay({ start: true }).then(() => props.close())
-	if (factory.isFlashcards) return await router.push(`/study/quizzes/${quizId}/flashcards`).then(() => props.close())
+	if (factory.isPractice || factory.isFlashcards) return await createPlay({ start: true }).then(() => props.close())
 }
 
 const submit = async () => await createPlay({ start: false })

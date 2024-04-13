@@ -25,7 +25,9 @@
 					</div>
 				</template>
 				<template #default="{ questions, extras }">
+					<PlayFlashcard v-if="play.isFlashcards()" :play="play" :questions="questions" :extras="extras" />
 					<Quiz
+						v-else
 						v-model:answer="extras.answer"
 						:index="extras.index"
 						:isDark="play.isDark"
@@ -94,61 +96,18 @@
 			</div>
 		</template>
 	</PlayWrapper>
-	<SofaModal v-if="showInfoModal">
-		<div class="flex flex-col p-4 mdlg:p-6 gap-6 items-center justify-center">
-			<div class="w-full flex flex-col gap-2 items-start">
-				<div class="w-full flex gap-2 justify-between md:justify-center items-center">
-					<SofaHeaderText class="text-xl" content="Flashcards" />
-					<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
-				</div>
-				<SofaNormalText content="Learning quiz questions and answers" />
-			</div>
-			<div class="w-full h-full flex flex-col items-center gap-4">
-				<div class="bg-primaryPurple text-white rounded-custom p-4 w-full flex flex-col gap-2">
-					<div
-						v-for="(item, index) in [
-							'Click on the card to flip it',
-							'Mastered makes card not reappear',
-							'Show later sends card to end of deck',
-							'Both buttons take you to next card',
-						]"
-						:key="index"
-						class="flex items-center justify-start gap-2">
-						<span class="w-1 aspect-square rounded-full bg-white" />
-						<SofaNormalText color="text-inherit" :content="item" />
-					</div>
-				</div>
-				<SofaCheckbox v-model="dontShowAgain" class="!w-auto">
-					<SofaNormalText color="text-inherit" content="Don't show again" />
-				</SofaCheckbox>
-				<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
-					<SofaButton
-						padding="px-5 py-2"
-						bgColor="bg-white"
-						textColor="text-grayColor"
-						class="hidden mdlg:inline-block"
-						customClass="border border-gray-100"
-						@click="close">
-						Exit
-					</SofaButton>
-
-					<SofaButton padding="px-5 py-3 mdlg:py-2" class="mdlg:w-auto w-full" @click="close">Start</SofaButton>
-				</div>
-			</div>
-		</div>
-	</SofaModal>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PlayWrapper from './PlayWrapper.vue'
+import PlayFlashcard from './types/PlayFlashcard.vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import QuizWrapper from '@app/components/study/quizzes/QuizWrapper.vue'
 import { PlayEntity, PlayTypes } from '@modules/plays'
-import { storage } from '@utils/storage'
 
-const props = defineProps<{
+defineProps<{
 	playId: string
 	type: PlayTypes
 	isInModal?: boolean
@@ -230,21 +189,4 @@ const generateQuizTitle = (play: PlayEntity, extras: QuizWrapperExtras) => {
 	if (play.isPractice()) return isDone.value ? 'Practice completed' : play.title
 	return `Question ${extras.index + 1} of ${play.questions.length}`
 }
-
-const storageKey = 'flashcards-info'
-
-const showInfoModal = ref(false)
-const dontShowAgain = ref(false)
-
-const close = () => (showInfoModal.value = false)
-
-if (props.type === PlayTypes.flashcards)
-	storage.get<true>(storageKey).then((value) => {
-		showInfoModal.value = !value
-	})
-
-watch(dontShowAgain, async () => {
-	if (dontShowAgain.value) await storage.set(storageKey, true)
-	else await storage.remove(storageKey)
-})
 </script>
