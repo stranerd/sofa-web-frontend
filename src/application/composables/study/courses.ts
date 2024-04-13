@@ -8,7 +8,7 @@ import { useSuccessHandler } from '../core/states'
 import { useFilesInList } from './files-list'
 import { useQuizzesInList } from './quizzes-list'
 import { Logic } from 'sofa-logic'
-import { Coursable, CourseEntity, CourseFactory, CoursesUseCases, ExtendedCourseSections } from '@modules/study'
+import { Coursable, CourseEntity, CourseFactory, CourseSectionsFactory, CoursesUseCases, ExtendedCourseSections } from '@modules/study'
 
 const store = {} as Record<
 	string,
@@ -64,10 +64,13 @@ export const useCreateCourse = () => {
 	} = useAsyncFn(async () => {
 		const factory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 		const course = await CoursesUseCases.add(factory)
-		return await CoursesUseCases.updateSections(course.id, [
+		const sectionsFactory = new CourseSectionsFactory()
+		sectionsFactory.loadEntity([
 			{ items: [], label: 'Introduction' },
 			{ items: [], label: 'Section 1' },
 		])
+
+		return await CoursesUseCases.updateSections(course.id, sectionsFactory)
 	})
 
 	return { createCourse, error, loading }
@@ -166,4 +169,34 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 		}),
 	)
 	return { quizzes, files, sections }
+}
+
+export const useUpdateSections = (course: Refable<CourseEntity | undefined>) => {
+	const factory = new CourseSectionsFactory()
+	if (course.value) factory.loadEntity(course.value.sections)
+
+	watch(course, (course) => {
+		factory.loadEntity(course?.sections ?? [])
+	})
+
+	const {
+		asyncFn: updateSections,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		if (!course.value) return false
+		const updatedCourse = await CoursesUseCases.updateSections(course.value.id, factory)
+		factory.loadEntity(updatedCourse.sections)
+		return true
+	})
+
+	const { sections: extendedSections } = useCourseSections(computed(() => factory.factories))
+
+	return {
+		factory,
+		loading,
+		error,
+		extendedSections,
+		updateSections,
+	}
 }

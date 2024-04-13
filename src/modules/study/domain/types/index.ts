@@ -56,10 +56,10 @@ export type CourseSectionItem =
 			fileType: FileType
 	  }
 
-export type CourseSections = {
+export type CourseSection = {
 	label: string
 	items: CourseSectionItem[]
-}[]
+}
 
 export enum QuizMeta {
 	games = 'games',
@@ -118,4 +118,4 @@ export type ExtendedCourseSectionItem =
 			file: FileEntity
 	  }
 
-export type ExtendedCourseSections = (Omit<CourseSections[number], 'items'> & { items: ExtendedCourseSectionItem[] })[]
+export type ExtendedCourseSections = (Omit<CourseSection, 'items'> & { items: ExtendedCourseSectionItem[] })[]
