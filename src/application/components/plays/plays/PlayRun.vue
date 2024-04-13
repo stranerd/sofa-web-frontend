@@ -10,18 +10,6 @@
 				:totalTime="play.totalTimeInSec"
 				:start="playExtras.startQuiz"
 				:submit="playExtras.submitAnswer">
-				<template #prestart="{ extras }">
-					<div class="w-full my-auto flex flex-col gap-6 items-center">
-						<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
-							<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="play.title" size="xl" />
-							<SofaNormalText color="text-inherit" :content="`${playQuestions.length} questions`" size="lg" />
-						</div>
-						<SofaHeaderText content="starting in" size="xl" />
-						<div class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white text-bodyBlack">
-							<SofaHeaderText color="text-inherit" size="xl" :content="`${extras.startCountdown}`" />
-						</div>
-					</div>
-				</template>
 				<template #default="{ questions, extras }">
 					<PlayFlashcard v-if="play.isFlashcards()" :play="play" :questions="questions" :extras="extras" />
 					<PlayPractice v-else-if="play.isPractice()" :play="play" :questions="questions" :extras="extras" />
@@ -41,6 +29,19 @@
 							textColor: 'text-white',
 							click: () => extras.submitAnswer('right', false),
 						}">
+						<template #prestart="{ extras }">
+							<div class="w-full my-auto flex flex-col gap-6 items-center">
+								<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
+									<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="play.title" size="xl" />
+									<SofaNormalText color="text-inherit" :content="`${playQuestions.length} questions`" size="lg" />
+								</div>
+								<SofaHeaderText content="starting in" size="xl" />
+								<div
+									class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white text-bodyBlack">
+									<SofaHeaderText color="text-inherit" size="xl" :content="`${extras.startCountdown}`" />
+								</div>
+							</div>
+						</template>
 						<template #header>
 							<div class="px-4 pt-4 md:pt-8 w-full flex">
 								<div class="flex lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full mx-auto">

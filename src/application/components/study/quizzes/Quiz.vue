@@ -1,6 +1,7 @@
 <template>
-	<div class="w-full h-full flex flex-col mdlg:gap-5" :class="{ 'gap-4': isInModal }">
-		<slot name="header">
+	<slot v-if="!started" name="prestart" :extras="extras" />
+	<div v-else class="w-full h-full flex flex-col mdlg:gap-5" :class="{ 'gap-4': isInModal }">
+		<slot name="header" :extras="extras">
 			<div
 				v-if="!isInModal"
 				class="p-4 md:py-8 w-full flex justify-center shadow-custom"
@@ -28,7 +29,7 @@
 			<div
 				class="w-full flex flex-col gap-8 my-auto"
 				:class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal, 'flex-1': growMid }">
-				<slot>
+				<slot :extras="extras">
 					<QuestionDisplay
 						v-if="question"
 						:key="question.id"
@@ -37,12 +38,12 @@
 						:isDark="isDark"
 						:title="title"
 						:optionState="optionState" />
-					<slot name="postBody" />
+					<slot name="postBody" :extras="extras" />
 				</slot>
 			</div>
 		</div>
 
-		<slot name="footer">
+		<slot name="footer" :extras="extras">
 			<div
 				v-if="leftButton || rightButton"
 				class="px-4 py-2 md:py-4 w-full flex justify-center"
@@ -94,10 +95,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { divideByZero } from 'valleyed'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
+import { PlayTiming } from '@modules/plays'
+import { useCountdown } from '@app/composables/core/time'
 
 type ButtonConfig = {
 	label: string
@@ -109,33 +113,60 @@ type ButtonConfig = {
 
 const props = withDefaults(
 	defineProps<{
-		index: number
-		questions: QuestionEntity[]
-		isDark?: boolean
 		title: string
+		questions: QuestionEntity[]
 		rightButton?: ButtonConfig | null
 		leftButton?: ButtonConfig | null
+		isDark?: boolean
 		showCounter?: boolean
 		isInModal?: boolean
 		growMid?: boolean
 		showAnswer?: boolean
 		isAnswerRight?: boolean
+		useTimer?: boolean
+		timing?: PlayTiming
+		totalTime?: number
+		start?: () => Promise<number | null>
+		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
 	}>(),
 	{
-		isDark: false,
 		rightButton: null,
 		leftButton: null,
+		isDark: false,
 		showCounter: true,
 		isInModal: false,
 		growMid: false,
 		showAnswer: false,
 		isAnswerRight: false,
+		useTimer: false,
+		timing: PlayTiming.perQuestion,
+		totalTime: undefined,
+		submit: undefined,
+		start: undefined,
 	},
 )
 
-const answer = defineModel<any>('answer')
+const index = ref(0)
+const started = ref(false)
+const { time: startTime, countdown: startCountdown } = useCountdown()
+const { time: runTime, countdown: runCountdown } = useCountdown()
 
-const question = computed(() => props.questions.at(props.index))
+const reorderedQuestions = ref<QuestionEntity[] | null>(null)
+const questions = computed(() => reorderedQuestions.value ?? props.questions)
+const answers = defineModel<Record<string, any>>('answers', { default: {} })
+const question = computed(() => questions.value.at(index.value))
+const answer = computed({
+	get: () => (question.value ? answers.value[question.value.id] ?? question.value.defaultAnswer : []),
+	set: (val) => {
+		// for deep reactive, seems models are not deeply reactive
+		answers.value = { ...answers.value, [question.value?.id ?? '']: val }
+	},
+})
+const startAt = computed(() => {
+	const allAnswers = answers.value
+	if (questions.value.length === Object.keys(allAnswers).length) return questions.value.length - 1
+	return questions.value.findIndex((q) => !(q.id in allAnswers))
+})
 
 const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState'] = (val, index) => {
 	const q = question.value
@@ -167,4 +198,70 @@ const optionState: InstanceType<typeof QuestionDisplay>['$props']['optionState']
 	if (q.strippedData.type === QuestionTypes.multipleChoice && answer.value.includes(index)) return 'selected'
 	return null
 }
+
+const nextQ = async (newIndex: number) => {
+	index.value = newIndex
+	if (extras.value.usesSingleQuestionTimer && question.value)
+		runCountdown({ time: question.value.timeLimit }).then(() => submitAnswer('right'))
+}
+
+const submitAnswer = async (dir: 'left' | 'right', skipChange = false) => {
+	if (!question.value) return
+	const isLast = !extras.value.canNext
+	const res = await props.submit?.(
+		{
+			questionId: question.value.id,
+			answer: answer.value ?? null,
+		},
+		isLast && dir === 'right',
+	)
+	if (!res || skipChange) return
+	if (!isLast && dir === 'right') await nextQ(index.value + 1)
+	if (extras.value.canPrev && dir === 'left') await nextQ(index.value - 1)
+}
+
+const extras = computed(() => ({
+	get fractionTimeLeft() {
+		if (this.usesSingleQuestionTimer) return divideByZero(runTime.value, question.value?.timeLimit ?? 0)
+		if (this.usesGeneralTimer) return divideByZero(runTime.value, props.totalTime ?? 0)
+		return 0
+	},
+	index: index.value,
+	answer: answer.value,
+	usesGeneralTimer: props.useTimer && props.timing === PlayTiming.general,
+	usesSingleQuestionTimer: props.useTimer && props.timing === PlayTiming.perQuestion,
+	started: started.value,
+	startCountdown: startTime.value,
+	question: question.value,
+	submitAnswer,
+	moveCurrrentQuestionToEnd: () => {
+		if (!reorderedQuestions.value) reorderedQuestions.value = [...questions.value]
+		reorderedQuestions.value = reorderedQuestions.value.concat(reorderedQuestions.value.splice(index.value, 1))
+	},
+	next: () => {
+		if (extras.value.canNext) index.value++
+	},
+	previous: () => {
+		if (extras.value.canPrev) index.value--
+	},
+	canPrev: index.value > 0,
+	canNext: index.value < questions.value.length - 1,
+	reset: () => {
+		reorderedQuestions.value = null
+		index.value = 0
+	},
+}))
+
+onMounted(async () => {
+	if (started.value) return
+	const justStarted = startAt.value === -1
+	if (props.useTimer && justStarted) await startCountdown({ time: 3 })
+	if (props.start) {
+		const timedOutAt = await props.start()
+		const endsIn = (timedOutAt ?? 0) - Date.now()
+		if (extras.value.usesGeneralTimer && endsIn > 0) runCountdown({ time: endsIn / 1000 })
+	}
+	nextQ(justStarted ? 0 : startAt.value)
+	started.value = true
+})
 </script>
