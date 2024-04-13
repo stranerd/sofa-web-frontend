@@ -95,13 +95,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
 import { divideByZero } from 'valleyed'
+import { computed, onMounted, ref, watch } from 'vue'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
+import { useCountdown } from '@app/composables/core/time'
+import { PlayTiming } from '@modules/plays'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { PlayTiming } from '@modules/plays'
-import { useCountdown } from '@app/composables/core/time'
 
 type ButtonConfig = (extras: ExtraTypes) => {
 	label: string
@@ -133,6 +133,8 @@ const props = withDefaults(
 	}>(),
 	{
 		answers: () => ({}),
+		rightButtonConfig: undefined,
+		leftButtonConfig: undefined,
 		isDark: false,
 		showCounter: true,
 		isInModal: false,
@@ -140,7 +142,10 @@ const props = withDefaults(
 		showAnswer: false,
 		isAnswerRight: false,
 		useTimer: false,
+		totalTime: undefined,
 		timing: PlayTiming.perQuestion,
+		start: undefined,
+		submit: undefined,
 	},
 )
 
