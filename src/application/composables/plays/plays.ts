@@ -194,7 +194,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 
 	const { asyncFn: resetAnswer } = useAsyncFn(async () => {
 		const p = singleStore[id].play.value
-		if (!p || p.isTimed) return false
+		if (!p || p.isTimed) return
 		myAnswer.value = await AnswersUseCases.reset(p.data.type, p.id)
 	})
 

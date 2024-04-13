@@ -15,6 +15,7 @@
 					totalTime: play.totalTimeInSec,
 					start: extras.startQuiz,
 					submit: extras.submitAnswer,
+					reset: extras.resetAnswer,
 					isInModal,
 				}" />
 			<div v-else-if="play.canJoinAfterStart && extras.canJoin" class="flex flex-col h-full items-center justify-center gap-4">

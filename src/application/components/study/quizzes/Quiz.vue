@@ -103,13 +103,15 @@ import { PlayTiming } from '@modules/plays'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
-type ButtonConfig = (extras: ExtraTypes) => {
-	label: string
-	bgColor: string
-	textColor: string
-	disabled?: boolean
-	click: () => void
-}
+type ButtonConfig = (extras: ExtraTypes) =>
+	| {
+			label: string
+			bgColor: string
+			textColor: string
+			disabled?: boolean
+			click: () => void
+	  }
+	| undefined
 
 const props = withDefaults(
 	defineProps<{
@@ -131,6 +133,7 @@ const props = withDefaults(
 		totalTime?: number
 		start?: () => Promise<number | null>
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
+		reset?: () => Promise<void>
 	}>(),
 	{
 		answers: () => ({}),
@@ -148,6 +151,7 @@ const props = withDefaults(
 		timing: PlayTiming.perQuestion,
 		start: undefined,
 		submit: undefined,
+		reset: undefined,
 	},
 )
 
@@ -231,11 +235,9 @@ const extras = computed(() => ({
 		if (this.usesGeneralTimer) return divideByZero(runTime.value, props.totalTime ?? 0)
 		return 0
 	},
-	index: index.value,
 	answer: answer.value,
 	usesGeneralTimer: props.useTimer && props.timing === PlayTiming.general,
 	usesSingleQuestionTimer: props.useTimer && props.timing === PlayTiming.perQuestion,
-	started: started.value,
 	startCountdown: startTime.value,
 	question: question.value,
 	submitAnswer,
@@ -255,7 +257,8 @@ const extras = computed(() => ({
 		if (!question.value) return
 		answers.value[question.value.id] = question.value.defaultAnswer
 	},
-	reset: () => {
+	reset: async () => {
+		await props.reset?.()
 		answers.value = {}
 		reorderedQuestions.value = null
 		index.value = 0

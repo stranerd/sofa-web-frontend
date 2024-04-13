@@ -143,7 +143,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		if (percentage >= 80) return 'text-[#4BAF7D]'
 		if (percentage >= 70) return 'text-[#ADAF4B]'
 		if (percentage >= 50) return 'text-[#3296C8]'
-		return 'text-primaryRed'
+		return 'text-[#E1324B]'
 	}
 
 	getResultLabel(userId: string) {

@@ -10,15 +10,16 @@
 				label: isDone || showSolution ? 'Continue' : 'Check',
 				bgColor: 'bg-primaryBlue',
 				textColor: 'text-white',
-				click: () => {
-					if (isDone) return Logic.Common.goBack()
+				click: async () => {
+					if (isDone) return await Logic.Common.goBack()
 					if (!showSolution) {
+						await extras.submitAnswer('right', true)
 						isCorrect = extras.question?.checkAnswer(extras.answer) ?? false
 						return (showSolution = true)
 					}
 					if (extras.canNext) {
 						showSolution = false
-						return extras.next()
+						return await extras.next()
 					}
 					showSolution = false
 					return (isDone = true)
@@ -27,18 +28,17 @@
 		"
 		:leftButtonConfig="
 			(extras) => ({
-				label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Skip',
+				label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Previous',
 				bgColor: 'bg-white border border-gray-100',
 				textColor: 'text-grayColor',
-				click: () => {
+				click: async () => {
 					if (isDone) {
-						extras.reset()
+						await extras.reset()
 						return (isDone = false)
 					} else if (showSolution) {
-						extras.resetCurrentQuestion()
+						await extras.resetCurrentQuestion()
 						return (showSolution = false)
-					} else if (extras.canNext) return extras.next()
-					else return (isDone = true)
+					} else if (extras.canPrev) return await extras.previous()
 				},
 			})
 		">

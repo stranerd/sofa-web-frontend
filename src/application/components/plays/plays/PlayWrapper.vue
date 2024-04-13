@@ -37,17 +37,18 @@ const quiz = computed(() => quizzes.value.at(0) ?? null)
 
 const extras = computed(() => ({
 	isMine: play.value && play.value.user.id === authId.value,
+	isParticipant: play.value?.participants.includes(authId.value),
 	canStart: play.value && play.value.user.id === authId.value && play.value.isCreated,
 	canEnd: play.value && play.value.user.id === authId.value && play.value.isStarted,
 	canJoin: play.value && !play.value.participants.includes(authId.value),
 	authId: authId.value,
 	picture: quiz.value?.picture ?? '/images/default.svg',
 	answers: myAnswer.value?.allAnswers ?? {},
-	start,
 	startQuiz: async () => {
 		if (!myAnswer.value) await submitAnswer({ questionId: null, answer: null }, false)
 		return myAnswer.value?.timedOutAt ?? null
 	},
+	start,
 	end,
 	join,
 	submitAnswer,
@@ -63,7 +64,6 @@ const extras = computed(() => ({
 	copy: async () => {
 		if (play.value) await Logic.Common.copy(play.value.shareLink)
 	},
-	isParticipant: play.value?.participants.includes(authId.value),
 	get scores() {
 		const p = play.value
 		if (!p) return []

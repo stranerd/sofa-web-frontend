@@ -2,12 +2,24 @@
 	<Quiz
 		v-bind="quizProps"
 		:showCounter="false"
+		:leftButtonConfig="
+			(extras) =>
+				extras.usesGeneralTimer
+					? {
+						label: 'Previous',
+						bgColor: 'bg-white border border-gray-100',
+						textColor: 'text-grayColor',
+						disabled: !extras.canPrev,
+						click: () => extras.submitAnswer('left'),
+					}
+					: undefined
+		"
 		:rightButtonConfig="
 			(extras) => ({
 				label: 'Continue',
 				bgColor: 'bg-primaryBlue',
 				textColor: 'text-white',
-				click: () => extras.submitAnswer('right', false),
+				click: () => extras.submitAnswer('right'),
 			})
 		">
 		<template #prestart="{ extras }">
