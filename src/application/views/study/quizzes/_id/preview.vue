@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="$route.params.id as string">
-			<template #default="{ quiz, questions, extras }">
+		<QuizWrapper v-if="quiz" :questions="questions">
+			<template #default="{ extras }">
 				<Quiz
 					v-model:answer="extras.answer"
 					:index="extras.index"
@@ -30,6 +30,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
+import { useQuiz } from '@app/composables/study/quizzes'
 
 export default defineComponent({
 	name: 'QuizIdPreviewPage',
@@ -41,6 +43,12 @@ export default defineComponent({
 		useMeta({
 			title: 'Preview',
 		})
+
+		const route = useRoute()
+		const id = route.params.id as string
+		const { quiz, questions } = useQuiz(id, { members: true })
+
+		return { quiz, questions }
 	},
 })
 </script>

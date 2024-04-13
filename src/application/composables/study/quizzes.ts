@@ -28,7 +28,7 @@ const store = {} as Record<
 	}
 >
 
-export const useQuiz = (id: string, skip: { questions: boolean; members: boolean }, access: CoursableAccess['access']) => {
+export const useQuiz = (id: string, skip?: { questions?: boolean; members?: boolean }, access?: CoursableAccess['access']) => {
 	store[id] ??= {
 		quiz: ref(null),
 		listener: useListener(
@@ -49,8 +49,8 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 
 	const { hasAccess } = useHasAccess()
 
-	const canFetchUsers = computed(() => !skip.members && hasAccess.value(store[id].quiz.value))
-	const canFetchQuestions = computed(() => !skip.questions && hasAccess.value(store[id].quiz.value))
+	const canFetchUsers = computed(() => !skip?.members && hasAccess.value(store[id].quiz.value))
+	const canFetchQuestions = computed(() => !skip?.questions && hasAccess.value(store[id].quiz.value))
 
 	const { users: members } = useUsersInList(
 		computed(() =>
@@ -58,13 +58,13 @@ export const useQuiz = (id: string, skip: { questions: boolean; members: boolean
 				? store[id].quiz.value?.access.members.concat(store[id].quiz.value!.user.id, ...store[id].quiz.value!.access.requests) ?? []
 				: [],
 		),
-		!skip.members,
+		!skip?.members,
 	)
 	const { questions: unorderedQuestions } = useQuestionsInList(
 		id,
 		computed(() => (canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : [])),
 		access,
-		!skip.questions,
+		!skip?.questions,
 	)
 	const questions = computed(
 		() => store[id].quiz.value?.questions.map((qId) => unorderedQuestions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
@@ -115,7 +115,7 @@ export const useCreateQuiz = () => {
 export const useEditQuiz = (id: string) => {
 	const router = useRouter()
 	const { id: authId } = useAuth()
-	const { quiz, questions, members, fetched } = useQuiz(id, { questions: false, members: false }, {})
+	const { quiz, questions, members, fetched } = useQuiz(id)
 	const quizFactory = new QuizFactory()
 	const questionFactory = new QuestionFactory()
 	const { setMessage } = useSuccessHandler()

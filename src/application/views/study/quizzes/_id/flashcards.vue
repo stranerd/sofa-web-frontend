@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout layoutStyle="!justify-between" :hide="{ top: true, bottom: true }">
-		<QuizWrapper :id="$route.params.id as string">
-			<template #default="{ quiz, questions, extras }">
+		<QuizWrapper v-if="quiz" :questions="questions">
+			<template #default="{ extras }">
 				<Quiz
 					v-model:answer="extras.answer"
 					:index="extras.index"
@@ -47,7 +47,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import Flashcard from '@app/components/study/quizzes/FlashcardDisplay.vue'
+import { useQuiz } from '@app/composables/study/quizzes'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -61,9 +63,13 @@ export default defineComponent({
 			title: 'Flashcards',
 		})
 
+		const route = useRoute()
+		const id = route.params.id as string
+		const { quiz, questions } = useQuiz(id, { members: true })
+
 		const isDone = ref(false)
 
-		return { isDone, Logic }
+		return { isDone, Logic, quiz, questions }
 	},
 })
 </script>

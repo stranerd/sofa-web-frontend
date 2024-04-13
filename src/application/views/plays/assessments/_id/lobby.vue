@@ -5,7 +5,7 @@
 		bgImage="/images/plays-bg.svg">
 		<PlayWrapper :id="$route.params.id as string" :type="PlayTypes.assessments" :skipQuestions="true">
 			<template #default="{ play, extras: playExtras, questions: playQuestions, participants }">
-				<QuizWrapper :id="play.quizId" :questions="playQuestions">
+				<QuizWrapper :questions="playQuestions">
 					<template #default="{ questions, extras }">
 						<Quiz
 							v-model:answer="extras.answer"

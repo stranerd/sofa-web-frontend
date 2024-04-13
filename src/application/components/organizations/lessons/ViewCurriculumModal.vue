@@ -56,13 +56,7 @@
 						Start
 					</SofaButton>
 				</div>
-				<PlayRun
-					v-else-if="play"
-					:playId="play.id"
-					:isInModal="true"
-					class="grow bg-lightGray"
-					:type="curriculumItem.quizMode"
-					:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }" />
+				<PlayRun v-else-if="play" :playId="play.id" :isInModal="true" class="grow bg-lightGray" :type="curriculumItem.quizMode" />
 			</template>
 		</div>
 		<div v-if="curriculumSection" class="flex flex-col gap-2">

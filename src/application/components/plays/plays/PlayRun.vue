@@ -3,7 +3,6 @@
 		<template #default="{ play, questions: playQuestions, extras: playExtras }">
 			<QuizWrapper
 				v-if="playExtras.isParticipant"
-				:id="play.quizId"
 				:showAnswer="showSolution"
 				:isAnswerRight="isCorrect"
 				:questions="playQuestions"
@@ -12,8 +11,7 @@
 				:timing="play.timing"
 				:totalTime="play.totalTimeInSec"
 				:start="playExtras.startQuiz"
-				:submit="playExtras.submitAnswer"
-				:access="access">
+				:submit="playExtras.submitAnswer">
 				<template #prestart="{ extras }">
 					<div class="w-full my-auto flex flex-col gap-6 items-center">
 						<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
@@ -154,7 +152,6 @@ const props = defineProps<{
 	playId: string
 	type: PlayTypes
 	isInModal?: boolean
-	access?: InstanceType<typeof QuizWrapper>['$props']['access']
 }>()
 
 const router = useRouter()

@@ -1,22 +1,19 @@
 <template>
-	<slot v-if="quiz && !started" name="prestart" :quiz="quiz" :extras="extras" :questions="questions" />
-	<slot v-else-if="fetched && quiz" :quiz="quiz" :questions="questions" :extras="extras" />
-	<slot v-if="fetched && !quiz" name="notfound" />
+	<slot v-if="!started" name="prestart" :extras="extras" :questions="questions" />
+	<slot v-else :questions="questions" :extras="extras" />
 </template>
 
 <script lang="ts" setup>
 import { divideByZero } from 'valleyed'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue'
 import { useCountdown } from '@app/composables/core/time'
-import { useQuiz } from '@app/composables/study/quizzes'
-import { CoursableAccess, QuestionEntity, QuestionTypes } from '@modules/study'
+import { QuestionEntity, QuestionTypes } from '@modules/study'
 import { PlayTiming } from '@modules/plays/domain/types'
 
 const props = withDefaults(
 	defineProps<{
-		id: string
-		questions?: QuestionEntity[]
+		questions: QuestionEntity[]
 		showAnswer?: boolean
 		isAnswerRight?: boolean
 		useTimer?: boolean
@@ -24,10 +21,8 @@ const props = withDefaults(
 		totalTime?: number
 		start?: () => Promise<number | null>
 		submit?: (data: { questionId: string; answer: any }, isLast: boolean) => Promise<boolean | undefined>
-		access?: CoursableAccess['access']
 	}>(),
 	{
-		questions: undefined,
 		showAnswer: false,
 		isAnswerRight: false,
 		useTimer: false,
@@ -39,9 +34,8 @@ const props = withDefaults(
 	},
 )
 
-const { quiz, questions: backup, fetched } = useQuiz(props.id, { questions: !!props.questions, members: true }, props.access)
 const reorderedQuestions = ref<QuestionEntity[] | null>(null)
-const questions = computed(() => reorderedQuestions.value ?? props.questions ?? backup.value ?? [])
+const questions = computed(() => reorderedQuestions.value ?? props.questions)
 
 const started = ref(false)
 const { time: startTime, countdown: startCountdown } = useCountdown()
@@ -161,20 +155,16 @@ const extras = computed(() => ({
 	},
 }))
 
-watch(
-	quiz,
-	async () => {
-		if (!quiz.value || started.value) return
-		const justStarted = startAt.value === -1
-		if (props.useTimer && justStarted) await startCountdown({ time: 3 })
-		if (props.start) {
-			const timedOutAt = await props.start()
-			const endsIn = (timedOutAt ?? 0) - Date.now()
-			if (extras.value.usesGeneralTimer && endsIn > 0) runCountdown({ time: endsIn / 1000 })
-		}
-		nextQ(justStarted ? 0 : startAt.value)
-		started.value = true
-	},
-	{ immediate: true },
-)
+onMounted(async () => {
+	if (started.value) return
+	const justStarted = startAt.value === -1
+	if (props.useTimer && justStarted) await startCountdown({ time: 3 })
+	if (props.start) {
+		const timedOutAt = await props.start()
+		const endsIn = (timedOutAt ?? 0) - Date.now()
+		if (extras.value.usesGeneralTimer && endsIn > 0) runCountdown({ time: endsIn / 1000 })
+	}
+	nextQ(justStarted ? 0 : startAt.value)
+	started.value = true
+})
 </script>
