@@ -22,7 +22,7 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Cour
 		this.departmentId = entity.departmentId
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, institutionId, departmentId } = this.validValues
 		return { title, institutionId, departmentId }
 	}

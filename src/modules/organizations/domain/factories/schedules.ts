@@ -49,7 +49,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 		this.end = '02:00'
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, description, timeStart, timeEnd } = this.validValues
 		return {
 			title,

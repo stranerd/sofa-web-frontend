@@ -20,7 +20,7 @@ export class FacultyFactory extends BaseFactory<FacultyEntity, FacultyToModel, F
 		this.institutionId = entity.institutionId
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, institutionId } = this.validValues
 		return { title, institutionId }
 	}

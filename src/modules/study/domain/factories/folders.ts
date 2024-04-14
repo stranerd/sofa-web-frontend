@@ -17,7 +17,7 @@ export class FolderFactory extends BaseFactory<FolderEntity, FolderToModel, Fold
 		this.title = entity.title
 	}
 
-	model = async () => {
+	model = () => {
 		const { title } = this.validValues
 		return { title }
 	}

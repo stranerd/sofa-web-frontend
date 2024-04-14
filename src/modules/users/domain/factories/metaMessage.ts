@@ -20,7 +20,7 @@ export class MetaMessageFactory extends BaseFactory<AuthDetails, MetaMessageData
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { name, email, phone, message } = this.validValues
 		return { name, email, phone, message }
 	}

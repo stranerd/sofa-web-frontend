@@ -12,10 +12,14 @@ export function deepToRaw<T>(input: T): T {
 	return input
 }
 
+function copy<T>(input: T): T {
+	return structuredClone(deepToRaw(input))
+}
+
 export abstract class BaseFactory<E, T, K extends Record<string, any>> extends ClassPropertiesWrapper<K> {
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
-	abstract model: () => T | Promise<T>
+	abstract model: () => T
 	abstract load: (entity: E) => void
 	reserved: string[] = []
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
@@ -33,10 +37,10 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 				this.onSet[key]?.(value)
 			},
 		})
-		this.defaults = reactive({ ...keys }) as K
-		this.values = reactive({ ...keys }) as K
-		this.validValues = reactive({ ...keys }) as K
-		this.#cloneValues = reactive({ ...keys }) as K
+		this.defaults = reactive(copy(keys)) as K
+		this.values = reactive(copy(keys)) as K
+		this.validValues = reactive(copy(keys)) as K
+		this.#cloneValues = reactive(copy(keys)) as K
 		this.errors = Object.keys(keys).reduce(
 			(acc, value: keyof K) => {
 				acc[value] = ''
@@ -99,7 +103,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	loadEntity(entity: E) {
 		this.load(entity)
 		this.#keys.forEach((key) => {
-			this.#cloneValues[key] = this.values[key]
+			this.#cloneValues[key] = copy(this.values[key])
 		})
 	}
 
@@ -108,6 +112,6 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 			this.#keys.forEach((key) => this.set(key, this.values[key]))
 			throw new Error('Validation errors')
 		}
-		return deepToRaw(await this.model())
+		return deepToRaw(this.model())
 	}
 }

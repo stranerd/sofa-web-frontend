@@ -52,9 +52,13 @@ const editTitle = ref(false)
 const title = computed(() => props.data.title)
 
 const submitTitle = () => {
-	Logic.Common.debounce(async () => {
-		props.updateTitle?.(model.value)
-	}, 1000)
+	Logic.Common.debounce(
+		'submitTitle',
+		async () => {
+			props.updateTitle?.(model.value)
+		},
+		1000,
+	)
 	editTitle.value = false
 }
 

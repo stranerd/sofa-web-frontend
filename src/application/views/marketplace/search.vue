@@ -261,9 +261,13 @@ export default defineComponent({
 					: {}),
 			}
 
-			Logic.Common.debounce(() => {
-				search(allQueries)
-			}, 500)
+			Logic.Common.debounce(
+				'search',
+				() => {
+					search(allQueries)
+				},
+				500,
+			)
 		}
 
 		onMounted(() => {

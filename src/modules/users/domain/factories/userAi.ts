@@ -24,7 +24,7 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi> {
 		}
 	}
 
-	model = async () => {
+	model = () => {
 		const { name, tagline, photo } = this.validValues
 		return { name, tagline, photo }
 	}

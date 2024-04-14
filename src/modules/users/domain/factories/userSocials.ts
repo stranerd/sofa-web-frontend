@@ -55,7 +55,7 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 		this.socials = entity.socials
 	}
 
-	model = async () => {
+	model = () => {
 		const { socials } = this.validValues
 		return socials
 	}

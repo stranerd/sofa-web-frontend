@@ -85,7 +85,7 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 		this.modeAssessments = entity.modes.assessments
 	}
 
-	model = async () => {
+	model = () => {
 		const {
 			title,
 			description,

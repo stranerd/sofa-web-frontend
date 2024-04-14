@@ -81,7 +81,7 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 		this.type = entity.data.type
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, quizId, type, gamesJoin, assessmentsEndedAt } = this.validValues
 		return {
 			title,

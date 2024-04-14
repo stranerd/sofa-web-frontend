@@ -96,15 +96,23 @@ export default defineComponent({
 		const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 		watch(factory.values, () => {
-			Logic.Common.debounce(() => {
-				if (factory.valid) updateProfile()
-			}, 1000)
+			Logic.Common.debounce(
+				'updateProfile',
+				() => {
+					if (factory.valid) updateProfile()
+				},
+				1000,
+			)
 		})
 
 		watch(socialsFactory.values, () => {
-			Logic.Common.debounce(() => {
-				if (socialsFactory.valid) updateSocials()
-			}, 1000)
+			Logic.Common.debounce(
+				'updateSocials',
+				() => {
+					if (socialsFactory.valid) updateSocials()
+				},
+				1000,
+			)
 		})
 
 		return { auth, userType, factory, socialsFactory }

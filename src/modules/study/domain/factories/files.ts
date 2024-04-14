@@ -69,7 +69,7 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 		this.courseId = entity.courseId
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, description, photo, topic, tags, media, courseId } = this.validValues
 		return { title, description, photo, topic, tags, media, courseId }
 	}

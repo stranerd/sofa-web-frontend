@@ -17,7 +17,7 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 		return this.phone?.code ?? '' + this.phone?.number ?? ''
 	}
 
-	model = async () => {
+	model = () => {
 		const { phone } = this.validValues
 		return phone!
 	}

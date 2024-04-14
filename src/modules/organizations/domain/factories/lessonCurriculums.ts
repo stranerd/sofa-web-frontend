@@ -48,7 +48,7 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		this.items = this.items.filter((_, i) => i !== index)
 	}
 
-	model = async () => {
+	model = () => {
 		const { label, items } = this.validValues
 		return { label, items }
 	}

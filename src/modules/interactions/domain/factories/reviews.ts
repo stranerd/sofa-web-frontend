@@ -19,7 +19,7 @@ export class ReviewFactory extends BaseFactory<ReviewEntity, Omit<ReviewToModel,
 		this.message = entity.message
 	}
 
-	model = async () => {
+	model = () => {
 		const { message, rating } = this.validValues
 		return { message, rating }
 	}

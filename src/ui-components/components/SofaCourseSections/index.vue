@@ -167,15 +167,19 @@ export default defineComponent({
 		const staticPropSections = ref([])
 
 		const addSectionMaterial = (id: string, type: 'file' | 'quiz') => {
-			Logic.Common.debounce(() => {
-				props.sectionInput.sections[selectedSection.value].items.push({
-					id,
-					type,
-				})
-				setTimeout(() => {
-					props.updateSections()
-				}, 1000)
-			}, 300)
+			Logic.Common.debounce(
+				'addSectionMaterial',
+				() => {
+					props.sectionInput.sections[selectedSection.value].items.push({
+						id,
+						type,
+					})
+					setTimeout(() => {
+						props.updateSections()
+					}, 1000)
+				},
+				300,
+			)
 		}
 
 		const setSectionMaterial = async (mediaFile: FileEntity | undefined, quiz: QuizEntity | undefined, save = false, index: number) => {
@@ -306,9 +310,13 @@ export default defineComponent({
 
 		watch(NewCoursableItem, () => {
 			if (sectionOptions.length) {
-				Logic.Common.debounce(async () => {
-					await setSectionMaterial(SingleFile.value, SingleQuiz.value, true, selectedSection.value)
-				}, 500)
+				Logic.Common.debounce(
+					'setSelectionMaterial',
+					async () => {
+						await setSectionMaterial(SingleFile.value, SingleQuiz.value, true, selectedSection.value)
+					},
+					500,
+				)
 			}
 		})
 

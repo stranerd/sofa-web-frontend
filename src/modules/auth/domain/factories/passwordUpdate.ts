@@ -34,7 +34,7 @@ export class PasswordUpdateFactory extends BaseFactory<null, PasswordUpdate, Key
 		super({ oldPassword: '', password: '', cPassword: '' })
 	}
 
-	model = async () => {
+	model = () => {
 		const { oldPassword, password } = this.validValues
 		return { oldPassword, password }
 	}

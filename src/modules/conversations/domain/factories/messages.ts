@@ -13,7 +13,7 @@ export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, M
 		super({ body: '', media: null })
 	}
 
-	model = async () => {
+	model = () => {
 		const { body, media } = this.validValues
 		return { body, media }
 	}

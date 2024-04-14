@@ -20,7 +20,7 @@ export class InstitutionFactory extends BaseFactory<InstitutionEntity, Instituti
 		this.isGateway = entity.isGateway
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, isGateway } = this.validValues
 		return { title, isGateway }
 	}

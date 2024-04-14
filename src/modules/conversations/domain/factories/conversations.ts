@@ -19,7 +19,7 @@ export class ConversationFactory extends BaseFactory<ConversationEntity, CreateC
 		this.tutorId = entity.tutor?.id ?? null
 	}
 
-	model = async () => {
+	model = () => {
 		const { body, tutorId } = this.validValues
 		return { body, tutorId }
 	}

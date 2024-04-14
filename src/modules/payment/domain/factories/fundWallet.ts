@@ -15,7 +15,7 @@ export class FundWalletFactory extends BaseFactory<null, FundDetails, FundDetail
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { amount, methodId } = this.validValues
 		return {
 			amount,

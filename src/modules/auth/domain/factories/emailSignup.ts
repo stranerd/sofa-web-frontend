@@ -46,7 +46,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		this.set('cPassword', '')
 	}
 
-	model = async () => {
+	model = () => {
 		const { first, last, email, password, description, photo } = this.validValues
 		return {
 			name: { first, last },

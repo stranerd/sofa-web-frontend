@@ -27,7 +27,7 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 		}
 	}
 
-	model = async () => {
+	model = () => {
 		const { country, state } = this.validValues
 		return { country, state }
 	}

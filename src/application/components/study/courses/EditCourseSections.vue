@@ -134,8 +134,8 @@ const onClickItem = (sectionIndex: number, itemIndex: number) => {
 watch(
 	() => factory.factories,
 	async () => {
-		const unChanged = await factory.equals(props.course.sections)
-		if (factory.valid || !unChanged) Logic.Common.debounce(updateSections, 500)
+		if (factory.valid && factory.hasChanges) Logic.Common.debounce('updateSections', updateSections, 1000)
 	},
+	{ deep: true, immediate: true },
 )
 </script>

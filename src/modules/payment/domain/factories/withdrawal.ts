@@ -23,7 +23,7 @@ export class WithdrawalFactory extends BaseFactory<null, WithdrawData, WithdrawD
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { amount, account } = this.validValues
 		return { amount, account }
 	}

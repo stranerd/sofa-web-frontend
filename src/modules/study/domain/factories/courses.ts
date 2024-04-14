@@ -68,7 +68,7 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Keys
 		this.currency = entity.price.currency
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, description, photo, topic, tags, amount, currency } = this.validValues
 		return {
 			title,

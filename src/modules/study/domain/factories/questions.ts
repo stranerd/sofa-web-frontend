@@ -256,7 +256,7 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 		return {} as never
 	}
 
-	model = async () => {
+	model = () => {
 		const { questionMedia, explanation, timeLimit, indicator } = this.validValues
 
 		const question = this.isFillInBlanks

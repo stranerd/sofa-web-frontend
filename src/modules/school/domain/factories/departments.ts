@@ -21,7 +21,7 @@ export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentT
 		this.facultyId = entity.facultyId
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, facultyId } = this.validValues
 		return { title, facultyId }
 	}

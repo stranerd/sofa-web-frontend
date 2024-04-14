@@ -18,7 +18,7 @@ export class ReportFactory extends BaseFactory<ReportEntity, Omit<ReportToModel,
 		this.message = entity.message
 	}
 
-	model = async () => {
+	model = () => {
 		const { message } = this.validValues
 		return { message }
 	}

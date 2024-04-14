@@ -38,7 +38,7 @@ export class VerificationFactory extends BaseFactory<VerificationEntity, Verific
 		this.quizzes = entity.content.quizzes
 	}
 
-	model = async () => {
+	model = () => {
 		const { courses, quizzes } = this.validValues
 		return { content: { courses, quizzes } }
 	}

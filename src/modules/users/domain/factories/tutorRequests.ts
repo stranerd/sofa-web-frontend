@@ -25,7 +25,7 @@ export class TutorRequestFactory extends BaseFactory<TutorRequestEntity, TutorRe
 		this.qualification = entity.qualification
 	}
 
-	model = async () => {
+	model = () => {
 		const { topicId, verification, qualification } = this.validValues
 		return { topicId, verification, qualification }
 	}

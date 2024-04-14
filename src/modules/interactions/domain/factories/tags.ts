@@ -24,7 +24,7 @@ export class TagFactory extends BaseFactory<TagEntity, TagToModel, TagToModel> {
 		this.parent = entity.parent
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, type, parent } = this.validValues
 		return { title, type, parent }
 	}

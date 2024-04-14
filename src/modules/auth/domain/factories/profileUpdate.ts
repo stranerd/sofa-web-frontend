@@ -18,7 +18,7 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		super({ first: '', last: '', description: '', photo: null })
 	}
 
-	model = async () => {
+	model = () => {
 		const { first, last, description, photo } = this.validValues
 		return {
 			name: { first, last },

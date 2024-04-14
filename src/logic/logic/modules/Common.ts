@@ -206,7 +206,7 @@ export default class Common {
 	public formatPrice = (price: number, currency = 'NGN') =>
 		`${price < 0 ? '-' : ''}${this.getCurrency(currency)}${Intl.NumberFormat().format(Math.abs(price))}`
 
-	public debounce = (method = () => {}, delay = 500) => {
+	public debounce = (key: string, method = () => {}, delay = 500) => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		if (typeof window.LIT !== 'undefined') {
