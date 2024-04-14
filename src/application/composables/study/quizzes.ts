@@ -113,7 +113,6 @@ export const useCreateQuiz = () => {
 }
 
 export const useEditQuiz = (id: string) => {
-	const router = useRouter()
 	const { id: authId } = useAuth()
 	const { quiz, questions, members, fetched } = useQuiz(id)
 	const quizFactory = new QuizFactory()
@@ -196,21 +195,6 @@ export const useEditQuiz = (id: string) => {
 		await setMessage('Question duplicated')
 	})
 
-	const { asyncFn: deleteQuiz } = useAsyncFn(
-		async () => {
-			await QuizzesUseCases.delete(id)
-			await router.push('/library')
-		},
-		{
-			pre: async () =>
-				await Logic.Common.confirm({
-					title: 'Are you sure?',
-					sub: 'This action is permanent. You will lose all saved questions in this quiz.',
-					right: { label: 'Yes, delete' },
-				}),
-		},
-	)
-
 	const { asyncFn: requestAccess } = useAsyncFn(
 		async (add: boolean) => {
 			await QuizzesUseCases.requestAccess(id, add)
@@ -249,9 +233,33 @@ export const useEditQuiz = (id: string) => {
 		addQuestion,
 		saveQuestion,
 		duplicateQuestion,
-		deleteQuiz,
 		requestAccess,
 		grantAccess,
 		manageMembers,
 	}
+}
+
+export const useDeleteQuiz = () => {
+	const router = useRouter()
+
+	const {
+		asyncFn: deleteQuiz,
+		error,
+		loading,
+	} = useAsyncFn(
+		async (quiz: QuizEntity) => {
+			await QuizzesUseCases.delete(quiz.id)
+			await router.push('/library')
+		},
+		{
+			pre: async () =>
+				await Logic.Common.confirm({
+					title: 'Are you sure?',
+					sub: 'This action is permanent. You will lose all saved questions in this quiz.',
+					right: { label: 'Yes, delete' },
+				}),
+		},
+	)
+
+	return { deleteQuiz, error, loading }
 }

@@ -7,7 +7,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
-import { useEditQuiz } from '@app/composables/study/quizzes'
+import { useDeleteQuiz, useEditQuiz } from '@app/composables/study/quizzes'
 import { UserEntity, UsersUseCases } from '@modules/users'
 
 const props = withDefaults(
@@ -28,7 +28,6 @@ const {
 	questions,
 	fetched,
 	questionFactory,
-	deleteQuiz,
 	saveQuestion,
 	reorderQuestions,
 	deleteQuestion,
@@ -39,6 +38,7 @@ const {
 	grantAccess,
 	manageMembers,
 } = useEditQuiz(props.id)
+const { deleteQuiz } = useDeleteQuiz()
 
 const selectedQuestionId = ref(props.selectedQuestion)
 const currentQuestionById = computed(() => questions.value.find((q) => q.id === selectedQuestionId.value))
@@ -73,7 +73,7 @@ const extras = computed(() => ({
 	deleteQuestion,
 	addQuestion,
 	duplicateQuestion,
-	deleteQuiz,
+	deleteQuiz: async () => (quiz.value ? deleteQuiz(quiz.value) : undefined),
 	saveCurrentQuestion,
 	requestAccess,
 	grantAccess,

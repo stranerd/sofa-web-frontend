@@ -67,7 +67,6 @@ import { computed, ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
-import { useDeleteFile } from '@app/composables/study/files'
 import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
@@ -75,9 +74,12 @@ const props = defineProps<{
 	course: CourseEntity
 }>()
 
+const emits = defineEmits<{
+	deleteItem: [ExtendedCourseSectionItem]
+}>()
+
 const selectedItem = defineModel<ExtendedCourseSectionItem>()
 
-const { deleteFile } = useDeleteFile()
 const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
 
 const addStudyMaterial = (index: number) => {
@@ -120,15 +122,9 @@ const getItemIcon = (item: ExtendedCourseSectionItem) => {
 }
 
 const removeItem = async (sectionIndex: number, itemIndex: number) => {
-	if (factory.factories.at(sectionIndex)) return
-	const fac = factory.factories[sectionIndex]
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
 	if (!item) return
-	if (item.type === Coursable.file)
-		await deleteFile(item.file).then((deleted) => {
-			if (deleted) factory.factories[sectionIndex].removeItem(itemIndex)
-		})
-	else fac.removeItem(itemIndex)
+	emits('deleteItem', item)
 }
 
 const onClickItem = (sectionIndex: number, itemIndex: number) => {

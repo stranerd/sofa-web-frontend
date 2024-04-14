@@ -10,13 +10,11 @@ import SofaIcon from '../SofaIcon'
 withDefaults(
 	defineProps<{
 		count?: number
-		customClass?: string
 		readonly?: boolean
 		size?: string
 	}>(),
 	{
 		count: 5,
-		customClass: '',
 		readonly: true,
 		size: 'h-[13px] mdlg:!h-[17px]',
 	},

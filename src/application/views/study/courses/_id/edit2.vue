@@ -40,7 +40,7 @@
 
 				<template #right-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<div>Right</div>
+						<EditCourseSectionItem :course="course" :item="selectedItem" />
 					</div>
 				</template>
 			</FullLayout>
@@ -52,13 +52,16 @@
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import EditCourseSections from '@app/components/study/courses/EditCourseSections.vue'
+import EditCourseSectionItem from '@app/components/study/courses/EditCourseSectionItem.vue'
 import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
 import { CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
+import { useDeleteFile } from '@app/composables/study/files'
+import { useDeleteQuiz } from '@app/composables/study/quizzes'
 
 export default defineComponent({
 	name: 'StudyCoursesIdEdit',
-	components: { EditCourseWrapper, EditCourseSections },
+	components: { EditCourseWrapper, EditCourseSections, EditCourseSectionItem },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
@@ -69,9 +72,19 @@ export default defineComponent({
 
 		const openEditModal = (course: CourseEntity) => useModals().study.editCourse.open({ course })
 
+		const { deleteFile } = useDeleteFile()
+		const { deleteQuiz } = useDeleteQuiz()
+
+		const deleteItem = async (item: ExtendedCourseSectionItem) => {
+			// TODO: move item out of course
+			if ('file' in item) await deleteFile(item.file)
+			if ('quiz' in item) await deleteQuiz(item.quiz)
+		}
+
 		return {
 			selectedItem,
 			openEditModal,
+			deleteItem,
 		}
 	},
 })
