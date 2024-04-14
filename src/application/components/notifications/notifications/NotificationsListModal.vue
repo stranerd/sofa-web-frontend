@@ -18,7 +18,7 @@
 				@click="markNotificationSeen(notification)">
 				<div class="flex flex-col gap-1">
 					<SofaNormalText color="text-inherit" :content="notification.body" />
-					<SofaNormalText color="text-inherit" :content="formatTime(notification.createdAt)" />
+					<SofaNormalText color="text-inherit" :content="$utils.formatTime(notification.createdAt)" />
 				</div>
 				<span v-if="!notification.seen" class="size-[8px] rounded-full bg-primaryBlue" />
 			</router-link>
@@ -36,7 +36,6 @@
 
 <script lang="ts" setup>
 import { useNotificationList } from '@app/composables/notifications/notifications'
-import { formatTime } from '@utils/dates'
 
 defineProps<{ close: () => void }>()
 

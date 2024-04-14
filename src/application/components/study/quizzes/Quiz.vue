@@ -7,7 +7,7 @@
 				class="p-4 md:py-8 w-full flex justify-center shadow-custom"
 				:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 				<div class="lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full flex items-center gap-4 justify-between">
-					<SofaIcon class="md:hidden" customClass="h-[19px]" name="circle-close" @click="Logic.Common.goBack()" />
+					<SofaIcon class="md:hidden" customClass="h-[19px]" name="circle-close" @click="$utils.goBack()" />
 					<SofaHeaderText size="xl" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
 					<SofaNormalText
 						class="md:hidden whitespace-nowrap"
@@ -19,7 +19,7 @@
 						customClass="!text-base whitespace-nowrap"
 						color="text-inherit"
 						content="Exit"
-						@click="Logic.Common.goBack()" />
+						@click="$utils.goBack()" />
 				</div>
 			</div>
 			<div v-else />
@@ -101,7 +101,6 @@ import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue
 import { useCountdown } from '@app/composables/core/time'
 import { PlayTiming } from '@modules/plays'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 type ButtonConfig = (extras: ExtraTypes) =>
 	| {

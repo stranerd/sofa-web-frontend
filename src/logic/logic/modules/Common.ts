@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { getRandomValue } from 'valleyed'
+import { formatNumber, getRandomValue, pluralize } from 'valleyed'
 import { reactive } from 'vue'
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import { Logic } from '..'
@@ -14,9 +14,11 @@ import {
 	SuccessConfirmationSetup,
 } from '../types/common'
 import { ValidationError } from '../types/domains/common'
+import { formatTime } from '@utils/dates'
 import { listenToMany, listenToOne } from '@modules/core'
 import { AuthDetails } from '@modules/auth'
 import { storage } from '@utils/storage'
+import { copyToClipboard, share } from '@utils/commons'
 
 export default class Common {
 	#router: Router | undefined = undefined
@@ -24,6 +26,10 @@ export default class Common {
 	public watchInterval: number | undefined = undefined
 	private redirectToName = 'redirect-to'
 	public AuthUser: AuthDetails | undefined = undefined
+
+	formatTime = formatTime
+	formatNumber = formatNumber
+	pluralize = pluralize
 
 	get route() {
 		return this.#route!
@@ -303,20 +309,12 @@ export default class Common {
 	}
 
 	public async share(title: string, text: string, url = window.location.href) {
-		try {
-			await navigator.share({ title, text, url })
-		} catch (err) {
-			this.copy(url, 'Link copied to your clipboard!')
-		}
+		const result = share({ title, text, url })
+		if (!result) this.copy(url, 'Link copied to clipboard!')
 	}
 
 	public async copy(text: string, message = 'Copied!', type: LoaderSetup['alerts'][number]['type'] = 'success') {
-		const result = await window.navigator.permissions.query({ name: 'clipboard-write' as any })
-		if (result.state === 'granted' || result.state === 'prompt') {
-			await window.navigator.clipboard.writeText(text)
-			this.showAlert({ message, type })
-			return true
-		}
-		return false
+		const result = await copyToClipboard(text)
+		if (result) this.showAlert({ message, type })
 	}
 }

@@ -31,7 +31,6 @@ import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import { openMaterial } from '@app/composables/library'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryOrganizationsIdPage',
@@ -49,7 +48,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, user, openMaterial, data }
+		return { user, openMaterial, data }
 	},
 })
 </script>

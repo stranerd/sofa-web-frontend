@@ -16,7 +16,7 @@
 						<div class="flex items-center justify-between rounded-custom border border-hoverBlue p-4">
 							<SofaHeaderText>{{ plan.title }}</SofaHeaderText>
 							<SofaHeaderText>
-								{{ Logic.Common.formatPrice(plan.amount, plan.currency) }}/{{ plan.intervalInWord }}
+								{{ $utils.formatPrice(plan.amount, plan.currency) }}/{{ plan.intervalInWord }}
 							</SofaHeaderText>
 						</div>
 						<SofaNormalText color="text-grayColor">Your subscription includes:</SofaNormalText>
@@ -37,17 +37,17 @@
 					<div class="flex flex-col gap-4">
 						<div class="flex items-center justify-between">
 							<SofaNormalText>Item (1)</SofaNormalText>
-							<SofaNormalText>{{ Logic.Common.formatPrice(plan.amount, plan.currency) }}</SofaNormalText>
+							<SofaNormalText>{{ $utils.formatPrice(plan.amount, plan.currency) }}</SofaNormalText>
 						</div>
 						<div class="flex items-center justify-between">
 							<SofaNormalText>Tax</SofaNormalText>
-							<SofaNormalText>{{ Logic.Common.formatPrice(0, plan.currency) }}</SofaNormalText>
+							<SofaNormalText>{{ $utils.formatPrice(0, plan.currency) }}</SofaNormalText>
 						</div>
 						<hr class="bg-grayColor" />
 						<div class="flex items-center justify-between">
 							<SofaNormalText customClass="font-semibold">Total</SofaNormalText>
 							<SofaNormalText customClass="font-semibold">
-								{{ Logic.Common.formatPrice(plan.amount, plan.currency) }}
+								{{ $utils.formatPrice(plan.amount, plan.currency) }}
 							</SofaNormalText>
 						</div>
 					</div>
@@ -105,7 +105,6 @@ export default defineComponent({
 			plan,
 			subscribe,
 			methodId,
-			Logic,
 		}
 	},
 })

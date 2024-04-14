@@ -55,7 +55,6 @@ import EditCourseSections from '@app/components/study/courses/EditCourseSections
 import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
 import { CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'StudyCoursesIdEdit',
@@ -73,7 +72,6 @@ export default defineComponent({
 		return {
 			selectedItem,
 			openEditModal,
-			Logic,
 		}
 	},
 })

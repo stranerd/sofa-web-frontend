@@ -9,15 +9,16 @@
 				<SofaNormalText class="!font-bold truncate" :content="classInst.title" />
 				<div class="flex items-center gap-2">
 					<SofaNormalText color="text-grayColor">
-						{{ classInst.lessons.length }} {{ pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
+						{{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
 					</SofaNormalText>
 					<div class="w-[5px] h-[5px] bg-grayColor rounded-[50%]"></div>
 					<SofaNormalText color="text-grayColor">
-						{{ classInst.members.students.length }} {{ pluralize(classInst.members.students.length, 'student', 'students') }}
+						{{ classInst.members.students.length }}
+						{{ $utils.pluralize(classInst.members.students.length, 'student', 'students') }}
 					</SofaNormalText>
 				</div>
 				<SofaNormalText color="text-grayColor" size="lg" class="font-bold">
-					{{ Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency) }}
+					{{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}
 				</SofaNormalText>
 			</div>
 
@@ -29,10 +30,8 @@
 </template>
 
 <script lang="ts" setup>
-import { pluralize } from 'valleyed'
 import { useModals } from '@app/composables/core/modals'
 import { ClassEntity } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{ classInst: ClassEntity }>()
 

@@ -3,7 +3,7 @@
 		<div class="bg-white w-full lg:w-[45%] mdlg:w-[50%] h-full flex flex-col items-center justify-center">
 			<div class="w-full h-full overflow-y-auto flex-1 flex flex-col justify-start relative md:p-8 p-4">
 				<div class="w-full flex gap-4 items-center">
-					<a v-if="!hideBack" @click="Logic.Common.goBack()">
+					<a v-if="!hideBack" @click="$utils.goBack()">
 						<SofaIcon customClass="md:h-[26px] h-[20px]" name="back-arrow" />
 					</a>
 
@@ -37,8 +37,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Logic } from 'sofa-logic'
-
 withDefaults(
 	defineProps<{
 		title: string

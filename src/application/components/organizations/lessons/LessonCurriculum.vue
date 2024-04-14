@@ -100,7 +100,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber } from 'valleyed'
 import { computed, ref } from 'vue'
 import Draggable from 'vuedraggable'
 import { useAuth } from '@app/composables/auth/auth'
@@ -117,6 +116,7 @@ import {
 	LessonCurriculumFactory,
 } from '@modules/organizations'
 import { FileType } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -171,7 +171,7 @@ const getItemIcon = (item: ExtendedClassLessonCurriculumSectionItem) => {
 }
 
 const getItemInfo = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${formatNumber(item.quiz.questions.length)} questions`
+	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${Logic.Common.formatNumber(item.quiz.questions.length)} questions`
 	if (item.type == ClassLessonable.file) return `${item.fileType}`
 	if (item.type == ClassLessonable.schedule) return item.schedule.timeRange
 }

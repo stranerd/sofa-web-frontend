@@ -14,8 +14,8 @@
 			<SofaIcon
 				:name="tab.icon"
 				class="fill-deepGray h-[30px] pb-1.5"
-				:class="{ '!fill-primaryPurple': Logic.Common.tabIsActive(tab.path) }" />
-			<span v-if="Logic.Common.tabIsActive(tab.path)" class="w-2 h-1 bg-primaryPurple rounded-lg" />
+				:class="{ '!fill-primaryPurple': $utils.tabIsActive(tab.path) }" />
+			<span v-if="$utils.tabIsActive(tab.path)" class="w-2 h-1 bg-primaryPurple rounded-lg" />
 		</router-link>
 	</div>
 </template>
@@ -23,7 +23,6 @@
 <script lang="ts" setup>
 import SofaIcon from '../SofaIcon/index.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { Logic } from 'sofa-logic'
 
 const { userType } = useAuth()
 </script>

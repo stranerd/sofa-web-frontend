@@ -38,7 +38,7 @@
 
 			<div class="w-full flex flex-row items-center gap-2">
 				<SofaIcon customClass="h-[16px]" name="calendar-black" />
-				<SofaNormalText> Last updated {{ formatTime(data.updatedAt) }} </SofaNormalText>
+				<SofaNormalText> Last updated {{ $utils.formatTime(data.updatedAt) }} </SofaNormalText>
 			</div>
 		</div>
 	</div>
@@ -52,8 +52,6 @@ import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaNormalText } from '../SofaTypography'
-import { Logic } from 'sofa-logic'
-import { formatTime } from '@utils/dates'
 import { CourseEntity } from '@modules/study'
 
 export default defineComponent({
@@ -74,12 +72,6 @@ export default defineComponent({
 			type: Object as () => CourseEntity,
 			default: null,
 		},
-	},
-	setup() {
-		return {
-			Logic,
-			formatTime,
-		}
 	},
 })
 </script>

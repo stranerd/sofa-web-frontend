@@ -76,7 +76,6 @@ import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 import { FileEntity, QuestionEntity, QuestionsUseCases, QuizEntity } from '@modules/study'
-import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import { ContentDetails, Logic } from 'sofa-logic'
@@ -266,7 +265,7 @@ export default defineComponent({
 									contentDetails.price = 0
 									contentDetails.image = quiz.photo ? quiz.photo.link : '/images/default.svg'
 									contentDetails.info = quiz.description
-									contentDetails.lastUpdated = `Last updated ${formatTime(quiz.updatedAt)}`
+									contentDetails.lastUpdated = `Last updated ${Logic.Common.formatTime(quiz.updatedAt)}`
 									contentDetails.tags = quiz.tagIds.map((id) => Logic.Study.GetTagName(id))
 									contentDetails.user.name = quiz.user.bio.publicName
 									contentDetails.user.photoUrl = quiz.user.bio.photo ? quiz.user.bio.photo.link : ''
@@ -402,7 +401,6 @@ export default defineComponent({
 		})
 
 		return {
-			Logic,
 			sectionOptions,
 			selectedSection,
 			selectedMaterial,

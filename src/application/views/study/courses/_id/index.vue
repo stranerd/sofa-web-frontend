@@ -12,7 +12,7 @@
 								{{ SingleCourse?.title }}
 							</SofaHeaderText>
 
-							<div v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id">
+							<div v-if="!CourseReview && $utils.AuthUser?.id != SingleCourse?.user.id">
 								<SofaButton customClass="" padding="px-4 py-1" @click="showRateCourse">Rate</SofaButton>
 							</div>
 						</div>
@@ -137,7 +137,7 @@
 		</SofaModalOld>
 
 		<!-- Rating floating button sm -->
-		<Teleport v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id && !$screen.desktop" to="body">
+		<Teleport v-if="!CourseReview && $utils.AuthUser?.id != SingleCourse?.user.id && !$screen.desktop" to="body">
 			<span class="absolute bottom-[3%] right-[2%] z-[1000] flex flex-row items-center justify-center h-[70px] w-[70px]">
 				<span
 					class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
@@ -293,7 +293,6 @@ export default defineComponent({
 		})
 
 		return {
-			Logic,
 			SingleCourse,
 			handleMobileGoback,
 			mobileTitle,

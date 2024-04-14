@@ -17,7 +17,9 @@
 			<div class="p-4 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 				<SofaIcon class="h-[40px]" name="xp-points" />
 				<div class="flex flex-col items-start justify-center">
-					<SofaNormalText class="font-bold"> {{ formatNumber(user.account.rankings.overall.value, 2) }} xp </SofaNormalText>
+					<SofaNormalText class="font-bold">
+						{{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp
+					</SofaNormalText>
 					<SofaNormalText color="text-bodyBlack" content="Point" />
 				</div>
 			</div>
@@ -25,7 +27,7 @@
 				<SofaIcon class="h-[40px]" name="streak-new" />
 				<div class="flex flex-col items-start justify-center">
 					<SofaNormalText class="font-bold">
-						{{ user.account.streak.count }} {{ pluralize(user.account.streak.count, 'day', 'days') }}
+						{{ user.account.streak.count }} {{ $utils.pluralize(user.account.streak.count, 'day', 'days') }}
 					</SofaNormalText>
 					<SofaNormalText color="text-bodyBlack">Streak</SofaNormalText>
 				</div>
@@ -73,7 +75,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber, pluralize } from 'valleyed'
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'

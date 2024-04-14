@@ -30,7 +30,7 @@
 						<div class="flex flex-col gap-2 items-center grow w-full">
 							<template v-if="tab === 'leaderboard'">
 								<SofaNormalText color="text-current" class="mb-2">
-									{{ extras.scores.length }} {{ pluralize(extras.scores.length, 'participant', 'participants') }}
+									{{ extras.scores.length }} {{ $utils.pluralize(extras.scores.length, 'participant', 'participants') }}
 								</SofaNormalText>
 								<div
 									v-for="score in extras.scores"
@@ -64,7 +64,7 @@
 									}"
 									class="mb-2"
 									textStyle="!text-3xl">
-									{{ formatNumber(extras.myScore.percentage, 1) }}%
+									{{ $utils.formatNumber(extras.myScore.percentage, 1) }}%
 								</SofaPieChart>
 								<SofaHeaderText size="2xl" color="text-current" :content="extras.myScore.label" />
 								<SofaNormalText
@@ -105,11 +105,9 @@
 </template>
 
 <script lang="ts">
-import { formatNumber, pluralize } from 'valleyed'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { Logic } from 'sofa-logic'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 
 export default defineComponent({
@@ -133,7 +131,7 @@ export default defineComponent({
 
 		const tab = ref<'leaderboard' | 'result'>(PlayEntity.hasLeaderboard(type) ? 'leaderboard' : 'result')
 
-		return { type, isDark, tab, Logic, formatNumber, pluralize }
+		return { type, isDark, tab }
 	},
 })
 </script>

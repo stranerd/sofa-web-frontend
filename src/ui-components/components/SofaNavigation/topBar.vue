@@ -22,7 +22,7 @@
 					v-for="tab in tabs"
 					:key="tab.name"
 					class="py-4 flex items-center justify-center gap-2 text-bodyBlack border-b-2 border-transparent"
-					:class="{ '!text-primaryPurple !border-primaryPurple': Logic.Common.tabIsActive(tab.path) }"
+					:class="{ '!text-primaryPurple !border-primaryPurple': $utils.tabIsActive(tab.path) }"
 					:to="tab.path">
 					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
 					<SofaNormalText class="font-bold" color="text-current" :content="tab.name" />
@@ -58,7 +58,7 @@
 
 		<template v-if="type == 'sub'">
 			<div class="flex gap-4 items-center">
-				<SofaIcon class="h-[12px]" name="back-arrow" @click="Logic.Common.goBack()" />
+				<SofaIcon class="h-[12px]" name="back-arrow" @click="$utils.goBack()" />
 				<SofaHeaderText class="!font-bold py-4" :content="title" />
 				<div v-if="badges.length" class="flex gap-2 items-center">
 					<SofaBadge v-for="item in badges" :key="item.text" v-bind="item">
@@ -104,7 +104,6 @@ import { SofaTextField } from '../SofaForm'
 import SofaIcon from '../SofaIcon/index.vue'
 import { SofaHeaderText } from '../SofaTypography'
 import SofaNormalText from '../SofaTypography/normalText.vue'
-import { Logic } from 'sofa-logic'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'

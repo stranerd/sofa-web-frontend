@@ -16,7 +16,7 @@
 				padding="py-3 md:px-6"
 				bgColor="bg-primaryBlue"
 				textColor="text-white"
-				@click="Logic.Common.goBack">
+				@click="$utils.goBack">
 				Done
 			</SofaButton>
 			<SofaButton
@@ -26,7 +26,7 @@
 				padding="py-3 md:px-6"
 				bgColor="bg-white border border-gray-100"
 				textColor="text-grayColor"
-				@click="Logic.Common.goBack">
+				@click="$utils.goBack">
 				Cancel
 			</SofaButton>
 			<SofaButton
@@ -47,7 +47,6 @@
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { QuizEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	quiz: QuizEntity

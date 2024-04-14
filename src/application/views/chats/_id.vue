@@ -207,7 +207,6 @@ export default defineComponent({
 			id,
 			user,
 			userAi,
-			Logic,
 			factory,
 			createMessage,
 			conversation,

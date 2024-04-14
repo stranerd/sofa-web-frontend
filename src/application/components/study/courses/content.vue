@@ -48,9 +48,7 @@
 					subTitle="Get this course to start learning with it"
 					customClass="h-[380px]"
 					:actionLabel="`${SingleCourse.price.amount ? 'Buy' : 'Get'} ${
-						SingleCourse.price.amount
-							? Logic.Common.formatPrice(SingleCourse.price.amount, SingleCourse.price.currency)
-							: 'for free'
+						SingleCourse.price.amount ? $utils.formatPrice(SingleCourse.price.amount, SingleCourse.price.currency) : 'for free'
 					}`"
 					:action="buyCourse"
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }"
@@ -90,7 +88,6 @@ export default defineComponent({
 		})
 
 		return {
-			Logic,
 			openMaterial,
 			extractResource,
 			SingleCourse,

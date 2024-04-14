@@ -14,7 +14,7 @@
 						route: `/chats/requests/${request.id}`,
 						title: request.user.bio.publicName,
 						lastMessage: request.title,
-						lastMessageTime: formatTime(request.createdAt),
+						lastMessageTime: $utils.formatTime(request.createdAt),
 						photoUrl: request.user.bio.photo?.link ?? null,
 					}" />
 			</div>
@@ -34,7 +34,7 @@
 						route: `/chats/${request.id}`,
 						title: request.user.bio.publicName,
 						lastMessage: request.title,
-						lastMessageTime: formatTime(request.createdAt),
+						lastMessageTime: $utils.formatTime(request.createdAt),
 						photoUrl: request.user.bio.photo?.link ?? null,
 					}" />
 			</div>
@@ -48,7 +48,7 @@
 					route: `/chats/${chat.id}`,
 					title: chat.title,
 					lastMessage: chat.last?.body ?? 'No message',
-					lastMessageTime: formatTime(chat.last?.createdAt ?? Date.now()),
+					lastMessageTime: $utils.formatTime(chat.last?.createdAt ?? Date.now()),
 					photoUrl:
 						id === chat.user.id
 							? chat.tutor
@@ -65,7 +65,6 @@ import { ref } from 'vue'
 import Chat from './Chat.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList } from '@app/composables/conversations/conversations'
-import { formatTime } from '@utils/dates'
 
 withDefaults(
 	defineProps<{

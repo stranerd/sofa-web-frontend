@@ -5,15 +5,15 @@
 		<div class="flex gap-2 items-center">
 			<SofaNormalText
 				color="text-grayColor"
-				:content="`${classInst.lessons.length} ${pluralize(classInst.lessons.length, 'lesson', 'lessons')}`" />
+				:content="`${classInst.lessons.length} ${$utils.pluralize(classInst.lessons.length, 'lesson', 'lessons')}`" />
 			<span class="w-[5px] h-[5px] bg-grayColor rounded-full" />
 			<SofaNormalText
 				color="text-grayColor"
-				:content="`${classInst.members.students.length} ${pluralize(classInst.members.students.length, 'student', 'students')}`" />
+				:content="`${classInst.members.students.length} ${$utils.pluralize(classInst.members.students.length, 'student', 'students')}`" />
 		</div>
 
 		<SofaNormalText size="lg" class="font-bold">
-			{{ Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency) }}/month
+			{{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}/month
 		</SofaNormalText>
 
 		<div class="flex gap-2 items-center justify-between pt-1">
@@ -30,10 +30,8 @@
 </template>
 
 <script lang="ts" setup>
-import { pluralize } from 'valleyed'
 import { useSaveClass } from '@app/composables/organizations/classes-explore'
 import { ClassEntity } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	classInst: ClassEntity

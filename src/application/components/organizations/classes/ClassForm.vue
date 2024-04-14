@@ -39,7 +39,7 @@
 					<template #inner-suffix>
 						<div class="flex items-center gap-1 border-l-2 border-darkLightGray px-2 py-1">
 							<SofaNormalText class="font-bold text-deepGray !text-xl">
-								{{ Logic.Common.getCurrency(factory.currency) }}
+								{{ $utils.getCurrency(factory.currency) }}
 							</SofaNormalText>
 						</div>
 					</template>
@@ -65,7 +65,6 @@
 
 <script lang="ts" setup>
 import { ClassFactory } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 defineProps<{
 	factory: ClassFactory

@@ -101,7 +101,7 @@
 				<template #middle-session>
 					<!-- Top bar for smaller screens -->
 					<div class="w-full flex mdlg:!hidden justify-between items-center bg-lightGray p-4">
-						<SofaIcon class="h-[19px]" name="circle-close" @click="Logic.Common.goBack()" />
+						<SofaIcon class="h-[19px]" name="circle-close" @click="$utils.goBack()" />
 
 						<SofaNormalText
 							class="!font-bold !text-sm"
@@ -260,7 +260,6 @@ import EditQuizWrapper from '@app/components/study/quizzes/EditQuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
 import { QuestionEntity, QuizEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'StudyQuizzesIdEdit',
@@ -296,7 +295,6 @@ export default defineComponent({
 			interactingQuestionId,
 			openAccessModal,
 			openEditModal,
-			Logic,
 		}
 	},
 })

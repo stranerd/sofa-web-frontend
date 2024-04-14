@@ -39,7 +39,7 @@
 				borderColor="border-transparent">
 				<template #inner-prefix>
 					<SofaNormalText>
-						{{ Logic.Common.getCurrency(wallet.balance.currency) }}
+						{{ $utils.getCurrency(wallet.balance.currency) }}
 					</SofaNormalText>
 				</template>
 			</SofaTextField>
@@ -91,7 +91,6 @@ import { computed, ref, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useAccountsUpdate } from '@app/composables/payment/accounts'
 import { useWithdrawal } from '@app/composables/payment/wallets'
-import { Logic } from 'sofa-logic'
 
 defineProps<{
 	close: () => void

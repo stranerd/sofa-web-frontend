@@ -17,11 +17,11 @@
 						{{ transaction.title }}
 					</SofaNormalText>
 					<SofaNormalText customClass="!font-bold" :color="transaction.color">
-						{{ Logic.Common.formatPrice(transaction.amount, transaction.currency) }}
+						{{ $utils.formatPrice(transaction.amount, transaction.currency) }}
 					</SofaNormalText>
 				</div>
 				<SofaNormalText color="text-grayColor">
-					{{ formatTime(transaction.createdAt) }}
+					{{ $utils.formatTime(transaction.createdAt) }}
 				</SofaNormalText>
 			</a>
 			<a
@@ -40,8 +40,6 @@
 import { useModals } from '@app/composables/core/modals'
 import { useMyTransactions } from '@app/composables/payment/transactions'
 import { TransactionEntity } from '@modules/payment'
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 
 const { transactions, hasMore, fetchOlderTransactions } = useMyTransactions()
 

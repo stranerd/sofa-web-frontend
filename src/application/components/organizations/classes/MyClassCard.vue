@@ -9,7 +9,7 @@
 			</div>
 
 			<SofaNormalText color="text-grayColor" size="lg" class="font-bold">
-				{{ Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency) }}/month
+				{{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}/month
 			</SofaNormalText>
 		</div>
 	</router-link>
@@ -17,7 +17,6 @@
 
 <script lang="ts" setup>
 import { ClassEntity } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 defineProps<{
 	classInst: ClassEntity

@@ -29,7 +29,6 @@ import { openMaterial } from '@app/composables/library'
 import { useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
 import { DraftStatus } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryQuizzesPage',
@@ -50,7 +49,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, data, openMaterial }
+		return { data, openMaterial }
 	},
 })
 </script>

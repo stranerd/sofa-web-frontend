@@ -7,7 +7,7 @@
 					<SofaImageLoader class="w-full rounded-custom" :photoUrl="content.image">
 						<div v-if="content.price > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
 							<SofaBadge customClass="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
-								{{ Logic.Common.formatPrice(content.price, content.currency) }}
+								{{ $utils.formatPrice(content.price, content.currency) }}
 							</SofaBadge>
 						</div>
 					</SofaImageLoader>
@@ -72,9 +72,7 @@
 								:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'}`"
 								@click="buyAction && content.status == 'published' ? buyAction() : null">
 								{{
-									content.price > 0
-										? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}`
-										: 'Get course for free'
+									content.price > 0 ? `Buy ${$utils.formatPrice(content.price, content.currency)}` : 'Get course for free'
 								}}
 							</SofaButton>
 							<SofaButton
@@ -257,7 +255,7 @@
 			padding="px-6 py-3"
 			:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'} w-full`"
 			@click="buyAction && content.status == 'published' ? buyAction() : null">
-			{{ content.price > 0 ? `Buy ${Logic.Common.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
+			{{ content.price > 0 ? `Buy ${$utils.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
 		</SofaButton>
 		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="$router.push(`/study/courses/${content.id}`)">
 			Go to course
@@ -278,7 +276,7 @@ import SofaIcon from '../SofaIcon'
 import SofaImageLoader from '../SofaImageLoader'
 import SofaRatings from '../SofaRatings'
 import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
-import { ContentDetails, Logic, ResourceType } from 'sofa-logic'
+import { ContentDetails, ResourceType } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{

@@ -116,7 +116,6 @@ import Draggable from 'vuedraggable'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
 import { FileEntity, QuestionEntity, QuestionsUseCases, QuizEntity } from '@modules/study'
-import { formatTime } from '@utils/dates'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
 import { Logic, UpdateCourseSectionsInput } from 'sofa-logic'
@@ -285,7 +284,7 @@ export default defineComponent({
 								photoUrl: `${quiz.user.bio?.photo?.link}`,
 								name: `${quiz.user.bio?.name?.full}`,
 							},
-							last_updated: formatTime(quiz.createdAt),
+							last_updated: Logic.Common.formatTime(quiz.createdAt),
 						},
 						original: quiz,
 						data: allQuestions,

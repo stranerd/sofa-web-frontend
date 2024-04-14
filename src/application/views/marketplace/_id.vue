@@ -1,14 +1,14 @@
 <template>
 	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
 		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
-			<SofaNormalText color="text-grayColor" class="w-full flex !flex-row justify-start gap-1">
-				<span class="cursor-pointer" @click="Logic.Common.goBack()">{{ 'Marketplace ' }}</span>
+			<SofaNormalText color="text-grayColor" class="w-full flex flex-row justify-start gap-1">
+				<a @click="$utils.goBack()">Marketplace </a>
 				<span> / {{ contentDetails.title }}</span>
 			</SofaNormalText>
 		</div>
 		<div
 			class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
-			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText customClass="!font-bold !text-base">
 				{{ contentType == 'course' ? 'Course details' : 'Quiz details' }}
 			</SofaNormalText>
@@ -47,7 +47,6 @@ import { useHasAccess } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
-import { formatTime } from '@utils/dates'
 import { Logic } from 'sofa-logic'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
 import { Purchasables } from '@modules/payment'
@@ -152,7 +151,7 @@ export default defineComponent({
 				contentDetails.status = SingleCourse.value.status
 				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.svg'
 				contentDetails.info = SingleCourse.value.description
-				contentDetails.lastUpdated = `Last updated ${formatTime(SingleCourse.value.createdAt)}`
+				contentDetails.lastUpdated = `Last updated ${Logic.Common.formatTime(SingleCourse.value.createdAt)}`
 				contentDetails.labels.color = 'orange'
 				contentDetails.labels.main = 'Course'
 				contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`
@@ -250,7 +249,7 @@ export default defineComponent({
 				contentDetails.status = SingleQuiz.value.status
 				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.svg'
 				contentDetails.info = SingleQuiz.value.description
-				contentDetails.lastUpdated = `Last updated ${formatTime(SingleQuiz.value.createdAt)}`
+				contentDetails.lastUpdated = `Last updated ${Logic.Common.formatTime(SingleQuiz.value.createdAt)}`
 				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`
 				contentDetails.labels.color = 'pink'
 				contentDetails.labels.main = 'Quiz'
@@ -375,7 +374,6 @@ export default defineComponent({
 		})
 
 		return {
-			Logic,
 			contentDetails,
 			similarContents,
 			SingleQuiz,

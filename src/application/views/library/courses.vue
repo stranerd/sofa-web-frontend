@@ -29,7 +29,6 @@ import { openMaterial } from '@app/composables/library'
 import { useRecent } from '@app/composables/study'
 import { useMyCourses } from '@app/composables/study/courses-list'
 import { DraftStatus } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryCoursesPage',
@@ -48,7 +47,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, openMaterial, data }
+		return { openMaterial, data }
 	},
 })
 </script>

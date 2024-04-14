@@ -11,7 +11,7 @@
 				bgColor: 'bg-primaryBlue',
 				textColor: 'text-white',
 				click: async () => {
-					if (isDone) return await Logic.Common.goBack()
+					if (isDone) return await $utils.goBack()
 					if (!showSolution) {
 						await extras.submitAnswer('right', true)
 						isCorrect = extras.question?.checkAnswer(extras.answer) ?? false
@@ -71,7 +71,6 @@
 import { ref } from 'vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import { PlayEntity } from '@modules/plays'
-import { Logic } from 'sofa-logic'
 
 type QuizProps = InstanceType<typeof Quiz>['$props']
 

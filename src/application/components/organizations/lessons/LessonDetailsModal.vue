@@ -12,8 +12,8 @@
 			<SofaNormalText
 				v-for="tab in [
 					{ title: 'Curriculum', key: 'curriculum' },
-					{ title: `Teachers ${formatNumber(activeLesson.users.teachers.length)}`, key: 'teachers' },
-					{ title: `Students ${formatNumber(activeLesson.users.students.length)}`, key: 'students' },
+					{ title: `Teachers ${$utils.formatNumber(activeLesson.users.teachers.length)}`, key: 'teachers' },
+					{ title: `Students ${$utils.formatNumber(activeLesson.users.students.length)}`, key: 'students' },
 				]"
 				:key="tab.key"
 				as="a"
@@ -65,7 +65,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber } from 'valleyed'
 import { computed, ref } from 'vue'
 import { ClassLesson, ClassEntity } from '@modules/organizations'
 import { useUsersInList } from '@app/composables/users/users'

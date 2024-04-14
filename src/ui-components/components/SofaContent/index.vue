@@ -60,7 +60,6 @@
 import { defineComponent } from 'vue'
 import SofaIcon from '../SofaIcon'
 import { SofaNormalText } from '../SofaTypography'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SofaContent',
@@ -81,11 +80,6 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
-	},
-	setup() {
-		return {
-			Logic,
-		}
 	},
 })
 </script>

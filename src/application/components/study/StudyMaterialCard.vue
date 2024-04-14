@@ -9,7 +9,7 @@
 				v-if="content.price && content.price.amount > 0"
 				class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 				<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
-					{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
+					{{ $utils.formatPrice(content.price.amount, content.price.currency) }}
 				</SofaBadge>
 			</div>
 		</SofaImageLoader>
@@ -66,7 +66,7 @@
 					v-if="content.price && content.price.amount > 0"
 					class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 					<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
-						{{ Logic.Common.formatPrice(content.price.amount, content.price.currency) }}
+						{{ $utils.formatPrice(content.price.amount, content.price.currency) }}
 					</SofaBadge>
 				</div>
 			</SofaImageLoader>
@@ -104,7 +104,7 @@
 					<div class="flex gap-1 items-center">
 						<SofaNormalText> {{ activity.ratings.avg }} </SofaNormalText>
 						<SofaNormalText color="text-grayColor">
-							({{ activity.ratings.count }} {{ pluralize(activity.ratings.count, 'rating', 'ratings') }})
+							({{ activity.ratings.count }} {{ $utils.pluralize(activity.ratings.count, 'rating', 'ratings') }})
 						</SofaNormalText>
 					</div>
 				</div>
@@ -131,9 +131,7 @@
 </template>
 
 <script lang="ts" setup>
-import { pluralize } from 'valleyed'
 import { computed } from 'vue'
-import { Logic } from 'sofa-logic'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { useMyFolders, saveToFolder } from '@app/composables/study/folders'
 import { extractResource } from '@app/composables/library'

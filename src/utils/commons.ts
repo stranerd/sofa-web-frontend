@@ -5,12 +5,22 @@ import { formatNumber } from 'valleyed'
 import { isWeb } from '@utils/constants'
 
 export const copyToClipboard = async (text: string) => {
-	throw new Error(`Not implemented: ${text}`)
+	const result = await window.navigator.permissions.query({ name: 'clipboard-write' as any })
+	if (result.state === 'granted' || result.state === 'prompt') {
+		await window.navigator.clipboard.writeText(text)
+		return true
+	}
+	return false
 	// await Clipboard.write({ string: text })
 }
 
 export const share = async (data: { title: string; text: string; url: string }) => {
-	throw new Error(`Not implemented: ${data}`)
+	try {
+		await navigator.share(data)
+		return true
+	} catch {
+		return false
+	}
 	/* const { value } = await Share.canShare()
 	if (value) await Share.share({
 		...data, dialogTitle: data.title
