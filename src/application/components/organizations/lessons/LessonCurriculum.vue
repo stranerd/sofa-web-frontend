@@ -14,14 +14,13 @@
 					<SofaCustomInput
 						v-if="canEdit && editedLabelSections.has(sectionIndex)"
 						v-model="factory.factories[sectionIndex].label"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white !px-0"
+						class="grow !px-0"
 						:autoFocus="true"
 						placeholder="Section label"
 						@onBlur="closeLabelSection(sectionIndex)"
 						@onEnter="closeLabelSection(sectionIndex)" />
-					<SofaHeaderText v-else size="base">{{ curriculum[sectionIndex].label }}</SofaHeaderText>
+					<SofaHeaderText v-else size="base" class="grow truncate">{{ curriculum[sectionIndex].label }}</SofaHeaderText>
 					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
-					<span class="flex-1" />
 					<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle" name="reorder-gray" />
 					<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
 					<SofaIcon

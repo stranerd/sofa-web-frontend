@@ -6,13 +6,12 @@
 					<SofaCustomInput
 						v-if="editedLabelSections.has(sectionIndex)"
 						v-model="factory.factories[sectionIndex].label"
-						customClass="w-full cursor-text !bg-white !px-0"
+						class="grow !px-0"
 						:autoFocus="true"
 						placeholder="Section label"
 						@onBlur="closeLabelSection(sectionIndex)"
 						@onEnter="closeLabelSection(sectionIndex)" />
-					<SofaHeaderText v-else size="base">{{ sections[sectionIndex].label }}</SofaHeaderText>
-					<span class="flex-1" />
+					<SofaHeaderText v-else size="base" class="grow truncate">{{ sections[sectionIndex].label }}</SofaHeaderText>
 					<SofaIcon class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 					<SofaIcon class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
 					<SofaIcon class="h-[20px] sectionHandle" name="reorder-gray" />
@@ -64,12 +63,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
 import { useDeleteFile } from '@app/composables/study/files'
 import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	course: CourseEntity
@@ -78,7 +78,7 @@ const props = defineProps<{
 const selectedItem = defineModel<ExtendedCourseSectionItem>()
 
 const { deleteFile } = useDeleteFile()
-const { factory, extendedSections: sections } = useUpdateSections(computed(() => props.course))
+const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
 
 const addStudyMaterial = (index: number) => {
 	if (!factory.factories.at(index)) return
@@ -134,4 +134,12 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 const onClickItem = (sectionIndex: number, itemIndex: number) => {
 	selectedItem.value = sections.value.at(sectionIndex)?.items.at(itemIndex)
 }
+
+watch(
+	() => factory.factories,
+	async () => {
+		const unChanged = await factory.equals(props.course.sections)
+		if (factory.valid || !unChanged) Logic.Common.debounce(updateSections, 500)
+	},
+)
 </script>

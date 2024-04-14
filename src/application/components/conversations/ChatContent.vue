@@ -7,15 +7,14 @@
 				<div class="flex flex-col">
 					<SofaCustomInput
 						v-if="canEditTitle && editTitle"
-						v-model="title"
-						customClass="!font-bold w-full flex justify-start !px-0 !py-0 !text-sm mdlg:!text-base"
+						v-model="model"
+						class="!px-0"
 						:autoFocus="true"
-						@onContentChange="submitTitle"
-						@onBlur="editTitle = false"></SofaCustomInput>
+						@onBlur="submitTitle" />
 					<SofaNormalText
 						v-else
 						class="!font-bold w-full !text-sm mdlg:!text-base !line-clamp-1"
-						:content="data.title"
+						:content="model"
 						@click="editTitle = canEditTitle ?? false" />
 					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
 				</div>
@@ -34,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
@@ -50,12 +49,12 @@ const props = defineProps<{
 const model = defineModel<string>({ default: '' })
 
 const editTitle = ref(false)
-const title = ref(props.data.title)
+const title = computed(() => props.data.title)
 
 const submitTitle = () => {
 	Logic.Common.debounce(async () => {
-		props.updateTitle?.(title.value)
-	}, 700)
+		props.updateTitle?.(model.value)
+	}, 1000)
 	editTitle.value = false
 }
 

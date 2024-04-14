@@ -4,7 +4,6 @@
 			<span v-for="(item, index) in factory.fillInBlanksAnswers" :key="index" class="flex items-center gap-1">
 				<SofaCustomInput
 					v-model="factory.fillInBlanksAnswers[index].value"
-					class="bg-transparent focus:outline-none w-auto p-2"
 					:class="item.type === 'q' ? 'questionText' : 'border-2 answerText border-darkLightGray rounded-lg'"
 					:placeholder="item.type === 'q' ? 'Text here' : 'Answer here'" />
 				<SofaIcon class="h-[14px] cursor-pointer" name="circle-close" @click="factory.fillInBlanksAnswers.splice(index, 1)" />
@@ -18,7 +17,6 @@
 			<span v-for="(item, index) in factory.dragAnswersAnswers" :key="index" class="flex items-center gap-1">
 				<SofaCustomInput
 					v-model="factory.dragAnswersAnswers[index].value"
-					class="bg-transparent focus:outline-none w-auto p-2"
 					:class="item.type === 'q' ? 'questionText' : 'border-2 answerText border-darkLightGray rounded-lg'"
 					:placeholder="item.type === 'q' ? 'Text here' : 'Answer here'" />
 				<SofaIcon class="h-[14px] cursor-pointer" name="circle-close" @click="factory.dragAnswersAnswers.splice(index, 1)" />

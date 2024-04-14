@@ -20,12 +20,12 @@
 					<SofaCustomInput
 						v-if="folder.id === factory.entityId"
 						v-model="factory.title"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white"
+						class="grow"
 						placeholder="Folder name"
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
 
-					<SofaNormalText v-else class="truncate w-full" :content="folder.title" />
+					<SofaNormalText v-else class="truncate grow" :content="folder.title" />
 				</div>
 
 				<div class="flex items-center shrink-0">

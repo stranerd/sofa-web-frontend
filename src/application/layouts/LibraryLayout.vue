@@ -55,12 +55,12 @@
 					<SofaCustomInput
 						v-if="item.id === factory.entityId"
 						v-model="factory.title"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+						class="grow"
 						:autoFocus="true"
 						placeholder="Folder name"
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
-					<SofaNormalText v-else class="truncate w-full">{{ item.title }}</SofaNormalText>
+					<SofaNormalText v-else class="truncate grow">{{ item.title }}</SofaNormalText>
 
 					<div
 						v-if="item.id !== factory.entityId"
@@ -119,10 +119,10 @@
 							v-model="factory.title"
 							placeholder="Folder name"
 							:autoFocus="true"
-							customClass="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-lightGray rounded cursor-text"
+							class="grow !py-1 !bg-lightGray rounded"
 							@onBlur="saveFolder"
 							@onEnter="saveFolder" />
-						<SofaNormalText v-else class="truncate w-full">{{ item.title }}</SofaNormalText>
+						<SofaNormalText v-else class="truncate grow">{{ item.title }}</SofaNormalText>
 
 						<div
 							v-if="item.id !== factory.entityId"
