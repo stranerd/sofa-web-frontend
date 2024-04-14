@@ -44,7 +44,7 @@
 					</div>
 
 					<div class="w-full flex flex-row items-center gap-2">
-						<SofaIcon customClass="h-[16px]" name="calendar-black" />
+						<SofaIcon customClass="h-[16px]" name="calendar" />
 						<SofaNormalText> Last updated {{ data.last_updated }} </SofaNormalText>
 					</div>
 				</div>

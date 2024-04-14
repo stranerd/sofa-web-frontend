@@ -37,7 +37,7 @@
 			</div>
 
 			<div class="w-full flex flex-row items-center gap-2">
-				<SofaIcon customClass="h-[16px]" name="calendar-black" />
+				<SofaIcon customClass="h-[16px]" name="calendar" />
 				<SofaNormalText> Last updated {{ $utils.formatTime(data.updatedAt) }} </SofaNormalText>
 			</div>
 		</div>

@@ -1,8 +1,9 @@
 <template>
 	<div v-if="item" class="flex flex-col gap-4 grow">
-		<div class="flex gap-2 justify-between items-center pb-4 border-b border-lightGray">
+		<div class="flex gap-2 justify-between items-center">
 			<SofaNormalText class="!font-bold" content="Details" />
 		</div>
+		<div class="h-1 bg-lightGray" />
 		<div class="flex flex-col gap-4 grow overflow-y-auto scrollbar-none">
 			<template v-if="quiz">
 				<SofaImageLoader class="w-full rounded-custom h-[200px]" :photoUrl="quiz.picture" />
@@ -29,12 +30,12 @@
 				</div>
 
 				<div class="flex items-center gap-2">
-					<SofaIcon class="h-[16px]" name="calendar-black" />
+					<SofaIcon class="h-[16px]" name="calendar" />
 					<SofaNormalText :content="`Last updated ${$utils.formatTime(quiz.updatedAt)}`" />
 				</div>
 			</template>
 
-			<template v-if="file">
+			<form v-if="file" class="flex flex-col gap-4" @submit.prevent="updateFile">
 				<SofaTextField
 					v-model="factory.title"
 					customClass="rounded-custom !bg-lightGray"
@@ -51,7 +52,11 @@
 					:rows="6"
 					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
 					placeholder="Description" />
-			</template>
+
+				<SofaButton v-if="factory.hasChanges" type="submit" :disabled="!factory.valid" padding="px-4 py-2" class="self-end"
+				>Save changes</SofaButton
+				>
+			</form>
 		</div>
 	</div>
 </template>
@@ -73,7 +78,7 @@ const props = defineProps<{
 const quiz = computed(() => (props.item?.type === Coursable.quiz ? props.item.quiz : null))
 const file = computed(() => (props.item?.type === Coursable.file ? props.item.file : null))
 
-const { factory } = useUpdateFile(file)
+const { factory, updateFile } = useUpdateFile(file)
 
 watch(file, () => {
 	if (file.value) factory.loadEntity(file.value)
