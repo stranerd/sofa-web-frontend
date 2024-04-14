@@ -13,7 +13,7 @@
 				:key="material.hash"
 				type="activity"
 				:material="material"
-				:isWrapped="!Logic.Common.isLarge"
+				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasBookmark="false"
 				:class="{ '!bg-lightBlue': hasMaterial(material) }"
@@ -38,11 +38,10 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { Logic } from 'sofa-logic'
+import { useAuth } from '@app/composables/auth/auth'
+import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { CourseEntity, QuizEntity } from '@modules/study'
 import { SofaNormalText } from 'sofa-ui-components'
-import { useUsersMaterials } from '@app/composables/study/users-materials'
-import { useAuth } from '@app/composables/auth/auth'
 
 type Material = QuizEntity | CourseEntity
 

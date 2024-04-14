@@ -38,7 +38,7 @@
 		<template #left-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
 				<SofaCourseSections
-					v-if="Logic.Common.isLarge && SingleCourse"
+					v-if="$screen.desktop && SingleCourse"
 					v-model="selectedMaterial"
 					:sectionInput="updateCourseSectionForm"
 					:updateSections="updateCourseSections"
@@ -69,7 +69,7 @@
 			<template v-if="currentContent == 'sections'">
 				<div class="w-full mdlg:!hidden flex-col h-full grow bg-white py-2 px-4 md:!flex">
 					<SofaCourseSections
-						v-if="!Logic.Common.isLarge && SingleCourse"
+						v-if="!$screen.desktop && SingleCourse"
 						v-model="selectedMaterial"
 						:sectionInput="updateCourseSectionForm"
 						:updateSections="updateCourseSections"

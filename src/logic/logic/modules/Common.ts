@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { getRandomValue, isString } from 'valleyed'
+import { getRandomValue } from 'valleyed'
 import { reactive } from 'vue'
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
 import { Logic } from '..'
@@ -19,7 +19,6 @@ import { AuthDetails } from '@modules/auth'
 import { storage } from '@utils/storage'
 
 export default class Common {
-	public window = reactive({ width: window.innerWidth })
 	#router: Router | undefined = undefined
 	#route: RouteLocationNormalizedLoaded | undefined = undefined
 	public watchInterval: number | undefined = undefined
@@ -56,12 +55,6 @@ export default class Common {
 		const min = Math.floor(seconds / 60)
 		const sec = seconds % 60
 		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
-	}
-
-	constructor() {
-		window.addEventListener('resize', () => {
-			this.window.width = window.innerWidth
-		})
 	}
 
 	public async listenToOne<Model, Entity = Model>(
@@ -154,14 +147,6 @@ export default class Common {
 		})
 	}
 
-	public get isOnlyMobile() {
-		return this.window.width <= 640
-	}
-
-	public get isLarge() {
-		return this.window.width > 1000
-	}
-
 	public showAlert = (alert: LoaderSetup['alerts'][number]) => {
 		this.loaderSetup.alerts.push(alert)
 	}
@@ -214,9 +199,6 @@ export default class Common {
 
 	public formatPrice = (price: number, currency = 'NGN') =>
 		`${price < 0 ? '-' : ''}${this.getCurrency(currency)}${Intl.NumberFormat().format(Math.abs(price))}`
-
-	public searchArray = (arr: any[], searchKey: string) =>
-		arr.filter((obj) => Object.keys(obj).some((key) => (isString()(obj[key]).valid ? obj[key].includes(searchKey) : false)))
 
 	public debounce = (method = () => {}, delay = 500) => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment

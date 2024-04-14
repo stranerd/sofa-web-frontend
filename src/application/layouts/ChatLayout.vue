@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<slot />
 	</ExpandedLayout>
 	<FullLayout v-else :noBottomPadding="true">
@@ -64,7 +64,6 @@
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList } from '@app/composables/conversations/conversations'
-import { Logic } from 'sofa-logic'
 
 withDefaults(
 	defineProps<{

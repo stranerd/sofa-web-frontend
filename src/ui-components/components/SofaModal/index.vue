@@ -40,7 +40,7 @@ const props = withDefaults(
 const modal = ref<HTMLDivElement>()
 
 const calculatePosition = () => {
-	if (!props.event || !modal.value || !props.popover || !Logic.Common.isLarge) return ''
+	if (!props.event || !modal.value || !props.popover || !Logic.Screen.desktop) return ''
 	const bounds = modal.value.getBoundingClientRect()
 	let top = props.event.y
 	const bottomDiff = top + bounds.height - window.innerHeight

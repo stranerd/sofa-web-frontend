@@ -240,7 +240,7 @@ export default defineComponent({
 		const selectedQuiz = ref('')
 
 		const handleShowAddVideo = () => {
-			if (Logic.Common.isLarge) showAddVideo.value = true
+			if (Logic.Screen.desktop) showAddVideo.value = true
 			else context.emit('OnItemSelected', 'video')
 		}
 

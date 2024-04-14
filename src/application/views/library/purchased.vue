@@ -6,7 +6,7 @@
 				:key="activity.hash"
 				type="activity"
 				:material="activity"
-				:isWrapped="!Logic.Common.isLarge"
+				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"

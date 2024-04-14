@@ -6,7 +6,7 @@
 				:key="activity.hash"
 				type="activity"
 				:material="activity"
-				:isWrapped="!Logic.Common.isLarge"
+				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"
@@ -28,8 +28,8 @@ import { useRoute } from 'vue-router'
 import { openMaterial } from '@app/composables/library'
 import { useRecent } from '@app/composables/study'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
-import { Logic } from 'sofa-logic'
 import { DraftStatus } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryQuizzesPage',

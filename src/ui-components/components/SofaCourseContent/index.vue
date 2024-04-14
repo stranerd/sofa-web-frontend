@@ -19,7 +19,7 @@
 				<template v-if="option.opened">
 					<div class="w-full gap-1">
 						<!-- For larger screens -->
-						<template v-if="!Logic.Common.isOnlyMobile">
+						<template v-if="!$screen.mobile">
 							<a
 								v-for="(material, i) in option.materials"
 								:key="i"
@@ -376,7 +376,7 @@ export default defineComponent({
 			}
 
 			setTimeout(() => {
-				if (!props.lockContent && !Logic.Common.isOnlyMobile) {
+				if (!props.lockContent && !Logic.Screen.mobile) {
 					if (props.modelValue) {
 						selectedMaterial.value = props.modelValue
 						selectedMaterial.value.isMounted = true

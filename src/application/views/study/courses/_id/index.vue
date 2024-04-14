@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="SingleCourse" width="mdlg:!w-[90%] lg:!w-[77%]" layoutStyle="mdlg:py-5">
 		<!-- Display for larger screens -->
-		<div v-if="!Logic.Common.isOnlyMobile" class="w-full mdlg:grid grid-cols-11 gap-4 grow">
+		<div v-if="!$screen.mobile" class="w-full mdlg:grid grid-cols-11 gap-4 grow">
 			<div class="mdlg:col-span-3 flex flex-col col-span-full lg:max-h-[600px] mdlg:max-h-[600px]">
 				<div class="w-full shadow-custom bg-white rounded-[16px] h-full flex flex-col pb-4">
 					<div
@@ -137,7 +137,7 @@
 		</SofaModalOld>
 
 		<!-- Rating floating button sm -->
-		<Teleport v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id && !Logic.Common.isLarge" to="body">
+		<Teleport v-if="!CourseReview && Logic.Common.AuthUser?.id != SingleCourse?.user.id && !$screen.desktop" to="body">
 			<span class="absolute bottom-[3%] right-[2%] z-[1000] flex flex-row items-center justify-center h-[70px] w-[70px]">
 				<span
 					class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
@@ -223,7 +223,7 @@ export default defineComponent({
 			if (data) {
 				selectedMaterial.value = data
 
-				if (Logic.Common.isOnlyMobile) {
+				if (Logic.Screen.mobile) {
 					showCourseContent.value = true
 
 					setTimeout(() => {

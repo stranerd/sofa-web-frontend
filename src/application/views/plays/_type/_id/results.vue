@@ -37,7 +37,7 @@
 									:key="score.user.id"
 									class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white text-deepGray"
 									:class="{ '!bg-lightBlue': score.user.id === extras.authId }">
-									<SofaAvatar :photoUrl="score.user.picture" :size="Logic.Common.isLarge ? 64 : 48" />
+									<SofaAvatar :photoUrl="score.user.picture" :size="$screen.desktop ? 64 : 48" />
 									<div class="grow">
 										<SofaNormalText
 											color="text-current"

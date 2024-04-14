@@ -77,7 +77,7 @@
 						:key="material.hash"
 						type="activity"
 						:material="material"
-						:isWrapped="!Logic.Common.isLarge"
+						:isWrapped="!$screen.desktop"
 						:hasBookmark="false"
 						:isRoute="false">
 						<template #side-icons>

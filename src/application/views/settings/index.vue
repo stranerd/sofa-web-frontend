@@ -11,7 +11,7 @@ export default defineComponent({
 	name: 'SettingsIndexPage',
 	routeConfig: {
 		goBackRoute: '/dashboard',
-		middlewares: ['isAuthenticated', () => (Logic.Common.isLarge ? '/settings/profile' : undefined)],
+		middlewares: ['isAuthenticated', () => (Logic.Screen.desktop ? '/settings/profile' : undefined)],
 	},
 	setup() {
 		useMeta({

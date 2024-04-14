@@ -1,7 +1,7 @@
 <template>
 	<div v-if="user" class="bg-white flex flex-col gap-2 rounded-custom shadow-custom p-4 mdlg:p-0 mdlg:shadow-none mdlg:rounded-none">
 		<div class="flex gap-3 items-start">
-			<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" :size="Logic.Common.isLarge ? 48 : 24" />
+			<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" :size="$screen.desktop ? 48 : 24" />
 			<div class="flex flex-col gap-2">
 				<div class="flex items-center gap-2">
 					<SofaNormalText customClass="font-bold">
@@ -33,7 +33,6 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
 import { useTimeDifference } from '@app/composables/core/time'
 import { AnnouncementEntity, ClassEntity, MemberTypes } from '@modules/organizations'

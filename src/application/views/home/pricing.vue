@@ -126,7 +126,7 @@ const plan = computed(() => {
 const firstPlan = ref<HTMLDivElement | null>(null)
 const height = computed(() => firstPlan.value?.clientHeight || 0)
 const dynamicStyle = computed(() => {
-	if (!Logic.Common.isLarge) {
+	if (!Logic.Screen.desktop) {
 		return {
 			top: `${(height.value + 40) / 2}px`,
 		}

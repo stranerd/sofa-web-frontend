@@ -34,9 +34,9 @@ const props = defineProps<{
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 
 watch(
-	() => Logic.Common.window.width,
+	() => Logic.Screen.width,
 	() => {
-		if (Logic.Common.isLarge && !props.isPreview) props.close()
+		if (Logic.Screen.desktop && !props.isPreview) props.close()
 	},
 	{ immediate: true },
 )

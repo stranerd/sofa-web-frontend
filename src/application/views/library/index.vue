@@ -9,7 +9,7 @@ import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryPage',
-	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Common.isLarge ? '/library/quizzes' : undefined)] },
+	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Screen.desktop ? '/library/quizzes' : undefined)] },
 	setup() {
 		useMeta({
 			title: 'Library',

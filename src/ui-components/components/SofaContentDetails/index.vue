@@ -172,7 +172,7 @@
 			v-if="selectedTab == 'creator'"
 			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
-				<SofaAvatar :photoUrl="content.user.photoUrl" :size="Logic.Common.isLarge ? 150 : 100" />
+				<SofaAvatar :photoUrl="content.user.photoUrl" :size="$screen.desktop ? 150 : 100" />
 
 				<div class="flex flex-col gap-1">
 					<div class="flex flex-row gap-2 items-center">

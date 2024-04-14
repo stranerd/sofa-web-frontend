@@ -56,7 +56,7 @@
 
 					<template v-if="resourceContents.length">
 						<div class="w-full flex flex-col gap-3">
-							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
+							<div v-if="$screen.desktop" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
 								<StudyMaterialCard v-for="m in resourceContents" :key="m.id" type="item" :material="m" class="col-span-1" />
 							</div>
 
@@ -90,7 +90,7 @@
 
 					<template v-if="quizContents.length">
 						<div class="w-full flex flex-col gap-3">
-							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
+							<div v-if="$screen.desktop" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
 								<StudyMaterialCard v-for="m in quizContents" :key="m.hash" type="item" :material="m" class="col-span-1" />
 							</div>
 

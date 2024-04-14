@@ -1,5 +1,5 @@
 <template>
-	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="title" />

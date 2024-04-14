@@ -133,7 +133,7 @@
 
 					<!-- Question list for smaller screens -->
 					<EditQuestionsList
-						v-if="!Logic.Common.isLarge"
+						v-if="!$screen.desktop"
 						v-model:questionId="extras.selectedQuestionId"
 						:quiz="quiz"
 						:users="extras.usersByQuestions"

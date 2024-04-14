@@ -26,7 +26,7 @@ import { Logic } from 'sofa-logic'
 export default defineComponent({
 	name: 'ChatsIndexPage',
 	components: { ChatList },
-	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Common.isLarge ? '/chats/new' : undefined)] },
+	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Screen.desktop ? '/chats/new' : undefined)] },
 	setup() {
 		useMeta({
 			title: 'Chat',

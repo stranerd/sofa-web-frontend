@@ -1,6 +1,6 @@
 import { RouteLocationNormalized } from 'vue-router'
 import { Middleware } from '@app/middlewares'
-import { FetchRule } from 'sofa-logic'
+import { Common, FetchRule, Screen } from 'sofa-logic'
 
 declare global {
 	type RouteConfig = Partial<{
@@ -13,5 +13,10 @@ declare global {
 declare module 'vue' {
 	interface ComponentCustomOptions {
 		routeConfig?: RouteConfig
+	}
+
+	interface ComponentCustomProperties {
+		$utils: Common
+		$screen: Screen
 	}
 }
