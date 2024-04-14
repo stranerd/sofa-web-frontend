@@ -41,6 +41,8 @@ declare module 'vue' {
     DashboardLayout: typeof import('./../application/layouts/DashboardLayout.vue')['default']
     EditClassModal: typeof import('./../application/components/organizations/classes/EditClassModal.vue')['default']
     EditCourseModal: typeof import('./../application/components/study/courses/EditCourseModal.vue')['default']
+    EditCourseSections: typeof import('./../application/components/study/courses/EditCourseSections.vue')['default']
+    EditCourseWrapper: typeof import('./../application/components/study/courses/EditCourseWrapper.vue')['default']
     EditQuestionBody: typeof import('./../application/components/study/questions/EditQuestionBody.vue')['default']
     EditQuestionOptions: typeof import('./../application/components/study/questions/EditQuestionOptions.vue')['default']
     EditQuestionsList: typeof import('./../application/components/study/questions/EditQuestionsList.vue')['default']

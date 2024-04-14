@@ -27,12 +27,9 @@ const {
 	quiz,
 	questions,
 	fetched,
-	quizFactory,
 	questionFactory,
 	deleteQuiz,
 	saveQuestion,
-	updateQuiz: update,
-	publishQuiz,
 	reorderQuestions,
 	deleteQuestion,
 	addQuestion,
@@ -49,11 +46,6 @@ const currentQuestionById = computed(() => questions.value.find((q) => q.id === 
 const saveCurrentQuestion = async () => {
 	if (!currentQuestionById.value || !questionFactory.valid) return
 	await saveQuestion(currentQuestionById.value.id, questionFactory)
-}
-
-const updateQuiz = async () => {
-	if (!quizFactory.valid) return
-	return await update()
 }
 
 const extras = computed(() => ({
@@ -76,7 +68,6 @@ const extras = computed(() => ({
 	},
 	currentQuestionById: currentQuestionById.value,
 	questionFactory,
-	quizFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => questions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions,
 	deleteQuestion,
@@ -84,24 +75,12 @@ const extras = computed(() => ({
 	duplicateQuestion,
 	deleteQuiz,
 	saveCurrentQuestion,
-	updateQuiz,
-	publishQuiz,
 	requestAccess,
 	grantAccess,
 	manageMembers,
 	isMine: quiz.value?.user.id === authId.value,
 	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(authId.value),
 }))
-
-watch(
-	quiz,
-	async () => {
-		const q = quiz.value
-		if (!q) return
-		quizFactory.loadEntity(q)
-	},
-	{ immediate: true },
-)
 
 watch(
 	[currentQuestionById, questions],

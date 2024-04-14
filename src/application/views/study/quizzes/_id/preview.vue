@@ -33,7 +33,7 @@ import { useQuiz } from '@app/composables/study/quizzes'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 
 export default defineComponent({
-	name: 'QuizIdPreviewPage',
+	name: 'StudyQuizzesIdPreviewPage',
 	components: { Quiz },
 	routeConfig: {
 		goBackRoute: (route) => `/study/quizzes/${route.params.id}/edit`,

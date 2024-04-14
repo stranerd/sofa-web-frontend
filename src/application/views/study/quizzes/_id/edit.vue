@@ -267,7 +267,7 @@ import { QuestionEntity, QuizEntity } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
-	name: 'QuizIdEdit',
+	name: 'StudyQuizzesIdEdit',
 	components: {
 		EditQuizWrapper,
 		EditQuestionsList,

@@ -1,6 +1,6 @@
 import { CourseToModel } from '../../data/models/courses'
 import { CourseEntity } from '../entities/courses'
-import { Coursable, CourseSections } from '../types'
+import { Coursable, CourseSection } from '../types'
 import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface ICourseRepository {
@@ -13,7 +13,7 @@ export interface ICourseRepository {
 	publish: (id: string) => Promise<CourseEntity>
 	freeze: (id: string) => Promise<CourseEntity>
 	move: (id: string, coursable: { coursableId: string; type: Coursable; add: boolean }) => Promise<CourseEntity>
-	updateSections: (id: string, sections: CourseSections) => Promise<CourseEntity>
+	updateSections: (id: string, sections: CourseSection[]) => Promise<CourseEntity>
 	listenToOne: (id: string, listener: Listeners<CourseEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listener: Listeners<CourseEntity>, matches: (entity: CourseEntity) => boolean) => Promise<() => void>
 }
