@@ -32,7 +32,7 @@ export class VerificationFactory extends BaseFactory<VerificationEntity, Verific
 		this.quizzes = this.quizzes.filter((id) => id !== quizId)
 	}
 
-	loadEntity = (entity: VerificationEntity) => {
+	load = (entity: VerificationEntity) => {
 		this.entityId = entity.id
 		this.courses = entity.content.courses
 		this.quizzes = entity.content.quizzes

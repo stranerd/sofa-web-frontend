@@ -128,7 +128,7 @@ const { factory, createPlay } = useCreatePlay(
 	{ start: true, nav: false },
 )
 const startQuizPlay = async (quiz: QuizEntity, type: PlayTypes) => {
-	factory.load(type, quiz)
+	factory.loadFrom(type, quiz)
 	const p = await createPlay()
 	if (!p) return
 	play.value = p

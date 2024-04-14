@@ -1,8 +1,8 @@
 import { v } from 'valleyed'
 import { ScheduleToModel } from '../../data/models/schedules'
 import { ScheduleEntity } from '../entities/schedules'
-import { BaseFactory } from '@modules/core'
 import { getDateString, getTimeString } from '@utils/dates'
+import { BaseFactory } from '@modules/core'
 
 type Keys = Omit<ScheduleToModel, 'lessonId' | 'time'> & { timeDate: Date; timeStart: Date; timeEnd: Date }
 
@@ -61,7 +61,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 		}
 	}
 
-	loadEntity = (entity: ScheduleEntity) => {
+	load = (entity: ScheduleEntity) => {
 		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description

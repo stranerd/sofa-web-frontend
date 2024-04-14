@@ -27,7 +27,7 @@ export class ProfileUpdateFactory extends BaseFactory<AuthDetails, ProfileUpdate
 		}
 	}
 
-	loadEntity = (entity: AuthDetails) => {
+	load = (entity: AuthDetails) => {
 		this.first = entity.name.first
 		this.last = entity.name.last
 		this.description = entity.description

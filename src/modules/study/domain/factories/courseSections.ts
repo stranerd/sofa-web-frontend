@@ -45,7 +45,7 @@ class _SectionFactory extends BaseFactory<CourseSection, CourseSection, CourseSe
 		return { label, items }
 	}
 
-	loadEntity = (entity: CourseSection) => {
+	load = (entity: CourseSection) => {
 		this.label = entity.label
 		this.items = entity.items
 	}

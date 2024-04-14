@@ -57,7 +57,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		}
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

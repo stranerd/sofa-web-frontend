@@ -22,7 +22,7 @@ export class PhoneUpdateFactory extends BaseFactory<AuthDetails, Phone, { phone:
 		return phone!
 	}
 
-	loadEntity = (entity: AuthDetails) => {
+	load = (entity: AuthDetails) => {
 		this.phone = entity.phone
 	}
 }

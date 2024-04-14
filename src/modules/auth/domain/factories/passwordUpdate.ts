@@ -39,7 +39,7 @@ export class PasswordUpdateFactory extends BaseFactory<null, PasswordUpdate, Key
 		return { oldPassword, password }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

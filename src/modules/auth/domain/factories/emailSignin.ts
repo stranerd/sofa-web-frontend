@@ -19,7 +19,7 @@ export class EmailSigninFactory extends BaseFactory<null, AuthUser, AuthUser> {
 		return { email, password }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

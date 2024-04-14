@@ -15,7 +15,7 @@ export class ReviewFactory extends BaseFactory<ReviewEntity, Omit<ReviewToModel,
 		super({ message: '', rating: 1 })
 	}
 
-	loadEntity = (entity: ReviewEntity) => {
+	load = (entity: ReviewEntity) => {
 		this.message = entity.message
 	}
 

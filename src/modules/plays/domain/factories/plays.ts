@@ -70,13 +70,13 @@ export class PlayFactory extends BaseFactory<PlayEntity, PlayToModel, Keys> {
 		return this.isTests || this.isPractice || this.isFlashcards
 	}
 
-	load(type: PlayTypes, quiz: QuizEntity) {
+	loadFrom(type: PlayTypes, quiz: QuizEntity) {
 		this.quizId = quiz.id
 		this.type = type
 		this.title = capitalize(quiz.title)
 	}
 
-	loadEntity = (entity: PlayEntity) => {
+	load = (entity: PlayEntity) => {
 		this.quizId = entity.quizId
 		this.type = entity.data.type
 	}

@@ -21,7 +21,7 @@ class _AccountUpdateFactory extends BaseFactory<AccountDetails, AccountUpdate, A
 		return { country, bankCode, bankNumber }
 	}
 
-	loadEntity = (entity: AccountDetails) => {
+	load = (entity: AccountDetails) => {
 		this.country = entity.country
 		this.bankCode = entity.bankCode
 		this.bankNumber = entity.bankNumber

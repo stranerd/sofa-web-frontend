@@ -16,12 +16,13 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
 	abstract model: () => T | Promise<T>
-	abstract loadEntity: (entity: E) => void
+	abstract load: (entity: E) => void
 	reserved: string[] = []
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
 	protected readonly defaults: K
 	public readonly values: K
 	protected readonly validValues: K
+	readonly #cloneValues: K
 	protected readonly onSet: Partial<Record<keyof K, (value: any) => void>> = {} as any
 
 	constructor(keys: K) {
@@ -35,6 +36,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 		this.defaults = reactive({ ...keys }) as K
 		this.values = reactive({ ...keys }) as K
 		this.validValues = reactive({ ...keys }) as K
+		this.#cloneValues = reactive({ ...keys }) as K
 		this.errors = Object.keys(keys).reduce(
 			(acc, value: keyof K) => {
 				acc[value] = ''
@@ -45,13 +47,11 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	}
 
 	get valid() {
-		return Object.keys(this.defaults)
-			.map((key) => this.isValid(key))
-			.every((valid) => valid)
+		return this.#keys.map((key) => this.isValid(key)).every(Boolean)
 	}
 
 	get hasChanges() {
-		return Object.keys(this.defaults).some((key) => !Differ.equal(this.defaults[key], this.values[key]))
+		return this.#keys.some((key) => !Differ.equal(this.#cloneValues[key], this.values[key]))
 	}
 
 	get entityId() {
@@ -62,12 +62,12 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 		this.#entity.value = v
 	}
 
-	set(property: keyof K, value: any, ignoreRules = false) {
-		const check = this.checkValidity(property, value)
+	set(key: keyof K, value: any, ignoreRules = false) {
+		const check = this.checkValidity(key, value)
 
-		this.values[property] = check.value as any
-		this.validValues[property] = check.valid || ignoreRules ? (check.value as any) : this.defaults[property]
-		this.errors[property] = /* Differ.equal(this.defaults[property], value) ? '' : */ check.errors.at(0) ?? ''
+		this.values[key] = check.value as any
+		this.validValues[key] = check.valid || ignoreRules ? (check.value as any) : this.defaults[key]
+		this.errors[key] = /* Differ.equal(this.defaults[property], value) ? '' : */ check.errors.at(0) ?? ''
 
 		return check.valid
 	}
@@ -82,10 +82,12 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 
 	reset() {
 		this.entityId = null
-		const reserved = (this.reserved ?? []).concat(['userId', 'user', 'userBio'])
-		Object.keys(this.defaults)
-			.filter((key) => !reserved.includes(key))
-			.forEach((key) => this.resetProp(key))
+		const reserved: (keyof K)[] = (this.reserved ?? []).concat(['userId', 'user', 'userBio'])
+		this.#keys.filter((key) => !reserved.includes(key)).forEach((key) => this.resetProp(key))
+	}
+
+	get #keys() {
+		return Object.keys(this.defaults) as (keyof K)[]
 	}
 
 	resetProp(property: keyof K) {
@@ -94,9 +96,16 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 		this.errors[property] = ''
 	}
 
+	loadEntity(entity: E) {
+		this.load(entity)
+		this.#keys.forEach((key) => {
+			this.#cloneValues[key] = this.values[key]
+		})
+	}
+
 	async toModel() {
 		if (!this.valid) {
-			Object.keys(this.defaults).forEach((key) => this.set(key, this.values[key]))
+			this.#keys.forEach((key) => this.set(key, this.values[key]))
 			throw new Error('Validation errors')
 		}
 		return deepToRaw(await this.model())

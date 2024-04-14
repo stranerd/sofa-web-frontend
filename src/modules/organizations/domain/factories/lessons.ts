@@ -19,7 +19,7 @@ export class LessonFactory extends BaseFactory<ClassLesson, LessonToModel, Keys>
 		return { title, teachers: [teacher] }
 	}
 
-	loadEntity = (entity: ClassLesson) => {
+	load = (entity: ClassLesson) => {
 		this.entityId = entity.id
 		this.title = entity.title
 	}

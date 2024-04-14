@@ -16,7 +16,7 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Cour
 		super({ title: '', institutionId: '', departmentId: null })
 	}
 
-	loadEntity = (entity: CourseEntity) => {
+	load = (entity: CourseEntity) => {
 		this.title = entity.title
 		this.institutionId = entity.institutionId
 		this.departmentId = entity.departmentId

@@ -31,7 +31,7 @@ export class PasswordResetFactory extends BaseFactory<null, { password: string; 
 		return { password, token }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

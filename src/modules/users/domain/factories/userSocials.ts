@@ -50,7 +50,7 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 		return newSocials
 	}
 
-	loadEntity = (entity: UserEntity) => {
+	load = (entity: UserEntity) => {
 		this.entityId = entity.id
 		this.socials = entity.socials
 	}

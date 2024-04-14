@@ -15,7 +15,7 @@ export class FacultyFactory extends BaseFactory<FacultyEntity, FacultyToModel, F
 		super({ title: '', institutionId: '' })
 	}
 
-	loadEntity = (entity: FacultyEntity) => {
+	load = (entity: FacultyEntity) => {
 		this.title = entity.title
 		this.institutionId = entity.institutionId
 	}

@@ -15,7 +15,7 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi> {
 		super({ name: UserEntity.defaultAi, tagline: '', photo: null })
 	}
 
-	loadEntity = (entity: UserEntity) => {
+	load = (entity: UserEntity) => {
 		this.entityId = entity.id
 		if (entity.ai) {
 			this.name = entity.ai.name

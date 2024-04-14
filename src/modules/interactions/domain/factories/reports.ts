@@ -14,7 +14,7 @@ export class ReportFactory extends BaseFactory<ReportEntity, Omit<ReportToModel,
 		super({ message: '' })
 	}
 
-	loadEntity = (entity: ReportEntity) => {
+	load = (entity: ReportEntity) => {
 		this.message = entity.message
 	}
 

@@ -16,7 +16,7 @@ export class DepartmentFactory extends BaseFactory<DepartmentEntity, DepartmentT
 		super({ title: '', facultyId: '' })
 	}
 
-	loadEntity = (entity: DepartmentEntity) => {
+	load = (entity: DepartmentEntity) => {
 		this.title = entity.title
 		this.facultyId = entity.facultyId
 	}

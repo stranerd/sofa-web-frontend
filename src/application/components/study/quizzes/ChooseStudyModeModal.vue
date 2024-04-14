@@ -93,7 +93,7 @@ const goToEdit = () => {
 }
 
 const chooseMode = async (type: PlayTypes) => {
-	factory.load(type, props.quiz)
+	factory.loadFrom(type, props.quiz)
 	if (factory.canAutoStart) return await createPlay({ start: true }).then(() => props.close())
 }
 

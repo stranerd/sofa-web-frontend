@@ -17,7 +17,7 @@ export class TagFactory extends BaseFactory<TagEntity, TagToModel, TagToModel> {
 		super({ title: '', type: TagTypes.topics, parent: null })
 	}
 
-	loadEntity = (entity: TagEntity) => {
+	load = (entity: TagEntity) => {
 		this.entityId = entity.id
 		this.title = entity.title
 		this.type = entity.type

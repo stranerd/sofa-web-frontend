@@ -53,7 +53,7 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		return { label, items }
 	}
 
-	loadEntity = (entity: ClassLessonCurriculumSection) => {
+	load = (entity: ClassLessonCurriculumSection) => {
 		this.label = entity.label
 		this.items = entity.items
 	}

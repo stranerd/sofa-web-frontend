@@ -28,7 +28,7 @@ export class WithdrawalFactory extends BaseFactory<null, WithdrawData, WithdrawD
 		return { amount, account }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

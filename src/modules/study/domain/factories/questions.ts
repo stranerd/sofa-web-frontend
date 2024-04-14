@@ -208,8 +208,7 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 		else this.multipleAnswers.push(index)
 	}
 
-	loadEntity = (entity: QuestionEntity) => {
-		this.reset()
+	load = (entity: QuestionEntity) => {
 		this.entityId = entity.id
 		this.question = entity.question
 		this.questionMedia = entity.questionMedia
