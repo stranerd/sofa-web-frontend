@@ -12,26 +12,17 @@
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
-		<div v-if="curriculumItem" class="w-full flex flex-col grow">
+		<div v-if="curriculumItem" class="w-full flex flex-col h-full overflow-y-auto">
 			<ScheduleView
 				v-if="curriculumItem.type === ClassLessonable.schedule"
 				:classInst="classInst"
 				:schedule="curriculumItem.schedule"
 				class="grow" />
-			<div
-				v-if="curriculumItem.type === ClassLessonable.file && mediaUrl"
-				class="w-full rounded-custom grow flex items-center justify-center bg-lightGray">
-				<SofaDocumentReader v-if="curriculumItem.fileType === FileType.document" :documentUrl="mediaUrl" class="rounded-custom" />
-				<SofaImageLoader
-					v-if="curriculumItem.fileType === FileType.image"
-					:photoUrl="mediaUrl"
-					class="rounded-custom w-full h-full" />
-				<SofaVideoPlayer
-					v-if="curriculumItem.fileType === FileType.video"
-					:videoUrl="mediaUrl"
-					:type="curriculumItem.file.media.type"
-					class="rounded-custom" />
-			</div>
+			<FileRenderer
+				v-if="curriculumItem.type === ClassLessonable.file"
+				:file="curriculumItem.file"
+				:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }"
+				class="rounded-custom w-full bg-lightGray" />
 			<template v-if="curriculumItem.type === ClassLessonable.quiz">
 				<div
 					v-if="!quizPlayStarted"
@@ -101,8 +92,6 @@ const itemTitle = computed(() => {
 	else return curriculumItem.value?.schedule.title
 })
 
-const mediaUrl = ref('')
-
 const curriculumSection = computed(() => props.curriculum.at(props.sectionIndex))
 const activeItemIndex = ref(props.itemIndex)
 
@@ -139,12 +128,6 @@ watch(
 	curriculumItem,
 	async () => {
 		quizPlayStarted.value = false
-		if (curriculumItem.value?.type === ClassLessonable.file)
-			mediaUrl.value = await curriculumItem.value.file.getUrl({
-				organizationId: props.classInst.organizationId,
-				classId: props.classInst.id,
-				lessonId: props.lesson.id,
-			})
 	},
 	{ immediate: true },
 )

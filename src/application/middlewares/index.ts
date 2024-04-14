@@ -63,8 +63,8 @@ export const runMiddlewares = async (to: RouteLocationNormalized, fromRoute: Rou
 	for (const middleware of middlewares) {
 		const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware
 		const goBackToNonAuth = () => {
-			const backPath = from?.fullPath ?? '/'
-			return backPath.startsWith('/auth/') ? '/' : backPath
+			const backPath = from?.fullPath ?? '/dashboard'
+			return backPath.startsWith('/auth/') ? '/dashboard' : backPath
 		}
 		const path = await wrapInAsync(() => callback?.({ to, from, goBackToNonAuth })).catch(() => null)
 		if (!path) continue

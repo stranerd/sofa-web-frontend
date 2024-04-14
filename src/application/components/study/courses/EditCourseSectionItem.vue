@@ -71,10 +71,6 @@ const props = defineProps<{
 	item?: ExtendedCourseSectionItem
 }>()
 
-/* const emits = defineEmits<{
-	deleteItem: [ExtendedCourseSectionItem]
-}>() */
-
 const quiz = computed(() => (props.item?.type === Coursable.quiz ? props.item.quiz : null))
 const file = computed(() => (props.item?.type === Coursable.file ? props.item.file : null))
 

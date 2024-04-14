@@ -52,6 +52,7 @@ declare module 'vue' {
     ExpandedLayout: typeof import('./../application/layouts/ExpandedLayout.vue')['default']
     ExploreClassCard: typeof import('./../application/components/organizations/classes/ExploreClassCard.vue')['default']
     ExploreClassView: typeof import('./../application/components/organizations/classes/ExploreClassView.vue')['default']
+    FileRenderer: typeof import('./../application/components/study/files/FileRenderer.vue')['default']
     Filter: typeof import('./../application/components/marketplace/Filter.vue')['default']
     FlashcardDisplay: typeof import('./../application/components/study/quizzes/FlashcardDisplay.vue')['default']
     FullLayout: typeof import('./../application/layouts/FullLayout.vue')['default']
