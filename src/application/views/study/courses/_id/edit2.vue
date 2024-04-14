@@ -6,39 +6,42 @@
 				:hide="{ bottom: true, top: true }"
 				bgColor="mdlg:bg-lightGray bg-white"
 				:topbarOptions="{
-					type: 'subpage',
+					type: 'sub',
 					title: course.title,
 					actions: [
 						{
-							isIcon: true,
-							data: [
-								{
-									name: 'Settings',
-									icon: 'cog',
-									handler: () => openEditModal(course),
-									size: 'h-[20px]',
-									hide: !extras.isMine,
-								},
-							],
+							label: 'Settings',
+							icon: 'cog',
+							handler: () => openEditModal(course),
+							size: 'h-[20px]',
+							hide: !extras.isMine,
+							bordered: true,
 						},
 						{
-							IsOutlined: true,
-							name: 'Exit',
+							label: 'Exit',
+							outlined: true,
 							handler: () => $router.push('/library/courses'),
 						},
 					],
 					badges: [{ text: course.status, color: course.isPublished ? 'green' : 'gray' }],
 				}">
 				<template #left-session>
-					<EditCourseSections :course="course" />
+					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
+						<EditCourseSections v-model="selectedItem" :course="course" />
+					</div>
 				</template>
 
 				<template #middle-session>
-					<div>Mid</div>
+					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
+						<div>Mid</div>
+						<p>{{ selectedItem }}</p>
+					</div>
 				</template>
 
 				<template #right-session>
-					<div>Right</div>
+					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
+						<div>Right</div>
+					</div>
 				</template>
 			</FullLayout>
 		</template>

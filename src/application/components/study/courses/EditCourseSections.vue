@@ -1,7 +1,7 @@
 <template>
-	<Draggable v-model="factory.factories" class="w-full flex flex-col p-4" handle=".sectionHandle" itemKey="" group="sections">
+	<Draggable v-model="factory.factories" class="flex flex-col gap-4" handle=".sectionHandle" itemKey="" group="sections">
 		<template #item="{ index: sectionIndex }">
-			<div v-if="sections[sectionIndex]">
+			<div v-if="sections[sectionIndex]" class="flex flex-col gap-4">
 				<div class="flex items-center gap-2 justify-between">
 					<SofaCustomInput
 						v-if="editedLabelSections.has(sectionIndex)"
@@ -24,7 +24,7 @@
 				</div>
 				<Draggable
 					v-if="expandedSections.has(sectionIndex)"
-					class="gap-4 flex flex-col"
+					class="flex flex-col gap-4"
 					:list="factory.factories[sectionIndex].items"
 					itemKey=""
 					handle=".itemHandle"
@@ -32,7 +32,8 @@
 					<template #item="{ index: itemIndex }">
 						<a
 							v-if="sections[sectionIndex].items[itemIndex]"
-							class="flex items-center gap-2"
+							class="flex items-center gap-2 px-2"
+							:class="{ 'bg-lightBlue rounded-lg py-2': selectedItem?.id === sections[sectionIndex].items[itemIndex].id }"
 							@click="onClickItem(sectionIndex, itemIndex)">
 							<SofaIcon :name="getItemIcon(sections[sectionIndex].items[itemIndex])" class="h-[16px]" />
 							<SofaNormalText
@@ -44,19 +45,19 @@
 						</a>
 					</template>
 					<template #footer>
-						<a class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
-							<SofaIcon name="box-add" class="h-[16px] fill-primaryPurple" />
-							<SofaNormalText color="text-primaryPink" content="Add study material" />
+						<a class="flex items-center gap-2 px-2 text-primaryPurple" @click.stop.prevent="addStudyMaterial(sectionIndex)">
+							<SofaIcon name="box-add" class="h-[16px] fill-current" />
+							<SofaNormalText color="text-current" content="Add study material" />
 						</a>
-						<div class="h-1 w-full bg-lightGray my-4" />
+						<div class="h-1 w-full bg-lightGray" />
 					</template>
 				</Draggable>
 			</div>
 		</template>
 		<template #footer>
-			<a class="flex items-center gap-2" @click.stop.prevent="factory.add()">
-				<SofaIcon name="box-add" class="h-[16px] fill-primaryPink" />
-				<SofaNormalText color="text-primaryPink" content="Add section" />
+			<a class="flex items-center gap-2 px-2 text-primaryPink" @click.stop.prevent="factory.add()">
+				<SofaIcon name="box-add" class="h-[16px] fill-current" />
+				<SofaNormalText color="text-current" content="Add section" />
 			</a>
 		</template>
 	</Draggable>
@@ -65,10 +66,10 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import Draggable from 'vuedraggable'
-import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
-import { useUpdateSections } from '@app/composables/study/courses'
 import { useModals } from '@app/composables/core/modals'
+import { useUpdateSections } from '@app/composables/study/courses'
 import { useDeleteFile } from '@app/composables/study/files'
+import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
 
 const props = defineProps<{
 	course: CourseEntity

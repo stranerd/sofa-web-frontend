@@ -2,33 +2,25 @@
 	<FullLayout
 		v-if="SingleCourse"
 		:topbarOptions="{
-			type: 'subpage',
+			type: 'sub',
 			title: SingleCourse.title,
 			actions: [
 				{
-					isIcon: true,
-					data: [
-						{
-							name: 'Settings',
-							icon: 'cog',
-							handler: () => openEditModal(SingleCourse!),
-							size: 'h-[20px]',
-						},
-					],
+					label: 'Settings',
+					icon: 'cog',
+					handler: () => openEditModal(SingleCourse!),
+					size: 'h-[20px]',
+					bordered: true,
 				},
 				{
-					IsOutlined: true,
-					name: 'Exit',
-					handler: () => {
-						Logic.Common.goBack()
-					},
+					label: 'Exit',
+					outlined: true,
+					handler: () => $router.push('/library/courses'),
 				},
 				{
+					label: 'Save',
 					disabled: !hasUnsavedChanges,
-					name: 'Save',
-					handler: () => {
-						Logic.Study.SaveCourseLocalChanges()
-					},
+					handler: Logic.Study.SaveCourseLocalChanges,
 				},
 			],
 			badges: [

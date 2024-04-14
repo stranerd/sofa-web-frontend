@@ -1,10 +1,5 @@
 <template>
-	<SofaTopBar
-		:subpageActions="topbarOptions.actions"
-		:title="topbarOptions.title"
-		:type="topbarOptions.type"
-		:customClass="hide.top ? 'hidden mdlg:!flex' : 'flex'"
-		:badges="topbarOptions.badges" />
+	<SofaTopBar v-bind="topbarOptions" :class="{ 'hidden mdlg:flex': hide.top }" />
 	<div class="grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
 		<div
 			v-if="!hide.left"
@@ -41,24 +36,14 @@ import { SofaTopBar } from 'sofa-ui-components'
 
 withDefaults(
 	defineProps<{
-		topbarOptions?: Partial<{
-			type: string
-			title: string
-			actions: any[]
-			badges: InstanceType<typeof SofaTopBar>['$props']['badges']
-		}>
+		topbarOptions?: InstanceType<typeof SofaTopBar>['$props']
 		hide?: Partial<{ top?: boolean; bottom?: boolean; left?: boolean; right?: boolean }>
 		bgColor?: string
 		wrap?: boolean
 		noBottomPadding?: boolean
 	}>(),
 	{
-		topbarOptions: () => ({
-			type: 'main',
-			title: '',
-			actions: [],
-			badges: [],
-		}),
+		topbarOptions: undefined,
 		hide: () => ({ top: false, bottom: false, left: false, right: false }),
 		bgColor: '',
 		wrap: false,

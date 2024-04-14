@@ -2,18 +2,18 @@
 	<FullLayout
 		:wrap="true"
 		:topbarOptions="{
-			type: 'subpage',
+			type: 'sub',
 			title: 'Account verification',
 			actions: [
 				{
-					IsOutlined: true,
-					name: 'Exit',
+					label: 'Exit',
 					handler: Logic.Common.goBack,
+					outlined: true,
 				},
 				{
-					IsOutlined: false,
-					name: 'Submit',
+					label: 'Submit',
 					disabled: !profileFactory.valid || !socialsFactory.valid || !verificationFactory.valid,
+					outlined: false,
 					handler: submit,
 				},
 			],

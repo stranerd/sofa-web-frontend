@@ -6,50 +6,46 @@
 				:hide="{ bottom: true, top: true }"
 				bgColor="mdlg:bg-lightGray bg-white"
 				:topbarOptions="{
-					type: 'subpage',
+					type: 'sub',
 					title: quiz.title,
 					actions: [
 						{
-							isIcon: true,
-							data: [
-								{
-									name: 'Share',
-									icon: 'share-option',
-									handler: () =>
-										openAccessModal({
-											quiz,
-											users: members,
-											grantAccess: extras.grantAccess,
-											manageMembers: extras.manageMembers,
-										}),
-									size: 'h-[20px]',
-									hide: !extras.isMine,
-								},
-								{
-									name: 'Preview',
-									icon: 'preview',
-									handler: () => $router.push(`/study/quizzes/${quiz.id}/preview`),
-									size: 'h-[17px]',
-								},
-								{
-									name: 'Settings',
-									icon: 'cog',
-									handler: () => openEditModal(quiz),
-									size: 'h-[20px]',
-									hide: !extras.isMine,
-								},
-							],
+							label: 'Share',
+							icon: 'share-option',
+							handler: () =>
+								openAccessModal({
+									quiz,
+									users: members,
+									grantAccess: extras.grantAccess,
+									manageMembers: extras.manageMembers,
+								}),
+							size: 'h-[20px]',
+							hide: !extras.isMine,
 						},
 						{
-							IsOutlined: true,
-							name: 'Exit',
+							label: 'Preview',
+							icon: 'preview',
+							handler: () => $router.push(`/study/quizzes/${quiz.id}/preview`),
+							size: 'h-[17px]',
+						},
+						{
+							label: 'Settings',
+							icon: 'cog',
+							handler: () => openEditModal(quiz),
+							size: 'h-[20px]',
+							hide: !extras.isMine,
+							bordered: true,
+						},
+						{
+							label: 'Exit',
 							handler: () => $router.push('/library/quizzes'),
+							outlined: true,
 						},
 						{
-							IsOutlined: false,
-							hide: !extras.currentQuestionById,
+							label: 'Save',
 							disabled: !extras.questionFactory.valid || !extras.questionFactory.hasChanges,
-							name: 'Save',
+							hide: !extras.currentQuestionById,
+							outlined: false,
 							handler: () => extras.saveCurrentQuestion(),
 						},
 					],

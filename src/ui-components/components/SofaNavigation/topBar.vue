@@ -1,13 +1,13 @@
 <template>
 	<div
-		:class="`items-center w-full lg:text-sm mdlg:text-[12px] text-xs  z-[100] gap-2 px-3 mdlg:px-4 sticky  top-0 mdlg:!bg-white bg-lightGray justify-between mdlg:!shadow-custom lg:!shadow-custom ${customClass}`">
+		class="flex gap-2 items-center w-full lg:text-sm mdlg:text-[12px] text-xs z-[100] px-4 sticky top-0 mdlg:bg-white bg-lightGray justify-between mdlg:shadow-custom">
 		<template v-if="type == 'main'">
 			<div class="mdlg:hidden flex items-center justify-between w-full">
-				<SofaAvatar :size="32" :photoUrl="user?.bio.photo?.link" @click="openSideBar" />
+				<SofaAvatar :size="32" :photoUrl="user?.picture" @click="openSideBar" />
 
 				<div class="py-4 flex items-center justify-center">
-					<img v-if="!title" src="/images/logo.svg" class="h-[24px]" />
-					<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
+					<SofaNormalText v-if="title" class="!font-bold !text-base">{{ title }}</SofaNormalText>
+					<img v-else src="/images/logo.svg" class="h-[24px]" />
 				</div>
 
 				<NotificationIcon v-if="user" />
@@ -21,27 +21,15 @@
 				<router-link
 					v-for="tab in tabs"
 					:key="tab.name"
-					class="py-4 flex items-center justify-center gap-2"
-					:class="Logic.Common.tabIsActive(tab.path) ? 'border-b-2 border-primaryPurple' : ''"
+					class="py-4 flex items-center justify-center gap-2 text-bodyBlack border-b-2 border-transparent"
+					:class="{ '!text-primaryPurple !border-primaryPurple': Logic.Common.tabIsActive(tab.path) }"
 					:to="tab.path">
-					<SofaIcon
-						:name="tab.icon"
-						class="h-[18px]"
-						:class="{
-							'!fill-primaryPurple': Logic.Common.tabIsActive(tab.path),
-							'fill-bodyBlack': true,
-						}" />
-					<SofaNormalText
-						customClass="font-bold"
-						:color="Logic.Common.tabIsActive(tab.path) ? 'text-primaryPurple' : 'text-darkBody'">
-						{{ tab.name }}
-					</SofaNormalText>
+					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
+					<SofaNormalText class="font-bold" color="text-current" :content="tab.name" />
 				</router-link>
 
-				<form
-					class="bg-lightGray w-[30%] py-2 rounded-[24px] flex flex-row items-center gap-2 px-4"
-					@submit.prevent="initiateSearch">
-					<SofaIcon customClass="h-[15px]" name="search" />
+				<form class="bg-lightGray w-[30%] py-2 px-4 rounded-3xl flex items-center gap-2" @submit.prevent="initiateSearch">
+					<SofaIcon class="h-[15px]" name="search" />
 					<SofaTextField
 						v-model="searchQuery"
 						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
@@ -50,78 +38,62 @@
 				</form>
 			</div>
 
-			<div class="hidden mdlg:!flex items-center gap-4">
+			<div class="hidden mdlg:flex items-center gap-4">
 				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
 					<SofaIcon name="plus-white" />
 				</SofaButton>
 				<NotificationIcon v-if="user" />
-				<SofaAvatar :size="36" :photoUrl="user?.bio?.photo?.link" as="router-link" to="/settings/profile" />
+				<SofaAvatar :size="36" :photoUrl="user?.picture" as="router-link" to="/settings/profile" />
 			</div>
 
 			<SofaButton
 				bgColor="bg-primaryPurple"
+				padding="p-4"
 				:hasShadow="false"
-				class="mdlg:hidden rounded-full !p-4 !fixed bottom-[4rem] right-[1.5rem]"
+				class="mdlg:hidden rounded-full fixed bottom-[4rem] right-[1.5rem]"
 				@click="handleShowAddMaterial">
 				<SofaIcon name="plus-white" />
 			</SofaButton>
 		</template>
 
-		<template v-if="type == 'subpage'">
-			<div class="flex flex-row gap-4 items-center">
-				<SofaIcon customClass="h-[12px] cursor-pointer" name="back-arrow" @click="Logic.Common.goBack()" />
-				<SofaHeaderText customClass="!font-bold py-4" :content="title" />
-				<div v-if="badges.length" class="flex flex-row gap-2 items-center">
-					<SofaBadge v-for="item in badges" :key="item.text" :color="item.color">
+		<template v-if="type == 'sub'">
+			<div class="flex gap-4 items-center">
+				<SofaIcon class="h-[12px]" name="back-arrow" @click="Logic.Common.goBack()" />
+				<SofaHeaderText class="!font-bold py-4" :content="title" />
+				<div v-if="badges.length" class="flex gap-2 items-center">
+					<SofaBadge v-for="item in badges" :key="item.text" v-bind="item">
 						{{ item.text }}
 					</SofaBadge>
 				</div>
 			</div>
 
-			<div class="md:!flex hidden flex-row items-center gap-4">
-				<template v-for="(action, index) in subpageActions" :key="index">
-					<template v-if="action.isIcon && !action.hide">
-						<div class="flex gap-4 border-r border-darkLightGray items-center pr-3">
-							<a
-								v-for="(icon, i) in action.data.filter((d: any) => !d.hide)"
-								:key="i"
-								class="flex flex-row gap-2 items-center"
-								@click="icon.handler()">
-								<SofaIcon :name="icon.icon" :customClass="icon.size" />
+			<div class="md:flex hidden items-center gap-4">
+				<template v-for="(action, index) in actions.filter((action) => !action.hide)" :key="index">
+					<a
+						v-if="'icon' in action && action.icon"
+						class="flex gap-2 items-center"
+						:class="{ 'border-r border-darkLightGray pr-3': action.bordered }"
+						@click="action.disabled ? undefined : action.handler()">
+						<SofaIcon :name="action.icon" :class="action.size" />
 
-								<SofaNormalText>
-									{{ icon.name }}
-								</SofaNormalText>
-							</a>
-						</div>
-					</template>
-					<template v-else-if="!action.hide">
-						<SofaButton
-							v-if="!action.IsOutlined"
-							:disabled="action.disabled"
-							:type="action.type"
-							padding="px-4 py-1"
-							:class="`!font-semibold ${action.class ?? ''}`"
-							@click="action.handler">
-							{{ action.name }}
-						</SofaButton>
-						<SofaButton
-							v-else
-							:disabled="action.disabled"
-							:type="action.type"
-							bgColor="bg-white"
-							textColor="text-grayColor"
-							:class="`!font-semibold border border-gray-200 ${action.class ?? ''}`"
-							padding="px-4 py-1"
-							@click="action.handler">
-							{{ action.name }}
-						</SofaButton>
-					</template>
+						<SofaNormalText :content="action.label" />
+					</a>
+					<SofaButton
+						v-else-if="!('icon' in action)"
+						:disabled="action.disabled"
+						padding="px-4 py-1"
+						v-bind="action.outlined ? { bgColor: 'bg-white', textColor: 'text-grayColor' } : {}"
+						class="!font-semibold"
+						:class="{ 'border border-gray-200': action.outlined }"
+						@click="action.handler">
+						{{ action.label }}
+					</SofaButton>
 				</template>
 			</div>
 		</template>
 	</div>
 </template>
+
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -137,22 +109,34 @@ import { handleShowAddMaterial } from '@app/composables/study'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
 
+type Action = {
+	label: string
+	handler: () => void
+	hide?: boolean
+	disabled?: boolean
+}
+
+type ActionButton = Action & {
+	outlined?: boolean
+}
+
+type ActionIcon = Action & {
+	icon: IconName
+	size?: string
+	bordered?: boolean
+}
+
 withDefaults(
 	defineProps<{
-		subpageActions?: any[]
+		actions?: (ActionButton | ActionIcon)[]
 		title?: string
-		type?: string
-		customClass?: string
-		badges?: {
-			text: string
-			color: InstanceType<typeof SofaBadge>['$props']['color']
-		}[]
+		type?: 'main' | 'sub'
+		badges?: (InstanceType<typeof SofaBadge>['$props'] & { text: string })[]
 	}>(),
 	{
-		subpageActions: () => [],
-		title: '',
+		actions: () => [],
+		title: undefined,
 		type: 'main',
-		customClass: 'flex',
 		badges: () => [],
 	},
 )
@@ -167,40 +151,38 @@ const initiateSearch = () => {
 	if (searchQuery.value.length > 1) router.push('/marketplace/search?q=' + searchQuery.value)
 }
 
-const tabs = computed(() => [
-	{
-		name: 'Home',
-		path: '/dashboard',
-		icon: 'home' as const,
-		icon_size: 'h-[18px]',
-	},
-	...(!userType.value.isOrg
-		? [
-				{
-					name: 'Chat',
-					path: '/chats',
-					icon: 'chat' as const,
-					icon_size: 'h-[18px]',
-				},
-			]
-		: []),
-	{
-		name: 'Classes',
-		path: userType.value.isOrg ? '/dashboard/classes' : '/classes',
-		icon: 'classes' as const,
-		icon_size: 'h-[18px]',
-	},
-	{
-		name: 'Library',
-		path: '/library',
-		icon: 'library' as const,
-		icon_size: 'h-[18px]',
-	},
-	{
-		name: 'Marketplace',
-		path: '/marketplace',
-		icon: 'marketplace' as const,
-		icon_size: 'h-[18px]',
-	},
-])
+const tabs = computed(
+	() =>
+		[
+			{
+				name: 'Home',
+				path: '/dashboard',
+				icon: 'home',
+			},
+			...(!userType.value.isOrg
+				? [
+						{
+							name: 'Chat',
+							path: '/chats',
+							icon: 'chat' as const,
+						},
+					]
+				: []),
+			{
+				name: 'Classes',
+				path: userType.value.isOrg ? '/dashboard/classes' : '/classes',
+				icon: 'classes',
+			},
+			{
+				name: 'Library',
+				path: '/library',
+				icon: 'library',
+			},
+			{
+				name: 'Marketplace',
+				path: '/marketplace',
+				icon: 'marketplace',
+			},
+		] as const,
+)
 </script>
