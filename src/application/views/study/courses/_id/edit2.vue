@@ -22,12 +22,23 @@
 							outlined: true,
 							handler: () => $router.push('/library/courses'),
 						},
+						{
+							label: 'Save',
+							disabled: !extras.sectionsFactory.valid || !extras.sectionsFactory.hasChanges,
+							outlined: false,
+							handler: () => extras.updateSections(),
+						},
 					],
 					badges: [{ text: course.status, color: course.isPublished ? 'green' : 'gray' }],
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<EditCourseSections :course="course" :item="selectedItem" @selectItem="(item) => (selectedItem = item)" />
+						<EditCourseSections
+							:course="course"
+							:item="selectedItem"
+							:factory="extras.sectionsFactory"
+							:sections="extras.sections"
+							@selectItem="(item) => (selectedItem = item)" />
 					</div>
 				</template>
 

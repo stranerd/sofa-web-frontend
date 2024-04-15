@@ -63,15 +63,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { ref } from 'vue'
 import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
-import { useUpdateSections } from '@app/composables/study/courses'
-import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
-import { Logic } from 'sofa-logic'
+import { Coursable, CourseEntity, CourseSectionsFactory, ExtendedCourseSectionItem, ExtendedCourseSections, FileType } from '@modules/study'
 
 const props = defineProps<{
 	course: CourseEntity
+	factory: CourseSectionsFactory
+	sections: ExtendedCourseSections
 	item?: ExtendedCourseSectionItem
 }>()
 
@@ -80,14 +80,12 @@ const emits = defineEmits<{
 	selectItem: [ExtendedCourseSectionItem]
 }>()
 
-const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
-
 const addStudyMaterial = (index: number) => {
-	if (!factory.factories.at(index)) return
+	if (!props.factory.factories.at(index)) return
 	useModals().study.selectStudyMaterial.open({
 		onSelected: (selected) => {
-			if ('file' in selected) factory.factories[index].addFile(selected.file)
-			else factory.factories[index].addQuiz(selected.quiz, selected.mode)
+			if ('file' in selected) props.factory.factories[index].addFile(selected.file)
+			else props.factory.factories[index].addQuiz(selected.quiz, selected.mode)
 		},
 	})
 }
@@ -122,21 +120,13 @@ const getItemIcon = (item: ExtendedCourseSectionItem) => {
 }
 
 const removeItem = async (sectionIndex: number, itemIndex: number) => {
-	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
+	const item = props.sections.at(sectionIndex)?.items.at(itemIndex)
 	if (!item) return
 	emits('deleteItem', item)
 }
 
 const onClickItem = (sectionIndex: number, itemIndex: number) => {
-	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
+	const item = props.sections.at(sectionIndex)?.items.at(itemIndex)
 	if (item) emits('selectItem', item)
 }
-
-watch(
-	() => factory.factories,
-	async () => {
-		if (factory.valid && factory.hasChanges) Logic.Common.debounce('updateSections', updateSections, 1000)
-	},
-	{ deep: true, immediate: true },
-)
 </script>

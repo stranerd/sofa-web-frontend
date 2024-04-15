@@ -171,7 +171,7 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 	return { quizzes, files, sections }
 }
 
-export const useUpdateSections = (course: Refable<CourseEntity | undefined>) => {
+export const useUpdateSections = (course: Refable<CourseEntity | null>) => {
 	const factory = new CourseSectionsFactory()
 	if (course.value) factory.loadEntity(course.value.sections)
 
