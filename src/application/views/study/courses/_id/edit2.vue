@@ -27,14 +27,13 @@
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<EditCourseSections v-model="selectedItem" :course="course" />
+						<EditCourseSections :course="course" :item="selectedItem" @selectItem="(item) => (selectedItem = item)" />
 					</div>
 				</template>
 
 				<template #middle-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<div>Mid</div>
-						<p>{{ selectedItem }}</p>
+						<EditCourseSectionItemBody :course="course" :item="selectedItem" />
 					</div>
 				</template>
 
@@ -51,17 +50,18 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import EditCourseSections from '@app/components/study/courses/EditCourseSections.vue'
 import EditCourseSectionItem from '@app/components/study/courses/EditCourseSectionItem.vue'
+import EditCourseSectionItemBody from '@app/components/study/courses/EditCourseSectionItemBody.vue'
+import EditCourseSections from '@app/components/study/courses/EditCourseSections.vue'
 import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
-import { CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
 import { useDeleteFile } from '@app/composables/study/files'
 import { useDeleteQuiz } from '@app/composables/study/quizzes'
+import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyCoursesIdEdit',
-	components: { EditCourseWrapper, EditCourseSections, EditCourseSectionItem },
+	components: { EditCourseWrapper, EditCourseSections, EditCourseSectionItem, EditCourseSectionItemBody },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
@@ -82,6 +82,7 @@ export default defineComponent({
 		}
 
 		return {
+			Coursable,
 			selectedItem,
 			openEditModal,
 			deleteItem,

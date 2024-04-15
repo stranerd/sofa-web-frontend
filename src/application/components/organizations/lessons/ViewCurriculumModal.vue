@@ -20,6 +20,7 @@
 				class="grow" />
 			<FileRenderer
 				v-if="curriculumItem.type === ClassLessonable.file"
+				:key="curriculumItem.id"
 				:file="curriculumItem.file"
 				:access="{ organizationId: classInst.organizationId, classId: classInst.id, lessonId: lesson.id }"
 				class="rounded-custom w-full bg-lightGray" />

@@ -27,7 +27,6 @@ declare global {
 		| 'box-add'
 		| 'box-exclamation'
 		| 'building'
-		| 'calendar-black'
 		| 'calendar'
 		| 'camera-white'
 		| 'card-gray'

@@ -105,22 +105,38 @@ export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 		return []
 	}
 
+	get content() {
+		return this.question
+	}
+
 	get answer() {
 		if (!this.data) return ''
 		if (this.data.type === QuestionTypes.multipleChoice) {
 			const options = this.data.options
-			return this.data.answers.map((idx) => options[idx]).join('<br>')
+			return this.data.answers.map((idx) => options[idx]).join('\n')
 		}
-		if (this.data.type === QuestionTypes.writeAnswer) return this.data.answers.join('<br>-- or --<br>')
+		if (this.data.type === QuestionTypes.writeAnswer) return this.data.answers.join('\n-- or --\n')
 		if (this.data.type === QuestionTypes.trueOrFalse) return capitalize(this.data.answer.toString())
 		if (
 			this.data.type === QuestionTypes.fillInBlanks ||
 			this.data.type === QuestionTypes.dragAnswers ||
 			this.data.type === QuestionTypes.sequence
 		)
-			return this.data.answers.join('<br>')
-		if (this.data.type === QuestionTypes.match) return this.data.set.map((s) => s.a).join('<br>')
+			return this.data.answers.join('\n')
+		if (this.data.type === QuestionTypes.match) return this.data.set.map((s) => s.a).join('\n')
 		return ''
+	}
+
+	get label() {
+		return QuestionEntity.getLabel(this.strippedData.type)
+	}
+
+	get icon() {
+		return QuestionEntity.getIcon(this.strippedData.type)
+	}
+
+	get image() {
+		return QuestionEntity.getImage(this.strippedData.type)
 	}
 
 	static getLabel(type: QuestionTypes) {

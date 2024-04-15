@@ -32,7 +32,7 @@
 						<a
 							v-if="sections[sectionIndex].items[itemIndex]"
 							class="flex items-center gap-2 px-2"
-							:class="{ 'bg-lightBlue rounded-lg py-2': selectedItem?.id === sections[sectionIndex].items[itemIndex].id }"
+							:class="{ 'bg-lightBlue rounded-lg py-2': item?.id === sections[sectionIndex].items[itemIndex].id }"
 							@click="onClickItem(sectionIndex, itemIndex)">
 							<SofaIcon :name="getItemIcon(sections[sectionIndex].items[itemIndex])" class="h-[16px]" />
 							<SofaNormalText
@@ -72,13 +72,13 @@ import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	course: CourseEntity
+	item?: ExtendedCourseSectionItem
 }>()
 
 const emits = defineEmits<{
 	deleteItem: [ExtendedCourseSectionItem]
+	selectItem: [ExtendedCourseSectionItem]
 }>()
-
-const selectedItem = defineModel<ExtendedCourseSectionItem>()
 
 const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
 
@@ -128,7 +128,8 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 }
 
 const onClickItem = (sectionIndex: number, itemIndex: number) => {
-	selectedItem.value = sections.value.at(sectionIndex)?.items.at(itemIndex)
+	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
+	if (item) emits('selectItem', item)
 }
 
 watch(
