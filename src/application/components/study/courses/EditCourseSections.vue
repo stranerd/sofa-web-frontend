@@ -69,6 +69,7 @@ import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
 import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
 import { Logic } from 'sofa-logic'
+import { useDeleteFile } from '@app/composables/study/files'
 
 const props = defineProps<{
 	course: CourseEntity
@@ -76,11 +77,12 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-	deleteItem: [ExtendedCourseSectionItem]
 	selectItem: [ExtendedCourseSectionItem]
 }>()
 
 const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
+
+const { deleteFile } = useDeleteFile()
 
 const addStudyMaterial = (index: number) => {
 	if (!factory.factories.at(index)) return
@@ -124,7 +126,8 @@ const getItemIcon = (item: ExtendedCourseSectionItem) => {
 const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
 	if (!item) return
-	emits('deleteItem', item)
+	factory.factories[sectionIndex].removeItem(itemIndex)
+	if (item.type === Coursable.file) await deleteFile(item.file)
 }
 
 const onClickItem = (sectionIndex: number, itemIndex: number) => {

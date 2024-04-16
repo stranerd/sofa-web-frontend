@@ -85,8 +85,6 @@ import EditCourseSectionItemBody from '@app/components/study/courses/EditCourseS
 import EditCourseSections from '@app/components/study/courses/EditCourseSections.vue'
 import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
-import { useDeleteFile } from '@app/composables/study/files'
-import { useDeleteQuiz } from '@app/composables/study/quizzes'
 import { Coursable, ExtendedCourseSectionItem } from '@modules/study'
 
 export default defineComponent({
@@ -104,15 +102,6 @@ export default defineComponent({
 
 		const openEditModal = useModals().study.editCourse.open
 
-		const { deleteFile } = useDeleteFile()
-		const { deleteQuiz } = useDeleteQuiz()
-
-		const deleteItem = async (item: ExtendedCourseSectionItem) => {
-			// TODO: move item out of course
-			if ('file' in item) await deleteFile(item.file)
-			if ('quiz' in item) await deleteQuiz(item.quiz)
-		}
-
 		const selectItem = async (item: ExtendedCourseSectionItem) => {
 			selectedItem.value = item
 			showBody.value = true
@@ -125,7 +114,6 @@ export default defineComponent({
 			selectedItem,
 			openEditModal,
 			selectItem,
-			deleteItem,
 		}
 	},
 })
