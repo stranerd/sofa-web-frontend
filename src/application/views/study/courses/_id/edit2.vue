@@ -22,23 +22,12 @@
 							outlined: true,
 							handler: () => $router.push('/library/courses'),
 						},
-						{
-							label: 'Save',
-							disabled: !extras.sectionsFactory.valid || !extras.sectionsFactory.hasChanges,
-							outlined: false,
-							handler: () => extras.updateSections(),
-						},
 					],
 					badges: [{ text: course.status, color: course.isPublished ? 'green' : 'gray' }],
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<EditCourseSections
-							:course="course"
-							:item="selectedItem"
-							:factory="extras.sectionsFactory"
-							:sections="extras.sections"
-							@selectItem="selectItem" />
+						<EditCourseSections :course="course" :item="selectedItem" @selectItem="selectItem" />
 					</div>
 				</template>
 
@@ -51,21 +40,7 @@
 						</div>
 
 						<EditCourseSectionItemBody v-if="$screen.desktop" :course="course" :item="selectedItem" />
-						<div v-else class="p-4 flex flex-col gap-4 h-full">
-							<EditCourseSections
-								:course="course"
-								:item="selectedItem"
-								:factory="extras.sectionsFactory"
-								:sections="extras.sections"
-								@selectItem="selectItem" />
-							<SofaButton
-								:disabled="!extras.sectionsFactory.valid || !extras.sectionsFactory.hasChanges"
-								padding="py-3"
-								class="sticky bottom-0 mt-auto"
-								@click="extras.updateSections">
-								Save changes
-							</SofaButton>
-						</div>
+						<EditCourseSections v-else :course="course" :item="selectedItem" class="p-4" @selectItem="selectItem" />
 					</div>
 				</template>
 
