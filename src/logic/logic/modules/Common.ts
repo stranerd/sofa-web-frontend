@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios'
 import { formatNumber, getRandomValue, pluralize } from 'valleyed'
 import { reactive } from 'vue'
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw, Router } from 'vue-router'
@@ -13,7 +12,6 @@ import {
 	SuccessConfirmation,
 	SuccessConfirmationSetup,
 } from '../types/common'
-import { ValidationError } from '../types/domains/common'
 import { formatTime } from '@utils/dates'
 import { listenToMany, listenToOne } from '@modules/core'
 import { AuthDetails } from '@modules/auth'
@@ -89,24 +87,6 @@ export default class Common {
 	}
 
 	public makeId = () => getRandomValue()
-
-	public showValidationError = (error: AxiosError, formElement: any, customErrorMessage: string | undefined = undefined) => {
-		const validationErrors = error?.response?.data as ValidationError[]
-
-		let errorMessage = ''
-
-		if (validationErrors && validationErrors.length) {
-			validationErrors.forEach((validation) => {
-				formElement?.fieldsToValidate?.[validation.field]?.showError(validation.message)
-			})
-			errorMessage = validationErrors[0]?.message
-		} else errorMessage = error.message
-
-		this.showAlert({
-			type: 'error',
-			message: customErrorMessage ?? errorMessage,
-		})
-	}
 
 	public ordinalSuffixOf(i: number) {
 		const j = i % 10,
@@ -239,7 +219,6 @@ export default class Common {
 
 		for (const rule of fetchRules) {
 			if (rule.requireAuth && !Logic.Common.AuthUser) return '/auth/signin'
-			if (rule.shouldSkip?.()) continue
 			let addRuleToRequest = true
 
 			if (rule.condition) {
@@ -285,12 +264,6 @@ export default class Common {
 							method?.(...rule.params).then(resolve)
 						}),
 					)
-				} else {
-					if (rule.silentUpdate) {
-						// run in silence
-						rule.params = [...new Set(rule.params)]
-						method?.(...rule.params)
-					}
 				}
 			}
 		}
@@ -303,9 +276,9 @@ export default class Common {
 	}
 
 	tabIsActive = (tab: string) => {
-		if (tab === '/' && this.route.path === '/') return true
-		else if (tab !== '/' && this.route.path.startsWith(tab)) return true
-		return false
+		if (tab === '/') return this.route.path === '/'
+		if (tab === '/dashboard') return this.route.path === '/dashboard'
+		return this.route.path.startsWith(tab)
 	}
 
 	public async share(title: string, text: string, url = window.location.href) {

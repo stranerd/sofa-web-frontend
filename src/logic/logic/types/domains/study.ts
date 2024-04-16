@@ -1,10 +1,10 @@
-import { SingleUser } from './users'
 import { CourseEntity, QuizEntity } from '@modules/study'
+import { EmbeddedUser } from '@modules/users'
 export interface ResourceType {
 	original: CourseEntity | QuizEntity
 	title: string
 	image: string
-	user: SingleUser
+	user: EmbeddedUser
 	authUserId: string | undefined
 	subject: string
 	route: string

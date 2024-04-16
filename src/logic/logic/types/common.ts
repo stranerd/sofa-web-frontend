@@ -3,20 +3,6 @@ import { Logic } from '../modules'
 export { Conditions, EmitTypes, QueryKeys } from '@modules/core'
 export type { Listeners, QueryParams, QueryResults } from '@modules/core'
 
-export interface FormRule {
-	type:
-		| 'isRequired'
-		| 'isGreaterThan'
-		| 'isLessThan'
-		| 'isEqualsTo'
-		| 'isGreaterThanOrEqualsTo'
-		| 'isLessThanOrEqualsTo'
-		| 'isRegex'
-		| 'isCondition'
-	value: any | undefined
-	errorMessage: string | undefined
-}
-
 export interface SelectOption<T = any> {
 	key: T
 	value: string
@@ -76,9 +62,6 @@ export interface FetchRule {
 	useRouteId?: boolean
 	useRouteQuery?: boolean
 	queries?: string[]
-	alignCurrency?: boolean
-	shouldSkip?: () => boolean
-	silentUpdate?: boolean
 	condition?: {
 		routeSearchItem: 'fullPath' | 'params' | 'query'
 		searchQuery: string

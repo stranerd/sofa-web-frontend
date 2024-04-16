@@ -1,4 +1,4 @@
-import { SingleUser } from './users'
+import { EmbeddedUser } from '@modules/users'
 
 export interface Tags {
 	hash: string
@@ -26,7 +26,7 @@ export interface Review {
 		type: string
 		userId: string
 	}
-	user: SingleUser
+	user: EmbeddedUser
 	rating: number
 	message: string
 	createdAt: number

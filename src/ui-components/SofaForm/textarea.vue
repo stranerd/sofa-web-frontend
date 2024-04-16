@@ -61,10 +61,8 @@ withDefaults(
 		rows?: number
 		disabled?: boolean
 		hasTitle?: boolean
-		labelStyle?: string
 		placeholder?: string
 		textAreaStyle?: string
-		updateValue?: string
 		richEditor?: boolean
 		error?: string
 	}>(),
@@ -72,10 +70,8 @@ withDefaults(
 		rows: 8,
 		disabled: false,
 		hasTitle: false,
-		labelStyle: '',
 		placeholder: '',
 		textAreaStyle: 'max-h-[400px] bg-grey100 px-3 py-3',
-		updateValue: '',
 		richEditor: false,
 		error: '',
 	},

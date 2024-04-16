@@ -1,12 +1,4 @@
-import { Media } from '@modules/core'
 import { CourseEntity, QuizEntity } from '@modules/study'
-
-export interface ValidationError {
-	field: string
-	message: string
-}
-
-export type FileData = Media
 
 export interface Paginated<D> {
 	pages: {
@@ -89,14 +81,5 @@ export interface ContentDetails {
 		duration: any
 		content: string
 		answer: string
-	}[]
-}
-
-export interface Country {
-	name: string
-	iso2: string
-	states: {
-		name: string
-		state_code: string
 	}[]
 }
