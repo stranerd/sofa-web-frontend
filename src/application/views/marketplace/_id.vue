@@ -53,7 +53,7 @@ import { Purchasables } from '@modules/payment'
 import ContentDetails from '@app/components/study/ContentDetails.vue'
 
 export default defineComponent({
-	name: 'MarketplaceInfoPage',
+	name: 'MarketplaceIdPage',
 	components: { ContentDetails },
 	routeConfig: {
 		fetchRules: [

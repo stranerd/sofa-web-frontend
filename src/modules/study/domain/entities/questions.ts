@@ -149,6 +149,11 @@ export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 		return data.extras.icon
 	}
 
+	static getShape(index: number) {
+		const shapes: IconName[] = ['circle', 'triangle', 'square', 'kite']
+		return shapes[index % shapes.length]
+	}
+
 	static getImage(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
 		return data.extras.image

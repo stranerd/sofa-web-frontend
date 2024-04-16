@@ -7,7 +7,7 @@ import { defineComponent } from 'vue'
 import { useCreateCourse } from '@app/composables/study/courses'
 
 export default defineComponent({
-	name: 'StudyCoursesCreate',
+	name: 'StudyCoursesCreatePage',
 	routeConfig: {
 		goBackRoute: '/library',
 		middlewares: [

@@ -111,7 +111,7 @@ import { useRoute } from 'vue-router'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 
 export default defineComponent({
-	name: 'PlaysTypeIdResultPage',
+	name: 'PlaysTypeIdResultsPage',
 	routeConfig: {
 		middlewares: [
 			'isAuthenticated',

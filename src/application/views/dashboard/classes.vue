@@ -47,7 +47,7 @@ import { useModals } from '@app/composables/core/modals'
 import { useOrganizationClasses } from '@app/composables/organizations/classes'
 
 export default defineComponent({
-	name: 'OrganizationClassesPage',
+	name: 'DashboardClassesPage',
 	components: { ClassCard },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {

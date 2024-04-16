@@ -163,7 +163,7 @@ import { Purchasables } from '@modules/payment'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
-	name: 'CourseDetailsPage',
+	name: 'StudyCoursesIdIndexPage',
 	components: { CContent, CourseContent, CourseSummary },
 	routeConfig: {
 		fetchRules: [

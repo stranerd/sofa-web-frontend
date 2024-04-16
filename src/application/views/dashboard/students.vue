@@ -14,7 +14,7 @@ import { useOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
 
 export default defineComponent({
-	name: 'OrganizationStudentsPage',
+	name: 'DashboardStudentsPage',
 	components: { MembersList },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {

@@ -8,7 +8,7 @@ import { useMeta } from 'vue-meta'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
-	name: 'LibraryPage',
+	name: 'LibraryIndexPage',
 	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Screen.desktop ? '/library/quizzes' : undefined)] },
 	setup() {
 		useMeta({

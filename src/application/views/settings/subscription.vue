@@ -152,7 +152,7 @@ import { usePlansList, useSubscription } from '@app/composables/payment/plans'
 import { PlanEntity } from '@modules/payment'
 
 export default defineComponent({
-	name: 'SubscriptionSettingPage',
+	name: 'SettingsSubscriptionPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

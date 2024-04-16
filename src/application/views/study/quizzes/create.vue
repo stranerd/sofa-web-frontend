@@ -7,7 +7,7 @@ import { defineComponent } from 'vue'
 import { useCreateQuiz } from '@app/composables/study/quizzes'
 
 export default defineComponent({
-	name: 'StudyQuizzesCreate',
+	name: 'StudyQuizzesCreatePage',
 	routeConfig: {
 		goBackRoute: '/library',
 		middlewares: [

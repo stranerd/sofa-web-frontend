@@ -261,7 +261,7 @@ import { useModals } from '@app/composables/core/modals'
 import { QuestionEntity } from '@modules/study'
 
 export default defineComponent({
-	name: 'StudyQuizzesIdEdit',
+	name: 'StudyQuizzesIdEditPage',
 	components: {
 		EditQuizWrapper,
 		EditQuestionsList,

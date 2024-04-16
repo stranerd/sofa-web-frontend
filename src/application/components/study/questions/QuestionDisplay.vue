@@ -28,7 +28,7 @@
 				}"
 				@click="selectMultipleChoiceAnswer(index)">
 				<div class="grow flex gap-3 items-center">
-					<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
+					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(option, index)" />
 					<SofaHeaderText
 						:content="option"
 						color="text-inherit"
@@ -49,7 +49,7 @@
 				}"
 				@click="answer.value = option">
 				<div class="grow flex gap-3 items-center">
-					<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(option, index)" />
+					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(option, index)" />
 					<SofaHeaderText
 						:content="option.toString()"
 						color="text-inherit"
@@ -157,7 +157,7 @@
 					<div
 						class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3"
 						:class="buildClass(answer.value[index], index)">
-						<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
+						<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
 						<SofaHeaderText
 							color="text-inherit"
 							class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
@@ -171,7 +171,7 @@
 					<div
 						class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3 cursor-move"
 						:class="buildClass(element, index)">
-						<SofaIcon :name="Logic.Study.getShape(index)" :class="buildIconClass(element, index)" />
+						<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(element, index)" />
 						<SofaHeaderText
 							color="text-inherit"
 							class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
@@ -187,7 +187,6 @@
 import { reactive, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	question: QuestionEntity

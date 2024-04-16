@@ -67,7 +67,7 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useClassesInList, useMyClassesIn } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
-	name: 'Classes',
+	name: 'ClassesIndexPage',
 	components: { MyClassCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],

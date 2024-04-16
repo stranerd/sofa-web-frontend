@@ -130,7 +130,7 @@ const settingOptions = [
 		subPages: [
 			{
 				title: 'Contact us',
-				to: '/settings/contact_us',
+				to: '/settings/contact',
 				show: () => true,
 			},
 		],

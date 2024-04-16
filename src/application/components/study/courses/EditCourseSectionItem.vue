@@ -36,17 +36,19 @@
 				customClass="rounded-custom !bg-lightGray"
 				type="text"
 				placeholder="File title"
-				:hasTitle="true"
+				hasTitle
 				borderColor="border-transparent">
 				<template #title>Title</template>
 			</SofaTextField>
 
 			<SofaTextarea
 				v-model="factory.description"
-				:hasTitle="false"
+				hasTitle
 				:rows="6"
 				textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-				placeholder="Description" />
+				placeholder="File description">
+				<template #title>Description</template>
+			</SofaTextarea>
 
 			<SofaButton v-if="factory.hasChanges" type="submit" :disabled="!factory.valid" padding="px-4 py-2" class="self-end">
 				Save changes

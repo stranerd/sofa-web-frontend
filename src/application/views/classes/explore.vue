@@ -51,7 +51,7 @@ import ExploreClassCard from '@app/components/organizations/classes/ExploreClass
 import { useExploreClasses } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
-	name: 'ClassesExplore',
+	name: 'ClassesExplorePage',
 	components: { ExploreClassCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],

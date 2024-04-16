@@ -1,11 +1,9 @@
-import { capitalize } from 'valleyed'
 import { reactive } from 'vue'
 import { Logic } from '..'
 import { $api } from '../../services'
 import { Conditions, QueryParams } from '../types/common'
 import { ContentDetails, Paginated } from '../types/domains/common'
 import { Review, Tags } from '../types/domains/interactions'
-import { AddItemToCourseInput, CreateDocumentInput, UpdateCourseSectionsInput } from '../types/forms/study'
 import Common from './Common'
 import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
 
@@ -17,31 +15,14 @@ export default class Study extends Common {
 	public Tags: Paginated<Tags> | undefined
 	public AllTopics: Paginated<Tags> | undefined
 	public AllOtherTags: Paginated<Tags> | undefined
-	public SingleTag: Tags | undefined
 	public AllQuzzies: Paginated<QuizEntity> | undefined
-	public TutorQuizzes: Paginated<QuizEntity> | undefined
 	public SingleQuiz: QuizEntity | undefined
 	public AllCourses: Paginated<CourseEntity> | undefined
-	public PurchasedCourses: Paginated<CourseEntity> | undefined
 	public SingleCourse: CourseEntity | undefined
-	public AllFiles: Paginated<FileEntity> | undefined
-	public SingleFile: FileEntity | undefined
-	public NewCoursableItem: any
-	public CoursableItemRemoved: any
 	public SingleCourseFiles: FileEntity[] | undefined
 	public SingleCourseQuizzes: QuizEntity[] | undefined
-	public SelectedMaterialDetails = reactive({
-		title: '',
-		descriptions: '',
-	})
-	public UpdatedFile: FileEntity | undefined
 	public SingleReview: Review | undefined
 	public AllReviews: Paginated<Review> | undefined
-
-	public CreateFileForm: CreateDocumentInput | undefined
-	public UpdateFileForm: CreateDocumentInput | undefined
-	public MoveItemToCourseForm: AddItemToCourseInput | undefined
-	public UpdateCourseSectionForm: UpdateCourseSectionsInput | undefined
 
 	public contentDetails = reactive<ContentDetails>({
 		original: null,
@@ -156,11 +137,6 @@ export default class Study extends Common {
 			this.SingleQuiz = response.data
 			return this.SingleQuiz
 		})
-	}
-
-	public getShape(index: number) {
-		const shapes: IconName[] = ['circle', 'triangle', 'square', 'kite']
-		return shapes[index % shapes.length]
 	}
 
 	public GetCourses = (filters: QueryParams, updateItems = true) =>
@@ -348,149 +324,4 @@ export default class Study extends Common {
 
 				return response.data
 			})
-
-	public SaveCourseChangesToLocal = (UpdateCourseSections: UpdateCourseSectionsInput) => {
-		localStorage.setItem('couse_section_update', JSON.stringify(UpdateCourseSections))
-	}
-
-	public SaveCourseLocalChanges = () => {
-		const update = localStorage.getItem('couse_section_update')
-		if (update) {
-			const content: any = JSON.parse(update)
-
-			this.UpdateCourseSectionForm = content
-
-			const unsectioned = this.UpdateCourseSectionForm?.sections.filter((item) => item.label == 'unsectioned')[0]
-			if (unsectioned && this.UpdateCourseSectionForm) {
-				if (unsectioned.items.length > 0) {
-					Logic.Common.showAlert({
-						type: 'error',
-						message: 'Unsectioned has to be empty. Please, move all your materials to a section.',
-					})
-					return
-				} else {
-					this.UpdateCourseSectionForm.sections = this.UpdateCourseSectionForm.sections.filter(
-						(item) => item.label != 'unsectioned',
-					)
-				}
-			}
-			this.UpdateCourseSection()
-		}
-	}
-
-	public MoveItemToCourse = (formIsValid: boolean) => {
-		if (formIsValid && this.MoveItemToCourseForm) {
-			Logic.Common.showLoading()
-			return $api.study.course
-				.moveItemIntoCourse(this.MoveItemToCourseForm)
-				.then((response) => {
-					// update course section
-					this.SingleCourse = response.data
-
-					const currentSections = this.SingleCourse.sections
-
-					if (!this.MoveItemToCourseForm?.add) {
-						currentSections.forEach((item) => {
-							item.items = item.items.filter((eachitem) => eachitem.id != this.MoveItemToCourseForm?.coursableId)
-						})
-
-						this.UpdateCourseSectionForm = {
-							id: response.data.id,
-							sections: currentSections,
-						}
-
-						this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
-
-						this.CoursableItemRemoved = Logic.Common.makeId()
-					} else {
-						// remove items not in coursable
-						currentSections.forEach((item) => {
-							item.items = item.items.filter((eachitem) => this.SingleCourse?.coursables.includes(eachitem))
-						})
-
-						this.UpdateCourseSectionForm = {
-							id: response.data.id,
-							sections: currentSections,
-						}
-
-						this.SaveCourseChangesToLocal(this.UpdateCourseSectionForm)
-						this.NewCoursableItem = Logic.Common.makeId()
-					}
-
-					Logic.Common.hideLoading()
-					return response.data
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-				})
-		}
-	}
-
-	public UpdateCourseSection = () => {
-		Logic.Common.showLoading()
-		if (this.UpdateCourseSectionForm) {
-			return $api.study.course
-				.updateCourseSections(this.UpdateCourseSectionForm)
-				.then((response) => {
-					localStorage.removeItem('couse_section_update')
-					this.SingleCourse = response.data
-					Logic.Common.hideLoading()
-					Logic.Common.showAlert({
-						message: 'All changes have been saved',
-						type: 'success',
-					})
-
-					return response.data
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-				})
-		}
-	}
-
-	public CreateFile = (formIsValid: boolean) => {
-		if (formIsValid && this.CreateFileForm) {
-			Logic.Common.showLoading()
-			return $api.study.file
-				.post(null, this.CreateFileForm)
-				.then((response) => {
-					this.SingleFile = response.data
-					Logic.Common.hideLoading()
-					return this.SingleFile
-				})
-				.catch((error) => {
-					Logic.Common.hideLoading()
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-				})
-		}
-	}
-
-	public UpdateFile = (formIsValid: boolean, id: string) => {
-		if (formIsValid && this.UpdateFileForm) {
-			return $api.study.file
-				.put(null, id, this.UpdateFileForm)
-				.then((response) => {
-					this.UpdatedFile = response.data
-				})
-				.catch((error) => {
-					Logic.Common.showError(capitalize(error.response.data[0]?.message))
-				})
-		}
-	}
-
-	public DeleteFile = (id: string) => {
-		Logic.Common.showLoading()
-		return $api.study.file
-			.delete(id)
-			.then((response) => {
-				Logic.Common.hideLoading()
-				return response.data
-			})
-			.catch(() => {
-				//
-				Logic.Common.hideLoading()
-			})
-	}
 }

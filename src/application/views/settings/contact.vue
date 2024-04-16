@@ -32,7 +32,7 @@ import { useMetaMessage } from '@app/composables/users/metaMessage'
 import { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } from '@utils/constants'
 
 export default defineComponent({
-	name: 'ContactUsSettingPage',
+	name: 'SettingsContactPage',
 	routeConfig: { goBackRoute: '/settings' },
 	setup() {
 		useMeta({

@@ -13,7 +13,7 @@ import DashboardForStudents from '@app/components/dashboard/DashboardForStudents
 import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
-	name: 'DashboardPage',
+	name: 'DashboardIndexPage',
 	components: { DashboardForStudents, DashboardForNonStudents },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
