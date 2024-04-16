@@ -12,7 +12,7 @@
 						{
 							label: 'Settings',
 							icon: 'cog',
-							handler: () => openEditModal(course),
+							handler: () => openEditModal({ course }),
 							size: 'h-[20px]',
 							hide: !extras.isMine,
 							bordered: true,
@@ -38,13 +38,34 @@
 							:item="selectedItem"
 							:factory="extras.sectionsFactory"
 							:sections="extras.sections"
-							@selectItem="(item) => (selectedItem = item)" />
+							@selectItem="selectItem" />
 					</div>
 				</template>
 
 				<template #middle-session>
-					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<EditCourseSectionItemBody :course="course" :item="selectedItem" />
+					<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col h-full overflow-y-auto">
+						<div class="w-full flex mdlg:hidden justify-between items-center bg-lightGray p-4">
+							<SofaIcon class="h-[19px]" name="circle-close" @click="$utils.goBack()" />
+							<SofaNormalText class="!font-bold !text-sm" content="Content" />
+							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal({ course })" />
+						</div>
+
+						<EditCourseSectionItemBody v-if="$screen.desktop" :course="course" :item="selectedItem" />
+						<div v-else class="p-4 flex flex-col gap-4 h-full">
+							<EditCourseSections
+								:course="course"
+								:item="selectedItem"
+								:factory="extras.sectionsFactory"
+								:sections="extras.sections"
+								@selectItem="selectItem" />
+							<SofaButton
+								:disabled="!extras.sectionsFactory.valid || !extras.sectionsFactory.hasChanges"
+								padding="py-3"
+								class="sticky bottom-0 mt-auto"
+								@click="extras.updateSections">
+								Save changes
+							</SofaButton>
+						</div>
 					</div>
 				</template>
 
@@ -54,6 +75,29 @@
 					</div>
 				</template>
 			</FullLayout>
+
+			<SofaModal v-if="showBody" :close="() => (showBody = false)">
+				<div class="flex flex-col gap-4 p-4 justify-between">
+					<div class="mdlg:hidden flex gap-2 items-center border-b border-lightGray">
+						<SofaNormalText class="!text-sm !font-bold" content="Details" />
+						<SofaIcon class="h-[6px] ml-auto" name="more-options-horizontal" @click="showMoreOptions = true" />
+						<SofaIcon class="h-[19px]" name="circle-close" @click="showBody = false" />
+					</div>
+
+					<EditCourseSectionItemBody :course="course" :item="selectedItem" />
+				</div>
+			</SofaModal>
+
+			<SofaModal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
+				<div class="flex flex-col gap-4 p-4 justify-between">
+					<div class="mdlg:hidden flex gap-2 justify-between items-center border-b border-lightGray">
+						<SofaNormalText class="!text-sm !font-bold" content="Summary" />
+						<SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
+					</div>
+
+					<EditCourseSectionItem :course="course" :item="selectedItem" />
+				</div>
+			</SofaModal>
 		</template>
 	</EditCourseWrapper>
 </template>
@@ -68,7 +112,7 @@ import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.v
 import { useModals } from '@app/composables/core/modals'
 import { useDeleteFile } from '@app/composables/study/files'
 import { useDeleteQuiz } from '@app/composables/study/quizzes'
-import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
+import { Coursable, ExtendedCourseSectionItem } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyCoursesIdEdit',
@@ -79,9 +123,11 @@ export default defineComponent({
 			title: 'Edit Course',
 		})
 
+		const showBody = ref(false)
+		const showMoreOptions = ref(false)
 		const selectedItem = ref<ExtendedCourseSectionItem>()
 
-		const openEditModal = (course: CourseEntity) => useModals().study.editCourse.open({ course })
+		const openEditModal = useModals().study.editCourse.open
 
 		const { deleteFile } = useDeleteFile()
 		const { deleteQuiz } = useDeleteQuiz()
@@ -92,10 +138,18 @@ export default defineComponent({
 			if ('quiz' in item) await deleteQuiz(item.quiz)
 		}
 
+		const selectItem = async (item: ExtendedCourseSectionItem) => {
+			selectedItem.value = item
+			showBody.value = true
+		}
+
 		return {
 			Coursable,
+			showBody,
+			showMoreOptions,
 			selectedItem,
 			openEditModal,
+			selectItem,
 			deleteItem,
 		}
 	},

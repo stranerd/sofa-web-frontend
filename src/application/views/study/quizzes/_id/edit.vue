@@ -31,7 +31,7 @@
 						{
 							label: 'Settings',
 							icon: 'cog',
-							handler: () => openEditModal(quiz),
+							handler: () => openEditModal({ quiz }),
 							size: 'h-[20px]',
 							hide: !extras.isMine,
 							bordered: true,
@@ -99,8 +99,7 @@
 				</template>
 
 				<template #middle-session>
-					<!-- Top bar for smaller screens -->
-					<div class="w-full flex mdlg:!hidden justify-between items-center bg-lightGray p-4">
+					<div class="w-full flex mdlg:hidden justify-between items-center bg-lightGray p-4">
 						<SofaIcon class="h-[19px]" name="circle-close" @click="$utils.goBack()" />
 
 						<SofaNormalText
@@ -119,7 +118,7 @@
 										manageMembers: extras.manageMembers,
 									})
 								" />
-							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal(quiz)" />
+							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal({ quiz })" />
 							<SofaIcon class="h-[14px]" name="preview" @click="() => $router.push(`/study/quizzes/${quiz.id}/preview`)" />
 							<SofaIcon class="h-[6px]" name="more-options-horizontal" @click="showMoreOptions = true" />
 						</div>
@@ -153,7 +152,7 @@
 			<!-- More option / settings for smaller screens -->
 			<SofaModal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
 				<div class="flex flex-col gap-4 justify-between">
-					<div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b border-[#F2F5F8]">
+					<div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b border-lightGray">
 						<SofaNormalText class="!text-sm !font-bold" content="Options" />
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
 					</div>
@@ -225,7 +224,7 @@
 						<a
 							v-for="type in QuestionEntity.getAllTypes()"
 							:key="type.value"
-							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue bg-[#F2F5F8] rounded-lg"
+							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue bg-lightGray rounded-lg"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
 							<SofaIcon :name="type.icon" class="h-[50px]" />
 							<SofaNormalText :content="type.label" />
@@ -259,7 +258,7 @@ import EditQuestionsList from '@app/components/study/questions/EditQuestionsList
 import EditQuizWrapper from '@app/components/study/quizzes/EditQuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
-import { QuestionEntity, QuizEntity } from '@modules/study'
+import { QuestionEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyQuizzesIdEdit',
@@ -278,12 +277,10 @@ export default defineComponent({
 
 		const showAddQuestionModal = ref(false)
 
-		const interactingQuestionId = ref('')
-
 		const showMoreOptions = ref(false)
 		const showCurrentlyEditingModal = ref(false)
 
-		const openEditModal = (quiz: QuizEntity) => useModals().study.editQuiz.open({ quiz })
+		const openEditModal = useModals().study.editQuiz.open
 
 		const openAccessModal = useModals().study.manageAccess.open
 
@@ -292,7 +289,6 @@ export default defineComponent({
 			showAddQuestionModal,
 			showCurrentlyEditingModal,
 			showMoreOptions,
-			interactingQuestionId,
 			openAccessModal,
 			openEditModal,
 		}
