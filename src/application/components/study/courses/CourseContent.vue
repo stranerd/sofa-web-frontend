@@ -73,8 +73,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
-import SofaIcon from '../SofaIcon'
-import { SofaNormalText } from '../SofaTypography'
 import { FileEntity, QuestionEntity, QuestionsUseCases, QuizEntity } from '@modules/study'
 import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
@@ -82,10 +80,6 @@ import { ContentDetails, Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SofaCourseContent',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-	},
 	props: {
 		customClass: {
 			type: String,

@@ -37,7 +37,7 @@
 		bgColor="mdlg:!bg-lightGray bg-white">
 		<template #left-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-[16px] flex flex-col h-full gap-4 overflow-y-auto">
-				<SofaCourseSections
+				<CourseSections
 					v-if="$screen.desktop && SingleCourse"
 					v-model="selectedMaterial"
 					:sectionInput="updateCourseSectionForm"
@@ -68,7 +68,7 @@
 
 			<template v-if="currentContent == 'sections'">
 				<div class="w-full mdlg:!hidden flex-col h-full grow bg-white py-2 px-4 md:!flex">
-					<SofaCourseSections
+					<CourseSections
 						v-if="!$screen.desktop && SingleCourse"
 						v-model="selectedMaterial"
 						:sectionInput="updateCourseSectionForm"
@@ -184,7 +184,7 @@
 						<AddVideo />
 					</div>
 
-					<SofaCourseDetails
+					<CourseDetails
 						v-if="modalData.content == 'material_details' && SingleCourse"
 						:data="selectedMaterial?.details"
 						:type="selectedMaterial?.type"
@@ -201,7 +201,7 @@
 			<div
 				class="w-full shadow-custom px-0 pt-4 bg-white rounded-[16px] flex flex-col gap-4 h-full justify-between relative overflow-y-auto">
 				<template v-if="selectedMaterial">
-					<SofaCourseDetails
+					<CourseDetails
 						:key="selectedMaterial.details.id"
 						:data="selectedMaterial.details"
 						:type="selectedMaterial.type"
@@ -216,6 +216,8 @@
 import { capitalize, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import AddVideo from '@app/components/study/courses/AddVideo.vue'
+import CourseSections from '@app/components/study/courses/CourseSections.vue'
+import CourseDetails from '@app/components/study/courses/CourseDetails.vue'
 import NewCourseMaterial from '@app/components/study/courses/NewMaterial.vue'
 import { Logic } from 'sofa-logic'
 
@@ -225,7 +227,7 @@ import { CourseEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'EditCourse',
-	components: { NewCourseMaterial, AddVideo },
+	components: { NewCourseMaterial, AddVideo, CourseSections, CourseDetails },
 	routeConfig: {
 		fetchRules: [
 			{

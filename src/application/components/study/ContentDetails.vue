@@ -116,7 +116,58 @@
 		</div>
 
 		<div v-if="selectedTab == 'content'" :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
-			<SofaContent :data="content.content" :hasAccess="hasAccess" />
+			<div class="w-full flex flex-col gap-3 pb-4">
+				<div class="flex flex-row items-center justify-between">
+					<div class="flex flex-row items-center gap-3">
+						<SofaNormalText> {{ content.content.sections.length }} sections </SofaNormalText>
+						<span class="h-[5px] w-[5px] rounded-full bg-bodyBlack"> </span>
+						<SofaNormalText>{{ content.content.materialsCount }} materials</SofaNormalText>
+					</div>
+				</div>
+
+				<div v-for="(section, index) in content.content.sections" :key="index" class="w-full flex flex-col gap-3">
+					<div
+						class="w-full bg-lightGray cursor-pointer rounded-custom px-4 py-4 flex flex-row items-center justify-between"
+						@click.stop="section.opened ? (section.opened = false) : (section.opened = true)">
+						<SofaNormalText customClass="!font-bold text-left !line-clamp-1">
+							{{ section.title }}
+						</SofaNormalText>
+
+						<div class="flex flex-row items-center gap-2">
+							<SofaNormalText>{{ section.data.length }} materials </SofaNormalText>
+							<SofaIcon customClass="h-[7px]" :name="section.opened ? 'chevron-up' : 'chevron-down'" />
+						</div>
+					</div>
+
+					<template v-if="section.opened">
+						<div
+							v-for="(eachData, i) in section.data"
+							:key="i"
+							class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row items-center justify-between">
+							<div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''}`">
+								<SofaIcon customClass="h-[42px]" :name="`${eachData.type.toLowerCase()}-content` as any" />
+								<div class="flex flex-col gap-1">
+									<SofaNormalText customClass="!font-bold text-left  !line-clamp-1">{{ eachData.title }}</SofaNormalText>
+									<div class="flex flex-row items-center gap-2">
+										<SofaNormalText v-if="!$screen.mobile" color="text-grayColor" customClass="text-left !line-clamp-1">
+											{{ eachData.type }}
+										</SofaNormalText>
+										<span
+											v-if="!$screen.mobile"
+											class="h-[5px] w-[5px] rounded-full bg-grayColor hidden md:!inline-block">
+										</span>
+										<SofaNormalText color="text-grayColor" customClass="text-left !line-clamp-1">
+											{{ eachData.sub }}
+										</SofaNormalText>
+									</div>
+								</div>
+							</div>
+
+							<SofaIcon v-if="!hasAccess" customClass="h-[40px]" name="locked-content" />
+						</div>
+					</template>
+				</div>
+			</div>
 		</div>
 
 		<div
@@ -136,8 +187,6 @@
 					</div>
 
 					<SofaNormalText customClass="text-left !font-bold" :content="question.content" />
-
-					<!-- <sofa-normal-text :customClass="'text-left'" :content="question.answer" /> -->
 				</div>
 			</div>
 
@@ -163,7 +212,66 @@
 		</div>
 
 		<div v-if="selectedTab == 'ratings'" :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
-			<SofaContentRatings :data="content.ratings" />
+			<div class="w-full flex flex-col gap-3 pb-4">
+				<div class="w-full bg-lightGray rounded-custom mdlg:p-4 p-3 flex gap-3 items-center">
+					<div class="flex flex-col py-4 px-2 mdlg:!w-[200px] w-[200px]">
+						<div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-2 border-darkLightGray">
+							<div class="flex flex-row">
+								<SofaNormalText customClass="mdlg:!text-xl !text-lg">
+									{{ content.ratings.avg }}
+								</SofaNormalText>
+								<SofaNormalText customClass="mdlg:!text-xl  !text-lg" color="text-grayColor"> /5 </SofaNormalText>
+							</div>
+							<SofaRatings v-model="content.ratings.avg" size="h-[15px] mdlg:!h-[17px]" />
+
+							<SofaNormalText color="text-grayColor">
+								{{ content.ratings.label }}
+							</SofaNormalText>
+						</div>
+					</div>
+
+					<div class="w-full flex flex-col gap-2">
+						<div
+							v-for="(rating, index) in content.ratings.stats"
+							:key="index"
+							class="w-full flex flex-row items-center justify-between gap-3">
+							<SofaNormalText
+								customClass="!text-xs mdlg:!text-xs"
+								:color="`${content.ratings.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'}`">
+								{{ index }} stars
+							</SofaNormalText>
+							<div class="grow h-[8px] rounded-[8px] bg-darkLightGray relative">
+								<div
+									class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
+									:style="`width: ${(content.ratings.stats[index] / content.ratings.count) * 100}%;`"></div>
+							</div>
+
+							<SofaNormalText
+								customClass="!text-xs mdlg:!text-xs"
+								:color="`${content.ratings.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'}`">
+								({{ content.ratings.stats[index] }})
+							</SofaNormalText>
+						</div>
+					</div>
+				</div>
+
+				<div
+					v-for="(review, index) in content.ratings.reviews"
+					:key="index"
+					class="w-full bg-lightGray rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-start">
+					<div>
+						<SofaAvatar :photoUrl="review.user.photoUrl" :size="44" :userId="review.user.id" />
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<SofaNormalText customClass="!font-semibold">{{ review.user.name }}</SofaNormalText>
+						<SofaRatings v-model="review.rating" size="h-[14px] mdlg:!h-[16px]" />
+						<SofaNormalText customClass="text-left">
+							{{ review.review }}
+						</SofaNormalText>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div
@@ -181,12 +289,6 @@
 					<SofaNormalText>
 						{{ content.user.role }}
 					</SofaNormalText>
-
-					<!-- <div class="w-full flex flex-row py-3 pb-4">
-            <sofa-button :padding="'px-5 py-1'" :customClass="'!font-semibold'"
-              >Follow</sofa-button
-            >
-          </div> -->
 
 					<div class="w-full flex flex-row items-center gap-4 pt-3">
 						<div class="flex flex-row gap-2 items-center">
@@ -221,8 +323,6 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- <div class="w-full !h-[100px]"></div> -->
 		</div>
 
 		<div
@@ -248,7 +348,6 @@
 		</div>
 	</div>
 
-	<!-- Smaller screen purchase buttons -->
 	<div v-if="showBuyButton && type == 'course'" class="md:!hidden flex flex-col w-full bg-white p-4">
 		<SofaButton
 			v-if="!hasAccess"
@@ -262,20 +361,11 @@
 		</SofaButton>
 	</div>
 </template>
+
 <script lang="ts" setup>
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ref, toRef, watch } from 'vue'
-import SofaAvatar from '../SofaAvatar'
-import SofaBadge from '../SofaBadge'
-import SofaButton from '../SofaButton'
-import SofaContent from '../SofaContent'
-import SofaContentRatings from '../SofaContentRatings'
-import SofaEmptyState from '../SofaEmptyState'
-import SofaIcon from '../SofaIcon'
-import SofaImageLoader from '../SofaImageLoader'
-import SofaRatings from '../SofaRatings'
-import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 import { ContentDetails, ResourceType } from 'sofa-logic'
 
 const props = withDefaults(

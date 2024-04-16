@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<div class="w-full bg-white rounded-[16px] flex flex-col grow overflow-y-auto">
-			<SofaContentDetails
+			<ContentDetails
 				:content="contentDetails"
 				customClass="!rounded-none"
 				:showBuyButton="true"
@@ -50,9 +50,11 @@ import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { Logic } from 'sofa-logic'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
 import { Purchasables } from '@modules/payment'
+import ContentDetails from '@app/components/study/ContentDetails.vue'
 
 export default defineComponent({
 	name: 'MarketplaceInfoPage',
+	components: { ContentDetails },
 	routeConfig: {
 		fetchRules: [
 			{

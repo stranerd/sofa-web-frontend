@@ -47,22 +47,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { defineComponent } from 'vue'
-import SofaAvatar from '../SofaAvatar'
-import SofaIcon from '../SofaIcon'
-import SofaImageLoader from '../SofaImageLoader'
-import SofaRatings from '../SofaRatings'
-import { SofaNormalText } from '../SofaTypography'
 import { CourseEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'SofaCourseSummary',
-	components: {
-		SofaIcon,
-		SofaNormalText,
-		SofaImageLoader,
-		SofaRatings,
-		SofaAvatar,
-	},
 	props: {
 		customClass: {
 			type: String,

@@ -17,7 +17,7 @@
 							</div>
 						</div>
 
-						<SofaCourseContent
+						<CourseContent
 							v-model="selectedMaterial"
 							:lockContent="!isUnlocked(SingleCourse)"
 							@onMaterialSelected="handleItemSelected" />
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div :class="`mdlg:col-span-8 flex flex-col col-span-full ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'} `">
-				<CourseContent :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selectedMaterial="selectedMaterial" />
+				<CContent :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selectedMaterial="selectedMaterial" />
 			</div>
 		</div>
 
@@ -48,7 +48,7 @@
 						</SofaNormalText>
 					</div>
 
-					<SofaCourseContent
+					<CourseContent
 						v-model="selectedMaterial"
 						:lockContent="!isUnlocked(SingleCourse)"
 						@onMaterialSelected="handleItemSelected"
@@ -58,10 +58,7 @@
 				<template v-else>
 					<div class="flex flex-col w-full">
 						<div :class="`w-full flex flex-col col-span-full  ${selectedMaterial?.type == 'document' ? 'h-full' : 'h-fit'} `">
-							<CourseContent
-								:buyCourse="buyCourse"
-								:isUnlocked="isUnlocked(SingleCourse)"
-								:selectedMaterial="selectedMaterial" />
+							<Content :buyCourse="buyCourse" :isUnlocked="isUnlocked(SingleCourse)" :selectedMaterial="selectedMaterial" />
 						</div>
 					</div>
 				</template>
@@ -131,7 +128,7 @@
 						<SofaIcon customClass="h-[19px]" name="circle-close" @click="showCourseInfo = false" />
 					</div>
 
-					<SofaCourseSummary :data="SingleCourse" />
+					<CourseSummary :data="SingleCourse" />
 				</div>
 			</div>
 		</SofaModalOld>
@@ -154,7 +151,9 @@
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import CourseContent from '@app/components/study/courses/content.vue'
+import CContent from '@app/components/study/courses/content.vue'
+import CourseContent from '@app/components/study/courses/CourseContent.vue'
+import CourseSummary from '@app/components/study/courses/CourseSummary.vue'
 import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
@@ -165,7 +164,7 @@ import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'CourseDetailsPage',
-	components: { CourseContent },
+	components: { CContent, CourseContent, CourseSummary },
 	routeConfig: {
 		fetchRules: [
 			{
