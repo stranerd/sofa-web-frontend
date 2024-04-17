@@ -17,7 +17,7 @@ export interface Paginated<D> {
 }
 
 export interface ContentDetails {
-	original: QuizEntity | CourseEntity | null
+	original: QuizEntity | CourseEntity
 	type: 'quiz' | 'course'
 	route: string
 	price: number

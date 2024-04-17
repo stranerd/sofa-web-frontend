@@ -25,7 +25,7 @@ export default class Study extends Common {
 	public AllReviews: Paginated<Review> | undefined
 
 	public contentDetails = reactive<ContentDetails>({
-		original: null,
+		original: null as any,
 		type: 'course',
 		route: '/marketplace/',
 		price: 0,

@@ -10,28 +10,14 @@
 			class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
 			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText customClass="!font-bold !text-base">
-				{{ contentType == 'course' ? 'Course details' : 'Quiz details' }}
+				{{ contentDetails.type == 'course' ? 'Course details' : 'Quiz details' }}
 			</SofaNormalText>
 			<div>
 				<SofaIcon customClass="h-[15px] invisible" name="back-arrow" />
 			</div>
 		</div>
 		<div class="w-full bg-white rounded-[16px] flex flex-col grow overflow-y-auto">
-			<ContentDetails
-				:content="contentDetails"
-				customClass="!rounded-none"
-				:showBuyButton="true"
-				:buyAction="buyCourse"
-				:hasAccess="userHasAccess(contentDetails.original)"
-				:similarContents="similarContents"
-				:type="contentType"
-				:contentId="contentDetails.id"
-				:openQuiz="() => contentDetails.original && openMaterial(contentDetails.original)"
-				:actions="{
-					report: () => reportMaterial(contentDetails.original!),
-					share: () => shareMaterialLink(contentDetails.original!),
-					save: () => saveToFolder(contentDetails.original!),
-				}" />
+			<ContentDetails v-if="contentDetails.original" :content="contentDetails" :similarContents="similarContents" />
 		</div>
 	</ExpandedLayout>
 </template>
@@ -39,17 +25,10 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute, useRouter } from 'vue-router'
-import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
-import { openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
-import { useHasAccess } from '@app/composables/study'
-import { saveToFolder } from '@app/composables/study/folders'
 import { InteractionEntities } from '@modules/interactions'
 import { QuestionEntity, QuestionsUseCases } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { useCreatePurchase } from '@app/composables/payment/purchases'
-import { Purchasables } from '@modules/payment'
 import ContentDetails from '@app/components/study/ContentDetails.vue'
 
 export default defineComponent({
@@ -120,19 +99,11 @@ export default defineComponent({
 			title: 'Course Info',
 		})
 
-		const contentType = ref('course')
-
-		const { hasAccess: userHasAccess } = useHasAccess()
-
-		const route = useRoute()
-		const router = useRouter()
 		const SingleCourse = ref(Logic.Study.SingleCourse)
 		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
 		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
 
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
-
-		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
 
 		const AllReviews = ref(Logic.Study.AllReviews)
 
@@ -143,7 +114,6 @@ export default defineComponent({
 		const setCourseData = () => {
 			if (SingleCourse.value) {
 				contentDetails.original = SingleCourse.value
-				contentType.value = 'course'
 				contentDetails.id = SingleCourse.value.id
 				contentDetails.route = `/marketplace/${SingleCourse.value.id}?type=course`
 				contentDetails.type = 'course'
@@ -242,7 +212,6 @@ export default defineComponent({
 		const setQuizData = () => {
 			if (SingleQuiz.value) {
 				contentDetails.original = SingleQuiz.value
-				contentType.value = 'quiz'
 				contentDetails.type = 'quiz'
 				contentDetails.id = SingleQuiz.value.id
 				contentDetails.route = `/marketplace/${SingleQuiz.value.id}?type=quiz`
@@ -303,15 +272,6 @@ export default defineComponent({
 			}
 		}
 
-		const buyCourse = async () => {
-			if (!SingleCourse.value) return
-			useModals().payment.selectPaymentMethod.open({
-				price: SingleCourse.value.price,
-				autoSelect: true,
-				onSelect: (method) => createPurchase(method).then(() => router.push(`/study/courses/${SingleCourse.value!.id}`)),
-			})
-		}
-
 		const setSimilarContents = () => {
 			if (SingleQuiz.value) {
 				Logic.Study.GetSimilarQuizzes(SingleQuiz.value.id).then((data) => {
@@ -353,22 +313,20 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			if (Logic.Common.route.query?.type?.toString()) {
-				contentType.value = Logic.Common.route.query?.type?.toString()
-			}
+			const type = Logic.Common.route.query?.type?.toString()
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
 			Logic.Study.watchProperty('SingleCourseFiles', SingleCourseFiles)
 			Logic.Study.watchProperty('SingleCourseQuizzes', SingleCourseQuizzes)
 			Logic.Study.watchProperty('SingleQuiz', SingleQuiz)
 			Logic.Study.watchProperty('AllReviews', AllReviews)
 
-			if (contentType.value == 'course') {
+			if (type === 'course') {
 				setCourseData()
 				setSimilarContents()
 				if (SingleCourse.value?.isPublished) createView({ id: SingleCourse.value.id, type: InteractionEntities.courses })
 			}
 
-			if (contentType.value == 'quiz') {
+			if (type === 'quiz') {
 				setQuizData()
 				setSimilarContents()
 				if (SingleQuiz.value?.isPublished) createView({ id: SingleQuiz.value.id, type: InteractionEntities.quizzes })
@@ -379,13 +337,6 @@ export default defineComponent({
 			contentDetails,
 			similarContents,
 			SingleQuiz,
-			contentType,
-			saveToFolder,
-			userHasAccess,
-			openMaterial,
-			reportMaterial,
-			shareMaterialLink,
-			buyCourse,
 		}
 	},
 })

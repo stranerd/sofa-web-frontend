@@ -1,9 +1,9 @@
 <template>
-	<div :class="`w-full flex flex-col gap-2 flex-1 relative bg-white mdlg:!rounded-[16px] overflow-y-auto rounded-custom ${customClass}`">
-		<div :class="`w-full flex flex-col gap-2 ${padding} relative`">
+	<div class="w-full flex flex-col gap-2 flex-1 relative bg-white mdlg:rounded-2xl overflow-y-auto">
+		<div class="w-full flex flex-col gap-2 px-3 pt-3 mdlg:px-4 mdlg:pt-4 relative">
 			<div
-				class="w-full flex mdlg:!flex md:!flex-row mdlg:!flex-none flex-col relative mdlg:!items-start h-auto items-start justify-start gap-3 mdlg:space-x-3">
-				<div :class="`${hasPadding ? 'mdlg:!w-[25%]' : 'mdlg:!w-[33%]'} w-full h-full mdlg:!absolute top-0 left-0`">
+				class="w-full flex mdlg:flex md:flex-row mdlg:flex-none flex-col relative h-auto items-start justify-start gap-3 mdlg:space-x-3">
+				<div class="mdlg:w-[25%] w-full shrink-0">
 					<SofaImageLoader class="w-full rounded-custom" :photoUrl="content.image">
 						<div v-if="content.price > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
 							<SofaBadge customClass="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
@@ -12,14 +12,14 @@
 						</div>
 					</SofaImageLoader>
 				</div>
-				<div :class="`flex flex-col gap-2 grow   ${hasPadding ? 'mdlg:!w-[75%] mdlg:!pl-[25%]' : 'mdlg:!w-[67%] mdlg:!pl-[33%]'}`">
-					<div class="w-full flex flex-row items-center justify-between">
+				<div class="flex flex-col gap-2 grow">
+					<div class="w-full flex items-center justify-between">
 						<SofaHeaderText :content="content.title" />
 
-						<div class="mdlg:!flex flex-row items-center justify-end gap-4 hidden">
-							<SofaIcon name="flag" customClass="h-[16px] cursor-pointer " @click="actions.report()" />
-							<SofaIcon name="share" customClass="h-[16px] cursor-pointer" @click="actions.share()" />
-							<SofaIcon name="save" customClass="h-[16px] cursor-pointer" @click="actions.save()" />
+						<div class="mdlg:flex items-center justify-end gap-4 hidden">
+							<SofaIcon name="flag" customClass="h-[16px] " @click="reportMaterial(content.original)" />
+							<SofaIcon name="share" customClass="h-[16px]" @click="shareMaterialLink(content.original)" />
+							<SofaIcon name="save" customClass="h-[16px] cursor-pointer" @click="saveToFolder(content.original)" />
 						</div>
 					</div>
 					<SofaNormalText customClass="text-left">
@@ -39,7 +39,7 @@
 						}}</SofaNormalText>
 					</div>
 
-					<div v-if="!isMinimal" class="w-full flex flex-row gap-2 items-center">
+					<div class="w-full flex flex-row gap-2 items-center">
 						<div class="flex flex-row gap-1 items-center">
 							<SofaRatings v-model="content.ratings.avg" size="h-[14px] mdlg:!h-[15px]" />
 							<SofaNormalText>
@@ -51,26 +51,26 @@
 
 					<div class="w-full flex flex-row items-center gap-2 justify-between">
 						<div class="flex flex-row items-center gap-2">
-							<div v-if="!isMinimal" class="gap-2 flex flex-row items-center">
+							<div class="gap-2 flex flex-row items-center">
 								<SofaAvatar :size="20" :photoUrl="content.user.photoUrl" />
 								<SofaNormalText>
 									{{ content.user.name }}
 								</SofaNormalText>
 							</div>
 
-							<span v-if="!isMinimal" class="h-[5px] w-[5px] rounded-full bg-bodyBlack"> </span>
+							<span class="h-[5px] w-[5px] rounded-full bg-bodyBlack"> </span>
 
 							<SofaNormalText>
 								{{ content.lastUpdated }}
 							</SofaNormalText>
 						</div>
 
-						<div v-if="showBuyButton && type == 'course'" class="md:!flex hidden flex-col">
+						<div v-if="content.type == 'course'" class="md:!flex hidden flex-col">
 							<SofaButton
 								v-if="!hasAccess"
 								padding="px-6 py-1"
 								:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'}`"
-								@click="buyAction && content.status == 'published' ? buyAction() : null">
+								@click="content.status == 'published' ? buyCourse() : null">
 								{{
 									content.price > 0 ? `Buy ${$utils.formatPrice(content.price, content.currency)}` : 'Get course for free'
 								}}
@@ -83,7 +83,7 @@
 								Go to course
 							</SofaButton>
 						</div>
-						<div v-if="type == 'quiz'" class="md:!flex hidden flex-col">
+						<div v-if="content.type == 'quiz'" class="md:!flex hidden flex-col">
 							<SofaButton padding="px-6 py-1" @click="hasAccess ? openQuiz() : $router.push(content.route)">
 								{{ hasAccess ? 'Start' : 'Go to course' }}
 							</SofaButton>
@@ -100,22 +100,18 @@
 		</div>
 
 		<div
-			:class="`w-full flex flex-row gap-4 items-center border-b border-lightGray mdlg:!relative sticky mdlg:!pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:!pt-0  ${
-				hasPadding ? 'px-4' : ''
-			}`">
+			class="w-full flex gap-4 items-center border-b border-lightGray mdlg:relative sticky mdlg:pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:pt-0 px-4">
 			<SofaNormalText
 				v-for="(tab, index) in tabs"
 				:key="index"
 				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
-				:customClass="`!font-semibold cursor-pointer pb-2  ${
-					selectedTab == tab.key && !isMinimal ? 'border-b-2 border-bodyBlack' : ''
-				}`"
+				:class="`!font-semibold cursor-pointer pb-2 ${selectedTab == tab.key ? 'border-b-2 border-bodyBlack' : ''}`"
 				@click="selectedTab = tab.key">
 				{{ tab.name }}
 			</SofaNormalText>
 		</div>
 
-		<div v-if="selectedTab == 'content'" :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
+		<div v-if="selectedTab == 'content'" class="w-full flex flex-col rounded-b-[16px] px-4 py-2 relative">
 			<div class="w-full flex flex-col gap-3 pb-4">
 				<div class="flex flex-row items-center justify-between">
 					<div class="flex flex-row items-center gap-3">
@@ -170,9 +166,7 @@
 			</div>
 		</div>
 
-		<div
-			v-if="selectedTab == 'questions'"
-			:class="`w-full flex flex-col flex-1 rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
+		<div v-if="selectedTab == 'questions'" class="w-full flex flex-col flex-1 rounded-b-[16px] px-4 py-2 relative">
 			<div v-if="hasAccess" class="w-full flex flex-col gap-3">
 				<div
 					v-for="(question, index) in content.questions"
@@ -199,7 +193,9 @@
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
 			</div>
 
-			<div v-if="type == 'quiz'" class="sticky bottom-0 w-full flex items-center justify-center mdlg:pt-3 mdlg:pb-0 mdlg:hidden py-4">
+			<div
+				v-if="content.type == 'quiz'"
+				class="sticky bottom-0 w-full flex items-center justify-center mdlg:pt-3 mdlg:pb-0 mdlg:hidden py-4">
 				<div class="md:!w-auto w-full flex flex-col">
 					<SofaButton
 						padding="md:!py-1 py-3 px-4"
@@ -211,7 +207,7 @@
 			</div>
 		</div>
 
-		<div v-if="selectedTab == 'ratings'" :class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative`">
+		<div v-if="selectedTab == 'ratings'" class="w-full flex flex-col rounded-b-[16px] px-4 py-2 relative">
 			<div class="w-full flex flex-col gap-3 pb-4">
 				<div class="w-full bg-lightGray rounded-custom mdlg:p-4 p-3 flex gap-3 items-center">
 					<div class="flex flex-col py-4 px-2 mdlg:!w-[200px] w-[200px]">
@@ -274,9 +270,7 @@
 			</div>
 		</div>
 
-		<div
-			v-if="selectedTab == 'creator'"
-			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
+		<div v-if="selectedTab == 'creator'" class="w-full flex flex-col rounded-b-2xl px-4 py-2 relative pb-4">
 			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
 				<SofaAvatar :photoUrl="content.user.photoUrl" :size="$screen.desktop ? 150 : 100" />
 
@@ -326,8 +320,8 @@
 		</div>
 
 		<div
-			v-if="selectedTab == 'similar_courses' && type == 'course'"
-			:class="`w-full flex flex-col rounded-b-[16px] ${hasPadding ? 'px-4' : ''} py-2 relative pb-4`">
+			v-if="selectedTab == 'similar_courses' && content.type == 'course'"
+			class="w-full flex flex-col rounded-b-[16px] px-4 py-2 relative pb-4">
 			<div
 				v-if="similarContents?.length"
 				class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
@@ -348,12 +342,12 @@
 		</div>
 	</div>
 
-	<div v-if="showBuyButton && type == 'course'" class="md:!hidden flex flex-col w-full bg-white p-4">
+	<div v-if="content.type == 'course'" class="md:!hidden flex flex-col w-full bg-white p-4">
 		<SofaButton
 			v-if="!hasAccess"
 			padding="px-6 py-3"
 			:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'} w-full`"
-			@click="buyAction && content.status == 'published' ? buyAction() : null">
+			@click="content.status == 'published' ? buyCourse() : null">
 			{{ content.price > 0 ? `Buy ${$utils.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
 		</SofaButton>
 		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="$router.push(`/study/courses/${content.id}`)">
@@ -363,56 +357,49 @@
 </template>
 
 <script lang="ts" setup>
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import { ref, toRef, watch } from 'vue'
-import { ContentDetails } from 'sofa-logic'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useModals } from '@app/composables/core/modals'
+import { openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
+import { useCreatePurchase } from '@app/composables/payment/purchases'
+import { useHasAccess } from '@app/composables/study'
+import { saveToFolder } from '@app/composables/study/folders'
+import { Purchasables } from '@modules/payment'
 import { CourseEntity, QuizEntity } from '@modules/study'
+import { ContentDetails } from 'sofa-logic'
 
-const props = withDefaults(
-	defineProps<{
-		customClass?: string
-		content: ContentDetails
-		padding?: string
-		hasPadding?: boolean
-		type?: string
-		contentId?: string
-		showBuyButton?: boolean
-		buyAction?: () => void
-		hasAccess?: boolean
-		isMinimal?: boolean
-		similarContents?: (QuizEntity | CourseEntity)[]
-		actions: {
-			report: () => void
-			share: () => void
-			save: () => void
-		}
-		openQuiz: () => void
-	}>(),
-	{
-		customClass: '',
-		padding: 'px-3 pt-3 mdlg:px-4 mdlg:pt-4',
-		hasPadding: true,
-		type: 'course',
-		contentId: '',
-		showBuyButton: false,
-		buyAction: null,
-		hasAccess: false,
-		isMinimal: false,
-		similarContents: () => [],
-	},
-)
+const props = defineProps<{
+	content: ContentDetails
+	similarContents: (QuizEntity | CourseEntity)[]
+}>()
 
 const selectedTab = ref('content')
+const router = useRouter()
+const { hasAccess: userHasAccess } = useHasAccess()
+const { createPurchase } = useCreatePurchase(props.content.id, Purchasables.courses)
 
-const tabs = ref([])
+const buyCourse = async () => {
+	const material = props.content.original
+	if (!material.isCourse()) return
+	useModals().payment.selectPaymentMethod.open({
+		price: material.price,
+		autoSelect: true,
+		onSelect: (method) => createPurchase(method).then(() => router.push(`/study/courses/${material.id}`)),
+	})
+}
 
-const typeRef = toRef(props, 'type')
+const openQuiz = () => {
+	openMaterial(props.content.original)
+}
+
+const hasAccess = computed(() => userHasAccess.value(props.content.original))
+
+const tabs = ref<{ name: string; key: string }[]>([])
 
 const setContent = () => {
 	tabs.value.length = 0
 
-	if (props.type == 'quiz') {
+	if (props.content.type == 'quiz') {
 		tabs.value.push({
 			name: 'Questions',
 			key: 'questions',
@@ -428,20 +415,18 @@ const setContent = () => {
 		selectedTab.value = 'content'
 	}
 
-	if (!props.isMinimal) {
-		tabs.value.push(
-			{
-				name: 'Ratings',
-				key: 'ratings',
-			},
-			// {
-			//   name: "Creator",
-			//   key: "creator",
-			// }
-		)
-	}
+	tabs.value.push(
+		{
+			name: 'Ratings',
+			key: 'ratings',
+		},
+		// {
+		//   name: "Creator",
+		//   key: "creator",
+		// }
+	)
 
-	if (props.type == 'course') {
+	if (props.content.type == 'course') {
 		tabs.value.push({
 			name: 'Similar courses',
 			key: 'similar_courses',
@@ -450,7 +435,7 @@ const setContent = () => {
 }
 
 watch(
-	typeRef,
+	() => props.content.type,
 	() => {
 		setContent()
 	},
