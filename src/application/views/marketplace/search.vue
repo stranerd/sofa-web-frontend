@@ -149,9 +149,28 @@
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
-import { search } from '@app/composables/marketplace'
 import { DraftStatus } from '@modules/study'
 import { Conditions, Logic, QueryParams } from 'sofa-logic'
+
+const search = async (query: QueryParams, returnCoursables = false) => {
+	Logic.Common.showLoading()
+
+	const allRequests = [
+		Logic.Study.GetCourses(query).catch(),
+		Logic.Study.GetQuizzes({
+			...query,
+			where: query.where!.concat(...(returnCoursables ? [{ field: 'courseId', value: null }] : [])),
+		}).catch(),
+	]
+
+	await Promise.all(allRequests)
+		.catch((error) => {
+			console.log(error)
+		})
+		.finally(() => {
+			Logic.Common.hideLoading()
+		})
+}
 
 export default defineComponent({
 	name: 'MarketplaceSearchPage',

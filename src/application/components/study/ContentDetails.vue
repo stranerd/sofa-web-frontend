@@ -333,7 +333,7 @@
 				class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
 				<div
 					class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-					<StudyMaterialCard v-for="m in similarContents" :key="m.original.hash" type="activity" :material="m.original" />
+					<StudyMaterialCard v-for="m in similarContents" :key="m.hash" type="activity" :material="m" />
 				</div>
 			</div>
 			<template v-else>
@@ -366,7 +366,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ref, toRef, watch } from 'vue'
-import { ContentDetails, ResourceType } from 'sofa-logic'
+import { ContentDetails } from 'sofa-logic'
+import { CourseEntity, QuizEntity } from '@modules/study'
 
 const props = withDefaults(
 	defineProps<{
@@ -380,7 +381,7 @@ const props = withDefaults(
 		buyAction?: () => void
 		hasAccess?: boolean
 		isMinimal?: boolean
-		similarContents?: ResourceType[]
+		similarContents?: (QuizEntity | CourseEntity)[]
 		actions: {
 			report: () => void
 			share: () => void

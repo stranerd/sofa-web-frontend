@@ -42,7 +42,7 @@ import { useMeta } from 'vue-meta'
 import { useRoute, useRouter } from 'vue-router'
 import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
-import { extractResource, openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
+import { openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useHasAccess } from '@app/composables/study'
 import { saveToFolder } from '@app/composables/study/folders'
 import { InteractionEntities } from '@modules/interactions'
@@ -318,7 +318,7 @@ export default defineComponent({
 					similarContents.value.length = 0
 					if (data) {
 						data.forEach((quiz) => {
-							similarContents.value.push(extractResource(quiz))
+							similarContents.value.push(quiz)
 						})
 					}
 				})
@@ -329,7 +329,7 @@ export default defineComponent({
 					similarContents.value.length = 0
 					if (data) {
 						data.forEach((course) => {
-							similarContents.value.push(extractResource(course))
+							similarContents.value.push(course)
 						})
 					}
 				})

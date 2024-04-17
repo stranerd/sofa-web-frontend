@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { extractResource, openMaterial } from '@app/composables/library'
+import { openMaterial } from '@app/composables/library'
 import { Logic } from 'sofa-logic'
 
 export default defineComponent({
@@ -89,7 +89,6 @@ export default defineComponent({
 
 		return {
 			openMaterial,
-			extractResource,
 			SingleCourse,
 		}
 	},
