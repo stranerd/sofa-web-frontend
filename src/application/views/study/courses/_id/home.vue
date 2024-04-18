@@ -9,7 +9,7 @@
 				<div class="w-full flex items-center justify-between">
 					<SofaHeaderText class="!font-bold !line-clamp-1" :content="course.title" />
 
-					<SofaButton v-if="id !== course.user.id && $screen.desktop" padding="px-4 py-1" @click="showRateCourse">
+					<SofaButton v-if="course.user.id !== id && $screen.desktop" padding="px-4 py-1" @click="showRateCourse">
 						Rate
 					</SofaButton>
 				</div>
@@ -18,12 +18,23 @@
 			</div>
 			<div
 				v-if="$screen.desktop || selectedItem"
-				class="col-span-9 w-full p-4 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
+				class="col-span-9 w-full px-4 pt-4 pb-2 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
 				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="back-arrow" @click="selectedItem = undefined" />
 				<div class="grow overflow-y-auto">
-					<p>Selected item</p>
-					<p>{{ selectedItem }}</p>
+					<template v-if="hasAccess(course)">
+						<p>Selected item</p>
+						<p>{{ selectedItem }}</p>
+					</template>
+					<SofaEmptyState
+						v-else
+						title="You have no access"
+						subTitle="Get this course to start learning with it"
+						class="h-[380px]"
+						:actionLabel="`${course.price.amount ? 'Buy' : 'Get'} ${course.price.amount ? $utils.formatPrice(course.price.amount, course.price.currency) : 'for free'}`"
+						:action="buyCourse"
+						:icon="{ name: 'lock-white', size: 'h-[28px]' }"
+						titleStyle="mdlg:!text-xl" />
 				</div>
 				<CourseSections
 					v-if="!$screen.desktop"
@@ -35,7 +46,7 @@
 			</div>
 		</div>
 
-		<Teleport v-if="id !== course.user.id && !$screen.desktop" to="body">
+		<Teleport v-if="course.user.id !== id && !$screen.desktop" to="body">
 			<a
 				class="size-[60px] absolute bottom-[3%] right-[2%] z-[100] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue"
 				@click="showRateCourse">
