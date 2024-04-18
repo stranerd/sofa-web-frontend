@@ -1,9 +1,9 @@
 <template>
-	<div v-if="list" class="flex flex-nowrap gap-4">
+	<div v-if="list" class="w-full flex gap-2 overflow-x-auto scrollbar-hide">
 		<template v-for="(section, sectionIndex) in sections" :key="sectionIndex">
 			<template v-for="(listItem, itemIndex) in section.items" :key="itemIndex">
 				<a
-					class="rounded-custom p-3 flex flex-col gap-1 border-2 border-grayColor bg-white text-bodyBlack shrink-0"
+					class="rounded-custom p-3 flex flex-col gap-1 border border-grayColor bg-white text-bodyBlack shrink-0"
 					:class="{ '!bg-primaryPurple !border-primaryPurple !text-white': item?.id === listItem.id }"
 					@click="onClickItem(sectionIndex, itemIndex)">
 					<SofaNormalText color="text-current">{{ section.label }} - {{ getItemTitle(listItem) }}</SofaNormalText>

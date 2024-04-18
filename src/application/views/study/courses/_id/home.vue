@@ -1,7 +1,10 @@
 <template>
 	<ExpandedLayout v-if="course" width="mdlg:w-[90%] lg:w-[77%]" layoutStyle="mdlg:py-5" :hide="{ bottom: true }">
-		<div class="w-full h-full flex flex-col items-start overflow-y-auto mdlg:grid grid-cols-12 gap-4">
-			<div class="col-span-3 p-4 gap-4 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl max-h-full overflow-y-auto">
+		<div class="w-full h-full flex flex-col overflow-y-auto mdlg:grid grid-cols-12 gap-4">
+			<div
+				v-if="$screen.desktop || !selectedItem"
+				class="col-span-3 w-full p-4 gap-4 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
+				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
 				<SofaIcon class="h-[15px] mdlg:hidden self-start" name="back-arrow" @click="$utils.goBack()" />
 				<div class="w-full flex items-center justify-between">
 					<SofaHeaderText class="!font-bold !line-clamp-1" :content="course.title" />
@@ -13,9 +16,22 @@
 				<SofaNormalText :content="course.description" />
 				<CourseSections :course="course" :item="selectedItem" @selectItem="selectItem" />
 			</div>
-			<div v-if="$screen.desktop" class="col-span-9 p-4 shadow-custom bg-white rounded-2xl max-h-full overflow-y-auto">
-				selected item
-				<CourseSections :course="course" list :item="selectedItem" @selectItem="selectItem" />
+			<div
+				v-if="$screen.desktop || selectedItem"
+				class="col-span-9 w-full p-4 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
+				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
+				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="back-arrow" @click="selectedItem = undefined" />
+				<div class="grow overflow-y-auto">
+					<p>Selected item</p>
+					<p>{{ selectedItem }}</p>
+				</div>
+				<CourseSections
+					v-if="!$screen.desktop"
+					class="shrink-0"
+					:course="course"
+					list
+					:item="selectedItem"
+					@selectItem="selectItem" />
 			</div>
 		</div>
 
@@ -55,7 +71,6 @@ export default defineComponent({
 		const route = useRoute()
 		const { id } = useAuth()
 		const { course } = useCourse(route.params.id as string)
-		const selectedSection = ref<{ sectionIndex: number; itemIndex: number }>()
 		const selectedItem = ref<ExtendedCourseSectionItem>()
 		const { hasAccess } = useHasAccess()
 		const { createView } = useCreateView()
@@ -89,7 +104,6 @@ export default defineComponent({
 		return {
 			id,
 			course,
-			selectedSection,
 			selectedItem,
 			hasAccess,
 			selectItem,
