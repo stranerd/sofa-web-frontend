@@ -1,6 +1,7 @@
 import { QuizEntity } from '../entities/quizzes'
 import { QuizFactory } from '../factories/quizzes'
 import { IQuizRepository } from '../irepositories/iquizzes'
+import { DraftStatus } from '../types'
 import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 
 export class QuizzesUseCase {
@@ -42,13 +43,25 @@ export class QuizzesUseCase {
 			],
 			whereType: QueryKeys.or,
 			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
 		}
 
 		return await this.repository.get(conditions)
 	}
 
-	async listenToOne(id: string, listener: Listeners<QuizEntity>) {
-		return await this.repository.listenToOne(id, listener)
+	async getUserPublicQuizzes(userId: string) {
+		const conditions: QueryParams = {
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'status', value: DraftStatus.published },
+				{ field: 'courseId', value: null },
+			],
+			whereType: QueryKeys.and,
+			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
+		}
+
+		return await this.repository.get(conditions)
 	}
 
 	async listenToUserQuizzes(userId: string, listener: Listeners<QuizEntity>) {
@@ -59,6 +72,7 @@ export class QuizzesUseCase {
 			],
 			whereType: QueryKeys.or,
 			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
 		}
 
 		return await this.repository.listenToMany(
@@ -66,6 +80,29 @@ export class QuizzesUseCase {
 			listener,
 			(entity) => entity.user.id === userId || entity.access.members.includes(userId),
 		)
+	}
+
+	async listenToUserPublicQuizzes(userId: string, listener: Listeners<QuizEntity>) {
+		const conditions: QueryParams = {
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'status', value: DraftStatus.published },
+				{ field: 'courseId', value: null },
+			],
+			whereType: QueryKeys.and,
+			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
+		}
+
+		return await this.repository.listenToMany(
+			conditions,
+			listener,
+			(entity) => entity.user.id === userId && entity.isPublished && !entity.courseId,
+		)
+	}
+
+	async listenToOne(id: string, listener: Listeners<QuizEntity>) {
+		return await this.repository.listenToOne(id, listener)
 	}
 
 	async getInList(ids: string[]) {
@@ -117,11 +154,16 @@ export class QuizzesUseCase {
 		return await this.repository.requestAccess(id, { add })
 	}
 
-	public async grantAccess(id: string, userId: string, grant: boolean) {
+	async grantAccess(id: string, userId: string, grant: boolean) {
 		return await this.repository.grantAccess(id, { userId, grant })
 	}
 
-	public async addMembers(id: string, userIds: string[], grant: boolean) {
+	async addMembers(id: string, userIds: string[], grant: boolean) {
 		return await this.repository.addMembers(id, { userIds, grant })
+	}
+
+	async getWithQuery(query: QueryParams) {
+		const result = await this.repository.get(query)
+		return result.results
 	}
 }
