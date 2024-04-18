@@ -34,7 +34,7 @@
 					class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
 					:to="item.routePath"
 					exactActiveClass="bg-lightBlue font-semibold">
-					<SofaIcon :name="item.icon" customClass="h-[17px]" />
+					<SofaIcon :name="item.icon" class="h-[17px] fill-deepGray" />
 					<SofaNormalText>{{ item.title }}</SofaNormalText>
 				</router-link>
 
@@ -95,7 +95,7 @@
 						:key="item.routePath"
 						:to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-lightGray">
-						<SofaIcon :name="item.icon" customClass="h-[16px]" />
+						<SofaIcon :name="item.icon" class="h-[16px] fill-deepGray" />
 						<SofaNormalText>{{ item.title }}</SofaNormalText>
 					</router-link>
 				</div>

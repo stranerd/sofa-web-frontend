@@ -6,15 +6,16 @@
 				<div class="w-full flex items-center justify-between">
 					<SofaHeaderText class="!font-bold !line-clamp-1" :content="course.title" />
 
-					<SofaButton v-if="id !== course.user.id && $screen.desktop" padding="px-4 py-1" @click="showRateCourse"
-					>Rate</SofaButton
-					>
+					<SofaButton v-if="id !== course.user.id && $screen.desktop" padding="px-4 py-1" @click="showRateCourse">
+						Rate
+					</SofaButton>
 				</div>
 				<SofaNormalText :content="course.description" />
 				<CourseSections :course="course" :item="selectedItem" @selectItem="selectItem" />
 			</div>
 			<div v-if="$screen.desktop" class="col-span-9 p-4 shadow-custom bg-white rounded-2xl max-h-full overflow-y-auto">
 				selected item
+				<CourseSections :course="course" list :item="selectedItem" @selectItem="selectItem" />
 			</div>
 		</div>
 
@@ -60,9 +61,8 @@ export default defineComponent({
 		const { createView } = useCreateView()
 		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
 
-		const selectItem = async (selected: { item: ExtendedCourseSectionItem; sectionIndex: number; itemIndex: number }) => {
-			selectedSection.value = { sectionIndex: selected.sectionIndex, itemIndex: selected.itemIndex }
-			selectedItem.value = selected.item
+		const selectItem = async (item: ExtendedCourseSectionItem) => {
+			selectedItem.value = item
 		}
 
 		const showRateCourse = () => {

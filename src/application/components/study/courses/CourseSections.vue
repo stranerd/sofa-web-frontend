@@ -1,5 +1,23 @@
 <template>
+	<div v-if="list" class="flex flex-nowrap gap-4">
+		<template v-for="(section, sectionIndex) in sections" :key="sectionIndex">
+			<template v-for="(listItem, itemIndex) in section.items" :key="itemIndex">
+				<a
+					class="rounded-custom p-3 flex flex-col gap-1 border-2 border-grayColor bg-white text-bodyBlack shrink-0"
+					:class="{ '!bg-primaryPurple !border-primaryPurple !text-white': item?.id === listItem.id }"
+					@click="onClickItem(sectionIndex, itemIndex)">
+					<SofaNormalText color="text-current">{{ section.label }} - {{ getItemTitle(listItem) }}</SofaNormalText>
+
+					<span class="w-full flex items-center gap-2">
+						<SofaIcon :name="getItemIcon(listItem)" class="h-[15px] fill-current" />
+						<SofaNormalText color="text-current" :content="getItemInfo(listItem)" class="capitalize" />
+					</span>
+				</a>
+			</template>
+		</template>
+	</div>
 	<Draggable
+		v-else
 		v-model="factory.factories"
 		:disabled="!edit"
 		class="flex flex-col gap-4"
@@ -30,7 +48,7 @@
 				<Draggable
 					v-if="expandedSections.has(sectionIndex)"
 					:disabled="!edit"
-					class="flex flex-col gap-4"
+					class="flex flex-col gap-2"
 					:list="factory.factories[sectionIndex].items"
 					itemKey=""
 					handle=".itemHandle"
@@ -38,10 +56,10 @@
 					<template #item="{ index: itemIndex }">
 						<a
 							v-if="sections[sectionIndex].items[itemIndex]"
-							class="flex items-center gap-2 px-2"
+							class="flex items-center gap-2 p-2"
 							:class="{ 'bg-lightBlue rounded-lg py-2': item?.id === sections[sectionIndex].items[itemIndex].id }"
 							@click="onClickItem(sectionIndex, itemIndex)">
-							<SofaIcon :name="getItemIcon(sections[sectionIndex].items[itemIndex])" class="h-[16px]" />
+							<SofaIcon :name="getItemIcon(sections[sectionIndex].items[itemIndex])" class="h-[16px] fill-deepGray" />
 							<SofaNormalText
 								color="text-deepGray"
 								:content="getItemTitle(sections[sectionIndex].items[itemIndex])"
@@ -57,7 +75,7 @@
 					<template #footer>
 						<a
 							v-if="edit"
-							class="flex items-center gap-2 px-2 text-primaryPurple"
+							class="flex items-center gap-2 p-2 text-primaryPurple"
 							@click.stop.prevent="addStudyMaterial(sectionIndex)">
 							<SofaIcon name="box-add" class="h-[16px] fill-current" />
 							<SofaNormalText color="text-current" content="Add study material" />
@@ -89,10 +107,11 @@ const props = defineProps<{
 	course: CourseEntity
 	edit?: boolean
 	item?: ExtendedCourseSectionItem
+	list?: boolean
 }>()
 
 const emits = defineEmits<{
-	selectItem: [{ item: ExtendedCourseSectionItem; sectionIndex: number; itemIndex: number }]
+	selectItem: [ExtendedCourseSectionItem]
 }>()
 
 const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
@@ -126,6 +145,7 @@ function closeLabelSection(index: number) {
 const getItemTitle = (item: ExtendedCourseSectionItem) => {
 	if (item.type == Coursable.quiz) return item.quiz.title
 	if (item.type == Coursable.file) return item.file.title
+	return ''
 }
 
 const getItemIcon = (item: ExtendedCourseSectionItem) => {
@@ -138,6 +158,12 @@ const getItemIcon = (item: ExtendedCourseSectionItem) => {
 	return 'file'
 }
 
+const getItemInfo = (item: ExtendedCourseSectionItem) => {
+	if (item.type == Coursable.quiz) return `${item.quizMode} - ${Logic.Common.formatNumber(item.quiz.questions.length)} questions`
+	if (item.type == Coursable.file) return `${item.fileType}`
+	return ''
+}
+
 const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
 	if (!item) return
@@ -147,7 +173,7 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 
 const onClickItem = (sectionIndex: number, itemIndex: number) => {
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
-	if (item) emits('selectItem', { item, sectionIndex, itemIndex })
+	if (item) emits('selectItem', item)
 }
 
 watch(

@@ -102,8 +102,8 @@ export default defineComponent({
 
 		const openEditModal = useModals().study.editCourse.open
 
-		const selectItem = async (selected: { item: ExtendedCourseSectionItem; sectionIndex: number; itemIndex: number }) => {
-			selectedItem.value = selected.item
+		const selectItem = async (item: ExtendedCourseSectionItem) => {
+			selectedItem.value = item
 			showBody.value = true
 		}
 
