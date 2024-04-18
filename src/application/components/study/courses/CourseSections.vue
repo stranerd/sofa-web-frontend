@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
@@ -179,6 +179,11 @@ const onClickItem = (sectionIndex: number, itemIndex: number) => {
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
 	if (item) emits('selectItem', item)
 }
+
+watchEffect(() => {
+	if (!Logic.Screen.desktop) return
+	if (!props.item && sections.value.at(0)?.items.at(0)) onClickItem(0, 0)
+})
 
 watch(
 	() => factory.factories,

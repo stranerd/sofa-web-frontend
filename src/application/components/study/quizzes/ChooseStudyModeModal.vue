@@ -85,7 +85,10 @@ const props = defineProps<{
 const { id } = useAuth()
 const { hasAccess } = useHasAccess()
 const router = useRouter()
-const { factory, createPlay } = useCreatePlay({}, { start: false, nav: true })
+const { factory, createPlay } = useCreatePlay(
+	computed(() => ({})),
+	{ start: false, nav: true },
+)
 
 const goToEdit = () => {
 	props.close()

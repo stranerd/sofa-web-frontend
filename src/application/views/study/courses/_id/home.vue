@@ -18,14 +18,11 @@
 			</div>
 			<div
 				v-if="$screen.desktop || selectedItem"
-				class="col-span-9 w-full px-4 pt-4 pb-2 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
+				class="col-span-9 w-full px-4 pt-4 pb-2 mdlg:pb-4 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
 				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="back-arrow" @click="selectedItem = undefined" />
-				<div class="grow overflow-y-auto">
-					<template v-if="hasAccess(course)">
-						<p>Selected item</p>
-						<p>{{ selectedItem }}</p>
-					</template>
+				<div v-if="selectedItem" class="grow overflow-y-auto">
+					<EmbeddedSection v-if="hasAccess(course)" :key="selectedItem.id" :item="selectedItem" :course="course" />
 					<SofaEmptyState
 						v-else
 						title="You have no access"
@@ -61,6 +58,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
+import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
 import CourseSections from '@app/components/study/courses/CourseSections.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
@@ -74,7 +72,7 @@ import { ExtendedCourseSectionItem } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyCoursesIdIndexPage',
-	components: { CourseSections },
+	components: { CourseSections, EmbeddedSection },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({ title: 'Course Details' })

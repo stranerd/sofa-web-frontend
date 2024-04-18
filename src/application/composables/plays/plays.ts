@@ -2,7 +2,7 @@ import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
-import { useAsyncFn } from '../core/hooks'
+import { Refable, useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useUsersInList } from '../users/users'
 import { CoursableAccess, QuestionEntity } from '@modules/study'
@@ -243,7 +243,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 	return { ...singleStore[id], questions, myAnswer, participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
 }
 
-export const useCreatePlay = (access: CoursableAccess['access'], options: { start: boolean; nav: boolean }) => {
+export const useCreatePlay = (access: Refable<CoursableAccess['access']>, options: { start: boolean; nav: boolean }) => {
 	const router = useRouter()
 	const factory = new PlayFactory()
 	const {
@@ -252,7 +252,7 @@ export const useCreatePlay = (access: CoursableAccess['access'], options: { star
 		error,
 	} = useAsyncFn(async (optionsOvr?: Partial<typeof options>) => {
 		const allOpts = { ...options, ...(optionsOvr ?? {}) }
-		let play = await PlaysUseCases.create(factory, access)
+		let play = await PlaysUseCases.create(factory, access.value)
 		if (allOpts.start && play.isCreated) play = await PlaysUseCases.start(play.id)
 		if (allOpts.nav) await router.push(allOpts.start ? play.runPage : play.lobbyPage)
 		factory.reset()
