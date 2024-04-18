@@ -73,7 +73,7 @@
 								<SofaNormalText class="!line-clamp-1 !text-left" :content="tutor.subjects" />
 
 								<div class="w-full flex gap-2 items-center">
-									<SofaIcon name="star-full" class="h-[16px]" />
+									<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 									<div class="flex gap-1 items-center">
 										<SofaNormalText :content="tutor.ratings.value" />
 										<SofaNormalText

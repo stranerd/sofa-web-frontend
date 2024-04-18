@@ -1,5 +1,11 @@
 <template>
-	<Draggable v-model="factory.factories" class="flex flex-col gap-4" handle=".sectionHandle" itemKey="" group="sections">
+	<Draggable
+		v-model="factory.factories"
+		:disabled="!edit"
+		class="flex flex-col gap-4"
+		handle=".sectionHandle"
+		itemKey=""
+		group="sections">
 		<template #item="{ index: sectionIndex }">
 			<div v-if="sections[sectionIndex]" class="flex flex-col gap-4">
 				<div class="flex items-center gap-2 justify-between">
@@ -12,9 +18,9 @@
 						@onBlur="closeLabelSection(sectionIndex)"
 						@onEnter="closeLabelSection(sectionIndex)" />
 					<SofaHeaderText v-else size="base" class="grow truncate">{{ sections[sectionIndex].label }}</SofaHeaderText>
-					<SofaIcon class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
-					<SofaIcon class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
-					<SofaIcon class="h-[20px] sectionHandle" name="reorder-gray" />
+					<SofaIcon v-if="edit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+					<SofaIcon v-if="edit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
+					<SofaIcon v-if="edit" class="h-[20px] sectionHandle" name="reorder-gray" />
 					<SofaIcon
 						class="h-[8px]"
 						name="chevron-down"
@@ -23,6 +29,7 @@
 				</div>
 				<Draggable
 					v-if="expandedSections.has(sectionIndex)"
+					:disabled="!edit"
 					class="flex flex-col gap-4"
 					:list="factory.factories[sectionIndex].items"
 					itemKey=""
@@ -39,22 +46,29 @@
 								color="text-deepGray"
 								:content="getItemTitle(sections[sectionIndex].items[itemIndex])"
 								class="truncate flex-1" />
-							<SofaIcon class="h-[16px]" name="trash-gray" @click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
-							<SofaIcon class="h-[20px] itemHandle" name="reorder-gray" />
+							<SofaIcon
+								v-if="edit"
+								class="h-[16px]"
+								name="trash-gray"
+								@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
+							<SofaIcon v-if="edit" class="h-[20px] itemHandle" name="reorder-gray" />
 						</a>
 					</template>
 					<template #footer>
-						<a class="flex items-center gap-2 px-2 text-primaryPurple" @click.stop.prevent="addStudyMaterial(sectionIndex)">
+						<a
+							v-if="edit"
+							class="flex items-center gap-2 px-2 text-primaryPurple"
+							@click.stop.prevent="addStudyMaterial(sectionIndex)">
 							<SofaIcon name="box-add" class="h-[16px] fill-current" />
 							<SofaNormalText color="text-current" content="Add study material" />
 						</a>
-						<div class="h-1 w-full bg-lightGray" />
+						<div v-if="sectionIndex < factory.factories.length - 1" class="h-0.5 w-full bg-lightGray" />
 					</template>
 				</Draggable>
 			</div>
 		</template>
 		<template #footer>
-			<a class="flex items-center gap-2 px-2 text-primaryPink" @click.stop.prevent="factory.add()">
+			<a v-if="edit" class="flex items-center gap-2 px-2 text-primaryPink" @click.stop.prevent="factory.add()">
 				<SofaIcon name="box-add" class="h-[16px] fill-current" />
 				<SofaNormalText color="text-current" content="Add section" />
 			</a>
@@ -67,17 +81,18 @@ import { computed, ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
+import { useDeleteFile } from '@app/composables/study/files'
 import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
 import { Logic } from 'sofa-logic'
-import { useDeleteFile } from '@app/composables/study/files'
 
 const props = defineProps<{
 	course: CourseEntity
+	edit?: boolean
 	item?: ExtendedCourseSectionItem
 }>()
 
 const emits = defineEmits<{
-	selectItem: [ExtendedCourseSectionItem]
+	selectItem: [{ item: ExtendedCourseSectionItem; sectionIndex: number; itemIndex: number }]
 }>()
 
 const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
@@ -132,12 +147,13 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 
 const onClickItem = (sectionIndex: number, itemIndex: number) => {
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
-	if (item) emits('selectItem', item)
+	if (item) emits('selectItem', { item, sectionIndex, itemIndex })
 }
 
 watch(
 	() => factory.factories,
 	async () => {
+		if (!props.edit) return
 		if (factory.valid && factory.hasChanges) Logic.Common.debounce('updateSections', updateSections, 1000)
 	},
 	{ deep: true, immediate: true },

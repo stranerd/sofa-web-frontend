@@ -1,6 +1,11 @@
 <template>
 	<a class="flex items-center gap-1">
-		<SofaIcon v-for="i in 5" :key="i" :name="model >= i ? 'star-full' : 'star'" :class="size" @click="!readonly && (model = i)" />
+		<SofaIcon
+			v-for="i in 5"
+			:key="i"
+			name="star"
+			:class="{ [size]: true, 'fill-primaryYellow': model >= i, 'fill-grayColor': model < i }"
+			@click="!readonly && (model = i)" />
 	</a>
 </template>
 

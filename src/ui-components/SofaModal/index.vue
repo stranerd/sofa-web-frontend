@@ -8,7 +8,7 @@
 					ref="modal"
 					class="z-[1] w-full mdlg:w-[50%] max-h-[100dvh] mdlg:max-h-[90dvh] overflow-y-auto bg-white text-bodyBlack rounded-t-2xl mdlg:rounded-b-2xl"
 					:class="{ [maxWidth]: true, [containerClass]: true, 'mdlg:my-[5dvh]': !popover }"
-					:style="calculatePosition()">
+					:style="$screen.desktop ? calculatePosition() : ''">
 					<slot />
 				</div>
 			</div>
@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>
 import { Teleport, ref } from 'vue'
-import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -40,7 +39,7 @@ const props = withDefaults(
 const modal = ref<HTMLDivElement>()
 
 const calculatePosition = () => {
-	if (!props.event || !modal.value || !props.popover || !Logic.Screen.desktop) return ''
+	if (!props.event || !modal.value || !props.popover) return ''
 	const bounds = modal.value.getBoundingClientRect()
 	let top = props.event.y
 	const bottomDiff = top + bounds.height - window.innerHeight

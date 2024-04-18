@@ -25,7 +25,7 @@ withDefaults(
 		width: '',
 		layoutStyle: '',
 		hide: () => ({ top: false, bottom: false }),
-		bgImage: '',
+		bgImage: undefined,
 	},
 )
 </script>

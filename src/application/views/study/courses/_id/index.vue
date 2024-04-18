@@ -139,7 +139,7 @@
 				<span
 					class="h-[60px] w-[60px] flex flex-col justify-center items-center rounded-full shadow-custom bg-primaryBlue cursor-pointer"
 					@click="showRateCourse">
-					<SofaIcon name="star-white" customClass="h-[15px]"></SofaIcon>
+					<SofaIcon name="star" class="h-[15px] fill-white" />
 					<SofaNormalText color="text-white"> Rate </SofaNormalText>
 				</span>
 			</span>
@@ -151,9 +151,9 @@
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import CContent from '@app/components/study/courses/content.vue'
 import CourseContent from '@app/components/study/courses/CourseContent.vue'
 import CourseSummary from '@app/components/study/courses/CourseSummary.vue'
+import CContent from '@app/components/study/courses/content.vue'
 import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useCreatePurchase } from '@app/composables/payment/purchases'

@@ -27,7 +27,7 @@
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<EditCourseSections :course="course" :item="selectedItem" @selectItem="selectItem" />
+						<CourseSections :course="course" :edit="true" :item="selectedItem" @selectItem="selectItem" />
 					</div>
 				</template>
 
@@ -40,7 +40,7 @@
 						</div>
 
 						<EditCourseSectionItemBody v-if="$screen.desktop" :course="course" :item="selectedItem" />
-						<EditCourseSections v-else :course="course" :item="selectedItem" class="p-4" @selectItem="selectItem" />
+						<CourseSections v-else :course="course" :edit="true" :item="selectedItem" class="p-4" @selectItem="selectItem" />
 					</div>
 				</template>
 
@@ -51,7 +51,7 @@
 				</template>
 			</FullLayout>
 
-			<SofaModal v-if="showBody" :close="() => (showBody = false)">
+			<SofaModal v-if="showBody && !$screen.desktop" :close="() => (showBody = false)">
 				<div class="flex flex-col gap-4 p-4 justify-between">
 					<div class="mdlg:hidden flex gap-2 items-center border-b border-lightGray">
 						<SofaNormalText class="!text-sm !font-bold" content="Details" />
@@ -80,17 +80,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import CourseSections from '@app/components/study/courses/CourseSections.vue'
 import EditCourseSectionItem from '@app/components/study/courses/EditCourseSectionItem.vue'
 import EditCourseSectionItemBody from '@app/components/study/courses/EditCourseSectionItemBody.vue'
-import EditCourseSections from '@app/components/study/courses/EditCourseSections.vue'
 import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
 import { Coursable, ExtendedCourseSectionItem } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'StudyCoursesIdEditPage',
-	components: { EditCourseWrapper, EditCourseSections, EditCourseSectionItem, EditCourseSectionItemBody },
+	components: { EditCourseWrapper, CourseSections, EditCourseSectionItem, EditCourseSectionItemBody },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
@@ -103,9 +102,9 @@ export default defineComponent({
 
 		const openEditModal = useModals().study.editCourse.open
 
-		const selectItem = async (item: ExtendedCourseSectionItem) => {
-			selectedItem.value = item
-			if (Logic.Screen.mobile) showBody.value = true
+		const selectItem = async (selected: { item: ExtendedCourseSectionItem; sectionIndex: number; itemIndex: number }) => {
+			selectedItem.value = selected.item
+			showBody.value = true
 		}
 
 		return {

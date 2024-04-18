@@ -28,15 +28,15 @@ export default class Screen {
 	}
 
 	public get mobile() {
-		return this.lte('sm')
+		return this.lt('md')
 	}
 
 	public get desktop() {
-		return this.gt('mdlg')
+		return this.gte('mdlg')
 	}
 
 	public get tab() {
-		return this.gte('sm') && this.lt('mdlg')
+		return this.gte('md') && this.lt('mdlg')
 	}
 
 	public get lt() {

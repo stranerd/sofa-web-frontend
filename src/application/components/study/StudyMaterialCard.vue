@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="w-full flex gap-2 items-center">
-			<SofaIcon name="star-full" class="h-[16px]" />
+			<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 
 			<div class="flex gap-1 items-center">
 				<SofaNormalText> {{ material.ratings.avg }} </SofaNormalText>
@@ -85,7 +85,7 @@
 				</div>
 
 				<div class="w-full flex gap-2 items-center">
-					<SofaIcon name="star-full" class="h-[16px]" />
+					<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 
 					<div class="flex gap-1 items-center">
 						<SofaNormalText> {{ material.ratings.avg }} </SofaNormalText>
