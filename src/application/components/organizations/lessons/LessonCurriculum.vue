@@ -45,10 +45,10 @@
 							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
 							@click="openCurriculumItem(itemIndex, sectionIndex)">
 							<div class="flex items-center gap-2 flex-1">
-								<SofaIcon :name="getItemIcon(curriculum[sectionIndex].items[itemIndex])" class="h-[16px]" />
+								<SofaIcon :name="curriculum[sectionIndex].items[itemIndex].icon" class="h-[16px]" />
 								<SofaNormalText
 									color="text-deepGray"
-									:content="getItemTitle(curriculum[sectionIndex].items[itemIndex])"
+									:content="curriculum[sectionIndex].items[itemIndex].title"
 									class="truncate" />
 								<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="shrink-0">
 									LIVE
@@ -57,7 +57,7 @@
 							<div v-if="view === CurriculumView.grid">
 								<SofaImageLoader
 									v-if="shouldShowItemImage(curriculum[sectionIndex].items[itemIndex])"
-									:photoUrl="getItemImagePlaceholder(curriculum[sectionIndex].items[itemIndex])"
+									:photoUrl="curriculum[sectionIndex].items[itemIndex].image"
 									class="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
 								<div
 									v-else
@@ -70,7 +70,7 @@
 									<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
 									<SofaNormalText
 										color="text-grayColor"
-										:content="getItemInfo(curriculum[sectionIndex].items[itemIndex])"
+										:content="curriculum[sectionIndex].items[itemIndex].info"
 										class="!capitalize" />
 								</div>
 								<SofaIcon v-if="canEdit" class="h-[20px] itemHandle" name="reorder-gray" />
@@ -114,8 +114,6 @@ import {
 	ExtendedClassLessonCurriculumSectionItem,
 	LessonCurriculumFactory,
 } from '@modules/organizations'
-import { FileType } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -152,38 +150,9 @@ const factory = computed(() => {
 	return f
 })
 
-const getItemTitle = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type == ClassLessonable.quiz) return item.quiz.title
-	if (item.type == ClassLessonable.file) return item.file.title
-	if (item.type == ClassLessonable.schedule) return item.schedule.title
-}
-
-const getItemIcon = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type === ClassLessonable.quiz) return 'quiz'
-	if (item.type === ClassLessonable.schedule) return 'translation'
-	if (item.type === ClassLessonable.file) {
-		if (item.fileType === FileType.document) return 'file'
-		if (item.fileType === FileType.image) return 'image-course'
-		if (item.fileType === FileType.video) return 'video-course'
-	}
-	return 'translation'
-}
-
-const getItemInfo = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type == ClassLessonable.quiz) return `${item.quizMode} - ${Logic.Common.formatNumber(item.quiz.questions.length)} questions`
-	if (item.type == ClassLessonable.file) return `${item.fileType}`
-	if (item.type == ClassLessonable.schedule) return item.schedule.timeRange
-}
-
 const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => {
 	if (item.type !== ClassLessonable.schedule) return true
 	return !item.schedule.canJoin(props.classInst, id.value)
-}
-
-const getItemImagePlaceholder = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type === ClassLessonable.quiz) return item.quiz.photo?.link ?? '/images/default.svg'
-	if (item.type === ClassLessonable.file) return item.file.photo?.link ?? '/images/default.svg'
-	return '/images/default.svg'
 }
 
 const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>

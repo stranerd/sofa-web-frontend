@@ -26,11 +26,7 @@ export class CourseEntity extends PublishableEntity<CourseFromModel> implements 
 		return `${window.location.origin}${this.pageLink}`
 	}
 
-	get quizzesIds() {
-		return this.coursables.filter((coursable) => coursable.type === 'quiz').map((coursable) => coursable.id)
-	}
-
-	get filesIds() {
-		return this.coursables.filter((coursable) => coursable.type === 'file').map((coursable) => coursable.id)
+	get totalItems() {
+		return this.sections.flatMap((section) => section.items.length).reduce((acc, cur) => acc + cur, 0)
 	}
 }

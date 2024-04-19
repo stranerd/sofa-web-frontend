@@ -1,7 +1,6 @@
-import { CourseEntity } from '../entities/courses'
-import { QuizEntity } from '../entities/quizzes'
+import type { StudyMaterial } from '../..'
 import { StudyKeys } from '../types'
 
 export interface IStudyRepository {
-	get: (key: StudyKeys) => Promise<(CourseEntity | QuizEntity)[]>
+	get: (key: StudyKeys) => Promise<StudyMaterial[]>
 }

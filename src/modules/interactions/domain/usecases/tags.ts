@@ -2,7 +2,7 @@ import { TagEntity } from '../entities/tags'
 import { TagFactory } from '../factories/tags'
 import { ITagRepository } from '../irepositories/tags'
 import { TagTypes } from '../types'
-import { Listeners } from '@modules/core'
+import { Conditions, Listeners } from '@modules/core'
 
 export class TagsUseCase {
 	private repository: ITagRepository
@@ -56,6 +56,25 @@ export class TagsUseCase {
 			},
 			listener,
 			(entity) => entity.type === TagTypes.generic,
+		)
+	}
+
+	async getInList(ids: string[]) {
+		const courses = await this.repository.get({
+			where: [{ field: 'id', value: ids, condition: Conditions.in }],
+			all: true,
+		})
+		return courses.results
+	}
+
+	async listenToInList(ids: () => string[], listener: Listeners<TagEntity>) {
+		return await this.repository.listenToMany(
+			{
+				where: [{ field: 'id', value: ids(), condition: Conditions.in }],
+				all: true,
+			},
+			listener,
+			(entity) => ids().includes(entity.id),
 		)
 	}
 }

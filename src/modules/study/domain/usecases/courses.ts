@@ -36,6 +36,10 @@ export class CoursesUseCase {
 		return await this.repository.find(id)
 	}
 
+	async similar(id: string) {
+		return await this.repository.similar(id)
+	}
+
 	async listenToOne(id: string, listener: Listeners<CourseEntity>) {
 		return await this.repository.listenToOne(id, listener)
 	}

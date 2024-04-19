@@ -48,11 +48,11 @@
 
 <script lang="ts" setup>
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
-import { CourseEntity, FolderSaved, QuizEntity } from '@modules/study'
+import { StudyMaterial, FolderSaved } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	entity: CourseEntity | QuizEntity
+	entity: StudyMaterial
 }>()
 
 const { folders, saveItem } = useMyFolders()

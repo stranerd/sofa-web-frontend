@@ -110,12 +110,18 @@ export type ExtendedCourseSectionItem =
 			type: Coursable.quiz
 			quizMode: QuizModes
 			quiz: QuizEntity
+			icon: IconName
+			title: string
+			info: string
 	  }
 	| {
 			id: string
 			type: Coursable.file
 			fileType: FileType
 			file: FileEntity
+			icon: IconName
+			title: string
+			info: string
 	  }
 
 export type ExtendedCourseSections = (Omit<CourseSection, 'items'> & { items: ExtendedCourseSectionItem[] })[]

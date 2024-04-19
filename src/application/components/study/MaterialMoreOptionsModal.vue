@@ -18,11 +18,11 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { saveToFolder } from '@app/composables/study/folders'
-import { CourseEntity, QuizEntity } from '@modules/study'
+import { StudyMaterial } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	material: CourseEntity | QuizEntity
+	material: StudyMaterial
 }>()
 
 const { id } = useAuth()

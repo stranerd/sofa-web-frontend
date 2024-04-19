@@ -1,4 +1,4 @@
-import { CourseEntity, QuizEntity } from '@modules/study'
+import { StudyMaterial } from '@modules/study'
 
 export interface Paginated<D> {
 	pages: {
@@ -17,7 +17,7 @@ export interface Paginated<D> {
 }
 
 export interface ContentDetails {
-	original: QuizEntity | CourseEntity
+	original: StudyMaterial
 	type: 'quiz' | 'course'
 	route: string
 	price: number

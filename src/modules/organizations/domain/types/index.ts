@@ -92,17 +92,29 @@ export type ExtendedClassLessonCurriculumSectionItem =
 			type: ClassLessonable.quiz
 			quizMode: PlayTypes
 			quiz: QuizEntity
+			image: string
+			icon: IconName
+			title: string
+			info: string
 	  }
 	| {
 			id: string
 			type: ClassLessonable.file
 			fileType: FileType
 			file: FileEntity
+			image: string
+			icon: IconName
+			title: string
+			info: string
 	  }
 	| {
 			id: string
 			type: ClassLessonable.schedule
 			schedule: ScheduleEntity
+			image: string
+			icon: IconName
+			title: string
+			info: string
 	  }
 
 export type ExtendedCurriculum = (Omit<ClassLessonCurriculumSection, 'items'> & { items: ExtendedClassLessonCurriculumSectionItem[] })[]

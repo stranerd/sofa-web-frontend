@@ -1,6 +1,6 @@
 import { addToArray } from 'valleyed'
-import { onMounted, onUnmounted, reactive } from 'vue'
-import { useAsyncFn } from '../core/hooks'
+import { computed, onMounted, onUnmounted, reactive } from 'vue'
+import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { TagEntity, TagsUseCases } from '@modules/interactions'
 
@@ -123,4 +123,31 @@ export const useGenericTagsList = () => {
 	})
 
 	return { ...genericStore, loading, error }
+}
+
+export const useTagsInList = (ids: Refable<string[]>, listen = false) => {
+	const allTags = computed(() => [...topicStore.topics, ...genericStore.tags])
+
+	const { items: tags, addToList } = useItemsInList('tags', ids, allTags, (ids) => TagsUseCases.getInList(ids))
+
+	const listener = useListener(
+		async () =>
+			await TagsUseCases.listenToInList(() => ids.value, {
+				created: addToList,
+				updated: addToList,
+				deleted: () => {
+					/* */
+				},
+			}),
+	)
+
+	onMounted(() => {
+		if (listen) listener.start()
+	})
+
+	onUnmounted(() => {
+		if (listen) listener.close()
+	})
+
+	return { tags }
 }

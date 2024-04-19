@@ -4,7 +4,7 @@
 		:to="material.pageLink"
 		v-bind="$attrs"
 		class="shrink-0 bg-white flex flex-col gap-2 p-3 rounded-2xl shadow-itemBox">
-		<SofaImageLoader class="w-full mdlg:h-[155px] h-[120px] rounded-custom relative" :photoUrl="image">
+		<SofaImageLoader class="w-full mdlg:h-[155px] h-[120px] rounded-custom relative" :photoUrl="material.picture">
 			<div v-if="price && price.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 				<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
 					{{ $utils.formatPrice(price.amount, price.currency) }}
@@ -54,7 +54,7 @@
 		:class="isWrapped ? 'w-full' : 'w-[220px]'">
 		<div class="flex mdlg:flex-row gap-2 mdlg:gap-3 items-start w-full" :class="isWrapped ? 'flex-row' : 'flex-col'">
 			<SofaImageLoader
-				:photoUrl="image"
+				:photoUrl="material.picture"
 				class="mdlg:h-[115px] mdlg:w-[200px] rounded-custom"
 				:class="isWrapped ? 'h-[100px] w-[150px]' : 'h-[120px] w-full'">
 				<div v-if="price && price.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
@@ -118,16 +118,17 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { CourseEntity, QuizEntity } from '@modules/study'
+import { StudyMaterial } from '@modules/study'
 import { UserType } from '@modules/users'
 import { useAuth } from '@app/composables/auth/auth'
 import { useMyFolders, saveToFolder } from '@app/composables/study/folders'
 import { useModals } from '@app/composables/core/modals'
+import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
 		type: 'item' | 'activity'
-		material: QuizEntity | CourseEntity
+		material: StudyMaterial
 		isWrapped?: boolean
 		isRoute?: boolean
 		hasBookmark?: boolean
@@ -155,11 +156,12 @@ const handleShowMaterialMoreOptions = (event: Event) => {
 	useModals().study.materialMoreOptions.open({ material: props.material }, event)
 }
 
-const image = computed(() => props.material.photo?.link ?? '/images/default.svg')
 const price = computed(() => (props.material.isCourse() ? props.material.price : null))
 const color = computed(() => (props.material.isQuiz() ? 'text-primaryPurplePink' : 'text-primaryPurple'))
 const label = computed(() => (props.material.isQuiz() ? 'Quiz - Learn' : 'Course'))
 const sub = computed(() =>
-	props.material.isQuiz() ? `${props.material.questions.length} questions` : `${props.material.sections.length} topics`,
+	props.material.isQuiz()
+		? `${props.material.questions.length} ${Logic.Common.pluralize(props.material.questions.length, 'question', 'questions')}`
+		: `${props.material.sections.length} ${(props.material.sections.length, 'topic', 'topics')}`,
 )
 </script>

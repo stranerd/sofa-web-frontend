@@ -1,386 +1,283 @@
 <template>
-	<div class="w-full flex flex-col gap-2 flex-1 relative bg-white mdlg:rounded-2xl overflow-y-auto">
-		<div class="w-full flex flex-col gap-2 px-3 pt-3 mdlg:px-4 mdlg:pt-4 relative">
-			<div
-				class="w-full flex mdlg:flex md:flex-row mdlg:flex-none flex-col relative h-auto items-start justify-start gap-3 mdlg:space-x-3">
-				<div class="mdlg:w-[25%] w-full shrink-0">
-					<SofaImageLoader class="w-full rounded-custom" :photoUrl="content.image">
-						<div v-if="content.price > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full px-2 py-2">
-							<SofaBadge customClass="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
-								{{ $utils.formatPrice(content.price, content.currency) }}
-							</SofaBadge>
-						</div>
-					</SofaImageLoader>
-				</div>
+	<div class="flex flex-col">
+		<div class="w-full flex flex-col gap-3 p-3 mdlg:p-4">
+			<div class="w-full flex mdlg:flex mdlg:flex-row flex-col relative h-auto items-start justify-start gap-4">
+				<SofaImageLoader class="w-full mdlg:w-[25%] shrink-0 rounded-custom" :photoUrl="material.picture">
+					<div v-if="price && price.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
+						<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
+							{{ $utils.formatPrice(price.amount, price.currency) }}
+						</SofaBadge>
+					</div>
+				</SofaImageLoader>
 				<div class="flex flex-col gap-2 grow">
 					<div class="w-full flex items-center justify-between">
-						<SofaHeaderText :content="content.title" />
+						<SofaHeaderText :content="material.title" />
 
 						<div class="mdlg:flex items-center justify-end gap-4 hidden">
-							<SofaIcon name="flag" customClass="h-[16px] " @click="reportMaterial(content.original)" />
-							<SofaIcon name="share" customClass="h-[16px]" @click="shareMaterialLink(content.original)" />
-							<SofaIcon name="save" customClass="h-[16px] cursor-pointer" @click="saveToFolder(content.original)" />
+							<SofaIcon name="flag" class="h-[16px]" @click="reportMaterial(material)" />
+							<SofaIcon name="share" class="h-[16px]" @click="shareMaterialLink(material)" />
+							<SofaIcon name="save" class="h-[16px]" @click="saveToFolder(material)" />
 						</div>
 					</div>
-					<SofaNormalText customClass="text-left">
-						{{ content.info }}
-					</SofaNormalText>
-					<div class="flex flex-row gap-2 items-center">
-						<SofaNormalText :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">
-							{{ content.labels.main }}
+					<SofaNormalText :content="material.description" />
+					<div class="flex gap-2 items-center" :class="[color]">
+						<SofaNormalText color="text-current" :content="label" />
+						<span class="size-[5px] rounded-full bg-current" />
+						<SofaNormalText color="text-current" :content="sub" />
+					</div>
+
+					<div class="flex gap-2 items-center">
+						<SofaRatings v-model="material.ratings.avg" size="h-[15px]" />
+						<SofaNormalText color="text-grayColor">
+							({{ material.ratings.count }} {{ $utils.pluralize(material.ratings.count, 'rating', 'ratings') }})
 						</SofaNormalText>
-						<span
-							:class="`h-[5px] w-[5px] rounded-full ${
-								content.labels.color == 'pink' ? 'bg-primaryPurplePink' : 'bg-primaryPurple'
-							}`">
-						</span>
-						<SofaNormalText :color="content.labels.color == 'pink' ? 'text-primaryPurplePink' : 'text-primaryPurple'">{{
-							content.labels.sub
-						}}</SofaNormalText>
 					</div>
 
-					<div class="w-full flex flex-row gap-2 items-center">
-						<div class="flex flex-row gap-1 items-center">
-							<SofaRatings v-model="content.ratings.avg" size="h-[14px] mdlg:!h-[15px]" />
-							<SofaNormalText>
-								{{ content.ratings.avg }}
+					<div class="w-full flex items-center gap-2 justify-between">
+						<div class="flex items-center gap-2">
+							<SofaAvatar :size="20" :photoUrl="material.user.bio.photo?.link" :userId="material.user.id" />
+							<SofaNormalText class="!whitespace-nowrap !line-clamp-1">
+								{{ material.user.id === id ? 'You' : material.user.bio.publicName }}
 							</SofaNormalText>
-							<SofaNormalText color="text-grayColor pl-2"> ({{ content.ratings.count }} ratings) </SofaNormalText>
-						</div>
-					</div>
 
-					<div class="w-full flex flex-row items-center gap-2 justify-between">
-						<div class="flex flex-row items-center gap-2">
-							<div class="gap-2 flex flex-row items-center">
-								<SofaAvatar :size="20" :photoUrl="content.user.photoUrl" />
-								<SofaNormalText>
-									{{ content.user.name }}
-								</SofaNormalText>
-							</div>
+							<span class="size-[5px] rounded-full bg-bodyBlack" />
 
-							<span class="h-[5px] w-[5px] rounded-full bg-bodyBlack"> </span>
-
-							<SofaNormalText>
-								{{ content.lastUpdated }}
-							</SofaNormalText>
+							<SofaNormalText :content="$utils.formatTime(material.updatedAt)" />
 						</div>
 
-						<div v-if="content.type == 'course'" class="md:!flex hidden flex-col">
-							<SofaButton
-								v-if="!hasAccess"
-								padding="px-6 py-1"
-								:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'}`"
-								@click="content.status == 'published' ? buyCourse() : null">
-								{{
-									content.price > 0 ? `Buy ${$utils.formatPrice(content.price, content.currency)}` : 'Get course for free'
-								}}
-							</SofaButton>
-							<SofaButton
-								v-else
-								padding="px-6 py-1"
-								customClass="w-auto"
-								@click="$router.push(`/study/courses/${content.id}`)">
-								Go to course
-							</SofaButton>
-						</div>
-						<div v-if="content.type == 'quiz'" class="md:!flex hidden flex-col">
-							<SofaButton padding="px-6 py-1" @click="hasAccess ? openQuiz() : $router.push(content.route)">
+						<div class="mdlg:flex hidden flex-col">
+							<SofaButton v-if="material.isQuiz()" padding="px-6 py-1" @click="openQuiz">
 								{{ hasAccess ? 'Start' : 'Go to course' }}
+							</SofaButton>
+							<SofaButton v-else padding="px-6 py-1" @click="openCourse">
+								{{
+									hasAccess
+										? 'Go to course'
+										: price && price.amount > 0
+											? `Buy ${$utils.formatPrice(price.amount, price.currency)}`
+											: 'Get course for free'
+								}}
 							</SofaButton>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="w-full flex flex-row gap-3 items-center py-2 flex-nowrap overflow-x-auto scrollbar-hide">
-				<div v-for="(tag, index) in content.tags" :key="index" class="px-4 py-1 border rounded-custom border-grayColor">
-					<SofaNormalText color="text-grayColor" customClass="!whitespace-nowrap">{{ tag }}</SofaNormalText>
-				</div>
+			<div class="w-full flex gap-3 items-center flex-nowrap overflow-x-auto scrollbar-hide">
+				<SofaNormalText
+					v-for="tag in tags"
+					:key="tag.hash"
+					color="text-grayColor"
+					class="!whitespace-nowrap px-4 py-1 border rounded-custom border-grayColor"
+					:content="tag.title" />
 			</div>
 		</div>
 
-		<div
-			class="w-full flex gap-4 items-center border-b border-lightGray mdlg:relative sticky mdlg:pr-5 pr-4 top-0 left-0 z-50 bg-white pt-3 mdlg:pt-0 px-4">
+		<div class="w-full flex gap-4 items-center border-b border-lightGray px-4 pt-2">
 			<SofaNormalText
 				v-for="(tab, index) in tabs"
 				:key="index"
 				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
-				:class="`!font-semibold cursor-pointer pb-2 ${selectedTab == tab.key ? 'border-b-2 border-bodyBlack' : ''}`"
-				@click="selectedTab = tab.key">
-				{{ tab.name }}
-			</SofaNormalText>
+				class="!font-semibold pb-2 border-b-2 border-transparent"
+				:class="{ '!border-bodyBlack': selectedTab === tab.key }"
+				as="a"
+				:content="tab.name"
+				@click="selectedTab = tab.key" />
 		</div>
 
-		<div v-if="selectedTab == 'content'" class="w-full flex flex-col rounded-b-[16px] px-4 py-2 relative">
-			<div class="w-full flex flex-col gap-3 pb-4">
-				<div class="flex flex-row items-center justify-between">
-					<div class="flex flex-row items-center gap-3">
-						<SofaNormalText> {{ content.content.sections.length }} sections </SofaNormalText>
-						<span class="h-[5px] w-[5px] rounded-full bg-bodyBlack"> </span>
-						<SofaNormalText>{{ content.content.materialsCount }} materials</SofaNormalText>
-					</div>
+		<div class="w-full flex flex-col gap-2 p-4 grow overflow-y-auto">
+			<template v-if="selectedTab == 'content' && material.isCourse()">
+				<div class="flex items-center gap-3">
+					<SofaNormalText>
+						{{ material.sections.length }} {{ $utils.pluralize(material.sections.length, 'section', 'sections') }}
+					</SofaNormalText>
+					<span class="size-[5px] rounded-full bg-bodyBlack" />
+					<SofaNormalText
+					>{{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }}</SofaNormalText
+					>
 				</div>
 
-				<div v-for="(section, index) in content.content.sections" :key="index" class="w-full flex flex-col gap-3">
-					<div
-						class="w-full bg-lightGray cursor-pointer rounded-custom px-4 py-4 flex flex-row items-center justify-between"
-						@click.stop="section.opened ? (section.opened = false) : (section.opened = true)">
-						<SofaNormalText customClass="!font-bold text-left !line-clamp-1">
-							{{ section.title }}
+				<div v-for="(section, index) in sections" :key="index" class="w-full flex flex-col gap-3">
+					<a class="bg-lightGray rounded-custom p-4 gap-4 flex items-center" @click="toggleSection(index)">
+						<SofaNormalText class="!font-bold !line-clamp-1" :content="section.label" />
+						<span class="grow" />
+						<SofaNormalText
+						>{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
 						</SofaNormalText>
+						<SofaIcon class="h-[8px]" name="chevron-down" :class="{ 'rotate-180': expandedSections.has(index) }" />
+					</a>
 
-						<div class="flex flex-row items-center gap-2">
-							<SofaNormalText>{{ section.data.length }} materials </SofaNormalText>
-							<SofaIcon customClass="h-[7px]" :name="section.opened ? 'chevron-up' : 'chevron-down'" />
-						</div>
-					</div>
-
-					<template v-if="section.opened">
+					<template v-if="expandedSections.has(index)">
 						<div
-							v-for="(eachData, i) in section.data"
-							:key="i"
-							class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row items-center justify-between">
-							<div :class="`flex flex-row items-center gap-3 ${!hasAccess ? 'opacity-50' : ''}`">
-								<SofaIcon customClass="h-[42px]" :name="`${eachData.type.toLowerCase()}-content` as any" />
+							v-for="item in section.items"
+							:key="item.id"
+							class="w-full bg-lightGray rounded-custom p-4 flex items-center justify-between">
+							<div class="flex items-center gap-3" :class="{ 'opacity-50': !hasAccess }">
+								<SofaIcon class="h-[42px] fill-deepGray" :name="item.icon" />
 								<div class="flex flex-col gap-1">
-									<SofaNormalText customClass="!font-bold text-left  !line-clamp-1">{{ eachData.title }}</SofaNormalText>
-									<div class="flex flex-row items-center gap-2">
-										<SofaNormalText v-if="!$screen.mobile" color="text-grayColor" customClass="text-left !line-clamp-1">
-											{{ eachData.type }}
-										</SofaNormalText>
-										<span
-											v-if="!$screen.mobile"
-											class="h-[5px] w-[5px] rounded-full bg-grayColor hidden md:!inline-block">
-										</span>
-										<SofaNormalText color="text-grayColor" customClass="text-left !line-clamp-1">
-											{{ eachData.sub }}
-										</SofaNormalText>
-									</div>
+									<SofaNormalText class="!font-bold !line-clamp-1" :content="item.title" />
+									<SofaNormalText color="text-grayColor" class="!line-clamp-1 capitalize" :content="item.info" />
 								</div>
 							</div>
 
-							<SofaIcon v-if="!hasAccess" customClass="h-[40px]" name="locked-content" />
+							<SofaIcon v-if="!hasAccess" class="h-[40px]" name="locked-content" />
 						</div>
 					</template>
 				</div>
-			</div>
-		</div>
 
-		<div v-if="selectedTab == 'questions'" class="w-full flex flex-col flex-1 rounded-b-[16px] px-4 py-2 relative">
-			<div v-if="hasAccess" class="w-full flex flex-col gap-3">
-				<div
-					v-for="(question, index) in content.questions"
-					:key="index"
-					class="w-full bg-lightGray px-4 py-4 flex flex-col gap-2 rounded-custom">
-					<div class="flex flex-row items-center gap-2">
-						<SofaNormalText color="text-grayColor" :content="question.type" />
+				<SofaButton padding="py-3 px-4" class="sticky bottom-0 mdlg:hidden mt-auto" @click="openCourse()">
+					{{
+						hasAccess
+							? 'Go to course'
+							: price && price.amount > 0
+								? `Buy ${$utils.formatPrice(price.amount, price.currency)}`
+								: 'Get course for free'
+					}}
+				</SofaButton>
+			</template>
 
-						<span class="w-[5px] h-[5px] rounded-full bg-grayColor" />
+			<template v-if="selectedTab == 'content' && material.isQuiz()">
+				<QuizWrapper v-if="hasAccess" :quiz="material">
+					<template #default="{ questions }">
+						<div class="flex flex-col gap-3">
+							<div
+								v-for="question in questions"
+								:key="question.hash"
+								class="w-full bg-lightGray p-4 flex flex-col gap-2 rounded-custom">
+								<div class="flex items-center gap-2">
+									<SofaNormalText color="text-grayColor" :content="question.label" />
+									<span class="size-[5px] rounded-full bg-grayColor" />
+									<SofaNormalText color="text-grayColor" :content="$utils.prettifyTime(question.timeLimit)" />
+								</div>
+								<SofaNormalText class="!font-bold" :content="question.content" />
+							</div>
+							<SofaButton padding="py-3 px-4" class="sticky bottom-0 mdlg:hidden mt-auto" @click="openQuiz()">
+								{{ hasAccess ? 'Start' : 'Go to course' }}
+							</SofaButton>
+						</div>
+					</template>
+				</QuizWrapper>
 
-						<SofaNormalText color="text-grayColor" :content="question.duration" />
-					</div>
-
-					<SofaNormalText customClass="text-left !font-bold" :content="question.content" />
-				</div>
-			</div>
-
-			<div v-if="!hasAccess" class="w-full flex flex-col gap-3 pb-4">
 				<SofaEmptyState
+					v-if="!hasAccess"
 					title="You have no access"
 					subTitle="Get the course it is in to use"
 					actionLabel="Go to course"
-					:action="() => $router.push(`/marketplace/${content.courseId}?type=course`)"
+					:action="openQuiz"
 					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
-			</div>
+			</template>
 
-			<div
-				v-if="content.type == 'quiz'"
-				class="sticky bottom-0 w-full flex items-center justify-center mdlg:pt-3 mdlg:pb-0 mdlg:hidden py-4">
-				<div class="md:!w-auto w-full flex flex-col">
-					<SofaButton
-						padding="md:!py-1 py-3 px-4"
-						customClass="md:!w-auto w-full"
-						@click="hasAccess ? openQuiz() : $router.push(`/marketplace/${content.courseId}?type=course`)">
-						{{ hasAccess ? 'Start' : 'Go to course' }}
-					</SofaButton>
-				</div>
-			</div>
-		</div>
-
-		<div v-if="selectedTab == 'ratings'" class="w-full flex flex-col rounded-b-[16px] px-4 py-2 relative">
-			<div class="w-full flex flex-col gap-3 pb-4">
-				<div class="w-full bg-lightGray rounded-custom mdlg:p-4 p-3 flex gap-3 items-center">
-					<div class="flex flex-col py-4 px-2 mdlg:!w-[200px] w-[200px]">
-						<div class="mdlg:!px-7 px-3 py-4 flex flex-col gap-2 items-center justify-center border-r-2 border-darkLightGray">
-							<div class="flex flex-row">
-								<SofaNormalText customClass="mdlg:!text-xl !text-lg">
-									{{ content.ratings.avg }}
-								</SofaNormalText>
-								<SofaNormalText customClass="mdlg:!text-xl  !text-lg" color="text-grayColor"> /5 </SofaNormalText>
-							</div>
-							<SofaRatings v-model="content.ratings.avg" size="h-[15px] mdlg:!h-[17px]" />
-
-							<SofaNormalText color="text-grayColor">
-								{{ content.ratings.label }}
-							</SofaNormalText>
+			<template v-if="selectedTab === 'ratings'">
+				<div class="bg-lightGray rounded-custom p-4 flex gap-3 items-center">
+					<div class="p-4 min-w-[150px] shrink-0 flex flex-col gap-2 items-center justify-center border-r-2 border-darkLightGray">
+						<div class="flex items-center">
+							<SofaNormalText class="mdlg:!text-xl !text-lg" :content="`${material.ratings.avg}`" />
+							<SofaNormalText class="mdlg:!text-xl !text-lg" color="text-grayColor"> /5 </SofaNormalText>
 						</div>
+						<SofaRatings v-model="material.ratings.avg" size="h-[15px] mdlg:h-[17px]" />
+						<SofaNormalText
+							color="text-grayColor"
+							:content="`${material.ratings.total} ${$utils.pluralize(material.ratings.total, 'rating', 'ratings')}`" />
 					</div>
 
-					<div class="w-full flex flex-col gap-2">
+					<div class="grow flex flex-col gap-2">
 						<div
-							v-for="(rating, index) in content.ratings.stats"
-							:key="index"
-							class="w-full flex flex-row items-center justify-between gap-3">
-							<SofaNormalText
-								customClass="!text-xs mdlg:!text-xs"
-								:color="`${content.ratings.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'}`">
-								{{ index }} stars
+							v-for="(rating, key) in stats"
+							:key="key"
+							class="w-full flex items-center justify-between gap-3"
+							:class="rating.count === 0 ? 'text-grayColor' : 'text-bodyBlack'">
+							<SofaNormalText class="!text-xs mdlg:!text-xs" color="text-current">
+								{{ key }} {{ $utils.pluralize(Number(key), 'star', 'stars') }}
 							</SofaNormalText>
-							<div class="grow h-[8px] rounded-[8px] bg-darkLightGray relative">
-								<div
-									class="h-full absolute top-0 left-0 bg-primaryYellow rounded-[8px]"
-									:style="`width: ${(content.ratings.stats[index] / content.ratings.count) * 100}%;`"></div>
+							<div class="grow h-2 rounded-full bg-darkLightGray">
+								<div class="h-full bg-primaryYellow rounded-full" :style="`width: ${rating.percentage * 100}%;`" />
 							</div>
 
-							<SofaNormalText
-								customClass="!text-xs mdlg:!text-xs"
-								:color="`${content.ratings.stats[index] == 0 ? 'text-grayColor' : 'text-bodyBlack'}`">
-								({{ content.ratings.stats[index] }})
-							</SofaNormalText>
+							<SofaNormalText class="!text-xs" color="text-current"> ({{ rating.count }}) </SofaNormalText>
 						</div>
 					</div>
 				</div>
 
-				<div
-					v-for="(review, index) in content.ratings.reviews"
-					:key="index"
-					class="w-full bg-lightGray rounded-custom mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row gap-3 items-start">
-					<div>
-						<SofaAvatar :photoUrl="review.user.photoUrl" :size="44" :userId="review.user.id" />
-					</div>
+				<div v-for="review in reviews" :key="review.hash" class="bg-lightGray rounded-custom mdlg:p-4 p-3 flex gap-3 items-start">
+					<SofaAvatar :photoUrl="review.user.bio.photo?.link" :size="44" :userId="review.user.id" />
 
 					<div class="flex flex-col gap-1">
-						<SofaNormalText customClass="!font-semibold">{{ review.user.name }}</SofaNormalText>
-						<SofaRatings v-model="review.rating" size="h-[14px] mdlg:!h-[16px]" />
-						<SofaNormalText customClass="text-left">
-							{{ review.review }}
-						</SofaNormalText>
+						<SofaNormalText class="!font-semibold" :content="review.user.bio.publicName" />
+						<SofaRatings v-model="review.rating" size="h-[14px] mdlg:h-[16px]" />
+						<SofaNormalText :content="review.message" />
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div v-if="selectedTab == 'creator'" class="w-full flex flex-col rounded-b-2xl px-4 py-2 relative pb-4">
-			<div class="w-full bg-lightGray rounded-custom px-4 py-4 flex flex-row gap-4 mdlg:!items-center items-start">
-				<SofaAvatar :photoUrl="content.user.photoUrl" :size="$screen.desktop ? 150 : 100" />
-
-				<div class="flex flex-col gap-1">
-					<div class="flex flex-row gap-2 items-center">
-						<SofaNormalText customClass="!font-bold">{{ content.user.name }}</SofaNormalText>
-						<SofaIcon customClass="h-[16px]" name="verify" />
-					</div>
-
-					<SofaNormalText>
-						{{ content.user.role }}
-					</SofaNormalText>
-
-					<div class="w-full flex flex-row items-center gap-4 pt-3">
-						<div class="flex flex-row gap-2 items-center">
-							<SofaIcon customClass="h-[40px] hidden mdlg:!inline-block" name="profile-quiz" />
-							<div class="flex flex-col gap-1 items-start justify-start">
-								<SofaNormalText> Quizzes </SofaNormalText>
-								<SofaNormalText customClass="!font-bold mdlg:!text-base">
-									{{ content.user.stats.quizzes }}
-								</SofaNormalText>
-							</div>
-						</div>
-
-						<div class="flex flex-row gap-2 items-center">
-							<SofaIcon customClass="h-[40px] hidden mdlg:!inline-block" name="profile-course" />
-							<div class="flex flex-col gap-1 items-start justify-start">
-								<SofaNormalText> Courses </SofaNormalText>
-								<SofaNormalText customClass="!font-bold mdlg:!text-base">
-									{{ content.user.stats.courses }}
-								</SofaNormalText>
-							</div>
-						</div>
-
-						<div class="flex flex-row gap-2 items-center">
-							<SofaIcon customClass="h-[40px] hidden mdlg:!inline-block" name="profile-followers" />
-							<div class="flex flex-col gap-1 items-start justify-start">
-								<SofaNormalText> Followers </SofaNormalText>
-								<SofaNormalText customClass="!font-bold mdlg:!text-base">
-									{{ content.user.stats.followers }}
-								</SofaNormalText>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div
-			v-if="selectedTab == 'similar_courses' && content.type == 'course'"
-			class="w-full flex flex-col rounded-b-[16px] px-4 py-2 relative pb-4">
-			<div
-				v-if="similarContents?.length"
-				class="lg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
-				<div
-					class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 mdlg:px-0 py-2 mdlg:!py-0 mdlg:pt-0 mdlg:!pr-0 pr-4">
-					<StudyMaterialCard v-for="m in similarContents" :key="m.hash" type="activity" :material="m" />
-				</div>
-			</div>
-			<template v-else>
-				<div class="w-full flex flex-col gap-3">
-					<SofaEmptyState
-						title="No similar course found"
-						subTitle="Discover thousands of materials to buy, created by verified experts"
-						actionLabel="Marketplace"
-						:action="() => $router.push('/marketplace')" />
 				</div>
 			</template>
-		</div>
-	</div>
 
-	<div v-if="content.type == 'course'" class="md:!hidden flex flex-col w-full bg-white p-4">
-		<SofaButton
-			v-if="!hasAccess"
-			padding="px-6 py-3"
-			:customClass="`${content.status == 'published' ? '' : 'bg-opacity-50'} w-full`"
-			@click="content.status == 'published' ? buyCourse() : null">
-			{{ content.price > 0 ? `Buy ${$utils.formatPrice(content.price, content.currency)}` : 'Get course for free' }}
-		</SofaButton>
-		<SofaButton v-else padding="px-6 py-3" customClass="w-full" @click="$router.push(`/study/courses/${content.id}`)">
-			Go to course
-		</SofaButton>
+			<template v-if="selectedTab === 'similar'">
+				<div v-if="similarMaterials.length" class="flex mdlg:flex-col mdlg:gap-4 gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
+					<StudyMaterialCard v-for="m in similarMaterials" :key="m.hash" type="activity" :material="m" />
+				</div>
+				<SofaEmptyState
+					v-else
+					title="No similar course found"
+					subTitle="Discover thousands of materials to buy, created by verified experts"
+					actionLabel="Marketplace"
+					:action="() => $router.push('/marketplace')" />
+			</template>
+		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
+import { useReviews } from '@app/composables/interactions/reviews'
+import { useTagsInList } from '@app/composables/interactions/tags'
 import { openMaterial, reportMaterial, shareMaterialLink } from '@app/composables/library'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
-import { useHasAccess } from '@app/composables/study'
+import { useHasAccess, useSimilar } from '@app/composables/study'
+import { useCourseSections } from '@app/composables/study/courses'
 import { saveToFolder } from '@app/composables/study/folders'
+import { InteractionEntities } from '@modules/interactions'
 import { Purchasables } from '@modules/payment'
-import { CourseEntity, QuizEntity } from '@modules/study'
-import { ContentDetails } from 'sofa-logic'
+import { StudyMaterial } from '@modules/study'
+import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
-	content: ContentDetails
-	similarContents: (QuizEntity | CourseEntity)[]
+	material: StudyMaterial
 }>()
 
-const selectedTab = ref('content')
+const { id } = useAuth()
 const router = useRouter()
+const expandedSections = ref(new Set<number>([0]))
+const { sections } = useCourseSections(computed(() => (props.material.isCourse() ? props.material.sections : [])))
+const { tags } = useTagsInList(computed(() => props.material.tagIds))
 const { hasAccess: userHasAccess } = useHasAccess()
-const { createPurchase } = useCreatePurchase(props.content.id, Purchasables.courses)
+const { createPurchase } = useCreatePurchase(props.material.id, Purchasables.courses)
+const { materials: similarMaterials } = useSimilar(props.material)
+const { reviews, stats } = useReviews({
+	id: props.material.id,
+	type: props.material.isCourse() ? InteractionEntities.courses : InteractionEntities.quizzes,
+})
 
-const buyCourse = async () => {
-	const material = props.content.original
+const hasAccess = computed(() => userHasAccess.value(props.material))
+const price = computed(() => (props.material.isCourse() ? props.material.price : null))
+const color = computed(() => (props.material.isQuiz() ? 'text-primaryPurplePink' : 'text-primaryPurple'))
+const label = computed(() => (props.material.isQuiz() ? 'Quiz - Learn' : 'Course'))
+const sub = computed(() =>
+	props.material.isQuiz()
+		? `${props.material.questions.length} ${Logic.Common.pluralize(props.material.questions.length, 'question', 'questions')}`
+		: `${props.material.sections.length} ${Logic.Common.pluralize(props.material.sections.length, 'topic', 'topics')}`,
+)
+
+const openQuiz = () => {
+	if (!props.material.isQuiz()) return
+	if (hasAccess.value) return openMaterial(props.material)
+	router.push(`/marketplace/${props.material.courseId}?type=course`)
+}
+
+const openCourse = () => {
+	const material = props.material
 	if (!material.isCourse()) return
+	if (hasAccess.value) return router.push(`/study/courses/${props.material.id}`)
 	useModals().payment.selectPaymentMethod.open({
 		price: material.price,
 		autoSelect: true,
@@ -388,57 +285,27 @@ const buyCourse = async () => {
 	})
 }
 
-const openQuiz = () => {
-	openMaterial(props.content.original)
+const toggleSection = (index: number) => {
+	if (expandedSections.value.has(index)) expandedSections.value.delete(index)
+	else expandedSections.value.add(index)
 }
 
-const hasAccess = computed(() => userHasAccess.value(props.content.original))
-
-const tabs = ref<{ name: string; key: string }[]>([])
-
-const setContent = () => {
-	tabs.value.length = 0
-
-	if (props.content.type == 'quiz') {
-		tabs.value.push({
-			name: 'Questions',
-			key: 'questions',
-		})
-
-		selectedTab.value = 'questions'
-	} else {
-		tabs.value.push({
-			name: 'Content',
-			key: 'content',
-		})
-
-		selectedTab.value = 'content'
-	}
-
-	tabs.value.push(
-		{
-			name: 'Ratings',
-			key: 'ratings',
-		},
-		// {
-		//   name: "Creator",
-		//   key: "creator",
-		// }
-	)
-
-	if (props.content.type == 'course') {
-		tabs.value.push({
-			name: 'Similar courses',
-			key: 'similar_courses',
-		})
-	}
-}
-
-watch(
-	() => props.content.type,
-	() => {
-		setContent()
-	},
-	{ immediate: true },
+const tabs = computed(
+	() =>
+		[
+			{
+				name: props.material.isQuiz() ? 'Questions' : 'Content',
+				key: 'content',
+			},
+			{
+				name: 'Ratings',
+				key: 'ratings',
+			},
+			{
+				name: props.material.isQuiz() ? 'Similar Quizzes' : 'Similar Courses',
+				key: 'similar',
+			},
+		] as const,
 )
+const selectedTab = ref<(typeof tabs)['value'][number]['key']>('content')
 </script>

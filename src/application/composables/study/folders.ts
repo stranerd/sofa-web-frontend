@@ -6,9 +6,9 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { Logic } from 'sofa-logic'
-import { CourseEntity, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, QuizEntity } from '@modules/study'
+import { StudyMaterial, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases } from '@modules/study'
 
-export const saveToFolder = (entity: CourseEntity | QuizEntity) => {
+export const saveToFolder = (entity: StudyMaterial) => {
 	useModals().study.saveToFolder.open({ entity })
 }
 

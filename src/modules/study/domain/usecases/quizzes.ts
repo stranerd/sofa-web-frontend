@@ -35,6 +35,10 @@ export class QuizzesUseCase {
 		return await this.repository.publish(id)
 	}
 
+	async similar(id: string) {
+		return await this.repository.similar(id)
+	}
+
 	async getUserQuizzes(userId: string) {
 		const conditions: QueryParams = {
 			where: [

@@ -40,10 +40,8 @@
 import { computed, ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
-import { CourseEntity, QuizEntity } from '@modules/study'
+import { StudyMaterial } from '@modules/study'
 import { SofaNormalText } from 'sofa-ui-components'
-
-type Material = QuizEntity | CourseEntity
 
 const props = defineProps<{
 	close: () => void
@@ -69,12 +67,12 @@ const add = () => {
 	props.close()
 }
 
-const hasMaterial = (material: Material) => {
+const hasMaterial = (material: StudyMaterial) => {
 	const type = material.isCourse() ? 'course' : 'quiz'
 	return selectedMaterials.value.some((m) => m.id === material.id && m.type === type)
 }
 
-const toggleMaterial = (material: Material) => {
+const toggleMaterial = (material: StudyMaterial) => {
 	const type = material.isCourse() ? 'course' : 'quiz'
 	const inListIndex = selectedMaterials.value.findIndex((m) => m.id === material.id && m.type === type)
 	if (inListIndex !== -1) selectedMaterials.value.splice(inListIndex, 1)

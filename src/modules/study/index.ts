@@ -4,6 +4,8 @@ import { FolderRepository } from './data/repositories/folders'
 import { QuestionRepository } from './data/repositories/questions'
 import { QuizRepository } from './data/repositories/quizzes'
 import { StudyRepository } from './data/repositories/study'
+import { CourseEntity } from './domain/entities/courses'
+import { QuizEntity } from './domain/entities/quizzes'
 import { CoursesUseCase } from './domain/usecases/courses'
 import { FilesUseCase } from './domain/usecases/files'
 import { FoldersUseCase } from './domain/usecases/folders'
@@ -33,3 +35,4 @@ export { Coursable, DraftStatus, FileType, FolderSaved, QuestionTypes, QuizModes
 export type { CoursableAccess, ExtendedCourseSections, ExtendedCourseSectionItem, QuestionAnswer, StudyKeys } from './domain/types'
 
 export type { QuestionFromModel } from './data/models/questions'
+export type StudyMaterial = CourseEntity | QuizEntity

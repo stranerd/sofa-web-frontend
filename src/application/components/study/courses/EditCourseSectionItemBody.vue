@@ -16,8 +16,8 @@
 						<span class="size-[5px] rounded-full bg-grayColor" />
 						<SofaNormalText color="text-grayColor" :content="$utils.prettifyTime(question.timeLimit)" />
 					</div>
-					<SofaNormalText class="text-left !font-bold" :content="question.content" />
-					<SofaNormalText v-if="showAnswers" class="text-left" :content="question.answer" />
+					<SofaNormalText class="!font-bold" :content="question.content" />
+					<SofaNormalText v-if="showAnswers" :content="question.answer" />
 				</div>
 			</template>
 		</QuizWrapper>

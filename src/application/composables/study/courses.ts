@@ -8,7 +8,15 @@ import { useSuccessHandler } from '../core/states'
 import { useFilesInList } from './files-list'
 import { useQuizzesInList } from './quizzes-list'
 import { Logic } from 'sofa-logic'
-import { Coursable, CourseEntity, CourseFactory, CourseSectionsFactory, CoursesUseCases, ExtendedCourseSections } from '@modules/study'
+import {
+	Coursable,
+	CourseEntity,
+	CourseFactory,
+	CourseSectionsFactory,
+	CoursesUseCases,
+	ExtendedCourseSections,
+	FileType,
+} from '@modules/study'
 
 const store = {} as Record<
 	string,
@@ -157,11 +165,30 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 				.map((item) => {
 					if (item.type === Coursable.file) {
 						const file = files.value.find((f) => f.id === item.id)
-						if (file) return { ...item, file }
+						if (file)
+							return {
+								...item,
+								file,
+								title: file.title,
+								icon:
+									file.type === FileType.document
+										? ('file' as IconName)
+										: file.type === FileType.image
+											? ('image-course' as IconName)
+											: ('video-course' as IconName),
+								info: file.type,
+							}
 					}
 					if (item.type === Coursable.quiz) {
 						const quiz = quizzes.value.find((q) => q.id === item.id)
-						if (quiz) return { ...item, quiz }
+						if (quiz)
+							return {
+								...item,
+								quiz,
+								title: quiz.title,
+								icon: 'quiz' as IconName,
+								info: `${item.quizMode} - ${Logic.Common.formatNumber(quiz.questions.length)} ${Logic.Common.pluralize(quiz.questions.length, 'question', 'questions')}`,
+							}
 					}
 				})
 				.filter(Boolean)

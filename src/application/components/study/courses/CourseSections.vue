@@ -7,11 +7,11 @@
 					class="rounded-custom p-3 flex flex-col gap-1 border border-grayColor bg-white text-bodyBlack shrink-0"
 					:class="{ '!bg-primaryPurple !border-primaryPurple !text-white': item?.id === listItem.id }"
 					@click="onClickItem(sectionIndex, itemIndex)">
-					<SofaNormalText color="text-current">{{ section.label }} - {{ getItemTitle(listItem) }}</SofaNormalText>
+					<SofaNormalText color="text-current">{{ section.label }} - {{ listItem.title }}</SofaNormalText>
 
 					<span class="w-full flex items-center gap-2">
-						<SofaIcon :name="getItemIcon(listItem)" class="h-[15px] fill-current" />
-						<SofaNormalText color="text-current" :content="getItemInfo(listItem)" class="capitalize" />
+						<SofaIcon :name="listItem.icon" class="h-[15px] fill-current" />
+						<SofaNormalText color="text-current" :content="listItem.info" class="capitalize" />
 					</span>
 				</a>
 			</template>
@@ -61,10 +61,10 @@
 							class="flex items-center gap-2 p-2"
 							:class="{ 'bg-lightBlue rounded-lg py-2': item?.id === sections[sectionIndex].items[itemIndex].id }"
 							@click="onClickItem(sectionIndex, itemIndex)">
-							<SofaIcon :name="getItemIcon(sections[sectionIndex].items[itemIndex])" class="h-[16px] fill-deepGray" />
+							<SofaIcon :name="sections[sectionIndex].items[itemIndex].icon" class="h-[16px] fill-deepGray" />
 							<SofaNormalText
 								color="text-deepGray"
-								:content="getItemTitle(sections[sectionIndex].items[itemIndex])"
+								:content="sections[sectionIndex].items[itemIndex].title"
 								class="truncate flex-1" />
 							<SofaIcon
 								v-if="edit"
@@ -102,7 +102,7 @@ import Draggable from 'vuedraggable'
 import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
 import { useDeleteFile } from '@app/composables/study/files'
-import { Coursable, CourseEntity, ExtendedCourseSectionItem, FileType } from '@modules/study'
+import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
 import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
@@ -142,28 +142,6 @@ function toggleLabelSection(index: number) {
 }
 function closeLabelSection(index: number) {
 	if (editedLabelSections.value.has(index)) editedLabelSections.value.delete(index)
-}
-
-const getItemTitle = (item: ExtendedCourseSectionItem) => {
-	if (item.type == Coursable.quiz) return item.quiz.title
-	if (item.type == Coursable.file) return item.file.title
-	return ''
-}
-
-const getItemIcon = (item: ExtendedCourseSectionItem) => {
-	if (item.type === Coursable.quiz) return 'quiz'
-	if (item.type === Coursable.file) {
-		if (item.fileType === FileType.document) return 'file'
-		if (item.fileType === FileType.image) return 'image-course'
-		if (item.fileType === FileType.video) return 'video-course'
-	}
-	return 'file'
-}
-
-const getItemInfo = (item: ExtendedCourseSectionItem) => {
-	if (item.type == Coursable.quiz) return `${item.quizMode} - ${Logic.Common.formatNumber(item.quiz.questions.length)} questions`
-	if (item.type == Coursable.file) return `${item.fileType}`
-	return ''
 }
 
 const getItemId = (item: ExtendedCourseSectionItem) => `course-section-item-${item.type}-${item.id}`

@@ -1,35 +1,30 @@
 <template>
-	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4">
-		<div class="mdlg:!flex hidden flex-row justify-between items-center w-full">
-			<SofaNormalText color="text-grayColor" class="w-full flex flex-row justify-start gap-1">
-				<a @click="$utils.goBack()">Marketplace </a>
+	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4" :hide="{ bottom: true }">
+		<div class="mdlg:flex hidden justify-between items-center w-full">
+			<SofaNormalText color="text-grayColor" class="w-full flex justify-start gap-1">
+				<router-link to="/marketplace">Marketplace</router-link>
 				<span> / {{ contentDetails.title }}</span>
 			</SofaNormalText>
 		</div>
-		<div
-			class="w-full flex mdlg:!hidden flex-row items-center z-[100] gap-3 justify-between bg-lightGray py-4 px-4 sticky top-0 left-0">
-			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
-			<SofaNormalText customClass="!font-bold !text-base">
+		<div class="w-full flex mdlg:hidden items-center z-[10] gap-3 justify-between bg-lightGray p-4 sticky top-0">
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+			<SofaNormalText class="!font-bold !text-base">
 				{{ contentDetails.type == 'course' ? 'Course details' : 'Quiz details' }}
 			</SofaNormalText>
-			<div>
-				<SofaIcon customClass="h-[15px] invisible" name="back-arrow" />
-			</div>
+			<span class="w-4" />
 		</div>
-		<div class="w-full bg-white rounded-[16px] flex flex-col grow overflow-y-auto">
-			<ContentDetails v-if="contentDetails.original" :content="contentDetails" :similarContents="similarContents" />
-		</div>
+		<ContentDetails
+			v-if="contentDetails.original"
+			:material="contentDetails.original"
+			class="w-full bg-white mdlg:rounded-2xl grow overflow-y-auto" />
 	</ExpandedLayout>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useCreateView } from '@app/composables/interactions/views'
-import { InteractionEntities } from '@modules/interactions'
-import { QuestionEntity, QuestionsUseCases } from '@modules/study'
-import { Logic } from 'sofa-logic'
 import ContentDetails from '@app/components/study/ContentDetails.vue'
+import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'MarketplaceIdPage',
@@ -50,18 +45,6 @@ export default defineComponent({
 			},
 			{
 				domain: 'Study',
-				property: 'AllReviews',
-				method: 'GetReviews',
-				params: ['courses'],
-				useRouteId: true,
-				ignoreProperty: true,
-				condition: {
-					routeSearchItem: 'fullPath',
-					searchQuery: 'course',
-				},
-			},
-			{
-				domain: 'Study',
 				property: 'SingleQuiz',
 				method: 'GetQuiz',
 				params: [],
@@ -72,26 +55,6 @@ export default defineComponent({
 					searchQuery: 'quiz',
 				},
 			},
-			{
-				domain: 'Study',
-				property: 'AllReviews',
-				method: 'GetReviews',
-				params: ['quizzes'],
-				useRouteId: true,
-				ignoreProperty: true,
-				condition: {
-					routeSearchItem: 'fullPath',
-					searchQuery: 'quiz',
-				},
-			},
-			{
-				domain: 'Study',
-				property: 'Tags',
-				method: 'GetTags',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: true,
-			},
 		],
 	},
 	setup() {
@@ -100,243 +63,50 @@ export default defineComponent({
 		})
 
 		const SingleCourse = ref(Logic.Study.SingleCourse)
-		const SingleCourseFiles = ref(Logic.Study.SingleCourseFiles)
-		const SingleCourseQuizzes = ref(Logic.Study.SingleCourseQuizzes)
-
 		const SingleQuiz = ref(Logic.Study.SingleQuiz)
-
-		const AllReviews = ref(Logic.Study.AllReviews)
-
-		const similarContents = ref<any[]>([])
 
 		const contentDetails = reactive(Logic.Study.contentDetails)
 
 		const setCourseData = () => {
 			if (SingleCourse.value) {
 				contentDetails.original = SingleCourse.value
-				contentDetails.id = SingleCourse.value.id
-				contentDetails.route = `/marketplace/${SingleCourse.value.id}?type=course`
-				contentDetails.type = 'course'
-				contentDetails.title = SingleCourse.value.title
-				contentDetails.price = SingleCourse.value.price.amount
-				contentDetails.currency = SingleCourse.value.price.currency
-				contentDetails.status = SingleCourse.value.status
-				contentDetails.image = SingleCourse.value.photo?.link ?? '/images/default.svg'
-				contentDetails.info = SingleCourse.value.description
-				contentDetails.lastUpdated = `Last updated ${Logic.Common.formatTime(SingleCourse.value.createdAt)}`
-				contentDetails.labels.color = 'orange'
-				contentDetails.labels.main = 'Course'
-				contentDetails.labels.sub = `${SingleCourse.value.sections.length} materials`
-				contentDetails.tags = SingleCourse.value.tagIds.map((id) => Logic.Study.GetTagName(id))
-				contentDetails.user.name = SingleCourse.value.user.bio.publicName
-				contentDetails.user.photoUrl = SingleCourse.value.user.bio.photo ? SingleCourse.value.user.bio.photo.link : ''
-				contentDetails.user.id = SingleCourse.value.user.id
-				contentDetails.user.roles = SingleCourse.value.user.roles
-
-				contentDetails.content.materialsCount = SingleCourse.value.coursables.length
-
-				contentDetails.ratings.label = `${SingleCourse.value.ratings.count} rating${
-					SingleCourse.value.ratings.count > 1 ? 's' : ''
-				}`
-				contentDetails.ratings.avg = SingleCourse.value.ratings.avg
-				contentDetails.ratings.count = SingleCourse.value.ratings.count
-
-				// set reviews
-				contentDetails.ratings.stats['1'] = 0
-				contentDetails.ratings.stats['2'] = 0
-				contentDetails.ratings.stats['3'] = 0
-				contentDetails.ratings.stats['4'] = 0
-				contentDetails.ratings.stats['5'] = 0
-
-				AllReviews.value?.results.forEach((review) => {
-					contentDetails.ratings.stats[`${review.rating}`]++
-					contentDetails.ratings.reviews.push({
-						rating: review.rating,
-						review: review.message,
-						user: {
-							name: review.user.bio.publicName,
-							photoUrl: review.user.bio.photo?.link || '',
-							id: review.user.id,
-						},
-					})
-				})
-
-				// set sections
-
-				contentDetails.content.sections.length = 0
-
-				SingleCourse.value.sections.forEach((section, index) => {
-					contentDetails.content.sections.push({
-						title: section.label,
-						opened: index == 0,
-						data: [],
-					})
-
-					section.items.forEach((item) => {
-						if (item.type == 'quiz') {
-							const quizData = SingleCourseQuizzes.value?.filter((quiz) => quiz.id == item.id)
-							if (quizData?.length) {
-								contentDetails.content.sections[index].data.push({
-									isLocked: true,
-									sub: `${quizData[0].questions.length} question${quizData[0].questions.length > 1 ? 's' : ''}`,
-									title: quizData[0].title,
-									type: 'Quiz',
-								})
-							}
-						} else {
-							const fileData = SingleCourseFiles.value?.filter((file) => file.id == item.id)
-
-							if (fileData?.length) {
-								if (fileData[0].type == 'video') {
-									contentDetails.content.sections[index].data.push({
-										isLocked: true,
-										sub: fileData[0].description,
-										title: fileData[0].title,
-										type: 'Video',
-									})
-								} else {
-									contentDetails.content.sections[index].data.push({
-										isLocked: true,
-										sub: fileData[0].description,
-										title: fileData[0].title,
-										type: 'Document',
-									})
-								}
-							}
-						}
-					})
-				})
 			}
 		}
 
 		const setQuizData = () => {
 			if (SingleQuiz.value) {
 				contentDetails.original = SingleQuiz.value
-				contentDetails.type = 'quiz'
-				contentDetails.id = SingleQuiz.value.id
-				contentDetails.route = `/marketplace/${SingleQuiz.value.id}?type=quiz`
-				contentDetails.title = SingleQuiz.value.title
-				contentDetails.price = 0
-				contentDetails.status = SingleQuiz.value.status
-				contentDetails.image = SingleQuiz.value.photo ? SingleQuiz.value.photo.link : '/images/default.svg'
-				contentDetails.info = SingleQuiz.value.description
-				contentDetails.lastUpdated = `Last updated ${Logic.Common.formatTime(SingleQuiz.value.createdAt)}`
-				contentDetails.labels.sub = `${SingleQuiz.value.questions.length} questions`
-				contentDetails.labels.color = 'pink'
-				contentDetails.labels.main = 'Quiz'
-				contentDetails.tags = SingleQuiz.value.tagIds.map((id) => Logic.Study.GetTagName(id))
-
-				contentDetails.user.name = SingleQuiz.value.user?.bio.publicName
-				contentDetails.user.photoUrl = SingleQuiz.value.user.bio.photo ? SingleQuiz.value.user.bio.photo.link : ''
-				contentDetails.user.id = SingleQuiz.value.user.id
-				contentDetails.user.roles = SingleQuiz.value.user.roles
-
-				contentDetails.ratings.label = `${SingleQuiz.value.ratings.count} rating${SingleQuiz.value.ratings.count > 1 ? 's' : ''}`
-				contentDetails.ratings.avg = SingleQuiz.value.ratings.avg
-				contentDetails.ratings.count = SingleQuiz.value.ratings.count
-
-				contentDetails.hasCourse = SingleQuiz.value.courseId ? true : false
-				contentDetails.courseId = SingleQuiz.value.courseId || ''
-
-				// set reviews
-				contentDetails.ratings.stats['1'] = 0
-				contentDetails.ratings.stats['2'] = 0
-				contentDetails.ratings.stats['3'] = 0
-				contentDetails.ratings.stats['4'] = 0
-				contentDetails.ratings.stats['5'] = 0
-
-				AllReviews.value?.results.forEach((review) => {
-					contentDetails.ratings.stats[`${review.rating}`]++
-					contentDetails.ratings.reviews.push({
-						rating: review.rating,
-						review: review.message,
-						user: {
-							name: review.user.bio.publicName,
-							photoUrl: review.user.bio.photo?.link || '',
-							id: review.user.id,
-						},
-					})
-				})
-
-				contentDetails.questions.length = 0
-				QuestionsUseCases.getAll(SingleQuiz.value.id).then((questions) => {
-					questions.results.forEach((question) => {
-						contentDetails.questions.push({
-							type: QuestionEntity.getLabel(question.type),
-							content: question.question,
-							duration: Logic.Common.prettifyTime(question.timeLimit),
-							answer: '',
-						})
-					})
-				})
 			}
 		}
 
-		const setSimilarContents = () => {
-			if (SingleQuiz.value) {
-				Logic.Study.GetSimilarQuizzes(SingleQuiz.value.id).then((data) => {
-					similarContents.value.length = 0
-					if (data) {
-						data.forEach((quiz) => {
-							similarContents.value.push(quiz)
-						})
-					}
-				})
-			}
+		watch(
+			SingleCourse,
+			() => {
+				if (SingleCourse.value) {
+					setCourseData()
+				}
+			},
+			{ immediate: true },
+		)
 
-			if (SingleCourse.value) {
-				Logic.Study.GetSimilarCourses(SingleCourse.value.id).then((data) => {
-					similarContents.value.length = 0
-					if (data) {
-						data.forEach((course) => {
-							similarContents.value.push(course)
-						})
-					}
-				})
-			}
-		}
-
-		const { createView } = useCreateView()
-
-		watch(SingleCourse, () => {
-			if (SingleCourse.value) {
-				setCourseData()
-				setSimilarContents()
-			}
-		})
-
-		watch(SingleQuiz, () => {
-			if (SingleQuiz.value) {
-				setQuizData()
-				setSimilarContents()
-			}
-		})
+		watch(
+			SingleQuiz,
+			() => {
+				if (SingleQuiz.value) {
+					setQuizData()
+				}
+			},
+			{ immediate: true },
+		)
 
 		onMounted(() => {
-			const type = Logic.Common.route.query?.type?.toString()
+			// const type = Logic.Common.route.query?.type?.toString()
 			Logic.Study.watchProperty('SingleCourse', SingleCourse)
-			Logic.Study.watchProperty('SingleCourseFiles', SingleCourseFiles)
-			Logic.Study.watchProperty('SingleCourseQuizzes', SingleCourseQuizzes)
 			Logic.Study.watchProperty('SingleQuiz', SingleQuiz)
-			Logic.Study.watchProperty('AllReviews', AllReviews)
-
-			if (type === 'course') {
-				setCourseData()
-				setSimilarContents()
-				if (SingleCourse.value?.isPublished) createView({ id: SingleCourse.value.id, type: InteractionEntities.courses })
-			}
-
-			if (type === 'quiz') {
-				setQuizData()
-				setSimilarContents()
-				if (SingleQuiz.value?.isPublished) createView({ id: SingleQuiz.value.id, type: InteractionEntities.quizzes })
-			}
 		})
 
 		return {
 			contentDetails,
-			similarContents,
-			SingleQuiz,
 		}
 	},
 })
