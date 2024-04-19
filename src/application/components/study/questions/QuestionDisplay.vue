@@ -87,105 +87,96 @@
 		<template v-if="question.strippedData.type === QuestionTypes.dragAnswers">
 			<div class="w-full flex md:gap-3 gap-2 items-center flex-wrap">
 				<template v-for="(content, index) in question.splitQuestions" :key="index">
-					<Draggable
+					<VueDraggable
 						v-if="index !== 0"
 						:id="`drag-answer-${index - 1}`"
-						:list="answer.drag[index - 1]"
-						itemKey=""
+						v-model="answer.drag[index - 1]"
 						group="dragAnswers"
 						:move="move"
 						class="md:min-w-[160px] md:!h-[70px] min-w-[140px] h-[48px] rounded-xl md:p-4 px-2 flex items-center justify-center border-2"
 						:class="buildClass(answer.drag[index - 1][0], index - 1)">
-						<template #item="{ element }">
-							<div
-								class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
-								:class="isDark ? 'bg-primaryBlue' : 'bg-lightBlue'">
-								<SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
-							</div>
-						</template>
-					</Draggable>
-					<SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
-				</template>
-
-				<Draggable
-					id="drag-options"
-					:list="answer.dragOptions"
-					itemKey=""
-					group="dragAnswers"
-					:move="move"
-					class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
-					<template #item="{ element }">
 						<div
+							v-for="(element, i) in answer.drag[index - 1]"
+							:key="i"
 							class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
 							:class="isDark ? 'bg-primaryBlue' : 'bg-lightBlue'">
 							<SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
 						</div>
-					</template>
-				</Draggable>
+					</VueDraggable>
+					<SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
+				</template>
+
+				<VueDraggable
+					id="drag-options"
+					v-model="answer.dragOptions"
+					group="dragAnswers"
+					:move="move"
+					class="w-full flex items-center gap-3 pt-6 md:!h-[90px] h-[40px]">
+					<div
+						v-for="(element, i) in answer.dragOptions"
+						:key="i"
+						class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
+						:class="isDark ? 'bg-primaryBlue' : 'bg-lightBlue'">
+						<SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
+					</div>
+				</VueDraggable>
 			</div>
 		</template>
 
 		<template v-if="question.strippedData.type === QuestionTypes.sequence">
-			<Draggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full" itemKey="">
-				<template #item="{ element, index }">
-					<div class="w-full flex items-center gap-3 cursor-move">
-						<div class="p-3 rounded-xl border-2" :class="buildClass(element, index)">
-							<SofaHeaderText
-								:content="(index + 1).toString()"
-								color="text-inherit"
-								class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex" />
-						</div>
-						<div class="p-3 rounded-xl border-2 grow" :class="buildClass(element, index)">
-							<SofaHeaderText
-								:content="element"
-								color="text-inherit"
-								class="'md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex !line-clamp-1" />
-						</div>
+			<VueDraggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full">
+				<div v-for="(element, index) in answer.value" :key="index" class="w-full flex items-center gap-3 cursor-move">
+					<div class="p-3 rounded-xl border-2" :class="buildClass(element, index)">
+						<SofaHeaderText
+							:content="(index + 1).toString()"
+							color="text-inherit"
+							class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex" />
 					</div>
-				</template>
-			</Draggable>
+					<div class="p-3 rounded-xl border-2 grow" :class="buildClass(element, index)">
+						<SofaHeaderText
+							:content="element"
+							color="text-inherit"
+							class="'md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex !line-clamp-1" />
+					</div>
+				</div>
+			</VueDraggable>
 		</template>
 
 		<div v-if="question.type === QuestionTypes.match" class="w-full grid grid-cols-2 gap-4">
-			<Draggable
-				:list="question.matchQuestions"
-				group="match-questions"
-				class="col-span-1 flex flex-col gap-2"
-				itemKey=""
-				:disabled="true">
-				<template #item="{ element, index }">
-					<div
-						class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3"
-						:class="buildClass(answer.value[index], index)">
-						<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
-						<SofaHeaderText
-							color="text-inherit"
-							class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
-							:content="element" />
-					</div>
-				</template>
-			</Draggable>
+			<VueDraggable v-model="question.matchQuestions" group="match-questions" class="col-span-1 flex flex-col gap-2" :disabled="true">
+				<div
+					v-for="(element, index) in question.matchQuestions"
+					:key="index"
+					class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3"
+					:class="buildClass(answer.value[index], index)">
+					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
+					<SofaHeaderText
+						color="text-inherit"
+						class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
+						:content="element" />
+				</div>
+			</VueDraggable>
 
-			<Draggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2" itemKey="">
-				<template #item="{ element, index }">
-					<div
-						class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3 cursor-move"
-						:class="buildClass(element, index)">
-						<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(element, index)" />
-						<SofaHeaderText
-							color="text-inherit"
-							class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
-							:content="element" />
-					</div>
-				</template>
-			</Draggable>
+			<VueDraggable v-model="answer.value" group="match-answers" class="col-span-1 flex flex-col gap-2">
+				<div
+					v-for="(element, index) in answer.value"
+					:key="index"
+					class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3 cursor-move"
+					:class="buildClass(element, index)">
+					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(element, index)" />
+					<SofaHeaderText
+						color="text-inherit"
+						class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
+						:content="element" />
+				</div>
+			</VueDraggable>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, watch } from 'vue'
-import Draggable from 'vuedraggable'
+import { VueDraggable } from 'vue-draggable-plus'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
 
 const props = defineProps<{

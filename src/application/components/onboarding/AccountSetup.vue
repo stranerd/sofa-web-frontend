@@ -104,7 +104,6 @@
 				:error="typeFactory.errors.schoolType"
 				borderColor="border-transparent"
 				:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
-			<!-- :options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" /> -->
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 				<SofaSelect

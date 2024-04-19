@@ -1,6 +1,6 @@
 <template>
 	<div ref="selectRef" class="flex flex-col w-full relative group" :tabIndex="-1">
-		<SofaNormalText v-if="hasTitle" customClass="">
+		<SofaNormalText v-if="hasTitle">
 			<slot name="title" />
 		</SofaNormalText>
 		<div class="flex items-center gap-1 justify-between w-full rounded-md px-3 py-4" :class="customClass" @click="showOptions = true">
@@ -53,10 +53,6 @@ import SofaTextField from './textField.vue'
 interface SelectOption {
 	key: T
 	value: string
-	extras?: string
-	hasIcon?: boolean
-	isImage?: boolean
-	isString?: boolean
 }
 
 const props = withDefaults(

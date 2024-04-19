@@ -1,106 +1,92 @@
 <template>
-	<Draggable
+	<VueDraggable
 		v-model="factory.factories"
 		:disabled="!canEdit"
 		class="w-full flex flex-col gap-4"
 		handle=".sectionHandle"
-		itemKey=""
 		group="curriculum">
-		<template #item="{ index: sectionIndex }">
-			<div
-				v-if="curriculum[sectionIndex]"
-				:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
-				<div class="flex items-center gap-2 justify-between">
-					<SofaCustomInput
-						v-if="canEdit && editedLabelSections.has(sectionIndex)"
-						v-model="factory.factories[sectionIndex].label"
-						class="grow !px-0"
-						:autoFocus="true"
-						placeholder="Section label"
-						@onBlur="closeLabelSection(sectionIndex)"
-						@onEnter="closeLabelSection(sectionIndex)" />
-					<SofaHeaderText v-else size="base" class="grow truncate">{{ curriculum[sectionIndex].label }}</SofaHeaderText>
-					<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
-					<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle" name="reorder-gray" />
-					<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
-					<SofaIcon
-						class="h-[8px]"
-						name="chevron-down"
-						:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
-						@click.stop.prevent="toggleSection(sectionIndex)" />
-				</div>
-				<Draggable
-					v-if="expandedSections.has(sectionIndex)"
-					class="gap-4 my-5 grid grid-cols-1"
-					:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
-					:disabled="!canEdit"
-					:list="factory.factories[sectionIndex].items"
-					itemKey=""
-					handle=".itemHandle"
-					:group="`sectionItems-${sectionIndex}`">
-					<template #item="{ index: itemIndex }">
-						<a
-							v-if="curriculum[sectionIndex].items[itemIndex]"
-							class="flex gap-2 mdlg:gap-4"
-							:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
-							@click="openCurriculumItem(itemIndex, sectionIndex)">
-							<div class="flex items-center gap-2 flex-1">
-								<SofaIcon :name="curriculum[sectionIndex].items[itemIndex].icon" class="h-[16px]" />
-								<SofaNormalText
-									color="text-deepGray"
-									:content="curriculum[sectionIndex].items[itemIndex].title"
-									class="truncate" />
-								<SofaBadge v-if="showLiveBadgeForItem(curriculum[sectionIndex].items[itemIndex])" class="shrink-0">
-									LIVE
-								</SofaBadge>
-							</div>
-							<div v-if="view === CurriculumView.grid">
-								<SofaImageLoader
-									v-if="shouldShowItemImage(curriculum[sectionIndex].items[itemIndex])"
-									:photoUrl="curriculum[sectionIndex].items[itemIndex].image"
-									class="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
-								<div
-									v-else
-									class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
-									<SofaHeaderText content="LIVE" customClass="!uppercase !text-white" />
-								</div>
-							</div>
-							<div class="flex items-center gap-2 shrink-0">
-								<div class="flex items-center gap-1">
-									<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
-									<SofaNormalText
-										color="text-grayColor"
-										:content="curriculum[sectionIndex].items[itemIndex].info"
-										class="!capitalize" />
-								</div>
-								<SofaIcon v-if="canEdit" class="h-[20px] itemHandle" name="reorder-gray" />
-								<SofaIcon
-									v-if="canEdit"
-									class="h-[16px]"
-									name="trash-gray"
-									@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
-							</div>
-						</a>
-					</template>
-					<template #footer>
-						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
-							<SofaIcon name="box-add" class="h-[16px] fill-primaryBlue" />
-							<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
-						</a>
-						<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
-							<SofaIcon name="box-add" class="h-[16px] fill-primaryPink" />
-							<SofaNormalText color="text-primaryPink" content="Add study material" />
-						</a>
-					</template>
-				</Draggable>
+		<div
+			v-for="(section, sectionIndex) in curriculum"
+			:key="sectionIndex"
+			:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
+			<div class="flex items-center gap-2 justify-between">
+				<SofaCustomInput
+					v-if="canEdit && editedLabelSections.has(sectionIndex)"
+					v-model="factory.factories[sectionIndex].label"
+					class="grow !px-0"
+					:autoFocus="true"
+					placeholder="Section label"
+					@onBlur="closeLabelSection(sectionIndex)"
+					@onEnter="closeLabelSection(sectionIndex)" />
+				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
+				<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+				<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle" name="reorder-gray" />
+				<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
+				<SofaIcon
+					class="h-[8px]"
+					name="chevron-down"
+					:class="{ 'rotate-180': expandedSections.has(sectionIndex) }"
+					@click.stop.prevent="toggleSection(sectionIndex)" />
 			</div>
-		</template>
-	</Draggable>
+			<VueDraggable
+				v-if="expandedSections.has(sectionIndex)"
+				v-model="factory.factories[sectionIndex].items"
+				class="gap-4 my-5 grid grid-cols-1"
+				:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
+				:disabled="!canEdit"
+				handle=".itemHandle"
+				:group="`sectionItems-${sectionIndex}`">
+				<a
+					v-for="(item, itemIndex) in section.items"
+					:key="itemIndex"
+					class="flex gap-2 mdlg:gap-4"
+					:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
+					@click="openCurriculumItem(itemIndex, sectionIndex)">
+					<div class="flex items-center gap-2 flex-1">
+						<SofaIcon :name="item.icon" class="h-[16px]" />
+						<SofaNormalText color="text-deepGray" :content="item.title" class="truncate" />
+						<SofaBadge v-if="showLiveBadgeForItem(item)" class="shrink-0"> LIVE </SofaBadge>
+					</div>
+					<div v-if="view === CurriculumView.grid">
+						<SofaImageLoader
+							v-if="shouldShowItemImage(item)"
+							:photoUrl="item.image"
+							class="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
+						<div
+							v-else
+							class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
+							<SofaHeaderText content="LIVE" class="!uppercase !text-white" />
+						</div>
+					</div>
+					<div class="flex items-center gap-2 shrink-0">
+						<div class="flex items-center gap-1">
+							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
+							<SofaNormalText color="text-grayColor" :content="item.info" class="!capitalize" />
+						</div>
+						<SofaIcon v-if="canEdit" class="h-[20px] itemHandle" name="reorder-gray" />
+						<SofaIcon
+							v-if="canEdit"
+							class="h-[16px]"
+							name="trash-gray"
+							@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
+					</div>
+				</a>
+				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
+					<SofaIcon name="box-add" class="h-[16px] fill-primaryBlue" />
+					<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
+				</a>
+				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
+					<SofaIcon name="box-add" class="h-[16px] fill-primaryPink" />
+					<SofaNormalText color="text-primaryPink" content="Add study material" />
+				</a>
+			</VueDraggable>
+		</div>
+	</VueDraggable>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import Draggable from 'vuedraggable'
+import { VueDraggable } from 'vue-draggable-plus'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'

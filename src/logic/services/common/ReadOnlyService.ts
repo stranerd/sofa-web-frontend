@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { QueryParams, QueryResults } from '../../logic/types/common'
 import { BaseApiService } from './BaseService'
+import { QueryParams, QueryResults } from '@modules/core'
 
 export class ReadOnlyApiService<M = any, E = M> extends BaseApiService {
 	constructor(resource: string) {

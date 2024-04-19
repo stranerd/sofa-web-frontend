@@ -7,13 +7,11 @@ import {
 	ConfirmationBase,
 	ConfirmationSetup,
 	ConfirmationSetupBase,
-	Listeners,
 	LoaderSetup,
 	SuccessConfirmation,
 	SuccessConfirmationSetup,
 } from '../types/common'
 import { formatTime } from '@utils/dates'
-import { listenToMany, listenToOne } from '@modules/core'
 import { AuthDetails } from '@modules/auth'
 import { storage } from '@utils/storage'
 import { copyToClipboard, share } from '@utils/commons'
@@ -59,23 +57,6 @@ export default class Common {
 		const min = Math.floor(seconds / 60)
 		const sec = seconds % 60
 		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
-	}
-
-	public async listenToOne<Model, Entity = Model>(
-		channel: string,
-		listeners: Listeners<Entity>,
-		mapper: (model: Model) => Entity = (model) => model as unknown as Entity,
-	) {
-		return listenToOne<Model, Entity>(channel, listeners, mapper)
-	}
-
-	async listenToMany<Model, Entity = Model>(
-		channel: string,
-		listeners: Listeners<Entity>,
-		matches: (entity: Entity) => boolean = () => true,
-		mapper: (model: Model) => Entity = (model) => model as unknown as Entity,
-	) {
-		return listenToMany<Model, Entity>(channel, listeners, mapper, matches)
 	}
 
 	public SetRouter = (router: Router) => {
