@@ -25,8 +25,8 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { openMaterial } from '@app/composables/library'
 import { useMyPurchasedCourses } from '@app/composables/study/courses-list'
+import { openMaterial } from '@app/composables/study/library'
 
 export default defineComponent({
 	name: 'LibraryPurchasedPage',

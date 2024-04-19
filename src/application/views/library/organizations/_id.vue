@@ -29,7 +29,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { openMaterial } from '@app/composables/library'
+import { openMaterial } from '@app/composables/study/library'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 
 export default defineComponent({

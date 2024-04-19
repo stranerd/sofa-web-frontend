@@ -10,7 +10,7 @@
 					<RouterLink
 						:to="link.link"
 						class="hover:text-purple hover:border-b-2 border-purple"
-						:class="route.path === link.link ? 'border-b-2 border-purple text-purple' : ''">
+						:class="$route.path === link.link ? 'border-b-2 border-purple text-purple' : ''">
 						{{ link.label }}
 					</RouterLink>
 				</li>
@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useModals } from '@app/composables/core/modals'
 const links = [
 	{
@@ -55,7 +54,6 @@ const links = [
 		link: '/home/contact',
 	},
 ]
-const route = useRoute()
 const openMobileMenu = () => {
 	useModals().users.mobileMenu.open({})
 }

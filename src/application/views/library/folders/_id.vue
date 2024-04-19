@@ -29,9 +29,9 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { openMaterial } from '@app/composables/library'
 import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
+import { openMaterial } from '@app/composables/study/library'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 
 export default defineComponent({
