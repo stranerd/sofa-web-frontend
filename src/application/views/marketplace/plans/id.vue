@@ -75,7 +75,7 @@ import { Logic } from 'sofa-logic'
 import { usePlan, useSubscription } from '@app/composables/payment/plans'
 
 export default defineComponent({
-	name: 'CheckoutSubscriptionPlanIdPage',
+	name: 'MarketplacePlansIdPage',
 	routeConfig: {
 		middlewares: [
 			async ({ from, to }) => {
@@ -91,7 +91,7 @@ export default defineComponent({
 		})
 
 		const route = useRoute()
-		const planId = route.params.planId as string
+		const planId = route.params.id as string
 		const methodId = ref(null as string | null)
 
 		const { plan } = usePlan(planId)

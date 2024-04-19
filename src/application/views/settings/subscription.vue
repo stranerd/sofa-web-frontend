@@ -194,7 +194,7 @@ export default defineComponent({
 		const { renewPlan, toggleRenewPlan } = useSubscription()
 
 		const subscribeToPlan = async (plan: PlanEntity) => {
-			await router.push(`/checkout/subscription/${plan.id}?back=/settings/subscription`)
+			await router.push(`/marketplace/plans/${plan.id}?back=/settings/subscription`)
 		}
 
 		return {

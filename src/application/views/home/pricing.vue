@@ -137,7 +137,7 @@ const dynamicStyle = computed(() => {
 const choosePlan = (plan: PlanEntity) => {
 	const backRoute = '/dashboard'
 	if (plan.amount === 0) router.push(backRoute)
-	else router.push({ path: `/checkout/subscription/${plan.id}`, query: { back: backRoute } })
+	else router.push({ path: `/marketplace/plans/${plan.id}`, query: { back: backRoute } })
 }
 </script>
 
