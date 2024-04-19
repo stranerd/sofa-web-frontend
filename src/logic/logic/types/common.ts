@@ -1,17 +1,5 @@
 import { Logic } from '../modules'
 
-export { Conditions, EmitTypes, QueryKeys } from '@modules/core'
-export type { Listeners, QueryParams, QueryResults } from '@modules/core'
-
-export interface SelectOption<T = any> {
-	key: T
-	value: string
-	extras?: string
-	hasIcon?: boolean
-	isImage?: boolean
-	isString?: boolean
-}
-
 export interface LoaderSetup {
 	loading: boolean
 	loaders: string[]

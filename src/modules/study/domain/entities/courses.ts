@@ -19,7 +19,7 @@ export class CourseEntity extends PublishableEntity<CourseFromModel> implements 
 	}
 
 	get pageLink() {
-		return `/marketplace/${this.id}?type=course`
+		return `/marketplace/courses/${this.id}`
 	}
 
 	get shareLink() {

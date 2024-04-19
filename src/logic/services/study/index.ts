@@ -1,8 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { ModelApiService } from '../common/ModelService'
-import { CourseEntity, FileEntity, QuizEntity } from '@modules/study'
+import { CourseEntity, QuizEntity } from '@modules/study'
 import { QuizFromModel } from '@modules/study/data/models/quizzes'
-import { FileFromModel } from '@modules/study/data/models/files'
 import { CourseFromModel } from '@modules/study/data/models/courses'
 
 class CoursesApi extends ModelApiService<CourseFromModel, CourseEntity> {
@@ -47,16 +46,7 @@ class QuizzesApi extends ModelApiService<QuizFromModel, QuizEntity> {
 	}
 }
 
-export default class FilesApi extends ModelApiService<FileFromModel, FileEntity> {
-	constructor() {
-		super('study/files')
-	}
-
-	mapper = (data: FileFromModel) => new FileEntity(data)
-}
-
 export const StudyApi = {
 	course: new CoursesApi(),
-	file: new FilesApi(),
 	quiz: new QuizzesApi(),
 }

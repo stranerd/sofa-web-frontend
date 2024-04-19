@@ -49,12 +49,20 @@ import SofaBadge from '../SofaBadge'
 import SofaIcon from '../SofaIcon/index.vue'
 import SofaNormalText from '../SofaTypography/normalText.vue'
 import SofaTextField from './textField.vue'
-import { SelectOption } from 'sofa-logic'
+
+interface SelectOption {
+	key: T
+	value: string
+	extras?: string
+	hasIcon?: boolean
+	isImage?: boolean
+	isString?: boolean
+}
 
 const props = withDefaults(
 	defineProps<{
 		placeholder?: string
-		options?: SelectOption<T>[]
+		options?: SelectOption[]
 		customClass?: string
 		isMultiple?: boolean
 		hasTitle?: boolean

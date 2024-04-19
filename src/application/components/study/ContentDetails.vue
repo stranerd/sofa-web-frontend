@@ -271,17 +271,17 @@ const sub = computed(() =>
 const openQuiz = () => {
 	if (!props.material.isQuiz()) return
 	if (hasAccess.value) return openMaterial(props.material)
-	router.push(`/marketplace/${props.material.courseId}?type=course`)
+	router.push(props.material.noAccessPage)
 }
 
 const openCourse = () => {
 	const material = props.material
 	if (!material.isCourse()) return
-	if (hasAccess.value) return router.push(`/study/courses/${props.material.id}`)
+	if (hasAccess.value) return openMaterial(material)
 	useModals().payment.selectPaymentMethod.open({
 		price: material.price,
 		autoSelect: true,
-		onSelect: (method) => createPurchase(method).then(() => router.push(`/study/courses/${material.id}`)),
+		onSelect: (method) => createPurchase(method).then(() => openMaterial(material)),
 	})
 }
 

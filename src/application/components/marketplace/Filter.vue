@@ -178,7 +178,8 @@ const toggleOption = (option: SelectedOption) => {
 
 <script lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
-import { Conditions, Logic } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
+import { Conditions } from '@modules/core'
 
 export type SelectedOption = {
 	name: string

@@ -7,7 +7,7 @@ export class QuizEntity extends CoursableEntity<QuizFromModel> {
 	}
 
 	get pageLink() {
-		return `/marketplace/${this.id}?type=quiz`
+		return `/marketplace/quizzes/${this.id}`
 	}
 
 	get shareLink() {
@@ -19,8 +19,8 @@ export class QuizEntity extends CoursableEntity<QuizFromModel> {
 	}
 
 	get noAccessPage() {
-		if (this.courseId) return `/marketplace/${this.courseId}?type=course`
-		return `/marketplace/${this.id}?type=quiz`
+		if (this.courseId) return `/marketplace/courses/${this.courseId}`
+		return `/marketplace/quizzes/${this.id}`
 	}
 
 	search(value: string) {

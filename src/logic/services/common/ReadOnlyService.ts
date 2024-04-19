@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { QueryParams } from '../../logic/types/common'
+import { QueryParams, QueryResults } from '../../logic/types/common'
 import { BaseApiService } from './BaseService'
-import { Paginated } from 'src/logic/logic'
 
 export class ReadOnlyApiService<M = any, E = M> extends BaseApiService {
 	constructor(resource: string) {
@@ -10,7 +9,7 @@ export class ReadOnlyApiService<M = any, E = M> extends BaseApiService {
 
 	mapper: (data: M) => E = (data: M) => data as unknown as E
 
-	public async fetch(filters: QueryParams = {}): Promise<AxiosResponse<Paginated<E>>> {
+	public async fetch(filters: QueryParams = {}): Promise<AxiosResponse<QueryResults<E>>> {
 		try {
 			const response: AxiosResponse = await this.axiosInstance.get(this.getUrl(), {
 				params: filters,

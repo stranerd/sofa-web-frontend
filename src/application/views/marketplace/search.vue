@@ -150,7 +150,8 @@ import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
 import { DraftStatus } from '@modules/study'
-import { Conditions, Logic, QueryParams } from 'sofa-logic'
+import { Logic } from 'sofa-logic'
+import { Conditions, QueryParams } from '@modules/core'
 
 const search = async (query: QueryParams, returnCoursables = false) => {
 	Logic.Common.showLoading()
