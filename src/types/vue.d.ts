@@ -8,8 +8,8 @@ declare global {
 		middlewares: Middleware[]
 	}>
 
-	declare const $utils: Utils
-	declare const $screen: Screen
+	declare var $utils: Utils // eslint-disable-line no-var
+	declare var $screen: Screen // eslint-disable-line no-var
 }
 
 declare module 'vue' {
