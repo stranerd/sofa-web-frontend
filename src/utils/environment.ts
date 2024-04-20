@@ -1,5 +1,5 @@
-import { parseURL } from '@utils/commons'
-import { isAndroid, isIos } from '@utils/constants'
+import { parseURL } from './commons'
+import { isAndroid, isIos } from './constants'
 
 const isDev = import.meta.env.VITE_ENVIRONMENT === 'local'
 

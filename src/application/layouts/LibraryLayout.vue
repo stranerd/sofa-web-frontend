@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray p-4 sticky top-0 left-0">
-			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
 			<span class="w-4" />
 		</div>
@@ -181,7 +181,6 @@ import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { PlayTypes } from '@modules/plays'
 import { DraftStatus } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const { isAdmin } = useAuth()
 const playOptions = [

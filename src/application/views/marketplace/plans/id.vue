@@ -71,7 +71,6 @@
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { Logic } from 'sofa-logic'
 import { usePlan, useSubscription } from '@app/composables/payment/plans'
 
 export default defineComponent({
@@ -80,7 +79,7 @@ export default defineComponent({
 		middlewares: [
 			async ({ from, to }) => {
 				const back = (to.query.back as string) ?? from?.fullPath
-				if (back) await Logic.Common.setRedirectToRoute(back)
+				if (back) await $utils.setRedirectToRoute(back)
 			},
 			'isAuthenticated',
 		],

@@ -5,7 +5,6 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
-import { Logic } from 'sofa-logic'
 import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
@@ -127,7 +126,7 @@ export const useDeleteClass = () => {
 		},
 		{
 			pre: async (classInst) =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: `Delete ${classInst.title}`,
 					sub: 'Are you sure you want to delete this class?',
 					right: { label: 'Yes, delete' },
@@ -196,7 +195,7 @@ export const usePurchaseClass = () => {
 		error,
 	} = useAsyncFn(async (classInst: ClassEntity, selectedMethod: SelectedPaymentMethod) => {
 		await ClassesUseCases.purchase(classInst.organizationId, classInst.id, selectedMethod)
-		Logic.Common.showAlert({
+		$utils.showAlert({
 			message: 'Successfully enrolled',
 			type: 'success',
 		})

@@ -38,7 +38,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAppleSignin, useGoogleSignin } from '@app/composables/auth/signin'
-import { isIos, isWeb } from '@utils/constants'
+const { isIos, isWeb } = $utils.constants
 
 const props = defineProps({
 	signUp: Boolean,

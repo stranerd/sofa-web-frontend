@@ -108,7 +108,6 @@ import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	classInst: ClassEntity
@@ -136,7 +135,7 @@ const { similarClasses } = useSimilarClasses(props.classInst.organizationId, pro
 useMeta({ title: props.classInst.title })
 
 const shareClass = () => {
-	Logic.Common.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
+	$utils.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
 }
 const purchase = runInAuth(() => {
 	const canAccessFree = user.value ? props.classInst.canAccessForFree(user.value) : false
@@ -163,7 +162,7 @@ const enrollInClassProps = computed(() => {
 	}
 	const canAccessFree = user.value ? classInst.canAccessForFree(user.value) : false
 	return {
-		label: `Enroll for ${canAccessFree ? 'free' : Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
+		label: `Enroll for ${canAccessFree ? 'free' : $utils.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
 		handler: purchase,
 	}
 })

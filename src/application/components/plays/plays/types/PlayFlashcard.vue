@@ -9,7 +9,7 @@
 				bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
 				textColor: 'text-white',
 				click: () => {
-					if (isDone) return Logic.Common.goBack()
+					if (isDone) return $utils.goBack()
 					if (extras.canNext) return extras.next()
 					return (isDone = true)
 				},
@@ -88,7 +88,6 @@ import { ref, watch } from 'vue'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
 import { PlayEntity } from '@modules/plays'
 import { storage } from '@utils/storage'
-import { Logic } from 'sofa-logic'
 
 type QuizProps = InstanceType<typeof Quiz>['$props']
 

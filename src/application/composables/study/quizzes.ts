@@ -8,7 +8,6 @@ import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
-import { Logic } from 'sofa-logic'
 import {
 	CoursableAccess,
 	QuestionEntity,
@@ -143,7 +142,7 @@ export const useEditQuiz = (id: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: "This action is permanent. After publishing a quiz, you won't be able to delete its questions again. However, you can add new and edit existing questions",
 					right: { label: 'Yes, publish', bg: 'bg-primaryBlue' },
@@ -164,14 +163,14 @@ export const useEditQuiz = (id: string) => {
 		{
 			pre: async () => {
 				if (quiz.value?.isPublished) {
-					Logic.Common.showAlert({
+					$utils.showAlert({
 						message: 'You cannot delete questions from published quiz',
 						type: 'warning',
 					})
 					return false
 				}
 
-				return await Logic.Common.confirm({
+				return await $utils.confirm({
 					title: 'Are you sure?',
 					sub: "This action is permanent. You won't be able to undo this.",
 					right: { label: 'Yes, delete' },
@@ -253,7 +252,7 @@ export const useDeleteQuiz = () => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action is permanent. You will lose all saved questions in this quiz.',
 					right: { label: 'Yes, delete' },

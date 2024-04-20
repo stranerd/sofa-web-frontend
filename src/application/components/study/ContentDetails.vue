@@ -239,7 +239,6 @@ import { openMaterial, reportMaterial, shareMaterialLink } from '@app/composable
 import { InteractionEntities } from '@modules/interactions'
 import { Purchasables } from '@modules/payment'
 import { StudyMaterial } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	material: StudyMaterial
@@ -264,8 +263,8 @@ const color = computed(() => (props.material.isQuiz() ? 'text-primaryPurplePink'
 const label = computed(() => (props.material.isQuiz() ? 'Quiz - Learn' : 'Course'))
 const sub = computed(() =>
 	props.material.isQuiz()
-		? `${props.material.questions.length} ${Logic.Common.pluralize(props.material.questions.length, 'question', 'questions')}`
-		: `${props.material.sections.length} ${Logic.Common.pluralize(props.material.sections.length, 'topic', 'topics')}`,
+		? `${props.material.questions.length} ${$utils.pluralize(props.material.questions.length, 'question', 'questions')}`
+		: `${props.material.sections.length} ${$utils.pluralize(props.material.sections.length, 'topic', 'topics')}`,
 )
 
 const openQuiz = () => {

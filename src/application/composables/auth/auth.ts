@@ -2,7 +2,6 @@ import { computed, ref } from 'vue'
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { Logic } from 'sofa-logic'
 import { WalletEntity } from '@modules/payment/domain/entities/wallets'
 import { WalletsUseCases } from '@modules/payment'
 
@@ -52,7 +51,6 @@ export const useAuth = () => {
 	const setAuthUser = async (details: AuthDetails | null) => {
 		await store.listener?.close()
 		store.auth.value = details
-		Logic.Common.AuthUser = details as any
 		if (details?.id) {
 			store.user.value = await UsersUseCases.find(details.id)
 			store.wallet.value = await WalletsUseCases.get()
@@ -73,7 +71,7 @@ export const useAuth = () => {
 	}
 
 	const signout = async () => {
-		const confirmed = await Logic.Common.confirm({
+		const confirmed = await $utils.confirm({
 			title: 'Are you sure you want to logout?',
 			sub: '',
 			right: { label: 'Yes, logout' },
@@ -86,7 +84,7 @@ export const useAuth = () => {
 	}
 
 	const deleteAccount = async () => {
-		const confirmed = await Logic.Common.confirm({
+		const confirmed = await $utils.confirm({
 			title: 'Are you sure?',
 			sub: 'This action is permanent. All your learning resources will be lost',
 			right: { label: 'Yes, delete account' },

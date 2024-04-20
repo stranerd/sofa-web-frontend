@@ -2,7 +2,6 @@ import { MessageEntity } from '../entities/messages'
 import { MessageFactory } from '../factories/messages'
 import { IMessageRepository } from '../irepositories/messages'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
-import { DEFAULT_PAGINATION_LIMIT } from '@utils/constants'
 
 export class MessagesUseCase {
 	private repository: (conversationId: string) => IMessageRepository
@@ -19,7 +18,7 @@ export class MessagesUseCase {
 		const conditions: QueryParams = {
 			where: [],
 			sort: [{ field: 'createdAt', desc: true }],
-			limit: DEFAULT_PAGINATION_LIMIT,
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
 		}
 
 		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.lt, value: date })

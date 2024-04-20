@@ -1,5 +1,5 @@
-import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@utils/constants'
-import { storage } from '@utils/storage'
+import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from './constants'
+import { storage } from './storage'
 
 type Tokens = {
 	accessToken: string | null

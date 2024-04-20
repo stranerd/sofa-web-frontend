@@ -1,8 +1,7 @@
 /* import { Clipboard } from '@capacitor/clipboard'
-import { Share } from '@capacitor/share'
-import { Notify } from '@utils/dialog' */
+import { Share } from '@capacitor/share'  */
 import { formatNumber } from 'valleyed'
-import { isWeb } from '@utils/constants'
+import { isWeb } from './constants'
 
 export const copyToClipboard = async (text: string) => {
 	const result = await window.navigator.permissions.query({ name: 'clipboard-write' as any })

@@ -6,12 +6,12 @@ import '@app/assets/styles/index.scss'
 
 import { globalPlugins } from '@app/plugins'
 import { router } from '@app/router'
-import { Logic } from 'sofa-logic'
+import { $utils, $screen } from '@utils/modules'
 
 const init = async () => {
 	const app = createApp(App)
-	app.config.globalProperties.$utils = Logic.Common
-	app.config.globalProperties.$screen = Logic.Screen
+	app.config.globalProperties.$utils = $utils
+	app.config.globalProperties.$screen = $screen
 
 	for (const plugin of globalPlugins) await plugin({ app, router }).catch()
 

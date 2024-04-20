@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosHeaders, AxiosInstance, AxiosResponse, Method } from 'axios'
 import { UploadedFile } from './uploader'
 import { AfterAuthUser } from '@modules/auth'
-import { apiBase } from '@utils/environment'
 import { getTokens, saveTokens } from '@utils/tokens'
 
+const { apiBase } = $utils.environment
 export class NetworkError extends Error {
 	readonly statusCode: StatusCodes
 	readonly errors: { message: string; field?: string }[]

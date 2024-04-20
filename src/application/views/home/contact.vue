@@ -126,7 +126,8 @@
 
 <script setup>
 import { useMetaMessage } from '@app/composables/users/metaMessage'
-import { CONTACT_EMAIL, CONTACT_NUMBER } from '@utils/constants'
+
+const { CONTACT_EMAIL, CONTACT_NUMBER } = $utils.constants
 const { sendMessage, factory } = useMetaMessage()
 </script>
 

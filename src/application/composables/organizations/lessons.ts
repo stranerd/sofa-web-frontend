@@ -16,7 +16,6 @@ import {
 	LessonsUseCases,
 } from '@modules/organizations'
 import { FileType } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -92,7 +91,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 								image: quiz.picture,
 								title: quiz.title,
 								icon: 'quiz' as IconName,
-								info: `${item.quizMode} - ${Logic.Common.formatNumber(quiz.questions.length)} ${Logic.Common.pluralize(quiz.questions.length, 'question', 'questions')}`,
+								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
 							}
 					}
 					if (item.type === ClassLessonable.schedule) {

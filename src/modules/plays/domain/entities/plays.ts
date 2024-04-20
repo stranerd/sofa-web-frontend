@@ -2,7 +2,6 @@ import { PlayFromModel } from '../../data/models/plays'
 import { PlayAssessmentsData, PlayGamesData, PlayGenericData, PlayStatus, PlayTestsData, PlayTypes } from '../types'
 import { BaseEntity } from '@modules/core'
 import { QuestionEntity } from '@modules/study'
-import { ordinalSuffixOf } from '@utils/commons'
 
 export class PlayEntity extends BaseEntity<PlayFromModel> {
 	constructor(data: PlayFromModel) {
@@ -124,7 +123,7 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 
 	getPosition(userId: string) {
 		const position = this.scores.findIndex((s) => s.userId === userId)
-		return ordinalSuffixOf(position !== -1 ? position + 1 : this.participants.length)
+		return $utils.ordinalSuffixOf(position !== -1 ? position + 1 : this.participants.length)
 	}
 
 	getCardLabel(userId: string): string {

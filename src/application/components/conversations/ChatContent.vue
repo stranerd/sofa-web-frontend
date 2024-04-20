@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	data: {
@@ -52,7 +51,7 @@ const editTitle = ref(false)
 const title = computed(() => props.data.title)
 
 const submitTitle = () => {
-	Logic.Common.debounce(
+	$utils.debounce(
 		'submitTitle',
 		async () => {
 			props.updateTitle?.(model.value)

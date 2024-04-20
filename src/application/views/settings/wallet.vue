@@ -43,11 +43,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SettingsWalletPage',
@@ -69,9 +68,7 @@ export default defineComponent({
 			useModals().payment.withdraw.open({})
 		}
 
-		const balance = computed(() =>
-			wallet.value ? Logic.Common.formatPrice(wallet.value.balance.amount, wallet.value.balance.currency) : '',
-		)
+		const balance = computed(() => (wallet.value ? $utils.formatPrice(wallet.value.balance.amount, wallet.value.balance.currency) : ''))
 
 		return { balance, showMoney, showFundWallet, showWalletWithdraw }
 	},

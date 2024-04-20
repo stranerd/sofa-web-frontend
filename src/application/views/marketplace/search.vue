@@ -117,7 +117,6 @@ import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
 import { useSearch } from '@app/composables/search'
-import { Logic } from 'sofa-logic'
 import { SofaNormalText } from 'sofa-ui-components'
 
 useMeta({
@@ -165,7 +164,7 @@ const selectedOptions = reactive<SelectedOption[]>([
 watch(
 	[query, selectedOptions],
 	() => {
-		Logic.Common.debounce('search', () => search(selectedOptions.map((option) => option.query)), 500)
+		$utils.debounce('search', () => search(selectedOptions.map((option) => option.query)), 500)
 	},
 	{ immediate: true },
 )

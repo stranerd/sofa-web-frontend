@@ -109,7 +109,6 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePlansList } from '@app/composables/payment/plans'
 import { PlanEntity } from '@modules/payment'
-import { Logic } from 'sofa-logic'
 
 const { studentsPlans, orgsPlans } = usePlansList()
 const router = useRouter()
@@ -126,7 +125,7 @@ const plan = computed(() => {
 const firstPlan = ref<HTMLDivElement | null>(null)
 const height = computed(() => firstPlan.value?.clientHeight || 0)
 const dynamicStyle = computed(() => {
-	if (!Logic.Screen.desktop) {
+	if (!$screen.desktop) {
 		return {
 			top: `${(height.value + 40) / 2}px`,
 		}

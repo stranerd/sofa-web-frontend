@@ -215,7 +215,6 @@ import { useChooseSchool } from '@app/composables/school'
 import { useCourseList } from '@app/composables/school/courses'
 import { useUserLocationUpdate, useUserTypeUpdate } from '@app/composables/users/profile'
 import { UserSchoolType } from '@modules/users'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	isProfileEducation?: boolean
@@ -285,7 +284,7 @@ const handleAccountSetup = async () => {
 }
 
 const complete = async () => {
-	await router.push(await Logic.Common.getRedirectToRoute())
+	await router.push(await $utils.getRedirectToRoute())
 }
 
 const { courses, fetchInstitutionCourses } = useCourseList()

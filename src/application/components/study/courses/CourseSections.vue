@@ -78,7 +78,6 @@ import { useModals } from '@app/composables/core/modals'
 import { useUpdateSections } from '@app/composables/study/courses'
 import { useDeleteFile } from '@app/composables/study/files'
 import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	course: CourseEntity
@@ -134,7 +133,7 @@ const onClickItem = (sectionIndex: number, itemIndex: number) => {
 }
 
 watchEffect(() => {
-	if (!Logic.Screen.desktop) return
+	if (!$screen.desktop) return
 	if (!props.item && sections.value.at(0)?.items.at(0)) onClickItem(0, 0)
 })
 
@@ -142,7 +141,7 @@ watch(
 	() => factory.factories,
 	async () => {
 		if (!props.edit) return
-		if (factory.valid && factory.hasChanges) Logic.Common.debounce('updateSections', updateSections, 500)
+		if (factory.valid && factory.hasChanges) $utils.debounce('updateSections', updateSections, 500)
 	},
 	{ deep: true, immediate: true },
 )

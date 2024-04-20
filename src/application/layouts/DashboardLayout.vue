@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="title" />
 			<span class="w-4" />
 		</div>
@@ -167,7 +167,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{

@@ -3,7 +3,6 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from './users'
-import { Logic } from 'sofa-logic'
 import { MemberTypes, MembersUseCases } from '@modules/organizations'
 
 export const useMyOrganizations = () => {
@@ -36,7 +35,7 @@ export const useMyOrganizations = () => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure you want to leave this organization?',
 					sub: 'This action is permanent. You will lose access to all current and future resources of this organization.',
 					right: { label: 'Yes, leave' },

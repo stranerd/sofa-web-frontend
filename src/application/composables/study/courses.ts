@@ -7,7 +7,6 @@ import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { useFilesInList } from './files-list'
 import { useQuizzesInList } from './quizzes-list'
-import { Logic } from 'sofa-logic'
 import {
 	Coursable,
 	CourseEntity,
@@ -115,7 +114,7 @@ export const useEditCourse = (id: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: "This action is permanent. After publishing a course, you won't be able to remove its contents again. However, you can add new and edit existing content.",
 					right: { label: 'Yes, publish', bg: 'bg-primaryBlue' },
@@ -130,7 +129,7 @@ export const useEditCourse = (id: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action is permanent.',
 					right: { label: 'Yes, delete' },
@@ -187,7 +186,7 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 								quiz,
 								title: quiz.title,
 								icon: 'quiz' as IconName,
-								info: `${item.quizMode} - ${Logic.Common.formatNumber(quiz.questions.length)} ${Logic.Common.pluralize(quiz.questions.length, 'question', 'questions')}`,
+								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
 							}
 					}
 				})

@@ -29,7 +29,8 @@
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useMetaMessage } from '@app/composables/users/metaMessage'
-import { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } from '@utils/constants'
+
+const { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } = $utils.constants
 
 export default defineComponent({
 	name: 'SettingsContactPage',

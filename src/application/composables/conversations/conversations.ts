@@ -5,7 +5,6 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
-import { Logic } from 'sofa-logic'
 import { ConversationEntity, ConversationFactory, ConversationsUseCases } from '@modules/conversations'
 
 const store = {
@@ -104,7 +103,7 @@ export const useConversation = (id: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action is permanent. All messages in this conversation would be lost',
 					right: { label: 'Yes, delete' },
@@ -150,7 +149,7 @@ export const useCreateConversation = () => {
 		factory.reset()
 		await router.push(`/chats/${conversation.id}`)
 		if (conversation.tutor)
-			await Logic.Common.success({
+			await $utils.success({
 				title: 'Tutor request sent!',
 				sub: 'You will get notified when the tutor responds',
 				button: { label: 'Done' },

@@ -121,7 +121,6 @@ import { useCreateConversation } from '@app/composables/conversations/conversati
 import { useTopicsList } from '@app/composables/interactions/tags'
 import { useTutorsList } from '@app/composables/users/users'
 import { ConversationEntity } from '@modules/conversations'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
@@ -162,7 +161,7 @@ const filteredTutors = computed(() =>
 			photoUrl: t.bio.photo?.link ?? null,
 			ratings: {
 				count: t.account.ratings.count,
-				value: Logic.Common.formatNumber(t.account.ratings.avg, 2),
+				value: window.$utils.formatNumber(t.account.ratings.avg, 2),
 			},
 			subjects: t.tutor.topics
 				.map((item) => topics.find((t) => t.id === item)?.title)

@@ -4,7 +4,6 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { createTransaction } from './transactions'
-import { Logic } from 'sofa-logic'
 import { MethodEntity } from '@modules/payment/domain/entities/methods'
 import { MethodsUseCases, TransactionType } from '@modules/payment'
 
@@ -82,7 +81,7 @@ export const useMethod = (method: MethodEntity) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: `Delete`,
 					sub: 'Are you sure you want to delete this method?',
 					right: { label: 'Yes, delete' },
@@ -98,7 +97,7 @@ export const useMethod = (method: MethodEntity) => {
 		{
 			pre: async () => {
 				if (method.primary) return false
-				return await Logic.Common.confirm({
+				return await $utils.confirm({
 					title: `Set Primary Method`,
 					sub: 'Are you sure you want to set this payment method as primary?',
 					right: { label: 'Yes', bg: 'bg-primaryBlue' },

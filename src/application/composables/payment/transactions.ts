@@ -3,8 +3,9 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { loadScript } from '../core/scripts'
-import { domain } from '@utils/environment'
 import { FlutterwaveSecrets, TransactionEntity, TransactionType, TransactionsUseCases } from '@modules/payment'
+
+const { domain } = $utils.environment
 
 const store = {
 	flutterwave: null as FlutterwaveSecrets | null,

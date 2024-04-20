@@ -4,7 +4,6 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
-import { Logic } from 'sofa-logic'
 import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
 
 const store = {} as Record<
@@ -111,7 +110,7 @@ export const useManageOrganizationMembers = (id: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure you want to remove this member?',
 					sub: '',
 					right: { label: 'Yes, remove' },
@@ -133,7 +132,7 @@ export const useManageOrganizationMembers = (id: string) => {
 		{
 			pre: async (_, accept) => {
 				const key = accept ? 'accept' : 'reject'
-				return await Logic.Common.confirm({
+				return await $utils.confirm({
 					title: `Are you sure you want to ${key} this member?`,
 					sub: '',
 					right: { label: `Yes, ${key}` },

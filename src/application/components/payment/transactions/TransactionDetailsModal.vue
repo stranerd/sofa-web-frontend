@@ -27,7 +27,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { TransactionEntity } from '@modules/payment'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
@@ -35,16 +34,16 @@ const props = defineProps<{
 }>()
 
 const details = computed(() => [
-	{ label: 'Amount', value: Logic.Common.formatPrice(props.transaction.originalAmount, props.transaction.currency) },
+	{ label: 'Amount', value: $utils.formatPrice(props.transaction.originalAmount, props.transaction.currency) },
 	...(props.transaction.serviceAmount > 0
 		? [
 				{
 					label: 'Commission',
-					value: Logic.Common.formatPrice(props.transaction.serviceAmount, props.transaction.currency),
+					value: $utils.formatPrice(props.transaction.serviceAmount, props.transaction.currency),
 				},
 			]
 		: []),
 	{ label: 'Title', value: props.transaction.title },
-	{ label: 'Time', value: Logic.Common.formatTime(props.transaction.createdAt) },
+	{ label: 'Time', value: $utils.formatTime(props.transaction.createdAt) },
 ])
 </script>

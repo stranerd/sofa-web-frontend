@@ -123,7 +123,6 @@ import { UserType } from '@modules/users'
 import { useAuth } from '@app/composables/auth/auth'
 import { useMyFolders, saveToFolder } from '@app/composables/study/folders'
 import { useModals } from '@app/composables/core/modals'
-import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -161,7 +160,7 @@ const color = computed(() => (props.material.isQuiz() ? 'text-primaryPurplePink'
 const label = computed(() => (props.material.isQuiz() ? 'Quiz - Learn' : 'Course'))
 const sub = computed(() =>
 	props.material.isQuiz()
-		? `${props.material.questions.length} ${Logic.Common.pluralize(props.material.questions.length, 'question', 'questions')}`
+		? `${props.material.questions.length} ${$utils.pluralize(props.material.questions.length, 'question', 'questions')}`
 		: `${props.material.sections.length} ${(props.material.sections.length, 'topic', 'topics')}`,
 )
 </script>

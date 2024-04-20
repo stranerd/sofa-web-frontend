@@ -1,8 +1,8 @@
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '../core/states'
-import { Logic } from 'sofa-logic'
 import {
 	UserAiFactory,
 	UserLocationFactory,
@@ -16,8 +16,9 @@ import {
 export const useUserTypeUpdate = () => {
 	const factory = new UserTypeFactory()
 	const { user } = useAuth()
+	const route = useRoute()
 
-	const type = Logic.Common.route?.query?.type as UserType
+	const type = route?.query?.type as UserType
 	if (type && Object.values(UserType).includes(type)) factory.type = type
 	if (user.value) factory.loadEntity(user.value)
 	watch(user, () => user.value && factory.loadEntity(user.value))

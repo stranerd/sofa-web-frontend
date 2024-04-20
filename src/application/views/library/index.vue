@@ -5,11 +5,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryIndexPage',
-	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Screen.desktop ? '/library/quizzes' : undefined)] },
+	routeConfig: { middlewares: ['isAuthenticated', () => ($screen.desktop ? '/library/quizzes' : undefined)] },
 	setup() {
 		useMeta({
 			title: 'Library',

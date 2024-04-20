@@ -22,7 +22,6 @@
 import { watch } from 'vue'
 import { useCurriculumViewToggle } from '@app/composables/organizations/lessons'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
@@ -34,9 +33,9 @@ const props = defineProps<{
 const { curriculumView, curriculumViewIcon, toggleView } = useCurriculumViewToggle()
 
 watch(
-	() => Logic.Screen.width,
+	() => $screen.width,
 	() => {
-		if (Logic.Screen.desktop && !props.isPreview) props.close()
+		if ($screen.desktop && !props.isPreview) props.close()
 	},
 	{ immediate: true },
 )
