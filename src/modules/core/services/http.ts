@@ -3,7 +3,6 @@ import { UploadedFile } from './uploader'
 import { AfterAuthUser } from '@modules/auth'
 import { getTokens, saveTokens } from '@utils/tokens'
 
-const { apiBase } = $utils.environment
 export class NetworkError extends Error {
 	readonly statusCode: StatusCodes
 	readonly errors: { message: string; field?: string }[]
@@ -17,12 +16,13 @@ export class NetworkError extends Error {
 
 export class HttpClient {
 	private readonly client: AxiosInstance
+	#apiBase = $utils.environment.apiBase
 
 	constructor(baseURL = '') {
-		this.client = axios.create({ baseURL: `${apiBase}${baseURL}` })
+		this.client = axios.create({ baseURL: `${this.#apiBase}${baseURL}` })
 		this.client.interceptors.request.use(
 			async (config) => {
-				const isFromOurServer = this.client.defaults.baseURL?.startsWith(apiBase)
+				const isFromOurServer = this.client.defaults.baseURL?.startsWith(this.#apiBase)
 				if (!isFromOurServer) return config
 				const { accessToken, refreshToken } = await getTokens()
 				config.headers = new AxiosHeaders(config.headers)
@@ -92,7 +92,7 @@ export class HttpClient {
 			if (!error.isAxiosError) throw error
 			if (!error.response) throw error
 			const status = error.response.status
-			const isFromOurServer = this.client.defaults.baseURL?.startsWith(apiBase) && Object.values(StatusCodes).includes(status)
+			const isFromOurServer = this.client.defaults.baseURL?.startsWith(this.#apiBase) && Object.values(StatusCodes).includes(status)
 			if (!isFromOurServer) throw error
 			if (status !== StatusCodes.AccessTokenExpired) throw new NetworkError(status, error.response.data)
 			const res = await this.getNewTokens()
@@ -103,7 +103,7 @@ export class HttpClient {
 
 	async getNewTokens() {
 		try {
-			const { data } = await this.client.post<any, AxiosResponse<AfterAuthUser>>('/auth/token', {}, { baseURL: apiBase })
+			const { data } = await this.client.post<any, AxiosResponse<AfterAuthUser>>('/auth/token', {}, { baseURL: this.#apiBase })
 			await saveTokens(data)
 			return !!data
 		} catch (e) {
@@ -117,9 +117,9 @@ export class HttpClient {
 
 	get socketPath() {
 		const baseUrl = this.client.defaults.baseURL ?? ''
-		const isFromOurServer = baseUrl.startsWith(apiBase)
+		const isFromOurServer = baseUrl.startsWith(this.#apiBase)
 		if (!isFromOurServer) return ''
-		const path = baseUrl.split(apiBase)[1]
+		const path = baseUrl.split(this.#apiBase)[1]
 		if (path.startsWith('/')) return path.slice(1)
 		return path
 	}

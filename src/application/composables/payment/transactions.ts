@@ -5,8 +5,6 @@ import { useListener } from '../core/listener'
 import { loadScript } from '../core/scripts'
 import { FlutterwaveSecrets, TransactionEntity, TransactionType, TransactionsUseCases } from '@modules/payment'
 
-const { domain } = $utils.environment
-
 const store = {
 	flutterwave: null as FlutterwaveSecrets | null,
 	transactions: ref<TransactionEntity[]>([]),
@@ -89,7 +87,7 @@ export const createTransaction = async (amount: number, type: TransactionType, d
 			currency,
 			customer: { email },
 			payment_options: supportedMethods.join(', '),
-			customizations: { title: 'Stranerd', description, logo: domain + '/images/logo.svg' },
+			customizations: { title: 'Stranerd', description, logo: $utils.environment.domain + '/images/logo.svg' },
 			callback: () => {
 				modal.close()
 				res()

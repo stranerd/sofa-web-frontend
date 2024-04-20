@@ -9,9 +9,6 @@ import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/a
 import { NetworkError, StatusCodes } from '@modules/core'
 import { storage } from '@utils/storage'
 
-const { isWeb } = $utils.constants
-const { googleClientId, packageName } = $utils.environment
-
 const store = {
 	referrerId: ref(undefined as string | undefined),
 	emailVerification: { email: ref(''), ...useSuccessHandler() },
@@ -134,7 +131,7 @@ export const useGoogleSignin = () => {
 	onMounted(async () => {
 		try {
 			GoogleAuth.initialize({
-				clientId: googleClientId,
+				clientId: $utils.environment.googleClientId,
 				scopes: ['profile', 'email'],
 			})
 		} catch (err) {
@@ -153,7 +150,8 @@ export const useAppleSignin = () => {
 		error,
 	} = useAsyncFn(async () => {
 		try {
-			const clientId = isWeb ? packageName.replace('.app', '') : packageName
+			const packageName = $utils.environment.packageName
+			const clientId = $utils.constants.isWeb ? packageName.replace('.app', '') : packageName
 			const redirectURI = 'https://' + clientId.split('.').reverse().join('.')
 			const { response } = await SignInWithApple.authorize({
 				clientId,

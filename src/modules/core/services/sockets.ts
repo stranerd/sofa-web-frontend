@@ -2,8 +2,6 @@ import io, { Socket } from 'socket.io-client'
 import { StatusCodes } from './http'
 import { getTokens } from '@utils/tokens'
 
-const { apiBase } = $utils.environment
-
 let socket = null as Socket<any, any> | null
 
 export enum EmitTypes {
@@ -25,7 +23,7 @@ async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	if (!socket || (!socket.auth['token'] && accessToken) || (accessToken && socket.auth['token'] !== accessToken)) {
-		const url = new URL(`${apiBase}/socket.io`)
+		const url = new URL(`${$utils.environment.apiBase}/socket.io`)
 		socket = io(url.origin, {
 			path: url.pathname,
 			auth: { token: accessToken },
