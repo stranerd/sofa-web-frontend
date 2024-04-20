@@ -34,7 +34,7 @@
 					</a>
 				</div>
 
-				<div class="flex flex-col grow overflow-y-auto gap-3 mdlg:gap-5">
+				<div class="flex flex-col grow overflow-y-auto gap-6">
 					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'courses'" class="flex flex-col gap-3">
 						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Courses </SofaNormalText>
 

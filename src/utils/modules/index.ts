@@ -4,7 +4,7 @@ import Utils from './Utils'
 export const $utils = new Utils()
 export const $screen = new Screen()
 
-global.$utils = $utils
-global.$screen = $screen
+globalThis.$utils = $utils
+globalThis.$screen = $screen
 
 export type { Screen, Utils }
