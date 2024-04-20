@@ -69,7 +69,7 @@ const access = computed(() => {
 
 const quizPlayStarted = ref(false)
 const play = ref<PlayEntity | null>(null)
-const { factory, createPlay } = useCreatePlay(access, { start: true, nav: false })
+const { factory, createPlay } = useCreatePlay(access, { start: true, nav: true })
 const startQuizPlay = async (quiz: QuizEntity, type: PlayTypes) => {
 	factory.loadFrom(type, quiz)
 	const p = await createPlay()
