@@ -6,7 +6,7 @@
 				:key="activity.hash"
 				type="activity"
 				:material="activity"
-				:isWrapped="!Logic.Common.isLarge"
+				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"
@@ -25,9 +25,8 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { openMaterial } from '@app/composables/library'
 import { useMyPurchasedCourses } from '@app/composables/study/courses-list'
-import { Logic } from 'sofa-logic'
+import { openMaterial } from '@app/composables/study/library'
 
 export default defineComponent({
 	name: 'LibraryPurchasedPage',
@@ -43,7 +42,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, openMaterial, data }
+		return { openMaterial, data }
 	},
 })
 </script>

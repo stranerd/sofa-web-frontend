@@ -6,7 +6,7 @@
 				:key="activity.hash"
 				type="activity"
 				:material="activity"
-				:isWrapped="!Logic.Common.isLarge"
+				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"
@@ -25,10 +25,9 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { openMaterial } from '@app/composables/library'
 import { useRecent } from '@app/composables/study'
+import { openMaterial } from '@app/composables/study/library'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'
-import { Logic } from 'sofa-logic'
 import { DraftStatus } from '@modules/study'
 
 export default defineComponent({
@@ -50,7 +49,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, data, openMaterial }
+		return { data, openMaterial }
 	},
 })
 </script>

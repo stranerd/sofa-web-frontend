@@ -25,7 +25,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, description, photo, amount, currency } = this.validValues
 		return {
 			title,
@@ -35,7 +35,7 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 		}
 	}
 
-	loadEntity = (entity: ClassEntity) => {
+	load = (entity: ClassEntity) => {
 		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description

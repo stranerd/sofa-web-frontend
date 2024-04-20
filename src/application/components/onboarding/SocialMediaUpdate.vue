@@ -44,14 +44,13 @@
 import { ref } from 'vue'
 import { socials } from '@app/composables/users/profile'
 import { UserSocialsFactory } from '@modules/users'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	factory: UserSocialsFactory
 }>()
 
 const deleteItem = async (index: number) => {
-	const confirm = await Logic.Common.confirm({
+	const confirm = await $utils.confirm({
 		title: 'Are you sure?',
 		sub: 'This action is permanent. The saved social link would be lost',
 		right: { label: 'Yes, delete' },

@@ -15,6 +15,7 @@ import {
 	LessonFactory,
 	LessonsUseCases,
 } from '@modules/organizations'
+import { FileType } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -66,15 +67,44 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 				.map((item) => {
 					if (item.type === ClassLessonable.file) {
 						const file = files.value.find((f) => f.id === item.id)
-						if (file) return { ...item, file }
+						if (file)
+							return {
+								...item,
+								file,
+								image: file.picture,
+								title: file.title,
+								icon:
+									file.type === FileType.document
+										? ('file' as IconName)
+										: file.type === FileType.image
+											? ('image-course' as IconName)
+											: ('video-course' as IconName),
+								info: file.type,
+							}
 					}
 					if (item.type === ClassLessonable.quiz) {
 						const quiz = quizzes.value.find((q) => q.id === item.id)
-						if (quiz) return { ...item, quiz }
+						if (quiz)
+							return {
+								...item,
+								quiz,
+								image: quiz.picture,
+								title: quiz.title,
+								icon: 'quiz' as IconName,
+								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
+							}
 					}
 					if (item.type === ClassLessonable.schedule) {
 						const schedule = schedules.value.find((s) => s.id === item.id)
-						if (schedule) return { ...item, schedule }
+						if (schedule)
+							return {
+								...item,
+								schedule,
+								image: '/images/default.svg',
+								title: schedule.title,
+								icon: 'translation' as IconName,
+								info: schedule.timeRange,
+							}
 					}
 				})
 				.filter(Boolean)

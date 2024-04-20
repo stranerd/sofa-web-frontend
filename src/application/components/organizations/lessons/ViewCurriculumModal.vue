@@ -3,62 +3,17 @@
 		<div class="flex w-full items-center gap-2 justify-between">
 			<SofaHeaderText class="!font-bold !text-deepGray" :content="title" />
 			<div class="flex items-center gap-4">
-				<SofaIcon class="h-[16px] fill-black" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
-				<SofaIcon
-					class="h-[16px] fill-black"
-					name="arrow-right-white"
-					:class="canNext ? 'fill-black' : 'fill-grayColor'"
-					@click="next" />
+				<SofaIcon class="h-[16px]" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
+				<SofaIcon class="h-[16px]" name="arrow-right-white" :class="canNext ? 'fill-black' : 'fill-grayColor'" @click="next" />
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>
-		<div v-if="curriculumItem" class="w-full flex flex-col grow">
-			<ScheduleView
-				v-if="curriculumItem.type === ClassLessonable.schedule"
-				:classInst="classInst"
-				:schedule="curriculumItem.schedule"
-				class="grow" />
-			<div
-				v-if="curriculumItem.type === ClassLessonable.file && mediaUrl"
-				class="w-full rounded-custom grow flex items-center justify-center bg-lightGray">
-				<SofaDocumentReader v-if="curriculumItem.fileType === FileType.document" :documentUrl="mediaUrl" class="rounded-custom" />
-				<SofaImageLoader
-					v-if="curriculumItem.fileType === FileType.image"
-					:photoUrl="mediaUrl"
-					class="rounded-custom w-full h-full" />
-				<SofaVideoPlayer
-					v-if="curriculumItem.fileType === FileType.video"
-					:videoUrl="mediaUrl"
-					:type="curriculumItem.file.media.type"
-					class="rounded-custom" />
-			</div>
-			<template v-if="curriculumItem.type === ClassLessonable.quiz">
-				<div
-					v-if="!quizPlayStarted"
-					class="w-full bg-primaryPurple grow flex flex-col items-center justify-center gap-3 rounded-custom">
-					<SofaHeaderText color="text-white">
-						{{ curriculumItem.quizMode === PlayTypes.practice ? 'Practice questions' : 'Test yourself' }}
-					</SofaHeaderText>
-					<SofaNormalText color="text-white">
-						{{
-							curriculumItem.quizMode === PlayTypes.practice
-								? 'Comfortable learning for topic mastery'
-								: 'Evaluate your level of knowledge'
-						}}
-					</SofaNormalText>
-					<SofaNormalText color="text-white">{{ curriculumItem.quiz.questions.length }} Questions </SofaNormalText>
-					<SofaButton
-						bgColor="bg-white"
-						textColor="text-primaryPurple"
-						padding="py-3 px-9"
-						customClass="font-bold"
-						@click="startQuizPlay(curriculumItem.quiz, curriculumItem.quizMode)">
-						Start
-					</SofaButton>
-				</div>
-				<PlayRun v-else-if="play" :playId="play.id" :isInModal="true" class="grow bg-lightGray" :type="curriculumItem.quizMode" />
-			</template>
-		</div>
+		<EmbeddedSection
+			v-if="curriculumItem"
+			class="h-full overflow-y-auto"
+			:item="curriculumItem"
+			:classInst="classInst"
+			:lesson="lesson" />
 		<div v-if="curriculumSection" class="flex flex-col gap-2">
 			<SofaHeaderText>{{ itemTitle }}</SofaHeaderText>
 			<SofaNormalText>{{ lesson.title }}/{{ curriculumSection.label }}</SofaNormalText>
@@ -67,11 +22,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
-import { useCreatePlay } from '@app/composables/plays/plays'
+import { computed, ref } from 'vue'
+import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
 import { ClassEntity, ClassLesson, ClassLessonable, ExtendedCurriculum } from '@modules/organizations'
-import { PlayEntity, PlayTypes } from '@modules/plays'
-import { FileType, QuizEntity } from '@modules/study'
+import { PlayTypes } from '@modules/plays'
+import { FileType } from '@modules/study'
 const props = defineProps<{
 	close: () => void
 	classInst: ClassEntity
@@ -101,8 +56,6 @@ const itemTitle = computed(() => {
 	else return curriculumItem.value?.schedule.title
 })
 
-const mediaUrl = ref('')
-
 const curriculumSection = computed(() => props.curriculum.at(props.sectionIndex))
 const activeItemIndex = ref(props.itemIndex)
 
@@ -116,36 +69,4 @@ const next = () => {
 const prev = () => {
 	if (canPrev.value) activeItemIndex.value--
 }
-
-const quizPlayStarted = ref(false)
-const play = ref<PlayEntity | null>(null)
-const { factory, createPlay } = useCreatePlay(
-	{
-		organizationId: props.classInst.organizationId,
-		classId: props.classInst.id,
-		lessonId: props.lesson.id,
-	},
-	{ start: true, nav: false },
-)
-const startQuizPlay = async (quiz: QuizEntity, type: PlayTypes) => {
-	factory.load(type, quiz)
-	const p = await createPlay()
-	if (!p) return
-	play.value = p
-	quizPlayStarted.value = true
-}
-
-watch(
-	curriculumItem,
-	async () => {
-		quizPlayStarted.value = false
-		if (curriculumItem.value?.type === ClassLessonable.file)
-			mediaUrl.value = await curriculumItem.value.file.getUrl({
-				organizationId: props.classInst.organizationId,
-				classId: props.classInst.id,
-				lessonId: props.lesson.id,
-			})
-	},
-	{ immediate: true },
-)
 </script>

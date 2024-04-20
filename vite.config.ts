@@ -65,7 +65,6 @@ export default defineConfig({
 			'@app': path.resolve(__dirname, './src/application'),
 			'@modules': path.resolve('./src/modules'),
 			'@utils': path.resolve('./src/utils'),
-			'sofa-logic': path.resolve('./src/logic'),
 			'sofa-ui-components': path.resolve('./src/ui-components'),
 		},
 		extensions: ['.js', '.vue', '.json', '.ts'],

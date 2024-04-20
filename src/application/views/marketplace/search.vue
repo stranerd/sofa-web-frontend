@@ -1,297 +1,171 @@
 <template>
 	<FullLayout :hide="{ top: true, right: true }">
 		<template #left-session>
-			<div class="w-full shadow-custom pb-6 bg-white rounded-custom relative flex flex-col h-full gap-6 overflow-y-auto">
-				<div class="w-full flex items-center p-4 bg-white sticky top-0 left-0 gap-2 pb-3 border-b border-lightGray">
-					<SofaIcon customClass="h-[14px]" name="filter" />
-					<SofaNormalText customClass="!font-bold" content="Filter" />
+			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col h-full gap-4 p-4">
+				<div class="flex items-center gap-2 shrink-0">
+					<SofaIcon class="h-[14px]" name="filter" />
+					<SofaNormalText class="!font-bold" content="Filter" />
 				</div>
 
-				<MarketplaceFilter v-model="selectedOptions" />
+				<span class="h-0.5 bg-lightGray" />
+
+				<MarketplaceFilter v-model="selectedOptions" class="grow overflow-y-auto" />
 			</div>
 		</template>
 
 		<template #middle-session>
-			<div class="w-full h-full flex flex-col grow overflow-y-auto mdlg:!gap-5 gap-3 px-0 mdlg:!pr-7">
-				<div
-					class="w-full mdlg:!shadow-custom mdlg:!px-4 sticky mdlg:!relative top-0 px-4 left-0 mdlg:!top-auto mdlg:!left-auto z-30 mdlg:!py-1 pl-2 pr-4 py-4 pb-2 mdlg:!bg-white bg-lightGray mdlg:rounded-custom flex flex-row gap-3 items-center mdlg:!justify-between justify-start">
-					<SofaIcon customClass="h-[15px] mdlg:!hidden pl-2" name="back-arrow" @click="Logic.Common.goBack()" />
-					<div
-						class="flex flex-row items-center grow rounded-custom w-full px-3 mdlg:!px-0 mdlg:!bg-transparent md:!shadow-none shadow-custom bg-white">
-						<SofaIcon name="search-black" customClass="h-[17px] mdlg:hidden" />
-						<SofaTextField
-							v-model="searchQuery"
-							customClass="!border-none w-full mdlg:!pl-0"
-							placeholder="Search for anything" />
-					</div>
-
-					<div class="w-[20px] hidden mdlg:!inline-block">
-						<SofaIcon name="search-black" customClass="h-[17px]" />
+			<div class="w-full h-full flex flex-col mdlg:gap-5 gap-3 p-4 mdlg:p-0 mdlg:pr-4">
+				<div class="flex gap-3 items-center">
+					<SofaIcon class="h-[15px] mdlg:hidden" name="back-arrow" @click="$utils.goBack()" />
+					<div class="flex mdlg:flex-row-reverse items-center grow bg-white rounded-custom px-3 gap-3">
+						<SofaIcon name="search-black" class="h-[17px]" />
+						<SofaTextField v-model="query" customClass="bg-transparent !px-0 !border-none" placeholder="Search for anything" />
 					</div>
 				</div>
 
-				<div class="w-full flex gap-3 items-center mdlg:px-0 pl-4">
-					<span
+				<div class="flex gap-3 items-center">
+					<a
 						v-for="(item, index) in filterOptions"
 						:key="index"
-						:class="`px-6 py-2 ${
-							item.id == selectedFilterOption ? 'bg-primaryPurple' : 'bg-white'
-						} rounded-custom flex items-center justify-center gap-1 cursor-pointer`"
+						class="px-6 py-2 rounded-custom flex items-center justify-center gap-1"
+						:class="item.id == selectedFilterOption ? 'bg-primaryPurple text-white' : 'bg-white text-deepGray'"
 						@click="selectedFilterOption = item.id">
-						<SofaNormalText
-							:color="`${item.id == selectedFilterOption ? 'text-white' : 'text-deepGray'}`"
-							customClass="!font-semibold"
-							:content="item.name" />
-					</span>
+						<SofaNormalText color="text-current" class="!font-semibold" :content="item.name" />
+					</a>
 				</div>
 
-				<!-- Course contents -->
+				<div class="flex flex-col grow overflow-y-auto gap-3 mdlg:gap-5">
+					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'courses'" class="flex flex-col gap-3">
+						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Courses </SofaNormalText>
 
-				<div
-					v-if="selectedFilterOption == 'all' || selectedFilterOption == 'courses'"
-					class="w-full flex flex-col gap-3 mdlg:px-0 pl-4">
-					<div v-if="selectedFilterOption == 'all'" class="w-full flex flex-col justify-start items-start">
-						<SofaNormalText customClass="font-bold"> Courses </SofaNormalText>
+						<div
+							v-if="courses.length"
+							class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 gap-3 mdlg:gap-4">
+							<StudyMaterialCard
+								v-for="m in courses"
+								:key="m.id"
+								:type="$screen.desktop ? 'item' : 'activity'"
+								:material="m"
+								class="col-span-1" />
+						</div>
+
+						<SofaEmptyState
+							v-else
+							title="No result found"
+							subTitle="We could not find any courses that matches your search"
+							actionLabel="Clear search"
+							:action="() => (query = '')" />
 					</div>
 
-					<template v-if="resourceContents.length">
-						<div class="w-full flex flex-col gap-3">
-							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
-								<StudyMaterialCard v-for="m in resourceContents" :key="m.id" type="item" :material="m" class="col-span-1" />
-							</div>
+					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'quizzes'" class="flex flex-col gap-3">
+						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Quizzes </SofaNormalText>
 
-							<div
-								class="lg:w-full mdlg:hidden flex gap-3 mdlg:gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<StudyMaterialCard v-for="m in resourceContents" :key="m.hash" type="activity" :material="m" />
-								</div>
-							</div>
+						<div
+							v-if="quizzes.length"
+							class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 gap-3 mdlg:gap-4">
+							<StudyMaterialCard
+								v-for="m in quizzes"
+								:key="m.id"
+								:type="$screen.desktop ? 'item' : 'activity'"
+								:material="m"
+								class="col-span-1" />
 						</div>
-					</template>
 
-					<template v-else>
-						<div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
-							<SofaEmptyState
-								title="No result found"
-								subTitle="We could not find any course that matches your search"
-								actionLabel="Clear search"
-								:action="() => (searchQuery = '')" />
-						</div>
-					</template>
-				</div>
-
-				<!-- Quiz contents -->
-				<div
-					v-if="selectedFilterOption == 'all' || selectedFilterOption == 'quizzes'"
-					class="w-full flex flex-col gap-3 mdlg:px-0 pl-4">
-					<div v-if="selectedFilterOption == 'all'" class="w-full flex flex-col justify-start items-start">
-						<SofaNormalText customClass="font-bold"> Quizzes </SofaNormalText>
+						<SofaEmptyState
+							v-else
+							title="No result found"
+							subTitle="We could not find any quizzes that matches your search"
+							actionLabel="Clear search"
+							:action="() => (query = '')" />
 					</div>
-
-					<template v-if="quizContents.length">
-						<div class="w-full flex flex-col gap-3">
-							<div v-if="Logic.Common.isLarge" class="w-full mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 mdlg:gap-4">
-								<StudyMaterialCard v-for="m in quizContents" :key="m.hash" type="item" :material="m" class="col-span-1" />
-							</div>
-
-							<div
-								class="lg:w-full mdlg:hidden flex gap-3 mdlg:gap-0 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-								<div class="mdlg:!w-full mdlg:!flex mdlg:!flex-col mdlg:!gap-4 flex flex-row gap-3 pr-4">
-									<StudyMaterialCard v-for="m in quizContents" :key="m.hash" type="activity" :material="m" />
-								</div>
-							</div>
-						</div>
-					</template>
-
-					<template v-else>
-						<div class="w-full flex flex-col gap-3 md:!pr-0 pr-4">
-							<SofaEmptyState
-								title="No result found"
-								subTitle="We could not find any quiz that matches your search"
-								actionLabel="Clear search"
-								:action="() => (searchQuery = '')" />
-						</div>
-					</template>
 				</div>
 			</div>
 
-			<!-- Bottom filter for sm screens -->
-			<div class="bg-lightGray mdlg:!hidden px-4 flex flex-col w-full">
-				<div class="bg-primaryPurple rounded-custom py-3 flex items-center justify-center gap-2" @click="showFilter = true">
-					<SofaIcon customClass="h-[14px]" name="filter-white" />
-					<SofaNormalText customClass="!font-semibold !text-sm" color="text-white">Filter</SofaNormalText>
-					<span class="w-[24px] h-[24px] bg-white rounded-full flex items-center justify-center">
-						<SofaNormalText color="text-primaryPurple">{{ selectedOptions.length }}</SofaNormalText>
+			<div class="mdlg:hidden px-4 flex flex-col w-full">
+				<SofaButton
+					class="bg-primaryPurple text-white rounded-custom py-3 flex items-center justify-center gap-2"
+					@click="showFilter = true">
+					<SofaIcon class="h-[14px] fill-current" name="filter" />
+					<SofaNormalText class="!font-semibold !text-sm" color="text-current">Filter</SofaNormalText>
+					<span class="px-2 bg-white rounded-full aspect-square flex justify-center items-center text-primaryPurple">
+						<SofaNormalText color="text-current">{{ selectedOptions.length }}</SofaNormalText>
 					</span>
-				</div>
+				</SofaButton>
 			</div>
-
-			<SofaModalOld v-if="showFilter" :close="() => (showFilter = false)" customClass="mdlg:!hidden">
-				<div
-					class="mdlg:!w-[70%] mdlg:!hidden bg-white lg:!w-[60%] px-0 pt-0 h-[95%] max-h-[95%] w-full flex flex-col rounded-t-[16px] gap-4 relative overflow-y-auto"
-					@click.stop="() => {}">
-					<div class="w-full flex px-4 py-3 justify-between items-center bg-white sticky top-0 left-0 border-b border-lightGray">
-						<div class="flex items-center gap-3">
-							<SofaIcon customClass="h-[13px]" name="filter" />
-							<SofaNormalText customClass="!font-bold !text-base" content="Filters" />
-						</div>
-						<SofaIcon customClass="h-[19px]" name="circle-close" @click="showFilter = false" />
-					</div>
-
-					<MarketplaceFilter v-model="selectedOptions" :close="() => (showFilter = false)" />
-				</div>
-			</SofaModalOld>
 		</template>
 	</FullLayout>
+	<SofaModal v-if="showFilter && !$screen.desktop" :close="() => (showFilter = false)" containerClass="h-[95%]">
+		<div class="flex flex-col h-full gap-4 p-4">
+			<div class="flex gap-3 items-center">
+				<SofaIcon class="h-[13px]" name="filter" />
+				<SofaNormalText class="!font-bold !text-base" content="Filters" />
+				<SofaIcon class="h-[19px] ml-auto" name="circle-close" @click="showFilter = false" />
+			</div>
+
+			<span class="h-0.5 bg-lightGray" />
+
+			<MarketplaceFilter v-model="selectedOptions" class="grow overflow-y-auto" />
+
+			<SofaButton padding="py-3" @click="showFilter = false">Show results</SofaButton>
+		</div>
+	</SofaModal>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+<script lang="ts" setup>
+import { reactive, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
+import { useRoute } from 'vue-router'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
-import { search } from '@app/composables/marketplace'
-import { DraftStatus } from '@modules/study'
-import { Conditions, Logic, QueryParams } from 'sofa-logic'
+import { useSearch } from '@app/composables/search'
+import { SofaNormalText } from 'sofa-ui-components'
 
-export default defineComponent({
-	name: 'MarketplaceSearchPage',
-	components: { MarketplaceFilter },
-	routeConfig: {
-		fetchRules: [
-			{
-				domain: 'Study',
-				property: 'AllCourses',
-				method: 'GetCoursesWithQuery',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: true,
-				useRouteQuery: true,
-				queries: ['userId', 'tagId', 'q'],
-			},
-			{
-				domain: 'Study',
-				property: 'AllQuzzies',
-				method: 'GetQuizzesWithQuery',
-				params: [],
-				requireAuth: true,
-				ignoreProperty: true,
-				useRouteQuery: true,
-				queries: ['userId', 'tagId', 'q'],
-			},
-			{
-				domain: 'Study',
-				property: 'AllTopics',
-				method: 'GetTopics',
-				params: [],
-				requireAuth: true,
-			},
-			{
-				domain: 'Study',
-				property: 'AllOtherTags',
-				method: 'GetOtherTags',
-				params: [],
-				requireAuth: true,
-			},
-		],
-	},
-	setup() {
-		useMeta({
-			title: 'Search',
-		})
-
-		const filterOptions = [
-			{
-				name: 'All',
-				id: 'all',
-			},
-			{
-				name: 'Courses',
-				id: 'courses',
-			},
-			{
-				name: 'Quizzes',
-				id: 'quizzes',
-			},
-		]
-
-		const AllCourses = ref(Logic.Study.AllCourses)
-		const AllQuzzies = ref(Logic.Study.AllQuzzies)
-		const resourceContents = computed(() => AllCourses.value?.results ?? [])
-		const quizContents = computed(() => AllQuzzies.value?.results ?? [])
-		const showFilter = ref(false)
-		const selectedFilterOption = ref(filterOptions[0].id)
-		const searchQuery = ref(Logic.Common.route.query?.q?.toString() ?? '')
-
-		const selectedOptions = reactive<SelectedOption[]>([
-			...(Logic.Common.route.query?.userId && Logic.Common.route.query?.userName
-				? [
-						{
-							name: Logic.Common.route.query.userName.toString(),
-							id: Logic.Common.route.query.userId.toString(),
-							type: 'user',
-							query: {
-								field: 'user.id',
-								value: Logic.Common.route.query.userId.toString(),
-								condition: Conditions.eq,
-							},
-						},
-					]
-				: []),
-		])
-
-		const fetchSearchResults = () => {
-			const allQueries: QueryParams = {
-				where: [
-					{
-						field: 'status',
-						value: DraftStatus.published,
-						condition: Conditions.eq,
-					},
-					...selectedOptions.map((option) => option.query),
-				],
-				sort: [{ field: 'createdAt', desc: true }],
-				limit: 20,
-				...(searchQuery.value
-					? {
-							search: {
-								value: searchQuery.value,
-								fields: ['title', 'user.bio.name.first', 'user.bio.name.last', 'user.bio.name.full', 'user.bio.publicName'],
-							},
-						}
-					: {}),
-			}
-
-			Logic.Common.debounce(() => {
-				search(allQueries)
-			}, 500)
-		}
-
-		onMounted(() => {
-			Logic.Study.watchProperty('AllCourses', AllCourses)
-			Logic.Study.watchProperty('AllQuzzies', AllQuzzies)
-			fetchSearchResults()
-		})
-
-		watch([searchQuery, selectedOptions], fetchSearchResults)
-
-		return {
-			resourceContents,
-			Logic,
-			searchQuery,
-			selectedOptions,
-			showFilter,
-			quizContents,
-			filterOptions,
-			selectedFilterOption,
-			search,
-		}
-	},
+useMeta({
+	title: 'Search',
 })
-</script>
 
-<style scoped>
-.textarea[contenteditable]:empty::before {
-	content: 'Enter message';
-	color: #78828c;
-}
-</style>
+const filterOptions = [
+	{
+		name: 'All',
+		id: 'all',
+	},
+	{
+		name: 'Courses',
+		id: 'courses',
+	},
+	{
+		name: 'Quizzes',
+		id: 'quizzes',
+	},
+] as const
+
+const route = useRoute()
+const { q, userId, userName } = route.query as Record<string, string>
+const { query, courses, quizzes, search } = useSearch(q)
+
+const showFilter = ref(false)
+const selectedFilterOption = ref<(typeof filterOptions)[number]['id']>(filterOptions[0].id)
+
+const selectedOptions = reactive<SelectedOption[]>([
+	...(userId && userName
+		? ([
+				{
+					name: userName,
+					id: userId,
+					type: 'user',
+					query: {
+						field: 'user.id',
+						value: userId,
+					},
+				},
+			] as const)
+		: []),
+])
+
+watch(
+	[query, selectedOptions],
+	() => {
+		$utils.debounce('search', () => search(selectedOptions.map((option) => option.query)), 500)
+	},
+	{ immediate: true },
+)
+</script>

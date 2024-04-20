@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-	name: 'Library404',
+	name: 'Library404Page',
 	routeConfig: { middlewares: [() => '/library/quizzes'] },
 })
 </script>

@@ -68,8 +68,7 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 		this.tags = this.tags.filter((_, i) => i !== index)
 	}
 
-	loadEntity = (entity: QuizEntity) => {
-		this.reset()
+	load = (entity: QuizEntity) => {
 		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
@@ -86,7 +85,7 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 		this.modeAssessments = entity.modes.assessments
 	}
 
-	model = async () => {
+	model = () => {
 		const {
 			title,
 			description,

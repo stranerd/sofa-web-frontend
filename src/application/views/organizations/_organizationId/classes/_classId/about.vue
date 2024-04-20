@@ -10,9 +10,9 @@
 						v-for="(item, i) in [
 							{ title: 'Name', value: classInst.title },
 							{ title: 'Description', value: classInst.description },
-							{ title: 'Created', value: formatTime(classInst.createdAt) },
-							{ title: 'Lessons', value: formatNumber(classInst.lessons.length) },
-							{ title: 'Students', value: formatNumber(classInst.members.students.length) },
+							{ title: 'Created', value: $utils.formatTime(classInst.createdAt) },
+							{ title: 'Lessons', value: $utils.formatNumber(classInst.lessons.length) },
+							{ title: 'Students', value: $utils.formatNumber(classInst.members.students.length) },
 						]"
 						:key="item.title"
 						class="flex flex-col gap-2 bg-white rounded-2xl shadow-custom p-4 mdlg:bg-transparent mdlg:rounded-none mdlg:shadow-none mdlg:p-0">
@@ -24,8 +24,3 @@
 		</template>
 	</ClassLayout>
 </template>
-
-<script lang="ts" setup>
-import { formatNumber } from 'valleyed'
-import { formatTime } from '@utils/dates'
-</script>

@@ -1,6 +1,5 @@
 import { RouteLocationNormalized } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
-import { Logic } from 'sofa-logic'
 
 type MiddleWareArgs = {
 	to: RouteLocationNormalized
@@ -21,11 +20,11 @@ export const isNotAuthenticated = defineMiddleware(async () => {
 })
 const checkAuthUser = async (to: string) => {
 	if (!useAuth().isLoggedIn.value) {
-		if (!to.startsWith('/auth/')) await Logic.Common.setRedirectToRoute(to)
+		if (!to.startsWith('/auth/')) await $utils.setRedirectToRoute(to)
 		return '/auth/signin'
 	}
 	if (!useAuth().isEmailVerified.value) {
-		if (!to.startsWith('/auth/')) await Logic.Common.setRedirectToRoute(to)
+		if (!to.startsWith('/auth/')) await $utils.setRedirectToRoute(to)
 		return '/auth/verify'
 	}
 }
@@ -33,7 +32,7 @@ export const isAuthenticated = defineMiddleware(async ({ to }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
 	if (!useAuth().user.value?.type) {
-		await Logic.Common.setRedirectToRoute(to.fullPath)
+		await $utils.setRedirectToRoute(to.fullPath)
 		return '/onboarding'
 	}
 })
@@ -63,8 +62,8 @@ export const runMiddlewares = async (to: RouteLocationNormalized, fromRoute: Rou
 	for (const middleware of middlewares) {
 		const callback = typeof middleware === 'string' ? globalMiddlewares[middleware] : middleware
 		const goBackToNonAuth = () => {
-			const backPath = from?.fullPath ?? '/'
-			return backPath.startsWith('/auth/') ? '/' : backPath
+			const backPath = from?.fullPath ?? '/dashboard'
+			return backPath.startsWith('/auth/') ? '/dashboard' : backPath
 		}
 		const path = await wrapInAsync(() => callback?.({ to, from, goBackToNonAuth })).catch(() => null)
 		if (!path) continue

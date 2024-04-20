@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, YOUTUBE_LINK, WHATSAPP_LINK } from '@utils/constants'
+const { INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, YOUTUBE_LINK, WHATSAPP_LINK } = $utils.constants
 const footerLinks = [
 	{
 		title: 'About',

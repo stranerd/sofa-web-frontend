@@ -7,7 +7,7 @@
 			</div>
 		</div>
 		<div class="w-full mdlg:!hidden p-4 flex justify-between items-center gap-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="classInst.title" />
 			<span class="w-4" />
 		</div>
@@ -25,14 +25,14 @@
 						<div class="flex items-center gap-1">
 							<SofaIcon name="lessons" class="fill-black h-[16px]" />
 							<SofaNormalText color="text-deepGray" class="line-clamp-1">
-								{{ classInst.lessons.length }} {{ pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
+								{{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
 							</SofaNormalText>
 						</div>
 						<div class="flex items-center gap-1">
 							<SofaIcon name="user-unfilled" class="!fill-black h-[16px]" />
 							<SofaNormalText color="text-deepGray" class="line-clamp-1">
 								{{ classInst.members.students.length }}
-								{{ pluralize(classInst.members.students.length, 'student', 'students') }}
+								{{ $utils.pluralize(classInst.members.students.length, 'student', 'students') }}
 							</SofaNormalText>
 						</div>
 					</div>
@@ -41,7 +41,7 @@
 						<SofaNormalText :content="classInst.user.bio.name.full" />
 						<div class="h-[5px] w-[5px] rounded-full bg-deepGray"></div>
 						<SofaNormalText>
-							{{ `Created on ${formatTime(classInst.createdAt)}` }}
+							{{ `Created on ${$utils.formatTime(classInst.createdAt)}` }}
 						</SofaNormalText>
 					</div>
 					<SofaButton padding="py-3 px-5" class="hidden mdlg:block self-start mt-3" @click="enrollInClassProps.handler">
@@ -100,7 +100,6 @@
 </template>
 
 <script lang="ts" setup>
-import { pluralize } from 'valleyed'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMeta } from 'vue-meta'
@@ -109,8 +108,6 @@ import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	classInst: ClassEntity
@@ -138,7 +135,7 @@ const { similarClasses } = useSimilarClasses(props.classInst.organizationId, pro
 useMeta({ title: props.classInst.title })
 
 const shareClass = () => {
-	Logic.Common.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
+	$utils.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)
 }
 const purchase = runInAuth(() => {
 	const canAccessFree = user.value ? props.classInst.canAccessForFree(user.value) : false
@@ -165,7 +162,7 @@ const enrollInClassProps = computed(() => {
 	}
 	const canAccessFree = user.value ? classInst.canAccessForFree(user.value) : false
 	return {
-		label: `Enroll for ${canAccessFree ? 'free' : Logic.Common.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
+		label: `Enroll for ${canAccessFree ? 'free' : $utils.formatPrice(classInst.price.amount, classInst.price.currency)}/month`,
 		handler: purchase,
 	}
 })

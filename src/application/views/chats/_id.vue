@@ -115,7 +115,6 @@ import { useConversation } from '@app/composables/conversations/conversations'
 import { useCreateMessage } from '@app/composables/conversations/messages'
 import { useModals } from '@app/composables/core/modals'
 import { InteractionEntities } from '@modules/interactions'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'ChatsIdPage',
@@ -169,13 +168,13 @@ export default defineComponent({
 					conversation: conversation.value!,
 				})
 			if (wallet.value?.subscription.active)
-				return await Logic.Common.confirm({
+				return await $utils.confirm({
 					title: 'You have run out of tutor aided conversations',
 					sub: 'This feature will become available on your next subscription renewal',
 					right: { label: 'Close', bg: 'bg-primaryBlue' },
 					left: { hide: true },
 				})
-			const confirmed = await Logic.Common.confirm({
+			const confirmed = await $utils.confirm({
 				title: 'You have no subscription',
 				sub: 'You need to be subscribed to Stranerd Plus to access this feature',
 				right: { label: 'Subscribe', bg: 'bg-primaryBlue' },
@@ -187,7 +186,7 @@ export default defineComponent({
 
 		const onClickEndSession = async () => {
 			if (!conversation.value) return
-			const confirmed = await Logic.Common.confirm({
+			const confirmed = await $utils.confirm({
 				title: 'End session with tutor?',
 				sub: 'Are you sure you want to end this session? The tutor will be removed from this chat',
 				right: { label: 'End session' },
@@ -207,7 +206,6 @@ export default defineComponent({
 			id,
 			user,
 			userAi,
-			Logic,
 			factory,
 			createMessage,
 			conversation,

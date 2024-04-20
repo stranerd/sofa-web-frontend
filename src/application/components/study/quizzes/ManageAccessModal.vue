@@ -65,7 +65,6 @@ import { computed } from 'vue'
 import { useSearchUsers } from '@app/composables/users/users'
 import { QuizEntity } from '@modules/study'
 import { UserEntity } from '@modules/users'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
@@ -94,6 +93,6 @@ const members = computed(() => props.users.filter((u) => [props.quiz.user.id, ..
 const requests = computed(() => props.users.filter((u) => props.quiz.access.requests.includes(u.id)))
 
 const shareUrl = props.quiz.accessShareLink
-const share = async () => await Logic.Common.share('Edit quiz', `Gain access to edit quiz: ${props.quiz.title}`, shareUrl)
-const copy = () => Logic.Common.copy(shareUrl)
+const share = async () => await $utils.share('Edit quiz', `Gain access to edit quiz: ${props.quiz.title}`, shareUrl)
+const copy = () => $utils.copy(shareUrl)
 </script>

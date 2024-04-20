@@ -1,10 +1,10 @@
-import { Coursable, CourseMeta, CourseSections, Publishable, Saleable } from '../../domain/types'
+import { Coursable, CourseMeta, CourseSection, Publishable, Saleable } from '../../domain/types'
 
 export interface CourseFromModel extends CourseToModel, Publishable, Saleable {
 	id: string
 	__type: 'CourseEntity'
 	coursables: { id: string; type: Coursable }[]
-	sections: CourseSections
+	sections: CourseSection[]
 	meta: Record<CourseMeta, number>
 	createdAt: number
 	updatedAt: number

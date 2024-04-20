@@ -1,6 +1,5 @@
-import { useAsyncFn } from '../core/hooks'
+import { Refable, useAsyncFn } from '../core/hooks'
 import { FileEntity, FileFactory, FilesUseCases } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 export const useCreateFile = () => {
 	const factory = new FileFactory()
@@ -18,21 +17,22 @@ export const useCreateFile = () => {
 	return { factory, createFile, error, loading }
 }
 
-export const useUpdateFile = (file: FileEntity) => {
+export const useUpdateFile = (file: Refable<FileEntity | null>) => {
 	const factory = new FileFactory()
-	factory.loadEntity(file)
+	if (file.value) factory.loadEntity(file.value)
 
 	const {
 		asyncFn: updateFile,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const updatedFile = await FilesUseCases.update(file.id, factory)
-		factory.reset()
+		if (!file.value) return
+		const updatedFile = await FilesUseCases.update(file.value.id, factory)
+		factory.loadEntity(updatedFile)
 		return updatedFile
 	})
 
-	return { updateFile, error, loading }
+	return { factory, updateFile, error, loading }
 }
 
 export const useDeleteFile = () => {
@@ -47,7 +47,7 @@ export const useDeleteFile = () => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action is permanent.',
 					right: { label: 'Yes, delete' },

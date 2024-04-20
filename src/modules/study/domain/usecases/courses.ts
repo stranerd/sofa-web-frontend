@@ -1,8 +1,9 @@
 import { CourseEntity } from '../entities/courses'
+import { CourseSectionsFactory } from '../factories/courseSections'
 import { CourseFactory } from '../factories/courses'
 import { ICourseRepository } from '../irepositories/icourses'
-import { CourseSections } from '../types'
-import { Conditions, Listeners, QueryParams } from '@modules/core'
+import { DraftStatus } from '../types'
+import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 
 export class CoursesUseCase {
 	private repository: ICourseRepository
@@ -23,8 +24,8 @@ export class CoursesUseCase {
 		return await this.repository.publish(id)
 	}
 
-	async updateSections(id: string, sections: CourseSections) {
-		return await this.repository.updateSections(id, sections)
+	async updateSections(id: string, factory: CourseSectionsFactory) {
+		return await this.repository.updateSections(id, await factory.toModel())
 	}
 
 	async delete(id: string) {
@@ -35,6 +36,10 @@ export class CoursesUseCase {
 		return await this.repository.find(id)
 	}
 
+	async similar(id: string) {
+		return await this.repository.similar(id)
+	}
+
 	async listenToOne(id: string, listener: Listeners<CourseEntity>) {
 		return await this.repository.listenToOne(id, listener)
 	}
@@ -43,6 +48,21 @@ export class CoursesUseCase {
 		const conditions: QueryParams = {
 			where: [{ field: 'user.id', value: userId }],
 			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
+		}
+
+		return await this.repository.get(conditions)
+	}
+
+	async getUserPublicCourses(userId: string) {
+		const conditions: QueryParams = {
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'status', value: DraftStatus.published },
+			],
+			whereType: QueryKeys.and,
+			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
 		}
 
 		return await this.repository.get(conditions)
@@ -52,9 +72,24 @@ export class CoursesUseCase {
 		const conditions: QueryParams = {
 			where: [{ field: 'user.id', value: userId }],
 			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
 		}
 
 		return await this.repository.listenToMany(conditions, listener, (entity) => entity.user.id === userId)
+	}
+
+	async listenToUserPublicCourses(userId: string, listener: Listeners<CourseEntity>) {
+		const conditions: QueryParams = {
+			where: [
+				{ field: 'user.id', value: userId },
+				{ field: 'status', value: DraftStatus.published },
+			],
+			whereType: QueryKeys.and,
+			all: true,
+			sort: [{ field: 'createdAt', desc: true }],
+		}
+
+		return await this.repository.listenToMany(conditions, listener, (entity) => entity.user.id === userId && entity.isPublished)
 	}
 
 	async getInList(ids: string[]) {
@@ -74,5 +109,10 @@ export class CoursesUseCase {
 			listener,
 			(entity) => ids().includes(entity.id),
 		)
+	}
+
+	async getWithQuery(query: QueryParams) {
+		const result = await this.repository.get(query)
+		return result.results
 	}
 }

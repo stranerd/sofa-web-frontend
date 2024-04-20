@@ -45,7 +45,7 @@ import { useAuth } from '@app/composables/auth/auth'
 import { usePasswordUpdate } from '@app/composables/auth/passwords'
 
 export default defineComponent({
-	name: 'SecuritySettingPage',
+	name: 'SettingsSecurityPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

@@ -2,7 +2,6 @@ import { addToArray } from 'valleyed'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
-import { Logic } from 'sofa-logic'
 import { DepartmentEntity, DepartmentFactory, DepartmentsUseCases } from '@modules/school'
 import { useSuccessHandler } from '@app/composables/core/states'
 
@@ -139,7 +138,7 @@ export const useDeleteDepartment = (departmentId: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure you want to delete this department?',
 					sub: '',
 					right: { label: 'Yes, delete' },

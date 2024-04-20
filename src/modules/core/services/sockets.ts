@@ -1,7 +1,8 @@
 import io, { Socket } from 'socket.io-client'
 import { StatusCodes } from './http'
-import { apiBase } from '@utils/environment'
 import { getTokens } from '@utils/tokens'
+
+const { apiBase } = $utils.environment
 
 let socket = null as Socket<any, any> | null
 

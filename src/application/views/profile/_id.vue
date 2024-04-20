@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="user" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="user.publicName" />
 			<div />
 		</div>
@@ -144,7 +144,6 @@ import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'ProfileIdPage',
@@ -172,7 +171,6 @@ export default defineComponent({
 			user,
 			materials,
 			filteredMaterials,
-			Logic,
 			currentTab,
 			socials,
 			searchQuery,

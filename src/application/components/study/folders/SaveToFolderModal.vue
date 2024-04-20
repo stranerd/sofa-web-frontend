@@ -20,12 +20,12 @@
 					<SofaCustomInput
 						v-if="folder.id === factory.entityId"
 						v-model="factory.title"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full  cursor-text !bg-white"
+						class="grow"
 						placeholder="Folder name"
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
 
-					<SofaNormalText v-else class="truncate w-full" :content="folder.title" />
+					<SofaNormalText v-else class="truncate grow" :content="folder.title" />
 				</div>
 
 				<div class="flex items-center shrink-0">
@@ -48,11 +48,11 @@
 
 <script lang="ts" setup>
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
-import { CourseEntity, FolderSaved, QuizEntity } from '@modules/study'
+import { StudyMaterial, FolderSaved } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void
-	entity: CourseEntity | QuizEntity
+	entity: StudyMaterial
 }>()
 
 const { folders, saveItem } = useMyFolders()

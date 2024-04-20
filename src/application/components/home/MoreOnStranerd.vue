@@ -167,7 +167,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Vue3Marquee } from 'vue3-marquee'
-import { APPSTORE_LINK, PLAYSTORE_LINK } from '@utils/constants'
+
+const { APPSTORE_LINK, PLAYSTORE_LINK } = $utils.constants
 defineProps({
 	content: {
 		type: Object as () => IMoreOnStranerd,

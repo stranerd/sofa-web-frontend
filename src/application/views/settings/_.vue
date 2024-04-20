@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-	name: 'Settings404',
+	name: 'Settings404Page',
 	routeConfig: { middlewares: [() => '/settings/profile'] },
 })
 </script>

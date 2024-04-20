@@ -1,6 +1,6 @@
 import { CourseEntity } from '../../domain/entities/courses'
 import { ICourseRepository } from '../../domain/irepositories/icourses'
-import { Coursable, CourseSections } from '../../domain/types'
+import { Coursable, CourseSection } from '../../domain/types'
 import { CourseFromModel, CourseToModel } from '../models/courses'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
@@ -77,8 +77,8 @@ export class CourseRepository implements ICourseRepository {
 		return this.mapper(d)
 	}
 
-	async updateSections(id: string, sections: CourseSections) {
-		const d = await this.client.post<{ sections: CourseSections }, CourseFromModel>(`/${id}/sections`, { sections })
+	async updateSections(id: string, sections: CourseSection[]) {
+		const d = await this.client.post<{ sections: CourseSection[] }, CourseFromModel>(`/${id}/sections`, { sections })
 		return this.mapper(d)
 	}
 }

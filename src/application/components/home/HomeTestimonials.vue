@@ -18,8 +18,8 @@
 				</div>
 				<p class="text-[16px]">{{ testimonial.testimonial }}</p>
 				<div class="flex items-center gap-1">
-					<SofaIcon v-for="i in testimonial.ratings" :key="i" name="star-full" class="h-[10px]" />
-					<SofaIcon v-for="i in 5 - testimonial.ratings" :key="i" name="star" class="h-[10px]" />
+					<SofaIcon v-for="i in testimonial.ratings" :key="i" name="star" class="h-[10px] fill-primaryYellow" />
+					<SofaIcon v-for="i in 5 - testimonial.ratings" :key="i" name="star" class="h-[10px] fill-grayColor" />
 				</div>
 			</div>
 		</div>

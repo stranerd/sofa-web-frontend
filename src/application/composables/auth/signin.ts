@@ -7,9 +7,10 @@ import { createSession } from '@app/composables/auth/session'
 import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
 import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/auth'
 import { NetworkError, StatusCodes } from '@modules/core'
-import { isWeb } from '@utils/constants'
-import { googleClientId, packageName } from '@utils/environment'
 import { storage } from '@utils/storage'
+
+const { isWeb } = $utils.constants
+const { googleClientId, packageName } = $utils.environment
 
 const store = {
 	referrerId: ref(undefined as string | undefined),

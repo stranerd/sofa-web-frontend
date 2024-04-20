@@ -43,7 +43,7 @@
 						<SofaHeaderText
 							size="xl"
 							color="text-inherit !font-normal"
-							:content="formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
+							:content="$utils.formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
 						<SofaNormalText size="lg" color="text-inherit" :content="stat.label" />
 					</div>
 					<div class="flex p-2 md:p-4 rounded-full items-center justify-center" :style="`background-color: ${stat.color}50`">
@@ -80,7 +80,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber } from 'valleyed'
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useUsersMaterials } from '@app/composables/study/users-materials'

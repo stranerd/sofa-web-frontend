@@ -7,7 +7,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
-import { useEditQuiz } from '@app/composables/study/quizzes'
+import { useDeleteQuiz, useEditQuiz } from '@app/composables/study/quizzes'
 import { UserEntity, UsersUseCases } from '@modules/users'
 
 const props = withDefaults(
@@ -27,12 +27,8 @@ const {
 	quiz,
 	questions,
 	fetched,
-	quizFactory,
 	questionFactory,
-	deleteQuiz,
 	saveQuestion,
-	updateQuiz: update,
-	publishQuiz,
 	reorderQuestions,
 	deleteQuestion,
 	addQuestion,
@@ -42,6 +38,7 @@ const {
 	grantAccess,
 	manageMembers,
 } = useEditQuiz(props.id)
+const { deleteQuiz } = useDeleteQuiz()
 
 const selectedQuestionId = ref(props.selectedQuestion)
 const currentQuestionById = computed(() => questions.value.find((q) => q.id === selectedQuestionId.value))
@@ -49,11 +46,6 @@ const currentQuestionById = computed(() => questions.value.find((q) => q.id === 
 const saveCurrentQuestion = async () => {
 	if (!currentQuestionById.value || !questionFactory.valid) return
 	await saveQuestion(currentQuestionById.value.id, questionFactory)
-}
-
-const updateQuiz = async () => {
-	if (!quizFactory.valid) return
-	return await update()
 }
 
 const extras = computed(() => ({
@@ -76,32 +68,19 @@ const extras = computed(() => ({
 	},
 	currentQuestionById: currentQuestionById.value,
 	questionFactory,
-	quizFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => questions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions,
 	deleteQuestion,
 	addQuestion,
 	duplicateQuestion,
-	deleteQuiz,
+	deleteQuiz: async () => (quiz.value ? deleteQuiz(quiz.value) : undefined),
 	saveCurrentQuestion,
-	updateQuiz,
-	publishQuiz,
 	requestAccess,
 	grantAccess,
 	manageMembers,
 	isMine: quiz.value?.user.id === authId.value,
 	canEdit: quiz.value?.access.members.concat(quiz.value.user.id).includes(authId.value),
 }))
-
-watch(
-	quiz,
-	async () => {
-		const q = quiz.value
-		if (!q) return
-		quizFactory.loadEntity(q)
-	},
-	{ immediate: true },
-)
 
 watch(
 	[currentQuestionById, questions],

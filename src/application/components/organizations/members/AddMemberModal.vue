@@ -43,7 +43,6 @@
 import { useManageOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	org: UserEntity
@@ -53,6 +52,6 @@ const props = defineProps<{
 
 const { addMembersEmails, addMembers } = useManageOrganizationMembers(props.org.id)
 const share = async () =>
-	await Logic.Common.share('Join organization', `Join to become a member of ${props.org?.publicName}`, props.org.shareLink)
-const copy = () => Logic.Common.copy(props.org.shareLink)
+	await $utils.share('Join organization', `Join to become a member of ${props.org?.publicName}`, props.org.shareLink)
+const copy = () => $utils.copy(props.org.shareLink)
 </script>

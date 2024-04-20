@@ -1,9 +1,9 @@
 import { addToArray } from 'valleyed'
 import { Ref, onMounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
-import { CourseEntity, QuizEntity, DraftStatus } from '@modules/study'
+import { useListener } from '../core/listener'
+import { CourseEntity, QuizEntity, CoursesUseCases, QuizzesUseCases } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { Logic, QueryParams } from 'sofa-logic'
 
 const store = {} as Record<
 	string,
@@ -21,6 +21,54 @@ export const useUsersMaterials = (id: string) => {
 		courses: reactive([]),
 	}
 
+	const listener = useListener(async () => {
+		const listeners = await Promise.all([
+			CoursesUseCases.listenToUserPublicCourses(id, {
+				created: async (entity) => {
+					addToArray(
+						store[id].courses,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store[id].courses,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store[id].courses = store[id].courses.filter((m) => m.id !== entity.id)
+				},
+			}),
+			QuizzesUseCases.listenToUserPublicQuizzes(id, {
+				created: async (entity) => {
+					addToArray(
+						store[id].quizzes,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store[id].quizzes,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store[id].quizzes = store[id].quizzes.filter((m) => m.id !== entity.id)
+				},
+			}),
+		])
+		return () => listeners.map((l) => l())
+	})
+
 	const {
 		asyncFn: fetchUserAndMaterials,
 		loading,
@@ -29,17 +77,9 @@ export const useUsersMaterials = (id: string) => {
 	} = useAsyncFn(
 		async () => {
 			store[id].user.value = await UsersUseCases.find(id)
-			const query: QueryParams = {
-				where: [
-					{ field: 'user.id', value: id },
-					{ field: 'status', value: DraftStatus.published },
-				],
-				all: true, // TODO: implement pagination
-				sort: [{ field: 'createdAt', desc: true }],
-			}
 			const [courses, quizzes] = await Promise.all([
-				Logic.Study.GetCourses(query),
-				Logic.Study.GetQuizzes({ ...query, where: [...query.where!, { field: 'courseId', value: null }] }),
+				await CoursesUseCases.getUserPublicCourses(id),
+				await QuizzesUseCases.getUserPublicQuizzes(id),
 			])
 			courses.results.forEach((r) =>
 				addToArray(
@@ -63,6 +103,10 @@ export const useUsersMaterials = (id: string) => {
 
 	onMounted(async () => {
 		if (!called.value) await fetchUserAndMaterials()
+		await listener.start()
+	})
+	onMounted(async () => {
+		await listener.close()
 	})
 
 	return { ...store[id], loading, error }

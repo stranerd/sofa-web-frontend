@@ -73,7 +73,7 @@
 								<SofaNormalText class="!line-clamp-1 !text-left" :content="tutor.subjects" />
 
 								<div class="w-full flex gap-2 items-center">
-									<SofaIcon name="star-full" class="h-[16px]" />
+									<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 									<div class="flex gap-1 items-center">
 										<SofaNormalText :content="tutor.ratings.value" />
 										<SofaNormalText
@@ -116,7 +116,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber } from 'valleyed'
 import { computed, ref } from 'vue'
 import { useCreateConversation } from '@app/composables/conversations/conversations'
 import { useTopicsList } from '@app/composables/interactions/tags'
@@ -162,7 +161,7 @@ const filteredTutors = computed(() =>
 			photoUrl: t.bio.photo?.link ?? null,
 			ratings: {
 				count: t.account.ratings.count,
-				value: formatNumber(t.account.ratings.avg, 2),
+				value: window.$utils.formatNumber(t.account.ratings.avg, 2),
 			},
 			subjects: t.tutor.topics
 				.map((item) => topics.find((t) => t.id === item)?.title)

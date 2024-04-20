@@ -26,12 +26,12 @@ export class PasswordResetFactory extends BaseFactory<null, { password: string; 
 		super({ email: '', password: '', cPassword: '', token: '' })
 	}
 
-	model = async () => {
+	model = () => {
 		const { password, token } = this.validValues
 		return { password, token }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

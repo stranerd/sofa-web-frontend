@@ -57,8 +57,7 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Keys
 		this.tags = this.tags.filter((_, i) => i !== index)
 	}
 
-	loadEntity = (entity: CourseEntity) => {
-		this.reset()
+	load = (entity: CourseEntity) => {
 		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
@@ -69,7 +68,7 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Keys
 		this.currency = entity.price.currency
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, description, photo, topic, tags, amount, currency } = this.validValues
 		return {
 			title,

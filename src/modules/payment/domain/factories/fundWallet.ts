@@ -15,7 +15,7 @@ export class FundWalletFactory extends BaseFactory<null, FundDetails, FundDetail
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { amount, methodId } = this.validValues
 		return {
 			amount,
@@ -23,7 +23,7 @@ export class FundWalletFactory extends BaseFactory<null, FundDetails, FundDetail
 		}
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

@@ -14,12 +14,12 @@ export class EmailSigninFactory extends BaseFactory<null, AuthUser, AuthUser> {
 		super({ email: '', password: '' })
 	}
 
-	model = async () => {
+	model = () => {
 		const { email, password } = this.validValues
 		return { email, password }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

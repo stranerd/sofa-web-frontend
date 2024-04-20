@@ -1,7 +1,6 @@
 import { NotificationEntity } from '../entities/notifications'
 import { INotificationRepository } from '../irepositories/notifications'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
-import { DEFAULT_PAGINATION_LIMIT } from '@utils/constants'
 
 export class NotificationsUseCase {
 	private repository: INotificationRepository
@@ -13,7 +12,7 @@ export class NotificationsUseCase {
 	async get(date?: number) {
 		const conditions: QueryParams = {
 			sort: [{ field: 'createdAt', desc: true }],
-			limit: DEFAULT_PAGINATION_LIMIT,
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
 		}
 		if (date) conditions.where = [{ field: 'createdAt', condition: Conditions.lt, value: date }]
 		return await this.repository.get(conditions)

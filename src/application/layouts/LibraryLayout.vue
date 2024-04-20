@@ -1,7 +1,7 @@
 <template>
-	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray p-4 sticky top-0 left-0">
-			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon customClass="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
 			<span class="w-4" />
 		</div>
@@ -34,7 +34,7 @@
 					class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
 					:to="item.routePath"
 					exactActiveClass="bg-lightBlue font-semibold">
-					<SofaIcon :name="item.icon" customClass="h-[17px]" />
+					<SofaIcon :name="item.icon" class="h-[17px] fill-deepGray" />
 					<SofaNormalText>{{ item.title }}</SofaNormalText>
 				</router-link>
 
@@ -55,12 +55,12 @@
 					<SofaCustomInput
 						v-if="item.id === factory.entityId"
 						v-model="factory.title"
-						customClass="lg:text-sm mdlg:text-[12px] text-xs w-full cursor-text !bg-white"
+						class="grow"
 						:autoFocus="true"
 						placeholder="Folder name"
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
-					<SofaNormalText v-else class="truncate w-full">{{ item.title }}</SofaNormalText>
+					<SofaNormalText v-else class="truncate grow">{{ item.title }}</SofaNormalText>
 
 					<div
 						v-if="item.id !== factory.entityId"
@@ -95,7 +95,7 @@
 						:key="item.routePath"
 						:to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-lightGray">
-						<SofaIcon :name="item.icon" customClass="h-[16px]" />
+						<SofaIcon :name="item.icon" class="h-[16px] fill-deepGray" />
 						<SofaNormalText>{{ item.title }}</SofaNormalText>
 					</router-link>
 				</div>
@@ -119,10 +119,10 @@
 							v-model="factory.title"
 							placeholder="Folder name"
 							:autoFocus="true"
-							customClass="lg:text-sm mdlg:text-[12px] text-xs w-full !py-1 !bg-lightGray rounded cursor-text"
+							class="grow !py-1 !bg-lightGray rounded"
 							@onBlur="saveFolder"
 							@onEnter="saveFolder" />
-						<SofaNormalText v-else class="truncate w-full">{{ item.title }}</SofaNormalText>
+						<SofaNormalText v-else class="truncate grow">{{ item.title }}</SofaNormalText>
 
 						<div
 							v-if="item.id !== factory.entityId"
@@ -181,7 +181,6 @@ import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { PlayTypes } from '@modules/plays'
 import { DraftStatus } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const { isAdmin } = useAuth()
 const playOptions = [

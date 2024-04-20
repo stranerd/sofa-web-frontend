@@ -18,14 +18,14 @@ export class TutorRequestFactory extends BaseFactory<TutorRequestEntity, TutorRe
 		super({ topicId: '', verification: undefined as any, qualification: [] })
 	}
 
-	loadEntity = (entity: TutorRequestEntity) => {
+	load = (entity: TutorRequestEntity) => {
 		this.entityId = entity.id
 		this.topicId = entity.topicId
 		this.verification = entity.verification
 		this.qualification = entity.qualification
 	}
 
-	model = async () => {
+	model = () => {
 		const { topicId, verification, qualification } = this.validValues
 		return { topicId, verification, qualification }
 	}

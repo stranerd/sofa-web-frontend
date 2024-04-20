@@ -12,7 +12,7 @@
 				:key="activity.hash"
 				type="activity"
 				:material="activity"
-				:isWrapped="!Logic.Common.isLarge"
+				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"
@@ -29,11 +29,10 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { openMaterial } from '@app/composables/library'
 import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
+import { openMaterial } from '@app/composables/study/library'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'LibraryFoldersIdPage',
@@ -54,7 +53,7 @@ export default defineComponent({
 			return []
 		})
 
-		return { Logic, folder, openMaterial, data }
+		return { folder, openMaterial, data }
 	},
 })
 </script>

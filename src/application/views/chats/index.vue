@@ -21,12 +21,11 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'ChatsIndexPage',
 	components: { ChatList },
-	routeConfig: { middlewares: ['isAuthenticated', () => (Logic.Common.isLarge ? '/chats/new' : undefined)] },
+	routeConfig: { middlewares: ['isAuthenticated', () => ($screen.desktop ? '/chats/new' : undefined)] },
 	setup() {
 		useMeta({
 			title: 'Chat',

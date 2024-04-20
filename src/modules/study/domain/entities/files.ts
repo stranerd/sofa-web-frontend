@@ -2,7 +2,6 @@ import { FileFromModel } from '../../data/models/files'
 import { CoursableAccess } from '../types'
 import { CoursableEntity } from './coursables'
 import { getTokens } from '@utils/tokens'
-import { apiBase } from '@utils/environment'
 
 export class FileEntity extends CoursableEntity<FileFromModel> {
 	constructor(data: FileFromModel) {
@@ -15,6 +14,6 @@ export class FileEntity extends CoursableEntity<FileFromModel> {
 			AccessToken: JSON.stringify(accessToken ?? ''),
 			access: JSON.stringify(access ?? {}),
 		})
-		return `${apiBase}/study/files/${this.id}/media?${query.toString()}`
+		return `${$utils.environment.apiBase}/study/files/${this.id}/media?${query.toString()}`
 	}
 }

@@ -2,9 +2,9 @@
 	<slot v-if="!classInst" name="notfound" />
 	<ExploreClassView v-else-if="!user || !classInst.isEnrolled(user)" :classInst="classInst" />
 	<slot v-else-if="full" name="full" :classInst="classInst" :user="user" />
-	<ExpandedLayout v-else-if="!Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout v-else-if="!$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4 sticky top-0">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="pageTitle" />
 			<span class="w-4" />
 		</div>
@@ -61,7 +61,6 @@ import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useClass } from '@app/composables/organizations/classes'
-import { Logic } from 'sofa-logic'
 import { useAuth } from '@app/composables/auth/auth'
 
 const props = withDefaults(

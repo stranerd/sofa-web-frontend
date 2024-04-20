@@ -2,7 +2,6 @@ import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { Logic } from 'sofa-logic'
 import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 
 const store = {} as Record<
@@ -148,7 +147,7 @@ export const useDeleteSchedule = () => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action is permanent.',
 					right: { label: 'Yes, delete' },
@@ -161,7 +160,7 @@ export const useDeleteSchedule = () => {
 
 export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntity) => {
 	const { asyncFn: copyKey } = useAsyncFn(async (s = schedule) => {
-		if (s.stream) await Logic.Common.copy(s.stream.streamKey)
+		if (s.stream) await $utils.copy(s.stream.streamKey)
 	})
 
 	const { asyncFn: join } = useAsyncFn(async (s = schedule) => {
@@ -186,7 +185,7 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 		},
 		{
 			pre: async () =>
-				Logic.Common.confirm({
+				$utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action will start the schedule. It will copy your youtube record key to your clipboard and redirect you to the jitsi site. You can always come back here to copy the stream code if needed.',
 					right: { label: 'Yes, start' },
@@ -201,7 +200,7 @@ export const useStartSchedule = (classInst: ClassEntity, schedule: ScheduleEntit
 		},
 		{
 			pre: async () =>
-				Logic.Common.confirm({
+				$utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action will end the schedule. Nobody will be able to join the live anymore.',
 					right: { label: 'Yes, end' },

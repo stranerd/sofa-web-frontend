@@ -12,9 +12,7 @@
 
 		<div class="w-full flex flex-col p-4 justify-start border-2 border-darkLightGray rounded-custom">
 			<SofaNormalText class="capitalize" :content="transaction.label" />
-			<SofaHeaderText
-				class="mdlg:!text-3xl !text-2xl"
-				:content="Logic.Common.formatPrice(transaction.amount, transaction.currency)" />
+			<SofaHeaderText class="mdlg:!text-3xl !text-2xl" :content="$utils.formatPrice(transaction.amount, transaction.currency)" />
 		</div>
 
 		<div class="w-full flex flex-col gap-4 py-4 md:pb-0">
@@ -29,8 +27,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { TransactionEntity } from '@modules/payment'
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void
@@ -38,16 +34,16 @@ const props = defineProps<{
 }>()
 
 const details = computed(() => [
-	{ label: 'Amount', value: Logic.Common.formatPrice(props.transaction.originalAmount, props.transaction.currency) },
+	{ label: 'Amount', value: $utils.formatPrice(props.transaction.originalAmount, props.transaction.currency) },
 	...(props.transaction.serviceAmount > 0
 		? [
 				{
 					label: 'Commission',
-					value: Logic.Common.formatPrice(props.transaction.serviceAmount, props.transaction.currency),
+					value: $utils.formatPrice(props.transaction.serviceAmount, props.transaction.currency),
 				},
 			]
 		: []),
 	{ label: 'Title', value: props.transaction.title },
-	{ label: 'Time', value: formatTime(props.transaction.createdAt) },
+	{ label: 'Time', value: $utils.formatTime(props.transaction.createdAt) },
 ])
 </script>

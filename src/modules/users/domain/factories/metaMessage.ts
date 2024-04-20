@@ -1,7 +1,7 @@
 import { v } from 'valleyed'
 import { MetaMessageData } from '../types'
-import { BaseFactory } from '@modules/core'
 import { AuthDetails, isValidPhone } from '@modules/auth'
+import { BaseFactory } from '@modules/core'
 
 export class MetaMessageFactory extends BaseFactory<AuthDetails, MetaMessageData, MetaMessageData> {
 	readonly rules = {
@@ -20,12 +20,12 @@ export class MetaMessageFactory extends BaseFactory<AuthDetails, MetaMessageData
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { name, email, phone, message } = this.validValues
 		return { name, email, phone, message }
 	}
 
-	loadEntity = (entity: AuthDetails) => {
+	load = (entity: AuthDetails) => {
 		this.name = entity.allNames.full
 		this.email = entity.email
 		if (entity.phone) this.phone = entity.phone

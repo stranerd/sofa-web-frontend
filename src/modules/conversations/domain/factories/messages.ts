@@ -13,12 +13,12 @@ export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, M
 		super({ body: '', media: null })
 	}
 
-	model = async () => {
+	model = () => {
 		const { body, media } = this.validValues
 		return { body, media }
 	}
 
-	loadEntity = (entity: MessageEntity) => {
+	load = (entity: MessageEntity) => {
 		this.entityId = entity.id
 		this.body = entity.body
 		this.media = entity.media

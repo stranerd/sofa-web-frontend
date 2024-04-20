@@ -8,8 +8,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { usePlay } from '@app/composables/plays/plays'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { PlayTypes } from '@modules/plays'
-import { ordinalSuffixOf } from '@utils/commons'
-import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{
@@ -55,14 +53,10 @@ const extras = computed(() => ({
 	resetAnswer,
 	share: async () => {
 		if (play.value)
-			await Logic.Common.share(
-				`Join ${play.value.singularizedType} on SOFA`,
-				`Take a quiz on: ${play.value.title}`,
-				play.value.shareLink,
-			)
+			await $utils.share(`Join ${play.value.singularizedType} on SOFA`, `Take a quiz on: ${play.value.title}`, play.value.shareLink)
 	},
 	copy: async () => {
-		if (play.value) await Logic.Common.copy(play.value.shareLink)
+		if (play.value) await $utils.copy(play.value.shareLink)
 	},
 	get scores() {
 		const p = play.value
@@ -71,7 +65,7 @@ const extras = computed(() => ({
 			.map((res, i, scores) => ({
 				score: res.value,
 				percentage: play.value?.getPercentage(res.userId) ?? 0,
-				position: scores[i - 1]?.value === res.value ? '' : ordinalSuffixOf(i + 1),
+				position: scores[i - 1]?.value === res.value ? '' : $utils.ordinalSuffixOf(i + 1),
 				user: participants.value.find((p) => p.id === res.userId)!,
 				isWinner: scores[0]?.value === res.value,
 				label: p.getResultLabel(authId.value),

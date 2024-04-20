@@ -46,7 +46,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		this.set('cPassword', '')
 	}
 
-	model = async () => {
+	model = () => {
 		const { first, last, email, password, description, photo } = this.validValues
 		return {
 			name: { first, last },
@@ -57,7 +57,7 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 		}
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

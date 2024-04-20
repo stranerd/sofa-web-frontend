@@ -58,8 +58,7 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 		this.tags = this.tags.filter((_, i) => i !== index)
 	}
 
-	loadEntity = (entity: FileEntity) => {
-		this.reset()
+	load = (entity: FileEntity) => {
 		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
@@ -70,7 +69,7 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 		this.courseId = entity.courseId
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, description, photo, topic, tags, media, courseId } = this.validValues
 		return { title, description, photo, topic, tags, media, courseId }
 	}

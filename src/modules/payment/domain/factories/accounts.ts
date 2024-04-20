@@ -16,12 +16,12 @@ class _AccountUpdateFactory extends BaseFactory<AccountDetails, AccountUpdate, A
 		super({ country: CurrencyCountries.NG, bankCode: '', bankNumber: '' })
 	}
 
-	model = async () => {
+	model = () => {
 		const { country, bankCode, bankNumber } = this.validValues
 		return { country, bankCode, bankNumber }
 	}
 
-	loadEntity = (entity: AccountDetails) => {
+	load = (entity: AccountDetails) => {
 		this.country = entity.country
 		this.bankCode = entity.bankCode
 		this.bankNumber = entity.bankNumber

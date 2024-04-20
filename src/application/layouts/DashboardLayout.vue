@@ -1,7 +1,7 @@
 <template>
-	<ExpandedLayout v-if="!index && !Logic.Common.isLarge" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="title" />
 			<span class="w-4" />
 		</div>
@@ -32,7 +32,7 @@
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
 							<SofaNormalText class="font-bold">
-								{{ formatNumber(user.account.rankings.overall.value, 2) }} xp
+								{{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp
 							</SofaNormalText>
 							<SofaNormalText color="text-bodyBlack" content="Point" />
 						</div>
@@ -41,7 +41,7 @@
 						<SofaIcon class="h-[40px]" name="streak-new" />
 						<div class="flex flex-col items-start justify-center">
 							<SofaNormalText class="font-bold">
-								{{ user.account.streak.count }} {{ pluralize(user.account.streak.count, 'day', 'days') }}
+								{{ user.account.streak.count }} {{ $utils.pluralize(user.account.streak.count, 'day', 'days') }}
 							</SofaNormalText>
 							<SofaNormalText color="text-bodyBlack">Streak</SofaNormalText>
 						</div>
@@ -159,7 +159,6 @@
 </template>
 
 <script setup lang="ts">
-import { formatNumber, pluralize } from 'valleyed'
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
@@ -168,7 +167,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
 import { useModals } from '@app/composables/core/modals'
 import { MemberTypes } from '@modules/organizations'
-import { Logic } from 'sofa-logic'
 
 const props = withDefaults(
 	defineProps<{

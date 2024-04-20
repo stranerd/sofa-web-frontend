@@ -35,13 +35,13 @@
     "valleyed": "^4.2.11",
     "video.js": "^8.10.0",
     "vue": "^3.4.21",
+    "vue-draggable-plus": "^0.4.0",
     "vue-inline-svg": "^3.1.2",
     "vue-meta": "^3.0.0-alpha.7",
     "vue-router": "^4.3.0",
     "vue-tel-input": "^8.3.1",
     "vue3-editor": "^0.1.1",
-    "vue3-marquee": "^4.2.0",
-    "vuedraggable": "^4.1.0"
+    "vue3-marquee": "^4.2.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

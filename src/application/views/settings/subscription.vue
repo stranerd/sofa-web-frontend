@@ -10,7 +10,7 @@
 						<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
 							<SofaHeaderText size="2xl" color="text-current" class="capitalize">{{ currentPlan.title }}</SofaHeaderText>
 							<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()" color="text-current">
-								{{ Logic.Common.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
+								{{ $utils.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
 								days left
 							</SofaNormalText>
 							<SofaNormalText v-else color="text-current"> Expired </SofaNormalText>
@@ -42,7 +42,7 @@
 
 				<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
 					<SofaHeaderText size="2xl" color="text-current">
-						{{ Logic.Common.formatPrice(wallet.getCurrentBill(currentPlan), currentPlan.currency) }}
+						{{ $utils.formatPrice(wallet.getCurrentBill(currentPlan), currentPlan.currency) }}
 					</SofaHeaderText>
 
 					<SofaNormalText class="text-current">Current Bill</SofaNormalText>
@@ -65,7 +65,7 @@
 
 				<div v-if="wallet.subscription.active" class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
 					<SofaNormalText class="!font-bold">Next billing date</SofaNormalText>
-					<SofaNormalText>{{ formatTime(wallet.subscription.current.expiredAt) }}</SofaNormalText>
+					<SofaNormalText>{{ $utils.formatTime(wallet.subscription.current.expiredAt) }}</SofaNormalText>
 				</div>
 			</div>
 
@@ -78,7 +78,7 @@
 					<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
 						<SofaNormalText class="text-current capitalize">{{ myApplicablePlan.title }}</SofaNormalText>
 						<SofaHeaderText size="2xl" color="text-current">
-							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
+							{{ $utils.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
 						</SofaHeaderText>
 
 						<SofaNormalText class="text-current">per member/month</SofaNormalText>
@@ -111,7 +111,7 @@
 
 					<div class="flex flex-row gap-2 items-center">
 						<SofaHeaderText class="!text-2xl !font-bold">
-							{{ Logic.Common.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
+							{{ $utils.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
 						</SofaHeaderText>
 						<SofaNormalText customClass="!text-2xl"> / {{ myApplicablePlan.intervalInWord }}</SofaNormalText>
 					</div>
@@ -149,12 +149,10 @@ import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlansList, useSubscription } from '@app/composables/payment/plans'
-import { formatTime } from '@utils/dates'
-import { Logic } from 'sofa-logic'
 import { PlanEntity } from '@modules/payment'
 
 export default defineComponent({
-	name: 'SubscriptionSettingPage',
+	name: 'SettingsSubscriptionPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({
@@ -196,12 +194,10 @@ export default defineComponent({
 		const { renewPlan, toggleRenewPlan } = useSubscription()
 
 		const subscribeToPlan = async (plan: PlanEntity) => {
-			await router.push(`/checkout/subscription/${plan.id}?back=/settings/subscription`)
+			await router.push(`/marketplace/plans/${plan.id}?back=/settings/subscription`)
 		}
 
 		return {
-			Logic,
-			formatTime,
 			myApplicablePlan,
 			currentPlan,
 			subscriptionInfo,

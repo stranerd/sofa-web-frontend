@@ -3,7 +3,7 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useMyPurchases } from '../payment/purchases'
 import { useModals } from '../core/modals'
-import { CourseEntity, QuizEntity, StudyKeys, StudyUseCases } from '@modules/study'
+import { CourseEntity, CoursesUseCases, StudyMaterial, QuizEntity, StudyKeys, StudyUseCases, QuizzesUseCases } from '@modules/study'
 
 export const handleShowAddMaterial = () => {
 	useModals().study.addMaterial.open({})
@@ -12,7 +12,14 @@ export const handleShowAddMaterial = () => {
 const store: Record<
 	string,
 	{
-		materials: Ref<(QuizEntity | CourseEntity)[]>
+		materials: Ref<StudyMaterial[]>
+	}
+> = {}
+
+const similarStore: Record<
+	string,
+	{
+		materials: Ref<StudyMaterial[]>
 	}
 > = {}
 
@@ -50,10 +57,37 @@ export const useRecent = () => {
 	return { quizzes, courses }
 }
 
+export const useSimilar = (material: StudyMaterial) => {
+	const key = `${material.__type}/${material.id}`
+
+	similarStore[key] ??= {
+		materials: ref([]),
+	}
+
+	const {
+		asyncFn: fetchSimilar,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(
+		async () => {
+			const materials = material.isQuiz() ? await QuizzesUseCases.similar(material.id) : await CoursesUseCases.similar(material.id)
+			similarStore[key].materials.value = materials
+		},
+		{ key: `study/study/${key}/similar` },
+	)
+
+	onMounted(async () => {
+		if (!called.value) await fetchSimilar()
+	})
+
+	return { ...similarStore[key], loading, error }
+}
+
 export const useHasAccess = () => {
 	const { id, user } = useAuth()
 	const { purchasesCoursesIds } = useMyPurchases()
-	const hasAccess = computed(() => (material: QuizEntity | CourseEntity | null) => {
+	const hasAccess = computed(() => (material: StudyMaterial | null) => {
 		if (!material) return false
 		return [
 			material.isQuiz() && !material.courseId,

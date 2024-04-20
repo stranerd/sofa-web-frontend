@@ -7,7 +7,7 @@ import { defineComponent } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 
 export default defineComponent({
-	name: 'ProfilePage',
+	name: 'ProfileIndexPage',
 	routeConfig: {
 		middlewares: [
 			'isAuthenticated',

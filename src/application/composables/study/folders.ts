@@ -1,14 +1,13 @@
+import { addToArray, getRandomValue } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { addToArray, getRandomValue } from 'valleyed'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
-import { Logic } from 'sofa-logic'
-import { CourseEntity, FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, QuizEntity } from '@modules/study'
+import { FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, StudyMaterial } from '@modules/study'
 
-export const saveToFolder = (entity: CourseEntity | QuizEntity) => {
+export const saveToFolder = (entity: StudyMaterial) => {
 	useModals().study.saveToFolder.open({ entity })
 }
 
@@ -102,7 +101,7 @@ export const useEditFolder = () => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: 'This action is permanent. All items in the folder will be removed',
 					right: { label: 'Yes, delete' },

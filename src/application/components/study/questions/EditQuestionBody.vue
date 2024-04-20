@@ -4,7 +4,6 @@
 			<span v-for="(item, index) in factory.fillInBlanksAnswers" :key="index" class="flex items-center gap-1">
 				<SofaCustomInput
 					v-model="factory.fillInBlanksAnswers[index].value"
-					class="bg-transparent focus:outline-none w-auto p-2"
 					:class="item.type === 'q' ? 'questionText' : 'border-2 answerText border-darkLightGray rounded-lg'"
 					:placeholder="item.type === 'q' ? 'Text here' : 'Answer here'" />
 				<SofaIcon class="h-[14px] cursor-pointer" name="circle-close" @click="factory.fillInBlanksAnswers.splice(index, 1)" />
@@ -18,7 +17,6 @@
 			<span v-for="(item, index) in factory.dragAnswersAnswers" :key="index" class="flex items-center gap-1">
 				<SofaCustomInput
 					v-model="factory.dragAnswersAnswers[index].value"
-					class="bg-transparent focus:outline-none w-auto p-2"
 					:class="item.type === 'q' ? 'questionText' : 'border-2 answerText border-darkLightGray rounded-lg'"
 					:placeholder="item.type === 'q' ? 'Text here' : 'Answer here'" />
 				<SofaIcon class="h-[14px] cursor-pointer" name="circle-close" @click="factory.dragAnswersAnswers.splice(index, 1)" />
@@ -60,7 +58,7 @@
 					v-for="(_, index) in factory.multipleOptions"
 					:key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
+					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 					<SofaTextarea
 						v-model="factory.multipleOptions[index]"
 						:rows="1"
@@ -84,7 +82,7 @@
 					v-for="(option, index) in [true, false]"
 					:key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
+					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 					<SofaNormalText color="text-inherit" class="flex-1 capitalize" :content="option.toString()" />
 					<SofaIcon
 						:name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'"
@@ -97,7 +95,7 @@
 					v-for="(_, index) in factory.writeAnswerAnswers"
 					:key="index"
 					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
+					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 					<SofaTextarea
 						v-model="factory.writeAnswerAnswers[index]"
 						:rows="index === 0 ? 3 : 1"
@@ -115,7 +113,7 @@
 			<template v-if="factory.isMatch">
 				<div v-for="(_, index) in factory.matchSet" :key="index" class="flex items-center gap-4 group">
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
+						<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 						<SofaTextarea
 							v-model="factory.matchSet[index].q"
 							:rows="1"
@@ -125,7 +123,7 @@
 							:placeholder="`Enter word/sentence ${index + 1}`" />
 					</div>
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
+						<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
 						<SofaTextarea
 							v-model="factory.matchSet[index].a"
 							:rows="1"
@@ -141,25 +139,26 @@
 						@click="factory.removeOption(index)" />
 				</div>
 			</template>
-			<Draggable v-if="factory.isSequence" :list="factory.sequenceAnswers" class="w-full flex flex-col gap-4" itemKey="">
-				<template #item="{ index }">
-					<div class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="Logic.Study.getShape(index)" class="hidden md:inline h-[20px] md:h-[23px] self-start" />
-						<SofaTextarea
-							v-model="factory.sequenceAnswers[index]"
-							:rows="1"
-							:richEditor="true"
-							class="flex-1"
-							textAreaStyle="p-0"
-							:placeholder="`Enter word/sentence ${index + 1}`" />
-						<SofaIcon
-							v-if="factory.canRemoveOption"
-							name="remove"
-							class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
-							@click="factory.removeOption(index)" />
-					</div>
-				</template>
-			</Draggable>
+			<VueDraggable v-if="factory.isSequence" v-model="factory.sequenceAnswers" class="w-full flex flex-col gap-4">
+				<div
+					v-for="(_, index) in factory.sequenceAnswers"
+					:key="index"
+					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
+					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] md:h-[23px] self-start" />
+					<SofaTextarea
+						v-model="factory.sequenceAnswers[index]"
+						:rows="1"
+						:richEditor="true"
+						class="flex-1"
+						textAreaStyle="p-0"
+						:placeholder="`Enter word/sentence ${index + 1}`" />
+					<SofaIcon
+						v-if="factory.canRemoveOption"
+						name="remove"
+						class="w-[23px] hidden group-hover:inline group-focus-within:inline"
+						@click="factory.removeOption(index)" />
+				</div>
+			</VueDraggable>
 		</div>
 
 		<a v-if="factory.canAddOption" class="self-end flex justify-end gap-2 items-center" @click="factory.addOption">
@@ -181,9 +180,8 @@
 </template>
 
 <script lang="ts" setup>
-import Draggable from 'vuedraggable'
-import { QuestionFactory } from '@modules/study'
-import { Logic } from 'sofa-logic'
+import { VueDraggable } from 'vue-draggable-plus'
+import { QuestionEntity, QuestionFactory } from '@modules/study'
 
 defineProps<{
 	factory: QuestionFactory

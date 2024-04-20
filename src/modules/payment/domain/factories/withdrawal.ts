@@ -23,12 +23,12 @@ export class WithdrawalFactory extends BaseFactory<null, WithdrawData, WithdrawD
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { amount, account } = this.validValues
 		return { amount, account }
 	}
 
-	loadEntity = (entity: null) => {
+	load = (entity: null) => {
 		throw new Error(`Cannot load an entity into this factory, ${entity}`)
 	}
 }

@@ -49,7 +49,7 @@
 					<template #inner-suffix>
 						<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
 							<SofaNormalText class="font-bold text-deepGray !text-xl">
-								{{ Logic.Common.getCurrency(factory.currency) }}
+								{{ $utils.getCurrency(factory.currency) }}
 							</SofaNormalText>
 						</div>
 					</template>
@@ -122,7 +122,6 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { useEditCourse } from '@app/composables/study/courses'
 import { CourseEntity } from '@modules/study'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	close: () => void

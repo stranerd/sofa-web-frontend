@@ -30,14 +30,14 @@
 						<div class="flex flex-col gap-2 items-center grow w-full">
 							<template v-if="tab === 'leaderboard'">
 								<SofaNormalText color="text-current" class="mb-2">
-									{{ extras.scores.length }} {{ pluralize(extras.scores.length, 'participant', 'participants') }}
+									{{ extras.scores.length }} {{ $utils.pluralize(extras.scores.length, 'participant', 'participants') }}
 								</SofaNormalText>
 								<div
 									v-for="score in extras.scores"
 									:key="score.user.id"
 									class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white text-deepGray"
 									:class="{ '!bg-lightBlue': score.user.id === extras.authId }">
-									<SofaAvatar :photoUrl="score.user.picture" :size="Logic.Common.isLarge ? 64 : 48" />
+									<SofaAvatar :photoUrl="score.user.picture" :size="$screen.desktop ? 64 : 48" />
 									<div class="grow">
 										<SofaNormalText
 											color="text-current"
@@ -64,7 +64,7 @@
 									}"
 									class="mb-2"
 									textStyle="!text-3xl">
-									{{ formatNumber(extras.myScore.percentage, 1) }}%
+									{{ $utils.formatNumber(extras.myScore.percentage, 1) }}%
 								</SofaPieChart>
 								<SofaHeaderText size="2xl" color="text-current" :content="extras.myScore.label" />
 								<SofaNormalText
@@ -105,15 +105,13 @@
 </template>
 
 <script lang="ts">
-import { formatNumber, pluralize } from 'valleyed'
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { Logic } from 'sofa-logic'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 
 export default defineComponent({
-	name: 'PlaysTypeIdResultPage',
+	name: 'PlaysTypeIdResultsPage',
 	routeConfig: {
 		middlewares: [
 			'isAuthenticated',
@@ -133,7 +131,7 @@ export default defineComponent({
 
 		const tab = ref<'leaderboard' | 'result'>(PlayEntity.hasLeaderboard(type) ? 'leaderboard' : 'result')
 
-		return { type, isDark, tab, Logic, formatNumber, pluralize }
+		return { type, isDark, tab }
 	},
 })
 </script>

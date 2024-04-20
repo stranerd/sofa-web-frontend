@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
 		<div class="mdlg:hidden w-full flex items-center gap-3 justify-between bg-lightGray p-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="Logic.Common.goBack()" />
+			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base">{{ title }}</SofaNormalText>
 			<span class="w-4" />
 		</div>
@@ -56,7 +56,6 @@
 
 <script setup lang="ts">
 import { useAuth } from '@app/composables/auth/auth'
-import { Logic } from 'sofa-logic'
 
 withDefaults(
 	defineProps<{
@@ -131,7 +130,7 @@ const settingOptions = [
 		subPages: [
 			{
 				title: 'Contact us',
-				to: '/settings/contact_us',
+				to: '/settings/contact',
 				show: () => true,
 			},
 		],

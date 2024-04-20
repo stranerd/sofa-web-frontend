@@ -24,7 +24,7 @@ export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, Announc
 		})
 	}
 
-	model = async () => {
+	model = () => {
 		const { body, lessonIds, userTypes } = this.validValues
 		return {
 			body,
@@ -35,7 +35,7 @@ export class AnnouncementFactory extends BaseFactory<AnnouncementEntity, Announc
 		}
 	}
 
-	loadEntity = (entity: AnnouncementEntity) => {
+	load = (entity: AnnouncementEntity) => {
 		this.body = entity.body
 		this.lessonIds = entity.filter.lessonIds ?? [null]
 		this.userTypes = entity.filter.userTypes ?? [null]

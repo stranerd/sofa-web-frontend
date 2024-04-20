@@ -68,7 +68,6 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
 import { useMyStudy } from '@app/composables/study'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'MarketPlaceIndexPage',
@@ -112,7 +111,6 @@ export default defineComponent({
 
 		return {
 			materials,
-			Logic,
 			searchQuery,
 			handleSearch,
 		}

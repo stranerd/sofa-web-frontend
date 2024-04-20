@@ -1,9 +1,8 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAsyncFn } from '../core/hooks'
-import { useSuccessHandler } from '@app/composables/core/states'
 import { CourseEntity, CourseFactory, CoursesUseCases } from '@modules/school'
-import { Logic } from 'sofa-logic'
+import { useSuccessHandler } from '@app/composables/core/states'
 
 const store = {
 	courses: ref([] as CourseEntity[]),
@@ -203,7 +202,7 @@ export const useDeleteCourse = (courseId: string) => {
 		},
 		{
 			pre: async () =>
-				await Logic.Common.confirm({
+				await $utils.confirm({
 					title: 'Are you sure you want to delete this course?',
 					sub: '',
 					right: { label: 'Yes, delete' },

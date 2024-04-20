@@ -1,10 +1,9 @@
 import { v } from 'valleyed'
 import { ScheduleEntity } from '../entities/schedules'
 import { ClassLessonCurriculumSection, ClassLessonable } from '../types'
-import { BaseFactory } from '@modules/core'
-import { asArray } from '@modules/core/domain/factories/arrays'
-import { FileEntity, FileType, QuizEntity } from '@modules/study'
+import { BaseFactory, asArray } from '@modules/core'
 import { PlayTypes } from '@modules/plays'
+import { FileEntity, FileType, QuizEntity } from '@modules/study'
 
 class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, ClassLessonCurriculumSection, ClassLessonCurriculumSection> {
 	readonly rules = {
@@ -49,12 +48,12 @@ class _CurriculumFactory extends BaseFactory<ClassLessonCurriculumSection, Class
 		this.items = this.items.filter((_, i) => i !== index)
 	}
 
-	model = async () => {
+	model = () => {
 		const { label, items } = this.validValues
 		return { label, items }
 	}
 
-	loadEntity = (entity: ClassLessonCurriculumSection) => {
+	load = (entity: ClassLessonCurriculumSection) => {
 		this.label = entity.label
 		this.items = entity.items
 	}

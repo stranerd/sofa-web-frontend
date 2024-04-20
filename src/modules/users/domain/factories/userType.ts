@@ -182,7 +182,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		}
 	}
 
-	loadEntity = (entity: UserEntity) => {
+	load = (entity: UserEntity) => {
 		this.entityId = entity.id
 		if (!entity.type) return
 		this.type = entity.type.type
@@ -203,7 +203,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		}
 	}
 
-	model = async (): Promise<UserTypeData> => {
+	model = (): UserTypeData => {
 		const { institutionId, facultyId, departmentId, exams, school, name, code } = this.validValues
 		if (this.isTeacher) return { type: UserType.teacher, school }
 		if (this.isOrganization) return { type: UserType.organization, name, code }

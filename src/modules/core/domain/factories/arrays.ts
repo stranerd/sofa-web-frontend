@@ -1,12 +1,15 @@
+import { Differ } from 'valleyed'
 import { computed, ref } from 'vue'
-import { BaseFactory } from './base'
+import { BaseFactory, deepToRaw } from './base'
 
 export function asArray<T extends BaseFactory<any, any, any>>(factory: { new (): T }) {
 	type E = T extends BaseFactory<infer E, any, any> ? E : never
+	type To = T extends BaseFactory<any, infer To, any> ? To : never
 
 	return class FactoryArray {
 		#factories: T[] = []
 		#count = ref(0)
+		#lastLoadedEntities: E[] = []
 		private readonly reactiveFactories = computed({
 			get: () => Array.from({ length: this.#count.value }, (_, index) => this.#factories[index]),
 			set: (factories: T[]) => {
@@ -29,11 +32,13 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 				return instance
 			})
 			this.#factories.splice(0, this.#factories.length, ...factories)
+			this.#lastLoadedEntities = entities
 			this.#markStateChange()
 		}
 
 		reset() {
 			this.#factories.forEach((instance) => instance.reset())
+			this.#lastLoadedEntities = []
 		}
 
 		delete(index: number) {
@@ -42,11 +47,11 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 		}
 
 		#markStateChange() {
-			this.#count.value = 0
+			this.#count.value = -1
 			this.#count.value = this.#factories.length
 		}
 
-		async toModel() {
+		async toModel(): Promise<To[]> {
 			return await Promise.all(this.#factories.map((instance) => instance.toModel()))
 		}
 
@@ -63,7 +68,10 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 		}
 
 		get hasChanges() {
-			return this.factories.some((instance) => instance.hasChanges)
+			const hasInsideChanges = this.factories.some((instance) => instance.hasChanges)
+			if (hasInsideChanges) return true
+			const models = this.factories.map((instance) => instance.model())
+			return !Differ.equal(deepToRaw(this.#lastLoadedEntities), models)
 		}
 	}
 }

@@ -2,18 +2,18 @@
 	<FullLayout
 		:wrap="true"
 		:topbarOptions="{
-			type: 'subpage',
+			type: 'sub',
 			title: 'Account verification',
 			actions: [
 				{
-					IsOutlined: true,
-					name: 'Exit',
-					handler: Logic.Common.goBack,
+					label: 'Exit',
+					handler: $utils.goBack,
+					outlined: true,
 				},
 				{
-					IsOutlined: false,
-					name: 'Submit',
+					label: 'Submit',
 					disabled: !profileFactory.valid || !socialsFactory.valid || !verificationFactory.valid,
+					outlined: false,
 					handler: submit,
 				},
 			],
@@ -77,7 +77,7 @@
 						:key="material.hash"
 						type="activity"
 						:material="material"
-						:isWrapped="!Logic.Common.isLarge"
+						:isWrapped="!$screen.desktop"
 						:hasBookmark="false"
 						:isRoute="false">
 						<template #side-icons>
@@ -126,7 +126,6 @@ import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useModals } from '@app/composables/core/modals'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
 import { useCreateVerification } from '@app/composables/users/verifications'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'VerificationIndexPage',
@@ -169,7 +168,6 @@ export default defineComponent({
 			socialsFactory,
 			verificationFactory,
 			content,
-			Logic,
 			showAddNewHandler,
 		}
 	},

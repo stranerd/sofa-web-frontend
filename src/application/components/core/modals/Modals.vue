@@ -69,13 +69,12 @@
 
 <script lang="ts" setup>
 import { modal } from '@app/composables/core/modal'
-import { Logic } from 'sofa-logic'
 
 const { modals, popovers, modalsDef, close } = modal
 
-const loaderSetup = Logic.Common.loaderSetup
-const confirmations = Logic.Common.confirmations
-const successes = Logic.Common.successes
+const loaderSetup = $utils.loaderSetup
+const confirmations = $utils.confirmations
+const successes = $utils.successes
 
 const stripKeys = <T extends Record<string, any>>(obj: T, keys: (keyof T)[]) =>
 	Object.keys(obj).reduce((acc, key: keyof T) => {

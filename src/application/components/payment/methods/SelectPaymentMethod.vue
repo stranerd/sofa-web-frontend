@@ -40,7 +40,6 @@ import { computed } from 'vue'
 import { useModals } from '@app/composables/core/modals'
 import { useMyMethods } from '@app/composables/payment/methods'
 import { useAuth } from '@app/composables/auth/auth'
-import { Logic } from 'sofa-logic'
 import { Currencies, SelectedPaymentMethod } from '@modules/payment'
 
 const props = withDefaults(
@@ -64,5 +63,5 @@ const showFundWallet = () => {
 	useModals().payment.fundWallet.open({})
 }
 
-const balance = computed(() => (wallet.value ? Logic.Common.formatPrice(wallet.value.balance.amount, wallet.value.balance.currency) : ''))
+const balance = computed(() => (wallet.value ? $utils.formatPrice(wallet.value.balance.amount, wallet.value.balance.currency) : ''))
 </script>

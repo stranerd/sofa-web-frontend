@@ -80,7 +80,6 @@ import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
-import { Logic } from 'sofa-logic'
 
 export default defineComponent({
 	name: 'SettingsProfilePage',
@@ -96,15 +95,23 @@ export default defineComponent({
 		const { factory: socialsFactory, updateSocials } = useUserSocialsUpdate()
 
 		watch(factory.values, () => {
-			Logic.Common.debounce(() => {
-				if (factory.valid) updateProfile()
-			}, 1000)
+			$utils.debounce(
+				'updateProfile',
+				() => {
+					if (factory.valid) updateProfile()
+				},
+				1000,
+			)
 		})
 
 		watch(socialsFactory.values, () => {
-			Logic.Common.debounce(() => {
-				if (socialsFactory.valid) updateSocials()
-			}, 1000)
+			$utils.debounce(
+				'updateSocials',
+				() => {
+					if (socialsFactory.valid) updateSocials()
+				},
+				1000,
+			)
 		})
 
 		return { auth, userType, factory, socialsFactory }

@@ -15,12 +15,12 @@ export class InstitutionFactory extends BaseFactory<InstitutionEntity, Instituti
 		super({ title: '', isGateway: false })
 	}
 
-	loadEntity = (entity: InstitutionEntity) => {
+	load = (entity: InstitutionEntity) => {
 		this.title = entity.title
 		this.isGateway = entity.isGateway
 	}
 
-	model = async () => {
+	model = () => {
 		const { title, isGateway } = this.validValues
 		return { title, isGateway }
 	}

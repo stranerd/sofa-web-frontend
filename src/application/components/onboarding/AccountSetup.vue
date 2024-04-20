@@ -104,7 +104,6 @@
 				:error="typeFactory.errors.schoolType"
 				borderColor="border-transparent"
 				:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
-			<!-- :options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" /> -->
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 				<SofaSelect
@@ -216,7 +215,6 @@ import { useChooseSchool } from '@app/composables/school'
 import { useCourseList } from '@app/composables/school/courses'
 import { useUserLocationUpdate, useUserTypeUpdate } from '@app/composables/users/profile'
 import { UserSchoolType } from '@modules/users'
-import { Logic } from 'sofa-logic'
 
 const props = defineProps<{
 	isProfileEducation?: boolean
@@ -286,7 +284,7 @@ const handleAccountSetup = async () => {
 }
 
 const complete = async () => {
-	await router.push(await Logic.Common.getRedirectToRoute())
+	await router.push(await $utils.getRedirectToRoute())
 }
 
 const { courses, fetchInstitutionCourses } = useCourseList()
