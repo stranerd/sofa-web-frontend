@@ -76,7 +76,6 @@ declare global {
 		| 'faded-plus'
 		| 'file'
 		| 'fill-in-blanks-type'
-		| 'filter-white'
 		| 'filter'
 		| 'flag'
 		| 'folder'
