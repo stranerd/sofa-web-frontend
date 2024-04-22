@@ -76,7 +76,7 @@
 					</div>
 					<div class="flex gap-4 items-center">
 						<SofaButton
-							v-if="!play.isClosed"
+							v-if="!play.isClosed && extras.isMine"
 							bgColor="bg-deepGray border border-white"
 							textColor="text-white"
 							padding="py-3 md:px-6"
@@ -84,11 +84,12 @@
 							@click="extras.end">
 							End Now
 						</SofaButton>
+						<span class="hidden mdlg:inline grow" />
 						<SofaButton
 							bgColor="bg-white border border-white"
 							textColor="text-bodyBlack"
 							padding="py-3 md:px-6"
-							class="w-full mdlg:w-auto mdlg:ml-auto"
+							class="w-full mdlg:w-auto"
 							@click="
 								() => {
 									if (tab === 'leaderboard' && extras.myScore) return (tab = 'result')

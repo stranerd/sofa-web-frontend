@@ -1,9 +1,8 @@
 import { CourseFromModel } from '../../data/models/courses'
-import { Coursable, CourseMeta, CourseSection, Publishable, Saleable } from '../types'
+import { CourseMeta, CourseSection, Publishable, Saleable } from '../types'
 import { PublishableEntity } from './coursables'
 
 export class CourseEntity extends PublishableEntity<CourseFromModel> implements Publishable, Saleable {
-	public readonly coursables: { id: string; type: Coursable }[]
 	public readonly sections: CourseSection[]
 	public readonly frozen: Saleable['frozen']
 	public readonly price: Saleable['price']
@@ -11,7 +10,6 @@ export class CourseEntity extends PublishableEntity<CourseFromModel> implements 
 
 	constructor(data: CourseFromModel) {
 		super(data)
-		this.coursables = data.coursables
 		this.sections = data.sections
 		this.frozen = data.frozen
 		this.price = data.price
