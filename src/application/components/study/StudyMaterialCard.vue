@@ -32,9 +32,9 @@
 		</div>
 
 		<div class="flex gap-2 items-center justify-between pt-1">
-			<router-link class="gap-2 flex items-center" :to="`/profile/${material.user.id}`">
+			<router-link class="gap-2 flex items-center truncate" :to="`/profile/${material.user.id}`">
 				<SofaAvatar :size="20" :photoUrl="material.user.bio.photo?.link" :userId="material.user.id" />
-				<SofaNormalText class="!whitespace-nowrap !line-clamp-1">
+				<SofaNormalText class="!whitespace-nowrap truncate !line-clamp-1">
 					{{ material.user.id === id ? 'You' : material.user.bio.publicName }}
 				</SofaNormalText>
 				<SofaIcon v-if="material.user.roles.isVerified" name="verify" class="h-[13px]" />
@@ -96,9 +96,9 @@
 				</div>
 
 				<div class="flex items-center gap-2 grow justify-between w-full">
-					<router-link class="gap-2 flex items-center" :to="`/profile/${material.user.id}`">
+					<router-link class="truncate gap-2 flex items-center" :to="`/profile/${material.user.id}`">
 						<SofaAvatar :size="20" :photoUrl="material.user.bio.photo?.link" :userId="material.user.id" />
-						<SofaNormalText class="whitespace-nowrap line-clamp-1">
+						<SofaNormalText class="whitespace-nowrap truncate line-clamp-1">
 							{{ material.user.id === id ? 'You' : material.user.bio.publicName }}
 						</SofaNormalText>
 						<SofaIcon v-if="material.user.roles.isVerified" name="verify" class="h-[13px]" />

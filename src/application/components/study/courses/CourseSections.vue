@@ -87,7 +87,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-	selectItem: [ExtendedCourseSectionItem]
+	selectItem: [ExtendedCourseSectionItem | undefined]
 }>()
 
 const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
@@ -123,6 +123,7 @@ const getItemId = (item: ExtendedCourseSectionItem) => `course-section-item-${it
 const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	const item = sections.value.at(sectionIndex)?.items.at(itemIndex)
 	if (!item) return
+	emits('selectItem', undefined)
 	factory.factories[sectionIndex].removeItem(itemIndex)
 	if (item.type === Coursable.file) await deleteFile(item.file)
 }

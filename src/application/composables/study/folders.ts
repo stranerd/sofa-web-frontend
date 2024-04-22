@@ -63,6 +63,7 @@ export const useMyFolders = () => {
 	)
 
 	onMounted(async () => {
+		if (!id.value) return
 		if (!called.value) await fetchFolders()
 		await store.listener.start()
 	})

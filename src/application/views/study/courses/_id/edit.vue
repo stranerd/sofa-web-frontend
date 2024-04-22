@@ -32,15 +32,15 @@
 				</template>
 
 				<template #middle-session>
-					<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col h-full overflow-y-auto">
-						<div class="w-full flex mdlg:hidden justify-between items-center bg-lightGray p-4">
+					<div class="w-full shadow-custom bg-white rounded-2xl p-4 gap-4 flex flex-col h-full overflow-y-auto">
+						<div class="w-full flex mdlg:hidden justify-between items-center">
 							<SofaIcon class="h-[19px]" name="circle-close" @click="$utils.goBack()" />
 							<SofaNormalText class="!font-bold !text-sm" content="Content" />
 							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal({ course })" />
 						</div>
 
 						<EditCourseSectionItemBody v-if="$screen.desktop" :course="course" :item="selectedItem" />
-						<CourseSections v-else :course="course" :edit="true" :item="selectedItem" class="p-4" @selectItem="selectItem" />
+						<CourseSections v-else :course="course" :edit="true" :item="selectedItem" @selectItem="selectItem" />
 					</div>
 				</template>
 
@@ -102,7 +102,7 @@ export default defineComponent({
 
 		const openEditModal = useModals().study.editCourse.open
 
-		const selectItem = async (item: ExtendedCourseSectionItem) => {
+		const selectItem = async (item?: ExtendedCourseSectionItem) => {
 			selectedItem.value = item
 			showBody.value = true
 		}

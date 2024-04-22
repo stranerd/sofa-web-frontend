@@ -127,7 +127,6 @@ declare module 'vue' {
     SofaIconCard: typeof import('sofa-ui-components')['SofaIconCard']
     SofaImageLoader: typeof import('sofa-ui-components')['SofaImageLoader']
     SofaModal: typeof import('sofa-ui-components')['SofaModal']
-    SofaModalOld: typeof import('sofa-ui-components')['SofaModalOld']
     SofaNormalText: typeof import('sofa-ui-components')['SofaNormalText']
     SofaOtpInput: typeof import('sofa-ui-components')['SofaOtpInput']
     SofaPhoneInput: typeof import('sofa-ui-components')['SofaPhoneInput']
