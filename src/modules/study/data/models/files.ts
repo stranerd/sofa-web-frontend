@@ -8,7 +8,7 @@ export interface FileFromModel extends FileToModel, CoursableData {
 	updatedAt: number
 }
 
-export interface FileToModel extends Omit<CoursableData, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status'> {
+export interface FileToModel extends Omit<CoursableData, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status' | 'courseIds'> {
 	topic: string
 	tags: string[]
 	media: Media

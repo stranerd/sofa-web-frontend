@@ -58,7 +58,7 @@ export class QuizzesUseCase {
 			where: [
 				{ field: 'user.id', value: userId },
 				{ field: 'status', value: DraftStatus.published },
-				{ field: 'courseId', value: null },
+				{ field: 'courseIds', value: [] },
 			],
 			whereType: QueryKeys.and,
 			all: true,
@@ -91,7 +91,7 @@ export class QuizzesUseCase {
 			where: [
 				{ field: 'user.id', value: userId },
 				{ field: 'status', value: DraftStatus.published },
-				{ field: 'courseId', value: null },
+				{ field: 'courseIds', value: [] },
 			],
 			whereType: QueryKeys.and,
 			all: true,
@@ -101,7 +101,7 @@ export class QuizzesUseCase {
 		return await this.repository.listenToMany(
 			conditions,
 			listener,
-			(entity) => entity.user.id === userId && entity.isPublished && !entity.courseId,
+			(entity) => entity.user.id === userId && entity.isPublished && !entity.courseIds.length,
 		)
 	}
 

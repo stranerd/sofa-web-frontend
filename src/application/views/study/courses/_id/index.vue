@@ -85,7 +85,7 @@ export default defineComponent({
 		const { createView } = useCreateView()
 		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
 
-		const selectItem = async (item: ExtendedCourseSectionItem) => {
+		const selectItem = async (item?: ExtendedCourseSectionItem) => {
 			selectedItem.value = item
 		}
 

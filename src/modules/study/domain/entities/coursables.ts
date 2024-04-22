@@ -50,7 +50,7 @@ type PublishableConstructorArgs = Publishable & {
 }
 
 export class CoursableEntity<
-		T extends PublishableConstructorArgs & { courseId: string | null } = PublishableConstructorArgs & { courseId: string | null },
+		T extends PublishableConstructorArgs & { courseIds: string[] } = PublishableConstructorArgs & { courseIds: string[] },
 	>
 	extends PublishableEntity<T>
 	implements CoursableData

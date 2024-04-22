@@ -1,6 +1,6 @@
 import { CourseEntity } from '../../domain/entities/courses'
 import { ICourseRepository } from '../../domain/irepositories/icourses'
-import { Coursable, CourseSection } from '../../domain/types'
+import { CourseSection } from '../../domain/types'
 import { CourseFromModel, CourseToModel } from '../models/courses'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
@@ -69,11 +69,6 @@ export class CourseRepository implements ICourseRepository {
 
 	async freeze(id: string) {
 		const d = await this.client.post<any, CourseFromModel>(`/${id}/freeze`, {})
-		return this.mapper(d)
-	}
-
-	async move(id: string, coursable: { coursableId: string; type: Coursable; add: boolean }) {
-		const d = await this.client.post<typeof coursable, CourseFromModel>(`/${id}/move`, coursable)
 		return this.mapper(d)
 	}
 

@@ -19,7 +19,7 @@ export class QuizEntity extends CoursableEntity<QuizFromModel> {
 	}
 
 	get noAccessPage() {
-		if (this.courseId) return `/marketplace/courses/${this.courseId}`
+		if (this.courseIds.at(0)) return `/marketplace/courses/${this.courseIds[0]}`
 		return `/marketplace/quizzes/${this.id}`
 	}
 

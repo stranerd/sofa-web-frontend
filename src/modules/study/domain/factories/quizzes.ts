@@ -19,7 +19,6 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 		topic: v.string().min(1),
 		tags: v.array(v.string().min(1)).set(),
 		isForTutors: v.boolean(),
-		courseId: v.string().min(1).nullable(),
 		timeLimit: v.number().gt(0).round().nullable(),
 		modeGames: v.boolean(),
 		modeTests: v.boolean(),
@@ -36,7 +35,6 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 			topic: 'Physics',
 			tags: [],
 			isForTutors: false,
-			courseId: null,
 			timeLimit: null,
 			modeGames: true,
 			modeTests: true,
@@ -76,7 +74,6 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 		this.topicId = entity.topicId
 		this.tagIds = entity.tagIds
 		this.isForTutors = entity.isForTutors
-		this.courseId = entity.courseId
 		this.timeLimit = entity.timeLimit
 		this.modeGames = entity.modes.games
 		this.modeTests = entity.modes.tests
@@ -93,7 +90,6 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 			topic,
 			tags,
 			isForTutors,
-			courseId,
 			timeLimit,
 			modeGames,
 			modeFlashcards,
@@ -108,7 +104,6 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 			topic,
 			tags,
 			isForTutors,
-			courseId,
 			timeLimit,
 			modes: {
 				games: modeGames,

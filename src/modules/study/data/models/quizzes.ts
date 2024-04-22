@@ -1,6 +1,6 @@
-import { CoursableData, Publishable, QuizAccess, QuizMeta, QuizModes } from '../../domain/types'
+import { CoursableData, QuizAccess, QuizMeta, QuizModes } from '../../domain/types'
 
-export interface QuizFromModel extends QuizToModel, Publishable {
+export interface QuizFromModel extends QuizToModel, CoursableData {
 	id: string
 	__type: 'QuizEntity'
 	questions: string[]
@@ -10,7 +10,7 @@ export interface QuizFromModel extends QuizToModel, Publishable {
 	updatedAt: number
 }
 
-export interface QuizToModel extends Omit<CoursableData, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status'> {
+export interface QuizToModel extends Omit<CoursableData, 'ratings' | 'topicId' | 'tagIds' | 'user' | 'status' | 'courseIds'> {
 	topic: string
 	tags: string[]
 	isForTutors: boolean

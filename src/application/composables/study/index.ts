@@ -89,9 +89,11 @@ export const useHasAccess = () => {
 	const { purchasesCoursesIds } = useMyPurchases()
 	const hasAccess = computed(() => (material: StudyMaterial | null) => {
 		if (!material) return false
+		const purchases = purchasesCoursesIds.value
+		const coursesIds = material.isCourse() ? [material.id] : material.courseIds
 		return [
-			material.isQuiz() && !material.courseId,
-			purchasesCoursesIds.value.includes(material.isCourse() ? material.id : material.courseId ?? ''),
+			material.isQuiz() && !material.courseIds.length,
+			coursesIds.some((id) => purchases.includes(id)),
 			material.user.id === user.value?.id,
 			material.isQuiz() && material.access.members.includes(id.value),
 			material.user.roles?.isOfficialAccount && user.value?.roles.isSubscribed,

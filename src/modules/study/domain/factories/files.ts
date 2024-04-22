@@ -16,7 +16,6 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 		media: v.file(),
 		topic: v.string().min(1),
 		tags: v.array(v.string().min(1)).set(),
-		courseId: v.string().min(1).nullable(),
 	}
 
 	constructor() {
@@ -27,7 +26,6 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 			media: null as any,
 			topic: 'Physics',
 			tags: [],
-			courseId: null,
 		})
 	}
 
@@ -66,11 +64,10 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 		this.media = entity.media
 		this.topicId = entity.topicId
 		this.tagIds = entity.tagIds
-		this.courseId = entity.courseId
 	}
 
 	model = () => {
-		const { title, description, photo, topic, tags, media, courseId } = this.validValues
-		return { title, description, photo, topic, tags, media, courseId }
+		const { title, description, photo, topic, tags, media } = this.validValues
+		return { title, description, photo, topic, tags, media }
 	}
 }
