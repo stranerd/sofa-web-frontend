@@ -1,5 +1,5 @@
 <template>
-	<FileRenderer v-if="item?.type === Coursable.file" :file="item.file" :access="{ courseId: course.id }" class="w-full rounded-custom" />
+	<EmbeddedSection v-if="item?.type === Coursable.file" :item="item" :course="course" class="w-full rounded-custom" />
 
 	<div v-if="item?.type == Coursable.quiz" class="flex flex-col gap-4">
 		<div class="w-full flex items-center justify-between">
@@ -27,6 +27,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
+import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
 
 defineProps<{
 	course: CourseEntity
