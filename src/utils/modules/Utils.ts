@@ -13,6 +13,10 @@ export default class Utils {
 	#redirectToName = 'redirect-to'
 	#debounces: Record<string, ReturnType<typeof setTimeout>> = {}
 
+	get router() {
+		return this.#router!
+	}
+
 	constants = constants
 	environment = environment
 	formatTime = formatTime

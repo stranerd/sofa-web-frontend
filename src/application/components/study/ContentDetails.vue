@@ -269,18 +269,18 @@ const sub = computed(() =>
 
 const openQuiz = () => {
 	if (!props.material.isQuiz()) return
-	if (hasAccess.value) return openMaterial(props.material)
+	if (hasAccess.value) return openMaterial(props.material, true)
 	router.push(props.material.noAccessPage)
 }
 
 const openCourse = () => {
 	const material = props.material
 	if (!material.isCourse()) return
-	if (hasAccess.value) return openMaterial(material)
+	if (hasAccess.value) return openMaterial(material, true)
 	useModals().payment.selectPaymentMethod.open({
 		price: material.price,
 		autoSelect: true,
-		onSelect: (method) => createPurchase(method).then(() => openMaterial(material)),
+		onSelect: (method) => createPurchase(method).then(() => openMaterial(material, true)),
 	})
 }
 

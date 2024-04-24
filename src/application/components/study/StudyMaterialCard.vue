@@ -3,8 +3,8 @@
 		v-if="type === 'item'"
 		:to="material.pageLink"
 		v-bind="$attrs"
-		class="shrink-0 bg-white flex flex-col gap-2 p-3 rounded-2xl shadow-itemBox">
-		<SofaImageLoader class="w-full mdlg:h-[155px] h-[120px] rounded-custom relative" :photoUrl="material.picture">
+		class="shrink-0 bg-white flex flex-col gap-2 p-3 mdlg:p-4 rounded-2xl shadow-itemBox">
+		<SofaImageLoader class="w-full mdlg:h-[155px] aspect-video rounded-custom relative" :photoUrl="material.picture">
 			<div v-if="price && price.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 				<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
 					{{ $utils.formatPrice(price.amount, price.currency) }}
@@ -50,22 +50,22 @@
 		v-bind="$attrs"
 		v-if="type === 'activity'"
 		:to="material.pageLink"
-		class="shrink-0 mdlg:w-full shadow-custom mdlg:shadow-none flex items-start gap-3 p-3 justify-between rounded-custom mdlg:bg-lightGray bg-white cursor-pointer relative"
-		:class="isWrapped ? 'w-full' : 'w-[220px]'">
+		class="shrink-0 mdlg:w-full shadow-custom mdlg:shadow-none flex items-start gap-3 p-3 mdlg:p-4 justify-between rounded-custom text-deepGray mdlg:bg-lightGray bg-white cursor-pointer relative"
+		:class="isWrapped ? 'w-full' : 'w-[156px]'">
 		<div class="flex mdlg:flex-row gap-2 mdlg:gap-3 items-start w-full" :class="isWrapped ? 'flex-row' : 'flex-col'">
 			<SofaImageLoader
 				:photoUrl="material.picture"
-				class="mdlg:h-[115px] mdlg:w-[200px] rounded-custom"
-				:class="isWrapped ? 'h-[100px] w-[150px]' : 'h-[120px] w-full'">
+				class="mdlg:w-[168px] aspect-video rounded-custom"
+				:class="isWrapped ? 'w-[150px]' : 'w-full'">
 				<div v-if="price && price.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
 					<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
 						{{ $utils.formatPrice(price.amount, price.currency) }}
 					</SofaBadge>
 				</div>
 			</SofaImageLoader>
-			<div class="flex flex-col gap-2 relative h-full w-full">
+			<div class="flex flex-col gap-1 relative h-full w-full">
 				<div class="w-full flex items-center gap-2">
-					<SofaNormalText class="!font-bold flex-1 line-clamp-1">{{ material.title }}</SofaNormalText>
+					<SofaHeading :content="material.title" class="grow" />
 					<SofaIcon
 						v-if="!hasShowMore && hasBookmark"
 						class="h-[16px] hidden mdlg:inline"
@@ -79,28 +79,28 @@
 					<slot name="side-icons" />
 				</div>
 				<div class="flex gap-2 items-center" :class="[color]">
-					<SofaNormalText color="text-current" :content="label" />
+					<SofaNormalText :content="label" />
 					<span class="size-[5px] rounded-full bg-current" />
-					<SofaNormalText color="text-current" :content="sub" />
+					<SofaNormalText :content="sub" />
 				</div>
 
 				<div class="w-full flex gap-2 items-center">
 					<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 
 					<div class="flex gap-1 items-center">
-						<SofaNormalText> {{ material.ratings.avg }} </SofaNormalText>
-						<SofaNormalText color="text-grayColor">
+						<SofaText> {{ material.ratings.avg }} </SofaText>
+						<SofaText class="text-grayColor">
 							({{ material.ratings.count }} {{ $utils.pluralize(material.ratings.count, 'rating', 'ratings') }})
-						</SofaNormalText>
+						</SofaText>
 					</div>
 				</div>
 
 				<div class="flex items-center gap-2 grow justify-between w-full">
 					<router-link class="truncate gap-2 flex items-center" :to="`/profile/${material.user.id}`">
 						<SofaAvatar :size="20" :photoUrl="material.user.bio.photo?.link" :userId="material.user.id" />
-						<SofaNormalText class="whitespace-nowrap truncate line-clamp-1">
+						<SofaText clamp>
 							{{ material.user.id === id ? 'You' : material.user.bio.publicName }}
-						</SofaNormalText>
+						</SofaText>
 						<SofaIcon v-if="material.user.roles.isVerified" name="verify" class="h-[13px]" />
 						<SofaIcon v-if="material.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
 					</router-link>
@@ -118,11 +118,11 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
+import { saveToFolder, useMyFolders } from '@app/composables/study/folders'
 import { StudyMaterial } from '@modules/study'
 import { UserType } from '@modules/users'
-import { useAuth } from '@app/composables/auth/auth'
-import { useMyFolders, saveToFolder } from '@app/composables/study/folders'
-import { useModals } from '@app/composables/core/modals'
 
 const props = withDefaults(
 	defineProps<{

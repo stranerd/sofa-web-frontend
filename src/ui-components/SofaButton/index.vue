@@ -1,7 +1,7 @@
 <template>
 	<button
 		:disabled="loading || disabled"
-		class="focus:outline-none disabled:opacity-30 relative rounded-custom flex gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs justify-center whitespace-nowrap"
+		class="focus:outline-none disabled:opacity-30 relative rounded-custom flex gap-2 items-center text-[14px] justify-center whitespace-nowrap"
 		:class="{
 			'opacity-75': loading,
 			'shadow-button': hasShadow,

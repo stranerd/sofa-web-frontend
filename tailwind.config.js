@@ -1,3 +1,7 @@
+import scrollbar from 'tailwind-scrollbar'
+import scrollbarHide from 'tailwind-scrollbar-hide'
+import forms from '@tailwindcss/forms'
+
 export default {
 	content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	darkMode: 'class',
@@ -50,9 +54,8 @@ export default {
 		},
 	},
 	plugins: [
-		require('@tailwindcss/typography'),
-		require('tailwind-scrollbar-hide'),
-		require('tailwind-scrollbar'),
-		require('@tailwindcss/forms')({ strategy: 'class' }),
+		scrollbar,
+		scrollbarHide,
+		forms({ strategy: 'class' }),
 	],
 }
