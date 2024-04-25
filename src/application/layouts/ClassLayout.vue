@@ -3,7 +3,7 @@
 	<ExploreClassView v-else-if="!user || !classInst.isEnrolled(user)" :classInst="classInst" />
 	<DashboardLayout
 		v-else
-		:title="title"
+		:title="classInst.title"
 		:breadcrumbs="[
 			{ text: 'Home', to: '/dashboard' },
 			{ text: classInst.title, to: classInst.pageLink },
@@ -50,7 +50,7 @@
 				<span>{{ tab.title }}</span>
 			</SofaText>
 		</div>
-		<div class="grow overflow-y-auto">
+		<div class="h-full overflow-y-auto">
 			<slot :classInst="classInst" :user="user" />
 		</div>
 	</DashboardLayout>
@@ -95,9 +95,11 @@ useMeta(
 const tabs = computed(
 	() =>
 		[
+			{ title: 'Feed', icon: 'feed', route: '/feed' },
 			{ title: 'Subjects', icon: 'lessons', route: '/subjects' },
-			{ title: 'Announcements', icon: 'announcement', route: '/announcements' },
-			{ title: 'Live', icon: 'calendar', route: '/schedules' },
+			{ title: 'Live', icon: 'live', route: '/live' },
+			{ title: `Students (${classInst.value?.members.students.length})`, icon: 'users', route: '/students' },
+			{ title: `Teachers (${classInst.value?.teachers.length})`, icon: 'tutor', route: '/teachers' },
 			{ title: 'About', icon: 'info', route: '/about' },
 		] as const,
 )

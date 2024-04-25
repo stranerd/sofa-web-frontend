@@ -20,6 +20,10 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 		return `${window.location.origin}${this.pageLink}`
 	}
 
+	get teachers() {
+		return this.lessons.flatMap((l) => l.users.teachers)
+	}
+
 	search(query: string) {
 		return [this.title, this.description, ...this.lessons.map((l) => l.title)].some((text) =>
 			text.toLowerCase().includes(query.toLowerCase()),

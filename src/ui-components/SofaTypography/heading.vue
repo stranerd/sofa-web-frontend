@@ -9,7 +9,7 @@ import Text from './text.vue'
 
 const props = withDefaults(
 	defineProps<{
-		size?: 'title' | 'base' | 'sub'
+		size?: InstanceType<typeof Text>['$props']['size']
 		content?: string
 		as?: string
 		bold?: boolean

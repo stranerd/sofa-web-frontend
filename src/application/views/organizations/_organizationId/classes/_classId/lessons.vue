@@ -1,5 +1,5 @@
 <template>
-	<ClassLayout>
+	<ClassLayout title="Lessons">
 		<template #default="{ classInst, user }">
 			<LessonsForAdmin v-if="classInst.isAdmin(user)" :classInst="classInst" />
 			<LessonsForTeachers v-if="classInst.isTeacher(user)" :classInst="classInst" />

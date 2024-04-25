@@ -1,5 +1,5 @@
 <template>
-	<ClassLayout>
+	<ClassLayout title="Announcements">
 		<template #default="{ classInst, user }">
 			<div
 				v-if="announcements.length === 0"

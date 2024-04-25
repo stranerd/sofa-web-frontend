@@ -1,5 +1,5 @@
 <template>
-	<ClassLayout>
+	<ClassLayout title="Schedules">
 		<template #default="{ classInst }">
 			<div v-if="schedules.length !== 0" class="w-full bg-white rounded-2xl shadow-custom">
 				<SofaHeaderText customClass="p-4 hidden mdlg:block">{{ 'Schedule' }}</SofaHeaderText>
