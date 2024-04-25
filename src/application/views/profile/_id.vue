@@ -99,9 +99,9 @@
 						<StudyMaterialCard
 							v-for="m in filteredMaterials"
 							:key="m.id"
-							type="item"
+							wrapped
 							:material="m"
-							class="w-[220px] mdlg:w-[calc((100%-4rem)/5)] border-2 border-darkLightGray" />
+							class="mdlg:w-[calc((100%-4rem)/5)]" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState

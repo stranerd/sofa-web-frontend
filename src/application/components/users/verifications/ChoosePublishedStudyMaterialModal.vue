@@ -11,12 +11,10 @@
 			<StudyMaterialCard
 				v-for="material in [...publishedCourses, ...publishedQuizzes]"
 				:key="material.hash"
-				type="activity"
 				:material="material"
-				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasBookmark="false"
-				:class="{ '!bg-lightBlue': hasMaterial(material) }"
+				:class="hasMaterial(material) ? '!bg-lightBlue' : '!bg-lightGray'"
 				@click="toggleMaterial(material)" />
 		</div>
 		<div class="flex items-center justify-between gap-4 sticky bottom-0 pb-4">

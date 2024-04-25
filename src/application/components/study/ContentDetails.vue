@@ -92,17 +92,17 @@
 						{{ material.sections.length }} {{ $utils.pluralize(material.sections.length, 'section', 'sections') }}
 					</SofaNormalText>
 					<span class="size-[5px] rounded-full bg-bodyBlack" />
-					<SofaNormalText
-					>{{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }}</SofaNormalText
-					>
+					<SofaNormalText>
+						{{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }}
+					</SofaNormalText>
 				</div>
 
 				<div v-for="(section, index) in sections" :key="index" class="w-full flex flex-col gap-3">
 					<a class="bg-lightGray rounded-custom p-4 gap-4 flex items-center" @click="toggleSection(index)">
 						<SofaNormalText class="!font-bold !line-clamp-1" :content="section.label" />
 						<span class="grow" />
-						<SofaNormalText
-						>{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
+						<SofaNormalText>
+							{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
 						</SofaNormalText>
 						<SofaIcon class="h-[8px]" name="chevron-down" :class="{ 'rotate-180': expandedSections.has(index) }" />
 					</a>
@@ -211,7 +211,7 @@
 
 			<template v-if="selectedTab === 'similar'">
 				<div v-if="similarMaterials.length" class="flex mdlg:flex-col mdlg:gap-4 gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
-					<StudyMaterialCard v-for="m in similarMaterials" :key="m.hash" type="activity" :material="m" />
+					<StudyMaterialCard v-for="m in similarMaterials" :key="m.hash" class="!bg-lightGray" :material="m" />
 				</div>
 				<SofaEmptyState
 					v-else

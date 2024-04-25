@@ -75,11 +75,10 @@
 					<StudyMaterialCard
 						v-for="material in [...content.courses, ...content.quizzes]"
 						:key="material.hash"
-						type="activity"
 						:material="material"
-						:isWrapped="!$screen.desktop"
 						:hasBookmark="false"
-						:isRoute="false">
+						:isRoute="false"
+						class="!bg-lightGray">
 						<template #side-icons>
 							<SofaIcon
 								class="h-[20px]"

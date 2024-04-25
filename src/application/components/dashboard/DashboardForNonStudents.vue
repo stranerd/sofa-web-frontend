@@ -5,7 +5,7 @@
 			class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 			<SofaHeading content="Overview" />
 
-			<div class="flex overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-2 gap-4">
+			<div class="flex overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-2 gap-2 mdlg:gap-4">
 				<div
 					v-for="stat in [
 						{
@@ -56,7 +56,7 @@
 						},
 					].filter((stat) => !stat.hide)"
 					:key="stat.label"
-					class="flex shrink-0 items-center gap-4 justify-between mdlg:col-span-1 bg-white mdlg:bg-lightGray p-4 md:p-6 rounded-custom">
+					class="flex shrink-0 items-center gap-6 justify-between mdlg:col-span-1 bg-white mdlg:bg-lightGray p-4 md:p-6 rounded-custom">
 					<div class="flex flex-col items-start">
 						<SofaHeading size="title" :content="$utils.formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
 						<SofaText :content="$utils.pluralize(stat.value, stat.labelSingular, stat.label)" />
@@ -85,7 +85,7 @@
 						:key="classInst.hash"
 						:wrapped="!$screen.desktop"
 						:classInst="classInst"
-						class="mdlg:bg-lightGray shrink-0" />
+						class="mdlg:bg-lightGray" />
 				</div>
 				<EmptyState
 					v-else
@@ -105,7 +105,12 @@
 				<div
 					v-if="materials.length"
 					class="mdlg:flex-col mdlg:gap-4 flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide shrink-0">
-					<StudyMaterialCard v-for="m in materials.slice(0, 10)" :key="m.hash" type="activity" :material="m" />
+					<StudyMaterialCard
+						v-for="m in materials.slice(0, 10)"
+						:key="m.hash"
+						:wrapped="!$screen.desktop"
+						:material="m"
+						class="mdlg:bg-lightGray" />
 				</div>
 				<EmptyState
 					v-else

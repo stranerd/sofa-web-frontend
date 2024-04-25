@@ -1,10 +1,12 @@
 <template>
 	<component
 		:is="as"
-		class="bg-white flex gap-2 p-3 mdlg:p-4 rounded-custom items-start"
-		:class="wrapped ? 'flex-col w-[180px]' : 'flex-row w-full'">
-		<SofaImageLoader class="aspect-video rounded-custom" :class="wrapped ? 'w-full' : 'w-[150px] mdlg:w-[168px]'" :photoUrl="image" />
-		<div class="flex flex-col gap-1 w-full">
+		class="bg-white text-deepGray flex gap-2 p-3 mdlg:p-4 rounded-custom items-start shrink-0 shadow-itemBox mdlg:shadow-none cursor-pointer"
+		:class="wrapped ? 'flex-col w-[210px]' : 'flex-row w-full'">
+		<SofaImageLoader class="rounded-custom" :class="wrapped ? 'w-full' : 'w-[144px] mdlg:w-[168px]'" aspect="3/2" :photoUrl="image">
+			<slot name="image-content" />
+		</SofaImageLoader>
+		<div class="flex flex-col w-full" :class="wrapped ? 'gap-2' : 'gap-1'">
 			<slot />
 		</div>
 	</component>

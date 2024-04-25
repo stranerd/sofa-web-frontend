@@ -4,9 +4,7 @@
 			<StudyMaterialCard
 				v-for="activity in data"
 				:key="activity.hash"
-				type="activity"
 				:material="activity"
-				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"
