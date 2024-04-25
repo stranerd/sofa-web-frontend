@@ -13,11 +13,7 @@
 						<SofaAvatar :photoUrl="user.bio.photo?.link" :size="110" class="-mt-[71px]" />
 
 						<div class="flex flex-col">
-							<div class="flex items-center gap-2">
-								<SofaHeaderText class="!font-bold" :content="user.publicName" />
-								<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[16px]" />
-								<SofaIcon v-if="user.userType.isTeacher" name="tutor-bagde" class="h-[18px]" />
-							</div>
+							<UserName :user="user" :avatar="false" name class="font-bold text-title" />
 							<SofaNormalText class="capitalize" :content="user.userType.type" />
 						</div>
 					</div>

@@ -66,10 +66,7 @@
 							@click="factory.tutorId = tutor.id">
 							<SofaAvatar :size="60" :photoUrl="tutor.photoUrl" :online="tutor.online" />
 							<div class="w-full flex flex-col grow gap-1">
-								<div class="flex gap-2 items-center">
-									<SofaNormalText class="!font-bold" :content="tutor.name" />
-									<SofaIcon class="h-[17px]" name="tutor-bagde" />
-								</div>
+								<UserName :user="tutor.user" :avatar="false" class="font-bold" />
 								<SofaNormalText class="!line-clamp-1 !text-left" :content="tutor.subjects" />
 
 								<div class="w-full flex gap-2 items-center">
@@ -157,6 +154,7 @@ const filteredTutors = computed(() =>
 			id: t.id,
 			name: t.publicName,
 			hash: t.hash,
+			user: t,
 			online: t.status.connections.length > 0,
 			photoUrl: t.bio.photo?.link ?? null,
 			ratings: {

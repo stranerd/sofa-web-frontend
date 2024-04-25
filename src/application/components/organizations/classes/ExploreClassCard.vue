@@ -17,13 +17,7 @@
 		</SofaNormalText>
 
 		<div class="flex gap-2 items-center justify-between pt-1">
-			<router-link class="gap-2 flex items-center truncate" :to="`/profile/${classInst.user.id}`">
-				<SofaAvatar :size="20" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />
-				<SofaNormalText class="truncate" :content="classInst.user.bio.name.full" />
-				<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[13px]" />
-				<SofaIcon v-if="classInst.user.type?.type === 'teacher'" name="tutor-bagde" class="h-[13px]" />
-			</router-link>
-
+			<UserName :user="classInst.user" as="router-link" />
 			<SofaIcon :name="isSaved ? 'bookmark-filled' : 'bookmark'" class="h-[18px]" @click.stop.prevent="saveClass" />
 		</div>
 	</router-link>

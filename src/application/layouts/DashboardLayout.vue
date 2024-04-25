@@ -17,11 +17,7 @@
 					<SofaAvatar :size="84" :photoUrl="user.bio.photo?.link" />
 
 					<div class="flex flex-col">
-						<div class="flex items-center gap-1">
-							<SofaHeading :content="user.publicName" />
-							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
-							<SofaIcon v-if="userType.isTeacher" name="tutor-bagde" class="h-[13px]" />
-						</div>
+						<UserName :user="user" :avatar="false" class="font-bold" />
 						<SofaText class="capitalize text-grayColor" :content="userType.type" />
 						<SofaText class="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
 					</div>
@@ -76,11 +72,7 @@
 							<SofaAvatar :size="44" :photoUrl="classInst.picture" />
 							<div class="flex flex-col truncate grow">
 								<SofaText :content="classInst.title" clamp />
-								<div class="flex items-center gap-2">
-									<SofaText class="text-grayColor" size="sub" :content="classInst.user.bio.publicName" />
-									<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[16px]" />
-									<SofaIcon v-if="classInst.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[18px]" />
-								</div>
+								<UserName :user="classInst.user" :avatar="false" size="sub" class="text-grayColor" />
 							</div>
 						</router-link>
 					</div>
@@ -132,7 +124,6 @@ import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useMyClasses } from '@app/composables/organizations/classes-explore'
-import { UserType } from '@modules/users'
 
 type ButtonConfig = {
 	action: () => void

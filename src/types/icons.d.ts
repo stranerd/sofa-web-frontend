@@ -158,7 +158,7 @@ declare global {
 		| 'triangle'
 		| 'true-false-type'
 		| 'tutor-auth'
-		| 'tutor-bagde'
+		| 'tutor-badge'
 		| 'tutor-review'
 		| 'tutor'
 		| 'unsave'

@@ -16,12 +16,7 @@
 				<SofaImageLoader :photoUrl="classInst.picture" class="h-[148px] w-full rounded-t-2xl">
 					<div class="flex flex-col justify-end w-full h-full bg-[#00000022] p-6 text-white rounded-t-2xl">
 						<SofaHeading :content="classInst.title" size="title2" />
-						<router-link class="gap-2 flex items-center" :to="`/profile/${classInst.user.id}`">
-							<SofaAvatar :size="24" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />
-							<SofaText clamp :content="classInst.user.bio.publicName" />
-							<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[13px]" />
-							<SofaIcon v-if="classInst.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
-						</router-link>
+						<UserName :user="classInst.user" as="router-link" />
 					</div>
 				</SofaImageLoader>
 				<div class="bg-white flex gap-4 px-6 overflow-x-auto rounded-b-2xl">
@@ -60,7 +55,6 @@
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
-import { UserType } from '@modules/users'
 import { useClass } from '@app/composables/organizations/classes'
 import { useAuth } from '@app/composables/auth/auth'
 

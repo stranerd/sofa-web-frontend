@@ -16,6 +16,22 @@ body {
 	@apply h-[100dvh] w-[100dvw] overflow-auto flex flex-col;
 }
 
+.text-sub {
+	@apply text-[12px] mdlg:text-[14px];
+}
+
+.text-base {
+	@apply text-[14px] mdlg:text-[16px];
+}
+
+.text-title {
+	@apply text-[18px] mdlg:text-[20px];
+}
+
+.text-title2 {
+	@apply text-[20px] mdlg:text-[22px];
+}
+
 ::-webkit-scrollbar {
 	width: 1px;
 	height: 0;

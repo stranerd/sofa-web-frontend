@@ -39,16 +39,8 @@
 				</div>
 			</div>
 
-			<div class="flex items-center gap-2 grow justify-between w-full">
-				<router-link class="truncate gap-2 flex items-center" :to="`/profile/${material.user.id}`">
-					<SofaAvatar :size="20" :photoUrl="material.user.bio.photo?.link" :userId="material.user.id" />
-					<SofaText clamp>
-						{{ material.user.id === id ? 'You' : material.user.bio.publicName }}
-					</SofaText>
-					<SofaIcon v-if="material.user.roles.isVerified" name="verify" class="h-[13px]" />
-					<SofaIcon v-if="material.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
-				</router-link>
-
+			<div class="flex items-center gap-2 justify-between w-full">
+				<UserName :user="material.user" as="router-link" />
 				<SofaIcon v-if="hasBookmark" :name="saveIcon" class="h-[17px] mdlg:hidden" @click.stop.prevent="bookmarkAction" />
 			</div>
 		</template>
@@ -57,11 +49,9 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { saveToFolder, useMyFolders } from '@app/composables/study/folders'
 import { StudyMaterial } from '@modules/study'
-import { UserType } from '@modules/users'
 
 const props = withDefaults(
 	defineProps<{
@@ -79,7 +69,6 @@ const props = withDefaults(
 	},
 )
 
-const { id } = useAuth()
 const { folders } = useMyFolders()
 
 const isSaved = computed(() => folders.value.some((folder) => folder.hasItem(props.material)))

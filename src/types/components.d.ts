@@ -144,6 +144,7 @@ declare module 'vue' {
     StudyMaterialCard: typeof import('./../application/components/study/StudyMaterialCard.vue')['default']
     TransactionDetailsModal: typeof import('./../application/components/payment/transactions/TransactionDetailsModal.vue')['default']
     TransactionsList: typeof import('./../application/components/payment/transactions/TransactionsList.vue')['default']
+    UserName: typeof import('./../application/components/core/UserName.vue')['default']
     ViewCurriculumModal: typeof import('./../application/components/organizations/lessons/ViewCurriculumModal.vue')['default']
     WithdrawModal: typeof import('./../application/components/payment/wallet/WithdrawModal.vue')['default']
   }

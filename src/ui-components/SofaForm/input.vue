@@ -1,7 +1,7 @@
 <template>
 	<div
 		v-bind="$attrs"
-		class="w-full gap-2 flex items-center justify-between text-[12px] mdlg:text-[14px] rounded-lg border border-darkLightGray group-focus-within:!border-primaryBlue"
+		class="w-full gap-2 flex items-center justify-between text-sub rounded-lg border border-darkLightGray group-focus-within:!border-primaryBlue"
 		:class="{
 			'!border-red-500': error,
 			[`${padding}`]: true,

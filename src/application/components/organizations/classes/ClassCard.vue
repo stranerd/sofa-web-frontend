@@ -24,14 +24,8 @@
 
 		<SofaHeading class="text-grayColor"> {{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}/month </SofaHeading>
 
-		<div class="flex gap-2 items-center justify-between pt-1">
-			<router-link class="gap-2 flex items-center truncate" :to="`/profile/${classInst.user.id}`">
-				<SofaAvatar :size="20" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />
-				<SofaText clamp :content="classInst.user.bio.publicName" />
-				<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[13px]" />
-				<SofaIcon v-if="classInst.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
-			</router-link>
-
+		<div class="flex gap-2 items-center justify-between">
+			<UserName :user="classInst.user" as="router-link" />
 			<SofaIcon v-if="hasBookmark" :name="saveIcon" class="h-[18px]" @click.stop.prevent="saveClass" />
 		</div>
 	</Card>
@@ -39,11 +33,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { ClassEntity } from '@modules/organizations'
-import { UserType } from '@modules/users'
-import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
 import { useSaveClass } from '@app/composables/organizations/classes-explore'
+import { ClassEntity } from '@modules/organizations'
 
 const props = withDefaults(
 	defineProps<{

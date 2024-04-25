@@ -9,11 +9,7 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<div v-if="conversation && conversation.tutor" class="w-full flex justify-center items-center gap-2">
-			<SofaAvatar :photoUrl="conversation.tutor.bio.photo?.link" :size="27" />
-			<SofaNormalText class="!font-bold" :content="conversation.tutor.bio.publicName" />
-			<SofaIcon name="tutor-bagde" class="h-[20px]" />
-		</div>
+		<UserName v-if="conversation?.tutor" :user="conversation.tutor" class="font-bold" />
 
 		<SofaRatings v-model="factory.rating" :readonly="false" size="h-[30px]" class="mb-3 self-center" />
 
