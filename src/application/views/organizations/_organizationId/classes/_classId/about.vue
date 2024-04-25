@@ -1,7 +1,7 @@
 <template>
-	<ClassLayout>
+	<ClassLayout title="About">
 		<template #default="{ classInst }">
-			<div class="w-full mdlg:bg-white mdlg:rounded-2xl mdlg:shadow-custom">
+			<div class="w-full mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom">
 				<SofaHeaderText class="p-4 hidden mdlg:block" content="About" />
 				<div class="hidden h-[1px] w-full bg-lightGray mdlg:block" />
 				<div class="flex flex-col gap-4 p-0 mdlg:p-4">

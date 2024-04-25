@@ -10,7 +10,7 @@ import { computed } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		size?: 'title' | 'base' | 'sub'
+		size?: 'title' | 'title2' | 'base' | 'sub'
 		content?: string
 		as?: string
 		bold?: boolean
@@ -28,6 +28,7 @@ const props = withDefaults(
 const cls = computed(() =>
 	[
 		props.content ? 'body flex flex-col items-start' : '',
+		props.size === 'title2' ? 'text-[20px] mdlg:text-[22px]' : '',
 		props.size === 'title' ? 'text-[18px] mdlg:text-[20px]' : '',
 		props.size === 'base' ? 'text-[14px] mdlg:text-[16px]' : '',
 		props.size === 'sub' ? 'text-[12px] mdlg:text-[14px]' : '',

@@ -1,6 +1,6 @@
 <template>
 	<ExpandedLayout v-if="!$screen.desktop" :hide="{ top: true }">
-		<div class="w-full flex items-center gap-3 justify-between bg-lightGray text-bodyBlack p-4">
+		<div class="w-full flex items-center gap-3 justify-between p-4" :class="{ 'bg-white': light }">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaHeading :content="title" />
 			<span class="w-4" />
@@ -90,6 +90,7 @@
 
 		<template #middle-session>
 			<div class="flex flex-col h-full overflow-y-auto mdlg:mr-4">
+				<slot name="pre-crumbs" />
 				<div
 					v-if="$screen.desktop && breadcrumbs"
 					class="bg-white text-bodyBlack py-3 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4"
@@ -146,6 +147,7 @@ const props = withDefaults(
 		breadcrumbs?: { text: string; to: string }[]
 		filter?: (query: string) => T[]
 		primary?: ButtonConfig
+		light?: boolean
 	}>(),
 	{
 		index: false,
@@ -153,6 +155,7 @@ const props = withDefaults(
 		primary: undefined,
 		filter: undefined,
 		breadcrumbs: undefined,
+		light: false,
 	},
 )
 

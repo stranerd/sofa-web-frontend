@@ -110,7 +110,6 @@ declare module 'vue' {
     SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']
     SettingsLayout: typeof import('./../application/layouts/SettingsLayout.vue')['default']
     SideBarModal: typeof import('./../application/components/users/users/SideBarModal.vue')['default']
-    SidebarScheduleList: typeof import('./../application/components/organizations/schedules/SidebarScheduleList.vue')['default']
     SocialMediaUpdate: typeof import('./../application/components/onboarding/SocialMediaUpdate.vue')['default']
     SofaAlert: typeof import('sofa-ui-components')['SofaAlert']
     SofaAvatar: typeof import('sofa-ui-components')['SofaAvatar']
