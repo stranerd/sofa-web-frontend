@@ -51,7 +51,7 @@
 		v-if="type === 'activity'"
 		:to="material.pageLink"
 		class="shrink-0 mdlg:w-full shadow-custom mdlg:shadow-none flex items-start gap-3 p-3 mdlg:p-4 justify-between rounded-custom text-deepGray mdlg:bg-lightGray bg-white cursor-pointer relative"
-		:class="isWrapped ? 'w-full' : 'w-[156px]'">
+		:class="isWrapped ? 'w-full' : 'w-[180px]'">
 		<div class="flex mdlg:flex-row gap-2 mdlg:gap-3 items-start w-full" :class="isWrapped ? 'flex-row' : 'flex-col'">
 			<SofaImageLoader
 				:photoUrl="material.picture"

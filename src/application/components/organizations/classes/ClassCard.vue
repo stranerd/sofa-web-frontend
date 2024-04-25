@@ -2,7 +2,7 @@
 	<router-link
 		:to="classInst.pageLink"
 		class="bg-white flex gap-2 p-3 mdlg:p-4 rounded-custom h-auto items-start"
-		:class="isWrapped ? 'flex-col w-[156px]' : 'flex-row'">
+		:class="isWrapped ? 'flex-col w-[180px]' : 'flex-row w-full'">
 		<SofaImageLoader
 			class="mdlg:w-[168px] aspect-video rounded-custom"
 			:class="isWrapped ? 'w-full' : 'w-[150px]'"
@@ -34,12 +34,16 @@
 				{{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}/month
 			</SofaHeading>
 
-			<router-link class="gap-2 flex items-center" :to="`/profile/${classInst.user.id}`">
-				<SofaAvatar :size="20" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />
-				<SofaText clamp :content="classInst.user.bio.publicName" />
-				<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[13px]" />
-				<SofaIcon v-if="classInst.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
-			</router-link>
+			<div class="flex gap-2 items-center justify-between pt-1">
+				<router-link class="gap-2 flex items-center truncate" :to="`/profile/${classInst.user.id}`">
+					<SofaAvatar :size="20" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />
+					<SofaText clamp :content="classInst.user.bio.publicName" />
+					<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[13px]" />
+					<SofaIcon v-if="classInst.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
+				</router-link>
+
+				<SofaIcon v-if="hasBookmark" :name="saveIcon" class="h-[18px]" @click.stop.prevent="saveClass" />
+			</div>
 		</div>
 	</router-link>
 </template>
@@ -50,21 +54,25 @@ import { ClassEntity } from '@modules/organizations'
 import { UserType } from '@modules/users'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
+import { useSaveClass } from '@app/composables/organizations/classes-explore'
 
 const props = withDefaults(
 	defineProps<{
 		classInst: ClassEntity
 		isWrapped?: boolean
 		hasShowMore?: boolean
+		hasBookmark?: boolean
 	}>(),
 	{
 		isWrapped: false,
 		hasShowMore: false,
+		hasBookmark: false,
 	},
 )
 
 const { id } = useAuth()
-
+const { saveClass, isSaved } = useSaveClass(props.classInst)
+const saveIcon = computed(() => (isSaved.value ? 'bookmark-filled' : 'bookmark'))
 const moreOptionsHandler = (e: Event) => useModals().organizations.classCardMoreOptions.open({ classInst: props.classInst }, e)
 
 const lessonsIn = computed(() =>
