@@ -1,21 +1,47 @@
 import { addToArray } from 'valleyed'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
+import { useListener } from '../core/listener'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { UsersUseCases } from '@modules/users'
 import { ClassEntity, ClassesUseCases } from '@modules/organizations'
 
 const store = {
 	classesIn: ref<ClassEntity[]>([]),
+	listener: useListener(async () => {
+		const { user } = useAuth()
+		return ClassesUseCases.listenToMyClassesIn(user.value!, {
+			created: async (entity) => {
+				addToArray(
+					store.classesIn.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			updated: async (entity) => {
+				addToArray(
+					store.classesIn.value,
+					entity,
+					(e) => e.id,
+					(e) => e.createdAt,
+				)
+			},
+			deleted: async (entity) => {
+				store.classesIn.value = store.classesIn.value.filter((m) => m.id !== entity.id)
+			},
+		})
+	}),
 	classesExplore: ref<ClassEntity[]>([]),
 }
 
-export const useMyClassesIn = () => {
+export const useMyClasses = () => {
 	const { user } = useAuth()
 	const {
 		asyncFn: fetchClasses,
 		loading,
 		error,
+		called,
 	} = useAsyncFn(
 		async () => {
 			const classes = await ClassesUseCases.getMyClassesIn(user.value!)
@@ -33,7 +59,11 @@ export const useMyClassesIn = () => {
 	)
 
 	onMounted(async () => {
-		await fetchClasses()
+		if (!called.value) await fetchClasses()
+		await store.listener.start()
+	})
+	onUnmounted(async () => {
+		await store.listener.close()
 	})
 
 	return { classes: store.classesIn, loading, error }

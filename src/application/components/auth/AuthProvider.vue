@@ -3,7 +3,6 @@
 		<SofaButton
 			bgColor="bg-transparent"
 			padding="px-8 py-5"
-			:hasShadow="false"
 			:disabled="googleLoading"
 			:loading="appleLoading"
 			class="border-2 border-darkLightGray font-bold"
@@ -17,7 +16,6 @@
 			v-if="showAppleSignin"
 			bgColor="bg-transparent"
 			padding="px-8 py-5"
-			:hasShadow="false"
 			:disabled="appleLoading"
 			:loading="appleLoading"
 			class="border-2 border-darkLightGray font-bold"

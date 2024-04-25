@@ -100,8 +100,7 @@
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
-import { useOrganizationClasses } from '@app/composables/organizations/classes'
-import { useMyClassesIn } from '@app/composables/organizations/classes-explore'
+import { useMyClasses } from '@app/composables/organizations/classes-explore'
 import { UserType } from '@modules/users'
 
 const props = withDefaults(
@@ -120,12 +119,8 @@ useMeta(
 	})),
 )
 
-const { id, user, userType } = useAuth()
-
-const { classes: myClassesIn } = useMyClassesIn()
-const { classes: orgClasses } = useOrganizationClasses(id.value)
-
-const classes = computed(() => (userType.value.isOrg ? orgClasses.value : myClassesIn.value))
+const { user, userType } = useAuth()
+const { classes } = useMyClasses()
 
 const options = computed(() => [
 	{ title: 'Dashboard', icon: 'dashboard' as const, route: '/dashboard' },

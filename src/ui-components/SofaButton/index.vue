@@ -4,7 +4,7 @@
 		class="focus:outline-none disabled:opacity-30 relative rounded-custom flex gap-2 items-center text-[12px] mdlg:text-[14px] justify-center whitespace-nowrap"
 		:class="{
 			'opacity-75': loading,
-			'shadow-button': hasShadow,
+			'shadow-button': shadow,
 			[padding]: true,
 			[bgColor]: true,
 			[textColor]: true,
@@ -40,9 +40,9 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
-		hasShadow: {
+		shadow: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 		disabled: {
 			type: Boolean,
@@ -54,11 +54,11 @@ export default defineComponent({
 
 <style scoped>
 .shadow-button {
-	box-shadow: 0 2px #999;
+	box-shadow: 0 1px #999;
 }
 
 .shadow-button:active {
-	transform: translateY(2px);
+	transform: translateY(1px);
 	box-shadow: none;
 }
 </style>

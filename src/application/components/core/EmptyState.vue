@@ -8,7 +8,6 @@
 		<div class="flex gap-3 justify-center items-center font-semibold">
 			<SofaButton
 				v-if="primary"
-				:hasShadow="false"
 				bgColor="bg-primaryBlue"
 				padding="py-3 px-6"
 				textColor="text-white"
@@ -19,7 +18,6 @@
 			<SofaButton
 				v-if="secondary"
 				bgColor="bg-transparent"
-				:hasShadow="false"
 				padding="py-3 px-6"
 				textColor="text-primaryBlue"
 				class="border border-primaryBlue"

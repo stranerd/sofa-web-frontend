@@ -22,12 +22,7 @@
 				</div>
 				<span v-if="!notification.seen" class="size-[8px] rounded-full bg-primaryBlue" />
 			</router-link>
-			<SofaButton
-				v-if="hasMore"
-				textColor="text-grayColor"
-				bgColor="bg-transparent"
-				:hasShadow="false"
-				@click="fetchOlderNotifications">
+			<SofaButton v-if="hasMore" textColor="text-grayColor" bgColor="bg-transparent" @click="fetchOlderNotifications">
 				Load More
 			</SofaButton>
 		</div>

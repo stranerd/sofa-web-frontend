@@ -44,7 +44,7 @@ import { computed, defineComponent, ref } from 'vue'
 import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useOrganizationClasses } from '@app/composables/organizations/classes'
+import { useMyClasses } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
 	name: 'DashboardClassesPage',
@@ -63,7 +63,7 @@ export default defineComponent({
 		}
 
 		const { id: organizationId } = useAuth()
-		const { classes } = useOrganizationClasses(organizationId.value)
+		const { classes } = useMyClasses()
 		const searchQuery = ref('')
 
 		const filteredClassess = computed(() => {

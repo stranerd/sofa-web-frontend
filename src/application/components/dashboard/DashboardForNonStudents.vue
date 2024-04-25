@@ -124,8 +124,7 @@
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useOrganizationClasses } from '@app/composables/organizations/classes'
-import { useMyClassesIn } from '@app/composables/organizations/classes-explore'
+import { useMyClasses } from '@app/composables/organizations/classes-explore'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 
 const { id, user, userType } = useAuth()
@@ -133,10 +132,7 @@ const { id, user, userType } = useAuth()
 const { courses, quizzes } = useUsersMaterials(id.value)
 const materials = computed(() => [...quizzes, ...courses].sort((a, b) => b.createdAt - a.createdAt))
 
-const { classes: myClassesIn } = useMyClassesIn()
-const { classes: orgClasses } = useOrganizationClasses(id.value)
-
-const classes = computed(() => (userType.value.isOrg ? orgClasses.value : myClassesIn.value))
+const { classes } = useMyClasses()
 
 const createClass = () => useModals().organizations.createClass.open({ organizationId: id.value })
 </script>

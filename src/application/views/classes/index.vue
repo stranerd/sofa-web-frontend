@@ -64,7 +64,7 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useClassesInList, useMyClassesIn } from '@app/composables/organizations/classes-explore'
+import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
 	name: 'ClassesIndexPage',
@@ -88,7 +88,7 @@ export default defineComponent({
 
 		const searchQuery = ref('')
 		const { user } = useAuth()
-		const { classes } = useMyClassesIn()
+		const { classes } = useMyClasses()
 		const { classes: savedClasses } = useClassesInList(computed(() => user.value?.account.saved.classes ?? []))
 
 		const filteredClasses = computed(() => {

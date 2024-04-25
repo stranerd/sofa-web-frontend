@@ -1,6 +1,8 @@
 import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../auth/auth'
+
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
@@ -8,7 +10,7 @@ import { useSuccessHandler } from '../core/states'
 import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
-const orgStore: Record<
+const myStore: Record<
 	string,
 	{
 		classes: Ref<ClassEntity[]>
@@ -16,14 +18,17 @@ const orgStore: Record<
 	}
 > = {}
 
-export const useOrganizationClasses = (organizationId: string) => {
-	orgStore[organizationId] ??= {
+export const useMyClasses = () => {
+	const { id, user } = useAuth()
+	const key = id.value
+
+	myStore[key] ??= {
 		classes: ref([]),
 		listener: useListener(async () =>
-			ClassesUseCases.listenToAll(organizationId, {
+			ClassesUseCases.listenToMyClassesIn(user.value!, {
 				created: async (entity) => {
 					addToArray(
-						orgStore[organizationId].classes.value,
+						myStore[key].classes.value,
 						entity,
 						(e) => e.id,
 						(e) => e.createdAt,
@@ -31,14 +36,14 @@ export const useOrganizationClasses = (organizationId: string) => {
 				},
 				updated: async (entity) => {
 					addToArray(
-						orgStore[organizationId].classes.value,
+						myStore[key].classes.value,
 						entity,
 						(e) => e.id,
 						(e) => e.createdAt,
 					)
 				},
 				deleted: async (entity) => {
-					orgStore[organizationId].classes.value = orgStore[organizationId].classes.value.filter((m) => m.id !== entity.id)
+					myStore[key].classes.value = myStore[key].classes.value.filter((m) => m.id !== entity.id)
 				},
 			}),
 		),
@@ -51,28 +56,28 @@ export const useOrganizationClasses = (organizationId: string) => {
 		called,
 	} = useAsyncFn(
 		async () => {
-			const classes = await ClassesUseCases.getAll(organizationId)
+			const classes = await ClassesUseCases.getMyClassesIn(user.value!)
 			classes.results.forEach((r) =>
 				addToArray(
-					orgStore[organizationId].classes.value,
+					myStore[key].classes.value,
 					r,
 					(e) => e.id,
 					(e) => e.createdAt,
 				),
 			)
 		},
-		{ key: `organizations/classes/${organizationId}` },
+		{ key: `organizations/classes/${key}` },
 	)
 
 	onMounted(async () => {
 		if (!called.value) await fetchClasses()
-		await orgStore[organizationId].listener.start()
+		await myStore[key].listener.start()
 	})
 	onUnmounted(async () => {
-		await orgStore[organizationId].listener.close()
+		await myStore[key].listener.close()
 	})
 
-	return { ...orgStore[organizationId], loading, error }
+	return { ...myStore[key], loading, error }
 }
 
 export const useCreateClass = (organizationId: string) => {
