@@ -2,7 +2,8 @@
 	<DashboardLayout :title="title" :index="index">
 		<div
 			v-if="$screen.desktop"
-			class="bg-white text-bodyBlack py-4 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4">
+			class="bg-white text-bodyBlack py-3 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4"
+			:class="{ 'rounded-b-2xl': rounded }">
 			<SofaIcon v-if="!index" class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<div class="flex items-center gap-1 shrink-0">
 				<template v-for="(breadcrumb, i) in breadcrumbs" :key="i">
@@ -29,7 +30,7 @@
 				{{ primary.label }}
 			</SofaButton>
 		</div>
-		<slot :searchQuery="searchQuery" :filteredItems="filteredItems" />
+		<slot :extras="extras" />
 	</DashboardLayout>
 </template>
 
@@ -45,16 +46,27 @@ const props = withDefaults(
 	defineProps<{
 		title: string
 		index?: boolean
+		rounded?: boolean
 		breadcrumbs: { text: string; to: string }[]
 		filter: (query: string) => T[]
 		primary?: ButtonConfig
 	}>(),
 	{
 		index: false,
+		rounded: false,
 		primary: undefined,
 	},
 )
 
 const searchQuery = ref('')
-const filteredItems = computed(() => props.filter(searchQuery.value))
+
+const extras = computed(() => ({
+	get searchQuery() {
+		return searchQuery.value
+	},
+	set searchQuery(value: string) {
+		searchQuery.value = value
+	},
+	filteredItems: props.filter(searchQuery.value),
+}))
 </script>

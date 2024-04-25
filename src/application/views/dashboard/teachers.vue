@@ -7,8 +7,8 @@
 		]"
 		:filter="(query) => teachers.filter((m) => m.search(query))"
 		:primary="{ label: 'Add teacher', action: add }">
-		<template #default="{ filteredItems }">
-			<MembersList :org="user!" :type="type" :members="teachers" :filteredMembers="filteredItems" />
+		<template #default="{ extras }">
+			<MembersList :org="user!" :type="type" :members="teachers" :filteredMembers="extras.filteredItems" />
 		</template>
 	</DashboardPageLayout>
 </template>

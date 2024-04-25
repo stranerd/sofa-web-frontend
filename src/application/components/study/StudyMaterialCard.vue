@@ -79,9 +79,9 @@
 					<slot name="side-icons" />
 				</div>
 				<div class="flex gap-2 items-center" :class="[color]">
-					<SofaNormalText :content="label" />
+					<SofaText :content="label" />
 					<span class="size-[5px] rounded-full bg-current" />
-					<SofaNormalText :content="sub" />
+					<SofaText :content="sub" />
 				</div>
 
 				<div class="w-full flex gap-2 items-center">

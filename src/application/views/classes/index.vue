@@ -52,7 +52,7 @@
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 items-start px-4 mdlg:px-0">
-					<MyClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst" />
+					<ClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst" />
 				</div>
 			</template>
 		</template>
@@ -62,13 +62,11 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-explore'
 
 export default defineComponent({
 	name: 'ClassesIndexPage',
-	components: { MyClassCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
 	},

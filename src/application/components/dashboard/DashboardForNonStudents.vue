@@ -80,7 +80,7 @@
 				</div>
 
 				<div v-if="materials.length" class="mdlg:flex-col mdlg:gap-4 flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
-					<MyClassCard
+					<ClassCard
 						v-for="classInst in classes"
 						:key="classInst.hash"
 						:isWrapped="!$screen.desktop"
