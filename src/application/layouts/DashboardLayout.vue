@@ -66,9 +66,9 @@
 						<router-link
 							v-for="classInst in classes"
 							:key="classInst.hash"
-							class="w-full flex items-center gap-3 p-3 rounded-lg text-deepGray hover:bg-lightBlue"
-							:to="classInst.pageLink"
-							activeClass="bg-lightBlue font-bold">
+							class="w-full flex items-center gap-3 p-2 rounded-lg text-deepGray hover:bg-lightBlue"
+							:class="{ 'bg-lightBlue font-bold': $route.path.startsWith(classInst.pageLink) }"
+							:to="classInst.pageLink">
 							<SofaAvatar :size="44" :photoUrl="classInst.picture" />
 							<div class="flex flex-col truncate grow">
 								<SofaText :content="classInst.title" clamp />
