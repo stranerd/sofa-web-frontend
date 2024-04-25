@@ -83,7 +83,7 @@
 					<ClassCard
 						v-for="classInst in classes"
 						:key="classInst.hash"
-						:isWrapped="!$screen.desktop"
+						:wrapped="!$screen.desktop"
 						:classInst="classInst"
 						class="mdlg:bg-lightGray shrink-0" />
 				</div>

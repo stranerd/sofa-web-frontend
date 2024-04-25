@@ -39,7 +39,7 @@
 
 		<div
 			class="mdlg:w-[85%] lg:w-[75%] w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 lg:grid-cols-5 max-h-full overflow-y-auto gap-3 mdlg:gap-6 px-4 py-8 mdlg:py-12">
-			<ClassCard v-for="classItem in classes" :key="classItem.id" isWrapped hasBookmark :classInst="classItem" />
+			<ClassCard v-for="classItem in classes" :key="classItem.id" wrapped hasBookmark :classInst="classItem" />
 		</div>
 	</ExpandedLayout>
 </template>

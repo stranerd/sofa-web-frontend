@@ -15,6 +15,7 @@ declare module 'vue' {
     AnnouncementCard: typeof import('./../application/components/organizations/announcements/AnnouncementCard.vue')['default']
     AuthLayout: typeof import('./../application/layouts/AuthLayout.vue')['default']
     AuthProvider: typeof import('./../application/components/auth/AuthProvider.vue')['default']
+    Card: typeof import('./../application/components/core/Card.vue')['default']
     Chat: typeof import('./../application/components/conversations/Chat.vue')['default']
     ChatContent: typeof import('./../application/components/conversations/ChatContent.vue')['default']
     ChatLayout: typeof import('./../application/layouts/ChatLayout.vue')['default']
