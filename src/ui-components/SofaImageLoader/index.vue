@@ -1,7 +1,7 @@
 <template>
 	<component :is="as" class="shrink-0 relative" :class="[customClass]" :style="styles">
-		<img :src="photoUrl ?? undefined" class="w-full opacity-0" :style="aspect ? `aspect-ratio: ${aspect}` : undefined" />
-		<span class="w-full h-full flex flex-col items-center justify-center absolute top-0 left-0">
+		<img v-if="photoUrl" :src="photoUrl" class="w-full invisible" :style="aspect ? `aspect-ratio: ${aspect}` : undefined" />
+		<span class="w-full h-full flex flex-col items-center justify-center" :class="{ 'absolute top-0 left-0': photoUrl }">
 			<slot />
 		</span>
 	</component>

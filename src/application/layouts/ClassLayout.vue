@@ -14,7 +14,7 @@
 		<template #pre-crumbs>
 			<div v-if="$screen.desktop" class="w-full flex flex-col mb-4">
 				<SofaImageLoader :photoUrl="classInst.picture" class="h-[148px] w-full rounded-t-2xl">
-					<div class="flex flex-col absolute bottom-0 left-0 p-6 bg-[00000050] text-white">
+					<div class="flex flex-col justify-end w-full h-full bg-[#00000022] p-6 text-white rounded-t-2xl">
 						<SofaHeading :content="classInst.title" size="title2" />
 						<router-link class="gap-2 flex items-center" :to="`/profile/${classInst.user.id}`">
 							<SofaAvatar :size="24" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />

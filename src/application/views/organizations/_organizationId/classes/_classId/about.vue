@@ -1,26 +1,27 @@
 <template>
 	<ClassLayout title="About">
 		<template #default="{ classInst }">
-			<div class="w-full mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom">
-				<SofaHeaderText class="p-4 hidden mdlg:block" content="About" />
-				<div class="hidden h-[1px] w-full bg-lightGray mdlg:block" />
-				<div class="flex flex-col gap-4 p-0 mdlg:p-4">
-					<SofaImageLoader class="mdlg:hidden w-full rounded-custom" :photoUrl="classInst.picture"> </SofaImageLoader>
-					<div
-						v-for="(item, i) in [
-							{ title: 'Name', value: classInst.title },
-							{ title: 'Description', value: classInst.description },
-							{ title: 'Created', value: $utils.formatTime(classInst.createdAt) },
-							{ title: 'Lessons', value: $utils.formatNumber(classInst.lessons.length) },
-							{ title: 'Students', value: $utils.formatNumber(classInst.members.students.length) },
-						]"
-						:key="item.title"
-						class="flex flex-col gap-2 bg-white rounded-2xl shadow-custom p-4 mdlg:bg-transparent mdlg:rounded-none mdlg:shadow-none mdlg:p-0">
-						<SofaNormalText class="text-grayColor">{{ item.title }}</SofaNormalText>
-						<SofaNormalText :class="i === 0 ? 'font-bold' : ''">{{ item.value }}</SofaNormalText>
+			<div class="p-4 mdlg:p-0">
+				<div
+					class="w-full bg-white rounded-t-2xl items-start mdlg:rounded-t-none rounded-b-2xl p-4 mdlg:p-6 flex flex-col mdlg:flex-row gap-4">
+					<SofaImageLoader class="w-full mdlg:w-[360px] rounded-custom" aspect="3/2" :photoUrl="classInst.picture" />
+					<div class="flex flex-col gap-2">
+						<SofaHeading :content="classInst.title" size="title2" />
+						<router-link class="gap-2 flex items-center" :to="`/profile/${classInst.user.id}`">
+							<SofaAvatar :size="24" :photoUrl="classInst.user.bio.photo?.link" :userId="classInst.user.id" />
+							<SofaText clamp :content="classInst.user.bio.publicName" class="text-grayColor" />
+							<SofaIcon v-if="classInst.user.roles.isVerified" name="verify" class="h-[13px]" />
+							<SofaIcon v-if="classInst.user.type?.type === UserType.teacher" name="tutor-bagde" class="h-[13px]" />
+						</router-link>
+						<SofaText :content="classInst.description" class="text-grayColor" size="title" />
+						<SofaText :content="`Created ${$utils.formatTime(classInst.createdAt)}`" class="text-grayColor" />
 					</div>
 				</div>
 			</div>
 		</template>
 	</ClassLayout>
 </template>
+
+<script lang="ts" setup>
+import { UserType } from '@modules/users'
+</script>
