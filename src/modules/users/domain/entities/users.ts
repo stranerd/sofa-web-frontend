@@ -8,7 +8,7 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 	}
 
 	get picture() {
-		return this.bio.photo?.link ?? '/images/default.svg'
+		return this.bio.photo?.link
 	}
 
 	get isOnline() {
