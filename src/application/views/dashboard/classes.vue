@@ -1,5 +1,5 @@
 <template>
-	<DashboardPageLayout
+	<DashboardLayout
 		title="Classes"
 		rounded
 		:breadcrumbs="[
@@ -38,7 +38,7 @@
 				<ClassCard v-for="cl in extras.filteredItems" :key="cl.hash" hasShowMore :classInst="cl" class="col-span-1" />
 			</div>
 		</template>
-	</DashboardPageLayout>
+	</DashboardLayout>
 </template>
 
 <script lang="ts">

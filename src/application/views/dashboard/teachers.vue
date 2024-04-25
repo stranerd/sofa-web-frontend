@@ -1,5 +1,5 @@
 <template>
-	<DashboardPageLayout
+	<DashboardLayout
 		title="Teachers"
 		:breadcrumbs="[
 			{ text: 'Home', to: '/dashboard' },
@@ -10,7 +10,7 @@
 		<template #default="{ extras }">
 			<MembersList :org="user!" :type="type" :members="teachers" :filteredMembers="extras.filteredItems" />
 		</template>
-	</DashboardPageLayout>
+	</DashboardLayout>
 </template>
 
 <script lang="ts">

@@ -40,7 +40,6 @@ declare module 'vue' {
     DashboardForNonStudents: typeof import('./../application/components/dashboard/DashboardForNonStudents.vue')['default']
     DashboardForStudents: typeof import('./../application/components/dashboard/DashboardForStudents.vue')['default']
     DashboardLayout: typeof import('./../application/layouts/DashboardLayout.vue')['default']
-    DashboardPageLayout: typeof import('./../application/layouts/DashboardPageLayout.vue')['default']
     EditClassModal: typeof import('./../application/components/organizations/classes/EditClassModal.vue')['default']
     EditCourseModal: typeof import('./../application/components/study/courses/EditCourseModal.vue')['default']
     EditCourseSectionItem: typeof import('./../application/components/study/courses/EditCourseSectionItem.vue')['default']
