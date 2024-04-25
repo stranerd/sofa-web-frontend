@@ -9,11 +9,10 @@
 			v-for="item in moreOptions.filter((opt) => !opt.hide)"
 			:key="item.title"
 			class="w-full flex items-center gap-2 p-4"
+			:class="item.icon === 'trash' ? 'text-primaryRed' : 'fill-current'"
 			@click.stop.prevent="item.action()">
-			<SofaIcon :name="item.icon" :class="item.icon === 'delete-quiz' ? 'fill-primaryRed h-[18px]' : 'h-[15px]'" />
-			<SofaNormalText :customClass="item.icon === 'delete-quiz' ? '!text-primaryRed' : ''">
-				{{ item.title }}
-			</SofaNormalText>
+			<SofaIcon :name="item.icon" class="fill-current" :class="item.icon === 'trash' ? 'h-[18px]' : 'h-[15px]'" />
+			<SofaText :content="item.title" />
 		</a>
 	</div>
 </template>
@@ -37,7 +36,7 @@ const moreOptions = computed(
 	() =>
 		[
 			{
-				icon: 'edit-option',
+				icon: 'edit',
 				title: 'Edit',
 				hide: props.classInst.organizationId !== id.value,
 				action: () => {
@@ -49,7 +48,7 @@ const moreOptions = computed(
 				},
 			},
 			{
-				icon: 'share-option',
+				icon: 'share',
 				title: 'Share',
 				hide: false,
 				action: () => {
@@ -58,7 +57,7 @@ const moreOptions = computed(
 				},
 			},
 			{
-				icon: 'delete-quiz',
+				icon: 'trash',
 				title: 'Delete',
 				hide: props.classInst.organizationId !== id.value,
 				action: async () => {

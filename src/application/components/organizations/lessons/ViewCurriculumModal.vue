@@ -4,7 +4,7 @@
 			<SofaHeaderText class="!font-bold !text-deepGray" :content="title" />
 			<div class="flex items-center gap-4">
 				<SofaIcon class="h-[16px]" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
-				<SofaIcon class="h-[16px]" name="arrow-right-white" :class="canNext ? 'fill-black' : 'fill-grayColor'" @click="next" />
+				<SofaIcon class="h-[16px]" name="arrow-right" :class="canNext ? 'fill-black' : 'fill-grayColor'" @click="next" />
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>
 		</div>

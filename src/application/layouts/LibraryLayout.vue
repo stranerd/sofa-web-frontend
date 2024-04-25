@@ -65,8 +65,8 @@
 					<div
 						v-if="item.id !== factory.entityId"
 						class="px-3 ml-auto justify-center rounded-r-lg hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
-						<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
-						<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
+						<SofaIcon class="h-[15px] fill-grayColor" name="edit" @click.stop.prevent="edit(item)" />
+						<SofaIcon class="h-[15px]" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
 					</div>
 				</component>
 
@@ -127,8 +127,8 @@
 						<div
 							v-if="item.id !== factory.entityId"
 							class="ml-auto justify-center hidden group-hover-[.folder-link]:flex group-focus-within-[.folder-link]:flex gap-2 items-center">
-							<SofaIcon class="h-[15px] cursor-pointer" name="edit-gray" @click.stop.prevent="edit(item)" />
-							<SofaIcon class="h-[15px] cursor-pointer" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
+							<SofaIcon class="h-[15px] fill-grayColor" name="edit" @click.stop.prevent="edit(item)" />
+							<SofaIcon class="h-[15px]" name="trash-gray" @click.stop.prevent="deleteFolder(item)" />
 						</div>
 					</component>
 				</div>
@@ -246,7 +246,7 @@ const libraryOptions = computed(() => [
 	},
 	{
 		title: 'Courses',
-		icon: 'course-list' as const,
+		icon: 'courses' as const,
 		routePath: '/library/courses',
 		options: [
 			{

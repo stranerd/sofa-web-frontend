@@ -17,7 +17,7 @@
 				</template>
 				<SofaNormalText v-else color="text-grayColor" :content="placeholder" />
 			</div>
-			<SofaIcon name="angle-small-down" class="h-[7px] pr-1" />
+			<SofaIcon name="angle-small-down" class="h-[7px] pr-1 fill-deepGray" />
 		</div>
 		<div v-if="error" class="w-full flex pt-1 justify-start">
 			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />

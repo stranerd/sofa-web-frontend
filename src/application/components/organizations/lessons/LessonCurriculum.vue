@@ -19,7 +19,11 @@
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
 				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
-				<SofaIcon v-if="canEdit" class="h-[16px]" name="edit-gray" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+				<SofaIcon
+					v-if="canEdit"
+					class="h-[16px] fill-grayColor"
+					name="edit"
+					@click.stop.prevent="toggleLabelSection(sectionIndex)" />
 				<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle" name="reorder-gray" />
 				<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
 				<SofaIcon
@@ -72,11 +76,11 @@
 					</div>
 				</a>
 				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
-					<SofaIcon name="box-add" class="h-[16px] fill-primaryBlue" />
+					<SofaIcon name="add" class="h-[16px] fill-primaryBlue" />
 					<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
 				</a>
 				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
-					<SofaIcon name="box-add" class="h-[16px] fill-primaryPink" />
+					<SofaIcon name="add" class="h-[16px] fill-primaryPink" />
 					<SofaNormalText color="text-primaryPink" content="Add study material" />
 				</a>
 			</VueDraggable>

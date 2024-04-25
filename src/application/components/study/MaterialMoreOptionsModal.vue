@@ -6,7 +6,7 @@
 		</div>
 
 		<a v-for="item in moreOptions" :key="item.title" class="w-full flex items-center gap-2 p-4" @click.stop.prevent="item.action()">
-			<SofaIcon :name="item.icon" customClass="h-[15px]" />
+			<SofaIcon :name="item.icon" class="h-[15px] fill-current" />
 			<SofaNormalText>{{ item.title }}</SofaNormalText>
 		</a>
 	</div>
@@ -30,7 +30,7 @@ const router = useRouter()
 
 const moreOptions = computed(() => [
 	{
-		icon: 'edit-option' as const,
+		icon: 'edit' as const,
 		title: 'Edit',
 		show: () => props.material?.user.id === id.value,
 		action: () => {
@@ -40,7 +40,7 @@ const moreOptions = computed(() => [
 		},
 	},
 	{
-		icon: 'share-option' as const,
+		icon: 'share' as const,
 		title: 'Share',
 		show: () => props.material.isPublished,
 		action: () => {

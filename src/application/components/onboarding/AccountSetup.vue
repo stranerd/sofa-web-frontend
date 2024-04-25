@@ -22,7 +22,7 @@
 						v-model="profileFactory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
 						accept="image/*">
-						<SofaIcon class="h-[18px]" name="camera-white" />
+						<SofaIcon class="h-[18px] fill-white" name="camera" />
 					</SofaFileInput>
 				</SofaImageLoader>
 			</div>
@@ -154,7 +154,8 @@
 							@click.prevent="typeFactory.activeInst = institution.id">
 							{{ institution.title }}
 							<SofaIcon
-								:name="typeFactory.activeInst === institution.id ? 'circle-close-white' : 'circle-close'"
+								name="circle-close"
+								:class="typeFactory.activeInst === institution.id ? 'fill-white' : 'fill-deepGray'"
 								class="h-[17px]" />
 						</SofaBadge>
 					</div>

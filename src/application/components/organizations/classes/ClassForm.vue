@@ -8,7 +8,7 @@
 							class="absolute bottom-0 left-0 p-3 flex w-full items-center justify-center bg-black bg-opacity-50 rounded-custom">
 							<SofaFileInput v-model="factory.photo" accept="image/*">
 								<div class="w-full flex items-center justify-center gap-3">
-									<SofaIcon class="h-[18px]" name="camera-white" />
+									<SofaIcon class="h-[18px] fill-white" name="camera" />
 									<SofaNormalText content="Add cover photo" color="text-white" />
 								</div>
 							</SofaFileInput>

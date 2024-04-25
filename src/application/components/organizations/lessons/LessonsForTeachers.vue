@@ -71,7 +71,7 @@
 					disableClick
 					:factory="canEditLesson ? factory : undefined" />
 				<SofaButton v-if="canEditLesson" bgColor="bg-primaryPurple" class="py-3 mdlg:py-4" @click="factory.add()">
-					<SofaIcon name="box-add" class="h-[16px] fill-white" />
+					<SofaIcon name="add" class="h-[16px] fill-white" />
 					Add section
 				</SofaButton>
 				<div v-if="canEditLesson" class="grid mdlg:hidden grid-cols-2 gap-3">

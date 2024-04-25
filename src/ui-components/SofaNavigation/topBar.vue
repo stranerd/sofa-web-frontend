@@ -73,7 +73,7 @@
 						class="flex gap-2 items-center"
 						:class="{ 'border-r border-darkLightGray pr-3': action.bordered }"
 						@click="action.disabled ? undefined : action.handler()">
-						<SofaIcon :name="action.icon" :class="action.size" />
+						<SofaIcon :name="action.icon" class="fill-deepGray" :class="action.size" />
 
 						<SofaNormalText :content="action.label" />
 					</a>

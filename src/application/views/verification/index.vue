@@ -31,7 +31,7 @@
 						v-model="profileFactory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full size-[40px] flex items-center justify-center"
 						accept="image/*">
-						<SofaIcon class="h-[18px]" name="camera-white" />
+						<SofaIcon class="h-[18px] fill-white" name="camera" />
 					</SofaFileInput>
 				</SofaImageLoader>
 
@@ -88,7 +88,7 @@
 					</StudyMaterialCard>
 
 					<SofaButton padding="p-4" @click="showAddNewHandler">
-						<SofaIcon name="box-add" class="h-[18px] fill-white" />
+						<SofaIcon name="add" class="h-[18px] fill-white" />
 						Add Content
 					</SofaButton>
 				</div>

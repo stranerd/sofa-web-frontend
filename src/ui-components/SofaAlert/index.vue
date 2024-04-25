@@ -8,7 +8,7 @@
 				'border-[#FA9632] bg-[#FFF4EB]': type === 'warning',
 				'border-lightBlue bg-lightBlue': type === 'info',
 			}">
-			<SofaIcon :name="`${type}-icon`" class="h-[25px]" />
+			<SofaIcon :name="`alert-${type}`" class="h-[25px]" />
 			<SofaNormalText class="!font-semibold w-full text-left" :content="content" />
 			<SofaIcon name="circle-close" class="h-[18px] ml-auto" @click="closeAlert()" />
 		</div>

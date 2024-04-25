@@ -36,7 +36,7 @@
 					type="time"
 					placeholder="From"
 					borderColor="border-transparent" />
-				<SofaIcon class="h-[16px]" name="arrow-right-white" customClass="!fill-darkLightGray" />
+				<SofaIcon name="arrow-right" class="h-[16px] fill-darkLightGray" />
 				<SofaTextField
 					v-model="factory.end"
 					:error="factory.errors.timeEnd"

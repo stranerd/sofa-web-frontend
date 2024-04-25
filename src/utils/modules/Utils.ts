@@ -139,7 +139,7 @@ export default class Utils {
 	}
 
 	public async share(title: string, text: string, url = window.location.href) {
-		const result = share({ title, text, url })
+		const result = await share({ title, text, url })
 		if (!result) this.copy(url, 'Link copied to clipboard!')
 	}
 

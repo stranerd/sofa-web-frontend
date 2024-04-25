@@ -38,9 +38,9 @@
 					<SofaNormalText v-else color="text-primaryBlue" as="a" content="+ Add" @click="handleFolderSelected(folder.id, true)" />
 				</div>
 			</a>
-			<a class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray" @click="generateNewFolder">
-				<SofaIcon class="h-[18px]" name="add-gray" />
-				<SofaNormalText class="text-grayColor" content="Add new folder" />
+			<a class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray text-grayColor" @click="generateNewFolder">
+				<SofaIcon class="h-[18px] fill-current" name="add" />
+				<SofaText content="Add new folder" />
 			</a>
 		</div>
 	</div>
@@ -48,7 +48,7 @@
 
 <script lang="ts" setup>
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
-import { StudyMaterial, FolderSaved } from '@modules/study'
+import { FolderSaved, StudyMaterial } from '@modules/study'
 
 const props = defineProps<{
 	close: () => void

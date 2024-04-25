@@ -50,7 +50,11 @@
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 items-start px-4 mdlg:px-0">
-					<ClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst" />
+					<ClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst">
+						<template #side-icons>
+							<SofaIcon class="h-[18px]" name="share" @click.stop.prevent="shareClass(classInst)" />
+						</template>
+					</ClassCard>
 				</div>
 			</template>
 		</template>
@@ -60,6 +64,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
+import { ClassEntity } from '@modules/organizations'
 import { useAuth } from '@app/composables/auth/auth'
 import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-explore'
 
@@ -87,7 +92,11 @@ export default defineComponent({
 			return list.filter((c) => c.search(searchQuery.value))
 		})
 
-		return { classes, filteredClasses, tabs, tab, searchQuery }
+		const shareClass = (classInst: ClassEntity) => {
+			$utils.share(`Join ${classInst.title} class on SOFA`, classInst.description, classInst.shareLink)
+		}
+
+		return { classes, filteredClasses, tabs, tab, searchQuery, shareClass }
 	},
 })
 </script>
