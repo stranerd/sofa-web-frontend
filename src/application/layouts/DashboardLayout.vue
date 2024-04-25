@@ -1,12 +1,12 @@
 <template>
-	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
+	<ExpandedLayout v-if="!$screen.desktop" :hide="{ top: true }">
 		<div class="w-full flex items-center gap-3 justify-between bg-lightGray text-bodyBlack p-4">
 			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
 			<SofaHeading :content="title" />
 			<span class="w-4" />
 		</div>
 
-		<div class="w-full flex flex-col gap-3 px-4 flex-1 overflow-y-auto">
+		<div class="w-full flex flex-col flex-1 overflow-y-auto">
 			<slot />
 		</div>
 	</ExpandedLayout>
@@ -89,7 +89,7 @@
 		</template>
 
 		<template #middle-session>
-			<div class="flex flex-col gap-4 h-full overflow-y-auto mdlg:mr-4">
+			<div class="flex flex-col h-full overflow-y-auto mdlg:mr-4">
 				<slot />
 			</div>
 		</template>

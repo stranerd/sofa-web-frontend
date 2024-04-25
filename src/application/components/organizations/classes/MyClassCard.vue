@@ -11,7 +11,7 @@
 			<SofaHeading :content="classInst.title" />
 			<div class="flex gap-2 items-center">
 				<SofaIcon name="lessons" class="fill-current w-[16px]" />
-				<SofaText clamp :content="classInst.lessons.map((lesson) => lesson.title).join(' | ')" />
+				<SofaText size="sub" clamp :content="classInst.lessons.map((lesson) => lesson.title).join(' | ')" />
 			</div>
 
 			<SofaHeading class="text-grayColor">

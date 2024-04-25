@@ -1,14 +1,16 @@
 <template>
-	<div class="w-full flex flex-col justify-center items-center p-20 rounded-2xl text-deepGray bg-white mdlg:bg-lightGray">
-		<SofaImageLoader :photoUrl="`/empty/${image}.png`" class="h-[180px] mb-4" />
-		<SofaHeading :content="title" />
-		<SofaText :content="sub" size="sub" class="text-grayColor mb-4" />
+	<div class="w-full flex flex-col justify-center items-center p-20 gap-4 rounded-2xl">
+		<SofaImageLoader :photoUrl="`/images/empty/${image}.png`" />
+		<div class="flex flex-col items-center text-center gap-2 max-w-[75%]">
+			<SofaHeading :content="title" class="text-deepGray" />
+			<SofaText v-for="text in Array.isArray(sub) ? sub : [sub]" :key="text" :content="text" size="sub" class="text-grayColor" />
+		</div>
 		<div class="flex gap-3 justify-center items-center font-semibold">
 			<SofaButton
 				v-if="primary"
 				:hasShadow="false"
 				bgColor="bg-primaryBlue"
-				padding="py-4 px-6"
+				padding="py-3 px-6"
 				textColor="text-white"
 				class="border border-primaryBlue"
 				@click="primary.action()">
@@ -18,7 +20,7 @@
 				v-if="secondary"
 				bgColor="bg-transparent"
 				:hasShadow="false"
-				padding="py-4 px-6"
+				padding="py-3 px-6"
 				textColor="text-primaryBlue"
 				class="border border-primaryBlue"
 				@click="secondary.action()">
@@ -34,9 +36,9 @@ type ButtonConfig = {
 }
 
 defineProps<{
-	image: 'classes' | 'study-materials'
+	image: 'classes' | 'study-materials' | 'teachers' | 'students'
 	title: string
-	sub: string
+	sub: string | string[]
 	primary?: ButtonConfig
 	secondary?: ButtonConfig
 }>()
