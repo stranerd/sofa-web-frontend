@@ -119,7 +119,7 @@
 	</FullLayout>
 </template>
 
-<script setup lang="ts" generic="T">
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
@@ -136,7 +136,6 @@ const props = withDefaults(
 		index?: boolean
 		rounded?: boolean
 		breadcrumbs?: { text: string; to: string }[]
-		filter?: (query: string) => T[]
 		primary?: ButtonConfig
 		light?: boolean
 	}>(),
@@ -144,7 +143,6 @@ const props = withDefaults(
 		index: false,
 		rounded: false,
 		primary: undefined,
-		filter: undefined,
 		breadcrumbs: undefined,
 		light: false,
 	},
@@ -180,6 +178,5 @@ const extras = computed(() => ({
 	set searchQuery(value: string) {
 		searchQuery.value = value
 	},
-	filteredItems: props.filter?.(searchQuery.value) ?? [],
 }))
 </script>

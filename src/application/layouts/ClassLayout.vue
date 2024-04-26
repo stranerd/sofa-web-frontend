@@ -33,21 +33,23 @@
 				</div>
 			</div>
 		</template>
-		<div v-if="!$screen.desktop" class="bg-white flex gap-1 px-2 overflow-x-auto">
-			<SofaText
-				v-for="tab in tabs"
-				:key="tab.route"
-				as="router-link"
-				class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
-				:to="`${classInst.pageLink}${tab.route}`"
-				exactActiveClass="text-primaryPurple !border-primaryPurple">
-				<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
-				<span>{{ tab.title }}</span>
-			</SofaText>
-		</div>
-		<div class="h-full overflow-y-auto">
-			<slot :classInst="classInst" :user="user" />
-		</div>
+		<template #default="{ extras }">
+			<div v-if="!$screen.desktop" class="bg-white flex gap-1 px-2 overflow-x-auto">
+				<SofaText
+					v-for="tab in tabs"
+					:key="tab.route"
+					as="router-link"
+					class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
+					:to="`${classInst.pageLink}${tab.route}`"
+					exactActiveClass="text-primaryPurple !border-primaryPurple">
+					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
+					<span>{{ tab.title }}</span>
+				</SofaText>
+			</div>
+			<div class="h-full overflow-y-auto">
+				<slot :classInst="classInst" :user="user" :extras="extras" />
+			</div>
+		</template>
 	</DashboardLayout>
 </template>
 

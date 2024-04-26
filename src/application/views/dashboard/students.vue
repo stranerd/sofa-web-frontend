@@ -5,10 +5,13 @@
 			{ text: 'Home', to: '/dashboard' },
 			{ text: 'Students', to: '/dashboard/students' },
 		]"
-		:filter="(query) => students.filter((m) => m.search(query))"
 		:primary="{ label: 'Add student', action: add }">
 		<template #default="{ extras }">
-			<MembersList :org="user!" :type="type" :members="students" :filteredMembers="extras.filteredItems" />
+			<MembersList
+				:org="user!"
+				:type="type"
+				:members="students"
+				:filteredMembers="students.filter((m) => m.search(extras.searchQuery))" />
 		</template>
 	</DashboardLayout>
 </template>

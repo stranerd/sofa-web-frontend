@@ -6,7 +6,6 @@
 			{ text: 'Home', to: '/dashboard' },
 			{ text: 'Classes', to: '/dashboard/classes' },
 		]"
-		:filter="(query) => classes.filter((m) => m.search(query))"
 		:primary="{ label: 'Create class', action: createClass }">
 		<template #default="{ extras }">
 			<div class="mdlg:mt-4 px-4 mdlg:p-0 grid grid-cols-1 mdlg:grid-cols-2 gap-4">
@@ -35,7 +34,12 @@
 					</template>
 				</SofaInput>
 
-				<ClassCard v-for="cl in extras.filteredItems" :key="cl.hash" hasShowMore :classInst="cl" class="col-span-1" />
+				<ClassCard
+					v-for="cl in classes.filter((m) => m.search(extras.searchQuery))"
+					:key="cl.hash"
+					hasShowMore
+					:classInst="cl"
+					class="col-span-1" />
 			</div>
 		</template>
 	</DashboardLayout>
