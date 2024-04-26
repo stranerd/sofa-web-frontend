@@ -21,7 +21,7 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 	}
 
 	get teachers() {
-		return this.lessons.flatMap((l) => l.users.teachers)
+		return [...new Set(this.lessons.flatMap((l) => l.users.teachers))]
 	}
 
 	search(query: string) {

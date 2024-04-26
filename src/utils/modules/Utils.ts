@@ -147,4 +147,8 @@ export default class Utils {
 		const result = await copyToClipboard(text)
 		if (result) this.showAlert({ message, type })
 	}
+
+	deepGet<T, R>(obj: T, key: Paths<T>) {
+		return key.split('.').reduce((acc, cur) => (acc && (acc as any)[cur] ? (acc as any)[cur] : undefined), obj as unknown as R)
+	}
 }

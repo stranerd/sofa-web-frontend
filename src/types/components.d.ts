@@ -137,6 +137,7 @@ declare module 'vue' {
     SofaRatings: typeof import('sofa-ui-components')['SofaRatings']
     SofaSelect: typeof import('sofa-ui-components')['SofaSelect']
     SofaSuccessPrompt: typeof import('sofa-ui-components')['SofaSuccessPrompt']
+    SofaTable: typeof import('sofa-ui-components')['SofaTable']
     SofaText: typeof import('sofa-ui-components')['SofaText']
     SofaTextarea: typeof import('sofa-ui-components')['SofaTextarea']
     SofaTextField: typeof import('sofa-ui-components')['SofaTextField']
