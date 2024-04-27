@@ -62,4 +62,14 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 			.flatMap((l) => l.curriculum.flatMap((c) => c.items.filter((i) => i.type === ClassLessonable.schedule)))
 			.map((i) => i.id)
 	}
+
+	getTeacherStudents(id: string) {
+		const lessons = this.lessons.filter((l) => l.users.teachers.includes(id))
+		return [...new Set(lessons.flatMap((l) => l.users.students))]
+	}
+
+	getStudentTeachers(id: string) {
+		const lessons = this.lessons.filter((l) => l.users.students.includes(id))
+		return [...new Set(lessons.flatMap((l) => l.users.teachers))]
+	}
 }

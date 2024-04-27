@@ -2,7 +2,12 @@
 	<table class="table-auto border-collapse">
 		<thead>
 			<tr>
-				<SofaText v-for="(field, fieldIdx) in fields" :key="fieldIdx" as="th" :class="[field.headerClass]" class="p-2">
+				<SofaText
+					v-for="(field, fieldIdx) in allFields"
+					:key="fieldIdx"
+					as="th"
+					:class="[field.headerClass, headClass]"
+					class="p-4">
 					<slot :name="`header-${field.id ?? fieldIdx}`">
 						{{ field.label }}
 					</slot>
@@ -12,13 +17,14 @@
 		<tbody>
 			<tr v-for="(item, index) in data" :key="index" :class="[typeof rowClass === 'function' ? rowClass(item, index) : rowClass]">
 				<SofaText
-					v-for="(field, fieldIdx) in fields"
+					v-for="(field, fieldIdx) in allFields"
 					:key="fieldIdx"
 					as="td"
 					:class="[typeof field.class === 'function' ? field.class(item, index) : field.class]"
-					class="p-2">
+					class="p-4">
 					<slot
 						:name="`data-${field.id ?? index}`"
+						:data="item"
 						:value="typeof field.key === 'function' ? field.key(item) : $utils.deepGet(item, field.key)">
 						{{ typeof field.key === 'function' ? field.key(item) : $utils.deepGet(item, field.key) }}
 					</slot>
@@ -29,15 +35,19 @@
 </template>
 
 <script lang="ts" setup generic="T">
-defineProps<{
+const props = defineProps<{
 	fields: {
 		id?: string
 		key: Paths<T> | ((data: T) => unknown)
 		label: string
 		headerClass?: string
 		class?: string | ((item: T, index: number) => string)
+		hide?: boolean
 	}[]
 	data: T[]
+	headClass?: string
 	rowClass?: string | ((item: T, index: number) => string)
 }>()
+
+const allFields = props.fields.filter((field) => !field.hide)
 </script>

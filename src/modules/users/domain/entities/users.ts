@@ -59,6 +59,11 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 		return false
 	}
 
+	search(query: string) {
+		if (!query) return true
+		return [this.bio.name.full].some((v) => v.toLowerCase().includes(query.toLowerCase()))
+	}
+
 	static defaultAi = 'Dr. Stranerd'
 	static defaultAiPhotoLink = '/images/icons/robot.svg'
 

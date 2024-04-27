@@ -79,6 +79,8 @@ declare global {
 		| 'not-selected'
 		| 'notebook-black'
 		| 'notes-white'
+		| 'offline-enrollment'
+		| 'online-enrollment'
 		| 'open-notebook'
 		| 'orange-list'
 		| 'organization-auth'
