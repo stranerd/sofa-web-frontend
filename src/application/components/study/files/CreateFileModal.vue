@@ -26,7 +26,6 @@
 		<SofaSelect
 			v-model="factory.topic"
 			customClass="rounded-custom !bg-lightGray"
-			name="Topic"
 			placeholder="Topic"
 			borderColor="border-transparent"
 			:error="factory.errors.topic"

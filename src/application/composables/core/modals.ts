@@ -6,7 +6,6 @@ import ConversationMoreOptions from '@app/components/conversations/ConversationM
 import HomeMobileMenu from '@app/components/home/HomeMobileMenu.vue'
 import CreateReport from '@app/components/interactions/reports/CreateReportModal.vue'
 import CreateReview from '@app/components/interactions/reviews/CreateReviewModal.vue'
-import CreateAnnouncement from '@app/components/organizations/announcements/CreateAnnouncementModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
@@ -57,7 +56,6 @@ export const useModals = () => ({
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
 		createLesson: { component: CreateLesson },
 		lessonDetails: { component: LessonDetails },
-		createAnnouncement: { component: CreateAnnouncement },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
 		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full overflow-y-auto' } },

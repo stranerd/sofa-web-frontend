@@ -1,0 +1,84 @@
+<template>
+	<form class="p-4 flex flex-col gap-4" @submit.prevent="createAnnouncement">
+		<div class="flex items-center gap-4">
+			<SofaAvatar v-if="!classInst.isAdmin(user!)" :photoUrl="classInst.picture" :size="48" />
+			<SofaTextarea
+				v-model="factory.body"
+				:rows="classInst.isAdmin(user!) ? 2 : 1"
+				textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
+				:error="factory.errors.body"
+				placeholder="Announce something" />
+		</div>
+		<div class="flex flex-col mdlg:flex-row items-center gap-4">
+			<SofaSelect
+				v-model="factory.lessonIds"
+				customClass="rounded-custom !bg-lightGray"
+				class="mdlg:w-[180px]"
+				placeholder="Select lesson"
+				borderColor="border-transparent"
+				isMultiple
+				:error="factory.errors.lessonIds"
+				:options="lessonOptions" />
+			<SofaSelect
+				v-model="factory.userTypes"
+				customClass="rounded-custom !bg-lightGray"
+				class="mdlg:w-[180px]"
+				placeholder="Select audience"
+				borderColor="border-transparent"
+				isMultiple
+				:error="factory.errors.userTypes"
+				:options="userTypesOption" />
+			<SofaButton
+				:disabled="!factory.valid"
+				bgColor="bg-primaryBlue"
+				type="submit"
+				textColor="text-white"
+				padding="py-3 px-6"
+				class="w-auto ml-auto !rounded-xl">
+				Post
+			</SofaButton>
+		</div>
+	</form>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useCreateAnnouncement } from '@app/composables/organizations/announcements'
+import { ClassEntity, MemberTypes } from '@modules/organizations'
+import { useAuth } from '@app/composables/auth/auth'
+
+const props = defineProps<{
+	classInst: ClassEntity
+}>()
+
+const { user } = useAuth()
+const { factory, createAnnouncement } = useCreateAnnouncement(props.classInst.organizationId, props.classInst.id)
+
+const lessonOptions = computed(() => {
+	if (!user.value) return []
+	if (props.classInst.isAdmin(user.value)) {
+		const lessons = props.classInst.lessons
+		return [{ key: null as string | null, value: 'All lessons' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
+	}
+	if (props.classInst.isTeacher(user.value)) {
+		const lessons = props.classInst.lessons.filter((lesson) => lesson.users.teachers.includes(user.value!.id))
+		return lessons.map((l) => ({ key: l.id, value: l.title }))
+	}
+	return []
+})
+
+const userTypesOption = computed(() => {
+	if (!user.value) return []
+	if (props.classInst.isAdmin(user.value)) {
+		return [
+			{ key: null, value: 'Both Teachers and Students' },
+			{ key: MemberTypes.student, value: 'Students Only' },
+			{ key: MemberTypes.teacher, value: 'Teachers Only' },
+		]
+	}
+	if (props.classInst.isTeacher(user.value)) {
+		return [{ key: MemberTypes.student, value: 'Students Only' }]
+	}
+	return []
+})
+</script>

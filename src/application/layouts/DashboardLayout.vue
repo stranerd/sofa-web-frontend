@@ -81,7 +81,7 @@
 		</template>
 
 		<template #middle-session>
-			<div class="flex flex-col h-full overflow-y-auto mdlg:mr-4">
+			<div class="flex flex-col grow overflow-y-auto mdlg:mr-4">
 				<slot name="pre-crumbs" />
 				<div
 					v-if="$screen.desktop && breadcrumbs"
