@@ -10,32 +10,31 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 		<template v-if="factory.type && !factory.canAutoStart">
-			<SofaTextField
-				v-model="factory.title"
-				:error="factory.errors.title"
-				customClass="w-full rounded-custom !bg-lightGray"
-				placeholder="Title"
-				:hasTitle="true"
-				borderColor="border-transparent">
-				<template #title>Title</template>
-			</SofaTextField>
+			<SofaFormGroup>
+				<SofaLabel>Title</SofaLabel>
+				<SofaTextField
+					v-model="factory.title"
+					:error="factory.errors.title"
+					customClass="w-full rounded-custom !bg-lightGray"
+					placeholder="Title"
+					borderColor="border-transparent" />
+			</SofaFormGroup>
 
 			<SofaCheckbox v-if="factory.isGames" v-model="factory.gamesJoin" type="switch" class="w-full justify-between p-4 bg-lightGray">
 				<SofaNormalText content="Participate" />
 			</SofaCheckbox>
 
-			<SofaTextField
-				v-if="factory.isAssessments"
-				v-model="factory.assessmentsEndedAtDate"
-				:error="factory.errors.assessmentsEndedAt"
-				:min="factory.minAssessmentsEndedAt"
-				customClass="w-full rounded-custom !bg-lightGray"
-				type="datetime-local"
-				placeholder="Ends at"
-				:hasTitle="true"
-				borderColor="border-transparent">
-				<template #title>Ends at</template>
-			</SofaTextField>
+			<SofaFormGroup v-if="factory.isAssessments">
+				<SofaLabel>Ends at</SofaLabel>
+				<SofaTextField
+					v-model="factory.assessmentsEndedAtDate"
+					:error="factory.errors.assessmentsEndedAt"
+					:min="factory.minAssessmentsEndedAt"
+					customClass="w-full rounded-custom !bg-lightGray"
+					type="datetime-local"
+					placeholder="Ends at"
+					borderColor="border-transparent" />
+			</SofaFormGroup>
 
 			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
 		</template>

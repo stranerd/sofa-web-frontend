@@ -1,8 +1,5 @@
 <template>
 	<div class="flex w-full flex-col content">
-		<SofaNormalText v-if="hasTitle" customClass="!pb-4 font-bold">
-			<slot name="title" />
-		</SofaNormalText>
 		<VueEditor
 			v-if="richEditor"
 			v-model="comp"
@@ -60,7 +57,6 @@ withDefaults(
 	defineProps<{
 		rows?: number
 		disabled?: boolean
-		hasTitle?: boolean
 		placeholder?: string
 		textAreaStyle?: string
 		richEditor?: boolean
@@ -69,7 +65,6 @@ withDefaults(
 	{
 		rows: 8,
 		disabled: false,
-		hasTitle: false,
 		placeholder: '',
 		textAreaStyle: 'max-h-[400px] bg-grey100 px-3 py-3',
 		richEditor: false,

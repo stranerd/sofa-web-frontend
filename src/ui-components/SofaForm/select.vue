@@ -1,11 +1,8 @@
 <template>
 	<div ref="selectRef" class="flex flex-col w-full relative group" :tabIndex="-1">
-		<SofaNormalText v-if="hasTitle">
-			<slot name="title" />
-		</SofaNormalText>
 		<div class="flex items-center gap-1 justify-between w-full rounded-md px-3 py-4" :class="customClass" @click="showOptions = true">
 			<input
-				v-if="!isMultiple"
+				v-if="!multiple"
 				:value="selectedOptions.at(0)?.value"
 				:placeholder="placeholder"
 				class="grow bg-transparent placeholder:text-grayColor text-darkBody w-full focus:outline-none lg:text-sm mdlg:text-[12px] text-xs" />
@@ -60,8 +57,7 @@ const props = withDefaults(
 		placeholder?: string
 		options?: SelectOption[]
 		customClass?: string
-		isMultiple?: boolean
-		hasTitle?: boolean
+		multiple?: boolean
 		autoComplete?: boolean
 		canUseCustom?: boolean
 		selectFirstOnMount?: boolean
@@ -71,8 +67,7 @@ const props = withDefaults(
 		placeholder: '',
 		options: () => [],
 		customClass: '',
-		isMultiple: false,
-		hasTitle: false,
+		multiple: false,
 		autoComplete: true,
 		canUseCustom: false,
 		selectFirstOnMount: false,
@@ -94,7 +89,7 @@ const filteredOptions = computed(() => {
 })
 
 const selectedOptions = computed(() => {
-	const options = props.options.filter((o) => (props.isMultiple ? (value.value as T[])?.includes(o.key) : value.value === o.key))
+	const options = props.options.filter((o) => (props.multiple ? (value.value as T[])?.includes(o.key) : value.value === o.key))
 	if (props.canUseCustom && options.length === 0) options.unshift({ key: value.value as T, value: value.value as string })
 	return options
 })
@@ -103,21 +98,21 @@ const model = defineModel<T | T[]>()
 
 const value = computed({
 	get: () => {
-		if (props.isMultiple) return Array.isArray(model.value) ? model.value : []
+		if (props.multiple) return Array.isArray(model.value) ? model.value : []
 		return model.value
 	},
 	set: (v) => (model.value = v),
 })
 
 const itemIsSelected = (key: T) => {
-	if (!props.isMultiple) return key === model.value
+	if (!props.multiple) return key === model.value
 	return Array.isArray(value.value) && value.value.some((v) => v === key)
 }
 
 const selectValue = (option: SelectOption) => {
 	showOptions.value = false
 	const v = option.key
-	if (!props.isMultiple) return (value.value = v)
+	if (!props.multiple) return (value.value = v)
 	const isSelected = itemIsSelected(v)
 	if (isSelected) return (value.value = Array.isArray(value.value) ? value.value.filter((o) => o !== v) : [])
 	else return (value.value = [...((value.value as T[]) ?? []), v])

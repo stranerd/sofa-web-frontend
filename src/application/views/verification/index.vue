@@ -35,32 +35,35 @@
 					</SofaFileInput>
 				</SofaImageLoader>
 
-				<SofaTextField
-					v-model="profileFactory.first"
-					placeholder="Enter first name"
-					:hasTitle="true"
-					customClass="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.first">
-					<template #title>First Name</template>
-				</SofaTextField>
+				<SofaFormGroup>
+					<SofaLabel>First Name</SofaLabel>
 
-				<SofaTextField
-					v-model="profileFactory.last"
-					placeholder="Enter last name"
-					:hasTitle="true"
-					customClass="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.last">
-					<template #title>Last Name</template>
-				</SofaTextField>
+					<SofaTextField
+						v-model="profileFactory.first"
+						placeholder="Enter first name"
+						customClass="rounded-custom !bg-lightGray"
+						:error="profileFactory.errors.first" />
+				</SofaFormGroup>
 
-				<SofaTextarea
-					v-model="profileFactory.description"
-					placeholder="Description of yourself"
-					:hasTitle="true"
-					textAreaStyle="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.description">
-					<template #title>Bio</template>
-				</SofaTextarea>
+				<SofaFormGroup>
+					<SofaLabel>Last Name</SofaLabel>
+
+					<SofaTextField
+						v-model="profileFactory.last"
+						placeholder="Enter last name"
+						customClass="rounded-custom !bg-lightGray"
+						:error="profileFactory.errors.last" />
+				</SofaFormGroup>
+
+				<SofaFormGroup>
+					<SofaLabel>Bio</SofaLabel>
+
+					<SofaTextarea
+						v-model="profileFactory.description"
+						placeholder="Description of yourself"
+						textAreaStyle="rounded-custom !bg-lightGray"
+						:error="profileFactory.errors.description" />
+				</SofaFormGroup>
 			</form>
 		</template>
 
