@@ -98,7 +98,7 @@
 							{{ i !== breadcrumbs.length - 1 ? '/' : '' }}
 						</template>
 					</div>
-					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="max-w-[300px] ml-auto" padding="p-3">
+					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white max-w-[300px] ml-auto mdlg:!p-3">
 						<template #prefix>
 							<SofaIcon name="search" class="h-[16px]" />
 						</template>

@@ -43,11 +43,7 @@
 
 			<SofaFormGroup>
 				<SofaLabel>Description</SofaLabel>
-				<SofaTextarea
-					v-model="factory.description"
-					:rows="6"
-					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-					placeholder="File description" />
+				<SofaTextarea v-model="factory.description" :rows="6" placeholder="File description" />
 			</SofaFormGroup>
 
 			<SofaButton v-if="factory.hasChanges" type="submit" :disabled="!factory.valid" padding="px-4 py-2" class="self-end">

@@ -26,7 +26,7 @@
 					borderColor="border-transparent" />
 				<SofaTextarea
 					v-model="factory.description"
-					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+					class="h-[90px] resize-none"
 					:error="factory.errors.description"
 					placeholder="Describe your class" />
 				<SofaTextField

@@ -14,10 +14,7 @@
 			<form class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom" @submit.prevent="sendMessage">
 				<SofaHeaderText size="xl" content="Give feedback" />
 
-				<SofaTextarea
-					v-model="factory.message"
-					textAreaStyle="rounded-custom !bg-lightGray"
-					placeholder="Let us know how we can help" />
+				<SofaTextarea v-model="factory.message" placeholder="Let us know how we can help" />
 
 				<SofaButton padding="px-7 py-2" class="w-auto ml-auto" type="submit"> Send </SofaButton>
 			</form>

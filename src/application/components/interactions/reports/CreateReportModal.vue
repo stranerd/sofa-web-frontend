@@ -9,12 +9,7 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<SofaTextarea
-			v-model="factory.message"
-			padding="p-4"
-			placeholder="Why are you reporting this?"
-			textAreaStyle="!bg-lightGray rounded-custom"
-			:error="factory.errors.message" />
+		<SofaTextarea v-model="factory.message" placeholder="Why are you reporting this?" class="p-4" :error="factory.errors.message" />
 
 		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">
 			Submit

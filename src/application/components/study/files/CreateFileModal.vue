@@ -16,12 +16,7 @@
 			placeholder="File title"
 			borderColor="border-transparent" />
 
-		<SofaTextarea
-			v-model="factory.description"
-			padding="p-4"
-			placeholder="Description..."
-			textAreaStyle="!bg-lightGray rounded-custom"
-			:error="factory.errors.description" />
+		<SofaTextarea v-model="factory.description" padding="p-4" placeholder="Description..." :error="factory.errors.description" />
 
 		<SofaSelect
 			v-model="factory.topic"
@@ -42,7 +37,7 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue'
-import { useTopicsList, useGenericTagsList } from '@app/composables/interactions/tags'
+import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { useCreateFile } from '@app/composables/study/files'
 import { UploadedFile } from '@modules/core'
 import { FileEntity } from '@modules/study'

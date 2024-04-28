@@ -21,7 +21,7 @@
 				</SofaButton>
 			</div>
 
-			<SofaInput v-if="!$screen.desktop" v-model="searchQuery" placeholder="Search" type="search" class="bg-white" padding="p-3">
+			<SofaInput v-if="!$screen.desktop" v-model="searchQuery" placeholder="Search" type="search" class="!bg-white mdlg:!p-3">
 				<template #prefix>
 					<SofaIcon name="search" class="h-[16px]" />
 				</template>
@@ -89,8 +89,8 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { ClassEntity } from '@modules/organizations'
 import { useUsersInList } from '@app/composables/users/users'
+import { ClassEntity } from '@modules/organizations'
 
 const props = defineProps<{
 	classInst: ClassEntity

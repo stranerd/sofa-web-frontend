@@ -61,7 +61,6 @@
 					<SofaTextarea
 						v-model="profileFactory.description"
 						placeholder="Description of yourself"
-						textAreaStyle="rounded-custom !bg-lightGray"
 						:error="profileFactory.errors.description" />
 				</SofaFormGroup>
 			</form>

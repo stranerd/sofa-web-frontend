@@ -54,7 +54,7 @@
 
 			<SofaTextarea
 				v-model="profileFactory.description"
-				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+				class="h-[90px] resize-none"
 				:error="profileFactory.errors.description"
 				:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
 

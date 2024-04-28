@@ -16,6 +16,14 @@ body {
 	@apply h-[100dvh] w-[100dvw] overflow-auto flex flex-col;
 }
 
+.has-error {
+	@apply relative after:content-[attr(data-error)] after:text-primaryRed after:absolute after:m-auto after:top-[100%] after:left-0;
+}
+
+.has-error[data-error]:not([data-error='']) {
+	@apply !border-primaryRed;
+}
+
 .text-sub {
 	@apply text-[12px] mdlg:text-[14px];
 }

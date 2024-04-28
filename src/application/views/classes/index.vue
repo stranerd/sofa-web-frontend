@@ -38,8 +38,7 @@
 							v-model="searchQuery"
 							placeholder="Search"
 							type="search"
-							class="grow rounded-custom bg-white"
-							padding="p-3">
+							class="grow !rounded-custom !bg-white mdlg:!p-3">
 							<template #prefix>
 								<SofaIcon name="search" class="h-[16px]" />
 							</template>

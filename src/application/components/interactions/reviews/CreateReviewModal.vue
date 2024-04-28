@@ -13,12 +13,7 @@
 
 		<SofaRatings v-model="factory.rating" :readonly="false" size="h-[30px]" class="mb-3 self-center" />
 
-		<SofaTextarea
-			v-model="factory.message"
-			padding="p-4"
-			placeholder="Why are you reviewing this?"
-			textAreaStyle="!bg-lightGray rounded-custom"
-			:error="factory.errors.message" />
+		<SofaTextarea v-model="factory.message" placeholder="Why are you reviewing this?" class="p-4" :error="factory.errors.message" />
 
 		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">Submit</SofaButton>
 	</form>

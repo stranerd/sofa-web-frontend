@@ -46,12 +46,7 @@
 
 			<template v-if="currentStep == 1">
 				<div class="w-full flex flex-col gap-3 px-4 md:px-0">
-					<SofaTextarea
-						v-model="factory.body"
-						customClass="bg-lightGray rounded-custom"
-						placeholder="Tell the tutor why you need him/her"
-						textAreaStyle="!bg-lightGray rounded-custom">
-					</SofaTextarea>
+					<SofaTextarea v-model="factory.body" placeholder="Tell the tutor why you need him/her" />
 				</div>
 			</template>
 

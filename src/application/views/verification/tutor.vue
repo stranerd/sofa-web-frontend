@@ -47,7 +47,7 @@
 						:error="profileFactory.errors.last"
 						borderColor="border-transparent" />
 
-					<SofaTextarea v-model="profileFactory.description" textAreaStyle="rounded-custom !bg-lightGray" placeholder="Bio" />
+					<SofaTextarea v-model="profileFactory.description" placeholder="Bio" />
 				</div>
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">

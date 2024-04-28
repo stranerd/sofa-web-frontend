@@ -17,12 +17,7 @@
 					borderColor="border-transparent"
 					:error="factory.errors.title" />
 
-				<SofaTextarea
-					v-model="factory.description"
-					:rows="4"
-					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-					placeholder="Description"
-					:error="factory.errors.description" />
+				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Description" :error="factory.errors.description" />
 
 				<SofaSelect
 					v-model="factory.topic"

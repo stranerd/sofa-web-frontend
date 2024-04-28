@@ -30,7 +30,7 @@
 			<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
 			<SofaTextarea
 				v-model="factory.question"
-				textAreaStyle="bg-transparent h-[130px] w-full resize-none"
+				class="!bg-transparent h-[130px] w-full resize-none"
 				:placeholder="factory.questionPlaceholder"
 				:richEditor="true" />
 		</div>
@@ -63,8 +63,7 @@
 						v-model="factory.multipleOptions[index]"
 						:rows="1"
 						:richEditor="true"
-						class="flex-1"
-						textAreaStyle="p-0"
+						class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
 						:placeholder="`Enter answer ${index + 1}`" />
 					<SofaIcon
 						v-if="factory.canRemoveOption"
@@ -100,8 +99,7 @@
 						v-model="factory.writeAnswerAnswers[index]"
 						:rows="index === 0 ? 3 : 1"
 						:richEditor="true"
-						class="flex-1"
-						textAreaStyle="p-0"
+						class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
 						:placeholder="index === 0 ? 'Enter answer' : `Add optional answer ${index}`" />
 					<SofaIcon
 						v-if="factory.canRemoveOption"
@@ -118,8 +116,7 @@
 							v-model="factory.matchSet[index].q"
 							:rows="1"
 							:richEditor="true"
-							class="flex-1"
-							textAreaStyle="p-0"
+							class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
 							:placeholder="`Enter word/sentence ${index + 1}`" />
 					</div>
 					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
@@ -128,8 +125,7 @@
 							v-model="factory.matchSet[index].a"
 							:rows="1"
 							:richEditor="true"
-							class="flex-1"
-							textAreaStyle="p-0"
+							class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
 							placeholder="Enter answer" />
 					</div>
 					<SofaIcon
@@ -149,8 +145,7 @@
 						v-model="factory.sequenceAnswers[index]"
 						:rows="1"
 						:richEditor="true"
-						class="flex-1"
-						textAreaStyle="p-0"
+						class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
 						:placeholder="`Enter word/sentence ${index + 1}`" />
 					<SofaIcon
 						v-if="factory.canRemoveOption"
@@ -171,7 +166,7 @@
 				<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
 				<SofaTextarea
 					v-model="factory.explanation"
-					textAreaStyle="bg-transparent h-[130px] w-full !p-0 resize-none"
+					class="!p-0 mdlg:!p-0 !bg-transparent h-[130px] resize-none w-full"
 					placeholder="Explanation"
 					:richEditor="true" />
 			</div>

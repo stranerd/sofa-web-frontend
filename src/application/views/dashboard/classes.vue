@@ -19,7 +19,7 @@
 						'Make announcements to all student at once',
 						'Set a monthly subscription fee for online students',
 					]"
-					class="bg-white"
+					class="bg-white col-span-full"
 					:primary="{ label: 'Create a class', action: createClass }" />
 
 				<SofaInput
@@ -27,8 +27,7 @@
 					v-model="extras.searchQuery"
 					placeholder="Search"
 					type="search"
-					class="col-span-1 bg-white"
-					padding="p-3">
+					class="col-span-1 !bg-white mdlg:!p-3">
 					<template #prefix>
 						<SofaIcon name="search" class="h-[16px]" />
 					</template>

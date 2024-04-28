@@ -1,10 +1,9 @@
 <template>
 	<div
-		v-bind="$attrs"
-		class="w-full gap-2 flex items-center justify-between text-sub rounded-lg border border-darkLightGray group-focus-within:!border-primaryBlue"
+		:data-error="error"
+		class="w-full gap-2 p-3 mdlg:p-4 flex items-center justify-between text-sub rounded-lg bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error"
 		:class="{
 			'!border-red-500': error,
-			[`${padding}`]: true,
 		}">
 		<slot name="prefix" />
 		<input
@@ -23,7 +22,6 @@
 			@click.stop="showPassword = !showPassword" />
 		<SofaIcon v-if="error" name="error-state" class="h-[15px]" />
 	</div>
-	<SofaText v-if="error" class="text-primaryRed" :content="error" />
 </template>
 
 <script lang="ts" setup generic="T">
@@ -32,7 +30,6 @@ import SofaIcon from '../SofaIcon'
 
 withDefaults(
 	defineProps<{
-		padding?: string
 		placeholder?: string
 		type?: string
 		min?: string | number
@@ -41,7 +38,6 @@ withDefaults(
 		error?: string
 	}>(),
 	{
-		padding: 'p-3 md:p-4',
 		placeholder: undefined,
 		type: 'text',
 		min: undefined,

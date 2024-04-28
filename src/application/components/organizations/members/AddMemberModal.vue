@@ -9,7 +9,7 @@
 			<SofaIcon class="h-[16px] fill-current ml-auto" name="circle-close" @click="showInfo = false" />
 		</div>
 		<div class="flex gap-2 items-center">
-			<SofaInput v-model="addMembersEmails" class="bg-lightGray" name="Emails" placeholder="Email, comma seperated" />
+			<SofaInput v-model="addMembersEmails" name="Emails" placeholder="Email, comma seperated" />
 			<SofaButton class="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addMembers(type)">
 				Invite
 			</SofaButton>

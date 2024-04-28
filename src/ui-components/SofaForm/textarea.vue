@@ -1,48 +1,44 @@
 <template>
-	<div class="flex w-full flex-col content">
-		<VueEditor
-			v-if="richEditor"
-			v-model="comp"
-			:editorOptions="editorOptions"
-			:disabled="disabled"
-			:style="`min-height: ${rows}em`"
-			:class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
-			:placeholder="placeholder"
-			:tabindex="0"
-			@ready="(v: any) => (quill = v)">
-			<template #toolbar>
-				<div :id="toolbarId" :class="{ '!hidden': disabled }">
-					<button class="ql-bold"></button>
-					<button class="ql-italic"></button>
-					<button class="ql-underline"></button>
-					<button class="ql-strike"></button>
-					<button class="ql-script" value="sub"></button>
-					<button class="ql-script" value="super"></button>
-					<button class="ql-formula"></button>
-					<button class="ql-code-block"></button>
-				</div>
-				<math-field
-					ref="mathRef"
-					class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
-					:class="{ hidden: !showMath || !quill }"
-					@beforeinput="saveFormula">
-					{{ mathText }}
-				</math-field>
-			</template>
-		</VueEditor>
-		<textarea
-			v-else
-			v-model="comp"
-			:placeholder="placeholder"
-			:rows="rows"
-			:disabled="disabled"
-			:tabindex="0"
-			:class="`w-full p-3 text-darkBody placeholder:text-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
-		</textarea>
-		<div v-if="error" class="w-full flex pt-1 justify-start">
-			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
-		</div>
-	</div>
+	<VueEditor
+		v-if="richEditor"
+		v-model="comp"
+		:editorOptions="editorOptions"
+		:disabled="disabled"
+		:style="`min-height: ${rows}em`"
+		class="w-full text-sub rounded-custom overflow-y-auto bg-lightGray p-3 mdlg:p-4 has-error"
+		:data-error="error"
+		:placeholder="placeholder"
+		:tabindex="0"
+		@ready="(v: any) => (quill = v)">
+		<template #toolbar>
+			<div :id="toolbarId" :class="{ '!hidden': disabled }">
+				<button class="ql-bold"></button>
+				<button class="ql-italic"></button>
+				<button class="ql-underline"></button>
+				<button class="ql-strike"></button>
+				<button class="ql-script" value="sub"></button>
+				<button class="ql-script" value="super"></button>
+				<button class="ql-formula"></button>
+				<button class="ql-code-block"></button>
+			</div>
+			<math-field
+				ref="mathRef"
+				class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
+				:class="{ hidden: !showMath || !quill }"
+				@beforeinput="saveFormula">
+				{{ mathText }}
+			</math-field>
+		</template>
+	</VueEditor>
+	<textarea
+		v-else
+		v-model="comp"
+		:placeholder="placeholder"
+		:rows="rows"
+		:disabled="disabled"
+		:tabindex="0"
+		:data-error="error"
+		class="w-full text-sub rounded-custom overflow-y-auto bg-lightGray p-3 mdlg:p-4 placeholder:text-grayColor focus:outline-none has-error" />
 </template>
 
 <script lang="ts" setup>
@@ -51,14 +47,12 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { Quill, VueEditor } from 'vue3-editor'
-import SofaNormalText from '../SofaTypography/normalText.vue'
 
 withDefaults(
 	defineProps<{
 		rows?: number
 		disabled?: boolean
 		placeholder?: string
-		textAreaStyle?: string
 		richEditor?: boolean
 		error?: string
 	}>(),
@@ -66,9 +60,8 @@ withDefaults(
 		rows: 8,
 		disabled: false,
 		placeholder: '',
-		textAreaStyle: 'max-h-[400px] bg-grey100 px-3 py-3',
 		richEditor: false,
-		error: '',
+		error: undefined,
 	},
 )
 

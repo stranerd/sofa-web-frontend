@@ -8,7 +8,7 @@
 			</SofaText>
 
 			<form class="w-[40%] mt-6" @submit.prevent="fetchClasses">
-				<SofaInput v-model="searchQuery" class="w-full bg-white rounded-custom shadow-custom" placeholder="Search">
+				<SofaInput v-model="searchQuery" class="w-full !bg-white !rounded-custom shadow-custom" placeholder="Search">
 					<template #prefix>
 						<SofaIcon name="search-black" class="h-[17px]" @click="fetchClasses" />
 					</template>
@@ -22,7 +22,7 @@
 				<SofaHeading content="Explore Classes" />
 				<span class="w-4" />
 			</div>
-			<SofaInput v-model="searchQuery" class="flex-1 bg-white rounded-custom shadow-custom w-full px-4 py-3" placeholder="Search">
+			<SofaInput v-model="searchQuery" class="flex-1 !bg-white !rounded-custom shadow-custom w-full" placeholder="Search">
 				<template #prefix>
 					<SofaIcon name="search-black" class="h-[15px]" @click="fetchClasses" />
 				</template>

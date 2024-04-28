@@ -18,7 +18,7 @@
 		<SofaTextarea
 			v-model="factory.description"
 			:error="factory.errors.description"
-			textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+			class="h-[90px] resize-none"
 			placeholder="Session description" />
 		<div class="flex flex-col gap-4 mdlg:flex-row mdlg:items-center justify-between">
 			<SofaTextField

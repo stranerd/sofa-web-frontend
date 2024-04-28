@@ -5,7 +5,6 @@
 			<SofaTextarea
 				v-model="factory.body"
 				:rows="classInst.isAdmin(user!) ? 2 : 1"
-				textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
 				:error="factory.errors.body"
 				placeholder="Announce something" />
 		</div>
@@ -43,9 +42,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useCreateAnnouncement } from '@app/composables/organizations/announcements'
 import { ClassEntity, MemberTypes } from '@modules/organizations'
-import { useAuth } from '@app/composables/auth/auth'
 
 const props = defineProps<{
 	classInst: ClassEntity
