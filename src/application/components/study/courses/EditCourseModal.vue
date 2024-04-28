@@ -26,12 +26,10 @@
 
 				<SofaSelect
 					v-model="factory.topic"
-					customClass="rounded-custom !bg-lightGray"
 					placeholder="Topic"
-					borderColor="border-transparent"
 					:error="factory.errors.topic"
 					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-					:canUseCustom="true" />
+					custom />
 
 				<SofaTextField
 					v-if="auth?.roles.isVerified"

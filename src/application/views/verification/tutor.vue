@@ -93,18 +93,14 @@
 
 					<SofaSelect
 						v-model="locationFactory.country"
-						customClass="rounded-custom !bg-lightGray"
 						placeholder="Country"
 						:error="locationFactory.errors.country"
-						borderColor="border-transparent"
 						:options="countries.map((c) => ({ key: c, value: c }))" />
 
 					<SofaSelect
 						v-model="locationFactory.state"
-						customClass="rounded-custom !bg-lightGray"
 						placeholder="State"
 						:error="locationFactory.errors.state"
-						borderColor="border-transparent"
 						:options="states.map((s) => ({ key: s, value: s }))" />
 				</div>
 			</template>
@@ -127,10 +123,8 @@
 
 					<SofaSelect
 						v-model="tutorRequestFactory.topicId"
-						customClass="rounded-custom !bg-lightGray"
 						placeholder="Select subject"
 						:error="tutorRequestFactory.errors.topicId"
-						borderColor="border-transparent"
 						:options="topics.filter((t) => !currentlyTeaching.includes(t.id)).map((t) => ({ key: t.id, value: t.title }))" />
 				</div>
 

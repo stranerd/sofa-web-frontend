@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import SofaImageLoader from '../SofaImageLoader/index.vue'
-
 withDefaults(
 	defineProps<{
 		as?: string

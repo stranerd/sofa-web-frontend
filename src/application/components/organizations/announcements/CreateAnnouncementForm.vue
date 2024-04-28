@@ -11,20 +11,16 @@
 		<div class="flex flex-col mdlg:flex-row items-center gap-4">
 			<SofaSelect
 				v-model="factory.lessonIds"
-				customClass="rounded-custom !bg-lightGray"
 				class="mdlg:w-[180px]"
 				placeholder="Select lesson"
-				borderColor="border-transparent"
-				isMultiple
+				multiple
 				:error="factory.errors.lessonIds"
 				:options="lessonOptions" />
 			<SofaSelect
 				v-model="factory.userTypes"
-				customClass="rounded-custom !bg-lightGray"
 				class="mdlg:w-[180px]"
 				placeholder="Select audience"
-				borderColor="border-transparent"
-				isMultiple
+				multiple
 				:error="factory.errors.userTypes"
 				:options="userTypesOption" />
 			<SofaButton

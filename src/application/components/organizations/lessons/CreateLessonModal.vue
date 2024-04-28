@@ -14,10 +14,9 @@
 				borderColor="border-transparent" />
 			<SofaSelect
 				v-model="factory.teacher"
-				customClass="rounded-custom !bg-lightGray col-span-1"
+				class="col-span-1"
 				placeholder="Assign a teacher"
 				:error="factory.errors.teacher"
-				borderColor="border-transparent"
 				:options="teachers" />
 			<div class="flex items-center justify-between">
 				<SofaButton

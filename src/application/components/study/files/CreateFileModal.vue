@@ -20,12 +20,10 @@
 
 		<SofaSelect
 			v-model="factory.topic"
-			customClass="rounded-custom !bg-lightGray"
 			placeholder="Topic"
-			borderColor="border-transparent"
 			:error="factory.errors.topic"
 			:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-			:canUseCustom="true" />
+			custom />
 
 		<SofaFileInput v-model="factory.media" :accept="accept" class="w-full flex flex-col">
 			<SofaButton class="w-full" padding="py-3">{{ factory.media ? 'Change file' : 'Choose file' }}</SofaButton>

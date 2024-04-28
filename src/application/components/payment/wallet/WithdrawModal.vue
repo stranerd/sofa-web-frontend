@@ -21,9 +21,7 @@
 
 			<SofaSelect
 				v-model="activeAccountFactory.bankCode"
-				customClass="rounded-custom !bg-lightGray"
 				placeholder="Bank"
-				borderColor="border-transparent"
 				:options="banks.map((bank) => ({ key: bank.code, value: bank.name }))">
 			</SofaSelect>
 

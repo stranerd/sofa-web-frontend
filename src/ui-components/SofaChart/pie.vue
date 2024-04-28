@@ -1,22 +1,20 @@
 <template>
 	<div class="w-full h-[180px] relative">
-		<div class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center">
-			<SofaHeaderText size="xl" color="text-current" :class="textStyle">
+		<div class="w-full h-full absolute top-0 left-0 flex items-center justify-center">
+			<SofaHeading size="title2" :class="textStyle">
 				<slot />
-			</SofaHeaderText>
+			</SofaHeading>
 		</div>
-		<canvas :id="`pieChart${randomIndex}`" class="w-full z-40 absolute h-full"></canvas>
+		<canvas :id="`pieChart${randomIndex}`" class="w-full z-40 absolute h-full" />
 	</div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, toRef, watch, markRaw } from 'vue'
 import { Chart, registerables } from 'chart.js'
-import { SofaHeaderText } from '../SofaTypography'
 Chart.register(...registerables)
 
 export default defineComponent({
 	name: 'SofaPieChart',
-	components: { SofaHeaderText },
 	props: {
 		textStyle: {
 			type: String,

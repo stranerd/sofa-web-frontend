@@ -12,37 +12,28 @@
 				d="M0.666626 14.9993C0.666626 7.08327 7.08388 0.666016 15 0.666016C22.916 0.666016 29.3333 7.08327 29.3333 14.9993C29.3333 22.9154 22.916 29.3327 15 29.3327C7.08388 29.3327 0.666626 22.9154 0.666626 14.9993ZM15 2.66602C8.18845 2.66602 2.66663 8.18784 2.66663 14.9993C2.66663 21.8109 8.18845 27.3327 15 27.3327C21.8115 27.3327 27.3333 21.8109 27.3333 14.9993C27.3333 8.18784 21.8115 2.66602 15 2.66602Z" />
 		</svg>
 		<div class="w-full flex flex-col gap-2 justify-center items-center py-2">
-			<SofaHeaderText color="text-white" :content="title" :customClass="`!font-semibold ${titleStyle}`" />
+			<SofaHeaderText color="text-white" :content="title" :class="`!font-semibold ${titleStyle}`" />
 			<SofaNormalText
 				color="text-white"
 				:content="subTitle"
-				customClass="w-full flex !font-lighter flex-row items-center text-center justify-center " />
+				class="w-full flex !font-lighter flex-row items-center text-center justify-center" />
 		</div>
 		<SofaButton
 			v-if="action"
-			customClass="!whitespace-nowrap"
+			class="!whitespace-nowrap"
 			bgColor="bg-white"
 			padding="py-1 px-4"
 			textColor="text-deepGray !font-semibold"
-			@click="action ? action() : null">
+			@click="action?.()">
 			{{ actionLabel }}
 		</SofaButton>
 	</div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import SofaButton from '../SofaButton'
-import SofaIcon from '../SofaIcon'
-import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
 export default defineComponent({
 	name: 'SofaEmptyState',
-	components: {
-		SofaIcon,
-		SofaButton,
-		SofaNormalText,
-		SofaHeaderText,
-	},
 	props: {
 		customClass: {
 			type: String,

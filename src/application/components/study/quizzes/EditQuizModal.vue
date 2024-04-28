@@ -21,12 +21,10 @@
 
 				<SofaSelect
 					v-model="factory.topic"
-					customClass="rounded-custom !bg-lightGray"
 					placeholder="Topic"
-					borderColor="border-transparent"
 					:error="factory.errors.topic"
 					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-					:canUseCustom="true" />
+					custom />
 			</div>
 
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">

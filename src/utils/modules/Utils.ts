@@ -23,6 +23,7 @@ export default class Utils {
 	formatNumber = formatNumber
 	pluralize = pluralize
 	ordinalSuffixOf = ordinalSuffixOf
+	getRandomValue = getRandomValue
 
 	async getRedirectToRoute() {
 		const value = await storage.get<string>(this.#redirectToName)
