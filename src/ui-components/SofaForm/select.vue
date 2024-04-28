@@ -2,7 +2,7 @@
 	<div
 		ref="selectRef"
 		:data-error="error"
-		class="group relative flex items-center gap-1 justify-between w-full rounded-custom bg-lightGray px-3 py-4 has-error text-sub"
+		class="group relative flex items-center gap-1 justify-between w-full rounded-lg bg-lightGray px-3 py-4 has-error text-sub"
 		:tabIndex="-1"
 		@click="showOptions = true">
 		<input
@@ -108,6 +108,7 @@ const selectValue = (option: SelectOption) => {
 }
 
 onMounted(() => {
-	if (props.selectFirstOnMount && !model.value && props.options.length) selectValue(props.options[0])
+	const valueIsEmpty = !model.value || (Array.isArray(model.value) && model.value.length === 0)
+	if (props.selectFirstOnMount && valueIsEmpty && props.options.length) selectValue(props.options[0])
 })
 </script>

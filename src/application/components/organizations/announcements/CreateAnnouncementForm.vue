@@ -8,21 +8,25 @@
 				:error="factory.errors.body"
 				placeholder="Announce something" />
 		</div>
-		<div class="flex flex-col mdlg:flex-row items-center gap-4">
-			<SofaSelect
-				v-model="factory.lessonIds"
-				class="mdlg:w-[180px]"
-				placeholder="Select lesson"
-				multiple
-				:error="factory.errors.lessonIds"
-				:options="lessonOptions" />
-			<SofaSelect
-				v-model="factory.userTypes"
-				class="mdlg:w-[180px]"
-				placeholder="Select audience"
-				multiple
-				:error="factory.errors.userTypes"
-				:options="userTypesOption" />
+		<div class="flex flex-col mdlg:flex-row items-center justify-between gap-4">
+			<div class="flex items-center gap-4">
+				<SofaSelect
+					v-model="factory.lessonIds"
+					class="mdlg:w-[180px]"
+					placeholder="Select lesson"
+					multiple
+					selectFirstOnMount
+					:error="factory.errors.lessonIds"
+					:options="lessonOptions" />
+				<SofaSelect
+					v-model="factory.userTypes"
+					class="mdlg:w-[180px]"
+					placeholder="Select audience"
+					multiple
+					selectFirstOnMount
+					:error="factory.errors.userTypes"
+					:options="userTypesOption" />
+			</div>
 			<SofaButton
 				:disabled="!factory.valid"
 				bgColor="bg-primaryBlue"
@@ -53,7 +57,7 @@ const lessonOptions = computed(() => {
 	if (!user.value) return []
 	if (props.classInst.isAdmin(user.value)) {
 		const lessons = props.classInst.lessons
-		return [{ key: null as string | null, value: 'All lessons' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
+		return [{ key: null as string | null, value: 'All' }].concat(lessons.map((l) => ({ key: l.id, value: l.title })))
 	}
 	if (props.classInst.isTeacher(user.value)) {
 		const lessons = props.classInst.lessons.filter((lesson) => lesson.users.teachers.includes(user.value!.id))
@@ -66,7 +70,7 @@ const userTypesOption = computed(() => {
 	if (!user.value) return []
 	if (props.classInst.isAdmin(user.value)) {
 		return [
-			{ key: null, value: 'Both Teachers and Students' },
+			{ key: null, value: 'All' },
 			{ key: MemberTypes.student, value: 'Students Only' },
 			{ key: MemberTypes.teacher, value: 'Teachers Only' },
 		]

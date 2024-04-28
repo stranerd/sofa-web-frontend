@@ -1,31 +1,15 @@
 <template>
-	<div v-if="user" class="bg-white flex flex-col gap-2 rounded-custom shadow-custom p-4 mdlg:p-0 mdlg:shadow-none mdlg:rounded-none">
-		<div class="flex gap-3 items-start">
-			<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" :size="$screen.desktop ? 48 : 24" />
-			<div class="flex flex-col gap-2">
-				<div class="flex items-center gap-2">
-					<SofaNormalText customClass="font-bold">
-						{{ user.id === announcement.user.id ? 'You' : announcement.user.bio.publicName }}
-					</SofaNormalText>
-					<div class="flex items-center gap-1">
-						<div class="h-[5px] w-[5px] bg-grayColor rounded-full"></div>
-						<SofaNormalText color="text-grayColor">{{ time }}</SofaNormalText>
-					</div>
-					<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="hidden mdlg:block">
-						{{ lessons }}
-					</SofaBadge>
-					<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8] hidden mdlg:block">
-						{{ recipients }}
-					</SofaBadge>
-				</div>
-				<SofaNormalText color="text-deepGray" :content="announcement.body" customClass="hidden mdlg:block" />
-			</div>
+	<div v-if="user" class="bg-white flex flex-col gap-3 rounded-2xl p-4">
+		<div class="flex items-center gap-2">
+			<SofaBadge class="!rounded-lg" color="gray" inverted>Subjects > {{ lessons }}</SofaBadge>
+			<SofaBadge class="!rounded-lg" color="gray" inverted>Recipeints > {{ recipients }}</SofaBadge>
 		</div>
-		<div class="flex mdlg:hidden items-start flex-col gap-1">
-			<SofaNormalText color="text-deepGray">{{ announcement.body }}</SofaNormalText>
-			<div class="flex items-center gap-1">
-				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)">{{ lessons }}</SofaBadge>
-				<SofaBadge v-if="classInst.isAdmin(user) || classInst.isTeacher(user)" class="bg-[#6419C8]">{{ recipients }} </SofaBadge>
+		<SofaText :content="announcement.body" />
+		<div class="flex gap-2 items-center">
+			<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" :size="36" />
+			<div class="flex flex-col">
+				<SofaHeading :content="user.id === announcement.user.id ? 'You' : announcement.user.bio.publicName" class="leading-none" />
+				<SofaText class="text-grayColor" size="sub" :content="time" />
 			</div>
 		</div>
 	</div>
@@ -46,7 +30,7 @@ const { time } = useTimeDifference(props.announcement.createdAt)
 
 const recipients = computed(() => {
 	const userTypes = props.announcement.filter.userTypes
-	if (!userTypes) return 'All Members'
+	if (!userTypes) return 'All'
 	const results: string[] = []
 	if (userTypes.includes(MemberTypes.teacher)) results.push('Teachers')
 	if (userTypes.includes(MemberTypes.student)) results.push('Students')
@@ -55,7 +39,7 @@ const recipients = computed(() => {
 
 const lessons = computed(() => {
 	const lessonIds = props.announcement.filter.lessonIds
-	if (!lessonIds) return 'All Lessons'
+	if (!lessonIds) return 'All'
 	return lessonIds.map((lessonId) => props.classInst.getLesson(lessonId)?.title ?? lessonId).join(', ')
 })
 </script>

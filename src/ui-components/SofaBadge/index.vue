@@ -1,21 +1,21 @@
 <template>
 	<component
 		:is="as"
-		class="px-3 py-1 lg:text-sm mdlg:text-[12px] text-xs rounded-custom"
+		class="px-3 py-1.5 text-sub rounded-custom"
 		:class="{
 			[customClass]: true,
-			'bg-primaryPurple text-white': color === 'purple',
-			'text-primaryPurple bg-opacity-25': color === 'purple' && isInverted,
-			'bg-primaryGreen text-white': color === 'green',
-			'text-primaryGreen bg-opacity-25': color === 'green' && isInverted,
-			'bg-primaryBlue text-white': color === 'blue',
-			'text-primaryBlue bg-opacity-25': color === 'blue' && isInverted,
-			'bg-primaryOrange text-white': color === 'orange',
-			'text-primaryOrange bg-opacity-25': color === 'orange' && isInverted,
-			'bg-lightGray text-grayColor': color === 'gray',
-			'text-bodyBlack bg-opacity-75': color === 'gray' && isInverted,
-			'bg-primaryPink text-white': color === 'pink',
-			'text-primaryPink bg-opacity-25': color === 'pink' && isInverted,
+			'bg-primaryPurple text-white': color === 'purple' && !inverted,
+			'text-primaryPurple bg-opacity-25': color === 'purple' && inverted,
+			'bg-primaryGreen text-white': color === 'green' && !inverted,
+			'text-primaryGreen bg-opacity-25': color === 'green' && inverted,
+			'bg-primaryBlue text-white': color === 'blue' && !inverted,
+			'text-primaryBlue bg-opacity-25': color === 'blue' && inverted,
+			'bg-primaryOrange text-white': color === 'orange' && !inverted,
+			'text-primaryOrange bg-opacity-25': color === 'orange' && inverted,
+			'bg-lightGray text-grayColor': color === 'gray' && !inverted,
+			'text-grayColor bg-opacity-75 border border-darkLightGray': color === 'gray' && inverted,
+			'bg-primaryPink text-white': color === 'pink' && !inverted,
+			'text-primaryPink bg-opacity-25': color === 'pink' && inverted,
 		}">
 		<slot />
 	</component>
@@ -25,13 +25,13 @@ withDefaults(
 	defineProps<{
 		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink'
 		customClass?: string
-		isInverted?: boolean
+		inverted?: boolean
 		as?: string
 	}>(),
 	{
 		color: 'purple',
 		customClass: '',
-		isInverted: false,
+		inverted: false,
 		as: 'span',
 	},
 )
