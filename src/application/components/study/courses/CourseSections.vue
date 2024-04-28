@@ -30,8 +30,8 @@
 					@onEnter="closeLabelSection(sectionIndex)" />
 				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="edit" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
-				<SofaIcon v-if="edit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
-				<SofaIcon v-if="edit" class="h-[20px] sectionHandle" name="reorder-gray" />
+				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
+				<SofaIcon v-if="edit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
 				<SofaIcon
 					class="h-[8px]"
 					name="chevron-down"
@@ -54,8 +54,12 @@
 					@click="onClickItem(sectionIndex, itemIndex)">
 					<SofaIcon :name="listItem.icon" class="h-[16px] fill-deepGray" />
 					<SofaNormalText color="text-deepGray" :content="listItem.title" class="truncate flex-1" />
-					<SofaIcon v-if="edit" class="h-[16px]" name="trash-gray" @click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
-					<SofaIcon v-if="edit" class="h-[20px] itemHandle" name="reorder-gray" />
+					<SofaIcon
+						v-if="edit"
+						class="h-[16px] fill-grayColor"
+						name="trash"
+						@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
+					<SofaIcon v-if="edit" class="h-[20px] itemHandle fill-grayColor" name="reorder" />
 				</a>
 				<a v-if="edit" class="flex items-center gap-2 p-2 text-primaryPurple" @click.stop.prevent="addStudyMaterial(sectionIndex)">
 					<SofaIcon name="add" class="h-[16px] fill-current" />

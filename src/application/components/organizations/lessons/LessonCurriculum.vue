@@ -24,8 +24,8 @@
 					class="h-[16px] fill-grayColor"
 					name="edit"
 					@click.stop.prevent="toggleLabelSection(sectionIndex)" />
-				<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle" name="reorder-gray" />
-				<SofaIcon v-if="canEdit" class="h-[16px]" name="trash-gray" @click.stop.prevent="factory.delete(sectionIndex)" />
+				<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
+				<SofaIcon v-if="canEdit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
 				<SofaIcon
 					class="h-[8px]"
 					name="chevron-down"
@@ -67,11 +67,11 @@
 							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
 							<SofaNormalText color="text-grayColor" :content="item.info" class="!capitalize" />
 						</div>
-						<SofaIcon v-if="canEdit" class="h-[20px] itemHandle" name="reorder-gray" />
+						<SofaIcon v-if="canEdit" class="h-[20px] itemHandle fill-grayColor" name="reorder" />
 						<SofaIcon
 							v-if="canEdit"
-							class="h-[16px]"
-							name="trash-gray"
+							class="h-[16px] fill-grayColor"
+							name="trash"
 							@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
 					</div>
 				</a>

@@ -1,44 +1,50 @@
 <template>
-	<VueEditor
-		v-if="richEditor"
-		v-model="comp"
-		:editorOptions="editorOptions"
-		:disabled="disabled"
-		:style="`min-height: ${rows}em`"
-		class="w-full text-sub rounded-custom overflow-y-auto bg-lightGray p-3 mdlg:p-4 has-error"
+	<div
 		:data-error="error"
-		:placeholder="placeholder"
-		:tabindex="0"
-		@ready="(v: any) => (quill = v)">
-		<template #toolbar>
-			<div :id="toolbarId" :class="{ '!hidden': disabled }">
-				<button class="ql-bold"></button>
-				<button class="ql-italic"></button>
-				<button class="ql-underline"></button>
-				<button class="ql-strike"></button>
-				<button class="ql-script" value="sub"></button>
-				<button class="ql-script" value="super"></button>
-				<button class="ql-formula"></button>
-				<button class="ql-code-block"></button>
-			</div>
-			<math-field
-				ref="mathRef"
-				class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
-				:class="{ hidden: !showMath || !quill }"
-				@beforeinput="saveFormula">
-				{{ mathText }}
-			</math-field>
-		</template>
-	</VueEditor>
-	<textarea
-		v-else
-		v-model="comp"
-		:placeholder="placeholder"
-		:rows="rows"
-		:disabled="disabled"
-		:tabindex="0"
-		:data-error="error"
-		class="w-full text-sub rounded-custom overflow-y-auto bg-lightGray p-3 mdlg:p-4 placeholder:text-grayColor focus:outline-none has-error" />
+		class="w-full gap-2 p-3 mdlg:p-4 flex items-start text-sub rounded-custom bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error">
+		<slot name="prefix" />
+		<VueEditor
+			v-if="richEditor"
+			v-model="comp"
+			:editorOptions="editorOptions"
+			:disabled="disabled"
+			:style="`min-height: ${rows}em`"
+			class="grow"
+			:placeholder="placeholder"
+			:tabindex="0"
+			@ready="(v: any) => (quill = v)">
+			<template #toolbar>
+				<div :id="toolbarId" :class="{ '!hidden': disabled }">
+					<button class="ql-bold"></button>
+					<button class="ql-italic"></button>
+					<button class="ql-underline"></button>
+					<button class="ql-strike"></button>
+					<button class="ql-script" value="sub"></button>
+					<button class="ql-script" value="super"></button>
+					<button class="ql-formula"></button>
+					<button class="ql-code-block"></button>
+				</div>
+				<math-field
+					ref="mathRef"
+					class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
+					:class="{ hidden: !showMath || !quill }"
+					@beforeinput="saveFormula">
+					{{ mathText }}
+				</math-field>
+			</template>
+		</VueEditor>
+		<textarea
+			v-else
+			v-model="comp"
+			:placeholder="placeholder"
+			:rows="rows"
+			:disabled="disabled"
+			:tabindex="0"
+			:data-error="error"
+			class="grow bg-transparent p-0 placeholder:text-grayColor focus:outline-none" />
+		<slot name="suffix" />
+		<SofaIcon v-if="error" name="error-state" class="h-[15px]" />
+	</div>
 </template>
 
 <script lang="ts" setup>

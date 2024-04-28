@@ -1,11 +1,15 @@
 <template>
-	<input
-		v-model="text"
-		class="bg-white focus:outline-none text-bodyBlack placeholder:text-grayColor p-2 cursor-text lg:text-sm mdlg:text-[12px] text-xs"
-		:placeholder="placeholder"
-		:autofocus="autoFocus"
-		@blur="emit('onBlur', true)"
-		@keydown.enter.prevent="emit('onEnter', true)" />
+	<div class="w-full gap-2 p-2 flex items-center text-sub rounded-lg bg-white text-sub">
+		<slot name="prefix" />
+		<input
+			v-model="text"
+			class="grow bg-transparent focus:outline-none placeholder:text-grayColor p-0 cursor-text"
+			:placeholder="placeholder"
+			:autofocus="autoFocus"
+			@blur="emit('onBlur', true)"
+			@keydown.enter.prevent="emit('onEnter', true)" />
+		<slot name="suffix" />
+	</div>
 </template>
 <script lang="ts" setup>
 withDefaults(

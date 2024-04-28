@@ -26,14 +26,17 @@
 			<SofaButton @click="factory.dragAnswersAnswers.push({ type: 'a', value: '' })">Add answer</SofaButton>
 		</div>
 
-		<div v-else class="w-full flex items-start p-4 rounded-custom bg-lightGray gap-3">
-			<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
-			<SofaTextarea
-				v-model="factory.question"
-				class="!bg-transparent h-[130px] w-full resize-none"
-				:placeholder="factory.questionPlaceholder"
-				:richEditor="true" />
-		</div>
+		<SofaTextarea
+			v-else
+			v-model="factory.question"
+			class="h-[130px] !bg-white resize-none"
+			:placeholder="factory.questionPlaceholder"
+			:error="factory.errors.question"
+			:richEditor="true">
+			<template v-if="!$screen.mobile" #prefix>
+				<SofaIcon name="question-input" class="h-[23px]" />
+			</template>
+		</SofaTextarea>
 
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
 			<SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />
@@ -54,80 +57,90 @@
 
 		<div v-if="!factory.isFillInBlanks && !factory.isDragAnswers" class="flex flex-col gap-4">
 			<template v-if="factory.isMultipleChoice">
-				<div
+				<SofaTextarea
 					v-for="(_, index) in factory.multipleOptions"
 					:key="index"
-					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
-					<SofaTextarea
-						v-model="factory.multipleOptions[index]"
-						:rows="1"
-						:richEditor="true"
-						class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
-						:placeholder="`Enter answer ${index + 1}`" />
-					<SofaIcon
-						v-if="factory.canRemoveOption"
-						name="remove"
-						class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
-						@click="factory.removeOption(index)" />
-					<SofaIcon
-						:name="factory.multipleAnswers.includes(index) ? 'selected' : 'not-selected'"
-						class="w-[23px] cursor-pointer"
-						@click="factory.toggleMultipleChoicAnswer(index)" />
-				</div>
+					v-model="factory.multipleOptions[index]"
+					:rows="1"
+					:richEditor="true"
+					class="w-full !rounded-xl !bg-white group"
+					:placeholder="`Enter answer ${index + 1}`">
+					<template v-if="!$screen.mobile" #prefix>
+						<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[20px] mdlg:h-[23px]" />
+					</template>
+					<template #suffix>
+						<SofaIcon
+							v-if="factory.canRemoveOption"
+							name="remove"
+							class="w-[23px] hidden group-hover:inline group-focus-within:inline"
+							@click="factory.removeOption(index)" />
+						<SofaIcon
+							:name="factory.multipleAnswers.includes(index) ? 'selected' : 'not-selected'"
+							class="w-[23px]"
+							@click="factory.toggleMultipleChoicAnswer(index)" />
+					</template>
+				</SofaTextarea>
 			</template>
 			<template v-if="factory.isTrueOrFalse">
-				<div
+				<SofaInput
 					v-for="(option, index) in [true, false]"
 					:key="index"
-					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
-					<SofaNormalText color="text-inherit" class="flex-1 capitalize" :content="option.toString()" />
-					<SofaIcon
-						:name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'"
-						class="w-[23px] cursor-pointer"
-						@click="factory.trueOrFalseAnswer = option" />
-				</div>
+					:modelValue="capitalize(option.toString())"
+					disabled
+					class="!rounded-xl !bg-white">
+					<template v-if="!$screen.mobile" #prefix>
+						<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[20px] mdlg:h-[23px]" />
+					</template>
+					<template #suffix>
+						<SofaIcon
+							:name="factory.trueOrFalseAnswer === option ? 'selected' : 'not-selected'"
+							class="w-[23px]"
+							@click="factory.trueOrFalseAnswer = option" />
+					</template>
+				</SofaInput>
 			</template>
 			<template v-if="factory.isWriteAnswer">
-				<div
+				<SofaTextarea
 					v-for="(_, index) in factory.writeAnswerAnswers"
 					:key="index"
-					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
-					<SofaTextarea
-						v-model="factory.writeAnswerAnswers[index]"
-						:rows="index === 0 ? 3 : 1"
-						:richEditor="true"
-						class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
-						:placeholder="index === 0 ? 'Enter answer' : `Add optional answer ${index}`" />
-					<SofaIcon
-						v-if="factory.canRemoveOption"
-						name="remove"
-						class="w-[23px] cursor-pointer hidden group-hover:inline group-focus-within:inline"
-						@click="factory.removeOption(index)" />
-				</div>
+					v-model="factory.writeAnswerAnswers[index]"
+					:rows="index === 0 ? 3 : 1"
+					:richEditor="true"
+					class="!rounded-xl !bg-white"
+					:placeholder="index === 0 ? 'Enter answer' : `Add optional answer ${index}`">
+					<template v-if="!$screen.mobile" #prefix>
+						<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[20px] mdlg:h-[23px]" />
+					</template>
+					<template v-if="factory.canRemoveOption" #suffix>
+						<SofaIcon
+							name="remove"
+							class="w-[23px] hidden group-hover:inline group-focus-within:inline"
+							@click="factory.removeOption(index)" />
+					</template>
+				</SofaTextarea>
 			</template>
 			<template v-if="factory.isMatch">
 				<div v-for="(_, index) in factory.matchSet" :key="index" class="flex items-center gap-4 group">
-					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
-						<SofaTextarea
-							v-model="factory.matchSet[index].q"
-							:rows="1"
-							:richEditor="true"
-							class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
-							:placeholder="`Enter word/sentence ${index + 1}`" />
-					</div>
-					<div class="flex-1 flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-						<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] mdlg:h-[23px] self-start" />
-						<SofaTextarea
-							v-model="factory.matchSet[index].a"
-							:rows="1"
-							:richEditor="true"
-							class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
-							placeholder="Enter answer" />
-					</div>
+					<SofaTextarea
+						v-model="factory.matchSet[index].q"
+						:rows="1"
+						:richEditor="true"
+						class="!rounded-xl !bg-white"
+						:placeholder="`Enter word/sentence ${index + 1}`">
+						<template v-if="!$screen.mobile" #prefix>
+							<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[20px] mdlg:h-[23px]" />
+						</template>
+					</SofaTextarea>
+					<SofaTextarea
+						v-model="factory.matchSet[index].a"
+						:rows="1"
+						:richEditor="true"
+						class="!bg-white !rounded-xl"
+						placeholder="Enter answer">
+						<template v-if="!$screen.mobile" #prefix>
+							<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[20px] mdlg:h-[23px]" />
+						</template>
+					</SofaTextarea>
 					<SofaIcon
 						v-if="factory.canRemoveOption"
 						name="remove"
@@ -136,23 +149,24 @@
 				</div>
 			</template>
 			<VueDraggable v-if="factory.isSequence" v-model="factory.sequenceAnswers" class="w-full flex flex-col gap-4">
-				<div
+				<SofaTextarea
 					v-for="(_, index) in factory.sequenceAnswers"
 					:key="index"
-					class="w-full group flex items-center rounded-xl px-3 py-5 border-2 border-darkLightGray bg-white gap-3">
-					<SofaIcon :name="QuestionEntity.getShape(index)" class="hidden md:inline h-[20px] md:h-[23px] self-start" />
-					<SofaTextarea
-						v-model="factory.sequenceAnswers[index]"
-						:rows="1"
-						:richEditor="true"
-						class="flex-1 !p-0 mdlg:!p-0 !bg-transparent"
-						:placeholder="`Enter word/sentence ${index + 1}`" />
-					<SofaIcon
-						v-if="factory.canRemoveOption"
-						name="remove"
-						class="w-[23px] hidden group-hover:inline group-focus-within:inline"
-						@click="factory.removeOption(index)" />
-				</div>
+					v-model="factory.sequenceAnswers[index]"
+					:rows="1"
+					:richEditor="true"
+					class="!rounded-xl !bg-white"
+					:placeholder="`Enter word/sentence ${index + 1}`">
+					<template v-if="!$screen.mobile" #prefix>
+						<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[20px] mdlg:h-[23px]" />
+					</template>
+					<template v-if="factory.canRemoveOption" #suffix>
+						<SofaIcon
+							name="remove"
+							class="w-[23px] hidden group-hover:inline group-focus-within:inline"
+							@click="factory.removeOption(index)" />
+					</template>
+				</SofaTextarea>
 			</VueDraggable>
 		</div>
 
@@ -162,19 +176,22 @@
 		</a>
 
 		<div class="w-full flex flex-col border-t border-lightGray pt-4">
-			<div class="w-full flex items-start p-4 rounded-custom bg-lightGray gap-3">
-				<SofaIcon name="question-input" class="h-[23px] w-[24px] hidden md:inline self-start" />
-				<SofaTextarea
-					v-model="factory.explanation"
-					class="!p-0 mdlg:!p-0 !bg-transparent h-[130px] resize-none w-full"
-					placeholder="Explanation"
-					:richEditor="true" />
-			</div>
+			<SofaTextarea
+				v-model="factory.explanation"
+				:error="factory.errors.explanation"
+				class="!bg-white h-[130px]"
+				placeholder="Explanation"
+				:richEditor="true">
+				<template v-if="!$screen.mobile" #prefix>
+					<SofaIcon name="question-input" class="h-[23px]" />
+				</template>
+			</SofaTextarea>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import { capitalize } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { QuestionEntity, QuestionFactory } from '@modules/study'
 
