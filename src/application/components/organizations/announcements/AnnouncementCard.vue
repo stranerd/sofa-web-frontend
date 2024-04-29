@@ -1,8 +1,8 @@
 <template>
 	<div v-if="user" class="bg-white flex flex-col gap-3 rounded-2xl p-4">
 		<div class="flex items-center gap-2">
-			<SofaBadge class="!rounded-lg" color="gray" inverted>Subjects > {{ lessons }}</SofaBadge>
-			<SofaBadge class="!rounded-lg" color="gray" inverted>Recipeints > {{ recipients }}</SofaBadge>
+			<SofaBadge color="gray" inverted>Subjects > {{ lessons }}</SofaBadge>
+			<SofaBadge color="gray" inverted>Recipeints > {{ recipients }}</SofaBadge>
 		</div>
 		<SofaText :content="announcement.body" />
 		<div class="flex gap-2 items-center">

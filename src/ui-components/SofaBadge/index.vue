@@ -1,11 +1,13 @@
 <template>
 	<component
 		:is="as"
-		class="px-3 py-1.5 text-sub rounded-custom"
+		class="px-3 py-1.5 text-sub rounded-lg"
 		:class="{
 			[customClass]: true,
 			'bg-primaryPurple text-white': color === 'purple' && !inverted,
 			'text-primaryPurple bg-opacity-25': color === 'purple' && inverted,
+			'bg-primaryRed text-white': color === 'red' && !inverted,
+			'text-primaryRed bg-opacity-25': color === 'red' && inverted,
 			'bg-primaryGreen text-white': color === 'green' && !inverted,
 			'text-primaryGreen bg-opacity-25': color === 'green' && inverted,
 			'bg-primaryBlue text-white': color === 'blue' && !inverted,
@@ -23,7 +25,7 @@
 <script lang="ts" setup>
 withDefaults(
 	defineProps<{
-		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink'
+		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink' | 'red'
 		customClass?: string
 		inverted?: boolean
 		as?: string

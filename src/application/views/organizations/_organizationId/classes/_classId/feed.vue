@@ -28,7 +28,23 @@
 					<SofaButton v-if="hasMore" padding="px-6 py-4" @click="fetchOlderAnnouncements"> Load More </SofaButton>
 				</div>
 				<div v-if="$screen.desktop" class="col-span-1 h-full overflow-y-auto">
-					<div class="bg-white rounded-2xl p-4">Live</div>
+					<div class="bg-white text-deepGray flex flex-col gap-4 rounded-2xl p-4">
+						<div class="flex items-center justify-between">
+							<SofaHeading content="Upcoming live" />
+							<SofaText as="router-link" class="text-primaryBlue" content="view all" :to="`${classInst.pageLink}/live`" />
+						</div>
+						<EmptyState
+							v-if="!upcoming.length"
+							image="live"
+							title="There is nothing here"
+							class="bg-lightGray"
+							sub="There are no live sessions scheduled" />
+						<UpcomingScheduleCard
+							v-for="schedule in upcoming.slice(0, 5)"
+							:key="schedule.hash"
+							:classInst="classInst"
+							:schedule="schedule" />
+					</div>
 				</div>
 			</div>
 		</template>
@@ -38,9 +54,11 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 import { useClassAnnouncements } from '@app/composables/organizations/announcements'
+import { useClassSchedules } from '@app/composables/organizations/schedules'
 
 const route = useRoute()
 const organizationId = route.params.organizationId as string
 const classId = route.params.classId as string
 const { announcements, hasMore, fetchOlderAnnouncements } = useClassAnnouncements(organizationId, classId)
+const { upcoming } = useClassSchedules(organizationId, classId)
 </script>

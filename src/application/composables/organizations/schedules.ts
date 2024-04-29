@@ -26,7 +26,7 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 							store[key].schedules.value,
 							entity,
 							(e) => e.id,
-							(e) => e.createdAt,
+							(e) => e.time.start,
 						)
 					},
 					updated: async (entity) => {
@@ -34,7 +34,7 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 							store[key].schedules.value,
 							entity,
 							(e) => e.id,
-							(e) => e.createdAt,
+							(e) => e.time.start,
 						)
 					},
 					deleted: async (entity) => {
@@ -50,6 +50,11 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 			listener,
 		}
 	}
+
+	const upcoming = computed(() => {
+		const now = Date.now()
+		return store[key].schedules.value.filter((s) => s.time.end > now).reverse()
+	})
 
 	const {
 		asyncFn: fetchSchedules,
@@ -88,6 +93,7 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 
 	return {
 		...store[key],
+		upcoming,
 		loading,
 		error,
 		fetchOlderSchedules,

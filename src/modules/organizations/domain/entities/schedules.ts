@@ -42,6 +42,10 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 		return this.stream?.canRewatch ?? false
 	}
 
+	get live() {
+		return this.status === ScheduleStatus.started
+	}
+
 	get meetingLink() {
 		return `https://meet.jit.si/${this.stream?.roomId ?? this.id}`
 	}

@@ -13,7 +13,7 @@ export default {
 				primaryBlue: '#197DFA',
 				primaryOrange: '#FA9632',
 				primaryGreen: '#4BAF7D',
-				primaryRed: '#E1324B',
+				primaryRed: '#F55F5F',
 				primaryPurplePink: '#AF19C8',
 				primaryYellow: '#FFAF4B',
 				primaryPink: '#FF4BC8',
@@ -53,9 +53,5 @@ export default {
 			'4xl': '1.75rem',
 		},
 	},
-	plugins: [
-		scrollbar,
-		scrollbarHide,
-		forms({ strategy: 'class' }),
-	],
+	plugins: [scrollbar, scrollbarHide, forms({ strategy: 'class' })],
 }

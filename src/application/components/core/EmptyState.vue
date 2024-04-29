@@ -1,8 +1,8 @@
 <template>
-	<div class="w-full flex flex-col justify-center items-center p-20 gap-4 rounded-2xl">
-		<SofaImageLoader :photoUrl="`/images/empty/${image}.png`" />
-		<div class="flex flex-col items-center text-center gap-2 max-w-[75%]">
-			<SofaHeading :content="title" size="title" class="text-deepGray" />
+	<div class="w-full flex flex-col justify-center items-center p-[12.5%] gap-4 rounded-2xl">
+		<SofaImageLoader :photoUrl="`/images/empty/${image}.png`" class="w-[30%]" />
+		<div class="flex flex-col items-center text-center gap-1">
+			<SofaHeading :content="title" class="text-deepGray" />
 			<SofaText v-for="text in Array.isArray(sub) ? sub : [sub]" :key="text" :content="text" size="sub" class="text-grayColor" />
 		</div>
 		<div class="flex gap-3 justify-center items-center font-semibold">
@@ -34,7 +34,7 @@ type ButtonConfig = {
 }
 
 defineProps<{
-	image: 'classes' | 'study-materials' | 'teachers' | 'students' | 'announcements'
+	image: 'classes' | 'study-materials' | 'teachers' | 'students' | 'announcements' | 'live'
 	title: string
 	sub: string | string[]
 	primary?: ButtonConfig
