@@ -15,7 +15,7 @@
 			<SofaSelect
 				v-model="factory.teacher"
 				class="col-span-1"
-				placeholder="Assign a teacher"
+				placeholder="Teacher"
 				:error="factory.errors.teacher"
 				:options="teachers" />
 			<div class="flex items-center justify-between">

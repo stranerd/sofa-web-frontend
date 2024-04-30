@@ -2,15 +2,12 @@
 	<div
 		ref="selectRef"
 		:data-error="error"
-		class="group relative flex items-center gap-1 justify-between w-full rounded-lg bg-lightGray px-3 py-4 has-error text-sub"
+		class="group relative flex items-center gap-2 w-full rounded-lg bg-lightGray px-3 py-4 has-error text-sub"
 		:tabIndex="-1"
 		@click="showOptions = true">
-		<input
-			:value="selectedOptions.map((o) => o.value).join(', ')"
-			:placeholder="placeholder"
-			disabled
-			class="w-full bg-transparent placeholder:text-grayColor focus:outline-none" />
-		<SofaIcon name="angle-small-down" class="h-[7px] pr-1 fill-deepGray" />
+		<span v-if="placeholder" class="font-semibold">{{ placeholder }}</span>
+		<span class="ml-auto grow truncate">{{ selectedOptions.map((o) => o.value).join(', ') }}</span>
+		<SofaIcon name="angle-small-down" class="h-[7px] fill-deepGray" />
 		<dialog
 			v-if="showOptions"
 			open

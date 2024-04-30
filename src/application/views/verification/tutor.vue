@@ -123,7 +123,7 @@
 
 					<SofaSelect
 						v-model="tutorRequestFactory.topicId"
-						placeholder="Select subject"
+						placeholder="Subject"
 						:error="tutorRequestFactory.errors.topicId"
 						:options="topics.filter((t) => !currentlyTeaching.includes(t.id)).map((t) => ({ key: t.id, value: t.title }))" />
 				</div>

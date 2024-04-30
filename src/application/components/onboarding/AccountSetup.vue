@@ -97,26 +97,26 @@
 			<SofaSelect
 				v-if="typeFactory.isStudent"
 				v-model="typeFactory.schoolType"
-				placeholder="Select education level"
+				placeholder="Education level"
 				:error="typeFactory.errors.schoolType"
 				:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 				<SofaSelect
 					v-model="typeFactory.institutionId"
-					placeholder="Select school"
+					placeholder="School"
 					:error="typeFactory.errors.institutionId"
 					:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
 
 				<SofaSelect
 					v-model="typeFactory.facultyId"
-					placeholder="Select faculty"
+					placeholder="Faculty"
 					:error="typeFactory.errors.facultyId"
 					:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
 
 				<SofaSelect
 					v-model="typeFactory.departmentId"
-					placeholder="Select department"
+					placeholder="Department"
 					:error="typeFactory.errors.departmentId"
 					:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
 			</template>
@@ -126,7 +126,7 @@
 
 					<SofaSelect
 						v-model="typeFactory.institutions"
-						placeholder="Select exams"
+						placeholder="Exams"
 						multiple
 						:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
 
@@ -151,7 +151,7 @@
 					<SofaSelect
 						v-if="typeFactory.activeInst"
 						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
-						placeholder="Select exam subjects"
+						placeholder="Subjects"
 						multiple
 						:options="
 							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))

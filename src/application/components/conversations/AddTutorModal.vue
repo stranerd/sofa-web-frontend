@@ -19,7 +19,7 @@
 				</div>
 
 				<div v-if="currentStep === 2" class="w-full flex flex-col pt-3">
-					<SofaSelect v-model="selectedTopic" placeholder="Select subject" class="!bg-white border" :options="allTopics" />
+					<SofaSelect v-model="selectedTopic" placeholder="Subject" class="!bg-white border" :options="allTopics" />
 				</div>
 			</div>
 

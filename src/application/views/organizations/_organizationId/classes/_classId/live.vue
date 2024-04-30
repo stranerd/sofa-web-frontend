@@ -20,6 +20,7 @@
 
 						<SofaSelect
 							v-model="currentLesson"
+							placeholder="Subject"
 							:options="[
 								{ key: null, value: 'All' },
 								...classInst.lessons.map((lesson) => ({ value: lesson.title, key: lesson.id })),
