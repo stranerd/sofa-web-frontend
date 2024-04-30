@@ -25,12 +25,12 @@
 								{ key: null, value: 'All' },
 								...classInst.lessons.map((lesson) => ({ value: lesson.title, key: lesson.id })),
 							]"
-							class="w-[160px] ml-auto bg-white mdlg:bg-lightGray" />
+							class="!w-[160px] ml-auto bg-white mdlg:bg-lightGray" />
 					</div>
 					<div class="h-[1px] bg-lightGray shrink-0" />
-					<div class="flex flex-col gap-4 flex-1 mdlg:bg-white mdlg:p-4 mdlg:rounded-b-2xl">
+					<div class="flex flex-col gap-4 h-full overflow-y-auto mdlg:bg-white mdlg:p-4 mdlg:rounded-b-2xl">
 						<EmptyState
-							v-if="!schedules.length"
+							v-if="!filteredSchedules.length"
 							image="live"
 							title="There’s nothing here"
 							class="bg-white"
@@ -58,7 +58,7 @@ import { useClassSchedules } from '@app/composables/organizations/schedules'
 const route = useRoute()
 const organizationId = route.params.organizationId as string
 const classId = route.params.classId as string
-const { upcoming, previous, schedules } = useClassSchedules(organizationId, classId)
+const { upcoming, previous } = useClassSchedules(organizationId, classId)
 
 const tabs = [
 	{ label: 'Upcoming', value: 'upcoming' },

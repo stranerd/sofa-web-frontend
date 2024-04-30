@@ -10,7 +10,7 @@ import { computed } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		size?: 'title' | 'title2' | 'base' | 'sub'
+		size?: 'title' | 'title2' | 'mid' | 'base' | 'sub'
 		content?: string
 		as?: string
 		bold?: boolean

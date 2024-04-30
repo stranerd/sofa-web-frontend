@@ -32,6 +32,10 @@ body {
 	@apply text-[14px] mdlg:text-[16px];
 }
 
+.text-mid {
+	@apply text-[16px] mdlg:text-[18px];
+}
+
 .text-title {
 	@apply text-[18px] mdlg:text-[20px];
 }

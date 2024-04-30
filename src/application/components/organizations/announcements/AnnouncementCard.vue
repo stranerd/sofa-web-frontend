@@ -1,14 +1,14 @@
 <template>
-	<div v-if="user" class="bg-white flex flex-col gap-3 rounded-2xl p-4">
+	<div class="bg-white flex flex-col gap-3 rounded-2xl p-4">
 		<div class="flex items-center gap-2">
 			<SofaBadge color="gray" inverted>Subjects > {{ lessons }}</SofaBadge>
 			<SofaBadge color="gray" inverted>Recipeints > {{ recipients }}</SofaBadge>
 		</div>
 		<SofaText :content="announcement.body" />
 		<div class="flex gap-2 items-center">
-			<SofaAvatar :photoUrl="announcement.user?.bio.photo?.link" :size="36" />
+			<SofaAvatar :photoUrl="announcement.user.bio.photo?.link" :size="36" />
 			<div class="flex flex-col">
-				<SofaHeading :content="user.id === announcement.user.id ? 'You' : announcement.user.bio.publicName" class="leading-none" />
+				<SofaHeading :content="id === announcement.user.id ? 'You' : announcement.user.bio.publicName" class="leading-none" />
 				<SofaText class="text-grayColor" size="sub" :content="time" />
 			</div>
 		</div>
@@ -25,7 +25,7 @@ const props = defineProps<{
 	classInst: ClassEntity
 }>()
 
-const { user } = useAuth()
+const { id } = useAuth()
 const { time } = useTimeDifference(props.announcement.createdAt)
 
 const recipients = computed(() => {

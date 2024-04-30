@@ -1,27 +1,32 @@
 <template>
-	<div
-		class="bg-white text-deepGray shadow-custom rounded-custom px-4 flex flex-col gap-2 py-6 mdlg:bg-transparent mdlg:shadow-none mdlg:rounded-none mdlg:px-0 mdlg:border-b border-lightGray">
-		<SofaNormalText :content="lesson?.title" color="text-grayColor" />
-		<SofaHeaderText :content="schedule.title" />
-		<div class="flex items-center gap-1">
-			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" :size="24" />
-			<SofaNormalText :content="schedule.user.bio.name.full" color="text-deepGray" />
+	<div class="flex flex-col bg-lightGray rounded-2xl">
+		<div
+			class="bg-white text-deepGray rounded-xl p-4 flex flex-col gap-2 border border-l-2 border-lightGray"
+			:class="schedule.live ? 'border-l-primaryRed' : 'border-l-primaryOrange'">
+			<SofaText :content="schedule.timeRange" />
+			<span class="flex items-center gap-1">
+				<SofaHeading :content="schedule.title" size="mid" class="leading-none" />
+				<SofaBadge v-if="schedule.live" color="red" class="!py-[2.5px] !px-[5px]">LIVE</SofaBadge>
+			</span>
+			<SofaText v-if="lesson" :content="lesson.title" class="text-grayColor" size="sub" />
+			<div v-if="actions.length" class="flex flex-wrap items-center gap-2">
+				<template v-for="action in actions" :key="action.label">
+					<a v-if="'icon' in action" class="flex items-center gap-1" :class="action.color" @click="action.handler">
+						<SofaIcon :name="action.icon" class="h-[16px] fill-current" />
+						<span>{{ action.label }}</span>
+					</a>
+					<SofaButton v-else :bgColor="action.bg" :textColor="action.color" padding="py-3 px-5" @click="action.handler">
+						{{ action.label }}
+					</SofaButton>
+				</template>
+			</div>
 		</div>
-		<div class="flex items-center gap-2" :class="schedule.canJoin(classInst, id) ? 'text-primaryRed' : 'text-inherit'">
-			<SofaIcon name="calendar" class="h-[17px] fill-current" />
-			<SofaNormalText :content="schedule.timeRange" color="text-inherit" />
-		</div>
-		<div class="flex flex-wrap items-center gap-2">
-			<SofaButton
-				v-for="buttonProps in buttons"
-				:key="buttonProps.label"
-				class="self-start"
-				:bgColor="buttonProps.bgColor ?? 'bg-primaryBlue'"
-				textColor="text-white"
-				padding="py-3 px-5"
-				@click="buttonProps.handler">
-				{{ buttonProps.label }}
-			</SofaButton>
+		<div class="flex items-center gap-2 rounded-b-2xl p-2 mdlg:p-4">
+			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" :size="36" />
+			<div class="flex flex-col">
+				<SofaHeading :content="id === schedule.user.id ? 'You' : schedule.user.bio.publicName" class="leading-none" />
+				<SofaText class="text-grayColor" size="sub" :content="time" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -29,26 +34,37 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { useTimeDifference } from '@app/composables/core/time'
 import { useStartSchedule } from '@app/composables/organizations/schedules'
 import { ClassEntity, ScheduleEntity } from '@modules/organizations'
+
+type Action = {
+	label: string
+	handler: () => void
+	color: string
+} & ({ bg: string } | { icon: IconName })
 
 const props = defineProps<{
 	classInst: ClassEntity
 	schedule: ScheduleEntity
 }>()
 
+const { id } = useAuth()
+const { time } = useTimeDifference(props.schedule.createdAt)
 const { copyKey, join, rewatch, start, end } = useStartSchedule(props.classInst, props.schedule)
 
-const { id } = useAuth()
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
-const buttons = computed(() => {
-	const b: { label: string; bgColor?: string; handler: () => void }[] = []
-	if (props.schedule.canStart(props.classInst, id.value)) b.push({ label: 'Start', handler: () => start() })
-	if (props.schedule.canJoin(props.classInst, id.value)) b.push({ label: 'Enter', handler: () => join() })
+const actions = computed(() => {
+	const b: Action[] = []
+	if (props.schedule.canStart(props.classInst, id.value))
+		b.push({ label: 'Start', bg: 'bg-primaryBlue', color: 'text-white', handler: () => start() })
+	if (props.schedule.canJoin(props.classInst, id.value))
+		b.push({ label: 'Enter', bg: 'bg-primaryBlue', color: 'text-white', handler: () => join() })
 	if (lesson.value?.users.teachers.includes(id.value) && props.schedule.canJoin(props.classInst, id.value))
-		b.push({ label: 'Copy stream key', handler: () => copyKey() })
-	if (props.schedule.canEnd(props.classInst, id.value)) b.push({ label: 'End', bgColor: 'bg-primaryRed', handler: () => end() })
-	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', handler: () => rewatch() })
+		b.push({ label: 'Copy stream key', icon: 'copy', color: 'text-primaryBlue', handler: () => copyKey() })
+	if (props.schedule.canEnd(props.classInst, id.value))
+		b.push({ label: 'End', icon: 'forbidden', color: 'text-primaryRed', handler: () => end() })
+	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', icon: 'video-course', color: 'text-primaryBlue', handler: () => rewatch() })
 	return b
 })
 </script>

@@ -51,7 +51,7 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 
 	const previous = computed(() => {
 		const now = Date.now()
-		return store[key].schedules.value.filter((s) => s.time.end < now).reverse()
+		return store[key].schedules.value.filter((s) => s.time.end < now)
 	})
 
 	const {

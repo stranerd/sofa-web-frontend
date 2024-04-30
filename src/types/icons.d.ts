@@ -52,6 +52,7 @@ declare global {
 		| 'filter'
 		| 'flag'
 		| 'folder'
+		| 'forbidden'
 		| 'fund-wallet'
 		| 'google'
 		| 'grid_view'

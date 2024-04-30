@@ -56,7 +56,8 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 
 	get timeRange() {
 		const { start, end } = this.time
-		return `${formatTime(start, true)} &nbsp; ● &nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
+		const time = `${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
+		return `${formatTime(start, true)} &nbsp; ● &nbsp; ${this.live ? 'Ongoing' : time}`
 	}
 
 	search(query: string) {
