@@ -155,8 +155,8 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 		sects.value.flatMap((c) => c.items.filter((item) => item.type === Coursable.file).map((item) => item.id)),
 	)
 
-	const { quizzes } = useQuizzesInList(quizIds, true)
-	const { files } = useFilesInList(fileIds, true)
+	const { quizzes } = useQuizzesInList(quizIds)
+	const { files } = useFilesInList(fileIds)
 
 	const sections = computed<ExtendedCourseSections>(() =>
 		sects.value.map((c) => {

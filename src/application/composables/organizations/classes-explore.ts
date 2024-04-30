@@ -98,9 +98,27 @@ export const useExploreClasses = () => {
 	return { classes: store.classesExplore, searchQuery, loading, error, fetchClasses }
 }
 
-export const useClassesInList = (ids: Refable<string[]>) => {
+export const useClassesInList = (ids: Refable<string[]>, listen = true) => {
 	const allClasses = computed(() => [...store.classesIn.value, ...store.classesExplore.value])
-	const { items: classes } = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids))
+	const { items: classes, addToList } = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids))
+
+	const listener = useListener(
+		async () =>
+			await ClassesUseCases.listenToInList(() => ids.value, {
+				created: addToList,
+				updated: addToList,
+				deleted: () => {},
+			}),
+	)
+
+	onMounted(async () => {
+		if (listen) await listener.start()
+	})
+
+	onUnmounted(async () => {
+		if (listen) await listener.close()
+	})
+
 	return { classes }
 }
 

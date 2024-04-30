@@ -3,7 +3,7 @@ import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { FilesUseCases } from '@modules/study'
 
-export const useFilesInList = (ids: Refable<string[]>, listen = false) => {
+export const useFilesInList = (ids: Refable<string[]>, listen = true) => {
 	const allFiles = computed(() => [])
 	const { items: files, addToList } = useItemsInList('files', ids, allFiles, (ids) => FilesUseCases.getInList(ids))
 

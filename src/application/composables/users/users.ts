@@ -93,7 +93,7 @@ export const useSearchUsers = () => {
 	return { ...searchStore, loading, error, searchValue, searchUsersByEmails }
 }
 
-export const useUsersInList = (ids: Refable<string[]>, listen = false) => {
+export const useUsersInList = (ids: Refable<string[]>, listen = true) => {
 	const { user } = useAuth()
 	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users, ...(user.value ? [user.value] : [])])
 

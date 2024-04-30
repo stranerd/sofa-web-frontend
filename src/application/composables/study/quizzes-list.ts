@@ -136,7 +136,7 @@ export const useTutorQuizzes = () => {
 	return { ...tutorStore, loading, error }
 }
 
-export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
+export const useQuizzesInList = (ids: Refable<string[]>, listen = true) => {
 	const allQuizzes = computed(() => [...store.quizzes.value, ...tutorStore.quizzes.value])
 
 	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, (ids) => QuizzesUseCases.getInList(ids))

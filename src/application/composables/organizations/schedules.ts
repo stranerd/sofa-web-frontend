@@ -8,7 +8,6 @@ const store = {} as Record<
 	string,
 	{
 		schedules: Ref<ScheduleEntity[]>
-		hasMore: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	}
 >
@@ -17,36 +16,30 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`
 	if (store[key] === undefined) {
 		const listener = useListener(() =>
-			SchedulesUseCases.listen(
-				organizationId,
-				classId,
-				{
-					created: async (entity) => {
-						addToArray(
-							store[key].schedules.value,
-							entity,
-							(e) => e.id,
-							(e) => e.time.start,
-						)
-					},
-					updated: async (entity) => {
-						addToArray(
-							store[key].schedules.value,
-							entity,
-							(e) => e.id,
-							(e) => e.time.start,
-						)
-					},
-					deleted: async (entity) => {
-						store[key].schedules.value = store[key].schedules.value.filter((m) => m.id !== entity.id)
-					},
+			SchedulesUseCases.listenToAll(organizationId, classId, {
+				created: async (entity) => {
+					addToArray(
+						store[key].schedules.value,
+						entity,
+						(e) => e.id,
+						(e) => e.time.start,
+					)
 				},
-				store[key].schedules.value.at(-1)?.createdAt,
-			),
+				updated: async (entity) => {
+					addToArray(
+						store[key].schedules.value,
+						entity,
+						(e) => e.id,
+						(e) => e.time.start,
+					)
+				},
+				deleted: async (entity) => {
+					store[key].schedules.value = store[key].schedules.value.filter((m) => m.id !== entity.id)
+				},
+			}),
 		)
 		store[key] = {
 			schedules: ref([]),
-			hasMore: ref(false),
 			listener,
 		}
 	}
@@ -63,24 +56,18 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 		called,
 	} = useAsyncFn(
 		async () => {
-			const schedules = await SchedulesUseCases.get(organizationId, classId, store[key].schedules.value.at(-1)?.createdAt)
-			store[key].hasMore.value = !!schedules.pages.next
+			const schedules = await SchedulesUseCases.getAll(organizationId, classId)
 			schedules.results.map((announcement) =>
 				addToArray(
 					store[key].schedules.value,
 					announcement,
 					(e) => e.id,
-					(e) => e.createdAt,
+					(e) => e.time.start,
 				),
 			)
 		},
 		{ key: `organizations/classes/${key}/schedules` },
 	)
-
-	const fetchOlderSchedules = async () => {
-		await fetchSchedules()
-		await store[key].listener.restart()
-	}
 
 	onMounted(async () => {
 		if (!called.value) await fetchSchedules()
@@ -96,7 +83,6 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 		upcoming,
 		loading,
 		error,
-		fetchOlderSchedules,
 		fetchSchedules,
 	}
 }
@@ -113,7 +99,7 @@ export const useCreateSchedule = (classInst: ClassEntity, lesson: ClassLesson) =
 	return { factory, loading, error, createSchedule }
 }
 
-export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = false) => {
+export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = true) => {
 	const key = `${organizationId}-${classId}`
 	const allSchedules = computed(() => store[key]?.schedules.value ?? [])
 	const { items: schedules, addToList } = useItemsInList('schedules', ids, allSchedules, (ids) =>

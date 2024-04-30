@@ -57,9 +57,9 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.schedule).map((item) => item.id)),
 	)
 
-	const { quizzes } = useQuizzesInList(quizIds, true)
-	const { files } = useFilesInList(fileIds, true)
-	const { schedules } = useSchedulesInList(classInst.organizationId, classInst.id, scheduleIds, true)
+	const { quizzes } = useQuizzesInList(quizIds)
+	const { files } = useFilesInList(fileIds)
+	const { schedules } = useSchedulesInList(classInst.organizationId, classInst.id, scheduleIds)
 
 	const curriculum = computed<ExtendedCurriculum>(() =>
 		curr.value.map((c) => {

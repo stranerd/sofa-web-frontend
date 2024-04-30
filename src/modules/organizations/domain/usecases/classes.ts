@@ -86,6 +86,17 @@ export class ClassesUseCase {
 		return classes.results
 	}
 
+	async listenToInList(ids: () => string[], listener: Listeners<ClassEntity>) {
+		return await this.repository('').listenToExploreMany(
+			{
+				where: [{ field: 'id', value: ids(), condition: Conditions.in }],
+				all: true,
+			},
+			listener,
+			(entity) => ids().includes(entity.id),
+		)
+	}
+
 	async getSimilarClasses(organizationId: string, classId: string) {
 		return await this.repository(organizationId).similar(classId)
 	}

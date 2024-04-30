@@ -3,7 +3,7 @@ import { Refable, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { CoursableAccess, QuestionEntity, QuestionsUseCases } from '@modules/study'
 
-export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, access: CoursableAccess['access'], listen = false) => {
+export const useQuestionsInList = (quizId: string, ids: Refable<string[]>, access: CoursableAccess['access'], listen = true) => {
 	const allQuestions = computed(() => [] as QuestionEntity[])
 
 	const { items: questions, addToList } = useItemsInList(

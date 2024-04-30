@@ -21,14 +21,6 @@
 					:showFilter="true"
 					:schedules="schedules.filter((s) => classInst.publishedSessions.includes(s.id))"
 					class="mdlg:px-4 mdlg:pb-4" />
-				<SofaButton
-					v-if="hasMore"
-					textColor="text-grayColor"
-					bgColor="bg-transparent"
-					class="!shadow-none !rounded-none !py-3 !mx-auto"
-					@click="fetchOlderSchedules">
-					Load More
-				</SofaButton>
 			</div>
 		</template>
 	</ClassLayout>
@@ -41,5 +33,5 @@ import { useClassSchedules } from '@app/composables/organizations/schedules'
 const route = useRoute()
 const organizationId = route.params.organizationId as string
 const classId = route.params.classId as string
-const { schedules, fetchOlderSchedules, hasMore } = useClassSchedules(organizationId, classId)
+const { schedules } = useClassSchedules(organizationId, classId)
 </script>

@@ -78,7 +78,7 @@ export const useMyPurchasedCourses = () => {
 	return { courses }
 }
 
-export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
+export const useCoursesInList = (ids: Refable<string[]>, listen = true) => {
 	const allCourses = computed(() => [...store.courses.value])
 
 	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, (ids) => CoursesUseCases.getInList(ids))

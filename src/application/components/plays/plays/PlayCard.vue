@@ -38,6 +38,9 @@ const props = defineProps<{
 
 const { id } = useAuth()
 
-const { quizzes } = useQuizzesInList(computed(() => [props.play.quizId]))
+const { quizzes } = useQuizzesInList(
+	computed(() => [props.play.quizId]),
+	false,
+)
 const quiz = computed(() => quizzes.value.at(0) ?? null)
 </script>
