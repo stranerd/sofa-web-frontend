@@ -49,6 +49,11 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 		return store[key].schedules.value.filter((s) => s.time.end > now).reverse()
 	})
 
+	const previous = computed(() => {
+		const now = Date.now()
+		return store[key].schedules.value.filter((s) => s.time.end < now).reverse()
+	})
+
 	const {
 		asyncFn: fetchSchedules,
 		loading,
@@ -81,6 +86,7 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 	return {
 		...store[key],
 		upcoming,
+		previous,
 		loading,
 		error,
 		fetchSchedules,

@@ -58,4 +58,8 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 		const { start, end } = this.time
 		return `${formatTime(start, true)} &nbsp; ● &nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
 	}
+
+	search(query: string) {
+		return [this.title, this.description].some((value) => value.toLowerCase().includes(query.toLowerCase()))
+	}
 }
