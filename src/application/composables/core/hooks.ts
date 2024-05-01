@@ -1,5 +1,6 @@
 import { addToArray, getRandomValue } from 'valleyed'
-import { ComputedRef, Ref, computed, reactive, ref, watch } from 'vue'
+import { ComputedRef, Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import type { useListener } from './listener'
 import { useErrorHandler, useLoadingHandler } from './states'
 
 const asyncStore: Record<string, { called: Ref<boolean> } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>> = {}
@@ -47,6 +48,7 @@ export const useItemsInList = <T extends { id: string }>(
 	ids: Refable<string[]>,
 	items: Refable<T[]>,
 	fetchItems: (ids: string[]) => Promise<T[]>,
+	listener?: ReturnType<typeof useListener>,
 ) => {
 	store[key] ??= {
 		items: reactive([]),
@@ -93,6 +95,11 @@ export const useItemsInList = <T extends { id: string }>(
 				(e) => e.id,
 			)
 		})
+	}
+
+	if (listener) {
+		onMounted(() => listener.start())
+		onUnmounted(() => listener.close())
 	}
 
 	return { items: filteredItems, searchForItem, addToList }

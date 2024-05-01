@@ -108,9 +108,7 @@ export const useCreateSchedule = (classInst: ClassEntity, lesson: ClassLesson) =
 export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = true) => {
 	const key = `${organizationId}-${classId}`
 	const allSchedules = computed(() => store[key]?.schedules.value ?? [])
-	const { items: schedules, addToList } = useItemsInList('schedules', ids, allSchedules, (ids) =>
-		SchedulesUseCases.getInList(organizationId, classId, ids),
-	)
+
 	const listener = useListener(
 		async () =>
 			await SchedulesUseCases.listenToInList(organizationId, classId, () => ids.value, {
@@ -122,13 +120,13 @@ export const useSchedulesInList = (organizationId: string, classId: string, ids:
 			}),
 	)
 
-	onMounted(() => {
-		if (listen) listener.start()
-	})
-
-	onUnmounted(() => {
-		if (listen) listener.close()
-	})
+	const { items: schedules, addToList } = useItemsInList(
+		'schedules',
+		ids,
+		allSchedules,
+		(ids) => SchedulesUseCases.getInList(organizationId, classId, ids),
+		listen ? listener : undefined,
+	)
 
 	return { schedules }
 }

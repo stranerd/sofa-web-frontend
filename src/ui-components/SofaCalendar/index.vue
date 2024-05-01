@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { computed, watch } from 'vue'
-import { getEndOfMonth, getMonthYear, weekDays, getStartOfDay, getStartOfMonth } from '@utils/dates'
+import { getEndOfMonth, getMonthYear, getStartOfDay, getStartOfMonth, weekDays } from '@utils/dates'
 
 const now = new Date()
 const today = getStartOfDay(now.getFullYear(), now.getMonth(), now.getDate())
@@ -79,8 +79,8 @@ const props = withDefaults(
 const days = $utils.rotate(weekDays, props.startOfWeek)
 
 const selectedDate = defineModel<Date | null>('selected', { default: null })
-const from = defineModel('from', { default: getStartOfMonth(now.getFullYear(), now.getMonth()) })
-const to = defineModel('to', { default: getEndOfMonth(now.getFullYear(), now.getMonth()) })
+const from = defineModel<Date>('from', { default: getStartOfMonth(now.getFullYear(), now.getMonth()) })
+const to = defineModel<Date>('to', { default: getEndOfMonth(now.getFullYear(), now.getMonth()) })
 const highlight = defineModel<Date[]>('highlight', { default: [] })
 
 const dates = computed(() => {

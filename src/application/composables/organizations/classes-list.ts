@@ -1,8 +1,8 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useListener } from '../core/listener'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
+import { useListener } from '../core/listener'
 import { UsersUseCases } from '@modules/users'
 import { ClassEntity, ClassesUseCases } from '@modules/organizations'
 
@@ -100,7 +100,6 @@ export const useExploreClasses = () => {
 
 export const useClassesInList = (ids: Refable<string[]>, listen = true) => {
 	const allClasses = computed(() => [...store.classesIn.value, ...store.classesExplore.value])
-	const { items: classes, searchForItem, addToList } = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids))
 
 	const listener = useListener(
 		async () =>
@@ -111,13 +110,11 @@ export const useClassesInList = (ids: Refable<string[]>, listen = true) => {
 			}),
 	)
 
-	onMounted(async () => {
-		if (listen) await listener.start()
-	})
-
-	onUnmounted(async () => {
-		if (listen) await listener.close()
-	})
+	const {
+		items: classes,
+		searchForItem,
+		addToList,
+	} = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids), listen ? listener : undefined)
 
 	return { classes, searchForItem }
 }
