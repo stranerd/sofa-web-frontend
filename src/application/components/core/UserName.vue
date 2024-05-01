@@ -1,7 +1,7 @@
 <template>
 	<SofaText v-bind="props" :to="`/profile/${user.id}`" class="gap-2 flex items-center truncate">
-		<SofaAvatar v-if="avatar" :size="24" class="!w-[1.75em] !h-[1.75em]" :photoUrl="user.bio.photo?.link" :userId="user.id" />
-		<span>{{ !name && user.id === id ? 'You' : publicName }}</span>
+		<SofaAvatar v-if="avatar" :size="24" class="!size-[1.75em]" :photoUrl="user.bio.photo?.link" :userId="user.id" />
+		<span class="line-clamp-1">{{ !name && user.id === id ? 'You' : publicName }}</span>
 		<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[1em]" />
 		<SofaIcon v-if="user.type?.type === UserType.teacher" name="tutor-badge" class="h-[1em]" />
 	</SofaText>
@@ -28,7 +28,7 @@ const props = withDefaults(
 	{
 		avatar: true,
 		name: false,
-		clamp: true,
+		clamp: false,
 		size: undefined,
 		as: undefined,
 		bold: undefined,

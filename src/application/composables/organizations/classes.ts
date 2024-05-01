@@ -18,6 +18,13 @@ const myStore: Record<
 	}
 > = {}
 
+const similarStore: Record<
+	string,
+	{
+		classes: Ref<ClassEntity[]>
+	}
+> = {}
+
 export const useMyClasses = () => {
 	const { id, user } = useAuth()
 	const key = id.value
@@ -211,7 +218,11 @@ export const usePurchaseClass = () => {
 }
 
 export const useSimilarClasses = (organizationId: string, classId: string) => {
-	const similarClasses = ref<ClassEntity[]>([])
+	const key = `${organizationId}-${classId}`
+	similarStore[key] ??= {
+		classes: ref([]),
+	}
+
 	const {
 		asyncFn: fetchSimilarClasses,
 		loading,
@@ -220,12 +231,12 @@ export const useSimilarClasses = (organizationId: string, classId: string) => {
 	} = useAsyncFn(
 		async () => {
 			const classes = await ClassesUseCases.getSimilarClasses(organizationId, classId)
-			similarClasses.value = classes
+			similarStore[key].classes.value = classes
 		},
-		{ key: `organizations/${organizationId}/classes/${classId}/similar` },
+		{ key: `organizations//classes/${key}/similar` },
 	)
 	onMounted(async () => {
 		if (!called.value) await fetchSimilarClasses()
 	})
-	return { similarClasses, loading, error }
+	return { ...similarStore[key], loading, error }
 }

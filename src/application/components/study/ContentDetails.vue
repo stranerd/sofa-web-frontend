@@ -75,7 +75,7 @@
 
 		<div class="w-full flex gap-4 items-center border-b border-lightGray px-4 pt-2">
 			<SofaNormalText
-				v-for="(tab, index) in tabs"
+				v-for="(tab, index) in tabs.filter((tab) => !tab.hide)"
 				:key="index"
 				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
 				class="!font-semibold pb-2 border-b-2 border-transparent"
@@ -210,15 +210,14 @@
 			</template>
 
 			<template v-if="selectedTab === 'similar'">
-				<div v-if="similarMaterials.length" class="flex mdlg:flex-col mdlg:gap-4 gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
-					<StudyMaterialCard v-for="m in similarMaterials" :key="m.hash" class="!bg-lightGray" :material="m" />
+				<div class="flex items-start mdlg:flex-col mdlg:gap-4 gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
+					<StudyMaterialCard
+						v-for="m in similarMaterials"
+						:key="m.hash"
+						class="!bg-lightGray"
+						:material="m"
+						:wrapped="!$screen.desktop" />
 				</div>
-				<SofaEmptyState
-					v-else
-					title="No similar course found"
-					subTitle="Discover thousands of materials to buy, created by verified experts"
-					actionLabel="Marketplace"
-					:action="() => $router.push('/marketplace')" />
 			</template>
 		</div>
 	</div>
@@ -295,14 +294,17 @@ const tabs = computed(
 			{
 				name: props.material.isQuiz() ? 'Questions' : 'Content',
 				key: 'content',
+				hide: false,
 			},
 			{
 				name: 'Ratings',
 				key: 'ratings',
+				hide: false,
 			},
 			{
 				name: props.material.isQuiz() ? 'Similar Quizzes' : 'Similar Courses',
 				key: 'similar',
+				hide: !similarMaterials.value.length,
 			},
 		] as const,
 )
