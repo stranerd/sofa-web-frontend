@@ -49,7 +49,7 @@ import { defineComponent } from 'vue'
 import ClassCard from '@app/components/organizations/classes/ClassCard.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useMyClasses } from '@app/composables/organizations/classes-explore'
+import { useMyClasses } from '@app/composables/organizations/classes-list'
 
 export default defineComponent({
 	name: 'DashboardClassesPage',

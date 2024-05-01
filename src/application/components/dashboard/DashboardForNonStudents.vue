@@ -133,7 +133,7 @@
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useMyClasses } from '@app/composables/organizations/classes-explore'
+import { useMyClasses } from '@app/composables/organizations/classes-list'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 
 const { id, user, userType } = useAuth()

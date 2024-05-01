@@ -45,7 +45,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useExploreClasses } from '@app/composables/organizations/classes-explore'
+import { useExploreClasses } from '@app/composables/organizations/classes-list'
 
 export default defineComponent({
 	name: 'MarketplaceClassesPage',

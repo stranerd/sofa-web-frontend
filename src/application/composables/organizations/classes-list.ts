@@ -100,7 +100,7 @@ export const useExploreClasses = () => {
 
 export const useClassesInList = (ids: Refable<string[]>, listen = true) => {
 	const allClasses = computed(() => [...store.classesIn.value, ...store.classesExplore.value])
-	const { items: classes, addToList } = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids))
+	const { items: classes, searchForItem, addToList } = useItemsInList('classes', ids, allClasses, (ids) => ClassesUseCases.getInList(ids))
 
 	const listener = useListener(
 		async () =>
@@ -119,7 +119,7 @@ export const useClassesInList = (ids: Refable<string[]>, listen = true) => {
 		if (listen) await listener.close()
 	})
 
-	return { classes }
+	return { classes, searchForItem }
 }
 
 export const useSaveClass = (classInst: ClassEntity) => {

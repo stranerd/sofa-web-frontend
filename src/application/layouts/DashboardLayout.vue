@@ -123,7 +123,7 @@
 import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
-import { useMyClasses } from '@app/composables/organizations/classes-explore'
+import { useMyClasses } from '@app/composables/organizations/classes-list'
 
 type ButtonConfig = {
 	action: () => void

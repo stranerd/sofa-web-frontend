@@ -64,7 +64,19 @@ export const useItemsInList = <T extends { id: string }>(
 		},
 	)
 
-	const allItems = computed(() => [...items.value, ...store[key].items])
+	const { asyncFn: searchForItem } = useAsyncFn(
+		async (id: string) => {
+			const item = allItems.value.find((q) => q.id === id)
+			if (item) return item
+			const items = await fetchItems([id])
+			return items.at(0)
+		},
+		{
+			force: true,
+		},
+	)
+
+	const allItems = computed(() => [...items.value, ...store[key].items] as T[])
 
 	const filteredItems = computed(() => ids.value.map((id) => allItems.value.find((q) => q.id === id)).filter(Boolean) as T[])
 
@@ -83,5 +95,5 @@ export const useItemsInList = <T extends { id: string }>(
 		})
 	}
 
-	return { items: filteredItems, addToList }
+	return { items: filteredItems, searchForItem, addToList }
 }

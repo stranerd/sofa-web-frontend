@@ -65,7 +65,7 @@ import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 import { ClassEntity } from '@modules/organizations'
 import { useAuth } from '@app/composables/auth/auth'
-import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-explore'
+import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-list'
 
 export default defineComponent({
 	name: 'ClassesIndexPage',

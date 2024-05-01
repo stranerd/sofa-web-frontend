@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useSaveClass } from '@app/composables/organizations/classes-explore'
+import { useSaveClass } from '@app/composables/organizations/classes-list'
 import { ClassEntity } from '@modules/organizations'
 
 const props = defineProps<{

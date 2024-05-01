@@ -35,7 +35,7 @@
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
-import { useSaveClass } from '@app/composables/organizations/classes-explore'
+import { useSaveClass } from '@app/composables/organizations/classes-list'
 import { ClassEntity } from '@modules/organizations'
 
 const props = withDefaults(
