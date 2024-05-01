@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex flex-col justify-center items-center p-[12.5%] gap-4 rounded-2xl">
+	<div class="w-full h-full grow flex flex-col justify-center items-center px-[12.5%] py-[5%] gap-4 rounded-2xl">
 		<SofaImageLoader :photoUrl="`/images/empty/${image}.png`" class="w-[30%]" />
 		<div class="flex flex-col items-center text-center gap-1">
 			<SofaHeading :content="title" class="text-deepGray" />

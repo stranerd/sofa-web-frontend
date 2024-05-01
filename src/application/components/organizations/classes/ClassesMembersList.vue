@@ -1,5 +1,7 @@
 <template>
-	<div class="p-4 flex flex-col gap-4 mdlg:gap-6 mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom">
+	<div
+		class="p-4 grow max-h-full overflow-y-auto flex flex-col gap-4 mdlg:gap-6 mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom"
+		:class="{ 'h-full': !users.length }">
 		<EmptyState
 			v-if="!users.length"
 			:image="isStudent ? 'students' : 'teachers'"

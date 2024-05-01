@@ -8,7 +8,7 @@
 		]"
 		:primary="{ label: 'Create class', action: createClass }">
 		<template #default="{ extras }">
-			<div class="mdlg:mt-4 px-4 mdlg:p-0 grid grid-cols-1 mdlg:grid-cols-2 gap-4">
+			<div class="mdlg:mt-4 px-4 mdlg:p-0 grid auto-rows-min grid-cols-1 mdlg:grid-cols-2 gap-4 h-full overflow-y-auto">
 				<EmptyState
 					v-if="!classes.length"
 					image="classes"

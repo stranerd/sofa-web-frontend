@@ -9,7 +9,7 @@
 		</template>
 
 		<template #middle-session>
-			<div v-if="!classes.length" class="px-4">
+			<div v-if="!classes.length" class="px-4 h-full">
 				<EmptyState
 					image="classes"
 					title="You are not in any class"

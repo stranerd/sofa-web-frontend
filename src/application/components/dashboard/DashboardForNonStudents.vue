@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col mdlg:gap-4">
+	<div class="flex flex-col mdlg:gap-4 h-full">
 		<div
 			v-if="user"
 			class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
@@ -68,8 +68,10 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-4">
-			<div class="h-fit w-full mdlg:shadow-custom px-4 mdlg:p-6 mdlg:bg-white rounded-2xl flex flex-col gap-4">
+		<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-4 grow">
+			<div
+				class="h-fit w-full overflow-y-auto mdlg:shadow-custom px-4 mdlg:p-6 mdlg:bg-white rounded-2xl flex flex-col gap-4"
+				:class="{ 'h-full': $screen.desktop && !materials.length }">
 				<div class="w-full flex gap-2 items-center justify-between">
 					<SofaHeading content="My classes" />
 					<SofaText
@@ -96,7 +98,9 @@
 					:primary="userType.isOrg ? { label: 'Add class', action: createClass } : undefined" />
 			</div>
 
-			<div class="h-fit w-full mdlg:shadow-custom px-4 mdlg:p-6 mdlg:bg-white rounded-2xl flex flex-col gap-4">
+			<div
+				class="h-fit w-full overflow-y-auto mdlg:shadow-custom px-4 mdlg:p-6 mdlg:bg-white rounded-2xl flex flex-col gap-4"
+				:class="{ 'h-full': $screen.desktop && !materials.length }">
 				<div class="w-full flex gap-2 items-center justify-between">
 					<SofaHeading content="Study materials" />
 					<SofaText as="router-link" to="/library" class="text-primaryBlue" content="View all" />
