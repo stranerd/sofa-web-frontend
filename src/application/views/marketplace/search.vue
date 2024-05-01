@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
@@ -145,7 +145,7 @@ const { query, courses, quizzes, search } = useSearch(q)
 const showFilter = ref(false)
 const selectedFilterOption = ref<(typeof filterOptions)[number]['id']>(filterOptions[0].id)
 
-const selectedOptions = reactive<SelectedOption[]>([
+const selectedOptions = ref<SelectedOption[]>([
 	...(userId && userName
 		? ([
 				{
@@ -164,7 +164,7 @@ const selectedOptions = reactive<SelectedOption[]>([
 watch(
 	[query, selectedOptions],
 	() => {
-		$utils.debounce('search', () => search(selectedOptions.map((option) => option.query)), 500)
+		$utils.debounce('search', () => search(selectedOptions.value.map((option) => option.query)), 500)
 	},
 	{ immediate: true },
 )
