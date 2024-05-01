@@ -7,15 +7,14 @@
 
 				<div class="py-4 flex items-center justify-center">
 					<SofaNormalText v-if="title" class="!font-bold !text-base">{{ title }}</SofaNormalText>
-					<img v-else src="/images/logo.svg" class="h-[24px]" />
+					<Logo withoutText class="h-[24px]" />
 				</div>
 
 				<NotificationIcon v-if="user" />
 			</div>
 			<div class="hidden gap-5 items-center justify-start grow mdlg:flex">
-				<router-link class="py-2 pr-3 flex items-center gap-1" to="/dashboard">
-					<img src="/images/logo.svg" class="h-[32px]" />
-					<img src="/images/logo-text.svg" class="h-[16px]" />
+				<router-link class="py-2 pr-3" to="/dashboard">
+					<Logo class="h-[32px]" />
 				</router-link>
 
 				<router-link

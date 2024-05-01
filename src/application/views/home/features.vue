@@ -5,7 +5,7 @@
 			<div class="hero w-full h-[400px] py-6 md:h-[800px] flex flex-col items-center justify-center">
 				<div class="w-[90%] md:w-[80%] mx-auto h-full flex flex-col items-center justify-center gap-4 md:gap-12">
 					<h1 class="text-[20px] md:text-[40px] text-white text-center font-bold">Features</h1>
-					<img class="mdlg:h-[533px]" src="/images/features-hero-image.png" />
+					<img class="mdlg:h-[533px]" src="/images/landing/features-hero-image.png" />
 				</div>
 			</div>
 		</header>
@@ -73,7 +73,7 @@ const content = ref<IMoreOnStranerd>({
 
 <style scoped>
 .hero {
-	background: url('/images/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

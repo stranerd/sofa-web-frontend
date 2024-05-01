@@ -7,9 +7,9 @@
 				{{ content.study.desc }}
 			</p>
 			<div class="relative flex mdlg:flex-row flex-col items-center mt-8 mdlg:mt-20">
-				<img class="hidden mdlg:block" src="/images/y.png" />
+				<img class="hidden mdlg:block" src="/images/landing/y.png" />
 				<div class="w-full mdlg:w-1/2 flex items-center justify-center">
-					<img src="/images/bot+human.png" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
+					<img src="/images/landing/bot+human.png" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
 				</div>
 				<div class="w-full mdlg:w-1/2 flex flex-col items-center mdlg:items-start text-center mdlg:text-left gap-2">
 					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">{{ content.study.heading }}</h3>
@@ -24,7 +24,7 @@
 						Know more
 					</RouterLink>
 				</div>
-				<img class="hidden mdlg:block absolute right-20 -top-10" src="/images/skewed-green-box.png" />
+				<img class="hidden mdlg:block absolute right-20 -top-10" src="/images/landing/skewed-green-box.png" />
 			</div>
 		</div>
 		<!-- Classes -->
@@ -47,7 +47,7 @@
 			</div>
 			<div
 				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
-				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" src="/images/live-classes.png" />
+				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" src="/images/landing/live-classes.png" />
 			</div>
 		</div>
 		<!-- MarketPlace -->
@@ -55,11 +55,11 @@
 			id="marketplace"
 			class="w-[90%] max-w-[1800px] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
 			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
-				<img class="w-[90%] mdlg:w-full mdlg:h-full" src="/images/marketplace.png" />
+				<img class="w-[90%] mdlg:w-full mdlg:h-full" src="/images/landing/marketplace.png" />
 			</div>
 			<div class="w-full mdlg:w-1/2 flex flex-col mdlg:items-start items-center text-center mdlg:text-left gap-2">
 				<div class="hidden mdlg:block w-full">
-					<img class="ml-auto mr-[10%]" src="/images/marketplace-top.png" />
+					<img class="ml-auto mr-[10%]" src="/images/landing/marketplace-top.png" />
 				</div>
 				<h3 class="font-bold text-[20px] md:text-[36px] md:leading-[54px]">{{ content.place.title }}</h3>
 				<h4 class="text-[16px] md:text-[24px]">{{ content.place.heading }}</h4>
@@ -73,7 +73,7 @@
 					Know more
 				</RouterLink>
 				<div class="hidden mdlg:block w-3/5">
-					<img class="ml-auto" src="/images/marketplace-y.png" />
+					<img class="ml-auto" src="/images/landing/marketplace-y.png" />
 				</div>
 			</div>
 		</div>
@@ -97,7 +97,7 @@
 			</div>
 			<div
 				class="abs absolute left-0 right-0 -top-[250px] sm:-top-[400px] mdlg:relative mdlg:-top-0 w-full mdlg:w-1/2 flex items-center justify-center">
-				<img src="/images/quiz.png" class="ml-auto" />
+				<img src="/images/landing/quiz.png" class="ml-auto" />
 			</div>
 		</div>
 		<!-- Access preparatory classes -->
@@ -134,7 +134,7 @@
 			</div>
 			<Vue3Marquee :duration="200" :pauseOnHover="true">
 				<div v-for="i in 20" :key="i" class="bg-white p-4 rounded-lg flex items-center gap-2 w-[261px] mx-4">
-					<img src="/images/dp.png" />
+					<img src="/images/landing/dp.png" />
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1">
 							<p class="text-[15px] font-medium">Harvard Academy</p>
@@ -154,11 +154,11 @@
 			class="w-[80%] max-w-[1800px] mt-20 md:mt-40 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 			<div class="w-full md:w-1/2 order-2 md:order-1 flex flex-col items-center gap-4">
 				<h1 class="font-bold text-[32px] text-center">Get The App</h1>
-				<a :href="APPSTORE_LINK" target="_blank"><img src="/images/app-store-badge.png" /></a>
-				<a :href="PLAYSTORE_LINK" target="_blank"><img src="/images/playstore-badge.png" /></a>
+				<a :href="APPSTORE_LINK" target="_blank"><img src="/images/landing/app-store-badge.png" /></a>
+				<a :href="PLAYSTORE_LINK" target="_blank"><img src="/images/landing/playstore-badge.png" /></a>
 			</div>
 			<div class="w-full order-1 md:order-2 md:w-1/2 flex flex-col items-center">
-				<img src="/images/get-app.png" />
+				<img src="/images/landing/get-app.png" />
 			</div>
 		</div>
 	</div>
@@ -175,7 +175,14 @@ defineProps({
 		required: true,
 	},
 })
-const images = ref(['/images/jamb.png', '/images/jupeb.png', '/images/waec.png', '/images/sat.png', '/images/neco.png', '/images/gce.png'])
+const images = ref([
+	'/images/exams/jamb.png',
+	'/images/exams/jupeb.png',
+	'/images/exams/waec.png',
+	'/images/exams/sat.png',
+	'/images/exams/neco.png',
+	'/images/exams/gce.png',
+])
 </script>
 
 <script lang="ts">
@@ -208,7 +215,8 @@ export interface IMoreOnStranerd {
 
 <style scoped>
 .styled-bg {
-	background: url('/images/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/landing/layer.png'),
+		linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

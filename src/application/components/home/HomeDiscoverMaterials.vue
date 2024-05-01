@@ -43,7 +43,7 @@
 					</div>
 				</div>
 				<div class="flex items-center justify-center">
-					<img src="/images/video-placeholder.png" />
+					<img src="/images/landing/video-placeholder.png" />
 				</div>
 			</div>
 		</div>

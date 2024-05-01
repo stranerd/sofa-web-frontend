@@ -21,11 +21,11 @@
 						</p>
 						<div class="flex flex-col gap-4">
 							<div class="flex flex-col md:flex-row items-center gap-6">
-								<img src="/images/mail.png" />
+								<img src="/images/landing/mail.png" />
 								<p class="text-white">{{ CONTACT_EMAIL }}</p>
 							</div>
 							<div class="flex flex-col md:flex-row items-center gap-6">
-								<img src="/images/phone.png" />
+								<img src="/images/landing/phone.png" />
 								<p class="text-white">{{ CONTACT_NUMBER }}</p>
 							</div>
 						</div>
@@ -108,7 +108,7 @@
 							</form>
 							<img
 								class="absolute -top-[30px] -right-0 md:w-[100px] md:h-[130px] mdlg:-top-[50px] mdlg:-right-[20px] w-[59px] h-[75px] mdlg:w-[145px] mdlg:h-[177px]"
-								src="/images/stranerd-rob.png" />
+								src="/images/landing/stranerd-rob.png" />
 						</div>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 		<section class="bg-[#FFD233] py-20 flex flex-col items-center justify-center mdlg:items-start relative">
 			<img
 				class="mdlg:absolute mdlg:-top-[120px] mdlg:w-[384px] mdlg:h-[466px] pt-[250px] md:pt-[200px] mdlg:pt-0"
-				src="/images/stranerd-rob.png" />
+				src="/images/landing/stranerd-rob.png" />
 			<HomeJoinUs class="w-[90%] md:w-[80%] mx-auto mt-[100px] mdlg:mt-[360px]" :isContactPage="true" />
 		</section>
 		<HomeFooter />
@@ -133,7 +133,7 @@ const { sendMessage, factory } = useMetaMessage()
 
 <style scoped>
 .styled-bg {
-	background: url('/images/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

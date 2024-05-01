@@ -28,7 +28,7 @@
 						ref="firstPlan"
 						:key="showStudentsPricing.toString()"
 						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
-						style="box-shadow: 0 0 24px 0 #00000040; z-index: 999999 !important">
+						style="box-shadow: 0 0 24px 0 #00000040; z-index: 10 !important">
 						<div class="flex gap-3 justify-between">
 							<div class="flex flex-col gap-2 pt-3">
 								<h2 class="text-[20px] font-bold">{{ plan.basic.title }}</h2>
@@ -56,7 +56,7 @@
 					<div
 						v-if="plan.plus"
 						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
-						style="box-shadow: 0 0 24px 0 #00000040; z-index: 999999 !important">
+						style="box-shadow: 0 0 24px 0 #00000040; z-index: 10 !important">
 						<div class="flex gap-3 justify-between">
 							<div class="flex flex-col pt-3 gap-2">
 								<h2 class="text-[20px] font-bold">{{ plan.plus.title }}</h2>
@@ -83,22 +83,22 @@
 					</div>
 					<div
 						class="absolute w-full mdlg:w-[927px] mx-auto left-0 right-0 styled-bg rounded-[20px]"
-						style="z-index: 100"
+						style="z-index: 5"
 						:class="[showStudentsPricing ? 'h-[350px]' : 'h-[200px]']"
 						:style="dynamicStyle"></div>
 				</div>
 				<img
 					class="hidden mdlg:block absolute left-0"
 					:class="showStudentsPricing ? 'bottom-0' : '-bottom-40'"
-					src="/images/arrow-svg.png" />
+					src="/images/landing/arrow-svg.png" />
 			</div>
-			<img class="hidden mdlg:block absolute top-[80px] right-0" src="/images/smiles.png" />
+			<img class="hidden mdlg:block absolute top-[80px] right-0" src="/images/landing/smiles.png" />
 		</header>
 		<HomeDiscoverMaterials />
 		<div class="w-[90%] mx-auto relative">
 			<HomeJoinUs class="w-full md:w-[90%] mx-auto" />
-			<img class="hidden mdlg:block absolute left-0 bottom-10" src="/images/pricing-left.png" />
-			<img class="hidden mdlg:block absolute -top-16 right-0" src="/images/skewed-green-box.png" />
+			<img class="hidden mdlg:block absolute left-0 bottom-10" src="/images/landing/pricing-left.png" />
+			<img class="hidden mdlg:block absolute -top-16 right-0" src="/images/landing/skewed-green-box.png" />
 		</div>
 		<HomeFooter />
 	</main>
@@ -142,7 +142,7 @@ const choosePlan = (plan: PlanEntity) => {
 
 <style scoped>
 .styled-bg {
-	background: url('/images/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

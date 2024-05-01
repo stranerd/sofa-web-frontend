@@ -5,7 +5,7 @@
 			<div class="styled-bg w-full h-[400px] py-6 md:h-[800px] flex flex-col items-center justify-center">
 				<div class="w-[90%] md:w-[80%] mx-auto h-full flex flex-col items-center justify-center gap-4 md:gap-12">
 					<h1 class="text-[20px] md:text-[40px] text-white text-center font-bold">About Us</h1>
-					<img class="mdlg:h-[533px]" src="/images/about-hero-image.png" />
+					<img class="mdlg:h-[533px]" src="/images/landing/about-hero-image.png" />
 				</div>
 			</div>
 		</header>
@@ -21,14 +21,14 @@
 				</p>
 			</div>
 			<div class="w-[80%] order-1 md:order-2 md:w-2/5 flex items-center justify-center">
-				<img src="/images/about-us.png" class="object-contain" />
+				<img src="/images/landing/about-us.png" class="object-contain" />
 			</div>
-			<img class="hidden mdlg:block absolute -bottom-10 left-[50%] right-0" src="/images/about-us-vector.png" />
+			<img class="hidden mdlg:block absolute -bottom-10 left-[50%] right-0" src="/images/landing/about-us-vector.png" />
 		</div>
 		<!-- Our Vision -->
 		<div class="w-[90%] md:w-[80%] max-w-[1800px] mx-auto flex md:flex-row flex-col items-center justify-between gap-12">
 			<div class="w-[80%] md:w-2/5 flex items-center justify-center">
-				<img src="/images/our-vision.png" class="object-contain" />
+				<img src="/images/landing/our-vision.png" class="object-contain" />
 			</div>
 			<div class="w-full md:w-3/5 flex flex-col gap-1">
 				<h2 class="text-[24px] font-bold about-us-button md:text-left text-center">Our Vision</h2>
@@ -50,10 +50,10 @@
 				</div>
 			</div>
 			<div class="w-[80%] md:w-2/5 order-1 md:order-2 flex items-center justify-center">
-				<img src="/images/our-mission.png" class="object-contain" />
+				<img src="/images/landing/our-mission.png" class="object-contain" />
 			</div>
-			<img class="hidden md:block absolute -bottom-6 left-0" src="/images/our-mission-vector-2.png" />
-			<img class="hidden md:block absolute -top-16 right-0" src="/images/our-mission-vector-1.png" />
+			<img class="hidden md:block absolute -bottom-6 left-0" src="/images/landing/our-mission-vector-2.png" />
+			<img class="hidden md:block absolute -top-16 right-0" src="/images/landing/our-mission-vector-1.png" />
 		</div>
 		<!-- What sets us apart -->
 		<div
@@ -76,12 +76,12 @@
 				</ul>
 			</div>
 			<div class="w-full mdlg:w-1/2 order-1 mdlg:order-2 flex items-center justify-center">
-				<img src="/images/what-set-us-apart.png" />
+				<img src="/images/landing/what-set-us-apart.png" />
 			</div>
 		</div>
 		<!-- Our Values -->
 		<div class="w-[90%] md:w-[80%] max-w-[1800px] mx-auto flex flex-col mdlg:flex-row items-center gap-6 mdlg:gap-20">
-			<img src="/images/our-values.png" />
+			<img src="/images/landing/our-values.png" />
 			<div class="flex flex-col gap-2">
 				<h3 class="text-[24px] font-bold">Our Values</h3>
 				<ul class="list-disc pl-4 text-[16px]">
@@ -101,7 +101,8 @@
 
 <style scoped>
 .styled-bg {
-	background: url('/images/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/landing/layer.png'),
+		linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

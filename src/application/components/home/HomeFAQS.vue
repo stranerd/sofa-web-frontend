@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<div class="absolute left-0 right-0 -bottom-24 md:-bottom-[220px] flex items-center justify-center">
-			<img class="w-[96px] h-[116px] md:w-[209px] md:h-[253px]" src="/images/stranerd-rob.png" />
+			<img class="w-[96px] h-[116px] md:w-[209px] md:h-[253px]" src="/images/landing/stranerd-rob.png" />
 		</div>
 	</div>
 </template>
