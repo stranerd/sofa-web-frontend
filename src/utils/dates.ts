@@ -9,18 +9,10 @@ export enum TIMES {
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 export const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-export const getTwoDigits = (digit: number): string => digit.toString().padStart(2, '0')
-export const formatTimeAsDigits = (date: Date) => {
-	const hour = getTwoDigits(date.getHours())
-	const minute = getTwoDigits(date.getMinutes())
-	return `${hour}:${minute}`
-}
-export const formatDateAsDigits = (date: Date, showYear = true) => {
-	const year = date.getFullYear()
-	const month = months[date.getMonth()].slice(0, 3)
-	const day = getTwoDigits(date.getDate())
-	return `${month} ${day}` + (showYear ? `, ${year}` : '')
-}
+const getTwoDigits = (digit: number): string => digit.toString().padStart(2, '0')
+const formatTimeAsDigits = (date: Date) => `${getTwoDigits(date.getHours())}:${getTwoDigits(date.getMinutes())}`
+export const formatDateAsDigits = (date: Date, showYear = true) =>
+	`${months[date.getMonth()]} ${getTwoDigits(date.getDate())}` + (showYear ? `, ${date.getFullYear()}` : '')
 
 export const formatTime = (time: number, withoutTime = false) => {
 	const date = new Date(time)
@@ -39,9 +31,8 @@ export const formatTime = (time: number, withoutTime = false) => {
 }
 
 export const getTimeFormatted = (timeInSecs: number) => {
-	if (timeInSecs < TIMES.minute) {
-		return `${timeInSecs} sec${timeInSecs > 1 ? 's' : ''}`
-	} else if (timeInSecs < TIMES.hour) {
+	if (timeInSecs < TIMES.minute) return `${timeInSecs} sec${timeInSecs > 1 ? 's' : ''}`
+	else if (timeInSecs < TIMES.hour) {
 		const minutes = Math.floor(timeInSecs / TIMES.minute)
 		return `${minutes} min${minutes > 1 ? 's' : ''}`
 	} else if (timeInSecs < TIMES.day) {
@@ -54,23 +45,23 @@ export const getTimeFormatted = (timeInSecs: number) => {
 		const months = Math.floor(timeInSecs / TIMES.month)
 		return `${months} mon${months > 1 ? 's' : ''}`
 	}
+	const year = Math.floor(timeInSecs / TIMES.year)
+	return `${year} yr${year > 1 ? 's' : ''}`
 }
 
 export const getDigitalTime = (timeInSecs: number) => {
 	const hours = Math.floor(timeInSecs / 3600)
 	const minutes = Math.floor((timeInSecs % 3600) / 60)
 	const seconds = Math.floor(timeInSecs % 60)
-	let hr = ''
-	if (hours) hr = `${hours < 10 ? '0' + hours : hours}:`
-	const rest = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+	const hr = hours ? `${getTwoDigits(hours)}:` : ''
+	const rest = `${getTwoDigits(minutes)}:${getTwoDigits(seconds)}`
 	return hr + rest
 }
 
-export const getDateString = (date: Date) =>
-	[date.getFullYear(), date.getMonth() + 1, date.getDate()].map((v) => v.toString().padStart(2, '0')).join('-')
-
-export const getTimeString = (date: Date) => [date.getHours(), date.getMinutes()].map((v) => v.toString().padStart(2, '0')).join(':')
-
+export const getDateString = (date: Date) => [date.getFullYear(), date.getMonth() + 1, date.getDate()].map(getTwoDigits).join('-')
+export const getTimeString = (date: Date) => [date.getHours(), date.getMinutes()].map(getTwoDigits).join(':')
 export const getDateTimeString = (date: Date) => `${getDateString(date)}T${getTimeString(date)}`
-
 export const getMonthYear = (date: Date) => `${months[date.getMonth()]} ${date.getFullYear()}`
+export const getStartOfMonth = (year: number, month: number) => new Date(year, month, 1)
+export const getEndOfMonth = (year: number, month: number) => new Date(year, month + 1, 0)
+export const getStartOfDay = (year: number, month: number, date: number) => new Date(year, month, date)

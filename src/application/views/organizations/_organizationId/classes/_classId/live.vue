@@ -44,7 +44,21 @@
 				</div>
 				<div v-if="$screen.desktop" class="col-span-1 h-full overflow-y-auto">
 					<div class="bg-white text-deepGray flex flex-col gap-4 rounded-2xl p-4">
-						<SofaCalendar />
+						<SofaCalendar
+							v-model:highlight="liveDates"
+							:classes="{
+								title: 'text-grayColor',
+								day: 'text-grayColor',
+								extraDay: 'opacity-30',
+								today: 'bg-lightGray text-deepGray',
+								highlight: 'bg-primaryRed/[0.1] text-primaryRed',
+							}" />
+						<div class="flex items-center gap-2">
+							<span class="rounded size-4 bg-lightGray" />
+							<SofaText content="Today" size="sub" class="text-grayColor mr-auto" />
+							<span class="rounded size-4 bg-primaryRed/[0.1]" />
+							<SofaText content="Live date" size="sub" class="text-grayColor" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -60,7 +74,7 @@ import { useClassSchedules } from '@app/composables/organizations/schedules'
 const route = useRoute()
 const organizationId = route.params.organizationId as string
 const classId = route.params.classId as string
-const { upcoming, previous } = useClassSchedules(organizationId, classId)
+const { upcoming, previous, schedules } = useClassSchedules(organizationId, classId)
 
 const tabs = [
 	{ label: 'Upcoming', value: 'upcoming' },
@@ -69,6 +83,7 @@ const tabs = [
 const currentTab = ref<(typeof tabs)[number]['value']>(tabs[0].value)
 const currentLesson = ref<string | null>(null)
 
+const liveDates = computed(() => schedules.value.map((schedule) => new Date(schedule.time.start)))
 const filteredSchedules = computed(() => {
 	const s = currentTab.value === 'upcoming' ? upcoming.value : previous.value
 	const lesson = currentLesson.value

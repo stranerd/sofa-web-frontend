@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import { copyToClipboard, ordinalSuffixOf, share } from '../commons'
 import * as constants from '../constants'
-import { formatTime } from '../dates'
+import { formatTime, getDigitalTime } from '../dates'
 import * as environment from '../environment'
 import { storage } from '../storage'
 
@@ -19,6 +19,7 @@ export default class Utils {
 
 	constants = constants
 	environment = environment
+	getDigitalTime = getDigitalTime
 	formatTime = formatTime
 	formatNumber = formatNumber
 	pluralize = pluralize
@@ -33,12 +34,6 @@ export default class Utils {
 
 	async setRedirectToRoute(value: string) {
 		await storage.set(this.#redirectToName, value)
-	}
-
-	prettifyTime = (seconds: number) => {
-		const min = Math.floor(seconds / 60)
-		const sec = seconds % 60
-		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
 	}
 
 	public setRouter = (router: Router) => {

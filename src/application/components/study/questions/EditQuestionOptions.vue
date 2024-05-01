@@ -26,7 +26,7 @@
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('timeLimit')">
 					<SofaIcon class="h-[18px]" name="time-limit" />
 					<SofaNormalText class="!font-bold" content="Time limit" />
-					<SofaNormalText :content="$utils.prettifyTime(factory.timeLimit)" class="ml-auto" />
+					<SofaNormalText :content="$utils.getDigitalTime(factory.timeLimit)" class="ml-auto" />
 					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('timeLimit') }" />
 				</a>
 
@@ -37,7 +37,7 @@
 						class="rounded-lg flex px-4 py-2 items-center justify-center gap-1"
 						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'"
 						@click="factory.timeLimit = time">
-						<SofaNormalText class="text-center" color="text-inherit" :content="$utils.prettifyTime(time)" />
+						<SofaNormalText class="text-center" color="text-inherit" :content="$utils.getDigitalTime(time)" />
 					</a>
 				</div>
 			</div>
