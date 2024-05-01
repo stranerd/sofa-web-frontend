@@ -24,6 +24,8 @@ declare module 'vue' {
     ChooseStudyModeModal: typeof import('./../application/components/study/quizzes/ChooseStudyModeModal.vue')['default']
     ClassCard: typeof import('./../application/components/organizations/classes/ClassCard.vue')['default']
     ClassCardMoreOptionsModal: typeof import('./../application/components/organizations/classes/ClassCardMoreOptionsModal.vue')['default']
+    ClassesFeed: typeof import('./../application/components/organizations/classes/ClassesFeed.vue')['default']
+    ClassesLive: typeof import('./../application/components/organizations/classes/ClassesLive.vue')['default']
     ClassesMembersList: typeof import('./../application/components/organizations/classes/ClassesMembersList.vue')['default']
     ClassForm: typeof import('./../application/components/organizations/classes/ClassForm.vue')['default']
     ClassLayout: typeof import('./../application/layouts/ClassLayout.vue')['default']

@@ -47,7 +47,7 @@
 				</SofaText>
 			</div>
 			<div class="h-full overflow-y-auto">
-				<slot :classInst="classInst" :user="user" :extras="extras" />
+				<slot :classInst="classInst" :extras="extras" />
 			</div>
 		</template>
 	</DashboardLayout>
