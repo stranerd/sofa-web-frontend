@@ -63,4 +63,11 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 	search(query: string) {
 		return [this.title, this.description].some((value) => value.toLowerCase().includes(query.toLowerCase()))
 	}
+
+	isInDateRange(date: Date) {
+		const start = new Date(this.time.start)
+		return [start.getFullYear() === date.getFullYear(), start.getMonth() === date.getMonth(), start.getDate() === date.getDate()].every(
+			Boolean,
+		)
+	}
 }

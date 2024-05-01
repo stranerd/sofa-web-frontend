@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import { copyToClipboard, ordinalSuffixOf, share } from '../commons'
 import * as constants from '../constants'
-import { formatTime, getDigitalTime } from '../dates'
+import { formatDateAsDigits, formatTime, getDigitalTime } from '../dates'
 import * as environment from '../environment'
 import { storage } from '../storage'
 
@@ -20,6 +20,7 @@ export default class Utils {
 	constants = constants
 	environment = environment
 	getDigitalTime = getDigitalTime
+	formatDateAsDigits = formatDateAsDigits
 	formatTime = formatTime
 	formatNumber = formatNumber
 	pluralize = pluralize

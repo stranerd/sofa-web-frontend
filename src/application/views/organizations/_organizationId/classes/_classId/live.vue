@@ -4,19 +4,22 @@
 			<div class="pt-4 px-4 mdlg:px-0 flex flex-col mdlg:grid grid-cols-4 gap-4 h-full overflow-y-auto">
 				<div class="col-span-3 flex flex-col gap-2 mdlg:gap-0 h-full overflow-y-auto">
 					<div class="flex items-center w-full mdlg:bg-white mdlg:p-4 mdlg:rounded-t-2xl shrink-0">
-						<SofaText
-							v-for="(tab, i) in tabs"
-							:key="tab.value"
-							as="a"
-							size="sub"
-							:content="tab.label"
-							class="px-4 py-2.5 font-semibold text-grayColor border border-current"
-							:class="{
-								'!text-primaryPurple': currentTab === tab.value,
-								'rounded-l-lg': i === 0,
-								'rounded-r-lg': i === tabs.length - 1,
-							}"
-							@click="currentTab = tab.value" />
+						<SofaHeading v-if="selectedDate" size="title" :content="$utils.formatDateAsDigits(selectedDate)" />
+						<template v-else>
+							<SofaText
+								v-for="(tab, i) in tabs"
+								:key="tab.value"
+								as="a"
+								size="sub"
+								:content="tab.label"
+								class="px-4 py-2.5 font-semibold text-grayColor border border-current"
+								:class="{
+									'!text-primaryPurple': currentTab === tab.value,
+									'rounded-l-lg': i === 0,
+									'rounded-r-lg': i === tabs.length - 1,
+								}"
+								@click="currentTab = tab.value" />
+						</template>
 
 						<SofaSelect
 							v-model="currentLesson"
@@ -45,12 +48,14 @@
 				<div v-if="$screen.desktop" class="col-span-1 h-full overflow-y-auto">
 					<div class="bg-white text-deepGray flex flex-col gap-4 rounded-2xl p-4">
 						<SofaCalendar
+							v-model:selected="selectedDate"
 							v-model:highlight="liveDates"
 							:classes="{
 								title: 'text-grayColor',
 								day: 'text-grayColor',
 								extraDay: 'opacity-30',
 								today: 'bg-lightGray text-deepGray',
+								selected: 'border-2 border-primaryPurple',
 								highlight: 'bg-primaryRed/[0.1] text-primaryRed',
 							}" />
 						<div class="flex items-center gap-2">
@@ -82,10 +87,17 @@ const tabs = [
 ] as const
 const currentTab = ref<(typeof tabs)[number]['value']>(tabs[0].value)
 const currentLesson = ref<string | null>(null)
+const selectedDate = ref<Date | null>(null)
 
 const liveDates = computed(() => schedules.value.map((schedule) => new Date(schedule.time.start)))
 const filteredSchedules = computed(() => {
-	const s = currentTab.value === 'upcoming' ? upcoming.value : previous.value
+	const s = selectedDate.value
+		? schedules.value.filter((s) => s.isInDateRange(selectedDate.value!))
+		: currentTab.value === 'upcoming'
+			? upcoming.value
+			: currentTab.value === 'previous'
+				? previous.value
+				: []
 	const lesson = currentLesson.value
 	if (!lesson) return s
 	return s.filter((schedule) => schedule.lessonId === lesson)

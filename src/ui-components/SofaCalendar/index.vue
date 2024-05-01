@@ -78,7 +78,7 @@ const props = withDefaults(
 
 const days = $utils.rotate(weekDays, props.startOfWeek)
 
-const selectedDate = defineModel<Date>()
+const selectedDate = defineModel<Date | null>('selected', { default: null })
 const from = defineModel('from', { default: getStartOfMonth(now.getFullYear(), now.getMonth()) })
 const to = defineModel('to', { default: getEndOfMonth(now.getFullYear(), now.getMonth()) })
 const highlight = defineModel<Date[]>('highlight', { default: [] })
@@ -102,7 +102,7 @@ const goToPrevMonth = () => (from.value = getStartOfMonth(from.value.getFullYear
 const goToPrevYear = () => (from.value = getStartOfMonth(from.value.getFullYear() - 1, from.value.getMonth()))
 const goToNextMonth = () => (from.value = getStartOfMonth(from.value.getFullYear(), from.value.getMonth() + 1))
 const goToNextYear = () => (from.value = getStartOfMonth(from.value.getFullYear() + 1, from.value.getMonth()))
-const toggleSelectedDate = (date: Date) => (selectedDate.value = selectedDate.value?.getTime() === date.getTime() ? undefined : date)
+const toggleSelectedDate = (date: Date) => (selectedDate.value = selectedDate.value?.getTime() === date.getTime() ? null : date)
 
 watch(
 	from,
