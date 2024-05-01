@@ -149,6 +149,12 @@ export default class Utils {
 		if (result) this.showAlert({ message, type })
 	}
 
+	rotate<T>(array: T[], by: number) {
+		const trimmed = by % array.length
+		const rotateBy = trimmed < 0 ? array.length + by : by
+		return array.slice(rotateBy).concat(array.slice(0, rotateBy))
+	}
+
 	deepGet<T, R>(obj: T, key: Paths<T>) {
 		return key.split('.').reduce((acc, cur) => (acc && (acc as any)[cur] ? (acc as any)[cur] : undefined), obj as unknown as R)
 	}

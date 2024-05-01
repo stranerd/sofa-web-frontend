@@ -116,6 +116,7 @@ declare module 'vue' {
     SofaBadge: typeof import('sofa-ui-components')['SofaBadge']
     SofaBottomBar: typeof import('sofa-ui-components')['SofaBottomBar']
     SofaButton: typeof import('sofa-ui-components')['SofaButton']
+    SofaCalendar: typeof import('sofa-ui-components')['SofaCalendar']
     SofaCheckbox: typeof import('sofa-ui-components')['SofaCheckbox']
     SofaCustomInput: typeof import('sofa-ui-components')['SofaCustomInput']
     SofaDeletePrompt: typeof import('sofa-ui-components')['SofaDeletePrompt']

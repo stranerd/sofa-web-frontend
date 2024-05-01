@@ -43,7 +43,9 @@
 					</div>
 				</div>
 				<div v-if="$screen.desktop" class="col-span-1 h-full overflow-y-auto">
-					<div class="bg-white text-deepGray flex flex-col gap-4 rounded-2xl p-4">Calendar</div>
+					<div class="bg-white text-deepGray flex flex-col gap-4 rounded-2xl p-4">
+						<SofaCalendar />
+					</div>
 				</div>
 			</div>
 		</template>

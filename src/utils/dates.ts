@@ -7,6 +7,7 @@ export enum TIMES {
 }
 
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+export const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export const getTwoDigits = (digit: number): string => digit.toString().padStart(2, '0')
 export const formatTimeAsDigits = (date: Date) => {
@@ -32,7 +33,7 @@ export const formatTime = (time: number, withoutTime = false) => {
 	if (date >= tomorrow) return formatDateAsDigits(date)
 	if (date > today) return withoutTime ? 'Today' : formatTimeAsDigits(date)
 	else if (date > yesterday) return 'Yesterday'
-	else if (date > lastWeek) return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]
+	else if (date > lastWeek) return weekDays[date.getDay()]
 	else if (date > oneYearAgo) return formatDateAsDigits(date, false)
 	else return formatDateAsDigits(date)
 }
@@ -71,3 +72,5 @@ export const getDateString = (date: Date) =>
 export const getTimeString = (date: Date) => [date.getHours(), date.getMinutes()].map((v) => v.toString().padStart(2, '0')).join(':')
 
 export const getDateTimeString = (date: Date) => `${getDateString(date)}T${getTimeString(date)}`
+
+export const getMonthYear = (date: Date) => `${months[date.getMonth()]} ${date.getFullYear()}`

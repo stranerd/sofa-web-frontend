@@ -24,7 +24,7 @@
 				<SofaNormalText color="text-grayColor" content="Add link" />
 			</div>
 
-			<SofaIcon class="h-[7px]" :name="showAddNewItems ? 'chevron-up' : 'chevron-down'" />
+			<SofaIcon name="chevron-down" class="h-[7px]" :class="{ 'rotate-180': showAddNewItems }" />
 		</a>
 
 		<div v-if="showAddNewItems" class="w-full flex flex-col gap-2">

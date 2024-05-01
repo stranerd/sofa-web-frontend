@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { TIMES, getTimeFormatted, months } from '@utils/dates'
+import { TIMES, getMonthYear, getTimeFormatted } from '@utils/dates'
 
 export const useCountdown = (skipClearOnUnmounted = false) => {
 	const time = ref(0)
@@ -54,14 +54,7 @@ export const useTimeDifference = (timeInMs: number) => {
 		}
 	})
 	const time = computed({
-		get: () => {
-			if (diffInSec.value < TIMES.year) return getTimeFormatted(diffInSec.value) + ' ago'
-			else {
-				const year = date.getFullYear()
-				const month = months[date.getMonth()]
-				return `${month} ${year}`
-			}
-		},
+		get: () => (diffInSec.value < TIMES.year ? getTimeFormatted(diffInSec.value) + ' ago' : getMonthYear(date)),
 		set: () => {},
 	})
 	onMounted(() => {

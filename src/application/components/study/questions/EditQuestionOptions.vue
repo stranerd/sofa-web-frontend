@@ -6,7 +6,7 @@
 					<SofaIcon class="h-[18px]" name="question-type" />
 					<SofaNormalText class="!font-bold" content="Question type" />
 					<SofaNormalText :content="QuestionEntity.getLabel(factory.type)" class="ml-auto" />
-					<SofaIcon class="h-[7px]" :name="isOpen('type') ? 'chevron-up' : 'chevron-down'" />
+					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('type') }" />
 				</a>
 
 				<div v-if="isOpen('type')" class="w-full grid grid-cols-2 gap-3">
@@ -27,7 +27,7 @@
 					<SofaIcon class="h-[18px]" name="time-limit" />
 					<SofaNormalText class="!font-bold" content="Time limit" />
 					<SofaNormalText :content="$utils.prettifyTime(factory.timeLimit)" class="ml-auto" />
-					<SofaIcon class="h-[7px]" :name="isOpen('timeLimit') ? 'chevron-up' : 'chevron-down'" />
+					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('timeLimit') }" />
 				</a>
 
 				<div v-if="isOpen('timeLimit')" class="w-full flex flex-wrap gap-3">

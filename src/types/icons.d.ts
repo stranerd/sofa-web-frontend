@@ -30,7 +30,6 @@ declare global {
 		| 'checkbox'
 		| 'checkmark-circle'
 		| 'chevron-down'
-		| 'chevron-up'
 		| 'circle-close'
 		| 'circle'
 		| 'classes'
