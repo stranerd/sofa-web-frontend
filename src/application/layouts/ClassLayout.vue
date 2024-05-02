@@ -27,8 +27,8 @@
 						:key="tab.route"
 						as="router-link"
 						class="py-4 border-b-2 border-transparent shrink-0 flex items-center gap-2"
-						:to="`${classInst.pageLink}${tab.route}`"
-						exactActiveClass="text-primaryPurple !border-primaryPurple">
+						:to="tab.route"
+						activeClass="text-primaryPurple !border-primaryPurple">
 						<SofaIcon :name="tab.icon" class="h-[24px] fill-current" />
 						<span>{{ tab.title }}</span>
 					</SofaText>
@@ -36,14 +36,14 @@
 			</div>
 		</template>
 		<template #default="{ extras }">
-			<slot v-if="!$screen.desktop" name="pre-tabs" />
+			<slot name="pre-tabs" />
 			<div v-if="!$screen.desktop" class="bg-white flex gap-1 px-2 overflow-x-auto">
 				<SofaText
 					v-for="tab in tabs"
 					:key="tab.route"
 					as="router-link"
 					class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
-					:to="`${classInst.pageLink}${tab.route}`"
+					:to="tab.route"
 					exactActiveClass="text-primaryPurple !border-primaryPurple">
 					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
 					<span>{{ tab.title }}</span>
@@ -95,16 +95,17 @@ useMeta(
 	})),
 )
 
+const getClassPath = (path: string) => `${classInst.value?.pageLink}/${path}`
 const tabs = computed(
 	() =>
 		props.tabs ??
 		([
-			{ title: 'Feed', icon: 'feed', route: '/feed' },
-			{ title: 'Subjects', icon: 'lessons', route: '/subjects' },
-			{ title: 'Live', icon: 'live', route: '/live' },
-			{ title: `Students (${classInst.value?.members.students.length})`, icon: 'users', route: '/students' },
-			{ title: `Teachers (${classInst.value?.teachers.length})`, icon: 'tutor', route: '/teachers' },
-			{ title: 'About', icon: 'info', route: '/about' },
+			{ title: 'Feed', icon: 'feed', route: getClassPath('feed') },
+			{ title: 'Subjects', icon: 'lessons', route: getClassPath('subjects') },
+			{ title: 'Live', icon: 'live', route: getClassPath('live') },
+			{ title: `Students (${classInst.value?.members.students.length})`, icon: 'users', route: getClassPath('students') },
+			{ title: `Teachers (${classInst.value?.teachers.length})`, icon: 'tutor', route: getClassPath('teachers') },
+			{ title: 'About', icon: 'info', route: getClassPath('about') },
 		] as const),
 )
 

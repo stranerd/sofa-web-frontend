@@ -1,8 +1,5 @@
 <template>
-	<ClassLayout
-		v-model="classInstRef"
-		title="Subjects"
-		:primary="showPrimary ? { label: 'Add subject', action: handlePrimary } : undefined">
+	<ClassLayout v-model="classInst" title="Subjects" :primary="showPrimary ? { label: 'Add subject', action: handlePrimary } : undefined">
 		<template #default="{ classInst: cls, extras }">
 			<div
 				class="p-4 grow max-h-full overflow-y-auto flex flex-col gap-4 mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom"

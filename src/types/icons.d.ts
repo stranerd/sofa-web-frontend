@@ -37,6 +37,7 @@ declare global {
 		| 'cog'
 		| 'copy'
 		| 'courses'
+		| 'curriculum'
 		| 'customized-material'
 		| 'dashboard'
 		| 'document-course'
