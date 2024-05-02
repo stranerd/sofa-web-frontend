@@ -1,47 +1,45 @@
 <template>
-	<div v-if="user" class="w-full bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center gap-4">
-		<div>
-			<SofaHeaderText :content="lesson.title" />
-			<div class="flex items-center gap-1">
-				<SofaNormalText color="text-grayColor">
-					{{ $utils.formatNumber(lesson.users.teachers.length) }}
-					{{ $utils.pluralize(lesson.users.teachers.length, 'teacher', 'teachers') }}
-				</SofaNormalText>
-				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor" />
-				<SofaNormalText color="text-grayColor">
+	<component :is="as" class="w-full px-5 py-4 cursor-pointer flex items-center gap-4">
+		<div class="flex items-center gap-2 grow">
+			<SofaHeading :content="lesson.title" />
+		</div>
+		<template v-if="isAdmin">
+			<SofaText class="text-grayColor mdlg:w-[250px] gap-2 flex items-center truncate">
+				<SofaIcon name="tutor" class="fill-current" />
+				<span>{{ teachers.map((teacher) => teacher.publicName).join(', ') }}</span>
+			</SofaText>
+			<SofaText class="text-grayColor mdlg:w-[120px] gap-2 flex items-center truncate">
+				<SofaIcon name="users" class="fill-current" />
+				<span>
 					{{ $utils.formatNumber(lesson.users.students.length) }}
 					{{ $utils.pluralize(lesson.users.students.length, 'student', 'students') }}
-				</SofaNormalText>
-				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor" />
-				<SofaNormalText color="text-grayColor">
-					{{ $utils.formatNumber(resources) }}
-					{{ $utils.pluralize(resources, 'resource', 'resources') }}
-				</SofaNormalText>
-			</div>
-		</div>
-		<SofaCheckbox v-if="classInst.isStudent(user) && !hideJoin" v-model="joined" class="ml-auto" />
-	</div>
+				</span>
+			</SofaText>
+		</template>
+	</component>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useJoinLesson } from '@app/composables/organizations/lessons'
+import { useUsersInList } from '@app/composables/users/users'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
-const props = defineProps<{
-	classInst: ClassEntity
-	lesson: ClassLesson
-	hideJoin?: boolean
-}>()
 
-const { id, user } = useAuth()
-const resources = props.lesson.curriculum.reduce((acc, cur) => acc + cur.items.length, 0)
+const props = withDefaults(
+	defineProps<{
+		classInst: ClassEntity
+		index: number
+		lesson: ClassLesson
+		as?: string
+	}>(),
+	{
+		as: 'div',
+	},
+)
 
-const joined = ref(props.lesson.users.students.includes(id.value))
+const { user } = useAuth()
+const teacherIds = computed(() => props.lesson.users.teachers)
+const { users: teachers } = useUsersInList(teacherIds)
 
-const { joinLesson } = useJoinLesson()
-
-watch(joined, async () => {
-	await joinLesson(props.classInst, props.lesson.id, joined.value)
-})
+const isAdmin = computed(() => props.classInst.isAdmin(user.value!))
 </script>

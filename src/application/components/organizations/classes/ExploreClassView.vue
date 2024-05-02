@@ -60,10 +60,10 @@
 					<SofaHeaderText content="Subjects" class="!text-xl" />
 					<div class="flex flex-col gap-4 mt-3">
 						<LessonCard
-							v-for="lesson in classInst.lessons"
+							v-for="(lesson, index) in classInst.lessons"
 							:key="lesson.id"
 							:lesson="lesson"
-							hideJoin
+							:index="index"
 							:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
 							:classInst="classInst"
 							@click="selectedLesson = lesson" />

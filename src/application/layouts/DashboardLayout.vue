@@ -163,7 +163,7 @@ const options = computed(() => [
 		? [
 				{ title: 'Classes', icon: 'classes' as const, route: '/dashboard/classes' },
 				{ title: 'Teachers', icon: 'tutor' as const, route: '/dashboard/teachers' },
-				{ title: 'Students', icon: 'user-unfilled' as const, route: '/dashboard/students' },
+				{ title: 'Students', icon: 'users' as const, route: '/dashboard/students' },
 			]
 		: []),
 	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes' as const, route: '/classes' }] : []),

@@ -83,7 +83,8 @@ export default defineComponent({
 		const searchQuery = ref('')
 		const { user } = useAuth()
 		const { classes } = useMyClasses()
-		const { classes: savedClasses } = useClassesInList(computed(() => user.value?.account.saved.classes ?? []))
+		const savedClassesIds = computed(() => user.value?.account.saved.classes ?? [])
+		const { classes: savedClasses } = useClassesInList(savedClassesIds)
 
 		const filteredClasses = computed(() => {
 			const list = tab.value === 'saved' ? savedClasses.value : classes.value

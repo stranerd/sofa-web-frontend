@@ -87,8 +87,10 @@ const { curriculum } = useLessonCurriculum(
 	computed(() => props.lesson.curriculum),
 )
 
-const { users: students } = useUsersInList(computed(() => activeLesson.value.users.students))
-const { users: teachers } = useUsersInList(computed(() => activeLesson.value.users.teachers))
+const studentIds = computed(() => activeLesson.value.users.students)
+const teacherIds = computed(() => activeLesson.value.users.teachers)
+const { users: students } = useUsersInList(studentIds)
+const { users: teachers } = useUsersInList(teacherIds)
 
 const canNext = computed(() => activeLessonIndex.value < props.classInst.lessons.length - 1)
 const canPrev = computed(() => activeLessonIndex.value > 0)

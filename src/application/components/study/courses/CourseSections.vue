@@ -94,7 +94,8 @@ const emits = defineEmits<{
 	selectItem: [ExtendedCourseSectionItem | undefined]
 }>()
 
-const { factory, extendedSections: sections, updateSections } = useUpdateSections(computed(() => props.course))
+const computedCourse = computed(() => props.course)
+const { factory, extendedSections: sections, updateSections } = useUpdateSections(computedCourse)
 
 const { deleteFile } = useDeleteFile()
 

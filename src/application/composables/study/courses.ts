@@ -216,7 +216,8 @@ export const useUpdateSections = (course: Refable<CourseEntity | null>) => {
 		return true
 	})
 
-	const { sections: extendedSections } = useCourseSections(computed(() => factory.factories))
+	const factories = computed(() => factory.factories)
+	const { sections: extendedSections } = useCourseSections(factories)
 
 	return {
 		factory,

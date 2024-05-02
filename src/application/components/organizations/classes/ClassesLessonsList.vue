@@ -10,13 +10,13 @@
 			:sub="emptyStateMessage"
 			:primary="isTeacher ? undefined : { label: 'Add subject', action: isAdmin ? openCreateLessonModal : openSelectLessonModal }" />
 
-		<template v-else>
-			<SofaInput v-if="!$screen.desktop" v-model="searchQuery" placeholder="Search" type="search" class="!bg-white mdlg:!p-3">
-				<template #prefix>
-					<SofaIcon name="search" class="h-[16px]" />
-				</template>
-			</SofaInput>
-		</template>
+		<LessonCard
+			v-for="(lesson, index) in lessons.filter((l) => l.title.toLowerCase().includes(searchQuery.toLowerCase()))"
+			:key="lesson.id"
+			:classInst="classInst"
+			:lesson="lesson"
+			:index="index"
+			class="bg-white mdlg:bg-lightGray rounded-xl" />
 	</div>
 </template>
 
