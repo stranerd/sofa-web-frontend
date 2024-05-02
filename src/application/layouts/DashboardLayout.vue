@@ -52,7 +52,7 @@
 							class="w-full flex items-center gap-3 p-3 rounded-lg text-deepGray hover:bg-lightBlue"
 							:to="item.route"
 							exactActiveClass="bg-lightBlue font-bold">
-							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
+							<SofaIcon :name="item.icon" class="h-[20px] fill-current" />
 							<SofaText :content="item.title" />
 						</router-link>
 					</div>

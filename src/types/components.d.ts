@@ -25,7 +25,6 @@ declare module 'vue' {
     ClassCard: typeof import('./../application/components/organizations/classes/ClassCard.vue')['default']
     ClassCardMoreOptionsModal: typeof import('./../application/components/organizations/classes/ClassCardMoreOptionsModal.vue')['default']
     ClassesFeed: typeof import('./../application/components/organizations/classes/ClassesFeed.vue')['default']
-    ClassesLessonsList: typeof import('./../application/components/organizations/classes/ClassesLessonsList.vue')['default']
     ClassesLive: typeof import('./../application/components/organizations/classes/ClassesLive.vue')['default']
     ClassesMembersList: typeof import('./../application/components/organizations/classes/ClassesMembersList.vue')['default']
     ClassForm: typeof import('./../application/components/organizations/classes/ClassForm.vue')['default']
