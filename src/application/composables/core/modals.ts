@@ -42,7 +42,12 @@ export const useModals = () => ({
 		addTutorConfirmation: { component: AddTutorConfirmation },
 		conversationMoreOptions: {
 			component: ConversationMoreOptions,
-			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+			modalArgs: {
+				closeOnClickOutside: true,
+				maxWidth: '!w-[80%] !md:w-[60%]',
+				maxHeight: 'h-full',
+				containerClass: 'mr-auto !rounded-none',
+			},
 		},
 	}),
 	interactions: modal.register('Interactions', {
@@ -55,12 +60,12 @@ export const useModals = () => ({
 		editClass: { component: EditClass },
 		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
-		createLesson: { component: CreateLesson },
-		selectLesson: { component: SelectLesson },
+		createLesson: { component: CreateLesson, modalArgs: { containerClass: 'h-full' } },
+		selectLesson: { component: SelectLesson, modalArgs: { containerClass: 'h-full' } },
 		lessonDetails: { component: LessonDetails },
 		createSchedule: { component: CreateSchedule },
 		previewCurriculum: { component: PreviewCurriculum },
-		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full overflow-y-auto' } },
+		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full' } },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
@@ -78,11 +83,21 @@ export const useModals = () => ({
 		customizeAi: { component: CustomizeAi },
 		sideBar: {
 			component: SideBar,
-			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+			modalArgs: {
+				closeOnClickOutside: true,
+				maxWidth: '!w-[80%] !md:w-[60%]',
+				maxHeight: 'h-full',
+				containerClass: 'mr-auto !rounded-none',
+			},
 		},
 		mobileMenu: {
 			component: HomeMobileMenu,
-			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-full !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+			modalArgs: {
+				closeOnClickOutside: true,
+				maxWidth: '!w-[80%] !md:w-[60%]',
+				maxHeight: 'h-full',
+				containerClass: 'mr-auto !rounded-none',
+			},
 		},
 		choosePublishedStudyMaterial: { component: ChoosePublishedStudyMaterial },
 	}),

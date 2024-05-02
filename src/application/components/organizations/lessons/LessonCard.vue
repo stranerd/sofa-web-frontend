@@ -4,7 +4,7 @@
 			<SofaImageLoader :photoUrl="image" class="size-[40px] rounded" />
 			<SofaHeading :content="lesson.title" />
 		</div>
-		<template v-if="isAdmin">
+		<template v-if="!hideStats">
 			<SofaText class="text-grayColor mdlg:w-[250px] gap-2 flex items-center truncate">
 				<SofaIcon name="tutor" class="fill-current h-[20px]" />
 				<span>{{ teachers.map((teacher) => teacher.publicName).join(', ') }}</span>
@@ -22,7 +22,6 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useAuth } from '@app/composables/auth/auth'
 import { useUsersInList } from '@app/composables/users/users'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
 
@@ -33,17 +32,17 @@ const props = withDefaults(
 		classInst: ClassEntity
 		index: number
 		lesson: ClassLesson
+		hideStats?: boolean
 		as?: string
 	}>(),
 	{
+		hideStats: false,
 		as: 'div',
 	},
 )
 
-const { user } = useAuth()
 const teacherIds = computed(() => props.lesson.users.teachers)
 const { users: teachers } = useUsersInList(teacherIds)
 
-const isAdmin = computed(() => props.classInst.isAdmin(user.value!))
 const image = computed(() => images[props.index % images.length])
 </script>

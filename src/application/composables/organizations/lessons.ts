@@ -155,8 +155,14 @@ export const useJoinLesson = () => {
 		asyncFn: joinLesson,
 		loading,
 		error,
-	} = useAsyncFn(async (classInst: ClassEntity, lessonId: string, join: boolean) => {
-		await LessonsUseCases.join(classInst.organizationId, classInst.id, lessonId, join)
+	} = useAsyncFn(async (classInst: ClassEntity, original: string[], selected: string[]) => {
+		const left = original.filter((id) => !selected.includes(id))
+		const joined = selected.filter((id) => !original.includes(id))
+		await Promise.all([
+			...left.map((id) => LessonsUseCases.join(classInst.organizationId, classInst.id, id, false)),
+			...joined.map((id) => LessonsUseCases.join(classInst.organizationId, classInst.id, id, true)),
+		])
+		return true
 	})
 	return { joinLesson, loading, error }
 }

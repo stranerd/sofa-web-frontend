@@ -45,7 +45,7 @@
 			<SofaCheckbox
 				:modelValue="factory.timeLimit === null"
 				type="switch"
-				@update:modelValue="(selected) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
+				@update:modelValue="(selected: boolean) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
 				<SofaNormalText content="Use individual question times" class="capitalize" />
 			</SofaCheckbox>
 			<SofaTextField
