@@ -1,6 +1,9 @@
 <template>
-	<ClassLayout v-model="classInst" title="Subjects" :primary="showPrimary ? { label: 'Add subject', action: handlePrimary } : undefined">
-		<template #default="{ classInst, extras }">
+	<ClassLayout
+		v-model="classInstRef"
+		title="Subjects"
+		:primary="showPrimary ? { label: 'Add subject', action: handlePrimary } : undefined">
+		<template #default="{ classInst: cls, extras }">
 			<div
 				class="p-4 grow max-h-full overflow-y-auto flex flex-col gap-4 mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom"
 				:class="{ 'h-full': !lessons.length }">
@@ -31,11 +34,11 @@
 					<LessonCard
 						v-for="(lesson, index) in lessons.filter((l) => l.title.toLowerCase().includes(extras.searchQuery.toLowerCase()))"
 						:key="lesson.id"
-						:classInst="classInst"
+						:classInst="cls"
 						:lesson="lesson"
 						:index="index"
 						as="router-link"
-						:to="`${classInst.pageLink}/subjects/${lesson.id}`"
+						:to="`${cls.pageLink}/subjects/${lesson.id}`"
 						class="bg-white mdlg:bg-lightGray rounded-xl" />
 				</template>
 			</div>

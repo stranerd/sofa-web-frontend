@@ -7,6 +7,7 @@
 		:breadcrumbs="[
 			{ text: 'Home', to: '/dashboard' },
 			{ text: classInst.title, to: classInst.pageLink },
+			...extraCrumbs,
 			{ text: title, to: $route.path },
 		]"
 		light
@@ -35,6 +36,7 @@
 			</div>
 		</template>
 		<template #default="{ extras }">
+			<slot v-if="!$screen.desktop" name="pre-tabs" />
 			<div v-if="!$screen.desktop" class="bg-white flex gap-1 px-2 overflow-x-auto">
 				<SofaText
 					v-for="tab in tabs"
@@ -66,26 +68,24 @@ import { ClassEntity } from '@modules/organizations'
 const props = withDefaults(
 	defineProps<{
 		title: string
-		organizationId?: string
-		classId?: string
 		rounded?: boolean
+		extraCrumbs?: InstanceType<typeof DashboardLayout>['$props']['breadcrumbs']
 		primary?: InstanceType<typeof DashboardLayout>['$props']['primary']
+		tabs?: { title: string; icon: IconName; route: string }[]
 	}>(),
 	{
-		organizationId: undefined,
-		classId: undefined,
 		rounded: undefined,
+		extraCrumbs: () => [],
 		primary: undefined,
+		tabs: undefined,
 	},
 )
 
 const model = defineModel<ClassEntity | null>({ default: null })
 
 const route = useRoute()
-const organizationId = props.organizationId ?? (route.params.organizationId as string)
-const classId = props.classId ?? (route.params.classId as string)
 
-const { class: classInst } = useClass(organizationId, classId)
+const { class: classInst } = useClass(route.params.organizationId as string, route.params.classId as string)
 const { user } = useAuth()
 
 const pageTitle = computed(() => classInst.value?.title ?? 'Class')
@@ -97,14 +97,15 @@ useMeta(
 
 const tabs = computed(
 	() =>
-		[
+		props.tabs ??
+		([
 			{ title: 'Feed', icon: 'feed', route: '/feed' },
 			{ title: 'Subjects', icon: 'lessons', route: '/subjects' },
 			{ title: 'Live', icon: 'live', route: '/live' },
 			{ title: `Students (${classInst.value?.members.students.length})`, icon: 'users', route: '/students' },
 			{ title: `Teachers (${classInst.value?.teachers.length})`, icon: 'tutor', route: '/teachers' },
 			{ title: 'About', icon: 'info', route: '/about' },
-		] as const,
+		] as const),
 )
 
 watch(classInst, () => {

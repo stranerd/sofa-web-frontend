@@ -9,10 +9,10 @@
 				placeholder="Announce something" />
 		</div>
 		<div class="flex flex-col mdlg:flex-row items-center justify-between gap-4">
-			<div class="flex items-center gap-4">
+			<div class="w-full flex flex-col mdlg:flex-row items-center gap-4">
 				<SofaSelect
 					v-model="factory.lessonIds"
-					class="mdlg:w-[180px]"
+					class="w-full mdlg:w-[180px]"
 					placeholder="Subject"
 					multiple
 					selectFirstOnMount
@@ -20,7 +20,7 @@
 					:options="lessonOptions" />
 				<SofaSelect
 					v-model="factory.userTypes"
-					class="mdlg:w-[180px]"
+					class="w-full mdlg:w-[180px]"
 					placeholder="Audience"
 					multiple
 					selectFirstOnMount

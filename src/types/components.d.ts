@@ -29,6 +29,7 @@ declare module 'vue' {
     ClassesMembersList: typeof import('./../application/components/organizations/classes/ClassesMembersList.vue')['default']
     ClassForm: typeof import('./../application/components/organizations/classes/ClassForm.vue')['default']
     ClassLayout: typeof import('./../application/layouts/ClassLayout.vue')['default']
+    ClassLessonLayout: typeof import('./../application/layouts/ClassLessonLayout.vue')['default']
     ContentDetails: typeof import('./../application/components/study/ContentDetails.vue')['default']
     ConversationMoreOptionsModal: typeof import('./../application/components/conversations/ConversationMoreOptionsModal.vue')['default']
     CourseSections: typeof import('./../application/components/study/courses/CourseSections.vue')['default']
