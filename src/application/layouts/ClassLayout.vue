@@ -109,7 +109,11 @@ const tabs = computed(
 		] as const),
 )
 
-watch(classInst, () => {
-	model.value = classInst.value
-})
+watch(
+	classInst,
+	() => {
+		model.value = classInst.value
+	},
+	{ immediate: true },
+)
 </script>

@@ -6,9 +6,12 @@ export const useListener = (startFn: () => Promise<() => void>) => {
 	const watchers = ref(0)
 	const isRunning = computed(() => watchers.value > 0)
 
-	const { asyncFn } = useAsyncFn(async () => {
-		listener = await startFn()
-	})
+	const { asyncFn } = useAsyncFn(
+		async () => {
+			listener = await startFn()
+		},
+		{ hideError: true, hideLoading: true },
+	)
 
 	const close = async () => {
 		if (watchers.value === 1) listener?.()

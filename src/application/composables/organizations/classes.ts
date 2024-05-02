@@ -1,7 +1,5 @@
-import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '../auth/auth'
 
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -10,82 +8,12 @@ import { useSuccessHandler } from '../core/states'
 import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
-const myStore: Record<
-	string,
-	{
-		classes: Ref<ClassEntity[]>
-		listener: ReturnType<typeof useListener>
-	}
-> = {}
-
-const similarStore: Record<
+export const similarStore: Record<
 	string,
 	{
 		classes: Ref<ClassEntity[]>
 	}
 > = {}
-
-export const useMyClasses = () => {
-	const { id, user } = useAuth()
-	const key = id.value
-
-	myStore[key] ??= {
-		classes: ref([]),
-		listener: useListener(async () =>
-			ClassesUseCases.listenToMyClassesIn(user.value!, {
-				created: async (entity) => {
-					addToArray(
-						myStore[key].classes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					addToArray(
-						myStore[key].classes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					myStore[key].classes.value = myStore[key].classes.value.filter((m) => m.id !== entity.id)
-				},
-			}),
-		),
-	}
-
-	const {
-		asyncFn: fetchClasses,
-		loading,
-		error,
-		called,
-	} = useAsyncFn(
-		async () => {
-			const classes = await ClassesUseCases.getMyClassesIn(user.value!)
-			classes.results.forEach((r) =>
-				addToArray(
-					myStore[key].classes.value,
-					r,
-					(e) => e.id,
-					(e) => e.createdAt,
-				),
-			)
-		},
-		{ key: `organizations/classes/${key}` },
-	)
-
-	onMounted(async () => {
-		if (!called.value) await fetchClasses()
-		await myStore[key].listener.start()
-	})
-	onUnmounted(async () => {
-		await myStore[key].listener.close()
-	})
-
-	return { ...myStore[key], loading, error }
-}
 
 export const useCreateClass = (organizationId: string) => {
 	const router = useRouter()
@@ -233,7 +161,7 @@ export const useSimilarClasses = (organizationId: string, classId: string) => {
 			const classes = await ClassesUseCases.getSimilarClasses(organizationId, classId)
 			similarStore[key].classes.value = classes
 		},
-		{ key: `organizations//classes/${key}/similar` },
+		{ key: `organizations/classes/${key}/similar` },
 	)
 	onMounted(async () => {
 		if (!called.value) await fetchSimilarClasses()

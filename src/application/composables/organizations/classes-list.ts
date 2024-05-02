@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { similarStore } from './classes'
 import { UsersUseCases } from '@modules/users'
 import { ClassEntity, ClassesUseCases } from '@modules/organizations'
 
@@ -99,7 +100,11 @@ export const useExploreClasses = () => {
 }
 
 export const useClassesInList = (ids: Refable<string[]>, listen = true) => {
-	const allClasses = computed(() => [...store.classesIn.value, ...store.classesExplore.value])
+	const allClasses = computed(() => [
+		...Object.values(similarStore).flatMap((s) => s.classes.value),
+		...store.classesIn.value,
+		...store.classesExplore.value,
+	])
 
 	const listener = useListener(
 		async () =>

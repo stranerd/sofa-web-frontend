@@ -71,7 +71,11 @@ const prevLessonLink = computed(() => {
 	return l ? `${classInst.value?.pageLink}/subjects/${l.id}` : undefined
 })
 
-watch(lesson, () => {
-	model.value = lesson.value
-})
+watch(
+	lesson,
+	() => {
+		model.value = lesson.value
+	},
+	{ immediate: true },
+)
 </script>
