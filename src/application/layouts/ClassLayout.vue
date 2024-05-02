@@ -10,6 +10,7 @@
 			{ text: title, to: $route.path },
 		]"
 		light
+		:primary="primary"
 		:rounded="rounded">
 		<template #pre-crumbs>
 			<div v-if="$screen.desktop" class="w-full flex flex-col mb-4">
@@ -54,11 +55,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
+import DashboardLayout from './DashboardLayout.vue'
 import { useClass } from '@app/composables/organizations/classes'
 import { useAuth } from '@app/composables/auth/auth'
+import { ClassEntity } from '@modules/organizations'
 
 const props = withDefaults(
 	defineProps<{
@@ -66,13 +69,17 @@ const props = withDefaults(
 		organizationId?: string
 		classId?: string
 		rounded?: boolean
+		primary?: InstanceType<typeof DashboardLayout>['$props']['primary']
 	}>(),
 	{
 		organizationId: undefined,
 		classId: undefined,
 		rounded: undefined,
+		primary: undefined,
 	},
 )
+
+const model = defineModel<ClassEntity | null>({ default: null })
 
 const route = useRoute()
 const organizationId = props.organizationId ?? (route.params.organizationId as string)
@@ -99,4 +106,8 @@ const tabs = computed(
 			{ title: 'About', icon: 'info', route: '/about' },
 		] as const,
 )
+
+watch(classInst, () => {
+	model.value = classInst.value
+})
 </script>
