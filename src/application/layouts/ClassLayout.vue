@@ -47,7 +47,7 @@
 					<span>{{ tab.title }}</span>
 				</SofaText>
 			</div>
-			<div class="h-full overflow-y-auto">
+			<div class="grow overflow-y-auto">
 				<slot :classInst="classInst" :extras="extras" />
 			</div>
 		</template>

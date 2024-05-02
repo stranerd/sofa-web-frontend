@@ -39,8 +39,8 @@ const isSelected = computed(() => {
 const toggle = () => {
 	if ('value' in props && Array.isArray(selected.value)) {
 		const index = selected.value.indexOf(props.value!)
-		if (index === -1) selected.value.push(props.value!)
-		else selected.value.splice(index, 1)
+		if (index === -1) selected.value = selected.value.concat(props.value!)
+		else selected.value = selected.value.filter((v) => v !== props.value)
 	} else selected.value = !selected.value
 }
 </script>

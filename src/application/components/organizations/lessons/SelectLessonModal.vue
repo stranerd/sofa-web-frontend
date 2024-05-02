@@ -42,7 +42,7 @@ const { id } = useAuth()
 const { joinLesson } = useJoinLesson()
 
 const original = props.classInst.lessons.filter((l) => l.users.students.includes(id.value)).map((l) => l.id)
-const selected = ref([...original])
+const selected = ref(original)
 
 const submit = async () => {
 	const saved = await joinLesson(props.classInst, original, selected.value)

@@ -60,7 +60,7 @@ export const useModals = () => ({
 		editClass: { component: EditClass },
 		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
-		createLesson: { component: CreateLesson },
+		createLesson: { component: CreateLesson, modalArgs: { containerClass: 'h-full' } },
 		selectLesson: { component: SelectLesson, modalArgs: { containerClass: 'h-full' } },
 		lessonDetails: { component: LessonDetails },
 		createSchedule: { component: CreateSchedule },
