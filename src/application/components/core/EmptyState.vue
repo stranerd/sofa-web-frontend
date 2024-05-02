@@ -34,7 +34,7 @@ type ButtonConfig = {
 }
 
 defineProps<{
-	image: 'classes' | 'study-materials' | 'teachers' | 'students' | 'announcements' | 'live'
+	image: 'classes' | 'study-materials' | 'teachers' | 'students' | 'announcements' | 'live' | 'lessons'
 	title: string
 	sub: string | string[]
 	primary?: ButtonConfig
