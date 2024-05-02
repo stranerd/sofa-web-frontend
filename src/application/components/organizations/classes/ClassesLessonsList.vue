@@ -8,15 +8,34 @@
 			:title="isStudent ? 'Choose your subjects to get started' : 'Getting started with subjects'"
 			class="bg-white"
 			:sub="emptyStateMessage"
-			:primary="isTeacher ? undefined : { label: 'Add subject', action: isAdmin ? openCreateLessonModal : openSelectLessonModal }" />
+			:primary="isAdmin || isStudent ? { label: 'Add subject', action: addLessonHandler } : undefined" />
 
-		<LessonCard
-			v-for="(lesson, index) in lessons.filter((l) => l.title.toLowerCase().includes(searchQuery.toLowerCase()))"
-			:key="lesson.id"
-			:classInst="classInst"
-			:lesson="lesson"
-			:index="index"
-			class="bg-white mdlg:bg-lightGray rounded-xl" />
+		<template v-else>
+			<div v-if="!$screen.desktop" class="flex items-center gap-2">
+				<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white mdlg:!p-3 grow">
+					<template #prefix>
+						<SofaIcon name="search" class="h-[16px]" />
+					</template>
+				</SofaInput>
+				<SofaButton
+					v-if="isAdmin || isStudent"
+					bgColor="bg-primaryBlue"
+					textColor="text-white"
+					padding="px-5 py-3"
+					@click="addLessonHandler">
+					Add Subject
+				</SofaButton>
+			</div>
+			<LessonCard
+				v-for="(lesson, index) in lessons.filter((l) => l.title.toLowerCase().includes(searchQuery.toLowerCase()))"
+				:key="lesson.id"
+				:classInst="classInst"
+				:lesson="lesson"
+				:index="index"
+				as="router-link"
+				:to="`${classInst.pageLink}/subjects/${lesson.id}`"
+				class="bg-white mdlg:bg-lightGray rounded-xl" />
+		</template>
 	</div>
 </template>
 
@@ -39,8 +58,8 @@ const isAdmin = computed(() => props.classInst.isAdmin(user.value!))
 const lessons = computed(() =>
 	props.classInst.lessons.filter((lesson) => {
 		if (isAdmin.value) return true
-		if (isStudent.value) return lesson.users.students.includes(user.value!.id)
-		if (isTeacher.value) return lesson.users.teachers.includes(user.value!.id)
+		if (isTeacher.value && lesson.users.teachers.includes(user.value!.id)) return true
+		if (isStudent.value && lesson.users.students.includes(user.value!.id)) return true
 		return false
 	}),
 )
@@ -55,6 +74,8 @@ const emptyStateMessage = computed(() => {
 	]
 })
 
-const openCreateLessonModal = () => useModals().organizations.createLesson.open({ classInst: props.classInst })
-const openSelectLessonModal = () => useModals().organizations.selectLesson.open({ classInst: props.classInst })
+const addLessonHandler = () => {
+	if (isAdmin.value) return useModals().organizations.createLesson.open({ classInst: props.classInst })
+	if (isStudent.value) return useModals().organizations.selectLesson.open({ classInst: props.classInst })
+}
 </script>
