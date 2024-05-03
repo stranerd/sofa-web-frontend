@@ -3,6 +3,7 @@
 		v-model="classInst"
 		:title="lesson?.title ?? 'Lesson'"
 		:tabs="!$screen.desktop ? tabs : undefined"
+		:primary="primary"
 		:extraCrumbs="[{ text: 'Subjects', to: `${classInst?.pageLink}/subjects` }]">
 		<template v-if="lesson && !$screen.desktop" #pre-tabs>
 			<div class="bg-white flex justify-between items-center gap-2 px-4 py-3 w-full border-y border-lightGray">
@@ -60,14 +61,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import ClassLayout from './ClassLayout.vue'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
 
+defineProps<{ primary?: InstanceType<typeof ClassLayout>['$props']['primary'] }>()
+
 const model = defineModel<ClassLesson | null>({ default: null })
+const classInst = defineModel<ClassEntity | null>('classInst', { default: null })
 
 const route = useRoute()
-const classInst = ref<ClassEntity | null>(null)
 const lesson = computed(() => classInst.value?.getLesson(route.params.subjectId as string) ?? null)
 
 const getLessonPath = (path: string) => `${classInst.value?.pageLink}/subjects/${lesson.value?.id}/${path}`

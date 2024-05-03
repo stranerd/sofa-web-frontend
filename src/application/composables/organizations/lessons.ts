@@ -37,6 +37,24 @@ export const useCreateLesson = (organizationId: string, classId: string) => {
 	}
 }
 
+export const useUpdateLesson = (classInst: ClassEntity, lesson: ClassLesson) => {
+	const factory = new LessonFactory()
+	factory.loadEntity(lesson)
+
+	const {
+		asyncFn: updateLesson,
+		loading,
+		error,
+	} = useAsyncFn(async () => {
+		const updatedClass = await LessonsUseCases.update(classInst.organizationId, classInst.id, lesson.id, factory)
+		factory.reset()
+		useModals().organizations.editLesson.close()
+		return updatedClass.getLesson(lesson.id)
+	})
+
+	return { error, loading, factory, updateLesson }
+}
+
 export const useCurriculumViewToggle = () => {
 	const curriculumView = ref(CurriculumView.list)
 	const curriculumViewIcon = computed((): IconName => (curriculumView.value === CurriculumView.list ? 'grid_view' : 'list_view'))

@@ -10,6 +10,7 @@ import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCar
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLessonModal.vue'
+import EditLesson from '@app/components/organizations/lessons/EditLessonModal.vue'
 import SelectLesson from '@app/components/organizations/lessons/SelectLessonModal.vue'
 import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
 import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
@@ -61,6 +62,7 @@ export const useModals = () => ({
 		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
 		createLesson: { component: CreateLesson, modalArgs: { containerClass: 'h-full' } },
+		editLesson: { component: EditLesson, modalArgs: { containerClass: 'h-full' } },
 		selectLesson: { component: SelectLesson, modalArgs: { containerClass: 'h-full' } },
 		lessonDetails: { component: LessonDetails },
 		createSchedule: { component: CreateSchedule },

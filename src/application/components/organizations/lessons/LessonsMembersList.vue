@@ -9,10 +9,19 @@
 			class="bg-white"
 			:sub="
 				isStudent ? 'Students that enroll in this subject will appear here' : 'Teachers assigned to this subject will appear here'
-			" />
+			"
+			:primary="!isStudent ? { label: 'Add teacher', action: editLesson } : undefined" />
 
 		<template v-else>
-			<div class="w-full bg-white border border-lightGray p-0.5 mdlg:p-0 rounded-2xl">
+			<SofaButton
+				v-if="!isStudent && !$screen.desktop"
+				bgColor="bg-primaryBlue"
+				textColor="text-white"
+				padding="px-6 py-3"
+				@click="editLesson">
+				Add teacher
+			</SofaButton>
+			<div class="w-full bg-white border border-lightGray p-1 mdlg:p-0 rounded-2xl">
 				<UserName
 					v-for="(user, i) in filteredUsers"
 					:key="user.hash"
@@ -26,6 +35,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useModals } from '@app/composables/core/modals'
 import { useUsersInList } from '@app/composables/users/users'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
 
@@ -41,4 +51,8 @@ const isStudent = computed(() => props.type === 'students')
 const usersIds = computed(() => (isStudent.value ? props.lesson.users.students : props.lesson.users.teachers))
 const { users } = useUsersInList(usersIds)
 const filteredUsers = computed(() => users.value.filter((u) => u.search(searchQuery.value)))
+
+const editLesson = () => {
+	useModals().organizations.editLesson.open({ classInst: props.classInst, lesson: props.lesson, initialStage: 2 })
+}
 </script>
