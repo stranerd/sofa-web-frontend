@@ -44,12 +44,12 @@
 					as="router-link"
 					class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
 					:to="tab.route"
-					exactActiveClass="text-primaryPurple !border-primaryPurple">
+					activeClass="text-primaryPurple !border-primaryPurple">
 					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
 					<span>{{ tab.title }}</span>
 				</SofaText>
 			</div>
-			<div class="grow overflow-y-auto">
+			<div class="flex flex-col grow overflow-y-auto">
 				<slot :classInst="classInst" :extras="extras" />
 			</div>
 		</template>

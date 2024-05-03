@@ -19,7 +19,7 @@
 					@click="nextLessonLink ? $router.push(nextLessonLink) : undefined" />
 			</div>
 		</template>
-		<template #default="{ extras }">
+		<template #default="{ classInst: cls, extras }">
 			<slot v-if="!lesson" name="notfound" />
 			<template v-else>
 				<div v-if="$screen.desktop" class="bg-white flex items-center gap-4 p-4 w-full border-b border-lightGray">
@@ -36,7 +36,24 @@
 						name="chevron-down"
 						@click="nextLessonLink ? $router.push(nextLessonLink) : undefined" />
 				</div>
-				<slot :classInst="classInst" :lesson="lesson" :extras="extras" />
+				<div
+					v-if="$screen.desktop"
+					class="bg-white flex items-center gap-1 px-2 pt-2 overflow-x-auto w-full border-b border-lightGray">
+					<SofaText
+						v-for="tab in tabs"
+						:key="tab.route"
+						as="router-link"
+						class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
+						:to="tab.route"
+						activeClass="text-primaryPurple !border-primaryPurple">
+						<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
+						<span>{{ tab.title }}</span>
+					</SofaText>
+					<slot name="post-tabs" :classInst="cls" :lesson="lesson" />
+				</div>
+				<div class="flex flex-col grow overflow-y-auto">
+					<slot :classInst="cls" :lesson="lesson" :extras="extras" />
+				</div>
 			</template>
 		</template>
 	</ClassLayout>

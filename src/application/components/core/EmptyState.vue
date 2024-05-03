@@ -2,7 +2,7 @@
 	<div class="w-full h-full grow flex flex-col justify-center items-center px-[12.5%] py-[5%] gap-4 rounded-2xl">
 		<SofaImageLoader :photoUrl="`/images/empty/${image}.png`" class="w-[33%]" />
 		<div class="flex flex-col items-center text-center gap-1">
-			<SofaHeading :content="title" class="text-deepGray" />
+			<SofaHeading :content="title" size="mid" class="text-deepGray" />
 			<SofaText v-for="text in Array.isArray(sub) ? sub : [sub]" :key="text" :content="text" size="sub" class="text-grayColor" />
 		</div>
 		<div class="flex gap-3 justify-center items-center font-semibold">

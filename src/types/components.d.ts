@@ -78,6 +78,7 @@ declare module 'vue' {
     LessonsForExplore: typeof import('./../application/components/organizations/lessons/LessonsForExplore.vue')['default']
     LessonsForStudents: typeof import('./../application/components/organizations/lessons/LessonsForStudents.vue')['default']
     LessonsForTeachers: typeof import('./../application/components/organizations/lessons/LessonsForTeachers.vue')['default']
+    LessonsMembersList: typeof import('./../application/components/organizations/lessons/LessonsMembersList.vue')['default']
     LibraryLayout: typeof import('./../application/layouts/LibraryLayout.vue')['default']
     Logo: typeof import('./../application/components/core/Logo.vue')['default']
     ManageAccessModal: typeof import('./../application/components/study/quizzes/ManageAccessModal.vue')['default']
