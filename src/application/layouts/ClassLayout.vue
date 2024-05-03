@@ -49,7 +49,8 @@
 					<span>{{ tab.title }}</span>
 				</SofaText>
 			</div>
-			<div class="flex flex-col grow overflow-y-auto">
+			<slot name="post-tabs" />
+			<div class="flex-1 overflow-y-auto">
 				<slot :classInst="classInst" :extras="extras" />
 			</div>
 		</template>

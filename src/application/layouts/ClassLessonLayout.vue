@@ -20,42 +20,38 @@
 					@click="nextLessonLink ? $router.push(nextLessonLink) : undefined" />
 			</div>
 		</template>
+		<template v-if="lesson && $screen.desktop" #post-tabs>
+			<div class="bg-white flex items-center gap-4 p-4 w-full border-b border-lightGray">
+				<SofaHeading :content="lesson.title" size="title" class="mr-auto" />
+				<SofaIcon
+					class="h-[7px] rotate-90 fill-current"
+					name="chevron-down"
+					:class="{ 'fill-grayColor': !prevLessonLink }"
+					@click="prevLessonLink ? $router.push(prevLessonLink) : undefined" />
+				<div class="w-[3px] self-stretch bg-lightGray" />
+				<SofaIcon
+					class="h-[7px] rotate-[270deg] fill-current"
+					:class="{ 'fill-grayColor': !nextLessonLink }"
+					name="chevron-down"
+					@click="nextLessonLink ? $router.push(nextLessonLink) : undefined" />
+			</div>
+			<div class="bg-white flex items-center gap-1 px-2 pt-2 overflow-x-auto w-full border-b border-lightGray">
+				<SofaText
+					v-for="tab in tabs"
+					:key="tab.route"
+					as="router-link"
+					class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
+					:to="tab.route"
+					activeClass="text-primaryPurple !border-primaryPurple">
+					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
+					<span>{{ tab.title }}</span>
+				</SofaText>
+				<slot name="post-tabs" />
+			</div>
+		</template>
 		<template #default="{ classInst: cls, extras }">
 			<slot v-if="!lesson" name="notfound" />
-			<template v-else>
-				<div v-if="$screen.desktop" class="bg-white flex items-center gap-4 p-4 w-full border-b border-lightGray">
-					<SofaHeading :content="lesson.title" size="title" class="mr-auto" />
-					<SofaIcon
-						class="h-[7px] rotate-90 fill-current"
-						name="chevron-down"
-						:class="{ 'fill-grayColor': !prevLessonLink }"
-						@click="prevLessonLink ? $router.push(prevLessonLink) : undefined" />
-					<div class="w-[3px] self-stretch bg-lightGray" />
-					<SofaIcon
-						class="h-[7px] rotate-[270deg] fill-current"
-						:class="{ 'fill-grayColor': !nextLessonLink }"
-						name="chevron-down"
-						@click="nextLessonLink ? $router.push(nextLessonLink) : undefined" />
-				</div>
-				<div
-					v-if="$screen.desktop"
-					class="bg-white flex items-center gap-1 px-2 pt-2 overflow-x-auto w-full border-b border-lightGray">
-					<SofaText
-						v-for="tab in tabs"
-						:key="tab.route"
-						as="router-link"
-						class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
-						:to="tab.route"
-						activeClass="text-primaryPurple !border-primaryPurple">
-						<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
-						<span>{{ tab.title }}</span>
-					</SofaText>
-					<slot name="post-tabs" :classInst="cls" :lesson="lesson" />
-				</div>
-				<div class="flex flex-col grow overflow-y-auto">
-					<slot :classInst="cls" :lesson="lesson" :extras="extras" />
-				</div>
-			</template>
+			<slot v-else :classInst="cls" :lesson="lesson" :extras="extras" />
 		</template>
 	</ClassLayout>
 </template>
