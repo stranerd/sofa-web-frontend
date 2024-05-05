@@ -12,8 +12,6 @@ import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLessonModal.vue'
 import EditLesson from '@app/components/organizations/lessons/EditLessonModal.vue'
 import SelectLesson from '@app/components/organizations/lessons/SelectLessonModal.vue'
-import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
-import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
 import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumModal.vue'
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
@@ -64,9 +62,7 @@ export const useModals = () => ({
 		createLesson: { component: CreateLesson, modalArgs: { containerClass: 'h-full' } },
 		editLesson: { component: EditLesson, modalArgs: { containerClass: 'h-full' } },
 		selectLesson: { component: SelectLesson, modalArgs: { containerClass: 'h-full' } },
-		lessonDetails: { component: LessonDetails },
 		createSchedule: { component: CreateSchedule },
-		previewCurriculum: { component: PreviewCurriculum },
 		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full' } },
 	}),
 	study: modal.register('Study', {
