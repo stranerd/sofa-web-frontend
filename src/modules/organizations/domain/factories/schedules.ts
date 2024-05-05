@@ -4,12 +4,13 @@ import { ScheduleEntity } from '../entities/schedules'
 import { getDateString, getTimeString } from '@utils/dates'
 import { BaseFactory } from '@modules/core'
 
-type Keys = Omit<ScheduleToModel, 'lessonId' | 'time'> & { timeDate: Date; timeStart: Date; timeEnd: Date }
+type Keys = Omit<ScheduleToModel, 'time'> & { timeDate: Date; timeStart: Date; timeEnd: Date }
 
-export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleToModel, 'lessonId'>, Keys> {
+export class ScheduleFactory extends BaseFactory<ScheduleEntity, ScheduleToModel, Keys> {
 	readonly rules = {
 		title: v.string().min(1),
 		description: v.string().min(1),
+		lessonId: v.string().min(1),
 		timeDate: v.time().asDate(),
 		timeStart: v.time().asDate(),
 		timeEnd: v.time().asDate(),
@@ -19,7 +20,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 		const tmr = new Date()
 		tmr.setDate(tmr.getDate() + 1)
 		const end = new Date(tmr.getTime() + 2 * 60 * 60 * 1000)
-		super({ title: '', description: '', timeDate: tmr, timeStart: tmr, timeEnd: end })
+		super({ title: '', description: '', lessonId: '', timeDate: tmr, timeStart: tmr, timeEnd: end })
 	}
 
 	get start() {
@@ -50,10 +51,11 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 	}
 
 	model = () => {
-		const { title, description, timeStart, timeEnd } = this.validValues
+		const { title, description, lessonId, timeStart, timeEnd } = this.validValues
 		return {
 			title,
 			description,
+			lessonId,
 			time: {
 				start: timeStart.getTime(),
 				end: timeEnd.getTime(),
@@ -65,6 +67,7 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, Omit<ScheduleTo
 		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
+		this.lessonId = entity.lessonId
 		const start = new Date(entity.time.start)
 		this.date = getDateString(start)
 		this.start = getTimeString(start)

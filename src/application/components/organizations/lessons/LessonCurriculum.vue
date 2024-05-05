@@ -75,10 +75,6 @@
 							@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
 					</div>
 				</a>
-				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addSchedule(sectionIndex)">
-					<SofaIcon name="add" class="h-[16px] fill-primaryBlue" />
-					<SofaNormalText color="text-primaryBlue" content="Add live schedule" />
-				</a>
 				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
 					<SofaIcon name="add" class="h-[16px] fill-primaryPink" />
 					<SofaNormalText color="text-primaryPink" content="Add study material" />
@@ -147,17 +143,6 @@ const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => 
 
 const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
 	item.type === ClassLessonable.schedule && item.schedule.canJoin(props.classInst, id.value)
-
-const addSchedule = (index: number) => {
-	if (!props.factory || !props.factory.factories.at(index) || !props.lesson) return
-	useModals().organizations.createSchedule.open({
-		classInst: props.classInst,
-		lesson: props.lesson,
-		afterSubmit: (schedule) => {
-			props.factory!.factories[index].addSchedule(schedule)
-		},
-	})
-}
 
 const addStudyMaterial = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index)) return

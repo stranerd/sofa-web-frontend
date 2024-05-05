@@ -27,6 +27,16 @@
 						...classInst.lessons.map((lesson) => ({ value: lesson.title, key: lesson.id })),
 					]"
 					class="!w-[160px] ml-auto bg-white mdlg:bg-lightGray" />
+
+				<SofaButton
+					v-if="!$screen.desktop && user && (classInst.isAdmin(user) || classInst.isTeacher(user))"
+					bgColor="bg-primaryBlue"
+					textColor="text-white"
+					class="!rounded-full ml-2"
+					padding="p-2"
+					@click="addLive">
+					<SofaIcon name="plus-white" class="h-[12px] fill-current" />
+				</SofaButton>
 			</div>
 			<div class="h-[1px] bg-lightGray shrink-0" />
 			<div class="flex flex-col gap-4 h-full overflow-y-auto mdlg:bg-white mdlg:p-4 mdlg:rounded-b-2xl">
@@ -71,10 +81,13 @@
 import { computed, ref } from 'vue'
 import { useClassSchedules } from '@app/composables/organizations/schedules'
 import { ClassEntity } from '@modules/organizations'
+import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
 
 const props = defineProps<{ classInst: ClassEntity }>()
 const searchQuery = defineModel<string>('searchQuery', { default: '' })
 
+const { user } = useAuth()
 const { upcoming, previous, schedules } = useClassSchedules(props.classInst.organizationId, props.classInst.id)
 
 const tabs = [
@@ -98,4 +111,8 @@ const filteredSchedules = computed(() => {
 	if (!lesson) return s
 	return s.filter((schedule) => schedule.lessonId === lesson)
 })
+
+const addLive = () => {
+	useModals().organizations.createSchedule.open({ classInst: props.classInst })
+}
 </script>
