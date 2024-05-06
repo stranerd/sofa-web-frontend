@@ -1,4 +1,4 @@
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
@@ -9,13 +9,12 @@ import {
 	ClassEntity,
 	ClassLesson,
 	ClassLessonable,
-	CurriculumView,
 	ExtendedCurriculum,
 	LessonCurriculumFactory,
 	LessonFactory,
 	LessonsUseCases,
 } from '@modules/organizations'
-import { FileType } from '@modules/study'
+import { FileType, QuizModes } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -55,16 +54,6 @@ export const useUpdateLesson = (classInst: ClassEntity, lesson: ClassLesson) => 
 	return { error, loading, factory, updateLesson }
 }
 
-export const useCurriculumViewToggle = () => {
-	const curriculumView = ref(CurriculumView.list)
-	const curriculumViewIcon = computed((): IconName => (curriculumView.value === CurriculumView.list ? 'grid_view' : 'list_view'))
-	const toggleView = () => {
-		curriculumView.value = curriculumView.value === CurriculumView.list ? CurriculumView.grid : CurriculumView.list
-	}
-
-	return { curriculumView, curriculumViewIcon, toggleView }
-}
-
 export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassLesson['curriculum']>) => {
 	const quizIds = computed(() =>
 		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.quiz).map((item) => item.id)),
@@ -99,6 +88,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 											? ('image-course' as IconName)
 											: ('video-course' as IconName),
 								info: file.type,
+								color: file.type === FileType.document ? '#3296C8' : file.type === FileType.image ? '#AF19C8' : '#4BAF7D',
 							}
 					}
 					if (item.type === ClassLessonable.quiz) {
@@ -109,8 +99,9 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 								quiz,
 								image: quiz.picture,
 								title: quiz.title,
-								icon: 'quiz' as IconName,
+								icon: item.quizMode === QuizModes.practice ? ('test' as IconName) : ('learn-quiz' as IconName),
 								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
+								color: item.quizMode === QuizModes.practice ? '#197DFA' : '#6419C8',
 							}
 					}
 					if (item.type === ClassLessonable.schedule) {
@@ -123,6 +114,7 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 								title: schedule.title,
 								icon: 'translation' as IconName,
 								info: schedule.timeRange,
+								color: schedule.live ? '#F55F5F' : '#FA9632',
 							}
 					}
 				})

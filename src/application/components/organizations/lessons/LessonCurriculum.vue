@@ -5,11 +5,8 @@
 		class="w-full flex flex-col gap-4"
 		handle=".sectionHandle"
 		group="curriculum">
-		<div
-			v-for="(section, sectionIndex) in curriculum"
-			:key="sectionIndex"
-			:class="isModal ? '' : 'bg-white rounded-custom p-4 mdlg:p-0 mdlg:bg-transparent mdlg:rounded-none'">
-			<div class="flex items-center gap-2 justify-between">
+		<div v-for="(section, sectionIndex) in curriculum" :key="sectionIndex" class="bg-white mdlg:bg-lightGray flex flex-col rounded-xl">
+			<div class="flex items-center gap-2 justify-between p-4">
 				<SofaCustomInput
 					v-if="canEdit && editedLabelSections.has(sectionIndex)"
 					v-model="factory.factories[sectionIndex].label"
@@ -18,7 +15,7 @@
 					placeholder="Section label"
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
-				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
+				<SofaHeading v-else class="grow truncate" :content="section.label" />
 				<SofaIcon
 					v-if="canEdit"
 					class="h-[16px] fill-grayColor"
@@ -35,44 +32,31 @@
 			<VueDraggable
 				v-if="expandedSections.has(sectionIndex)"
 				v-model="factory.factories[sectionIndex].items"
-				class="gap-4 my-5 grid grid-cols-1"
-				:class="view === CurriculumView.grid ? 'sm:grid-cols-2 md:grid-cols-3 mdlg:grid-cols-2 lg:grid-cols-3' : ''"
+				class="mdlg:gap-4 grid grid-cols-1 mdlg:px-4 mdlg:pb-4"
+				:class="view === CurriculumView.grid ? 'md:grid-cols-2 mdlg:grid-cols-4' : ''"
 				:disabled="!canEdit"
 				handle=".itemHandle"
 				:group="`sectionItems-${sectionIndex}`">
 				<a
 					v-for="(item, itemIndex) in section.items"
 					:key="itemIndex"
-					class="flex gap-2 mdlg:gap-4"
-					:class="view === CurriculumView.grid ? 'flex-col' : 'flex-col mdlg:flex-row mdlg:items-center'"
+					class="flex flex-col gap-2 border-t border-lightGray mdlg:border-none p-4 bg-white rounded-xl"
 					@click="openCurriculumItem(itemIndex, sectionIndex)">
-					<div class="flex items-center gap-2 flex-1">
-						<SofaIcon :name="item.icon" class="h-[16px]" />
-						<SofaNormalText color="text-deepGray" :content="item.title" class="truncate" />
-						<SofaBadge v-if="showLiveBadgeForItem(item)" class="shrink-0"> LIVE </SofaBadge>
-					</div>
-					<div v-if="view === CurriculumView.grid">
-						<SofaImageLoader
-							v-if="shouldShowItemImage(item)"
-							:photoUrl="item.image"
-							class="!h-[100px] w-full mdlg:!w-[200px] mdlg:!h-[115px] bg-grayColor rounded-custom" />
+					<SofaImageLoader v-if="view === CurriculumView.grid" :photoUrl="item.image" class="w-full aspect-video rounded" />
+					<div class="flex items-center gap-3 w-full">
 						<div
-							v-else
-							class="!h-[100px] w-full mdlg:!h-[115px] mdlg:!w-[200px] rounded-custom bg-primaryRed flex items-center justify-center">
-							<SofaHeaderText content="LIVE" class="!uppercase !text-white" />
+							class="size-[40px] mdlg:size-[44px] rounded flex items-center justify-center"
+							:style="`background-color: ${item.color};`">
+							<SofaIcon :name="item.icon" class="fill-white w-[20px]" />
 						</div>
-					</div>
-					<div class="flex items-center gap-2 shrink-0">
-						<div class="flex items-center gap-1">
-							<SofaIcon v-if="view === CurriculumView.grid" class="h-[16px] fill-grayColor" name="info" />
-							<SofaNormalText color="text-grayColor" :content="item.info" class="!capitalize" />
+						<div class="flex flex-col flex-1">
+							<SofaText :content="item.title" clamp />
+							<SofaText
+								:content="item.info"
+								size="sub"
+								class="capitalize text-grayColor"
+								:style="showLiveBadgeForItem(item) ? `color: ${item.color};` : undefined" />
 						</div>
-						<SofaIcon v-if="canEdit" class="h-[20px] itemHandle fill-grayColor" name="reorder" />
-						<SofaIcon
-							v-if="canEdit"
-							class="h-[16px] fill-grayColor"
-							name="trash"
-							@click.stop.prevent="removeItem(sectionIndex, itemIndex)" />
 					</div>
 				</a>
 				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
@@ -87,7 +71,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { useLessonCurriculum } from '@app/composables/organizations/lessons'
 import { useDeleteSchedule } from '@app/composables/organizations/schedules'
@@ -107,19 +90,15 @@ const props = withDefaults(
 		lesson: ClassLesson
 		view: CurriculumView
 		curriculum: ClassLesson['curriculum']
-		isModal?: boolean
 		factory?: LessonCurriculumFactory
 		disableClick?: boolean
 	}>(),
 	{
-		isModal: false,
 		factory: undefined,
-		lesson: undefined,
 		disableClick: false,
 	},
 )
 
-const { id } = useAuth()
 const { curriculum } = useLessonCurriculum(
 	props.classInst,
 	computed(() => props.curriculum),
@@ -136,13 +115,8 @@ const factory = computed(() => {
 	return f
 })
 
-const shouldShowItemImage = (item: ExtendedClassLessonCurriculumSectionItem) => {
-	if (item.type !== ClassLessonable.schedule) return true
-	return !item.schedule.canJoin(props.classInst, id.value)
-}
-
 const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
-	item.type === ClassLessonable.schedule && item.schedule.canJoin(props.classInst, id.value)
+	item.type === ClassLessonable.schedule && item.schedule.live
 
 const addStudyMaterial = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index)) return
@@ -175,14 +149,16 @@ const removeItem = async (sectionIndex: number, itemIndex: number) => {
 	if (!item) return
 	if (item.type === ClassLessonable.file)
 		await deleteFile(item.file).then((deleted) => {
-			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
+			if (deleted) fac.removeItem(itemIndex)
 		})
 	else if (item.type === ClassLessonable.schedule)
 		await deleteSchedule(item.schedule).then((deleted) => {
-			if (deleted) props.factory!.factories[sectionIndex].removeItem(itemIndex)
+			if (deleted) fac.removeItem(itemIndex)
 		})
 	else fac.removeItem(itemIndex)
 }
+removeItem
+
 const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
 	if (props.disableClick) return
 	useModals().organizations.viewCurriculum.open({

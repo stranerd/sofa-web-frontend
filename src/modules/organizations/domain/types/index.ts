@@ -96,6 +96,7 @@ export type ExtendedClassLessonCurriculumSectionItem =
 			icon: IconName
 			title: string
 			info: string
+			color: string
 	  }
 	| {
 			id: string
@@ -106,6 +107,7 @@ export type ExtendedClassLessonCurriculumSectionItem =
 			icon: IconName
 			title: string
 			info: string
+			color: string
 	  }
 	| {
 			id: string
@@ -115,6 +117,7 @@ export type ExtendedClassLessonCurriculumSectionItem =
 			icon: IconName
 			title: string
 			info: string
+			color: string
 	  }
 
 export type ExtendedCurriculum = (Omit<ClassLessonCurriculumSection, 'items'> & { items: ExtendedClassLessonCurriculumSectionItem[] })[]
