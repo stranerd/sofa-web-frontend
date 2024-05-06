@@ -5,7 +5,7 @@
 			<SofaText>/ {{ classInst.title }}</SofaText>
 		</div>
 		<div v-else class="w-full p-4 flex justify-between items-center gap-4 bg-white text-deepGray">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 			<SofaHeading :content="classInst.title" />
 			<span class="w-4" />
 		</div>
@@ -95,8 +95,8 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useMeta } from 'vue-meta'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'

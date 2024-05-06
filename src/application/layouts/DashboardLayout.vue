@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="!$screen.desktop" :hide="{ top: true }">
 		<div class="w-full flex items-center gap-3 justify-between p-4" :class="{ 'bg-white': light }">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 			<SofaHeading :content="title" />
 			<span class="w-4" />
 		</div>
@@ -87,7 +87,7 @@
 					v-if="$screen.desktop && breadcrumbs"
 					class="bg-white text-bodyBlack py-3 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4"
 					:class="{ 'rounded-b-2xl': rounded }">
-					<SofaIcon v-if="!index" class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+					<SofaIcon v-if="!index" class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 					<div class="flex items-center gap-1 shrink-0">
 						<template v-for="(breadcrumb, i) in breadcrumbs" :key="i">
 							<SofaText

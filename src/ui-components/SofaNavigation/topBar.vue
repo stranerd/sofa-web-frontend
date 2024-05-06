@@ -39,7 +39,7 @@
 
 			<div class="hidden mdlg:flex items-center gap-4">
 				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
-					<SofaIcon name="plus-white" />
+					<SofaIcon name="plus" class="fill-white" />
 				</SofaButton>
 				<NotificationIcon v-if="user" />
 				<SofaAvatar :size="36" :photoUrl="user?.picture" as="router-link" to="/settings/profile" />
@@ -50,13 +50,13 @@
 				padding="p-4"
 				class="mdlg:hidden rounded-full fixed bottom-[4rem] right-[1.5rem]"
 				@click="handleShowAddMaterial">
-				<SofaIcon name="plus-white" />
+				<SofaIcon name="plus" class="fill-white" />
 			</SofaButton>
 		</template>
 
 		<template v-if="type == 'sub'">
 			<div class="flex gap-4 items-center">
-				<SofaIcon class="h-[12px]" name="back-arrow" @click="$utils.goBack()" />
+				<SofaIcon class="h-[12px]" name="arrow-left" @click="$utils.goBack()" />
 				<SofaHeaderText class="!font-bold py-4" :content="title" />
 				<div v-if="badges.length" class="flex gap-2 items-center">
 					<SofaBadge v-for="item in badges" :key="item.text" v-bind="item">

@@ -3,7 +3,7 @@
 		<div class="flex w-full items-center gap-2 justify-between">
 			<SofaHeaderText class="!font-bold !text-deepGray" :content="title" />
 			<div class="flex items-center gap-4">
-				<SofaIcon class="h-[16px]" name="back-arrow" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
+				<SofaIcon class="h-[16px]" name="arrow-left" :class="canPrev ? 'fill-black' : 'fill-grayColor'" @click="prev" />
 				<SofaIcon class="h-[16px]" name="arrow-right" :class="canNext ? 'fill-black' : 'fill-grayColor'" @click="next" />
 				<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 			</div>

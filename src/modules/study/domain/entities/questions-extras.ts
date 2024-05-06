@@ -25,8 +25,8 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			},
 			extras: {
 				label: 'Multiple choice',
-				image: 'multiple_choice',
-				icon: 'multiple-choice-type',
+				image: 'multiple-choice',
+				icon: 'question-multiple-choice',
 			},
 		},
 		[QuestionTypes.writeAnswer]: {
@@ -39,8 +39,8 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			},
 			extras: {
 				label: 'Write answer',
-				image: 'write_answer',
-				icon: 'write-answer-type',
+				image: 'write-answer',
+				icon: 'question-write-answer',
 			},
 		},
 		[QuestionTypes.trueOrFalse]: {
@@ -53,8 +53,8 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			},
 			extras: {
 				label: 'True/False',
-				icon: 'true-false-type',
-				image: 'true_false',
+				image: 'true-false',
+				icon: 'question-true-false',
 			},
 		},
 		[QuestionTypes.fillInBlanks]: {
@@ -69,8 +69,8 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			},
 			extras: {
 				label: 'Fill in blank(s)',
-				image: 'fill_in_blank',
-				icon: 'fill-in-blanks-type',
+				image: 'fill-in-blanks',
+				icon: 'question-fill-in-blanks',
 			},
 		},
 		[QuestionTypes.dragAnswers]: {
@@ -85,8 +85,8 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			},
 			extras: {
 				label: 'Drag answers',
-				image: 'drag_answer',
-				icon: 'drag-answers-type',
+				image: 'drag-answers',
+				icon: 'question-drag-answers',
 			},
 		},
 		[QuestionTypes.sequence]: {
@@ -100,7 +100,7 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			extras: {
 				label: 'Sequence',
 				image: 'sequence',
-				icon: 'sequence-type',
+				icon: 'question-sequence',
 			},
 		},
 		[QuestionTypes.match]: {
@@ -119,7 +119,7 @@ export const questionTypes: Record<QuestionTypes, { template: QuestionToModel; e
 			extras: {
 				label: 'Match',
 				image: 'match',
-				icon: 'match-type',
+				icon: 'question-match',
 			},
 		},
 	}

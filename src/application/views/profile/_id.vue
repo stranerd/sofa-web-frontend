@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout v-if="user" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base" :content="user.publicName" />
 			<div />
 		</div>

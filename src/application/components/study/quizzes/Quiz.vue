@@ -62,7 +62,7 @@
 					</SofaButton>
 					<SofaIcon
 						v-else-if="leftButton && isInModal"
-						name="round-arrow-left"
+						name="arrow-left-round"
 						class="h-[40px]"
 						:class="leftButton.disabled ? 'fill-grayColor' : 'fill-black'"
 						@click="leftButton.click" />
@@ -84,7 +84,7 @@
 					</SofaButton>
 					<SofaIcon
 						v-else-if="rightButton && isInModal"
-						name="round-arrow-right"
+						name="arrow-right-round"
 						class="h-[40px]"
 						:class="rightButton.disabled ? 'fill-grayColor' : 'fill-black'"
 						@click="rightButton.click()" />

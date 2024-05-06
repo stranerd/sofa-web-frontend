@@ -18,7 +18,7 @@
 
 		<form class="w-full flex mdlg:hidden flex-col px-4" @submit.prevent="fetchClasses">
 			<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray py-4 sticky top-0 left-0">
-				<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+				<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 				<SofaHeading content="Explore Classes" />
 				<span class="w-4" />
 			</div>

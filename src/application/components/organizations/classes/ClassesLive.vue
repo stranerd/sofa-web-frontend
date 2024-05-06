@@ -35,7 +35,7 @@
 					class="!rounded-full ml-2"
 					padding="p-2"
 					@click="addLive">
-					<SofaIcon name="plus-white" class="h-[12px] fill-current" />
+					<SofaIcon name="plus" class="h-[12px] fill-current" />
 				</SofaButton>
 			</div>
 			<div class="h-[1px] bg-lightGray shrink-0" />

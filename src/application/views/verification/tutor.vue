@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout width="mdlg:!w-[60%] lg:!w-[45%]">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-lightGray p-4 sticky top-0">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base"> Become a tutor</SofaNormalText>
 			<span />
 		</div>

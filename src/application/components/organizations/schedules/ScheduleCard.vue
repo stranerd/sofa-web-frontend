@@ -64,7 +64,7 @@ const actions = computed(() => {
 		b.push({ label: 'Copy stream key', icon: 'copy', color: 'text-primaryBlue', handler: () => copyKey() })
 	if (props.schedule.canEnd(props.classInst, id.value))
 		b.push({ label: 'End', icon: 'forbidden', color: 'text-primaryRed', handler: () => end() })
-	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', icon: 'video-course', color: 'text-primaryBlue', handler: () => rewatch() })
+	if (props.schedule.canWatch()) b.push({ label: 'Rewatch', icon: 'file-video', color: 'text-primaryBlue', handler: () => rewatch() })
 	return b
 })
 </script>

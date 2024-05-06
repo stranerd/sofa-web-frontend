@@ -1,7 +1,7 @@
 <template>
 	<div class="p-4 mdlg:p-6 flex flex-col gap-4 h-full">
 		<div class="flex w-full items-center gap-2 justify-between">
-			<SofaIcon v-if="stage > 1" class="h-[15px]" name="back-arrow" @click="stage--" />
+			<SofaIcon v-if="stage > 1" class="h-[15px]" name="arrow-left" @click="stage--" />
 			<SofaHeading size="title" :content="title" />
 			<SofaIcon v-if="!$screen.desktop" class="h-[16px]" name="circle-close" @click="cancel" />
 			<span v-else class="w-4" />
@@ -66,10 +66,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { ClassEntity, MemberTypes, LessonFactory } from '@modules/organizations'
-import { useOrganizationMembers } from '@app/composables/organizations/members'
 import { useModals } from '@app/composables/core/modals'
+import { useOrganizationMembers } from '@app/composables/organizations/members'
 import { useUsersInList } from '@app/composables/users/users'
+import { ClassEntity, LessonFactory, MemberTypes } from '@modules/organizations'
 
 const props = withDefaults(
 	defineProps<{

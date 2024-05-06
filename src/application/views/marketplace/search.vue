@@ -16,7 +16,7 @@
 		<template #middle-session>
 			<div class="w-full h-full flex flex-col mdlg:gap-5 gap-3 p-4 mdlg:p-0 mdlg:pr-4">
 				<div class="flex gap-3 items-center">
-					<SofaIcon class="h-[15px] mdlg:hidden" name="back-arrow" @click="$utils.goBack()" />
+					<SofaIcon class="h-[15px] mdlg:hidden" name="arrow-left" @click="$utils.goBack()" />
 					<div class="flex mdlg:flex-row-reverse items-center grow bg-white rounded-custom px-3 gap-3">
 						<SofaIcon name="search-black" class="h-[17px]" />
 						<SofaTextField v-model="query" customClass="bg-transparent !px-0 !border-none" placeholder="Search for anything" />

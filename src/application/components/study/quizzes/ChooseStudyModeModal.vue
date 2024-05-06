@@ -58,7 +58,7 @@
 		subTitle="Get the course it is in to use"
 		actionLabel="Go to course"
 		:action="() => $router.push(quiz.noAccessPage)"
-		:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
+		:icon="{ name: 'lock', size: 'h-[28px] fill-white' }" />
 </template>
 
 <script lang="ts" setup>

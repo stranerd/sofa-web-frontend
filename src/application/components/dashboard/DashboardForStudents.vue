@@ -47,7 +47,7 @@
 
 		<div class="w-full mdlg:shadow-custom px-4 mdlg:p-0 mdlg:bg-white rounded-2xl flex flex-col gap-4">
 			<div class="w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-lg bg-primaryPurple">
-				<SofaIcon class="h-[28px]" name="white-search" />
+				<SofaIcon class="h-[28px] fill-white" name="search" />
 				<div class="w-full flex flex-col gap-2 justify-center items-center py-2">
 					<SofaNormalText color="text-white" class="!font-bold" content="Discover more" />
 					<SofaNormalText color="text-white" class="!font-semibold">

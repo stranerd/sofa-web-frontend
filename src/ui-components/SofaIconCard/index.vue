@@ -6,9 +6,9 @@
 				<SofaIcon :customClass="data.iconSize" :name="data.icon" />
 			</div>
 			<div class="w-full flex flex-col">
-				<div class="flex flex-row items-center gap-2">
+				<div class="flex items-center gap-2">
 					<slot name="title" />
-					<SofaIcon v-if="showArrow" customClass="h-[12px]" name="right-arrow" />
+					<SofaIcon v-if="showArrow" class="h-[12px] fill-black" name="arrow-right" />
 				</div>
 				<SofaNormalText customClass="text-left w-full !line-clamp-1">
 					{{ data.subTitle }}

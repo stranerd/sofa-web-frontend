@@ -164,7 +164,7 @@
 					subTitle="Get the course it is in to use"
 					actionLabel="Go to course"
 					:action="openQuiz"
-					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
+					:icon="{ name: 'lock', size: 'h-[28px] fill-white' }" />
 			</template>
 
 			<template v-if="selectedTab === 'ratings'">

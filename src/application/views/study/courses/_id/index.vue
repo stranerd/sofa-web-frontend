@@ -5,7 +5,7 @@
 				v-if="$screen.desktop || !selectedItem"
 				class="col-span-3 w-full p-4 gap-4 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
-				<SofaIcon class="h-[15px] mdlg:hidden self-start" name="back-arrow" @click="$utils.goBack()" />
+				<SofaIcon class="h-[15px] mdlg:hidden self-start" name="arrow-left" @click="$utils.goBack()" />
 				<div class="w-full flex items-center justify-between">
 					<SofaHeaderText class="!font-bold !line-clamp-1" :content="course.title" />
 
@@ -20,7 +20,7 @@
 				v-if="$screen.desktop || selectedItem"
 				class="col-span-9 w-full px-4 pt-4 pb-2 mdlg:pb-4 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
-				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="back-arrow" @click="selectedItem = undefined" />
+				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="arrow-left" @click="selectedItem = undefined" />
 				<div v-if="selectedItem" class="grow overflow-y-auto">
 					<EmbeddedSection v-if="hasAccess(course)" :key="selectedItem.id" :item="selectedItem" :course="course" />
 					<SofaEmptyState
@@ -30,7 +30,7 @@
 						class="h-[380px]"
 						:actionLabel="`${course.price.amount ? 'Buy' : 'Get'} ${course.price.amount ? $utils.formatPrice(course.price.amount, course.price.currency) : 'for free'}`"
 						:action="buyCourse"
-						:icon="{ name: 'lock-white', size: 'h-[28px]' }"
+						:icon="{ name: 'lock', size: 'h-[28px] fill-white' }"
 						titleStyle="mdlg:!text-xl" />
 				</div>
 				<CourseSections
