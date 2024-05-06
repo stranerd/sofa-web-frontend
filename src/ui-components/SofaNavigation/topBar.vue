@@ -6,7 +6,7 @@
 				<SofaAvatar :size="32" :photoUrl="user?.picture" @click="openSideBar" />
 
 				<div class="py-4 flex items-center justify-center">
-					<SofaNormalText v-if="title" class="!font-bold !text-base">{{ title }}</SofaNormalText>
+					<SofaHeading v-if="title" class="!font-bold !text-base" :content="title" />
 					<Logo withoutText class="h-[24px]" />
 				</div>
 
@@ -24,16 +24,15 @@
 					:class="{ '!text-primaryPurple !border-primaryPurple': $utils.tabIsActive(tab.path) }"
 					:to="tab.path">
 					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
-					<SofaNormalText class="font-bold" color="text-current" :content="tab.name" />
+					<SofaHeading :content="tab.name" />
 				</router-link>
 
-				<form class="bg-lightGray w-[30%] py-2 px-4 rounded-3xl flex items-center gap-2" @submit.prevent="initiateSearch">
-					<SofaIcon class="h-[15px]" name="search" />
-					<SofaTextField
-						v-model="searchQuery"
-						customClass="bg-transparent text-bodyBlack w-full focus:outline-none rounded-full"
-						placeholder="Search"
-						padding="px-1" />
+				<form class="w-[30%] py-1" @submit.prevent="initiateSearch">
+					<SofaInput v-model="searchQuery" placeholder="Search" class="!py-2 !rounded-full">
+						<template #prefix>
+							<SofaIcon class="h-[15px]" name="search" />
+						</template>
+					</SofaInput>
 				</form>
 			</div>
 
@@ -57,7 +56,7 @@
 		<template v-if="type == 'sub'">
 			<div class="flex gap-4 items-center">
 				<SofaIcon class="h-[12px]" name="arrow-left" @click="$utils.goBack()" />
-				<SofaHeaderText class="!font-bold py-4" :content="title" />
+				<SofaHeading class="py-4" :content="title" />
 				<div v-if="badges.length" class="flex gap-2 items-center">
 					<SofaBadge v-for="item in badges" :key="item.text" v-bind="item">
 						{{ item.text }}
@@ -73,8 +72,7 @@
 						:class="{ 'border-r border-darkLightGray pr-3': action.bordered }"
 						@click="action.disabled ? undefined : action.handler()">
 						<SofaIcon :name="action.icon" class="fill-deepGray" :class="action.size" />
-
-						<SofaNormalText :content="action.label" />
+						<SofaText :content="action.label" />
 					</a>
 					<SofaButton
 						v-else-if="!('icon' in action)"
@@ -95,13 +93,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SofaAvatar from '../SofaAvatar'
-import SofaBadge from '../SofaBadge'
-import SofaButton from '../SofaButton'
-import { SofaTextField } from '../SofaForm'
-import SofaIcon from '../SofaIcon/index.vue'
-import { SofaHeaderText } from '../SofaTypography'
-import SofaNormalText from '../SofaTypography/normalText.vue'
+import SofaBadge from '../SofaBadge/index.vue'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
