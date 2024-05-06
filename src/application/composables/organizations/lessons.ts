@@ -5,6 +5,7 @@ import { useSuccessHandler } from '../core/states'
 import { useFilesInList } from '../study/files-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useSchedulesInList } from './schedules'
+import { FileType, QuizModes } from '@modules/study'
 import {
 	ClassEntity,
 	ClassLesson,
@@ -14,7 +15,6 @@ import {
 	LessonFactory,
 	LessonsUseCases,
 } from '@modules/organizations'
-import { FileType, QuizModes } from '@modules/study'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -83,10 +83,10 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 								title: file.title,
 								icon:
 									file.type === FileType.document
-										? ('file' as IconName)
+										? ('file-document' as IconName)
 										: file.type === FileType.image
-											? ('image-course' as IconName)
-											: ('video-course' as IconName),
+											? ('file-image' as IconName)
+											: ('file-video' as IconName),
 								info: file.type,
 								color: file.type === FileType.document ? '#3296C8' : file.type === FileType.image ? '#AF19C8' : '#4BAF7D',
 							}
@@ -99,9 +99,9 @@ export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassL
 								quiz,
 								image: quiz.picture,
 								title: quiz.title,
-								icon: item.quizMode === QuizModes.practice ? ('test' as IconName) : ('learn-quiz' as IconName),
+								icon: item.quizMode === QuizModes.practice ? ('quiz-practice' as IconName) : ('quiz-tests' as IconName),
 								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
-								color: item.quizMode === QuizModes.practice ? '#197DFA' : '#6419C8',
+								color: item.quizMode === QuizModes.practice ? '#FF4BC8' : '#6419C8',
 							}
 					}
 					if (item.type === ClassLessonable.schedule) {

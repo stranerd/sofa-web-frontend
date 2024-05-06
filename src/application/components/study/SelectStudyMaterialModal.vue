@@ -57,33 +57,33 @@ const newMaterialOptions = [
 		name: 'Document',
 		type: 'file',
 		extras: { type: FileType.document, accept: 'application/pdf' },
-		icon: 'document-course',
+		icon: 'file-document',
 	},
 	{
 		name: 'Image',
 		type: 'file',
 		extras: { type: FileType.image, accept: 'image/*' },
-		icon: 'image-course',
+		icon: 'file-image',
 	},
 
 	{
 		name: 'Video',
 		type: 'file',
 		extras: { type: FileType.video, accept: 'video/*' },
-		icon: 'video-course',
+		icon: 'file-video',
 	},
 
 	{
 		name: 'Practice',
 		type: 'quiz',
 		extras: { mode: PlayTypes.practice },
-		icon: 'open-notebook',
+		icon: 'quiz-practice',
 	},
 	{
 		name: 'Test',
 		type: 'quiz',
 		extras: { mode: PlayTypes.tests },
-		icon: 'document-text',
+		icon: 'quiz-tests',
 	},
 ] as const
 

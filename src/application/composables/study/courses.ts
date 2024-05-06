@@ -171,10 +171,10 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 								title: file.title,
 								icon:
 									file.type === FileType.document
-										? ('file' as IconName)
+										? ('file-document' as IconName)
 										: file.type === FileType.image
-											? ('image-course' as IconName)
-											: ('video-course' as IconName),
+											? ('file-image' as IconName)
+											: ('file-video' as IconName),
 								info: file.type,
 							}
 					}

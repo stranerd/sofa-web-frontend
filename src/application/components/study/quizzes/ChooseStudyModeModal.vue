@@ -4,56 +4,50 @@
 		class="w-full flex flex-col mdlg:gap-6 gap-4 mdlg:p-6 p-4 items-center justify-center"
 		@submit.prevent="submit">
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden border-lightGray border-b">
-			<SofaNormalText customClass="!font-bold !text-base">
+			<SofaHeading>
 				{{ factory.isGames ? 'Start quiz game' : 'Choose Study Mode' }}
-			</SofaNormalText>
+			</SofaHeading>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 		<template v-if="factory.type && !factory.canAutoStart">
 			<SofaFormGroup>
 				<SofaLabel>Title</SofaLabel>
-				<SofaTextField
-					v-model="factory.title"
-					:error="factory.errors.title"
-					customClass="w-full rounded-custom !bg-lightGray"
-					placeholder="Title"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.title" :error="factory.errors.title" placeholder="Title" />
 			</SofaFormGroup>
 
 			<SofaCheckbox v-if="factory.isGames" v-model="factory.gamesJoin" type="switch" class="w-full justify-between p-4 bg-lightGray">
-				<SofaNormalText content="Participate" />
+				<SofaText content="Participate" />
 			</SofaCheckbox>
 
 			<SofaFormGroup v-if="factory.isAssessments">
 				<SofaLabel>Ends at</SofaLabel>
-				<SofaTextField
+				<SofaInput
 					v-model="factory.assessmentsEndedAtDate"
 					:error="factory.errors.assessmentsEndedAt"
 					:min="factory.minAssessmentsEndedAt"
-					customClass="w-full rounded-custom !bg-lightGray"
 					type="datetime-local"
-					placeholder="Ends at"
-					borderColor="border-transparent" />
+					placeholder="Ends at" />
 			</SofaFormGroup>
 
 			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
 		</template>
 
 		<div v-else class="w-full flex flex-col gap-3">
-			<SofaIconCard
+			<a
 				v-for="item in filteredModes"
 				:key="item.title"
-				:data="{ ...item, iconSize: 'h-[46px]' }"
-				customClass="!bg-lightGray !w-full !shadow-none"
+				class="w-full mdlg:p-4 p-3 flex items-center mdlg:bg-lightGray bg-white gap-3 rounded-custom"
 				@click="chooseMode(item.value)">
-				<template #title>
-					<SofaNormalText customClass="!font-bold">
-						{{ item.title }}
-					</SofaNormalText>
-				</template>
-			</SofaIconCard>
+				<div class="flex size-[46px] items-center justify-center rounded-custom" :style="`background-color: ${item.color};`">
+					<SofaIcon class="w-[20px] fill-white" :name="item.icon" />
+				</div>
+				<div class="w-full flex flex-col">
+					<SofaHeading :content="item.title" />
+					<SofaText clamp :content="item.subTitle" />
+				</div>
+			</a>
 
-			<SofaHeaderText v-if="filteredModes.length === 0" content="No modes supported for this quiz" />
+			<SofaHeading v-if="filteredModes.length === 0" size="mid" content="No modes supported for this quiz" />
 
 			<SofaButton v-if="id === quiz.user.id" class="w-full" padding="p-3" @click="goToEdit"> Edit Quiz </SofaButton>
 		</div>
@@ -105,32 +99,37 @@ const modes = [
 	{
 		title: 'Practice',
 		subTitle: 'Interactive and comfortable learning',
-		icon: 'learn-quiz',
+		icon: 'quiz-practice',
 		value: PlayTypes.practice,
+		color: '#FF4BC8',
 	},
 	{
 		title: 'Test',
 		subTitle: 'Evaluate your level of knowledge',
-		icon: 'test',
+		icon: 'quiz-tests',
 		value: PlayTypes.tests,
+		color: '#6419C8',
 	},
 	{
 		title: 'Flashcards',
 		subTitle: 'Digital cards to memorize answers',
-		icon: 'study-flashcard',
+		icon: 'quiz-flashcards',
 		value: PlayTypes.flashcards,
+		color: '#4BAF7D',
 	},
 	{
 		title: 'Game',
 		subTitle: 'Battle friends for the highest score',
-		icon: 'play-quiz',
+		icon: 'quiz-games',
 		value: PlayTypes.games,
+		color: '#FA9632',
 	},
 	{
 		title: 'Assessment',
 		subTitle: 'Homework/test with a deadline to share to students',
-		icon: 'assessment',
+		icon: 'quiz-assessments',
 		value: PlayTypes.assessments,
+		color: '#3296C8',
 	},
 ] as const
 
