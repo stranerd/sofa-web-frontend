@@ -1,22 +1,31 @@
 <template>
-	<component :is="as" class="w-full p-4 mdlg:px-5 flex flex-col mdlg:flex-row mdlg:items-center gap-2 mdlg:gap-4">
-		<div class="flex items-center gap-2 grow">
-			<SofaImageLoader :photoUrl="image" class="size-[40px] rounded" />
-			<SofaHeading :content="lesson.title" />
+	<component :is="as" class="w-full mdlg:flex-row-reverse p-4 flex items-center gap-4">
+		<div class="flex flex-col gap-2 grow">
+			<SofaHeading :content="lesson.title" size="mid" class="leading-none" />
+			<div class="text-grayColor flex flex-col mdlg:flex-row gap-2 mdlg:gap-4 mdlg:items-center">
+				<SofaText class="gap-2 flex items-center truncate">
+					<SofaIcon name="course-material" class="fill-current h-[20px]" />
+					<span>
+						{{ $utils.formatNumber(lesson.curriculum.length) }}
+						{{ $utils.pluralize(lesson.curriculum.length, 'material', 'materials') }}
+					</span>
+				</SofaText>
+				<SofaText class="gap-2 flex items-center truncate">
+					<SofaIcon name="tutor" class="fill-current h-[20px]" />
+					<span>{{ teachers.map((teacher) => teacher.publicName).join(', ') }}</span>
+				</SofaText>
+				<SofaText class="gap-2 flex items-center truncate">
+					<SofaIcon name="users" class="fill-current h-[20px]" />
+					<span>
+						{{ $utils.formatNumber(lesson.users.students.length) }}
+						{{ $utils.pluralize(lesson.users.students.length, 'student', 'students') }}
+					</span>
+				</SofaText>
+			</div>
 		</div>
-		<template v-if="!hideStats">
-			<SofaText class="text-grayColor mdlg:w-[250px] gap-2 flex items-center truncate">
-				<SofaIcon name="tutor" class="fill-current h-[20px]" />
-				<span>{{ teachers.map((teacher) => teacher.publicName).join(', ') }}</span>
-			</SofaText>
-			<SofaText class="text-grayColor mdlg:w-[120px] gap-2 flex items-center truncate">
-				<SofaIcon name="users" class="fill-current h-[20px]" />
-				<span>
-					{{ $utils.formatNumber(lesson.users.students.length) }}
-					{{ $utils.pluralize(lesson.users.students.length, 'student', 'students') }}
-				</span>
-			</SofaText>
-		</template>
+		<div class="flex flex-col">
+			<SofaImageLoader :photoUrl="image" class="size-[56px] rounded" />
+		</div>
 	</component>
 </template>
 
@@ -32,11 +41,9 @@ const props = withDefaults(
 		classInst: ClassEntity
 		index: number
 		lesson: ClassLesson
-		hideStats?: boolean
 		as?: string
 	}>(),
 	{
-		hideStats: false,
 		as: 'div',
 	},
 )

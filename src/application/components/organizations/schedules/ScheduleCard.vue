@@ -1,27 +1,25 @@
 <template>
-	<div class="flex flex-col bg-lightGray rounded-2xl">
-		<div
-			class="bg-white text-deepGray rounded-xl p-4 flex flex-col gap-2 border border-l-2 border-lightGray"
-			:class="schedule.live ? 'border-l-primaryRed' : 'border-l-primaryOrange'">
-			<SofaText :content="schedule.timeRange" />
-			<span class="flex items-center gap-1">
-				<SofaHeading :content="schedule.title" size="mid" class="leading-none" />
-				<SofaBadge v-if="schedule.live" color="red" class="!py-[2.5px] !px-[5px]">LIVE</SofaBadge>
-			</span>
-			<SofaText v-if="lesson" :content="lesson.title" class="text-grayColor" size="sub" />
-			<div v-if="actions.length" class="flex flex-wrap items-center gap-2">
-				<template v-for="action in actions" :key="action.label">
-					<a v-if="'icon' in action" class="flex items-center gap-1" :class="action.color" @click="action.handler">
-						<SofaIcon :name="action.icon" class="h-[16px] fill-current" />
-						<span>{{ action.label }}</span>
-					</a>
-					<SofaButton v-else :bgColor="action.bg" :textColor="action.color" padding="py-3 px-5" @click="action.handler">
-						{{ action.label }}
-					</SofaButton>
-				</template>
-			</div>
+	<div
+		class="bg-white text-deepGray rounded-2xl p-4 flex flex-col gap-2 border border-l-2 border-lightGray"
+		:class="schedule.live ? 'border-l-primaryRed' : 'border-l-primaryOrange'">
+		<SofaText :content="schedule.timeRange" />
+		<span class="flex items-center gap-1">
+			<SofaHeading :content="schedule.title" size="mid" class="leading-none" />
+			<SofaBadge v-if="schedule.live" color="red" class="!py-[2.5px] !px-[5px]">LIVE</SofaBadge>
+		</span>
+		<SofaText v-if="lesson" :content="lesson.title" class="text-grayColor" size="sub" />
+		<div v-if="actions.length" class="flex flex-wrap items-center gap-2">
+			<template v-for="action in actions" :key="action.label">
+				<a v-if="'icon' in action" class="flex items-center gap-1" :class="action.color" @click="action.handler">
+					<SofaIcon :name="action.icon" class="h-[16px] fill-current" />
+					<span>{{ action.label }}</span>
+				</a>
+				<SofaButton v-else :bgColor="action.bg" :textColor="action.color" padding="py-3 px-5" @click="action.handler">
+					{{ action.label }}
+				</SofaButton>
+			</template>
 		</div>
-		<div class="flex items-center gap-2 rounded-b-2xl p-2 mdlg:p-4">
+		<div class="flex items-center gap-2">
 			<SofaAvatar :photoUrl="schedule.user.bio.photo?.link" :size="36" />
 			<div class="flex flex-col">
 				<SofaHeading :content="id === schedule.user.id ? 'You' : schedule.user.bio.publicName" class="leading-none" />

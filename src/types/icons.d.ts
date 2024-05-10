@@ -38,6 +38,7 @@ declare global {
 		| 'classes'
 		| 'cog'
 		| 'copy'
+		| 'course-material'
 		| 'courses'
 		| 'curriculum'
 		| 'customized-material'

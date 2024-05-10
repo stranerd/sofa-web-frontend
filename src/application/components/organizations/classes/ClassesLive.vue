@@ -1,6 +1,14 @@
 <template>
 	<div class="pt-4 px-4 mdlg:px-0 flex flex-col mdlg:grid grid-cols-4 gap-4 h-full overflow-y-auto">
 		<div class="col-span-3 flex flex-col gap-2 mdlg:gap-0 h-full overflow-y-auto">
+			<SofaButton
+				v-if="!$screen.desktop && user && (classInst.isAdmin(user) || classInst.isTeacher(user))"
+				bgColor="bg-primaryBlue"
+				textColor="text-white"
+				padding="px-6 py-3"
+				@click="addLive">
+				Add live
+			</SofaButton>
 			<div class="flex items-center w-full mdlg:bg-white mdlg:p-4 mdlg:rounded-t-2xl shrink-0">
 				<SofaHeading v-if="selectedDate" size="title" :content="$utils.formatDateAsDigits(selectedDate)" />
 				<template v-else>
@@ -27,15 +35,14 @@
 						...classInst.lessons.map((lesson) => ({ value: lesson.title, key: lesson.id })),
 					]"
 					class="!w-[160px] ml-auto bg-white mdlg:bg-lightGray" />
-
 				<SofaButton
-					v-if="!$screen.desktop && user && (classInst.isAdmin(user) || classInst.isTeacher(user))"
+					v-if="$screen.desktop && user && (classInst.isAdmin(user) || classInst.isTeacher(user))"
 					bgColor="bg-primaryBlue"
 					textColor="text-white"
-					class="!rounded-full ml-2"
-					padding="p-2"
+					class="ml-4"
+					padding="px-6 py-3"
 					@click="addLive">
-					<SofaIcon name="plus" class="h-[12px] fill-current" />
+					Add live
 				</SofaButton>
 			</div>
 			<div class="h-[1px] bg-lightGray shrink-0" />

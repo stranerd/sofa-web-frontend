@@ -4,17 +4,16 @@
 			<SofaHeading content="Add subject" size="title" />
 			<SofaIcon class="mdlg:hidden h-[16px]" name="circle-close" @click="close" />
 		</div>
-		<div class="flex flex-col max-h-full overflow-y-auto border border-lightGray">
-			<SofaCheckbox
+		<div class="flex flex-col gap-4 max-h-full overflow-y-auto">
+			<LessonCard
 				v-for="(lesson, index) in classInst.lessons"
 				:key="lesson.id"
-				v-model="selected"
-				:value="lesson.id"
-				class="pr-4"
-				rotate
-				:class="{ 'bg-lightGray': index % 2 === 0 }">
-				<LessonCard :lesson="lesson" :classInst="classInst" :index="index" hideStats />
-			</SofaCheckbox>
+				:lesson="lesson"
+				:classInst="classInst"
+				:index="index"
+				class="bg-lightGray rounded-2xl"
+				:class="{ 'border border-primaryPurple': selected.includes(lesson.id) }"
+				@click="toggleSelected(lesson.id)" />
 		</div>
 		<div class="flex items-center justify-between mt-auto">
 			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="close">
@@ -43,6 +42,11 @@ const { joinLesson } = useJoinLesson()
 
 const original = props.classInst.lessons.filter((l) => l.users.students.includes(id.value)).map((l) => l.id)
 const selected = ref(original)
+
+const toggleSelected = (id: string) => {
+	if (selected.value.includes(id)) selected.value = selected.value.filter((s) => s !== id)
+	else selected.value = selected.value.concat(id)
+}
 
 const submit = async () => {
 	const saved = await joinLesson(props.classInst, original, selected.value)

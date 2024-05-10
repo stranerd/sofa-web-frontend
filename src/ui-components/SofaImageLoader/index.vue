@@ -31,7 +31,6 @@ const styles = computed(() =>
 		'background-size: cover',
 		'background-repeat: no-repeat',
 		'background-position: center',
-		'max-width: 100%',
 		props.photoUrl ? `background-image: url('${props.photoUrl}')` : '',
 	]
 		.filter(Boolean)
