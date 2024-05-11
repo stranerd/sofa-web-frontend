@@ -4,6 +4,7 @@
 		:title="lesson?.title ?? 'Lesson'"
 		:tabs="!$screen.desktop ? tabs : undefined"
 		:primary="primary"
+		:full="full"
 		:extraCrumbs="[{ text: 'Courses', to: `${classInst?.pageLink}/courses` }]">
 		<template v-if="full && lesson" #full="{ classInst: cls }">
 			<slot name="full" :classInst="cls" :lesson="lesson" />

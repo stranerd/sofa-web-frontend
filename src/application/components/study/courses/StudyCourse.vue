@@ -4,10 +4,10 @@
 			v-if="$screen.desktop || !selectedItem"
 			class="col-span-3 w-full p-4 gap-4 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 			:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
-			<SofaIcon class="h-[15px] mdlg:hidden self-start" name="arrow-left" @click="$utils.goBack()" />
-			<div class="w-full flex items-center justify-between">
-				<SofaHeading :content="title" />
+			<div class="w-full flex items-center justify-between gap-2">
+				<SofaHeading :content="title" size="mid" />
 				<SofaButton v-if="rate && $screen.desktop" padding="px-4 py-1" @click="rate"> Rate </SofaButton>
+				<span v-else class="w-4" />
 			</div>
 			<SofaText v-if="description" :content="description" />
 			<CourseSections v-model:selectedItem="selectedItem" :sections="sections" />
@@ -16,9 +16,9 @@
 			v-if="$screen.desktop || selectedItem"
 			class="col-span-9 w-full px-4 pt-4 pb-2 mdlg:pb-4 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 			:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
-			<div v-if="!$screen.desktop" class="flex items-center justify-between gap-4">
+			<div v-if="!$screen.desktop" class="flex items-center justify-between gap-4 mb-2">
 				<SofaIcon class="h-[15px]" name="arrow-left" @click="selectedItem = null" />
-				<SofaHeading :content="title" />
+				<SofaHeading :content="title" size="mid" />
 				<span class="w-4" />
 			</div>
 			<div v-if="selectedItem" class="grow overflow-y-auto">
