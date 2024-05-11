@@ -1,5 +1,5 @@
 <template>
-	<ClassLayout v-model="classInst" title="Subjects" :primary="showPrimary ? { label: 'Add subject', action: handlePrimary } : undefined">
+	<ClassLayout v-model="classInst" title="Courses" :primary="showPrimary ? { label: 'Add course', action: handlePrimary } : undefined">
 		<template #default="{ classInst: cls, extras }">
 			<div
 				class="p-4 grow max-h-full overflow-y-auto flex flex-col gap-4 mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom"
@@ -7,10 +7,10 @@
 				<EmptyState
 					v-if="!lessons.length"
 					image="lessons"
-					:title="isStudent ? 'Choose your subjects to get started' : 'Getting started with subjects'"
+					:title="isStudent ? 'Choose your courses to get started' : 'Getting started with courses'"
 					class="bg-white"
 					:sub="emptyStateMessage"
-					:primary="isAdmin || isStudent ? { label: 'Add subject', action: handlePrimary } : undefined" />
+					:primary="isAdmin || isStudent ? { label: 'Add course', action: handlePrimary } : undefined" />
 
 				<template v-else>
 					<div v-if="!$screen.desktop" class="flex items-center gap-2">
@@ -25,7 +25,7 @@
 							textColor="text-white"
 							padding="px-5 py-3"
 							@click="handlePrimary">
-							Add Subject
+							Add Course
 						</SofaButton>
 					</div>
 					<LessonCard
@@ -35,7 +35,7 @@
 						:lesson="lesson"
 						:index="index"
 						as="router-link"
-						:to="`${cls.pageLink}/subjects/${lesson.id}`"
+						:to="`${cls.pageLink}/courses/${lesson.id}`"
 						class="bg-white mdlg:bg-lightGray rounded-xl" />
 				</template>
 			</div>
@@ -72,12 +72,12 @@ const showPrimary = computed(() => {
 })
 
 const emptyStateMessage = computed(() => {
-	if (isStudent.value) return 'Select the subjects you want to study in this class'
+	if (isStudent.value) return 'Select the courses you want to study in this class'
 	return [
 		'Comprehensive subject based curriculum',
-		'Assign teachers to manage their specific subjects',
+		'Assign teachers to manage their specific courses',
 		'Contains live teaching sessions and study materials',
-		'Students choose how many subjects to study in a class',
+		'Students choose how many courses to study in a class',
 	]
 })
 

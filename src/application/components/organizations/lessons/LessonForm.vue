@@ -12,8 +12,8 @@
 		<div class="flex flex-col gap-4 grow overflow-y-auto">
 			<template v-if="stage === 1">
 				<SofaFormGroup>
-					<SofaLabel>Subject Title</SofaLabel>
-					<SofaInput v-model="factory.title" type="text" placeholder="Enter subject title" :error="factory.errors.title" />
+					<SofaLabel>Title</SofaLabel>
+					<SofaInput v-model="factory.title" type="text" placeholder="Enter course title" :error="factory.errors.title" />
 				</SofaFormGroup>
 			</template>
 			<template v-if="stage === 2">

@@ -13,7 +13,7 @@
 				<SofaSelect
 					v-model="factory.lessonIds"
 					class="w-full mdlg:w-[180px]"
-					placeholder="Subject"
+					placeholder="Course"
 					multiple
 					selectFirstOnMount
 					:error="factory.errors.lessonIds"

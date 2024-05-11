@@ -105,7 +105,7 @@ const tabs = computed(
 		props.tabs ??
 		([
 			{ title: 'Feed', icon: 'feed', route: getClassPath('feed') },
-			{ title: 'Subjects', icon: 'lessons', route: getClassPath('subjects') },
+			{ title: 'Courses', icon: 'lessons', route: getClassPath('courses') },
 			{ title: 'Live', icon: 'live', route: getClassPath('live') },
 			{ title: `Students (${classInst.value?.members.students.length})`, icon: 'users', route: getClassPath('students') },
 			{ title: `Teachers (${classInst.value?.teachers.length})`, icon: 'tutor', route: getClassPath('teachers') },

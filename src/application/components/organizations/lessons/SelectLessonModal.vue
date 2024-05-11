@@ -1,7 +1,7 @@
 <template>
 	<div class="p-4 flex flex-col gap-4 h-full">
 		<div class="flex w-full items-center gap-2 justify-between mdlg:justify-center">
-			<SofaHeading content="Add subject" size="title" />
+			<SofaHeading content="Add course" size="title" />
 			<SofaIcon class="mdlg:hidden h-[16px]" name="circle-close" @click="close" />
 		</div>
 		<div class="flex flex-col gap-4 max-h-full overflow-y-auto">

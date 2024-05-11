@@ -4,7 +4,7 @@
 		:title="lesson?.title ?? 'Lesson'"
 		:tabs="!$screen.desktop ? tabs : undefined"
 		:primary="primary"
-		:extraCrumbs="[{ text: 'Subjects', to: `${classInst?.pageLink}/subjects` }]">
+		:extraCrumbs="[{ text: 'Courses', to: `${classInst?.pageLink}/courses` }]">
 		<template v-if="full && lesson" #full="{ classInst: cls }">
 			<slot name="full" :classInst="cls" :lesson="lesson" />
 		</template>
@@ -79,9 +79,9 @@ const model = defineModel<ClassLesson | null>({ default: null })
 const classInst = defineModel<ClassEntity | null>('classInst', { default: null })
 
 const route = useRoute()
-const lesson = computed(() => classInst.value?.getLesson(route.params.subjectId as string) ?? null)
+const lesson = computed(() => classInst.value?.getLesson(route.params.courseId as string) ?? null)
 
-const getLessonPath = (path: string) => `${classInst.value?.pageLink}/subjects/${lesson.value?.id}/${path}`
+const getLessonPath = (path: string) => `${classInst.value?.pageLink}/courses/${lesson.value?.id}/${path}`
 
 const tabs = computed(() => [
 	{ title: 'Curriculum', icon: 'curriculum' as const, route: getLessonPath('curriculum') },
@@ -91,12 +91,12 @@ const tabs = computed(() => [
 
 const nextLessonLink = computed(() => {
 	const l = classInst.value?.lessons.find((_, i, arr) => arr.at((i - 1) % arr.length)?.id === lesson.value?.id)
-	return l ? `${classInst.value?.pageLink}/subjects/${l.id}` : undefined
+	return l ? `${classInst.value?.pageLink}/courses/${l.id}` : undefined
 })
 
 const prevLessonLink = computed(() => {
 	const l = classInst.value?.lessons.find((_, i, arr) => arr.at((i + 1) % arr.length)?.id === lesson.value?.id)
-	return l ? `${classInst.value?.pageLink}/subjects/${l.id}` : undefined
+	return l ? `${classInst.value?.pageLink}/courses/${l.id}` : undefined
 })
 
 watch(

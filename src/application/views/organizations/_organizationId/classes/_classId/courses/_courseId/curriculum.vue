@@ -92,6 +92,6 @@ const canEdit = computed(() => {
 
 const edit = async () => {
 	if (!classInst.value || !lesson.value) return
-	await router.push(`${classInst.value}/subjects/${lesson.value.id}/edit`)
+	await router.push(`${classInst.value}/courses/${lesson.value.id}/edit`)
 }
 </script>

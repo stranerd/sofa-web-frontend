@@ -57,7 +57,7 @@
 
 			<div v-if="selectedTab == 'activity'" class="grow overflow-y-auto">
 				<div v-if="classInst.lessons.length" class="flex w-full flex-col">
-					<SofaHeaderText content="Subjects" class="!text-xl" />
+					<SofaHeaderText content="Courses" class="!text-xl" />
 					<div class="flex flex-col gap-4 mt-3">
 						<LessonCard
 							v-for="(lesson, index) in classInst.lessons"

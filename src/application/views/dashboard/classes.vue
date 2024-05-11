@@ -14,8 +14,8 @@
 					image="classes"
 					title="Getting started with classes"
 					:sub="[
-						'Teach all subjects of a class in the same place',
-						'Create subjects for specific subjects',
+						'Teach all courses of a class in the same place',
+						'Create courses for specific subjects',
 						'Make announcements to all student at once',
 						'Set a monthly subscription fee for online students',
 					]"

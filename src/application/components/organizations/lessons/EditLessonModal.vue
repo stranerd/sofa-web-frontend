@@ -1,6 +1,6 @@
 <template>
 	<LessonForm
-		title="Edit subject"
+		title="Edit course"
 		:initialStage="initialStage"
 		:classInst="classInst"
 		:factory="factory"

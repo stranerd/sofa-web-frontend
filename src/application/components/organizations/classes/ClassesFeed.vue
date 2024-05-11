@@ -14,7 +14,7 @@
 				:sub="[
 					'See latest class updates and information',
 					...(classInst.isAdmin(user) || classInst.isTeacher(user)
-						? ['Make announcements to students and teachers', 'Make announcements for a specific subject']
+						? ['Make announcements to students and teachers', 'Make announcements for a specific course']
 						: []),
 				]" />
 

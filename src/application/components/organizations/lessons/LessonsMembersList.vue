@@ -5,11 +5,9 @@
 		<EmptyState
 			v-if="!users.length"
 			:image="isStudent ? 'students' : 'teachers'"
-			:title="isStudent ? 'No students studying this subject' : 'No teachers assigned to this subject'"
+			:title="isStudent ? 'No students studying this course' : 'No teachers assigned to this course'"
 			class="bg-white"
-			:sub="
-				isStudent ? 'Students that enroll in this subject will appear here' : 'Teachers assigned to this subject will appear here'
-			"
+			:sub="isStudent ? 'Students that enroll in this course will appear here' : 'Teachers assigned to this course will appear here'"
 			:primary="!isStudent ? { label: 'Add teacher', action: editLesson } : undefined" />
 
 		<template v-else>

@@ -1,7 +1,7 @@
 <template>
 	<div class="bg-white flex flex-col gap-3 rounded-2xl p-4">
 		<div class="flex items-center gap-2">
-			<SofaBadge color="gray" inverted>Subjects > {{ lessons }}</SofaBadge>
+			<SofaBadge color="gray" inverted>Courses > {{ lessons }}</SofaBadge>
 			<SofaBadge color="gray" inverted>Recipeints > {{ recipients }}</SofaBadge>
 		</div>
 		<SofaText :content="announcement.body" />

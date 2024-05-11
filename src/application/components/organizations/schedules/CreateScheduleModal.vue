@@ -17,7 +17,7 @@
 			placeholder="Session description" />
 		<SofaSelect
 			v-model="factory.lessonId"
-			placeholder="Subject"
+			placeholder="Course"
 			:options="lessons.map((lesson) => ({ value: lesson.title, key: lesson.id }))" />
 		<div class="flex flex-col gap-4 mdlg:flex-row mdlg:items-center justify-between">
 			<SofaInput

@@ -54,7 +54,7 @@
 										lesson.users[isStudent ? 'students' : 'teachers'].includes(user.id),
 									).length,
 								),
-							label: 'Subjects',
+							label: 'Courses',
 							class: 'text-center',
 						},
 						{

@@ -11,9 +11,7 @@
 				<SofaText :content="lessonsIn.map((lesson) => lesson.title).join(' | ')" />
 			</template>
 			<template v-else>
-				<SofaText>
-					{{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'subject', 'subjects') }}
-				</SofaText>
+				<SofaText> {{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'course', 'courses') }} </SofaText>
 				<span class="size-[5px] rounded-full bg-current" />
 				<SofaText>
 					{{ classInst.members.students.length }}

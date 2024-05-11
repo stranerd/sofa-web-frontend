@@ -1,5 +1,5 @@
 <template>
-	<LessonForm title="Create a subject" :classInst="classInst" :factory="factory" :cancel="close" :submit="submit" />
+	<LessonForm title="Create a course" :classInst="classInst" :factory="factory" :cancel="close" :submit="submit" />
 </template>
 
 <script setup lang="ts">
