@@ -60,7 +60,7 @@ import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/stu
 
 const props = defineProps<{
 	course: CourseEntity
-	item?: ExtendedCourseSectionItem
+	item: ExtendedCourseSectionItem | null
 }>()
 
 const quiz = computed(() => (props.item?.type === Coursable.quiz ? props.item.quiz : null))

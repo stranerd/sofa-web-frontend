@@ -149,7 +149,6 @@ declare module 'vue' {
     TransactionsList: typeof import('./../application/components/payment/transactions/TransactionsList.vue')['default']
     UpcomingScheduleCard: typeof import('./../application/components/organizations/schedules/UpcomingScheduleCard.vue')['default']
     UserName: typeof import('./../application/components/core/UserName.vue')['default']
-    ViewCurriculumModal: typeof import('./../application/components/organizations/lessons/ViewCurriculumModal.vue')['default']
     WithdrawModal: typeof import('./../application/components/payment/wallet/WithdrawModal.vue')['default']
   }
 }

@@ -14,13 +14,13 @@
 					</SofaButton>
 				</div>
 				<SofaNormalText :content="course.description" />
-				<CourseSections :course="course" :item="selectedItem" @selectItem="selectItem" />
+				<CourseSections v-model:selectedItem="selectedItem" :sections="sections" />
 			</div>
 			<div
 				v-if="$screen.desktop || selectedItem"
 				class="col-span-9 w-full px-4 pt-4 pb-2 mdlg:pb-4 gap-2 flex flex-col mdlg:shadow-custom bg-white mdlg:rounded-2xl overflow-y-auto"
 				:class="$screen.desktop ? 'h-fit max-h-full' : 'h-full'">
-				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="arrow-left" @click="selectedItem = undefined" />
+				<SofaIcon class="h-[15px] mdlg:hidden self-start mb-2" name="arrow-left" @click="selectedItem = null" />
 				<div v-if="selectedItem" class="grow overflow-y-auto">
 					<EmbeddedSection v-if="hasAccess(course)" :key="selectedItem.id" :item="selectedItem" :course="course" />
 					<SofaEmptyState
@@ -33,13 +33,7 @@
 						:icon="{ name: 'lock', size: 'h-[28px] fill-white' }"
 						titleStyle="mdlg:!text-xl" />
 				</div>
-				<CourseSections
-					v-if="!$screen.desktop"
-					class="shrink-0"
-					:course="course"
-					list
-					:item="selectedItem"
-					@selectItem="selectItem" />
+				<CourseSections v-if="!$screen.desktop" v-model:selectedItem="selectedItem" :sections="sections" class="shrink-0" list />
 			</div>
 		</div>
 
@@ -55,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
@@ -65,7 +59,7 @@ import { useModals } from '@app/composables/core/modals'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
 import { useHasAccess } from '@app/composables/study'
-import { useCourse } from '@app/composables/study/courses'
+import { useCourse, useCourseSections } from '@app/composables/study/courses'
 import { InteractionEntities } from '@modules/interactions'
 import { Purchasables } from '@modules/payment'
 import { ExtendedCourseSectionItem } from '@modules/study'
@@ -80,14 +74,11 @@ export default defineComponent({
 		const route = useRoute()
 		const { id } = useAuth()
 		const { course } = useCourse(route.params.id as string)
-		const selectedItem = ref<ExtendedCourseSectionItem>()
+		const selectedItem = ref<ExtendedCourseSectionItem | null>(null)
 		const { hasAccess } = useHasAccess()
 		const { createView } = useCreateView()
 		const { createPurchase } = useCreatePurchase(route.params.id as string, Purchasables.courses)
-
-		const selectItem = async (item?: ExtendedCourseSectionItem) => {
-			selectedItem.value = item
-		}
+		const { sections } = useCourseSections(computed(() => course.value?.sections ?? []))
 
 		const showRateCourse = () => {
 			if (!course.value) return
@@ -113,9 +104,9 @@ export default defineComponent({
 		return {
 			id,
 			course,
+			sections,
 			selectedItem,
 			hasAccess,
-			selectItem,
 			buyCourse,
 			showRateCourse,
 		}

@@ -5,7 +5,7 @@
 		class="w-full flex flex-col gap-4"
 		handle=".sectionHandle"
 		group="curriculum">
-		<div v-for="(section, sectionIndex) in curriculum" :key="sectionIndex" class="bg-white mdlg:bg-lightGray flex flex-col rounded-xl">
+		<div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="bg-white mdlg:bg-lightGray flex flex-col rounded-xl">
 			<div class="flex items-center gap-2 justify-between p-4">
 				<SofaCustomInput
 					v-if="canEdit && editedLabelSections.has(sectionIndex)"
@@ -41,7 +41,7 @@
 					v-for="(item, itemIndex) in section.items"
 					:key="itemIndex"
 					class="flex flex-col gap-2 border-t border-lightGray mdlg:border-none p-4 bg-white rounded-xl"
-					@click="openCurriculumItem(itemIndex, sectionIndex)">
+					@click="openCurriculumItem(item)">
 					<SofaImageLoader v-if="view === CurriculumView.grid" :photoUrl="item.image" class="w-full aspect-video rounded" />
 					<div class="flex items-center gap-3 w-full">
 						<div
@@ -51,11 +51,7 @@
 						</div>
 						<div class="flex flex-col flex-1">
 							<SofaText :content="item.title" clamp />
-							<SofaText
-								:content="item.info"
-								size="sub"
-								class="capitalize text-grayColor"
-								:style="showLiveBadgeForItem(item) ? `color: ${item.color};` : undefined" />
+							<SofaText :content="item.info" size="sub" class="capitalize text-grayColor" />
 						</div>
 					</div>
 				</a>
@@ -72,17 +68,10 @@
 import { computed, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useModals } from '@app/composables/core/modals'
-import { useLessonCurriculum } from '@app/composables/organizations/lessons'
-import { useDeleteSchedule } from '@app/composables/organizations/schedules'
+import { useCourseSections } from '@app/composables/study/courses'
 import { useDeleteFile } from '@app/composables/study/files'
-import {
-	ClassEntity,
-	ClassLesson,
-	ClassLessonable,
-	CurriculumView,
-	ExtendedClassLessonCurriculumSectionItem,
-	LessonCurriculumFactory,
-} from '@modules/organizations'
+import { ClassEntity, ClassLesson, CurriculumView, LessonCurriculumFactory } from '@modules/organizations'
+import { Coursable, ExtendedCourseSectionItem } from '@modules/study'
 
 const props = withDefaults(
 	defineProps<{
@@ -99,12 +88,8 @@ const props = withDefaults(
 	},
 )
 
-const { curriculum } = useLessonCurriculum(
-	props.classInst,
-	computed(() => props.curriculum),
-)
+const { sections } = useCourseSections(computed(() => props.curriculum))
 const { deleteFile } = useDeleteFile()
-const { deleteSchedule } = useDeleteSchedule()
 
 const canEdit = computed(() => props.factory !== undefined)
 
@@ -114,9 +99,6 @@ const factory = computed(() => {
 	f.loadEntity(props.curriculum)
 	return f
 })
-
-const showLiveBadgeForItem = (item: ExtendedClassLessonCurriculumSectionItem) =>
-	item.type === ClassLessonable.schedule && item.schedule.live
 
 const addStudyMaterial = (index: number) => {
 	if (!props.factory || !props.factory.factories.at(index)) return
@@ -142,31 +124,19 @@ function closeLabelSection(index: number) {
 	if (editedLabelSections.value.has(index)) editedLabelSections.value.delete(index)
 }
 
-const removeItem = async (sectionIndex: number, itemIndex: number) => {
-	if (!props.factory || !props.factory.factories.at(sectionIndex)) return
-	const fac = props.factory.factories[sectionIndex]
-	const item = curriculum.value.at(sectionIndex)?.items.at(itemIndex)
-	if (!item) return
-	if (item.type === ClassLessonable.file)
+const removeItem = async (item: ExtendedCourseSectionItem) => {
+	if (!props.factory || !props.factory.factories.at(item.sectionIndex)) return
+	const fac = props.factory.factories[item.sectionIndex]
+	if (item.type === Coursable.file)
 		await deleteFile(item.file).then((deleted) => {
-			if (deleted) fac.removeItem(itemIndex)
+			if (deleted) fac.removeItem(item.itemIndex)
 		})
-	else if (item.type === ClassLessonable.schedule)
-		await deleteSchedule(item.schedule).then((deleted) => {
-			if (deleted) fac.removeItem(itemIndex)
-		})
-	else fac.removeItem(itemIndex)
+	else fac.removeItem(item.itemIndex)
 }
 removeItem
 
-const openCurriculumItem = (itemIndex: number, sectionIndex: number) => {
+const openCurriculumItem = (item: ExtendedCourseSectionItem) => {
 	if (props.disableClick) return
-	useModals().organizations.viewCurriculum.open({
-		classInst: props.classInst,
-		lesson: props.lesson,
-		curriculum: curriculum.value,
-		itemIndex,
-		sectionIndex,
-	})
+	console.log(item)
 }
 </script>

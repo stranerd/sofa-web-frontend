@@ -15,6 +15,7 @@ import {
 	CoursesUseCases,
 	ExtendedCourseSections,
 	FileType,
+	QuizModes,
 } from '@modules/study'
 
 const store = {} as Record<
@@ -159,9 +160,9 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 	const { files } = useFilesInList(fileIds)
 
 	const sections = computed<ExtendedCourseSections>(() =>
-		sects.value.map((c) => {
+		sects.value.map((c, sectionIndex) => {
 			const items = c.items
-				.map((item) => {
+				.map((item, itemIndex) => {
 					if (item.type === Coursable.file) {
 						const file = files.value.find((f) => f.id === item.id)
 						if (file)
@@ -169,6 +170,7 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 								...item,
 								file,
 								title: file.title,
+								image: file.picture,
 								icon:
 									file.type === FileType.document
 										? ('file-document' as IconName)
@@ -176,6 +178,9 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 											? ('file-image' as IconName)
 											: ('file-video' as IconName),
 								info: file.type,
+								color: file.type === FileType.document ? '#3296C8' : file.type === FileType.image ? '#AF19C8' : '#4BAF7D',
+								sectionIndex,
+								itemIndex,
 							}
 					}
 					if (item.type === Coursable.quiz) {
@@ -185,8 +190,12 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 								...item,
 								quiz,
 								title: quiz.title,
-								icon: 'quiz' as IconName,
+								image: quiz.picture,
+								icon: item.quizMode === QuizModes.practice ? ('quiz-practice' as IconName) : ('quiz-tests' as IconName),
 								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
+								color: item.quizMode === QuizModes.practice ? '#FF4BC8' : '#6419C8',
+								sectionIndex,
+								itemIndex,
 							}
 					}
 				})
@@ -217,13 +226,13 @@ export const useUpdateSections = (course: Refable<CourseEntity | null>) => {
 	})
 
 	const factories = computed(() => factory.factories)
-	const { sections: extendedSections } = useCourseSections(factories)
+	const { sections } = useCourseSections(factories)
 
 	return {
 		factory,
 		loading,
 		error,
-		extendedSections,
+		sections,
 		updateSections,
 	}
 }

@@ -31,7 +31,7 @@ import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
 
 defineProps<{
 	course: CourseEntity
-	item?: ExtendedCourseSectionItem
+	item: ExtendedCourseSectionItem | null
 }>()
 
 const showAnswers = ref(true)

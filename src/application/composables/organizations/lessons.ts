@@ -2,19 +2,8 @@ import { computed, watch } from 'vue'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
-import { useFilesInList } from '../study/files-list'
-import { useQuizzesInList } from '../study/quizzes-list'
-import { useSchedulesInList } from './schedules'
-import { FileType, QuizModes } from '@modules/study'
-import {
-	ClassEntity,
-	ClassLesson,
-	ClassLessonable,
-	ExtendedCurriculum,
-	LessonCurriculumFactory,
-	LessonFactory,
-	LessonsUseCases,
-} from '@modules/organizations'
+import { useCourseSections } from '../study/courses'
+import { ClassEntity, ClassLesson, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()
@@ -54,77 +43,6 @@ export const useUpdateLesson = (classInst: ClassEntity, lesson: ClassLesson) => 
 	return { error, loading, factory, updateLesson }
 }
 
-export const useLessonCurriculum = (classInst: ClassEntity, curr: Refable<ClassLesson['curriculum']>) => {
-	const quizIds = computed(() =>
-		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.quiz).map((item) => item.id)),
-	)
-	const fileIds = computed(() =>
-		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.file).map((item) => item.id)),
-	)
-	const scheduleIds = computed(() =>
-		curr.value.flatMap((c) => c.items.filter((item) => item.type === ClassLessonable.schedule).map((item) => item.id)),
-	)
-
-	const { quizzes } = useQuizzesInList(quizIds)
-	const { files } = useFilesInList(fileIds)
-	const { schedules } = useSchedulesInList(classInst.organizationId, classInst.id, scheduleIds)
-
-	const curriculum = computed<ExtendedCurriculum>(() =>
-		curr.value.map((c) => {
-			const items = c.items
-				.map((item) => {
-					if (item.type === ClassLessonable.file) {
-						const file = files.value.find((f) => f.id === item.id)
-						if (file)
-							return {
-								...item,
-								file,
-								image: file.picture,
-								title: file.title,
-								icon:
-									file.type === FileType.document
-										? ('file-document' as IconName)
-										: file.type === FileType.image
-											? ('file-image' as IconName)
-											: ('file-video' as IconName),
-								info: file.type,
-								color: file.type === FileType.document ? '#3296C8' : file.type === FileType.image ? '#AF19C8' : '#4BAF7D',
-							}
-					}
-					if (item.type === ClassLessonable.quiz) {
-						const quiz = quizzes.value.find((q) => q.id === item.id)
-						if (quiz)
-							return {
-								...item,
-								quiz,
-								image: quiz.picture,
-								title: quiz.title,
-								icon: item.quizMode === QuizModes.practice ? ('quiz-practice' as IconName) : ('quiz-tests' as IconName),
-								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
-								color: item.quizMode === QuizModes.practice ? '#FF4BC8' : '#6419C8',
-							}
-					}
-					if (item.type === ClassLessonable.schedule) {
-						const schedule = schedules.value.find((s) => s.id === item.id)
-						if (schedule)
-							return {
-								...item,
-								schedule,
-								image: '/images/default.svg',
-								title: schedule.title,
-								icon: 'translation' as IconName,
-								info: schedule.timeRange,
-								color: schedule.live ? '#F55F5F' : '#FA9632',
-							}
-					}
-				})
-				.filter(Boolean)
-			return { label: c.label, items }
-		}),
-	)
-	return { quizzes, files, schedules, curriculum }
-}
-
 export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<ClassLesson | undefined>) => {
 	const factory = new LessonCurriculumFactory()
 	const { setMessage } = useSuccessHandler()
@@ -147,16 +65,13 @@ export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<Clas
 		return true
 	})
 
-	const { curriculum: extendedCurriculum } = useLessonCurriculum(
-		classInst,
-		computed(() => factory.factories),
-	)
+	const { sections } = useCourseSections(computed(() => factory.factories))
 
 	return {
 		factory,
 		loading,
 		error,
-		extendedCurriculum,
+		sections,
 		updateCurriculum,
 	}
 }
