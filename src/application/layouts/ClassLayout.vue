@@ -1,6 +1,7 @@
 <template>
 	<slot v-if="!classInst" name="notfound" />
 	<ExploreClassView v-else-if="!user || !classInst.isEnrolled(user)" :classInst="classInst" />
+	<slot v-else-if="full" name="full" :classInst="classInst" />
 	<DashboardLayout
 		v-else
 		:title="classInst.title"
@@ -73,12 +74,14 @@ const props = withDefaults(
 		extraCrumbs?: InstanceType<typeof DashboardLayout>['$props']['breadcrumbs']
 		primary?: InstanceType<typeof DashboardLayout>['$props']['primary']
 		tabs?: { title: string; icon: IconName; route: string }[]
+		full?: boolean
 	}>(),
 	{
 		rounded: undefined,
 		extraCrumbs: () => [],
 		primary: undefined,
 		tabs: undefined,
+		full: false,
 	},
 )
 

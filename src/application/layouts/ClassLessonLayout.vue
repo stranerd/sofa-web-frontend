@@ -5,6 +5,9 @@
 		:tabs="!$screen.desktop ? tabs : undefined"
 		:primary="primary"
 		:extraCrumbs="[{ text: 'Subjects', to: `${classInst?.pageLink}/subjects` }]">
+		<template v-if="full && lesson" #full="{ classInst: cls }">
+			<slot name="full" :classInst="cls" :lesson="lesson" />
+		</template>
 		<template v-if="lesson && !$screen.desktop" #pre-tabs>
 			<div class="bg-white flex justify-between items-center gap-2 px-4 py-3 w-full border-y border-lightGray">
 				<SofaIcon
@@ -49,9 +52,8 @@
 				<slot name="post-tabs" />
 			</div>
 		</template>
-		<template #default="{ classInst: cls, extras }">
-			<slot v-if="!lesson" name="notfound" />
-			<slot v-else :classInst="cls" :lesson="lesson" :extras="extras" />
+		<template v-if="lesson" #default="{ classInst: cls, extras }">
+			<slot :classInst="cls" :lesson="lesson" :extras="extras" />
 		</template>
 	</ClassLayout>
 </template>
@@ -62,7 +64,16 @@ import { useRoute } from 'vue-router'
 import ClassLayout from './ClassLayout.vue'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
 
-defineProps<{ primary?: InstanceType<typeof ClassLayout>['$props']['primary'] }>()
+withDefaults(
+	defineProps<{
+		primary?: InstanceType<typeof ClassLayout>['$props']['primary']
+		full?: boolean
+	}>(),
+	{
+		primary: undefined,
+		full: false,
+	},
+)
 
 const model = defineModel<ClassLesson | null>({ default: null })
 const classInst = defineModel<ClassEntity | null>('classInst', { default: null })
