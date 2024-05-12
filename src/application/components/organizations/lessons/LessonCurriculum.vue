@@ -1,14 +1,14 @@
 <template>
 	<VueDraggable
 		v-model="factory.factories"
-		:disabled="!canEdit"
+		:disabled="!edit"
 		class="w-full flex flex-col gap-4"
 		handle=".sectionHandle"
 		group="curriculum">
-		<div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="bg-white mdlg:bg-lightGray flex flex-col rounded-xl">
-			<div class="flex items-center gap-2 justify-between p-4">
+		<div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="bg-white flex flex-col rounded-xl">
+			<div class="border-b-2 border-lightGray flex items-center gap-2 justify-between p-4">
 				<SofaCustomInput
-					v-if="canEdit && editedLabelSections.has(sectionIndex)"
+					v-if="edit && editedLabelSections.has(sectionIndex)"
 					v-model="factory.factories[sectionIndex].label"
 					class="grow !px-0"
 					:autoFocus="true"
@@ -16,13 +16,9 @@
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
 				<SofaHeading v-else class="grow truncate" :content="section.label" />
-				<SofaIcon
-					v-if="canEdit"
-					class="h-[16px] fill-grayColor"
-					name="edit"
-					@click.stop.prevent="toggleLabelSection(sectionIndex)" />
-				<SofaIcon v-if="canEdit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
-				<SofaIcon v-if="canEdit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
+				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="edit" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+				<SofaIcon v-if="edit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
+				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
 				<SofaIcon
 					class="h-[8px]"
 					name="chevron-down"
@@ -32,16 +28,17 @@
 			<VueDraggable
 				v-if="expandedSections.has(sectionIndex)"
 				v-model="factory.factories[sectionIndex].items"
-				class="mdlg:gap-4 grid grid-cols-1 mdlg:px-4 mdlg:pb-4"
+				class="grid grid-cols-1"
 				:class="view === CurriculumView.grid ? 'md:grid-cols-2 mdlg:grid-cols-4' : ''"
-				:disabled="!canEdit"
+				:disabled="!edit"
 				handle=".itemHandle"
 				:group="`sectionItems-${sectionIndex}`">
 				<a
 					v-for="(item, itemIndex) in section.items"
 					:key="itemIndex"
-					class="flex flex-col gap-2 border-t border-lightGray mdlg:border-none p-4 bg-white rounded-xl"
-					@click="openCurriculumItem(item)">
+					class="flex flex-col gap-2 p-4 border-b-2 border-lightGray"
+					:class="view === CurriculumView.grid ? 'md:border-none' : ''"
+					@click="onClickItem(item)">
 					<SofaImageLoader v-if="view === CurriculumView.grid" :photoUrl="item.image" class="w-full aspect-video rounded" />
 					<div class="flex items-center gap-3 w-full">
 						<div
@@ -55,12 +52,24 @@
 						</div>
 					</div>
 				</a>
-				<a v-if="canEdit" class="flex items-center gap-2" @click.stop.prevent="addStudyMaterial(sectionIndex)">
-					<SofaIcon name="add" class="h-[16px] fill-primaryPink" />
-					<SofaNormalText color="text-primaryPink" content="Add study material" />
-				</a>
 			</VueDraggable>
+			<a
+				v-if="edit && expandedSections.has(sectionIndex)"
+				class="flex items-center gap-2 p-4 text-primaryPink"
+				@click.stop.prevent="addStudyMaterial(sectionIndex)">
+				<SofaIcon name="add" class="h-[16px] fill-current" />
+				<SofaText content="Add study material" />
+			</a>
 		</div>
+		<SofaButton
+			bgColor="bg-primaryPurple"
+			textColor="text-white"
+			padding="px-6 py-3"
+			class="flex items-center gap-2"
+			@click="factory.add()">
+			<SofaIcon name="add" class="h-[16px] fill-current" />
+			<span>Add section</span>
+		</SofaButton>
 	</VueDraggable>
 </template>
 
@@ -80,19 +89,18 @@ const props = withDefaults(
 		view: CurriculumView
 		curriculum: ClassLesson['curriculum']
 		factory?: LessonCurriculumFactory
-		disableClick?: boolean
+		onClick?: (item: ExtendedCourseSectionItem) => void
 	}>(),
 	{
 		factory: undefined,
-		disableClick: false,
+		onClick: undefined,
 	},
 )
 
 const { sections } = useCourseSections(computed(() => props.curriculum))
 const { deleteFile } = useDeleteFile()
 
-const canEdit = computed(() => props.factory !== undefined)
-
+const edit = computed(() => !!props.factory)
 const factory = computed(() => {
 	if (props.factory) return props.factory
 	const f = new LessonCurriculumFactory()
@@ -135,8 +143,7 @@ const removeItem = async (item: ExtendedCourseSectionItem) => {
 }
 removeItem
 
-const openCurriculumItem = (item: ExtendedCourseSectionItem) => {
-	if (props.disableClick) return
-	console.log(item)
+const onClickItem = (item: ExtendedCourseSectionItem) => {
+	props.onClick?.(item)
 }
 </script>

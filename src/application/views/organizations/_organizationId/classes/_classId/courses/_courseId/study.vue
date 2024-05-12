@@ -1,5 +1,5 @@
 <template>
-	<ClassLessonLayout v-model="lesson" full>
+	<ClassLessonLayout v-model="lesson" title="Study" full>
 		<template #full="{ lesson: ls, classInst: cls }">
 			<ExpandedLayout layoutStyle="mdlg:p-5" :hide="{ bottom: true }">
 				<StudyCourse

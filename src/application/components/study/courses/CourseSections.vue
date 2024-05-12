@@ -17,22 +17,11 @@
 			</template>
 		</template>
 	</div>
-	<VueDraggable
-		v-else
-		:modelValue="factory?.factories ?? []"
-		:disabled="!factory"
-		class="flex flex-col gap-4"
-		handle=".sectionHandle"
-		group="sections"
-		@update:modelValue="
-			(values) => {
-				if (factory) factory.factories = values
-			}
-		">
+	<VueDraggable v-else v-model="factory.factories" :disabled="!edit" class="flex flex-col gap-4" handle=".sectionHandle" group="sections">
 		<div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="flex flex-col gap-4">
 			<div class="flex items-center gap-2 justify-between">
 				<SofaCustomInput
-					v-if="factory && editedLabelSections.has(sectionIndex)"
+					v-if="edit && editedLabelSections.has(sectionIndex)"
 					v-model="factory.factories[sectionIndex].label"
 					class="grow !px-0"
 					:autoFocus="true"
@@ -40,13 +29,9 @@
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
 				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
-				<SofaIcon
-					v-if="factory"
-					class="h-[16px] fill-grayColor"
-					name="edit"
-					@click.stop.prevent="toggleLabelSection(sectionIndex)" />
-				<SofaIcon v-if="factory" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
-				<SofaIcon v-if="factory" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
+				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="edit" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
+				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
+				<SofaIcon v-if="edit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
 				<SofaIcon
 					class="h-[8px]"
 					name="chevron-down"
@@ -55,16 +40,11 @@
 			</div>
 			<VueDraggable
 				v-if="expandedSections.has(sectionIndex)"
-				:modelValue="factory?.factories[sectionIndex].items ?? []"
-				:disabled="!factory"
+				v-model="factory.factories[sectionIndex].items"
+				:disabled="!edit"
 				class="flex flex-col gap-2"
 				handle=".itemHandle"
-				:group="`sectionItems-${sectionIndex}`"
-				@update:modelValue="
-					(values) => {
-						if (factory && factory.factories[sectionIndex]) factory.factories[sectionIndex].items = values
-					}
-				">
+				:group="`sectionItems-${sectionIndex}`">
 				<a
 					v-for="(listItem, itemIndex) in section.items"
 					:id="getItemId(listItem)"
@@ -74,20 +54,17 @@
 					@click="onClickItem(listItem)">
 					<SofaIcon :name="listItem.icon" class="h-[16px] fill-deepGray" />
 					<SofaNormalText color="text-deepGray" :content="listItem.title" class="truncate flex-1" />
-					<SofaIcon v-if="factory" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="removeItem(listItem)" />
-					<SofaIcon v-if="factory" class="h-[20px] itemHandle fill-grayColor" name="reorder" />
+					<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="removeItem(listItem)" />
+					<SofaIcon v-if="edit" class="h-[20px] itemHandle fill-grayColor" name="reorder" />
 				</a>
-				<a
-					v-if="factory"
-					class="flex items-center gap-2 p-2 text-primaryPurple"
-					@click.stop.prevent="addStudyMaterial(sectionIndex)">
+				<a v-if="edit" class="flex items-center gap-2 p-2 text-primaryPurple" @click.stop.prevent="addStudyMaterial(sectionIndex)">
 					<SofaIcon name="add" class="h-[16px] fill-current" />
 					<SofaNormalText color="text-current" content="Add study material" />
 				</a>
-				<div v-if="factory && sectionIndex < factory.factories.length - 1" class="h-0.5 w-full bg-lightGray" />
+				<div v-if="edit && sectionIndex < factory.factories.length - 1" class="h-0.5 w-full bg-lightGray" />
 			</VueDraggable>
 		</div>
-		<a v-if="factory" class="flex items-center gap-2 px-2 text-primaryPink" @click.stop.prevent="factory.add()">
+		<a v-if="edit" class="flex items-center gap-2 px-2 text-primaryPink" @click.stop.prevent="factory.add()">
 			<SofaIcon name="add" class="h-[16px] fill-current" />
 			<SofaNormalText color="text-current" content="Add section" />
 		</a>
@@ -95,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useModals } from '@app/composables/core/modals'
 import { useDeleteFile } from '@app/composables/study/files'
@@ -110,6 +87,14 @@ const props = defineProps<{
 const selectedItem = defineModel<ExtendedCourseSectionItem | null>('selectedItem', { default: null })
 
 const { deleteFile } = useDeleteFile()
+
+const edit = computed(() => !!props.factory)
+const factory = computed(() => {
+	if (props.factory) return props.factory
+	const f = new CourseSectionsFactory()
+	f.loadEntity(props.sections)
+	return f
+})
 
 const addStudyMaterial = (index: number) => {
 	if (!props.factory?.factories.at(index)) return

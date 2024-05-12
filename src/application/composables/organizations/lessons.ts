@@ -1,8 +1,7 @@
-import { computed, watch } from 'vue'
+import { watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
-import { useSuccessHandler } from '../core/states'
-import { useCourseSections } from '../study/courses'
 import { ClassEntity, ClassLesson, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
@@ -43,9 +42,9 @@ export const useUpdateLesson = (classInst: ClassEntity, lesson: ClassLesson) => 
 	return { error, loading, factory, updateLesson }
 }
 
-export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<ClassLesson | undefined>) => {
+export const useUpdateCurriculum = (lesson: Refable<ClassLesson | null>) => {
 	const factory = new LessonCurriculumFactory()
-	const { setMessage } = useSuccessHandler()
+	const router = useRouter()
 	if (lesson.value) factory.loadEntity(lesson.value.curriculum)
 
 	watch(lesson, (lesson) => {
@@ -56,22 +55,19 @@ export const useUpdateCurriculum = (classInst: ClassEntity, lesson: Refable<Clas
 		asyncFn: updateCurriculum,
 		loading,
 		error,
-	} = useAsyncFn(async () => {
+	} = useAsyncFn(async (classInst: ClassEntity) => {
 		if (!lesson.value) return false
 		const updatedClass = await LessonsUseCases.updateCurriculum(classInst.organizationId, classInst.id, lesson.value.id, factory)
 		const updatedLesson = updatedClass.getLesson(lesson.value.id)
 		factory.loadEntity(updatedLesson?.curriculum ?? [])
-		await setMessage('Curriculum updated successfully!')
+		await router.push(`${updatedClass.pageLink}/courses/${updatedLesson?.id}`)
 		return true
 	})
-
-	const { sections } = useCourseSections(computed(() => factory.factories))
 
 	return {
 		factory,
 		loading,
 		error,
-		sections,
 		updateCurriculum,
 	}
 }

@@ -2,6 +2,7 @@
 	<ClassLessonLayout
 		v-model="lesson"
 		v-model:classInst="classInst"
+		title="Teachers"
 		:primary="user && classInst?.isAdmin(user) ? { label: 'Add teacher', action: editLesson } : undefined">
 		<template #default="{ classInst: cls, lesson: ls, extras }">
 			<LessonsMembersList v-model:searchQuery="extras.searchQuery" :classInst="cls" :lesson="ls" type="teachers" />

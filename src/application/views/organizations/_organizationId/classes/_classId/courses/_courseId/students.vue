@@ -1,5 +1,5 @@
 <template>
-	<ClassLessonLayout>
+	<ClassLessonLayout title="Students">
 		<template #default="{ classInst, lesson, extras }">
 			<LessonsMembersList v-model:searchQuery="extras.searchQuery" :classInst="classInst" :lesson="lesson" type="students" />
 		</template>

@@ -4,7 +4,7 @@
 	<slot v-else-if="full" name="full" :classInst="classInst" />
 	<DashboardLayout
 		v-else
-		:title="classInst.title"
+		:title="pageTitle ?? classInst.title"
 		:breadcrumbs="[
 			{ text: 'Home', to: '/dashboard' },
 			{ text: classInst.title, to: classInst.pageLink },
@@ -70,6 +70,7 @@ import { ClassEntity } from '@modules/organizations'
 const props = withDefaults(
 	defineProps<{
 		title: string
+		pageTitle?: string
 		rounded?: boolean
 		extraCrumbs?: InstanceType<typeof DashboardLayout>['$props']['breadcrumbs']
 		primary?: InstanceType<typeof DashboardLayout>['$props']['primary']
@@ -77,6 +78,7 @@ const props = withDefaults(
 		full?: boolean
 	}>(),
 	{
+		pageTitle: undefined,
 		rounded: undefined,
 		extraCrumbs: () => [],
 		primary: undefined,
@@ -92,10 +94,9 @@ const route = useRoute()
 const { class: classInst } = useClass(route.params.organizationId as string, route.params.classId as string)
 const { user } = useAuth()
 
-const pageTitle = computed(() => classInst.value?.title ?? 'Class')
 useMeta(
 	computed(() => ({
-		title: pageTitle.value,
+		title: classInst.value?.title ?? 'Class',
 	})),
 )
 

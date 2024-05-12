@@ -35,7 +35,7 @@
 						:lesson="lesson"
 						:index="index"
 						as="router-link"
-						:to="`${cls.pageLink}/courses/${lesson.id}/study`"
+						:to="`${cls.pageLink}/courses/${lesson.id}/`"
 						class="bg-white mdlg:bg-lightGray rounded-xl" />
 				</template>
 			</div>
