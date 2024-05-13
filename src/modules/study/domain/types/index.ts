@@ -87,12 +87,6 @@ export type CoursableAccess = {
 		| {
 				courseId: string
 		  }
-		| {
-				testId: string
-		  }
-		| {
-				gameId: string
-		  }
 		| Record<string, any>
 }
 
