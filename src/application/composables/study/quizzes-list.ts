@@ -136,10 +136,8 @@ export const useTutorQuizzes = () => {
 	return { ...tutorStore, loading, error }
 }
 
-export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
+export const useQuizzesInList = (ids: Refable<string[]>, listen = true) => {
 	const allQuizzes = computed(() => [...store.quizzes.value, ...tutorStore.quizzes.value])
-
-	const { items: quizzes, addToList } = useItemsInList('quizzes', ids, allQuizzes, (ids) => QuizzesUseCases.getInList(ids))
 
 	const listener = useListener(
 		async () =>
@@ -152,13 +150,13 @@ export const useQuizzesInList = (ids: Refable<string[]>, listen = false) => {
 			}),
 	)
 
-	onMounted(() => {
-		if (listen) listener.start()
-	})
-
-	onUnmounted(() => {
-		if (listen) listener.close()
-	})
+	const { items: quizzes, addToList } = useItemsInList(
+		'quizzes',
+		ids,
+		allQuizzes,
+		(ids) => QuizzesUseCases.getInList(ids),
+		listen ? listener : undefined,
+	)
 
 	return { quizzes }
 }

@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import { copyToClipboard, ordinalSuffixOf, share } from '../commons'
 import * as constants from '../constants'
-import { formatTime } from '../dates'
+import { formatDateAsDigits, formatTime, getDigitalTime } from '../dates'
 import * as environment from '../environment'
 import { storage } from '../storage'
 
@@ -13,12 +13,19 @@ export default class Utils {
 	#redirectToName = 'redirect-to'
 	#debounces: Record<string, ReturnType<typeof setTimeout>> = {}
 
+	get router() {
+		return this.#router!
+	}
+
 	constants = constants
 	environment = environment
+	getDigitalTime = getDigitalTime
+	formatDateAsDigits = formatDateAsDigits
 	formatTime = formatTime
 	formatNumber = formatNumber
 	pluralize = pluralize
 	ordinalSuffixOf = ordinalSuffixOf
+	getRandomValue = getRandomValue
 
 	async getRedirectToRoute() {
 		const value = await storage.get<string>(this.#redirectToName)
@@ -28,12 +35,6 @@ export default class Utils {
 
 	async setRedirectToRoute(value: string) {
 		await storage.set(this.#redirectToName, value)
-	}
-
-	prettifyTime = (seconds: number) => {
-		const min = Math.floor(seconds / 60)
-		const sec = seconds % 60
-		return `${min > 0 ? `${min}m` : ''}${sec > 0 ? `${sec}s` : ''}`
 	}
 
 	public setRouter = (router: Router) => {
@@ -135,12 +136,22 @@ export default class Utils {
 	}
 
 	public async share(title: string, text: string, url = window.location.href) {
-		const result = share({ title, text, url })
+		const result = await share({ title, text, url })
 		if (!result) this.copy(url, 'Link copied to clipboard!')
 	}
 
 	public async copy(text: string, message = 'Copied!', type: LoaderSetup['alerts'][number]['type'] = 'success') {
 		const result = await copyToClipboard(text)
 		if (result) this.showAlert({ message, type })
+	}
+
+	rotate<T>(array: T[], by: number) {
+		const trimmed = by % array.length
+		const rotateBy = trimmed < 0 ? array.length + by : by
+		return array.slice(rotateBy).concat(array.slice(0, rotateBy))
+	}
+
+	deepGet<T, R>(obj: T, key: Paths<T>) {
+		return key.split('.').reduce((acc, cur) => (acc && (acc as any)[cur] ? (acc as any)[cur] : undefined), obj as unknown as R)
 	}
 }

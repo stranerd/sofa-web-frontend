@@ -123,6 +123,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 
 	const { users: participants } = useUsersInList(
 		computed(() => (skip.participants ? [] : singleStore[id].play.value?.participants ?? [])),
+		!skip?.participants,
 	)
 
 	const { asyncFn: fetchQuestions, called: fetchedQuestions } = useAsyncFn(

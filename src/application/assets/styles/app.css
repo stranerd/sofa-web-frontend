@@ -5,13 +5,43 @@
 @tailwind utilities;
 
 body {
-  font-family: Lexend;
-  -webkit-tap-highlight-color: transparent;
-  @apply bg-lightGray text-bodyBlack;
+	font-family: Lexend;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: transparent;
+	@apply bg-lightGray text-bodyBlack;
 }
 
 #app {
-  @apply h-[100dvh] w-[100dvw] overflow-auto flex flex-col;
+	@apply h-[100dvh] w-[100dvw] overflow-auto flex flex-col;
+}
+
+.has-error {
+	@apply relative after:content-[attr(data-error)] after:text-primaryRed after:absolute after:m-auto after:top-[100%] after:left-0;
+}
+
+.has-error[data-error]:not([data-error='']) {
+	@apply !border-primaryRed;
+}
+
+.text-sub {
+	@apply text-[12px] mdlg:text-[14px];
+}
+
+.text-base {
+	@apply text-[14px] mdlg:text-[16px];
+}
+
+.text-mid {
+	@apply text-[16px] mdlg:text-[18px];
+}
+
+.text-title {
+	@apply text-[18px] mdlg:text-[20px];
+}
+
+.text-title2 {
+	@apply text-[20px] mdlg:text-[22px];
 }
 
 ::-webkit-scrollbar {
@@ -26,60 +56,43 @@ body {
 }
 
 a {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s;
+	transition:
+		background-color 600000s 0s,
+		color 600000s 0s;
 }
 input[data-autocompleted] {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 /* Top bar loader */
 
 @keyframes loader-animation {
-  0% {
-    left: -80%;
-  }
-  49% {
-    left: 80%;
-  }
-  50% {
-    left: 80%;
-  }
-  100% {
-    left: -80%;
-  }
+	0% {
+		left: -80%;
+	}
+	49% {
+		left: 80%;
+	}
+	50% {
+		left: 80%;
+	}
+	100% {
+		left: -80%;
+	}
 }
 
 .loader-bar {
-  width: 100%;
-  position: absolute;
-  height: 5px;
-  background-color: #3219AF;
-  animation-name: loader-animation;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
-
-h1.ce-header{
-  @apply text-3xl font-bold
-}
-h2.ce-header{
-  @apply text-2xl font-semibold
-}
-h3.ce-header{
-  @apply text-xl font-semibold
-}
-h4.ce-header{
-  @apply text-lg font-semibold
-}
-h5.ce-header{
-  @apply text-base font-semibold
-}
-h6.ce-header{
-  @apply text-base font-semibold
+	width: 100%;
+	position: absolute;
+	height: 5px;
+	background-color: #3219af;
+	animation-name: loader-animation;
+	animation-duration: 3s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
 }

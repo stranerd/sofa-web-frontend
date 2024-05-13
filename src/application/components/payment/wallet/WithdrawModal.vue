@@ -21,9 +21,7 @@
 
 			<SofaSelect
 				v-model="activeAccountFactory.bankCode"
-				customClass="rounded-custom !bg-lightGray"
 				placeholder="Bank"
-				borderColor="border-transparent"
 				:options="banks.map((bank) => ({ key: bank.code, value: bank.name }))">
 			</SofaSelect>
 
@@ -57,9 +55,9 @@
 				<SofaRadio :id="`account-${index}`" v-model="selectedAccountIndex" :value="index" name="account" />
 			</label>
 
-			<a class="w-full flex items-center gap-3 p-4 rounded-custom border-2 border-lightGray" @click="addAccount">
-				<SofaIcon class="h-[18px]" name="add-gray" />
-				<SofaNormalText class="text-grayColor" content="Add new account" />
+			<a class="w-full flex items-center gap-3 p-4 rounded-custom border-2 border-lightGray text-grayColor" @click="addAccount">
+				<SofaIcon class="h-[18px] fill-current" name="add" />
+				<SofaText content="Add new account" />
 			</a>
 		</div>
 

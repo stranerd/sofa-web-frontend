@@ -1,15 +1,15 @@
 <template>
-	<div class="flex w-full flex-col content">
-		<SofaNormalText v-if="hasTitle" customClass="!pb-4 font-bold">
-			<slot name="title" />
-		</SofaNormalText>
+	<div
+		:data-error="error"
+		class="w-full gap-2 p-3 mdlg:p-4 flex items-start text-sub rounded-xl bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error">
+		<slot name="prefix" />
 		<VueEditor
 			v-if="richEditor"
 			v-model="comp"
 			:editorOptions="editorOptions"
 			:disabled="disabled"
 			:style="`min-height: ${rows}em`"
-			:class="`w-full lg:text-sm mdlg:text-[12px] text-darkBody text-xs rounded-md ${textAreaStyle} overflow-y-auto`"
+			class="grow"
 			:placeholder="placeholder"
 			:tabindex="0"
 			@ready="(v: any) => (quill = v)">
@@ -40,11 +40,10 @@
 			:rows="rows"
 			:disabled="disabled"
 			:tabindex="0"
-			:class="`w-full p-3 text-darkBody placeholder:text-grayColor lg:text-sm mdlg:text-[12px] bg-white focus:outline-none text-xs rounded-md ${textAreaStyle}  overflow-y-auto`">
-		</textarea>
-		<div v-if="error" class="w-full flex pt-1 justify-start">
-			<SofaNormalText class="text-left !font-normal" :content="error" color="text-primaryRed" />
-		</div>
+			:data-error="error"
+			class="grow bg-transparent p-0 placeholder:text-grayColor focus:outline-none" />
+		<slot name="suffix" />
+		<SofaIcon v-if="error" name="error-state" class="h-[15px]" />
 	</div>
 </template>
 
@@ -54,26 +53,21 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { Quill, VueEditor } from 'vue3-editor'
-import SofaNormalText from '../SofaTypography/normalText.vue'
 
 withDefaults(
 	defineProps<{
 		rows?: number
 		disabled?: boolean
-		hasTitle?: boolean
 		placeholder?: string
-		textAreaStyle?: string
 		richEditor?: boolean
 		error?: string
 	}>(),
 	{
 		rows: 8,
 		disabled: false,
-		hasTitle: false,
 		placeholder: '',
-		textAreaStyle: 'max-h-[400px] bg-grey100 px-3 py-3',
 		richEditor: false,
-		error: '',
+		error: undefined,
 	},
 )
 

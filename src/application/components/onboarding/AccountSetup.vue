@@ -22,7 +22,7 @@
 						v-model="profileFactory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
 						accept="image/*">
-						<SofaIcon class="h-[18px]" name="camera-white" />
+						<SofaIcon class="h-[18px] fill-white" name="camera" />
 					</SofaFileInput>
 				</SofaImageLoader>
 			</div>
@@ -54,7 +54,7 @@
 
 			<SofaTextarea
 				v-model="profileFactory.description"
-				textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3 resize-none"
+				class="h-[90px] resize-none"
 				:error="profileFactory.errors.description"
 				:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
 
@@ -70,18 +70,16 @@
 			<div class="w-full grid grid-cols-2 gap-4">
 				<SofaSelect
 					v-model="locationFactory.country"
-					customClass="rounded-custom !bg-lightGray col-span-1"
+					class="col-span-1"
 					placeholder="Country"
 					:error="locationFactory.errors.country"
-					borderColor="border-transparent"
 					:options="countries.map((c) => ({ key: c, value: c }))" />
 
 				<SofaSelect
 					v-model="locationFactory.state"
-					customClass="rounded-custom !bg-lightGray col-span-1"
+					class="col-span-1"
 					placeholder="State"
 					:error="locationFactory.errors.state"
-					borderColor="border-transparent"
 					:options="states.map((s) => ({ key: s, value: s }))" />
 			</div>
 		</div>
@@ -99,35 +97,27 @@
 			<SofaSelect
 				v-if="typeFactory.isStudent"
 				v-model="typeFactory.schoolType"
-				customClass="rounded-custom !bg-lightGray"
-				placeholder="Select education level"
+				placeholder="Education level"
 				:error="typeFactory.errors.schoolType"
-				borderColor="border-transparent"
 				:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
 
 			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 				<SofaSelect
 					v-model="typeFactory.institutionId"
-					customClass="rounded-custom !bg-lightGray"
-					placeholder="Select school"
+					placeholder="School"
 					:error="typeFactory.errors.institutionId"
-					borderColor="border-transparent"
 					:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
 
 				<SofaSelect
 					v-model="typeFactory.facultyId"
-					customClass="rounded-custom !bg-lightGray"
-					placeholder="Select faculty"
+					placeholder="Faculty"
 					:error="typeFactory.errors.facultyId"
-					borderColor="border-transparent"
 					:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
 
 				<SofaSelect
 					v-model="typeFactory.departmentId"
-					customClass="rounded-custom !bg-lightGray"
-					placeholder="Select department"
+					placeholder="Department"
 					:error="typeFactory.errors.departmentId"
-					borderColor="border-transparent"
 					:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
 			</template>
 			<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
@@ -136,10 +126,8 @@
 
 					<SofaSelect
 						v-model="typeFactory.institutions"
-						customClass="rounded-custom !bg-lightGray"
-						placeholder="Select exams"
-						borderColor="border-transparent"
-						:isMultiple="true"
+						placeholder="Exams"
+						multiple
 						:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
 
 					<div class="w-full flex flex-wrap gap-3">
@@ -154,7 +142,8 @@
 							@click.prevent="typeFactory.activeInst = institution.id">
 							{{ institution.title }}
 							<SofaIcon
-								:name="typeFactory.activeInst === institution.id ? 'circle-close-white' : 'circle-close'"
+								name="circle-close"
+								:class="typeFactory.activeInst === institution.id ? 'fill-white' : 'fill-deepGray'"
 								class="h-[17px]" />
 						</SofaBadge>
 					</div>
@@ -162,10 +151,8 @@
 					<SofaSelect
 						v-if="typeFactory.activeInst"
 						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
-						customClass="rounded-custom !bg-lightGray"
-						placeholder="Select exam subjects"
-						borderColor="border-transparent"
-						:isMultiple="true"
+						placeholder="Subjects"
+						multiple
 						:options="
 							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
 						" />
@@ -182,7 +169,7 @@
 				Enter the 6-digit code sent to {{ phoneFactory.phoneStr }}
 			</SofaNormalText>
 			<div class="w-full md:!w-[60%] flex flex-col gap-4">
-				<SofaOtpInput v-model="token" :numberOfInput="6" />
+				<SofaOtpInput v-model="token" />
 			</div>
 
 			<div class="w-full flex items-center justify-center gap-1 pt-3">

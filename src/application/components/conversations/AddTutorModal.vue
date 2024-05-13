@@ -19,11 +19,7 @@
 				</div>
 
 				<div v-if="currentStep === 2" class="w-full flex flex-col pt-3">
-					<SofaSelect
-						v-model="selectedTopic"
-						placeholder="Select subject"
-						customClass="rounded-custom border"
-						:options="allTopics" />
+					<SofaSelect v-model="selectedTopic" placeholder="Subject" class="!bg-white border" :options="allTopics" />
 				</div>
 			</div>
 
@@ -46,12 +42,7 @@
 
 			<template v-if="currentStep == 1">
 				<div class="w-full flex flex-col gap-3 px-4 md:px-0">
-					<SofaTextarea
-						v-model="factory.body"
-						customClass="bg-lightGray rounded-custom"
-						placeholder="Tell the tutor why you need him/her"
-						textAreaStyle="!bg-lightGray rounded-custom">
-					</SofaTextarea>
+					<SofaTextarea v-model="factory.body" placeholder="Tell the tutor why you need him/her" />
 				</div>
 			</template>
 
@@ -66,10 +57,7 @@
 							@click="factory.tutorId = tutor.id">
 							<SofaAvatar :size="60" :photoUrl="tutor.photoUrl" :online="tutor.online" />
 							<div class="w-full flex flex-col grow gap-1">
-								<div class="flex gap-2 items-center">
-									<SofaNormalText class="!font-bold" :content="tutor.name" />
-									<SofaIcon class="h-[17px]" name="tutor-bagde" />
-								</div>
+								<UserName :user="tutor.user" :avatar="false" class="font-bold" />
 								<SofaNormalText class="!line-clamp-1 !text-left" :content="tutor.subjects" />
 
 								<div class="w-full flex gap-2 items-center">
@@ -157,6 +145,7 @@ const filteredTutors = computed(() =>
 			id: t.id,
 			name: t.publicName,
 			hash: t.hash,
+			user: t,
 			online: t.status.connections.length > 0,
 			photoUrl: t.bio.photo?.link ?? null,
 			ratings: {

@@ -6,14 +6,12 @@ import ConversationMoreOptions from '@app/components/conversations/ConversationM
 import HomeMobileMenu from '@app/components/home/HomeMobileMenu.vue'
 import CreateReport from '@app/components/interactions/reports/CreateReportModal.vue'
 import CreateReview from '@app/components/interactions/reviews/CreateReviewModal.vue'
-import CreateAnnouncement from '@app/components/organizations/announcements/CreateAnnouncementModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
 import CreateLesson from '@app/components/organizations/lessons/CreateLessonModal.vue'
-import LessonDetails from '@app/components/organizations/lessons/LessonDetailsModal.vue'
-import PreviewCurriculum from '@app/components/organizations/lessons/PreviewCurriculumModal.vue'
-import ViewCuriculum from '@app/components/organizations/lessons/ViewCurriculumModal.vue'
+import EditLesson from '@app/components/organizations/lessons/EditLessonModal.vue'
+import SelectLesson from '@app/components/organizations/lessons/SelectLessonModal.vue'
 import AddMember from '@app/components/organizations/members/AddMemberModal.vue'
 import JoinOrganization from '@app/components/organizations/members/JoinOrganizationModal.vue'
 import CreateSchedule from '@app/components/organizations/schedules/CreateScheduleModal.vue'
@@ -42,7 +40,12 @@ export const useModals = () => ({
 		addTutorConfirmation: { component: AddTutorConfirmation },
 		conversationMoreOptions: {
 			component: ConversationMoreOptions,
-			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+			modalArgs: {
+				closeOnClickOutside: true,
+				maxWidth: '!w-[80%] !md:w-[60%]',
+				maxHeight: 'h-full',
+				containerClass: 'mr-auto !rounded-none',
+			},
 		},
 	}),
 	interactions: modal.register('Interactions', {
@@ -55,12 +58,10 @@ export const useModals = () => ({
 		editClass: { component: EditClass },
 		joinOrganization: { component: JoinOrganization },
 		classCardMoreOptions: { component: ClassCardMoreOptions, modalArgs: { popover: true } },
-		createLesson: { component: CreateLesson },
-		lessonDetails: { component: LessonDetails },
-		createAnnouncement: { component: CreateAnnouncement },
+		createLesson: { component: CreateLesson, modalArgs: { containerClass: 'h-full' } },
+		editLesson: { component: EditLesson, modalArgs: { containerClass: 'h-full' } },
+		selectLesson: { component: SelectLesson, modalArgs: { containerClass: 'h-full' } },
 		createSchedule: { component: CreateSchedule },
-		previewCurriculum: { component: PreviewCurriculum },
-		viewCurriculum: { component: ViewCuriculum, modalArgs: { containerClass: 'h-full overflow-y-auto' } },
 	}),
 	study: modal.register('Study', {
 		addMaterial: { component: AddMaterial, modalArgs: { closeOnClickOutside: true } },
@@ -78,11 +79,21 @@ export const useModals = () => ({
 		customizeAi: { component: CustomizeAi },
 		sideBar: {
 			component: SideBar,
-			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-[80%] !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+			modalArgs: {
+				closeOnClickOutside: true,
+				maxWidth: '!w-[80%] !md:w-[60%]',
+				maxHeight: 'h-full',
+				containerClass: 'mr-auto !rounded-none',
+			},
 		},
 		mobileMenu: {
 			component: HomeMobileMenu,
-			modalArgs: { closeOnClickOutside: true, maxWidth: '!w-full !md:w-[60%] mr-auto h-full overflow-y-auto !rounded-none' },
+			modalArgs: {
+				closeOnClickOutside: true,
+				maxWidth: '!w-[80%] !md:w-[60%]',
+				maxHeight: 'h-full',
+				containerClass: 'mr-auto !rounded-none',
+			},
 		},
 		choosePublishedStudyMaterial: { component: ChoosePublishedStudyMaterial },
 	}),

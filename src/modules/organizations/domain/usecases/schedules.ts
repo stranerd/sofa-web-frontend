@@ -1,7 +1,7 @@
 import { ScheduleEntity } from '../entities/schedules'
 import { ScheduleFactory } from '../factories/schedules'
 import { IScheduleRepository } from '../irepositories/schedules'
-import { QueryParams, Conditions, Listeners } from '@modules/core'
+import { Conditions, Listeners } from '@modules/core'
 
 export class SchedulesUseCase {
 	private repository: (organizationId: string, classId: string) => IScheduleRepository
@@ -10,8 +10,8 @@ export class SchedulesUseCase {
 		this.repository = repository
 	}
 
-	async create(organizationId: string, classId: string, lessonId: string, factory: ScheduleFactory) {
-		return await this.repository(organizationId, classId).add({ ...(await factory.toModel()), lessonId })
+	async create(organizationId: string, classId: string, factory: ScheduleFactory) {
+		return await this.repository(organizationId, classId).add(await factory.toModel())
 	}
 
 	async delete(data: { organizationId: string; classId: string; id: string }) {
@@ -30,28 +30,12 @@ export class SchedulesUseCase {
 		return await this.repository(organizationId, classId).find(id)
 	}
 
-	async get(organizationId: string, classId: string, date?: number) {
-		const conditions: QueryParams = {
-			where: [],
-			sort: [{ field: 'createdAt', desc: true }],
-			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
-		}
-		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.lt, value: date })
-		return await this.repository(organizationId, classId).get(conditions)
+	async getAll(organizationId: string, classId: string) {
+		return await this.repository(organizationId, classId).get({ all: true })
 	}
 
-	async listen(organizationId: string, classId: string, listener: Listeners<ScheduleEntity>, date?: number) {
-		const conditions: QueryParams = {
-			where: [],
-			sort: [{ field: 'createdAt', desc: true }],
-			all: true,
-		}
-		if (date) conditions.where!.push({ field: 'createdAt', condition: Conditions.gt, value: date })
-
-		return await this.repository(organizationId, classId).listenToMany(conditions, listener, (entity) => {
-			if (date) return entity.createdAt >= date
-			else return true
-		})
+	async listenToAll(organizationId: string, classId: string, listener: Listeners<ScheduleEntity>) {
+		return await this.repository(organizationId, classId).listenToMany({ all: true }, listener, () => true)
 	}
 
 	async getInList(organizationId: string, classId: string, ids: string[]) {
@@ -61,6 +45,7 @@ export class SchedulesUseCase {
 		})
 		return schedules.results
 	}
+
 	async listenToInList(organizationId: string, classId: string, ids: () => string[], listener: Listeners<ScheduleEntity>) {
 		return await this.repository(organizationId, classId).listenToMany(
 			{

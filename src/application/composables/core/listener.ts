@@ -1,9 +1,17 @@
 import { computed, ref } from 'vue'
+import { useAsyncFn } from './hooks'
 
 export const useListener = (startFn: () => Promise<() => void>) => {
 	let listener = null as null | (() => void)
 	const watchers = ref(0)
 	const isRunning = computed(() => watchers.value > 0)
+
+	const { asyncFn } = useAsyncFn(
+		async () => {
+			listener = await startFn()
+		},
+		{ hideError: true, hideLoading: true },
+	)
 
 	const close = async () => {
 		if (watchers.value === 1) listener?.()
@@ -11,7 +19,7 @@ export const useListener = (startFn: () => Promise<() => void>) => {
 	}
 
 	const start = async () => {
-		if (!isRunning.value) listener = await startFn()
+		if (!isRunning.value) await asyncFn()
 		watchers.value++
 	}
 
@@ -21,7 +29,7 @@ export const useListener = (startFn: () => Promise<() => void>) => {
 	}
 
 	const restart = async () => {
-		if (isRunning.value) listener = await startFn()
+		if (isRunning.value) await asyncFn()
 		else await start()
 	}
 

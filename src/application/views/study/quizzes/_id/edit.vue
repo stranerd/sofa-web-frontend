@@ -11,7 +11,7 @@
 					actions: [
 						{
 							label: 'Share',
-							icon: 'share-option',
+							icon: 'share',
 							handler: () =>
 								openAccessModal({
 									quiz,
@@ -109,7 +109,7 @@
 						<div class="flex items-center gap-3">
 							<SofaIcon
 								class="h-[18px]"
-								name="share-option"
+								name="share"
 								@click="
 									openAccessModal({
 										quiz,

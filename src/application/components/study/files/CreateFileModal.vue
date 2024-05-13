@@ -16,22 +16,14 @@
 			placeholder="File title"
 			borderColor="border-transparent" />
 
-		<SofaTextarea
-			v-model="factory.description"
-			padding="p-4"
-			placeholder="Description..."
-			textAreaStyle="!bg-lightGray rounded-custom"
-			:error="factory.errors.description" />
+		<SofaTextarea v-model="factory.description" padding="p-4" placeholder="Description..." :error="factory.errors.description" />
 
 		<SofaSelect
 			v-model="factory.topic"
-			customClass="rounded-custom !bg-lightGray"
-			name="Topic"
 			placeholder="Topic"
-			borderColor="border-transparent"
 			:error="factory.errors.topic"
 			:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-			:canUseCustom="true" />
+			custom />
 
 		<SofaFileInput v-model="factory.media" :accept="accept" class="w-full flex flex-col">
 			<SofaButton class="w-full" padding="py-3">{{ factory.media ? 'Change file' : 'Choose file' }}</SofaButton>
@@ -43,7 +35,7 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue'
-import { useTopicsList, useGenericTagsList } from '@app/composables/interactions/tags'
+import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
 import { useCreateFile } from '@app/composables/study/files'
 import { UploadedFile } from '@modules/core'
 import { FileEntity } from '@modules/study'

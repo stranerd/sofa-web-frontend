@@ -1,7 +1,7 @@
 <template>
 	<ExpandedLayout width="mdlg:!w-[60%] lg:!w-[45%]">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-lightGray p-4 sticky top-0">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 			<SofaNormalText class="!font-bold !text-base"> Become a tutor</SofaNormalText>
 			<span />
 		</div>
@@ -27,7 +27,7 @@
 							v-model="profileFactory.photo"
 							class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full size-[40px] flex items-center justify-center"
 							accept="image/*">
-							<SofaIcon class="h-[18px]" name="camera-white" />
+							<SofaIcon class="h-[18px] fill-white" name="camera" />
 						</SofaFileInput>
 					</SofaImageLoader>
 
@@ -47,7 +47,7 @@
 						:error="profileFactory.errors.last"
 						borderColor="border-transparent" />
 
-					<SofaTextarea v-model="profileFactory.description" textAreaStyle="rounded-custom !bg-lightGray" placeholder="Bio" />
+					<SofaTextarea v-model="profileFactory.description" placeholder="Bio" />
 				</div>
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
@@ -93,18 +93,14 @@
 
 					<SofaSelect
 						v-model="locationFactory.country"
-						customClass="rounded-custom !bg-lightGray"
 						placeholder="Country"
 						:error="locationFactory.errors.country"
-						borderColor="border-transparent"
 						:options="countries.map((c) => ({ key: c, value: c }))" />
 
 					<SofaSelect
 						v-model="locationFactory.state"
-						customClass="rounded-custom !bg-lightGray"
 						placeholder="State"
 						:error="locationFactory.errors.state"
-						borderColor="border-transparent"
 						:options="states.map((s) => ({ key: s, value: s }))" />
 				</div>
 			</template>
@@ -127,10 +123,8 @@
 
 					<SofaSelect
 						v-model="tutorRequestFactory.topicId"
-						customClass="rounded-custom !bg-lightGray"
-						placeholder="Select subject"
+						placeholder="Subject"
 						:error="tutorRequestFactory.errors.topicId"
-						borderColor="border-transparent"
 						:options="topics.filter((t) => !currentlyTeaching.includes(t.id)).map((t) => ({ key: t.id, value: t.title }))" />
 				</div>
 

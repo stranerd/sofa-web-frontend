@@ -2,13 +2,13 @@ import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { ClassEntity, ClassLesson, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
+import { useModals } from '../core/modals'
+import { ClassEntity, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 
 const store = {} as Record<
 	string,
 	{
 		schedules: Ref<ScheduleEntity[]>
-		hasMore: Ref<boolean>
 		listener: ReturnType<typeof useListener>
 	}
 >
@@ -17,39 +17,43 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`
 	if (store[key] === undefined) {
 		const listener = useListener(() =>
-			SchedulesUseCases.listen(
-				organizationId,
-				classId,
-				{
-					created: async (entity) => {
-						addToArray(
-							store[key].schedules.value,
-							entity,
-							(e) => e.id,
-							(e) => e.createdAt,
-						)
-					},
-					updated: async (entity) => {
-						addToArray(
-							store[key].schedules.value,
-							entity,
-							(e) => e.id,
-							(e) => e.createdAt,
-						)
-					},
-					deleted: async (entity) => {
-						store[key].schedules.value = store[key].schedules.value.filter((m) => m.id !== entity.id)
-					},
+			SchedulesUseCases.listenToAll(organizationId, classId, {
+				created: async (entity) => {
+					addToArray(
+						store[key].schedules.value,
+						entity,
+						(e) => e.id,
+						(e) => e.time.start,
+					)
 				},
-				store[key].schedules.value.at(-1)?.createdAt,
-			),
+				updated: async (entity) => {
+					addToArray(
+						store[key].schedules.value,
+						entity,
+						(e) => e.id,
+						(e) => e.time.start,
+					)
+				},
+				deleted: async (entity) => {
+					store[key].schedules.value = store[key].schedules.value.filter((m) => m.id !== entity.id)
+				},
+			}),
 		)
 		store[key] = {
 			schedules: ref([]),
-			hasMore: ref(false),
 			listener,
 		}
 	}
+
+	const upcoming = computed(() => {
+		const now = Date.now()
+		return store[key].schedules.value.filter((s) => s.time.end > now).reverse()
+	})
+
+	const previous = computed(() => {
+		const now = Date.now()
+		return store[key].schedules.value.filter((s) => s.time.end < now)
+	})
 
 	const {
 		asyncFn: fetchSchedules,
@@ -58,24 +62,18 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 		called,
 	} = useAsyncFn(
 		async () => {
-			const schedules = await SchedulesUseCases.get(organizationId, classId, store[key].schedules.value.at(-1)?.createdAt)
-			store[key].hasMore.value = !!schedules.pages.next
+			const schedules = await SchedulesUseCases.getAll(organizationId, classId)
 			schedules.results.map((announcement) =>
 				addToArray(
 					store[key].schedules.value,
 					announcement,
 					(e) => e.id,
-					(e) => e.createdAt,
+					(e) => e.time.start,
 				),
 			)
 		},
 		{ key: `organizations/classes/${key}/schedules` },
 	)
-
-	const fetchOlderSchedules = async () => {
-		await fetchSchedules()
-		await store[key].listener.restart()
-	}
 
 	onMounted(async () => {
 		if (!called.value) await fetchSchedules()
@@ -88,31 +86,34 @@ export const useClassSchedules = (organizationId: string, classId: string) => {
 
 	return {
 		...store[key],
+		upcoming,
+		previous,
 		loading,
 		error,
-		fetchOlderSchedules,
 		fetchSchedules,
 	}
 }
 
-export const useCreateSchedule = (classInst: ClassEntity, lesson: ClassLesson) => {
+export const useCreateSchedule = (classInst: ClassEntity) => {
 	const factory = new ScheduleFactory()
 
 	const {
 		asyncFn: createSchedule,
 		loading,
 		error,
-	} = useAsyncFn(async () => await SchedulesUseCases.create(classInst.organizationId, classInst.id, lesson.id, factory))
+	} = useAsyncFn(async () => {
+		const schedule = await SchedulesUseCases.create(classInst.organizationId, classInst.id, factory)
+		useModals().organizations.createSchedule.close()
+		return schedule
+	})
 
 	return { factory, loading, error, createSchedule }
 }
 
-export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = false) => {
+export const useSchedulesInList = (organizationId: string, classId: string, ids: Refable<string[]>, listen = true) => {
 	const key = `${organizationId}-${classId}`
 	const allSchedules = computed(() => store[key]?.schedules.value ?? [])
-	const { items: schedules, addToList } = useItemsInList('schedules', ids, allSchedules, (ids) =>
-		SchedulesUseCases.getInList(organizationId, classId, ids),
-	)
+
 	const listener = useListener(
 		async () =>
 			await SchedulesUseCases.listenToInList(organizationId, classId, () => ids.value, {
@@ -124,13 +125,13 @@ export const useSchedulesInList = (organizationId: string, classId: string, ids:
 			}),
 	)
 
-	onMounted(() => {
-		if (listen) listener.start()
-	})
-
-	onUnmounted(() => {
-		if (listen) listener.close()
-	})
+	const { items: schedules, addToList } = useItemsInList(
+		'schedules',
+		ids,
+		allSchedules,
+		(ids) => SchedulesUseCases.getInList(organizationId, classId, ids),
+		listen ? listener : undefined,
+	)
 
 	return { schedules }
 }

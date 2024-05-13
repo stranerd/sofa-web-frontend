@@ -1,13 +1,25 @@
 <template>
-	<DashboardLayout title="Students">
-		<MembersList :org="user!" :image="studentsImage" :type="MemberTypes.student" :members="students" :messages="messages" />
+	<DashboardLayout
+		title="Students"
+		:breadcrumbs="[
+			{ text: 'Home', to: '/dashboard' },
+			{ text: 'Students', to: '/dashboard/students' },
+		]"
+		:primary="{ label: 'Add student', action: add }">
+		<template #default="{ extras }">
+			<MembersList
+				:org="user!"
+				:type="type"
+				:members="students"
+				:filteredMembers="students.filter((m) => m.search(extras.searchQuery))" />
+		</template>
 	</DashboardLayout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import studentsImage from '@app/assets/images/class-students.png'
+import { useModals } from '@app/composables/core/modals'
 import MembersList from '@app/components/organizations/members/MembersList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useOrganizationMembers } from '@app/composables/organizations/members'
@@ -20,16 +32,11 @@ export default defineComponent({
 	setup() {
 		useMeta({ title: 'Students' })
 
-		const messages = [
-			'Add students from your physical class here.',
-			'Students here get your classes, courses, and quizzes for FREE.',
-			'Your students can revisit live classes for revision purposes.',
-			'No loss of study resources so students can keep coming back to them.',
-		]
-
 		const { id, user } = useAuth()
 		const { students } = useOrganizationMembers(id.value)
-		return { students, messages, MemberTypes, studentsImage, user }
+		const type = MemberTypes.student
+		const add = () => useModals().organizations.addMember.open({ org: user.value!, type })
+		return { students, type, add, user }
 	},
 })
 </script>

@@ -78,10 +78,8 @@ export const useMyPurchasedCourses = () => {
 	return { courses }
 }
 
-export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
+export const useCoursesInList = (ids: Refable<string[]>, listen = true) => {
 	const allCourses = computed(() => [...store.courses.value])
-
-	const { items: courses, addToList } = useItemsInList('courses', ids, allCourses, (ids) => CoursesUseCases.getInList(ids))
 
 	const listener = useListener(
 		async () =>
@@ -94,13 +92,13 @@ export const useCoursesInList = (ids: Refable<string[]>, listen = false) => {
 			}),
 	)
 
-	onMounted(() => {
-		if (listen) listener.start()
-	})
-
-	onUnmounted(() => {
-		if (listen) listener.close()
-	})
+	const { items: courses, addToList } = useItemsInList(
+		'courses',
+		ids,
+		allCourses,
+		(ids) => CoursesUseCases.getInList(ids),
+		listen ? listener : undefined,
+	)
 
 	return { courses }
 }

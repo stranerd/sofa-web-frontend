@@ -4,16 +4,27 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useEditCourse } from '@app/composables/study/courses'
+import { CourseEntity } from '@modules/study'
 
 const props = defineProps<{
 	id: string
 }>()
 
+const model = defineModel<CourseEntity | null>('course', { default: null })
+
 const { id: authId } = useAuth()
 const { course, fetched, deleteCourse } = useEditCourse(props.id)
+
+watch(
+	course,
+	() => {
+		model.value = course.value
+	},
+	{ immediate: true },
+)
 
 const extras = computed(() => ({
 	deleteCourse,

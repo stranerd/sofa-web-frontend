@@ -150,7 +150,7 @@ export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 	}
 
 	static getShape(index: number) {
-		const shapes: IconName[] = ['circle', 'triangle', 'square', 'kite']
+		const shapes: IconName[] = ['q-circle', 'q-triangle', 'q-square', 'q-kite']
 		return shapes[index % shapes.length]
 	}
 

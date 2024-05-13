@@ -1,35 +1,31 @@
 <template>
 	<div class="flex flex-col gap-4 mdlg:p-6 p-4">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="!text-xl" content="Add study material" />
+			<SofaHeading size="mid" content="Add study material" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
-			<SofaNormalText class="!font-bold" content="Add study material" />
+			<SofaHeading content="Add study material" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
-		<div class="w-full grid grid-cols-2 mdlg:grid-cols-3 place-items-center h-full md:!gap-6 !gap-3">
+		<div class="w-full grid grid-cols-2 mdlg:grid-cols-3 place-items-center h-full md:gap-6 gap-4">
 			<template v-for="item in newMaterialOptions" :key="item.name">
 				<a
 					v-if="item.type === 'quiz'"
-					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center"
+					class="rounded-custom w-full aspect-video bg-lightGray flex flex-col gap-2 items-center justify-center"
 					@click="selectQuiz(item)">
-					<SofaIcon :name="item.icon" customClass="h-[22px]!fill-black" />
-					<SofaNormalText customClass="!font-bold">
-						{{ item.name }}
-					</SofaNormalText>
+					<SofaIcon :name="item.icon" class="h-[22px] fill-black" />
+					<SofaHeading :content="item.name" />
 				</a>
 
 				<SofaFileInput
 					v-if="item.type === 'file'"
-					:isWrapper="true"
+					isWrapper
 					:accept="item.extras.accept"
-					class="rounded-custom w-full mdlg:w-[200px] h-[149px] bg-lightGray flex flex-col gap-3 items-center justify-center"
+					class="rounded-custom w-full aspect-video bg-lightGray flex flex-col gap-2 items-center justify-center"
 					@update:modelValue="(media) => media && uploadFile(item, media as any)">
-					<SofaIcon :name="item.icon" customClass="h-[22px] !fill-black" />
-					<SofaNormalText customClass="!font-bold">
-						{{ item.name }}
-					</SofaNormalText>
+					<SofaIcon :name="item.icon" class="h-[22px] fill-black" />
+					<SofaHeading :content="item.name" />
 				</SofaFileInput>
 			</template>
 		</div>
@@ -57,33 +53,33 @@ const newMaterialOptions = [
 		name: 'Document',
 		type: 'file',
 		extras: { type: FileType.document, accept: 'application/pdf' },
-		icon: 'document-course',
+		icon: 'file-document',
 	},
 	{
 		name: 'Image',
 		type: 'file',
 		extras: { type: FileType.image, accept: 'image/*' },
-		icon: 'image-course',
+		icon: 'file-image',
 	},
 
 	{
 		name: 'Video',
 		type: 'file',
 		extras: { type: FileType.video, accept: 'video/*' },
-		icon: 'video-course',
+		icon: 'file-video',
 	},
 
 	{
 		name: 'Practice',
 		type: 'quiz',
 		extras: { mode: PlayTypes.practice },
-		icon: 'open-notebook',
+		icon: 'quiz-practice',
 	},
 	{
 		name: 'Test',
 		type: 'quiz',
 		extras: { mode: PlayTypes.tests },
-		icon: 'document-text',
+		icon: 'quiz-tests',
 	},
 ] as const
 

@@ -1,49 +1,43 @@
 <template>
-	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
-		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base" :content="title" />
+	<ExpandedLayout v-if="!$screen.desktop" :hide="{ top: true }">
+		<div class="w-full flex items-center gap-3 justify-between p-4" :class="{ 'bg-white': light }">
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+			<SofaHeading :content="title" />
 			<span class="w-4" />
 		</div>
 
-		<div class="w-full flex flex-col gap-3 px-4 flex-1 overflow-y-auto">
-			<slot />
+		<div class="w-full flex flex-col flex-1 overflow-y-auto">
+			<slot :extras="extras" />
 		</div>
 	</ExpandedLayout>
-	<FullLayout v-else :topbarOptions="{ title }">
+	<FullLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
-			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
+			<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
 					<SofaAvatar :size="84" :photoUrl="user.bio.photo?.link" />
 
 					<div class="flex flex-col">
-						<div class="flex items-center gap-1">
-							<SofaHeaderText class="!text-base" :content="user.publicName" />
-							<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
-							<SofaIcon v-if="userType.isTeacher" name="tutor-bagde" class="h-[13px]" />
-						</div>
-						<SofaNormalText class="capitalize" color="text-grayColor" :content="userType.type" />
-						<SofaNormalText color="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
+						<UserName :user="user" :avatar="false" class="font-bold" />
+						<SofaText class="capitalize text-grayColor" :content="userType.type" />
+						<SofaText class="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
 					</div>
 				</div>
 
 				<div v-if="user && userType.isStudent" class="w-full grid grid-cols-2 gap-3">
-					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
+					<div class="p-3 rounded-custom bg-lightGray text-bodyBlack col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
-							<SofaNormalText class="font-bold">
-								{{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp
-							</SofaNormalText>
-							<SofaNormalText color="text-bodyBlack" content="Point" />
+							<SofaHeading> {{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp </SofaHeading>
+							<SofaText content="Point" />
 						</div>
 					</div>
-					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
+					<div class="p-3 rounded-custom bg-lightGray text-bodyBlack col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="streak-new" />
 						<div class="flex flex-col items-start justify-center">
-							<SofaNormalText class="font-bold">
+							<SofaHeading>
 								{{ user.account.streak.count }} {{ $utils.pluralize(user.account.streak.count, 'day', 'days') }}
-							</SofaNormalText>
-							<SofaNormalText color="text-bodyBlack">Streak</SofaNormalText>
+							</SofaHeading>
+							<SofaText content="Streak" />
 						</div>
 					</div>
 				</div>
@@ -51,15 +45,35 @@
 				<template v-else>
 					<div class="h-[1px] w-full bg-lightGray" />
 
-					<div class="w-full flex flex-col gap-1">
+					<div class="w-full flex flex-col">
 						<router-link
 							v-for="item in options"
 							:key="item.route"
-							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
+							class="w-full flex items-center gap-3 p-3 rounded-lg text-deepGray hover:bg-lightBlue"
 							:to="item.route"
-							exactActiveClass="bg-lightBlue font-semibold">
-							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
-							<SofaNormalText color="text-inherit" :content="item.title" />
+							exactActiveClass="bg-lightBlue font-bold">
+							<SofaIcon :name="item.icon" class="h-[20px] fill-current" />
+							<SofaText :content="item.title" />
+						</router-link>
+					</div>
+				</template>
+
+				<template v-if="classes.length">
+					<div class="h-[1px] w-full bg-lightGray" />
+
+					<div class="w-full flex flex-col">
+						<SofaText content="Classes" class="text-grayColor mb-2" />
+						<router-link
+							v-for="classInst in classes"
+							:key="classInst.hash"
+							class="w-full flex items-center gap-3 p-2 rounded-lg text-deepGray hover:bg-lightBlue"
+							:class="{ 'bg-lightBlue font-bold': $route.path.startsWith(classInst.pageLink) }"
+							:to="classInst.pageLink">
+							<SofaAvatar :size="44" :photoUrl="classInst.picture" />
+							<div class="flex flex-col truncate grow">
+								<SofaText :content="classInst.title" clamp />
+								<UserName :user="classInst.user" :avatar="false" size="sub" class="text-grayColor" />
+							</div>
 						</router-link>
 					</div>
 				</template>
@@ -67,114 +81,70 @@
 		</template>
 
 		<template #middle-session>
-			<div class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot />
-			</div>
-		</template>
-
-		<template #right-session>
-			<div v-if="userType.isStudent" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
-				<div class="w-full flex items-center gap-3">
-					<SofaAvatar :photoUrl="userAi.image" :size="84" />
-					<div class="flex flex-col gap-1">
-						<SofaHeaderText class="!text-base !font-bold" :content="userAi.name" />
-						<SofaNormalText :content="userAi.tagline" />
-						<SofaNormalText color="text-primaryPink" as="a" content="Customize" @click="customizeAi" />
+			<div class="flex flex-col grow overflow-y-auto mdlg:mr-4">
+				<slot name="pre-crumbs" />
+				<div
+					v-if="$screen.desktop && breadcrumbs"
+					class="bg-white text-bodyBlack py-3 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4"
+					:class="{ 'rounded-b-2xl': rounded }">
+					<SofaIcon v-if="!index" class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+					<div class="flex items-center gap-1 shrink-0">
+						<template v-for="(breadcrumb, i) in breadcrumbs" :key="i">
+							<SofaText
+								as="router-link"
+								:to="breadcrumb.to"
+								:content="breadcrumb.text"
+								:class="i === breadcrumbs.length - 1 ? 'text-deepGray' : 'text-grayColor'" />
+							{{ i !== breadcrumbs.length - 1 ? '/' : '' }}
+						</template>
 					</div>
+					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white max-w-[300px] ml-auto mdlg:!p-3">
+						<template #prefix>
+							<SofaIcon name="search" class="h-[16px]" />
+						</template>
+					</SofaInput>
+					<SofaButton
+						v-if="primary"
+						bgColor="bg-primaryBlue"
+						padding="py-3 px-6"
+						textColor="text-white"
+						class="border border-primaryBlue"
+						@click="primary.action()">
+						{{ primary.label }}
+					</SofaButton>
 				</div>
-
-				<SofaTextField v-model="factory.body" placeholder="What can I do for you?" customClass="border">
-					<template #inner-suffix>
-						<SofaIcon name="send" class="h-[19px] cursor-pointer" @click="createConversation" />
-					</template>
-				</SofaTextField>
-
-				<div class="w-full flex items-center gap-2">
-					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/study/quizzes/create">
-						Create a quiz
-					</SofaBadge>
-					<SofaBadge color="gray" :isInverted="true" as="router-link" customClass="!py-2 !px-4" to="/study/courses/create">
-						Create a course
-					</SofaBadge>
-				</div>
-			</div>
-
-			<div
-				v-if="(conversations.length && userType.isStudent) || userType.isTeacher"
-				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
-				<SofaNormalText class="!font-bold" content="Recent chats" />
-
-				<template v-if="conversations.length">
-					<ChatList :limit="3" />
-					<SofaNormalText color="text-primaryPink" as="router-link" to="/chats" content="See all" />
-				</template>
-				<SofaEmptyState v-else title="No chat" subTitle="Your active chats will show up here" actionLabel="" />
-			</div>
-
-			<div v-if="userType.isOrg" class="w-full shadow-custom bg-white rounded-2xl flex flex-col gap-4 p-6">
-				<SofaHeaderText class="!text-lg !font-bold" content="Start something" />
-
-				<div class="grid grid-cols-2 gap-y-2 gap-x-4">
-					<SofaBadge
-						v-for="command in rightCommands"
-						:key="command.label"
-						color="gray"
-						:isInverted="true"
-						as="a"
-						class="!py-3 !px-4 truncate"
-						@click="command.action">
-						{{ command.label }}
-					</SofaBadge>
-				</div>
-			</div>
-
-			<div v-if="!user?.roles.isVerified" class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
-				<div class="w-full flex gap-2 items-center">
-					<SofaNormalText class="!font-bold" content="Get verified" />
-					<SofaIcon name="verify" class="h-[16px]" />
-				</div>
-				<SofaNormalText>
-					Join the elite that create the highest quality study materials, reach more audience, and sell on marketplace.
-				</SofaNormalText>
-
-				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification')"> Apply here </SofaButton>
-			</div>
-
-			<div
-				v-if="userType.isTeacher && user?.tutor.topics.length === 0"
-				class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col items-start gap-3">
-				<div class="w-full flex gap-2 items-center">
-					<SofaNormalText class="!font-bold" content="Apply to teach subjects" />
-					<SofaIcon name="tutor-bagde" class="h-[16px]" />
-				</div>
-				<SofaNormalText>
-					As a teacher, you need to pass a test on a subject before you can be recommended to teach the subject to others.
-					Complete your test after this application and we will reach out to you with your result.
-				</SofaNormalText>
-
-				<SofaButton :hasShadow="false" padding="py-2 px-6" @click="$router.push('/verification/tutor')"> Apply here </SofaButton>
+				<slot :extras="extras" />
 			</div>
 		</template>
 	</FullLayout>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRouter } from 'vue-router'
-import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
-import { useConversationsList, useCreateConversation } from '@app/composables/conversations/conversations'
-import { useModals } from '@app/composables/core/modals'
-import { MemberTypes } from '@modules/organizations'
+import { useMyClasses } from '@app/composables/organizations/classes-list'
+
+type ButtonConfig = {
+	action: () => void
+	label: string
+}
 
 const props = withDefaults(
 	defineProps<{
 		title: string
 		index?: boolean
+		rounded?: boolean
+		breadcrumbs?: { text: string; to: string }[]
+		primary?: ButtonConfig
+		light?: boolean
 	}>(),
 	{
 		index: false,
+		rounded: false,
+		primary: undefined,
+		breadcrumbs: undefined,
+		light: false,
 	},
 )
 
@@ -184,22 +154,8 @@ useMeta(
 	})),
 )
 
-const { id, user, userAi, userType } = useAuth()
-const { conversations } = useConversationsList()
-const { factory, createConversation } = useCreateConversation()
-
-const router = useRouter()
-const customizeAi = () => useModals().users.customizeAi.open({})
-
-const rightCommands = computed(() => [
-	{ label: 'Add a student', action: () => useModals().organizations.addMember.open({ type: MemberTypes.student, org: user.value! }) },
-	{ label: 'Add a teacher', action: () => useModals().organizations.addMember.open({ type: MemberTypes.teacher, org: user.value! }) },
-	{ label: 'Create a quiz', action: () => router.push('/study/quizzes/create') },
-	{ label: 'Create a course', action: () => router.push('/study/courses/create') },
-	...(userType.value.isOrg
-		? [{ label: 'Create a class', action: () => useModals().organizations.createClass.open({ organizationId: id.value }) }]
-		: []),
-])
+const { user, userType } = useAuth()
+const { classes } = useMyClasses()
 
 const options = computed(() => [
 	{ title: 'Dashboard', icon: 'dashboard' as const, route: '/dashboard' },
@@ -207,9 +163,20 @@ const options = computed(() => [
 		? [
 				{ title: 'Classes', icon: 'classes' as const, route: '/dashboard/classes' },
 				{ title: 'Teachers', icon: 'tutor' as const, route: '/dashboard/teachers' },
-				{ title: 'Students', icon: 'user-unfilled' as const, route: '/dashboard/students' },
+				{ title: 'Students', icon: 'users' as const, route: '/dashboard/students' },
 			]
 		: []),
 	...(userType.value.isTeacher ? [{ title: 'Classes', icon: 'classes' as const, route: '/classes' }] : []),
 ])
+
+const searchQuery = ref('')
+
+const extras = computed(() => ({
+	get searchQuery() {
+		return searchQuery.value
+	},
+	set searchQuery(value: string) {
+		searchQuery.value = value
+	},
+}))
 </script>

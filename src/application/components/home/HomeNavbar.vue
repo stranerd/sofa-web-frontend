@@ -1,10 +1,10 @@
 <template>
-	<nav class="w-full h-[65px] bg-white flex items-center justify-center">
+	<nav class="w-full h-[65px] bg-white flex items-center justify-center sticky top-0 left-0">
 		<div class="w-[90%] mx-auto flex items-center justify-between max-w-[1800px]">
 			<button class="block mdlg:hidden">
 				<SofaIcon name="menu" class="h-[24px]" @click="openMobileMenu" />
 			</button>
-			<img src="/images/stranerd_logo.png" />
+			<Logo class="h-[30px]" />
 			<ul class="hidden mdlg:flex items-center gap-6">
 				<li v-for="link in links" :key="link.label">
 					<RouterLink

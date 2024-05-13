@@ -10,9 +10,7 @@
 			<StudyMaterialCard
 				v-for="activity in data"
 				:key="activity.hash"
-				type="activity"
 				:material="activity"
-				:isWrapped="!$screen.desktop"
 				:isRoute="false"
 				:hasShowMore="true"
 				class="mdlg:!bg-white"
@@ -43,8 +41,10 @@ export default defineComponent({
 
 		const { folder } = useFolder(route.params.id as string)
 
-		const { quizzes } = useQuizzesInList(computed(() => folder.value?.saved.quizzes ?? []))
-		const { courses } = useCoursesInList(computed(() => folder.value?.saved.courses ?? []))
+		const quizzesIds = computed(() => folder.value?.saved.quizzes ?? [])
+		const coursesIds = computed(() => folder.value?.saved.courses ?? [])
+		const { quizzes } = useQuizzesInList(quizzesIds)
+		const { courses } = useCoursesInList(coursesIds)
 
 		const data = computed(() => {
 			if (tab.value === 'all') return [...courses.value, ...quizzes.value].sort((a, b) => b.createdAt - a.createdAt)

@@ -9,20 +9,11 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<div v-if="conversation && conversation.tutor" class="w-full flex justify-center items-center gap-2">
-			<SofaAvatar :photoUrl="conversation.tutor.bio.photo?.link" :size="27" />
-			<SofaNormalText class="!font-bold" :content="conversation.tutor.bio.publicName" />
-			<SofaIcon name="tutor-bagde" class="h-[20px]" />
-		</div>
+		<UserName v-if="conversation?.tutor" :user="conversation.tutor" class="font-bold" />
 
 		<SofaRatings v-model="factory.rating" :readonly="false" size="h-[30px]" class="mb-3 self-center" />
 
-		<SofaTextarea
-			v-model="factory.message"
-			padding="p-4"
-			placeholder="Why are you reviewing this?"
-			textAreaStyle="!bg-lightGray rounded-custom"
-			:error="factory.errors.message" />
+		<SofaTextarea v-model="factory.message" placeholder="Why are you reviewing this?" class="p-4" :error="factory.errors.message" />
 
 		<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">Submit</SofaButton>
 	</form>

@@ -1,5 +1,5 @@
 import { ClassFromModel } from '../../data/models/classes'
-import { ClassLessonable, MemberTypes, Saleable } from '../types'
+import { MemberTypes, Saleable } from '../types'
 import { BaseEntity } from '@modules/core'
 import { UserEntity } from '@modules/users'
 
@@ -18,6 +18,10 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 
 	get shareLink() {
 		return `${window.location.origin}${this.pageLink}`
+	}
+
+	get teachers() {
+		return [...new Set(this.lessons.flatMap((l) => l.users.teachers))]
 	}
 
 	search(query: string) {
@@ -53,9 +57,13 @@ export class ClassEntity extends BaseEntity<ClassFromModel> implements Saleable 
 		)
 	}
 
-	get publishedSessions() {
-		return this.lessons
-			.flatMap((l) => l.curriculum.flatMap((c) => c.items.filter((i) => i.type === ClassLessonable.schedule)))
-			.map((i) => i.id)
+	getTeacherStudents(id: string) {
+		const lessons = this.lessons.filter((l) => l.users.teachers.includes(id))
+		return [...new Set(lessons.flatMap((l) => l.users.students))]
+	}
+
+	getStudentTeachers(id: string) {
+		const lessons = this.lessons.filter((l) => l.users.students.includes(id))
+		return [...new Set(lessons.flatMap((l) => l.users.teachers))]
 	}
 }

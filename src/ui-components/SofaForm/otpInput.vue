@@ -1,19 +1,19 @@
 <template>
-	<div class="flex flex-row items-center justify-around gap-1 z-40">
-		<span v-for="index in numberOfInput" :key="index + '' + uniqueKey">
-			<input
-				:id="'' + uniqueKey + index"
-				v-model="otps[index - 1]"
-				type="number"
-				class="md:w-[53px] w-[40px] aspect-square text-lg text-center text-darkBody focus:outline-none bg-lightGray rounded-custom"
-				:disabled="isDisabled"
-				@keypress="onKeyPress"
-				@keyup.right="focusInputByRef('' + uniqueKey + (index + 1))"
-				@keyup.left="focusInputByRef('' + uniqueKey + (index - 1))"
-				@keyup.delete="focusInputByRef('' + uniqueKey + (index - 1))"
-				@paste="onPaste"
-				@input="onInput($event, '' + uniqueKey + (index + 1))" />
-		</span>
+	<div class="flex items-center justify-around gap-1">
+		<input
+			v-for="index in numberOfInput"
+			:id="id + index"
+			:key="index"
+			v-model="otps[index - 1]"
+			type="number"
+			class="md:w-[53px] w-[40px] aspect-square text-lg text-center text-darkBody focus:outline-none bg-lightGray rounded-custom"
+			:disabled="disabled"
+			@keypress="onKeyPress"
+			@keyup.right="focusInputByRef(id + (index + 1))"
+			@keyup.left="focusInputByRef(id + (index - 1))"
+			@keyup.delete="focusInputByRef(id + (index - 1))"
+			@paste="onPaste"
+			@input="onInput($event, id + (index + 1))" />
 	</div>
 </template>
 
@@ -22,21 +22,18 @@ import { reactive, watch } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		isDisabled?: boolean
-		uniqueKey?: string
-		isError?: boolean
+		disabled?: boolean
+		error?: string
 		numberOfInput?: number
-		onChangeOTP?: (val: string) => void
 	}>(),
 	{
-		isDisabled: false,
-		uniqueKey: 'otpDigit',
-		isError: false,
-		numberOfInput: 4,
-		onChangeOTP: undefined,
+		disabled: false,
+		error: undefined,
+		numberOfInput: 6,
 	},
 )
 
+const id = $utils.getRandomValue()
 const otp = defineModel<string>({ default: '' })
 
 const otps = reactive<string[]>(otp.value.split('').slice(0, props.numberOfInput))
@@ -46,9 +43,7 @@ watch(otps, (value) => {
 })
 
 const onKeyPress = (event: any) => {
-	if (event.target.value.length === 1) {
-		return event.preventDefault()
-	}
+	if (event.target.value.length === 1) return event.preventDefault()
 }
 
 const focusInputByRef = (id: any) => {
@@ -56,7 +51,6 @@ const focusInputByRef = (id: any) => {
 }
 
 const onInput = (event: any, id: string) => {
-	props.onChangeOTP?.(otp.value)
 	if (event.inputType === 'deleteContentBackward') return false
 
 	focusInputByRef(id)
@@ -71,7 +65,7 @@ const onPaste = (event: any) => {
 	otps.splice(0, otps.length, ...pastedData.split('').slice(0, props.numberOfInput))
 
 	// focus the last input element according to length
-	focusInputByRef(`${props.uniqueKey}${otps.length}`)
+	focusInputByRef(`${id}${otps.length}`)
 
 	event.preventDefault()
 }

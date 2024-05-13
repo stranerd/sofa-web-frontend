@@ -1,5 +1,5 @@
 <template>
-	<EditCourseWrapper :id="$route.params.id as string">
+	<EditCourseWrapper :id="$route.params.id as string" v-model:course="courseModel">
 		<template #default="{ course, extras }">
 			<FullLayout
 				v-if="course"
@@ -27,7 +27,7 @@
 				}">
 				<template #left-session>
 					<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4 h-full overflow-y-auto">
-						<CourseSections :course="course" :edit="true" :item="selectedItem" @selectItem="selectItem" />
+						<CourseSections v-model:selectedItem="selectedItem" :factory="factory" :sections="sections" />
 					</div>
 				</template>
 
@@ -40,7 +40,7 @@
 						</div>
 
 						<EditCourseSectionItemBody v-if="$screen.desktop" :course="course" :item="selectedItem" />
-						<CourseSections v-else :course="course" :edit="true" :item="selectedItem" @selectItem="selectItem" />
+						<CourseSections v-else v-model:selectedItem="selectedItem" :factory="factory" :sections="sections" />
 					</div>
 				</template>
 
@@ -78,14 +78,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import CourseSections from '@app/components/study/courses/CourseSections.vue'
 import EditCourseSectionItem from '@app/components/study/courses/EditCourseSectionItem.vue'
 import EditCourseSectionItemBody from '@app/components/study/courses/EditCourseSectionItemBody.vue'
 import EditCourseWrapper from '@app/components/study/courses/EditCourseWrapper.vue'
 import { useModals } from '@app/composables/core/modals'
-import { Coursable, ExtendedCourseSectionItem } from '@modules/study'
+import { useUpdateSections } from '@app/composables/study/courses'
+import { CourseEntity, ExtendedCourseSectionItem } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyCoursesIdEditPage',
@@ -98,22 +99,33 @@ export default defineComponent({
 
 		const showBody = ref(false)
 		const showMoreOptions = ref(false)
-		const selectedItem = ref<ExtendedCourseSectionItem>()
+		const courseModel = ref<CourseEntity | null>(null)
+		const selectedItem = ref<ExtendedCourseSectionItem | null>(null)
 
 		const openEditModal = useModals().study.editCourse.open
 
-		const selectItem = async (item?: ExtendedCourseSectionItem) => {
-			selectedItem.value = item
+		const { factory, sections, updateSections } = useUpdateSections(courseModel)
+
+		watch(selectedItem, () => {
 			showBody.value = true
-		}
+		})
+
+		watch(
+			() => factory.factories,
+			async () => {
+				if (factory.valid && factory.hasChanges) $utils.debounce('updateSections', updateSections, 500)
+			},
+			{ deep: true, immediate: true },
+		)
 
 		return {
-			Coursable,
+			courseModel,
+			factory,
+			sections,
 			showBody,
 			showMoreOptions,
 			selectedItem,
 			openEditModal,
-			selectItem,
 		}
 	},
 })

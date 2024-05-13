@@ -25,7 +25,7 @@ export const useRedirectToAuth = () => {
 	const runInAuth =
 		<T>(fn: () => T | Promise<T>) =>
 		async () => {
-			if (id) return fn()
+			if (id.value) return fn()
 			return redirect() as unknown as T
 		}
 

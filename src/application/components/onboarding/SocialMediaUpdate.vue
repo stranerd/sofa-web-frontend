@@ -20,11 +20,11 @@
 			class="w-full flex items-center justify-between gap-3 p-3 rounded-custom border-2 border-darkLightGray"
 			@click="showAddNewItems = !showAddNewItems">
 			<div class="flex items-center gap-3">
-				<SofaIcon name="box-add" class="h-[20px] fill-grayColor" />
+				<SofaIcon name="add" class="h-[20px] fill-grayColor" />
 				<SofaNormalText color="text-grayColor" content="Add link" />
 			</div>
 
-			<SofaIcon class="h-[7px]" :name="showAddNewItems ? 'chevron-up' : 'chevron-down'" />
+			<SofaIcon name="chevron-down" class="h-[7px]" :class="{ 'rotate-180': showAddNewItems }" />
 		</a>
 
 		<div v-if="showAddNewItems" class="w-full flex flex-col gap-2">

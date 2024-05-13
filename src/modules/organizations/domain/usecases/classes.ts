@@ -2,7 +2,7 @@ import { ClassEntity } from '../entities/classes'
 import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
 import { UserEntity } from '@modules/users'
-import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
+import { Conditions, Listeners, QueryKeys } from '@modules/core'
 import { SelectedPaymentMethod } from '@modules/payment'
 
 export class ClassesUseCase {
@@ -50,12 +50,32 @@ export class ClassesUseCase {
 	async getMyClassesIn(user: UserEntity) {
 		return await this.repository('').explore({
 			where: [
+				{ field: 'organizationId', value: user.id },
 				{ field: 'members.students', value: user.id },
 				{ field: 'lessons.users.teachers', value: user.id },
 			],
 			whereType: QueryKeys.or,
 			all: true,
 		})
+	}
+
+	async listenToMyClassesIn(user: UserEntity, listener: Listeners<ClassEntity>) {
+		return await this.repository('').listenToExploreMany(
+			{
+				where: [
+					{ field: 'organizationId', value: user.id },
+					{ field: 'members.students', value: user.id },
+					{ field: 'lessons.users.teachers', value: user.id },
+				],
+				whereType: QueryKeys.or,
+				all: true,
+			},
+			listener,
+			(entity) =>
+				entity.members.students.includes(user.id) ||
+				entity.lessons.some((lesson) => lesson.users.teachers.includes(user.id)) ||
+				entity.organizationId === user.id,
+		)
 	}
 
 	async getInList(ids: string[]) {
@@ -66,22 +86,19 @@ export class ClassesUseCase {
 		return classes.results
 	}
 
-	async getAll(organizationId: string) {
-		return await this.repository(organizationId).get({
-			all: true,
-		})
+	async listenToInList(ids: () => string[], listener: Listeners<ClassEntity>) {
+		return await this.repository('').listenToExploreMany(
+			{
+				where: [{ field: 'id', value: ids(), condition: Conditions.in }],
+				all: true,
+			},
+			listener,
+			(entity) => ids().includes(entity.id),
+		)
 	}
 
 	async getSimilarClasses(organizationId: string, classId: string) {
 		return await this.repository(organizationId).similar(classId)
-	}
-
-	async listenToAll(organizationId: string, listener: Listeners<ClassEntity>) {
-		const conditions: QueryParams = {
-			all: true,
-		}
-
-		return await this.repository(organizationId).listenToMany(conditions, listener, () => true)
 	}
 
 	async purchase(organizationId: string, classId: string, methodId: SelectedPaymentMethod) {

@@ -1,8 +1,5 @@
 <template>
 	<div class="flex w-full flex-col relative">
-		<SofaNormalText v-if="hasTitle" class="!pb-2 !font-bold">
-			<slot name="title" />
-		</SofaNormalText>
 		<div class="w-full flex items-center group" :class="{ 'opacity-50': disabled }">
 			<slot name="outer-prefix" />
 			<div
@@ -44,9 +41,7 @@ withDefaults(
 		padding?: string
 		placeholder?: string
 		customClass?: string
-		hasTitle?: boolean
 		type?: string
-		name?: string
 		min?: string | number
 		max?: string | number
 		disabled?: boolean
@@ -57,10 +52,7 @@ withDefaults(
 		padding: 'p-3 md:p-4',
 		placeholder: '',
 		customClass: '',
-		hasTitle: false,
-		rules: undefined,
 		type: 'text',
-		name: '',
 		min: undefined,
 		max: undefined,
 		disabled: false,

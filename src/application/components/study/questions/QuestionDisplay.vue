@@ -60,10 +60,7 @@
 
 		<template v-if="question.strippedData.type === QuestionTypes.writeAnswer">
 			<div class="w-full rounded-xl gap-3 border-2" :class="buildClass(answer.value)">
-				<SofaTextarea
-					v-model="answer.value"
-					placeholder="Write your answer here"
-					textAreaStyle="focus:outline-none !bg-transparent !text-inherit p-3 placeholder:!text-inherit w-full text-base placeholder:text-base" />
+				<SofaTextarea v-model="answer.value" placeholder="Write your answer here" class="!bg-transparent w-full" />
 			</div>
 		</template>
 

@@ -6,8 +6,8 @@
 				<div class="h-full w-full absolute top-0 left-0" @click="close" />
 				<div
 					ref="modal"
-					class="z-[1] w-full mdlg:w-[50%] max-h-[100dvh] mdlg:max-h-[90dvh] overflow-y-auto bg-white text-bodyBlack rounded-t-2xl mdlg:rounded-b-2xl"
-					:class="{ [maxWidth]: true, [containerClass]: true, 'mdlg:my-[5dvh]': !popover }"
+					class="z-[1] w-full mdlg:w-[50%] overflow-y-auto bg-white text-bodyBlack rounded-t-2xl mdlg:rounded-b-2xl"
+					:class="{ [maxWidth]: true, [maxHeight]: true, [containerClass]: true, 'mdlg:my-[5dvh]': !popover }"
 					:style="$screen.desktop ? calculatePosition() : ''">
 					<slot />
 				</div>
@@ -25,6 +25,7 @@ const props = withDefaults(
 		popover?: boolean
 		event?: PointerEvent
 		maxWidth?: string
+		maxHeight?: string
 		containerClass?: string
 	}>(),
 	{
@@ -32,6 +33,7 @@ const props = withDefaults(
 		popover: false,
 		event: undefined,
 		maxWidth: 'mdlg:max-w-[800px]',
+		maxHeight: 'max-h-[99dvh] mdlg:max-h-[85dvh]',
 		containerClass: '',
 	},
 )

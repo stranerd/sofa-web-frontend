@@ -1,6 +1,4 @@
-import { ScheduleEntity } from '../entities/schedules'
-import { PlayTypes } from '@modules/plays'
-import { FileEntity, FileType, QuizEntity } from '@modules/study'
+import { CourseSection } from '@modules/study/domain/types'
 
 export type { Saleable } from '@modules/payment'
 export type { EmbeddedUser } from '@modules/users'
@@ -38,43 +36,16 @@ export type ClassLesson = {
 		students: string[]
 		teachers: string[]
 	}
-	curriculum: ClassLessonCurriculumSection[]
+	curriculum: CourseSection[]
 }
 
 export type ClassMembers = {
 	students: string[]
 }
 
-export enum ClassLessonable {
-	quiz = 'quiz',
-	file = 'file',
-	schedule = 'schedule',
-}
-
 export enum CurriculumView {
 	list = 'list',
 	grid = 'grid',
-}
-
-type ClassLessonCurriculumSectionItem =
-	| {
-			id: string
-			type: ClassLessonable.quiz
-			quizMode: PlayTypes
-	  }
-	| {
-			id: string
-			type: ClassLessonable.file
-			fileType: FileType
-	  }
-	| {
-			id: string
-			type: ClassLessonable.schedule
-	  }
-
-export type ClassLessonCurriculumSection = {
-	label: string
-	items: ClassLessonCurriculumSectionItem[]
 }
 
 export type ScheduleStream = {
@@ -85,36 +56,3 @@ export type ScheduleStream = {
 	roomId: string
 	canRewatch: boolean
 }
-
-export type ExtendedClassLessonCurriculumSectionItem =
-	| {
-			id: string
-			type: ClassLessonable.quiz
-			quizMode: PlayTypes
-			quiz: QuizEntity
-			image: string
-			icon: IconName
-			title: string
-			info: string
-	  }
-	| {
-			id: string
-			type: ClassLessonable.file
-			fileType: FileType
-			file: FileEntity
-			image: string
-			icon: IconName
-			title: string
-			info: string
-	  }
-	| {
-			id: string
-			type: ClassLessonable.schedule
-			schedule: ScheduleEntity
-			image: string
-			icon: IconName
-			title: string
-			info: string
-	  }
-
-export type ExtendedCurriculum = (Omit<ClassLessonCurriculumSection, 'items'> & { items: ExtendedClassLessonCurriculumSectionItem[] })[]

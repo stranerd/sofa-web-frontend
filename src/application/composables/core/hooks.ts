@@ -1,5 +1,6 @@
 import { addToArray, getRandomValue } from 'valleyed'
-import { ComputedRef, Ref, computed, reactive, ref, watch } from 'vue'
+import { ComputedRef, Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import type { useListener } from './listener'
 import { useErrorHandler, useLoadingHandler } from './states'
 
 const asyncStore: Record<string, { called: Ref<boolean> } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>> = {}
@@ -47,6 +48,7 @@ export const useItemsInList = <T extends { id: string }>(
 	ids: Refable<string[]>,
 	items: Refable<T[]>,
 	fetchItems: (ids: string[]) => Promise<T[]>,
+	listener?: ReturnType<typeof useListener>,
 ) => {
 	store[key] ??= {
 		items: reactive([]),
@@ -64,7 +66,19 @@ export const useItemsInList = <T extends { id: string }>(
 		},
 	)
 
-	const allItems = computed(() => [...items.value, ...store[key].items])
+	const { asyncFn: searchForItem } = useAsyncFn(
+		async (id: string) => {
+			const item = allItems.value.find((q) => q.id === id)
+			if (item) return item
+			const items = await fetchItems([id])
+			return items.at(0)
+		},
+		{
+			force: true,
+		},
+	)
+
+	const allItems = computed(() => [...items.value, ...store[key].items] as T[])
 
 	const filteredItems = computed(() => ids.value.map((id) => allItems.value.find((q) => q.id === id)).filter(Boolean) as T[])
 
@@ -83,5 +97,10 @@ export const useItemsInList = <T extends { id: string }>(
 		})
 	}
 
-	return { items: filteredItems, addToList }
+	if (listener) {
+		onMounted(() => listener.start())
+		onUnmounted(() => listener.close())
+	}
+
+	return { items: filteredItems, searchForItem, addToList }
 }

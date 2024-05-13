@@ -1,32 +1,46 @@
 <template>
-	<a v-if="type === 'switch'" class="flex items-center gap-2">
-		<span @click="toggle">
+	<a v-if="type === 'switch'" class="flex items-center gap-2" :class="{ 'flex-row-reverse justify-between': rotate }">
+		<span class="text-sub" @click="toggle">
 			<slot />
 		</span>
-		<SofaIcon customClass="h-[1.5em]" :name="selected ? 'toggle-on' : 'toggle-off'" @click="toggle" />
+		<SofaIcon class="h-[1.5em]" :name="isSelected ? 'toggle-on' : 'toggle-off'" @click="toggle" />
 	</a>
-	<a v-else class="flex gap-2 items-center">
-		<SofaIcon :name="`${selected ? 'checkbox-active' : 'checkbox'}`" customClass="md:!h-[18px] h-[20px] w-[25px]" @click="toggle" />
-		<span class="flex gap-2 items-center lg:text-sm mdlg:text-[12px] text-xs" @click="toggle">
+	<a v-else class="flex items-center gap-2" :class="{ 'flex-row-reverse justify-between': rotate }">
+		<SofaIcon :name="isSelected ? 'checkbox-active' : 'checkbox'" class="md:!h-[18px] h-[20px] w-[25px]" @click="toggle" />
+		<span class="flex gap-2 items-center text-sub" @click="toggle">
 			<slot />
 		</span>
 	</a>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup generic="T = boolean">
+import { computed } from 'vue'
 import SofaIcon from '../SofaIcon/index.vue'
 
-withDefaults(
+const props = withDefaults(
 	defineProps<{
 		type?: 'checkbox' | 'switch'
+		value?: T
+		rotate?: boolean
 	}>(),
 	{
 		type: 'checkbox',
+		value: undefined,
+		rotate: false,
 	},
 )
 
-const selected = defineModel<boolean>({ default: false })
+const selected = defineModel<T[] | boolean>()
+
+const isSelected = computed(() => {
+	if ('value' in props && Array.isArray(selected.value)) return selected.value.includes(props.value!)
+	return selected.value
+})
 
 const toggle = () => {
-	selected.value = !selected.value
+	if ('value' in props && Array.isArray(selected.value)) {
+		const index = selected.value.indexOf(props.value!)
+		if (index === -1) selected.value = selected.value.concat(props.value!)
+		else selected.value = selected.value.filter((v) => v !== props.value)
+	} else selected.value = !selected.value
 }
 </script>

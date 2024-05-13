@@ -1,9 +1,8 @@
 <template>
 	<SofaModal :close="() => close?.()" maxWidth="md:max-w-[30%]">
 		<div class="flex flex-col gap-2 relative mdlg:p-6 p-4 py-6 items-center justify-center text-center">
-			<SofaHeaderText v-if="title" class="text-xl" :content="title" />
-
-			<SofaNormalText v-if="subTitle" :content="subTitle" />
+			<SofaHeading v-if="title" size="title" :content="title" />
+			<SofaText v-if="subTitle" :content="subTitle" />
 
 			<div class="w-full md:flex justify-between items-center grid grid-cols-2 gap-3 mt-3">
 				<div v-for="button in buttons" :key="button.label" class="md:w-auto col-span-1 flex flex-col">
@@ -23,10 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import SofaButton from '../SofaButton'
-import SofaModal from '../SofaModal'
-import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
-
 withDefaults(
 	defineProps<{
 		close: () => void

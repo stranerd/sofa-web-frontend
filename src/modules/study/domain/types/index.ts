@@ -87,12 +87,6 @@ export type CoursableAccess = {
 		| {
 				courseId: string
 		  }
-		| {
-				testId: string
-		  }
-		| {
-				gameId: string
-		  }
 		| Record<string, any>
 }
 
@@ -104,24 +98,25 @@ export enum QuizModes {
 	assessments = 'assessments',
 }
 
-export type ExtendedCourseSectionItem =
-	| {
-			id: string
-			type: Coursable.quiz
-			quizMode: QuizModes
-			quiz: QuizEntity
-			icon: IconName
-			title: string
-			info: string
-	  }
-	| {
-			id: string
-			type: Coursable.file
-			fileType: FileType
-			file: FileEntity
-			icon: IconName
-			title: string
-			info: string
-	  }
+export type ExtendedCourseSectionItem = CourseSectionItem & {
+	icon: IconName
+	title: string
+	image: string
+	color: string
+	info: string
+	sectionIndex: number
+	itemIndex: number
+} & (
+		| {
+				type: Coursable.quiz
+				quizMode: QuizModes
+				quiz: QuizEntity
+		  }
+		| {
+				type: Coursable.file
+				fileType: FileType
+				file: FileEntity
+		  }
+	)
 
 export type ExtendedCourseSections = (Omit<CourseSection, 'items'> & { items: ExtendedCourseSectionItem[] })[]

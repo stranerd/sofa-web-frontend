@@ -125,10 +125,8 @@ export const useGenericTagsList = () => {
 	return { ...genericStore, loading, error }
 }
 
-export const useTagsInList = (ids: Refable<string[]>, listen = false) => {
+export const useTagsInList = (ids: Refable<string[]>, listen = true) => {
 	const allTags = computed(() => [...topicStore.topics, ...genericStore.tags])
-
-	const { items: tags, addToList } = useItemsInList('tags', ids, allTags, (ids) => TagsUseCases.getInList(ids))
 
 	const listener = useListener(
 		async () =>
@@ -141,13 +139,13 @@ export const useTagsInList = (ids: Refable<string[]>, listen = false) => {
 			}),
 	)
 
-	onMounted(() => {
-		if (listen) listener.start()
-	})
-
-	onUnmounted(() => {
-		if (listen) listener.close()
-	})
+	const { items: tags, addToList } = useItemsInList(
+		'tags',
+		ids,
+		allTags,
+		(ids) => TagsUseCases.getInList(ids),
+		listen ? listener : undefined,
+	)
 
 	return { tags }
 }

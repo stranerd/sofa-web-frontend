@@ -8,7 +8,7 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 	}
 
 	get picture() {
-		return this.bio.photo?.link ?? '/images/default.svg'
+		return this.bio.photo?.link
 	}
 
 	get isOnline() {
@@ -57,6 +57,11 @@ export class UserEntity extends BaseEntity<UserFromModel> {
 		if (task === 'quiz_flashcard') return !!this.account.meta.playedFlashcards
 		if (task === 'quiz_game') return !!this.account.meta.hostedGames || !!this.account.meta.playedGames
 		return false
+	}
+
+	search(query: string) {
+		if (!query) return true
+		return [this.bio.name.full].some((v) => v.toLowerCase().includes(query.toLowerCase()))
 	}
 
 	static defaultAi = 'Dr. Stranerd'

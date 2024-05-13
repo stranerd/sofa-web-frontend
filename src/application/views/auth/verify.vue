@@ -2,7 +2,7 @@
 	<AuthLayout title="Verify your email" :subTitle="`Enter the 6-digit code sent to your email ${email}`">
 		<form class="flex flex-col gap-6 w-full items-center justify-center" @submit.prevent="completeVerification">
 			<div class="w-full lg:w-[70%] mdlg:w-[80%] flex flex-col gap-4">
-				<SofaOtpInput v-model="token" :numberOfInput="6" />
+				<SofaOtpInput v-model="token" />
 			</div>
 
 			<div class="w-full flex flex-col">

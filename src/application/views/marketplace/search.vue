@@ -16,7 +16,7 @@
 		<template #middle-session>
 			<div class="w-full h-full flex flex-col mdlg:gap-5 gap-3 p-4 mdlg:p-0 mdlg:pr-4">
 				<div class="flex gap-3 items-center">
-					<SofaIcon class="h-[15px] mdlg:hidden" name="back-arrow" @click="$utils.goBack()" />
+					<SofaIcon class="h-[15px] mdlg:hidden" name="arrow-left" @click="$utils.goBack()" />
 					<div class="flex mdlg:flex-row-reverse items-center grow bg-white rounded-custom px-3 gap-3">
 						<SofaIcon name="search-black" class="h-[17px]" />
 						<SofaTextField v-model="query" customClass="bg-transparent !px-0 !border-none" placeholder="Search for anything" />
@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
@@ -145,7 +145,7 @@ const { query, courses, quizzes, search } = useSearch(q)
 const showFilter = ref(false)
 const selectedFilterOption = ref<(typeof filterOptions)[number]['id']>(filterOptions[0].id)
 
-const selectedOptions = reactive<SelectedOption[]>([
+const selectedOptions = ref<SelectedOption[]>([
 	...(userId && userName
 		? ([
 				{
@@ -164,7 +164,7 @@ const selectedOptions = reactive<SelectedOption[]>([
 watch(
 	[query, selectedOptions],
 	() => {
-		$utils.debounce('search', () => search(selectedOptions.map((option) => option.query)), 500)
+		$utils.debounce('search', () => search(selectedOptions.value.map((option) => option.query)), 500)
 	},
 	{ immediate: true },
 )

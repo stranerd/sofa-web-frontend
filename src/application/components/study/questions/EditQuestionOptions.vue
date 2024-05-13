@@ -6,7 +6,7 @@
 					<SofaIcon class="h-[18px]" name="question-type" />
 					<SofaNormalText class="!font-bold" content="Question type" />
 					<SofaNormalText :content="QuestionEntity.getLabel(factory.type)" class="ml-auto" />
-					<SofaIcon class="h-[7px]" :name="isOpen('type') ? 'chevron-up' : 'chevron-down'" />
+					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('type') }" />
 				</a>
 
 				<div v-if="isOpen('type')" class="w-full grid grid-cols-2 gap-3">
@@ -26,8 +26,8 @@
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('timeLimit')">
 					<SofaIcon class="h-[18px]" name="time-limit" />
 					<SofaNormalText class="!font-bold" content="Time limit" />
-					<SofaNormalText :content="$utils.prettifyTime(factory.timeLimit)" class="ml-auto" />
-					<SofaIcon class="h-[7px]" :name="isOpen('timeLimit') ? 'chevron-up' : 'chevron-down'" />
+					<SofaNormalText :content="$utils.getDigitalTime(factory.timeLimit)" class="ml-auto" />
+					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('timeLimit') }" />
 				</a>
 
 				<div v-if="isOpen('timeLimit')" class="w-full flex flex-wrap gap-3">
@@ -37,7 +37,7 @@
 						class="rounded-lg flex px-4 py-2 items-center justify-center gap-1"
 						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'"
 						@click="factory.timeLimit = time">
-						<SofaNormalText class="text-center" color="text-inherit" :content="$utils.prettifyTime(time)" />
+						<SofaNormalText class="text-center" color="text-inherit" :content="$utils.getDigitalTime(time)" />
 					</a>
 				</div>
 			</div>

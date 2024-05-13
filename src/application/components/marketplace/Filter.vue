@@ -12,7 +12,7 @@
 					:key="option.id"
 					class="px-4 py-2 bg-primaryPurple rounded-custom flex items-center justify-center gap-1">
 					<SofaNormalText color="text-white" :content="option.name" />
-					<SofaIcon class="h-[18px]" name="close-white" @click="toggleOption(option)" />
+					<SofaIcon class="h-[18px] fill-white" name="circle-close" c @click="toggleOption(option)" />
 				</span>
 			</div>
 		</div>

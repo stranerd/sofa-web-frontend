@@ -1,6 +1,6 @@
-import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
@@ -8,72 +8,12 @@ import { useSuccessHandler } from '../core/states'
 import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
-const orgStore: Record<
+export const similarStore: Record<
 	string,
 	{
 		classes: Ref<ClassEntity[]>
-		listener: ReturnType<typeof useListener>
 	}
 > = {}
-
-export const useOrganizationClasses = (organizationId: string) => {
-	orgStore[organizationId] ??= {
-		classes: ref([]),
-		listener: useListener(async () =>
-			ClassesUseCases.listenToAll(organizationId, {
-				created: async (entity) => {
-					addToArray(
-						orgStore[organizationId].classes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				updated: async (entity) => {
-					addToArray(
-						orgStore[organizationId].classes.value,
-						entity,
-						(e) => e.id,
-						(e) => e.createdAt,
-					)
-				},
-				deleted: async (entity) => {
-					orgStore[organizationId].classes.value = orgStore[organizationId].classes.value.filter((m) => m.id !== entity.id)
-				},
-			}),
-		),
-	}
-
-	const {
-		asyncFn: fetchClasses,
-		loading,
-		error,
-		called,
-	} = useAsyncFn(
-		async () => {
-			const classes = await ClassesUseCases.getAll(organizationId)
-			classes.results.forEach((r) =>
-				addToArray(
-					orgStore[organizationId].classes.value,
-					r,
-					(e) => e.id,
-					(e) => e.createdAt,
-				),
-			)
-		},
-		{ key: `organizations/classes/${organizationId}` },
-	)
-
-	onMounted(async () => {
-		if (!called.value) await fetchClasses()
-		await orgStore[organizationId].listener.start()
-	})
-	onUnmounted(async () => {
-		await orgStore[organizationId].listener.close()
-	})
-
-	return { ...orgStore[organizationId], loading, error }
-}
 
 export const useCreateClass = (organizationId: string) => {
 	const router = useRouter()
@@ -206,7 +146,11 @@ export const usePurchaseClass = () => {
 }
 
 export const useSimilarClasses = (organizationId: string, classId: string) => {
-	const similarClasses = ref<ClassEntity[]>([])
+	const key = `${organizationId}-${classId}`
+	similarStore[key] ??= {
+		classes: ref([]),
+	}
+
 	const {
 		asyncFn: fetchSimilarClasses,
 		loading,
@@ -215,12 +159,12 @@ export const useSimilarClasses = (organizationId: string, classId: string) => {
 	} = useAsyncFn(
 		async () => {
 			const classes = await ClassesUseCases.getSimilarClasses(organizationId, classId)
-			similarClasses.value = classes
+			similarStore[key].classes.value = classes
 		},
-		{ key: `organizations/${organizationId}/classes/${classId}/similar` },
+		{ key: `organizations/classes/${key}/similar` },
 	)
 	onMounted(async () => {
 		if (!called.value) await fetchSimilarClasses()
 	})
-	return { similarClasses, loading, error }
+	return { ...similarStore[key], loading, error }
 }

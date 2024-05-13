@@ -33,13 +33,13 @@
 						<a
 							class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
 							@click.stop="emits('duplicateQuestion', element)">
-							<SofaIcon name="duplicate-quiz" class="h-[24px]" />
+							<SofaIcon name="copy" class="h-[24px] fill-current" />
 						</a>
 						<a
 							v-if="!quiz.isPublished"
 							class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
 							@click.stop="emits('deleteQuestion', element.id)">
-							<SofaIcon name="delete-quiz" class="h-[24px]" />
+							<SofaIcon name="trash" class="h-[24px] fill-current" />
 						</a>
 					</div>
 				</div>
@@ -49,7 +49,7 @@
 		<a
 			class="h-[144px] shrink-0 w-full rounded-xl border-2 border-darkLightGray flex items-center justify-center"
 			@click="emits('addQuestion')">
-			<SofaIcon name="add-item" class="h-[30px]" />
+			<SofaIcon name="add" class="h-[30px] fill-grayColor" />
 		</a>
 	</div>
 
@@ -77,7 +77,7 @@
 			</a>
 		</VueDraggable>
 
-		<SofaIcon class="h-[44px] shrink-0" name="faded-plus" @click="emits('addQuestion')" />
+		<SofaIcon class="h-[44px] fill-white" name="add" @click="emits('addQuestion')" />
 	</div>
 </template>
 

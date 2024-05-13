@@ -1,47 +1,55 @@
 <template>
-	<div v-if="user" class="w-full bg-lightGray px-5 py-4 rounded-custom cursor-pointer flex items-center gap-4">
-		<div>
-			<SofaHeaderText :content="lesson.title" />
-			<div class="flex items-center gap-1">
-				<SofaNormalText color="text-grayColor">
-					{{ $utils.formatNumber(lesson.users.teachers.length) }}
-					{{ $utils.pluralize(lesson.users.teachers.length, 'teacher', 'teachers') }}
-				</SofaNormalText>
-				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor" />
-				<SofaNormalText color="text-grayColor">
-					{{ $utils.formatNumber(lesson.users.students.length) }}
-					{{ $utils.pluralize(lesson.users.students.length, 'student', 'students') }}
-				</SofaNormalText>
-				<div class="h-[5px] w-[5px] rounded-[50%] bg-grayColor" />
-				<SofaNormalText color="text-grayColor">
-					{{ $utils.formatNumber(resources) }}
-					{{ $utils.pluralize(resources, 'resource', 'resources') }}
-				</SofaNormalText>
+	<component :is="as" class="w-full mdlg:flex-row-reverse p-4 flex items-center gap-4">
+		<div class="flex flex-col gap-2 grow">
+			<SofaHeading :content="lesson.title" size="mid" class="leading-none" />
+			<div class="text-grayColor flex flex-col mdlg:flex-row gap-2 mdlg:gap-4 mdlg:items-center">
+				<SofaText class="gap-2 flex items-center truncate">
+					<SofaIcon name="course-material" class="fill-current h-[20px]" />
+					<span>
+						{{ $utils.formatNumber(lesson.curriculum.length) }}
+						{{ $utils.pluralize(lesson.curriculum.length, 'material', 'materials') }}
+					</span>
+				</SofaText>
+				<SofaText class="gap-2 flex items-center truncate">
+					<SofaIcon name="tutor" class="fill-current h-[20px]" />
+					<span>{{ teachers.map((teacher) => teacher.publicName).join(', ') }}</span>
+				</SofaText>
+				<SofaText class="gap-2 flex items-center truncate">
+					<SofaIcon name="users" class="fill-current h-[20px]" />
+					<span>
+						{{ $utils.formatNumber(lesson.users.students.length) }}
+						{{ $utils.pluralize(lesson.users.students.length, 'student', 'students') }}
+					</span>
+				</SofaText>
 			</div>
 		</div>
-		<SofaCheckbox v-if="classInst.isStudent(user) && !hideJoin" v-model="joined" class="ml-auto" />
-	</div>
+		<div class="flex flex-col">
+			<SofaImageLoader :photoUrl="image" class="size-[56px] rounded" />
+		</div>
+	</component>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { useAuth } from '@app/composables/auth/auth'
-import { useJoinLesson } from '@app/composables/organizations/lessons'
+import { computed } from 'vue'
+import { useUsersInList } from '@app/composables/users/users'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
-const props = defineProps<{
-	classInst: ClassEntity
-	lesson: ClassLesson
-	hideJoin?: boolean
-}>()
 
-const { id, user } = useAuth()
-const resources = props.lesson.curriculum.reduce((acc, cur) => acc + cur.items.length, 0)
+const images = ['/images/lessons/1.png', '/images/lessons/2.png']
 
-const joined = ref(props.lesson.users.students.includes(id.value))
+const props = withDefaults(
+	defineProps<{
+		classInst: ClassEntity
+		index: number
+		lesson: ClassLesson
+		as?: string
+	}>(),
+	{
+		as: 'div',
+	},
+)
 
-const { joinLesson } = useJoinLesson()
+const teacherIds = computed(() => props.lesson.users.teachers)
+const { users: teachers } = useUsersInList(teacherIds)
 
-watch(joined, async () => {
-	await joinLesson(props.classInst, props.lesson.id, joined.value)
-})
+const image = computed(() => images[props.index % images.length])
 </script>

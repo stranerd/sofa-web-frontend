@@ -1,5 +1,5 @@
 import { addToArray } from 'valleyed'
-import { Ref, onMounted, reactive, ref } from 'vue'
+import { Ref, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { CourseEntity, QuizEntity, CoursesUseCases, QuizzesUseCases } from '@modules/study'
@@ -105,7 +105,7 @@ export const useUsersMaterials = (id: string) => {
 		if (!called.value) await fetchUserAndMaterials()
 		await listener.start()
 	})
-	onMounted(async () => {
+	onUnmounted(async () => {
 		await listener.close()
 	})
 

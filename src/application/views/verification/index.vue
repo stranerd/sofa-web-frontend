@@ -31,36 +31,38 @@
 						v-model="profileFactory.photo"
 						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full size-[40px] flex items-center justify-center"
 						accept="image/*">
-						<SofaIcon class="h-[18px]" name="camera-white" />
+						<SofaIcon class="h-[18px] fill-white" name="camera" />
 					</SofaFileInput>
 				</SofaImageLoader>
 
-				<SofaTextField
-					v-model="profileFactory.first"
-					placeholder="Enter first name"
-					:hasTitle="true"
-					customClass="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.first">
-					<template #title>First Name</template>
-				</SofaTextField>
+				<SofaFormGroup>
+					<SofaLabel>First Name</SofaLabel>
 
-				<SofaTextField
-					v-model="profileFactory.last"
-					placeholder="Enter last name"
-					:hasTitle="true"
-					customClass="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.last">
-					<template #title>Last Name</template>
-				</SofaTextField>
+					<SofaTextField
+						v-model="profileFactory.first"
+						placeholder="Enter first name"
+						customClass="rounded-custom !bg-lightGray"
+						:error="profileFactory.errors.first" />
+				</SofaFormGroup>
 
-				<SofaTextarea
-					v-model="profileFactory.description"
-					placeholder="Description of yourself"
-					:hasTitle="true"
-					textAreaStyle="rounded-custom !bg-lightGray"
-					:error="profileFactory.errors.description">
-					<template #title>Bio</template>
-				</SofaTextarea>
+				<SofaFormGroup>
+					<SofaLabel>Last Name</SofaLabel>
+
+					<SofaTextField
+						v-model="profileFactory.last"
+						placeholder="Enter last name"
+						customClass="rounded-custom !bg-lightGray"
+						:error="profileFactory.errors.last" />
+				</SofaFormGroup>
+
+				<SofaFormGroup>
+					<SofaLabel>Bio</SofaLabel>
+
+					<SofaTextarea
+						v-model="profileFactory.description"
+						placeholder="Description of yourself"
+						:error="profileFactory.errors.description" />
+				</SofaFormGroup>
 			</form>
 		</template>
 
@@ -75,11 +77,10 @@
 					<StudyMaterialCard
 						v-for="material in [...content.courses, ...content.quizzes]"
 						:key="material.hash"
-						type="activity"
 						:material="material"
-						:isWrapped="!$screen.desktop"
 						:hasBookmark="false"
-						:isRoute="false">
+						:isRoute="false"
+						class="!bg-lightGray">
 						<template #side-icons>
 							<SofaIcon
 								class="h-[20px]"
@@ -89,7 +90,7 @@
 					</StudyMaterialCard>
 
 					<SofaButton padding="p-4" @click="showAddNewHandler">
-						<SofaIcon name="box-add" class="h-[18px] fill-white" />
+						<SofaIcon name="add" class="h-[18px] fill-white" />
 						Add Content
 					</SofaButton>
 				</div>

@@ -17,21 +17,14 @@
 					borderColor="border-transparent"
 					:error="factory.errors.title" />
 
-				<SofaTextarea
-					v-model="factory.description"
-					:rows="4"
-					textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-					placeholder="Description"
-					:error="factory.errors.description" />
+				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Description" :error="factory.errors.description" />
 
 				<SofaSelect
 					v-model="factory.topic"
-					customClass="rounded-custom !bg-lightGray"
 					placeholder="Topic"
-					borderColor="border-transparent"
 					:error="factory.errors.topic"
 					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
-					:canUseCustom="true" />
+					custom />
 			</div>
 
 			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
@@ -39,7 +32,7 @@
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 						<SofaFileInput v-model="factory.photo" accept="image/*">
 							<div class="p-3 flex items-center justify-center gap-2 rounded-custom bg-deepGray bg-opacity-50">
-								<SofaIcon class="h-[18px]" name="camera-white" />
+								<SofaIcon class="h-[18px] fill-white" name="camera" />
 								<SofaNormalText color="text-white" content="Add cover photo" />
 							</div>
 						</SofaFileInput>
@@ -52,7 +45,7 @@
 			<SofaCheckbox
 				:modelValue="factory.timeLimit === null"
 				type="switch"
-				@update:modelValue="(selected) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
+				@update:modelValue="(selected: boolean) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
 				<SofaNormalText content="Use individual question times" class="capitalize" />
 			</SofaCheckbox>
 			<SofaTextField

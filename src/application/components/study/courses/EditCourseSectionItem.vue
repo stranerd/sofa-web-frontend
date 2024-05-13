@@ -31,24 +31,20 @@
 		</template>
 
 		<form v-if="file" class="flex flex-col gap-4" @submit.prevent="updateFile">
-			<SofaTextField
-				v-model="factory.title"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="File title"
-				hasTitle
-				borderColor="border-transparent">
-				<template #title>Title</template>
-			</SofaTextField>
+			<SofaFormGroup>
+				<SofaLabel>Title</SofaLabel>
+				<SofaTextField
+					v-model="factory.title"
+					customClass="rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="File title"
+					borderColor="border-transparent" />
+			</SofaFormGroup>
 
-			<SofaTextarea
-				v-model="factory.description"
-				hasTitle
-				:rows="6"
-				textAreaStyle="rounded-custom !bg-lightGray md:p-4 p-3"
-				placeholder="File description">
-				<template #title>Description</template>
-			</SofaTextarea>
+			<SofaFormGroup>
+				<SofaLabel>Description</SofaLabel>
+				<SofaTextarea v-model="factory.description" :rows="6" placeholder="File description" />
+			</SofaFormGroup>
 
 			<SofaButton v-if="factory.hasChanges" type="submit" :disabled="!factory.valid" padding="px-4 py-2" class="self-end">
 				Save changes
@@ -64,7 +60,7 @@ import { Coursable, CourseEntity, ExtendedCourseSectionItem } from '@modules/stu
 
 const props = defineProps<{
 	course: CourseEntity
-	item?: ExtendedCourseSectionItem
+	item: ExtendedCourseSectionItem | null
 }>()
 
 const quiz = computed(() => (props.item?.type === Coursable.quiz ? props.item.quiz : null))

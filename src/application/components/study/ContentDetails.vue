@@ -75,7 +75,7 @@
 
 		<div class="w-full flex gap-4 items-center border-b border-lightGray px-4 pt-2">
 			<SofaNormalText
-				v-for="(tab, index) in tabs"
+				v-for="(tab, index) in tabs.filter((tab) => !tab.hide)"
 				:key="index"
 				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
 				class="!font-semibold pb-2 border-b-2 border-transparent"
@@ -92,17 +92,17 @@
 						{{ material.sections.length }} {{ $utils.pluralize(material.sections.length, 'section', 'sections') }}
 					</SofaNormalText>
 					<span class="size-[5px] rounded-full bg-bodyBlack" />
-					<SofaNormalText
-					>{{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }}</SofaNormalText
-					>
+					<SofaNormalText>
+						{{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }}
+					</SofaNormalText>
 				</div>
 
 				<div v-for="(section, index) in sections" :key="index" class="w-full flex flex-col gap-3">
 					<a class="bg-lightGray rounded-custom p-4 gap-4 flex items-center" @click="toggleSection(index)">
 						<SofaNormalText class="!font-bold !line-clamp-1" :content="section.label" />
 						<span class="grow" />
-						<SofaNormalText
-						>{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
+						<SofaNormalText>
+							{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
 						</SofaNormalText>
 						<SofaIcon class="h-[8px]" name="chevron-down" :class="{ 'rotate-180': expandedSections.has(index) }" />
 					</a>
@@ -147,7 +147,7 @@
 								<div class="flex items-center gap-2">
 									<SofaNormalText color="text-grayColor" :content="question.label" />
 									<span class="size-[5px] rounded-full bg-grayColor" />
-									<SofaNormalText color="text-grayColor" :content="$utils.prettifyTime(question.timeLimit)" />
+									<SofaNormalText color="text-grayColor" :content="$utils.getDigitalTime(question.timeLimit)" />
 								</div>
 								<SofaNormalText class="!font-bold" :content="question.content" />
 							</div>
@@ -164,7 +164,7 @@
 					subTitle="Get the course it is in to use"
 					actionLabel="Go to course"
 					:action="openQuiz"
-					:icon="{ name: 'lock-white', size: 'h-[28px]' }" />
+					:icon="{ name: 'lock', size: 'h-[28px] fill-white' }" />
 			</template>
 
 			<template v-if="selectedTab === 'ratings'">
@@ -210,15 +210,14 @@
 			</template>
 
 			<template v-if="selectedTab === 'similar'">
-				<div v-if="similarMaterials.length" class="flex mdlg:flex-col mdlg:gap-4 gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
-					<StudyMaterialCard v-for="m in similarMaterials" :key="m.hash" type="activity" :material="m" />
+				<div class="flex items-start mdlg:flex-col mdlg:gap-4 gap-3 flex-nowrap overflow-x-auto scrollbar-hide">
+					<StudyMaterialCard
+						v-for="m in similarMaterials"
+						:key="m.hash"
+						class="!bg-lightGray"
+						:material="m"
+						:wrapped="!$screen.desktop" />
 				</div>
-				<SofaEmptyState
-					v-else
-					title="No similar course found"
-					subTitle="Discover thousands of materials to buy, created by verified experts"
-					actionLabel="Marketplace"
-					:action="() => $router.push('/marketplace')" />
 			</template>
 		</div>
 	</div>
@@ -247,8 +246,10 @@ const props = defineProps<{
 const { id } = useAuth()
 const router = useRouter()
 const expandedSections = ref(new Set<number>([0]))
-const { sections } = useCourseSections(computed(() => (props.material.isCourse() ? props.material.sections : [])))
-const { tags } = useTagsInList(computed(() => props.material.tagIds))
+const courseSections = computed(() => (props.material.isCourse() ? props.material.sections : []))
+const { sections } = useCourseSections(courseSections)
+const tagIds = computed(() => props.material.tagIds)
+const { tags } = useTagsInList(tagIds)
 const { hasAccess: userHasAccess } = useHasAccess()
 const { createPurchase } = useCreatePurchase(props.material.id, Purchasables.courses)
 const { materials: similarMaterials } = useSimilar(props.material)
@@ -269,18 +270,18 @@ const sub = computed(() =>
 
 const openQuiz = () => {
 	if (!props.material.isQuiz()) return
-	if (hasAccess.value) return openMaterial(props.material)
+	if (hasAccess.value) return openMaterial(props.material, true)
 	router.push(props.material.noAccessPage)
 }
 
 const openCourse = () => {
 	const material = props.material
 	if (!material.isCourse()) return
-	if (hasAccess.value) return openMaterial(material)
+	if (hasAccess.value) return openMaterial(material, true)
 	useModals().payment.selectPaymentMethod.open({
 		price: material.price,
 		autoSelect: true,
-		onSelect: (method) => createPurchase(method).then(() => openMaterial(material)),
+		onSelect: (method) => createPurchase(method).then(() => openMaterial(material, true)),
 	})
 }
 
@@ -295,14 +296,17 @@ const tabs = computed(
 			{
 				name: props.material.isQuiz() ? 'Questions' : 'Content',
 				key: 'content',
+				hide: false,
 			},
 			{
 				name: 'Ratings',
 				key: 'ratings',
+				hide: false,
 			},
 			{
 				name: props.material.isQuiz() ? 'Similar Quizzes' : 'Similar Courses',
 				key: 'similar',
+				hide: !similarMaterials.value.length,
 			},
 		] as const,
 )

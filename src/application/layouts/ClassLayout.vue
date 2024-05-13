@@ -1,99 +1,124 @@
 <template>
 	<slot v-if="!classInst" name="notfound" />
 	<ExploreClassView v-else-if="!user || !classInst.isEnrolled(user)" :classInst="classInst" />
-	<slot v-else-if="full" name="full" :classInst="classInst" :user="user" />
-	<ExpandedLayout v-else-if="!$screen.desktop" :hide="{ top: true, bottom: true }">
-		<div class="w-full flex items-center gap-3 justify-between bg-lightGray p-4 sticky top-0">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base" :content="pageTitle" />
-			<span class="w-4" />
-		</div>
-		<div class="w-full flex items-center gap-4 px-4 border-b border-darkLightGray overflow-x-auto">
-			<router-link v-for="item in options" :key="item.route" :to="`${classInst.pageLink}${item.route}`" class="pb-3">
-				<SofaNormalText
-					class="text-md font-700 border-b-2 pb-1"
-					:class="$route.path.includes(item.route) ? 'border-black text-deepGray' : 'text-grayColor border-transparent'">
-					{{ item.title }}
-				</SofaNormalText>
-			</router-link>
-		</div>
-		<div class="w-full flex flex-col gap-4 flex-1 overflow-y-auto p-4">
-			<slot :classInst="classInst" :user="user" />
-		</div>
-	</ExpandedLayout>
-	<FullLayout v-else :topbarOptions="{ title: pageTitle }">
-		<template #left-session>
-			<div v-if="classInst" class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
-				<div class="w-full flex flex-col gap-5">
-					<SofaImageLoader class="w-full rounded-custom" :photoUrl="classInst.picture"> </SofaImageLoader>
-					<SofaHeaderText>{{ classInst.title }}</SofaHeaderText>
-				</div>
-
-				<div>
-					<div class="h-[1px] w-full bg-lightGray" />
-					<div class="w-full flex flex-col gap-1">
-						<router-link
-							v-for="item in options"
-							:key="item.route"
-							class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-deepGray hover:bg-lightBlue"
-							:to="`${classInst.pageLink}${item.route}`"
-							exactActiveClass="bg-lightBlue font-semibold">
-							<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
-							<SofaNormalText color="text-inherit" :content="item.title" />
-						</router-link>
+	<slot v-else-if="full" name="full" :classInst="classInst" />
+	<DashboardLayout
+		v-else
+		:title="pageTitle ?? classInst.title"
+		:breadcrumbs="[
+			{ text: 'Home', to: '/dashboard' },
+			{ text: classInst.title, to: classInst.pageLink },
+			...extraCrumbs,
+			{ text: title, to: $route.path },
+		]"
+		light
+		:primary="primary"
+		:rounded="rounded">
+		<template #pre-crumbs>
+			<div v-if="$screen.desktop" class="w-full flex flex-col mb-4">
+				<SofaImageLoader :photoUrl="classInst.picture" class="h-[148px] w-full rounded-t-2xl">
+					<div class="flex flex-col justify-end w-full h-full bg-black/15 p-6 text-white rounded-t-2xl">
+						<SofaHeading :content="classInst.title" size="title2" />
+						<UserName :user="classInst.user" as="router-link" />
 					</div>
+				</SofaImageLoader>
+				<div class="bg-white flex gap-4 px-6 overflow-x-auto rounded-b-2xl">
+					<SofaText
+						v-for="tab in tabs"
+						:key="tab.route"
+						as="router-link"
+						class="py-4 border-b-2 border-transparent shrink-0 flex items-center gap-2"
+						:to="tab.route"
+						activeClass="text-primaryPurple !border-primaryPurple">
+						<SofaIcon :name="tab.icon" class="h-[24px] fill-current" />
+						<span>{{ tab.title }}</span>
+					</SofaText>
 				</div>
 			</div>
 		</template>
-		<template #middle-session>
-			<div class="flex flex-col gap-4 h-full overflow-y-auto">
-				<slot :classInst="classInst" :user="user" />
+		<template #default="{ extras }">
+			<slot name="pre-tabs" />
+			<div v-if="!$screen.desktop" class="bg-white flex gap-1 px-2 overflow-x-auto">
+				<SofaText
+					v-for="tab in tabs"
+					:key="tab.route"
+					as="router-link"
+					class="p-2 border-b-2 border-transparent shrink-0 flex items-center gap-2"
+					:to="tab.route"
+					activeClass="text-primaryPurple !border-primaryPurple">
+					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
+					<span>{{ tab.title }}</span>
+				</SofaText>
+			</div>
+			<slot name="post-tabs" />
+			<div class="flex-1 overflow-y-auto">
+				<slot :classInst="classInst" :extras="extras" />
 			</div>
 		</template>
-		<template #right-session>
-			<SidebarScheduleList :classInst="classInst" />
-		</template>
-	</FullLayout>
+	</DashboardLayout>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
+import DashboardLayout from './DashboardLayout.vue'
 import { useClass } from '@app/composables/organizations/classes'
 import { useAuth } from '@app/composables/auth/auth'
+import { ClassEntity } from '@modules/organizations'
 
 const props = withDefaults(
 	defineProps<{
+		title: string
+		pageTitle?: string
+		rounded?: boolean
+		extraCrumbs?: InstanceType<typeof DashboardLayout>['$props']['breadcrumbs']
+		primary?: InstanceType<typeof DashboardLayout>['$props']['primary']
+		tabs?: { title: string; icon: IconName; route: string }[]
 		full?: boolean
-		organizationId?: string
-		classId?: string
 	}>(),
 	{
+		pageTitle: undefined,
+		rounded: undefined,
+		extraCrumbs: () => [],
+		primary: undefined,
+		tabs: undefined,
 		full: false,
-		organizationId: undefined,
-		classId: undefined,
 	},
 )
 
-const route = useRoute()
-const organizationId = props.organizationId ?? (route.params.organizationId as string)
-const classId = props.classId ?? (route.params.classId as string)
+const model = defineModel<ClassEntity | null>({ default: null })
 
-const { class: classInst } = useClass(organizationId, classId)
+const route = useRoute()
+
+const { class: classInst } = useClass(route.params.organizationId as string, route.params.classId as string)
 const { user } = useAuth()
 
-const pageTitle = computed(() => classInst.value?.title ?? 'Class')
 useMeta(
 	computed(() => ({
-		title: pageTitle.value,
+		title: classInst.value?.title ?? 'Class',
 	})),
 )
 
-const options = computed(() => [
-	{ title: 'Lessons', icon: 'lessons' as const, route: '/lessons' },
-	{ title: 'Announcements', icon: 'announcement' as const, route: '/announcements' },
-	{ title: 'Schedule', icon: 'calendar' as const, route: '/schedules' },
-	{ title: 'About', icon: 'info' as const, route: '/about' },
-])
+const getClassPath = (path: string) => `${classInst.value?.pageLink}/${path}`
+const tabs = computed(
+	() =>
+		props.tabs ??
+		([
+			{ title: 'Feed', icon: 'feed', route: getClassPath('feed') },
+			{ title: 'Courses', icon: 'lessons', route: getClassPath('courses') },
+			{ title: 'Live', icon: 'live', route: getClassPath('live') },
+			{ title: `Students (${classInst.value?.members.students.length})`, icon: 'users', route: getClassPath('students') },
+			{ title: `Teachers (${classInst.value?.teachers.length})`, icon: 'tutor', route: getClassPath('teachers') },
+			{ title: 'About', icon: 'info', route: getClassPath('about') },
+		] as const),
+)
+
+watch(
+	classInst,
+	() => {
+		model.value = classInst.value
+	},
+	{ immediate: true },
+)
 </script>

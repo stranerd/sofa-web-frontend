@@ -14,7 +14,7 @@
 					<div class="flex items-center gap-2">
 						<SofaNormalText color="text-grayColor" :content="question.label" />
 						<span class="size-[5px] rounded-full bg-grayColor" />
-						<SofaNormalText color="text-grayColor" :content="$utils.prettifyTime(question.timeLimit)" />
+						<SofaNormalText color="text-grayColor" :content="$utils.getDigitalTime(question.timeLimit)" />
 					</div>
 					<SofaNormalText class="!font-bold" :content="question.content" />
 					<SofaNormalText v-if="showAnswers" :content="question.answer" />
@@ -31,7 +31,7 @@ import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
 
 defineProps<{
 	course: CourseEntity
-	item?: ExtendedCourseSectionItem
+	item: ExtendedCourseSectionItem | null
 }>()
 
 const showAnswers = ref(true)

@@ -5,7 +5,7 @@ const tsFile = 'src/types/icons.d.ts'
 
 if (fs.existsSync(iconPath)) {
 	const iconsPath = fs.readdirSync(iconPath)
-	const iconsNames = iconsPath.map((icon) => icon.split('.svg')[0])
+	const iconsNames = iconsPath.filter((icon) => icon.endsWith('.svg')).map((icon) => icon.split('.svg')[0])
 
 	const literalTypesFromIconsNames = iconsNames.map((iconName) => `'${iconName}'`)
 

@@ -40,11 +40,11 @@
 						</RouterLink>
 					</div>
 				</div>
-				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/smiles.png" />
-				<img class="hidden mdlg:block absolute bottom-0 left-0" src="/images/arrow-svg.png" />
+				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/landing/smiles.png" />
+				<img class="hidden mdlg:block absolute bottom-0 left-0" src="/images/landing/arrow-svg.png" />
 			</div>
 			<div class="w-[90%] mt-[30px] mdlg:mt-0 mx-auto flex md:items-center md:justify-center">
-				<img src="/images/students-hero-image.png" class="w-full h-full mdlg:h-[866px] object-cover md:object-contain" />
+				<img src="/images/landing/students-hero-image.png" class="w-full h-full mdlg:h-[866px] object-cover md:object-contain" />
 			</div>
 		</header>
 		<MoreOnStranerd :content="content" />

@@ -1,98 +1,87 @@
 <template>
-	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-4" :hide="{ bottom: true }">
-		<div class="mdlg:flex hidden px-4 justify-between items-center w-full">
-			<div class="text-grayColor w-full flex justify-start gap-1">
-				<SofaNormalText as="router-link" to="/classes/explore" class="text-current">Classes</SofaNormalText>
-				<SofaNormalText class="text-current">/ {{ classInst.title }}</SofaNormalText>
-			</div>
+	<ExpandedLayout width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:py-5" :hide="{ bottom: true }">
+		<div v-if="$screen.desktop" class="text-grayColor w-full flex gap-1">
+			<SofaText as="router-link" to="/marketplace/classes" content="Explore classes" />
+			<SofaText>/ {{ classInst.title }}</SofaText>
 		</div>
-		<div class="w-full mdlg:!hidden p-4 flex justify-between items-center gap-4">
-			<SofaIcon class="h-[15px]" name="back-arrow" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base" :content="classInst.title" />
+		<div v-else class="w-full p-4 flex justify-between items-center gap-4 bg-white text-deepGray">
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+			<SofaHeading :content="classInst.title" />
 			<span class="w-4" />
 		</div>
-		<div class="w-full mdlg:rounded-2xl flex flex-col grow overflow-y-auto p-4 bg-white">
-			<div
-				class="w-full flex mdlg:flex md:flex-row mdlg:flex-none flex-col mdlg:items-start h-auto items-start justify-start gap-3 mdlg:gap--3">
-				<SofaImageLoader class="w-full mdlg:w-[33%] h-[200px] rounded-custom" :photoUrl="classInst.picture"> </SofaImageLoader>
+		<div class="w-full mdlg:rounded-2xl flex flex-col max-h-full overflow-y-auto px-4 pb-4 mdlg:p-4 bg-white text-deepGray">
+			<div class="w-full flex mdlg:flex-row flex-col items-start gap-4">
+				<SofaImageLoader class="w-full mdlg:w-[33%] aspect-video rounded-custom" :photoUrl="classInst.picture" />
 				<div class="w-full flex flex-col gap-2 grow">
-					<div class="w-full flex flex-row items-center justify-between">
-						<SofaHeaderText :content="classInst.title" />
+					<div class="w-full flex items-center justify-between gap-4">
+						<SofaHeading :content="classInst.title" />
 						<SofaIcon name="share" class="h-[16px]" @click="shareClass" />
 					</div>
-					<SofaNormalText>{{ classInst.description }}</SofaNormalText>
-					<div class="flex flex-row mdlg:flex-col gap-2">
+					<SofaText :content="classInst.description" />
+					<div class="flex items-center mdlg:items-start mdlg:flex-col gap-2">
 						<div class="flex items-center gap-1">
-							<SofaIcon name="lessons" class="fill-black h-[16px]" />
-							<SofaNormalText color="text-deepGray" class="line-clamp-1">
+							<SofaIcon name="lessons" class="fill-current h-[16px]" />
+							<SofaText clamp>
 								{{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
-							</SofaNormalText>
+							</SofaText>
 						</div>
 						<div class="flex items-center gap-1">
-							<SofaIcon name="user-unfilled" class="!fill-black h-[16px]" />
-							<SofaNormalText color="text-deepGray" class="line-clamp-1">
+							<SofaIcon name="user-unfilled" class="fill-current h-[16px]" />
+							<SofaText clamp>
 								{{ classInst.members.students.length }}
 								{{ $utils.pluralize(classInst.members.students.length, 'student', 'students') }}
-							</SofaNormalText>
+							</SofaText>
 						</div>
 					</div>
 					<div class="flex items-center gap-1">
-						<SofaAvatar :photoUrl="classInst.user.bio.photo?.link" :size="24" />
-						<SofaNormalText :content="classInst.user.bio.name.full" />
-						<div class="h-[5px] w-[5px] rounded-full bg-deepGray"></div>
-						<SofaNormalText>
-							{{ `Created on ${$utils.formatTime(classInst.createdAt)}` }}
-						</SofaNormalText>
+						<UserName :user="classInst.user" />
+						<div class="size-[5px] rounded-full bg-current" />
+						<SofaText :content="`Created on ${$utils.formatTime(classInst.createdAt)}`" />
 					</div>
-					<SofaButton padding="py-3 px-5" class="hidden mdlg:block self-start mt-3" @click="enrollInClassProps.handler">
+					<SofaButton padding="py-3 px-5" class="hidden mdlg:inline self-start mt-3" @click="enrollInClassProps.handler">
 						{{ enrollInClassProps.label }}
 					</SofaButton>
 				</div>
 			</div>
-			<!-- Tabs -->
+
 			<div class="w-full flex gap-4 items-center border-b border-lightGray pr-4 pt-3 my-4">
-				<SofaNormalText
-					v-for="(tab, index) in tabs"
-					:key="index"
-					:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
-					:customClass="`!font-semibold cursor-pointer pb-2  ${selectedTab == tab.key ? 'border-b-2 border-bodyBlack' : ''}`"
-					@click="selectedTab = tab.key">
-					{{ tab.name }}
-				</SofaNormalText>
+				<SofaText
+					v-for="tab in tabs.filter((tab) => !tab.hide)"
+					:key="tab.name"
+					as="a"
+					class="font-semibold pb-2 text-grayColor"
+					:content="tab.name"
+					:class="{ 'border-b-2 border-current !text-bodyBlack': selectedTab === tab.key }"
+					@click="selectedTab = tab.key" />
 			</div>
-			<div v-if="selectedTab == 'activity'" class="grow overflow-y-auto">
+
+			<div v-if="selectedTab == 'courses'" class="grow overflow-y-auto">
 				<div v-if="classInst.lessons.length" class="flex w-full flex-col">
-					<SofaHeaderText content="Lessons" class="!text-xl" />
-					<div class="flex flex-col gap-4 mt-3">
-						<LessonCard
-							v-for="lesson in classInst.lessons"
-							:key="lesson.id"
-							:lesson="lesson"
-							hideJoin
-							:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
-							:classInst="classInst"
-							@click="selectedLesson = lesson" />
-					</div>
+					<LessonCard
+						v-for="(lesson, index) in classInst.lessons"
+						:key="lesson.id"
+						:lesson="lesson"
+						:index="index"
+						class="rounded-xl"
+						:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
+						:classInst="classInst"
+						@click="selectedLesson = lesson" />
 				</div>
-				<div v-else class="flex flex-col gap-4 items-center py-10">
-					<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
-					<SofaNormalText color="text-grayColor" customClass="font-bold">No lessons created yet!</SofaNormalText>
-				</div>
+				<EmptyState v-else image="lessons" title="No courses created yet" sub="" />
 			</div>
-			<div v-if="selectedTab == 'similar_classes'" class="grow overflow-y-auto">
-				<div v-if="similarClasses.length === 0" class="flex flex-col gap-4 items-center py-10">
-					<img src="/images/empty-classes.png" class="w-[84px] h-[84px]" />
-					<SofaNormalText color="text-grayColor" customClass="font-bold">No classes found!</SofaNormalText>
-				</div>
-				<div v-else class="grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-3 mdlg:gap-6">
-					<ExploreClassCard
-						v-for="classItem in similarClasses"
-						:key="classItem.id"
-						:classInst="classItem"
-						class="!bg-[#FAFAFA]" />
-				</div>
+
+			<div
+				v-if="selectedTab == 'similar'"
+				class="grow overflow-y-auto flex items-start mdlg:flex-col gap-4 flex-nowrap overflow-x-auto scrollbar-hide">
+				<ClassCard
+					v-for="classItem in similarClasses"
+					:key="classItem.id"
+					:classInst="classItem"
+					class="!bg-lightGray"
+					:wrapped="!$screen.desktop" />
 			</div>
-			<SofaButton padding="px-6 py-3" class="mdlg:hidden w-full mt-4" @click="enrollInClassProps.handler">
+
+			<SofaButton v-if="!$screen.desktop" padding="px-6 py-3" class="w-full sticky bottom-0 mt-4" @click="enrollInClassProps.handler">
 				{{ enrollInClassProps.label }}
 			</SofaButton>
 		</div>
@@ -101,38 +90,30 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useMeta } from 'vue-meta'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
 import { usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
 
-const props = defineProps<{
-	classInst: ClassEntity
-}>()
+const props = defineProps<{ classInst: ClassEntity }>()
 
 const router = useRouter()
+useMeta({ title: props.classInst.title })
 const { user, wallet } = useAuth()
 const { runInAuth } = useRedirectToAuth()
-const tabs = [
-	{
-		name: 'Activity',
-		key: 'activity',
-	},
-	{
-		name: 'Similar Classes',
-		key: 'similar_classes',
-	},
-]
-const selectedTab = ref(tabs[0].key)
+const { purchaseClass } = usePurchaseClass()
+const { classes: similarClasses } = useSimilarClasses(props.classInst.organizationId, props.classInst.id)
+
+const tabs = computed(() => [
+	{ name: 'Courses', key: 'courses', hide: !props.classInst.lessons.length },
+	{ name: 'Similar Classes', key: 'similar', hide: !similarClasses.value.length },
+])
+const selectedTab = ref(tabs.value[0]?.key)
 const lessons = computed(() => props.classInst.lessons)
 const selectedLesson = ref(lessons.value[0])
-const { purchaseClass } = usePurchaseClass()
-const { similarClasses } = useSimilarClasses(props.classInst.organizationId, props.classInst.id)
-
-useMeta({ title: props.classInst.title })
 
 const shareClass = () => {
 	$utils.share(`Join ${props.classInst.title} class on SOFA`, props.classInst.description, props.classInst.shareLink)

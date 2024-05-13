@@ -1,83 +1,87 @@
 <template>
-	<div v-if="!members.length" class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col mdlg:flex-row gap-4 p-6">
-		<div class="h-full aspect-square bg-lightGray rounded flex items-center justify-center">
-			<img class="w-3/4 h-3/4" :src="image" />
-		</div>
-		<div class="flex flex-col gap-2">
-			<SofaHeaderText color="text-inherit" size="xl" :content="`Getting started with ${label}`" />
-			<div v-for="message in messages" :key="message" class="flex gap-2 items-center">
-				<SofaIcon name="checkmark-circle" class="h-[16px]" />
-				<SofaNormalText color="text-grayColor" :content="message" />
+	<div
+		class="p-4 h-fit max-h-full overflow-y-auto flex flex-col gap-4 mdlg:gap-6 mdlg:bg-white mdlg:rounded-b-2xl mdlg:shadow-custom"
+		:class="{ 'h-full': !members.length }">
+		<EmptyState
+			v-if="!members.length"
+			:image="isStudent ? 'students' : 'teachers'"
+			:title="isStudent ? 'You have no students' : 'You have no teachers'"
+			class="bg-white"
+			:sub="
+				isStudent
+					? 'Add your offline students to your organization so they can access to your classes, courses, and quizzes'
+					: 'Add teachers to your organization'
+			"
+			:primary="{ label: isStudent ? 'Add student' : 'Add teacher', action: add }" />
+		<div v-if="pending.length" class="flex flex-col rounded-2xl border border-lightGray bg-white text-deepGray px-0.5 mdlg:px-0">
+			<SofaText :content="`Requests (${$utils.formatNumber(pending.length)})`" class="p-4" />
+			<div
+				v-for="(member, index) in pending"
+				:key="member.hash"
+				class="flex gap-3 items-center w-full p-3 mdlg:p-4"
+				:class="{ 'bg-lightGray': index % 2 === 0 }">
+				<SofaAvatar :photoUrl="member.user?.bio.photo?.link" :size="$screen.desktop ? 48 : 32" />
+				<SofaText
+					:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
+					class="truncate grow" />
+				<template v-if="member.pending">
+					<SofaText as="a" class="text-primaryRed" content="Decline" size="sub" @click="acceptMember(member, false)" />
+					<div class="h-full bg-darkLightGray w-[1px]" />
+					<SofaText as="a" class="text-primaryGreen" content="Accept" size="sub" @click="acceptMember(member, true)" />
+				</template>
+				<SofaText v-else as="a" class="text-primaryRed" content="Remove" size="sub" @click="removeMember(member)" />
 			</div>
-			<SofaButton bgColor="bg-primaryBlue" textColor="text-white" class="self-start mt-2" padding="px-6 py-3" @click="add">
-				Add {{ label }}
-			</SofaButton>
 		</div>
-	</div>
-	<div v-else class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-4 md:gap-6 py-4 md:py-6">
-		<div class="flex gap-4 items-center px-4 md:px-6">
-			<div class="flex items-center border border-darkLightGray rounded-custom pl-4 md:min-w-[300px]">
-				<SofaIcon name="search" class="h-[16px]" />
-				<SofaTextField v-model="searchValue" class="w-full" placeholder="Search" type="search" borderColor="!border-none" />
+		<SofaButton
+			v-if="!$screen.desktop"
+			bgColor="bg-primaryBlue"
+			padding="py-3 px-6"
+			textColor="text-white"
+			class="border border-primaryBlue"
+			@click="add">
+			{{ isStudent ? 'Add student' : 'Add teacher' }}
+		</SofaButton>
+		<div v-if="nonPending.length" class="flex flex-col rounded-2xl border border-lightGray bg-white text-deepGray px-1 mdlg:px-0">
+			<SofaText :content="`${isStudent ? 'Students' : 'Teachers'} (${$utils.formatNumber(nonPending.length)})`" class="p-4" />
+			<div
+				v-for="(member, index) in nonPending"
+				:key="member.hash"
+				class="flex gap-3 items-center w-full p-3 mdlg:p-4"
+				:class="{ 'bg-lightGray': index % 2 === 0 }">
+				<SofaAvatar :photoUrl="member.user?.bio.photo?.link" :size="$screen.desktop ? 48 : 32" />
+				<SofaText
+					:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
+					class="truncate grow" />
+				<template v-if="member.pending">
+					<SofaText as="a" class="text-primaryRed" content="Decline" size="sub" @click="acceptMember(member, false)" />
+					<div class="h-full bg-darkLightGray w-[1px]" />
+					<SofaText as="a" class="text-primaryGreen" content="Accept" size="sub" @click="acceptMember(member, true)" />
+				</template>
+				<SofaText v-else as="a" class="text-primaryRed" content="Remove" size="sub" @click="removeMember(member)" />
 			</div>
-			<SofaButton
-				class="ml-auto"
-				customClass="font-semibold"
-				padding="py-3 px-6"
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
-				@click="add">
-				Add {{ label }}
-			</SofaButton>
-		</div>
-		<div class="w-full bg-darkLightGray h-[1px]" />
-		<div class="flex flex-col gap-4 md:gap-6">
-			<SofaNormalText
-				v-if="!pending.length && !nonPending.length"
-				color="text-inherit"
-				content="No member matches the search query" />
-			<template v-for="member in [...pending, ...nonPending]" :key="member.id">
-				<div class="flex gap-2 items-center w-full px-4 md:px-6">
-					<SofaAvatar :photoUrl="member.user?.bio.photo?.link" :size="28" />
-					<SofaNormalText
-						color="text-inherit"
-						:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
-						class="truncate grow" />
-					<template v-if="member.pending">
-						<SofaNormalText as="a" color="text-primaryRed" content="Decline" @click="acceptMember(member, false)" />
-						<div class="h-full bg-darkLightGray w-[1px]" />
-						<SofaNormalText as="a" color="text-primaryGreen" content="Accept" @click="acceptMember(member, true)" />
-					</template>
-					<SofaNormalText v-else as="a" color="text-primaryRed" content="Remove" @click="removeMember(member)" />
-				</div>
-				<div v-if="nonPending.at(-1)?.id !== member.id" class="w-full bg-darkLightGray h-[1px]" />
-			</template>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useModals } from '@app/composables/core/modals'
 import { useManageOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberEntity, MemberTypes } from '@modules/organizations'
 import { UserEntity } from '@modules/users'
 
 const props = defineProps<{
-	image: string
 	type: MemberTypes
 	members: MemberEntity[]
-	messages: string[]
+	filteredMembers: MemberEntity[]
 	org: UserEntity
 }>()
 
 const { removeMember, acceptMember } = useManageOrganizationMembers(props.org.id)
 const add = () => useModals().organizations.addMember.open({ org: props.org, type: props.type })
 
-const label = computed(() => (props.type === MemberTypes.student ? 'students' : 'teachers'))
+const isStudent = computed(() => props.type === MemberTypes.student)
 
-const searchValue = ref('')
-
-const pending = computed(() => props.members.filter((m) => m.pending && m.search(searchValue.value)))
-const nonPending = computed(() => props.members.filter((m) => !m.pending && m.search(searchValue.value)))
+const pending = computed(() => props.filteredMembers.filter((m) => m.pending))
+const nonPending = computed(() => props.filteredMembers.filter((m) => !m.pending))
 </script>

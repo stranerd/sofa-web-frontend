@@ -1,39 +1,61 @@
 <template>
-	<router-link :to="classInst.pageLink" class="bg-white shadow-custom rounded-custom p-4 relative">
-		<div class="flex items-center gap-2 mdlg:gap-4 w-full">
-			<SofaImageLoader
-				:photoUrl="classInst.picture"
-				class="h-[100px] w-[150px] mdlg:h-[115px] mdlg:w-[200px] bg-grayColor rounded-custom">
-			</SofaImageLoader>
-			<div class="flex flex-col gap-2 relative h-full w-full">
-				<SofaNormalText class="!font-bold truncate" :content="classInst.title" />
-				<div class="flex items-center gap-2">
-					<SofaNormalText color="text-grayColor">
-						{{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'lesson', 'lessons') }}
-					</SofaNormalText>
-					<div class="w-[5px] h-[5px] bg-grayColor rounded-[50%]"></div>
-					<SofaNormalText color="text-grayColor">
-						{{ classInst.members.students.length }}
-						{{ $utils.pluralize(classInst.members.students.length, 'student', 'students') }}
-					</SofaNormalText>
-				</div>
-				<SofaNormalText color="text-grayColor" size="lg" class="font-bold">
-					{{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}
-				</SofaNormalText>
-			</div>
-
-			<div class="absolute right-0 top-0 p-3 bg-white rounded-tr-lg">
-				<SofaIcon name="more-options-horizontal" class="h-[6px]" @click.stop.prevent="moreOptionsHandler" />
-			</div>
+	<Card :wrapped="wrapped" :image="classInst.picture" as="router-link" :to="classInst.pageLink">
+		<div class="w-full flex items-center gap-2 truncate">
+			<SofaHeading :content="classInst.title" class="grow" />
+			<SofaIcon v-if="hasShowMore" name="more-options-horizontal" class="w-[20px] h-3" @click.stop.prevent="moreOptionsHandler" />
+			<slot name="side-icons" />
 		</div>
-	</router-link>
+		<div class="w-full flex gap-2 items-center text-grayColor truncate line-clamp-1">
+			<template v-if="lessonsIn.length">
+				<SofaIcon name="lessons" class="fill-current w-[16px]" />
+				<SofaText :content="lessonsIn.map((lesson) => lesson.title).join(' | ')" />
+			</template>
+			<template v-else>
+				<SofaText> {{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'course', 'courses') }} </SofaText>
+				<span class="size-[5px] rounded-full bg-current" />
+				<SofaText>
+					{{ classInst.members.students.length }}
+					{{ $utils.pluralize(classInst.members.students.length, 'student', 'students') }}
+				</SofaText>
+			</template>
+		</div>
+
+		<SofaHeading class="text-grayColor"> {{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}/month </SofaHeading>
+
+		<div class="flex gap-2 items-center justify-between">
+			<UserName :user="classInst.user" as="router-link" />
+			<SofaIcon v-if="hasBookmark" :name="saveIcon" class="h-[18px]" @click.stop.prevent="saveClass" />
+		</div>
+	</Card>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
+import { useSaveClass } from '@app/composables/organizations/classes-list'
 import { ClassEntity } from '@modules/organizations'
 
-const props = defineProps<{ classInst: ClassEntity }>()
+const props = withDefaults(
+	defineProps<{
+		classInst: ClassEntity
+		wrapped?: boolean
+		hasShowMore?: boolean
+		hasBookmark?: boolean
+	}>(),
+	{
+		wrapped: false,
+		hasShowMore: false,
+		hasBookmark: false,
+	},
+)
 
+const { id } = useAuth()
+const { saveClass, isSaved } = useSaveClass(props.classInst)
+const saveIcon = computed(() => (isSaved.value ? 'bookmark-filled' : 'bookmark'))
 const moreOptionsHandler = (e: Event) => useModals().organizations.classCardMoreOptions.open({ classInst: props.classInst }, e)
+
+const lessonsIn = computed(() =>
+	props.classInst.lessons.filter((lesson) => lesson.users.students.includes(id.value) || lesson.users.teachers.includes(id.value)),
+)
 </script>

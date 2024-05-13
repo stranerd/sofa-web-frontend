@@ -18,12 +18,12 @@
 			class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
 			:class="{ 'border-primaryBlue border-2': selectedMethod === method.id }"
 			@click="selectedMethod = method.id">
-			<SofaIcon customClass="h-[20px]" name="card" />
+			<SofaIcon customClass="h-[20px]" name="atm-card" />
 			<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
 		</a>
-		<a class="w-full flex items-center gap-3 p-3 border-2 border-darkLightGray rounded-custom" @click="addMethod">
-			<SofaIcon customClass="h-[18px]" name="add-gray" />
-			<SofaNormalText color="text-grayColor">Add credit or debit card</SofaNormalText>
+		<a class="w-full flex items-center gap-3 p-3 border-2 border-darkLightGray text-grayColor rounded-custom" @click="addMethod">
+			<SofaIcon class="h-[18px]" name="add" />
+			<SofaText>Add credit or debit card</SofaText>
 		</a>
 		<a
 			v-if="showWallet"

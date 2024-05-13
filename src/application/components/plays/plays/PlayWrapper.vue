@@ -30,7 +30,8 @@ const { play, participants, questions, fetched, myAnswer, start, end, join, subm
 	participants: props.skipParticipants,
 	statusNav: props.skipStatusNav,
 })
-const { quizzes } = useQuizzesInList(computed(() => (play.value ? [play.value.quizId] : [])))
+const quizId = computed(() => (play.value ? [play.value.quizId] : []))
+const { quizzes } = useQuizzesInList(quizId)
 const quiz = computed(() => quizzes.value.at(0) ?? null)
 
 const extras = computed(() => ({

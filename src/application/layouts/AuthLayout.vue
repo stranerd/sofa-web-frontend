@@ -2,7 +2,7 @@
 	<div class="w-full h-full flex bg-white">
 		<div class="bg-white w-full lg:w-[45%] mdlg:w-[50%] h-full overflow-y-auto flex flex-col shrink-0 md:p-8 p-4">
 			<div class="w-full flex gap-4 items-center">
-				<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="back-arrow" @click="$utils.goBack()" />
+				<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="arrow-left" @click="$utils.goBack()" />
 
 				<div class="w-full flex flex-col md:justify-center md:items-center justify-start items-start gap-1">
 					<SofaHeaderText class="md:!text-2xl text-lg" :content="title" />

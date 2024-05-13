@@ -45,15 +45,15 @@
 						</RouterLink>
 					</div>
 				</div>
-				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/smiles.png" />
-				<img class="hidden mdlg:block absolute -bottom-14 left-0" src="/images/arrow-svg-white.png" />
+				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/landing/smiles.png" />
+				<img class="hidden mdlg:block absolute -bottom-14 left-0" src="/images/landing/arrow-svg-white.png" />
 			</div>
 			<div class="z-50 w-[90%] max-w-[1800px] mt-[30px] mdlg:mt-0 mx-auto flex md:items-center md:justify-center">
 				<img
-					src="/images/organization-hero-image.png"
+					src="/images/landing/organization-hero-image.png"
 					class="w-full h-full mdlg:h-[450px] mdlg:w-[767px] object-cover md:object-contain" />
 			</div>
-			<img class="z-50 w-[90%] mx-auto -mb-10 md:-mb-24 h-full" src="/images/stranerd-stats.png" />
+			<img class="z-50 w-[90%] mx-auto -mb-10 md:-mb-24 h-full" src="/images/landing/stranerd-stats.png" />
 		</header>
 		<MoreOnStranerd class="mt-[100px] mdlg:mt-[180px]" :content="content" />
 		<HomeFooter />

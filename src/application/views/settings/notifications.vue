@@ -2,8 +2,8 @@
 	<SettingsLayout title="Notifications">
 		<div class="flex flex-col px-4 w-full">
 			<div class="flex justify-between items-center gap-4 bg-white rounded-2xl p-4 shadow-custom">
-				<SofaNormalText customClass="!font-bold">Push notifications</SofaNormalText>
-				<SofaIcon customClass="h-[22px]" name="toggle-on" />
+				<SofaHeading content="Push notifications" />
+				<SofaIcon class="h-[22px]" name="toggle-on" />
 			</div>
 		</div>
 	</SettingsLayout>

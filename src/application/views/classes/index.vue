@@ -9,50 +9,51 @@
 		</template>
 
 		<template #middle-session>
-			<div v-if="classes.length === 0" class="h-full mdlg:h-auto flex flex-col justify-center p-4 mdlg:p-0">
-				<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col gap-2 p-4 mdlg:p-6">
-					<div class="mdlg:bg-lightGray flex flex-col gap-2 p-4 mdlg:p-6 text-center items-center w-full">
-						<img :src="emptyClassesContent.imageURL" class="w-[64px] h-[64px]" />
-						<SofaHeaderText :content="emptyClassesContent.title" />
-						<SofaNormalText :content="emptyClassesContent.sub" color="text-grayColor" />
-						<router-link to="/classes/explore">
-							<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-5">Explore </SofaButton>
-						</router-link>
-					</div>
-				</div>
+			<div v-if="!classes.length" class="px-4 h-full">
+				<EmptyState
+					image="classes"
+					title="You are not in any class"
+					sub="Explore classes to find ones you would like to join"
+					class="bg-white"
+					:primary="{ label: 'Explore', action: () => $router.push('/marketplace/classes') }" />
 			</div>
 			<template v-else>
 				<div class="flex flex-col mdlg:flex-row gap-4 justify-between items-center px-4 mdlg:px-0">
 					<div class="flex gap-2 mdlg:gap-4 w-full items-center">
-						<a
+						<SofaText
 							v-for="t in tabs"
 							:key="t"
-							class="capitalize py-3 px-4 font-bold rounded-custom border bg-white border-darkLightGray"
+							as="a"
+							class="capitalize py-2 px-4 rounded-xl border bg-white border-darkLightGray"
 							:class="{ '!bg-primaryPurple !text-white !border-primaryPurple': t === tab }"
 							@click="tab = t">
 							{{ t }}
-						</a>
-						<router-link class="ml-auto mdlg:hidden" to="/classes/explore">
+						</SofaText>
+						<router-link class="ml-auto mdlg:hidden" to="/marketplace/classes">
 							<SofaButton padding="py-3 px-5">Explore</SofaButton>
 						</router-link>
 					</div>
 					<div class="w-full flex items-center gap-4">
-						<SofaTextField
+						<SofaInput
 							v-model="searchQuery"
-							class="bg-white border border-darkLightGray rounded-custom flex-1"
-							customClass="!border-none w-full"
-							placeholder="Search">
-							<template #inner-prefix>
-								<SofaIcon name="search-black" class="h-[17px]" />
+							placeholder="Search"
+							type="search"
+							class="grow !rounded-custom !bg-white mdlg:!p-3">
+							<template #prefix>
+								<SofaIcon name="search" class="h-[16px]" />
 							</template>
-						</SofaTextField>
-						<router-link class="hidden mdlg:inline-block" to="/classes/explore">
+						</SofaInput>
+						<router-link class="hidden mdlg:inline-block" to="/marketplace/classes">
 							<SofaButton padding="py-3 px-5">Explore</SofaButton>
 						</router-link>
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 items-start px-4 mdlg:px-0">
-					<MyClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst" />
+					<ClassCard v-for="classInst in filteredClasses" :key="classInst.hash" :classInst="classInst">
+						<template #side-icons>
+							<SofaIcon class="h-[18px]" name="share" @click.stop.prevent="shareClass(classInst)" />
+						</template>
+					</ClassCard>
 				</div>
 			</template>
 		</template>
@@ -62,13 +63,12 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import MyClassCard from '@app/components/organizations/classes/MyClassCard.vue'
+import { ClassEntity } from '@modules/organizations'
 import { useAuth } from '@app/composables/auth/auth'
-import { useClassesInList, useMyClassesIn } from '@app/composables/organizations/classes-explore'
+import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-list'
 
 export default defineComponent({
 	name: 'ClassesIndexPage',
-	components: { MyClassCard },
 	routeConfig: {
 		middlewares: ['isAuthenticated'],
 	},
@@ -77,19 +77,14 @@ export default defineComponent({
 			title: 'Classes',
 		})
 
-		const emptyClassesContent = {
-			imageURL: '/images/empty-classes.png',
-			title: 'You are not in any class',
-			sub: 'Explore classes to find ones you would like to join',
-		}
-
 		const tabs = ['active', 'saved']
 		const tab = ref(tabs[0])
 
 		const searchQuery = ref('')
 		const { user } = useAuth()
-		const { classes } = useMyClassesIn()
-		const { classes: savedClasses } = useClassesInList(computed(() => user.value?.account.saved.classes ?? []))
+		const { classes } = useMyClasses()
+		const savedClassesIds = computed(() => user.value?.account.saved.classes ?? [])
+		const { classes: savedClasses } = useClassesInList(savedClassesIds)
 
 		const filteredClasses = computed(() => {
 			const list = tab.value === 'saved' ? savedClasses.value : classes.value
@@ -97,7 +92,11 @@ export default defineComponent({
 			return list.filter((c) => c.search(searchQuery.value))
 		})
 
-		return { classes, filteredClasses, tabs, tab, emptyClassesContent, searchQuery }
+		const shareClass = (classInst: ClassEntity) => {
+			$utils.share(`Join ${classInst.title} class on SOFA`, classInst.description, classInst.shareLink)
+		}
+
+		return { classes, filteredClasses, tabs, tab, searchQuery, shareClass }
 	},
 })
 </script>

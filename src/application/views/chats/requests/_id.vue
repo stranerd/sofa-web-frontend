@@ -24,7 +24,6 @@
 							textColor="text-white"
 							customClass="w-full rounded-custom"
 							padding="py-3"
-							:hasShadow="false"
 							@click="accept(false)">
 							Decline
 						</SofaButton>
@@ -36,7 +35,6 @@
 							textColor="text-white"
 							customClass="w-full rounded-custom"
 							padding="py-3"
-							:hasShadow="false"
 							@click="accept(true)">
 							Accept
 						</SofaButton>

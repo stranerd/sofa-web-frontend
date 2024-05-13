@@ -15,6 +15,7 @@ import {
 	CoursesUseCases,
 	ExtendedCourseSections,
 	FileType,
+	QuizModes,
 } from '@modules/study'
 
 const store = {} as Record<
@@ -155,13 +156,13 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 		sects.value.flatMap((c) => c.items.filter((item) => item.type === Coursable.file).map((item) => item.id)),
 	)
 
-	const { quizzes } = useQuizzesInList(quizIds, true)
-	const { files } = useFilesInList(fileIds, true)
+	const { quizzes } = useQuizzesInList(quizIds)
+	const { files } = useFilesInList(fileIds)
 
 	const sections = computed<ExtendedCourseSections>(() =>
-		sects.value.map((c) => {
+		sects.value.map((c, sectionIndex) => {
 			const items = c.items
-				.map((item) => {
+				.map((item, itemIndex) => {
 					if (item.type === Coursable.file) {
 						const file = files.value.find((f) => f.id === item.id)
 						if (file)
@@ -169,13 +170,17 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 								...item,
 								file,
 								title: file.title,
+								image: file.picture,
 								icon:
 									file.type === FileType.document
-										? ('file' as IconName)
+										? ('file-document' as IconName)
 										: file.type === FileType.image
-											? ('image-course' as IconName)
-											: ('video-course' as IconName),
+											? ('file-image' as IconName)
+											: ('file-video' as IconName),
 								info: file.type,
+								color: file.type === FileType.document ? '#3296C8' : file.type === FileType.image ? '#AF19C8' : '#4BAF7D',
+								sectionIndex,
+								itemIndex,
 							}
 					}
 					if (item.type === Coursable.quiz) {
@@ -185,8 +190,12 @@ export const useCourseSections = (sects: Refable<CourseEntity['sections']>) => {
 								...item,
 								quiz,
 								title: quiz.title,
-								icon: 'quiz' as IconName,
+								image: quiz.picture,
+								icon: item.quizMode === QuizModes.practice ? ('quiz-practice' as IconName) : ('quiz-tests' as IconName),
 								info: `${item.quizMode} - ${$utils.formatNumber(quiz.questions.length)} ${$utils.pluralize(quiz.questions.length, 'question', 'questions')}`,
+								color: item.quizMode === QuizModes.practice ? '#FF4BC8' : '#6419C8',
+								sectionIndex,
+								itemIndex,
 							}
 					}
 				})
@@ -216,13 +225,14 @@ export const useUpdateSections = (course: Refable<CourseEntity | null>) => {
 		return true
 	})
 
-	const { sections: extendedSections } = useCourseSections(computed(() => factory.factories))
+	const factories = computed(() => factory.factories)
+	const { sections } = useCourseSections(factories)
 
 	return {
 		factory,
 		loading,
 		error,
-		extendedSections,
+		sections,
 		updateSections,
 	}
 }

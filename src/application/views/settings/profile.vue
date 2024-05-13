@@ -10,7 +10,7 @@
 							v-model="factory.photo"
 							class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full size-[40px] flex items-center justify-center"
 							accept="image/*">
-							<SofaIcon class="h-[18px]" name="camera-white" />
+							<SofaIcon class="h-[18px] fill-white" name="camera" />
 						</SofaFileInput>
 					</SofaImageLoader>
 
@@ -36,7 +36,7 @@
 				<SofaTextarea
 					v-model="factory.description"
 					:error="factory.errors.description"
-					textAreaStyle="h-[90px] rounded-custom !bg-lightGray md:p-4 p-3"
+					class="h-[90px] resize-none"
 					placeholder="Bio" />
 			</div>
 

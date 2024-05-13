@@ -1,19 +1,14 @@
 <template>
 	<div class="flex flex-col md:gap-5 gap-3 relative mdlg:p-6 items-center">
-		<SofaHeaderText class="hidden mdlg:inline-block text-xl" :content="`Join ${org.publicName}`" />
+		<SofaHeading class="hidden mdlg:inline-block" size="mid" :content="`Join ${org.publicName}`" />
 
 		<div class="w-full flex justify-between items-center mdlg:hidden py-2 border-lightGray border-b px-4">
-			<SofaNormalText class="!font-bold !text-base" :content="`Join ${org.publicName}`" />
+			<SofaHeading :content="`Join ${org.publicName}`" size="mid" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-			<SofaTextField
-				v-model="joinCode"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Enter Join Code"
-				borderColor="border-transparent" />
+			<SofaInput v-model="joinCode" type="text" placeholder="Enter Join Code" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">

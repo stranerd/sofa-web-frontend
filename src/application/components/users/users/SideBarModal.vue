@@ -4,11 +4,7 @@
 			<SofaAvatar :size="75" :photoUrl="user.bio.photo?.link" />
 
 			<div class="flex flex-col">
-				<div class="flex items-center gap-1">
-					<SofaHeaderText class="!text-base" :content="user.publicName" />
-					<SofaIcon v-if="user.roles.isVerified" name="verify" class="h-[13px]" />
-					<SofaIcon v-if="userType.isTeacher" name="tutor-bagde" class="h-[13px]" />
-				</div>
+				<UserName :user="user" :avatar="false" class="font-bold" />
 				<SofaNormalText class="capitalize" color="text-grayColor" :content="userType.type" />
 				<SofaNormalText color="text-primaryBlue" as="router-link" to="/profile" content="View Profile" />
 			</div>

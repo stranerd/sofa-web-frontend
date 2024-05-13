@@ -7,7 +7,8 @@ import { MemberTypes, MembersUseCases } from '@modules/organizations'
 
 export const useMyOrganizations = () => {
 	const { user } = useAuth()
-	const { users: orgs } = useUsersInList(computed(() => user.value?.account.organizationsIn.map((o) => o.id) ?? []))
+	const orgIds = computed(() => user.value?.account.organizationsIn.map((o) => o.id) ?? [])
+	const { users: orgs } = useUsersInList(orgIds)
 	const { message, setMessage } = useSuccessHandler()
 	const code = ref('')
 

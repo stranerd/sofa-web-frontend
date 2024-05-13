@@ -2,7 +2,7 @@
 	<component
 		:is="userId ? 'router-link' : as"
 		:to="`/profile/${userId}`"
-		class="shrink-0 rounded-full flex font-semibold bg-opacity-10 cursor-pointer items-center justify-center relative"
+		class="shrink-0 rounded-full flex font-semibold bg-opacity-75 cursor-pointer items-center justify-center relative"
 		:class="bgColor"
 		:style="`width: ${size}px; height: ${size}px;`">
 		<SofaImageLoader v-if="photoUrl" :photoUrl="photoUrl" class="w-full h-full rounded-full" />
@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import SofaImageLoader from '../SofaImageLoader/index.vue'
-
 withDefaults(
 	defineProps<{
 		as?: string

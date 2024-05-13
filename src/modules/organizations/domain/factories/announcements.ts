@@ -1,7 +1,7 @@
 import { v } from 'valleyed'
+import { AnnouncementToModel } from '../../data/models/announcements'
 import { AnnouncementEntity } from '../entities/announcements'
 import { MemberTypes } from '../types'
-import { AnnouncementToModel } from '@modules/organizations/data/models/announcements'
 import { BaseFactory } from '@modules/core'
 
 type Keys = Omit<AnnouncementToModel, 'filter'> & {

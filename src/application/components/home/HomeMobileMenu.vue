@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full py-10 flex flex-col items-center bg-white min-h-screen">
-		<img src="/images/stranerd_logo.png" />
+		<Logo class="h-[30px]" />
 		<ul class="flex flex-col items-center gap-6 pt-20">
 			<li v-for="link in links" :key="link.label">
 				<RouterLink

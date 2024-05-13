@@ -54,6 +54,12 @@ export class ClassRepository implements IClassRepository {
 		return await listenToMany(this.client.socketPath, listeners, this.mapper, matches)
 	}
 
+	async listenToExploreMany(query: QueryParams, listeners: Listeners<ClassEntity>, matches: (entity: ClassEntity) => boolean) {
+		const models = await this.explore(query)
+		await Promise.all(models.results.map(listeners.updated))
+		return await listenToMany(this.exploreClient.socketPath, listeners, this.mapper, matches)
+	}
+
 	async add(data: ClassToModel) {
 		const d = await this.client.post<ClassToModel, ClassFromModel>('/', data)
 		return this.mapper(d)

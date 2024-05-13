@@ -42,6 +42,10 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 		return this.stream?.canRewatch ?? false
 	}
 
+	get live() {
+		return this.status === ScheduleStatus.started
+	}
+
 	get meetingLink() {
 		return `https://meet.jit.si/${this.stream?.roomId ?? this.id}`
 	}
@@ -52,6 +56,18 @@ export class ScheduleEntity extends BaseEntity<ScheduleFromModel> {
 
 	get timeRange() {
 		const { start, end } = this.time
-		return `${formatTime(start, true)} &nbsp; ● &nbsp; ${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
+		const time = `${getTimeString(new Date(start))} - ${getTimeString(new Date(end))}`
+		return `${formatTime(start, true)} &nbsp; ● &nbsp; ${this.live ? 'Ongoing' : time}`
+	}
+
+	search(query: string) {
+		return [this.title, this.description].some((value) => value.toLowerCase().includes(query.toLowerCase()))
+	}
+
+	isInDateRange(date: Date) {
+		const start = new Date(this.time.start)
+		return [start.getFullYear() === date.getFullYear(), start.getMonth() === date.getMonth(), start.getDate() === date.getDate()].every(
+			Boolean,
+		)
 	}
 }
