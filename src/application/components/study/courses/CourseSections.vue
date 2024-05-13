@@ -82,6 +82,7 @@ const props = defineProps<{
 	list?: boolean
 	factory?: CourseSectionsFactory
 	sections: ExtendedCourseSections
+	defaultSelected?: { sectionIndex: number; itemIndex: number }
 }>()
 
 const selectedItem = defineModel<ExtendedCourseSectionItem | null>('selectedItem', { default: null })
@@ -138,8 +139,10 @@ const onClickItem = (item: ExtendedCourseSectionItem) => {
 }
 
 watchEffect(() => {
-	if (!$screen.desktop) return
-	if (!selectedItem.value && props.sections.at(0)?.items.at(0)) onClickItem(props.sections[0].items[0])
+	if (!$screen.desktop && !props.defaultSelected) return
+	const { sectionIndex, itemIndex } = props.defaultSelected ?? { sectionIndex: 0, itemIndex: 0 }
+	if (!selectedItem.value && props.sections.at(sectionIndex)?.items.at(itemIndex))
+		onClickItem(props.sections[sectionIndex].items[itemIndex])
 })
 
 watch(

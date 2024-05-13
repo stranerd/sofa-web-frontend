@@ -55,24 +55,19 @@
 					@click="selectedTab = tab.key" />
 			</div>
 
-			<div v-if="selectedTab == 'activity'" class="grow overflow-y-auto">
+			<div v-if="selectedTab == 'courses'" class="grow overflow-y-auto">
 				<div v-if="classInst.lessons.length" class="flex w-full flex-col">
-					<SofaHeaderText content="Courses" class="!text-xl" />
-					<div class="flex flex-col gap-4 mt-3">
-						<LessonCard
-							v-for="(lesson, index) in classInst.lessons"
-							:key="lesson.id"
-							:lesson="lesson"
-							:index="index"
-							:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
-							:classInst="classInst"
-							@click="selectedLesson = lesson" />
-					</div>
+					<LessonCard
+						v-for="(lesson, index) in classInst.lessons"
+						:key="lesson.id"
+						:lesson="lesson"
+						:index="index"
+						class="rounded-xl"
+						:class="lesson.id === selectedLesson?.id ? '!bg-lightBlue' : ''"
+						:classInst="classInst"
+						@click="selectedLesson = lesson" />
 				</div>
-				<div v-else class="flex flex-col gap-4 items-center py-10">
-					<img src="/images/empty-lessons.png" class="w-[84px] h-[84px]" />
-					<SofaNormalText color="text-grayColor" customClass="font-bold">No lessons created yet!</SofaNormalText>
-				</div>
+				<EmptyState v-else image="lessons" title="No courses created yet" sub="" />
 			</div>
 
 			<div
@@ -113,7 +108,7 @@ const { purchaseClass } = usePurchaseClass()
 const { classes: similarClasses } = useSimilarClasses(props.classInst.organizationId, props.classInst.id)
 
 const tabs = computed(() => [
-	{ name: 'Activity', key: 'activity', hide: !props.classInst.lessons.length },
+	{ name: 'Courses', key: 'courses', hide: !props.classInst.lessons.length },
 	{ name: 'Similar Classes', key: 'similar', hide: !similarClasses.value.length },
 ])
 const selectedTab = ref(tabs.value[0]?.key)

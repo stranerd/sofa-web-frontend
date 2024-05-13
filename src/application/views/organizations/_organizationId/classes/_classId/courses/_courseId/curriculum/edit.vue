@@ -41,8 +41,8 @@ const router = useRouter()
 const { factory, updateCurriculum } = useUpdateCurriculum(lesson)
 
 const canEditCurr = computed(() => {
-	if (!user.value || !classInst.value || !lesson.value) return false
-	return classInst.value.isAdmin(user.value) || lesson.value.users.teachers.includes(user.value.id)
+	if (!user.value || !lesson.value) return false
+	return lesson.value.users.teachers.includes(user.value.id)
 })
 
 const cancel = async () => {

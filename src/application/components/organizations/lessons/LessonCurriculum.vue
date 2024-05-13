@@ -61,15 +61,17 @@
 				<SofaText content="Add study material" />
 			</a>
 		</div>
-		<SofaButton
-			bgColor="bg-primaryPurple"
-			textColor="text-white"
-			padding="px-6 py-3"
-			class="flex items-center gap-2"
-			@click="factory.add()">
-			<SofaIcon name="add" class="h-[16px] fill-current" />
-			<span>Add section</span>
-		</SofaButton>
+		<div v-if="edit" class="flex flex-col mdlg:px-4">
+			<SofaButton
+				bgColor="bg-primaryPurple"
+				textColor="text-white"
+				padding="px-6 py-3"
+				class="flex items-center gap-2"
+				@click="factory.add()">
+				<SofaIcon name="add" class="h-[16px] fill-current" />
+				<span>Add section</span>
+			</SofaButton>
+		</div>
 	</VueDraggable>
 </template>
 

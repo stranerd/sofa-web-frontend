@@ -10,7 +10,7 @@
 				<span v-else class="w-4" />
 			</div>
 			<SofaText v-if="description" :content="description" />
-			<CourseSections v-model:selectedItem="selectedItem" :sections="sections" />
+			<CourseSections v-model:selectedItem="selectedItem" :sections="sections" :defaultSelected="defaultSelected" />
 		</div>
 		<div
 			v-if="$screen.desktop || selectedItem"
@@ -25,7 +25,13 @@
 				<EmbeddedSection v-if="hasAccess" :key="selectedItem.id" v-bind="embeddedProps" :item="selectedItem" />
 				<slot v-else name="noAccess" />
 			</div>
-			<CourseSections v-if="!$screen.desktop" v-model:selectedItem="selectedItem" :sections="sections" class="shrink-0" list />
+			<CourseSections
+				v-if="!$screen.desktop"
+				v-model:selectedItem="selectedItem"
+				:sections="sections"
+				:defaultSelected="defaultSelected"
+				class="shrink-0"
+				list />
 		</div>
 		<Teleport v-if="rate && !$screen.desktop" to="body">
 			<a
@@ -50,6 +56,7 @@ defineProps<{
 	sections: ExtendedCourseSections
 	description?: string
 	rate?: () => void
+	defaultSelected?: { sectionIndex: number; itemIndex: number }
 	embeddedProps: Omit<InstanceType<typeof EmbeddedSection>['$props'], 'item'>
 }>()
 

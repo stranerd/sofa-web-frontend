@@ -84,7 +84,19 @@
 						</SofaText>
 					</div>
 					<div class="grow overflow-y-auto">
-						<LessonCurriculum :classInst="cls" :lesson="ls" :view="currentView" :curriculum="ls.curriculum" />
+						<LessonCurriculum
+							:classInst="cls"
+							:lesson="ls"
+							:view="currentView"
+							:curriculum="ls.curriculum"
+							:onClick="
+								(item) => {
+									$router.push({
+										path: `${cls.pageLink}/courses/${ls.id}/study`,
+										query: { sectionIndex: item.sectionIndex, itemIndex: item.itemIndex },
+									})
+								}
+							" />
 					</div>
 				</template>
 			</div>
