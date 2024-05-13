@@ -6,7 +6,7 @@
 					:title="ls.title"
 					hasAccess
 					:sections="sections"
-					:default="defaultSelected"
+					:defaultSelected="defaultSelected"
 					:embeddedProps="{ classInst: cls, lesson: ls }"
 					class="w-full h-full overflow-y-auto" />
 			</ExpandedLayout>
@@ -26,10 +26,10 @@ const { sections } = useCourseSections(computed(() => lesson.value?.curriculum ?
 
 const route = useRoute()
 const defaultSelected =
-	route.params.sectionIndex && route.params.itemIndex
+	route.query.sectionIndex && route.query.itemIndex
 		? {
-				sectionIndex: Number(route.params.sectionIndex),
-				itemIndex: Number(route.params.itemIndex),
+				sectionIndex: Number(route.query.sectionIndex),
+				itemIndex: Number(route.query.itemIndex),
 			}
 		: undefined
 </script>
