@@ -5,6 +5,7 @@ import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useUsersInList } from '../users/users'
+import { useSuccessHandler } from '../core/states'
 import { CoursableAccess, QuestionEntity } from '@modules/study'
 import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlayTypes, PlaysUseCases } from '@modules/plays'
 
@@ -87,6 +88,7 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 	const { id: authId } = useAuth()
 	const route = useRoute()
 	const router = useRouter()
+	const { setMessage } = useSuccessHandler()
 
 	singleStore[id] ??= {
 		play: ref(null),
@@ -199,6 +201,15 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		myAnswer.value = await AnswersUseCases.reset(p.data.type, p.id)
 	})
 
+	const { asyncFn: exportResult } = useAsyncFn(async () => {
+		const p = singleStore[id].play.value
+		if (!p || !p.isClosed) return
+		const text = await PlaysUseCases.export(id)
+		const blob = new Blob([text], { type: 'text/plain' })
+		await $utils.download(blob, `${p.title}.txt`)
+		await setMessage('Exported successfully')
+	})
+
 	const alertAndNav = async (route: string) => {
 		await router.replace(route)
 	}
@@ -241,7 +252,19 @@ export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean;
 		return singleStore[id].questions
 	})
 
-	return { ...singleStore[id], questions, myAnswer, participants, fetched: called, join, start, end, submitAnswer, resetAnswer }
+	return {
+		...singleStore[id],
+		questions,
+		myAnswer,
+		participants,
+		fetched: called,
+		join,
+		start,
+		end,
+		submitAnswer,
+		resetAnswer,
+		exportResult,
+	}
 }
 
 export const useCreatePlay = (access: Refable<CoursableAccess['access']>, options: { start: boolean; nav: boolean }) => {

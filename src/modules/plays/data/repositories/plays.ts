@@ -72,4 +72,8 @@ export class PlayRepository implements IPlayRepository {
 		const d = await this.client.post<typeof data, PlayFromModel>(`/${id}/join`, data)
 		return this.mapper(d)
 	}
+
+	async export(id: string) {
+		return await this.client.post<Record<string, never>, string>(`/${id}/export`, {})
+	}
 }

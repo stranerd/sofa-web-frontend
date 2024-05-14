@@ -25,11 +25,15 @@ const props = withDefaults(
 )
 
 const { id: authId } = useAuth()
-const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer, resetAnswer } = usePlay(props.type, props.id, {
-	questions: props.skipQuestions,
-	participants: props.skipParticipants,
-	statusNav: props.skipStatusNav,
-})
+const { play, participants, questions, fetched, myAnswer, start, end, join, submitAnswer, resetAnswer, exportResult } = usePlay(
+	props.type,
+	props.id,
+	{
+		questions: props.skipQuestions,
+		participants: props.skipParticipants,
+		statusNav: props.skipStatusNav,
+	},
+)
 const quizId = computed(() => (play.value ? [play.value.quizId] : []))
 const { quizzes } = useQuizzesInList(quizId)
 const quiz = computed(() => quizzes.value.at(0) ?? null)
@@ -52,6 +56,7 @@ const extras = computed(() => ({
 	join,
 	submitAnswer,
 	resetAnswer,
+	exportResult,
 	share: async () => {
 		if (play.value)
 			await $utils.share(`Join ${play.value.singularizedType} on SOFA`, `Take a quiz on: ${play.value.title}`, play.value.shareLink)

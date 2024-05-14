@@ -145,6 +145,14 @@ export default class Utils {
 		if (result) this.showAlert({ message, type })
 	}
 
+	public async download(blob: Blob, fileName: string) {
+		const url = window.URL.createObjectURL(blob)
+		const a = document.createElement('a')
+		a.href = url
+		a.download = fileName
+		a.click()
+	}
+
 	rotate<T>(array: T[], by: number) {
 		const trimmed = by % array.length
 		const rotateBy = trimmed < 0 ? array.length + by : by

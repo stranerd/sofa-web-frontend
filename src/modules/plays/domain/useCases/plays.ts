@@ -108,4 +108,8 @@ export class PlaysUseCase {
 	async join(id: string, data: { join: boolean }) {
 		return await this.repository.join(id, data)
 	}
+
+	async export(id: string) {
+		return await this.repository.export(id)
+	}
 }

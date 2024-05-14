@@ -29,6 +29,10 @@ export class PlayEntity extends BaseEntity<PlayFromModel> {
 		)
 	}
 
+	get hasLeaderboard() {
+		return PlayEntity.hasLeaderboard(this.data.type)
+	}
+
 	get hasLobby() {
 		return ![PlayTypes.practice, PlayTypes.flashcards].includes(this.data.type)
 	}

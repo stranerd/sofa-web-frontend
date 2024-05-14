@@ -14,4 +14,5 @@ export interface IPlayRepository {
 	listenToOne: (id: string, listeners: Listeners<PlayEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listeners: Listeners<PlayEntity>, matches: (entity: PlayEntity) => boolean) => Promise<() => void>
 	join: (id: string, data: { join: boolean }) => Promise<PlayEntity>
+	export: (id: string) => Promise<string>
 }
