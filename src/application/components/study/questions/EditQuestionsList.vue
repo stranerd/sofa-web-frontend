@@ -8,11 +8,9 @@
 				:class="selectedQuestionId == element.id ? 'bg-lightBlue' : 'bg-lightGray'"
 				@click="selectQuestion(element)">
 				<div class="flex items-center gap-2">
-					<SofaNormalText class="!font-bold" :content="`${index + 1}`" />
-					<span class="w-[4px] h-[4px] rounded-full bg-deepGray" />
-					<SofaNormalText
-						class="!font-bold truncate"
-						:content="QuestionEntity.getLabel(factory.entityId === element.id ? factory.type : element.type)" />
+					<SofaHeading :content="`${index + 1}`" />
+					<span class="size-[4px] rounded-full bg-deepGray" />
+					<SofaHeading :content="QuestionEntity.getLabel(factory.entityId === element.id ? factory.type : element.type)" />
 
 					<div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
 						<template v-for="(user, i) in users[element.id] ?? []" :key="user.id">
@@ -24,30 +22,28 @@
 					</div>
 				</div>
 
-				<div
-					class="w-full h-[144px] bg-cover"
-					:style="`background-image: url('/images/questions/${QuestionEntity.getImage(
-						factory.entityId === element.id ? factory.type : element.type,
-					)}.svg')`">
+				<SofaImageLoader
+					class="w-full aspect-video"
+					:photoUrl="`/images/questions/${QuestionEntity.getImage(factory.entityId === element.id ? factory.type : element.type)}.svg`">
 					<div class="h-full w-full hidden group-hover:flex gap-3 items-center justify-center">
 						<a
-							class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
+							class="size-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
 							@click.stop="emits('duplicateQuestion', element)">
 							<SofaIcon name="copy" class="h-[24px] fill-current" />
 						</a>
 						<a
 							v-if="!quiz.isPublished"
-							class="w-[40px] h-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
+							class="size-[40px] bg-darkLightGray opacity-50 rounded-lg flex items-center justify-center"
 							@click.stop="emits('deleteQuestion', element.id)">
 							<SofaIcon name="trash" class="h-[24px] fill-current" />
 						</a>
 					</div>
-				</div>
+				</SofaImageLoader>
 			</a>
 		</VueDraggable>
 
 		<a
-			class="h-[144px] shrink-0 w-full rounded-xl border-2 border-darkLightGray flex items-center justify-center"
+			class="aspect-video shrink-0 w-full rounded-xl border-2 border-darkLightGray flex items-center justify-center"
 			@click="emits('addQuestion')">
 			<SofaIcon name="add" class="h-[30px] fill-grayColor" />
 		</a>
@@ -58,26 +54,25 @@
 		class="w-full overflow-x-auto scrollbar-hide flex mdlg:!hidden items-center py-3 gap-2 px-4 border-t justify-between bg-white border-lightGray">
 		<VueDraggable
 			v-model="reactiveQuestions"
-			class="w-full flex flex-nowrap gap-2 items-center whitespace-nowrap"
+			class="flex-1 flex flex-nowrap gap-2 items-center whitespace-nowrap"
 			group="question-list-mobile"
 			direction="horizontal"
 			:disabled="true">
 			<a
 				v-for="(element, index) in reactiveQuestions"
 				:key="index"
-				class="w-[48px] h-[48px] shrink-0 rounded-custom items-center justify-center flex relative"
+				class="size-[48px] shrink-0 rounded-custom items-center justify-center flex relative"
 				:class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGray'"
 				@click="selectQuestion(element)">
-				<SofaNormalText :color="selectedQuestionId === element.id ? 'text-white' : 'text-bodyBlack'" :content="`${index + 1}`" />
-				<SofaNormalText
+				<SofaText :class="selectedQuestionId === element.id ? 'text-white' : 'text-bodyBlack'" :content="`${index + 1}`" />
+				<SofaText
 					v-if="users[element.id]?.length"
-					class="aspect-square leading-none h-4 rounded-full flex items-center justify-center bg-primaryRed absolute right-[-0.25rem] top-[-0.25rem]"
-					color="text-lightGray"
+					class="text-lightGray aspect-square leading-none h-4 rounded-full flex items-center justify-center bg-primaryRed absolute right-[-0.25rem] top-[-0.25rem]"
 					:content="`${users[element.id].length}`" />
 			</a>
 		</VueDraggable>
 
-		<SofaIcon class="h-[44px] fill-white" name="add" @click="emits('addQuestion')" />
+		<SofaIcon class="h-[44px] fill-lightGray" name="add" @click="emits('addQuestion')" />
 	</div>
 </template>
 

@@ -55,7 +55,6 @@
 
 		<template v-if="type == 'sub'">
 			<div class="flex gap-4 items-center">
-				<SofaIcon class="h-[12px]" name="arrow-left" @click="$utils.goBack()" />
 				<SofaHeading class="py-4" :content="title" />
 				<div v-if="badges.length" class="flex gap-2 items-center">
 					<SofaBadge v-for="item in badges" :key="item.text" v-bind="item">
