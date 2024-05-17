@@ -26,7 +26,7 @@
 						Infrastructure
 					</div>
 					<p class="text-[14px] md:text-[16px] leading-[24px]">
-						Empower educators, engage learners, and streamline operations with our comprehensive learning platform
+						Join students like you all over the world in achieving extraordinary academic success with Stranerd.
 					</p>
 					<div class="flex flex-col md:flex-row items-center gap-3">
 						<RouterLink to="/auth/signup" class="bg-purple text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">

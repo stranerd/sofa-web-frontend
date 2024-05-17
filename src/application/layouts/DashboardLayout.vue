@@ -1,7 +1,8 @@
 <template>
 	<ExpandedLayout v-if="!$screen.desktop" :hide="{ top: true }">
 		<div class="w-full flex items-center gap-3 justify-between p-4" :class="{ 'bg-white': light }">
-			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+			<SofaIcon v-if="$route.path !== '/dashboard'" class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+			<Logo v-else withoutText class="h-[24px]" />
 			<SofaHeading :content="title" />
 			<span class="w-4" />
 		</div>

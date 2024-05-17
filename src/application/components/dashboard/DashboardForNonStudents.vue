@@ -56,7 +56,7 @@
 						},
 					].filter((stat) => !stat.hide)"
 					:key="stat.label"
-					class="flex shrink-0 items-center gap-6 justify-between mdlg:col-span-1 bg-white mdlg:bg-lightGray p-4 md:p-6 rounded-custom">
+					class="flex shrink-0 items-center gap-8 justify-between mdlg:col-span-1 bg-white mdlg:bg-lightGray p-4 md:p-6 rounded-custom">
 					<div class="flex flex-col items-start">
 						<SofaHeading size="title" :content="$utils.formatNumber(stat.value).padStart(!!stat.value ? 2 : 0, '0')" />
 						<SofaText :content="$utils.pluralize(stat.value, stat.labelSingular, stat.label)" />

@@ -3,7 +3,7 @@ import { Router } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AuthUseCases } from '@modules/auth'
-import { deleteTokens, getTokens } from '@utils/tokens'
+import { getTokens } from '@utils/tokens'
 
 type PluginFunction = (args: { app: App; router: Router }) => Promise<void>
 const definePlugin = (plugin: PluginFunction) => plugin
@@ -33,8 +33,8 @@ const parseLoggedInUser = definePlugin(async ({ router }) => {
 	try {
 		const { accessToken, refreshToken } = await getTokens()
 		if (!accessToken || !refreshToken) return
-		const user = await AuthUseCases.getAuthUser().catch(() => null)
-		if (!user) return await deleteTokens()
+		const user = await AuthUseCases.getAuthUser()
+		if (!user) return
 		if (!user.isEmailVerified) {
 			setEmailVerificationEmail(user.email)
 			await router.push('/auth/verify')
