@@ -7,7 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AccountSetup: typeof import('./../application/components/onboarding/AccountSetup.vue')['default']
+    AccountSetup: typeof import('./../application/components/auth/AccountSetup.vue')['default']
     AddMaterialModal: typeof import('./../application/components/study/AddMaterialModal.vue')['default']
     AddMemberModal: typeof import('./../application/components/organizations/members/AddMemberModal.vue')['default']
     AddTutorConfirmationModal: typeof import('./../application/components/conversations/AddTutorConfirmationModal.vue')['default']
@@ -109,7 +109,7 @@ declare module 'vue' {
     SelectStudyMaterialModal: typeof import('./../application/components/study/SelectStudyMaterialModal.vue')['default']
     SettingsLayout: typeof import('./../application/layouts/SettingsLayout.vue')['default']
     SideBarModal: typeof import('./../application/components/users/users/SideBarModal.vue')['default']
-    SocialMediaUpdate: typeof import('./../application/components/onboarding/SocialMediaUpdate.vue')['default']
+    SocialMediaUpdate: typeof import('./../application/components/users/users/SocialMediaUpdate.vue')['default']
     SofaAlert: typeof import('sofa-ui-components')['SofaAlert']
     SofaAvatar: typeof import('sofa-ui-components')['SofaAvatar']
     SofaBadge: typeof import('sofa-ui-components')['SofaBadge']

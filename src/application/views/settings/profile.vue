@@ -75,15 +75,12 @@
 <script lang="ts">
 import { defineComponent, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import AccountSetup from '@app/components/onboarding/AccountSetup.vue'
-import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
 
 export default defineComponent({
 	name: 'SettingsProfilePage',
-	components: { AccountSetup, SocialMediaUpdate },
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
 		useMeta({

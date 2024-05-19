@@ -121,7 +121,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import SocialMediaUpdate from '@app/components/onboarding/SocialMediaUpdate.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useModals } from '@app/composables/core/modals'
@@ -130,7 +129,6 @@ import { useCreateVerification } from '@app/composables/users/verifications'
 
 export default defineComponent({
 	name: 'VerificationIndexPage',
-	components: { SocialMediaUpdate },
 	routeConfig: {
 		middlewares: [
 			'isAuthenticated',

@@ -31,11 +31,9 @@ import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { UserType } from '@modules/users'
-import AccountSetup from '@app/components/onboarding/AccountSetup.vue'
 
 export default defineComponent({
 	name: 'OnboardingPage',
-	components: { AccountSetup },
 	routeConfig: {
 		middlewares: [
 			'isOnboarding',
