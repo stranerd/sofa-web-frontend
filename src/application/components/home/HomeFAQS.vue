@@ -15,7 +15,7 @@
 						class="flex items-center justify-between font-medium text-[10px] md:text-[20px]"
 						@click="activeQuestion = activeQuestion === index ? null : index">
 						{{ question.question }}
-						<SofaIcon name="arrow-left" />
+						<SofaIcon name="arrow-down-2" />
 					</div>
 					<div v-if="activeQuestion === index" class="mt-2 max-w-full h-fit text-grayColor">
 						{{ question.answer }}
@@ -58,26 +58,4 @@ const questions = ref([
 const activeQuestion = ref(questions.value[0])
 </script>
 
-<style scoped>
-/* Works on Firefox */
-/* .styled-scrollbar {
-	scrollbar-width: 64px !important;
-	scrollbar-color: #ffffff #e6e6e6 !important;
-} */
-
-/* Works on Chrome, Edge, and Safari */
-/* .styled-scrollbar::-webkit-scrollbar {
-	width: 24px !important;
-}
-
-.styled-scrollbar::-webkit-scrollbar-track {
-	background: #e6e6e6 !important;
-	border-radius: 24px !important;
-}
-
-.styled-scrollbar::-webkit-scrollbar-thumb {
-	background-color: #ffffff !important;
-	border-radius: 24px !important;
-	border: 3px solid #ffffff !important;
-} */
-</style>
+<style scoped></style>

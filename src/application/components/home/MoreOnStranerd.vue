@@ -1,5 +1,27 @@
 <template>
 	<div class="w-full flex flex-col items-center justify-center">
+		<!-- New Discover Sudy Materials -->
+		<div
+			id="discover-study-materials"
+			class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
+			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
+				<h4 class="font-bold text-[20px] md:text-[32px] text-white text-center">
+					{{ $screen.desktop ? 'Discover Study Materials' : 'Discover Quality Materials by Verified Creators' }}
+				</h4>
+				<p class="text-white text-[12px] md:text-[16px] text-center">
+					Access a world of interactive learning with quizzes and courses created by experts to cater for your specific needs.
+				</p>
+			</div>
+			<div class="hidden mdlg:block">
+				<img src="/images/landing/discover-study-materials.png" class="object-contain" />
+			</div>
+			<div class="mdlg:hidden">
+				<img src="/images/landing/discover-study-materials-top.png" class="object-contain" />
+			</div>
+			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-tl-[22px] rounded-br-[22px] text-purple font-medium"
+			>Find more</RouterLink
+			>
+		</div>
 		<!-- New and exciting ways to study -->
 		<div id="study" class="w-[90%] mx-auto max-w-[1800px]">
 			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">{{ content.study.title }}</h2>
@@ -77,6 +99,30 @@
 				</div>
 			</div>
 		</div>
+		<!-- Personalised Learning -->
+		<div
+			id="personalized-learning"
+			class="w-[90%] max-w-[1200px] mt-[180px] md:mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			<div
+				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[80px] justify-center gap-2 text-center px-8 mdlg:text-left">
+				<h3 class="text-white font-bold text-[20px] md:text-[30px]">{{ content.personalizedLearning!.title }}</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.personalizedLearning!.heading }}</h4>
+				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
+					{{ content.personalizedLearning!.content }}
+				</p>
+				<RouterLink
+					v-if="content.personalizedLearning!.link.length"
+					:to="content.personalizedLearning!.link"
+					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+					Know more
+				</RouterLink>
+			</div>
+			<div
+				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
+				<img src="/images/landing/personalized-learning.png" class="hidden mdlg:block" />
+				<img src="/images/landing/personalized-learning-top.png" class="mdlg:hidden mb-[-350px]" />
+			</div>
+		</div>
 		<!-- Create -->
 		<div
 			v-if="content.create.show"
@@ -105,7 +151,7 @@
 			<div class="flex flex-col justify-center items-center overflow-hidden w-full max-w-[1800px] mx-auto">
 				<div class="w-[90%] mx-auto flex flex-col gap-2">
 					<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
-						Access Preparatory Classes for top examinations
+						Access Preparatory Classes for Top Examinations
 					</h4>
 					<p class="text-[12px] md:text-[16px] text-center">
 						Access a world of interactive learning with quizzes and courses created
@@ -204,6 +250,8 @@ export interface IMoreOnStranerd {
 	classes: ContentType
 	place: ContentType
 	create: ContentType
+	personalizedLearning?: ContentType
+	marketPlace?: ContentType
 	testimonial: ShowType
 	learningCenters: ShowType
 	faqs: ShowType

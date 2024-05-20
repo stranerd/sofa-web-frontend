@@ -95,6 +95,14 @@ const content = ref<IMoreOnStranerd>({
 		link: '/home/features#create',
 		show: false,
 	},
+	marketPlace: {
+		title: 'Create',
+		heading: 'Quizzes, Courses, Games, Flashcards.',
+		content:
+			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
+		link: '/home/features#create',
+		show: false,
+	},
 	testimonial: {
 		show: true,
 	},

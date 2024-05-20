@@ -16,7 +16,7 @@
 				</router-link>
 			</div>
 			<div
-				class="absolute top-[65px] left-0 right-0 w-full bg-[#FFC96F] rounded-b-full h-[200px] blur-[80px]"
+				class="absolute top-[1px] left-0 right-0 w-full bg-[#FFC96F] rounded-b-full h-[200px] blur-[100px]"
 				style="z-index: 10 !important"></div>
 			<div class="z-30 w-[90%] mdlg:min-h-[500px] max-w-[1800px] relative">
 				<div class="w-[90%] md:w-[70%] mdlg:w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
@@ -85,6 +85,13 @@ const content = ref<IMoreOnStranerd>({
 		content:
 			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
 		link: '/home/features#create',
+		show: false,
+	},
+	personalizedLearning: {
+		title: 'Personalized Learning',
+		heading: '',
+		content: 'Create flashcards, mock quizzes and tests to test your knowledge on subjects.',
+		link: '/home/features',
 		show: false,
 	},
 	testimonial: {
