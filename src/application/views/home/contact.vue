@@ -61,7 +61,7 @@
 										required />
 								</div>
 								<!-- Phone Number -->
-								<div class="flex flex-col gap-2">
+								<div v-if="0" class="flex flex-col gap-2">
 									<label class="flex items-center gap-3">
 										<SofaIcon name="phone" class="!fill-[#686969]" />
 										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">Phone Number</p>
