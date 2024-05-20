@@ -15,8 +15,8 @@
 				<div class="order-1 mdlg:order-2 flex flex-col gap-6">
 					<div class="flex flex-col gap-5">
 						<div class="flex flex-col gap-1">
-							<h4 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">
-								Discover Study Materials By Verified Creators
+							<h4 class="text-[30px] text-center md:text-left md:text-[36px] font-bold md:leading-[54px]">
+								Create Study Materials for students
 							</h4>
 							<p class="text-[14px] md:text-[16px] leading-[24px]">
 								Explore a Treasure Trove of Learning Resources Curated by Accredited Experts. Dive into a World of Engaging
@@ -27,7 +27,7 @@
 						</div>
 						<RouterLink
 							to="/marketplace"
-							class="self-start bg-purple text-[14px] md:text-[16px] text-white py-[16px] px-[32px] rounded-[99px]">
+							class="self-start bg-purple text-[14px] md:text-[16px] text-white py-[16px] px-[32px] rounded-[99px] mx-auto md:mx-0">
 							Discover creators
 						</RouterLink>
 					</div>

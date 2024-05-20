@@ -14,7 +14,7 @@
 				<div class="w-full mdlg:w-1/2 flex flex-col items-center mdlg:items-start text-center mdlg:text-left gap-2">
 					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">{{ content.study.heading }}</h3>
 					<p class="text-[16px] md:text-[24px] leading-[36px]">{{ content.study.sub_heading }}</p>
-					<p class="w-4/5 text-[14px] md:text-[16px] leading-[24px]">
+					<p class="w-4/5 text-[14px] md:text-[16px] leading-[24px] tracking-wide">
 						{{ content.study.content }}
 					</p>
 					<RouterLink
