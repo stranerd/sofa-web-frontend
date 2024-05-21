@@ -73,8 +73,36 @@
 				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" :src="content.classes?.image" />
 			</div>
 		</div>
+		<!-- Wider Audience -->
+		<HomeWideAudience v-if="content.wideAudience.show" />
+		<!-- Accountability -->
+		<HomeAccountability v-if="content.accountability.show" />
+
+		<div
+			id="personalized-learning"
+			class="w-[90%] max-w-[1200px] mt-[180px] md:mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+			<div
+				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[80px] justify-center gap-2 text-center px-8 mdlg:text-left">
+				<h3 class="text-white font-bold text-[20px] md:text-[30px]">Personalized Learning</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]"></h4>
+				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
+					Create flashcards, mock quizzes and tests to test your knowledge on subjects.
+				</p>
+				<RouterLink
+					to="/home/features"
+					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+					Know more
+				</RouterLink>
+			</div>
+			<div
+				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
+				<img src="/images/landing/personalized-learning.png" class="hidden mdlg:block" />
+				<img src="/images/landing/personalized-learning-top.png" class="mdlg:hidden mb-[-350px]" />
+			</div>
+		</div>
 		<!-- MarketPlace -->
 		<div
+			v-if="content.place.show"
 			id="marketplace"
 			class="w-[90%] max-w-[1800px] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
 			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
@@ -167,6 +195,7 @@
 		<HomeDiscoverMaterials v-if="content.discover.show" />
 		<!-- Testimonials -->
 		<HomeTestimonials v-if="content.testimonial.show" class="mb-20" />
+
 		<!-- Popular Learning centers -->
 		<div
 			v-if="content.learningCenters.show"
@@ -257,6 +286,8 @@ export interface IMoreOnStranerd {
 	discoverStudyMaterials?: ShowType
 	testimonial: ShowType
 	learningCenters: ShowType
+	wideAudience: ShowType
+	accountability: ShowType
 	faqs: ShowType
 	getApp: ShowType
 	access: ContentType
@@ -266,8 +297,7 @@ export interface IMoreOnStranerd {
 
 <style scoped>
 .styled-bg {
-	background: url('/images/landing/landing/layer.png'),
-		linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

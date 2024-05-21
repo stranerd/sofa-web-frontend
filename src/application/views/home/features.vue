@@ -41,6 +41,7 @@ const content = ref<IMoreOnStranerd>({
 		content:
 			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources. Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
 		link: '',
+		show: true,
 	},
 	create: {
 		title: 'Create',
@@ -48,6 +49,18 @@ const content = ref<IMoreOnStranerd>({
 		content:
 			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
 		link: '',
+		show: false,
+	},
+	access: {
+		title: 'Access Preparatory Classes for top examinations',
+		heading: '',
+		content: 'Access a world of interactive learning with quizzes and courses created ',
+		link: '',
+	},
+	wideAudience: {
+		show: false,
+	},
+	accountability: {
 		show: false,
 	},
 	testimonial: {
@@ -61,12 +74,6 @@ const content = ref<IMoreOnStranerd>({
 	},
 	getApp: {
 		show: false,
-	},
-	access: {
-		title: 'Access Preparatory Classes for top examinations',
-		heading: '',
-		content: 'Access a world of interactive learning with quizzes and courses created ',
-		link: '',
 	},
 	discover: {
 		show: false,

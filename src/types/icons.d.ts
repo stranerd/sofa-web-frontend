@@ -12,6 +12,7 @@ declare global {
 		| 'alert-warning'
 		| 'angle-small-down'
 		| 'apple'
+		| 'arrow-down-2'
 		| 'arrow-down'
 		| 'arrow-left-round'
 		| 'arrow-left'

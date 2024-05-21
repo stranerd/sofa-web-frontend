@@ -80,6 +80,7 @@ const content = ref<IMoreOnStranerd>({
 		heading: '',
 		content: 'Explore extensive and resourceful materials needed for academic success.',
 		link: '/home/features#marketplace',
+		show: true,
 	},
 	create: {
 		title: 'Create',
@@ -88,6 +89,12 @@ const content = ref<IMoreOnStranerd>({
 			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
 		link: '/home/features#create',
 		show: false,
+	},
+	access: {
+		title: 'Access Preparatory Classes for top examinations',
+		heading: '',
+		content: 'Access a world of interactive learning with quizzes and courses created ',
+		link: '',
 	},
 	personalizedLearning: {
 		show: true,
@@ -107,11 +114,11 @@ const content = ref<IMoreOnStranerd>({
 	getApp: {
 		show: true,
 	},
-	access: {
-		title: 'Access Preparatory Classes for top examinations',
-		heading: '',
-		content: 'Access a world of interactive learning with quizzes and courses created ',
-		link: '',
+	wideAudience: {
+		show: false,
+	},
+	accountability: {
+		show: false,
 	},
 	discover: {
 		show: true,

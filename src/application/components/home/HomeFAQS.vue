@@ -12,12 +12,12 @@
 					:key="question.question"
 					class="bg-white w-full p-4 rounded-lg flex flex-col cursor-pointer">
 					<div
-						class="flex items-center justify-between font-medium text-[10px] md:text-[20px]"
+						class="flex items-center justify-between font-medium text-[15px] md:text-[20px]"
 						@click="activeQuestion = activeQuestion === index ? null : index">
 						{{ question.question }}
 						<SofaIcon name="arrow-down-2" />
 					</div>
-					<div v-if="activeQuestion === index" class="mt-2 max-w-full h-fit text-grayColor">
+					<div v-if="activeQuestion === index" class="mt-2 max-w-full h-fit text-grayColor text-base">
 						{{ question.answer }}
 					</div>
 				</div>

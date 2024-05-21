@@ -105,6 +105,7 @@ const content = ref<IMoreOnStranerd>({
 		content:
 			'Access a wealth of educational resources, tips, and support from our team of experts, empowering you to provide the best possible learning environment for your child.',
 		link: '/home/features#marketplace',
+		show: false,
 	},
 	create: {
 		title: 'Create',
@@ -127,6 +128,12 @@ const content = ref<IMoreOnStranerd>({
 		heading: '',
 		content: 'Empower students with engaging, effective study materials.',
 		link: '',
+	},
+	wideAudience: {
+		show: true,
+	},
+	accountability: {
+		show: true,
 	},
 	personalizedLearning: {
 		show: false,
