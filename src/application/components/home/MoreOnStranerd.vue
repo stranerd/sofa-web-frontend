@@ -2,6 +2,7 @@
 	<div class="w-full flex flex-col items-center justify-center">
 		<!-- New Discover Sudy Materials -->
 		<div
+			v-if="content.discoverStudyMaterials!.show"
 			id="discover-study-materials"
 			class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
 			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
@@ -31,7 +32,7 @@
 			<div class="relative flex mdlg:flex-row flex-col items-center mt-8 mdlg:mt-20">
 				<img class="hidden mdlg:block" src="/images/landing/y.png" />
 				<div class="w-full mdlg:w-1/2 flex items-center justify-center">
-					<img src="/images/landing/bot+human.png" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
+					<img :src="content.study.image" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
 				</div>
 				<div class="w-full mdlg:w-1/2 flex flex-col items-center mdlg:items-start text-center mdlg:text-left gap-2">
 					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">{{ content.study.heading }}</h3>
@@ -55,7 +56,7 @@
 			class="w-[90%] max-w-[1800px] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div
 				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[160px] justify-center gap-2 text-center px-8 mdlg:text-left">
-				<h3 class="text-white font-bold text-[20px] md:text-[36px] leading-[54px]">{{ content.classes.title }}</h3>
+				<h3 class="text-white font-bold text-[20px] md:text-[30px] leading-[54px]">{{ content.classes.title }}</h3>
 				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.classes.heading }}</h4>
 				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
 					{{ content.classes.content }}
@@ -69,7 +70,7 @@
 			</div>
 			<div
 				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
-				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" src="/images/landing/live-classes.png" />
+				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" :src="content.classes?.image" />
 			</div>
 		</div>
 		<!-- MarketPlace -->
@@ -101,18 +102,18 @@
 		</div>
 		<!-- Personalised Learning -->
 		<div
+			v-if="content.personalizedLearning?.show"
 			id="personalized-learning"
 			class="w-[90%] max-w-[1200px] mt-[180px] md:mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div
 				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[80px] justify-center gap-2 text-center px-8 mdlg:text-left">
-				<h3 class="text-white font-bold text-[20px] md:text-[30px]">{{ content.personalizedLearning!.title }}</h3>
-				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.personalizedLearning!.heading }}</h4>
+				<h3 class="text-white font-bold text-[20px] md:text-[30px]">Personalized Learning</h3>
+				<h4 class="text-white text-[16px] md:text-[24px]"></h4>
 				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
-					{{ content.personalizedLearning!.content }}
+					Create flashcards, mock quizzes and tests to test your knowledge on subjects.
 				</p>
 				<RouterLink
-					v-if="content.personalizedLearning!.link.length"
-					:to="content.personalizedLearning!.link"
+					to="/home/features"
 					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 					Know more
 				</RouterLink>
@@ -147,14 +148,14 @@
 			</div>
 		</div>
 		<!-- Access preparatory classes -->
-		<div v-if="content.access.show" class="w-full bg-[#F9FAFB] h-[389px] mb-20 flex items-center justify-center">
+		<div class="w-full bg-[#F9FAFB] h-[389px] mb-20 flex items-center justify-center">
 			<div class="flex flex-col justify-center items-center overflow-hidden w-full max-w-[1800px] mx-auto">
 				<div class="w-[90%] mx-auto flex flex-col gap-2">
 					<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
-						Access Preparatory Classes for Top Examinations
+						{{ content.access.title }}
 					</h4>
 					<p class="text-[12px] md:text-[16px] text-center">
-						Access a world of interactive learning with quizzes and courses created
+						{{ content.access.content }}
 					</p>
 				</div>
 				<Vue3Marquee :duration="200" :pauseOnHover="true" class="flex items-center">
@@ -241,6 +242,7 @@ interface ContentType extends ShowType {
 	desc?: string
 	heading: string
 	sub_heading?: string
+	image?: string
 	content: string
 	link: string
 }
@@ -250,13 +252,14 @@ export interface IMoreOnStranerd {
 	classes: ContentType
 	place: ContentType
 	create: ContentType
-	personalizedLearning?: ContentType
+	personalizedLearning?: ShowType
 	marketPlace?: ContentType
+	discoverStudyMaterials?: ShowType
 	testimonial: ShowType
 	learningCenters: ShowType
 	faqs: ShowType
 	getApp: ShowType
-	access: ShowType
+	access: ContentType
 	discover: ShowType
 }
 </script>

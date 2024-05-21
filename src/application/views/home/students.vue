@@ -65,12 +65,14 @@ const content = ref<IMoreOnStranerd>({
 		heading: 'Hybrid tutoring',
 		sub_heading: 'AI + Human Experts',
 		content: 'Elevate your learning experience by utilizing the power of AI technology and educators Insights.',
+		image: '/images/landing/bot+human.png',
 		link: '/home/features#study',
 	},
 	classes: {
 		title: 'Classes',
 		heading: '',
 		content: 'Watch live classes, and catch the replay at your convenient time.',
+		image: '/images/landing/live-classes.png',
 		link: '/home/features#classes',
 	},
 	place: {
@@ -88,11 +90,10 @@ const content = ref<IMoreOnStranerd>({
 		show: false,
 	},
 	personalizedLearning: {
-		title: 'Personalized Learning',
-		heading: '',
-		content: 'Create flashcards, mock quizzes and tests to test your knowledge on subjects.',
-		link: '/home/features',
-		show: false,
+		show: true,
+	},
+	discoverStudyMaterials: {
+		show: true,
 	},
 	testimonial: {
 		show: true,
@@ -107,7 +108,10 @@ const content = ref<IMoreOnStranerd>({
 		show: true,
 	},
 	access: {
-		show: true,
+		title: 'Access Preparatory Classes for top examinations',
+		heading: '',
+		content: 'Access a world of interactive learning with quizzes and courses created ',
+		link: '',
 	},
 	discover: {
 		show: true,

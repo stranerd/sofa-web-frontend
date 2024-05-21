@@ -63,7 +63,10 @@ const content = ref<IMoreOnStranerd>({
 		show: false,
 	},
 	access: {
-		show: false,
+		title: 'Access Preparatory Classes for top examinations',
+		heading: '',
+		content: 'Access a world of interactive learning with quizzes and courses created ',
+		link: '',
 	},
 	discover: {
 		show: false,

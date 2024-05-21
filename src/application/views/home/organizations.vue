@@ -23,15 +23,34 @@
 			<div class="z-30 w-[90%] mdlg:min-h-[400px] max-w-[1800px] relative">
 				<div class="w-[90%] md:w-[70%] mdlg:w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
 					<h1
-						class="text-[18px] text-white leading-[27px] md:text-[30px] md:leading-[40px] mdlg:text-[40px] text-center font-600 mdlg:leading-[60px] font-semibold">
-						Unlock Your Students Potential with Personalized
+						class="text-[18px] text-white leading-[27px] md:text-[30px] md:leading-[40px] mdlg:text-[40px] text-center font-600 mdlg:leading-[60px] font-semibold mt-10">
+						{{ $screen.desktop ? 'Why Teach' : "Unlock Your Child's Potential with Personalized" }}
 					</h1>
+					<div class="hidden mdlg:block absolute uppercase text-white top-[100px] z-[-1] max-w-full overflow-hidden">
+						<Vue3Marquee :duration="200" :pauseOnHover="true">
+							<div class="flex items-center gap-4 max-w-full">
+								<div v-for="i in 4" :key="i" class="bg-primaryYellow rounded-lg p-3 w-[100px] mr-4"><span>Lekki</span></div>
+								<div v-for="i in 2" :key="i" class="bg-primaryPurple rounded-lg p-3 w-[100px] mr-4"><span>Abuja</span></div>
+								<div v-for="i in 2" :key="i" class="bg-primaryBlue rounded-lg p-3 w-[100px] mr-4"><span>Lagos</span></div>
+								<div v-for="i in 3" :key="i" class="bg-primaryGreen rounded-lg p-3 w-[100px] mr-4"><span>Kogi</span></div>
+								<div v-for="i in 4" :key="i" class="bg-grayColor rounded-lg p-3 w-[100px] mr-4"><span>Edo</span></div>
+							</div>
+						</Vue3Marquee>
+					</div>
+					<h2
+						class="hidden md:block text-[18px] text-white md:text-[28px] md:leading-[40px] mdlg:text-[35px] text-center font-600 mdlg:leading-[60px] font-semibold mt-10">
+						When you can teach the
+					</h2>
 					<div
-						class="bg-purple text-white w-[174px] text-[20px] mdlg:text-[40px] font-600 font-semibold rounded-lg h-[38px] mdlg:h-[80px] mdlg:w-[387px] flex items-center justify-center -rotate-6 mb-4">
-						Infrastructure
+						class="bg-purple md:bg-primaryYellow text-white w-[174px] text-[20px] mdlg:text-[40px] font-600 font-semibold rounded-lg h-[38px] mdlg:h-[80px] mdlg:w-[387px] flex items-center justify-center -rotate-6 mb-4">
+						{{ $screen.desktop ? 'Whole World' : 'Learning' }}
 					</div>
 					<p class="text-[14px] text-white md:text-[16px] leading-[24px]">
-						Empower educators, engage learners, and streamline operations with our comprehensive learning platform
+						{{
+							$screen.desktop
+								? 'Scale your business with Stranerd’s cutting edge solutions.'
+								: 'Empower educators, engage learners, and streamline operations with our comprehensive learning platform'
+						}}
 					</p>
 					<div class="flex flex-col md:flex-row items-center gap-3">
 						<RouterLink to="/auth/signup" class="bg-white text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
@@ -46,7 +65,6 @@
 					</div>
 				</div>
 				<img class="hidden mdlg:block absolute top-0 right-0" src="/images/landing/smiles.png" />
-				<img class="hidden mdlg:block absolute -bottom-14 left-0" src="/images/landing/arrow-svg-white.png" />
 			</div>
 			<div class="z-30 w-[90%] max-w-[1800px] mt-[30px] mdlg:mt-0 mx-auto flex md:items-center md:justify-center">
 				<img
@@ -62,22 +80,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Vue3Marquee } from 'vue3-marquee'
 import type { IMoreOnStranerd } from '@app/components/home/MoreOnStranerd.vue'
 const content = ref<IMoreOnStranerd>({
 	study: {
-		title: 'Exciting New Ways to Study',
-		desc: 'Transform your child’s learning experience into something truly engaging and effective',
-		heading: 'Personalized Learning Experience',
+		title: 'Stranerd for Learning Centers',
+		desc: 'Enhancing the future of Education, one learning center at a time',
+		heading: 'Virtual Learning',
 		sub_heading: '',
-		content:
-			"Tailored to your child's unique learning style and pace, our platform delivers personalized lessons and activities that keep them engaged and motivated.",
+		content: 'Using Stranerd Classes to host and record live classes will increase your class attendance from 3,000 to 300,000.',
+		image: '/images/landing/organization-virtual-learning.png',
 		link: '/home/features#study',
 	},
 	classes: {
-		title: 'Real-time Progress Tracking',
+		title: 'Comfortable Learning',
 		heading: '',
-		content:
-			"Stay informed about your child's academic progress with real-time updates and insights, allowing you to identify areas for improvement and celebrate their achievements.",
+		content: 'Your students can pace themselves, prepare for quizzes, write exams from home or anywhere.',
+		image: '/images/landing/organization-comfortable-learning.png',
 		link: '/home/features#classes',
 	},
 	place: {
@@ -103,6 +122,18 @@ const content = ref<IMoreOnStranerd>({
 		link: '/home/features#create',
 		show: false,
 	},
+	access: {
+		title: 'Curate High- Quality materials for Top Examinations',
+		heading: '',
+		content: 'Empower students with engaging, effective study materials.',
+		link: '',
+	},
+	personalizedLearning: {
+		show: false,
+	},
+	discoverStudyMaterials: {
+		show: false,
+	},
 	testimonial: {
 		show: true,
 	},
@@ -113,9 +144,6 @@ const content = ref<IMoreOnStranerd>({
 		show: true,
 	},
 	getApp: {
-		show: true,
-	},
-	access: {
 		show: true,
 	},
 	discover: {
