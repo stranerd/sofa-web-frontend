@@ -1,5 +1,5 @@
 <template>
-	<nav class="w-full h-[65px] bg-white flex items-center justify-center sticky top-0 left-0">
+	<nav class="w-full h-[65px] bg-white flex items-center justify-center sticky top-0 left-0 z-[1000]">
 		<div class="w-[90%] mx-auto flex items-center justify-between max-w-[1800px]">
 			<button class="block mdlg:hidden">
 				<SofaIcon name="menu" class="h-[24px]" @click="openMobileMenu" />

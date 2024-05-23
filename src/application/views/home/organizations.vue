@@ -1,7 +1,7 @@
 <template>
 	<main class="w-full bg-white">
 		<header class="flex gap-[44px] flex-col items-center justify-center bg-[#29001a] relative">
-			<HomeNavbar class="!z-50" />
+			<HomeNavbar />
 			<!-- Link -->
 			<div
 				class="z-30 flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden"

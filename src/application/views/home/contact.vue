@@ -6,18 +6,17 @@
 				<div
 					class="w-[90%] max-w-[1800px] mx-auto flex justify-between relative mt-[230px] sm:mt-[200px] mdlg:mt-0 mdlg:flex-row flex-col gap-10 mdlg:gap-0">
 					<div class="w-full mdlg:w-1/2 flex flex-col gap-4 mdlg:pr-16 text-center md:text-left">
-						<div class="flex flex-col gap-[10px]">
+						<div class="flex flex-col gap-[10px] md:flex-row">
 							<h1 class="text-[20px] mdlg:text-[40px] text-white leading-[30px] mdlg:leading-[60px] font-normal">
-								<span class="bg-white text-purple font-bold rounded-[16px] p-[10px]">Get in touch</span> with us to
-							</h1>
-							<h1 class="text-[20px] mdlg:text-[40px] text-white leading-[30px] mdlg:leading-[60px] font-normal">
-								discover the amazing world of learning
+								<span class="bg-white text-purple font-bold rounded-[16px] p-[10px] block w-fit md:inline mx-auto md:mx-0"
+								>Get in touch</span
+								>
+								<span> with us to discover the amazing world of learning.</span>
 							</h1>
 						</div>
 						<p class="text-white text-[14px] md:text-[16px]">
-							Lorem ipsum dolor sit amet consectetur. In aenean habitant malesuada congue varius sed mi convallis
-							pellentesque. Etiam et ac quam ut. Et dictumst dolor enim ornare scelerisque neque lectus lorem. Enim venenatis
-							morbi a sed vivamus viverra.
+							We'd love to hear from you. If you’re curious about pricing and features or interested in partnering with us,
+							we’re here to answer all your questions.
 						</p>
 						<div class="flex flex-col gap-4">
 							<div class="flex flex-col md:flex-row items-center gap-6">
@@ -32,8 +31,8 @@
 					</div>
 					<div class="mdlg:absolute mdlg:right-0 w-full mdlg:w-1/2 flex justify-center relative" style="z-index: 999">
 						<div class="bg-white rounded-[30px] w-full md:w-[90%] mx-auto py-10" style="box-shadow: 0px 4px 16px 0px #00000066">
-							<p class="text-black text-[20px] md:text-[36px] font-bold text-center">Contact Us Today</p>
 							<form class="flex flex-col w-[90%] md:w-[80%] mx-auto gap-6 pt-8" @submit.prevent="sendMessage">
+								<p class="text-black text-[20px] md:text-[36px] font-bold text-left">Contact Us Today</p>
 								<!-- Full name -->
 								<div class="flex flex-col gap-2">
 									<label class="flex items-center gap-3">

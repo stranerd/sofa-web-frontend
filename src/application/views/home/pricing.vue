@@ -27,7 +27,7 @@
 						v-if="plan.basic"
 						ref="firstPlan"
 						:key="showStudentsPricing.toString()"
-						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
+						class="w-full bg-white flex flex-col gap-6 px-6 rounded-[20px]"
 						style="box-shadow: 0 0 24px 0 #00000040; z-index: 10 !important">
 						<div class="flex gap-3 justify-between">
 							<div class="flex flex-col gap-2 pt-3">
@@ -53,7 +53,7 @@
 							Choose Plan
 						</button>
 					</div>
-					<div
+					<!-- <div
 						v-if="plan.plus"
 						class="w-full mdlg:w-1/2 bg-white flex flex-col gap-6 px-6 rounded-[20px]"
 						style="box-shadow: 0 0 24px 0 #00000040; z-index: 10 !important">
@@ -80,9 +80,9 @@
 						<button class="w-full bg-purple text-white py-[10px] rounded-lg mb-3" @click="choosePlan(plan.plus)">
 							Choose Plan
 						</button>
-					</div>
+					</div> -->
 					<div
-						class="absolute w-full mdlg:w-[927px] mx-auto left-0 right-0 styled-bg rounded-[20px]"
+						class="absolute w-full mdlg:w-[503px] mx-auto left-0 right-0 styled-bg rounded-[20px]"
 						style="z-index: 5"
 						:class="[showStudentsPricing ? 'h-[350px]' : 'h-[200px]']"
 						:style="dynamicStyle"></div>
@@ -123,11 +123,13 @@ const plan = computed(() => {
 	}
 })
 const firstPlan = ref<HTMLDivElement | null>(null)
-const height = computed(() => firstPlan.value?.clientHeight || 0)
+// const height = computed(() => firstPlan.value?.clientHeight || 0)
 const dynamicStyle = computed(() => {
 	if (!$screen.desktop) {
 		return {
-			top: `${(height.value + 40) / 2}px`,
+			// top: `${(height.value + 40) / 2}px`,
+			top: '50%',
+			transform: 'translateY(-50%)',
 		}
 	}
 	return {}

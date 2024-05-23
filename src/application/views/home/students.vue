@@ -1,7 +1,7 @@
 <template>
 	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white mx-auto">
 		<header class="flex flex-col items-center justify-center relative">
-			<HomeNavbar class="mb-[44px] z-50" />
+			<HomeNavbar class="mb-[44px]" />
 			<!-- Link -->
 			<div
 				class="z-30 flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
