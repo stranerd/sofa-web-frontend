@@ -2,7 +2,7 @@
 	<div class="w-full flex flex-col items-center justify-center">
 		<!-- New Discover Sudy Materials -->
 		<div
-			v-if="content.discoverStudyMaterials!.show"
+			v-if="content.discoverStudyMaterials?.show"
 			id="discover-study-materials"
 			class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
 			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
@@ -75,31 +75,18 @@
 		</div>
 		<!-- Wider Audience -->
 		<HomeWideAudience v-if="content.wideAudience.show" />
+		<!-- Visible on Only Organization tab -->
+		<HomeLearning
+			v-if="$route.path === '/home/organizations'"
+			:content="{
+				title: 'Marketplace',
+				description:
+					'Create and upload relevant educational materials to Stranerd’s marketplace that can be purchased by students.',
+				desktopImage: '/images/landing/organization-marketplace.png',
+				mobileImage: '/images/landing/organization-marketplace-top.png',
+			}" />
 		<!-- Accountability -->
 		<HomeAccountability v-if="content.accountability.show" />
-
-		<div
-			id="personalized-learning"
-			class="w-[90%] max-w-[1200px] mt-[180px] md:mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
-			<div
-				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[80px] justify-center gap-2 text-center px-8 mdlg:text-left">
-				<h3 class="text-white font-bold text-[20px] md:text-[30px]">Personalized Learning</h3>
-				<h4 class="text-white text-[16px] md:text-[24px]"></h4>
-				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
-					Create flashcards, mock quizzes and tests to test your knowledge on subjects.
-				</p>
-				<RouterLink
-					to="/home/features"
-					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
-					Know more
-				</RouterLink>
-			</div>
-			<div
-				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
-				<img src="/images/landing/personalized-learning.png" class="hidden mdlg:block" />
-				<img src="/images/landing/personalized-learning-top.png" class="mdlg:hidden mb-[-350px]" />
-			</div>
-		</div>
 		<!-- MarketPlace -->
 		<div
 			v-if="content.place.show"
@@ -129,29 +116,14 @@
 			</div>
 		</div>
 		<!-- Personalised Learning -->
-		<div
+		<HomeLearning
 			v-if="content.personalizedLearning?.show"
-			id="personalized-learning"
-			class="w-[90%] max-w-[1200px] mt-[180px] md:mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
-			<div
-				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[80px] justify-center gap-2 text-center px-8 mdlg:text-left">
-				<h3 class="text-white font-bold text-[20px] md:text-[30px]">Personalized Learning</h3>
-				<h4 class="text-white text-[16px] md:text-[24px]"></h4>
-				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
-					Create flashcards, mock quizzes and tests to test your knowledge on subjects.
-				</p>
-				<RouterLink
-					to="/home/features"
-					class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
-					Know more
-				</RouterLink>
-			</div>
-			<div
-				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
-				<img src="/images/landing/personalized-learning.png" class="hidden mdlg:block" />
-				<img src="/images/landing/personalized-learning-top.png" class="mdlg:hidden mb-[-350px]" />
-			</div>
-		</div>
+			:content="{
+				title: 'Personalized Learning',
+				description: 'Create flashcards, mock quizzes and tests to test your knowledge on subjects.',
+				desktopImage: '/images/landing/personalized-learning.png',
+				mobileImage: '/images/landing/personalized-learning-top.png',
+			}" />
 		<!-- Create -->
 		<div
 			v-if="content.create.show"
@@ -176,7 +148,7 @@
 			</div>
 		</div>
 		<!-- Access preparatory classes -->
-		<div class="w-full bg-[#F9FAFB] h-[389px] mb-20 flex items-center justify-center">
+		<div v-if="content.access.show" class="w-full bg-[#F9FAFB] h-[389px] mb-20 flex items-center justify-center">
 			<div class="flex flex-col justify-center items-center overflow-hidden w-full max-w-[1800px] mx-auto">
 				<div class="w-[90%] mx-auto flex flex-col gap-2">
 					<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">

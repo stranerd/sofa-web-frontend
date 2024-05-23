@@ -27,19 +27,21 @@ const content = ref<IMoreOnStranerd>({
 		content:
 			'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
 		link: '',
+		image: '/images/landing/bot+human.png',
 	},
 	classes: {
 		title: 'Classes',
-		heading: 'Self Paced & Live Classes',
+		heading: '',
 		content:
-			'Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes. Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes. merse yourself in the energ',
+			'Join and rewatch live classes hosted by your learning centers on Stranerd. Stranerd offers you the opportunity to participate in and rewatch live classes hosted by your learning centers anywhere you are. You can access these recorded classes from any device, allowing you to study and learn at your own pace. We have made it easy for you to track your studies and stay organized with your learning.',
 		link: '',
+		image: '/images/landing/live-classes.png',
 	},
 	place: {
 		title: 'Marketplace',
-		heading: 'Explore & Discover materials',
+		heading: '',
 		content:
-			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources. Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
+			'Explore the endless materials and resources created just for you. Find a wide range of study guides, mock quizzes and exams, online courses to help you master any subject. By maximizing the use of these wide range of resources we have provided, your academic goals can be attained.',
 		link: '',
 		show: true,
 	},
@@ -56,8 +58,15 @@ const content = ref<IMoreOnStranerd>({
 		heading: '',
 		content: 'Access a world of interactive learning with quizzes and courses created ',
 		link: '',
+		show: false,
+	},
+	personalizedLearning: {
+		show: true,
 	},
 	wideAudience: {
+		show: false,
+	},
+	discoverStudyMaterials: {
 		show: false,
 	},
 	accountability: {

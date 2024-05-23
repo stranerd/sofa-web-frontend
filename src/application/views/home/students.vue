@@ -95,6 +95,7 @@ const content = ref<IMoreOnStranerd>({
 		heading: '',
 		content: 'Access a world of interactive learning with quizzes and courses created ',
 		link: '',
+		show: true,
 	},
 	personalizedLearning: {
 		show: true,

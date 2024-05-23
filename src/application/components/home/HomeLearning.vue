@@ -1,0 +1,44 @@
+<template>
+	<div
+		id="personalized-learning"
+		class="w-[90%] max-w-[1200px] mt-[220px] md:mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
+		<div
+			class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[80px] justify-center gap-2 text-center px-8 mdlg:text-left">
+			<h3 class="text-white font-bold text-[20px] md:text-[30px]">{{ content.title }}</h3>
+			<h4 class="text-white text-[16px] md:text-[24px]"></h4>
+			<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
+				{{ content.description }}
+			</p>
+			<RouterLink
+				to="/home/features"
+				class="self-center mdlg:self-start text-[14px] md:text-[16px] bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+				Know more
+			</RouterLink>
+		</div>
+		<div
+			class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
+			<img :src="content.desktopImage" class="hidden mdlg:block" />
+			<img :src="content.mobileImage" class="mdlg:hidden mb-[-350px]" />
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+defineProps({
+	content: {
+		type: Object as () => Content,
+		required: true,
+	},
+})
+</script>
+
+<script lang="ts">
+interface Content {
+	title: string
+	subHeading?: string
+	description: string
+	desktopImage: string
+	mobileImage: string
+	link?: string
+}
+</script>

@@ -124,10 +124,11 @@ const content = ref<IMoreOnStranerd>({
 		show: false,
 	},
 	access: {
-		title: 'Curate High- Quality materials for Top Examinations',
+		title: 'Curate High-Quality materials for Top Examinations',
 		heading: '',
 		content: 'Empower students with engaging, effective study materials.',
 		link: '',
+		show: true,
 	},
 	wideAudience: {
 		show: true,

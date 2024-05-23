@@ -69,6 +69,7 @@ declare module 'vue' {
     HomeFAQS: typeof import('./../application/components/home/HomeFAQS.vue')['default']
     HomeFooter: typeof import('./../application/components/home/HomeFooter.vue')['default']
     HomeJoinUs: typeof import('./../application/components/home/HomeJoinUs.vue')['default']
+    HomeLearning: typeof import('./../application/components/home/HomeLearning.vue')['default']
     HomeMobileMenu: typeof import('./../application/components/home/HomeMobileMenu.vue')['default']
     HomeNavbar: typeof import('./../application/components/home/HomeNavbar.vue')['default']
     HomeTestimonials: typeof import('./../application/components/home/HomeTestimonials.vue')['default']

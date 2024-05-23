@@ -1,6 +1,6 @@
 <template>
 	<div id="accountability" class="w-[90%] mx-auto max-w-[1800px]">
-		<div class="relative flex mdlg:flex-row flex-col items-center mt-8 mdlg:mt-20">
+		<div class="relative flex mdlg:flex-row flex-col items-center my-8 mdlg:mt-20">
 			<img class="hidden mdlg:block" src="" />
 			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
 				<img
@@ -26,4 +26,4 @@
 
 <script setup></script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
