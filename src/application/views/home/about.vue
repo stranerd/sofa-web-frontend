@@ -67,6 +67,7 @@
 			<img class="hidden md:block absolute -bottom-6 left-0" src="/images/landing/our-mission-vector-2.png" />
 			<img class="hidden md:block absolute -top-16 right-0" src="/images/landing/our-mission-vector-1.png" />
 		</div>
+
 		<!-- What we believe -->
 		<div class="flex justify-center mdlg:p-6 w-full">
 			<div class="flex flex-col items-center justify-center md:w-[80%] p-12 gap-12 w-full">

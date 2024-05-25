@@ -38,7 +38,7 @@ const content = ref<IMoreOnStranerd>({
 		title: '',
 		desc: '',
 		heading: 'Hybrid tutoring',
-		sub_heading: 'AI + Human Experts',
+		sub_heading: '',
 		content:
 			'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
 		link: '',
