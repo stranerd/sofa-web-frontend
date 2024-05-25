@@ -67,6 +67,7 @@ const content = ref<IMoreOnStranerd>({
 		content: 'Elevate your learning experience by utilizing the power of AI technology and educators Insights.',
 		image: '/images/landing/bot+human.png',
 		link: '/home/features#study',
+		show: true,
 	},
 	classes: {
 		title: 'Classes',
@@ -98,7 +99,12 @@ const content = ref<IMoreOnStranerd>({
 		show: true,
 	},
 	personalizedLearning: {
+		title: 'Personalized Learning',
+		content: 'Create flashcards, mock quizzes and tests to test your knowledge on subjects.',
+		image: '/images/landing/personalized-learning.png',
+		mobileImage: '/images/landing/personalized-learning-top.png',
 		show: true,
+		link: '',
 	},
 	discoverStudyMaterials: {
 		show: true,

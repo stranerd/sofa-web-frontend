@@ -24,7 +24,7 @@
 			>
 		</div>
 		<!-- New and exciting ways to study -->
-		<div id="study" class="w-[90%] mx-auto max-w-[1800px]">
+		<div v-if="content.study.show" id="study" class="w-[90%] mx-auto max-w-[1800px]">
 			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">{{ content.study.title }}</h2>
 			<p class="text-[14px] md:text-[16px] text-center">
 				{{ content.study.desc }}
@@ -76,15 +76,7 @@
 		<!-- Wider Audience -->
 		<HomeWideAudience v-if="content.wideAudience.show" />
 		<!-- Visible on Only Organization tab -->
-		<HomeLearning
-			v-if="$route.path === '/home/organizations'"
-			:content="{
-				title: 'Marketplace',
-				description:
-					'Create and upload relevant educational materials to Stranerd’s marketplace that can be purchased by students.',
-				desktopImage: '/images/landing/organization-marketplace.png',
-				mobileImage: '/images/landing/organization-marketplace-top.png',
-			}" />
+		<HomeLearning v-if="$route.path === '/home/organizations'" :content="content.personalizedLearning" />
 		<!-- Accountability -->
 		<HomeAccountability v-if="content.accountability.show" />
 		<!-- MarketPlace -->
@@ -116,14 +108,9 @@
 			</div>
 		</div>
 		<!-- Personalised Learning -->
-		<HomeLearning
-			v-if="content.personalizedLearning?.show"
-			:content="{
-				title: 'Personalized Learning',
-				description: 'Create flashcards, mock quizzes and tests to test your knowledge on subjects.',
-				desktopImage: '/images/landing/personalized-learning.png',
-				mobileImage: '/images/landing/personalized-learning-top.png',
-			}" />
+		<HomeLearning v-if="content.personalizedLearning?.show" :content="content.personalizedLearning" />
+		<!-- Features -->
+		<HomeFeatureIdea v-if="content.featureIdeas?.show" :content="content.featureIdeas" />
 		<!-- Create -->
 		<div
 			v-if="content.create.show"
@@ -194,6 +181,8 @@
 			</Vue3Marquee>
 			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Find more</RouterLink>
 		</div>
+		<!-- Resources By Subjects -->
+		<HomeResourcesBySubjects v-if="$route.path === '/home/organizations'" />
 		<!-- FAQS -->
 		<HomeFAQS v-if="content.faqs.show" />
 		<!-- Get app -->
@@ -238,12 +227,13 @@ interface ShowType {
 	show?: boolean
 }
 
-interface ContentType extends ShowType {
+export interface ContentType extends ShowType {
 	title: string
 	desc?: string
-	heading: string
+	heading?: string
 	sub_heading?: string
 	image?: string
+	mobileImage?: string
 	content: string
 	link: string
 }
@@ -253,9 +243,10 @@ export interface IMoreOnStranerd {
 	classes: ContentType
 	place: ContentType
 	create: ContentType
-	personalizedLearning?: ShowType
+	personalizedLearning?: ContentType
 	marketPlace?: ContentType
 	discoverStudyMaterials?: ShowType
+	featureIdeas?: ContentType
 	testimonial: ShowType
 	learningCenters: ShowType
 	wideAudience: ShowType

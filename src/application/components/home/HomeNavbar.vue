@@ -39,7 +39,7 @@ const links = [
 	},
 	{
 		label: 'Features',
-		link: '/home/features',
+		link: '/home/features/students',
 	},
 	{
 		label: 'Pricing',

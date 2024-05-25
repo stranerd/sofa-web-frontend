@@ -8,11 +8,13 @@
 					class="z-30 flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
 					style="box-shadow: 0 4px 16px 0 #00000040">
 					<router-link
-						to="/home/features"
+						to="/home/features/students"
 						class="w-1/2 h-full flex items-center justify-center p-5 bg-purple text-white rounded-[22px] text-[14px] md:text-[16px]">
 						Students
 					</router-link>
-					<router-link to="/home/features" class="w-1/2 h-full flex items-center justify-center p-5 text-[14px] md:text-[16px]">
+					<router-link
+						to="/home/features/organizations"
+						class="w-1/2 h-full flex items-center justify-center p-5 text-[14px] md:text-[16px]">
 						Organizations
 					</router-link>
 				</div>
@@ -41,6 +43,7 @@ const content = ref<IMoreOnStranerd>({
 			'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators. Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
 		link: '',
 		image: '/images/landing/bot+human.png',
+		show: true,
 	},
 	classes: {
 		title: 'Classes',
@@ -74,6 +77,18 @@ const content = ref<IMoreOnStranerd>({
 		show: false,
 	},
 	personalizedLearning: {
+		title: '',
+		content: '',
+		show: false,
+		link: '',
+	},
+	featureIdeas: {
+		title: 'Create',
+		content:
+			'Create customized and personalized quizzes to test your knowledge on study materials, and to identify areas that need additional study.  These quizzes can be adapted to suit your needs and can include a range of question types such as multiple choice, true or false, fill in the gap, and short answers. They can be repeated  to measure progress, and can be shared with other students to compare results.',
+		image: '/images/landing/personalized-learning.png',
+		mobileImage: '/images/landing/personalized-learning-top.png',
+		link: '',
 		show: true,
 	},
 	wideAudience: {

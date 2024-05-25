@@ -74,6 +74,7 @@
 			<img class="z-30 w-[90%] mx-auto -mb-10 md:-mb-24 h-full" src="/images/landing/stranerd-stats.png" />
 		</header>
 		<MoreOnStranerd class="mt-[100px] mdlg:mt-[180px]" :content="content" />
+
 		<HomeFooter />
 	</main>
 </template>
@@ -91,6 +92,7 @@ const content = ref<IMoreOnStranerd>({
 		content: 'Using Stranerd Classes to host and record live classes will increase your class attendance from 3,000 to 300,000.',
 		image: '/images/landing/organization-virtual-learning.png',
 		link: '/home/features#study',
+		show: true,
 	},
 	classes: {
 		title: 'Comfortable Learning',
@@ -137,7 +139,12 @@ const content = ref<IMoreOnStranerd>({
 		show: true,
 	},
 	personalizedLearning: {
+		title: 'Marketplace',
+		content: 'Create and upload relevant educational materials to Stranerd’s marketplace that can be purchased by students.',
+		image: '/images/landing/organization-marketplace.png',
+		mobileImage: '/images/landing/organization-marketplace-top.png',
 		show: false,
+		link: '',
 	},
 	discoverStudyMaterials: {
 		show: false,
