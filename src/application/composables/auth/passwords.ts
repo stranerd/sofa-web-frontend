@@ -26,15 +26,9 @@ export const usePasswordReset = () => {
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		try {
-			const user = await AuthUseCases.resetPassword(factory)
-			await setMessage('Password reset successfully!')
-			await createSession(user, router)
-		} catch (error) {
-			if (error instanceof NetworkError && error.statusCode === StatusCodes.InvalidToken) {
-				throw new Error('Invalid or expired OTP. Resend a new OTP to your email')
-			} else throw error
-		}
+		const user = await AuthUseCases.resetPassword(factory)
+		await setMessage('Password reset successfully!')
+		await createSession(user, router)
 	})
 
 	return { factory, sent, loading, message, error, resetPassword, sendResetEmail }

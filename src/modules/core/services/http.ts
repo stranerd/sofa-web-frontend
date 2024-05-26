@@ -132,10 +132,8 @@ export enum StatusCodes {
 	NotAuthorized = 403,
 	NotFound = 404,
 	ValidationError = 422,
-	AccountNotVerified = 460,
+	TooManyRequests = 429,
 	AccessTokenExpired = 461,
-	RefreshTokenMisused = 462,
-	InvalidToken = 463,
 }
 
 export enum QueryKeys {

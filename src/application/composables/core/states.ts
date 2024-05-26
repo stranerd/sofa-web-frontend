@@ -8,8 +8,7 @@ export const useErrorHandler = () => {
 	const setError = async (error: any, skipAlert = false) => {
 		if (error instanceof NetworkError) {
 			errorState.value = error.errors.map(({ message, field }) => `${capitalize(field ?? 'Error')}: ${message}`).join('\n')
-			if ([StatusCodes.NotAuthenticated, StatusCodes.AccessTokenExpired, StatusCodes.RefreshTokenMisused].includes(error.statusCode))
-				await useAuth().signout()
+			if ([StatusCodes.NotAuthenticated, StatusCodes.AccessTokenExpired].includes(error.statusCode)) await useAuth().signout()
 		} else errorState.value = error?.message ?? error?.error ?? error
 		if (errorState.value && !skipAlert) $utils.showAlert({ message: errorState.value, type: 'error' })
 	}

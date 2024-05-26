@@ -3,11 +3,10 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
-import { createSession } from '@app/composables/auth/session'
-import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
-import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/auth'
-import { NetworkError, StatusCodes } from '@modules/core'
 import { storage } from '@utils/storage'
+import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/auth'
+import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
+import { createSession } from '@app/composables/auth/session'
 
 const store = {
 	referrerId: ref(undefined as string | undefined),
@@ -69,15 +68,8 @@ export const useEmailVerification = () => {
 		loading: completeVerificationLoading,
 		error: completeVerificationError,
 	} = useAsyncFn(async () => {
-		try {
-			const user = await AuthUseCases.completeEmailVerification(token.value)
-			await createSession(user, router)
-		} catch (error) {
-			if (error instanceof NetworkError && error.statusCode === StatusCodes.InvalidToken) {
-				await router.push('/auth/signin')
-				throw new Error('Invalid or expired token. Proceed to signin!')
-			} else throw error
-		}
+		const user = await AuthUseCases.completeEmailVerification(token.value)
+		await createSession(user, router)
 	})
 
 	const {
