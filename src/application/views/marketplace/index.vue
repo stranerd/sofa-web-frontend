@@ -49,7 +49,7 @@
 					<div
 						v-if="material.list.length"
 						class="mdlg:gap-4 flex gap-3 mdlg:p-0 pr-4 flex-nowrap overflow-x-auto scrollbar-hide items-start">
-						<StudyMaterialCard v-for="m in material.list" :key="m.id" wrapped :material="m" class="mdlg:w-[20%]" />
+						<StudyMaterialCard v-for="m in material.list" :key="m.id" wrapped :material="m" class="mdlg:w-[25%]" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
 						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />

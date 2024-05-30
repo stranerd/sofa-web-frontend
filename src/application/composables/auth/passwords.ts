@@ -4,7 +4,7 @@ import { useAsyncFn } from '../core/hooks'
 import { createSession } from '@app/composables/auth/session'
 import { useSuccessHandler } from '@app/composables/core/states'
 import { AuthUseCases, PasswordResetFactory, PasswordUpdateFactory } from '@modules/auth'
-import { NetworkError, StatusCodes } from '@modules/core'
+// import { NetworkError, StatusCodes } from '@modules/core'
 
 export const usePasswordReset = () => {
 	const sent = ref(false)
