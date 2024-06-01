@@ -124,7 +124,6 @@ declare module 'vue' {
     SofaEmptyState: typeof import('sofa-ui-components')['SofaEmptyState']
     SofaFileInput: typeof import('sofa-ui-components')['SofaFileInput']
     SofaFormGroup: typeof import('sofa-ui-components')['SofaFormGroup']
-    SofaHeader: typeof import('sofa-ui-components')['SofaHeader']
     SofaHeaderText: typeof import('sofa-ui-components')['SofaHeaderText']
     SofaHeading: typeof import('sofa-ui-components')['SofaHeading']
     SofaIcon: typeof import('sofa-ui-components')['SofaIcon']

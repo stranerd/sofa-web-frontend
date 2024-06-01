@@ -27,7 +27,7 @@
 					<SofaHeading :content="tab.name" />
 				</router-link>
 
-				<form class="py-1" :class="route.path.startsWith('/admin') ? 'w-[43%]' : 'w-[30%]'" @submit.prevent="initiateSearch">
+				<form class="py-1 w-[30%]" @submit.prevent="initiateSearch">
 					<SofaInput v-model="searchQuery" placeholder="Search" class="!py-2 !rounded-full">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
@@ -91,7 +91,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import SofaBadge from '../SofaBadge/index.vue'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { useModals } from '@app/composables/core/modals'
@@ -129,9 +129,8 @@ withDefaults(
 	},
 )
 
-const { user, userType } = useAuth()
+const { user, isAdmin, userType } = useAuth()
 const router = useRouter()
-const route = useRoute()
 const openSideBar = () => useModals().users.sideBar.open({})
 
 const searchQuery = ref('')
@@ -140,9 +139,18 @@ const initiateSearch = () => {
 	if (searchQuery.value.length > 1) router.push('/marketplace/search?q=' + searchQuery.value)
 }
 
-const tabs = computed(() => {
-	if (!route.path.startsWith('/admin')) {
-		return [
+const tabs = computed(
+	() =>
+		[
+			...(isAdmin.value
+				? [
+						{
+							name: 'Admin',
+							path: '/admin',
+							icon: 'admin' as const,
+						},
+					]
+				: []),
 			{
 				name: 'Home',
 				path: '/dashboard',
@@ -172,30 +180,6 @@ const tabs = computed(() => {
 				path: '/marketplace',
 				icon: 'marketplace' as const,
 			},
-		] as const
-	} else {
-		return [
-			{
-				name: 'Admin',
-				path: '/admin',
-				icon: 'admin' as const,
-			},
-			{
-				name: 'Home',
-				path: '/dashboard',
-				icon: 'home' as const,
-			},
-			{
-				name: 'Library',
-				path: '/library',
-				icon: 'library' as const,
-			},
-			{
-				name: 'Marketplace',
-				path: '/marketplace',
-				icon: 'marketplace' as const,
-			},
-		]
-	}
-})
+		] as const,
+)
 </script>

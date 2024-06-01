@@ -1,25 +1,27 @@
 <template>
 	<FullLayout :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
-			<div class="w-full min-h-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col p-4 gap-4">
-				<div v-for="(tab, index) in tabs" :key="index" class="min-h-[120px] min-w-full border-b-[#F1F6FA] border-b-2">
-					<SofaNormalText :content="tab.title" class="text-grayColor p-2" />
-					<div class="flex flex-col gap-2">
-						<div v-for="item in tab.items" :key="item.link">
-							<RouterLink
-								:to="item.link"
-								class="w-full flex items-center gap-3 h-[34px] p-2"
-								activeClass="bg-blue-100 rounded font-bold">
-								<SofaIcon class="h-[15px]" :name="item.icon" />
-								<SofaNormalText :content="item.name" class="text-[10px]" />
-							</RouterLink>
-						</div>
-					</div>
+			<div class="w-full min-h-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col px-4">
+				<div
+					v-for="(tab, index) in tabs"
+					:key="index"
+					class="w-full flex flex-col py-2"
+					:class="{ 'border-t-2 border-b-lightGray': index !== 0 }">
+					<SofaText :content="tab.title" class="text-grayColor p-2" />
+					<router-link
+						v-for="item in tab.items"
+						:key="item.link"
+						:to="item.link"
+						class="w-full flex items-center gap-3 p-2 rounded-lg"
+						activeClass="bg-lightBlue font-bold">
+						<SofaIcon class="h-[15px]" :name="item.icon" />
+						<SofaText :content="item.name" />
+					</router-link>
 				</div>
 			</div>
 		</template>
 		<template #middle-session>
-			<div class="min-h-full rounded-[22px] flex flex-col grow overflow-y-auto mdlg:mr-4 bg-white">
+			<div class="flex flex-col grow overflow-y-auto mdlg:mr-4">
 				<slot />
 			</div>
 		</template>
@@ -29,17 +31,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
-import { RouterLink } from 'vue-router'
-const props = withDefaults(
-	defineProps<{
-		title: string
-	}>(),
-	{
-		title: '',
-	},
-)
-const tabs = {
-	// general: {
+
+const props = defineProps<{
+	title: string
+}>()
+
+const tabs = [
+	// {
 	// 	title: 'General',
 	// 	items: [
 	// 		{
@@ -64,7 +62,7 @@ const tabs = {
 	// 		},
 	// 	],
 	// },
-	applications: {
+	{
 		title: 'Applications',
 		items: [
 			{
@@ -79,12 +77,11 @@ const tabs = {
 			},
 		],
 	},
-}
+]
+
 useMeta(
 	computed(() => ({
 		title: props.title,
 	})),
 )
 </script>
-
-<style scoped></style>
