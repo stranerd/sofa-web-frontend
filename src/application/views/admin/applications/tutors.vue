@@ -21,8 +21,13 @@
 			<div class="px-1 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
-						{ id: 'teacher', key: 'userId', label: 'Teacher', class: 'w-[60%]' },
-						{ id: 'applied', key: (d) => $utils.formatTime(d.createdAt), label: 'Applied', class: 'text-grayColor w-[20%]' },
+						{ id: 'teacher', key: 'user.publicName', label: 'Teacher', class: 'w-[60%]' },
+						{
+							id: 'applied',
+							key: (d) => $utils.formatTime(d.tutorRequest.createdAt),
+							label: 'Applied',
+							class: 'text-grayColor w-[20%]',
+						},
 						{ id: 'action', key: () => 'Reject', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
 					:data="data"
@@ -48,29 +53,32 @@
 </template>
 
 <script setup lang="ts">
-import { TutorRequestFromModel } from '@modules/users/data/models/tutorRequests'
+import { TutorRequestEntity, UserEntity } from '@modules/users'
 
-const data: TutorRequestFromModel[] = [
+const data: { tutorRequest: TutorRequestEntity; user: UserEntity }[] = [
 	{
-		id: '1',
-		userId: '2768379',
-		pending: false,
-		accepted: null,
-		testId: '1',
-		testFinished: false,
-		createdAt: Date.now(),
-		updatedAt: Date.now(),
-		topicId: '552',
-		verification: {
-			name: '',
-			type: '',
-			size: 0,
-			path: '',
-			timestamp: 0,
-			duration: 0,
-			link: '',
-		},
-		qualification: [],
+		tutorRequest: new TutorRequestEntity({
+			id: '1',
+			userId: '2768379',
+			pending: false,
+			accepted: null,
+			testId: '1',
+			testFinished: false,
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+			topicId: '552',
+			verification: {
+				name: '',
+				type: '',
+				size: 0,
+				path: '',
+				timestamp: 0,
+				duration: 0,
+				link: '',
+			},
+			qualification: [],
+		}),
+		user: new UserEntity({} as any),
 	},
 ]
 </script>
