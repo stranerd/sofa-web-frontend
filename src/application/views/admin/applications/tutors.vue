@@ -1,42 +1,38 @@
 <template>
 	<AdminLayout title="Tutors">
-		<div class="header flex justify-between items-center p-4">
-			<div class="w-[60%]">
-				<SofaHeaderText content="Tutor applications" />
+		<div class="header flex justify-between items-center h-[50px]">
+			<div class="w-[60%] border-r h-full flex items-center">
+				<SofaHeaderText content="Tutor applications" class="px-4" />
 			</div>
-			<div class="w-[20%]">
+			<div class="w-[20%] border-r h-full">
 				<form class="py-1">
-					<SofaInput placeholder="Search" class="!py-2">
+					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
 						</template>
 					</SofaInput>
 				</form>
 			</div>
-			<div class="flex items-center justify-end w-[20%]">
+			<div class="flex items-center justify-start w-[20%] border-r h-full">
 				<div class="mx-2">1-10 of 50</div>
-				<SofaIcon class="h-[15px] text-grayColor" name="arrow-left-round" />
+				<SofaIcon class="h-[20px] text-grayColor" name="alt-arrow-left" />
 				<div class="border-r h-4 mx-2"></div>
-				<SofaIcon class="h-[15px]" name="arrow-right-round" />
+				<SofaIcon class="h-[20px]" name="alt-arrow-right" />
 			</div>
 		</div>
 		<SofaTable
 			:fields="[
 				{ id: 'teacher', key: 'userId', label: 'Teacher', class: 'w-[60%]' },
 				{ id: 'applied', key: 'createdAt', label: 'Applied', class: 'text-grayColor text-[10px] w-[20%]' },
-				{ id: 'action', key: () => 'Reject', label: 'Action', hide: false, class: 'text-grayColor w-[20%]' },
+				{ id: 'action', key: () => 'Reject', label: 'Action', class: 'text-grayColor w-[20%]' },
 			]"
 			:data="data"
-			headClass="text-left border-b-[##F1F6FA] border-t-[##F1F6FA] border text-grayColor"
+			headClass="text-left border-t border-b text-grayColor"
 			:rowClass="(item, index) => ((index + 1) % 2 !== 0 ? 'bg-[#F1F6FA]' : '')">
 			<template #data-action>
 				<div class="flex items-center justify-between">
-					<SofaButton bgColor="bg-none" textColor="text-deepGray" padding="py-1" class="!font-semibold text-primaryRed"
-					>Reject</SofaButton
-					>
-					<SofaButton bgColor="bg-none" textColor="text-deepGray" padding="py-1" class="!font-semibold text-primaryGreen"
-					>Accept</SofaButton
-					>
+					<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" class="!font-semiboldd">Reject</SofaButton>
+					<SofaButton bgColor="bg-none" textColor="text-primaryGreen" padding="py-1" class="!font-semibold">Accept</SofaButton>
 				</div>
 			</template>
 		</SofaTable>
@@ -68,7 +64,15 @@ const data: TutorRequestToModel[] = [
 		createdAt: `${$utils.formatDateAsDigits(new Date())}`,
 		updatedAt: Date.now(),
 		topicId: '552',
-		verification: {},
+		verification: {
+			name: '',
+			type: '',
+			size: 0,
+			path: '',
+			timestamp: 0,
+			duration: 0,
+			link: '',
+		},
 		qualification: [],
 	},
 ]

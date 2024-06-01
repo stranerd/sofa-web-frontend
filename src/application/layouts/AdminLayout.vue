@@ -2,7 +2,7 @@
 	<FullLayout :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
 			<div class="w-full min-h-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col p-4 gap-4">
-				<div v-for="(tab, index) in tabs" :key="index" class="min-h-[100px] min-w-full border-b-[#F1F6FA] border-b">
+				<div v-for="(tab, index) in tabs" :key="index" class="min-h-[120px] min-w-full border-b-[#F1F6FA] border-b-2">
 					<SofaNormalText :content="tab.title" class="text-grayColor p-2" />
 					<div class="flex flex-col gap-2">
 						<div v-for="item in tab.items" :key="item.link">
@@ -39,6 +39,31 @@ const props = withDefaults(
 	},
 )
 const tabs = {
+	// general: {
+	// 	title: 'General',
+	// 	items: [
+	// 		{
+	// 			name: 'Dashboard',
+	// 			link: '/admin/applications/tutors',
+	// 			icon: 'tutor' as const,
+	// 		},
+	// 		{
+	// 			name: 'Analytics',
+	// 			link: '/admin/applications/verifications',
+	// 			icon: 'verify-stroke' as const,
+	// 		},
+	// 		{
+	// 			name: 'Report',
+	// 			link: '/admin/applications/verifications',
+	// 			icon: 'verify-stroke' as const,
+	// 		},
+	// 		{
+	// 			name: 'Sales',
+	// 			link: '/admin/applications/verifications',
+	// 			icon: 'verify-stroke' as const,
+	// 		},
+	// 	],
+	// },
 	applications: {
 		title: 'Applications',
 		items: [

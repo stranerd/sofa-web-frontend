@@ -11,6 +11,8 @@ declare global {
 		| 'alert-info'
 		| 'alert-success'
 		| 'alert-warning'
+		| 'alt-arrow-left'
+		| 'alt-arrow-right'
 		| 'angle-small-down'
 		| 'apple'
 		| 'arrow-left-round'
