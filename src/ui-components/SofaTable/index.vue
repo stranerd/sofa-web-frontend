@@ -21,7 +21,8 @@
 					:key="fieldIdx"
 					as="td"
 					:class="[typeof field.class === 'function' ? field.class(item, index) : field.class]"
-					class="p-4">
+					class="p-4"
+					:onClick="field.onClick">
 					<slot
 						:name="`data-${field.id ?? index}`"
 						:data="item"
@@ -41,12 +42,13 @@ const props = defineProps<{
 		key: Paths<T> | ((data: T) => unknown)
 		label: string
 		headerClass?: string
-		class?: string | ((item: T, index: number) => string)
+		class?: string | ((data: T, index: number) => string)
 		hide?: boolean
+		onClick?: (data: T) => void
 	}[]
 	data: T[]
 	headClass?: string
-	rowClass?: string | ((item: T, index: number) => string)
+	rowClass?: string | ((data: T, index: number) => string)
 }>()
 
 const allFields = props.fields.filter((field) => !field.hide)
