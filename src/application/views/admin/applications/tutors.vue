@@ -1,10 +1,10 @@
 <template>
 	<AdminLayout title="Tutors">
 		<div class="header flex justify-between items-center p-4">
-			<div>
+			<div class="w-[60%]">
 				<SofaHeaderText content="Tutor applications" />
 			</div>
-			<div>
+			<div class="w-[20%]">
 				<form class="py-1">
 					<SofaInput placeholder="Search" class="!py-2">
 						<template #prefix>
@@ -13,7 +13,7 @@
 					</SofaInput>
 				</form>
 			</div>
-			<div class="flex items-center">
+			<div class="flex items-center justify-end w-[20%]">
 				<div class="mx-2">1-10 of 50</div>
 				<SofaIcon class="h-[15px] text-grayColor" name="arrow-left-round" />
 				<div class="border-r h-4 mx-2"></div>
@@ -21,11 +21,26 @@
 			</div>
 		</div>
 		<SofaTable
-			:fields="fields"
+			:fields="[
+				{ id: 'teacher', key: 'userId', label: 'Teacher', class: 'w-[60%]' },
+				{ id: 'applied', key: 'createdAt', label: 'Applied', class: 'text-grayColor text-[10px] w-[20%]' },
+				{ id: 'action', key: () => 'Reject', label: 'Action', hide: false, class: 'text-grayColor w-[20%]' },
+			]"
 			:data="data"
 			headClass="text-left border-b-[##F1F6FA] border-t-[##F1F6FA] border text-grayColor"
-			:rowClass="(item, index) => ((index + 1) % 2 !== 0 ? 'bg-[#F1F6FA]' : '')" />
-		<div class="bottom p-4 flex justify-between items-center w-full">
+			:rowClass="(item, index) => ((index + 1) % 2 !== 0 ? 'bg-[#F1F6FA]' : '')">
+			<template #data-action>
+				<div class="flex items-center justify-between">
+					<SofaButton bgColor="bg-none" textColor="text-deepGray" padding="py-1" class="!font-semibold text-primaryRed"
+					>Reject</SofaButton
+					>
+					<SofaButton bgColor="bg-none" textColor="text-deepGray" padding="py-1" class="!font-semibold text-primaryGreen"
+					>Accept</SofaButton
+					>
+				</div>
+			</template>
+		</SofaTable>
+		<div class="p-4 flex justify-between items-center w-full">
 			<SofaText content="Bulk actions:" class="text-grayColor font-bold" />
 			<div class="flex items-center">
 				<SofaButton bgColor="bg-white" textColor="text-deepGray" padding="px-4 py-1" class="!font-semibold text-primaryRed">
@@ -40,13 +55,23 @@
 </template>
 
 <script setup lang="ts">
-const fields = [
-	{ id: 'teacher', key: 'teacher', label: 'Teacher' },
-	{ id: 'applied', key: 'applied', label: 'Applied' },
-	{ id: 'action', key: 'action', label: 'Action', hide: false },
-]
+import { TutorRequestToModel } from '@modules/users/data/models/tutorRequests'
 
-const data = [{ teacher: 'Ayomide Adekunle', applied: 'May 21', action: 'Reject' }]
+const data: TutorRequestToModel[] = [
+	{
+		id: '1',
+		userId: '2768379',
+		pending: false,
+		accepted: null,
+		testId: '1',
+		testFinished: false,
+		createdAt: `${$utils.formatDateAsDigits(new Date())}`,
+		updatedAt: Date.now(),
+		topicId: '552',
+		verification: {},
+		qualification: [],
+	},
+]
 </script>
 
 <style scoped></style>
