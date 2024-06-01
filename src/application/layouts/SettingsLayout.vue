@@ -12,7 +12,7 @@
 
 		<div :class="index ? 'grid' : 'hidden mdlg:grid'" class="grow overflow-y-auto grid-cols-12 w-full gap-5 text-left">
 			<div class="mdlg:col-span-3 mdlg:flex col-span-full flex-col relative mdlg:px-0 px-4">
-				<div class="flex flex-col gap-3 mdlg:p-4 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:shadow-custom">
+				<div class="flex flex-col gap-3 mdlg:p-2 mdlg:bg-white mdlg:rounded-2xl mdlg:gap-4 mdlg:shadow-custom">
 					<div
 						v-for="option in settingOptions"
 						:key="option.title"

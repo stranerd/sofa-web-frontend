@@ -12,6 +12,7 @@ declare module 'vue' {
     AddMemberModal: typeof import('./../application/components/organizations/members/AddMemberModal.vue')['default']
     AddTutorConfirmationModal: typeof import('./../application/components/conversations/AddTutorConfirmationModal.vue')['default']
     AddTutorModal: typeof import('./../application/components/conversations/AddTutorModal.vue')['default']
+    AdminLayout: typeof import('./../application/layouts/AdminLayout.vue')['default']
     AnnouncementCard: typeof import('./../application/components/organizations/announcements/AnnouncementCard.vue')['default']
     AuthLayout: typeof import('./../application/layouts/AuthLayout.vue')['default']
     AuthProvider: typeof import('./../application/components/auth/AuthProvider.vue')['default']

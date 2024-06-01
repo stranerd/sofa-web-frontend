@@ -27,7 +27,7 @@
 					<SofaHeading :content="tab.name" />
 				</router-link>
 
-				<form class="w-[30%] py-1" @submit.prevent="initiateSearch">
+				<form class="py-1 w-[30%]" @submit.prevent="initiateSearch">
 					<SofaInput v-model="searchQuery" placeholder="Search" class="!py-2 !rounded-full">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
@@ -129,7 +129,7 @@ withDefaults(
 	},
 )
 
-const { user, userType } = useAuth()
+const { user, isAdmin, userType } = useAuth()
 const router = useRouter()
 const openSideBar = () => useModals().users.sideBar.open({})
 
@@ -142,10 +142,19 @@ const initiateSearch = () => {
 const tabs = computed(
 	() =>
 		[
+			...(isAdmin.value
+				? [
+						{
+							name: 'Admin',
+							path: '/admin',
+							icon: 'admin' as const,
+						},
+					]
+				: []),
 			{
 				name: 'Home',
 				path: '/dashboard',
-				icon: 'home',
+				icon: 'home' as const,
 			},
 			...(!userType.value.isOrg
 				? [
@@ -159,17 +168,17 @@ const tabs = computed(
 			{
 				name: 'Classes',
 				path: userType.value.isOrg ? '/dashboard/classes' : '/classes',
-				icon: 'classes',
+				icon: 'classes' as const,
 			},
 			{
 				name: 'Library',
 				path: '/library',
-				icon: 'library',
+				icon: 'library' as const,
 			},
 			{
 				name: 'Marketplace',
 				path: '/marketplace',
-				icon: 'marketplace',
+				icon: 'marketplace' as const,
 			},
 		] as const,
 )
