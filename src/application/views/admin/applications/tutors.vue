@@ -21,13 +21,19 @@
 			<div class="px-1 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
-						{ id: 'teacher', key: 'userId', label: 'Teacher', class: 'w-[60%]' },
-						{ id: 'applied', key: (d) => $utils.formatTime(d.createdAt), label: 'Applied', class: 'text-grayColor w-[20%]' },
+						{ id: 'teacher', key: (d) => d.tutorApplication.userId, label: 'Teacher', class: 'w-[60%]' },
+						{
+							id: 'applied',
+							key: (d) => $utils.formatTime(d.tutorApplication.createdAt),
+							label: 'Applied',
+							class: 'text-grayColor w-[20%]',
+						},
 						{ id: 'action', key: () => 'Reject', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
 					:data="data"
 					headClass="text-left text-grayColor"
-					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')">
+					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')"
+					@displayData="handleActionClick">
 					<template #data-action>
 						<div class="flex items-center justify-between">
 							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1">Reject</SofaButton>
@@ -48,31 +54,122 @@
 </template>
 
 <script setup lang="ts">
-import { TutorRequestFromModel } from '@modules/users/data/models/tutorRequests'
+import { useModals } from '@app/composables/core/modals'
+import { TutorRequestEntity, UserEntity } from '@modules/users'
 
-const data: TutorRequestFromModel[] = [
+const data: { tutorApplication: TutorRequestEntity; user: UserEntity }[] = [
 	{
-		id: '1',
-		userId: '2768379',
-		pending: false,
-		accepted: null,
-		testId: '1',
-		testFinished: false,
-		createdAt: Date.now(),
-		updatedAt: Date.now(),
-		topicId: '552',
-		verification: {
-			name: '',
-			type: '',
-			size: 0,
-			path: '',
-			timestamp: 0,
-			duration: 0,
-			link: '',
-		},
-		qualification: [],
+		tutorApplication: new TutorRequestEntity({
+			id: '1',
+			userId: '2768379',
+			pending: false,
+			accepted: null,
+			testId: '1',
+			testFinished: false,
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+			topicId: '552',
+			verification: {
+				name: 'tyyuoi',
+				type: '',
+				size: 0,
+				path: '',
+				timestamp: 0,
+				duration: 0,
+				link: '',
+			},
+			qualification: [],
+		}),
+		user: new UserEntity({
+			id: '',
+			bio: {},
+			roles: '',
+			account: {
+				// ... account data
+			},
+			status: {
+				// ... status data
+			},
+			dates: {
+				createdAt: 0,
+				deletedAt: 0,
+			},
+			type: null,
+			tutor: {
+				conversations: [],
+				topics: [],
+			},
+			ai: {
+				photo: null,
+				name: '',
+				tagline: '',
+			},
+			socials: [],
+			location: null,
+		}),
+	},
+	{
+		tutorApplication: new TutorRequestEntity({
+			id: '2',
+			userId: '2877837',
+			pending: false,
+			accepted: null,
+			testId: '1',
+			testFinished: false,
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+			topicId: '552',
+			verification: {
+				name: 'tyyuoi',
+				type: '',
+				size: 0,
+				path: '',
+				timestamp: 0,
+				duration: 0,
+				link: '',
+			},
+			qualification: [],
+		}),
+		user: new UserEntity({
+			id: '',
+			bio: {},
+			roles: '',
+			account: {
+				// ... account data
+			},
+			status: {
+				// ... status data
+			},
+			dates: {
+				createdAt: 0,
+				deletedAt: 0,
+			},
+			type: null,
+			tutor: {
+				conversations: [],
+				topics: [],
+			},
+			ai: {
+				photo: null,
+				name: '',
+				tagline: '',
+			},
+			socials: [],
+			location: null,
+		}),
 	},
 ]
+const handleActionClick = (item: T, index: number) => {
+	useModals().users.tutorApplication.open({
+		tutorRequest: item.tutorApplication,
+		user: item.user, // pass the user data here
+		currentIndex: index,
+		totalItems: data.length,
+		onNext: () => {},
+		onPrevious: () => {},
+	})
+	console.log(item, index)
+}
 </script>
 
 <style scoped></style>

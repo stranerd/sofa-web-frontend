@@ -15,13 +15,18 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="(item, index) in data" :key="index" :class="[typeof rowClass === 'function' ? rowClass(item, index) : rowClass]">
+			<tr
+				v-for="(item, index) in data"
+				:key="index"
+				:class="[typeof rowClass === 'function' ? rowClass(item, index) : rowClass]"
+				@click="displayData(item, index)">
 				<SofaText
 					v-for="(field, fieldIdx) in allFields"
 					:key="fieldIdx"
 					as="td"
 					:class="[typeof field.class === 'function' ? field.class(item, index) : field.class]"
-					class="p-4">
+					class="p-4"
+					@click="field.onClick ? field.onClick(item, index) : null">
 					<slot
 						:name="`data-${field.id ?? index}`"
 						:data="item"
@@ -43,11 +48,18 @@ const props = defineProps<{
 		headerClass?: string
 		class?: string | ((item: T, index: number) => string)
 		hide?: boolean
+		onClick?: (item: T, index: number) => void
 	}[]
 	data: T[]
 	headClass?: string
 	rowClass?: string | ((item: T, index: number) => string)
 }>()
 
+const emit = defineEmits(['displayData'])
+
 const allFields = props.fields.filter((field) => !field.hide)
+
+const displayData = (item: T, index: number) => {
+	emit('displayData', item, index)
+}
 </script>

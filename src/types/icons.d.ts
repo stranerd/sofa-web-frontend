@@ -80,6 +80,7 @@ declare global {
 		| 'more-options-horizontal'
 		| 'more-options'
 		| 'not-selected'
+		| 'notes'
 		| 'offline-enrollment'
 		| 'online-enrollment'
 		| 'orange-list'
