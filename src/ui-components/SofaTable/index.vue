@@ -47,13 +47,13 @@ const props = defineProps<{
 		key: Paths<T> | ((data: T) => unknown)
 		label: string
 		headerClass?: string
-		class?: string | ((item: T, index: number) => string)
+		class?: string | ((data: T, index: number) => string)
 		hide?: boolean
 		onClick?: (item: T, index: number) => void
 	}[]
 	data: T[]
 	headClass?: string
-	rowClass?: string | ((item: T, index: number) => string)
+	rowClass?: string | ((data: T, index: number) => string)
 }>()
 
 const emit = defineEmits(['displayData'])
