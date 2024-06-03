@@ -39,7 +39,7 @@
 			</div>
 			<div>
 				<SofaHeading content="Location" />
-				<SofaText :content="tutorRequest.verification.name" />
+				<SofaText content="Lagos, Nigeria" />
 			</div>
 		</div>
 		<div class="footer flex justify-between p-4">

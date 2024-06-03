@@ -18,6 +18,7 @@
 			<tr
 				v-for="(item, index) in data"
 				:key="index"
+				class="cursor-pointer"
 				:class="[typeof rowClass === 'function' ? rowClass(item, index) : rowClass]"
 				@click="displayData(item, index)">
 				<SofaText

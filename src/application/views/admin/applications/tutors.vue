@@ -168,7 +168,6 @@ const handleActionClick = (item: T, index: number) => {
 		onNext: () => {},
 		onPrevious: () => {},
 	})
-	console.log(item, index)
 }
 </script>
 
