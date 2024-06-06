@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div v-if="currentItem">
 		<div class="header flex justify-between p-4">
 			<SofaHeading content="Tutor application" />
 			<div class="flex items-center justify-end w-3/4 border-l border-lightGray px-4 gap-2">
-				<div class="inline">{{ currentIndex + 1 }}-10 of {{ totalItems }}</div>
+				<div class="inline">{{ currentIndex + 1 }}-10 of {{ data.length }}</div>
 				<SofaIcon class="h-[20px]" name="alt-arrow-left" />
 				<div class="w-[2px] h-4 bg-grayColor" />
 				<SofaIcon class="h-[20px]" name="alt-arrow-right" />
@@ -15,9 +15,9 @@
 				<SofaAvatar photoUrl="/images/auth-bg.png" :size="80" />
 			</div>
 		</div>
-		<div class="p-6 mt-6 space-y-6">
+		<div class="p-6 mt-6 flex flex-col gap-6">
 			<div>
-				<SofaHeading :content="tutorRequest.userId" />
+				<SofaHeading :content="currentItem.tutorRequest.userId" />
 				<SofaText content="This is a description" />
 			</div>
 			<div>
@@ -26,13 +26,13 @@
 			</div>
 			<div>
 				<SofaHeading content="Verification" />
-				<SofaText :content="tutorRequest.verification.name" />
+				<SofaText :content="currentItem.tutorRequest.verification.name" />
 			</div>
 			<div>
 				<SofaHeading content="Subject" />
 				<div class="flex items-center gap-4">
 					<div v-for="i in 2" :key="i" class="flex items-center gap-2">
-						<SofaIcon name="notes" />
+						<SofaIcon name="lessons" class="fill-deepGray" />
 						<SofaText content="Chemistry" />
 					</div>
 				</div>
@@ -42,7 +42,7 @@
 				<SofaText content="Lagos, Nigeria" />
 			</div>
 		</div>
-		<div class="footer flex justify-between p-4">
+		<div class="flex justify-between p-4">
 			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4">Reject</SofaButton>
 			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4">Accept</SofaButton>
 		</div>
@@ -50,17 +50,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import { TutorRequestEntity, UserEntity } from '@modules/users'
 
-defineProps<{
+const props = defineProps<{
 	close: () => void
-	tutorRequest: TutorRequestEntity
-	user: UserEntity
-	currentIndex: number
-	totalItems: number
-	onNext?: () => void
-	onPrevious?: () => void
+	data: {
+		tutorRequest: TutorRequestEntity
+		user: UserEntity
+	}[]
+	selectedIndex?: number
 }>()
-</script>
 
-<style scoped></style>
+const currentIndex = ref(props.selectedIndex || 0)
+const currentItem = computed(() => props.data.at(currentIndex.value))
+</script>

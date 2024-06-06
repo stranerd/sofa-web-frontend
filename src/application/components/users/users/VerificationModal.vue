@@ -1,9 +1,9 @@
 <template>
-	<div>
-		<div class="header flex justify-between p-4">
+	<div v-if="currentItem">
+		<div class="flex justify-between p-4">
 			<SofaHeading content="Verification application" />
 			<div class="flex items-center justify-end w-1/2 border-l border-lightGray px-4 gap-2">
-				<div class="inline">{{ currentIndex + 1 }}-10 of {{ totalItems }}</div>
+				<div class="inline">{{ currentIndex + 1 }}-10 of {{ data.length }}</div>
 				<SofaIcon class="h-[20px]" name="alt-arrow-left" />
 				<div class="w-[2px] h-4 bg-grayColor" />
 				<SofaIcon class="h-[20px]" name="alt-arrow-right" />
@@ -17,7 +17,7 @@
 		</div>
 		<div class="p-6 mt-6 space-y-6">
 			<div class="space-y-2">
-				<SofaHeading :content="verificationRequest.userId" />
+				<SofaHeading :content="currentItem.verification.userId" />
 				<SofaText content="This is a description" />
 			</div>
 			<div class="space-y-2">
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="footer flex justify-between p-4">
+		<div class="flex justify-between p-4">
 			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4">Reject</SofaButton>
 			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4">Accept</SofaButton>
 		</div>
@@ -61,17 +61,18 @@
 </template>
 
 <script setup lang="ts">
-import { VerificationEntity, UserEntity } from '@modules/users'
+import { computed, ref } from 'vue'
+import { UserEntity, VerificationEntity } from '@modules/users'
 
-defineProps<{
+const props = defineProps<{
 	close: () => void
-	verificationRequest: VerificationEntity
-	user: UserEntity
-	currentIndex: number
-	totalItems: number
-	onNext?: () => void
-	onPrevious?: () => void
+	data: {
+		verification: VerificationEntity
+		user: UserEntity
+	}[]
+	selectedIndex?: number
 }>()
-</script>
 
-<style scoped></style>
+const currentIndex = ref(props.selectedIndex || 0)
+const currentItem = computed(() => props.data.at(currentIndex.value))
+</script>

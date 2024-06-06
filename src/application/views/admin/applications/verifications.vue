@@ -24,11 +24,17 @@
 			<div class="px-1 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
-						{ id: 'account', key: (d) => d.verificationApplication.userId, label: 'Account', class: 'w-[40%]' },
-						{ id: 'type', key: (d) => d.verificationApplication.id, label: 'Type', class: 'text-grayColor w-[20%]' },
+						{
+							id: 'account',
+							key: (d) => d.verification.userId,
+							label: 'Account',
+							class: 'w-[40%]',
+							onClick: (_, index) => handleClick(index),
+						},
+						{ id: 'type', key: (d) => d.verification.id, label: 'Type', class: 'text-grayColor w-[20%]' },
 						{
 							id: 'applied',
-							key: (d) => $utils.formatTime(d.verificationApplication.createdAt),
+							key: (d) => $utils.formatTime(d.verification.createdAt),
 							label: 'Applied',
 							class: 'text-grayColor w-[20%]',
 						},
@@ -36,8 +42,7 @@
 					]"
 					:data="data"
 					headClass="text-left text-grayColor"
-					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')"
-					@displayData="handleActionClick">
+					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')">
 					<template #data-action>
 						<div class="flex items-center justify-between">
 							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1">Reject</SofaButton>
@@ -61,9 +66,9 @@
 import { useModals } from '@app/composables/core/modals'
 import { UserEntity, VerificationEntity } from '@modules/users'
 
-const data: { verificationApplication: VerificationEntity; user: UserEntity }[] = [
+const data: { verification: VerificationEntity; user: UserEntity }[] = [
 	{
-		verificationApplication: new VerificationEntity({
+		verification: new VerificationEntity({
 			id: '1',
 			userId: '2768379',
 			pending: false,
@@ -75,47 +80,11 @@ const data: { verificationApplication: VerificationEntity; user: UserEntity }[] 
 				quizzes: [],
 			},
 		}),
-		user: new UserEntity({
-			id: '',
-			bio: {},
-			roles: '',
-			account: {
-				// ... account data
-			},
-			status: {
-				// ... status data
-			},
-			dates: {
-				createdAt: 0,
-				deletedAt: 0,
-			},
-			type: null,
-			tutor: {
-				conversations: [],
-				topics: [],
-			},
-			ai: {
-				photo: null,
-				name: '',
-				tagline: '',
-			},
-			socials: [],
-			location: null,
-		}),
+		user: new UserEntity({} as any),
 	},
 ]
 
-const handleActionClick = (item: T, index: number) => {
-	useModals().users.verificationApplication.open({
-		verificationRequest: item.verificationApplication,
-		user: item.user, // pass the user data here
-		currentIndex: index,
-		totalItems: data.length,
-		onNext: () => {},
-		onPrevious: () => {},
-	})
-	console.log(item, index)
+const handleClick = (selectedIndex: number) => {
+	useModals().users.verification.open({ data, selectedIndex })
 }
 </script>
-
-<style scoped></style>

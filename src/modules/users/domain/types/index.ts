@@ -146,7 +146,6 @@ export enum UserSocials {
 	instagram = 'instagram',
 	youtube = 'youtube',
 	tiktok = 'tiktok',
-	// linkedin = 'linkedin'
 }
 
 export type UserSocialsType = { ref: UserSocials; link: string }[]
