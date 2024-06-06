@@ -24,14 +24,20 @@
 			<div class="px-1 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
-						{ id: 'account', key: 'userId', label: 'Account', class: 'w-[40%]' },
-						{ id: 'type', key: 'id', label: 'Type', class: 'text-grayColor w-[20%]' },
-						{ id: 'applied', key: (d) => $utils.formatTime(d.createdAt), label: 'Applied', class: 'text-grayColor w-[20%]' },
+						{ id: 'account', key: (d) => d.verificationApplication.userId, label: 'Account', class: 'w-[40%]' },
+						{ id: 'type', key: (d) => d.verificationApplication.id, label: 'Type', class: 'text-grayColor w-[20%]' },
+						{
+							id: 'applied',
+							key: (d) => $utils.formatTime(d.verificationApplication.createdAt),
+							label: 'Applied',
+							class: 'text-grayColor w-[20%]',
+						},
 						{ id: 'action', key: () => 'Reject', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
 					:data="data"
 					headClass="text-left text-grayColor"
-					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')">
+					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')"
+					@displayData="handleActionClick">
 					<template #data-action>
 						<div class="flex items-center justify-between">
 							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1">Reject</SofaButton>
@@ -52,34 +58,64 @@
 </template>
 
 <script setup lang="ts">
-import { VerificationFromModel } from '@modules/users/data/models/verifications'
+import { useModals } from '@app/composables/core/modals'
+import { UserEntity, VerificationEntity } from '@modules/users'
 
-const data: VerificationFromModel[] = [
+const data: { verificationApplication: VerificationEntity; user: UserEntity }[] = [
 	{
-		id: '1',
-		userId: '2768379',
-		pending: false,
-		accepted: null,
-		createdAt: Date.now(),
-		updatedAt: Date.now(),
-		content: {
-			courses: [],
-			quizzes: [],
-		},
-	},
-	{
-		id: '2',
-		userId: '4567',
-		pending: false,
-		accepted: null,
-		createdAt: Date.now(),
-		updatedAt: Date.now(),
-		content: {
-			courses: [],
-			quizzes: [],
-		},
+		verificationApplication: new VerificationEntity({
+			id: '1',
+			userId: '2768379',
+			pending: false,
+			accepted: null,
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+			content: {
+				courses: [],
+				quizzes: [],
+			},
+		}),
+		user: new UserEntity({
+			id: '',
+			bio: {},
+			roles: '',
+			account: {
+				// ... account data
+			},
+			status: {
+				// ... status data
+			},
+			dates: {
+				createdAt: 0,
+				deletedAt: 0,
+			},
+			type: null,
+			tutor: {
+				conversations: [],
+				topics: [],
+			},
+			ai: {
+				photo: null,
+				name: '',
+				tagline: '',
+			},
+			socials: [],
+			location: null,
+		}),
 	},
 ]
+
+const handleActionClick = (item: T, index: number) => {
+	useModals().users.verificationApplication.open({
+		verificationRequest: item.verificationApplication,
+		user: item.user, // pass the user data here
+		currentIndex: index,
+		totalItems: data.length,
+		onNext: () => {},
+		onPrevious: () => {},
+	})
+	console.log(item, index)
+}
 </script>
 
 <style scoped></style>

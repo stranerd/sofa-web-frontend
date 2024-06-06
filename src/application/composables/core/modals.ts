@@ -33,6 +33,8 @@ import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
 import ChoosePublishedStudyMaterial from '@app/components/users/verifications/ChoosePublishedStudyMaterialModal.vue'
 import NotificationsList from '@app/components/notifications/notifications/NotificationsListModal.vue'
+import TutorApplicationModal from '@app/components/users/users/TutorApplicationModal.vue'
+import VerificationApplicationModal from '@app/components/users/users/VerificationApplicationModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -96,6 +98,8 @@ export const useModals = () => ({
 			},
 		},
 		choosePublishedStudyMaterial: { component: ChoosePublishedStudyMaterial },
+		tutorApplication: { component: TutorApplicationModal, modalArgs: { maxHeight: 'h-full' } },
+		verificationApplication: { component: VerificationApplicationModal, modalArgs: { maxHeight: 'h-full' } },
 	}),
 	payment: modal.register('Payment', {
 		transactionDetails: { component: TransactionDetails },
