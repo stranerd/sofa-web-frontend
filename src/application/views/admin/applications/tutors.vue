@@ -11,34 +11,48 @@
 					</SofaInput>
 				</form>
 				<div class="flex items-center w-[20%] border-l border-lightGray px-4 gap-2">
-					<div>1-10 of 50</div>
+					<div>{{ currentViewingIndex * limit + 1 }}-{{ (currentViewingIndex + 1) * limit }} of {{ total }}</div>
 					<span class="flex-1" />
-					<SofaIcon class="h-[20px]" name="alt-arrow-left" />
+					<SofaIcon
+						class="h-[20px]"
+						name="alt-arrow-left"
+						:class="{ 'fill-grayColor': canPrev }"
+						@click="canPrev ? previous : undefined" />
 					<div class="w-1 h-4 bg-lightGray" />
-					<SofaIcon class="h-[20px]" name="alt-arrow-right" />
+					<SofaIcon
+						class="h-[20px]"
+						name="alt-arrow-right"
+						:class="{ 'fill-grayColor': canNext }"
+						@click="canNext ? next : undefined" />
 				</div>
 			</div>
 			<div class="px-1 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
 						{
-							id: 'teacher',
-							key: (d) => d.tutorRequest.userId,
+							id: 'name',
+							key: 'user.publicName',
 							label: 'Teacher',
-							class: 'w-[60%]',
+							headerClass: 'w-full',
 							onClick: (_, index) => handleClick(index),
 						},
 						{
 							id: 'applied',
 							key: (d) => $utils.formatTime(d.tutorRequest.createdAt),
 							label: 'Applied',
-							class: 'text-grayColor w-[20%]',
+							class: 'text-grayColor',
 						},
-						{ id: 'action', key: () => 'Reject', label: 'Action', class: 'text-grayColor w-[20%]' },
+						{ id: 'action', key: 'tutorRequest.id', label: 'Action', class: 'text-grayColor' },
 					]"
-					:data="data"
+					:data="currentlyViewing"
 					headClass="text-left text-grayColor"
 					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')">
+					<template #data-name="{ data: { user } }">
+						<span class="flex items-center gap-2">
+							<SofaAvatar :photoUrl="user.picture" :size="$screen.desktop ? 40 : 28" />
+							<span>{{ user.publicName }}</span>
+						</span>
+					</template>
 					<template #data-action>
 						<div class="flex items-center justify-between">
 							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1">Reject</SofaButton>
@@ -50,7 +64,7 @@
 			<div class="p-4 flex justify-between items-center w-full">
 				<SofaText content="Bulk actions:" class="text-grayColor font-bold" />
 				<div class="flex items-center">
-					<SofaButton bgColor="bg-white" textColor="text-primaryRef" padding="px-4 py-1"> Reject all </SofaButton>
+					<SofaButton bgColor="bg-white" textColor="text-primaryRed" padding="px-4 py-1"> Reject all </SofaButton>
 					<SofaButton bgColor="bg-white" textColor="text-primaryGreen" padding="px-4 py-1"> Accept all </SofaButton>
 				</div>
 			</div>
@@ -60,60 +74,14 @@
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { TutorRequestEntity, UserEntity } from '@modules/users'
+import { usePendingTutorRequests } from '@app/composables/users/tutorRequests'
 
-const data: { tutorRequest: TutorRequestEntity; user: UserEntity }[] = [
-	{
-		tutorRequest: new TutorRequestEntity({
-			id: '1',
-			userId: '2768379',
-			pending: false,
-			accepted: null,
-			testId: '1',
-			testFinished: false,
-			createdAt: Date.now(),
-			updatedAt: Date.now(),
-			topicId: '552',
-			verification: {
-				name: 'tyyuoi',
-				type: '',
-				size: 0,
-				path: '',
-				timestamp: 0,
-				duration: 0,
-				link: '',
-			},
-			qualification: [],
-		}),
-		user: new UserEntity({} as any),
-	},
-	{
-		tutorRequest: new TutorRequestEntity({
-			id: '2',
-			userId: '2877837',
-			pending: false,
-			accepted: null,
-			testId: '1',
-			testFinished: false,
-			createdAt: Date.now(),
-			updatedAt: Date.now(),
-			topicId: '552',
-			verification: {
-				name: 'tyyuoi',
-				type: '',
-				size: 0,
-				path: '',
-				timestamp: 0,
-				duration: 0,
-				link: '',
-			},
-			qualification: [],
-		}),
-		user: new UserEntity({} as any),
-	},
-]
+const { currentlyViewing, tutorRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = usePendingTutorRequests()
 
 const handleClick = (selectedIndex: number) => {
-	useModals().users.tutorRequest.open({ data, selectedIndex })
+	useModals().users.tutorRequest.open({
+		data: tutorRequests.value,
+		selectedIndex: currentViewingIndex.value * limit + selectedIndex,
+	})
 }
 </script>
