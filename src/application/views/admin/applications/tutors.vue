@@ -61,13 +61,7 @@
 					</template>
 				</SofaTable>
 			</div>
-			<div class="p-4 flex justify-between items-center w-full">
-				<SofaText content="Bulk actions:" class="text-grayColor font-bold" />
-				<div class="flex items-center">
-					<SofaButton bgColor="bg-white" textColor="text-primaryRed" padding="px-4 py-1"> Reject all </SofaButton>
-					<SofaButton bgColor="bg-white" textColor="text-primaryGreen" padding="px-4 py-1"> Accept all </SofaButton>
-				</div>
-			</div>
+			<!-- BULK ACTIONS -->
 		</div>
 	</AdminLayout>
 </template>
