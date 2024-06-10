@@ -54,7 +54,7 @@
 						</span>
 					</template>
 					<template #data-action>
-						<div class="flex items-center justify-between">
+						<div class="flex items-center justify-between gap-2">
 							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1">Reject</SofaButton>
 							<SofaButton bgColor="bg-none" textColor="text-primaryGreen" padding="py-1">Accept</SofaButton>
 						</div>
