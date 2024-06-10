@@ -1,7 +1,8 @@
 import { TutorRequestEntity } from '../entities/tutorRequests'
 import { TutorRequestFactory } from '../factories/tutorRequests'
 import { ITutorRequestRepository } from '../irepositories/itutorRequests'
-import { Listeners } from '@modules/core'
+import { AcceptTutorRequestInput } from '../types'
+import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class TutorRequestsUseCase {
 	private repository: ITutorRequestRepository
@@ -40,5 +41,31 @@ export class TutorRequestsUseCase {
 
 	async create(factory: TutorRequestFactory) {
 		return await this.repository.create(await factory.toModel())
+	}
+
+	async get(date?: number) {
+		const query: QueryParams = {
+			where: [{ field: 'pending', value: true }],
+			sort: [{ field: 'createdAt', desc: true }],
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+		}
+		if (date) query.where!.push({ field: 'createdAt', value: date, condition: Conditions.lt })
+		return await this.repository.get(query)
+	}
+
+	async listen(listeners: Listeners<TutorRequestEntity>, date?: number) {
+		const query: QueryParams = {
+			where: [{ field: 'pending', value: true }],
+			sort: [{ field: 'createdAt', desc: true }],
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+		}
+		if (date) query.where!.push({ field: 'createdAt', value: date, condition: Conditions.gte })
+		return await this.repository.listenToMany(query, listeners, (entity) =>
+			[entity.pending, date ? entity.createdAt >= date : true].every(Boolean),
+		)
+	}
+
+	async accept(id: string, data: AcceptTutorRequestInput) {
+		return await this.repository.accept(id, data)
 	}
 }
