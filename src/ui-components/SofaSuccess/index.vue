@@ -5,7 +5,7 @@
 
 			<SofaHeaderText v-if="title" class="text-xl" :content="title" />
 
-			<SofaNormalText v-if="subTitle" :content="subTitle" />
+			<SofaNormalText v-if="sub" :content="sub" />
 
 			<SofaButton
 				v-if="!button.hide"
@@ -13,7 +13,7 @@
 				:bgColor="button.bgColor ?? 'bg-primaryBlue'"
 				padding="px-4 py-2"
 				class="border-transparent border-2 md:w-auto w-full"
-				@click="button.action?.()">
+				@click="button.action()">
 				{{ button.label }}
 			</SofaButton>
 		</div>
@@ -30,7 +30,7 @@ withDefaults(
 	defineProps<{
 		close: () => void
 		title?: string
-		subTitle?: string
+		sub?: string
 		button: {
 			label: string
 			hide?: boolean
@@ -41,7 +41,7 @@ withDefaults(
 	}>(),
 	{
 		title: '',
-		subTitle: '',
+		sub: '',
 	},
 )
 </script>

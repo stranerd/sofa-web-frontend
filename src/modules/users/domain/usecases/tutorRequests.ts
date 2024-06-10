@@ -1,6 +1,7 @@
 import { TutorRequestEntity } from '../entities/tutorRequests'
 import { TutorRequestFactory } from '../factories/tutorRequests'
 import { ITutorRequestRepository } from '../irepositories/itutorRequests'
+import { AcceptTutorRequestInput } from '../types'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class TutorRequestsUseCase {
@@ -62,5 +63,9 @@ export class TutorRequestsUseCase {
 		return await this.repository.listenToMany(query, listeners, (entity) =>
 			[entity.pending, date ? entity.createdAt >= date : true].every(Boolean),
 		)
+	}
+
+	async accept(id: string, data: AcceptTutorRequestInput) {
+		return await this.repository.accept(id, data)
 	}
 }

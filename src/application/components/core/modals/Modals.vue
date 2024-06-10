@@ -17,51 +17,68 @@
 		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
-	<SofaDeletePrompt
-		v-for="confirmation in confirmations"
+	<SofaConfirm
+		v-for="confirmation in $utils.confirmations"
 		:key="confirmation.id"
-		:title="confirmation.title"
-		:subTitle="confirmation.sub"
+		v-bind="{ confirmation }"
 		:close="() => confirmation.close(false)"
-		:buttons="[
-			{
-				label: confirmation.left?.label ?? 'No',
-				hide: confirmation.left?.hide,
-				bgColor: confirmation.left?.bg,
-				textColor: confirmation.left?.color,
-				isClose: true,
-				action: () => confirmation.close(false),
-			},
-			{
-				label: confirmation.right?.label ?? 'Yes',
-				hide: confirmation.right?.hide,
-				bgColor: confirmation.right?.bg,
-				textColor: confirmation.right?.color,
-				isClose: false,
-				action: () => confirmation.close(true),
-			},
-		]" />
-	<SofaSuccessPrompt
-		v-for="confirmation in successes"
-		:key="confirmation.id"
-		:title="confirmation.title"
-		:subTitle="confirmation.sub"
-		:close="() => confirmation.close(false)"
-		:button="{
-			label: confirmation.button?.label ?? 'Ok',
-			hide: confirmation.button?.hide,
-			bgColor: confirmation.button?.bg,
-			textColor: confirmation.button?.color,
+		:left="{
+			label: confirmation.left?.label ?? 'No',
+			hide: confirmation.left?.hide,
+			bgColor: confirmation.left?.bg,
+			textColor: confirmation.left?.color,
+			isClose: true,
+			action: () => confirmation.close(false),
+		}"
+		:right="{
+			label: confirmation.right?.label ?? 'Yes',
+			hide: confirmation.right?.hide,
+			bgColor: confirmation.right?.bg,
+			textColor: confirmation.right?.color,
+			isClose: false,
 			action: () => confirmation.close(true),
 		}" />
+	<SofaPrompt
+		v-for="prompt in $utils.prompts"
+		:key="prompt.id"
+		v-bind="prompt"
+		:close="() => prompt.close(undefined)"
+		:left="{
+			label: prompt.left?.label ?? 'No',
+			hide: prompt.left?.hide,
+			bgColor: prompt.left?.bg,
+			textColor: prompt.left?.color,
+			isClose: true,
+			action: () => prompt.close(undefined),
+		}"
+		:right="{
+			label: prompt.right?.label ?? 'Yes',
+			hide: prompt.right?.hide,
+			bgColor: prompt.right?.bg,
+			textColor: prompt.right?.color,
+			isClose: false,
+			action: (message) => prompt.close(message),
+		}" />
+	<SofaSuccess
+		v-for="success in $utils.successes"
+		:key="success.id"
+		v-bind="{ confirmation: success }"
+		:close="() => success.close(false)"
+		:button="{
+			label: success.button?.label ?? 'Ok',
+			hide: success.button?.hide,
+			bgColor: success.button?.bg,
+			textColor: success.button?.color,
+			action: () => success.close(true),
+		}" />
 	<SofaAlert
-		v-for="(alert, i) in loaderSetup.alerts"
+		v-for="(alert, i) in $utils.loaderSetup.alerts"
 		:key="i"
-		:close="() => loaderSetup.alerts.splice(i, 1)"
+		:close="() => $utils.loaderSetup.alerts.splice(i, 1)"
 		:content="alert.message"
 		:type="alert.type" />
 	<div
-		v-if="loaderSetup.loading || loaderSetup.loaders.length"
+		v-if="$utils.loaderSetup.loading || $utils.loaderSetup.loaders.length"
 		class="fixed top-0 left-0 h-full w-full bg-black opacity-80 z-[100000000000] cursor-not-allowed">
 		<div class="loader-bar" />
 	</div>
@@ -69,12 +86,9 @@
 
 <script lang="ts" setup>
 import { modal } from '@app/composables/core/modal'
+import { SofaPrompt } from 'sofa-ui-components'
 
 const { modals, popovers, modalsDef, close } = modal
-
-const loaderSetup = $utils.loaderSetup
-const confirmations = $utils.confirmations
-const successes = $utils.successes
 
 const stripKeys = <T extends Record<string, any>>(obj: T, keys: (keyof T)[]) =>
 	Object.keys(obj).reduce((acc, key: keyof T) => {
