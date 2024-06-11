@@ -123,6 +123,47 @@ export const useCreateTutorRequest = () => {
 	return { factory, createTutorRequest, loading, error }
 }
 
+export const useAcceptRejectTutorRequest = () => {
+	const {
+		asyncFn: acceptTutorRequest,
+		loading: acceptLoading,
+		error: acceptError,
+	} = useAsyncFn(async (id: string, data: AcceptTutorRequestInput) => {
+		await TutorRequestsUseCases.accept(id, data)
+	})
+
+	const handleReject = async (id: string) => {
+		const message = await $utils.prompt({
+			title: 'Will you be rejecting this?',
+			sub: 'Please let us know why',
+			right: { label: 'Yes, reject' },
+		})
+		if (message) {
+			await acceptTutorRequest(id, { accept: false, message })
+		}
+	}
+
+	const handleAccept = async (id: string) => {
+		const message = await $utils.prompt({
+			title: 'Will you be accepting this?',
+			sub: 'Please let us know why',
+			right: { label: 'Yes, accept' },
+			required: false,
+		})
+		if (message) {
+			await acceptTutorRequest(id, { accept: true, message })
+		}
+	}
+
+	return {
+		acceptTutorRequest,
+		acceptLoading,
+		acceptError,
+		handleReject,
+		handleAccept,
+	}
+}
+
 export const usePendingTutorRequests = () => {
 	const {
 		asyncFn: fetchTutorRequests,
@@ -146,13 +187,13 @@ export const usePendingTutorRequests = () => {
 		{ key: `users/tutorRequests/all` },
 	)
 
-	const {
-		asyncFn: acceptTutorRequest,
-		loading: acceptLoading,
-		error: acceptError,
-	} = useAsyncFn(async (id: string, data: AcceptTutorRequestInput) => {
-		await TutorRequestsUseCases.accept(id, data)
-	})
+	// const {
+	// 	asyncFn: acceptTutorRequest,
+	// 	loading: acceptLoading,
+	// 	error: acceptError,
+	// } = useAsyncFn(async (id: string, data: AcceptTutorRequestInput) => {
+	// 	await TutorRequestsUseCases.accept(id, data)
+	// })
 
 	const limit = 10
 	const tutorRequestsUserIds = computed(() => store.tutorRequests.value.map((r) => r.userId))
@@ -205,8 +246,5 @@ export const usePendingTutorRequests = () => {
 		canNext,
 		previous,
 		next,
-		acceptError,
-		acceptLoading,
-		acceptTutorRequest,
 	}
 }
