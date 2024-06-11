@@ -53,6 +53,7 @@ export default class Utils {
 
 	public confirmations = reactive<ConfirmationSetup[]>([])
 	public successes = reactive<SuccessConfirmationSetup[]>([])
+	public prompts = reactive<PromptConfirmationSetup[]>([])
 
 	public async confirm(confirmation: Confirmation) {
 		return this.#confirmLogic(this.confirmations, confirmation)
@@ -62,18 +63,22 @@ export default class Utils {
 		return this.#confirmLogic(this.successes, confirmation)
 	}
 
-	async #confirmLogic<I extends ConfirmationBase, J extends ConfirmationBase & ConfirmationSetupBase>(
+	public async prompt(prompt: PromptConfirmation) {
+		return this.#confirmLogic(this.prompts, prompt)
+	}
+
+	async #confirmLogic<I extends ConfirmationBase, J extends ConfirmationBase & ConfirmationSetupBase<any>>(
 		confirmations: J[],
 		confirmation: I,
 	) {
-		return new Promise<boolean>((res) => {
+		return new Promise<InferConfirmationReturn<J>>((res, rej) => {
 			const id = getRandomValue()
 			confirmations.push({
 				...confirmation,
 				id,
-				close: (val: boolean) => {
+				close: (val: InferConfirmationReturn<J>) => {
 					const index = confirmations.findIndex((c) => c.id === id)
-					if (index === -1) return res(false)
+					if (index === -1) return rej('Modal not found')
 					confirmations.splice(index, 1)
 					res(val)
 				},

@@ -23,9 +23,9 @@ declare global {
 		sub: string
 	}
 
-	type ConfirmationSetupBase = {
+	type ConfirmationSetupBase<T> = {
 		id: string
-		close: (val: boolean) => void
+		close: (val: T) => void
 	}
 
 	type Confirmation = ConfirmationBase & {
@@ -33,13 +33,22 @@ declare global {
 		right?: Partial<ConfirmButton>
 	}
 
-	type ConfirmationSetup = Confirmation & ConfirmationSetupBase
+	type ConfirmationSetup = Confirmation & ConfirmationSetupBase<boolean>
 
-	type SuccessConfirmation = ConfirmationBase & {
+	type PromptConfirmation = Confirmation & {
+		placeholder?: string
+		required?: boolean
+	}
+
+	type PromptConfirmationSetup = PromptConfirmation & ConfirmationSetupBase<string | undefined>
+
+	type SuccessConfirmation = ConfirmationBase<boolean> & {
 		button?: Partial<ConfirmButton>
 	}
 
 	type SuccessConfirmationSetup = SuccessConfirmation & ConfirmationSetupBase
+
+	type InferConfirmationReturn<T> = T extends ConfirmationSetupBase<infer R> ? R : never
 
 	type Paths<T> = T extends object ? { [K in keyof T]: `${Exclude<K, symbol>}${'' | `.${Paths<T[K]>}`}` }[keyof T] : never
 }
