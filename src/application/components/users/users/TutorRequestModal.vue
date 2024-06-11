@@ -26,16 +26,19 @@
 			</div>
 			<div>
 				<SofaHeading content="Qualification" />
-				<div v-for="(file, index) in currentItem.tutorRequest.qualification" :key="index" class="flex items-center gap-2">
-					<SofaIcon name="file-document" class="fill-primaryPurple" />
-					<SofaText :content="file.name" class="text-primaryPurple" />
+				<div
+					v-for="(file, index) in currentItem.tutorRequest.qualification"
+					:key="index"
+					class="flex items-center gap-2 text-primaryPurple">
+					<SofaIcon name="file-document" class="fill-current" />
+					<SofaText :content="file.name" />
 				</div>
 			</div>
 			<div>
 				<SofaHeading content="Verification" />
-				<div class="flex items-center gap-2">
-					<SofaIcon name="file-document" class="fill-primaryPurple" />
-					<SofaText :content="currentItem.tutorRequest.verification.name" class="text-primaryPurple" />
+				<div class="flex items-center gap-2 text-primaryPurple">
+					<SofaIcon name="file-document" class="fill-current" />
+					<SofaText :content="currentItem.tutorRequest.verification.name" />
 				</div>
 			</div>
 			<div>
@@ -56,22 +59,23 @@
 					</div>
 				</div>
 			</div>
-			<div>
+			<div v-if="currentItem.user.location">
 				<SofaHeading content="Location" />
-				<SofaText :content="`${currentItem.user.location?.state}, ${currentItem.user.location?.country}`" />
+				<SofaText :content="`${currentItem.user.location.state}, ${currentItem.user.location.country}`" />
 			</div>
 		</div>
 		<div class="flex justify-between p-4">
-			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4">Reject</SofaButton>
-			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4">Accept</SofaButton>
+			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject(currentItem.tutorRequest.id)">Reject</SofaButton>
+			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4" @click="handleAccept(currentItem.tutorRequest.id)">Accept</SofaButton>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { TutorRequestEntity, UserEntity } from '@modules/users'
 import { useTagsInList } from '@app/composables/interactions/tags'
+import { useAcceptTutorRequest } from '@app/composables/users/tutorRequests'
+import { TutorRequestEntity, UserEntity } from '@modules/users'
 
 const props = defineProps<{
 	close: () => void
@@ -89,4 +93,6 @@ const currentlyTeachingIds = computed(() => currentItem.value?.user.tutor.topics
 const { tags: currentlyTeaching } = useTagsInList(currentlyTeachingIds)
 const appliedForIds = computed(() => (currentItem.value ? [currentItem.value.tutorRequest.topicId] : []))
 const { tags: appliedSubjects } = useTagsInList(appliedForIds)
+
+const { handleAccept, handleReject } = useAcceptTutorRequest()
 </script>

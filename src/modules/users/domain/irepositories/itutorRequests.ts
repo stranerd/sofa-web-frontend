@@ -12,6 +12,6 @@ export interface ITutorRequestRepository {
 		listener: Listeners<TutorRequestEntity>,
 		matches: (entity: TutorRequestEntity) => boolean,
 	) => Promise<() => void>
-	accept: (id: string, data: AcceptTutorRequestInput) => Promise<boolean>
+	accept: (id: string, data: AcceptTutorRequestInput) => Promise<TutorRequestEntity>
 	create: (data: TutorRequestToModel) => Promise<TutorRequestEntity>
 }
