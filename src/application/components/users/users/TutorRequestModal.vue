@@ -62,7 +62,7 @@
 			</div>
 		</div>
 		<div class="flex justify-between p-4">
-			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4">Reject</SofaButton>
+			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject">Reject</SofaButton>
 			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4">Accept</SofaButton>
 		</div>
 	</div>
@@ -72,6 +72,7 @@
 import { computed, ref } from 'vue'
 import { TutorRequestEntity, UserEntity } from '@modules/users'
 import { useTagsInList } from '@app/composables/interactions/tags'
+import { usePendingTutorRequests } from '@app/composables/users/tutorRequests'
 
 const props = defineProps<{
 	close: () => void
@@ -89,4 +90,17 @@ const currentlyTeachingIds = computed(() => currentItem.value?.user.tutor.topics
 const { tags: currentlyTeaching } = useTagsInList(currentlyTeachingIds)
 const appliedForIds = computed(() => (currentItem.value ? [currentItem.value.tutorRequest.topicId] : []))
 const { tags: appliedSubjects } = useTagsInList(appliedForIds)
+
+const { acceptTutorRequest } = usePendingTutorRequests()
+
+const handleReject = async () => {
+	const message = await $utils.prompt({
+		title: 'Are you sure you want to reject?',
+		sub: 'Please let us know why',
+		right: { label: 'Yes, reject' },
+	})
+	if (message) {
+		await acceptTutorRequest(currentItem.value!.tutorRequest.id, { accept: false, message })
+	}
+}
 </script>

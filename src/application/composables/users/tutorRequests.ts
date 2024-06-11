@@ -7,6 +7,7 @@ import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from './users'
 import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases } from '@modules/users'
+import { AcceptTutorRequestInput } from '@modules/users/domain/types'
 
 const myStore = {
 	tutorRequests: ref<TutorRequestEntity[]>([]),
@@ -145,6 +146,14 @@ export const usePendingTutorRequests = () => {
 		{ key: `users/tutorRequests/all` },
 	)
 
+	const {
+		asyncFn: acceptTutorRequest,
+		loading: acceptLoading,
+		error: acceptError,
+	} = useAsyncFn(async (id: string, data: AcceptTutorRequestInput) => {
+		await TutorRequestsUseCases.accept(id, data)
+	})
+
 	const limit = 10
 	const tutorRequestsUserIds = computed(() => store.tutorRequests.value.map((r) => r.userId))
 	const { users } = useUsersInList(tutorRequestsUserIds)
@@ -156,7 +165,6 @@ export const usePendingTutorRequests = () => {
 			})
 			.filter(Boolean),
 	)
-
 	const currentlyViewing = computed(() =>
 		tutorRequests.value.slice(store.currentViewingIndex.value * limit, (store.currentViewingIndex.value + 1) * limit),
 	)
@@ -197,5 +205,8 @@ export const usePendingTutorRequests = () => {
 		canNext,
 		previous,
 		next,
+		acceptError,
+		acceptLoading,
+		acceptTutorRequest,
 	}
 }

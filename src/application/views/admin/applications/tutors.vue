@@ -26,7 +26,7 @@
 						@click="canNext ? next : undefined" />
 				</div>
 			</div>
-			<div class="px-1 flex flex-col border-y border-lightGray">
+			<div class="px-1 py-2 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
 						{
