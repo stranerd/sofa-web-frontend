@@ -15,13 +15,19 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="(item, index) in data" :key="index" :class="[typeof rowClass === 'function' ? rowClass(item, index) : rowClass]">
+			<tr
+				v-for="(item, index) in data"
+				:key="index"
+				class="cursor-pointer"
+				:class="[typeof rowClass === 'function' ? rowClass(item, index) : rowClass]"
+				@click.stop.prevent="onRowClick?.(item, index)">
 				<SofaText
 					v-for="(field, fieldIdx) in allFields"
 					:key="fieldIdx"
 					as="td"
 					:class="[typeof field.class === 'function' ? field.class(item, index) : field.class]"
-					class="p-4">
+					class="p-4"
+					@click.stop.prevent="field.onClick?.(item, index)">
 					<slot
 						:name="`data-${field.id ?? index}`"
 						:data="item"
@@ -41,12 +47,14 @@ const props = defineProps<{
 		key: Paths<T> | ((data: T) => unknown)
 		label: string
 		headerClass?: string
-		class?: string | ((item: T, index: number) => string)
+		class?: string | ((data: T, index: number) => string)
 		hide?: boolean
+		onClick?: (data: T, index: number) => void
 	}[]
 	data: T[]
 	headClass?: string
-	rowClass?: string | ((item: T, index: number) => string)
+	rowClass?: string | ((data: T, index: number) => string)
+	onRowClick?: (data: T, index: number) => void
 }>()
 
 const allFields = props.fields.filter((field) => !field.hide)

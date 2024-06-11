@@ -9,14 +9,14 @@ import { useCoursesInList } from '../study/courses-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { VerificationEntity, VerificationFactory, VerificationsUseCases } from '@modules/users'
 
-const store = {
+const myStore = {
 	verifications: ref<VerificationEntity[]>([]),
 	listener: useListener(async () => {
 		const { id } = useAuth()
 		return VerificationsUseCases.listenToMine(id.value, {
 			created: async (entity) => {
 				addToArray(
-					store.verifications.value,
+					myStore.verifications.value,
 					entity,
 					(e) => e.id,
 					(e) => e.createdAt,
@@ -24,14 +24,14 @@ const store = {
 			},
 			updated: async (entity) => {
 				addToArray(
-					store.verifications.value,
+					myStore.verifications.value,
 					entity,
 					(e) => e.id,
 					(e) => e.createdAt,
 				)
 			},
 			deleted: async (entity) => {
-				store.verifications.value = store.verifications.value.filter((m) => m.id !== entity.id)
+				myStore.verifications.value = myStore.verifications.value.filter((m) => m.id !== entity.id)
 			},
 		})
 	}),
@@ -50,7 +50,7 @@ export const useMyVerifications = (afterFetch?: () => void) => {
 			const verifications = await VerificationsUseCases.getMine(id.value)
 			verifications.results.forEach((r) =>
 				addToArray(
-					store.verifications.value,
+					myStore.verifications.value,
 					r,
 					(e) => e.id,
 					(e) => e.createdAt,
@@ -62,14 +62,14 @@ export const useMyVerifications = (afterFetch?: () => void) => {
 
 	onMounted(async () => {
 		if (!called.value) await fetchVerifications()
-		await store.listener.start()
+		await myStore.listener.start()
 		await afterFetch?.()
 	})
 	onUnmounted(async () => {
-		await store.listener.close()
+		await myStore.listener.close()
 	})
 
-	return { ...store, loading, error }
+	return { ...myStore, loading, error }
 }
 
 export const useCreateVerification = () => {

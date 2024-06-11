@@ -24,9 +24,20 @@
 			<div class="px-1 flex flex-col border-y border-lightGray">
 				<SofaTable
 					:fields="[
-						{ id: 'account', key: 'userId', label: 'Account', class: 'w-[40%]' },
-						{ id: 'type', key: 'id', label: 'Type', class: 'text-grayColor w-[20%]' },
-						{ id: 'applied', key: (d) => $utils.formatTime(d.createdAt), label: 'Applied', class: 'text-grayColor w-[20%]' },
+						{
+							id: 'account',
+							key: (d) => d.verification.userId,
+							label: 'Account',
+							class: 'w-[40%]',
+							onClick: (_, index) => handleClick(index),
+						},
+						{ id: 'type', key: (d) => d.verification.id, label: 'Type', class: 'text-grayColor w-[20%]' },
+						{
+							id: 'applied',
+							key: (d) => $utils.formatTime(d.verification.createdAt),
+							label: 'Applied',
+							class: 'text-grayColor w-[20%]',
+						},
 						{ id: 'action', key: () => 'Reject', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
 					:data="data"
@@ -40,46 +51,33 @@
 					</template>
 				</SofaTable>
 			</div>
-			<div class="p-4 flex justify-between items-center w-full">
-				<SofaText content="Bulk actions:" class="text-grayColor font-bold" />
-				<div class="flex items-center">
-					<SofaButton bgColor="bg-white" textColor="text-primaryRed" padding="px-4 py-1"> Reject all </SofaButton>
-					<SofaButton bgColor="bg-white" textColor="text-primaryGreen" padding="px-4 py-1"> Accept all </SofaButton>
-				</div>
-			</div>
 		</div>
 	</AdminLayout>
 </template>
 
 <script setup lang="ts">
-import { VerificationFromModel } from '@modules/users/data/models/verifications'
+import { useModals } from '@app/composables/core/modals'
+import { UserEntity, VerificationEntity } from '@modules/users'
 
-const data: VerificationFromModel[] = [
+const data: { verification: VerificationEntity; user: UserEntity }[] = [
 	{
-		id: '1',
-		userId: '2768379',
-		pending: false,
-		accepted: null,
-		createdAt: Date.now(),
-		updatedAt: Date.now(),
-		content: {
-			courses: [],
-			quizzes: [],
-		},
-	},
-	{
-		id: '2',
-		userId: '4567',
-		pending: false,
-		accepted: null,
-		createdAt: Date.now(),
-		updatedAt: Date.now(),
-		content: {
-			courses: [],
-			quizzes: [],
-		},
+		verification: new VerificationEntity({
+			id: '1',
+			userId: '2768379',
+			pending: false,
+			accepted: null,
+			createdAt: Date.now(),
+			updatedAt: Date.now(),
+			content: {
+				courses: [],
+				quizzes: [],
+			},
+		}),
+		user: new UserEntity({} as any),
 	},
 ]
-</script>
 
-<style scoped></style>
+const handleClick = (selectedIndex: number) => {
+	useModals().users.verification.open({ data, selectedIndex })
+}
+</script>
