@@ -4,10 +4,11 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from './users'
-import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases } from '@modules/users'
 import { AcceptTutorRequestInput } from '@modules/users/domain/types'
+import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases } from '@modules/users'
 
 const myStore = {
 	tutorRequests: ref<TutorRequestEntity[]>([]),
@@ -123,48 +124,55 @@ export const useCreateTutorRequest = () => {
 	return { factory, createTutorRequest, loading, error }
 }
 
-export const useAcceptRejectTutorRequest = () => {
+export const useAcceptTutorRequest = () => {
 	const {
 		asyncFn: acceptTutorRequest,
-		loading: acceptLoading,
-		error: acceptError,
-	} = useAsyncFn(async (id: string, data: AcceptTutorRequestInput) => {
-		await TutorRequestsUseCases.accept(id, data)
-	})
+		loading,
+		error,
+	} = useAsyncFn(
+		async (tutorRequest: TutorRequestEntity, data: AcceptTutorRequestInput) => {
+			const updated = await TutorRequestsUseCases.accept(tutorRequest.id, data)
+			addToArray(
+				store.tutorRequests.value,
+				updated,
+				(e) => e.id,
+				(e) => e.createdAt,
+			)
+			useModals().users.tutorRequest.close()
+		},
+		{
+			pre: (tutorRequest: TutorRequestEntity) => tutorRequest.pending,
+		},
+	)
 
-	const handleReject = async (id: string) => {
+	const handleReject = async (tutorRequest: TutorRequestEntity) => {
 		const message = await $utils.prompt({
 			title: 'Will you be rejecting this?',
 			sub: 'Please let us know why',
 			right: { label: 'Yes, reject' },
 		})
-		if (message) {
-			await acceptTutorRequest(id, { accept: false, message })
-		}
+		if (message) await acceptTutorRequest(tutorRequest, { accept: false, message })
 	}
 
-	const handleAccept = async (id: string) => {
+	const handleAccept = async (tutorRequest: TutorRequestEntity) => {
 		const message = await $utils.prompt({
 			title: 'Will you be accepting this?',
 			sub: 'Please let us know why',
 			right: { label: 'Yes, accept' },
 			required: false,
 		})
-		if (message) {
-			await acceptTutorRequest(id, { accept: true, message })
-		}
+		await acceptTutorRequest(tutorRequest, { accept: true, message: message ?? '' })
 	}
 
 	return {
-		acceptTutorRequest,
-		acceptLoading,
-		acceptError,
+		loading,
+		error,
 		handleReject,
 		handleAccept,
 	}
 }
 
-export const usePendingTutorRequests = () => {
+export const useTutorRequests = () => {
 	const {
 		asyncFn: fetchTutorRequests,
 		loading,

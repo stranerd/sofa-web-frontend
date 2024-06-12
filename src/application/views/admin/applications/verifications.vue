@@ -73,7 +73,6 @@
 					</template>
 				</SofaTable>
 			</div>
-			<!-- BULK ACTIONS -->
 		</div>
 	</AdminLayout>
 </template>

@@ -12,6 +12,6 @@ export interface IVerificationRepository {
 		listener: Listeners<VerificationEntity>,
 		matches: (entity: VerificationEntity) => boolean,
 	) => Promise<() => void>
-	accept: (id: string, data: AcceptVerificationInput) => Promise<boolean>
+	accept: (id: string, data: AcceptVerificationInput) => Promise<VerificationEntity>
 	create: (data: VerificationToModel) => Promise<VerificationEntity>
 }

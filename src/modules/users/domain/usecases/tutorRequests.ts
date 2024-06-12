@@ -45,7 +45,6 @@ export class TutorRequestsUseCase {
 
 	async get(date?: number) {
 		const query: QueryParams = {
-			where: [{ field: 'pending', value: true }],
 			sort: [{ field: 'createdAt', desc: true }],
 			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
 		}
@@ -55,14 +54,11 @@ export class TutorRequestsUseCase {
 
 	async listen(listeners: Listeners<TutorRequestEntity>, date?: number) {
 		const query: QueryParams = {
-			where: [{ field: 'pending', value: true }],
 			sort: [{ field: 'createdAt', desc: true }],
 			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
 		}
 		if (date) query.where!.push({ field: 'createdAt', value: date, condition: Conditions.gte })
-		return await this.repository.listenToMany(query, listeners, (entity) =>
-			[entity.pending, date ? entity.createdAt >= date : true].every(Boolean),
-		)
+		return await this.repository.listenToMany(query, listeners, (entity) => [date ? entity.createdAt >= date : true].every(Boolean))
 	}
 
 	async accept(id: string, data: AcceptTutorRequestInput) {

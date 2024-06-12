@@ -1,14 +1,10 @@
 <template>
 	<div v-if="currentItem">
-		<div class="flex justify-between p-4">
+		<div class="flex justify-between gap-4 p-4">
 			<SofaHeading content="Verification application" />
-			<div class="flex items-center justify-end w-1/2 border-l border-lightGray px-4 gap-2">
-				<div class="inline">{{ currentIndex + 1 }} of {{ data.length }}</div>
-				<SofaIcon
-					class="h-[20px]"
-					name="alt-arrow-left"
-					:class="{ 'fill-grayColor': currentIndex < 1 }"
-					@click="currentIndex > 0 ? currentIndex-- : null" />
+			<div class="flex items-center justify-end w-1/2 border-l border-lightGray gap-2">
+				<div class="inline">{{ currentIndex + 1 }}-10 of {{ data.length }}</div>
+				<SofaIcon class="h-[20px]" name="alt-arrow-left" />
 				<div class="w-[2px] h-4 bg-grayColor" />
 				<SofaIcon class="h-[20px]" name="alt-arrow-right" @click="currentIndex < data.length - 1 ? currentIndex++ : null" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="close" />

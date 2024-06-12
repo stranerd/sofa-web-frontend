@@ -48,6 +48,6 @@ export class TutorRequestRepository implements ITutorRequestRepository {
 	}
 
 	async accept(id: string, data: AcceptTutorRequestInput) {
-		return await this.client.post<AcceptTutorRequestInput, boolean>(`/${id}`, data)
+		return await this.client.post<AcceptTutorRequestInput, TutorRequestEntity>(`/${id}`, data)
 	}
 }

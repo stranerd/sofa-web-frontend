@@ -54,32 +54,28 @@
 						</span>
 					</template>
 					<template #data-action="{ data: { tutorRequest } }">
-						<div class="flex items-center justify-between gap-2">
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleReject(tutorRequest.id)"
-							>Reject</SofaButton
-							>
-							<SofaButton
-								bgColor="bg-none"
-								textColor="text-primaryGreen"
-								padding="py-1"
-								@click="handleAccept(tutorRequest.id)"
-							>Accept</SofaButton
-							>
+						<div v-if="tutorRequest.pending" class="flex items-center justify-between gap-6">
+							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleReject(tutorRequest)">
+								Reject
+							</SofaButton>
+							<SofaButton bgColor="bg-none" textColor="text-primaryGreen" padding="py-1" @click="handleAccept(tutorRequest)">
+								Accept
+							</SofaButton>
 						</div>
+						<div v-else />
 					</template>
 				</SofaTable>
 			</div>
-			<!-- BULK ACTIONS -->
 		</div>
 	</AdminLayout>
 </template>
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { useAcceptRejectTutorRequest, usePendingTutorRequests } from '@app/composables/users/tutorRequests'
+import { useAcceptTutorRequest, useTutorRequests } from '@app/composables/users/tutorRequests'
 
-const { currentlyViewing, tutorRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = usePendingTutorRequests()
-const { handleAccept, handleReject } = useAcceptRejectTutorRequest()
+const { currentlyViewing, tutorRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useTutorRequests()
+const { handleAccept, handleReject } = useAcceptTutorRequest()
 
 const handleClick = (selectedIndex: number) => {
 	useModals().users.tutorRequest.open({

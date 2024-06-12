@@ -48,6 +48,6 @@ export class VerificationRepository implements IVerificationRepository {
 	}
 
 	async accept(id: string, data: AcceptVerificationInput) {
-		return await this.client.post<AcceptVerificationInput, boolean>(`/${id}`, data)
+		return await this.client.post<AcceptVerificationInput, VerificationEntity>(`/${id}`, data)
 	}
 }
