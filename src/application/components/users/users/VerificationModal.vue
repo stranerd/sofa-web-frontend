@@ -1,8 +1,8 @@
 <template>
 	<div v-if="currentItem">
-		<div class="flex justify-between p-4">
+		<div class="flex justify-between gap-4 p-4">
 			<SofaHeading content="Verification application" />
-			<div class="flex items-center justify-end w-1/2 border-l border-lightGray px-4 gap-2">
+			<div class="flex items-center justify-end w-1/2 border-l border-lightGray gap-2">
 				<div class="inline">{{ currentIndex + 1 }}-10 of {{ data.length }}</div>
 				<SofaIcon class="h-[20px]" name="alt-arrow-left" />
 				<div class="w-[2px] h-4 bg-grayColor" />
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="bg-primaryPurple w-full h-[100px] relative">
-			<div class="rounded-full w-[100px] h-[100px] bg-white p-2 absolute -bottom-2/4 left-4 z-10">
+			<div class="rounded-full size-[100px] bg-white p-2 absolute -bottom-2/4 left-4 z-10">
 				<SofaAvatar photoUrl="/images/auth-bg.png" :size="80" />
 			</div>
 		</div>
