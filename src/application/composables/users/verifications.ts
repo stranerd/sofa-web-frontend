@@ -9,6 +9,7 @@ import { useCoursesInList } from '../study/courses-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useUsersInList } from './users'
 import { VerificationEntity, VerificationFactory, VerificationsUseCases } from '@modules/users'
+import { AcceptVerificationInput } from '@modules/users/domain/types'
 
 const myStore = {
 	verifications: ref<VerificationEntity[]>([]),
@@ -78,6 +79,47 @@ const store = {
 	hasMore: ref(true),
 	total: ref(0),
 	currentViewingIndex: ref(0),
+}
+
+export const useAcceptRejectVerificationRequest = () => {
+	const {
+		asyncFn: acceptVerificationRequest,
+		loading: acceptLoading,
+		error: acceptError,
+	} = useAsyncFn(async (id: string, data: AcceptVerificationInput) => {
+		await VerificationsUseCases.accept(id, data)
+	})
+
+	const handleReject = async (id: string) => {
+		const message = await $utils.prompt({
+			title: 'Will you be rejecting this?',
+			sub: 'Please let us know why',
+			right: { label: 'Yes, reject' },
+		})
+		if (message) {
+			await acceptVerificationRequest(id, { accept: false, message })
+		}
+	}
+
+	const handleAccept = async (id: string) => {
+		const message = await $utils.prompt({
+			title: 'Will you be accepting this?',
+			sub: 'Please let us know why',
+			right: { label: 'Yes, accept' },
+			required: false,
+		})
+		if (message) {
+			await acceptVerificationRequest(id, { accept: true, message })
+		}
+	}
+
+	return {
+		acceptVerificationRequest,
+		acceptLoading,
+		acceptError,
+		handleReject,
+		handleAccept,
+	}
 }
 
 export const usePendingVerificationRequest = () => {

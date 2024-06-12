@@ -3,28 +3,32 @@
 		<div class="flex justify-between p-4">
 			<SofaHeading content="Verification application" />
 			<div class="flex items-center justify-end w-1/2 border-l border-lightGray px-4 gap-2">
-				<div class="inline">{{ currentIndex + 1 }}-10 of {{ data.length }}</div>
-				<SofaIcon class="h-[20px]" name="alt-arrow-left" />
+				<div class="inline">{{ currentIndex + 1 }} of {{ data.length }}</div>
+				<SofaIcon
+					class="h-[20px]"
+					name="alt-arrow-left"
+					:class="{ 'fill-grayColor': currentIndex < 1 }"
+					@click="currentIndex > 0 ? currentIndex-- : null" />
 				<div class="w-[2px] h-4 bg-grayColor" />
-				<SofaIcon class="h-[20px]" name="alt-arrow-right" />
+				<SofaIcon class="h-[20px]" name="alt-arrow-right" @click="currentIndex < data.length - 1 ? currentIndex++ : null" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="close" />
 			</div>
 		</div>
 		<div class="bg-primaryPurple w-full h-[100px] relative">
 			<div class="rounded-full w-[100px] h-[100px] bg-white p-2 absolute -bottom-2/4 left-4 z-10">
-				<SofaAvatar photoUrl="/images/auth-bg.png" :size="80" />
+				<SofaAvatar :photoUrl="currentItem.user.picture" :size="80" />
 			</div>
 		</div>
 		<div class="p-6 mt-6 space-y-6">
 			<div class="space-y-2">
-				<SofaHeading :content="currentItem.verification.userId" />
-				<SofaText content="This is a description" />
+				<SofaHeading :content="currentItem.user.publicName" />
+				<SofaText :content="currentItem.user.bio.description" />
 			</div>
-			<div class="space-y-2">
+			<div v-if="currentItem.user.socials.length !== 0" class="space-y-2">
 				<SofaHeading content="Links" />
 				<div class="flex items-center gap-4">
-					<div v-for="i in 3" :key="i" class="flex items-center gap-2">
-						<SofaIcon name="socials-facebook" class="bg-primaryBlue" />
+					<div v-for="social in currentItem.user.socials" :key="social.link" class="flex items-center gap-2">
+						<SofaIcon :name="`socials-${social.ref}`" class="bg-primaryBlue" />
 					</div>
 				</div>
 			</div>
@@ -54,8 +58,10 @@
 			</div>
 		</div>
 		<div class="flex justify-between p-4">
-			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4">Reject</SofaButton>
-			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4">Accept</SofaButton>
+			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject(currentItem!.verification.id)">Reject</SofaButton>
+			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4" @click="handleAccept(currentItem!.verification.id)"
+			>Accept</SofaButton
+			>
 		</div>
 	</div>
 </template>
@@ -63,6 +69,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { UserEntity, VerificationEntity } from '@modules/users'
+// import { useTagsInList } from '@app/composables/interactions/tags'
+import { useAcceptRejectVerificationRequest } from '@app/composables/users/verifications'
 
 const props = defineProps<{
 	close: () => void
@@ -75,4 +83,13 @@ const props = defineProps<{
 
 const currentIndex = ref(props.selectedIndex || 0)
 const currentItem = computed(() => props.data.at(currentIndex.value))
+
+const { handleAccept, handleReject } = useAcceptRejectVerificationRequest()
+
+// const currentlyTeachingIds = computed(() => currentItem.value?.user.tutor.topics ?? [])
+// const { tags: currentlyTeaching } = useTagsInList(currentlyTeachingIds)
+// const appliedForIds = computed(() => (currentItem.value ? [currentItem.value.verification.id] : []))
+// const { tags: appliedSubjects } = useTagsInList(appliedForIds)
+
+// console.log(currentlyTeaching.value)
 </script>

@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { usePendingVerificationRequest } from '@app/composables/users/verifications'
+import { usePendingVerificationRequest, useAcceptRejectVerificationRequest } from '@app/composables/users/verifications'
 
 const { currentlyViewing, verificationRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } =
 	usePendingVerificationRequest()
@@ -92,10 +92,5 @@ const handleClick = (selectedIndex: number) => {
 	})
 }
 
-const handleReject = (id: string) => {
-	console.log(id)
-}
-const handleAccept = (id: string) => {
-	console.log(id)
-}
+const { handleReject, handleAccept } = useAcceptRejectVerificationRequest()
 </script>
