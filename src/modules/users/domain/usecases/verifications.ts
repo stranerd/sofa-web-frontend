@@ -1,6 +1,7 @@
 import { VerificationEntity } from '../entities/verifications'
 import { VerificationFactory } from '../factories/verifications'
 import { IVerificationRepository } from '../irepositories/iverifications'
+import { AcceptVerificationInput } from '../types'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class VerificationsUseCase {
@@ -62,5 +63,9 @@ export class VerificationsUseCase {
 		return await this.repository.listenToMany(query, listeners, (entity) =>
 			[entity.pending, date ? entity.createdAt >= date : true].every(Boolean),
 		)
+	}
+
+	async accept(id: string, data: AcceptVerificationInput) {
+		return await this.repository.accept(id, data)
 	}
 }

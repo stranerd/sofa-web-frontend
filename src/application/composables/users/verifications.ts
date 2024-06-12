@@ -7,6 +7,7 @@ import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { useCoursesInList } from '../study/courses-list'
 import { useQuizzesInList } from '../study/quizzes-list'
+import { useUsersInList } from './users'
 import { VerificationEntity, VerificationFactory, VerificationsUseCases } from '@modules/users'
 
 const myStore = {
@@ -70,6 +71,92 @@ export const useMyVerifications = (afterFetch?: () => void) => {
 	})
 
 	return { ...myStore, loading, error }
+}
+
+const store = {
+	verificationRequests: ref<VerificationEntity[]>([]),
+	hasMore: ref(true),
+	total: ref(0),
+	currentViewingIndex: ref(0),
+}
+
+export const usePendingVerificationRequest = () => {
+	const {
+		asyncFn: fetchVerificationRequests,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(
+		async () => {
+			const verificationRequests = await VerificationsUseCases.get(store.verificationRequests.value.at(-1)?.createdAt)
+			if (!called.value) store.total.value = verificationRequests.docs.total
+			store.hasMore.value = !!verificationRequests.pages.next
+			verificationRequests.results.forEach((r) =>
+				addToArray(
+					store.verificationRequests.value,
+					r,
+					(e) => e.id,
+					(e) => e.createdAt,
+				),
+			)
+		},
+		{ key: `users/verificationRequests/all` },
+	)
+
+	const limit = 10
+	const verificanRequestId = computed(() => store.verificationRequests.value.map((r) => r.userId))
+	const { users } = useUsersInList(verificanRequestId)
+	const verificationRequests = computed(() =>
+		store.verificationRequests.value
+			.map((r) => {
+				const user = users.value.find((u) => u.id === r.userId)
+				return user ? { verification: r, user } : null
+			})
+			.filter(Boolean),
+	)
+	const currentlyViewing = computed(() =>
+		verificationRequests.value.slice(store.currentViewingIndex.value * limit, (store.currentViewingIndex.value + 1) * limit),
+	)
+	const isOnLastPage = computed(
+		() => currentlyViewing.value.at(-1)?.verification.id !== verificationRequests.value.at(-1)?.verification.id,
+	)
+	const canNext = computed(() => !isOnLastPage.value || store.hasMore.value)
+	const canPrev = computed(() => store.currentViewingIndex.value > 0)
+
+	const previous = async () => {
+		if (!canPrev.value) return
+		store.currentViewingIndex.value -= 1
+	}
+
+	const next = async () => {
+		if (!canNext.value) return
+		if (isOnLastPage.value && store.hasMore.value) {
+			await fetchVerificationRequests()
+			// await listener.restart()
+		}
+		store.currentViewingIndex.value += 1
+	}
+
+	onMounted(async () => {
+		if (!called.value) await fetchVerificationRequests()
+		// await listener.start()
+	})
+	// onUnmounted(async () => {
+	// 	await listener.close()
+	// })
+
+	return {
+		...store,
+		loading,
+		error,
+		currentlyViewing,
+		verificationRequests,
+		limit,
+		canPrev,
+		canNext,
+		previous,
+		next,
+	}
 }
 
 export const useCreateVerification = () => {

@@ -87,4 +87,5 @@ const handleClick = (selectedIndex: number) => {
 		selectedIndex: currentViewingIndex.value * limit + selectedIndex,
 	})
 }
+console.log(currentlyViewing.value)
 </script>

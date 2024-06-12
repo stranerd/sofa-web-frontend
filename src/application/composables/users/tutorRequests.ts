@@ -187,14 +187,6 @@ export const usePendingTutorRequests = () => {
 		{ key: `users/tutorRequests/all` },
 	)
 
-	// const {
-	// 	asyncFn: acceptTutorRequest,
-	// 	loading: acceptLoading,
-	// 	error: acceptError,
-	// } = useAsyncFn(async (id: string, data: AcceptTutorRequestInput) => {
-	// 	await TutorRequestsUseCases.accept(id, data)
-	// })
-
 	const limit = 10
 	const tutorRequestsUserIds = computed(() => store.tutorRequests.value.map((r) => r.userId))
 	const { users } = useUsersInList(tutorRequestsUserIds)
