@@ -2,7 +2,7 @@
 	<div v-if="currentItem">
 		<div class="header flex justify-between gap-4 p-4">
 			<SofaHeading content="Tutor application" />
-			<div class="flex items-center justify-end w-3/4 border-l border-lightGray gap-2">
+			<div class="flex items-center justify-end w-1/2 border-l border-lightGray gap-2">
 				<div class="inline">{{ currentIndex + 1 }} of {{ data.length }}</div>
 				<SofaIcon
 					class="h-[20px]"

@@ -58,15 +58,11 @@
 						</span>
 					</template>
 					<template #data-action="{ data: { verification } }">
-						<div class="flex items-center justify-between">
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleReject(verification.id)"
+						<div v-if="verification.pending" class="flex items-center justify-between">
+							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleReject(verification)"
 							>Reject</SofaButton
 							>
-							<SofaButton
-								bgColor="bg-none"
-								textColor="text-primaryGreen"
-								padding="py-1"
-								@click="handleAccept(verification.id)"
+							<SofaButton bgColor="bg-none" textColor="text-primaryGreen" padding="py-1" @click="handleAccept(verification)"
 							>Accept</SofaButton
 							>
 						</div>
@@ -79,10 +75,10 @@
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { usePendingVerificationRequest, useAcceptRejectVerificationRequest } from '@app/composables/users/verifications'
+import { useVerificationRequests, useAcceptVerificationRequest } from '@app/composables/users/verifications'
 
 const { currentlyViewing, verificationRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } =
-	usePendingVerificationRequest()
+	useVerificationRequests()
 
 const handleClick = (selectedIndex: number) => {
 	useModals().users.verification.open({
@@ -91,5 +87,5 @@ const handleClick = (selectedIndex: number) => {
 	})
 }
 
-const { handleReject, handleAccept } = useAcceptRejectVerificationRequest()
+const { handleReject, handleAccept } = useAcceptVerificationRequest()
 </script>

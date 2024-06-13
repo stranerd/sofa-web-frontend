@@ -23,41 +23,26 @@
 			<div v-if="currentItem.user.socials.length !== 0" class="space-y-2">
 				<SofaHeading content="Links" />
 				<div class="flex items-center gap-4">
-					<div v-for="social in currentItem.user.socials" :key="social.link" class="flex items-center gap-2">
+					<a
+						v-for="social in currentItem.user.socials"
+						:key="social.link"
+						:href="social.link"
+						target="_blank"
+						class="flex items-center gap-2">
 						<SofaIcon :name="`socials-${social.ref}`" class="bg-primaryBlue" />
-					</div>
+					</a>
 				</div>
 			</div>
 			<div class="space-y-2">
 				<SofaHeading content="Content" />
 				<div class="flex items-center gap-6 min-w-full overflow-x-auto flex-nowrap">
-					<div v-for="i in 8" :key="i" class="border-2 rounded-lg border-grayColor p-4 w-[212px] h-[240px] space-y-4">
-						<img src="/images/auth-bg.png" alt="" class="rounded-lg h-[120px] w-[180px]" />
-						<div class="">
-							<SofaHeading content="Atoms I" />
-							<div class="flex gap-2 items-center whitespace-nowrap line-clamp-1 text-primaryPurplePink">
-								<SofaText content="Course" />
-								<span class="size-[5px] rounded-full bg-current" />
-								<SofaText content="4 materials" />
-							</div>
-
-							<div class="w-full flex gap-2 items-center">
-								<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
-								<div class="flex gap-1 items-center">
-									<SofaText content="4.0" />
-									<SofaText class="text-grayColor"> (24 ratings)</SofaText>
-								</div>
-							</div>
-						</div>
-					</div>
+					<StudyMaterialCard v-for="material in [...tutorCourses, ...tutorQuizzes]" :key="material.hash" :material />
 				</div>
 			</div>
 		</div>
-		<div class="flex justify-between p-4">
-			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject(currentItem!.verification.id)">Reject</SofaButton>
-			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4" @click="handleAccept(currentItem!.verification.id)"
-			>Accept</SofaButton
-			>
+		<div v-if="currentItem.verification.pending" class="flex justify-between p-4">
+			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject(currentItem!.verification)">Reject</SofaButton>
+			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4" @click="handleAccept(currentItem!.verification)">Accept</SofaButton>
 		</div>
 	</div>
 </template>
@@ -65,8 +50,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { UserEntity, VerificationEntity } from '@modules/users'
-// import { useTagsInList } from '@app/composables/interactions/tags'
-import { useAcceptRejectVerificationRequest } from '@app/composables/users/verifications'
+import { useCoursesInList } from '@app/composables/study/courses-list'
+import { useQuizzesInList } from '@app/composables/study/quizzes-list'
+import { useAcceptVerificationRequest } from '@app/composables/users/verifications'
+import StudyMaterialCard from '@app/components/study/StudyMaterialCard.vue'
 
 const props = defineProps<{
 	close: () => void
@@ -80,12 +67,10 @@ const props = defineProps<{
 const currentIndex = ref(props.selectedIndex || 0)
 const currentItem = computed(() => props.data.at(currentIndex.value))
 
-const { handleAccept, handleReject } = useAcceptRejectVerificationRequest()
+const { handleAccept, handleReject } = useAcceptVerificationRequest()
 
-// const currentlyTeachingIds = computed(() => currentItem.value?.user.tutor.topics ?? [])
-// const { tags: currentlyTeaching } = useTagsInList(currentlyTeachingIds)
-// const appliedForIds = computed(() => (currentItem.value ? [currentItem.value.verification.id] : []))
-// const { tags: appliedSubjects } = useTagsInList(appliedForIds)
-
-// console.log(currentlyTeaching.value)
+const courseIds = computed(() => currentItem.value?.verification.content.courses ?? [])
+const { courses: tutorCourses } = useCoursesInList(courseIds)
+const quizIds = computed(() => (currentItem.value ? currentItem.value.verification.content.quizzes : []))
+const { quizzes: tutorQuizzes } = useQuizzesInList(quizIds)
 </script>

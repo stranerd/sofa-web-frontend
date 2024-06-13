@@ -7,6 +7,7 @@ import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { useCoursesInList } from '../study/courses-list'
 import { useQuizzesInList } from '../study/quizzes-list'
+import { useModals } from '../core/modals'
 import { useUsersInList } from './users'
 import { VerificationEntity, VerificationFactory, VerificationsUseCases } from '@modules/users'
 import { AcceptVerificationInput } from '@modules/users/domain/types'
@@ -81,27 +82,39 @@ const store = {
 	currentViewingIndex: ref(0),
 }
 
-export const useAcceptRejectVerificationRequest = () => {
+export const useAcceptVerificationRequest = () => {
 	const {
 		asyncFn: acceptVerificationRequest,
-		loading: acceptLoading,
-		error: acceptError,
-	} = useAsyncFn(async (id: string, data: AcceptVerificationInput) => {
-		await VerificationsUseCases.accept(id, data)
-	})
+		loading,
+		error,
+	} = useAsyncFn(
+		async (verificationRequest: VerificationEntity, data: AcceptVerificationInput) => {
+			const updated = await VerificationsUseCases.accept(verificationRequest.id, data)
+			addToArray(
+				store.verificationRequests.value,
+				updated,
+				(e) => e.id,
+				(e) => e.createdAt,
+			)
+			useModals().users.tutorRequest.close()
+		},
+		{
+			pre: (verificationRequest: VerificationEntity) => verificationRequest.pending,
+		},
+	)
 
-	const handleReject = async (id: string) => {
+	const handleReject = async (verificationRequest: VerificationEntity) => {
 		const message = await $utils.prompt({
 			title: 'Will you be rejecting this?',
 			sub: 'Please let us know why',
 			right: { label: 'Yes, reject' },
 		})
 		if (message) {
-			await acceptVerificationRequest(id, { accept: false, message })
+			await acceptVerificationRequest(verificationRequest, { accept: false, message })
 		}
 	}
 
-	const handleAccept = async (id: string) => {
+	const handleAccept = async (verificationRequest: VerificationEntity) => {
 		const message = await $utils.prompt({
 			title: 'Will you be accepting this?',
 			sub: 'Please let us know why',
@@ -109,20 +122,20 @@ export const useAcceptRejectVerificationRequest = () => {
 			required: false,
 		})
 		if (message) {
-			await acceptVerificationRequest(id, { accept: true, message })
+			await acceptVerificationRequest(verificationRequest, { accept: true, message })
 		}
 	}
 
 	return {
 		acceptVerificationRequest,
-		acceptLoading,
-		acceptError,
+		loading,
+		error,
 		handleReject,
 		handleAccept,
 	}
 }
 
-export const usePendingVerificationRequest = () => {
+export const useVerificationRequests = () => {
 	const {
 		asyncFn: fetchVerificationRequests,
 		loading,
