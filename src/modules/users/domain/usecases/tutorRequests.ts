@@ -55,7 +55,7 @@ export class TutorRequestsUseCase {
 	async listen(listeners: Listeners<TutorRequestEntity>, date?: number) {
 		const query: QueryParams = {
 			sort: [{ field: 'createdAt', desc: true }],
-			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+			all: true,
 		}
 		if (date) query.where!.push({ field: 'createdAt', value: date, condition: Conditions.gte })
 		return await this.repository.listenToMany(query, listeners, (entity) => [date ? entity.createdAt >= date : true].every(Boolean))

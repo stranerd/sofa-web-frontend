@@ -33,16 +33,16 @@
 							id: 'name',
 							key: 'user.publicName',
 							label: 'Teacher',
-							headerClass: 'w-full',
+							class: 'w-[60%]',
 							onClick: (_, index) => handleClick(index),
 						},
 						{
 							id: 'applied',
 							key: (d) => $utils.formatTime(d.tutorRequest.createdAt),
 							label: 'Applied',
-							class: 'text-grayColor',
+							class: 'text-grayColor w-[20%]',
 						},
-						{ id: 'action', key: 'tutorRequest.id', label: 'Action', class: 'text-grayColor' },
+						{ id: 'action', key: 'tutorRequest.id', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
 					:data="currentlyViewing"
 					headClass="text-left text-grayColor"

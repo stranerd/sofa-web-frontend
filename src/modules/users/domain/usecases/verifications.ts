@@ -1,6 +1,7 @@
 import { VerificationEntity } from '../entities/verifications'
 import { VerificationFactory } from '../factories/verifications'
 import { IVerificationRepository } from '../irepositories/iverifications'
+import { AcceptVerificationInput } from '../types'
 import { Conditions, Listeners, QueryParams } from '@modules/core'
 
 export class VerificationsUseCase {
@@ -44,7 +45,6 @@ export class VerificationsUseCase {
 
 	async get(date?: number) {
 		const query: QueryParams = {
-			where: [{ field: 'pending', value: true }],
 			sort: [{ field: 'createdAt', desc: true }],
 			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
 		}
@@ -54,13 +54,14 @@ export class VerificationsUseCase {
 
 	async listen(listeners: Listeners<VerificationEntity>, date?: number) {
 		const query: QueryParams = {
-			where: [{ field: 'pending', value: true }],
 			sort: [{ field: 'createdAt', desc: true }],
-			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+			all: true,
 		}
 		if (date) query.where!.push({ field: 'createdAt', value: date, condition: Conditions.gte })
-		return await this.repository.listenToMany(query, listeners, (entity) =>
-			[entity.pending, date ? entity.createdAt >= date : true].every(Boolean),
-		)
+		return await this.repository.listenToMany(query, listeners, (entity) => [date ? entity.createdAt >= date : true].every(Boolean))
+	}
+
+	async accept(id: string, data: AcceptVerificationInput) {
+		return await this.repository.accept(id, data)
 	}
 }
