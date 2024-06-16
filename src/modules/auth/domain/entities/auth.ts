@@ -7,7 +7,6 @@ export type AuthUser = {
 
 export enum AuthRoles {
 	isAdmin = 'isAdmin',
-	isSuperAdmin = 'isSuperAdmin',
 	isSubscribed = 'isSubscribed',
 	isVerified = 'isVerified',
 	isOfficialAccount = 'isOfficialAccount',
