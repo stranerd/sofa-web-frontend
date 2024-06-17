@@ -2,13 +2,13 @@ import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
-import { useAsyncFn } from '../core/hooks'
+import { useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from './users'
 import { AcceptTutorRequestInput } from '@modules/users/domain/types'
-import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases } from '@modules/users'
+import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases, UserEntity } from '@modules/users'
 
 const myStore = {
 	tutorRequests: ref<TutorRequestEntity[]>([]),
@@ -37,40 +37,6 @@ const myStore = {
 		})
 	}),
 }
-
-const store = {
-	tutorRequests: ref<TutorRequestEntity[]>([]),
-	hasMore: ref(true),
-	total: ref(0),
-	currentViewingIndex: ref(0),
-}
-
-const listener = useListener(async () =>
-	TutorRequestsUseCases.listen(
-		{
-			created: async (entity) => {
-				addToArray(
-					store.tutorRequests.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.tutorRequests.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.tutorRequests.value = store.tutorRequests.value.filter((m) => m.id !== entity.id)
-			},
-		},
-		store.tutorRequests.value.at(-1)?.createdAt,
-	),
-)
 
 export const useMyTutorRequests = () => {
 	const { id } = useAuth()
@@ -131,17 +97,11 @@ export const useAcceptTutorRequest = () => {
 		error,
 	} = useAsyncFn(
 		async (tutorRequest: TutorRequestEntity, data: AcceptTutorRequestInput) => {
-			const updated = await TutorRequestsUseCases.accept(tutorRequest.id, data)
-			addToArray(
-				store.tutorRequests.value,
-				updated,
-				(e) => e.id,
-				(e) => e.createdAt,
-			)
+			await TutorRequestsUseCases.accept(tutorRequest.id, data)
 			useModals().users.tutorRequest.close()
 		},
 		{
-			pre: (tutorRequest: TutorRequestEntity) => tutorRequest.pending,
+			pre: (tutorRequest) => tutorRequest.pending,
 		},
 	)
 
@@ -172,79 +132,20 @@ export const useAcceptTutorRequest = () => {
 	}
 }
 
-export const useTutorRequests = () => {
-	const {
-		asyncFn: fetchTutorRequests,
-		loading,
-		error,
-		called,
-	} = useAsyncFn(
-		async () => {
-			const tutorRequests = await TutorRequestsUseCases.get(store.tutorRequests.value.at(-1)?.createdAt)
-			if (!called.value) store.total.value = tutorRequests.docs.total
-			store.hasMore.value = !!tutorRequests.pages.next
-			tutorRequests.results.forEach((r) =>
-				addToArray(
-					store.tutorRequests.value,
-					r,
-					(e) => e.id,
-					(e) => e.createdAt,
-				),
-			)
+export const useTutorRequestsList = () => {
+	const result = usePaginatedTable<TutorRequestEntity, { tutorRequest: TutorRequestEntity; user: UserEntity }>({
+		key: 'users/tutorRequests/all',
+		useCase: (lastItem) => TutorRequestsUseCases.get(lastItem?.createdAt),
+		comparer: (item) => item.createdAt,
+		listenerFn: (handlers, lastItem) => TutorRequestsUseCases.listen(handlers, lastItem?.createdAt),
+		computedFn: (item) => {
+			const user = users.value.find((u) => u.id === item.userId)
+			return user ? { tutorRequest: item, user } : null
 		},
-		{ key: `users/tutorRequests/all` },
-	)
-
-	const limit = 10
-	const tutorRequestsUserIds = computed(() => store.tutorRequests.value.map((r) => r.userId))
-	const { users } = useUsersInList(tutorRequestsUserIds)
-	const tutorRequests = computed(() =>
-		store.tutorRequests.value
-			.map((r) => {
-				const user = users.value.find((u) => u.id === r.userId)
-				return user ? { tutorRequest: r, user } : null
-			})
-			.filter(Boolean),
-	)
-	const currentlyViewing = computed(() =>
-		tutorRequests.value.slice(store.currentViewingIndex.value * limit, (store.currentViewingIndex.value + 1) * limit),
-	)
-	const isOnLastPage = computed(() => currentlyViewing.value.at(-1)?.tutorRequest.id !== tutorRequests.value.at(-1)?.tutorRequest.id)
-	const canNext = computed(() => !isOnLastPage.value || store.hasMore.value)
-	const canPrev = computed(() => store.currentViewingIndex.value > 0)
-
-	const previous = async () => {
-		if (!canPrev.value) return
-		store.currentViewingIndex.value -= 1
-	}
-
-	const next = async () => {
-		if (!canNext.value) return
-		if (isOnLastPage.value && store.hasMore.value) {
-			await fetchTutorRequests()
-			await listener.restart()
-		}
-		store.currentViewingIndex.value += 1
-	}
-
-	onMounted(async () => {
-		if (!called.value) await fetchTutorRequests()
-		await listener.start()
-	})
-	onUnmounted(async () => {
-		await listener.close()
 	})
 
-	return {
-		...store,
-		loading,
-		error,
-		currentlyViewing,
-		tutorRequests,
-		limit,
-		canPrev,
-		canNext,
-		previous,
-		next,
-	}
+	const userIds = computed(() => result.items.value.map((r) => r.userId))
+	const { users } = useUsersInList(userIds)
+
+	return result
 }

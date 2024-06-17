@@ -1,7 +1,8 @@
 import { addToArray, getRandomValue } from 'valleyed'
 import { ComputedRef, Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
-import type { useListener } from './listener'
+import { useListener } from './listener'
 import { useErrorHandler, useLoadingHandler } from './states'
+import { Listeners, QueryResults } from '@modules/core'
 
 const asyncStore: Record<string, { called: Ref<boolean> } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>> = {}
 
@@ -34,7 +35,7 @@ export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Parti
 	return { asyncFn, error, loading, called }
 }
 
-const store: Record<
+const listItemsStore: Record<
 	string,
 	{
 		items: { id: string }[]
@@ -50,7 +51,7 @@ export const useItemsInList = <T extends { id: string }>(
 	fetchItems: (ids: string[]) => Promise<T[]>,
 	listener?: ReturnType<typeof useListener>,
 ) => {
-	store[key] ??= {
+	listItemsStore[key] ??= {
 		items: reactive([]),
 	}
 
@@ -78,7 +79,7 @@ export const useItemsInList = <T extends { id: string }>(
 		},
 	)
 
-	const allItems = computed(() => [...items.value, ...store[key].items] as T[])
+	const allItems = computed(() => [...items.value, ...listItemsStore[key].items] as T[])
 
 	const filteredItems = computed(() => ids.value.map((id) => allItems.value.find((q) => q.id === id)).filter(Boolean) as T[])
 
@@ -89,7 +90,7 @@ export const useItemsInList = <T extends { id: string }>(
 	const addToList = (...items: T[]) => {
 		items.forEach((item) => {
 			addToArray(
-				store[key].items,
+				listItemsStore[key].items,
 				item,
 				(e) => e.id,
 				(e) => e.id,
@@ -103,4 +104,136 @@ export const useItemsInList = <T extends { id: string }>(
 	}
 
 	return { items: filteredItems, searchForItem, addToList }
+}
+
+const paginatedTableStore: Record<
+	string,
+	{
+		items: Ref<{ id: string }[]>
+		hasMore: Ref<boolean>
+		total: Ref<number>
+		currentViewingIndex: Ref<number>
+		listener: ReturnType<typeof useListener>
+	}
+> = {}
+
+export const usePaginatedTable = <T extends { id: string }, C>({
+	key,
+	useCase,
+	listenerFn,
+	computedFn,
+	comparer,
+	asc = false,
+}: {
+	key: string
+	useCase: (lastItem?: T) => Promise<QueryResults<T>>
+	listenerFn: (handlers: Listeners<T>, lastItem?: T) => Promise<() => void>
+	computedFn: (raw: T) => C | null
+	comparer: (item: T) => number | string
+	asc?: boolean
+}) => {
+	paginatedTableStore[key] ??= {
+		items: ref([]),
+		hasMore: ref(false),
+		total: ref(0),
+		currentViewingIndex: ref(0),
+		listener: useListener(async () =>
+			listenerFn(
+				{
+					created: async (entity) => {
+						addToArray(
+							store.items.value,
+							entity,
+							(e) => e.id,
+							(e) => comparer(e as T),
+							asc,
+						)
+					},
+					updated: async (entity) => {
+						addToArray(
+							store.items.value,
+							entity,
+							(e) => e.id,
+							(e) => comparer(e as T),
+							asc,
+						)
+					},
+					deleted: async (entity) => {
+						store.items.value = store.items.value.filter((m) => m.id !== entity.id)
+					},
+				},
+				store.items.value.at(-1) as T,
+			),
+		),
+	}
+
+	const store = paginatedTableStore[key]
+
+	const {
+		asyncFn: fetchItems,
+		loading,
+		error,
+		called,
+	} = useAsyncFn(
+		async () => {
+			const data = await useCase(store.items.value.at(-1) as T)
+			if (!called.value) store.total.value = data.docs.total
+			store.hasMore.value = !!data.pages.next
+			data.results.forEach((r) =>
+				addToArray(
+					store.items.value,
+					r,
+					(e) => e.id,
+					(e) => comparer(e as T),
+					asc,
+				),
+			)
+		},
+		{ key },
+	)
+
+	const limit = 10
+	const mapped = computed(() => store.items.value.map((r) => computedFn(r as T)).filter(Boolean))
+	const currentlyViewing = computed(() =>
+		mapped.value.slice(store.currentViewingIndex.value * limit, (store.currentViewingIndex.value + 1) * limit),
+	)
+	const isOnLastPage = computed(() => currentlyViewing.value.at(-1) !== mapped.value.at(-1))
+	const canNext = computed(() => !isOnLastPage.value || store.hasMore.value)
+	const canPrev = computed(() => store.currentViewingIndex.value > 0)
+
+	const previous = async () => {
+		if (!canPrev.value) return
+		store.currentViewingIndex.value -= 1
+	}
+
+	const next = async () => {
+		if (!canNext.value) return
+		if (isOnLastPage.value && store.hasMore.value) {
+			await fetchItems()
+			await store.listener.restart()
+		}
+		store.currentViewingIndex.value += 1
+	}
+
+	onMounted(async () => {
+		if (!called.value) await fetchItems()
+		await store.listener.start()
+	})
+	onUnmounted(async () => {
+		await store.listener.close()
+	})
+
+	return {
+		...store,
+		items: store.items as Ref<T[]>,
+		loading,
+		error,
+		currentlyViewing,
+		mapped,
+		limit,
+		canPrev,
+		canNext,
+		previous,
+		next,
+	}
 }

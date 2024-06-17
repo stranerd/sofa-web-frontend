@@ -75,13 +75,13 @@
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { useVerifications, useAcceptVerificationRequest } from '@app/composables/users/verifications'
+import { useVerificationsList, useAcceptVerificationRequest } from '@app/composables/users/verifications'
 
-const { currentlyViewing, verificationRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useVerifications()
+const { currentlyViewing, mapped, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useVerificationsList()
 
 const handleClick = (selectedIndex: number) => {
 	useModals().users.verification.open({
-		data: verificationRequests.value,
+		data: mapped.value,
 		selectedIndex: currentViewingIndex.value * limit + selectedIndex,
 	})
 }

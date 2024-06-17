@@ -72,14 +72,14 @@
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { useAcceptTutorRequest, useTutorRequests } from '@app/composables/users/tutorRequests'
+import { useAcceptTutorRequest, useTutorRequestsList } from '@app/composables/users/tutorRequests'
 
-const { currentlyViewing, tutorRequests, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useTutorRequests()
+const { currentlyViewing, mapped, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useTutorRequestsList()
 const { handleAccept, handleReject } = useAcceptTutorRequest()
 
 const handleClick = (selectedIndex: number) => {
 	useModals().users.tutorRequest.open({
-		data: tutorRequests.value,
+		data: mapped.value,
 		selectedIndex: currentViewingIndex.value * limit + selectedIndex,
 	})
 }
