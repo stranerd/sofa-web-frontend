@@ -39,7 +39,7 @@
 							class: 'w-[40%]',
 							onClick: (_, index) => handleClick(index),
 						},
-						{ id: 'type', key: (d) => d.user.type?.type, label: 'Type', class: 'text-grayColor w-[20%]' },
+						{ id: 'type', key: (d) => d.user.type?.type, label: 'Type', class: 'text-grayColor w-[20%] capitalize' },
 						{
 							id: 'applied',
 							key: (d) => $utils.formatTime(d.verification.createdAt),

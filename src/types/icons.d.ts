@@ -143,6 +143,7 @@ declare global {
 		| 'solar_play-circle-bold'
 		| 'star'
 		| 'streak-new'
+		| 'students'
 		| 'study-flashcard'
 		| 'study-material'
 		| 'study-offline'

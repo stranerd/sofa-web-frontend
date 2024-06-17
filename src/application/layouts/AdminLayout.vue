@@ -77,6 +77,31 @@ const tabs = [
 			},
 		],
 	},
+	{
+		title: 'Accounts',
+		items: [
+			{
+				name: 'Admins',
+				link: '/admin/accounts/admins',
+				icon: 'admin' as const,
+			},
+			{
+				name: 'Students',
+				link: '/admin/accounts/students',
+				icon: 'students' as const,
+			},
+			{
+				name: 'Teachers',
+				link: '/admin/applications/verifications',
+				icon: 'tutor' as const,
+			},
+			{
+				name: 'Organizations',
+				link: '/admin/applications/verifications',
+				icon: 'organization' as const,
+			},
+		],
+	},
 ]
 
 useMeta(
