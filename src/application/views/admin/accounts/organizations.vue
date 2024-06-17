@@ -24,7 +24,7 @@
 						{
 							id: 'organization',
 							key: '',
-							label: 'Organnization',
+							label: 'Organization',
 							class: 'w-[60%]',
 						},
 						{

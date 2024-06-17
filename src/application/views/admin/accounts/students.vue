@@ -11,11 +11,19 @@
 					</SofaInput>
 				</form>
 				<div class="flex items-center w-[20%] border-l border-lightGray px-4 gap-2">
-					<div>1-10 of 50</div>
+					<div>{{ currentViewingIndex * limit + 1 }} -{{ limit }} of {{ total }}</div>
 					<span class="flex-1" />
-					<SofaIcon class="h-[20px]" name="alt-arrow-left" />
+					<SofaIcon
+						class="h-[20px]"
+						name="alt-arrow-left"
+						:class="{ 'fill-grayColor': canPrev }"
+						@click="canPrev ? previous : undefined" />
 					<div class="w-1 h-4 bg-lightGray" />
-					<SofaIcon class="h-[20px]" name="alt-arrow-right" />
+					<SofaIcon
+						class="h-[20px]"
+						name="alt-arrow-right"
+						:class="{ 'fill-grayColor': canNext }"
+						@click="canNext ? next : undefined" />
 				</div>
 			</div>
 			<div class="px-1 py-2 flex flex-col border-y border-lightGray">
@@ -23,21 +31,27 @@
 					:fields="[
 						{
 							id: 'student',
-							key: '',
+							key: (d) => d.id,
 							label: 'Student',
 							class: 'w-[60%]',
 						},
 						{
 							id: 'joined',
-							key: '',
+							key: (d) => $utils.formatTime(d.dates.createdAt),
 							label: 'Joined',
 							class: 'text-grayColor w-[20%]',
 						},
 						{ id: 'action', key: '', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
-					:data="[]"
+					:data="currentlyViewing"
 					headClass="text-left text-grayColor"
 					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')">
+					<template #data-student="{ data }">
+						<span class="flex items-center gap-2">
+							<SofaAvatar :photoUrl="data.picture" :size="$screen.desktop ? 40 : 28" />
+							<span>{{ data.publicName }}</span>
+						</span>
+					</template>
 					<template #data-action>
 						<div>
 							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1"> Delete account </SofaButton>
@@ -49,6 +63,10 @@
 	</AdminLayout>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useUserTypeList } from '@app/composables/users/users'
+
+const { currentlyViewing, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useUserTypeList('student')
+</script>
 
 <style scoped></style>
