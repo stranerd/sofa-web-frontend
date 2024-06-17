@@ -117,19 +117,19 @@ const paginatedTableStore: Record<
 	}
 > = {}
 
-export const usePaginatedTable = <T extends { id: string }, C>({
+export const usePaginatedTable = <T extends { id: string }, C = T>({
 	key,
 	useCase,
 	listenerFn,
-	computedFn,
+	computedFn = (item: T) => item as unknown as C,
 	comparer,
 	asc = false,
 }: {
 	key: string
 	useCase: (lastItem?: T) => Promise<QueryResults<T>>
 	listenerFn: (handlers: Listeners<T>, lastItem?: T) => Promise<() => void>
-	computedFn: (raw: T) => C | null
 	comparer: (item: T) => number | string
+	computedFn?: (raw: T) => C | null
 	asc?: boolean
 }) => {
 	paginatedTableStore[key] ??= {
