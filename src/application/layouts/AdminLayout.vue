@@ -92,12 +92,12 @@ const tabs = [
 			},
 			{
 				name: 'Teachers',
-				link: '/admin/applications/verifications',
+				link: '/admin/accounts/teachers',
 				icon: 'tutor' as const,
 			},
 			{
 				name: 'Organizations',
-				link: '/admin/applications/verifications',
+				link: '/admin/accounts/organizations',
 				icon: 'organization' as const,
 			},
 		],
