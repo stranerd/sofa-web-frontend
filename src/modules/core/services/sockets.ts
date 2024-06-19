@@ -116,8 +116,8 @@ export async function listenToMany<Model, Entity>(
 				if (!data.after || !data.before) return
 				const after = mapper(data.after)
 				const before = mapper(data.before)
-				if (matches(before)) await listeners.updated(after)
-				else await listeners.deleted(after)
+				if (matches(after)) await listeners.updated(after)
+				else if (matches(before)) await listeners.deleted(after)
 			},
 			deleted: async (data) => {
 				if (!data.before) return
