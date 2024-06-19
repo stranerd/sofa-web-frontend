@@ -18,10 +18,31 @@ export type Listeners<Model> = {
 
 type SocketReturn = { code: StatusCodes; message: string; channel: string }
 
-async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model>, query: Record<string, any>) {
+type SocketEmit<Model> = {
+	channel: string
+} & (
+	| {
+			type: EmitTypes.created
+			before: null
+			after: Model
+	  }
+	| {
+			type: EmitTypes.updated
+			before: Model
+			after: Model
+	  }
+	| {
+			type: EmitTypes.deleted
+			before: Model
+			after: null
+	  }
+)
+
+type SockerListener<Model> = Record<keyof Listeners<Model>, (data: SocketEmit<Model>) => Promise<unknown>>
+
+async function listenOnSocket<Model>(channel: string, listeners: SockerListener<Model>, query: Record<string, any>) {
 	const { accessToken } = await getTokens()
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error token is not defined in the Socket auth
 	if (!socket || (!socket.auth['token'] && accessToken) || (accessToken && socket.auth['token'] !== accessToken)) {
 		const url = new URL(`${$utils.environment.apiBase}/socket.io`)
 		socket = io(url.origin, {
@@ -34,9 +55,9 @@ async function listenOnSocket<Model>(channel: string, listeners: Listeners<Model
 	socket.emit('join', { channel, query }, (res: SocketReturn) => {
 		finalChannel = res.channel
 		if (res.code !== StatusCodes.Ok) return
-		socket?.on(finalChannel, async (data: { channel: string; type: EmitTypes; data: Model }) => {
+		socket?.on(finalChannel, async (data: SocketEmit<any>) => {
 			if (finalChannel !== data.channel) return
-			await listeners[data.type]?.(data.data)
+			await listeners[data.type]?.(data)
 		})
 	})
 	return () => {
@@ -59,9 +80,18 @@ export async function listenToOne<Model, Entity>(
 	return listenOnSocket<Model>(
 		channel,
 		{
-			created: async (model) => await listeners.created(mapper(model)),
-			updated: async (model) => await listeners.updated(mapper(model)),
-			deleted: async (model) => await listeners.deleted(mapper(model)),
+			created: async (data) => {
+				if (!data.after) return
+				await listeners.created(mapper(data.after))
+			},
+			updated: async (data) => {
+				if (!data.after) return
+				await listeners.updated(mapper(data.after))
+			},
+			deleted: async (data) => {
+				if (!data.before) return
+				await listeners.deleted(mapper(data.before))
+			},
 		},
 		query,
 	)
@@ -77,16 +107,21 @@ export async function listenToMany<Model, Entity>(
 	return listenOnSocket<Model>(
 		channel,
 		{
-			created: async (model) => {
-				const entity = mapper(model)
+			created: async (data) => {
+				if (!data.after) return
+				const entity = mapper(data.after)
 				if (matches(entity)) await listeners.created(entity)
 			},
-			updated: async (model) => {
-				const entity = mapper(model)
-				if (matches(entity)) await listeners.updated(entity)
+			updated: async (data) => {
+				if (!data.after || !data.before) return
+				const after = mapper(data.after)
+				const before = mapper(data.before)
+				if (matches(before)) await listeners.updated(after)
+				else await listeners.deleted(after)
 			},
-			deleted: async (model) => {
-				const entity = mapper(model)
+			deleted: async (data) => {
+				if (!data.before) return
+				const entity = mapper(data.before)
 				if (matches(entity)) await listeners.deleted(entity)
 			},
 		},
