@@ -33,7 +33,7 @@
 							id: 'teacher',
 							key: (d) => d.id,
 							label: 'Teacher',
-							class: 'w-[60%]',
+							class: 'w-[80%]',
 						},
 						{
 							id: 'joined',
@@ -41,7 +41,6 @@
 							label: 'Joined',
 							class: 'text-grayColor w-[20%]',
 						},
-						{ id: 'action', key: '', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
 					:data="currentlyViewing"
 					headClass="text-left text-grayColor"
@@ -51,11 +50,6 @@
 							<SofaAvatar :photoUrl="data.picture" :size="$screen.desktop ? 40 : 28" />
 							<span>{{ data.publicName }}</span>
 						</span>
-					</template>
-					<template #data-action>
-						<div>
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1"> Delete account </SofaButton>
-						</div>
 					</template>
 				</SofaTable>
 			</div>

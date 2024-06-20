@@ -88,7 +88,7 @@ const tabs = [
 			{
 				name: 'Students',
 				link: '/admin/accounts/students',
-				icon: 'students' as const,
+				icon: 'users' as const,
 			},
 			{
 				name: 'Teachers',

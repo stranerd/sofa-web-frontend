@@ -58,9 +58,11 @@
 							<span>{{ data.publicName }}</span>
 						</span>
 					</template>
-					<template #data-action>
+					<template #data-action="{ data }">
 						<div>
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1"> Revoke Access </SofaButton>
+							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleAccept(data)">
+								Revoke Access
+							</SofaButton>
 						</div>
 					</template>
 				</SofaTable>
@@ -70,9 +72,10 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminsList } from '@app/composables/users/users'
+import { useAdminsList, useMakeAdmin } from '@app/composables/users/users'
 
 const { currentlyViewing, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useAdminsList()
+const { handleAccept } = useMakeAdmin()
 </script>
 
 <style scoped></style>

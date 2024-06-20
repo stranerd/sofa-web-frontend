@@ -4,6 +4,7 @@ import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { UserEntity, UserType, UsersUseCases } from '@modules/users'
+import { AuthRoles, AuthUseCases } from '@modules/auth'
 
 const searchStore = {
 	users: reactive<UserEntity[]>([]),
@@ -137,4 +138,26 @@ export const useUserTypeList = (type: string) => {
 	})
 
 	return result
+}
+
+export const useMakeAdmin = () => {
+	const {
+		asyncFn: makeAdmin,
+		loading,
+		error,
+	} = useAsyncFn(async (user: UserEntity) => {
+		await AuthUseCases.updateRole(user.id, AuthRoles.isAdmin, user.roles.isAdmin)
+	})
+
+	const handleAccept = async (user: UserEntity) => {
+		const confirmed = await $utils.confirm({
+			title: 'Are you sure?',
+			sub: '',
+			right: { label: 'Yes, make admin' },
+		})
+		if (!confirmed) return
+		await makeAdmin(user)
+	}
+
+	return { loading, error, handleAccept }
 }
