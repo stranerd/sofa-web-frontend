@@ -14,7 +14,7 @@
 						:to="item.link"
 						class="w-full flex items-center gap-3 p-2 rounded-lg"
 						activeClass="bg-lightBlue font-bold">
-						<SofaIcon class="h-[15px]" :name="item.icon" />
+						<SofaIcon class="h-[15px] fill-black" :name="item.icon" />
 						<SofaText :content="item.name" />
 					</router-link>
 				</div>
@@ -74,6 +74,26 @@ const tabs = [
 				name: 'Verification',
 				link: '/admin/applications/verifications',
 				icon: 'verify-stroke' as const,
+			},
+		],
+	},
+	{
+		title: 'Resources',
+		items: [
+			{
+				name: 'Quizzes',
+				link: '/admin/resources/quizzes',
+				icon: 'quiz' as const,
+			},
+			{
+				name: 'Courses',
+				link: '/admin/resources/courses',
+				icon: 'courses' as const,
+			},
+			{
+				name: 'Classes',
+				link: '/admin/resources/classes',
+				icon: 'classes-admin' as const,
 			},
 		],
 	},

@@ -18,6 +18,7 @@ import {
 	QuizFactory,
 	QuizzesUseCases,
 } from '@modules/study'
+// import { UserEntity } from '@modules/users'
 
 const store = {} as Record<
 	string,
@@ -262,3 +263,22 @@ export const useDeleteQuiz = () => {
 
 	return { deleteQuiz, error, loading }
 }
+
+// export const useGetQuizList = () => {
+// 	const result = usePaginatedTable<QuizEntity, { quizRequest: QuizEntity; user: UserEntity }>({
+// 		key: 'users/quizRequests/all',
+// 		useCase: () => QuizzesUseCases.getWithQuery({ }),
+// 		comparer: (item) => item.createdAt,
+// 		listenerFn: (handlers) =>
+// 			QuizzesUseCases.listenToInList(() => result.items.value.map((r) => r. as string), handlers),
+// 		computedFn: (item) => {
+// 			const user = users.value.find((u) => u.id === item.user.id)
+// 			return user ? { quizRequest: item, user } : null
+// 		},
+// 	})
+
+// 	const userIds = computed(() => result.items.value.map((r) => r.user.id))
+// 	const { users } = useUsersInList(userIds)
+
+// 	return result
+// }

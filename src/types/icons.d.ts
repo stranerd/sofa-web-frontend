@@ -38,6 +38,7 @@ declare global {
 		| 'chevron-double-down'
 		| 'chevron-down'
 		| 'circle-close'
+		| 'classes-admin'
 		| 'classes'
 		| 'cog'
 		| 'copy'
