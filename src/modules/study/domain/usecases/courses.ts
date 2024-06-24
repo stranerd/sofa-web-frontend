@@ -115,4 +115,20 @@ export class CoursesUseCase {
 		const result = await this.repository.get(query)
 		return result.results
 	}
+
+	async getAllCourses() {
+		const query: QueryParams = {
+			sort: [{ field: 'dates.createdAt', desc: true }],
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+		}
+		return await this.repository.get(query)
+	}
+
+	async listenToCourses(listeners: Listeners<CourseEntity>, date?: number) {
+		const query: QueryParams = {
+			sort: [{ field: 'createdAt', desc: true }],
+			all: true,
+		}
+		return await this.repository.listenToMany(query, listeners, (entity) => entity.createdAt >= date!)
+	}
 }

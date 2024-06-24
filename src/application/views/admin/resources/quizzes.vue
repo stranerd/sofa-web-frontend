@@ -23,38 +23,38 @@
 					:fields="[
 						{
 							id: 'quiz',
-							key: '',
+							key: (d) => d.title,
 							label: 'Quiz',
 							class: 'w-[40%]',
 						},
 						{
 							id: 'author',
-							key: '',
+							key: 'd.user.bio.publicName',
 							label: 'Author',
 							class: 'text-grayColor w-[20%]',
 						},
 						{
 							id: 'created',
-							key: '',
+							key: (d) => $utils.formatTime(d.createdAt),
 							label: 'Created',
 							class: 'text-grayColor w-[20%]',
 						},
-						{ id: 'action', key: '', label: 'Action', class: 'text-grayColor w-[20%]' },
+						{ id: 'action', key: 'd.id', label: 'Action', class: 'text-grayColor w-[20%]' },
 					]"
-					:data="[]"
+					:data="currentlyViewing"
 					headClass="text-left text-grayColor"
 					:rowClass="(_, index) => (index % 2 == 0 ? 'bg-lightGray' : '')">
-					<template #data-quiz>
-						<!-- <span class="flex items-center gap-2">
-							<SofaAvatar :photoUrl="user.picture" :size="$screen.desktop ? 40 : 28" />
-							<span>{{ user.publicName }}</span>
-						</span> -->
+					<template #data-quiz="{ data }">
+						<span class="flex items-center gap-2">
+							<SofaImageLoader :photoUrl="data.picture" aspect="1/1" />
+							<span>{{ data.title }}</span>
+						</span>
 					</template>
-					<template #data-author>
-						<!-- <span class="flex items-center gap-2">
-							<SofaAvatar :photoUrl="user.picture" :size="$screen.desktop ? 40 : 28" />
-							<span>{{ user.publicName }}</span>
-						</span> -->
+					<template #data-author="{ data }">
+						<span class="flex items-center gap-2">
+							<SofaAvatar :photoUrl="data.user.bio.publicName" :size="$screen.desktop ? 40 : 28" />
+							<span>{{ data.user.bio.photo }}</span>
+						</span>
 					</template>
 					<template #data-action>
 						<div class="flex items-center justify-between gap-6">
@@ -69,6 +69,7 @@
 </template>
 
 <script setup lang="ts">
-// import { useGetQuizList } from '@app/composables/study/quizzes'
-// const {} = useGetQuizList()
+import { useQuizzesList } from '@app/composables/study/quizzes'
+const { currentlyViewing } = useQuizzesList()
+// console.log(currentlyViewing.value)
 </script>

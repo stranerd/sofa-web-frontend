@@ -170,4 +170,20 @@ export class QuizzesUseCase {
 		const result = await this.repository.get(query)
 		return result.results
 	}
+
+	async getAllQuizzes() {
+		const query: QueryParams = {
+			sort: [{ field: 'dates.createdAt', desc: true }],
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+		}
+		return await this.repository.get(query)
+	}
+
+	async listenToQuizzes(listeners: Listeners<QuizEntity>, date?: number) {
+		const query: QueryParams = {
+			sort: [{ field: 'createdAt', desc: true }],
+			all: true,
+		}
+		return await this.repository.listenToMany(query, listeners, (entity) => entity.createdAt >= date!)
+	}
 }
