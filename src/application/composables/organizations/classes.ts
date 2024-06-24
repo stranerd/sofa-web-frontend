@@ -1,7 +1,7 @@
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useAsyncFn } from '../core/hooks'
+import { useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
@@ -167,4 +167,15 @@ export const useSimilarClasses = (organizationId: string, classId: string) => {
 		if (!called.value) await fetchSimilarClasses()
 	})
 	return { ...similarStore[key], loading, error }
+}
+
+export const useClassesList = () => {
+	const result = usePaginatedTable<ClassEntity>({
+		key: `users/courses/all`,
+		useCase: () => ClassesUseCases.getAllClasses(),
+		comparer: (item) => item.createdAt,
+		listenerFn: (handlers) => ClassesUseCases.listenToClasses(handlers),
+	})
+
+	return result
 }
