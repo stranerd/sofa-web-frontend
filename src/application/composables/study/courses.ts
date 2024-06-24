@@ -1,7 +1,7 @@
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
-import { Refable, useAsyncFn } from '../core/hooks'
+import { Refable, useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
@@ -235,4 +235,15 @@ export const useUpdateSections = (course: Refable<CourseEntity | null>) => {
 		sections,
 		updateSections,
 	}
+}
+
+export const useCoursesList = () => {
+	const result = usePaginatedTable<CourseEntity>({
+		key: `users/courses/all`,
+		useCase: () => CoursesUseCases.getAllCourses(),
+		comparer: (item) => item.createdAt,
+		listenerFn: (handlers) => CoursesUseCases.listenToCourses(handlers),
+	})
+
+	return result
 }
