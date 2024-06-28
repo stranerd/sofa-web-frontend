@@ -29,14 +29,19 @@
 						:href="social.link"
 						target="_blank"
 						class="flex items-center gap-2">
-						<SofaIcon :name="`socials-${social.ref}`" class="bg-primaryBlue" />
+						<SofaIcon :name="`socials-${social.ref}`" class="bg-primaryBlue rounded-full" />
 					</a>
 				</div>
 			</div>
 			<div class="flex flex-col gap-1">
 				<SofaHeading content="Content" />
 				<div class="flex items-center gap-6 min-w-full overflow-x-auto flex-nowrap">
-					<StudyMaterialCard v-for="material in [...courses, ...quizzes]" :key="material.hash" :material />
+					<StudyMaterialCard
+						v-for="material in [...courses, ...quizzes]"
+						:key="material.hash"
+						:material
+						:wrapped="true"
+						class="border-2 border-grayColor" />
 				</div>
 			</div>
 		</div>

@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
-import { UserEntity, UsersUseCases } from '@modules/users'
-import { WalletEntity } from '@modules/payment/domain/entities/wallets'
 import { WalletsUseCases } from '@modules/payment'
+import { WalletEntity } from '@modules/payment/domain/entities/wallets'
+import { UserEntity, UsersUseCases } from '@modules/users'
 
 const store = {
 	auth: ref(null as AuthDetails | null),
@@ -35,7 +35,7 @@ export const useAuth = () => {
 	const bio = computed(() => store.user.value?.bio)
 	const isLoggedIn = computed(() => !!id.value && !!store.user.value)
 	const isEmailVerified = computed(() => !!store.auth.value?.isEmailVerified)
-	const isAdmin = computed(() => !!store.auth.value?.roles.isAdmin || !!store.auth.value?.roles.isSuperAdmin)
+	const isAdmin = computed(() => !!store.auth.value?.roles.isAdmin)
 	const isSubscribed = computed(() => !!store.wallet.value?.subscription.active)
 
 	const userType = computed(() => store.user.value?.userType ?? UserEntity.getDefaultUserType())

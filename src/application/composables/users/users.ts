@@ -1,9 +1,9 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { UserEntity, UsersUseCases } from '@modules/users'
+import { UserEntity, UserType, UsersUseCases } from '@modules/users'
 
 const searchStore = {
 	users: reactive<UserEntity[]>([]),
@@ -116,3 +116,18 @@ export const useUsersInList = (ids: Refable<string[]>, listen = true) => {
 
 	return { users }
 }
+
+export const useAdminsList = () =>
+	usePaginatedTable<UserEntity>({
+		key: 'users/users/admins',
+		useCase: () => UsersUseCases.getAdmins(),
+		comparer: (users) => users.dates.createdAt,
+		listenerFn: (handlers) => UsersUseCases.listenToAdmins(handlers),
+	})
+export const useUserTypeList = (type: UserType) =>
+	usePaginatedTable<UserEntity>({
+		key: `users/users/${type}`,
+		useCase: () => UsersUseCases.getType(type),
+		comparer: (users) => users.dates.createdAt,
+		listenerFn: (handlers) => UsersUseCases.listenToType(handlers, type),
+	})

@@ -2,7 +2,7 @@
 	<AdminLayout title="Verifications">
 		<div class="flex flex-col bg-white rounded-2xl">
 			<div class="flex justify-between items-center">
-				<SofaHeading content="Verification applications" class="px-4 w-[40%]" />
+				<SofaHeading content="Verification applications" class="px-4 w-[40%]" size="mid" />
 				<form class="py-1 w-[20%] border-l border-lightGray">
 					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
 						<template #prefix>
@@ -14,19 +14,19 @@
 					<SofaSelect :options="[]" placeholder="All types" class="!bg-transparent !border-none" />
 				</div>
 				<div class="flex items-center w-[20%] border-l border-lightGray px-4 gap-2">
-					<div>{{ currentViewingIndex * limit + 1 }} -{{ limit }} of {{ total }}</div>
+					<SofaText :content="limitText" />
 					<span class="flex-1" />
 					<SofaIcon
 						class="h-[20px]"
 						name="alt-arrow-left"
-						:class="{ 'fill-grayColor': canPrev }"
-						@click="canPrev ? previous : undefined" />
+						:class="{ 'fill-grayColor': !canPrev }"
+						@click="canPrev ? previous() : undefined" />
 					<div class="w-1 h-4 bg-lightGray" />
 					<SofaIcon
 						class="h-[20px]"
 						name="alt-arrow-right"
-						:class="{ 'fill-grayColor': canNext }"
-						@click="canNext ? next : undefined" />
+						:class="{ 'fill-grayColor': !canNext }"
+						@click="canNext ? next() : undefined" />
 				</div>
 			</div>
 			<div class="px-1 py-2 flex flex-col border-y border-lightGray">
@@ -39,7 +39,7 @@
 							class: 'w-[40%]',
 							onClick: (_, index) => handleClick(index),
 						},
-						{ id: 'type', key: (d) => d.user.type?.type, label: 'Type', class: 'text-grayColor w-[20%]' },
+						{ id: 'type', key: (d) => d.user.type?.type, label: 'Type', class: 'text-grayColor w-[20%] capitalize' },
 						{
 							id: 'applied',
 							key: (d) => $utils.formatTime(d.verification.createdAt),
@@ -77,7 +77,7 @@
 import { useModals } from '@app/composables/core/modals'
 import { useVerificationsList, useAcceptVerificationRequest } from '@app/composables/users/verifications'
 
-const { currentlyViewing, mapped, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useVerificationsList()
+const { currentlyViewing, mapped, currentViewingIndex, limit, limitText, canPrev, canNext, previous, next } = useVerificationsList()
 
 const handleClick = (selectedIndex: number) => {
 	useModals().users.verification.open({

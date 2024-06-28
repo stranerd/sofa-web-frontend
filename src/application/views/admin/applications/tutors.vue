@@ -2,7 +2,7 @@
 	<AdminLayout title="Tutors">
 		<div class="flex flex-col bg-white rounded-2xl">
 			<div class="flex justify-between items-center py-1">
-				<SofaHeading content="Tutor applications" class="px-4 w-[60%]" />
+				<SofaHeading content="Tutor applications" class="px-4 w-[60%]" size="mid" />
 				<form class="py-1 w-[20%] border-l border-lightGray">
 					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
 						<template #prefix>
@@ -11,19 +11,19 @@
 					</SofaInput>
 				</form>
 				<div class="flex items-center w-[20%] border-l border-lightGray px-4 gap-2">
-					<div>{{ currentViewingIndex * limit + 1 }}-{{ (currentViewingIndex + 1) * limit }} of {{ total }}</div>
+					<SofaText :content="limitText" />
 					<span class="flex-1" />
 					<SofaIcon
 						class="h-[20px]"
 						name="alt-arrow-left"
-						:class="{ 'fill-grayColor': canPrev }"
-						@click="canPrev ? previous : undefined" />
+						:class="{ 'fill-grayColor': !canPrev }"
+						@click="canPrev ? previous() : undefined" />
 					<div class="w-1 h-4 bg-lightGray" />
 					<SofaIcon
 						class="h-[20px]"
 						name="alt-arrow-right"
-						:class="{ 'fill-grayColor': canNext }"
-						@click="canNext ? next : undefined" />
+						:class="{ 'fill-grayColor': !canNext }"
+						@click="canNext ? next() : undefined" />
 				</div>
 			</div>
 			<div class="px-1 py-2 flex flex-col border-y border-lightGray">
@@ -74,7 +74,7 @@
 import { useModals } from '@app/composables/core/modals'
 import { useAcceptTutorRequest, useTutorRequestsList } from '@app/composables/users/tutorRequests'
 
-const { currentlyViewing, mapped, currentViewingIndex, limit, total, canPrev, canNext, previous, next } = useTutorRequestsList()
+const { currentlyViewing, mapped, currentViewingIndex, limit, limitText, canPrev, canNext, previous, next } = useTutorRequestsList()
 const { handleAccept, handleReject } = useAcceptTutorRequest()
 
 const handleClick = (selectedIndex: number) => {

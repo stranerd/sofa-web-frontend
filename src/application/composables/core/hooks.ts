@@ -197,9 +197,14 @@ export const usePaginatedTable = <T extends { id: string }, C = T>({
 	const currentlyViewing = computed(() =>
 		mapped.value.slice(store.currentViewingIndex.value * limit, (store.currentViewingIndex.value + 1) * limit),
 	)
-	const isOnLastPage = computed(() => currentlyViewing.value.at(-1) !== mapped.value.at(-1))
+	const isOnLastPage = computed(() => currentlyViewing.value.at(-1) === mapped.value.at(-1))
 	const canNext = computed(() => !isOnLastPage.value || store.hasMore.value)
 	const canPrev = computed(() => store.currentViewingIndex.value > 0)
+	const limitText = computed(() => {
+		const start = store.currentViewingIndex.value * limit + 1
+		const end = (store.currentViewingIndex.value + 1) * limit
+		return `${start} - ${end > store.total.value ? store.total.value : end} of ${store.total.value}`
+	})
 
 	const previous = async () => {
 		if (!canPrev.value) return
@@ -229,8 +234,10 @@ export const usePaginatedTable = <T extends { id: string }, C = T>({
 		loading,
 		error,
 		currentlyViewing,
+		isOnLastPage,
 		mapped,
 		limit,
+		limitText,
 		canPrev,
 		canNext,
 		previous,
