@@ -27,10 +27,10 @@ runs:
       shell: bash
       env:
         BASE64_ZIPPED_CONTENT: ${{ inputs.BASE64_ZIPPED_CONTENT }}
-      run: node bin/unzip.js
+      run: pnpm exec tsx bin/unzip.ts
     - name: Version Project
       shell: bash
-      run: node bin/version.js
+      run: pnpm exec tsx bin/version.ts
       env:
         APP_VERSION: ${{ github.ref }}
     - name: Build Apps

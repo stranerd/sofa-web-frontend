@@ -1,13 +1,10 @@
-/* eslint-disable no-console */
-const { MobileProject } = require('@trapezedev/project')
-const fs = require('fs')
-const { build } = require('plist')
-const {
-	appBuild, installCertAndProfile,
-	authenticationKeyPath, exportPlistPath
-} = require('./app.js')
-const envs = require('../env.json')
-const { v } = require('valleyed')
+import fs from 'fs'
+import { MobileProject } from '@trapezedev/project'
+import plist from 'plist'
+import { v } from 'valleyed'
+import envs from '../env.json'
+import { appBuild, authenticationKeyPath, exportPlistPath, installCertAndProfile } from './app.js'
+
 const { asset_links, google_client_ids, package_name, app_name, environment, domain } = envs
 const isProduction = environment === 'production'
 
@@ -15,7 +12,7 @@ const getProject = async () => {
 	process.env.VERBOSE = 'false'
 	const project = new MobileProject('./', {
 		ios: { path: 'ios/App' },
-		android: { path: 'android' }
+		android: { path: 'android' },
 	})
 	await project.load()
 	return project
@@ -41,37 +38,43 @@ const setup = async (args) => {
 	const versionCode = 1
 	const versionName = '0.0.0'
 
-	const { data, certificate: identity, keychain } = installCertAndProfile(
-		`./bin/config/${environment}/profile.mobileprovision`,
-		`./bin/config/${environment}/certificate.p12`
-	)
+	const {
+		data,
+		certificate: identity,
+		keychain,
+	} = installCertAndProfile(`./bin/config/${environment}/profile.mobileprovision`, `./bin/config/${environment}/certificate.p12`)
 	const { Name, Entitlements, TeamIdentifier } = data
 	const teamID = TeamIdentifier[0]
-	await Promise.all(project.ios.getTargets().map(async (target) => {
-		await Promise.all(target.buildConfigurations.map(async (build) => {
-			await project.ios.setBundleId(target.name, build.name, package_name)
-			await project.ios.setDisplayName(target.name, build.name, app_name)
-			await project.ios.setVersion(target.name, build.name, versionName)
-			await project.ios.setBuild(target.name, build.name, versionCode)
-			await project.ios.setBuildProperty(target.name, build.name, 'GOOGLE_CLIENT_ID', reversedIosClientId)
-			await project.ios.setBuildProperty(target.name, build.name, 'DOMAIN', domain)
-			await project.ios.setBuildProperty(target.name, build.name, 'CODE_SIGN_STYLE', 'Manual')
-			await project.ios.setBuildProperty(target.name, build.name, 'IPHONEOS_DEPLOYMENT_TARGET', '13.0')
-			await project.ios.setBuildProperty(target.name, build.name, 'CODE_SIGN_IDENTITY', identity)
-			await project.ios.setBuildProperty(target.name, build.name, 'CODE_SIGN_KEYCHAIN', keychain)
-			await project.ios.setBuildProperty(target.name, build.name, 'PROVISIONING_PROFILE_SPECIFIER', Name)
-			await project.ios.setBuildProperty(target.name, build.name, 'DEVELOPMENT_TEAM', teamID)
-			await project.ios.setEntitlements(target.name, build.name, {
-				...Entitlements,
-				'com.apple.developer.applesignin': ['Default'],
-				'com.apple.developer.associated-domains': [`applinks:${domain}`]
-			})
-		}))
-	}))
+	const ios = project.ios!
+	await Promise.all(
+		(ios.getTargets() ?? []).map(async (target) => {
+			await Promise.all(
+				target.buildConfigurations.map(async (build) => {
+					await ios.setBundleId(target.name, build.name, package_name)
+					await ios.setDisplayName(target.name, build.name, app_name)
+					await ios.setVersion(target.name, build.name, versionName)
+					await ios.setBuild(target.name, build.name, versionCode)
+					await ios.setBuildProperty(target.name, build.name, 'GOOGLE_CLIENT_ID', reversedIosClientId)
+					await ios.setBuildProperty(target.name, build.name, 'DOMAIN', domain)
+					await ios.setBuildProperty(target.name, build.name, 'CODE_SIGN_STYLE', 'Manual')
+					await ios.setBuildProperty(target.name, build.name, 'IPHONEOS_DEPLOYMENT_TARGET', '13.0')
+					await ios.setBuildProperty(target.name, build.name, 'CODE_SIGN_IDENTITY', identity)
+					await ios.setBuildProperty(target.name, build.name, 'CODE_SIGN_KEYCHAIN', keychain)
+					await ios.setBuildProperty(target.name, build.name, 'PROVISIONING_PROFILE_SPECIFIER', Name)
+					await ios.setBuildProperty(target.name, build.name, 'DEVELOPMENT_TEAM', teamID)
+					await ios.setEntitlements(target.name, build.name, {
+						...Entitlements,
+						'com.apple.developer.applesignin': ['Default'],
+						'com.apple.developer.associated-domains': [`applinks:${domain}`],
+					})
+				}),
+			)
+		}),
+	)
 
-	await project.android.setPackageName(package_name)
-	await project.android.setVersionName(versionName)
-	await project.android.setVersionCode(versionCode)
+	await project.android!.setPackageName(package_name)
+	await project.android!.setVersionName(versionName)
+	await project.android!.setVersionCode(versionCode)
 
 	await project.commit()
 
@@ -84,12 +87,16 @@ const setup = async (args) => {
 	const googlePlistConfig = `bin/config/${environment}/GoogleService-Info.plist`
 	const iosAuthKeyConfig = `bin/config/${environment}/auth.p8`
 
-	fs.writeFileSync(exportPlistPath, build({
-		destination: 'export',
-		method: isProduction ? 'app-store' : 'development',
-		provisioningProfiles: { [package_name]: Name },
-		signingStyle: 'manual', teamID
-	}))
+	fs.writeFileSync(
+		exportPlistPath,
+		plist.build({
+			destination: 'export',
+			method: isProduction ? 'app-store' : 'development',
+			provisioningProfiles: { [package_name]: Name },
+			signingStyle: 'manual',
+			teamID,
+		}),
+	)
 	copyTo(androidKeystoreConfig, androidKeystorePath, 'Provide an app.keystore file for your current environment')
 	copyTo(googleServicesConfig, googleServicesPath, 'Provide a google-services.json file for your current environment')
 	copyTo(googlePlistConfig, googlePlistPath, 'Provide a GoogleService-Info.plist file for your current environment')
@@ -99,8 +106,9 @@ const setup = async (args) => {
 const version = async (args) => {
 	const firstVersionDate = 1640995200000
 	const providedVersionCode = parseInt(args[1])
-	const versionCode = v.number().gt(0).parse(providedVersionCode).valid ?
-		providedVersionCode : Math.floor((Date.now() - firstVersionDate) / 1e5)
+	const versionCode = v.number().gt(0).parse(providedVersionCode).valid
+		? providedVersionCode
+		: Math.floor((Date.now() - firstVersionDate) / 1e5)
 	const versionName = args[0].toString()
 	if (!versionName) {
 		console.log('Provide a version please')
@@ -109,22 +117,26 @@ const version = async (args) => {
 
 	const project = await getProject()
 
-	const targets = project.ios.getTargets()
-	await Promise.all(targets.map(async (target) => {
-		await Promise.all(target.buildConfigurations.map(async (build) => {
-			await project.ios.setVersion(target.name, build.name, versionName)
-			await project.ios.setBuild(target.name, build.name, versionCode)
-		}))
-	}))
+	const targets = project.ios!.getTargets() ?? []
+	await Promise.all(
+		targets.map(async (target) => {
+			await Promise.all(
+				target.buildConfigurations.map(async (build) => {
+					await project.ios!.setVersion(target.name, build.name, versionName)
+					await project.ios!.setBuild(target.name, build.name, versionCode)
+				}),
+			)
+		}),
+	)
 
-	await project.android.setVersionName(versionName)
-	await project.android.setVersionCode(versionCode)
+	await project.android!.setVersionName(versionName)
+	await project.android!.setVersionCode(versionCode)
 	await project.commit()
 	console.log(`Versioned to v${versionName}(${versionCode})`)
 }
 
 const env = async () => {
-	const entries = Object.entries(envs).map(([key, value]) => ([key, typeof value === 'string' ? value : JSON.stringify(value)]))
+	const entries = Object.entries(envs).map(([key, value]) => [key, typeof value === 'string' ? value : JSON.stringify(value)])
 	const envFormattedEntries = entries.reduce((accumulator, currentValue) => {
 		const [key, value] = currentValue
 		return accumulator + `VITE_${key.toUpperCase()}=${value}\n`
@@ -155,5 +167,7 @@ declare global {
 
 const actions = { setup, version, env, appBuild, iconsTypes }
 
-const run = actions[process.argv[2]] ?? (async () => console.log(`Invalid action provided. Valid actions are: ${Object.keys(actions).filter((x) => x !== 'default')}`))
+const run =
+	actions[process.argv[2]] ??
+	(async () => console.log(`Invalid action provided. Valid actions are: ${Object.keys(actions).filter((x) => x !== 'default')}`))
 run(process.argv.slice(3)).then()

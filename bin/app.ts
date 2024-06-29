@@ -1,9 +1,9 @@
-/* eslint-disable no-console */
-const path = require('path')
-const { execSync, exec } = require('child_process')
-const { parse } = require('plist')
-const { readFileSync } = require('fs')
-const { ios: iosEnv, android: androidEnv, environment } = require('../env.json')
+import { exec, execSync } from 'child_process'
+import { readFileSync } from 'fs'
+import path from 'path'
+import plist from 'plist'
+import { android as androidEnv, environment, ios as iosEnv } from '../env.json'
+
 const isProduction = environment === 'production'
 
 const authenticationKeyPath = `ios/App/AuthKey_${iosEnv.authentication_key_id}.p8`
@@ -18,7 +18,7 @@ const installCertAndProfile = (profileFile, certificateFile) => {
 	const startIndex = rawPlist.indexOf('<?xml')
 	const endString = '</plist>'
 	const endIndex = rawPlist.indexOf(endString)
-	const data = parse(rawPlist.slice(startIndex, endIndex + endString.length))
+	const data = plist.parse(rawPlist.slice(startIndex, endIndex + endString.length)) as Record<string, any>
 	const { UUID } = data
 	const profilePath = '$HOME/Library/MobileDevice/Provisioning Profiles'
 	const command = `mkdir -p "${profilePath}" &&
@@ -83,7 +83,9 @@ ${envs} ./gradlew ${type + configuration} ${install}
 
 		const authPath = path.dirname(path.join(__dirname, '../', authenticationKeyPath))
 		const auth = `-apiKey ${iosEnv.authentication_key_id} -apiIssuer ${iosEnv.authentication_key_issuer_id}`
-		const exportIpa = isProduction ? `&& API_PRIVATE_KEYS_DIR=${authPath} xcrun altool --upload-app --type ios --file ${ipaFile}/App.ipa ${auth}` : ''
+		const exportIpa = isProduction
+			? `&& API_PRIVATE_KEYS_DIR=${authPath} xcrun altool --upload-app --type ios --file ${ipaFile}/App.ipa ${auth}`
+			: ''
 
 		return `rm -rf ${ipaFile} &&
 xcodebuild -workspace ios/App/App.xcworkspace -scheme App clean archive -archivePath ${archiveFile} -configuration ${configuration} &&
@@ -92,8 +94,9 @@ xcodebuild -exportArchive -archivePath ${archiveFile}.xcarchive -exportOptionsPl
 	}
 
 	const platforms = {
-		android, ios,
-		default: () => 'echo Invalid platform provided'
+		android,
+		ios,
+		default: () => 'echo Invalid platform provided',
 	}
 
 	const runner = platforms[platform] ?? platforms.default
@@ -101,11 +104,8 @@ xcodebuild -exportArchive -archivePath ${archiveFile}.xcarchive -exportOptionsPl
 		if (!error) return
 		process.exit(1)
 	})
-	proc.stdout.pipe(process.stdout)
-	proc.stderr.pipe(process.stderr)
+	proc.stdout?.pipe(process.stdout)
+	proc.stderr?.pipe(process.stderr)
 }
 
-module.exports = {
-	appBuild, installCertAndProfile,
-	authenticationKeyPath, exportPlistPath
-}
+export { appBuild, authenticationKeyPath, exportPlistPath, installCertAndProfile }

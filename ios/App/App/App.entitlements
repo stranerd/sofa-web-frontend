@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:localhost:8080</string>
+		<string>applinks:dev.stranerd.com</string>
 	</array>
 	<key>com.apple.developer.applesignin</key>
 	<array>

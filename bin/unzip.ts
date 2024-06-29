@@ -1,7 +1,4 @@
-/* eslint-disable no-console */
-const { execSync } = require('child_process')
-const version = process.argv[2]
-const { environment } = require('../env.json')
+import { execSync } from 'child_process'
 
 const content = process.env.BASE64_ZIPPED_CONTENT
 const encodedFileName = 'encoded.txt'
@@ -13,6 +10,4 @@ rm ${encodedFileName} &&
 unzip -o ${zippedFileName} -d ./bin/config/ &&
 rm ${zippedFileName}`
 
-console.log(
-	execSync(command, { maxBuffer: 1024 * 1024 * 5 }).toString()
-)
+console.log(execSync(command, { maxBuffer: 1024 * 1024 * 5 }).toString())
