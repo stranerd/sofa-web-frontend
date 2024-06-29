@@ -1,7 +1,7 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useMyPurchases } from '../payment/purchases'
 import { CourseEntity, CoursesUseCases } from '@modules/study'
@@ -102,3 +102,11 @@ export const useCoursesInList = (ids: Refable<string[]>, listen = true) => {
 
 	return { courses }
 }
+
+export const useCoursesList = () =>
+	usePaginatedTable<CourseEntity>({
+		key: `study/courses/all`,
+		useCase: (lastItem) => CoursesUseCases.getAll(lastItem?.createdAt),
+		comparer: (item) => item.createdAt,
+		listenerFn: (handlers, lastItem) => CoursesUseCases.listenToAll(handlers, lastItem?.createdAt),
+	})

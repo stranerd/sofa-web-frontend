@@ -2,7 +2,7 @@ import { ClassEntity } from '../entities/classes'
 import { ClassFactory } from '../factories/classes'
 import { IClassRepository } from '../irepositories/classes'
 import { UserEntity } from '@modules/users'
-import { Conditions, Listeners, QueryKeys } from '@modules/core'
+import { Conditions, Listeners, QueryKeys, QueryParams } from '@modules/core'
 import { SelectedPaymentMethod } from '@modules/payment'
 
 export class ClassesUseCase {
@@ -107,5 +107,25 @@ export class ClassesUseCase {
 
 	async cancelPurchase(organizationId: string, classId: string) {
 		return await this.repository(organizationId).cancelPurchase(classId)
+	}
+
+	async getAll(date?: number) {
+		const query: QueryParams = {
+			sort: [{ field: 'createdAt', desc: true }],
+			limit: $utils.constants.DEFAULT_PAGINATION_LIMIT,
+		}
+		if (date) query.where = [{ field: 'createdAt', value: date, condition: Conditions.lt }]
+		return await this.repository('').explore(query)
+	}
+
+	async listenToAll(listeners: Listeners<ClassEntity>, date?: number) {
+		const query: QueryParams = {
+			sort: [{ field: 'createdAt', desc: true }],
+			all: true,
+		}
+		if (date) query.where = [{ field: 'createdAt', value: date, condition: Conditions.gte }]
+		return await this.repository('').listenToExploreMany(query, listeners, (entity) =>
+			[date ? entity.createdAt >= date : true].every(Boolean),
+		)
 	}
 }

@@ -1,7 +1,7 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { QuizEntity, QuizzesUseCases } from '@modules/study'
 
@@ -160,3 +160,11 @@ export const useQuizzesInList = (ids: Refable<string[]>, listen = true) => {
 
 	return { quizzes }
 }
+
+export const useQuizzesList = () =>
+	usePaginatedTable<QuizEntity>({
+		key: `study/quizzes/all`,
+		useCase: (lastItem) => QuizzesUseCases.getAll(lastItem?.createdAt),
+		comparer: (item) => item.createdAt,
+		listenerFn: (handlers, lastItem) => QuizzesUseCases.listenToAll(handlers, lastItem?.createdAt),
+	})

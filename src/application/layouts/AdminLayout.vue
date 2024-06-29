@@ -14,7 +14,7 @@
 						:to="item.link"
 						class="w-full flex items-center gap-3 p-2.5 rounded-lg"
 						activeClass="bg-lightBlue font-bold">
-						<SofaIcon class="h-[1.25em]" :name="item.icon" />
+						<SofaIcon class="h-[1.25em] fill-black" :name="item.icon" />
 						<SofaText :content="item.name" />
 					</router-link>
 				</div>
@@ -37,43 +37,18 @@ const props = defineProps<{
 }>()
 
 const tabs = [
-	// {
-	// 	title: 'General',
-	// 	items: [
-	// 		{
-	// 			name: 'Dashboard',
-	// 			link: '/admin/applications/tutors',
-	// 			icon: 'tutor' as const,
-	// 		},
-	// 		{
-	// 			name: 'Analytics',
-	// 			link: '/admin/applications/verifications',
-	// 			icon: 'verify-stroke' as const,
-	// 		},
-	// 		{
-	// 			name: 'Report',
-	// 			link: '/admin/applications/verifications',
-	// 			icon: 'verify-stroke' as const,
-	// 		},
-	// 		{
-	// 			name: 'Sales',
-	// 			link: '/admin/applications/verifications',
-	// 			icon: 'verify-stroke' as const,
-	// 		},
-	// 	],
-	// },
 	{
 		title: 'Applications',
 		items: [
 			{
 				name: 'Tutor',
 				link: '/admin/applications/tutors',
-				icon: 'tutor' as const,
+				icon: 'tutor',
 			},
 			{
 				name: 'Verification',
 				link: '/admin/applications/verifications',
-				icon: 'verify-stroke' as const,
+				icon: 'verify-stroke',
 			},
 		],
 	},
@@ -83,26 +58,46 @@ const tabs = [
 			{
 				name: 'Admins',
 				link: '/admin/accounts/admins',
-				icon: 'admin' as const,
+				icon: 'admin',
 			},
 			{
 				name: 'Students',
 				link: '/admin/accounts/students',
-				icon: 'users' as const,
+				icon: 'users',
 			},
 			{
 				name: 'Teachers',
 				link: '/admin/accounts/teachers',
-				icon: 'tutor' as const,
+				icon: 'tutor',
 			},
 			{
 				name: 'Organizations',
 				link: '/admin/accounts/organizations',
-				icon: 'organization' as const,
+				icon: 'organization',
 			},
 		],
 	},
-]
+	{
+		title: 'Resources',
+		items: [
+			{
+				name: 'Quizzes',
+				link: '/admin/resources/quizzes',
+				icon: 'quiz',
+			},
+			{
+				name: 'Courses',
+				link: '/admin/resources/courses',
+				icon: 'courses',
+			},
+			{
+				name: 'Classes',
+				link: '/admin/resources/classes',
+				icon: 'classes',
+			},
+		],
+	},
+] as const
 
 useMeta(
 	computed(() => ({

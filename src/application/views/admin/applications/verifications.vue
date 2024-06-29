@@ -16,17 +16,9 @@
 				<div class="flex items-center w-[20%] border-l border-lightGray px-4 gap-2">
 					<SofaText :content="limitText" />
 					<span class="flex-1" />
-					<SofaIcon
-						class="h-[20px]"
-						name="alt-arrow-left"
-						:class="{ 'fill-grayColor': !canPrev }"
-						@click="canPrev ? previous() : undefined" />
+					<SofaIcon class="h-[20px]" name="alt-arrow-left" :class="{ 'fill-grayColor': !canPrev }" @click="previous" />
 					<div class="w-1 h-4 bg-lightGray" />
-					<SofaIcon
-						class="h-[20px]"
-						name="alt-arrow-right"
-						:class="{ 'fill-grayColor': !canNext }"
-						@click="canNext ? next() : undefined" />
+					<SofaIcon class="h-[20px]" name="alt-arrow-right" :class="{ 'fill-grayColor': !canNext }" @click="next" />
 				</div>
 			</div>
 			<div class="px-1 py-2 flex flex-col border-y border-lightGray">

@@ -1,7 +1,7 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
-import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
+import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { similarStore } from './classes'
 import { UsersUseCases } from '@modules/users'
@@ -137,4 +137,15 @@ export const useSaveClass = (classInst: ClassEntity) => {
 	})
 
 	return { loading, error, saveClass, isSaved }
+}
+
+export const useClassesList = () => {
+	const result = usePaginatedTable<ClassEntity>({
+		key: `organizations/classes/all`,
+		useCase: (lastItem) => ClassesUseCases.getAll(lastItem?.createdAt),
+		comparer: (item) => item.createdAt,
+		listenerFn: (handlers, lastItem) => ClassesUseCases.listenToAll(handlers, lastItem?.createdAt),
+	})
+
+	return result
 }
