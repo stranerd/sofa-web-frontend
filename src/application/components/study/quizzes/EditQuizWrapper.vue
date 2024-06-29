@@ -5,8 +5,8 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRoute, useRouter } from '@app/composables/core/routes'
 import { useDeleteQuiz, useEditQuiz } from '@app/composables/study/quizzes'
 import { UserEntity, UsersUseCases } from '@modules/users'
 

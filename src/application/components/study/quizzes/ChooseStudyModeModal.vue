@@ -63,8 +63,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRouter } from '@app/composables/core/routes'
 import { useCreatePlay } from '@app/composables/plays/plays'
 import { useHasAccess } from '@app/composables/study'
 import { PlayTypes } from '@modules/plays'

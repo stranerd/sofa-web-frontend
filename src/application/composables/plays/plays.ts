@@ -1,13 +1,13 @@
 import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useUsersInList } from '../users/users'
 import { useSuccessHandler } from '../core/states'
-import { CoursableAccess, QuestionEntity } from '@modules/study'
+import { useUsersInList } from '../users/users'
 import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlayTypes, PlaysUseCases } from '@modules/plays'
+import { useRoute, useRouter } from '@app/composables/core/routes'
+import { CoursableAccess, QuestionEntity } from '@modules/study'
 
 const myStore = {
 	plays: ref<PlayEntity[]>([]) as Ref<PlayEntity[]>,

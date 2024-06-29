@@ -61,10 +61,10 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import DashboardLayout from './DashboardLayout.vue'
-import { useClass } from '@app/composables/organizations/classes'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRoute } from '@app/composables/core/routes'
+import { useClass } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
 
 const props = withDefaults(

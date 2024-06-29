@@ -29,7 +29,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { UserType } from '@modules/users'
 
 export default defineComponent({

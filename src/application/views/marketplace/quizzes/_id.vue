@@ -18,9 +18,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
-import { useQuiz } from '@app/composables/study/quizzes'
 import ContentDetails from '@app/components/study/ContentDetails.vue'
+import { useRoute } from '@app/composables/core/routes'
+import { useQuiz } from '@app/composables/study/quizzes'
 
 export default defineComponent({
 	name: 'MarketplaceQuizzesIdPage',

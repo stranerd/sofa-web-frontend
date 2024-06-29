@@ -1,5 +1,5 @@
-import { RouteLocationNormalized } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { RouteLocationNormalized } from '@app/composables/core/routes'
 
 type MiddleWareArgs = {
 	to: RouteLocationNormalized

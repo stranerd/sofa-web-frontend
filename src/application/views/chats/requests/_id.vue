@@ -48,10 +48,10 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
+import { useRoute } from '@app/composables/core/routes'
 
 export default defineComponent({
 	name: 'ChatsRequestsIdPage',

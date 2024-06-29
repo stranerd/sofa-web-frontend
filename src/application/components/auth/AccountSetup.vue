@@ -195,9 +195,9 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePhoneUpdate, useProfileUpdate } from '@app/composables/auth/profile'
+import { useRouter } from '@app/composables/core/routes'
 import { useChooseSchool } from '@app/composables/school'
 import { useCourseList } from '@app/composables/school/courses'
 import { useUserLocationUpdate, useUserTypeUpdate } from '@app/composables/users/profile'

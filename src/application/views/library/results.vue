@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { useMyPlays } from '@app/composables/plays/plays'
 
 export default defineComponent({

@@ -114,8 +114,8 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
+import { useRoute } from '@app/composables/core/routes'
 import { useSearch } from '@app/composables/search'
 import { SofaNormalText } from 'sofa-ui-components'
 

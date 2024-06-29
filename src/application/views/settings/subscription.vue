@@ -146,8 +146,8 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRouter } from '@app/composables/core/routes'
 import { usePlansList, useSubscription } from '@app/composables/payment/plans'
 import { PlanEntity } from '@modules/payment'
 

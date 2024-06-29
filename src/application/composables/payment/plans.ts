@@ -1,12 +1,12 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
 import { UserType } from '@modules/users'
 import { PlanEntity, PlansUseCases, SelectedPaymentMethod, WalletsUseCases } from '@modules/payment'
+import { useRouter } from '@app/composables/core/routes'
 
 const store = {
 	plans: ref<PlanEntity[]>([]),

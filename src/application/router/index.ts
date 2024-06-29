@@ -1,6 +1,6 @@
 // @ts-expect-error - no types
 import routes from '~pages'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from '@app/composables/core/routes'
 import { modal } from '@app/composables/core/modal'
 import { runMiddlewares } from '@app/middlewares'
 

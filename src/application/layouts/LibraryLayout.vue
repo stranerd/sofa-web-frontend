@@ -175,8 +175,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRoute } from '@app/composables/core/routes'
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 import { PlayTypes } from '@modules/plays'

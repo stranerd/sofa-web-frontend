@@ -107,13 +107,13 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute, useRouter } from 'vue-router'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import ConversationMessages from '@app/components/conversations/Messages.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useConversation } from '@app/composables/conversations/conversations'
 import { useCreateMessage } from '@app/composables/conversations/messages'
 import { useModals } from '@app/composables/core/modals'
+import { useRoute, useRouter } from '@app/composables/core/routes'
 import { InteractionEntities } from '@modules/interactions'
 
 export default defineComponent({

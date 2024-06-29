@@ -134,10 +134,10 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
+import { useRoute } from '@app/composables/core/routes'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { socials } from '@app/composables/users/profile'
 

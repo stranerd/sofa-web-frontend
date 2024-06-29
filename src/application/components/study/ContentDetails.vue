@@ -225,9 +225,9 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
+import { useRouter } from '@app/composables/core/routes'
 import { useReviews } from '@app/composables/interactions/reviews'
 import { useTagsInList } from '@app/composables/interactions/tags'
 import { useCreatePurchase } from '@app/composables/payment/purchases'

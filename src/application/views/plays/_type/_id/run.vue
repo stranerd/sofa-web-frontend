@@ -10,7 +10,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 
 export default defineComponent({

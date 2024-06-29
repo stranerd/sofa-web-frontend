@@ -70,7 +70,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { usePlan, useSubscription } from '@app/composables/payment/plans'
 
 export default defineComponent({

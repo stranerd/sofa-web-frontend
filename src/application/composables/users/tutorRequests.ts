@@ -1,6 +1,5 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -9,6 +8,7 @@ import { useSuccessHandler } from '../core/states'
 import { useUsersInList } from './users'
 import { AcceptTutorRequestInput } from '@modules/users/domain/types'
 import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases, UserEntity } from '@modules/users'
+import { useRouter } from '@app/composables/core/routes'
 
 const myStore = {
 	tutorRequests: ref<TutorRequestEntity[]>([]),

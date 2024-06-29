@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useFolder } from '@app/composables/study/folders'
 import { openMaterial } from '@app/composables/study/library'

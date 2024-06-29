@@ -1,5 +1,4 @@
 import { Ref, computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -18,6 +17,7 @@ import {
 	QuizFactory,
 	QuizzesUseCases,
 } from '@modules/study'
+import { useRouter } from '@app/composables/core/routes'
 
 const store = {} as Record<
 	string,

@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { useRecent } from '@app/composables/study'
 import { openMaterial } from '@app/composables/study/library'
 import { useMyQuizzes, useTutorQuizzes } from '@app/composables/study/quizzes-list'

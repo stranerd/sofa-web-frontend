@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
 import { createSession } from '@app/composables/auth/session'
+import { useRouter } from '@app/composables/core/routes'
 import { useSuccessHandler } from '@app/composables/core/states'
 import { AuthUseCases, PasswordResetFactory, PasswordUpdateFactory } from '@modules/auth'
 

@@ -106,7 +106,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter } from '@app/composables/core/routes'
 import { usePlansList } from '@app/composables/payment/plans'
 import { PlanEntity } from '@modules/payment'
 

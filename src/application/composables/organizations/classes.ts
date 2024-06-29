@@ -1,5 +1,4 @@
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -7,6 +6,7 @@ import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
 import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
+import { useRouter } from '@app/composables/core/routes'
 
 export const similarStore: Record<
 	string,

@@ -64,8 +64,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRouter } from '@app/composables/core/routes'
 import { useMyStudy } from '@app/composables/study'
 
 const { user, userType } = useAuth()

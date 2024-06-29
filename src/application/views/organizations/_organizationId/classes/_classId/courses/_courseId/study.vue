@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute } from '@app/composables/core/routes'
 import { useCourseSections } from '@app/composables/study/courses'
 import { ClassLesson } from '@modules/organizations'
 

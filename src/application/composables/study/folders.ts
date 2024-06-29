@@ -1,11 +1,11 @@
 import { addToArray, getRandomValue } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, StudyMaterial } from '@modules/study'
+import { useRoute, useRouter } from '@app/composables/core/routes'
 
 export const saveToFolder = (entity: StudyMaterial) => {
 	useModals().study.saveToFolder.open({ entity })

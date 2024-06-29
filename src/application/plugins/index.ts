@@ -1,7 +1,7 @@
 import { App } from 'vue'
-import { Router } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { setEmailVerificationEmail } from '@app/composables/auth/signin'
+import { Router } from '@app/composables/core/routes'
 import { AuthUseCases } from '@modules/auth'
 import { getTokens } from '@utils/tokens'
 

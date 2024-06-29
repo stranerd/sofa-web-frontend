@@ -1,6 +1,5 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
@@ -11,6 +10,7 @@ import { useQuizzesInList } from '../study/quizzes-list'
 import { useUsersInList } from './users'
 import { AcceptVerificationInput } from '@modules/users/domain/types'
 import { UserEntity, VerificationEntity, VerificationFactory, VerificationsUseCases } from '@modules/users'
+import { useRouter } from '@app/composables/core/routes'
 
 const myStore = {
 	verifications: ref<VerificationEntity[]>([]),

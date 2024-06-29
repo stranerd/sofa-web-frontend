@@ -1,8 +1,8 @@
 import { watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useModals } from '../core/modals'
 import { ClassEntity, ClassLesson, LessonCurriculumFactory, LessonFactory, LessonsUseCases } from '@modules/organizations'
+import { useRouter } from '@app/composables/core/routes'
 
 export const useCreateLesson = (organizationId: string, classId: string) => {
 	const factory = new LessonFactory()

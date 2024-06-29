@@ -40,9 +40,9 @@
 <script setup lang="ts">
 import { capitalize } from 'valleyed'
 import { computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import ClassLayout from './ClassLayout.vue'
 import { ClassEntity, ClassLesson } from '@modules/organizations'
+import { useRoute } from '@app/composables/core/routes'
 
 defineProps<{
 	title: string

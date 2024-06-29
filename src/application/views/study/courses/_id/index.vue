@@ -25,10 +25,10 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
 import StudyCourse from '@app/components/study/courses/StudyCourse.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
+import { useRoute } from '@app/composables/core/routes'
 import { useCreateView } from '@app/composables/interactions/views'
 import { useCreatePurchase } from '@app/composables/payment/purchases'
 import { useHasAccess } from '@app/composables/study'

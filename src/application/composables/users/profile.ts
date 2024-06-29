@@ -1,5 +1,4 @@
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '../core/states'
@@ -12,6 +11,7 @@ import {
 	UserTypeFactory,
 	UsersUseCases,
 } from '@modules/users'
+import { useRoute } from '@app/composables/core/routes'
 
 export const useUserTypeUpdate = () => {
 	const factory = new UserTypeFactory()

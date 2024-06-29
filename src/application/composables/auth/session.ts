@@ -1,4 +1,4 @@
-import { Router, useRoute, useRouter } from 'vue-router'
+import { Router, useRoute, useRouter } from '@app/composables/core/routes'
 import { useAuth } from '@app/composables/auth/auth'
 import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AfterAuthUser, AuthUseCases } from '@modules/auth'

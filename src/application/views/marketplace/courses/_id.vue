@@ -18,9 +18,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRoute } from 'vue-router'
-import { useCourse } from '@app/composables/study/courses'
 import ContentDetails from '@app/components/study/ContentDetails.vue'
+import { useRoute } from '@app/composables/core/routes'
+import { useCourse } from '@app/composables/study/courses'
 
 export default defineComponent({
 	name: 'MarketplaceCoursesIdPage',

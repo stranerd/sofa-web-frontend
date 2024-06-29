@@ -91,10 +91,10 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
 import { useModals } from '@app/composables/core/modals'
+import { useRouter } from '@app/composables/core/routes'
 import { usePurchaseClass, useSimilarClasses } from '@app/composables/organizations/classes'
 import { ClassEntity } from '@modules/organizations'
 

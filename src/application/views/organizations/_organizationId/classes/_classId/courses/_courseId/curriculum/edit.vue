@@ -27,10 +27,10 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { ClassEntity, ClassLesson, CurriculumView } from '@modules/organizations'
 import { useAuth } from '@app/composables/auth/auth'
+import { useRouter } from '@app/composables/core/routes'
 import { useUpdateCurriculum } from '@app/composables/organizations/lessons'
+import { ClassEntity, ClassLesson, CurriculumView } from '@modules/organizations'
 
 const lesson = ref<ClassLesson | null>(null)
 const classInst = ref<ClassEntity | null>(null)

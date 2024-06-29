@@ -63,7 +63,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useMeta } from 'vue-meta'
-import { useRouter } from 'vue-router'
+import { useRouter } from '@app/composables/core/routes'
 import { useMyStudy } from '@app/composables/study'
 
 export default defineComponent({
