@@ -1,33 +1,25 @@
-/* import { Clipboard } from '@capacitor/clipboard'
-import { Share } from '@capacitor/share'  */
+import { Clipboard } from '@capacitor/clipboard'
+import { Share } from '@capacitor/share'
 import { formatNumber } from 'valleyed'
 import { isWeb } from './constants'
 
 export const copyToClipboard = async (text: string) => {
-	const result = await window.navigator.permissions.query({ name: 'clipboard-write' as any })
-	if (result.state === 'granted' || result.state === 'prompt') {
-		await window.navigator.clipboard.writeText(text)
-		return true
-	}
-	return false
-	// await Clipboard.write({ string: text })
-}
-
-export const share = async (data: { title: string; text: string; url: string }) => {
 	try {
-		await navigator.share(data)
+		await Clipboard.write({ string: text })
 		return true
 	} catch {
 		return false
 	}
-	/* const { value } = await Share.canShare()
-	if (value) await Share.share({
-		...data, dialogTitle: data.title
+}
+
+export const share = async (data: { title: string; text: string; url: string }) => {
+	const { value } = await Share.canShare()
+	if (!value) return false
+	await Share.share({
+		...data,
+		dialogTitle: data.title,
 	})
-	else {
-		await copyToClipboard(url)
-		await Notify({ message: 'Copied link to your clipboard!' })
-	} */
+	return true
 }
 
 const localURL = 'http://localhost'
