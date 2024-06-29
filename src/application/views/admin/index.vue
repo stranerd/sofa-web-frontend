@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-	name: 'Admin404Page',
-	routeConfig: { middlewares: [() => '/admin/'] },
+	name: 'AdminIndexPage',
+	routeConfig: { middlewares: [() => '/admin/accounts/admins'] },
 })
 </script>
