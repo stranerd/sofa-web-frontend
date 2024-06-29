@@ -7,16 +7,26 @@
     "node": ">= 18.18.0"
   },
   "scripts": {
-    "predev": "npm run envs",
+    "predev": "pnpm run bin:project:env",
     "dev": "vite",
-    "prebuild": "npm run envs",
-    "build": "vite build",
+    "dev:android": "ionic cap run android --livereload --external --port 8080",
+    "dev:ios": "ionic cap run ios --livereload --external --port 8080",
+    "prebuild:web": "pnpm run bin:project:env",
+    "build:web": "vite build",
+    "prebuild:app": "pnpm run bin:project:env",
+    "build:app": "SKIP_COMPRESSION=1 vite build",
+    "postbuild:app": "cap sync",
     "preview": "vite preview",
     "lint:fix": "eslint --ext ts,vue --fix ./ && echo Done",
-    "envs": "node bin/copy-env-app.js",
-    "icons:types": "node bin/build-icons-types.js",
     "lint:staged": "lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "yarn jetify",
+    "bin:project:setup": "node bin/project setup",
+    "bin:project:version": "node bin/project version",
+    "bin:project:env": "node bin/project env",
+    "bin:project:appBuild": "pnpm run build:app && node bin/project appBuild",
+    "bin:icons": "capacitor-assets generate --ios --android",
+    "bin:icons:types": "node bin/project iconsTypes"
   },
   "lint-staged": {
     "*": "npm run lint:fix"
@@ -75,6 +85,5 @@
     "vite-plugin-pages": "^0.32.0",
     "vite-plugin-watch": "^0.3.1",
     "vue-tsc": "^1.8.27"
-  },
-  "description": "Vue Typescript Template"
+  }
 }

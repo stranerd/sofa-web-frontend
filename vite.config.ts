@@ -21,7 +21,7 @@ export default defineConfig({
 		}),
 		watch({
 			pattern: 'public/images/icons/*.svg',
-			command: 'npm run icons:types',
+			command: 'npm run bin:icons:types',
 		}),
 		Pages({
 			importMode: 'sync',

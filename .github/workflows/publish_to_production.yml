@@ -47,8 +47,11 @@ jobs:
           ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
         run: echo "$ENV_SECRETS" > env.json
 
-      - name: Build apps
-        run: pnpm build
+      - name: Setup Project
+        run: pnpm run bin:project:setup --skip-apps
+
+      - name: Build Web
+        run: pnpm run build:web
 
       - name: Copy config
         run: cp ./staticwebapp.config.json ./dist/staticwebapp.config.json
