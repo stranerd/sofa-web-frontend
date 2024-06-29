@@ -59,8 +59,8 @@ export default class Utils {
 		return this.#confirmLogic(this.confirmations, confirmation)
 	}
 
-	public async success(confirmation: SuccessConfirmation) {
-		return this.#confirmLogic(this.successes, confirmation)
+	public async success(success: SuccessConfirmation) {
+		return this.#confirmLogic(this.successes, success)
 	}
 
 	public async prompt(prompt: PromptConfirmation) {

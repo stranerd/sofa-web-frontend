@@ -3,8 +3,8 @@
 		<div class="flex flex-col bg-white rounded-2xl">
 			<div class="flex justify-between items-center py-1">
 				<SofaHeading content="Tutor applications" class="px-4 w-[60%]" size="mid" />
-				<form class="py-1 w-[20%] border-l border-lightGray">
-					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
+				<form class="w-[20%] border-l border-lightGray">
+					<SofaInput placeholder="Search" class="!bg-transparent !border-none">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
 						</template>
@@ -33,16 +33,17 @@
 							id: 'name',
 							key: 'user.publicName',
 							label: 'Teacher',
-							class: 'w-[60%]',
+							headerClass: 'w-[60%]',
 							onClick: (_, index) => handleClick(index),
 						},
 						{
 							id: 'applied',
 							key: (d) => $utils.formatTime(d.tutorRequest.createdAt),
 							label: 'Applied',
-							class: 'text-grayColor w-[20%]',
+							class: 'text-grayColor',
+							headerClass: 'w-[20%]',
 						},
-						{ id: 'action', key: 'tutorRequest.id', label: 'Action', class: 'text-grayColor w-[20%]' },
+						{ id: 'action', key: 'tutorRequest.id', label: 'Action', class: 'text-grayColor w-[20%]', headerClass: 'w-[20%]' },
 					]"
 					:data="currentlyViewing"
 					headClass="text-left text-grayColor"

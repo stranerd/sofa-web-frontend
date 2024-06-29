@@ -3,8 +3,8 @@
 		<div class="flex flex-col bg-white rounded-2xl">
 			<div class="flex justify-between items-center">
 				<SofaHeading content="Verification applications" class="px-4 w-[40%]" size="mid" />
-				<form class="py-1 w-[20%] border-l border-lightGray">
-					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
+				<form class="w-[20%] border-l border-lightGray">
+					<SofaInput placeholder="Search" class="!bg-transparent !border-none">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
 						</template>
@@ -36,17 +36,24 @@
 							id: 'account',
 							key: (d) => d.verification.id,
 							label: 'Account',
-							class: 'w-[40%]',
+							headerClass: 'w-[40%]',
 							onClick: (_, index) => handleClick(index),
 						},
-						{ id: 'type', key: (d) => d.user.type?.type, label: 'Type', class: 'text-grayColor w-[20%] capitalize' },
+						{
+							id: 'type',
+							key: (d) => d.user.type?.type,
+							label: 'Type',
+							class: 'text-grayColor capitalize',
+							headerClass: 'w-[20%]',
+						},
 						{
 							id: 'applied',
 							key: (d) => $utils.formatTime(d.verification.createdAt),
 							label: 'Applied',
-							class: 'text-grayColor w-[20%]',
+							class: 'text-grayColor',
+							headerClass: 'w-[20%]',
 						},
-						{ id: 'action', key: 'verification.id', label: 'Action', class: 'text-grayColor w-[20%]' },
+						{ id: 'action', key: 'verification.id', label: 'Action', class: 'text-grayColor', headerClass: 'w-[20%]' },
 					]"
 					:data="currentlyViewing"
 					headClass="text-left text-grayColor"
@@ -75,7 +82,7 @@
 
 <script setup lang="ts">
 import { useModals } from '@app/composables/core/modals'
-import { useVerificationsList, useAcceptVerificationRequest } from '@app/composables/users/verifications'
+import { useAcceptVerificationRequest, useVerificationsList } from '@app/composables/users/verifications'
 
 const { currentlyViewing, mapped, currentViewingIndex, limit, limitText, canPrev, canNext, previous, next } = useVerificationsList()
 

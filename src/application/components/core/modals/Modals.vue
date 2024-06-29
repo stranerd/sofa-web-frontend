@@ -20,7 +20,7 @@
 	<SofaConfirm
 		v-for="confirmation in $utils.confirmations"
 		:key="confirmation.id"
-		v-bind="{ confirmation }"
+		v-bind="confirmation"
 		:close="() => confirmation.close(false)"
 		:left="{
 			label: confirmation.left?.label ?? 'No',
@@ -62,7 +62,7 @@
 	<SofaSuccess
 		v-for="success in $utils.successes"
 		:key="success.id"
-		v-bind="{ confirmation: success }"
+		v-bind="success"
 		:close="() => success.close(false)"
 		:button="{
 			label: success.button?.label ?? 'Ok',

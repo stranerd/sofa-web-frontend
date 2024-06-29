@@ -14,8 +14,8 @@ export const useToggleRoles = (role: AuthRoles) => {
 		{
 			pre: () =>
 				$utils.confirm({
-					title: "Are you sure you want to change this user's role?",
-					sub: '',
+					title: 'Are you sure',
+					sub: "you want to change this user's role?",
 					right: { label: 'Yes, change' },
 				}),
 		},

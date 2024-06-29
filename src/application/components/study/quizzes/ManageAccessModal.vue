@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useSearchUsers } from '@app/composables/users/users'
+import { useSearchUsersByEmail } from '@app/composables/users/users'
 import { QuizEntity } from '@modules/study'
 import { UserEntity } from '@modules/users'
 
@@ -74,14 +74,10 @@ const props = defineProps<{
 	manageMembers: (userIds: string[], grant: boolean) => Promise<void>
 }>()
 
-const { searchUsersByEmails, searchValue } = useSearchUsers()
+const { searchUsersByEmails, searchValue } = useSearchUsersByEmail()
 
 const addUsers = async () => {
-	const emails = searchValue.value
-		.toLowerCase()
-		.split(',')
-		.map((e) => e.trim())
-	const users = await searchUsersByEmails(emails)
+	const users = await searchUsersByEmails(searchValue.value)
 	if (users?.length)
 		props.manageMembers(
 			users.map((u) => u.id),

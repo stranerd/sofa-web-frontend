@@ -1,13 +1,9 @@
 import { addToArray } from 'valleyed'
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { UserEntity, UserType, UsersUseCases } from '@modules/users'
-
-const searchStore = {
-	users: reactive<UserEntity[]>([]),
-}
 
 const store = {
 	tutors: ref<UserEntity[]>([]),
@@ -69,33 +65,27 @@ export const useTutorsList = () => {
 	return { ...store, loading, error }
 }
 
-export const useSearchUsers = () => {
+export const useSearchUsersByEmail = () => {
 	const searchValue = ref('')
 
 	const {
 		asyncFn: searchUsersByEmails,
 		loading,
 		error,
-	} = useAsyncFn(async (emails: string[]) => {
-		searchStore.users.length = 0
+	} = useAsyncFn(async (emailStr: string) => {
+		const emails = emailStr
+			.toLowerCase()
+			.split(',')
+			.map((e) => e.trim())
 		const users = await UsersUseCases.getInEmails(emails)
-		users.forEach((r) =>
-			addToArray(
-				searchStore.users,
-				r,
-				(e) => e.id,
-				(e) => e.bio.name.first,
-			),
-		)
-		searchValue.value = ''
-		return searchStore.users
+		return users
 	})
-	return { ...searchStore, loading, error, searchValue, searchUsersByEmails }
+	return { loading, error, searchValue, searchUsersByEmails }
 }
 
 export const useUsersInList = (ids: Refable<string[]>, listen = true) => {
 	const { user } = useAuth()
-	const allUsers = computed(() => [...store.tutors.value, ...searchStore.users, ...(user.value ? [user.value] : [])])
+	const allUsers = computed(() => [...store.tutors.value, ...(user.value ? [user.value] : [])])
 
 	const listener = useListener(
 		async () =>

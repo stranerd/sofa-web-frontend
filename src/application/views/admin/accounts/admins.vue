@@ -3,8 +3,8 @@
 		<div class="flex flex-col bg-white rounded-2xl">
 			<div class="flex justify-between items-center">
 				<SofaHeading content="Admins" class="px-4 w-[60%]" size="mid" />
-				<form class="py-1 w-[20%] border-l border-lightGray">
-					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
+				<form class="w-[20%] border-l border-lightGray">
+					<SofaInput placeholder="Search" class="!bg-transparent !border-none">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
 						</template>
@@ -26,8 +26,8 @@
 						@click="canNext ? next() : undefined" />
 				</div>
 			</div>
-			<form class="flex items-center border-y border-lightGray p-4 gap-4">
-				<SofaInput placeholder="Enter your email" class="flex-grow" />
+			<form class="flex items-center border-y border-lightGray p-4 gap-4" @submit.prevent="submit">
+				<SofaInput v-model="searchValue" placeholder="Enter account email" class="flex-grow" />
 				<SofaButton bgColor="bg-primaryBlue" type="submit" class="py-3">Grant Admin Access</SofaButton>
 			</form>
 			<div class="px-1 py-2 flex flex-col">
@@ -37,15 +37,16 @@
 							id: 'account',
 							key: (d) => d.id,
 							label: 'Account',
-							class: 'w-[60%]',
+							headerClass: 'w-[75%]',
 						},
 						{
-							id: 'promoted',
+							id: 'joined',
 							key: (d) => $utils.formatTime(d.dates.createdAt),
-							label: 'Promoted',
-							class: 'text-grayColor w-[20%]',
+							label: 'Joined',
+							class: 'text-grayColor',
+							headerClass: 'w-[15%]',
 						},
-						{ id: 'action', key: '', label: 'Action', class: 'text-grayColor w-[20%]' },
+						{ id: 'action', key: '', label: 'Action', headerClass: 'w-[10%]' },
 					]"
 					:data="currentlyViewing"
 					headClass="text-left text-grayColor"
@@ -71,9 +72,17 @@
 
 <script setup lang="ts">
 import { useToggleRoles } from '@app/composables/auth/roles'
-import { useAdminsList } from '@app/composables/users/users'
+import { useAdminsList, useSearchUsersByEmail } from '@app/composables/users/users'
 import { AuthRoles } from '@modules/auth'
 
 const { currentlyViewing, limitText, canPrev, canNext, previous, next } = useAdminsList()
 const { updateRole } = useToggleRoles(AuthRoles.isAdmin)
+
+const { searchUsersByEmails, searchValue } = useSearchUsersByEmail()
+
+const submit = async () => {
+	const users = await searchUsersByEmails(searchValue.value)
+	if (users?.at(0)) await updateRole(users[0])
+	searchValue.value = ''
+}
 </script>

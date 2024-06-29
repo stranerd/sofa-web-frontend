@@ -3,8 +3,8 @@
 		<div class="flex flex-col bg-white rounded-2xl">
 			<div class="flex justify-between items-center">
 				<SofaHeading content="Organization" class="px-4 w-[60%]" size="mid" />
-				<form class="py-1 w-[20%] border-l border-lightGray">
-					<SofaInput placeholder="Search" class="!py-2 !bg-transparent !border-none">
+				<form class="w-[20%] border-l border-lightGray">
+					<SofaInput placeholder="Search" class="!bg-transparent !border-none">
 						<template #prefix>
 							<SofaIcon class="h-[15px]" name="search" />
 						</template>
@@ -33,13 +33,14 @@
 							id: 'organization',
 							key: (d) => d.id,
 							label: 'Organization',
-							class: 'w-[80%]',
+							headerClass: 'w-[80%]',
 						},
 						{
 							id: 'joined',
 							key: (d) => $utils.formatTime(d.dates.createdAt),
 							label: 'Joined',
-							class: 'text-grayColor w-[20%]',
+							class: 'text-grayColor',
+							headerClass: 'w-[20%]',
 						},
 					]"
 					:data="currentlyViewing"

@@ -7,14 +7,14 @@
 					:key="index"
 					class="w-full flex flex-col py-2"
 					:class="{ 'border-t-2 border-b-lightGray': index !== 0 }">
-					<SofaText :content="tab.title" class="text-grayColor p-2" />
+					<SofaText :content="tab.title" class="text-grayColor p-2.5" />
 					<router-link
 						v-for="item in tab.items"
 						:key="item.link"
 						:to="item.link"
-						class="w-full flex items-center gap-3 p-2 rounded-lg"
+						class="w-full flex items-center gap-3 p-2.5 rounded-lg"
 						activeClass="bg-lightBlue font-bold">
-						<SofaIcon class="h-[15px]" :name="item.icon" />
+						<SofaIcon class="h-[1.25em]" :name="item.icon" />
 						<SofaText :content="item.name" />
 					</router-link>
 				</div>
