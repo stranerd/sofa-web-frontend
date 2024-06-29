@@ -11,15 +11,18 @@ jobs:
     environment: production
     runs-on: macos-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Build Project
-        uses: ./.github/actions/publish
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Setup App Deployment
+        uses: ./.github/actions/app-deploy
         with:
           ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
           BASE64_ZIPPED_CONTENT: ${{ secrets.BASE64_ZIPPED_CONTENT }}
+
       - name: Build android
         run: node bin/project appBuild android
+
       - name: Push to play store
         uses: r0adkll/upload-google-play@v1
         with:
@@ -32,12 +35,14 @@ jobs:
     environment: production
     runs-on: macos-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Build Project
-        uses: ./.github/actions/publish
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Setup App Deployment
+        uses: ./.github/actions/app-deploy
         with:
           ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
           BASE64_ZIPPED_CONTENT: ${{ secrets.BASE64_ZIPPED_CONTENT }}
+
       - name: Build ios and push to app store
         run: node bin/project appBuild ios

@@ -1,0 +1,38 @@
+name: Setup For Publish To Stores
+description: Build apps into dist folder
+
+inputs:
+  ENV_SECRETS:
+    description: Content to write to the env.json file
+    required: true
+  BASE64_ZIPPED_CONTENT:
+    description: Base64 encoded content of a zipped file to unzip to bin/config for the environment
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'microsoft'
+        java-version: '11'
+    - name: Setup Codebase
+      uses: ./.github/actions/setup
+      with:
+        ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
+    - name: Setup Project
+      shell: bash
+      run: pnpm run bin:project:setup --skip-apps
+    - name: Setup Config folder
+      shell: bash
+      env:
+        BASE64_ZIPPED_CONTENT: ${{ inputs.BASE64_ZIPPED_CONTENT }}
+      run: node bin/unzip.js
+    - name: Version Project
+      shell: bash
+      run: node bin/version.js
+      env:
+        APP_VERSION: ${{ github.ref }}
+    - name: Build Apps
+      shell: bash
+      run: pnpm run build:app

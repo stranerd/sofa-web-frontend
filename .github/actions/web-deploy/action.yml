@@ -1,0 +1,27 @@
+name: Setup For Web Deploy
+description: Build site into dist folder
+
+inputs:
+  ENV_SECRETS:
+    description: Content to write to the env.json file
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+      - name: Setup Codebase
+        uses: ./.github/actions/setup
+        with:
+          ENV_SECRETS: ${{ secrets.ENV_SECRETS }}
+
+      - name: Setup Project
+        shell: bash
+        run: pnpm run bin:project:setup --skip-apps
+
+      - name: Build Web
+        shell: bash
+        run: pnpm run build:web
+
+      - name: Copy config
+        shell: bash
+        run: cp ./staticwebapp.config.json ./dist/staticwebapp.config.json

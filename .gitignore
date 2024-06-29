@@ -1,16 +1,19 @@
-node_modules/
-*.log
-
-.idea
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.vercel
+Thumbs.db
 
-env.json
-.env
+*.log
+log.txt
+*-debug.log*
 
-dist
+/.ionic
+/dist
+/node_modules
+
+.env*
+*.env
+/.env
+/env.json
+*env.json
+
+capacitor.config.json
+public/.well-known
