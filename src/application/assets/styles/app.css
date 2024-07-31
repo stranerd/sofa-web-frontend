@@ -50,7 +50,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-	/* background: #4e474788; */
+	background: #4e474788;
 	border-radius: 100px;
 	cursor: pointer;
 }

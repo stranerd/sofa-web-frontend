@@ -1,7 +1,30 @@
 <template>
 	<div class="w-full flex flex-col items-center justify-center">
+		<!-- New Discover Sudy Materials -->
+		<div
+			v-if="content.discoverStudyMaterials?.show"
+			id="discover-study-materials"
+			class="styled-bg h-[400px] md:h-[514px] w-full flex flex-col justify-center items-center gap-8 mb-20 overflow-hidden">
+			<div class="w-[90%] mx-auto mdlg:w-full flex flex-col gap-2">
+				<h4 class="font-bold text-[20px] md:text-[32px] text-white text-center">
+					{{ $screen.desktop ? 'Discover Study Materials' : 'Discover Quality Materials by Verified Creators' }}
+				</h4>
+				<p class="text-white text-[12px] md:text-[16px] text-center">
+					Access a world of interactive learning with quizzes and courses created by experts to cater for your specific needs.
+				</p>
+			</div>
+			<div class="hidden mdlg:block">
+				<img src="/images/landing/discover-study-materials.png" class="object-contain" />
+			</div>
+			<div class="mdlg:hidden">
+				<img src="/images/landing/discover-study-materials-top.png" class="object-contain" />
+			</div>
+			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-tl-[22px] rounded-br-[22px] text-purple font-medium"
+			>Find more</RouterLink
+			>
+		</div>
 		<!-- New and exciting ways to study -->
-		<div id="study" class="w-[90%] mx-auto max-w-[1800px]">
+		<div v-if="content.study.show" id="study" class="w-[90%] mx-auto max-w-[1800px]">
 			<h2 class="text-[20px] md:text-[32px] text-purple font-bold leading-[54px] text-center">{{ content.study.title }}</h2>
 			<p class="text-[14px] md:text-[16px] text-center">
 				{{ content.study.desc }}
@@ -9,12 +32,12 @@
 			<div class="relative flex mdlg:flex-row flex-col items-center mt-8 mdlg:mt-20">
 				<img class="hidden mdlg:block" src="/images/landing/y.png" />
 				<div class="w-full mdlg:w-1/2 flex items-center justify-center">
-					<img src="/images/landing/bot+human.png" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
+					<img :src="content.study.image" class="w-[80%] md:w-[500px] h-full mdlg:h-[500px] object-contain" />
 				</div>
 				<div class="w-full mdlg:w-1/2 flex flex-col items-center mdlg:items-start text-center mdlg:text-left gap-2">
 					<h3 class="text-[20px] md:text-[36px] font-bold md:leading-[54px]">{{ content.study.heading }}</h3>
 					<p class="text-[16px] md:text-[24px] leading-[36px]">{{ content.study.sub_heading }}</p>
-					<p class="w-4/5 text-[14px] md:text-[16px] leading-[24px]">
+					<p class="w-4/5 text-[14px] md:text-[16px] leading-[24px] tracking-wide">
 						{{ content.study.content }}
 					</p>
 					<RouterLink
@@ -33,7 +56,7 @@
 			class="w-[90%] max-w-[1800px] mt-[300px] mdlg:my-20 mx-auto styled-bg min-h-[290px] pb-8 md:pb-0 mdlg:h-[600px] rounded-[20px] flex flex-col mdlg:flex-row items-center justify-between relative">
 			<div
 				class="w-full order-2 mdlg:order-1 mdlg:w-1/2 mx-auto flex flex-col mt-10 mdlg:mt-0 mdlg:pl-[160px] justify-center gap-2 text-center px-8 mdlg:text-left">
-				<h3 class="text-white font-bold text-[20px] md:text-[36px] leading-[54px]">{{ content.classes.title }}</h3>
+				<h3 class="text-white font-bold text-[20px] md:text-[30px] leading-[54px]">{{ content.classes.title }}</h3>
 				<h4 class="text-white text-[16px] md:text-[24px]">{{ content.classes.heading }}</h4>
 				<p class="text-white text-[14px] md:text-[16px] leading-[24px] font-normal">
 					{{ content.classes.content }}
@@ -47,11 +70,18 @@
 			</div>
 			<div
 				class="absolute left-0 right-0 -top-[250px] mdlg:-top-0 mdlg:relative order-1 mdlg:order-2 w-full mdlg:w-1/2 flex items-center justify-center">
-				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" src="/images/landing/live-classes.png" />
+				<img class="w-[250px] h-[290px] mdlg:h-[814px] mdlg:w-[578px]" :src="content.classes?.image" />
 			</div>
 		</div>
+		<!-- Wider Audience -->
+		<HomeWideAudience v-if="content.wideAudience.show" />
+		<!-- Visible on Only Organization tab -->
+		<HomeLearning v-if="$route.path === '/home/organizations'" :content="content.personalizedLearning" />
+		<!-- Accountability -->
+		<HomeAccountability v-if="content.accountability.show" />
 		<!-- MarketPlace -->
 		<div
+			v-if="content.place.show"
 			id="marketplace"
 			class="w-[90%] max-w-[1800px] mx-auto mdlg:w-full my-20 mdlg:h-[600px] flex flex-col mdlg:flex-row items-center justify-between">
 			<div class="w-full mdlg:w-1/2 flex items-center justify-center">
@@ -77,6 +107,10 @@
 				</div>
 			</div>
 		</div>
+		<!-- Personalised Learning -->
+		<HomeLearning v-if="content.personalizedLearning?.show" :content="content.personalizedLearning" />
+		<!-- Features -->
+		<HomeFeatureIdea v-if="content.featureIdeas?.show" :content="content.featureIdeas" />
 		<!-- Create -->
 		<div
 			v-if="content.create.show"
@@ -105,10 +139,10 @@
 			<div class="flex flex-col justify-center items-center overflow-hidden w-full max-w-[1800px] mx-auto">
 				<div class="w-[90%] mx-auto flex flex-col gap-2">
 					<h4 class="font-bold text-[20px] md:text-[36px] text-purple text-center leading-[30px] md:leading-[48px]">
-						Access Preparatory Classes for top examinations
+						{{ content.access.title }}
 					</h4>
 					<p class="text-[12px] md:text-[16px] text-center">
-						Access a world of interactive learning with quizzes and courses created
+						{{ content.access.content }}
 					</p>
 				</div>
 				<Vue3Marquee :duration="200" :pauseOnHover="true" class="flex items-center">
@@ -120,6 +154,7 @@
 		<HomeDiscoverMaterials v-if="content.discover.show" />
 		<!-- Testimonials -->
 		<HomeTestimonials v-if="content.testimonial.show" class="mb-20" />
+
 		<!-- Popular Learning centers -->
 		<div
 			v-if="content.learningCenters.show"
@@ -146,6 +181,8 @@
 			</Vue3Marquee>
 			<RouterLink to="#" class="bg-white py-[10px] px-[30px] h-[44px] rounded-[22px]">Find more</RouterLink>
 		</div>
+		<!-- Resources By Subjects -->
+		<HomeResourcesBySubjects v-if="$route.path === '/home/organizations'" />
 		<!-- FAQS -->
 		<HomeFAQS v-if="content.faqs.show" />
 		<!-- Get app -->
@@ -190,11 +227,13 @@ interface ShowType {
 	show?: boolean
 }
 
-interface ContentType extends ShowType {
+export interface ContentType extends ShowType {
 	title: string
 	desc?: string
-	heading: string
+	heading?: string
 	sub_heading?: string
+	image?: string
+	mobileImage?: string
 	content: string
 	link: string
 }
@@ -204,19 +243,24 @@ export interface IMoreOnStranerd {
 	classes: ContentType
 	place: ContentType
 	create: ContentType
+	personalizedLearning?: ContentType
+	marketPlace?: ContentType
+	discoverStudyMaterials?: ShowType
+	featureIdeas?: ContentType
 	testimonial: ShowType
 	learningCenters: ShowType
+	wideAudience: ShowType
+	accountability: ShowType
 	faqs: ShowType
 	getApp: ShowType
-	access: ShowType
+	access: ContentType
 	discover: ShowType
 }
 </script>
 
 <style scoped>
 .styled-bg {
-	background: url('/images/landing/landing/layer.png'),
-		linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;

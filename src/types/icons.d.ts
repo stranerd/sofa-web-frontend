@@ -15,6 +15,8 @@ declare global {
 		| 'alt-arrow-right'
 		| 'angle-small-down'
 		| 'apple'
+		| 'arrow-down-2'
+		| 'arrow-down'
 		| 'arrow-left-round'
 		| 'arrow-left'
 		| 'arrow-right-round'

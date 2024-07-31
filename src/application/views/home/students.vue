@@ -1,10 +1,10 @@
 <template>
 	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white mx-auto">
 		<header class="flex flex-col items-center justify-center relative">
-			<HomeNavbar class="mb-[44px] z-50" />
+			<HomeNavbar class="mb-[44px]" />
 			<!-- Link -->
 			<div
-				class="flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
+				class="z-30 flex items-center bg-white h-[44px] rounded-[22px] w-[268px] overflow-hidden mb-[44px]"
 				style="box-shadow: 0 4px 16px 0 #00000040">
 				<router-link
 					to="/home/students"
@@ -15,15 +15,18 @@
 					Organizations
 				</router-link>
 			</div>
-			<div class="w-[90%] mdlg:min-h-[500px] max-w-[1800px] relative">
+			<div
+				class="absolute top-[1px] left-0 right-0 w-full bg-[#FFC96F] rounded-b-full h-[200px] blur-[100px]"
+				style="z-index: 10 !important"></div>
+			<div class="z-30 w-[90%] mdlg:min-h-[500px] max-w-[1800px] relative">
 				<div class="w-[90%] md:w-[70%] mdlg:w-[50%] mx-auto flex flex-col items-center justify-center text-center gap-4">
 					<h1
 						class="text-[18px] leading-[27px] md:text-[30px] md:leading-[40px] mdlg:text-[40px] text-center font-600 mdlg:leading-[60px] font-semibold">
-						Transforming Learning Centers with Our Cutting-Edge
+						Academic Excellence Made
 					</h1>
 					<div
 						class="bg-purple text-white w-[174px] text-[20px] mdlg:text-[40px] font-600 font-semibold rounded-lg h-[38px] mdlg:h-[80px] mdlg:w-[387px] flex items-center justify-center -rotate-6 mb-4">
-						Infrastructure
+						Easy
 					</div>
 					<p class="text-[14px] md:text-[16px] leading-[24px]">
 						Join students like you all over the world in achieving extraordinary academic success with Stranerd.
@@ -57,26 +60,28 @@ import { ref } from 'vue'
 import type { IMoreOnStranerd } from '@app/components/home/MoreOnStranerd.vue'
 const content = ref<IMoreOnStranerd>({
 	study: {
-		title: 'Exciting New Ways to Study',
-		desc: 'Making learning experiences engaging and effective',
+		title: 'Stranerd for Students',
+		desc: 'Guiding thousands of students on their journey to academic excellence.',
 		heading: 'Hybrid tutoring',
 		sub_heading: 'AI + Human Experts',
-		content: 'Elevate your learning experience with the synergy of AI technology and the insight of seasoned educators.',
+		content: 'Elevate your learning experience by utilizing the power of AI technology and educators Insights.',
+		image: '/images/landing/bot+human.png',
 		link: '/home/features#study',
+		show: true,
 	},
 	classes: {
 		title: 'Classes',
-		heading: 'Self Paced & Live Classes',
-		content:
-			'Learn on Your Own Time or Dive into Real-Time Interaction. Seize control of your learning journey: embrace the tranquility of self-paced study or immerse yourself in the energy of live classes.',
+		heading: '',
+		content: 'Watch live classes, and catch the replay at your convenient time.',
+		image: '/images/landing/live-classes.png',
 		link: '/home/features#classes',
 	},
 	place: {
 		title: 'Marketplace',
-		heading: 'Explore & Discover materials',
-		content:
-			"Welcome to a vibrant ecosystem where learning flourishes and possibilities abound. Our Learning Marketplace is more than just a platform—it's a community of passionate learners, dedicated educators, and cutting-edge resources.",
+		heading: '',
+		content: 'Explore extensive and resourceful materials needed for academic success.',
 		link: '/home/features#marketplace',
+		show: true,
 	},
 	create: {
 		title: 'Create',
@@ -85,6 +90,24 @@ const content = ref<IMoreOnStranerd>({
 			'From interactive quizzes that test your knowledge to expertly curated courses that guide your learning, from engaging games that make studying fun to customizable flashcards that reinforce key concepts – our platform offers a diverse range of resources designed to cater to every learning style and preference.',
 		link: '/home/features#create',
 		show: false,
+	},
+	access: {
+		title: 'Access Preparatory Classes for top examinations',
+		heading: '',
+		content: 'Access a world of interactive learning with quizzes and courses created ',
+		link: '',
+		show: true,
+	},
+	personalizedLearning: {
+		title: 'Personalized Learning',
+		content: 'Create flashcards, mock quizzes and tests to test your knowledge on subjects.',
+		image: '/images/landing/personalized-learning.png',
+		mobileImage: '/images/landing/personalized-learning-top.png',
+		show: true,
+		link: '',
+	},
+	discoverStudyMaterials: {
+		show: true,
 	},
 	testimonial: {
 		show: true,
@@ -98,8 +121,11 @@ const content = ref<IMoreOnStranerd>({
 	getApp: {
 		show: true,
 	},
-	access: {
-		show: true,
+	wideAudience: {
+		show: false,
+	},
+	accountability: {
+		show: false,
 	},
 	discover: {
 		show: true,
