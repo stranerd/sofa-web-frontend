@@ -215,8 +215,7 @@ export interface IMoreOnStranerd {
 
 <style scoped>
 .styled-bg {
-	background: url('/images/landing/landing/layer.png'),
-		linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
+	background: url('/images/landing/layer.png'), linear-gradient(rgba(150, 77, 222, 1), rgba(150, 77, 222, 1), rgba(150, 77, 222, 1));
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
