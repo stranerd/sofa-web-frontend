@@ -30,7 +30,7 @@
 const testimonials = [
 	{
 		name: 'Joshua Opalele',
-		image: '/images/robert.png',
+		image: '/images/landing/robert.png',
 		role: 'Tutor',
 		testimonial:
 			"I've tried numerous online learning platforms, but none compare to the quality and variety offered here. From interactive quizzes to in-depth courses, I've found everything I need to excel in my studies.",
@@ -38,7 +38,7 @@ const testimonials = [
 	},
 	{
 		name: 'Joshua Opalele',
-		image: '/images/robert.png',
+		image: '/images/landing/robert.png',
 		role: 'Tutor',
 		testimonial:
 			"I've tried numerous online learning platforms, but none compare to the quality and variety offered here. From interactive quizzes to in-depth courses, I've found everything I need to excel in my studies.",
@@ -46,7 +46,7 @@ const testimonials = [
 	},
 	{
 		name: 'Joshua Opalele',
-		image: '/images/robert.png',
+		image: '/images/landing/robert.png',
 		role: 'Tutor',
 		testimonial:
 			"I've tried numerous online learning platforms, but none compare to the quality and variety offered here. From interactive quizzes to in-depth courses, I've found everything I need to excel in my studies.",
@@ -54,7 +54,7 @@ const testimonials = [
 	},
 	{
 		name: 'Joshua Opalele',
-		image: '/images/robert.png',
+		image: '/images/landing/robert.png',
 		role: 'Tutor',
 		testimonial:
 			"I've tried numerous online learning platforms, but none compare to the quality and variety offered here. From interactive quizzes to in-depth courses, I've found everything I need to excel in my studies.",
@@ -62,7 +62,7 @@ const testimonials = [
 	},
 	{
 		name: 'Joshua Opalele',
-		image: '/images/robert.png',
+		image: '/images/landing/robert.png',
 		role: 'Tutor',
 		testimonial:
 			"I've tried numerous online learning platforms, but none compare to the quality and variety offered here. From interactive quizzes to in-depth courses, I've found everything I need to excel in my studies.",

@@ -5,6 +5,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
 import { usePlay } from '@app/composables/plays/plays'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { PlayTypes } from '@modules/plays'
@@ -63,6 +64,13 @@ const extras = computed(() => ({
 	},
 	copy: async () => {
 		if (play.value) await $utils.copy(play.value.shareLink)
+	},
+	openQr: async () => {
+		if (play.value)
+			useModals().users.displayQrCode.open({
+				value: play.value.shareLink,
+				size: 400,
+			})
 	},
 	get scores() {
 		const p = play.value
