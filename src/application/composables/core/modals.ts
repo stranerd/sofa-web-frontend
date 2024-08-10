@@ -6,6 +6,7 @@ import ConversationMoreOptions from '@app/components/conversations/ConversationM
 import HomeMobileMenu from '@app/components/home/HomeMobileMenu.vue'
 import CreateReport from '@app/components/interactions/reports/CreateReportModal.vue'
 import CreateReview from '@app/components/interactions/reviews/CreateReviewModal.vue'
+import NotificationsList from '@app/components/notifications/notifications/NotificationsListModal.vue'
 import ClassCardMoreOptions from '@app/components/organizations/classes/ClassCardMoreOptionsModal.vue'
 import CreateClass from '@app/components/organizations/classes/CreateClassModal.vue'
 import EditClass from '@app/components/organizations/classes/EditClassModal.vue'
@@ -22,17 +23,17 @@ import Withdraw from '@app/components/payment/wallet/WithdrawModal.vue'
 import AddMaterial from '@app/components/study/AddMaterialModal.vue'
 import MaterialMoreOptions from '@app/components/study/MaterialMoreOptionsModal.vue'
 import SelectStudyMaterial from '@app/components/study/SelectStudyMaterialModal.vue'
+import EditCourse from '@app/components/study/courses/EditCourseModal.vue'
 import CreateFile from '@app/components/study/files/CreateFileModal.vue'
 import SaveToFolder from '@app/components/study/folders/SaveToFolderModal.vue'
 import ChooseStudyMode from '@app/components/study/quizzes/ChooseStudyModeModal.vue'
 import EditQuiz from '@app/components/study/quizzes/EditQuizModal.vue'
-import EditCourse from '@app/components/study/courses/EditCourseModal.vue'
 import ManageAccess from '@app/components/study/quizzes/ManageAccessModal.vue'
 import SelectQuiz from '@app/components/study/quizzes/SelectQuizModal.vue'
 import CustomizeAi from '@app/components/users/users/CustomizeAiModal.vue'
+import DisplayQrCode from '@app/components/users/users/DisplayQrCodeModal.vue'
 import SideBar from '@app/components/users/users/SideBarModal.vue'
 import ChoosePublishedStudyMaterial from '@app/components/users/verifications/ChoosePublishedStudyMaterialModal.vue'
-import NotificationsList from '@app/components/notifications/notifications/NotificationsListModal.vue'
 
 export const useModals = () => ({
 	conversations: modal.register('Conversations', {
@@ -96,6 +97,7 @@ export const useModals = () => ({
 			},
 		},
 		choosePublishedStudyMaterial: { component: ChoosePublishedStudyMaterial },
+		displayQrCode: { component: DisplayQrCode, modalArgs: { maxHeight: 'h-[80dvh]', closeOnClickOutside: true } },
 	}),
 	payment: modal.register('Payment', {
 		transactionDetails: { component: TransactionDetails },
