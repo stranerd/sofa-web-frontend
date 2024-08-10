@@ -29,7 +29,7 @@
 		<SofaTextarea
 			v-else
 			v-model="factory.question"
-			class="h-[130px] !bg-white resize-none"
+			class="h-[130px] mdlg:h-[180px] !bg-white"
 			:placeholder="factory.questionPlaceholder"
 			:error="factory.errors.question"
 			:richEditor="true">

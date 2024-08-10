@@ -126,6 +126,7 @@ declare global {
 		| 'results'
 		| 'robot'
 		| 'save'
+		| 'scan'
 		| 'search-black'
 		| 'search'
 		| 'selected'
