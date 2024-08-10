@@ -47,6 +47,10 @@
 												<SofaIcon class="h-[16px]" name="share" />
 												<SofaNormalText color="text-inherit" content="Share" />
 											</a>
+											<a class="gap-2 items-center flex" @click="extras.openQr()">
+												<SofaIcon class="h-[16px]" name="scan" />
+												<SofaNormalText color="text-inherit" content="View QR" />
+											</a>
 											<a class="gap-2 items-center flex" @click="extras.copy()">
 												<SofaIcon class="h-[16px]" name="copy" />
 												<SofaNormalText color="text-inherit" content="Copy" />
