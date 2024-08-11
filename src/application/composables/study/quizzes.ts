@@ -54,14 +54,15 @@ export const useQuiz = (id: string, skip?: { questions?: boolean; members?: bool
 	const { users: members } = useUsersInList(
 		computed(() =>
 			canFetchUsers.value && store[id].quiz.value
-				? store[id].quiz.value?.access.members.concat(store[id].quiz.value!.user.id, ...store[id].quiz.value!.access.requests) ?? []
+				? (store[id].quiz.value?.access.members.concat(store[id].quiz.value!.user.id, ...store[id].quiz.value!.access.requests) ??
+					[])
 				: [],
 		),
 		!skip?.members,
 	)
 	const { questions: unorderedQuestions } = useQuestionsInList(
 		id,
-		computed(() => (canFetchQuestions.value ? store[id].quiz.value?.questions ?? [] : [])),
+		computed(() => (canFetchQuestions.value ? (store[id].quiz.value?.questions ?? []) : [])),
 		access,
 		!skip?.questions,
 	)

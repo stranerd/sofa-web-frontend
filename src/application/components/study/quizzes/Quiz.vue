@@ -164,7 +164,7 @@ const questions = computed(() => reorderedQuestions.value ?? props.questions)
 const answers = ref<Record<string, any>>(props.answers ?? {})
 const question = computed(() => questions.value.at(index.value))
 const answer = computed({
-	get: () => (question.value ? answers.value[question.value.id] ?? question.value.defaultAnswer : []),
+	get: () => (question.value ? (answers.value[question.value.id] ?? question.value.defaultAnswer) : []),
 	set: (val) => {
 		if (props.disabled) return
 		if (question.value) answers.value[question.value.id] = val
