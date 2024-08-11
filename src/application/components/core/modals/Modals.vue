@@ -4,7 +4,7 @@
 		:key="key"
 		:event="modalsDef[key].event"
 		v-bind="stripKeys(modalsDef[key].modalArgs ?? {}, ['popover', 'closeOnClickOutside'])"
-		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? false ? () => close(key) : undefined">
+		:close="(modalsDef[key].modalArgs?.closeOnClickOutside ?? false) ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
 	<SofaModal
@@ -14,7 +14,7 @@
 		:event="modalsDef[key].event"
 		maxWidth="mdlg:!w-auto"
 		v-bind="stripKeys(modalsDef[key].modalArgs ?? {}, ['popover', 'closeOnClickOutside'])"
-		:close="modalsDef[key].modalArgs?.closeOnClickOutside ?? true ? () => close(key) : undefined">
+		:close="(modalsDef[key].modalArgs?.closeOnClickOutside ?? true) ? () => close(key) : undefined">
 		<component :is="modalsDef[key].component" v-bind="modalsDef[key].args ?? {}" :close="() => close(key)" />
 	</SofaModal>
 	<SofaDeletePrompt
