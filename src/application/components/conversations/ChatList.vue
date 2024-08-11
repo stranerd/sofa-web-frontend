@@ -52,9 +52,9 @@
 					photoUrl:
 						id === chat.user.id
 							? chat.tutor
-								? chat.tutor.bio.photo?.link ?? null
+								? (chat.tutor.bio.photo?.link ?? null)
 								: userAi.image
-							: chat.user.bio.photo?.link ?? null,
+							: (chat.user.bio.photo?.link ?? null),
 				}" />
 		</div>
 	</div>
