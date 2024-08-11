@@ -25,7 +25,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8.7.4
+          version: 9.5.0
           run_install: false
 
       - name: Get pnpm store directory
@@ -36,7 +36,7 @@ jobs:
       - name: Setup pnpm cache
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: "pnpm"
           cache-dependency-path: "**/pnpm-lock.yaml"
 
