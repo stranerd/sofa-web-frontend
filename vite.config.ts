@@ -71,6 +71,12 @@ export default defineConfig({
 	},
 	build: {
 		minify: 'terser',
+		target: 'esnext',
+	},
+	optimizeDeps: {
+		esbuildOptions: {
+			target: 'esnext',
+		},
 	},
 	server: {
 		port: 8080,
