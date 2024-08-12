@@ -88,6 +88,6 @@ const label = computed(() => (props.material.isQuiz() ? 'Quiz - Learn' : 'Course
 const sub = computed(() =>
 	props.material.isQuiz()
 		? `${props.material.questions.length} ${$utils.pluralize(props.material.questions.length, 'question', 'questions')}`
-		: `${props.material.sections.length} ${(props.material.sections.length, 'topic', 'topics')}`,
+		: `${props.material.sections.length} ${$utils.pluralize(props.material.sections.length, 'topic', 'topics')}`,
 )
 </script>

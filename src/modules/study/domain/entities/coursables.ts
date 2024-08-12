@@ -31,15 +31,15 @@ export class PublishableEntity<T extends PublishableConstructorArgs = Publishabl
 	}
 
 	isQuiz(): this is QuizEntity {
-		return this.__type.startsWith('QuizEntity')
+		return '__type' in this && this.__type === 'QuizEntity'
 	}
 
 	isCourse(): this is CourseEntity {
-		return this.__type.startsWith('CourseEntity')
+		return '__type' in this && this.__type === 'CourseEntity'
 	}
 
 	isFile(): this is FileEntity {
-		return this.__type.startsWith('FileEntity')
+		return '__type' in this && this.__type === 'FileEntity'
 	}
 }
 

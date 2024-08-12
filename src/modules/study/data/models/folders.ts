@@ -3,6 +3,7 @@ import { EmbeddedUser } from '@modules/users'
 
 export interface FolderFromModel extends FolderToModel {
 	id: string
+	__type: 'FolderEntity'
 	saved: Record<FolderSaved, string[]>
 	user: EmbeddedUser
 	createdAt: number

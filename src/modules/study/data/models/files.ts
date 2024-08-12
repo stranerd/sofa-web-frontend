@@ -3,6 +3,7 @@ import { Media } from '@modules/core'
 
 export interface FileFromModel extends FileToModel, CoursableData {
 	id: string
+	__type: 'FileEntity'
 	type: FileType
 	createdAt: number
 	updatedAt: number
