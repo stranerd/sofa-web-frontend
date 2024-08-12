@@ -38,13 +38,11 @@
 					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'courses'" class="flex flex-col gap-3">
 						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Courses </SofaNormalText>
 
-						<div
-							v-if="courses.length"
-							class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 gap-3 mdlg:gap-4">
+						<div v-if="courses.length" class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide gap-3 mdlg:gap-4">
 							<StudyMaterialCard
 								v-for="m in courses"
 								:key="m.id"
-								:type="$screen.desktop ? 'item' : 'activity'"
+								:wrapped="$screen.desktop"
 								:material="m"
 								class="col-span-1" />
 						</div>
@@ -60,13 +58,11 @@
 					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'quizzes'" class="flex flex-col gap-3">
 						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Quizzes </SofaNormalText>
 
-						<div
-							v-if="quizzes.length"
-							class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-4 lg:grid-cols-5 gap-3 mdlg:gap-4">
+						<div v-if="quizzes.length" class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide gap-3 mdlg:gap-4">
 							<StudyMaterialCard
 								v-for="m in quizzes"
 								:key="m.id"
-								:type="$screen.desktop ? 'item' : 'activity'"
+								:wrapped="$screen.desktop"
 								:material="m"
 								class="col-span-1" />
 						</div>
