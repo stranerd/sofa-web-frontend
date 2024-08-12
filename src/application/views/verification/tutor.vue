@@ -144,8 +144,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useTopicsList } from '@app/composables/interactions/tags'
@@ -156,7 +156,7 @@ export default defineComponent({
 	name: 'VerificationTutorPage',
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({ title: 'Become a tutor' })
+		useHead({ title: 'Become a tutor' })
 
 		const { user } = useAuth()
 		const { factory: profileFactory, updateProfile } = useProfileUpdate()

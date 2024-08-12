@@ -73,8 +73,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useUserSocialsUpdate } from '@app/composables/users/profile'
@@ -83,7 +83,7 @@ export default defineComponent({
 	name: 'SettingsProfilePage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Profile',
 		})
 

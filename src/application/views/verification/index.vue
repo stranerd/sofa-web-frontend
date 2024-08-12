@@ -119,8 +119,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useProfileUpdate } from '@app/composables/auth/profile'
 import { useModals } from '@app/composables/core/modals'
@@ -139,7 +139,7 @@ export default defineComponent({
 		],
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Become a verified creator',
 		})
 

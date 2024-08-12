@@ -68,8 +68,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { usePlan, useSubscription } from '@app/composables/payment/plans'
 
@@ -85,7 +85,7 @@ export default defineComponent({
 		],
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Plan Subscription',
 		})
 

@@ -10,14 +10,14 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'SettingsNotificationsPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Notifications',
 		})
 	},

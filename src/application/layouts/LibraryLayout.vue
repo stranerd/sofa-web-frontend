@@ -173,8 +173,8 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useEditFolder, useMyFolders } from '@app/composables/study/folders'
@@ -300,7 +300,7 @@ const { factory, edit, saveFolder, generateNewFolder, deleteFolder } = useEditFo
 
 const { organizations } = useMyOrganizations()
 
-useMeta(
+useHead(
 	computed(() => ({
 		title: props.title,
 	})),

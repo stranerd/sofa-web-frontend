@@ -20,15 +20,15 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useMyOrganizations } from '@app/composables/users/organizations'
 
 export default defineComponent({
 	name: 'SettingsOrganizationsPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({ title: 'Organizations' })
+		useHead({ title: 'Organizations' })
 		const { organizations, leaveOrganization } = useMyOrganizations()
 		return { organizations, leaveOrganization }
 	},

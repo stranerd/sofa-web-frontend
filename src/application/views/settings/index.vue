@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 
 export default defineComponent({
 	name: 'SettingsIndexPage',
@@ -13,7 +13,7 @@ export default defineComponent({
 		middlewares: ['isAuthenticated', () => ($screen.desktop ? '/settings/profile' : undefined)],
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Settings',
 		})
 	},

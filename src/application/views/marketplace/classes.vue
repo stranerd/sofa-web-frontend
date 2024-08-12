@@ -43,8 +43,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useExploreClasses } from '@app/composables/organizations/classes-list'
 
 export default defineComponent({
@@ -54,7 +54,7 @@ export default defineComponent({
 		goBackRoute: '/classes',
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Explore Classes',
 		})
 

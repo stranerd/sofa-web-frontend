@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useMetaMessage } from '@app/composables/users/metaMessage'
 
 const { CONTACT_EMAIL, INSTAGRAM_LINK, TIKTOK_LINK, TWITTER_LINK, WHATSAPP_LINK, YOUTUBE_LINK } = $utils.constants
@@ -33,7 +33,7 @@ export default defineComponent({
 	name: 'SettingsContactPage',
 	routeConfig: { goBackRoute: '/settings' },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Contact Us',
 		})
 

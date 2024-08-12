@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import ChatList from '@app/components/conversations/ChatList.vue'
 import { useAuth } from '@app/composables/auth/auth'
 
@@ -27,7 +27,7 @@ export default defineComponent({
 	components: { ChatList },
 	routeConfig: { middlewares: ['isAuthenticated', () => ($screen.desktop ? '/chats/new' : undefined)] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Chat',
 		})
 		const { userType } = useAuth()

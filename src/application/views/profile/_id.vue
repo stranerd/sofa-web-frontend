@@ -132,8 +132,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
@@ -144,7 +144,7 @@ import { socials } from '@app/composables/users/profile'
 export default defineComponent({
 	name: 'ProfileIdPage',
 	setup() {
-		useMeta({ title: 'Public Profile' })
+		useHead({ title: 'Public Profile' })
 
 		const { user: authUser } = useAuth()
 		const { runInAuth } = useRedirectToAuth()

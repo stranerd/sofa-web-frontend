@@ -61,11 +61,11 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
-import { ClassEntity } from '@modules/organizations'
 import { useAuth } from '@app/composables/auth/auth'
 import { useClassesInList, useMyClasses } from '@app/composables/organizations/classes-list'
+import { ClassEntity } from '@modules/organizations'
 
 export default defineComponent({
 	name: 'ClassesIndexPage',
@@ -73,7 +73,7 @@ export default defineComponent({
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Classes',
 		})
 

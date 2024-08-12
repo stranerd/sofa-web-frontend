@@ -20,15 +20,15 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { getEmailVerificationEmail, useEmailVerification } from '@app/composables/auth/signin'
 
 export default defineComponent({
 	name: 'AuthVerifyPage',
 	routeConfig: { middlewares: [() => (getEmailVerificationEmail() ? undefined : '/auth/signin')] },
 	setup() {
-		useMeta({ title: 'Verify your email' })
+		useHead({ title: 'Verify your email' })
 
 		const { email, token, message, completeVerification, sendVerificationEmail } = useEmailVerification()
 		return {

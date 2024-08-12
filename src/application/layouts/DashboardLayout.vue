@@ -121,8 +121,8 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useMyClasses } from '@app/composables/organizations/classes-list'
 
@@ -149,7 +149,7 @@ const props = withDefaults(
 	},
 )
 
-useMeta(
+useHead(
 	computed(() => ({
 		title: props.title,
 	})),

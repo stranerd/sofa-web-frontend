@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import ChatContent from '@app/components/conversations/ChatContent.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useCreateConversation } from '@app/composables/conversations/conversations'
@@ -53,7 +53,7 @@ export default defineComponent({
 	components: { ChatContent },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'New Chat',
 		})
 

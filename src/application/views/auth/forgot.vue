@@ -64,15 +64,15 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { usePasswordReset } from '@app/composables/auth/passwords'
 
 export default defineComponent({
 	name: 'AuthForgotPage',
 	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
-		useMeta({ title: 'Forgot password' })
+		useHead({ title: 'Forgot password' })
 
 		const { factory, sent, sendResetEmail, resetPassword } = usePasswordReset()
 		return { factory, sent, sendResetEmail, resetPassword }

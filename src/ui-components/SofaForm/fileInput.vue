@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, withDefaults } from 'vue'
+import { ref } from 'vue'
 import { Media, UploadedFile } from '@modules/core'
 
 const props = withDefaults(

@@ -59,13 +59,13 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import DashboardLayout from './DashboardLayout.vue'
+import { ClassEntity } from '@modules/organizations'
 import { useClass } from '@app/composables/organizations/classes'
 import { useAuth } from '@app/composables/auth/auth'
-import { ClassEntity } from '@modules/organizations'
 
 const props = withDefaults(
 	defineProps<{
@@ -94,7 +94,7 @@ const route = useRoute()
 const { class: classInst } = useClass(route.params.organizationId as string, route.params.classId as string)
 const { user } = useAuth()
 
-useMeta(
+useHead(
 	computed(() => ({
 		title: classInst.value?.title ?? 'Class',
 	})),

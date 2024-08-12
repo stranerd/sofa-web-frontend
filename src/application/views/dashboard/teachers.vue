@@ -17,11 +17,11 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
-import { useModals } from '@app/composables/core/modals'
 import MembersList from '@app/components/organizations/members/MembersList.vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
 import { useOrganizationMembers } from '@app/composables/organizations/members'
 import { MemberTypes } from '@modules/organizations'
 
@@ -30,7 +30,7 @@ export default defineComponent({
 	components: { MembersList },
 	routeConfig: { goBackRoute: '/dashboard', middlewares: ['isOrg'] },
 	setup() {
-		useMeta({ title: 'Teachers' })
+		useHead({ title: 'Teachers' })
 
 		const { id, user } = useAuth()
 		const { teachers } = useOrganizationMembers(id.value)

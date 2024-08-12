@@ -112,14 +112,14 @@
 </template>
 
 <script lang="ts" setup>
+import { useHead } from '@unhead/vue'
 import { ref, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
 import { useSearch } from '@app/composables/search'
 import { SofaNormalText } from 'sofa-ui-components'
 
-useMeta({
+useHead({
 	title: 'Search',
 })
 

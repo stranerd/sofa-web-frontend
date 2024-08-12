@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useCourse } from '@app/composables/study/courses'
 import ContentDetails from '@app/components/study/ContentDetails.vue'
@@ -27,7 +27,7 @@ export default defineComponent({
 	components: { ContentDetails },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Course Details',
 		})
 

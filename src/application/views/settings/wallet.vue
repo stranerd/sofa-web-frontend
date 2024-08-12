@@ -43,8 +43,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 
@@ -52,7 +52,7 @@ export default defineComponent({
 	name: 'SettingsWalletPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Wallet',
 		})
 

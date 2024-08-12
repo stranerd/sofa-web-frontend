@@ -26,8 +26,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { useQuiz } from '@app/composables/study/quizzes'
 import Quiz from '@app/components/study/quizzes/Quiz.vue'
@@ -40,7 +40,7 @@ export default defineComponent({
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Preview',
 		})
 

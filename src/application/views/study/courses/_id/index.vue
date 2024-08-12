@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent, ref, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import StudyCourse from '@app/components/study/courses/StudyCourse.vue'
 import { useAuth } from '@app/composables/auth/auth'
@@ -42,7 +42,7 @@ export default defineComponent({
 	components: { StudyCourse },
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({ title: 'Course Details' })
+		useHead({ title: 'Course Details' })
 
 		const route = useRoute()
 		const { id } = useAuth()

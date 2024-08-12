@@ -17,6 +17,9 @@ importers:
       '@tato30/vue-pdf':
         specifier: ^1.9.5
         version: 1.10.0(vue@3.4.37(typescript@5.5.4))
+      '@unhead/vue':
+        specifier: ^1.9.16
+        version: 1.9.16(vue@3.4.37(typescript@5.5.4))
       '@videojs-player/vue':
         specifier: ^1.0.0
         version: 1.0.0(@types/video.js@7.3.58)(video.js@8.17.2)(vue@3.4.37(typescript@5.5.4))
@@ -56,9 +59,6 @@ importers:
       vue-inline-svg:
         specifier: ^3.1.2
         version: 3.1.3(vue@3.4.37(typescript@5.5.4))
-      vue-meta:
-        specifier: ^3.0.0-alpha.7
-        version: 3.0.0-alpha.10(vue@3.4.37(typescript@5.5.4))
       vue-router:
         specifier: ^4.3.0
         version: 4.4.3(vue@3.4.37(typescript@5.5.4))
@@ -631,6 +631,20 @@ packages:
 
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+
+  '@unhead/dom@1.9.16':
+    resolution: {integrity: sha512-aZIAnnc89Csi1vV4mtlHYI765B7m1yuaXUuQiYHwr6glE9FLyy2X87CzEci4yPH/YbkKm0bGQRfcxXq6Eq0W7g==}
+
+  '@unhead/schema@1.9.16':
+    resolution: {integrity: sha512-V2BshX+I6D2wN4ys5so8RQDUgsggsxW9FVBiuQi4h8oPWtHclogxzDiHa5BH2TgvNIoUxLnLYNAShMGipmVuUw==}
+
+  '@unhead/shared@1.9.16':
+    resolution: {integrity: sha512-pfJnArULCY+GBr7OtYyyxihRiQLkT31TpyK6nUKIwyax4oNOGyhNfk0RFzNq16BwLg60d1lrc5bd5mZGbfClMA==}
+
+  '@unhead/vue@1.9.16':
+    resolution: {integrity: sha512-kpMWWwm8cOwo4gw4An43pz30l2CqNtmJpX5Xsu79rwf6Viq8jHAjk6BGqyKy220M2bpa0Va4fnR532SgGO1YgQ==}
+    peerDependencies:
+      vue: '>=2.7 || >=3'
 
   '@videojs-player/vue@1.0.0':
     resolution: {integrity: sha512-WonTezRfKu3fYdQLt/ta+nuKH6gMZUv8l40Jke/j4Lae7IqeO/+lLAmBnh3ni88bwR+vkFXIlZ2Ci7VKInIYJg==}
@@ -1490,6 +1504,9 @@ packages:
   he@1.2.0:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
+
+  hookable@5.5.3:
+    resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
 
   https-proxy-agent@5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
@@ -2462,6 +2479,9 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
+  unhead@1.9.16:
+    resolution: {integrity: sha512-FOoXkuRNDwt7PUaNE0LXNCb6RCz4vTpkGymz4tJ8rcaG5uUJ0lxGK536hzCFwFw3Xkp3n+tkt2yCcbAZE/FOvA==}
+
   universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
@@ -2658,11 +2678,6 @@ packages:
     peerDependencies:
       vue: ^3
 
-  vue-meta@3.0.0-alpha.10:
-    resolution: {integrity: sha512-rYeIGkhm1gKBcReEkPHiV6LV2Y6BZTMGTkGw1mQIZTxfFcVJL0srLZsL1zAmLeTGxMrlDYylMQEVSYRkDnwz3A==}
-    peerDependencies:
-      vue: ^3.0.0
-
   vue-router@4.4.3:
     resolution: {integrity: sha512-sv6wmNKx2j3aqJQDMxLFzs/u/mjA9Z5LCgy6BE0f7yFWMjrPLnS/sPNn8ARY/FXw6byV18EFutn5lTO6+UsV5A==}
     peerDependencies:
@@ -2777,6 +2792,9 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  zhead@2.2.4:
+    resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
 snapshots:
 
@@ -3178,6 +3196,28 @@ snapshots:
       eslint-visitor-keys: 3.4.3
 
   '@ungap/structured-clone@1.2.0': {}
+
+  '@unhead/dom@1.9.16':
+    dependencies:
+      '@unhead/schema': 1.9.16
+      '@unhead/shared': 1.9.16
+
+  '@unhead/schema@1.9.16':
+    dependencies:
+      hookable: 5.5.3
+      zhead: 2.2.4
+
+  '@unhead/shared@1.9.16':
+    dependencies:
+      '@unhead/schema': 1.9.16
+
+  '@unhead/vue@1.9.16(vue@3.4.37(typescript@5.5.4))':
+    dependencies:
+      '@unhead/schema': 1.9.16
+      '@unhead/shared': 1.9.16
+      hookable: 5.5.3
+      unhead: 1.9.16
+      vue: 3.4.37(typescript@5.5.4)
 
   '@videojs-player/vue@1.0.0(@types/video.js@7.3.58)(video.js@8.17.2)(vue@3.4.37(typescript@5.5.4))':
     dependencies:
@@ -4240,6 +4280,8 @@ snapshots:
 
   he@1.2.0: {}
 
+  hookable@5.5.3: {}
+
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.2
@@ -5253,6 +5295,13 @@ snapshots:
 
   undici-types@5.26.5: {}
 
+  unhead@1.9.16:
+    dependencies:
+      '@unhead/dom': 1.9.16
+      '@unhead/schema': 1.9.16
+      '@unhead/shared': 1.9.16
+      hookable: 5.5.3
+
   universalify@2.0.1: {}
 
   unplugin-vue-components@0.26.0(@babel/parser@7.25.3)(rollup@4.20.0)(vue@3.4.37(typescript@5.5.4)):
@@ -5443,10 +5492,6 @@ snapshots:
     dependencies:
       vue: 3.4.37(typescript@5.5.4)
 
-  vue-meta@3.0.0-alpha.10(vue@3.4.37(typescript@5.5.4)):
-    dependencies:
-      vue: 3.4.37(typescript@5.5.4)
-
   vue-router@4.4.3(vue@3.4.37(typescript@5.5.4)):
     dependencies:
       '@vue/devtools-api': 6.6.3
@@ -5563,3 +5608,5 @@ snapshots:
   yaml@2.5.0: {}
 
   yocto-queue@0.1.0: {}
+
+  zhead@2.2.4: {}

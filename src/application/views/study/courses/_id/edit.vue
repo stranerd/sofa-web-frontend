@@ -78,8 +78,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent, ref, watch } from 'vue'
-import { useMeta } from 'vue-meta'
 import CourseSections from '@app/components/study/courses/CourseSections.vue'
 import EditCourseSectionItem from '@app/components/study/courses/EditCourseSectionItem.vue'
 import EditCourseSectionItemBody from '@app/components/study/courses/EditCourseSectionItemBody.vue'
@@ -93,7 +93,7 @@ export default defineComponent({
 	components: { EditCourseWrapper, CourseSections, EditCourseSectionItem, EditCourseSectionItemBody },
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Edit Course',
 		})
 

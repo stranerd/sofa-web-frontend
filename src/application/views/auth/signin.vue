@@ -43,8 +43,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import AuthProvider from '@app/components/auth/AuthProvider.vue'
 import { useEmailSignin } from '@app/composables/auth/signin'
 
@@ -53,7 +53,7 @@ export default defineComponent({
 	components: { AuthProvider },
 	routeConfig: { middlewares: ['isNotAuthenticated'] },
 	setup() {
-		useMeta({ title: 'Sign In To Your Account' })
+		useHead({ title: 'Sign In To Your Account' })
 		const { factory, signin } = useEmailSignin()
 		return { factory, signin }
 	},

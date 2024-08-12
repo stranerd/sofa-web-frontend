@@ -135,8 +135,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { PlayEntity, PlayTypes } from '@modules/plays'
 
@@ -151,7 +151,7 @@ export default defineComponent({
 		],
 	},
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Lobby',
 		})
 

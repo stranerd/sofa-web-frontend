@@ -144,8 +144,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePlansList, useSubscription } from '@app/composables/payment/plans'
@@ -155,7 +155,7 @@ export default defineComponent({
 	name: 'SettingsSubscriptionPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Subscription',
 		})
 

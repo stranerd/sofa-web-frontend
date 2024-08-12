@@ -39,8 +39,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useAuth } from '@app/composables/auth/auth'
 import { usePasswordUpdate } from '@app/composables/auth/passwords'
 
@@ -48,7 +48,7 @@ export default defineComponent({
 	name: 'SettingsSecurityPage',
 	routeConfig: { goBackRoute: '/settings', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Security',
 		})
 

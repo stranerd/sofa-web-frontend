@@ -89,8 +89,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useHead } from '@unhead/vue'
 import { computed, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useRedirectToAuth } from '@app/composables/auth/session'
@@ -101,7 +101,7 @@ import { ClassEntity } from '@modules/organizations'
 const props = defineProps<{ classInst: ClassEntity }>()
 
 const router = useRouter()
-useMeta({ title: props.classInst.title })
+useHead({ title: props.classInst.title })
 const { user, wallet } = useAuth()
 const { runInAuth } = useRedirectToAuth()
 const { purchaseClass } = usePurchaseClass()

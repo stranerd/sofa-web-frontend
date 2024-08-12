@@ -61,8 +61,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
 import { useMyStudy } from '@app/composables/study'
 
@@ -70,7 +70,7 @@ export default defineComponent({
 	name: 'MarketPlaceIndexPage',
 	routeConfig: { middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Marketplace',
 		})
 

@@ -250,8 +250,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { defineComponent, ref } from 'vue'
-import { useMeta } from 'vue-meta'
 import EditQuestionBody from '@app/components/study/questions/EditQuestionBody.vue'
 import EditQuestionOptions from '@app/components/study/questions/EditQuestionOptions.vue'
 import EditQuestionsList from '@app/components/study/questions/EditQuestionsList.vue'
@@ -271,7 +271,7 @@ export default defineComponent({
 	},
 	routeConfig: { goBackRoute: '/library', middlewares: ['isAuthenticated'] },
 	setup() {
-		useMeta({
+		useHead({
 			title: 'Edit Quiz',
 		})
 

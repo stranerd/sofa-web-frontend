@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
 
 const props = defineProps<{
 	title: string
@@ -99,7 +99,7 @@ const tabs = [
 	},
 ] as const
 
-useMeta(
+useHead(
 	computed(() => ({
 		title: props.title,
 	})),

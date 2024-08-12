@@ -27,8 +27,8 @@
 </template>
 
 <script lang="ts">
+import { useHead } from '@unhead/vue'
 import { computed, defineComponent } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import { UserType } from '@modules/users'
 
@@ -45,7 +45,7 @@ export default defineComponent({
 		],
 	},
 	setup() {
-		useMeta({ title: 'Setup Your Account' })
+		useHead({ title: 'Setup Your Account' })
 		const route = useRoute()
 		const type = computed(() => route.query.type as UserType | undefined)
 

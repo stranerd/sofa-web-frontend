@@ -1,24 +1,19 @@
 <template>
-	<metainfo>
-		<template #title="{ content }">
-			{{ content ? `${content} | Stranerd` : 'Stranerd' }}
-		</template>
-	</metainfo>
 	<RouterView :key="$route.path" />
 	<Modals />
 </template>
 
 <script lang="ts" setup>
+import { useHead } from '@unhead/vue'
 import { watch } from 'vue'
-import { useMeta } from 'vue-meta'
 import { useRoute } from 'vue-router'
 import Modals from '@app/components/core/modals/Modals.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { UsersUseCases } from '@modules/users'
 
-useMeta({
+useHead({
 	title: 'Stranerd',
-	htmlAttrs: { lang: 'en', amp: true },
+	htmlAttrs: { lang: 'en' /* amp: true */ },
 })
 
 const route = useRoute()
