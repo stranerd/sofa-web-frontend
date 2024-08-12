@@ -1,9 +1,10 @@
 import { createHead } from '@unhead/vue'
 import { createApp } from 'vue'
 
-import App from './application/App.vue'
 import { $screen, $utils } from '@utils/modules'
-import './application/assets/styles/index.scss'
+
+import App from '@app/App.vue'
+import '@app/assets/styles/index.scss'
 
 import { globalPlugins } from '@app/plugins'
 import { router } from '@app/router'
