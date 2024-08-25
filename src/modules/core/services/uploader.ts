@@ -1,3 +1,4 @@
+import { getRandomValue } from 'valleyed'
 import { parseURL } from '@utils/commons'
 
 export interface Media {
@@ -15,6 +16,8 @@ export const parseMedia = (media: Media) => {
 	return media
 }
 
+const hash = getRandomValue()
+
 export class UploadedFile implements Media {
 	readonly name: string
 	readonly path: string
@@ -25,6 +28,7 @@ export class UploadedFile implements Media {
 	readonly timestamp = Date.now()
 	readonly data: Blob
 	readonly ref: File
+	private readonly _hash = hash
 
 	constructor({ file }: { file: File }) {
 		this.name = file.name
@@ -45,7 +49,7 @@ export class UploadedFile implements Media {
 	}
 
 	static is(val: any): val is UploadedFile {
-		return val?.constructor?.name === 'UploadedFile'
+		return val?.constructor?.name === 'UploadedFile' || val?._hash === hash
 	}
 }
 
