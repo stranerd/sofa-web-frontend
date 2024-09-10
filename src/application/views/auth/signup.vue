@@ -1,10 +1,10 @@
 <template>
-	<AuthLayout title="Create your account" subTitle="Join the School Of Future Africa">
+	<AuthLayout title="Create your account">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signup">
 			<AuthProvider :signUp="true" />
 
 			<div class="w-full flex flex-col gap-4">
-				<div class="flex gap-4 items-center">
+				<!-- <div class="flex gap-4 items-center">
 					<SofaTextField
 						v-model="factory.first"
 						customClass="rounded-custom !bg-lightGray w-full"
@@ -15,7 +15,7 @@
 						customClass="rounded-custom !bg-lightGray w-full"
 						placeholder="Last Name"
 						:error="factory.errors.last" />
-				</div>
+				</div> -->
 				<SofaTextField
 					v-model="factory.email"
 					customClass="rounded-custom !bg-lightGray"
@@ -37,7 +37,7 @@
 
 				<SofaCheckbox v-model="factory.termsAccepted">
 					<span class="text-grayColor text-left flex flex-wrap gap-[4px]">
-						I have read and accepted SOFA’s
+						I accepts Stranerd's
 						<SofaNormalText
 							color="text-primaryBlue"
 							as="router-link"

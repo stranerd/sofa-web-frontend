@@ -6,6 +6,7 @@ export * from './verifications'
 export { AuthRoleType, UserBio }
 
 export enum UserType {
+	agent = 'agent',
 	student = 'student',
 	teacher = 'teacher',
 	organization = 'organization',

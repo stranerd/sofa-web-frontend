@@ -47,5 +47,5 @@ const { loading: appleLoading, signin: appleSignin } = useAppleSignin()
 
 const showAppleSignin = isWeb || isIos
 
-const message = computed(() => (props.signUp ? 'Sign up' : 'Sign in'))
+const message = computed(() => (props.signUp ? 'Continue with' : 'Sign in'))
 </script>
