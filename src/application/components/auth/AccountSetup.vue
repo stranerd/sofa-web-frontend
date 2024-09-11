@@ -1,98 +1,136 @@
 <template>
 	<form class="w-full flex flex-col gap-4" @submit.prevent="handleAccountSetup">
 		<div v-if="!isProfileEducation && !isProfilePhone" class="w-full flex gap-3">
-			<a
-				v-for="option in accountSetupOptions.filter((o) => !o.hide)"
-				:key="option.id"
-				class="p-3 rounded-custom flex items-center gap-2 justify-center w-full"
-				:class="tab === option.id ? 'bg-primaryPurple' : option.done ? 'bg-primaryGreen' : 'bg-lightGray'"
-				@click="tab = option.id">
-				<SofaNormalText :color="option.done || tab === option.id ? 'text-white' : 'text-grayColor'">
-					{{ option.name }}
-				</SofaNormalText>
-				<SofaIcon v-if="option.done" class="h-[14px]" name="done" />
-			</a>
+			<div class="flex items-center">
+				<a
+					v-for="(option, index) in accountSetupOptions.filter((o) => !o.hide)"
+					:key="option.id"
+					class="flex items-center gap-2 w-full"
+					@click="tab = option.id">
+					<div
+						:class="[
+							'w-8 h-8 rounded-full flex items-center justify-center text-white',
+							{
+								'bg-primaryGreen': option.done,
+								'bg-primaryPurple': tab === option.id && !option.done,
+								'bg-grayColor': !option.done && tab !== option.id,
+							},
+						]">
+						<SofaIcon v-if="option.done" class="h-[14px]" name="done" />
+						<span v-else>{{ index + 1 }}</span>
+					</div>
+					<SofaNormalText
+						:class="[
+							'hidden mdlg:block',
+							{
+								'text-primaryGreen': option.done,
+								'text-primaryPurple': tab === option.id && !option.done,
+								'text-grayColor': !option.done && tab !== option.id,
+							},
+						]">
+						{{ option.name }}
+					</SofaNormalText>
+					<div v-if="index < accountSetupOptions.length - 1" class="w-8 mdlg:w-24 h-0.5 bg-grayColor mx-1 mdlg:mx-2"></div>
+				</a>
+			</div>
 		</div>
 
-		<div v-if="tab === 'profile'" class="w-full flex flex-col gap-4 py-3">
-			<div class="w-full flex flex-col items-center justify-center pt-3">
-				<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
-					<SofaIcon v-if="!profileFactory.photo" class="h-[50px]" name="user" />
+		<div v-if="tab === 'profile'" class="w-full flex flex-col mdlg:flex-row gap-4 py-3">
+			<div class="mdlg:w-2/5 flex flex-col items-center justify-center pt-3">
+				<SofaImageLoader class="size-[90px] mdlg:size-[200px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
+					<SofaIcon v-if="!profileFactory.photo" class="h-[50px] mdlg:h-[150px]" name="user" />
 					<SofaFileInput
 						v-model="profileFactory.photo"
-						class="absolute bottom-[-5%] right-[-5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
+						class="absolute bottom-[-5%] right-[-5%] mdlg:bottom-[5%] mdlg:right-[5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
 						accept="image/*">
 						<SofaIcon class="h-[18px] fill-white" name="camera" />
 					</SofaFileInput>
 				</SofaImageLoader>
 			</div>
 
-			<SofaTextField
-				v-model="profileFactory.first"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="First Name"
-				:error="profileFactory.errors.first"
-				borderColor="border-transparent" />
+			<div class="mdlg:w-3/5 grid gap-4">
+				<div class="grid mdlg:grid-cols-2 gap-4">
+					<SofaTextField
+						v-model="profileFactory.first"
+						customClass="rounded-custom !bg-lightGray"
+						type="text"
+						placeholder="First Name"
+						:error="profileFactory.errors.first"
+						borderColor="border-transparent" />
 
-			<SofaTextField
-				v-model="profileFactory.last"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Last Name"
-				:error="profileFactory.errors.last"
-				borderColor="border-transparent" />
+					<SofaTextField
+						v-model="profileFactory.last"
+						customClass="rounded-custom !bg-lightGray"
+						type="text"
+						placeholder="Last Name"
+						:error="profileFactory.errors.last"
+						borderColor="border-transparent" />
+				</div>
 
-			<SofaTextField
-				v-if="typeFactory.isOrganization"
-				v-model="typeFactory.name"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Organization name"
-				:error="typeFactory.errors.name"
-				borderColor="border-transparent" />
+				<SofaTextField
+					v-if="typeFactory.isOrganization"
+					v-model="typeFactory.name"
+					customClass="rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="Organization name"
+					:error="typeFactory.errors.name"
+					borderColor="border-transparent" />
 
-			<SofaTextarea
-				v-model="profileFactory.description"
-				class="h-[90px] resize-none"
-				:error="profileFactory.errors.description"
-				:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
+				<SofaTextarea
+					v-model="profileFactory.description"
+					class="h-[90px] resize-none"
+					:error="profileFactory.errors.description"
+					:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
 
-			<SofaTextField
-				v-if="typeFactory.isOrganization"
-				v-model="typeFactory.code"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Set organization code"
-				:error="typeFactory.errors.code"
-				borderColor="border-transparent" />
+				<SofaPhoneInput v-model="phoneFactory.phone" class="rounded !border-none bg-lightGray py-2" />
 
-			<div class="w-full grid grid-cols-2 gap-4">
-				<SofaSelect
-					v-model="locationFactory.country"
-					class="col-span-1"
-					placeholder="Country"
-					:error="locationFactory.errors.country"
-					:options="countries.map((c) => ({ key: c, value: c }))" />
+				<SofaTextField
+					v-if="typeFactory.isOrganization"
+					v-model="typeFactory.code"
+					customClass="rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="Set organization code"
+					:error="typeFactory.errors.code"
+					borderColor="border-transparent" />
 
-				<SofaSelect
-					v-model="locationFactory.state"
-					class="col-span-1"
-					placeholder="State"
-					:error="locationFactory.errors.state"
-					:options="states.map((s) => ({ key: s, value: s }))" />
+				<div class="w-full grid grid-cols-2 gap-4">
+					<SofaSelect
+						v-model="locationFactory.country"
+						class="col-span-1"
+						placeholder="Country"
+						:error="locationFactory.errors.country"
+						:options="countries.map((c) => ({ key: c, value: c }))" />
+
+					<SofaSelect
+						v-model="locationFactory.state"
+						class="col-span-1"
+						placeholder="State"
+						:error="locationFactory.errors.state"
+						:options="states.map((s) => ({ key: s, value: s }))" />
+				</div>
 			</div>
 		</div>
 
 		<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
 			<SofaTextField
 				v-if="typeFactory.isTeacher"
+				customClass="rounded-custom !bg-lightGray"
+				type="text"
+				placeholder="What acdemy degree(s) do you have?"
+				borderColor="border-transparent" />
+
+			<SofaTextField
+				v-if="typeFactory.isTeacher"
 				v-model="typeFactory.school"
 				customClass="rounded-custom !bg-lightGray"
 				type="text"
-				placeholder="Where do you teach at the moment?"
+				placeholder="Where do you teach now?"
 				:error="typeFactory.errors.school"
 				borderColor="border-transparent" />
+
+			<SofaSelect v-if="typeFactory.isTeacher" placeholder="How long have you been teaching?" :options="[]" class="text-grayColor" />
+
+			<SofaSelect v-if="typeFactory.isTeacher" placeholder="Do you sell study materials?" :options="[]" class="text-grayColor" />
 
 			<SofaSelect
 				v-if="typeFactory.isStudent"
@@ -186,8 +224,9 @@
 					{{ isProfilePhone && tab === 'phone' ? 'Send OTP' : 'Save changes' }}
 				</SofaButton>
 			</div>
-			<div v-else class="flex flex-col w-full">
-				<SofaButton :disabled="isDisabled" class="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
+			<div v-else class="flex items-center justify-between w-full">
+				<SofaButton :disabled="isDisabled" padding="px-4 py-2" bgColor="bg-grayColor"> Skip </SofaButton>
+				<SofaButton :disabled="isDisabled" padding="px-4 py-2" type="submit"> Next </SofaButton>
 			</div>
 		</div>
 	</form>

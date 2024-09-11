@@ -1,7 +1,7 @@
 <template>
-	<AuthLayout title="Choose account type" :hideBack="!type" bgImage="/images/auth-setup.png">
+	<AuthLayout title="Choose account type" :hideBack="!type" bgImage="/images/auth-setup.png" :showBodyBgImage="type ? true : false">
 		<AccountSetup v-if="type" />
-		<div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 place-items-center w-full">
+		<div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 place-items-center mt-24 md:mt-0 w-full">
 			<router-link
 				v-for="userType in userTypes"
 				:key="userType.value"
@@ -27,14 +27,14 @@ import { UserType } from '@modules/users'
 export default defineComponent({
 	name: 'OnboardingPage',
 	routeConfig: {
-		middlewares: [
-			'isOnboarding',
-			({ to }) => {
-				const type = to.query.type as UserType | undefined
-				if (!type || Object.values(UserType).includes(type)) return
-				return '/onboarding'
-			},
-		],
+		// middlewares: [
+		// 	'isOnboarding',
+		// 	({ to }) => {
+		// 		const type = to.query.type as UserType | undefined
+		// 		if (!type || Object.values(UserType).includes(type)) return
+		// 		return '/onboarding'
+		// 	},
+		// ],
 	},
 	setup() {
 		useHead({ title: 'Setup Your Account' })

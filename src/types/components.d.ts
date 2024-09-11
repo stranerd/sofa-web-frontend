@@ -145,6 +145,7 @@ declare module 'vue' {
     SofaText: typeof import('sofa-ui-components')['SofaText']
     SofaTextarea: typeof import('sofa-ui-components')['SofaTextarea']
     SofaTextField: typeof import('sofa-ui-components')['SofaTextField']
+    SofaTopBar: typeof import('sofa-ui-components')['SofaTopBar']
     SofaVideoPlayer: typeof import('sofa-ui-components')['SofaVideoPlayer']
     StudyCourse: typeof import('./../application/components/study/courses/StudyCourse.vue')['default']
     StudyMaterialCard: typeof import('./../application/components/study/StudyMaterialCard.vue')['default']
